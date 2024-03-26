@@ -13,12 +13,9 @@ import {
   publishAssessment,
   uploadAssessment
 } from '../../../features/groundControl/GroundControlActions';
-import GroundControl, { DispatchProps, StateProps } from './GroundControl';
+import GroundControl, { DispatchProps } from './GroundControl';
 
-const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  assessmentOverviews: state.session.assessmentOverviews,
-  assessmentConfigurations: state.session.assessmentConfigurations
-});
+const mapStateToProps: MapStateToProps<{}, {}, OverallState> = state => ({});
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(

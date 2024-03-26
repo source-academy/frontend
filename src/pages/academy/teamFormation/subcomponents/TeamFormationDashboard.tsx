@@ -1,8 +1,9 @@
 import '@tremor/react/dist/esm/tremor.css';
 
-import { Button, Card, Col, ColGrid, Flex, Title } from '@tremor/react';
+import { Button as BpButton } from '@blueprintjs/core';
+import { Card, Flex, Title } from '@tremor/react';
 import { useNavigate } from 'react-router';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession } from 'src/commons/utils/Hooks';
 import { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
 
 import TeamFormationTable from './TeamFormationTable';
@@ -12,8 +13,7 @@ type TeamFormationDashboardProps = {
 };
 
 const TeamFormationDashboard: React.FC<TeamFormationDashboardProps> = ({ teams }) => {
-  const group = useTypedSelector(state => state.session.group);
-  const { courseId } = useTypedSelector(state => state.session);
+  const { courseId, group } = useSession();
   const navigate = useNavigate();
 
   const createTeam = () => {
@@ -26,21 +26,16 @@ const TeamFormationDashboard: React.FC<TeamFormationDashboardProps> = ({ teams }
 
   const teamData = teams;
   return (
-    <ColGrid numColsLg={8} gapX="gap-x-4" gapY="gap-y-2">
-      <Col numColSpanLg={8}>
-        <Card>
-          <Flex justifyContent="justify-between">
-            <Flex justifyContent="justify-start" spaceX="space-x-6">
-              <Title>Teams</Title>
-            </Flex>
-            <Button onClick={createTeam}>Create Team</Button>
-            &nbsp;
-            <Button onClick={importTeam}>Import Team</Button>
-          </Flex>
-          <TeamFormationTable group={group} teams={teamData} />
-        </Card>
-      </Col>
-    </ColGrid>
+    <Card>
+      <Flex justifyContent="justify-between">
+        <Title>Teams</Title>
+        <Flex justifyContent="justify-end" spaceX="space-x-2">
+          <BpButton onClick={createTeam}>Create Team</BpButton>
+          <BpButton onClick={importTeam}>Import Team</BpButton>
+        </Flex>
+      </Flex>
+      <TeamFormationTable group={group} teams={teamData} />
+    </Card>
   );
 };
 

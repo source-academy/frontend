@@ -27,11 +27,7 @@ import {
   Text,
   TextInput
 } from '@tremor/react';
-import React from 'react';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { updateTeamFormationsTableFilters } from 'src/commons/workspace/WorkspaceActions';
+import React, { useState } from 'react';
 import { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
 
 import { AssessmentTypeBadge } from '../../teamFormation/subcomponents/TeamFormationBadges';
@@ -85,25 +81,16 @@ type TeamFormationTableProps = {
 };
 
 const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams }) => {
-  const dispatch = useDispatch();
-  const tableFilters = useTypedSelector(
-    state => state.workspaces.teamFormation.teamFormationTableFilters
-  );
-
   const defaultFilters = [];
-  if (group && !tableFilters.columnFilters.find(filter => filter.id === 'groupName')) {
+  if (group) {
     defaultFilters.push({
       id: 'groupName',
       value: group
     });
   }
 
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
-    ...tableFilters.columnFilters,
-    ...defaultFilters
-  ]);
-
-  const [globalFilter, setGlobalFilter] = useState<string | null>(tableFilters.globalFilter);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([...defaultFilters]);
+  const [globalFilter, setGlobalFilter] = useState<string | null>(null);
 
   const globalFilterFn = (
     row: Row<TeamFormationOverview>,
@@ -146,15 +133,6 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
     const newFilters = columnFilters.filter(filter => filter.id !== id && filter.value !== value);
     setColumnFilters(newFilters);
   };
-
-  useEffect(() => {
-    dispatch(
-      updateTeamFormationsTableFilters({
-        columnFilters,
-        globalFilter
-      })
-    );
-  }, [columnFilters, globalFilter, dispatch]);
 
   return (
     <>

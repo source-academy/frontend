@@ -1,5 +1,6 @@
 import '@tremor/react/dist/esm/tremor.css';
 
+import { Button } from '@blueprintjs/core';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -8,7 +9,7 @@ import Select, { ActionMeta, MultiValue } from 'react-select';
 import { createTeam, updateTeam } from 'src/commons/application/actions/SessionActions';
 import { User } from 'src/commons/application/types/SessionTypes';
 import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession } from 'src/commons/utils/Hooks';
 import { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
 import classes from 'src/styles/TeamFormation.module.scss';
 
@@ -19,8 +20,7 @@ export type OptionType = {
 
 const TeamFormationForm: React.FC = () => {
   const { teamId } = useParams(); // Retrieve the team ID from the URL
-  const assessmentOverviews = useTypedSelector(state => state.session.assessmentOverviews);
-  const { courseId, students, teamFormationOverviews } = useTypedSelector(state => state.session);
+  const { courseId, students, assessmentOverviews, teamFormationOverviews } = useSession();
   const dispatch = useDispatch();
   const [selectedAssessment, setSelectedAssessment] = useState<AssessmentOverview | undefined>(
     undefined
@@ -140,7 +140,7 @@ const TeamFormationForm: React.FC = () => {
           </div>
           {selectedAssessment && (
             <div className={classes['form-field']}>
-              <label className={classes['form-label']}>Max No. Student:</label>
+              <label className={classes['form-label']}>Max No. of Students:</label>
               <input
                 type="text"
                 className={classes['form-select']}
@@ -186,20 +186,20 @@ const TeamFormationForm: React.FC = () => {
           </div>
         ))}
         {!teamId ? (
-          <button type="button" onClick={addAnotherTeam} className={classes['add-button']}>
+          <Button onClick={addAnotherTeam} intent="primary">
             Add Another Team
-          </button>
+          </Button>
         ) : null}
 
         <div className={classes['form-footer']}>
-          <button type="button" onClick={backToTeamDashboard} className={classes['back-button']}>
+          <Button onClick={backToTeamDashboard} intent="danger">
             Back
-          </button>
+          </Button>
 
-          <div className={classes['submit-button-container']}>
-            <button type="button" onClick={submitForm} className={classes['submit-button']}>
+          <div>
+            <Button onClick={submitForm} intent="success">
               Submit
-            </button>
+            </Button>
           </div>
         </div>
       </Form>
