@@ -62,6 +62,8 @@ export type AssessmentOverview = {
   gradingStatus: GradingStatus;
   id: number;
   isPublished?: boolean;
+  hasVotingFeatures: boolean;
+  hasTokenCounter?: boolean;
   maxXp: number;
   earlySubmissionXp: number;
   number?: string; // For mission control
@@ -99,6 +101,7 @@ export type AssessmentConfiguration = {
   hoursBeforeEarlyXpDecay: number;
   earlySubmissionXp: number;
   hasTokenCounter: boolean;
+  hasVotingFeatures: boolean;
 };
 
 export interface IProgrammingQuestion extends BaseQuestion {
@@ -248,7 +251,8 @@ export const overviewTemplate = (): AssessmentOverview => {
     story: 'mission',
     xp: 0,
     gradingStatus: 'none',
-    maxTeamSize: 1
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   };
 };
 

@@ -86,7 +86,8 @@ const makeAssessmentOverview = (result: any, maxXpVal: number): AssessmentOvervi
     story: rawOverview.story,
     xp: 0,
     gradingStatus: 'none' as GradingStatuses,
-    maxTeamSize: 1
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   };
 };
 
