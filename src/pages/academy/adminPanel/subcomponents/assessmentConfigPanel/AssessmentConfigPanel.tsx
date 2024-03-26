@@ -61,6 +61,16 @@ const AssessmentConfigPanel: React.FC<Props> = ({
     gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('hasTokenCounter', value);
   };
 
+  const setHasVotingFeatures = (index: number, value: boolean) => {
+    const temp = [...assessmentConfig.current];
+    temp[index] = {
+      ...temp[index],
+      hasVotingFeatures: value
+    };
+    setAssessmentConfig(temp);
+    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('hasVotingFeatures', value);
+  };
+
   const setEarlyXp = (index: number, value: number) => {
     const temp = [...assessmentConfig.current];
     temp[index] = {
@@ -95,6 +105,7 @@ const AssessmentConfigPanel: React.FC<Props> = ({
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 0,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 0
     });
     setAssessmentConfig(temp);
@@ -140,7 +151,16 @@ const AssessmentConfigPanel: React.FC<Props> = ({
       }
     },
     {
-      headerName: 'Has Token Counter',
+      headerName: 'Voting Features*',
+      field: 'hasVotingFeatures',
+      cellRenderer: BooleanCell,
+      cellRendererParams: {
+        setStateHandler: setHasVotingFeatures,
+        field: 'hasVotingFeatures'
+      }
+    },
+    {
+      headerName: 'Token Counter*',
       field: 'hasTokenCounter',
       cellRenderer: BooleanCell,
       cellRendererParams: {
@@ -248,6 +268,11 @@ const AssessmentConfigPanel: React.FC<Props> = ({
         onRowDragEnd={onRowDragLeaveOrEnd}
         onCellValueChanged={onCellValueChanged}
       />
+      <div className="footer-text">
+        *If you create an assessment with these toggles enabled, they will be activated within the
+        assessment <b>by default</b>. However, you can also visit ground control to manually
+        override these settings if needed.
+      </div>
     </div>
   );
 

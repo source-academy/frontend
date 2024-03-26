@@ -1133,7 +1133,14 @@ export const deleteSourcecastEntry = async (
  */
 export const updateAssessment = async (
   id: number,
-  body: { openAt?: string; closeAt?: string; isPublished?: boolean; maxTeamSize?: number },
+  body: {
+    openAt?: string;
+    closeAt?: string;
+    isPublished?: boolean;
+    maxTeamSize?: number;
+    hasTokenCounter?: boolean;
+    hasVotingFeatures?: boolean;
+  },
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/assessments/${id}`, 'POST', {
