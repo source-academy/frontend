@@ -15,7 +15,8 @@ test('getAchievements generates correct action object', () => {
   const action = getAchievements();
 
   expect(action).toEqual({
-    type: GET_ACHIEVEMENTS
+    type: GET_ACHIEVEMENTS,
+    payload: {}
   });
 });
 

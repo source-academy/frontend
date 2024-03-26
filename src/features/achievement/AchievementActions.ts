@@ -1,6 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
 import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
-import { action } from 'typesafe-actions';
 
 import {
   AchievementGoal,
@@ -37,7 +36,7 @@ export const bulkUpdateGoals = createAction(BULK_UPDATE_GOALS, (goals: GoalDefin
   payload: goals
 }));
 
-export const getAchievements = () => action(GET_ACHIEVEMENTS);
+export const getAchievements = createAction(GET_ACHIEVEMENTS, () => ({ payload: {} }));
 
 export const getGoals = createAction(GET_GOALS, (studentCourseRegId: number) => ({
   payload: studentCourseRegId
