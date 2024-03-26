@@ -405,13 +405,6 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     currentQuestion: undefined,
     hasUnsavedChanges: false
   },
-  teamFormation: {
-    ...createDefaultWorkspace('teamFormation'),
-    teamFormationTableFilters: {
-      columnFilters: [],
-      globalFilter: null
-    }
-  },
   playground: {
     ...createDefaultWorkspace('playground'),
     usingSubst: false,
@@ -548,7 +541,6 @@ export const defaultSideContentManager: SideContentManagerState = {
   assessment: defaultSideContent,
   grading: defaultSideContent,
   playground: defaultSideContent,
-  teamFormation: defaultSideContent,
   sicp: defaultSideContent,
   sourcecast: defaultSideContent,
   sourcereel: defaultSideContent,

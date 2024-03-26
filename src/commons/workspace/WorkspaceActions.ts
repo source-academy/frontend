@@ -50,7 +50,6 @@ import {
   SET_TOKEN_COUNT,
   SHIFT_EDITOR_TAB,
   SubmissionsTableFilters,
-  TeamFormationsTableFilters,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_FOLDER_MODE,
   TOGGLE_UPDATE_CSE,
@@ -71,7 +70,6 @@ import {
   UPDATE_STEPSTOTAL,
   UPDATE_SUBLANGUAGE,
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
-  UPDATE_TEAM_FORMATIONS_TABLE_FILTERS,
   UPDATE_WORKSPACE,
   WorkspaceLocation,
   WorkspaceLocationsWithTools,
@@ -400,11 +398,6 @@ export const setIsEditorReadonly = createAction(
 export const updateSubmissionsTableFilters = createAction(
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
   (filters: SubmissionsTableFilters) => ({ payload: { filters } })
-);
-
-export const updateTeamFormationsTableFilters = createAction(
-  UPDATE_TEAM_FORMATIONS_TABLE_FILTERS,
-  (filters: TeamFormationsTableFilters) => ({ payload: { filters } })
 );
 
 export const updateCurrentAssessmentId = createAction(

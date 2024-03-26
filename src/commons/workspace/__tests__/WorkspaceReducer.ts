@@ -116,10 +116,6 @@ function generateDefaultWorkspace(payload: any = {}): WorkspaceManagerState {
     stories: {
       ...defaultWorkspaceManager.stories,
       ...cloneDeep(payload)
-    },
-    teamFormation: {
-      ...defaultWorkspaceManager.teamFormation,
-      ...cloneDeep(payload)
     }
   };
 }

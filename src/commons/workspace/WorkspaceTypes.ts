@@ -39,7 +39,6 @@ export const TOGGLE_USING_SUBST = 'TOGGLE_USING_SUBST';
 export const TOGGLE_USING_CSE = 'TOGGLE_USING_CSE';
 export const TOGGLE_UPDATE_CSE = 'TOGGLE_UPDATE_CSE';
 export const UPDATE_SUBMISSIONS_TABLE_FILTERS = 'UPDATE_SUBMISSIONS_TABLE_FILTERS';
-export const UPDATE_TEAM_FORMATIONS_TABLE_FILTERS = 'UPDATE_TEAM_FORMATIONS_TABLE_FILTERS';
 export const UPDATE_CURRENT_ASSESSMENT_ID = 'UPDATE_CURRENT_ASSESSMENT_ID';
 export const UPDATE_CURRENT_SUBMISSION_ID = 'UPDATE_CURRENT_SUBMISSION_ID';
 export const TOGGLE_FOLDER_MODE = 'TOGGLE_FOLDER_MODE';
@@ -83,13 +82,7 @@ type GradingWorkspaceAttr = {
   readonly hasUnsavedChanges: boolean;
 };
 
-type TeamFormationWorkspaceAttr = {
-  readonly teamFormationTableFilters: TeamFormationsTableFilters;
-};
-
 type GradingWorkspaceState = GradingWorkspaceAttr & WorkspaceState;
-
-type TeamFormationWorkspaceState = TeamFormationWorkspaceAttr & WorkspaceState;
 
 type PlaygroundWorkspaceAttr = {
   readonly usingSubst: boolean;
@@ -106,7 +99,6 @@ export type SicpWorkspaceState = PlaygroundWorkspaceState;
 export type WorkspaceManagerState = {
   readonly assessment: AssessmentWorkspaceState;
   readonly grading: GradingWorkspaceState;
-  readonly teamFormation: TeamFormationWorkspaceState;
   readonly playground: PlaygroundWorkspaceState;
   readonly sourcecast: SourcecastWorkspaceState;
   readonly sourcereel: SourcereelWorkspaceState;
