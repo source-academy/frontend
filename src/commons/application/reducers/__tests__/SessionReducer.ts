@@ -3,6 +3,7 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import { GradingOverview, GradingQuery } from '../../../../features/grading/GradingTypes';
 import {
   Assessment,
+  AssessmentConfiguration,
   AssessmentOverview,
   AssessmentStatuses,
   ProgressStatuses
@@ -157,6 +158,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200,
       isManuallyGraded: false,
+      isAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false
     },
@@ -169,6 +171,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200,
       isManuallyGraded: false,
+      isAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false
     },
@@ -181,6 +184,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200,
       isManuallyGraded: false,
+      isAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false
     }

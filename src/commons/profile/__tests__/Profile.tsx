@@ -28,6 +28,7 @@ const assessmentConfigurations: AssessmentConfiguration[] = [
   assessmentConfigId: i,
   type: c,
   isManuallyGraded: false,
+  isAutoPublished: false,
   displayInDashboard: false,
   hasTokenCounter: false,
   hoursBeforeEarlyXpDecay: 0,

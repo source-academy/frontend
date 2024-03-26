@@ -410,7 +410,7 @@ const makeProgressStatus = (progress: ProgressStatus) => {
   if (progress === ProgressStatuses.published) {
     iconName = IconNames.TICK;
     intent = Intent.SUCCESS;
-    tooltip = 'Fully graded!!!';
+    tooltip = 'Fully graded';
   } else if (progress === ProgressStatuses.graded || progress === ProgressStatuses.submitted) {
     // shh, hide actual grading progress from users
     iconName = IconNames.TIME;
