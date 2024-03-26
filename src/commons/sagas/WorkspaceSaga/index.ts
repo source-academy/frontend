@@ -490,7 +490,7 @@ export default function* WorkspaceSaga(): SagaIterator {
       yield call([CseMachine, CseMachine.clear]);
       const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
       for (const [key, value] of globals) {
-        window[key] = value;
+        window[key as any] = value;
       }
       yield put(
         actions.endClearContext(

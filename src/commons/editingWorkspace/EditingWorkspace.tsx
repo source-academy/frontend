@@ -723,7 +723,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
 };
 
 function uniq(a: string[]) {
-  const seen = {};
+  const seen: Record<string, boolean> = {};
   return a.filter(item => (seen.hasOwnProperty(item) ? false : (seen[item] = true)));
 }
 

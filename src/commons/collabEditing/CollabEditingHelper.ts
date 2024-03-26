@@ -1,14 +1,14 @@
 import Constants from '../utils/Constants';
 
-const protocolMap = {
+const protocolMap = Object.freeze({
   'http:': 'ws:',
   'https:': 'wss:'
-};
+});
 
 export function getSessionUrl(sessionId: string, ws?: boolean): string {
   const url = new URL(sessionId, Constants.sharedbBackendUrl);
-  if (ws) {
-    url.protocol = protocolMap[url.protocol];
+  if (ws && Object.keys(protocolMap).includes(url.protocol)) {
+    url.protocol = protocolMap[url.protocol as keyof typeof protocolMap];
   }
   return url.toString();
 }
