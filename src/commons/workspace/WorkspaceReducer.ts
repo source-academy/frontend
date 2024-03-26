@@ -85,6 +85,7 @@ import {
 } from './WorkspaceActions';
 import {
   EditorTabState,
+  UPDATE_CHANGEPOINTSTEPS,
   UPDATE_LAST_DEBUGGER_RESULT,
   UPDATE_LAST_NON_DET_RESULT,
   WorkspaceLocation,
@@ -860,6 +861,14 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
   const workspaceLocation = getWorkspaceLocation(action);
 
   switch (action.type) {
+    case UPDATE_CHANGEPOINTSTEPS:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          changepointSteps: action.payload.changepointSteps
+        }
+      };
     case UPDATE_LAST_DEBUGGER_RESULT:
       return {
         ...state,
