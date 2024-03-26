@@ -63,7 +63,7 @@ const GroundControl: React.FC<Props> = props => {
   };
 
   const resizeGrid = () => {
-    gridApi.current?.sizeColumnsToFit()
+    gridApi.current?.sizeColumnsToFit();
   };
 
   const toggleDropzone = () => {
