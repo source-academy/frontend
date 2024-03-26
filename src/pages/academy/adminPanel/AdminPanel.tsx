@@ -46,7 +46,8 @@ const AdminPanel: React.FC = () => {
     enableAchievements: true,
     enableSourcecast: true,
     enableStories: false,
-    moduleHelpText: ''
+    moduleHelpText: '',
+    defaultLlmPrompt: ''
   });
 
   const dispatch = useDispatch();
@@ -86,7 +87,8 @@ const AdminPanel: React.FC = () => {
       enableAchievements: session.enableAchievements,
       enableSourcecast: session.enableSourcecast,
       enableStories: session.enableStories,
-      moduleHelpText: session.moduleHelpText
+      moduleHelpText: session.moduleHelpText,
+      defaultLlmPrompt: session.defaultLlmPrompt
     });
 
     // IMPT: To prevent mutation of props

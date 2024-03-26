@@ -111,6 +111,7 @@ export type SessionState = {
   readonly sourceChapter?: Chapter;
   readonly sourceVariant?: Variant;
   readonly moduleHelpText?: string;
+  readonly defaultLlmPrompt?: string;
   readonly assetsPrefix?: string;
 
   readonly assessmentConfigurations?: AssessmentConfiguration[];
@@ -180,6 +181,7 @@ export type CourseConfiguration = {
   sourceChapter: Chapter;
   sourceVariant: Variant;
   moduleHelpText: string;
+  defaultLlmPrompt: string;
   assetsPrefix: string;
 };
 
