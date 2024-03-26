@@ -1,11 +1,8 @@
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-balham.css';
-
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
-import { AgGridReact } from 'ag-grid-react';
 import { startCase } from 'lodash';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import DataTable from 'src/commons/dataTable/DataTable';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
@@ -42,8 +39,8 @@ const Dashboard: React.FC = () => {
 
   const content = (
     <div className="Dashboard">
-      <div className="Grid ag-grid-parent ag-theme-balham">
-        <AgGridReact
+      <div className="Grid">
+        <DataTable
           domLayout={'autoHeight'}
           columnDefs={columnDefs}
           defaultColDef={defaultColumnDefs}

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button, H2, Intent } from '@blueprintjs/core';
 import { ColDef, GridApi, GridReadyEvent, ValueFormatterFunc } from 'ag-grid-community';
-import { AgGridReact } from 'ag-grid-react';
 import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -12,6 +11,7 @@ import {
   updateTimeOptions
 } from 'src/commons/application/actions/SessionActions';
 import { NotificationConfiguration, TimeOption } from 'src/commons/application/types/SessionTypes';
+import DataTable from 'src/commons/dataTable/DataTable';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import BooleanCell from './assessmentConfigPanel/BooleanCell';
@@ -189,8 +189,8 @@ const NotificationConfigPanel = () => {
   };
 
   const grid = (
-    <div className="Grid ag-grid-parent ag-theme-balham">
-      <AgGridReact
+    <div className="Grid">
+      <DataTable
         domLayout={'autoHeight'}
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}

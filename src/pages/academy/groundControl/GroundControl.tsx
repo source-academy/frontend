@@ -1,6 +1,3 @@
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-balham.css';
-
 import {
   Button,
   Collapse,
@@ -12,8 +9,8 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
-import { AgGridReact } from 'ag-grid-react';
 import React, { useState } from 'react';
+import DataTable from 'src/commons/dataTable/DataTable';
 import { useSession } from 'src/commons/utils/Hooks';
 
 import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
@@ -208,8 +205,8 @@ const GroundControl: React.FC<Props> = props => {
   );
 
   const grid = (
-    <div className="Grid ag-grid-parent ag-theme-balham">
-      <AgGridReact
+    <div className="Grid">
+      <DataTable
         domLayout={'autoHeight'}
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
