@@ -151,21 +151,21 @@ const GroundControl: React.FC<Props> = props => {
         handleDeleteAssessment: props.handleDeleteAssessment
       },
       width: 80,
-        filter: false,
-        resizable: false,
-        sortable: false,
-        cellStyle: {
-          padding: 0
-        }
+      filter: false,
+      resizable: false,
+      sortable: false,
+      cellStyle: {
+        padding: 0
+      }
+    },
+    {
+      headerName: 'Configure',
+      field: 'placeholderConfigure' as any,
+      cellRenderer: ConfigureCell,
+      cellRendererParams: {
+        handleConfigureAssessment: props.handleConfigureAssessment
       },
-      {
-        headerName: 'Configure',
-        field: '',
-        cellRenderer: ConfigureCell,
-        cellRendererParams: {
-          handleConfigureAssessment: this.props.handleConfigureAssessment
-        },
-        width: 80,
+      width: 80,
       filter: false,
       resizable: false,
       sortable: false,
