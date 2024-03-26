@@ -537,6 +537,7 @@ test('updateAssessmentOverviews generates correct action object', () => {
       coverImage: 'test_string',
       id: 0,
       maxXp: 0,
+      earlySubmissionXp: 0,
       openAt: 'test_string',
       title: 'test_string',
       shortSummary: 'test_string',
