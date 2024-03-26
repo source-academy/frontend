@@ -13,17 +13,25 @@ export function getSessionUrl(sessionId: string, ws?: boolean): string {
   return url.toString();
 }
 
-export async function checkSessionIdExists(sessionId: string): Promise<boolean> {
+export async function getDocInfoFromSessionId(
+  sessionId: string
+): Promise<{ docId: string; readOnly: boolean } | null> {
   const resp = await fetch(getSessionUrl(sessionId));
 
-  return resp && resp.ok;
+  if (resp && resp.ok) {
+    return resp.json();
+  } else {
+    return null;
+  }
 }
 
-export async function createNewSession(initial: string): Promise<string> {
+export async function createNewSession(
+  contents: string
+): Promise<{ docId: string; sessionEditingId: string; sessionViewingId: string }> {
   const resp = await fetch(Constants.sharedbBackendUrl, {
     method: 'POST',
-    body: initial,
-    headers: { 'Content-Type': 'text/plain' }
+    body: JSON.stringify({ contents }),
+    headers: { 'Content-Type': 'application/json' }
   });
 
   if (!resp || !resp.ok) {
@@ -32,5 +40,5 @@ export async function createNewSession(initial: string): Promise<string> {
     );
   }
 
-  return resp.text();
+  return resp.json();
 }
