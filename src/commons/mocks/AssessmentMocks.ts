@@ -23,6 +23,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     },
     {
@@ -32,6 +33,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     },
     {
@@ -41,6 +43,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     },
     {
@@ -49,7 +52,8 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      hasTokenCounter: true,
+      hasTokenCounter: false,
+      hasVotingFeatures: true,
       earlySubmissionXp: 200
     },
     {
@@ -59,6 +63,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     }
   ],
@@ -70,6 +75,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     },
     {
@@ -79,6 +85,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     },
     {
@@ -88,6 +95,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     }
   ]
@@ -109,7 +117,8 @@ const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
     story: 'mission-1',
     xp: 0,
     gradingStatus: GradingStatuses.none,
-    maxTeamSize: 1
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   }
 ];
 
@@ -141,7 +150,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     story: 'mission-1',
     xp: 1,
     gradingStatus: GradingStatuses.none,
-    maxTeamSize: 4
+    maxTeamSize: 4,
+    hasVotingFeatures: false
   },
   {
     type: 'Missions',
@@ -158,7 +168,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     story: 'mission-2',
     xp: 2,
     gradingStatus: GradingStatuses.none,
-    maxTeamSize: 1
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   },
   {
     type: 'Quests',
@@ -175,7 +186,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     story: 'sidequest-2.1',
     xp: 3,
     gradingStatus: GradingStatuses.none,
-    maxTeamSize: 2
+    maxTeamSize: 2,
+    hasVotingFeatures: false
   },
   {
     type: 'Paths',
@@ -192,7 +204,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     story: null,
     xp: 0,
     gradingStatus: GradingStatuses.excluded,
-    maxTeamSize: 2
+    maxTeamSize: 2,
+    hasVotingFeatures: false
   },
   {
     type: 'Others',
@@ -210,7 +223,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     xp: 3,
     gradingStatus: GradingStatuses.none,
     private: true,
-    maxTeamSize: 1
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   }
 ];
 
@@ -230,7 +244,8 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     story: 'mission-3',
     xp: 800,
     gradingStatus: GradingStatuses.grading,
-    maxTeamSize: 1
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   },
   {
     type: 'Quests',
@@ -247,7 +262,8 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     story: null,
     xp: 500,
     gradingStatus: GradingStatuses.none,
-    maxTeamSize: 1
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   },
   {
     type: 'Quests',
@@ -264,7 +280,8 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     story: null,
     xp: 150,
     gradingStatus: GradingStatuses.graded,
-    maxTeamSize: 1
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   },
   {
     type: 'Quests',
@@ -281,7 +298,8 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     story: null,
     xp: 100,
     gradingStatus: GradingStatuses.excluded,
-    maxTeamSize: 1
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   }
 ];
 
