@@ -2,6 +2,7 @@ import { DialogueLine, DialogueObject } from "../dialogue/GameDialogueTypes";
 import FontAssets from '../assets/FontAssets';
 import { BitmapFontStyle } from '../commons/CommonTypes';
 import { Color } from '../utils/StyleUtils';
+import { screenSize } from "../commons/CommonConstants";
 
 export const defaultReaction = {
   correct: ['You are right.'],
@@ -25,7 +26,7 @@ export const ImproveMent : DialogueObject = new Map([
 ]);
 
 export const QuizConstants = {
-    textPad: 10,
+    textPad: 250,
     textConfig: { x: 15, y: -15, oriX: 0.5, oriY: 0.5 },
     y: 50,
     width: 450,
@@ -47,7 +48,7 @@ export const questionTextStyle = {
     fill: Color.lightBlue,
     align: 'left',
     lineSpacing: 10,
-    wordWrap: { width: QuizConstants.width - QuizConstants.textPad * 2 }
+    wordWrap: { width: screenSize.x - 240 }
   };
   
 export const quizOptStyle: BitmapFontStyle = {
