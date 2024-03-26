@@ -23,7 +23,9 @@ export const mockGradingOverviews: GradingOverview[] = [
     maxXp: 100,
     studentId: 0,
     studentName: 'Al Gorithm',
+    studentNames: [],
     studentUsername: 'E0123456',
+    studentUsernames: [],
     submissionId: 1,
     submissionStatus: 'submitted',
     groupName: '1D',
@@ -43,7 +45,9 @@ export const mockGradingOverviews: GradingOverview[] = [
     maxXp: 400,
     studentId: 0,
     studentName: 'Dee Sign',
+    studentNames: [],
     studentUsername: 'E0000000',
+    studentUsernames: [],
     submissionId: 2,
     submissionStatus: 'submitted',
     groupName: '1F',
@@ -63,7 +67,9 @@ export const mockGradingOverviews: GradingOverview[] = [
     maxXp: 1000,
     studentId: 1,
     studentName: 'May Trix',
+    studentNames: [],
     studentUsername: 'E0000001',
+    studentUsernames: [],
     submissionId: 3,
     submissionStatus: 'submitted',
     groupName: '1F',
@@ -117,6 +123,7 @@ export const mockGradingAnswer: GradingAnswer = [
       answer: `function remainder(n, d) {
   return (n - d) < 0 ? n : remainder(n - d, d);
 }`,
+      lastModifiedAt: '2023-08-05T17:48:24.000000Z',
       content: `
 Hello and welcome to this assessment! This is the *0th question*.
 
@@ -233,6 +240,7 @@ _italics_
       postpend: '',
       testcases: [],
       answer: "This student's answer to the 1st question",
+      lastModifiedAt: '2023-08-05T17:48:24.000000Z',
       content: 'Hello and welcome to this assessment! This is the 1st question.',
       id: 1,
       library: mockLibrary,
@@ -325,6 +333,7 @@ New message from **Avenger**!
       postpend: '',
       testcases: [],
       answer: 3,
+      lastModifiedAt: '2023-08-05T17:48:24.000000Z',
       solution: 2,
       content:
         'Hello and welcome to this assessment! This is the 2nd question. Oddly enough, it is an MCQ question!',

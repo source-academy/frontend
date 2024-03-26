@@ -334,7 +334,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
     context.runtime.break = false;
-    yield put(actions.updateLastDebuggerResult(undefined));
+    yield put(actions.updateLastDebuggerResult(undefined, workspaceLocation));
   });
 
   yield takeEvery(
