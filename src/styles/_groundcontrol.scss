@@ -85,6 +85,28 @@
     .publish-voting {
       margin-top: 5px;
     }
+
+    .reassign-voting-warning {
+      font-size: 11px;
+      margin-left: 38px;
+    }
+
+    .confirm-assign-voting,
+    .current-voting-status {
+      max-height: 30px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: 16px;
+
+      .confirm-assign-text {
+        margin-top: 8px;
+      }
+
+      .voting-status-text {
+        margin-top: 10px;
+      }
+    }
   }
 
   .numeric-input-container {
