@@ -76,6 +76,7 @@ const makeAssessmentOverview = (result: any, maxXpVal: number): AssessmentOvervi
     coverImage: rawOverview.coverimage,
     id: EDITING_ID,
     maxXp: maxXpVal,
+    earlySubmissionXp: 0,
     number: rawOverview.number || '',
     openAt: rawOverview.startdate,
     title: rawOverview.title,
@@ -85,7 +86,8 @@ const makeAssessmentOverview = (result: any, maxXpVal: number): AssessmentOvervi
     story: rawOverview.story,
     xp: 0,
     gradingStatus: 'none' as GradingStatuses,
-    maxTeamSize: 1
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   };
 };
 

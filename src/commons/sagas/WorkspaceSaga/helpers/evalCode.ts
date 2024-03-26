@@ -248,6 +248,9 @@ export function* evalCode(
         yield put(
           actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation)
         );
+        yield put(
+          actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation)
+        );
       }
     } else {
       // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
@@ -315,6 +318,7 @@ export function* evalCode(
     // But TS can't infer that yet, so we need a typecast here.
     yield put(actions.toggleUpdateCse(false, workspaceLocation as any));
     yield put(actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation));
+    yield put(actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation));
   }
   // Stop the home icon from flashing for an error if it is doing so since the evaluation is successful
   if (context.executionMethod === 'cse-machine' || context.executionMethod === 'interpreter') {
