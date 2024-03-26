@@ -11,7 +11,14 @@ jest.mock('react-redux', () => ({
 const useSelectorMock = useTypedSelector as jest.Mock;
 
 const assessmentTypes = ['Missions', 'Quests', 'Paths', 'Contests', 'Others'];
-const staffRoutes = ['grading', 'groundcontrol', 'sourcereel', 'gamesimulator', 'dashboard'];
+const staffRoutes = [
+  'grading',
+  'groundcontrol',
+  'sourcereel',
+  'gamesimulator',
+  'dashboard',
+  'teamformation'
+];
 const adminRoutes = ['adminpanel'];
 const courseId = 0;
 const createCoursePath = (path: string) => `/courses/${courseId}/${path}`;
@@ -43,7 +50,7 @@ const mockProps = {
 };
 const element = <AcademyNavigationBar {...mockProps} />;
 
-test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Grading and AdminPanel NavLinks do NOT render for Role.Student', () => {
+test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Grading, Team Formation and AdminPanel NavLinks do NOT render for Role.Student', () => {
   useSelectorMock.mockReturnValue({
     role: Role.Student,
     courseId
@@ -57,7 +64,7 @@ test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gradi
   validateAdminPaths(tree, false);
 });
 
-test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard and Grading NavLinks render for Role.Staff', () => {
+test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Team Formation and Grading NavLinks render for Role.Staff', () => {
   useSelectorMock.mockReturnValueOnce({
     role: Role.Staff,
     courseId
@@ -71,7 +78,7 @@ test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard and Gr
   validateAdminPaths(tree, false);
 });
 
-test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Grading and AdminPanel NavLinks render for Role.Admin', () => {
+test('MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Grading, Team Formation and AdminPanel NavLinks render for Role.Admin', () => {
   useSelectorMock.mockReturnValueOnce({
     role: Role.Admin,
     courseId

@@ -1,5 +1,4 @@
 import { Context } from 'js-slang';
-import { SideContentState } from 'src/commons/sideContent/SideContentTypes';
 import { DebuggerContext } from 'src/commons/workspace/WorkspaceTypes';
 
 import { InterpreterOutput, StoriesRole } from '../../commons/application/ApplicationTypes';
@@ -62,7 +61,6 @@ export type StoriesEnvState = {
   readonly globals: Array<[string, any]>;
   readonly usingSubst: boolean;
   readonly debuggerContext: DebuggerContext;
-  readonly sideContent: SideContentState;
 };
 
 export type StoriesAuthState = {
