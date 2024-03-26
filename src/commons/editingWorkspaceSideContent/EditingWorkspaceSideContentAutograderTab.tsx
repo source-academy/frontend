@@ -43,7 +43,6 @@ export const AutograderTab: React.FC<AutograderProps> = props => {
       <div>
         <Card className="row listing" elevation={Elevation.ONE}>
           <div className="col-xs-9 listing-text">
-            {/* {makeOverviewCardTitle(overview, index, setBetchaAssessment, renderGradingStatus)} */}
             <div className="row listing-program">
               <H6>
                 Test Program:

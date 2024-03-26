@@ -228,6 +228,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     assessmentConfigId: 1,
     type: 'Missions',
     isManuallyGraded: true,
+    isAutoPublished: false,
     displayInDashboard: true,
     hoursBeforeEarlyXpDecay: 48,
     hasTokenCounter: false,
@@ -237,6 +238,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     assessmentConfigId: 2,
     type: 'Quests',
     isManuallyGraded: true,
+    isAutoPublished: false,
     displayInDashboard: true,
     hoursBeforeEarlyXpDecay: 48,
     hasTokenCounter: false,
@@ -246,6 +248,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     assessmentConfigId: 3,
     type: 'Paths',
     isManuallyGraded: false,
+    isAutoPublished: true,
     displayInDashboard: false,
     hoursBeforeEarlyXpDecay: 48,
     hasTokenCounter: false,
@@ -255,6 +258,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     assessmentConfigId: 4,
     type: 'Contests',
     isManuallyGraded: false,
+    isAutoPublished: false,
     displayInDashboard: false,
     hoursBeforeEarlyXpDecay: 48,
     hasTokenCounter: true,
@@ -264,6 +268,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     assessmentConfigId: 5,
     type: 'Others',
     isManuallyGraded: true,
+    isAutoPublished: false,
     displayInDashboard: false,
     hoursBeforeEarlyXpDecay: 48,
     hasTokenCounter: false,
@@ -1060,11 +1065,12 @@ describe('Test CREATE_COURSE action', () => {
   const user = mockUser;
   const courseConfiguration = mockCourseConfiguration1;
   const courseRegistration = mockCourseRegistration1;
-  const placeholderAssessmentConfig = [
+  const placeholderAssessmentConfig: AssessmentConfiguration[] = [
     {
       type: 'Missions',
       assessmentConfigId: -1,
       isManuallyGraded: true,
+      isAutoPublished: false,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 0,
       hasTokenCounter: false,

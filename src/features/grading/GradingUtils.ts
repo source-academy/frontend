@@ -1,15 +1,12 @@
 import { ColumnFilter } from '@tanstack/react-table';
-import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
+import {
+  AssessmentStatus,
+  AssessmentStatuses,
+  ProgressStatus,
+  ProgressStatuses
+} from 'src/commons/assessment/AssessmentTypes';
 
 import { GradingOverview } from './GradingTypes';
-
-// TODO: Unused. Marked for deletion.
-export const isSubmissionUngraded = (s: GradingOverview): boolean => {
-  const isSubmitted = s.submissionStatus === 'submitted';
-  const isNotGraded =
-    s.gradingStatus !== GradingStatuses.graded && s.gradingStatus !== GradingStatuses.excluded;
-  return isSubmitted && isNotGraded;
-};
 
 export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined) => {
   if (!gradingOverviews) return;
@@ -22,7 +19,7 @@ export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined
 
   const content = new Blob(
     [
-      '"Assessment Number","Assessment Name","Student Name","Student Username","Group","Status","Grading","Question Count","Questions Graded","Initial XP","XP Adjustment","Current XP (excl. bonus)","Max XP","Bonus XP"\n',
+      '"Assessment Number","Assessment Name","Student Name","Student Username","Group","Progress","Question Count","Questions Graded","Initial XP","XP Adjustment","Current XP (excl. bonus)","Max XP","Bonus XP"\n',
       ...gradingOverviews.map(
         e =>
           [
@@ -31,8 +28,7 @@ export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined
             e.studentName,
             e.studentUsername,
             e.groupName,
-            e.submissionStatus,
-            e.gradingStatus,
+            e.progress,
             e.questionCount,
             e.gradedCount,
             e.initialXp,
@@ -72,9 +68,7 @@ export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined
   }, 0);
 };
 
-// Cleanup work: change all references to column properties in backend saga to backend name to reduce
-// un-needed hardcode conversion, ensuring that places that reference it are updated. A two-way conversion
-// function would be good to implement in GradingUtils.
+// TODO: Two-way conversion function for frontend-backend parameter conversion
 export const convertFilterToBackendParams = (column: ColumnFilter) => {
   switch (column.id) {
     case 'assessmentName':
@@ -85,8 +79,8 @@ export const convertFilterToBackendParams = (column: ColumnFilter) => {
       return { name: column.value };
     case 'studentUsername':
       return { username: column.value };
-    case 'submissionStatus':
-      return { status: column.value };
+    case 'progress':
+      return progressStatusToBackendParams(column.value as ProgressStatus);
     case 'groupName':
       return { groupName: column.value };
     default:
@@ -98,13 +92,68 @@ export const paginationToBackendParams = (page: number, pageSize: number) => {
   return { offset: page * pageSize, pageSize: pageSize };
 };
 
-export const ungradedToBackendParams = (showAll: boolean) => {
+export const unpublishedToBackendParams = (showAll: boolean) => {
   if (showAll) {
     return {};
   }
+
   return {
-    status: 'submitted',
-    isManuallyGraded: true,
-    notFullyGraded: true
+    status: AssessmentStatuses.submitted,
+    isGradingPublished: false
   };
+};
+
+/**
+ * Converts multiple backend parameters into a single comprehensive grading status for use in the grading dashboard.
+ * @param isGradingPublished backend field denoting if grading of submitted work is to be shown to the student
+ * @param submissionStatus backend field denoting if the student has submitted their work.
+ * @param numGraded
+ * @param numQuestions
+ * @returns a ProgressStatus, defined within AssessmentTypes, useable by the grading dashboard for display and business logic.
+ */
+export const backendParamsToProgressStatus = (
+  isGradingPublished: boolean,
+  submissionStatus: AssessmentStatus,
+  numGraded: number,
+  numQuestions: number
+): ProgressStatus => {
+  if (submissionStatus !== AssessmentStatuses.submitted) {
+    return submissionStatus as ProgressStatus;
+  } else if (numGraded < numQuestions) {
+    return ProgressStatuses.submitted;
+  } else if (!isGradingPublished) {
+    return ProgressStatuses.graded;
+  } else {
+    return ProgressStatuses.published;
+  }
+};
+
+export const progressStatusToBackendParams = (progress: ProgressStatus) => {
+  switch (progress) {
+    case ProgressStatuses.published:
+      return {
+        isGradingPublished: true,
+        isFullyGraded: true,
+        status: AssessmentStatuses.submitted
+      };
+    case ProgressStatuses.graded:
+      return {
+        isGradingPublished: false,
+        isFullyGraded: true,
+        status: AssessmentStatuses.submitted
+      };
+    case ProgressStatuses.submitted:
+      return {
+        isGradingPublished: false,
+        isFullyGraded: false,
+        status: AssessmentStatuses.submitted
+      };
+    default:
+      // 'attempted' work may have been previously graded and then unsubmitted
+      // thus, isFullyGraded flag is not added
+      return {
+        isGradingPublished: false,
+        status: progress as AssessmentStatus
+      };
+  }
 };

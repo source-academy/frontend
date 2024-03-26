@@ -14,7 +14,7 @@ import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import {
   exportGradingCSV,
   paginationToBackendParams,
-  ungradedToBackendParams
+  unpublishedToBackendParams
 } from 'src/features/grading/GradingUtils';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
@@ -28,7 +28,7 @@ const groupOptions = [
 ];
 
 const showOptions = [
-  { value: false, label: 'ungraded' },
+  { value: false, label: 'unpublished' },
   { value: true, label: 'all' }
 ];
 
@@ -55,7 +55,7 @@ const Grading: React.FC = () => {
       dispatch(
         fetchGradingOverviews(
           showAllGroups,
-          ungradedToBackendParams(showAllSubmissions),
+          unpublishedToBackendParams(showAllSubmissions),
           paginationToBackendParams(page, pageSize),
           filterParams
         )

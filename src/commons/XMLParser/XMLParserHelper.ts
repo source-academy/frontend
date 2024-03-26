@@ -9,11 +9,11 @@ import {
   AssessmentType,
   BaseQuestion,
   emptyLibrary,
-  GradingStatuses,
   IMCQQuestion,
   IProgrammingQuestion,
   Library,
   MCQChoice,
+  ProgressStatuses,
   Question,
   Testcase,
   TestcaseTypes
@@ -72,6 +72,7 @@ const makeAssessmentOverview = (result: any, maxXpVal: number): AssessmentOvervi
   return {
     type: capitalizeFirstLetter(rawOverview.kind) as AssessmentType,
     isManuallyGraded: true, // TODO: This is temporarily hardcoded to true. To be redone when overhauling MissionControl
+    isPublished: false,
     closeAt: rawOverview.duedate,
     coverImage: rawOverview.coverimage,
     id: EDITING_ID,
@@ -83,8 +84,8 @@ const makeAssessmentOverview = (result: any, maxXpVal: number): AssessmentOvervi
     shortSummary: task.WEBSUMMARY ? task.WEBSUMMARY[0] : '',
     status: AssessmentStatuses.attempting,
     story: rawOverview.story,
+    progress: ProgressStatuses.attempting,
     xp: 0,
-    gradingStatus: 'none' as GradingStatuses,
     maxTeamSize: 1
   };
 };

@@ -5,7 +5,7 @@ import {
   Assessment,
   AssessmentOverview,
   AssessmentStatuses,
-  GradingStatuses
+  ProgressStatuses
 } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
 import { defaultSession, GameState, Role, Story } from '../../ApplicationTypes';
@@ -158,6 +158,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200,
       isManuallyGraded: false,
+      isAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false
     },
@@ -170,6 +171,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200,
       isManuallyGraded: false,
+      isAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false
     },
@@ -182,6 +184,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200,
       isManuallyGraded: false,
+      isAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false
     }
@@ -328,17 +331,18 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
   {
     type: 'Missions',
     isManuallyGraded: true,
+    isPublished: false,
     closeAt: 'test_string',
     coverImage: 'test_string',
     id: 0,
     maxXp: 0,
     openAt: 'test_string',
+    progress: ProgressStatuses.not_attempted,
     title: 'test_string',
     shortSummary: 'test_string',
     status: AssessmentStatuses.not_attempted,
     story: null,
     xp: 0,
-    gradingStatus: GradingStatuses.none,
     maxTeamSize: 5
   }
 ];
@@ -347,18 +351,19 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
   {
     type: 'Contests',
     isManuallyGraded: true,
+    isPublished: false,
     closeAt: 'test_string_0',
     coverImage: 'test_string_0',
     fileName: 'test_sting_0',
     id: 1,
     maxXp: 1,
     openAt: 'test_string_0',
+    progress: ProgressStatuses.attempted,
     title: 'test_string_0',
     shortSummary: 'test_string_0',
     status: AssessmentStatuses.attempted,
     story: null,
     xp: 1,
-    gradingStatus: GradingStatuses.grading,
     maxTeamSize: 1
   }
 ];
@@ -530,11 +535,11 @@ const gradingOverviewTest1: GradingOverview[] = [
     studentUsername: 'E0123456',
     studentUsernames: [],
     submissionId: 1,
-    submissionStatus: 'attempting',
+    submissionStatus: AssessmentStatuses.attempting,
+    progress: ProgressStatuses.attempting,
     groupName: 'group',
-    gradingStatus: 'excluded',
-    questionCount: 0,
-    gradedCount: 6
+    questionCount: 4,
+    gradedCount: 2
   }
 ];
 
@@ -555,11 +560,11 @@ const gradingOverviewTest2: GradingOverview[] = [
     studentUsername: 'E0000000',
     studentUsernames: [],
     submissionId: 2,
-    submissionStatus: 'attempted',
+    submissionStatus: AssessmentStatuses.attempted,
+    progress: ProgressStatuses.graded,
     groupName: 'another group',
-    gradingStatus: 'excluded',
-    questionCount: 6,
-    gradedCount: 0
+    questionCount: 3,
+    gradedCount: 3
   }
 ];
 

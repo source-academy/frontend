@@ -20,6 +20,8 @@ import {
   CHANGE_TEAM_SIZE_ASSESSMENT,
   DELETE_ASSESSMENT,
   PUBLISH_ASSESSMENT,
+  PUBLISH_GRADING_ALL,
+  UNPUBLISH_GRADING_ALL,
   UPLOAD_ASSESSMENT
 } from '../../features/groundControl/GroundControlTypes';
 import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
@@ -61,6 +63,7 @@ import {
   FETCH_TOTAL_XP_ADMIN,
   FETCH_USER_AND_COURSE,
   NotificationConfiguration,
+  PUBLISH_GRADING,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   SUBMIT_ANSWER,
@@ -68,6 +71,7 @@ import {
   SUBMIT_GRADING_AND_CONTINUE,
   TimeOption,
   Tokens,
+  UNPUBLISH_GRADING,
   UNSUBMIT_SUBMISSION,
   UPDATE_ASSESSMENT_CONFIGS,
   UPDATE_COURSE_CONFIG,
@@ -87,6 +91,7 @@ import {
   AssessmentOverview,
   AssessmentStatuses,
   FETCH_ASSESSMENT_OVERVIEWS,
+  ProgressStatuses,
   Question,
   SUBMIT_ASSESSMENT
 } from '../assessment/AssessmentTypes';
@@ -134,6 +139,8 @@ import {
   postTeams,
   postUnsubmit,
   postUploadTeams,
+  publishGrading,
+  publishGradingAll,
   putAssessmentConfigs,
   putCourseConfig,
   putCourseResearchAgreement,
@@ -147,6 +154,8 @@ import {
   removeAssessmentConfig,
   removeTimeOptions,
   removeUserCourseRegistration,
+  unpublishGrading,
+  unpublishGradingAll,
   updateAssessment,
   uploadAssessment
 } from './RequestsSaga';
@@ -456,13 +465,13 @@ function* BackendSaga(): SagaIterator {
         return;
       }
 
-      const { filterToGroup, gradedFilter, pageParams, filterParams } = action.payload;
+      const { filterToGroup, publishedFilter, pageParams, filterParams } = action.payload;
 
       const gradingOverviews: GradingOverviews | null = yield call(
         getGradingOverviews,
         tokens,
         filterToGroup,
-        gradedFilter,
+        publishedFilter,
         pageParams,
         filterParams
       );
@@ -633,7 +642,7 @@ function* BackendSaga(): SagaIterator {
       );
       const newOverviews = overviews.map(overview => {
         if (overview.submissionId === submissionId) {
-          return { ...overview, submissionStatus: 'attempted' };
+          return { ...overview, progress: ProgressStatuses.attempted };
         }
         return overview;
       });
@@ -643,6 +652,70 @@ function* BackendSaga(): SagaIterator {
       );
 
       yield call(showSuccessMessage, 'Unsubmit successful', 1000);
+      yield put(
+        actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews })
+      );
+    }
+  );
+
+  yield takeEvery(
+    PUBLISH_GRADING,
+    function* (action: ReturnType<typeof actions.publishGrading>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { submissionId } = action.payload;
+
+      const resp: Response | null = yield publishGrading(submissionId, tokens);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      const overviews: GradingOverview[] = yield select(
+        (state: OverallState) => state.session.gradingOverviews?.data || []
+      );
+      const newOverviews = overviews.map(overview => {
+        if (overview.submissionId === submissionId) {
+          return { ...overview, progress: ProgressStatuses.published };
+        }
+        return overview;
+      });
+
+      const totalPossibleEntries = yield select(
+        (state: OverallState) => state.session.gradingOverviews?.count
+      );
+
+      yield call(showSuccessMessage, 'Publish grading successful', 1000);
+      yield put(
+        actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews })
+      );
+    }
+  );
+
+  yield takeEvery(
+    UNPUBLISH_GRADING,
+    function* (action: ReturnType<typeof actions.unpublishGrading>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { submissionId } = action.payload;
+
+      const resp: Response | null = yield unpublishGrading(submissionId, tokens);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      const overviews: GradingOverview[] = yield select(
+        (state: OverallState) => state.session.gradingOverviews?.data || []
+      );
+      const newOverviews = overviews.map(overview => {
+        if (overview.submissionId === submissionId) {
+          return { ...overview, progress: ProgressStatuses.graded };
+        }
+        return overview;
+      });
+
+      const totalPossibleEntries = yield select(
+        (state: OverallState) => state.session.gradingOverviews?.count
+      );
+
+      yield call(showSuccessMessage, 'Unpublish grading successful', 1000);
       yield put(
         actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews })
       );
@@ -1152,11 +1225,12 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.clearStoriesUserAndGroup());
     }
 
-    const placeholderAssessmentConfig = [
+    const placeholderAssessmentConfig: AssessmentConfiguration[] = [
       {
         type: 'Missions',
         assessmentConfigId: -1,
         isManuallyGraded: true,
+        isAutoPublished: false,
         displayInDashboard: true,
         hoursBeforeEarlyXpDecay: 0,
         hasTokenCounter: false,
@@ -1314,7 +1388,7 @@ function* BackendSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.publishAssessment>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload.id;
-      const togglePublishTo = action.payload.togglePublishTo;
+      const togglePublishTo = action.payload.togglePublishAssessmentTo;
 
       const resp: Response | null = yield updateAssessment(
         id,
@@ -1359,6 +1433,38 @@ function* BackendSaga(): SagaIterator {
       }
 
       yield put(actions.fetchAssessmentOverviews());
+    }
+  );
+
+  yield takeEvery(
+    PUBLISH_GRADING_ALL,
+    function* (action: ReturnType<typeof actions.publishGradingAll>): any {
+      const tokens: Tokens = yield selectTokens();
+      const id = action.payload;
+
+      const resp: Response | null = yield publishGradingAll(id, tokens);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.fetchAssessmentOverviews());
+      yield call(showSuccessMessage, 'Published all graded submissons successfully!', 1000);
+    }
+  );
+
+  yield takeEvery(
+    UNPUBLISH_GRADING_ALL,
+    function* (action: ReturnType<typeof actions.unpublishGradingAll>): any {
+      const tokens: Tokens = yield selectTokens();
+      const id = action.payload;
+
+      const resp: Response | null = yield unpublishGradingAll(id, tokens);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.fetchAssessmentOverviews());
+      yield call(showSuccessMessage, 'Unpublished all submissons successfully!', 1000);
     }
   );
 }

@@ -6,11 +6,11 @@ import {
   AssessmentConfiguration,
   AssessmentOverview,
   AssessmentStatuses,
-  GradingStatuses,
   IContestVotingQuestion,
   IMCQQuestion,
   IProgrammingQuestion,
   Library,
+  ProgressStatuses,
   TestcaseTypes
 } from '../assessment/AssessmentTypes';
 
@@ -20,6 +20,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       assessmentConfigId: 1,
       type: 'Missions',
       isManuallyGraded: true,
+      isAutoPublished: false,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
@@ -29,6 +30,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       assessmentConfigId: 2,
       type: 'Quests',
       isManuallyGraded: true,
+      isAutoPublished: false,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
@@ -37,7 +39,8 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
     {
       assessmentConfigId: 3,
       type: 'Paths',
-      isManuallyGraded: true,
+      isManuallyGraded: false,
+      isAutoPublished: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
@@ -47,6 +50,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       assessmentConfigId: 4,
       type: 'Contests',
       isManuallyGraded: true,
+      isAutoPublished: false,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: true,
@@ -56,6 +60,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       assessmentConfigId: 5,
       type: 'Others',
       isManuallyGraded: true,
+      isAutoPublished: false,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
@@ -67,6 +72,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       assessmentConfigId: 1,
       type: 'Mission Impossible',
       isManuallyGraded: true,
+      isAutoPublished: false,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
@@ -76,6 +82,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       assessmentConfigId: 2,
       type: 'Data Structures',
       isManuallyGraded: true,
+      isAutoPublished: false,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
@@ -85,6 +92,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       assessmentConfigId: 3,
       type: 'Algorithm Frenzy',
       isManuallyGraded: true,
+      isAutoPublished: false,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
@@ -100,6 +108,7 @@ const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
     id: 1,
+    isPublished: false,
     maxXp: 1000,
     openAt: '2038-06-18T05:24:26.026Z',
     title: 'An Odessey to Runes (Duplicate)',
@@ -108,7 +117,7 @@ const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: 'mission-1',
     xp: 0,
-    gradingStatus: GradingStatuses.none,
+    progress: ProgressStatuses.not_attempted,
     maxTeamSize: 1
   }
 ];
@@ -120,6 +129,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
     id: 2,
+    isPublished: false,
     maxXp: 1000,
     openAt: '2018-06-18T05:24:26.026Z',
     title: 'An Odessey to Runes',
@@ -140,12 +150,13 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.attempted,
     story: 'mission-1',
     xp: 1,
-    gradingStatus: GradingStatuses.none,
+    progress: ProgressStatuses.attempted,
     maxTeamSize: 4
   },
   {
     type: 'Missions',
     isManuallyGraded: true,
+    isPublished: false,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=World&font=lobster',
     id: 3,
@@ -157,12 +168,13 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.attempting,
     story: 'mission-2',
     xp: 2,
-    gradingStatus: GradingStatuses.none,
+    progress: ProgressStatuses.attempting,
     maxTeamSize: 1
   },
   {
     type: 'Quests',
     isManuallyGraded: true,
+    isPublished: false,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
     id: 4,
@@ -174,12 +186,13 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: 'sidequest-2.1',
     xp: 3,
-    gradingStatus: GradingStatuses.none,
+    progress: ProgressStatuses.not_attempted,
     maxTeamSize: 2
   },
   {
     type: 'Paths',
     isManuallyGraded: true,
+    isPublished: false,
     closeAt: '2069-04-20T01:23:45.111Z',
     coverImage: 'https://fakeimg.pl/700x400/417678,64/?text=%E3%83%91%E3%82%B9&font=noto',
     id: 5,
@@ -191,12 +204,13 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: null,
     xp: 0,
-    gradingStatus: GradingStatuses.excluded,
+    progress: ProgressStatuses.not_attempted,
     maxTeamSize: 2
   },
   {
     type: 'Others',
     isManuallyGraded: false,
+    isPublished: false,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
     id: 6,
@@ -208,9 +222,9 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: 'sidequest-2.1',
     xp: 3,
-    gradingStatus: GradingStatuses.none,
     private: true,
-    maxTeamSize: 1
+    maxTeamSize: 1,
+    progress: ProgressStatuses.not_attempted
   }
 ];
 
@@ -218,6 +232,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
   {
     type: 'Missions',
     isManuallyGraded: true,
+    isPublished: false,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
     id: 7,
@@ -229,12 +244,13 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: 'mission-3',
     xp: 800,
-    gradingStatus: GradingStatuses.grading,
+    progress: ProgressStatuses.submitted,
     maxTeamSize: 1
   },
   {
     type: 'Quests',
     isManuallyGraded: true,
+    isPublished: false,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
     id: 8,
@@ -246,12 +262,13 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 500,
-    gradingStatus: GradingStatuses.none,
+    progress: ProgressStatuses.not_attempted,
     maxTeamSize: 1
   },
   {
     type: 'Quests',
     isManuallyGraded: true,
+    isPublished: true,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
     id: 9,
@@ -263,12 +280,13 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 150,
-    gradingStatus: GradingStatuses.graded,
+    progress: ProgressStatuses.not_attempted,
     maxTeamSize: 1
   },
   {
-    type: 'Quests',
-    isManuallyGraded: true,
+    type: 'Paths',
+    isManuallyGraded: false,
+    isPublished: true,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
     id: 10,
@@ -280,7 +298,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 100,
-    gradingStatus: GradingStatuses.excluded,
+    progress: ProgressStatuses.not_attempted,
     maxTeamSize: 1
   }
 ];

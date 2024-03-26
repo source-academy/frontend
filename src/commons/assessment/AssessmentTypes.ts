@@ -13,18 +13,24 @@ export enum AssessmentStatuses {
 }
 export type AssessmentStatus = keyof typeof AssessmentStatuses;
 
+// Devnote: If adjusting this, ensure that each status can be uniquely attributed to one set of backend parameters, and vice versa.
+// This allows for a clean conversion from progress status to backend parameters, ensuring only backend pagination.
+// Adjust the computeProgress function in GradingUtils accordingly.
+export enum ProgressStatuses {
+  attempting = 'attempting',
+  attempted = 'attempted',
+  not_attempted = 'not_attempted',
+  submitted = 'submitted',
+  graded = 'graded',
+  published = 'published'
+}
+
+export type ProgressStatus = keyof typeof ProgressStatuses;
+
 export type AssessmentWorkspaceParams = {
   assessmentId?: string;
   questionId?: string;
 };
-
-export enum GradingStatuses {
-  excluded = 'excluded',
-  graded = 'graded',
-  grading = 'grading',
-  none = 'none'
-}
-export type GradingStatus = keyof typeof GradingStatuses;
 
 export type AssessmentType = string;
 
@@ -59,13 +65,13 @@ export type AssessmentOverview = {
   closeAt: string;
   coverImage: string;
   fileName?: string; // For mission control
-  gradingStatus: GradingStatus;
   id: number;
-  isPublished?: boolean;
+  isPublished: boolean;
   maxXp: number;
   number?: string; // For mission control
   openAt: string;
   private?: boolean;
+  progress: ProgressStatus;
   reading?: string; // For mission control
   shortSummary: string;
   status: AssessmentStatus;
@@ -94,6 +100,7 @@ export type AssessmentConfiguration = {
   assessmentConfigId: number;
   type: AssessmentType;
   isManuallyGraded: boolean;
+  isAutoPublished: boolean;
   displayInDashboard: boolean;
   hoursBeforeEarlyXpDecay: number;
   earlySubmissionXp: number;
@@ -237,6 +244,7 @@ export const overviewTemplate = (): AssessmentOverview => {
     closeAt: '2100-12-01T00:00+08',
     coverImage: 'https://fakeimg.pl/300/',
     id: -1,
+    isPublished: false,
     maxXp: 0,
     openAt: '2000-01-01T00:00+08',
     title: 'Insert title here',
@@ -244,8 +252,8 @@ export const overviewTemplate = (): AssessmentOverview => {
     shortSummary: 'Insert short summary here',
     status: AssessmentStatuses.not_attempted,
     story: 'mission',
+    progress: ProgressStatuses.not_attempted,
     xp: 0,
-    gradingStatus: 'none',
     maxTeamSize: 1
   };
 };
