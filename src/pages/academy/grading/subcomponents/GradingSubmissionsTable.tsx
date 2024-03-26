@@ -75,27 +75,6 @@ const makeColumns = (handleClick: () => void) => [
       </Filterable>
     )
   }),
-  // For debugging purposes - remove before PR finalization
-  columnHelper.accessor('submissionStatus', {
-    header: 'submissionStatus (debug)',
-    cell: info => info.getValue()
-  }),
-  columnHelper.accessor(({ currentXp, xpBonus, maxXp }) => ({ currentXp, xpBonus, maxXp }), {
-    header: 'Raw XP (+Bonus)',
-    enableColumnFilter: false,
-    cell: info => {
-      const { currentXp, xpBonus, maxXp } = info.getValue();
-      return (
-        <Flex justifyContent="justify-start" spaceX="space-x-2">
-          <Text>
-            {currentXp} (+{xpBonus})
-          </Text>
-          <Text>/</Text>
-          <Text>{maxXp}</Text>
-        </Flex>
-      );
-    }
-  }),
   columnHelper.accessor(({ submissionId, progress }) => ({ submissionId, progress }), {
     header: 'Actions',
     enableColumnFilter: false,
