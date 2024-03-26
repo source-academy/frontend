@@ -40,6 +40,7 @@ export type DispatchProps = {
     hasVotingFeatures: boolean,
     hasTokenCounter: boolean
   ) => void;
+  handleAssignEntriesForVoting: (id: number) => void;
   handleFetchCourseConfigs: () => void;
 };
 
