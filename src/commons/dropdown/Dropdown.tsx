@@ -1,6 +1,5 @@
-import { Menu, MenuItem, Position } from '@blueprintjs/core';
+import { Menu, MenuItem, Popover, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Popover2 } from '@blueprintjs/popover2';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -69,9 +68,9 @@ const Dropdown: React.FC = () => {
 
   return (
     <>
-      <Popover2 content={menu} inheritDarkTheme={false} placement={Position.BOTTOM}>
+      <Popover content={menu} inheritDarkTheme={false} placement={Position.BOTTOM}>
         <ControlButton icon={IconNames.CARET_DOWN} />
-      </Popover2>
+      </Popover>
       <DropdownSettings isOpen={isSettingsOpen} onClose={toggleSettingsOpen} />
       <DropdownAbout isOpen={isAboutOpen} onClose={toggleAboutOpen} />
       <DropdownHelp isOpen={isHelpOpen} onClose={toggleHelpOpen} />

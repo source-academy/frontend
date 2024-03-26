@@ -2,7 +2,7 @@
 
 exports[`NavigationBarLangSelectButton should render correctly 1`] = `
 <span
-  className="bp5-popover2-target bp5-popover-target"
+  className="bp5-popover-target"
   onClick={[Function]}
   onKeyDown={[Function]}
 >

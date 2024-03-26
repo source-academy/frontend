@@ -4,10 +4,10 @@ import {
   FormGroup,
   HTMLSelect,
   Icon,
-  PopoverPosition
+  PopoverPosition,
+  Tooltip
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Tooltip2 } from '@blueprintjs/popover2';
 import React, { useContext } from 'react';
 
 import { EditorBinding, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
@@ -51,13 +51,13 @@ const DropdownSettings: React.FC<Props> = ({ isOpen, onClose }) => {
             value={workspaceSettings.editorBinding}
             onChange={handleEditorBindingChange}
           />
-          <Tooltip2
+          <Tooltip
             position={PopoverPosition.TOP}
             className="form-field-help-text"
             content="Optional editor bindings for advanced users. Set to 'None' for default text editor behaviour."
           >
             <Icon icon={IconNames.Help} />
-          </Tooltip2>
+          </Tooltip>
         </FormGroup>
       </DialogBody>
     </Dialog>

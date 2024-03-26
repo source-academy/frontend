@@ -1,6 +1,13 @@
-import { NonIdealState, Position, Spinner, SpinnerSize, Text } from '@blueprintjs/core';
+import {
+  NonIdealState,
+  Popover,
+  Position,
+  Spinner,
+  SpinnerSize,
+  Text,
+  Tooltip
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
@@ -49,11 +56,11 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
       ) : this.props.isSicp ? (
         <div>
           <input defaultValue={this.props.queryString!} readOnly={true} ref={this.shareInputElem} />
-          <Tooltip2 content="Copy link to clipboard">
+          <Tooltip content="Copy link to clipboard">
             <CopyToClipboard text={this.props.queryString!}>
               <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectShareInputText} />
             </CopyToClipboard>
-          </Tooltip2>
+          </Tooltip>
         </div>
       ) : (
         <>
@@ -86,26 +93,26 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
           ) : (
             <div key={this.props.shortURL}>
               <input defaultValue={this.props.shortURL} readOnly={true} ref={this.shareInputElem} />
-              <Tooltip2 content="Copy link to clipboard">
+              <Tooltip content="Copy link to clipboard">
                 <CopyToClipboard text={this.props.shortURL}>
                   <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectShareInputText} />
                 </CopyToClipboard>
-              </Tooltip2>
+              </Tooltip>
             </div>
           )}
         </>
       );
 
     return (
-      <Popover2
+      <Popover
         popoverClassName="Popover-share"
         inheritDarkTheme={false}
         content={shareButtonPopoverContent}
       >
-        <Tooltip2 content="Get shareable link" placement={Position.TOP}>
+        <Tooltip content="Get shareable link" placement={Position.TOP}>
           <ControlButton label="Share" icon={IconNames.SHARE} onClick={() => this.toggleButton()} />
-        </Tooltip2>
-      </Popover2>
+        </Tooltip>
+      </Popover>
     );
   }
 

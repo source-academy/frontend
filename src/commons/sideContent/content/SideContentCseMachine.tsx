@@ -5,10 +5,10 @@ import {
   Checkbox,
   Classes,
   Divider,
-  Slider
+  Slider,
+  Tooltip
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
 import React from 'react';
@@ -212,7 +212,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
           />
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <ButtonGroup>
-              <Tooltip2 content="Control and Stash" compact>
+              <Tooltip content="Control and Stash" compact>
                 <AnchorButton
                   onMouseUp={() => {
                     if (this.state.visualization) {
@@ -229,8 +229,8 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                     style={{ margin: 0 }}
                   />
                 </AnchorButton>
-              </Tooltip2>
-              <Tooltip2 content="Truncate Control" compact>
+              </Tooltip>
+              <Tooltip content="Truncate Control" compact>
                 <AnchorButton
                   onMouseUp={() => {
                     if (this.state.visualization) {
@@ -247,7 +247,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                     style={{ margin: 0 }}
                   />
                 </AnchorButton>
-              </Tooltip2>
+              </Tooltip>
             </ButtonGroup>
             <ButtonGroup>
               <Button
@@ -274,7 +274,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
               />
             </ButtonGroup>
             <ButtonGroup>
-              <Tooltip2 content="Print" compact>
+              <Tooltip content="Print" compact>
                 <AnchorButton
                   onMouseUp={() => {
                     if (this.state.visualization) {
@@ -291,14 +291,14 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                     style={{ margin: 0 }}
                   />
                 </AnchorButton>
-              </Tooltip2>
-              <Tooltip2 content="Save" compact>
+              </Tooltip>
+              <Tooltip content="Save" compact>
                 <AnchorButton
                   icon="floppy-disk"
                   disabled={!this.state.visualization}
                   onClick={Layout.exportImage}
                 />
-              </Tooltip2>
+              </Tooltip>
             </ButtonGroup>
           </div>
         </div>{' '}
