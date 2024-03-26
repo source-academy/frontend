@@ -8,8 +8,8 @@ import { getDynamicTabs, getLocation, getTabId } from './SideContentHelper';
 import {
   REMOVE_SIDE_CONTENT_ALERT,
   RESET_SIDE_CONTENT,
-  SPAWN_SIDE_CONTENT,
   SideContentManagerState,
+  SPAWN_SIDE_CONTENT,
   VISIT_SIDE_CONTENT
 } from './SideContentTypes';
 
