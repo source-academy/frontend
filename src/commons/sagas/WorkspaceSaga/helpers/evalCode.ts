@@ -4,7 +4,7 @@ import { Context, interrupt, Result, resume, runFilesInContext } from 'js-slang'
 import { ACORN_PARSE_OPTIONS, TRY_AGAIN } from 'js-slang/dist/constants';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
-import { Chapter, ErrorSeverity,ErrorType, SourceError, Variant } from 'js-slang/dist/types';
+import { Chapter, ErrorSeverity, ErrorType, SourceError, Variant } from 'js-slang/dist/types';
 import { SagaIterator } from 'redux-saga';
 import { call, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
@@ -58,9 +58,9 @@ export function* evalCode(
             .usingSubst
       )
     : isStoriesBlock
-    ? // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
-      yield select((state: OverallState) => state.stories.envs[storyEnv!].usingSubst)
-    : false;
+      ? // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
+        yield select((state: OverallState) => state.stories.envs[storyEnv!].usingSubst)
+      : false;
   const stepLimit: number = isStoriesBlock
     ? yield select((state: OverallState) => state.stories.envs[storyEnv!].stepLimit)
     : yield select((state: OverallState) => state.workspaces[workspaceLocation].stepLimit);
@@ -88,12 +88,12 @@ export function* evalCode(
   const currentStep: number = needUpdateCse
     ? -1
     : correctWorkspace
-    ? yield select(
-        (state: OverallState) =>
-          (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
-            .currentStep
-      )
-    : -1;
+      ? yield select(
+          (state: OverallState) =>
+            (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
+              .currentStep
+        )
+      : -1;
   const cseActiveAndCorrectChapter = context.chapter >= 3 && cseIsActive;
   if (cseActiveAndCorrectChapter) {
     context.executionMethod = 'cse-machine';
@@ -260,27 +260,27 @@ export function* evalCode(
       actionType === DEBUG_RESUME
         ? call(resume, lastDebuggerResult)
         : isNonDet || isLazy || isWasm
-        ? call_variant(context.variant)
-        : isC
-        ? call(cCompileAndRun, entrypointCode, context)
-        : call(
-            runFilesInContext,
-            isFolderModeEnabled
-              ? files
-              : {
-                  [entrypointFilePath]: files[entrypointFilePath]
-                },
-            entrypointFilePath,
-            context,
-            {
-              scheduler: 'preemptive',
-              originalMaxExecTime: execTime,
-              stepLimit: stepLimit,
-              throwInfiniteLoops: true,
-              useSubst: substActiveAndCorrectChapter,
-              envSteps: currentStep
-            }
-          ),
+          ? call_variant(context.variant)
+          : isC
+            ? call(cCompileAndRun, entrypointCode, context)
+            : call(
+                runFilesInContext,
+                isFolderModeEnabled
+                  ? files
+                  : {
+                      [entrypointFilePath]: files[entrypointFilePath]
+                    },
+                entrypointFilePath,
+                context,
+                {
+                  scheduler: 'preemptive',
+                  originalMaxExecTime: execTime,
+                  stepLimit: stepLimit,
+                  throwInfiniteLoops: true,
+                  useSubst: substActiveAndCorrectChapter,
+                  envSteps: currentStep
+                }
+              ),
 
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
