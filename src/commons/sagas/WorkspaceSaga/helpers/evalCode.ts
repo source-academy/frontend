@@ -245,7 +245,7 @@ export function* evalCode(
   const isWasm: boolean = context.variant === Variant.WASM;
   const isC: boolean = context.chapter === Chapter.FULL_C;
 
-  const lastDebuggerResult = yield select(
+  let lastDebuggerResult = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].lastDebuggerResult
   );
 
@@ -301,17 +301,16 @@ export function* evalCode(
     yield call(showWarningMessage, 'Execution aborted', 750);
     return;
   }
-
   if (paused) {
     yield put(actions.endDebuggerPause(workspaceLocation));
-    yield put(actions.updateLastDebuggerResult(manualToggleDebugger(context)));
+    yield put(actions.updateLastDebuggerResult(manualToggleDebugger(context), workspaceLocation));
     yield call(updateInspector, workspaceLocation);
     yield call(showWarningMessage, 'Execution paused', 750);
     return;
   }
 
   if (actionType === EVAL_EDITOR) {
-    yield put(actions.updateLastDebuggerResult(result));
+    yield put(actions.updateLastDebuggerResult(result, workspaceLocation));
   }
 
   // do not highlight for stories
@@ -335,6 +334,9 @@ export function* evalCode(
         yield put(
           actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation)
         );
+        yield put(
+          actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation)
+        );
       }
     } else {
       // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
@@ -353,7 +355,7 @@ export function* evalCode(
     if (result.value === 'cut') {
       result.value = undefined;
     }
-    yield put(actions.updateLastNonDetResult(result));
+    yield put(actions.updateLastNonDetResult(result, workspaceLocation));
   }
 
   yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
@@ -375,6 +377,9 @@ export function* evalCode(
     }
   }
 
+  lastDebuggerResult = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].lastDebuggerResult
+  );
   // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
   if (actionType === EVAL_EDITOR || actionType === EVAL_REPL || actionType === DEBUG_RESUME) {
     if (context.errors.length > 0) {
@@ -399,6 +404,7 @@ export function* evalCode(
     // But TS can't infer that yet, so we need a typecast here.
     yield put(actions.toggleUpdateCse(false, workspaceLocation as any));
     yield put(actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation));
+    yield put(actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation));
   }
   // Stop the home icon from flashing for an error if it is doing so since the evaluation is successful
   if (context.executionMethod === 'cse-machine' || context.executionMethod === 'interpreter') {

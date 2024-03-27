@@ -394,10 +394,6 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   isDebugging: false,
   enableDebugging: true,
   debuggerContext: {} as DebuggerContext,
-  sideContent: {
-    alerts: [],
-    dynamicTabs: []
-  },
   lastDebuggerResult: undefined,
   lastNonDetResult: null
 });
@@ -430,6 +426,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     currentStep: -1,
     stepsTotal: 0,
     breakpointSteps: [],
+    changepointSteps: [],
     activeEditorTabIndex: 0,
     editorTabs: [
       {
@@ -483,6 +480,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     currentStep: -1,
     stepsTotal: 0,
     breakpointSteps: [],
+    changepointSteps: [],
     activeEditorTabIndex: 0,
     editorTabs: [
       {
@@ -517,6 +515,8 @@ export const defaultSession: SessionState = {
   sessionId: Date.now(),
   githubOctokitObject: { octokit: undefined },
   gradingOverviews: undefined,
+  students: undefined,
+  teamFormationOverviews: undefined,
   gradings: new Map<number, GradingQuery>(),
   notifications: []
 };
@@ -540,11 +540,7 @@ export const createDefaultStoriesEnv = (
   stepLimit: 1000,
   globals: [],
   usingSubst: false,
-  debuggerContext: {} as DebuggerContext,
-  sideContent: {
-    dynamicTabs: [],
-    alerts: []
-  }
+  debuggerContext: {} as DebuggerContext
 });
 
 export const defaultFileSystem: FileSystemState = {

@@ -59,6 +59,7 @@ test('SET_TOKEN sets accessToken and refreshToken correctly', () => {
 test('SET_USER works correctly', () => {
   const payload = {
     userId: 123,
+    username: 'E1234567',
     name: 'test student',
     courses: [
       {
@@ -158,7 +159,8 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       earlySubmissionXp: 200,
       isManuallyGraded: false,
       displayInDashboard: true,
-      hasTokenCounter: false
+      hasTokenCounter: false,
+      hasVotingFeatures: false
     },
     {
       assessmentConfigId: 1,
@@ -170,7 +172,8 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       earlySubmissionXp: 200,
       isManuallyGraded: false,
       displayInDashboard: true,
-      hasTokenCounter: false
+      hasTokenCounter: false,
+      hasVotingFeatures: false
     },
     {
       assessmentConfigId: 1,
@@ -182,7 +185,8 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       earlySubmissionXp: 200,
       isManuallyGraded: false,
       displayInDashboard: true,
-      hasTokenCounter: false
+      hasTokenCounter: false,
+      hasVotingFeatures: false
     }
   ];
 
@@ -331,13 +335,16 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
     coverImage: 'test_string',
     id: 0,
     maxXp: 0,
+    earlySubmissionXp: 0,
     openAt: 'test_string',
     title: 'test_string',
     shortSummary: 'test_string',
     status: AssessmentStatuses.not_attempted,
     story: null,
     xp: 0,
-    gradingStatus: GradingStatuses.none
+    gradingStatus: GradingStatuses.none,
+    maxTeamSize: 5,
+    hasVotingFeatures: false
   }
 ];
 
@@ -350,13 +357,16 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
     fileName: 'test_sting_0',
     id: 1,
     maxXp: 1,
+    earlySubmissionXp: 0,
     openAt: 'test_string_0',
     title: 'test_string_0',
     shortSummary: 'test_string_0',
     status: AssessmentStatuses.attempted,
     story: null,
     xp: 1,
-    gradingStatus: GradingStatuses.grading
+    gradingStatus: GradingStatuses.grading,
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   }
 ];
 
@@ -523,7 +533,9 @@ const gradingOverviewTest1: GradingOverview[] = [
     maxXp: 500,
     studentId: 100,
     studentName: 'test student',
+    studentNames: [],
     studentUsername: 'E0123456',
+    studentUsernames: [],
     submissionId: 1,
     submissionStatus: 'attempting',
     groupName: 'group',
@@ -546,7 +558,9 @@ const gradingOverviewTest2: GradingOverview[] = [
     maxXp: 1000,
     studentId: 20,
     studentName: 'another student',
+    studentNames: [],
     studentUsername: 'E0000000',
+    studentUsernames: [],
     submissionId: 2,
     submissionStatus: 'attempted',
     groupName: 'another group',
