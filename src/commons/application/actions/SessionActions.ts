@@ -3,8 +3,10 @@ import {
   paginationToBackendParams,
   ungradedToBackendParams
 } from 'src/features/grading/GradingUtils';
+import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
 import { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';
+import { TeamFormationOverview } from '../../../features/teamFormation/TeamFormationTypes';
 import {
   Assessment,
   AssessmentConfiguration,
@@ -20,8 +22,12 @@ import { Role } from '../ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
+  BULK_UPLOAD_TEAM,
+  CHECK_ANSWER_LAST_MODIFIED_AT,
   CourseRegistration,
+  CREATE_TEAM,
   DELETE_ASSESSMENT_CONFIG,
+  DELETE_TEAM,
   DELETE_TIME_OPTIONS,
   DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
@@ -36,6 +42,9 @@ import {
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATION_CONFIGS,
   FETCH_NOTIFICATIONS,
+  FETCH_STUDENTS,
+  FETCH_TEAM_FORMATION_OVERVIEW,
+  FETCH_TEAM_FORMATION_OVERVIEWS,
   FETCH_TOTAL_XP,
   FETCH_TOTAL_XP_ADMIN,
   FETCH_USER_AND_COURSE,
@@ -77,6 +86,10 @@ import {
   UPDATE_NOTIFICATION_CONFIG,
   UPDATE_NOTIFICATION_PREFERENCES,
   UPDATE_NOTIFICATIONS,
+  UPDATE_STUDENTS,
+  UPDATE_TEAM,
+  UPDATE_TEAM_FORMATION_OVERVIEW,
+  UPDATE_TEAM_FORMATION_OVERVIEWS,
   UPDATE_TIME_OPTIONS,
   UPDATE_TOTAL_XP,
   UPDATE_USER_ROLE,
@@ -136,6 +149,13 @@ export const fetchGradingOverviews = createAction(
     filterParams = {}
   ) => ({ payload: { filterToGroup, gradedFilter, pageParams, filterParams } })
 );
+
+export const fetchTeamFormationOverviews = createAction(
+  FETCH_TEAM_FORMATION_OVERVIEWS,
+  (filterToGroup = true) => ({ payload: filterToGroup })
+);
+
+export const fetchStudents = createAction(FETCH_STUDENTS, () => ({ payload: {} }));
 
 export const login = createAction(LOGIN, (providerId: string) => ({ payload: providerId }));
 
@@ -202,6 +222,13 @@ export const submitAnswer = createAction(
   (id: number, answer: string | number | ContestEntry[]) => ({ payload: { id, answer } })
 );
 
+export const checkAnswerLastModifiedAt = createAction(
+  CHECK_ANSWER_LAST_MODIFIED_AT,
+  (id: number, lastModifiedAt: string, saveAnswer: Function) => ({
+    payload: { id, lastModifiedAt, saveAnswer }
+  })
+);
+
 export const submitAssessment = createAction(SUBMIT_ASSESSMENT, (id: number) => ({ payload: id }));
 
 export const submitGrading = createAction(
@@ -245,6 +272,46 @@ export const updateGradingOverviews = createAction(
   UPDATE_GRADING_OVERVIEWS,
   (overviews: GradingOverviews) => ({ payload: overviews })
 );
+
+export const fetchTeamFormationOverview = createAction(
+  FETCH_TEAM_FORMATION_OVERVIEW,
+  (assessmentId: number) => ({ payload: { assessmentId } })
+);
+
+export const createTeam = createAction(
+  CREATE_TEAM,
+  (assessment: AssessmentOverview, teams: OptionType[][]) => ({ payload: { assessment, teams } })
+);
+
+export const updateTeam = createAction(
+  UPDATE_TEAM,
+  (teamId: number, assessment: AssessmentOverview, teams: OptionType[][]) => ({
+    payload: { teamId, assessment, teams }
+  })
+);
+
+export const deleteTeam = createAction(DELETE_TEAM, (teamId: number) => ({ payload: { teamId } }));
+
+export const bulkUploadTeam = createAction(
+  BULK_UPLOAD_TEAM,
+  (assessment: AssessmentOverview, file: File, students: User[] | undefined) => ({
+    payload: { assessment, file, students }
+  })
+);
+
+export const updateTeamFormationOverviews = createAction(
+  UPDATE_TEAM_FORMATION_OVERVIEWS,
+  (overviews: TeamFormationOverview[]) => ({ payload: overviews })
+);
+
+export const updateTeamFormationOverview = createAction(
+  UPDATE_TEAM_FORMATION_OVERVIEW,
+  (overview: TeamFormationOverview) => ({ payload: overview })
+);
+
+export const updateStudents = createAction(UPDATE_STUDENTS, (students: User[]) => ({
+  payload: students
+}));
 
 /**
  * An extra id parameter is included here because of

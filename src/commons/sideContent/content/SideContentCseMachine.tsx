@@ -50,6 +50,7 @@ type StateProps = {
   stepsTotal: number;
   currentStep: number;
   breakpointSteps: number[];
+  changepointSteps: number[];
   needCseUpdate: boolean;
   machineOutput: InterpreterOutput[];
 };
@@ -257,12 +258,14 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
               <Button
                 disabled={!this.state.visualization}
                 icon="chevron-left"
-                onClick={this.stepPrevious}
+                onClick={
+                  CseMachine.getControlStash() ? this.stepPrevious : this.stepPrevChangepoint
+                }
               />
               <Button
                 disabled={!this.state.visualization}
                 icon="chevron-right"
-                onClick={this.stepNext}
+                onClick={CseMachine.getControlStash() ? this.stepNext : this.stepNextChangepoint}
               />
               <Button
                 disabled={!this.state.visualization}
@@ -450,6 +453,31 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
     this.sliderShift(0);
     this.sliderRelease(0);
   };
+
+  private stepNextChangepoint = () => {
+    for (const step of this.props.changepointSteps) {
+      if (step > this.state.value) {
+        this.sliderShift(step);
+        this.sliderRelease(step);
+        return;
+      }
+    }
+    this.sliderShift(this.props.stepsTotal);
+    this.sliderRelease(this.props.stepsTotal);
+  };
+
+  private stepPrevChangepoint = () => {
+    for (let i = this.props.changepointSteps.length - 1; i >= 0; i--) {
+      const step = this.props.changepointSteps[i];
+      if (step < this.state.value) {
+        this.sliderShift(step);
+        this.sliderRelease(step);
+        return;
+      }
+    }
+    this.sliderShift(0);
+    this.sliderRelease(0);
+  };
 }
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
@@ -479,6 +507,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
     stepsTotal: workspace.stepsTotal,
     currentStep: workspace.currentStep,
     breakpointSteps: workspace.breakpointSteps,
+    changepointSteps: workspace.changepointSteps,
     needCseUpdate: workspace.updateCse,
     machineOutput: workspace.output
   };

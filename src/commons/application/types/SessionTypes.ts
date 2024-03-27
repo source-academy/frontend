@@ -3,6 +3,7 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 
 import { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';
 import { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
+import { TeamFormationOverview } from '../../../features/teamFormation/TeamFormationTypes';
 import {
   Assessment,
   AssessmentConfiguration,
@@ -11,6 +12,11 @@ import {
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../ApplicationTypes';
 
+export const BULK_UPLOAD_TEAM = 'BULK_UPLOAD_TEAM';
+export const CHECK_ANSWER_LAST_MODIFIED_AT = 'CHECK_ANSWER_LAST_MODIFIED_AT';
+export const CREATE_TEAM = 'CREATE_TEAM';
+export const DELETE_TEAM = 'DELETE_TEAM';
+export const UPDATE_TEAM = 'UPDATE_TEAM';
 export const FETCH_AUTH = 'FETCH_AUTH';
 export const FETCH_USER_AND_COURSE = 'FETCH_USER_AND_COURSE';
 export const FETCH_COURSE_CONFIG = 'FETCH_COURSE_CONFIG';
@@ -21,6 +27,9 @@ export const FETCH_TOTAL_XP = 'FETCH_TOTAL_XP';
 export const FETCH_TOTAL_XP_ADMIN = 'FETCH_TOTAL_XP_ADMIN';
 export const FETCH_GRADING = 'FETCH_GRADING';
 export const FETCH_GRADING_OVERVIEWS = 'FETCH_GRADING_OVERVIEWS';
+export const FETCH_STUDENTS = 'FETCH_STUDENTS';
+export const FETCH_TEAM_FORMATION_OVERVIEW = 'FETCH_TEAM_FORMATION_OVERVIEW';
+export const FETCH_TEAM_FORMATION_OVERVIEWS = 'FETCH_TEAM_FORMATION_OVERVIEWS';
 export const LOGIN = 'LOGIN';
 export const LOGOUT_GOOGLE = 'LOGOUT_GOOGLE';
 export const LOGIN_GITHUB = 'LOGIN_GITHUB';
@@ -48,6 +57,9 @@ export const UPDATE_TOTAL_XP = 'UPDATE_TOTAL_XP';
 export const UPDATE_ASSESSMENT = 'UPDATE_ASSESSMENT';
 export const UPDATE_GRADING_OVERVIEWS = 'UPDATE_GRADING_OVERVIEWS';
 export const UPDATE_GRADING = 'UPDATE_GRADING';
+export const UPDATE_TEAM_FORMATION_OVERVIEW = 'UPDATE_TEAM_FORMATION_OVERVIEW';
+export const UPDATE_TEAM_FORMATION_OVERVIEWS = 'UPDATE_TEAM_FORMATION_OVERVIEWS';
+export const UPDATE_STUDENTS = 'UPDATE_STUDENTS';
 export const FETCH_NOTIFICATIONS = 'FETCH_NOTIFICATIONS';
 export const ACKNOWLEDGE_NOTIFICATIONS = 'ACKNOWLEDGE_NOTIFICATIONS';
 export const UPDATE_NOTIFICATIONS = 'UPDATE_NOTIFICATIONS';
@@ -114,6 +126,9 @@ export type SessionState = {
   readonly assessmentOverviews?: AssessmentOverview[];
   readonly assessments: Map<number, Assessment>;
   readonly gradingOverviews?: GradingOverviews;
+  readonly students?: User[];
+  readonly teamFormationOverview?: TeamFormationOverview;
+  readonly teamFormationOverviews?: TeamFormationOverview[];
   readonly gradings: Map<number, GradingQuery>;
   readonly notifications: Notification[];
   readonly googleUser?: string;
@@ -139,6 +154,7 @@ export type UserCourse = {
 export type User = {
   userId: number;
   name: string;
+  username: string;
   courses: UserCourse[];
 };
 

@@ -1,5 +1,6 @@
+import { createAction } from '@reduxjs/toolkit';
 import { Chapter } from 'js-slang/dist/types';
-import { action as generateAction } from 'typesafe-actions';
+import { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
 import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../../../commons/application/types/ExternalTypes';
@@ -18,6 +19,9 @@ import {
 } from '../../SourceRecorderTypes';
 import { SourcecastReducer } from '../SourcecastReducer';
 import { UPDATE_SOURCECAST_INDEX } from '../SourcecastTypes';
+
+const generateAction = <T, S extends SourceActionType['type']>(type: S, payload: T) =>
+  createAction(type, (payload: T) => ({ payload }))(payload);
 
 describe('SAVE_SOURCECAST_DATA', () => {
   test('saves sourcecastData correctly', () => {
