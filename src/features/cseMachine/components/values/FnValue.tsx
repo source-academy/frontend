@@ -12,13 +12,14 @@ import {
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { EnvTreeNode, FnTypes, IHoverable, ReferenceType } from '../../CseMachineTypes';
+import { Closure, EnvTreeNode, IHoverable, ReferenceType } from '../../CseMachineTypes';
 import {
   defaultSAColor,
   getBodyText,
   getNonEmptyEnv,
   getParamsText,
-  getTextWidth
+  getTextWidth,
+  isMainReference
 } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
@@ -30,44 +31,48 @@ export class FnValue extends Value implements IHoverable {
   /** name of this function */
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
-  readonly tooltipWidth: number;
-  readonly centerX: number;
+  tooltipWidth!: number;
+  centerX!: number;
 
-  readonly fnName: string;
-  readonly paramsText: string;
-  readonly bodyText: string;
-  readonly exportBodyText: string;
-  readonly tooltip: string;
-  readonly exportTooltip: string;
-  readonly exportTooltipWidth: number;
+  fnName!: string;
+  paramsText!: string;
+  bodyText!: string;
+  exportBodyText!: string;
+  tooltip!: string;
+  exportTooltip!: string;
+  exportTooltipWidth!: number;
   private _arrow: ArrowFromFn | undefined;
 
   /** the parent/enclosing environment of this fn value */
-  readonly enclosingEnvNode: EnvTreeNode;
+  enclosingEnvNode!: EnvTreeNode;
   readonly labelRef: RefObject<any> = React.createRef();
 
   constructor(
     /** underlying JS Slang function (contains extra props) */
-    readonly data: FnTypes,
+    readonly data: Closure,
     /** what this value is being referenced by */
-    readonly referencedBy: ReferenceType[]
+    firstReference: ReferenceType
   ) {
     super();
     Layout.memoizeValue(this);
+    this.addReference(firstReference);
+  }
+
+  handleNewReference(newReference: ReferenceType): void {
+    if (!isMainReference(this, newReference)) return;
 
     // derive the coordinates from the main reference (binding / array unit)
-    const mainReference = this.referencedBy[0];
-    if (mainReference instanceof Binding) {
-      this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
-      this._y = mainReference.y();
+    if (newReference instanceof Binding) {
+      this._x = newReference.frame.x() + newReference.frame.width() + Config.FrameMarginX / 4;
+      this._y = newReference.y();
       this.centerX = this._x + this.radius * 2;
     } else {
-      if (mainReference.isLastUnit) {
-        this._x = mainReference.x() + Config.DataUnitWidth * 2;
-        this._y = mainReference.y() + Config.DataUnitHeight / 2 - this.radius;
+      if (newReference.isLastUnit) {
+        this._x = newReference.x() + Config.DataUnitWidth * 2;
+        this._y = newReference.y() + Config.DataUnitHeight / 2 - this.radius;
       } else {
-        this._x = mainReference.x();
-        this._y = mainReference.y() + mainReference.parent.height() + Config.DataUnitHeight;
+        this._x = newReference.x();
+        this._y = newReference.y() + newReference.parent.height() + Config.DataUnitHeight;
       }
       this.centerX = this._x + Config.DataUnitWidth / 2;
       this._x = this.centerX - this.radius * 2;
@@ -108,8 +113,11 @@ export class FnValue extends Value implements IHoverable {
     if (CseMachine.getPrintableMode()) return;
     this.labelRef.current.hide();
   };
-  updatePosition(): void {}
+
   draw(): React.ReactNode {
+    if (this.fnName === undefined) {
+      throw new Error('Closure values are not initialised and cannot be drawn!');
+    }
     this._arrow =
       this.enclosingEnvNode.frame &&
       (new ArrowFromFn(this).to(this.enclosingEnvNode.frame) as ArrowFromFn);
