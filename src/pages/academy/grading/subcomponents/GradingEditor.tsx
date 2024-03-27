@@ -44,8 +44,8 @@ type Props = {
   initialXp: number;
   xpAdjustment: number;
   maxXp: number;
-  studentName: string;
-  studentUsername: string;
+  studentNames: string[];
+  studentUsernames: string[];
   comments: string;
   graderName?: string;
   gradedAt?: string;
@@ -249,7 +249,16 @@ const GradingEditor: React.FC<Props> = props => {
 
       <div className="grading-editor-header">
         <H3>
-          Currently Grading: {props.studentName} ({props.studentUsername})
+          Currently Grading:
+          <br />
+          {props.studentNames.map((name, index) => (
+            <div key={index}>
+              <span>
+                {name} ({props.studentUsernames[index]})
+              </span>
+              <br />
+            </div>
+          ))}
         </H3>
       </div>
       {props.solution !== null ? (
