@@ -39,7 +39,7 @@ export default class QuizParser {
     const questions: Question[] = this.parseQuizQuestions(rawQuestions);
     const result: boolean[] = new Array<boolean>(questions.length);
     console.log(quizId + ":" + result);
-    const quiz: Quiz = { questions: questions, result: result};
+    const quiz: Quiz = { questions: questions };
     Parser.checkpoint.map.setItemInMap(GameItemType.quizzes, quizId, quiz);
   }
 

@@ -2,7 +2,6 @@ import { DialogueObject } from '../dialogue/GameDialogueTypes';
 
 export type Quiz = {
   questions: Question[];
-  result: boolean[];
 };
 
 export type Question = {
@@ -15,8 +14,3 @@ export type Option = {
   text: string;
   reaction?: DialogueObject;
 };
-
-export type QuizResult = {
-  numberOfQuestions: number;
-  allCorrect : boolean;
-}
