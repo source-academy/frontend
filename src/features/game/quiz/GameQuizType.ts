@@ -18,4 +18,5 @@ export type Option = {
 
 export type QuizResult = {
   numberOfQuestions: number;
+  allCorrect : boolean;
 }

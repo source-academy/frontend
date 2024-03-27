@@ -1,6 +1,7 @@
 import { ItemId } from '../commons/CommonTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import { Question } from './GameQuizType';
+import { Question, QuizResult } from './GameQuizType';
+import { QuizConstants, textStyle, quizOptStyle, questionTextStyle } from './GameQuizConstants';
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { Constants, screenSize } from '../commons/CommonConstants';
@@ -13,7 +14,10 @@ import { fadeAndDestroy } from '../effects/FadeEffect';
 import { rightSideEntryTweenProps, rightSideExitTweenProps } from '../effects/FlyEffect';
 import { DialogueObject } from '../dialogue/GameDialogueTypes';
 import GameQuizReactionManager from './GameQuizReactionManager';
-import { QuizConstants, textStyle, quizOptStyle } from './GameQuizConstants';
+import { displayNotification } from '../effects/Notification';
+import GameQuizOutcomeManager from './GameQuizOutcome';
+import { ImproveMent, allCorrect } from './GameQuizConstants';
+import { createDialogueBox, createTypewriter } from '../dialogue/GameDialogueHelper';
 
 export default class QuizManager {
   private reactionManager? : GameQuizReactionManager;
@@ -40,27 +44,36 @@ export default class QuizManager {
       const quizContainer = new Phaser.GameObjects.Container(scene, 0, 0);
 
       const quizPartitions = Math.ceil(choices.length / 5);
-      const quizHeight = choices.length > 5 ? 5 : choices.length;
+      const quizHeight = choices.length;
+
+      //create quiz box contains quiz questions
+      const quizQuestionBox = createDialogueBox(scene);
+
+      const quizQuestionWriter = createTypewriter(scene, questionTextStyle);
+
+      quizQuestionWriter.changeLine(question.question);
 
       const header = new Phaser.GameObjects.Text(
         scene,
-        screenSize.x - QuizConstants.textPad,
+        screenSize.x / 2 - QuizConstants.textPad,
         QuizConstants.y,
-        question.question,
+        "options" ,
         textStyle
       ).setOrigin(1.0, 0.0);
+      
       const quizHeaderBg = new Phaser.GameObjects.Rectangle(
         scene,
-        screenSize.x,
+        screenSize.x / 2,
         QuizConstants.y - QuizConstants.textPad,
         QuizConstants.width * quizPartitions,
         header.getBounds().bottom * 0.5 + QuizConstants.textPad,
         HexColor.darkBlue,
         0.8
       ).setOrigin(1.0, 0.0);
+      
       const quizBg = new Phaser.GameObjects.Rectangle(
         scene,
-        screenSize.x,
+        screenSize.x / 2,
         QuizConstants.y - QuizConstants.textPad,
         QuizConstants.width * quizPartitions,
         quizHeaderBg.getBounds().bottom * 0.5 + (quizHeight + 0.5) * QuizConstants.yInterval,
@@ -68,7 +81,8 @@ export default class QuizManager {
         0.2
       ).setOrigin(1.0, 0.0);
 
-      quizContainer.add([quizBg, quizHeaderBg, header]);
+      quizContainer.add([quizBg, quizHeaderBg, header, 
+            quizQuestionBox, quizQuestionWriter.container]);
 
       const buttonPositions = calcListFormatPos({
         numOfItems: choices.length,
@@ -77,6 +91,7 @@ export default class QuizManager {
       });
 
       GameGlobalAPI.getInstance().addToLayer(Layer.UI, quizContainer);
+      
       const activateQuizContainer: Promise<any> = new Promise(resolve => {
         quizContainer.add(
           choices.map((response, index) =>
@@ -85,7 +100,7 @@ export default class QuizManager {
               message: response.text,
               textConfig: QuizConstants.textConfig,
               bitMapTextStyle: quizOptStyle,
-              onUp: async () => {
+              onUp: () => {
                 quizContainer.destroy();
                 const isCorrect = (index === question.answer);
                 if (response.reaction) {
@@ -94,7 +109,7 @@ export default class QuizManager {
                 resolve(isCorrect);
               }
             }).setPosition(
-              screenSize.x -
+                screenSize.x / 2 -
                 QuizConstants.width / 2 -
                 QuizConstants.width * (quizPartitions - Math.floor(index / 5) - 1),
               (buttonPositions[index][1] % (5 * QuizConstants.yInterval)) +
