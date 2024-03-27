@@ -50,6 +50,7 @@ import { retrieveFilesInWorkspaceAsRecord, writeFileRecursively } from '../fileS
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
 import DisplayBufferService from '../utils/DisplayBufferService';
+import { jvmRun } from '../utils/JavaHelper';
 import {
   getBlockExtraMethodsString,
   getDifferenceInMethods,
@@ -1157,6 +1158,7 @@ export function* evalCode(
   const isNonDet: boolean = context.variant === Variant.NON_DET;
   const isLazy: boolean = context.variant === Variant.LAZY;
   const isWasm: boolean = context.variant === Variant.WASM;
+  const isJava: boolean = context.chapter === Chapter.FULL_JAVA;
 
   // Handles `console.log` statements in fullJS
   const detachConsole: () => void =
@@ -1168,6 +1170,8 @@ export function* evalCode(
     result:
       actionType === DEBUG_RESUME
         ? call(resume, lastDebuggerResult)
+        : isJava
+        ? call(jvmRun, entrypointCode, context)
         : isNonDet || isLazy || isWasm
         ? call_variant(context.variant)
         : call(
