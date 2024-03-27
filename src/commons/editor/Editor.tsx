@@ -435,10 +435,16 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     session.on('changeAnnotation' as any, makeHandleAnnotationChange(session));
 
     // Start autocompletion
-    acequire('ace/ext/language_tools').setCompleters([
-      makeCompleter((...args) => handlePromptAutocompleteRef.current(...args))
-    ]);
-  }, [editor, props.editorTabIndex]);
+    if (props.sourceChapter === Chapter.FULL_C) {
+      // for C language, use the default autocomplete provided by ace editor
+      const { textCompleter, keyWordCompleter, setCompleters } = acequire('ace/ext/language_tools');
+      setCompleters([textCompleter, keyWordCompleter]);
+    } else {
+      acequire('ace/ext/language_tools').setCompleters([
+        makeCompleter((...args) => handlePromptAutocompleteRef.current(...args))
+      ]);
+    }
+  }, [editor, props.sourceChapter, props.editorTabIndex]);
 
   React.useLayoutEffect(() => {
     if (editor === undefined) {

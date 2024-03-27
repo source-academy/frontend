@@ -1,12 +1,14 @@
+import { compileAndRun as compileAndRunCCode } from '@sourceacademy/c-slang/ctowasm/dist/index';
 import { tokenizer } from 'acorn';
 import { Context, interrupt, Result, resume, runFilesInContext } from 'js-slang';
 import { ACORN_PARSE_OPTIONS, TRY_AGAIN } from 'js-slang/dist/constants';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, ErrorSeverity, ErrorType, Variant } from 'js-slang/dist/types';
 import { SagaIterator } from 'redux-saga';
 import { call, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
+import { makeCCompilerConfig, specialCReturnObject } from 'src/commons/utils/CToWasmHelper';
 import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
 import { EVAL_STORY } from 'src/features/stories/StoriesTypes';
 
@@ -157,9 +159,91 @@ export function* evalCode(
       );
   }
 
+  function reportCCompilationError(errorMessage: string, context: Context) {
+    context.errors.push({
+      type: ErrorType.SYNTAX,
+      severity: ErrorSeverity.ERROR,
+      location: {
+        start: {
+          line: 0,
+          column: 0
+        },
+        end: {
+          line: 0,
+          column: 0
+        }
+      },
+      explain: () => errorMessage,
+      elaborate: () => ''
+    });
+  }
+
+  function reportCRuntimeError(errorMessage: string, context: Context) {
+    context.errors.push({
+      type: ErrorType.RUNTIME,
+      severity: ErrorSeverity.ERROR,
+      location: {
+        start: {
+          line: 0,
+          column: 0
+        },
+        end: {
+          line: 0,
+          column: 0
+        }
+      },
+      explain: () => errorMessage,
+      elaborate: () => ''
+    });
+  }
+
+  async function cCompileAndRun(cCode: string, context: Context) {
+    const cCompilerConfig = await makeCCompilerConfig(cCode, context);
+    return await compileAndRunCCode(cCode, cCompilerConfig)
+      .then(compilationResult => {
+        if (compilationResult.status === 'failure') {
+          // report any compilation failure
+          reportCCompilationError(
+            `Compilation failed with the following error(s):\n\n${compilationResult.errorMessage}`,
+            context
+          );
+          return {
+            status: 'error',
+            context
+          };
+        }
+        if (compilationResult.warnings.length > 0) {
+          return {
+            status: 'finished',
+            context,
+            value: {
+              toReplString: () =>
+                `Compilation and program execution successful with the following warning(s):\n${compilationResult.warnings.join(
+                  '\n'
+                )}`
+            }
+          };
+        }
+        if (specialCReturnObject === null) {
+          return {
+            status: 'finished',
+            context,
+            value: { toReplString: () => 'Compilation and program execution successful.' }
+          };
+        }
+        return { status: 'finished', context, value: specialCReturnObject };
+      })
+      .catch((e: any): Result => {
+        console.log(e);
+        reportCRuntimeError(e.message, context);
+        return { status: 'error' };
+      });
+  }
+
   const isNonDet: boolean = context.variant === Variant.NON_DET;
   const isLazy: boolean = context.variant === Variant.LAZY;
   const isWasm: boolean = context.variant === Variant.WASM;
+  const isC: boolean = context.chapter === Chapter.FULL_C;
 
   let lastDebuggerResult = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].lastDebuggerResult
@@ -177,6 +261,8 @@ export function* evalCode(
         ? call(resume, lastDebuggerResult)
         : isNonDet || isLazy || isWasm
         ? call_variant(context.variant)
+        : isC
+        ? call(cCompileAndRun, entrypointCode, context)
         : call(
             runFilesInContext,
             isFolderModeEnabled
