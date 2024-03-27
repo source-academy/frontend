@@ -248,13 +248,14 @@ const GradingEditor: React.FC<Props> = props => {
   return (
     <div className="GradingEditor">
       <Prompt
-        when={!currentlySaving && hasUnsavedChanges}
-        message={'You have unsaved changes. Are you sure you want to leave?'}
-      />
-
-      <Prompt
-        when={!currentlySaving && isNewQuestion}
-        message={'You have to click save changes. Are you sure you want to leave?'}
+        when={!currentlySaving && (hasUnsavedChanges || isNewQuestion)}
+        message={
+          hasUnsavedChanges
+            ? 'You have unsaved changes. Are you sure you want to leave?'
+            : isNewQuestion
+            ? 'You have to click save changes. Are you sure you want to leave?'
+            : ''
+        }
       />
 
       <div className="grading-editor-header">
