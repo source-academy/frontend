@@ -33,21 +33,6 @@ const notifications: Notification[] = [
     assessment_type: 'Missions',
     assessment_title: 'The Secret to Streams'
   },
-  // {
-  //   id: 2,
-  //   type: 'graded',
-  //   assessment_id: 1,
-  //   assessment_type: 'Missions',
-  //   assessment_title: 'The Secret to Streams'
-  // },
-  // {
-  //   id: 3,
-  //   type: 'autograded',
-  //   assessment_id: 2,
-  //   assessment_type: 'Missions',
-  //   assessment_title: 'The Secret to Streams',
-  //   submission_id: 3
-  // },
   {
     id: 4,
     type: 'unsubmitted',

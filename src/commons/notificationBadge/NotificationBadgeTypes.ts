@@ -9,9 +9,6 @@ export type Notification = {
 
 export enum NotificationTypes {
   new = 'new',
-  // deadline = 'deadline',
-  // autograded = 'autograded',
-  // graded = 'graded',
   submitted = 'submitted',
   unsubmitted = 'unsubmitted',
   new_message = 'new_message',
