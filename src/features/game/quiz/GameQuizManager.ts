@@ -1,6 +1,6 @@
 import { ItemId } from '../commons/CommonTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import { Question, QuizResult } from './GameQuizType';
+import { Question } from './GameQuizType';
 import { QuizConstants, textStyle, quizOptStyle, questionTextStyle } from './GameQuizConstants';
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
@@ -14,9 +14,7 @@ import { fadeAndDestroy } from '../effects/FadeEffect';
 import { rightSideEntryTweenProps, rightSideExitTweenProps } from '../effects/FlyEffect';
 import { DialogueObject } from '../dialogue/GameDialogueTypes';
 import GameQuizReactionManager from './GameQuizReactionManager';
-import { displayNotification } from '../effects/Notification';
-import GameQuizOutcomeManager from './GameQuizOutcome';
-import { ImproveMent, allCorrect } from './GameQuizConstants';
+import { resultMsg } from './GameQuizConstants';
 import { createDialogueBox, createTypewriter } from '../dialogue/GameDialogueHelper';
 
 export default class QuizManager {
@@ -24,16 +22,12 @@ export default class QuizManager {
   
   public async showQuiz(quizId:ItemId) {
     const quiz = GameGlobalAPI.getInstance().getQuizById(quizId);
-    const quizResult: boolean[] = new Array<boolean>(quiz.questions.length);
+    const numOfQns = quiz.questions.length;
+    let numOfCorrect = 0;
     for (let i = 0; i < quiz.questions.length; i++ ) {
-        const isCorrect = await this.showQuizQuestion(GameGlobalAPI.getInstance().getGameManager(), quiz.questions[i]);
-        console.log("check the question displayed: " + isCorrect);
-        quizResult[i] = isCorrect;
+        numOfCorrect += await this.showQuizQuestion(GameGlobalAPI.getInstance().getGameManager(), quiz.questions[i]);
     }
-    console.log(quiz.result);
-    quiz.result = quizResult;
-    console.log(quiz.result);
-    await this.showResult(quiz.result);
+    await this.showResult(numOfQns, numOfCorrect);
   }
 
   //Display the specific quiz question
@@ -55,15 +49,15 @@ export default class QuizManager {
 
       const header = new Phaser.GameObjects.Text(
         scene,
-        screenSize.x / 2 - QuizConstants.textPad,
+        screenSize.x - QuizConstants.textPad,
         QuizConstants.y,
-        "options" ,
+        "" ,
         textStyle
       ).setOrigin(1.0, 0.0);
       
       const quizHeaderBg = new Phaser.GameObjects.Rectangle(
         scene,
-        screenSize.x / 2,
+        screenSize.x,
         QuizConstants.y - QuizConstants.textPad,
         QuizConstants.width * quizPartitions,
         header.getBounds().bottom * 0.5 + QuizConstants.textPad,
@@ -73,7 +67,7 @@ export default class QuizManager {
       
       const quizBg = new Phaser.GameObjects.Rectangle(
         scene,
-        screenSize.x / 2,
+        screenSize.x,
         QuizConstants.y - QuizConstants.textPad,
         QuizConstants.width * quizPartitions,
         quizHeaderBg.getBounds().bottom * 0.5 + (quizHeight + 0.5) * QuizConstants.yInterval,
@@ -100,16 +94,16 @@ export default class QuizManager {
               message: response.text,
               textConfig: QuizConstants.textConfig,
               bitMapTextStyle: quizOptStyle,
-              onUp: () => {
+              onUp: async () => {
                 quizContainer.destroy();
-                const isCorrect = (index === question.answer);
+                const isCorrect = (index === question.answer) ? 1 : 0;
                 if (response.reaction) {
                   await this.showReaction(response.reaction);
                 }
                 resolve(isCorrect);
               }
             }).setPosition(
-                screenSize.x / 2 -
+                screenSize.x -
                 QuizConstants.width / 2 -
                 QuizConstants.width * (quizPartitions - Math.floor(index / 5) - 1),
               (buttonPositions[index][1] % (5 * QuizConstants.yInterval)) +
@@ -149,28 +143,15 @@ export default class QuizManager {
     await this.reactionManager.showReaction();
   }
 
-  private async showResult(result: boolean[]) {
-    const numOfCorrect = result.reduce((accumulator, current) => accumulator + (current ? 1 : 0), 0);
-    const line = numOfCorrect <= 1 ? `${ numOfCorrect } question` : `${ numOfCorrect } questions`;
-    const resultObject: DialogueObject = new Map([
-      ["0", [{line: `You got ${ line } correct!`}]]
-    ]);
-    await this.showReaction(resultObject);
+  private async showResult(numOfQns: number, numOfCorrect: number) {
+    await this.showReaction(this.makeResultMsg(numOfQns, numOfCorrect));
   }
-  // private showQuestion(question: Question) {
-  //   console.log(question.question);
-  //   console.log(question.answer);
-  //   question.options.forEach(option => {
-  //     this.showOption(option);
-  //   });
-  // }
 
-  // private showOption(option: Option) {
-  //   console.log(option.text);
-  //   option.reaction.forEach((value: DialogueLine[]) => this.showReaction(value));
-  // }
-
-  // private showReaction(reaction: DialogueLine[]) {
-  //   reaction.forEach((line: DialogueLine) => console.log(line.line));
-  // }
+  private makeResultMsg(numOfQns: number, numOfCorrect: number): DialogueObject {
+    let line = `You got ${ numOfCorrect } out of ${numOfQns} questions correct! `;
+    line += (numOfCorrect === numOfQns ? resultMsg.allCorrect : resultMsg.notAllCorrect);
+    return new Map([
+      ["0", [{line: line}]]
+    ]);
+  }
 }
