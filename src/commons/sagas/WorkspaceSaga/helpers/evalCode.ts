@@ -249,9 +249,6 @@ export function* evalCode(
           }
           // This should not happen but we check just in case
           default: {
-            // @ts-expect-error This is used to force a type error if we miss a case
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const _: never = specialError;
             yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
           }
         }
@@ -345,7 +342,7 @@ export function* evalCode(
 }
 
 // Special module errors
-const specialErrors = ['source_academy_interrupt', 'ajbwj'] as const;
+const specialErrors = ['source_academy_interrupt'] as const;
 type SpecialError = (typeof specialErrors)[number];
 
 function checkSpecialError(errors: SourceError[]): SpecialError | null {
