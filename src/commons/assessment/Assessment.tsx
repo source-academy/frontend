@@ -190,6 +190,15 @@ const Assessment: React.FC<AssessmentProps> = props => {
             <div className="listing-description">
               <Markdown content={overview.shortSummary} />
             </div>
+            {overview.maxTeamSize > 1 ? (
+              <div className="listing-team_information">
+                <H6> This is a team assessment. </H6>
+              </div>
+            ) : (
+              <div>
+                <H6> This is an individual assessment. </H6>
+              </div>
+            )}
             <div className="listing-footer">
               <div>
                 <Text className="listing-due-date">
@@ -289,7 +298,6 @@ const Assessment: React.FC<AssessmentProps> = props => {
     /** Upcoming assessments, that are not released yet. */
     const isOverviewUpcoming = (overview: AssessmentOverview) =>
       !beforeNow(overview.closeAt) && !beforeNow(overview.openAt);
-
     const upcomingCards = sortAssessments(assessmentOverviews.filter(isOverviewUpcoming)).map(
       (overview, index) => makeOverviewCard(overview, index, role !== Role.Student, false)
     );
@@ -341,6 +349,20 @@ const Assessment: React.FC<AssessmentProps> = props => {
     );
   }
 
+  // Define the warning text when finalising submissions
+  const hasBonusXp = (betchaAssessment?.earlySubmissionXp as number) > 0;
+  const warningText = hasBonusXp ? (
+    <p>
+      Finalising your submission early grants you additional XP, but{' '}
+      <span className="warning">this action is irreversible.</span>
+    </p>
+  ) : (
+    <p>
+      Finalising your submission early does not grant you additional XP, and{' '}
+      <span className="warning">this action is irreversible.</span>
+    </p>
+  );
+
   // Define the betcha dialog (in each card's menu)
   const submissionText = betchaAssessment ? (
     <p>
@@ -353,10 +375,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
   const betchaText = (
     <>
       {submissionText}
-      <p>
-        Finalising your submission early grants you additional XP, but{' '}
-        <span className="warning">this action is irreversible.</span>
-      </p>
+      {warningText}
     </>
   );
   const betchaDialog = (

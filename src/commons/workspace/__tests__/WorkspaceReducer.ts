@@ -252,14 +252,14 @@ describe('BROWSE_REPL_HISTORY_UP', () => {
 
 describe('CHANGE_EXTERNAL_LIBRARY', () => {
   test('sets externalLibrary correctly', () => {
-    const newExternal = 'new_external_test';
+    const newExternal = 'new_external_test' as ExternalLibraryName;
     const playgroundAction = {
       type: CHANGE_EXTERNAL_LIBRARY,
       payload: {
         newExternal,
         workspaceLocation: playgroundWorkspace
       }
-    };
+    } as const;
 
     const result = WorkspaceReducer(defaultWorkspaceManager, playgroundAction);
     expect(result).toEqual({
@@ -861,7 +861,8 @@ describe('LOG_OUT', () => {
       updateCse: true,
       currentStep: -1,
       stepsTotal: 0,
-      breakpointSteps: []
+      breakpointSteps: [],
+      changepointSteps: []
     };
 
     const logoutDefaultState: WorkspaceManagerState = {
@@ -872,7 +873,7 @@ describe('LOG_OUT', () => {
     const playgroundAction = {
       type: LOG_OUT,
       payload: {}
-    };
+    } as const;
 
     const result = WorkspaceReducer(logoutDefaultState, playgroundAction);
     expect(result).toEqual({
@@ -1088,7 +1089,7 @@ describe('UPDATE_CURRENT_ASSESSMENT_ID', () => {
     const assessmentAction = {
       type: UPDATE_CURRENT_ASSESSMENT_ID,
       payload: { assessmentId, questionId }
-    };
+    } as const;
 
     const result = WorkspaceReducer(defaultWorkspaceManager, assessmentAction);
     expect(result).toEqual({
@@ -1109,7 +1110,7 @@ describe('UPDATE_CURRENT_SUBMISSION_ID', () => {
     const assessmentAction = {
       type: UPDATE_CURRENT_SUBMISSION_ID,
       payload: { submissionId, questionId }
-    };
+    } as const;
 
     const result = WorkspaceReducer(defaultWorkspaceManager, assessmentAction);
     expect(result).toEqual({

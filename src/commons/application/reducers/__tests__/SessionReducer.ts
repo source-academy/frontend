@@ -31,7 +31,7 @@ test('LOG_OUT works correctly on default session', () => {
   const action = {
     type: LOG_OUT,
     payload: {}
-  };
+  } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result).toEqual(defaultSession);
@@ -47,7 +47,7 @@ test('SET_TOKEN sets accessToken and refreshToken correctly', () => {
       accessToken,
       refreshToken
     }
-  };
+  } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result).toEqual({
@@ -58,20 +58,23 @@ test('SET_TOKEN sets accessToken and refreshToken correctly', () => {
 
 test('SET_USER works correctly', () => {
   const payload = {
+    userId: 123,
+    username: 'E1234567',
     name: 'test student',
-    role: Role.Student,
     courses: [
       {
         courseId: 1,
         courseName: `CS1101 Programming Methodology (AY20/21 Sem 1)`,
         courseShortName: `CS1101S`,
-        viewable: true
+        viewable: true,
+        role: Role.Student
       },
       {
         courseId: 2,
         courseName: `CS2030S Programming Methodology II (AY20/21 Sem 2)`,
         courseShortName: `CS2030S`,
-        viewable: true
+        viewable: true,
+        role: Role.Staff
       }
     ]
   };
@@ -79,7 +82,7 @@ test('SET_USER works correctly', () => {
   const action = {
     type: SET_USER,
     payload
-  };
+  } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result).toEqual({
@@ -105,7 +108,7 @@ test('SET_COURSE_CONFIGURATION works correctly', () => {
   const action = {
     type: SET_COURSE_CONFIGURATION,
     payload
-  };
+  } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result).toEqual({
@@ -135,7 +138,7 @@ test('SET_COURSE_REGISTRATION works correctly', () => {
   const action = {
     type: SET_COURSE_REGISTRATION,
     payload
-  };
+  } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result).toEqual({
@@ -153,7 +156,11 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       buildSolution: false,
       isContest: false,
       hoursBeforeEarlyXpDecay: 48,
-      earlySubmissionXp: 200
+      earlySubmissionXp: 200,
+      isManuallyGraded: false,
+      displayInDashboard: true,
+      hasTokenCounter: false,
+      hasVotingFeatures: false
     },
     {
       assessmentConfigId: 1,
@@ -162,7 +169,11 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       buildSolution: false,
       isContest: false,
       hoursBeforeEarlyXpDecay: 48,
-      earlySubmissionXp: 200
+      earlySubmissionXp: 200,
+      isManuallyGraded: false,
+      displayInDashboard: true,
+      hasTokenCounter: false,
+      hasVotingFeatures: false
     },
     {
       assessmentConfigId: 1,
@@ -171,14 +182,18 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       buildSolution: false,
       isContest: false,
       hoursBeforeEarlyXpDecay: 48,
-      earlySubmissionXp: 200
+      earlySubmissionXp: 200,
+      isManuallyGraded: false,
+      displayInDashboard: true,
+      hasTokenCounter: false,
+      hasVotingFeatures: false
     }
   ];
 
   const action = {
     type: SET_ASSESSMENT_CONFIGURATIONS,
     payload
-  };
+  } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result).toEqual({
@@ -193,12 +208,14 @@ test('SET_ADMIN_PANEL_COURSE_REGISTRATIONS works correctly', () => {
       courseRegId: 1,
       courseId: 1,
       name: 'Bob',
+      username: 'E1234567',
       role: Role.Student
     },
     {
       courseRegId: 2,
       courseId: 1,
       name: 'Avenger',
+      username: 'E7654321',
       role: Role.Staff
     }
   ];
@@ -206,7 +223,7 @@ test('SET_ADMIN_PANEL_COURSE_REGISTRATIONS works correctly', () => {
   const action = {
     type: SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
     payload
-  };
+  } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result).toEqual({
@@ -220,7 +237,7 @@ test('SET_GITHUB_ACCESS_TOKEN works correctly', () => {
   const action = {
     type: SET_GITHUB_ACCESS_TOKEN,
     payload: token
-  };
+  } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result).toEqual({
@@ -267,7 +284,7 @@ test('UPDATE_ASSESSMENT works correctly in inserting assessment', () => {
   const action = {
     type: UPDATE_ASSESSMENT,
     payload: assessmentTest1
-  };
+  } as const;
   const resultMap: Map<number, Assessment> = SessionsReducer(defaultSession, action).assessments;
 
   expect(resultMap.get(assessmentTest1.id)).toEqual(assessmentTest1);
@@ -285,7 +302,7 @@ test('UPDATE_ASSESSMENT works correctly in inserting assessment and retains old 
   const action = {
     type: UPDATE_ASSESSMENT,
     payload: assessmentTest2
-  };
+  } as const;
   const resultMap: Map<number, Assessment> = SessionsReducer(newDefaultSession, action).assessments;
 
   expect(resultMap.get(assessmentTest2.id)).toEqual(assessmentTest2);
@@ -303,7 +320,7 @@ test('UPDATE_ASSESSMENT works correctly in updating assessment', () => {
   const action = {
     type: UPDATE_ASSESSMENT,
     payload: assessmentTest2
-  };
+  } as const;
   const resultMap: Map<number, Assessment> = SessionsReducer(newDefaultSession, action).assessments;
 
   expect(resultMap.get(assessmentTest2.id)).toEqual(assessmentTest2);
@@ -318,13 +335,16 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
     coverImage: 'test_string',
     id: 0,
     maxXp: 0,
+    earlySubmissionXp: 0,
     openAt: 'test_string',
     title: 'test_string',
     shortSummary: 'test_string',
     status: AssessmentStatuses.not_attempted,
     story: null,
     xp: 0,
-    gradingStatus: GradingStatuses.none
+    gradingStatus: GradingStatuses.none,
+    maxTeamSize: 5,
+    hasVotingFeatures: false
   }
 ];
 
@@ -337,13 +357,16 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
     fileName: 'test_sting_0',
     id: 1,
     maxXp: 1,
+    earlySubmissionXp: 0,
     openAt: 'test_string_0',
     title: 'test_string_0',
     shortSummary: 'test_string_0',
     status: AssessmentStatuses.attempted,
     story: null,
     xp: 1,
-    gradingStatus: GradingStatuses.grading
+    gradingStatus: GradingStatuses.grading,
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   }
 ];
 
@@ -351,7 +374,7 @@ test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in inserting assessment overvi
   const action = {
     type: UPDATE_ASSESSMENT_OVERVIEWS,
     payload: assessmentOverviewsTest1
-  };
+  } as const;
 
   const result: SessionState = SessionsReducer(defaultSession, action);
 
@@ -370,7 +393,7 @@ test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in updating assessment overvie
   const action = {
     type: UPDATE_ASSESSMENT_OVERVIEWS,
     payload: assessmentOverviewsPayload
-  };
+  } as const;
 
   const result: SessionState = SessionsReducer(newDefaultSession, action);
 
@@ -445,7 +468,7 @@ test('UPDATE_GRADING works correctly in inserting gradings', () => {
       submissionId,
       grading: gradingTest1
     }
-  };
+  } as const;
 
   const gradingMap: Map<number, GradingQuery> = SessionsReducer(defaultSession, action).gradings;
   expect(gradingMap.get(submissionId)).toEqual(gradingTest1);
@@ -468,7 +491,7 @@ test('UPDATE_GRADING works correctly in inserting gradings and retains old data'
       submissionId: submissionId2,
       grading: gradingTest2
     }
-  };
+  } as const;
 
   const gradingMap: Map<number, GradingQuery> = SessionsReducer(newDefaultSession, action).gradings;
   expect(gradingMap.get(submissionId1)).toEqual(gradingTest1);
@@ -490,7 +513,7 @@ test('UPDATE_GRADING works correctly in updating gradings', () => {
       submissionId,
       grading: gradingTest2
     }
-  };
+  } as const;
 
   const gradingMap: Map<number, GradingQuery> = SessionsReducer(newDefaultSession, action).gradings;
   expect(gradingMap.get(submissionId)).toEqual(gradingTest2);
@@ -510,7 +533,9 @@ const gradingOverviewTest1: GradingOverview[] = [
     maxXp: 500,
     studentId: 100,
     studentName: 'test student',
+    studentNames: [],
     studentUsername: 'E0123456',
+    studentUsernames: [],
     submissionId: 1,
     submissionStatus: 'attempting',
     groupName: 'group',
@@ -533,7 +558,9 @@ const gradingOverviewTest2: GradingOverview[] = [
     maxXp: 1000,
     studentId: 20,
     studentName: 'another student',
+    studentNames: [],
     studentUsername: 'E0000000',
+    studentUsernames: [],
     submissionId: 2,
     submissionStatus: 'attempted',
     groupName: 'another group',
@@ -546,11 +573,17 @@ const gradingOverviewTest2: GradingOverview[] = [
 test('UPDATE_GRADING_OVERVIEWS works correctly in inserting grading overviews', () => {
   const action = {
     type: UPDATE_GRADING_OVERVIEWS,
-    payload: gradingOverviewTest1
-  };
+    payload: {
+      count: gradingOverviewTest1.length,
+      data: gradingOverviewTest1
+    }
+  } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
 
-  expect(result.gradingOverviews).toEqual(gradingOverviewTest1);
+  expect(result.gradingOverviews).toEqual({
+    count: gradingOverviewTest1.length,
+    data: gradingOverviewTest1
+  });
 });
 
 test('UPDATE_GRADING_OVERVIEWS works correctly in updating grading overviews', () => {
@@ -561,11 +594,14 @@ test('UPDATE_GRADING_OVERVIEWS works correctly in updating grading overviews', (
       data: gradingOverviewTest1
     }
   };
-  const gradingOverviewsPayload = [...gradingOverviewTest2, ...gradingOverviewTest1];
+  const gradingOverviewsPayload = {
+    count: gradingOverviewTest1.length + gradingOverviewTest2.length,
+    data: [...gradingOverviewTest2, ...gradingOverviewTest1]
+  };
   const action = {
     type: UPDATE_GRADING_OVERVIEWS,
     payload: gradingOverviewsPayload
-  };
+  } as const;
   const result: SessionState = SessionsReducer(newDefaultSession, action);
 
   expect(result.gradingOverviews).toEqual(gradingOverviewsPayload);
@@ -592,7 +628,7 @@ test('UPDATE_NOTIFICATIONS works correctly in updating notifications', () => {
   const action = {
     type: UPDATE_NOTIFICATIONS,
     payload: notifications
-  };
+  } as const;
 
   const result: SessionState = SessionsReducer(defaultSession, action);
 
