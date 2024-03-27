@@ -2,9 +2,14 @@ import {
   paginationToBackendParams,
   ungradedToBackendParams
 } from 'src/features/grading/GradingUtils';
+import { freshSortState } from 'src/pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import { action } from 'typesafe-actions'; // EDITED
 
-import { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';
+import {
+  AllColsSortStates,
+  GradingOverviews,
+  GradingQuery
+} from '../../../features/grading/GradingTypes';
 import {
   Assessment,
   AssessmentConfiguration,
@@ -113,13 +118,23 @@ export const fetchGrading = (submissionId: number) => action(FETCH_GRADING, subm
  * many entries, starting from what offset, to get
  * @param filterParams - param that contains columnFilters converted into JSON for
  * processing into query parameters
+ * @param allColsSortStates - param that contains the sort states of all columns and
+ * the order it should be sorted in
  */
 export const fetchGradingOverviews = (
   filterToGroup = true,
   gradedFilter = ungradedToBackendParams(false),
   pageParams = paginationToBackendParams(0, 10),
-  filterParams = {}
-) => action(FETCH_GRADING_OVERVIEWS, { filterToGroup, gradedFilter, pageParams, filterParams });
+  filterParams = {},
+  allColsSortStates: AllColsSortStates = { currentState: freshSortState, sortOrder: [] }
+) =>
+  action(FETCH_GRADING_OVERVIEWS, {
+    filterToGroup,
+    gradedFilter,
+    pageParams,
+    filterParams,
+    allColsSortStates
+  });
 
 export const login = (providerId: string) => action(LOGIN, providerId);
 

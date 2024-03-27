@@ -5,17 +5,17 @@ import "ag-grid-community/styles/ag-theme-quartz.css"
 import { Button, H6, Icon as BpIcon, InputGroup } from '@blueprintjs/core';
 // import { Icon as BpIcon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import {
-  // Column,
-  ColumnFilter,
-  ColumnFiltersState,
-  // createColumnHelper,
-  // flexRender,
-  // getCoreRowModel,
-  // getFilteredRowModel,
-  // getPaginationRowModel,
-  // useReactTable
-} from '@tanstack/react-table';
+// import {
+//   Column,
+//   ColumnFilter,
+//   ColumnFiltersState,
+//   createColumnHelper,
+//   flexRender,
+//   getCoreRowModel,
+//   getFilteredRowModel,
+//   getPaginationRowModel,
+//   useReactTable
+// } from '@tanstack/react-table';
 // import {
 //   Footer,
 //   Table,
@@ -37,11 +37,21 @@ import GradingText from 'src/commons/grading/GradingText';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   increaseRequestCounter,
+  updateAllColsSortStates,
   updateGradingColumnVisibility,
   updateSubmissionsTableFilters
 } from 'src/commons/workspace/WorkspaceActions';
-import { GradingColumnVisibility } from 'src/commons/workspace/WorkspaceTypes';
-import { GradingOverview } from 'src/features/grading/GradingTypes';
+import { 
+  ColumnFields, 
+  ColumnFilter,
+  ColumnFiltersState, 
+  ColumnName, 
+  GradingColumnVisibility,
+  GradingSubmissionTableProps, 
+  IGradingTableProperties, 
+  IGradingTableRow, 
+  SortStateProperties, 
+  SortStates} from 'src/features/grading/GradingTypes';
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 
 import GradingActions from './GradingActions';
@@ -115,12 +125,6 @@ import GradingSubmissionFilters from './GradingSubmissionFilters';
 //   })
 // ];
 
-export enum SortStates {
-  ASC = 'sort-asc',
-  DESC = 'sort-desc',
-  NONE = 'sort'
-}
-
 export const getNextSortState = (current: SortStates) => {
   switch (current) {
     case SortStates.NONE:
@@ -134,11 +138,16 @@ export const getNextSortState = (current: SortStates) => {
   }
 }
 
-type GradingSubmissionTableProps = {
-  totalRows: number;
-  pageSize: number;
-  submissions: GradingOverview[];
-  updateEntries: (page: number, filterParams: Object) => void;
+export const freshSortState: SortStateProperties = {
+  assessmentName: SortStates.NONE,
+  assessmentType: SortStates.NONE,
+  studentName: SortStates.NONE,
+  studentUsername: SortStates.NONE,
+  groupName: SortStates.NONE,
+  submissionStatus: SortStates.NONE,
+  gradingStatus: SortStates.NONE,
+  xp: SortStates.NONE,
+  actionsIndex: SortStates.NONE,
 };
 
 const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
@@ -150,108 +159,38 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
   // End of Original Code
 
-  interface IGradingTableRow {
-    assessmentName: string;
-    assessmentType: string;
-    studentName: string;
-    studentUsername: string;
-    groupName: string;
-    submissionStatus: string;
-    gradingStatus: string;
-    xp: string;
-    actionsIndex: number;
-    courseID: number;
-  }
-
-  interface IGradingTableProperties {
-    defaultColDefs: ColDef;
-    pagination: boolean;
-    pageSize: number;
-    suppressPaginationPanel: boolean;
-    rowClass: string;
-    rowHeight: number;
-    overlayNoRowsTemplate: string;
-    overlayLoadingTemplate: string;
-    suppressRowClickSelection: boolean;
-    tableHeight: string;
-    tableMargins: string;
-  }
-
-  interface SortStateProperties {
-    assessmentName: SortStates;
-    assessmentType: SortStates;
-    studentName: SortStates;
-    studentUsername: SortStates;
-    groupName: SortStates;
-    submissionStatus: SortStates;
-    gradingStatus: SortStates;
-    xp: SortStates;
-    actionsIndex: SortStates;
-  }
-
-  enum ColumnFields {
-    assessmentName = "assessmentName",
-    assessmentType = "assessmentType",
-    studentName = "studentName",
-    studentUsername = "studentUsername",
-    groupName = "groupName",
-    submissionStatus = "submissionStatus",
-    gradingStatus = "gradingStatus",
-    xp = "xp",
-    actionsIndex = "actionsIndex",
-  }
-
-  enum ColumnName {
-    assessmentName = "Name",
-    assessmentType = "Type",
-    studentName = "Student",
-    studentUsername = "Username",
-    groupName = "Group",
-    submissionStatus = "Progress",
-    gradingStatus = "Grading",
-    xp = "Raw XP (+Bonus)",
-    actionsIndex = "Actions",
-  }
-
-  const freshSortState: SortStateProperties = {
-    assessmentName: SortStates.NONE,
-    assessmentType: SortStates.NONE,
-    studentName: SortStates.NONE,
-    studentUsername: SortStates.NONE,
-    groupName: SortStates.NONE,
-    submissionStatus: SortStates.NONE,
-    gradingStatus: SortStates.NONE,
-    xp: SortStates.NONE,
-    actionsIndex: SortStates.NONE,
-  };
-
-  const customComponents = {
-    agColumnHeader: GradingColumnCustomHeaders,
-  };
-
   const disabledEditModeCols: string[] = [
     ColumnFields.actionsIndex,
-  ]
+  ];
 
   const disabledFilterModeCols: string[] = [
     ColumnFields.gradingStatus,
     ColumnFields.xp,
     ColumnFields.actionsIndex,
-  ]
+  ];
 
-  const newSortState = (affectedID: ColumnFields, sortDirection: SortStates) => {
-    setColumnSortStates((prev) => {
-      const newState: SortStateProperties = {...prev};
-      newState[affectedID] = sortDirection;
-      return newState;
-    });
-    setColumnSortOrder((prev) => {
-      const newOrder: ColumnFields[] = prev.filter((item) => String(item) !== String(affectedID));
-      if (sortDirection !== SortStates.NONE) {
-        newOrder.push(affectedID);
-      }
-      return newOrder;
-    })
+  const disabledSortCols: string[] = [
+    ColumnFields.actionsIndex,
+  ];
+
+  const updateSortState = (affectedID: ColumnFields, sortDirection: SortStates) => {
+    if (!disabledSortCols.includes(affectedID)) {
+
+      setColumnSortStates((prev) => {
+        const newState: SortStateProperties = {...prev};
+        newState[affectedID] = sortDirection;
+        return newState;
+      });
+
+      setColumnSortOrder((prev) => {
+        const newOrder: ColumnFields[] = prev.filter((item) => String(item) !== String(affectedID));
+        if (sortDirection !== SortStates.NONE) {
+          newOrder.push(affectedID);
+        }
+        return newOrder;
+      });
+      
+    }
   }
 
   const defaultColumnDefs: ColDef = {
@@ -260,23 +199,30 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     sortable: true,
     headerComponentParams: {
       hideColumn: (id: string) => handleColumnFilterAdd(id),
-      newSortState: newSortState,
+      updateSortState: updateSortState,
+      disabledSortCols: disabledSortCols,
     },
   };
 
   const ROW_HEIGHT: number = 60; // in px, declared here to calculate table height
+  const HEADER_HEIGHT: number = 48; // in px, declared here to calculate table height
 
   const tableProperties: IGradingTableProperties = {
+    customComponents: {
+      agColumnHeader: GradingColumnCustomHeaders,
+    },
     defaultColDefs: defaultColumnDefs,
-    pagination: true,
+    headerHeight: HEADER_HEIGHT,
+    overlayLoadingTemplate: '<div aria-live="polite" aria-atomic="true" style="position:absolute;top:0;left:0;right:0; bottom:0; background: url(https://ag-grid.com/images/ag-grid-loading-spinner.svg) center no-repeat" aria-label="loading"></div>',
+    overlayNoRowsTemplate: "Hmm... No submissions found, did you filter them all out?",
     pageSize: pageSize,
-    suppressPaginationPanel: true,
+    pagination: true,
     rowClass: "grading-left-align grading-table-rows",
     rowHeight: ROW_HEIGHT,
-    overlayNoRowsTemplate: "Hmm... No submissions found, did you filter them all out?",
-    overlayLoadingTemplate: '<div aria-live="polite" aria-atomic="true" style="position:absolute;top:0;left:0;right:0; bottom:0; background: url(https://ag-grid.com/images/ag-grid-loading-spinner.svg) center no-repeat" aria-label="loading"></div>',
+    suppressMenuHide: true,
+    suppressPaginationPanel: true,
     suppressRowClickSelection: true,
-    tableHeight: String(ROW_HEIGHT * Math.min(pageSize, Math.max(2, submissions.length)) + 48) + "px",
+    tableHeight: String(ROW_HEIGHT * Math.min(pageSize, Math.max(2, submissions.length)) + HEADER_HEIGHT) + "px",
     tableMargins: "1rem 0 0 0",
   };
 
@@ -296,7 +242,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       suppressMovable: true,
       cellClass: "grading-def-cell grading-def-cell-pointer",
       headerClass: "grading-default-headers",
-      flex: 1, 
+      flex: 1, // weight of column width
     }
 
     cols.push({ 
@@ -608,7 +554,11 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     // TODO BACKEND SORT
     console.log(columnSortStates);
     console.log(columnSortOrder);
-  }, [columnSortStates, columnSortOrder]);
+    dispatch(updateAllColsSortStates({
+      currentState: columnSortStates,
+      sortOrder: columnSortOrder,
+    }))
+  }, [columnSortStates, columnSortOrder, dispatch]);
 
   // End of Original Code
 
@@ -619,7 +569,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         const newData: IGradingTableRow[] = [];
 
         const sameData: boolean = submissions.reduce(
-          (accumulator, currentSubmission, index) => {
+          (sameData, currentSubmission, index) => {
             newData.push({
               assessmentName: currentSubmission.assessmentName,
               assessmentType: currentSubmission.assessmentType,
@@ -632,7 +582,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
               actionsIndex: currentSubmission.submissionId,
               courseID: courseId!,
             })
-            return accumulator && (currentSubmission.submissionId === rowData?.[index]?.actionsIndex);
+            return sameData && (currentSubmission.submissionId === rowData?.[index]?.actionsIndex);
           },
           submissions.length === rowData?.length
         );
@@ -733,21 +683,22 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         margin: tableProperties.tableMargins 
       }}>
         <AgGridReact
+          columnDefs={colDefs}
+          onCellClicked={cellClickedEvent}
           ref={gridRef}
           rowData={rowData}
-          columnDefs={colDefs}
+          components={tableProperties.customComponents}
           defaultColDef={tableProperties.defaultColDefs}
+          headerHeight={tableProperties.headerHeight}
+          overlayLoadingTemplate={tableProperties.overlayLoadingTemplate}
+          overlayNoRowsTemplate={tableProperties.overlayNoRowsTemplate}
           pagination={tableProperties.pagination}
           paginationPageSize={tableProperties.pageSize}
-          suppressPaginationPanel={tableProperties.suppressPaginationPanel}
           rowClass={tableProperties.rowClass}
           rowHeight={tableProperties.rowHeight}
-          overlayNoRowsTemplate={tableProperties.overlayNoRowsTemplate}
-          overlayLoadingTemplate={tableProperties.overlayLoadingTemplate}
+          suppressMenuHide={tableProperties.suppressMenuHide}
+          suppressPaginationPanel={tableProperties.suppressPaginationPanel}
           suppressRowClickSelection={tableProperties.suppressRowClickSelection}
-          onCellClicked={cellClickedEvent}
-          components={customComponents}
-          suppressMenuHide={true}
         />
       </div>
 

@@ -1,8 +1,8 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ColumnFilter } from '@tanstack/react-table';
 import { Badge } from '@tremor/react';
 import { GradingStatus } from 'src/commons/assessment/AssessmentTypes';
+import { ColumnFilter } from 'src/features/grading/GradingTypes';
 
 const BADGE_COLORS = {
   // assessment types

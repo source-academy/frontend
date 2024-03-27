@@ -1,3 +1,5 @@
+import { ColDef } from 'ag-grid-community';
+
 import {
   AssessmentType,
   AutogradingResult,
@@ -7,6 +9,24 @@ import {
   Testcase
 } from '../../commons/assessment/AssessmentTypes';
 import { Notification } from '../../commons/notificationBadge/NotificationBadgeTypes';
+
+export enum ColumnFields {
+  assessmentName = 'assessmentName',
+  assessmentType = 'assessmentType',
+  studentName = 'studentName',
+  studentUsername = 'studentUsername',
+  groupName = 'groupName',
+  submissionStatus = 'submissionStatus',
+  gradingStatus = 'gradingStatus',
+  xp = 'xp',
+  actionsIndex = 'actionsIndex'
+}
+
+export enum SortStates {
+  ASC = 'sort-asc',
+  DESC = 'sort-desc',
+  NONE = 'sort'
+}
 
 /**
  * Information on a Grading, for a particular student submission
@@ -49,6 +69,20 @@ export type GradingOverviewWithNotifications = {
  */
 export type GradingAnswer = GradingQuestion[];
 
+export type AllColsSortStates = {
+  currentState: SortStateProperties;
+  sortOrder: string[];
+};
+
+export type ColumnFiltersState = ColumnFilter[];
+
+export type ColumnFilter = {
+  id: string;
+  value: unknown;
+};
+
+export type GradingColumnVisibility = string[];
+
 export type GradingAssessment = {
   coverPicture: string;
   id: number;
@@ -63,6 +97,67 @@ export type GradingAssessment = {
 export type GradingQuery = {
   answers: GradingAnswer;
   assessment: GradingAssessment;
+};
+
+export type GradingSubmissionTableProps = {
+  totalRows: number;
+  pageSize: number;
+  submissions: GradingOverview[];
+  updateEntries: (page: number, filterParams: Object) => void;
+};
+
+export enum ColumnName {
+  assessmentName = 'Name',
+  assessmentType = 'Type',
+  studentName = 'Student',
+  studentUsername = 'Username',
+  groupName = 'Group',
+  submissionStatus = 'Progress',
+  gradingStatus = 'Grading',
+  xp = 'Raw XP (+Bonus)',
+  actionsIndex = 'Actions'
+}
+
+export type SortStateProperties = {
+  assessmentName: SortStates;
+  assessmentType: SortStates;
+  studentName: SortStates;
+  studentUsername: SortStates;
+  groupName: SortStates;
+  submissionStatus: SortStates;
+  gradingStatus: SortStates;
+  xp: SortStates;
+  actionsIndex: SortStates;
+};
+
+export type IGradingTableRow = {
+  assessmentName: string;
+  assessmentType: string;
+  studentName: string;
+  studentUsername: string;
+  groupName: string;
+  submissionStatus: string;
+  gradingStatus: string;
+  xp: string;
+  actionsIndex: number; // actions needs a column, but only submission ID data, so it stores submission ID
+  courseID: number;
+};
+
+export type IGradingTableProperties = {
+  customComponents: any;
+  defaultColDefs: ColDef;
+  headerHeight: number;
+  overlayLoadingTemplate: string;
+  overlayNoRowsTemplate: string;
+  pageSize: number;
+  pagination: boolean;
+  rowClass: string;
+  rowHeight: number;
+  suppressMenuHide: boolean;
+  suppressPaginationPanel: boolean;
+  suppressRowClickSelection: boolean;
+  tableHeight: string;
+  tableMargins: string;
 };
 
 /**

@@ -668,7 +668,6 @@
   font-size: 0.875rem;
   user-select: text;
   border: 0px!important;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.075)!important;
 
   &:hover:not(:has(> div)):has(button.grading-overview-filterable-btns) {
     button {
@@ -699,7 +698,6 @@
 }
 
 .grading-table-footer {
-  border-top: 1px solid rgba(0, 0, 0, 0.075)!important;
   padding-top: 15px;
   margin-bottom: 15px;
 }

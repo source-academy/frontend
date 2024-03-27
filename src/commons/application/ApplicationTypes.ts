@@ -7,6 +7,7 @@ import { GradingQuery } from '../../features/grading/GradingTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
+import { freshSortState } from '../../pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import { Assessment } from '../assessment/AssessmentTypes';
 import { FileSystemState } from '../fileSystem/FileSystemTypes';
@@ -414,7 +415,11 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     currentSubmission: undefined,
     currentQuestion: undefined,
     hasUnsavedChanges: false,
-    requestCounter: 0
+    requestCounter: 0,
+    allColsSortStates: {
+      currentState: freshSortState,
+      sortOrder: []
+    }
   },
   playground: {
     ...createDefaultWorkspace('playground'),

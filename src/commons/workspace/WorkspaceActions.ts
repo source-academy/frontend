@@ -2,6 +2,7 @@ import { createAction } from '@reduxjs/toolkit';
 import { Context } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
 
+import { AllColsSortStates, GradingColumnVisibility } from '../../features/grading/GradingTypes';
 import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SALanguage } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
@@ -35,7 +36,6 @@ import {
   EVAL_EDITOR_AND_TESTCASES,
   EVAL_REPL,
   EVAL_TESTCASE,
-  GradingColumnVisibility,
   INCREMENT_REQUEST_COUNTER,
   MOVE_CURSOR,
   NAV_DECLARATION,
@@ -60,6 +60,7 @@ import {
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
+  UPDATE_ALL_COLS_SORT_STATES,
   UPDATE_BREAKPOINTSTEPS,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
@@ -404,6 +405,11 @@ export const increaseRequestCounter = createAction(INCREMENT_REQUEST_COUNTER, ()
 export const decreaseRequestCounter = createAction(DECREMENT_REQUEST_COUNTER, () => ({
   payload: {}
 }));
+
+export const updateAllColsSortStates = createAction(
+  UPDATE_ALL_COLS_SORT_STATES,
+  (sortStates: AllColsSortStates) => ({ payload: { sortStates } })
+);
 
 export const updateSubmissionsTableFilters = createAction(
   UPDATE_SUBMISSIONS_TABLE_FILTERS,

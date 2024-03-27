@@ -72,6 +72,7 @@ import {
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
+  UPDATE_ALL_COLS_SORT_STATES,
   UPDATE_BREAKPOINTSTEPS,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
@@ -626,6 +627,14 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
         return state;
       }
     }
+    case UPDATE_ALL_COLS_SORT_STATES:
+      return {
+        ...state,
+        grading: {
+          ...state.grading,
+          allColsSortStates: action.payload.sortStates
+        }
+      };
     case UPDATE_SUBMISSIONS_TABLE_FILTERS:
       return {
         ...state,

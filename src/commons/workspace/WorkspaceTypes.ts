@@ -1,6 +1,7 @@
 import { Context } from 'js-slang';
 
 import { GitHubAssessmentWorkspaceState } from '../../features/githubAssessment/GitHubAssessmentTypes';
+import { AllColsSortStates, GradingColumnVisibility } from '../../features/grading/GradingTypes';
 import { SourcecastWorkspaceState } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SourcereelWorkspaceState } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
 import { InterpreterOutput } from '../application/ApplicationTypes';
@@ -50,6 +51,7 @@ export const TOGGLE_FOLDER_MODE = 'TOGGLE_FOLDER_MODE';
 export const SET_FOLDER_MODE = 'SET_FOLDER_MODE';
 export const UPDATE_ACTIVE_EDITOR_TAB_INDEX = 'UPDATE_ACTIVE_EDITOR_TAB_INDEX';
 export const UPDATE_ACTIVE_EDITOR_TAB = 'UPDATE_ACTIVE_EDITOR_TAB';
+export const UPDATE_ALL_COLS_SORT_STATES = 'UPDATE_ALL_COLS_SORT_STATES';
 export const UPDATE_EDITOR_VALUE = 'UPDATE_EDITOR_VALUE';
 export const UPDATE_EDITOR_BREAKPOINTS = 'UPDATE_EDITOR_BREAKPOINTS';
 export const ADD_EDITOR_TAB = 'ADD_EDITOR_TAB';
@@ -85,6 +87,7 @@ type GradingWorkspaceAttr = {
   readonly currentQuestion?: number;
   readonly hasUnsavedChanges: boolean;
   readonly requestCounter: number;
+  readonly allColsSortStates: AllColsSortStates;
 };
 type GradingWorkspaceState = GradingWorkspaceAttr & WorkspaceState;
 
@@ -171,5 +174,3 @@ export type DebuggerContext = {
 export type SubmissionsTableFilters = {
   columnFilters: { id: string; value: unknown }[];
 };
-
-export type GradingColumnVisibility = string[];

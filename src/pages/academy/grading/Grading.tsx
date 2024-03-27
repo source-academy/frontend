@@ -9,8 +9,8 @@ import { Navigate, useParams } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
-import { useSession } from 'src/commons/utils/Hooks';
-// import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
+// import { useSession } from 'src/commons/utils/Hooks';
+import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 import { decreaseRequestCounter, increaseRequestCounter } from 'src/commons/workspace/WorkspaceActions';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import {
@@ -52,7 +52,7 @@ const Grading: React.FC = () => {
   const [showAllSubmissions, setShowAllSubmissions] = useState(false);
 
   const dispatch = useDispatch();
-  // const requestCounter = useTypedSelector(state => state.workspaces.grading.requestCounter);
+  const allColsSortStates = useTypedSelector(state => state.workspaces.grading.allColsSortStates);
 
   const updateGradingOverviewsCallback = useCallback(
     (page: number, filterParams: Object) => {
@@ -62,16 +62,17 @@ const Grading: React.FC = () => {
           showAllGroups,
           ungradedToBackendParams(showAllSubmissions),
           paginationToBackendParams(page, pageSize),
-          filterParams
+          filterParams,
+          allColsSortStates,
         )
       );
     },
-    [dispatch, showAllGroups, showAllSubmissions, pageSize]
+    [dispatch, showAllGroups, showAllSubmissions, pageSize, allColsSortStates]
   );
 
   // useEffect(() => {
-  //   console.log(requestCounter);
-  // }, [requestCounter]);
+  //   console.log(sortStates);
+  // }, [sortStates]);
 
   useEffect(() => {
     dispatch(decreaseRequestCounter());
