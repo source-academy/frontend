@@ -8,7 +8,7 @@ import EditableGoalUuids from './achievementSettings/EditableGoalUuids';
 import EditablePosition from './achievementSettings/EditablePosition';
 import EditablePrerequisiteUuids from './achievementSettings/EditablePrerequisiteUuids';
 
-type AchievementSettingsProps = {
+type Props = {
   changeCardBackground: (cardBackground: string) => void;
   changeGoalUuids: (goalUuids: string[]) => void;
   changePosition: (position: number) => void;
@@ -17,19 +17,18 @@ type AchievementSettingsProps = {
   editableAchievement: AchievementItem;
 };
 
-const AchievementSettings: React.FC<AchievementSettingsProps> = props => {
-  const {
-    changeCardBackground,
-    changeGoalUuids,
-    changePosition,
-    changePrerequisiteUuids,
-    changeIsVariableXp,
-    editableAchievement
-  } = props;
+const AchievementSettings: React.FC<Props> = ({
+  changeCardBackground,
+  changeGoalUuids,
+  changePosition,
+  changePrerequisiteUuids,
+  changeIsVariableXp,
+  editableAchievement
+}) => {
   const { uuid, cardBackground, goalUuids, position, prerequisiteUuids, isVariableXp } =
     editableAchievement;
 
-  const [isOpen, setOpen] = useState<boolean>(false);
+  const [isOpen, setOpen] = useState(false);
   const toggleOpen = () => setOpen(!isOpen);
 
   return (

@@ -6,12 +6,12 @@ import Markdown from '../Markdown';
 import { Links } from '../utils/Constants';
 import { useTypedSelector } from '../utils/Hooks';
 
-type DialogProps = {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
 };
 
-const DropdownHelp: React.FC<DialogProps> = props => {
+const DropdownHelp: React.FC<Props> = props => {
   const moduleHelpText = useTypedSelector(store => store.session.moduleHelpText);
 
   return (

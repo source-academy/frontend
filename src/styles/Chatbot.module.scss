@@ -1,0 +1,132 @@
+.bot-container {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  transform: translateY(0%);
+  z-index: 1000;
+}
+
+.bot-area {
+  position: relative;
+}
+
+.tips-box {
+  position: absolute;
+  padding-right: 10px;
+  bottom: 10px;
+  right: 65px;
+  width: 180px;
+  height: auto;
+  border: 1px solid black;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+}
+
+.tips-message {
+  padding: auto;
+  font-size: 13px;
+  text-align: right;
+}
+
+.bot-button {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+}
+
+.iSA {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.chat-container {
+  position: relative;
+  width: 400px;
+  height: 450px;
+  border-radius: 5px;
+  background-color: #f1f1f1;
+  padding: 16px;
+  z-index: 1000;
+}
+
+.chat-message {
+  height: 80%;
+  border: 1px solid #ddd;
+  overflow-y: scroll;
+  border-radius: 5px;
+  padding: 16px;
+}
+
+.user-input {
+  width: 100%;
+  font-size: 20px;
+  color: black;
+  background-color: white;
+  border: 1px solid black;
+  margin-bottom: 0px;
+  padding-left: 10px;
+}
+
+.user {
+  background-color: #a3a3a4;
+  color: #fff;
+  font-size: 15px;
+  text-align: right;
+  padding: 10px;
+  line-height: 1.5;
+  border-radius: 10px;
+  display: block;
+}
+
+.bot {
+  background-color: #e1e1e1;
+  font-size: 15px;
+  color: #333;
+  text-align: left;
+  padding: 10px;
+  line-height: 1.5;
+  border-radius: 10px;
+  display: block;
+}
+
+.button-container {
+  height: 8%;
+  text-align: center;
+  margin-top: 0px;
+  padding: 0px;
+}
+
+.button-send {
+  width: 40%;
+  height: 100%;
+  background-color: gray;
+  font-size: 15px;
+  margin-right: 5%;
+  margin-top: 0%;
+  border: 1px;
+  border-radius: 10px;
+  vertical-align: top;
+}
+
+.button-clean {
+  width: 40%;
+  margin-top: 0%;
+  height: 100%;
+  margin-left: 5%;
+  background-color: gray;
+  font-size: 15px;
+  border: 1px;
+  border-radius: 10px;
+  vertical-align: top;
+}

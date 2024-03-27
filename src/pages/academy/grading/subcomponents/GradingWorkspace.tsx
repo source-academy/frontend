@@ -2,11 +2,11 @@ import { Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { fetchGrading } from 'src/commons/application/actions/SessionActions';
-import SideContentToneMatrix from 'src/commons/sideContent/SideContentToneMatrix';
+import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { showSimpleErrorDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import {
@@ -14,7 +14,6 @@ import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeExecTime,
-  changeSideContentHeight,
   clearReplOutput,
   evalEditor,
   evalRepl,
@@ -51,18 +50,15 @@ import { ControlBarRunButton } from '../../../../commons/controlBar/ControlBarRu
 import { convertEditorTabStateToProps } from '../../../../commons/editor/EditorContainer';
 import { Position } from '../../../../commons/editor/EditorTypes';
 import Markdown from '../../../../commons/Markdown';
+import SideContentAutograder from '../../../../commons/sideContent/content/SideContentAutograder';
+import SideContentToneMatrix from '../../../../commons/sideContent/content/SideContentToneMatrix';
 import { SideContentProps } from '../../../../commons/sideContent/SideContent';
-import SideContentAutograder from '../../../../commons/sideContent/SideContentAutograder';
+import { useSideContent } from '../../../../commons/sideContent/SideContentHelper';
 import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
 import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
 import { WorkspaceLocation, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
 import { AnsweredQuestion } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditor';
-
-type GradingWorkspaceProps = {
-  submissionId: number;
-  questionId: number;
-};
 
 const workspaceLocation: WorkspaceLocation = 'grading';
 const unansweredPrependValue: string = `// This answer does not have significant changes from the given solution
@@ -72,9 +68,17 @@ const unansweredPrependValue: string = `// This answer does not have significant
 
 `;
 
-const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
+type Props = {
+  submissionId: number;
+  questionId: number;
+};
+
+const GradingWorkspace: React.FC<Props> = props => {
   const navigate = useNavigate();
-  const [selectedTab, setSelectedTab] = useState(SideContentType.grading);
+  const { selectedTab, setSelectedTab } = useSideContent(
+    workspaceLocation,
+    SideContentType.grading
+  );
 
   const grading = useTypedSelector(state => state.session.gradings.get(props.submissionId));
   const courseId = useTypedSelector(state => state.session.courseId);
@@ -87,7 +91,6 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     isRunning,
     output,
     replValue,
-    sideContentHeight,
     currentSubmission: storedSubmissionId,
     currentQuestion: storedQuestionId
   } = useTypedSelector(state => state.workspaces[workspaceLocation]);
@@ -225,7 +228,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
    *
    * Assumes that 'grading' is defined
    */
-  const checkWorkspaceReset = (props: GradingWorkspaceProps) => {
+  const checkWorkspaceReset = (props: Props) => {
     /* Reset grading if it has changed.*/
     const submissionId = props.submissionId;
     const questionId = props.questionId;
@@ -287,8 +290,8 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
   };
 
   /** Pre-condition: Grading has been loaded */
-  const sideContentProps: (p: GradingWorkspaceProps, q: number) => SideContentProps = (
-    props: GradingWorkspaceProps,
+  const sideContentProps: (p: Props, q: number) => SideContentProps = (
+    props: Props,
     questionId: number
   ) => {
     const tabs: SideContentTab[] = [
@@ -304,8 +307,16 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
             initialXp={grading!.answers[questionId].grade.xp}
             xpAdjustment={grading!.answers[questionId].grade.xpAdjustment}
             maxXp={grading!.answers[questionId].question.maxXp}
-            studentName={grading!.answers[questionId].student.name}
-            studentUsername={grading!.answers[questionId].student.username}
+            studentNames={
+              grading![questionId].student.name
+                ? [grading!.answers[questionId].student.name]
+                : grading!.answers[questionId].team!.map(member => member.name)
+            }
+            studentUsernames={
+              grading![questionId].student.username
+                ? [grading!.answers[questionId].student.username]
+                : grading!.answers[questionId].team!.map(member => member.username)
+            }
             comments={grading!.answers[questionId].grade.comments ?? ''}
             graderName={
               grading!.answers[questionId].grade.grader
@@ -381,7 +392,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
         beforeDynamicTabs: tabs,
         afterDynamicTabs: []
       },
-      workspaceLocation: workspaceLocation
+      workspaceLocation
     };
 
     return sideContentProps;
@@ -482,6 +493,7 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
             removeEditorTabByIndex: handleRemoveEditorTabByIndex,
             editorTabs: editorTabs.map(convertEditorTabStateToProps),
             editorSessionId: '',
+            sessionDetails: null,
             handleDeclarationNavigate: handleDeclarationNavigate,
             handleEditorEval: handleEval,
             handleEditorValueChange: handleEditorValueChange,
@@ -501,7 +513,6 @@ const GradingWorkspace: React.FC<GradingWorkspaceProps> = props => {
     sideBarProps: {
       tabs: []
     },
-    sideContentHeight: sideContentHeight,
     sideContentProps: sideContentProps(props, questionId),
     replProps: {
       handleBrowseHistoryDown: handleBrowseHistoryDown,

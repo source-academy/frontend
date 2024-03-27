@@ -11,27 +11,39 @@ import classes from 'src/styles/Academy.module.scss';
 
 import {
   fetchNotifications,
+  fetchStudents,
+  fetchTeamFormationOverviews,
   updateLatestViewedCourse
 } from '../../commons/application/actions/SessionActions';
 import Assessment from '../../commons/assessment/Assessment';
 import { assessmentTypeLink } from '../../commons/utils/ParamParseHelper';
-import { assessmentRegExp, gradingRegExp, numberRegExp } from '../../features/academy/AcademyTypes';
+import {
+  assessmentRegExp,
+  gradingRegExp,
+  numberRegExp,
+  teamRegExp
+} from '../../features/academy/AcademyTypes';
 import Achievement from '../achievement/Achievement';
 import NotFound from '../notFound/NotFound';
 import Sourcecast from '../sourcecast/Sourcecast';
 import AdminPanel from './adminPanel/AdminPanel';
 import Dashboard from './dashboard/Dashboard';
 import Game from './game/Game';
+import GameSimulator from './gameSimulator/GameSimulator';
 import Grading from './grading/Grading';
 import GroundControl from './groundControl/GroundControlContainer';
 import NotiPreference from './notiPreference/NotiPreference';
 import Sourcereel from './sourcereel/Sourcereel';
-import StorySimulator from './storySimulator/StorySimulator';
+import TeamFormationForm from './teamFormation/subcomponents/TeamFormationForm';
+import TeamFormationImport from './teamFormation/subcomponents/TeamFormationImport';
+import TeamFormation from './teamFormation/TeamFormation';
 
-const Academy: React.FC<{}> = () => {
+const Academy: React.FC = () => {
   const dispatch = useDispatch();
   React.useEffect(() => {
+    dispatch(fetchStudents());
     dispatch(fetchNotifications());
+    dispatch(fetchTeamFormationOverviews(false));
   }, [dispatch]);
 
   const { agreedToResearch, assessmentConfigurations, enableGame, role } = useSession();
@@ -42,8 +54,16 @@ const Academy: React.FC<{}> = () => {
           <Route path="groundcontrol" element={<GroundControl />} key={0} />,
           <Route path={`grading/${gradingRegExp}`} element={<Grading />} key={1} />,
           <Route path="sourcereel" element={<Sourcereel />} key={2} />,
-          <Route path="storysimulator" element={<StorySimulator />} key={3} />,
-          <Route path="dashboard" element={<Dashboard />} key={4} />
+          <Route path="gamesimulator" element={<GameSimulator />} key={3} />,
+          <Route path="teamformation" element={<TeamFormation />} key={4} />,
+          <Route path="teamformation/create" element={<TeamFormationForm />} key={5} />,
+          <Route
+            path={`teamformation/edit/${teamRegExp}`}
+            element={<TeamFormationForm />}
+            key={6}
+          />,
+          <Route path="teamformation/import" element={<TeamFormationImport />} key={7} />,
+          <Route path="dashboard" element={<Dashboard />} key={8} />
         ]
       : null;
   return (
@@ -88,7 +108,7 @@ const Academy: React.FC<{}> = () => {
   );
 };
 
-const CourseSelectingAcademy: React.FC<{}> = () => {
+const CourseSelectingAcademy: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { courseId } = useSession();

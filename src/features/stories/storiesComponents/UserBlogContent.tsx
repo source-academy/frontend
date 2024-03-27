@@ -9,10 +9,6 @@ import { addStoryEnv, clearStoryEnv } from 'src/features/stories/StoriesActions'
 
 import { store } from '../../../pages/createStore';
 
-type UserBlogProps = {
-  fileContent: string;
-};
-
 export const DEFAULT_ENV = 'default';
 
 const YAML_HEADER = '---';
@@ -87,15 +83,19 @@ export function getYamlHeader(content: string): { header: string; content: strin
   };
 }
 
-const UserBlogContent: React.FC<UserBlogProps> = props => {
+type Props = {
+  fileContent: string;
+};
+
+const UserBlogContent: React.FC<Props> = ({ fileContent }) => {
   const [content, setContent] = useState('');
 
   useEffect(() => {
-    const { header, content } = getYamlHeader(props.fileContent);
+    const { header, content } = getYamlHeader(fileContent);
     setContent(content);
     store.dispatch(clearStoryEnv());
     handleHeaders(header);
-  }, [props.fileContent]);
+  }, [fileContent]);
 
   return content ? (
     <div className="userblogContent">

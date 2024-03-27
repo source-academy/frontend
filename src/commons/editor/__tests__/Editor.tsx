@@ -8,6 +8,7 @@ test('Editor renders correctly', () => {
     editorTabIndex: 0,
     breakpoints: [],
     editorSessionId: '',
+    sessionDetails: null,
     editorValue: '',
     highlightedLines: [],
     isEditorAutorun: false,

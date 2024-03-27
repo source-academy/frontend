@@ -3,7 +3,7 @@ import { call, put, select, takeEvery } from 'redux-saga/effects';
 
 import { FETCH_GROUP_GRADING_SUMMARY } from '../../features/dashboard/DashboardTypes';
 import {
-  GradingOverview,
+  GradingOverviews,
   GradingQuery,
   GradingQuestion
 } from '../../features/grading/GradingTypes';
@@ -17,6 +17,9 @@ import {
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
+  BULK_UPLOAD_TEAM,
+  CREATE_TEAM,
+  DELETE_TEAM,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
   FETCH_ASSESSMENT,
   FETCH_AUTH,
@@ -24,6 +27,8 @@ import {
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
+  FETCH_STUDENTS,
+  FETCH_TEAM_FORMATION_OVERVIEWS,
   FETCH_USER_AND_COURSE,
   SUBMIT_ANSWER,
   SUBMIT_GRADING,
@@ -32,7 +37,8 @@ import {
   UNSUBMIT_SUBMISSION,
   UPDATE_ASSESSMENT_CONFIGS,
   UPDATE_COURSE_CONFIG,
-  UPDATE_LATEST_VIEWED_COURSE
+  UPDATE_LATEST_VIEWED_COURSE,
+  UPDATE_TEAM
 } from '../application/types/SessionTypes';
 import {
   AssessmentOverview,
@@ -56,9 +62,17 @@ import {
 } from './AssessmentMocks';
 import { mockFetchGrading, mockFetchGradingOverview, mockGradingSummary } from './GradingMocks';
 import {
+  mockBulkUploadTeam,
+  mockCreateTeam,
+  mockDeleteTeam,
+  mockFetchTeamFormationOverview,
+  mockUpdateTeam
+} from './TeamFormationMocks';
+import {
   mockAdminPanelCourseRegistrations,
   mockCourseConfigurations,
   mockCourseRegistrations,
+  mockFetchStudents,
   mockNotifications,
   mockUser
 } from './UserMocks';
@@ -166,12 +180,86 @@ export function* mockBackendSaga(): SagaIterator {
     FETCH_GRADING_OVERVIEWS,
     function* (action: ReturnType<typeof actions.fetchGradingOverviews>): any {
       const accessToken = yield select((state: OverallState) => state.session.accessToken);
-      const filterToGroup = action.payload;
+      const { filterToGroup, pageParams, filterParams } = action.payload;
       const gradingOverviews = yield call(() =>
-        mockFetchGradingOverview(accessToken, filterToGroup)
+        mockFetchGradingOverview(accessToken, filterToGroup, pageParams, filterParams)
       );
       if (gradingOverviews !== null) {
-        yield put(actions.updateGradingOverviews([...gradingOverviews]));
+        yield put(actions.updateGradingOverviews(gradingOverviews));
+      }
+    }
+  );
+
+  yield takeEvery(
+    FETCH_TEAM_FORMATION_OVERVIEWS,
+    function* (action: ReturnType<typeof actions.fetchTeamFormationOverviews>): any {
+      const accessToken = yield select((state: OverallState) => state.session.accessToken);
+      const filterToGroup = action.payload;
+      const teamFormationOverviews = yield call(() =>
+        mockFetchTeamFormationOverview(accessToken, filterToGroup)
+      );
+      if (teamFormationOverviews !== null) {
+        yield put(actions.updateTeamFormationOverviews([...teamFormationOverviews]));
+      }
+    }
+  );
+
+  yield takeEvery(CREATE_TEAM, function* (action: ReturnType<typeof actions.createTeam>): any {
+    const accessToken = yield select((state: OverallState) => state.session.accessToken);
+    const { assessment, teams } = action.payload;
+
+    const teamFormationOverviews = yield call(() =>
+      mockCreateTeam(accessToken, assessment.id, assessment.title, assessment.type, teams)
+    );
+    if (teamFormationOverviews !== null) {
+      yield put(actions.updateTeamFormationOverviews([...teamFormationOverviews]));
+    }
+  });
+
+  yield takeEvery(
+    BULK_UPLOAD_TEAM,
+    function* (action: ReturnType<typeof actions.bulkUploadTeam>): any {
+      const accessToken = yield select((state: OverallState) => state.session.accessToken);
+      const { assessment, file } = action.payload;
+
+      const teamFormationOverviews = yield call(() =>
+        mockBulkUploadTeam(accessToken, assessment.id, assessment.title, assessment.type, file)
+      );
+      if (teamFormationOverviews !== null) {
+        yield put(actions.updateTeamFormationOverviews([...teamFormationOverviews]));
+      }
+    }
+  );
+
+  yield takeEvery(UPDATE_TEAM, function* (action: ReturnType<typeof actions.updateTeam>): any {
+    const accessToken = yield select((state: OverallState) => state.session.accessToken);
+    const { teamId, assessment, teams } = action.payload;
+
+    const teamFormationOverviews = yield call(() =>
+      mockUpdateTeam(accessToken, teamId, assessment.id, assessment.title, assessment.type, teams)
+    );
+    if (teamFormationOverviews !== null) {
+      yield put(actions.updateTeamFormationOverviews([...teamFormationOverviews]));
+    }
+  });
+
+  yield takeEvery(DELETE_TEAM, function* (action: ReturnType<typeof actions.deleteTeam>): any {
+    const accessToken = yield select((state: OverallState) => state.session.accessToken);
+    const { teamId } = action.payload;
+
+    const teamFormationOverviews = yield call(() => mockDeleteTeam(accessToken, teamId));
+    if (teamFormationOverviews !== null) {
+      yield put(actions.updateTeamFormationOverviews([...teamFormationOverviews]));
+    }
+  });
+
+  yield takeEvery(
+    FETCH_STUDENTS,
+    function* (action: ReturnType<typeof actions.fetchStudents>): any {
+      const accessToken = yield select((state: OverallState) => state.session.accessToken);
+      const students = yield call(() => mockFetchStudents(accessToken));
+      if (students !== null) {
+        yield put(actions.updateStudents([...students]));
       }
     }
   );
@@ -189,10 +277,14 @@ export function* mockBackendSaga(): SagaIterator {
     UNSUBMIT_SUBMISSION,
     function* (action: ReturnType<typeof actions.unsubmitSubmission>) {
       const { submissionId } = action.payload;
-      const overviews: GradingOverview[] = yield select(
-        (state: OverallState) => state.session.gradingOverviews || []
+      const overviews: GradingOverviews = yield select(
+        (state: OverallState) =>
+          state.session.gradingOverviews || {
+            count: 0,
+            data: []
+          }
       );
-      const index = overviews.findIndex(
+      const index = overviews.data.findIndex(
         overview =>
           overview.submissionId === submissionId && overview.submissionStatus === 'submitted'
       );
@@ -200,14 +292,14 @@ export function* mockBackendSaga(): SagaIterator {
         yield call(showWarningMessage, '400: Bad Request');
         return;
       }
-      const newOverviews = (overviews as GradingOverview[]).map(overview => {
+      const newOverviews = overviews.data.map(overview => {
         if (overview.submissionId === submissionId) {
           return { ...overview, submissionStatus: 'attempted' };
         }
         return overview;
       });
       yield call(showSuccessMessage, 'Unsubmit successful!', 1000);
-      yield put(actions.updateGradingOverviews(newOverviews));
+      yield put(actions.updateGradingOverviews({ ...overviews, data: newOverviews }));
     }
   );
 

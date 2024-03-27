@@ -1,6 +1,12 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
+import { mockStudents } from 'src/commons/mocks/UserMocks';
+import {
+  paginationToBackendParams,
+  ungradedToBackendParams
+} from 'src/features/grading/GradingUtils';
 
-import { GradingOverview, GradingQuery } from '../../../../features/grading/GradingTypes';
+import { GradingOverviews, GradingQuery } from '../../../../features/grading/GradingTypes';
+import { TeamFormationOverview } from '../../../../features/teamFormation/TeamFormationTypes';
 import { Assessment, AssessmentOverview } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../../ApplicationTypes';
@@ -17,6 +23,8 @@ import {
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
+  FETCH_STUDENTS,
+  FETCH_TEAM_FORMATION_OVERVIEWS,
   FETCH_USER_AND_COURSE,
   LOGIN,
   REAUTOGRADE_ANSWER,
@@ -43,7 +51,11 @@ import {
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_NOTIFICATIONS,
-  UPDATE_USER_ROLE
+  UPDATE_STUDENTS,
+  UPDATE_TEAM_FORMATION_OVERVIEW,
+  UPDATE_TEAM_FORMATION_OVERVIEWS,
+  UPDATE_USER_ROLE,
+  User
 } from '../../types/SessionTypes';
 import {
   acknowledgeNotifications,
@@ -58,6 +70,8 @@ import {
   fetchGrading,
   fetchGradingOverviews,
   fetchNotifications,
+  fetchStudents,
+  fetchTeamFormationOverviews,
   fetchUserAndCourse,
   login,
   reautogradeAnswer,
@@ -84,6 +98,9 @@ import {
   updateGradingOverviews,
   updateLatestViewedCourse,
   updateNotifications,
+  updateStudents,
+  updateTeamFormationOverview,
+  updateTeamFormationOverviews,
   updateUserRole
 } from '../SessionActions';
 
@@ -110,14 +127,16 @@ test('fetchAuth generates correct action object', () => {
 test('fetchUserAndCourse generates correct action object', () => {
   const action = fetchUserAndCourse();
   expect(action).toEqual({
-    type: FETCH_USER_AND_COURSE
+    type: FETCH_USER_AND_COURSE,
+    payload: {}
   });
 });
 
 test('fetchCourseConfig generates correct action object', () => {
   const action = fetchCourseConfig();
   expect(action).toEqual({
-    type: FETCH_COURSE_CONFIG
+    type: FETCH_COURSE_CONFIG,
+    payload: {}
   });
 });
 
@@ -133,7 +152,8 @@ test('fetchAssessment generates correct action object', () => {
 test('fetchAssessmentOverviews generates correct action object', () => {
   const action = fetchAssessmentOverviews();
   expect(action).toEqual({
-    type: FETCH_ASSESSMENT_OVERVIEWS
+    type: FETCH_ASSESSMENT_OVERVIEWS,
+    payload: {}
   });
 });
 
@@ -150,16 +170,54 @@ test('fetchGradingOverviews generates correct default action object', () => {
   const action = fetchGradingOverviews();
   expect(action).toEqual({
     type: FETCH_GRADING_OVERVIEWS,
-    payload: true
+    payload: {
+      filterToGroup: true,
+      gradedFilter: ungradedToBackendParams(false),
+      pageParams: paginationToBackendParams(0, 10),
+      filterParams: {}
+    }
   });
 });
 
 test('fetchGradingOverviews generates correct action object', () => {
   const filterToGroup = false;
-  const action = fetchGradingOverviews(filterToGroup);
+  const gradedFilter = ungradedToBackendParams(true);
+  const pageParams = { offset: 123, pageSize: 456 };
+  const filterParams = { abc: 'xxx', def: 'yyy' };
+  const action = fetchGradingOverviews(filterToGroup, gradedFilter, pageParams, filterParams);
   expect(action).toEqual({
     type: FETCH_GRADING_OVERVIEWS,
+    payload: {
+      filterToGroup: filterToGroup,
+      gradedFilter: gradedFilter,
+      pageParams: pageParams,
+      filterParams: filterParams
+    }
+  });
+});
+
+test('fetchTeamFormationOverviews generates correct default action object', () => {
+  const action = fetchTeamFormationOverviews();
+  expect(action).toEqual({
+    type: FETCH_TEAM_FORMATION_OVERVIEWS,
+    payload: true
+  });
+});
+
+test('fetchTeamFormationOverviews generates correct action object', () => {
+  const filterToGroup = false;
+  const action = fetchTeamFormationOverviews(filterToGroup);
+  expect(action).toEqual({
+    type: FETCH_TEAM_FORMATION_OVERVIEWS,
     payload: filterToGroup
+  });
+});
+
+test('fetchStudents generates correct action object', () => {
+  const action = fetchStudents();
+  expect(action).toEqual({
+    type: FETCH_STUDENTS,
+    payload: {}
   });
 });
 
@@ -167,7 +225,8 @@ test('fetchNotifications generates correct action object', () => {
   const action = fetchNotifications();
 
   expect(action).toEqual({
-    type: FETCH_NOTIFICATIONS
+    type: FETCH_NOTIFICATIONS,
+    payload: {}
   });
 });
 
@@ -196,6 +255,7 @@ test('setUser generates correct action object', () => {
   const user = {
     userId: 123,
     name: 'test student',
+    username: 'test student',
     courses: [
       {
         courseId: 1,
@@ -275,6 +335,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
       isManuallyGraded: true,
       displayInDashboard: true,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -284,6 +345,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
       isManuallyGraded: true,
       displayInDashboard: true,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -293,6 +355,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
       isManuallyGraded: true,
       displayInDashboard: true,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     }
@@ -474,13 +537,16 @@ test('updateAssessmentOverviews generates correct action object', () => {
       coverImage: 'test_string',
       id: 0,
       maxXp: 0,
+      earlySubmissionXp: 0,
       openAt: 'test_string',
       title: 'test_string',
       shortSummary: 'test_string',
       status: 'not_attempted',
       story: null,
       xp: 0,
-      gradingStatus: 'none'
+      gradingStatus: 'none',
+      maxTeamSize: 1,
+      hasVotingFeatures: false
     }
   ];
   const action = updateAssessmentOverviews(overviews);
@@ -510,32 +576,83 @@ test('updateAssessment generates correct action object', () => {
 });
 
 test('updateGradingOverviews generates correct action object', () => {
-  const overviews: GradingOverview[] = [
-    {
-      assessmentId: 1,
-      assessmentNumber: 'M1A',
-      assessmentName: 'test assessment',
-      assessmentType: 'Contests',
-      initialXp: 0,
-      xpBonus: 100,
-      xpAdjustment: 50,
-      currentXp: 50,
-      maxXp: 500,
-      studentId: 100,
-      studentName: 'test student',
-      studentUsername: 'E0123456',
-      submissionId: 1,
-      submissionStatus: 'attempting',
-      groupName: 'group',
-      gradingStatus: 'excluded',
-      questionCount: 6,
-      gradedCount: 0
-    }
-  ];
+  const overviews: GradingOverviews = {
+    count: 1,
+    data: [
+      {
+        assessmentId: 1,
+        assessmentNumber: 'M1A',
+        assessmentName: 'test assessment',
+        assessmentType: 'Contests',
+        initialXp: 0,
+        xpBonus: 100,
+        xpAdjustment: 50,
+        currentXp: 50,
+        maxXp: 500,
+        studentId: 100,
+        studentName: 'test student',
+        studentNames: [],
+        studentUsername: 'E0123456',
+        studentUsernames: [],
+        submissionId: 1,
+        submissionStatus: 'attempting',
+        groupName: 'group',
+        gradingStatus: 'excluded',
+        questionCount: 6,
+        gradedCount: 0
+      }
+    ]
+  };
 
   const action = updateGradingOverviews(overviews);
   expect(action).toEqual({
     type: UPDATE_GRADING_OVERVIEWS,
+    payload: overviews
+  });
+});
+
+test('updateStudents generates correct action object', () => {
+  const students: User[] = mockStudents;
+
+  const action = updateStudents(students);
+  expect(action).toEqual({
+    type: UPDATE_STUDENTS,
+    payload: students
+  });
+});
+
+test('updateTeamFormationOverview generates correct action object', () => {
+  const overview: TeamFormationOverview = {
+    teamId: 0,
+    assessmentId: 1,
+    assessmentName: 'Mission 1',
+    assessmentType: 'Missions',
+    studentIds: [0],
+    studentNames: ['Mark Henry']
+  };
+
+  const action = updateTeamFormationOverview(overview);
+  expect(action).toEqual({
+    type: UPDATE_TEAM_FORMATION_OVERVIEW,
+    payload: overview
+  });
+});
+
+test('updateTeamFormationOverviews generates correct action object', () => {
+  const overviews: TeamFormationOverview[] = [
+    {
+      teamId: 0,
+      assessmentId: 0,
+      assessmentName: 'Mission 2',
+      assessmentType: 'Missions',
+      studentIds: [0],
+      studentNames: ['Mark Henry']
+    }
+  ];
+
+  const action = updateTeamFormationOverviews(overviews);
+  expect(action).toEqual({
+    type: UPDATE_TEAM_FORMATION_OVERVIEWS,
     payload: overviews
   });
 });
@@ -644,7 +761,8 @@ test('updateCourseConfig generates correct action object', () => {
 test('fetchAssessmentConfig generates correct action object', () => {
   const action = fetchAssessmentConfigs();
   expect(action).toEqual({
-    type: FETCH_ASSESSMENT_CONFIGS
+    type: FETCH_ASSESSMENT_CONFIGS,
+    payload: {}
   });
 });
 
@@ -656,6 +774,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       isManuallyGraded: true,
       displayInDashboard: true,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -665,6 +784,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       isManuallyGraded: true,
       displayInDashboard: true,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -674,6 +794,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       isManuallyGraded: true,
       displayInDashboard: true,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -683,6 +804,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       isManuallyGraded: true,
       displayInDashboard: true,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -692,6 +814,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       isManuallyGraded: true,
       displayInDashboard: true,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     }
@@ -710,6 +833,7 @@ test('deleteAssessmentConfig generates correct action object', () => {
     isManuallyGraded: true,
     displayInDashboard: true,
     hasTokenCounter: false,
+    hasVotingFeatures: false,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   };
@@ -723,7 +847,8 @@ test('deleteAssessmentConfig generates correct action object', () => {
 test('fetchAdminPanelCourseRegistrations generates correct action object', () => {
   const action = fetchAdminPanelCourseRegistrations();
   expect(action).toEqual({
-    type: FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS
+    type: FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
+    payload: {}
   });
 });
 
