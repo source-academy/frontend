@@ -8,13 +8,12 @@ import { Layout } from '../CseMachineLayout';
 import { DataArray, Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
 import {
   currentItemSAColor,
-  getDereferencedObjects,
-  getNonEmptyEnv,
   getTextWidth,
+  getUnreferencedObjects,
   isArray,
-  isDummyKey,
   isPrimitiveData,
-  isUnassigned
+  isUnassigned,
+  setDifference
 } from '../CseMachineUtils';
 import { ArrowFromFrame } from './arrows/ArrowFromFrame';
 import { GenericArrow } from './arrows/GenericArrow';
@@ -96,48 +95,29 @@ export class Frame extends Visible implements IHoverable {
     let prevBinding: Binding | null = null;
     let totalWidth = this._width;
 
-    const descriptors = Object.getOwnPropertyDescriptors(this.environment.head);
-    const entries = [];
-    const dummyEntries = [];
-    for (const entry of Object.entries(descriptors)) {
-      // TODO: remove this, keys cannot by numeric anymore
-      if (isDummyKey(entry[0])) {
-        const actualEnv = getNonEmptyEnv(entry[1].value.environment);
-        if (
-          this.environment.id === Config.GlobalEnvId ||
-          (actualEnv && actualEnv.id === this.environment.id)
-        ) {
-          dummyEntries.push(entry);
-        }
-      } else {
-        entries.push(entry);
-      }
-    }
-    // Show dummy bindings for objects in the heap that are not in the head
-    const dereferencedValues = getDereferencedObjects(this.environment);
-    // Find arrays that are children of other arrays, and prevent them from creating new
-    // dummy bindings, as they can be drawn around the original parent array
+    // get all keys and object descriptors of each value inside the head
+    const entries = Object.entries(Object.getOwnPropertyDescriptors(this.environment.head));
+
+    // get values that are unreferenced, which will used to created dummy bindings
+    const unreferencedValues = getUnreferencedObjects(this.environment);
+
+    // find arrays that are nested inside other arrays, and prevent them from creating new
+    // dummy bindings, as they should be drawn around the original parent array instead
     const nestedArrays = new Set<DataArray>();
-    // original is needed to track circular references
-    const addNestedArrays = (array: DataArray, original: DataArray) => {
-      if (array === original || nestedArrays.has(array)) return;
-      nestedArrays.add(array);
-      for (const data of array) {
-        if (isArray(data)) addNestedArrays(data, original);
-      }
-    };
-    // Add all the nested arrays first before doing another loop to add the dummy bindings
-    for (const value of dereferencedValues) {
+    for (const value of unreferencedValues) {
       if (isArray(value)) {
         for (const data of value) {
-          if (isArray(data)) addNestedArrays(data, value);
+          if (isArray(data) && data !== value) {
+            nestedArrays.add(data);
+            // Since deeply nested arrays always come first inside the heap order, there is no need
+            // to do a recursive search for deeply nested arrays, as they would have already been
+            // added to the nestedArrays set by this point.
+          }
         }
       }
     }
-    // Add dummy bindings
-    for (const value of dereferencedValues) {
-      // Exclude nested arrays
-      if (isArray(value) && nestedArrays.has(value)) continue;
+    // Add dummy bindings to `entries`
+    for (const value of setDifference(unreferencedValues, nestedArrays)) {
       const descriptor: TypedPropertyDescriptor<any> & PropertyDescriptor = {
         value,
         configurable: false,
@@ -146,9 +126,8 @@ export class Frame extends Visible implements IHoverable {
       };
       // The key is a number string to "disguise" as a dummy binding
       // TODO: revamp the dummy binding behavior, don't rely on numeric keys
-      dummyEntries.push(['0', descriptor] as const);
+      entries.push(['0', descriptor]);
     }
-    entries.push(...dummyEntries);
 
     for (const [key, data] of entries) {
       // If the value is unassigned, retrieve declaration type from its description, otherwise, retrieve directly from the data's property

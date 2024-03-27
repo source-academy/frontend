@@ -204,37 +204,14 @@ export class Layout {
     const globalEnv = globalEnvNode.environment;
 
     // merge preludeEnvNode bindings and heap into globalEnvNode
-    const preludeObjects = [...preludeEnvNode.environment.heap.getHeap()];
-    const preludeMap = new Map(Object.entries(preludeEnv.head).map(([key, value]) => [value, key]));
-    const arrayReferenceMap = new Map<DataArray, DataArray>();
-    while (preludeObjects.length > 0) {
-      const value = preludeObjects.shift()!;
-      let newValue: Closure | DataArray;
-      if (isArray(value)) {
-        // Modify environment of each array by creating new array
-        newValue = [...value] as DataArray;
-        arrayReferenceMap.set(value, newValue);
-        // Also change the reference of any nested arrays to the one with the modified environment.
-        // `arrayReferenceMap` is guaranteed to contain any nested array, because the heap order is
-        // based on object creation order, and nested arrays are always created before parent array.
-        newValue.forEach((child, i) => {
-          if (isArray(child) && arrayReferenceMap.has(child)) {
-            newValue[i] = arrayReferenceMap.get(child);
-          }
-        });
-        Object.defineProperties(newValue, {
-          id: { value: value.id },
-          environment: { value: globalEnvNode.environment }
-        });
-      } else {
-        // Modify environment of each closure by mutation
-        newValue = value;
-        newValue.environment = globalEnvNode.environment;
-      }
-      globalEnv.heap.add(newValue);
-      const key = preludeMap.get(value);
+    const preludeValueKeyMap = new Map(Object.entries(preludeEnv.head).map(([key, value]) => [value, key]));
+    // Change environments of each array and closure in the prelude to be the global environment
+    for (const value of preludeEnv.heap.getHeap()) {
+      value.environment = globalEnvNode.environment;
+      globalEnv.heap.add(value);
+      const key = preludeValueKeyMap.get(value);
       if (key) {
-        globalEnv.head[key] = newValue;
+        globalEnv.head[key] = value;
       }
     }
 

@@ -124,17 +124,22 @@ export function isPrimitiveData(data: Data): data is Primitive {
   return isUndefined(data) || isNull(data) || isString(data) || isNumber(data) || isBoolean(data);
 }
 
+// TODO: remove this in the future once ES typings are updated to contain the new set functions
+type ExtendedSet<T> = Set<T> & {
+  difference(other: Set<T>): Set<T>;
+};
+
 /** Returns the elements in `set1` that are not in `set2` */
-export function setDifference(set1: Set<any>, set2: Set<any>) {
-  // use native set difference function if it exists
+export function setDifference<T>(set1: Set<T>, set2: Set<T>) {
   if ('difference' in Set.prototype) {
-    return (set1 as any).difference(set2);
+    return (set1 as ExtendedSet<T>).difference(set2);
+  } else {
+    const result = new Set<T>();
+    for (const item of set1) {
+      if (!set2.has(item)) result.add(item);
+    }
+    return result;
   }
-  const result = new Set();
-  for (const item of set1) {
-    if (!set2.has(item)) result.add(item);
-  }
-  return result;
 }
 
 /**
@@ -387,11 +392,9 @@ function findObjects(
   if (visited.has(array)) return;
   visited.add(array);
   for (const item of array) {
-    if (isArray(item)) {
-      if (item.environment === environment) set.add(item);
-      findObjects(environment, set, item);
-    } else if (isClosure(item)) {
-      if (item.environment === environment) set.add(item);
+    if (isArray(item) || isClosure(item)) {
+      if (isEnvEqual(item.environment, environment)) set.add(item);
+      if (isArray(item)) findObjects(environment, set, item);
     }
   }
 }
@@ -402,9 +405,7 @@ function findObjects(
  */
 export function getReferencedObjects(environment: Env): Set<DataArray | Closure> {
   const objects = new Set<DataArray | Closure>();
-  if (environment !== null) {
-    findObjects(environment, objects, Object.values(environment.head));
-  }
+  findObjects(environment, objects, Object.values(environment.head));
   return objects;
 }
 
@@ -413,19 +414,8 @@ export function getReferencedObjects(environment: Env): Set<DataArray | Closure>
  * referenced in the head. (Note that these objects can still be referenced from other
  * environments, just not the given one)
  */
-export function getDereferencedObjects(environment: Env): Set<DataArray | Closure> {
-  // TODO: replace with native set difference function once it becomes more widely available
-  const dereferenced = new Set<DataArray | Closure>();
-  if (environment !== null) {
-    const referenced = getReferencedObjects(environment);
-    const heap = environment.heap.getHeap() as Set<DataArray | Closure>;
-    for (const obj of heap) {
-      if (!referenced.has(obj)) {
-        dereferenced.add(obj);
-      }
-    }
-  }
-  return dereferenced;
+export function getUnreferencedObjects(environment: Env): Set<DataArray | Closure> {
+  return setDifference(environment.heap.getHeap(), getReferencedObjects(environment));
 }
 
 /**
@@ -459,31 +449,6 @@ export function copyOwnPropertyDescriptors(source: any, destination: any) {
     copyOwnPropertyDescriptors(source.tail, destination.tail);
   }
 }
-
-// /**
-//  * Simple deep clone that also copies property descriptors and non-enumerable properties.
-//  * Only supports primitives, simple objects, sets and maps
-//  * Preserves references, but does not copy properties with symbols as their keys.
-//  */
-// function cloneDeepWithDescriptors(value: any, visited = new WeakMap()) {
-//   if (value == null || typeof value !== 'object') {
-//     return value;
-//   }
-//   if (visited.has(value)) {
-//     return visited.get(value);
-//   }
-//   const descriptors = Object.getOwnPropertyDescriptors(value);
-//   const clonedObject = Object.create(Object.getPrototypeOf(value), descriptors);
-//   visited.set(value, clonedObject);
-//   for (const key of Reflect.ownKeys(value)) {
-//     // TODO: remove the `any` casting once old ES versions (like ES2015, ES2017)
-//     // are removed from tsconfig, as currently, old type definitions are being used
-//     // which do not have symbol index signature on `Object.getOwnPropertyDescriptors`,
-//     // resulting in a type error: Type 'symbol' cannot be used as an index type.
-//     descriptors[key as any].value = cloneDeepWithDescriptors(value[key], visited);
-//   }
-//   return clonedObject;
-// }
 
 /**
  * Creates a deep clone of `EnvTree`
