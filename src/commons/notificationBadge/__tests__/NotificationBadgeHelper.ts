@@ -11,7 +11,7 @@ const notificationMission: Notification = {
 
 const notificationSidequest: Notification = {
   id: 2,
-  type: 'autograded',
+  type: 'published_grading',
   assessment_id: 2,
   assessment_type: 'Quests',
   assessment_title: 'Quest_1'
@@ -19,11 +19,26 @@ const notificationSidequest: Notification = {
 
 const notificationPath: Notification = {
   id: 3,
-  type: 'graded',
+  type: 'published_grading',
   assessment_id: 3,
   assessment_type: 'Paths',
   assessment_title: 'Path_1'
 };
+// const notificationSidequest: Notification = {
+//   id: 2,
+//   type: 'autograded',
+//   assessment_id: 2,
+//   assessment_type: 'Quests',
+//   assessment_title: 'Quest_1'
+// };
+
+// const notificationPath: Notification = {
+//   id: 3,
+//   type: 'graded',
+//   assessment_id: 3,
+//   assessment_type: 'Paths',
+//   assessment_title: 'Path_1'
+// };
 
 const notificationContest: Notification = {
   id: 4,

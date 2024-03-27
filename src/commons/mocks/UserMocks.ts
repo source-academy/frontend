@@ -428,57 +428,43 @@ export const mockFetchStudentInfo = (accessToken: string): StudentInfo[] | null 
 };
 
 export const mockNotifications: Notification[] = [
-  {
-    id: 1,
-    type: NotificationTypes.deadline,
-    assessment_id: 3,
-    assessment_type: 'Quests',
-    assessment_title: 'The Secret to Streams'
-  },
+  // {
+  //   id: 1,
+  //   type: NotificationTypes.deadline,
+  //   assessment_id: 3,
+  //   assessment_type: 'Quests',
+  //   assessment_title: 'The Secret to Streams'
+  // },
   {
     id: 2,
-    type: NotificationTypes.autograded,
-    assessment_id: 4,
-    assessment_type: 'Missions',
-    assessment_title: 'A Closed Mission'
-  },
-  {
-    id: 3,
-    type: NotificationTypes.graded,
-    assessment_id: 4,
-    assessment_type: 'Missions',
-    assessment_title: 'A Closed Mission'
-  },
-  {
-    id: 4,
     type: NotificationTypes.new,
     assessment_id: 6,
     assessment_type: 'Paths',
     assessment_title: 'Basic Logic'
   },
   {
-    id: 5,
+    id: 3,
     type: NotificationTypes.new,
     assessment_id: 7,
     assessment_type: 'Missions',
     assessment_title: 'Symphony of the Winds'
   },
   {
-    id: 6,
+    id: 4,
     type: NotificationTypes.submitted,
     submission_id: 1,
     assessment_type: 'Missions',
     assessment_title: 'Mission 0'
   },
   {
-    id: 7,
+    id: 5,
     type: NotificationTypes.submitted,
     submission_id: 2,
     assessment_type: 'Missions',
     assessment_title: 'Mission 1'
   },
   {
-    id: 8,
+    id: 6,
     type: NotificationTypes.submitted,
     submission_id: 3,
     assessment_type: 'Missions',

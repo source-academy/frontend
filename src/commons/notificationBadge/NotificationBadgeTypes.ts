@@ -9,12 +9,14 @@ export type Notification = {
 
 export enum NotificationTypes {
   new = 'new',
-  deadline = 'deadline',
-  autograded = 'autograded',
-  graded = 'graded',
+  // deadline = 'deadline',
+  // autograded = 'autograded',
+  // graded = 'graded',
   submitted = 'submitted',
   unsubmitted = 'unsubmitted',
-  new_message = 'new_message'
+  new_message = 'new_message',
+  published_grading = 'published_grading',
+  unpublished_grading = 'unpublished_grading'
 }
 
 export type NotificationType = keyof typeof NotificationTypes;
