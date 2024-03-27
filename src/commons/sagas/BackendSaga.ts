@@ -511,7 +511,8 @@ function* BackendSaga(): SagaIterator {
         gradingQuestion.grade = {
           xpAdjustment,
           xp: gradingQuestion.grade.xp,
-          comments
+          comments,
+          grader: {id: 0, name: ""}
         };
       }
       return gradingQuestion;
