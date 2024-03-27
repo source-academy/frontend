@@ -133,7 +133,7 @@ export default class QuizManager {
         ...rightSideExitTweenProps
       });
 
-      await sleep(rightSideExitTweenProps.duration);
+      //await sleep(rightSideExitTweenProps.duration);
       fadeAndDestroy(scene, quizContainer, { fadeDuration: Constants.fadeDuration });
       return response;
   }
@@ -143,12 +143,23 @@ export default class QuizManager {
     await this.reactionManager.showReaction();
   }
 
+  /**
+   * Show the final score of the quiz as a quiz reaction.
+   * @param numOfQns The number of questions of the quiz.
+   * @param numOfCorrect The number of correctly answered questions.
+   */
   private async showResult(numOfQns: number, numOfCorrect: number) {
     await this.showReaction(this.makeResultMsg(numOfQns, numOfCorrect));
   }
 
+  /**
+   * Create DialogueObject containing the message of quiz score.
+   * @param numOfQns The number of questions of the quiz.
+   * @param numOfCorrect The number of correctly answered questions.
+   * @returns A DialogueObject containing the message of quiz score.
+   */
   private makeResultMsg(numOfQns: number, numOfCorrect: number): DialogueObject {
-    let line = `You got ${ numOfCorrect } out of ${numOfQns} questions correct! `;
+    let line = `You got ${ numOfCorrect } out of ${numOfQns} questions correct. `;
     line += (numOfCorrect === numOfQns ? resultMsg.allCorrect : resultMsg.notAllCorrect);
     return new Map([
       ["0", [{line: line}]]
