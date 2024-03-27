@@ -132,7 +132,7 @@ const cracoConfig = (module.exports = {
           'decode-uri-component',
           'split-on-first',
           'filter-obj',
-          'c-slang'
+          '@sourceacademy/c-slang',
         ),
         '^.+\\.module\\.(css|sass|scss)$'
       ];
