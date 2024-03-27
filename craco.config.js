@@ -131,7 +131,8 @@ const cracoConfig = (module.exports = {
           'query-string',
           'decode-uri-component',
           'split-on-first',
-          'filter-obj'
+          'filter-obj',
+          'c-slang'
         ),
         '^.+\\.module\\.(css|sass|scss)$'
       ];
