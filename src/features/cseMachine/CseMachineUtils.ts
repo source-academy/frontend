@@ -394,7 +394,7 @@ function findObjects(
   for (const item of array) {
     if (isArray(item) || isClosure(item)) {
       if (isEnvEqual(item.environment, environment)) set.add(item);
-      if (isArray(item)) findObjects(environment, set, item);
+      if (isArray(item)) findObjects(environment, set, item, visited);
     }
   }
 }
