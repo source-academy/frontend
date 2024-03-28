@@ -2,11 +2,11 @@ import setupJVM, { parseBin } from 'java-slang/dist/jvm';
 import { Lib } from 'java-slang/dist/jvm/jni';
 import { createModuleProxy, loadCachedFiles } from 'java-slang/dist/jvm/utils/integration';
 import { Context } from 'js-slang';
-import { initModuleContext, loadModuleBundle } from 'js-slang/dist/modules/moduleLoader';
+import { initModuleContext, loadModuleBundle } from 'js-slang/dist/modules/loader/moduleLoader';
 
 import DisplayBufferService from './DisplayBufferService';
 
-const supportedModules: string[] = [];
+const supportedModules: string[] = ['rune'];
 
 export async function jvmRun(javaCode: string, context: Context) {
   let compiled = {};
@@ -20,12 +20,10 @@ export async function jvmRun(javaCode: string, context: Context) {
 
   await Promise.all(
     supportedModules.map(async module => {
-      console.log('LOADING: ', module);
       await initModuleContext(module, context, true);
-      console.log('LOADING: ', module);
       const moduleFuncs = await loadModuleBundle(module, context);
       const { javaClassname, proxy } = await createModuleProxy(module, moduleFuncs);
-      lib[javaClassname] = proxy;
+      lib[javaClassname] = { methods: proxy };
     })
   );
 
@@ -48,7 +46,6 @@ export async function jvmRun(javaCode: string, context: Context) {
           nativesPath: '',
           callbacks: {
             readFileSync: (path: string) => {
-              console.log('READFILE: ', path);
               const item = files[path as keyof typeof files];
               if (!item) {
                 throw new Error('File not found: ' + path);

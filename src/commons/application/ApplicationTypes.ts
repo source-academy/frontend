@@ -213,18 +213,15 @@ export const pyLanguages: SALanguage[] = pySubLanguages.map(sublang => {
   return { ...sublang, mainLanguage: SupportedLanguage.PYTHON, supports: { repl: true } };
 });
 
-export const javaSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>> = [
+export const javaLanguages: SALanguage[] = [
   {
-    chapter: Chapter.FULL_JAVA,
+    chapter: -15, // TODO: use actual value
     variant: Variant.DEFAULT,
-    displayName: 'Java'
+    displayName: 'Java',
+    mainLanguage: SupportedLanguage.JAVA,
+    supports: {}
   }
 ];
-
-export const javaLanguages: SALanguage[] = javaSubLanguages.map(sublang => {
-  return { ...sublang, mainLanguage: SupportedLanguage.JAVA, supports: { repl: true } };
-});
-
 export const cLanguages: SALanguage[] = [
   {
     chapter: Chapter.FULL_C,
