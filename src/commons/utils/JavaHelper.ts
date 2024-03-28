@@ -1,5 +1,4 @@
 import setupJVM, { parseBin } from 'java-slang/dist/jvm';
-import { Lib } from 'java-slang/dist/jvm/jni';
 import { createModuleProxy, loadCachedFiles } from 'java-slang/dist/jvm/utils/integration';
 import { Context } from 'js-slang';
 import { initModuleContext, loadModuleBundle } from 'js-slang/dist/modules/loader/moduleLoader';
@@ -16,7 +15,11 @@ export async function jvmRun(javaCode: string, context: Context) {
     compiled = json;
   }
 
-  const lib: Lib = {};
+  const lib: {
+    [key: string]: {
+      methods: { [key: string]: (...args: any[]) => any };
+    };
+  } = {};
 
   await Promise.all(
     supportedModules.map(async module => {
