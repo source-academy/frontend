@@ -120,7 +120,7 @@ export class FnValue extends Value implements IHoverable {
 
   draw(): React.ReactNode {
     if (this.fnName === undefined) {
-      throw new Error('Error: Closure has no main reference and is not initialised!')
+      throw new Error('Error: Closure has no main reference and is not initialised!');
     }
     this._arrow =
       this.enclosingEnvNode.frame &&
