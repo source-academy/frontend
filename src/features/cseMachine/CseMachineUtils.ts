@@ -95,7 +95,11 @@ export function isFunction(x: any): x is Function {
 
 /** Returns `true` if `data` is a JS Slang closure */
 export function isClosure(data: Data): data is Closure {
-  return isFunction(data) && 'environment' in data && 'functionName' in data;
+  return (
+    isFunction(data) &&
+    {}.hasOwnProperty.call(data, 'environment') &&
+    {}.hasOwnProperty.call(data, 'functionName')
+  );
 }
 
 /** Returns `true` if `x` is a JS Slang function in the global frame */
@@ -167,8 +171,8 @@ export function convertClosureToGlobalFn(fn: Closure) {
 /**
  * Returns `true` if `reference` is the main reference of `value`. The main reference priority
  * order is as follows:
- * 1. The first `ArrayUnit` inside `value.referencedBy` that also shares the same environment
- * 2. The first `Binding` inside `value.referencedBy` that also shares the same environment
+ * 1. The first `ArrayUnit` inside `value.references` that also shares the same environment
+ * 2. The first `Binding` inside `value.references` that also shares the same environment
  *
  * An exception is for a global function value, in which case the global frame binding is
  * always prioritised.
@@ -239,7 +243,7 @@ export function getTextWidth(
       ''
     );
   const metrics = context.measureText(longestLine);
-  return metrics.width;
+  return Math.round(metrics.width);
 }
 
 /**
@@ -351,11 +355,15 @@ export function setUnhoveredStyle(target: Node | Group, unhoveredAttrs: any = {}
   });
 }
 
-/** Extracts the non-empty tail environment from the given environment */
-export function getNonEmptyEnv(environment: Env | null): Env | null {
-  if (environment === null) {
-    return null;
-  } else if (isEmptyEnvironment(environment)) {
+/**
+ * Extracts the non-empty tail environment from the given environment.
+ * Returns the current environment if the tail is null.
+ */
+export function getNonEmptyEnv(environment: Env): Env {
+  if (isEmptyEnvironment(environment)) {
+    if (environment.tail === null) {
+      return environment;
+    }
     return getNonEmptyEnv(environment.tail);
   } else {
     return environment;

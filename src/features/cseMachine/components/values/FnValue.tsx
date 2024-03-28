@@ -1,4 +1,3 @@
-import { Environment } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import {
@@ -19,6 +18,7 @@ import {
   getNonEmptyEnv,
   getParamsText,
   getTextWidth,
+  isEmptyEnvironment,
   isMainReference
 } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
@@ -54,13 +54,17 @@ export class FnValue extends Value implements IHoverable {
     firstReference: ReferenceType
   ) {
     super();
+    // Workaround for `stream_tail`, as the closure will always be linked to the
+    // "functionBodyEnvironment" which might be empty
+    if (isEmptyEnvironment(data.environment)) {
+      data.environment = getNonEmptyEnv(data.environment);
+    }
     Layout.memoizeValue(this);
     this.addReference(firstReference);
   }
 
   handleNewReference(newReference: ReferenceType): void {
     if (!isMainReference(this, newReference)) return;
-
     // derive the coordinates from the main reference (binding / array unit)
     if (newReference instanceof Binding) {
       this._x = newReference.frame.x() + newReference.frame.width() + Config.FrameMarginX / 4;
@@ -83,7 +87,7 @@ export class FnValue extends Value implements IHoverable {
     this._height = this.radius * 2;
 
     this.enclosingEnvNode = Layout.environmentTree.getTreeNode(
-      getNonEmptyEnv(this.data.environment) as Environment
+      this.data.environment
     ) as EnvTreeNode;
     this.fnName = this.data.functionName;
 
@@ -116,7 +120,7 @@ export class FnValue extends Value implements IHoverable {
 
   draw(): React.ReactNode {
     if (this.fnName === undefined) {
-      throw new Error('Closure values are not initialised and cannot be drawn!');
+      throw new Error('Error: Closure has no main reference and is not initialised!')
     }
     this._arrow =
       this.enclosingEnvNode.frame &&

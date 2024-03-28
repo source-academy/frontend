@@ -9,18 +9,13 @@ import { Visible } from './Visible';
 
 /** this classes encapsulates a null value in Source pairs or arrays */
 export class ArrayNullUnit extends Visible {
-  referencedBy: ArrayUnit;
-
-  constructor(referencedBy: ArrayUnit) {
+  constructor(reference: ArrayUnit) {
     super();
-    this.referencedBy = referencedBy;
-    this._x = referencedBy.x();
-    this._y = referencedBy.y();
-    this._height = referencedBy.height();
-    this._width = referencedBy.width();
+    this._x = reference.x();
+    this._y = reference.y();
+    this._height = reference.height();
+    this._width = reference.width();
   }
-
-  updatePosition = () => {};
 
   draw(): React.ReactNode {
     return (

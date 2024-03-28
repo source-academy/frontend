@@ -221,7 +221,12 @@ export class Layout {
     // update globalEnvNode children
     globalEnvNode.resetChildren(preludeEnvNode.children);
 
-    // go through new bindings and update functions to be global functions
+    // update the tail of each child's environment to point to the global environment
+    globalEnvNode.children.forEach(node => {
+      node.environment.tail = globalEnv;
+    });
+
+    // go through new bindings and update closures to be global functions
     for (const value of Object.values(globalEnv.head)) {
       if (isClosure(value)) {
         convertClosureToGlobalFn(value);
