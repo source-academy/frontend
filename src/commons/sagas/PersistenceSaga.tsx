@@ -1,4 +1,5 @@
 import { Intent } from '@blueprintjs/core';
+import { GoogleOAuthProvider, SuccessTokenResponse } from 'google-oauth-gsi';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { SagaIterator } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
@@ -13,7 +14,7 @@ import {
 import { store } from '../../pages/createStore';
 import { OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { LOGOUT_GOOGLE } from '../application/types/SessionTypes';
+import { LOGIN_GOOGLE, LOGOUT_GOOGLE } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { showSimpleConfirmDialog, showSimplePromptDialog } from '../utils/DialogHelper';
@@ -27,8 +28,10 @@ import { AsyncReturnType } from '../utils/TypeHelper';
 import { safeTakeEvery as takeEvery, safeTakeLatest as takeLatest } from './SafeEffects';
 
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
-const SCOPES = 'profile https://www.googleapis.com/auth/drive.file';
+const SCOPES =
+  'profile https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/userinfo.email';
 const UPLOAD_PATH = 'https://www.googleapis.com/upload/drive/v3/files';
+const USER_INFO_PATH = 'https://www.googleapis.com/oauth2/v3/userinfo';
 
 // Special ID value for the Google Drive API.
 const ROOT_ID = 'root';
@@ -36,18 +39,54 @@ const ROOT_ID = 'root';
 const MIME_SOURCE = 'text/plain';
 // const MIME_FOLDER = 'application/vnd.google-apps.folder';
 
+// GIS Token Client
+let googleProvider: GoogleOAuthProvider;
+// Login function
+function* googleLogin() {
+  try {
+    const tokenResp: SuccessTokenResponse = yield new Promise<SuccessTokenResponse>(
+      (resolve, reject) => {
+        googleProvider.useGoogleLogin({
+          flow: 'implicit',
+          onSuccess: resolve,
+          onError: reject,
+          scope: SCOPES
+        })();
+      }
+    );
+    yield call(handleUserChanged, tokenResp.access_token);
+  } catch (ex) {
+    console.error(ex);
+  }
+}
+
 export function* persistenceSaga(): SagaIterator {
-  yield takeLatest(LOGOUT_GOOGLE, function* () {
+  yield takeLatest(LOGOUT_GOOGLE, function* (): any {
     yield put(actions.playgroundUpdatePersistenceFile(undefined));
     yield call(ensureInitialised);
-    yield call([gapi.auth2.getAuthInstance(), 'signOut']);
+    yield call(gapi.client.setToken, null);
+    yield put(actions.removeGoogleUserAndAccessToken());
+  });
+
+  yield takeLatest(LOGIN_GOOGLE, function* (): any {
+    yield call(ensureInitialised);
+    yield call(googleLogin);
+  });
+
+  yield takeEvery(PERSISTENCE_INITIALISE, function* (): any {
+    yield call(ensureInitialised);
+    // check for stored token
+    const accessToken = yield select((state: OverallState) => state.session.googleAccessToken);
+    if (accessToken) {
+      yield call(gapi.client.setToken, { access_token: accessToken });
+      yield call(handleUserChanged, accessToken);
+    }
   });
 
   yield takeLatest(PERSISTENCE_OPEN_PICKER, function* (): any {
     let toastKey: string | undefined;
     try {
       yield call(ensureInitialisedAndAuthorised);
-
       const { id, name, picked } = yield call(pickFile, 'Pick a file to open');
       if (!picked) {
         return;
@@ -282,8 +321,6 @@ export function* persistenceSaga(): SagaIterator {
       }
     }
   );
-
-  yield takeEvery(PERSISTENCE_INITIALISE, ensureInitialised);
 }
 
 interface IPlaygroundConfig {
@@ -307,24 +344,42 @@ const initialisationPromise: Promise<void> = new Promise(res => {
   startInitialisation = res;
 }).then(initialise);
 
-function handleUserChanged(user: gapi.auth2.GoogleUser) {
-  store.dispatch(
-    actions.setGoogleUser(user.isSignedIn() ? user.getBasicProfile().getEmail() : undefined)
-  );
-}
-
+// only called once
 async function initialise() {
-  await new Promise((resolve, reject) =>
-    gapi.load('client:auth2', { callback: resolve, onerror: reject })
+  // initialize GIS client
+  await new Promise<void>(
+    (resolve, reject) =>
+      (googleProvider = new GoogleOAuthProvider({
+        clientId: Constants.googleClientId!,
+        onScriptLoadSuccess: resolve,
+        onScriptLoadError: reject
+      }))
+  );
+
+  // load and initialize gapi.client
+  await new Promise<void>((resolve, reject) =>
+    gapi.load('client', {
+      callback: resolve,
+      onerror: reject
+    })
   );
   await gapi.client.init({
-    apiKey: Constants.googleApiKey,
-    clientId: Constants.googleClientId,
-    discoveryDocs: DISCOVERY_DOCS,
-    scope: SCOPES
+    discoveryDocs: DISCOVERY_DOCS
   });
-  gapi.auth2.getAuthInstance().currentUser.listen(handleUserChanged);
-  handleUserChanged(gapi.auth2.getAuthInstance().currentUser.get());
+}
+
+function* handleUserChanged(accessToken: string | null) {
+  if (accessToken === null) {
+    yield put(actions.removeGoogleUserAndAccessToken());
+  } else {
+    const email: string | undefined = yield call(getUserProfileDataEmail);
+    if (!email) {
+      yield put(actions.removeGoogleUserAndAccessToken());
+    } else {
+      yield put(store.dispatch(actions.setGoogleUser(email)));
+      yield put(store.dispatch(actions.setGoogleAccessToken(accessToken)));
+    }
+  }
 }
 
 function* ensureInitialised() {
@@ -332,11 +387,30 @@ function* ensureInitialised() {
   yield initialisationPromise;
 }
 
+// called multiple times
 function* ensureInitialisedAndAuthorised() {
   yield call(ensureInitialised);
-  if (!gapi.auth2.getAuthInstance().isSignedIn.get()) {
-    yield gapi.auth2.getAuthInstance().signIn();
+  const currToken: GoogleApiOAuth2TokenObject = yield call(gapi.client.getToken);
+
+  if (currToken === null) {
+    yield call(googleLogin);
+  } else {
+    // check if loaded token is still valid
+    const email: string | undefined = yield call(getUserProfileDataEmail);
+    const isValid = email ? true : false;
+    if (!isValid) {
+      yield call(googleLogin);
+    }
   }
+}
+
+function getUserProfileDataEmail(): Promise<string | undefined> {
+  return gapi.client
+    .request({
+      path: USER_INFO_PATH
+    })
+    .then(r => r.result.email)
+    .catch(() => undefined);
 }
 
 type PickFileResult =
@@ -372,9 +446,7 @@ function pickFile(
         .setTitle(title)
         .enableFeature(google.picker.Feature.NAV_HIDDEN)
         .addView(view)
-        .setOAuthToken(
-          gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse().access_token
-        )
+        .setOAuthToken(gapi.client.getToken().access_token)
         .setAppId(Constants.googleAppId!)
         .setDeveloperKey(Constants.googleApiKey!)
         .setCallback((data: any) => {
