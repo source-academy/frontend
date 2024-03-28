@@ -208,7 +208,10 @@ export const setAdminPanelCourseRegistrations = createAction(
 
 export const setGoogleUser = createAction(SET_GOOGLE_USER, (user?: string) => ({ payload: user }));
 
-export const setGoogleAccessToken = createAction(SET_GOOGLE_ACCESS_TOKEN, (accessToken?: string) => ({ payload: accessToken }));
+export const setGoogleAccessToken = createAction(
+  SET_GOOGLE_ACCESS_TOKEN,
+  (accessToken?: string) => ({ payload: accessToken })
+);
 
 export const setGitHubOctokitObject = createAction(
   SET_GITHUB_OCTOKIT_OBJECT,
@@ -224,7 +227,10 @@ export const removeGitHubOctokitObjectAndAccessToken = createAction(
   () => ({ payload: {} })
 );
 
-export const removeGoogleUserAndAccessToken = createAction(REMOVE_GOOGLE_USER_AND_ACCESS_TOKEN, () => ({ payload: {} }));
+export const removeGoogleUserAndAccessToken = createAction(
+  REMOVE_GOOGLE_USER_AND_ACCESS_TOKEN,
+  () => ({ payload: {} })
+);
 
 export const submitAnswer = createAction(
   SUBMIT_ANSWER,
