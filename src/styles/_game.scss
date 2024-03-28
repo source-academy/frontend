@@ -4,3 +4,9 @@
   width: 100%;
   align-items: center;
 }
+
+#fullscreen-button {
+  position: absolute;
+  cursor: pointer;
+  z-index: 100;
+}
