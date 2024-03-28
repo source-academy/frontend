@@ -245,7 +245,7 @@ const NavigationBar: React.FC = () => {
           position={Position.BOTTOM_RIGHT}
           interactionKind="hover"
           content={desktopNavbarLeftPopoverContent}
-          popoverClassName={'desktop-navbar-popover'}
+          popoverClassName="desktop-navbar-popover"
           disabled={!enableDesktopPopover}
         >
           <NavLink

@@ -46,7 +46,7 @@ const ChapterSimulatorTextLoader: React.FC<StorageProps> = ({ storageName, s3Txt
           </option>
         ))}
       </select>
-      <Button icon={'download'} onClick={() => window.open(toTxtPath(chosenFilename))} />
+      <Button icon="download" onClick={() => window.open(toTxtPath(chosenFilename))} />
     </>
   );
 

@@ -424,7 +424,7 @@ export class Layout {
       return Layout.prevLayout;
     } else {
       const layout = (
-        <div className={'sa-cse-machine'} data-testid="sa-cse-machine">
+        <div className="sa-cse-machine" data-testid="sa-cse-machine">
           <div
             id="scroll-container"
             ref={Layout.scrollContainerRef}

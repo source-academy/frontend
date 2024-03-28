@@ -169,7 +169,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
         <div className="SourcecastTable">
           <div className="ag-grid-parent">
             <AgGridReact
-              domLayout={'autoHeight'}
+              domLayout="autoHeight"
               columnDefs={this.state.columnDefs}
               defaultColDef={this.defaultColumnDefs}
               onGridReady={this.onGridReady}
