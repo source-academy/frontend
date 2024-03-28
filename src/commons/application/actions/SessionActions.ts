@@ -18,7 +18,7 @@ import {
   NotificationFilterFunction
 } from '../../notificationBadge/NotificationBadgeTypes';
 import { generateOctokitInstance } from '../../utils/GitHubPersistenceHelper';
-import { Role } from '../ApplicationTypes';
+import { Role, StoriesRole } from '../ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
@@ -27,6 +27,7 @@ import {
   CourseRegistration,
   CREATE_TEAM,
   DELETE_ASSESSMENT_CONFIG,
+  DELETE_STORIES_USER_USER_GROUPS,
   DELETE_TEAM,
   DELETE_TIME_OPTIONS,
   DELETE_USER_COURSE_REGISTRATION,
@@ -86,6 +87,7 @@ import {
   UPDATE_NOTIFICATION_CONFIG,
   UPDATE_NOTIFICATION_PREFERENCES,
   UPDATE_NOTIFICATIONS,
+  UPDATE_STORIES_USER_ROLE,
   UPDATE_STUDENTS,
   UPDATE_TEAM,
   UPDATE_TEAM_FORMATION_OVERVIEW,
@@ -412,4 +414,14 @@ export const deleteUserCourseRegistration = createAction(
 export const updateCourseResearchAgreement = createAction(
   UPDATE_COURSE_RESEARCH_AGREEMENT,
   (agreedToResearch: boolean) => ({ payload: { agreedToResearch } })
+);
+
+export const updateStoriesUserRole = createAction(
+  UPDATE_STORIES_USER_ROLE,
+  (userId: number, role: StoriesRole) => ({ payload: { userId, role } })
+);
+
+export const deleteStoriesUserUserGroups = createAction(
+  DELETE_STORIES_USER_USER_GROUPS,
+  (userId: number) => ({ payload: { userId } })
 );

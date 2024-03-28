@@ -4,6 +4,7 @@ import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 
 import {
   ADD_STORY_ENV,
+  AdminPanelStoriesUser,
   CLEAR_STORIES_USER_AND_GROUP,
   CLEAR_STORY_ENV,
   CREATE_STORY,
@@ -11,11 +12,13 @@ import {
   EVAL_STORY,
   EVAL_STORY_ERROR,
   EVAL_STORY_SUCCESS,
+  FETCH_ADMIN_PANEL_STORIES_USERS,
   GET_STORIES_LIST,
   GET_STORIES_USER,
   HANDLE_STORIES_CONSOLE_LOG,
   NOTIFY_STORIES_EVALUATED,
   SAVE_STORY,
+  SET_ADMIN_PANEL_STORIES_USERS,
   SET_CURRENT_STORIES_GROUP,
   SET_CURRENT_STORIES_USER,
   SET_CURRENT_STORY,
@@ -97,3 +100,9 @@ export const setCurrentStoriesGroup = createAction(
 export const clearStoriesUserAndGroup = createAction(CLEAR_STORIES_USER_AND_GROUP, () => ({
   payload: {}
 }));
+export const fetchAdminPanelStoriesUsers = () =>
+  createAction(FETCH_ADMIN_PANEL_STORIES_USERS, () => ({ payload: {} }));
+export const setAdminPanelStoriesUsers = createAction(
+  SET_ADMIN_PANEL_STORIES_USERS,
+  (users: AdminPanelStoriesUser[]) => ({ payload: { users } })
+);

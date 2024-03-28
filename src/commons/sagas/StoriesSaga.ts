@@ -3,16 +3,20 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { ADD_NEW_STORIES_USERS_TO_COURSE } from 'src/features/academy/AcademyTypes';
 import {
   deleteStory,
+  deleteUserUserGroups,
+  getAdminPanelStoriesUsers,
   getStories,
   getStoriesUser,
   getStory,
   postNewStoriesUsers,
   postStory,
+  putStoriesUserRole,
   updateStory
 } from 'src/features/stories/storiesComponents/BackendAccess';
 import {
   CREATE_STORY,
   DELETE_STORY,
+  FETCH_ADMIN_PANEL_STORIES_USERS,
   GET_STORIES_LIST,
   GET_STORIES_USER,
   SAVE_STORY,
@@ -23,9 +27,13 @@ import {
 } from 'src/features/stories/StoriesTypes';
 
 import { OverallState, StoriesRole } from '../application/ApplicationTypes';
-import { Tokens } from '../application/types/SessionTypes';
+import {
+  DELETE_STORIES_USER_USER_GROUPS,
+  Tokens,
+  UPDATE_STORIES_USER_ROLE
+} from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
-import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { defaultStoryContent } from '../utils/StoriesHelper';
 import { selectTokens } from './BackendSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
@@ -146,6 +154,47 @@ export function* storiesSaga(): SagaIterator {
 
       // TODO: Refresh the list of story users
       //       once that page is implemented
+    }
+  );
+  yield takeEvery(
+    FETCH_ADMIN_PANEL_STORIES_USERS,
+    function* (action: ReturnType<typeof actions.fetchAdminPanelStoriesUsers>): any {
+      const tokens: Tokens = yield selectTokens();
+
+      const storiesUsers = yield call(getAdminPanelStoriesUsers, tokens);
+
+      if (storiesUsers) {
+        yield put(actions.setAdminPanelStoriesUsers(storiesUsers));
+      }
+    }
+  );
+
+  yield takeEvery(
+    UPDATE_STORIES_USER_ROLE,
+    function* (action: ReturnType<typeof actions.updateStoriesUserRole>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { userId, role }: { userId: number; role: StoriesRole } = action.payload;
+
+      const resp: Response | null = yield call(putStoriesUserRole, tokens, userId, role);
+
+      if (resp) {
+        yield put(actions.fetchAdminPanelStoriesUsers());
+        yield call(showSuccessMessage, 'Role updated!');
+      }
+    }
+  );
+
+  yield takeEvery(
+    DELETE_STORIES_USER_USER_GROUPS,
+    function* (action: ReturnType<typeof actions.deleteStoriesUserUserGroups>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { userId }: { userId: number } = action.payload;
+
+      const resp: Response | null = yield call(deleteUserUserGroups, tokens, userId);
+      if (resp) {
+        yield put(actions.fetchAdminPanelStoriesUsers());
+        yield call(showSuccessMessage, 'Stories user deleted!');
+      }
     }
   );
 }

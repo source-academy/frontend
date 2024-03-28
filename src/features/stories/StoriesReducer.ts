@@ -20,6 +20,7 @@ import {
   EVAL_STORY_SUCCESS,
   HANDLE_STORIES_CONSOLE_LOG,
   NOTIFY_STORIES_EVALUATED,
+  SET_ADMIN_PANEL_STORIES_USERS,
   SET_CURRENT_STORIES_GROUP,
   SET_CURRENT_STORIES_USER,
   SET_CURRENT_STORY,
@@ -234,6 +235,11 @@ const oldStoriesReducer: Reducer<StoriesState, SourceActionType> = (
       };
     case LOG_OUT:
       return defaultStories;
+    case SET_ADMIN_PANEL_STORIES_USERS:
+      return {
+        ...state,
+        storiesUsers: action.payload.users
+      };
     default:
       return state;
   }
