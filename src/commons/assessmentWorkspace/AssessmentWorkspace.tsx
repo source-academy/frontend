@@ -387,6 +387,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     const question = assessment.questions[questionId];
 
+    // TODO: REMOVE AFTER TESTING !!!
+    question.library.chapter = Chapter.SOURCE_4;
+
+
     const options: {
       autogradingResults?: AutogradingResult[];
       editorValue?: string;

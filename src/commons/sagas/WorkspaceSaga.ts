@@ -903,7 +903,7 @@ export function* evalEditor(
       const elevatedContext = makeElevatedContext(context);
       const prependFilePath = '/prepend.js';
       const prependFiles = {
-        [prependFilePath]: prepend
+        [prependFilePath]: 'import { beside, flip_horiz, red, heart, sail, show } from "rune";'
       };
       yield call(
         evalCode,
@@ -1255,6 +1255,10 @@ export function* evalCode(
       ? DisplayBufferService.attachConsole(workspaceLocation)
       : () => {};
 
+  console.log(files)
+  console.log(context)
+  console.log(actionType === DEBUG_RESUME)
+  console.log(isNonDet || isLazy || isWasm)
   const { result, interrupted, paused } = yield race({
     result:
       actionType === DEBUG_RESUME
@@ -1323,6 +1327,7 @@ export function* evalCode(
     result.status !== 'suspended-non-det' &&
     result.status !== 'suspended-cse-eval'
   ) {
+    console.log(context.errors)
     yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
     if (!isStoriesBlock) {
       yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
@@ -1330,6 +1335,8 @@ export function* evalCode(
       // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
       yield put(actions.evalStoryError(context.errors, storyEnv!));
     }
+
+    
 
     const events = context.errors.length > 0 ? [EventType.ERROR] : [];
 
