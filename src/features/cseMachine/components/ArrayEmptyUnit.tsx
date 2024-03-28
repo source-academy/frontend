@@ -3,7 +3,7 @@ import { Rect } from 'react-konva';
 
 import { ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
-import { Data } from '../CseMachineTypes';
+import { DataArray } from '../CseMachineTypes';
 import { defaultSAColor } from '../CseMachineUtils';
 import { ArrayValue } from './values/ArrayValue';
 import { Visible } from './Visible';
@@ -12,10 +12,11 @@ import { Visible } from './Visible';
 export class ArrayEmptyUnit extends Visible {
   readonly value: null = null;
 
-  readonly data: Data = [];
+  readonly data: DataArray;
 
   constructor(readonly parent: ArrayValue) {
     super();
+    this.data = parent.data;
     this._x = this.parent.x();
     this._y = this.parent.y();
     this._height = this.parent.height();

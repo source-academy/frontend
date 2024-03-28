@@ -4,14 +4,15 @@ import { Group, Rect } from 'react-konva';
 import CseMachine from '../CseMachine';
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
-import { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
+import { DataArray, Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
 import {
   currentItemSAColor,
-  getNonEmptyEnv,
   getTextWidth,
-  isDummyKey,
+  getUnreferencedObjects,
+  isDataArray,
   isPrimitiveData,
-  isUnassigned
+  isUnassigned,
+  setDifference
 } from '../CseMachineUtils';
 import { ArrowFromFrame } from './arrows/ArrowFromFrame';
 import { Binding } from './Binding';
@@ -90,28 +91,44 @@ export class Frame extends Visible implements IHoverable {
     let prevBinding: Binding | null = null;
     let totalWidth = this._width;
 
-    const descriptors = Object.getOwnPropertyDescriptors(this.environment.head);
-    const entries = [];
-    const dummyEntries = [];
-    for (const entry of Object.entries(descriptors)) {
-      if (isDummyKey(entry[0])) {
-        const actualEnv = getNonEmptyEnv(entry[1].value.environment);
-        if (
-          this.environment.id === Config.GlobalEnvId ||
-          (actualEnv && actualEnv.id === this.environment.id)
-        ) {
-          dummyEntries.push(entry);
+    // get all keys and object descriptors of each value inside the head
+    const entries = Object.entries(Object.getOwnPropertyDescriptors(this.environment.head));
+
+    // get values that are unreferenced, which will used to created dummy bindings
+    const unreferencedValues = getUnreferencedObjects(this.environment);
+
+    // find arrays that are nested inside other arrays, and prevent them from creating new
+    // dummy bindings, as they should be drawn around the original parent array instead
+    const nestedArrays = new Set<DataArray>();
+    for (const value of unreferencedValues) {
+      if (isDataArray(value)) {
+        for (const data of value) {
+          if (isDataArray(data) && data !== value) {
+            nestedArrays.add(data);
+            // Since deeply nested arrays always come first inside the heap order, there is no need
+            // to do a recursive search for deeply nested arrays, as they would have already been
+            // added to the nestedArrays set by this point.
+          }
         }
-      } else {
-        entries.push(entry);
       }
     }
-    entries.push(...dummyEntries);
+    // Add dummy bindings to `entries`
+    for (const value of setDifference(unreferencedValues, nestedArrays)) {
+      const descriptor: TypedPropertyDescriptor<any> & PropertyDescriptor = {
+        value,
+        configurable: false,
+        enumerable: true,
+        writable: false
+      };
+      // The key is a number string to "disguise" as a dummy binding
+      // TODO: revamp the dummy binding behavior, don't rely on numeric keys
+      entries.push(['0', descriptor]);
+    }
 
     for (const [key, data] of entries) {
       // If the value is unassigned, retrieve declaration type from its description, otherwise, retrieve directly from the data's property
       const constant =
-        this.environment.head[key].description === 'const declaration' || !data.writable;
+        this.environment.head[key]?.description === 'const declaration' || !data.writable;
       const currBinding: Binding = new Binding(key, data.value, this, prevBinding, constant);
       this.bindings.push(currBinding);
       prevBinding = currBinding;

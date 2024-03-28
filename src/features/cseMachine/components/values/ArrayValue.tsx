@@ -2,7 +2,8 @@ import React from 'react';
 
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { Data, ReferenceType } from '../../CseMachineTypes';
+import { DataArray, ReferenceType } from '../../CseMachineTypes';
+import { isMainReference } from '../../CseMachineUtils';
 import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
 import { ArrayUnit } from '../ArrayUnit';
 import { Binding } from '../Binding';
@@ -17,25 +18,29 @@ export class ArrayValue extends Value {
 
   constructor(
     /** underlying values this array contains */
-    readonly data: Data[],
+    readonly data: DataArray,
     /** what this value is being referenced by */
-    readonly referencedBy: ReferenceType[]
+    firstReference: ReferenceType
   ) {
     super();
     Layout.memoizeValue(this);
+    this.addReference(firstReference);
+  }
+
+  handleNewReference(newReference: ReferenceType): void {
+    if (!isMainReference(this, newReference)) return;
 
     // derive the coordinates from the main reference (binding / array unit)
-    const mainReference = this.referencedBy[0];
-    if (mainReference instanceof Binding) {
-      this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX;
-      this._y = mainReference.y();
+    if (newReference instanceof Binding) {
+      this._x = newReference.frame.x() + newReference.frame.width() + Config.FrameMarginX;
+      this._y = newReference.y();
     } else {
-      if (mainReference.isLastUnit) {
-        this._x = mainReference.x() + Config.DataUnitWidth * 2;
-        this._y = mainReference.y();
+      if (newReference.isLastUnit) {
+        this._x = newReference.x() + Config.DataUnitWidth * 2;
+        this._y = newReference.y();
       } else {
-        this._x = mainReference.x();
-        this._y = mainReference.y() + mainReference.parent.height() + Config.DataUnitHeight;
+        this._x = newReference.x();
+        this._y = newReference.y() + newReference.parent.height() + Config.DataUnitHeight;
       }
     }
 
@@ -69,12 +74,6 @@ export class ArrayValue extends Value {
       this.units = [unit, ...this.units];
     }
   }
-  reset(): void {
-    super.reset();
-    this.units.map(x => x.reset());
-    this.referencedBy.length = 0;
-  }
-  updatePosition(): void {}
 
   draw(): React.ReactNode {
     if (this.isDrawn()) return null;

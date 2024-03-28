@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { ReferenceType, UnassignedData } from '../../CseMachineTypes';
+import { ReferenceType, Unassigned } from '../../CseMachineTypes';
 import { getTextWidth } from '../../CseMachineUtils';
 import { Binding } from '../Binding';
 import { Text } from '../Text';
@@ -10,25 +10,25 @@ import { Value } from './Value';
 
 /** this class encapsulates an unassigned value in Source, internally represented as a symbol */
 export class UnassignedValue extends Value {
-  readonly data: UnassignedData = Symbol();
+  readonly data: Unassigned = Symbol();
   readonly text: Text;
 
-  constructor(readonly referencedBy: ReferenceType[]) {
+  constructor(reference: ReferenceType) {
     super();
+    this.references = [reference];
 
     // derive the coordinates from the main reference (binding / array unit)
-    const mainReference = this.referencedBy[0];
-    if (mainReference instanceof Binding) {
-      this._x = mainReference.x() + getTextWidth(mainReference.keyString) + Config.TextPaddingX;
-      this._y = mainReference.y();
+    if (reference instanceof Binding) {
+      this._x = reference.x() + getTextWidth(reference.keyString) + Config.TextPaddingX;
+      this._y = reference.y();
       this.text = new Text(Config.UnassignedData, this._x, this._y, {
         isStringIdentifiable: false
       });
     } else {
-      const maxWidth = mainReference.width();
+      const maxWidth = reference.width();
       const textWidth = Math.min(getTextWidth(String(this.data)), maxWidth);
-      this._x = mainReference.x() + (mainReference.width() - textWidth) / 2;
-      this._y = mainReference.y() + (mainReference.height() - Config.FontSize) / 2;
+      this._x = reference.x() + (reference.width() - textWidth) / 2;
+      this._y = reference.y() + (reference.height() - Config.FontSize) / 2;
       this.text = new Text(Config.UnassignedData, this._x, this._y, {
         maxWidth: maxWidth,
         isStringIdentifiable: false
@@ -39,11 +39,9 @@ export class UnassignedValue extends Value {
     this._height = this.text.height();
   }
 
-  reset(): void {
-    super.reset();
-    this.referencedBy.length = 0;
+  handleNewReference(): void {
+    throw new Error('Unassigned value cannot have more than one reference!');
   }
-  updatePosition(): void {}
 
   draw(): React.ReactNode {
     this._isDrawn = true;

@@ -11,7 +11,7 @@ import {
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { IHoverable, ReferenceType } from '../../CseMachineTypes';
+import { GlobalFn, IHoverable } from '../../CseMachineTypes';
 import { defaultSAColor, getBodyText, getParamsText, getTextWidth } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
@@ -38,30 +38,18 @@ export class GlobalFnValue extends Value implements IHoverable {
 
   constructor(
     /** underlying function */
-    readonly data: () => any,
+    readonly data: GlobalFn,
     /** what this value is being referenced by */
-    readonly referencedBy: ReferenceType[]
+    mainReference: Binding
   ) {
     super();
     Layout.memoizeValue(this);
+    this.references = [mainReference];
 
-    // derive the coordinates from the main reference (binding / array unit)
-    const mainReference = this.referencedBy[0];
-    if (mainReference instanceof Binding) {
-      this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
-      this._y = mainReference.y();
-      this.centerX = this._x + this.radius * 2;
-    } else {
-      if (mainReference.isLastUnit) {
-        this._x = mainReference.x() + Config.DataUnitWidth * 2;
-        this._y = mainReference.y() + Config.DataUnitHeight / 2 - this.radius;
-      } else {
-        this._x = mainReference.x();
-        this._y = mainReference.y() + mainReference.parent.height() + Config.DataUnitHeight;
-      }
-      this.centerX = this._x + Config.DataUnitWidth / 2;
-      this._x = this.centerX - this.radius * 2;
-    }
+    // derive the coordinates from the main reference (binding)
+    this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
+    this._y = mainReference.y();
+    this.centerX = this._x + this.radius * 2;
     this._y += this.radius;
 
     this._width = this.radius * 4;
@@ -83,34 +71,17 @@ export class GlobalFnValue extends Value implements IHoverable {
       getTextWidth(this.exportBodyText)
     );
   }
-  isSelected(): boolean {
-    return this.selected;
+
+  handleNewReference(): void {
+    // do nothing, since the first reference which is a binding in the global frame,
+    // is also the main reference
   }
+
   arrow(): ArrowFromFn | undefined {
     return this._arrow;
   }
 
-  updatePosition(): void {
-    const mainReference = this.referencedBy.find(x => x instanceof Binding) || this.referencedBy[0];
-    if (mainReference instanceof Binding) {
-      this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
-      this._y = mainReference.y();
-      this.centerX = this._x + this.radius * 2;
-    } else {
-      if (mainReference.isLastUnit) {
-        this._x = mainReference.x() + Config.DataUnitWidth * 2;
-        this._y = mainReference.y() + Config.DataUnitHeight / 2 - this.radius;
-      } else {
-        this._x = mainReference.x();
-        this._y = mainReference.y() + mainReference.parent.height() + Config.DataUnitHeight;
-      }
-      this.centerX = this._x + Config.DataUnitWidth / 2;
-      this._x = this.centerX - this.radius * 2;
-    }
-    this._y += this.radius;
-  }
-
-  onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+  onMouseEnter = (_: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
     this.labelRef.current.show();
   };
@@ -124,7 +95,8 @@ export class GlobalFnValue extends Value implements IHoverable {
       container && (container.style.cursor = 'default');
     }
   };
-  onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+
+  onClick = (_: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
     this.selected = !this.selected;
     if (!this.selected) {
