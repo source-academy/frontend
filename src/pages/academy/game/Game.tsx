@@ -1,4 +1,5 @@
 import { Icon } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import { useFullscreen } from '@mantine/hooks';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -131,7 +132,7 @@ function Game() {
       <div id="game-display" ref={setGameDisplayRefs}>
         <Icon
           id="fullscreen-button"
-          icon={isFullscreen ? 'minimize' : 'fullscreen'}
+          icon={isFullscreen ? IconNames.MINIMIZE : IconNames.FULLSCREEN}
           color="white"
           htmlTitle={isFullscreen ? 'Exit full screen' : 'Full screen'}
           size={iconSize}
