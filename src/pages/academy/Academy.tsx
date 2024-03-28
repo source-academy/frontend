@@ -31,7 +31,7 @@ import Dashboard from './dashboard/Dashboard';
 import Game from './game/Game';
 import GameSimulator from './gameSimulator/GameSimulator';
 import Grading from './grading/Grading';
-import GroundControl from './groundControl/GroundControlContainer';
+import GroundControl from './groundControl/GroundControl';
 import NotiPreference from './notiPreference/NotiPreference';
 import Sourcereel from './sourcereel/Sourcereel';
 import TeamFormationForm from './teamFormation/subcomponents/TeamFormationForm';
