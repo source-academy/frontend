@@ -166,28 +166,17 @@ const GroundControl: React.FC = () => {
       }
     },
     {
-      headerName: 'Delete',
-      field: 'placeholderDelete' as any,
-      cellRenderer: DeleteCell,
-      cellRendererParams: {
-        handleDeleteAssessment: handleDeleteAssessment
+      headerName: 'Actions',
+      field: 'placeholderActions' as any,
+      cellRenderer: (data: AssessmentOverview) => {
+        return (
+          <>
+            <DeleteCell handleDeleteAssessment={handleDeleteAssessment} data={data} />
+            <ConfigureCell handleConfigureAssessment={handleConfigureAssessment} data={data} />
+          </>
+        );
       },
-      width: 80,
-      filter: false,
-      resizable: false,
-      sortable: false,
-      cellStyle: {
-        padding: 0
-      }
-    },
-    {
-      headerName: 'Configure',
-      field: 'placeholderConfigure' as any,
-      cellRenderer: ConfigureCell,
-      cellRendererParams: {
-        handleConfigureAssessment: handleConfigureAssessment
-      },
-      width: 80,
+      width: 100,
       filter: false,
       resizable: false,
       sortable: false,
