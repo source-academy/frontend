@@ -66,7 +66,11 @@ import {
   WorkspaceLocation,
   WorkspaceState
 } from '../../workspace/WorkspaceTypes';
-import workspaceSaga, { evalCode, evalEditor, evalTestCode, runTestCase } from '../WorkspaceSaga';
+import workspaceSaga from '../WorkspaceSaga';
+import { evalCode } from '../WorkspaceSaga/helpers/evalCode';
+import { evalEditor } from '../WorkspaceSaga/helpers/evalEditor';
+import { evalTestCode } from '../WorkspaceSaga/helpers/evalTestCode';
+import { runTestCase } from '../WorkspaceSaga/helpers/runTestCase';
 
 function generateDefaultState(
   workspaceLocation: WorkspaceLocation,
@@ -844,7 +848,7 @@ describe('evalCode', () => {
       envSteps: -1
     };
     lastDebuggerResult = { status: 'error' };
-    state = generateDefaultState(workspaceLocation);
+    state = generateDefaultState(workspaceLocation, { lastDebuggerResult: { status: 'error' } });
   });
 
   describe('on EVAL_EDITOR action without interruptions or pausing', () => {

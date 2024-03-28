@@ -1,19 +1,15 @@
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-balham.css';
 
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { startCase } from 'lodash';
-import * as React from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
 import { fetchGroupGradingSummary } from '../../../features/dashboard/DashboardActions';
-
-type DashboardProps = StateProps;
-
-export type StateProps = {};
 
 const defaultColumnDefs: ColDef = {
   filter: true,
@@ -21,7 +17,7 @@ const defaultColumnDefs: ColDef = {
   sortable: true
 };
 
-const Dashboard: React.FC<DashboardProps> = props => {
+const Dashboard: React.FC = () => {
   const dispatch = useDispatch();
   const gradingSummary = useTypedSelector(state => state.dashboard.gradingSummary);
 
@@ -55,7 +51,7 @@ const Dashboard: React.FC<DashboardProps> = props => {
           onGridSizeChanged={resizeGrid}
           rowData={gradingSummary.rows}
           rowHeight={30}
-          suppressCellSelection={true}
+          suppressCellFocus={true}
           suppressMovableColumns={true}
         />
       </div>

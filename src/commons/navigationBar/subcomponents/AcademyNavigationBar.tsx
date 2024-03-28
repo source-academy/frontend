@@ -1,19 +1,19 @@
 import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
-import * as React from 'react';
+import React from 'react';
 import { AssessmentType } from 'src/commons/assessment/AssessmentTypes';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession } from 'src/commons/utils/Hooks';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 
 import { Role } from '../../application/ApplicationTypes';
 import { createDesktopNavlink, NavbarEntryInfo, renderNavlinksFromInfo } from '../NavigationBar';
 
-type OwnProps = {
+type Props = {
   assessmentTypes?: AssessmentType[];
 };
 
-const AcademyNavigationBar: React.FunctionComponent<OwnProps> = ({ assessmentTypes }) => {
-  const { role, courseId } = useTypedSelector(state => state.session);
+const AcademyNavigationBar: React.FC<Props> = ({ assessmentTypes }) => {
+  const { role, courseId } = useSession();
   const isEnrolledInACourse = !!role;
 
   const academyNavbarRightInfo = React.useMemo<NavbarEntryInfo[]>(
@@ -51,6 +51,7 @@ export const icons: IconName[] = [
   IconNames.COMPARISON,
   IconNames.MANUAL,
   IconNames.GRAPH,
+  IconNames.FORM,
   IconNames.LAB_TEST,
   IconNames.CALCULATOR
 ];
@@ -106,6 +107,13 @@ const getStaffNavlinkInfo = ({
       hiddenInBreakpoints: ['xs', 'sm', 'md']
     },
     {
+      to: `/courses/${courseId}/teamformation`,
+      icon: IconNames.FORM,
+      text: 'Team Formation',
+      disabled: !isStaffOrAdmin,
+      hiddenInBreakpoints: ['xs', 'sm', 'md']
+    },
+    {
       to: `/courses/${courseId}/grading`,
       icon: IconNames.ENDORSED,
       text: 'Grading',
@@ -114,18 +122,11 @@ const getStaffNavlinkInfo = ({
       hiddenInBreakpoints: ['xs', 'sm', 'md']
     },
     {
-      to: `/courses/${courseId}/storysimulator`,
+      to: `/courses/${courseId}/gamesimulator`,
       icon: IconNames.CROWN,
       text: 'Game Simulator',
       disabled: !isStaffOrAdmin,
       hiddenInBreakpoints: ['xs', 'sm', 'md']
-    },
-    {
-      to: `/courses/${courseId}/xpcalculation`,
-      icon: IconNames.CALCULATOR,
-      text: 'XP Calculation',
-      disabled: !isAdmin,
-      hiddenInBreakpoints: ['xs', 'sm', 'md', 'lg']
     },
     {
       to: `/courses/${courseId}/adminpanel`,

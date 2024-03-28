@@ -4,12 +4,12 @@ import React from 'react';
 
 import ControlButton from '../ControlButton';
 
-type ControlBarToggleEditModeButtonProps = {
+type Props = {
   toggleEditMode?(): void;
   editingMode?: string;
 };
 
-export const ControlBarToggleEditModeButton: React.FC<ControlBarToggleEditModeButtonProps> = ({
+export const ControlBarToggleEditModeButton: React.FC<Props> = ({
   toggleEditMode,
   editingMode
 }) => {

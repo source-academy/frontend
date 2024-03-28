@@ -1,3 +1,5 @@
+$ns: 'bp5';
+
 // Global variables
 $cadet-color-1: #1a2530;
 $cadet-color-2: #2c3e50;
@@ -33,7 +35,7 @@ $achievement-assets: 'https://source-academy-assets.s3-ap-southeast-1.amazonaws.
 }
 
 .#{$ns}-overlay {
-  .#{$ns}-popover2-content {
+  .#{$ns}-popover-content {
     .badge-tag {
       background-color: transparent;
       margin-left: 0.4rem;

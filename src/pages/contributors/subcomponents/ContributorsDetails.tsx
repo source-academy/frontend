@@ -1,22 +1,23 @@
 import { Card, Elevation, H3, H5 } from '@blueprintjs/core';
 import React from 'react';
+import classes from 'src/styles/Contributors.module.scss';
 
 import { Links } from '../../../commons/utils/Constants';
 
-const dot = <span className="dot">&bull;</span>;
+const dot = <span className={classes['dot']}>&bull;</span>;
 
 const ContributorsDetails: React.FC = () => (
-  <div className="outsideDetails">
-    <Card className="contributorsDetails" elevation={Elevation.ONE}>
+  <div className={classes['outsideDetails']}>
+    <Card className={classes['contributorsDetails']} elevation={Elevation.ONE}>
       <H3>The Team behind the Source Academy</H3>
-      <p className="description">
+      <p className={classes['description']}>
         The <i>Source Academy</i> is designed and developed by a team of students, most of who have
         used the system to learn the fundamentals of computing and enjoyed it. This page includes
         all developers who contributed to the Source Academy <i>Merlin</i> (2023) and its precursors{' '}
         <i>Rook</i> (2022), <i>Knight</i> (2020) and <i>Cadet</i> (2018). These versions succeeded
         Source Academy 2 (2017) and ultimately the original Source Academy (2016).
       </p>
-      <div className="leadership">
+      <div className={classes['leadership']}>
         <H5>
           <strong>
             <u>2023 Leadership (Merlin)</u>
@@ -86,7 +87,7 @@ const ContributorsDetails: React.FC = () => (
           <strong>(Coordination)</strong>
         </p>
       </div>
-      <div className="hallOfFame">
+      <div className={classes['hallOfFame']}>
         <H5>
           <strong>
             <u>Hall of Fame</u>
@@ -110,7 +111,7 @@ const ContributorsDetails: React.FC = () => (
           Ng Tse Pei {dot} Joey Yeo {dot} Tan Yu Wei {dot} Sigmund Chianasta
         </p>
       </div>
-      <div className="leadership">
+      <div className={classes['leadership']}>
         <p>
           <strong>2019 Leadership</strong>
         </p>
@@ -145,8 +146,8 @@ const ContributorsDetails: React.FC = () => (
           (Tools)
         </p>
       </div>
-      <div className="leadership">
-        <p className="evenWider">
+      <div className={classes['leadership']}>
+        <p className={classes['evenWider']}>
           <strong>2020 Leadership (Knight)</strong>
         </p>
         <br />
@@ -180,13 +181,13 @@ const ContributorsDetails: React.FC = () => (
           (Source)
         </p>
         {dot}
-        <p className="wider">
+        <p className={classes['wider']}>
           Tee Hao Wei
           <br />
           (Backend &amp; DevOps)
         </p>
       </div>
-      <div className="leadership">
+      <div className={classes['leadership']}>
         <p>
           <strong>2021 Leadership</strong>
         </p>
@@ -203,20 +204,20 @@ const ContributorsDetails: React.FC = () => (
           (Frontend)
         </p>
         {dot}
-        <p className="evenWider">
+        <p className={classes['evenWider']}>
           Daryl Tan, Thomas Tan
           <br />
           (Source)
         </p>
         {dot}
-        <p className="wider">
+        <p className={classes['wider']}>
           Tee Hao Wei
           <br />
           (Backend &amp; DevOps)
         </p>
       </div>
-      <div className="leadership">
-        <p className="evenWider">
+      <div className={classes['leadership']}>
+        <p className={classes['evenWider']}>
           <strong>2022 Leadership (Rook)</strong>
         </p>
         <br />
@@ -270,7 +271,7 @@ const ContributorsDetails: React.FC = () => (
           (Modules)
         </p>
       </div>
-      <div className="contributors">
+      <div className={classes['contributors']}>
         <H5>
           <strong>
             <u>All Contributors</u>

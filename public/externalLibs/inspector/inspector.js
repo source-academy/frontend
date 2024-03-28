@@ -29,22 +29,22 @@
     }
   }
 
-  function highlightCleanForAgenda() {
+  function highlightCleanForControl() {
     var gutterCells = document.getElementsByClassName('ace_gutter-cell');
     var aceLines = document.getElementsByClassName('ace_line');
     if (gutterCells != undefined) {
       for (cell of gutterCells) {
-        cell.classList.remove('ace_gutter-cell_hi_agenda');
+        cell.classList.remove('ace_gutter-cell_hi_control');
       }
     }
     if (aceLines != undefined) {
       for (line of aceLines) {
-        line.classList.remove('ace_line_hi_agenda');
+        line.classList.remove('ace_line_hi_control');
       }
     }
   }
 
-  function highlightLineForAgenda(number) {
+  function highlightLineForControl(number) {
     if (number == undefined) return;
     var gutterCells = document.getElementsByClassName('ace_gutter-cell');
     var aceLines = document.getElementsByClassName('ace_line');
@@ -61,16 +61,16 @@
         }
       }
 
-      gutterCells[number].classList.add('ace_gutter-cell_hi_agenda');
-      aceLines[number].classList.add('ace_line_hi_agenda');
+      gutterCells[number].classList.add('ace_gutter-cell_hi_control');
+      aceLines[number].classList.add('ace_line_hi_control');
     }
   }
 
   exports.Inspector = {
     highlightLine,
     highlightClean,
-    highlightCleanForAgenda,
-    highlightLineForAgenda
+    highlightCleanForControl,
+    highlightLineForControl
   };
   setTimeout(() => {}, 1000);
 })(window);

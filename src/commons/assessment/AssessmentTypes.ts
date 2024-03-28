@@ -46,8 +46,8 @@ export enum QuestionTypes {
 export type QuestionType = keyof typeof QuestionTypes;
 
 /*
-W* Used to display information regarding an assessment in the UI.
-*
+ * Used to display information regarding an assessment in the UI.
+ *
  * @property closeAt an ISO 8601 compliant date string specifiying when
  *   the assessment closes
  * @property openAt an ISO 8601 compliant date string specifiying when
@@ -62,7 +62,10 @@ export type AssessmentOverview = {
   gradingStatus: GradingStatus;
   id: number;
   isPublished?: boolean;
+  hasVotingFeatures: boolean;
+  hasTokenCounter?: boolean;
   maxXp: number;
+  earlySubmissionXp: number;
   number?: string; // For mission control
   openAt: string;
   private?: boolean;
@@ -72,6 +75,7 @@ export type AssessmentOverview = {
   story: string | null;
   title: string;
   xp: number;
+  maxTeamSize: number; // For team assessment
 };
 
 /*
@@ -81,6 +85,7 @@ export type Assessment = {
   type: AssessmentType;
   globalDeployment?: Library; // For mission control
   graderDeployment?: Library; // For mission control
+  hasTokenCounter?: boolean;
   id: number;
   longSummary: string;
   missionPDF: string;
@@ -95,10 +100,13 @@ export type AssessmentConfiguration = {
   displayInDashboard: boolean;
   hoursBeforeEarlyXpDecay: number;
   earlySubmissionXp: number;
+  hasTokenCounter: boolean;
+  hasVotingFeatures: boolean;
 };
 
 export interface IProgrammingQuestion extends BaseQuestion {
   answer: string | null;
+  lastModifiedAt: string;
   autogradingResults: AutogradingResult[];
   graderTemplate?: string;
   prepend: string;
@@ -121,7 +129,8 @@ export interface IContestVotingQuestion extends BaseQuestion {
   prepend: string;
   postpend: string;
   contestEntries: ContestEntry[];
-  contestLeaderboard: ContestEntry[];
+  scoreLeaderboard: ContestEntry[];
+  popularVoteLeaderboard: ContestEntry[];
   type: 'voting';
 }
 
@@ -233,6 +242,7 @@ export const overviewTemplate = (): AssessmentOverview => {
     coverImage: 'https://fakeimg.pl/300/',
     id: -1,
     maxXp: 0,
+    earlySubmissionXp: 0,
     openAt: '2000-01-01T00:00+08',
     title: 'Insert title here',
     reading: '',
@@ -240,7 +250,9 @@ export const overviewTemplate = (): AssessmentOverview => {
     status: AssessmentStatuses.not_attempted,
     story: 'mission',
     xp: 0,
-    gradingStatus: 'none'
+    gradingStatus: 'none',
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   };
 };
 
@@ -248,6 +260,7 @@ export const programmingTemplate = (): IProgrammingQuestion => {
   return {
     autogradingResults: [],
     answer: '// [Marking Scheme]\n// 1 mark for correct answer',
+    lastModifiedAt: '2023-08-05T17:48:24.000000Z',
     content: 'Enter content here',
     id: 0,
     library: emptyLibrary(),

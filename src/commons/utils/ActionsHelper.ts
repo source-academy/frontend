@@ -1,10 +1,9 @@
-import { ActionType } from 'typesafe-actions';
-
 import * as CommonsActions from '../../commons/application/actions/CommonsActions';
 import * as InterpreterActions from '../../commons/application/actions/InterpreterActions';
 import * as SessionActions from '../../commons/application/actions/SessionActions';
 import * as CollabEditingActions from '../../commons/collabEditing/CollabEditingActions';
 import * as FileSystemActions from '../../commons/fileSystem/FileSystemActions';
+import * as SideContentActions from '../../commons/sideContent/SideContentActions';
 import * as WorkspaceActions from '../../commons/workspace/WorkspaceActions';
 import * as AcademyActions from '../../features/academy/AcademyActions';
 import * as AchievementActions from '../../features/achievement/AchievementActions';
@@ -18,6 +17,7 @@ import * as SourcecastActions from '../../features/sourceRecorder/sourcecast/Sou
 import * as SourceRecorderActions from '../../features/sourceRecorder/SourceRecorderActions';
 import * as SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
 import * as StoriesActions from '../../features/stories/StoriesActions';
+import { ActionType } from './TypeHelper';
 
 export const actions = {
   ...AchievementActions,
@@ -37,7 +37,8 @@ export const actions = {
   ...PersistenceActions,
   ...RemoteExecutionActions,
   ...FileSystemActions,
-  ...StoriesActions
+  ...StoriesActions,
+  ...SideContentActions
 };
 
 export type SourceActionType = ActionType<typeof actions>;

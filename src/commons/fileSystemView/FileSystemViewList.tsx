@@ -2,22 +2,26 @@ import { Spinner, SpinnerSize } from '@blueprintjs/core';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
+import classes from 'src/styles/FileSystemView.module.scss';
 
 import Delay from '../delay/Delay';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewDirectoryNode from './FileSystemViewDirectoryNode';
 import FileSystemViewFileNode from './FileSystemViewFileNode';
 
-export type FileSystemViewListProps = {
+type Props = {
   workspaceLocation: WorkspaceLocation;
   fileSystem: FSModule;
   basePath: string;
   indentationLevel: number;
 };
 
-const FileSystemViewList: React.FC<FileSystemViewListProps> = (props: FileSystemViewListProps) => {
-  const { workspaceLocation, fileSystem, basePath, indentationLevel } = props;
-
+const FileSystemViewList: React.FC<Props> = ({
+  workspaceLocation,
+  fileSystem,
+  basePath,
+  indentationLevel
+}) => {
   const [dirNames, setDirNames] = React.useState<string[] | undefined>(undefined);
   const [fileNames, setFileNames] = React.useState<string[] | undefined>(undefined);
 
@@ -66,13 +70,13 @@ const FileSystemViewList: React.FC<FileSystemViewListProps> = (props: FileSystem
   if (!fileNames || !dirNames) {
     return (
       <Delay waitInMsBeforeRender={200}>
-        <Spinner className="file-system-view-spinner" size={SpinnerSize.SMALL} />
+        <Spinner className={classes['file-system-view-spinner']} size={SpinnerSize.SMALL} />
       </Delay>
     );
   }
 
   return (
-    <div className="file-system-view-list-container">
+    <div className={classes['file-system-view-list-container']}>
       {dirNames.map(dirName => {
         return (
           <FileSystemViewDirectoryNode

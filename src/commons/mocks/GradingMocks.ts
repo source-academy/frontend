@@ -1,5 +1,10 @@
 import { GradingSummary } from '../../features/dashboard/DashboardTypes';
-import { Grading, GradingOverview } from '../../features/grading/GradingTypes';
+import {
+  GradingAnswer,
+  GradingAssessment,
+  GradingOverview,
+  GradingQuery
+} from '../../features/grading/GradingTypes';
 import { Role } from '../application/ApplicationTypes';
 import { Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { mockLibrary } from './AssessmentMocks';
@@ -18,7 +23,9 @@ export const mockGradingOverviews: GradingOverview[] = [
     maxXp: 100,
     studentId: 0,
     studentName: 'Al Gorithm',
+    studentNames: [],
     studentUsername: 'E0123456',
+    studentUsernames: [],
     submissionId: 1,
     submissionStatus: 'submitted',
     groupName: '1D',
@@ -38,7 +45,9 @@ export const mockGradingOverviews: GradingOverview[] = [
     maxXp: 400,
     studentId: 0,
     studentName: 'Dee Sign',
+    studentNames: [],
     studentUsername: 'E0000000',
+    studentUsernames: [],
     submissionId: 2,
     submissionStatus: 'submitted',
     groupName: '1F',
@@ -58,7 +67,9 @@ export const mockGradingOverviews: GradingOverview[] = [
     maxXp: 1000,
     studentId: 1,
     studentName: 'May Trix',
+    studentNames: [],
     studentUsername: 'E0000001',
+    studentUsernames: [],
     submissionId: 3,
     submissionStatus: 'submitted',
     groupName: '1F',
@@ -74,10 +85,14 @@ export const mockGradingOverviews: GradingOverview[] = [
  *
  * @param accessToken a valid access token for the cadet backend.
  * @param group a boolean if true, only fetches submissions from the grader's group
+ * @param pageParams contains pagination details on offset and page index.
+ * @param backendParams contains filters to set conditions in SQL query.
  */
 export const mockFetchGradingOverview = (
   accessToken: string,
-  group: boolean
+  group: boolean,
+  pageParams: { offset: number; pageSize: number },
+  backendParams: Object
 ): GradingOverview[] | null => {
   // mocks backend role fetching
   const permittedRoles: Role[] = [Role.Admin, Role.Staff];
@@ -102,12 +117,13 @@ export const mockTestcases: Testcase[] = [
   { type: TestcaseTypes.opaque, program: `remainder(17, 23) === 17;`, score: 2, answer: `true` }
 ];
 
-export const mockGrading: Grading = [
+export const mockGradingAnswer: GradingAnswer = [
   {
     question: {
       answer: `function remainder(n, d) {
   return (n - d) < 0 ? n : remainder(n - d, d);
 }`,
+      lastModifiedAt: '2023-08-05T17:48:24.000000Z',
       content: `
 Hello and welcome to this assessment! This is the *0th question*.
 
@@ -224,6 +240,7 @@ _italics_
       postpend: '',
       testcases: [],
       answer: "This student's answer to the 1st question",
+      lastModifiedAt: '2023-08-05T17:48:24.000000Z',
       content: 'Hello and welcome to this assessment! This is the 1st question.',
       id: 1,
       library: mockLibrary,
@@ -316,6 +333,7 @@ New message from **Avenger**!
       postpend: '',
       testcases: [],
       answer: 3,
+      lastModifiedAt: '2023-08-05T17:48:24.000000Z',
       solution: 2,
       content:
         'Hello and welcome to this assessment! This is the 2nd question. Oddly enough, it is an MCQ question!',
@@ -386,20 +404,47 @@ New message from **Avenger**!
   }
 ];
 
+export const mockGradingAssessment: GradingAssessment = {
+  coverPicture: 'https://i.imgur.com/dR7zBPI.jpeg',
+  id: 1,
+  number: '10',
+  reading:
+    'This is for you to read. Read it carefully. Perhaps you will find the answer to life here.',
+  story: `Story:
+Start of story.
+End of story.
+The End.
+
+Credits
+Starring: Source Academy`,
+  summaryLong:
+    'This is the long summary of the assessment. It is a very very very very long summary',
+  summaryShort: 'This is short summary',
+  title: 'Assessment 1: Some Title'
+};
+
+export const mockGradingQuery: GradingQuery = {
+  answers: mockGradingAnswer,
+  assessment: mockGradingAssessment
+};
+
 /**
  * Mock for fetching a trainer/admin's student grading information.
  * A null value is returned for invalid token or role.
  *
  * @param accessToken a valid access token for the cadet backend.
  */
-export const mockFetchGrading = (accessToken: string, submissionId: number): Grading | null => {
+export const mockFetchGrading = (
+  accessToken: string,
+  submissionId: number
+): GradingQuery | null => {
   // mocks backend role fetching
   const permittedRoles: Role[] = [Role.Admin, Role.Staff];
   const role: Role | null = mockFetchRole(accessToken);
   if (role === null || !permittedRoles.includes(role)) {
     return null;
   } else {
-    return mockGrading;
+    return mockGradingQuery;
   }
 };
 

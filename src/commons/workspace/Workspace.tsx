@@ -1,7 +1,7 @@
 import { FocusStyleManager } from '@blueprintjs/core';
 import { Enable, NumberSize, Resizable, ResizableProps, ResizeCallback } from 're-resizable';
 import { Direction } from 're-resizable/lib/resizer';
-import * as React from 'react';
+import React from 'react';
 
 import ControlBar, { ControlBarProps } from '../controlBar/ControlBar';
 import EditorContainer, { EditorContainerProps } from '../editor/EditorContainer';
@@ -28,7 +28,6 @@ type StateProps = {
   sideBarProps: {
     tabs: SideBarTab[];
   };
-  sideContentHeight?: number;
   sideContentProps: SideContentProps;
   sideContentIsResizeable?: boolean;
 };
@@ -41,8 +40,8 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   const maxDividerHeight = React.useRef<number | null>(null);
   const sideDividerDiv = React.useRef<HTMLDivElement | null>(null);
   const [contentContainerWidth] = useDimensions(contentContainerDiv);
-  const [expandedSideBarWidth, setExpandedSideBarWidth] = React.useState<number>(200);
-  const [isSideBarExpanded, setIsSideBarExpanded] = React.useState<boolean>(true);
+  const [expandedSideBarWidth, setExpandedSideBarWidth] = React.useState(200);
+  const [isSideBarExpanded, setIsSideBarExpanded] = React.useState(true);
 
   const sideBarCollapsedWidth = 40;
 

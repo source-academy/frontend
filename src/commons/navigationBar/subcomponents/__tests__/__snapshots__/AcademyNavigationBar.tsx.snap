@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard and Grading NavLinks render for Role.Staff 1`] = `
-<Blueprint4.Navbar
+exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Grading, Team Formation and AdminPanel NavLinks do NOT render for Role.Student 1`] = `
+<Blueprint5.Navbar
   className="NavigationBar secondary-navbar"
 >
-  <Blueprint4.NavbarGroup
+  <Blueprint5.NavbarGroup
     align="left"
   >
     <NavLink
@@ -12,11 +12,13 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       title="Missions"
       to="/courses/0/missions"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="flame"
+        tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Missions
       </div>
@@ -30,11 +32,13 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       title="Quests"
       to="/courses/0/quests"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="lightbulb"
+        tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Quests
       </div>
@@ -48,11 +52,13 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       title="Paths"
       to="/courses/0/paths"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="predictive-analysis"
+        tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Paths
       </div>
@@ -66,11 +72,13 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       title="Contests"
       to="/courses/0/contests"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="comparison"
+        tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Contests
       </div>
@@ -84,11 +92,13 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       title="Others"
       to="/courses/0/others"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="manual"
+        tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Others
       </div>
@@ -97,8 +107,139 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
         notificationFilter={[Function]}
       />
     </NavLink>
-  </Blueprint4.NavbarGroup>
-  <Blueprint4.NavbarGroup
+  </Blueprint5.NavbarGroup>
+  <Blueprint5.NavbarGroup
+    align="right"
+  >
+    <NavLink
+      className={[Function]}
+      title="Notifications"
+      to="/courses/0/notipreference"
+    >
+      <Blueprint5.Icon
+        autoLoad={true}
+        icon="notifications"
+        tagName="span"
+      />
+      <div
+        className="hidden-xs hidden-sm hidden-md hidden-lg"
+      >
+        Notifications
+      </div>
+    </NavLink>
+  </Blueprint5.NavbarGroup>
+</Blueprint5.Navbar>
+`;
+
+exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Grading, Team Formation and AdminPanel NavLinks render for Role.Admin 1`] = `
+<Blueprint5.Navbar
+  className="NavigationBar secondary-navbar"
+>
+  <Blueprint5.NavbarGroup
+    align="left"
+  >
+    <NavLink
+      className={[Function]}
+      title="Missions"
+      to="/courses/0/missions"
+    >
+      <Blueprint5.Icon
+        autoLoad={true}
+        icon="flame"
+        tagName="span"
+      />
+      <div
+        className="hidden-xs hidden-sm"
+      >
+        Missions
+      </div>
+      <NotificationBadge
+        disableHover={true}
+        notificationFilter={[Function]}
+      />
+    </NavLink>
+    <NavLink
+      className={[Function]}
+      title="Quests"
+      to="/courses/0/quests"
+    >
+      <Blueprint5.Icon
+        autoLoad={true}
+        icon="lightbulb"
+        tagName="span"
+      />
+      <div
+        className="hidden-xs hidden-sm"
+      >
+        Quests
+      </div>
+      <NotificationBadge
+        disableHover={true}
+        notificationFilter={[Function]}
+      />
+    </NavLink>
+    <NavLink
+      className={[Function]}
+      title="Paths"
+      to="/courses/0/paths"
+    >
+      <Blueprint5.Icon
+        autoLoad={true}
+        icon="predictive-analysis"
+        tagName="span"
+      />
+      <div
+        className="hidden-xs hidden-sm"
+      >
+        Paths
+      </div>
+      <NotificationBadge
+        disableHover={true}
+        notificationFilter={[Function]}
+      />
+    </NavLink>
+    <NavLink
+      className={[Function]}
+      title="Contests"
+      to="/courses/0/contests"
+    >
+      <Blueprint5.Icon
+        autoLoad={true}
+        icon="comparison"
+        tagName="span"
+      />
+      <div
+        className="hidden-xs hidden-sm"
+      >
+        Contests
+      </div>
+      <NotificationBadge
+        disableHover={true}
+        notificationFilter={[Function]}
+      />
+    </NavLink>
+    <NavLink
+      className={[Function]}
+      title="Others"
+      to="/courses/0/others"
+    >
+      <Blueprint5.Icon
+        autoLoad={true}
+        icon="manual"
+        tagName="span"
+      />
+      <div
+        className="hidden-xs hidden-sm"
+      >
+        Others
+      </div>
+      <NotificationBadge
+        disableHover={true}
+        notificationFilter={[Function]}
+      />
+    </NavLink>
+  </Blueprint5.NavbarGroup>
+  <Blueprint5.NavbarGroup
     align="right"
   >
     <NavLink
@@ -106,11 +247,13 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       title="Ground Control"
       to="/courses/0/groundcontrol"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="satellite"
+        tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Ground Control
       </div>
@@ -120,11 +263,13 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       title="Dashboard"
       to="/courses/0/dashboard"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="globe"
+        tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm"
+        className="hidden-xs hidden-sm"
       >
         Dashboard
       </div>
@@ -134,13 +279,31 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       title="Sourcereel"
       to="/courses/0/sourcereel"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="mobile-video"
+        tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md"
+        className="hidden-xs hidden-sm hidden-md"
       >
         Sourcereel
+      </div>
+    </NavLink>
+    <NavLink
+      className={[Function]}
+      title="Team Formation"
+      to="/courses/0/teamformation"
+    >
+      <Blueprint5.Icon
+        autoLoad={true}
+        icon="form"
+        tagName="span"
+      />
+      <div
+        className="hidden-xs hidden-sm hidden-md"
+      >
+        Team Formation
       </div>
     </NavLink>
     <NavLink
@@ -148,11 +311,13 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
       title="Grading"
       to="/courses/0/grading"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="endorsed"
+        tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md"
+        className="hidden-xs hidden-sm hidden-md"
       >
         Grading
       </div>
@@ -164,341 +329,17 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard an
     <NavLink
       className={[Function]}
       title="Game Simulator"
-      to="/courses/0/storysimulator"
+      to="/courses/0/gamesimulator"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="crown"
+        tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md"
+        className="hidden-xs hidden-sm hidden-md"
       >
         Game Simulator
-      </div>
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Notifications"
-      to="/courses/0/notipreference"
-    >
-      <Blueprint4.Icon
-        icon="notifications"
-      />
-      <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg"
-      >
-        Notifications
-      </div>
-    </NavLink>
-  </Blueprint4.NavbarGroup>
-</Blueprint4.Navbar>
-`;
-
-exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading and AdminPanel NavLinks do NOT render for Role.Student 1`] = `
-<Blueprint4.Navbar
-  className="NavigationBar secondary-navbar"
->
-  <Blueprint4.NavbarGroup
-    align="left"
-  >
-    <NavLink
-      className={[Function]}
-      title="Missions"
-      to="/courses/0/missions"
-    >
-      <Blueprint4.Icon
-        icon="flame"
-      />
-      <div
-        className="navbar-button-text hidden-xs hidden-sm"
-      >
-        Missions
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Quests"
-      to="/courses/0/quests"
-    >
-      <Blueprint4.Icon
-        icon="lightbulb"
-      />
-      <div
-        className="navbar-button-text hidden-xs hidden-sm"
-      >
-        Quests
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Paths"
-      to="/courses/0/paths"
-    >
-      <Blueprint4.Icon
-        icon="predictive-analysis"
-      />
-      <div
-        className="navbar-button-text hidden-xs hidden-sm"
-      >
-        Paths
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Contests"
-      to="/courses/0/contests"
-    >
-      <Blueprint4.Icon
-        icon="comparison"
-      />
-      <div
-        className="navbar-button-text hidden-xs hidden-sm"
-      >
-        Contests
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Others"
-      to="/courses/0/others"
-    >
-      <Blueprint4.Icon
-        icon="manual"
-      />
-      <div
-        className="navbar-button-text hidden-xs hidden-sm"
-      >
-        Others
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-  </Blueprint4.NavbarGroup>
-  <Blueprint4.NavbarGroup
-    align="right"
-  >
-    <NavLink
-      className={[Function]}
-      title="Notifications"
-      to="/courses/0/notipreference"
-    >
-      <Blueprint4.Icon
-        icon="notifications"
-      />
-      <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg"
-      >
-        Notifications
-      </div>
-    </NavLink>
-  </Blueprint4.NavbarGroup>
-</Blueprint4.Navbar>
-`;
-
-exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, Grading, XP Calculation and AdminPanel NavLinks render for Role.Admin 1`] = `
-<Blueprint4.Navbar
-  className="NavigationBar secondary-navbar"
->
-  <Blueprint4.NavbarGroup
-    align="left"
-  >
-    <NavLink
-      className={[Function]}
-      title="Missions"
-      to="/courses/0/missions"
-    >
-      <Blueprint4.Icon
-        icon="flame"
-      />
-      <div
-        className="navbar-button-text hidden-xs hidden-sm"
-      >
-        Missions
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Quests"
-      to="/courses/0/quests"
-    >
-      <Blueprint4.Icon
-        icon="lightbulb"
-      />
-      <div
-        className="navbar-button-text hidden-xs hidden-sm"
-      >
-        Quests
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Paths"
-      to="/courses/0/paths"
-    >
-      <Blueprint4.Icon
-        icon="predictive-analysis"
-      />
-      <div
-        className="navbar-button-text hidden-xs hidden-sm"
-      >
-        Paths
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Contests"
-      to="/courses/0/contests"
-    >
-      <Blueprint4.Icon
-        icon="comparison"
-      />
-      <div
-        className="navbar-button-text hidden-xs hidden-sm"
-      >
-        Contests
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Others"
-      to="/courses/0/others"
-    >
-      <Blueprint4.Icon
-        icon="manual"
-      />
-      <div
-        className="navbar-button-text hidden-xs hidden-sm"
-      >
-        Others
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-  </Blueprint4.NavbarGroup>
-  <Blueprint4.NavbarGroup
-    align="right"
-  >
-    <NavLink
-      className={[Function]}
-      title="Ground Control"
-      to="/courses/0/groundcontrol"
-    >
-      <Blueprint4.Icon
-        icon="satellite"
-      />
-      <div
-        className="navbar-button-text hidden-xs hidden-sm"
-      >
-        Ground Control
-      </div>
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Dashboard"
-      to="/courses/0/dashboard"
-    >
-      <Blueprint4.Icon
-        icon="globe"
-      />
-      <div
-        className="navbar-button-text hidden-xs hidden-sm"
-      >
-        Dashboard
-      </div>
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Sourcereel"
-      to="/courses/0/sourcereel"
-    >
-      <Blueprint4.Icon
-        icon="mobile-video"
-      />
-      <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md"
-      >
-        Sourcereel
-      </div>
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Grading"
-      to="/courses/0/grading"
-    >
-      <Blueprint4.Icon
-        icon="endorsed"
-      />
-      <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md"
-      >
-        Grading
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Game Simulator"
-      to="/courses/0/storysimulator"
-    >
-      <Blueprint4.Icon
-        icon="crown"
-      />
-      <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md"
-      >
-        Game Simulator
-      </div>
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="XP Calculation"
-      to="/courses/0/xpcalculation"
-    >
-      <Blueprint4.Icon
-        icon="calculator"
-      />
-      <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg"
-      >
-        XP Calculation
       </div>
     </NavLink>
     <NavLink
@@ -506,11 +347,13 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       title="Admin Panel"
       to="/courses/0/adminpanel"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="settings"
+        tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg"
+        className="hidden-xs hidden-sm hidden-md hidden-lg"
       >
         Admin Panel
       </div>
@@ -520,15 +363,248 @@ exports[`MissionControl, GroundControl, Sourcereel, StorySimulator, Dashboard, G
       title="Notifications"
       to="/courses/0/notipreference"
     >
-      <Blueprint4.Icon
+      <Blueprint5.Icon
+        autoLoad={true}
         icon="notifications"
+        tagName="span"
       />
       <div
-        className="navbar-button-text hidden-xs hidden-sm hidden-md hidden-lg"
+        className="hidden-xs hidden-sm hidden-md hidden-lg"
       >
         Notifications
       </div>
     </NavLink>
-  </Blueprint4.NavbarGroup>
-</Blueprint4.Navbar>
+  </Blueprint5.NavbarGroup>
+</Blueprint5.Navbar>
+`;
+
+exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Team Formation and Grading NavLinks render for Role.Staff 1`] = `
+<Blueprint5.Navbar
+  className="NavigationBar secondary-navbar"
+>
+  <Blueprint5.NavbarGroup
+    align="left"
+  >
+    <NavLink
+      className={[Function]}
+      title="Missions"
+      to="/courses/0/missions"
+    >
+      <Blueprint5.Icon
+        autoLoad={true}
+        icon="flame"
+        tagName="span"
+      />
+      <div
+        className="hidden-xs hidden-sm"
+      >
+        Missions
+      </div>
+      <NotificationBadge
+        disableHover={true}
+        notificationFilter={[Function]}
+      />
+    </NavLink>
+    <NavLink
+      className={[Function]}
+      title="Quests"
+      to="/courses/0/quests"
+    >
+      <Blueprint5.Icon
+        autoLoad={true}
+        icon="lightbulb"
+        tagName="span"
+      />
+      <div
+        className="hidden-xs hidden-sm"
+      >
+        Quests
+      </div>
+      <NotificationBadge
+        disableHover={true}
+        notificationFilter={[Function]}
+      />
+    </NavLink>
+    <NavLink
+      className={[Function]}
+      title="Paths"
+      to="/courses/0/paths"
+    >
+      <Blueprint5.Icon
+        autoLoad={true}
+        icon="predictive-analysis"
+        tagName="span"
+      />
+      <div
+        className="hidden-xs hidden-sm"
+      >
+        Paths
+      </div>
+      <NotificationBadge
+        disableHover={true}
+        notificationFilter={[Function]}
+      />
+    </NavLink>
+    <NavLink
+      className={[Function]}
+      title="Contests"
+      to="/courses/0/contests"
+    >
+      <Blueprint5.Icon
+        autoLoad={true}
+        icon="comparison"
+        tagName="span"
+      />
+      <div
+        className="hidden-xs hidden-sm"
+      >
+        Contests
+      </div>
+      <NotificationBadge
+        disableHover={true}
+        notificationFilter={[Function]}
+      />
+    </NavLink>
+    <NavLink
+      className={[Function]}
+      title="Others"
+      to="/courses/0/others"
+    >
+      <Blueprint5.Icon
+        autoLoad={true}
+        icon="manual"
+        tagName="span"
+      />
+      <div
+        className="hidden-xs hidden-sm"
+      >
+        Others
+      </div>
+      <NotificationBadge
+        disableHover={true}
+        notificationFilter={[Function]}
+      />
+    </NavLink>
+  </Blueprint5.NavbarGroup>
+  <Blueprint5.NavbarGroup
+    align="right"
+  >
+    <NavLink
+      className={[Function]}
+      title="Ground Control"
+      to="/courses/0/groundcontrol"
+    >
+      <Blueprint5.Icon
+        autoLoad={true}
+        icon="satellite"
+        tagName="span"
+      />
+      <div
+        className="hidden-xs hidden-sm"
+      >
+        Ground Control
+      </div>
+    </NavLink>
+    <NavLink
+      className={[Function]}
+      title="Dashboard"
+      to="/courses/0/dashboard"
+    >
+      <Blueprint5.Icon
+        autoLoad={true}
+        icon="globe"
+        tagName="span"
+      />
+      <div
+        className="hidden-xs hidden-sm"
+      >
+        Dashboard
+      </div>
+    </NavLink>
+    <NavLink
+      className={[Function]}
+      title="Sourcereel"
+      to="/courses/0/sourcereel"
+    >
+      <Blueprint5.Icon
+        autoLoad={true}
+        icon="mobile-video"
+        tagName="span"
+      />
+      <div
+        className="hidden-xs hidden-sm hidden-md"
+      >
+        Sourcereel
+      </div>
+    </NavLink>
+    <NavLink
+      className={[Function]}
+      title="Team Formation"
+      to="/courses/0/teamformation"
+    >
+      <Blueprint5.Icon
+        autoLoad={true}
+        icon="form"
+        tagName="span"
+      />
+      <div
+        className="hidden-xs hidden-sm hidden-md"
+      >
+        Team Formation
+      </div>
+    </NavLink>
+    <NavLink
+      className={[Function]}
+      title="Grading"
+      to="/courses/0/grading"
+    >
+      <Blueprint5.Icon
+        autoLoad={true}
+        icon="endorsed"
+        tagName="span"
+      />
+      <div
+        className="hidden-xs hidden-sm hidden-md"
+      >
+        Grading
+      </div>
+      <NotificationBadge
+        disableHover={true}
+        notificationFilter={[Function]}
+      />
+    </NavLink>
+    <NavLink
+      className={[Function]}
+      title="Game Simulator"
+      to="/courses/0/gamesimulator"
+    >
+      <Blueprint5.Icon
+        autoLoad={true}
+        icon="crown"
+        tagName="span"
+      />
+      <div
+        className="hidden-xs hidden-sm hidden-md"
+      >
+        Game Simulator
+      </div>
+    </NavLink>
+    <NavLink
+      className={[Function]}
+      title="Notifications"
+      to="/courses/0/notipreference"
+    >
+      <Blueprint5.Icon
+        autoLoad={true}
+        icon="notifications"
+        tagName="span"
+      />
+      <div
+        className="hidden-xs hidden-sm hidden-md hidden-lg"
+      >
+        Notifications
+      </div>
+    </NavLink>
+  </Blueprint5.NavbarGroup>
+</Blueprint5.Navbar>
 `;

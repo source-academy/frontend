@@ -2,13 +2,13 @@ import { ButtonGroup, Classes, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import { Octokit } from '@octokit/rest';
-import * as React from 'react';
+import React from 'react';
 import { useResponsive } from 'src/commons/utils/Hooks';
 
 import { GitHubSaveInfo } from '../../../features/github/GitHubTypes';
 import ControlButton from '../../ControlButton';
 
-export type ControlBarGitHubButtonsProps = {
+type Props = {
   isFolderModeEnabled: boolean;
   loggedInAs?: Octokit;
   githubSaveInfo: GitHubSaveInfo;
@@ -26,7 +26,7 @@ export type ControlBarGitHubButtonsProps = {
  *
  * @param props Component properties
  */
-export const ControlBarGitHubButtons: React.FC<ControlBarGitHubButtonsProps> = props => {
+export const ControlBarGitHubButtons: React.FC<Props> = props => {
   const { isMobileBreakpoint } = useResponsive();
 
   const filePath = props.githubSaveInfo.filePath || '';

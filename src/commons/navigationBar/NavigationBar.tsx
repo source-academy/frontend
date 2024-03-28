@@ -11,13 +11,13 @@ import {
   NavbarHeading,
   Position
 } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
-import { BlueprintIcons_16Id } from '@blueprintjs/icons/lib/esm/generated-icons/16px/blueprint-icons-16';
+import { IconName, IconNames } from '@blueprintjs/icons';
 import { Popover2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import { Location } from 'history';
 import { useCallback, useMemo, useState } from 'react';
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import classes from 'src/styles/NavigationBar.module.scss';
 
 import Dropdown from '../dropdown/Dropdown';
 import NotificationBadge from '../notificationBadge/NotificationBadge';
@@ -33,7 +33,7 @@ import SicpNavigationBar from './subcomponents/SicpNavigationBar';
 
 export type NavbarEntryInfo = {
   to: string;
-  icon: BlueprintIcons_16Id;
+  icon: IconName;
   text: string;
   disabled?: boolean; // entry is not rendered when disabled
   hasNotifications?: boolean; // whether to render NotificationBadge
@@ -54,6 +54,7 @@ const NavigationBar: React.FC = () => {
     courseShortName,
     enableAchievements,
     enableSourcecast,
+    enableStories,
     assessmentConfigurations
   } = useSession();
   const assessmentTypes = useMemo(
@@ -68,15 +69,7 @@ const NavigationBar: React.FC = () => {
       <NavLink
         to={navbarEntry.to}
         className={({ isActive }) =>
-          classNames(
-            'NavigationBar__link__mobile',
-            Classes.BUTTON,
-            Classes.MINIMAL,
-            Classes.LARGE,
-            {
-              [Classes.ACTIVE]: isActive
-            }
-          )
+          classNames(Classes.BUTTON, Classes.MINIMAL, Classes.LARGE, { [Classes.ACTIVE]: isActive })
         }
         onClick={() => setMobileSideMenuOpen(false)}
         key={navbarEntry.text}
@@ -161,12 +154,6 @@ const NavigationBar: React.FC = () => {
         disabled: !isEnrolledInACourse
       },
       {
-        to: '/githubassessments',
-        icon: IconNames.BRIEFCASE,
-        text: 'Classroom',
-        disabled: !Constants.enableGitHubAssessments
-      },
-      {
         to: '/sicpjs',
         icon: IconNames.BOOK,
         text: 'SICP JS',
@@ -179,14 +166,21 @@ const NavigationBar: React.FC = () => {
         disabled: !(isEnrolledInACourse && enableAchievements)
       },
       {
-        to: '/stories',
+        to: `/courses/${courseId}/stories`,
         icon: IconNames.GIT_REPO,
         text: 'Stories',
-        // TODO: Enable when stories are implemented
-        disabled: true && !isLoggedIn
+        // TODO: Enable for public deployment
+        disabled: !(isEnrolledInACourse && enableStories)
       }
     ];
-  }, [isLoggedIn, isEnrolledInACourse, courseId, enableSourcecast, enableAchievements]);
+  }, [
+    courseId,
+    isEnrolledInACourse,
+    enableSourcecast,
+    enableStories,
+    isLoggedIn,
+    enableAchievements
+  ]);
 
   const fullAcademyMobileNavbarLeftAdditionalInfo = useMemo(
     () => getAcademyNavbarRightInfo({ isEnrolledInACourse, courseId, role }),
@@ -235,7 +229,6 @@ const NavigationBar: React.FC = () => {
       '/playground',
       '/sicpjs',
       '/contributors',
-      '/githubassessments',
       `/courses/${courseId}/sourcecast`,
       `/courses/${courseId}/achievements`
     ];
@@ -304,7 +297,14 @@ const NavigationBar: React.FC = () => {
 
   return (
     <>
-      <Navbar className={classNames('NavigationBar', 'primary-navbar', Classes.DARK)}>
+      <Navbar
+        className={classNames(
+          'NavigationBar',
+          'primary-navbar',
+          classes['primary-navbar'],
+          Classes.DARK
+        )}
+      >
         {Constants.playgroundOnly
           ? isMobileBreakpoint
             ? renderPlaygroundOnlyNavbarLeftMobile()
@@ -317,7 +317,6 @@ const NavigationBar: React.FC = () => {
 
       <Routes>
         <Route path="/playground" element={null} />
-        <Route path="/githubassessments/*" element={null} />
         <Route path="/contributors" element={null} />
         <Route path="/courses/:courseId/sourcecast" element={null} />
         <Route path="/courses/:courseId/achievements" element={null} />
@@ -342,23 +341,17 @@ const playgroundOnlyNavbarLeftInfo: NavbarEntryInfo[] = [
     text: 'Playground'
   },
   {
-    to: '/githubassessments',
-    icon: IconNames.BRIEFCASE,
-    text: 'Classroom',
-    disabled: !Constants.enableGitHubAssessments
-  },
-  {
     to: '/sicpjs',
     icon: IconNames.BOOK,
     text: 'SICP JS'
-  },
-  {
-    to: '/stories',
-    icon: IconNames.GIT_REPO,
-    text: 'Stories',
-    // TODO: Enable when stories are implemented
-    disabled: true
   }
+  // {
+  //   to: '/stories',
+  //   icon: IconNames.GIT_REPO,
+  //   text: 'Stories',
+  //   // TODO: Enable for public deployment
+  //   disabled: true
+  // }
 ];
 
 export const renderNavlinksFromInfo = (
@@ -376,7 +369,7 @@ export const renderNavlinksFromInfo = (
 export const createDesktopNavlink: CreateNavlinkFunction = navbarEntry => (
   <NavLink
     className={({ isActive }) =>
-      classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+      classNames(Classes.BUTTON, Classes.MINIMAL, {
         [Classes.ACTIVE]: isActive
       })
     }
@@ -385,12 +378,7 @@ export const createDesktopNavlink: CreateNavlinkFunction = navbarEntry => (
     title={navbarEntry.text}
   >
     <Icon icon={navbarEntry.icon} />
-    <div
-      className={classNames(
-        'navbar-button-text',
-        navbarEntry.hiddenInBreakpoints?.map(bp => `hidden-${bp}`)
-      )}
-    >
+    <div className={classNames(navbarEntry.hiddenInBreakpoints?.map(bp => `hidden-${bp}`))}>
       {navbarEntry.text}
     </div>
     {navbarEntry.hasNotifications && (

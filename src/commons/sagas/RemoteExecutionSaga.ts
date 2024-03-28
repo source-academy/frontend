@@ -1,5 +1,5 @@
 import { SlingClient } from '@sourceacademy/sling-client';
-import { assemble, compile, compileFiles, Context } from 'js-slang';
+import { assemble, compileFiles, Context } from 'js-slang';
 import { ExceptionError } from 'js-slang/dist/errors/errors';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import _ from 'lodash';
@@ -288,7 +288,7 @@ export function* remoteExecutionSaga(): SagaIterator {
     // clear the context of errors (note: the way this works is that the context
     // is mutated by js-slang anyway, so it's ok to do it like this)
     context.errors.length = 0;
-    const compiled: MaybePromise<ReturnType<typeof compile>> = yield call(
+    const compiled: MaybePromise<ReturnType<typeof compileFiles>> = yield call(
       compileFiles,
       files,
       entrypointFilePath,

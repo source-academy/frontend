@@ -18,7 +18,7 @@ const cracoConfig = (module.exports = {
         plugin => plugin.constructor.name === 'InjectManifest'
       );
       if (injectManifestPlugin) {
-        injectManifestPlugin.config.maximumFileSizeToCacheInBytes = 15 * 1024 * 1024;
+        injectManifestPlugin.config.maximumFileSizeToCacheInBytes = 17 * 1024 * 1024;
       }
 
       // add rules to pack WASM (for Sourceror)
@@ -127,7 +127,12 @@ const cracoConfig = (module.exports = {
           'trim-lines',
           'property-information',
           'space-separated-tokens',
-          'comma-separated-tokens'
+          'comma-separated-tokens',
+          'query-string',
+          'decode-uri-component',
+          'split-on-first',
+          'filter-obj',
+          '@sourceacademy/c-slang',
         ),
         '^.+\\.module\\.(css|sass|scss)$'
       ];
@@ -142,6 +147,11 @@ const cracoConfig = (module.exports = {
         '<rootDir>/node_modules/vfile/lib';
       return jestConfig;
     }
+  },
+  babel: {
+    presets: [
+      ['@babel/preset-typescript']
+    ]
   }
 });
 

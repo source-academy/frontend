@@ -1,0 +1,46 @@
+.assessment-feedback {
+  padding-left: 2rem;
+}
+
+.feedback-list {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.assessment-comments {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.question-header {
+  margin-top: 0;
+}
+
+.box-comment {
+  flex-grow: 1;
+  display: block;
+  padding-top: 0.1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  white-space: pre-wrap;
+  word-break: break-word;
+
+  .xp {
+    font-weight: 700;
+    color: orange;
+  }
+}
+
+.to-assessment-button {
+  flex: none;
+
+  height: 2rem;
+  width: 6rem;
+
+  margin-top: 0.1rem;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+
+  cursor: pointer;
+}

@@ -4,6 +4,7 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import classes from 'src/styles/FileSystemView.module.scss';
 
 import { showSimpleConfirmDialog } from '../utils/DialogHelper';
 import { addEditorTab, removeEditorTabForFile } from '../workspace/WorkspaceActions';
@@ -12,7 +13,7 @@ import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
 
-export type FileSystemViewFileNodeProps = {
+type Props = {
   workspaceLocation: WorkspaceLocation;
   fileSystem: FSModule;
   basePath: string;
@@ -21,13 +22,15 @@ export type FileSystemViewFileNodeProps = {
   refreshDirectory: () => void;
 };
 
-const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
-  props: FileSystemViewFileNodeProps
-) => {
-  const { workspaceLocation, fileSystem, basePath, fileName, indentationLevel, refreshDirectory } =
-    props;
-
-  const [isEditing, setIsEditing] = React.useState<boolean>(false);
+const FileSystemViewFileNode: React.FC<Props> = ({
+  workspaceLocation,
+  fileSystem,
+  basePath,
+  fileName,
+  indentationLevel,
+  refreshDirectory
+}) => {
+  const [isEditing, setIsEditing] = React.useState(false);
   const dispatch = useDispatch();
 
   const fullPath = path.join(basePath, fileName);
@@ -90,7 +93,7 @@ const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
       rename={handleRenameFile}
       remove={handleRemoveFile}
     >
-      <div className="file-system-view-node-container" onClick={onClick}>
+      <div className={classes['file-system-view-node-container']} onClick={onClick}>
         <FileSystemViewIndentationPadding indentationLevel={indentationLevel} />
         <Icon icon={IconNames.DOCUMENT} />
         <FileSystemViewFileName

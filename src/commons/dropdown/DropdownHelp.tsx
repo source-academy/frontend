@@ -1,29 +1,29 @@
-import { Classes, Dialog } from '@blueprintjs/core';
+import { Dialog, DialogBody } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import * as React from 'react';
+import React from 'react';
 
 import Markdown from '../Markdown';
 import { Links } from '../utils/Constants';
 import { useTypedSelector } from '../utils/Hooks';
 
-type DialogProps = {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
 };
 
-const DropdownHelp: React.FC<DialogProps> = props => {
+const DropdownHelp: React.FC<Props> = props => {
   const moduleHelpText = useTypedSelector(store => store.session.moduleHelpText);
 
   return (
     <Dialog
-      className="help"
+      style={{ textAlign: 'justify' }}
       icon={IconNames.ERROR}
-      isCloseButtonShown={true}
+      isCloseButtonShown
       isOpen={props.isOpen}
       onClose={props.onClose}
       title="Help"
     >
-      <div className={Classes.DIALOG_BODY}>
+      <DialogBody>
         {moduleHelpText ? (
           <Markdown content={moduleHelpText} openLinksInNewWindow />
         ) : (
@@ -39,7 +39,7 @@ const DropdownHelp: React.FC<DialogProps> = props => {
             </p>
           </>
         )}
-      </div>
+      </DialogBody>
     </Dialog>
   );
 };

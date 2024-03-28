@@ -13,7 +13,7 @@ import CheckpointConstants, { transitionTextStyle } from './CheckpointTransition
  * Internally, we use this scene to fully load the next checkpoint,
  * before finally loading the next scene.
  *
- * In story simulator, the next checkpoint is loaded based on the
+ * In Game simulator, the next checkpoint is loaded based on the
  * chapterSimStack using the callGameManagerForSim function.
  *
  * We cannot load these informations at the start of GameManager as

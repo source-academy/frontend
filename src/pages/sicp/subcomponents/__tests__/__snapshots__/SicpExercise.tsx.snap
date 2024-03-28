@@ -2,7 +2,7 @@
 
 exports[`Sicp exercise renders correctly 1`] = `
 <div
-  className="bp4-card bp4-elevation-1 sicp-exercise"
+  className="sicp-exercise bp5-card bp5-elevation-1"
 >
   <b>
     Title
@@ -16,7 +16,7 @@ exports[`Sicp exercise renders correctly 1`] = `
     className="sicp-button-container"
   >
     <button
-      className="bp4-button bp4-large sicp-show-solution-button"
+      className="bp5-button bp5-large sicp-show-solution-button"
       disabled={false}
       onBlur={[Function]}
       onClick={[Function]}
@@ -25,14 +25,14 @@ exports[`Sicp exercise renders correctly 1`] = `
       type="button"
     >
       <span
-        className="bp4-button-text"
+        className="bp5-button-text"
       >
         Show Solution
       </span>
     </button>
   </div>
   <div
-    className="bp4-collapse sicp-solution"
+    className="bp5-collapse sicp-solution"
     style={
       Object {
         "height": undefined,
@@ -43,7 +43,7 @@ exports[`Sicp exercise renders correctly 1`] = `
   >
     <div
       aria-hidden={true}
-      className="bp4-collapse-body"
+      className="bp5-collapse-body"
       style={
         Object {
           "transform": "translateY(-undefinedpx)",

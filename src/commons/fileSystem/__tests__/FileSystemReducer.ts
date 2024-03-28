@@ -12,7 +12,7 @@ describe('SET_IN_BROWSER_FILE_SYSTEM', () => {
       payload: {
         inBrowserFileSystem
       }
-    };
+    } as const;
     const result = FileSystemReducer(defaultFileSystem, action);
     expect(result).toEqual({
       ...defaultFileSystem,

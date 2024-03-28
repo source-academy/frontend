@@ -1,9 +1,10 @@
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { compressToEncodedURIComponent } from 'lz-string';
-import * as qs from 'query-string';
+import qs from 'query-string';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select } from 'redux-saga/effects';
+import CseMachine from 'src/features/cseMachine/CseMachine';
 
 import {
   changeQueryString,
@@ -11,12 +12,23 @@ import {
   updateShortURL
 } from '../../features/playground/PlaygroundActions';
 import { GENERATE_LZ_STRING, SHORTEN_URL } from '../../features/playground/PlaygroundTypes';
-import { OverallState } from '../application/ApplicationTypes';
+import { isSourceLanguage, OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
+import { visitSideContent } from '../sideContent/SideContentActions';
+import { SideContentType, VISIT_SIDE_CONTENT } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { EditorTabState } from '../workspace/WorkspaceTypes';
+import {
+  clearReplOutput,
+  setEditorHighlightedLines,
+  toggleUpdateCse,
+  toggleUsingCse,
+  toggleUsingSubst,
+  updateCurrentStep,
+  updateStepsTotal
+} from '../workspace/WorkspaceActions';
+import { EditorTabState, PlaygroundWorkspaceState } from '../workspace/WorkspaceTypes';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export default function* PlaygroundSaga(): SagaIterator {
@@ -55,6 +67,57 @@ export default function* PlaygroundSaga(): SagaIterator {
     }
     yield put(updateShortURL(Constants.urlShortenerBase + resp.url.keyword));
   });
+
+  yield takeEvery(
+    VISIT_SIDE_CONTENT,
+    function* ({
+      payload: { newId, prevId, workspaceLocation }
+    }: ReturnType<typeof visitSideContent>) {
+      if (workspaceLocation !== 'playground' || newId === prevId) return;
+
+      // Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
+      if (prevId === SideContentType.substVisualizer && newId === SideContentType.mobileEditorRun) {
+        return;
+      }
+
+      const {
+        context: { chapter: playgroundSourceChapter },
+        editorTabs
+      }: PlaygroundWorkspaceState = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation]
+      );
+
+      if (prevId === SideContentType.substVisualizer) {
+        if (newId === SideContentType.mobileEditorRun) return;
+        const hasBreakpoints = editorTabs.find(({ breakpoints }) => breakpoints.find(x => !!x));
+
+        if (!hasBreakpoints) {
+          yield put(toggleUsingSubst(false, workspaceLocation));
+          yield put(clearReplOutput(workspaceLocation));
+        }
+      }
+
+      if (newId !== SideContentType.cseMachine) {
+        yield put(toggleUsingCse(false, workspaceLocation));
+        yield call([CseMachine, CseMachine.clearCse]);
+        yield put(updateCurrentStep(-1, workspaceLocation));
+        yield put(updateStepsTotal(0, workspaceLocation));
+        yield put(toggleUpdateCse(true, workspaceLocation));
+        yield put(setEditorHighlightedLines(workspaceLocation, 0, []));
+      }
+
+      if (
+        isSourceLanguage(playgroundSourceChapter) &&
+        (newId === SideContentType.substVisualizer || newId === SideContentType.cseMachine)
+      ) {
+        if (playgroundSourceChapter <= Chapter.SOURCE_2) {
+          yield put(toggleUsingSubst(true, workspaceLocation));
+        } else {
+          yield put(toggleUsingCse(true, workspaceLocation));
+        }
+      }
+    }
+  );
 }
 
 function* updateQueryString() {

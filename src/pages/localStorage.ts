@@ -68,6 +68,7 @@ export const saveState = (state: OverallState) => {
         enableGame: state.session.enableGame,
         enableAchievements: state.session.enableAchievements,
         enableSourcecast: state.session.enableSourcecast,
+        enableStories: state.session.enableStories,
         moduleHelpText: state.session.moduleHelpText,
         assetsPrefix: state.session.assetsPrefix,
         assessmentConfigurations: state.session.assessmentConfigurations,

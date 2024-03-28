@@ -26,6 +26,8 @@ const defaultProps = assertType<AssessmentWorkspaceProps>()({
     type: 'Missions',
     isManuallyGraded: true,
     displayInDashboard: true,
+    hasTokenCounter: false,
+    hasVotingFeatures: false,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   },

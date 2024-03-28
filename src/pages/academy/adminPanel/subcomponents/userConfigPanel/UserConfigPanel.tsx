@@ -8,9 +8,7 @@ import { AdminPanelCourseRegistration } from 'src/commons/application/types/Sess
 import RolesCell from './RolesCell';
 import UserActionsCell from './UserActionsCell';
 
-export type UserConfigPanelProps = OwnProps;
-
-type OwnProps = {
+type Props = {
   courseRegId?: number;
   userCourseRegistrations?: AdminPanelCourseRegistration[];
   handleUpdateUserRole: (courseRegId: number, role: Role) => void;
@@ -24,14 +22,14 @@ type OwnProps = {
  *   other admins can do so, to prevent a scenario where there are
  *   no admins left in a course)
  */
-const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
+const UserConfigPanel: React.FC<Props> = props => {
   const gridApi = React.useRef<GridApi>();
 
   const userCourseRegistrations = props.userCourseRegistrations?.map(e =>
     !e.name ? { ...e, name: '(user has yet to log in)' } : e
   );
 
-  const columnDefs: ColDef[] = [
+  const columnDefs: ColDef<AdminPanelCourseRegistration>[] = [
     {
       headerName: 'Name',
       field: 'name',
@@ -48,7 +46,7 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
     {
       headerName: 'Role',
       field: 'role',
-      cellRendererFramework: RolesCell,
+      cellRenderer: RolesCell,
       cellRendererParams: {
         courseRegId: props.courseRegId,
         handleUpdateUserRole: props.handleUpdateUserRole
@@ -57,8 +55,8 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
     },
     {
       headerName: 'Actions',
-      field: 'actions',
-      cellRendererFramework: UserActionsCell,
+      field: 'actions' as any,
+      cellRenderer: UserActionsCell,
       cellRendererParams: {
         handleDeleteUserFromCourse: props.handleDeleteUserFromCourse
       },
@@ -88,7 +86,7 @@ const UserConfigPanel: React.FC<UserConfigPanelProps> = props => {
         onGridSizeChanged={() => gridApi.current?.sizeColumnsToFit()}
         rowData={userCourseRegistrations}
         rowHeight={36}
-        suppressCellSelection={true}
+        suppressCellFocus={true}
         suppressMovableColumns={true}
         pagination
       />

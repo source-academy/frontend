@@ -32,7 +32,7 @@ export default class GameSaveManager {
    * Updates the save manager with chapter number and checkpoint number
    * if player has chosen a chapter/checkpoint to play with.
    *
-   * Chapter number and checkpoint number can be -1 if inside the Story Simulator,
+   * Chapter number and checkpoint number can be -1 if inside the Game Simulator,
    *
    * @param chapterNum chapter number
    * @param checkpointNum checkpoint number
@@ -56,7 +56,7 @@ export default class GameSaveManager {
    * informtion from GameManager, GameStateManager, or other in-game managers,
    * and converts them into JSON format to be saved to backend.
    *
-   * Only called when playing the Game (not Story Simulator), because Story Simulator
+   * Only called when playing the Game (not Game Simulator), because Game Simulator
    * shouldn't save game state to backend.
    */
   public async saveGame() {

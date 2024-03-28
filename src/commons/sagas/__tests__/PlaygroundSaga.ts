@@ -1,6 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { compressToEncodedURIComponent } from 'lz-string';
-import * as qs from 'query-string';
+import qs from 'query-string';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 
@@ -83,11 +83,12 @@ describe('Playground saga tests', () => {
             }
           ],
           usingSubst: false,
-          usingEnv: false,
-          updateEnv: true,
-          envSteps: -1,
-          envStepsTotal: 0,
-          breakpointSteps: []
+          usingCse: false,
+          updateCse: true,
+          currentStep: -1,
+          stepsTotal: 0,
+          breakpointSteps: [],
+          changepointSteps: []
         }
       }
     };
@@ -150,11 +151,12 @@ describe('Playground saga tests', () => {
             }
           ],
           usingSubst: false,
-          usingEnv: false,
-          updateEnv: true,
-          envSteps: -1,
-          envStepsTotal: 0,
-          breakpointSteps: []
+          usingCse: false,
+          updateCse: true,
+          currentStep: -1,
+          stepsTotal: 0,
+          breakpointSteps: [],
+          changepointSteps: []
         }
       }
     };
@@ -217,11 +219,12 @@ describe('Playground saga tests', () => {
             }
           ],
           usingSubst: false,
-          usingEnv: false,
-          updateEnv: true,
-          envSteps: -1,
-          envStepsTotal: 0,
-          breakpointSteps: []
+          usingCse: false,
+          updateCse: true,
+          currentStep: -1,
+          stepsTotal: 0,
+          breakpointSteps: [],
+          changepointSteps: []
         }
       }
     };
@@ -267,11 +270,12 @@ describe('Playground saga tests', () => {
             }
           ],
           usingSubst: false,
-          usingEnv: false,
-          updateEnv: true,
-          envSteps: -1,
-          envStepsTotal: 0,
-          breakpointSteps: []
+          usingCse: false,
+          updateCse: true,
+          currentStep: -1,
+          stepsTotal: 0,
+          breakpointSteps: [],
+          changepointSteps: []
         }
       }
     };
@@ -336,11 +340,12 @@ describe('Playground saga tests', () => {
             }
           ],
           usingSubst: false,
-          usingEnv: false,
-          updateEnv: true,
-          envSteps: -1,
-          envStepsTotal: 0,
-          breakpointSteps: []
+          usingCse: false,
+          updateCse: true,
+          currentStep: -1,
+          stepsTotal: 0,
+          breakpointSteps: [],
+          changepointSteps: []
         }
       }
     };
@@ -394,11 +399,12 @@ describe('Playground saga tests', () => {
             }
           ],
           usingSubst: false,
-          usingEnv: false,
-          updateEnv: true,
-          envSteps: -1,
-          envStepsTotal: 0,
-          breakpointSteps: []
+          usingCse: false,
+          updateCse: true,
+          currentStep: -1,
+          stepsTotal: 0,
+          breakpointSteps: [],
+          changepointSteps: []
         }
       }
     };

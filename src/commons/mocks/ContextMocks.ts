@@ -34,10 +34,11 @@ export function mockRuntimeContext(): Context {
         range: [0, 1]
       }
     ],
-    agenda: null,
+    control: null,
     stash: null,
     envStepsTotal: 0,
-    breakpointSteps: []
+    breakpointSteps: [],
+    changepointSteps: []
   };
   return context;
 }

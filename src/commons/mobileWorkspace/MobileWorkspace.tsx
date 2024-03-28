@@ -16,9 +16,7 @@ import DraggableRepl from './DraggableRepl';
 import MobileKeyboard from './MobileKeyboard';
 import MobileSideContent, { MobileSideContentProps } from './mobileSideContent/MobileSideContent';
 
-export type MobileWorkspaceProps = StateProps;
-
-type StateProps = {
+export type MobileWorkspaceProps = {
   editorContainerProps?: EditorContainerProps; // Either editorProps or mcqProps must be provided
   hasUnsavedChanges?: boolean; // Not used in Playground
   mcqProps?: McqChooserProps; // Not used in Playground
@@ -268,9 +266,12 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         beforeDynamicTabs: [
           ...sideBarTabs,
           mobileEditorTab,
-          ...props.mobileSideContentProps.tabs.beforeDynamicTabs
+          ...(props.mobileSideContentProps.tabs?.beforeDynamicTabs ?? [])
         ],
-        afterDynamicTabs: [...props.mobileSideContentProps.tabs.afterDynamicTabs, mobileRunTab]
+        afterDynamicTabs: [
+          ...(props.mobileSideContentProps.tabs?.afterDynamicTabs ?? []),
+          mobileRunTab
+        ]
       }
     };
   }, [
@@ -281,9 +282,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     sideBarTabs
   ]);
 
-  const inAssessmentWorkspace =
-    props.mobileSideContentProps.workspaceLocation === 'assessment' ||
-    props.mobileSideContentProps.workspaceLocation === 'githubAssessment';
+  const inAssessmentWorkspace = props.mobileSideContentProps.workspaceLocation === 'assessment';
 
   return (
     <div className="workspace mobile-workspace">

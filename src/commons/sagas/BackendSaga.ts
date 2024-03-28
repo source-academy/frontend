@@ -9,9 +9,16 @@ import {
   FETCH_GROUP_GRADING_SUMMARY,
   GradingSummary
 } from '../../features/dashboard/DashboardTypes';
-import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
+import {
+  GradingOverview,
+  GradingOverviews,
+  GradingQuery,
+  GradingQuestion
+} from '../../features/grading/GradingTypes';
 import {
   CHANGE_DATE_ASSESSMENT,
+  CHANGE_TEAM_SIZE_ASSESSMENT,
+  CONFIGURE_ASSESSMENT,
   DELETE_ASSESSMENT,
   PUBLISH_ASSESSMENT,
   UPLOAD_ASSESSMENT
@@ -22,18 +29,22 @@ import {
   SourcecastData
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
+import { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
 import { OverallState, Role } from '../application/ApplicationTypes';
 import { RouterState } from '../application/types/CommonsTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
+  BULK_UPLOAD_TEAM,
+  CHECK_ANSWER_LAST_MODIFIED_AT,
   CourseConfiguration,
   CourseRegistration,
+  CREATE_TEAM,
   DELETE_ASSESSMENT_CONFIG,
+  DELETE_TEAM,
   DELETE_TIME_OPTIONS,
   DELETE_USER_COURSE_REGISTRATION,
   FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
-  FETCH_ALL_USER_XP,
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_ADMIN,
   FETCH_ASSESSMENT_CONFIGS,
@@ -44,6 +55,9 @@ import {
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATION_CONFIGS,
   FETCH_NOTIFICATIONS,
+  FETCH_STUDENTS,
+  FETCH_TEAM_FORMATION_OVERVIEW,
+  FETCH_TEAM_FORMATION_OVERVIEWS,
   FETCH_TOTAL_XP,
   FETCH_TOTAL_XP_ADMIN,
   FETCH_USER_AND_COURSE,
@@ -62,6 +76,7 @@ import {
   UPDATE_LATEST_VIEWED_COURSE,
   UPDATE_NOTIFICATION_CONFIG,
   UPDATE_NOTIFICATION_PREFERENCES,
+  UPDATE_TEAM,
   UPDATE_TIME_OPTIONS,
   UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
@@ -85,9 +100,10 @@ import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/Au
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
+  checkAnswerLastModifiedAt,
   deleteAssessment,
   deleteSourcecastEntry,
-  getAllUserXp,
+  deleteTeam,
   getAssessment,
   getAssessmentConfigs,
   getAssessmentOverviews,
@@ -100,6 +116,9 @@ import {
   getNotificationConfigs,
   getNotifications,
   getSourcecastIndex,
+  getStudents,
+  getTeamFormationOverview,
+  getTeamFormationOverviews,
   getTotalXp,
   getUser,
   getUserCourseRegistrations,
@@ -113,7 +132,9 @@ import {
   postReautogradeAnswer,
   postReautogradeSubmission,
   postSourcecast,
+  postTeams,
   postUnsubmit,
+  postUploadTeams,
   putAssessmentConfigs,
   putCourseConfig,
   putCourseResearchAgreement,
@@ -121,6 +142,7 @@ import {
   putNewUsers,
   putNotificationConfigs,
   putNotificationPreferences,
+  putTeams,
   putTimeOptions,
   putUserRole,
   removeAssessmentConfig,
@@ -199,8 +221,12 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.setCourseConfiguration(courseConfiguration));
       yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
 
-      yield put(actions.getStoriesUser());
-      // TODO: Fetch associated stories group ID
+      if (courseConfiguration.enableStories) {
+        yield put(actions.getStoriesUser());
+        // TODO: Fetch associated stories group ID
+      } else {
+        yield put(actions.clearStoriesUserAndGroup());
+      }
     }
     /**
      * NOTE: Navigation logic is now handled in <Login /> component.
@@ -245,8 +271,12 @@ function* BackendSaga(): SagaIterator {
         yield put(actions.setCourseConfiguration(courseConfiguration));
         yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
 
-        yield put(actions.getStoriesUser());
-        // TODO: Fetch associated stories group ID
+        if (courseConfiguration.enableStories) {
+          yield put(actions.getStoriesUser());
+          // TODO: Fetch associated stories group ID
+        } else {
+          yield put(actions.clearStoriesUserAndGroup());
+        }
       }
     }
   );
@@ -257,8 +287,12 @@ function* BackendSaga(): SagaIterator {
     if (config) {
       yield put(actions.setCourseConfiguration(config));
 
-      yield put(actions.getStoriesUser());
-      // TODO: Fetch associated stories group ID
+      if (config.enableStories) {
+        yield put(actions.getStoriesUser());
+        // TODO: Fetch associated stories group ID
+      } else {
+        yield put(actions.clearStoriesUserAndGroup());
+      }
     }
   });
 
@@ -271,15 +305,6 @@ function* BackendSaga(): SagaIterator {
     );
     if (assessmentOverviews) {
       yield put(actions.updateAssessmentOverviews(assessmentOverviews));
-    }
-  });
-
-  yield takeEvery(FETCH_ALL_USER_XP, function* () {
-    const tokens: Tokens = yield selectTokens();
-
-    const res: { all_users_xp: string[][] } = yield call(getAllUserXp, tokens);
-    if (res) {
-      yield put(actions.updateAllUserXp(res.all_users_xp));
     }
   });
 
@@ -377,6 +402,24 @@ function* BackendSaga(): SagaIterator {
   });
 
   yield takeEvery(
+    CHECK_ANSWER_LAST_MODIFIED_AT,
+    function* (action: ReturnType<typeof actions.checkAnswerLastModifiedAt>): any {
+      const tokens: Tokens = yield selectTokens();
+      const questionId = action.payload.id;
+      const lastModifiedAt = action.payload.lastModifiedAt;
+      const saveAnswer = action.payload.saveAnswer;
+
+      const resp: boolean | null = yield call(
+        checkAnswerLastModifiedAt,
+        questionId,
+        lastModifiedAt,
+        tokens
+      );
+      saveAnswer(resp);
+    }
+  );
+
+  yield takeEvery(
     SUBMIT_ASSESSMENT,
     function* (action: ReturnType<typeof actions.submitAssessment>): any {
       const tokens: Tokens = yield selectTokens();
@@ -409,12 +452,20 @@ function* BackendSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.fetchGradingOverviews>) {
       const tokens: Tokens = yield selectTokens();
 
-      const filterToGroup = action.payload;
+      const role: Role = yield select((state: OverallState) => state.session.role!);
+      if (role === Role.Student) {
+        return;
+      }
 
-      const gradingOverviews: GradingOverview[] | null = yield call(
+      const { filterToGroup, gradedFilter, pageParams, filterParams } = action.payload;
+
+      const gradingOverviews: GradingOverviews | null = yield call(
         getGradingOverviews,
         tokens,
-        filterToGroup
+        filterToGroup,
+        gradedFilter,
+        pageParams,
+        filterParams
       );
       if (gradingOverviews) {
         yield put(actions.updateGradingOverviews(gradingOverviews));
@@ -422,11 +473,143 @@ function* BackendSaga(): SagaIterator {
     }
   );
 
+  yield takeEvery(
+    FETCH_TEAM_FORMATION_OVERVIEW,
+    function* (action: ReturnType<typeof actions.fetchTeamFormationOverview>) {
+      const tokens: Tokens = yield selectTokens();
+      const { assessmentId } = action.payload;
+
+      const teamFormationOverview: TeamFormationOverview | null = yield call(
+        getTeamFormationOverview,
+        assessmentId,
+        tokens
+      );
+      if (teamFormationOverview) {
+        yield put(actions.updateTeamFormationOverview(teamFormationOverview));
+      }
+    }
+  );
+
+  yield takeEvery(FETCH_TEAM_FORMATION_OVERVIEWS, function* () {
+    const tokens: Tokens = yield selectTokens();
+
+    const role: Role = yield select((state: OverallState) => state.session.role!);
+    if (role === Role.Student) {
+      return;
+    }
+
+    const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
+      getTeamFormationOverviews,
+      tokens
+    );
+    if (teamFormationOverviews) {
+      yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+    }
+  });
+
+  yield takeEvery(FETCH_STUDENTS, function* (): any {
+    const tokens: Tokens = yield selectTokens();
+    const role: Role = yield select((state: OverallState) => state.session.role!);
+    if (role === Role.Student) {
+      return;
+    }
+    const students: User[] | null = yield call(getStudents, tokens);
+    if (students) {
+      yield put(actions.updateStudents(students));
+    }
+  });
+
+  yield takeEvery(CREATE_TEAM, function* (action: ReturnType<typeof actions.createTeam>): any {
+    const tokens: Tokens = yield selectTokens();
+    const { assessment, teams } = action.payload;
+
+    const resp: Response | null = yield call(postTeams, assessment.id, teams, tokens);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
+    const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
+      getTeamFormationOverviews,
+      tokens
+    );
+    if (teamFormationOverviews) {
+      yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+    }
+    yield call(showSuccessMessage, 'Team created successfully', 1000);
+    if (resp && resp.status === 409) {
+      return yield call(showWarningMessage, resp.statusText);
+    }
+  });
+
+  yield takeEvery(
+    BULK_UPLOAD_TEAM,
+    function* (action: ReturnType<typeof actions.bulkUploadTeam>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { assessment, file, students } = action.payload;
+
+      const resp: Response | null = yield call(
+        postUploadTeams,
+        assessment.id,
+        file,
+        students,
+        tokens
+      );
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+      const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
+        getTeamFormationOverviews,
+        tokens
+      );
+
+      yield call(showSuccessMessage, 'Team created successfully', 1000);
+      if (teamFormationOverviews) {
+        yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+      }
+    }
+  );
+
+  yield takeEvery(UPDATE_TEAM, function* (action: ReturnType<typeof actions.updateTeam>): any {
+    const tokens: Tokens = yield selectTokens();
+    const { teamId, assessment, teams } = action.payload;
+    const resp: Response | null = yield call(putTeams, assessment.id, teamId, teams, tokens);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
+    const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
+      getTeamFormationOverviews,
+      tokens
+    );
+
+    yield call(showSuccessMessage, 'Team updated successfully', 1000);
+    if (teamFormationOverviews) {
+      yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+    }
+  });
+
+  yield takeEvery(DELETE_TEAM, function* (action: ReturnType<typeof actions.deleteTeam>): any {
+    const tokens: Tokens = yield selectTokens();
+    const { teamId } = action.payload;
+
+    const resp: Response | null = yield call(deleteTeam, teamId, tokens);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
+    const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
+      getTeamFormationOverviews,
+      tokens
+    );
+
+    yield call(showSuccessMessage, 'Team deleted successfully', 1000);
+    if (teamFormationOverviews) {
+      yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+    }
+  });
+
   yield takeEvery(FETCH_GRADING, function* (action: ReturnType<typeof actions.fetchGrading>) {
     const tokens: Tokens = yield selectTokens();
     const id = action.payload;
 
-    const grading: Grading | null = yield call(getGrading, id, tokens);
+    const grading: GradingQuery | null = yield call(getGrading, id, tokens);
     if (grading) {
       yield put(actions.updateGrading(id, grading));
     }
@@ -447,7 +630,7 @@ function* BackendSaga(): SagaIterator {
       }
 
       const overviews: GradingOverview[] = yield select(
-        (state: OverallState) => state.session.gradingOverviews || []
+        (state: OverallState) => state.session.gradingOverviews?.data || []
       );
       const newOverviews = overviews.map(overview => {
         if (overview.submissionId === submissionId) {
@@ -456,8 +639,14 @@ function* BackendSaga(): SagaIterator {
         return overview;
       });
 
+      const totalPossibleEntries = yield select(
+        (state: OverallState) => state.session.gradingOverviews?.count
+      );
+
       yield call(showSuccessMessage, 'Unsubmit successful', 1000);
-      yield put(actions.updateGradingOverviews(newOverviews));
+      yield put(
+        actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews })
+      );
     }
   );
 
@@ -488,10 +677,10 @@ function* BackendSaga(): SagaIterator {
     yield call(showSuccessMessage, 'Submitted!', 1000);
 
     // Now, update the grade for the question in the Grading in the store
-    const grading: Grading = yield select((state: OverallState) =>
+    const grading: GradingQuery = yield select((state: OverallState) =>
       state.session.gradings.get(submissionId)
     );
-    const newGrading = grading.slice().map((gradingQuestion: GradingQuestion) => {
+    const newGrading = grading.answers.slice().map((gradingQuestion: GradingQuestion) => {
       if (gradingQuestion.question.id === questionId) {
         gradingQuestion.grade = {
           xpAdjustment,
@@ -502,7 +691,9 @@ function* BackendSaga(): SagaIterator {
       return gradingQuestion;
     });
 
-    yield put(actions.updateGrading(submissionId, newGrading));
+    yield put(
+      actions.updateGrading(submissionId, { answers: newGrading, assessment: grading.assessment })
+    );
   };
 
   const sendGradeAndContinue = function* (
@@ -724,8 +915,12 @@ function* BackendSaga(): SagaIterator {
       yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
       yield put(actions.setCourseRegistration(courseRegistration));
 
-      yield put(actions.getStoriesUser());
-      // TODO: Fetch associated stories group ID
+      if (courseConfiguration.enableStories) {
+        yield put(actions.getStoriesUser());
+        // TODO: Fetch associated stories group ID
+      } else {
+        yield put(actions.clearStoriesUserAndGroup());
+      }
 
       yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);
     }
@@ -742,6 +937,13 @@ function* BackendSaga(): SagaIterator {
         return yield handleResponseError(resp);
       }
 
+      if (courseConfig.enableStories) {
+        yield put(actions.getStoriesUser());
+        // TODO: Fetch associated stories group ID
+      } else {
+        yield put(actions.clearStoriesUserAndGroup());
+      }
+
       yield put(actions.setCourseConfiguration(courseConfig));
       yield call(showSuccessMessage, 'Updated successfully!', 1000);
     }
@@ -754,7 +956,6 @@ function* BackendSaga(): SagaIterator {
       getAssessmentConfigs,
       tokens
     );
-
     if (assessmentConfigs) {
       yield put(actions.setAssessmentConfigurations(assessmentConfigs));
     }
@@ -945,6 +1146,13 @@ function* BackendSaga(): SagaIterator {
     yield put(actions.setUser(user));
     yield put(actions.setCourseRegistration({ role: Role.Student }));
 
+    if (courseConfiguration.enableStories) {
+      yield put(actions.getStoriesUser());
+      // TODO: Fetch associated stories group ID
+    } else {
+      yield put(actions.clearStoriesUserAndGroup());
+    }
+
     const placeholderAssessmentConfig = [
       {
         type: 'Missions',
@@ -952,6 +1160,8 @@ function* BackendSaga(): SagaIterator {
         isManuallyGraded: true,
         displayInDashboard: true,
         hoursBeforeEarlyXpDecay: 0,
+        hasTokenCounter: false,
+        hasVotingFeatures: false,
         earlySubmissionXp: 0
       }
     ];
@@ -1069,6 +1279,23 @@ function* BackendSaga(): SagaIterator {
   );
 
   yield takeEvery(
+    CHANGE_TEAM_SIZE_ASSESSMENT,
+    function* (action: ReturnType<typeof actions.changeTeamSizeAssessment>): any {
+      const tokens: Tokens = yield selectTokens();
+      const id = action.payload.id;
+      const maxTeamSize = action.payload.maxTeamSize;
+
+      const resp: Response | null = yield updateAssessment(id, { maxTeamSize }, tokens);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.fetchAssessmentOverviews());
+      yield call(showSuccessMessage, 'Team size updated successfully!', 1000);
+    }
+  );
+
+  yield takeEvery(
     DELETE_ASSESSMENT,
     function* (action: ReturnType<typeof actions.deleteAssessment>): any {
       const tokens: Tokens = yield selectTokens();
@@ -1134,6 +1361,28 @@ function* BackendSaga(): SagaIterator {
       }
 
       yield put(actions.fetchAssessmentOverviews());
+    }
+  );
+
+  yield takeEvery(
+    CONFIGURE_ASSESSMENT,
+    function* (action: ReturnType<typeof actions.configureAssessment>): any {
+      const tokens: Tokens = yield selectTokens();
+      const id = action.payload.id;
+      const hasVotingFeatures = action.payload.hasVotingFeatures;
+      const hasTokenCounter = action.payload.hasTokenCounter;
+
+      const resp: Response | null = yield updateAssessment(
+        id,
+        { hasVotingFeatures: hasVotingFeatures, hasTokenCounter: hasTokenCounter },
+        tokens
+      );
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.fetchAssessmentOverviews());
+      yield call(showSuccessMessage, 'Updated successfully!', 1000);
     }
   );
 }

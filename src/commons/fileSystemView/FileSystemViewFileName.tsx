@@ -2,6 +2,7 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import classes from 'src/styles/FileSystemView.module.scss';
 
 import { showSimpleErrorDialog } from '../utils/DialogHelper';
 import {
@@ -10,7 +11,7 @@ import {
 } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
-export type FileSystemViewFileNameProps = {
+type Props = {
   workspaceLocation: WorkspaceLocation;
   fileSystem: FSModule;
   basePath: string;
@@ -21,21 +22,17 @@ export type FileSystemViewFileNameProps = {
   refreshDirectory: () => void;
 };
 
-const FileSystemViewFileName: React.FC<FileSystemViewFileNameProps> = (
-  props: FileSystemViewFileNameProps
-) => {
-  const {
-    workspaceLocation,
-    fileSystem,
-    basePath,
-    fileName,
-    isDirectory,
-    isEditing,
-    setIsEditing,
-    refreshDirectory
-  } = props;
-
-  const [editedFileName, setEditedFileName] = React.useState<string>(fileName);
+const FileSystemViewFileName: React.FC<Props> = ({
+  workspaceLocation,
+  fileSystem,
+  basePath,
+  fileName,
+  isDirectory,
+  isEditing,
+  setIsEditing,
+  refreshDirectory
+}) => {
+  const [editedFileName, setEditedFileName] = React.useState(fileName);
   const dispatch = useDispatch();
 
   const handleInputOnChange = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -104,7 +101,7 @@ const FileSystemViewFileName: React.FC<FileSystemViewFileNameProps> = (
           type="text"
           autoFocus
           spellCheck={false}
-          className="file-system-view-input"
+          className={classes['file-system-view-input']}
           value={editedFileName}
           onChange={handleInputOnChange}
           onKeyDown={handleInputOnKeyDown}
@@ -112,7 +109,7 @@ const FileSystemViewFileName: React.FC<FileSystemViewFileNameProps> = (
           onBlur={handleInputOnBlur}
         />
       )}
-      {!isEditing && <div className="file-system-view-file-name">{fileName}</div>}
+      {!isEditing && <div className={classes['file-system-view-file-name']}>{fileName}</div>}
     </>
   );
 };

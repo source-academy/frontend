@@ -1,15 +1,18 @@
 import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router';
+import classes from 'src/styles/AchievementCommentCard.module.scss';
 
 import { Assessment } from '../assessment/AssessmentTypes';
 import { useTypedSelector } from '../utils/Hooks';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 
-const AchievementCommentCard: React.FC<{
+type Props = {
   assessment: Assessment;
   showToQuestion: boolean;
-}> = ({ assessment, showToQuestion }) => {
+};
+
+const AchievementCommentCard: React.FC<Props> = ({ assessment, showToQuestion }) => {
   const navigate = useNavigate();
   const courseId = useTypedSelector(store => store.session.courseId);
   const toMission = useMemo(
@@ -28,22 +31,25 @@ const AchievementCommentCard: React.FC<{
 
   return (
     <div>
-      <h1 className="assessment-feedback">Feedback</h1>
-      <div className="feedback-list">
+      <h1 className={classes['assessment-feedback']}>Feedback</h1>
+      <div className={classes['feedback-list']}>
         {assessment &&
           assessment.questions.map((question, index) => (
-            <div className="assessment-comments" key={index}>
+            <div className={classes['assessment-comments']} key={index}>
               <span>
-                <h2 className="question-header">{'Q' + (index + 1)}</h2>
+                <h2 className={classes['question-header']}>{'Q' + (index + 1)}</h2>
               </span>
 
-              <div className="box-comment">
+              <div className={classes['box-comment']}>
                 <p>{question.comments === null ? 'No Comments' : question.comments}</p>
                 <p className="xp">{'XP: ' + question.xp + '/' + question.maxXp}</p>
               </div>
 
               {showToQuestion && (
-                <button className="to-assessment-button" onClick={() => toMission(index)}>
+                <button
+                  className={classes['to-assessment-button']}
+                  onClick={() => toMission(index)}
+                >
                   {'To Question'}
                 </button>
               )}

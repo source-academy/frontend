@@ -3,14 +3,14 @@ import Draggable, { DraggableEventHandler } from 'react-draggable';
 
 import Repl, { ReplProps } from '../repl/Repl';
 
-type DraggableReplProps = {
+type Props = {
   position: { x: number; y: number };
   onDrag: DraggableEventHandler;
   disabled: boolean;
   replProps: ReplProps;
 };
 
-const DraggableRepl: React.FC<DraggableReplProps> = (props: DraggableReplProps) => {
+const DraggableRepl: React.FC<Props> = props => {
   return (
     <Draggable
       axis="y"

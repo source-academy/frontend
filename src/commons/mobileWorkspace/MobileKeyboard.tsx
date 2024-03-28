@@ -3,13 +3,11 @@ import React from 'react';
 import Draggable, { DraggableEvent, DraggableEventHandler } from 'react-draggable';
 import Keyboard from 'react-simple-keyboard';
 
-export type MobileKeyboardProps = OwnProps;
-
-type OwnProps = {
+type Props = {
   targetKeyboardInput: Ace.Editor | null;
 };
 
-const MobileKeyboard: React.FC<MobileKeyboardProps> = props => {
+const MobileKeyboard: React.FC<Props> = props => {
   const [isKeyboardShown, setIsKeyoardShown] = React.useState(false);
   const [buttonContent, setButtonContent] = React.useState('ᐸ');
   const [keyboardPosition, setKeyboardPosition] = React.useState({ x: 0, y: 0 });

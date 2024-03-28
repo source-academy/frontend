@@ -23,8 +23,10 @@ export type GradingOverview = {
   currentXp: number;
   maxXp: number;
   studentId: number;
-  studentName: string;
-  studentUsername: string;
+  studentName: string | undefined;
+  studentNames: string[] | undefined;
+  studentUsername: string | undefined;
+  studentUsernames: string[] | undefined;
   submissionId: number;
   submissionStatus: string;
   groupName: string;
@@ -32,6 +34,11 @@ export type GradingOverview = {
   gradingStatus: GradingStatus;
   questionCount: number;
   gradedCount: number;
+};
+
+export type GradingOverviews = {
+  count: number; // To support server-side pagination
+  data: GradingOverview[];
 };
 
 export type GradingOverviewWithNotifications = {
@@ -42,7 +49,23 @@ export type GradingOverviewWithNotifications = {
  * The information fetched before
  * grading a submission.
  */
-export type Grading = GradingQuestion[];
+export type GradingAnswer = GradingQuestion[];
+
+export type GradingAssessment = {
+  coverPicture: string;
+  id: number;
+  number: string;
+  reading: string;
+  story: string;
+  summaryLong: string;
+  summaryShort: string;
+  title: string;
+};
+
+export type GradingQuery = {
+  answers: GradingAnswer;
+  assessment: GradingAssessment;
+};
 
 /**
  * Encapsulates information regarding grading a
@@ -50,6 +73,11 @@ export type Grading = GradingQuestion[];
  */
 export type GradingQuestion = {
   question: AnsweredQuestion;
+  team?: Array<{
+    username: any;
+    name: string;
+    id: number;
+  }>;
   student: {
     name: string;
     username: string;
@@ -80,6 +108,7 @@ export type AnsweredQuestion = Question & Answer;
 
 type Answer = {
   autogradingResults: AutogradingResult[];
+  lastModifiedAt: string;
   prepend: string;
   postpend: string;
   testcases: Testcase[];
@@ -88,17 +117,4 @@ type Answer = {
   maxXp: number;
   solutionTemplate?: string;
   choices?: MCQChoice[];
-};
-
-export type GradingWorkspaceParams = {
-  submissionId?: string;
-  questionId?: string;
-};
-
-export type GradingNavLinkProps = {
-  data: GradingOverviewWithNotifications;
-};
-
-export type GradingCellProps = {
-  data: GradingOverview;
 };

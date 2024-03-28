@@ -1,21 +1,20 @@
-import { Classes, Dialog, HTMLSelect } from '@blueprintjs/core';
+import { Dialog, DialogBody, HTMLSelect } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import * as React from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router';
 
 import { Role } from '../application/ApplicationTypes';
 import { UserCourse } from '../application/types/SessionTypes';
 
-type DialogProps = {
+type Props = {
   isOpen: boolean;
   onClose: () => void;
   courses: UserCourse[];
   courseId?: number;
 };
 
-const DropdownCourses: React.FC<DialogProps> = props => {
+const DropdownCourses: React.FC<Props> = ({ isOpen, onClose, courses, courseId }) => {
   const navigate = useNavigate();
-  const { courses } = props;
 
   const options = courses.map(course => ({
     value: course.courseId,
@@ -25,28 +24,27 @@ const DropdownCourses: React.FC<DialogProps> = props => {
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
     navigate(`/courses/${e.currentTarget.value}`);
-    props.onClose();
+    onClose();
   };
 
   return (
     <Dialog
-      className="my-courses"
       icon={IconNames.PROPERTIES}
       isCloseButtonShown={true}
-      isOpen={props.isOpen}
-      onClose={props.onClose}
+      isOpen={isOpen}
+      onClose={onClose}
       title="My Courses"
     >
-      <div className={Classes.DIALOG_BODY}>
-        <div>Select a course to switch to:</div>
+      <DialogBody>
+        <p>Select a course to switch to:</p>
         <HTMLSelect
-          value={props.courseId}
+          value={courseId}
           options={options}
           fill
           onChange={onChangeHandler}
           disabled={courses.length <= 1}
         />
-      </div>
+      </DialogBody>
     </Dialog>
   );
 };

@@ -12,7 +12,6 @@
     align-items: center;
     color: white;
     display: flex;
-    flex-direction: row;
     padding: $default-spacing;
 
     .level {
@@ -24,19 +23,15 @@
       flex-direction: row;
 
       .level-badge {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-
         .level-icon {
+          display: block;
           background: url(#{$achievement-assets}/level-icon.png) center/contain;
           height: 2.5em;
           width: 2.5em;
         }
 
-        p {
-          font-size: 0.9em;
-          margin: 0;
+        > * {
+          margin: 0 auto;
         }
       }
 
@@ -120,7 +115,6 @@
 
     align-items: center;
     display: flex;
-    flex-direction: row;
     padding: $default-spacing;
     color: white;
 
@@ -157,9 +151,7 @@
 
     align-items: center;
     display: flex;
-    flex-direction: row;
     height: 100%;
-    overflow-y: hidden;
 
     %container {
       display: flex;
@@ -199,19 +191,16 @@
 
     .task-container {
       @extend %container;
-      height: 90%;
       list-style-type: none;
       overflow-y: auto;
       padding: 0;
       scrollbar-color: white #444;
       scrollbar-width: thin;
 
-      li {
-        margin: $default-spacing;
-      }
+      padding: $default-spacing;
 
-      li:not(:first-child) {
-        margin: 0 $default-spacing $default-spacing;
+      > * + * {
+        margin-top: $default-spacing;
       }
 
       .task {
@@ -219,31 +208,28 @@
           border-radius: 0.3rem;
           cursor: pointer;
           display: flex;
-          flex-direction: row;
+          align-items: center;
           height: $card-height;
-          transition: box-shadow 0.2s ease-out;
+          transition: box-shadow 0.2s ease-in-out;
           width: $card-width;
-          padding-bottom: 5.6em;
 
-          .dropdown-button {
-            align-items: center;
-            display: flex;
-            height: $card-height;
-            padding: 0 0 0 0.5em;
-            width: $card-height;
-          }
+          padding: 0.5em;
+          column-gap: 0.5em;
 
           .content {
             display: flex;
             flex-direction: column;
-            height: $card-height;
-            width: $card-width - $card-height;
+            justify-content: space-between;
+            height: 100%;
+            width: 100%;
 
             .heading {
               align-items: center;
               display: flex;
-              flex-direction: row;
-              height: math.div($card-height * 3, 5);
+
+              > * {
+                margin: 0;
+              }
             }
 
             .details {
@@ -255,34 +241,19 @@
                 margin: 0;
               }
 
-              .ability {
-                align-items: center;
-                display: flex;
-                flex: 1 1 50%;
-              }
-
               .deadline,
               .xp {
                 align-items: center;
                 display: flex;
-                flex: 1 1 25%;
-
-                p {
-                  padding: 0 0 0 0.3em;
-                }
+                column-gap: 0.3em;
+                width: 100%;
               }
-            }
-
-            .progress {
-              margin: 0.2em 0 0 0;
-              width: 95%;
             }
           }
         }
 
         .achievement-card:hover {
           box-shadow: 0 0 10px black;
-          transition: box-shadow 0.2s ease-in;
         }
 
         .prerequisite-container {
@@ -329,7 +300,6 @@
       $content-spacing: 0.5em;
 
       @extend %container;
-      height: 90%;
       min-width: $view-width + $default-spacing * 2;
       overflow-y: auto;
       scrollbar-color: white #444;

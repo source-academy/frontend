@@ -1,6 +1,6 @@
 import { Card, Classes, Dialog, H1, InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import * as React from 'react';
+import React from 'react';
 import Recorder from 'yareco';
 
 import ControlButton from '../../../../commons/ControlButton';

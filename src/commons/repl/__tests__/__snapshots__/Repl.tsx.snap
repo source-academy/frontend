@@ -1,60 +1,60 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Code output renders correctly 1`] = `
-<Blueprint4.Card
+<Blueprint5.Card
   elevation={0}
   interactive={false}
 >
-  <Unknown
+  <ForwardRef
     className="code-output"
   >
     display('');
-  </Unknown>
-</Blueprint4.Card>
+  </ForwardRef>
+</Blueprint5.Card>
 `;
 
 exports[`Empty output renders an empty card 1`] = `
-<Blueprint4.Card
+<Blueprint5.Card
   elevation={0}
   interactive={false}
 >
   ''
-</Blueprint4.Card>
+</Blueprint5.Card>
 `;
 
 exports[`Error output (no consoleLogs) renders correctly 1`] = `
-<Blueprint4.Card
+<Blueprint5.Card
   elevation={0}
   interactive={false}
 >
-  <Unknown
+  <ForwardRef
     className="error-output"
   >
     Expected , got .
-  </Unknown>
-</Blueprint4.Card>
+  </ForwardRef>
+</Blueprint5.Card>
 `;
 
 exports[`Error output (with consoleLogs) renders correctly 1`] = `
-<Blueprint4.Card
+<Blueprint5.Card
   elevation={0}
   interactive={false}
 >
-  <Unknown
+  <ForwardRef
     className="log-output"
   >
     a
 bb
 cccccccccccccccccccccccccccccccc
 d
-  </Unknown>
+  </ForwardRef>
   <br />
-  <Unknown
+  <ForwardRef
     className="error-output"
   >
     Expected , got .
-  </Unknown>
-</Blueprint4.Card>
+  </ForwardRef>
+</Blueprint5.Card>
 `;
 
 exports[`Repl renders correctly 1`] = `
@@ -136,7 +136,7 @@ exports[`Repl renders correctly 1`] = `
       usingSubst={false}
     />
     <HotKeysEnabled
-      className="repl-input-parent row bp4-card bp4-elevation-0"
+      className="repl-input-parent row bp5-card bp5-elevation-0"
       handlers={
         Object {
           "goGreen": [Function],
@@ -207,51 +207,51 @@ exports[`Repl renders correctly 1`] = `
 `;
 
 exports[`Result output (no consoleLogs) renders correctly 1`] = `
-<Blueprint4.Card
+<Blueprint5.Card
   elevation={0}
   interactive={false}
 >
-  <Unknown
+  <ForwardRef
     className="result-output"
   >
     42
-  </Unknown>
-</Blueprint4.Card>
+  </ForwardRef>
+</Blueprint5.Card>
 `;
 
 exports[`Result output (with consoleLogs) renders correctly 1`] = `
-<Blueprint4.Card
+<Blueprint5.Card
   elevation={0}
   interactive={false}
 >
-  <Unknown
+  <ForwardRef
     className="log-output"
   >
     a
 bb
 cccccccccccccccccccccccccccccccc
 d
-  </Unknown>
-  <Unknown
+  </ForwardRef>
+  <ForwardRef
     className="result-output"
   >
     42
-  </Unknown>
-</Blueprint4.Card>
+  </ForwardRef>
+</Blueprint5.Card>
 `;
 
 exports[`Running output renders correctly 1`] = `
-<Blueprint4.Card
+<Blueprint5.Card
   elevation={0}
   interactive={false}
 >
-  <Unknown
+  <ForwardRef
     className="log-output"
   >
     a
 bb
 cccccccccccccccccccccccccccccccc
 d
-  </Unknown>
-</Blueprint4.Card>
+  </ForwardRef>
+</Blueprint5.Card>
 `;

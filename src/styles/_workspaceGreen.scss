@@ -30,22 +30,22 @@ $dark-green: #00e000;
   }
 
   /* individual components */
-  .bp4-button {
+  .#{$ns}-button {
     background: $pure-green !important;
     box-shadow: none !important;
   }
 
-  .bp4-input {
+  .#{$ns}-input {
     background: $pure-green !important;
     box-shadow: none !important;
   }
 
-  .bp4-control-indicator {
+  .#{$ns}-control-indicator {
     background: $pure-green !important;
     border: 0.1rem solid $dark-green !important;
   }
 
-  .bp4-control-indicator::before {
+  .#{$ns}-control-indicator::before {
     background: $pure-green !important;
     border: 0.1rem solid $dark-green !important;
     box-shadow: none !important;

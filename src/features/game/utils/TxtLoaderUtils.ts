@@ -51,7 +51,7 @@ export async function callGameManagerForSim() {
   const scene = SourceAcademyGame.getInstance().getCurrentSceneRef();
   const checkpointFilenames = SourceAcademyGame.getInstance().getSSChapterSimFilenames();
   if (!checkpointFilenames.length) {
-    scene.scene.start('StorySimulatorMenu');
+    scene.scene.start('GameSimulatorMenu');
     return;
   }
   const filename = checkpointFilenames.pop() as string;
