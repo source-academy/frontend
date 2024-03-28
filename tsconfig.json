@@ -19,6 +19,7 @@
     "strictNullChecks": true,
     "skipLibCheck": true,
     "suppressImplicitAnyIndexErrors": true,
+    "ignoreDeprecations": "5.0",
     "noUnusedLocals": true,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,

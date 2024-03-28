@@ -6,6 +6,7 @@ import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 import ControlButton from '../ControlButton';
 import Constants from '../utils/Constants';
+import { shortenURLRequest } from '../sagas/PlaygroundSaga';
 
 type ControlBarShareButtonProps = DispatchProps & StateProps;
 
@@ -20,11 +21,13 @@ type StateProps = {
   shortURL?: string;
   key: string;
   isSicp?: boolean;
+  programConfig: object
 };
 
 type State = {
   keyword: string;
   isLoading: boolean;
+  isSuccess: boolean;
 };
 
 export class ControlBarShareButton extends React.PureComponent<ControlBarShareButtonProps, State> {
@@ -36,7 +39,28 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
     this.handleChange = this.handleChange.bind(this);
     this.toggleButton = this.toggleButton.bind(this);
     this.shareInputElem = React.createRef();
-    this.state = { keyword: '', isLoading: false };
+    this.state = { keyword: '', isLoading: false, isSuccess: false };
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.handleKeyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  handleKeyDown = (event: any) => {
+    if (event.key === 'Enter' && event.ctrlKey) {
+      // console.log('Ctrl+Enter pressed!');
+      this.setState({ keyword: "Test" })
+      this.props.handleShortenURL(this.state.keyword);
+      this.setState({ isLoading: true });
+      if (this.props.shortURL || this.props.isSicp) {
+        this.selectShareInputText();
+        console.log("link created.")
+      }
+    }
   }
 
   public render() {
@@ -57,8 +81,12 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
         </div>
       ) : (
         <>
-          {!this.props.shortURL || this.props.shortURL === 'ERROR' ? (
+        {/* check this.props.postSuccess */}
+          {/* {!this.props.shortURL || this.props.shortURL === 'ERROR' ? (
+            !this.state.isLoading || this.props.shortURL === 'ERROR' ? ( */}
+            {!this.state.isSuccess || this.props.shortURL === 'ERROR' ? (
             !this.state.isLoading || this.props.shortURL === 'ERROR' ? (
+              
               <div>
                 {Constants.urlShortenerBase}&nbsp;
                 <input
@@ -66,12 +94,37 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
                   onChange={this.handleChange}
                   style={{ width: 175 }}
                 />
+                <>{console.log(this.props.programConfig)}</>
                 <ControlButton
                   label="Get Link"
                   icon={IconNames.SHARE}
                   onClick={() => {
-                    this.props.handleShortenURL(this.state.keyword);
-                    this.setState({ isLoading: true });
+                    // post request to backend, set keyword as return uuid
+                    const requestBody = {
+                      shared_program: {
+                        data: this.props.programConfig
+                      }
+                    };
+                    const fetchOpts: RequestInit = {
+                      method: 'POST',
+                      body: JSON.stringify(requestBody),
+                      headers: {
+                        'Content-Type': 'application/json'
+                      }
+                    };
+                    fetch("http://localhost:4000/api/shared_programs", fetchOpts)
+                    .then(res => {
+                      return res.json()
+                    })
+                    .then(resp => {
+                      this.setState({ keyword: resp.uuid })
+                      console.log(resp)
+                    })
+                    .catch(err => console.log("Error: ", err));
+
+                    // this.props.handleShortenURL(this.state.keyword);
+                    // console.log("base", this.props.shortURL)
+                    this.setState({ isLoading: true, isSuccess: true });
                   }}
                 />
               </div>
@@ -84,10 +137,13 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
               </div>
             )
           ) : (
-            <div key={this.props.shortURL}>
-              <input defaultValue={this.props.shortURL} readOnly={true} ref={this.shareInputElem} />
+            // <div key={this.props.shortURL}>
+            <div key={this.state.keyword}>
+              {/* <input defaultValue={this.props.shortURL} readOnly={true} ref={this.shareInputElem} /> */}
+              <input defaultValue={this.state.keyword} readOnly={true} ref={this.shareInputElem} />
               <Tooltip2 content="Copy link to clipboard">
-                <CopyToClipboard text={this.props.shortURL}>
+                {/* <CopyToClipboard text={this.props.shortURL}> */}
+                <CopyToClipboard text={this.state.keyword}>
                   <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectShareInputText} />
                 </CopyToClipboard>
               </Tooltip2>
@@ -97,15 +153,15 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
       );
 
     return (
-      <Popover2
-        popoverClassName="Popover-share"
-        inheritDarkTheme={false}
-        content={shareButtonPopoverContent}
-      >
-        <Tooltip2 content="Get shareable link" placement={Position.TOP}>
-          <ControlButton label="Share" icon={IconNames.SHARE} onClick={() => this.toggleButton()} />
-        </Tooltip2>
-      </Popover2>
+        <Popover2
+          popoverClassName="Popover-share"
+          inheritDarkTheme={false}
+          content={shareButtonPopoverContent}
+        >
+          <Tooltip2 content="Get shareable link" placement={Position.TOP}>
+            <ControlButton label="Share" icon={IconNames.SHARE} onClick={() => this.toggleButton()} />
+          </Tooltip2>
+        </Popover2>
     );
   }
 
@@ -121,8 +177,8 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
     }
 
     // reset state
-    this.props.handleUpdateShortURL('');
-    this.setState({ keyword: '', isLoading: false });
+    // this.props.handleUpdateShortURL('');
+    this.setState({ keyword: '', isLoading: false, isSuccess: false });
   }
 
   private handleChange(event: React.FormEvent<HTMLInputElement>) {
@@ -135,4 +191,7 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
       this.shareInputElem.current.select();
     }
   }
+
+ 
+  
 }

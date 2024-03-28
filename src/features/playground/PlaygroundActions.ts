@@ -11,6 +11,7 @@ import {
   SHORTEN_URL,
   UPDATE_SHORT_URL
 } from './PlaygroundTypes';
+import { programConfig } from 'src/pages/playground/Decoder';
 
 export const generateLzString = () => action(GENERATE_LZ_STRING);
 
@@ -19,6 +20,8 @@ export const shortenURL = (keyword: string) => action(SHORTEN_URL, keyword);
 export const updateShortURL = (shortURL: string) => action(UPDATE_SHORT_URL, shortURL);
 
 export const changeQueryString = (queryString: string) => action(CHANGE_QUERY_STRING, queryString);
+
+// export const changeProgramConfig = (config: programConfig) => action(CHANGE_PROGRAM_CONFIG, config);
 
 export const playgroundUpdatePersistenceFile = (file?: PersistenceFile) =>
   action(PLAYGROUND_UPDATE_PERSISTENCE_FILE, file);
