@@ -13,7 +13,7 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { useSession } from 'src/commons/utils/Hooks';
 
 import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
@@ -64,10 +64,6 @@ const GroundControl: React.FC<Props> = props => {
 
   const resizeGrid = () => {
     gridApi.current?.sizeColumnsToFit();
-  };
-
-  const toggleDropzone = () => {
-    setShowDropzone(!showDropzone);
   };
 
   const columnDefs: ColDef<AssessmentOverview>[] = [
@@ -179,21 +175,24 @@ const GroundControl: React.FC<Props> = props => {
     sortable: true
   };
 
-  const controls = (
-    <div className="GridControls ground-control-controls">
-      <Button
-        active={showDropzone}
-        icon={IconNames.CLOUD_UPLOAD}
-        intent={showDropzone ? Intent.PRIMARY : Intent.NONE}
-        onClick={toggleDropzone}
-      >
-        <span className="hidden-xs">Upload assessment</span>
-      </Button>
-      <DefaultChapterSelect />
-      <Button icon={IconNames.REFRESH} onClick={props.handleAssessmentOverviewFetch}>
-        <span className="hidden-xs">Refresh assessments</span>
-      </Button>
-    </div>
+  const controls = useMemo(
+    () => (
+      <div className="GridControls ground-control-controls">
+        <Button
+          active={showDropzone}
+          icon={IconNames.CLOUD_UPLOAD}
+          intent={showDropzone ? Intent.PRIMARY : Intent.NONE}
+          onClick={() => setShowDropzone(prev => !prev)}
+        >
+          <span className="hidden-xs">Upload assessment</span>
+        </Button>
+        <DefaultChapterSelect />
+        <Button icon={IconNames.REFRESH} onClick={props.handleAssessmentOverviewFetch}>
+          <span className="hidden-xs">Refresh assessments</span>
+        </Button>
+      </div>
+    ),
+    [props.handleAssessmentOverviewFetch, showDropzone]
   );
 
   const dropzone = (
