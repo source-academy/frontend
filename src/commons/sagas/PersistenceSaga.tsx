@@ -1,4 +1,5 @@
 import { Intent } from '@blueprintjs/core';
+import { FSModule } from 'browserfs/dist/node/core/FS';
 import { GoogleOAuthProvider, SuccessTokenResponse } from 'google-oauth-gsi';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { SagaIterator } from 'redux-saga';
@@ -16,6 +17,8 @@ import { store } from '../../pages/createStore';
 import { OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { LOGIN_GOOGLE, LOGOUT_GOOGLE } from '../application/types/SessionTypes';
+import { retrieveFilesInWorkspaceAsRecord, rmFilesInDirRecursively, writeFileRecursively } from '../fileSystem/FileSystemUtils';
+import { refreshFileView } from '../fileSystemView/FileSystemViewList'; // TODO broken when folder is open when reading folders
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { showSimpleConfirmDialog, showSimplePromptDialog } from '../utils/DialogHelper';
@@ -27,9 +30,6 @@ import {
 } from '../utils/notifications/NotificationsHelper';
 import { AsyncReturnType } from '../utils/TypeHelper';
 import { safeTakeEvery as takeEvery, safeTakeLatest as takeLatest } from './SafeEffects';
-import { FSModule } from 'browserfs/dist/node/core/FS';
-import { retrieveFilesInWorkspaceAsRecord, rmFilesInDirRecursively, writeFileRecursively } from '../fileSystem/FileSystemUtils';
-import { refreshFileView } from '../fileSystemView/FileSystemViewList'; // TODO broken when folder is open when reading folders
 
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
 const SCOPES =

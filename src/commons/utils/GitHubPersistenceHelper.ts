@@ -4,7 +4,9 @@ import { Octokit } from '@octokit/rest';
  * Returns an instance to Octokit created using the authentication token
  */
 export function generateOctokitInstance(authToken: string) {
-  const octokit = new Octokit({
+  const octokitPlugin = Octokit.plugin(require('octokit-commit-multiple-files'));
+  console.log('testttt');
+  const octokit = new octokitPlugin({
     auth: authToken,
     userAgent: 'Source Academy Playground',
     baseUrl: 'https://api.github.com',

@@ -6,14 +6,14 @@ import React from 'react';
 import { useDispatch, useStore } from 'react-redux';
 import classes from 'src/styles/FileSystemView.module.scss';
 
+import { OverallState } from '../application/ApplicationTypes';
+import { actions } from '../utils/ActionsHelper';
 import { showSimpleConfirmDialog } from '../utils/DialogHelper';
 import { addEditorTab, removeEditorTabForFile } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
-import { OverallState } from '../application/ApplicationTypes';
-import { actions } from '../utils/ActionsHelper';
 
 type Props = {
   workspaceLocation: WorkspaceLocation;

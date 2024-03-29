@@ -1,6 +1,8 @@
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import Stats from 'browserfs/dist/node/core/node_fs_stats';
 import path from 'path';
+import { GitHubSaveInfo } from 'src/features/github/GitHubTypes';
+import { store } from 'src/pages/createStore';
 
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
@@ -263,3 +265,19 @@ export const writeFileRecursively = (
     });
   });
 };
+
+export const getGithubSaveInfo = () => {
+  const githubSaveInfoArray = store.getState().fileSystem.githubSaveInfoArray;
+  const { 
+    editorTabs,
+    activeEditorTabIndex
+  } = store.getState().workspaces['playground'];
+  let currentFilePath = '';
+  if (activeEditorTabIndex !== null) {
+    currentFilePath = editorTabs[activeEditorTabIndex].filePath?.slice(12) || '';
+  }
+  const nullGithubSaveInfo: GitHubSaveInfo = { repoName: 'test', filePath: '', lastSaved: new Date() };
+  const githubSaveInfo = githubSaveInfoArray.find(githubSaveInfo => githubSaveInfo.filePath === currentFilePath) || nullGithubSaveInfo;
+
+  return githubSaveInfo;
+}

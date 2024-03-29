@@ -69,14 +69,15 @@ import {
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import {
   githubOpenFile,
+  githubSaveAll,
   githubSaveFile,
   githubSaveFileAs
 } from 'src/features/github/GitHubActions';
 import {
   persistenceInitialise,
   persistenceOpenPicker,
-  persistenceSaveFile,
   persistenceSaveAll,
+  persistenceSaveFile,
   persistenceSaveFileAs
 } from 'src/features/persistence/PersistenceActions';
 import {
@@ -111,7 +112,7 @@ import {
   NormalEditorContainerProps
 } from '../../commons/editor/EditorContainer';
 import { Position } from '../../commons/editor/EditorTypes';
-import { overwriteFilesInWorkspace } from '../../commons/fileSystem/FileSystemUtils';
+import { getGithubSaveInfo, overwriteFilesInWorkspace } from '../../commons/fileSystem/FileSystemUtils';
 import FileSystemView from '../../commons/fileSystemView/FileSystemView';
 import MobileWorkspace, {
   MobileWorkspaceProps
@@ -264,9 +265,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
     context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant }
   } = useTypedSelector(state => state.workspaces[workspaceLocation]);
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
-  const { queryString, shortURL, persistenceObject, githubSaveInfo } = useTypedSelector(
+  const { queryString, shortURL, persistenceObject} = useTypedSelector(
     state => state.playground
   );
+  const githubSaveInfo = getGithubSaveInfo();
+  console.log(githubSaveInfo);
   const {
     sourceChapter: courseSourceChapter,
     sourceVariant: courseSourceVariant,
@@ -631,6 +634,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         onClickOpen={() => dispatch(githubOpenFile())}
         onClickSaveAs={() => dispatch(githubSaveFileAs())}
         onClickSave={() => dispatch(githubSaveFile())}
+        onClickSaveAll={() => dispatch(githubSaveAll())}
         onClickLogIn={() => dispatch(loginGitHub())}
         onClickLogOut={() => dispatch(logoutGitHub())}
       />

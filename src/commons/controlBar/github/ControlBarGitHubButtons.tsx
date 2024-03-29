@@ -16,6 +16,7 @@ type Props = {
   onClickOpen?: () => void;
   onClickSave?: () => void;
   onClickSaveAs?: () => void;
+  onClickSaveAll?: () => void;
   onClickLogIn?: () => void;
   onClickLogOut?: () => void;
 };
@@ -83,7 +84,7 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
     <ControlButton
       label="Save All"
       icon={IconNames.DOUBLE_CHEVRON_UP}
-      onClick={props.onClickSaveAs}
+      onClick={props.onClickSaveAll}
       isDisabled={shouldDisableButtons}
     />
   );

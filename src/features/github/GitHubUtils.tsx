@@ -1,9 +1,13 @@
 import { Octokit } from '@octokit/rest';
+
 import {
   GetResponseDataTypeFromEndpointMethod,
   GetResponseTypeFromEndpointMethod
 } from '@octokit/types';
+import { FSModule } from 'browserfs/dist/node/core/FS';
 
+import { rmFilesInDirRecursively,writeFileRecursively } from '../../commons/fileSystem/FileSystemUtils';
+import { refreshFileView } from '../../commons/fileSystemView/FileSystemViewList';
 import { actions } from '../../commons/utils/ActionsHelper';
 import { showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
 import {
@@ -11,9 +15,6 @@ import {
   showWarningMessage
 } from '../../commons/utils/notifications/NotificationsHelper';
 import { store } from '../../pages/createStore';
-import { writeFileRecursively, rmFilesInDirRecursively } from '../../commons/fileSystem/FileSystemUtils';
-import { FSModule } from 'browserfs/dist/node/core/FS';
-import { refreshFileView } from '../../commons/fileSystemView/FileSystemViewList';
 
 /**
  * Exchanges the Access Code with the back-end to receive an Auth-Token
@@ -225,7 +226,13 @@ export async function openFileInEditor(
       throw new Error('No active editor tab found.');
     }
     store.dispatch(actions.updateEditorValue('playground', activeEditorTabIndex, newEditorValue));
-    store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath, new Date()));
+    store.dispatch(actions.addGithubSaveInfo(
+      {
+        repoName: repoName,
+        filePath: filePath,
+        lastSaved: new Date()
+      }
+    ))
     showSuccessMessage('Successfully loaded file!', 1000);
   }
 }
@@ -288,10 +295,12 @@ export async function openFolderInFolderMode(
     let promise = Promise.resolve();
     type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
     files.forEach((file: string) => {
-      console.log(file);
       promise = promise.then(async () => {
         let results = {} as GetContentResponse;
         if (file.startsWith(filePath)) {
+          console.log(repoOwner);
+          console.log(repoName);
+          console.log(file);
           results = await octokit.repos.getContent({
             owner: repoOwner,
             repo: repoName,
@@ -349,6 +358,9 @@ export async function performOverwritingSave(
 
   try {
     type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+    console.log(repoOwner);
+    console.log(repoName);
+    console.log(filePath);
     const results: GetContentResponse = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,
@@ -375,13 +387,81 @@ export async function performOverwritingSave(
       committer: { name: githubName, email: githubEmail },
       author: { name: githubName, email: githubEmail }
     });
-    //
-    store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath, new Date()));
+    
+    store.dispatch(actions.updateGithubSaveInfo(repoName, filePath, new Date()));
+
+    //this is just so that playground is forcefully updated
+    store.dispatch(actions.playgroundUpdateRepoName(repoName));
     showSuccessMessage('Successfully saved file!', 1000);
   } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to save the file.', 1000);
   }
+}
+
+export async function performMultipleOverwritingSave(
+  octokit: Octokit,
+  repoOwner: string,
+  repoName: string,
+  githubName: string | null,
+  githubEmail: string | null,
+  changes: { commitMessage: string, files: Record<string, string> }
+) {
+  if (octokit === undefined) return;
+
+  githubEmail = githubEmail || 'No public email provided';
+  githubName = githubName || 'Source Academy User';
+  changes.commitMessage = changes.commitMessage || 'Changes made from Source Academy';
+
+  for (const filePath of Object.keys(changes.files)) {
+    console.log(filePath);
+    changes.files[filePath] = Buffer.from(changes.files[filePath], 'utf8').toString('base64');
+    try {
+      type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+      console.log(repoOwner);
+      console.log(repoName);
+      console.log(filePath);
+      const results: GetContentResponse = await octokit.repos.getContent({
+        owner: repoOwner,
+        repo: repoName,
+        path: filePath
+      });
+  
+      type GetContentData = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+      const files: GetContentData = results.data;
+  
+      // Cannot save over folder
+      if (Array.isArray(files)) {
+        return;
+      }
+
+      store.dispatch(actions.updateGithubSaveInfo(repoName, filePath.slice(12), new Date()));
+    } catch (err) {
+      console.error(err);
+      showWarningMessage('Something went wrong when trying to save the file.', 1000);
+    }
+  }
+
+  try {
+    await (octokit as any).createOrUpdateFiles({
+      owner: repoOwner,
+      repo: repoName,
+      createBranch: false,
+      branch: 'main',
+      changes: [{
+        message: changes.commitMessage,
+        files: changes.files
+      }]
+    })
+
+    //this is to forcefully update playground
+    store.dispatch(actions.playgroundUpdateRepoName(repoName));
+    showSuccessMessage('Successfully saved file!', 1000);
+  } catch (err) {
+    console.error(err);
+    showWarningMessage('Something went wrong when trying to save the file.', 1000);
+  }
+  
 }
 
 export async function performCreatingSave(

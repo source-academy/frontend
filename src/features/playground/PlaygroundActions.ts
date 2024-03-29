@@ -9,10 +9,9 @@ import {
   PLAYGROUND_UPDATE_LANGUAGE_CONFIG,
   PLAYGROUND_UPDATE_PERSISTENCE_FILE,
   PLAYGROUND_UPDATE_PERSISTENCE_FOLDER,
+  PLAYGROUND_UPDATE_REPO_NAME,
   SHORTEN_URL,
-  UPDATE_SHORT_URL,
-  PLAYGROUND_UPDATE_REPO_NAME
-} from './PlaygroundTypes';
+  UPDATE_SHORT_URL} from './PlaygroundTypes';
 
 export const generateLzString = createAction(GENERATE_LZ_STRING, () => ({ payload: {} }));
 

@@ -9833,6 +9833,11 @@ obuf@^1.0.0, obuf@^1.1.2:
   resolved "https://registry.yarnpkg.com/obuf/-/obuf-1.1.2.tgz#09bea3343d41859ebd446292d11c9d4db619084e"
   integrity sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==
 
+octokit-commit-multiple-files@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/octokit-commit-multiple-files/-/octokit-commit-multiple-files-5.0.2.tgz#be7b30e521a25b1c3163f2221234bc97166d2077"
+  integrity sha512-tHAFIwLZlbC/lodw5gDCBLLG3UtXTTjYFJyW4Lcjrq6H2fz5tXo9P+sc77+87FROp2K3LtSIkFlxenH7BtyGqg==
+
 on-finished@2.4.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/on-finished/-/on-finished-2.4.1.tgz#58c8c44116e54845ad57f14ab10b03533184ac3f"

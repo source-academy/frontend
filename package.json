@@ -60,6 +60,7 @@
     "mdast-util-to-hast": "^13.0.0",
     "moment": "^2.29.4",
     "normalize.css": "^8.0.1",
+    "octokit-commit-multiple-files": "^5.0.2",
     "phaser": "^3.55.2",
     "query-string": "^9.0.0",
     "re-resizable": "^6.9.9",

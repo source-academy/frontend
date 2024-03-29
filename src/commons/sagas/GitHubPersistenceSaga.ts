@@ -7,6 +7,7 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import {
   GITHUB_OPEN_FILE,
+  GITHUB_SAVE_ALL,
   GITHUB_SAVE_FILE,
   GITHUB_SAVE_FILE_AS
 } from '../../features/github/GitHubTypes';
@@ -15,6 +16,7 @@ import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
 import { OverallState } from '../application/ApplicationTypes';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
+import { getGithubSaveInfo, retrieveFilesInWorkspaceAsRecord } from '../fileSystem/FileSystemUtils';
 import FileExplorerDialog, { FileExplorerDialogProps } from '../gitHubOverlay/FileExplorerDialog';
 import RepositoryDialog, { RepositoryDialogProps } from '../gitHubOverlay/RepositoryDialog';
 import { actions } from '../utils/ActionsHelper';
@@ -22,6 +24,7 @@ import Constants from '../utils/Constants';
 import { promisifyDialog } from '../utils/DialogHelper';
 import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
 import { EditorTabState } from '../workspace/WorkspaceTypes';
+import { FSModule } from 'browserfs/dist/node/core/FS';
 
 export function* GitHubPersistenceSaga(): SagaIterator {
   yield takeLatest(LOGIN_GITHUB, githubLoginSaga);
@@ -30,6 +33,7 @@ export function* GitHubPersistenceSaga(): SagaIterator {
   yield takeLatest(GITHUB_OPEN_FILE, githubOpenFile);
   yield takeLatest(GITHUB_SAVE_FILE, githubSaveFile);
   yield takeLatest(GITHUB_SAVE_FILE_AS, githubSaveFileAs);
+  yield takeLatest(GITHUB_SAVE_ALL, githubSaveAll);
 }
 
 function* githubLoginSaga() {
@@ -113,8 +117,9 @@ function* githubSaveFile(): any {
   const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
 
   const githubLoginId = authUser.data.login;
-  const repoName = store.getState().playground.githubSaveInfo.repoName;
-  const filePath = store.getState().playground.githubSaveInfo.filePath;
+  const githubSaveInfo = getGithubSaveInfo();
+  const repoName = githubSaveInfo.repoName;
+  const filePath = githubSaveInfo.filePath;
   const githubEmail = authUser.data.email;
   const githubName = authUser.data.name;
   const commitMessage = 'Changes made from Source Academy';
@@ -190,6 +195,74 @@ function* githubSaveFileAs(): any {
 
     yield call(promisifiedFileExplorer);
   }
+}
+
+function* githubSaveAll(): any {
+  const octokit = getGitHubOctokitInstance();
+  if (octokit === undefined) return;
+
+  type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
+    typeof octokit.users.getAuthenticated
+  >;
+  const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
+  
+  const githubLoginId = authUser.data.login;
+  const githubSaveInfo = getGithubSaveInfo();
+  const repoName = githubSaveInfo.repoName;
+  const githubEmail = authUser.data.email;
+  const githubName = authUser.data.name;
+  const commitMessage = 'Changes made from Source Academy';
+  const fileSystem: FSModule | null = yield select(
+    (state: OverallState) => state.fileSystem.inBrowserFileSystem
+  );
+  // If the file system is not initialised, do nothing.
+  if (fileSystem === null) {
+    yield call(console.log, "no filesystem!");
+    return;
+  }
+  yield call(console.log, "there is a filesystem");
+  const currFiles: Record<string, string> = yield call(retrieveFilesInWorkspaceAsRecord, "playground", fileSystem);
+  const modifiedcurrFiles : Record<string, string> = {};
+  for (const filePath of Object.keys(currFiles)) {
+    modifiedcurrFiles[filePath.slice(12)] = currFiles[filePath];
+  }
+  console.log(modifiedcurrFiles);
+
+  yield call(GitHubUtils.performMultipleOverwritingSave,
+      octokit,
+      githubLoginId,
+      repoName,
+      githubEmail,
+      githubName,
+      { commitMessage: commitMessage, files: modifiedcurrFiles});
+
+  // for (const filePath of Object.keys(currFiles)) {
+  //   const content = currFiles[filePath];
+  //   yield call(GitHubUtils.performOverwritingSave,
+  //     octokit,
+  //     githubLoginId,
+  //     repoName,
+  //     filePath.slice(12),
+  //     githubEmail,
+  //     githubName,
+  //     commitMessage,
+  //     content);
+  // }
+
+  // const activeEditorTabIndex: number | null = yield select(
+  //   (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
+  // );
+  // if (activeEditorTabIndex === null) {
+  //   throw new Error('No active editor tab found.');
+  // }
+  // const editorTabs: EditorTabState[] = yield select(
+  //   (state: OverallState) => state.workspaces.playground.editorTabs
+  // );
+  // const content = editorTabs[activeEditorTabIndex].value;
+
+  
+
+  
 }
 
 export default GitHubPersistenceSaga;
