@@ -7,7 +7,6 @@ import { useDispatch, useStore } from 'react-redux';
 import classes from 'src/styles/FileSystemView.module.scss';
 
 import { OverallState } from '../application/ApplicationTypes';
-import { actions } from '../utils/ActionsHelper';
 import { showSimpleConfirmDialog } from '../utils/DialogHelper';
 import { addEditorTab, removeEditorTabForFile } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
@@ -53,13 +52,6 @@ const FileSystemViewFileNode: React.FC<Props> = ({
       const editorFilePath = store.getState().workspaces['playground'].editorTabs[idx].filePath || '';
       console.log(repoName);
       console.log(editorFilePath);
-      store.dispatch(actions.updateEditorGithubSaveInfo(
-        'playground',
-        idx,
-        repoName,
-        editorFilePath,
-        new Date()
-      ));
       console.log(store.getState().workspaces['playground'].editorTabs);
     });
   };

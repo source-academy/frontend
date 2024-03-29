@@ -82,7 +82,6 @@ import {
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_CURRENTSTEP,
   UPDATE_EDITOR_BREAKPOINTS,
-  UPDATE_EDITOR_GITHUB_SAVE_INFO,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_LAST_DEBUGGER_RESULT,
@@ -837,8 +836,7 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
         filePath,
         value: editorValue,
         highlightedLines: [],
-        breakpoints: [],
-        githubSaveInfo: {repoName: '', filePath: ''}
+        breakpoints: []
       };
       const newEditorTabs: EditorTabState[] = [
         ...state[workspaceLocation].editorTabs,

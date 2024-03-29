@@ -5,7 +5,7 @@ import { EventType } from '../../../../features/achievement/AchievementTypes';
 import { DeviceSession } from '../../../../features/remoteExecution/RemoteExecutionTypes';
 import { WORKSPACE_BASE_PATHS } from '../../../../pages/fileSystem/createInBrowserFileSystem';
 import { OverallState } from '../../../application/ApplicationTypes';
-import { retrieveFilesInWorkspaceAsRecord } from '../../../fileSystem/utils';
+import { retrieveFilesInWorkspaceAsRecord } from '../../../fileSystem/FileSystemUtils';
 import { actions } from '../../../utils/ActionsHelper';
 import { makeElevatedContext } from '../../../utils/JsSlangHelper';
 import {

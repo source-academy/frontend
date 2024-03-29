@@ -24,7 +24,7 @@ import {
 } from '../../application/types/InterpreterTypes';
 import { Library, Testcase } from '../../assessment/AssessmentTypes';
 import { Documentation } from '../../documentation/Documentation';
-import { writeFileRecursively } from '../../fileSystem/utils';
+import { writeFileRecursively } from '../../fileSystem/FileSystemUtils';
 import { resetSideContent } from '../../sideContent/SideContentActions';
 import { actions } from '../../utils/ActionsHelper';
 import {

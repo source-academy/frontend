@@ -366,8 +366,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
         : undefined,
       value: ['playground', 'sourcecast'].includes(workspaceLocation) ? defaultEditorValue : '',
       highlightedLines: [],
-      breakpoints: [],
-      githubSaveInfo: { repoName:'', filePath:''}
+      breakpoints: []
     }
   ],
   programPrependValue: '',
@@ -435,8 +434,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
         filePath: getDefaultFilePath('playground'),
         value: defaultEditorValue,
         highlightedLines: [],
-        breakpoints: [],
-        githubSaveInfo: {repoName:'', filePath:''}
+        breakpoints: []
       }
     ]
   },
@@ -490,8 +488,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
         filePath: getDefaultFilePath('sicp'),
         value: defaultEditorValue,
         highlightedLines: [],
-        breakpoints: [],
-        githubSaveInfo: {repoName:'', filePath:''}
+        breakpoints: []
       }
     ]
   },

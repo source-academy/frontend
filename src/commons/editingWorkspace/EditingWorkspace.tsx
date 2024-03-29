@@ -321,8 +321,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
         {
           value: editorValue,
           highlightedLines: [],
-          breakpoints: [],
-          githubSaveInfo: {repoName: '', filePath: ''}
+          breakpoints: []
         }
       ],
       programPrependValue,

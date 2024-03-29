@@ -41,7 +41,7 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
       state.githubSaveInfoArray = [];
     })
     .addCase(addPersistenceFile, (state, action) => {
-      const persistenceFilePayload = action.payload.persistenceFile;
+      const persistenceFilePayload = action.payload;
       const persistenceFileArray = state['persistenceFileArray'];
       const persistenceFileIndex = persistenceFileArray.findIndex(e => e.id === persistenceFilePayload.id);
       if (persistenceFileIndex === -1) {
@@ -52,7 +52,7 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
       state.persistenceFileArray = persistenceFileArray;
     })
     .addCase(deletePersistenceFile, (state, action) => {
-      const newPersistenceFileArray = state['persistenceFileArray'].filter(e => e.id !== action.payload.persistenceFile.id);
+      const newPersistenceFileArray = state['persistenceFileArray'].filter(e => e.id !== action.payload.id);
       state.persistenceFileArray = newPersistenceFileArray;
     })
     .addCase(deleteAllPersistenceFiles, (state, action) => {
