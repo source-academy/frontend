@@ -42,6 +42,10 @@ export default class ActionConditionChecker {
         return GameGlobalAPI.getInstance().isObjectiveComplete(conditionParams.id) === boolean;
       case GameStateStorage.TasklistState:
         return GameGlobalAPI.getInstance().isTaskComplete(conditionParams.id) === boolean;
+      case GameStateStorage.AttemptedQuizState:
+        return GameGlobalAPI.getInstance().isQuizAttempted(conditionParams.id) === boolean;
+      case GameStateStorage.CompletedQuizState:
+        return GameGlobalAPI.getInstance().isQuizComplete(conditionParams.id) === boolean;
       default:
         return true;
     }
