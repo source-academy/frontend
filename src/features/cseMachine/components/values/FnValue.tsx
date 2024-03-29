@@ -1,4 +1,3 @@
-import { Environment } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import {
@@ -19,6 +18,7 @@ import {
   getNonEmptyEnv,
   getParamsText,
   getTextWidth,
+  isEmptyEnvironment,
   isMainReference
 } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
@@ -29,8 +29,8 @@ import { Value } from './Value';
  *  contains extra props such as environment and fnName */
 export class FnValue extends Value implements IHoverable {
   /** name of this function */
-  radius: number = Config.FnRadius;
-  innerRadius: number = Config.FnInnerRadius;
+  readonly radius: number = Config.FnRadius;
+  readonly innerRadius: number = Config.FnInnerRadius;
   tooltipWidth!: number;
   centerX!: number;
 
@@ -47,19 +47,36 @@ export class FnValue extends Value implements IHoverable {
   enclosingEnvNode!: EnvTreeNode;
   readonly labelRef: RefObject<any> = React.createRef();
 
-  // derive the coordinates from the main reference (binding / array unit)
-  private constructFnValue(mainReference: ReferenceType) {
-    if (mainReference instanceof Binding) {
-      this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
-      this._y = mainReference.y();
+  constructor(
+    /** underlying JS Slang function (contains extra props) */
+    readonly data: Closure,
+    /** what this value is being referenced by */
+    firstReference: ReferenceType
+  ) {
+    super();
+    // Workaround for `stream_tail`, as the closure will always be linked to the
+    // "functionBodyEnvironment" which might be empty
+    if (isEmptyEnvironment(data.environment)) {
+      data.environment = getNonEmptyEnv(data.environment);
+    }
+    Layout.memoizeValue(this);
+    this.addReference(firstReference);
+  }
+
+  handleNewReference(newReference: ReferenceType): void {
+    if (!isMainReference(this, newReference)) return;
+    // derive the coordinates from the main reference (binding / array unit)
+    if (newReference instanceof Binding) {
+      this._x = newReference.frame.x() + newReference.frame.width() + Config.FrameMarginX / 4;
+      this._y = newReference.y();
       this.centerX = this._x + this.radius * 2;
     } else {
-      if (mainReference.isLastUnit) {
-        this._x = mainReference.x() + Config.DataUnitWidth * 2;
-        this._y = mainReference.y() + Config.DataUnitHeight / 2 - this.radius;
+      if (newReference.isLastUnit) {
+        this._x = newReference.x() + Config.DataUnitWidth * 2;
+        this._y = newReference.y() + Config.DataUnitHeight / 2 - this.radius;
       } else {
-        this._x = mainReference.x();
-        this._y = mainReference.y() + mainReference.parent.height() + Config.DataUnitHeight;
+        this._x = newReference.x();
+        this._y = newReference.y() + newReference.parent.height() + Config.DataUnitHeight;
       }
       this.centerX = this._x + Config.DataUnitWidth / 2;
       this._x = this.centerX - this.radius * 2;
@@ -70,7 +87,7 @@ export class FnValue extends Value implements IHoverable {
     this._height = this.radius * 2;
 
     this.enclosingEnvNode = Layout.environmentTree.getTreeNode(
-      getNonEmptyEnv(this.data.environment) as Environment
+      this.data.environment
     ) as EnvTreeNode;
     this.fnName = this.data.functionName;
 
@@ -90,33 +107,6 @@ export class FnValue extends Value implements IHoverable {
     );
   }
 
-  constructor(
-    /** underlying JS Slang function (contains extra props) */
-    readonly data: Closure,
-    /** what this value is being referenced by */
-    readonly referencedBy: ReferenceType[]
-  ) {
-    super();
-    Layout.memoizeValue(this);
-
-    // Values are always contructed with referencedBy having a single reference
-    const reference = referencedBy[0];
-    if (isMainReference(this, reference)) {
-      this.constructFnValue(reference);
-    }
-  }
-
-  addReference(newReference: ReferenceType): void {
-    super.addReference(newReference);
-    // We are assuming that there will be eventually a main reference
-    if (isMainReference(this, newReference)) {
-      this.constructFnValue(newReference);
-      for (const reference of this.referencedBy) {
-        if (reference instanceof Binding) reference.updateArrow();
-      }
-    }
-  }
-
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
     this.ref.current.moveToTop();
@@ -127,8 +117,11 @@ export class FnValue extends Value implements IHoverable {
     if (CseMachine.getPrintableMode()) return;
     this.labelRef.current.hide();
   };
-  updatePosition(): void {}
+
   draw(): React.ReactNode {
+    if (this.fnName === undefined) {
+      throw new Error('Closure has no main reference and is not initialised!');
+    }
     this._arrow =
       this.enclosingEnvNode.frame &&
       (new ArrowFromFn(this).to(this.enclosingEnvNode.frame) as ArrowFromFn);

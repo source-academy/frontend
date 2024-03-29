@@ -47,39 +47,20 @@ export type Unassigned = symbol;
 /** types of primitives in JS Slang  */
 export type Primitive = number | string | boolean | null | undefined;
 
-/** types of functions in JS Slang */
-// export type Closure = {
-//   /** the function itself */
-//   (): any;
-
-//   /** the enclosing environment */
-//   environment: Environment;
-
-//   /** string representation of the function */
-//   functionName: string;
-
-//   /** unique id of the function */
-//   id: string;
-
-//   node: any;
-
-//   preDefined?: boolean;
-// };
-
-/** type of an in-built function in JS Slang  */
+/** types of in-built functions in JS Slang */
 export type GlobalFn = Function;
 
-/** type of a closure in JS Slang redefined here for convenience.  */
+/** types of functions in JS Slang */
 export type Closure = JsSlangClosure;
 
-/** type of an array in JS Slang */
+/** types of arrays in JS Slang */
 export type DataArray = Data[] & {
-  id: string;
-  environment: Environment;
+  readonly id: string;
+  environment: Env;
 };
 
 /** the types of data in the JS Slang context */
-export type Data = Primitive | JsSlangClosure | GlobalFn | Unassigned | DataArray;
+export type Data = Primitive | Closure | GlobalFn | Unassigned | DataArray;
 
 /** modified `Environment` to store children and associated frame */
 export type Env = Environment;

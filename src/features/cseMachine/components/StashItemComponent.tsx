@@ -10,8 +10,8 @@ import { Layout } from '../CseMachineLayout';
 import { IHoverable } from '../CseMachineTypes';
 import {
   getTextWidth,
-  isArray,
   isClosure,
+  isDataArray,
   isStashItemInDanger,
   setHoveredCursor,
   setHoveredStyle,
@@ -46,7 +46,7 @@ export class StashItemComponent extends Visible implements IHoverable {
         ? `'${val}'`.trim()
         : isClosure(val)
         ? 'closure'
-        : isArray(val)
+        : isDataArray(val)
         ? arrowTo
           ? 'pair/array'
           : JSON.stringify(val)

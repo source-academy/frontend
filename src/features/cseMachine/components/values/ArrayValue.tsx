@@ -17,18 +17,31 @@ export class ArrayValue extends Value {
   /** array of units this array is made of */
   units: ArrayUnit[] = [];
 
-  // derive the coordinates from the main reference (binding / array unit)
-  private constructArrayValue(mainReference: ReferenceType) {
-    if (mainReference instanceof Binding) {
-      this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX;
-      this._y = mainReference.y();
+  constructor(
+    /** underlying values this array contains */
+    readonly data: DataArray,
+    /** what this value is being referenced by */
+    firstReference: ReferenceType
+  ) {
+    super();
+    Layout.memoizeValue(this);
+    this.addReference(firstReference);
+  }
+
+  handleNewReference(newReference: ReferenceType): void {
+    if (!isMainReference(this, newReference)) return;
+
+    // derive the coordinates from the main reference (binding / array unit)
+    if (newReference instanceof Binding) {
+      this._x = newReference.frame.x() + newReference.frame.width() + Config.FrameMarginX;
+      this._y = newReference.y();
     } else {
-      if (mainReference.isLastUnit) {
-        this._x = mainReference.x() + Config.DataUnitWidth * 2;
-        this._y = mainReference.y();
+      if (newReference.isLastUnit) {
+        this._x = newReference.x() + Config.DataUnitWidth * 2;
+        this._y = newReference.y();
       } else {
-        this._x = mainReference.x();
-        this._y = mainReference.y() + mainReference.parent.height() + Config.DataUnitHeight;
+        this._x = newReference.x();
+        this._y = newReference.y() + newReference.parent.height() + Config.DataUnitHeight;
       }
     }
 
@@ -62,39 +75,6 @@ export class ArrayValue extends Value {
       this.units = [unit, ...this.units];
     }
   }
-
-  constructor(
-    /** underlying values this array contains */
-    readonly data: DataArray,
-    /** what this value is being referenced by */
-    readonly referencedBy: ReferenceType[]
-  ) {
-    super();
-    Layout.memoizeValue(this);
-
-    const reference = referencedBy[0];
-    if (isMainReference(this, reference)) {
-      this.constructArrayValue(reference);
-    }
-  }
-
-  addReference(newReference: ReferenceType): void {
-    super.addReference(newReference);
-    // We are assuming that there will be eventually a main reference
-    if (isMainReference(this, newReference)) {
-      this.constructArrayValue(newReference);
-      for (const reference of this.referencedBy) {
-        if (reference instanceof Binding) reference.updateArrow();
-      }
-    }
-  }
-
-  reset(): void {
-    super.reset();
-    this.units.map(x => x.reset());
-    this.referencedBy.length = 0;
-  }
-  updatePosition(): void {}
 
   draw(): React.ReactNode {
     if (this.isDrawn()) return null;

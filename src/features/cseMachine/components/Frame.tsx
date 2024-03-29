@@ -10,7 +10,7 @@ import {
   currentItemSAColor,
   getTextWidth,
   getUnreferencedObjects,
-  isArray,
+  isDataArray,
   isPrimitiveData,
   isUnassigned,
   setDifference
@@ -105,9 +105,9 @@ export class Frame extends Visible implements IHoverable {
     // dummy bindings, as they should be drawn around the original parent array instead
     const nestedArrays = new Set<DataArray>();
     for (const value of unreferencedValues) {
-      if (isArray(value)) {
+      if (isDataArray(value)) {
         for (const data of value) {
-          if (isArray(data) && data !== value) {
+          if (isDataArray(data) && data !== value) {
             nestedArrays.add(data);
             // Since deeply nested arrays always come first inside the heap order, there is no need
             // to do a recursive search for deeply nested arrays, as they would have already been

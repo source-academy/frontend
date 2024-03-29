@@ -3,7 +3,7 @@ import React from 'react';
 import { Config } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Data } from '../CseMachineTypes';
-import { isArray, isClosure, isDummyKey, isMainReference } from '../CseMachineUtils';
+import { isDummyKey, isEnvEqual, isGlobalFn, isMainReference } from '../CseMachineUtils';
 import { ArrowFromText } from './arrows/ArrowFromText';
 import { GenericArrow } from './arrows/GenericArrow';
 import { Frame } from './Frame';
@@ -42,7 +42,9 @@ export class Binding extends Visible {
     readonly isConstant: boolean = false
   ) {
     super();
-    this.isDummyBinding = isDummyKey(this.keyString);
+    this.isDummyBinding =
+      isDummyKey(this.keyString) ||
+      (isEnvEqual(frame.environment, Layout.globalEnvNode.environment) && isGlobalFn(data));
 
     // derive the coordinates from the binding above it
     if (this.prevBinding) {
@@ -104,7 +106,7 @@ export class Binding extends Visible {
           ? null // omit the key since value is anonymous
           : this.key.draw()}
         {this.arrow?.draw()}
-        {(!isClosure(this.data) && !isArray(this.data)) || isMainReference(this.value, this)
+        {isMainReference(this.value, this)
           ? this.value.draw()
           : null}
       </React.Fragment>

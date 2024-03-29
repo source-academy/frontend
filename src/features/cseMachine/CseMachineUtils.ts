@@ -69,9 +69,18 @@ export function isEmptyEnvironment(env: Env): env is Env & { head: EmptyObject }
   return env === null || isEmptyObject(env.head);
 }
 
-/** Returns `true` if `data` is a Javascript array */
-export function isArray(data: Data): data is DataArray {
-  return Array.isArray(data); // && 'id' in data && 'environment' in data;
+/** Returns `true` if `data` is an array */
+export function isArray(data: any): data is any[] {
+  return Array.isArray(data);
+}
+
+/** Returns `true` if `data` is a JS Slang array with properties `id` and `environment` */
+export function isDataArray(data: any): data is DataArray {
+  return (
+    isArray(data) &&
+    {}.hasOwnProperty.call(data, 'id') &&
+    {}.hasOwnProperty.call(data, 'environment')
+  );
 }
 
 /** Returns `true` if `x` is a Javascript function */
@@ -81,7 +90,11 @@ export function isFunction(x: any): x is Function {
 
 /** Returns `true` if `data` is a JS Slang closure */
 export function isClosure(data: Data): data is Closure {
-  return isFunction(data) && 'environment' in data && 'functionName' in data;
+  return (
+    isFunction(data) &&
+    {}.hasOwnProperty.call(data, 'environment') &&
+    {}.hasOwnProperty.call(data, 'functionName')
+  );
 }
 
 /** Returns `true` if `x` is a JS Slang function in the global frame */
@@ -129,7 +142,7 @@ type ExtendedSet<T> = Set<T> & {
   difference(other: Set<T>): Set<T>;
 };
 
-/** Returns the elements in `set1` that are not in `set2` */
+/** Returns a set with the elements in `set1` that are not in `set2` */
 export function setDifference<T>(set1: Set<T>, set2: Set<T>) {
   if ('difference' in Set.prototype) {
     return (set1 as ExtendedSet<T>).difference(set2);
@@ -151,60 +164,36 @@ export function convertClosureToGlobalFn(fn: Closure) {
 }
 
 /**
- * Returns the main reference of `value`. The main reference priority order is as follows:
- * 1. The first `ArrayUnit` inside `value.referencedBy` that also shares the same environment
- * 2. The first `Binding` inside `value.referencedBy` that also shares the same environment
- * 3. The first reference `value.referencedBy[0]`.
+ * Returns `true` if `reference` is the main reference of `value`. The main reference priority
+ * order is as follows:
+ * 1. The first `ArrayUnit` inside `value.references` that also shares the same environment
+ * 2. The first `Binding` inside `value.references` that also shares the same environment
  *
- * An exception is for a global function value, in which case the first binding is always
- * prioritised.
+ * An exception is for a global function value, in which case the global frame binding is
+ * always prioritised.
  */
-export function getMainReference(value: Value): ReferenceType {
-  if (isGlobalFn(value.data)) {
-    return value.referencedBy.find(r => r instanceof Binding) ?? value.referencedBy[0];
-  }
-  if (isClosure(value.data) || isArray(value.data)) {
-    const valueEnv = value.data.environment;
-    // First find if value is referenced by an array in the same environment
-    const arrayUnit = value.referencedBy.find(
-      r => r instanceof ArrayUnit && isEnvEqual(r.parent.data.environment, valueEnv)
-    );
-    if (arrayUnit) return arrayUnit;
-    // Then find the first binding in the same environment
-    return (
-      value.referencedBy.find(
-        r => r instanceof Binding && isEnvEqual(r.frame.environment, valueEnv)
-      ) ?? value.referencedBy[0]
-    );
-  }
-  return value.referencedBy[0];
-}
-
-/** Returns `true` if `reference` is the main reference of `value` */
 export function isMainReference(value: Value, reference: ReferenceType) {
-  if (!isClosure(value.data) && !isArray(value.data)) {
-    return false;
+  if (isGlobalFn(value.data)) {
+    return (
+      reference instanceof Binding &&
+      isEnvEqual(reference.frame.environment, Layout.globalEnvNode.environment)
+    );
+  }
+  if (!isClosure(value.data) && !isDataArray(value.data)) {
+    return true;
   }
   const valueEnv = value.data.environment;
-  const mainRef = getMainReference(value);
-  return (
-    mainRef === reference &&
-    isEnvEqual(
-      valueEnv,
-      reference instanceof Binding ? reference.frame.environment : reference.parent.data.environment
-    )
+  const firstArrayUnit = value.references.find(
+    r => r instanceof ArrayUnit && isEnvEqual(r.parent.data.environment, valueEnv)
   );
-  // if (value instanceof FnValue) {
-  //   // chooses the frame of the enclosing environment, not necessarily the first in referencedBy.
-  //   return (
-  //     value.enclosingEnvNode === binding.frame.envTreeNode &&
-  //     value.referencedBy.findIndex(x => x instanceof Binding && x === binding) !== -1
-  //   );
-  // } else if (value instanceof GlobalFnValue) {
-  //   return value.referencedBy.find(x => x instanceof Binding) === binding;
-  // } else {
-  //   return value.referencedBy[0] === binding;
-  // }
+  if (firstArrayUnit) {
+    return reference === firstArrayUnit;
+  } else {
+    const firstBinding = value.references.find(
+      r => r instanceof Binding && isEnvEqual(r.frame.environment, valueEnv)
+    );
+    return reference === firstBinding;
+  }
 }
 
 /** checks if `value` is a `number` */
@@ -249,7 +238,7 @@ export function getTextWidth(
       ''
     );
   const metrics = context.measureText(longestLine);
-  return metrics.width;
+  return Math.ceil(metrics.width * 10) / 10;
 }
 
 /**
@@ -283,7 +272,7 @@ export function getTextHeight(
 }
 
 /** Returns the parameter string of the given function */
-export function getParamsText(data: Closure | GlobalFn): string {
+export function getParamsText(data: Function): string {
   if (isClosure(data)) {
     return data.node.params.map((node: any) => node.name).join(',');
   } else {
@@ -293,7 +282,7 @@ export function getParamsText(data: Closure | GlobalFn): string {
 }
 
 /** Returns the body string of the given function */
-export function getBodyText(data: Closure | GlobalFn): string {
+export function getBodyText(data: Function): string {
   const fnString = data.toString();
   if (isClosure(data)) {
     let body =
@@ -361,11 +350,15 @@ export function setUnhoveredStyle(target: Node | Group, unhoveredAttrs: any = {}
   });
 }
 
-/** Extracts the non-empty tail environment from the given environment */
-export function getNonEmptyEnv(environment: Env | null): Env | null {
-  if (environment === null) {
-    return null;
-  } else if (isEmptyEnvironment(environment)) {
+/**
+ * Extracts the non-empty tail environment from the given environment.
+ * Returns the current environment if the tail is null.
+ */
+export function getNonEmptyEnv(environment: Env): Env {
+  if (isEmptyEnvironment(environment)) {
+    if (environment.tail === null) {
+      return environment;
+    }
     return getNonEmptyEnv(environment.tail);
   } else {
     return environment;
@@ -387,14 +380,14 @@ function findObjects(
   environment: Env,
   set: Set<DataArray | Closure>,
   array: any[],
-  visited = new Set<any[]>() // needed for circular references
+  visited = new Set<any[]>() // needed to track circular references
 ): void {
   if (visited.has(array)) return;
   visited.add(array);
   for (const item of array) {
-    if (isArray(item) || isClosure(item)) {
+    if (isDataArray(item) || isClosure(item)) {
       if (isEnvEqual(item.environment, environment)) set.add(item);
-      if (isArray(item)) findObjects(environment, set, item, visited);
+      if (isDataArray(item)) findObjects(environment, set, item, visited);
     }
   }
 }
@@ -439,7 +432,7 @@ export function copyOwnPropertyDescriptors(source: any, destination: any) {
   } else if (isEnvironment(source) && isEnvironment(destination)) {
     // TODO: revisit this approach of copying the raw values and descriptors from source,
     // as this defeats the purpose of deep cloning by referencing the original values again.
-    // Perhaps, there should be a new deep cloning function that also clones property descriptors
+    // Perhaps, there should be a new deep cloning function that also clones property descriptors.
 
     // copy descriptors from source frame to destination frame
     Object.defineProperties(destination.head, Object.getOwnPropertyDescriptors(source.head));
@@ -753,7 +746,7 @@ export function getControlItemComponent(
 }
 
 export function getStashItemComponent(stashItem: StashValue, stackHeight: number, index: number) {
-  if (isClosure(stashItem) || isGlobalFn(stashItem) || isArray(stashItem)) {
+  if (isClosure(stashItem) || isGlobalFn(stashItem) || isDataArray(stashItem)) {
     for (const level of Layout.levels) {
       for (const frame of level.frames) {
         if (isClosure(stashItem) || isGlobalFn(stashItem)) {
@@ -768,7 +761,7 @@ export function getStashItemComponent(stashItem: StashValue, stackHeight: number
           if (fn) return new StashItemComponent(stashItem, stackHeight, index, fn);
         } else {
           const ar: ArrayValue | undefined = frame.bindings.find(binding => {
-            if (isArray(binding.data)) {
+            if (isDataArray(binding.data)) {
               return binding.data === stashItem;
             }
             return false;
