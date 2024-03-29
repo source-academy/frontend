@@ -33,6 +33,8 @@ class GameStateManager {
   private checkpointObjective: GameObjective;
   private checkpointTask: GameTask;
   private chapterNewlyCompleted: boolean;
+  private completedQuizzes: ItemId[];
+  private attemptedQuizzes: ItemId[];
 
   // Triggered Interactions
   private updatedLocations: Set<LocationId>;
@@ -46,6 +48,8 @@ class GameStateManager {
     this.checkpointObjective = gameCheckpoint.objectives;
     this.checkpointTask = gameCheckpoint.tasks;
     this.chapterNewlyCompleted = false;
+    this.attemptedQuizzes = [];
+    this.completedQuizzes = [];
 
     this.updatedLocations = new Set(this.gameMap.getLocationIds());
     this.triggeredInteractions = new Map<ItemId, boolean>();
@@ -82,6 +86,8 @@ class GameStateManager {
         this.checkpointTask.showTask(task);
       });
 
+    this.completedQuizzes = this.getSaveManager().getCompletedQuizzes();
+    this.attemptedQuizzes = this.getSaveManager().getAttemptedQuizzes();
     this.chapterNewlyCompleted = this.getSaveManager().getChapterNewlyCompleted();
   }
 
@@ -448,6 +454,52 @@ class GameStateManager {
   }
 
   ///////////////////////////////
+  //          Quiz             //
+  ///////////////////////////////
+
+  /**
+   * Checks whether a specific quiz has been completed.
+   *
+   * @param key quiz id
+   * @returns {boolean}
+   */
+  public isQuizComplete(quizId: string): boolean {
+    return this.completedQuizzes.includes(quizId);
+  }
+
+  /**
+   * Checks whether a specific quiz has been attempted.
+   *
+   * @param key quiz id
+   * @returns {boolean}
+   */
+  public isQuizAttempted(quizId: string): boolean {
+    return this.attemptedQuizzes.includes(quizId);
+  }
+
+  /**
+   * Record that a quiz has been completed.
+   * A quiz is completed when its maximum score is obtained.
+   *
+   * @param key task id
+   */
+  public completeQuiz(quizId: string) {
+    if (!this.completedQuizzes.includes(quizId)) this.completedQuizzes.push(quizId);
+    console.log(this.completedQuizzes);
+  }
+
+  /**
+   * Record that a quiz has been attempted.
+   * A quiz is attempted when user answers all questions.
+   *
+   * @param key task id
+   */
+  public attemptQuiz(quizId: string) {
+    if (!this.attemptedQuizzes.includes(quizId)) this.attemptedQuizzes.push(quizId);
+    console.log(this.attemptedQuizzes);
+  }
+
+  ///////////////////////////////
   //          Saving           //
   ///////////////////////////////
 
@@ -495,6 +547,24 @@ class GameStateManager {
    */
   public getTriggeredStateChangeActions(): string[] {
     return this.triggeredStateChangeActions;
+  }
+
+  /**
+   * Gets array of all quizzes that have been completed.
+   *
+   * @returns {ItemId[]}
+   */
+  public getCompletedQuizzes(): ItemId[] {
+    return this.completedQuizzes;
+  }
+
+  /**
+   * Gets array of all quizzes that have been attempted.
+   *
+   * @returns {ItemId[]}
+   */
+  public getAttemptedQuizzes(): ItemId[] {
+    return this.attemptedQuizzes;
   }
 
   public getGameMap = () => this.gameMap;

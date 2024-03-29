@@ -514,8 +514,25 @@ class GameGlobalAPI {
   /////////////////////
   //   Game Quiz     //
   /////////////////////
+
   public async showQuiz(quizId: ItemId) {
     await this.getGameManager().getQuizManager().showQuiz(quizId);
+  }
+
+  public isQuizAttempted(key: string): boolean {
+    return this.getGameManager().getStateManager().isQuizAttempted(key);
+  }
+
+  public isQuizComplete(key: string): boolean {
+    return this.getGameManager().getStateManager().isQuizComplete(key);
+  }
+
+  public completeQuiz(key: string): void {
+    this.getGameManager().getStateManager().completeQuiz(key);
+  }
+
+  public attemptQuiz(key: string): void {
+    this.getGameManager().getStateManager().attemptQuiz(key);
   }
 }
 

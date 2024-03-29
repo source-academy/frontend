@@ -28,6 +28,8 @@ export default class QuizManager {
     for (let i = 0; i < quiz.questions.length; i++ ) {
         numOfCorrect += await this.showQuizQuestion(GameGlobalAPI.getInstance().getGameManager(), quiz.questions[i]);
     }
+    GameGlobalAPI.getInstance().attemptQuiz(quizId);
+    if (numOfCorrect === numOfQns) GameGlobalAPI.getInstance().completeQuiz(quizId);
     await this.showResult(numOfQns, numOfCorrect);
   }
 

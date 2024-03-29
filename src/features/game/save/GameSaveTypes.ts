@@ -20,6 +20,8 @@ export type FullSaveState = {
  * @prop {string[]} completedObjectives - list of objectives that have been completed by player
  * @prop {string[]} triggeredInteractions - list of itemIds that have been triggered by player
  * @prop {string[]} triggeredActions - list of actions that have been triggered by player
+ * @prop {string[]} attemptedQuizzes - list of quiz ids that have been attempted by player
+ * @prop {string[]} completedQuizzes - list of quiz ids that have been completed by player
  */
 export type GameSaveState = {
   lastCheckpointPlayed: number;
@@ -32,6 +34,8 @@ export type GameSaveState = {
   completedObjectives: string[];
   triggeredInteractions: string[];
   triggeredStateChangeActions: string[];
+  attemptedQuizzes: string[];
+  completedQuizzes: string[];
 };
 
 /**
