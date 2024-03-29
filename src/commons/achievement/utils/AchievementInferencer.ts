@@ -288,7 +288,6 @@ class AchievementInferencer {
     // finally, process the nodeList
     this.processNodes();
     this.normalizePositions(achievement.uuid, achievement.position);
-
     return newUuid;
   }
 
