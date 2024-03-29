@@ -34,6 +34,7 @@
     "@octokit/rest": "^20.0.0",
     "@reduxjs/toolkit": "^1.9.7",
     "@sentry/browser": "^7.57.0",
+    "@sourceacademy/c-slang": "^1.0.18",
     "@sourceacademy/sharedb-ace": "^2.0.2",
     "@sourceacademy/sling-client": "^0.1.0",
     "@szhsin/react-menu": "^4.0.0",
