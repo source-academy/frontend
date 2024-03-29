@@ -194,7 +194,7 @@ const codeSamplesControlStash = [
     }
     math_sin(math_PI / 2); 
     `,
-    6
+    5
   ],
   [
     'Control is truncated properly',
