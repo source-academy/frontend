@@ -769,7 +769,7 @@ async function getFilesOfFolder( // recursively get files
   let fileList: gapi.client.drive.File[] | undefined;
   
   await gapi.client.drive.files.list({
-    q: '\'' + folderId + '\'' + ' in parents and trashed = false',
+    q: `'${folderId}' in parents and trashed = false`
   }).then(res => {
     fileList = res.result.files
   });
@@ -858,8 +858,8 @@ async function getContainingFolderIdRecursively( // TODO memoize?
   let folderList: gapi.client.drive.File[] | undefined;
 
   await gapi.client.drive.files.list({
-    q: '\'' + immediateParentFolderId + '\'' + ' in parents and trashed = false and mimeType = \''
-       + "application/vnd.google-apps.folder" + '\'',
+    q: `'${immediateParentFolderId}' in parents and trashed = false and mimeType = '`
+       + 'application/vnd.google-apps.folder\''
   }).then(res => {
     folderList = res.result.files
   });

@@ -2,6 +2,7 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { persistenceRenameFile, persistenceRenameFolder } from 'src/features/persistence/PersistenceActions';
 import classes from 'src/styles/FileSystemView.module.scss';
 
 import { showSimpleErrorDialog } from '../utils/DialogHelper';
@@ -10,7 +11,6 @@ import {
   renameEditorTabsForDirectory
 } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import { persistenceRenameFile, persistenceRenameFolder } from 'src/features/persistence/PersistenceActions';
 
 type Props = {
   workspaceLocation: WorkspaceLocation;

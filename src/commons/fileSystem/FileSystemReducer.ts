@@ -4,13 +4,12 @@ import { Reducer } from 'redux';
 import { defaultFileSystem } from '../application/ApplicationTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import { 
-  setInBrowserFileSystem,
   addGithubSaveInfo,
-  deleteAllGithubSaveInfo,
-  deleteGithubSaveInfo,
   addPersistenceFile,
+  deleteAllGithubSaveInfo,
+  deleteAllPersistenceFiles,  deleteGithubSaveInfo,
   deletePersistenceFile,
-  deleteAllPersistenceFiles } from './FileSystemActions';
+  setInBrowserFileSystem } from './FileSystemActions';
 import { FileSystemState } from './FileSystemTypes';
 
 export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = createReducer(
@@ -25,7 +24,7 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
         const githubSaveInfoArray = state['githubSaveInfoArray']
 
         const saveInfoIndex = githubSaveInfoArray.findIndex(e => e === githubSaveInfoPayload);
-        if (saveInfoIndex == -1) {
+        if (saveInfoIndex === -1) {
           githubSaveInfoArray[githubSaveInfoArray.length] = githubSaveInfoPayload;
         } else {
           // file already exists, to replace file

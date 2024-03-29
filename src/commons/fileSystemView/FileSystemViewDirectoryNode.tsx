@@ -4,6 +4,7 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { persistenceCreateFile, persistenceCreateFolder, persistenceDeleteFolder } from 'src/features/persistence/PersistenceActions';
 import classes from 'src/styles/FileSystemView.module.scss';
 
 import { rmdirRecursively } from '../fileSystem/FileSystemUtils';
@@ -15,7 +16,6 @@ import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
 import FileSystemViewList from './FileSystemViewList';
 import FileSystemViewPlaceholderNode from './FileSystemViewPlaceholderNode';
-import { persistenceCreateFile, persistenceCreateFolder, persistenceDeleteFolder } from 'src/features/persistence/PersistenceActions';
 
 type Props = {
   workspaceLocation: WorkspaceLocation;

@@ -1,6 +1,6 @@
 import { createAction } from '@reduxjs/toolkit';
 
-import { GITHUB_OPEN_FILE, GITHUB_SAVE_FILE, GITHUB_SAVE_FILE_AS, GITHUB_SAVE_ALL } from './GitHubTypes';
+import { GITHUB_OPEN_FILE, GITHUB_SAVE_ALL,GITHUB_SAVE_FILE, GITHUB_SAVE_FILE_AS } from './GitHubTypes';
 
 export const githubOpenFile = createAction(GITHUB_OPEN_FILE, () => ({ payload: {} }));
 

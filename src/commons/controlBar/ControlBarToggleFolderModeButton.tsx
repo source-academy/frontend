@@ -32,7 +32,7 @@ export const ControlBarToggleFolderModeButton: React.FC<Props> = ({
           iconColor: isFolderModeEnabled ? Colors.BLUE4 : undefined
         }}
         onClick={toggleFolderMode}
-        isDisabled={isSessionActive || false && isPersistenceActive}
+        isDisabled={isSessionActive || isPersistenceActive}
       />
     </Tooltip2>
   );

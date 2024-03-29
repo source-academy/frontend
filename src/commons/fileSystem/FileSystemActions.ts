@@ -1,17 +1,16 @@
 import { createAction } from '@reduxjs/toolkit';
-import { GitHubSaveInfo } from 'src/features/github/GitHubTypes';
 import { FSModule } from 'browserfs/dist/node/core/FS';
+import { GitHubSaveInfo } from 'src/features/github/GitHubTypes';
+import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 
 import { 
   ADD_GITHUB_SAVE_INFO,
-  DELETE_ALL_GITHUB_SAVE_INFO,
-  DELETE_GITHUB_SAVE_INFO,
-  SET_IN_BROWSER_FILE_SYSTEM,
-  UPDATE_GITHUB_SAVE_INFO,
   ADD_PERSISTENCE_FILE,
+  DELETE_ALL_GITHUB_SAVE_INFO,
+  DELETE_ALL_PERSISTENCE_FILES,  DELETE_GITHUB_SAVE_INFO,
   DELETE_PERSISTENCE_FILE, 
-  DELETE_ALL_PERSISTENCE_FILES } from './FileSystemTypes';
-import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
+  SET_IN_BROWSER_FILE_SYSTEM,
+  UPDATE_GITHUB_SAVE_INFO } from './FileSystemTypes';
 
 export const setInBrowserFileSystem = createAction(
   SET_IN_BROWSER_FILE_SYSTEM,
