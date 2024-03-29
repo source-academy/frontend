@@ -37,8 +37,6 @@ export default class QuizParser {
     Parser.validator.registerId(quizId);
     const rawQuestions: Map<string, string[]> = StringUtils.mapByHeader(quizBody, isInteger);
     const questions: Question[] = this.parseQuizQuestions(rawQuestions);
-    const result: boolean[] = new Array<boolean>(questions.length);
-    console.log(quizId + ":" + result);
     const quiz: Quiz = { questions: questions };
     Parser.checkpoint.map.setItemInMap(GameItemType.quizzes, quizId, quiz);
   }
