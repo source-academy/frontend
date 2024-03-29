@@ -9,13 +9,13 @@ import DialogueRenderer from '../dialogue/GameDialogueRenderer';
 //import DialogueSpeakerRenderer from '../dialogue/GameDialogueSpeakerRenderer';
 import { DialogueObject } from "../dialogue/GameDialogueTypes";
 import { questionTextStyle } from './GameQuizConstants';
-
+import { QuizSpeakerRenderer } from './GameQuizSpeakerRenderer';
 
 export default class GameQuizReactionManager {
     private dialogue: DialogueObject;
     private dialogueRenderer? : DialogueRenderer;
     private dialogueGenerator? : DialogueGenerator;
-    //private speakerRenderer? : DialogueSpeakerRenderer;
+    private speakerRenderer? : QuizSpeakerRenderer;
 
 
     constructor(dialogue: DialogueObject) {
@@ -25,7 +25,7 @@ export default class GameQuizReactionManager {
     public async showReaction() : Promise<void> {
         this.dialogueRenderer = new DialogueRenderer(questionTextStyle);
         this.dialogueGenerator = new DialogueGenerator(this.dialogue);
-        //this.speakerRenderer = new DialogueSpeakerRenderer();
+        this.speakerRenderer = new QuizSpeakerRenderer();
 
         GameGlobalAPI.getInstance().addToLayer(
             Layer.Dialogue,
@@ -35,7 +35,7 @@ export default class GameQuizReactionManager {
           GameGlobalAPI.getInstance().fadeInLayer(Layer.Dialogue);
           await new Promise(resolve => this.playWholeDialogue(resolve as () => void));
           this.getDialogueRenderer().destroy();
-          //this.getSpeakerRenderer().changeSpeakerTo(null);
+          this.getSpeakerRenderer().changeSpeakerTo(null);
     }
 
     private async playWholeDialogue(resolve: () => void) {
@@ -53,7 +53,7 @@ export default class GameQuizReactionManager {
           await this.getDialogueGenerator().generateNextLine();
         const lineWithName = line.replace('{name}', this.getUsername());
         this.getDialogueRenderer().changeText(lineWithName);
-        //this.getSpeakerRenderer().changeSpeakerTo(speakerDetail);
+        this.getSpeakerRenderer().changeSpeakerTo(speakerDetail);
     
         // Store the current line into the storage
         GameGlobalAPI.getInstance().storeDialogueLine(lineWithName, speakerDetail);
@@ -83,6 +83,6 @@ export default class GameQuizReactionManager {
 
     private getDialogueGenerator = () => this.dialogueGenerator as DialogueGenerator;
     private getDialogueRenderer = () => this.dialogueRenderer as DialogueRenderer;
-    //private getSpeakerRenderer = () => this.speakerRenderer as DialogueSpeakerRenderer;
+    private getSpeakerRenderer = () => this.speakerRenderer as QuizSpeakerRenderer;
     public getUsername = () => SourceAcademyGame.getInstance().getAccountInfo().name;
 }
