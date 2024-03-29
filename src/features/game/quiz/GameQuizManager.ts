@@ -55,7 +55,8 @@ export default class QuizManager {
 
       const header = new Phaser.GameObjects.Text(
         scene,
-        screenSize.x / 2 + QuizConstants.textPad,
+        screenSize.x / 2 + QuizConstants.textPad - QuizConstants.width * quizPartitions / 2 
+          + QuizConstants.headerOff,
         QuizConstants.y,
         "options" ,
         textStyle
@@ -90,7 +91,7 @@ export default class QuizManager {
         ySpacing: QuizConstants.yInterval
       });
 
-      GameGlobalAPI.getInstance().addToLayer(Layer.UI, quizContainer);
+      GameGlobalAPI.getInstance().addToLayer(Layer.Dialogue, quizContainer);
       
       const activateQuizContainer: Promise<any> = new Promise(resolve => {
         quizContainer.add(

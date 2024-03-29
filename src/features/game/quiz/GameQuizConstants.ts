@@ -30,16 +30,18 @@ export const QuizConstants = {
     textConfig: { x: 15, y: -15, oriX: 0.5, oriY: 0.5 },
     y: 50,
     width: 450,
-    yInterval: 100
+    yInterval: 100,
+    headerOff : 60,
+    speakerTextConfig: { x: 320, y: 745, oriX: 0.5, oriY: 0.5 }
 };
   
 export const textStyle = {
     fontFamily: 'Verdana',
-    fontSize: '20px',
+    fontSize: '30px',
     fill: Color.offWhite,
-    align: 'right',
+    align: 'left',
     lineSpacing: 10,
-    wordWrap: { width: QuizConstants.width - QuizConstants.textPad * 2 }
+    wordWrap: { width: 60 }
   };
 
 export const questionTextStyle = {
@@ -56,3 +58,11 @@ export const quizOptStyle: BitmapFontStyle = {
     size: 25,
     align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
   };
+
+
+
+export const speakerTextStyle: BitmapFontStyle = {
+  key: FontAssets.zektonFont.key,
+  size: 36,
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+};
