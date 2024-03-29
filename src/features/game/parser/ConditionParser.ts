@@ -51,6 +51,25 @@ export default class ConditionParser {
           },
           boolean: !hasExclamation
         };
+      
+      case GameStateStorage.AttemptedQuizState:
+        return {
+          state: GameStateStorage.AttemptedQuizState,
+          conditionParams: {
+            id: condParams[0]
+          },
+          boolean: !hasExclamation
+        };
+      
+      case GameStateStorage.CompletedQuizState:
+        return {
+          state: GameStateStorage.CompletedQuizState,
+          conditionParams: {
+            id: condParams[0]
+          },
+          boolean: !hasExclamation
+        };
+      
       default:
         throw new Error('Parsing error: Invalid condition param');
     }
