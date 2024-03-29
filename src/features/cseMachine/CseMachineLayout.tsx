@@ -145,7 +145,7 @@ export class Layout {
     Layout.control = control;
     Layout.stash = stash;
 
-    // remove program environment and merge bindings into global env
+    // remove prelude environment and merge bindings into global env
     Layout.removePreludeEnv();
     // remove global functions that are not referenced in the program
     Layout.removeUnreferencedGlobalFns();
