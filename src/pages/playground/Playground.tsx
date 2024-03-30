@@ -137,6 +137,7 @@ import {
 } from './PlaygroundTabs';
 import { Decoder, programConfig, resetConfig } from './Decoder';
 import { EncodeURL } from './Encoder';
+import { useParams } from 'react-router';
 
 export type PlaygroundProps = {
   isSicpEditor?: boolean;
@@ -336,10 +337,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
     state => state.workspaces.playground.externalLibrary
   );
 
-  const handleHash = (hash:string) => {
-    if (hash?.includes('uuid')) {
-      const curr_uuid = parseQuery(location.hash).uuid;
-        fetch(`http://localhost:4000/api/shared_programs/${curr_uuid}`)
+  const handleURL = () => {
+  const { uuid } = useParams();
+    if (uuid) {
+        fetch(`http://localhost:4000/api/shared_programs/${uuid}`)
         .then(response => response.json())
         .then(resp => {
           // console.log("resp", resp)
@@ -402,7 +403,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     //   dispatch,
     //   fileSystem
     // );
-    handleHash(hash);
+    handleURL();
   }, [
     dispatch,
     fileSystem,
@@ -720,6 +721,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   );
   
   const config = EncodeURL();
+  // const config = {};
 
   const shareButton = useMemo(() => {
     const qs = isSicpEditor ? Links.playground + '#' + props.initialEditorValueHash : queryString;

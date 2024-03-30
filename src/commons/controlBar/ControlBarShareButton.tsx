@@ -6,7 +6,6 @@ import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 import ControlButton from '../ControlButton';
 import Constants from '../utils/Constants';
-import { shortenURLRequest } from '../sagas/PlaygroundSaga';
 
 type ControlBarShareButtonProps = DispatchProps & StateProps;
 

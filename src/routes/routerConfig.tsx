@@ -68,6 +68,10 @@ export const playgroundOnlyRouterConfig: RouteObject[] = [
         path: 'playground',
         lazy: Playground
       },
+      {
+        path: 'playground/share/:uuid?',
+        lazy: Playground
+      },
       ...commonChildrenRoutes,
       {
         path: '*',

@@ -1216,7 +1216,30 @@
   dependencies:
     tslib "~2.6.2"
 
-"@blueprintjs/core@^5.7.0", "@blueprintjs/core@^5.9.1":
+"@blueprintjs/colors@^5.1.1":
+  version "5.1.1"
+  resolved "https://registry.npmmirror.com/@blueprintjs/colors/-/colors-5.1.1.tgz#b227d1ce8b95d9266d976441f34cd71d436735db"
+  integrity sha512-Mni/GgCYLaMf5U5zsCN42skOG49w3U0QmUFuJgFZ/1pv+3cHF/9xR4L4dXcj5DtgJoHkmUbK36PR5mdFB65WEA==
+  dependencies:
+    tslib "~2.6.2"
+
+"@blueprintjs/core@^5.10.1":
+  version "5.10.1"
+  resolved "https://registry.npmmirror.com/@blueprintjs/core/-/core-5.10.1.tgz#d3df1743258a10841d2885dd2ba712d116a96689"
+  integrity sha512-yE10tC/tA/NWo8zsged3n0PUcjlQzh9GqNKOqMAoSSnsAKGI+RJiHtbS2RERyKU+NailIsuFx1k282ohkJvkOQ==
+  dependencies:
+    "@blueprintjs/colors" "^5.1.1"
+    "@blueprintjs/icons" "^5.9.0"
+    "@popperjs/core" "^2.11.8"
+    classnames "^2.3.1"
+    normalize.css "^8.0.1"
+    react-popper "^2.3.0"
+    react-transition-group "^4.4.5"
+    react-uid "^2.3.3"
+    tslib "~2.6.2"
+    use-sync-external-store "^1.2.0"
+
+"@blueprintjs/core@^5.9.1":
   version "5.9.1"
   resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-5.9.1.tgz#79e474aa063468aec4c2e82cd9b6e12d0b98b1bc"
   integrity sha512-/Cq6CAV/GyMhTOGrzgIBDsneduQCFWxzDwlX2f8MMAFZFO7FaeCONPvzbcxpTRAXR+RFkb4HpPdIsAslyZUMzA==
@@ -1265,6 +1288,15 @@
   version "5.7.1"
   resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-5.7.1.tgz#48b76bed2759ebd919c06bef0775635435bd6644"
   integrity sha512-oWOaa6PFYa3ShBtUpNGU0fnu66AC0/ecQoD1VnI1yg3F0IFHxKApYOC11SL//ckfB6tDkqN+O8Y/7TdtTmVzig==
+  dependencies:
+    change-case "^4.1.2"
+    classnames "^2.3.1"
+    tslib "~2.6.2"
+
+"@blueprintjs/icons@^5.9.0":
+  version "5.9.0"
+  resolved "https://registry.npmmirror.com/@blueprintjs/icons/-/icons-5.9.0.tgz#f1d6ebffa3033bbdd8ea05dbfa6fb8e5e88cf119"
+  integrity sha512-9W9DYFqSORBr1QPSEwpbjnftbU+hfWB/gFtpa4LdzR7VhtQaCdcrinyXFmNUFacQ9czYrmr72bP567Rv6pRUDg==
   dependencies:
     change-case "^4.1.2"
     classnames "^2.3.1"
@@ -11072,7 +11104,7 @@ react-dev-utils@^12.0.1:
 
 react-dom@^18.2.0:
   version "18.2.0"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.2.0.tgz#22aaf38708db2674ed9ada224ca4aa708d821e3d"
+  resolved "https://registry.npmmirror.com/react-dom/-/react-dom-18.2.0.tgz#22aaf38708db2674ed9ada224ca4aa708d821e3d"
   integrity sha512-6IMTriUmvsjHUjNtEDudZfuDQUoWXVxKHhlEGSk81n4YFS+r/Kl99wXiwlVXtPBtJenozv2P+hxDsw9eA7Xo6g==
   dependencies:
     loose-envify "^1.1.0"
@@ -11417,7 +11449,7 @@ react-uid@^2.3.3:
 
 react@^18.2.0:
   version "18.2.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"
+  resolved "https://registry.npmmirror.com/react/-/react-18.2.0.tgz#555bd98592883255fa00de14f1151a917b5d77d5"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
   dependencies:
     loose-envify "^1.1.0"

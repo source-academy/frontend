@@ -4,7 +4,7 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import { retrieveFilesInWorkspaceAsRecord } from 'src/commons/fileSystem/utils';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import { EditorTabState } from 'src/commons/workspace/WorkspaceTypes';
-import * as qs from 'query-string';
+import qs from 'query-string'
 import { compressToEncodedURIComponent } from 'lz-string';
 import { useState } from 'react';
 
@@ -31,11 +31,11 @@ export const EncodeURL = () => {
     const execTime: number = useSelector(
       (state: OverallState) => state.workspaces.playground.execTime
     );
-    const fileSystem: FSModule | null = GetFileSystem();
+    const fileSystem: FSModule = GetFileSystem();
     
     const result: object = {
       isFolder: isFolderModeEnabled,
-      files: fileSystem == null ? null : GetFile(fileSystem),
+      files: GetFile(fileSystem),
       tabs: editorTabFilePaths.map(compressToEncodedURIComponent)[0],
       tabIdx: activeEditorTabIndex,
       chap: chapter,
@@ -51,7 +51,7 @@ export const EncodeURL = () => {
     const fileSystem: FSModule | null = useSelector(
       (state: OverallState) => state.fileSystem.inBrowserFileSystem
     );
-    return fileSystem;
+    return fileSystem as FSModule;
   }
   
   const GetFile = (fileSystem: FSModule) => {
@@ -60,6 +60,5 @@ export const EncodeURL = () => {
     .then((result: Record<string, string>) => {
       setFiles(result)
     })
-    return files == null ? null : compressToEncodedURIComponent(qs.stringify(files))
-    // compressToEncodedURIComponent(qs.stringify(retrieveFilesInWorkspaceAsRecord('playground', fileSystem)))
+    return compressToEncodedURIComponent(qs.stringify(files as Record<string, string>))
   }
