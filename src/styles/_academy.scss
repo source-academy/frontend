@@ -513,55 +513,41 @@
   }
 }
 
+
+// Grading Section
 .grading-overview-unfilterable-btns,
 .grading-overview-filterable-btns {
   padding: 0 2px;
   text-align: inherit;
   outline: none;
+
   a {
     text-decoration: none;
     color: black;
   }
 
-  // Hides overflowed text for the buttons
   &,
   p {
     text-overflow: ellipsis;
     overflow: hidden;
+  }
+}
 
-    // For general filterable buttons
-    & {
-      max-width: 20vw;
-    }
+.contentdisplay-content-parent:has(div.grading-table-wrapper) {
+  max-width: 100%;
 
-    /* Special case for filtered buttons (those you click to remove filter)
-      -16px for icon
-      -0.875rem for icon margins
-      -1.125rem for additional padding
-    */
-    p, &:has(> span) > span, > a {
-      max-width: calc(20vw - 16px - 2rem);
-    }
+  .contentdisplay-content {
+    min-width: 1500px;
   }
 }
 
 .grading-overview-filterable-btns {
-  // Invisible border for backgroundless buttons
-  &:not(:has(> .grading-badge)) {
-    text-decoration: none;
+  &:hover:not(:has(> .grading-badge)) {
+    text-decoration: underline;
   }
-
-  &:hover {
-    //Buttons with bg
-    // &:has(> .grading-badge) > .grading-badge {
-    //   // Use of contrast due to unknown background color
-    //   filter: contrast(0.6);
-    // }
-
-    // Backgroundless buttons
-    &:not(:has(> .grading-badge)) {
-      text-decoration: underline;
-    }
+  
+  &:hover:has(> .grading-badge) {
+    filter: brightness(0.75);
   }
 }
 
@@ -570,18 +556,6 @@
 .grading-overview-rounded-btns {
   border-radius: 9999px;
 }
-
-// .grading-overview-footer-sibling {
-//   // Footer component
-//   ~ div ~ div {
-//     pointer-events: none;
-
-//     // Footer's children
-//     > * > * {
-//       pointer-events: all;
-//     }
-//   }
-// }
 
 .grading-table-col-icons {
   pointer-events: none;
@@ -673,8 +647,8 @@
   user-select: text;
   border: 0px!important;
 
-  &:hover:has(button.grading-overview-filterable-btns) {
-    button {
+  &:hover:has(.grading-overview-filterable-btns) {
+    .grading-overview-filterable-btns {
       &:not(:has(> .grading-badge)) {
         text-decoration: underline;
       }
@@ -734,7 +708,7 @@
   justify-content: center;
   line-height: normal!important;
   width: fit-content;
-  max-width: 20vw;
+  max-width: max(1500px * 0.2, 20vw);
   margin: auto;
   color: rgba(0, 0, 0, 0.7);
   text-wrap: nowrap;
@@ -768,7 +742,7 @@
 .grading-badge-text {
   line-height: normal!important;
   width: fit-content;
-  max-width: calc(20vw - 16px - 2rem);
+  max-width: max(calc(1500px * 0.2 - 16px - 2rem), calc(20vw - 16px - 2rem));
   overflow: hidden;
   text-overflow: ellipsis;
 }
