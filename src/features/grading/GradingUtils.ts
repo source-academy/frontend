@@ -1,5 +1,5 @@
-import { ColumnFilter } from '@tanstack/react-table';
 import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
+import { ColumnFilter } from 'src/features/grading/GradingTypes';
 
 import { GradingOverview } from './GradingTypes';
 

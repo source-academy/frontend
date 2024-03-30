@@ -418,7 +418,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     requestCounter: 0,
     allColsSortStates: {
       currentState: freshSortState,
-      sortOrder: []
+      sortBy: ''
     }
   },
   playground: {

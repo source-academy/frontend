@@ -71,7 +71,7 @@ export type GradingAnswer = GradingQuestion[];
 
 export type AllColsSortStates = {
   currentState: SortStateProperties;
-  sortOrder: string[];
+  sortBy: string;
 };
 
 export type ColumnFiltersState = ColumnFilter[];

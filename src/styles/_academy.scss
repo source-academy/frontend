@@ -547,19 +547,19 @@
 
 .grading-overview-filterable-btns {
   // Invisible border for backgroundless buttons
-  &:not(:has(> div)) {
+  &:not(:has(> .grading-badge)) {
     text-decoration: none;
   }
 
   &:hover {
-    // Buttons with bg
-    &:has(> div) {
-      // Use of contrast due to unknown background color
-      filter: contrast(0.9);
-    }
+    //Buttons with bg
+    // &:has(> .grading-badge) > .grading-badge {
+    //   // Use of contrast due to unknown background color
+    //   filter: contrast(0.6);
+    // }
 
     // Backgroundless buttons
-    &:not(:has(> div)) {
+    &:not(:has(> .grading-badge)) {
       text-decoration: underline;
     }
   }
@@ -602,7 +602,7 @@
 .grading-default-headers {
   justify-content: space-between;
   width: 100%;
-    transition: 0.1s ease;
+  transition: 0.1s ease;
   cursor: pointer;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
@@ -630,6 +630,10 @@
   &.ag-row-hover {
     --ag-row-hover-color: rgb(245, 245, 245);
   }
+
+  &.ag-row.ag-row-last {
+    border-bottom: 0px!important;
+  }
 }
 
 .ag-header-cell.grading-left-align {
@@ -647,12 +651,12 @@
   padding: 7.5px 15px;
   border-radius: 25px;
   margin: 0 15px 0 auto;
-  background-color: #dbeafe;
-  color: #3b82f6;
+  background-color: #dbeafef5!important;
+  color: #3b82f6!important;
 
   &.grading-filter-btn-on {
-    background-color: #f5f5f5;
-    color: black;
+    background-color: #f5f5f5!important;
+    color: black!important;
   }
 
   &:hover {
@@ -669,12 +673,14 @@
   user-select: text;
   border: 0px!important;
 
-  &:hover:not(:has(> div)):has(button.grading-overview-filterable-btns) {
+  &:hover:has(button.grading-overview-filterable-btns) {
     button {
-      text-decoration: underline;
+      &:not(:has(> .grading-badge)) {
+        text-decoration: underline;
+      }
       
-      &:has(> div) {
-        filter: contrast(0.9);
+      &:has(> .grading-badge) {
+        filter: brightness(0.75)
       }
     }
   }
@@ -717,5 +723,126 @@
     &::placeholder {
       color: #b3b3b3;
     }
+  }
+}
+
+.grading-badge {
+  border-radius: 9999px;
+  padding: 0.1rem 0.2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  line-height: normal!important;
+  width: fit-content;
+  max-width: 20vw;
+  margin: auto;
+  color: rgba(0, 0, 0, 0.7);
+  text-wrap: nowrap;
+
+  &.grading-badge-xs {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  &.grading-badge-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  &.grading-badge-md {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  &.grading-badge-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  &.grading-badge-xl {
+    padding: 1rem 2rem;
+    font-size: 1.25rem;
+  }
+}
+
+.grading-badge-text {
+  line-height: normal!important;
+  width: fit-content;
+  max-width: calc(20vw - 16px - 2rem);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.grading-loading-icon {
+  animation: spin 1s linear infinite;
+  margin: 4px;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 48px;
+  height: 48px;
+  border: 4px solid #b3b3b3!important;
+  border-bottom-color: transparent!important;
+  border-radius: 50%;
+  z-index: 10;
+  color: #374151;
+}
+
+.grading-actions-btn-wrappers {
+  > a {
+    display: flex;
+  }
+}
+
+.grading-action-icons {
+  color: #3b82f6;
+  border-radius: 10px;
+  margin: auto 0;
+  background-color: #7dbcff00;
+  transition: 0.1s ease;
+
+  svg {
+    fill: #3b82f6!important;
+  }
+
+  &.grading-action-icons-bg {
+    background-color: #7dbcff80;
+
+    &:hover {
+      background-color: #7dbcffb3;
+    }
+  }
+
+  .bp5-icon {
+    margin: 6px;
+  }
+}
+
+.grading-table-wrapper {
+  padding: 1rem 1.5rem 0 1.5rem;
+
+  * {
+    border: none;
+    outline: none;
+    text-decoration: none;
+    background-color: transparent;
+  }
+
+  button {
+    cursor: pointer;
+  }
+}
+
+.export-csv-btn {
+  color: #3b82f6!important;
+  
+  svg {
+    fill: #3b82f6!important;
+  }
+
+  &:hover {
+    text-decoration: underline!important;
+    background-color: transparent!important;
   }
 }

@@ -1,6 +1,5 @@
-import { Icon as BpIcon } from '@blueprintjs/core';
+import { Button, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Icon } from '@tremor/react';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -49,22 +48,20 @@ const GradingActions: React.FC<GradingActionsProps> = ({ submissionId, style }) 
   };
 
   return (
-    <GradingFlex justifyContent="justify-start" style={{columnGap: "5px", ...style}}>
+    <GradingFlex justifyContent="justify-start" className="grading-actions-btn-wrappers" style={{columnGap: "5px", ...style}}>
       <Link to={`/courses/${courseId}/grading/${submissionId}`}>
-        <Icon tooltip="Grade" icon={() => <BpIcon icon={IconNames.EDIT} />} variant="light" />
+        <GradingFlex alignItems="items-center" className="grading-action-icons grading-action-icons-bg">
+          <Icon htmlTitle="Grade" icon={IconNames.EDIT} />
+        </GradingFlex>
       </Link>
 
-      <button type="button" style={{ padding: 0 }} onClick={handleReautogradeClick}>
-        <Icon
-          tooltip="Reautograde"
-          icon={() => <BpIcon icon={IconNames.REFRESH} />}
-          variant="simple"
-        />
-      </button>
+      <Button className="grading-action-icons" minimal={true} style={{ padding: 0 }} onClick={handleReautogradeClick}>
+        <Icon htmlTitle="Reautograde" icon={IconNames.REFRESH} />
+      </Button>
 
-      <button type="button" style={{ padding: 0 }} onClick={handleUnsubmitClick}>
-        <Icon tooltip="Unsubmit" icon={() => <BpIcon icon={IconNames.UNDO} />} variant="simple" />
-      </button>
+      <Button className="grading-action-icons" minimal={true} style={{ padding: 0 }} onClick={handleUnsubmitClick}>
+        <Icon htmlTitle="Unsubmit" icon={IconNames.UNDO} />
+      </Button>
     </GradingFlex>
   );
 };

@@ -415,13 +415,25 @@ function* BackendSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.fetchGradingOverviews>) {
       const tokens: Tokens = yield selectTokens();
 
-      const {
-        filterToGroup,
-        gradedFilter,
-        pageParams,
-        filterParams
-        // allColsSortStates,
-      } = action.payload;
+      const { filterToGroup, gradedFilter, pageParams, filterParams, allColsSortStates } =
+        action.payload;
+
+      const sortedBy = {
+        sortBy: allColsSortStates.sortBy,
+        sortDirection: ''
+      };
+
+      for (const key in allColsSortStates.currentState) {
+        if (allColsSortStates.sortBy === key) {
+          if (allColsSortStates.currentState[key] !== 'sort') {
+            sortedBy.sortDirection = allColsSortStates.currentState[key];
+          } else {
+            sortedBy.sortBy = '';
+            sortedBy.sortDirection = '';
+          }
+          break;
+        }
+      }
 
       const gradingOverviews: GradingOverviews | null = yield call(
         getGradingOverviews,
@@ -430,7 +442,7 @@ function* BackendSaga(): SagaIterator {
         gradedFilter,
         pageParams,
         filterParams
-        // allColsSortStates
+        // sortedBy
       );
       if (gradingOverviews) {
         yield put(actions.updateGradingOverviews(gradingOverviews));

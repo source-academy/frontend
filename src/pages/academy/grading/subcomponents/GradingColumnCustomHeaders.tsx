@@ -1,7 +1,7 @@
 import { Icon } from '@blueprintjs/core';
 import { CustomHeaderProps } from 'ag-grid-react';
-import { useState } from 'react';
-
+import { useEffect, useState } from 'react';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { SortStates } from 'src/features/grading/GradingTypes';
 
 import { getNextSortState } from './GradingSubmissionsTable';
@@ -16,11 +16,18 @@ const GradingColumnCustomHeaders: React.FC<GradingColumnCustomHeadersProps> = (p
 
   // The values correspond to the available icons in the BlueprintJS library. "sort" means unsorted.
   const [sortState, setSortState] = useState<SortStates>(SortStates.NONE);
+  const colsSortState = useTypedSelector(state => state.workspaces.grading.allColsSortStates);
 
   const nextSortState = () => {
     setSortState((prev) => getNextSortState(prev));
     props.updateSortState(props.column.getColId(), getNextSortState(sortState));
   }
+
+  useEffect(() => {
+    if (colsSortState.sortBy !== props.column.getColId()) {
+      setSortState(SortStates.NONE);
+    }
+  }, [colsSortState, props.column]);
 
   return (
     <div className={String(props.eGridHeader.classList)}>

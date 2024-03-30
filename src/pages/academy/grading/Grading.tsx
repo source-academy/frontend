@@ -1,13 +1,12 @@
-import '@tremor/react/dist/esm/tremor.css';
-
-import { Icon as BpIcon, NonIdealState, Position, Spinner, SpinnerSize } from '@blueprintjs/core';
+import { Button, NonIdealState, Position, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Button, Card, Flex, Text, Title } from '@tremor/react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/commons/application/ApplicationTypes';
+import GradingFlex from 'src/commons/grading/GradingFlex';
+import GradingText from 'src/commons/grading/GradingText';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 // import { useSession } from 'src/commons/utils/Hooks';
 import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
@@ -116,22 +115,22 @@ const Grading: React.FC = () => {
         gradingOverviews?.data === undefined ? (
           loadingDisplay
         ) : (
-          <Card>
-            <Flex justifyContent="justify-between">
-              <Flex justifyContent="justify-start" spaceX="space-x-6">
-                <Title>Submissions</Title>
-                <Button
-                  variant="light"
-                  size="xs"
-                  icon={() => <BpIcon icon={IconNames.EXPORT} style={{ marginRight: '0.5rem' }} />}
+          <GradingFlex flexDirection="column" className="grading-table-wrapper">
+            <GradingFlex justifyContent="justify-between">
+              <GradingFlex justifyContent="justify-start" style={{columnGap: "1.5rem"}}>
+                <GradingText style={{fontSize: "1.125rem", opacity: 0.9}}>Submissions</GradingText>
+                <Button 
+                  minimal={true}
+                  icon={IconNames.EXPORT}
                   onClick={() => exportGradingCSV(gradingOverviews.data)}
+                  className="export-csv-btn"
                 >
                   Export to CSV
                 </Button>
-              </Flex>
-            </Flex>
-            <Flex justifyContent="justify-start" marginTop="mt-2" spaceX="space-x-2">
-              <Text>Viewing</Text>
+              </GradingFlex>
+            </GradingFlex>
+            <GradingFlex justifyContent="justify-start" style={{columnGap: "0.5rem", marginTop: "0.5rem"}}>
+              <GradingText>Viewing</GradingText>
               <SimpleDropdown
                 options={showOptions}
                 selectedValue={showAllSubmissions}
@@ -139,7 +138,7 @@ const Grading: React.FC = () => {
                 popoverProps={{ position: Position.BOTTOM }}
                 buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
               />
-              <Text>submissions from</Text>
+              <GradingText>submissions from</GradingText>
               <SimpleDropdown
                 options={groupOptions}
                 selectedValue={showAllGroups}
@@ -147,7 +146,7 @@ const Grading: React.FC = () => {
                 popoverProps={{ position: Position.BOTTOM }}
                 buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
               />
-              <Text>showing</Text>
+              <GradingText>showing</GradingText>
               <SimpleDropdown
                 options={pageSizeOptions}
                 selectedValue={pageSize}
@@ -155,15 +154,15 @@ const Grading: React.FC = () => {
                 popoverProps={{ position: Position.BOTTOM }}
                 buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
               />
-              <Text>entries per page.</Text>
-            </Flex>
+              <GradingText>entries per page.</GradingText>
+            </GradingFlex>
             <GradingSubmissionsTable
               totalRows={gradingOverviews.count}
               pageSize={pageSize}
               submissions={submissions}
               updateEntries={updateGradingOverviewsCallback}
             />
-          </Card>
+          </GradingFlex>
         )
       }
       fullWidth={true}

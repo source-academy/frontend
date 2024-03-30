@@ -119,14 +119,14 @@ export const fetchGrading = (submissionId: number) => action(FETCH_GRADING, subm
  * @param filterParams - param that contains columnFilters converted into JSON for
  * processing into query parameters
  * @param allColsSortStates - param that contains the sort states of all columns and
- * the order it should be sorted in
+ * the col it should be sorted by
  */
 export const fetchGradingOverviews = (
   filterToGroup = true,
   gradedFilter = ungradedToBackendParams(false),
   pageParams = paginationToBackendParams(0, 10),
   filterParams = {},
-  allColsSortStates: AllColsSortStates = { currentState: freshSortState, sortOrder: [] }
+  allColsSortStates: AllColsSortStates = { currentState: freshSortState, sortBy: '' }
 ) =>
   action(FETCH_GRADING_OVERVIEWS, {
     filterToGroup,

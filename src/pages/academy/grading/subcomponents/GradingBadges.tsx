@@ -1,28 +1,65 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Badge } from '@tremor/react';
+import { ReactNode } from 'react';
 import { GradingStatus } from 'src/commons/assessment/AssessmentTypes';
 import { ColumnFilter } from 'src/features/grading/GradingTypes';
 
+declare const sizeValues: readonly ["xs", "sm", "md", "lg", "xl"];
+declare type Size = typeof sizeValues[number];
+
+interface BadgeProps {
+  text: string;
+  color?: string;
+  size?: Size;
+  icon?: () => ReactNode;
+}
+
+const Badge: React.FC<BadgeProps> = (props: BadgeProps) => {
+  return (
+    <div 
+      className={"grading-badge grading-badge-" + (props.size ? props.size : "sm")} 
+      style={{
+        color: (props.color ? props.color[1] : "#000000"),
+        backgroundColor: (props.color ? (props.color[0] + "40") : "")
+      }}
+    >
+      {props.icon ? props.icon() : <></>}
+      <span className="grading-badge-text">{props.text}</span>
+    </div>
+  );
+
+};
+
+// First colour is bg, second is text (text is more saturated/darker)
+const AVAILABLE_COLORS = {
+  indigo: ['#818cf8', '#4f46e5'],
+  emerald: ['#6ee7b7', '#059669'],
+  sky: ['#7dd3fc', '#0284c7'],
+  green: ['#4ade80', '#15803d'],
+  yellow: ['#fde047', '#ca8a04'],
+  red: ['#f87171', '#b91c1c'],
+  gray: ['#9ca3af', '#374151'],
+};
+
 const BADGE_COLORS = {
   // assessment types
-  missions: 'indigo',
-  quests: 'emerald',
-  paths: 'sky',
+  missions: AVAILABLE_COLORS.indigo, //indigo
+  quests: AVAILABLE_COLORS.emerald, //emerald
+  paths: AVAILABLE_COLORS.sky, //sky
 
   // submission status
-  submitted: 'green',
-  attempting: 'yellow',
-  attempted: 'red',
+  submitted: AVAILABLE_COLORS.green, //green
+  attempting: AVAILABLE_COLORS.yellow, //yellow
+  attempted: AVAILABLE_COLORS.red, //red
 
   // grading status
-  graded: 'green',
-  grading: 'yellow',
-  none: 'red'
+  graded: AVAILABLE_COLORS.green, //green
+  grading: AVAILABLE_COLORS.yellow, //yellow
+  none: AVAILABLE_COLORS.red //red
 };
 
 export function getBadgeColorFromLabel(label: string) {
-  return BADGE_COLORS[label.toLowerCase()] || 'gray';
+  return BADGE_COLORS[label.toLowerCase()] || AVAILABLE_COLORS.gray; //gray
 }
 
 type AssessmentTypeBadgeProps = {
