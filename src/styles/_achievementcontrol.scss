@@ -74,6 +74,97 @@
       @extend %container;
       width: $view-width + $default-spacing * 2;
 
+      .task {
+        .achievement-card {
+          border-radius: 0.3rem;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          height: $card-height;
+          transition: box-shadow 0.2s ease-in-out;
+          width: $card-width;
+
+          padding: 0.5em;
+          column-gap: 0.5em;
+
+          .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            width: 100%;
+
+            .heading {
+              align-items: center;
+              display: flex;
+
+              > * {
+                margin: 0;
+              }
+            }
+
+            .details {
+              display: flex;
+              flex-direction: row;
+              font-size: 0.8em;
+
+              p {
+                margin: 0;
+              }
+
+              .deadline,
+              .xp {
+                align-items: center;
+                display: flex;
+                column-gap: 0.3em;
+                width: 100%;
+              }
+            }
+          }
+        }
+
+        .achievement-card:hover {
+          box-shadow: 0 0 10px black;
+        }
+
+        .prerequisite-container {
+          $shrink-factor: 0.9;
+          $line-width: 1em;
+          // remaining-width is the empty space between line and card
+          $remaining-width: math.div((1 - $shrink-factor) * $card-width - 2 * $line-width, 2);
+          $top-spacing: 0.2em;
+          $line-extension: 0.1em;
+
+          display: flex;
+          flex-direction: column;
+
+          .prerequisite {
+            display: flex;
+            flex-direction: row;
+            max-width: $card-width;
+
+            .dropdown-lines {
+              height: $top-spacing + $card-height + $remaining-width + $line-extension;
+              margin: -#{math.div($card-height, 1.6)} -#{$line-width + $remaining-width} 0
+                $line-width;
+              min-width: $line-width;
+            }
+
+            .achievement-card {
+              margin: $top-spacing 0 0 0;
+              transform: scale($shrink-factor);
+            }
+          }
+
+          .prerequisite:first-child {
+            .dropdown-lines {
+              height: $top-spacing + math.div($card-height, 2) + $remaining-width;
+              margin-top: 0;
+            }
+          }
+        }
+      }
+
       .no-view {
         align-items: center;
         text-shadow: black 1px 1px;
@@ -84,20 +175,23 @@
       }
 
       .view {
+        border-radius: 1rem;
         text-shadow: black 1px 1px;
         color: white;
         display: flex;
         flex-direction: column;
         margin: $default-spacing;
-        min-height: $view-height;
         width: $view-width;
+        padding-bottom: 1rem;
 
         .cover {
+          border-top-left-radius: 1rem;
+          border-top-right-radius: 1rem;
           display: flex;
           flex-direction: column;
-          height: $cover-height;
           text-align: center;
-          width: $cover-width;
+          min-height: $cover-height;
+          min-width: $cover-width;
 
           h1 {
             margin: 0.5em auto 0;
@@ -115,6 +209,10 @@
             margin: auto auto 1em;
             width: 80%;
           }
+        }
+
+        .progress-header {
+          margin-left: 2rem;
         }
 
         .goal {
@@ -140,6 +238,15 @@
               text-align: center;
               font-size: 0.7em;
               padding: 0.2em 0 0 0;
+            }
+          }
+
+          .goal-progress {
+            width: 100%;
+            padding-right: 2.5em;
+
+            .progress {
+              margin-top: 5px;
             }
           }
 
