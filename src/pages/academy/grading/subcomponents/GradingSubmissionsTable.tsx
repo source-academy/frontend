@@ -112,7 +112,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     defaultColDefs: defaultColumnDefs,
     headerHeight: HEADER_HEIGHT,
     overlayLoadingTemplate: '<div class="grading-loading-icon"></div>',
-    overlayNoRowsTemplate: "Hmm... No submissions found, did you filter them all out?",
+    overlayNoRowsTemplate: "Hmm... we didn't find any submissions, you might want to debug your filter() function.",
     pageSize: pageSize,
     pagination: true,
     rowClass: "grading-left-align grading-table-rows",

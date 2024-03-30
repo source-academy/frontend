@@ -537,7 +537,7 @@
   max-width: 100%;
 
   .contentdisplay-content {
-    min-width: 1500px;
+    min-width: 1200px;
   }
 }
 
@@ -627,6 +627,7 @@
   margin: 0 15px 0 auto;
   background-color: #dbeafef5!important;
   color: #3b82f6!important;
+  min-width: fit-content;
 
   &.grading-filter-btn-on {
     background-color: #f5f5f5!important;
@@ -708,7 +709,7 @@
   justify-content: center;
   line-height: normal!important;
   width: fit-content;
-  max-width: max(1500px * 0.2, 20vw);
+  max-width: max(1200px * 0.2, 20vw);
   margin: auto;
   color: rgba(0, 0, 0, 0.7);
   text-wrap: nowrap;
@@ -742,7 +743,7 @@
 .grading-badge-text {
   line-height: normal!important;
   width: fit-content;
-  max-width: max(calc(1500px * 0.2 - 16px - 2rem), calc(20vw - 16px - 2rem));
+  max-width: max(calc(1200px * 0.2 - 16px - 2rem), calc(20vw - 16px - 2rem));
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -819,4 +820,13 @@
     text-decoration: underline!important;
     background-color: transparent!important;
   }
+}
+
+.grading-refresh-loop {
+  svg {
+    transform: rotate(180deg);
+    transition: 0.2s ease;
+  }
+  cursor: not-allowed!important;
+  pointer-events: none;
 }

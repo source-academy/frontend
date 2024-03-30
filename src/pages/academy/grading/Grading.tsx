@@ -1,4 +1,4 @@
-import { Button, NonIdealState, Position, Spinner, SpinnerSize } from '@blueprintjs/core';
+import { Button, Icon, NonIdealState, Position, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -49,12 +49,17 @@ const Grading: React.FC = () => {
 
   const [pageSize, setPageSize] = useState(10);
   const [showAllSubmissions, setShowAllSubmissions] = useState(false);
+  const [refreshQuery, setRefreshQuery] = useState(false);
 
   const dispatch = useDispatch();
   const allColsSortStates = useTypedSelector(state => state.workspaces.grading.allColsSortStates);
+  const requestCounter = useTypedSelector(state => state.workspaces.grading.requestCounter);
 
   const updateGradingOverviewsCallback = useCallback(
     (page: number, filterParams: Object) => {
+      if (refreshQuery) { // Prevents es-lint missing dependency warning
+        return setRefreshQuery(false);
+      }
       dispatch(increaseRequestCounter());
       dispatch(
         fetchGradingOverviews(
@@ -66,7 +71,7 @@ const Grading: React.FC = () => {
         )
       );
     },
-    [dispatch, showAllGroups, showAllSubmissions, pageSize, allColsSortStates]
+    [dispatch, showAllGroups, showAllSubmissions, pageSize, allColsSortStates, refreshQuery]
   );
 
   // useEffect(() => {
@@ -155,6 +160,9 @@ const Grading: React.FC = () => {
                 buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
               />
               <GradingText>entries per page.</GradingText>
+              <Button className={"grading-refresh" + (requestCounter !== 0 ? "-loop" : "") } minimal={true} style={{ padding: 0 }} onClick={(e) => setRefreshQuery((prev) => !prev)}>
+                <Icon htmlTitle="Refresh" icon={IconNames.REFRESH} />
+              </Button>
             </GradingFlex>
             <GradingSubmissionsTable
               totalRows={gradingOverviews.count}
