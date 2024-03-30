@@ -13,9 +13,10 @@ const ContributorsDetails: React.FC = () => (
       <p className={classes['description']}>
         The <i>Source Academy</i> is designed and developed by a team of students, most of who have
         used the system to learn the fundamentals of computing and enjoyed it. This page includes
-        all developers who contributed to the Source Academy <i>Strange</i> (2024) and its precursors{' '}
-        <i>Merlin</i> (2023), <i>Rook</i> (2022), <i>Knight</i> (2020) and <i>Cadet</i> (2018). These versions succeeded
-        Source Academy 2 (2017) and ultimately the original Source Academy (2016).
+        all developers who contributed to the Source Academy <i>Strange</i> (2024) and its
+        precursors <i>Merlin</i> (2023), <i>Rook</i> (2022), <i>Knight</i> (2020) and <i>Cadet</i>{' '}
+        (2018). These versions succeeded Source Academy 2 (2017) and ultimately the original Source
+        Academy (2016).
       </p>
       <div className={classes['leadership']}>
         <H5>
