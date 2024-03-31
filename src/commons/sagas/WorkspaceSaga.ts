@@ -903,7 +903,7 @@ export function* evalEditor(
       const elevatedContext = makeElevatedContext(context);
       const prependFilePath = '/prepend.js';
       const prependFiles = {
-        [prependFilePath]: 'import { beside, flip_horiz, red, heart, sail, show } from "rune";'
+        [prependFilePath]: prepend
       };
       yield call(
         evalCode,
@@ -1255,10 +1255,6 @@ export function* evalCode(
       ? DisplayBufferService.attachConsole(workspaceLocation)
       : () => {};
 
-  console.log(files)
-  console.log(context)
-  console.log(actionType === DEBUG_RESUME)
-  console.log(isNonDet || isLazy || isWasm)
   const { result, interrupted, paused } = yield race({
     result:
       actionType === DEBUG_RESUME
