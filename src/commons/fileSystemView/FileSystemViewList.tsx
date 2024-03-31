@@ -9,7 +9,7 @@ import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewDirectoryNode from './FileSystemViewDirectoryNode';
 import FileSystemViewFileNode from './FileSystemViewFileNode';
 
-export type FileSystemViewListProps = {
+type Props = {
   workspaceLocation: WorkspaceLocation;
   fileSystem: FSModule;
   basePath: string;
@@ -17,9 +17,13 @@ export type FileSystemViewListProps = {
   disableEditing?: boolean;
 };
 
-const FileSystemViewList: React.FC<FileSystemViewListProps> = (props: FileSystemViewListProps) => {
-  const { workspaceLocation, fileSystem, basePath, indentationLevel, disableEditing } = props;
-
+const FileSystemViewList: React.FC<Props> = ({
+  workspaceLocation,
+  fileSystem,
+  basePath,
+  indentationLevel,
+  disableEditing
+}) => {
   const [dirNames, setDirNames] = React.useState<string[] | undefined>(undefined);
   const [fileNames, setFileNames] = React.useState<string[] | undefined>(undefined);
 

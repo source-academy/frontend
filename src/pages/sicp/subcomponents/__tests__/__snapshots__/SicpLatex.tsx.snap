@@ -1,65 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Sicp latex renders correctly block 1`] = `
-<Latex
-  delimiters={
-    Array [
-      Object {
-        "display": true,
-        "left": "$$",
-        "right": "$$",
-      },
-      Object {
-        "display": false,
-        "left": "\\\\(",
-        "right": "\\\\)",
-      },
-      Object {
-        "display": false,
-        "left": "$",
-        "right": "$",
-      },
-      Object {
-        "display": true,
-        "left": "\\\\[",
-        "right": "\\\\]",
-      },
-    ]
-  }
-  strict={false}
->
+<Latex$1>
   1+1
-</Latex>
+</Latex$1>
 `;
 
 exports[`Sicp latex renders correctly inline 1`] = `
-<Latex
-  delimiters={
-    Array [
-      Object {
-        "display": true,
-        "left": "$$",
-        "right": "$$",
-      },
-      Object {
-        "display": false,
-        "left": "\\\\(",
-        "right": "\\\\)",
-      },
-      Object {
-        "display": false,
-        "left": "$",
-        "right": "$",
-      },
-      Object {
-        "display": true,
-        "left": "\\\\[",
-        "right": "\\\\]",
-      },
-    ]
-  }
-  strict={false}
->
+<Latex$1>
   1+1
-</Latex>
+</Latex$1>
 `;

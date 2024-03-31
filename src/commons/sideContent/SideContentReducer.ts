@@ -2,13 +2,12 @@ import { defaultSideContent, defaultSideContentManager } from '../application/Ap
 import { SourceActionType } from '../utils/ActionsHelper';
 import { getDynamicTabs, getTabId } from './SideContentHelper';
 import { getLocation } from './SideContentHelper';
-import { CHANGE_SIDE_CONTENT_HEIGHT } from './SideContentTypes';
+import { CHANGE_SIDE_CONTENT_HEIGHT, SPAWN_SIDE_CONTENT } from './SideContentTypes';
 import {
   END_ALERT_SIDE_CONTENT,
   REMOVE_SIDE_CONTENT_ALERT,
   RESET_SIDE_CONTENT,
   SideContentManagerState,
-  SPAWN_SIDE_CONTENT,
   VISIT_SIDE_CONTENT
 } from './SideContentTypes';
 

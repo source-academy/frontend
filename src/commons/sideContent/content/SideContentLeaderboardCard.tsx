@@ -15,11 +15,11 @@ type StateProps = {
   rank: number;
 };
 
-const SideContentLeaderboardCard: React.FunctionComponent<
-  SideContentLeaderboardCardProps
-> = props => {
-  const { handleContestEntryClick, contestEntry, rank } = props;
-
+const SideContentLeaderboardCard: React.FC<SideContentLeaderboardCardProps> = ({
+  handleContestEntryClick,
+  contestEntry,
+  rank
+}) => {
   return (
     <div className={classNames('LeaderboardCard')}>
       <Card

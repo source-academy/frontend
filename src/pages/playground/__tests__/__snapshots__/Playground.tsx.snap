@@ -298,7 +298,7 @@ exports[`Playground tests Playground renders correctly 1`] = `
               class="editor-container"
             >
               <div
-                class="Editor bp4-card bp4-elevation-0"
+                class="Editor bp5-card bp5-elevation-0"
                 tabindex="-1"
               >
                 <div
@@ -495,13 +495,13 @@ exports[`Playground tests Playground renders correctly 1`] = `
                           </span>
                         </div>
                         <div
-                          aria-controls="bp5-tab-panel_side-content-tabs_env_visualizer"
+                          aria-controls="bp5-tab-panel_side-content-tabs_cse_machine"
                           aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp5-tab side-content-tab"
-                          data-tab-id="env_visualizer"
-                          id="bp5-tab-title_side-content-tabs_env_visualizer"
+                          data-tab-id="cse_machine"
+                          id="bp5-tab-title_side-content-tabs_cse_machine"
                           role="tab"
                           tabindex="-1"
                         >
@@ -710,9 +710,9 @@ and also the
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp5-tab-title_side-content-tabs_env_visualizer"
+                        aria-labelledby="bp5-tab-title_side-content-tabs_cse_machine"
                         class="bp5-tab-panel side-content-tab"
-                        id="bp5-tab-panel_side-content-tabs_env_visualizer"
+                        id="bp5-tab-panel_side-content-tabs_cse_machine"
                         role="tabpanel"
                       >
                         <div
@@ -732,36 +732,42 @@ and also the
                                   class="bp5-slider-track"
                                 >
                                   <div
-                                    class="bp5-slider-progress"
-                                    style="left: 0.00%; right: 0.00%; top: 0px;"
-                                  />
-                                  <div
                                     class="bp5-slider-progress bp5-intent-primary"
-                                    style="left: 0.00%; right: 0.00%; top: 0px;"
+                                    style="left: 0.00%; right: 100.00%; top: 0px;"
                                   />
                                   <div
                                     class="bp5-slider-progress"
-                                    style="left: 0.00%; right: 0.00%; top: 0px;"
+                                    style="left: 0.00%; right: 100.00%; top: 0px;"
+                                  />
+                                  <div
+                                    class="bp5-slider-progress"
+                                    style="left: 0.00%; right: 100.00%; top: 0px;"
                                   />
                                 </div>
                                 <div
                                   class="bp5-slider-axis"
-                                />
+                                >
+                                  <div
+                                    class="bp5-slider-label"
+                                  >
+                                    0
+                                  </div>
+                                </div>
                                 <span
                                   aria-disabled="true"
                                   aria-orientation="horizontal"
                                   aria-valuemax="0"
-                                  aria-valuemin="1"
-                                  aria-valuenow="1"
+                                  aria-valuemin="0"
+                                  aria-valuenow="0"
                                   class="bp5-slider-handle"
                                   role="slider"
-                                  style="left: calc(0.00% - 0px);"
+                                  style="left: calc(NaN% - 0px);"
                                   tabindex="0"
                                 >
                                   <span
                                     class="bp5-slider-label"
                                   >
-                                    1
+                                    0
                                   </span>
                                 </span>
                               </div>
@@ -791,10 +797,11 @@ and also the
                                         class="bp5-button-text"
                                       >
                                         <label
-                                          class="bp5-control bp5-checkbox"
+                                          class="bp5-control bp5-checkbox bp5-disabled"
                                           style="margin: 0px;"
                                         >
                                           <input
+                                            disabled=""
                                             type="checkbox"
                                           />
                                           <span
@@ -907,40 +914,6 @@ and also the
                                     >
                                       <span
                                         aria-hidden="true"
-                                        class="bp5-icon bp5-icon-standard bp5-icon-build"
-                                        data-icon="build"
-                                      />
-                                      <span
-                                        class="bp5-button-text"
-                                      >
-                                        <label
-                                          class="bp5-control bp5-checkbox bp5-disabled"
-                                          style="margin: 0px;"
-                                        >
-                                          <input
-                                            disabled=""
-                                            type="checkbox"
-                                          />
-                                          <span
-                                            class="bp5-control-indicator"
-                                          />
-                                        </label>
-                                      </span>
-                                    </a>
-                                  </span>
-                                  <span
-                                    class="bp5-popover-target"
-                                  >
-                                    <a
-                                      aria-disabled="true"
-                                      aria-expanded="false"
-                                      class="bp5-button bp5-disabled"
-                                      disabled=""
-                                      role="button"
-                                      tabindex="-1"
-                                    >
-                                      <span
-                                        aria-hidden="true"
                                         class="bp5-icon bp5-icon-standard bp5-icon-print"
                                         data-icon="print"
                                       />
@@ -984,12 +957,13 @@ and also the
                               </div>
                             </div>
                              
+                            <div />
                             <div
                               class="bp5-running-text"
-                              data-testid="env-visualizer-default-text"
-                              id="env-visualizer-default-text"
+                              data-testid="cse-machine-default-text"
+                              id="cse-machine-default-text"
                             >
-                              The environment model visualizer generates environment model diagrams following a notation introduced in
+                              The CSE machine generates control, stash and environment model diagrams following a notation introduced in
                                
                               <a
                                 href="https://sourceacademy.org/sicpjs/3.2"
@@ -1003,7 +977,7 @@ and also the
                               .
                               <br />
                               <br />
-                               On this tab, the REPL will be hidden from view, so do check that your code has no errors before running the stepper. You may use this tool by running your program and then dragging the slider above to see the state of the environment at different stages in the evaluation of your program. Clicking on the fast-forward button (double chevron) will take you to the next breakpoint in your program
+                               On this tab, the REPL will be hidden from view, so do check that your code has no errors before running the stepper. You may use this tool by running your program and then dragging the slider above to see the state of the control, stash and environment at different stages in the evaluation of your program. Clicking on the fast-forward button (double chevron) will take you to the next breakpoint in your program
                               <br />
                               <br />
                               <div
@@ -1661,7 +1635,7 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
               class="editor-container"
             >
               <div
-                class="Editor bp4-card bp4-elevation-0"
+                class="Editor bp5-card bp5-elevation-0"
                 tabindex="-1"
               >
                 <div

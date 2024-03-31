@@ -14,7 +14,7 @@ import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
 
-export type FileSystemViewFileNodeProps = {
+type Props = {
   workspaceLocation: WorkspaceLocation;
   fileSystem: FSModule;
   basePath: string;
@@ -24,20 +24,16 @@ export type FileSystemViewFileNodeProps = {
   refreshDirectory: () => void;
 };
 
-const FileSystemViewFileNode: React.FC<FileSystemViewFileNodeProps> = (
-  props: FileSystemViewFileNodeProps
-) => {
-  const {
-    workspaceLocation,
-    fileSystem,
-    basePath,
-    fileName,
-    indentationLevel,
-    refreshDirectory,
-    disableEditing
-  } = props;
-
-  const [isEditing, setIsEditing] = React.useState<boolean>(false);
+const FileSystemViewFileNode: React.FC<Props> = ({
+  workspaceLocation,
+  fileSystem,
+  basePath,
+  fileName,
+  indentationLevel,
+  refreshDirectory,
+  disableEditing
+}) => {
+  const [isEditing, setIsEditing] = React.useState(false);
   const dispatch = useDispatch();
 
   const fullPath = path.join(basePath, fileName);

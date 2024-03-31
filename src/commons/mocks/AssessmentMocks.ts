@@ -23,6 +23,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     },
     {
@@ -32,6 +33,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     },
     {
@@ -41,6 +43,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     },
     {
@@ -49,7 +52,8 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isManuallyGraded: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      hasTokenCounter: true,
+      hasTokenCounter: false,
+      hasVotingFeatures: true,
       earlySubmissionXp: 200
     },
     {
@@ -59,6 +63,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     }
   ],
@@ -70,6 +75,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     },
     {
@@ -79,6 +85,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     },
     {
@@ -88,6 +95,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     }
   ]
@@ -101,6 +109,7 @@ const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/300/',
     id: 1,
     maxXp: 1000,
+    earlySubmissionXp: 0,
     openAt: '2038-06-18T05:24:26.026Z',
     title: 'An Odessey to Runes (Duplicate)',
     shortSummary:
@@ -108,7 +117,9 @@ const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: 'mission-1',
     xp: 0,
-    gradingStatus: GradingStatuses.none
+    gradingStatus: GradingStatuses.none,
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   }
 ];
 
@@ -120,6 +131,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/300/',
     id: 2,
     maxXp: 1000,
+    earlySubmissionXp: 0,
     openAt: '2018-06-18T05:24:26.026Z',
     title: 'An Odessey to Runes',
     shortSummary: `
@@ -139,7 +151,9 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.attempted,
     story: 'mission-1',
     xp: 1,
-    gradingStatus: GradingStatuses.none
+    gradingStatus: GradingStatuses.none,
+    maxTeamSize: 4,
+    hasVotingFeatures: false
   },
   {
     type: 'Missions',
@@ -148,6 +162,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/350x200/?text=World&font=lobster',
     id: 3,
     maxXp: 1000,
+    earlySubmissionXp: 0,
     openAt: '2018-07-18T05:24:26.026Z',
     title: 'The Secret to Streams',
     shortSummary:
@@ -155,7 +170,9 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.attempting,
     story: 'mission-2',
     xp: 2,
-    gradingStatus: GradingStatuses.none
+    gradingStatus: GradingStatuses.none,
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   },
   {
     type: 'Quests',
@@ -164,6 +181,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
     id: 4,
     maxXp: 1000,
+    earlySubmissionXp: 0,
     openAt: '2018-07-18T05:24:26.026Z',
     title: 'A sample Sidequest',
     shortSummary:
@@ -171,7 +189,9 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: 'sidequest-2.1',
     xp: 3,
-    gradingStatus: GradingStatuses.none
+    gradingStatus: GradingStatuses.none,
+    maxTeamSize: 2,
+    hasVotingFeatures: false
   },
   {
     type: 'Paths',
@@ -180,6 +200,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/700x400/417678,64/?text=%E3%83%91%E3%82%B9&font=noto',
     id: 5,
     maxXp: 200,
+    earlySubmissionXp: 0,
     openAt: '2018-01-01T00:00:00.000Z',
     title: 'Basic logic gates',
     shortSummary:
@@ -187,7 +208,9 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: null,
     xp: 0,
-    gradingStatus: GradingStatuses.excluded
+    gradingStatus: GradingStatuses.excluded,
+    maxTeamSize: 2,
+    hasVotingFeatures: false
   },
   {
     type: 'Others',
@@ -196,6 +219,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
     id: 6,
     maxXp: 1000,
+    earlySubmissionXp: 0,
     openAt: '2018-07-18T05:24:26.026Z',
     title: 'A sample Practical',
     shortSummary:
@@ -204,7 +228,9 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     story: 'sidequest-2.1',
     xp: 3,
     gradingStatus: GradingStatuses.none,
-    private: true
+    private: true,
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   }
 ];
 
@@ -216,6 +242,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
     id: 7,
     maxXp: 1000,
+    earlySubmissionXp: 0,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'A closed Mission',
     shortSummary:
@@ -223,7 +250,9 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: 'mission-3',
     xp: 800,
-    gradingStatus: GradingStatuses.grading
+    gradingStatus: GradingStatuses.grading,
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   },
   {
     type: 'Quests',
@@ -232,6 +261,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
     id: 8,
     maxXp: 1000,
+    earlySubmissionXp: 0,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Closed (not graded) Sidequest',
     shortSummary:
@@ -239,7 +269,9 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 500,
-    gradingStatus: GradingStatuses.none
+    gradingStatus: GradingStatuses.none,
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   },
   {
     type: 'Quests',
@@ -248,6 +280,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
     id: 9,
     maxXp: 500,
+    earlySubmissionXp: 0,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Closed (fully graded) Sidequest',
     shortSummary:
@@ -255,7 +288,9 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 150,
-    gradingStatus: GradingStatuses.graded
+    gradingStatus: GradingStatuses.graded,
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   },
   {
     type: 'Quests',
@@ -264,6 +299,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
     id: 10,
     maxXp: 0,
+    earlySubmissionXp: 0,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Ungraded assessment',
     shortSummary:
@@ -271,7 +307,9 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 100,
-    gradingStatus: GradingStatuses.excluded
+    gradingStatus: GradingStatuses.excluded,
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   }
 ];
 
@@ -294,6 +332,7 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
   {
     autogradingResults: [],
     answer: null,
+    lastModifiedAt: '2023-08-05T17:48:24.000000Z',
     content: `
   This question has an id of \`0\`.
   
@@ -345,6 +384,7 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
   function volumeOfSphere(x) {
       return 4 / 3 * cube(x) * pi;
   }`,
+    lastModifiedAt: '2023-08-05T17:48:24.000000Z',
     content: 'Hello and welcome to this assessment! This is the 1st question.',
     id: 1,
     library: mockLibrary,
@@ -441,6 +481,7 @@ export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion>
   {
     autogradingResults: [],
     answer: null,
+    lastModifiedAt: '2023-08-05T17:48:24.000000Z',
     content: 'You have reached the last question! Have some fun with the tone matrix...',
     id: 4,
     library: mockLibrary,
@@ -464,6 +505,7 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
           return fibonacci(n-1) + fibonacci(n-2);
       }
   }`,
+    lastModifiedAt: '2023-08-05T17:48:24.000000Z',
     content: 'You can see autograding results!!!',
     id: 0,
     library: mockLibrary,
@@ -555,6 +597,7 @@ export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQue
     answer: `function recurse(rune, n) {
       return n <= 1 ? rune : make_cross(recurse(rune, n - 1));
   }`,
+    lastModifiedAt: '2023-08-05T17:48:24.000000Z',
     content: 'This is a runes question - there are no testcases nor autograding results.',
     id: 1,
     library: mockLibrary,
@@ -644,6 +687,7 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   {
     autogradingResults: [],
     answer: null,
+    lastModifiedAt: '2023-08-05T17:48:24.000000Z',
     content: `An AND gate is a digital logic gate that implements logical conjunction on its inputs. It returns a single output that is HIGH (active) iff all the inputs to the AND gate are HIGH (active).
   
   In this question, let us model an AND gate as a function, and treat HIGH (active) inputs as the boolean value \`true\` and LOW (inactive) inputs as the boolean value \`false\`.
@@ -721,6 +765,7 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   {
     autogradingResults: [],
     answer: null,
+    lastModifiedAt: '2023-08-05T17:48:24.000000Z',
     content: `The XOR (exclusive-OR) gate is a digital logic gate that accepts two inputs and returns a single output that is HIGH (active) iff one of the inputs are HIGH (active), but not both.
   
   In this question, let us model the XOR gate as a function. Implement the function \`XOR(x, y)\` which takes two boolean inputs \`x\` and \`y\` and which returns the output of the XOR gate as a boolean.
@@ -780,6 +825,7 @@ export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
   {
     autogradingResults: [],
     answer: null,
+    lastModifiedAt: '2023-08-05T17:48:24.000000Z',
     content: `The NOR logic gate is special in that it is an _universal logic gate_, that is to say, they can be composed to form any other logic gate.
   
   Implement the AND logic gate **using ONLY the NOR logic gate**, as the \`NOR_AND(x, y)\` function that takes in two booleans as input.

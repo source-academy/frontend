@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { Context } from 'js-slang';
+import { Context, Result } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
 
 import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
@@ -52,21 +52,24 @@ import {
   SubmissionsTableFilters,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_FOLDER_MODE,
-  TOGGLE_UPDATE_ENV,
-  TOGGLE_USING_ENV,
+  TOGGLE_UPDATE_CSE,
+  TOGGLE_USING_CSE,
   TOGGLE_USING_SUBST,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_BREAKPOINTSTEPS,
+  UPDATE_CHANGEPOINTSTEPS,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
+  UPDATE_CURRENTSTEP,
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_TAB_READ_ONLY,
   UPDATE_EDITOR_VALUE,
-  UPDATE_ENVSTEPS,
-  UPDATE_ENVSTEPSTOTAL,
   UPDATE_HAS_UNSAVED_CHANGES,
+  UPDATE_LAST_DEBUGGER_RESULT,
+  UPDATE_LAST_NON_DET_RESULT,
   UPDATE_REPL_VALUE,
+  UPDATE_STEPSTOTAL,
   UPDATE_SUBLANGUAGE,
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
   UPDATE_WORKSPACE,
@@ -466,29 +469,29 @@ export const addHtmlConsoleError = createAction(
   })
 );
 
-export const toggleUsingEnv = createAction(
-  TOGGLE_USING_ENV,
-  (usingEnv: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
-    payload: { usingEnv, workspaceLocation }
+export const toggleUsingCse = createAction(
+  TOGGLE_USING_CSE,
+  (usingCse: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
+    payload: { usingCse, workspaceLocation }
   })
 );
 
-export const toggleUpdateEnv = createAction(
-  TOGGLE_UPDATE_ENV,
-  (updateEnv: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
-    payload: { updateEnv, workspaceLocation }
+export const toggleUpdateCse = createAction(
+  TOGGLE_UPDATE_CSE,
+  (updateCse: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
+    payload: { updateCse, workspaceLocation }
   })
 );
 
-export const updateEnvSteps = createAction(
-  UPDATE_ENVSTEPS,
+export const updateCurrentStep = createAction(
+  UPDATE_CURRENTSTEP,
   (steps: number, workspaceLocation: WorkspaceLocation) => ({
     payload: { steps, workspaceLocation }
   })
 );
 
-export const updateEnvStepsTotal = createAction(
-  UPDATE_ENVSTEPSTOTAL,
+export const updateStepsTotal = createAction(
+  UPDATE_STEPSTOTAL,
   (steps: number, workspaceLocation: WorkspaceLocation) => ({
     payload: { steps, workspaceLocation }
   })
@@ -498,5 +501,26 @@ export const updateBreakpointSteps = createAction(
   UPDATE_BREAKPOINTSTEPS,
   (breakpointSteps: number[], workspaceLocation: WorkspaceLocation) => ({
     payload: { breakpointSteps, workspaceLocation }
+  })
+);
+
+export const updateChangePointSteps = createAction(
+  UPDATE_CHANGEPOINTSTEPS,
+  (changepointSteps: number[], workspaceLocation: WorkspaceLocation) => ({
+    payload: { changepointSteps, workspaceLocation }
+  })
+);
+
+export const updateLastDebuggerResult = createAction(
+  UPDATE_LAST_DEBUGGER_RESULT,
+  (lastDebuggerResult: any, workspaceLocation: WorkspaceLocation) => ({
+    payload: { lastDebuggerResult, workspaceLocation }
+  })
+);
+
+export const updateLastNonDetResult = createAction(
+  UPDATE_LAST_NON_DET_RESULT,
+  (lastNonDetResult: Result, workspaceLocation: WorkspaceLocation) => ({
+    payload: { lastNonDetResult, workspaceLocation }
   })
 );

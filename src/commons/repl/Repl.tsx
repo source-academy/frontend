@@ -38,7 +38,7 @@ type OwnProps = {
   replButtons: Array<JSX.Element | null>;
 };
 
-const Repl: React.FC<ReplProps> = (props: ReplProps) => {
+const Repl: React.FC<ReplProps> = props => {
   const cards = props.output.map((slice, index) => (
     <Output
       output={slice}
@@ -64,7 +64,7 @@ const Repl: React.FC<ReplProps> = (props: ReplProps) => {
   );
 };
 
-export const Output: React.FC<OutputProps> = (props: OutputProps) => {
+export const Output: React.FC<OutputProps> = props => {
   switch (props.output.type) {
     case 'code':
       return (

@@ -16,6 +16,7 @@ import { isEqual, isNull } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { onClickProgress } from 'src/features/assessments/AssessmentUtils';
 import { WORKSPACE_BASE_PATHS } from 'src/pages/fileSystem/createInBrowserFileSystem';
 import { mobileOnlyTabIds } from 'src/pages/playground/PlaygroundTabs';
@@ -27,7 +28,12 @@ import {
   KeyboardCommand,
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { fetchAssessment, submitAnswer } from '../application/actions/SessionActions';
+import {
+  checkAnswerLastModifiedAt,
+  fetchAssessment,
+  fetchTeamFormationOverview,
+  submitAnswer
+} from '../application/actions/SessionActions';
 import { defaultWorkspaceManager } from '../application/ApplicationTypes';
 import {
   AssessmentConfiguration,
@@ -105,6 +111,7 @@ import {
 } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
+
 export type AssessmentWorkspaceProps = {
   assessmentId: number;
   needsPassword: boolean;
@@ -119,6 +126,7 @@ const workspaceLocation: WorkspaceLocation = 'assessment';
 const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const { assessmentId, questionId } = props;
   const [showOverlay, setShowOverlay] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = useState(false);
   const [sessionId, setSessionId] = useState('');
   const { isMobileBreakpoint } = useResponsive();
@@ -127,6 +135,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const [isEditable, setIsEditable] = useState(true);
 
   const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
+  const assessmentOverviews = useTypedSelector(state => state.session.assessmentOverviews);
+  const teamFormationOverview = useTypedSelector(state => state.session.teamFormationOverview);
+  const assessmentOverview = assessmentOverviews?.find(assessmentOverview => {
+    return assessmentOverview.id === assessment?.id;
+  });
   const { selectedTab, setSelectedTab } = useSideContent(
     workspaceLocation,  
     assessment?.questions[questionId].grader !== undefined
@@ -154,6 +167,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
   const dispatch = useDispatch();
   const {
+    handleTeamOverviewFetch,
     handleTestcaseEval,
     handleClearContext,
     handleChangeExecTime,
@@ -166,11 +180,14 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleEditorUpdateBreakpoints,
     handleReplEval,
     handleSave,
+    handleCheckLastModifiedAt,
     handleUpdateHasUnsavedChanges,
     handleEnableTokenCounter,
     handleDisableTokenCounter
   } = useMemo(() => {
     return {
+      handleTeamOverviewFetch: (assessmentId: number) =>
+        dispatch(fetchTeamFormationOverview(assessmentId)),
       handleTestcaseEval: (id: number) => dispatch(evalTestcase(workspaceLocation, id)),
       handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
         dispatch(beginClearContext(workspaceLocation, library, shouldInitLibrary)),
@@ -189,6 +206,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
         dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)),
       handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
+      handleCheckLastModifiedAt: (id: number, lastModifiedAt: string, saveAnswer: Function) =>
+        dispatch(checkAnswerLastModifiedAt(id, lastModifiedAt, saveAnswer)),
       handleSave: (id: number, answer: number | string | ContestEntry[]) =>
         dispatch(submitAnswer(id, answer)),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
@@ -198,6 +217,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
   }, [dispatch]);
   const currentQuestionFilePath = `/${workspaceLocation}/${questionId + 1}.js`;
+
+  useEffect(() => {
+    handleTeamOverviewFetch(props.assessmentId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /**
    * After mounting (either an older copy of the assessment
@@ -251,16 +275,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    * Handles toggling enabling and disabling token counter depending on assessment properties
    */
   useEffect(() => {
-    if (props.assessmentConfiguration.hasTokenCounter) {
+    if (assessment?.hasTokenCounter) {
       handleEnableTokenCounter();
     } else {
       handleDisableTokenCounter();
     }
-  }, [
-    props.assessmentConfiguration.hasTokenCounter,
-    handleEnableTokenCounter,
-    handleDisableTokenCounter
-  ]);
+  }, [assessment?.hasTokenCounter, handleEnableTokenCounter, handleDisableTokenCounter]);
 
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
@@ -478,6 +498,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   ) => {
     const question = assessment!.questions[questionId];
     const isGraded = question.grader !== undefined;
+    const isTeamAssessment =
+      assessmentOverview !== undefined ? assessmentOverview.maxTeamSize > 1 : false;
     const isContestVoting = question?.type === QuestionTypes.voting;
     const handleContestEntryClick = (_submissionId: number, answer: string) => {
       // Contest entries should be fixed to the first tab
@@ -492,6 +514,30 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         id: SideContentType.questionOverview
       }
     ];
+
+    if (isTeamAssessment) {
+      tabs.push({
+        label: `Team`,
+        iconName: IconNames.PEOPLE,
+        body: (
+          <div>
+            {teamFormationOverview === undefined ? (
+              'You are not assigned to any team!'
+            ) : (
+              <div>
+                Your teammates for this assessment:{' '}
+                {teamFormationOverview.studentNames.map((name: string, index: number) => (
+                  <span key={index}>
+                    {index > 0 ? ', ' : ''}
+                    {name}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        )
+      });
+    }
 
     if (isContestVoting) {
       tabs.push(
@@ -646,8 +692,49 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
     const onClickReturn = () => navigate(listingPath);
 
-    // Tab 0 contains the main question tab (always) - and the only 1 they can edit, so this works fine
-    const onClickSave = () => handleSave(question.id, editorTabs[0].value);
+    const onClickSave = () => {
+      if (isSaving) return;
+      setIsSaving(true);
+      handleSave(question.id, editorTabs[0].value)
+      checkLastModified();
+      setTimeout(() => {
+        setIsSaving(false);
+      }, 3000);
+    };
+
+    const checkLastModified = () => {
+      const isTeamAssessment: boolean = assessmentOverview?.maxTeamSize !== 0;
+      if (isTeamAssessment && question.type === QuestionTypes.programming) {
+        handleCheckLastModifiedAt(question.id, question.lastModifiedAt, saveClick);
+      }
+    };
+
+    const saveClick = async (modified: boolean) => {
+      const isTeamAssessment: boolean = assessmentOverview?.maxTeamSize !== 0;
+      if (isTeamAssessment && question.type === QuestionTypes.programming) {
+        if (modified) {
+          const confirm = await showSimpleConfirmDialog({
+            contents: (
+              <>
+                <p>Save answer?</p>
+                <p>Note: The changes made by your teammate will be lost.</p>
+              </>
+            ),
+            positiveIntent: 'danger',
+            positiveLabel: 'Save'
+          });
+
+          if (!confirm) {
+            return;
+          }
+        }
+      }
+      // Tab 0 contains the main question tab (always) - and the only 1 they can edit, so this works fine
+      handleSave(question.id, editorTabs[0].value);
+      setTimeout(() => {
+        handleAssessmentFetch(props.assessmentId);
+      }, 1000);
+    };
 
     const onClickResetTemplate = () => {
       setShowResetTemplateOverlay(true);
@@ -703,10 +790,20 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       />
     );
 
+    // Define the function to check if the Save button should be disabled
+    const shouldDisableSaveButton = (): boolean | undefined => {
+      const isIndividualAssessment: boolean = assessmentOverview?.maxTeamSize === 1;
+      if (isIndividualAssessment) {
+        return false;
+      }
+      return !teamFormationOverview;
+    };
+
     const saveButton =
       props.canSave && question.type === QuestionTypes.programming ? (
         <ControlButtonSaveButton
           hasUnsavedChanges={hasUnsavedChanges}
+          isDisabled={shouldDisableSaveButton()}
           onClickSave={onClickSave}
           disabled={!isEditable}
           key="save"
@@ -916,6 +1013,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           removeEditorTabByIndex: editorContainerHandlers.removeEditorTabByIndex,
           editorTabs: editorTabs.map(convertEditorTabStateToProps),
           editorSessionId: '',
+          sessionDetails: null,
           sourceChapter: question.library.chapter || Chapter.SOURCE_4,
           sourceVariant: question.library.variant ?? Variant.DEFAULT,
           externalLibraryName: question.library.external.name || 'NONE',

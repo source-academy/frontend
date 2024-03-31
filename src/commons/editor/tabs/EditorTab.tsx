@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import React from 'react';
 
-export type EditorTabProps = {
+type Props = {
   filePath: string;
   isActive: boolean;
   setActive: () => void;
@@ -11,9 +11,7 @@ export type EditorTabProps = {
   readOnly?: boolean;
 };
 
-const EditorTab: React.FC<EditorTabProps> = (props: EditorTabProps) => {
-  const { filePath, isActive, setActive, remove, readOnly } = props;
-
+const EditorTab: React.FC<Props> = ({ filePath, isActive, setActive, remove, readOnly }) => {
   const onClick = (e: React.MouseEvent<HTMLElement>) => {
     // Stop the click event from propagating to the parent component.
     e.stopPropagation();

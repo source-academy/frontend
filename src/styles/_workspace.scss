@@ -397,9 +397,9 @@ $code-color-notification: #f9f0d7;
       }
     }
 
-    // Specific CSS for the Stepper and Env Visualiser tab, since REPL is hidden
+    // Specific CSS for the Stepper and CSE Machine tab, since REPL is hidden
     ##{$ns}-tab-panel_side-content-tabs_subst_visualiser,
-    ##{$ns}-tab-panel_side-content-tabs_env_visualizer {
+    ##{$ns}-tab-panel_side-content-tabs_cse_machine {
       height: calc(100% - 60px);
       margin-top: -45px;
 

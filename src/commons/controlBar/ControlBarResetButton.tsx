@@ -3,12 +3,12 @@ import React from 'react';
 
 import ControlButton from '../ControlButton';
 
-type ControlBarResetButtonProps = {
+type Props = {
   onClick?(): any;
   disabled?: boolean;
 };
 
-export const ControlBarResetButton: React.FC<ControlBarResetButtonProps> = ({
+export const ControlBarResetButton: React.FC<Props> = ({
   onClick,
   disabled
 }) => {

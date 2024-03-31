@@ -1,7 +1,7 @@
-import * as bp3core from '@blueprintjs/core';
+import * as bpcore from '@blueprintjs/core';
 import { TabId } from '@blueprintjs/core';
-import * as bp3icons from '@blueprintjs/icons';
-import * as bp3popover from '@blueprintjs/popover2';
+import * as bpicons from '@blueprintjs/icons';
+import * as bppopover from '@blueprintjs/popover2';
 import * as jsslang from 'js-slang';
 import * as jsslangDist from 'js-slang/dist';
 import lodash from 'lodash';
@@ -32,9 +32,9 @@ const requireProvider = (x: string) => {
     'react/jsx-runtime': JSXRuntime,
     'react-ace': ace,
     'react-dom': ReactDOM,
-    '@blueprintjs/core': bp3core,
-    '@blueprintjs/icons': bp3icons,
-    '@blueprintjs/popover2': bp3popover,
+    '@blueprintjs/core': bpcore,
+    '@blueprintjs/icons': bpicons,
+    '@blueprintjs/popover2': bppopover,
     'js-slang': jsslang,
     'js-slang/dist': jsslangDist,
     lodash,
@@ -45,27 +45,30 @@ const requireProvider = (x: string) => {
   return exports[x];
 };
 
-type RawTab = (provider: ReturnType<typeof requireProvider>) => ModuleSideContent;
+type RawTab = (provider: ReturnType<typeof requireProvider>) => { default: ModuleSideContent };
 
 /**
  * Returns an array of SideContentTabs to be spawned
  * @param debuggerContext - DebuggerContext object from redux store
  */
-export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab[] => {
+export function getDynamicTabs(debuggerContext: DebuggerContext): SideContentTab[] {
   const moduleContexts = debuggerContext?.context?.moduleContexts;
 
   if (!moduleContexts) return [];
 
   return Object.values(moduleContexts)
     .flatMap(({ tabs }) => tabs ?? [])
-    .map((rawTab: RawTab) => rawTab(requireProvider))
+    .map((rawTab: RawTab) => {
+      const { default: content } = rawTab(requireProvider);
+      return content;
+    })
     .filter(({ toSpawn }) => !toSpawn || toSpawn(debuggerContext))
     .map(tab => ({
       ...tab,
       body: tab.body(debuggerContext),
       id: SideContentType.module
     }));
-};
+}
 
 export const generateIconId = (tabId: TabId) => `${tabId}-icon`;
 export const getTabId = (tab: SideContentTab) =>
