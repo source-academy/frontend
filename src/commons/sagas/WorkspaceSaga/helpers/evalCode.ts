@@ -4,7 +4,7 @@ import { Context, interrupt, Result, resume, runFilesInContext } from 'js-slang'
 import { ACORN_PARSE_OPTIONS, TRY_AGAIN } from 'js-slang/dist/constants';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
-import { Chapter, ErrorSeverity, ErrorType, Variant } from 'js-slang/dist/types';
+import { Chapter, ErrorSeverity, ErrorType, SourceError, Variant } from 'js-slang/dist/types';
 import { SagaIterator } from 'redux-saga';
 import { call, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
@@ -326,17 +326,31 @@ export function* evalCode(
   ) {
     yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
     if (!isStoriesBlock) {
-      yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
-      // enable the CSE machine visualizer during errors
-      if (context.executionMethod === 'cse-machine' && needUpdateCse) {
-        yield put(actions.updateStepsTotal(context.runtime.envStepsTotal + 1, workspaceLocation));
-        yield put(actions.toggleUpdateCse(false, workspaceLocation as any));
-        yield put(
-          actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation)
-        );
-        yield put(
-          actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation)
-        );
+      const specialError = checkSpecialError(context.errors);
+      if (specialError !== null) {
+        switch (specialError) {
+          case 'source_academy_interrupt': {
+            yield* handleSourceAcademyInterrupt(context, entrypointCode, workspaceLocation);
+            break;
+          }
+          // This should not happen but we check just in case
+          default: {
+            yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
+          }
+        }
+      } else {
+        yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
+        // enable the CSE machine visualizer during errors
+        if (context.executionMethod === 'cse-machine' && needUpdateCse) {
+          yield put(actions.updateStepsTotal(context.runtime.envStepsTotal + 1, workspaceLocation));
+          yield put(actions.toggleUpdateCse(false, workspaceLocation as any));
+          yield put(
+            actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation)
+          );
+          yield put(
+            actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation)
+          );
+        }
       }
     } else {
       // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
@@ -411,4 +425,35 @@ export function* evalCode(
     const introIcon = document.getElementById(SideContentType.introduction + '-icon');
     introIcon && introIcon.classList.remove('side-content-tab-alert-error');
   }
+}
+
+// Special module errors
+const specialErrors = ['source_academy_interrupt'] as const;
+type SpecialError = (typeof specialErrors)[number];
+
+function checkSpecialError(errors: SourceError[]): SpecialError | null {
+  if (errors.length !== 1) {
+    return null;
+  }
+  const firstError = errors[0] as any;
+  if (typeof firstError.error !== 'string') {
+    return null;
+  }
+  if (!specialErrors.includes(firstError.error)) {
+    return null;
+  }
+
+  return firstError.error as SpecialError;
+}
+
+function* handleSourceAcademyInterrupt(
+  context: Context,
+  entrypointCode: string,
+  workspaceLocation: WorkspaceLocation
+) {
+  yield put(
+    actions.evalInterpreterSuccess('Program has been interrupted by module', workspaceLocation)
+  );
+  context.errors = [];
+  yield put(actions.notifyProgramEvaluated(null, null, entrypointCode, context, workspaceLocation));
 }
