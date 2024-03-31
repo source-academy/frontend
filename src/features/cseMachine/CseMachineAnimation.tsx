@@ -279,8 +279,9 @@ export class CseAnimation {
   }
 
   static async playAnimation() {
-    if (!CseAnimation.animationEnabled) {
-      CseAnimation.disableAnimations();
+    if (!CseAnimation.animationEnabled || CseMachine.getStackTruncated()) {
+      CseAnimation.animations.forEach(a => a.destroy());
+      CseAnimation.clearAnimationComponents();
       return;
     }
     CseAnimation.disableAnimations();
