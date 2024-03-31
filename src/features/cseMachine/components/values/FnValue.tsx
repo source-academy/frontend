@@ -67,7 +67,7 @@ export class FnValue extends Value implements IHoverable {
     if (!isMainReference(this, newReference)) return;
     // derive the coordinates from the main reference (binding / array unit)
     if (newReference instanceof Binding) {
-      this._x = newReference.frame.x() + newReference.frame.width() + Config.FrameMarginX / 4;
+      this._x = newReference.frame.x() + newReference.frame.width() + Config.FrameMarginX;
       this._y = newReference.y();
       this.centerX = this._x + this.radius * 2;
     } else {
