@@ -18,6 +18,7 @@ import {
 import {
   CHANGE_DATE_ASSESSMENT,
   CHANGE_TEAM_SIZE_ASSESSMENT,
+  CONFIGURE_ASSESSMENT,
   DELETE_ASSESSMENT,
   PUBLISH_ASSESSMENT,
   UPLOAD_ASSESSMENT
@@ -1160,6 +1161,7 @@ function* BackendSaga(): SagaIterator {
         displayInDashboard: true,
         hoursBeforeEarlyXpDecay: 0,
         hasTokenCounter: false,
+        hasVotingFeatures: false,
         earlySubmissionXp: 0
       }
     ];
@@ -1359,6 +1361,28 @@ function* BackendSaga(): SagaIterator {
       }
 
       yield put(actions.fetchAssessmentOverviews());
+    }
+  );
+
+  yield takeEvery(
+    CONFIGURE_ASSESSMENT,
+    function* (action: ReturnType<typeof actions.configureAssessment>): any {
+      const tokens: Tokens = yield selectTokens();
+      const id = action.payload.id;
+      const hasVotingFeatures = action.payload.hasVotingFeatures;
+      const hasTokenCounter = action.payload.hasTokenCounter;
+
+      const resp: Response | null = yield updateAssessment(
+        id,
+        { hasVotingFeatures: hasVotingFeatures, hasTokenCounter: hasTokenCounter },
+        tokens
+      );
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.fetchAssessmentOverviews());
+      yield call(showSuccessMessage, 'Updated successfully!', 1000);
     }
   );
 }
