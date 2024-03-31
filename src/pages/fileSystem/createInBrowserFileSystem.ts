@@ -15,7 +15,6 @@ import { EditorTabState, WorkspaceManagerState } from '../../commons/workspace/W
  */
 export const WORKSPACE_BASE_PATHS: Record<keyof WorkspaceManagerState, string> = {
   assessment: '/assessment',
-  githubAssessment: '',
   grading: '/grading',
   playground: '/playground',
   sicp: '/sicp',

@@ -20,7 +20,8 @@ import { evalCode } from './evalCode';
 import { insertDebuggerStatements } from './insertDebuggerStatements';
 
 export function* evalEditor(
-  workspaceLocation: WorkspaceLocation
+  workspaceLocation: WorkspaceLocation,
+  isGraderTab = false
 ): Generator<StrictEffect, void, any> {
   const [
     prepend,
@@ -53,15 +54,24 @@ export function* evalEditor(
   }
 
   const defaultFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
+  let entrypointFilePath = editorTabs[activeEditorTabIndex].filePath ?? defaultFilePath;
   let files: Record<string, string>;
   if (isFolderModeEnabled) {
     files = yield call(retrieveFilesInWorkspaceAsRecord, workspaceLocation, fileSystem);
+    if ((workspaceLocation === 'assessment' || workspaceLocation === 'grading') && isGraderTab) {
+      const questionNumber = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].currentQuestion
+      );
+      if (typeof questionNumber !== undefined) {
+        entrypointFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/${questionNumber + 1}.js`;
+      }
+    }
   } else {
     files = {
       [defaultFilePath]: editorTabs[activeEditorTabIndex].value
     };
   }
-  const entrypointFilePath = editorTabs[activeEditorTabIndex].filePath ?? defaultFilePath;
+  
 
   yield put(actions.addEvent([EventType.RUN_CODE]));
 

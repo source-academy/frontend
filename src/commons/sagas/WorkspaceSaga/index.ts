@@ -189,9 +189,12 @@ export default function* WorkspaceSaga(): SagaIterator {
 
       const code: string = yield select((state: OverallState) => {
         const prependCode = state.workspaces[workspaceLocation].programPrependValue;
-        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        const editorCode = state.workspaces[workspaceLocation].editorTabs[0].value;
-        return [prependCode, editorCode] as [string, string];
+        const activeEditorTab = state.workspaces[workspaceLocation].activeEditorTabIndex;
+        const currentFileCode =
+          activeEditorTab !== null
+            ? state.workspaces[workspaceLocation].editorTabs[activeEditorTab].value
+            : state.workspaces[workspaceLocation].editorTabs[0].value;
+        return [prependCode, currentFileCode] as [string, string];
       });
       const [prepend, editorValue] = code;
 
@@ -539,7 +542,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     function* (action: ReturnType<typeof actions.runAllTestcases>) {
       const { workspaceLocation } = action.payload;
 
-      yield call(evalEditor, workspaceLocation);
+      yield call(evalEditor, workspaceLocation, true);
 
       const testcases: Testcase[] = yield select(
         (state: OverallState) => state.workspaces[workspaceLocation].editorTestcases

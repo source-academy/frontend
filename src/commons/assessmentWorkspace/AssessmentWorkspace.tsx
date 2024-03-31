@@ -803,9 +803,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       props.canSave && question.type === QuestionTypes.programming ? (
         <ControlButtonSaveButton
           hasUnsavedChanges={hasUnsavedChanges}
-          isDisabled={shouldDisableSaveButton()}
+          isDisabled={shouldDisableSaveButton() || !isEditable}
           onClickSave={onClickSave}
-          disabled={!isEditable}
           key="save"
         />
       ) : null;
