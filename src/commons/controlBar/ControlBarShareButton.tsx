@@ -20,7 +20,7 @@ type StateProps = {
   shortURL?: string;
   key: string;
   isSicp?: boolean;
-  programConfig: object
+  programConfig: object;
 };
 
 type State = {
@@ -52,15 +52,15 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
   handleKeyDown = (event: any) => {
     if (event.key === 'Enter' && event.ctrlKey) {
       // console.log('Ctrl+Enter pressed!');
-      this.setState({ keyword: "Test" })
+      this.setState({ keyword: 'Test' });
       this.props.handleShortenURL(this.state.keyword);
       this.setState({ isLoading: true });
       if (this.props.shortURL || this.props.isSicp) {
         this.selectShareInputText();
-        console.log("link created.")
+        console.log('link created.');
       }
     }
-  }
+  };
 
   public render() {
     const shareButtonPopoverContent =
@@ -80,12 +80,8 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
         </div>
       ) : (
         <>
-        {/* check this.props.postSuccess */}
-          {/* {!this.props.shortURL || this.props.shortURL === 'ERROR' ? (
-            !this.state.isLoading || this.props.shortURL === 'ERROR' ? ( */}
-            {!this.state.isSuccess || this.props.shortURL === 'ERROR' ? (
+          {!this.state.isSuccess || this.props.shortURL === 'ERROR' ? (
             !this.state.isLoading || this.props.shortURL === 'ERROR' ? (
-              
               <div>
                 {Constants.urlShortenerBase}&nbsp;
                 <input
@@ -111,18 +107,15 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
                         'Content-Type': 'application/json'
                       }
                     };
-                    fetch("http://localhost:4000/api/shared_programs", fetchOpts)
-                    .then(res => {
-                      return res.json()
-                    })
-                    .then(resp => {
-                      this.setState({ keyword: resp.uuid })
-                      console.log(resp)
-                    })
-                    .catch(err => console.log("Error: ", err));
-
-                    // this.props.handleShortenURL(this.state.keyword);
-                    // console.log("base", this.props.shortURL)
+                    fetch('http://localhost:4000/api/shared_programs', fetchOpts)
+                      .then(res => {
+                        return res.json();
+                      })
+                      .then(resp => {
+                        this.setState({ keyword: resp.uuid });
+                        console.log(resp);
+                      })
+                      .catch(err => console.log('Error: ', err));
                     this.setState({ isLoading: true, isSuccess: true });
                   }}
                 />
@@ -152,15 +145,15 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
       );
 
     return (
-        <Popover2
-          popoverClassName="Popover-share"
-          inheritDarkTheme={false}
-          content={shareButtonPopoverContent}
-        >
-          <Tooltip2 content="Get shareable link" placement={Position.TOP}>
-            <ControlButton label="Share" icon={IconNames.SHARE} onClick={() => this.toggleButton()} />
-          </Tooltip2>
-        </Popover2>
+      <Popover2
+        popoverClassName="Popover-share"
+        inheritDarkTheme={false}
+        content={shareButtonPopoverContent}
+      >
+        <Tooltip2 content="Get shareable link" placement={Position.TOP}>
+          <ControlButton label="Share" icon={IconNames.SHARE} onClick={() => this.toggleButton()} />
+        </Tooltip2>
+      </Popover2>
     );
   }
 
@@ -190,7 +183,4 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
       this.shareInputElem.current.select();
     }
   }
-
- 
-  
 }

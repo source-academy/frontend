@@ -11,7 +11,6 @@ import {
   SHORTEN_URL,
   UPDATE_SHORT_URL
 } from './PlaygroundTypes';
-import { programConfig } from 'src/pages/playground/Decoder';
 
 export const generateLzString = () => action(GENERATE_LZ_STRING);
 

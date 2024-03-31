@@ -1223,7 +1223,7 @@
   dependencies:
     tslib "~2.6.2"
 
-"@blueprintjs/core@^5.10.1":
+"@blueprintjs/core@^5.7.0":
   version "5.10.1"
   resolved "https://registry.npmmirror.com/@blueprintjs/core/-/core-5.10.1.tgz#d3df1743258a10841d2885dd2ba712d116a96689"
   integrity sha512-yE10tC/tA/NWo8zsged3n0PUcjlQzh9GqNKOqMAoSSnsAKGI+RJiHtbS2RERyKU+NailIsuFx1k282ohkJvkOQ==
