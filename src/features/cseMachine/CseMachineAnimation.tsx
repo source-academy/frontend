@@ -222,6 +222,8 @@ export class CseAnimation {
           );
           break;
         case InstrType.BRANCH:
+        case InstrType.FOR:
+        case InstrType.WHILE:
           // if (!currControlComponent) return;
           CseAnimation.animations.push(
             new BranchAnimation(
@@ -258,13 +260,6 @@ export class CseAnimation {
               Layout.previousStashComponent.stashItemComponents.at(-1)!,
               currStashComponent!
             )
-          );
-          break;
-        // block split cases
-        case InstrType.FOR:
-        case InstrType.WHILE:
-          CseAnimation.animations.push(
-            new BlockAnimation(lastControlComponent, CseAnimation.getNewControlItems())
           );
           break;
         case InstrType.ARRAY_LENGTH:
