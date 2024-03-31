@@ -55,12 +55,36 @@ const makeColumns = (handleClick: () => void) => [
     )
   }),
   columnHelper.accessor('studentName', {
-    header: 'Student',
-    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
+    header: 'Student(s)',
+    cell: info => {
+      const value = info.getValue();
+      const fallbackValue = info.row.original.studentNames;
+      const finalValue = value || '';
+      const finalFallbackValue = fallbackValue?.join(', ') || '';
+      return (
+        <Filterable
+          onClick={handleClick}
+          column={info.column}
+          value={finalValue !== '' ? finalValue : finalFallbackValue}
+        />
+      );
+    }
   }),
   columnHelper.accessor('studentUsername', {
-    header: 'Username',
-    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
+    header: 'Username(s)',
+    cell: info => {
+      const value = info.getValue();
+      const fallbackValue = info.row.original.studentUsernames;
+      const finalValue = value || '';
+      const finalFallbackValue = fallbackValue?.join(', ') || '';
+      return (
+        <Filterable
+          onClick={handleClick}
+          column={info.column}
+          value={finalValue !== '' ? finalValue : finalFallbackValue}
+        />
+      );
+    }
   }),
   columnHelper.accessor('groupName', {
     header: 'Group',
