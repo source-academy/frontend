@@ -80,14 +80,14 @@ export class AssignmentAnimation extends Animatable {
       this.asgnItemAnimation.animateTo(
         {
           x: this.frame.x() - this.asgnItemAnimation.width() - this.stashItemAnimation.width(),
-          y: this.binding.y() + this.binding.height() / 2 - this.asgnItemAnimation.height() / 2
+          y: this.binding.y()
         },
         { duration: 1.5 }
       ),
       this.stashItemAnimation.animateTo(
         {
           x: this.frame.x() - this.stashItem.width(),
-          y: this.binding.y() + this.binding.height() / 2 - this.stashItem.height() / 2
+          y: this.binding.y()
         },
         { duration: 1.5 }
       )
