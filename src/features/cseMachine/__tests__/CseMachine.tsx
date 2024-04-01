@@ -9,6 +9,7 @@ import { GlobalFnValue } from '../components/values/GlobalFnValue';
 import CseMachine from '../CseMachine';
 import { Layout } from '../CseMachineLayout';
 import { Env, EnvTree } from '../CseMachineTypes';
+import { isDataArray, isFunction } from '../CseMachineUtils';
 
 // The following are code samples that are more complex/known to have caused bugs
 // Some are commented out to keep the tests shorter
@@ -96,9 +97,7 @@ codeSamples.forEach((code, idx) => {
       });
     });
     environmentsToTest.forEach(environment => {
-      expect(environment).toMatchSnapshot({
-        id: expect.any(String)
-      });
+      expect(environment).toMatchSnapshot();
     });
     expect(toTest).toMatchSnapshot();
     // Note: Old code is kept here as a reference for later
@@ -165,6 +164,7 @@ codeSamples.forEach((code, idx) => {
     checkLayout();
     CseMachine.togglePrintableMode();
     checkLayout();
+    CseMachine.togglePrintableMode();
   });
 });
 
@@ -217,7 +217,9 @@ codeSamplesControlStash.forEach((codeSample, idx) => {
     if (truncate) {
       CseMachine.toggleStackTruncated();
     }
-    CseMachine.toggleControlStash();
+    if (!CseMachine.getControlStash()) {
+      CseMachine.toggleControlStash();
+    }
     const context = createContext(4);
     await runInContext(code, context, { executionMethod: 'cse-machine', envSteps: currentStep });
     Layout.setContext(
@@ -235,6 +237,7 @@ codeSamplesControlStash.forEach((codeSample, idx) => {
     if (truncate) expect(controlItemsToTest.length).toBeLessThanOrEqual(10);
     stashItemsToTest.forEach(item => {
       expect(item.draw()).toMatchSnapshot();
+      if (isFunction(item.value) || isDataArray(item.value)) expect(item.arrow).toBeDefined();
     });
   });
 });

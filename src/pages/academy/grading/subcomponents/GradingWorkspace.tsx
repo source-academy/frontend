@@ -308,12 +308,12 @@ const GradingWorkspace: React.FC<Props> = props => {
             xpAdjustment={grading!.answers[questionId].grade.xpAdjustment}
             maxXp={grading!.answers[questionId].question.maxXp}
             studentNames={
-              grading![questionId].student.name
+              grading!.answers[questionId].student.name
                 ? [grading!.answers[questionId].student.name]
                 : grading!.answers[questionId].team!.map(member => member.name)
             }
             studentUsernames={
-              grading![questionId].student.username
+              grading!.answers[questionId].student.username
                 ? [grading!.answers[questionId].student.username]
                 : grading!.answers[questionId].team!.map(member => member.username)
             }
