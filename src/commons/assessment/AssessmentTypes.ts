@@ -65,6 +65,7 @@ export type AssessmentOverview = {
   hasVotingFeatures: boolean;
   hasTokenCounter?: boolean;
   maxXp: number;
+  earlySubmissionXp: number;
   number?: string; // For mission control
   openAt: string;
   private?: boolean;
@@ -241,6 +242,7 @@ export const overviewTemplate = (): AssessmentOverview => {
     coverImage: 'https://fakeimg.pl/300/',
     id: -1,
     maxXp: 0,
+    earlySubmissionXp: 0,
     openAt: '2000-01-01T00:00+08',
     title: 'Insert title here',
     reading: '',
