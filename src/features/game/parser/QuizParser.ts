@@ -1,6 +1,4 @@
-import { DialogueObject } from '../dialogue/GameDialogueTypes';
 import { GameItemType } from '../location/GameMapTypes';
-import { defaultReaction } from '../quiz/GameQuizConstants';
 import { Option, Question, Quiz } from '../quiz/GameQuizType';
 import StringUtils from '../utils/StringUtils';
 import DialogueParser from './DialogueParser';
@@ -98,7 +96,7 @@ export default class QuizParser {
     const optionsParagraph = StringUtils.splitToParagraph(optionsText);
     const options: Option[] = Array(optionsParagraph.length);
     optionsParagraph.forEach(([header, content]: [string, string[]], index) => {
-      options[index] = this.createOption(content, answer === index);
+      options[index] = this.createOption(content);
     });
     return options;
   }
@@ -108,38 +106,22 @@ export default class QuizParser {
    *
    * @param content An Array of string containing an option's content,
    * including option text and reaction
-   * @param isCorrect Indicates whether this option is the correct answer
-   * @param [defaultReaction=false] Indicates whether this option uses the default reaction
+   * @param [noReaction=false] Indicates whether this option provides a reaction
    */
   private static createOption(
     content: string[],
-    isCorrect: boolean,
-    defaultReaction: boolean = false
+    noReaction: boolean = false
   ): Option {
     if (content.length <= 1) {
-      defaultReaction = true;
+      noReaction = true;
     }
     const option: Option = {
       text: content[0],
-      reaction: defaultReaction
-        ? this.createDefaultReaction(isCorrect)
+      reaction: noReaction
+        ? undefined
         : DialogueParser.parseQuizReaction(content.slice(1))
     };
     return option;
-  }
-
-  /**
-   * This function creates a Dialogue object with
-   * the default reactions defined in GamaQuizConstants
-   *
-   * @param isCorrect Indicates whether the correct or wrong reaction should be used
-   */
-  private static createDefaultReaction(isCorrect: boolean): DialogueObject {
-    if (isCorrect) {
-      return DialogueParser.parseQuizReaction(defaultReaction.correct);
-    } else {
-      return DialogueParser.parseQuizReaction(defaultReaction.wrong);
-    }
   }
 }
 

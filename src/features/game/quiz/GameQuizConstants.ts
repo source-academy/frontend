@@ -1,16 +1,19 @@
-import { DialogueLine, DialogueObject } from "../dialogue/GameDialogueTypes";
 import FontAssets from '../assets/FontAssets';
 import { BitmapFontStyle } from '../commons/CommonTypes';
 import { Color } from '../utils/StyleUtils';
 import { screenSize } from "../commons/CommonConstants";
+import { DialogueLine, DialogueObject } from '../dialogue/GameDialogueTypes';
+const allCorrect2 : string = "Well done!";
 
-export const defaultReaction = {
-  correct: ['You are right.'],
-  wrong: ['Wrong answer...']
-};
+const notAllCorrect : string = "Let's keep going!"
+
+export const resultMsg = {
+  allCorrect: allCorrect2,
+  notAllCorrect: notAllCorrect
+}
 
 const resultLine : DialogueLine = {
-  line : "good job",
+  line : "Good job!. ",
 }
 
 const resultLine2 : DialogueLine = {
@@ -28,7 +31,7 @@ export const ImproveMent : DialogueObject = new Map([
 export const QuizConstants = {
     textPad: 250,
     textConfig: { x: 15, y: -15, oriX: 0.5, oriY: 0.5 },
-    y: 50,
+    y: 100,
     width: 450,
     yInterval: 100,
     headerOff : 60,
