@@ -28,7 +28,7 @@ const assessmentConfigurations: AssessmentConfiguration[] = [
   assessmentConfigId: i,
   type: c,
   isManuallyGraded: false,
-  isAutoPublished: false,
+  isGradingAutoPublished: false,
   displayInDashboard: false,
   hasTokenCounter: false,
   hasVotingFeatures: false,

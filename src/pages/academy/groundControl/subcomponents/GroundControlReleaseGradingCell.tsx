@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogBody, DialogFooter, Intent } from '@blueprintjs/core';
+import { Button, Dialog, DialogBody, DialogFooter, Intent, Tooltip } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
 import React, { useCallback, useMemo, useState } from 'react';
 
@@ -85,7 +85,9 @@ const MassPublishingChangeCell: React.FC<SubProps> = ({
 
   return (
     <>
-      <Button className="bp5-minimal" key={keyID} onClick={handleOpenDialog} icon={icon} />
+      <Tooltip content={change} placement="top">
+        <Button className="bp5-minimal" key={keyID} onClick={handleOpenDialog} icon={icon} />
+      </Tooltip>
       <Dialog
         icon={IconNames.WARNING_SIGN}
         isOpen={isDialogOpen}

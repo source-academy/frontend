@@ -1231,7 +1231,7 @@ function* BackendSaga(): SagaIterator {
         type: 'Missions',
         assessmentConfigId: -1,
         isManuallyGraded: true,
-        isAutoPublished: false,
+        isGradingAutoPublished: false,
         displayInDashboard: true,
         hoursBeforeEarlyXpDecay: 0,
         hasTokenCounter: false,
@@ -1341,13 +1341,8 @@ function* BackendSaga(): SagaIterator {
       const id = action.payload.id;
       const closeAt = action.payload.closeAt;
       const openAt = action.payload.openAt;
-      const isAutoPublished = action.payload.isAutoPublished;
 
-      const resp: Response | null = yield updateAssessment(
-        id,
-        { openAt, closeAt, isAutoPublished },
-        tokens
-      );
+      const resp: Response | null = yield updateAssessment(id, { openAt, closeAt }, tokens);
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }

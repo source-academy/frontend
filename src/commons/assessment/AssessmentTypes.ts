@@ -103,7 +103,7 @@ export type AssessmentConfiguration = {
   assessmentConfigId: number;
   type: AssessmentType;
   isManuallyGraded: boolean;
-  isAutoPublished: boolean;
+  isGradingAutoPublished: boolean;
   displayInDashboard: boolean;
   hoursBeforeEarlyXpDecay: number;
   earlySubmissionXp: number;
