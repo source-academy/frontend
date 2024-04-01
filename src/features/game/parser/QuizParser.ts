@@ -3,6 +3,7 @@ import { Option, Question, Quiz } from '../quiz/GameQuizType';
 import StringUtils from '../utils/StringUtils';
 import DialogueParser from './DialogueParser';
 import Parser from './Parser';
+import SpeakerParser from './SpeakerParser';
 
 /**
  * This class parses quizzes and creates Quiz Objects
@@ -51,8 +52,7 @@ export default class QuizParser {
   private static parseQuizQuestions(map: Map<string, string[]>): Question[] {
     const questions: Question[] = new Array(map.size);
     map.forEach((value: string[], key: string) => {
-      const question: Question = this.createQuestion(value);
-      questions[parseInt(key)] = question;
+      questions[parseInt(key)] = this.createQuestion(value);
     });
     return questions;
   }
@@ -65,11 +65,14 @@ export default class QuizParser {
    * containing question text, correct answer, and options
    */
   private static createQuestion(questionText: string[]): Question {
-    const ans = this.getQuizAnswer(questionText[1]);
+    if (questionText.length < 2) {
+      throw new Error('Parsing error: Quiz missing question or answer');
+    }
     const question: Question = {
       question: questionText[0],
-      answer: ans,
-      options: this.parseOptions(questionText.slice(2), ans)
+      speaker: SpeakerParser.parse('@narrator'),
+      answer: this.getQuizAnswer(questionText[1]),
+      options: this.parseOptions(questionText.slice(2))
     };
     return question;
   }
@@ -81,7 +84,11 @@ export default class QuizParser {
    * @param answer The string containing the correct answer of a question
    */
   private static getQuizAnswer(answer: string): Number {
-    return parseInt(answer.split(':')[1]);
+    const ans = answer.split(':');
+    if (ans.length < 2 || Number.isNaN(parseInt(ans[1]))) {
+      throw new Error('Parsing error: Invalid answer for Quiz');
+    }
+    return parseInt(ans[1]);
   }
 
   /**
@@ -90,9 +97,8 @@ export default class QuizParser {
    *
    * @param optionsText An Array of string containing all options' content,
    * including option text and reactions
-   * @param answer The correct answer of the corresponding question
    */
-  private static parseOptions(optionsText: string[], answer: Number): Option[] {
+  private static parseOptions(optionsText: string[]): Option[] {
     const optionsParagraph = StringUtils.splitToParagraph(optionsText);
     const options: Option[] = Array(optionsParagraph.length);
     optionsParagraph.forEach(([header, content]: [string, string[]], index) => {
@@ -108,18 +114,16 @@ export default class QuizParser {
    * including option text and reaction
    * @param [noReaction=false] Indicates whether this option provides a reaction
    */
-  private static createOption(
-    content: string[],
-    noReaction: boolean = false
-  ): Option {
+  private static createOption(content: string[], noReaction: boolean = false): Option {
+    if (!content) {
+      throw new Error('Parsing error: Quiz option not provided');
+    }
     if (content.length <= 1) {
       noReaction = true;
     }
     const option: Option = {
       text: content[0],
-      reaction: noReaction
-        ? undefined
-        : DialogueParser.parseQuizReaction(content.slice(1))
+      reaction: noReaction ? undefined : DialogueParser.parseQuizReaction(content.slice(1))
     };
     return option;
   }

@@ -1,4 +1,4 @@
-import { Context } from 'js-slang';
+import { Context, Result } from 'js-slang';
 
 import { SourcecastWorkspaceState } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SourcereelWorkspaceState } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
@@ -6,7 +6,6 @@ import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
-import { SideContentState } from '../sideContent/SideContentTypes';
 
 export const ADD_HTML_CONSOLE_ERROR = 'ADD_HTML_CONSOLE_ERROR';
 export const BEGIN_CLEAR_CONTEXT = 'BEGIN_CLEAR_CONTEXT';
@@ -62,7 +61,10 @@ export const UPDATE_SUBLANGUAGE = 'UPDATE_SUBLANGUAGE';
 export const UPDATE_CURRENTSTEP = 'UPDATE_CURRENTSTEP';
 export const UPDATE_STEPSTOTAL = 'UPDATE_STEPSTOTAL';
 export const UPDATE_BREAKPOINTSTEPS = 'UPDATE_BREAKPOINTSTEPS';
+export const UPDATE_CHANGEPOINTSTEPS = 'UPDATE_CHANGEPOINTSTEPS';
 export const CHANGE_SUBLANGUAGE = 'CHANGE_SUBLANGUAGE';
+export const UPDATE_LAST_DEBUGGER_RESULT = 'UPDATE_LAST_DEBUGGER_RESULT';
+export const UPDATE_LAST_NON_DET_RESULT = 'UPDATE_LAST_NON_DET_RESULT';
 
 export type WorkspaceLocation = keyof WorkspaceManagerState;
 export type WorkspaceLocationsWithTools = Extract<WorkspaceLocation, 'playground' | 'sicp'>;
@@ -80,6 +82,7 @@ type GradingWorkspaceAttr = {
   readonly currentQuestion?: number;
   readonly hasUnsavedChanges: boolean;
 };
+
 type GradingWorkspaceState = GradingWorkspaceAttr & WorkspaceState;
 
 type PlaygroundWorkspaceAttr = {
@@ -89,6 +92,7 @@ type PlaygroundWorkspaceAttr = {
   readonly currentStep: number;
   readonly stepsTotal: number;
   readonly breakpointSteps: number[];
+  readonly changepointSteps: number[];
 };
 export type PlaygroundWorkspaceState = PlaygroundWorkspaceAttr & WorkspaceState;
 
@@ -126,6 +130,7 @@ export type WorkspaceState = {
   readonly programPrependValue: string;
   readonly programPostpendValue: string;
   readonly editorSessionId: string;
+  readonly sessionDetails: { docId: string; readOnly: boolean } | null;
   readonly editorTestcases: Testcase[];
   readonly execTime: number;
   readonly isRunning: boolean;
@@ -144,7 +149,8 @@ export type WorkspaceState = {
   readonly stepLimit: number;
   readonly globals: Array<[string, any]>;
   readonly debuggerContext: DebuggerContext;
-  readonly sideContent: SideContentState;
+  readonly lastDebuggerResult: any;
+  readonly lastNonDetResult: Result | null;
 };
 
 type ReplHistory = {
@@ -163,4 +169,9 @@ export type DebuggerContext = {
 
 export type SubmissionsTableFilters = {
   columnFilters: { id: string; value: unknown }[];
+};
+
+export type TeamFormationsTableFilters = {
+  columnFilters: { id: string; value: unknown }[];
+  globalFilter: string | null;
 };

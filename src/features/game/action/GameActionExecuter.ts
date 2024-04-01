@@ -103,11 +103,11 @@ export default class GameActionExecuter {
         await sleep(actionParams.duration);
         return;
       case GameActionType.ShowQuiz:
-        await GameGlobalAPI.getInstance().getGameManager()
-          .getDialogueManager().hideAll();
+        globalAPI.enableKeyboardInput(false);
+        await globalAPI.getGameManager().getDialogueManager().hideAll();
         await globalAPI.showQuiz(actionParams.id);
-        await GameGlobalAPI.getInstance().getGameManager()
-          .getDialogueManager().showAll();
+        await globalAPI.getGameManager().getDialogueManager().showAll();
+        globalAPI.enableKeyboardInput(true);
         return;
       default:
         return;
