@@ -7,12 +7,12 @@ import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
 import StringUtils from '../utils/StringUtils';
 import { createBitmapText } from '../utils/TextUtils';
-import {QuizConstants, speakerTextStyle } from './GameQuizConstants';
+import { QuizConstants, speakerTextStyle } from './GameQuizConstants';
 
 export class QuizSpeakerRenderer {
-    private currentSpeakerId?: string;
-    private speakerSprite?:Phaser.GameObjects.Image;
-    private speakerSpriteBox?:Phaser.GameObjects.Container;
+  private currentSpeakerId?: string;
+  private speakerSprite?: Phaser.GameObjects.Image;
+  private speakerSpriteBox?: Phaser.GameObjects.Container;
 
   /**
    * Changes the speaker shown in the speaker box and the speaker rendered on screen
@@ -101,7 +101,7 @@ export class QuizSpeakerRenderer {
   }
 
   /**
-   * Show the hidden speaker box and sprite 
+   * Show the hidden speaker box and sprite
    */
   public async show() {
     this.getSpeakerSprite().setVisible(true);
@@ -110,5 +110,5 @@ export class QuizSpeakerRenderer {
 
   public getUsername = () => SourceAcademyGame.getInstance().getAccountInfo().name;
   public getSpeakerSprite = () => this.speakerSprite as Phaser.GameObjects.Image;
-  public getSpeakerSpriteBox = () => this.speakerSpriteBox as Phaser.GameObjects.Container;  
+  public getSpeakerSpriteBox = () => this.speakerSpriteBox as Phaser.GameObjects.Container;
 }
