@@ -485,7 +485,6 @@ class GameStateManager {
    */
   public completeQuiz(quizId: string) {
     if (!this.completedQuizzes.includes(quizId)) this.completedQuizzes.push(quizId);
-    console.log(this.completedQuizzes);
   }
 
   /**
@@ -496,7 +495,6 @@ class GameStateManager {
    */
   public attemptQuiz(quizId: string) {
     if (!this.attemptedQuizzes.includes(quizId)) this.attemptedQuizzes.push(quizId);
-    console.log(this.attemptedQuizzes);
   }
 
   ///////////////////////////////
