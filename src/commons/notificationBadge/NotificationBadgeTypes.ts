@@ -11,9 +11,15 @@ export enum NotificationTypes {
   new = 'new',
   submitted = 'submitted',
   unsubmitted = 'unsubmitted',
+<<<<<<< Updated upstream
   new_message = 'new_message',
   published_grading = 'published_grading',
   unpublished_grading = 'unpublished_grading'
+=======
+  published_grading = 'published_grading',
+  unpublished_grading = 'unpublished_grading',
+  new_message = 'new_message'
+>>>>>>> Stashed changes
 }
 
 export type NotificationType = keyof typeof NotificationTypes;

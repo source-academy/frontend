@@ -1189,6 +1189,7 @@ export const deleteSourcecastEntry = async (
  */
 export const updateAssessment = async (
   id: number,
+<<<<<<< Updated upstream
   body: {
     openAt?: string;
     closeAt?: string;
@@ -1197,6 +1198,9 @@ export const updateAssessment = async (
     hasTokenCounter?: boolean;
     hasVotingFeatures?: boolean;
   },
+=======
+  body: { openAt?: string; closeAt?: string; isPublished?: boolean, isAutoPublished?: boolean },
+>>>>>>> Stashed changes
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/assessments/${id}`, 'POST', {

@@ -1341,8 +1341,9 @@ function* BackendSaga(): SagaIterator {
       const id = action.payload.id;
       const closeAt = action.payload.closeAt;
       const openAt = action.payload.openAt;
+      const isAutoPublished = action.payload.isAutoPublished;
 
-      const resp: Response | null = yield updateAssessment(id, { openAt, closeAt }, tokens);
+      const resp: Response | null = yield updateAssessment(id, { openAt, closeAt, isAutoPublished }, tokens);
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
