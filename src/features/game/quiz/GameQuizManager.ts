@@ -53,7 +53,7 @@ export default class QuizManager {
         scene,
         screenSize.x - QuizConstants.textPad,
         QuizConstants.y,
-        "" ,
+        "What is the correct answer?",
         textStyle
       ).setOrigin(1.0, 0.0);
       
@@ -86,7 +86,7 @@ export default class QuizManager {
         ySpacing: QuizConstants.yInterval
       });
 
-      GameGlobalAPI.getInstance().addToLayer(Layer.UI, quizContainer);
+      GameGlobalAPI.getInstance().addToLayer(Layer.Dialogue, quizContainer);
       
       const activateQuizContainer: Promise<any> = new Promise(resolve => {
         quizContainer.add(
