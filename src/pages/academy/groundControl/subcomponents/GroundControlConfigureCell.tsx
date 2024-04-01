@@ -11,13 +11,8 @@ import {
 import { IconNames, Team } from '@blueprintjs/icons';
 import { createGrid, GridOptions } from 'ag-grid-community';
 import React, { useCallback, useState } from 'react';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
 
-import {
-  AssessmentOverview,
-  IContestVotingQuestion,
-  QuestionTypes
-} from '../../../../commons/assessment/AssessmentTypes';
+import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
 
 type Props = {
