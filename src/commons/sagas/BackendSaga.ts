@@ -1343,7 +1343,11 @@ function* BackendSaga(): SagaIterator {
       const openAt = action.payload.openAt;
       const isAutoPublished = action.payload.isAutoPublished;
 
-      const resp: Response | null = yield updateAssessment(id, { openAt, closeAt, isAutoPublished }, tokens);
+      const resp: Response | null = yield updateAssessment(
+        id,
+        { openAt, closeAt, isAutoPublished },
+        tokens
+      );
       if (!resp || !resp.ok) {
         return yield handleResponseError(resp);
       }
