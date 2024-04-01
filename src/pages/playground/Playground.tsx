@@ -308,7 +308,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     courseSourceVariant,
     workspaceLocation,
     handleChapterSelect,
-    handleChangeExecTime,
+    handleChangeExecTime
   ]);
 
   /**
