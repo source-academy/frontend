@@ -31,6 +31,8 @@ export async function jvmRun(javaCode: string, context: Context) {
   );
 
   return loadCachedFiles(() =>
+    // FIXME: replace with fetch(cdn url)
+    // I dont think its wise to include the entire java lib in java-slang
     import('java-slang/dist/jvm/utils/classfiles').then(module => {
       return module.default as { [key: string]: string };
     })
@@ -61,7 +63,7 @@ export async function jvmRun(javaCode: string, context: Context) {
               return parseBin(new DataView(bytes.buffer));
             },
             readFile: (path: string) => {
-              return import(`jvm-slang/bin/stdlib/${path}.js`).then(m => {
+              return import(`java-slang/dist/jvm/stdlib/${path}.js`).then(m => {
                 return m;
               });
             },
