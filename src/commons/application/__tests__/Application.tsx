@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import Application from '../Application';
@@ -19,7 +19,7 @@ jest.mock('react-redux', () => ({
   useDispatch: jest.fn(),
   useSelector: jest.fn()
 }));
-const useSelectorMock = useSelector as jest.Mock;
+const useSelectorMock = useTypedSelector as jest.Mock;
 
 test('Application renders correctly', () => {
   useSelectorMock.mockReturnValue({ name: 'Bob' });

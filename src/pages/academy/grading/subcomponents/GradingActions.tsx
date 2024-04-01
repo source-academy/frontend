@@ -11,12 +11,12 @@ import GradingFlex from 'src/commons/grading/GradingFlex';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
-type GradingActionsProps = {
+type Props = {
   submissionId: number;
   style?: React.CSSProperties;
 };
 
-const GradingActions: React.FC<GradingActionsProps> = ({ submissionId, style }) => {
+const GradingActions: React.FC<Props> = ({ submissionId, style }) => {
   const dispatch = useDispatch();
   const courseId = useTypedSelector(store => store.session.courseId);
 

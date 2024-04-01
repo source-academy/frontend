@@ -11,24 +11,21 @@ import {
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { ReferenceType } from '../../CseMachineTypes';
-import { getBodyText, getParamsText, getTextWidth } from '../../CseMachineUtils';
+import { GlobalFn, IHoverable } from '../../CseMachineTypes';
+import { defaultSAColor, getBodyText, getParamsText, getTextWidth } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
-import { GenericArrow } from '../arrows/GenericArrow';
 import { Binding } from '../Binding';
-import { Frame } from '../Frame';
-import { FnValue } from './FnValue';
 import { Value } from './Value';
 
 /** this encapsulates a function from the global frame
  * (which has no extra props such as environment or fnName) */
-export class GlobalFnValue extends Value {
+export class GlobalFnValue extends Value implements IHoverable {
   centerX: number;
   readonly tooltipWidth: number;
   readonly exportTooltipWidth: number;
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
-  private _arrow: GenericArrow<FnValue | GlobalFnValue, Frame> | undefined;
+  private _arrow: ArrowFromFn | undefined;
 
   readonly paramsText: string;
   readonly bodyText: string;
@@ -37,35 +34,22 @@ export class GlobalFnValue extends Value {
   readonly exportTooltip: string;
   private selected: boolean = false;
 
-  readonly ref: RefObject<any> = React.createRef();
   readonly labelRef: RefObject<any> = React.createRef();
 
   constructor(
     /** underlying function */
-    readonly data: () => any,
+    readonly data: GlobalFn,
     /** what this value is being referenced by */
-    readonly referencedBy: ReferenceType[]
+    mainReference: Binding
   ) {
     super();
     Layout.memoizeValue(this);
+    this.references = [mainReference];
 
-    // derive the coordinates from the main reference (binding / array unit)
-    const mainReference = this.referencedBy[0];
-    if (mainReference instanceof Binding) {
-      this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
-      this._y = mainReference.y();
-      this.centerX = this._x + this.radius * 2;
-    } else {
-      if (mainReference.isLastUnit) {
-        this._x = mainReference.x() + Config.DataUnitWidth * 2;
-        this._y = mainReference.y() + Config.DataUnitHeight / 2 - this.radius;
-      } else {
-        this._x = mainReference.x();
-        this._y = mainReference.y() + mainReference.parent.height() + Config.DataUnitHeight;
-      }
-      this.centerX = this._x + Config.DataUnitWidth / 2;
-      this._x = this.centerX - this.radius * 2;
-    }
+    // derive the coordinates from the main reference (binding)
+    this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
+    this._y = mainReference.y();
+    this.centerX = this._x + this.radius * 2;
     this._y += this.radius;
 
     this._width = this.radius * 4;
@@ -88,34 +72,16 @@ export class GlobalFnValue extends Value {
     );
   }
 
-  isSelected(): boolean {
-    return this.selected;
+  handleNewReference(): void {
+    // do nothing, since the first reference which is a binding in the global frame,
+    // is also the main reference
   }
-  arrow(): GenericArrow<FnValue | GlobalFnValue, Frame> | undefined {
+
+  arrow(): ArrowFromFn | undefined {
     return this._arrow;
   }
 
-  updatePosition(): void {
-    const mainReference = this.referencedBy.find(x => x instanceof Binding) || this.referencedBy[0];
-    if (mainReference instanceof Binding) {
-      this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
-      this._y = mainReference.y();
-      this.centerX = this._x + this.radius * 2;
-    } else {
-      if (mainReference.isLastUnit) {
-        this._x = mainReference.x() + Config.DataUnitWidth * 2;
-        this._y = mainReference.y() + Config.DataUnitHeight / 2 - this.radius;
-      } else {
-        this._x = mainReference.x();
-        this._y = mainReference.y() + mainReference.parent.height() + Config.DataUnitHeight;
-      }
-      this.centerX = this._x + Config.DataUnitWidth / 2;
-      this._x = this.centerX - this.radius * 2;
-    }
-    this._y += this.radius;
-  }
-
-  onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+  onMouseEnter = (_: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
     this.labelRef.current.show();
   };
@@ -129,7 +95,8 @@ export class GlobalFnValue extends Value {
       container && (container.style.cursor = 'default');
     }
   };
-  onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+
+  onClick = (_: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
     this.selected = !this.selected;
     if (!this.selected) {
@@ -142,7 +109,8 @@ export class GlobalFnValue extends Value {
   draw(): React.ReactNode {
     this._isDrawn = true;
     this._arrow =
-      Layout.globalEnvNode.frame && new ArrowFromFn(this).to(Layout.globalEnvNode.frame);
+      Layout.globalEnvNode.frame &&
+      (new ArrowFromFn(this).to(Layout.globalEnvNode.frame) as ArrowFromFn);
     return (
       <React.Fragment key={Layout.key++}>
         <Group
@@ -157,9 +125,7 @@ export class GlobalFnValue extends Value {
             x={this.centerX - this.radius}
             y={this.y()}
             radius={this.radius}
-            stroke={
-              CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
-            }
+            stroke={defaultSAColor()}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -167,9 +133,7 @@ export class GlobalFnValue extends Value {
             x={this.centerX - this.radius}
             y={this.y()}
             radius={this.innerRadius}
-            fill={
-              CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
-            }
+            fill={defaultSAColor()}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -177,9 +141,7 @@ export class GlobalFnValue extends Value {
             x={this.centerX + this.radius}
             y={this.y()}
             radius={this.radius}
-            stroke={
-              CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
-            }
+            stroke={defaultSAColor()}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -187,9 +149,7 @@ export class GlobalFnValue extends Value {
             x={this.centerX + this.radius}
             y={this.y()}
             radius={this.innerRadius}
-            fill={
-              CseMachine.getPrintableMode() ? Config.SA_BLUE.toString() : Config.SA_WHITE.toString()
-            }
+            fill={defaultSAColor()}
           />
         </Group>
         {CseMachine.getPrintableMode() ? (
@@ -199,13 +159,13 @@ export class GlobalFnValue extends Value {
             visible={true}
             ref={this.labelRef}
           >
-            <KonvaTag stroke="black" fill={'white'} opacity={Number(Config.FnTooltipOpacity)} />
+            <KonvaTag stroke="black" fill={'white'} opacity={Config.FnTooltipOpacity} />
             <KonvaText
               text={this.exportTooltip}
-              fontFamily={Config.FontFamily.toString()}
-              fontSize={Number(Config.FontSize)}
-              fontStyle={Config.FontStyle.toString()}
-              fill={Config.SA_BLUE.toString()}
+              fontFamily={Config.FontFamily}
+              fontSize={Config.FontSize}
+              fontStyle={Config.FontStyle}
+              fill={Config.SA_BLUE}
               padding={5}
             />
           </KonvaLabel>
@@ -216,18 +176,18 @@ export class GlobalFnValue extends Value {
             visible={false}
             ref={this.labelRef}
           >
-            <KonvaTag stroke="black" fill={'black'} opacity={Number(Config.FnTooltipOpacity)} />
+            <KonvaTag stroke="black" fill={'black'} opacity={Config.FnTooltipOpacity} />
             <KonvaText
               text={this.tooltip}
-              fontFamily={Config.FontFamily.toString()}
-              fontSize={Number(Config.FontSize)}
-              fontStyle={Config.FontStyle.toString()}
-              fill={Config.SA_WHITE.toString()}
+              fontFamily={Config.FontFamily}
+              fontSize={Config.FontSize}
+              fontStyle={Config.FontStyle}
+              fill={Config.SA_WHITE}
               padding={5}
             />
           </KonvaLabel>
         )}
-        {this._arrow?.draw()}
+        {Layout.globalEnvNode.frame && new ArrowFromFn(this).to(Layout.globalEnvNode.frame).draw()}
       </React.Fragment>
     );
   }

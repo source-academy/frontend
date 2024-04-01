@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { Context } from 'js-slang';
+import { Context, Result } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
 
 import { AllColsSortStates, GradingColumnVisibility } from '../../features/grading/GradingTypes';
@@ -62,6 +62,7 @@ import {
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_ALL_COLS_SORT_STATES,
   UPDATE_BREAKPOINTSTEPS,
+  UPDATE_CHANGEPOINTSTEPS,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_CURRENTSTEP,
@@ -69,6 +70,8 @@ import {
   UPDATE_EDITOR_VALUE,
   UPDATE_GRADING_COLUMN_VISIBILITY,
   UPDATE_HAS_UNSAVED_CHANGES,
+  UPDATE_LAST_DEBUGGER_RESULT,
+  UPDATE_LAST_NON_DET_RESULT,
   UPDATE_REPL_VALUE,
   UPDATE_STEPSTOTAL,
   UPDATE_SUBLANGUAGE,
@@ -513,5 +516,26 @@ export const updateBreakpointSteps = createAction(
   UPDATE_BREAKPOINTSTEPS,
   (breakpointSteps: number[], workspaceLocation: WorkspaceLocation) => ({
     payload: { breakpointSteps, workspaceLocation }
+  })
+);
+
+export const updateChangePointSteps = createAction(
+  UPDATE_CHANGEPOINTSTEPS,
+  (changepointSteps: number[], workspaceLocation: WorkspaceLocation) => ({
+    payload: { changepointSteps, workspaceLocation }
+  })
+);
+
+export const updateLastDebuggerResult = createAction(
+  UPDATE_LAST_DEBUGGER_RESULT,
+  (lastDebuggerResult: any, workspaceLocation: WorkspaceLocation) => ({
+    payload: { lastDebuggerResult, workspaceLocation }
+  })
+);
+
+export const updateLastNonDetResult = createAction(
+  UPDATE_LAST_NON_DET_RESULT,
+  (lastNonDetResult: Result, workspaceLocation: WorkspaceLocation) => ({
+    payload: { lastNonDetResult, workspaceLocation }
   })
 );

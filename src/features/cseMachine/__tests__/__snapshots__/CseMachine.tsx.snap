@@ -181,7 +181,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 127.5 L 486.12109375 390 L 486.12109375 390 M 140 127.5 L 486.12109375 390 L 486.12109375 390 "
+      data="M 140 127.5 L 486 390 L 486 390 M 140 127.5 L 486 390 L 486 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -194,7 +194,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         Array [
           140,
           127.5,
-          486.12109375,
+          486,
           390,
         ]
       }
@@ -309,7 +309,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 197.5 L 802.2421875 390 L 802.2421875 390 M 140 197.5 L 802.2421875 390 L 802.2421875 390 "
+      data="M 140 197.5 L 802 390 L 802 390 M 140 197.5 L 802 390 L 802 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -322,7 +322,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         Array [
           140,
           197.5,
-          802.2421875,
+          802,
           390,
         ]
       }
@@ -437,7 +437,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 267.5 L 1118.36328125 390 L 1118.36328125 390 M 140 267.5 L 1118.36328125 390 L 1118.36328125 390 "
+      data="M 140 267.5 L 1118 390 L 1118 390 M 140 267.5 L 1118 390 L 1118 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -450,7 +450,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         Array [
           140,
           267.5,
-          1118.36328125,
+          1118,
           390,
         ]
       }
@@ -565,7 +565,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 337.5 L 1434.484375 390 L 1434.484375 390 M 140 337.5 L 1434.484375 390 L 1434.484375 390 "
+      data="M 140 337.5 L 1434 390 L 1434 390 M 140 337.5 L 1434 390 L 1434 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -578,7 +578,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         Array [
           140,
           337.5,
-          1434.484375,
+          1434,
           390,
         ]
       }
@@ -694,7 +694,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={178.060546875}
+    x={178}
     y={5}
   >
     <Tag
@@ -715,7 +715,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   </Label>
   <Label
     visible={false}
-    x={183.060546875}
+    x={183}
     y={45}
   >
     <Tag
@@ -743,7 +743,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={207.0908203125}
+    x={207}
     y={5}
   >
     <Tag
@@ -764,7 +764,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   </Label>
   <Label
     visible={false}
-    x={212.0908203125}
+    x={212}
     y={45}
   >
     <Tag
@@ -792,7 +792,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={236.12109375}
+    x={236}
     y={5}
   >
     <Tag
@@ -813,7 +813,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   </Label>
   <Label
     visible={false}
-    x={241.12109375}
+    x={241}
     y={45}
   >
     <Tag
@@ -841,7 +841,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={265.1513671875}
+    x={265}
     y={5}
   >
     <Tag
@@ -862,7 +862,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   </Label>
   <Label
     visible={false}
-    x={270.1513671875}
+    x={270}
     y={45}
   >
     <Tag
@@ -890,7 +890,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={294.181640625}
+    x={294}
     y={5}
   >
     <Tag
@@ -911,7 +911,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   </Label>
   <Label
     visible={false}
-    x={299.181640625}
+    x={299}
     y={45}
   >
     <Tag
@@ -939,7 +939,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={323.2119140625}
+    x={323}
     y={5}
   >
     <Tag
@@ -960,7 +960,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   </Label>
   <Label
     visible={false}
-    x={328.2119140625}
+    x={328}
     y={45}
   >
     <Tag
@@ -1802,7 +1802,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 92.5 L 30 60 L 30 60 "
+      data="M 140 92.5 L 170 105 L 170 105 M 140 92.5 L 170 105 L 170 105 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -1815,8 +1815,8 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
         Array [
           140,
           92.5,
-          30,
-          60,
+          170,
+          105,
         ]
       }
       preventDefault={false}
@@ -1974,6 +1974,32 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
       text="closure"
     />
   </Label>
+  <Group
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+  >
+    <Path
+      data="M 181.5 40 L 356.5 330 L 356.5 330 M 181.5 40 L 356.5 330 L 356.5 330 "
+      hitStrokeWidth={5}
+      preventDefault={false}
+      stroke="#999999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999999"
+      pointerWidth={10}
+      points={
+        Array [
+          181.5,
+          40,
+          356.5,
+          330,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
 </React.Fragment>
 `;
 
@@ -1982,7 +2008,10 @@ Object {
   "head": Object {
     ":::pre-declared names::": Symbol(),
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "-1",
   "name": "global",
   "tail": null,
 }
@@ -1991,10 +2020,6 @@ Object {
 exports[`CSE Machine calculates correct layout for code sample 0 2`] = `
 Object {
   "head": Object {
-    "50": [Function],
-    "52": [Function],
-    "54": [Function],
-    "56": [Function],
     "fn": [Function],
     "x": Array [
       "long string",
@@ -2060,78 +2085,206 @@ Object {
       ],
     ],
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+      [Function],
+      [Function],
+      Array [
+        [Function],
+        [Function],
+      ],
+      Array [
+        2,
+        3,
+      ],
+      [Function],
+      Array [
+        [Function],
+        null,
+      ],
+      Array [
+        Array [
+          2,
+          3,
+        ],
+        Array [
+          [Function],
+          null,
+        ],
+      ],
+      Array [
+        1,
+        Array [
+          Array [
+            2,
+            3,
+          ],
+          Array [
+            [Function],
+            null,
+          ],
+        ],
+      ],
+      [Function],
+      Array [
+        "long string",
+        Array [
+          [Function],
+          [Function],
+        ],
+        Array [
+          1,
+          Array [
+            Array [
+              2,
+              3,
+            ],
+            Array [
+              [Function],
+              null,
+            ],
+          ],
+        ],
+        [Function],
+        5,
+        6,
+      ],
+      Array [
+        [Function],
+        null,
+      ],
+      Array [
+        Array [
+          Array [
+            2,
+            3,
+          ],
+          Array [
+            [Function],
+            null,
+          ],
+        ],
+        Array [
+          [Function],
+          null,
+        ],
+      ],
+      Array [
+        [Function],
+        Array [
+          Array [
+            Array [
+              2,
+              3,
+            ],
+            Array [
+              [Function],
+              null,
+            ],
+          ],
+          Array [
+            [Function],
+            null,
+          ],
+        ],
+      ],
+      Array [
+        Array [
+          1,
+          Array [
+            Array [
+              2,
+              3,
+            ],
+            Array [
+              [Function],
+              null,
+            ],
+          ],
+        ],
+        Array [
+          [Function],
+          Array [
+            Array [
+              Array [
+                2,
+                3,
+              ],
+              Array [
+                [Function],
+                null,
+              ],
+            ],
+            Array [
+              [Function],
+              null,
+            ],
+          ],
+        ],
+      ],
+      Array [
+        Array [
+          [Function],
+          [Function],
+        ],
+        Array [
+          Array [
+            1,
+            Array [
+              Array [
+                2,
+                3,
+              ],
+              Array [
+                [Function],
+                null,
+              ],
+            ],
+          ],
+          Array [
+            [Function],
+            Array [
+              Array [
+                Array [
+                  2,
+                  3,
+                ],
+                Array [
+                  [Function],
+                  null,
+                ],
+              ],
+              Array [
+                [Function],
+                null,
+              ],
+            ],
+          ],
+        ],
+      ],
+    },
+  },
+  "id": "46",
   "name": "programEnvironment",
   "tail": Object {
     "head": Object {
-      "$accumulate": [Function],
-      "$append": [Function],
-      "$build_list": [Function],
-      "$enum_list": [Function],
-      "$filter": [Function],
-      "$length": [Function],
-      "$list_to_string": [Function],
-      "$map": [Function],
-      "$remove": [Function],
-      "$remove_all": [Function],
-      "$reverse": [Function],
-      "__access_export__": [Function],
-      "__access_named_export__": [Function],
-      "accumulate": [Function],
-      "append": [Function],
-      "build_list": [Function],
-      "build_stream": [Function],
-      "enum_list": [Function],
-      "enum_stream": [Function],
-      "equal": [Function],
-      "eval_stream": [Function],
-      "filter": [Function],
-      "for_each": [Function],
-      "integers_from": [Function],
-      "is_stream": [Function],
-      "length": [Function],
-      "list_ref": [Function],
-      "list_to_stream": [Function],
-      "list_to_string": [Function],
-      "map": [Function],
-      "member": [Function],
-      "remove": [Function],
-      "remove_all": [Function],
-      "reverse": [Function],
-      "stream_append": [Function],
-      "stream_filter": [Function],
-      "stream_for_each": [Function],
-      "stream_length": [Function],
-      "stream_map": [Function],
-      "stream_member": [Function],
-      "stream_ref": [Function],
-      "stream_remove": [Function],
-      "stream_remove_all": [Function],
-      "stream_reverse": [Function],
-      "stream_to_list": [Function],
+      ":::pre-declared names::": Symbol(),
     },
-    "id": "1",
-    "name": "programEnvironment",
-    "tail": Object {
-      "head": Object {
-        ":::pre-declared names::": Symbol(),
-      },
-      "id": "-1",
-      "name": "global",
-      "tail": null,
+    "heap": Heap {
+      "storage": null,
     },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
   },
 }
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 0 3`] = `
 Array [
-  0,
-  0,
   ":::pre-declared names::: ",
   Symbol(),
-  0,
-  1,
   "fn:= ",
   [Function],
   "x:= ",
@@ -2199,14 +2352,6 @@ Array [
       ],
     ],
   ],
-  "50:= ",
-  [Function],
-  "52:= ",
-  [Function],
-  "54:= ",
-  [Function],
-  "56:= ",
-  [Function],
 ]
 `;
 
@@ -2215,7 +2360,10 @@ Object {
   "head": Object {
     ":::pre-declared names::": Symbol(),
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "-1",
   "name": "global",
   "tail": null,
 }
@@ -2224,7 +2372,6 @@ Object {
 exports[`CSE Machine calculates correct layout for code sample 1 2`] = `
 Object {
   "head": Object {
-    "106": [Function],
     "fn": [Function],
     "l": Array [
       1,
@@ -2300,78 +2447,339 @@ Object {
       4,
     ],
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+      Array [
+        1,
+        2,
+      ],
+      Array [
+        Array [
+          1,
+          2,
+        ],
+        3,
+      ],
+      Array [
+        1,
+        Array [
+          Array [
+            1,
+            2,
+          ],
+          3,
+        ],
+        4,
+      ],
+      Array [
+        [Function],
+        null,
+      ],
+      Array [
+        3,
+        Array [
+          [Function],
+          null,
+        ],
+      ],
+      Array [
+        2,
+        Array [
+          3,
+          Array [
+            [Function],
+            null,
+          ],
+        ],
+      ],
+      Array [
+        1,
+        Array [
+          2,
+          Array [
+            3,
+            Array [
+              [Function],
+              null,
+            ],
+          ],
+        ],
+      ],
+      Array [
+        1,
+        2,
+      ],
+      Array [
+        1,
+        Array [
+          1,
+          2,
+        ],
+        [Function],
+        4,
+        5,
+      ],
+      Array [
+        4,
+        null,
+      ],
+      Array [
+        Array [
+          1,
+          Array [
+            1,
+            2,
+          ],
+          [Function],
+          4,
+          5,
+        ],
+        Array [
+          4,
+          null,
+        ],
+      ],
+      Array [
+        Array [
+          Array [
+            1,
+            2,
+          ],
+          3,
+        ],
+        Array [
+          Array [
+            1,
+            Array [
+              1,
+              2,
+            ],
+            [Function],
+            4,
+            5,
+          ],
+          Array [
+            4,
+            null,
+          ],
+        ],
+      ],
+      Array [
+        Array [
+          1,
+          Array [
+            2,
+            Array [
+              3,
+              Array [
+                [Function],
+                null,
+              ],
+            ],
+          ],
+        ],
+        Array [
+          Array [
+            Array [
+              1,
+              2,
+            ],
+            3,
+          ],
+          Array [
+            Array [
+              1,
+              Array [
+                1,
+                2,
+              ],
+              [Function],
+              4,
+              5,
+            ],
+            Array [
+              4,
+              null,
+            ],
+          ],
+        ],
+      ],
+      [Function],
+      Array [
+        Array [
+          1,
+          Array [
+            Array [
+              1,
+              2,
+            ],
+            3,
+          ],
+          4,
+        ],
+        null,
+      ],
+      Array [
+        [Function],
+        Array [
+          Array [
+            1,
+            Array [
+              Array [
+                1,
+                2,
+              ],
+              3,
+            ],
+            4,
+          ],
+          null,
+        ],
+      ],
+      Array [
+        Array [
+          Array [
+            1,
+            Array [
+              2,
+              Array [
+                3,
+                Array [
+                  [Function],
+                  null,
+                ],
+              ],
+            ],
+          ],
+          Array [
+            Array [
+              Array [
+                1,
+                2,
+              ],
+              3,
+            ],
+            Array [
+              Array [
+                1,
+                Array [
+                  1,
+                  2,
+                ],
+                [Function],
+                4,
+                5,
+              ],
+              Array [
+                4,
+                null,
+              ],
+            ],
+          ],
+        ],
+        Array [
+          [Function],
+          Array [
+            Array [
+              1,
+              Array [
+                Array [
+                  1,
+                  2,
+                ],
+                3,
+              ],
+              4,
+            ],
+            null,
+          ],
+        ],
+      ],
+      Array [
+        1,
+        Array [
+          Array [
+            Array [
+              1,
+              Array [
+                2,
+                Array [
+                  3,
+                  Array [
+                    [Function],
+                    null,
+                  ],
+                ],
+              ],
+            ],
+            Array [
+              Array [
+                Array [
+                  1,
+                  2,
+                ],
+                3,
+              ],
+              Array [
+                Array [
+                  1,
+                  Array [
+                    1,
+                    2,
+                  ],
+                  [Function],
+                  4,
+                  5,
+                ],
+                Array [
+                  4,
+                  null,
+                ],
+              ],
+            ],
+          ],
+          Array [
+            [Function],
+            Array [
+              Array [
+                1,
+                Array [
+                  Array [
+                    1,
+                    2,
+                  ],
+                  3,
+                ],
+                4,
+              ],
+              null,
+            ],
+          ],
+        ],
+      ],
+    },
+  },
+  "id": "46",
   "name": "programEnvironment",
   "tail": Object {
     "head": Object {
-      "$accumulate": [Function],
-      "$append": [Function],
-      "$build_list": [Function],
-      "$enum_list": [Function],
-      "$filter": [Function],
-      "$length": [Function],
-      "$list_to_string": [Function],
-      "$map": [Function],
-      "$remove": [Function],
-      "$remove_all": [Function],
-      "$reverse": [Function],
-      "__access_export__": [Function],
-      "__access_named_export__": [Function],
-      "accumulate": [Function],
-      "append": [Function],
-      "build_list": [Function],
-      "build_stream": [Function],
-      "enum_list": [Function],
-      "enum_stream": [Function],
-      "equal": [Function],
-      "eval_stream": [Function],
-      "filter": [Function],
-      "for_each": [Function],
-      "integers_from": [Function],
-      "is_stream": [Function],
-      "length": [Function],
-      "list_ref": [Function],
-      "list_to_stream": [Function],
-      "list_to_string": [Function],
-      "map": [Function],
-      "member": [Function],
-      "remove": [Function],
-      "remove_all": [Function],
-      "reverse": [Function],
-      "stream_append": [Function],
-      "stream_filter": [Function],
-      "stream_for_each": [Function],
-      "stream_length": [Function],
-      "stream_map": [Function],
-      "stream_member": [Function],
-      "stream_ref": [Function],
-      "stream_remove": [Function],
-      "stream_remove_all": [Function],
-      "stream_reverse": [Function],
-      "stream_to_list": [Function],
+      ":::pre-declared names::": Symbol(),
     },
-    "id": "57",
-    "name": "programEnvironment",
-    "tail": Object {
-      "head": Object {
-        ":::pre-declared names::": Symbol(),
-      },
-      "id": "-1",
-      "name": "global",
-      "tail": null,
+    "heap": Heap {
+      "storage": null,
     },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
   },
 }
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 1 3`] = `
 Array [
-  0,
-  0,
   ":::pre-declared names::: ",
   Symbol(),
-  0,
-  1,
   "fn:= ",
   [Function],
   "x:= ",
@@ -2449,8 +2857,6 @@ Array [
       ],
     ],
   ],
-  "106:= ",
-  [Function],
 ]
 `;
 
@@ -2459,7 +2865,10 @@ Object {
   "head": Object {
     ":::pre-declared names::": Symbol(),
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "-1",
   "name": "global",
   "tail": null,
 }
@@ -2495,78 +2904,82 @@ Object {
       ],
     ],
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": Set {
+      Array [
+        2,
+        Array [
+          3,
+          Array [
+            Array [
+              1,
+              [Circular],
+            ],
+            null,
+          ],
+        ],
+      ],
+      Array [
+        1,
+        Array [
+          2,
+          Array [
+            3,
+            Array [
+              [Circular],
+              null,
+            ],
+          ],
+        ],
+      ],
+      Array [
+        Array [
+          1,
+          Array [
+            2,
+            Array [
+              3,
+              [Circular],
+            ],
+          ],
+        ],
+        null,
+      ],
+      Array [
+        3,
+        Array [
+          Array [
+            1,
+            Array [
+              2,
+              [Circular],
+            ],
+          ],
+          null,
+        ],
+      ],
+    },
+  },
+  "id": "46",
   "name": "programEnvironment",
   "tail": Object {
     "head": Object {
-      "$accumulate": [Function],
-      "$append": [Function],
-      "$build_list": [Function],
-      "$enum_list": [Function],
-      "$filter": [Function],
-      "$length": [Function],
-      "$list_to_string": [Function],
-      "$map": [Function],
-      "$remove": [Function],
-      "$remove_all": [Function],
-      "$reverse": [Function],
-      "__access_export__": [Function],
-      "__access_named_export__": [Function],
-      "accumulate": [Function],
-      "append": [Function],
-      "build_list": [Function],
-      "build_stream": [Function],
-      "enum_list": [Function],
-      "enum_stream": [Function],
-      "equal": [Function],
-      "eval_stream": [Function],
-      "filter": [Function],
-      "for_each": [Function],
-      "integers_from": [Function],
-      "is_stream": [Function],
-      "length": [Function],
-      "list_ref": [Function],
-      "list_to_stream": [Function],
-      "list_to_string": [Function],
-      "map": [Function],
-      "member": [Function],
-      "remove": [Function],
-      "remove_all": [Function],
-      "reverse": [Function],
-      "stream_append": [Function],
-      "stream_filter": [Function],
-      "stream_for_each": [Function],
-      "stream_length": [Function],
-      "stream_map": [Function],
-      "stream_member": [Function],
-      "stream_ref": [Function],
-      "stream_remove": [Function],
-      "stream_remove_all": [Function],
-      "stream_reverse": [Function],
-      "stream_to_list": [Function],
+      ":::pre-declared names::": Symbol(),
     },
-    "id": "107",
-    "name": "programEnvironment",
-    "tail": Object {
-      "head": Object {
-        ":::pre-declared names::": Symbol(),
-      },
-      "id": "-1",
-      "name": "global",
-      "tail": null,
+    "heap": Heap {
+      "storage": null,
     },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
   },
 }
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 2 3`] = `
 Array [
-  0,
-  0,
   ":::pre-declared names::: ",
   Symbol(),
-  0,
-  1,
   "x1:= ",
   Array [
     1,
@@ -2603,7 +3016,10 @@ Object {
   "head": Object {
     ":::pre-declared names::": Symbol(),
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "-1",
   "name": "global",
   "tail": null,
 }
@@ -2612,8 +3028,6 @@ Object {
 exports[`CSE Machine calculates correct layout for code sample 3 2`] = `
 Object {
   "head": Object {
-    "202": [Function],
-    "204": [Function],
     "e": Array [
       Array [
         3,
@@ -2688,78 +3102,216 @@ Object {
       ],
     ],
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": Set {
+      Array [
+        5,
+        null,
+      ],
+      Array [
+        4,
+        Array [
+          5,
+          null,
+        ],
+      ],
+      Array [
+        3,
+        Array [
+          4,
+          Array [
+            5,
+            null,
+          ],
+        ],
+      ],
+      Array [
+        Array [
+          3,
+          Array [
+            4,
+            Array [
+              5,
+              null,
+            ],
+          ],
+        ],
+        null,
+      ],
+      Array [
+        2,
+        Array [
+          Array [
+            3,
+            Array [
+              4,
+              Array [
+                5,
+                null,
+              ],
+            ],
+          ],
+          null,
+        ],
+      ],
+      Array [
+        Array [
+          3,
+          Array [
+            4,
+            Array [
+              5,
+              null,
+            ],
+          ],
+        ],
+        Array [
+          2,
+          Array [
+            Array [
+              3,
+              Array [
+                4,
+                Array [
+                  5,
+                  null,
+                ],
+              ],
+            ],
+            null,
+          ],
+        ],
+      ],
+      Array [
+        1,
+        2,
+      ],
+      [Function],
+      Array [
+        5,
+        null,
+      ],
+      Array [
+        4,
+        Array [
+          5,
+          null,
+        ],
+      ],
+      Array [
+        [Function],
+        Array [
+          4,
+          Array [
+            5,
+            null,
+          ],
+        ],
+      ],
+      Array [
+        Array [
+          [Function],
+          Array [
+            4,
+            Array [
+              5,
+              null,
+            ],
+          ],
+        ],
+        null,
+      ],
+      Array [
+        2,
+        Array [
+          Array [
+            [Function],
+            Array [
+              4,
+              Array [
+                5,
+                null,
+              ],
+            ],
+          ],
+          null,
+        ],
+      ],
+      Array [
+        Array [
+          [Function],
+          Array [
+            4,
+            Array [
+              5,
+              null,
+            ],
+          ],
+        ],
+        Array [
+          2,
+          Array [
+            Array [
+              [Function],
+              Array [
+                4,
+                Array [
+                  5,
+                  null,
+                ],
+              ],
+            ],
+            null,
+          ],
+        ],
+      ],
+      [Function],
+      Array [
+        1,
+        2,
+      ],
+      Array [
+        [Function],
+        Array [
+          1,
+          2,
+        ],
+      ],
+      Array [
+        Array [
+          1,
+          2,
+        ],
+        Array [
+          [Function],
+          Array [
+            1,
+            2,
+          ],
+        ],
+      ],
+    },
+  },
+  "id": "46",
   "name": "programEnvironment",
   "tail": Object {
     "head": Object {
-      "$accumulate": [Function],
-      "$append": [Function],
-      "$build_list": [Function],
-      "$enum_list": [Function],
-      "$filter": [Function],
-      "$length": [Function],
-      "$list_to_string": [Function],
-      "$map": [Function],
-      "$remove": [Function],
-      "$remove_all": [Function],
-      "$reverse": [Function],
-      "__access_export__": [Function],
-      "__access_named_export__": [Function],
-      "accumulate": [Function],
-      "append": [Function],
-      "build_list": [Function],
-      "build_stream": [Function],
-      "enum_list": [Function],
-      "enum_stream": [Function],
-      "equal": [Function],
-      "eval_stream": [Function],
-      "filter": [Function],
-      "for_each": [Function],
-      "integers_from": [Function],
-      "is_stream": [Function],
-      "length": [Function],
-      "list_ref": [Function],
-      "list_to_stream": [Function],
-      "list_to_string": [Function],
-      "map": [Function],
-      "member": [Function],
-      "remove": [Function],
-      "remove_all": [Function],
-      "reverse": [Function],
-      "stream_append": [Function],
-      "stream_filter": [Function],
-      "stream_for_each": [Function],
-      "stream_length": [Function],
-      "stream_map": [Function],
-      "stream_member": [Function],
-      "stream_ref": [Function],
-      "stream_remove": [Function],
-      "stream_remove_all": [Function],
-      "stream_reverse": [Function],
-      "stream_to_list": [Function],
+      ":::pre-declared names::": Symbol(),
     },
-    "id": "154",
-    "name": "programEnvironment",
-    "tail": Object {
-      "head": Object {
-        ":::pre-declared names::": Symbol(),
-      },
-      "id": "-1",
-      "name": "global",
-      "tail": null,
+    "heap": Heap {
+      "storage": null,
     },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
   },
 }
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 3 3`] = `
 Array [
-  0,
-  0,
   ":::pre-declared names::: ",
   Symbol(),
-  0,
-  1,
   "e:= ",
   Array [
     Array [
@@ -2837,10 +3389,6 @@ Array [
       ],
     ],
   ],
-  "202:= ",
-  [Function],
-  "204:= ",
-  [Function],
 ]
 `;
 
@@ -2849,7 +3397,10 @@ Object {
   "head": Object {
     ":::pre-declared names::": Symbol(),
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "-1",
   "name": "global",
   "tail": null,
 }
@@ -2863,66 +3414,23 @@ Object {
     "y": 10,
     "z": [Function],
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+    },
+  },
+  "id": "46",
   "name": "programEnvironment",
   "tail": Object {
     "head": Object {
-      "$accumulate": [Function],
-      "$append": [Function],
-      "$build_list": [Function],
-      "$enum_list": [Function],
-      "$filter": [Function],
-      "$length": [Function],
-      "$list_to_string": [Function],
-      "$map": [Function],
-      "$remove": [Function],
-      "$remove_all": [Function],
-      "$reverse": [Function],
-      "__access_export__": [Function],
-      "__access_named_export__": [Function],
-      "accumulate": [Function],
-      "append": [Function],
-      "build_list": [Function],
-      "build_stream": [Function],
-      "enum_list": [Function],
-      "enum_stream": [Function],
-      "equal": [Function],
-      "eval_stream": [Function],
-      "filter": [Function],
-      "for_each": [Function],
-      "integers_from": [Function],
-      "is_stream": [Function],
-      "length": [Function],
-      "list_ref": [Function],
-      "list_to_stream": [Function],
-      "list_to_string": [Function],
-      "map": [Function],
-      "member": [Function],
-      "remove": [Function],
-      "remove_all": [Function],
-      "reverse": [Function],
-      "stream_append": [Function],
-      "stream_filter": [Function],
-      "stream_for_each": [Function],
-      "stream_length": [Function],
-      "stream_map": [Function],
-      "stream_member": [Function],
-      "stream_ref": [Function],
-      "stream_remove": [Function],
-      "stream_remove_all": [Function],
-      "stream_reverse": [Function],
-      "stream_to_list": [Function],
+      ":::pre-declared names::": Symbol(),
     },
-    "id": "205",
-    "name": "programEnvironment",
-    "tail": Object {
-      "head": Object {
-        ":::pre-declared names::": Symbol(),
-      },
-      "id": "-1",
-      "name": "global",
-      "tail": null,
+    "heap": Heap {
+      "storage": null,
     },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
   },
 }
 `;
@@ -2968,10 +3476,14 @@ Object {
     "type": "CallExpression",
   },
   "head": Object {
-    "255": [Function],
     "x": 11,
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+    },
+  },
+  "id": "48",
   "name": "f",
   "tail": Object {
     "head": Object {
@@ -2980,66 +3492,23 @@ Object {
       "y": 10,
       "z": [Function],
     },
-    "id": "251",
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+      },
+    },
+    "id": "46",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
-        "$accumulate": [Function],
-        "$append": [Function],
-        "$build_list": [Function],
-        "$enum_list": [Function],
-        "$filter": [Function],
-        "$length": [Function],
-        "$list_to_string": [Function],
-        "$map": [Function],
-        "$remove": [Function],
-        "$remove_all": [Function],
-        "$reverse": [Function],
-        "__access_export__": [Function],
-        "__access_named_export__": [Function],
-        "accumulate": [Function],
-        "append": [Function],
-        "build_list": [Function],
-        "build_stream": [Function],
-        "enum_list": [Function],
-        "enum_stream": [Function],
-        "equal": [Function],
-        "eval_stream": [Function],
-        "filter": [Function],
-        "for_each": [Function],
-        "integers_from": [Function],
-        "is_stream": [Function],
-        "length": [Function],
-        "list_ref": [Function],
-        "list_to_stream": [Function],
-        "list_to_string": [Function],
-        "map": [Function],
-        "member": [Function],
-        "remove": [Function],
-        "remove_all": [Function],
-        "reverse": [Function],
-        "stream_append": [Function],
-        "stream_filter": [Function],
-        "stream_for_each": [Function],
-        "stream_length": [Function],
-        "stream_map": [Function],
-        "stream_member": [Function],
-        "stream_ref": [Function],
-        "stream_remove": [Function],
-        "stream_remove_all": [Function],
-        "stream_reverse": [Function],
-        "stream_to_list": [Function],
+        ":::pre-declared names::": Symbol(),
       },
-      "id": "205",
-      "name": "programEnvironment",
-      "tail": Object {
-        "head": Object {
-          ":::pre-declared names::": Symbol(),
-        },
-        "id": "-1",
-        "name": "global",
-        "tail": null,
+      "heap": Heap {
+        "storage": null,
       },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
     },
   },
 }
@@ -3047,12 +3516,8 @@ Object {
 
 exports[`CSE Machine calculates correct layout for code sample 4 4`] = `
 Array [
-  0,
-  0,
   ":::pre-declared names::: ",
   Symbol(),
-  0,
-  1,
   "x: ",
   0,
   "y: ",
@@ -3061,11 +3526,9 @@ Array [
   [Function],
   "z:= ",
   [Function],
-  0,
-  2,
   "x: ",
   11,
-  "255:= ",
+  "0:= ",
   [Function],
 ]
 `;
@@ -3077,7 +3540,12 @@ Object {
     "accumulate": [Function],
     "pair": [Function],
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+    },
+  },
+  "id": "-1",
   "name": "global",
   "tail": null,
 }
@@ -3097,84 +3565,61 @@ Object {
       ],
     ],
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": Set {
+      Array [
+        [Function],
+        null,
+      ],
+      Array [
+        [Function],
+        Array [
+          [Function],
+          null,
+        ],
+      ],
+      Array [
+        1,
+        Array [
+          [Function],
+          Array [
+            [Function],
+            null,
+          ],
+        ],
+      ],
+    },
+  },
+  "id": "46",
   "name": "programEnvironment",
   "tail": Object {
     "head": Object {
-      "$accumulate": [Function],
-      "$append": [Function],
-      "$build_list": [Function],
-      "$enum_list": [Function],
-      "$filter": [Function],
-      "$length": [Function],
-      "$list_to_string": [Function],
-      "$map": [Function],
-      "$remove": [Function],
-      "$remove_all": [Function],
-      "$reverse": [Function],
-      "__access_export__": [Function],
-      "__access_named_export__": [Function],
+      ":::pre-declared names::": Symbol(),
       "accumulate": [Function],
-      "append": [Function],
-      "build_list": [Function],
-      "build_stream": [Function],
-      "enum_list": [Function],
-      "enum_stream": [Function],
-      "equal": [Function],
-      "eval_stream": [Function],
-      "filter": [Function],
-      "for_each": [Function],
-      "integers_from": [Function],
-      "is_stream": [Function],
-      "length": [Function],
-      "list_ref": [Function],
-      "list_to_stream": [Function],
-      "list_to_string": [Function],
-      "map": [Function],
-      "member": [Function],
-      "remove": [Function],
-      "remove_all": [Function],
-      "reverse": [Function],
-      "stream_append": [Function],
-      "stream_filter": [Function],
-      "stream_for_each": [Function],
-      "stream_length": [Function],
-      "stream_map": [Function],
-      "stream_member": [Function],
-      "stream_ref": [Function],
-      "stream_remove": [Function],
-      "stream_remove_all": [Function],
-      "stream_reverse": [Function],
-      "stream_to_list": [Function],
+      "pair": [Function],
     },
-    "id": "256",
-    "name": "programEnvironment",
-    "tail": Object {
-      "head": Object {
-        ":::pre-declared names::": Symbol(),
-        "accumulate": [Function],
-        "pair": [Function],
+    "heap": Heap {
+      "storage": Set {
+        [Function],
       },
-      "id": "-1",
-      "name": "global",
-      "tail": null,
     },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
   },
 }
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 5 3`] = `
 Array [
-  0,
-  0,
   ":::pre-declared names::: ",
   Symbol(),
-  "accumulate: ",
-  [Function],
   "pair: ",
   [Function],
-  0,
-  1,
+  "accumulate: ",
+  [Function],
+  "0:= ",
+  [Function],
   "x:= ",
   Array [
     1,
@@ -3194,7 +3639,10 @@ Object {
   "head": Object {
     ":::pre-declared names::": Symbol(),
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "-1",
   "name": "global",
   "tail": null,
 }
@@ -3205,78 +3653,31 @@ Object {
   "head": Object {
     "x": Array [],
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": Set {
+      Array [],
+    },
+  },
+  "id": "46",
   "name": "programEnvironment",
   "tail": Object {
     "head": Object {
-      "$accumulate": [Function],
-      "$append": [Function],
-      "$build_list": [Function],
-      "$enum_list": [Function],
-      "$filter": [Function],
-      "$length": [Function],
-      "$list_to_string": [Function],
-      "$map": [Function],
-      "$remove": [Function],
-      "$remove_all": [Function],
-      "$reverse": [Function],
-      "__access_export__": [Function],
-      "__access_named_export__": [Function],
-      "accumulate": [Function],
-      "append": [Function],
-      "build_list": [Function],
-      "build_stream": [Function],
-      "enum_list": [Function],
-      "enum_stream": [Function],
-      "equal": [Function],
-      "eval_stream": [Function],
-      "filter": [Function],
-      "for_each": [Function],
-      "integers_from": [Function],
-      "is_stream": [Function],
-      "length": [Function],
-      "list_ref": [Function],
-      "list_to_stream": [Function],
-      "list_to_string": [Function],
-      "map": [Function],
-      "member": [Function],
-      "remove": [Function],
-      "remove_all": [Function],
-      "reverse": [Function],
-      "stream_append": [Function],
-      "stream_filter": [Function],
-      "stream_for_each": [Function],
-      "stream_length": [Function],
-      "stream_map": [Function],
-      "stream_member": [Function],
-      "stream_ref": [Function],
-      "stream_remove": [Function],
-      "stream_remove_all": [Function],
-      "stream_reverse": [Function],
-      "stream_to_list": [Function],
+      ":::pre-declared names::": Symbol(),
     },
-    "id": "303",
-    "name": "programEnvironment",
-    "tail": Object {
-      "head": Object {
-        ":::pre-declared names::": Symbol(),
-      },
-      "id": "-1",
-      "name": "global",
-      "tail": null,
+    "heap": Heap {
+      "storage": null,
     },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
   },
 }
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 6 3`] = `
 Array [
-  0,
-  0,
   ":::pre-declared names::: ",
   Symbol(),
-  0,
-  1,
   "x:= ",
   Array [],
 ]
@@ -3285,11 +3686,15 @@ Array [
 exports[`CSE Machine calculates correct layout for code sample 7 1`] = `
 Object {
   "head": Object {
-    "411": [Function],
     ":::pre-declared names::": Symbol(),
     "integers_from": [Function],
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+    },
+  },
+  "id": "-1",
   "name": "global",
   "tail": null,
 }
@@ -3309,69 +3714,43 @@ Object {
       ],
     ],
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": Set {
+      Array [],
+      Array [
+        1,
+        Array [
+          [Circular],
+          [Circular],
+        ],
+        [Circular],
+      ],
+      Array [
+        [Circular],
+        Array [
+          1,
+          [Circular],
+          [Circular],
+        ],
+      ],
+      [Function],
+    },
+  },
+  "id": "46",
   "name": "programEnvironment",
   "tail": Object {
     "head": Object {
-      "$accumulate": [Function],
-      "$append": [Function],
-      "$build_list": [Function],
-      "$enum_list": [Function],
-      "$filter": [Function],
-      "$length": [Function],
-      "$list_to_string": [Function],
-      "$map": [Function],
-      "$remove": [Function],
-      "$remove_all": [Function],
-      "$reverse": [Function],
-      "411": [Function],
-      "__access_export__": [Function],
-      "__access_named_export__": [Function],
-      "accumulate": [Function],
-      "append": [Function],
-      "build_list": [Function],
-      "build_stream": [Function],
-      "enum_list": [Function],
-      "enum_stream": [Function],
-      "equal": [Function],
-      "eval_stream": [Function],
-      "filter": [Function],
-      "for_each": [Function],
+      ":::pre-declared names::": Symbol(),
       "integers_from": [Function],
-      "is_stream": [Function],
-      "length": [Function],
-      "list_ref": [Function],
-      "list_to_stream": [Function],
-      "list_to_string": [Function],
-      "map": [Function],
-      "member": [Function],
-      "remove": [Function],
-      "remove_all": [Function],
-      "reverse": [Function],
-      "stream_append": [Function],
-      "stream_filter": [Function],
-      "stream_for_each": [Function],
-      "stream_length": [Function],
-      "stream_map": [Function],
-      "stream_member": [Function],
-      "stream_ref": [Function],
-      "stream_remove": [Function],
-      "stream_remove_all": [Function],
-      "stream_reverse": [Function],
-      "stream_to_list": [Function],
     },
-    "id": "350",
-    "name": "programEnvironment",
-    "tail": Object {
-      "head": Object {
-        "411": [Function],
-        ":::pre-declared names::": Symbol(),
-        "integers_from": [Function],
+    "heap": Heap {
+      "storage": Set {
+        [Function],
       },
-      "id": "-1",
-      "name": "global",
-      "tail": null,
     },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
   },
 }
 `;
@@ -3417,73 +3796,33 @@ Object {
     "type": "CallExpression",
   },
   "head": Object {
-    "414": [Function],
-    "422": [Function],
+    "79": [Function],
     "n": 1,
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+      Array [
+        1,
+        [Function],
+      ],
+    },
+  },
+  "id": "68",
   "name": "integers_from",
   "tail": Object {
     "head": Object {
-      "$accumulate": [Function],
-      "$append": [Function],
-      "$build_list": [Function],
-      "$enum_list": [Function],
-      "$filter": [Function],
-      "$length": [Function],
-      "$list_to_string": [Function],
-      "$map": [Function],
-      "$remove": [Function],
-      "$remove_all": [Function],
-      "$reverse": [Function],
-      "411": [Function],
-      "__access_export__": [Function],
-      "__access_named_export__": [Function],
-      "accumulate": [Function],
-      "append": [Function],
-      "build_list": [Function],
-      "build_stream": [Function],
-      "enum_list": [Function],
-      "enum_stream": [Function],
-      "equal": [Function],
-      "eval_stream": [Function],
-      "filter": [Function],
-      "for_each": [Function],
+      ":::pre-declared names::": Symbol(),
       "integers_from": [Function],
-      "is_stream": [Function],
-      "length": [Function],
-      "list_ref": [Function],
-      "list_to_stream": [Function],
-      "list_to_string": [Function],
-      "map": [Function],
-      "member": [Function],
-      "remove": [Function],
-      "remove_all": [Function],
-      "reverse": [Function],
-      "stream_append": [Function],
-      "stream_filter": [Function],
-      "stream_for_each": [Function],
-      "stream_length": [Function],
-      "stream_map": [Function],
-      "stream_member": [Function],
-      "stream_ref": [Function],
-      "stream_remove": [Function],
-      "stream_remove_all": [Function],
-      "stream_reverse": [Function],
-      "stream_to_list": [Function],
     },
-    "id": "350",
-    "name": "programEnvironment",
-    "tail": Object {
-      "head": Object {
-        "411": [Function],
-        ":::pre-declared names::": Symbol(),
-        "integers_from": [Function],
+    "heap": Heap {
+      "storage": Set {
+        [Function],
       },
-      "id": "-1",
-      "name": "global",
-      "tail": null,
     },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
   },
 }
 `;
@@ -3529,72 +3868,27 @@ Object {
     "type": "CallExpression",
   },
   "head": Object {
-    "426": [Function],
+    "83": [Function],
     "n": 2,
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "80",
   "name": "n => ...",
   "tail": Object {
     "head": Object {
-      "$accumulate": [Function],
-      "$append": [Function],
-      "$build_list": [Function],
-      "$enum_list": [Function],
-      "$filter": [Function],
-      "$length": [Function],
-      "$list_to_string": [Function],
-      "$map": [Function],
-      "$remove": [Function],
-      "$remove_all": [Function],
-      "$reverse": [Function],
-      "411": [Function],
-      "__access_export__": [Function],
-      "__access_named_export__": [Function],
-      "accumulate": [Function],
-      "append": [Function],
-      "build_list": [Function],
-      "build_stream": [Function],
-      "enum_list": [Function],
-      "enum_stream": [Function],
-      "equal": [Function],
-      "eval_stream": [Function],
-      "filter": [Function],
-      "for_each": [Function],
+      ":::pre-declared names::": Symbol(),
       "integers_from": [Function],
-      "is_stream": [Function],
-      "length": [Function],
-      "list_ref": [Function],
-      "list_to_stream": [Function],
-      "list_to_string": [Function],
-      "map": [Function],
-      "member": [Function],
-      "remove": [Function],
-      "remove_all": [Function],
-      "reverse": [Function],
-      "stream_append": [Function],
-      "stream_filter": [Function],
-      "stream_for_each": [Function],
-      "stream_length": [Function],
-      "stream_map": [Function],
-      "stream_member": [Function],
-      "stream_ref": [Function],
-      "stream_remove": [Function],
-      "stream_remove_all": [Function],
-      "stream_reverse": [Function],
-      "stream_to_list": [Function],
     },
-    "id": "350",
-    "name": "programEnvironment",
-    "tail": Object {
-      "head": Object {
-        "411": [Function],
-        ":::pre-declared names::": Symbol(),
-        "integers_from": [Function],
+    "heap": Heap {
+      "storage": Set {
+        [Function],
       },
-      "id": "-1",
-      "name": "global",
-      "tail": null,
     },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
   },
 }
 `;
@@ -3604,7 +3898,10 @@ Object {
   "head": Object {
     "i": 5,
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "48",
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
@@ -3619,69 +3916,43 @@ Object {
         ],
       ],
     },
-    "id": "396",
+    "heap": Heap {
+      "storage": Set {
+        Array [],
+        Array [
+          1,
+          Array [
+            [Circular],
+            [Circular],
+          ],
+          [Circular],
+        ],
+        Array [
+          [Circular],
+          Array [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+        [Function],
+      },
+    },
+    "id": "46",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
-        "$accumulate": [Function],
-        "$append": [Function],
-        "$build_list": [Function],
-        "$enum_list": [Function],
-        "$filter": [Function],
-        "$length": [Function],
-        "$list_to_string": [Function],
-        "$map": [Function],
-        "$remove": [Function],
-        "$remove_all": [Function],
-        "$reverse": [Function],
-        "411": [Function],
-        "__access_export__": [Function],
-        "__access_named_export__": [Function],
-        "accumulate": [Function],
-        "append": [Function],
-        "build_list": [Function],
-        "build_stream": [Function],
-        "enum_list": [Function],
-        "enum_stream": [Function],
-        "equal": [Function],
-        "eval_stream": [Function],
-        "filter": [Function],
-        "for_each": [Function],
+        ":::pre-declared names::": Symbol(),
         "integers_from": [Function],
-        "is_stream": [Function],
-        "length": [Function],
-        "list_ref": [Function],
-        "list_to_stream": [Function],
-        "list_to_string": [Function],
-        "map": [Function],
-        "member": [Function],
-        "remove": [Function],
-        "remove_all": [Function],
-        "reverse": [Function],
-        "stream_append": [Function],
-        "stream_filter": [Function],
-        "stream_for_each": [Function],
-        "stream_length": [Function],
-        "stream_map": [Function],
-        "stream_member": [Function],
-        "stream_ref": [Function],
-        "stream_remove": [Function],
-        "stream_remove_all": [Function],
-        "stream_reverse": [Function],
-        "stream_to_list": [Function],
       },
-      "id": "350",
-      "name": "programEnvironment",
-      "tail": Object {
-        "head": Object {
-          "411": [Function],
-          ":::pre-declared names::": Symbol(),
-          "integers_from": [Function],
+      "heap": Heap {
+        "storage": Set {
+          [Function],
         },
-        "id": "-1",
-        "name": "global",
-        "tail": null,
       },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
     },
   },
 }
@@ -3742,7 +4013,10 @@ Object {
       [Function],
     ],
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "71",
   "name": "eval_stream",
   "tail": Object {
     "head": Object {
@@ -3757,69 +4031,43 @@ Object {
         ],
       ],
     },
-    "id": "396",
+    "heap": Heap {
+      "storage": Set {
+        Array [],
+        Array [
+          1,
+          Array [
+            [Circular],
+            [Circular],
+          ],
+          [Circular],
+        ],
+        Array [
+          [Circular],
+          Array [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+        [Function],
+      },
+    },
+    "id": "46",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
-        "$accumulate": [Function],
-        "$append": [Function],
-        "$build_list": [Function],
-        "$enum_list": [Function],
-        "$filter": [Function],
-        "$length": [Function],
-        "$list_to_string": [Function],
-        "$map": [Function],
-        "$remove": [Function],
-        "$remove_all": [Function],
-        "$reverse": [Function],
-        "411": [Function],
-        "__access_export__": [Function],
-        "__access_named_export__": [Function],
-        "accumulate": [Function],
-        "append": [Function],
-        "build_list": [Function],
-        "build_stream": [Function],
-        "enum_list": [Function],
-        "enum_stream": [Function],
-        "equal": [Function],
-        "eval_stream": [Function],
-        "filter": [Function],
-        "for_each": [Function],
+        ":::pre-declared names::": Symbol(),
         "integers_from": [Function],
-        "is_stream": [Function],
-        "length": [Function],
-        "list_ref": [Function],
-        "list_to_stream": [Function],
-        "list_to_string": [Function],
-        "map": [Function],
-        "member": [Function],
-        "remove": [Function],
-        "remove_all": [Function],
-        "reverse": [Function],
-        "stream_append": [Function],
-        "stream_filter": [Function],
-        "stream_for_each": [Function],
-        "stream_length": [Function],
-        "stream_map": [Function],
-        "stream_member": [Function],
-        "stream_ref": [Function],
-        "stream_remove": [Function],
-        "stream_remove_all": [Function],
-        "stream_reverse": [Function],
-        "stream_to_list": [Function],
       },
-      "id": "350",
-      "name": "programEnvironment",
-      "tail": Object {
-        "head": Object {
-          "411": [Function],
-          ":::pre-declared names::": Symbol(),
-          "integers_from": [Function],
+      "heap": Heap {
+        "storage": Set {
+          [Function],
         },
-        "id": "-1",
-        "name": "global",
-        "tail": null,
       },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
     },
   },
 }
@@ -3830,13 +4078,19 @@ Object {
   "head": Object {
     "_copy_of_i": 1,
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "49",
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
       "i": 5,
     },
-    "id": "397",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "48",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
@@ -3851,69 +4105,43 @@ Object {
           ],
         ],
       },
-      "id": "396",
+      "heap": Heap {
+        "storage": Set {
+          Array [],
+          Array [
+            1,
+            Array [
+              [Circular],
+              [Circular],
+            ],
+            [Circular],
+          ],
+          Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+          [Function],
+        },
+      },
+      "id": "46",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
-          "$accumulate": [Function],
-          "$append": [Function],
-          "$build_list": [Function],
-          "$enum_list": [Function],
-          "$filter": [Function],
-          "$length": [Function],
-          "$list_to_string": [Function],
-          "$map": [Function],
-          "$remove": [Function],
-          "$remove_all": [Function],
-          "$reverse": [Function],
-          "411": [Function],
-          "__access_export__": [Function],
-          "__access_named_export__": [Function],
-          "accumulate": [Function],
-          "append": [Function],
-          "build_list": [Function],
-          "build_stream": [Function],
-          "enum_list": [Function],
-          "enum_stream": [Function],
-          "equal": [Function],
-          "eval_stream": [Function],
-          "filter": [Function],
-          "for_each": [Function],
+          ":::pre-declared names::": Symbol(),
           "integers_from": [Function],
-          "is_stream": [Function],
-          "length": [Function],
-          "list_ref": [Function],
-          "list_to_stream": [Function],
-          "list_to_string": [Function],
-          "map": [Function],
-          "member": [Function],
-          "remove": [Function],
-          "remove_all": [Function],
-          "reverse": [Function],
-          "stream_append": [Function],
-          "stream_filter": [Function],
-          "stream_for_each": [Function],
-          "stream_length": [Function],
-          "stream_map": [Function],
-          "stream_member": [Function],
-          "stream_ref": [Function],
-          "stream_remove": [Function],
-          "stream_remove_all": [Function],
-          "stream_reverse": [Function],
-          "stream_to_list": [Function],
         },
-        "id": "350",
-        "name": "programEnvironment",
-        "tail": Object {
-          "head": Object {
-            "411": [Function],
-            ":::pre-declared names::": Symbol(),
-            "integers_from": [Function],
+        "heap": Heap {
+          "storage": Set {
+            [Function],
           },
-          "id": "-1",
-          "name": "global",
-          "tail": null,
         },
+        "id": "-1",
+        "name": "global",
+        "tail": null,
       },
     },
   },
@@ -3925,13 +4153,19 @@ Object {
   "head": Object {
     "_copy_of_i": 2,
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "53",
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
       "i": 5,
     },
-    "id": "397",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "48",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
@@ -3946,69 +4180,43 @@ Object {
           ],
         ],
       },
-      "id": "396",
+      "heap": Heap {
+        "storage": Set {
+          Array [],
+          Array [
+            1,
+            Array [
+              [Circular],
+              [Circular],
+            ],
+            [Circular],
+          ],
+          Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+          [Function],
+        },
+      },
+      "id": "46",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
-          "$accumulate": [Function],
-          "$append": [Function],
-          "$build_list": [Function],
-          "$enum_list": [Function],
-          "$filter": [Function],
-          "$length": [Function],
-          "$list_to_string": [Function],
-          "$map": [Function],
-          "$remove": [Function],
-          "$remove_all": [Function],
-          "$reverse": [Function],
-          "411": [Function],
-          "__access_export__": [Function],
-          "__access_named_export__": [Function],
-          "accumulate": [Function],
-          "append": [Function],
-          "build_list": [Function],
-          "build_stream": [Function],
-          "enum_list": [Function],
-          "enum_stream": [Function],
-          "equal": [Function],
-          "eval_stream": [Function],
-          "filter": [Function],
-          "for_each": [Function],
+          ":::pre-declared names::": Symbol(),
           "integers_from": [Function],
-          "is_stream": [Function],
-          "length": [Function],
-          "list_ref": [Function],
-          "list_to_stream": [Function],
-          "list_to_string": [Function],
-          "map": [Function],
-          "member": [Function],
-          "remove": [Function],
-          "remove_all": [Function],
-          "reverse": [Function],
-          "stream_append": [Function],
-          "stream_filter": [Function],
-          "stream_for_each": [Function],
-          "stream_length": [Function],
-          "stream_map": [Function],
-          "stream_member": [Function],
-          "stream_ref": [Function],
-          "stream_remove": [Function],
-          "stream_remove_all": [Function],
-          "stream_reverse": [Function],
-          "stream_to_list": [Function],
         },
-        "id": "350",
-        "name": "programEnvironment",
-        "tail": Object {
-          "head": Object {
-            "411": [Function],
-            ":::pre-declared names::": Symbol(),
-            "integers_from": [Function],
+        "heap": Heap {
+          "storage": Set {
+            [Function],
           },
-          "id": "-1",
-          "name": "global",
-          "tail": null,
         },
+        "id": "-1",
+        "name": "global",
+        "tail": null,
       },
     },
   },
@@ -4020,13 +4228,19 @@ Object {
   "head": Object {
     "_copy_of_i": 3,
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "57",
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
       "i": 5,
     },
-    "id": "397",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "48",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
@@ -4041,69 +4255,43 @@ Object {
           ],
         ],
       },
-      "id": "396",
+      "heap": Heap {
+        "storage": Set {
+          Array [],
+          Array [
+            1,
+            Array [
+              [Circular],
+              [Circular],
+            ],
+            [Circular],
+          ],
+          Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+          [Function],
+        },
+      },
+      "id": "46",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
-          "$accumulate": [Function],
-          "$append": [Function],
-          "$build_list": [Function],
-          "$enum_list": [Function],
-          "$filter": [Function],
-          "$length": [Function],
-          "$list_to_string": [Function],
-          "$map": [Function],
-          "$remove": [Function],
-          "$remove_all": [Function],
-          "$reverse": [Function],
-          "411": [Function],
-          "__access_export__": [Function],
-          "__access_named_export__": [Function],
-          "accumulate": [Function],
-          "append": [Function],
-          "build_list": [Function],
-          "build_stream": [Function],
-          "enum_list": [Function],
-          "enum_stream": [Function],
-          "equal": [Function],
-          "eval_stream": [Function],
-          "filter": [Function],
-          "for_each": [Function],
+          ":::pre-declared names::": Symbol(),
           "integers_from": [Function],
-          "is_stream": [Function],
-          "length": [Function],
-          "list_ref": [Function],
-          "list_to_stream": [Function],
-          "list_to_string": [Function],
-          "map": [Function],
-          "member": [Function],
-          "remove": [Function],
-          "remove_all": [Function],
-          "reverse": [Function],
-          "stream_append": [Function],
-          "stream_filter": [Function],
-          "stream_for_each": [Function],
-          "stream_length": [Function],
-          "stream_map": [Function],
-          "stream_member": [Function],
-          "stream_ref": [Function],
-          "stream_remove": [Function],
-          "stream_remove_all": [Function],
-          "stream_reverse": [Function],
-          "stream_to_list": [Function],
         },
-        "id": "350",
-        "name": "programEnvironment",
-        "tail": Object {
-          "head": Object {
-            "411": [Function],
-            ":::pre-declared names::": Symbol(),
-            "integers_from": [Function],
+        "heap": Heap {
+          "storage": Set {
+            [Function],
           },
-          "id": "-1",
-          "name": "global",
-          "tail": null,
         },
+        "id": "-1",
+        "name": "global",
+        "tail": null,
       },
     },
   },
@@ -4115,13 +4303,19 @@ Object {
   "head": Object {
     "_copy_of_i": 4,
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "61",
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
       "i": 5,
     },
-    "id": "397",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "48",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
@@ -4136,69 +4330,43 @@ Object {
           ],
         ],
       },
-      "id": "396",
+      "heap": Heap {
+        "storage": Set {
+          Array [],
+          Array [
+            1,
+            Array [
+              [Circular],
+              [Circular],
+            ],
+            [Circular],
+          ],
+          Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+          [Function],
+        },
+      },
+      "id": "46",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
-          "$accumulate": [Function],
-          "$append": [Function],
-          "$build_list": [Function],
-          "$enum_list": [Function],
-          "$filter": [Function],
-          "$length": [Function],
-          "$list_to_string": [Function],
-          "$map": [Function],
-          "$remove": [Function],
-          "$remove_all": [Function],
-          "$reverse": [Function],
-          "411": [Function],
-          "__access_export__": [Function],
-          "__access_named_export__": [Function],
-          "accumulate": [Function],
-          "append": [Function],
-          "build_list": [Function],
-          "build_stream": [Function],
-          "enum_list": [Function],
-          "enum_stream": [Function],
-          "equal": [Function],
-          "eval_stream": [Function],
-          "filter": [Function],
-          "for_each": [Function],
+          ":::pre-declared names::": Symbol(),
           "integers_from": [Function],
-          "is_stream": [Function],
-          "length": [Function],
-          "list_ref": [Function],
-          "list_to_stream": [Function],
-          "list_to_string": [Function],
-          "map": [Function],
-          "member": [Function],
-          "remove": [Function],
-          "remove_all": [Function],
-          "reverse": [Function],
-          "stream_append": [Function],
-          "stream_filter": [Function],
-          "stream_for_each": [Function],
-          "stream_length": [Function],
-          "stream_map": [Function],
-          "stream_member": [Function],
-          "stream_ref": [Function],
-          "stream_remove": [Function],
-          "stream_remove_all": [Function],
-          "stream_reverse": [Function],
-          "stream_to_list": [Function],
         },
-        "id": "350",
-        "name": "programEnvironment",
-        "tail": Object {
-          "head": Object {
-            "411": [Function],
-            ":::pre-declared names::": Symbol(),
-            "integers_from": [Function],
+        "heap": Heap {
+          "storage": Set {
+            [Function],
           },
-          "id": "-1",
-          "name": "global",
-          "tail": null,
         },
+        "id": "-1",
+        "name": "global",
+        "tail": null,
       },
     },
   },
@@ -4210,7 +4378,12 @@ Object {
   "head": Object {
     "es": [Function],
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+    },
+  },
+  "id": "72",
   "name": "blockEnvironment",
   "tail": Object {
     "callExpression": Object {
@@ -4266,7 +4439,10 @@ Object {
         [Function],
       ],
     },
-    "id": "415",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "71",
     "name": "eval_stream",
     "tail": Object {
       "head": Object {
@@ -4281,69 +4457,43 @@ Object {
           ],
         ],
       },
-      "id": "396",
+      "heap": Heap {
+        "storage": Set {
+          Array [],
+          Array [
+            1,
+            Array [
+              [Circular],
+              [Circular],
+            ],
+            [Circular],
+          ],
+          Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+          [Function],
+        },
+      },
+      "id": "46",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
-          "$accumulate": [Function],
-          "$append": [Function],
-          "$build_list": [Function],
-          "$enum_list": [Function],
-          "$filter": [Function],
-          "$length": [Function],
-          "$list_to_string": [Function],
-          "$map": [Function],
-          "$remove": [Function],
-          "$remove_all": [Function],
-          "$reverse": [Function],
-          "411": [Function],
-          "__access_export__": [Function],
-          "__access_named_export__": [Function],
-          "accumulate": [Function],
-          "append": [Function],
-          "build_list": [Function],
-          "build_stream": [Function],
-          "enum_list": [Function],
-          "enum_stream": [Function],
-          "equal": [Function],
-          "eval_stream": [Function],
-          "filter": [Function],
-          "for_each": [Function],
+          ":::pre-declared names::": Symbol(),
           "integers_from": [Function],
-          "is_stream": [Function],
-          "length": [Function],
-          "list_ref": [Function],
-          "list_to_stream": [Function],
-          "list_to_string": [Function],
-          "map": [Function],
-          "member": [Function],
-          "remove": [Function],
-          "remove_all": [Function],
-          "reverse": [Function],
-          "stream_append": [Function],
-          "stream_filter": [Function],
-          "stream_for_each": [Function],
-          "stream_length": [Function],
-          "stream_map": [Function],
-          "stream_member": [Function],
-          "stream_ref": [Function],
-          "stream_remove": [Function],
-          "stream_remove_all": [Function],
-          "stream_reverse": [Function],
-          "stream_to_list": [Function],
         },
-        "id": "350",
-        "name": "programEnvironment",
-        "tail": Object {
-          "head": Object {
-            "411": [Function],
-            ":::pre-declared names::": Symbol(),
-            "integers_from": [Function],
+        "heap": Heap {
+          "storage": Set {
+            [Function],
           },
-          "id": "-1",
-          "name": "global",
-          "tail": null,
         },
+        "id": "-1",
+        "name": "global",
+        "tail": null,
       },
     },
   },
@@ -4355,19 +4505,28 @@ Object {
   "head": Object {
     "i": 1,
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "50",
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
       "_copy_of_i": 1,
     },
-    "id": "398",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "49",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "i": 5,
       },
-      "id": "397",
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "48",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
@@ -4382,69 +4541,43 @@ Object {
             ],
           ],
         },
-        "id": "396",
+        "heap": Heap {
+          "storage": Set {
+            Array [],
+            Array [
+              1,
+              Array [
+                [Circular],
+                [Circular],
+              ],
+              [Circular],
+            ],
+            Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+            [Function],
+          },
+        },
+        "id": "46",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
-            "$accumulate": [Function],
-            "$append": [Function],
-            "$build_list": [Function],
-            "$enum_list": [Function],
-            "$filter": [Function],
-            "$length": [Function],
-            "$list_to_string": [Function],
-            "$map": [Function],
-            "$remove": [Function],
-            "$remove_all": [Function],
-            "$reverse": [Function],
-            "411": [Function],
-            "__access_export__": [Function],
-            "__access_named_export__": [Function],
-            "accumulate": [Function],
-            "append": [Function],
-            "build_list": [Function],
-            "build_stream": [Function],
-            "enum_list": [Function],
-            "enum_stream": [Function],
-            "equal": [Function],
-            "eval_stream": [Function],
-            "filter": [Function],
-            "for_each": [Function],
+            ":::pre-declared names::": Symbol(),
             "integers_from": [Function],
-            "is_stream": [Function],
-            "length": [Function],
-            "list_ref": [Function],
-            "list_to_stream": [Function],
-            "list_to_string": [Function],
-            "map": [Function],
-            "member": [Function],
-            "remove": [Function],
-            "remove_all": [Function],
-            "reverse": [Function],
-            "stream_append": [Function],
-            "stream_filter": [Function],
-            "stream_for_each": [Function],
-            "stream_length": [Function],
-            "stream_map": [Function],
-            "stream_member": [Function],
-            "stream_ref": [Function],
-            "stream_remove": [Function],
-            "stream_remove_all": [Function],
-            "stream_reverse": [Function],
-            "stream_to_list": [Function],
           },
-          "id": "350",
-          "name": "programEnvironment",
-          "tail": Object {
-            "head": Object {
-              "411": [Function],
-              ":::pre-declared names::": Symbol(),
-              "integers_from": [Function],
+          "heap": Heap {
+            "storage": Set {
+              [Function],
             },
-            "id": "-1",
-            "name": "global",
-            "tail": null,
           },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
         },
       },
     },
@@ -4457,19 +4590,28 @@ Object {
   "head": Object {
     "i": 2,
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "54",
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
       "_copy_of_i": 2,
     },
-    "id": "401",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "53",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "i": 5,
       },
-      "id": "397",
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "48",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
@@ -4484,69 +4626,43 @@ Object {
             ],
           ],
         },
-        "id": "396",
+        "heap": Heap {
+          "storage": Set {
+            Array [],
+            Array [
+              1,
+              Array [
+                [Circular],
+                [Circular],
+              ],
+              [Circular],
+            ],
+            Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+            [Function],
+          },
+        },
+        "id": "46",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
-            "$accumulate": [Function],
-            "$append": [Function],
-            "$build_list": [Function],
-            "$enum_list": [Function],
-            "$filter": [Function],
-            "$length": [Function],
-            "$list_to_string": [Function],
-            "$map": [Function],
-            "$remove": [Function],
-            "$remove_all": [Function],
-            "$reverse": [Function],
-            "411": [Function],
-            "__access_export__": [Function],
-            "__access_named_export__": [Function],
-            "accumulate": [Function],
-            "append": [Function],
-            "build_list": [Function],
-            "build_stream": [Function],
-            "enum_list": [Function],
-            "enum_stream": [Function],
-            "equal": [Function],
-            "eval_stream": [Function],
-            "filter": [Function],
-            "for_each": [Function],
+            ":::pre-declared names::": Symbol(),
             "integers_from": [Function],
-            "is_stream": [Function],
-            "length": [Function],
-            "list_ref": [Function],
-            "list_to_stream": [Function],
-            "list_to_string": [Function],
-            "map": [Function],
-            "member": [Function],
-            "remove": [Function],
-            "remove_all": [Function],
-            "reverse": [Function],
-            "stream_append": [Function],
-            "stream_filter": [Function],
-            "stream_for_each": [Function],
-            "stream_length": [Function],
-            "stream_map": [Function],
-            "stream_member": [Function],
-            "stream_ref": [Function],
-            "stream_remove": [Function],
-            "stream_remove_all": [Function],
-            "stream_reverse": [Function],
-            "stream_to_list": [Function],
           },
-          "id": "350",
-          "name": "programEnvironment",
-          "tail": Object {
-            "head": Object {
-              "411": [Function],
-              ":::pre-declared names::": Symbol(),
-              "integers_from": [Function],
+          "heap": Heap {
+            "storage": Set {
+              [Function],
             },
-            "id": "-1",
-            "name": "global",
-            "tail": null,
           },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
         },
       },
     },
@@ -4559,19 +4675,28 @@ Object {
   "head": Object {
     "i": 3,
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "58",
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
       "_copy_of_i": 3,
     },
-    "id": "404",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "57",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "i": 5,
       },
-      "id": "397",
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "48",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
@@ -4586,69 +4711,43 @@ Object {
             ],
           ],
         },
-        "id": "396",
+        "heap": Heap {
+          "storage": Set {
+            Array [],
+            Array [
+              1,
+              Array [
+                [Circular],
+                [Circular],
+              ],
+              [Circular],
+            ],
+            Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+            [Function],
+          },
+        },
+        "id": "46",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
-            "$accumulate": [Function],
-            "$append": [Function],
-            "$build_list": [Function],
-            "$enum_list": [Function],
-            "$filter": [Function],
-            "$length": [Function],
-            "$list_to_string": [Function],
-            "$map": [Function],
-            "$remove": [Function],
-            "$remove_all": [Function],
-            "$reverse": [Function],
-            "411": [Function],
-            "__access_export__": [Function],
-            "__access_named_export__": [Function],
-            "accumulate": [Function],
-            "append": [Function],
-            "build_list": [Function],
-            "build_stream": [Function],
-            "enum_list": [Function],
-            "enum_stream": [Function],
-            "equal": [Function],
-            "eval_stream": [Function],
-            "filter": [Function],
-            "for_each": [Function],
+            ":::pre-declared names::": Symbol(),
             "integers_from": [Function],
-            "is_stream": [Function],
-            "length": [Function],
-            "list_ref": [Function],
-            "list_to_stream": [Function],
-            "list_to_string": [Function],
-            "map": [Function],
-            "member": [Function],
-            "remove": [Function],
-            "remove_all": [Function],
-            "reverse": [Function],
-            "stream_append": [Function],
-            "stream_filter": [Function],
-            "stream_for_each": [Function],
-            "stream_length": [Function],
-            "stream_map": [Function],
-            "stream_member": [Function],
-            "stream_ref": [Function],
-            "stream_remove": [Function],
-            "stream_remove_all": [Function],
-            "stream_reverse": [Function],
-            "stream_to_list": [Function],
           },
-          "id": "350",
-          "name": "programEnvironment",
-          "tail": Object {
-            "head": Object {
-              "411": [Function],
-              ":::pre-declared names::": Symbol(),
-              "integers_from": [Function],
+          "heap": Heap {
+            "storage": Set {
+              [Function],
             },
-            "id": "-1",
-            "name": "global",
-            "tail": null,
           },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
         },
       },
     },
@@ -4661,19 +4760,28 @@ Object {
   "head": Object {
     "i": 4,
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "62",
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
       "_copy_of_i": 4,
     },
-    "id": "407",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "61",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "i": 5,
       },
-      "id": "397",
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "48",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
@@ -4688,69 +4796,43 @@ Object {
             ],
           ],
         },
-        "id": "396",
+        "heap": Heap {
+          "storage": Set {
+            Array [],
+            Array [
+              1,
+              Array [
+                [Circular],
+                [Circular],
+              ],
+              [Circular],
+            ],
+            Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+            [Function],
+          },
+        },
+        "id": "46",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
-            "$accumulate": [Function],
-            "$append": [Function],
-            "$build_list": [Function],
-            "$enum_list": [Function],
-            "$filter": [Function],
-            "$length": [Function],
-            "$list_to_string": [Function],
-            "$map": [Function],
-            "$remove": [Function],
-            "$remove_all": [Function],
-            "$reverse": [Function],
-            "411": [Function],
-            "__access_export__": [Function],
-            "__access_named_export__": [Function],
-            "accumulate": [Function],
-            "append": [Function],
-            "build_list": [Function],
-            "build_stream": [Function],
-            "enum_list": [Function],
-            "enum_stream": [Function],
-            "equal": [Function],
-            "eval_stream": [Function],
-            "filter": [Function],
-            "for_each": [Function],
+            ":::pre-declared names::": Symbol(),
             "integers_from": [Function],
-            "is_stream": [Function],
-            "length": [Function],
-            "list_ref": [Function],
-            "list_to_stream": [Function],
-            "list_to_string": [Function],
-            "map": [Function],
-            "member": [Function],
-            "remove": [Function],
-            "remove_all": [Function],
-            "reverse": [Function],
-            "stream_append": [Function],
-            "stream_filter": [Function],
-            "stream_for_each": [Function],
-            "stream_length": [Function],
-            "stream_map": [Function],
-            "stream_member": [Function],
-            "stream_ref": [Function],
-            "stream_remove": [Function],
-            "stream_remove_all": [Function],
-            "stream_reverse": [Function],
-            "stream_to_list": [Function],
           },
-          "id": "350",
-          "name": "programEnvironment",
-          "tail": Object {
-            "head": Object {
-              "411": [Function],
-              ":::pre-declared names::": Symbol(),
-              "integers_from": [Function],
+          "heap": Heap {
+            "storage": Set {
+              [Function],
             },
-            "id": "-1",
-            "name": "global",
-            "tail": null,
           },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
         },
       },
     },
@@ -4813,13 +4895,21 @@ Object {
       [Function],
     ],
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "74",
   "name": "es",
   "tail": Object {
     "head": Object {
       "es": [Function],
     },
-    "id": "416",
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+      },
+    },
+    "id": "72",
     "name": "blockEnvironment",
     "tail": Object {
       "callExpression": Object {
@@ -4875,7 +4965,10 @@ Object {
           [Function],
         ],
       },
-      "id": "415",
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "71",
       "name": "eval_stream",
       "tail": Object {
         "head": Object {
@@ -4890,69 +4983,43 @@ Object {
             ],
           ],
         },
-        "id": "396",
+        "heap": Heap {
+          "storage": Set {
+            Array [],
+            Array [
+              1,
+              Array [
+                [Circular],
+                [Circular],
+              ],
+              [Circular],
+            ],
+            Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+            [Function],
+          },
+        },
+        "id": "46",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
-            "$accumulate": [Function],
-            "$append": [Function],
-            "$build_list": [Function],
-            "$enum_list": [Function],
-            "$filter": [Function],
-            "$length": [Function],
-            "$list_to_string": [Function],
-            "$map": [Function],
-            "$remove": [Function],
-            "$remove_all": [Function],
-            "$reverse": [Function],
-            "411": [Function],
-            "__access_export__": [Function],
-            "__access_named_export__": [Function],
-            "accumulate": [Function],
-            "append": [Function],
-            "build_list": [Function],
-            "build_stream": [Function],
-            "enum_list": [Function],
-            "enum_stream": [Function],
-            "equal": [Function],
-            "eval_stream": [Function],
-            "filter": [Function],
-            "for_each": [Function],
+            ":::pre-declared names::": Symbol(),
             "integers_from": [Function],
-            "is_stream": [Function],
-            "length": [Function],
-            "list_ref": [Function],
-            "list_to_stream": [Function],
-            "list_to_string": [Function],
-            "map": [Function],
-            "member": [Function],
-            "remove": [Function],
-            "remove_all": [Function],
-            "reverse": [Function],
-            "stream_append": [Function],
-            "stream_filter": [Function],
-            "stream_for_each": [Function],
-            "stream_length": [Function],
-            "stream_map": [Function],
-            "stream_member": [Function],
-            "stream_ref": [Function],
-            "stream_remove": [Function],
-            "stream_remove_all": [Function],
-            "stream_reverse": [Function],
-            "stream_to_list": [Function],
           },
-          "id": "350",
-          "name": "programEnvironment",
-          "tail": Object {
-            "head": Object {
-              "411": [Function],
-              ":::pre-declared names::": Symbol(),
-              "integers_from": [Function],
+          "heap": Heap {
+            "storage": Set {
+              [Function],
             },
-            "id": "-1",
-            "name": "global",
-            "tail": null,
           },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
         },
       },
     },
@@ -5015,13 +5082,21 @@ Object {
       [Function],
     ],
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "85",
   "name": "es",
   "tail": Object {
     "head": Object {
       "es": [Function],
     },
-    "id": "416",
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+      },
+    },
+    "id": "72",
     "name": "blockEnvironment",
     "tail": Object {
       "callExpression": Object {
@@ -5077,7 +5152,10 @@ Object {
           [Function],
         ],
       },
-      "id": "415",
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "71",
       "name": "eval_stream",
       "tail": Object {
         "head": Object {
@@ -5092,69 +5170,43 @@ Object {
             ],
           ],
         },
-        "id": "396",
+        "heap": Heap {
+          "storage": Set {
+            Array [],
+            Array [
+              1,
+              Array [
+                [Circular],
+                [Circular],
+              ],
+              [Circular],
+            ],
+            Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+            [Function],
+          },
+        },
+        "id": "46",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
-            "$accumulate": [Function],
-            "$append": [Function],
-            "$build_list": [Function],
-            "$enum_list": [Function],
-            "$filter": [Function],
-            "$length": [Function],
-            "$list_to_string": [Function],
-            "$map": [Function],
-            "$remove": [Function],
-            "$remove_all": [Function],
-            "$reverse": [Function],
-            "411": [Function],
-            "__access_export__": [Function],
-            "__access_named_export__": [Function],
-            "accumulate": [Function],
-            "append": [Function],
-            "build_list": [Function],
-            "build_stream": [Function],
-            "enum_list": [Function],
-            "enum_stream": [Function],
-            "equal": [Function],
-            "eval_stream": [Function],
-            "filter": [Function],
-            "for_each": [Function],
+            ":::pre-declared names::": Symbol(),
             "integers_from": [Function],
-            "is_stream": [Function],
-            "length": [Function],
-            "list_ref": [Function],
-            "list_to_stream": [Function],
-            "list_to_string": [Function],
-            "map": [Function],
-            "member": [Function],
-            "remove": [Function],
-            "remove_all": [Function],
-            "reverse": [Function],
-            "stream_append": [Function],
-            "stream_filter": [Function],
-            "stream_for_each": [Function],
-            "stream_length": [Function],
-            "stream_map": [Function],
-            "stream_member": [Function],
-            "stream_ref": [Function],
-            "stream_remove": [Function],
-            "stream_remove_all": [Function],
-            "stream_reverse": [Function],
-            "stream_to_list": [Function],
           },
-          "id": "350",
-          "name": "programEnvironment",
-          "tail": Object {
-            "head": Object {
-              "411": [Function],
-              ":::pre-declared names::": Symbol(),
-              "integers_from": [Function],
+          "heap": Heap {
+            "storage": Set {
+              [Function],
             },
-            "id": "-1",
-            "name": "global",
-            "tail": null,
           },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
         },
       },
     },
@@ -5169,25 +5221,41 @@ Object {
       Array [],
     ],
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": Set {
+      Array [
+        Array [],
+      ],
+    },
+  },
+  "id": "51",
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
       "i": 1,
     },
-    "id": "399",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "50",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "_copy_of_i": 1,
       },
-      "id": "398",
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "49",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
           "i": 5,
         },
-        "id": "397",
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "48",
         "name": "blockEnvironment",
         "tail": Object {
           "head": Object {
@@ -5202,69 +5270,43 @@ Object {
               ],
             ],
           },
-          "id": "396",
+          "heap": Heap {
+            "storage": Set {
+              Array [],
+              Array [
+                1,
+                Array [
+                  [Circular],
+                  [Circular],
+                ],
+                [Circular],
+              ],
+              Array [
+                [Circular],
+                Array [
+                  1,
+                  [Circular],
+                  [Circular],
+                ],
+              ],
+              [Function],
+            },
+          },
+          "id": "46",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
-              "$accumulate": [Function],
-              "$append": [Function],
-              "$build_list": [Function],
-              "$enum_list": [Function],
-              "$filter": [Function],
-              "$length": [Function],
-              "$list_to_string": [Function],
-              "$map": [Function],
-              "$remove": [Function],
-              "$remove_all": [Function],
-              "$reverse": [Function],
-              "411": [Function],
-              "__access_export__": [Function],
-              "__access_named_export__": [Function],
-              "accumulate": [Function],
-              "append": [Function],
-              "build_list": [Function],
-              "build_stream": [Function],
-              "enum_list": [Function],
-              "enum_stream": [Function],
-              "equal": [Function],
-              "eval_stream": [Function],
-              "filter": [Function],
-              "for_each": [Function],
+              ":::pre-declared names::": Symbol(),
               "integers_from": [Function],
-              "is_stream": [Function],
-              "length": [Function],
-              "list_ref": [Function],
-              "list_to_stream": [Function],
-              "list_to_string": [Function],
-              "map": [Function],
-              "member": [Function],
-              "remove": [Function],
-              "remove_all": [Function],
-              "reverse": [Function],
-              "stream_append": [Function],
-              "stream_filter": [Function],
-              "stream_for_each": [Function],
-              "stream_length": [Function],
-              "stream_map": [Function],
-              "stream_member": [Function],
-              "stream_ref": [Function],
-              "stream_remove": [Function],
-              "stream_remove_all": [Function],
-              "stream_reverse": [Function],
-              "stream_to_list": [Function],
             },
-            "id": "350",
-            "name": "programEnvironment",
-            "tail": Object {
-              "head": Object {
-                "411": [Function],
-                ":::pre-declared names::": Symbol(),
-                "integers_from": [Function],
+            "heap": Heap {
+              "storage": Set {
+                [Function],
               },
-              "id": "-1",
-              "name": "global",
-              "tail": null,
             },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
           },
         },
       },
@@ -5280,25 +5322,41 @@ Object {
       Array [],
     ],
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": Set {
+      Array [
+        Array [],
+      ],
+    },
+  },
+  "id": "55",
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
       "i": 2,
     },
-    "id": "402",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "54",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "_copy_of_i": 2,
       },
-      "id": "401",
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "53",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
           "i": 5,
         },
-        "id": "397",
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "48",
         "name": "blockEnvironment",
         "tail": Object {
           "head": Object {
@@ -5313,69 +5371,43 @@ Object {
               ],
             ],
           },
-          "id": "396",
+          "heap": Heap {
+            "storage": Set {
+              Array [],
+              Array [
+                1,
+                Array [
+                  [Circular],
+                  [Circular],
+                ],
+                [Circular],
+              ],
+              Array [
+                [Circular],
+                Array [
+                  1,
+                  [Circular],
+                  [Circular],
+                ],
+              ],
+              [Function],
+            },
+          },
+          "id": "46",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
-              "$accumulate": [Function],
-              "$append": [Function],
-              "$build_list": [Function],
-              "$enum_list": [Function],
-              "$filter": [Function],
-              "$length": [Function],
-              "$list_to_string": [Function],
-              "$map": [Function],
-              "$remove": [Function],
-              "$remove_all": [Function],
-              "$reverse": [Function],
-              "411": [Function],
-              "__access_export__": [Function],
-              "__access_named_export__": [Function],
-              "accumulate": [Function],
-              "append": [Function],
-              "build_list": [Function],
-              "build_stream": [Function],
-              "enum_list": [Function],
-              "enum_stream": [Function],
-              "equal": [Function],
-              "eval_stream": [Function],
-              "filter": [Function],
-              "for_each": [Function],
+              ":::pre-declared names::": Symbol(),
               "integers_from": [Function],
-              "is_stream": [Function],
-              "length": [Function],
-              "list_ref": [Function],
-              "list_to_stream": [Function],
-              "list_to_string": [Function],
-              "map": [Function],
-              "member": [Function],
-              "remove": [Function],
-              "remove_all": [Function],
-              "reverse": [Function],
-              "stream_append": [Function],
-              "stream_filter": [Function],
-              "stream_for_each": [Function],
-              "stream_length": [Function],
-              "stream_map": [Function],
-              "stream_member": [Function],
-              "stream_ref": [Function],
-              "stream_remove": [Function],
-              "stream_remove_all": [Function],
-              "stream_reverse": [Function],
-              "stream_to_list": [Function],
             },
-            "id": "350",
-            "name": "programEnvironment",
-            "tail": Object {
-              "head": Object {
-                "411": [Function],
-                ":::pre-declared names::": Symbol(),
-                "integers_from": [Function],
+            "heap": Heap {
+              "storage": Set {
+                [Function],
               },
-              "id": "-1",
-              "name": "global",
-              "tail": null,
             },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
           },
         },
       },
@@ -5391,25 +5423,41 @@ Object {
       Array [],
     ],
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": Set {
+      Array [
+        Array [],
+      ],
+    },
+  },
+  "id": "59",
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
       "i": 3,
     },
-    "id": "405",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "58",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "_copy_of_i": 3,
       },
-      "id": "404",
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "57",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
           "i": 5,
         },
-        "id": "397",
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "48",
         "name": "blockEnvironment",
         "tail": Object {
           "head": Object {
@@ -5424,69 +5472,43 @@ Object {
               ],
             ],
           },
-          "id": "396",
+          "heap": Heap {
+            "storage": Set {
+              Array [],
+              Array [
+                1,
+                Array [
+                  [Circular],
+                  [Circular],
+                ],
+                [Circular],
+              ],
+              Array [
+                [Circular],
+                Array [
+                  1,
+                  [Circular],
+                  [Circular],
+                ],
+              ],
+              [Function],
+            },
+          },
+          "id": "46",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
-              "$accumulate": [Function],
-              "$append": [Function],
-              "$build_list": [Function],
-              "$enum_list": [Function],
-              "$filter": [Function],
-              "$length": [Function],
-              "$list_to_string": [Function],
-              "$map": [Function],
-              "$remove": [Function],
-              "$remove_all": [Function],
-              "$reverse": [Function],
-              "411": [Function],
-              "__access_export__": [Function],
-              "__access_named_export__": [Function],
-              "accumulate": [Function],
-              "append": [Function],
-              "build_list": [Function],
-              "build_stream": [Function],
-              "enum_list": [Function],
-              "enum_stream": [Function],
-              "equal": [Function],
-              "eval_stream": [Function],
-              "filter": [Function],
-              "for_each": [Function],
+              ":::pre-declared names::": Symbol(),
               "integers_from": [Function],
-              "is_stream": [Function],
-              "length": [Function],
-              "list_ref": [Function],
-              "list_to_stream": [Function],
-              "list_to_string": [Function],
-              "map": [Function],
-              "member": [Function],
-              "remove": [Function],
-              "remove_all": [Function],
-              "reverse": [Function],
-              "stream_append": [Function],
-              "stream_filter": [Function],
-              "stream_for_each": [Function],
-              "stream_length": [Function],
-              "stream_map": [Function],
-              "stream_member": [Function],
-              "stream_ref": [Function],
-              "stream_remove": [Function],
-              "stream_remove_all": [Function],
-              "stream_reverse": [Function],
-              "stream_to_list": [Function],
             },
-            "id": "350",
-            "name": "programEnvironment",
-            "tail": Object {
-              "head": Object {
-                "411": [Function],
-                ":::pre-declared names::": Symbol(),
-                "integers_from": [Function],
+            "heap": Heap {
+              "storage": Set {
+                [Function],
               },
-              "id": "-1",
-              "name": "global",
-              "tail": null,
             },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
           },
         },
       },
@@ -5502,25 +5524,41 @@ Object {
       Array [],
     ],
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": Set {
+      Array [
+        Array [],
+      ],
+    },
+  },
+  "id": "63",
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
       "i": 4,
     },
-    "id": "408",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "62",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "_copy_of_i": 4,
       },
-      "id": "407",
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "61",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
           "i": 5,
         },
-        "id": "397",
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "48",
         "name": "blockEnvironment",
         "tail": Object {
           "head": Object {
@@ -5535,69 +5573,43 @@ Object {
               ],
             ],
           },
-          "id": "396",
+          "heap": Heap {
+            "storage": Set {
+              Array [],
+              Array [
+                1,
+                Array [
+                  [Circular],
+                  [Circular],
+                ],
+                [Circular],
+              ],
+              Array [
+                [Circular],
+                Array [
+                  1,
+                  [Circular],
+                  [Circular],
+                ],
+              ],
+              [Function],
+            },
+          },
+          "id": "46",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
-              "$accumulate": [Function],
-              "$append": [Function],
-              "$build_list": [Function],
-              "$enum_list": [Function],
-              "$filter": [Function],
-              "$length": [Function],
-              "$list_to_string": [Function],
-              "$map": [Function],
-              "$remove": [Function],
-              "$remove_all": [Function],
-              "$reverse": [Function],
-              "411": [Function],
-              "__access_export__": [Function],
-              "__access_named_export__": [Function],
-              "accumulate": [Function],
-              "append": [Function],
-              "build_list": [Function],
-              "build_stream": [Function],
-              "enum_list": [Function],
-              "enum_stream": [Function],
-              "equal": [Function],
-              "eval_stream": [Function],
-              "filter": [Function],
-              "for_each": [Function],
+              ":::pre-declared names::": Symbol(),
               "integers_from": [Function],
-              "is_stream": [Function],
-              "length": [Function],
-              "list_ref": [Function],
-              "list_to_stream": [Function],
-              "list_to_string": [Function],
-              "map": [Function],
-              "member": [Function],
-              "remove": [Function],
-              "remove_all": [Function],
-              "reverse": [Function],
-              "stream_append": [Function],
-              "stream_filter": [Function],
-              "stream_for_each": [Function],
-              "stream_length": [Function],
-              "stream_map": [Function],
-              "stream_member": [Function],
-              "stream_ref": [Function],
-              "stream_remove": [Function],
-              "stream_remove_all": [Function],
-              "stream_reverse": [Function],
-              "stream_to_list": [Function],
             },
-            "id": "350",
-            "name": "programEnvironment",
-            "tail": Object {
-              "head": Object {
-                "411": [Function],
-                ":::pre-declared names::": Symbol(),
-                "integers_from": [Function],
+            "heap": Heap {
+              "storage": Set {
+                [Function],
               },
-              "id": "-1",
-              "name": "global",
-              "tail": null,
             },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
           },
         },
       },
@@ -5620,7 +5632,32 @@ Object {
       ],
     ],
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": Set {
+      Array [
+        Array [
+          [Circular],
+          Array [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+      ],
+      Array [
+        2,
+        [Function],
+      ],
+      Array [
+        1,
+        Array [
+          2,
+          null,
+        ],
+      ],
+    },
+  },
+  "id": "75",
   "name": "blockEnvironment",
   "tail": Object {
     "callExpression": Object {
@@ -5676,13 +5713,21 @@ Object {
         [Function],
       ],
     },
-    "id": "418",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "74",
     "name": "es",
     "tail": Object {
       "head": Object {
         "es": [Function],
       },
-      "id": "416",
+      "heap": Heap {
+        "storage": Set {
+          [Function],
+        },
+      },
+      "id": "72",
       "name": "blockEnvironment",
       "tail": Object {
         "callExpression": Object {
@@ -5738,7 +5783,10 @@ Object {
             [Function],
           ],
         },
-        "id": "415",
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "71",
         "name": "eval_stream",
         "tail": Object {
           "head": Object {
@@ -5753,69 +5801,43 @@ Object {
               ],
             ],
           },
-          "id": "396",
+          "heap": Heap {
+            "storage": Set {
+              Array [],
+              Array [
+                1,
+                Array [
+                  [Circular],
+                  [Circular],
+                ],
+                [Circular],
+              ],
+              Array [
+                [Circular],
+                Array [
+                  1,
+                  [Circular],
+                  [Circular],
+                ],
+              ],
+              [Function],
+            },
+          },
+          "id": "46",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
-              "$accumulate": [Function],
-              "$append": [Function],
-              "$build_list": [Function],
-              "$enum_list": [Function],
-              "$filter": [Function],
-              "$length": [Function],
-              "$list_to_string": [Function],
-              "$map": [Function],
-              "$remove": [Function],
-              "$remove_all": [Function],
-              "$reverse": [Function],
-              "411": [Function],
-              "__access_export__": [Function],
-              "__access_named_export__": [Function],
-              "accumulate": [Function],
-              "append": [Function],
-              "build_list": [Function],
-              "build_stream": [Function],
-              "enum_list": [Function],
-              "enum_stream": [Function],
-              "equal": [Function],
-              "eval_stream": [Function],
-              "filter": [Function],
-              "for_each": [Function],
+              ":::pre-declared names::": Symbol(),
               "integers_from": [Function],
-              "is_stream": [Function],
-              "length": [Function],
-              "list_ref": [Function],
-              "list_to_stream": [Function],
-              "list_to_string": [Function],
-              "map": [Function],
-              "member": [Function],
-              "remove": [Function],
-              "remove_all": [Function],
-              "reverse": [Function],
-              "stream_append": [Function],
-              "stream_filter": [Function],
-              "stream_for_each": [Function],
-              "stream_length": [Function],
-              "stream_map": [Function],
-              "stream_member": [Function],
-              "stream_ref": [Function],
-              "stream_remove": [Function],
-              "stream_remove_all": [Function],
-              "stream_reverse": [Function],
-              "stream_to_list": [Function],
             },
-            "id": "350",
-            "name": "programEnvironment",
-            "tail": Object {
-              "head": Object {
-                "411": [Function],
-                ":::pre-declared names::": Symbol(),
-                "integers_from": [Function],
+            "heap": Heap {
+              "storage": Set {
+                [Function],
               },
-              "id": "-1",
-              "name": "global",
-              "tail": null,
             },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
           },
         },
       },
@@ -5838,7 +5860,25 @@ Object {
       ],
     ],
   },
-  "id": Any<String>,
+  "heap": Heap {
+    "storage": Set {
+      Array [
+        Array [
+          [Circular],
+          Array [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+      ],
+      Array [
+        2,
+        null,
+      ],
+    },
+  },
+  "id": "86",
   "name": "blockEnvironment",
   "tail": Object {
     "callExpression": Object {
@@ -5894,13 +5934,21 @@ Object {
         [Function],
       ],
     },
-    "id": "427",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "85",
     "name": "es",
     "tail": Object {
       "head": Object {
         "es": [Function],
       },
-      "id": "416",
+      "heap": Heap {
+        "storage": Set {
+          [Function],
+        },
+      },
+      "id": "72",
       "name": "blockEnvironment",
       "tail": Object {
         "callExpression": Object {
@@ -5956,7 +6004,10 @@ Object {
             [Function],
           ],
         },
-        "id": "415",
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "71",
         "name": "eval_stream",
         "tail": Object {
           "head": Object {
@@ -5971,69 +6022,43 @@ Object {
               ],
             ],
           },
-          "id": "396",
+          "heap": Heap {
+            "storage": Set {
+              Array [],
+              Array [
+                1,
+                Array [
+                  [Circular],
+                  [Circular],
+                ],
+                [Circular],
+              ],
+              Array [
+                [Circular],
+                Array [
+                  1,
+                  [Circular],
+                  [Circular],
+                ],
+              ],
+              [Function],
+            },
+          },
+          "id": "46",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
-              "$accumulate": [Function],
-              "$append": [Function],
-              "$build_list": [Function],
-              "$enum_list": [Function],
-              "$filter": [Function],
-              "$length": [Function],
-              "$list_to_string": [Function],
-              "$map": [Function],
-              "$remove": [Function],
-              "$remove_all": [Function],
-              "$reverse": [Function],
-              "411": [Function],
-              "__access_export__": [Function],
-              "__access_named_export__": [Function],
-              "accumulate": [Function],
-              "append": [Function],
-              "build_list": [Function],
-              "build_stream": [Function],
-              "enum_list": [Function],
-              "enum_stream": [Function],
-              "equal": [Function],
-              "eval_stream": [Function],
-              "filter": [Function],
-              "for_each": [Function],
+              ":::pre-declared names::": Symbol(),
               "integers_from": [Function],
-              "is_stream": [Function],
-              "length": [Function],
-              "list_ref": [Function],
-              "list_to_stream": [Function],
-              "list_to_string": [Function],
-              "map": [Function],
-              "member": [Function],
-              "remove": [Function],
-              "remove_all": [Function],
-              "reverse": [Function],
-              "stream_append": [Function],
-              "stream_filter": [Function],
-              "stream_for_each": [Function],
-              "stream_length": [Function],
-              "stream_map": [Function],
-              "stream_member": [Function],
-              "stream_ref": [Function],
-              "stream_remove": [Function],
-              "stream_remove_all": [Function],
-              "stream_reverse": [Function],
-              "stream_to_list": [Function],
             },
-            "id": "350",
-            "name": "programEnvironment",
-            "tail": Object {
-              "head": Object {
-                "411": [Function],
-                ":::pre-declared names::": Symbol(),
-                "integers_from": [Function],
+            "heap": Heap {
+              "storage": Set {
+                [Function],
               },
-              "id": "-1",
-              "name": "global",
-              "tail": null,
             },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
           },
         },
       },
@@ -6044,14 +6069,12 @@ Object {
 
 exports[`CSE Machine calculates correct layout for code sample 7 24`] = `
 Array [
-  0,
-  0,
   ":::pre-declared names::: ",
   Symbol(),
   "integers_from: ",
   [Function],
-  0,
-  1,
+  "0:= ",
+  [Function],
   "y: ",
   Array [
     [Circular],
@@ -6065,24 +6088,25 @@ Array [
   [Function],
   "x: ",
   1,
-  1,
-  1,
+  "0:= ",
+  Array [],
+  "79:= ",
+  [Function],
   "n: ",
   1,
-  "414:= ",
+  "0:= ",
   [Function],
-  2,
-  1,
+  "0:= ",
+  Array [
+    1,
+    [Function],
+  ],
+  "83:= ",
+  [Function],
   "n: ",
-  2,
-  "426:= ",
-  [Function],
-  0,
   2,
   "i: ",
   5,
-  4,
-  2,
   "s: ",
   Array [
     1,
@@ -6090,43 +6114,23 @@ Array [
   ],
   "n: ",
   2,
-  0,
-  3,
   "_copy_of_i:= ",
   1,
-  1,
-  3,
   "_copy_of_i:= ",
   2,
-  2,
-  3,
   "_copy_of_i:= ",
-  3,
-  3,
   3,
   "_copy_of_i:= ",
   4,
-  4,
-  3,
   "es:= ",
   [Function],
-  0,
-  4,
   "i:= ",
   1,
-  1,
-  4,
   "i:= ",
   2,
-  2,
-  4,
   "i:= ",
   3,
-  3,
-  4,
   "i:= ",
-  4,
-  4,
   4,
   "s: ",
   Array [
@@ -6135,8 +6139,6 @@ Array [
   ],
   "n: ",
   2,
-  5,
-  4,
   "s: ",
   Array [
     2,
@@ -6144,32 +6146,22 @@ Array [
   ],
   "n: ",
   1,
-  0,
-  5,
   "x:= ",
   Array [
     Array [],
   ],
-  1,
-  5,
   "x:= ",
   Array [
     Array [],
   ],
-  2,
-  5,
   "x:= ",
   Array [
     Array [],
   ],
-  3,
-  5,
   "x:= ",
   Array [
     Array [],
   ],
-  4,
-  5,
   "z:= ",
   Array [
     Array [
@@ -6181,8 +6173,19 @@ Array [
       ],
     ],
   ],
-  5,
-  5,
+  "0:= ",
+  Array [
+    2,
+    [Function],
+  ],
+  "0:= ",
+  Array [
+    1,
+    Array [
+      2,
+      null,
+    ],
+  ],
   "z:= ",
   Array [
     Array [
@@ -6193,6 +6196,11 @@ Array [
         [Circular],
       ],
     ],
+  ],
+  "0:= ",
+  Array [
+    2,
+    null,
   ],
 ]
 `;

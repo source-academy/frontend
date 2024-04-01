@@ -10,15 +10,6 @@ import {
 
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
-type AchievementManualEditorProps = {
-  hiddenState: [boolean, any];
-  userState: [AchievementUser | undefined, any];
-  studio: string;
-  users: AchievementUser[];
-  getUsers: () => void;
-  updateGoalProgress: (studentCourseRegId: number, progress: GoalProgress) => void;
-};
-
 const GoalSelect = Select.ofType<AchievementGoal>();
 const goalRenderer: ItemRenderer<AchievementGoal> = (goal, { handleClick }) => (
   <MenuItem key={goal.uuid} onClick={handleClick} text={goal.text} />
@@ -40,7 +31,16 @@ export function updateGoalProcessed() {
   showSuccessMessage('Goal updated');
 }
 
-const AchievementManualEditor: React.FC<AchievementManualEditorProps> = props => {
+type Props = {
+  hiddenState: [boolean, any];
+  userState: [AchievementUser | undefined, any];
+  studio: string;
+  users: AchievementUser[];
+  getUsers: () => void;
+  updateGoalProgress: (studentCourseRegId: number, progress: GoalProgress) => void;
+};
+
+const AchievementManualEditor: React.FC<Props> = props => {
   const { userState, hiddenState, studio, getUsers, updateGoalProgress } = props;
   const users =
     studio === 'Staff'
@@ -75,7 +75,7 @@ const AchievementManualEditor: React.FC<AchievementManualEditorProps> = props =>
 
   const [goal, changeGoal] = useState<AchievementGoal | undefined>(undefined);
   const [selectedUser, changeSelectedUser] = userState;
-  const [count, changeCount] = useState<number>(0);
+  const [count, changeCount] = useState(0);
   const [viewHidden, changeViewHidden] = hiddenState;
 
   const updateGoal = () => {
@@ -95,53 +95,61 @@ const AchievementManualEditor: React.FC<AchievementManualEditorProps> = props =>
 
   return (
     <div className="achievement-manual-editor">
-      <h3>User: </h3>
-      <UserSelect
-        filterable={true}
-        items={users}
-        itemRenderer={userRenderer}
-        itemPredicate={userPredicate}
-        onItemSelect={changeSelectedUser}
-        noResults={<MenuItem disabled={true} text="No matching user" />}
-      >
-        <Button
-          outlined={true}
-          text={selectedUser ? selectedUser.name || selectedUser.username : 'No User Selected'}
-          color="White"
+      <div className="editor-section">
+        <h3>User: </h3>
+        <UserSelect
+          filterable={true}
+          items={users}
+          itemRenderer={userRenderer}
+          itemPredicate={userPredicate}
+          onItemSelect={changeSelectedUser}
+          noResults={<MenuItem disabled={true} text="No matching user" />}
+        >
+          <Button
+            outlined={true}
+            text={selectedUser ? selectedUser.name || selectedUser.username : 'No User Selected'}
+            color="White"
+          />
+        </UserSelect>
+      </div>
+
+      <div className="editor-section">
+        <h3>Goal: </h3>
+        <GoalSelect
+          filterable={true}
+          items={manualAchievements}
+          itemRenderer={goalRenderer}
+          itemPredicate={goalPredicate}
+          onItemSelect={changeGoal}
+          noResults={<MenuItem disabled={true} text="No matching goal" />}
+        >
+          <Button outlined={true} text={goal ? goal.text : 'No Goal Selected'} color="White" />
+        </GoalSelect>
+      </div>
+
+      <div className="editor-section">
+        <h3>Count: </h3>
+        <NumericInput
+          value={count}
+          min={0}
+          allowNumericCharactersOnly={true}
+          minorStepSize={null}
+          placeholder="Count"
+          onValueChange={changeCount}
         />
-      </UserSelect>
+      </div>
 
-      <h3>Goal: </h3>
-      <GoalSelect
-        filterable={true}
-        items={manualAchievements}
-        itemRenderer={goalRenderer}
-        itemPredicate={goalPredicate}
-        onItemSelect={changeGoal}
-        noResults={<MenuItem disabled={true} text="No matching goal" />}
-      >
-        <Button outlined={true} text={goal ? goal.text : 'No Goal Selected'} color="White" />
-      </GoalSelect>
+      <div className="editor-section">
+        <Button outlined={true} text="Update Goal" onClick={updateGoal} intent="primary" />
+      </div>
 
-      <h3>Count: </h3>
-      <NumericInput
-        value={count}
-        min={0}
-        allowNumericCharactersOnly={true}
-        minorStepSize={null}
-        placeholder="Count"
-        onValueChange={changeCount}
-      />
-
-      <h3> </h3>
-      <Button outlined={true} text="Update Goal" onClick={updateGoal} intent="primary" />
-
-      <h3> </h3>
-      <Checkbox
-        checked={viewHidden}
-        label="View Hidden Achievements"
-        onChange={() => changeViewHidden(!viewHidden)}
-      />
+      <div className="editor-section">
+        <Checkbox
+          checked={viewHidden}
+          label="View Hidden Achievements"
+          onChange={() => changeViewHidden(!viewHidden)}
+        />
+      </div>
     </div>
   );
 };

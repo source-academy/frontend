@@ -3,15 +3,12 @@ import { ColumnFilter, ColumnFiltersState } from 'src/features/grading/GradingTy
 
 import { FilterBadge } from './GradingBadges';
 
-type GradingSubmissionFiltersProps = {
+type Props = {
   filters: ColumnFiltersState;
   onFilterRemove: (filter: ColumnFilter) => void;
 };
 
-const GradingSubmissionFilters: React.FC<GradingSubmissionFiltersProps> = ({
-  filters,
-  onFilterRemove
-}) => {
+const GradingSubmissionFilters: React.FC<Props> = ({ filters, onFilterRemove }) => {
   return (
     <GradingFlex justifyContent="justify-start" style={{columnGap: "5px"}}>
       {filters.map(filter => (

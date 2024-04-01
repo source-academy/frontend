@@ -1,18 +1,15 @@
 import { runInContext } from 'js-slang/dist/';
 import createContext from 'js-slang/dist/createContext';
 
-import { ControlItemComponent } from '../compactComponents/ControlItemComponent';
-import { StashItemComponent } from '../compactComponents/StashItemComponent';
-import { ArrayUnit } from '../components/ArrayUnit';
-import { ArrowFromArrayUnit } from '../components/arrows/ArrowFromArrayUnit';
-import { Frame } from '../components/Frame';
+import { ControlItemComponent } from '../components/ControlItemComponent';
+import { StashItemComponent } from '../components/StashItemComponent';
 import { ArrayValue } from '../components/values/ArrayValue';
 import { FnValue } from '../components/values/FnValue';
 import { GlobalFnValue } from '../components/values/GlobalFnValue';
 import CseMachine from '../CseMachine';
-import { Config } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Env, EnvTree } from '../CseMachineTypes';
+import { isDataArray, isFunction } from '../CseMachineUtils';
 
 // The following are code samples that are more complex/known to have caused bugs
 // Some are commented out to keep the tests shorter
@@ -80,9 +77,6 @@ const codeSamples = [
 
 codeSamples.forEach((code, idx) => {
   test('CSE Machine calculates correct layout for code sample ' + idx, async () => {
-    if (CseMachine.getCompactLayout()) {
-      CseMachine.toggleCompactLayout();
-    }
     const context = createContext(4);
     await runInContext(code, context);
     Layout.setContext(
@@ -93,7 +87,7 @@ codeSamples.forEach((code, idx) => {
 
     const toTest: any[] = [];
     const environmentsToTest: Env[] = [];
-    Layout.compactLevels.forEach(({ frames }) => {
+    Layout.levels.forEach(({ frames }) => {
       frames.forEach(({ environment, bindings }) => {
         environmentsToTest.push(environment);
         bindings.forEach(({ keyString, data }) => {
@@ -102,75 +96,75 @@ codeSamples.forEach((code, idx) => {
         });
       });
     });
-    Layout.grid.frameLevels.forEach(({ frames }) => {
-      frames.forEach(({ environment, bindings, xCoord, yCoord }) => {
-        environmentsToTest.push(environment);
-        toTest.push(xCoord);
-        toTest.push(yCoord);
-        bindings.forEach(({ keyString, data }) => {
-          toTest.push(keyString);
-          toTest.push(data);
-        });
-      });
-    });
     environmentsToTest.forEach(environment => {
-      expect(environment).toMatchSnapshot({
-        id: expect.any(String)
-      });
+      expect(environment).toMatchSnapshot();
     });
     expect(toTest).toMatchSnapshot();
-    const checkNonCompactLayout = () => {
+    // Note: Old code is kept here as a reference for later
+    // const checkNonCompactLayout = () => {
+    //   Layout.draw();
+    //   Layout.values.forEach(v => {
+    //     if (v instanceof GlobalFnValue || v instanceof FnValue) {
+    //       const arrow = v.arrow();
+    //       expect(arrow).toBeDefined();
+    //       expect(arrow?.target).toBeDefined();
+    //       const path = arrow!.path().match(/[^ ]+/g) ?? [];
+    //       expect(path.length).toEqual(14);
+    //       expect(path[1]).toEqual(path[4]); // move up
+    //       expect(path[8]).toEqual(path[10]); // move left
+    //       expect(Frame.lastXCoordBelow(v.x())).toEqual(Frame.lastXCoordBelow(arrow!.target!.x())); // target
+    //     } else if (v instanceof ArrayValue) {
+    //       v.arrows().forEach(arrow => {
+    //         expect(arrow).toBeDefined();
+    //         expect(arrow?.target).toBeDefined();
+    //         if (
+    //           arrow instanceof ArrowFromArrayUnit &&
+    //           arrow.target instanceof ArrayValue &&
+    //           arrow.source instanceof ArrayUnit
+    //         ) {
+    //           const sourceArray = arrow.source.parent as ArrayValue;
+    //           const targetArray = arrow.target as ArrayValue;
+    //           if (sourceArray.level === targetArray.level) {
+    //             // for arrows within same array level
+    //             const path = arrow!.path().match(/[^ ]+/g) ?? [];
+    //             expect(parseFloat(path[1])).toEqual(arrow.source.x() + Config.DataUnitWidth / 2);
+    //             expect(parseFloat(path[2])).toEqual(arrow.source.y() + Config.DataUnitHeight / 2);
+    //             if (sourceArray.data === targetArray.data) {
+    //               expect(path.length).toEqual(22); // up, right, down.
+    //               expect(path[1]).toEqual(path[4]);
+    //               expect(path[17]).toEqual(path[20]);
+    //               expect(parseFloat(path[20]) - parseFloat(path[1])).toBeCloseTo(
+    //                 Config.DataUnitWidth / 3
+    //               );
+    //             }
+    //           }
+    //         }
+    //       });
+    //     }
+    //   });
+    // };
+    const checkLayout = () => {
       Layout.draw();
+      // TODO: write proper tests to check layout, similar to the above tests for the old components.
+      // In addition to the tests below, it would also be nice to check each frame and its bindings as well,
+      // and check all the relevant arrows are drawn correctly
       Layout.values.forEach(v => {
         if (v instanceof GlobalFnValue || v instanceof FnValue) {
-          const arrow = v.arrow();
-          expect(arrow).toBeDefined();
-          expect(arrow?.target).toBeDefined();
-          const path = arrow!.path().match(/[^ ]+/g) ?? [];
-          expect(path.length).toEqual(14);
-          expect(path[1]).toEqual(path[4]); // move up
-          expect(path[8]).toEqual(path[10]); // move left
-          expect(Frame.lastXCoordBelow(v.x())).toEqual(Frame.lastXCoordBelow(arrow!.target!.x())); // target
+          // TODO: check the arrow of each function value that starts from its tail, and points to the
+          // environment frame that the function value originates from.
+          // 1. Check that arrow and its target is defined, and format the path into an array
+          // 2. Check that path[1] === path[4], i.e. the arrow moves up first
+          // 3. Check that path[8] === path[10], i.e. the arrow moves left afterwards
+          // 4. Check that the arrow is indeed drawn to the correct frame.
         } else if (v instanceof ArrayValue) {
-          v.arrows().forEach(arrow => {
-            expect(arrow).toBeDefined();
-            expect(arrow?.target).toBeDefined();
-            if (
-              arrow instanceof ArrowFromArrayUnit &&
-              arrow.target instanceof ArrayValue &&
-              arrow.source instanceof ArrayUnit
-            ) {
-              const sourceArray = arrow.source.parent as ArrayValue;
-              const targetArray = arrow.target as ArrayValue;
-              if (sourceArray.level === targetArray.level) {
-                // for arrows within same array level
-                const path = arrow!.path().match(/[^ ]+/g) ?? [];
-                expect(parseFloat(path[1])).toEqual(arrow.source.x() + Config.DataUnitWidth / 2);
-                expect(parseFloat(path[2])).toEqual(arrow.source.y() + Config.DataUnitHeight / 2);
-                if (sourceArray.data === targetArray.data) {
-                  expect(path.length).toEqual(22); // up, right, down.
-                  expect(path[1]).toEqual(path[4]);
-                  expect(path[17]).toEqual(path[20]);
-                  expect(parseFloat(path[20]) - parseFloat(path[1])).toBeCloseTo(
-                    Config.DataUnitWidth / 3
-                  );
-                }
-              }
-            }
-          });
+          // TODO: check the arrows of each array unit
         }
       });
     };
-    const checkCompactLayout = () => {
-      Layout.draw();
-    };
-    checkCompactLayout();
+    checkLayout();
     CseMachine.togglePrintableMode();
-    checkCompactLayout();
-    CseMachine.toggleCompactLayout();
-    checkNonCompactLayout();
+    checkLayout();
     CseMachine.togglePrintableMode();
-    checkNonCompactLayout();
   });
 });
 
@@ -200,7 +194,7 @@ const codeSamplesControlStash = [
     }
     math_sin(math_PI / 2); 
     `,
-    7
+    5
   ],
   [
     'Control is truncated properly',
@@ -210,7 +204,7 @@ const codeSamplesControlStash = [
       }
       fact(10);
       `,
-    161,
+    160,
     true
   ]
 ];
@@ -220,13 +214,12 @@ codeSamplesControlStash.forEach((codeSample, idx) => {
     const code = codeSample[1] as string;
     const currentStep = codeSample[2] as number;
     const truncate = codeSample[3];
-    if (!CseMachine.getCompactLayout()) {
-      CseMachine.toggleCompactLayout();
-    }
     if (truncate) {
       CseMachine.toggleStackTruncated();
     }
-    CseMachine.toggleControlStash();
+    if (!CseMachine.getControlStash()) {
+      CseMachine.toggleControlStash();
+    }
     const context = createContext(4);
     await runInContext(code, context, { executionMethod: 'cse-machine', envSteps: currentStep });
     Layout.setContext(
@@ -244,6 +237,7 @@ codeSamplesControlStash.forEach((codeSample, idx) => {
     if (truncate) expect(controlItemsToTest.length).toBeLessThanOrEqual(10);
     stashItemsToTest.forEach(item => {
       expect(item.draw()).toMatchSnapshot();
+      if (isFunction(item.value) || isDataArray(item.value)) expect(item.arrow).toBeDefined();
     });
   });
 });

@@ -27,7 +27,7 @@ exports[`CSE Machine component renders correctly 1`] = `
         className="bp5-slider-track"
       >
         <div
-          className="bp5-slider-progress"
+          className="bp5-slider-progress bp5-intent-primary"
           style={
             Object {
               "left": "0.00%",
@@ -37,7 +37,7 @@ exports[`CSE Machine component renders correctly 1`] = `
           }
         />
         <div
-          className="bp5-slider-progress bp5-intent-primary"
+          className="bp5-slider-progress"
           style={
             Object {
               "left": "0.00%",
@@ -59,13 +59,24 @@ exports[`CSE Machine component renders correctly 1`] = `
       </div>
       <div
         className="bp5-slider-axis"
-      />
+      >
+        <div
+          className="bp5-slider-label"
+          style={
+            Object {
+              "left": "NaN%",
+            }
+          }
+        >
+          0
+        </div>
+      </div>
       <span
         aria-disabled={true}
         aria-orientation="horizontal"
         aria-valuemax={0}
-        aria-valuemin={1}
-        aria-valuenow={1}
+        aria-valuemin={0}
+        aria-valuenow={0}
         className="bp5-slider-handle"
         role="slider"
         style={Object {}}
@@ -74,7 +85,7 @@ exports[`CSE Machine component renders correctly 1`] = `
         <span
           className="bp5-slider-label"
         >
-          1
+          0
         </span>
       </span>
     </div>
@@ -119,7 +130,7 @@ exports[`CSE Machine component renders correctly 1`] = `
               className="bp5-button-text"
             >
               <label
-                className="bp5-control bp5-checkbox"
+                className="bp5-control bp5-checkbox bp5-disabled"
                 style={
                   Object {
                     "margin": 0,
@@ -128,7 +139,7 @@ exports[`CSE Machine component renders correctly 1`] = `
               >
                 <input
                   checked={false}
-                  disabled={false}
+                  disabled={true}
                   onChange={[Function]}
                   type="checkbox"
                 />
@@ -278,55 +289,6 @@ exports[`CSE Machine component renders correctly 1`] = `
           >
             <span
               aria-hidden={true}
-              className="bp5-icon bp5-icon-standard bp5-icon-build"
-              data-icon="build"
-            />
-            <span
-              className="bp5-button-text"
-            >
-              <label
-                className="bp5-control bp5-checkbox bp5-disabled"
-                style={
-                  Object {
-                    "margin": 0,
-                  }
-                }
-              >
-                <input
-                  checked={false}
-                  disabled={true}
-                  onChange={[Function]}
-                  type="checkbox"
-                />
-                <span
-                  className="bp5-control-indicator"
-                />
-              </label>
-            </span>
-          </a>
-        </span>
-        <span
-          className="bp5-popover-target"
-          onBlur={[Function]}
-          onContextMenu={[Function]}
-          onFocus={[Function]}
-          onMouseEnter={[Function]}
-          onMouseLeave={[Function]}
-        >
-          <a
-            aria-disabled={true}
-            aria-expanded={false}
-            className="bp5-button bp5-disabled"
-            disabled={true}
-            onBlur={[Function]}
-            onKeyDown={[Function]}
-            onKeyUp={[Function]}
-            onMouseUp={[Function]}
-            role="button"
-            tabIndex={-1}
-          >
-            <span
-              aria-hidden={true}
               className="bp5-icon bp5-icon-standard bp5-icon-print"
               data-icon="print"
             />
@@ -384,6 +346,7 @@ exports[`CSE Machine component renders correctly 1`] = `
     </div>
   </div>
    
+  <div />
   <div
     className="bp5-running-text"
     data-testid="cse-machine-default-text"

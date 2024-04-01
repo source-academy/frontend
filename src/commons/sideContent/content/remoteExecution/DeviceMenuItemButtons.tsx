@@ -1,17 +1,13 @@
 import { Button } from '@blueprintjs/core';
 import React from 'react';
 
-type DeviceMenuItemProps = {
+type Props = {
   text?: React.ReactNode;
   handleDelete: React.MouseEventHandler;
   handleEdit: React.MouseEventHandler;
 };
 
-const DeviceMenuItemButtons: React.FC<DeviceMenuItemProps> = ({
-  text,
-  handleDelete,
-  handleEdit
-}) => {
+const DeviceMenuItemButtons: React.FC<Props> = ({ text, handleDelete, handleEdit }) => {
   return (
     <>
       {text}

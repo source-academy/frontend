@@ -8,11 +8,11 @@ import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 import { Role } from '../../application/ApplicationTypes';
 import { createDesktopNavlink, NavbarEntryInfo, renderNavlinksFromInfo } from '../NavigationBar';
 
-type OwnProps = {
+type Props = {
   assessmentTypes?: AssessmentType[];
 };
 
-const AcademyNavigationBar: React.FunctionComponent<OwnProps> = ({ assessmentTypes }) => {
+const AcademyNavigationBar: React.FC<Props> = ({ assessmentTypes }) => {
   const { role, courseId } = useSession();
   const isEnrolledInACourse = !!role;
 
@@ -51,6 +51,7 @@ export const icons: IconName[] = [
   IconNames.COMPARISON,
   IconNames.MANUAL,
   IconNames.GRAPH,
+  IconNames.FORM,
   IconNames.LAB_TEST,
   IconNames.CALCULATOR
 ];
@@ -102,6 +103,13 @@ const getStaffNavlinkInfo = ({
       to: `/courses/${courseId}/sourcereel`,
       icon: IconNames.MOBILE_VIDEO,
       text: 'Sourcereel',
+      disabled: !isStaffOrAdmin,
+      hiddenInBreakpoints: ['xs', 'sm', 'md']
+    },
+    {
+      to: `/courses/${courseId}/teamformation`,
+      icon: IconNames.FORM,
+      text: 'Team Formation',
       disabled: !isStaffOrAdmin,
       hiddenInBreakpoints: ['xs', 'sm', 'md']
     },
