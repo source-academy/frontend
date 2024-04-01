@@ -9,11 +9,12 @@ import {
   Switch
 } from '@blueprintjs/core';
 import { IconNames, Team } from '@blueprintjs/icons';
-import { createGrid, GridOptions } from 'ag-grid-community';
 import React, { useCallback, useState } from 'react';
 
-import { AssessmentOverview, ContestEntry } from '../../../../commons/assessment/AssessmentTypes';
+import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
+import ExportScoreLeaderboardButton from '../configureControls/ExportScoreLeaderboardButton';
+import ExportVoteLeaderboardButton from '../configureControls/ExportVoteLeaderboardButton';
 
 type Props = {
   handleConfigureAssessment: (
@@ -21,17 +22,10 @@ type Props = {
     hasVotingFeatures: boolean,
     hasTokenCounter: boolean
   ) => void;
-  handleFetchScoreLeaderboard: (id: number) => ContestEntry[];
-  handleFetchPopularVoteLeaderboard: (id: number) => ContestEntry[];
   data: AssessmentOverview;
 };
 
-const ConfigureCell: React.FC<Props> = ({
-  handleConfigureAssessment,
-  handleFetchScoreLeaderboard,
-  handleFetchPopularVoteLeaderboard,
-  data
-}) => {
+const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => {
   const [isDialogOpen, setDialogState] = useState(false);
   const [hasVotingFeatures, setHasVotingFeatures] = useState(!!data.hasVotingFeatures);
   const [hasTokenCounter, setHasTokenCounter] = useState(!!data.hasTokenCounter);
@@ -49,18 +43,6 @@ const ConfigureCell: React.FC<Props> = ({
   const toggleHasTokenCounter = useCallback(() => setHasTokenCounter(prev => !prev), []);
   const toggleVotingFeatures = useCallback(() => setHasVotingFeatures(prev => !prev), []);
   const toggleIsTeamAssessment = useCallback(() => setIsTeamAssessment(prev => !prev), []);
-
-  const exportScoreLeaderboardToCsv = async () => {
-    const scoreLeaderboard = await handleFetchScoreLeaderboard(data.id);
-    const gridContainer = document.createElement('div');
-    const gridOptions: GridOptions = {
-      rowData: scoreLeaderboard,
-      columnDefs: [{ field: 'student_name' }, { field: 'answer' }, { field: 'final_score' }]
-    };
-    const api = createGrid(gridContainer, gridOptions);
-    api.exportDataAsCsv();
-    api.destroy();
-  };
 
   return (
     <>
@@ -123,13 +105,8 @@ const ConfigureCell: React.FC<Props> = ({
             />
             <Collapse isOpen={hasVotingFeatures}>
               <div className="voting-related-controls">
-                <div className="control-button-container">
-                  <ControlButton
-                    icon={IconNames.CROWN}
-                    onClick={exportScoreLeaderboardToCsv}
-                    label="Export Score Leaderboard"
-                  />
-                </div>
+                <ExportScoreLeaderboardButton assessmentId={data.id} />
+                <ExportVoteLeaderboardButton assessmentId={data.id} />
                 <Switch
                   className="publish-voting"
                   disabled={true}

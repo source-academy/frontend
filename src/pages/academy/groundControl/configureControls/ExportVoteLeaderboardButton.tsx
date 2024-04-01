@@ -1,4 +1,5 @@
 import { IconNames } from '@blueprintjs/icons';
+import { createGrid,GridOptions } from 'ag-grid-community';
 import ControlButton from 'src/commons/ControlButton';
 
 type Props = {
@@ -6,8 +7,10 @@ type Props = {
 };
 
 const ExportVoteLeaderboardButton: React.FC<Props> = ({ assessmentId }) => {
+
+  // onClick handler for fetching popular vote leaderboard, putting it into a grid and exporting data  
   const exportPopularVoteLeaderboardToCsv = async () => {
-    const popularVoteLeaderboard = await handleFetchPopularVoteLeaderboard(data.id);
+    const popularVoteLeaderboard = await {1, 3, 4}
     const gridContainer = document.createElement('div');
     const gridOptions: GridOptions = {
       rowData: popularVoteLeaderboard,
@@ -28,3 +31,5 @@ const ExportVoteLeaderboardButton: React.FC<Props> = ({ assessmentId }) => {
     </div>
   );
 };
+
+export default ExportVoteLeaderboardButton;
