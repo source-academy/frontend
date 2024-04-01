@@ -16,7 +16,7 @@ import { AgGridReact } from 'ag-grid-react';
 import React, { useState } from 'react';
 import { useSession } from 'src/commons/utils/Hooks';
 
-import { AssessmentOverview, ContestEntry } from '../../../commons/assessment/AssessmentTypes';
+import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import DefaultChapterSelect from './subcomponents/DefaultChapterSelect';
 import ConfigureCell from './subcomponents/GroundControlConfigureCell';
@@ -40,8 +40,6 @@ export type DispatchProps = {
     hasVotingFeatures: boolean,
     hasTokenCounter: boolean
   ) => void;
-  handleFetchScoreLeaderboard: (id: number) => ContestEntry[];
-  handleFetchPopularVoteLeaderboard: (id: number) => ContestEntry[];
   handleFetchCourseConfigs: () => void;
 };
 
@@ -165,9 +163,7 @@ const GroundControl: React.FC<Props> = props => {
       field: 'placeholderConfigure' as any,
       cellRenderer: ConfigureCell,
       cellRendererParams: {
-        handleConfigureAssessment: props.handleConfigureAssessment,
-        handleFetchScoreLeaderboard: props.handleFetchScoreLeaderboard,
-        handleFetchPopularVoteLeaderboard: props.handleFetchPopularVoteLeaderboard
+        handleConfigureAssessment: props.handleConfigureAssessment
       },
       width: 80,
       filter: false,

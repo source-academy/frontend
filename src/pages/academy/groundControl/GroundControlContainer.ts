@@ -11,8 +11,6 @@ import {
   changeTeamSizeAssessment,
   configureAssessment,
   deleteAssessment,
-  fetchPopularVoteLeaderboard,
-  fetchScoreLeaderboard,
   publishAssessment,
   uploadAssessment
 } from '../../../features/groundControl/GroundControlActions';
@@ -30,9 +28,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleUploadAssessment: uploadAssessment,
       handlePublishAssessment: publishAssessment,
       handleFetchCourseConfigs: fetchCourseConfig,
-      handleConfigureAssessment: configureAssessment,
-      handleFetchScoreLeaderboard: fetchScoreLeaderboard,
-      handleFetchPopularVoteLeaderboard: fetchPopularVoteLeaderboard
+      handleConfigureAssessment: configureAssessment
     },
     dispatch
   );

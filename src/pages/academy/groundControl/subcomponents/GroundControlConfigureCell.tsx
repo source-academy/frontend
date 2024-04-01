@@ -50,18 +50,6 @@ const ConfigureCell: React.FC<Props> = ({
   const toggleVotingFeatures = useCallback(() => setHasVotingFeatures(prev => !prev), []);
   const toggleIsTeamAssessment = useCallback(() => setIsTeamAssessment(prev => !prev), []);
 
-  const exportPopularVoteLeaderboardToCsv = async () => {
-    const popularVoteLeaderboard = await handleFetchPopularVoteLeaderboard(data.id);
-    const gridContainer = document.createElement('div');
-    const gridOptions: GridOptions = {
-      rowData: popularVoteLeaderboard,
-      columnDefs: [{ field: 'student_name' }, { field: 'answer' }, { field: 'final_score' }]
-    };
-    const api = createGrid(gridContainer, gridOptions);
-    api.exportDataAsCsv();
-    api.destroy();
-  };
-
   const exportScoreLeaderboardToCsv = async () => {
     const scoreLeaderboard = await handleFetchScoreLeaderboard(data.id);
     const gridContainer = document.createElement('div');
@@ -135,13 +123,6 @@ const ConfigureCell: React.FC<Props> = ({
             />
             <Collapse isOpen={hasVotingFeatures}>
               <div className="voting-related-controls">
-                <div className="control-button-container">
-                  <ControlButton
-                    icon={IconNames.PEOPLE}
-                    onClick={exportPopularVoteLeaderboardToCsv}
-                    label="Export Popular Vote Leaderboard"
-                  />
-                </div>
                 <div className="control-button-container">
                   <ControlButton
                     icon={IconNames.CROWN}
