@@ -18,7 +18,7 @@ const cracoConfig = (module.exports = {
         plugin => plugin.constructor.name === 'InjectManifest'
       );
       if (injectManifestPlugin) {
-        injectManifestPlugin.config.maximumFileSizeToCacheInBytes = 15 * 1024 * 1024;
+        injectManifestPlugin.config.maximumFileSizeToCacheInBytes = 17 * 1024 * 1024;
       }
 
       // add rules to pack WASM (for Sourceror)
@@ -131,7 +131,8 @@ const cracoConfig = (module.exports = {
           'query-string',
           'decode-uri-component',
           'split-on-first',
-          'filter-obj'
+          'filter-obj',
+          '@sourceacademy/c-slang',
         ),
         '^.+\\.module\\.(css|sass|scss)$'
       ];
