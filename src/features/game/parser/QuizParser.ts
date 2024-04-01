@@ -66,7 +66,7 @@ export default class QuizParser {
    */
   private static createQuestion(questionText: string[]): Question {
     if (questionText.length < 2) {
-      throw new Error("Parsing error: Quiz missing question or answer");
+      throw new Error('Parsing error: Quiz missing question or answer');
     }
     const question: Question = {
       question: questionText[0],
@@ -86,7 +86,7 @@ export default class QuizParser {
   private static getQuizAnswer(answer: string): Number {
     const ans = answer.split(':');
     if (ans.length < 2 || Number.isNaN(parseInt(ans[1]))) {
-      throw new Error("Parsing error: Invalid answer for Quiz");
+      throw new Error('Parsing error: Invalid answer for Quiz');
     }
     return parseInt(ans[1]);
   }
@@ -114,21 +114,16 @@ export default class QuizParser {
    * including option text and reaction
    * @param [noReaction=false] Indicates whether this option provides a reaction
    */
-  private static createOption(
-    content: string[],
-    noReaction: boolean = false
-  ): Option {
+  private static createOption(content: string[], noReaction: boolean = false): Option {
     if (!content) {
-      throw new Error("Parsing error: Quiz option not provided")
+      throw new Error('Parsing error: Quiz option not provided');
     }
     if (content.length <= 1) {
       noReaction = true;
     }
     const option: Option = {
       text: content[0],
-      reaction: noReaction
-        ? undefined
-        : DialogueParser.parseQuizReaction(content.slice(1))
+      reaction: noReaction ? undefined : DialogueParser.parseQuizReaction(content.slice(1))
     };
     return option;
   }

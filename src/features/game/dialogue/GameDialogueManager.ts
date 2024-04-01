@@ -33,8 +33,6 @@ export default class DialogueManager {
   public async showDialogue(dialogueId: ItemId): Promise<void> {
     const dialogue = GameGlobalAPI.getInstance().getDialogueById(dialogueId);
 
-    
-
     this.dialogueRenderer = new DialogueRenderer(textTypeWriterStyle);
     this.dialogueGenerator = new DialogueGenerator(dialogue.content);
     this.speakerRenderer = new DialogueSpeakerRenderer();
@@ -55,7 +53,8 @@ export default class DialogueManager {
     // add keyboard listener for dialogue box
     this.getInputManager().registerKeyboardListener(keyboardShortcuts.Next, 'up', async () => {
       // show the next line if dashboard or escape menu are not displayed
-      if ( !GameGlobalAPI.getInstance().getGameManager().getPhaseManager().isCurrentPhaseTerminal()
+      if (
+        !GameGlobalAPI.getInstance().getGameManager().getPhaseManager().isCurrentPhaseTerminal()
       ) {
         await this.showNextLine(resolve);
       }
@@ -74,15 +73,14 @@ export default class DialogueManager {
     const lineWithName = line.replace('{name}', this.getUsername());
     this.getDialogueRenderer().changeText(lineWithName);
     this.getSpeakerRenderer().changeSpeakerTo(speakerDetail);
-    
-    console.log(GameGlobalAPI.getInstance().getGameManager().getPhaseManager().isCurrentPhaseTerminal());
+
     // Store the current line into the storage
     GameGlobalAPI.getInstance().storeDialogueLine(lineWithName, speakerDetail);
 
     // Disable interactions while processing actions
     GameGlobalAPI.getInstance().enableSprite(this.getDialogueRenderer().getDialogueBox(), false);
     this.getInputManager().enableKeyboardInput(false);
-    
+
     if (prompt) {
       // disable keyboard input to prevent continue dialogue
       this.getInputManager().enableKeyboardInput(false);
