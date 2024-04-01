@@ -49,7 +49,6 @@ const GradingActions: React.FC<Props> = ({ submissionId, progress }) => {
     }
   };
 
-  // TODO - Redux loop
   const handlePublishClick = async () => {
     const confirm = await showSimpleConfirmDialog({
       contents: "Publish this assessment's grading?",

@@ -32,7 +32,7 @@ const AssessmentConfigPanel: React.FC<Props> = ({
   const gridApi = React.useRef<GridApi>();
 
   // manually graded assessments should not be auto-published
-  // check and ensure that isManuallyGraded = true and isAutoPublished = true cannot be set simultaneously
+  // check and ensure that isManuallyGraded = true and isGradingAutoPublished = true cannot be set simultaneously
   const setIsManuallyGraded = (index: number, value: boolean) => {
     const temp = [...assessmentConfig.current];
     temp[index] = {
@@ -42,20 +42,20 @@ const AssessmentConfigPanel: React.FC<Props> = ({
 
     // use a second spread operator if mutation of temp[index] causes issues
     if (value) {
-      temp[index].isAutoPublished = false;
-      gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isAutoPublished', false);
+      temp[index].isGradingAutoPublished = false;
+      gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isGradingAutoPublished', false);
     }
 
     setAssessmentConfig(temp);
     gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isManuallyGraded', value);
   };
 
-  const setIsAutoPublished = (index: number, value: boolean) => {
+  const setIsGradingAutoPublished = (index: number, value: boolean) => {
     const temp = [...assessmentConfig.current];
 
     temp[index] = {
       ...temp[index],
-      isAutoPublished: value
+      isGradingAutoPublished: value
     };
 
     if (value) {
@@ -64,7 +64,7 @@ const AssessmentConfigPanel: React.FC<Props> = ({
     }
 
     setAssessmentConfig(temp);
-    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isAutoPublished', value);
+    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isGradingAutoPublished', value);
   };
 
   const setDisplayInDashboard = (index: number, value: boolean) => {
@@ -128,7 +128,7 @@ const AssessmentConfigPanel: React.FC<Props> = ({
       assessmentConfigId: -1,
       type: 'untitled',
       isManuallyGraded: true,
-      isAutoPublished: false,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 0,
       hasTokenCounter: false,
@@ -170,11 +170,11 @@ const AssessmentConfigPanel: React.FC<Props> = ({
     },
     {
       headerName: 'Is Auto-published',
-      field: 'isAutoPublished',
+      field: 'isGradingAutoPublished',
       cellRenderer: BooleanCell,
       cellRendererParams: {
-        setStateHandler: setIsAutoPublished,
-        field: 'isAutoPublished'
+        setStateHandler: setIsGradingAutoPublished,
+        field: 'isGradingAutoPublished'
       }
     },
     {

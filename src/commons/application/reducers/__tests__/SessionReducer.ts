@@ -158,7 +158,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200,
       isManuallyGraded: false,
-      isAutoPublished: false,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false,
       hasVotingFeatures: false
@@ -172,7 +172,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200,
       isManuallyGraded: false,
-      isAutoPublished: false,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false,
       hasVotingFeatures: false
@@ -186,7 +186,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200,
       isManuallyGraded: false,
-      isAutoPublished: false,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false,
       hasVotingFeatures: false
