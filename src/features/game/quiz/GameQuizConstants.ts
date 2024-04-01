@@ -3,13 +3,11 @@ import { BitmapFontStyle } from '../commons/CommonTypes';
 import { Color } from '../utils/StyleUtils';
 import { screenSize } from "../commons/CommonConstants";
 
-const allCorrect : string = "Well done!";
-
-const notAllCorrect : string = "Let's keep going!"
+export const questionPrompt = "What is the correct answer?";
 
 export const resultMsg = {
-  allCorrect: allCorrect,
-  notAllCorrect: notAllCorrect
+  allCorrect: "Well done!",
+  notAllCorrect: "Let's keep going!"
 }
 
 export const QuizConstants = {

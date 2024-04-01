@@ -1,7 +1,7 @@
 import { ItemId } from '../commons/CommonTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { Question } from './GameQuizType';
-import { QuizConstants, textStyle, quizOptStyle, questionTextStyle } from './GameQuizConstants';
+import { QuizConstants, textStyle, quizOptStyle, questionTextStyle, resultMsg, questionPrompt } from './GameQuizConstants';
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { Constants, screenSize } from '../commons/CommonConstants';
@@ -14,7 +14,6 @@ import { fadeAndDestroy } from '../effects/FadeEffect';
 import { rightSideEntryTweenProps, rightSideExitTweenProps } from '../effects/FlyEffect';
 import { DialogueObject } from '../dialogue/GameDialogueTypes';
 import GameQuizReactionManager from './GameQuizReactionManager';
-import { resultMsg } from './GameQuizConstants';
 import { createDialogueBox, createTypewriter } from '../dialogue/GameDialogueHelper';
 
 export default class QuizManager {
@@ -35,7 +34,7 @@ export default class QuizManager {
   //Display the specific quiz question
   public async showQuizQuestion(scene: Phaser.Scene, question: Question){
         
-      console.log(GameGlobalAPI.getInstance().getGameManager().getPhaseManager().isCurrentPhaseTerminal());
+      GameGlobalAPI.getInstance().getGameManager().getPhaseManager().isCurrentPhaseTerminal();
       const choices = question.options;
       const quizContainer = new Phaser.GameObjects.Container(scene, 0, 0);
 
@@ -53,7 +52,7 @@ export default class QuizManager {
         scene,
         screenSize.x - QuizConstants.textPad,
         QuizConstants.y,
-        "What is the correct answer?",
+        questionPrompt,
         textStyle
       ).setOrigin(1.0, 0.0);
       
