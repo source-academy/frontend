@@ -95,7 +95,7 @@ const makeColumns = (handleClick: () => void) => [
     header: 'Progress',
     cell: info => (
       <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
-        <ProgressStatusBadge progress={info.getValue() as ProgressStatus} />
+        <ProgressStatusBadge progress={info.getValue()} />
       </Filterable>
     )
   }),
