@@ -30,7 +30,6 @@ import {
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { ProgressStatus } from 'src/commons/assessment/AssessmentTypes';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { updateSubmissionsTableFilters } from 'src/commons/workspace/WorkspaceActions';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
