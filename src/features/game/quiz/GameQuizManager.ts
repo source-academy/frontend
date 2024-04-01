@@ -60,7 +60,7 @@ export default class QuizManager {
       
       const quizHeaderBg = new Phaser.GameObjects.Rectangle(
         scene,
-        screenSize.x / 2 + QuizConstants.textPad,
+        screenSize.x,
         QuizConstants.y - QuizConstants.textPad,
         QuizConstants.width * quizPartitions,
         header.getBounds().bottom * 0.5 + QuizConstants.textPad,
@@ -70,8 +70,8 @@ export default class QuizManager {
       
       const quizBg = new Phaser.GameObjects.Rectangle(
         scene,
-        screenSize.x / 2 + QuizConstants.textPad,
-        QuizConstants.y,
+        screenSize.x,
+        QuizConstants.y - QuizConstants.textPad,
         QuizConstants.width * quizPartitions,
         quizHeaderBg.getBounds().bottom * 0.5 + (quizHeight + 0.5) * QuizConstants.yInterval,
         HexColor.lightBlue,
@@ -110,8 +110,7 @@ export default class QuizManager {
                 QuizConstants.width / 2 -
                 QuizConstants.width * (quizPartitions - Math.floor(index / 5) - 1) + QuizConstants.textPad,
               (buttonPositions[index][1] % (5 * QuizConstants.yInterval)) +
-                quizHeaderBg.getBounds().bottom +
-                75
+                quizHeaderBg.getBounds().bottom + 75
             )
           )
         );});

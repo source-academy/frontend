@@ -29,7 +29,7 @@ export const ImproveMent : DialogueObject = new Map([
 ]);
 
 export const QuizConstants = {
-    textPad: 250,
+    textPad: 10,
     textConfig: { x: 15, y: -15, oriX: 0.5, oriY: 0.5 },
     y: 100,
     width: 450,
@@ -44,7 +44,7 @@ export const textStyle = {
     fill: Color.offWhite,
     align: 'left',
     lineSpacing: 10,
-    wordWrap: { width: 60 }
+    wordWrap: { width: QuizConstants.width - QuizConstants.textPad * 260 }
   };
 
 export const questionTextStyle = {
