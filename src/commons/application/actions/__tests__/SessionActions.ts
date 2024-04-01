@@ -829,6 +829,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       isAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 0,
       earlySubmissionXp: 0
     },
