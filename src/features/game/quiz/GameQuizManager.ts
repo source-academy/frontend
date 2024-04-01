@@ -47,6 +47,7 @@ export default class QuizManager {
       const quizQuestionWriter = createTypewriter(scene, questionTextStyle);
 
       quizQuestionWriter.changeLine(question.question);
+      GameGlobalAPI.getInstance().storeDialogueLine(question.question, question.speaker);
 
       const header = new Phaser.GameObjects.Text(
         scene,
