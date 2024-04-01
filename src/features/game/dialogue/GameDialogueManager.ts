@@ -104,11 +104,17 @@ export default class DialogueManager {
     }
   }
 
+  /**
+   * Hide all dialogue boxes, speaker boxes and speaker sprites
+   * */
   public async hideAll() {
     await this.getDialogueRenderer().hide();
     await this.getSpeakerRenderer().hide();
   }
 
+  /**
+   * Make all dialogue boxes, speaker boxes and speaker sprites visible
+   * */
   public async showAll() {
     await this.getDialogueRenderer().show();
     await this.getSpeakerRenderer().show();

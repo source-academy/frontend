@@ -69,7 +69,7 @@ class DialogueRenderer {
   }
 
   /**
-   * Hide the dialoguebox  
+   * Hide the dialoguebox
    */
   public async hide() {
     this.typewriter.container.setVisible(false);
@@ -78,14 +78,13 @@ class DialogueRenderer {
   }
 
   /**
-   * Show the hidden dialoguebox 
+   * Make the dialoguebox visible
    */
   public async show() {
     this.typewriter.container.setVisible(true);
     this.dialogueBox.setVisible(true);
-    this.blinkingDiamond.container.setVisible(true); 
+    this.blinkingDiamond.container.setVisible(true);
   }
-
 
   /**
    * Change the text written in the box

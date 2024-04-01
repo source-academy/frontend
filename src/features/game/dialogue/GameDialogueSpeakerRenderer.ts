@@ -16,8 +16,8 @@ import DialogueConstants, { speakerTextStyle } from './GameDialogueConstants';
  */
 export default class DialogueSpeakerRenderer {
   private currentSpeakerId?: string;
-  private speakerSprite?:Phaser.GameObjects.Image;
-  private speakerSpriteBox?:Phaser.GameObjects.Container;
+  private speakerSprite?: Phaser.GameObjects.Image;
+  private speakerSpriteBox?: Phaser.GameObjects.Container;
 
   /**
    * Changes the speaker shown in the speaker box and the speaker rendered on screen
@@ -106,7 +106,7 @@ export default class DialogueSpeakerRenderer {
   }
 
   /**
-   * Show the hidden speaker box and sprite 
+   * Show the hidden speaker box and sprite
    */
   public async show() {
     this.getSpeakerSprite().setVisible(true);
