@@ -118,7 +118,7 @@ export const backendParamsToProgressStatus = (
   numQuestions: number
 ): ProgressStatus => {
   if (submissionStatus !== AssessmentStatuses.submitted) {
-    return submissionStatus as ProgressStatus;
+    return submissionStatus;
   } else if (numGraded < numQuestions) {
     return ProgressStatuses.submitted;
   } else if (!isGradingPublished) {
