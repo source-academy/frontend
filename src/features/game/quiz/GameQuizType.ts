@@ -1,3 +1,4 @@
+import { SpeakerDetail } from '../character/GameCharacterTypes';
 import { DialogueObject } from '../dialogue/GameDialogueTypes';
 
 export type Quiz = {
@@ -6,6 +7,7 @@ export type Quiz = {
 
 export type Question = {
   question: string;
+  speaker: SpeakerDetail;
   answer: Number;
   options: Option[];
 };
