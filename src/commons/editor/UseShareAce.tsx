@@ -43,13 +43,20 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       editor.setReadOnly(sessionDetails.readOnly);
 
       const curMgr = new AceMultiCursorManager(editor.getSession());
-      curMgr.addCursor('default', 'Name', '#5f9ea0', { row: 1, column: 1 } as Ace.Point); // hardcoded for now
 
-      ShareAce.connections.contents.on('docPresenceUpdate', (newPresence: Ace.Point) => {
+      ShareAce.connections.contents.on('userPresenceUpdate', (id: string, newPresence: Ace.Point) => {
         // TODO: modify this and move it to a separate handler
         // when more info is added to presence
-        curMgr.setCursor('default', newPresence);
+        try {
+          curMgr.addCursor(id, id, '#5f9ea0', newPresence);
+        } catch (err) {
+          curMgr.setCursor(id, newPresence);
+        }
       });
+
+      ShareAce.connections.contents.on('userLeft', (id: string) => {
+        curMgr.removeCursor(id);
+      })
 
       showSuccessMessage(
         'You have joined a session as ' + (sessionDetails.readOnly ? 'a viewer.' : 'an editor.')
