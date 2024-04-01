@@ -45,7 +45,7 @@ export class ArrayUnit extends Visible {
     this.isFirstUnit = this.idx === 0;
     this.isLastUnit = this.idx === this.parent.data.length - 1;
     this.value = Layout.createValue(this.data, this);
-    this.isMainReference = this.value.referencedBy.length > 1;
+    this.isMainReference = this.value.references.length > 1;
     this.index = new Text(this.idx, this.x(), this.y() - 0.4 * this.height());
   }
 

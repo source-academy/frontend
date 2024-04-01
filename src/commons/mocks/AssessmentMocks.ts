@@ -109,6 +109,7 @@ const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/300/',
     id: 1,
     maxXp: 1000,
+    earlySubmissionXp: 0,
     openAt: '2038-06-18T05:24:26.026Z',
     title: 'An Odessey to Runes (Duplicate)',
     shortSummary:
@@ -130,6 +131,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/300/',
     id: 2,
     maxXp: 1000,
+    earlySubmissionXp: 0,
     openAt: '2018-06-18T05:24:26.026Z',
     title: 'An Odessey to Runes',
     shortSummary: `
@@ -160,6 +162,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/350x200/?text=World&font=lobster',
     id: 3,
     maxXp: 1000,
+    earlySubmissionXp: 0,
     openAt: '2018-07-18T05:24:26.026Z',
     title: 'The Secret to Streams',
     shortSummary:
@@ -178,6 +181,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
     id: 4,
     maxXp: 1000,
+    earlySubmissionXp: 0,
     openAt: '2018-07-18T05:24:26.026Z',
     title: 'A sample Sidequest',
     shortSummary:
@@ -196,6 +200,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/700x400/417678,64/?text=%E3%83%91%E3%82%B9&font=noto',
     id: 5,
     maxXp: 200,
+    earlySubmissionXp: 0,
     openAt: '2018-01-01T00:00:00.000Z',
     title: 'Basic logic gates',
     shortSummary:
@@ -214,6 +219,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
     id: 6,
     maxXp: 1000,
+    earlySubmissionXp: 0,
     openAt: '2018-07-18T05:24:26.026Z',
     title: 'A sample Practical',
     shortSummary:
@@ -236,6 +242,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
     id: 7,
     maxXp: 1000,
+    earlySubmissionXp: 0,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'A closed Mission',
     shortSummary:
@@ -254,6 +261,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
     id: 8,
     maxXp: 1000,
+    earlySubmissionXp: 0,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Closed (not graded) Sidequest',
     shortSummary:
@@ -272,6 +280,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
     id: 9,
     maxXp: 500,
+    earlySubmissionXp: 0,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Closed (fully graded) Sidequest',
     shortSummary:
@@ -290,6 +299,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
     id: 10,
     maxXp: 0,
+    earlySubmissionXp: 0,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Ungraded assessment',
     shortSummary:
