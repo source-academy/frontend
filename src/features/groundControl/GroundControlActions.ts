@@ -5,6 +5,8 @@ import {
   CHANGE_TEAM_SIZE_ASSESSMENT,
   CONFIGURE_ASSESSMENT,
   DELETE_ASSESSMENT,
+  FETCH_POPULAR_VOTE_LEADERBOARD,
+  FETCH_SCORE_LEADERBOARD,
   PUBLISH_ASSESSMENT,
   UPLOAD_ASSESSMENT
 } from './GroundControlTypes';
@@ -37,5 +39,16 @@ export const configureAssessment = createAction(
   CONFIGURE_ASSESSMENT,
   (id: number, hasVotingFeatures: boolean, hasTokenCounter: boolean) => ({
     payload: { id, hasVotingFeatures, hasTokenCounter }
+  })
+);
+
+export const fetchScoreLeaderboard = createAction(FETCH_SCORE_LEADERBOARD, (id: number) => ({
+  payload: { id }
+}));
+
+export const fetchPopularVoteLeaderboard = createAction(
+  FETCH_POPULAR_VOTE_LEADERBOARD,
+  (id: number) => ({
+    payload: { id }
   })
 );

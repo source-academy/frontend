@@ -12,7 +12,7 @@ import { IconNames, Team } from '@blueprintjs/icons';
 import { createGrid, GridOptions } from 'ag-grid-community';
 import React, { useCallback, useState } from 'react';
 
-import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
+import { AssessmentOverview, ContestEntry } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
 
 type Props = {
@@ -21,10 +21,17 @@ type Props = {
     hasVotingFeatures: boolean,
     hasTokenCounter: boolean
   ) => void;
+  handleFetchScoreLeaderboard: (id: number) => ContestEntry[];
+  handleFetchPopularVoteLeaderboard: (id: number) => ContestEntry[];
   data: AssessmentOverview;
 };
 
-const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => {
+const ConfigureCell: React.FC<Props> = ({
+  handleConfigureAssessment,
+  handleFetchScoreLeaderboard,
+  handleFetchPopularVoteLeaderboard,
+  data
+}) => {
   const [isDialogOpen, setDialogState] = useState(false);
   const [hasVotingFeatures, setHasVotingFeatures] = useState(!!data.hasVotingFeatures);
   const [hasTokenCounter, setHasTokenCounter] = useState(!!data.hasTokenCounter);
@@ -43,10 +50,11 @@ const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => 
   const toggleVotingFeatures = useCallback(() => setHasVotingFeatures(prev => !prev), []);
   const toggleIsTeamAssessment = useCallback(() => setIsTeamAssessment(prev => !prev), []);
 
-  const exportPopularVoteLeaderboardToCsv = () => {
+  const exportPopularVoteLeaderboardToCsv = async () => {
+    const popularVoteLeaderboard = await handleFetchPopularVoteLeaderboard(data.id);
     const gridContainer = document.createElement('div');
     const gridOptions: GridOptions = {
-      rowData: data.popularVoteLeaderboard,
+      rowData: popularVoteLeaderboard,
       columnDefs: [{ field: 'student_name' }, { field: 'answer' }, { field: 'final_score' }]
     };
     const api = createGrid(gridContainer, gridOptions);
@@ -54,10 +62,11 @@ const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => 
     api.destroy();
   };
 
-  const exportScoreLeaderboardToCsv = () => {
+  const exportScoreLeaderboardToCsv = async () => {
+    const scoreLeaderboard = await handleFetchScoreLeaderboard(data.id);
     const gridContainer = document.createElement('div');
     const gridOptions: GridOptions = {
-      rowData: data.scoreLeaderboard,
+      rowData: scoreLeaderboard,
       columnDefs: [{ field: 'student_name' }, { field: 'answer' }, { field: 'final_score' }]
     };
     const api = createGrid(gridContainer, gridOptions);

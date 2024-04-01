@@ -443,6 +443,58 @@ export const getAssessmentOverviews = async (
 };
 
 /**
+ * GET /courses/{courseId}/assessments/{assessmentId}/scoreLeaderboard
+ */
+export const getScoreLeaderboard = async (tokens: Tokens): Promise<AssessmentOverview[] | null> => {
+  const resp = await request(`${courseId()}/assessments`, 'GET', {
+    ...tokens
+  });
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+  const assessmentOverviews = await resp.json();
+
+  return assessmentOverviews.map((overview: any) => {
+    overview.gradingStatus = computeGradingStatus(
+      overview.isManuallyGraded,
+      overview.status,
+      overview.gradedCount,
+      overview.questionCount
+    );
+    delete overview.gradedCount;
+    delete overview.questionCount;
+
+    return overview as AssessmentOverview;
+  });
+};
+
+/**
+ * GET /courses/{courseId}/assessments/{assessmentId}/popularVoteLeaderboard
+ */
+export const getPopularVoteLeaderboard = async (tokens: Tokens): Promise<ContestEntry[] | null> => {
+  const resp = await request(`${courseId()}/assessments`, 'GET', {
+    ...tokens
+  });
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+  const assessmentOverviews = await resp.json();
+
+  return assessmentOverviews.map((overview: any) => {
+    overview.gradingStatus = computeGradingStatus(
+      overview.isManuallyGraded,
+      overview.status,
+      overview.gradedCount,
+      overview.questionCount
+    );
+    delete overview.gradedCount;
+    delete overview.questionCount;
+
+    return overview as AssessmentOverview;
+  });
+};
+
+/**
  * GET /courses/{courseId}/user/total_xp
  */
 export const getTotalXp = async (tokens: Tokens, courseRegId?: number): Promise<number | null> => {
