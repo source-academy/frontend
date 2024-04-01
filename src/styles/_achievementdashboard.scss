@@ -8,10 +8,12 @@
 
   .achievement-overview {
     $default-spacing: 0.5em;
+    $vertical-spacing: 100px;
 
     align-items: center;
     color: white;
     display: flex;
+
     padding: $default-spacing;
 
     .level {
@@ -112,9 +114,12 @@
 
   .achievement-manual-editor {
     $default-spacing: 0.5em;
+    $vertical-spacing: 10px;
 
     align-items: center;
     display: flex;
+    gap: $default-spacing $vertical-spacing;
+    flex-wrap: wrap;
     padding: $default-spacing;
     color: white;
 
@@ -132,6 +137,11 @@
     h3 {
       margin: 0 $default-spacing;
       display: inline-flex;
+    }
+
+    .editor-section {
+      display: flex;
+      align-items: center;
     }
   }
 
@@ -328,6 +338,314 @@
         margin: $default-spacing;
         width: $view-width;
         padding-bottom: 1rem;
+
+        .cover {
+          border-top-left-radius: 1rem;
+          border-top-right-radius: 1rem;
+          display: flex;
+          flex-direction: column;
+          text-align: center;
+          min-height: $cover-height;
+          min-width: $cover-width;
+
+          h1 {
+            margin: 0.5em auto 0;
+            padding: $cover-spacing;
+          }
+
+          p {
+            margin: 0 auto;
+            padding: $cover-spacing;
+          }
+
+          .description {
+            color: yellow;
+            font-size: 0.85em;
+            margin: auto auto 1em;
+            width: 80%;
+          }
+        }
+
+        .progress-header {
+          margin-left: 2rem;
+        }
+
+        .goal {
+          align-items: center;
+          display: flex;
+          flex-direction: row;
+          padding: $content-spacing;
+
+          .goal-badge {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            min-width: 6em;
+            padding: 0 $content-spacing;
+
+            .goal-icon {
+              background: url(#{$achievement-assets}/xp-icon.png) center/contain;
+              height: 2em;
+              width: 2em;
+            }
+
+            p {
+              text-align: center;
+              font-size: 0.7em;
+              padding: 0.2em 0 0 0;
+            }
+          }
+
+          .goal-progress {
+            width: 100%;
+            padding-right: 2.5em;
+
+            .progress {
+              margin-top: 5px;
+            }
+          }
+
+          p {
+            margin: 0;
+            padding: 0;
+          }
+        }
+
+        hr {
+          background: lightgrey;
+          border: none;
+          height: 1px;
+          margin: $content-spacing auto;
+          width: 90%;
+        }
+
+        .completion {
+          padding: $content-spacing;
+          text-align: center;
+
+          h1 {
+            color: #fc0;
+            margin: 0 auto $content-spacing;
+          }
+
+          p {
+            margin: 0;
+            padding: 0;
+          }
+        }
+      }
+    }
+
+    // Scroll Bar
+    ::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    ::-webkit-scrollbar-track {
+      border-radius: 1.5px;
+      box-shadow: inset 0 0 3px black;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: white;
+      border-radius: 1.5px;
+    }
+  }
+
+  .achievement-main-mobile {
+    // Cover aspect ratio 2:1
+    $cover-height: 16em;
+    $cover-width: 25em;
+    // Card aspect ratio 2:1
+    $card-height: 5em;
+    $card-width: 25em;
+    // Default spacing should be at least 10px to prevent border glow bleeding
+    $default-spacing: 1em;
+    // View aspect ratio 18:25
+    $view-height: 50em;
+    $view-width: $cover-width;
+
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    %container {
+      display: flex;
+      flex-direction: row;
+      margin: 90 auto;
+      max-height: $view-height + $default-spacing * 2;
+      min-width: max-content;
+    }
+
+    .filter-container {
+      @extend %container;
+      height: 5%;
+
+      .filter {
+        align-items: center;
+        cursor: pointer;
+        display: flex;
+        flex-direction: row;
+        margin: auto $default-spacing;
+
+        p {
+          font-size: 0.8em;
+          margin: 0;
+          padding: 1em 0 0 0;
+          white-space: nowrap;
+        }
+      }
+
+      @media only screen and (max-height: 600px) {
+        height: 80%;
+
+        p {
+          display: none;
+        }
+      }
+    }
+
+    .task-container {
+      display: flex;
+      flex-direction: column;
+      gap: $default-spacing;
+      list-style-type: none;
+      overflow-y: auto;
+      padding: $default-spacing;
+      scrollbar-color: white #444;
+      scrollbar-width: thin;
+
+      > * + * {
+        margin-top: $default-spacing;
+      }
+
+      .task {
+        .achievement-card {
+          border-radius: 0.3rem;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          height: $card-height;
+          transition: box-shadow 0.2s ease-in-out;
+          width: $card-width;
+
+          padding: 0.5em;
+          column-gap: 0.5em;
+
+          .content {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            width: 100%;
+
+            .heading {
+              align-items: center;
+              display: flex;
+
+              > * {
+                margin: 0;
+              }
+            }
+
+            .details {
+              display: flex;
+              flex-direction: row;
+              font-size: 0.8em;
+
+              p {
+                margin: 0;
+              }
+
+              .deadline,
+              .xp {
+                align-items: center;
+                display: flex;
+                column-gap: 0.3em;
+                width: 100%;
+              }
+            }
+          }
+        }
+
+        .achievement-card:hover {
+          box-shadow: 0 0 10px black;
+        }
+
+        .prerequisite-container {
+          $shrink-factor: 0.9;
+          $line-width: 1em;
+          // remaining-width is the empty space between line and card
+          $remaining-width: math.div((1 - $shrink-factor) * $card-width - 2 * $line-width, 2);
+          $top-spacing: 0.2em;
+          $line-extension: 0.1em;
+
+          display: flex;
+          flex-direction: column;
+
+          .prerequisite {
+            display: flex;
+            flex-direction: row;
+            max-width: $card-width;
+
+            .dropdown-lines {
+              height: $top-spacing + $card-height + $remaining-width + $line-extension;
+              margin: -#{math.div($card-height, 1.6)} -#{$line-width + $remaining-width} 0
+                $line-width;
+              min-width: $line-width;
+            }
+
+            .achievement-card {
+              margin: $top-spacing 0 0 0;
+              transform: scale($shrink-factor);
+            }
+          }
+
+          .prerequisite:first-child {
+            .dropdown-lines {
+              height: $top-spacing + math.div($card-height, 2) + $remaining-width;
+              margin-top: 0;
+            }
+          }
+        }
+      }
+    }
+
+    .view-container {
+      $cover-spacing: 0.3em;
+      $content-spacing: 0.5em;
+
+      @extend %container;
+      min-width: $view-width + $default-spacing * 2;
+      overflow-y: auto;
+      scrollbar-color: white #444;
+      scrollbar-width: thin;
+
+      .no-view {
+        align-items: center;
+        background: rgba(0, 0, 0, 0.5);
+        text-shadow: black 1px 1px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        height: $view-height / 3;
+        justify-content: center;
+        margin: 1em auto;
+        width: $view-width;
+        border-radius: 1rem;
+      }
+
+      .view {
+        border-radius: 1rem;
+        text-shadow: black 1px 1px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        margin: $default-spacing;
+        max-width: $view-width * 1.25;
+        padding-bottom: 2rem;
+        overflow-y: auto;
 
         .cover {
           border-top-left-radius: 1rem;
