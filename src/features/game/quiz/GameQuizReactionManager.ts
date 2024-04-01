@@ -1,8 +1,6 @@
 import SoundAssets from '../assets/SoundAssets';
-//import { textTypeWriterStyle } from '../dialogue/GameDialogueConstants';
 import DialogueGenerator from '../dialogue/GameDialogueGenerator';
 import DialogueRenderer from '../dialogue/GameDialogueRenderer';
-//import DialogueSpeakerRenderer from '../dialogue/GameDialogueSpeakerRenderer';
 import { DialogueObject } from '../dialogue/GameDialogueTypes';
 import { promptWithChoices } from '../effects/Prompt';
 import { Layer } from '../layer/GameLayerTypes';
@@ -11,6 +9,10 @@ import SourceAcademyGame from '../SourceAcademyGame';
 import { questionTextStyle } from './GameQuizConstants';
 import { QuizSpeakerRenderer } from './GameQuizSpeakerRenderer';
 
+/**
+ * A class that manages the reaction after a option is selected or the quiz is complete
+ *
+ */
 export default class GameQuizReactionManager {
   private dialogue: DialogueObject;
   private dialogueRenderer?: DialogueRenderer;
@@ -21,6 +23,10 @@ export default class GameQuizReactionManager {
     this.dialogue = dialogue;
   }
 
+  /**
+   * It renders the reaction after the selection of an option or the quiz ends
+   * @returns {Promise} the promise that resolves when the whole reaction is displayed
+   */
   public async showReaction(): Promise<void> {
     this.dialogueRenderer = new DialogueRenderer(questionTextStyle);
     this.dialogueGenerator = new DialogueGenerator(this.dialogue);

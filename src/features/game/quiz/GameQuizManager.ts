@@ -27,6 +27,10 @@ import { Question } from './GameQuizType';
 export default class QuizManager {
   private reactionManager?: GameQuizReactionManager;
 
+  /**
+   * rendering the quiz section inside a dialogue
+   * @param quizId the Id of quiz that users will attempt inside a dialogye
+   */
   public async showQuiz(quizId: ItemId) {
     const quiz = GameGlobalAPI.getInstance().getQuizById(quizId);
     const numOfQns = quiz.questions.length;
@@ -53,14 +57,16 @@ export default class QuizManager {
     const quizPartitions = Math.ceil(choices.length / 5);
     const quizHeight = choices.length;
 
-    //create quiz box contains quiz questions
+    //Create quiz box contains quiz questions
     const quizQuestionBox = createDialogueBox(scene);
 
+    //Create text writer to display quiz questions
     const quizQuestionWriter = createTypewriter(scene, questionTextStyle);
-
     quizQuestionWriter.changeLine(question.question);
+
     GameGlobalAPI.getInstance().storeDialogueLine(question.question, question.speaker);
 
+    //Generate UI components for quizzes
     const header = new Phaser.GameObjects.Text(
       scene,
       screenSize.x - QuizConstants.textPad,
@@ -105,6 +111,7 @@ export default class QuizManager {
 
     GameGlobalAPI.getInstance().addToLayer(Layer.Dialogue, quizContainer);
 
+    //Create options for users to select
     const activateQuizContainer: Promise<any> = new Promise(resolve => {
       quizContainer.add(
         choices.map((response, index) =>
@@ -158,14 +165,12 @@ export default class QuizManager {
     return response;
   }
 
-  private async showReaction(scene: Phaser.Scene, question: Question, reaction: DialogueObject, status: QuizResult) {
-    console.log("the number of correct answer: " + status.numberOfQuestions);
-    await this.showResult(scene, reaction);
-    //await displayNotification(GameGlobalAPI.getInstance().getGameManager(), "number of correct questions: " + status.numberOfQuestions);
-  }
-
-
-  private async showResult(scene: Phaser.Scene, reaction: DialogueObject) {
+  /**
+   * Display the reaction after users selecting an option
+   * @param reaction the reaction will be displayed based on the choice of users
+   *
+   */
+  private async showReaction(reaction: DialogueObject) {
     this.reactionManager = new GameQuizReactionManager(reaction);
     await this.reactionManager.showReaction();
   }

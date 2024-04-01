@@ -9,6 +9,11 @@ import StringUtils from '../utils/StringUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import { QuizConstants, speakerTextStyle } from './GameQuizConstants';
 
+/**
+ * Class that manages speaker box portion of the quiz speaker box
+ * render characters in QuizSpeaker Layer
+ *
+ */
 export class QuizSpeakerRenderer {
   private currentSpeakerId?: string;
   private speakerSprite?: Phaser.GameObjects.Image;

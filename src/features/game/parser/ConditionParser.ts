@@ -51,7 +51,7 @@ export default class ConditionParser {
           },
           boolean: !hasExclamation
         };
-      
+
       case GameStateStorage.AttemptedQuizState:
         return {
           state: GameStateStorage.AttemptedQuizState,
@@ -60,7 +60,7 @@ export default class ConditionParser {
           },
           boolean: !hasExclamation
         };
-      
+
       case GameStateStorage.CompletedQuizState:
         return {
           state: GameStateStorage.CompletedQuizState,
@@ -69,7 +69,7 @@ export default class ConditionParser {
           },
           boolean: !hasExclamation
         };
-      
+
       default:
         throw new Error('Parsing error: Invalid condition param');
     }
