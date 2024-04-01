@@ -24,6 +24,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     },
     {
@@ -34,6 +35,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     },
     {
@@ -44,6 +46,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     },
     {
@@ -53,7 +56,8 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       isAutoPublished: false,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
-      hasTokenCounter: true,
+      hasTokenCounter: false,
+      hasVotingFeatures: true,
       earlySubmissionXp: 200
     },
     {
@@ -64,6 +68,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     }
   ],
@@ -76,6 +81,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     },
     {
@@ -86,6 +92,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     },
     {
@@ -96,6 +103,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       earlySubmissionXp: 200
     }
   ]
@@ -110,6 +118,7 @@ const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
     id: 1,
     isPublished: false,
     maxXp: 1000,
+    earlySubmissionXp: 0,
     openAt: '2038-06-18T05:24:26.026Z',
     title: 'An Odessey to Runes (Duplicate)',
     shortSummary:
@@ -118,7 +127,8 @@ const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
     story: 'mission-1',
     xp: 0,
     progress: ProgressStatuses.not_attempted,
-    maxTeamSize: 1
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   }
 ];
 
@@ -131,6 +141,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     id: 2,
     isPublished: false,
     maxXp: 1000,
+    earlySubmissionXp: 0,
     openAt: '2018-06-18T05:24:26.026Z',
     title: 'An Odessey to Runes',
     shortSummary: `
@@ -151,7 +162,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     story: 'mission-1',
     xp: 1,
     progress: ProgressStatuses.attempted,
-    maxTeamSize: 4
+    maxTeamSize: 4,
+    hasVotingFeatures: false
   },
   {
     type: 'Missions',
@@ -161,6 +173,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/350x200/?text=World&font=lobster',
     id: 3,
     maxXp: 1000,
+    earlySubmissionXp: 0,
     openAt: '2018-07-18T05:24:26.026Z',
     title: 'The Secret to Streams',
     shortSummary:
@@ -169,7 +182,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     story: 'mission-2',
     xp: 2,
     progress: ProgressStatuses.attempting,
-    maxTeamSize: 1
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   },
   {
     type: 'Quests',
@@ -179,6 +193,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
     id: 4,
     maxXp: 1000,
+    earlySubmissionXp: 0,
     openAt: '2018-07-18T05:24:26.026Z',
     title: 'A sample Sidequest',
     shortSummary:
@@ -187,7 +202,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     story: 'sidequest-2.1',
     xp: 3,
     progress: ProgressStatuses.not_attempted,
-    maxTeamSize: 2
+    maxTeamSize: 2,
+    hasVotingFeatures: false
   },
   {
     type: 'Paths',
@@ -197,6 +213,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/700x400/417678,64/?text=%E3%83%91%E3%82%B9&font=noto',
     id: 5,
     maxXp: 200,
+    earlySubmissionXp: 0,
     openAt: '2018-01-01T00:00:00.000Z',
     title: 'Basic logic gates',
     shortSummary:
@@ -205,7 +222,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     story: null,
     xp: 0,
     progress: ProgressStatuses.not_attempted,
-    maxTeamSize: 2
+    maxTeamSize: 2,
+    hasVotingFeatures: false
   },
   {
     type: 'Others',
@@ -215,6 +233,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
     id: 6,
     maxXp: 1000,
+    earlySubmissionXp: 0,
     openAt: '2018-07-18T05:24:26.026Z',
     title: 'A sample Practical',
     shortSummary:
@@ -224,7 +243,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     xp: 3,
     private: true,
     maxTeamSize: 1,
-    progress: ProgressStatuses.not_attempted
+    progress: ProgressStatuses.not_attempted,
+    hasVotingFeatures: false
   }
 ];
 
@@ -237,6 +257,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
     id: 7,
     maxXp: 1000,
+    earlySubmissionXp: 0,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'A closed Mission',
     shortSummary:
@@ -245,7 +266,8 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     story: 'mission-3',
     xp: 800,
     progress: ProgressStatuses.submitted,
-    maxTeamSize: 1
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   },
   {
     type: 'Quests',
@@ -255,6 +277,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
     id: 8,
     maxXp: 1000,
+    earlySubmissionXp: 0,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Closed (not graded) Sidequest',
     shortSummary:
@@ -263,7 +286,8 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     story: null,
     xp: 500,
     progress: ProgressStatuses.not_attempted,
-    maxTeamSize: 1
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   },
   {
     type: 'Quests',
@@ -273,6 +297,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
     id: 9,
     maxXp: 500,
+    earlySubmissionXp: 0,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Closed (fully graded) Sidequest',
     shortSummary:
@@ -281,7 +306,8 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     story: null,
     xp: 150,
     progress: ProgressStatuses.not_attempted,
-    maxTeamSize: 1
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   },
   {
     type: 'Paths',
@@ -291,6 +317,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
     id: 10,
     maxXp: 0,
+    earlySubmissionXp: 0,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Ungraded assessment',
     shortSummary:
@@ -299,7 +326,8 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     story: null,
     xp: 100,
     progress: ProgressStatuses.not_attempted,
-    maxTeamSize: 1
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   }
 ];
 

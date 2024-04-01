@@ -342,6 +342,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
       isAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -352,6 +353,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
       isAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -362,6 +364,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
       isAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     }
@@ -544,6 +547,7 @@ test('updateAssessmentOverviews generates correct action object', () => {
       coverImage: 'test_string',
       id: 0,
       maxXp: 0,
+      earlySubmissionXp: 0,
       openAt: 'test_string',
       title: 'test_string',
       shortSummary: 'test_string',
@@ -551,7 +555,8 @@ test('updateAssessmentOverviews generates correct action object', () => {
       story: null,
       xp: 0,
       progress: ProgressStatuses.not_attempted,
-      maxTeamSize: 1
+      maxTeamSize: 1,
+      hasVotingFeatures: false
     }
   ];
   const action = updateAssessmentOverviews(overviews);
@@ -780,6 +785,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       isAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -790,6 +796,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       isAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -800,6 +807,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       isAutoPublished: true,
       displayInDashboard: true,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -810,6 +818,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       isAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     },
@@ -830,6 +839,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       isAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false,
+      hasVotingFeatures: false,
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200
     }
@@ -849,6 +859,7 @@ test('deleteAssessmentConfig generates correct action object', () => {
     isAutoPublished: false,
     displayInDashboard: true,
     hasTokenCounter: false,
+    hasVotingFeatures: false,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   };

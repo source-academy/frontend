@@ -31,6 +31,7 @@ const assessmentConfigurations: AssessmentConfiguration[] = [
   isAutoPublished: false,
   displayInDashboard: false,
   hasTokenCounter: false,
+  hasVotingFeatures: false,
   hoursBeforeEarlyXpDecay: 0,
   earlySubmissionXp: 0
 }));

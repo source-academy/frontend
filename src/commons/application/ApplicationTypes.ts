@@ -121,13 +121,15 @@ export enum StoriesRole {
 export enum SupportedLanguage {
   JAVASCRIPT = 'JavaScript',
   SCHEME = 'Scheme',
-  PYTHON = 'Python'
+  PYTHON = 'Python',
+  C = 'C'
 }
 
 export const SUPPORTED_LANGUAGES = [
   SupportedLanguage.JAVASCRIPT,
   SupportedLanguage.SCHEME,
-  SupportedLanguage.PYTHON
+  SupportedLanguage.PYTHON,
+  SupportedLanguage.C
 ];
 
 /**
@@ -209,6 +211,16 @@ export const pyLanguages: SALanguage[] = pySubLanguages.map(sublang => {
   return { ...sublang, mainLanguage: SupportedLanguage.PYTHON, supports: { repl: true } };
 });
 
+export const cLanguages: SALanguage[] = [
+  {
+    chapter: Chapter.FULL_C,
+    variant: Variant.DEFAULT,
+    displayName: 'C',
+    mainLanguage: SupportedLanguage.C,
+    supports: {}
+  }
+];
+
 export const styliseSublanguage = (chapter: Chapter, variant: Variant = Variant.DEFAULT) => {
   return getLanguageConfig(chapter, variant).displayName;
 };
@@ -277,7 +289,8 @@ export const ALL_LANGUAGES: readonly SALanguage[] = [
   fullTSLanguage,
   htmlLanguage,
   ...schemeLanguages,
-  ...pyLanguages
+  ...pyLanguages,
+  ...cLanguages
 ];
 // TODO: Remove this function once logic has been fully migrated
 export const getLanguageConfig = (

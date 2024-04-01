@@ -19,6 +19,7 @@ const mockAssessmentProps = assertType<AssessmentProps>()({
     isAutoPublished: false,
     displayInDashboard: true,
     hasTokenCounter: false,
+    hasVotingFeatures: false,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   }

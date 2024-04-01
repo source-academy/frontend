@@ -28,6 +28,7 @@ const defaultProps = assertType<AssessmentWorkspaceProps>()({
     isAutoPublished: false,
     displayInDashboard: true,
     hasTokenCounter: false,
+    hasVotingFeatures: false,
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   },
