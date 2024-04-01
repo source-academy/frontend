@@ -15,6 +15,7 @@ import { rightSideEntryTweenProps, rightSideExitTweenProps } from '../effects/Fl
 import { DialogueObject } from '../dialogue/GameDialogueTypes';
 import GameQuizReactionManager from './GameQuizReactionManager';
 import { createDialogueBox, createTypewriter } from '../dialogue/GameDialogueHelper';
+import { SpeakerDetail } from '../character/GameCharacterTypes';
 
 export default class QuizManager {
   private reactionManager? : GameQuizReactionManager;
@@ -23,13 +24,16 @@ export default class QuizManager {
   public async showQuiz(quizId:ItemId) {
     const quiz = GameGlobalAPI.getInstance().getQuizById(quizId);
     const numOfQns = quiz.questions.length;
+    if (numOfQns === 0) {
+      return;
+    }
     let numOfCorrect = 0;
-    for (let i = 0; i < quiz.questions.length; i++ ) {
+    for (let i = 0; i < numOfQns; i++) {
         numOfCorrect += await this.showQuizQuestion(GameGlobalAPI.getInstance().getGameManager(), quiz.questions[i]);
     }
     GameGlobalAPI.getInstance().attemptQuiz(quizId);
     if (numOfCorrect === numOfQns) GameGlobalAPI.getInstance().completeQuiz(quizId);
-    await this.showResult(numOfQns, numOfCorrect);
+    await this.showResult(numOfQns, numOfCorrect, quiz.questions[0].speaker);
   }
 
   //Display the specific quiz question
@@ -158,8 +162,8 @@ export default class QuizManager {
    * @param numOfQns The number of questions of the quiz.
    * @param numOfCorrect The number of correctly answered questions.
    */
-  private async showResult(numOfQns: number, numOfCorrect: number) {
-    await this.showReaction(this.makeResultMsg(numOfQns, numOfCorrect));
+  private async showResult(numOfQns: number, numOfCorrect: number, speaker: SpeakerDetail) {
+    await this.showReaction(this.makeResultMsg(numOfQns, numOfCorrect, speaker));
   }
 
   /**
@@ -168,11 +172,11 @@ export default class QuizManager {
    * @param numOfCorrect The number of correctly answered questions.
    * @returns A DialogueObject containing the message of quiz score.
    */
-  private makeResultMsg(numOfQns: number, numOfCorrect: number): DialogueObject {
+  private makeResultMsg(numOfQns: number, numOfCorrect: number, speaker: SpeakerDetail): DialogueObject {
     let line = `You got ${ numOfCorrect } out of ${numOfQns} questions correct. `;
     line += (numOfCorrect === numOfQns ? resultMsg.allCorrect : resultMsg.notAllCorrect);
     return new Map([
-      ["0", [{line: line}]]
+      ["0", [{line: line, speakerDetail: speaker}]]
     ]);
   }
 }
