@@ -3,26 +3,19 @@ import { Line as KonvaLine } from 'react-konva';
 
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
-import { ReferenceType } from '../CseMachineTypes';
 import { defaultSAColor } from '../CseMachineUtils';
+import { ArrayUnit } from './ArrayUnit';
 import { Visible } from './Visible';
 
 /** this classes encapsulates a null value in Source pairs or arrays */
 export class ArrayNullUnit extends Visible {
-  arrayUnit: ReferenceType;
-  referencedBy: ReferenceType[];
-
-  constructor(referencedBy: ReferenceType[]) {
+  constructor(reference: ArrayUnit) {
     super();
-    this.referencedBy = referencedBy;
-    this.arrayUnit = referencedBy[0];
-    this._x = this.arrayUnit.x();
-    this._y = this.arrayUnit.y();
-    this._height = this.arrayUnit.height();
-    this._width = this.arrayUnit.width();
+    this._x = reference.x();
+    this._y = reference.y();
+    this._height = reference.height();
+    this._width = reference.width();
   }
-
-  updatePosition = () => {};
 
   draw(): React.ReactNode {
     return (
