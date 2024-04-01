@@ -205,7 +205,7 @@ const GradingEditor: React.FC<Props> = props => {
   };
 
   const checkIsNewQuestion = () => {
-    return props.graderName === undefined;
+    return props.gradedAt === undefined;
   };
 
   const generateMarkdownPreview = (markdown: string) =>

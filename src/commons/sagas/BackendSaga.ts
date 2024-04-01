@@ -686,7 +686,7 @@ function* BackendSaga(): SagaIterator {
           xpAdjustment,
           xp: gradingQuestion.grade.xp,
           comments,
-          grader: { id: 0, name: '' }
+          gradedAt: new Date().toISOString()
         };
       }
       return gradingQuestion;
