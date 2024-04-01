@@ -15,7 +15,8 @@ import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 import {
   AssessmentOverview,
-  IContestVotingQuestion
+  IContestVotingQuestion,
+  QuestionTypes
 } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
 
@@ -47,18 +48,10 @@ const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => 
   const toggleVotingFeatures = useCallback(() => setHasVotingFeatures(prev => !prev), []);
   const toggleIsTeamAssessment = useCallback(() => setIsTeamAssessment(prev => !prev), []);
 
-  const assessment = useTypedSelector(state => state.session.assessments.get(data.id));
-  // Currently, all voting assignments have only one voting question, and so retrieving the leaderboards
-  // for the first leaderboard is sufficient. However, if there are multiple voting questions in the same
-  // assessment, this might not work.
-  const question = assessment!.questions[0] as IContestVotingQuestion;
-  const scoreLeaderboard = question.scoreLeaderboard;
-  const popularVoteLeaderboard = question.popularVoteLeaderboard;
-
-  const exportScoreLeaderboardToCsv = () => {
+  const exportPopularVoteLeaderboardToCsv = () => {
     const gridContainer = document.createElement('div');
     const gridOptions: GridOptions = {
-      rowData: scoreLeaderboard,
+      rowData: data.popularVoteLeaderboard,
       columnDefs: [{ field: 'student_name' }, { field: 'answer' }, { field: 'final_score' }]
     };
     const api = createGrid(gridContainer, gridOptions);
@@ -66,10 +59,10 @@ const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => 
     api.destroy();
   };
 
-  const exportPopularVoteLeaderboardToCsv = () => {
+  const exportScoreLeaderboardToCsv = () => {
     const gridContainer = document.createElement('div');
     const gridOptions: GridOptions = {
-      rowData: popularVoteLeaderboard,
+      rowData: data.scoreLeaderboard,
       columnDefs: [{ field: 'student_name' }, { field: 'answer' }, { field: 'final_score' }]
     };
     const api = createGrid(gridContainer, gridOptions);

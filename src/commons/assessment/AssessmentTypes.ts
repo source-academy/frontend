@@ -64,6 +64,8 @@ export type AssessmentOverview = {
   isPublished?: boolean;
   hasVotingFeatures: boolean;
   hasTokenCounter?: boolean;
+  scoreLeaderboard?: ContestEntry[];
+  popularVoteLeaderboard?: ContestEntry[];
   maxXp: number;
   earlySubmissionXp: number;
   number?: string; // For mission control
