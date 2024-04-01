@@ -30,6 +30,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
     const editor = reactAceRef.current!.editor;
     const ShareAce = new sharedbAce(sessionDetails.docId, {
+      user: { name: 'DUMMY_NAME', color: '#5f9ea0' },
       WsUrl: getSessionUrl(editorSessionId, true),
       pluginWsUrl: null,
       namespace: 'sa'
@@ -44,13 +45,13 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
       const curMgr = new AceMultiCursorManager(editor.getSession());
 
-      ShareAce.connections.contents.on('userPresenceUpdate', (id: string, newPresence: Ace.Point) => {
+      ShareAce.connections.contents.on('userPresenceUpdate', (id: string, newPresence: { user: any, cursorPos: Ace.Point }) => {
         // TODO: modify this and move it to a separate handler
         // when more info is added to presence
         try {
-          curMgr.addCursor(id, id, '#5f9ea0', newPresence);
+          curMgr.addCursor(id, newPresence.user.name, newPresence.user.color, newPresence.cursorPos);
         } catch (err) {
-          curMgr.setCursor(id, newPresence);
+          curMgr.setCursor(id, newPresence.cursorPos);
         }
       });
 
