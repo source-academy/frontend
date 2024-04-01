@@ -75,14 +75,14 @@ const makeNotificationMessage = (type: NotificationType) => {
   switch (type) {
     case NotificationTypes.new:
       return 'This assessment is new.';
-    case NotificationTypes.published_grading:
-      return 'This assessment has been published.';
-    case NotificationTypes.unpublished_grading:
-      return 'This assessment has been unpublished.';
     case NotificationTypes.submitted:
       return 'This submission is new.';
     case NotificationTypes.unsubmitted:
       return 'This assessment has been unsubmitted.';
+    case NotificationTypes.published_grading:
+      return 'This assessment has been published.';
+    case NotificationTypes.unpublished_grading:
+      return 'This assessment has been unpublished.';
     case NotificationTypes.new_message:
       return 'There are new messages.';
     default:
