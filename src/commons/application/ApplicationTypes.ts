@@ -215,7 +215,7 @@ export const pyLanguages: SALanguage[] = pySubLanguages.map(sublang => {
 
 export const javaLanguages: SALanguage[] = [
   {
-    chapter: -15, // TODO: use actual value
+    chapter: Chapter.FULL_JAVA,
     variant: Variant.DEFAULT,
     displayName: 'Java',
     mainLanguage: SupportedLanguage.JAVA,

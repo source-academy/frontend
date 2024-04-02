@@ -245,7 +245,7 @@ export function* evalCode(
   const isLazy: boolean = context.variant === Variant.LAZY;
   const isWasm: boolean = context.variant === Variant.WASM;
   const isC: boolean = context.chapter === Chapter.FULL_C;
-  const isJava: boolean = context.chapter === -15; // TODO: Chapter.FULL_JAVA
+  const isJava: boolean = context.chapter === Chapter.FULL_JAVA;
 
   let lastDebuggerResult = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].lastDebuggerResult
