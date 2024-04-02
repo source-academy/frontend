@@ -18,5 +18,6 @@ export type PersistenceFile = {
   name: string;
   path?: string; // only for persistenceFileArray
   lastSaved?: Date;
+  lastEdit?: Date;
   isFolder?: boolean;
 };

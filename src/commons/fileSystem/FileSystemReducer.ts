@@ -9,7 +9,8 @@ import {
   deleteAllGithubSaveInfo,
   deleteAllPersistenceFiles,  deleteGithubSaveInfo,
   deletePersistenceFile,
-  setInBrowserFileSystem } from './FileSystemActions';
+  setInBrowserFileSystem, 
+  setPersistenceFileLastEditByPath} from './FileSystemActions';
 import { FileSystemState } from './FileSystemTypes';
 
 export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = createReducer(
@@ -56,6 +57,16 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
     })
     .addCase(deleteAllPersistenceFiles, (state, action) => {
       state.persistenceFileArray = [];
+    })
+    .addCase(setPersistenceFileLastEditByPath, (state, action) => {
+      const filesState = state['persistenceFileArray'];
+      const persistenceFileFindIndex = filesState.findIndex(e => e.path === action.payload.path);
+      if (persistenceFileFindIndex === -1) {
+        return;
+      }
+      const newPersistenceFile = {...filesState[persistenceFileFindIndex], lastEdit: action.payload.date};
+      filesState[persistenceFileFindIndex] = newPersistenceFile;
+      state.persistenceFileArray = filesState;
     })
   }
 );

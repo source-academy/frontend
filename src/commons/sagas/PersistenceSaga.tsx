@@ -36,6 +36,7 @@ import {
 } from '../utils/notifications/NotificationsHelper';
 import { AsyncReturnType } from '../utils/TypeHelper';
 import { safeTakeEvery as takeEvery, safeTakeLatest as takeLatest } from './SafeEffects';
+import { WORKSPACE_BASE_PATHS } from 'src/pages/fileSystem/createInBrowserFileSystem';
 
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
 const SCOPES =
@@ -179,7 +180,7 @@ export function* persistenceSaga(): SagaIterator {
         yield call(console.log, test);
 
         // refresh needed
-        yield call(store.dispatch, actions.removeEditorTabsForDirectory("playground", "/")); // deletes all active tabs
+        yield call(store.dispatch, actions.removeEditorTabsForDirectory("playground", WORKSPACE_BASE_PATHS["playground"])); // TODO hardcoded
         // TODO find a file to open instead of deleting all active tabs?
         // TODO without modifying WorkspaceReducer in one function this would cause errors - called by onChange of Playground.tsx?
         // TODO change behaviour of WorkspaceReducer to not create program.js every time folder mode changes with 0 tabs existing?

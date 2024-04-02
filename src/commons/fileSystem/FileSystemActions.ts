@@ -10,7 +10,8 @@ import {
   DELETE_ALL_PERSISTENCE_FILES,  DELETE_GITHUB_SAVE_INFO,
   DELETE_PERSISTENCE_FILE, 
   SET_IN_BROWSER_FILE_SYSTEM,
-  UPDATE_GITHUB_SAVE_INFO } from './FileSystemTypes';
+  UPDATE_GITHUB_SAVE_INFO,
+  SET_PERSISTENCE_FILE_LAST_EDIT_BY_PATH } from './FileSystemTypes';
 
 export const setInBrowserFileSystem = createAction(
   SET_IN_BROWSER_FILE_SYSTEM,
@@ -51,4 +52,9 @@ export const deletePersistenceFile = createAction(
 export const deleteAllPersistenceFiles = createAction(
   DELETE_ALL_PERSISTENCE_FILES,
   () => ({ payload: {} })
+);
+
+export const setPersistenceFileLastEditByPath = createAction(
+  SET_PERSISTENCE_FILE_LAST_EDIT_BY_PATH,
+  (path: string, date: Date) => ({ payload: {path, date}})
 );

@@ -15,10 +15,14 @@ import FileSystemViewPlaceholderNode from './FileSystemViewPlaceholderNode';
 type Props = {
   workspaceLocation: WorkspaceLocation;
   basePath: string;
+  lastEditedFilePath: string;
 };
 
-const FileSystemView: React.FC<Props> = ({ workspaceLocation, basePath }) => {
+const FileSystemView: React.FC<Props> = ({ workspaceLocation, basePath, lastEditedFilePath }) => {
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
+  const persistenceFileArray = useTypedSelector(state => state.fileSystem.persistenceFileArray);
+
+  console.log("lefp", lastEditedFilePath, "pfa", persistenceFileArray);
 
   const [isAddingNewFile, setIsAddingNewFile] = React.useState(false);
   const [isAddingNewDirectory, setIsAddingNewDirectory] = React.useState(false);
@@ -99,6 +103,8 @@ const FileSystemView: React.FC<Props> = ({ workspaceLocation, basePath }) => {
         key={fileSystemViewListKey}
         fileSystem={fileSystem}
         basePath={basePath}
+        lastEditedFilePath={lastEditedFilePath}
+        persistenceFileArray={persistenceFileArray}
         indentationLevel={0}
       />
       {isAddingNewFile && (

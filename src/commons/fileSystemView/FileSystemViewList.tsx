@@ -8,11 +8,14 @@ import Delay from '../delay/Delay';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewDirectoryNode from './FileSystemViewDirectoryNode';
 import FileSystemViewFileNode from './FileSystemViewFileNode';
+import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 
 type Props = {
   workspaceLocation: WorkspaceLocation;
   fileSystem: FSModule;
   basePath: string;
+  lastEditedFilePath: string;
+  persistenceFileArray: PersistenceFile[];
   indentationLevel: number;
 };
 
@@ -22,6 +25,8 @@ const FileSystemViewList: React.FC<Props> = ({
   workspaceLocation,
   fileSystem,
   basePath,
+  lastEditedFilePath,
+  persistenceFileArray,
   indentationLevel
 }) => {
   const [dirNames, setDirNames] = React.useState<string[] | undefined>(undefined);
@@ -88,6 +93,8 @@ const FileSystemViewList: React.FC<Props> = ({
             key={dirName}
             fileSystem={fileSystem}
             basePath={basePath}
+            lastEditedFilePath={lastEditedFilePath}
+            persistenceFileArray={persistenceFileArray}
             directoryName={dirName}
             indentationLevel={indentationLevel}
             refreshParentDirectory={readDirectory}
@@ -101,6 +108,8 @@ const FileSystemViewList: React.FC<Props> = ({
             key={fileName}
             fileSystem={fileSystem}
             basePath={basePath}
+            lastEditedFilePath={lastEditedFilePath}
+            persistenceFileArray={persistenceFileArray}
             fileName={fileName}
             indentationLevel={indentationLevel}
             refreshDirectory={readDirectory}

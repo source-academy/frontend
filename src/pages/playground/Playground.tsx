@@ -138,6 +138,7 @@ import {
   makeSubstVisualizerTabFrom,
   mobileOnlyTabIds
 } from './PlaygroundTabs';
+import { setPersistenceFileLastEditByPath } from 'src/commons/fileSystem/FileSystemActions';
 
 export type PlaygroundProps = {
   isSicpEditor?: boolean;
@@ -269,7 +270,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     state => state.playground
   );
   const githubSaveInfo = getGithubSaveInfo();
-  console.log(githubSaveInfo);
+  //console.log(githubSaveInfo);
   const {
     sourceChapter: courseSourceChapter,
     sourceVariant: courseSourceVariant,
@@ -408,15 +409,21 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [isGreen]
   );
 
-  const onEditorValueChange = React.useCallback(
-    (editorTabIndex: number, newEditorValue: string) => {
-      setLastEdit(new Date());
-      // TODO change editor tab label to reflect path of opened file?
-      
-      handleEditorValueChange(editorTabIndex, newEditorValue);
-    },
-    [handleEditorValueChange]
-  );
+  const [lastEditedFilePath, setLastEditedFilePath] = useState<string>("");
+
+  const onEditorValueChange = (editorTabIndex: number, newEditorValue: string) => {
+    const filePath = editorTabs[editorTabIndex]?.filePath;
+    const editDate = new Date();
+    if (filePath) {
+      //console.log(editorTabs);
+      console.log("dispatched " + filePath);
+      dispatch(setPersistenceFileLastEditByPath(filePath, editDate));
+      setLastEditedFilePath(filePath);
+    }
+    setLastEdit(editDate);
+    // TODO change editor tab label to reflect path of opened file?
+    handleEditorValueChange(editorTabIndex, newEditorValue);
+  };
 
   // const onChangeTabs = useCallback(
   //   (
@@ -993,6 +1000,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
                   <FileSystemView
                     workspaceLocation="playground"
                     basePath={WORKSPACE_BASE_PATHS[workspaceLocation]}
+                    lastEditedFilePath={lastEditedFilePath}
                   />
                 ),
                 iconName: IconNames.FOLDER_CLOSE,
@@ -1002,7 +1010,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
           : [])
       ]
     };
-  }, [isFolderModeEnabled, workspaceLocation]);
+  }, [isFolderModeEnabled, workspaceLocation, lastEditedFilePath]);
 
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {

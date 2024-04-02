@@ -16,11 +16,14 @@ import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
 import FileSystemViewList from './FileSystemViewList';
 import FileSystemViewPlaceholderNode from './FileSystemViewPlaceholderNode';
+import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 
 type Props = {
   workspaceLocation: WorkspaceLocation;
   fileSystem: FSModule;
   basePath: string;
+  lastEditedFilePath: string;
+  persistenceFileArray: PersistenceFile[];
   directoryName: string;
   indentationLevel: number;
   refreshParentDirectory: () => void;
@@ -30,6 +33,8 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
   workspaceLocation,
   fileSystem,
   basePath,
+  lastEditedFilePath,
+  persistenceFileArray,
   directoryName,
   indentationLevel,
   refreshParentDirectory
@@ -196,6 +201,8 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
           key={fileSystemViewListKey}
           fileSystem={fileSystem}
           basePath={fullPath}
+          lastEditedFilePath={lastEditedFilePath}
+          persistenceFileArray={persistenceFileArray}
           indentationLevel={indentationLevel + 1}
         />
       )}
