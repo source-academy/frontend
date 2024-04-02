@@ -195,7 +195,7 @@ export default class QuizManager {
     numOfCorrect: number,
     speaker: SpeakerDetail
   ): DialogueObject {
-    let line = `You got ${numOfCorrect} out of ${numOfQns} questions correct. `;
+    let line = resultMsg.message.replace('{numOfCorrect}', numOfCorrect.toString()).replace('{numOfQns}', numOfQns.toString());
     line += numOfCorrect === numOfQns ? resultMsg.allCorrect : resultMsg.notAllCorrect;
     return new Map([['0', [{ line: line, speakerDetail: speaker }]]]);
   }

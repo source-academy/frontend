@@ -6,6 +6,7 @@ import { Color } from '../utils/StyleUtils';
 export const questionPrompt = 'What is the correct answer?';
 
 export const resultMsg = {
+  message: 'You got {numOfCorrect} out of {numOfQns} questions correct. ',
   allCorrect: 'Well done!',
   notAllCorrect: "Let's keep going!"
 };
