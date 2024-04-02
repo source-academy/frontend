@@ -27,7 +27,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
   const user = {
     name: useTypedSelector(state => state.session.name),
     color: '#5f9ea0' // TODO: random generator
-  }
+  };
 
   React.useEffect(() => {
     if (!editorSessionId || !sessionDetails) {
@@ -51,19 +51,27 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
       const curMgr = new AceMultiCursorManager(editor.getSession());
 
-      ShareAce.connections.contents.on('userPresenceUpdate', (id: string, newPresence: { user: any, cursorPos: Ace.Point }) => {
-        // TODO: modify this and move it to a separate handler
-        // when more info is added to presence
-        try {
-          curMgr.addCursor(id, newPresence.user.name, newPresence.user.color, newPresence.cursorPos);
-        } catch (err) {
-          curMgr.setCursor(id, newPresence.cursorPos);
+      ShareAce.connections.contents.on(
+        'userPresenceUpdate',
+        (id: string, newPresence: { user: any; cursorPos: Ace.Point }) => {
+          // TODO: modify this and move it to a separate handler
+          // when more info is added to presence
+          try {
+            curMgr.addCursor(
+              id,
+              newPresence.user.name,
+              newPresence.user.color,
+              newPresence.cursorPos
+            );
+          } catch (err) {
+            curMgr.setCursor(id, newPresence.cursorPos);
+          }
         }
-      });
+      );
 
       ShareAce.connections.contents.on('userLeft', (id: string) => {
         curMgr.removeCursor(id);
-      })
+      });
 
       showSuccessMessage(
         'You have joined a session as ' + (sessionDetails.readOnly ? 'a viewer.' : 'an editor.')
