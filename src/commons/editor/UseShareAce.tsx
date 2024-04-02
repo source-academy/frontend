@@ -41,6 +41,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       pluginWsUrl: null,
       namespace: 'sa'
     });
+    const curMgr = new AceMultiCursorManager(editor.getSession());
 
     ShareAce.on('ready', () => {
       ShareAce.add(editor, ['contents'], []);
@@ -49,28 +50,28 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       // Disables editor in a read-only session
       editor.setReadOnly(sessionDetails.readOnly);
 
-      const curMgr = new AceMultiCursorManager(editor.getSession());
-
       ShareAce.connections.contents.on(
         'userPresenceUpdate',
         (id: string, newPresence: { user: any; cursorPos: Ace.Point }) => {
           // TODO: modify this and move it to a separate handler
           // when more info is added to presence
-          try {
+          if (curMgr.isCursorExist(id)) {
+            curMgr.setCursor(id, newPresence.cursorPos);
+          } else {
             curMgr.addCursor(
               id,
               newPresence.user.name,
               newPresence.user.color,
               newPresence.cursorPos
             );
-          } catch (err) {
-            curMgr.setCursor(id, newPresence.cursorPos);
           }
         }
       );
 
       ShareAce.connections.contents.on('userLeft', (id: string) => {
-        curMgr.removeCursor(id);
+        if (curMgr.isCursorExist(id)) {
+          curMgr.removeCursor(id);
+        }
       });
 
       showSuccessMessage(
@@ -120,6 +121,9 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
       // Resets editor to normal after leaving the session
       editor.setReadOnly(false);
+
+      // Removes all cursors
+      curMgr.removeAll();
     };
     // eslint-disable-next-line
   }, [editorSessionId, sessionDetails, reactAceRef]);

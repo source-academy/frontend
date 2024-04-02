@@ -73,6 +73,11 @@ class AceMultiCursorManager {
   //     cursor.setPosition(null);
   //   }
 
+  public isCursorExist(id: string): boolean {
+    const cursor = this._cursors[id];
+    return cursor !== undefined;
+  }
+
   /**
    * Removes the cursor for the specified user.
    *
