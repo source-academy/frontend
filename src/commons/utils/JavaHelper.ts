@@ -7,7 +7,7 @@ import DisplayBufferService from './DisplayBufferService';
 
 const supportedModules: string[] = ['rune'];
 
-export async function jvmRun(javaCode: string, context: Context) {
+export async function javaRun(javaCode: string, context: Context) {
   let compiled = {};
   // FIXME: Remove when the compiler is working
   if (javaCode.startsWith('// From JSON')) {
@@ -30,6 +30,7 @@ export async function jvmRun(javaCode: string, context: Context) {
     })
   );
 
+  // load cached classfiles
   return loadCachedFiles(() =>
     import('java-slang/dist/jvm/utils/classfiles').then(module => {
       return module.default as { [key: string]: string };
@@ -43,6 +44,7 @@ export async function jvmRun(javaCode: string, context: Context) {
 
       let buffer: string[] = [];
 
+      // run the JVM
       return new Promise((resolve, reject) => {
         const runJVM = setupJVM({
           javaClassPath: '',

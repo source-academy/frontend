@@ -9,7 +9,7 @@ import { SagaIterator } from 'redux-saga';
 import { call, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 import { makeCCompilerConfig, specialCReturnObject } from 'src/commons/utils/CToWasmHelper';
-import { jvmRun } from 'src/commons/utils/JavaHelper';
+import { javaRun } from 'src/commons/utils/JavaHelper';
 import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
 import { EVAL_STORY } from 'src/features/stories/StoriesTypes';
 
@@ -266,7 +266,7 @@ export function* evalCode(
         : isC
         ? call(cCompileAndRun, entrypointCode, context)
         : isJava
-        ? call(jvmRun, entrypointCode, context)
+        ? call(javaRun, entrypointCode, context)
         : call(
             runFilesInContext,
             isFolderModeEnabled
