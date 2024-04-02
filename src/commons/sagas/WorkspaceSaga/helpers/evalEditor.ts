@@ -24,6 +24,7 @@ export function* evalEditor(
   isGraderTab = false
 ): Generator<StrictEffect, void, any> {
   const [
+    workspaceFiles,
     prepend,
     activeEditorTabIndex,
     editorTabs,
@@ -32,6 +33,7 @@ export function* evalEditor(
     fileSystem,
     remoteExecutionSession
   ]: [
+    Record<string, { answer: string; prepend: string; postpend: string }>,
     string,
     number | null,
     EditorTabState[],
@@ -40,6 +42,7 @@ export function* evalEditor(
     FSModule,
     DeviceSession | undefined
   ] = yield select((state: OverallState) => [
+    state.workspaces[workspaceLocation].files,
     state.workspaces[workspaceLocation].programPrependValue,
     state.workspaces[workspaceLocation].activeEditorTabIndex,
     state.workspaces[workspaceLocation].editorTabs,
@@ -97,15 +100,27 @@ export function* evalEditor(
         code,
         breakpoints,
         context
-      );
+      );  
     }
 
+    // Append the prepend and postpend to the files, except for entrypointFile which should only have 
+    // the postpend appended, since the prepend should be evaluated silently with a privileged context
+    for (const [filePath, fileContents] of Object.entries(workspaceFiles)) {
+      if (filePath === entrypointFilePath) {
+        files[filePath] = files[filePath] + fileContents.postpend;
+      } else {
+        files[filePath] = fileContents.prepend + files[filePath] + fileContents.postpend;
+      }
+    }
+
+    const prependVal = entrypointFilePath in workspaceFiles ? workspaceFiles[entrypointFilePath].prepend : prepend;
+    console.log('prependVal', prependVal)
     // Evaluate the prepend silently with a privileged context, if it exists
-    if (prepend.length) {
+    if (prependVal.length) {
       const elevatedContext = makeElevatedContext(context);
       const prependFilePath = '/prepend.js';
       const prependFiles = {
-        [prependFilePath]: prepend
+        [prependFilePath]: prependVal
       };
       yield call(
         evalCode,

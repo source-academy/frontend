@@ -348,7 +348,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const activeTab = useRef(selectedTab);
   activeTab.current = selectedTab;
   const handleEval = useCallback(() => {
-    // Run testcases when the autograder tab is selected
     if (activeTab.current === SideContentType.autograder) {
       handleRunAllTestcases();
     } else {
@@ -418,6 +417,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       programPostpendValue?: string;
       editorTestcases?: Testcase[];
     } = {};
+    const optionFiles = {};
 
     switch (question.type) {
       case QuestionTypes.programming:
@@ -434,6 +434,13 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         // "otherFiles" refers to all other files that have an "answer" record
         const otherFiles: Record<string, string> = {};
         assessment.questions.forEach((question: Question, index) => {
+          if (question.type === 'programming') {
+            optionFiles[`/${workspaceLocation}/${index + 1}.js`] = { 
+              answer: question.answer || question.solutionTemplate,
+              prepend: question.prepend, 
+              postpend: question.postpend 
+            };
+          }
           if (question.type === 'programming' && question.answer && index !== questionId) {
             otherFiles[`/${workspaceLocation}/${index + 1}.js`] = question.answer;
           }
@@ -478,7 +485,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       editorTabs: [{ value: options.editorValue ?? '', highlightedLines: [], breakpoints: [] }],
       programPrependValue: options.programPrependValue ?? '',
       programPostpendValue: options.programPostpendValue ?? '',
-      editorTestcases: options.editorTestcases ?? []
+      editorTestcases: options.editorTestcases ?? [],
+      files: optionFiles
     });
     handleResetWorkspace(resetWorkspaceOptions);
     handleChangeExecTime(
