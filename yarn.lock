@@ -8884,7 +8884,7 @@ js-sdsl@4.3.0:
   resolved "https://registry.yarnpkg.com/js-sdsl/-/js-sdsl-4.3.0.tgz#aeefe32a451f7af88425b11fdb5f58c90ae1d711"
   integrity sha512-mifzlm2+5nZ+lEcLJMoBK0/IH/bDg8XnJfd/Wq6IP+xoCjLZsTOnV2QpxlVbX9bMnkl5PdEjNtBJ9Cj1NjifhQ==
 
-js-slang@^1.0.55:
+js-slang@^1.0.59:
   version "1.0.59"
   resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.59.tgz#8ff36df9815bd6fe9dc3e1b4e44a61ded3b0b49e"
   integrity sha512-XTTF/LZp5kMW+VGPlMq/HWq76fYdrPCKbDUXaAURE1Sfttvm3ii0Kf02JzZcNsuikTp+J3m5Gv39n5MhjeVBjQ==
