@@ -4,6 +4,7 @@ import { Ace } from 'ace-builds';
 import React from 'react';
 
 import { getDocInfoFromSessionId, getSessionUrl } from '../collabEditing/CollabEditingHelper';
+import { useTypedSelector } from '../utils/Hooks';
 import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
 import AceMultiCursorManager from './AceMultiCursorManager';
 import { EditorHook } from './Editor';
@@ -23,6 +24,11 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
   const { editorSessionId, sessionDetails } = inProps;
 
+  const user = {
+    name: useTypedSelector(state => state.session.name),
+    color: '#5f9ea0' // TODO: random generator
+  }
+
   React.useEffect(() => {
     if (!editorSessionId || !sessionDetails) {
       return;
@@ -30,7 +36,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
     const editor = reactAceRef.current!.editor;
     const ShareAce = new sharedbAce(sessionDetails.docId, {
-      user: { name: 'DUMMY_NAME', color: '#5f9ea0' },
+      user,
       WsUrl: getSessionUrl(editorSessionId, true),
       pluginWsUrl: null,
       namespace: 'sa'
@@ -107,6 +113,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       // Resets editor to normal after leaving the session
       editor.setReadOnly(false);
     };
+    // eslint-disable-next-line
   }, [editorSessionId, sessionDetails, reactAceRef]);
 };
 
