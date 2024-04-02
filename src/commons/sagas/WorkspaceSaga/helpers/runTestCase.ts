@@ -19,22 +19,35 @@ export function* runTestCase(
   workspaceLocation: WorkspaceLocation,
   index: number
 ): Generator<StrictEffect, boolean, any> {
-  const [prepend, value, postpend, testcase, isFolderModeEnabled]: [string, string, string, string, boolean] = yield select(
-    (state: OverallState) => {
-      const activeEditorTabIndex = state.workspaces[workspaceLocation].activeEditorTabIndex;
+  const [files, prepend, value, postpend, testcase, isFolderModeEnabled]: [
+    Record<string, { answer: string; prepend: string; postpend: string }>,
+    string,
+    string,
+    string,
+    string,
+    boolean
+  ] = yield select((state: OverallState) => {
+    const files = state.workspaces[workspaceLocation].files;
+    const activeEditorTabIndex = state.workspaces[workspaceLocation].activeEditorTabIndex;
 
-      const isFolderModeEnabled = state.workspaces[workspaceLocation].isFolderModeEnabled;
-      const prepend = state.workspaces[workspaceLocation].programPrependValue;
-      const postpend = state.workspaces[workspaceLocation].programPostpendValue;
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      const value =
+    const isFolderModeEnabled = state.workspaces[workspaceLocation].isFolderModeEnabled;
+    const prepend = state.workspaces[workspaceLocation].programPrependValue;
+    const postpend = state.workspaces[workspaceLocation].programPostpendValue;
+    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+    const value =
       activeEditorTabIndex !== null
         ? state.workspaces[workspaceLocation].editorTabs[activeEditorTabIndex].value
         : state.workspaces[workspaceLocation].editorTabs[0].value;
-      const testcase = state.workspaces[workspaceLocation].editorTestcases[index].program;
-      return [prepend, value, postpend, testcase, isFolderModeEnabled] as [string, string, string, string, boolean];
-    }
-  );
+    const testcase = state.workspaces[workspaceLocation].editorTestcases[index].program;
+    return [files, prepend, value, postpend, testcase, isFolderModeEnabled] as [
+      Record<string, { answer: string; prepend: string; postpend: string }>,
+      string,
+      string,
+      string,
+      string,
+      boolean
+    ];
+  });
   const type: TestcaseType = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].editorTestcases[index].type
   );
@@ -83,7 +96,10 @@ export function* runTestCase(
 
   // Populate valueFiles with the entire fileSystem if folder mode is enabled and is an assessment
   // Always sets the entry path as the current question
-  if (isFolderModeEnabled && (workspaceLocation === 'assessment' || workspaceLocation === 'grading')) {
+  if (
+    isFolderModeEnabled &&
+    (workspaceLocation === 'assessment' || workspaceLocation === 'grading')
+  ) {
     const questionNumber = yield select(
       (state: OverallState) => state.workspaces[workspaceLocation].currentQuestion
     );
@@ -93,7 +109,15 @@ export function* runTestCase(
     const fileSystem = yield select((state: OverallState) => state.fileSystem.inBrowserFileSystem);
     valueFiles = yield call(retrieveFilesInWorkspaceAsRecord, workspaceLocation, fileSystem);
   }
-  
+
+  // Append the prepend and postpend to the files, except for entrypointFile is unchanced,
+  // since the prepend and postpend should be evaluated silently with a privileged context
+  for (const [filePath, fileContents] of Object.entries(files)) {
+    if (filePath !== valueFileEntryPath) {
+      valueFiles[filePath] = fileContents.prepend + valueFiles[filePath] + fileContents.postpend;
+    }
+  }
+
   yield call(
     evalCode,
     valueFiles,

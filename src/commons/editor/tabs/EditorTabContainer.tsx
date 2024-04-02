@@ -14,7 +14,7 @@ type Props = {
 };
 
 const EditorTabContainer: React.FC<Props> = ({
-    editorTabs,
+  editorTabs,
   baseFilePath,
   filePaths,
   activeEditorTabIndex,

@@ -102,7 +102,7 @@ export function* evalCode(
   const isFolderModeEnabled: boolean = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].isFolderModeEnabled
   );
-  
+
   const entrypointCode = files[entrypointFilePath];
 
   const lastNonDetResult = yield select(

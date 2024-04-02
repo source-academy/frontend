@@ -141,7 +141,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     return assessmentOverview.id === assessment?.id;
   });
   const { selectedTab, setSelectedTab } = useSideContent(
-    workspaceLocation,  
+    workspaceLocation,
     assessment?.questions[questionId].grader !== undefined
       ? SideContentType.grading
       : SideContentType.questionOverview
@@ -409,7 +409,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     // TODO: REMOVE AFTER TESTING !!!
     question.library.chapter = Chapter.SOURCE_4;
 
-
     const options: {
       autogradingResults?: AutogradingResult[];
       editorValue?: string;
@@ -435,10 +434,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         const otherFiles: Record<string, string> = {};
         assessment.questions.forEach((question: Question, index) => {
           if (question.type === 'programming') {
-            optionFiles[`/${workspaceLocation}/${index + 1}.js`] = { 
+            optionFiles[`/${workspaceLocation}/${index + 1}.js`] = {
               answer: question.answer || question.solutionTemplate,
-              prepend: question.prepend, 
-              postpend: question.postpend 
+              prepend: question.prepend,
+              postpend: question.postpend
             };
           }
           if (question.type === 'programming' && question.answer && index !== questionId) {
@@ -447,8 +446,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         });
 
         rewriteFilesWithContent(currentQuestionFilePath, {
-          [currentQuestionFilePath]: 
-             isReset
+          [currentQuestionFilePath]: isReset
             ? programmingQuestionData.solutionTemplate
             : programmingQuestionData.answer || programmingQuestionData.solutionTemplate,
           ...otherFiles
@@ -478,7 +476,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     }
 
     // Set to first tab first, the main editor tab should be the first tab
-    handleEditorUpdateBreakpoints(0, []); 
+    handleEditorUpdateBreakpoints(0, []);
     handleUpdateCurrentAssessmentId(assessmentId, questionId);
     const resetWorkspaceOptions = assertType<WorkspaceState>()({
       autogradingResults: options.autogradingResults ?? [],
@@ -703,7 +701,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const onClickSave = () => {
       if (isSaving) return;
       setIsSaving(true);
-      handleSave(question.id, editorTabs[0].value)
+      handleSave(question.id, editorTabs[0].value);
       checkLastModified();
       setTimeout(() => {
         setIsSaving(false);
@@ -860,12 +858,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       />
     );
 
-
     const editorButtonsMobileBreakpoint = [
       runButton,
       saveButton,
       resetButton,
-      toggleFolderModeButton,
+      toggleFolderModeButton
     ];
     editorButtonsMobileBreakpoint.push(chapterSelect);
 

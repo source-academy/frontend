@@ -74,7 +74,6 @@ export function* evalEditor(
       [defaultFilePath]: editorTabs[activeEditorTabIndex].value
     };
   }
-  
 
   yield put(actions.addEvent([EventType.RUN_CODE]));
 
@@ -100,10 +99,10 @@ export function* evalEditor(
         code,
         breakpoints,
         context
-      );  
+      );
     }
 
-    // Append the prepend and postpend to the files, except for entrypointFile which should only have 
+    // Append the prepend and postpend to the files, except for entrypointFile which should only have
     // the postpend appended, since the prepend should be evaluated silently with a privileged context
     for (const [filePath, fileContents] of Object.entries(workspaceFiles)) {
       if (filePath === entrypointFilePath) {
@@ -113,8 +112,9 @@ export function* evalEditor(
       }
     }
 
-    const prependVal = entrypointFilePath in workspaceFiles ? workspaceFiles[entrypointFilePath].prepend : prepend;
-    console.log('prependVal', prependVal)
+    const prependVal =
+      entrypointFilePath in workspaceFiles ? workspaceFiles[entrypointFilePath].prepend : prepend;
+    // console.log('prependVal', prependVal)
     // Evaluate the prepend silently with a privileged context, if it exists
     if (prependVal.length) {
       const elevatedContext = makeElevatedContext(context);

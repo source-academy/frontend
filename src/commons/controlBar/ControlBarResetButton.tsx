@@ -8,10 +8,7 @@ type Props = {
   disabled?: boolean;
 };
 
-export const ControlBarResetButton: React.FC<Props> = ({
-  onClick,
-  disabled
-}) => {
+export const ControlBarResetButton: React.FC<Props> = ({ onClick, disabled }) => {
   return (
     <ControlButton label="Reset" icon={IconNames.REPEAT} onClick={onClick} isDisabled={disabled} />
   );

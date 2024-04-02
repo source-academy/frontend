@@ -153,7 +153,7 @@ export type WorkspaceState = {
   readonly debuggerContext: DebuggerContext;
   readonly lastDebuggerResult: any;
   readonly lastNonDetResult: Result | null;
-  readonly files: Record<string, { answer: string, prepend: string, postpend: string }>;
+  readonly files: Record<string, { answer: string; prepend: string; postpend: string }>;
 };
 
 type ReplHistory = {
