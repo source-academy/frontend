@@ -67,8 +67,8 @@ const stringToGameStateStorageMap = {
   checklist: GameStateStorage.ChecklistState,
   tasklist: GameStateStorage.TasklistState,
   userstate: GameStateStorage.UserState,
-  attempted: GameStateStorage.AttemptedQuizState,
-  completed: GameStateStorage.CompletedQuizState
+  attemptedQuiz: GameStateStorage.AttemptedQuizState,
+  completedQuiz: GameStateStorage.CompletedQuizState
 };
 
 const stringToUserStateTypeMap = {
