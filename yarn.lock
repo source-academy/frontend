@@ -1216,30 +1216,7 @@
   dependencies:
     tslib "~2.6.2"
 
-"@blueprintjs/colors@^5.1.1":
-  version "5.1.1"
-  resolved "https://registry.npmmirror.com/@blueprintjs/colors/-/colors-5.1.1.tgz#b227d1ce8b95d9266d976441f34cd71d436735db"
-  integrity sha512-Mni/GgCYLaMf5U5zsCN42skOG49w3U0QmUFuJgFZ/1pv+3cHF/9xR4L4dXcj5DtgJoHkmUbK36PR5mdFB65WEA==
-  dependencies:
-    tslib "~2.6.2"
-
-"@blueprintjs/core@^5.7.0":
-  version "5.10.1"
-  resolved "https://registry.npmmirror.com/@blueprintjs/core/-/core-5.10.1.tgz#d3df1743258a10841d2885dd2ba712d116a96689"
-  integrity sha512-yE10tC/tA/NWo8zsged3n0PUcjlQzh9GqNKOqMAoSSnsAKGI+RJiHtbS2RERyKU+NailIsuFx1k282ohkJvkOQ==
-  dependencies:
-    "@blueprintjs/colors" "^5.1.1"
-    "@blueprintjs/icons" "^5.9.0"
-    "@popperjs/core" "^2.11.8"
-    classnames "^2.3.1"
-    normalize.css "^8.0.1"
-    react-popper "^2.3.0"
-    react-transition-group "^4.4.5"
-    react-uid "^2.3.3"
-    tslib "~2.6.2"
-    use-sync-external-store "^1.2.0"
-
-"@blueprintjs/core@^5.9.1":
+"@blueprintjs/core@^5.7.0", "@blueprintjs/core@^5.9.1":
   version "5.9.1"
   resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-5.9.1.tgz#79e474aa063468aec4c2e82cd9b6e12d0b98b1bc"
   integrity sha512-/Cq6CAV/GyMhTOGrzgIBDsneduQCFWxzDwlX2f8MMAFZFO7FaeCONPvzbcxpTRAXR+RFkb4HpPdIsAslyZUMzA==
@@ -1288,15 +1265,6 @@
   version "5.7.1"
   resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-5.7.1.tgz#48b76bed2759ebd919c06bef0775635435bd6644"
   integrity sha512-oWOaa6PFYa3ShBtUpNGU0fnu66AC0/ecQoD1VnI1yg3F0IFHxKApYOC11SL//ckfB6tDkqN+O8Y/7TdtTmVzig==
-  dependencies:
-    change-case "^4.1.2"
-    classnames "^2.3.1"
-    tslib "~2.6.2"
-
-"@blueprintjs/icons@^5.9.0":
-  version "5.9.0"
-  resolved "https://registry.npmmirror.com/@blueprintjs/icons/-/icons-5.9.0.tgz#f1d6ebffa3033bbdd8ea05dbfa6fb8e5e88cf119"
-  integrity sha512-9W9DYFqSORBr1QPSEwpbjnftbU+hfWB/gFtpa4LdzR7VhtQaCdcrinyXFmNUFacQ9czYrmr72bP567Rv6pRUDg==
   dependencies:
     change-case "^4.1.2"
     classnames "^2.3.1"
@@ -8588,10 +8556,10 @@ js-sdsl@4.3.0, js-sdsl@^4.1.4:
   resolved "https://registry.yarnpkg.com/js-sdsl/-/js-sdsl-4.3.0.tgz#aeefe32a451f7af88425b11fdb5f58c90ae1d711"
   integrity sha512-mifzlm2+5nZ+lEcLJMoBK0/IH/bDg8XnJfd/Wq6IP+xoCjLZsTOnV2QpxlVbX9bMnkl5PdEjNtBJ9Cj1NjifhQ==
 
-js-slang@^1.0.52:
-  version "1.0.52"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.52.tgz#f24d504e09842fc6567789b45e8c9fc3a86a38d3"
-  integrity sha512-Ioe/XQFxAwZpDGNsg8MDKbC/0CvLXN+0mwhKrtm2jq6PHGa9oldZqykZZAlPYdC5XifI3DktKrRmuc94AIiKfA==
+js-slang@^1.0.55:
+  version "1.0.55"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.55.tgz#401829c277a315cadcde9702a48edd60cea52bf9"
+  integrity sha512-M1m4l2cbxqVRkHTAAin0mT6FWsDvj+/NZsp9usBKL0UVaht/afl2/FSuryzdcZgQ1vo2wLqNbFFV94y0r6D5PQ==
   dependencies:
     "@babel/parser" "^7.19.4"
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
