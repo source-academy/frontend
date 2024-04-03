@@ -14,6 +14,8 @@ import {
   showWarningMessage
 } from '../../commons/utils/notifications/NotificationsHelper';
 import { store } from '../../pages/createStore';
+import { WORKSPACE_BASE_PATHS } from 'src/pages/fileSystem/createInBrowserFileSystem';
+import { updateRefreshFileViewKey } from 'src/commons/fileSystem/FileSystemActions';
 
 /**
  * Exchanges the Access Code with the back-end to receive an Auth-Token
@@ -234,6 +236,9 @@ export async function openFileInEditor(
     ))
     showSuccessMessage('Successfully loaded file!', 1000);
   }
+
+  //refreshes editor tabs
+  store.dispatch(actions.removeEditorTabsForDirectory("playground", WORKSPACE_BASE_PATHS["playground"])); // TODO hardcoded
 }
 
 export async function openFolderInFolderMode(
@@ -290,9 +295,12 @@ export async function openFolderInFolderMode(
   const readFile = async (files: Array<string>) => {
     console.log(files);
     console.log(filePath);
-    rmFilesInDirRecursively(fileSystem, "/playground");
     let promise = Promise.resolve();
+    console.log("removing files");
+    await rmFilesInDirRecursively(fileSystem, "/playground");
+    console.log("files removed");
     type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+    console.log("starting to add files");
     files.forEach((file: string) => {
       promise = promise.then(async () => {
         let results = {} as GetContentResponse;
@@ -311,7 +319,7 @@ export async function openFolderInFolderMode(
           if (content) {
             const fileContent = Buffer.from(content, 'base64').toString();
             console.log(file);
-            writeFileRecursively(fileSystem, "/playground/" + file, fileContent);
+            await writeFileRecursively(fileSystem, "/playground/" + file, fileContent);
             store.dispatch(actions.addGithubSaveInfo(
               {
                 repoName: repoName,
@@ -327,13 +335,19 @@ export async function openFolderInFolderMode(
     })
     promise.then(() => {
       store.dispatch(actions.playgroundUpdateRepoName(repoName));
-      console.log("promises fulfilled"); 
+      console.log("promises fulfilled");
+      // store.dispatch(actions.setFolderMode('playground', true));
+      store.dispatch(updateRefreshFileViewKey());
+      console.log("refreshed");
       refreshFileView();
       showSuccessMessage('Successfully loaded file!', 1000);
     })
   }
 
   readFile(files);
+
+  //refreshes editor tabs
+  store.dispatch(actions.removeEditorTabsForDirectory("playground", WORKSPACE_BASE_PATHS["playground"])); // TODO hardcoded
 }
 
 export async function performOverwritingSave(

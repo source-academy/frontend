@@ -548,7 +548,9 @@ export const createDefaultStoriesEnv = (
 
 export const defaultFileSystem: FileSystemState = {
   inBrowserFileSystem: null,
-  persistenceFileArray: []
+  persistenceFileArray: [],
+  lastEditedFilePath: '',
+  refreshFileViewKey: 0
 };
 
 export const defaultSideContent: SideContentState = {

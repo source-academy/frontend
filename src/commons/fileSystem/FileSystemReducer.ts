@@ -11,6 +11,8 @@ import {
   deletePersistenceFile,
   setInBrowserFileSystem, 
   setPersistenceFileLastEditByPath,
+  updateLastEditedFilePath,
+  updateRefreshFileViewKey,
   } from './FileSystemActions';
 import { FileSystemState } from './FileSystemTypes';
 
@@ -87,6 +89,12 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
       const newPersistenceFile = {...filesState[persistenceFileFindIndex], lastEdit: action.payload.date};
       filesState[persistenceFileFindIndex] = newPersistenceFile;
       state.persistenceFileArray = filesState;
+    })
+    .addCase(updateLastEditedFilePath, (state, action) => {
+      state.lastEditedFilePath = action.payload.lastEditedFilePath;
+    })
+    .addCase(updateRefreshFileViewKey, (state, action) => {
+      state.refreshFileViewKey = (state.refreshFileViewKey + 1) % 2;
     })
   }
 );

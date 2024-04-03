@@ -11,7 +11,9 @@ import {
   DELETE_PERSISTENCE_FILE, 
   SET_IN_BROWSER_FILE_SYSTEM,
   UPDATE_GITHUB_SAVE_INFO,
-  SET_PERSISTENCE_FILE_LAST_EDIT_BY_PATH } from './FileSystemTypes';
+  SET_PERSISTENCE_FILE_LAST_EDIT_BY_PATH, 
+  UPDATE_LAST_EDITED_FILE_PATH,
+  UPDATE_REFRESH_FILE_VIEW_KEY} from './FileSystemTypes';
 
 export const setInBrowserFileSystem = createAction(
   SET_IN_BROWSER_FILE_SYSTEM,
@@ -56,5 +58,15 @@ export const deleteAllPersistenceFiles = createAction(
 
 export const setPersistenceFileLastEditByPath = createAction(
   SET_PERSISTENCE_FILE_LAST_EDIT_BY_PATH,
-  (path: string, date: Date) => ({ payload: {path, date}})
+  (path: string, date: Date) => ({ payload: {path, date} })
+);
+
+export const updateLastEditedFilePath = createAction(
+  UPDATE_LAST_EDITED_FILE_PATH,
+  ( lastEditedFilePath: string) => ({ payload: {lastEditedFilePath} })
+);
+
+export const updateRefreshFileViewKey = createAction(
+  UPDATE_REFRESH_FILE_VIEW_KEY,
+  () => ({ payload: {} })
 );

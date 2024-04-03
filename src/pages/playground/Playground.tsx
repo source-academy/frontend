@@ -138,7 +138,7 @@ import {
   makeSubstVisualizerTabFrom,
   mobileOnlyTabIds
 } from './PlaygroundTabs';
-import { setPersistenceFileLastEditByPath } from 'src/commons/fileSystem/FileSystemActions';
+import { setPersistenceFileLastEditByPath, updateLastEditedFilePath } from 'src/commons/fileSystem/FileSystemActions';
 
 export type PlaygroundProps = {
   isSicpEditor?: boolean;
@@ -409,7 +409,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [isGreen]
   );
 
-  const [lastEditedFilePath, setLastEditedFilePath] = useState<string>("");
+  const lastEditedFilePath = useTypedSelector(state => state.fileSystem.lastEditedFilePath);
+  const refreshFileViewKey = useTypedSelector(state => state.fileSystem.refreshFileViewKey);
 
   const onEditorValueChange = (editorTabIndex: number, newEditorValue: string) => {
     const filePath = editorTabs[editorTabIndex]?.filePath;
@@ -418,7 +419,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       //console.log(editorTabs);
       console.log("dispatched " + filePath);
       dispatch(setPersistenceFileLastEditByPath(filePath, editDate));
-      setLastEditedFilePath(filePath);
+      dispatch(updateLastEditedFilePath(filePath));
     }
     setLastEdit(editDate);
     // TODO change editor tab label to reflect path of opened file?
@@ -1005,6 +1006,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
                     basePath={WORKSPACE_BASE_PATHS[workspaceLocation]}
                     lastEditedFilePath={lastEditedFilePath}
                     isContextMenuDisabled={isContextMenuDisabled}
+                    key={refreshFileViewKey}
                   />
                 ),
                 iconName: IconNames.FOLDER_CLOSE,
@@ -1014,7 +1016,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
           : [])
       ]
     };
-  }, [isFolderModeEnabled, workspaceLocation, lastEditedFilePath, isContextMenuDisabled]);
+  }, [isFolderModeEnabled, workspaceLocation, lastEditedFilePath, isContextMenuDisabled, refreshFileViewKey]);
 
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {

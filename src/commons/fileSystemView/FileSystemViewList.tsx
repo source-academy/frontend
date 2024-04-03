@@ -74,8 +74,6 @@ const FileSystemViewList: React.FC<Props> = ({
     });
   };
 
-  refreshFileView = readDirectory;
-
   React.useEffect(readDirectory, [fileSystem, basePath]);
 
   if (!fileNames || !dirNames) {

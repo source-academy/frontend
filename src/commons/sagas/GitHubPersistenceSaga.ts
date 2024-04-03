@@ -119,7 +119,7 @@ function* githubSaveFile(): any {
   const githubLoginId = authUser.data.login;
   const githubSaveInfo = getGithubSaveInfo();
   const repoName = githubSaveInfo.repoName;
-  const filePath = githubSaveInfo.filePath;
+  const filePath = githubSaveInfo.filePath || '';
   const githubEmail = authUser.data.email;
   const githubName = authUser.data.name;
   const commitMessage = 'Changes made from Source Academy';
@@ -138,12 +138,15 @@ function* githubSaveFile(): any {
     octokit,
     githubLoginId,
     repoName || '',
-    filePath || '',
+    filePath,
     githubEmail,
     githubName,
     commitMessage,
     content
   );
+
+  // forces lasteditedfilepath in filesystem to be updated which causes the colors to be updated
+  store.dispatch(actions.updateLastEditedFilePath(''));
 }
 
 function* githubSaveFileAs(): any {
@@ -195,6 +198,7 @@ function* githubSaveFileAs(): any {
 
     yield call(promisifiedFileExplorer);
   }
+  
 }
 
 function* githubSaveAll(): any {
@@ -237,6 +241,8 @@ function* githubSaveAll(): any {
       githubName,
       { commitMessage: commitMessage, files: modifiedcurrFiles});
   
+  // forces lasteditedfilepath in filesystem to be updated which causes the colors to be updated
+  store.dispatch(actions.updateLastEditedFilePath(''));
 }
 
 export default GitHubPersistenceSaga;

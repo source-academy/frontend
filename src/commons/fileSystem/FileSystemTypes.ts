@@ -10,8 +10,12 @@ export const DELETE_ALL_GITHUB_SAVE_INFO = 'DELETE_ALL_GITHUB_SAVE_INFO';
 export const UPDATE_GITHUB_SAVE_INFO = 'UPDATE_GITHUB_SAVE_INFO';
 export const DELETE_ALL_PERSISTENCE_FILES = 'DELETE_ALL_PERSISTENCE_FILES';
 export const SET_PERSISTENCE_FILE_LAST_EDIT_BY_PATH = 'SET_PERSISTENCE_FILE_LAST_EDIT_BY_PATH';
+export const UPDATE_LAST_EDITED_FILE_PATH = 'UPDATE_LAST_EDITED_FILE_PATH';
+export const UPDATE_REFRESH_FILE_VIEW_KEY = 'UPDATE_REFRESH_FILE_VIEW_KEY';
 
 export type FileSystemState = {
   inBrowserFileSystem: FSModule | null;
   persistenceFileArray: PersistenceFile[];
+  lastEditedFilePath: string;
+  refreshFileViewKey: integer
 };
