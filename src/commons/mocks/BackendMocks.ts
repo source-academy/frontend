@@ -322,7 +322,8 @@ export function* mockBackendSaga(): SagaIterator {
         gradingQuestion.grade = {
           xpAdjustment,
           xp: gradingQuestion.grade.xp,
-          comments
+          comments,
+          gradedAt: new Date().toISOString()
         };
       }
       return gradingQuestion;
