@@ -24,7 +24,6 @@ import { OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { LOGIN_GOOGLE, LOGOUT_GOOGLE } from '../application/types/SessionTypes';
 import { retrieveFilesInWorkspaceAsRecord, rmFilesInDirRecursively, writeFileRecursively } from '../fileSystem/FileSystemUtils';
-import { refreshFileView } from '../fileSystemView/FileSystemViewList'; // TODO broken when folder is open when reading folders
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { showSimpleConfirmDialog, showSimplePromptDialog } from '../utils/DialogHelper';
@@ -196,7 +195,7 @@ export function* persistenceSaga(): SagaIterator {
         // TODO find a file to open instead of deleting all active tabs?
         // TODO without modifying WorkspaceReducer in one function this would cause errors - called by onChange of Playground.tsx?
         // TODO change behaviour of WorkspaceReducer to not create program.js every time folder mode changes with 0 tabs existing?
-        yield call(refreshFileView); // refreshes folder view TODO super jank?
+        yield call(store.dispatch, actions.updateRefreshFileViewKey()); // refreshes folder view TODO super jank?
 
         yield call(showSuccessMessage, `Loaded folder ${name}.`, 1000);
 
@@ -533,6 +532,9 @@ export function* persistenceSaga(): SagaIterator {
       // Turn on folder mode TODO enable folder mode
       //yield call (store.dispatch, actions.setFolderMode("playground", true));
       yield call(store.dispatch, actions.enableFileSystemContextMenus());
+      yield call(store.dispatch, actions.updateRefreshFileViewKey());
+
+      yield call(showSuccessMessage, `${currFolderObject.name} successfully saved to Google Drive.`, 1000);
 
       
       // Case 1: Open picker to select location for saving, similar to save all
@@ -609,7 +611,8 @@ export function* persistenceSaga(): SagaIterator {
         yield call(console.log, "parent not found ", newFilePath);
         return;
       }
-      const newFileName = regexResult![2];
+      const newFileName = regexResult![2] + regexResult![3];
+      yield call(console.log, regexResult, "regexresult!!!!!!!!!!!!!!!!!");
       const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
       const parentFolderPersistenceFile = persistenceFileArray.find(e => e.path === parentFolderPath);
       if (!parentFolderPersistenceFile) {
@@ -648,6 +651,37 @@ export function* persistenceSaga(): SagaIterator {
     function* ({ payload }: ReturnType<typeof actions.persistenceCreateFolder>) {
       const newFolderPath = payload;
       yield call(console.log, "create folder ", newFolderPath);
+
+      
+      // const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
+      
+      // look for parent folder persistenceFile
+      const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(newFolderPath);
+      const parentFolderPath = regexResult ? regexResult[1].slice(0, -1) : undefined;
+      if (!parentFolderPath) {
+        yield call(console.log, "parent not found ", newFolderPath);
+        return;
+      }
+      const newFolderName = regexResult![2];
+      const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
+      const parentFolderPersistenceFile = persistenceFileArray.find(e => e.path === parentFolderPath);
+      if (!parentFolderPersistenceFile) {
+        yield call(console.log, "parent pers file not found ", newFolderPath, " parent path ", parentFolderPath, " persArr ", persistenceFileArray, " reg res ", regexResult);
+        return;
+      }
+
+      yield call(console.log, "parent found ", parentFolderPersistenceFile, " for file ", newFolderPath);
+
+      // create folder
+      const parentFolderId = parentFolderPersistenceFile.id;
+
+      const newFolderId: string = yield call(createFolderAndReturnId, parentFolderId, newFolderName);
+      yield put(actions.addPersistenceFile({ lastSaved: new Date(), path: newFolderPath, id: newFolderId, name: newFolderName, parentId: parentFolderId }));
+      yield call(
+        showSuccessMessage,
+        `Folder ${newFolderName} successfully saved to Google Drive.`,
+        1000
+      );
     }
   );
 
@@ -656,6 +690,21 @@ export function* persistenceSaga(): SagaIterator {
     function* ({ payload }: ReturnType<typeof actions.persistenceDeleteFile>) {
       const filePath = payload;
       yield call(console.log, "delete file ", filePath);
+
+      // look for file
+      const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
+      const persistenceFile = persistenceFileArray.find(e => e.path === filePath);
+      if (!persistenceFile) {
+        yield call(console.log, "cannot find pers file for ", filePath);
+        return;
+      }
+      yield call(deleteFileOrFolder, persistenceFile.id); // assume this succeeds all the time
+      yield put(actions.deletePersistenceFile(persistenceFile));
+      yield call(
+        showSuccessMessage,
+        `${persistenceFile.name} successfully deleted from Google Drive.`,
+        1000
+      );
     }
   );
 
@@ -664,6 +713,21 @@ export function* persistenceSaga(): SagaIterator {
     function* ({ payload }: ReturnType<typeof actions.persistenceDeleteFolder>) {
       const folderPath = payload;
       yield call(console.log, "delete folder ", folderPath);
+
+      // identical to delete file
+      const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
+      const persistenceFile = persistenceFileArray.find(e => e.path === folderPath);
+      if (!persistenceFile) {
+        yield call(console.log, "cannot find pers file for ", folderPath);
+        return;
+      }
+      yield call(deleteFileOrFolder, persistenceFile.id); // assume this succeeds all the time
+      yield put(actions.deletePersistenceFile(persistenceFile));
+      yield call(
+        showSuccessMessage,
+        `Folder ${persistenceFile.name} successfully deleted from Google Drive.`,
+        1000
+      );
     }
   )
 
@@ -671,6 +735,33 @@ export function* persistenceSaga(): SagaIterator {
     PERSISTENCE_RENAME_FILE,
     function* ({ payload : {oldFilePath, newFilePath} }: ReturnType<typeof actions.persistenceRenameFile>) {
       yield call(console.log, "rename file ", oldFilePath, " to ", newFilePath);
+
+      // look for file
+      const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
+      const persistenceFile = persistenceFileArray.find(e => e.path === oldFilePath);
+      if (!persistenceFile) {
+        yield call(console.log, "cannot find pers file for ", oldFilePath);
+        return;
+      }
+
+      // new name
+      const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(newFilePath);
+      if (!regexResult) {
+        yield call(console.log, "regex fail ", newFilePath);
+        return;
+      }
+      const newFileName = regexResult[2] + regexResult[3];
+
+      // call gapi 
+      yield call(renameFileOrFolder, persistenceFile.id, newFileName);
+
+      // handle pers file
+      yield put(actions.updatePersistenceFilePathAndNameByPath(oldFilePath, newFilePath, newFileName));
+      yield call(
+        showSuccessMessage,
+        `${newFileName} successfully renamed in Google Drive.`,
+        1000
+      );
     }
   );
 
@@ -911,6 +1002,24 @@ async function getFileFromFolder( // returns string id or empty string if failed
   }
 }
 */
+
+function deleteFileOrFolder(
+  id: string
+): Promise<any> {
+  return gapi.client.drive.files.delete({
+    fileId: id
+  });
+}
+
+function renameFileOrFolder(
+  id: string,
+  newName: string,
+): Promise<any> {
+  return gapi.client.drive.files.update({
+    fileId: id,
+    resource: { name: newName }
+  });
+}
 
 async function getContainingFolderIdRecursively( // TODO memoize?
   parentFolders: string[],

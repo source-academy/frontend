@@ -13,6 +13,7 @@ import {
   setPersistenceFileLastEditByPath,
   updateLastEditedFilePath,
   updateRefreshFileViewKey,
+  updatePersistenceFilePathAndNameByPath,
   } from './FileSystemActions';
 import { FileSystemState } from './FileSystemTypes';
 
@@ -23,7 +24,7 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
       .addCase(setInBrowserFileSystem, (state, action) => {
         state.inBrowserFileSystem = action.payload.inBrowserFileSystem;
       })
-      .addCase(addGithubSaveInfo, (state, action) => {
+      .addCase(addGithubSaveInfo, (state, action) => { // TODO rewrite
         const githubSaveInfoPayload = action.payload.githubSaveInfo;
         const persistenceFileArray = state['persistenceFileArray'];
 
@@ -51,7 +52,7 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
         }
         state.persistenceFileArray = persistenceFileArray;
     })
-    .addCase(deleteGithubSaveInfo, (state, action) => {
+    .addCase(deleteGithubSaveInfo, (state, action) => { // TODO rewrite - refer to deletePersistenceFile below
       const newPersistenceFileArray = state['persistenceFileArray'].filter(e => {
         return e.path != action.payload.githubSaveInfo.filePath &&
         e.lastSaved != action.payload.githubSaveInfo.lastSaved &&
@@ -62,7 +63,7 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
     .addCase(deleteAllGithubSaveInfo, (state, action) => {
       state.persistenceFileArray = [];
     })
-    .addCase(addPersistenceFile, (state, action) => {
+    .addCase(addPersistenceFile, (state, action) => { // TODO rewrite
       const persistenceFilePayload = action.payload;
       const persistenceFileArray = state['persistenceFileArray'];
       const persistenceFileIndex = persistenceFileArray.findIndex(e => e.id === persistenceFilePayload.id);
@@ -75,10 +76,27 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
     })
     .addCase(deletePersistenceFile, (state, action) => {
       const newPersistenceFileArray = state['persistenceFileArray'].filter(e => e.id !== action.payload.id);
-      state.persistenceFileArray = newPersistenceFileArray;
+      const isGitHubSyncing = action.payload.repoName ? true : false;
+      if (isGitHubSyncing) {
+        const newPersFile = {id: '', name: '', repoName: action.payload.repoName, path: action.payload.path};
+        const newPersFileArray = newPersistenceFileArray.concat(newPersFile);
+        state.persistenceFileArray = newPersFileArray;
+      } else {
+        state.persistenceFileArray = newPersistenceFileArray;
+      }
     })
     .addCase(deleteAllPersistenceFiles, (state, action) => {
       state.persistenceFileArray = [];
+    })
+    .addCase(updatePersistenceFilePathAndNameByPath, (state, action) => {
+      const filesState = state['persistenceFileArray'];
+      const persistenceFileFindIndex = filesState.findIndex(e => e.path === action.payload.oldPath);
+      if (persistenceFileFindIndex === -1) {
+        return;
+      }
+      const newPersistenceFile = {...filesState[persistenceFileFindIndex], path: action.payload.newPath, name: action.payload.newFileName};
+      filesState[persistenceFileFindIndex] = newPersistenceFile;
+      state.persistenceFileArray = filesState;
     })
     .addCase(setPersistenceFileLastEditByPath, (state, action) => {
       const filesState = state['persistenceFileArray'];

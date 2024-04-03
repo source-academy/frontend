@@ -10,10 +10,10 @@ import {
   DELETE_ALL_PERSISTENCE_FILES,  DELETE_GITHUB_SAVE_INFO,
   DELETE_PERSISTENCE_FILE, 
   SET_IN_BROWSER_FILE_SYSTEM,
-  UPDATE_GITHUB_SAVE_INFO,
   SET_PERSISTENCE_FILE_LAST_EDIT_BY_PATH, 
+  UPDATE_PERSISTENCE_FILE_PATH_AND_NAME_BY_PATH,
   UPDATE_LAST_EDITED_FILE_PATH,
-  UPDATE_REFRESH_FILE_VIEW_KEY} from './FileSystemTypes';
+  UPDATE_REFRESH_FILE_VIEW_KEY } from './FileSystemTypes';
 
 export const setInBrowserFileSystem = createAction(
   SET_IN_BROWSER_FILE_SYSTEM,
@@ -34,12 +34,6 @@ export const deleteAllGithubSaveInfo = createAction(
   DELETE_ALL_GITHUB_SAVE_INFO,
   () => ({ payload: {} })
 );
-export const updateGithubSaveInfo = createAction(
-  UPDATE_GITHUB_SAVE_INFO,
-  (repoName: string,
-    filePath: string,
-    lastSaved: Date) => ({ payload: {repoName, filePath, lastSaved} })
-);
 
 export const addPersistenceFile = createAction(
   ADD_PERSISTENCE_FILE,
@@ -48,7 +42,12 @@ export const addPersistenceFile = createAction(
 
 export const deletePersistenceFile = createAction(
   DELETE_PERSISTENCE_FILE,
-  (persistenceFile: PersistenceFile) => ({ payload: persistenceFile })
+  ( persistenceFile: PersistenceFile ) => ({ payload: persistenceFile })
+);
+
+export const updatePersistenceFilePathAndNameByPath = createAction(
+  UPDATE_PERSISTENCE_FILE_PATH_AND_NAME_BY_PATH,
+  (oldPath: string, newPath: string, newFileName: string) => ({ payload: {oldPath, newPath, newFileName}})
 );
 
 export const deleteAllPersistenceFiles = createAction(
