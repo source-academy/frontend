@@ -315,11 +315,11 @@ export async function openFolderInFolderMode(
             store.dispatch(actions.addGithubSaveInfo(
               {
                 repoName: repoName,
-                filePath: file,
+                filePath: "/playground/" + file,
                 lastSaved: new Date()
               }
             ))
-            console.log(store.getState().fileSystem.githubSaveInfoArray);
+            console.log(store.getState().fileSystem.persistenceFileArray);
             console.log("wrote one file");
           }
         }
@@ -363,7 +363,7 @@ export async function performOverwritingSave(
     const results: GetContentResponse = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,
-      path: filePath
+      path: filePath.slice(12)
     });
 
     type GetContentData = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.getContent>;
@@ -379,7 +379,7 @@ export async function performOverwritingSave(
     await octokit.repos.createOrUpdateFileContents({
       owner: repoOwner,
       repo: repoName,
-      path: filePath,
+      path: filePath.slice(12),
       message: commitMessage,
       content: contentEncoded,
       sha: sha,
@@ -387,7 +387,7 @@ export async function performOverwritingSave(
       author: { name: githubName, email: githubEmail }
     });
     
-    store.dispatch(actions.updateGithubSaveInfo(repoName, filePath, new Date()));
+    store.dispatch(actions.addGithubSaveInfo( { repoName: repoName, filePath: filePath, lastSaved: new Date()} ));
 
     //this is just so that playground is forcefully updated
     store.dispatch(actions.playgroundUpdateRepoName(repoName));
@@ -434,7 +434,7 @@ export async function performMultipleOverwritingSave(
         return;
       }
 
-      store.dispatch(actions.updateGithubSaveInfo(repoName, filePath.slice(12), new Date()));
+      store.dispatch(actions.addGithubSaveInfo( { repoName: repoName, filePath: "/playground/" + filePath, lastSaved: new Date() } ));
     } catch (err) {
       console.error(err);
       showWarningMessage('Something went wrong when trying to save the file.', 1000);
@@ -486,13 +486,13 @@ export async function performCreatingSave(
     await octokit.repos.createOrUpdateFileContents({
       owner: repoOwner,
       repo: repoName,
-      path: filePath,
+      path: filePath.slice(12),
       message: commitMessage,
       content: contentEncoded,
       committer: { name: githubName, email: githubEmail },
       author: { name: githubName, email: githubEmail }
     });
-    store.dispatch(actions.playgroundUpdateGitHubSaveInfo(repoName, filePath, new Date()));
+    store.dispatch(actions.addGithubSaveInfo( { repoName: repoName, filePath: filePath, lastSaved: new Date() } ));
     showSuccessMessage('Successfully created file!', 1000);
   } catch (err) {
     console.error(err);
@@ -519,7 +519,7 @@ export async function performFolderDeletion(
     const results = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,
-      path: filePath
+      path: filePath.slice(12)
     });
 
     const files = results.data;
@@ -536,7 +536,7 @@ export async function performFolderDeletion(
       await octokit.repos.deleteFile({
         owner: repoOwner,
         repo: repoName,
-        path: file.path,
+        path: file.path.slice(12),
         message: commitMessage,
         sha: file.sha
       });

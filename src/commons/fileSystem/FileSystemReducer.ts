@@ -10,7 +10,8 @@ import {
   deleteAllPersistenceFiles,  deleteGithubSaveInfo,
   deletePersistenceFile,
   setInBrowserFileSystem, 
-  setPersistenceFileLastEditByPath} from './FileSystemActions';
+  setPersistenceFileLastEditByPath,
+  } from './FileSystemActions';
 import { FileSystemState } from './FileSystemTypes';
 
 export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = createReducer(
@@ -22,23 +23,42 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
       })
       .addCase(addGithubSaveInfo, (state, action) => {
         const githubSaveInfoPayload = action.payload.githubSaveInfo;
-        const githubSaveInfoArray = state['githubSaveInfoArray']
+        const persistenceFileArray = state['persistenceFileArray'];
 
-        const saveInfoIndex = githubSaveInfoArray.findIndex(e => e === githubSaveInfoPayload);
+        const saveInfoIndex = persistenceFileArray.findIndex(e => {
+          return e.path === githubSaveInfoPayload.filePath &&
+          e.repoName === githubSaveInfoPayload.repoName;
+        });
         if (saveInfoIndex === -1) {
-          githubSaveInfoArray[githubSaveInfoArray.length] = githubSaveInfoPayload;
+          persistenceFileArray[persistenceFileArray.length] = {
+            id: '',
+            name: '',
+            path: githubSaveInfoPayload.filePath,
+            lastSaved: githubSaveInfoPayload.lastSaved,
+            repoName: githubSaveInfoPayload.repoName
+          };
         } else {
           // file already exists, to replace file
-          githubSaveInfoArray[saveInfoIndex] = githubSaveInfoPayload;
+          persistenceFileArray[saveInfoIndex] = {
+            id: '',
+            name: '',
+            path: githubSaveInfoPayload.filePath,
+            lastSaved: githubSaveInfoPayload.lastSaved,
+            repoName: githubSaveInfoPayload.repoName
+          };
         }
-        state.githubSaveInfoArray = githubSaveInfoArray;
+        state.persistenceFileArray = persistenceFileArray;
     })
     .addCase(deleteGithubSaveInfo, (state, action) => {
-      const newGithubSaveInfoArray = state['githubSaveInfoArray'].filter(e => e !== action.payload.githubSaveInfo);
-      state.githubSaveInfoArray = newGithubSaveInfoArray;
+      const newPersistenceFileArray = state['persistenceFileArray'].filter(e => {
+        return e.path != action.payload.githubSaveInfo.filePath &&
+        e.lastSaved != action.payload.githubSaveInfo.lastSaved &&
+        e.repoName != action.payload.githubSaveInfo.repoName
+      });
+      state.persistenceFileArray = newPersistenceFileArray;
     })
     .addCase(deleteAllGithubSaveInfo, (state, action) => {
-      state.githubSaveInfoArray = [];
+      state.persistenceFileArray = [];
     })
     .addCase(addPersistenceFile, (state, action) => {
       const persistenceFilePayload = action.payload;

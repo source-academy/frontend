@@ -6,6 +6,7 @@ import { store } from 'src/pages/createStore';
 
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 
 type File = {
   path: string;
@@ -267,17 +268,16 @@ export const writeFileRecursively = (
 };
 
 export const getGithubSaveInfo = () => {
-  const githubSaveInfoArray = store.getState().fileSystem.githubSaveInfoArray;
+  const persistenceFileArray = store.getState().fileSystem.persistenceFileArray;
   const { 
     editorTabs,
     activeEditorTabIndex
   } = store.getState().workspaces['playground'];
   let currentFilePath = '';
   if (activeEditorTabIndex !== null) {
-    currentFilePath = editorTabs[activeEditorTabIndex].filePath?.slice(12) || '';
+    currentFilePath = editorTabs[activeEditorTabIndex].filePath || '';
   }
-  const nullGithubSaveInfo: GitHubSaveInfo = { repoName: 'test', filePath: '', lastSaved: new Date() };
-  const githubSaveInfo = githubSaveInfoArray.find(githubSaveInfo => githubSaveInfo.filePath === currentFilePath) || nullGithubSaveInfo;
-
+  const PersistenceFile: PersistenceFile = persistenceFileArray.find(e => e.path === currentFilePath) || {name: '', id: ''};
+  const githubSaveInfo: GitHubSaveInfo = { filePath: PersistenceFile.path, lastSaved: PersistenceFile.lastSaved, repoName: PersistenceFile.repoName};
   return githubSaveInfo;
 }

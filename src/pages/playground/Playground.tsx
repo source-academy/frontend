@@ -629,7 +629,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const githubPersistenceIsDirty =
     githubSaveInfo && (!githubSaveInfo.lastSaved || githubSaveInfo.lastSaved < lastEdit);
-  //console.log(githubSaveInfo);
+  console.log(githubSaveInfo.lastSaved);
+  console.log(lastEdit);
   const githubButtons = useMemo(() => {
     return (
       <ControlBarGitHubButtons

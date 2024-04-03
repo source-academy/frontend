@@ -20,4 +20,5 @@ export type PersistenceFile = {
   lastSaved?: Date;
   lastEdit?: Date;
   isFolder?: boolean;
+  repoName?: string; // only when synced to github
 };

@@ -1,5 +1,4 @@
 import { FSModule } from 'browserfs/dist/node/core/FS';
-import { GitHubSaveInfo } from 'src/features/github/GitHubTypes';
 import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 
 export const SET_IN_BROWSER_FILE_SYSTEM = 'SET_IN_BROWSER_FILE_SYSTEM';
@@ -14,6 +13,5 @@ export const SET_PERSISTENCE_FILE_LAST_EDIT_BY_PATH = 'SET_PERSISTENCE_FILE_LAST
 
 export type FileSystemState = {
   inBrowserFileSystem: FSModule | null;
-  githubSaveInfoArray: GitHubSaveInfo[];
   persistenceFileArray: PersistenceFile[];
 };

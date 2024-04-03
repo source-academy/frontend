@@ -137,8 +137,8 @@ function* githubSaveFile(): any {
   GitHubUtils.performOverwritingSave(
     octokit,
     githubLoginId,
-    repoName,
-    filePath,
+    repoName || '',
+    filePath || '',
     githubEmail,
     githubName,
     commitMessage,
@@ -208,6 +208,7 @@ function* githubSaveAll(): any {
   
   const githubLoginId = authUser.data.login;
   const githubSaveInfo = getGithubSaveInfo();
+  // console.log(githubSaveInfo);
   const repoName = githubSaveInfo.repoName;
   const githubEmail = authUser.data.email;
   const githubName = authUser.data.name;
@@ -231,37 +232,10 @@ function* githubSaveAll(): any {
   yield call(GitHubUtils.performMultipleOverwritingSave,
       octokit,
       githubLoginId,
-      repoName,
+      repoName || '',
       githubEmail,
       githubName,
       { commitMessage: commitMessage, files: modifiedcurrFiles});
-
-  // for (const filePath of Object.keys(currFiles)) {
-  //   const content = currFiles[filePath];
-  //   yield call(GitHubUtils.performOverwritingSave,
-  //     octokit,
-  //     githubLoginId,
-  //     repoName,
-  //     filePath.slice(12),
-  //     githubEmail,
-  //     githubName,
-  //     commitMessage,
-  //     content);
-  // }
-
-  // const activeEditorTabIndex: number | null = yield select(
-  //   (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
-  // );
-  // if (activeEditorTabIndex === null) {
-  //   throw new Error('No active editor tab found.');
-  // }
-  // const editorTabs: EditorTabState[] = yield select(
-  //   (state: OverallState) => state.workspaces.playground.editorTabs
-  // );
-  // const content = editorTabs[activeEditorTabIndex].value;
-
-  
-
   
 }
 
