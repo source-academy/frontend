@@ -26,7 +26,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
   const user = {
     name: useTypedSelector(state => state.session.name),
-    color: '#5f9ea0' // TODO: random generator
+    color: getColor()  //'#5f9ea0' // TODO: random generator
   };
 
   React.useEffect(() => {
@@ -55,6 +55,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
         (id: string, newPresence: { user: any; cursorPos: Ace.Point }) => {
           // TODO: modify this and move it to a separate handler
           // when more info is added to presence
+          console.log("update: " + id);
           if (curMgr.isCursorExist(id)) {
             curMgr.setCursor(id, newPresence.cursorPos);
           } else {
@@ -69,6 +70,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       );
 
       ShareAce.connections.contents.on('userLeft', (id: string) => {
+        console.log("left: " + id);
         if (curMgr.isCursorExist(id)) {
           curMgr.removeCursor(id);
         }
@@ -128,5 +130,11 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
     // eslint-disable-next-line
   }, [editorSessionId, sessionDetails, reactAceRef]);
 };
+
+function getColor(){ 
+  return "hsl(" + 360 * Math.random() + ',' +
+             (25 + 70 * Math.random()) + '%,' + 
+             (50 + 20 * Math.random()) + '%)'
+}
 
 export default useShareAce;
