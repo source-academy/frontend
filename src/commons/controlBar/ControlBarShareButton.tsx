@@ -112,7 +112,9 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
                         return res.json();
                       })
                       .then(resp => {
-                        this.setState({ keyword: resp.uuid });
+                        this.setState({
+                          keyword: 'http://localhost:8000/playground/share/' + resp.uuid
+                        });
                         console.log(resp);
                       })
                       .catch(err => console.log('Error: ', err));

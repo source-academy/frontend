@@ -4,7 +4,7 @@ import { Ace, Range } from 'ace-builds';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { Dispatch, useCallback, useEffect, useMemo, useState } from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { useDispatch, useStore } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
@@ -32,6 +32,7 @@ import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActi
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
+  addEditorTab,
   addHtmlConsoleError,
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -44,6 +45,7 @@ import {
   navigateToDeclaration,
   promptAutocomplete,
   removeEditorTab,
+  removeEditorTabsForDirectory,
   sendReplInputToOutput,
   setEditorBreakpoint,
   setEditorHighlightedLines,
@@ -76,6 +78,7 @@ import {
 } from 'src/features/playground/PlaygroundActions';
 
 import {
+  getDefaultFilePath,
   getLanguageConfig,
   isSourceLanguage,
   OverallState,
@@ -124,6 +127,13 @@ import {
   makeSubstVisualizerTabFrom,
   mobileOnlyTabIds
 } from './PlaygroundTabs';
+import { FSModule } from 'browserfs/dist/node/core/FS';
+import { decompressFromEncodedURIComponent } from 'lz-string';
+import { AnyAction } from 'redux';
+import { overwriteFilesInWorkspace } from 'src/commons/fileSystem/utils';
+import { convertParamToInt, convertParamToBoolean } from 'src/commons/utils/ParamParseHelper';
+import { IParsedQuery, parseQuery } from 'src/commons/utils/QueryHelper';
+import { showFullJSWarningOnUrlLoad, showFulTSWarningOnUrlLoad, showHTMLDisclaimer } from 'src/commons/utils/WarningDialogHelper';
 
 export type PlaygroundProps = {
   isSicpEditor?: boolean;
@@ -133,6 +143,91 @@ export type PlaygroundProps = {
 };
 
 const keyMap = { goGreen: 'h u l k' };
+
+export async function handleHash(
+    hash: string,
+    handlers: {
+      handleChapterSelect: (chapter: Chapter, variant: Variant) => void;
+      handleChangeExecTime: (execTime: number) => void;
+    },
+    workspaceLocation: WorkspaceLocation,
+    dispatch: Dispatch<AnyAction>,
+    fileSystem: FSModule | null
+  ) {
+    // Make the parsed query string object a Partial because we might access keys which are not set.
+    const qs: Partial<IParsedQuery> = parseQuery(hash);
+  
+    const chapter = convertParamToInt(qs.chap) ?? undefined;
+    if (chapter === Chapter.FULL_JS) {
+      showFullJSWarningOnUrlLoad();
+    } else if (chapter === Chapter.FULL_TS) {
+      showFulTSWarningOnUrlLoad();
+    } else {
+      if (chapter === Chapter.HTML) {
+        const continueToHtml = await showHTMLDisclaimer();
+        if (!continueToHtml) {
+          return;
+        }
+      }
+  
+      // For backward compatibility with old share links - 'prgrm' is no longer used.
+      const program = qs.prgrm === undefined ? '' : decompressFromEncodedURIComponent(qs.prgrm);
+  
+      // By default, create just the default file.
+      const defaultFilePath = getDefaultFilePath(workspaceLocation);
+      const files: Record<string, string> =
+        qs.files === undefined
+          ? {
+              [defaultFilePath]: program
+            }
+          : parseQuery(decompressFromEncodedURIComponent(qs.files));
+      if (fileSystem !== null) {
+        await overwriteFilesInWorkspace(workspaceLocation, fileSystem, files);
+      }
+  
+      // BrowserFS does not provide a way of listening to changes in the file system, which makes
+      // updating the file system view troublesome. To force the file system view to re-render
+      // (and thus display the updated file system), we first disable Folder mode.
+      dispatch(setFolderMode(workspaceLocation, false));
+      const isFolderModeEnabled = convertParamToBoolean(qs.isFolder) ?? false;
+      // If Folder mode should be enabled, enabling it after disabling it earlier will cause the
+      // newly-added files to be shown. Note that this has to take place after the files are
+      // already added to the file system.
+      dispatch(setFolderMode(workspaceLocation, isFolderModeEnabled));
+  
+      // By default, open a single editor tab containing the default playground file.
+      const editorTabFilePaths = qs.tabs?.split(',').map(decompressFromEncodedURIComponent) ?? [
+        defaultFilePath
+      ];
+      // Remove all editor tabs before populating with the ones from the query string.
+      dispatch(
+        removeEditorTabsForDirectory(workspaceLocation, WORKSPACE_BASE_PATHS[workspaceLocation])
+      );
+      // Add editor tabs from the query string.
+      editorTabFilePaths.forEach(filePath =>
+        // Fall back on the empty string if the file contents do not exist.
+        dispatch(addEditorTab(workspaceLocation, filePath, files[filePath] ?? ''))
+      );
+  
+      // By default, use the first editor tab.
+      const activeEditorTabIndex = convertParamToInt(qs.tabIdx) ?? 0;
+      dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex));
+      if (chapter) {
+        // TODO: To migrate the state logic away from playgroundSourceChapter
+        //       and playgroundSourceVariant into the language config instead
+        const languageConfig = getLanguageConfig(chapter, qs.variant as Variant);
+        handlers.handleChapterSelect(chapter, languageConfig.variant);
+        // Hardcoded for Playground only for now, while we await workspace refactoring
+        // to decouple the SicpWorkspace from the Playground.
+        dispatch(playgroundConfigLanguage(languageConfig));
+      }
+  
+      const execTime = Math.max(convertParamToInt(qs.exec || '1000') || 1000, 1000);
+      if (execTime) {
+        handlers.handleChangeExecTime(execTime);
+      }
+    }
+  }
 
 const Playground: React.FC<PlaygroundProps> = props => {
   const { isSicpEditor } = props;
@@ -146,7 +241,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const shouldAddDevice = searchParams.get('add_device');
-  const { uuid } = useParams();
 
   // Selectors and handlers migrated over from deprecated withRouter implementation
   const {
@@ -239,6 +333,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     state => state.workspaces.playground.externalLibrary
   );
 
+  const { uuid } = useParams();
+
   const handleURL = () => {
     if (uuid) {
       fetch(`http://localhost:4000/api/shared_programs/${uuid}`)
@@ -296,10 +392,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
         // This is because Folder mode only works in Source 2+.
         dispatch(setFolderMode(workspaceLocation, false));
       }
-      return;
-    } else {
-      handleURL();
     }
+    handleURL();
+    return;
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     dispatch,
     fileSystem,
@@ -308,7 +405,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     courseSourceVariant,
     workspaceLocation,
     handleChapterSelect,
-    handleChangeExecTime,
+    handleChangeExecTime
   ]);
 
   /**
@@ -632,6 +729,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         key="share"
       />
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, isSicpEditor, props.initialEditorValueHash, queryString, shortURL]);
 
   const toggleFolderModeButton = useMemo(() => {

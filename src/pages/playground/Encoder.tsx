@@ -10,27 +10,21 @@ import { EditorTabState } from 'src/commons/workspace/WorkspaceTypes';
 
 export const EncodeURL = () => {
   const isFolderModeEnabled: boolean = useTypedSelector(
-    (state) => state.workspaces.playground.isFolderModeEnabled
+    state => state.workspaces.playground.isFolderModeEnabled
   );
 
   const editorTabs: EditorTabState[] = useTypedSelector(
-    (state) => state.workspaces.playground.editorTabs
+    state => state.workspaces.playground.editorTabs
   );
   const editorTabFilePaths = editorTabs
     .map((editorTab: EditorTabState) => editorTab.filePath)
     .filter((filePath): filePath is string => filePath !== undefined);
   const activeEditorTabIndex: number | null = useTypedSelector(
-    (state) => state.workspaces.playground.activeEditorTabIndex
+    state => state.workspaces.playground.activeEditorTabIndex
   );
-  const chapter: Chapter = useTypedSelector(
-    (state) => state.workspaces.playground.context.chapter
-  );
-  const variant: Variant = useTypedSelector(
-    (state) => state.workspaces.playground.context.variant
-  );
-  const execTime: number = useTypedSelector(
-    (state) => state.workspaces.playground.execTime
-  );
+  const chapter: Chapter = useTypedSelector(state => state.workspaces.playground.context.chapter);
+  const variant: Variant = useTypedSelector(state => state.workspaces.playground.context.variant);
+  const execTime: number = useTypedSelector(state => state.workspaces.playground.execTime);
   const fileSystem: FSModule = GetFileSystem();
 
   const result: object = {
@@ -49,7 +43,7 @@ export const EncodeURL = () => {
 
 const GetFileSystem = () => {
   const fileSystem: FSModule | null = useTypedSelector(
-    (state) => state.fileSystem.inBrowserFileSystem
+    state => state.fileSystem.inBrowserFileSystem
   );
   return fileSystem as FSModule;
 };
