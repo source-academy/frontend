@@ -109,7 +109,8 @@ export const unpublishedToBackendParams = (showAll: boolean) => {
  * @param submissionStatus backend field denoting if the student has submitted their work.
  * @param numGraded
  * @param numQuestions
- * @returns a ProgressStatus, defined within AssessmentTypes, useable by the grading dashboard for display and business logic.
+ * @returns a ProgressStatus, defined within AssessmentTypes, useable by the grading dashboard for display and business logic 
+ * as well as by the assessment overviews for each student to determine if grading is to be shown 
  */
 export const backendParamsToProgressStatus = (
   isGradingPublished: boolean,
