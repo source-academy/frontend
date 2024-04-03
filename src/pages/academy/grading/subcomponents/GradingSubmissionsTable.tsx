@@ -34,6 +34,7 @@ import GradingActions from './GradingActions';
 import { AssessmentTypeBadge, GradingStatusBadge, SubmissionStatusBadge } from './GradingBadges';
 import GradingColumnCustomHeaders from './GradingColumnCustomHeaders';
 import GradingColumnFilters from './GradingColumnFilters';
+import GradingFilterable from "./GradingFilterable";
 import GradingSubmissionFilters from './GradingSubmissionFilters';
 
 export const getNextSortState = (current: SortStates) => {
@@ -61,6 +62,20 @@ export const freshSortState: SortStateProperties = {
   actionsIndex: SortStates.NONE,
 };
 
+const disabledEditModeCols: string[] = [
+  ColumnFields.actionsIndex,
+];
+
+const disabledFilterModeCols: string[] = [
+  ColumnFields.gradingStatus,
+  ColumnFields.xp,
+  ColumnFields.actionsIndex,
+];
+
+const disabledSortCols: string[] = [
+  ColumnFields.actionsIndex,
+];
+
 const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   showAllSubmissions,
   totalRows,
@@ -68,40 +83,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   submissions,
   updateEntries,
 }) => {
-
-  const disabledEditModeCols: string[] = [
-    ColumnFields.actionsIndex,
-  ];
-
-  const disabledFilterModeCols: string[] = [
-    ColumnFields.gradingStatus,
-    ColumnFields.xp,
-    ColumnFields.actionsIndex,
-  ];
-
-  const disabledSortCols: string[] = [
-    ColumnFields.actionsIndex,
-  ];
-
-  const defaultColumnDefs: ColDef = {
-    filter: false,
-    resizable: false,
-    sortable: true,
-    headerComponentParams: {
-      hideColumn: (id: string) => handleColumnFilterAdd(id),
-      updateSortState: (affectedID: ColumnFields, sortDirection: SortStates) => {
-        if (!disabledSortCols.includes(affectedID)) {
-          const newState: SortStateProperties = {...freshSortState};
-          newState[affectedID] = sortDirection;
-          dispatch(updateAllColsSortStates({
-            currentState: newState,
-            sortBy: affectedID,
-          }))
-        }
-      },
-      disabledSortCols: disabledSortCols,
-    },
-  };
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -126,10 +107,31 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   );
   const [rowData, setRowData] = useState<IGradingTableRow[]>([]);
   const [colDefs, setColDefs] = useState<ColDef<IGradingTableRow>[]>();
+  // This is what that controls Grading Mode. If future feedback says it's better to default to filter mode, change it here.
   const [filterMode, setFilterMode] = useState<boolean>(false);
 
   const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
   const resetPage = useCallback(() => setPage(0), [setPage]);
+
+  const defaultColumnDefs: ColDef = {
+    filter: false,
+    resizable: false,
+    sortable: true,
+    headerComponentParams: {
+      hideColumn: (id: string) => handleColumnFilterAdd(id),
+      updateSortState: (affectedID: ColumnFields, sortDirection: SortStates) => {
+        if (!disabledSortCols.includes(affectedID)) {
+          const newState: SortStateProperties = {...freshSortState};
+          newState[affectedID] = sortDirection;
+          dispatch(updateAllColsSortStates({
+            currentState: newState,
+            sortBy: affectedID,
+          }))
+        }
+      },
+      disabledSortCols: disabledSortCols,
+    },
+  };
 
   const ROW_HEIGHT: number = 60; // in px, declared here to calculate table height
   const HEADER_HEIGHT: number = 48; // in px, declared here to calculate table height
@@ -206,7 +208,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return (params.data !== undefined)
           ? {
-              component: Filterable,
+              component: GradingFilterable,
               params: {
                 value: params.data.assessmentName,
                 filterMode: filterMode,
@@ -223,7 +225,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return (params.data !== undefined)
           ? {
-              component: Filterable,
+              component: GradingFilterable,
               params: {
                 value: params.data.assessmentType,
                 children: [<AssessmentTypeBadge type={params.data.assessmentType} />],
@@ -244,7 +246,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return (params.data !== undefined)
           ? {
-              component: Filterable,
+              component: GradingFilterable,
               params: {
                 value: params.data.studentName,
                 filterMode: filterMode,
@@ -261,7 +263,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return (params.data !== undefined)
           ? {
-              component: Filterable,
+              component: GradingFilterable,
               params: {
                 value: params.data.studentUsername,
                 filterMode: filterMode,
@@ -279,7 +281,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return (params.data !== undefined)
           ? {
-              component: Filterable,
+              component: GradingFilterable,
               params: {
                 value: params.data.groupName,
                 filterMode: filterMode,
@@ -296,7 +298,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return (params.data !== undefined)
           ? {
-              component: Filterable,
+              component: GradingFilterable,
               params: {
                 value: params.data.submissionStatus,
                 children: [<SubmissionStatusBadge status={params.data.submissionStatus} />],
@@ -400,8 +402,13 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   };
 
   useEffect(() => {
+    if (!showAllSubmissions && columnFilters.reduce((doesItContain, currentFilter) => doesItContain || (currentFilter.id === ColumnFields.submissionStatus && currentFilter.value !== "submitted"), false)) {
+      setColumnFilters((prev: ColumnFiltersState) => prev.filter(filter => (filter.id !== ColumnFields.submissionStatus)));
+      resetPage();
+      return;
+    }
     dispatch(updateSubmissionsTableFilters({ columnFilters }));
-  }, [columnFilters, dispatch]);
+  }, [columnFilters, showAllSubmissions, dispatch, resetPage]);
 
   useEffect(() => {
     dispatch(updateGradingColumnVisibility(hiddenColumns));
@@ -468,7 +475,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         gridRef.current!.api.showLoadingOverlay();
       }
     }
-    // We ignore the dependency on rowData purposely as we setRowData above. If not, it may cause an infinite loop.
+    // We ignore the dependency on rowData purposely as we setRowData above. 
+    // If not, it could cause a double execution, which is a bit expensive.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [requestCounter, submissions, courseId, gridRef.current?.api]);
 
@@ -594,23 +602,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         />
       </GradingFlex>
     </>
-  );
-};
-
-type FilterableProps = {
-  setColumnFilters: React.Dispatch<React.SetStateAction<ColumnFiltersState>>;
-  id: string;
-  value: string;
-  children?: React.ReactNode;
-  onClick?: () => void;
-  filterMode: boolean;
-};
-
-const Filterable: React.FC<FilterableProps> = ({ value, children, filterMode }) => {
-  return (
-    <button type="button" className={filterMode ? "grading-overview-filterable-btns" : "grading-overview-unfilterable-btns"}>
-      {children || value}
-    </button>
   );
 };
 

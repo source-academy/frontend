@@ -50,7 +50,6 @@ const Grading: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [showAllSubmissions, setShowAllSubmissions] = useState(false);
   const [refreshQuery, setRefreshQuery] = useState(false);
-  // const [searchAttemptingFilter, setSearchAttemptingFilter] = useState(false);
   const [submissions, setSubmissions] = useState<GradingOverview[]>([]);
 
   const dispatch = useDispatch();
@@ -65,14 +64,13 @@ const Grading: React.FC = () => {
       if (refreshQuery) {
         return setRefreshQuery(false);
       }
-      // setSearchAttemptingFilter(filterParams["status"] === "attempting");
 
       dispatch(setGradingHasLoadedBefore());
       dispatch(increaseRequestCounter());
       dispatch(
         fetchGradingOverviews(
           showAllGroups,
-          ungradedToBackendParams(showAllSubmissions, filterParams["status"]),
+          ungradedToBackendParams(showAllSubmissions),
           paginationToBackendParams(page, pageSize),
           filterParams,
           allColsSortStates,
@@ -83,10 +81,6 @@ const Grading: React.FC = () => {
   );
 
   useEffect(() => {
-    // console.log(gradingOverviews);
-    // if (searchAttemptingFilter && !showAllSubmissions) {
-    //   setSubmissions([]);
-    // } else {
     setSubmissions(gradingOverviews?.data?.map(e =>
       !e.studentName
         ? {
@@ -98,8 +92,6 @@ const Grading: React.FC = () => {
     // }
     dispatch(decreaseRequestCounter());
 
-    // We ignore the dependency on searchAttemptingFilter purposely as we don't want a premature data update.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gradingOverviews, dispatch]);
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page

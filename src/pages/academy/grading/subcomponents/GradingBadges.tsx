@@ -30,7 +30,7 @@ const Badge: React.FC<BadgeProps> = (props: BadgeProps) => {
 
 };
 
-// First colour is bg, second is text (text is more saturated/darker)
+// First colour is bg, second is text (text is more saturated/darker). Colours are referenced from tailwind css.
 const AVAILABLE_COLORS = {
   indigo: ['#818cf8', '#4f46e5'],
   emerald: ['#6ee7b7', '#059669'],
@@ -43,19 +43,19 @@ const AVAILABLE_COLORS = {
 
 const BADGE_COLORS = {
   // assessment types
-  missions: AVAILABLE_COLORS.indigo, //indigo
-  quests: AVAILABLE_COLORS.emerald, //emerald
-  paths: AVAILABLE_COLORS.sky, //sky
+  missions: AVAILABLE_COLORS.indigo,
+  quests: AVAILABLE_COLORS.emerald,
+  paths: AVAILABLE_COLORS.sky,
 
   // submission status
-  submitted: AVAILABLE_COLORS.green, //green
-  attempting: AVAILABLE_COLORS.yellow, //yellow
-  attempted: AVAILABLE_COLORS.red, //red
+  submitted: AVAILABLE_COLORS.green,
+  attempting: AVAILABLE_COLORS.yellow,
+  attempted: AVAILABLE_COLORS.red,
 
   // grading status
-  graded: AVAILABLE_COLORS.green, //green
-  grading: AVAILABLE_COLORS.yellow, //yellow
-  none: AVAILABLE_COLORS.red //red
+  graded: AVAILABLE_COLORS.green,
+  grading: AVAILABLE_COLORS.yellow,
+  none: AVAILABLE_COLORS.red
 };
 
 export function getBadgeColorFromLabel(label: string) {

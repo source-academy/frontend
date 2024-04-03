@@ -103,6 +103,7 @@ import {
   updateTeamFormationOverviews,
   updateUserRole
 } from '../SessionActions';
+import { freshSortState } from 'src/pages/academy/grading/subcomponents/GradingSubmissionsTable';
 
 test('acknowledgeNotifications generates correct action object', () => {
   const action = acknowledgeNotifications();
@@ -172,18 +173,20 @@ test('fetchGradingOverviews generates correct default action object', () => {
     type: FETCH_GRADING_OVERVIEWS,
     payload: {
       filterToGroup: true,
-      gradedFilter: ungradedToBackendParams(false, ''),
+      gradedFilter: ungradedToBackendParams(false),
       pageParams: paginationToBackendParams(0, 10),
-      filterParams: {}
+      filterParams: {},
+      allColsSortStates: { currentState: freshSortState, sortBy: '' }
     }
   });
 });
 
 test('fetchGradingOverviews generates correct action object', () => {
   const filterToGroup = false;
-  const gradedFilter = ungradedToBackendParams(true, '');
+  const gradedFilter = ungradedToBackendParams(true);
   const pageParams = { offset: 123, pageSize: 456 };
   const filterParams = { abc: 'xxx', def: 'yyy' };
+  const sortBy = { currentState: freshSortState, sortBy: '' };
   const action = fetchGradingOverviews(filterToGroup, gradedFilter, pageParams, filterParams);
   expect(action).toEqual({
     type: FETCH_GRADING_OVERVIEWS,
@@ -191,7 +194,8 @@ test('fetchGradingOverviews generates correct action object', () => {
       filterToGroup: filterToGroup,
       gradedFilter: gradedFilter,
       pageParams: pageParams,
-      filterParams: filterParams
+      filterParams: filterParams,
+      sortedBy: sortBy
     }
   });
 });

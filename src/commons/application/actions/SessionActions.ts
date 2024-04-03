@@ -151,11 +151,26 @@ export const fetchGradingOverviews = createAction(
   FETCH_GRADING_OVERVIEWS,
   (
     filterToGroup = true,
-    gradedFilter = ungradedToBackendParams(false, ''),
+    gradedFilter = ungradedToBackendParams(false),
     pageParams = paginationToBackendParams(0, 10),
     filterParams = {},
     allColsSortStates: AllColsSortStates = { currentState: freshSortState, sortBy: '' }
-  ) => ({ payload: { filterToGroup, gradedFilter, pageParams, filterParams, allColsSortStates } })
+  ) => {
+    const sortedBy = {
+      sortBy: '',
+      sortDirection: ''
+    };
+    return {
+      payload: {
+        filterToGroup,
+        gradedFilter,
+        pageParams,
+        filterParams,
+        allColsSortStates,
+        sortedBy
+      }
+    };
+  }
 );
 
 export const fetchTeamFormationOverviews = createAction(

@@ -539,14 +539,6 @@
   }
 }
 
-.contentdisplay-content-parent:has(div.grading-table-wrapper) {
-  max-width: 100%;
-
-  .contentdisplay-content {
-    min-width: 1200px;
-  }
-}
-
 .grading-overview-filterable-btns {
   &:hover:not(:has(> .grading-badge)) {
     text-decoration: underline;
@@ -561,6 +553,14 @@
 .grading-overview-filterable-btns, 
 .grading-overview-rounded-btns {
   border-radius: 9999px;
+}
+
+.contentdisplay-content-parent:has(div.grading-table-wrapper) {
+  max-width: 100%;
+
+  .contentdisplay-content {
+    min-width: 1200px;
+  }
 }
 
 .grading-table-col-icons {
@@ -608,7 +608,7 @@
 
 .grading-table-rows {
   &.ag-row-hover {
-    --ag-row-hover-color: rgb(245, 245, 245);
+    --ag-row-hover-color: #f5f5f5;
   }
 
   &.ag-row.ag-row-last {

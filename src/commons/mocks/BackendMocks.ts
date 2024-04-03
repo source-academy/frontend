@@ -180,9 +180,9 @@ export function* mockBackendSaga(): SagaIterator {
     FETCH_GRADING_OVERVIEWS,
     function* (action: ReturnType<typeof actions.fetchGradingOverviews>): any {
       const accessToken = yield select((state: OverallState) => state.session.accessToken);
-      const { filterToGroup, pageParams, filterParams } = action.payload;
+      const { filterToGroup, pageParams, filterParams, sortedBy } = action.payload;
       const gradingOverviews = yield call(() =>
-        mockFetchGradingOverview(accessToken, filterToGroup, pageParams, filterParams)
+        mockFetchGradingOverview(accessToken, filterToGroup, pageParams, filterParams, sortedBy)
       );
       if (gradingOverviews !== null) {
         yield put(actions.updateGradingOverviews(gradingOverviews));

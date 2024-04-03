@@ -644,7 +644,6 @@ export const getGradingOverviews = async (
   sortedBy: Record<string, any>
 ): Promise<GradingOverviews | null> => {
   // gradedQuery placed behind filterQuery to override progress filter if any
-  console.log(filterParams);
   const params = new URLSearchParams({ ...pageParams, ...filterParams, ...graded, ...sortedBy });
   params.append('group', `${group}`);
 
