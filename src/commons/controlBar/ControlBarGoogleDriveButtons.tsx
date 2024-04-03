@@ -65,7 +65,7 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
       label="Save As"
       icon={IconNames.SEND_TO}
       onClick={props.onClickSaveAs}
-      isDisabled={props.accessToken ? false : true}
+      isDisabled={props.accessToken ? props.isFolderModeEnabled : true}
     />
   );
   const saveAllButton = (
