@@ -16,3 +16,12 @@
     background-color: $cadet-color-3;
   }
 }
+
+.context-menu-item-disabled {
+  list-style: none;
+  user-select: none;
+  padding: 3px 16px;
+  white-space: nowrap;
+  color: #a7b6c2;
+}
+
