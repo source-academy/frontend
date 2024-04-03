@@ -338,7 +338,8 @@ export const defaultLanguageConfig: SALanguage = getDefaultLanguageConfig();
 export const defaultPlayground: PlaygroundState = {
   githubSaveInfo: { repoName: '', filePath: '' },
   languageConfig: defaultLanguageConfig,
-  repoName: ''
+  repoName: '',
+  isFileSystemContextMenusDisabled: false
 };
 
 export const defaultEditorValue = '// Type your program in here!';
@@ -349,7 +350,7 @@ export const defaultEditorValue = '// Type your program in here!';
  *
  * @param workspaceLocation the location of the workspace, used for context
  */
-export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): WorkspaceState => ({
+export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): WorkspaceState => ({ // TODO remove default js
   autogradingResults: [],
   context: createContext<WorkspaceLocation>(
     Constants.defaultSourceChapter,
@@ -403,7 +404,7 @@ const defaultFileName = 'program.js';
 export const getDefaultFilePath = (workspaceLocation: WorkspaceLocation) =>
   `${WORKSPACE_BASE_PATHS[workspaceLocation]}/${defaultFileName}`;
 
-export const defaultWorkspaceManager: WorkspaceManagerState = {
+export const defaultWorkspaceManager: WorkspaceManagerState = { // TODO default
   assessment: {
     ...createDefaultWorkspace('assessment'),
     currentAssessment: undefined,

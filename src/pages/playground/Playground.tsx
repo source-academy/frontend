@@ -983,6 +983,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     disableScrolling: isSicpEditor
   };
 
+  const isContextMenuDisabled = store.getState().playground.isFileSystemContextMenusDisabled;
+
   const sideBarProps: { tabs: SideBarTab[] } = useMemo(() => {
     // The sidebar is rendered if and only if there is at least one tab present.
     // Because whether the sidebar is rendered or not affects the sidebar resizing
@@ -1001,6 +1003,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
                     workspaceLocation="playground"
                     basePath={WORKSPACE_BASE_PATHS[workspaceLocation]}
                     lastEditedFilePath={lastEditedFilePath}
+                    isContextMenuDisabled={isContextMenuDisabled}
                   />
                 ),
                 iconName: IconNames.FOLDER_CLOSE,
@@ -1010,7 +1013,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
           : [])
       ]
     };
-  }, [isFolderModeEnabled, workspaceLocation, lastEditedFilePath]);
+  }, [isFolderModeEnabled, workspaceLocation, lastEditedFilePath, isContextMenuDisabled]);
 
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {

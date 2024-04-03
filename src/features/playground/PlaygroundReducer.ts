@@ -9,6 +9,8 @@ import {
   PLAYGROUND_UPDATE_PERSISTENCE_FILE,
   PLAYGROUND_UPDATE_PERSISTENCE_FOLDER,
   PLAYGROUND_UPDATE_REPO_NAME,
+  DISABLE_FILE_SYSTEM_CONTEXT_MENUS,
+  ENABLE_FILE_SYSTEM_CONTEXT_MENUS,
   PlaygroundState,
   UPDATE_SHORT_URL
 } from './PlaygroundTypes';
@@ -52,6 +54,16 @@ export const PlaygroundReducer: Reducer<PlaygroundState, SourceActionType> = (
       return {
         ...state,
         repoName: action.payload
+      }
+    case DISABLE_FILE_SYSTEM_CONTEXT_MENUS:
+      return {
+        ...state,
+        isFileSystemContextMenusDisabled: true
+      }
+    case ENABLE_FILE_SYSTEM_CONTEXT_MENUS:
+      return {
+        ...state,
+        isFileSystemContextMenusDisabled: false
       }
     default:
       return state;

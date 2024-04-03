@@ -24,6 +24,7 @@ type Props = {
   fileName: string;
   indentationLevel: number;
   refreshDirectory: () => void;
+  isContextMenuDisabled: boolean;
 };
 
 const FileSystemViewFileNode: React.FC<Props> = ({
@@ -34,7 +35,8 @@ const FileSystemViewFileNode: React.FC<Props> = ({
   persistenceFileArray,
   fileName,
   indentationLevel,
-  refreshDirectory
+  refreshDirectory,
+  isContextMenuDisabled
 }) => {
   const [currColor, setCurrColor] = React.useState<string | undefined>(undefined);
 
@@ -123,6 +125,7 @@ const FileSystemViewFileNode: React.FC<Props> = ({
       open={handleOpenFile}
       rename={handleRenameFile}
       remove={handleRemoveFile}
+      isContextMenuDisabled={isContextMenuDisabled}
     >
       <div className={classes['file-system-view-node-container']} onClick={onClick}>
         <FileSystemViewIndentationPadding indentationLevel={indentationLevel} />

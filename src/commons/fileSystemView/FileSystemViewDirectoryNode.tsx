@@ -27,6 +27,7 @@ type Props = {
   directoryName: string;
   indentationLevel: number;
   refreshParentDirectory: () => void;
+  isContextMenuDisabled: boolean;
 };
 
 const FileSystemViewDirectoryNode: React.FC<Props> = ({
@@ -37,11 +38,12 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
   persistenceFileArray,
   directoryName,
   indentationLevel,
-  refreshParentDirectory
+  refreshParentDirectory,
+  isContextMenuDisabled
 }) => {
   const fullPath = path.join(basePath, directoryName);
 
-  const [isExpanded, setIsExpanded] = React.useState(false);
+  const [isExpanded, setIsExpanded] = React.useState(true);
   const [isEditing, setIsEditing] = React.useState(false);
   const [isAddingNewFile, setIsAddingNewFile] = React.useState(false);
   const [isAddingNewDirectory, setIsAddingNewDirectory] = React.useState(false);
@@ -158,6 +160,7 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
         createNewDirectory={handleCreateNewDirectory}
         rename={handleRenameDirectory}
         remove={handleRemoveDirectory}
+        isContextMenuDisabled={isContextMenuDisabled}
       >
         <div className={classes['file-system-view-node-container']} onClick={toggleIsExpanded}>
           <FileSystemViewIndentationPadding indentationLevel={indentationLevel} />
@@ -204,6 +207,7 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
           lastEditedFilePath={lastEditedFilePath}
           persistenceFileArray={persistenceFileArray}
           indentationLevel={indentationLevel + 1}
+          isContextMenuDisabled={isContextMenuDisabled}
         />
       )}
     </div>

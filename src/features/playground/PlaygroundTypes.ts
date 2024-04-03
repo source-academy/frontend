@@ -12,6 +12,8 @@ export const PLAYGROUND_UPDATE_PERSISTENCE_FILE = 'PLAYGROUND_UPDATE_PERSISTENCE
 export const PLAYGROUND_UPDATE_PERSISTENCE_FOLDER = 'PLAYGROUND_UPDATE_PERSISTENCE_FOLDER';
 export const PLAYGROUND_UPDATE_LANGUAGE_CONFIG = 'PLAYGROUND_UPDATE_LANGUAGE_CONFIG';
 export const PLAYGROUND_UPDATE_REPO_NAME = 'PLAYGROUND_UPDATE_REPO_NAME';
+export const DISABLE_FILE_SYSTEM_CONTEXT_MENUS = 'DISABLE_FILE_SYSTEM_CONTEXT_MENUS';
+export const ENABLE_FILE_SYSTEM_CONTEXT_MENUS = 'ENABLE_FILE_SYSTEM_CONTEXT_MENUS';
 
 export type PlaygroundState = {
   readonly queryString?: string;
@@ -20,4 +22,5 @@ export type PlaygroundState = {
   readonly githubSaveInfo: GitHubSaveInfo;
   readonly languageConfig: SALanguage;
   repoName: string;
+  readonly isFileSystemContextMenusDisabled: boolean;
 };

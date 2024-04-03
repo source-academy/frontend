@@ -126,6 +126,10 @@ export function* persistenceSaga(): SagaIterator {
         return;
       }
 
+      // Close folder mode TODO disable the button
+      //yield call(store.dispatch, actions.setFolderMode("playground", false));
+      yield call(store.dispatch, actions.disableFileSystemContextMenus());
+
       // Note: for mimeType, text/plain -> file, application/vnd.google-apps.folder -> folder
 
       if (mimeType === "application/vnd.google-apps.folder") { // handle folders
@@ -151,6 +155,8 @@ export function* persistenceSaga(): SagaIterator {
         }
         yield call(console.log, "there is a filesystem");
 
+        // Begin
+
         // rm everything TODO replace everything hardcoded with playground?
         yield call(rmFilesInDirRecursively, fileSystem, "/playground");
 
@@ -172,8 +178,9 @@ export function* persistenceSaga(): SagaIterator {
             'playground'
           )
         );
-        // open folder mode
-        yield call(store.dispatch, actions.setFolderMode("playground", true));
+        // open folder mode TODO enable button
+        //yield call(store.dispatch, actions.setFolderMode("playground", true));
+        yield call(store.dispatch, actions.enableFileSystemContextMenus());
 
         // DDDDDDDDDDDDDDDebug
         const test = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
@@ -436,6 +443,11 @@ export function* persistenceSaga(): SagaIterator {
         return;
       }
 
+      // Start actually saving
+      // Turn off folder mode TODO disable folder mode
+      //yield call (store.dispatch, actions.setFolderMode("playground", false));
+      yield call(store.dispatch, actions.disableFileSystemContextMenus());
+
       if (topLevelFolderName !== currFolderObject.name) {
         // top level folder name has been renamed
         yield call(console.log, "TLFN changed from ", currFolderObject.name, " to ", topLevelFolderName);
@@ -492,7 +504,6 @@ export function* persistenceSaga(): SagaIterator {
         currPersistenceFile.lastSaved = new Date();
         yield put(actions.addPersistenceFile(currPersistenceFile));
 
-        yield put(actions.playgroundUpdatePersistenceFolder({ id: currFolderObject.id, name: currFolderObject.name, parentId: currFolderObject.parentId, lastSaved: new Date() })); // TODO wut is this
         yield call(showSuccessMessage, `${currFileName} successfully saved to Google Drive.`, 1000);
 
         // TODO: create getFileIdRecursively, that uses currFileParentFolderId
@@ -505,8 +516,13 @@ export function* persistenceSaga(): SagaIterator {
       }
 
       // Ddededededebug
-      const t: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
-      yield call(console.log, t);
+      //const t: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
+      yield put(actions.playgroundUpdatePersistenceFolder({ id: currFolderObject.id, name: currFolderObject.name, parentId: currFolderObject.parentId, lastSaved: new Date() })); // TODO wut is this
+      //yield call(console.log, t);
+
+      // Turn on folder mode TODO enable folder mode
+      //yield call (store.dispatch, actions.setFolderMode("playground", true));
+      yield call(store.dispatch, actions.enableFileSystemContextMenus());
 
       
       // Case 1: Open picker to select location for saving, similar to save all

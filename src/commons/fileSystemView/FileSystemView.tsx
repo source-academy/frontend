@@ -16,9 +16,10 @@ type Props = {
   workspaceLocation: WorkspaceLocation;
   basePath: string;
   lastEditedFilePath: string;
+  isContextMenuDisabled: boolean;
 };
 
-const FileSystemView: React.FC<Props> = ({ workspaceLocation, basePath, lastEditedFilePath }) => {
+const FileSystemView: React.FC<Props> = ({ workspaceLocation, basePath, lastEditedFilePath, isContextMenuDisabled }) => {
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
   const persistenceFileArray = useTypedSelector(state => state.fileSystem.persistenceFileArray);
 
@@ -106,6 +107,7 @@ const FileSystemView: React.FC<Props> = ({ workspaceLocation, basePath, lastEdit
         lastEditedFilePath={lastEditedFilePath}
         persistenceFileArray={persistenceFileArray}
         indentationLevel={0}
+        isContextMenuDisabled={isContextMenuDisabled}
       />
       {isAddingNewFile && (
         <div className={classes['file-system-view-node-container']}>
@@ -131,6 +133,7 @@ const FileSystemView: React.FC<Props> = ({ workspaceLocation, basePath, lastEdit
         className={classes['file-system-view-empty-space']}
         createNewFile={handleCreateNewFile}
         createNewDirectory={handleCreateNewDirectory}
+        isContextMenuDisabled={isContextMenuDisabled}
       />
     </div>
   );

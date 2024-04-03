@@ -17,6 +17,7 @@ type Props = {
   lastEditedFilePath: string;
   persistenceFileArray: PersistenceFile[];
   indentationLevel: number;
+  isContextMenuDisabled: boolean;
 };
 
 export let refreshFileView: () => any; // TODO jank
@@ -27,7 +28,8 @@ const FileSystemViewList: React.FC<Props> = ({
   basePath,
   lastEditedFilePath,
   persistenceFileArray,
-  indentationLevel
+  indentationLevel,
+  isContextMenuDisabled
 }) => {
   const [dirNames, setDirNames] = React.useState<string[] | undefined>(undefined);
   const [fileNames, setFileNames] = React.useState<string[] | undefined>(undefined);
@@ -98,6 +100,7 @@ const FileSystemViewList: React.FC<Props> = ({
             directoryName={dirName}
             indentationLevel={indentationLevel}
             refreshParentDirectory={readDirectory}
+            isContextMenuDisabled={isContextMenuDisabled}
           />
         );
       })}
@@ -113,6 +116,7 @@ const FileSystemViewList: React.FC<Props> = ({
             fileName={fileName}
             indentationLevel={indentationLevel}
             refreshDirectory={readDirectory}
+            isContextMenuDisabled={isContextMenuDisabled}
           />
         );
       })}

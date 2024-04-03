@@ -4,6 +4,8 @@ import { SALanguage } from 'src/commons/application/ApplicationTypes';
 import { PersistenceFile } from '../persistence/PersistenceTypes';
 import {
   CHANGE_QUERY_STRING,
+  DISABLE_FILE_SYSTEM_CONTEXT_MENUS,
+  ENABLE_FILE_SYSTEM_CONTEXT_MENUS,
   GENERATE_LZ_STRING,
   PLAYGROUND_UPDATE_GITHUB_SAVE_INFO,
   PLAYGROUND_UPDATE_LANGUAGE_CONFIG,
@@ -50,4 +52,14 @@ export const playgroundConfigLanguage = createAction(
 export const playgroundUpdateRepoName = createAction(
   PLAYGROUND_UPDATE_REPO_NAME,
   (repoName: string) => ({ payload: repoName })
+);
+
+export const disableFileSystemContextMenus = createAction(
+  DISABLE_FILE_SYSTEM_CONTEXT_MENUS,
+  () => ({ payload: {} })
+);
+
+export const enableFileSystemContextMenus = createAction(
+  ENABLE_FILE_SYSTEM_CONTEXT_MENUS,
+  () => ({ payload: {} })
 );
