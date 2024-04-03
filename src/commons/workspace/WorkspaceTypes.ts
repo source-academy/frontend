@@ -36,6 +36,7 @@ export const PLAYGROUND_EXTERNAL_SELECT = 'PLAYGROUND_EXTERNAL_SELECT ';
 export const RESET_TESTCASE = 'RESET_TESTCASE';
 export const RESET_WORKSPACE = 'RESET_WORKSPACE';
 export const SEND_REPL_INPUT_TO_OUTPUT = 'SEND_REPL_INPUT_TO_OUTPUT';
+export const SET_GRADING_HAS_LOADED_BEFORE = 'SET_GRADING_HAS_LOADED_BEFORE';
 export const SET_TOKEN_COUNT = 'SET_TOKEN_COUNT';
 export const TOGGLE_EDITOR_AUTORUN = 'TOGGLE_EDITOR_AUTORUN';
 export const TOGGLE_USING_SUBST = 'TOGGLE_USING_SUBST';
@@ -89,6 +90,7 @@ type GradingWorkspaceAttr = {
   readonly hasUnsavedChanges: boolean;
   readonly requestCounter: number;
   readonly allColsSortStates: AllColsSortStates;
+  readonly hasLoadedBefore: boolean;
 };
 
 type GradingWorkspaceState = GradingWorkspaceAttr & WorkspaceState;

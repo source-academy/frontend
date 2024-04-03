@@ -483,8 +483,8 @@ function* BackendSaga(): SagaIterator {
         filterToGroup,
         gradedFilter,
         pageParams,
-        filterParams
-        // sortedBy
+        filterParams,
+        sortedBy
       );
       if (gradingOverviews) {
         yield put(actions.updateGradingOverviews(gradingOverviews));

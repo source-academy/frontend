@@ -48,9 +48,9 @@ const GradingActions: React.FC<Props> = ({ submissionId, style }) => {
   };
 
   return (
-    <GradingFlex justifyContent="justify-start" className="grading-actions-btn-wrappers" style={{columnGap: "5px", ...style}}>
+    <GradingFlex justifyContent="flex-start" className="grading-actions-btn-wrappers" style={{columnGap: "5px", ...style}}>
       <Link to={`/courses/${courseId}/grading/${submissionId}`}>
-        <GradingFlex alignItems="items-center" className="grading-action-icons grading-action-icons-bg">
+        <GradingFlex alignItems="center" className="grading-action-icons grading-action-icons-bg">
           <Icon htmlTitle="Grade" icon={IconNames.EDIT} />
         </GradingFlex>
       </Link>

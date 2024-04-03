@@ -71,6 +71,7 @@ import {
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SET_FOLDER_MODE,
+  SET_GRADING_HAS_LOADED_BEFORE,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
   TOGGLE_UPDATE_CSE,
@@ -547,6 +548,14 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           editorSessionId: action.payload.editorSessionId
+        }
+      };
+    case SET_GRADING_HAS_LOADED_BEFORE:
+      return {
+        ...state,
+        grading: {
+          ...state.grading,
+          hasLoadedBefore: state.grading.hasLoadedBefore
         }
       };
     case SET_SESSION_DETAILS:

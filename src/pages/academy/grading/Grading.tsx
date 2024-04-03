@@ -8,10 +8,10 @@ import { Role } from 'src/commons/application/ApplicationTypes';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
-// import { useSession } from 'src/commons/utils/Hooks';
 import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
-import { decreaseRequestCounter, increaseRequestCounter } from 'src/commons/workspace/WorkspaceActions';
+import { decreaseRequestCounter, increaseRequestCounter, setGradingHasLoadedBefore } from 'src/commons/workspace/WorkspaceActions';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
+import { GradingOverview } from 'src/features/grading/GradingTypes';
 import {
   exportGradingCSV,
   paginationToBackendParams,
@@ -50,21 +50,29 @@ const Grading: React.FC = () => {
   const [pageSize, setPageSize] = useState(10);
   const [showAllSubmissions, setShowAllSubmissions] = useState(false);
   const [refreshQuery, setRefreshQuery] = useState(false);
+  // const [searchAttemptingFilter, setSearchAttemptingFilter] = useState(false);
+  const [submissions, setSubmissions] = useState<GradingOverview[]>([]);
 
   const dispatch = useDispatch();
   const allColsSortStates = useTypedSelector(state => state.workspaces.grading.allColsSortStates);
   const requestCounter = useTypedSelector(state => state.workspaces.grading.requestCounter);
+  const hasLoadedBefore = useTypedSelector(state => state.workspaces.grading.hasLoadedBefore);
 
   const updateGradingOverviewsCallback = useCallback(
     (page: number, filterParams: Object) => {
-      if (refreshQuery) { // Prevents es-lint missing dependency warning
+
+       // Prevents es-lint missing dependency warning
+      if (refreshQuery) {
         return setRefreshQuery(false);
       }
+      // setSearchAttemptingFilter(filterParams["status"] === "attempting");
+
+      dispatch(setGradingHasLoadedBefore());
       dispatch(increaseRequestCounter());
       dispatch(
         fetchGradingOverviews(
           showAllGroups,
-          ungradedToBackendParams(showAllSubmissions),
+          ungradedToBackendParams(showAllSubmissions, filterParams["status"] === "attempting"),
           paginationToBackendParams(page, pageSize),
           filterParams,
           allColsSortStates,
@@ -74,12 +82,24 @@ const Grading: React.FC = () => {
     [dispatch, showAllGroups, showAllSubmissions, pageSize, allColsSortStates, refreshQuery]
   );
 
-  // useEffect(() => {
-  //   console.log(sortStates);
-  // }, [sortStates]);
-
   useEffect(() => {
+    // console.log(gradingOverviews);
+    // if (searchAttemptingFilter && !showAllSubmissions) {
+    //   setSubmissions([]);
+    // } else {
+    setSubmissions(gradingOverviews?.data?.map(e =>
+      !e.studentName
+        ? {
+            ...e,
+            studentName: Array.isArray(e.studentNames) ? e.studentNames.join(', ') : e.studentNames
+          }
+        : e
+    ) ?? []);
+    // }
     dispatch(decreaseRequestCounter());
+
+    // We ignore the dependency on searchAttemptingFilter purposely as we don't want a premature data update.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gradingOverviews, dispatch]);
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
@@ -108,26 +128,20 @@ const Grading: React.FC = () => {
     />
   );
 
-  const submissions =
-    gradingOverviews?.data?.map(e =>
-      !e.studentName
-        ? {
-            ...e,
-            studentName: Array.isArray(e.studentNames) ? e.studentNames.join(', ') : e.studentNames
-          }
-        : e
-    ) ?? [];
-
   return (
     <ContentDisplay
-      loadContentDispatch={() => dispatch(fetchGradingOverviews(showAllGroups))}
+      loadContentDispatch={() => {
+        if (!hasLoadedBefore) {
+          dispatch(fetchGradingOverviews(showAllGroups));
+        }
+      }}
       display={
         gradingOverviews?.data === undefined ? (
           loadingDisplay
         ) : (
           <GradingFlex flexDirection="column" className="grading-table-wrapper">
-            <GradingFlex justifyContent="justify-between">
-              <GradingFlex justifyContent="justify-start" style={{columnGap: "1.5rem"}}>
+            <GradingFlex justifyContent="space-between">
+              <GradingFlex justifyContent="flex-start" style={{columnGap: "1.5rem"}}>
                 <GradingText style={{fontSize: "1.125rem", opacity: 0.9}}>Submissions</GradingText>
                 <Button 
                   minimal={true}
@@ -139,7 +153,7 @@ const Grading: React.FC = () => {
                 </Button>
               </GradingFlex>
             </GradingFlex>
-            <GradingFlex justifyContent="justify-start" style={{columnGap: "0.5rem", marginTop: "0.5rem"}}>
+            <GradingFlex justifyContent="flex-start" style={{columnGap: "0.5rem", marginTop: "0.5rem"}}>
               <GradingText>Viewing</GradingText>
               <SimpleDropdown
                 options={showOptions}
@@ -170,6 +184,7 @@ const Grading: React.FC = () => {
               </Button>
             </GradingFlex>
             <GradingSubmissionsTable
+              showAllSubmissions={showAllSubmissions}
               totalRows={gradingOverviews.count}
               pageSize={pageSize}
               submissions={submissions}

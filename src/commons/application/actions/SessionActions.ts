@@ -151,7 +151,7 @@ export const fetchGradingOverviews = createAction(
   FETCH_GRADING_OVERVIEWS,
   (
     filterToGroup = true,
-    gradedFilter = ungradedToBackendParams(false),
+    gradedFilter = ungradedToBackendParams(false, false),
     pageParams = paginationToBackendParams(0, 10),
     filterParams = {},
     allColsSortStates: AllColsSortStates = { currentState: freshSortState, sortBy: '' }

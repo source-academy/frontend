@@ -98,12 +98,12 @@ export const paginationToBackendParams = (page: number, pageSize: number) => {
   return { offset: page * pageSize, pageSize: pageSize };
 };
 
-export const ungradedToBackendParams = (showAll: boolean) => {
+export const ungradedToBackendParams = (showAll: boolean, attempting: boolean) => {
   if (showAll) {
     return {};
   }
   return {
-    status: 'submitted',
+    status: attempting ? 'attempting' : 'submitted',
     isManuallyGraded: true,
     notFullyGraded: true
   };

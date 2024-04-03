@@ -50,6 +50,7 @@ import {
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
   SET_FOLDER_MODE,
+  SET_GRADING_HAS_LOADED_BEFORE,
   SET_TOKEN_COUNT,
   SHIFT_EDITOR_TAB,
   SubmissionsTableFilters,
@@ -400,6 +401,10 @@ export const setIsEditorReadonly = createAction(
     payload: { workspaceLocation, isEditorReadonly }
   })
 );
+
+export const setGradingHasLoadedBefore = createAction(SET_GRADING_HAS_LOADED_BEFORE, () => ({
+  payload: true
+}));
 
 export const increaseRequestCounter = createAction(INCREMENT_REQUEST_COUNTER, () => ({
   payload: {}

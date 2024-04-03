@@ -10,7 +10,7 @@ type Props = {
 
 const GradingSubmissionFilters: React.FC<Props> = ({ filters, onFilterRemove }) => {
   return (
-    <GradingFlex justifyContent="justify-start" style={{columnGap: "5px"}}>
+    <GradingFlex justifyContent="flex-start" style={{columnGap: "5px"}}>
       {filters.map(filter => (
         <FilterBadge filter={filter} onRemove={onFilterRemove} key={filter.id} />
       ))}

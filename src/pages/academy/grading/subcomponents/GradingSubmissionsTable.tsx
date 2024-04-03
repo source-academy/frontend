@@ -36,40 +36,6 @@ import GradingColumnCustomHeaders from './GradingColumnCustomHeaders';
 import GradingColumnFilters from './GradingColumnFilters';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
 
-// TODO: Restore the following accessor behavior change from team assessments merge
-// columnHelper.accessor('studentName', {
-//   header: 'Student(s)',
-//   cell: info => {
-//     const value = info.getValue();
-//     const fallbackValue = info.row.original.studentNames;
-//     const finalValue = value || '';
-//     const finalFallbackValue = fallbackValue?.join(', ') || '';
-//     return (
-//       <Filterable
-//         onClick={handleClick}
-//         column={info.column}
-//         value={finalValue !== '' ? finalValue : finalFallbackValue}
-//       />
-//     );
-//   }
-// }),
-// columnHelper.accessor('studentUsername', {
-//   header: 'Username(s)',
-//   cell: info => {
-//     const value = info.getValue();
-//     const fallbackValue = info.row.original.studentUsernames;
-//     const finalValue = value || '';
-//     const finalFallbackValue = fallbackValue?.join(', ') || '';
-//     return (
-//       <Filterable
-//         onClick={handleClick}
-//         column={info.column}
-//         value={finalValue !== '' ? finalValue : finalFallbackValue}
-//       />
-//     );
-//   }
-// }),
-
 export const getNextSortState = (current: SortStates) => {
   switch (current) {
     case SortStates.NONE:
@@ -96,6 +62,7 @@ export const freshSortState: SortStateProperties = {
 };
 
 const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
+  showAllSubmissions,
   totalRows,
   pageSize,
   submissions,
@@ -136,28 +103,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     },
   };
 
-  const ROW_HEIGHT: number = 60; // in px, declared here to calculate table height
-  const HEADER_HEIGHT: number = 48; // in px, declared here to calculate table height
-
-  const tableProperties: IGradingTableProperties = {
-    customComponents: {
-      agColumnHeader: GradingColumnCustomHeaders,
-    },
-    defaultColDefs: defaultColumnDefs,
-    headerHeight: HEADER_HEIGHT,
-    overlayLoadingTemplate: '<div class="grading-loading-icon"></div>',
-    overlayNoRowsTemplate: "Hmm... we didn't find any submissions, you might want to debug your filter() function.",
-    pageSize: pageSize,
-    pagination: true,
-    rowClass: "grading-left-align grading-table-rows",
-    rowHeight: ROW_HEIGHT,
-    suppressMenuHide: true,
-    suppressPaginationPanel: true,
-    suppressRowClickSelection: true,
-    tableHeight: String(ROW_HEIGHT * (submissions.length > 0 ? submissions.length : 2) + HEADER_HEIGHT + 4) + "px",
-    tableMargins: "1rem 0 0 0",
-  };
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -179,12 +124,35 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   const [hiddenColumns, setHiddenColumns] = useState<GradingColumnVisibility>(
     columnVisibility ? columnVisibility : []
   );
-  const [rowData, setRowData] = useState<IGradingTableRow[]>();
+  const [rowData, setRowData] = useState<IGradingTableRow[]>([]);
   const [colDefs, setColDefs] = useState<ColDef<IGradingTableRow>[]>();
   const [filterMode, setFilterMode] = useState<boolean>(false);
 
   const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
   const resetPage = useCallback(() => setPage(0), [setPage]);
+
+  const ROW_HEIGHT: number = 60; // in px, declared here to calculate table height
+  const HEADER_HEIGHT: number = 48; // in px, declared here to calculate table height
+
+  const tableProperties: IGradingTableProperties = {
+    customComponents: {
+      agColumnHeader: GradingColumnCustomHeaders,
+    },
+    defaultColDefs: defaultColumnDefs,
+    headerHeight: HEADER_HEIGHT,
+    overlayLoadingTemplate: '<div class="grading-loading-icon"></div>',
+    overlayNoRowsTemplate: "Hmm... we didn't find any submissions, you might want to debug your filter() function.",
+    pageSize: pageSize,
+    pagination: true,
+    rowClass: "grading-left-align grading-table-rows",
+    rowHeight: ROW_HEIGHT,
+    suppressMenuHide: true,
+    suppressPaginationPanel: true,
+    suppressRowClickSelection: true,
+    tableHeight: String(ROW_HEIGHT * (rowData.length > 0 ? rowData.length : 2) + HEADER_HEIGHT + 4) + "px",
+    tableMargins: "1rem 0 0 0",
+  };
+
   // Placing searchValue as a dependency for triggering a page reset will result in double-querying.
   const debouncedUpdateSearchValue = useMemo(
     () =>
@@ -458,11 +426,22 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
         const sameData: boolean = submissions.reduce(
           (sameData, currentSubmission, index) => {
+
             newData.push({
               assessmentName: currentSubmission.assessmentName,
               assessmentType: currentSubmission.assessmentType,
-              studentName: currentSubmission.studentName,
-              studentUsername: currentSubmission.studentUsername,
+              studentName: currentSubmission.studentName 
+                ? currentSubmission.studentName 
+                : (currentSubmission.studentNames 
+                  ? currentSubmission.studentNames.join(', ') 
+                  : ''
+                ),
+              studentUsername: currentSubmission.studentUsername 
+                ? currentSubmission.studentUsername 
+                : (currentSubmission.studentUsernames 
+                  ? currentSubmission.studentUsernames.join(', ') 
+                  : ''
+              ),
               groupName: currentSubmission.groupName,
               submissionStatus: currentSubmission.submissionStatus,
               gradingStatus: currentSubmission.gradingStatus,
@@ -481,19 +460,17 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
         gridRef.current!.api.hideOverlay();
 
+        if (newData.length === 0 && requestCounter <= 0) {
+          gridRef.current!.api.showNoRowsOverlay();
+        }
+
       } else {
         gridRef.current!.api.showLoadingOverlay();
       }
     }
     // We ignore the dependency on rowData purposely as we setRowData above. If not, it may cause an infinite loop.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [requestCounter, submissions, courseId]);
-
-  useEffect(() => {
-    if (rowData?.length === 0 && requestCounter <= 0 && gridRef.current?.api) {
-      gridRef.current!.api.showNoRowsOverlay();
-    }
-  }, [requestCounter, rowData]);
+  }, [requestCounter, submissions, courseId, gridRef.current?.api]);
 
   useEffect(() => {
     setColDefs(generateCols());
@@ -502,7 +479,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   return (
     <>
       {hiddenColumns.length > 0 ? (
-        <GradingFlex justifyContent="justify-between" alignItems="items-center" style={{ marginTop: "0.5rem" }}>
+        <GradingFlex justifyContent="space-between" alignItems="center" style={{ marginTop: "0.5rem" }}>
           <GradingFlex>
             <GradingText secondaryText>Columns Hidden:</GradingText>
             <GradingColumnFilters
@@ -523,8 +500,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         <></>
       )}
 
-      <GradingFlex justifyContent="justify-between" alignItems="items-center" style={{ marginTop: "0.5rem" }}>
-        <GradingFlex alignItems="items-center">
+      <GradingFlex justifyContent="space-between" alignItems="center" style={{ marginTop: "0.5rem" }}>
+        <GradingFlex alignItems="center">
           <GradingFlex style={{ gap: '0.5rem', alignItems: 'center', height: '1.75rem', width: "100%" }}>
             <Icon icon={IconNames.FILTER_LIST} />
             <GradingText secondaryText>
@@ -583,7 +560,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         />
       </div>
 
-      <GradingFlex justifyContent="justify-center" className="grading-table-footer" style={{ width: "100%", columnGap: "5px" }}>
+      <GradingFlex justifyContent="center" className="grading-table-footer" style={{ width: "100%", columnGap: "5px" }}>
         <Button
           small
           minimal

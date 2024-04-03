@@ -423,7 +423,8 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     allColsSortStates: {
       currentState: freshSortState,
       sortBy: ''
-    }
+    },
+    hasLoadedBefore: false
   },
   playground: {
     ...createDefaultWorkspace('playground'),

@@ -102,6 +102,7 @@ export type GradingQuery = {
 };
 
 export type GradingSubmissionTableProps = {
+  showAllSubmissions: boolean;
   totalRows: number;
   pageSize: number;
   submissions: GradingOverview[];
@@ -111,8 +112,8 @@ export type GradingSubmissionTableProps = {
 export enum ColumnName {
   assessmentName = 'Name',
   assessmentType = 'Type',
-  studentName = 'Student',
-  studentUsername = 'Username',
+  studentName = 'Student(s)',
+  studentUsername = 'Username(s)',
   groupName = 'Group',
   submissionStatus = 'Progress',
   gradingStatus = 'Grading',
