@@ -72,7 +72,7 @@ const Grading: React.FC = () => {
       dispatch(
         fetchGradingOverviews(
           showAllGroups,
-          ungradedToBackendParams(showAllSubmissions, filterParams["status"] === "attempting"),
+          ungradedToBackendParams(showAllSubmissions, filterParams["status"]),
           paginationToBackendParams(page, pageSize),
           filterParams,
           allColsSortStates,

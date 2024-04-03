@@ -98,12 +98,14 @@ export const paginationToBackendParams = (page: number, pageSize: number) => {
   return { offset: page * pageSize, pageSize: pageSize };
 };
 
-export const ungradedToBackendParams = (showAll: boolean, attempting: boolean) => {
+export const ungradedToBackendParams = (showAll: boolean, filterStatus: string) => {
   if (showAll) {
     return {};
   }
   return {
-    status: attempting ? 'attempting' : 'submitted',
+    status: ['attempting', 'submitted', 'attempted'].includes(filterStatus)
+      ? filterStatus
+      : 'submitted',
     isManuallyGraded: true,
     notFullyGraded: true
   };
