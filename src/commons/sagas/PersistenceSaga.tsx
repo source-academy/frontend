@@ -126,8 +126,6 @@ export function* persistenceSaga(): SagaIterator {
         return;
       }
 
-      // Close folder mode TODO disable the button
-      //yield call(store.dispatch, actions.setFolderMode("playground", false));
       yield call(store.dispatch, actions.disableFileSystemContextMenus());
 
       // Note: for mimeType, text/plain -> file, application/vnd.google-apps.folder -> folder
@@ -153,7 +151,6 @@ export function* persistenceSaga(): SagaIterator {
           yield call(console.log, "no filesystem!");
           return;
         }
-        yield call(console.log, "there is a filesystem");
 
         // Begin
 
@@ -163,7 +160,15 @@ export function* persistenceSaga(): SagaIterator {
         // clear all persistence files
         yield call(store.dispatch, actions.deleteAllPersistenceFiles());
 
+        // add tlrf
+        yield put(actions.addPersistenceFile({ id, parentId, name, path: "/playground/" + name, isFolder: true }));
+
         for (const currFile of fileList) {
+          if (currFile.isFolder == true) {
+            yield call(console.log, "not file ", currFile);
+            yield put(actions.addPersistenceFile({ id: currFile.id, parentId: currFile.parentId, name: currFile.name, path: "/playground" + currFile.path, isFolder: true }));
+            continue;
+          }
           yield put(actions.addPersistenceFile({ id: currFile.id, parentId: currFile.parentId, name: currFile.name, path: "/playground" + currFile.path, lastSaved: new Date() }));
           const contents = yield call([gapi.client.drive.files, 'get'], { fileId: currFile.id, alt: 'media' });
           yield call(writeFileRecursively, fileSystem, "/playground" + currFile.path, contents.body);
@@ -427,7 +432,7 @@ export function* persistenceSaga(): SagaIterator {
         external
       };
 
-      // check if top level folder has been renamed
+      // check if top level folder has been renamed TODO remove once instant sync done
       // assuming only 1 top level folder exists, so get 1 file
       const testPath = Object.keys(currFiles)[0];
       const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(testPath);
@@ -444,8 +449,6 @@ export function* persistenceSaga(): SagaIterator {
       }
 
       // Start actually saving
-      // Turn off folder mode TODO disable folder mode
-      //yield call (store.dispatch, actions.setFolderMode("playground", false));
       yield call(store.dispatch, actions.disableFileSystemContextMenus());
 
       if (topLevelFolderName !== currFolderObject.name) {
@@ -477,9 +480,16 @@ export function* persistenceSaga(): SagaIterator {
 
         const currPersistenceFile = persistenceFileArray.find(e => e.path === currFullFilePath);
         if (currPersistenceFile === undefined) {
-          yield call(console.log, "error");
-          return;
+          yield call(console.log, "this file is not in persistenceFileArray: ", currFullFilePath);
+          continue;
         }
+
+        if (!currPersistenceFile.id || !currPersistenceFile.parentId) {
+          // get folder
+          yield call(console.log, "this file does not have id/parentId: ", currFullFilePath);
+          continue;
+        }
+
         const currFileId = currPersistenceFile.id!;
         const currFileParentFolderId = currPersistenceFile.parentId!;
         
@@ -589,6 +599,47 @@ export function* persistenceSaga(): SagaIterator {
     function* ({ payload }: ReturnType<typeof actions.persistenceCreateFile>) {
       const newFilePath = payload;
       yield call(console.log, "create file ", newFilePath);
+
+      // const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
+      
+      // look for parent folder persistenceFile
+      const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(newFilePath);
+      const parentFolderPath = regexResult ? regexResult[1].slice(0, -1) : undefined;
+      if (!parentFolderPath) {
+        yield call(console.log, "parent not found ", newFilePath);
+        return;
+      }
+      const newFileName = regexResult![2];
+      const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
+      const parentFolderPersistenceFile = persistenceFileArray.find(e => e.path === parentFolderPath);
+      if (!parentFolderPersistenceFile) {
+        yield call(console.log, "parent pers file not found ", newFilePath, " parent path ", parentFolderPath, " persArr ", persistenceFileArray, " reg res ", regexResult);
+        return;
+      }
+
+      yield call(console.log, "parent found ", parentFolderPersistenceFile, " for file ", newFilePath);
+
+      // create file
+      const parentFolderId = parentFolderPersistenceFile.id;
+      const [chapter, variant, external] = yield select(
+        (state: OverallState) => [
+          state.workspaces.playground.context.chapter,
+          state.workspaces.playground.context.variant,
+          state.workspaces.playground.externalLibrary
+        ]
+      );
+      const config: IPlaygroundConfig = {
+        chapter,
+        variant,
+        external
+      };
+      const newFilePersistenceFile: PersistenceFile = yield call(createFile, newFileName, parentFolderId, MIME_SOURCE, '', config);
+      yield put(actions.addPersistenceFile({ ...newFilePersistenceFile, lastSaved: new Date(), path: newFilePath }));
+      yield call(
+        showSuccessMessage,
+        `${newFileName} successfully saved to Google Drive.`,
+        1000
+      );
     }
   );
 
@@ -798,7 +849,7 @@ async function getFilesOfFolder( // recursively get files
       name: currFolderName,
       id: folderId,
       path: currPath + '/' + currFolderName,
-      isFile: false
+      isFolder: true
     }];
   }
 
@@ -809,15 +860,20 @@ async function getFilesOfFolder( // recursively get files
       ans = ans.concat(await 
         getFilesOfFolder(currFile.id!, currFile.name!, currPath + '/' + currFolderName)
       );
-    } 
-    else { // file
-      console.log("found file " + currFile.name);
       ans.push({
         name: currFile.name,
         id: currFile.id,
         parentId: folderId,
         path: currPath + '/' + currFolderName + '/' + currFile.name,
-        isFile: true
+        isFolder: true
+      });
+    } 
+    else { // file
+      ans.push({
+        name: currFile.name,
+        id: currFile.id,
+        parentId: folderId,
+        path: currPath + '/' + currFolderName + '/' + currFile.name
       });
     } 
   }
@@ -934,7 +990,7 @@ function createFile(
       headers,
       body
     })
-    .then(({ result }) => ({ id: result.id, name: result.name, isFile: true }));
+    .then(({ result }) => ({ id: result.id, parentId: parent, name: result.name  }));
 }
 
 function updateFile(

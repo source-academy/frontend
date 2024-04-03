@@ -50,7 +50,7 @@ const FileSystemViewFileNode: React.FC<Props> = ({
             ? Colors.ORANGE4
             : Colors.BLUE4
           : Colors.BLUE4
-        : Colors.BLUE4
+        : Colors.ORANGE4
       : undefined;
     setCurrColor(checkColor(myFileMetadata));
   }, [lastEditedFilePath]);
