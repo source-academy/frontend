@@ -14,6 +14,7 @@ import {
   updateLastEditedFilePath,
   updateRefreshFileViewKey,
   updatePersistenceFilePathAndNameByPath,
+  updatePersistenceFolderPathAndNameByPath,
   } from './FileSystemActions';
 import { FileSystemState } from './FileSystemTypes';
 
@@ -97,6 +98,43 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
       const newPersistenceFile = {...filesState[persistenceFileFindIndex], path: action.payload.newPath, name: action.payload.newFileName};
       filesState[persistenceFileFindIndex] = newPersistenceFile;
       state.persistenceFileArray = filesState;
+    })
+    .addCase(updatePersistenceFolderPathAndNameByPath, (state, action) => {
+      const filesState = state['persistenceFileArray'];
+      const persistenceFileFindIndex = filesState.findIndex(e => e.path === action.payload.oldPath);
+      if (persistenceFileFindIndex === -1) {
+        return;
+      }
+      // get current level of folder
+      const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(action.payload.newPath)!;
+
+      const currFolderSplit: string[] = regexResult[0].slice(1).split("/");
+      const currFolderIndex = currFolderSplit.length - 1;
+
+      // /fold1/ becomes ["fold1"]
+      // /fold1/fold2/ becomes ["fold1", "fold2"]
+      // If in top level folder, becomes [""]
+
+      console.log(regexResult, currFolderSplit, "a1");
+
+      // update all files that are its children
+      state.persistenceFileArray = filesState.filter(e => e.path).map((e => {
+        const r = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(e.path!)!;
+        const currParentFolders = r[0].slice(1).split("/");
+        console.log("currParentFolders", currParentFolders, "folderLevel", currFolderIndex);
+        if (currParentFolders.length <= currFolderIndex) {
+          return e; // not a child of folder
+        }
+        if (currParentFolders[currFolderIndex] !== action.payload.oldFolderName) {
+          return e; // not a child of folder
+        }
+        // only children remain
+        currParentFolders[currFolderIndex] = action.payload.newFolderName;
+        currParentFolders[0] = "/" + currParentFolders[0];
+        const newPath = currParentFolders.join("/");
+        console.log("from", e.path, "to", newPath);
+        return {...e, path: newPath};
+      }));
     })
     .addCase(setPersistenceFileLastEditByPath, (state, action) => {
       const filesState = state['persistenceFileArray'];

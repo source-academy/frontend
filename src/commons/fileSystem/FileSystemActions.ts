@@ -13,7 +13,8 @@ import {
   SET_PERSISTENCE_FILE_LAST_EDIT_BY_PATH, 
   UPDATE_PERSISTENCE_FILE_PATH_AND_NAME_BY_PATH,
   UPDATE_LAST_EDITED_FILE_PATH,
-  UPDATE_REFRESH_FILE_VIEW_KEY } from './FileSystemTypes';
+  UPDATE_REFRESH_FILE_VIEW_KEY, 
+  UPDATE_PERSISTENCE_FOLDER_PATH_AND_NAME_BY_PATH} from './FileSystemTypes';
 
 export const setInBrowserFileSystem = createAction(
   SET_IN_BROWSER_FILE_SYSTEM,
@@ -48,6 +49,11 @@ export const deletePersistenceFile = createAction(
 export const updatePersistenceFilePathAndNameByPath = createAction(
   UPDATE_PERSISTENCE_FILE_PATH_AND_NAME_BY_PATH,
   (oldPath: string, newPath: string, newFileName: string) => ({ payload: {oldPath, newPath, newFileName}})
+);
+
+export const updatePersistenceFolderPathAndNameByPath = createAction(
+  UPDATE_PERSISTENCE_FOLDER_PATH_AND_NAME_BY_PATH,
+  (oldPath: string, newPath: string, oldFolderName: string, newFolderName: string) => ({ payload: {oldPath, newPath, oldFolderName, newFolderName}})
 );
 
 export const deleteAllPersistenceFiles = createAction(

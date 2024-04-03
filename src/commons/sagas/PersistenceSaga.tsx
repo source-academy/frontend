@@ -36,6 +36,7 @@ import {
 import { AsyncReturnType } from '../utils/TypeHelper';
 import { safeTakeEvery as takeEvery, safeTakeLatest as takeLatest } from './SafeEffects';
 import { WORKSPACE_BASE_PATHS } from 'src/pages/fileSystem/createInBrowserFileSystem';
+import { EditorTabState } from '../workspace/WorkspaceTypes';
 
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
 const SCOPES =
@@ -195,7 +196,7 @@ export function* persistenceSaga(): SagaIterator {
         // TODO find a file to open instead of deleting all active tabs?
         // TODO without modifying WorkspaceReducer in one function this would cause errors - called by onChange of Playground.tsx?
         // TODO change behaviour of WorkspaceReducer to not create program.js every time folder mode changes with 0 tabs existing?
-        yield call(store.dispatch, actions.updateRefreshFileViewKey()); // refreshes folder view TODO super jank?
+        yield call(store.dispatch, actions.updateRefreshFileViewKey());
 
         yield call(showSuccessMessage, `Loaded folder ${name}.`, 1000);
 
@@ -553,24 +554,31 @@ export function* persistenceSaga(): SagaIterator {
     PERSISTENCE_SAVE_FILE,
     function* ({ payload: { id, name } }: ReturnType<typeof actions.persistenceSaveFile>) {
       let toastKey: string | undefined;
+
+      const [currFolderObject] = yield select( // TODO resolve type here?
+      (state: OverallState) => [
+        state.playground.persistenceFile
+      ]
+      );
+
+      yield call(ensureInitialisedAndAuthorised);
+
+      const [activeEditorTabIndex, editorTabs, chapter, variant, external] = yield select(
+        (state: OverallState) => [
+          state.workspaces.playground.activeEditorTabIndex,
+          state.workspaces.playground.editorTabs,
+          state.workspaces.playground.context.chapter,
+          state.workspaces.playground.context.variant,
+          state.workspaces.playground.externalLibrary
+        ]
+      );
+
       try {
         toastKey = yield call(showMessage, {
           message: `Saving as ${name}...`,
           timeout: 0,
           intent: Intent.PRIMARY
         });
-
-        yield call(ensureInitialisedAndAuthorised);
-
-        const [activeEditorTabIndex, editorTabs, chapter, variant, external] = yield select(
-          (state: OverallState) => [
-            state.workspaces.playground.activeEditorTabIndex,
-            state.workspaces.playground.editorTabs,
-            state.workspaces.playground.context.chapter,
-            state.workspaces.playground.context.variant,
-            state.workspaces.playground.externalLibrary
-          ]
-        );
 
         if (activeEditorTabIndex === null) {
           throw new Error('No active editor tab found.');
@@ -582,6 +590,20 @@ export function* persistenceSaga(): SagaIterator {
           variant,
           external
         };
+        if ((currFolderObject as PersistenceFile).isFolder) {
+          yield call(console.log, "folder opened! updating pers specially");
+          const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
+          const currPersistenceFile = persistenceFileArray.find(e => e.path === (editorTabs[activeEditorTabIndex] as EditorTabState).filePath);
+          if (!currPersistenceFile) {
+            throw new Error('Persistence file not found');
+          }
+          yield call(updateFile, currPersistenceFile.id, currPersistenceFile.name, MIME_SOURCE, code, config);
+          currPersistenceFile.lastSaved = new Date();
+          yield put(actions.addPersistenceFile(currPersistenceFile));
+          yield call(showSuccessMessage, `${name} successfully saved to Google Drive.`, 1000);
+          return;
+        } 
+
         yield call(updateFile, id, name, MIME_SOURCE, code, config);
         yield put(actions.playgroundUpdatePersistenceFile({ id, name, lastSaved: new Date() }));
         yield call(showSuccessMessage, `${name} successfully saved to Google Drive.`, 1000);
@@ -599,12 +621,12 @@ export function* persistenceSaga(): SagaIterator {
   yield takeEvery(
     PERSISTENCE_CREATE_FILE,
     function* ({ payload }: ReturnType<typeof actions.persistenceCreateFile>) {
+      yield call(store.dispatch, actions.disableFileSystemContextMenus());
+
       const newFilePath = payload;
       yield call(console.log, "create file ", newFilePath);
 
-      // const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
-      
-      // look for parent folder persistenceFile
+      // look for parent folder persistenceFile TODO modify action so name is supplied?
       const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(newFilePath);
       const parentFolderPath = regexResult ? regexResult[1].slice(0, -1) : undefined;
       if (!parentFolderPath) {
@@ -638,6 +660,8 @@ export function* persistenceSaga(): SagaIterator {
       };
       const newFilePersistenceFile: PersistenceFile = yield call(createFile, newFileName, parentFolderId, MIME_SOURCE, '', config);
       yield put(actions.addPersistenceFile({ ...newFilePersistenceFile, lastSaved: new Date(), path: newFilePath }));
+      yield call(store.dispatch, actions.enableFileSystemContextMenus());
+      yield call(store.dispatch, actions.updateRefreshFileViewKey());
       yield call(
         showSuccessMessage,
         `${newFileName} successfully saved to Google Drive.`,
@@ -649,13 +673,15 @@ export function* persistenceSaga(): SagaIterator {
   yield takeEvery(
     PERSISTENCE_CREATE_FOLDER,
     function* ({ payload }: ReturnType<typeof actions.persistenceCreateFolder>) {
+      yield call(store.dispatch, actions.disableFileSystemContextMenus());
+
       const newFolderPath = payload;
       yield call(console.log, "create folder ", newFolderPath);
 
       
       // const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
       
-      // look for parent folder persistenceFile
+      // look for parent folder persistenceFile TODO modify action so name is supplied?
       const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(newFolderPath);
       const parentFolderPath = regexResult ? regexResult[1].slice(0, -1) : undefined;
       if (!parentFolderPath) {
@@ -677,6 +703,8 @@ export function* persistenceSaga(): SagaIterator {
 
       const newFolderId: string = yield call(createFolderAndReturnId, parentFolderId, newFolderName);
       yield put(actions.addPersistenceFile({ lastSaved: new Date(), path: newFolderPath, id: newFolderId, name: newFolderName, parentId: parentFolderId }));
+      yield call(store.dispatch, actions.enableFileSystemContextMenus());
+      yield call(store.dispatch, actions.updateRefreshFileViewKey());
       yield call(
         showSuccessMessage,
         `Folder ${newFolderName} successfully saved to Google Drive.`,
@@ -688,6 +716,8 @@ export function* persistenceSaga(): SagaIterator {
   yield takeEvery(
     PERSISTENCE_DELETE_FILE,
     function* ({ payload }: ReturnType<typeof actions.persistenceDeleteFile>) {
+      yield call(store.dispatch, actions.disableFileSystemContextMenus());
+
       const filePath = payload;
       yield call(console.log, "delete file ", filePath);
 
@@ -698,8 +728,10 @@ export function* persistenceSaga(): SagaIterator {
         yield call(console.log, "cannot find pers file for ", filePath);
         return;
       }
-      yield call(deleteFileOrFolder, persistenceFile.id); // assume this succeeds all the time
+      yield call(deleteFileOrFolder, persistenceFile.id); // assume this succeeds all the time? TODO
       yield put(actions.deletePersistenceFile(persistenceFile));
+      yield call(store.dispatch, actions.enableFileSystemContextMenus());
+      yield call(store.dispatch, actions.updateRefreshFileViewKey());
       yield call(
         showSuccessMessage,
         `${persistenceFile.name} successfully deleted from Google Drive.`,
@@ -711,6 +743,8 @@ export function* persistenceSaga(): SagaIterator {
   yield takeEvery(
     PERSISTENCE_DELETE_FOLDER,
     function* ({ payload }: ReturnType<typeof actions.persistenceDeleteFolder>) {
+      yield call(store.dispatch, actions.disableFileSystemContextMenus());
+
       const folderPath = payload;
       yield call(console.log, "delete folder ", folderPath);
 
@@ -721,8 +755,10 @@ export function* persistenceSaga(): SagaIterator {
         yield call(console.log, "cannot find pers file for ", folderPath);
         return;
       }
-      yield call(deleteFileOrFolder, persistenceFile.id); // assume this succeeds all the time
+      yield call(deleteFileOrFolder, persistenceFile.id); // assume this succeeds all the time? TODO
       yield put(actions.deletePersistenceFile(persistenceFile));
+      yield call(store.dispatch, actions.enableFileSystemContextMenus());
+      yield call(store.dispatch, actions.updateRefreshFileViewKey());
       yield call(
         showSuccessMessage,
         `Folder ${persistenceFile.name} successfully deleted from Google Drive.`,
@@ -734,6 +770,8 @@ export function* persistenceSaga(): SagaIterator {
   yield takeEvery(
     PERSISTENCE_RENAME_FILE,
     function* ({ payload : {oldFilePath, newFilePath} }: ReturnType<typeof actions.persistenceRenameFile>) {
+      yield call(store.dispatch, actions.disableFileSystemContextMenus());
+
       yield call(console.log, "rename file ", oldFilePath, " to ", newFilePath);
 
       // look for file
@@ -744,7 +782,7 @@ export function* persistenceSaga(): SagaIterator {
         return;
       }
 
-      // new name
+      // new name TODO: modify action so name is supplied?
       const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(newFilePath);
       if (!regexResult) {
         yield call(console.log, "regex fail ", newFilePath);
@@ -757,6 +795,8 @@ export function* persistenceSaga(): SagaIterator {
 
       // handle pers file
       yield put(actions.updatePersistenceFilePathAndNameByPath(oldFilePath, newFilePath, newFileName));
+      yield call(store.dispatch, actions.enableFileSystemContextMenus());
+      yield call(store.dispatch, actions.updateRefreshFileViewKey());
       yield call(
         showSuccessMessage,
         `${newFileName} successfully renamed in Google Drive.`,
@@ -768,7 +808,46 @@ export function* persistenceSaga(): SagaIterator {
   yield takeEvery(
     PERSISTENCE_RENAME_FOLDER,
     function* ({ payload : {oldFolderPath, newFolderPath} }: ReturnType<typeof actions.persistenceRenameFolder>) {
+      yield call(store.dispatch, actions.disableFileSystemContextMenus());
+
       yield call(console.log, "rename folder ", oldFolderPath, " to ", newFolderPath);
+
+      // look for folder
+      const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
+      const persistenceFile = persistenceFileArray.find(e => e.path === oldFolderPath);
+      if (!persistenceFile) {
+        yield call(console.log, "cannot find pers file for ", oldFolderPath);
+        return;
+      }
+
+      // new name TODO: modify action so name is supplied?
+      const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(newFolderPath);
+      if (!regexResult) {
+        yield call(console.log, "regex fail ", newFolderPath);
+        return;
+      }
+      const newFolderName = regexResult[2] + regexResult[3];
+
+      // old name TODO: modify action so name is supplied?
+      const regexResult2 = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(oldFolderPath);
+      if (!regexResult2) {
+        yield call(console.log, "regex fail ", oldFolderPath);
+        return;
+      }
+      const oldFolderName = regexResult2[2] + regexResult2[3];
+
+      // call gapi 
+      yield call(renameFileOrFolder, persistenceFile.id, newFolderName);
+
+      // handle pers file
+      yield put(actions.updatePersistenceFolderPathAndNameByPath(oldFolderPath, newFolderPath, oldFolderName, newFolderName));
+      yield call(store.dispatch, actions.enableFileSystemContextMenus());
+      yield call(store.dispatch, actions.updateRefreshFileViewKey());
+      yield call(
+        showSuccessMessage,
+        `Folder ${newFolderName} successfully renamed in Google Drive.`,
+        1000
+      );
     }
   );
 }
