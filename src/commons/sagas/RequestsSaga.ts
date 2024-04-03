@@ -445,53 +445,39 @@ export const getAssessmentOverviews = async (
 /**
  * GET /courses/{courseId}/assessments/{assessmentId}/scoreLeaderboard
  */
-export const getScoreLeaderboard = async (tokens: Tokens): Promise<AssessmentOverview[] | null> => {
-  const resp = await request(`${courseId()}/assessments`, 'GET', {
+export const getScoreLeaderboard = async (
+  assessmentId: number,
+  tokens: Tokens
+): Promise<ContestEntry[] | null> => {
+  const resp = await request(`${courseId()}/assessments/${assessmentId}/scoreLeaderboard`, 'GET', {
     ...tokens
   });
   if (!resp || !resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
   }
-  const assessmentOverviews = await resp.json();
-
-  return assessmentOverviews.map((overview: any) => {
-    overview.gradingStatus = computeGradingStatus(
-      overview.isManuallyGraded,
-      overview.status,
-      overview.gradedCount,
-      overview.questionCount
-    );
-    delete overview.gradedCount;
-    delete overview.questionCount;
-
-    return overview as AssessmentOverview;
-  });
+  const scoreLeaderboard = await resp.json();
+  return scoreLeaderboard as ContestEntry[];
 };
 
 /**
  * GET /courses/{courseId}/assessments/{assessmentId}/popularVoteLeaderboard
  */
-export const getPopularVoteLeaderboard = async (tokens: Tokens): Promise<ContestEntry[] | null> => {
-  const resp = await request(`${courseId()}/assessments`, 'GET', {
-    ...tokens
-  });
+export const getPopularVoteLeaderboard = async (
+  assessmentId: number,
+  tokens: Tokens
+): Promise<ContestEntry[] | null> => {
+  const resp = await request(
+    `${courseId()}/assessments/${assessmentId}/popularVoteLeaderboard`,
+    'GET',
+    {
+      ...tokens
+    }
+  );
   if (!resp || !resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
   }
-  const assessmentOverviews = await resp.json();
-
-  return assessmentOverviews.map((overview: any) => {
-    overview.gradingStatus = computeGradingStatus(
-      overview.isManuallyGraded,
-      overview.status,
-      overview.gradedCount,
-      overview.questionCount
-    );
-    delete overview.gradedCount;
-    delete overview.questionCount;
-
-    return overview as AssessmentOverview;
-  });
+  const popularVoteLeaderboard = await resp.json();
+  return popularVoteLeaderboard as ContestEntry[];
 };
 
 /**
