@@ -324,7 +324,7 @@ const GradingWorkspace: React.FC<Props> = props => {
                 : undefined
             }
             gradedAt={
-              grading!.answers[questionId].grade.grader
+              grading!.answers[questionId].grade.gradedAt
                 ? grading!.answers[questionId].grade.gradedAt!
                 : undefined
             }
