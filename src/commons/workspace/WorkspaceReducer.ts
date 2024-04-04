@@ -5,6 +5,11 @@ import { Reducer } from 'redux';
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
 import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
+import { logOut } from '../application/actions/CommonsActions';
+import {
+  evalInterpreterSuccess,
+  handleConsoleLog
+} from '../application/actions/InterpreterActions';
 import {
   CodeOutput,
   createDefaultWorkspace,
@@ -14,22 +19,23 @@ import {
   NotificationOutput,
   ResultOutput
 } from '../application/ApplicationTypes';
-import { LOG_OUT } from '../application/types/CommonsTypes';
 import {
   DEBUG_RESET,
   DEBUG_RESUME,
   END_DEBUG_PAUSE,
   END_INTERRUPT_EXECUTION,
   EVAL_INTERPRETER_ERROR,
-  EVAL_INTERPRETER_SUCCESS,
   EVAL_TESTCASE_FAILURE,
   EVAL_TESTCASE_SUCCESS,
-  HANDLE_CONSOLE_LOG,
   UPDATE_EDITOR_HIGHLIGHTED_LINES,
   UPDATE_EDITOR_HIGHLIGHTED_LINES_CONTROL
 } from '../application/types/InterpreterTypes';
 import { Testcase } from '../assessment/AssessmentTypes';
-import { SET_EDITOR_SESSION_ID, SET_SHAREDB_CONNECTED } from '../collabEditing/CollabEditingTypes';
+import {
+  SET_EDITOR_SESSION_ID,
+  SET_SESSION_DETAILS,
+  SET_SHAREDB_CONNECTED
+} from '../collabEditing/CollabEditingTypes';
 import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
@@ -38,21 +44,22 @@ import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeExecTime,
+  changeExternalLibrary,
   changeStepLimit,
   clearReplInput,
   clearReplOutput,
   clearReplOutputLast,
+  disableTokenCounter,
+  enableTokenCounter,
+  endClearContext,
+  evalEditor,
+  evalRepl,
+  sendReplInputToOutput,
   setTokenCount
 } from './WorkspaceActions';
 import {
   ADD_EDITOR_TAB,
-  CHANGE_EXTERNAL_LIBRARY,
-  DISABLE_TOKEN_COUNTER,
   EditorTabState,
-  ENABLE_TOKEN_COUNTER,
-  END_CLEAR_CONTEXT,
-  EVAL_EDITOR,
-  EVAL_REPL,
   MOVE_CURSOR,
   REMOVE_EDITOR_TAB,
   REMOVE_EDITOR_TAB_FOR_FILE,
@@ -61,7 +68,6 @@ import {
   RENAME_EDITOR_TABS_FOR_DIRECTORY,
   RESET_TESTCASE,
   RESET_WORKSPACE,
-  SEND_REPL_INPUT_TO_OUTPUT,
   SET_FOLDER_MODE,
   SHIFT_EDITOR_TAB,
   TOGGLE_EDITOR_AUTORUN,
@@ -71,12 +77,15 @@ import {
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_BREAKPOINTSTEPS,
+  UPDATE_CHANGEPOINTSTEPS,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_CURRENTSTEP,
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
+  UPDATE_LAST_DEBUGGER_RESULT,
+  UPDATE_LAST_NON_DET_RESULT,
   UPDATE_REPL_VALUE,
   UPDATE_STEPSTOTAL,
   UPDATE_SUBLANGUAGE,
@@ -98,9 +107,9 @@ const getWorkspaceLocation = (action: any): WorkspaceLocation => {
  *   - `location` is defined (and exists) as a property 'workspaceLocation' in
  *     the action's payload.
  */
-export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
+export const WorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
   state = defaultWorkspaceManager,
-  action: SourceActionType
+  action
 ) => {
   const workspaceLocation = getWorkspaceLocation(action);
   switch (workspaceLocation) {
@@ -216,19 +225,11 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     .addCase(clearReplOutput, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].output = [];
-    });
-});
-
-const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
-  state = defaultWorkspaceManager,
-  action: SourceActionType
-) => {
-  const workspaceLocation = getWorkspaceLocation(action);
-  let newOutput: InterpreterOutput[];
-  let lastOutput: InterpreterOutput;
-
-  switch (action.type) {
-    case END_CLEAR_CONTEXT:
+    })
+    .addCase(endClearContext, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      // For some reason mutating the state directly results in type
+      // errors, so we have to do it the old-fashioned way
       return {
         ...state,
         [workspaceLocation]: {
@@ -243,9 +244,14 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
           externalLibrary: action.payload.library.external.name
         }
       };
-    case SEND_REPL_INPUT_TO_OUTPUT:
+    })
+    .addCase(sendReplInputToOutput, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       // CodeOutput properties exist in parallel with workspaceLocation
-      newOutput = state[workspaceLocation].output.concat(action.payload as CodeOutput);
+      const newOutput: InterpreterOutput[] = state[workspaceLocation].output.concat(
+        action.payload as CodeOutput
+      );
+
       let newReplHistoryRecords: string[];
       if (action.payload.value !== '') {
         newReplHistoryRecords = [action.payload.value].concat(
@@ -257,31 +263,24 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
       if (newReplHistoryRecords.length > Constants.maxBrowseIndex) {
         newReplHistoryRecords.pop();
       }
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          output: newOutput,
-          replHistory: {
-            ...state[workspaceLocation].replHistory,
-            records: newReplHistoryRecords
-          }
-        }
-      };
-    case CHANGE_EXTERNAL_LIBRARY:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          externalLibrary: action.payload.newExternal
-        }
-      };
-    case HANDLE_CONSOLE_LOG:
+
+      state[workspaceLocation].output = newOutput;
+      state[workspaceLocation].replHistory.records = newReplHistoryRecords;
+    })
+    .addCase(changeExternalLibrary, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].externalLibrary = action.payload.newExternal;
+    })
+    .addCase(handleConsoleLog, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       /* Possible cases:
        * (1) state[workspaceLocation].output === [], i.e. state[workspaceLocation].output[-1] === undefined
        * (2) state[workspaceLocation].output[-1] is not RunningOutput
        * (3) state[workspaceLocation].output[-1] is RunningOutput */
-      lastOutput = state[workspaceLocation].output[state[workspaceLocation].output.length - 1];
+      const lastOutput: InterpreterOutput =
+        state[workspaceLocation].output[state[workspaceLocation].output.length - 1];
+      let newOutput: InterpreterOutput[];
+
       if (lastOutput === undefined || lastOutput.type !== 'running') {
         // New block of output.
         newOutput = state[workspaceLocation].output.concat({
@@ -296,54 +295,36 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
         newOutput = state[workspaceLocation].output.slice(0, -1);
         newOutput.push(updatedLastOutput);
       }
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          output: newOutput
-        }
-      };
-    case LOG_OUT:
+
+      state[workspaceLocation].output = newOutput;
+    })
+    .addCase(logOut, (state, action) => {
       // Preserve the playground workspace even after log out
       const playgroundWorkspace = state.playground;
       return {
         ...defaultWorkspaceManager,
         playground: playgroundWorkspace
       };
-    case ENABLE_TOKEN_COUNTER:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          hasTokenCounter: true
-        }
-      };
-    case DISABLE_TOKEN_COUNTER:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          hasTokenCounter: false
-        }
-      };
-    case EVAL_EDITOR:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          isRunning: true,
-          isDebugging: false
-        }
-      };
-    case EVAL_REPL:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          isRunning: true
-        }
-      };
-    case EVAL_INTERPRETER_SUCCESS:
+    })
+    .addCase(enableTokenCounter, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].hasTokenCounter = true;
+    })
+    .addCase(disableTokenCounter, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].hasTokenCounter = false;
+    })
+    .addCase(evalEditor, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].isRunning = true;
+      state[workspaceLocation].isDebugging = false;
+    })
+    .addCase(evalRepl, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].isRunning = true;
+    })
+    .addCase(evalInterpreterSuccess, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       const execType = state[workspaceLocation].context.executionMethod;
       const tokens = state[workspaceLocation].tokenCount;
       const newOutputEntry: Partial<ResultOutput> = {
@@ -351,7 +332,9 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
         value: execType === 'interpreter' ? action.payload.value : stringify(action.payload.value)
       };
 
-      lastOutput = state[workspaceLocation].output.slice(-1)[0];
+      const lastOutput: InterpreterOutput = state[workspaceLocation].output.slice(-1)[0];
+      let newOutput: InterpreterOutput[];
+
       if (lastOutput !== undefined && lastOutput.type === 'running') {
         const newOutputEntryWithLogs = {
           consoleLogs: lastOutput.consoleLogs,
@@ -381,14 +364,20 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
         } as ResultOutput);
       }
 
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          output: newOutput,
-          isRunning: false
-        }
-      };
+      state[workspaceLocation].output = newOutput;
+      state[workspaceLocation].isRunning = false;
+    });
+});
+
+const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
+  state = defaultWorkspaceManager,
+  action
+) => {
+  const workspaceLocation = getWorkspaceLocation(action);
+  let newOutput: InterpreterOutput[];
+  let lastOutput: InterpreterOutput;
+
+  switch (action.type) {
     case EVAL_TESTCASE_SUCCESS:
       return {
         ...state,
@@ -556,7 +545,14 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
           editorSessionId: action.payload.editorSessionId
         }
       };
-
+    case SET_SESSION_DETAILS:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          sessionDetails: action.payload.sessionDetails
+        }
+      };
     case SET_IS_EDITOR_READONLY:
       return {
         ...state,
@@ -1080,6 +1076,31 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           breakpointSteps: action.payload.breakpointSteps
+        }
+      };
+    case UPDATE_CHANGEPOINTSTEPS:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          changepointSteps: action.payload.changepointSteps
+        }
+      };
+    case UPDATE_LAST_DEBUGGER_RESULT:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          lastDebuggerResult: action.payload.lastDebuggerResult
+        }
+      };
+
+    case UPDATE_LAST_NON_DET_RESULT:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          lastNonDetResult: action.payload.lastNonDetResult
         }
       };
     case NOTIFY_PROGRAM_EVALUATED: {

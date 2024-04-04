@@ -1,7 +1,7 @@
-import * as es from 'estree';
 import { Control } from 'js-slang/dist/cse-machine/interpreter';
 import { ControlItem, Instr } from 'js-slang/dist/cse-machine/types';
 import { StatementSequence } from 'js-slang/dist/types';
+import { Node } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group, Label, Tag, Text } from 'react-konva';
@@ -143,6 +143,6 @@ export const isInstr = (command: ControlItem): command is Instr => {
  * @param command A ControlItem
  * @returns true if the ControlItem is an esNode and false if it is an instruction.
  */
-export const isNode = (command: ControlItem): command is es.Node | StatementSequence => {
-  return (command as es.Node).type !== undefined;
+export const isNode = (command: ControlItem): command is Node | StatementSequence => {
+  return (command as Node).type !== undefined;
 };

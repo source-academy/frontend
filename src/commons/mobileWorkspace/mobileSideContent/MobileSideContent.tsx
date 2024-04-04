@@ -98,13 +98,13 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
 
   return (
     <SideContentProvider {...props}>
-      {({ tabs: allTabs, changeTabsCallback, selectedTab }) => (
+      {({ tabs: allTabs, selectedTab }) => (
         <>
           {renderedPanels(allTabs, selectedTab)}
           <div className="mobile-tabs-container">
             <Tabs
               id="mobile-side-content"
-              onChange={changeTabsCallback}
+              onChange={onChange}
               renderActiveTabPanelOnly={renderActiveTabPanelOnly}
               selectedTabId={selectedTab}
               className={classNames(Classes.DARK, 'mobile-side-content')}

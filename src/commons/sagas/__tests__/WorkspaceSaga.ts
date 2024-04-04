@@ -1,6 +1,6 @@
 import { Context, IOptions, Result, resume, runFilesInContext, runInContext } from 'js-slang';
 import createContext from 'js-slang/dist/createContext';
-import { Chapter, Finished, Variant } from 'js-slang/dist/types';
+import { Chapter, ErrorType, Finished, SourceError, Variant } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
@@ -66,7 +66,11 @@ import {
   WorkspaceLocation,
   WorkspaceState
 } from '../../workspace/WorkspaceTypes';
-import workspaceSaga, { evalCode, evalEditor, evalTestCode, runTestCase } from '../WorkspaceSaga';
+import workspaceSaga from '../WorkspaceSaga';
+import { evalCode } from '../WorkspaceSaga/helpers/evalCode';
+import { evalEditor } from '../WorkspaceSaga/helpers/evalEditor';
+import { evalTestCode } from '../WorkspaceSaga/helpers/evalTestCode';
+import { runTestCase } from '../WorkspaceSaga/helpers/runTestCase';
 
 function generateDefaultState(
   workspaceLocation: WorkspaceLocation,
@@ -844,7 +848,7 @@ describe('evalCode', () => {
       envSteps: -1
     };
     lastDebuggerResult = { status: 'error' };
-    state = generateDefaultState(workspaceLocation);
+    state = generateDefaultState(workspaceLocation, { lastDebuggerResult: { status: 'error' } });
   });
 
   describe('on EVAL_EDITOR action without interruptions or pausing', () => {
@@ -1089,6 +1093,32 @@ describe('evalCode', () => {
         })
         .put(endDebuggerPause(workspaceLocation))
         .call(showWarningMessage, 'Execution paused', 750)
+        .silentRun();
+    });
+  });
+
+  describe('special error', () => {
+    test('on throwing of special error, calls evalInterpreterSuccess ', async () => {
+      context.errors = [
+        { type: ErrorType.RUNTIME, error: 'source_academy_interrupt' } as unknown as SourceError
+      ];
+      return expectSaga(
+        evalCode,
+        files,
+        codeFilePath,
+        context,
+        execTime,
+        workspaceLocation,
+        actionType
+      )
+        .withState(state)
+        .provide([
+          [
+            call(runFilesInContext, files, codeFilePath, context, options),
+            { status: 'error', value }
+          ]
+        ])
+        .put(evalInterpreterSuccess('Program has been interrupted by module', workspaceLocation))
         .silentRun();
     });
   });
