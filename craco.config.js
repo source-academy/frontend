@@ -40,16 +40,16 @@ const cracoConfig = (module.exports = {
       // Polyfill Node.js core modules.
       // An empty implementation (false) is provided when there is no browser equivalent.
       webpackConfig.resolve.fallback = {
-        child_process: false,
-        constants: require.resolve('constants-browserify'),
-        fs: false,
-        http: require.resolve('stream-http'),
-        https: require.resolve('https-browserify'),
-        os: require.resolve('os-browserify/browser'),
+        'child_process': false,
+        'constants': require.resolve('constants-browserify'),
+        'fs': false,
+        'http': require.resolve('stream-http'),
+        'https': require.resolve('https-browserify'),
+        'os': require.resolve('os-browserify/browser'),
         'path/posix': require.resolve('path-browserify'),
-        stream: require.resolve('stream-browserify'),
-        timers: require.resolve('timers-browserify'),
-        url: require.resolve('url/')
+        'stream': require.resolve('stream-browserify'),
+        'timers': require.resolve('timers-browserify'),
+        'url': require.resolve('url/')
       };
 
       // workaround .mjs files by Acorn
@@ -59,27 +59,25 @@ const cracoConfig = (module.exports = {
         type: 'javascript/auto',
         resolve: {
           fullySpecified: false
-        }
+        },
       });
 
       // Ignore warnings for dependencies that do not ship with a source map.
       // This is because we cannot do anything about our dependencies.
-      webpackConfig.ignoreWarnings = [
-        {
-          module: /node_modules/,
-          message: /Failed to parse source map/
-        }
-      ];
+      webpackConfig.ignoreWarnings = [{
+        module: /node_modules/,
+        message: /Failed to parse source map/
+      }];
 
       webpackConfig.plugins = [
         ...webpackConfig.plugins,
         // Make environment variables available in the browser by polyfilling the 'process' Node.js module.
         new webpack.ProvidePlugin({
-          process: 'process/browser'
+          process: 'process/browser',
         }),
         // Make the 'buffer' Node.js module available in the browser.
         new webpack.ProvidePlugin({
-          Buffer: ['buffer', 'Buffer']
+          Buffer: ['buffer', 'Buffer'],
         })
       ];
 
@@ -134,7 +132,7 @@ const cracoConfig = (module.exports = {
           'decode-uri-component',
           'split-on-first',
           'filter-obj',
-          '@sourceacademy/c-slang'
+          '@sourceacademy/c-slang',
         ),
         '^.+\\.module\\.(css|sass|scss)$'
       ];
@@ -151,7 +149,9 @@ const cracoConfig = (module.exports = {
     }
   },
   babel: {
-    presets: [['@babel/preset-typescript']]
+    presets: [
+      ['@babel/preset-typescript']
+    ]
   }
 });
 
