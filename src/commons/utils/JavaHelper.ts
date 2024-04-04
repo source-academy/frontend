@@ -5,22 +5,24 @@ import { initModuleContext, loadModuleBundle } from 'js-slang/dist/modules/loade
 
 import DisplayBufferService from './DisplayBufferService';
 
+const CDN = 'https://source-academy.github.io/modules/java/java-packages/src/';
 const supportedModules: string[] = ['rune'];
 
 export async function javaRun(javaCode: string, context: Context) {
   let compiled = {};
+
   // FIXME: Remove when the compiler is working
   if (javaCode.startsWith('// From JSON')) {
     const json = JSON.parse(javaCode.slice(13));
     compiled = json;
   }
 
+  // load modules
   const lib: {
     [key: string]: {
       methods: { [key: string]: (...args: any[]) => any };
     };
   } = {};
-
   await Promise.all(
     supportedModules.map(async module => {
       await initModuleContext(module, context, true);
@@ -30,14 +32,17 @@ export async function javaRun(javaCode: string, context: Context) {
     })
   );
 
-  // load cached classfiles
+  // load cached classfiles from IndexedDB
   return loadCachedFiles(() =>
-    import('java-slang/dist/jvm/utils/classfiles').then(module => {
-      return module.default as { [key: string]: string };
-    })
+    // Initial loader to fetch commonly used classfiles
+    fetch(CDN + '_base.json')
+      .then(res => res.json())
+      .then((obj: { [key: string]: string }) => {
+        return obj;
+      })
   )
     .then(stdlib => {
-      const files = {
+      let files = {
         ...stdlib,
         ...compiled
       };
@@ -46,15 +51,38 @@ export async function javaRun(javaCode: string, context: Context) {
 
       // run the JVM
       return new Promise((resolve, reject) => {
-        const runJVM = setupJVM({
+        setupJVM({
           javaClassPath: '',
           nativesPath: '',
           callbacks: {
             readFileSync: (path: string) => {
-              const item = files[path as keyof typeof files];
-              if (!item) {
-                throw new Error('File not found: ' + path);
+              let item = files[path as keyof typeof files];
+
+              // not found: attempt to fetch from CDN
+              if (!item && path) {
+                const splits = path.split('/');
+                splits.pop(); // classname.class
+                const pkg = splits.join('_');
+
+                const request = new XMLHttpRequest();
+                request.open('GET', `${CDN}${pkg}.json`, false);
+                console.log('get ', `${CDN}${pkg}.json`);
+                request.send(null);
+                if (request.status !== 200) {
+                  throw new Error('File not found: ' + path);
+                }
+                const json = JSON.parse(request.responseText);
+                // we might want to cache the files in IndexedDB here
+                files = { ...files, ...json };
+
+                if (!files[path as keyof typeof files]) {
+                  throw new Error('File not found: ' + path);
+                }
+
+                item = files[path as keyof typeof files];
               }
+
+              // convert base64 to classfile object
               const binaryString = atob(item);
               const bytes = new Uint8Array(binaryString.length);
               for (let i = 0; i < binaryString.length; i++) {
@@ -91,12 +119,12 @@ export async function javaRun(javaCode: string, context: Context) {
                 severity: 'Error' as any,
                 location: {
                   start: {
-                    line: 0,
-                    column: 0
+                    line: -1,
+                    column: -1
                   },
                   end: {
-                    line: 0,
-                    column: 0
+                    line: -1,
+                    column: -1
                   }
                 },
                 explain: () => msg,
@@ -112,8 +140,7 @@ export async function javaRun(javaCode: string, context: Context) {
             }
           },
           natives: lib
-        });
-        runJVM();
+        })();
       });
     })
     .catch(() => {
