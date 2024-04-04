@@ -185,6 +185,7 @@ export class Layout {
   /** remove program environment containing predefined functions */
   private static removeProgramEnv() {
     if (!Layout.globalEnvNode.children) return;
+    if (Layout.globalEnvNode.children.length === 0) return;
 
     const programEnvNode = Layout.globalEnvNode.children[0];
     const globalEnvNode = Layout.globalEnvNode;

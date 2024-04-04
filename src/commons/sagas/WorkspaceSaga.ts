@@ -31,6 +31,7 @@ import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTyp
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import {
   defaultEditorValue,
+  isSchemeLanguage,
   isSourceLanguage,
   OverallState,
   styliseSublanguage
@@ -1089,7 +1090,11 @@ export function* evalCode(
             .currentStep
       )
     : -1;
-  const cseActiveAndCorrectChapter = context.chapter >= 3 && cseIsActive;
+
+  // TODO: we need to make a function that generalises all languages that depend on using the CSE machine
+  const cseActiveAndCorrectChapter =
+    (isSchemeLanguage(context.chapter) || context.chapter >= 3) && cseIsActive;
+
   if (cseActiveAndCorrectChapter) {
     context.executionMethod = 'cse-machine';
   }
