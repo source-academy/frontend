@@ -181,7 +181,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 127.5 L 486.12109375 390 L 486.12109375 390 M 140 127.5 L 486.12109375 390 L 486.12109375 390 "
+      data="M 140 127.5 L 485.99609375 390 L 485.99609375 390 M 140 127.5 L 485.99609375 390 L 485.99609375 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -194,7 +194,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         Array [
           140,
           127.5,
-          486.12109375,
+          485.99609375,
           390,
         ]
       }
@@ -309,7 +309,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 197.5 L 802.2421875 390 L 802.2421875 390 M 140 197.5 L 802.2421875 390 L 802.2421875 390 "
+      data="M 140 197.5 L 801.9921875 390 L 801.9921875 390 M 140 197.5 L 801.9921875 390 L 801.9921875 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -322,7 +322,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         Array [
           140,
           197.5,
-          802.2421875,
+          801.9921875,
           390,
         ]
       }
@@ -437,7 +437,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 267.5 L 1118.36328125 390 L 1118.36328125 390 M 140 267.5 L 1118.36328125 390 L 1118.36328125 390 "
+      data="M 140 267.5 L 1117.98828125 390 L 1117.98828125 390 M 140 267.5 L 1117.98828125 390 L 1117.98828125 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -450,7 +450,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         Array [
           140,
           267.5,
-          1118.36328125,
+          1117.98828125,
           390,
         ]
       }
@@ -565,7 +565,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 140 337.5 L 1434.484375 390 L 1434.484375 390 M 140 337.5 L 1434.484375 390 L 1434.484375 390 "
+      data="M 140 337.5 L 1433.984375 390 L 1433.984375 390 M 140 337.5 L 1433.984375 390 L 1433.984375 390 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -578,7 +578,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         Array [
           140,
           337.5,
-          1434.484375,
+          1433.984375,
           390,
         ]
       }
@@ -694,7 +694,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={178.060546875}
+    x={177.998046875}
     y={5}
   >
     <Tag
@@ -715,7 +715,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   </Label>
   <Label
     visible={false}
-    x={183.060546875}
+    x={182.998046875}
     y={45}
   >
     <Tag
@@ -743,7 +743,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={207.0908203125}
+    x={206.9970703125}
     y={5}
   >
     <Tag
@@ -764,7 +764,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   </Label>
   <Label
     visible={false}
-    x={212.0908203125}
+    x={211.9970703125}
     y={45}
   >
     <Tag
@@ -792,7 +792,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={236.12109375}
+    x={235.99609375}
     y={5}
   >
     <Tag
@@ -813,7 +813,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   </Label>
   <Label
     visible={false}
-    x={241.12109375}
+    x={240.99609375}
     y={45}
   >
     <Tag
@@ -841,7 +841,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={265.1513671875}
+    x={264.9951171875}
     y={5}
   >
     <Tag
@@ -862,7 +862,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   </Label>
   <Label
     visible={false}
-    x={270.1513671875}
+    x={269.9951171875}
     y={45}
   >
     <Tag
@@ -890,7 +890,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={294.181640625}
+    x={293.994140625}
     y={5}
   >
     <Tag
@@ -911,7 +911,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   </Label>
   <Label
     visible={false}
-    x={299.181640625}
+    x={298.994140625}
     y={45}
   >
     <Tag
@@ -939,7 +939,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={323.2119140625}
+    x={322.9931640625}
     y={5}
   >
     <Tag
@@ -960,7 +960,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   </Label>
   <Label
     visible={false}
-    x={328.2119140625}
+    x={327.9931640625}
     y={45}
   >
     <Tag
@@ -1556,7 +1556,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#030fff"
     />
     <Text
       fill="#999999"
@@ -1564,10 +1564,13 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
       fontSize={15}
       fontStyle="normal"
       fontVariant="normal"
-      height={35}
+      height={80}
       padding={10}
       preventDefault={false}
-      text="x = x + 1;"
+      text="[
+  arr[x] …
+  x = x +…
+]"
       width={120}
     />
   </Label>
@@ -1590,109 +1593,10 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="x = x + 1;"
-    />
-  </Label>
-</React.Fragment>
-`;
-
-exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 12`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    x={20}
-    y={425}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#999999"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      height={35}
-      padding={10}
-      preventDefault={false}
-      text="pop"
-      width={120}
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={145}
-    y={430}
-  >
-    <Tag
-      fill="black"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="black"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="Pop most recently pushed value from stash"
-    />
-  </Label>
-</React.Fragment>
-`;
-
-exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 13`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    x={20}
-    y={460}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#030fff"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      height={35}
-      padding={10}
-      preventDefault={false}
-      text="arr[x] = …"
-      width={120}
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={145}
-    y={465}
-  >
-    <Tag
-      fill="black"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="black"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="arr[x] = () => x;"
+      text="[
+  arr[x] = () => x;
+  x = x + 1;
+]"
     />
   </Label>
 </React.Fragment>
@@ -1837,7 +1741,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#030fff"
     />
     <Text
       fill="#999999"
@@ -1882,64 +1786,13 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    x={20}
-    y={145}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#030fff"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      height={35}
-      padding={10}
-      preventDefault={false}
-      text="asgn math…"
-      width={120}
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={145}
-    y={150}
-  >
-    <Tag
-      fill="black"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="black"
-    />
-    <Text
-      fill="#999999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="Assign value on top of stash to math_sin"
-    />
-  </Label>
-</React.Fragment>
-`;
-
-exports[`CSE Machine Control Stash correctly renders: global environments are treated correctly 5`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
     x={140}
     y={5}
   >
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#ff0000"
     />
     <Text
       fill="#999999"
@@ -1974,6 +1827,32 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
       text="closure"
     />
   </Label>
+  <Group
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+  >
+    <Path
+      data="M 181.49658203125 40 L 186.4892578125 240 L 186.4892578125 240 "
+      hitStrokeWidth={5}
+      preventDefault={false}
+      stroke="#999999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999999"
+      pointerWidth={10}
+      points={
+        Array [
+          181.49658203125,
+          40,
+          186.4892578125,
+          240,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
 </React.Fragment>
 `;
 
@@ -1981,6 +1860,9 @@ exports[`CSE Machine calculates correct layout for code sample 0 1`] = `
 Object {
   "head": Object {
     ":::pre-declared names::": Symbol(),
+  },
+  "heap": Heap {
+    "storage": null,
   },
   "id": Any<String>,
   "name": "global",
@@ -1991,10 +1873,6 @@ Object {
 exports[`CSE Machine calculates correct layout for code sample 0 2`] = `
 Object {
   "head": Object {
-    "50": [Function],
-    "52": [Function],
-    "54": [Function],
-    "56": [Function],
     "fn": [Function],
     "x": Array [
       "long string",
@@ -2060,6 +1938,186 @@ Object {
       ],
     ],
   },
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+      [Function],
+      [Function],
+      Array [
+        [Function],
+        [Function],
+      ],
+      Array [
+        2,
+        3,
+      ],
+      [Function],
+      Array [
+        [Function],
+        null,
+      ],
+      Array [
+        Array [
+          2,
+          3,
+        ],
+        Array [
+          [Function],
+          null,
+        ],
+      ],
+      Array [
+        1,
+        Array [
+          Array [
+            2,
+            3,
+          ],
+          Array [
+            [Function],
+            null,
+          ],
+        ],
+      ],
+      [Function],
+      Array [
+        "long string",
+        Array [
+          [Function],
+          [Function],
+        ],
+        Array [
+          1,
+          Array [
+            Array [
+              2,
+              3,
+            ],
+            Array [
+              [Function],
+              null,
+            ],
+          ],
+        ],
+        [Function],
+        5,
+        6,
+      ],
+      Array [
+        [Function],
+        null,
+      ],
+      Array [
+        Array [
+          Array [
+            2,
+            3,
+          ],
+          Array [
+            [Function],
+            null,
+          ],
+        ],
+        Array [
+          [Function],
+          null,
+        ],
+      ],
+      Array [
+        [Function],
+        Array [
+          Array [
+            Array [
+              2,
+              3,
+            ],
+            Array [
+              [Function],
+              null,
+            ],
+          ],
+          Array [
+            [Function],
+            null,
+          ],
+        ],
+      ],
+      Array [
+        Array [
+          1,
+          Array [
+            Array [
+              2,
+              3,
+            ],
+            Array [
+              [Function],
+              null,
+            ],
+          ],
+        ],
+        Array [
+          [Function],
+          Array [
+            Array [
+              Array [
+                2,
+                3,
+              ],
+              Array [
+                [Function],
+                null,
+              ],
+            ],
+            Array [
+              [Function],
+              null,
+            ],
+          ],
+        ],
+      ],
+      Array [
+        Array [
+          [Function],
+          [Function],
+        ],
+        Array [
+          Array [
+            1,
+            Array [
+              Array [
+                2,
+                3,
+              ],
+              Array [
+                [Function],
+                null,
+              ],
+            ],
+          ],
+          Array [
+            [Function],
+            Array [
+              Array [
+                Array [
+                  2,
+                  3,
+                ],
+                Array [
+                  [Function],
+                  null,
+                ],
+              ],
+              Array [
+                [Function],
+                null,
+              ],
+            ],
+          ],
+        ],
+      ],
+    },
+  },
   "id": Any<String>,
   "name": "programEnvironment",
   "tail": Object {
@@ -2108,13 +2166,67 @@ Object {
       "stream_remove": [Function],
       "stream_remove_all": [Function],
       "stream_reverse": [Function],
+      "stream_tail": [Function],
       "stream_to_list": [Function],
     },
-    "id": "1",
-    "name": "programEnvironment",
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+      },
+    },
+    "id": "0",
+    "name": "prelude",
     "tail": Object {
       "head": Object {
         ":::pre-declared names::": Symbol(),
+      },
+      "heap": Heap {
+        "storage": null,
       },
       "id": "-1",
       "name": "global",
@@ -2195,14 +2307,6 @@ Array [
       ],
     ],
   ],
-  "50:= ",
-  [Function],
-  "52:= ",
-  [Function],
-  "54:= ",
-  [Function],
-  "56:= ",
-  [Function],
 ]
 `;
 
@@ -2210,6 +2314,9 @@ exports[`CSE Machine calculates correct layout for code sample 1 1`] = `
 Object {
   "head": Object {
     ":::pre-declared names::": Symbol(),
+  },
+  "heap": Heap {
+    "storage": null,
   },
   "id": Any<String>,
   "name": "global",
@@ -2220,7 +2327,6 @@ Object {
 exports[`CSE Machine calculates correct layout for code sample 1 2`] = `
 Object {
   "head": Object {
-    "106": [Function],
     "fn": [Function],
     "l": Array [
       1,
@@ -2296,6 +2402,319 @@ Object {
       4,
     ],
   },
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+      Array [
+        1,
+        2,
+      ],
+      Array [
+        Array [
+          1,
+          2,
+        ],
+        3,
+      ],
+      Array [
+        1,
+        Array [
+          Array [
+            1,
+            2,
+          ],
+          3,
+        ],
+        4,
+      ],
+      Array [
+        [Function],
+        null,
+      ],
+      Array [
+        3,
+        Array [
+          [Function],
+          null,
+        ],
+      ],
+      Array [
+        2,
+        Array [
+          3,
+          Array [
+            [Function],
+            null,
+          ],
+        ],
+      ],
+      Array [
+        1,
+        Array [
+          2,
+          Array [
+            3,
+            Array [
+              [Function],
+              null,
+            ],
+          ],
+        ],
+      ],
+      Array [
+        1,
+        2,
+      ],
+      Array [
+        1,
+        Array [
+          1,
+          2,
+        ],
+        [Function],
+        4,
+        5,
+      ],
+      Array [
+        4,
+        null,
+      ],
+      Array [
+        Array [
+          1,
+          Array [
+            1,
+            2,
+          ],
+          [Function],
+          4,
+          5,
+        ],
+        Array [
+          4,
+          null,
+        ],
+      ],
+      Array [
+        Array [
+          Array [
+            1,
+            2,
+          ],
+          3,
+        ],
+        Array [
+          Array [
+            1,
+            Array [
+              1,
+              2,
+            ],
+            [Function],
+            4,
+            5,
+          ],
+          Array [
+            4,
+            null,
+          ],
+        ],
+      ],
+      Array [
+        Array [
+          1,
+          Array [
+            2,
+            Array [
+              3,
+              Array [
+                [Function],
+                null,
+              ],
+            ],
+          ],
+        ],
+        Array [
+          Array [
+            Array [
+              1,
+              2,
+            ],
+            3,
+          ],
+          Array [
+            Array [
+              1,
+              Array [
+                1,
+                2,
+              ],
+              [Function],
+              4,
+              5,
+            ],
+            Array [
+              4,
+              null,
+            ],
+          ],
+        ],
+      ],
+      [Function],
+      Array [
+        Array [
+          1,
+          Array [
+            Array [
+              1,
+              2,
+            ],
+            3,
+          ],
+          4,
+        ],
+        null,
+      ],
+      Array [
+        [Function],
+        Array [
+          Array [
+            1,
+            Array [
+              Array [
+                1,
+                2,
+              ],
+              3,
+            ],
+            4,
+          ],
+          null,
+        ],
+      ],
+      Array [
+        Array [
+          Array [
+            1,
+            Array [
+              2,
+              Array [
+                3,
+                Array [
+                  [Function],
+                  null,
+                ],
+              ],
+            ],
+          ],
+          Array [
+            Array [
+              Array [
+                1,
+                2,
+              ],
+              3,
+            ],
+            Array [
+              Array [
+                1,
+                Array [
+                  1,
+                  2,
+                ],
+                [Function],
+                4,
+                5,
+              ],
+              Array [
+                4,
+                null,
+              ],
+            ],
+          ],
+        ],
+        Array [
+          [Function],
+          Array [
+            Array [
+              1,
+              Array [
+                Array [
+                  1,
+                  2,
+                ],
+                3,
+              ],
+              4,
+            ],
+            null,
+          ],
+        ],
+      ],
+      Array [
+        1,
+        Array [
+          Array [
+            Array [
+              1,
+              Array [
+                2,
+                Array [
+                  3,
+                  Array [
+                    [Function],
+                    null,
+                  ],
+                ],
+              ],
+            ],
+            Array [
+              Array [
+                Array [
+                  1,
+                  2,
+                ],
+                3,
+              ],
+              Array [
+                Array [
+                  1,
+                  Array [
+                    1,
+                    2,
+                  ],
+                  [Function],
+                  4,
+                  5,
+                ],
+                Array [
+                  4,
+                  null,
+                ],
+              ],
+            ],
+          ],
+          Array [
+            [Function],
+            Array [
+              Array [
+                1,
+                Array [
+                  Array [
+                    1,
+                    2,
+                  ],
+                  3,
+                ],
+                4,
+              ],
+              null,
+            ],
+          ],
+        ],
+      ],
+    },
+  },
   "id": Any<String>,
   "name": "programEnvironment",
   "tail": Object {
@@ -2344,13 +2763,67 @@ Object {
       "stream_remove": [Function],
       "stream_remove_all": [Function],
       "stream_reverse": [Function],
+      "stream_tail": [Function],
       "stream_to_list": [Function],
     },
-    "id": "57",
-    "name": "programEnvironment",
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+      },
+    },
+    "id": "0",
+    "name": "prelude",
     "tail": Object {
       "head": Object {
         ":::pre-declared names::": Symbol(),
+      },
+      "heap": Heap {
+        "storage": null,
       },
       "id": "-1",
       "name": "global",
@@ -2441,8 +2914,6 @@ Array [
       ],
     ],
   ],
-  "106:= ",
-  [Function],
 ]
 `;
 
@@ -2450,6 +2921,9 @@ exports[`CSE Machine calculates correct layout for code sample 2 1`] = `
 Object {
   "head": Object {
     ":::pre-declared names::": Symbol(),
+  },
+  "heap": Heap {
+    "storage": null,
   },
   "id": Any<String>,
   "name": "global",
@@ -2486,6 +2960,62 @@ Object {
         null,
       ],
     ],
+  },
+  "heap": Heap {
+    "storage": Set {
+      Array [
+        2,
+        Array [
+          3,
+          Array [
+            Array [
+              1,
+              [Circular],
+            ],
+            null,
+          ],
+        ],
+      ],
+      Array [
+        1,
+        Array [
+          2,
+          Array [
+            3,
+            Array [
+              [Circular],
+              null,
+            ],
+          ],
+        ],
+      ],
+      Array [
+        Array [
+          1,
+          Array [
+            2,
+            Array [
+              3,
+              [Circular],
+            ],
+          ],
+        ],
+        null,
+      ],
+      Array [
+        3,
+        Array [
+          Array [
+            1,
+            Array [
+              2,
+              [Circular],
+            ],
+          ],
+          null,
+        ],
+      ],
+    },
   },
   "id": Any<String>,
   "name": "programEnvironment",
@@ -2535,13 +3065,67 @@ Object {
       "stream_remove": [Function],
       "stream_remove_all": [Function],
       "stream_reverse": [Function],
+      "stream_tail": [Function],
       "stream_to_list": [Function],
     },
-    "id": "107",
-    "name": "programEnvironment",
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+      },
+    },
+    "id": "0",
+    "name": "prelude",
     "tail": Object {
       "head": Object {
         ":::pre-declared names::": Symbol(),
+      },
+      "heap": Heap {
+        "storage": null,
       },
       "id": "-1",
       "name": "global",
@@ -2591,6 +3175,9 @@ Object {
   "head": Object {
     ":::pre-declared names::": Symbol(),
   },
+  "heap": Heap {
+    "storage": null,
+  },
   "id": Any<String>,
   "name": "global",
   "tail": null,
@@ -2600,8 +3187,6 @@ Object {
 exports[`CSE Machine calculates correct layout for code sample 3 2`] = `
 Object {
   "head": Object {
-    "202": [Function],
-    "204": [Function],
     "e": Array [
       Array [
         3,
@@ -2676,6 +3261,196 @@ Object {
       ],
     ],
   },
+  "heap": Heap {
+    "storage": Set {
+      Array [
+        5,
+        null,
+      ],
+      Array [
+        4,
+        Array [
+          5,
+          null,
+        ],
+      ],
+      Array [
+        3,
+        Array [
+          4,
+          Array [
+            5,
+            null,
+          ],
+        ],
+      ],
+      Array [
+        Array [
+          3,
+          Array [
+            4,
+            Array [
+              5,
+              null,
+            ],
+          ],
+        ],
+        null,
+      ],
+      Array [
+        2,
+        Array [
+          Array [
+            3,
+            Array [
+              4,
+              Array [
+                5,
+                null,
+              ],
+            ],
+          ],
+          null,
+        ],
+      ],
+      Array [
+        Array [
+          3,
+          Array [
+            4,
+            Array [
+              5,
+              null,
+            ],
+          ],
+        ],
+        Array [
+          2,
+          Array [
+            Array [
+              3,
+              Array [
+                4,
+                Array [
+                  5,
+                  null,
+                ],
+              ],
+            ],
+            null,
+          ],
+        ],
+      ],
+      Array [
+        1,
+        2,
+      ],
+      [Function],
+      Array [
+        5,
+        null,
+      ],
+      Array [
+        4,
+        Array [
+          5,
+          null,
+        ],
+      ],
+      Array [
+        [Function],
+        Array [
+          4,
+          Array [
+            5,
+            null,
+          ],
+        ],
+      ],
+      Array [
+        Array [
+          [Function],
+          Array [
+            4,
+            Array [
+              5,
+              null,
+            ],
+          ],
+        ],
+        null,
+      ],
+      Array [
+        2,
+        Array [
+          Array [
+            [Function],
+            Array [
+              4,
+              Array [
+                5,
+                null,
+              ],
+            ],
+          ],
+          null,
+        ],
+      ],
+      Array [
+        Array [
+          [Function],
+          Array [
+            4,
+            Array [
+              5,
+              null,
+            ],
+          ],
+        ],
+        Array [
+          2,
+          Array [
+            Array [
+              [Function],
+              Array [
+                4,
+                Array [
+                  5,
+                  null,
+                ],
+              ],
+            ],
+            null,
+          ],
+        ],
+      ],
+      [Function],
+      Array [
+        1,
+        2,
+      ],
+      Array [
+        [Function],
+        Array [
+          1,
+          2,
+        ],
+      ],
+      Array [
+        Array [
+          1,
+          2,
+        ],
+        Array [
+          [Function],
+          Array [
+            1,
+            2,
+          ],
+        ],
+      ],
+    },
+  },
   "id": Any<String>,
   "name": "programEnvironment",
   "tail": Object {
@@ -2724,13 +3499,67 @@ Object {
       "stream_remove": [Function],
       "stream_remove_all": [Function],
       "stream_reverse": [Function],
+      "stream_tail": [Function],
       "stream_to_list": [Function],
     },
-    "id": "154",
-    "name": "programEnvironment",
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+      },
+    },
+    "id": "0",
+    "name": "prelude",
     "tail": Object {
       "head": Object {
         ":::pre-declared names::": Symbol(),
+      },
+      "heap": Heap {
+        "storage": null,
       },
       "id": "-1",
       "name": "global",
@@ -2821,10 +3650,6 @@ Array [
       ],
     ],
   ],
-  "202:= ",
-  [Function],
-  "204:= ",
-  [Function],
 ]
 `;
 
@@ -2832,6 +3657,9 @@ exports[`CSE Machine calculates correct layout for code sample 4 1`] = `
 Object {
   "head": Object {
     ":::pre-declared names::": Symbol(),
+  },
+  "heap": Heap {
+    "storage": null,
   },
   "id": Any<String>,
   "name": "global",
@@ -2846,6 +3674,11 @@ Object {
     "x": 0,
     "y": 10,
     "z": [Function],
+  },
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+    },
   },
   "id": Any<String>,
   "name": "programEnvironment",
@@ -2895,13 +3728,67 @@ Object {
       "stream_remove": [Function],
       "stream_remove_all": [Function],
       "stream_reverse": [Function],
+      "stream_tail": [Function],
       "stream_to_list": [Function],
     },
-    "id": "205",
-    "name": "programEnvironment",
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+      },
+    },
+    "id": "0",
+    "name": "prelude",
     "tail": Object {
       "head": Object {
         ":::pre-declared names::": Symbol(),
+      },
+      "heap": Heap {
+        "storage": null,
       },
       "id": "-1",
       "name": "global",
@@ -2952,8 +3839,12 @@ Object {
     "type": "CallExpression",
   },
   "head": Object {
-    "255": [Function],
     "x": 11,
+  },
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+    },
   },
   "id": Any<String>,
   "name": "f",
@@ -2964,7 +3855,12 @@ Object {
       "y": 10,
       "z": [Function],
     },
-    "id": "251",
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+      },
+    },
+    "id": "47",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -3012,13 +3908,67 @@ Object {
         "stream_remove": [Function],
         "stream_remove_all": [Function],
         "stream_reverse": [Function],
+        "stream_tail": [Function],
         "stream_to_list": [Function],
       },
-      "id": "205",
-      "name": "programEnvironment",
+      "heap": Heap {
+        "storage": Set {
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+        },
+      },
+      "id": "0",
+      "name": "prelude",
       "tail": Object {
         "head": Object {
           ":::pre-declared names::": Symbol(),
+        },
+        "heap": Heap {
+          "storage": null,
         },
         "id": "-1",
         "name": "global",
@@ -3043,8 +3993,6 @@ Array [
   [Function],
   "x: ",
   11,
-  "255:= ",
-  [Function],
 ]
 `;
 
@@ -3054,6 +4002,9 @@ Object {
     ":::pre-declared names::": Symbol(),
     "accumulate": [Function],
     "pair": [Function],
+  },
+  "heap": Heap {
+    "storage": null,
   },
   "id": Any<String>,
   "name": "global",
@@ -3074,6 +4025,31 @@ Object {
         ],
       ],
     ],
+  },
+  "heap": Heap {
+    "storage": Set {
+      Array [
+        [Function],
+        null,
+      ],
+      Array [
+        [Function],
+        Array [
+          [Function],
+          null,
+        ],
+      ],
+      Array [
+        1,
+        Array [
+          [Function],
+          Array [
+            [Function],
+            null,
+          ],
+        ],
+      ],
+    },
   },
   "id": Any<String>,
   "name": "programEnvironment",
@@ -3123,15 +4099,69 @@ Object {
       "stream_remove": [Function],
       "stream_remove_all": [Function],
       "stream_reverse": [Function],
+      "stream_tail": [Function],
       "stream_to_list": [Function],
     },
-    "id": "256",
-    "name": "programEnvironment",
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+      },
+    },
+    "id": "0",
+    "name": "prelude",
     "tail": Object {
       "head": Object {
         ":::pre-declared names::": Symbol(),
         "accumulate": [Function],
         "pair": [Function],
+      },
+      "heap": Heap {
+        "storage": null,
       },
       "id": "-1",
       "name": "global",
@@ -3168,6 +4198,9 @@ Object {
   "head": Object {
     ":::pre-declared names::": Symbol(),
   },
+  "heap": Heap {
+    "storage": null,
+  },
   "id": Any<String>,
   "name": "global",
   "tail": null,
@@ -3178,6 +4211,11 @@ exports[`CSE Machine calculates correct layout for code sample 6 2`] = `
 Object {
   "head": Object {
     "x": Array [],
+  },
+  "heap": Heap {
+    "storage": Set {
+      Array [],
+    },
   },
   "id": Any<String>,
   "name": "programEnvironment",
@@ -3227,13 +4265,67 @@ Object {
       "stream_remove": [Function],
       "stream_remove_all": [Function],
       "stream_reverse": [Function],
+      "stream_tail": [Function],
       "stream_to_list": [Function],
     },
-    "id": "303",
-    "name": "programEnvironment",
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+      },
+    },
+    "id": "0",
+    "name": "prelude",
     "tail": Object {
       "head": Object {
         ":::pre-declared names::": Symbol(),
+      },
+      "heap": Heap {
+        "storage": null,
       },
       "id": "-1",
       "name": "global",
@@ -3255,9 +4347,10 @@ Array [
 exports[`CSE Machine calculates correct layout for code sample 7 1`] = `
 Object {
   "head": Object {
-    "411": [Function],
     ":::pre-declared names::": Symbol(),
-    "integers_from": [Function],
+  },
+  "heap": Heap {
+    "storage": null,
   },
   "id": Any<String>,
   "name": "global",
@@ -3279,6 +4372,28 @@ Object {
       ],
     ],
   },
+  "heap": Heap {
+    "storage": Set {
+      Array [],
+      Array [
+        1,
+        Array [
+          [Circular],
+          [Circular],
+        ],
+        [Circular],
+      ],
+      Array [
+        [Circular],
+        Array [
+          1,
+          [Circular],
+          [Circular],
+        ],
+      ],
+      [Function],
+    },
+  },
   "id": Any<String>,
   "name": "programEnvironment",
   "tail": Object {
@@ -3294,7 +4409,6 @@ Object {
       "$remove": [Function],
       "$remove_all": [Function],
       "$reverse": [Function],
-      "411": [Function],
       "__access_export__": [Function],
       "__access_named_export__": [Function],
       "accumulate": [Function],
@@ -3328,15 +4442,67 @@ Object {
       "stream_remove": [Function],
       "stream_remove_all": [Function],
       "stream_reverse": [Function],
+      "stream_tail": [Function],
       "stream_to_list": [Function],
     },
-    "id": "350",
-    "name": "programEnvironment",
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+      },
+    },
+    "id": "0",
+    "name": "prelude",
     "tail": Object {
       "head": Object {
-        "411": [Function],
         ":::pre-declared names::": Symbol(),
-        "integers_from": [Function],
+      },
+      "heap": Heap {
+        "storage": null,
       },
       "id": "-1",
       "name": "global",
@@ -3387,9 +4553,16 @@ Object {
     "type": "CallExpression",
   },
   "head": Object {
-    "414": [Function],
-    "422": [Function],
     "n": 1,
+  },
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+      Array [
+        1,
+        [Function],
+      ],
+    },
   },
   "id": Any<String>,
   "name": "integers_from",
@@ -3406,7 +4579,6 @@ Object {
       "$remove": [Function],
       "$remove_all": [Function],
       "$reverse": [Function],
-      "411": [Function],
       "__access_export__": [Function],
       "__access_named_export__": [Function],
       "accumulate": [Function],
@@ -3440,15 +4612,67 @@ Object {
       "stream_remove": [Function],
       "stream_remove_all": [Function],
       "stream_reverse": [Function],
+      "stream_tail": [Function],
       "stream_to_list": [Function],
     },
-    "id": "350",
-    "name": "programEnvironment",
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+      },
+    },
+    "id": "0",
+    "name": "prelude",
     "tail": Object {
       "head": Object {
-        "411": [Function],
         ":::pre-declared names::": Symbol(),
-        "integers_from": [Function],
+      },
+      "heap": Heap {
+        "storage": null,
       },
       "id": "-1",
       "name": "global",
@@ -3465,45 +4689,53 @@ Object {
       Object {
         "loc": undefined,
         "type": "Literal",
-        "value": 2,
+        "value": Array [
+          1,
+          [Function],
+        ],
       },
     ],
     "callee": Node {
-      "end": 13321,
+      "end": 317,
       "loc": SourceLocation {
         "end": Position {
-          "column": 23,
-          "line": 450,
+          "column": 73,
+          "line": 12,
         },
         "start": Position {
-          "column": 10,
-          "line": 450,
+          "column": 62,
+          "line": 12,
         },
       },
-      "name": "integers_from",
-      "start": 13308,
+      "name": "stream_tail",
+      "start": 306,
       "type": "Identifier",
     },
-    "end": 13328,
+    "end": 320,
     "loc": SourceLocation {
       "end": Position {
-        "column": 30,
-        "line": 450,
+        "column": 76,
+        "line": 12,
       },
       "start": Position {
-        "column": 10,
-        "line": 450,
+        "column": 62,
+        "line": 12,
       },
     },
-    "start": 13308,
+    "start": 306,
     "type": "CallExpression",
   },
   "head": Object {
-    "426": [Function],
-    "n": 2,
+    "xs": Array [
+      1,
+      [Function],
+    ],
+  },
+  "heap": Heap {
+    "storage": null,
   },
   "id": Any<String>,
-  "name": "n => ...",
+  "name": "stream_tail",
   "tail": Object {
     "head": Object {
       "$accumulate": [Function],
@@ -3517,7 +4749,6 @@ Object {
       "$remove": [Function],
       "$remove_all": [Function],
       "$reverse": [Function],
-      "411": [Function],
       "__access_export__": [Function],
       "__access_named_export__": [Function],
       "accumulate": [Function],
@@ -3551,15 +4782,67 @@ Object {
       "stream_remove": [Function],
       "stream_remove_all": [Function],
       "stream_reverse": [Function],
+      "stream_tail": [Function],
       "stream_to_list": [Function],
     },
-    "id": "350",
-    "name": "programEnvironment",
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+      },
+    },
+    "id": "0",
+    "name": "prelude",
     "tail": Object {
       "head": Object {
-        "411": [Function],
         ":::pre-declared names::": Symbol(),
-        "integers_from": [Function],
+      },
+      "heap": Heap {
+        "storage": null,
       },
       "id": "-1",
       "name": "global",
@@ -3571,8 +4854,181 @@ Object {
 
 exports[`CSE Machine calculates correct layout for code sample 7 5`] = `
 Object {
+  "callExpression": Object {
+    "arguments": Array [
+      Object {
+        "loc": undefined,
+        "type": "Literal",
+        "value": 2,
+      },
+    ],
+    "callee": Node {
+      "end": 13849,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 23,
+          "line": 470,
+        },
+        "start": Position {
+          "column": 10,
+          "line": 470,
+        },
+      },
+      "name": "integers_from",
+      "start": 13836,
+      "type": "Identifier",
+    },
+    "end": 13856,
+    "loc": SourceLocation {
+      "end": Position {
+        "column": 30,
+        "line": 470,
+      },
+      "start": Position {
+        "column": 10,
+        "line": 470,
+      },
+    },
+    "start": 13836,
+    "type": "CallExpression",
+  },
+  "head": Object {
+    "n": 2,
+  },
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+      Array [
+        2,
+        [Function],
+      ],
+    },
+  },
+  "id": Any<String>,
+  "name": "integers_from",
+  "tail": Object {
+    "head": Object {
+      "$accumulate": [Function],
+      "$append": [Function],
+      "$build_list": [Function],
+      "$enum_list": [Function],
+      "$filter": [Function],
+      "$length": [Function],
+      "$list_to_string": [Function],
+      "$map": [Function],
+      "$remove": [Function],
+      "$remove_all": [Function],
+      "$reverse": [Function],
+      "__access_export__": [Function],
+      "__access_named_export__": [Function],
+      "accumulate": [Function],
+      "append": [Function],
+      "build_list": [Function],
+      "build_stream": [Function],
+      "enum_list": [Function],
+      "enum_stream": [Function],
+      "equal": [Function],
+      "eval_stream": [Function],
+      "filter": [Function],
+      "for_each": [Function],
+      "integers_from": [Function],
+      "is_stream": [Function],
+      "length": [Function],
+      "list_ref": [Function],
+      "list_to_stream": [Function],
+      "list_to_string": [Function],
+      "map": [Function],
+      "member": [Function],
+      "remove": [Function],
+      "remove_all": [Function],
+      "reverse": [Function],
+      "stream_append": [Function],
+      "stream_filter": [Function],
+      "stream_for_each": [Function],
+      "stream_length": [Function],
+      "stream_map": [Function],
+      "stream_member": [Function],
+      "stream_ref": [Function],
+      "stream_remove": [Function],
+      "stream_remove_all": [Function],
+      "stream_reverse": [Function],
+      "stream_tail": [Function],
+      "stream_to_list": [Function],
+    },
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+        [Function],
+      },
+    },
+    "id": "0",
+    "name": "prelude",
+    "tail": Object {
+      "head": Object {
+        ":::pre-declared names::": Symbol(),
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 6`] = `
+Object {
   "head": Object {
     "i": 5,
+  },
+  "heap": Heap {
+    "storage": null,
   },
   "id": Any<String>,
   "name": "blockEnvironment",
@@ -3589,7 +5045,29 @@ Object {
         ],
       ],
     },
-    "id": "396",
+    "heap": Heap {
+      "storage": Set {
+        Array [],
+        Array [
+          1,
+          Array [
+            [Circular],
+            [Circular],
+          ],
+          [Circular],
+        ],
+        Array [
+          [Circular],
+          Array [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+        [Function],
+      },
+    },
+    "id": "47",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -3604,7 +5082,6 @@ Object {
         "$remove": [Function],
         "$remove_all": [Function],
         "$reverse": [Function],
-        "411": [Function],
         "__access_export__": [Function],
         "__access_named_export__": [Function],
         "accumulate": [Function],
@@ -3638,15 +5115,67 @@ Object {
         "stream_remove": [Function],
         "stream_remove_all": [Function],
         "stream_reverse": [Function],
+        "stream_tail": [Function],
         "stream_to_list": [Function],
       },
-      "id": "350",
-      "name": "programEnvironment",
+      "heap": Heap {
+        "storage": Set {
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+        },
+      },
+      "id": "0",
+      "name": "prelude",
       "tail": Object {
         "head": Object {
-          "411": [Function],
           ":::pre-declared names::": Symbol(),
-          "integers_from": [Function],
+        },
+        "heap": Heap {
+          "storage": null,
         },
         "id": "-1",
         "name": "global",
@@ -3657,7 +5186,7 @@ Object {
 }
 `;
 
-exports[`CSE Machine calculates correct layout for code sample 7 6`] = `
+exports[`CSE Machine calculates correct layout for code sample 7 7`] = `
 Object {
   "callExpression": Object {
     "arguments": Array [
@@ -3712,6 +5241,9 @@ Object {
       [Function],
     ],
   },
+  "heap": Heap {
+    "storage": null,
+  },
   "id": Any<String>,
   "name": "eval_stream",
   "tail": Object {
@@ -3727,7 +5259,29 @@ Object {
         ],
       ],
     },
-    "id": "396",
+    "heap": Heap {
+      "storage": Set {
+        Array [],
+        Array [
+          1,
+          Array [
+            [Circular],
+            [Circular],
+          ],
+          [Circular],
+        ],
+        Array [
+          [Circular],
+          Array [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+        [Function],
+      },
+    },
+    "id": "47",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -3742,7 +5296,6 @@ Object {
         "$remove": [Function],
         "$remove_all": [Function],
         "$reverse": [Function],
-        "411": [Function],
         "__access_export__": [Function],
         "__access_named_export__": [Function],
         "accumulate": [Function],
@@ -3776,15 +5329,67 @@ Object {
         "stream_remove": [Function],
         "stream_remove_all": [Function],
         "stream_reverse": [Function],
+        "stream_tail": [Function],
         "stream_to_list": [Function],
       },
-      "id": "350",
-      "name": "programEnvironment",
+      "heap": Heap {
+        "storage": Set {
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+        },
+      },
+      "id": "0",
+      "name": "prelude",
       "tail": Object {
         "head": Object {
-          "411": [Function],
           ":::pre-declared names::": Symbol(),
-          "integers_from": [Function],
+        },
+        "heap": Heap {
+          "storage": null,
         },
         "id": "-1",
         "name": "global",
@@ -3795,190 +5400,182 @@ Object {
 }
 `;
 
-exports[`CSE Machine calculates correct layout for code sample 7 7`] = `
-Object {
-  "head": Object {
-    "_copy_of_i": 1,
-  },
-  "id": Any<String>,
-  "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
-      "i": 5,
-    },
-    "id": "397",
-    "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
-        "eval_stream": [Function],
-        "x": 1,
-        "y": Array [
-          [Circular],
-          Array [
-            1,
-            [Circular],
-            [Circular],
-          ],
-        ],
-      },
-      "id": "396",
-      "name": "programEnvironment",
-      "tail": Object {
-        "head": Object {
-          "$accumulate": [Function],
-          "$append": [Function],
-          "$build_list": [Function],
-          "$enum_list": [Function],
-          "$filter": [Function],
-          "$length": [Function],
-          "$list_to_string": [Function],
-          "$map": [Function],
-          "$remove": [Function],
-          "$remove_all": [Function],
-          "$reverse": [Function],
-          "411": [Function],
-          "__access_export__": [Function],
-          "__access_named_export__": [Function],
-          "accumulate": [Function],
-          "append": [Function],
-          "build_list": [Function],
-          "build_stream": [Function],
-          "enum_list": [Function],
-          "enum_stream": [Function],
-          "equal": [Function],
-          "eval_stream": [Function],
-          "filter": [Function],
-          "for_each": [Function],
-          "integers_from": [Function],
-          "is_stream": [Function],
-          "length": [Function],
-          "list_ref": [Function],
-          "list_to_stream": [Function],
-          "list_to_string": [Function],
-          "map": [Function],
-          "member": [Function],
-          "remove": [Function],
-          "remove_all": [Function],
-          "reverse": [Function],
-          "stream_append": [Function],
-          "stream_filter": [Function],
-          "stream_for_each": [Function],
-          "stream_length": [Function],
-          "stream_map": [Function],
-          "stream_member": [Function],
-          "stream_ref": [Function],
-          "stream_remove": [Function],
-          "stream_remove_all": [Function],
-          "stream_reverse": [Function],
-          "stream_to_list": [Function],
-        },
-        "id": "350",
-        "name": "programEnvironment",
-        "tail": Object {
-          "head": Object {
-            "411": [Function],
-            ":::pre-declared names::": Symbol(),
-            "integers_from": [Function],
-          },
-          "id": "-1",
-          "name": "global",
-          "tail": null,
-        },
-      },
-    },
-  },
-}
-`;
-
 exports[`CSE Machine calculates correct layout for code sample 7 8`] = `
 Object {
   "head": Object {
-    "_copy_of_i": 2,
+    "the_tail": [Function],
+  },
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+    },
   },
   "id": Any<String>,
   "name": "blockEnvironment",
   "tail": Object {
-    "head": Object {
-      "i": 5,
+    "callExpression": Object {
+      "arguments": Array [
+        Object {
+          "loc": undefined,
+          "type": "Literal",
+          "value": Array [
+            1,
+            [Function],
+          ],
+        },
+      ],
+      "callee": Node {
+        "end": 317,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 73,
+            "line": 12,
+          },
+          "start": Position {
+            "column": 62,
+            "line": 12,
+          },
+        },
+        "name": "stream_tail",
+        "start": 306,
+        "type": "Identifier",
+      },
+      "end": 320,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 76,
+          "line": 12,
+        },
+        "start": Position {
+          "column": 62,
+          "line": 12,
+        },
+      },
+      "start": 306,
+      "type": "CallExpression",
     },
-    "id": "397",
-    "name": "blockEnvironment",
+    "head": Object {
+      "xs": Array [
+        1,
+        [Function],
+      ],
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "78",
+    "name": "stream_tail",
     "tail": Object {
       "head": Object {
+        "$accumulate": [Function],
+        "$append": [Function],
+        "$build_list": [Function],
+        "$enum_list": [Function],
+        "$filter": [Function],
+        "$length": [Function],
+        "$list_to_string": [Function],
+        "$map": [Function],
+        "$remove": [Function],
+        "$remove_all": [Function],
+        "$reverse": [Function],
+        "__access_export__": [Function],
+        "__access_named_export__": [Function],
+        "accumulate": [Function],
+        "append": [Function],
+        "build_list": [Function],
+        "build_stream": [Function],
+        "enum_list": [Function],
+        "enum_stream": [Function],
+        "equal": [Function],
         "eval_stream": [Function],
-        "x": 1,
-        "y": Array [
-          [Circular],
-          Array [
-            1,
-            [Circular],
-            [Circular],
-          ],
-        ],
+        "filter": [Function],
+        "for_each": [Function],
+        "integers_from": [Function],
+        "is_stream": [Function],
+        "length": [Function],
+        "list_ref": [Function],
+        "list_to_stream": [Function],
+        "list_to_string": [Function],
+        "map": [Function],
+        "member": [Function],
+        "remove": [Function],
+        "remove_all": [Function],
+        "reverse": [Function],
+        "stream_append": [Function],
+        "stream_filter": [Function],
+        "stream_for_each": [Function],
+        "stream_length": [Function],
+        "stream_map": [Function],
+        "stream_member": [Function],
+        "stream_ref": [Function],
+        "stream_remove": [Function],
+        "stream_remove_all": [Function],
+        "stream_reverse": [Function],
+        "stream_tail": [Function],
+        "stream_to_list": [Function],
       },
-      "id": "396",
-      "name": "programEnvironment",
+      "heap": Heap {
+        "storage": Set {
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+          [Function],
+        },
+      },
+      "id": "0",
+      "name": "prelude",
       "tail": Object {
         "head": Object {
-          "$accumulate": [Function],
-          "$append": [Function],
-          "$build_list": [Function],
-          "$enum_list": [Function],
-          "$filter": [Function],
-          "$length": [Function],
-          "$list_to_string": [Function],
-          "$map": [Function],
-          "$remove": [Function],
-          "$remove_all": [Function],
-          "$reverse": [Function],
-          "411": [Function],
-          "__access_export__": [Function],
-          "__access_named_export__": [Function],
-          "accumulate": [Function],
-          "append": [Function],
-          "build_list": [Function],
-          "build_stream": [Function],
-          "enum_list": [Function],
-          "enum_stream": [Function],
-          "equal": [Function],
-          "eval_stream": [Function],
-          "filter": [Function],
-          "for_each": [Function],
-          "integers_from": [Function],
-          "is_stream": [Function],
-          "length": [Function],
-          "list_ref": [Function],
-          "list_to_stream": [Function],
-          "list_to_string": [Function],
-          "map": [Function],
-          "member": [Function],
-          "remove": [Function],
-          "remove_all": [Function],
-          "reverse": [Function],
-          "stream_append": [Function],
-          "stream_filter": [Function],
-          "stream_for_each": [Function],
-          "stream_length": [Function],
-          "stream_map": [Function],
-          "stream_member": [Function],
-          "stream_ref": [Function],
-          "stream_remove": [Function],
-          "stream_remove_all": [Function],
-          "stream_reverse": [Function],
-          "stream_to_list": [Function],
+          ":::pre-declared names::": Symbol(),
         },
-        "id": "350",
-        "name": "programEnvironment",
-        "tail": Object {
-          "head": Object {
-            "411": [Function],
-            ":::pre-declared names::": Symbol(),
-            "integers_from": [Function],
-          },
-          "id": "-1",
-          "name": "global",
-          "tail": null,
+        "heap": Heap {
+          "storage": null,
         },
+        "id": "-1",
+        "name": "global",
+        "tail": null,
       },
     },
   },
@@ -3988,7 +5585,10 @@ Object {
 exports[`CSE Machine calculates correct layout for code sample 7 9`] = `
 Object {
   "head": Object {
-    "_copy_of_i": 3,
+    "_copy_of_i": 1,
+  },
+  "heap": Heap {
+    "storage": null,
   },
   "id": Any<String>,
   "name": "blockEnvironment",
@@ -3996,7 +5596,10 @@ Object {
     "head": Object {
       "i": 5,
     },
-    "id": "397",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "49",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
@@ -4011,7 +5614,29 @@ Object {
           ],
         ],
       },
-      "id": "396",
+      "heap": Heap {
+        "storage": Set {
+          Array [],
+          Array [
+            1,
+            Array [
+              [Circular],
+              [Circular],
+            ],
+            [Circular],
+          ],
+          Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+          [Function],
+        },
+      },
+      "id": "47",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -4026,7 +5651,6 @@ Object {
           "$remove": [Function],
           "$remove_all": [Function],
           "$reverse": [Function],
-          "411": [Function],
           "__access_export__": [Function],
           "__access_named_export__": [Function],
           "accumulate": [Function],
@@ -4060,15 +5684,67 @@ Object {
           "stream_remove": [Function],
           "stream_remove_all": [Function],
           "stream_reverse": [Function],
+          "stream_tail": [Function],
           "stream_to_list": [Function],
         },
-        "id": "350",
-        "name": "programEnvironment",
+        "heap": Heap {
+          "storage": Set {
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+          },
+        },
+        "id": "0",
+        "name": "prelude",
         "tail": Object {
           "head": Object {
-            "411": [Function],
             ":::pre-declared names::": Symbol(),
-            "integers_from": [Function],
+          },
+          "heap": Heap {
+            "storage": null,
           },
           "id": "-1",
           "name": "global",
@@ -4083,7 +5759,10 @@ Object {
 exports[`CSE Machine calculates correct layout for code sample 7 10`] = `
 Object {
   "head": Object {
-    "_copy_of_i": 4,
+    "_copy_of_i": 2,
+  },
+  "heap": Heap {
+    "storage": null,
   },
   "id": Any<String>,
   "name": "blockEnvironment",
@@ -4091,7 +5770,10 @@ Object {
     "head": Object {
       "i": 5,
     },
-    "id": "397",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "49",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
@@ -4106,7 +5788,29 @@ Object {
           ],
         ],
       },
-      "id": "396",
+      "heap": Heap {
+        "storage": Set {
+          Array [],
+          Array [
+            1,
+            Array [
+              [Circular],
+              [Circular],
+            ],
+            [Circular],
+          ],
+          Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+          [Function],
+        },
+      },
+      "id": "47",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -4121,7 +5825,6 @@ Object {
           "$remove": [Function],
           "$remove_all": [Function],
           "$reverse": [Function],
-          "411": [Function],
           "__access_export__": [Function],
           "__access_named_export__": [Function],
           "accumulate": [Function],
@@ -4155,15 +5858,67 @@ Object {
           "stream_remove": [Function],
           "stream_remove_all": [Function],
           "stream_reverse": [Function],
+          "stream_tail": [Function],
           "stream_to_list": [Function],
         },
-        "id": "350",
-        "name": "programEnvironment",
+        "heap": Heap {
+          "storage": Set {
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+          },
+        },
+        "id": "0",
+        "name": "prelude",
         "tail": Object {
           "head": Object {
-            "411": [Function],
             ":::pre-declared names::": Symbol(),
-            "integers_from": [Function],
+          },
+          "heap": Heap {
+            "storage": null,
           },
           "id": "-1",
           "name": "global",
@@ -4178,7 +5933,360 @@ Object {
 exports[`CSE Machine calculates correct layout for code sample 7 11`] = `
 Object {
   "head": Object {
+    "_copy_of_i": 3,
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "i": 5,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "49",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "eval_stream": [Function],
+        "x": 1,
+        "y": Array [
+          [Circular],
+          Array [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+      },
+      "heap": Heap {
+        "storage": Set {
+          Array [],
+          Array [
+            1,
+            Array [
+              [Circular],
+              [Circular],
+            ],
+            [Circular],
+          ],
+          Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+          [Function],
+        },
+      },
+      "id": "47",
+      "name": "programEnvironment",
+      "tail": Object {
+        "head": Object {
+          "$accumulate": [Function],
+          "$append": [Function],
+          "$build_list": [Function],
+          "$enum_list": [Function],
+          "$filter": [Function],
+          "$length": [Function],
+          "$list_to_string": [Function],
+          "$map": [Function],
+          "$remove": [Function],
+          "$remove_all": [Function],
+          "$reverse": [Function],
+          "__access_export__": [Function],
+          "__access_named_export__": [Function],
+          "accumulate": [Function],
+          "append": [Function],
+          "build_list": [Function],
+          "build_stream": [Function],
+          "enum_list": [Function],
+          "enum_stream": [Function],
+          "equal": [Function],
+          "eval_stream": [Function],
+          "filter": [Function],
+          "for_each": [Function],
+          "integers_from": [Function],
+          "is_stream": [Function],
+          "length": [Function],
+          "list_ref": [Function],
+          "list_to_stream": [Function],
+          "list_to_string": [Function],
+          "map": [Function],
+          "member": [Function],
+          "remove": [Function],
+          "remove_all": [Function],
+          "reverse": [Function],
+          "stream_append": [Function],
+          "stream_filter": [Function],
+          "stream_for_each": [Function],
+          "stream_length": [Function],
+          "stream_map": [Function],
+          "stream_member": [Function],
+          "stream_ref": [Function],
+          "stream_remove": [Function],
+          "stream_remove_all": [Function],
+          "stream_reverse": [Function],
+          "stream_tail": [Function],
+          "stream_to_list": [Function],
+        },
+        "heap": Heap {
+          "storage": Set {
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+          },
+        },
+        "id": "0",
+        "name": "prelude",
+        "tail": Object {
+          "head": Object {
+            ":::pre-declared names::": Symbol(),
+          },
+          "heap": Heap {
+            "storage": null,
+          },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 12`] = `
+Object {
+  "head": Object {
+    "_copy_of_i": 4,
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "i": 5,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "49",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "eval_stream": [Function],
+        "x": 1,
+        "y": Array [
+          [Circular],
+          Array [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+      },
+      "heap": Heap {
+        "storage": Set {
+          Array [],
+          Array [
+            1,
+            Array [
+              [Circular],
+              [Circular],
+            ],
+            [Circular],
+          ],
+          Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+          [Function],
+        },
+      },
+      "id": "47",
+      "name": "programEnvironment",
+      "tail": Object {
+        "head": Object {
+          "$accumulate": [Function],
+          "$append": [Function],
+          "$build_list": [Function],
+          "$enum_list": [Function],
+          "$filter": [Function],
+          "$length": [Function],
+          "$list_to_string": [Function],
+          "$map": [Function],
+          "$remove": [Function],
+          "$remove_all": [Function],
+          "$reverse": [Function],
+          "__access_export__": [Function],
+          "__access_named_export__": [Function],
+          "accumulate": [Function],
+          "append": [Function],
+          "build_list": [Function],
+          "build_stream": [Function],
+          "enum_list": [Function],
+          "enum_stream": [Function],
+          "equal": [Function],
+          "eval_stream": [Function],
+          "filter": [Function],
+          "for_each": [Function],
+          "integers_from": [Function],
+          "is_stream": [Function],
+          "length": [Function],
+          "list_ref": [Function],
+          "list_to_stream": [Function],
+          "list_to_string": [Function],
+          "map": [Function],
+          "member": [Function],
+          "remove": [Function],
+          "remove_all": [Function],
+          "reverse": [Function],
+          "stream_append": [Function],
+          "stream_filter": [Function],
+          "stream_for_each": [Function],
+          "stream_length": [Function],
+          "stream_map": [Function],
+          "stream_member": [Function],
+          "stream_ref": [Function],
+          "stream_remove": [Function],
+          "stream_remove_all": [Function],
+          "stream_reverse": [Function],
+          "stream_tail": [Function],
+          "stream_to_list": [Function],
+        },
+        "heap": Heap {
+          "storage": Set {
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+          },
+        },
+        "id": "0",
+        "name": "prelude",
+        "tail": Object {
+          "head": Object {
+            ":::pre-declared names::": Symbol(),
+          },
+          "heap": Heap {
+            "storage": null,
+          },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 13`] = `
+Object {
+  "head": Object {
     "es": [Function],
+  },
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+    },
   },
   "id": Any<String>,
   "name": "blockEnvironment",
@@ -4236,7 +6344,10 @@ Object {
         [Function],
       ],
     },
-    "id": "415",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "72",
     "name": "eval_stream",
     "tail": Object {
       "head": Object {
@@ -4251,7 +6362,29 @@ Object {
           ],
         ],
       },
-      "id": "396",
+      "heap": Heap {
+        "storage": Set {
+          Array [],
+          Array [
+            1,
+            Array [
+              [Circular],
+              [Circular],
+            ],
+            [Circular],
+          ],
+          Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+          [Function],
+        },
+      },
+      "id": "47",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
@@ -4266,7 +6399,6 @@ Object {
           "$remove": [Function],
           "$remove_all": [Function],
           "$reverse": [Function],
-          "411": [Function],
           "__access_export__": [Function],
           "__access_named_export__": [Function],
           "accumulate": [Function],
@@ -4300,15 +6432,67 @@ Object {
           "stream_remove": [Function],
           "stream_remove_all": [Function],
           "stream_reverse": [Function],
+          "stream_tail": [Function],
           "stream_to_list": [Function],
         },
-        "id": "350",
-        "name": "programEnvironment",
+        "heap": Heap {
+          "storage": Set {
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+          },
+        },
+        "id": "0",
+        "name": "prelude",
         "tail": Object {
           "head": Object {
-            "411": [Function],
             ":::pre-declared names::": Symbol(),
-            "integers_from": [Function],
+          },
+          "heap": Heap {
+            "storage": null,
           },
           "id": "-1",
           "name": "global",
@@ -4320,10 +6504,13 @@ Object {
 }
 `;
 
-exports[`CSE Machine calculates correct layout for code sample 7 12`] = `
+exports[`CSE Machine calculates correct layout for code sample 7 14`] = `
 Object {
   "head": Object {
     "i": 1,
+  },
+  "heap": Heap {
+    "storage": null,
   },
   "id": Any<String>,
   "name": "blockEnvironment",
@@ -4331,13 +6518,19 @@ Object {
     "head": Object {
       "_copy_of_i": 1,
     },
-    "id": "398",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "50",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "i": 5,
       },
-      "id": "397",
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "49",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
@@ -4352,7 +6545,29 @@ Object {
             ],
           ],
         },
-        "id": "396",
+        "heap": Heap {
+          "storage": Set {
+            Array [],
+            Array [
+              1,
+              Array [
+                [Circular],
+                [Circular],
+              ],
+              [Circular],
+            ],
+            Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+            [Function],
+          },
+        },
+        "id": "47",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -4367,7 +6582,6 @@ Object {
             "$remove": [Function],
             "$remove_all": [Function],
             "$reverse": [Function],
-            "411": [Function],
             "__access_export__": [Function],
             "__access_named_export__": [Function],
             "accumulate": [Function],
@@ -4401,219 +6615,67 @@ Object {
             "stream_remove": [Function],
             "stream_remove_all": [Function],
             "stream_reverse": [Function],
+            "stream_tail": [Function],
             "stream_to_list": [Function],
           },
-          "id": "350",
-          "name": "programEnvironment",
-          "tail": Object {
-            "head": Object {
-              "411": [Function],
-              ":::pre-declared names::": Symbol(),
-              "integers_from": [Function],
+          "heap": Heap {
+            "storage": Set {
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
             },
-            "id": "-1",
-            "name": "global",
-            "tail": null,
           },
-        },
-      },
-    },
-  },
-}
-`;
-
-exports[`CSE Machine calculates correct layout for code sample 7 13`] = `
-Object {
-  "head": Object {
-    "i": 2,
-  },
-  "id": Any<String>,
-  "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
-      "_copy_of_i": 2,
-    },
-    "id": "401",
-    "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
-        "i": 5,
-      },
-      "id": "397",
-      "name": "blockEnvironment",
-      "tail": Object {
-        "head": Object {
-          "eval_stream": [Function],
-          "x": 1,
-          "y": Array [
-            [Circular],
-            Array [
-              1,
-              [Circular],
-              [Circular],
-            ],
-          ],
-        },
-        "id": "396",
-        "name": "programEnvironment",
-        "tail": Object {
-          "head": Object {
-            "$accumulate": [Function],
-            "$append": [Function],
-            "$build_list": [Function],
-            "$enum_list": [Function],
-            "$filter": [Function],
-            "$length": [Function],
-            "$list_to_string": [Function],
-            "$map": [Function],
-            "$remove": [Function],
-            "$remove_all": [Function],
-            "$reverse": [Function],
-            "411": [Function],
-            "__access_export__": [Function],
-            "__access_named_export__": [Function],
-            "accumulate": [Function],
-            "append": [Function],
-            "build_list": [Function],
-            "build_stream": [Function],
-            "enum_list": [Function],
-            "enum_stream": [Function],
-            "equal": [Function],
-            "eval_stream": [Function],
-            "filter": [Function],
-            "for_each": [Function],
-            "integers_from": [Function],
-            "is_stream": [Function],
-            "length": [Function],
-            "list_ref": [Function],
-            "list_to_stream": [Function],
-            "list_to_string": [Function],
-            "map": [Function],
-            "member": [Function],
-            "remove": [Function],
-            "remove_all": [Function],
-            "reverse": [Function],
-            "stream_append": [Function],
-            "stream_filter": [Function],
-            "stream_for_each": [Function],
-            "stream_length": [Function],
-            "stream_map": [Function],
-            "stream_member": [Function],
-            "stream_ref": [Function],
-            "stream_remove": [Function],
-            "stream_remove_all": [Function],
-            "stream_reverse": [Function],
-            "stream_to_list": [Function],
-          },
-          "id": "350",
-          "name": "programEnvironment",
+          "id": "0",
+          "name": "prelude",
           "tail": Object {
             "head": Object {
-              "411": [Function],
               ":::pre-declared names::": Symbol(),
-              "integers_from": [Function],
             },
-            "id": "-1",
-            "name": "global",
-            "tail": null,
-          },
-        },
-      },
-    },
-  },
-}
-`;
-
-exports[`CSE Machine calculates correct layout for code sample 7 14`] = `
-Object {
-  "head": Object {
-    "i": 3,
-  },
-  "id": Any<String>,
-  "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
-      "_copy_of_i": 3,
-    },
-    "id": "404",
-    "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
-        "i": 5,
-      },
-      "id": "397",
-      "name": "blockEnvironment",
-      "tail": Object {
-        "head": Object {
-          "eval_stream": [Function],
-          "x": 1,
-          "y": Array [
-            [Circular],
-            Array [
-              1,
-              [Circular],
-              [Circular],
-            ],
-          ],
-        },
-        "id": "396",
-        "name": "programEnvironment",
-        "tail": Object {
-          "head": Object {
-            "$accumulate": [Function],
-            "$append": [Function],
-            "$build_list": [Function],
-            "$enum_list": [Function],
-            "$filter": [Function],
-            "$length": [Function],
-            "$list_to_string": [Function],
-            "$map": [Function],
-            "$remove": [Function],
-            "$remove_all": [Function],
-            "$reverse": [Function],
-            "411": [Function],
-            "__access_export__": [Function],
-            "__access_named_export__": [Function],
-            "accumulate": [Function],
-            "append": [Function],
-            "build_list": [Function],
-            "build_stream": [Function],
-            "enum_list": [Function],
-            "enum_stream": [Function],
-            "equal": [Function],
-            "eval_stream": [Function],
-            "filter": [Function],
-            "for_each": [Function],
-            "integers_from": [Function],
-            "is_stream": [Function],
-            "length": [Function],
-            "list_ref": [Function],
-            "list_to_stream": [Function],
-            "list_to_string": [Function],
-            "map": [Function],
-            "member": [Function],
-            "remove": [Function],
-            "remove_all": [Function],
-            "reverse": [Function],
-            "stream_append": [Function],
-            "stream_filter": [Function],
-            "stream_for_each": [Function],
-            "stream_length": [Function],
-            "stream_map": [Function],
-            "stream_member": [Function],
-            "stream_ref": [Function],
-            "stream_remove": [Function],
-            "stream_remove_all": [Function],
-            "stream_reverse": [Function],
-            "stream_to_list": [Function],
-          },
-          "id": "350",
-          "name": "programEnvironment",
-          "tail": Object {
-            "head": Object {
-              "411": [Function],
-              ":::pre-declared names::": Symbol(),
-              "integers_from": [Function],
+            "heap": Heap {
+              "storage": null,
             },
             "id": "-1",
             "name": "global",
@@ -4629,21 +6691,30 @@ Object {
 exports[`CSE Machine calculates correct layout for code sample 7 15`] = `
 Object {
   "head": Object {
-    "i": 4,
+    "i": 2,
+  },
+  "heap": Heap {
+    "storage": null,
   },
   "id": Any<String>,
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
-      "_copy_of_i": 4,
+      "_copy_of_i": 2,
     },
-    "id": "407",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "54",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
         "i": 5,
       },
-      "id": "397",
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "49",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
@@ -4658,7 +6729,29 @@ Object {
             ],
           ],
         },
-        "id": "396",
+        "heap": Heap {
+          "storage": Set {
+            Array [],
+            Array [
+              1,
+              Array [
+                [Circular],
+                [Circular],
+              ],
+              [Circular],
+            ],
+            Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+            [Function],
+          },
+        },
+        "id": "47",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -4673,7 +6766,6 @@ Object {
             "$remove": [Function],
             "$remove_all": [Function],
             "$reverse": [Function],
-            "411": [Function],
             "__access_export__": [Function],
             "__access_named_export__": [Function],
             "accumulate": [Function],
@@ -4707,15 +6799,67 @@ Object {
             "stream_remove": [Function],
             "stream_remove_all": [Function],
             "stream_reverse": [Function],
+            "stream_tail": [Function],
             "stream_to_list": [Function],
           },
-          "id": "350",
-          "name": "programEnvironment",
+          "heap": Heap {
+            "storage": Set {
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+            },
+          },
+          "id": "0",
+          "name": "prelude",
           "tail": Object {
             "head": Object {
-              "411": [Function],
               ":::pre-declared names::": Symbol(),
-              "integers_from": [Function],
+            },
+            "heap": Heap {
+              "storage": null,
             },
             "id": "-1",
             "name": "global",
@@ -4729,6 +6873,374 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 16`] = `
+Object {
+  "head": Object {
+    "i": 3,
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "_copy_of_i": 3,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "58",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "i": 5,
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "49",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "head": Object {
+          "eval_stream": [Function],
+          "x": 1,
+          "y": Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+        },
+        "heap": Heap {
+          "storage": Set {
+            Array [],
+            Array [
+              1,
+              Array [
+                [Circular],
+                [Circular],
+              ],
+              [Circular],
+            ],
+            Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+            [Function],
+          },
+        },
+        "id": "47",
+        "name": "programEnvironment",
+        "tail": Object {
+          "head": Object {
+            "$accumulate": [Function],
+            "$append": [Function],
+            "$build_list": [Function],
+            "$enum_list": [Function],
+            "$filter": [Function],
+            "$length": [Function],
+            "$list_to_string": [Function],
+            "$map": [Function],
+            "$remove": [Function],
+            "$remove_all": [Function],
+            "$reverse": [Function],
+            "__access_export__": [Function],
+            "__access_named_export__": [Function],
+            "accumulate": [Function],
+            "append": [Function],
+            "build_list": [Function],
+            "build_stream": [Function],
+            "enum_list": [Function],
+            "enum_stream": [Function],
+            "equal": [Function],
+            "eval_stream": [Function],
+            "filter": [Function],
+            "for_each": [Function],
+            "integers_from": [Function],
+            "is_stream": [Function],
+            "length": [Function],
+            "list_ref": [Function],
+            "list_to_stream": [Function],
+            "list_to_string": [Function],
+            "map": [Function],
+            "member": [Function],
+            "remove": [Function],
+            "remove_all": [Function],
+            "reverse": [Function],
+            "stream_append": [Function],
+            "stream_filter": [Function],
+            "stream_for_each": [Function],
+            "stream_length": [Function],
+            "stream_map": [Function],
+            "stream_member": [Function],
+            "stream_ref": [Function],
+            "stream_remove": [Function],
+            "stream_remove_all": [Function],
+            "stream_reverse": [Function],
+            "stream_tail": [Function],
+            "stream_to_list": [Function],
+          },
+          "heap": Heap {
+            "storage": Set {
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+            },
+          },
+          "id": "0",
+          "name": "prelude",
+          "tail": Object {
+            "head": Object {
+              ":::pre-declared names::": Symbol(),
+            },
+            "heap": Heap {
+              "storage": null,
+            },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 17`] = `
+Object {
+  "head": Object {
+    "i": 4,
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "_copy_of_i": 4,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "62",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "i": 5,
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "49",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "head": Object {
+          "eval_stream": [Function],
+          "x": 1,
+          "y": Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+        },
+        "heap": Heap {
+          "storage": Set {
+            Array [],
+            Array [
+              1,
+              Array [
+                [Circular],
+                [Circular],
+              ],
+              [Circular],
+            ],
+            Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+            [Function],
+          },
+        },
+        "id": "47",
+        "name": "programEnvironment",
+        "tail": Object {
+          "head": Object {
+            "$accumulate": [Function],
+            "$append": [Function],
+            "$build_list": [Function],
+            "$enum_list": [Function],
+            "$filter": [Function],
+            "$length": [Function],
+            "$list_to_string": [Function],
+            "$map": [Function],
+            "$remove": [Function],
+            "$remove_all": [Function],
+            "$reverse": [Function],
+            "__access_export__": [Function],
+            "__access_named_export__": [Function],
+            "accumulate": [Function],
+            "append": [Function],
+            "build_list": [Function],
+            "build_stream": [Function],
+            "enum_list": [Function],
+            "enum_stream": [Function],
+            "equal": [Function],
+            "eval_stream": [Function],
+            "filter": [Function],
+            "for_each": [Function],
+            "integers_from": [Function],
+            "is_stream": [Function],
+            "length": [Function],
+            "list_ref": [Function],
+            "list_to_stream": [Function],
+            "list_to_string": [Function],
+            "map": [Function],
+            "member": [Function],
+            "remove": [Function],
+            "remove_all": [Function],
+            "reverse": [Function],
+            "stream_append": [Function],
+            "stream_filter": [Function],
+            "stream_for_each": [Function],
+            "stream_length": [Function],
+            "stream_map": [Function],
+            "stream_member": [Function],
+            "stream_ref": [Function],
+            "stream_remove": [Function],
+            "stream_remove_all": [Function],
+            "stream_reverse": [Function],
+            "stream_tail": [Function],
+            "stream_to_list": [Function],
+          },
+          "heap": Heap {
+            "storage": Set {
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+            },
+          },
+          "id": "0",
+          "name": "prelude",
+          "tail": Object {
+            "head": Object {
+              ":::pre-declared names::": Symbol(),
+            },
+            "heap": Heap {
+              "storage": null,
+            },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 18`] = `
 Object {
   "callExpression": Object {
     "arguments": Array [
@@ -4783,13 +7295,23 @@ Object {
       [Function],
     ],
   },
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+    },
+  },
   "id": Any<String>,
   "name": "es",
   "tail": Object {
     "head": Object {
       "es": [Function],
     },
-    "id": "416",
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+      },
+    },
+    "id": "73",
     "name": "blockEnvironment",
     "tail": Object {
       "callExpression": Object {
@@ -4845,7 +7367,10 @@ Object {
           [Function],
         ],
       },
-      "id": "415",
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "72",
       "name": "eval_stream",
       "tail": Object {
         "head": Object {
@@ -4860,7 +7385,29 @@ Object {
             ],
           ],
         },
-        "id": "396",
+        "heap": Heap {
+          "storage": Set {
+            Array [],
+            Array [
+              1,
+              Array [
+                [Circular],
+                [Circular],
+              ],
+              [Circular],
+            ],
+            Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+            [Function],
+          },
+        },
+        "id": "47",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -4875,7 +7422,6 @@ Object {
             "$remove": [Function],
             "$remove_all": [Function],
             "$reverse": [Function],
-            "411": [Function],
             "__access_export__": [Function],
             "__access_named_export__": [Function],
             "accumulate": [Function],
@@ -4909,15 +7455,67 @@ Object {
             "stream_remove": [Function],
             "stream_remove_all": [Function],
             "stream_reverse": [Function],
+            "stream_tail": [Function],
             "stream_to_list": [Function],
           },
-          "id": "350",
-          "name": "programEnvironment",
+          "heap": Heap {
+            "storage": Set {
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+            },
+          },
+          "id": "0",
+          "name": "prelude",
           "tail": Object {
             "head": Object {
-              "411": [Function],
               ":::pre-declared names::": Symbol(),
-              "integers_from": [Function],
+            },
+            "heap": Heap {
+              "storage": null,
             },
             "id": "-1",
             "name": "global",
@@ -4930,7 +7528,7 @@ Object {
 }
 `;
 
-exports[`CSE Machine calculates correct layout for code sample 7 17`] = `
+exports[`CSE Machine calculates correct layout for code sample 7 19`] = `
 Object {
   "callExpression": Object {
     "arguments": Array [
@@ -4985,13 +7583,21 @@ Object {
       [Function],
     ],
   },
+  "heap": Heap {
+    "storage": null,
+  },
   "id": Any<String>,
   "name": "es",
   "tail": Object {
     "head": Object {
       "es": [Function],
     },
-    "id": "416",
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+      },
+    },
+    "id": "73",
     "name": "blockEnvironment",
     "tail": Object {
       "callExpression": Object {
@@ -5047,7 +7653,10 @@ Object {
           [Function],
         ],
       },
-      "id": "415",
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "72",
       "name": "eval_stream",
       "tail": Object {
         "head": Object {
@@ -5062,7 +7671,29 @@ Object {
             ],
           ],
         },
-        "id": "396",
+        "heap": Heap {
+          "storage": Set {
+            Array [],
+            Array [
+              1,
+              Array [
+                [Circular],
+                [Circular],
+              ],
+              [Circular],
+            ],
+            Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+            [Function],
+          },
+        },
+        "id": "47",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
@@ -5077,7 +7708,6 @@ Object {
             "$remove": [Function],
             "$remove_all": [Function],
             "$reverse": [Function],
-            "411": [Function],
             "__access_export__": [Function],
             "__access_named_export__": [Function],
             "accumulate": [Function],
@@ -5111,241 +7741,71 @@ Object {
             "stream_remove": [Function],
             "stream_remove_all": [Function],
             "stream_reverse": [Function],
+            "stream_tail": [Function],
             "stream_to_list": [Function],
           },
-          "id": "350",
-          "name": "programEnvironment",
+          "heap": Heap {
+            "storage": Set {
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+              [Function],
+            },
+          },
+          "id": "0",
+          "name": "prelude",
           "tail": Object {
             "head": Object {
-              "411": [Function],
               ":::pre-declared names::": Symbol(),
-              "integers_from": [Function],
+            },
+            "heap": Heap {
+              "storage": null,
             },
             "id": "-1",
             "name": "global",
             "tail": null,
-          },
-        },
-      },
-    },
-  },
-}
-`;
-
-exports[`CSE Machine calculates correct layout for code sample 7 18`] = `
-Object {
-  "head": Object {
-    "x": Array [
-      Array [],
-    ],
-  },
-  "id": Any<String>,
-  "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
-      "i": 1,
-    },
-    "id": "399",
-    "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
-        "_copy_of_i": 1,
-      },
-      "id": "398",
-      "name": "blockEnvironment",
-      "tail": Object {
-        "head": Object {
-          "i": 5,
-        },
-        "id": "397",
-        "name": "blockEnvironment",
-        "tail": Object {
-          "head": Object {
-            "eval_stream": [Function],
-            "x": 1,
-            "y": Array [
-              [Circular],
-              Array [
-                1,
-                [Circular],
-                [Circular],
-              ],
-            ],
-          },
-          "id": "396",
-          "name": "programEnvironment",
-          "tail": Object {
-            "head": Object {
-              "$accumulate": [Function],
-              "$append": [Function],
-              "$build_list": [Function],
-              "$enum_list": [Function],
-              "$filter": [Function],
-              "$length": [Function],
-              "$list_to_string": [Function],
-              "$map": [Function],
-              "$remove": [Function],
-              "$remove_all": [Function],
-              "$reverse": [Function],
-              "411": [Function],
-              "__access_export__": [Function],
-              "__access_named_export__": [Function],
-              "accumulate": [Function],
-              "append": [Function],
-              "build_list": [Function],
-              "build_stream": [Function],
-              "enum_list": [Function],
-              "enum_stream": [Function],
-              "equal": [Function],
-              "eval_stream": [Function],
-              "filter": [Function],
-              "for_each": [Function],
-              "integers_from": [Function],
-              "is_stream": [Function],
-              "length": [Function],
-              "list_ref": [Function],
-              "list_to_stream": [Function],
-              "list_to_string": [Function],
-              "map": [Function],
-              "member": [Function],
-              "remove": [Function],
-              "remove_all": [Function],
-              "reverse": [Function],
-              "stream_append": [Function],
-              "stream_filter": [Function],
-              "stream_for_each": [Function],
-              "stream_length": [Function],
-              "stream_map": [Function],
-              "stream_member": [Function],
-              "stream_ref": [Function],
-              "stream_remove": [Function],
-              "stream_remove_all": [Function],
-              "stream_reverse": [Function],
-              "stream_to_list": [Function],
-            },
-            "id": "350",
-            "name": "programEnvironment",
-            "tail": Object {
-              "head": Object {
-                "411": [Function],
-                ":::pre-declared names::": Symbol(),
-                "integers_from": [Function],
-              },
-              "id": "-1",
-              "name": "global",
-              "tail": null,
-            },
-          },
-        },
-      },
-    },
-  },
-}
-`;
-
-exports[`CSE Machine calculates correct layout for code sample 7 19`] = `
-Object {
-  "head": Object {
-    "x": Array [
-      Array [],
-    ],
-  },
-  "id": Any<String>,
-  "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
-      "i": 2,
-    },
-    "id": "402",
-    "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
-        "_copy_of_i": 2,
-      },
-      "id": "401",
-      "name": "blockEnvironment",
-      "tail": Object {
-        "head": Object {
-          "i": 5,
-        },
-        "id": "397",
-        "name": "blockEnvironment",
-        "tail": Object {
-          "head": Object {
-            "eval_stream": [Function],
-            "x": 1,
-            "y": Array [
-              [Circular],
-              Array [
-                1,
-                [Circular],
-                [Circular],
-              ],
-            ],
-          },
-          "id": "396",
-          "name": "programEnvironment",
-          "tail": Object {
-            "head": Object {
-              "$accumulate": [Function],
-              "$append": [Function],
-              "$build_list": [Function],
-              "$enum_list": [Function],
-              "$filter": [Function],
-              "$length": [Function],
-              "$list_to_string": [Function],
-              "$map": [Function],
-              "$remove": [Function],
-              "$remove_all": [Function],
-              "$reverse": [Function],
-              "411": [Function],
-              "__access_export__": [Function],
-              "__access_named_export__": [Function],
-              "accumulate": [Function],
-              "append": [Function],
-              "build_list": [Function],
-              "build_stream": [Function],
-              "enum_list": [Function],
-              "enum_stream": [Function],
-              "equal": [Function],
-              "eval_stream": [Function],
-              "filter": [Function],
-              "for_each": [Function],
-              "integers_from": [Function],
-              "is_stream": [Function],
-              "length": [Function],
-              "list_ref": [Function],
-              "list_to_stream": [Function],
-              "list_to_string": [Function],
-              "map": [Function],
-              "member": [Function],
-              "remove": [Function],
-              "remove_all": [Function],
-              "reverse": [Function],
-              "stream_append": [Function],
-              "stream_filter": [Function],
-              "stream_for_each": [Function],
-              "stream_length": [Function],
-              "stream_map": [Function],
-              "stream_member": [Function],
-              "stream_ref": [Function],
-              "stream_remove": [Function],
-              "stream_remove_all": [Function],
-              "stream_reverse": [Function],
-              "stream_to_list": [Function],
-            },
-            "id": "350",
-            "name": "programEnvironment",
-            "tail": Object {
-              "head": Object {
-                "411": [Function],
-                ":::pre-declared names::": Symbol(),
-                "integers_from": [Function],
-              },
-              "id": "-1",
-              "name": "global",
-              "tail": null,
-            },
           },
         },
       },
@@ -5361,25 +7821,41 @@ Object {
       Array [],
     ],
   },
+  "heap": Heap {
+    "storage": Set {
+      Array [
+        Array [],
+      ],
+    },
+  },
   "id": Any<String>,
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
-      "i": 3,
+      "i": 1,
     },
-    "id": "405",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "51",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
-        "_copy_of_i": 3,
+        "_copy_of_i": 1,
       },
-      "id": "404",
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "50",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
           "i": 5,
         },
-        "id": "397",
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "49",
         "name": "blockEnvironment",
         "tail": Object {
           "head": Object {
@@ -5394,7 +7870,29 @@ Object {
               ],
             ],
           },
-          "id": "396",
+          "heap": Heap {
+            "storage": Set {
+              Array [],
+              Array [
+                1,
+                Array [
+                  [Circular],
+                  [Circular],
+                ],
+                [Circular],
+              ],
+              Array [
+                [Circular],
+                Array [
+                  1,
+                  [Circular],
+                  [Circular],
+                ],
+              ],
+              [Function],
+            },
+          },
+          "id": "47",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -5409,7 +7907,6 @@ Object {
               "$remove": [Function],
               "$remove_all": [Function],
               "$reverse": [Function],
-              "411": [Function],
               "__access_export__": [Function],
               "__access_named_export__": [Function],
               "accumulate": [Function],
@@ -5443,15 +7940,67 @@ Object {
               "stream_remove": [Function],
               "stream_remove_all": [Function],
               "stream_reverse": [Function],
+              "stream_tail": [Function],
               "stream_to_list": [Function],
             },
-            "id": "350",
-            "name": "programEnvironment",
+            "heap": Heap {
+              "storage": Set {
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+              },
+            },
+            "id": "0",
+            "name": "prelude",
             "tail": Object {
               "head": Object {
-                "411": [Function],
                 ":::pre-declared names::": Symbol(),
-                "integers_from": [Function],
+              },
+              "heap": Heap {
+                "storage": null,
               },
               "id": "-1",
               "name": "global",
@@ -5472,25 +8021,41 @@ Object {
       Array [],
     ],
   },
+  "heap": Heap {
+    "storage": Set {
+      Array [
+        Array [],
+      ],
+    },
+  },
   "id": Any<String>,
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
-      "i": 4,
+      "i": 2,
     },
-    "id": "408",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "55",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
-        "_copy_of_i": 4,
+        "_copy_of_i": 2,
       },
-      "id": "407",
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "54",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
           "i": 5,
         },
-        "id": "397",
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "49",
         "name": "blockEnvironment",
         "tail": Object {
           "head": Object {
@@ -5505,7 +8070,29 @@ Object {
               ],
             ],
           },
-          "id": "396",
+          "heap": Heap {
+            "storage": Set {
+              Array [],
+              Array [
+                1,
+                Array [
+                  [Circular],
+                  [Circular],
+                ],
+                [Circular],
+              ],
+              Array [
+                [Circular],
+                Array [
+                  1,
+                  [Circular],
+                  [Circular],
+                ],
+              ],
+              [Function],
+            },
+          },
+          "id": "47",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -5520,7 +8107,6 @@ Object {
               "$remove": [Function],
               "$remove_all": [Function],
               "$reverse": [Function],
-              "411": [Function],
               "__access_export__": [Function],
               "__access_named_export__": [Function],
               "accumulate": [Function],
@@ -5554,15 +8140,67 @@ Object {
               "stream_remove": [Function],
               "stream_remove_all": [Function],
               "stream_reverse": [Function],
+              "stream_tail": [Function],
               "stream_to_list": [Function],
             },
-            "id": "350",
-            "name": "programEnvironment",
+            "heap": Heap {
+              "storage": Set {
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+              },
+            },
+            "id": "0",
+            "name": "prelude",
             "tail": Object {
               "head": Object {
-                "411": [Function],
                 ":::pre-declared names::": Symbol(),
-                "integers_from": [Function],
+              },
+              "heap": Heap {
+                "storage": null,
               },
               "id": "-1",
               "name": "global",
@@ -5579,6 +8217,406 @@ Object {
 exports[`CSE Machine calculates correct layout for code sample 7 22`] = `
 Object {
   "head": Object {
+    "x": Array [
+      Array [],
+    ],
+  },
+  "heap": Heap {
+    "storage": Set {
+      Array [
+        Array [],
+      ],
+    },
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "i": 3,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "59",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "_copy_of_i": 3,
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "58",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "head": Object {
+          "i": 5,
+        },
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "49",
+        "name": "blockEnvironment",
+        "tail": Object {
+          "head": Object {
+            "eval_stream": [Function],
+            "x": 1,
+            "y": Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+          },
+          "heap": Heap {
+            "storage": Set {
+              Array [],
+              Array [
+                1,
+                Array [
+                  [Circular],
+                  [Circular],
+                ],
+                [Circular],
+              ],
+              Array [
+                [Circular],
+                Array [
+                  1,
+                  [Circular],
+                  [Circular],
+                ],
+              ],
+              [Function],
+            },
+          },
+          "id": "47",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              "$accumulate": [Function],
+              "$append": [Function],
+              "$build_list": [Function],
+              "$enum_list": [Function],
+              "$filter": [Function],
+              "$length": [Function],
+              "$list_to_string": [Function],
+              "$map": [Function],
+              "$remove": [Function],
+              "$remove_all": [Function],
+              "$reverse": [Function],
+              "__access_export__": [Function],
+              "__access_named_export__": [Function],
+              "accumulate": [Function],
+              "append": [Function],
+              "build_list": [Function],
+              "build_stream": [Function],
+              "enum_list": [Function],
+              "enum_stream": [Function],
+              "equal": [Function],
+              "eval_stream": [Function],
+              "filter": [Function],
+              "for_each": [Function],
+              "integers_from": [Function],
+              "is_stream": [Function],
+              "length": [Function],
+              "list_ref": [Function],
+              "list_to_stream": [Function],
+              "list_to_string": [Function],
+              "map": [Function],
+              "member": [Function],
+              "remove": [Function],
+              "remove_all": [Function],
+              "reverse": [Function],
+              "stream_append": [Function],
+              "stream_filter": [Function],
+              "stream_for_each": [Function],
+              "stream_length": [Function],
+              "stream_map": [Function],
+              "stream_member": [Function],
+              "stream_ref": [Function],
+              "stream_remove": [Function],
+              "stream_remove_all": [Function],
+              "stream_reverse": [Function],
+              "stream_tail": [Function],
+              "stream_to_list": [Function],
+            },
+            "heap": Heap {
+              "storage": Set {
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+              },
+            },
+            "id": "0",
+            "name": "prelude",
+            "tail": Object {
+              "head": Object {
+                ":::pre-declared names::": Symbol(),
+              },
+              "heap": Heap {
+                "storage": null,
+              },
+              "id": "-1",
+              "name": "global",
+              "tail": null,
+            },
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 23`] = `
+Object {
+  "head": Object {
+    "x": Array [
+      Array [],
+    ],
+  },
+  "heap": Heap {
+    "storage": Set {
+      Array [
+        Array [],
+      ],
+    },
+  },
+  "id": Any<String>,
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "i": 4,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "63",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "_copy_of_i": 4,
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "62",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "head": Object {
+          "i": 5,
+        },
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "49",
+        "name": "blockEnvironment",
+        "tail": Object {
+          "head": Object {
+            "eval_stream": [Function],
+            "x": 1,
+            "y": Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+          },
+          "heap": Heap {
+            "storage": Set {
+              Array [],
+              Array [
+                1,
+                Array [
+                  [Circular],
+                  [Circular],
+                ],
+                [Circular],
+              ],
+              Array [
+                [Circular],
+                Array [
+                  1,
+                  [Circular],
+                  [Circular],
+                ],
+              ],
+              [Function],
+            },
+          },
+          "id": "47",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              "$accumulate": [Function],
+              "$append": [Function],
+              "$build_list": [Function],
+              "$enum_list": [Function],
+              "$filter": [Function],
+              "$length": [Function],
+              "$list_to_string": [Function],
+              "$map": [Function],
+              "$remove": [Function],
+              "$remove_all": [Function],
+              "$reverse": [Function],
+              "__access_export__": [Function],
+              "__access_named_export__": [Function],
+              "accumulate": [Function],
+              "append": [Function],
+              "build_list": [Function],
+              "build_stream": [Function],
+              "enum_list": [Function],
+              "enum_stream": [Function],
+              "equal": [Function],
+              "eval_stream": [Function],
+              "filter": [Function],
+              "for_each": [Function],
+              "integers_from": [Function],
+              "is_stream": [Function],
+              "length": [Function],
+              "list_ref": [Function],
+              "list_to_stream": [Function],
+              "list_to_string": [Function],
+              "map": [Function],
+              "member": [Function],
+              "remove": [Function],
+              "remove_all": [Function],
+              "reverse": [Function],
+              "stream_append": [Function],
+              "stream_filter": [Function],
+              "stream_for_each": [Function],
+              "stream_length": [Function],
+              "stream_map": [Function],
+              "stream_member": [Function],
+              "stream_ref": [Function],
+              "stream_remove": [Function],
+              "stream_remove_all": [Function],
+              "stream_reverse": [Function],
+              "stream_tail": [Function],
+              "stream_to_list": [Function],
+            },
+            "heap": Heap {
+              "storage": Set {
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+              },
+            },
+            "id": "0",
+            "name": "prelude",
+            "tail": Object {
+              "head": Object {
+                ":::pre-declared names::": Symbol(),
+              },
+              "heap": Heap {
+                "storage": null,
+              },
+              "id": "-1",
+              "name": "global",
+              "tail": null,
+            },
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 24`] = `
+Object {
+  "head": Object {
     "z": Array [
       Array [
         [Circular],
@@ -5589,6 +8627,27 @@ Object {
         ],
       ],
     ],
+  },
+  "heap": Heap {
+    "storage": Set {
+      Array [
+        Array [
+          [Circular],
+          Array [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+      ],
+      Array [
+        1,
+        Array [
+          2,
+          null,
+        ],
+      ],
+    },
   },
   "id": Any<String>,
   "name": "blockEnvironment",
@@ -5646,13 +8705,23 @@ Object {
         [Function],
       ],
     },
-    "id": "418",
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+      },
+    },
+    "id": "75",
     "name": "es",
     "tail": Object {
       "head": Object {
         "es": [Function],
       },
-      "id": "416",
+      "heap": Heap {
+        "storage": Set {
+          [Function],
+        },
+      },
+      "id": "73",
       "name": "blockEnvironment",
       "tail": Object {
         "callExpression": Object {
@@ -5708,7 +8777,10 @@ Object {
             [Function],
           ],
         },
-        "id": "415",
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "72",
         "name": "eval_stream",
         "tail": Object {
           "head": Object {
@@ -5723,7 +8795,29 @@ Object {
               ],
             ],
           },
-          "id": "396",
+          "heap": Heap {
+            "storage": Set {
+              Array [],
+              Array [
+                1,
+                Array [
+                  [Circular],
+                  [Circular],
+                ],
+                [Circular],
+              ],
+              Array [
+                [Circular],
+                Array [
+                  1,
+                  [Circular],
+                  [Circular],
+                ],
+              ],
+              [Function],
+            },
+          },
+          "id": "47",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -5738,7 +8832,6 @@ Object {
               "$remove": [Function],
               "$remove_all": [Function],
               "$reverse": [Function],
-              "411": [Function],
               "__access_export__": [Function],
               "__access_named_export__": [Function],
               "accumulate": [Function],
@@ -5772,15 +8865,67 @@ Object {
               "stream_remove": [Function],
               "stream_remove_all": [Function],
               "stream_reverse": [Function],
+              "stream_tail": [Function],
               "stream_to_list": [Function],
             },
-            "id": "350",
-            "name": "programEnvironment",
+            "heap": Heap {
+              "storage": Set {
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+              },
+            },
+            "id": "0",
+            "name": "prelude",
             "tail": Object {
               "head": Object {
-                "411": [Function],
                 ":::pre-declared names::": Symbol(),
-                "integers_from": [Function],
+              },
+              "heap": Heap {
+                "storage": null,
               },
               "id": "-1",
               "name": "global",
@@ -5794,7 +8939,7 @@ Object {
 }
 `;
 
-exports[`CSE Machine calculates correct layout for code sample 7 23`] = `
+exports[`CSE Machine calculates correct layout for code sample 7 25`] = `
 Object {
   "head": Object {
     "z": Array [
@@ -5807,6 +8952,24 @@ Object {
         ],
       ],
     ],
+  },
+  "heap": Heap {
+    "storage": Set {
+      Array [
+        Array [
+          [Circular],
+          Array [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+      ],
+      Array [
+        2,
+        null,
+      ],
+    },
   },
   "id": Any<String>,
   "name": "blockEnvironment",
@@ -5864,13 +9027,21 @@ Object {
         [Function],
       ],
     },
-    "id": "427",
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "83",
     "name": "es",
     "tail": Object {
       "head": Object {
         "es": [Function],
       },
-      "id": "416",
+      "heap": Heap {
+        "storage": Set {
+          [Function],
+        },
+      },
+      "id": "73",
       "name": "blockEnvironment",
       "tail": Object {
         "callExpression": Object {
@@ -5926,7 +9097,10 @@ Object {
             [Function],
           ],
         },
-        "id": "415",
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "72",
         "name": "eval_stream",
         "tail": Object {
           "head": Object {
@@ -5941,7 +9115,29 @@ Object {
               ],
             ],
           },
-          "id": "396",
+          "heap": Heap {
+            "storage": Set {
+              Array [],
+              Array [
+                1,
+                Array [
+                  [Circular],
+                  [Circular],
+                ],
+                [Circular],
+              ],
+              Array [
+                [Circular],
+                Array [
+                  1,
+                  [Circular],
+                  [Circular],
+                ],
+              ],
+              [Function],
+            },
+          },
+          "id": "47",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
@@ -5956,7 +9152,6 @@ Object {
               "$remove": [Function],
               "$remove_all": [Function],
               "$reverse": [Function],
-              "411": [Function],
               "__access_export__": [Function],
               "__access_named_export__": [Function],
               "accumulate": [Function],
@@ -5990,15 +9185,67 @@ Object {
               "stream_remove": [Function],
               "stream_remove_all": [Function],
               "stream_reverse": [Function],
+              "stream_tail": [Function],
               "stream_to_list": [Function],
             },
-            "id": "350",
-            "name": "programEnvironment",
+            "heap": Heap {
+              "storage": Set {
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+                [Function],
+              },
+            },
+            "id": "0",
+            "name": "prelude",
             "tail": Object {
               "head": Object {
-                "411": [Function],
                 ":::pre-declared names::": Symbol(),
-                "integers_from": [Function],
+              },
+              "heap": Heap {
+                "storage": null,
               },
               "id": "-1",
               "name": "global",
@@ -6012,14 +9259,10 @@ Object {
 }
 `;
 
-exports[`CSE Machine calculates correct layout for code sample 7 24`] = `
+exports[`CSE Machine calculates correct layout for code sample 7 26`] = `
 Array [
   ":::pre-declared names::: ",
   Symbol(),
-  "integers_from: ",
-  [Function],
-  "411: ",
-  [Function],
   "y: ",
   Array [
     [Circular],
@@ -6035,12 +9278,13 @@ Array [
   1,
   "n: ",
   1,
-  "414:= ",
-  [Function],
+  "xs: ",
+  Array [
+    1,
+    [Function],
+  ],
   "n: ",
   2,
-  "426:= ",
-  [Function],
   "i: ",
   5,
   "s: ",
@@ -6050,6 +9294,8 @@ Array [
   ],
   "n: ",
   2,
+  "the_tail:= ",
+  [Function],
   "_copy_of_i:= ",
   1,
   "_copy_of_i:= ",
