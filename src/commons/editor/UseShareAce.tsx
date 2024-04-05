@@ -1,6 +1,5 @@
 import * as Sentry from '@sentry/browser';
 import sharedbAce from '@sourceacademy/sharedb-ace';
-import { Ace } from 'ace-builds';
 import React from 'react';
 
 import { getDocInfoFromSessionId, getSessionUrl } from '../collabEditing/CollabEditingHelper';
@@ -26,7 +25,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
   const user = {
     name: useTypedSelector(state => state.session.name),
-    color: getColor()  //'#5f9ea0' // TODO: random generator
+    color: getColor() //'#5f9ea0' // TODO: random generator
   };
 
   React.useEffect(() => {
@@ -35,46 +34,21 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
     }
 
     const editor = reactAceRef.current!.editor;
+    const cursorManager = new AceMultiCursorManager(editor.getSession());
     const ShareAce = new sharedbAce(sessionDetails.docId, {
       user,
+      cursorManager,
       WsUrl: getSessionUrl(editorSessionId, true),
       pluginWsUrl: null,
       namespace: 'sa'
     });
-    const curMgr = new AceMultiCursorManager(editor.getSession());
 
     ShareAce.on('ready', () => {
-      ShareAce.add(editor, ['contents'], []);
+      ShareAce.add(editor, cursorManager, ['contents'], []);
       propsRef.current.handleSetSharedbConnected!(true);
 
       // Disables editor in a read-only session
       editor.setReadOnly(sessionDetails.readOnly);
-
-      ShareAce.connections.contents.on(
-        'userPresenceUpdate',
-        (id: string, newPresence: { user: any; cursorPos: Ace.Point }) => {
-          // TODO: modify this and move it to a separate handler
-          // when more info is added to presence
-          console.log("update: " + id);
-          if (curMgr.isCursorExist(id)) {
-            curMgr.setCursor(id, newPresence.cursorPos);
-          } else {
-            curMgr.addCursor(
-              id,
-              newPresence.user.name,
-              newPresence.user.color,
-              newPresence.cursorPos
-            );
-          }
-        }
-      );
-
-      ShareAce.connections.contents.on('userLeft', (id: string) => {
-        console.log("left: " + id);
-        if (curMgr.isCursorExist(id)) {
-          curMgr.removeCursor(id);
-        }
-      });
 
       showSuccessMessage(
         'You have joined a session as ' + (sessionDetails.readOnly ? 'a viewer.' : 'an editor.')
@@ -125,16 +99,22 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       editor.setReadOnly(false);
 
       // Removes all cursors
-      curMgr.removeAll();
+      cursorManager.removeAll();
     };
     // eslint-disable-next-line
   }, [editorSessionId, sessionDetails, reactAceRef]);
 };
 
-function getColor(){ 
-  return "hsl(" + 360 * Math.random() + ',' +
-             (25 + 70 * Math.random()) + '%,' + 
-             (50 + 20 * Math.random()) + '%)'
+function getColor() {
+  return (
+    'hsl(' +
+    360 * Math.random() +
+    ',' +
+    (25 + 70 * Math.random()) +
+    '%,' +
+    (50 + 20 * Math.random()) +
+    '%)'
+  );
 }
 
 export default useShareAce;
