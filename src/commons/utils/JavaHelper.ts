@@ -3,9 +3,8 @@ import { createModuleProxy, loadCachedFiles } from 'java-slang/dist/jvm/utils/in
 import { Context } from 'js-slang';
 import { initModuleContext, loadModuleBundle } from 'js-slang/dist/modules/loader/moduleLoader';
 
+import Constants from './Constants';
 import DisplayBufferService from './DisplayBufferService';
-
-const CDN = 'https://source-academy.github.io/modules/java/java-packages/src/';
 
 export async function javaRun(javaCode: string, context: Context) {
   let compiled = {};
@@ -23,7 +22,7 @@ export async function javaRun(javaCode: string, context: Context) {
       const pkg = splits.join('_');
 
       const request = new XMLHttpRequest();
-      request.open('GET', `${CDN}${pkg}.json`, false);
+      request.open('GET', `${Constants.javaPacakgesUrl}${pkg}.json`, false);
       request.send(null);
       if (request.status !== 200) {
         throw new Error('File not found: ' + path);
@@ -102,7 +101,7 @@ export async function javaRun(javaCode: string, context: Context) {
   // load cached classfiles from IndexedDB
   return loadCachedFiles(() =>
     // Initial loader to fetch commonly used classfiles
-    fetch(CDN + '_base.json')
+    fetch(Constants.javaPacakgesUrl + '_base.json')
       .then(res => res.json())
       .then((obj: { [key: string]: string }) => {
         return obj;
