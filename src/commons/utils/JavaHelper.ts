@@ -47,19 +47,16 @@ export async function javaRun(javaCode: string, context: Context) {
     }
     return parseBin(new DataView(bytes.buffer));
   };
-  const loadNatives = (path: string) => {
+  const loadNatives = async (path: string) => {
     // dynamic load modules
     if (path.startsWith('modules')) {
       const module = path.split('/')[1] as string;
       initModuleContext(module, context, true);
       const moduleFuncs = loadModuleBundle(module, context);
       const { proxy } = createModuleProxy(module, moduleFuncs);
-      return Promise.resolve({ default: proxy });
+      return { default: proxy };
     }
-
-    return import(`java-slang/dist/jvm/stdlib/${path}.js`).then(m => {
-      return m;
-    });
+    return await import(`java-slang/dist/jvm/stdlib/${path}.js`);
   };
   const stdout = (str: string) => {
     // java flush pushes a single newline to buffer
