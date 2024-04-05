@@ -73,11 +73,7 @@ const MobileKeyboard: React.FC<Props> = props => {
     onKeyPress: handleKeyPress,
     baseClass: 'simple-keyboard-shortcut',
     layout: {
-      default: [
-        '{ } ( ) " \' _ => ;',
-        '{tab} && || ! < > = ===',
-        '+ - * / % // {arrowleft} {arrowright}'
-      ]
+      default: ['{ } ( ) " \' _ => ; {tab} && || ! < > = === + - * / % // {arrowleft} {arrowright}']
     },
     buttonTheme: [
       {
