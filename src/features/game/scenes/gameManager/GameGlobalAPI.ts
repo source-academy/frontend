@@ -285,7 +285,9 @@ class GameGlobalAPI {
   }
 
   public async showNextLine() {
-    await this.getGameManager().getDialogueManager().showNextLine(() => {});
+    await this.getGameManager()
+      .getDialogueManager()
+      .showNextLine(() => {});
   }
 
   /////////////////////

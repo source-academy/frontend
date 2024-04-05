@@ -4,9 +4,9 @@ import { BitmapFontStyle } from '../commons/CommonTypes';
 import { Color } from '../utils/StyleUtils';
 
 export const startPrompt = {
-  text: "Start the quiz?", 
-  options: ["Yes", "No"]
-}
+  text: 'Start the quiz?',
+  options: ['Yes', 'No']
+};
 
 export const questionPrompt = 'What is the correct answer?';
 
