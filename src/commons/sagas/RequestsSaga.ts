@@ -443,44 +443,6 @@ export const getAssessmentOverviews = async (
 };
 
 /**
- * GET /courses/{courseId}/assessments/{assessmentId}/scoreLeaderboard
- */
-export const getScoreLeaderboard = async (
-  assessmentId: number,
-  tokens: Tokens
-): Promise<ContestEntry[] | null> => {
-  const resp = await request(`${courseId()}/assessments/${assessmentId}/scoreLeaderboard`, 'GET', {
-    ...tokens
-  });
-  if (!resp || !resp.ok) {
-    return null; // invalid accessToken _and_ refreshToken
-  }
-  const scoreLeaderboard = await resp.json();
-  return scoreLeaderboard as ContestEntry[];
-};
-
-/**
- * GET /courses/{courseId}/assessments/{assessmentId}/popularVoteLeaderboard
- */
-export const getPopularVoteLeaderboard = async (
-  assessmentId: number,
-  tokens: Tokens
-): Promise<ContestEntry[] | null> => {
-  const resp = await request(
-    `${courseId()}/assessments/${assessmentId}/popularVoteLeaderboard`,
-    'GET',
-    {
-      ...tokens
-    }
-  );
-  if (!resp || !resp.ok) {
-    return null; // invalid accessToken _and_ refreshToken
-  }
-  const popularVoteLeaderboard = await resp.json();
-  return popularVoteLeaderboard as ContestEntry[];
-};
-
-/**
  * GET /courses/{courseId}/user/total_xp
  */
 export const getTotalXp = async (tokens: Tokens, courseRegId?: number): Promise<number | null> => {
@@ -1164,6 +1126,48 @@ export const deleteSourcecastEntry = async (
   });
 
   return resp;
+};
+
+/**
+ * GET /courses/{courseId}/admin/assessments/{assessmentId}/scoreLeaderboard
+ */
+export const getScoreLeaderboard = async (
+  assessmentId: number,
+  tokens: Tokens
+): Promise<ContestEntry[] | null> => {
+  const resp = await request(
+    `${courseId()}/admin/assessments/${assessmentId}/scoreLeaderboard`,
+    'GET',
+    {
+      ...tokens
+    }
+  );
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+  const scoreLeaderboard = await resp.json();
+  return scoreLeaderboard as ContestEntry[];
+};
+
+/**
+ * GET /courses/{courseId}/admin/assessments/{assessmentId}/popularVoteLeaderboard
+ */
+export const getPopularVoteLeaderboard = async (
+  assessmentId: number,
+  tokens: Tokens
+): Promise<ContestEntry[] | null> => {
+  const resp = await request(
+    `${courseId()}/admin/assessments/${assessmentId}/popularVoteLeaderboard`,
+    'GET',
+    {
+      ...tokens
+    }
+  );
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+  const popularVoteLeaderboard = await resp.json();
+  return popularVoteLeaderboard as ContestEntry[];
 };
 
 /**
