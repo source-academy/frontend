@@ -3,6 +3,11 @@ import { screenSize } from '../commons/CommonConstants';
 import { BitmapFontStyle } from '../commons/CommonTypes';
 import { Color } from '../utils/StyleUtils';
 
+export const startPrompt = {
+  text: "Start the quiz?", 
+  options: ["Yes", "No"]
+}
+
 export const questionPrompt = 'What is the correct answer?';
 
 export const resultMsg = {
@@ -21,9 +26,9 @@ export const QuizConstants = {
   speakerTextConfig: { x: 320, y: 745, oriX: 0.5, oriY: 0.5 }
 };
 
-export const textStyle = {
+export const quizTextStyle = {
   fontFamily: 'Verdana',
-  fontSize: '25px',
+  fontSize: '20px',
   fill: Color.offWhite,
   align: 'left',
   lineSpacing: 10,

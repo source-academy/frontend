@@ -104,9 +104,7 @@ export default class GameActionExecuter {
         return;
       case GameActionType.ShowQuiz:
         globalAPI.enableKeyboardInput(false);
-        await globalAPI.getGameManager().getDialogueManager().hideAll();
         await globalAPI.showQuiz(actionParams.id);
-        await globalAPI.getGameManager().getDialogueManager().showAll();
         globalAPI.enableKeyboardInput(true);
         return;
       default:

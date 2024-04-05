@@ -15,21 +15,24 @@ import { sleep } from '../utils/GameUtils';
 import { calcListFormatPos, HexColor } from '../utils/StyleUtils';
 import {
   questionPrompt,
+  startPrompt,
+  resultMsg,
   questionTextStyle,
   QuizConstants,
   quizOptStyle,
-  resultMsg,
-  textStyle
+  quizTextStyle
 } from './GameQuizConstants';
 import GameQuizReactionManager from './GameQuizReactionManager';
 import { Question } from './GameQuizType';
+import { promptWithChoices } from '../effects/Prompt';
 
 export default class QuizManager {
   private reactionManager?: GameQuizReactionManager;
 
   /**
-   * rendering the quiz section inside a dialogue
-   * @param quizId the Id of quiz that users will attempt inside a dialogye
+   * Rendering the quiz section inside a dialogue.
+   * 
+   * @param quizId The Id of quiz that users will attempt inside a dialogue.
    */
   public async showQuiz(quizId: ItemId) {
     const quiz = GameGlobalAPI.getInstance().getQuizById(quizId);
@@ -37,6 +40,11 @@ export default class QuizManager {
     if (numOfQns === 0) {
       return;
     }
+    if (!await this.showStartPrompt(GameGlobalAPI.getInstance().getGameManager())) {
+      await GameGlobalAPI.getInstance().showNextLine();
+      return;
+    }
+    await GameGlobalAPI.getInstance().getGameManager().getDialogueManager().hideAll();
     let numOfCorrect = 0;
     for (let i = 0; i < numOfQns; i++) {
       numOfCorrect += await this.showQuizQuestion(
@@ -47,9 +55,29 @@ export default class QuizManager {
     GameGlobalAPI.getInstance().attemptQuiz(quizId);
     if (numOfCorrect === numOfQns) GameGlobalAPI.getInstance().completeQuiz(quizId);
     await this.showResult(numOfQns, numOfCorrect, quiz.questions[0].speaker);
+    await GameGlobalAPI.getInstance().showNextLine();
+    await GameGlobalAPI.getInstance().getGameManager().getDialogueManager().showAll();
   }
 
-  //Display the specific quiz question
+  /**
+   * Display a prompt before a quiz starts.
+   * Player can choose to proceed and do the quiz, 
+   * or to not do the quiz and exit.
+   * 
+   * @param scene The Game Manager.
+   * @returns true if the player chooses to start the quiz.
+   */
+  private async showStartPrompt(scene: Phaser.Scene) {
+    const response = await promptWithChoices(scene, startPrompt.text, startPrompt.options);
+    return (response === 0);
+  }
+
+  /**
+   * Display the specific quiz question.
+   * 
+   * @param scene The game manager.
+   * @param question The question to be displayed.
+   */
   public async showQuizQuestion(scene: Phaser.Scene, question: Question) {
     const choices = question.options;
     const quizContainer = new Phaser.GameObjects.Container(scene, 0, 0);
@@ -72,7 +100,7 @@ export default class QuizManager {
       screenSize.x - QuizConstants.textPad,
       QuizConstants.y,
       questionPrompt,
-      textStyle
+      quizTextStyle
     ).setOrigin(1.0, 0.0);
 
     const quizHeaderBg = new Phaser.GameObjects.Rectangle(
@@ -166,9 +194,9 @@ export default class QuizManager {
   }
 
   /**
-   * Display the reaction after users selecting an option
-   * @param reaction the reaction will be displayed based on the choice of users
-   *
+   * Display the reaction after users selecting an option.
+   * 
+   * @param reaction The reaction to be displayed.
    */
   private async showReaction(reaction: DialogueObject) {
     this.reactionManager = new GameQuizReactionManager(reaction);
@@ -177,6 +205,7 @@ export default class QuizManager {
 
   /**
    * Show the final score of the quiz as a quiz reaction.
+   * 
    * @param numOfQns The number of questions of the quiz.
    * @param numOfCorrect The number of correctly answered questions.
    */
@@ -186,6 +215,7 @@ export default class QuizManager {
 
   /**
    * Create DialogueObject containing the message of quiz score.
+   * 
    * @param numOfQns The number of questions of the quiz.
    * @param numOfCorrect The number of correctly answered questions.
    * @returns A DialogueObject containing the message of quiz score.
