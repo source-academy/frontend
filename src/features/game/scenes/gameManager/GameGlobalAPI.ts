@@ -284,6 +284,10 @@ class GameGlobalAPI {
     await this.getGameManager().getDialogueManager().showDialogue(dialogueId);
   }
 
+  public async showNextLine() {
+    await this.getGameManager().getDialogueManager().showNextLine(() => {});
+  }
+
   /////////////////////
   //   Storage      //
   /////////////////////
@@ -512,7 +516,7 @@ class GameGlobalAPI {
   }
 
   /////////////////////
-  //   Game Quiz     //
+  //      Quiz       //
   /////////////////////
 
   public async showQuiz(quizId: ItemId) {
