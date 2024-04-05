@@ -99,10 +99,8 @@ export async function javaRun(javaCode: string, context: Context) {
   };
 
   // FIXME: Remove when the compiler is working
-  if (javaCode.startsWith('// From JSON')) {
-    const json = JSON.parse(javaCode.slice(13));
-    compiled = json;
-  }
+  const json = JSON.parse(javaCode);
+  compiled = json;
 
   // load cached classfiles from IndexedDB
   return loadCachedFiles(() =>
