@@ -156,18 +156,13 @@ export const fetchGradingOverviews = createAction(
     filterParams = {},
     allColsSortStates: AllColsSortStates = { currentState: freshSortState, sortBy: '' }
   ) => {
-    const sortedBy = {
-      sortBy: '',
-      sortDirection: ''
-    };
     return {
       payload: {
         filterToGroup,
         gradedFilter,
         pageParams,
         filterParams,
-        allColsSortStates,
-        sortedBy
+        allColsSortStates
       }
     };
   }

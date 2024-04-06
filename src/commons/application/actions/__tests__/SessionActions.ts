@@ -186,8 +186,14 @@ test('fetchGradingOverviews generates correct action object', () => {
   const gradedFilter = ungradedToBackendParams(true);
   const pageParams = { offset: 123, pageSize: 456 };
   const filterParams = { abc: 'xxx', def: 'yyy' };
-  const sortBy = { currentState: freshSortState, sortBy: '' };
-  const action = fetchGradingOverviews(filterToGroup, gradedFilter, pageParams, filterParams);
+  const allColsSortStates = { currentState: freshSortState, sortBy: '' };
+  const action = fetchGradingOverviews(
+    filterToGroup,
+    gradedFilter,
+    pageParams,
+    filterParams,
+    allColsSortStates
+  );
   expect(action).toEqual({
     type: FETCH_GRADING_OVERVIEWS,
     payload: {
@@ -195,7 +201,7 @@ test('fetchGradingOverviews generates correct action object', () => {
       gradedFilter: gradedFilter,
       pageParams: pageParams,
       filterParams: filterParams,
-      sortedBy: sortBy
+      allColsSortStates: allColsSortStates
     }
   });
 });

@@ -180,7 +180,22 @@ export function* mockBackendSaga(): SagaIterator {
     FETCH_GRADING_OVERVIEWS,
     function* (action: ReturnType<typeof actions.fetchGradingOverviews>): any {
       const accessToken = yield select((state: OverallState) => state.session.accessToken);
-      const { filterToGroup, pageParams, filterParams, sortedBy } = action.payload;
+      const { filterToGroup, pageParams, filterParams, allColsSortStates } = action.payload;
+      const sortedBy = {
+        sortBy: allColsSortStates.sortBy,
+        sortDirection: ''
+      };
+      for (const key in allColsSortStates.currentState) {
+        if (allColsSortStates.sortBy === key) {
+          if (allColsSortStates.currentState[key] !== 'sort') {
+            sortedBy.sortDirection = allColsSortStates.currentState[key];
+          } else {
+            sortedBy.sortBy = '';
+            sortedBy.sortDirection = '';
+          }
+          break;
+        }
+      }
       const gradingOverviews = yield call(() =>
         mockFetchGradingOverview(accessToken, filterToGroup, pageParams, filterParams, sortedBy)
       );
