@@ -13,6 +13,8 @@ import React, { useCallback, useState } from 'react';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
+import ExportScoreLeaderboardButton from '../configureControls/ExportScoreLeaderboardButton';
+import ExportVoteLeaderboardButton from '../configureControls/ExportVoteLeaderboardButton';
 import AssignEntriesButton from './configureControls/AssignEntriesButton';
 
 type Props = {
@@ -112,20 +114,8 @@ const ConfigureCell: React.FC<Props> = ({
             />
             <Collapse isOpen={hasVotingFeatures}>
               <div className="voting-related-controls">
-                <div className="control-button-container">
-                  <ControlButton
-                    icon={IconNames.PEOPLE}
-                    isDisabled={true}
-                    label="Export Popular Vote Leaderboard (Coming soon!)"
-                  />
-                </div>
-                <div className="control-button-container">
-                  <ControlButton
-                    icon={IconNames.CROWN}
-                    isDisabled={true}
-                    label="Export Score Leaderboard (Coming soon!)"
-                  />
-                </div>
+                <ExportScoreLeaderboardButton assessmentId={data.id} />
+                <ExportVoteLeaderboardButton assessmentId={data.id} />
                 <AssignEntriesButton
                   handleAssignEntriesForVoting={handleAssignEntriesForVoting}
                   assessmentId={data.id}
