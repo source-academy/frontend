@@ -338,7 +338,8 @@
     padding-right: 1em;
   }
 
-  .ag-cell-label-container:not(:has(> span.ag-header-icon.ag-header-cell-menu-button)) > .ag-header-cell-label {
+  .ag-cell-label-container:not(:has(> span.ag-header-icon.ag-header-cell-menu-button))
+    > .ag-header-cell-label {
     padding-right: 1em;
   }
 }
@@ -518,7 +519,6 @@
   }
 }
 
-
 // Grading Section
 .grading-overview-unfilterable-btns,
 .grading-overview-filterable-btns {
@@ -543,14 +543,14 @@
   &:hover:not(:has(> .grading-badge)) {
     text-decoration: underline;
   }
-  
+
   &:hover:has(> .grading-badge) {
     filter: brightness(0.75);
   }
 }
 
 .grading-overview-unfilterable-btns,
-.grading-overview-filterable-btns, 
+.grading-overview-filterable-btns,
 .grading-overview-rounded-btns {
   border-radius: 9999px;
 }
@@ -568,7 +568,7 @@
   opacity: 0;
   padding: 6px;
   height: fit-content;
-  line-height: initial!important;
+  line-height: initial !important;
   border-radius: 5px;
   margin-right: 2.5px;
   position: absolute;
@@ -612,7 +612,7 @@
   }
 
   &.ag-row.ag-row-last {
-    border-bottom: 0px!important;
+    border-bottom: 0px !important;
   }
 }
 
@@ -631,13 +631,13 @@
   padding: 7.5px 15px;
   border-radius: 25px;
   margin: 0 15px 0 auto;
-  background-color: #dbeafef5!important;
-  color: #3b82f6!important;
+  background-color: #dbeafef5 !important;
+  color: #3b82f6 !important;
   min-width: fit-content;
 
   &.grading-filter-btn-on {
-    background-color: #f5f5f5!important;
-    color: black!important;
+    background-color: #f5f5f5 !important;
+    color: black !important;
   }
 
   &:hover {
@@ -647,21 +647,21 @@
 
 .grading-def-cell {
   text-align: center;
-  display: flex!important; 
+  display: flex !important;
   justify-content: center;
   flex-direction: column;
   font-size: 0.875rem;
   user-select: text;
-  border: 0px!important;
+  border: 0px !important;
 
   &:hover:has(.grading-overview-filterable-btns) {
     .grading-overview-filterable-btns {
       &:not(:has(> .grading-badge)) {
         text-decoration: underline;
       }
-      
+
       &:has(> .grading-badge) {
-        filter: brightness(0.75)
+        filter: brightness(0.75);
       }
     }
   }
@@ -680,7 +680,7 @@
   }
 
   &.grading-cell-align-left {
-    text-align: left!important;
+    text-align: left !important;
   }
 }
 
@@ -699,7 +699,7 @@
     border-radius: 6px;
     box-shadow: none;
     border: 1px solid rgba(0, 0, 0, 0.3);
-    font-size: 0.875rem!important;
+    font-size: 0.875rem !important;
 
     &::placeholder {
       color: #b3b3b3;
@@ -713,7 +713,7 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  line-height: normal!important;
+  line-height: normal !important;
   width: fit-content;
   max-width: max(1200px * 0.2, 20vw);
   margin: auto;
@@ -749,7 +749,7 @@
 }
 
 .grading-badge-text {
-  line-height: normal!important;
+  line-height: normal !important;
   width: fit-content;
   max-width: max(calc(1200px * 0.2 - 16px - 2rem), calc(20vw - 16px - 2rem));
   overflow: hidden;
@@ -765,8 +765,8 @@
   left: 0;
   width: 48px;
   height: 48px;
-  border: 4px solid #b3b3b3!important;
-  border-bottom-color: transparent!important;
+  border: 4px solid #b3b3b3 !important;
+  border-bottom-color: transparent !important;
   border-radius: 50%;
   z-index: 10;
   color: #374151;
@@ -786,7 +786,7 @@
   transition: 0.1s ease;
 
   svg {
-    fill: #3b82f6!important;
+    fill: #3b82f6 !important;
   }
 
   &.grading-action-icons-bg {
@@ -818,15 +818,15 @@
 }
 
 .export-csv-btn {
-  color: #3b82f6!important;
-  
+  color: #3b82f6 !important;
+
   svg {
-    fill: #3b82f6!important;
+    fill: #3b82f6 !important;
   }
 
   &:hover {
-    text-decoration: underline!important;
-    background-color: transparent!important;
+    text-decoration: underline !important;
+    background-color: transparent !important;
   }
 }
 
@@ -835,6 +835,6 @@
     transform: rotate(180deg);
     transition: 0.2s ease;
   }
-  cursor: not-allowed!important;
+  cursor: not-allowed !important;
   pointer-events: none;
 }

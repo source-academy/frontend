@@ -4,8 +4,8 @@ import { ReactNode } from 'react';
 import { GradingStatus } from 'src/commons/assessment/AssessmentTypes';
 import { ColumnFilter } from 'src/features/grading/GradingTypes';
 
-declare const sizeValues: readonly ["xs", "sm", "md", "lg", "xl"];
-declare type Size = typeof sizeValues[number];
+declare const sizeValues: readonly ['xs', 'sm', 'md', 'lg', 'xl'];
+declare type Size = (typeof sizeValues)[number];
 
 interface BadgeProps {
   text: string;
@@ -16,18 +16,17 @@ interface BadgeProps {
 
 const Badge: React.FC<BadgeProps> = (props: BadgeProps) => {
   return (
-    <div 
-      className={"grading-badge grading-badge-" + (props.size ? props.size : "sm")} 
+    <div
+      className={'grading-badge grading-badge-' + (props.size ? props.size : 'sm')}
       style={{
-        color: (props.color ? props.color[1] : "#000000"),
-        backgroundColor: (props.color ? (props.color[0] + "40") : "")
+        color: props.color ? props.color[1] : '#000000',
+        backgroundColor: props.color ? props.color[0] + '40' : ''
       }}
     >
       {props.icon ? props.icon() : <></>}
       <span className="grading-badge-text">{props.text}</span>
     </div>
   );
-
 };
 
 // First colour is bg, second is text (text is more saturated/darker). Colours are referenced from tailwind css.
@@ -38,7 +37,7 @@ const AVAILABLE_COLORS = {
   green: ['#4ade80', '#15803d'],
   yellow: ['#fde047', '#ca8a04'],
   red: ['#f87171', '#b91c1c'],
-  gray: ['#9ca3af', '#374151'],
+  gray: ['#9ca3af', '#374151']
 };
 
 const BADGE_COLORS = {

@@ -6,7 +6,12 @@ type FilterableProps = {
 
 const GradingFilterable: React.FC<FilterableProps> = ({ value, children, filterMode }) => {
   return (
-    <button type="button" className={filterMode ? "grading-overview-filterable-btns" : "grading-overview-unfilterable-btns"}>
+    <button
+      type="button"
+      className={
+        filterMode ? 'grading-overview-filterable-btns' : 'grading-overview-unfilterable-btns'
+      }
+    >
       {children || value}
     </button>
   );

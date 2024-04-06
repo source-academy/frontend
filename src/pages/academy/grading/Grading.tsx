@@ -9,7 +9,11 @@ import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
-import { decreaseRequestCounter, increaseRequestCounter, setGradingHasLoadedBefore } from 'src/commons/workspace/WorkspaceActions';
+import {
+  decreaseRequestCounter,
+  increaseRequestCounter,
+  setGradingHasLoadedBefore
+} from 'src/commons/workspace/WorkspaceActions';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
 import {
@@ -59,8 +63,7 @@ const Grading: React.FC = () => {
 
   const updateGradingOverviewsCallback = useCallback(
     (page: number, filterParams: Object) => {
-
-       // Prevents es-lint missing dependency warning
+      // Prevents es-lint missing dependency warning
       if (refreshQuery) {
         return setRefreshQuery(false);
       }
@@ -73,7 +76,7 @@ const Grading: React.FC = () => {
           ungradedToBackendParams(showAllSubmissions),
           paginationToBackendParams(page, pageSize),
           filterParams,
-          allColsSortStates,
+          allColsSortStates
         )
       );
     },
@@ -81,17 +84,20 @@ const Grading: React.FC = () => {
   );
 
   useEffect(() => {
-    setSubmissions(gradingOverviews?.data?.map(e =>
-      !e.studentName
-        ? {
-            ...e,
-            studentName: Array.isArray(e.studentNames) ? e.studentNames.join(', ') : e.studentNames
-          }
-        : e
-    ) ?? []);
+    setSubmissions(
+      gradingOverviews?.data?.map(e =>
+        !e.studentName
+          ? {
+              ...e,
+              studentName: Array.isArray(e.studentNames)
+                ? e.studentNames.join(', ')
+                : e.studentNames
+            }
+          : e
+      ) ?? []
+    );
     // }
     dispatch(decreaseRequestCounter());
-
   }, [gradingOverviews, dispatch]);
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
@@ -133,9 +139,11 @@ const Grading: React.FC = () => {
         ) : (
           <GradingFlex flexDirection="column" className="grading-table-wrapper">
             <GradingFlex justifyContent="space-between">
-              <GradingFlex justifyContent="flex-start" style={{columnGap: "1.5rem"}}>
-                <GradingText style={{fontSize: "1.125rem", opacity: 0.9}}>Submissions</GradingText>
-                <Button 
+              <GradingFlex justifyContent="flex-start" style={{ columnGap: '1.5rem' }}>
+                <GradingText style={{ fontSize: '1.125rem', opacity: 0.9 }}>
+                  Submissions
+                </GradingText>
+                <Button
                   minimal={true}
                   icon={IconNames.EXPORT}
                   onClick={() => exportGradingCSV(gradingOverviews.data)}
@@ -145,7 +153,10 @@ const Grading: React.FC = () => {
                 </Button>
               </GradingFlex>
             </GradingFlex>
-            <GradingFlex justifyContent="flex-start" style={{columnGap: "0.5rem", marginTop: "0.5rem"}}>
+            <GradingFlex
+              justifyContent="flex-start"
+              style={{ columnGap: '0.5rem', marginTop: '0.5rem' }}
+            >
               <GradingText>Viewing</GradingText>
               <SimpleDropdown
                 options={showOptions}
@@ -171,7 +182,12 @@ const Grading: React.FC = () => {
                 buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
               />
               <GradingText>entries per page.</GradingText>
-              <Button className={"grading-refresh" + (requestCounter !== 0 ? "-loop" : "") } minimal={true} style={{ padding: 0 }} onClick={(e) => setRefreshQuery((prev) => !prev)}>
+              <Button
+                className={'grading-refresh' + (requestCounter !== 0 ? '-loop' : '')}
+                minimal={true}
+                style={{ padding: 0 }}
+                onClick={e => setRefreshQuery(prev => !prev)}
+              >
                 <Icon htmlTitle="Refresh" icon={IconNames.REFRESH} />
               </Button>
             </GradingFlex>
