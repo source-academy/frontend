@@ -587,6 +587,10 @@
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 
+  &:not(.grading-left-align) {
+    padding: 0 !important;
+  }
+
   span.ag-header-cell-text {
     margin: 0 auto;
     font-size: 0.8rem;
@@ -720,7 +724,7 @@
   color: rgba(0, 0, 0, 0.7);
   text-wrap: nowrap;
   text-overflow: ellipsis;
-  max-width: 90%;
+  max-width: 97.5%;
 
   &.grading-badge-xs {
     padding: 0.25rem 0.6rem;

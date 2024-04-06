@@ -96,7 +96,6 @@ const Grading: React.FC = () => {
           : e
       ) ?? []
     );
-    // }
     dispatch(decreaseRequestCounter());
   }, [gradingOverviews, dispatch]);
 

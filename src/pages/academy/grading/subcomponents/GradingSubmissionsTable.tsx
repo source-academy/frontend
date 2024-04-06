@@ -186,6 +186,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     return params;
   }, [columnFilters, searchValue]);
 
+  // generateCols is to initialise the columns (and headers). The rows with data are added in the useEffect with ignored dependencies.
   const generateCols = useCallback(() => {
     const cols: ColDef<IGradingTableRow>[] = [];
 
@@ -533,9 +534,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         style={{ marginTop: '0.5rem' }}
       >
         <GradingFlex alignItems="center">
-          <GradingFlex
-            style={{ gap: '0.5rem', alignItems: 'center', height: '1.75rem', width: '100%' }}
-          >
+          <GradingFlex style={{ alignItems: 'center', height: '1.75rem', width: '100%' }}>
             <Icon icon={IconNames.FILTER_LIST} />
             <GradingText secondaryText>
               {columnFilters.length > 0 ? (
