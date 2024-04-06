@@ -4,6 +4,7 @@ import {
   paginationToBackendParams,
   ungradedToBackendParams
 } from 'src/features/grading/GradingUtils';
+import { freshSortState } from 'src/pages/academy/grading/subcomponents/GradingSubmissionsTable';
 
 import { GradingOverviews, GradingQuery } from '../../../../features/grading/GradingTypes';
 import { TeamFormationOverview } from '../../../../features/teamFormation/TeamFormationTypes';
@@ -103,7 +104,6 @@ import {
   updateTeamFormationOverviews,
   updateUserRole
 } from '../SessionActions';
-import { freshSortState } from 'src/pages/academy/grading/subcomponents/GradingSubmissionsTable';
 
 test('acknowledgeNotifications generates correct action object', () => {
   const action = acknowledgeNotifications();
