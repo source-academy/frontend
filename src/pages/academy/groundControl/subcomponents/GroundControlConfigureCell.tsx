@@ -15,6 +15,7 @@ import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTyp
 import ControlButton from '../../../../commons/ControlButton';
 import ExportScoreLeaderboardButton from '../configureControls/ExportScoreLeaderboardButton';
 import ExportVoteLeaderboardButton from '../configureControls/ExportVoteLeaderboardButton';
+import AssignEntriesButton from './configureControls/AssignEntriesButton';
 
 type Props = {
   handleConfigureAssessment: (
@@ -22,24 +23,32 @@ type Props = {
     hasVotingFeatures: boolean,
     hasTokenCounter: boolean
   ) => void;
+  handleAssignEntriesForVoting: (id: number) => void;
   data: AssessmentOverview;
 };
 
-const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => {
+const ConfigureCell: React.FC<Props> = ({
+  handleConfigureAssessment,
+  handleAssignEntriesForVoting,
+  data
+}) => {
   const [isDialogOpen, setDialogState] = useState(false);
   const [hasVotingFeatures, setHasVotingFeatures] = useState(!!data.hasVotingFeatures);
   const [hasTokenCounter, setHasTokenCounter] = useState(!!data.hasTokenCounter);
   const [isTeamAssessment, setIsTeamAssessment] = useState(false);
+  const [isVotingPublished] = useState(!!data.isVotingPublished);
 
   const handleOpenDialog = useCallback(() => setDialogState(true), []);
   const handleCloseDialog = useCallback(() => setDialogState(false), []);
 
+  // Updates assessment overview with changes to hasVotingFeatures and hasTokenCounter
   const handleConfigure = useCallback(() => {
     const { id } = data;
     handleConfigureAssessment(id, hasVotingFeatures, hasTokenCounter);
     handleCloseDialog();
   }, [data, handleCloseDialog, handleConfigureAssessment, hasTokenCounter, hasVotingFeatures]);
 
+  // Toggles in configuration pannel
   const toggleHasTokenCounter = useCallback(() => setHasTokenCounter(prev => !prev), []);
   const toggleVotingFeatures = useCallback(() => setHasVotingFeatures(prev => !prev), []);
   const toggleIsTeamAssessment = useCallback(() => setIsTeamAssessment(prev => !prev), []);
@@ -107,11 +116,10 @@ const ConfigureCell: React.FC<Props> = ({ handleConfigureAssessment, data }) => 
               <div className="voting-related-controls">
                 <ExportScoreLeaderboardButton assessmentId={data.id} />
                 <ExportVoteLeaderboardButton assessmentId={data.id} />
-                <Switch
-                  className="publish-voting"
-                  disabled={true}
-                  inline
-                  label="Publish Voting (Coming soon!)"
+                <AssignEntriesButton
+                  handleAssignEntriesForVoting={handleAssignEntriesForVoting}
+                  assessmentId={data.id}
+                  isVotingPublished={isVotingPublished}
                 />
               </div>
             </Collapse>

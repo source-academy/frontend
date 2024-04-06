@@ -1182,6 +1182,7 @@ export const updateAssessment = async (
     maxTeamSize?: number;
     hasTokenCounter?: boolean;
     hasVotingFeatures?: boolean;
+    assignEntriesForVoting?: boolean;
   },
   tokens: Tokens
 ): Promise<Response | null> => {
