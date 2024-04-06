@@ -121,6 +121,7 @@ const FilterBadge: React.FC<FilterBadgeProps> = ({ filter, onRemove }) => {
       type="button"
       className="grading-overview-filterable-btns"
       onClick={() => onRemove(filter)}
+      style={{ marginLeft: '5px' }}
     >
       <Badge
         text={filterValue}
@@ -143,6 +144,7 @@ const ColumnFilterBadge: React.FC<ColumnFilterBadgeProps> = ({ filter, onRemove,
       type="button"
       className="grading-overview-filterable-btns"
       onClick={() => onRemove(filter)}
+      style={{ marginLeft: '5px' }}
     >
       <Badge
         text={filtersName}

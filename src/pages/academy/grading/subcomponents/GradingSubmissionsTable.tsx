@@ -333,6 +333,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       field: ColumnFields.xp,
       cellClass:
         generalColProperties.cellClass +
+        ' grading-xp-cell' +
         (!filterMode ? ' grading-def-cell-pointer' : ' grading-def-cell-selectable')
     });
 
@@ -340,6 +341,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       ...generalColProperties,
       headerName: ColumnName.actionsIndex,
       field: ColumnFields.actionsIndex,
+      flex: 1.25,
       cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return params.data !== undefined
           ? {
@@ -536,12 +538,14 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         <GradingFlex alignItems="center">
           <GradingFlex style={{ alignItems: 'center', height: '1.75rem', width: '100%' }}>
             <Icon icon={IconNames.FILTER_LIST} />
-            <GradingText secondaryText>
+            <GradingText secondaryText style={{ marginLeft: '7.5px' }}>
               {columnFilters.length > 0 ? (
                 'Filters: '
               ) : filterMode === true ? (
                 'No filters applied. Click on any cell to filter by its value.' +
-                (hiddenColumns.length === 0 ? ' Click on any column header to hide it.' : '')
+                (hiddenColumns.length === 0
+                  ? " Click on any column header's eye icon to hide it."
+                  : '')
               ) : (
                 <strong>Disable Grading Mode to enable click to filter</strong>
               )}{' '}
@@ -615,7 +619,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           disabled={page <= 0}
         />
         <H6 style={{ margin: 'auto 0' }}>
-          Page {page + 1} of {maxPage + 1}
+          Page {maxPage + 1 === 0 ? 0 : page + 1} of {maxPage + 1}
         </H6>
         <Button
           small

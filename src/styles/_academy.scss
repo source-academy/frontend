@@ -686,6 +686,11 @@
   &.grading-cell-align-left {
     text-align: left !important;
   }
+
+  &.grading-xp-cell {
+    text-wrap: pretty;
+    line-height: 15px;
+  }
 }
 
 .grading-table-footer {
@@ -724,7 +729,7 @@
   color: rgba(0, 0, 0, 0.7);
   text-wrap: nowrap;
   text-overflow: ellipsis;
-  max-width: 97.5%;
+  max-width: 100%;
 
   &.grading-badge-xs {
     padding: 0.25rem 0.6rem;
@@ -836,9 +841,17 @@
 
 .grading-refresh-loop {
   svg {
-    transform: rotate(180deg);
-    transition: 0.2s ease;
+    animation: 0.2s ease rotateHalf;
   }
   cursor: not-allowed !important;
   pointer-events: none;
+}
+
+@keyframes rotateHalf {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
 }

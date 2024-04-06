@@ -53,19 +53,19 @@ const Grading: React.FC = () => {
 
   const [pageSize, setPageSize] = useState(10);
   const [showAllSubmissions, setShowAllSubmissions] = useState(false);
-  const [refreshQuery, setRefreshQuery] = useState(false);
+  const [refreshQueried, setRefreshQueried] = useState(false); // for callback (immediately becomes false)
+  const [animateRefresh, setAnimateRefresh] = useState(false); // for animation (becomes false on animation end)
   const [submissions, setSubmissions] = useState<GradingOverview[]>([]);
 
   const dispatch = useDispatch();
   const allColsSortStates = useTypedSelector(state => state.workspaces.grading.allColsSortStates);
-  const requestCounter = useTypedSelector(state => state.workspaces.grading.requestCounter);
   const hasLoadedBefore = useTypedSelector(state => state.workspaces.grading.hasLoadedBefore);
 
   const updateGradingOverviewsCallback = useCallback(
     (page: number, filterParams: Object) => {
       // Prevents es-lint missing dependency warning
-      if (refreshQuery) {
-        return setRefreshQuery(false);
+      if (refreshQueried) {
+        return setRefreshQueried(false);
       }
 
       dispatch(setGradingHasLoadedBefore());
@@ -80,7 +80,7 @@ const Grading: React.FC = () => {
         )
       );
     },
-    [dispatch, showAllGroups, showAllSubmissions, pageSize, allColsSortStates, refreshQuery]
+    [dispatch, showAllGroups, showAllSubmissions, pageSize, allColsSortStates, refreshQueried]
   );
 
   useEffect(() => {
@@ -182,10 +182,14 @@ const Grading: React.FC = () => {
               />
               <GradingText>entries per page.</GradingText>
               <Button
-                className={'grading-refresh' + (requestCounter !== 0 ? '-loop' : '')}
+                className={animateRefresh ? 'grading-refresh-loop' : ''}
                 minimal={true}
                 style={{ padding: 0 }}
-                onClick={e => setRefreshQuery(prev => !prev)}
+                onClick={e => {
+                  setRefreshQueried(true);
+                  setAnimateRefresh(true);
+                }}
+                onAnimationEnd={e => setAnimateRefresh(false)}
               >
                 <Icon htmlTitle="Refresh" icon={IconNames.REFRESH} />
               </Button>
