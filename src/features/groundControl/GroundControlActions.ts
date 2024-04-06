@@ -1,6 +1,7 @@
 import { createAction } from '@reduxjs/toolkit';
 
 import {
+  ASSIGN_ENTRIES_FOR_VOTING,
   CHANGE_DATE_ASSESSMENT,
   CHANGE_TEAM_SIZE_ASSESSMENT,
   CONFIGURE_ASSESSMENT,
@@ -39,3 +40,7 @@ export const configureAssessment = createAction(
     payload: { id, hasVotingFeatures, hasTokenCounter }
   })
 );
+
+export const assignEntriesForVoting = createAction(ASSIGN_ENTRIES_FOR_VOTING, (id: number) => ({
+  payload: { id }
+}));
