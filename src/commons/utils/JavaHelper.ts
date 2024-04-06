@@ -58,18 +58,11 @@ export async function javaRun(javaCode: string, context: Context) {
     return await import(`java-slang/dist/jvm/stdlib/${path}.js`);
   };
   const stdout = (str: string) => {
-    // java flush pushes a single newline to buffer
-    if (str === '\n') {
-      if (buffer.length > 0) {
-        DisplayBufferService.push(buffer.join(''), context.externalContext);
-      }
-      buffer = [];
-      return;
-    }
-
     if (str.endsWith('\n')) {
       buffer.push(str);
-      DisplayBufferService.push(buffer.join(''), context.externalContext);
+      const lines = buffer.join('').split('\n');
+      lines.pop();
+      lines.forEach(line => DisplayBufferService.push(line, context.externalContext));
       buffer = [];
     } else {
       buffer.push(str);
@@ -95,8 +88,13 @@ export async function javaRun(javaCode: string, context: Context) {
   };
 
   // FIXME: Remove when the compiler is working
-  const json = JSON.parse(javaCode);
-  compiled = json;
+  try {
+    const json = JSON.parse(javaCode);
+    compiled = json;
+  } catch (e) {
+    stderr(e);
+    return Promise.resolve({ status: 'error' });
+  }
 
   // load cached classfiles from IndexedDB
   return loadCachedFiles(() =>
