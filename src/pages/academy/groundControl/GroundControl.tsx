@@ -43,6 +43,7 @@ export type DispatchProps = {
     hasVotingFeatures: boolean,
     hasTokenCounter: boolean
   ) => void;
+  handleAssignEntriesForVoting: (id: number) => void;
   handleFetchCourseConfigs: () => void;
 };
 
@@ -182,7 +183,8 @@ const GroundControl: React.FC<Props> = props => {
       field: 'placeholderConfigure' as any,
       cellRenderer: ConfigureCell,
       cellRendererParams: {
-        handleConfigureAssessment: props.handleConfigureAssessment
+        handleConfigureAssessment: props.handleConfigureAssessment,
+        handleAssignEntriesForVoting: props.handleAssignEntriesForVoting
       },
       width: 70,
       filter: false,
