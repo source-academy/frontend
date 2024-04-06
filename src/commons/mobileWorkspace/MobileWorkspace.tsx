@@ -184,6 +184,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         newTabId === SideContentType.mobileEditorRun &&
         !(
           prevTabId === SideContentType.substVisualizer ||
+          prevTabId === SideContentType.cseMachine ||
           prevTabId === SideContentType.autograder ||
           prevTabId === SideContentType.testcases
         )
@@ -193,12 +194,14 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         handleHideRepl();
       }
 
-      // Disable draggable REPL when on the files & stepper tab.
+      // Disable draggable REPL when on the files & stepper & cse tab.
       if (
         newTabId === SideContentType.folder ||
         newTabId === SideContentType.substVisualizer ||
+        newTabId === SideContentType.cseMachine ||
         (prevTabId === SideContentType.substVisualizer &&
-          newTabId === SideContentType.mobileEditorRun)
+          newTabId === SideContentType.mobileEditorRun) ||
+        (prevTabId === SideContentType.cseMachine && newTabId === SideContentType.mobileEditorRun)
       ) {
         setIsDraggableReplDisabled(true);
       } else {
