@@ -22,7 +22,7 @@ export async function javaRun(javaCode: string, context: Context) {
       const pkg = splits.join('_');
 
       const request = new XMLHttpRequest();
-      request.open('GET', `${Constants.javaPacakgesUrl}${pkg}.json`, false);
+      request.open('GET', `${Constants.javaPackagesUrl}${pkg}.json`, false);
       request.send(null);
       if (request.status !== 200) {
         throw new Error('File not found: ' + path);
@@ -101,7 +101,7 @@ export async function javaRun(javaCode: string, context: Context) {
   // load cached classfiles from IndexedDB
   return loadCachedFiles(() =>
     // Initial loader to fetch commonly used classfiles
-    fetch(Constants.javaPacakgesUrl + '_base.json')
+    fetch(Constants.javaPackagesUrl + '_base.json')
       .then(res => res.json())
       .then((obj: { [key: string]: string }) => {
         return obj;

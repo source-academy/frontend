@@ -39,7 +39,7 @@ const githubClientId = process.env.REACT_APP_GITHUB_CLIENT_ID || '';
 const githubOAuthProxyUrl = process.env.REACT_APP_GITHUB_OAUTH_PROXY_URL || '';
 const sicpBackendUrl =
   process.env.REACT_APP_SICPJS_BACKEND_URL || 'https://sicp.sourceacademy.org/';
-const javaPacakgesUrl = 'https://source-academy.github.io/modules/java/java-packages/src/';
+const javaPackagesUrl = 'https://source-academy.github.io/modules/java/java-packages/src/';
 const workspaceSettingsLocalStorageKey = 'workspace-settings';
 
 // For achievements feature (CA - Continual Assessment)
@@ -137,7 +137,7 @@ const Constants = {
   sharedbBackendUrl,
   cadetLoggerInterval,
   sicpBackendUrl,
-  javaPacakgesUrl,
+  javaPackagesUrl,
   workspaceSettingsLocalStorageKey,
   caFulfillmentLevel
 };
