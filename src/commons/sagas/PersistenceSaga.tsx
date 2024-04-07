@@ -734,50 +734,55 @@ export function* persistenceSaga(): SagaIterator {
     function* ({ payload }: ReturnType<typeof actions.persistenceCreateFile>) {
       yield call(store.dispatch, actions.disableFileSystemContextMenus());
 
-      const newFilePath = payload;
-      yield call(console.log, "create file ", newFilePath);
+      try {
+        const newFilePath = payload;
+        yield call(console.log, "create file ", newFilePath);
 
-      // look for parent folder persistenceFile TODO modify action so name is supplied?
-      const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(newFilePath);
-      const parentFolderPath = regexResult ? regexResult[1].slice(0, -1) : undefined;
-      if (!parentFolderPath) {
-        yield call(console.log, "parent not found ", newFilePath);
-        return;
+        // look for parent folder persistenceFile TODO modify action so name is supplied?
+        const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(newFilePath);
+        const parentFolderPath = regexResult ? regexResult[1].slice(0, -1) : undefined;
+        if (!parentFolderPath) {
+          throw new Error("Parent folder path not found");
+        }
+        const newFileName = regexResult![2] + regexResult![3];
+        yield call(console.log, regexResult, "regexresult!!!!!!!!!!!!!!!!!");
+        const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
+        const parentFolderPersistenceFile = persistenceFileArray.find(e => e.path === parentFolderPath);
+        if (!parentFolderPersistenceFile) {
+          yield call(console.log, "parent pers file missing");
+          return;
+        }
+
+        yield call(console.log, "parent found ", parentFolderPersistenceFile, " for file ", newFilePath);
+
+        // create file
+        const parentFolderId = parentFolderPersistenceFile.id;
+        const [chapter, variant, external] = yield select(
+          (state: OverallState) => [
+            state.workspaces.playground.context.chapter,
+            state.workspaces.playground.context.variant,
+            state.workspaces.playground.externalLibrary
+          ]
+        );
+        const config: IPlaygroundConfig = {
+          chapter,
+          variant,
+          external
+        };
+        const newFilePersistenceFile: PersistenceFile = yield call(createFile, newFileName, parentFolderId, MIME_SOURCE, '', config);
+        yield put(actions.addPersistenceFile({ ...newFilePersistenceFile, lastSaved: new Date(), path: newFilePath }));
+        yield call(store.dispatch, actions.updateRefreshFileViewKey());
+        yield call(
+          showSuccessMessage,
+          `${newFileName} successfully saved to Google Drive.`,
+          1000
+        );
+      } catch (ex) {
+        console.error(ex);
+        yield call(showWarningMessage, `Error while creating file.`, 1000);
+      } finally {
+        yield call(store.dispatch, actions.enableFileSystemContextMenus());
       }
-      const newFileName = regexResult![2] + regexResult![3];
-      yield call(console.log, regexResult, "regexresult!!!!!!!!!!!!!!!!!");
-      const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
-      const parentFolderPersistenceFile = persistenceFileArray.find(e => e.path === parentFolderPath);
-      if (!parentFolderPersistenceFile) {
-        yield call(console.log, "parent pers file not found ", newFilePath, " parent path ", parentFolderPath, " persArr ", persistenceFileArray, " reg res ", regexResult);
-        return;
-      }
-
-      yield call(console.log, "parent found ", parentFolderPersistenceFile, " for file ", newFilePath);
-
-      // create file
-      const parentFolderId = parentFolderPersistenceFile.id;
-      const [chapter, variant, external] = yield select(
-        (state: OverallState) => [
-          state.workspaces.playground.context.chapter,
-          state.workspaces.playground.context.variant,
-          state.workspaces.playground.externalLibrary
-        ]
-      );
-      const config: IPlaygroundConfig = {
-        chapter,
-        variant,
-        external
-      };
-      const newFilePersistenceFile: PersistenceFile = yield call(createFile, newFileName, parentFolderId, MIME_SOURCE, '', config);
-      yield put(actions.addPersistenceFile({ ...newFilePersistenceFile, lastSaved: new Date(), path: newFilePath }));
-      yield call(store.dispatch, actions.enableFileSystemContextMenus());
-      yield call(store.dispatch, actions.updateRefreshFileViewKey());
-      yield call(
-        showSuccessMessage,
-        `${newFileName} successfully saved to Google Drive.`,
-        1000
-      );
     }
   );
 
@@ -786,41 +791,46 @@ export function* persistenceSaga(): SagaIterator {
     function* ({ payload }: ReturnType<typeof actions.persistenceCreateFolder>) {
       yield call(store.dispatch, actions.disableFileSystemContextMenus());
 
-      const newFolderPath = payload;
-      yield call(console.log, "create folder ", newFolderPath);
+      try {
+        const newFolderPath = payload;
+        yield call(console.log, "create folder ", newFolderPath);
 
-      
-      // const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
-      
-      // look for parent folder persistenceFile TODO modify action so name is supplied?
-      const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(newFolderPath);
-      const parentFolderPath = regexResult ? regexResult[1].slice(0, -1) : undefined;
-      if (!parentFolderPath) {
-        yield call(console.log, "parent not found ", newFolderPath);
-        return;
+        
+        // const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
+        
+        // look for parent folder persistenceFile TODO modify action so name is supplied?
+        const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(newFolderPath);
+        const parentFolderPath = regexResult ? regexResult[1].slice(0, -1) : undefined;
+        if (!parentFolderPath) {
+          throw new Error("parent missing");
+        }
+        const newFolderName = regexResult![2];
+        const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
+        const parentFolderPersistenceFile = persistenceFileArray.find(e => e.path === parentFolderPath);
+        if (!parentFolderPersistenceFile) {
+          yield call(console.log, "parent pers file missing");
+          return;
+        }
+
+        yield call(console.log, "parent found ", parentFolderPersistenceFile, " for file ", newFolderPath);
+
+        // create folder
+        const parentFolderId = parentFolderPersistenceFile.id;
+
+        const newFolderId: string = yield call(createFolderAndReturnId, parentFolderId, newFolderName);
+        yield put(actions.addPersistenceFile({ lastSaved: new Date(), path: newFolderPath, id: newFolderId, name: newFolderName, parentId: parentFolderId }));
+        yield call(store.dispatch, actions.updateRefreshFileViewKey());
+        yield call(
+          showSuccessMessage,
+          `Folder ${newFolderName} successfully saved to Google Drive.`,
+          1000
+        );
+      } catch (ex) {
+        console.error(ex);
+        yield call(showWarningMessage, `Error while creating folder.`, 1000);
+      } finally {
+        yield call(store.dispatch, actions.enableFileSystemContextMenus());
       }
-      const newFolderName = regexResult![2];
-      const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
-      const parentFolderPersistenceFile = persistenceFileArray.find(e => e.path === parentFolderPath);
-      if (!parentFolderPersistenceFile) {
-        yield call(console.log, "parent pers file not found ", newFolderPath, " parent path ", parentFolderPath, " persArr ", persistenceFileArray, " reg res ", regexResult);
-        return;
-      }
-
-      yield call(console.log, "parent found ", parentFolderPersistenceFile, " for file ", newFolderPath);
-
-      // create folder
-      const parentFolderId = parentFolderPersistenceFile.id;
-
-      const newFolderId: string = yield call(createFolderAndReturnId, parentFolderId, newFolderName);
-      yield put(actions.addPersistenceFile({ lastSaved: new Date(), path: newFolderPath, id: newFolderId, name: newFolderName, parentId: parentFolderId }));
-      yield call(store.dispatch, actions.enableFileSystemContextMenus());
-      yield call(store.dispatch, actions.updateRefreshFileViewKey());
-      yield call(
-        showSuccessMessage,
-        `Folder ${newFolderName} successfully saved to Google Drive.`,
-        1000
-      );
     }
   );
 
@@ -829,25 +839,33 @@ export function* persistenceSaga(): SagaIterator {
     function* ({ payload }: ReturnType<typeof actions.persistenceDeleteFile>) {
       yield call(store.dispatch, actions.disableFileSystemContextMenus());
 
-      const filePath = payload;
-      yield call(console.log, "delete file ", filePath);
+      try {
 
-      // look for file
-      const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
-      const persistenceFile = persistenceFileArray.find(e => e.path === filePath);
-      if (!persistenceFile || persistenceFile.id === '') {
-        yield call(console.log, "cannot find pers file for ", filePath);
-        return;
+        const filePath = payload;
+        yield call(console.log, "delete file ", filePath);
+
+        // look for file
+        const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
+        const persistenceFile = persistenceFileArray.find(e => e.path === filePath);
+        if (!persistenceFile || persistenceFile.id === '') {
+          yield call(console.log, "cannot find pers file for ", filePath);
+          return;
+        }
+        yield call(deleteFileOrFolder, persistenceFile.id); // assume this succeeds all the time? TODO
+        yield put(actions.deletePersistenceFile(persistenceFile));
+        yield call(store.dispatch, actions.updateRefreshFileViewKey());
+        yield call(
+          showSuccessMessage,
+          `${persistenceFile.name} successfully deleted from Google Drive.`,
+          1000
+        );
+
+      } catch (ex) {
+        console.error(ex);
+        yield call(showWarningMessage, `Error while deleting file.`, 1000);
+      } finally {
+        yield call(store.dispatch, actions.enableFileSystemContextMenus());
       }
-      yield call(deleteFileOrFolder, persistenceFile.id); // assume this succeeds all the time? TODO
-      yield put(actions.deletePersistenceFile(persistenceFile));
-      yield call(store.dispatch, actions.enableFileSystemContextMenus());
-      yield call(store.dispatch, actions.updateRefreshFileViewKey());
-      yield call(
-        showSuccessMessage,
-        `${persistenceFile.name} successfully deleted from Google Drive.`,
-        1000
-      );
     }
   );
 
@@ -856,25 +874,31 @@ export function* persistenceSaga(): SagaIterator {
     function* ({ payload }: ReturnType<typeof actions.persistenceDeleteFolder>) {
       yield call(store.dispatch, actions.disableFileSystemContextMenus());
 
-      const folderPath = payload;
-      yield call(console.log, "delete folder ", folderPath);
+      try{
+        const folderPath = payload;
+        yield call(console.log, "delete folder ", folderPath);
 
-      // identical to delete file
-      const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
-      const persistenceFile = persistenceFileArray.find(e => e.path === folderPath);
-      if (!persistenceFile || persistenceFile.id === '') {
-        yield call(console.log, "cannot find pers file for ", folderPath);
-        return;
+        // identical to delete file
+        const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
+        const persistenceFile = persistenceFileArray.find(e => e.path === folderPath);
+        if (!persistenceFile || persistenceFile.id === '') {
+          yield call(console.log, "cannot find pers file");
+          return;
+        }
+        yield call(deleteFileOrFolder, persistenceFile.id);
+        yield put(actions.deletePersistenceFile(persistenceFile));
+        yield call(store.dispatch, actions.updateRefreshFileViewKey());
+        yield call(
+          showSuccessMessage,
+          `Folder ${persistenceFile.name} successfully deleted from Google Drive.`,
+          1000
+        );
+      } catch (ex) {
+        console.error(ex);
+        yield call(showWarningMessage, `Error while deleting folder.`, 1000);
+      } finally {
+        yield call(store.dispatch, actions.enableFileSystemContextMenus());
       }
-      yield call(deleteFileOrFolder, persistenceFile.id); // assume this succeeds all the time? TODO
-      yield put(actions.deletePersistenceFile(persistenceFile));
-      yield call(store.dispatch, actions.enableFileSystemContextMenus());
-      yield call(store.dispatch, actions.updateRefreshFileViewKey());
-      yield call(
-        showSuccessMessage,
-        `Folder ${persistenceFile.name} successfully deleted from Google Drive.`,
-        1000
-      );
     }
   )
 
@@ -883,36 +907,42 @@ export function* persistenceSaga(): SagaIterator {
     function* ({ payload : {oldFilePath, newFilePath} }: ReturnType<typeof actions.persistenceRenameFile>) {
       yield call(store.dispatch, actions.disableFileSystemContextMenus());
 
-      yield call(console.log, "rename file ", oldFilePath, " to ", newFilePath);
+      try {
 
-      // look for file
-      const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
-      const persistenceFile = persistenceFileArray.find(e => e.path === oldFilePath);
-      if (!persistenceFile) {
-        yield call(console.log, "cannot find pers file for ", oldFilePath);
-        return;
+        yield call(console.log, "rename file ", oldFilePath, " to ", newFilePath);
+
+        // look for file
+        const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
+        const persistenceFile = persistenceFileArray.find(e => e.path === oldFilePath);
+        if (!persistenceFile) {
+          yield call(console.log, "cannot find pers file");
+          return;
+        }
+
+        // new name TODO: modify action so name is supplied?
+        const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(newFilePath);
+        if (!regexResult) {
+          throw new Error("regex fail");
+        }
+        const newFileName = regexResult[2] + regexResult[3];
+
+        // call gapi 
+        yield call(renameFileOrFolder, persistenceFile.id, newFileName);
+
+        // handle pers file
+        yield put(actions.updatePersistenceFilePathAndNameByPath(oldFilePath, newFilePath, newFileName));
+        yield call(store.dispatch, actions.updateRefreshFileViewKey());
+        yield call(
+          showSuccessMessage,
+          `${newFileName} successfully renamed in Google Drive.`,
+          1000
+        );
+      } catch (ex) {
+        console.error(ex);
+        yield call(showWarningMessage, `Error while renaming file.`, 1000);
+      } finally {
+        yield call(store.dispatch, actions.enableFileSystemContextMenus());
       }
-
-      // new name TODO: modify action so name is supplied?
-      const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(newFilePath);
-      if (!regexResult) {
-        yield call(console.log, "regex fail ", newFilePath);
-        return;
-      }
-      const newFileName = regexResult[2] + regexResult[3];
-
-      // call gapi 
-      yield call(renameFileOrFolder, persistenceFile.id, newFileName);
-
-      // handle pers file
-      yield put(actions.updatePersistenceFilePathAndNameByPath(oldFilePath, newFilePath, newFileName));
-      yield call(store.dispatch, actions.enableFileSystemContextMenus());
-      yield call(store.dispatch, actions.updateRefreshFileViewKey());
-      yield call(
-        showSuccessMessage,
-        `${newFileName} successfully renamed in Google Drive.`,
-        1000
-      );
     }
   );
 
@@ -921,44 +951,48 @@ export function* persistenceSaga(): SagaIterator {
     function* ({ payload : {oldFolderPath, newFolderPath} }: ReturnType<typeof actions.persistenceRenameFolder>) {
       yield call(store.dispatch, actions.disableFileSystemContextMenus());
 
-      yield call(console.log, "rename folder ", oldFolderPath, " to ", newFolderPath);
+      try {
+        yield call(console.log, "rename folder ", oldFolderPath, " to ", newFolderPath);
 
-      // look for folder
-      const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
-      const persistenceFile = persistenceFileArray.find(e => e.path === oldFolderPath);
-      if (!persistenceFile) {
-        yield call(console.log, "cannot find pers file for ", oldFolderPath);
-        return;
+        // look for folder
+        const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
+        const persistenceFile = persistenceFileArray.find(e => e.path === oldFolderPath);
+        if (!persistenceFile) {
+          yield call(console.log, "cannot find pers file for ", oldFolderPath);
+          return;
+        }
+
+        // new name TODO: modify action so name is supplied?
+        const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(newFolderPath);
+        if (!regexResult) {
+          throw new Error("regex fail")
+        }
+        const newFolderName = regexResult[2] + regexResult[3];
+
+        // old name TODO: modify action so name is supplied?
+        const regexResult2 = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(oldFolderPath);
+        if (!regexResult2) {
+          throw new Error("regex2 fail");
+        }
+        const oldFolderName = regexResult2[2] + regexResult2[3];
+
+        // call gapi 
+        yield call(renameFileOrFolder, persistenceFile.id, newFolderName);
+
+        // handle pers file
+        yield put(actions.updatePersistenceFolderPathAndNameByPath(oldFolderPath, newFolderPath, oldFolderName, newFolderName));
+        yield call(store.dispatch, actions.updateRefreshFileViewKey());
+        yield call(
+          showSuccessMessage,
+          `Folder ${newFolderName} successfully renamed in Google Drive.`,
+          1000
+        );
+      } catch (ex) {
+        console.error(ex);
+        yield call(showWarningMessage, `Error while renaming folder.`, 1000);
+      } finally {
+        yield call(store.dispatch, actions.enableFileSystemContextMenus());
       }
-
-      // new name TODO: modify action so name is supplied?
-      const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(newFolderPath);
-      if (!regexResult) {
-        yield call(console.log, "regex fail ", newFolderPath);
-        return;
-      }
-      const newFolderName = regexResult[2] + regexResult[3];
-
-      // old name TODO: modify action so name is supplied?
-      const regexResult2 = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(oldFolderPath);
-      if (!regexResult2) {
-        yield call(console.log, "regex fail ", oldFolderPath);
-        return;
-      }
-      const oldFolderName = regexResult2[2] + regexResult2[3];
-
-      // call gapi 
-      yield call(renameFileOrFolder, persistenceFile.id, newFolderName);
-
-      // handle pers file
-      yield put(actions.updatePersistenceFolderPathAndNameByPath(oldFolderPath, newFolderPath, oldFolderName, newFolderName));
-      yield call(store.dispatch, actions.enableFileSystemContextMenus());
-      yield call(store.dispatch, actions.updateRefreshFileViewKey());
-      yield call(
-        showSuccessMessage,
-        `Folder ${newFolderName} successfully renamed in Google Drive.`,
-        1000
-      );
     }
   );
 }
