@@ -15,6 +15,7 @@ import {
 import { store } from '../../pages/createStore';
 import { WORKSPACE_BASE_PATHS } from 'src/pages/fileSystem/createInBrowserFileSystem';
 import { updateRefreshFileViewKey } from 'src/commons/fileSystem/FileSystemActions';
+import { PersistenceFile } from '../persistence/PersistenceTypes';
 
 /**
  * Exchanges the Access Code with the back-end to receive an Auth-Token
@@ -505,56 +506,6 @@ export async function performCreatingSave(
   }
 }
 
-export async function performFolderDeletion(
-  octokit: Octokit,
-  repoOwner: string,
-  repoName: string,
-  filePath: string,
-  githubName: string | null,
-  githubEmail: string | null,
-  commitMessage: string
-) {
-  if (octokit === undefined) return;
-
-  githubEmail = githubEmail || 'No public email provided';
-  githubName = githubName || 'Source Academy User';
-  commitMessage = commitMessage || 'Changes made from Source Academy';
-
-  try {
-    const results = await octokit.repos.getContent({
-      owner: repoOwner,
-      repo: repoName,
-      path: filePath
-    });
-
-    const files = results.data;
-
-    // This function must apply deletion to an entire folder
-    if (!Array.isArray(files)) {
-      showWarningMessage('Something went wrong when trying to delete the folder.', 1000);
-      return;
-    }
-
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-
-      await octokit.repos.deleteFile({
-        owner: repoOwner,
-        repo: repoName,
-        path: file.path,
-        message: commitMessage,
-        sha: file.sha
-      });
-    }
-
-    showSuccessMessage('Successfully deleted folder from GitHub!', 1000);
-    store.dispatch(updateRefreshFileViewKey());
-  } catch (err) {
-    console.error(err);
-    showWarningMessage('Something went wrong when trying to delete the folder.', 1000);
-  }
-}
-
 export async function performFileDeletion (
   octokit: Octokit,
   repoOwner: string,
@@ -586,7 +537,6 @@ export async function performFileDeletion (
     }
 
     const sha = files.sha;
-    console.log(sha);
     
     await octokit.repos.deleteFile({
       owner: repoOwner,
@@ -596,10 +546,235 @@ export async function performFileDeletion (
       sha: sha
     });
 
+
+    const persistenceFileArray = store.getState().fileSystem.persistenceFileArray;
+    console.log(persistenceFileArray);
+    const persistenceFile = persistenceFileArray.find(e => 
+      e.repoName === repoName && 
+      e.path === "/playground/" + filePath);
+    if (!persistenceFile) {
+      console.log("Cannot find persistence file for " + filePath);
+      return;
+    }
+    console.log(persistenceFile);
+    store.dispatch(actions.deleteGithubSaveInfo(persistenceFile));
     showSuccessMessage('Successfully deleted file from GitHub!', 1000);
     store.dispatch(updateRefreshFileViewKey());
   } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to delete the file.', 1000);
+  }
+}
+
+export async function performFolderDeletion(
+  octokit: Octokit,
+  repoOwner: string,
+  repoName: string,
+  filePath: string,
+  githubName: string | null,
+  githubEmail: string | null,
+  commitMessage: string
+) {
+  if (octokit === undefined) return;
+
+  githubEmail = githubEmail || 'No public email provided';
+  githubName = githubName || 'Source Academy User';
+  commitMessage = commitMessage || 'Changes made from Source Academy';
+
+  try {
+    const results = await octokit.repos.getContent({
+      owner: repoOwner,
+      repo: repoName,
+      path: filePath
+    });
+    console.log(results);
+
+    const persistenceFileArray = store.getState().fileSystem.persistenceFileArray;
+    
+    for (let i = 0; i < persistenceFileArray.length; i++) {
+      await checkPersistenceFile(persistenceFileArray[i]);
+    }
+
+    async function checkPersistenceFile(persistenceFile: PersistenceFile) {
+      if (persistenceFile.path?.startsWith("/playground/" + filePath)) {
+        console.log("Deleting" + persistenceFile.path);
+        await performFileDeletion(
+          octokit,
+          repoOwner,
+          repoName,
+          persistenceFile.path.slice(12),
+          githubName,
+          githubEmail,
+          commitMessage
+        )
+      }
+    }
+
+    showSuccessMessage('Successfully deleted folder from GitHub!', 1000);
+    store.dispatch(updateRefreshFileViewKey());
+  } catch (err) {
+    console.error(err);
+    showWarningMessage('Something went wrong when trying to delete the folder.', 1000);
+  }
+}
+
+export async function performFileRenaming (
+  octokit: Octokit,
+  repoOwner: string,
+  repoName: string,
+  oldFilePath: string,
+  githubName: string | null,
+  githubEmail: string | null,
+  commitMessage: string,
+  newFilePath: string
+) {
+  if (octokit === undefined) return;
+
+  githubEmail = githubEmail || 'No public email provided';
+  githubName = githubName || 'Source Academy User';
+  commitMessage = commitMessage || 'Changes made from Source Academy';
+
+  try {
+    type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+    console.log("repoOwner is " + repoOwner + " repoName is " + repoName + " oldfilepath is " + oldFilePath);
+    const results: GetContentResponse = await octokit.repos.getContent({
+      owner: repoOwner,
+      repo: repoName,
+      path: oldFilePath
+    });
+
+    type GetContentData = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+    const files: GetContentData = results.data;
+
+    if (Array.isArray(files)) {
+      return;
+    }
+
+    const sha = files.sha;
+    const content = (results.data as any).content;
+    const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(newFilePath);
+        if (regexResult === null) {
+          console.log("Regex null");
+          return;
+        }
+    const newFileName = regexResult[2] + regexResult[3];
+
+    await octokit.repos.deleteFile({
+      owner: repoOwner,
+      repo: repoName,
+      path: oldFilePath,
+      message: commitMessage,
+      sha: sha
+    });
+
+
+    await octokit.repos.createOrUpdateFileContents({
+      owner: repoOwner,
+      repo: repoName,
+      path: newFilePath,
+      message: commitMessage,
+      content: content,
+      committer: { name: githubName, email: githubEmail },
+      author: { name: githubName, email: githubEmail }
+    });
+
+    store.dispatch(actions.updatePersistenceFilePathAndNameByPath("/playground/" + oldFilePath, "/playground/" + newFilePath, newFileName));
+    showSuccessMessage('Successfully renamed file in Github!', 1000);
+    store.dispatch(updateRefreshFileViewKey());
+  } catch (err) {
+    console.error(err);
+    showWarningMessage('Something went wrong when trying to rename the file.', 1000);
+  }
+}
+
+export async function performFolderRenaming (
+  octokit: Octokit,
+  repoOwner: string,
+  repoName: string,
+  oldFolderPath: string,
+  githubName: string | null,
+  githubEmail: string | null,
+  commitMessage: string,
+  newFolderPath: string
+) {
+  if (octokit === undefined) return;
+
+  githubEmail = githubEmail || 'No public email provided';
+  githubName = githubName || 'Source Academy User';
+  commitMessage = commitMessage || 'Changes made from Source Academy';
+  
+  try {
+    
+    const persistenceFileArray = store.getState().fileSystem.persistenceFileArray;
+    type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+    type GetContentData = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+    
+    for (let i = 0; i < persistenceFileArray.length; i++) {
+      const persistenceFile = persistenceFileArray[i];
+      if (persistenceFile.path?.startsWith("/playground/" + oldFolderPath)) {
+        console.log("Deleting" + persistenceFile.path);
+        const results: GetContentResponse = await octokit.repos.getContent({
+          owner: repoOwner,
+          repo: repoName,
+          path: persistenceFile.path.slice(12)
+        });
+        const file: GetContentData = results.data;
+        const content = (results.data as any).content;
+        // Cannot save over folder
+        if (Array.isArray(file)) {
+          return;
+        }
+        const sha = file.sha;
+
+        const oldFilePath = persistenceFile.path.slice(12);
+        const newFilePath = newFolderPath + persistenceFile.path.slice(12 + oldFolderPath.length);
+
+        const regexResult0 = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(oldFolderPath);
+        if (regexResult0 === null) {
+          console.log("Regex null");
+          return;
+        }
+        const oldFolderName = regexResult0[2];
+        const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(newFolderPath);
+        if (regexResult === null) {
+          console.log("Regex null");
+          return;
+        }
+        const newFolderName = regexResult[2];
+
+        await octokit.repos.deleteFile({
+          owner: repoOwner,
+          repo: repoName,
+          path: oldFilePath,
+          message: commitMessage,
+          sha: sha
+        });
+
+        await octokit.repos.createOrUpdateFileContents({
+          owner: repoOwner,
+          repo: repoName,
+          path: newFilePath,
+          message: commitMessage,
+          content: content,
+          committer: { name: githubName, email: githubEmail},
+          author: { name: githubName, email: githubEmail}
+        });
+
+        console.log("oldfolderpath is " + oldFolderPath + " newfolderpath is " + newFolderPath + " oldfoldername is " + oldFolderName + " newfoldername is " + newFolderName);
+
+        console.log(store.getState().fileSystem.persistenceFileArray);
+        store.dispatch(actions.updatePersistenceFolderPathAndNameByPath(
+          "/playground/" + oldFolderPath, 
+          "/playground/" + newFolderPath, 
+          oldFolderName, 
+          newFolderName));
+      }
+    }
+
+    showSuccessMessage('Successfully renamed folder in Github!', 1000);
+    store.dispatch(updateRefreshFileViewKey());
+  } catch(err) {
+    console.error(err);
+    showWarningMessage('Something went wrong when trying to rename the folder.', 1000);
   }
 }

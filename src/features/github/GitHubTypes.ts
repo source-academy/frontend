@@ -5,6 +5,8 @@ export const GITHUB_SAVE_ALL = 'GITHUB_SAVE_ALL';
 export const GITHUB_CREATE_FILE = 'GITHUB_CREATE_FILE';
 export const GITHUB_DELETE_FILE = 'GITHUB_DELETE_FILE';
 export const GITHUB_DELETE_FOLDER = 'GITHUB_DELETE_FOLDER';
+export const GITHUB_RENAME_FOLDER = 'GITHUB_RENAME_FOLDER';
+export const GITHUB_RENAME_FILE = 'GITHUB_RENAME_FILE';
 
 export type GitHubSaveInfo = {
   repoName?: string;

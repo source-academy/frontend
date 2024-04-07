@@ -7,7 +7,9 @@ import {
     GITHUB_SAVE_FILE, 
     GITHUB_SAVE_FILE_AS,
     GITHUB_DELETE_FILE,
-    GITHUB_DELETE_FOLDER} from './GitHubTypes';
+    GITHUB_DELETE_FOLDER,
+    GITHUB_RENAME_FOLDER,
+    GITHUB_RENAME_FILE} from './GitHubTypes';
 
 export const githubOpenFile = createAction(GITHUB_OPEN_FILE, () => ({ payload: {} }));
 
@@ -22,3 +24,7 @@ export const githubCreateFile = createAction(GITHUB_CREATE_FILE, (filePath: stri
 export const githubDeleteFile = createAction(GITHUB_DELETE_FILE, (filePath: string) => ({ payload: filePath }));
 
 export const githubDeleteFolder = createAction(GITHUB_DELETE_FOLDER, (filePath: string) => ({ payload: filePath}));
+
+export const githubRenameFile = createAction(GITHUB_RENAME_FILE, (oldFilePath: string, newFilePath: string) => ({ payload: {oldFilePath, newFilePath} }));
+
+export const githubRenameFolder = createAction(GITHUB_RENAME_FOLDER, (oldFilePath: string, newFilePath: string) => ({ payload: {oldFilePath, newFilePath} }));

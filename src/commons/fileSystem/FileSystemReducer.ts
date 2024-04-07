@@ -54,11 +54,7 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
         state.persistenceFileArray = persistenceFileArray;
     })
     .addCase(deleteGithubSaveInfo, (state, action) => { // TODO rewrite - refer to deletePersistenceFile below
-      const newPersistenceFileArray = state['persistenceFileArray'].filter(e => {
-        return e.path != action.payload.path &&
-        e.lastSaved != action.payload.lastSaved &&
-        e.repoName != action.payload.repoName
-      });
+      const newPersistenceFileArray = state['persistenceFileArray'].filter(e => e.path !== action.payload.path);
       const isGDriveSyncing = action.payload.id ? true: false;
       if (isGDriveSyncing) {
         const newPersFile = { id: action.payload.id, path: action.payload.path, repoName: '', name: action.payload.name};
@@ -108,10 +104,12 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
     })
     .addCase(updatePersistenceFolderPathAndNameByPath, (state, action) => {
       const filesState = state['persistenceFileArray'];
-      const persistenceFileFindIndex = filesState.findIndex(e => e.path === action.payload.oldPath);
-      if (persistenceFileFindIndex === -1) {
-        return;
-      }
+      //const persistenceFileFindIndex = filesState.findIndex(e => e.path === action.payload.oldPath);
+      console.log(action.payload);
+      filesState.forEach(e => console.log(e.path));
+      // if (persistenceFileFindIndex === -1) {
+      //   return;
+      // }
       // get current level of folder
       const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(action.payload.newPath)!;
 

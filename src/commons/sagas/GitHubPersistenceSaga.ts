@@ -13,7 +13,9 @@ import {
   GITHUB_SAVE_FILE_AS,
   GITHUB_CREATE_FILE,
   GITHUB_DELETE_FILE,
-  GITHUB_DELETE_FOLDER
+  GITHUB_DELETE_FOLDER,
+  GITHUB_RENAME_FILE,
+  GITHUB_RENAME_FOLDER,
 } from '../../features/github/GitHubTypes';
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
@@ -32,7 +34,6 @@ import { EditorTabState } from '../workspace/WorkspaceTypes';
 export function* GitHubPersistenceSaga(): SagaIterator {
   yield takeLatest(LOGIN_GITHUB, githubLoginSaga);
   yield takeLatest(LOGOUT_GITHUB, githubLogoutSaga);
-
   yield takeLatest(GITHUB_OPEN_FILE, githubOpenFile);
   yield takeLatest(GITHUB_SAVE_FILE, githubSaveFile);
   yield takeLatest(GITHUB_SAVE_FILE_AS, githubSaveFileAs);
@@ -40,6 +41,8 @@ export function* GitHubPersistenceSaga(): SagaIterator {
   yield takeLatest(GITHUB_CREATE_FILE, githubCreateFile);
   yield takeLatest(GITHUB_DELETE_FILE, githubDeleteFile);
   yield takeLatest(GITHUB_DELETE_FOLDER, githubDeleteFolder);
+  yield takeLatest(GITHUB_RENAME_FILE, githubRenameFile);
+  yield takeLatest(GITHUB_RENAME_FOLDER, githubRenameFolder);
 }
 
 function* githubLoginSaga() {
@@ -308,12 +311,11 @@ function* githubDeleteFile({ payload }: ReturnType<typeof actions.githubDeleteFi
   const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
 
   const githubLoginId = authUser.data.login;
-  const githubSaveInfo = getGithubSaveInfo();
-  const repoName = githubSaveInfo.repoName;
-  const lastSaved = githubSaveInfo.lastSaved;
+  const repoName = getGithubSaveInfo().repoName;
   const githubEmail = authUser.data.email;
   const githubName = authUser.data.name;
   const commitMessage = 'Changes made from Source Academy';
+
 
   if (repoName === '') {
     yield call(console.log, "not synced to github");
@@ -329,14 +331,6 @@ function* githubDeleteFile({ payload }: ReturnType<typeof actions.githubDeleteFi
     githubName,
     commitMessage,
   );
-
-  const persistenceFileArray = store.getState().fileSystem.persistenceFileArray;
-  const persistenceFile = persistenceFileArray.find(e => 
-    e.repoName === repoName && 
-    e.path === filePath && 
-    e.lastSaved === lastSaved) || {id: '', name: ''};
-  store.dispatch(actions.deleteGithubSaveInfo(persistenceFile));
-
   
   yield call(store.dispatch, actions.enableFileSystemContextMenus());
   yield call(store.dispatch, actions.updateRefreshFileViewKey());
@@ -375,7 +369,89 @@ function* githubDeleteFolder({ payload }: ReturnType<typeof actions.githubDelete
     githubName,
     commitMessage
   );
-  
+
+  yield call(store.dispatch, actions.enableFileSystemContextMenus());
+  yield call(store.dispatch, actions.updateRefreshFileViewKey());
+}
+
+function* githubRenameFile({ payload }: ReturnType<typeof actions.githubRenameFile>): any {
+  yield call(store.dispatch, actions.disableFileSystemContextMenus());
+
+  const newFilePath = payload.newFilePath;
+  const oldFilePath = payload.oldFilePath;
+
+  const octokit = getGitHubOctokitInstance();
+  if (octokit === undefined) return;
+
+  type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
+    typeof octokit.users.getAuthenticated
+  >;
+  const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
+
+  const githubLoginId = authUser.data.login;
+  const githubSaveInfo = getGithubSaveInfo();
+  const repoName = githubSaveInfo.repoName;
+  const githubEmail = authUser.data.email;
+  const githubName = authUser.data.name;
+  const commitMessage = 'Changes made from Source Academy';
+
+  if (repoName === '' || repoName === undefined) {
+    yield call(console.log, "not synced to github");
+    return;
+  }
+
+  GitHubUtils.performFileRenaming(
+    octokit,
+    githubLoginId,
+    repoName,
+    oldFilePath.slice(12),
+    githubName,
+    githubEmail,
+    commitMessage,
+    newFilePath.slice(12)
+  )
+
+  yield call(store.dispatch, actions.enableFileSystemContextMenus());
+  yield call(store.dispatch, actions.updateRefreshFileViewKey());
+}
+
+function* githubRenameFolder({ payload }: ReturnType<typeof actions.githubRenameFile>): any {
+  yield call(store.dispatch, actions.disableFileSystemContextMenus());
+
+  const newFilePath = payload.newFilePath;
+  const oldFilePath = payload.oldFilePath;
+
+  const octokit = getGitHubOctokitInstance();
+  if (octokit === undefined) return;
+
+  type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
+    typeof octokit.users.getAuthenticated
+  >;
+  const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
+
+  const githubLoginId = authUser.data.login;
+  const githubSaveInfo = getGithubSaveInfo();
+  const repoName = githubSaveInfo.repoName;
+  const githubEmail = authUser.data.email;
+  const githubName = authUser.data.name;
+  const commitMessage = 'Changes made from Source Academy';
+
+  if (repoName === '' || repoName === undefined) {
+    yield call(console.log, "not synced to github");
+    return;
+  }
+
+  GitHubUtils.performFolderRenaming(
+    octokit,
+    githubLoginId,
+    repoName,
+    oldFilePath.slice(12),
+    githubName,
+    githubEmail,
+    commitMessage,
+    newFilePath.slice(12)
+  )
+
   yield call(store.dispatch, actions.enableFileSystemContextMenus());
   yield call(store.dispatch, actions.updateRefreshFileViewKey());
 }
