@@ -156,6 +156,7 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
     })
     .addCase(updateRefreshFileViewKey, (state, action) => {
       state.refreshFileViewKey = (state.refreshFileViewKey + 1) % 2;
+      state.lastEditedFilePath = "";
     })
   }
 );
