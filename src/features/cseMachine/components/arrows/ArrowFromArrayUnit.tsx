@@ -9,6 +9,11 @@ import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */
 export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
+  constructor(from: ArrayUnit) {
+    super(from);
+    this.faded = from.parent.unreferenced;
+  }
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;

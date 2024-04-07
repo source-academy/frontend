@@ -19,21 +19,24 @@ import CseMachine from './CseMachine';
 import { CseAnimation } from './CseMachineAnimation';
 import { Config, ShapeDefaultProps } from './CseMachineConfig';
 import {
-  Closure,
   Data,
   DataArray,
   EnvTree,
   EnvTreeNode,
   GlobalFn,
+  NonGlobalFn,
   ReferenceType
 } from './CseMachineTypes';
 import {
   assert,
   deepCopyTree,
   getNextChildren,
+  isBuiltInFn,
   isClosure,
   isDataArray,
+  isEnvEqual,
   isGlobalFn,
+  isNonGlobalFn,
   isPrimitiveData,
   isStreamFn,
   isUnassigned,
@@ -77,7 +80,7 @@ export class Layout {
   static previousStashComponent: StashStack;
 
   /** memoized values */
-  static values = new Map<DataArray | Closure | GlobalFn, Value>();
+  static values = new Map<string | (() => any), Value>();
   /** memoized layout */
   static prevLayout: React.ReactNode;
   static currentDark: React.ReactNode;
@@ -198,37 +201,42 @@ export class Layout {
 
     const preludeEnvNode = Layout.globalEnvNode.children[0];
     const preludeEnv = preludeEnvNode.environment;
-    const globalEnvNode = Layout.globalEnvNode;
-    const globalEnv = globalEnvNode.environment;
+    const globalEnv = Layout.globalEnvNode.environment;
 
-    const preludeValueKeyMap = new Map(
-      Object.entries(preludeEnv.head).map(([key, value]) => [value, key])
-    );
-
-    // Change environments of each array and closure in the prelude to be the global environment
-    for (const value of preludeEnv.heap.getHeap()) {
-      Object.defineProperty(value, 'environment', { value: globalEnvNode.environment });
-      preludeEnv.heap.move(value, globalEnv.heap);
-      // globalEnv.heap.add(value);
-      const key = preludeValueKeyMap.get(value);
-      if (key) {
-        delete preludeEnv.head[key];
-        globalEnv.head[key] = value;
+    // Add bindings from prelude environment head to global environment head
+    for (const [key, value] of Object.entries(preludeEnv.head)) {
+      delete preludeEnv.head[key];
+      globalEnv.head[key] = value;
+      if (isStreamFn(value) && isEnvEqual(value.environment, preludeEnv)) {
+        Object.defineProperty(value, 'environment', { value: globalEnv });
       }
     }
 
+    // Move objects from prelude environment heap to global environment heap
+    for (const value of preludeEnv.heap.getHeap()) {
+      Object.defineProperty(value, 'environment', { value: globalEnv });
+      if (isDataArray(value)) {
+        for (const item of value) {
+          if (isStreamFn(item) && isEnvEqual(item.environment, preludeEnv)) {
+            Object.defineProperty(item, 'environment', { value: globalEnv });
+          }
+        }
+      }
+      preludeEnv.heap.move(value, globalEnv.heap);
+    }
+
     // update globalEnvNode children
-    globalEnvNode.resetChildren(preludeEnvNode.children);
+    Layout.globalEnvNode.resetChildren(preludeEnvNode.children);
 
     // update the tail of each child's environment to point to the global environment
-    globalEnvNode.children.forEach(node => {
+    Layout.globalEnvNode.children.forEach(node => {
       node.environment.tail = globalEnv;
     });
   }
 
   /** remove any global functions not referenced elsewhere in the program */
   private static removeUnreferencedGlobalFns(): void {
-    const referencedFns = new Set<GlobalFn>();
+    const referencedFns = new Set<GlobalFn | NonGlobalFn>();
     const visitedData = new Set<DataArray>();
 
     const findGlobalFnReferences = (envNode: EnvTreeNode): void => {
@@ -272,9 +280,9 @@ export class Layout {
     }
 
     // Then, find any references within any arrays inside the global environment heap,
-    // and also add any closures created in the global frame
+    // and also add any non-global functions created in the global frame
     for (const data of Layout.globalEnvNode.environment.heap.getHeap()) {
-      if (isClosure(data)) {
+      if (isNonGlobalFn(data)) {
         referencedFns.add(data);
       } else if (isDataArray(data)) {
         findGlobalFnReferencesInData(data);
@@ -291,14 +299,8 @@ export class Layout {
     const newHead = {};
     const newHeap = new Heap();
     for (const fn of referencedFns) {
-      if (isGlobalFn(fn)) {
-        newHead[functionNames.get(fn)!] = fn;
-        if (fn.hasOwnProperty('environment')) {
-          newHeap.add(fn as Closure);
-        }
-      } else {
-        newHeap.add(fn);
-      }
+      if (isClosure(fn)) newHeap.add(fn);
+      if (isGlobalFn(fn)) newHead[functionNames.get(fn)!] = fn;
     }
 
     // add any arrays from the original heap to the new heap
@@ -357,7 +359,9 @@ export class Layout {
     } else if (isPrimitiveData(data)) {
       return new PrimitiveValue(data, reference);
     } else {
-      const existingValue = Layout.values.get(data);
+      const existingValue = Layout.values.get(
+        isBuiltInFn(data) || isStreamFn(data) ? data : data.id
+      );
       if (existingValue) {
         existingValue.addReference(reference);
         return existingValue;
@@ -366,13 +370,14 @@ export class Layout {
       let newValue: Value = new PrimitiveValue(null, reference);
       if (isDataArray(data)) {
         newValue = new ArrayValue(data, reference);
-      } else if (isGlobalFn(data) || isStreamFn(data)) {
+      } else if (isGlobalFn(data)) {
+        assert(reference instanceof Binding);
         newValue = new GlobalFnValue(data, reference);
       } else {
         newValue = new FnValue(data, reference);
       }
 
-      Layout.values.set(data, newValue);
+      Layout.values.set(isBuiltInFn(data) || isStreamFn(data) ? data : data.id, newValue);
       return newValue;
     }
   }

@@ -47,14 +47,23 @@ export type Unassigned = symbol;
 /** types of primitives in JS Slang  */
 export type Primitive = number | string | boolean | null | undefined;
 
+/** fields of JS Slang closures */
+export type ClosureFields =
+  | 'id'
+  | 'environment'
+  | 'functionName'
+  | 'predefined'
+  | 'node'
+  | 'originalNode';
+
+/** types of closures in JS Slang, redefined here for convenience. */
+export type Closure = JsSlangClosure;
+
 /** types of built-in functions in JS Slang */
-export type BuiltInFn = Exclude<Function, Closure>;
+export type BuiltInFn = () => never; // Use `never` to differentiate from `StreamFn`
 
 /** types of pre-defined functions in JS Slang */
 export type PredefinedFn = Omit<Closure, 'predefined'> & { predefined: true };
-
-/** types of global functions in JS Slang */
-export type GlobalFn = BuiltInFn | PredefinedFn;
 
 /**
  * Special type of a function returned from calling `stream`. It is mostly similar to a global
@@ -63,10 +72,13 @@ export type GlobalFn = BuiltInFn | PredefinedFn;
  *
  * TODO: remove this and all other `StreamFn` code if `stream` becomes a pre-defined function
  */
-export type StreamFn = BuiltInFn & { environment: Env };
+export type StreamFn = (() => [any, StreamFn] | null) & { environment: Env };
 
-/** types of closures in JS Slang, redefined here for convenience. */
-export type Closure = JsSlangClosure;
+/** types of global functions in JS Slang */
+export type GlobalFn = BuiltInFn | PredefinedFn;
+
+/** types of global functions in JS Slang */
+export type NonGlobalFn = (Omit<Closure, 'predefined'> & { predefined: false }) | StreamFn;
 
 /** types of arrays in JS Slang */
 export type DataArray = Data[] & {
@@ -75,7 +87,7 @@ export type DataArray = Data[] & {
 };
 
 /** the types of data in the JS Slang context */
-export type Data = Primitive | Closure | GlobalFn | Unassigned | DataArray;
+export type Data = Primitive | NonGlobalFn | GlobalFn | Unassigned | DataArray;
 
 /** modified `Environment` to store children and associated frame */
 export type Env = Environment;

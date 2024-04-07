@@ -11,14 +11,16 @@ import {
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { Closure, IHoverable, ReferenceType } from '../../CseMachineTypes';
+import { IHoverable, NonGlobalFn, ReferenceType } from '../../CseMachineTypes';
 import {
   defaultSAColor,
   fadedSAColor,
   getBodyText,
   getParamsText,
   getTextWidth,
-  isMainReference
+  isDummyReference,
+  isMainReference,
+  isStreamFn
 } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
@@ -47,21 +49,19 @@ export class FnValue extends Value implements IHoverable {
   enclosingFrame?: Frame;
   readonly labelRef: RefObject<any> = React.createRef();
 
-  unreferenced: boolean;
-
   constructor(
     /** underlying JS Slang function (contains extra props) */
-    readonly data: Closure,
+    readonly data: NonGlobalFn,
     /** what this value is being referenced by */
     firstReference: ReferenceType
   ) {
     super();
-    this.unreferenced = firstReference instanceof Binding && firstReference.isDummyBinding;
+    this.unreferenced = isDummyReference(firstReference);
     this.addReference(firstReference);
   }
 
   handleNewReference(newReference: ReferenceType): void {
-    if (this.unreferenced && this.references.length > 0) this.unreferenced = false;
+    if (this.unreferenced) this.unreferenced = isDummyReference(newReference);
     if (!isMainReference(this, newReference)) return;
     // derive the coordinates from the main reference (binding / array unit)
     if (newReference instanceof Binding) {
@@ -85,7 +85,7 @@ export class FnValue extends Value implements IHoverable {
     this._height = this.radius * 2;
 
     this.enclosingFrame = Frame.getFrom(this.data.environment);
-    this.fnName = this.data.functionName;
+    this.fnName = isStreamFn(this.data) ? '' : this.data.functionName;
 
     this.paramsText = `params: (${getParamsText(this.data)})`;
     this.bodyText = `body: ${getBodyText(this.data)}`;

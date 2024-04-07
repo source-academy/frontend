@@ -13,6 +13,14 @@ import { Value } from './Value';
 export class PrimitiveValue extends Value {
   /** the text to be rendered */
   readonly text: Text | ArrayNullUnit;
+  get unreferenced() {
+    return super.unreferenced;
+  }
+  set unreferenced(value: boolean) {
+    if (value === super.unreferenced) return;
+    super.unreferenced = value;
+    if (this.text instanceof Text) this.text.options.faded = value;
+  }
 
   constructor(
     /** data */
@@ -39,6 +47,7 @@ export class PrimitiveValue extends Value {
             maxWidth: maxWidth,
             isStringIdentifiable: true
           });
+      this.unreferenced = reference.unreferenced;
     }
 
     this._width = this.text.width();

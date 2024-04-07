@@ -95,7 +95,6 @@ export function visualizeCseMachine({ context }: { context: Context }) {
     CseMachine.drawCse(context);
   } catch (err) {
     console.error(err);
-    throw new Error('CSE machine is not enabled');
   }
 }
 

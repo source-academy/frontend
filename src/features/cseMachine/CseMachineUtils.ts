@@ -1,3 +1,4 @@
+import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
 import {
   AppInstr,
   ArrLitInstr,
@@ -40,6 +41,7 @@ import {
   EnvTree,
   EnvTreeNode,
   GlobalFn,
+  NonGlobalFn,
   PredefinedFn,
   Primitive,
   ReferenceType,
@@ -108,33 +110,49 @@ export function isFunction(x: any): x is Function {
 }
 
 /** Returns `true` if `data` is a built-in function */
-function isBuiltInFn(data: Data): data is BuiltInFn {
-  return isFunction(data) && !isClosure(data);
+export function isBuiltInFn(data: Data): data is BuiltInFn {
+  // Extra `environment` check for functions returned from `stream`
+  // TODO: remove if `stream` becomes a pre-defined function
+  return isFunction(data) && !isClosure(data) && !{}.hasOwnProperty.call(data, 'environment');
 }
 
 /** Returns `true` if `data` is a pre-defined function */
-function isPredefinedFn(data: Data): data is PredefinedFn {
+export function isPredefinedFn(data: Data): data is PredefinedFn {
   return isClosure(data) && data.predefined;
-}
-
-/** Returns `true` if `data` is a function in the global frame */
-export function isGlobalFn(data: Data): data is GlobalFn {
-  return isBuiltInFn(data) || isPredefinedFn(data);
-}
-
-/** Returns `true` if `data` is a function returned from calling `stream` */
-export function isStreamFn(data: Data): data is StreamFn {
-  return isBuiltInFn(data) && {}.hasOwnProperty.call(data, 'environment');
 }
 
 /** Returns `true` if `data` is a JS Slang closure */
 export function isClosure(data: Data): data is Closure {
   return (
-    isFunction(data) &&
-    {}.hasOwnProperty.call(data, 'environment') &&
-    {}.hasOwnProperty.call(data, 'functionName') &&
-    {}.hasOwnProperty.call(data, 'predefined')
+    data instanceof JsSlangClosure ||
+    (isFunction(data) &&
+      {}.hasOwnProperty.call(data, 'environment') &&
+      {}.hasOwnProperty.call(data, 'functionName') &&
+      {}.hasOwnProperty.call(data, 'predefined'))
   );
+}
+
+/**
+ * Returns `true` if `data` is a function returned from calling `stream`.
+ * TODO: remove if `stream` becomes a pre-defined function
+ */
+export function isStreamFn(data: Data): data is StreamFn {
+  return isFunction(data) && !isClosure(data) && {}.hasOwnProperty.call(data, 'environment');
+}
+
+/** Returns `true` if `data` is a function that is built-in or pre-defined */
+export function isGlobalFn(data: Data): data is GlobalFn {
+  return isBuiltInFn(data) || isPredefinedFn(data);
+}
+
+/**
+ * Returns `true` if `data` is **not** a function that is built-in or pre-defined.
+ * In other words, it is either a closure that is not predefined, or a stream function.
+ *
+ * TODO: remove checking for `isStreamFn` if `stream` becomes pre-defined
+ */
+export function isNonGlobalFn(data: Data): data is NonGlobalFn {
+  return (isClosure(data) && !isPredefinedFn(data)) || isStreamFn(data);
 }
 
 /** Returns `true` if `data` is null */
@@ -192,12 +210,10 @@ export function setDifference<T>(set1: Set<T>, set2: Set<T>) {
 
 /**
  * Returns `true` if `reference` is the main reference of `value`. The main reference priority
- * order is as follows:
- * 1. The first `ArrayUnit` inside `value.references` that also shares the same environment
- * 2. The first `Binding` inside `value.references` that also shares the same environment
+ * order is the first binding or array unit which shares the same environment with `value`.
  *
  * An exception is for a global function value, in which case the global frame binding is
- * always prioritised.
+ * always prioritised over array units.
  */
 export function isMainReference(value: Value, reference: ReferenceType) {
   if (isGlobalFn(value.data)) {
@@ -206,21 +222,25 @@ export function isMainReference(value: Value, reference: ReferenceType) {
       isEnvEqual(reference.frame.environment, Layout.globalEnvNode.environment)
     );
   }
-  if (!isClosure(value.data) && !isDataArray(value.data)) {
+  if (!isNonGlobalFn(value.data) && !isDataArray(value.data)) {
     return true;
   }
   const valueEnv = value.data.environment;
-  const firstArrayUnit = value.references.find(
-    r => r instanceof ArrayUnit && isEnvEqual(r.parent.data.environment, valueEnv)
+  const mainReference = value.references.find(r =>
+    isEnvEqual(r instanceof ArrayUnit ? r.parent.data.environment : r.frame.environment, valueEnv)
   );
-  if (firstArrayUnit) {
-    return reference === firstArrayUnit;
-  } else {
-    const firstBinding = value.references.find(
-      r => r instanceof Binding && isEnvEqual(r.frame.environment, valueEnv)
-    );
-    return reference === firstBinding;
-  }
+  return reference === mainReference;
+}
+
+/**
+ * Returns `true` if `reference` is a dummy reference, i.e. it is a dummy binding, or the reference
+ * is itself unreferenced.
+ */
+export function isDummyReference(reference: ReferenceType) {
+  return (
+    (reference instanceof Binding && reference.isDummyBinding) ||
+    (reference instanceof ArrayUnit && reference.unreferenced)
+  );
 }
 
 /** checks if `value` is a `number` */
@@ -299,17 +319,17 @@ export function getTextHeight(
 }
 
 /** Returns the parameter string of the given function */
-export function getParamsText(data: GlobalFn | Closure): string {
+export function getParamsText(data: Closure | GlobalFn | StreamFn): string {
   if (isClosure(data)) {
     return data.node.params.map((node: any) => node.name).join(',');
   } else {
     const fnString = data.toString();
-    return fnString.substring(fnString.indexOf('('), fnString.indexOf('{')).trim();
+    return fnString.substring(fnString.indexOf('(') + 1, fnString.indexOf(')')).trim();
   }
 }
 
 /** Returns the body string of the given function */
-export function getBodyText(data: Function): string {
+export function getBodyText(data: Closure | GlobalFn | StreamFn): string {
   const fnString = data.toString();
   if (isClosure(data)) {
     let body =
@@ -319,6 +339,9 @@ export function getBodyText(data: Function): string {
 
     if (body[0] !== '{') body = '{\n  return ' + body + ';\n}';
     return body;
+  } else if (isStreamFn(data)) {
+    // TODO: remove if `stream` becomes pre-defined
+    return '{\n  [implementation hidden]\n}';
   } else {
     return fnString.substring(fnString.indexOf('{'));
   }

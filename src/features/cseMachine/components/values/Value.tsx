@@ -8,6 +8,15 @@ export abstract class Value extends Visible {
   /** the underlying data of this value */
   abstract readonly data: Data;
 
+  /** if the value does not have active references, i.e. it should be garbage collected */
+  private _unreferenced: boolean = false;
+  get unreferenced() {
+    return this._unreferenced;
+  }
+  set unreferenced(value: boolean) {
+    this._unreferenced = value;
+  }
+
   /** references to this value */
   public references: ReferenceType[] = [];
 

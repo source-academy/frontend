@@ -11,8 +11,14 @@ import {
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { GlobalFn, IHoverable, ReferenceType } from '../../CseMachineTypes';
-import { defaultSAColor, getBodyText, getParamsText, getTextWidth } from '../../CseMachineUtils';
+import { GlobalFn, IHoverable } from '../../CseMachineTypes';
+import {
+  defaultSAColor,
+  fadedSAColor,
+  getBodyText,
+  getParamsText,
+  getTextWidth
+} from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
 import { Value } from './Value';
@@ -40,33 +46,22 @@ export class GlobalFnValue extends Value implements IHoverable {
     /** underlying function */
     readonly data: GlobalFn,
     /** what this value is being referenced by */
-    mainReference: ReferenceType
+    mainReference: Binding
   ) {
     super();
+    this.unreferenced = false;
     this.references = [mainReference];
 
     // derive the coordinates from the main reference (binding)
-    if (mainReference instanceof Binding) {
-      this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 2;
-      this._y = mainReference.y();
-      this.centerX = this._x + this.radius * 2;
-      this._y += this.radius;
-    } else {
-      if (mainReference.isLastUnit) {
-        this._x = mainReference.x() + Config.DataUnitWidth * 2;
-        this._y = mainReference.y() + Config.DataUnitHeight / 2 - this.radius;
-      } else {
-        this._x = mainReference.x();
-        this._y = mainReference.y() + mainReference.parent.height() + Config.DataUnitHeight;
-      }
-      this.centerX = this._x + Config.DataUnitWidth / 2;
-      this._x = this.centerX - this.radius * 2;
-    }
+    this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX;
+    this._y = mainReference.y();
+    this.centerX = this._x + this.radius * 2;
+    this._y += this.radius;
 
     this._width = this.radius * 4;
     this._height = this.radius * 2;
 
-    this.paramsText = `params: ${getParamsText(this.data)}`;
+    this.paramsText = `params: (${getParamsText(this.data)})`;
     this.bodyText = `body: ${getBodyText(this.data)}`;
     this.exportBodyText =
       (this.bodyText.length > 23 ? this.bodyText.slice(0, 20) : this.bodyText)
@@ -75,18 +70,14 @@ export class GlobalFnValue extends Value implements IHoverable {
         .join('\n') + ' ...';
     this.tooltip = `${this.paramsText}\n${this.bodyText}`;
     this.exportTooltip = `${this.paramsText}\n${this.exportBodyText}`;
-    this.tooltipWidth =
-      Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText)) + Config.TextPaddingX;
+    this.tooltipWidth = Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText));
     this.exportTooltipWidth = Math.max(
       getTextWidth(this.paramsText),
       getTextWidth(this.exportBodyText)
     );
   }
 
-  handleNewReference(): void {
-    // do nothing, since the first reference which is a binding in the global frame,
-    // is also the main reference
-  }
+  handleNewReference(): void {}
 
   arrow(): ArrowFromFn | undefined {
     return this._arrow;
@@ -119,15 +110,15 @@ export class GlobalFnValue extends Value implements IHoverable {
 
   draw(): React.ReactNode {
     this._isDrawn = true;
-    this._arrow =
-      Layout.globalEnvNode.frame &&
-      (new ArrowFromFn(this).to(Layout.globalEnvNode.frame) as ArrowFromFn);
+    if (Layout.globalEnvNode.frame) {
+      this._arrow = new ArrowFromFn(this).to(Layout.globalEnvNode.frame) as ArrowFromFn;
+    }
+    const stroke = this.unreferenced ? fadedSAColor() : defaultSAColor();
     return (
       <React.Fragment key={Layout.key++}>
         <Group
           onMouseEnter={e => this.onMouseEnter(e)}
           onMouseLeave={e => this.onMouseLeave(e)}
-          onClick={e => this.onClick(e)}
           ref={this.ref}
         >
           <Circle
@@ -136,7 +127,7 @@ export class GlobalFnValue extends Value implements IHoverable {
             x={this.centerX - this.radius}
             y={this.y()}
             radius={this.radius}
-            stroke={defaultSAColor()}
+            stroke={stroke}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -144,7 +135,7 @@ export class GlobalFnValue extends Value implements IHoverable {
             x={this.centerX - this.radius}
             y={this.y()}
             radius={this.innerRadius}
-            fill={defaultSAColor()}
+            fill={stroke}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -152,7 +143,7 @@ export class GlobalFnValue extends Value implements IHoverable {
             x={this.centerX + this.radius}
             y={this.y()}
             radius={this.radius}
-            stroke={defaultSAColor()}
+            stroke={stroke}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -160,7 +151,7 @@ export class GlobalFnValue extends Value implements IHoverable {
             x={this.centerX + this.radius}
             y={this.y()}
             radius={this.innerRadius}
-            fill={defaultSAColor()}
+            fill={stroke}
           />
         </Group>
         {CseMachine.getPrintableMode() ? (
@@ -198,7 +189,7 @@ export class GlobalFnValue extends Value implements IHoverable {
             />
           </KonvaLabel>
         )}
-        {Layout.globalEnvNode.frame && new ArrowFromFn(this).to(Layout.globalEnvNode.frame).draw()}
+        {this._arrow?.draw()}
       </React.Fragment>
     );
   }

@@ -4,15 +4,15 @@ import { Group, Rect } from 'react-konva';
 import CseMachine from '../CseMachine';
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
-import { DataArray, Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
+import { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
 import {
   currentItemSAColor,
   getTextWidth,
   getUnreferencedObjects,
+  isClosure,
   isDataArray,
   isPrimitiveData,
-  isUnassigned,
-  setDifference
+  isUnassigned
 } from '../CseMachineUtils';
 import { ArrowFromFrame } from './arrows/ArrowFromFrame';
 import { Binding } from './Binding';
@@ -101,26 +101,34 @@ export class Frame extends Visible implements IHoverable {
     const entries = Object.entries(Object.getOwnPropertyDescriptors(this.environment.head));
 
     // get values that are unreferenced, which will used to created dummy bindings
-    const unreferencedValues = getUnreferencedObjects(this.environment);
+    const unreferencedValues = [...getUnreferencedObjects(this.environment)];
 
-    // find arrays that are nested inside other arrays, and prevent them from creating new
-    // dummy bindings, as they should be drawn around the original parent array instead
-    const nestedArrays = new Set<DataArray>();
-    for (const value of unreferencedValues) {
+    // TODO: find out why values are not added to heap on the correct order in JS Slang
+    // For now, sorting is a good workaround since id also increases in insertion order
+    unreferencedValues.sort((v1, v2) => Number(v1.id) - Number(v2.id));
+
+    // find objects that are nested inside other arrays, and prevent them from creating new
+    // dummy bindings by removing them from unreferencedValues, as they should be drawn
+    // around the original parent array instead
+    let i = 0;
+    while (i < unreferencedValues.length) {
+      const value = unreferencedValues[i];
       if (isDataArray(value)) {
         for (const data of value) {
-          if (isDataArray(data) && data !== value) {
-            nestedArrays.add(data);
-            // Since deeply nested arrays always come first inside the heap order, there is no need
-            // to do a recursive search for deeply nested arrays, as they would have already been
-            // added to the nestedArrays set by this point.
+          if ((isDataArray(data) && data !== value) || isClosure(data)) {
+            const prev = unreferencedValues.findIndex(value => value.id === data.id);
+            if (prev > -1) {
+              unreferencedValues.splice(prev, 1);
+              if (prev <= i) i--;
+            }
           }
         }
       }
+      i++;
     }
-    let i = 0;
+
     // Add dummy bindings to `entries`
-    for (const value of setDifference(unreferencedValues, nestedArrays)) {
+    for (const value of unreferencedValues) {
       const descriptor: TypedPropertyDescriptor<any> & PropertyDescriptor = {
         value,
         configurable: false,
