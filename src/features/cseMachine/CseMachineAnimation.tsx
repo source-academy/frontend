@@ -142,6 +142,7 @@ export class CseAnimation {
         case 'ForStatement':
         case 'IfStatement':
         case 'MemberExpression':
+        case 'ReturnStatement':
         case 'StatementSequence':
         case 'UnaryExpression':
         case 'VariableDeclaration':
@@ -161,11 +162,12 @@ export class CseAnimation {
           )!;
           const fn = fnStashItem.value;
           const isPredefined = isGlobalFn(fn) || (isClosure(fn) && fn.preDefined);
+          const frameCreated = checkFrameCreation(CseAnimation.previousFrame, CseAnimation.currentFrame);
 
           // TODO: find a better way to test for a variadic function call
           if (appInstr.numOfArgs > CseAnimation.currentFrame.bindings.length
             || CseAnimation.currentFrame.environment.heap.size() > 0 // only variadics can instantaneously create array
-            && checkFrameCreation(CseAnimation.previousFrame, CseAnimation.currentFrame)
+            && frameCreated
           ) {
             // function is variadic, disable animation
             break;
@@ -177,8 +179,8 @@ export class CseAnimation {
               CseAnimation.getNewControlItems(),
               fnStashItem,
               Layout.previousStashComponent.stashItemComponents.slice(-appInstr.numOfArgs),
-              !isPredefined && checkFrameCreation(CseAnimation.previousFrame, CseAnimation.currentFrame) 
-                ? CseAnimation.currentFrame : undefined
+              CseAnimation.currentFrame,
+              !isPredefined && frameCreated
             )
           );
           break;

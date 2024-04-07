@@ -18,13 +18,16 @@ export class FunctionApplicationAnimation extends Animatable {
   private frameCreationAnimation?: FrameCreationAnimation;
   private argStashAnimations: AnimatedTextbox[] = [];
   private bindingValueAnimations: AnimatedTextComponent[] = [];
+  // we still need to fade away the closure stash item when there is no frame creation animation
+  private closureStashItemAnimation?: AnimatedTextbox;
 
   constructor(
     private callInstrItem: ControlItemComponent,
     private newControlItems: ControlItemComponent[],
     private closureStashItem: StashItemComponent,
     argStashItems: StashItemComponent[],
-    private functionFrame?: Frame
+    private functionFrame: Frame,
+    private frameCreation: boolean
   ) {
     super();
     const closureStashLocation = getNodeLocation(closureStashItem);
@@ -35,7 +38,7 @@ export class FunctionApplicationAnimation extends Animatable {
     this.controlItemAnimations = newControlItems.map(
       i => new AnimatedTextbox(i.text, { ...closureStashLocation, opacity: 0 })
     );
-    if (functionFrame) {
+    if (frameCreation) {
       this.frameCreationAnimation = new FrameCreationAnimation(closureStashItem, functionFrame);
       this.argStashAnimations = argStashItems.map(
         i => new AnimatedTextbox(i.text, getNodePosition(i))
@@ -49,6 +52,11 @@ export class FunctionApplicationAnimation extends Animatable {
           opacity: 0
         });
       });
+    } else {
+      this.closureStashItemAnimation = new AnimatedTextbox(
+        closureStashItem.text,
+        getNodePosition(closureStashItem)
+      )
     }
   }
 
@@ -60,13 +68,15 @@ export class FunctionApplicationAnimation extends Animatable {
         {this.frameCreationAnimation?.draw()}
         {this.argStashAnimations.map(a => a.draw())}
         {this.bindingValueAnimations.map(a => a.draw())}
+        {this.closureStashItemAnimation?.draw()}
       </Group>
     );
   }
 
   async animate() {
     this.newControlItems.forEach(item => item.ref.current.hide());
-    this.functionFrame?.ref.current.hide();
+    // hide the function frame before the frame creation animation plays
+    if (this.frameCreation) { this.functionFrame.ref.current.hide(); }
     const minCallInstrWidth =
       getTextWidth(this.callInstrItem.text) + Number(ControlStashConfig.ControlItemTextPadding) * 2;
     // Move call instruction next to closure item in the stash
@@ -88,6 +98,10 @@ export class FunctionApplicationAnimation extends Animatable {
       ),
       // run frame creation animation
       this.frameCreationAnimation?.animate(config),
+      // if there is no frame creation, instead animate the fading of the closure stash item
+      this.closureStashItemAnimation?.animateTo({
+        opacity: 0
+      }),
       // move arguments from stash to the frame
       ...this.argStashAnimations.flatMap((a, i) => {
         const valueAnimation = this.bindingValueAnimations[i];
