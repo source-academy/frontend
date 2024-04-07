@@ -11,6 +11,7 @@ const BADGE_COLORS = {
   paths: 'sky',
 
   // ProgressStatus
+  autograded: 'purple',
   not_attempted: 'gray',
   attempting: 'red',
   attempted: 'red',
@@ -47,7 +48,9 @@ const ProgressStatusBadge: React.FC<ProgressStatusBadgeProps> = ({ progress }) =
   const badgeIcon = () => (
     <Icon
       icon={
-        progress === ProgressStatuses.published
+        progress === ProgressStatuses.autograded
+          ? IconNames.AIRPLANE
+          : progress === ProgressStatuses.published
           ? IconNames.ENDORSED
           : progress === ProgressStatuses.graded
           ? IconNames.TICK
