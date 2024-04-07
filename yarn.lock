@@ -8638,10 +8638,10 @@ js-sdsl@4.3.0, js-sdsl@^4.1.4:
   resolved "https://registry.yarnpkg.com/js-sdsl/-/js-sdsl-4.3.0.tgz#aeefe32a451f7af88425b11fdb5f58c90ae1d711"
   integrity sha512-mifzlm2+5nZ+lEcLJMoBK0/IH/bDg8XnJfd/Wq6IP+xoCjLZsTOnV2QpxlVbX9bMnkl5PdEjNtBJ9Cj1NjifhQ==
 
-js-slang@^1.0.60:
-  version "1.0.60"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.60.tgz#71ffcf6cb094f66e2b97d48f63bbbd1707d6ecbe"
-  integrity sha512-rc972WwXP3O/pPNoXQi5DtEt2lzA4kjeOtmw7fUHGEtxnhqIr3TuA9tieYLyGoQptrvMMdrbQwsG7fqmg+sCzw==
+js-slang@^1.0.62:
+  version "1.0.62"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.62.tgz#516352f5db0738d1bca91b1146e3a7e012355127"
+  integrity sha512-rngDsPDpEsx2VFmJfHxbA9O2AYIR8czwyJgDUC0EeJCBYOVJf8TJLWJEN/85795x5xTrhaZ3qc/QyP84qv53Sw==
   dependencies:
     "@babel/parser" "^7.19.4"
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
@@ -8657,7 +8657,6 @@ js-slang@^1.0.60:
     lodash "^4.17.21"
     node-getopt "^0.3.2"
     source-map "0.7.3"
-    xmlhttprequest-ts "^1.0.1"
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
@@ -13107,7 +13106,7 @@ tsconfig-paths@^3.14.1:
     minimist "^1.2.6"
     strip-bom "^3.0.0"
 
-tslib@^1.8.1, tslib@^1.9.2:
+tslib@^1.8.1:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
@@ -14121,13 +14120,6 @@ xmlchars@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/xmlchars/-/xmlchars-2.2.0.tgz#060fe1bcb7f9c76fe2a17db86a9bc3ab894210cb"
   integrity sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==
-
-xmlhttprequest-ts@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/xmlhttprequest-ts/-/xmlhttprequest-ts-1.0.1.tgz#7b3cb4a197aee38cf2d4f9dd6189d1d21f0835b2"
-  integrity sha512-x+7u8NpBcwfBCeGqUpdGrR6+kGUGVjKc4wolyCz7CQqBZQp7VIyaF1xAvJ7ApRzvLeuiC4BbmrA6CWH9NqxK/g==
-  dependencies:
-    tslib "^1.9.2"
 
 "xtend@>=4.0.0 <4.1.0-0", xtend@^4.0.0, xtend@^4.0.2:
   version "4.0.2"
