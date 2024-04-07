@@ -555,13 +555,13 @@ export function* persistenceSaga(): SagaIterator {
   yield takeEvery(
     PERSISTENCE_SAVE_FILE,
     function* ({ payload: { id, name } }: ReturnType<typeof actions.persistenceSaveFile>) {
+      yield call(store.dispatch, actions.disableFileSystemContextMenus());
       let toastKey: string | undefined;
 
       const [currFolderObject] = yield select( // TODO resolve type here?
       (state: OverallState) => [
         state.playground.persistenceFile
-      ]
-      );
+      ]);
 
       yield call(ensureInitialisedAndAuthorised);
 
@@ -576,11 +576,6 @@ export function* persistenceSaga(): SagaIterator {
       );
 
       try {
-        toastKey = yield call(showMessage, {
-          message: `Saving as ${name}...`,
-          timeout: 0,
-          intent: Intent.PRIMARY
-        });
 
         if (activeEditorTabIndex === null) {
           throw new Error('No active editor tab found.');
@@ -599,12 +594,24 @@ export function* persistenceSaga(): SagaIterator {
           if (!currPersistenceFile) {
             throw new Error('Persistence file not found');
           }
+          toastKey = yield call(showMessage, {
+            message: `Saving as ${currPersistenceFile.name}...`,
+            timeout: 0,
+            intent: Intent.PRIMARY
+          });
           yield call(updateFile, currPersistenceFile.id, currPersistenceFile.name, MIME_SOURCE, code, config);
           currPersistenceFile.lastSaved = new Date();
           yield put(actions.addPersistenceFile(currPersistenceFile));
-          yield call(showSuccessMessage, `${name} successfully saved to Google Drive.`, 1000);
+          yield call(store.dispatch, actions.updateRefreshFileViewKey());
+          yield call(showSuccessMessage, `${currPersistenceFile.name} successfully saved to Google Drive.`, 1000);
           return;
         } 
+
+        toastKey = yield call(showMessage, {
+          message: `Saving as ${name}...`,
+          timeout: 0,
+          intent: Intent.PRIMARY
+        });
 
         yield call(updateFile, id, name, MIME_SOURCE, code, config);
         yield put(actions.playgroundUpdatePersistenceFile({ id, name, lastSaved: new Date() }));
@@ -616,6 +623,7 @@ export function* persistenceSaga(): SagaIterator {
         if (toastKey) {
           dismiss(toastKey);
         }
+        yield call(store.dispatch, actions.enableFileSystemContextMenus());
       }
     }
   );
