@@ -99,26 +99,26 @@ export const unpublishedToBackendParams = (showAll: boolean) => {
 
   return {
     status: AssessmentStatuses.submitted,
+    isManuallyGraded: true,
     isGradingPublished: false
   };
 };
 
 /**
  * Converts multiple backend parameters into a single comprehensive grading status for use in the grading dashboard.
- * @param isGradingPublished backend field denoting if grading of submitted work is to be shown to the student
- * @param submissionStatus backend field denoting if the student has submitted their work.
- * @param numGraded
- * @param numQuestions
  * @returns a ProgressStatus, defined within AssessmentTypes, useable by the grading dashboard for display and business logic
  * as well as by the assessment overviews for each student to determine if grading is to be shown
  */
 export const backendParamsToProgressStatus = (
+  isManuallyGraded: boolean,
   isGradingPublished: boolean,
   submissionStatus: AssessmentStatus,
   numGraded: number,
   numQuestions: number
 ): ProgressStatus => {
-  if (submissionStatus !== AssessmentStatuses.submitted) {
+  if (!isManuallyGraded) {
+    return ProgressStatuses.autograded;
+  } else if (submissionStatus !== AssessmentStatuses.submitted) {
     return submissionStatus;
   } else if (numGraded < numQuestions) {
     return ProgressStatuses.submitted;
@@ -131,20 +131,27 @@ export const backendParamsToProgressStatus = (
 
 export const progressStatusToBackendParams = (progress: ProgressStatus) => {
   switch (progress) {
+    case ProgressStatuses.autograded:
+      return {
+        isManuallyGraded: false
+      };
     case ProgressStatuses.published:
       return {
+        isManuallyGraded: true,
         isGradingPublished: true,
         isFullyGraded: true,
         status: AssessmentStatuses.submitted
       };
     case ProgressStatuses.graded:
       return {
+        isManuallyGraded: true,
         isGradingPublished: false,
         isFullyGraded: true,
         status: AssessmentStatuses.submitted
       };
     case ProgressStatuses.submitted:
       return {
+        isManuallyGraded: true,
         isGradingPublished: false,
         isFullyGraded: false,
         status: AssessmentStatuses.submitted
@@ -153,6 +160,7 @@ export const progressStatusToBackendParams = (progress: ProgressStatus) => {
       // 'attempted' work may have been previously graded and then unsubmitted
       // thus, isFullyGraded flag is not added
       return {
+        isManuallyGraded: true,
         isGradingPublished: false,
         status: progress as AssessmentStatus
       };

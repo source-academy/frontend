@@ -15,11 +15,12 @@ export type AssessmentStatus = keyof typeof AssessmentStatuses;
 
 // Devnote: If adjusting this, ensure that each status can be uniquely attributed to one set of backend parameters, and vice versa.
 // This allows for a clean conversion from progress status to backend parameters, ensuring only backend pagination.
-// Adjust the computeProgress function in GradingUtils accordingly.
+// Adjust the conversion functions in GradingUtils accordingly.
 export enum ProgressStatuses {
+  autograded = 'autograded',
+  not_attempted = 'not_attempted',
   attempting = 'attempting',
   attempted = 'attempted',
-  not_attempted = 'not_attempted',
   submitted = 'submitted',
   graded = 'graded',
   published = 'published'
