@@ -165,6 +165,7 @@ export class CseAnimation {
           // TODO: find a better way to test for a variadic function call
           if (appInstr.numOfArgs > CseAnimation.currentFrame.bindings.length
             || CseAnimation.currentFrame.environment.heap.size() > 0 // only variadics can instantaneously create array
+            && checkFrameCreation(CseAnimation.previousFrame, CseAnimation.currentFrame)
           ) {
             // function is variadic, disable animation
             break;
