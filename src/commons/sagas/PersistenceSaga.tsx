@@ -258,6 +258,13 @@ export function* persistenceSaga(): SagaIterator {
 
   yield takeLatest(PERSISTENCE_SAVE_FILE_AS, function* (): any {
     let toastKey: string | undefined;
+    const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
+    const [currPersistenceFile] = yield select( 
+      (state: OverallState) => [
+        state.playground.persistenceFile
+      ]
+      );
+    yield call(console.log, "currpersfile ", currPersistenceFile);
     try {
       yield call(ensureInitialisedAndAuthorised);
 
@@ -313,6 +320,58 @@ export function* persistenceSaga(): SagaIterator {
         if (!reallyOverwrite) {
           return;
         }
+
+        yield call(store.dispatch, actions.disableFileSystemContextMenus());
+        // Case: Picked a file to overwrite
+        if (currPersistenceFile && currPersistenceFile.isFolder) {
+          yield call(console.log, "folder opened, handling save_as differently! overwriting file");
+          // First case: Chosen location is within TLRF - so need to call methods to update PersistenceFileArray
+          // Other case: Chosen location is outside TLRF - don't care
+          
+          yield call(console.log, "curr pers file ", currPersistenceFile, " pickedDir ", pickedDir, " pickedFile ", pickedFile);
+          const localFileTarget = persistenceFileArray.find(e => e.id === pickedFile.id);
+          if (localFileTarget) {
+            toastKey = yield call(showMessage, {
+              message: `Saving as ${localFileTarget.name}...`,
+              timeout: 0,
+              intent: Intent.PRIMARY
+            });
+            // identical to just saving a file locally
+            const fileSystem: FSModule | null = yield select(
+              (state: OverallState) => state.fileSystem.inBrowserFileSystem
+            );
+            if (fileSystem === null) {
+              yield call(console.log, "no filesystem!");
+              throw new Error("No filesystem");
+            }
+
+            // Save to GDrive
+            const [chapter, variant, external] = yield select(
+              (state: OverallState) => [
+                state.workspaces.playground.context.chapter,
+                state.workspaces.playground.context.variant,
+                state.workspaces.playground.externalLibrary
+              ]
+            );
+            const config: IPlaygroundConfig = {
+              chapter,
+              variant,
+              external
+            };
+
+            yield call(updateFile, localFileTarget.id, localFileTarget.name, MIME_SOURCE, code, config);
+
+            yield put(actions.addPersistenceFile({ ...localFileTarget, lastSaved: new Date(), lastEdit: undefined }));
+            yield call(writeFileRecursively, fileSystem, localFileTarget.path!, code);
+            yield call(store.dispatch, actions.updateRefreshFileViewKey());
+          }
+          yield call(
+            showSuccessMessage,
+            `${pickedFile.name} successfully saved to Google Drive.`,
+            1000
+          );
+          return;
+        }
         yield put(actions.playgroundUpdatePersistenceFile(pickedFile));
         yield put(actions.persistenceSaveFile(pickedFile));
       } else {
@@ -340,6 +399,8 @@ export function* persistenceSaga(): SagaIterator {
           return;
         }
 
+        yield call(store.dispatch, actions.disableFileSystemContextMenus());
+
         const config: IPlaygroundConfig = {
           chapter,
           variant,
@@ -352,7 +413,7 @@ export function* persistenceSaga(): SagaIterator {
           intent: Intent.PRIMARY
         });
 
-        const newFile = yield call(
+        const newFile: PersistenceFile = yield call(
           createFile,
           response.value,
           saveToDir.id,
@@ -360,6 +421,45 @@ export function* persistenceSaga(): SagaIterator {
           code,
           config
         );
+
+        //Case: Chose to save as a new file
+        if (currPersistenceFile && currPersistenceFile.isFolder) {
+          yield call(console.log, "folder opened, handling save_as differently! saving as new file");
+          // First case: Chosen location is within TLRF - so need to call methods to update PersistenceFileArray
+          // Other case: Chosen location is outside TLRF - don't care
+          
+          yield call(console.log, "curr persFileArr ", persistenceFileArray, " pickedDir ", pickedDir, " pickedFile ", pickedFile, " saveToDir ", saveToDir);
+          let needToUpdateLocal = false;
+          let localFolderTarget: PersistenceFile;
+          for (let i = 0; i < persistenceFileArray.length; i++) {
+            if (persistenceFileArray[i].isFolder && persistenceFileArray[i].id === saveToDir.id) {
+              needToUpdateLocal = true;
+              localFolderTarget = persistenceFileArray[i];
+              break;
+            }
+          }
+
+          if (needToUpdateLocal) {
+            const fileSystem: FSModule | null = yield select(
+              (state: OverallState) => state.fileSystem.inBrowserFileSystem
+            );
+            if (fileSystem === null) {
+              yield call(console.log, "no filesystem!");
+              throw new Error("No filesystem");
+            }
+            const newPath = localFolderTarget!.path + "/" + response.value;
+            yield put(actions.addPersistenceFile({ ...newFile, lastSaved: new Date(), path: newPath }));
+            yield call(writeFileRecursively, fileSystem, newPath, code);
+            yield call(store.dispatch, actions.updateRefreshFileViewKey());
+          }
+
+          yield call(
+            showSuccessMessage,
+            `${response.value} successfully saved to Google Drive.`,
+            1000
+          );
+          return;
+        }
 
         yield put(actions.playgroundUpdatePersistenceFile({ ...newFile, lastSaved: new Date() }));
         yield call(
@@ -375,6 +475,7 @@ export function* persistenceSaga(): SagaIterator {
       if (toastKey) {
         dismiss(toastKey);
       }
+      yield call(store.dispatch, actions.enableFileSystemContextMenus());
     }
   });
 
