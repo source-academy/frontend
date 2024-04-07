@@ -28,14 +28,14 @@ import {
   ReferenceType
 } from './CseMachineTypes';
 import {
-  convertClosureToGlobalFn,
+  assert,
   deepCopyTree,
   getNextChildren,
   isClosure,
   isDataArray,
-  isFunction,
   isGlobalFn,
   isPrimitiveData,
+  isStreamFn,
   isUnassigned,
   setDifference
 } from './CseMachineUtils';
@@ -63,8 +63,6 @@ export class Layout {
   /** scale factor for zooming and out of canvas */
   static scaleFactor = 1.02;
 
-  /** the environment tree */
-  static environmentTree: EnvTree;
   /** the global environment */
   static globalEnvNode: EnvTreeNode;
   /** grid of frames */
@@ -79,7 +77,7 @@ export class Layout {
   static previousStashComponent: StashStack;
 
   /** memoized values */
-  static values = new Map<Data, Value>();
+  static values = new Map<DataArray | Closure | GlobalFn, Value>();
   /** memoized layout */
   static prevLayout: React.ReactNode;
   static currentDark: React.ReactNode;
@@ -140,8 +138,7 @@ export class Layout {
     Layout.key = 0;
 
     // deep copy so we don't mutate the context
-    Layout.environmentTree = deepCopyTree(envTree);
-    Layout.globalEnvNode = Layout.environmentTree.root;
+    Layout.globalEnvNode = deepCopyTree(envTree).root;
     Layout.control = control;
     Layout.stash = stash;
 
@@ -211,9 +208,11 @@ export class Layout {
     // Change environments of each array and closure in the prelude to be the global environment
     for (const value of preludeEnv.heap.getHeap()) {
       Object.defineProperty(value, 'environment', { value: globalEnvNode.environment });
-      globalEnv.heap.add(value);
+      preludeEnv.heap.move(value, globalEnv.heap);
+      // globalEnv.heap.add(value);
       const key = preludeValueKeyMap.get(value);
       if (key) {
+        delete preludeEnv.head[key];
         globalEnv.head[key] = value;
       }
     }
@@ -225,18 +224,11 @@ export class Layout {
     globalEnvNode.children.forEach(node => {
       node.environment.tail = globalEnv;
     });
-
-    // go through new bindings and update closures to be global functions
-    for (const value of Object.values(globalEnv.head)) {
-      if (isClosure(value)) {
-        convertClosureToGlobalFn(value);
-      }
-    }
   }
 
   /** remove any global functions not referenced elsewhere in the program */
   private static removeUnreferencedGlobalFns(): void {
-    const referencedGlobalFns = new Set<GlobalFn>();
+    const referencedFns = new Set<GlobalFn>();
     const visitedData = new Set<DataArray>();
 
     const findGlobalFnReferences = (envNode: EnvTreeNode): void => {
@@ -244,7 +236,7 @@ export class Layout {
       const unreferenced = setDifference(envNode.environment.heap.getHeap(), new Set(headValues));
       for (const data of headValues) {
         if (isGlobalFn(data)) {
-          referencedGlobalFns.add(data);
+          referencedFns.add(data);
         } else if (isDataArray(data)) {
           findGlobalFnReferencesInData(data);
         }
@@ -263,7 +255,7 @@ export class Layout {
       visitedData.add(data);
       data.forEach(d => {
         if (isGlobalFn(d)) {
-          referencedGlobalFns.add(d);
+          referencedFns.add(d);
         } else if (isDataArray(d)) {
           findGlobalFnReferencesInData(d);
         }
@@ -273,15 +265,18 @@ export class Layout {
     // First, add any referenced global functions in the stash
     for (const item of Layout.stash.getStack()) {
       if (isGlobalFn(item)) {
-        referencedGlobalFns.add(item);
+        referencedFns.add(item);
       } else if (isDataArray(item)) {
         findGlobalFnReferencesInData(item);
       }
     }
 
-    // Then, find any references within any arrays inside the global environment heap
+    // Then, find any references within any arrays inside the global environment heap,
+    // and also add any closures created in the global frame
     for (const data of Layout.globalEnvNode.environment.heap.getHeap()) {
-      if (isDataArray(data)) {
+      if (isClosure(data)) {
+        referencedFns.add(data);
+      } else if (isDataArray(data)) {
         findGlobalFnReferencesInData(data);
       }
     }
@@ -295,10 +290,14 @@ export class Layout {
 
     const newHead = {};
     const newHeap = new Heap();
-    for (const fn of referencedGlobalFns) {
-      newHead[functionNames.get(fn)!] = fn;
-      if (fn.hasOwnProperty('environment')) {
-        newHeap.add(fn as Closure);
+    for (const fn of referencedFns) {
+      if (isGlobalFn(fn)) {
+        newHead[functionNames.get(fn)!] = fn;
+        if (fn.hasOwnProperty('environment')) {
+          newHeap.add(fn as Closure);
+        }
+      } else {
+        newHeap.add(fn);
       }
     }
 
@@ -349,46 +348,31 @@ export class Layout {
     }
   }
 
-  /** memoize `Value` (used to detect circular references in non-primitive `Value`) */
-  static memoizeValue(value: Value): void {
-    Layout.values.set(value.data, value);
-  }
-
-  /** create an instance of the corresponding `Value` if it doesn't already exists,
-   *  else, return the existing value */
+  /** Creates an instance of the corresponding `Value` if it doesn't already exists,
+   *  else, returns the existing value */
   static createValue(data: Data, reference: ReferenceType): Value {
     if (isUnassigned(data)) {
+      assert(reference instanceof Binding);
       return new UnassignedValue(reference);
     } else if (isPrimitiveData(data)) {
       return new PrimitiveValue(data, reference);
     } else {
-      // try to find if this value is already created
       const existingValue = Layout.values.get(data);
       if (existingValue) {
         existingValue.addReference(reference);
         return existingValue;
       }
 
-      // else create a new one
       let newValue: Value = new PrimitiveValue(null, reference);
       if (isDataArray(data)) {
         newValue = new ArrayValue(data, reference);
-      } else if (isFunction(data)) {
-        if (isClosure(data)) {
-          // normal JS Slang function
-          newValue = new FnValue(data, reference);
-        } else {
-          if (reference instanceof Binding) {
-            // function from the global env (has no extra props such as env, fnName)
-            newValue = new GlobalFnValue(data, reference);
-          } else {
-            // this should be impossible, since bindings for global function always get
-            // drawn first, before any other values like arrays get drawn
-            throw new Error('First reference of global function value is not a binding!');
-          }
-        }
+      } else if (isGlobalFn(data) || isStreamFn(data)) {
+        newValue = new GlobalFnValue(data, reference);
+      } else {
+        newValue = new FnValue(data, reference);
       }
 
+      Layout.values.set(data, newValue);
       return newValue;
     }
   }

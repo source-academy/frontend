@@ -15,6 +15,7 @@ import { Value } from './Value';
 export class ArrayValue extends Value {
   /** array of units this array is made of */
   units: ArrayUnit[] = [];
+  unreferenced: boolean;
 
   constructor(
     /** underlying values this array contains */
@@ -23,11 +24,12 @@ export class ArrayValue extends Value {
     firstReference: ReferenceType
   ) {
     super();
-    Layout.memoizeValue(this);
+    this.unreferenced = firstReference instanceof Binding && firstReference.isDummyBinding;
     this.addReference(firstReference);
   }
 
   handleNewReference(newReference: ReferenceType): void {
+    if (this.unreferenced && this.references.length > 0) this.unreferenced = false;
     if (!isMainReference(this, newReference)) return;
 
     // derive the coordinates from the main reference (binding / array unit)

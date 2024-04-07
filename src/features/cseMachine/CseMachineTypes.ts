@@ -2,7 +2,7 @@ import {
   EnvTree as EnvironmentTree,
   EnvTreeNode as EnvironmentTreeNode
 } from 'js-slang/dist/createContext';
-import JsSlangClosure from 'js-slang/dist/interpreter/closure';
+import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
 import { Environment } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
@@ -47,10 +47,25 @@ export type Unassigned = symbol;
 /** types of primitives in JS Slang  */
 export type Primitive = number | string | boolean | null | undefined;
 
-/** types of in-built functions in JS Slang */
-export type GlobalFn = Function;
+/** types of built-in functions in JS Slang */
+export type BuiltInFn = Exclude<Function, Closure>;
 
-/** types of functions in JS Slang */
+/** types of pre-defined functions in JS Slang */
+export type PredefinedFn = Omit<Closure, 'predefined'> & { predefined: true };
+
+/** types of global functions in JS Slang */
+export type GlobalFn = BuiltInFn | PredefinedFn;
+
+/**
+ * Special type of a function returned from calling `stream`. It is mostly similar to a global
+ * function, but has the extra `environment` property as it should be drawn next to the frame
+ * in which `stream` is called.
+ *
+ * TODO: remove this and all other `StreamFn` code if `stream` becomes a pre-defined function
+ */
+export type StreamFn = BuiltInFn & { environment: Env };
+
+/** types of closures in JS Slang, redefined here for convenience. */
 export type Closure = JsSlangClosure;
 
 /** types of arrays in JS Slang */

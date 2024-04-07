@@ -11,18 +11,18 @@ import {
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { Closure, EnvTreeNode, IHoverable, ReferenceType } from '../../CseMachineTypes';
+import { Closure, IHoverable, ReferenceType } from '../../CseMachineTypes';
 import {
   defaultSAColor,
+  fadedSAColor,
   getBodyText,
-  getNonEmptyEnv,
   getParamsText,
   getTextWidth,
-  isEmptyEnvironment,
   isMainReference
 } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
+import { Frame } from '../Frame';
 import { Value } from './Value';
 
 /** this class encapsulates a JS Slang function (not from the global frame) that
@@ -43,9 +43,11 @@ export class FnValue extends Value implements IHoverable {
   exportTooltipWidth!: number;
   private _arrow: ArrowFromFn | undefined;
 
-  /** the parent/enclosing environment of this fn value */
-  enclosingEnvNode!: EnvTreeNode;
+  /** the enclosing frame of this fn value */
+  enclosingFrame?: Frame;
   readonly labelRef: RefObject<any> = React.createRef();
+
+  unreferenced: boolean;
 
   constructor(
     /** underlying JS Slang function (contains extra props) */
@@ -54,20 +56,16 @@ export class FnValue extends Value implements IHoverable {
     firstReference: ReferenceType
   ) {
     super();
-    // Workaround for `stream_tail`, as the closure will always be linked to the
-    // "functionBodyEnvironment" which might be empty
-    if (isEmptyEnvironment(data.environment)) {
-      data.environment = getNonEmptyEnv(data.environment);
-    }
-    Layout.memoizeValue(this);
+    this.unreferenced = firstReference instanceof Binding && firstReference.isDummyBinding;
     this.addReference(firstReference);
   }
 
   handleNewReference(newReference: ReferenceType): void {
+    if (this.unreferenced && this.references.length > 0) this.unreferenced = false;
     if (!isMainReference(this, newReference)) return;
     // derive the coordinates from the main reference (binding / array unit)
     if (newReference instanceof Binding) {
-      this._x = newReference.frame.x() + newReference.frame.width() + Config.FrameMarginX / 4;
+      this._x = newReference.frame.x() + newReference.frame.width() + Config.FrameMarginX;
       this._y = newReference.y();
       this.centerX = this._x + this.radius * 2;
     } else {
@@ -86,9 +84,7 @@ export class FnValue extends Value implements IHoverable {
     this._width = this.radius * 4;
     this._height = this.radius * 2;
 
-    this.enclosingEnvNode = Layout.environmentTree.getTreeNode(
-      this.data.environment
-    ) as EnvTreeNode;
+    this.enclosingFrame = Frame.getFrom(this.data.environment);
     this.fnName = this.data.functionName;
 
     this.paramsText = `params: (${getParamsText(this.data)})`;
@@ -122,9 +118,10 @@ export class FnValue extends Value implements IHoverable {
     if (this.fnName === undefined) {
       throw new Error('Error: Closure has no main reference and is not initialised!');
     }
-    this._arrow =
-      this.enclosingEnvNode.frame &&
-      (new ArrowFromFn(this).to(this.enclosingEnvNode.frame) as ArrowFromFn);
+    if (this.enclosingFrame) {
+      this._arrow = new ArrowFromFn(this).to(this.enclosingFrame) as ArrowFromFn;
+    }
+    const stroke = this.unreferenced ? fadedSAColor() : defaultSAColor();
     return (
       <React.Fragment key={Layout.key++}>
         <Group
@@ -138,7 +135,7 @@ export class FnValue extends Value implements IHoverable {
             x={this.centerX - this.radius}
             y={this.y()}
             radius={this.radius}
-            stroke={defaultSAColor()}
+            stroke={stroke}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -146,7 +143,7 @@ export class FnValue extends Value implements IHoverable {
             x={this.centerX - this.radius}
             y={this.y()}
             radius={this.innerRadius}
-            fill={defaultSAColor()}
+            fill={stroke}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -154,7 +151,7 @@ export class FnValue extends Value implements IHoverable {
             x={this.centerX + this.radius}
             y={this.y()}
             radius={this.radius}
-            stroke={defaultSAColor()}
+            stroke={stroke}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -162,7 +159,7 @@ export class FnValue extends Value implements IHoverable {
             x={this.centerX + this.radius}
             y={this.y()}
             radius={this.innerRadius}
-            fill={defaultSAColor()}
+            fill={stroke}
           />
         </Group>
         {CseMachine.getPrintableMode() ? (

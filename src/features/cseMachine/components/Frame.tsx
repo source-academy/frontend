@@ -31,6 +31,11 @@ const frameNames = new Map([
 
 /** this class encapsulates a frame of key-value bindings to be drawn on canvas */
 export class Frame extends Visible implements IHoverable {
+  private static envFrameMap: Map<string, Frame> = new Map();
+  public static getFrom(environment: Env): Frame | undefined {
+    return Frame.envFrameMap.get(environment.id);
+  }
+
   /** total height = frame height + frame title height */
   readonly totalHeight: number;
   /** width of this frame + max width of the bound values */
@@ -57,6 +62,7 @@ export class Frame extends Visible implements IHoverable {
     this._width = Config.FrameMinWidth;
     this.level = envTreeNode.level as Level;
     this.environment = envTreeNode.environment;
+    Frame.envFrameMap.set(this.environment.id, this);
     this.parentFrame = envTreeNode.parent?.frame;
     this._x = this.level.x();
     // derive the x coordinate from the left sibling frame
@@ -112,6 +118,7 @@ export class Frame extends Visible implements IHoverable {
         }
       }
     }
+    let i = 0;
     // Add dummy bindings to `entries`
     for (const value of setDifference(unreferencedValues, nestedArrays)) {
       const descriptor: TypedPropertyDescriptor<any> & PropertyDescriptor = {
@@ -122,7 +129,7 @@ export class Frame extends Visible implements IHoverable {
       };
       // The key is a number string to "disguise" as a dummy binding
       // TODO: revamp the dummy binding behavior, don't rely on numeric keys
-      entries.push(['0', descriptor]);
+      entries.push([`${i++}`, descriptor]);
     }
 
     for (const [key, data] of entries) {

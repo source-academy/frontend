@@ -11,7 +11,7 @@ import {
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { GlobalFn, IHoverable } from '../../CseMachineTypes';
+import { GlobalFn, IHoverable, ReferenceType } from '../../CseMachineTypes';
 import { defaultSAColor, getBodyText, getParamsText, getTextWidth } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
@@ -40,17 +40,28 @@ export class GlobalFnValue extends Value implements IHoverable {
     /** underlying function */
     readonly data: GlobalFn,
     /** what this value is being referenced by */
-    mainReference: Binding
+    mainReference: ReferenceType
   ) {
     super();
-    Layout.memoizeValue(this);
     this.references = [mainReference];
 
     // derive the coordinates from the main reference (binding)
-    this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
-    this._y = mainReference.y();
-    this.centerX = this._x + this.radius * 2;
-    this._y += this.radius;
+    if (mainReference instanceof Binding) {
+      this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 2;
+      this._y = mainReference.y();
+      this.centerX = this._x + this.radius * 2;
+      this._y += this.radius;
+    } else {
+      if (mainReference.isLastUnit) {
+        this._x = mainReference.x() + Config.DataUnitWidth * 2;
+        this._y = mainReference.y() + Config.DataUnitHeight / 2 - this.radius;
+      } else {
+        this._x = mainReference.x();
+        this._y = mainReference.y() + mainReference.parent.height() + Config.DataUnitHeight;
+      }
+      this.centerX = this._x + Config.DataUnitWidth / 2;
+      this._x = this.centerX - this.radius * 2;
+    }
 
     this._width = this.radius * 4;
     this._height = this.radius * 2;

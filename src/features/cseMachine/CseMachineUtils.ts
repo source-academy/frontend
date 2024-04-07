@@ -31,6 +31,7 @@ import { Config } from './CseMachineConfig';
 import { ControlStashConfig } from './CseMachineControlStashConfig';
 import { Layout } from './CseMachineLayout';
 import {
+  BuiltInFn,
   Closure,
   Data,
   DataArray,
@@ -39,9 +40,22 @@ import {
   EnvTree,
   EnvTreeNode,
   GlobalFn,
+  PredefinedFn,
   Primitive,
-  ReferenceType
+  ReferenceType,
+  StreamFn
 } from './CseMachineTypes';
+
+class AssertionError extends Error {
+  constructor(msg?: string) {
+    super(msg);
+    this.name = 'AssertionError';
+  }
+}
+
+export function assert(condition: boolean, msg?: string): asserts condition {
+  if (!condition) throw new AssertionError(msg);
+}
 
 // TODO: can make use of lodash
 /** Returns `true` if `x` is an object */
@@ -93,18 +107,34 @@ export function isFunction(x: any): x is Function {
   return x && {}.toString.call(x) === '[object Function]';
 }
 
+/** Returns `true` if `data` is a built-in function */
+function isBuiltInFn(data: Data): data is BuiltInFn {
+  return isFunction(data) && !isClosure(data);
+}
+
+/** Returns `true` if `data` is a pre-defined function */
+function isPredefinedFn(data: Data): data is PredefinedFn {
+  return isClosure(data) && data.predefined;
+}
+
+/** Returns `true` if `data` is a function in the global frame */
+export function isGlobalFn(data: Data): data is GlobalFn {
+  return isBuiltInFn(data) || isPredefinedFn(data);
+}
+
+/** Returns `true` if `data` is a function returned from calling `stream` */
+export function isStreamFn(data: Data): data is StreamFn {
+  return isBuiltInFn(data) && {}.hasOwnProperty.call(data, 'environment');
+}
+
 /** Returns `true` if `data` is a JS Slang closure */
 export function isClosure(data: Data): data is Closure {
   return (
     isFunction(data) &&
     {}.hasOwnProperty.call(data, 'environment') &&
-    {}.hasOwnProperty.call(data, 'functionName')
+    {}.hasOwnProperty.call(data, 'functionName') &&
+    {}.hasOwnProperty.call(data, 'predefined')
   );
-}
-
-/** Returns `true` if `x` is a JS Slang function in the global frame */
-export function isGlobalFn(x: any): x is GlobalFn {
-  return isFunction(x) && !isClosure(x);
 }
 
 /** Returns `true` if `data` is null */
@@ -158,14 +188,6 @@ export function setDifference<T>(set1: Set<T>, set2: Set<T>) {
     }
     return result;
   }
-}
-
-/**
- * Mutates the given closure and converts it into a global function,
- * by removing the `functionName` property
- */
-export function convertClosureToGlobalFn(fn: Closure) {
-  delete (fn as Partial<Closure>).functionName;
 }
 
 /**
@@ -277,7 +299,7 @@ export function getTextHeight(
 }
 
 /** Returns the parameter string of the given function */
-export function getParamsText(data: Function): string {
+export function getParamsText(data: GlobalFn | Closure): string {
   if (isClosure(data)) {
     return data.node.params.map((node: any) => node.name).join(',');
   } else {
@@ -291,7 +313,7 @@ export function getBodyText(data: Function): string {
   const fnString = data.toString();
   if (isClosure(data)) {
     let body =
-      data.node.type === 'FunctionDeclaration' || fnString.substring(0, 8) === 'function'
+      data.node.type === 'FunctionExpression' || fnString.substring(0, 8) === 'function'
         ? fnString.substring(fnString.indexOf('{'))
         : fnString.substring(fnString.indexOf('=') + 3);
 
@@ -818,6 +840,9 @@ export const isStashItemInDanger = (stashIndex: number): boolean => {
 
 export const defaultSAColor = () =>
   CseMachine.getPrintableMode() ? Config.SA_BLUE : Config.SA_WHITE;
+
+export const fadedSAColor = () =>
+  CseMachine.getPrintableMode() ? Config.SA_FADED_BLUE : Config.SA_FADED_WHITE;
 
 export const stackItemSAColor = (index: number) =>
   isStashItemInDanger(index)
