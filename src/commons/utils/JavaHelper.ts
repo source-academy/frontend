@@ -1,7 +1,7 @@
 import setupJVM, { parseBin } from 'java-slang/dist/jvm';
 import { createModuleProxy, loadCachedFiles } from 'java-slang/dist/jvm/utils/integration';
 import { Context } from 'js-slang';
-import { initModuleContext, loadModuleBundle } from 'js-slang/dist/modules/loader/moduleLoader';
+import loadSourceModules from 'js-slang/dist/modules/loader';
 
 import Constants from './Constants';
 import DisplayBufferService from './DisplayBufferService';
@@ -50,8 +50,7 @@ export async function javaRun(javaCode: string, context: Context) {
     // dynamic load modules
     if (path.startsWith('modules')) {
       const module = path.split('/')[1] as string;
-      initModuleContext(module, context, true);
-      const moduleFuncs = loadModuleBundle(module, context);
+      const moduleFuncs = await loadSourceModules(new Set([module]), context, true);
       const { proxy } = createModuleProxy(module, moduleFuncs);
       return { default: proxy };
     }
