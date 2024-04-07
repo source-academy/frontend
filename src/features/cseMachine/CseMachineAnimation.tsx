@@ -84,6 +84,7 @@ export class CseAnimation {
       console.log('TYPE: ' + lastControlItem.type);
       switch (lastControlItem.type) {
         case 'ArrowFunctionExpression':
+        case 'FunctionExpression':
           CseAnimation.animations.push(
             new LiteralAnimation(lastControlComponent, currStashComponent!)
           );
