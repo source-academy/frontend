@@ -17,6 +17,8 @@ import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding
 import FileSystemViewList from './FileSystemViewList';
 import FileSystemViewPlaceholderNode from './FileSystemViewPlaceholderNode';
 import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
+import { githubCreateFile, githubDeleteFolder } from 'src/features/github/GitHubActions';
+import { enableFileSystemContextMenus } from 'src/features/playground/PlaygroundActions';
 
 type Props = {
   workspaceLocation: WorkspaceLocation;
@@ -86,6 +88,7 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
         return;
       }
       dispatch(persistenceDeleteFolder(fullPath));
+      dispatch(githubDeleteFolder(fullPath));
       dispatch(removeEditorTabsForDirectory(workspaceLocation, fullPath));
       rmdirRecursively(fileSystem, fullPath).then(refreshParentDirectory);
     });
@@ -119,6 +122,7 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
           console.error(err);
         }
         dispatch(persistenceCreateFile(newFilePath));
+        dispatch(githubCreateFile(newFilePath));
         forceRefreshFileSystemViewList();
       });
     });
@@ -148,6 +152,22 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
         }
 
         dispatch(persistenceCreateFolder(newDirectoryPath));
+        function informUserGithubCannotCreateFolder() {
+          return showSimpleConfirmDialog({
+            contents: (
+              <div>
+                <p>Warning: Github is unable to create empty directories. When you create your first file in this folder,
+                   Github will automatically sync this folder and the first file.
+                </p>
+                <p>Please click 'Confirm' to continue.</p>
+              </div>
+            ),
+            positiveIntent: 'primary',
+            positiveLabel: 'Confirm'
+          });
+        }
+        informUserGithubCannotCreateFolder();
+        dispatch(enableFileSystemContextMenus());
         forceRefreshFileSystemViewList();
       });
     });

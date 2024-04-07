@@ -171,6 +171,8 @@ export function* persistenceSaga(): SagaIterator {
           }
           yield put(actions.addPersistenceFile({ id: currFile.id, parentId: currFile.parentId, name: currFile.name, path: "/playground" + currFile.path, lastSaved: new Date() }));
           const contents = yield call([gapi.client.drive.files, 'get'], { fileId: currFile.id, alt: 'media' });
+          console.log(currFile.path);
+          console.log(contents.body === "");
           yield call(writeFileRecursively, fileSystem, "/playground" + currFile.path, contents.body);
           yield call(showSuccessMessage, `Loaded file ${currFile.path}.`, 1000);
         }
@@ -724,7 +726,7 @@ export function* persistenceSaga(): SagaIterator {
       // look for file
       const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
       const persistenceFile = persistenceFileArray.find(e => e.path === filePath);
-      if (!persistenceFile) {
+      if (!persistenceFile || persistenceFile.id === '') {
         yield call(console.log, "cannot find pers file for ", filePath);
         return;
       }
@@ -751,7 +753,7 @@ export function* persistenceSaga(): SagaIterator {
       // identical to delete file
       const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
       const persistenceFile = persistenceFileArray.find(e => e.path === folderPath);
-      if (!persistenceFile) {
+      if (!persistenceFile || persistenceFile.id === '') {
         yield call(console.log, "cannot find pers file for ", folderPath);
         return;
       }

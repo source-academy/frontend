@@ -55,11 +55,18 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
     })
     .addCase(deleteGithubSaveInfo, (state, action) => { // TODO rewrite - refer to deletePersistenceFile below
       const newPersistenceFileArray = state['persistenceFileArray'].filter(e => {
-        return e.path != action.payload.githubSaveInfo.filePath &&
-        e.lastSaved != action.payload.githubSaveInfo.lastSaved &&
-        e.repoName != action.payload.githubSaveInfo.repoName
+        return e.path != action.payload.path &&
+        e.lastSaved != action.payload.lastSaved &&
+        e.repoName != action.payload.repoName
       });
-      state.persistenceFileArray = newPersistenceFileArray;
+      const isGDriveSyncing = action.payload.id ? true: false;
+      if (isGDriveSyncing) {
+        const newPersFile = { id: action.payload.id, path: action.payload.path, repoName: '', name: action.payload.name};
+        const newPersFileArray = newPersistenceFileArray.concat(newPersFile);
+        state.persistenceFileArray = newPersFileArray;
+      } else {
+        state.persistenceFileArray = newPersistenceFileArray;
+      }  
     })
     .addCase(deleteAllGithubSaveInfo, (state, action) => {
       state.persistenceFileArray = [];

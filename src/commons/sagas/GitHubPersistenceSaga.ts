@@ -10,7 +10,10 @@ import {
   GITHUB_OPEN_FILE,
   GITHUB_SAVE_ALL,
   GITHUB_SAVE_FILE,
-  GITHUB_SAVE_FILE_AS
+  GITHUB_SAVE_FILE_AS,
+  GITHUB_CREATE_FILE,
+  GITHUB_DELETE_FILE,
+  GITHUB_DELETE_FOLDER
 } from '../../features/github/GitHubTypes';
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
@@ -34,6 +37,9 @@ export function* GitHubPersistenceSaga(): SagaIterator {
   yield takeLatest(GITHUB_SAVE_FILE, githubSaveFile);
   yield takeLatest(GITHUB_SAVE_FILE_AS, githubSaveFileAs);
   yield takeLatest(GITHUB_SAVE_ALL, githubSaveAll);
+  yield takeLatest(GITHUB_CREATE_FILE, githubCreateFile);
+  yield takeLatest(GITHUB_DELETE_FILE, githubDeleteFile);
+  yield takeLatest(GITHUB_DELETE_FOLDER, githubDeleteFolder);
 }
 
 function* githubLoginSaga() {
@@ -138,15 +144,14 @@ function* githubSaveFile(): any {
     octokit,
     githubLoginId,
     repoName || '',
-    filePath,
+    filePath.slice(12),
     githubEmail,
     githubName,
     commitMessage,
     content
   );
 
-  // forces lasteditedfilepath in filesystem to be updated which causes the colors to be updated
-  store.dispatch(actions.updateLastEditedFilePath(''));
+  store.dispatch(actions.updateRefreshFileViewKey());
 }
 
 function* githubSaveFileAs(): any {
@@ -241,8 +246,138 @@ function* githubSaveAll(): any {
       githubName,
       { commitMessage: commitMessage, files: modifiedcurrFiles});
   
-  // forces lasteditedfilepath in filesystem to be updated which causes the colors to be updated
-  store.dispatch(actions.updateLastEditedFilePath(''));
+  store.dispatch(actions.updateRefreshFileViewKey());
+}
+
+function* githubCreateFile({ payload }: ReturnType<typeof actions.githubCreateFile>): any {
+  yield call(store.dispatch, actions.disableFileSystemContextMenus());
+
+  const filePath = payload;
+
+  const octokit = getGitHubOctokitInstance();
+  if (octokit === undefined) return;
+
+  type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
+    typeof octokit.users.getAuthenticated
+  >;
+  const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
+
+  const githubLoginId = authUser.data.login;
+  const repoName = getGithubSaveInfo().repoName;
+  const githubEmail = authUser.data.email;
+  const githubName = authUser.data.name;
+  const commitMessage = 'Changes made from Source Academy';
+  const content = ''
+
+  if (repoName === '') {
+    yield call(console.log, "not synced to github");
+    return;
+  }
+
+  GitHubUtils.performCreatingSave(
+    octokit,
+    githubLoginId,
+    repoName || '',
+    filePath.slice(12),
+    githubEmail,
+    githubName,
+    commitMessage,
+    content
+  );
+  
+  yield call(store.dispatch, actions.addGithubSaveInfo({
+    repoName: repoName,
+    filePath: filePath,
+    lastSaved: new Date()
+  }))
+  yield call(store.dispatch, actions.enableFileSystemContextMenus());
+  yield call(store.dispatch, actions.updateRefreshFileViewKey());
+}
+
+function* githubDeleteFile({ payload }: ReturnType<typeof actions.githubDeleteFile>): any {
+  yield call(store.dispatch, actions.disableFileSystemContextMenus());
+
+  const filePath = payload;
+
+  const octokit = getGitHubOctokitInstance();
+  if (octokit === undefined) return;
+
+  type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
+    typeof octokit.users.getAuthenticated
+  >;
+  const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
+
+  const githubLoginId = authUser.data.login;
+  const githubSaveInfo = getGithubSaveInfo();
+  const repoName = githubSaveInfo.repoName;
+  const lastSaved = githubSaveInfo.lastSaved;
+  const githubEmail = authUser.data.email;
+  const githubName = authUser.data.name;
+  const commitMessage = 'Changes made from Source Academy';
+
+  if (repoName === '') {
+    yield call(console.log, "not synced to github");
+    return;
+  }
+
+  GitHubUtils.performFileDeletion(
+    octokit,
+    githubLoginId,
+    repoName || '',
+    filePath.slice(12),
+    githubEmail,
+    githubName,
+    commitMessage,
+  );
+
+  const persistenceFileArray = store.getState().fileSystem.persistenceFileArray;
+  const persistenceFile = persistenceFileArray.find(e => 
+    e.repoName === repoName && 
+    e.path === filePath && 
+    e.lastSaved === lastSaved) || {id: '', name: ''};
+  store.dispatch(actions.deleteGithubSaveInfo(persistenceFile));
+
+  
+  yield call(store.dispatch, actions.enableFileSystemContextMenus());
+  yield call(store.dispatch, actions.updateRefreshFileViewKey());
+}
+
+function* githubDeleteFolder({ payload }: ReturnType<typeof actions.githubDeleteFolder>): any {
+  yield call(store.dispatch, actions.disableFileSystemContextMenus());
+
+  const filePath = payload;
+
+  const octokit = getGitHubOctokitInstance();
+  if (octokit === undefined) return;
+
+  type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
+    typeof octokit.users.getAuthenticated
+  >;
+  const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
+
+  const githubLoginId = authUser.data.login;
+  const repoName = getGithubSaveInfo().repoName;
+  const githubEmail = authUser.data.email;
+  const githubName = authUser.data.name;
+  const commitMessage = 'Changes made from Source Academy';
+
+  if (repoName === '') {
+    yield call(console.log, "not synced to github");
+    return;
+  }
+
+  GitHubUtils.performFolderDeletion(
+    octokit,
+    githubLoginId,
+    repoName || '',
+    filePath.slice(12),
+    githubEmail,
+    githubName,
+    commitMessage
+  );
+  
+  yield call(store.dispatch, actions.enableFileSystemContextMenus());
+  yield call(store.dispatch, actions.updateRefreshFileViewKey());
 }
 
 export default GitHubPersistenceSaga;

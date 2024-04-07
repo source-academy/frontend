@@ -14,6 +14,7 @@ import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
 import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
+import { githubDeleteFile } from 'src/features/github/GitHubActions';
 
 type Props = {
   workspaceLocation: WorkspaceLocation;
@@ -50,7 +51,7 @@ const FileSystemViewFileNode: React.FC<Props> = ({
             ? Colors.ORANGE4
             : Colors.BLUE4
           : Colors.BLUE4
-        : Colors.ORANGE4
+        : Colors.BLUE4
       : undefined;
     setCurrColor(checkColor(myFileMetadata));
   }, [lastEditedFilePath]);
@@ -107,6 +108,7 @@ const FileSystemViewFileNode: React.FC<Props> = ({
           console.error(err);
         }
         dispatch(persistenceDeleteFile(fullPath));
+        dispatch(githubDeleteFile(fullPath));
         dispatch(removeEditorTabForFile(workspaceLocation, fullPath));
         refreshDirectory();
       });

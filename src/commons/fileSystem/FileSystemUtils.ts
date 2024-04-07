@@ -277,7 +277,11 @@ export const getGithubSaveInfo = () => {
   if (activeEditorTabIndex !== null) {
     currentFilePath = editorTabs[activeEditorTabIndex].filePath || '';
   }
-  const PersistenceFile: PersistenceFile = persistenceFileArray.find(e => e.path === currentFilePath) || {name: '', id: ''};
-  const githubSaveInfo: GitHubSaveInfo = { filePath: PersistenceFile.path, lastSaved: PersistenceFile.lastSaved, repoName: PersistenceFile.repoName};
+  const PersistenceFile: PersistenceFile = persistenceFileArray.find(e => e.path === currentFilePath) || {name: '', id: '', repoName: ''};
+  const githubSaveInfo: GitHubSaveInfo = { 
+    filePath: PersistenceFile.path, 
+    lastSaved: PersistenceFile.lastSaved, 
+    repoName: PersistenceFile.repoName || (persistenceFileArray[0] === undefined ? '' : persistenceFileArray[0].repoName)
+  };
   return githubSaveInfo;
 }

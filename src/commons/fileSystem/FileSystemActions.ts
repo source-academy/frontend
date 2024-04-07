@@ -28,7 +28,7 @@ export const addGithubSaveInfo = createAction(
 
 export const deleteGithubSaveInfo = createAction(
   DELETE_GITHUB_SAVE_INFO,
-  (githubSaveInfo: GitHubSaveInfo) => ({ payload: { githubSaveInfo }})
+  (persistenceFile : PersistenceFile) => ({ payload: persistenceFile })
 );
 
 export const deleteAllGithubSaveInfo = createAction(
