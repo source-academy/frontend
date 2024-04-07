@@ -47,7 +47,7 @@ export class GlobalFnValue extends Value implements IHoverable {
     this.references = [mainReference];
 
     // derive the coordinates from the main reference (binding)
-    this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX / 4;
+    this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX;
     this._y = mainReference.y();
     this.centerX = this._x + this.radius * 2;
     this._y += this.radius;
