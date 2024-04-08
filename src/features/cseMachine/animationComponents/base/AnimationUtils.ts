@@ -63,19 +63,5 @@ export function lookupBinding(currFrame: Frame, bindingName: string): [Frame, Bi
 // Compare two given frames and return whether they are actually different, and that
 // the second frame is a newly created frame
 export function checkFrameCreation(prevFrame: Frame, currFrame: Frame): boolean {
-  // If the names are different, then they are definitely not the same frame.
-  if (prevFrame.name.fullStr !== currFrame.name.fullStr) return true;
-  // If currFrame is a newly created frame, all bindings will be unassigned, and
-  // prevFrame will have no assigned bindings. Exception will be the global frame
-  const prevFrameHasUnassigned = prevFrame.bindings.reduce((result, binding) => {
-    return result || binding.value instanceof UnassignedValue;
-  }, false);
-  const currFrameHasAllUnassigned = currFrame.bindings.reduce((result, binding) => {
-    return result && binding.value instanceof UnassignedValue;
-  }, true);
-  if (prevFrameHasUnassigned || !currFrameHasAllUnassigned) return false;
-  // As a last resort, we check the frame positions for any difference. Since
-  // no frames are ever deleted over the lifetime of the CSE Machine, we can assume
-  // that newer frames would have either a larger `x` or `y` value
-  return prevFrame.x() < currFrame.x() || prevFrame.y() < currFrame.y();
+  return prevFrame.environment.id !== currFrame.environment.id;
 }
