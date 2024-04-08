@@ -341,12 +341,12 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
     maxXp: 0,
     earlySubmissionXp: 0,
     openAt: 'test_string',
-    progress: ProgressStatuses.not_attempted,
     title: 'test_string',
     shortSummary: 'test_string',
     status: AssessmentStatuses.not_attempted,
     story: null,
     xp: 0,
+    isGradingPublished: false,
     maxTeamSize: 5,
     hasVotingFeatures: false
   }
@@ -364,12 +364,12 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
     maxXp: 1,
     earlySubmissionXp: 0,
     openAt: 'test_string_0',
-    progress: ProgressStatuses.attempted,
     title: 'test_string_0',
     shortSummary: 'test_string_0',
     status: AssessmentStatuses.attempted,
     story: null,
     xp: 1,
+    isGradingPublished: false,
     maxTeamSize: 1,
     hasVotingFeatures: false
   }
@@ -544,6 +544,7 @@ const gradingOverviewTest1: GradingOverview[] = [
     submissionId: 1,
     submissionStatus: AssessmentStatuses.attempting,
     progress: ProgressStatuses.attempting,
+    isGradingPublished: false,
     groupName: 'group',
     questionCount: 4,
     gradedCount: 2
@@ -569,6 +570,7 @@ const gradingOverviewTest2: GradingOverview[] = [
     submissionId: 2,
     submissionStatus: AssessmentStatuses.attempted,
     progress: ProgressStatuses.graded,
+    isGradingPublished: false,
     groupName: 'another group',
     questionCount: 3,
     gradedCount: 3

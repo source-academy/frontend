@@ -99,9 +99,7 @@ test('Profile renders correctly when there are closed and graded, or closed and 
     }
   );
 
-  const numProfileCards = mockAssessmentOverviews.filter(
-    item => item.progress === ProgressStatuses.published
-  ).length;
+  const numProfileCards = mockAssessmentOverviews.filter(item => item.isGradingPublished).length;
 
   [
     'profile-summary-navlink',

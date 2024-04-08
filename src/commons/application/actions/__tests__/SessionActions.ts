@@ -554,7 +554,7 @@ test('updateAssessmentOverviews generates correct action object', () => {
       status: AssessmentStatuses.not_attempted,
       story: null,
       xp: 0,
-      progress: ProgressStatuses.not_attempted,
+      isGradingPublished: false,
       maxTeamSize: 1,
       hasVotingFeatures: false
     }
@@ -605,6 +605,7 @@ test('updateGradingOverviews generates correct action object', () => {
         studentUsername: 'E0123456',
         studentUsernames: [],
         submissionId: 1,
+        isGradingPublished: false,
         progress: ProgressStatuses.attempting,
         groupName: 'group',
         submissionStatus: AssessmentStatuses.attempting,
