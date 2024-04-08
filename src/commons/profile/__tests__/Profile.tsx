@@ -6,10 +6,7 @@ import { OverallState, Role } from 'src/commons/application/ApplicationTypes';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { assertType } from 'src/commons/utils/TypeHelper';
 
-import {
-  AssessmentConfiguration,
-  AssessmentStatuses,
-} from '../../assessment/AssessmentTypes';
+import { AssessmentConfiguration, AssessmentStatuses } from '../../assessment/AssessmentTypes';
 import { mockAssessmentOverviews } from '../../mocks/AssessmentMocks';
 import Profile, { ProfileProps } from '../Profile';
 
