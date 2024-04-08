@@ -74,7 +74,7 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
       icon={IconNames.DOUBLE_CHEVRON_UP}
       onClick={props.onClickSaveAll}
       // disable if persistenceObject is not a folder
-      isDisabled={props.currentObject ? props.currentObject.isFolder ? false : true : true}
+      isDisabled={props.accessToken ? false : true}
     />
   );
 

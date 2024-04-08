@@ -253,7 +253,7 @@ function* githubSaveAll(): any {
 }
 
 function* githubCreateFile({ payload }: ReturnType<typeof actions.githubCreateFile>): any {
-  yield call(store.dispatch, actions.disableFileSystemContextMenus());
+  //yield call(store.dispatch, actions.disableFileSystemContextMenus());
 
   const filePath = payload;
 
@@ -298,7 +298,7 @@ function* githubCreateFile({ payload }: ReturnType<typeof actions.githubCreateFi
 }
 
 function* githubDeleteFile({ payload }: ReturnType<typeof actions.githubDeleteFile>): any {
-  yield call(store.dispatch, actions.disableFileSystemContextMenus());
+  //yield call(store.dispatch, actions.disableFileSystemContextMenus());
 
   const filePath = payload;
 
@@ -337,7 +337,7 @@ function* githubDeleteFile({ payload }: ReturnType<typeof actions.githubDeleteFi
 }
 
 function* githubDeleteFolder({ payload }: ReturnType<typeof actions.githubDeleteFolder>): any {
-  yield call(store.dispatch, actions.disableFileSystemContextMenus());
+  //yield call(store.dispatch, actions.disableFileSystemContextMenus());
 
   const filePath = payload;
 
@@ -375,7 +375,7 @@ function* githubDeleteFolder({ payload }: ReturnType<typeof actions.githubDelete
 }
 
 function* githubRenameFile({ payload }: ReturnType<typeof actions.githubRenameFile>): any {
-  yield call(store.dispatch, actions.disableFileSystemContextMenus());
+  //yield call(store.dispatch, actions.disableFileSystemContextMenus());
 
   const newFilePath = payload.newFilePath;
   const oldFilePath = payload.oldFilePath;
@@ -416,7 +416,7 @@ function* githubRenameFile({ payload }: ReturnType<typeof actions.githubRenameFi
 }
 
 function* githubRenameFolder({ payload }: ReturnType<typeof actions.githubRenameFile>): any {
-  yield call(store.dispatch, actions.disableFileSystemContextMenus());
+  //yield call(store.dispatch, actions.disableFileSystemContextMenus());
 
   const newFilePath = payload.newFilePath;
   const oldFilePath = payload.oldFilePath;

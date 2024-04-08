@@ -26,7 +26,7 @@ import { LOGIN_GOOGLE, LOGOUT_GOOGLE } from '../application/types/SessionTypes';
 import { retrieveFilesInWorkspaceAsRecord, rmFilesInDirRecursively, writeFileRecursively } from '../fileSystem/FileSystemUtils';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
-import { showSimpleConfirmDialog, showSimplePromptDialog } from '../utils/DialogHelper';
+import { showSimpleConfirmDialog, showSimpleErrorDialog, showSimplePromptDialog } from '../utils/DialogHelper';
 import {
   dismiss,
   showMessage,
@@ -256,7 +256,7 @@ export function* persistenceSaga(): SagaIterator {
     }
   });
 
-  yield takeLatest(PERSISTENCE_SAVE_FILE_AS, function* (): any {
+  yield takeLatest(PERSISTENCE_SAVE_FILE_AS, function* (): any { // TODO wrap first part in try catch finally block
     let toastKey: string | undefined;
     const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
     const [currPersistenceFile] = yield select( 
@@ -327,6 +327,19 @@ export function* persistenceSaga(): SagaIterator {
           yield call(console.log, "folder opened, handling save_as differently! overwriting file");
           // First case: Chosen location is within TLRF - so need to call methods to update PersistenceFileArray
           // Other case: Chosen location is outside TLRF - don't care
+
+          const [chapter, variant, external] = yield select(
+            (state: OverallState) => [
+              state.workspaces.playground.context.chapter,
+              state.workspaces.playground.context.variant,
+              state.workspaces.playground.externalLibrary
+            ]
+          );
+          const config: IPlaygroundConfig = {
+            chapter,
+            variant,
+            external
+          };
           
           yield call(console.log, "curr pers file ", currPersistenceFile, " pickedDir ", pickedDir, " pickedFile ", pickedFile);
           const localFileTarget = persistenceFileArray.find(e => e.id === pickedFile.id);
@@ -345,25 +358,13 @@ export function* persistenceSaga(): SagaIterator {
               throw new Error("No filesystem");
             }
 
-            // Save to GDrive
-            const [chapter, variant, external] = yield select(
-              (state: OverallState) => [
-                state.workspaces.playground.context.chapter,
-                state.workspaces.playground.context.variant,
-                state.workspaces.playground.externalLibrary
-              ]
-            );
-            const config: IPlaygroundConfig = {
-              chapter,
-              variant,
-              external
-            };
-
             yield call(updateFile, localFileTarget.id, localFileTarget.name, MIME_SOURCE, code, config);
 
             yield put(actions.addPersistenceFile({ ...localFileTarget, lastSaved: new Date(), lastEdit: undefined }));
             yield call(writeFileRecursively, fileSystem, localFileTarget.path!, code);
             yield call(store.dispatch, actions.updateRefreshFileViewKey());
+          } else {
+            yield call(updateFile, pickedFile.id, pickedFile.name, MIME_SOURCE, code, config);
           }
           yield call(
             showSuccessMessage,
@@ -399,7 +400,7 @@ export function* persistenceSaga(): SagaIterator {
           return;
         }
 
-        yield call(store.dispatch, actions.disableFileSystemContextMenus());
+        // yield call(store.dispatch, actions.disableFileSystemContextMenus());
 
         const config: IPlaygroundConfig = {
           chapter,
@@ -479,177 +480,282 @@ export function* persistenceSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery( // TODO work on this
+  yield takeEvery(
     PERSISTENCE_SAVE_ALL,
     function* () {
-      // TODO: when top level folder is renamed, save all just leaves the old folder alone and saves in a new folder if it exists
-      //       Add checking to see if current folder already exists when renamed?
-      //       Some way to keep track of when files/folders are renamed???????????
-      // TODO: if top level folder already exists in GDrive, to 
+      let toastKey: string | undefined;
 
-      // Case init: Don't care, delete everything in remote and save again
-      // Callable only if persistenceObject isFolder
-      const [currFolderObject] = yield select( // TODO resolve type here?
-        (state: OverallState) => [
-          state.playground.persistenceFile
-        ]
-      );
-      if (!currFolderObject) {
-        yield call(console.log, "no obj!");
-        return;
-      }
-      if (!(currFolderObject as PersistenceFile).isFolder) {
-        yield call(console.log, "folder not opened!");
-        return;
-      }
+      try {
+        const [currFolderObject] = yield select(
+          (state: OverallState) => [
+            state.playground.persistenceFile
+          ]
+        );
 
-      
+        const fileSystem: FSModule | null = yield select(
+          (state: OverallState) => state.fileSystem.inBrowserFileSystem
+        );
 
-      console.log("currFolderObj", currFolderObject);
-
-      const fileSystem: FSModule | null = yield select(
-        (state: OverallState) => state.fileSystem.inBrowserFileSystem
-      );
-      // If the file system is not initialised, do nothing.
-      if (fileSystem === null) {
-        yield call(console.log, "no filesystem!");
-        return;
-      }
-      yield call(console.log, "there is a filesystem");
-
-      const currFiles: Record<string, string> = yield call(retrieveFilesInWorkspaceAsRecord, "playground", fileSystem);
-      // TODO this does not get bare folders, is it a necessity?
-      // behaviour of open folder for GDrive loads even empty folders
-      yield call(console.log, "currfiles", currFiles);
-
-      const [chapter, variant, external] = yield select(
-        (state: OverallState) => [
-          state.workspaces.playground.context.chapter,
-          state.workspaces.playground.context.variant,
-          state.workspaces.playground.externalLibrary
-        ]
-      );
-      const config: IPlaygroundConfig = {
-        chapter,
-        variant,
-        external
-      };
-
-      // check if top level folder has been renamed TODO remove once instant sync done
-      // assuming only 1 top level folder exists, so get 1 file
-      const testPath = Object.keys(currFiles)[0];
-      const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(testPath);
-      if (regexResult === null) {
-        yield call(console.log, "Regex null!");
-        return; // should never come here
-      }
-      const topLevelFolderName = regexResult[1].slice(
-        ("/playground/").length, -1).split("/")[0]; // TODO assuming only the top level folder exists, change?
-      
-      if (topLevelFolderName === "") {
-        yield call(console.log, "no top level folder?");
-        return;
-      }
-
-      // Start actually saving
-      yield call(store.dispatch, actions.disableFileSystemContextMenus());
-
-      if (topLevelFolderName !== currFolderObject.name) {
-        // top level folder name has been renamed
-        yield call(console.log, "TLFN changed from ", currFolderObject.name, " to ", topLevelFolderName);
-        const newTopLevelFolderId: string = yield call(getContainingFolderIdRecursively, [topLevelFolderName],
-          currFolderObject.parentId!); // try and find the folder if it exists
-        currFolderObject.name = topLevelFolderName; // so that the new top level folder will be created below
-        currFolderObject.id = newTopLevelFolderId; // so that new top level folder will be saved in root of gdrive
-      }
-      const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
-      //const fileNameRegex = new RegExp('@"[^\\]+$"');
-      for (const currFullFilePath of Object.keys(currFiles)) {
-        // TODO assuming current files have not been renamed at all - to implement: rename/create/delete files instantly
-        const currFileContent = currFiles[currFullFilePath];
-        const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(currFullFilePath);
-        if (regexResult === null) {
-          yield call(console.log, "Regex null!");
-          continue;
-        }
-        const currFileName = regexResult[2] + regexResult[3];
-        //const currFileParentFolders: string[] = regexResult[1].slice(
-        //  ("/playground/" + currFolderObject.name + "/").length, -1)
-        //  .split("/");
-
-        // /fold1/ becomes ["fold1"]
-        // /fold1/fold2/ becomes ["fold1", "fold2"]
-        // If in top level folder, becomes [""]
-
-        const currPersistenceFile = persistenceFileArray.find(e => e.path === currFullFilePath);
-        if (currPersistenceFile === undefined) {
-          yield call(console.log, "this file is not in persistenceFileArray: ", currFullFilePath);
-          continue;
+        // If the file system is not initialised, do nothing.
+        if (fileSystem === null) {
+          yield call(console.log, "no filesystem!"); // TODO change to throw new Error
+          return;
         }
 
-        if (!currPersistenceFile.id || !currPersistenceFile.parentId) {
-          // get folder
-          yield call(console.log, "this file does not have id/parentId: ", currFullFilePath);
-          continue;
+        const currFiles: Record<string, string> = yield call(retrieveFilesInWorkspaceAsRecord, "playground", fileSystem);
+        yield call(console.log, "currfiles", currFiles);
+
+
+        yield call(console.log, "there is a filesystem");
+
+        const [chapter, variant, external] = yield select(
+          (state: OverallState) => [
+            state.workspaces.playground.context.chapter,
+            state.workspaces.playground.context.variant,
+            state.workspaces.playground.externalLibrary
+          ]
+        );
+        const config: IPlaygroundConfig = {
+          chapter,
+          variant,
+          external
+        };
+
+        if (!currFolderObject || !(currFolderObject as PersistenceFile).isFolder) {
+          // Check if there is only a single top level folder
+          const testPaths: Set<string> = new Set();
+          Object.keys(currFiles).forEach(e => {
+            const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(e);
+            testPaths.add(regexResult![1].slice(("/playground/").length, -1).split("/")[0]); //TODO hardcoded playground
+          });
+          if (testPaths.size !== 1) {
+            yield call(showSimpleErrorDialog, {
+              title: 'Unable to Save All',
+              contents: (
+                <p>
+                  There must be exactly one top level folder present in order
+                  to use Save All.
+                </p>
+              ),
+              label: "OK"
+            });
+            return;
+          }
+
+          // Now, perform old save all
+
+          // Ask user to confirm location
+          const pickedDir: PickFileResult = yield call(
+            pickFile,
+            'Pick a folder, or cancel to pick the root folder',
+            {
+              pickFolders: true,
+              showFolders: true,
+              showFiles: false
+            }
+          );
+    
+          const saveToDir: PersistenceFile = pickedDir.picked // TODO is there a better way?
+            ? {...pickedDir}
+            : { id: ROOT_ID, name: 'My Drive'};
+          const topLevelFolderName = testPaths.values().next().value
+          let topLevelFolderId: string = yield call(getIdOfFileOrFolder, saveToDir.id, topLevelFolderName);
+          
+          if (topLevelFolderId !== "") {
+            // File already exists
+            const reallyOverwrite: boolean = yield call(showSimpleConfirmDialog, {
+              title: 'Saving to Google Drive',
+              contents: (
+                <span>
+                  Folder with the same name was found. Overwrite <strong>{topLevelFolderName}</strong>?
+                  No deletions will be made remotely, only content updates, but new remote files may be created.
+                </span>
+              )
+            });
+            if (!reallyOverwrite) {
+              return;
+            }
+          } else {
+            // Create new folder
+            const reallyCreate: boolean = yield call(showSimpleConfirmDialog, {
+              title: 'Saving to Google Drive',
+              contents: (
+                <span>
+                  Create <strong>{topLevelFolderName}</strong> inside <strong>{saveToDir.name}</strong>?
+                </span>
+              )
+            });
+            if (!reallyCreate) {
+              return;
+            }
+            topLevelFolderId = yield call(createFolderAndReturnId, saveToDir.id, topLevelFolderName);
+          }
+          toastKey = yield call(showMessage, {
+            message: `Saving ${topLevelFolderName}...`,
+            timeout: 0,
+            intent: Intent.PRIMARY
+          });
+          // it is time
+          yield call(store.dispatch, actions.disableFileSystemContextMenus());
+
+          interface FolderIdBundle {
+            id: string,
+            parentId: string
+          }
+
+          for (const currFullFilePath of Object.keys(currFiles)) {
+            const currFileContent = currFiles[currFullFilePath];
+            const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(currFullFilePath)!;
+            const currFileName = regexResult[2] + regexResult[3];
+            const currFileParentFolders: string[] = regexResult[1].slice(
+            ("/playground/" + topLevelFolderName + "/").length, -1)
+            .split("/");
+
+            const gcfirResult: FolderIdBundle = yield call(getContainingFolderIdRecursively, currFileParentFolders,
+              topLevelFolderId); // TODO can be optimized by checking persistenceFileArray
+            const currFileParentFolderId = gcfirResult.id;
+            let currFileId: string = yield call(getIdOfFileOrFolder, currFileParentFolderId, currFileName);
+    
+            if (currFileId === "") {
+              // file does not exist, create file
+              yield call(console.log, "creating ", currFileName);
+              const res: PersistenceFile = yield call(createFile, currFileName, currFileParentFolderId, MIME_SOURCE, currFileContent, config);
+              currFileId = res.id;
+            }
+
+            yield call (console.log, "name", currFileName, "content", currFileContent
+            , "parent folder id", currFileParentFolderId);
+            
+            const currPersistenceFile: PersistenceFile = {
+              name: currFileName, 
+              id: currFileId, 
+              parentId: currFileParentFolderId, 
+              lastSaved: new Date(), 
+              path: currFullFilePath};
+            yield put(actions.addPersistenceFile(currPersistenceFile));
+
+            yield call(console.log, "updating ", currFileName, " id: ", currFileId);
+            yield call(updateFile, currFileId, currFileName, MIME_SOURCE, currFileContent, config);
+
+            let currParentFolderName = currFileParentFolders[currFileParentFolders.length - 1];
+            if (currParentFolderName !== "") currParentFolderName = topLevelFolderName;
+            const parentPersistenceFile: PersistenceFile = {
+              name: currParentFolderName,
+              id: currFileParentFolderId,
+              path: regexResult[1].slice(0,-1),
+              parentId: gcfirResult.parentId,
+              isFolder: true
+            }
+            yield put(actions.addPersistenceFile(parentPersistenceFile));
+           
+    
+            yield call(showSuccessMessage, `${currFileName} successfully saved to Google Drive.`, 1000);
+            yield call(store.dispatch, actions.updateRefreshFileViewKey());
+          }
+
+          yield put(actions.playgroundUpdatePersistenceFolder({ 
+            id: topLevelFolderId, 
+            name: topLevelFolderName, 
+            parentId: saveToDir.id, 
+            lastSaved: new Date() })); 
+
+          yield call(store.dispatch, actions.enableFileSystemContextMenus());
+          yield call(store.dispatch, actions.updateRefreshFileViewKey());
+
+          yield call(showSuccessMessage, `${topLevelFolderName} successfully saved to Google Drive.`, 1000);
+          return;
+        }
+        
+        // From here onwards, code assumes every file is contained in PersistenceFileArray
+        // Instant sync for renaming/deleting/creating files/folders ensures that is the case if folder is opened
+        // New files will not be created from here onwards - every operation is an update operation
+
+        toastKey = yield call(showMessage, {
+          message: `Saving ${currFolderObject.name}...`,
+          timeout: 0,
+          intent: Intent.PRIMARY
+        });
+
+        console.log("currFolderObj", currFolderObject);
+        const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
+        for (const currFullFilePath of Object.keys(currFiles)) {
+          const currFileContent = currFiles[currFullFilePath];
+          const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(currFullFilePath);
+          if (regexResult === null) {
+            yield call(console.log, "Regex null!");
+            continue;
+          }
+          const currFileName = regexResult[2] + regexResult[3];
+          //const currFileParentFolders: string[] = regexResult[1].slice(
+          //  ("/playground/" + currFolderObject.name + "/").length, -1)
+          //  .split("/");
+
+          // /fold1/ becomes ["fold1"]
+          // /fold1/fold2/ becomes ["fold1", "fold2"]
+          // If in top level folder, becomes [""]
+
+          const currPersistenceFile = persistenceFileArray.find(e => e.path === currFullFilePath);
+          if (currPersistenceFile === undefined) {
+            yield call(console.log, "this file is not in persistenceFileArray: ", currFullFilePath); // TODO change to Error?
+            continue;
+          }
+
+          if (!currPersistenceFile.id || !currPersistenceFile.parentId) {
+            // get folder
+            yield call(console.log, "this file does not have id/parentId: ", currFullFilePath); // TODO change to Error?
+            continue;
+          }
+
+          const currFileId = currPersistenceFile.id!;
+          const currFileParentFolderId = currPersistenceFile.parentId!;
+          
+          //const currFileParentFolderId: string = yield call(getContainingFolderIdRecursively, currFileParentFolders,
+          //  currFolderObject.id);
+
+          yield call (console.log, "name", currFileName, "content", currFileContent
+          , "parent folder id", currFileParentFolderId);
+          
+
+          //const currFileId: string = yield call(getFileFromFolder, currFileParentFolderId, currFileName);
+
+          //if (currFileId === "") {
+            // file does not exist, create file
+            // TODO: should never come here
+            //yield call(console.log, "creating ", currFileName);
+            //yield call(createFile, currFileName, currFileParentFolderId, MIME_SOURCE, currFileContent, config);
+
+          yield call(console.log, "updating ", currFileName, " id: ", currFileId);
+          yield call(updateFile, currFileId, currFileName, MIME_SOURCE, currFileContent, config);
+          
+          currPersistenceFile.lastSaved = new Date();
+          yield put(actions.addPersistenceFile(currPersistenceFile));
+
+          yield call(showSuccessMessage, `${currFileName} successfully saved to Google Drive.`, 1000);
+
+          // TODO: create getFileIdRecursively, that uses currFileParentFolderId
+          //         to query GDrive api to get a particular file's GDrive id OR modify reading func to save each obj's id somewhere
+          //       Then use updateFile like in persistence_save_file to update files that exist
+          //         on GDrive, or createFile if the file doesn't exist
+        
         }
 
-        const currFileId = currPersistenceFile.id!;
-        const currFileParentFolderId = currPersistenceFile.parentId!;
-        
-        //const currFileParentFolderId: string = yield call(getContainingFolderIdRecursively, currFileParentFolders,
-        //  currFolderObject.id);
-
-        yield call (console.log, "name", currFileName, "content", currFileContent
-        , "parent folder id", currFileParentFolderId);
-        
-
-        //const currFileId: string = yield call(getFileFromFolder, currFileParentFolderId, currFileName);
-
-        //if (currFileId === "") {
-          // file does not exist, create file
-          // TODO: should never come here
-          //yield call(console.log, "creating ", currFileName);
-          //yield call(createFile, currFileName, currFileParentFolderId, MIME_SOURCE, currFileContent, config);
-
-        yield call(console.log, "updating ", currFileName, " id: ", currFileId);
-        yield call(updateFile, currFileId, currFileName, MIME_SOURCE, currFileContent, config);
-        
-        currPersistenceFile.lastSaved = new Date();
-        yield put(actions.addPersistenceFile(currPersistenceFile));
-
-        yield call(showSuccessMessage, `${currFileName} successfully saved to Google Drive.`, 1000);
-
-        // TODO: create getFileIdRecursively, that uses currFileParentFolderId
-        //         to query GDrive api to get a particular file's GDrive id OR modify reading func to save each obj's id somewhere
-        //       Then use updateFile like in persistence_save_file to update files that exist
-        //         on GDrive, or createFile if the file doesn't exist
-
-        // TODO: lazy loading of files?
-        //         just show the folder structure, then load the file - to turn into an issue
+        yield put(actions.playgroundUpdatePersistenceFolder({ 
+          id: currFolderObject.id, 
+          name: currFolderObject.name, 
+          parentId: currFolderObject.parentId, 
+          lastSaved: new Date() }));
+        yield call(store.dispatch, actions.updateRefreshFileViewKey());
+        yield call(showSuccessMessage, `${currFolderObject.name} successfully saved to Google Drive.`, 1000);
+      } catch (ex) {
+        console.error(ex);
+        yield call(showWarningMessage, `Error while performing Save All.`, 1000);
+      } finally {
+        if (toastKey) {
+          dismiss(toastKey);
+        }
+        yield call(store.dispatch, actions.enableFileSystemContextMenus());
+        yield call(store.dispatch, actions.updateRefreshFileViewKey());
       }
-
-      // Ddededededebug
-      //const t: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
-      yield put(actions.playgroundUpdatePersistenceFolder({ id: currFolderObject.id, name: currFolderObject.name, parentId: currFolderObject.parentId, lastSaved: new Date() })); // TODO wut is this
-      //yield call(console.log, t);
-
-      // Turn on folder mode TODO enable folder mode
-      //yield call (store.dispatch, actions.setFolderMode("playground", true));
-      yield call(store.dispatch, actions.enableFileSystemContextMenus());
-      yield call(store.dispatch, actions.updateRefreshFileViewKey());
-
-      yield call(showSuccessMessage, `${currFolderObject.name} successfully saved to Google Drive.`, 1000);
-
-      
-      // Case 1: Open picker to select location for saving, similar to save all
-      // 1a No folder exists on remote, simple save
-      // 1b Folder exists, popup confirmation to destroy remote folder and replace
-
-      // Case 2: Location already decided (PersistenceObject exists with isFolder === true)
-      // TODO: Modify functions here to update string[] in persistenceObject for Folder
-      // 2a No changes to folder/file structure, only content needs updating
-      // TODO Maybe update the colors of the side view as well to reflect which have been modified?
-      // 2b Changes to folder/file structure -> Delete and replace changed files
     }
   );
 
@@ -987,6 +1093,16 @@ export function* persistenceSaga(): SagaIterator {
           `Folder ${newFolderName} successfully renamed in Google Drive.`,
           1000
         );
+
+        const [currFolderObject] = yield select(
+          (state: OverallState) => [
+            state.playground.persistenceFile
+          ]
+        );
+        if (currFolderObject.name === oldFolderName) {
+          // update playground PersistenceFile
+          yield put(actions.playgroundUpdatePersistenceFolder({...currFolderObject, name: newFolderName})); 
+        }
       } catch (ex) {
         console.error(ex);
         yield call(showWarningMessage, `Error while renaming folder.`, 1000);
@@ -1196,8 +1312,8 @@ async function getFilesOfFolder( // recursively get files
   return ans;
 }
 
-/*
-async function getFileFromFolder( // returns string id or empty string if failed
+
+async function getIdOfFileOrFolder( // returns string id or empty string if failed
   parentFolderId: string,
   fileName: string
 ): Promise<string> {
@@ -1225,7 +1341,7 @@ async function getFileFromFolder( // returns string id or empty string if failed
     return "";
   }
 }
-*/
+
 
 function deleteFileOrFolder(
   id: string
@@ -1245,13 +1361,13 @@ function renameFileOrFolder(
   });
 }
 
-async function getContainingFolderIdRecursively( // TODO memoize?
+async function getContainingFolderIdRecursively(
   parentFolders: string[],
   topFolderId: string,
   currDepth: integer = 0
-): Promise<string> {
+): Promise<{id: string, parentId: string}> {
   if (parentFolders[0] === '' || currDepth === parentFolders.length) {
-    return topFolderId;
+    return {id: topFolderId, parentId: ""};
   }
   const currFolderName = parentFolders[parentFolders.length - 1 - currDepth];
 
@@ -1259,7 +1375,7 @@ async function getContainingFolderIdRecursively( // TODO memoize?
     parentFolders,
     topFolderId,
     currDepth + 1
-    );
+    ).then(r => r.id);
 
   let folderList: gapi.client.drive.File[] | undefined;
 
@@ -1273,7 +1389,7 @@ async function getContainingFolderIdRecursively( // TODO memoize?
   if (!folderList) {
     console.log("create!", currFolderName);
     const newId = await createFolderAndReturnId(immediateParentFolderId, currFolderName);
-    return newId;
+    return {id: newId, parentId: immediateParentFolderId};
   }
 
   console.log("folderList gcfir", folderList);
@@ -1281,13 +1397,13 @@ async function getContainingFolderIdRecursively( // TODO memoize?
   for (const currFolder of folderList) {
     if (currFolder.name === currFolderName) {
       console.log("found ", currFolder.name, " and id is ", currFolder.id);
-      return currFolder.id!;
+      return {id: currFolder.id!, parentId: immediateParentFolderId};
     }
   }
   
   console.log("create!", currFolderName);
   const newId = await createFolderAndReturnId(immediateParentFolderId, currFolderName);
-  return newId;
+  return {id: newId, parentId: immediateParentFolderId};
   
 }
 
@@ -1308,8 +1424,6 @@ function createFile(
       ...config
     }
   };
-
-  console.log("METATAAAAAA", meta);
 
   const { body, headers } = createMultipartBody(meta, contents, mimeType);
 
