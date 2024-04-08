@@ -51,7 +51,7 @@ export async function javaRun(javaCode: string, context: Context) {
     if (path.startsWith('modules')) {
       const module = path.split('/')[1] as string;
       const moduleFuncs = await loadSourceModules(new Set([module]), context, true);
-      const { proxy } = createModuleProxy(module, moduleFuncs);
+      const { proxy } = createModuleProxy(module, moduleFuncs[module]);
       return { default: proxy };
     }
     return await import(`java-slang/dist/jvm/stdlib/${path}.js`);
