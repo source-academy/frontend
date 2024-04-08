@@ -1,5 +1,4 @@
-import { FocusStyleManager } from '@blueprintjs/core';
-import { Icon } from '@blueprintjs/core';
+import { FocusStyleManager, Icon, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useFullscreen } from '@mantine/hooks';
 import { Enable, NumberSize, Resizable, ResizableProps, ResizeCallback } from 're-resizable';
@@ -191,13 +190,25 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   );
 
   // This is a custom hook imported from @mantine/hooks that handles the fullscreen logic
-  // It returns a ref to attach to the element that should be fullscreened,
+  // It returns a ref callback function to attach to the element that should be fullscreened,
   // a function to toggle fullscreen and a boolean indicating whether the element is fullscreen
   const {
     ref: fullscreenRef,
     toggle: toggleFullscreen,
     fullscreen: isFullscreen
   } = useFullscreen<HTMLDivElement>();
+
+  const fullscreenContainerRef = React.useRef<HTMLDivElement | null>(null);
+  const setFullscreenRefs = React.useCallback(
+    (node: HTMLDivElement | null) => {
+      // Refs returned by useRef()
+      fullscreenContainerRef.current = node;
+
+      // Ref callback function from useFullscreen
+      fullscreenRef(node);
+    },
+    [fullscreenRef]
+  );
 
   return (
     <div className="workspace">
@@ -218,14 +229,18 @@ const Workspace: React.FC<WorkspaceProps> = props => {
         <div className="row content-parent" ref={contentContainerDiv}>
           <div className="editor-divider" ref={editorDividerDiv} />
           <Resizable {...editorResizableProps()}>{createWorkspaceInput(props)}</Resizable>
-          <div className="right-parent" ref={fullscreenRef}>
-            <Icon
-              id="fullscreen-button"
-              icon={isFullscreen ? IconNames.MINIMIZE : IconNames.MAXIMIZE}
-              color="white"
-              htmlTitle={isFullscreen ? 'Exit full screen' : 'Full screen'}
-              onClick={toggleFullscreen}
-            />
+          <div className="right-parent" ref={setFullscreenRefs}>
+            <Tooltip
+              className="fullscreen-button"
+              content={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+              portalContainer={fullscreenContainerRef.current || undefined}
+            >
+              <Icon
+                icon={isFullscreen ? IconNames.MINIMIZE : IconNames.MAXIMIZE}
+                color="white"
+                onClick={toggleFullscreen}
+              />
+            </Tooltip>
             {props.sideContentIsResizeable === undefined || props.sideContentIsResizeable
               ? resizableSideContent
               : sideContent}
