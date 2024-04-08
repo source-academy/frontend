@@ -67,7 +67,7 @@ export type AssessmentOverview = {
   coverImage: string;
   fileName?: string; // For mission control
   id: number;
-  isPublished: boolean;
+  isPublished: boolean; // refers to assessment as a whole being published
   hasVotingFeatures: boolean;
   hasTokenCounter?: boolean;
   isVotingPublished?: boolean;
@@ -76,7 +76,7 @@ export type AssessmentOverview = {
   number?: string; // For mission control
   openAt: string;
   private?: boolean;
-  progress: ProgressStatus;
+  isGradingPublished: boolean; // refers to specific assessment submission being published
   reading?: string; // For mission control
   shortSummary: string;
   status: AssessmentStatus;
@@ -259,7 +259,7 @@ export const overviewTemplate = (): AssessmentOverview => {
     shortSummary: 'Insert short summary here',
     status: AssessmentStatuses.not_attempted,
     story: 'mission',
-    progress: ProgressStatuses.not_attempted,
+    isGradingPublished: false,
     xp: 0,
     maxTeamSize: 1,
     hasVotingFeatures: false

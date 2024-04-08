@@ -13,7 +13,6 @@ import {
   IProgrammingQuestion,
   Library,
   MCQChoice,
-  ProgressStatuses,
   Question,
   Testcase,
   TestcaseTypes
@@ -85,7 +84,7 @@ const makeAssessmentOverview = (result: any, maxXpVal: number): AssessmentOvervi
     shortSummary: task.WEBSUMMARY ? task.WEBSUMMARY[0] : '',
     status: AssessmentStatuses.attempting,
     story: rawOverview.story,
-    progress: ProgressStatuses.attempting,
+    isGradingPublished: false,
     xp: 0,
     maxTeamSize: 1,
     hasVotingFeatures: false

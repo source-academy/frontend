@@ -10,7 +10,6 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   Library,
-  ProgressStatuses,
   TestcaseTypes
 } from '../assessment/AssessmentTypes';
 
@@ -126,7 +125,7 @@ const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: 'mission-1',
     xp: 0,
-    progress: ProgressStatuses.not_attempted,
+    isGradingPublished: false,
     maxTeamSize: 1,
     hasVotingFeatures: false
   }
@@ -161,7 +160,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.attempted,
     story: 'mission-1',
     xp: 1,
-    progress: ProgressStatuses.attempted,
+    isGradingPublished: false,
     maxTeamSize: 4,
     hasVotingFeatures: false
   },
@@ -181,7 +180,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.attempting,
     story: 'mission-2',
     xp: 2,
-    progress: ProgressStatuses.attempting,
+    isGradingPublished: false,
     maxTeamSize: 1,
     hasVotingFeatures: false
   },
@@ -201,7 +200,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: 'sidequest-2.1',
     xp: 3,
-    progress: ProgressStatuses.not_attempted,
+    isGradingPublished: false,
     maxTeamSize: 2,
     hasVotingFeatures: false
   },
@@ -221,7 +220,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: null,
     xp: 0,
-    progress: ProgressStatuses.not_attempted,
+    isGradingPublished: false,
     maxTeamSize: 2,
     hasVotingFeatures: false
   },
@@ -243,7 +242,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     xp: 3,
     private: true,
     maxTeamSize: 1,
-    progress: ProgressStatuses.not_attempted,
+    isGradingPublished: false,
     hasVotingFeatures: false
   }
 ];
@@ -265,7 +264,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: 'mission-3',
     xp: 800,
-    progress: ProgressStatuses.submitted,
+    isGradingPublished: false,
     maxTeamSize: 1,
     hasVotingFeatures: false
   },
@@ -281,11 +280,11 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Closed (not graded) Sidequest',
     shortSummary:
-      'This is a test for the grading status tooltip when the assessment is not graded. It should render as a red cross.',
+      'This is a test for the grading status tooltip when the assessment is not published. It should render as a yellow waiting clock.',
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 500,
-    progress: ProgressStatuses.not_attempted,
+    isGradingPublished: false,
     maxTeamSize: 1,
     hasVotingFeatures: false
   },
@@ -300,12 +299,12 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     earlySubmissionXp: 0,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Closed (fully graded) Sidequest',
-    shortSummary:
-      'This is a test for the grading status tooltip when the assessment is fully graded. It should render as a green tick. This sidequest links to the mock Sidequest 4.',
+    shortSummary: `This is a test for the grading status tooltip when a manually graded assessment is fully graded but not published.
+       It should still render as a yellow clock. This sidequest links to the mock Sidequest 4.`,
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 150,
-    progress: ProgressStatuses.not_attempted,
+    isGradingPublished: false,
     maxTeamSize: 1,
     hasVotingFeatures: false
   },
@@ -321,11 +320,11 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Ungraded assessment',
     shortSummary:
-      'This is a test for the grading status tooltip when the assessment does not require manual grading (e.g. paths and contests). It should render as a blue disable sign. This sidequest links to the mock Sidequest 4.',
+      'This is a test for the grading status tooltip when the assessment does not require manual grading (e.g. paths and contests) but is unpublished. It should still render as a yellow clock. This sidequest links to the mock Sidequest 4.',
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 100,
-    progress: ProgressStatuses.not_attempted,
+    isGradingPublished: false,
     maxTeamSize: 1,
     hasVotingFeatures: false
   }

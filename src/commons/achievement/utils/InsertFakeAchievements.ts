@@ -9,13 +9,12 @@ import {
   AssessmentConfiguration,
   AssessmentOverview,
   AssessmentStatuses,
-  ProgressStatuses
 } from '../../assessment/AssessmentTypes';
 import AchievementInferencer from './AchievementInferencer';
 import { isExpired, isReleased } from './DateHelper';
 
 function assessmentPublished(assessmentOverview: AssessmentOverview): boolean {
-  return assessmentOverview.progress === ProgressStatuses.published;
+  return assessmentOverview.isGradingPublished;
 }
 
 function insertFakeAchievements(
@@ -72,7 +71,7 @@ function insertFakeAchievements(
               requiredCompletionFrac: 0
             }
           },
-          assessmentOverview.progress === ProgressStatuses.published
+          assessmentOverview.isGradingPublished
         );
       }
 

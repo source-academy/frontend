@@ -50,9 +50,7 @@ import {
   AssessmentConfiguration,
   AssessmentOverview,
   AssessmentStatuses,
-  AssessmentWorkspaceParams,
-  ProgressStatus,
-  ProgressStatuses
+  AssessmentWorkspaceParams
 } from './AssessmentTypes';
 
 export type AssessmentProps = {
@@ -162,9 +160,8 @@ const Assessment: React.FC<AssessmentProps> = props => {
     overview: AssessmentOverview,
     index: number,
     renderAttemptButton: boolean,
-    renderProgressStatus: boolean
+    renderGradingTooltip: boolean
   ) => {
-    const showGrade = overview.progress === ProgressStatuses.published;
     return (
       <div key={index}>
         <Card className="row listing" elevation={Elevation.ONE}>
@@ -181,10 +178,12 @@ const Assessment: React.FC<AssessmentProps> = props => {
             />
           </div>
           <div className={classNames('listing-text', !isMobileBreakpoint && 'col-xs-9')}>
-            {makeOverviewCardTitle(overview, index, renderProgressStatus)}
+            {makeOverviewCardTitle(overview, index, renderGradingTooltip)}
             <div className="listing-xp">
               <H6>
-                {showGrade ? `XP: ${overview.xp} / ${overview.maxXp}` : `Max XP: ${overview.maxXp}`}
+                {overview.isGradingPublished
+                  ? `XP: ${overview.xp} / ${overview.maxXp}`
+                  : `Max XP: ${overview.maxXp}`}
               </H6>
             </div>
             <div className="listing-description">
@@ -241,7 +240,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
               <Icon icon="lock" />
             </Tooltip2>
           ) : null}
-          {renderProgressStatus ? makeProgressStatus(overview.progress) : null}
+          {renderProgressStatus ? showGradingTooltip(overview.isGradingPublished) : null}
         </H4>
       </Text>
       <div className="listing-button">{makeSubmissionButton(overview, index)}</div>
@@ -421,25 +420,20 @@ const Assessment: React.FC<AssessmentProps> = props => {
   );
 };
 
-const makeProgressStatus = (progress: ProgressStatus) => {
+const showGradingTooltip = (isGradingPublished: boolean) => {
   let iconName: IconName;
   let intent: Intent;
   let tooltip: string;
 
-  if (progress === ProgressStatuses.published) {
+  if (isGradingPublished) {
     iconName = IconNames.TICK;
     intent = Intent.SUCCESS;
     tooltip = 'Fully graded';
-  } else if (progress === ProgressStatuses.graded || progress === ProgressStatuses.submitted) {
-    // shh, hide actual grading progress from users
+  } else {
+    // shh, hide actual grading progress from users even if graded
     iconName = IconNames.TIME;
     intent = Intent.WARNING;
     tooltip = 'Grading in progress';
-  } else {
-    // The user wouldnt have seen this progress status without submitting. something wrong here.
-    iconName = IconNames.DISABLE;
-    intent = Intent.PRIMARY;
-    tooltip = `Not applicable`;
   }
 
   return (

@@ -7,7 +7,6 @@ import { fetchAssessmentOverviews, fetchTotalXp } from '../application/actions/S
 import {
   AssessmentStatuses,
   AssessmentType,
-  ProgressStatuses
 } from '../assessment/AssessmentTypes';
 import Constants from '../utils/Constants';
 import { useSession } from '../utils/Hooks';
@@ -130,7 +129,7 @@ const Profile: React.FC<ProfileProps> = props => {
 
       // Build condensed assessment cards from an array of assessments
       const summaryCallouts = assessmentOverviews!
-        .filter(item => item.progress === ProgressStatuses.published)
+        .filter(item => item.isGradingPublished)
         .map((assessment, index) => {
           return (
             <ProfileCard
