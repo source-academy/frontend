@@ -38,6 +38,7 @@ import {
   isGlobalFn,
   isNonGlobalFn,
   isPrimitiveData,
+  isSourceObject,
   isStreamFn,
   isUnassigned,
   setDifference
@@ -296,11 +297,12 @@ export class Layout {
       Object.entries(Layout.globalEnvNode.environment.head).map(([key, value]) => [value, key])
     );
 
+    let i = 0;
     const newHead = {};
     const newHeap = new Heap();
     for (const fn of referencedFns) {
       if (isClosure(fn)) newHeap.add(fn);
-      if (isGlobalFn(fn)) newHead[functionNames.get(fn)!] = fn;
+      if (isGlobalFn(fn)) newHead[functionNames.get(fn) ?? `${i++}`] = fn;
     }
 
     // add any arrays from the original heap to the new heap
@@ -373,8 +375,10 @@ export class Layout {
       } else if (isGlobalFn(data)) {
         assert(reference instanceof Binding);
         newValue = new GlobalFnValue(data, reference);
-      } else {
+      } else if (isNonGlobalFn(data)) {
         newValue = new FnValue(data, reference);
+      } else if (isSourceObject(data)) {
+        return new PrimitiveValue('<' + data.toReplString() + '>', reference);
       }
 
       Layout.values.set(isBuiltInFn(data) || isStreamFn(data) ? data : data.id, newValue);

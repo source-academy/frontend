@@ -45,6 +45,7 @@ import {
   PredefinedFn,
   Primitive,
   ReferenceType,
+  SourceObject,
   StreamFn
 } from './CseMachineTypes';
 
@@ -68,6 +69,11 @@ export function isObject(x: any): x is object {
 /** Returns `true` if `object` is empty */
 export function isEmptyObject(object: Object): object is EmptyObject {
   return Object.keys(object).length === 0;
+}
+
+/** Returns `true` if `x` is a source object, e.g. runes */
+export function isSourceObject(x: any): x is SourceObject {
+  return isObject(x) && 'toReplString' in x && isFunction(x.toReplString);
 }
 
 /** Returns `true` if `object` is `Environment` */
@@ -121,14 +127,15 @@ export function isPredefinedFn(data: Data): data is PredefinedFn {
   return isClosure(data) && data.predefined;
 }
 
+const closureFields = ['id', 'environment', 'functionName', 'predefined', 'node', 'originalNode'];
+
 /** Returns `true` if `data` is a JS Slang closure */
 export function isClosure(data: Data): data is Closure {
+  const obj = {};
   return (
     data instanceof JsSlangClosure ||
     (isFunction(data) &&
-      {}.hasOwnProperty.call(data, 'environment') &&
-      {}.hasOwnProperty.call(data, 'functionName') &&
-      {}.hasOwnProperty.call(data, 'predefined'))
+      closureFields.reduce((prev, field) => prev && obj.hasOwnProperty.call(data, field), true))
   );
 }
 
@@ -318,13 +325,16 @@ export function getTextHeight(
   return numberOfLines * fontSize;
 }
 
-/** Returns the parameter string of the given function */
+/** Returns the parameter string of the given function, surrounded by brackets */
 export function getParamsText(data: Closure | GlobalFn | StreamFn): string {
   if (isClosure(data)) {
-    return data.node.params.map((node: any) => node.name).join(',');
+    let params = data.functionName.slice(0, data.functionName.indexOf('=>')).trim();
+    console.log(params);
+    if (!params.startsWith('(')) params = '(' + params + ')';
+    return params;
   } else {
     const fnString = data.toString();
-    return fnString.substring(fnString.indexOf('(') + 1, fnString.indexOf(')')).trim();
+    return fnString.substring(fnString.indexOf('('), fnString.indexOf(')') + 1);
   }
 }
 
@@ -333,7 +343,7 @@ export function getBodyText(data: Closure | GlobalFn | StreamFn): string {
   const fnString = data.toString();
   if (isClosure(data)) {
     let body =
-      data.node.type === 'FunctionExpression' || fnString.substring(0, 8) === 'function'
+      fnString.substring(0, 8) === 'function'
         ? fnString.substring(fnString.indexOf('{'))
         : fnString.substring(fnString.indexOf('=') + 3);
 

@@ -87,7 +87,7 @@ export class FnValue extends Value implements IHoverable {
     this.enclosingFrame = Frame.getFrom(this.data.environment);
     this.fnName = isStreamFn(this.data) ? '' : this.data.functionName;
 
-    this.paramsText = `params: (${getParamsText(this.data)})`;
+    this.paramsText = `params: ${getParamsText(this.data)}`;
     this.bodyText = `body: ${getBodyText(this.data)}`;
     this.exportBodyText =
       (this.bodyText.length > 23 ? this.bodyText.slice(0, 20) : this.bodyText)

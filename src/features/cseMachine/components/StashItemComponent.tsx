@@ -12,6 +12,7 @@ import {
   getTextWidth,
   isDataArray,
   isNonGlobalFn,
+  isSourceObject,
   isStashItemInDanger,
   setHoveredCursor,
   setHoveredStyle,
@@ -50,6 +51,8 @@ export class StashItemComponent extends Visible implements IHoverable {
         ? arrowTo
           ? 'pair/array'
           : JSON.stringify(val)
+        : isSourceObject(val)
+        ? '<' + val.toReplString() + '>'
         : String(value);
     };
     this.text = truncateText(

@@ -61,7 +61,7 @@ export class GlobalFnValue extends Value implements IHoverable {
     this._width = this.radius * 4;
     this._height = this.radius * 2;
 
-    this.paramsText = `params: (${getParamsText(this.data)})`;
+    this.paramsText = `params: ${getParamsText(this.data)}`;
     this.bodyText = `body: ${getBodyText(this.data)}`;
     this.exportBodyText =
       (this.bodyText.length > 23 ? this.bodyText.slice(0, 20) : this.bodyText)
