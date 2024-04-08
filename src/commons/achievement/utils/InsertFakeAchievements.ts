@@ -8,7 +8,7 @@ import { GoalType } from '../../../features/achievement/AchievementTypes';
 import {
   AssessmentConfiguration,
   AssessmentOverview,
-  AssessmentStatuses,
+  AssessmentStatuses
 } from '../../assessment/AssessmentTypes';
 import AchievementInferencer from './AchievementInferencer';
 import { isExpired, isReleased } from './DateHelper';
