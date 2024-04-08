@@ -34,6 +34,7 @@ export const mockGradingOverviews: GradingOverview[] = [
     submissionId: 1,
     submissionStatus: AssessmentStatuses.submitted,
     progress: ProgressStatuses.published,
+    isGradingPublished: true,
     groupName: '1D',
     questionCount: 6,
     gradedCount: 6
@@ -56,6 +57,7 @@ export const mockGradingOverviews: GradingOverview[] = [
     submissionId: 2,
     submissionStatus: AssessmentStatuses.submitted,
     progress: ProgressStatuses.submitted,
+    isGradingPublished: false,
     groupName: '1F',
     questionCount: 6,
     gradedCount: 2
@@ -78,6 +80,7 @@ export const mockGradingOverviews: GradingOverview[] = [
     submissionId: 3,
     submissionStatus: AssessmentStatuses.submitted,
     progress: ProgressStatuses.graded,
+    isGradingPublished: false,
     groupName: '1F',
     questionCount: 0,
     gradedCount: 0

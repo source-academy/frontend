@@ -680,6 +680,7 @@ export const getGradingOverviews = async (
           submissionStatus: overview.status,
           groupName: overview.student ? overview.student.groupName : '-',
           groupLeaderId: overview.student ? overview.student.groupLeaderId : undefined,
+          isGradingPublished: overview.isGradingPublished,
           progress: backendParamsToProgressStatus(
             overview.assessment.isManuallyGraded,
             overview.isGradingPublished,

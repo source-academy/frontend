@@ -23,6 +23,7 @@ export type GradingOverview = {
   xpAdjustment: number;
   currentXp: number;
   maxXp: number;
+  isGradingPublished: boolean;
   progress: ProgressStatus;
   studentId: number;
   studentName: string | undefined;
