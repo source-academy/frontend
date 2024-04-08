@@ -1,5 +1,5 @@
 import { Stash } from 'js-slang/dist/cse-machine/interpreter';
-import { Value } from 'js-slang/dist/types';
+import { Chapter, Value } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group } from 'react-konva';
@@ -18,18 +18,20 @@ export class StashStack extends Visible implements IHoverable {
 
   constructor(
     /** the stash object */
-    readonly stash: Stash
+    readonly stash: Stash,
+    readonly chapter: Chapter
   ) {
     super();
     this._x = ControlStashConfig.StashPosX;
     this._y = ControlStashConfig.StashPosY;
     this._width = 0;
     this._height = 0;
+    this.chapter = chapter;
 
     // Function to convert the stack items to their components
     let i = 0;
     const stashItemToComponent = (stashItem: Value) => {
-      const component = getStashItemComponent(stashItem, this._width, i);
+      const component = getStashItemComponent(stashItem, this._width, i, this.chapter);
       this._width += component.width();
       this._height = Math.max(this._height, component.height());
       i += 1;

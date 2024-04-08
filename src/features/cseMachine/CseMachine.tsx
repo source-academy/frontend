@@ -84,7 +84,8 @@ export default class CseMachine {
     Layout.setContext(
       context.runtime.environmentTree as EnvTree,
       context.runtime.control,
-      context.runtime.stash
+      context.runtime.stash,
+      context.chapter
     );
     this.setVis(Layout.draw());
     this.setIsStepLimitExceeded(context.runtime.control.isEmpty());

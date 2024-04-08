@@ -1,3 +1,5 @@
+import { estreeDecode } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/encoder-visitor';
+import { unparse } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/reverse_parser';
 import {
   AppInstr,
   ArrLitInstr,
@@ -9,12 +11,13 @@ import {
   InstrType,
   UnOpInstr
 } from 'js-slang/dist/cse-machine/types';
-import { Environment, Value as StashValue } from 'js-slang/dist/types';
+import { Chapter, Environment, Value as StashValue } from 'js-slang/dist/types';
 import { astToString } from 'js-slang/dist/utils/ast/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
 import { cloneDeep } from 'lodash';
+import { isSchemeLanguage } from 'src/commons/application/ApplicationTypes';
 import classes from 'src/styles/Draggable.module.scss';
 
 import { ArrayUnit } from './components/ArrayUnit';
@@ -513,12 +516,26 @@ export function getControlItemComponent(
   stackHeight: number,
   index: number,
   highlightOnHover: () => void,
-  unhighlightOnHover: () => void
+  unhighlightOnHover: () => void,
+  chapter: Chapter
 ): ControlItemComponent {
   const topItem = CseMachine.getStackTruncated()
     ? index === Math.min(Layout.control.size() - 1, 9)
     : index === Layout.control.size() - 1;
   if (!isInstr(controlItem)) {
+    if (isSchemeLanguage(chapter)) {
+      // use the js-slang decoder on the control item
+      controlItem = estreeDecode(controlItem as any);
+      const text = unparse(controlItem as any);
+      return new ControlItemComponent(
+        text,
+        text,
+        stackHeight,
+        highlightOnHover,
+        unhighlightOnHover,
+        topItem
+      );
+    }
     switch (controlItem.type) {
       case 'Program':
         // If the control item is the whole program
@@ -737,6 +754,24 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
+      case InstrType.GENERATE_CONT:
+        return new ControlItemComponent(
+          'generate cont',
+          'Generate continuation',
+          stackHeight,
+          highlightOnHover,
+          unhighlightOnHover,
+          topItem
+        );
+      case InstrType.RESUME_CONT:
+        return new ControlItemComponent(
+          'call cont',
+          'call a continuation',
+          stackHeight,
+          highlightOnHover,
+          unhighlightOnHover,
+          topItem
+        );
       default:
         return new ControlItemComponent(
           'INSTRUCTION',
@@ -750,7 +785,16 @@ export function getControlItemComponent(
   }
 }
 
-export function getStashItemComponent(stashItem: StashValue, stackHeight: number, index: number) {
+export function getStashItemComponent(
+  stashItem: StashValue,
+  stackHeight: number,
+  index: number,
+  chapter: Chapter
+): StashItemComponent {
+  if (isSchemeLanguage(chapter)) {
+    // we can use schemeVisualise to get the representation of the value
+    // TODO
+  }
   if (isClosure(stashItem) || isGlobalFn(stashItem) || isDataArray(stashItem)) {
     for (const level of Layout.levels) {
       for (const frame of level.frames) {
