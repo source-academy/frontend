@@ -21,7 +21,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
     this._x = from.x();
     this._y = from.y();
   }
-  
+
   path(): string {
     return this._path;
   }
