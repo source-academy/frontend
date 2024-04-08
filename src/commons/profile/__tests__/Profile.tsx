@@ -9,7 +9,6 @@ import { assertType } from 'src/commons/utils/TypeHelper';
 import {
   AssessmentConfiguration,
   AssessmentStatuses,
-  ProgressStatuses
 } from '../../assessment/AssessmentTypes';
 import { mockAssessmentOverviews } from '../../mocks/AssessmentMocks';
 import Profile, { ProfileProps } from '../Profile';

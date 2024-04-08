@@ -67,7 +67,7 @@ export type AssessmentOverview = {
   coverImage: string;
   fileName?: string; // For mission control
   id: number;
-  isPublished: boolean; // refers to assessment as a whole being published
+  isPublished?: boolean; // refers to assessment as a whole being published
   hasVotingFeatures: boolean;
   hasTokenCounter?: boolean;
   isVotingPublished?: boolean;
