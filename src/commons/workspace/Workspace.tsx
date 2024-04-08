@@ -1,4 +1,7 @@
 import { FocusStyleManager } from '@blueprintjs/core';
+import { Icon } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import { useFullscreen } from '@mantine/hooks';
 import { Enable, NumberSize, Resizable, ResizableProps, ResizeCallback } from 're-resizable';
 import { Direction } from 're-resizable/lib/resizer';
 import React from 'react';
@@ -187,6 +190,15 @@ const Workspace: React.FC<WorkspaceProps> = props => {
     </Resizable>
   );
 
+  // This is a custom hook imported from @mantine/hooks that handles the fullscreen logic
+  // It returns a ref to attach to the element that should be fullscreened,
+  // a function to toggle fullscreen and a boolean indicating whether the element is fullscreen
+  const {
+    ref: fullscreenRef,
+    toggle: toggleFullscreen,
+    fullscreen: isFullscreen
+  } = useFullscreen<HTMLDivElement>();
+
   return (
     <div className="workspace">
       <Prompt
@@ -206,7 +218,14 @@ const Workspace: React.FC<WorkspaceProps> = props => {
         <div className="row content-parent" ref={contentContainerDiv}>
           <div className="editor-divider" ref={editorDividerDiv} />
           <Resizable {...editorResizableProps()}>{createWorkspaceInput(props)}</Resizable>
-          <div className="right-parent">
+          <div className="right-parent" ref={fullscreenRef}>
+            <Icon
+              id="fullscreen-button"
+              icon={isFullscreen ? IconNames.MINIMIZE : IconNames.MAXIMIZE}
+              color="white"
+              htmlTitle={isFullscreen ? 'Exit full screen' : 'Full screen'}
+              onClick={toggleFullscreen}
+            />
             {props.sideContentIsResizeable === undefined || props.sideContentIsResizeable
               ? resizableSideContent
               : sideContent}
