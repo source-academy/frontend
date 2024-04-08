@@ -203,8 +203,7 @@ export class Layout {
    * objects into the global environment head and heap
    */
   private static removePreludeEnv() {
-    if (!Layout.globalEnvNode.children) return;
-    if (Layout.globalEnvNode.children.length === 0) return;
+    if (!Layout.globalEnvNode.children || Layout.globalEnvNode.children.length === 0) return;
 
     const preludeEnvNode = Layout.globalEnvNode.children[0];
     const preludeEnv = preludeEnvNode.environment;
