@@ -44,10 +44,7 @@ const MobileKeyboard: React.FC<Props> = props => {
     }
   };
 
-
-
   const handleKeyPress = (button: string) => {
-
     if (!props.targetKeyboardInput) {
       return;
     }
@@ -62,7 +59,7 @@ const MobileKeyboard: React.FC<Props> = props => {
     setTouchStartInfo({
       x: touch.clientX,
       y: touch.clientY,
-      time: Date.now(),
+      time: Date.now()
     });
   };
 
