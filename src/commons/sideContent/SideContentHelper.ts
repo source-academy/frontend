@@ -45,27 +45,30 @@ const requireProvider = (x: string) => {
   return exports[x];
 };
 
-type RawTab = (provider: ReturnType<typeof requireProvider>) => ModuleSideContent;
+type RawTab = (provider: ReturnType<typeof requireProvider>) => { default: ModuleSideContent };
 
 /**
  * Returns an array of SideContentTabs to be spawned
  * @param debuggerContext - DebuggerContext object from redux store
  */
-export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab[] => {
+export function getDynamicTabs(debuggerContext: DebuggerContext): SideContentTab[] {
   const moduleContexts = debuggerContext?.context?.moduleContexts;
 
   if (!moduleContexts) return [];
 
   return Object.values(moduleContexts)
     .flatMap(({ tabs }) => tabs ?? [])
-    .map((rawTab: RawTab) => rawTab(requireProvider))
+    .map((rawTab: RawTab) => {
+      const { default: content } = rawTab(requireProvider);
+      return content;
+    })
     .filter(({ toSpawn }) => !toSpawn || toSpawn(debuggerContext))
     .map(tab => ({
       ...tab,
       body: tab.body(debuggerContext),
       id: SideContentType.module
     }));
-};
+}
 
 export const generateIconId = (tabId: TabId) => `${tabId}-icon`;
 export const getTabId = (tab: SideContentTab) =>
@@ -83,6 +86,13 @@ export const useSideContent = (location: SideContentLocation, defaultTab?: SideC
   const dispatch = useDispatch();
   const setSelectedTab = useCallback(
     (newId: SideContentType) => {
+      if (
+        (selectedTab === SideContentType.substVisualizer ||
+          selectedTab === SideContentType.cseMachine) &&
+        newId === SideContentType.mobileEditorRun
+      ) {
+        return;
+      }
       dispatch(visitSideContent(newId, selectedTab, location));
     },
     [dispatch, location, selectedTab]
