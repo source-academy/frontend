@@ -55,7 +55,7 @@ function insertFakeAchievements(
             requiredCompletionFrac: 0
           }
         },
-        assessmentOverview.status === 'submitted'
+        assessmentOverview.status === AssessmentStatuses.submitted
       );
 
       // goal for assessment grading
