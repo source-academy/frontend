@@ -567,7 +567,7 @@ export function* persistenceSaga(): SagaIterator {
               title: 'Saving to Google Drive',
               contents: (
                 <span>
-                  Folder with the same name was found. Overwrite <strong>{topLevelFolderName}</strong>?
+                  Overwrite <strong>{topLevelFolderName}</strong> inside <strong>{saveToDir.name}</strong>?
                   No deletions will be made remotely, only content updates, but new remote files may be created.
                 </span>
               )
@@ -680,11 +680,7 @@ export function* persistenceSaga(): SagaIterator {
         const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
         for (const currFullFilePath of Object.keys(currFiles)) {
           const currFileContent = currFiles[currFullFilePath];
-          const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(currFullFilePath);
-          if (regexResult === null) {
-            yield call(console.log, "Regex null!");
-            continue;
-          }
+          const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(currFullFilePath)!;
           const currFileName = regexResult[2] + regexResult[3];
           //const currFileParentFolders: string[] = regexResult[1].slice(
           //  ("/playground/" + currFolderObject.name + "/").length, -1)
@@ -696,14 +692,12 @@ export function* persistenceSaga(): SagaIterator {
 
           const currPersistenceFile = persistenceFileArray.find(e => e.path === currFullFilePath);
           if (currPersistenceFile === undefined) {
-            yield call(console.log, "this file is not in persistenceFileArray: ", currFullFilePath); // TODO change to Error?
-            continue;
+            throw new Error("this file is not in persistenceFileArray: " + currFullFilePath);
           }
 
           if (!currPersistenceFile.id || !currPersistenceFile.parentId) {
             // get folder
-            yield call(console.log, "this file does not have id/parentId: ", currFullFilePath); // TODO change to Error?
-            continue;
+            throw new Error("this file does not have id/parentId: " + currFullFilePath);
           }
 
           const currFileId = currPersistenceFile.id!;
