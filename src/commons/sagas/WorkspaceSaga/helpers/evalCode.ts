@@ -9,6 +9,7 @@ import { SagaIterator } from 'redux-saga';
 import { call, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 import { makeCCompilerConfig, specialCReturnObject } from 'src/commons/utils/CToWasmHelper';
+import { javaRun } from 'src/commons/utils/JavaHelper';
 import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
 import { EVAL_STORY } from 'src/features/stories/StoriesTypes';
 
@@ -244,6 +245,7 @@ export function* evalCode(
   const isLazy: boolean = context.variant === Variant.LAZY;
   const isWasm: boolean = context.variant === Variant.WASM;
   const isC: boolean = context.chapter === Chapter.FULL_C;
+  const isJava: boolean = context.chapter === Chapter.FULL_JAVA;
 
   let lastDebuggerResult = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].lastDebuggerResult
@@ -263,6 +265,8 @@ export function* evalCode(
         ? call_variant(context.variant)
         : isC
         ? call(cCompileAndRun, entrypointCode, context)
+        : isJava
+        ? call(javaRun, entrypointCode, context)
         : call(
             runFilesInContext,
             isFolderModeEnabled
