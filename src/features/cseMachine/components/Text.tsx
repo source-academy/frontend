@@ -5,7 +5,13 @@ import { Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-k
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Data, IHoverable } from '../CseMachineTypes';
-import { getTextWidth, setHoveredCursor, setUnhoveredCursor } from '../CseMachineUtils';
+import {
+  defaultSAColor,
+  fadedSAColor,
+  getTextWidth,
+  setHoveredCursor,
+  setUnhoveredCursor
+} from '../CseMachineUtils';
 import { Visible } from './Visible';
 
 export interface TextOptions {
@@ -15,6 +21,7 @@ export interface TextOptions {
   fontStyle: string;
   fontVariant: string;
   isStringIdentifiable: boolean;
+  faded: boolean;
 }
 
 export const defaultOptions: TextOptions = {
@@ -23,7 +30,8 @@ export const defaultOptions: TextOptions = {
   fontSize: Config.FontSize, // in pixels. Default is 12
   fontStyle: Config.FontStyle, // can be normal, bold, or italic. Default is normal
   fontVariant: Config.FontVariant, // can be normal or small-caps. Default is normal
-  isStringIdentifiable: false // if true, contain strings within double quotation marks "". Default is false
+  isStringIdentifiable: false, // if true, contain strings within double quotation marks "". Default is false
+  faded: false // if true, draws text with a lighter shade
 };
 
 /** this class encapsulates a string to be drawn onto the canvas */
@@ -84,7 +92,7 @@ export class Text extends Visible implements IHoverable {
       fontFamily: this.options.fontFamily,
       fontSize: this.options.fontSize,
       fontStyle: this.options.fontStyle,
-      fill: Config.SA_WHITE
+      fill: this.options.faded ? fadedSAColor() : defaultSAColor()
     };
     return (
       <React.Fragment key={Layout.key++}>
