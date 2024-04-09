@@ -65,6 +65,8 @@ export const UPDATE_CHANGEPOINTSTEPS = 'UPDATE_CHANGEPOINTSTEPS';
 export const CHANGE_SUBLANGUAGE = 'CHANGE_SUBLANGUAGE';
 export const UPDATE_LAST_DEBUGGER_RESULT = 'UPDATE_LAST_DEBUGGER_RESULT';
 export const UPDATE_LAST_NON_DET_RESULT = 'UPDATE_LAST_NON_DET_RESULT';
+export const TOGGLE_USING_UPLOAD = 'TOGGLE_USING_UPLOAD';
+export const UPLOAD_FILES = 'UPLOAD_FILES';
 
 export type WorkspaceLocation = keyof WorkspaceManagerState;
 export type WorkspaceLocationsWithTools = Extract<WorkspaceLocation, 'playground' | 'sicp'>;
@@ -88,6 +90,7 @@ type GradingWorkspaceState = GradingWorkspaceAttr & WorkspaceState;
 type PlaygroundWorkspaceAttr = {
   readonly usingSubst: boolean;
   readonly usingCse: boolean;
+  readonly usingUpload: boolean;
   readonly updateCse: boolean;
   readonly currentStep: number;
   readonly stepsTotal: number;
@@ -151,6 +154,7 @@ export type WorkspaceState = {
   readonly debuggerContext: DebuggerContext;
   readonly lastDebuggerResult: any;
   readonly lastNonDetResult: Result | null;
+  readonly files: { [key: string]: any };
 };
 
 type ReplHistory = {

@@ -55,6 +55,7 @@ import {
   TOGGLE_UPDATE_CSE,
   TOGGLE_USING_CSE,
   TOGGLE_USING_SUBST,
+  TOGGLE_USING_UPLOAD,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_BREAKPOINTSTEPS,
@@ -72,6 +73,7 @@ import {
   UPDATE_SUBLANGUAGE,
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
   UPDATE_WORKSPACE,
+  UPLOAD_FILES,
   WorkspaceLocation,
   WorkspaceLocationsWithTools,
   WorkspaceState
@@ -514,5 +516,19 @@ export const updateLastNonDetResult = createAction(
   UPDATE_LAST_NON_DET_RESULT,
   (lastNonDetResult: Result, workspaceLocation: WorkspaceLocation) => ({
     payload: { lastNonDetResult, workspaceLocation }
+  })
+);
+
+export const toggleUsingUpload = createAction(
+  TOGGLE_USING_UPLOAD,
+  (usingUpload: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
+    payload: { usingUpload, workspaceLocation }
+  })
+);
+
+export const uploadFiles = createAction(
+  UPLOAD_FILES,
+  (files: { [key: string]: any }, workspaceLocation: WorkspaceLocation) => ({
+    payload: { files, workspaceLocation }
   })
 );

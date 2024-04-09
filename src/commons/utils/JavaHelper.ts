@@ -6,7 +6,11 @@ import loadSourceModules from 'js-slang/dist/modules/loader';
 import Constants from './Constants';
 import DisplayBufferService from './DisplayBufferService';
 
-export async function javaRun(javaCode: string, context: Context) {
+export async function javaRun(
+  javaCode: string,
+  context: Context,
+  options?: { uploadIsActive?: boolean; uploads?: { [key: string]: any } }
+) {
   let compiled = {};
 
   let files = {};
@@ -86,12 +90,10 @@ export async function javaRun(javaCode: string, context: Context) {
     });
   };
 
-  // FIXME: Remove when the compiler is working
-  try {
-    const json = JSON.parse(javaCode);
-    compiled = json;
-  } catch (e) {
-    stderr(e);
+  if (options?.uploadIsActive) {
+    compiled = options.uploads ?? {};
+  } else {
+    stderr('Compiler not integrated');
     return Promise.resolve({ status: 'error' });
   }
 

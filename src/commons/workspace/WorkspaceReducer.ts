@@ -74,6 +74,7 @@ import {
   TOGGLE_UPDATE_CSE,
   TOGGLE_USING_CSE,
   TOGGLE_USING_SUBST,
+  TOGGLE_USING_UPLOAD,
   UPDATE_ACTIVE_EDITOR_TAB,
   UPDATE_ACTIVE_EDITOR_TAB_INDEX,
   UPDATE_BREAKPOINTSTEPS,
@@ -91,6 +92,7 @@ import {
   UPDATE_SUBLANGUAGE,
   UPDATE_SUBMISSIONS_TABLE_FILTERS,
   UPDATE_WORKSPACE,
+  UPLOAD_FILES,
   WorkspaceLocation,
   WorkspaceManagerState
 } from './WorkspaceTypes';
@@ -1120,6 +1122,28 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
         }
       };
     }
+    case TOGGLE_USING_UPLOAD: {
+      const { workspaceLocation } = action.payload;
+      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
+        return {
+          ...state,
+          [workspaceLocation]: {
+            ...state[workspaceLocation],
+            usingUpload: action.payload.usingUpload
+          }
+        };
+      } else {
+        return state;
+      }
+    }
+    case UPLOAD_FILES:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          files: action.payload.files
+        }
+      };
     default:
       return state;
   }
