@@ -3,7 +3,7 @@ import React from 'react';
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
 import { DataArray, ReferenceType } from '../../CseMachineTypes';
-import { isDummyReference, isMainReference } from '../../CseMachineUtils';
+import { isMainReference } from '../../CseMachineUtils';
 import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
 import { ArrayUnit } from '../ArrayUnit';
 import { Binding } from '../Binding';
@@ -15,16 +15,6 @@ import { Value } from './Value';
 export class ArrayValue extends Value {
   /** array of units this array is made of */
   units: ArrayUnit[] = [];
-  get unreferenced() {
-    return super.unreferenced;
-  }
-  set unreferenced(value: boolean) {
-    if (value === super.unreferenced) return;
-    super.unreferenced = value;
-    for (const unit of this.units) {
-      unit.unreferenced = value;
-    }
-  }
 
   constructor(
     /** underlying values this array contains */
@@ -33,12 +23,11 @@ export class ArrayValue extends Value {
     firstReference: ReferenceType
   ) {
     super();
-    this.unreferenced = isDummyReference(firstReference);
+    Layout.memoizeValue(data, this);
     this.addReference(firstReference);
   }
 
   handleNewReference(newReference: ReferenceType): void {
-    if (this.unreferenced) this.unreferenced = isDummyReference(newReference);
     if (!isMainReference(this, newReference)) return;
 
     // derive the coordinates from the main reference (binding / array unit)
@@ -83,6 +72,15 @@ export class ArrayValue extends Value {
       );
 
       this.units = [unit, ...this.units];
+    }
+  }
+
+  markAsReferenced() {
+    if (this.isReferenced()) return;
+    super.markAsReferenced();
+    for (const unit of this.units) {
+      unit.index.options.faded = false;
+      unit.value.markAsReferenced();
     }
   }
 

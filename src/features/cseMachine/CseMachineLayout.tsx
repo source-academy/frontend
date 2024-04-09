@@ -25,7 +25,8 @@ import {
   EnvTreeNode,
   GlobalFn,
   NonGlobalFn,
-  ReferenceType
+  ReferenceType,
+  StreamFn
 } from './CseMachineTypes';
 import {
   assert,
@@ -369,7 +370,7 @@ export class Layout {
         return existingValue;
       }
 
-      let newValue: Value = new PrimitiveValue(null, reference);
+      let newValue: Value | undefined;
       if (isDataArray(data)) {
         newValue = new ArrayValue(data, reference);
       } else if (isGlobalFn(data)) {
@@ -378,12 +379,16 @@ export class Layout {
       } else if (isNonGlobalFn(data)) {
         newValue = new FnValue(data, reference);
       } else if (isSourceObject(data)) {
-        return new PrimitiveValue('<' + data.toReplString() + '>', reference);
+        return new PrimitiveValue(data.toReplString(), reference);
       }
 
-      Layout.values.set(isBuiltInFn(data) || isStreamFn(data) ? data : data.id, newValue);
-      return newValue;
+      return newValue ?? new PrimitiveValue(null, reference);
     }
+  }
+
+  static memoizeValue(data: GlobalFn | NonGlobalFn | StreamFn | DataArray, value: Value) {
+    if (isBuiltInFn(data) || isStreamFn(data)) Layout.values.set(data, value);
+    else Layout.values.set(data.id, value);
   }
 
   /**

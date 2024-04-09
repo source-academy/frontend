@@ -3,7 +3,7 @@ import React from 'react';
 import { Config } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Data } from '../CseMachineTypes';
-import { defaultSAColor, fadedSAColor, isDummyReference } from '../CseMachineUtils';
+import { defaultSAColor, fadedSAColor } from '../CseMachineUtils';
 import { Arrow } from './arrows/Arrow';
 import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
 import { RoundedRect } from './shapes/RoundedRect';
@@ -26,23 +26,6 @@ export class ArrayUnit extends Visible {
   readonly isMainReference: boolean;
   arrow: Arrow | undefined = undefined;
   index: Text;
-  private _unreferenced: boolean = false;
-  get unreferenced() {
-    return this._unreferenced;
-  }
-  set unreferenced(value: boolean) {
-    if (value === this._unreferenced) return;
-    this._unreferenced = value;
-    if (value) {
-      // Only set unreferenced to true if all other references are also dummy references
-      if (this.value.references.filter(ref => !isDummyReference(ref)).length === 0) {
-        this.value.unreferenced = true;
-      }
-    } else {
-      this.value.unreferenced = false;
-    }
-    this.index.options.faded = value;
-  }
 
   constructor(
     /** index of this unit in its parent */
@@ -61,8 +44,7 @@ export class ArrayUnit extends Visible {
     this.isLastUnit = this.idx === this.parent.data.length - 1;
     this.value = Layout.createValue(this.data, this);
     this.isMainReference = this.value.references.length > 1;
-    this.index = new Text(this.idx, this.x(), this.y() - 0.4 * this.height());
-    this.unreferenced = parent.unreferenced;
+    this.index = new Text(this.idx, this.x(), this.y() - 0.4 * this.height(), { faded: true });
   }
 
   updatePosition = () => {};
@@ -94,7 +76,7 @@ export class ArrayUnit extends Visible {
           y={this.y()}
           width={this.width()}
           height={this.height()}
-          stroke={this.unreferenced ? fadedSAColor() : defaultSAColor()}
+          stroke={this.parent.isReferenced() ? defaultSAColor() : fadedSAColor()}
           hitStrokeWidth={Config.DataHitStrokeWidth}
           fillEnabled={false}
           onMouseEnter={this.onMouseEnter}

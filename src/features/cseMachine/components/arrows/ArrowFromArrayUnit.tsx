@@ -11,7 +11,7 @@ import { GenericArrow } from './GenericArrow';
 export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
   constructor(from: ArrayUnit) {
     super(from);
-    this.faded = from.parent.unreferenced;
+    this.faded = !from.parent.isReferenced();
   }
 
   protected calculateSteps() {

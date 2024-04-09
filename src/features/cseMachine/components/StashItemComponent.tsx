@@ -52,7 +52,7 @@ export class StashItemComponent extends Visible implements IHoverable {
           ? 'pair/array'
           : JSON.stringify(val)
         : isSourceObject(val)
-        ? '<' + val.toReplString() + '>'
+        ? val.toReplString()
         : String(value);
     };
     this.text = truncateText(
@@ -72,7 +72,7 @@ export class StashItemComponent extends Visible implements IHoverable {
     this._x = ControlStashConfig.StashPosX + stackWidth;
     this._y = ControlStashConfig.StashPosY;
     if (arrowTo) {
-      arrowTo.unreferenced = false;
+      arrowTo.markAsReferenced();
       this.arrow = new ArrowFromStashItemComponent(this).to(arrowTo) as ArrowFromStashItemComponent;
     }
   }

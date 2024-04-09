@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Data, ReferenceType } from '../../CseMachineTypes';
+import { isDummyReference } from '../../CseMachineUtils';
 import { Visible } from '../Visible';
 
 /** the value of a `Binding` or an `ArrayUnit` */
@@ -8,13 +9,18 @@ export abstract class Value extends Visible {
   /** the underlying data of this value */
   abstract readonly data: Data;
 
-  /** if the value does not have active references, i.e. it should be garbage collected */
-  private _unreferenced: boolean = false;
-  get unreferenced() {
-    return this._unreferenced;
+  /**
+   * if the value has actual references, i.e. the references
+   * are not from dummy bindings or from unreferenced arrays
+   */
+  private _isReferenced: boolean = false;
+
+  isReferenced() {
+    return this._isReferenced;
   }
-  set unreferenced(value: boolean) {
-    this._unreferenced = value;
+
+  markAsReferenced() {
+    this._isReferenced = true;
   }
 
   /** references to this value */
@@ -24,6 +30,9 @@ export abstract class Value extends Visible {
   addReference(newReference: ReferenceType): void {
     this.references.push(newReference);
     this.handleNewReference(newReference);
+    if (!this.isReferenced() && !isDummyReference(newReference)) {
+      this.markAsReferenced();
+    }
   }
 
   /** additional logic to handle new references */

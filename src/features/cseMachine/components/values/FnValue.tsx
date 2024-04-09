@@ -18,7 +18,6 @@ import {
   getBodyText,
   getParamsText,
   getTextWidth,
-  isDummyReference,
   isMainReference,
   isStreamFn
 } from '../../CseMachineUtils';
@@ -56,13 +55,13 @@ export class FnValue extends Value implements IHoverable {
     firstReference: ReferenceType
   ) {
     super();
-    this.unreferenced = isDummyReference(firstReference);
+    Layout.memoizeValue(data, this);
     this.addReference(firstReference);
   }
 
   handleNewReference(newReference: ReferenceType): void {
-    if (this.unreferenced) this.unreferenced = isDummyReference(newReference);
     if (!isMainReference(this, newReference)) return;
+
     // derive the coordinates from the main reference (binding / array unit)
     if (newReference instanceof Binding) {
       this._x = newReference.frame.x() + newReference.frame.width() + Config.FrameMarginX;
@@ -121,7 +120,7 @@ export class FnValue extends Value implements IHoverable {
     if (this.enclosingFrame) {
       this._arrow = new ArrowFromFn(this).to(this.enclosingFrame) as ArrowFromFn;
     }
-    const stroke = this.unreferenced ? fadedSAColor() : defaultSAColor();
+    const stroke = this.isReferenced() ? defaultSAColor() : fadedSAColor();
     return (
       <React.Fragment key={Layout.key++}>
         <Group

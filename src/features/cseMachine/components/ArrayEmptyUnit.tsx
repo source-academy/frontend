@@ -29,7 +29,7 @@ export class ArrayEmptyUnit extends Visible {
         y={this.y()}
         width={this.width()}
         height={this.height()}
-        stroke={this.parent.unreferenced ? fadedSAColor() : defaultSAColor()}
+        stroke={this.parent.isReferenced() ? defaultSAColor() : fadedSAColor()}
         ref={this.ref}
       />
     );

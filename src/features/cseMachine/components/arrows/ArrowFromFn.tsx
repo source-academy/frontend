@@ -9,7 +9,7 @@ import { GenericArrow } from './GenericArrow';
 export class ArrowFromFn extends GenericArrow<FnValue | GlobalFnValue, Frame> {
   constructor(from: FnValue | GlobalFnValue) {
     super(from);
-    this.faded = from.unreferenced;
+    this.faded = !from.isReferenced();
   }
 
   protected calculateSteps() {

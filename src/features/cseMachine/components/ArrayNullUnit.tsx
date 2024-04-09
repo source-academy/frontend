@@ -23,7 +23,7 @@ export class ArrayNullUnit extends Visible {
         {...ShapeDefaultProps}
         key={Layout.key++}
         points={[this.x(), this.y() + this.height(), this.x() + this.width(), this.y()]}
-        stroke={this.reference.parent.unreferenced ? fadedSAColor() : defaultSAColor()}
+        stroke={this.reference.parent.isReferenced() ? defaultSAColor() : fadedSAColor()}
         hitStrokeWidth={Config.DataHitStrokeWidth}
         ref={this.ref}
         listening={false}

@@ -240,13 +240,13 @@ export function isMainReference(value: Value, reference: ReferenceType) {
 }
 
 /**
- * Returns `true` if `reference` is a dummy reference, i.e. it is a dummy binding, or the reference
- * is itself unreferenced.
+ * Returns `true` if `reference` is a dummy reference,
+ * i.e. it is a dummy binding, or the reference is from an array which is unreferenced
  */
 export function isDummyReference(reference: ReferenceType) {
   return (
     (reference instanceof Binding && reference.isDummyBinding) ||
-    (reference instanceof ArrayUnit && reference.unreferenced)
+    (reference instanceof ArrayUnit && !reference.parent.isReferenced())
   );
 }
 
@@ -264,6 +264,9 @@ export function isDummyKey(key: string) {
   return isNumeric(key);
 }
 
+const canvas = document.createElement('canvas');
+const context = canvas.getContext('2d');
+
 /**
  * Uses canvas.measureText to compute and return the width of the given text of given font in pixels.
  *
@@ -274,9 +277,6 @@ export function getTextWidth(
   text: string,
   font: string = `${Config.FontStyle} ${Config.FontSize}px ${Config.FontFamily}`
 ): number {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-
   if (!context || !text) {
     return 0;
   }
@@ -310,9 +310,6 @@ export function getTextHeight(
   font: string = `${Config.FontStyle} ${Config.FontSize}px ${Config.FontFamily}`,
   fontSize: number = Config.FontSize
 ): number {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-
   if (!context || !text) {
     return 0;
   }
@@ -329,7 +326,6 @@ export function getTextHeight(
 export function getParamsText(data: Closure | GlobalFn | StreamFn): string {
   if (isClosure(data)) {
     let params = data.functionName.slice(0, data.functionName.indexOf('=>')).trim();
-    console.log(params);
     if (!params.startsWith('(')) params = '(' + params + ')';
     return params;
   } else {
@@ -714,7 +710,7 @@ export function getControlItemComponent(
             (accum, level) =>
               accum
                 ? accum
-                : level.frames.find(frame => frame.environment?.id === getEnvID(envInstr.env)),
+                : level.frames.find(frame => frame.environment?.id === getEnvId(envInstr.env)),
             undefined
           )
         );
@@ -806,39 +802,23 @@ export function getControlItemComponent(
 }
 
 export function getStashItemComponent(stashItem: StashValue, stackHeight: number, index: number) {
-  if (isClosure(stashItem) || isGlobalFn(stashItem) || isDataArray(stashItem)) {
-    for (const level of Layout.levels) {
-      for (const frame of level.frames) {
-        if (isClosure(stashItem) || isGlobalFn(stashItem)) {
-          const fn: FnValue | GlobalFnValue | undefined = frame.bindings.find(binding => {
-            if (isClosure(stashItem) && isClosure(binding.data)) {
-              return binding.data.id === stashItem.id;
-            } else if (isGlobalFn(stashItem) && isGlobalFn(binding.data)) {
-              return binding.data?.toString() === stashItem.toString();
-            }
-            return false;
-          })?.value as unknown as FnValue | GlobalFnValue;
-          if (fn) return new StashItemComponent(stashItem, stackHeight, index, fn);
-        } else {
-          const ar: ArrayValue | undefined = frame.bindings.find(binding => {
-            if (isDataArray(binding.data)) {
-              return binding.data === stashItem;
-            }
-            return false;
-          })?.value as ArrayValue;
-          if (ar) return new StashItemComponent(stashItem, stackHeight, index, ar);
-        }
-      }
+  let arrowTo: ArrayValue | FnValue | GlobalFnValue | undefined;
+  if (isFunction(stashItem) || isDataArray(stashItem)) {
+    if (isClosure(stashItem) || isDataArray(stashItem)) {
+      arrowTo = Layout.values.get(stashItem.id) as ArrayValue | FnValue;
+    } else {
+      arrowTo = Layout.values.get(stashItem) as FnValue | GlobalFnValue;
     }
   }
-  return new StashItemComponent(stashItem, stackHeight, index);
+  return new StashItemComponent(stashItem, stackHeight, index, arrowTo);
 }
 
 // Helper function to get environment ID. Accounts for the hidden prelude environment right
 // after the global environment. Does not need to be used for frame environments, only for
 // environments from the context.
-export const getEnvID = (environment: Environment): string =>
-  environment.tail?.name === 'global' ? environment.tail.id : environment.id;
+export const getEnvId = (environment: Environment): string => {
+  return environment.name === 'prelude' ? environment.tail!.id : environment.id;
+};
 
 // Function that returns whether the stash item will be popped off in the next step
 export const isStashItemInDanger = (stashIndex: number): boolean => {

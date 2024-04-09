@@ -49,8 +49,7 @@ export class GlobalFnValue extends Value implements IHoverable {
     mainReference: Binding
   ) {
     super();
-    this.unreferenced = false;
-    this.references = [mainReference];
+    Layout.memoizeValue(data, this);
 
     // derive the coordinates from the main reference (binding)
     this._x = mainReference.frame.x() + mainReference.frame.width() + Config.FrameMarginX;
@@ -75,6 +74,8 @@ export class GlobalFnValue extends Value implements IHoverable {
       getTextWidth(this.paramsText),
       getTextWidth(this.exportBodyText)
     );
+    
+    this.addReference(mainReference);
   }
 
   handleNewReference(): void {}
@@ -113,7 +114,7 @@ export class GlobalFnValue extends Value implements IHoverable {
     if (Layout.globalEnvNode.frame) {
       this._arrow = new ArrowFromFn(this).to(Layout.globalEnvNode.frame) as ArrowFromFn;
     }
-    const stroke = this.unreferenced ? fadedSAColor() : defaultSAColor();
+    const stroke = this.isReferenced() ? defaultSAColor() : fadedSAColor();
     return (
       <React.Fragment key={Layout.key++}>
         <Group
