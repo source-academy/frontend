@@ -161,7 +161,7 @@ export class CseAnimation {
             -appInstr.numOfArgs - 1
           )!;
           const fn = fnStashItem.value;
-          const isPredefined = isGlobalFn(fn) || (isClosure(fn) && fn.preDefined);
+          const isPredefined = isGlobalFn(fn) || (isClosure(fn) && fn.predefined);
           const frameCreated = checkFrameCreation(CseAnimation.previousFrame, CseAnimation.currentFrame);
 
           // TODO: find a better way to test for a variadic function call

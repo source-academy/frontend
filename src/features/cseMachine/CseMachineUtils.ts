@@ -45,10 +45,9 @@ import {
   PredefinedFn,
   Primitive,
   ReferenceType,
-  Unassigned,
   SourceObject,
-  StreamFn
-} from './CseMachineTypes';
+  StreamFn,
+  Unassigned} from './CseMachineTypes';
 
 class AssertionError extends Error {
   constructor(msg?: string) {
