@@ -435,8 +435,8 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     session.on('changeAnnotation' as any, makeHandleAnnotationChange(session));
 
     // Start autocompletion
-    if (props.sourceChapter === Chapter.FULL_C) {
-      // for C language, use the default autocomplete provided by ace editor
+    if (props.sourceChapter === Chapter.FULL_C || props.sourceChapter === Chapter.FULL_JAVA) {
+      // for C, Java language, use the default autocomplete provided by ace editor
       const { textCompleter, keyWordCompleter, setCompleters } = acequire('ace/ext/language_tools');
       setCompleters([textCompleter, keyWordCompleter]);
     } else {
