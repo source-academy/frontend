@@ -74,7 +74,7 @@ export class GlobalFnValue extends Value implements IHoverable {
       getTextWidth(this.paramsText),
       getTextWidth(this.exportBodyText)
     );
-    
+
     this.addReference(mainReference);
   }
 
