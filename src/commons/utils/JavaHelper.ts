@@ -7,7 +7,7 @@ import Constants from './Constants';
 import DisplayBufferService from './DisplayBufferService';
 
 export async function javaRun(
-  javaCode: string,
+  _javaCode: string,
   context: Context,
   options?: { uploadIsActive?: boolean; uploads?: { [key: string]: any } }
 ) {
