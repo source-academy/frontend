@@ -21,7 +21,6 @@ export class PrimitiveValue extends Value {
     reference: ReferenceType
   ) {
     super();
-    this.references = [reference];
 
     // derive the coordinates from the main reference (binding / array unit)
     if (reference instanceof Binding) {
@@ -30,24 +29,33 @@ export class PrimitiveValue extends Value {
       this.text = new Text(this.data, this.x(), this.y(), { isStringIdentifiable: true });
     } else {
       const maxWidth = reference.width();
-      const textWidth = Math.min(getTextWidth(String(this.data)), maxWidth);
+      const textWidth = isNull(this.data) ? 0 : Math.min(getTextWidth(String(this.data)), maxWidth);
       this._x = reference.x() + (reference.width() - textWidth) / 2;
       this._y = reference.y() + (reference.height() - Config.FontSize) / 2;
       this.text = isNull(this.data)
         ? new ArrayNullUnit(reference)
         : new Text(this.data, this.x(), this.y(), {
             maxWidth: maxWidth,
-            isStringIdentifiable: true
+            isStringIdentifiable: true,
+            faded: true
           });
     }
 
     this._width = this.text.width();
     this._height = this.text.height();
     this.ref = this.text.ref;
+    this.addReference(reference);
   }
 
   handleNewReference(): void {
-    throw new Error('Primitive values cannot have more than one reference!');
+    if (this.references.length > 1)
+      throw new Error('Primitive values cannot have more than one reference!');
+  }
+
+  markAsReferenced() {
+    if (this.isReferenced()) return;
+    super.markAsReferenced();
+    if (this.text instanceof Text) this.text.options.faded = false;
   }
 
   draw(): React.ReactNode {

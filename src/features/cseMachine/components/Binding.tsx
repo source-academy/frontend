@@ -3,7 +3,7 @@ import React from 'react';
 import { Config } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Data } from '../CseMachineTypes';
-import { isDummyKey, isEnvEqual, isGlobalFn, isMainReference } from '../CseMachineUtils';
+import { isDummyKey, isMainReference } from '../CseMachineUtils';
 import { ArrowFromText } from './arrows/ArrowFromText';
 import { GenericArrow } from './arrows/GenericArrow';
 import { Frame } from './Frame';
@@ -42,9 +42,7 @@ export class Binding extends Visible {
     readonly isConstant: boolean = false
   ) {
     super();
-    this.isDummyBinding =
-      isDummyKey(this.keyString) ||
-      (isEnvEqual(frame.environment, Layout.globalEnvNode.environment) && isGlobalFn(data));
+    this.isDummyBinding = isDummyKey(this.keyString);
 
     // derive the coordinates from the binding above it
     if (this.prevBinding) {
