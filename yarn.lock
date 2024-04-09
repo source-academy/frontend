@@ -2353,10 +2353,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@sourceacademy/c-slang@^1.0.18":
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/@sourceacademy/c-slang/-/c-slang-1.0.18.tgz#9d9cf94481e3bd12cbe667a3a3872bea59a9d2c4"
-  integrity sha512-L4bCfQR1K9EqwaVpIkGt2ADYp/nvludVUj5YOimNsWnE0UbS9Z5WhvdRMm7IyGxGF60B2VAH6BfjiyK8phsIug==
+"@sourceacademy/c-slang@^1.0.19":
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/@sourceacademy/c-slang/-/c-slang-1.0.19.tgz#e8672a4fa15474ac9da8d56e3212adbdae1c2194"
+  integrity sha512-tkqdk0CKV/Y3+OkgoyiYlrwmv0uSp9gBkXO73x0yDCv7RoOzFgWgNRoFULX/o9MQ1U+QRlvaoZvpsn7DJjTFyQ==
   dependencies:
     bignumber.js "^9.1.2"
     peggy "^3.0.2"
@@ -8084,10 +8084,10 @@ java-parser@^2.0.5:
     chevrotain-allstar "0.3.1"
     lodash "4.17.21"
 
-java-slang@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/java-slang/-/java-slang-1.0.3.tgz#4f89ce3b9b0be37e3026d21a03fe895ac4b526b8"
-  integrity sha512-Rn8+ME+kPlaUh2DRboAvUhl7wixdZqFnC2H6t3qsx+ypeGoYKeHFMTlMj23Gsek4PEDOplSxQQs6E5dAKkjTYw==
+java-slang@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/java-slang/-/java-slang-1.0.4.tgz#ae25540e28fee7ff5ee4d10f3d82f1e2afdb72d4"
+  integrity sha512-AN2ysL9OrWWI6E1sxDtNRuwI8mJpTKppIuj7J8zfGj6/FLnHnxp1my+jdAduzAGnfYPwrIkmUQSMg/e/B7gRig==
   dependencies:
     "@types/lodash" "^4.14.198"
     java-parser "^2.0.5"
