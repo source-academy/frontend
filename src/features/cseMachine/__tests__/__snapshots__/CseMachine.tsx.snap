@@ -1979,7 +1979,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 181.5 40 L 356.5 330 L 356.5 330 M 181.5 40 L 356.5 330 L 356.5 330 "
+      data="M 181.5 40 L 379 330 L 379 330 M 181.5 40 L 379 330 L 379 330 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -1992,7 +1992,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
         Array [
           181.5,
           40,
-          356.5,
+          379,
           330,
         ]
       }
@@ -3618,8 +3618,6 @@ Array [
   [Function],
   "accumulate: ",
   [Function],
-  "0:= ",
-  [Function],
   "x:= ",
   Array [
     1,
@@ -4133,9 +4131,7 @@ Object {
     "the_tail": [Function],
   },
   "heap": Heap {
-    "storage": Set {
-      [Function],
-    },
+    "storage": null,
   },
   "id": "79",
   "name": "blockEnvironment",
@@ -5003,9 +4999,7 @@ Object {
     ],
   },
   "heap": Heap {
-    "storage": Set {
-      [Function],
-    },
+    "storage": null,
   },
   "id": "75",
   "name": "es",
@@ -5801,9 +5795,7 @@ Object {
       ],
     },
     "heap": Heap {
-      "storage": Set {
-        [Function],
-      },
+      "storage": null,
     },
     "id": "75",
     "name": "es",
@@ -6167,13 +6159,11 @@ Array [
   [Function],
   "x: ",
   1,
-  "0:= ",
+  "1:= ",
   Array [],
   "n: ",
   1,
-  "0:= ",
-  [Function],
-  "0:= ",
+  "1:= ",
   Array [
     1,
     [Function],
@@ -6185,9 +6175,7 @@ Array [
   ],
   "n: ",
   2,
-  "0:= ",
-  [Function],
-  "0:= ",
+  "1:= ",
   Array [
     2,
     [Function],
@@ -6202,8 +6190,6 @@ Array [
   "n: ",
   2,
   "the_tail:= ",
-  [Function],
-  "0:= ",
   [Function],
   "_copy_of_i:= ",
   1,
@@ -6230,8 +6216,6 @@ Array [
   ],
   "n: ",
   2,
-  "0:= ",
-  [Function],
   "s: ",
   Array [
     2,
@@ -6266,7 +6250,7 @@ Array [
       ],
     ],
   ],
-  "0:= ",
+  "1:= ",
   Array [
     1,
     Array [
@@ -6285,7 +6269,7 @@ Array [
       ],
     ],
   ],
-  "0:= ",
+  "1:= ",
   Array [
     2,
     null,
