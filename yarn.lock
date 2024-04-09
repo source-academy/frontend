@@ -2353,10 +2353,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@sourceacademy/c-slang@^1.0.18":
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/@sourceacademy/c-slang/-/c-slang-1.0.18.tgz#9d9cf94481e3bd12cbe667a3a3872bea59a9d2c4"
-  integrity sha512-L4bCfQR1K9EqwaVpIkGt2ADYp/nvludVUj5YOimNsWnE0UbS9Z5WhvdRMm7IyGxGF60B2VAH6BfjiyK8phsIug==
+"@sourceacademy/c-slang@^1.0.19":
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/@sourceacademy/c-slang/-/c-slang-1.0.19.tgz#e8672a4fa15474ac9da8d56e3212adbdae1c2194"
+  integrity sha512-tkqdk0CKV/Y3+OkgoyiYlrwmv0uSp9gBkXO73x0yDCv7RoOzFgWgNRoFULX/o9MQ1U+QRlvaoZvpsn7DJjTFyQ==
   dependencies:
     bignumber.js "^9.1.2"
     peggy "^3.0.2"
