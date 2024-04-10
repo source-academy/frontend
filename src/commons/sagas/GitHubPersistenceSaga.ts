@@ -216,6 +216,46 @@ function* githubSaveAll(): any {
   type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
     typeof octokit.users.getAuthenticated
   >;
+
+  if (store.getState().fileSystem.persistenceFileArray.length === 0) {
+    type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
+      typeof octokit.repos.listForAuthenticatedUser
+    >;
+    const userRepos: ListForAuthenticatedUserData = yield call(
+      async () =>
+        await octokit.paginate(octokit.repos.listForAuthenticatedUser, {
+          // 100 is the maximum number of results that can be retrieved per page.
+          per_page: 100
+        })
+    );
+
+    const getRepoName = async () =>
+      await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
+        userRepos: userRepos,
+        onSubmit: resolve
+      }));
+    const repoName = yield call(getRepoName);
+
+    const editorContent = '';
+
+    if (repoName !== '') {
+      const pickerType = 'Saveall';
+      const promisifiedDialog = async () =>
+        await promisifyDialog<FileExplorerDialogProps, string>(FileExplorerDialog, resolve => ({
+          repoName: repoName,
+          pickerType: pickerType,
+          octokit: octokit,
+          editorContent: editorContent,
+          onSubmit: resolve
+        }));
+
+      yield call(promisifiedDialog);
+    }
+  }
+
+
+
+
   const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
   
   const githubLoginId = authUser.data.login;

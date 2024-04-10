@@ -117,6 +117,10 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
       }
     }
 
+    if (props.pickerType == 'Saveall') {
+
+    }
+
     if (props.pickerType === 'Save') {
       const { canBeSaved, saveType } = await checkIfFileCanBeSavedAndGetSaveType(
         props.octokit,
