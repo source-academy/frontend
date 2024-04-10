@@ -192,7 +192,7 @@ const codeSamplesControlStash = [
     {
       const math_sin = x => x;
     }
-    math_sin(math_PI / 2); 
+    math_sin(math_PI / 2);
     `,
     5
   ],
