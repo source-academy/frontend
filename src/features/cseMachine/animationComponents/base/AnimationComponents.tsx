@@ -6,8 +6,9 @@ import { Arrow, KonvaNodeComponent, Path, Rect, Text } from 'react-konva';
 import { CseAnimation } from '../../CseMachineAnimation';
 import { Config } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
-import { currentItemSAColor, defaultSAColor } from '../../CseMachineUtils';
+import { defaultStrokeColor, defaultTextColor } from '../../CseMachineUtils';
 import { Animatable, AnimatableTo, AnimationConfig } from './Animatable';
+import { lerpColor } from './AnimationUtils';
 
 type AnimationData<KonvaConfig extends Konva.NodeConfig> = {
   startTime: number;
@@ -52,21 +53,24 @@ abstract class BaseAnimationComponent<
         continue;
       }
       // Calculate animation progress from 0 to 1
-      const scale = Math.min((frame.time - data.startTime) / (data.endTime - data.startTime), 1);
+      const delta = Math.min((frame.time - data.startTime) / (data.endTime - data.startTime), 1);
       // Interpolate each attribute between the starting and ending values
       for (const attr in data.current) {
         if (typeof data.to[attr] === 'number') {
-          const start = data.from[attr] as number;
+          const start = (data.from[attr] ?? 0) as number;
           const end = data.to[attr] as number;
-          const value = data.easing(scale, start, end - start, 1);
+          const value = data.easing(delta, start, end - start, 1);
           (data.current[attr] as number) = value;
           if (attr === 'x') this._x = value;
           if (attr === 'y') this._y = value;
           if (attr === 'width') this._width = value;
           if (attr === 'height') this._height = value;
-        } else {
+        } else if ((attr === 'fill' || attr === 'stroke') && typeof data.to[attr] === 'string') {
+          const value = lerpColor(data.from[attr] ?? '#000', data.to[attr]!, delta, data.easing);
+          (data.current[attr] as string) = value;
+        } else if (delta === 1) {
           // TODO: could handle the animation of path strings by interpolating between different coordinates.
-          // For now, we just simply set the value to the target value immediately.
+          // For now, we just simply set the value to the target value at the end of the animation.
           data.current[attr] = data.to[attr];
         }
       }
@@ -74,7 +78,7 @@ abstract class BaseAnimationComponent<
       Object.assign(attrs, data.current);
       // Resolve the animation's promise later if the animation is done, and also
       // remove the animation data from the list
-      if (scale === 1) {
+      if (delta === 1) {
         resolveList.push(data.resolve);
         this.animationData.splice(i, 1);
       } else {
@@ -161,10 +165,7 @@ export class AnimationComponent<
      * standard 'konva' library.
      */
     // Note that the React nodes from `react-konva` (such as `Text`, `Rect`, etc.) are not
-    // actually types/classes, but are disguised to look like them. They are just variable
-    // names, and during runtime, these variables actually only contain a string of the same
-    // name. This is why we can pass in `Text` or `Rect` or other React Konva Nodes directly
-    // as part of a parameter, as they are not actually types, but variables.
+    // actually types or classes, but are actually variables.
     private type: KonvaNodeComponent<KonvaNode, KonvaConfig>,
     /** The props we want our konva node to have initially. It should match the correct
      *  subtype of `NodeConfig` that the konva node requires. */
@@ -190,21 +191,25 @@ export class AnimationComponent<
 export class AnimatedTextComponent extends AnimationComponent<Konva.Text, Konva.TextConfig> {
   constructor(props: Konva.TextConfig & Required<Pick<Konva.TextConfig, 'text'>>) {
     const defaultProps = {
-      fill: ControlStashConfig.SA_WHITE.toString(),
-      fontFamily: ControlStashConfig.FontFamily.toString(),
-      fontSize: Number(ControlStashConfig.FontSize),
-      fontStyle: ControlStashConfig.FontStyle.toString(),
-      fontVariant: ControlStashConfig.FontVariant.toString()
+      fill: defaultTextColor(),
+      fontFamily: ControlStashConfig.FontFamily,
+      fontSize: ControlStashConfig.FontSize,
+      fontStyle: ControlStashConfig.FontStyle,
+      fontVariant: ControlStashConfig.FontVariant
     };
-    super(Text, { ...defaultProps, ...props });
+    super(Text, { ...defaultProps, ...props, width: undefined });
+  }
+
+  animateTo(to: Partial<Konva.TextConfig>, animationConfig?: AnimationConfig) {
+    return super.animateTo({ ...to, width: undefined }, animationConfig);
   }
 }
 
 export class AnimatedRectComponent extends AnimationComponent<Konva.Rect, Konva.RectConfig> {
   constructor(props: Konva.RectConfig) {
     const defaultProps = {
-      stroke: currentItemSAColor(false),
-      cornerRadius: Number(ControlStashConfig.ControlItemCornerRadius)
+      stroke: defaultStrokeColor(),
+      cornerRadius: ControlStashConfig.ControlItemCornerRadius
     };
     super(Rect, { ...defaultProps, ...props });
   }
@@ -213,9 +218,8 @@ export class AnimatedRectComponent extends AnimationComponent<Konva.Rect, Konva.
 export class AnimatedPathComponent extends AnimationComponent<Konva.Path, Konva.PathConfig> {
   constructor(props: Konva.PathConfig & Required<Pick<Konva.PathConfig, 'data'>>) {
     const defaultProps = {
-      stroke: defaultSAColor(),
-      strokeWidth: Number(Config.ArrowStrokeWidth),
-      hitStrokeWidth: Number(Config.ArrowHitStrokeWidth)
+      fill: defaultStrokeColor(),
+      strokeWidth: Config.ArrowStrokeWidth
     };
     super(Path, { ...defaultProps, ...props });
   }
@@ -224,9 +228,9 @@ export class AnimatedPathComponent extends AnimationComponent<Konva.Path, Konva.
 export class AnimatedArrowComponent extends AnimationComponent<Konva.Arrow, Konva.ArrowConfig> {
   constructor(props: Konva.ArrowConfig) {
     const defaultProps = {
-      fill: defaultSAColor(),
+      fill: defaultStrokeColor(),
       strokeEnabled: false,
-      pointerWidth: Number(Config.ArrowHeadSize)
+      pointerWidth: Config.ArrowHeadSize
     };
     super(Arrow, { ...defaultProps, ...props });
   }

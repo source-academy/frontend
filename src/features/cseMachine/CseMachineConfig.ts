@@ -34,8 +34,6 @@ export const Config = Object.freeze({
   FontStyle: 'normal',
   FontVariant: 'normal',
 
-  HoveredColor: '#32CD32',
-
   ArrowHeadSize: 10,
   ArrowStrokeWidth: 1,
   ArrowHitStrokeWidth: 5,
@@ -45,12 +43,33 @@ export const Config = Object.freeze({
   MaxExportWidth: 20000,
   MaxExportHeight: 12000,
 
-  SA_WHITE: '#999999',
-  SA_FADED_WHITE: '#5b6773',
-  SA_BLUE: '#2c3e50',
-  SA_FADED_BLUE: '#BBB',
-  PRINT_BACKGROUND: 'white',
-  SA_CURRENT_ITEM: '#030fff',
+  BgColor: '#2c3e50',
+  PrintBgColor: '#fff',
+
+  // Colors of all text
+  TextColor: '#999',
+  TextColorFaded: '#5b6773',
+  PrintTextColor: '#333',
+  PrintTextColorFaded: '#bbb',
+
+  // Colors of arrows and borders
+  StrokeColor: '#999',
+  StrokeColorFaded: '#5b6773',
+  PrintStrokeColor: '#999',
+  PrintStrokeColorFaded: '#bbb',
+
+  // Colors of different states
+  ActiveColor: '#0000ff',
+  PrintActiveColor: '#3d5afe',
+  DangerColor: '#ff1744',
+  PrintDangerColor: '#f44336',
+  HoverColor: '#25c225',
+  PrintHoverColor: '#0dbf0d',
+
+  // Colors for text hover background
+  // Note that these are also applied with 0.5 opacity when drawn
+  HoverBgColor: '#000',
+  PrintHoverBgColor: '#bbb',
 
   ConstantColon: ':= ',
   VariableColon: ': ',

@@ -2,12 +2,15 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Label, Tag, Text } from 'react-konva';
 
-import { ShapeDefaultProps } from '../CseMachineConfig';
+import CseMachine from '../CseMachine';
+import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { Layout } from '../CseMachineLayout';
 import { IHoverable } from '../CseMachineTypes';
 import {
-  currentItemSAColor,
+  defaultActiveColor,
+  defaultStrokeColor,
+  defaultTextColor,
   getTextHeight,
   setHoveredCursor,
   setHoveredStyle,
@@ -85,7 +88,7 @@ export class ControlItemComponent extends Visible implements IHoverable {
 
   draw(): React.ReactNode {
     const textProps = {
-      fill: ControlStashConfig.SA_WHITE,
+      fill: defaultTextColor(),
       padding: ControlStashConfig.ControlItemTextPadding,
       fontFamily: ControlStashConfig.FontFamily,
       fontSize: ControlStashConfig.FontSize,
@@ -93,7 +96,7 @@ export class ControlItemComponent extends Visible implements IHoverable {
       fontVariant: ControlStashConfig.FontVariant
     };
     const tagProps = {
-      stroke: currentItemSAColor(this.topItem),
+      stroke: this.topItem ? defaultActiveColor() : defaultStrokeColor(),
       cornerRadius: ControlStashConfig.ControlItemCornerRadius
     };
     return (
@@ -122,13 +125,14 @@ export class ControlItemComponent extends Visible implements IHoverable {
         >
           <Tag
             {...ShapeDefaultProps}
-            stroke="black"
-            fill={'black'}
+            stroke={Config.HoverBgColor}
+            fill={Config.HoverBgColor}
             opacity={ControlStashConfig.TooltipOpacity}
           />
           <Text
             {...ShapeDefaultProps}
             {...textProps}
+            fill={CseMachine.getPrintableMode() ? Config.PrintBgColor : Config.TextColor}
             text={this.tooltip}
             padding={ControlStashConfig.TooltipPadding}
           />

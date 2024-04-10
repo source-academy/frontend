@@ -2,7 +2,7 @@ import React from 'react';
 import { Group } from 'react-konva';
 
 import { ControlItemComponent } from '../components/ControlItemComponent';
-import { currentItemSAColor } from '../CseMachineUtils';
+import { defaultActiveColor } from '../CseMachineUtils';
 import { Animatable, AnimationConfig } from './base/Animatable';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodePosition } from './base/AnimationUtils';
@@ -53,7 +53,7 @@ export class BlockAnimation extends Animatable {
       // which the last control item always have
       this.targetItemAnimations
         .at(-1)
-        ?.animateRectTo({ stroke: currentItemSAColor(true) }, animationConfig)
+        ?.animateRectTo({ stroke: defaultActiveColor() }, animationConfig)
     ]);
     this.destroy();
   }

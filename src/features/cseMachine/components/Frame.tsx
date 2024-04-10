@@ -7,7 +7,8 @@ import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
 import {
-  currentItemSAColor,
+  defaultActiveColor,
+  defaultStrokeColor,
   getTextWidth,
   getUnreferencedObjects,
   isClosure,
@@ -183,7 +184,11 @@ export class Frame extends Visible implements IHoverable {
           y={this.y()}
           width={this.width()}
           height={this.height()}
-          stroke={currentItemSAColor(CseMachine.getCurrentEnvId() === this.environment?.id)}
+          stroke={
+            CseMachine.getCurrentEnvId() === this.environment?.id
+              ? defaultActiveColor()
+              : defaultStrokeColor()
+          }
           cornerRadius={Config.FrameCornerRadius}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}

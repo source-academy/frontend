@@ -3,7 +3,7 @@ import { Group } from 'react-konva';
 
 import { Frame } from '../components/Frame';
 import { Config } from '../CseMachineConfig';
-import { currentItemSAColor } from '../CseMachineUtils';
+import { defaultActiveColor } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedRectComponent } from './base/AnimationComponents';
 import { getNodePosition } from './base/AnimationUtils';
@@ -26,7 +26,7 @@ export class EnvironmentAnimation extends Animatable {
     this.frameAnimation = new AnimatedRectComponent({
       ...prevFramePosition,
       cornerRadius: Number(Config.FrameCornerRadius),
-      stroke: currentItemSAColor(true)
+      stroke: defaultActiveColor()
     });
   }
 

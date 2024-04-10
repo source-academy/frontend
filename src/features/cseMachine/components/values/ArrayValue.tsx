@@ -1,9 +1,10 @@
+import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group } from 'react-konva';
 
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { DataArray, ReferenceType } from '../../CseMachineTypes';
+import { DataArray, IHoverable, ReferenceType } from '../../CseMachineTypes';
 import { isMainReference } from '../../CseMachineUtils';
 import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
 import { ArrayUnit } from '../ArrayUnit';
@@ -13,7 +14,7 @@ import { Value } from './Value';
 
 /** this class encapsulates an array value in source,
  *  defined as a JS array with not 2 elements */
-export class ArrayValue extends Value {
+export class ArrayValue extends Value implements IHoverable {
   /** array of units this array is made of */
   units: ArrayUnit[] = [];
 
@@ -80,16 +81,33 @@ export class ArrayValue extends Value {
     if (this.isReferenced()) return;
     super.markAsReferenced();
     for (const unit of this.units) {
-      unit.index.options.faded = false;
       unit.value.markAsReferenced();
     }
   }
+
+  onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
+    e.cancelBubble = true;
+    for (const unit of this.units) {
+      unit.showIndex();
+    }
+  };
+
+  onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
+    for (const unit of this.units) {
+      unit.hideIndex();
+    }
+  };
 
   draw(): React.ReactNode {
     if (this.isDrawn()) return null;
     this._isDrawn = true;
     return (
-      <Group key={Layout.key++} ref={this.ref}>
+      <Group
+        key={Layout.key++}
+        ref={this.ref}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+      >
         {this.units.length > 0
           ? this.units.map(unit => unit.draw())
           : new ArrayEmptyUnit(this).draw()}

@@ -13,8 +13,9 @@ import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
 import { IHoverable, NonGlobalFn, ReferenceType } from '../../CseMachineTypes';
 import {
-  defaultSAColor,
-  fadedSAColor,
+  defaultStrokeColor,
+  defaultTextColor,
+  fadedTextColor,
   getBodyText,
   getParamsText,
   getTextWidth,
@@ -120,7 +121,7 @@ export class FnValue extends Value implements IHoverable {
     if (this.enclosingFrame) {
       this._arrow = new ArrowFromFn(this).to(this.enclosingFrame) as ArrowFromFn;
     }
-    const stroke = this.isReferenced() ? defaultSAColor() : fadedSAColor();
+    const textColor = this.isReferenced() ? defaultTextColor() : fadedTextColor();
     return (
       <React.Fragment key={Layout.key++}>
         <Group
@@ -134,7 +135,7 @@ export class FnValue extends Value implements IHoverable {
             x={this.centerX - this.radius}
             y={this.y()}
             radius={this.radius}
-            stroke={stroke}
+            stroke={textColor}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -142,7 +143,7 @@ export class FnValue extends Value implements IHoverable {
             x={this.centerX - this.radius}
             y={this.y()}
             radius={this.innerRadius}
-            fill={stroke}
+            fill={textColor}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -150,7 +151,7 @@ export class FnValue extends Value implements IHoverable {
             x={this.centerX + this.radius}
             y={this.y()}
             radius={this.radius}
-            stroke={stroke}
+            stroke={textColor}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -158,7 +159,7 @@ export class FnValue extends Value implements IHoverable {
             x={this.centerX + this.radius}
             y={this.y()}
             radius={this.innerRadius}
-            fill={stroke}
+            fill={textColor}
           />
         </Group>
         {CseMachine.getPrintableMode() ? (
@@ -168,13 +169,13 @@ export class FnValue extends Value implements IHoverable {
             visible={true}
             ref={this.labelRef}
           >
-            <KonvaTag stroke="black" fill={'white'} opacity={Config.FnTooltipOpacity} />
+            <KonvaTag stroke={defaultStrokeColor()} />
             <KonvaText
               text={this.exportTooltip}
               fontFamily={Config.FontFamily}
               fontSize={Config.FontSize}
               fontStyle={Config.FontStyle}
-              fill={Config.SA_BLUE}
+              fill={textColor}
               padding={5}
             />
           </KonvaLabel>
@@ -185,13 +186,17 @@ export class FnValue extends Value implements IHoverable {
             visible={false}
             ref={this.labelRef}
           >
-            <KonvaTag stroke="black" fill={'black'} opacity={Config.FnTooltipOpacity} />
+            <KonvaTag
+              stroke={Config.HoverBgColor}
+              fill={Config.HoverBgColor}
+              opacity={Config.FnTooltipOpacity}
+            />
             <KonvaText
               text={this.tooltip}
               fontFamily={Config.FontFamily}
               fontSize={Config.FontSize}
               fontStyle={Config.FontStyle}
-              fill={Config.SA_WHITE}
+              fill={textColor}
               padding={5}
             />
           </KonvaLabel>

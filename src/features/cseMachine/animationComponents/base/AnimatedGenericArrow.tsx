@@ -8,7 +8,7 @@ import { Animatable, AnimatableTo, AnimationConfig } from './Animatable';
 import { AnimatedArrowComponent, AnimatedPathComponent } from './AnimationComponents';
 import { SharedProperties } from './AnimationUtils';
 
-type PathArrowSharedConfig = SharedProperties<PathConfig, ArrowConfig>;
+type PathArrowSharedConfig = Omit<SharedProperties<PathConfig, ArrowConfig>, 'width' | 'height'>;
 
 export class AnimatedGenericArrow<
   Source extends Visible,
@@ -57,6 +57,7 @@ export class AnimatedGenericArrow<
   }
 
   async animateTo(to: Partial<PathArrowSharedConfig>, animationConfig?: AnimationConfig) {
+    console.log(to, this.pathComponent);
     await Promise.all([
       this.animatePathTo(to, animationConfig),
       this.animateArrowTo(to, animationConfig)

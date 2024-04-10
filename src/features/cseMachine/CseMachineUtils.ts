@@ -15,6 +15,7 @@ import { astToString } from 'js-slang/dist/utils/ast/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
+import { Text } from 'konva/lib/shapes/Text';
 import { cloneDeep, isObject } from 'lodash';
 import classes from 'src/styles/Draggable.module.scss';
 
@@ -29,7 +30,6 @@ import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
 import CseMachine from './CseMachine';
 import { Config } from './CseMachineConfig';
-import { ControlStashConfig } from './CseMachineControlStashConfig';
 import { Layout } from './CseMachineLayout';
 import {
   BuiltInFn,
@@ -47,7 +47,8 @@ import {
   ReferenceType,
   SourceObject,
   StreamFn,
-  Unassigned} from './CseMachineTypes';
+  Unassigned
+} from './CseMachineTypes';
 
 class AssertionError extends Error {
   constructor(msg?: string) {
@@ -186,9 +187,16 @@ export function isBoolean(data: Data): data is boolean {
   return typeof data === 'boolean';
 }
 
-/** Returns `true` if `data` is a primitive, defined as a null | data | number */
+/** Returns `true` if `data` is a primitive, which are non-reference types and source objects */
 export function isPrimitiveData(data: Data): data is Primitive {
-  return isUndefined(data) || isNull(data) || isString(data) || isNumber(data) || isBoolean(data);
+  return (
+    isUndefined(data) ||
+    isNull(data) ||
+    isString(data) ||
+    isNumber(data) ||
+    isBoolean(data) ||
+    isSourceObject(data)
+  );
 }
 
 // TODO: remove this in the future once ES typings are updated to contain the new set functions
@@ -286,7 +294,7 @@ export function getTextWidth(
       ''
     );
   const metrics = context.measureText(longestLine);
-  return Math.ceil(metrics.width * 10) / 10;
+  return Math.round(metrics.width);
 }
 
 /**
@@ -370,8 +378,8 @@ export function setHoveredStyle(target: Node | Group, hoveredAttrs: any = {}): v
   nodes.push(target);
   nodes.forEach(node => {
     node.setAttrs({
-      stroke: node.attrs.stroke ? Config.HoveredColor : node.attrs.stroke,
-      fill: node.attrs.fill ? Config.HoveredColor : node.attrs.fill,
+      stroke: node.attrs.stroke ? Config.HoverColor : node.attrs.stroke,
+      fill: node.attrs.fill ? Config.HoverColor : node.attrs.fill,
       ...hoveredAttrs
     });
   });
@@ -386,14 +394,14 @@ export function setUnhoveredStyle(target: Node | Group, unhoveredAttrs: any = {}
   nodes.forEach(node => {
     node.setAttrs({
       stroke: node.attrs.stroke
-        ? CseMachine.getPrintableMode()
-          ? Config.SA_BLUE
-          : Config.SA_WHITE
+        ? node instanceof Text
+          ? defaultTextColor()
+          : defaultStrokeColor()
         : node.attrs.stroke,
       fill: node.attrs.fill
-        ? CseMachine.getPrintableMode()
-          ? Config.SA_BLUE
-          : Config.SA_WHITE
+        ? node instanceof Text
+          ? defaultTextColor()
+          : defaultStrokeColor()
         : node.attrs.fill,
       ...unhoveredAttrs
     });
@@ -845,21 +853,23 @@ export const isStashItemInDanger = (stashIndex: number): boolean => {
   return false;
 };
 
-export const defaultSAColor = () =>
-  CseMachine.getPrintableMode() ? Config.SA_BLUE : Config.SA_WHITE;
+export const defaultBackgroundColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintBgColor : Config.BgColor;
 
-export const fadedSAColor = () =>
-  CseMachine.getPrintableMode() ? Config.SA_FADED_BLUE : Config.SA_FADED_WHITE;
+export const defaultTextColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintTextColor : Config.TextColor;
 
-export const stackItemSAColor = (index: number) =>
-  isStashItemInDanger(index)
-    ? ControlStashConfig.STASH_DANGER_ITEM
-    : CseMachine.getPrintableMode()
-    ? ControlStashConfig.SA_BLUE
-    : ControlStashConfig.SA_WHITE;
-export const currentItemSAColor = (test: boolean) =>
-  test
-    ? Config.SA_CURRENT_ITEM
-    : CseMachine.getPrintableMode()
-    ? ControlStashConfig.SA_BLUE
-    : ControlStashConfig.SA_WHITE;
+export const fadedTextColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintTextColorFaded : Config.TextColorFaded;
+
+export const defaultStrokeColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintStrokeColor : Config.StrokeColor;
+
+export const fadedStrokeColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintStrokeColorFaded : Config.StrokeColorFaded;
+
+export const defaultActiveColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintActiveColor : Config.ActiveColor;
+
+export const defaultDangerColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintDangerColor : Config.DangerColor;

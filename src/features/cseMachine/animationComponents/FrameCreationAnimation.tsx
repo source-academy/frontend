@@ -6,7 +6,7 @@ import { Frame } from '../components/Frame';
 import { StashItemComponent } from '../components/StashItemComponent';
 import { Config } from '../CseMachineConfig';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
-import { currentItemSAColor } from '../CseMachineUtils';
+import { defaultActiveColor, defaultStrokeColor } from '../CseMachineUtils';
 import { Animatable, AnimationConfig } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
 import { AnimatedRectComponent, AnimatedTextComponent } from './base/AnimationComponents';
@@ -36,7 +36,7 @@ export class FrameCreationAnimation extends Animatable {
     });
     this.borderAnimation = new AnimatedRectComponent({
       ...getNodePosition(origin),
-      stroke: currentItemSAColor(origin instanceof ControlItemComponent)
+      stroke: origin instanceof ControlItemComponent ? defaultActiveColor() : defaultStrokeColor()
     });
     if (frame.arrow) {
       this.frameArrowAnimation = new AnimatedGenericArrow(frame.arrow, { opacity: 0 });

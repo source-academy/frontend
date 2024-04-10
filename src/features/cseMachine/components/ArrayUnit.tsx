@@ -1,13 +1,20 @@
 import React from 'react';
+import { Text as KonvaText } from 'react-konva';
 
-import { Config } from '../CseMachineConfig';
+import CseMachine from '../CseMachine';
+import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Data } from '../CseMachineTypes';
-import { defaultSAColor, fadedSAColor } from '../CseMachineUtils';
+import {
+  defaultTextColor as defaultStrokeColor,
+  defaultTextColor,
+  fadedTextColor as fadedStrokeColor,
+  fadedTextColor
+} from '../CseMachineUtils';
 import { Arrow } from './arrows/Arrow';
 import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
 import { RoundedRect } from './shapes/RoundedRect';
-import { Text } from './Text';
+import { defaultOptions } from './Text';
 import { ArrayValue } from './values/ArrayValue';
 import { PrimitiveValue } from './values/PrimitiveValue';
 import { Value } from './values/Value';
@@ -25,7 +32,7 @@ export class ArrayUnit extends Visible {
   /** check if this unit is the main reference of the value */
   readonly isMainReference: boolean;
   arrow: Arrow | undefined = undefined;
-  index: Text;
+  readonly indexRef = React.createRef<any>();
 
   constructor(
     /** index of this unit in its parent */
@@ -44,14 +51,15 @@ export class ArrayUnit extends Visible {
     this.isLastUnit = this.idx === this.parent.data.length - 1;
     this.value = Layout.createValue(this.data, this);
     this.isMainReference = this.value.references.length > 1;
-    this.index = new Text(this.idx, this.x(), this.y() - 0.4 * this.height(), { faded: true });
   }
 
-  updatePosition = () => {};
+  showIndex() {
+    this.indexRef.current?.show();
+  }
 
-  onMouseEnter = () => {};
-
-  onMouseLeave = () => {};
+  hideIndex() {
+    if (!CseMachine.getPrintableMode()) this.indexRef.current?.hide();
+  }
 
   draw(): React.ReactNode {
     if (this.isDrawn()) return null;
@@ -68,6 +76,18 @@ export class ArrayUnit extends Visible {
     if (this.isLastUnit)
       cornerRadius.upperRight = cornerRadius.lowerRight = Config.DataCornerRadius;
 
+    const indexProps = {
+      fontFamily: defaultOptions.fontFamily,
+      fontSize: defaultOptions.fontSize,
+      fontStyle: defaultOptions.fontStyle,
+      fill: this.parent.isReferenced() ? defaultTextColor() : fadedTextColor(),
+      x: this.x(),
+      y: this.y() - defaultOptions.fontSize - 4,
+      width: this.width(),
+      padding: 2,
+      visible: CseMachine.getPrintableMode()
+    };
+
     return (
       <React.Fragment key={Layout.key++}>
         <RoundedRect
@@ -76,15 +96,19 @@ export class ArrayUnit extends Visible {
           y={this.y()}
           width={this.width()}
           height={this.height()}
-          stroke={this.parent.isReferenced() ? defaultSAColor() : fadedSAColor()}
+          stroke={this.parent.isReferenced() ? defaultStrokeColor() : fadedStrokeColor()}
           hitStrokeWidth={Config.DataHitStrokeWidth}
-          fillEnabled={false}
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
+          fillEnabled={true}
           cornerRadius={cornerRadius}
           forwardRef={this.ref}
         />
-        {this.index.draw()}
+        <KonvaText
+          key={Layout.key++}
+          ref={this.indexRef}
+          {...ShapeDefaultProps}
+          {...indexProps}
+          text={`${this.idx}`}
+        />
         {this.value.draw()}
         {this.value instanceof PrimitiveValue || new ArrowFromArrayUnit(this).to(this.value).draw()}
       </React.Fragment>

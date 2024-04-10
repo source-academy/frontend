@@ -9,7 +9,6 @@ import { StashItemComponent } from '../components/StashItemComponent';
 import { defaultOptions, Text } from '../components/Text';
 import { PrimitiveValue } from '../components/values/PrimitiveValue';
 import { Value } from '../components/values/Value';
-import { Config } from '../CseMachineConfig';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { getTextWidth } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
@@ -40,7 +39,6 @@ export class AssignmentAnimation extends Animatable {
         ...defaultOptions,
         ...getNodePosition(this.binding.value.text),
         text: this.binding.value.text.partialStr,
-        fill: Config.SA_WHITE.toString(),
         x: this.binding.value.text.x() - 16,
         opacity: 0
       });

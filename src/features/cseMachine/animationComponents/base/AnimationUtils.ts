@@ -1,6 +1,7 @@
 import { Binding } from '../../components/Binding';
 import { Frame } from '../../components/Frame';
 import { Visible } from '../../components/Visible';
+import { AnimationConfig } from './Animatable';
 
 /** Omits the index signature `[key: string]: any;` from type `T` */
 export type RemoveIndex<T> = {
@@ -63,4 +64,42 @@ export function lookupBinding(currFrame: Frame, bindingName: string): [Frame, Bi
 // the second frame is a newly created frame
 export function checkFrameCreation(prevFrame: Frame, currFrame: Frame): boolean {
   return prevFrame.environment.id !== currFrame.environment.id;
+}
+
+function parseHexColor(color: string): [number, number, number] {
+  if (!color.startsWith('#') || (color.length !== 4 && color.length !== 7)) {
+    throw new Error(`Cannot parse given color string: ${color}`);
+  }
+  if (color.length === 4) color = color + color.slice(1);
+  return [
+    parseInt(color.slice(1, 3), 16),
+    parseInt(color.slice(3, 5), 16),
+    parseInt(color.slice(5, 7), 16)
+  ];
+}
+
+function convertRgbToHex([r, g, b]: [number, number, number]): `#${string}` {
+  return `#${
+    r.toString(16).padStart(2, '0') +
+    g.toString(16).padStart(2, '0') +
+    b.toString(16).padStart(2, '0')
+  }`;
+}
+
+/**
+ * Interpolates between the colors based on the given delta and easing function.
+ * Only supports hex colors, e.g. `#000`, `#abcdef`, etc.
+ */
+export function lerpColor(
+  startColor: string,
+  endColor: string,
+  delta: number,
+  easingFn: NonNullable<AnimationConfig['easing']>
+): `#${string}` {
+  const startRgb = parseHexColor(startColor);
+  const endRgb = parseHexColor(endColor);
+  const rgb = Array.from({ length: 3 }, (_, i) =>
+    Math.round(easingFn(delta, startRgb[i], endRgb[i] - startRgb[i], 1))
+  );
+  return convertRgbToHex(rgb as [number, number, number]);
 }
