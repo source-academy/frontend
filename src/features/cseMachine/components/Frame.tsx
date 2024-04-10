@@ -74,6 +74,8 @@ export class Frame extends Visible implements IHoverable {
     this.leftSiblingFrame &&
       (this._x +=
         this.leftSiblingFrame.x() + this.leftSiblingFrame.totalWidth + Config.FrameMarginX);
+    // ensure x coordinate cannot be less than that of parent frame
+    this.parentFrame && (this._x = Math.max(this._x, this.parentFrame.x()));
 
     this.name = new Text(
       frameNames.get(this.environment.name) || this.environment.name,
