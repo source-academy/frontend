@@ -46,7 +46,9 @@ export const Config = Object.freeze({
   MaxExportHeight: 12000,
 
   SA_WHITE: '#999999',
+  SA_FADED_WHITE: '#5b6773',
   SA_BLUE: '#2c3e50',
+  SA_FADED_BLUE: '#BBB',
   PRINT_BACKGROUND: 'white',
   SA_CURRENT_ITEM: '#030fff',
 
