@@ -1,6 +1,4 @@
-import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
 import React from 'react';
 
 import { SideContentLocation, SideContentTab, SideContentType } from '../SideContentTypes';
@@ -28,17 +26,19 @@ async function getBase64(file: Blob, onFinish: (result: string) => void) {
 class SideContentUpload extends React.Component<OwnProps> {
   public render() {
     return (
-      <div className={classNames('sa-data-visualizer', Classes.DARK)}>
+      <div>
         <p>
           Upload class files to run in the JVM.
           <br />
           <br />
           Code in the editor will be ignored when running while this tab is active.
           <br />
+          <br />
         </p>
         <input
           type="file"
           multiple
+          accept=".class"
           onChange={e => {
             const ret: { [key: string]: string } = {};
             const promises = [];
