@@ -369,6 +369,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       const testcase = state[workspaceLocation].editorTestcases[action.payload.index];
       testcase.result = action.payload.value;
       testcase.errors = undefined;
+      state[workspaceLocation].isRunning = false;
     })
     .addCase(evalTestcaseFailure, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
@@ -450,7 +451,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       return {
         ...state,
         [workspaceLocation]: {
-          // ...state[workspaceLocation],
+          ...state[workspaceLocation],
           ...createDefaultWorkspace(workspaceLocation),
           ...action.payload.workspaceOptions
         }
