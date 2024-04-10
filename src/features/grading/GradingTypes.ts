@@ -3,8 +3,8 @@ import { ColDef } from 'ag-grid-community';
 import {
   AssessmentType,
   AutogradingResult,
-  ProgressStatus,
   MCQChoice,
+  ProgressStatus,
   Question,
   Testcase
 } from '../../commons/assessment/AssessmentTypes';

@@ -289,7 +289,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           : undefined;
       }
     });
-    
+
     // TODO TO REMOVE this or gradingStatus
     cols.push({
       ...generalColProperties,

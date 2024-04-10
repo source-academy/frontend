@@ -39,7 +39,7 @@ const AVAILABLE_COLORS = {
   red: ['#f87171', '#b91c1c'],
   gray: ['#9ca3af', '#374151'],
   purple: ['#c084fc', '#7e22ce'],
-  blue: ['#93c5fd', '#2563eb'],
+  blue: ['#93c5fd', '#2563eb']
 };
 
 const BADGE_COLORS = {
@@ -159,12 +159,12 @@ const ProgressStatusBadge: React.FC<ProgressStatusBadgeProps> = ({ progress }) =
   return <Badge text={statusText} color={getBadgeColorFromLabel(progress)} icon={badgeIcon} />;
 };
 
- // TO BE REMOVED
+// TO BE REMOVED
 type SubmissionStatusBadgeProps = {
   status: string;
 };
 
- // TO BE REMOVED
+// TO BE REMOVED
 const SubmissionStatusBadge: React.FC<SubmissionStatusBadgeProps> = ({ status }) => {
   const statusText = status.charAt(0).toUpperCase() + status.slice(1);
   return <Badge text={statusText} color={getBadgeColorFromLabel(status)} />;
