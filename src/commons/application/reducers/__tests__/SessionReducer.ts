@@ -5,7 +5,7 @@ import {
   Assessment,
   AssessmentOverview,
   AssessmentStatuses,
-  GradingStatuses
+  ProgressStatuses
 } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
 import { defaultSession, GameState, Role, Story } from '../../ApplicationTypes';
@@ -342,7 +342,7 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: null,
     xp: 0,
-    gradingStatus: GradingStatuses.none,
+    gradingStatus: ProgressStatuses.none,
     maxTeamSize: 5,
     hasVotingFeatures: false
   }
@@ -364,7 +364,7 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
     status: AssessmentStatuses.attempted,
     story: null,
     xp: 1,
-    gradingStatus: GradingStatuses.grading,
+    gradingStatus: ProgressStatuses.grading,
     maxTeamSize: 1,
     hasVotingFeatures: false
   }

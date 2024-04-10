@@ -4,7 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { fetchAssessmentOverviews, fetchTotalXp } from '../application/actions/SessionActions';
-import { AssessmentStatuses, AssessmentType, ProgressStatuses } from '../assessment/AssessmentTypes';
+import {
+  AssessmentStatuses,
+  AssessmentType,
+  ProgressStatuses
+} from '../assessment/AssessmentTypes';
 import Constants from '../utils/Constants';
 import { useSession } from '../utils/Hooks';
 import ProfileCard from './ProfileCard';
