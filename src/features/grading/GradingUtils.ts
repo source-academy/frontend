@@ -1,4 +1,4 @@
-import { GradingStatuses } from 'src/commons/assessment/AssessmentTypes';
+import { ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 import { ColumnFilter } from 'src/features/grading/GradingTypes';
 
 import { GradingOverview } from './GradingTypes';
@@ -7,7 +7,7 @@ import { GradingOverview } from './GradingTypes';
 export const isSubmissionUngraded = (s: GradingOverview): boolean => {
   const isSubmitted = s.submissionStatus === 'submitted';
   const isNotGraded =
-    s.gradingStatus !== GradingStatuses.graded && s.gradingStatus !== GradingStatuses.excluded;
+    s.gradingStatus !== ProgressStatuses.graded && s.gradingStatus !== ProgressStatuses.excluded;
   return isSubmitted && isNotGraded;
 };
 

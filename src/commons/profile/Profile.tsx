@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { fetchAssessmentOverviews, fetchTotalXp } from '../application/actions/SessionActions';
-import { AssessmentStatuses, AssessmentType, GradingStatuses } from '../assessment/AssessmentTypes';
+import { AssessmentStatuses, AssessmentType, ProgressStatuses } from '../assessment/AssessmentTypes';
 import Constants from '../utils/Constants';
 import { useSession } from '../utils/Hooks';
 import ProfileCard from './ProfileCard';
@@ -129,8 +129,8 @@ const Profile: React.FC<ProfileProps> = props => {
         .filter(
           item =>
             item.status === AssessmentStatuses.submitted &&
-            (item.gradingStatus === GradingStatuses.graded ||
-              item.gradingStatus === GradingStatuses.excluded)
+            (item.gradingStatus === ProgressStatuses.graded ||
+              item.gradingStatus === ProgressStatuses.excluded)
         )
         .map((assessment, index) => {
           return (

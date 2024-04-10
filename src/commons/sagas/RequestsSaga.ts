@@ -48,9 +48,9 @@ import {
   AssessmentConfiguration,
   AssessmentOverview,
   ContestEntry,
-  GradingStatus,
   IContestVotingQuestion,
   IProgrammingQuestion,
+  ProgressStatus,
   QuestionType,
   QuestionTypes
 } from '../assessment/AssessmentTypes';
@@ -1673,7 +1673,7 @@ const computeGradingStatus = (
   submissionStatus: any,
   numGraded: number,
   numQuestions: number
-): GradingStatus =>
+): ProgressStatus =>
   // isGraded refers to whether the assessment type is graded or not, as specified in
   // the respective assessment configuration
   isManuallyGraded && submissionStatus === 'submitted'

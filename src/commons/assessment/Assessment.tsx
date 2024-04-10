@@ -51,7 +51,7 @@ import {
   AssessmentOverview,
   AssessmentStatuses,
   AssessmentWorkspaceParams,
-  GradingStatuses
+  ProgressStatuses
 } from './AssessmentTypes';
 
 export type AssessmentProps = {
@@ -427,17 +427,17 @@ const makeGradingStatus = (gradingStatus: string) => {
   let tooltip: string;
 
   switch (gradingStatus) {
-    case GradingStatuses.graded:
+    case ProgressStatuses.graded:
       iconName = IconNames.TICK;
       intent = Intent.SUCCESS;
       tooltip = 'Fully graded';
       break;
-    case GradingStatuses.grading:
+    case ProgressStatuses.grading:
       iconName = IconNames.TIME;
       intent = Intent.WARNING;
       tooltip = 'Grading in progress';
       break;
-    case GradingStatuses.none:
+    case ProgressStatuses.none:
       iconName = IconNames.CROSS;
       intent = Intent.DANGER;
       tooltip = 'Not graded yet';

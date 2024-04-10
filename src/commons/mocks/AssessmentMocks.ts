@@ -6,11 +6,11 @@ import {
   AssessmentConfiguration,
   AssessmentOverview,
   AssessmentStatuses,
-  GradingStatuses,
   IContestVotingQuestion,
   IMCQQuestion,
   IProgrammingQuestion,
   Library,
+  ProgressStatuses,
   TestcaseTypes
 } from '../assessment/AssessmentTypes';
 
@@ -117,7 +117,7 @@ const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: 'mission-1',
     xp: 0,
-    gradingStatus: GradingStatuses.none,
+    gradingStatus: ProgressStatuses.none,
     maxTeamSize: 1,
     hasVotingFeatures: false
   }
@@ -151,7 +151,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.attempted,
     story: 'mission-1',
     xp: 1,
-    gradingStatus: GradingStatuses.none,
+    gradingStatus: ProgressStatuses.none,
     maxTeamSize: 4,
     hasVotingFeatures: false
   },
@@ -170,7 +170,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.attempting,
     story: 'mission-2',
     xp: 2,
-    gradingStatus: GradingStatuses.none,
+    gradingStatus: ProgressStatuses.none,
     maxTeamSize: 1,
     hasVotingFeatures: false
   },
@@ -189,7 +189,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: 'sidequest-2.1',
     xp: 3,
-    gradingStatus: GradingStatuses.none,
+    gradingStatus: ProgressStatuses.none,
     maxTeamSize: 2,
     hasVotingFeatures: false
   },
@@ -208,7 +208,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: null,
     xp: 0,
-    gradingStatus: GradingStatuses.excluded,
+    gradingStatus: ProgressStatuses.excluded,
     maxTeamSize: 2,
     hasVotingFeatures: false
   },
@@ -227,7 +227,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: 'sidequest-2.1',
     xp: 3,
-    gradingStatus: GradingStatuses.none,
+    gradingStatus: ProgressStatuses.none,
     private: true,
     maxTeamSize: 1,
     hasVotingFeatures: false
@@ -250,7 +250,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: 'mission-3',
     xp: 800,
-    gradingStatus: GradingStatuses.grading,
+    gradingStatus: ProgressStatuses.grading,
     maxTeamSize: 1,
     hasVotingFeatures: false
   },
@@ -269,7 +269,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 500,
-    gradingStatus: GradingStatuses.none,
+    gradingStatus: ProgressStatuses.none,
     maxTeamSize: 1,
     hasVotingFeatures: false
   },
@@ -288,7 +288,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 150,
-    gradingStatus: GradingStatuses.graded,
+    gradingStatus: ProgressStatuses.graded,
     maxTeamSize: 1,
     hasVotingFeatures: false
   },
@@ -307,7 +307,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 100,
-    gradingStatus: GradingStatuses.excluded,
+    gradingStatus: ProgressStatuses.excluded,
     maxTeamSize: 1,
     hasVotingFeatures: false
   }

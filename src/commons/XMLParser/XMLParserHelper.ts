@@ -9,11 +9,11 @@ import {
   AssessmentType,
   BaseQuestion,
   emptyLibrary,
-  GradingStatuses,
   IMCQQuestion,
   IProgrammingQuestion,
   Library,
   MCQChoice,
+  ProgressStatuses,
   Question,
   Testcase,
   TestcaseTypes
@@ -85,7 +85,7 @@ const makeAssessmentOverview = (result: any, maxXpVal: number): AssessmentOvervi
     status: AssessmentStatuses.attempting,
     story: rawOverview.story,
     xp: 0,
-    gradingStatus: 'none' as GradingStatuses,
+    gradingStatus: 'none' as ProgressStatuses,
     maxTeamSize: 1,
     hasVotingFeatures: false
   };
