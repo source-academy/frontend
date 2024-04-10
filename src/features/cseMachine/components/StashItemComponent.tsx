@@ -10,8 +10,9 @@ import { Layout } from '../CseMachineLayout';
 import { IHoverable } from '../CseMachineTypes';
 import {
   getTextWidth,
-  isClosure,
   isDataArray,
+  isNonGlobalFn,
+  isSourceObject,
   isStashItemInDanger,
   setHoveredCursor,
   setHoveredStyle,
@@ -44,12 +45,14 @@ export class StashItemComponent extends Visible implements IHoverable {
     const valToStashRep = (val: any): string => {
       return typeof val === 'string'
         ? `'${val}'`.trim()
-        : isClosure(val)
+        : isNonGlobalFn(val)
         ? 'closure'
         : isDataArray(val)
         ? arrowTo
           ? 'pair/array'
           : JSON.stringify(val)
+        : isSourceObject(val)
+        ? val.toReplString()
         : String(value);
     };
     this.text = truncateText(
@@ -69,6 +72,7 @@ export class StashItemComponent extends Visible implements IHoverable {
     this._x = ControlStashConfig.StashPosX + stackWidth;
     this._y = ControlStashConfig.StashPosY;
     if (arrowTo) {
+      arrowTo.markAsReferenced();
       this.arrow = new ArrowFromStashItemComponent(this).to(arrowTo) as ArrowFromStashItemComponent;
     }
   }
