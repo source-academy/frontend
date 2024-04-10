@@ -189,9 +189,6 @@ const Workspace: React.FC<WorkspaceProps> = props => {
     </Resizable>
   );
 
-  // This is a custom hook imported from @mantine/hooks that handles the fullscreen logic
-  // It returns a ref callback function to attach to the element that should be fullscreened,
-  // a function to toggle fullscreen and a boolean indicating whether the element is fullscreen
   const {
     ref: fullscreenRef,
     toggle: toggleFullscreen,
@@ -201,10 +198,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   const fullscreenContainerRef = React.useRef<HTMLDivElement | null>(null);
   const setFullscreenRefs = React.useCallback(
     (node: HTMLDivElement | null) => {
-      // Refs returned by useRef()
       fullscreenContainerRef.current = node;
-
-      // Ref callback function from useFullscreen
       fullscreenRef(node);
     },
     [fullscreenRef]
