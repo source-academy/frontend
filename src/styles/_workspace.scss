@@ -153,7 +153,7 @@ $code-color-notification: #f9f0d7;
     }
 
     .ace_breakpoint:before {
-      content: " \25CF";
+      content: ' \25CF';
       margin-left: -10px;
       color: red;
     }
@@ -468,8 +468,8 @@ $code-color-notification: #f9f0d7;
                 * sourcecode, font size modified.
                 */
               font:
-                16px / normal "Inconsolata",
-                "Consolas",
+                16px / normal 'Inconsolata',
+                'Consolas',
                 monospace;
 
               .canvas-container {
@@ -500,7 +500,7 @@ $code-color-notification: #f9f0d7;
     // Set colour of icons in blueprintjs tabs
     color: #a7b6c2;
 
-    &[aria-selected="true"] {
+    &[aria-selected='true'] {
       .side-content-tooltip {
         background-color: #495a6b;
 
@@ -513,7 +513,7 @@ $code-color-notification: #f9f0d7;
       }
     }
 
-    &[aria-disabled="true"] {
+    &[aria-disabled='true'] {
       .side-content-tooltip {
         // Set tooltip colour to always be the same as the background
         background-color: inherit;
@@ -799,8 +799,8 @@ $code-color-notification: #f9f0d7;
           * sourcecode, font size modified.
           */
         font:
-          16px / normal "Inconsolata",
-          "Consolas",
+          16px / normal 'Inconsolata',
+          'Consolas',
           monospace;
       }
 
