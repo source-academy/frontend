@@ -11,13 +11,13 @@ const BADGE_COLORS = {
   paths: 'sky',
 
   // ProgressStatus
-  autograded: 'purple',
-  not_attempted: 'gray',
-  attempting: 'red',
-  attempted: 'red',
-  submitted: 'yellow',
-  graded: 'green',
-  published: 'blue'
+  [ProgressStatuses.autograded]: 'purple',
+  [ProgressStatuses.not_attempted]: 'gray',
+  [ProgressStatuses.attempting]: 'red',
+  [ProgressStatuses.attempted]: 'red',
+  [ProgressStatuses.submitted]: 'yellow',
+  [ProgressStatuses.graded]: 'green',
+  [ProgressStatuses.published]: 'blue'
 };
 
 export function getBadgeColorFromLabel(label: string) {
