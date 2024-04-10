@@ -1979,7 +1979,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     onMouseLeave={[Function]}
   >
     <Path
-      data="M 181.5 40 L 356.5 330 L 356.5 330 M 181.5 40 L 356.5 330 L 356.5 330 "
+      data="M 181.5 40 L 379 330 L 379 330 M 181.5 40 L 379 330 L 379 330 "
       hitStrokeWidth={5}
       preventDefault={false}
       stroke="#999999"
@@ -1992,7 +1992,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
         Array [
           181.5,
           40,
-          356.5,
+          379,
           330,
         ]
       }
@@ -2265,7 +2265,7 @@ Object {
       ],
     },
   },
-  "id": "46",
+  "id": "47",
   "name": "programEnvironment",
   "tail": Object {
     "head": Object {
@@ -2760,7 +2760,7 @@ Object {
       ],
     },
   },
-  "id": "46",
+  "id": "47",
   "name": "programEnvironment",
   "tail": Object {
     "head": Object {
@@ -2960,7 +2960,7 @@ Object {
       ],
     },
   },
-  "id": "46",
+  "id": "47",
   "name": "programEnvironment",
   "tail": Object {
     "head": Object {
@@ -3292,7 +3292,7 @@ Object {
       ],
     },
   },
-  "id": "46",
+  "id": "47",
   "name": "programEnvironment",
   "tail": Object {
     "head": Object {
@@ -3419,7 +3419,7 @@ Object {
       [Function],
     },
   },
-  "id": "46",
+  "id": "47",
   "name": "programEnvironment",
   "tail": Object {
     "head": Object {
@@ -3483,7 +3483,7 @@ Object {
       [Function],
     },
   },
-  "id": "48",
+  "id": "49",
   "name": "f",
   "tail": Object {
     "head": Object {
@@ -3497,7 +3497,7 @@ Object {
         [Function],
       },
     },
-    "id": "46",
+    "id": "47",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
@@ -3528,7 +3528,7 @@ Array [
   [Function],
   "x: ",
   11,
-  "0:= ",
+  "1:= ",
   [Function],
 ]
 `;
@@ -3590,7 +3590,7 @@ Object {
       ],
     },
   },
-  "id": "46",
+  "id": "47",
   "name": "programEnvironment",
   "tail": Object {
     "head": Object {
@@ -3617,8 +3617,6 @@ Array [
   "pair: ",
   [Function],
   "accumulate: ",
-  [Function],
-  "0:= ",
   [Function],
   "x:= ",
   Array [
@@ -3658,7 +3656,7 @@ Object {
       Array [],
     },
   },
-  "id": "46",
+  "id": "47",
   "name": "programEnvironment",
   "tail": Object {
     "head": Object {
@@ -3687,12 +3685,9 @@ exports[`CSE Machine calculates correct layout for code sample 7 1`] = `
 Object {
   "head": Object {
     ":::pre-declared names::": Symbol(),
-    "integers_from": [Function],
   },
   "heap": Heap {
-    "storage": Set {
-      [Function],
-    },
+    "storage": null,
   },
   "id": "-1",
   "name": "global",
@@ -3736,17 +3731,14 @@ Object {
       [Function],
     },
   },
-  "id": "46",
+  "id": "47",
   "name": "programEnvironment",
   "tail": Object {
     "head": Object {
       ":::pre-declared names::": Symbol(),
-      "integers_from": [Function],
     },
     "heap": Heap {
-      "storage": Set {
-        [Function],
-      },
+      "storage": null,
     },
     "id": "-1",
     "name": "global",
@@ -3796,7 +3788,6 @@ Object {
     "type": "CallExpression",
   },
   "head": Object {
-    "79": [Function],
     "n": 1,
   },
   "heap": Heap {
@@ -3808,17 +3799,14 @@ Object {
       ],
     },
   },
-  "id": "68",
+  "id": "69",
   "name": "integers_from",
   "tail": Object {
     "head": Object {
       ":::pre-declared names::": Symbol(),
-      "integers_from": [Function],
     },
     "heap": Heap {
-      "storage": Set {
-        [Function],
-      },
+      "storage": null,
     },
     "id": "-1",
     "name": "global",
@@ -3834,57 +3822,59 @@ Object {
       Object {
         "loc": undefined,
         "type": "Literal",
-        "value": 2,
+        "value": Array [
+          1,
+          [Function],
+        ],
       },
     ],
     "callee": Node {
-      "end": 13321,
+      "end": 317,
       "loc": SourceLocation {
         "end": Position {
-          "column": 23,
-          "line": 450,
+          "column": 73,
+          "line": 12,
         },
         "start": Position {
-          "column": 10,
-          "line": 450,
+          "column": 62,
+          "line": 12,
         },
       },
-      "name": "integers_from",
-      "start": 13308,
+      "name": "stream_tail",
+      "start": 306,
       "type": "Identifier",
     },
-    "end": 13328,
+    "end": 320,
     "loc": SourceLocation {
       "end": Position {
-        "column": 30,
-        "line": 450,
+        "column": 76,
+        "line": 12,
       },
       "start": Position {
-        "column": 10,
-        "line": 450,
+        "column": 62,
+        "line": 12,
       },
     },
-    "start": 13308,
+    "start": 306,
     "type": "CallExpression",
   },
   "head": Object {
-    "83": [Function],
-    "n": 2,
+    "xs": Array [
+      1,
+      [Function],
+    ],
   },
   "heap": Heap {
     "storage": null,
   },
-  "id": "80",
-  "name": "n => ...",
+  "id": "78",
+  "name": "stream_tail",
   "tail": Object {
     "head": Object {
       ":::pre-declared names::": Symbol(),
-      "integers_from": [Function],
     },
     "heap": Heap {
-      "storage": Set {
-        [Function],
-      },
+      "storage": null,
     },
     "id": "-1",
     "name": "global",
@@ -3895,13 +3885,81 @@ Object {
 
 exports[`CSE Machine calculates correct layout for code sample 7 5`] = `
 Object {
+  "callExpression": Object {
+    "arguments": Array [
+      Object {
+        "loc": undefined,
+        "type": "Literal",
+        "value": 2,
+      },
+    ],
+    "callee": Node {
+      "end": 13849,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 23,
+          "line": 470,
+        },
+        "start": Position {
+          "column": 10,
+          "line": 470,
+        },
+      },
+      "name": "integers_from",
+      "start": 13836,
+      "type": "Identifier",
+    },
+    "end": 13856,
+    "loc": SourceLocation {
+      "end": Position {
+        "column": 30,
+        "line": 470,
+      },
+      "start": Position {
+        "column": 10,
+        "line": 470,
+      },
+    },
+    "start": 13836,
+    "type": "CallExpression",
+  },
+  "head": Object {
+    "n": 2,
+  },
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+      Array [
+        2,
+        [Function],
+      ],
+    },
+  },
+  "id": "80",
+  "name": "integers_from",
+  "tail": Object {
+    "head": Object {
+      ":::pre-declared names::": Symbol(),
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 6`] = `
+Object {
   "head": Object {
     "i": 5,
   },
   "heap": Heap {
     "storage": null,
   },
-  "id": "48",
+  "id": "49",
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
@@ -3938,17 +3996,14 @@ Object {
         [Function],
       },
     },
-    "id": "46",
+    "id": "47",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
         ":::pre-declared names::": Symbol(),
-        "integers_from": [Function],
       },
       "heap": Heap {
-        "storage": Set {
-          [Function],
-        },
+        "storage": null,
       },
       "id": "-1",
       "name": "global",
@@ -3958,7 +4013,7 @@ Object {
 }
 `;
 
-exports[`CSE Machine calculates correct layout for code sample 7 6`] = `
+exports[`CSE Machine calculates correct layout for code sample 7 7`] = `
 Object {
   "callExpression": Object {
     "arguments": Array [
@@ -4016,7 +4071,7 @@ Object {
   "heap": Heap {
     "storage": null,
   },
-  "id": "71",
+  "id": "72",
   "name": "eval_stream",
   "tail": Object {
     "head": Object {
@@ -4053,17 +4108,14 @@ Object {
         [Function],
       },
     },
-    "id": "46",
+    "id": "47",
     "name": "programEnvironment",
     "tail": Object {
       "head": Object {
         ":::pre-declared names::": Symbol(),
-        "integers_from": [Function],
       },
       "heap": Heap {
-        "storage": Set {
-          [Function],
-        },
+        "storage": null,
       },
       "id": "-1",
       "name": "global",
@@ -4073,151 +4125,79 @@ Object {
 }
 `;
 
-exports[`CSE Machine calculates correct layout for code sample 7 7`] = `
-Object {
-  "head": Object {
-    "_copy_of_i": 1,
-  },
-  "heap": Heap {
-    "storage": null,
-  },
-  "id": "49",
-  "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
-      "i": 5,
-    },
-    "heap": Heap {
-      "storage": null,
-    },
-    "id": "48",
-    "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
-        "eval_stream": [Function],
-        "x": 1,
-        "y": Array [
-          [Circular],
-          Array [
-            1,
-            [Circular],
-            [Circular],
-          ],
-        ],
-      },
-      "heap": Heap {
-        "storage": Set {
-          Array [],
-          Array [
-            1,
-            Array [
-              [Circular],
-              [Circular],
-            ],
-            [Circular],
-          ],
-          Array [
-            [Circular],
-            Array [
-              1,
-              [Circular],
-              [Circular],
-            ],
-          ],
-          [Function],
-        },
-      },
-      "id": "46",
-      "name": "programEnvironment",
-      "tail": Object {
-        "head": Object {
-          ":::pre-declared names::": Symbol(),
-          "integers_from": [Function],
-        },
-        "heap": Heap {
-          "storage": Set {
-            [Function],
-          },
-        },
-        "id": "-1",
-        "name": "global",
-        "tail": null,
-      },
-    },
-  },
-}
-`;
-
 exports[`CSE Machine calculates correct layout for code sample 7 8`] = `
 Object {
   "head": Object {
-    "_copy_of_i": 2,
+    "the_tail": [Function],
   },
   "heap": Heap {
     "storage": null,
   },
-  "id": "53",
+  "id": "79",
   "name": "blockEnvironment",
   "tail": Object {
+    "callExpression": Object {
+      "arguments": Array [
+        Object {
+          "loc": undefined,
+          "type": "Literal",
+          "value": Array [
+            1,
+            [Function],
+          ],
+        },
+      ],
+      "callee": Node {
+        "end": 317,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 73,
+            "line": 12,
+          },
+          "start": Position {
+            "column": 62,
+            "line": 12,
+          },
+        },
+        "name": "stream_tail",
+        "start": 306,
+        "type": "Identifier",
+      },
+      "end": 320,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 76,
+          "line": 12,
+        },
+        "start": Position {
+          "column": 62,
+          "line": 12,
+        },
+      },
+      "start": 306,
+      "type": "CallExpression",
+    },
     "head": Object {
-      "i": 5,
+      "xs": Array [
+        1,
+        [Function],
+      ],
     },
     "heap": Heap {
       "storage": null,
     },
-    "id": "48",
-    "name": "blockEnvironment",
+    "id": "78",
+    "name": "stream_tail",
     "tail": Object {
       "head": Object {
-        "eval_stream": [Function],
-        "x": 1,
-        "y": Array [
-          [Circular],
-          Array [
-            1,
-            [Circular],
-            [Circular],
-          ],
-        ],
+        ":::pre-declared names::": Symbol(),
       },
       "heap": Heap {
-        "storage": Set {
-          Array [],
-          Array [
-            1,
-            Array [
-              [Circular],
-              [Circular],
-            ],
-            [Circular],
-          ],
-          Array [
-            [Circular],
-            Array [
-              1,
-              [Circular],
-              [Circular],
-            ],
-          ],
-          [Function],
-        },
+        "storage": null,
       },
-      "id": "46",
-      "name": "programEnvironment",
-      "tail": Object {
-        "head": Object {
-          ":::pre-declared names::": Symbol(),
-          "integers_from": [Function],
-        },
-        "heap": Heap {
-          "storage": Set {
-            [Function],
-          },
-        },
-        "id": "-1",
-        "name": "global",
-        "tail": null,
-      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
     },
   },
 }
@@ -4226,12 +4206,12 @@ Object {
 exports[`CSE Machine calculates correct layout for code sample 7 9`] = `
 Object {
   "head": Object {
-    "_copy_of_i": 3,
+    "_copy_of_i": 1,
   },
   "heap": Heap {
     "storage": null,
   },
-  "id": "57",
+  "id": "50",
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
@@ -4240,7 +4220,7 @@ Object {
     "heap": Heap {
       "storage": null,
     },
-    "id": "48",
+    "id": "49",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
@@ -4277,17 +4257,14 @@ Object {
           [Function],
         },
       },
-      "id": "46",
+      "id": "47",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
           ":::pre-declared names::": Symbol(),
-          "integers_from": [Function],
         },
         "heap": Heap {
-          "storage": Set {
-            [Function],
-          },
+          "storage": null,
         },
         "id": "-1",
         "name": "global",
@@ -4301,12 +4278,12 @@ Object {
 exports[`CSE Machine calculates correct layout for code sample 7 10`] = `
 Object {
   "head": Object {
-    "_copy_of_i": 4,
+    "_copy_of_i": 2,
   },
   "heap": Heap {
     "storage": null,
   },
-  "id": "61",
+  "id": "54",
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
@@ -4315,7 +4292,7 @@ Object {
     "heap": Heap {
       "storage": null,
     },
-    "id": "48",
+    "id": "49",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
@@ -4352,17 +4329,14 @@ Object {
           [Function],
         },
       },
-      "id": "46",
+      "id": "47",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
           ":::pre-declared names::": Symbol(),
-          "integers_from": [Function],
         },
         "heap": Heap {
-          "storage": Set {
-            [Function],
-          },
+          "storage": null,
         },
         "id": "-1",
         "name": "global",
@@ -4376,6 +4350,150 @@ Object {
 exports[`CSE Machine calculates correct layout for code sample 7 11`] = `
 Object {
   "head": Object {
+    "_copy_of_i": 3,
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "58",
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "i": 5,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "49",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "eval_stream": [Function],
+        "x": 1,
+        "y": Array [
+          [Circular],
+          Array [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+      },
+      "heap": Heap {
+        "storage": Set {
+          Array [],
+          Array [
+            1,
+            Array [
+              [Circular],
+              [Circular],
+            ],
+            [Circular],
+          ],
+          Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+          [Function],
+        },
+      },
+      "id": "47",
+      "name": "programEnvironment",
+      "tail": Object {
+        "head": Object {
+          ":::pre-declared names::": Symbol(),
+        },
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "-1",
+        "name": "global",
+        "tail": null,
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 12`] = `
+Object {
+  "head": Object {
+    "_copy_of_i": 4,
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "62",
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "i": 5,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "49",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "eval_stream": [Function],
+        "x": 1,
+        "y": Array [
+          [Circular],
+          Array [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+      },
+      "heap": Heap {
+        "storage": Set {
+          Array [],
+          Array [
+            1,
+            Array [
+              [Circular],
+              [Circular],
+            ],
+            [Circular],
+          ],
+          Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+          [Function],
+        },
+      },
+      "id": "47",
+      "name": "programEnvironment",
+      "tail": Object {
+        "head": Object {
+          ":::pre-declared names::": Symbol(),
+        },
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "-1",
+        "name": "global",
+        "tail": null,
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 13`] = `
+Object {
+  "head": Object {
     "es": [Function],
   },
   "heap": Heap {
@@ -4383,7 +4501,7 @@ Object {
       [Function],
     },
   },
-  "id": "72",
+  "id": "73",
   "name": "blockEnvironment",
   "tail": Object {
     "callExpression": Object {
@@ -4442,7 +4560,7 @@ Object {
     "heap": Heap {
       "storage": null,
     },
-    "id": "71",
+    "id": "72",
     "name": "eval_stream",
     "tail": Object {
       "head": Object {
@@ -4479,17 +4597,14 @@ Object {
           [Function],
         },
       },
-      "id": "46",
+      "id": "47",
       "name": "programEnvironment",
       "tail": Object {
         "head": Object {
           ":::pre-declared names::": Symbol(),
-          "integers_from": [Function],
         },
         "heap": Heap {
-          "storage": Set {
-            [Function],
-          },
+          "storage": null,
         },
         "id": "-1",
         "name": "global",
@@ -4500,7 +4615,7 @@ Object {
 }
 `;
 
-exports[`CSE Machine calculates correct layout for code sample 7 12`] = `
+exports[`CSE Machine calculates correct layout for code sample 7 14`] = `
 Object {
   "head": Object {
     "i": 1,
@@ -4508,7 +4623,7 @@ Object {
   "heap": Heap {
     "storage": null,
   },
-  "id": "50",
+  "id": "51",
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
@@ -4517,7 +4632,7 @@ Object {
     "heap": Heap {
       "storage": null,
     },
-    "id": "49",
+    "id": "50",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
@@ -4526,7 +4641,7 @@ Object {
       "heap": Heap {
         "storage": null,
       },
-      "id": "48",
+      "id": "49",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
@@ -4563,187 +4678,14 @@ Object {
             [Function],
           },
         },
-        "id": "46",
+        "id": "47",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
             ":::pre-declared names::": Symbol(),
-            "integers_from": [Function],
           },
           "heap": Heap {
-            "storage": Set {
-              [Function],
-            },
-          },
-          "id": "-1",
-          "name": "global",
-          "tail": null,
-        },
-      },
-    },
-  },
-}
-`;
-
-exports[`CSE Machine calculates correct layout for code sample 7 13`] = `
-Object {
-  "head": Object {
-    "i": 2,
-  },
-  "heap": Heap {
-    "storage": null,
-  },
-  "id": "54",
-  "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
-      "_copy_of_i": 2,
-    },
-    "heap": Heap {
-      "storage": null,
-    },
-    "id": "53",
-    "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
-        "i": 5,
-      },
-      "heap": Heap {
-        "storage": null,
-      },
-      "id": "48",
-      "name": "blockEnvironment",
-      "tail": Object {
-        "head": Object {
-          "eval_stream": [Function],
-          "x": 1,
-          "y": Array [
-            [Circular],
-            Array [
-              1,
-              [Circular],
-              [Circular],
-            ],
-          ],
-        },
-        "heap": Heap {
-          "storage": Set {
-            Array [],
-            Array [
-              1,
-              Array [
-                [Circular],
-                [Circular],
-              ],
-              [Circular],
-            ],
-            Array [
-              [Circular],
-              Array [
-                1,
-                [Circular],
-                [Circular],
-              ],
-            ],
-            [Function],
-          },
-        },
-        "id": "46",
-        "name": "programEnvironment",
-        "tail": Object {
-          "head": Object {
-            ":::pre-declared names::": Symbol(),
-            "integers_from": [Function],
-          },
-          "heap": Heap {
-            "storage": Set {
-              [Function],
-            },
-          },
-          "id": "-1",
-          "name": "global",
-          "tail": null,
-        },
-      },
-    },
-  },
-}
-`;
-
-exports[`CSE Machine calculates correct layout for code sample 7 14`] = `
-Object {
-  "head": Object {
-    "i": 3,
-  },
-  "heap": Heap {
-    "storage": null,
-  },
-  "id": "58",
-  "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
-      "_copy_of_i": 3,
-    },
-    "heap": Heap {
-      "storage": null,
-    },
-    "id": "57",
-    "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
-        "i": 5,
-      },
-      "heap": Heap {
-        "storage": null,
-      },
-      "id": "48",
-      "name": "blockEnvironment",
-      "tail": Object {
-        "head": Object {
-          "eval_stream": [Function],
-          "x": 1,
-          "y": Array [
-            [Circular],
-            Array [
-              1,
-              [Circular],
-              [Circular],
-            ],
-          ],
-        },
-        "heap": Heap {
-          "storage": Set {
-            Array [],
-            Array [
-              1,
-              Array [
-                [Circular],
-                [Circular],
-              ],
-              [Circular],
-            ],
-            Array [
-              [Circular],
-              Array [
-                1,
-                [Circular],
-                [Circular],
-              ],
-            ],
-            [Function],
-          },
-        },
-        "id": "46",
-        "name": "programEnvironment",
-        "tail": Object {
-          "head": Object {
-            ":::pre-declared names::": Symbol(),
-            "integers_from": [Function],
-          },
-          "heap": Heap {
-            "storage": Set {
-              [Function],
-            },
+            "storage": null,
           },
           "id": "-1",
           "name": "global",
@@ -4758,21 +4700,21 @@ Object {
 exports[`CSE Machine calculates correct layout for code sample 7 15`] = `
 Object {
   "head": Object {
-    "i": 4,
+    "i": 2,
   },
   "heap": Heap {
     "storage": null,
   },
-  "id": "62",
+  "id": "55",
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
-      "_copy_of_i": 4,
+      "_copy_of_i": 2,
     },
     "heap": Heap {
       "storage": null,
     },
-    "id": "61",
+    "id": "54",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
@@ -4781,7 +4723,7 @@ Object {
       "heap": Heap {
         "storage": null,
       },
-      "id": "48",
+      "id": "49",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
@@ -4818,17 +4760,14 @@ Object {
             [Function],
           },
         },
-        "id": "46",
+        "id": "47",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
             ":::pre-declared names::": Symbol(),
-            "integers_from": [Function],
           },
           "heap": Heap {
-            "storage": Set {
-              [Function],
-            },
+            "storage": null,
           },
           "id": "-1",
           "name": "global",
@@ -4841,6 +4780,170 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 16`] = `
+Object {
+  "head": Object {
+    "i": 3,
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "59",
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "_copy_of_i": 3,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "58",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "i": 5,
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "49",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "head": Object {
+          "eval_stream": [Function],
+          "x": 1,
+          "y": Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+        },
+        "heap": Heap {
+          "storage": Set {
+            Array [],
+            Array [
+              1,
+              Array [
+                [Circular],
+                [Circular],
+              ],
+              [Circular],
+            ],
+            Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+            [Function],
+          },
+        },
+        "id": "47",
+        "name": "programEnvironment",
+        "tail": Object {
+          "head": Object {
+            ":::pre-declared names::": Symbol(),
+          },
+          "heap": Heap {
+            "storage": null,
+          },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 17`] = `
+Object {
+  "head": Object {
+    "i": 4,
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "63",
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "_copy_of_i": 4,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "62",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "i": 5,
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "49",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "head": Object {
+          "eval_stream": [Function],
+          "x": 1,
+          "y": Array [
+            [Circular],
+            Array [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+        },
+        "heap": Heap {
+          "storage": Set {
+            Array [],
+            Array [
+              1,
+              Array [
+                [Circular],
+                [Circular],
+              ],
+              [Circular],
+            ],
+            Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+            [Function],
+          },
+        },
+        "id": "47",
+        "name": "programEnvironment",
+        "tail": Object {
+          "head": Object {
+            ":::pre-declared names::": Symbol(),
+          },
+          "heap": Heap {
+            "storage": null,
+          },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 18`] = `
 Object {
   "callExpression": Object {
     "arguments": Array [
@@ -4898,7 +5001,7 @@ Object {
   "heap": Heap {
     "storage": null,
   },
-  "id": "74",
+  "id": "75",
   "name": "es",
   "tail": Object {
     "head": Object {
@@ -4909,7 +5012,7 @@ Object {
         [Function],
       },
     },
-    "id": "72",
+    "id": "73",
     "name": "blockEnvironment",
     "tail": Object {
       "callExpression": Object {
@@ -4968,7 +5071,7 @@ Object {
       "heap": Heap {
         "storage": null,
       },
-      "id": "71",
+      "id": "72",
       "name": "eval_stream",
       "tail": Object {
         "head": Object {
@@ -5005,17 +5108,14 @@ Object {
             [Function],
           },
         },
-        "id": "46",
+        "id": "47",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
             ":::pre-declared names::": Symbol(),
-            "integers_from": [Function],
           },
           "heap": Heap {
-            "storage": Set {
-              [Function],
-            },
+            "storage": null,
           },
           "id": "-1",
           "name": "global",
@@ -5027,7 +5127,7 @@ Object {
 }
 `;
 
-exports[`CSE Machine calculates correct layout for code sample 7 17`] = `
+exports[`CSE Machine calculates correct layout for code sample 7 19`] = `
 Object {
   "callExpression": Object {
     "arguments": Array [
@@ -5085,7 +5185,7 @@ Object {
   "heap": Heap {
     "storage": null,
   },
-  "id": "85",
+  "id": "83",
   "name": "es",
   "tail": Object {
     "head": Object {
@@ -5096,7 +5196,7 @@ Object {
         [Function],
       },
     },
-    "id": "72",
+    "id": "73",
     "name": "blockEnvironment",
     "tail": Object {
       "callExpression": Object {
@@ -5155,7 +5255,7 @@ Object {
       "heap": Heap {
         "storage": null,
       },
-      "id": "71",
+      "id": "72",
       "name": "eval_stream",
       "tail": Object {
         "head": Object {
@@ -5192,223 +5292,18 @@ Object {
             [Function],
           },
         },
-        "id": "46",
+        "id": "47",
         "name": "programEnvironment",
         "tail": Object {
           "head": Object {
             ":::pre-declared names::": Symbol(),
-            "integers_from": [Function],
           },
           "heap": Heap {
-            "storage": Set {
-              [Function],
-            },
+            "storage": null,
           },
           "id": "-1",
           "name": "global",
           "tail": null,
-        },
-      },
-    },
-  },
-}
-`;
-
-exports[`CSE Machine calculates correct layout for code sample 7 18`] = `
-Object {
-  "head": Object {
-    "x": Array [
-      Array [],
-    ],
-  },
-  "heap": Heap {
-    "storage": Set {
-      Array [
-        Array [],
-      ],
-    },
-  },
-  "id": "51",
-  "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
-      "i": 1,
-    },
-    "heap": Heap {
-      "storage": null,
-    },
-    "id": "50",
-    "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
-        "_copy_of_i": 1,
-      },
-      "heap": Heap {
-        "storage": null,
-      },
-      "id": "49",
-      "name": "blockEnvironment",
-      "tail": Object {
-        "head": Object {
-          "i": 5,
-        },
-        "heap": Heap {
-          "storage": null,
-        },
-        "id": "48",
-        "name": "blockEnvironment",
-        "tail": Object {
-          "head": Object {
-            "eval_stream": [Function],
-            "x": 1,
-            "y": Array [
-              [Circular],
-              Array [
-                1,
-                [Circular],
-                [Circular],
-              ],
-            ],
-          },
-          "heap": Heap {
-            "storage": Set {
-              Array [],
-              Array [
-                1,
-                Array [
-                  [Circular],
-                  [Circular],
-                ],
-                [Circular],
-              ],
-              Array [
-                [Circular],
-                Array [
-                  1,
-                  [Circular],
-                  [Circular],
-                ],
-              ],
-              [Function],
-            },
-          },
-          "id": "46",
-          "name": "programEnvironment",
-          "tail": Object {
-            "head": Object {
-              ":::pre-declared names::": Symbol(),
-              "integers_from": [Function],
-            },
-            "heap": Heap {
-              "storage": Set {
-                [Function],
-              },
-            },
-            "id": "-1",
-            "name": "global",
-            "tail": null,
-          },
-        },
-      },
-    },
-  },
-}
-`;
-
-exports[`CSE Machine calculates correct layout for code sample 7 19`] = `
-Object {
-  "head": Object {
-    "x": Array [
-      Array [],
-    ],
-  },
-  "heap": Heap {
-    "storage": Set {
-      Array [
-        Array [],
-      ],
-    },
-  },
-  "id": "55",
-  "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
-      "i": 2,
-    },
-    "heap": Heap {
-      "storage": null,
-    },
-    "id": "54",
-    "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
-        "_copy_of_i": 2,
-      },
-      "heap": Heap {
-        "storage": null,
-      },
-      "id": "53",
-      "name": "blockEnvironment",
-      "tail": Object {
-        "head": Object {
-          "i": 5,
-        },
-        "heap": Heap {
-          "storage": null,
-        },
-        "id": "48",
-        "name": "blockEnvironment",
-        "tail": Object {
-          "head": Object {
-            "eval_stream": [Function],
-            "x": 1,
-            "y": Array [
-              [Circular],
-              Array [
-                1,
-                [Circular],
-                [Circular],
-              ],
-            ],
-          },
-          "heap": Heap {
-            "storage": Set {
-              Array [],
-              Array [
-                1,
-                Array [
-                  [Circular],
-                  [Circular],
-                ],
-                [Circular],
-              ],
-              Array [
-                [Circular],
-                Array [
-                  1,
-                  [Circular],
-                  [Circular],
-                ],
-              ],
-              [Function],
-            },
-          },
-          "id": "46",
-          "name": "programEnvironment",
-          "tail": Object {
-            "head": Object {
-              ":::pre-declared names::": Symbol(),
-              "integers_from": [Function],
-            },
-            "heap": Heap {
-              "storage": Set {
-                [Function],
-              },
-            },
-            "id": "-1",
-            "name": "global",
-            "tail": null,
-          },
         },
       },
     },
@@ -5430,25 +5325,25 @@ Object {
       ],
     },
   },
-  "id": "59",
+  "id": "52",
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
-      "i": 3,
+      "i": 1,
     },
     "heap": Heap {
       "storage": null,
     },
-    "id": "58",
+    "id": "51",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
-        "_copy_of_i": 3,
+        "_copy_of_i": 1,
       },
       "heap": Heap {
         "storage": null,
       },
-      "id": "57",
+      "id": "50",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
@@ -5457,7 +5352,7 @@ Object {
         "heap": Heap {
           "storage": null,
         },
-        "id": "48",
+        "id": "49",
         "name": "blockEnvironment",
         "tail": Object {
           "head": Object {
@@ -5494,17 +5389,14 @@ Object {
               [Function],
             },
           },
-          "id": "46",
+          "id": "47",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
               ":::pre-declared names::": Symbol(),
-              "integers_from": [Function],
             },
             "heap": Heap {
-              "storage": Set {
-                [Function],
-              },
+              "storage": null,
             },
             "id": "-1",
             "name": "global",
@@ -5531,25 +5423,25 @@ Object {
       ],
     },
   },
-  "id": "63",
+  "id": "56",
   "name": "blockEnvironment",
   "tail": Object {
     "head": Object {
-      "i": 4,
+      "i": 2,
     },
     "heap": Heap {
       "storage": null,
     },
-    "id": "62",
+    "id": "55",
     "name": "blockEnvironment",
     "tail": Object {
       "head": Object {
-        "_copy_of_i": 4,
+        "_copy_of_i": 2,
       },
       "heap": Heap {
         "storage": null,
       },
-      "id": "61",
+      "id": "54",
       "name": "blockEnvironment",
       "tail": Object {
         "head": Object {
@@ -5558,7 +5450,7 @@ Object {
         "heap": Heap {
           "storage": null,
         },
-        "id": "48",
+        "id": "49",
         "name": "blockEnvironment",
         "tail": Object {
           "head": Object {
@@ -5595,17 +5487,14 @@ Object {
               [Function],
             },
           },
-          "id": "46",
+          "id": "47",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
               ":::pre-declared names::": Symbol(),
-              "integers_from": [Function],
             },
             "heap": Heap {
-              "storage": Set {
-                [Function],
-              },
+              "storage": null,
             },
             "id": "-1",
             "name": "global",
@@ -5619,6 +5508,202 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 22`] = `
+Object {
+  "head": Object {
+    "x": Array [
+      Array [],
+    ],
+  },
+  "heap": Heap {
+    "storage": Set {
+      Array [
+        Array [],
+      ],
+    },
+  },
+  "id": "60",
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "i": 3,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "59",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "_copy_of_i": 3,
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "58",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "head": Object {
+          "i": 5,
+        },
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "49",
+        "name": "blockEnvironment",
+        "tail": Object {
+          "head": Object {
+            "eval_stream": [Function],
+            "x": 1,
+            "y": Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+          },
+          "heap": Heap {
+            "storage": Set {
+              Array [],
+              Array [
+                1,
+                Array [
+                  [Circular],
+                  [Circular],
+                ],
+                [Circular],
+              ],
+              Array [
+                [Circular],
+                Array [
+                  1,
+                  [Circular],
+                  [Circular],
+                ],
+              ],
+              [Function],
+            },
+          },
+          "id": "47",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              ":::pre-declared names::": Symbol(),
+            },
+            "heap": Heap {
+              "storage": null,
+            },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 23`] = `
+Object {
+  "head": Object {
+    "x": Array [
+      Array [],
+    ],
+  },
+  "heap": Heap {
+    "storage": Set {
+      Array [
+        Array [],
+      ],
+    },
+  },
+  "id": "64",
+  "name": "blockEnvironment",
+  "tail": Object {
+    "head": Object {
+      "i": 4,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "63",
+    "name": "blockEnvironment",
+    "tail": Object {
+      "head": Object {
+        "_copy_of_i": 4,
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "62",
+      "name": "blockEnvironment",
+      "tail": Object {
+        "head": Object {
+          "i": 5,
+        },
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "49",
+        "name": "blockEnvironment",
+        "tail": Object {
+          "head": Object {
+            "eval_stream": [Function],
+            "x": 1,
+            "y": Array [
+              [Circular],
+              Array [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+          },
+          "heap": Heap {
+            "storage": Set {
+              Array [],
+              Array [
+                1,
+                Array [
+                  [Circular],
+                  [Circular],
+                ],
+                [Circular],
+              ],
+              Array [
+                [Circular],
+                Array [
+                  1,
+                  [Circular],
+                  [Circular],
+                ],
+              ],
+              [Function],
+            },
+          },
+          "id": "47",
+          "name": "programEnvironment",
+          "tail": Object {
+            "head": Object {
+              ":::pre-declared names::": Symbol(),
+            },
+            "heap": Heap {
+              "storage": null,
+            },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 24`] = `
 Object {
   "head": Object {
     "z": Array [
@@ -5645,10 +5730,6 @@ Object {
         ],
       ],
       Array [
-        2,
-        [Function],
-      ],
-      Array [
         1,
         Array [
           2,
@@ -5657,7 +5738,7 @@ Object {
       ],
     },
   },
-  "id": "75",
+  "id": "76",
   "name": "blockEnvironment",
   "tail": Object {
     "callExpression": Object {
@@ -5716,7 +5797,7 @@ Object {
     "heap": Heap {
       "storage": null,
     },
-    "id": "74",
+    "id": "75",
     "name": "es",
     "tail": Object {
       "head": Object {
@@ -5727,7 +5808,7 @@ Object {
           [Function],
         },
       },
-      "id": "72",
+      "id": "73",
       "name": "blockEnvironment",
       "tail": Object {
         "callExpression": Object {
@@ -5786,7 +5867,7 @@ Object {
         "heap": Heap {
           "storage": null,
         },
-        "id": "71",
+        "id": "72",
         "name": "eval_stream",
         "tail": Object {
           "head": Object {
@@ -5823,17 +5904,14 @@ Object {
               [Function],
             },
           },
-          "id": "46",
+          "id": "47",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
               ":::pre-declared names::": Symbol(),
-              "integers_from": [Function],
             },
             "heap": Heap {
-              "storage": Set {
-                [Function],
-              },
+              "storage": null,
             },
             "id": "-1",
             "name": "global",
@@ -5846,7 +5924,7 @@ Object {
 }
 `;
 
-exports[`CSE Machine calculates correct layout for code sample 7 23`] = `
+exports[`CSE Machine calculates correct layout for code sample 7 25`] = `
 Object {
   "head": Object {
     "z": Array [
@@ -5878,7 +5956,7 @@ Object {
       ],
     },
   },
-  "id": "86",
+  "id": "84",
   "name": "blockEnvironment",
   "tail": Object {
     "callExpression": Object {
@@ -5937,7 +6015,7 @@ Object {
     "heap": Heap {
       "storage": null,
     },
-    "id": "85",
+    "id": "83",
     "name": "es",
     "tail": Object {
       "head": Object {
@@ -5948,7 +6026,7 @@ Object {
           [Function],
         },
       },
-      "id": "72",
+      "id": "73",
       "name": "blockEnvironment",
       "tail": Object {
         "callExpression": Object {
@@ -6007,7 +6085,7 @@ Object {
         "heap": Heap {
           "storage": null,
         },
-        "id": "71",
+        "id": "72",
         "name": "eval_stream",
         "tail": Object {
           "head": Object {
@@ -6044,17 +6122,14 @@ Object {
               [Function],
             },
           },
-          "id": "46",
+          "id": "47",
           "name": "programEnvironment",
           "tail": Object {
             "head": Object {
               ":::pre-declared names::": Symbol(),
-              "integers_from": [Function],
             },
             "heap": Heap {
-              "storage": Set {
-                [Function],
-              },
+              "storage": null,
             },
             "id": "-1",
             "name": "global",
@@ -6067,14 +6142,10 @@ Object {
 }
 `;
 
-exports[`CSE Machine calculates correct layout for code sample 7 24`] = `
+exports[`CSE Machine calculates correct layout for code sample 7 26`] = `
 Array [
   ":::pre-declared names::: ",
   Symbol(),
-  "integers_from: ",
-  [Function],
-  "0:= ",
-  [Function],
   "y: ",
   Array [
     [Circular],
@@ -6088,23 +6159,27 @@ Array [
   [Function],
   "x: ",
   1,
-  "0:= ",
+  "1:= ",
   Array [],
-  "79:= ",
-  [Function],
   "n: ",
   1,
-  "0:= ",
-  [Function],
-  "0:= ",
+  "1:= ",
   Array [
     1,
     [Function],
   ],
-  "83:= ",
-  [Function],
+  "xs: ",
+  Array [
+    1,
+    [Function],
+  ],
   "n: ",
   2,
+  "1:= ",
+  Array [
+    2,
+    [Function],
+  ],
   "i: ",
   5,
   "s: ",
@@ -6114,6 +6189,8 @@ Array [
   ],
   "n: ",
   2,
+  "the_tail:= ",
+  [Function],
   "_copy_of_i:= ",
   1,
   "_copy_of_i:= ",
@@ -6173,12 +6250,7 @@ Array [
       ],
     ],
   ],
-  "0:= ",
-  Array [
-    2,
-    [Function],
-  ],
-  "0:= ",
+  "1:= ",
   Array [
     1,
     Array [
@@ -6197,7 +6269,7 @@ Array [
       ],
     ],
   ],
-  "0:= ",
+  "1:= ",
   Array [
     2,
     null,
