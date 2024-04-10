@@ -7,6 +7,7 @@ import {
   reautogradeSubmission,
   unsubmitSubmission
 } from 'src/commons/application/actions/SessionActions';
+import { ProgressStatus } from 'src/commons/assessment/AssessmentTypes';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -14,9 +15,10 @@ import { useTypedSelector } from 'src/commons/utils/Hooks';
 type Props = {
   submissionId: number;
   style?: React.CSSProperties;
+  progress?: ProgressStatus; // TODO REMOVE ?
 };
 
-const GradingActions: React.FC<Props> = ({ submissionId, style }) => {
+const GradingActions: React.FC<Props> = ({ submissionId, style, progress }) => {
   const dispatch = useDispatch();
   const courseId = useTypedSelector(store => store.session.courseId);
 

@@ -32,7 +32,7 @@ import {
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 
 import GradingActions from './GradingActions';
-import { AssessmentTypeBadge, GradingStatusBadge, SubmissionStatusBadge } from './GradingBadges';
+import { AssessmentTypeBadge, ProgressStatusBadge, SubmissionStatusBadge } from './GradingBadges';
 import GradingColumnCustomHeaders from './GradingColumnCustomHeaders';
 import GradingColumnFilters from './GradingColumnFilters';
 import GradingFilterable from './GradingFilterable';
@@ -289,7 +289,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           : undefined;
       }
     });
-
+    
+    // TODO TO REMOVE this or gradingStatus
     cols.push({
       ...generalColProperties,
       headerName: ColumnName.submissionStatus,
@@ -318,9 +319,9 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return params.data !== undefined
           ? {
-              component: GradingStatusBadge,
+              component: ProgressStatusBadge,
               params: {
-                status: params.data.gradingStatus
+                progress: params.data.gradingStatus
               }
             }
           : undefined;
@@ -348,6 +349,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
               component: GradingActions,
               params: {
                 submissionId: params.data.actionsIndex,
+                // progress: params.data.progress, // TODO add this
                 style: { justifyContent: 'center' }
               }
             }
@@ -473,6 +475,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
                 ') / ' +
                 currentSubmission.maxXp,
               actionsIndex: currentSubmission.submissionId,
+              //progress: currentSubmission.progress, // TODO to add this
               courseID: courseId!
             });
             return sameData && currentSubmission.submissionId === rowData?.[index]?.actionsIndex;

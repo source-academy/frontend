@@ -3,7 +3,7 @@ import { ColDef } from 'ag-grid-community';
 import {
   AssessmentType,
   AutogradingResult,
-  GradingStatus,
+  ProgressStatus,
   MCQChoice,
   Question,
   Testcase
@@ -51,7 +51,7 @@ export type GradingOverview = {
   submissionStatus: string;
   groupName: string;
   groupLeaderId?: number;
-  gradingStatus: GradingStatus;
+  gradingStatus: ProgressStatus;
   questionCount: number;
   gradedCount: number;
 };
@@ -143,6 +143,7 @@ export type IGradingTableRow = {
   gradingStatus: string;
   xp: string;
   actionsIndex: number; // actions needs a column, but only submission ID data, so it stores submission ID
+  //progress: ProgressStatus; // TODO to add this
   courseID: number;
 };
 

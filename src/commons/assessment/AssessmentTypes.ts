@@ -18,13 +18,23 @@ export type AssessmentWorkspaceParams = {
   questionId?: string;
 };
 
-export enum GradingStatuses {
-  excluded = 'excluded',
+// Devnote: If adjusting this, ensure that each status can be uniquely attributed to one set of backend parameters, and vice versa.
+// This allows for a clean conversion from progress status to backend parameters, ensuring only backend pagination.
+// Adjust the conversion functions in GradingUtils accordingly.
+export enum ProgressStatuses {
+  autograded = 'autograded',
+  not_attempted = 'not_attempted',
+  attempting = 'attempting',
+  attempted = 'attempted',
+  submitted = 'submitted',
   graded = 'graded',
-  grading = 'grading',
-  none = 'none'
+  published = 'published',
+  excluded = 'excluded', // TODO TO BE REMOVED
+  grading = 'grading', // TODO TO BE REMOVED
+  none = 'none' // TODO TO BE REMOVED
 }
-export type GradingStatus = keyof typeof GradingStatuses;
+
+export type ProgressStatus = keyof typeof ProgressStatuses;
 
 export type AssessmentType = string;
 
@@ -59,7 +69,7 @@ export type AssessmentOverview = {
   closeAt: string;
   coverImage: string;
   fileName?: string; // For mission control
-  gradingStatus: GradingStatus;
+  gradingStatus: ProgressStatus;
   id: number;
   isPublished?: boolean;
   hasVotingFeatures: boolean;
