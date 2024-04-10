@@ -1919,6 +1919,11 @@
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
 
+"@mantine/hooks@^7.7.0":
+  version "7.7.0"
+  resolved "https://registry.yarnpkg.com/@mantine/hooks/-/hooks-7.7.0.tgz#52f0fdc97e953798d2e632aa5e90959f389cbd1e"
+  integrity sha512-m99vMzeONMpBLv0Rcb2LD88xAhpvwVdTMBo/7WohBDYtk1shJKHAc/WbQ/cJPcNk11Bzp/mhx/EPNZfs9+NwZA==
+
 "@mapbox/node-pre-gyp@^1.0.0":
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/@mapbox/node-pre-gyp/-/node-pre-gyp-1.0.10.tgz#8e6735ccebbb1581e5a7e652244cadc8a844d03c"
