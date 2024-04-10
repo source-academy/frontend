@@ -1,7 +1,7 @@
-import { ModulesGlobalConfig as CCompilerConfig } from '@sourceacademy/c-slang/ctowasm/dist';
-import { initModuleContext, loadModuleBundle } from 'js-slang/dist/modules/loader/moduleLoader';
-import { ModuleFunctions } from 'js-slang/dist/modules/moduleTypes';
-import { Context } from 'js-slang/dist/types';
+import type { ModulesGlobalConfig as CCompilerConfig } from '@sourceacademy/c-slang/ctowasm/dist';
+import loadSourceModules from 'js-slang/dist/modules/loader';
+import type { ModuleFunctions } from 'js-slang/dist/modules/moduleTypes';
+import type { Context } from 'js-slang/dist/types';
 
 import { handleConsoleLog } from '../application/actions/InterpreterActions';
 
@@ -37,17 +37,19 @@ export async function loadModulesUsedInCProgram(
   if (!includedModules) {
     return allModuleFunctions;
   }
-  for (const m of includedModules) {
-    const moduleName = m.slice(1, m.length - 1);
 
-    if (modulesAvailableForC.has(moduleName)) {
-      await initModuleContext(moduleName, context, true);
-      const moduleFuncs = await loadModuleBundle(moduleName, context);
-      for (const moduleFunc of Object.keys(moduleFuncs)) {
-        allModuleFunctions[moduleFunc] = moduleFuncs[moduleFunc];
-      }
-    }
-  }
+  const modulesToLoad = includedModules.filter(m => {
+    const moduleName = m.slice(1, m.length - 1);
+    return modulesAvailableForC.has(moduleName);
+  });
+
+  const loadedModules = await loadSourceModules(new Set(modulesToLoad), context, true);
+  Object.values(loadedModules).forEach(functions => {
+    Object.entries(functions).forEach(([name, func]) => {
+      allModuleFunctions[name] = func;
+    });
+  });
+
   const pixNFlixStart = allModuleFunctions['start'];
   allModuleFunctions['start'] = () => {
     specialCReturnObject = pixNFlixStart();
