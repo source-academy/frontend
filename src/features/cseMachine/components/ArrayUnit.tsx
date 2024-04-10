@@ -3,7 +3,7 @@ import React from 'react';
 import { Config } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Data } from '../CseMachineTypes';
-import { defaultSAColor } from '../CseMachineUtils';
+import { defaultSAColor, fadedSAColor } from '../CseMachineUtils';
 import { Arrow } from './arrows/Arrow';
 import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
 import { RoundedRect } from './shapes/RoundedRect';
@@ -24,7 +24,6 @@ export class ArrayUnit extends Visible {
   readonly isLastUnit: boolean;
   /** check if this unit is the main reference of the value */
   readonly isMainReference: boolean;
-  parent: ArrayValue;
   arrow: Arrow | undefined = undefined;
   index: Text;
 
@@ -34,10 +33,9 @@ export class ArrayUnit extends Visible {
     /** the value this unit contains*/
     readonly data: Data,
     /** parent of this unit */
-    parent: ArrayValue
+    readonly parent: ArrayValue
   ) {
     super();
-    this.parent = parent;
     this._x = this.parent.x() + this.idx * Config.DataUnitWidth;
     this._y = this.parent.y();
     this._height = Config.DataUnitHeight;
@@ -45,8 +43,8 @@ export class ArrayUnit extends Visible {
     this.isFirstUnit = this.idx === 0;
     this.isLastUnit = this.idx === this.parent.data.length - 1;
     this.value = Layout.createValue(this.data, this);
-    this.isMainReference = this.value.referencedBy.length > 1;
-    this.index = new Text(this.idx, this.x(), this.y() - 0.4 * this.height());
+    this.isMainReference = this.value.references.length > 1;
+    this.index = new Text(this.idx, this.x(), this.y() - 0.4 * this.height(), { faded: true });
   }
 
   updatePosition = () => {};
@@ -78,7 +76,7 @@ export class ArrayUnit extends Visible {
           y={this.y()}
           width={this.width()}
           height={this.height()}
-          stroke={defaultSAColor()}
+          stroke={this.parent.isReferenced() ? defaultSAColor() : fadedSAColor()}
           hitStrokeWidth={Config.DataHitStrokeWidth}
           fillEnabled={false}
           onMouseEnter={this.onMouseEnter}
