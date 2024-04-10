@@ -1,4 +1,4 @@
-import { FocusStyleManager, Icon, Tooltip } from '@blueprintjs/core';
+import { Button, FocusStyleManager, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useFullscreen } from '@mantine/hooks';
 import { Enable, NumberSize, Resizable, ResizableProps, ResizeCallback } from 're-resizable';
@@ -229,9 +229,9 @@ const Workspace: React.FC<WorkspaceProps> = props => {
               content={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
               portalContainer={fullscreenContainerRef.current || undefined}
             >
-              <Icon
+              <Button
+                minimal
                 icon={isFullscreen ? IconNames.MINIMIZE : IconNames.MAXIMIZE}
-                color="white"
                 onClick={toggleFullscreen}
               />
             </Tooltip>
