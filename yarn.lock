@@ -2358,10 +2358,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@sourceacademy/c-slang@^1.0.18":
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/@sourceacademy/c-slang/-/c-slang-1.0.18.tgz#9d9cf94481e3bd12cbe667a3a3872bea59a9d2c4"
-  integrity sha512-L4bCfQR1K9EqwaVpIkGt2ADYp/nvludVUj5YOimNsWnE0UbS9Z5WhvdRMm7IyGxGF60B2VAH6BfjiyK8phsIug==
+"@sourceacademy/c-slang@^1.0.19":
+  version "1.0.19"
+  resolved "https://registry.yarnpkg.com/@sourceacademy/c-slang/-/c-slang-1.0.19.tgz#e8672a4fa15474ac9da8d56e3212adbdae1c2194"
+  integrity sha512-tkqdk0CKV/Y3+OkgoyiYlrwmv0uSp9gBkXO73x0yDCv7RoOzFgWgNRoFULX/o9MQ1U+QRlvaoZvpsn7DJjTFyQ==
   dependencies:
     bignumber.js "^9.1.2"
     peggy "^3.0.2"
@@ -8089,10 +8089,10 @@ java-parser@^2.0.5:
     chevrotain-allstar "0.3.1"
     lodash "4.17.21"
 
-java-slang@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/java-slang/-/java-slang-1.0.3.tgz#4f89ce3b9b0be37e3026d21a03fe895ac4b526b8"
-  integrity sha512-Rn8+ME+kPlaUh2DRboAvUhl7wixdZqFnC2H6t3qsx+ypeGoYKeHFMTlMj23Gsek4PEDOplSxQQs6E5dAKkjTYw==
+java-slang@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/java-slang/-/java-slang-1.0.6.tgz#34a68954a8dfb5bde8572d49a6bea170d7026749"
+  integrity sha512-CHq2s9xuzuuPfygRp9pQncfPfIuzpHivXn3wfy4QBiQ801IvdVFL3w/nV6qQn6GUG+kvOU+qCuxUFsFH8X5Dhg==
   dependencies:
     "@types/lodash" "^4.14.198"
     java-parser "^2.0.5"
@@ -8643,10 +8643,10 @@ js-sdsl@4.3.0, js-sdsl@^4.1.4:
   resolved "https://registry.yarnpkg.com/js-sdsl/-/js-sdsl-4.3.0.tgz#aeefe32a451f7af88425b11fdb5f58c90ae1d711"
   integrity sha512-mifzlm2+5nZ+lEcLJMoBK0/IH/bDg8XnJfd/Wq6IP+xoCjLZsTOnV2QpxlVbX9bMnkl5PdEjNtBJ9Cj1NjifhQ==
 
-js-slang@^1.0.62:
-  version "1.0.62"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.62.tgz#516352f5db0738d1bca91b1146e3a7e012355127"
-  integrity sha512-rngDsPDpEsx2VFmJfHxbA9O2AYIR8czwyJgDUC0EeJCBYOVJf8TJLWJEN/85795x5xTrhaZ3qc/QyP84qv53Sw==
+js-slang@^1.0.64:
+  version "1.0.64"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.64.tgz#978ffdc9146778e4a417367dea0758187609db1c"
+  integrity sha512-mKaFhbK1pTWbuZsvwMoB6qgq0lUbd3MjYOwB+xD13B3zXJjGPNwvN/xycPSvpAgtb7Qv2KtPJu1E4mmhAL1wwA==
   dependencies:
     "@babel/parser" "^7.19.4"
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
@@ -12877,9 +12877,9 @@ tar-stream@^2.1.4:
     readable-stream "^3.1.1"
 
 tar@^6.1.11, tar@^6.1.2:
-  version "6.1.15"
-  resolved "https://registry.yarnpkg.com/tar/-/tar-6.1.15.tgz#c9738b0b98845a3b344d334b8fa3041aaba53a69"
-  integrity sha512-/zKt9UyngnxIT/EAGYuxaMYgOIJiP81ab9ZfkILq4oNLPFX50qyYmu7jRj9qeXoxmJHjGlbH0+cm2uy1WCs10A==
+  version "6.2.1"
+  resolved "https://registry.yarnpkg.com/tar/-/tar-6.2.1.tgz#717549c541bc3c2af15751bea94b1dd068d4b03a"
+  integrity sha512-DZ4yORTwrbTj/7MZYq2w+/ZFdI6OZ/f9SFHR+71gIVUZhOQPHzVCLpvRnPgyaMpfWxxk/4ONva3GQSyNIKRv6A==
   dependencies:
     chownr "^2.0.0"
     fs-minipass "^2.0.0"
