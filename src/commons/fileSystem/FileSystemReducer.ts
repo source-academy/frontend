@@ -104,12 +104,6 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
     })
     .addCase(updatePersistenceFolderPathAndNameByPath, (state, action) => {
       const filesState = state['persistenceFileArray'];
-      //const persistenceFileFindIndex = filesState.findIndex(e => e.path === action.payload.oldPath);
-      console.log(action.payload);
-      filesState.forEach(e => console.log(e.path));
-      // if (persistenceFileFindIndex === -1) {
-      //   return;
-      // }
       // get current level of folder
       const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(action.payload.newPath)!;
 

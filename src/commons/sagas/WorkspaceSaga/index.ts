@@ -9,9 +9,9 @@ import { EVAL_STORY } from 'src/features/stories/StoriesTypes';
 
 import { EventType } from '../../../features/achievement/AchievementTypes';
 import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
-import { WORKSPACE_BASE_PATHS } from '../../../pages/fileSystem/createInBrowserFileSystem';
 import {
   defaultEditorValue,
+  getDefaultFilePath,
   OverallState,
   styliseSublanguage
 } from '../../application/ApplicationTypes';
@@ -107,13 +107,13 @@ export default function* WorkspaceSaga(): SagaIterator {
     );
     // If Folder mode is disabled and there are no open editor tabs, add an editor tab.
     if (editorTabs.length === 0) {
-      const defaultFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
+      const defaultFilePath = getDefaultFilePath(workspaceLocation);
       const fileSystem: FSModule | null = yield select(
         (state: OverallState) => state.fileSystem.inBrowserFileSystem
       );
       // If the file system is not initialised, add an editor tab with the default editor value.
       if (fileSystem === null) {
-        yield put(actions.addEditorTab(workspaceLocation, defaultFilePath, defaultEditorValue));
+        yield put(actions.addEditorTab(workspaceLocation, defaultFilePath, defaultEditorValue)); 
         return;
       }
       const editorValue: string = yield new Promise((resolve, reject) => {

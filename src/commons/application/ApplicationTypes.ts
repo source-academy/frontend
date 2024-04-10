@@ -401,10 +401,11 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
 });
 
 const defaultFileName = 'program.js';
+const defaultTopLevelFolderName = 'proj';
 export const getDefaultFilePath = (workspaceLocation: WorkspaceLocation) =>
-  `${WORKSPACE_BASE_PATHS[workspaceLocation]}/${defaultFileName}`;
+  `${WORKSPACE_BASE_PATHS[workspaceLocation]}/${defaultTopLevelFolderName}/${defaultFileName}`;
 
-export const defaultWorkspaceManager: WorkspaceManagerState = { // TODO default
+export const defaultWorkspaceManager: WorkspaceManagerState = {
   assessment: {
     ...createDefaultWorkspace('assessment'),
     currentAssessment: undefined,
