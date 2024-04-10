@@ -123,6 +123,7 @@ export enum SupportedLanguage {
   JAVASCRIPT = 'JavaScript',
   SCHEME = 'Scheme',
   PYTHON = 'Python',
+  JAVA = 'Java',
   C = 'C'
 }
 
@@ -130,6 +131,7 @@ export const SUPPORTED_LANGUAGES = [
   SupportedLanguage.JAVASCRIPT,
   SupportedLanguage.SCHEME,
   SupportedLanguage.PYTHON,
+  SupportedLanguage.JAVA,
   SupportedLanguage.C
 ];
 
@@ -212,6 +214,15 @@ export const pyLanguages: SALanguage[] = pySubLanguages.map(sublang => {
   return { ...sublang, mainLanguage: SupportedLanguage.PYTHON, supports: { repl: true } };
 });
 
+export const javaLanguages: SALanguage[] = [
+  {
+    chapter: Chapter.FULL_JAVA,
+    variant: Variant.DEFAULT,
+    displayName: 'Java',
+    mainLanguage: SupportedLanguage.JAVA,
+    supports: {}
+  }
+];
 export const cLanguages: SALanguage[] = [
   {
     chapter: Chapter.FULL_C,
@@ -291,6 +302,7 @@ export const ALL_LANGUAGES: readonly SALanguage[] = [
   htmlLanguage,
   ...schemeLanguages,
   ...pyLanguages,
+  ...javaLanguages,
   ...cLanguages
 ];
 // TODO: Remove this function once logic has been fully migrated
