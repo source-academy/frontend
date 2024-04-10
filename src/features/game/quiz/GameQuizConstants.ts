@@ -50,8 +50,6 @@ export const quizOptStyle: BitmapFontStyle = {
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
-
-
 export const speakerTextStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 36,
