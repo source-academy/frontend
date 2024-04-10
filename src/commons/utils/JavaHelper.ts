@@ -1,3 +1,5 @@
+import { compileFromSource } from 'java-slang/dist/compiler';
+import { BinaryWriter } from 'java-slang/dist/compiler/binary-writer';
 import setupJVM, { parseBin } from 'java-slang/dist/jvm';
 import { createModuleProxy, loadCachedFiles } from 'java-slang/dist/jvm/utils/integration';
 import { Context } from 'js-slang';
@@ -7,7 +9,23 @@ import Constants from './Constants';
 import DisplayBufferService from './DisplayBufferService';
 
 export async function javaRun(javaCode: string, context: Context) {
-  let compiled = {};
+  let compiled = {}
+
+  try {
+    const classFile = compileFromSource(javaCode);
+    compiled = {
+      "Main.class": Buffer.from(new BinaryWriter().generateBinary(classFile)).toString('base64')
+    };
+  } catch (e) {
+    context.errors.push({
+      type: "CompileError" as any,
+      severity: "Error" as any,
+      location: { start: { line: -1, column: -1 }, end: { line: -1, column: -1 } },
+      explain: () => e,
+      elaborate: () => e
+    });
+    return Promise.resolve({ status: 'error' });
+  }
 
   let files = {};
   let buffer: string[] = [];
@@ -85,15 +103,6 @@ export async function javaRun(javaCode: string, context: Context) {
       elaborate: () => msg
     });
   };
-
-  // FIXME: Remove when the compiler is working
-  try {
-    const json = JSON.parse(javaCode);
-    compiled = json;
-  } catch (e) {
-    stderr(e);
-    return Promise.resolve({ status: 'error' });
-  }
 
   // load cached classfiles from IndexedDB
   return loadCachedFiles(() =>
