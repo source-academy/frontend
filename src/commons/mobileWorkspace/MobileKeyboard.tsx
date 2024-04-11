@@ -74,14 +74,12 @@ const MobileKeyboard: React.FC<Props> = props => {
     const swipeThreshold = 30; // pixels
     const tapThresholdTime = 200; // milliseconds
 
-    if (Math.abs(deltaX) > swipeThreshold || Math.abs(deltaY) > swipeThreshold) {
-      console.log('Swipe detected');
-    } else if (deltaTime < tapThresholdTime) {
-      console.log('Tap detected');
+    if (
+      Math.abs(deltaX) < swipeThreshold &&
+      Math.abs(deltaY) < swipeThreshold &&
+      deltaTime < tapThresholdTime
+    ) {
       handleKeyRelease();
-    } else {
-      // Handle other cases or ignore
-      console.log('Other touch event detected');
     }
   };
 
