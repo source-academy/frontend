@@ -15,10 +15,13 @@ import { GlobalFn, IHoverable } from '../../CseMachineTypes';
 import {
   defaultStrokeColor,
   defaultTextColor,
+  fadedStrokeColor,
   fadedTextColor,
   getBodyText,
   getParamsText,
-  getTextWidth
+  getTextWidth,
+  setHoveredCursor,
+  setUnhoveredCursor
 } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
@@ -27,21 +30,20 @@ import { Value } from './Value';
 /** this encapsulates a function from the global frame
  * (which has no extra props such as environment or fnName) */
 export class GlobalFnValue extends Value implements IHoverable {
-  centerX: number;
-  readonly tooltipWidth: number;
-  readonly exportTooltipWidth: number;
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
-  private _arrow: ArrowFromFn | undefined;
 
   readonly paramsText: string;
   readonly bodyText: string;
   readonly exportBodyText: string;
   readonly tooltip: string;
+  readonly tooltipWidth: number;
   readonly exportTooltip: string;
-  private selected: boolean = false;
-
+  readonly exportTooltipWidth: number;
   readonly labelRef: RefObject<any> = React.createRef();
+
+  centerX: number;
+  private _arrow: ArrowFromFn | undefined;
 
   constructor(
     /** underlying function */
@@ -85,29 +87,17 @@ export class GlobalFnValue extends Value implements IHoverable {
     return this._arrow;
   }
 
-  onMouseEnter = (_: KonvaEventObject<MouseEvent>) => {
+  onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
+    setHoveredCursor(currentTarget);
+    this.labelRef.current.moveToTop();
     this.labelRef.current.show();
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
-    if (!this.selected) {
-      this.labelRef.current.hide();
-    } else {
-      const container = currentTarget.getStage()?.container();
-      container && (container.style.cursor = 'default');
-    }
-  };
-
-  onClick = (_: KonvaEventObject<MouseEvent>) => {
-    if (CseMachine.getPrintableMode()) return;
-    this.selected = !this.selected;
-    if (!this.selected) {
-      this.labelRef.current.hide();
-    } else {
-      this.labelRef.current.show();
-    }
+    setUnhoveredCursor(currentTarget);
+    this.labelRef.current.hide();
   };
 
   draw(): React.ReactNode {
@@ -116,20 +106,17 @@ export class GlobalFnValue extends Value implements IHoverable {
       this._arrow = new ArrowFromFn(this).to(Layout.globalEnvNode.frame) as ArrowFromFn;
     }
     const textColor = this.isReferenced() ? defaultTextColor() : fadedTextColor();
+    const strokeColor = this.isReferenced() ? defaultStrokeColor() : fadedStrokeColor();
     return (
       <React.Fragment key={Layout.key++}>
-        <Group
-          onMouseEnter={e => this.onMouseEnter(e)}
-          onMouseLeave={e => this.onMouseLeave(e)}
-          ref={this.ref}
-        >
+        <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} ref={this.ref}>
           <Circle
             {...ShapeDefaultProps}
             key={Layout.key++}
             x={this.centerX - this.radius}
             y={this.y()}
             radius={this.radius}
-            stroke={textColor}
+            stroke={strokeColor}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -137,7 +124,7 @@ export class GlobalFnValue extends Value implements IHoverable {
             x={this.centerX - this.radius}
             y={this.y()}
             radius={this.innerRadius}
-            fill={textColor}
+            fill={strokeColor}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -145,7 +132,7 @@ export class GlobalFnValue extends Value implements IHoverable {
             x={this.centerX + this.radius}
             y={this.y()}
             radius={this.radius}
-            stroke={textColor}
+            stroke={strokeColor}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -153,48 +140,33 @@ export class GlobalFnValue extends Value implements IHoverable {
             x={this.centerX + this.radius}
             y={this.y()}
             radius={this.innerRadius}
-            fill={textColor}
+            fill={strokeColor}
           />
         </Group>
-        {CseMachine.getPrintableMode() ? (
-          <KonvaLabel
-            x={this.x() + this.width() + Config.TextPaddingX * 2}
-            y={this.y() - Config.TextPaddingY}
-            visible={true}
-            ref={this.labelRef}
-          >
-            <KonvaTag stroke={defaultStrokeColor()} />
-            <KonvaText
-              text={this.exportTooltip}
-              fontFamily={Config.FontFamily}
-              fontSize={Config.FontSize}
-              fontStyle={Config.FontStyle}
-              fill={textColor}
-              padding={5}
-            />
-          </KonvaLabel>
-        ) : (
-          <KonvaLabel
-            x={this.x() + this.width() + Config.TextPaddingX * 2}
-            y={this.y() - Config.TextPaddingY}
-            visible={false}
-            ref={this.labelRef}
-          >
+        <KonvaLabel
+          x={this.x() + this.width() + Config.TextPaddingX * 2}
+          y={this.y() - Config.TextPaddingY}
+          visible={CseMachine.getPrintableMode()}
+          ref={this.labelRef}
+        >
+          {CseMachine.getPrintableMode() ? (
+            <KonvaTag stroke={strokeColor} />
+          ) : (
             <KonvaTag
               stroke={Config.HoverBgColor}
               fill={Config.HoverBgColor}
               opacity={Config.FnTooltipOpacity}
             />
-            <KonvaText
-              text={this.tooltip}
-              fontFamily={Config.FontFamily}
-              fontSize={Config.FontSize}
-              fontStyle={Config.FontStyle}
-              fill={textColor}
-              padding={5}
-            />
-          </KonvaLabel>
-        )}
+          )}
+          <KonvaText
+            text={CseMachine.getPrintableMode() ? this.exportTooltip : this.tooltip}
+            fontFamily={Config.FontFamily}
+            fontSize={Config.FontSize}
+            fontStyle={Config.FontStyle}
+            fill={textColor}
+            padding={5}
+          />
+        </KonvaLabel>
         {this._arrow?.draw()}
       </React.Fragment>
     );

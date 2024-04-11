@@ -83,6 +83,7 @@ export class StashItemComponent extends Visible implements IHoverable {
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
     !isStashItemInDanger(this.index) && setHoveredStyle(e.currentTarget);
     setHoveredCursor(e.currentTarget);
+    this.tooltipRef.current.moveToTop();
     this.tooltipRef.current.show();
   };
 

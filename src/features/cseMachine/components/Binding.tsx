@@ -104,9 +104,7 @@ export class Binding extends Visible {
           ? null // omit the key since value is anonymous
           : this.key.draw()}
         {this.arrow?.draw()}
-        {isMainReference(this.value, this)
-          ? this.value.draw()
-          : null}
+        {isMainReference(this.value, this) ? this.value.draw() : null}
       </React.Fragment>
     );
   }

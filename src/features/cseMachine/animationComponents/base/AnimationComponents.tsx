@@ -66,11 +66,11 @@ abstract class BaseAnimationComponent<
           if (attr === 'width') this._width = value;
           if (attr === 'height') this._height = value;
         } else if ((attr === 'fill' || attr === 'stroke') && typeof data.to[attr] === 'string') {
-          const value = lerpColor(data.from[attr] ?? '#000', data.to[attr]!, delta, data.easing);
+          const value = lerpColor(data.from[attr], data.to[attr]!, delta, data.easing);
           (data.current[attr] as string) = value;
-        } else if (delta === 1) {
+        } else {
           // TODO: could handle the animation of path strings by interpolating between different coordinates.
-          // For now, we just simply set the value to the target value at the end of the animation.
+          // For now, we just simply set the value to the target value immediately.
           data.current[attr] = data.to[attr];
         }
       }

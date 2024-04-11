@@ -56,7 +56,7 @@ export class FunctionApplicationAnimation extends Animatable {
       this.closureStashItemAnimation = new AnimatedTextbox(
         closureStashItem.text,
         getNodePosition(closureStashItem)
-      )
+      );
     }
   }
 
@@ -76,7 +76,9 @@ export class FunctionApplicationAnimation extends Animatable {
   async animate() {
     this.newControlItems.forEach(item => item.ref.current.hide());
     // hide the function frame before the frame creation animation plays
-    if (this.frameCreation) { this.functionFrame.ref.current.hide(); }
+    if (this.frameCreation) {
+      this.functionFrame.ref.current.hide();
+    }
     const minCallInstrWidth =
       getTextWidth(this.callInstrItem.text) + Number(ControlStashConfig.ControlItemTextPadding) * 2;
     // Move call instruction next to closure item in the stash

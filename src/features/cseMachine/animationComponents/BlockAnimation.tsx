@@ -42,13 +42,23 @@ export class BlockAnimation extends Animatable {
   async animate(animationConfig?: AnimationConfig) {
     this.targetItems.forEach(c => c.ref.current.hide());
     const totalHeight = this.targetItems.reduce((height, item) => height + item.height(), 0);
+    const fadeDuration = ((animationConfig?.duration ?? 1) * 3) / 4;
+    const fadeInDelay = (animationConfig?.delay ?? 0) + (animationConfig?.duration ?? 1) / 4;
     await Promise.all([
       // Fade out the previous item while also changing its height for a more fluid animation
-      this.initialItemAnimation.animateTo({ height: totalHeight, opacity: 0 }, animationConfig),
-      // Fade in the new items while also moving them from the old item's position
-      ...this.targetItemAnimations.map((a, i) =>
-        a.animateTo({ ...getNodePosition(this.targetItems[i]), opacity: 1 }, animationConfig)
+      this.initialItemAnimation.animateTo({ height: totalHeight }, animationConfig),
+      this.initialItemAnimation.animateTo(
+        { opacity: 0 },
+        { ...animationConfig, duration: fadeDuration }
       ),
+      // Fade in the new items while also moving them from the old item's position
+      ...this.targetItemAnimations.flatMap((a, i) => [
+        a.animateTo({ ...getNodePosition(this.targetItems[i]) }, animationConfig),
+        a.animateTo(
+          { opacity: 1 },
+          { ...animationConfig, duration: fadeDuration, delay: fadeInDelay }
+        )
+      ]),
       // Also animate the last item's rect border color to the blue border
       // which the last control item always have
       this.targetItemAnimations

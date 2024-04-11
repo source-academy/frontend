@@ -6,9 +6,9 @@ import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Data } from '../CseMachineTypes';
 import {
-  defaultTextColor as defaultStrokeColor,
+  defaultStrokeColor,
   defaultTextColor,
-  fadedTextColor as fadedStrokeColor,
+  fadedStrokeColor,
   fadedTextColor
 } from '../CseMachineUtils';
 import { Arrow } from './arrows/Arrow';

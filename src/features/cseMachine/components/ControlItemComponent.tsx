@@ -72,6 +72,7 @@ export class ControlItemComponent extends Visible implements IHoverable {
     this.highlightOnHover();
     !this.topItem && setHoveredStyle(e.currentTarget);
     setHoveredCursor(e.currentTarget);
+    this.tooltipRef.current.moveToTop();
     this.tooltipRef.current.show();
   };
 

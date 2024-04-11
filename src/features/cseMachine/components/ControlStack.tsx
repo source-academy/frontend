@@ -3,7 +3,7 @@ import { ControlItem, Instr } from 'js-slang/dist/cse-machine/types';
 import { Node } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
-import { Group, Label, Tag, Text } from 'react-konva';
+import { Label, Tag, Text } from 'react-konva';
 
 import CseMachine from '../CseMachine';
 import { Config } from '../CseMachineConfig';
@@ -70,17 +70,15 @@ export class ControlStack extends Visible implements IHoverable {
       .slice(CseMachine.getStackTruncated() ? -10 : 0)
       .map(controlItemToComponent);
   }
+
   onMouseEnter(e: KonvaEventObject<MouseEvent>): void {
     setHoveredStyle(e.currentTarget);
     setHoveredCursor(e.currentTarget);
   }
+
   onMouseLeave(e: KonvaEventObject<MouseEvent>): void {
     setUnhoveredStyle(e.currentTarget);
     setUnhoveredCursor(e.currentTarget);
-  }
-
-  destroy() {
-    this.ref.current.destroyChildren();
   }
 
   draw(): React.ReactNode {
@@ -91,7 +89,7 @@ export class ControlStack extends Visible implements IHoverable {
       fontVariant: ControlStashConfig.FontVariant
     };
     return (
-      <Group key={Layout.key++} ref={this.ref}>
+      <React.Fragment>
         {CseMachine.getStackTruncated() && Layout.control.size() > 10 && (
           <Label
             x={ControlStashConfig.ShowMoreButtonX}
@@ -118,7 +116,7 @@ export class ControlStack extends Visible implements IHoverable {
           </Label>
         )}
         {this.stackItemComponents.map(c => c?.draw())}
-      </Group>
+      </React.Fragment>
     );
   }
 }

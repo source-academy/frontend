@@ -91,11 +91,12 @@ function convertRgbToHex([r, g, b]: [number, number, number]): `#${string}` {
  * Only supports hex colors, e.g. `#000`, `#abcdef`, etc.
  */
 export function lerpColor(
-  startColor: string,
+  startColor: string | undefined,
   endColor: string,
   delta: number,
   easingFn: NonNullable<AnimationConfig['easing']>
 ): `#${string}` {
+  if (!startColor) return endColor as `#${string}`;
   const startRgb = parseHexColor(startColor);
   const endRgb = parseHexColor(endColor);
   const rgb = Array.from({ length: 3 }, (_, i) =>

@@ -4,6 +4,7 @@ import { Group } from 'react-konva';
 
 import { GenericArrow } from '../../components/arrows/GenericArrow';
 import { Visible } from '../../components/Visible';
+import { defaultStrokeColor, fadedStrokeColor } from '../../CseMachineUtils';
 import { Animatable, AnimatableTo, AnimationConfig } from './Animatable';
 import { AnimatedArrowComponent, AnimatedPathComponent } from './AnimationComponents';
 import { SharedProperties } from './AnimationUtils';
@@ -31,11 +32,15 @@ export class AnimatedGenericArrow<
     this._y = arrow.y();
     this._width = arrow.width();
     this._height = arrow.height();
-    this.pathComponent = new AnimatedPathComponent({ ...props, data: arrow.path() });
+    this.pathComponent = new AnimatedPathComponent({
+      stroke: arrow.faded ? fadedStrokeColor() : defaultStrokeColor(),
+      data: arrow.path(),
+      ...props
+    });
     this.pathComponent.addListener(this.onPropsChange);
     this.arrowComponent = new AnimatedArrowComponent({
-      ...props,
-      points: arrow.points.slice(arrow.points.length - 4)
+      points: arrow.points.slice(arrow.points.length - 4),
+      ...props
     });
   }
 
@@ -57,7 +62,6 @@ export class AnimatedGenericArrow<
   }
 
   async animateTo(to: Partial<PathArrowSharedConfig>, animationConfig?: AnimationConfig) {
-    console.log(to, this.pathComponent);
     await Promise.all([
       this.animatePathTo(to, animationConfig),
       this.animateArrowTo(to, animationConfig)

@@ -15,12 +15,15 @@ import { IHoverable, NonGlobalFn, ReferenceType } from '../../CseMachineTypes';
 import {
   defaultStrokeColor,
   defaultTextColor,
+  fadedStrokeColor,
   fadedTextColor,
   getBodyText,
   getParamsText,
   getTextWidth,
   isMainReference,
-  isStreamFn
+  isStreamFn,
+  setHoveredCursor,
+  setUnhoveredCursor
 } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
@@ -33,21 +36,20 @@ export class FnValue extends Value implements IHoverable {
   /** name of this function */
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
-  tooltipWidth!: number;
-  centerX!: number;
 
-  fnName!: string;
-  paramsText!: string;
-  bodyText!: string;
-  exportBodyText!: string;
-  tooltip!: string;
-  exportTooltip!: string;
-  exportTooltipWidth!: number;
-  private _arrow: ArrowFromFn | undefined;
-
-  /** the enclosing frame of this fn value */
-  enclosingFrame?: Frame;
+  readonly fnName: string;
+  readonly paramsText: string;
+  readonly bodyText: string;
+  readonly exportBodyText: string;
+  readonly tooltip: string;
+  readonly tooltipWidth: number;
+  readonly exportTooltip: string;
+  readonly exportTooltipWidth: number;
   readonly labelRef: RefObject<any> = React.createRef();
+
+  centerX: number;
+  enclosingFrame?: Frame;
+  private _arrow: ArrowFromFn | undefined;
 
   constructor(
     /** underlying JS Slang function (contains extra props) */
@@ -57,6 +59,29 @@ export class FnValue extends Value implements IHoverable {
   ) {
     super();
     Layout.memoizeValue(data, this);
+
+    this.centerX = 0;
+    this._width = this.radius * 4;
+    this._height = this.radius * 2;
+
+    this.enclosingFrame = Frame.getFrom(this.data.environment);
+    this.fnName = isStreamFn(this.data) ? '' : this.data.functionName;
+
+    this.paramsText = `params: ${getParamsText(this.data)}`;
+    this.bodyText = `body: ${getBodyText(this.data)}`;
+    this.exportBodyText =
+      (this.bodyText.length > 23 ? this.bodyText.slice(0, 20) : this.bodyText)
+        .split('\n')
+        .slice(0, 2)
+        .join('\n') + ' ...';
+    this.tooltip = `${this.paramsText}\n${this.bodyText}`;
+    this.exportTooltip = `${this.paramsText}\n${this.exportBodyText}`;
+    this.tooltipWidth = Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText));
+    this.exportTooltipWidth = Math.max(
+      getTextWidth(this.paramsText),
+      getTextWidth(this.exportBodyText)
+    );
+
     this.addReference(firstReference);
   }
 
@@ -80,37 +105,22 @@ export class FnValue extends Value implements IHoverable {
       this._x = this.centerX - this.radius * 2;
     }
     this._y += this.radius;
+  }
 
-    this._width = this.radius * 4;
-    this._height = this.radius * 2;
-
-    this.enclosingFrame = Frame.getFrom(this.data.environment);
-    this.fnName = isStreamFn(this.data) ? '' : this.data.functionName;
-
-    this.paramsText = `params: ${getParamsText(this.data)}`;
-    this.bodyText = `body: ${getBodyText(this.data)}`;
-    this.exportBodyText =
-      (this.bodyText.length > 23 ? this.bodyText.slice(0, 20) : this.bodyText)
-        .split('\n')
-        .slice(0, 2)
-        .join('\n') + ' ...';
-    this.tooltip = `${this.paramsText}\n${this.bodyText}`;
-    this.exportTooltip = `${this.paramsText}\n${this.exportBodyText}`;
-    this.tooltipWidth = Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText));
-    this.exportTooltipWidth = Math.max(
-      getTextWidth(this.paramsText),
-      getTextWidth(this.exportBodyText)
-    );
+  arrow(): ArrowFromFn | undefined {
+    return this._arrow;
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
-    this.ref.current.moveToTop();
+    setHoveredCursor(currentTarget);
+    this.labelRef.current.moveToTop();
     this.labelRef.current.show();
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
+    setUnhoveredCursor(currentTarget);
     this.labelRef.current.hide();
   };
 
@@ -122,20 +132,17 @@ export class FnValue extends Value implements IHoverable {
       this._arrow = new ArrowFromFn(this).to(this.enclosingFrame) as ArrowFromFn;
     }
     const textColor = this.isReferenced() ? defaultTextColor() : fadedTextColor();
+    const strokeColor = this.isReferenced() ? defaultStrokeColor() : fadedStrokeColor();
     return (
       <React.Fragment key={Layout.key++}>
-        <Group
-          onMouseEnter={e => this.onMouseEnter(e)}
-          onMouseLeave={e => this.onMouseLeave(e)}
-          ref={this.ref}
-        >
+        <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} ref={this.ref}>
           <Circle
             {...ShapeDefaultProps}
             key={Layout.key++}
             x={this.centerX - this.radius}
             y={this.y()}
             radius={this.radius}
-            stroke={textColor}
+            stroke={strokeColor}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -143,7 +150,7 @@ export class FnValue extends Value implements IHoverable {
             x={this.centerX - this.radius}
             y={this.y()}
             radius={this.innerRadius}
-            fill={textColor}
+            fill={strokeColor}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -151,7 +158,7 @@ export class FnValue extends Value implements IHoverable {
             x={this.centerX + this.radius}
             y={this.y()}
             radius={this.radius}
-            stroke={textColor}
+            stroke={strokeColor}
           />
           <Circle
             {...ShapeDefaultProps}
@@ -159,48 +166,33 @@ export class FnValue extends Value implements IHoverable {
             x={this.centerX + this.radius}
             y={this.y()}
             radius={this.innerRadius}
-            fill={textColor}
+            fill={strokeColor}
           />
         </Group>
-        {CseMachine.getPrintableMode() ? (
-          <KonvaLabel
-            x={this.x() + this.width() + Config.TextPaddingX * 2}
-            y={this.y() - Config.TextPaddingY}
-            visible={true}
-            ref={this.labelRef}
-          >
-            <KonvaTag stroke={defaultStrokeColor()} />
-            <KonvaText
-              text={this.exportTooltip}
-              fontFamily={Config.FontFamily}
-              fontSize={Config.FontSize}
-              fontStyle={Config.FontStyle}
-              fill={textColor}
-              padding={5}
-            />
-          </KonvaLabel>
-        ) : (
-          <KonvaLabel
-            x={this.x() + this.width() + Config.TextPaddingX * 2}
-            y={this.y() - Config.TextPaddingY}
-            visible={false}
-            ref={this.labelRef}
-          >
+        <KonvaLabel
+          x={this.x() + this.width() + Config.TextPaddingX * 2}
+          y={this.y() - Config.TextPaddingY}
+          visible={CseMachine.getPrintableMode()}
+          ref={this.labelRef}
+        >
+          {CseMachine.getPrintableMode() ? (
+            <KonvaTag stroke={strokeColor} />
+          ) : (
             <KonvaTag
               stroke={Config.HoverBgColor}
               fill={Config.HoverBgColor}
               opacity={Config.FnTooltipOpacity}
             />
-            <KonvaText
-              text={this.tooltip}
-              fontFamily={Config.FontFamily}
-              fontSize={Config.FontSize}
-              fontStyle={Config.FontStyle}
-              fill={textColor}
-              padding={5}
-            />
-          </KonvaLabel>
-        )}
+          )}
+          <KonvaText
+            text={CseMachine.getPrintableMode() ? this.exportTooltip : this.tooltip}
+            fontFamily={Config.FontFamily}
+            fontSize={Config.FontSize}
+            fontStyle={Config.FontStyle}
+            fill={textColor}
+            padding={5}
+          />
+        </KonvaLabel>
         {this._arrow?.draw()}
       </React.Fragment>
     );

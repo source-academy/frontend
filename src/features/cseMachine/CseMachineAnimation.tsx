@@ -162,12 +162,16 @@ export class CseAnimation {
           )!;
           const fn = fnStashItem.value;
           const isPredefined = isGlobalFn(fn) || (isClosure(fn) && fn.predefined);
-          const frameCreated = checkFrameCreation(CseAnimation.previousFrame, CseAnimation.currentFrame);
+          const frameCreated = checkFrameCreation(
+            CseAnimation.previousFrame,
+            CseAnimation.currentFrame
+          );
 
           // TODO: find a better way to test for a variadic function call
-          if ((appInstr.numOfArgs > CseAnimation.currentFrame.bindings.length
-            || CseAnimation.currentFrame.environment.heap.size() > 0) // only variadics can instantaneously create array
-            && frameCreated
+          if (
+            (appInstr.numOfArgs > CseAnimation.currentFrame.bindings.length ||
+              CseAnimation.currentFrame.environment.heap.size() > 0) && // only variadics can instantaneously create array
+            frameCreated
           ) {
             // function is variadic, disable animation
             break;
