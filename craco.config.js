@@ -139,6 +139,7 @@ const cracoConfig = {
           'split-on-first',
           'filter-obj',
           '@sourceacademy/c-slang',
+          'java-parser'
         ),
         '^.+\\.module\\.(css|sass|scss)$'
       ];
