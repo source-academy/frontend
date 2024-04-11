@@ -9,12 +9,6 @@ import loadSourceModules from 'js-slang/dist/modules/loader';
 import Constants from './Constants';
 import DisplayBufferService from './DisplayBufferService';
 
-class ProgramTerminatedSuccessfully {
-  toString() {
-    return ' ';
-  }
-}
-
 export async function javaRun(javaCode: string, context: Context) {
   let compiled = {};
 
@@ -138,7 +132,11 @@ export async function javaRun(javaCode: string, context: Context) {
                   : {
                       status: 'finished',
                       context,
-                      value: new ProgramTerminatedSuccessfully()
+                      value: new (class {
+                        toString() {
+                          return ' ';
+                        }
+                      })()
                     }
               );
             }
