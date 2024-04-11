@@ -25,7 +25,7 @@ export class AnimatedGenericArrow<
 
   constructor(
     private arrow: GenericArrow<Source, Target>,
-    props: PathArrowSharedConfig
+    props?: PathArrowSharedConfig
   ) {
     super();
     this._x = arrow.x();

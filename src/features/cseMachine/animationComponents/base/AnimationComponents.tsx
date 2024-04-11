@@ -8,7 +8,7 @@ import { Config } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
 import { defaultStrokeColor, defaultTextColor } from '../../CseMachineUtils';
 import { Animatable, AnimatableTo, AnimationConfig } from './Animatable';
-import { lerpColor } from './AnimationUtils';
+import { lerp } from './AnimationUtils';
 
 type AnimationData<KonvaConfig extends Konva.NodeConfig> = {
   startTime: number;
@@ -56,23 +56,12 @@ abstract class BaseAnimationComponent<
       const delta = Math.min((frame.time - data.startTime) / (data.endTime - data.startTime), 1);
       // Interpolate each attribute between the starting and ending values
       for (const attr in data.current) {
-        if (typeof data.to[attr] === 'number') {
-          const start = (data.from[attr] ?? 0) as number;
-          const end = data.to[attr] as number;
-          const value = data.easing(delta, start, end - start, 1);
-          (data.current[attr] as number) = value;
-          if (attr === 'x') this._x = value;
-          if (attr === 'y') this._y = value;
-          if (attr === 'width') this._width = value;
-          if (attr === 'height') this._height = value;
-        } else if ((attr === 'fill' || attr === 'stroke') && typeof data.to[attr] === 'string') {
-          const value = lerpColor(data.from[attr], data.to[attr]!, delta, data.easing);
-          (data.current[attr] as string) = value;
-        } else {
-          // TODO: could handle the animation of path strings by interpolating between different coordinates.
-          // For now, we just simply set the value to the target value immediately.
-          data.current[attr] = data.to[attr];
-        }
+        const value = lerp(delta, attr, data.from[attr], data.to[attr], data.easing);
+        data.current[attr] = value;
+        if (attr === 'x') this._x = value;
+        if (attr === 'y') this._y = value;
+        if (attr === 'width') this._width = value;
+        if (attr === 'height') this._height = value;
       }
       // Add the new attributes and values into the main attrs object
       Object.assign(attrs, data.current);

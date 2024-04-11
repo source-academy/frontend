@@ -6,12 +6,15 @@ import { StashItemComponent } from '../components/StashItemComponent';
 import { Animatable } from './base/Animatable';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodeLocation, getNodePosition } from './base/AnimationUtils';
-import { BlockAnimation } from './BlockAnimation';
+import { ControlExpansionAnimation } from './ControlExpansionAnimation';
 
+/**
+ * Animation for the `branch` instruction.
+ */
 export class BranchAnimation extends Animatable {
   private branchItemAnimation: AnimatedTextbox;
   private booleanItemAnimation: AnimatedTextbox;
-  private blockAnimation: BlockAnimation;
+  private controlExpandAnimation: ControlExpansionAnimation;
 
   constructor(
     private branchItem: ControlItemComponent,
@@ -21,7 +24,7 @@ export class BranchAnimation extends Animatable {
     super();
     this.branchItemAnimation = new AnimatedTextbox(branchItem.text, getNodePosition(branchItem));
     this.booleanItemAnimation = new AnimatedTextbox(booleanItem.text, getNodePosition(booleanItem));
-    this.blockAnimation = new BlockAnimation(branchItem, resultItems);
+    this.controlExpandAnimation = new ControlExpansionAnimation(branchItem, resultItems);
   }
 
   draw(): React.ReactNode {
@@ -29,7 +32,7 @@ export class BranchAnimation extends Animatable {
       <Group ref={this.ref} key={Animatable.key--}>
         {this.branchItemAnimation.draw()}
         {this.booleanItemAnimation.draw()}
-        {this.blockAnimation.draw()}
+        {this.controlExpandAnimation.draw()}
       </Group>
     );
   }
@@ -45,8 +48,8 @@ export class BranchAnimation extends Animatable {
     await Promise.all([
       this.branchItemAnimation.animateTo({ opacity: 0 }),
       this.booleanItemAnimation.animateTo({ ...getNodeLocation(this.branchItem), opacity: 0 }),
-      // Play the block animation for the results of the branch instruction
-      this.blockAnimation.animate({ delay: 0.5 })
+      // Play the control expansion animation for the results of the branch instruction
+      this.controlExpandAnimation.animate({ delay: 0.5 })
     ]);
     this.destroy();
   }
@@ -55,6 +58,6 @@ export class BranchAnimation extends Animatable {
     this.ref.current?.hide();
     this.branchItemAnimation.destroy();
     this.booleanItemAnimation.destroy();
-    this.blockAnimation.destroy();
+    this.controlExpandAnimation.destroy();
   }
 }

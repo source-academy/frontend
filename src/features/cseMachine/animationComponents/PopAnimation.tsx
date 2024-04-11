@@ -48,7 +48,7 @@ export class PopAnimation extends Animatable {
   }
 
   async animate() {
-    this.undefinedStashItem?.ref.current.hide();
+    this.undefinedStashItem?.ref.current?.hide();
     await Promise.all([
       this.popItemAnimation.animateTo({ ...getNodePosition(this.stashItem), opacity: 0 }),
       this.stashItemAnimation.animateTo({ scaleX: 0.6, scaleY: 0.6 }, { delay: 0.3 })

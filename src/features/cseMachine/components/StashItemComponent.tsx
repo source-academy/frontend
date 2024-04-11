@@ -83,14 +83,18 @@ export class StashItemComponent extends Visible implements IHoverable {
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
     !isStashItemInDanger(this.index) && setHoveredStyle(e.currentTarget);
     setHoveredCursor(e.currentTarget);
+    this.ref.current.moveToTop();
     this.tooltipRef.current.moveToTop();
     this.tooltipRef.current.show();
   };
 
   onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
-    !isStashItemInDanger(this.index) && setUnhoveredStyle(e.currentTarget);
     setUnhoveredCursor(e.currentTarget);
     this.tooltipRef.current.hide();
+    if (!isStashItemInDanger(this.index)) {
+      setUnhoveredStyle(e.currentTarget);
+      this.ref.current.zIndex(1);
+    }
   };
 
   destroy() {
@@ -118,6 +122,7 @@ export class StashItemComponent extends Visible implements IHoverable {
           y={this.y()}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
+          zIndex={1}
         >
           <Tag {...ShapeDefaultProps} {...tagProps} />
           <Text {...ShapeDefaultProps} {...textProps} text={this.text} />

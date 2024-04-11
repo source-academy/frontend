@@ -24,6 +24,7 @@ export class AssignmentAnimation extends Animatable {
   private arrowAnimation?: AnimatedGenericArrow<Text, Value>;
 
   private arrow?: GenericArrow<Text, Value>;
+  private stashItemIsFirst: boolean;
 
   constructor(
     private asgnItem: ControlItemComponent | StashItemComponent,
@@ -32,6 +33,7 @@ export class AssignmentAnimation extends Animatable {
     private binding: Binding
   ) {
     super();
+    this.stashItemIsFirst = stashItem.index === 0;
     this.asgnItemAnimation = new AnimatedTextbox(asgnItem.text, getNodePosition(asgnItem));
     this.stashItemAnimation = new AnimatedTextbox(stashItem.text, getNodePosition(stashItem));
     if (this.binding.value instanceof PrimitiveValue && this.binding.value.text instanceof Text) {
@@ -66,11 +68,11 @@ export class AssignmentAnimation extends Animatable {
     // hide value of binding
     if (this.bindingAnimation) this.binding.value.ref.current?.hide();
     // hide arrow
-    if (this.arrow) this.arrow.ref.current.hide();
-    // move asgn instruction up, right next to stash item, while also decreasing its width
+    if (this.arrow) this.arrow.ref.current?.hide();
+    // move asgn instruction next to stash item, while also decreasing its width
     await this.asgnItemAnimation.animateTo({
-      x: this.stashItem.x() - minAsgnItemWidth,
-      y: this.stashItem.y(),
+      x: this.stashItem.x() - (this.stashItemIsFirst ? minAsgnItemWidth : 0),
+      y: this.stashItem.y() + (this.stashItemIsFirst ? 0 : this.stashItem.height()),
       width: minAsgnItemWidth
     });
     // move both asgn instruction and stash item down to the frame the binding is in

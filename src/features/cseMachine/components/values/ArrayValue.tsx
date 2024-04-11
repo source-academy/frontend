@@ -46,7 +46,7 @@ export class ArrayValue extends Value implements IHoverable {
       }
     }
 
-    this._width = this.data.length * Config.DataUnitWidth + Config.DataMinWidth;
+    this._width = Math.max(this.data.length * Config.DataUnitWidth, Config.DataMinWidth);
     this._height = Config.DataUnitHeight;
 
     // initialize array units from the last index

@@ -3,6 +3,8 @@ import { Group } from 'react-konva';
 
 import { ControlItemComponent } from '../components/ControlItemComponent';
 import { StashItemComponent } from '../components/StashItemComponent';
+import { ControlStashConfig } from '../CseMachineControlStashConfig';
+import { getTextWidth } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodePosition } from './base/AnimationUtils';
@@ -13,7 +15,7 @@ export class UnaryOperationAnimation extends Animatable {
   private resultAnimation: AnimatedTextbox;
 
   constructor(
-    operator: ControlItemComponent,
+    private operator: ControlItemComponent,
     private operand: StashItemComponent,
     private result: StashItemComponent
   ) {
@@ -38,20 +40,37 @@ export class UnaryOperationAnimation extends Animatable {
   }
 
   async animate() {
-    this.result.ref.current.hide();
-    const operandPosition = getNodePosition(this.operand);
-    const resultPosition = getNodePosition(this.result);
+    this.result.ref.current?.hide();
+    const minOpWidth =
+      getTextWidth(this.operator.text) + ControlStashConfig.ControlItemTextPadding * 2;
     await Promise.all([
-      this.operatorAnimation.animateTo(operandPosition),
+      this.resultAnimation.animateTo(
+        {
+          x:
+            this.operand.x() +
+            (this.operand.x() + minOpWidth + this.operand.width()) / 2 +
+            this.result.width() / 2
+        },
+        { duration: 0 }
+      ),
+      this.operatorAnimation.animateTo({
+        x: this.operand.x(),
+        y: this.result.y(),
+        width: minOpWidth
+      }),
       this.operandAnimation.animateTo({
-        ...operandPosition,
-        x: operandPosition.x + operandPosition.width
+        x: this.operand.x() + minOpWidth
       })
     ]);
+    const fadeDuration = 3 / 4;
+    const fadeInDelay = 1 / 4;
     await Promise.all([
-      this.operatorAnimation.animateTo({ ...resultPosition, opacity: 0 }),
-      this.operandAnimation.animateTo({ ...resultPosition, opacity: 0 }),
-      this.resultAnimation.animateTo({ ...resultPosition, opacity: 1 }, { delay: 0.5 })
+      this.operatorAnimation.animateTo({ width: this.result.width() }),
+      this.operatorAnimation.animateTo({ opacity: 0 }, { duration: fadeDuration }),
+      this.operandAnimation.animateTo({ x: this.result.x(), width: this.result.width() }),
+      this.operandAnimation.animateTo({ opacity: 0 }, { duration: fadeDuration }),
+      this.resultAnimation.animateTo({ x: this.result.x() }),
+      this.resultAnimation.animateTo({ opacity: 1 }, { duration: fadeDuration, delay: fadeInDelay })
     ]);
     this.destroy();
   }

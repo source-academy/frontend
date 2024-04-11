@@ -8,6 +8,10 @@ import { Animatable } from './base/Animatable';
 import { AnimatedRectComponent } from './base/AnimationComponents';
 import { getNodePosition } from './base/AnimationUtils';
 
+/**
+ * Animation for the `env` instruction.
+ * Moves the frame border from previous environment frame to new one.
+ */
 export class EnvironmentAnimation extends Animatable {
   private frameAnimation: AnimatedRectComponent;
   private tempRect: AnimatedRectComponent; // this one just hides the blue temporarily

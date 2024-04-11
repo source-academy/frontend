@@ -9,33 +9,31 @@ import { Animatable } from './base/Animatable';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodePosition } from './base/AnimationUtils';
 
+/** Animation for array assignment */
 export class ArrayAssignmentAnimation extends Animatable {
+  private arrayUnit: ArrayUnit;
+
   private asgnItemAnimation: AnimatedTextbox;
   private pairArrayItemAnimation: AnimatedTextbox;
   private indexItemAnimation: AnimatedTextbox;
   private valueAnimation: AnimatedTextbox;
   private resultAnimation: AnimatedTextbox;
-  private arrayUnit: ArrayUnit;
 
   constructor(
     asgnItem: ControlItemComponent,
-    pairArrayItem: StashItemComponent,
+    arrayItem: StashItemComponent,
+    arrayValue: ArrayValue,
     indexItem: StashItemComponent,
     valueItem: StashItemComponent,
     private resultItem: StashItemComponent
   ) {
     super();
     this.asgnItemAnimation = new AnimatedTextbox(asgnItem.text, getNodePosition(asgnItem));
-    this.pairArrayItemAnimation = new AnimatedTextbox(
-      pairArrayItem.text,
-      getNodePosition(pairArrayItem)
-    );
+    this.pairArrayItemAnimation = new AnimatedTextbox(arrayItem.text, getNodePosition(arrayItem));
     this.indexItemAnimation = new AnimatedTextbox(indexItem.text, getNodePosition(indexItem));
     this.valueAnimation = new AnimatedTextbox(valueItem.text, getNodePosition(valueItem));
     this.resultAnimation = new AnimatedTextbox(resultItem.text, getNodePosition(valueItem));
-    // the target should always be an array value
-    const array = pairArrayItem.arrow!.target! as ArrayValue;
-    this.arrayUnit = array.units[parseInt(indexItem.text)];
+    this.arrayUnit = arrayValue.units[parseInt(indexItem.text)];
   }
 
   draw(): React.ReactNode {
@@ -51,7 +49,7 @@ export class ArrayAssignmentAnimation extends Animatable {
   }
 
   async animate() {
-    this.resultItem.ref.current.hide();
+    this.resultItem.ref.current?.hide();
     // move the value near to the correct array unit
     await this.valueAnimation.animateTo(
       {

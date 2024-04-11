@@ -60,14 +60,14 @@ export function lookupBinding(currFrame: Frame, bindingName: string): [Frame, Bi
   );
 }
 
-// Compare two given frames and return whether they are actually different, and that
-// the second frame is a newly created frame
-export function checkFrameCreation(prevFrame: Frame, currFrame: Frame): boolean {
-  return prevFrame.environment.id !== currFrame.environment.id;
+/** Simple check for if a string is a hex color string. Does not check individual characters. */
+function isHexColor(value: string): boolean {
+  return value.startsWith('#') && (value.length === 4 || value.length === 7);
 }
 
+/** Converts a hex color string to a 3-element rgb array */
 function parseHexColor(color: string): [number, number, number] {
-  if (!color.startsWith('#') || (color.length !== 4 && color.length !== 7)) {
+  if (!isHexColor(color)) {
     throw new Error(`Cannot parse given color string: ${color}`);
   }
   if (color.length === 4) color = color + color.slice(1);
@@ -78,6 +78,7 @@ function parseHexColor(color: string): [number, number, number] {
   ];
 }
 
+/** Converts a rgb array to hex color string */
 function convertRgbToHex([r, g, b]: [number, number, number]): `#${string}` {
   return `#${
     r.toString(16).padStart(2, '0') +
@@ -90,10 +91,10 @@ function convertRgbToHex([r, g, b]: [number, number, number]): `#${string}` {
  * Interpolates between the colors based on the given delta and easing function.
  * Only supports hex colors, e.g. `#000`, `#abcdef`, etc.
  */
-export function lerpColor(
+function lerpColor(
+  delta: number,
   startColor: string | undefined,
   endColor: string,
-  delta: number,
   easingFn: NonNullable<AnimationConfig['easing']>
 ): `#${string}` {
   if (!startColor) return endColor as `#${string}`;
@@ -103,4 +104,27 @@ export function lerpColor(
     Math.round(easingFn(delta, startRgb[i], endRgb[i] - startRgb[i], 1))
   );
   return convertRgbToHex(rgb as [number, number, number]);
+}
+
+/**
+ * Interpolates between `startValue` and `endValue` at the given `delta`, depending on the given
+ * `property` and `easingFn`.
+ * Only supports interpolation between numbers, or color strings
+ */
+export function lerp(
+  delta: number,
+  property: string,
+  startValue: any,
+  endValue: any,
+  easingFn: NonNullable<AnimationConfig['easing']>
+): any {
+  if (startValue === endValue) return endValue;
+  if (typeof endValue === 'number') {
+    if (typeof startValue !== 'number') return endValue;
+    return easingFn(delta, startValue, endValue - startValue, 1);
+  } else if (property === 'fill' || property === 'stroke') {
+    return lerpColor(delta, startValue, endValue, easingFn);
+  } else {
+    return endValue;
+  }
 }

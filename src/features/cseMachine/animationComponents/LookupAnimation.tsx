@@ -13,6 +13,7 @@ import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodePosition } from './base/AnimationUtils';
 
+/** Animation for variable lookup */
 export class LookupAnimation extends Animatable {
   private nameItemAnimation: AnimatedTextbox;
   private stashItemAnimation: AnimatedTextbox;
@@ -48,7 +49,7 @@ export class LookupAnimation extends Animatable {
   }
 
   async animate() {
-    this.stashItem.ref.current.hide();
+    this.stashItem.ref.current?.hide();
     if (this.stashItem.arrow) {
       this.stashItem.arrow.ref.current?.hide();
     }

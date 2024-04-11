@@ -52,7 +52,7 @@ export class ArrayAccessAnimation extends Animatable {
   }
 
   async animate() {
-    this.resultItem.ref.current.hide();
+    this.resultItem.ref.current?.hide();
     await this.indexItemAnimation.animateTo(
       {
         x: this.arrayUnit.x() + this.arrayUnit.width() / 4,

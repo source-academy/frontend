@@ -1,29 +1,31 @@
 import { AppInstr, ArrLitInstr, AssmtInstr, InstrType } from 'js-slang/dist/cse-machine/types';
+import { Node } from 'js-slang/dist/types';
 import { Layer } from 'konva/lib/Layer';
 import { Easings } from 'konva/lib/Tween';
 import React from 'react';
 
 import { ArrayAccessAnimation } from './animationComponents/ArrayAccessAnimation';
 import { ArrayAssignmentAnimation } from './animationComponents/ArrayAssignmentAnimation';
-import { ArrayLiteralAnimation } from './animationComponents/ArrayLiteralAnimation';
 import { AssignmentAnimation } from './animationComponents/AssignmentAnimation';
 import { Animatable } from './animationComponents/base/Animatable';
-import { checkFrameCreation, lookupBinding } from './animationComponents/base/AnimationUtils';
+import { lookupBinding } from './animationComponents/base/AnimationUtils';
 import { BinaryOperationAnimation } from './animationComponents/BinaryOperationAnimation';
-import { BlockAnimation } from './animationComponents/BlockAnimation';
 import { BranchAnimation } from './animationComponents/BranchAnimation';
+import { ControlExpansionAnimation } from './animationComponents/ControlExpansionAnimation';
+import { ControlToStashAnimation } from './animationComponents/ControlToStashAnimation';
 import { EnvironmentAnimation } from './animationComponents/EnvironmentAnimation';
 import { FrameCreationAnimation } from './animationComponents/FrameCreationAnimation';
 import { FunctionApplicationAnimation } from './animationComponents/FunctionApplicationAnimation';
-import { LiteralAnimation } from './animationComponents/LiteralAnimation';
+import { InstructionApplicationAnimation } from './animationComponents/InstructionApplicationAnimation';
 import { LookupAnimation } from './animationComponents/LookupAnimation';
 import { PopAnimation } from './animationComponents/PopAnimation';
 import { UnaryOperationAnimation } from './animationComponents/UnaryOperationAnimation';
-import { isInstr } from './components/ControlStack';
+import { isNode } from './components/ControlStack';
 import { Frame } from './components/Frame';
+import { ArrayValue } from './components/values/ArrayValue';
 import CseMachine from './CseMachine';
 import { Layout } from './CseMachineLayout';
-import { isClosure, isGlobalFn } from './CseMachineUtils';
+import { isBuiltInFn, isStreamFn } from './CseMachineUtils';
 
 export class CseAnimation {
   static readonly animations: Animatable[] = [];
@@ -63,6 +65,75 @@ export class CseAnimation {
     return Layout.controlComponent.stackItemComponents.slice(previousControlSize - 1);
   }
 
+  private static handleNode(node: Node) {
+    const lastControlComponent = Layout.previousControlComponent.stackItemComponents.at(-1)!;
+    const currStashComponent = Layout.stashComponent.stashItemComponents.at(-1)!;
+    switch (node.type) {
+      case 'Program':
+        CseAnimation.animations.push(
+          new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())
+        );
+        if (CseMachine.getCurrentEnvId() !== '-1') {
+          CseAnimation.animations.push(
+            new FrameCreationAnimation(lastControlComponent, CseAnimation.currentFrame)
+          );
+        }
+        break;
+      case 'BlockStatement':
+        CseAnimation.animations.push(
+          new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems()),
+          new FrameCreationAnimation(lastControlComponent, CseAnimation.currentFrame)
+        );
+        break;
+      case 'Literal':
+        CseAnimation.animations.push(
+          new ControlToStashAnimation(lastControlComponent, currStashComponent!)
+        );
+        break;
+      case 'ArrowFunctionExpression':
+        CseAnimation.animations.push(
+          new ControlToStashAnimation(lastControlComponent, currStashComponent!)
+        );
+        break;
+      case 'Identifier':
+        // Special case for 'undefined' identifier
+        if (node.name === 'undefined') {
+          CseAnimation.animations.push(
+            new ControlToStashAnimation(lastControlComponent, currStashComponent!)
+          );
+        } else {
+          CseAnimation.animations.push(
+            new LookupAnimation(
+              lastControlComponent,
+              currStashComponent!,
+              ...lookupBinding(CseAnimation.currentFrame, node.name)
+            )
+          );
+        }
+        break;
+      case 'AssignmentExpression':
+      case 'ArrayExpression':
+      case 'BinaryExpression':
+      case 'CallExpression':
+      case 'ConditionalExpression':
+      case 'ForStatement':
+      case 'IfStatement':
+      case 'MemberExpression':
+      case 'ReturnStatement':
+      case 'StatementSequence':
+      case 'UnaryExpression':
+      case 'VariableDeclaration':
+      case 'WhileStatement':
+        CseAnimation.animations.push(
+          new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())
+        );
+        break;
+      case 'ExpressionStatement':
+        CseAnimation.handleNode(node.expression);
+        break;
+    }
+  }
+
   static updateAnimation() {
     CseAnimation.animations.forEach(a => a.destroy());
     CseAnimation.clearAnimationComponents();
@@ -80,80 +151,9 @@ export class CseAnimation {
     ) {
       return;
     }
-    if (!isInstr(lastControlItem)) {
-      console.log('TYPE: ' + lastControlItem.type);
-      switch (lastControlItem.type) {
-        case 'ArrowFunctionExpression':
-        case 'FunctionExpression':
-          CseAnimation.animations.push(
-            new LiteralAnimation(lastControlComponent, currStashComponent!)
-          );
-          break;
-        case 'BlockStatement':
-          CseAnimation.animations.push(
-            new BlockAnimation(lastControlComponent, CseAnimation.getNewControlItems())
-          );
-          // if (!currControlComponent) return;
-          if (checkFrameCreation(CseAnimation.previousFrame, CseAnimation.currentFrame)) {
-            CseAnimation.animations.push(
-              new FrameCreationAnimation(lastControlComponent, CseAnimation.currentFrame)
-            );
-          }
-          break;
-        case 'Identifier':
-          // Special case for 'undefined' identifier, use the literal animation instead
-          if (lastControlComponent.text === 'undefined') {
-            CseAnimation.animations.push(
-              new LiteralAnimation(lastControlComponent, currStashComponent!)
-            );
-          } else {
-            CseAnimation.animations.push(
-              new LookupAnimation(
-                lastControlComponent,
-                currStashComponent!,
-                ...lookupBinding(CseAnimation.currentFrame, lastControlItem.name)
-              )
-            );
-          }
-          break;
-        case 'Literal':
-          CseAnimation.animations.push(
-            new LiteralAnimation(lastControlComponent, currStashComponent!)
-          );
-          break;
-        case 'Program':
-          CseAnimation.animations.push(
-            new BlockAnimation(lastControlComponent, CseAnimation.getNewControlItems())
-          );
-          // if (!currControlComponent) return;
-          if (checkFrameCreation(CseAnimation.previousFrame, CseAnimation.currentFrame)) {
-            CseAnimation.animations.push(
-              new FrameCreationAnimation(lastControlComponent, CseAnimation.currentFrame)
-            );
-          }
-          break;
-        // block split cases
-        case 'AssignmentExpression':
-        case 'ArrayExpression':
-        case 'BinaryExpression':
-        case 'CallExpression':
-        case 'ConditionalExpression':
-        case 'ExpressionStatement':
-        case 'ForStatement':
-        case 'IfStatement':
-        case 'MemberExpression':
-        case 'ReturnStatement':
-        case 'StatementSequence':
-        case 'UnaryExpression':
-        case 'VariableDeclaration':
-        case 'WhileStatement':
-          CseAnimation.animations.push(
-            new BlockAnimation(lastControlComponent, CseAnimation.getNewControlItems())
-          );
-          break;
-      }
+    if (isNode(lastControlItem)) {
+      CseAnimation.handleNode(lastControlItem);
     } else {
-      console.log('INSTRTYPE: ' + lastControlItem.instrType);
       switch (lastControlItem.instrType) {
         case InstrType.APPLICATION:
           const appInstr = lastControlItem as AppInstr;
@@ -161,21 +161,17 @@ export class CseAnimation {
             -appInstr.numOfArgs - 1
           )!;
           const fn = fnStashItem.value;
-          const isPredefined = isGlobalFn(fn) || (isClosure(fn) && fn.predefined);
-          const frameCreated = checkFrameCreation(
-            CseAnimation.previousFrame,
-            CseAnimation.currentFrame
-          );
-
-          // TODO: find a better way to test for a variadic function call
-          if (
-            (appInstr.numOfArgs > CseAnimation.currentFrame.bindings.length ||
-              CseAnimation.currentFrame.environment.heap.size() > 0) && // only variadics can instantaneously create array
-            frameCreated
-          ) {
-            // function is variadic, disable animation
+          if (isBuiltInFn(fn) || isStreamFn(fn)) {
+            CseAnimation.animations.push(
+              new InstructionApplicationAnimation(
+                lastControlComponent,
+                Layout.previousStashComponent.stashItemComponents.slice(-appInstr.numOfArgs - 1),
+                currStashComponent!
+              )
+            );
             break;
           }
+          const frameCreated = appInstr.numOfArgs > 0;
 
           CseAnimation.animations.push(
             new FunctionApplicationAnimation(
@@ -183,8 +179,7 @@ export class CseAnimation {
               CseAnimation.getNewControlItems(),
               fnStashItem,
               Layout.previousStashComponent.stashItemComponents.slice(-appInstr.numOfArgs),
-              CseAnimation.currentFrame,
-              !isPredefined && frameCreated
+              frameCreated ? CseAnimation.currentFrame : undefined
             )
           );
           break;
@@ -199,10 +194,12 @@ export class CseAnimation {
           );
           break;
         case InstrType.ARRAY_ASSIGNMENT:
+          const arrayItem = Layout.previousStashComponent.stashItemComponents.at(-3)!;
           CseAnimation.animations.push(
             new ArrayAssignmentAnimation(
               lastControlComponent,
-              Layout.previousStashComponent.stashItemComponents.at(-3)!,
+              arrayItem,
+              Layout.values.get(arrayItem.value.id) as ArrayValue,
               Layout.previousStashComponent.stashItemComponents.at(-2)!,
               Layout.previousStashComponent.stashItemComponents.at(-1)!,
               Layout.stashComponent.stashItemComponents.at(-1)!
@@ -212,7 +209,7 @@ export class CseAnimation {
         case InstrType.ARRAY_LITERAL:
           const arrSize = (lastControlItem as ArrLitInstr).arity;
           CseAnimation.animations.push(
-            new ArrayLiteralAnimation(
+            new InstructionApplicationAnimation(
               lastControlComponent,
               Layout.previousStashComponent.stashItemComponents.slice(-arrSize),
               currStashComponent!
@@ -241,7 +238,6 @@ export class CseAnimation {
         case InstrType.BRANCH:
         case InstrType.FOR:
         case InstrType.WHILE:
-          // if (!currControlComponent) return;
           CseAnimation.animations.push(
             new BranchAnimation(
               lastControlComponent,
@@ -291,7 +287,7 @@ export class CseAnimation {
   }
 
   static async playAnimation() {
-    if (!CseAnimation.animationEnabled || CseMachine.getStackTruncated()) {
+    if (!CseAnimation.animationEnabled) {
       CseAnimation.animations.forEach(a => a.destroy());
       CseAnimation.clearAnimationComponents();
       return;
@@ -300,7 +296,7 @@ export class CseAnimation {
     // Get the actual HTML <canvas> element and set the pointer events to none, to allow for
     // mouse events to pass through the animation layer, and be handled by the actual CSE Machine.
     // Setting the listening property to false on the Konva Layer does not seem to work, so
-    // this is the only workaround.
+    // this a workaround.
     const canvasElement = CseAnimation.getLayer()?.getCanvas()._canvas;
     if (canvasElement) canvasElement.style.pointerEvents = 'none';
     // Play all the animations

@@ -3,6 +3,8 @@ import { Group } from 'react-konva';
 
 import { ControlItemComponent } from '../components/ControlItemComponent';
 import { StashItemComponent } from '../components/StashItemComponent';
+import { ControlStashConfig } from '../CseMachineControlStashConfig';
+import { getTextWidth } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodePosition } from './base/AnimationUtils';
@@ -14,7 +16,7 @@ export class BinaryOperationAnimation extends Animatable {
   private resultAnimation: AnimatedTextbox;
 
   constructor(
-    binaryOperator: ControlItemComponent,
+    private binaryOperator: ControlItemComponent,
     leftOperand: StashItemComponent,
     private rightOperand: StashItemComponent,
     private result: StashItemComponent
@@ -48,24 +50,30 @@ export class BinaryOperationAnimation extends Animatable {
   }
 
   async animate() {
-    this.result.ref.current.hide();
+    this.result.ref.current?.hide();
     const rightOpPosition = getNodePosition(this.rightOperand);
     const resultPosition = getNodePosition(this.result);
+    const minBinOpWidth =
+      getTextWidth(this.binaryOperator.text) + ControlStashConfig.ControlItemTextPadding * 2;
+    const fadeDuration = 3 / 4;
+    const fadeInDelay = 1 / 4;
     // Shifts the right operand to the right and move the operator in between the operands
     await Promise.all([
-      this.binaryOperatorAnimation.animateTo(rightOpPosition),
+      this.binaryOperatorAnimation.animateTo({ ...rightOpPosition, width: minBinOpWidth }),
       this.rightOperandAnimation.animateTo({
         ...rightOpPosition,
-        x: rightOpPosition.x + rightOpPosition.width
+        x: rightOpPosition.x + minBinOpWidth
       })
     ]);
     // Merges the operators and operands together to form the result
-    const to = { ...resultPosition, opacity: 0 };
     await Promise.all([
-      this.binaryOperatorAnimation.animateTo(to),
-      this.leftOperandAnimation.animateTo({ opacity: 0 }),
-      this.rightOperandAnimation.animateTo(to),
-      this.resultAnimation.animateTo({ ...resultPosition, opacity: 1 }, { delay: 0.1 })
+      this.binaryOperatorAnimation.animateTo(resultPosition),
+      this.binaryOperatorAnimation.animateTo({ opacity: 0 }, { duration: fadeDuration }),
+      this.leftOperandAnimation.animateTo({ opacity: 0 }, { duration: fadeDuration }),
+      this.rightOperandAnimation.animateTo(resultPosition),
+      this.rightOperandAnimation.animateTo({ opacity: 0 }, { duration: fadeDuration }),
+      this.resultAnimation.animateTo(resultPosition),
+      this.resultAnimation.animateTo({ opacity: 1 }, { duration: fadeDuration, delay: fadeInDelay })
     ]);
     this.destroy();
   }
