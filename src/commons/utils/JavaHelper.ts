@@ -11,7 +11,7 @@ import DisplayBufferService from './DisplayBufferService';
 
 class ProgramTerminatedSuccessfully {
   toString() {
-    return 'Program terminated successfully';
+    return ' ';
   }
 }
 
