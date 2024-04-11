@@ -47,9 +47,10 @@ const cracoConfig = {
         'https': require.resolve('https-browserify'),
         'os': require.resolve('os-browserify/browser'),
         'path/posix': require.resolve('path-browserify'),
+        'process/browser': require.resolve('process/browser'),
         'stream': require.resolve('stream-browserify'),
         'timers': require.resolve('timers-browserify'),
-        'url': require.resolve('url/')
+        'url': require.resolve('url/'),
       };
 
       // workaround .mjs files by Acorn
