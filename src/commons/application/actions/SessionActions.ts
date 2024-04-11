@@ -136,7 +136,7 @@ export const fetchGrading = createAction(FETCH_GRADING, (submissionId: number) =
 /**
  * @param filterToGroup - param that when set to true, only shows submissions under the group
  * of the grader
- * @param publishedFilter - backend params to filter to unoublished
+ * @param publishedFilter - backend params to filter to unpublished
  * @param pageParams - param that contains offset and pageSize, informing backend about how
  * many entries, starting from what offset, to get
  * @param filterParams - param that contains columnFilters converted into JSON for

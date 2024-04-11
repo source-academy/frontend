@@ -429,14 +429,6 @@ export const getAssessmentOverviews = async (
   const assessmentOverviews = await resp.json();
 
   return assessmentOverviews.map((overview: any) => {
-    // TODO: remove and replace with just isGradingPublished.
-    overview.progress = backendParamsToProgressStatus(
-      overview.isManuallyGraded,
-      overview.isGradingPublished,
-      overview.status,
-      overview.gradedCount,
-      overview.questionCount
-    );
     delete overview.gradedCount;
     delete overview.questionCount;
 
@@ -483,14 +475,6 @@ export const getUserAssessmentOverviews = async (
   }
   const assessmentOverviews = await resp.json();
   return assessmentOverviews.map((overview: any) => {
-    // TODO: remove from assessment overviews, replacing with just isGradingPublished.
-    overview.progress = backendParamsToProgressStatus(
-      overview.assessment.isManuallyGraded,
-      overview.isGradingPublished,
-      overview.status,
-      overview.gradedCount,
-      overview.questionCount
-    );
     delete overview.gradedCount;
     delete overview.questionCount;
 
