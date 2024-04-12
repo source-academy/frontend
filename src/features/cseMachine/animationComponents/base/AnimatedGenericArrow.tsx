@@ -39,6 +39,7 @@ export class AnimatedGenericArrow<
     });
     this.pathComponent.addListener(this.onPropsChange);
     this.arrowComponent = new AnimatedArrowComponent({
+      fill: arrow.faded ? fadedStrokeColor() : defaultStrokeColor(),
       points: arrow.points.slice(arrow.points.length - 4),
       ...props
     });

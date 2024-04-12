@@ -2,7 +2,7 @@ import React from 'react';
 import { Group } from 'react-konva';
 
 import { ControlItemComponent } from '../components/ControlItemComponent';
-import { defaultActiveColor } from '../CseMachineUtils';
+import { defaultActiveColor, defaultStrokeColor } from '../CseMachineUtils';
 import { Animatable, AnimationConfig } from './base/Animatable';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodePosition } from './base/AnimationUtils';
@@ -25,7 +25,9 @@ export class ControlExpansionAnimation extends Animatable {
     this.targetItems = [...targetItems];
     this.targetItems.sort((a, b) => a.y() - b.y());
     const initialPosition = getNodePosition(this.initialItem);
-    this.initialItemAnimation = new AnimatedTextbox(initialItem.text, initialPosition);
+    this.initialItemAnimation = new AnimatedTextbox(initialItem.text, initialPosition, {
+      rectProps: { stroke: defaultActiveColor() }
+    });
     this.targetItemAnimations = this.targetItems.map((item, i) => {
       return new AnimatedTextbox(item.text, {
         ...initialPosition,
@@ -53,7 +55,10 @@ export class ControlExpansionAnimation extends Animatable {
     const fadeInDelay = (animationConfig?.delay ?? 0) + (animationConfig?.duration ?? 1) / 4;
     await Promise.all([
       // Fade out the previous item while also changing its height for a more fluid animation
-      this.initialItemAnimation.animateRectTo({ height: totalHeight }, animationConfig),
+      this.initialItemAnimation.animateRectTo(
+        { height: totalHeight, stroke: defaultStrokeColor() },
+        animationConfig
+      ),
       this.initialItemAnimation.animateTextTo({ y: textY }, animationConfig),
       this.initialItemAnimation.animateTo(
         { opacity: 0 },

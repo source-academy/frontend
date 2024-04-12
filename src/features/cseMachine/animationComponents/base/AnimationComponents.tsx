@@ -207,7 +207,7 @@ export class AnimatedRectComponent extends AnimationComponent<Konva.Rect, Konva.
 export class AnimatedPathComponent extends AnimationComponent<Konva.Path, Konva.PathConfig> {
   constructor(props: Konva.PathConfig & Required<Pick<Konva.PathConfig, 'data'>>) {
     const defaultProps = {
-      fill: defaultStrokeColor(),
+      stroke: defaultStrokeColor(),
       strokeWidth: Config.ArrowStrokeWidth
     };
     super(Path, { ...defaultProps, ...props });

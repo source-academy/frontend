@@ -6,7 +6,12 @@ import { Frame } from '../components/Frame';
 import { StashItemComponent } from '../components/StashItemComponent';
 import { Visible } from '../components/Visible';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
-import { defaultActiveColor, getTextWidth } from '../CseMachineUtils';
+import {
+  defaultActiveColor,
+  defaultDangerColor,
+  defaultStrokeColor,
+  getTextWidth
+} from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
@@ -16,8 +21,9 @@ import { FrameCreationAnimation } from './FrameCreationAnimation';
 export class FunctionApplicationAnimation extends Animatable {
   private callInstrAnimation: AnimatedTextbox;
   private stashItemAnimations: AnimatedTextbox[];
-  private closureArrowAnimation: AnimatedGenericArrow<StashItemComponent, Visible>;
+  private stashArrowAnimations: AnimatedGenericArrow<StashItemComponent, Visible>[];
   private newControlItemAnimations: AnimatedTextbox[];
+  private envArrowAnimation?: AnimatedGenericArrow<ControlItemComponent, Visible>;
   private frameCreationAnimation?: FrameCreationAnimation;
 
   private isFirstStashItem: boolean;
@@ -34,16 +40,31 @@ export class FunctionApplicationAnimation extends Animatable {
     this.isFirstStashItem = closureStashItem.index === 0;
     this.callInstrAnimation = new AnimatedTextbox(
       callInstrItem.text,
-      getNodePosition(callInstrItem)
+      getNodePosition(callInstrItem),
+      { rectProps: { stroke: defaultActiveColor() } }
     );
     this.stashItemAnimations = [
-      new AnimatedTextbox(closureStashItem.text, getNodePosition(closureStashItem)),
-      ...argStashItems.map(item => new AnimatedTextbox(item.text, getNodePosition(item)))
+      new AnimatedTextbox(closureStashItem.text, getNodePosition(closureStashItem), {
+        rectProps: { stroke: defaultDangerColor() }
+      }),
+      ...argStashItems.map(item => {
+        return new AnimatedTextbox(item.text, getNodePosition(item), {
+          rectProps: { stroke: defaultDangerColor() }
+        });
+      })
     ];
-    this.closureArrowAnimation = new AnimatedGenericArrow(closureStashItem.arrow!);
+    this.stashArrowAnimations = [
+      new AnimatedGenericArrow(closureStashItem.arrow!),
+      ...argStashItems.flatMap(item => (item.arrow ? new AnimatedGenericArrow(item.arrow) : []))
+    ];
     this.newControlItemAnimations = newControlItems.map(
       i => new AnimatedTextbox(i.text, { ...closureLocation, opacity: 0 })
     );
+    if (this.newControlItems[0].arrow) {
+      this.envArrowAnimation = new AnimatedGenericArrow(this.newControlItems[0].arrow, {
+        opacity: 0
+      });
+    }
     if (functionFrame) {
       this.frameCreationAnimation = new FrameCreationAnimation(closureStashItem, functionFrame);
     }
@@ -54,8 +75,9 @@ export class FunctionApplicationAnimation extends Animatable {
       <Group key={Animatable.key--} ref={this.ref}>
         {this.callInstrAnimation.draw()}
         {this.stashItemAnimations.map(a => a.draw())}
-        {this.closureArrowAnimation.draw()}
+        {this.stashArrowAnimations.map(a => a.draw())}
         {this.newControlItemAnimations.map(a => a.draw())}
+        {this.envArrowAnimation?.draw()}
         {this.frameCreationAnimation?.draw()}
       </Group>
     );
@@ -63,17 +85,22 @@ export class FunctionApplicationAnimation extends Animatable {
 
   async animate() {
     this.newControlItems.forEach(item => item.ref.current?.hide());
+    this.newControlItems[0].arrow?.ref.current?.hide();
     // hide the function frame before the frame creation animation plays
     this.functionFrame?.ref.current?.hide();
 
     const minInstrWidth =
       getTextWidth(this.callInstrItem.text) + ControlStashConfig.ControlItemTextPadding * 2;
     // Move call instruction next to stash items
-    await this.callInstrAnimation.animateTo({
-      x: this.closureStashItem.x() - (this.isFirstStashItem ? minInstrWidth : 0),
-      y: this.closureStashItem.y() + (this.isFirstStashItem ? 0 : this.closureStashItem.height()),
-      width: minInstrWidth
-    });
+    await Promise.all([
+      this.callInstrAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
+      this.callInstrAnimation.animateTo({
+        x: this.closureStashItem.x() - (this.isFirstStashItem ? minInstrWidth : 0),
+        y: this.closureStashItem.y() + (this.isFirstStashItem ? 0 : this.closureStashItem.height()),
+        width: minInstrWidth
+      }),
+      ...this.stashItemAnimations.map(a => a.animateRectTo({ stroke: defaultStrokeColor() }))
+    ]);
     const targetLocation = {
       x: this.functionFrame?.x() ?? this.newControlItems[0].x(),
       y: this.functionFrame?.y() ?? this.newControlItems[0].y()
@@ -83,7 +110,7 @@ export class FunctionApplicationAnimation extends Animatable {
     const fadeInDelay = 3 / 8;
     // merge all items together while also creating the new frame and new control items
     await Promise.all([
-      this.closureArrowAnimation.animateTo({ opacity: 0 }, { duration: 0.5 }),
+      this.stashArrowAnimations.map(a => a.animateTo({ opacity: 0 }, { duration: 0.5 })),
       this.callInstrAnimation.animateTo(targetLocation, config),
       this.callInstrAnimation.animateTo({ opacity: 0 }, { ...config, duration: fadeDuration }),
       ...this.stashItemAnimations.flatMap(a => [
@@ -95,7 +122,8 @@ export class FunctionApplicationAnimation extends Animatable {
         a.animateTo({ opacity: 1 }, { ...config, duration: fadeDuration, delay: fadeInDelay })
       ]),
       this.newControlItemAnimations.at(-1)!.animateRectTo({ stroke: defaultActiveColor() }, config),
-      this.frameCreationAnimation?.animate(config)
+      this.frameCreationAnimation?.animate(config),
+      this.envArrowAnimation?.animateTo({ opacity: 1 }, { delay: config.duration })
     ]);
     this.destroy();
   }
@@ -103,10 +131,11 @@ export class FunctionApplicationAnimation extends Animatable {
   destroy() {
     this.ref.current?.hide();
     this.newControlItems.forEach(item => item.ref.current?.show());
+    this.newControlItems[0].arrow?.ref.current?.show();
     this.functionFrame?.ref.current?.show();
     this.callInstrAnimation.destroy();
     this.stashItemAnimations.forEach(a => a.destroy());
-    this.closureArrowAnimation.destroy();
+    this.stashArrowAnimations.forEach(a => a.destroy());
     this.newControlItemAnimations.forEach(a => a.destroy());
     this.frameCreationAnimation?.destroy();
   }

@@ -19,15 +19,20 @@ import { AnimatedRectComponent, AnimatedTextComponent } from './base/AnimationCo
 import { getNodeDimensions, getNodeLocation, getNodePosition } from './base/AnimationUtils';
 
 export class FrameCreationAnimation extends Animatable {
-  readonly controlTextAnimation: AnimatedTextComponent;
-  readonly borderAnimation: AnimatedRectComponent;
+  private controlTextAnimation: AnimatedTextComponent;
+  private borderAnimation: AnimatedRectComponent;
   private frameArrowAnimation?: AnimatedGenericArrow<Frame, Frame>;
   private frameNameAnimation: AnimatedTextComponent;
-  private frameBindingKeyAnimations: AnimatedTextComponent[];
+
+  // Bindings
+  private frameKeyAnimations: AnimatedTextComponent[];
   private frameValues: PrimitiveValue[];
   private frameValueAnimations: AnimatedTextComponent[];
   private frameArrows: GenericArrow<Text, Value>[];
   private frameArrowAnimations: AnimatedGenericArrow<Text, Value>[];
+
+  // The array value that is in the frame created from a variadic closure.
+  // This is special since it is the only object that is created together with the frame.
   private variadicArray?: ArrayValue;
 
   constructor(
@@ -61,7 +66,7 @@ export class FrameCreationAnimation extends Animatable {
       y: frame.name.y() - yDiff,
       opacity: 0
     });
-    this.frameBindingKeyAnimations = frame.bindings.map(binding => {
+    this.frameKeyAnimations = frame.bindings.map(binding => {
       return new AnimatedTextComponent({
         text: binding.keyString,
         ...getNodeDimensions(binding.key),
@@ -107,7 +112,7 @@ export class FrameCreationAnimation extends Animatable {
         {this.borderAnimation.draw()}
         {this.frameArrowAnimation?.draw()}
         {this.frameNameAnimation.draw()}
-        {this.frameBindingKeyAnimations.map(a => a.draw())}
+        {this.frameKeyAnimations.map(a => a.draw())}
         {this.frameValueAnimations.map(a => a.draw())}
         {this.frameArrowAnimations.map(a => a.draw())}
       </Group>
@@ -125,6 +130,12 @@ export class FrameCreationAnimation extends Animatable {
       easing: animationConfig?.easing
     };
     const framePosition = getNodePosition(this.frame);
+    // Fade in the arrow last. Declared here first so it runs alongside the rest of the animations,
+    // but needed to be awaited later on in this function
+    const frameArrowAnimate = this.frameArrowAnimation?.animateTo(
+      { opacity: 1 },
+      { delay: duration + (animationConfig?.delay ?? 0) }
+    );
     await Promise.all([
       // Fade out the control text during translation
       this.controlTextAnimation.animateTo({ opacity: 0 }, fadeOutConfig),
@@ -140,8 +151,8 @@ export class FrameCreationAnimation extends Animatable {
         translateConfig
       ),
       this.frameNameAnimation.animateTo(getNodePosition(this.frame.name), translateConfig),
-      // Also fade frame items in during translation
-      ...this.frameBindingKeyAnimations.flatMap((a, i) => [
+      // Also fade frame bindings in during translation
+      ...this.frameKeyAnimations.flatMap((a, i) => [
         a.animateTo(getNodeLocation(this.frame.bindings[i].key), translateConfig),
         a.animateTo({ opacity: 1 }, fadeInConfig)
       ]),
@@ -153,29 +164,30 @@ export class FrameCreationAnimation extends Animatable {
         a.animateTo({ x: 0, y: 0 }, translateConfig),
         a.animateTo({ opacity: 1 }, fadeInConfig)
       ]),
-      this.frameNameAnimation.animateTo({ opacity: 1 }, fadeInConfig),
-      // Fade in the arrow last
-      this.frameArrowAnimation?.animateTo(
-        { opacity: 1 },
-        { delay: duration + (animationConfig?.delay ?? 0) }
-      )
+      this.frameNameAnimation.animateTo({ opacity: 1 }, fadeInConfig)
     ]);
+    // if variadic array exists, make it fade in together with the frame arrow
     this.variadicArray?.ref.current?.opacity(0);
+    this.frame.arrow?.ref.current?.hide();
+    this.frame.ref.current?.show();
     this.variadicArray?.ref.current?.to({
       opacity: 1,
-      duration: CseAnimation.defaultDuration / 2000
+      duration: CseAnimation.defaultDuration / 1000
     });
+    // Wait for the frame arrow animation to finish before returning
+    await frameArrowAnimate;
     this.destroy();
   }
 
   destroy() {
     this.ref.current?.hide();
     this.frame.ref.current?.show();
+    this.frame.arrow?.ref.current?.show();
     this.controlTextAnimation.destroy();
     this.borderAnimation.destroy();
     this.frameArrowAnimation?.destroy();
     this.frameNameAnimation.destroy();
-    this.frameBindingKeyAnimations.forEach(a => a.destroy());
+    this.frameKeyAnimations.forEach(a => a.destroy());
     this.frameValueAnimations.forEach(a => a.destroy());
     this.frameArrowAnimations.forEach(a => a.destroy());
   }

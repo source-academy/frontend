@@ -5,6 +5,12 @@ import { ControlItemComponent } from '../components/ControlItemComponent';
 import { StashItemComponent } from '../components/StashItemComponent';
 import { Visible } from '../components/Visible';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
+import {
+  defaultActiveColor,
+  defaultDangerColor,
+  defaultStrokeColor,
+  isStashItemInDanger
+} from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
 import { AnimatedRectComponent, AnimatedTextComponent } from './base/AnimationComponents';
@@ -12,7 +18,7 @@ import { getNodePosition } from './base/AnimationUtils';
 
 /**
  * Animation for any single item movement from control to stash.
- * 
+ *
  * Used for literals and arrow function expressions
  */
 export class ControlToStashAnimation extends Animatable {
@@ -28,7 +34,10 @@ export class ControlToStashAnimation extends Animatable {
   ) {
     super();
     const controlPosition = getNodePosition(controlItem);
-    this.borderRectAnimation = new AnimatedRectComponent(controlPosition);
+    this.borderRectAnimation = new AnimatedRectComponent({
+      ...controlPosition,
+      stroke: defaultActiveColor()
+    });
     this.controlTextAnimation = new AnimatedTextComponent({
       ...controlPosition,
       text: controlItem.text,
@@ -64,7 +73,12 @@ export class ControlToStashAnimation extends Animatable {
     this.stashItem.arrow?.ref.current.hide();
     const stashPosition = getNodePosition(this.stashItem);
     await Promise.all([
-      this.borderRectAnimation.animateTo(stashPosition),
+      this.borderRectAnimation.animateTo({
+        ...stashPosition,
+        stroke: isStashItemInDanger(this.stashItem.index)
+          ? defaultDangerColor()
+          : defaultStrokeColor()
+      }),
       this.controlTextAnimation.animateTo(stashPosition),
       // If the text is different, also fade out the old text and fade in the new text
       ...(this.textChanged
