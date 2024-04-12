@@ -12,6 +12,7 @@ import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { deleteStory, getStoriesList, saveStory } from 'src/features/stories/StoriesActions';
 import { getYamlHeader } from 'src/features/stories/storiesComponents/UserBlogContent';
+import { StoryStatus } from 'src/features/stories/StoriesTypes';
 
 import StoriesTable from './StoriesTable';
 import StoryActions from './StoryActions';
@@ -102,6 +103,32 @@ const Stories: React.FC = () => {
         { ...toMoveUp, pinOrder: oldIndex }
       ];
       storiesToUpdate.forEach(story => dispatch(saveStory(story, story.id)));
+    },
+    [dispatch, storyLists]
+  );
+
+  const handleRejectStory = useCallback(
+    (id: number) => {
+      // Safe to use ! as the story ID comes a story in storyList
+      const story = storyLists.pending.find(story => story.id === id)!;
+      const newStory = {
+        ...story,
+        status: StoryStatus.Rejected
+      };
+      dispatch(saveStory(newStory, id));
+    },
+    [dispatch, storyLists]
+  );
+
+  const handlePublishStory = useCallback(
+    (id: number) => {
+      // Safe to use ! as the story ID comes a story in storyList
+      const story = storyLists.pending.find(story => story.id === id)!;
+      const newStory = {
+        ...story,
+        status: StoryStatus.Published
+      };
+      dispatch(saveStory(newStory, id));
     },
     [dispatch, storyLists]
   );
