@@ -87,6 +87,11 @@ import {
   shortenURL,
   updateShortURL
 } from 'src/features/playground/PlaygroundActions';
+import ShareLinkStateDecoder from 'src/features/playground/shareLinks/decoder/Decoder';
+import JsonDecoderDelegate from 'src/features/playground/shareLinks/decoder/delegates/JsonDecoderDelegate';
+import UrlParamsDecoderDelegate from 'src/features/playground/shareLinks/decoder/delegates/UrlParamsDecoderDelegate';
+import { useURLEncoder } from 'src/features/playground/shareLinks/encoder/URLEncoder';
+import ShareLinkState from 'src/features/playground/shareLinks/ShareLinkState';
 
 import {
   getDefaultFilePath,
@@ -129,8 +134,6 @@ import {
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { WORKSPACE_BASE_PATHS } from '../fileSystem/createInBrowserFileSystem';
-import { Decoder, programConfig, resetConfig } from './Decoder';
-import { EncodeURL } from './Encoder';
 import {
   desktopOnlyTabIds,
   makeIntroductionTabFrom,
@@ -233,13 +236,100 @@ export async function handleHash(
   }
 }
 
+export async function resetConfig(
+  configObj: Partial<ShareLinkState>,
+  handlers: {
+    handleChapterSelect: (chapter: Chapter, variant: Variant) => void;
+    handleChangeExecTime: (execTime: number) => void;
+  },
+  workspaceLocation: WorkspaceLocation,
+  dispatch: Dispatch<AnyAction>,
+  fileSystem: FSModule | null
+) {
+  const chapter = convertParamToInt(configObj.chap?.toString()) ?? undefined;
+  if (chapter === Chapter.FULL_JS) {
+    showFullJSWarningOnUrlLoad();
+  } else if (chapter === Chapter.FULL_TS) {
+    showFulTSWarningOnUrlLoad();
+  } else {
+    if (chapter === Chapter.HTML) {
+      const continueToHtml = await showHTMLDisclaimer();
+      if (!continueToHtml) {
+        return;
+      }
+    }
+
+    // For backward compatibility with old share links - 'prgrm' is no longer used.
+    const program =
+      configObj.prgrm === undefined ? '' : decompressFromEncodedURIComponent(configObj.prgrm);
+
+    // By default, create just the default file.
+    const defaultFilePath = getDefaultFilePath(workspaceLocation);
+    const files: Record<string, string> =
+      configObj.files === undefined
+        ? {
+            [defaultFilePath]: program
+          }
+        : parseQuery(decompressFromEncodedURIComponent(configObj.files));
+    if (fileSystem !== null) {
+      await overwriteFilesInWorkspace(workspaceLocation, fileSystem, files);
+    }
+
+    // BrowserFS does not provide a way of listening to changes in the file system, which makes
+    // updating the file system view troublesome. To force the file system view to re-render
+    // (and thus display the updated file system), we first disable Folder mode.
+    dispatch(setFolderMode(workspaceLocation, false));
+    const isFolderModeEnabled = convertParamToBoolean(configObj.isFolder?.toString()) ?? false;
+
+    // If Folder mode should be enabled, enabling it after disabling it earlier will cause the
+    // newly-added files to be shown. Note that this has to take place after the files are
+    // already added to the file system.
+    dispatch(setFolderMode(workspaceLocation, isFolderModeEnabled));
+
+    // By default, open a single editor tab containing the default playground file.
+    const editorTabFilePaths = configObj.tabs
+      ?.split(',')
+      .map(decompressFromEncodedURIComponent) ?? [defaultFilePath];
+
+    // Remove all editor tabs before populating with the ones from the query string.
+    dispatch(
+      removeEditorTabsForDirectory(workspaceLocation, WORKSPACE_BASE_PATHS[workspaceLocation])
+    );
+    // Add editor tabs from the query string.
+    editorTabFilePaths.forEach(filePath =>
+      // Fall back on the empty string if the file contents do not exist.
+      dispatch(addEditorTab(workspaceLocation, filePath, files[filePath] ?? ''))
+    );
+
+    // By default, use the first editor tab.
+    const activeEditorTabIndex = convertParamToInt(configObj.tabIdx?.toString()) ?? 0;
+    dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex));
+    if (chapter) {
+      // TODO: To migrate the state logic away from playgroundSourceChapter
+      //       and playgroundSourceVariant into the language config instead
+      const languageConfig = getLanguageConfig(chapter, configObj.variant as Variant);
+      handlers.handleChapterSelect(chapter, languageConfig.variant);
+      // Hardcoded for Playground only for now, while we await workspace refactoring
+      // to decouple the SicpWorkspace from the Playground.
+      dispatch(playgroundConfigLanguage(languageConfig));
+    }
+
+    const execTime = Math.max(
+      convertParamToInt(configObj.exec?.toString() || '1000') || 1000,
+      1000
+    );
+    if (execTime) {
+      handlers.handleChangeExecTime(execTime);
+    }
+  }
+}
+
 const Playground: React.FC<PlaygroundProps> = props => {
   const { isSicpEditor } = props;
   const workspaceLocation: WorkspaceLocation = isSicpEditor ? 'sicp' : 'playground';
   const { isMobileBreakpoint } = useResponsive();
 
   const [deviceSecret, setDeviceSecret] = useState<string | undefined>();
-  // const location = useLocation();
   const navigate = useNavigate();
   const store = useStore<OverallState>();
   const location = useLocation();
@@ -337,36 +427,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     state => state.workspaces.playground.externalLibrary
   );
 
-  const { uuid } = useParams();
-
-  const handleURL = () => {
-    if (uuid) {
-      fetch(`http://localhost:4000/api/shared_programs/${uuid}`)
-        .then(response => response.json())
-        .then(resp => {
-          // console.log("resp", resp)
-          const res: programConfig = Decoder.decodeJSON(resp);
-          console.log('decode', res);
-          resetConfig(
-            res,
-            { handleChangeExecTime, handleChapterSelect },
-            workspaceLocation,
-            dispatch,
-            fileSystem
-          );
-        });
-    } else {
-      const config = Decoder.decodeString(location.hash);
-      resetConfig(
-        config,
-        { handleChangeExecTime, handleChapterSelect },
-        workspaceLocation,
-        dispatch,
-        fileSystem
-      );
-    }
-  };
-
   useEffect(() => {
     // When the editor session Id changes, then treat it as a new session.
     setSessionId(
@@ -380,9 +440,42 @@ const Playground: React.FC<PlaygroundProps> = props => {
   }, [editorSessionId]);
 
   const hash = isSicpEditor ? props.initialEditorValueHash : location.hash;
+  const { uuid } = useParams();
 
   useEffect(() => {
-    if (!hash) {
+    const handleURL = (uuid: string | undefined) => {
+      if (uuid !== undefined) {
+        fetch(`${Constants.backendUrl}/api/shared_programs/${uuid}`)
+          .then(response => response.json())
+          .then(resp => {
+            // console.log("resp", resp)
+            const res: Partial<ShareLinkState> = new ShareLinkStateDecoder(resp).decodeWith(
+              new JsonDecoderDelegate()
+            );
+            // console.log('decode', res);
+            resetConfig(
+              res,
+              { handleChangeExecTime, handleChapterSelect },
+              workspaceLocation,
+              dispatch,
+              fileSystem
+            );
+          });
+      } else {
+        const config = new ShareLinkStateDecoder(location.hash).decodeWith(
+          new UrlParamsDecoderDelegate()
+        );
+        resetConfig(
+          config,
+          { handleChangeExecTime, handleChapterSelect },
+          workspaceLocation,
+          dispatch,
+          fileSystem
+        );
+      }
+    };
+
+    if (!hash && uuid === undefined) {
       // If not a accessing via shared link, use the Source chapter and variant in the current course
       if (courseSourceChapter && courseSourceVariant) {
         handleChapterSelect(courseSourceChapter, courseSourceVariant);
@@ -396,15 +489,16 @@ const Playground: React.FC<PlaygroundProps> = props => {
         // This is because Folder mode only works in Source 2+.
         dispatch(setFolderMode(workspaceLocation, false));
       }
+    } else {
+      handleURL(uuid);
     }
-    handleURL();
     return;
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     dispatch,
     fileSystem,
     hash,
+    location.hash,
+    uuid,
     courseSourceChapter,
     courseSourceVariant,
     workspaceLocation,
@@ -717,7 +811,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     ]
   );
 
-  const config = EncodeURL();
+  const config = useURLEncoder();
 
   const shareButton = useMemo(() => {
     const qs = isSicpEditor ? Links.playground + '#' + props.initialEditorValueHash : queryString;
@@ -733,8 +827,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         key="share"
       />
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, isSicpEditor, props.initialEditorValueHash, queryString, shortURL]);
+  }, [dispatch, isSicpEditor, props.initialEditorValueHash, queryString, shortURL, config]);
 
   const toggleFolderModeButton = useMemo(() => {
     return (

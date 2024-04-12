@@ -3,9 +3,11 @@ import { IconNames } from '@blueprintjs/icons';
 import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
+import ShareLinkState from 'src/features/playground/shareLinks/ShareLinkState';
 
 import ControlButton from '../ControlButton';
 import Constants from '../utils/Constants';
+import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
 type ControlBarShareButtonProps = DispatchProps & StateProps;
 
@@ -20,7 +22,7 @@ type StateProps = {
   shortURL?: string;
   key: string;
   isSicp?: boolean;
-  programConfig: object;
+  programConfig: Partial<ShareLinkState>;
 };
 
 type State = {
@@ -89,37 +91,11 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
                   onChange={this.handleChange}
                   style={{ width: 175 }}
                 />
-                <>{console.log(this.props.programConfig)}</>
                 <ControlButton
                   label="Get Link"
                   icon={IconNames.SHARE}
-                  onClick={() => {
-                    // post request to backend, set keyword as return uuid
-                    const requestBody = {
-                      shared_program: {
-                        data: this.props.programConfig
-                      }
-                    };
-                    const fetchOpts: RequestInit = {
-                      method: 'POST',
-                      body: JSON.stringify(requestBody),
-                      headers: {
-                        'Content-Type': 'application/json'
-                      }
-                    };
-                    fetch('http://localhost:4000/api/shared_programs', fetchOpts)
-                      .then(res => {
-                        return res.json();
-                      })
-                      .then(resp => {
-                        this.setState({
-                          keyword: 'http://localhost:8000/playground/share/' + resp.uuid
-                        });
-                        console.log(resp);
-                      })
-                      .catch(err => console.log('Error: ', err));
-                    this.setState({ isLoading: true, isSuccess: true });
-                  }}
+                  // post request to backend, set keyword as return uuid
+                  onClick={this.fetchUUID}
                 />
               </div>
             ) : (
@@ -131,12 +107,9 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
               </div>
             )
           ) : (
-            // <div key={this.props.shortURL}>
             <div key={this.state.keyword}>
-              {/* <input defaultValue={this.props.shortURL} readOnly={true} ref={this.shareInputElem} /> */}
               <input defaultValue={this.state.keyword} readOnly={true} ref={this.shareInputElem} />
               <Tooltip2 content="Copy link to clipboard">
-                {/* <CopyToClipboard text={this.props.shortURL}> */}
                 <CopyToClipboard text={this.state.keyword}>
                   <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectShareInputText} />
                 </CopyToClipboard>
@@ -184,5 +157,32 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
       this.shareInputElem.current.focus();
       this.shareInputElem.current.select();
     }
+  }
+
+  private fetchUUID() {
+    const requestBody = {
+      shared_program: {
+        data: this.props.programConfig
+      }
+    };
+    const fetchOpts: RequestInit = {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
+    fetch(`${Constants.backendUrl}/api/shared_programs`, fetchOpts)
+      .then(res => {
+        return res.json();
+      })
+      .then(resp => {
+        this.setState({
+          // seems like there's no frontend url env variavle, should be replaced by frontend server accordingly
+          keyword: `http://localhost:8000/playground/share/` + resp.uuid
+        });
+        this.setState({ isLoading: true, isSuccess: true });
+      })
+      .catch(err => showWarningMessage('fail to generate url!' + err));
   }
 }
