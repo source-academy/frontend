@@ -48,13 +48,13 @@ const Stories: React.FC = () => {
     [dispatch]
   );
 
-  const storyList = useTypedSelector(state => state.stories.storyList);
+  const storyLists = useTypedSelector(state => state.stories.storyLists);
 
   const handleTogglePinStory = useCallback(
     (id: number) => {
       // Safe to use ! as the story ID comes a story in storyList
-      const story = storyList.find(story => story.id === id)!;
-      const pinnedLength = storyList.filter(story => story.isPinned).length;
+      const story = storyLists.published.find(story => story.id === id)!;
+      const pinnedLength = storyLists.published.filter(story => story.isPinned).length;
       const newStory = {
         ...story,
         isPinned: !story.isPinned,
@@ -63,19 +63,19 @@ const Stories: React.FC = () => {
       };
       dispatch(saveStory(newStory, id));
     },
-    [dispatch, storyList]
+    [dispatch, storyLists]
   );
 
   const handleMovePinUp = useCallback(
     (id: number) => {
       // Safe to use ! as the story ID comes a story in storyList
-      const oldIndex = storyList.findIndex(story => story.id === id)!;
+      const oldIndex = storyLists.published.findIndex(story => story.id === id)!;
       if (oldIndex === 0) {
         return;
       }
 
-      const toMoveUp = storyList[oldIndex];
-      const toMoveDown = storyList[oldIndex - 1];
+      const toMoveUp = storyLists.published[oldIndex];
+      const toMoveDown = storyLists.published[oldIndex - 1];
 
       const storiesToUpdate = [
         { ...toMoveUp, pinOrder: oldIndex - 1 },
@@ -83,19 +83,19 @@ const Stories: React.FC = () => {
       ];
       storiesToUpdate.forEach(story => dispatch(saveStory(story, story.id)));
     },
-    [dispatch, storyList]
+    [dispatch, storyLists]
   );
 
   const handleMovePinDown = useCallback(
     (id: number) => {
       // Safe to use ! as the story ID comes a story in storyList
-      const oldIndex = storyList.findIndex(story => story.id === id)!;
-      const pinnedLength = storyList.filter(story => story.isPinned).length;
+      const oldIndex = storyLists.published.findIndex(story => story.id === id)!;
+      const pinnedLength = storyLists.published.filter(story => story.isPinned).length;
       if (oldIndex === pinnedLength - 1) {
         return;
       }
-      const toMoveDown = storyList[oldIndex];
-      const toMoveUp = storyList[oldIndex + 1];
+      const toMoveDown = storyLists.published[oldIndex];
+      const toMoveUp = storyLists.published[oldIndex + 1];
 
       const storiesToUpdate = [
         { ...toMoveDown, pinOrder: oldIndex + 1 },
@@ -103,7 +103,7 @@ const Stories: React.FC = () => {
       ];
       storiesToUpdate.forEach(story => dispatch(saveStory(story, story.id)));
     },
-    [dispatch, storyList]
+    [dispatch, storyLists]
   );
 
   return isStoriesDisabled ? (
@@ -140,7 +140,7 @@ const Stories: React.FC = () => {
 
           <StoriesTable
             headers={columns}
-            stories={storyList
+            stories={storyLists.published
               // Filter out the YAML header from the content
               .map(story => ({ ...story, content: getYamlHeader(story.content).content }))
               .filter(

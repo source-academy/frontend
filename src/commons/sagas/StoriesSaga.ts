@@ -19,6 +19,8 @@ import {
   SET_CURRENT_STORY_ID,
   StoryData,
   StoryListView,
+  StoryListViews,
+  StoryStatus,
   StoryView
 } from 'src/features/stories/StoriesTypes';
 
@@ -33,10 +35,33 @@ import { safeTakeEvery as takeEvery } from './SafeEffects';
 export function* storiesSaga(): SagaIterator {
   yield takeLatest(GET_STORIES_LIST, function* () {
     const tokens: Tokens = yield selectTokens();
-    const allStories: StoryListView[] = yield call(async () => {
-      const resp = await getStories(tokens);
+
+    const draftStories: StoryListView[] = yield call(async () => {
+      const resp = await getStories(tokens, StoryStatus.Draft);
       return resp ?? [];
     });
+
+    const pendingStories: StoryListView[] = yield call(async () => {
+      const resp = await getStories(tokens, StoryStatus.Pending);
+      return resp ?? [];
+    });
+
+    const rejectedStories: StoryListView[] = yield call(async () => {
+      const resp = await getStories(tokens, StoryStatus.Rejected);
+      return resp ?? [];
+    });
+
+    const publishedStories: StoryListView[] = yield call(async () => {
+      const resp = await getStories(tokens, StoryStatus.Published);
+      return resp ?? [];
+    });
+
+    const allStories: StoryListViews = {
+      draft: draftStories,
+      pending: pendingStories,
+      rejected: rejectedStories,
+      published: publishedStories
+    };
 
     yield put(actions.updateStoriesList(allStories));
   });
@@ -55,7 +80,9 @@ export function* storiesSaga(): SagaIterator {
         const defaultStory: StoryData = {
           title: '',
           content: defaultStoryContent,
-          pinOrder: null
+          pinOrder: null,
+          status: StoryStatus.Draft,
+          statusMessage: ''
         };
         yield put(actions.setCurrentStory(defaultStory));
       }
@@ -98,7 +125,9 @@ export function* storiesSaga(): SagaIterator {
       id,
       story.title,
       story.content,
-      story.pinOrder
+      story.pinOrder,
+      story.status,
+      story.statusMessage
     );
 
     // TODO: Check correctness

@@ -11,7 +11,7 @@ import { store } from 'src/pages/createStore';
 
 import { Tokens } from '../../../commons/application/types/SessionTypes';
 import { NameUsernameRole } from '../../../pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
-import { StoryListView, StoryView } from '../StoriesTypes';
+import { StoryListView, StoryStatus, StoryView } from '../StoriesTypes';
 
 // Helpers
 
@@ -75,8 +75,22 @@ export const postNewStoriesUsers = async (
   // TODO: Return response JSON directly.
 };
 
-export const getStories = async (tokens: Tokens): Promise<StoryListView[] | null> => {
-  const resp = await requestStoryBackend(`/groups/${getStoriesGroupId()}/stories`, 'GET', {
+export const getStories = async (
+  tokens: Tokens,
+  status: StoryStatus | null = null
+): Promise<StoryListView[] | null> => {
+  const route =
+    status === StoryStatus.Draft
+      ? '/draft'
+      : status === StoryStatus.Pending
+      ? '/pending'
+      : status === StoryStatus.Rejected
+      ? '/rejected'
+      : status === StoryStatus.Published
+      ? '/published'
+      : '';
+
+  const resp = await requestStoryBackend(`/groups/${getStoriesGroupId()}/stories${route}`, 'GET', {
     ...tokens
   });
   if (!resp) {
@@ -124,10 +138,12 @@ export const updateStory = async (
   id: number,
   title: string,
   content: string,
-  pinOrder: number | null
+  pinOrder: number | null,
+  status: StoryStatus,
+  statusMessage: string
 ): Promise<StoryView | null> => {
   const resp = await requestStoryBackend(`/groups/${getStoriesGroupId()}/stories/${id}`, 'PUT', {
-    body: { title, content, pinOrder },
+    body: { title, content, pinOrder, status, statusMessage },
     ...tokens
   });
   if (!resp) {

@@ -198,7 +198,7 @@ const oldStoriesReducer: Reducer<StoriesState, SourceActionType> = (
     case UPDATE_STORIES_LIST:
       return {
         ...state,
-        storyList: action.payload
+        storyLists: action.payload
       };
     case SET_CURRENT_STORY_ID:
       return {

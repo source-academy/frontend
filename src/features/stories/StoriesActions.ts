@@ -21,7 +21,7 @@ import {
   SET_CURRENT_STORY,
   SET_CURRENT_STORY_ID,
   StoryData,
-  StoryListView,
+  StoryListViews,
   StoryParams,
   TOGGLE_STORIES_USING_SUBST,
   UPDATE_STORIES_LIST
@@ -70,7 +70,7 @@ export const toggleStoriesUsingSubst = createAction(
 export const getStoriesList = createAction(GET_STORIES_LIST, () => ({ payload: {} }));
 export const updateStoriesList = createAction(
   UPDATE_STORIES_LIST,
-  (storyList: StoryListView[]) => ({ payload: storyList })
+  (storyLists: StoryListViews) => ({ payload: storyLists })
 );
 export const setCurrentStory = createAction(SET_CURRENT_STORY, (story: StoryData | null) => ({
   payload: story
