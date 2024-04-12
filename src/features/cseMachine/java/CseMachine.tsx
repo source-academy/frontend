@@ -1,12 +1,12 @@
-import { Context } from "java-slang/dist/ec-evaluator/types";
-import { KonvaEventObject } from "konva/lib/Node";
-import React, { RefObject } from "react";
-import { Layer, Rect, Stage } from "react-konva";
+import { Context } from 'java-slang/dist/ec-evaluator/types';
+import { KonvaEventObject } from 'konva/lib/Node';
+import React, { RefObject } from 'react';
+import { Layer, Rect, Stage } from 'react-konva';
 
-import { Config, ShapeDefaultProps } from "./../CseMachineConfig";
-import { Control } from "./components/Control";
-import { Environment } from "./components/Environment";
-import { Stash } from "./components/Stash";
+import { Config, ShapeDefaultProps } from './../CseMachineConfig';
+import { Control } from './components/Control';
+import { Environment } from './components/Environment';
+import { Stash } from './components/Stash';
 
 type SetVis = (vis: React.ReactNode) => void;
 type SetEditorHighlightedLines = (segments: [number, number][]) => void;
@@ -28,10 +28,7 @@ export class CseMachine {
   static control: Control | undefined;
   static stash: Stash | undefined;
 
-  static init(
-    setVis: SetVis,
-    setEditorHighlightedLines: (segments: [number, number][]) => void,
-  ) {
+  static init(setVis: SetVis, setEditorHighlightedLines: (segments: [number, number][]) => void) {
     this.setVis = setVis;
     this.setEditorHighlightedLines = setEditorHighlightedLines;
   }

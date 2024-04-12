@@ -1,16 +1,16 @@
-import { Environment as JavaEnvironment, EnvNode } from "java-slang/dist/ec-evaluator/components";
-import { Class as JavaClass, StructType } from "java-slang/dist/ec-evaluator/types";
-import { Group } from "react-konva";
+import { Environment as JavaEnvironment, EnvNode } from 'java-slang/dist/ec-evaluator/components';
+import { Class as JavaClass, StructType } from 'java-slang/dist/ec-evaluator/types';
+import { Group } from 'react-konva';
 
-import { Visible } from "../../components/Visible";
-import { Config } from "../../CseMachineConfig";
-import { ControlStashConfig } from "../../CseMachineControlStashConfig";
-import { CseMachine } from "../CseMachine";
-import { Arrow } from "./Arrow";
-import { Frame } from "./Frame";
-import { Line } from "./Line";
-import { Object } from "./Object";
-import { Variable } from "./Variable";
+import { Visible } from '../../components/Visible';
+import { Config } from '../../CseMachineConfig';
+import { ControlStashConfig } from '../../CseMachineControlStashConfig';
+import { CseMachine } from '../CseMachine';
+import { Arrow } from './Arrow';
+import { Frame } from './Frame';
+import { Line } from './Line';
+import { Object } from './Object';
+import { Variable } from './Variable';
 
 export class Environment extends Visible {
   private readonly _methodFrames: Frame[] = [];
@@ -22,25 +22,29 @@ export class Environment extends Visible {
     super();
 
     // Position.
-    this._x = ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth + 2 * Config.CanvasPaddingX;
-    this._y = ControlStashConfig.StashPosY + ControlStashConfig.StashItemHeight + 2 * Config.CanvasPaddingY;
+    this._x =
+      ControlStashConfig.ControlPosX +
+      ControlStashConfig.ControlItemWidth +
+      2 * Config.CanvasPaddingX;
+    this._y =
+      ControlStashConfig.StashPosY + ControlStashConfig.StashItemHeight + 2 * Config.CanvasPaddingY;
 
     // Create method frames.
     const methodFramesX = this._x;
     let methodFramesY: number = this._y;
     let methodFramesWidth = Number(Config.FrameMinWidth);
     environment.global.children.forEach(env => {
-      if (env.name.includes("(")) {
+      if (env.name.includes('(')) {
         let currEnv: EnvNode | undefined = env;
         let parentFrame;
         while (currEnv) {
           const stroke = currEnv === environment.current ? Config.SA_CURRENT_ITEM : Config.SA_WHITE;
           const frame = new Frame(currEnv, methodFramesX, methodFramesY, stroke);
           this._methodFrames.push(frame);
-          methodFramesY += (frame.height() + Config.FramePaddingY);
+          methodFramesY += frame.height() + Config.FramePaddingY;
           methodFramesWidth = Math.max(methodFramesWidth, frame.width());
           parentFrame && frame.setParent(parentFrame);
-  
+
           parentFrame = frame;
           currEnv = currEnv.children.length ? currEnv.children[0] : undefined;
         }
@@ -76,10 +80,10 @@ export class Environment extends Visible {
       }
 
       // Standardize obj frames width.
-      objectFrames.forEach(o => o.setWidth(objectFrameWidth))
+      objectFrames.forEach(o => o.setWidth(objectFrameWidth));
 
       // Only add padding btwn objects.
-      objectFramesY += Config.FramePaddingY
+      objectFramesY += Config.FramePaddingY;
 
       this._objects.push(new Object(objectFrames, obj));
     });
@@ -89,7 +93,8 @@ export class Environment extends Visible {
     let classFramesY = this._y;
     for (const [_, c] of environment.global.frame.entries()) {
       const classEnv = (c as JavaClass).frame;
-      const classFrameStroke = classEnv === environment.current ? Config.SA_CURRENT_ITEM : Config.SA_WHITE;
+      const classFrameStroke =
+        classEnv === environment.current ? Config.SA_CURRENT_ITEM : Config.SA_WHITE;
       const highlightOnHover = () => {
         const node = (c as JavaClass).classDecl;
         let start = -1;
@@ -101,14 +106,22 @@ export class Environment extends Visible {
         CseMachine.setEditorHighlightedLines([[start, end]]);
       };
       const unhighlightOnHover = () => CseMachine.setEditorHighlightedLines([]);
-      const classFrame = new Frame(classEnv, classFramesX, classFramesY, classFrameStroke, "", highlightOnHover, unhighlightOnHover);
+      const classFrame = new Frame(
+        classEnv,
+        classFramesX,
+        classFramesY,
+        classFrameStroke,
+        '',
+        highlightOnHover,
+        unhighlightOnHover
+      );
       const superClassName = (c as JavaClass).superclass?.frame.name;
       if (superClassName) {
         const parentFrame = this._classFrames.find(f => f.name.text === superClassName)!;
-        classFrame.setParent(parentFrame)
+        classFrame.setParent(parentFrame);
       }
       this._classFrames.push(classFrame);
-      classFramesY += (classFrame.height() + Config.FramePaddingY);
+      classFramesY += classFrame.height() + Config.FramePaddingY;
     }
 
     // Draw arrow for var ref in mtd frames to corresponding obj.
@@ -124,42 +137,52 @@ export class Environment extends Visible {
             matchingObj.y() + matchingObj.height() / 2
           );
         }
-      })
+      });
     });
 
     // Draw arrow for var ref in obj frames to corresponding var or obj.
-    this._objects.flatMap(obj => obj.frames).forEach(of => {
-      of.bindings.forEach(b => {
-        if (b.value instanceof Variable && b.value.variable.value.kind === StructType.VARIABLE) {
-          const variable = b.value.variable.value;
-          const matchingVariable = this._classFrames.flatMap(c => c.bindings).filter(b => b.value instanceof Variable && b.value.variable === variable)[0].value as Variable;
-          b.value.value = new Arrow(
-            b.value.x() + b.value.width() / 2,
-            b.value.y() + b.value.type.height() + (b.value.height() - b.value.type.height()) / 2,
-            matchingVariable.x(),
-            matchingVariable.y() + matchingVariable.type.height());
-        }
-        if (b.value instanceof Variable && b.value.variable.value.kind === StructType.OBJECT) {
-          const obj = b.value.variable.value.frame;
-          const matchingObj = this._objects.find(o => o.getFrame().frame === obj)!;
-          // Variable always has a box.
-          b.value.value = new Arrow(
-            b.value.x() + b.value.width() / 2,
-            b.value.y() + b.value.type.height() + (b.value.height() - b.value.type.height()) / 2,
-            matchingObj.x(),
-            matchingObj.y() + matchingObj.height() / 2);
-        }
-      })
-    });
+    this._objects
+      .flatMap(obj => obj.frames)
+      .forEach(of => {
+        of.bindings.forEach(b => {
+          if (b.value instanceof Variable && b.value.variable.value.kind === StructType.VARIABLE) {
+            const variable = b.value.variable.value;
+            const matchingVariable = this._classFrames
+              .flatMap(c => c.bindings)
+              .filter(b => b.value instanceof Variable && b.value.variable === variable)[0]
+              .value as Variable;
+            b.value.value = new Arrow(
+              b.value.x() + b.value.width() / 2,
+              b.value.y() + b.value.type.height() + (b.value.height() - b.value.type.height()) / 2,
+              matchingVariable.x(),
+              matchingVariable.y() + matchingVariable.type.height()
+            );
+          }
+          if (b.value instanceof Variable && b.value.variable.value.kind === StructType.OBJECT) {
+            const obj = b.value.variable.value.frame;
+            const matchingObj = this._objects.find(o => o.getFrame().frame === obj)!;
+            // Variable always has a box.
+            b.value.value = new Arrow(
+              b.value.x() + b.value.width() / 2,
+              b.value.y() + b.value.type.height() + (b.value.height() - b.value.type.height()) / 2,
+              matchingObj.x(),
+              matchingObj.y() + matchingObj.height() / 2
+            );
+          }
+        });
+      });
 
     // Draw line for obj to class.
     this._objects.forEach(obj => {
-      const matchingClass = this._classFrames.find(c => c.name.text === obj.object.class.frame.name)!;
+      const matchingClass = this._classFrames.find(
+        c => c.name.text === obj.object.class.frame.name
+      )!;
       const line = new Line(
         obj.x() + obj.width(),
         obj.y() + obj.height() / 2,
         matchingClass.x(),
-        matchingClass.y() + matchingClass.height() / 2 + matchingClass.name.height());
+        matchingClass.y() + matchingClass.height() / 2 + matchingClass.name.height()
+      );
       this._lines.push(line);
     });
   }

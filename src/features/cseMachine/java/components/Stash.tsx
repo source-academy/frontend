@@ -27,10 +27,11 @@ export class Stash extends Visible {
       const stashItemStroke = ControlStashConfig.SA_WHITE;
       const stashItemReference = this.getStashItemRef(stashItem);
       const currStashItem = new StashItem(
-        stashItemX, 
+        stashItemX,
         stashItemText,
         stashItemStroke,
-        stashItemReference);
+        stashItemReference
+      );
 
       this._stashItems.push(currStashItem);
       stashItemX += currStashItem.width();
@@ -42,43 +43,42 @@ export class Stash extends Visible {
   }
 
   draw(): React.ReactNode {
-    return (
-      <Group key={CseMachine.key++} >
-        {this._stashItems.map(s => s.draw())}
-      </Group>
-    );
+    return <Group key={CseMachine.key++}>{this._stashItems.map(s => s.draw())}</Group>;
   }
 
   private getStashItemString = (stashItem: JavaStashItem): string => {
     switch (stashItem.kind) {
-      case "Literal":
+      case 'Literal':
         return stashItem.literalType.value;
       case StructType.VARIABLE:
-        return "location";
+        return 'location';
       case StructType.TYPE:
         return stashItem.type;
       default:
         return stashItem.kind.toLowerCase();
     }
-  }
+  };
 
   private getStashItemRef = (stashItem: JavaStashItem) => {
     return stashItem.kind === StructType.CLOSURE
       ? CseMachine.environment &&
-        CseMachine.environment.classes
-          .flatMap(c => c.bindings)
-          .find(b => b.value instanceof Method && b.value.method === stashItem)?.value as Method
+          (CseMachine.environment.classes
+            .flatMap(c => c.bindings)
+            .find(b => b.value instanceof Method && b.value.method === stashItem)?.value as Method)
       : stashItem.kind === StructType.VARIABLE
-      ? CseMachine.environment && 
-        (CseMachine.environment.frames
+      ? CseMachine.environment &&
+        ((CseMachine.environment.frames
           .flatMap(c => c.bindings)
-          .find(b => b.value instanceof Variable && b.value.variable === stashItem)?.value as Variable ||
-        CseMachine.environment.classes
-          .flatMap(c => c.bindings)
-          .find(b => b.value instanceof Variable && b.value.variable === stashItem)?.value as Variable ||
-        CseMachine.environment.objects
-          .flatMap(o => o.bindings)
-          .find(b => b.value instanceof Variable && b.value.variable === stashItem)?.value as Variable)
+          .find(b => b.value instanceof Variable && b.value.variable === stashItem)
+          ?.value as Variable) ||
+          (CseMachine.environment.classes
+            .flatMap(c => c.bindings)
+            .find(b => b.value instanceof Variable && b.value.variable === stashItem)
+            ?.value as Variable) ||
+          (CseMachine.environment.objects
+            .flatMap(o => o.bindings)
+            .find(b => b.value instanceof Variable && b.value.variable === stashItem)
+            ?.value as Variable))
       : stashItem.kind === StructType.CLASS
       ? CseMachine.environment &&
         CseMachine.environment.classes.find(c => c.frame === stashItem.frame)
@@ -86,5 +86,5 @@ export class Stash extends Visible {
       ? CseMachine.environment &&
         CseMachine.environment.objects.find(o => o.frame === stashItem.frame)
       : undefined;
-  }
+  };
 }

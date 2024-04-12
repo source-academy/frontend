@@ -12,7 +12,7 @@ export function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIter
   try {
     const [lastDebuggerResult, chapter] = yield select((state: OverallState) => [
       state.workspaces[workspaceLocation].lastDebuggerResult,
-      state.workspaces[workspaceLocation].context.chapter,
+      state.workspaces[workspaceLocation].context.chapter
     ]);
     if (chapter === Chapter.FULL_JAVA) {
       const controlItem = lastDebuggerResult.context.control.peek();

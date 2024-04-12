@@ -12,7 +12,7 @@ import {
   setHoveredStyle,
   setUnhoveredCursor,
   setUnhoveredStyle,
-  truncateText,
+  truncateText
 } from '../../CseMachineUtils';
 import { CseMachine } from '../CseMachine';
 import { Arrow } from './Arrow';
@@ -32,14 +32,14 @@ export class ControlItem extends Visible implements IHoverable {
 
     private readonly _tooltip: string,
     private readonly highlightOnHover: () => void,
-    private readonly unhighlightOnHover: () => void,
+    private readonly unhighlightOnHover: () => void
   ) {
     super();
 
     // Position.
     this._x = ControlStashConfig.ControlPosX;
     this._y = y;
-    
+
     // Text.
     this._text = truncateText(
       this._text,
@@ -51,8 +51,9 @@ export class ControlItem extends Visible implements IHoverable {
     this._tooltipRef = React.createRef();
 
     // Height and width.
-    this._height = getTextHeight(this._text, ControlStashConfig.ControlMaxTextWidth)
-      + ControlStashConfig.ControlItemTextPadding * 2;
+    this._height =
+      getTextHeight(this._text, ControlStashConfig.ControlMaxTextWidth) +
+      ControlStashConfig.ControlItemTextPadding * 2;
     this._width = ControlStashConfig.ControlItemWidth;
 
     // Arrow
@@ -61,14 +62,14 @@ export class ControlItem extends Visible implements IHoverable {
         this._x + this._width,
         this._y + this._height / 2,
         reference.x(),
-        reference.y() + reference.height() / 2 + reference.name.height(),
+        reference.y() + reference.height() / 2 + reference.name.height()
       );
     }
   }
 
   private isCurrentItem = (): boolean => {
     return this._stroke === Config.SA_CURRENT_ITEM;
-  }
+  };
 
   onMouseEnter = (e: KonvaEventObject<MouseEvent>): void => {
     this.highlightOnHover();
@@ -91,11 +92,11 @@ export class ControlItem extends Visible implements IHoverable {
       fontFamily: ControlStashConfig.FontFamily,
       fontSize: ControlStashConfig.FontSize,
       fontStyle: ControlStashConfig.FontStyle,
-      fontVariant: ControlStashConfig.FontVariant,
+      fontVariant: ControlStashConfig.FontVariant
     };
     const tagProps = {
       stroke: this._stroke,
-      cornerRadius: ControlStashConfig.ControlItemCornerRadius,
+      cornerRadius: ControlStashConfig.ControlItemCornerRadius
     };
     return (
       <React.Fragment key={CseMachine.key++}>
@@ -107,11 +108,7 @@ export class ControlItem extends Visible implements IHoverable {
           onMouseLeave={this.onMouseLeave}
           key={CseMachine.key++}
         >
-          <Tag
-            {...ShapeDefaultProps}
-            {...tagProps}
-            key={CseMachine.key++}
-          />
+          <Tag {...ShapeDefaultProps} {...tagProps} key={CseMachine.key++} />
           <Text
             {...ShapeDefaultProps}
             {...textProps}

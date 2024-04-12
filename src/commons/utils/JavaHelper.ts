@@ -11,7 +11,12 @@ import { CseMachine } from '../../features/cseMachine/java/CseMachine';
 import Constants from './Constants';
 import DisplayBufferService from './DisplayBufferService';
 
-export async function javaRun(javaCode: string, context: Context, targetStep: number, isUsingCse: boolean) {
+export async function javaRun(
+  javaCode: string,
+  context: Context,
+  targetStep: number,
+  isUsingCse: boolean
+) {
   let compiled = {};
 
   let files = {};
@@ -152,26 +157,22 @@ export function visualizeJavaCseMachine({ context }: { context: JavaContext }) {
   }
 }
 
-export async function runJavaCseMachine(
-  code: string,
-  targetStep: number,
-  context: Context
-) {
+export async function runJavaCseMachine(code: string, targetStep: number, context: Context) {
   const convertJavaErrorToJsError = (e: JavaSourceError): SourceError => ({
     type: ErrorType.RUNTIME,
     severity: ErrorSeverity.ERROR,
     location: {
       start: {
         line: 0,
-        column: 0,
+        column: 0
       },
       end: {
         line: 0,
-        column: 0,
-      },
+        column: 0
+      }
     },
     explain: () => e.explain(),
-    elaborate: () => e.explain(),
+    elaborate: () => e.explain()
   });
   context.executionMethod = 'cse-machine';
   return runECEvaluator(code, targetStep)

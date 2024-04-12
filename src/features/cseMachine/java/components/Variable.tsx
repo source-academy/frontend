@@ -33,7 +33,7 @@ export class Variable extends Visible {
   constructor(
     x: number,
     y: number,
-    private readonly _variable: JavaVariable,
+    private readonly _variable: JavaVariable
   ) {
     super();
 
@@ -42,29 +42,29 @@ export class Variable extends Visible {
     this._y = y;
 
     // Type.
-    this._type = new Text(
-      this._variable.type,
-      this._x,
-      this._y);
+    this._type = new Text(this._variable.type, this._x, this._y);
 
     // Value.
-    if (this.variable.value.kind === "Literal") {
+    if (this.variable.value.kind === 'Literal') {
       this._value = new Text(
         this.variable.value.literalType.value,
         this._x + Config.TextPaddingX,
-        this._y + this._type.height() + Config.TextPaddingX);
+        this._y + this._type.height() + Config.TextPaddingX
+      );
     } else if (this.variable.value.kind === StructType.SYMBOL) {
       this._value = new Text(
-        "",
+        '',
         this._x + Config.TextPaddingX,
-        this._y + this._type.height()  + Config.TextPaddingX);
+        this._y + this._type.height() + Config.TextPaddingX
+      );
     } else {
       this._value = new Text(
-        "",
+        '',
         this._x + Config.TextPaddingX,
-        this._y + this._type.height()  + Config.TextPaddingX);
+        this._y + this._type.height() + Config.TextPaddingX
+      );
     }
-    
+
     // Height and width.
     this._height = this._type.height() + this._value.height() + 2 * Config.TextPaddingX;
     this._width = Math.max(this._type.width(), this._value.width() + 2 * Config.TextPaddingX);

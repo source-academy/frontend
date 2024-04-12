@@ -250,9 +250,7 @@ export function* evalCode(
   let lastDebuggerResult = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].lastDebuggerResult
   );
-  const isUsingCse = yield select(
-    (state: OverallState) => state.workspaces["playground"].usingCse
-  );
+  const isUsingCse = yield select((state: OverallState) => state.workspaces['playground'].usingCse);
 
   // Handles `console.log` statements in fullJS
   const detachConsole: () => void =

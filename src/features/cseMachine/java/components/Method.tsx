@@ -12,20 +12,20 @@ import {
   getTextHeight,
   getTextWidth,
   setHoveredCursor,
-  setUnhoveredCursor,
+  setUnhoveredCursor
 } from '../../CseMachineUtils';
 import { CseMachine } from '../CseMachine';
 
 export class Method extends Visible implements IHoverable {
   private _centerX: number;
-  
+
   private readonly _tooltipRef: RefObject<any>;
   private readonly _tooltip: string;
 
   constructor(
     x: number,
     y: number,
-    private readonly _method: JavaMethod,
+    private readonly _method: JavaMethod
   ) {
     super();
 

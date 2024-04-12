@@ -9,7 +9,7 @@ import { Frame } from './Frame';
 export class Object extends Visible {
   constructor(
     private readonly _frames: Frame[],
-    private readonly _object: JavaObject,
+    private readonly _object: JavaObject
   ) {
     super();
 
@@ -19,7 +19,10 @@ export class Object extends Visible {
 
     // Height and width.
     this._height = this._frames.reduce((accHeight, currFrame) => accHeight + currFrame.height(), 0);
-    this._width = this._frames.reduce((maxWidth, currFrame) => Math.max(maxWidth, currFrame.width()), 0);
+    this._width = this._frames.reduce(
+      (maxWidth, currFrame) => Math.max(maxWidth, currFrame.width()),
+      0
+    );
   }
 
   get frames() {
@@ -35,10 +38,6 @@ export class Object extends Visible {
   }
 
   draw(): React.ReactNode {
-    return (
-      <Group key={CseMachine.key++}>
-        {this._frames.map(f => f.draw())}
-      </Group>
-    );
+    return <Group key={CseMachine.key++}>{this._frames.map(f => f.draw())}</Group>;
   }
 }

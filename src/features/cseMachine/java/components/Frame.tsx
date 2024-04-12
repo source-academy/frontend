@@ -29,7 +29,7 @@ export class Frame extends Visible implements IHoverable {
 
     readonly tooltip?: string,
     readonly highlightOnHover?: () => void,
-    readonly unhighlightOnHover?: () => void,
+    readonly unhighlightOnHover?: () => void
   ) {
     super();
 
@@ -46,16 +46,18 @@ export class Frame extends Visible implements IHoverable {
     for (const [key, data] of frame.frame) {
       const currBinding: Binding = new Binding(key, data, this._x + Config.FramePaddingX, bindingY);
       this.bindings.push(currBinding);
-      bindingY += (currBinding.height() + Config.FramePaddingY);
+      bindingY += currBinding.height() + Config.FramePaddingY;
       this._width = Math.max(this._width, currBinding.width() + 2 * Config.FramePaddingX);
-      this._height += (currBinding.height() + Config.FramePaddingY);
+      this._height += currBinding.height() + Config.FramePaddingY;
     }
 
     // Set x of Method aft knowing frame width.
-    this.bindings.filter(b => b.value instanceof Method).forEach(b => {
-      (b.value as Method).setX(this._x + this._width + Config.FramePaddingX);
-      b.setArrowToX(this._x + this._width + Config.FramePaddingX);
-    })
+    this.bindings
+      .filter(b => b.value instanceof Method)
+      .forEach(b => {
+        (b.value as Method).setX(this._x + this._width + Config.FramePaddingX);
+        b.setArrowToX(this._x + this._width + Config.FramePaddingX);
+      });
 
     this.tooltipRef = React.createRef();
   }
@@ -111,16 +113,17 @@ export class Frame extends Visible implements IHoverable {
         {this.bindings.map(binding => binding.draw())}
 
         {/* Frame parent */}
-        {this.parent && new Arrow(
-          this._x + Config.FramePaddingX / 2,
-          this._y + this.name.height(),
-          this.parent.x() + Config.FramePaddingX / 2,
-          // TODO WHY NEED TO ADD NAME HEIGHT?
-          this.parent.y() + this.parent.height() + this.name?.height()
-        ).draw()}
-        
+        {this.parent &&
+          new Arrow(
+            this._x + Config.FramePaddingX / 2,
+            this._y + this.name.height(),
+            this.parent.x() + Config.FramePaddingX / 2,
+            // TODO WHY NEED TO ADD NAME HEIGHT?
+            this.parent.y() + this.parent.height() + this.name?.height()
+          ).draw()}
+
         {/* Frame tooltip */}
-        {this.tooltip && 
+        {this.tooltip && (
           <Label
             x={this.x() + this.width() + ControlStashConfig.TooltipMargin}
             y={this.y() + ControlStashConfig.TooltipMargin}
@@ -143,7 +146,7 @@ export class Frame extends Visible implements IHoverable {
               key={CseMachine.key++}
             />
           </Label>
-        }
+        )}
       </Group>
     );
   }

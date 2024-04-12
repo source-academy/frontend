@@ -8,7 +8,7 @@ import {
   setHoveredCursor,
   setHoveredStyle,
   setUnhoveredCursor,
-  setUnhoveredStyle,
+  setUnhoveredStyle
 } from '../../CseMachineUtils';
 import { CseMachine } from '../CseMachine';
 
@@ -17,12 +17,7 @@ export class Arrow extends Visible implements IHoverable {
   private static readonly TO_X_INDEX = 2;
   private readonly _points: number[] = [];
 
-  constructor(
-    fromX: number,
-    fromY: number,
-    toX: number,
-    toY: number,
-  ) {
+  constructor(fromX: number, fromY: number, toX: number, toY: number) {
     super();
     this._points.push(fromX, fromY, toX, toY);
   }
@@ -30,9 +25,9 @@ export class Arrow extends Visible implements IHoverable {
   setToX(x: number) {
     this._points[Arrow.TO_X_INDEX] = x;
   }
-  
+
   onMouseEnter(e: KonvaEventObject<MouseEvent>) {
-    setHoveredStyle(e.currentTarget)
+    setHoveredStyle(e.currentTarget);
     setHoveredCursor(e.currentTarget);
   }
 

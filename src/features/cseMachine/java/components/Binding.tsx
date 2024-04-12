@@ -12,17 +12,12 @@ import { Variable } from './Variable';
 /** a Binding is a key-value pair in a Frame */
 export class Binding extends Visible {
   private readonly _name: Text;
-  
+
   private readonly _value: Variable | Method | Text;
   // Only Method has arrow.
   private readonly _arrow: Arrow | undefined;
 
-  constructor(
-    name: Name, 
-    value: Value,
-    x: number,
-    y: number
-  ) {
+  constructor(name: Name, value: Value, x: number, y: number) {
     super();
 
     // Position.
@@ -34,40 +29,43 @@ export class Binding extends Visible {
       this._name = new Text(
         name + Config.VariableColon, // := is part of name
         this.x(),
-        this.y());
+        this.y()
+      );
       // Value.
       this._value = new Method(
         this._name.x() + this._name.width(),
         this.y() + this._name.height() / 2,
-        value);
+        value
+      );
       this._arrow = new Arrow(
         this._name.x() + this._name.width(),
         this._name.y() + this._name.height() / 2,
         this._value.x(),
-        this._value.y());
+        this._value.y()
+      );
     } else if (value.kind === StructType.VARIABLE) {
       // Name.
       this._name = new Text(
         name + Config.VariableColon, // := is part of name
         this.x(),
-        this.y() + Config.FontSize + Config.TextPaddingX);
+        this.y() + Config.FontSize + Config.TextPaddingX
+      );
       // Value.
-      this._value = new Variable(
-        this._name.x() + this._name.width(),
-        this.y(),
-        value);
-    } else /*if (value.kind === StructType.CLASS)*/ {
+      this._value = new Variable(this._name.x() + this._name.width(), this.y(), value);
+    } /*if (value.kind === StructType.CLASS)*/ else {
       // Dummy value as class will nvr be drawn.
       // Name.
       this._name = new Text(
         name + Config.VariableColon, // := is part of name
         this.x(),
-        this.y() + Config.FontSize + Config.TextPaddingX);
+        this.y() + Config.FontSize + Config.TextPaddingX
+      );
       // Value.
       this._value = new Text(
-        "",
+        '',
         this._name.x() + this._name.width() + Config.TextPaddingX,
-        this.y() + Config.TextPaddingX);
+        this.y() + Config.TextPaddingX
+      );
     }
 
     // Height and width.

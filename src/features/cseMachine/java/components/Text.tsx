@@ -11,7 +11,7 @@ export class Text extends Visible {
   constructor(
     private readonly _text: string,
     x: number,
-    y: number,
+    y: number
   ) {
     super();
 
@@ -37,22 +37,13 @@ export class Text extends Visible {
       fontFamily: Config.FontFamily,
       fontSize: Config.FontSize,
       fontStyle: Config.FontStyle,
-      fill: Config.SA_WHITE,
+      fill: Config.SA_WHITE
     };
 
     return (
       <KonvaGroup key={CseMachine.key++}>
-        <KonvaLabel
-          x={this.x()}
-          y={this.y()}
-          key={CseMachine.key++}
-        >
-          <KonvaText
-            {...ShapeDefaultProps} 
-            key={CseMachine.key++} 
-            text={this._text}
-            {...props}
-          />
+        <KonvaLabel x={this.x()} y={this.y()} key={CseMachine.key++}>
+          <KonvaText {...ShapeDefaultProps} key={CseMachine.key++} text={this._text} {...props} />
         </KonvaLabel>
       </KonvaGroup>
     );
