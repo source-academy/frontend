@@ -31,10 +31,4 @@ export const ControlStashConfig = Object.freeze({
   FontVariant: 'normal',
   FontStyleHeader: 'bold',
   FontSizeHeader: 18,
-
-  // Colors still used by the Java CSE Machine but not the JS CSE
-  SA_WHITE: '#999999',
-  SA_BLUE: '#2c3e50',
-  PRINT_BACKGROUND: 'white',
-  STASH_DANGER_ITEM: '#ff0000'
 });

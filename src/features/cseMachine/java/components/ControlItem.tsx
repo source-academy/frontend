@@ -3,10 +3,12 @@ import React, { RefObject } from 'react';
 import { Label, Tag, Text } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
-import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
+import { ShapeDefaultProps } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
 import { IHoverable } from '../../CseMachineTypes';
 import {
+  defaultActiveColor,
+  defaultTextColor,
   getTextHeight,
   setHoveredCursor,
   setHoveredStyle,
@@ -68,7 +70,7 @@ export class ControlItem extends Visible implements IHoverable {
   }
 
   private isCurrentItem = (): boolean => {
-    return this._stroke === Config.SA_CURRENT_ITEM;
+    return this._stroke === defaultActiveColor();
   };
 
   onMouseEnter = (e: KonvaEventObject<MouseEvent>): void => {
@@ -87,7 +89,7 @@ export class ControlItem extends Visible implements IHoverable {
 
   draw(): React.ReactNode {
     const textProps = {
-      fill: ControlStashConfig.SA_WHITE,
+      fill: defaultTextColor(),
       padding: ControlStashConfig.ControlItemTextPadding,
       fontFamily: ControlStashConfig.FontFamily,
       fontSize: ControlStashConfig.FontSize,

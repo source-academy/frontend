@@ -78,15 +78,7 @@ export const Config = Object.freeze({
 
   UnassignedData: '',
   GlobalFrameDefaultText: ':::pre-declared names::',
-  GlobalEnvId: '-1',
-
-  // Colors still used by the Java CSE Machine but not the JS CSE
-  SA_WHITE: '#999999',
-  SA_FADED_WHITE: '#5b6773',
-  SA_BLUE: '#2c3e50',
-  SA_FADED_BLUE: '#BBB',
-  PRINT_BACKGROUND: 'white',
-  SA_CURRENT_ITEM: '#030fff'
+  GlobalEnvId: '-1'
 });
 
 export const ShapeDefaultProps = Object.freeze({

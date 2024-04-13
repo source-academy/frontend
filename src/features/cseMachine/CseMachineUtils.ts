@@ -465,10 +465,9 @@ export function getReferencedObjects(environment: Env): Set<DataArray | Closure>
 /**
  * Get the set of all objects in the heap of the given environment that are **not**
  * referenced in the head. (Note that these objects can still be referenced from other
- * environments, just not the given one)
+ * environments, just not the given one.)
  */
 export function getUnreferencedObjects(environment: Env): Set<DataArray | Closure> {
-  console.log(getReferencedObjects(environment));
   return setDifference(environment.heap.getHeap(), getReferencedObjects(environment));
 }
 
