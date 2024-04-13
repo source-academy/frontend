@@ -52,8 +52,8 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
     }
 
     const lastMessage = messages[messages.length - 1];
-    if (lastMessage.role === 'bot') {
-      // Bot has responded
+    if (lastMessage.role === 'bot' || isLoading) {
+      // Bot has responded, or user request for the new message already sent
       return;
     }
 
@@ -81,7 +81,7 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [getSection, getText, messages, tokens]);
+  }, [getSection, getText, isLoading, messages, tokens]);
 
   const resetChat = () => {
     setMessages([initialMessage]);
