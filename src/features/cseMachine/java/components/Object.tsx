@@ -6,7 +6,7 @@ import { Visible } from '../../components/Visible';
 import { CseMachine } from '../CseMachine';
 import { Frame } from './Frame';
 
-export class Object extends Visible {
+export class Obj extends Visible {
   constructor(
     private readonly _frames: Frame[],
     private readonly _object: JavaObject

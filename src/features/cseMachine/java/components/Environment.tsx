@@ -9,12 +9,12 @@ import { CseMachine } from '../CseMachine';
 import { Arrow } from './Arrow';
 import { Frame } from './Frame';
 import { Line } from './Line';
-import { Object } from './Object';
+import { Obj } from './Object';
 import { Variable } from './Variable';
 
 export class Environment extends Visible {
   private readonly _methodFrames: Frame[] = [];
-  private readonly _objects: Object[] = [];
+  private readonly _objects: Obj[] = [];
   private readonly _classFrames: Frame[] = [];
   private readonly _lines: Line[] = [];
 
@@ -85,7 +85,7 @@ export class Environment extends Visible {
       // Only add padding btwn objects.
       objectFramesY += Config.FramePaddingY;
 
-      this._objects.push(new Object(objectFrames, obj));
+      this._objects.push(new Obj(objectFrames, obj));
     });
 
     // Create class frames.
