@@ -28,7 +28,7 @@ export class Binding extends Visible {
    */
   readonly isDummyBinding: boolean = false;
   /** arrow that is drawn from the key to the value */
-  arrow: GenericArrow<Text, Value> | undefined;
+  arrow?: GenericArrow<Text, Value>;
 
   constructor(
     /** the key of this binding */
@@ -82,23 +82,17 @@ export class Binding extends Visible {
         this._height = this.prevBinding.height();
       }
     }
-
-    this.updateArrow();
   }
 
-  updateArrow(): void {
+  draw(): React.ReactNode {
     if (
       !this.isDummyBinding && // value is unreferenced in dummy binding
       !(this.value instanceof PrimitiveValue) &&
       !(this.value instanceof UnassignedValue)
     ) {
-      // TODO: Figure out why sometimes the key is null
-      if (this.key) this.arrow = new ArrowFromText(this.key).to(this.value);
+      this.arrow = new ArrowFromText(this.key).to(this.value);
     }
-  }
 
-  draw(): React.ReactNode {
-    this.updateArrow(); // catch edge case when arrow points to an object lower down
     return (
       <React.Fragment key={Layout.key++}>
         {this.isDummyBinding

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Group } from 'react-konva';
 
-import { GenericArrow } from '../components/arrows/GenericArrow';
 import { Binding } from '../components/Binding';
 import { ControlItemComponent } from '../components/ControlItemComponent';
 import { Frame } from '../components/Frame';
@@ -17,13 +16,13 @@ import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { AnimatedTextComponent } from './base/AnimationComponents';
 import { getNodePosition } from './base/AnimationUtils';
 
+/** Animation for a variable assignment */
 export class AssignmentAnimation extends Animatable {
   private asgnItemAnimation: AnimatedTextbox;
   private stashItemAnimation: AnimatedTextbox;
   private bindingAnimation?: AnimatedTextComponent;
   private arrowAnimation?: AnimatedGenericArrow<Text, Value>;
 
-  private arrow?: GenericArrow<Text, Value>;
   private stashItemIsFirst: boolean;
 
   constructor(
@@ -46,14 +45,14 @@ export class AssignmentAnimation extends Animatable {
         x: this.binding.value.text.x() - 16,
         opacity: 0
       });
-    } else if (this.binding.arrow) {
-      const arrow = this.binding.arrow!;
-      this.arrow = arrow;
-      this.arrowAnimation = new AnimatedGenericArrow(arrow, { x: -16, opacity: 0 });
     }
   }
 
   draw(): React.ReactNode {
+    // Arrow only gets updated when drawn, so animated arrow is initialised here instead
+    if (this.binding.arrow) {
+      this.arrowAnimation = new AnimatedGenericArrow(this.binding.arrow, { x: -16, opacity: 0 });
+    }
     return (
       <Group key={Animatable.key--} ref={this.ref}>
         {this.asgnItemAnimation.draw()}
@@ -70,7 +69,7 @@ export class AssignmentAnimation extends Animatable {
     // hide value of binding
     if (this.bindingAnimation) this.binding.value.ref.current?.hide();
     // hide arrow
-    if (this.arrow) this.arrow.ref.current?.hide();
+    this.binding.arrow?.ref.current?.hide();
     // move asgn instruction next to stash item, while also decreasing its width
     await Promise.all([
       this.asgnItemAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
@@ -89,7 +88,7 @@ export class AssignmentAnimation extends Animatable {
             ? this.binding.y() + this.binding.height() / 2 - this.asgnItemAnimation.height() / 2
             : this.binding.y()
         },
-        { duration: 1.5 }
+        { duration: 1.2 }
       ),
       this.stashItemAnimation.animateTo(
         {
@@ -98,7 +97,7 @@ export class AssignmentAnimation extends Animatable {
             ? this.binding.y() + this.binding.height() / 2 - this.asgnItemAnimation.height() / 2
             : this.binding.y()
         },
-        { duration: 1.5 }
+        { duration: 1.2 }
       )
     ]);
     // move both asgn instruction and stash item right, fade in the binding value and binding arrow
@@ -123,7 +122,7 @@ export class AssignmentAnimation extends Animatable {
   destroy() {
     this.ref.current?.hide();
     this.binding.value.ref.current?.show();
-    this.arrow?.ref.current?.show();
+    this.binding.arrow?.ref.current?.show();
     this.asgnItemAnimation.destroy();
     this.stashItemAnimation.destroy();
     this.bindingAnimation?.destroy();

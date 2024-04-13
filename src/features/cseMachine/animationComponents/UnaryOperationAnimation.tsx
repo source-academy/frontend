@@ -15,6 +15,7 @@ import { Animatable } from './base/Animatable';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodePosition } from './base/AnimationUtils';
 
+/** Animation for an unary operation, e.g. `-`, `!` */
 export class UnaryOperationAnimation extends Animatable {
   private operatorAnimation: AnimatedTextbox;
   private operandAnimation: AnimatedTextbox;

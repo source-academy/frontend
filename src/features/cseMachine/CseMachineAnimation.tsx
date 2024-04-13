@@ -62,7 +62,7 @@ export class CseAnimation {
     const previousControlSize = Layout.previousControlComponent.control.size();
     const numOfItems = currentControlSize - previousControlSize + 1;
     if (numOfItems <= 0) return [];
-    return Layout.controlComponent.stackItemComponents.slice(previousControlSize - 1);
+    return Layout.controlComponent.stackItemComponents.slice(-numOfItems);
   }
 
   private static handleNode(node: Node) {
@@ -123,6 +123,7 @@ export class CseAnimation {
       case 'StatementSequence':
       case 'UnaryExpression':
       case 'VariableDeclaration':
+      case 'FunctionDeclaration':
       case 'WhileStatement':
         CseAnimation.animations.push(
           new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())

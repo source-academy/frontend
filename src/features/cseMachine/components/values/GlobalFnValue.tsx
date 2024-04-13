@@ -1,4 +1,5 @@
 import { KonvaEventObject } from 'konva/lib/Node';
+import { Label } from 'konva/lib/shapes/Label';
 import React, { RefObject } from 'react';
 import {
   Circle,
@@ -40,7 +41,7 @@ export class GlobalFnValue extends Value implements IHoverable {
   readonly tooltipWidth: number;
   readonly exportTooltip: string;
   readonly exportTooltipWidth: number;
-  readonly labelRef: RefObject<any> = React.createRef();
+  readonly labelRef: RefObject<Label> = React.createRef();
 
   centerX: number;
   private _arrow: ArrowFromFn | undefined;
@@ -90,14 +91,14 @@ export class GlobalFnValue extends Value implements IHoverable {
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
     setHoveredCursor(currentTarget);
-    this.labelRef.current.moveToTop();
-    this.labelRef.current.show();
+    this.labelRef.current?.moveToTop();
+    this.labelRef.current?.show();
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
     setUnhoveredCursor(currentTarget);
-    this.labelRef.current.hide();
+    this.labelRef.current?.hide();
   };
 
   draw(): React.ReactNode {

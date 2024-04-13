@@ -18,7 +18,6 @@ type AnimationData<KonvaConfig extends Konva.NodeConfig> = {
   to: Readonly<Partial<KonvaConfig>>;
   easing: NonNullable<AnimationConfig['easing']>;
   resolve: (value: void | PromiseLike<void>) => void;
-  reject: (reason?: any) => void;
 };
 
 abstract class BaseAnimationComponent<
@@ -31,11 +30,7 @@ abstract class BaseAnimationComponent<
   private animationFn: AnimationFn = frame => {
     if (!frame || this.animationData.length === 0) return false;
     if (!this.ref.current) {
-      this.animationData.forEach(data =>
-        data.reject(
-          'Animation error: Current node reference is null, unable to continue animation!'
-        )
-      );
+      this.animationData.forEach(data => data.resolve());
       this.animation.stop();
       return;
     }
@@ -90,7 +85,7 @@ abstract class BaseAnimationComponent<
     if (!CseAnimation.getLayer()) {
       // If this occurs, it would most likely mean that this animation component is created
       // before the animation layer is even drawn, as the layer ref current value would be null.
-      console.error('Missing animation layer! Unable to create animation component!');
+      throw new Error('Missing animation layer! Unable to create animation component!');
     }
     this.animation = new Konva.Animation(this.animationFn, CseAnimation.getLayer());
     if (props.x) this._x = props.x;
@@ -100,16 +95,12 @@ abstract class BaseAnimationComponent<
   }
 
   animateTo(to: Partial<KonvaConfig>, animationConfig?: AnimationConfig): Promise<void> {
-    return new Promise((resolve, reject) => {
-      if (this.isDestroyed || Object.keys(to).length === 0) {
+    return new Promise(resolve => {
+      // Note: this.ref.current being undefined could also result from not calling the draw
+      // function of this animation component.
+      // TODO: find a better way to detect the animation component not being drawn
+      if (this.isDestroyed || Object.keys(to).length === 0 || !this.ref.current) {
         resolve();
-        return;
-      }
-      if (!this.ref.current) {
-        reject(
-          'Animation error: Current node reference is null, unable to start animation! ' +
-            'Check that you have actually drawn the animation component first.'
-        );
         return;
       }
       const node: Konva.Node = this.ref.current;
@@ -124,7 +115,7 @@ abstract class BaseAnimationComponent<
       const endTime = startTime + (animationConfig?.duration ?? 1) * CseAnimation.defaultDuration;
       const easing = animationConfig?.easing ?? CseAnimation.defaultEasing;
       // Add animation data
-      const data = { startTime, endTime, from, current: { ...from }, to, easing, resolve, reject };
+      const data = { startTime, endTime, from, current: { ...from }, to, easing, resolve };
       this.animationData.push(data);
       // Play animation
       if (!this.animation.isRunning()) this.animation.start();

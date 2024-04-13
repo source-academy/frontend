@@ -5,7 +5,13 @@ import { ControlItemComponent } from '../components/ControlItemComponent';
 import { StashItemComponent } from '../components/StashItemComponent';
 import { Visible } from '../components/Visible';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
-import { getTextWidth } from '../CseMachineUtils';
+import {
+  defaultActiveColor,
+  defaultDangerColor,
+  defaultStrokeColor,
+  getTextWidth,
+  isStashItemInDanger
+} from '../CseMachineUtils';
 import { Animatable, AnimationConfig } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
@@ -19,7 +25,7 @@ import { getNodePosition } from './base/AnimationUtils';
 export class InstructionApplicationAnimation extends Animatable {
   private controlInstrAnimation: AnimatedTextbox; // the array literal control item
   private stashItemAnimations: AnimatedTextbox[];
-  private resultAnimation?: AnimatedTextbox;
+  private resultAnimation: AnimatedTextbox;
   private arrowAnimation?: AnimatedGenericArrow<StashItemComponent, Visible>;
 
   private endX: number;
@@ -28,26 +34,29 @@ export class InstructionApplicationAnimation extends Animatable {
   constructor(
     private controlInstrItem: ControlItemComponent,
     private stashItems: StashItemComponent[],
-    private resultItem?: StashItemComponent
+    private resultItem: StashItemComponent
   ) {
     super();
     this.resultItemIsFirst = (resultItem?.index ?? stashItems[0].index) === 0;
     this.endX = stashItems.at(-1)!.x() + stashItems.at(-1)!.width();
     this.controlInstrAnimation = new AnimatedTextbox(
       controlInstrItem.text,
-      getNodePosition(controlInstrItem)
+      getNodePosition(controlInstrItem),
+      { rectProps: { stroke: defaultActiveColor() } }
     );
-    this.stashItemAnimations = stashItems.map(
-      item => new AnimatedTextbox(item.text, getNodePosition(item))
-    );
-    if (resultItem) {
-      this.resultAnimation = new AnimatedTextbox(resultItem.text, {
-        ...getNodePosition(resultItem),
-        opacity: 0
+    this.stashItemAnimations = stashItems.map(item => {
+      return new AnimatedTextbox(item.text, getNodePosition(item), {
+        rectProps: {
+          stroke: isStashItemInDanger(item.index) ? defaultDangerColor() : defaultStrokeColor()
+        }
       });
-      if (resultItem.arrow) {
-        this.arrowAnimation = new AnimatedGenericArrow(resultItem.arrow, { opacity: 0 });
-      }
+    });
+    this.resultAnimation = new AnimatedTextbox(resultItem.text, {
+      ...getNodePosition(resultItem),
+      opacity: 0
+    });
+    if (resultItem.arrow) {
+      this.arrowAnimation = new AnimatedGenericArrow(resultItem.arrow, { opacity: 0 });
     }
   }
 
@@ -56,7 +65,7 @@ export class InstructionApplicationAnimation extends Animatable {
       <Group ref={this.ref} key={Animatable.key--}>
         {this.controlInstrAnimation.draw()}
         {this.stashItemAnimations.map(a => a.draw())}
-        {this.resultAnimation?.draw()}
+        {this.resultAnimation.draw()}
         {this.arrowAnimation?.draw()}
       </Group>
     );
@@ -74,10 +83,11 @@ export class InstructionApplicationAnimation extends Animatable {
     const fadeInDelay = (animationConfig?.delay ?? 0) + (animationConfig?.duration ?? 1) / 4;
     // Move array literal instruction next to stash items
     await Promise.all([
-      this.resultAnimation?.animateTo(
+      this.resultAnimation.animateTo(
         { x: startX + (this.endX - startX) / 2 - this.resultItem!.width() / 2 },
         { duration: 0 }
       ),
+      this.controlInstrAnimation.animateRectTo({ stroke: defaultStrokeColor() }, animationConfig),
       this.controlInstrAnimation.animateTo(
         {
           x: startX,
@@ -87,6 +97,9 @@ export class InstructionApplicationAnimation extends Animatable {
           width: minInstrWidth
         },
         animationConfig
+      ),
+      ...this.stashItemAnimations.map(a =>
+        a.animateRectTo({ stroke: defaultStrokeColor() }, animationConfig)
       )
     ]);
     animationConfig = { ...animationConfig, delay: 0 };
@@ -102,6 +115,8 @@ export class InstructionApplicationAnimation extends Animatable {
         a.animateTo({ opacity: 0 }, { ...animationConfig, duration: fadeDuration })
       ]),
       this.resultAnimation?.animateTo({ x: resultX }, animationConfig),
+      isStashItemInDanger(this.resultItem.index) &&
+        this.resultAnimation?.animateRectTo({ stroke: defaultDangerColor() }, animationConfig),
       this.resultAnimation?.animateTo(
         { opacity: 1 },
         { ...animationConfig, duration: fadeDuration, delay: fadeInDelay }
@@ -116,11 +131,11 @@ export class InstructionApplicationAnimation extends Animatable {
 
   destroy() {
     this.ref.current?.hide();
-    this.resultItem?.ref.current?.show();
-    this.resultItem?.arrow?.ref.current?.show();
+    this.resultItem.ref.current?.show();
+    this.resultItem.arrow?.ref.current?.show();
     this.controlInstrAnimation.destroy();
     this.stashItemAnimations.map(a => a.destroy());
-    this.resultAnimation?.destroy();
+    this.resultAnimation.destroy();
     this.arrowAnimation?.destroy();
   }
 }

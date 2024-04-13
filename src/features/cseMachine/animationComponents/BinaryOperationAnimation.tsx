@@ -15,6 +15,7 @@ import { Animatable } from './base/Animatable';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodePosition } from './base/AnimationUtils';
 
+/** Animation for a binary operation, e.g. `+`, `===` */
 export class BinaryOperationAnimation extends Animatable {
   private binaryOperatorAnimation: AnimatedTextbox;
   private leftOperandAnimation: AnimatedTextbox;

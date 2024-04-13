@@ -18,7 +18,6 @@ import { getNodePosition } from './base/AnimationUtils';
 
 /**
  * Animation for any single item movement from control to stash.
- *
  * Used for literals and arrow function expressions
  */
 export class ControlToStashAnimation extends Animatable {
@@ -94,9 +93,9 @@ export class ControlToStashAnimation extends Animatable {
   }
 
   destroy() {
+    this.ref.current?.hide();
     this.stashItem.ref.current?.show();
     this.stashItem.arrow?.ref.current?.show();
-    this.ref.current?.hide();
     this.borderRectAnimation.destroy();
     this.controlTextAnimation.destroy();
     this.stackTextAnimation?.destroy();

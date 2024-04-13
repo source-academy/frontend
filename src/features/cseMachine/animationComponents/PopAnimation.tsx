@@ -9,6 +9,7 @@ import { Animatable } from './base/Animatable';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodePosition } from './base/AnimationUtils';
 
+/** Animation for the `pop` instruction, which removes the top item in the stash */
 export class PopAnimation extends Animatable {
   private popItemAnimation: AnimatedTextbox;
   private stashItemAnimation: AnimatedTextbox;

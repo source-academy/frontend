@@ -18,6 +18,10 @@ import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
 import { AnimatedRectComponent, AnimatedTextComponent } from './base/AnimationComponents';
 import { getNodeDimensions, getNodeLocation, getNodePosition } from './base/AnimationUtils';
 
+/**
+ * Animation for the creation of a new environment frame.
+ * Used for block statements and within function application of closures.
+ */
 export class FrameCreationAnimation extends Animatable {
   private controlTextAnimation: AnimatedTextComponent;
   private borderAnimation: AnimatedRectComponent;

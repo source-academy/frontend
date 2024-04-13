@@ -18,6 +18,7 @@ import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodeLocation, getNodePosition } from './base/AnimationUtils';
 import { FrameCreationAnimation } from './FrameCreationAnimation';
 
+/** Animation for function application for closures */
 export class FunctionApplicationAnimation extends Animatable {
   private callInstrAnimation: AnimatedTextbox;
   private stashItemAnimations: AnimatedTextbox[];
@@ -105,7 +106,7 @@ export class FunctionApplicationAnimation extends Animatable {
       x: this.functionFrame?.x() ?? this.newControlItems[0].x(),
       y: this.functionFrame?.y() ?? this.newControlItems[0].y()
     };
-    const config = { duration: 1.5 };
+    const config = { duration: 1.2 };
     const fadeDuration = 9 / 8;
     const fadeInDelay = 3 / 8;
     // merge all items together while also creating the new frame and new control items

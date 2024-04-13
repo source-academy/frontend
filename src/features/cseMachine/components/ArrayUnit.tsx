@@ -1,4 +1,4 @@
-import { Text } from 'konva/lib/shapes/Text';
+import { Text, TextConfig } from 'konva/lib/shapes/Text';
 import React from 'react';
 import { Text as KonvaText } from 'react-konva';
 
@@ -12,8 +12,8 @@ import {
   fadedStrokeColor,
   fadedTextColor
 } from '../CseMachineUtils';
-import { Arrow } from './arrows/Arrow';
 import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
+import { GenericArrow } from './arrows/GenericArrow';
 import { RoundedRect } from './shapes/RoundedRect';
 import { defaultOptions } from './Text';
 import { ArrayValue } from './values/ArrayValue';
@@ -32,7 +32,8 @@ export class ArrayUnit extends Visible {
   readonly isLastUnit: boolean;
   /** check if this unit is the main reference of the value */
   readonly isMainReference: boolean;
-  arrow: Arrow | undefined = undefined;
+  /** arrow that is drawn from the array unit to the value */
+  arrow?: GenericArrow<ArrayUnit, Value>;
   readonly indexRef = React.createRef<Text>();
 
   constructor(
@@ -66,6 +67,10 @@ export class ArrayUnit extends Visible {
     if (this.isDrawn()) return null;
     this._isDrawn = true;
 
+    if (!(this.value instanceof PrimitiveValue)) {
+      this.arrow = new ArrowFromArrayUnit(this).to(this.value);
+    }
+
     const cornerRadius = {
       upperLeft: 0,
       lowerLeft: 0,
@@ -77,7 +82,7 @@ export class ArrayUnit extends Visible {
     if (this.isLastUnit)
       cornerRadius.upperRight = cornerRadius.lowerRight = Config.DataCornerRadius;
 
-    const indexProps: React.ComponentProps<typeof KonvaText> = {
+    const indexProps: TextConfig = {
       fontFamily: defaultOptions.fontFamily,
       fontSize: defaultOptions.fontSize,
       fontStyle: defaultOptions.fontStyle,
@@ -111,7 +116,7 @@ export class ArrayUnit extends Visible {
           text={`${this.idx}`}
         />
         {this.value.draw()}
-        {this.value instanceof PrimitiveValue || new ArrowFromArrayUnit(this).to(this.value).draw()}
+        {this.arrow?.draw()}
       </React.Fragment>
     );
   }
