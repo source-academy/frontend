@@ -98,6 +98,7 @@ export class Binding extends Visible {
   }
 
   draw(): React.ReactNode {
+    this.updateArrow(); // catch edge case when arrow points to an object lower down
     return (
       <React.Fragment key={Layout.key++}>
         {this.isDummyBinding
