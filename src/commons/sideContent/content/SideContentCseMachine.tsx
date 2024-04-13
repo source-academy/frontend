@@ -447,7 +447,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
     if (this.isJava()) {
       JavaCseMachine.zoomStage(isZoomIn, multiplier);
     } else {
-      Layout.zoomStage(false, 5);
+      Layout.zoomStage(isZoomIn, multiplier);
     }
   };
 
