@@ -18,7 +18,7 @@ const useTypeInference: EditorHook = (inProps, outProps, keyBindings, reactAceRe
     const code = editor.getValue();
     const pos = editor.getCursorPosition();
     const token = editor.session.getTokenAt(pos.row, pos.column);
-
+    console.log('his');
     // comment out everyline of the inference string returned by getTypeInformation
     const commentEveryLine = (str: string) => {
       const arr = str.split('\n');

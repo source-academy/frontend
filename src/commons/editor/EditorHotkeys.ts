@@ -18,7 +18,7 @@ export const keyBindings = {
   typeInferenceDisplay: {
     win: 'Ctrl-Shift-M',
     mac: 'Command-Shift-M'
-  },
+  }
 };
 
 export type KeyFunction = keyof typeof keyBindings;
