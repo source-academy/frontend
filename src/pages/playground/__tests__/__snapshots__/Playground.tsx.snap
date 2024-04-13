@@ -979,17 +979,19 @@ and also the
                               data-testid="cse-machine-default-text"
                               id="cse-machine-default-text"
                             >
-                              The CSE machine generates control, stash and environment model diagrams following a notation introduced in
-                               
-                              <a
-                                href="https://sourceacademy.org/sicpjs/3.2"
-                                rel="noopener noreferrer"
-                                target="_blank"
-                              >
-                                <i>
-                                  Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3, Section 2
-                                </i>
-                              </a>
+                              <span>
+                                The CSE machine generates control, stash and environment model diagrams following a notation introduced in
+                                 
+                                <a
+                                  href="https://sourceacademy.org/sicpjs/3.2"
+                                  rel="noopener noreferrer"
+                                  target="_blank"
+                                >
+                                  <i>
+                                    Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3, Section 2
+                                  </i>
+                                </a>
+                              </span>
                               .
                               <br />
                               <br />

@@ -10,6 +10,7 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
+import { Chapter } from 'js-slang/dist/types';
 import { debounce } from 'lodash';
 import React from 'react';
 import { HotKeys } from 'react-hotkeys';
@@ -20,6 +21,7 @@ import type { PlaygroundWorkspaceState } from 'src/commons/workspace/WorkspaceTy
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
 import { Layout } from 'src/features/cseMachine/CseMachineLayout';
+import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
 import { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
 import { HighlightedLines } from '../../editor/EditorTypes';
@@ -40,6 +42,7 @@ type State = {
   width: number;
   lastStep: boolean;
   stepLimitExceeded: boolean;
+  chapter: Chapter;
 };
 
 type CseMachineProps = OwnProps & StateProps & DispatchProps;
@@ -53,6 +56,7 @@ type StateProps = {
   changepointSteps: number[];
   needCseUpdate: boolean;
   machineOutput: InterpreterOutput[];
+  chapter: Chapter;
 };
 
 type OwnProps = {
@@ -85,25 +89,39 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
       width: this.calculateWidth(props.editorWidth),
       height: this.calculateHeight(props.sideContentHeight),
       lastStep: false,
-      stepLimitExceeded: false
+      stepLimitExceeded: false,
+      chapter: props.chapter
     };
-    CseMachine.init(
-      visualization => {
-        this.setState({ visualization }, () => CseAnimation.playAnimation());
-        if (visualization) this.props.handleAlertSideContent();
-      },
-      this.state.width,
-      this.state.height,
-      (segments: [number, number][]) => {
-        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        // This comment is copied over from workspace saga
-        props.setEditorHighlightedLines(0, segments);
-      },
-      // We shouldn't be able to move slider to a step number beyond the step limit
-      isControlEmpty => {
-        this.setState({ stepLimitExceeded: false });
-      }
-    );
+    if (this.isJava()) {
+      JavaCseMachine.init(
+        visualization => this.setState({ visualization }),
+        (segments: [number, number][]) => {
+          props.setEditorHighlightedLines(0, segments);
+        }
+      );
+    } else {
+      CseMachine.init(
+        visualization => {
+          this.setState({ visualization }, () => CseAnimation.playAnimation());
+          if (visualization) this.props.handleAlertSideContent();
+        },
+        this.state.width,
+        this.state.height,
+        (segments: [number, number][]) => {
+          // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+          // This comment is copied over from workspace saga
+          props.setEditorHighlightedLines(0, segments);
+        },
+        // We shouldn't be able to move slider to a step number beyond the step limit
+        isControlEmpty => {
+          this.setState({ stepLimitExceeded: false });
+        }
+      );
+    }
+  }
+
+  private isJava(): boolean {
+    return this.props.chapter === Chapter.FULL_JAVA;
   }
 
   private calculateWidth(editorWidth?: string) {
@@ -173,7 +191,11 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
     }
     if (prevProps.needCseUpdate && !this.props.needCseUpdate) {
       this.stepFirst();
-      CseMachine.clearCse();
+      if (this.isJava()) {
+        JavaCseMachine.clearCse();
+      } else {
+        CseMachine.clearCse();
+      }
     }
   }
 
@@ -210,45 +232,53 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
             onRelease={this.sliderRelease}
             value={this.state.value < 0 ? 0 : this.state.value}
           />
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <ButtonGroup>
-              <Tooltip2 content="Control and Stash" compact>
-                <AnchorButton
-                  onMouseUp={() => {
-                    if (this.state.visualization) {
-                      CseMachine.toggleControlStash();
-                      CseMachine.redraw();
-                    }
-                  }}
-                  icon="layers"
-                  disabled={!this.state.visualization}
-                >
-                  <Checkbox
-                    checked={CseMachine.getControlStash()}
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: this.isJava() ? 'center' : 'space-between',
+              alignItems: 'center'
+            }}
+          >
+            {!this.isJava() && (
+              <ButtonGroup>
+                <Tooltip2 content="Control and Stash" compact>
+                  <AnchorButton
+                    onMouseUp={() => {
+                      if (this.state.visualization) {
+                        CseMachine.toggleControlStash();
+                        CseMachine.redraw();
+                      }
+                    }}
+                    icon="layers"
                     disabled={!this.state.visualization}
-                    style={{ margin: 0 }}
-                  />
-                </AnchorButton>
-              </Tooltip2>
-              <Tooltip2 content="Truncate Control" compact>
-                <AnchorButton
-                  onMouseUp={() => {
-                    if (this.state.visualization) {
-                      CseMachine.toggleStackTruncated();
-                      CseMachine.redraw();
-                    }
-                  }}
-                  icon="minimize"
-                  disabled={!this.state.visualization}
-                >
-                  <Checkbox
-                    checked={CseMachine.getStackTruncated()}
+                  >
+                    <Checkbox
+                      checked={CseMachine.getControlStash()}
+                      disabled={!this.state.visualization}
+                      style={{ margin: 0 }}
+                    />
+                  </AnchorButton>
+                </Tooltip2>
+                <Tooltip2 content="Truncate Control" compact>
+                  <AnchorButton
+                    onMouseUp={() => {
+                      if (this.state.visualization) {
+                        CseMachine.toggleStackTruncated();
+                        CseMachine.redraw();
+                      }
+                    }}
+                    icon="minimize"
                     disabled={!this.state.visualization}
-                    style={{ margin: 0 }}
-                  />
-                </AnchorButton>
-              </Tooltip2>
-            </ButtonGroup>
+                  >
+                    <Checkbox
+                      checked={CseMachine.getStackTruncated()}
+                      disabled={!this.state.visualization}
+                      style={{ margin: 0 }}
+                    />
+                  </AnchorButton>
+                </Tooltip2>
+              </ButtonGroup>
+            )}
             <ButtonGroup>
               <Button
                 disabled={!this.state.visualization}
@@ -259,13 +289,19 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                 disabled={!this.state.visualization}
                 icon="chevron-left"
                 onClick={
-                  CseMachine.getControlStash() ? this.stepPrevious : this.stepPrevChangepoint
+                  this.isJava() || CseMachine.getControlStash()
+                    ? this.stepPrevious
+                    : this.stepPrevChangepoint
                 }
               />
               <Button
                 disabled={!this.state.visualization}
                 icon="chevron-right"
-                onClick={CseMachine.getControlStash() ? this.stepNext : this.stepNextChangepoint}
+                onClick={
+                  this.isJava() || CseMachine.getControlStash()
+                    ? this.stepNext
+                    : this.stepNextChangepoint
+                }
               />
               <Button
                 disabled={!this.state.visualization}
@@ -273,33 +309,35 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                 onClick={this.stepNextBreakpoint}
               />
             </ButtonGroup>
-            <ButtonGroup>
-              <Tooltip2 content="Print" compact>
-                <AnchorButton
-                  onMouseUp={() => {
-                    if (this.state.visualization) {
-                      CseMachine.togglePrintableMode();
-                      CseMachine.redraw();
-                    }
-                  }}
-                  icon="print"
-                  disabled={!this.state.visualization}
-                >
-                  <Checkbox
+            {!this.isJava() && (
+              <ButtonGroup>
+                <Tooltip2 content="Print" compact>
+                  <AnchorButton
+                    onMouseUp={() => {
+                      if (this.state.visualization) {
+                        CseMachine.togglePrintableMode();
+                        CseMachine.redraw();
+                      }
+                    }}
+                    icon="print"
                     disabled={!this.state.visualization}
-                    checked={CseMachine.getPrintableMode()}
-                    style={{ margin: 0 }}
+                  >
+                    <Checkbox
+                      disabled={!this.state.visualization}
+                      checked={CseMachine.getPrintableMode()}
+                      style={{ margin: 0 }}
+                    />
+                  </AnchorButton>
+                </Tooltip2>
+                <Tooltip2 content="Save" compact>
+                  <AnchorButton
+                    icon="floppy-disk"
+                    disabled={!this.state.visualization}
+                    onClick={Layout.exportImage}
                   />
-                </AnchorButton>
-              </Tooltip2>
-              <Tooltip2 content="Save" compact>
-                <AnchorButton
-                  icon="floppy-disk"
-                  disabled={!this.state.visualization}
-                  onClick={Layout.exportImage}
-                />
-              </Tooltip2>
-            </ButtonGroup>
+                </Tooltip2>
+              </ButtonGroup>
+            )}
           </div>
         </div>{' '}
         {this.state.visualization &&
@@ -331,14 +369,34 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
             className={Classes.RUNNING_TEXT}
             data-testid="cse-machine-default-text"
           >
-            The CSE machine generates control, stash and environment model diagrams following a
-            notation introduced in{' '}
-            <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
-              <i>
-                Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3,
-                Section 2
-              </i>
-            </a>
+            {this.isJava() ? (
+              <span>
+                The CSEC machine generates control, stash, environment and class model diagrams
+                adapted from the notation introduced in{' '}
+                <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
+                  <i>
+                    Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter
+                    3, Section 2
+                  </i>
+                </a>
+                {'. '}
+                You have chosen the sublanguage{' '}
+                <a href={`${Links.sourceDocs}java_csec/`} rel="noopener noreferrer" target="_blank">
+                  <i>Java CSEC</i>
+                </a>
+              </span>
+            ) : (
+              <span>
+                The CSE machine generates control, stash and environment model diagrams following a
+                notation introduced in{' '}
+                <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
+                  <i>
+                    Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter
+                    3, Section 2
+                  </i>
+                </a>
+              </span>
+            )}
             .
             <br />
             <br /> On this tab, the REPL will be hidden from view, so do check that your code has no
@@ -371,19 +429,27 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
           <Button
             icon="plus"
             disabled={!this.state.visualization}
-            onClick={() => Layout.zoomStage(true, 5)}
+            onClick={() => this.zoomStage(true, 5)}
             style={{ marginBottom: '5px', borderRadius: '3px' }}
           />
           <Button
             icon="minus"
             disabled={!this.state.visualization}
-            onClick={() => Layout.zoomStage(false, 5)}
+            onClick={() => this.zoomStage(false, 5)}
             style={{ borderRadius: '3px' }}
           />
         </ButtonGroup>
       </HotKeys>
     );
   }
+
+  private zoomStage = (isZoomIn: boolean, multiplier: number) => {
+    if (this.isJava()) {
+      JavaCseMachine.zoomStage(isZoomIn, multiplier);
+    } else {
+      Layout.zoomStage(isZoomIn, multiplier);
+    }
+  };
 
   private sliderRelease = (newValue: number) => {
     if (newValue === this.props.stepsTotal) {
@@ -509,7 +575,8 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
     breakpointSteps: workspace.breakpointSteps,
     changepointSteps: workspace.changepointSteps,
     needCseUpdate: workspace.updateCse,
-    machineOutput: workspace.output
+    machineOutput: workspace.output,
+    chapter: workspace.context.chapter
   };
 };
 
