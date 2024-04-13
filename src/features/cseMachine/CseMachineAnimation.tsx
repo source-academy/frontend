@@ -143,7 +143,6 @@ export class CseAnimation {
     const lastControlItem = Layout.previousControlComponent.control.peek();
     const lastControlComponent = Layout.previousControlComponent.stackItemComponents.at(-1);
     const currStashComponent = Layout.stashComponent.stashItemComponents.at(-1);
-    // const currControlComponent = Layout.controlComponent.stackItemComponents.at(-1);
     if (
       !CseAnimation.animationEnabled ||
       !lastControlItem ||

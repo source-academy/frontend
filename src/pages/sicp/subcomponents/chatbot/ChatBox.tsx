@@ -1,139 +1,99 @@
 import { Button } from '@blueprintjs/core';
-import * as React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { useSession } from 'src/commons/utils/Hooks';
+import { useTokens } from 'src/commons/utils/Hooks';
+import { chat } from 'src/features/sicp/chatCompletion/api';
+import { buildPrompt, SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
 import classes from 'src/styles/Chatbot.module.scss';
 
-import { chat } from '../../../../commons/sagas/RequestsSaga';
-import SICPNotes from './SicpNotes';
-
 type Props = {
-  getSection: () => string;
+  getSection: () => SicpSection;
   getText: () => string;
 };
 
+type ChatMessage = { role: 'user' | 'bot'; content: string };
+const initialMessage: ChatMessage = {
+  content: 'Ask me something about this paragraph!',
+  role: 'bot'
+};
+const botErrorMessage: ChatMessage = {
+  content: 'Sorry, I am down with a cold, please try again later.',
+  role: 'bot'
+};
+
+type Payload = { role: 'user' | 'assistant' | 'system'; content: string }[];
+/** At most CONTEXT_SIZE messages are passed for chat completion. */
+const CONTEXT_SIZE = 20;
+
 const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
-  const chatRef = React.useRef<HTMLDivElement | null>(null);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [messages, setMessages] = React.useState<{ role: 'user' | 'bot'; content: string[] }[]>([
-    { content: ['Ask me something about this paragraph!'], role: 'bot' }
-  ]);
-  const [userInput, setUserInput] = React.useState('');
-  const [contentHistory, setContentHistory] = React.useState<Array<string>>([]);
-  const [roleHistory, setRoleHistory] = React.useState<Array<string>>([]);
-  const { accessToken, refreshToken } = useSession();
+  const chatRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [messages, setMessages] = useState<ChatMessage[]>([initialMessage]);
+  const [userInput, setUserInput] = useState('');
+  const tokens = useTokens();
 
   const handleUserInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserInput(event.target.value);
   };
 
-  // To get code snippets
-  const codeBlocks = (temp: string) => {
-    return temp.split('```');
-  };
-
-  const text = () => {
-    return '\n(2) Here is the paragraph:\n' + getText();
-  };
-
-  const section = () => {
-    const sectionNumber = getSection();
-    return parseInt(sectionNumber.charAt(0), 10) > 3
-      ? '\n(1) There is no section summary for this section. Please answer the question based on the following paragraph\n'
-      : '\n(1) Here is the summary of this section:\n' + SICPNotes[getSection()];
-  };
-
-  function getPrompt() {
-    const prompt =
-      'You are a competent tutor, assisting a student who is learning computer science following the textbook "Structure and Interpretation of Computer Programs,' +
-      'JavaScript edition". The student request is about a paragraph of the book. The request may be a follow-up request to a request that was posed to you' +
-      'previously.\n' +
-      'What follows are:\n' +
-      '(1) the summary of section (2) the full paragraph. Please answer the student request,' +
-      'not the requests of the history. If the student request is not related to the book, ask them to ask questions that are related to the book. Donot say that I provide you text\n\n' +
-      section() +
-      text();
-    return prompt;
-  }
-
   const sendMessage = async () => {
     if (userInput.trim() === '') {
       return;
     }
-    // clean the input immediately after the user sends the message so that the user would not feel the lag
-    const _userInput = userInput;
-    const _messages = messages;
     setUserInput('');
-    const blocks = codeBlocks(_userInput);
-    setMessages([...messages, { role: 'user', content: blocks }]);
+    setMessages(prev => [...prev, { role: 'user', content: userInput }]);
+  };
+
+  // Watch whenever a new message comes in
+  useEffect(() => {
+    if (messages.length === 0) {
+      return;
+    }
+
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage.role === 'bot' || isLoading) {
+      // Bot has responded, or user request for the new message already sent
+      return;
+    }
+
+    // User just sent a message
     setIsLoading(true);
 
-    const prompt = getPrompt();
-    const payload: { role: string; content: string }[] = [{ role: 'system', content: prompt }];
-    for (let i = 0; i < contentHistory.length; i++) {
-      payload.push({ role: roleHistory[i], content: contentHistory[i] });
-    }
-    payload.push({ role: 'user', content: _userInput });
-    const tokens = { accessToken: accessToken!, refreshToken: refreshToken! };
+    // Bot needs to respond, send payload to chat completion
+    const prompt = buildPrompt(getSection(), getText());
+    const payload: Payload = [
+      { role: 'system', content: prompt },
+      ...messages.slice(-CONTEXT_SIZE).map(message => {
+        const role = message.role === 'user' ? 'user' : 'assistant';
+        const segment: Payload[number] = { role, content: message.content };
+        return segment;
+      })
+    ];
+
     chat(tokens, payload)
       .then(text => {
-        const keptContentHistory =
-          contentHistory.length >= 20 ? contentHistory.slice(2) : contentHistory;
-        const keptRoleHistory = roleHistory.length >= 20 ? roleHistory.slice(2) : roleHistory;
-        setContentHistory([...keptContentHistory, _userInput, text]);
-        setRoleHistory([...keptRoleHistory, 'user', 'assistant']);
-        setMessages([
-          ..._messages,
-          { role: 'user', content: blocks },
-          {
-            role: 'bot',
-            content: [text + '\n\nThe answer is generated by GPT-4 and may not be correct.']
-          }
-        ]);
+        setMessages(prev => [...prev, { role: 'bot', content: text }]);
       })
       .catch(e => {
-        setMessages([
-          ..._messages,
-          { role: 'user', content: blocks },
-          { content: [`Sorry, I am down with a cold, please try again later.`], role: 'bot' }
-        ]);
+        setMessages(prev => [...prev, botErrorMessage]);
       })
       .finally(() => {
         setIsLoading(false);
       });
-  };
+  }, [getSection, getText, isLoading, messages, tokens]);
 
-  const cleanMessage = () => {
-    setMessages([{ content: ['Ask me something about this paragraph!'], role: 'bot' }]);
-    setContentHistory([]);
-    setRoleHistory([]);
-  };
-
-  const renderMessageContent = (message: string | string[]) => {
-    if (!Array.isArray(message)) {
-      return message;
-    }
-
-    return message.map((block, index) =>
-      // Assume that only javascript code snippets will appear
-      block.substring(0, 10) === 'javascript' ? (
-        <SyntaxHighlighter language="javascript" style={SourceTheme} key={index}>
-          {block.substring(11, block.length)}
-        </SyntaxHighlighter>
-      ) : (
-        block
-      )
-    );
+  const resetChat = () => {
+    setMessages([initialMessage]);
   };
 
   const keyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && !isLoading) {
       sendMessage();
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     scrollToBottom();
   }, [messages, isLoading]);
 
@@ -150,29 +110,52 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
             className={classes[`${message.role}`]}
             style={{ whiteSpace: 'pre-line' }}
           >
-            {renderMessageContent(message.content)}
+            {renderMessageContent(message)}
           </div>
         ))}
         {isLoading && <p>loading...</p>}
       </div>
       <input
         type="text"
+        disabled={isLoading}
         className={classes['user-input']}
-        placeholder="Type your message here..."
+        placeholder={isLoading ? 'Waiting for response...' : 'Type your message here...'}
         value={userInput}
         onChange={handleUserInput}
         onKeyDown={keyDown}
       />
       <div className={classes['button-container']}>
-        <Button className={classes['button-send']} onClick={sendMessage}>
+        <Button disabled={isLoading} className={classes['button-send']} onClick={sendMessage}>
           Send
         </Button>
-        <Button className={classes['button-clean']} onClick={cleanMessage}>
+        <Button className={classes['button-clean']} onClick={resetChat}>
           Clean
         </Button>
       </div>
     </div>
   );
+};
+
+const renderMessageContent = (message: ChatMessage) => {
+  let contentToRender = message.content;
+  if (message.role === 'bot') {
+    contentToRender += '\n\nThe answer is generated by GPT-4 and may not be correct.';
+  }
+  // TODO: Parse full Markdown, make snippets runnable
+  if (!contentToRender.includes('```javascript')) {
+    return contentToRender;
+  }
+  const renderableRegex = /```javascript\n([\s\S]*?)\n```/g;
+  const chunks = contentToRender.split(renderableRegex);
+  return chunks.map((chunk, i) => {
+    return renderableRegex.test(chunk) ? (
+      <SyntaxHighlighter language="javascript" style={SourceTheme} key={i}>
+        {chunk}
+      </SyntaxHighlighter>
+    ) : (
+      <React.Fragment key={i}>{chunk.trim()}</React.Fragment>
+    );
+  });
 };
 
 export default ChatBox;
