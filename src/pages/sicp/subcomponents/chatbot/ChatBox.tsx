@@ -1,5 +1,5 @@
 import { Button } from '@blueprintjs/core';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { useTokens } from 'src/commons/utils/Hooks';
 import { chat } from 'src/features/sicp/api';
@@ -13,15 +13,19 @@ type Props = {
   getText: () => string;
 };
 
+type ChatMessage = { role: 'user' | 'bot'; content: string[] };
+const initialMessage: ChatMessage = {
+  content: ['Ask me something about this paragraph!'],
+  role: 'bot'
+};
+
 const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
-  const chatRef = React.useRef<HTMLDivElement | null>(null);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [messages, setMessages] = React.useState<{ role: 'user' | 'bot'; content: string[] }[]>([
-    { content: ['Ask me something about this paragraph!'], role: 'bot' }
-  ]);
-  const [userInput, setUserInput] = React.useState('');
-  const [contentHistory, setContentHistory] = React.useState<Array<string>>([]);
-  const [roleHistory, setRoleHistory] = React.useState<Array<string>>([]);
+  const chatRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [messages, setMessages] = useState<ChatMessage[]>([initialMessage]);
+  const [userInput, setUserInput] = useState('');
+  const [contentHistory, setContentHistory] = useState<Array<string>>([]);
+  const [roleHistory, setRoleHistory] = useState<Array<string>>([]);
   const tokens = useTokens();
 
   const handleUserInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -132,7 +136,7 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     scrollToBottom();
   }, [messages, isLoading]);
 
