@@ -2,11 +2,13 @@ import React from 'react';
 import { Group, Rect } from 'react-konva';
 
 import CseMachine from '../CseMachine';
+import { CseAnimation } from '../CseMachineAnimation';
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
 import {
-  currentItemSAColor,
+  defaultActiveColor,
+  defaultStrokeColor,
   getTextWidth,
   getUnreferencedObjects,
   isClosure,
@@ -15,6 +17,7 @@ import {
   isUnassigned
 } from '../CseMachineUtils';
 import { ArrowFromFrame } from './arrows/ArrowFromFrame';
+import { GenericArrow } from './arrows/GenericArrow';
 import { Binding } from './Binding';
 import { Level } from './Level';
 import { Text } from './Text';
@@ -51,6 +54,8 @@ export class Frame extends Visible implements IHoverable {
   readonly environment: Env;
   /** the parent/enclosing frame of this frame (the frame above it) */
   readonly parentFrame: Frame | undefined;
+  /** arrow that is drawn from this frame to the parent frame */
+  readonly arrow: GenericArrow<Frame, Frame> | undefined;
 
   constructor(
     /** environment tree node that contains this frame */
@@ -69,6 +74,8 @@ export class Frame extends Visible implements IHoverable {
     this.leftSiblingFrame &&
       (this._x +=
         this.leftSiblingFrame.x() + this.leftSiblingFrame.totalWidth + Config.FrameMarginX);
+    // ensure x coordinate cannot be less than that of parent frame
+    this.parentFrame && (this._x = Math.max(this._x, this.parentFrame.x()));
 
     this.name = new Text(
       frameNames.get(this.environment.name) || this.environment.name,
@@ -157,6 +164,12 @@ export class Frame extends Visible implements IHoverable {
       : Config.FramePaddingY * 2;
 
     this.totalHeight = this.height() + this.name.height() + Config.TextPaddingY / 2;
+
+    if (this.parentFrame) this.arrow = new ArrowFromFrame(this).to(this.parentFrame);
+
+    if (CseMachine.getCurrentEnvId() === this.environment.id) {
+      CseAnimation.setCurrentFrame(this);
+    }
   }
 
   onMouseEnter = () => {};
@@ -165,7 +178,7 @@ export class Frame extends Visible implements IHoverable {
 
   draw(): React.ReactNode {
     return (
-      <Group key={Layout.key++}>
+      <Group ref={this.ref} key={Layout.key++}>
         {this.name.draw()}
         <Rect
           {...ShapeDefaultProps}
@@ -173,14 +186,18 @@ export class Frame extends Visible implements IHoverable {
           y={this.y()}
           width={this.width()}
           height={this.height()}
-          stroke={currentItemSAColor(CseMachine.getCurrentEnvId() === this.environment?.id)}
+          stroke={
+            CseMachine.getCurrentEnvId() === this.environment?.id
+              ? defaultActiveColor()
+              : defaultStrokeColor()
+          }
           cornerRadius={Config.FrameCornerRadius}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
           key={Layout.key++}
         />
         {this.bindings.map(binding => binding.draw())}
-        {this.parentFrame && new ArrowFromFrame(this).to(this.parentFrame).draw()}
+        {this.arrow?.draw()}
       </Group>
     );
   }

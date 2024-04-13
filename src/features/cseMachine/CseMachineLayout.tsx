@@ -32,6 +32,7 @@ import {
 import {
   assert,
   deepCopyTree,
+  defaultBackgroundColor,
   getNextChildren,
   isBuiltInFn,
   isClosure,
@@ -40,7 +41,6 @@ import {
   isGlobalFn,
   isNonGlobalFn,
   isPrimitiveData,
-  isSourceObject,
   isStreamFn,
   isUnassigned,
   setDifference
@@ -82,8 +82,12 @@ export class Layout {
   static previousControlComponent: ControlStack;
   static previousStashComponent: StashStack;
 
-  /** memoized values */
+  /**
+   * memoized values, where keys are either ids for arrays and closures,
+   * or the function objects themselves for built-in functions and stream functions
+   */
   static values = new Map<string | (() => any), Value>();
+
   /** memoized layout */
   static prevLayout: React.ReactNode;
   static currentDark: React.ReactNode;
@@ -93,6 +97,7 @@ export class Layout {
   static currentStackLight: React.ReactNode;
   static currentStackTruncLight: React.ReactNode;
   static stageRef: RefObject<any> = React.createRef();
+
   // buffer for faster rendering of diagram when scrolling
   static invisiblePaddingVertical: number = 300;
   static invisiblePaddingHorizontal: number = 300;
@@ -371,19 +376,16 @@ export class Layout {
         return existingValue;
       }
 
-      let newValue: Value | undefined;
       if (isDataArray(data)) {
-        newValue = new ArrayValue(data, reference);
+        return new ArrayValue(data, reference);
       } else if (isGlobalFn(data)) {
         assert(reference instanceof Binding);
-        newValue = new GlobalFnValue(data, reference);
+        return new GlobalFnValue(data, reference);
       } else if (isNonGlobalFn(data)) {
-        newValue = new FnValue(data, reference);
-      } else if (isSourceObject(data)) {
-        return new PrimitiveValue(data.toReplString(), reference);
+        return new FnValue(data, reference);
       }
 
-      return newValue ?? new PrimitiveValue(null, reference);
+      return new PrimitiveValue(null, reference);
     }
   }
 
@@ -510,15 +512,13 @@ export class Layout {
                 width: Layout.width(),
                 height: Layout.height(),
                 overflow: 'hidden',
-                backgroundColor: CseMachine.getPrintableMode()
-                  ? Config.PRINT_BACKGROUND
-                  : Config.SA_BLUE
+                backgroundColor: defaultBackgroundColor()
               }}
             >
               <Stage
                 width={Layout.stageWidth}
                 height={Layout.stageHeight}
-                ref={this.stageRef}
+                ref={Layout.stageRef}
                 draggable
                 onWheel={Layout.zoomStage}
                 className={classes['draggable']}
@@ -530,15 +530,16 @@ export class Layout {
                     y={0}
                     width={Layout.width()}
                     height={Layout.height()}
-                    fill={CseMachine.getPrintableMode() ? Config.PRINT_BACKGROUND : Config.SA_BLUE}
+                    fill={defaultBackgroundColor()}
                     key={Layout.key++}
                     listening={false}
                   />
                   {Layout.levels.map(level => level.draw())}
                   {CseMachine.getControlStash() && Layout.controlComponent.draw()}
                   {CseMachine.getControlStash() && Layout.stashComponent.draw()}
-                  {CseMachine.getControlStash() &&
-                    CseAnimation.animationComponents.map(c => c.draw())}
+                </Layer>
+                <Layer ref={CseAnimation.layerRef} listening={false}>
+                  {CseMachine.getControlStash() && CseAnimation.animations.map(c => c.draw())}
                 </Layer>
               </Stage>
             </div>

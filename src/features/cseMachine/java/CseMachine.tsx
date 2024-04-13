@@ -3,6 +3,7 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 
+import { defaultBackgroundColor } from '../CseMachineUtils';
 import { Config, ShapeDefaultProps } from './../CseMachineConfig';
 import { Control } from './components/Control';
 import { Environment } from './components/Environment';
@@ -115,7 +116,7 @@ export class CseMachine {
               width: Config.CanvasMinWidth,
               height: Config.CanvasMinHeight,
               overflow: 'hidden',
-              backgroundColor: Config.SA_BLUE
+              backgroundColor: defaultBackgroundColor()
             }}
           >
             <Stage
@@ -133,7 +134,7 @@ export class CseMachine {
                   y={0}
                   width={Config.CanvasMinWidth}
                   height={Config.CanvasMinHeight}
-                  fill={Config.SA_BLUE}
+                  fill={defaultBackgroundColor()}
                   key={CseMachine.key++}
                   listening={false}
                 />
