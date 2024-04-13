@@ -86,7 +86,7 @@ export const Config = Object.freeze({
   SA_BLUE: '#2c3e50',
   SA_FADED_BLUE: '#BBB',
   PRINT_BACKGROUND: 'white',
-  SA_CURRENT_ITEM: '#030fff',
+  SA_CURRENT_ITEM: '#030fff'
 });
 
 export const ShapeDefaultProps = Object.freeze({
