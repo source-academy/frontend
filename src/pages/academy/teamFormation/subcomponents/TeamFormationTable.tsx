@@ -62,8 +62,11 @@ const columns = [
         </React.Fragment>
       )),
     filterFn: (row, id: string | number, filterValue: any): boolean => {
-      const rowValue = row.original[id];
-      return Array.isArray(rowValue) && rowValue.includes(filterValue);
+      const rowValue = row.original[id as keyof typeof row.original];
+      if (typeof rowValue === 'string' || typeof rowValue === 'number') {
+        return rowValue === filterValue;
+      }
+      return rowValue.some(v => v === filterValue);
     }
   }),
   columnHelper.accessor(({ teamId }) => ({ teamId }), {
