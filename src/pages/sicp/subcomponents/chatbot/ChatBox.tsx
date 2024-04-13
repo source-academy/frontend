@@ -2,7 +2,7 @@ import { Button } from '@blueprintjs/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { useTokens } from 'src/commons/utils/Hooks';
-import { chat } from 'src/features/sicp/api';
+import { chat } from 'src/features/sicp/chatCompletion/api';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
 import classes from 'src/styles/Chatbot.module.scss';
 
