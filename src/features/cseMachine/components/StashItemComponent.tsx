@@ -127,7 +127,7 @@ export class StashItemComponent extends Visible implements IHoverable {
           <Tag
             {...ShapeDefaultProps}
             stroke="black"
-            fill={'black'}
+            fill="black"
             opacity={ControlStashConfig.TooltipOpacity}
           />
           <Text

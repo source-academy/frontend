@@ -168,7 +168,7 @@ export class FnValue extends Value implements IHoverable {
             visible={true}
             ref={this.labelRef}
           >
-            <KonvaTag stroke="black" fill={'white'} opacity={Config.FnTooltipOpacity} />
+            <KonvaTag stroke="black" fill="white" opacity={Config.FnTooltipOpacity} />
             <KonvaText
               text={this.exportTooltip}
               fontFamily={Config.FontFamily}
@@ -185,7 +185,7 @@ export class FnValue extends Value implements IHoverable {
             visible={false}
             ref={this.labelRef}
           >
-            <KonvaTag stroke="black" fill={'black'} opacity={Config.FnTooltipOpacity} />
+            <KonvaTag stroke="black" fill="black" opacity={Config.FnTooltipOpacity} />
             <KonvaText
               text={this.tooltip}
               fontFamily={Config.FontFamily}
