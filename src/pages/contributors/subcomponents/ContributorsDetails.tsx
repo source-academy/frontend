@@ -13,14 +13,15 @@ const ContributorsDetails: React.FC = () => (
       <p className={classes['description']}>
         The <i>Source Academy</i> is designed and developed by a team of students, most of who have
         used the system to learn the fundamentals of computing and enjoyed it. This page includes
-        all developers who contributed to the Source Academy <i>Merlin</i> (2023) and its precursors{' '}
-        <i>Rook</i> (2022), <i>Knight</i> (2020) and <i>Cadet</i> (2018). These versions succeeded
-        Source Academy 2 (2017) and ultimately the original Source Academy (2016).
+        all developers who contributed to the Source Academy <i>Strange</i> (2024) and its
+        precursors <i>Merlin</i> (2023), <i>Rook</i> (2022), <i>Knight</i> (2020) and <i>Cadet</i>{' '}
+        (2018). These versions succeeded Source Academy 2 (2017) and ultimately the original Source
+        Academy (2016).
       </p>
       <div className={classes['leadership']}>
         <H5>
           <strong>
-            <u>2023 Leadership (Merlin)</u>
+            <u>2024 Leadership (Strange)</u>
           </strong>
         </H5>
         <p>
@@ -30,47 +31,33 @@ const ContributorsDetails: React.FC = () => (
         </p>
         {dot}
         <p>
-          Chow En Rong,
-          <br />
-          Shen Yi Hong
+          Zhang Yao
           <br />
           <strong>(Frontend)</strong>
         </p>
         {dot}
         <p>
-          Chen Yanyu
+          Richard Dominick
           <br />
           <strong>(Backend)</strong>
         </p>
         {dot}
         <p>
-          Gokul Rajiv,
-          <br />
           Lee Hyung Woon
           <br />
           <strong>(Game)</strong>
         </p>
         {dot}
         <p>
-          Shen Yi Hong,
+          Kyriel Mortel Abad
           <br />
-          Zhan Jie,
-          <br />
-          <strong>(Source)</strong>
+          <strong>(Languages)</strong>
         </p>
         {dot}
         <p>
-          Lee Yi,
-          <br />
-          Joel Leow
+          Lee Yi
           <br />
           <strong>(Modules)</strong>
-        </p>
-        {dot}
-        <p>
-          Richard Dominick
-          <br />
-          <strong>(Robotics)</strong>
         </p>
         {dot}
         <p>
@@ -269,6 +256,61 @@ const ContributorsDetails: React.FC = () => (
           Marcus Tang
           <br />
           (Modules)
+        </p>
+      </div>
+      <div className={classes['leadership']}>
+        <p className={classes['evenWider']}>
+          <strong>2023 Leadership (Merlin)</strong>
+        </p>
+        <br />
+        <p>
+          Richard Dominick
+          <br />
+          <strong>(CTO)</strong>
+        </p>
+        {dot}
+        <p>
+          Chow En Rong,
+          <br />
+          Shen Yi Hong
+          <br />
+          <strong>(Frontend)</strong>
+        </p>
+        {dot}
+        <p>
+          Chen Yanyu
+          <br />
+          <strong>(Backend)</strong>
+        </p>
+        {dot}
+        <p>
+          Gokul Rajiv,
+          <br />
+          Lee Hyung Woon
+          <br />
+          <strong>(Game)</strong>
+        </p>
+        {dot}
+        <p>
+          Shen Yi Hong,
+          <br />
+          Zhan Jie,
+          <br />
+          <strong>(Source)</strong>
+        </p>
+        {dot}
+        <p>
+          Lee Yi,
+          <br />
+          Joel Leow
+          <br />
+          <strong>(Modules)</strong>
+        </p>
+        {dot}
+        <p>
+          Richard Dominick
+          <br />
+          <strong>(Robotics)</strong>
         </p>
       </div>
       <div className={classes['contributors']}>

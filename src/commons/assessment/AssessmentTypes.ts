@@ -62,7 +62,11 @@ export type AssessmentOverview = {
   gradingStatus: GradingStatus;
   id: number;
   isPublished?: boolean;
+  hasVotingFeatures: boolean;
+  hasTokenCounter?: boolean;
+  isVotingPublished?: boolean;
   maxXp: number;
+  earlySubmissionXp: number;
   number?: string; // For mission control
   openAt: string;
   private?: boolean;
@@ -98,6 +102,7 @@ export type AssessmentConfiguration = {
   hoursBeforeEarlyXpDecay: number;
   earlySubmissionXp: number;
   hasTokenCounter: boolean;
+  hasVotingFeatures: boolean;
 };
 
 export interface IProgrammingQuestion extends BaseQuestion {
@@ -238,6 +243,7 @@ export const overviewTemplate = (): AssessmentOverview => {
     coverImage: 'https://fakeimg.pl/300/',
     id: -1,
     maxXp: 0,
+    earlySubmissionXp: 0,
     openAt: '2000-01-01T00:00+08',
     title: 'Insert title here',
     reading: '',
@@ -246,7 +252,8 @@ export const overviewTemplate = (): AssessmentOverview => {
     story: 'mission',
     xp: 0,
     gradingStatus: 'none',
-    maxTeamSize: 1
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   };
 };
 

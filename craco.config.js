@@ -1,7 +1,7 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+/* eslint-disable @typescript-eslint/no-var-requires */
 const webpack = require('webpack');
 
-const cracoConfig = (module.exports = {
+const cracoConfig = {
   webpack: {
     configure: webpackConfig => {
       // avoid the entire process.env being inserted into the service worker
@@ -18,7 +18,7 @@ const cracoConfig = (module.exports = {
         plugin => plugin.constructor.name === 'InjectManifest'
       );
       if (injectManifestPlugin) {
-        injectManifestPlugin.config.maximumFileSizeToCacheInBytes = 15 * 1024 * 1024;
+        injectManifestPlugin.config.maximumFileSizeToCacheInBytes = 20 * 1024 * 1024;
       }
 
       // add rules to pack WASM (for Sourceror)
@@ -47,9 +47,10 @@ const cracoConfig = (module.exports = {
         'https': require.resolve('https-browserify'),
         'os': require.resolve('os-browserify/browser'),
         'path/posix': require.resolve('path-browserify'),
+        'process/browser': require.resolve('process/browser'),
         'stream': require.resolve('stream-browserify'),
         'timers': require.resolve('timers-browserify'),
-        'url': require.resolve('url/')
+        'url': require.resolve('url/'),
       };
 
       // workaround .mjs files by Acorn
@@ -62,11 +63,16 @@ const cracoConfig = (module.exports = {
         },
       });
 
-      // Ignore warnings for dependencies that do not ship with a source map.
-      // This is because we cannot do anything about our dependencies.
-      webpackConfig.ignoreWarnings = [{
+      webpackConfig.ignoreWarnings = [{ 
+        // Ignore warnings for dependencies that do not ship with a source map.
+        // This is because we cannot do anything about our dependencies.
         module: /node_modules/,
         message: /Failed to parse source map/
+      }, {
+        // Ignore the warnings that occur because js-slang uses dynamic imports
+        // to load Source modules
+        module: /js-slang\/dist\/modules\/loader\/loaders.js/,
+        message: /Critical dependency: the request of a dependency is an expression/
       }];
 
       webpackConfig.plugins = [
@@ -78,7 +84,7 @@ const cracoConfig = (module.exports = {
         // Make the 'buffer' Node.js module available in the browser.
         new webpack.ProvidePlugin({
           Buffer: ['buffer', 'Buffer'],
-        })
+        }),
       ];
 
       // Workaround to suppress warnings caused by ts-morph in js-slang
@@ -131,7 +137,9 @@ const cracoConfig = (module.exports = {
           'query-string',
           'decode-uri-component',
           'split-on-first',
-          'filter-obj'
+          'filter-obj',
+          '@sourceacademy/c-slang',
+          'java-parser'
         ),
         '^.+\\.module\\.(css|sass|scss)$'
       ];
@@ -152,7 +160,7 @@ const cracoConfig = (module.exports = {
       ['@babel/preset-typescript']
     ]
   }
-});
+}
 
 const ignoreModulePaths = (...paths) => {
   const moduleRoot = replaceSlashes('/node_modules/');
@@ -165,3 +173,5 @@ const ignoreModulePaths = (...paths) => {
 const replaceSlashes = target => {
   return target.replaceAll('/', '[/\\\\]');
 };
+
+module.exports = cracoConfig

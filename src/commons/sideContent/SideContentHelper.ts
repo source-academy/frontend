@@ -84,6 +84,13 @@ export const useSideContent = (location: SideContentLocation, defaultTab?: SideC
   const dispatch = useDispatch();
   const setSelectedTab = useCallback(
     (newId: SideContentType) => {
+      if (
+        (selectedTab === SideContentType.substVisualizer ||
+          selectedTab === SideContentType.cseMachine) &&
+        newId === SideContentType.mobileEditorRun
+      ) {
+        return;
+      }
       dispatch(visitSideContent(newId, selectedTab, location));
     },
     [dispatch, location, selectedTab]

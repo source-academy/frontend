@@ -1129,11 +1129,61 @@ export const deleteSourcecastEntry = async (
 };
 
 /**
+ * GET /courses/{courseId}/admin/assessments/{assessmentId}/scoreLeaderboard
+ */
+export const getScoreLeaderboard = async (
+  assessmentId: number,
+  tokens: Tokens
+): Promise<ContestEntry[] | null> => {
+  const resp = await request(
+    `${courseId()}/admin/assessments/${assessmentId}/scoreLeaderboard`,
+    'GET',
+    {
+      ...tokens
+    }
+  );
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+  const scoreLeaderboard = await resp.json();
+  return scoreLeaderboard as ContestEntry[];
+};
+
+/**
+ * GET /courses/{courseId}/admin/assessments/{assessmentId}/popularVoteLeaderboard
+ */
+export const getPopularVoteLeaderboard = async (
+  assessmentId: number,
+  tokens: Tokens
+): Promise<ContestEntry[] | null> => {
+  const resp = await request(
+    `${courseId()}/admin/assessments/${assessmentId}/popularVoteLeaderboard`,
+    'GET',
+    {
+      ...tokens
+    }
+  );
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+  const popularVoteLeaderboard = await resp.json();
+  return popularVoteLeaderboard as ContestEntry[];
+};
+
+/**
  * POST /courses/{courseId}/admin/assessments/{assessmentId}
  */
 export const updateAssessment = async (
   id: number,
-  body: { openAt?: string; closeAt?: string; isPublished?: boolean; maxTeamSize?: number },
+  body: {
+    openAt?: string;
+    closeAt?: string;
+    isPublished?: boolean;
+    maxTeamSize?: number;
+    hasTokenCounter?: boolean;
+    hasVotingFeatures?: boolean;
+    assignEntriesForVoting?: boolean;
+  },
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/assessments/${id}`, 'POST', {

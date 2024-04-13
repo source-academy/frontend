@@ -67,3 +67,30 @@
     width: 28px;
   }
 }
+
+.voting-related-configs,
+.general-configs,
+.team-related-configs {
+  margin-top: 20px;
+
+  .voting-related-controls {
+    display: flex;
+    flex-direction: column;
+
+    .control-button-container {
+      display: flex;
+      margin-left: 5px;
+    }
+  }
+
+  .numeric-input-container {
+    display: flex;
+    margin-left: 14px;
+    gap: 8px;
+    align-items: center;
+
+    .max-team-size {
+      margin-top: 10px;
+    }
+  }
+}

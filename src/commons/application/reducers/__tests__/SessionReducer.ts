@@ -159,7 +159,8 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       earlySubmissionXp: 200,
       isManuallyGraded: false,
       displayInDashboard: true,
-      hasTokenCounter: false
+      hasTokenCounter: false,
+      hasVotingFeatures: false
     },
     {
       assessmentConfigId: 1,
@@ -171,7 +172,8 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       earlySubmissionXp: 200,
       isManuallyGraded: false,
       displayInDashboard: true,
-      hasTokenCounter: false
+      hasTokenCounter: false,
+      hasVotingFeatures: false
     },
     {
       assessmentConfigId: 1,
@@ -183,7 +185,8 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       earlySubmissionXp: 200,
       isManuallyGraded: false,
       displayInDashboard: true,
-      hasTokenCounter: false
+      hasTokenCounter: false,
+      hasVotingFeatures: false
     }
   ];
 
@@ -332,6 +335,7 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
     coverImage: 'test_string',
     id: 0,
     maxXp: 0,
+    earlySubmissionXp: 0,
     openAt: 'test_string',
     title: 'test_string',
     shortSummary: 'test_string',
@@ -339,7 +343,8 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
     story: null,
     xp: 0,
     gradingStatus: GradingStatuses.none,
-    maxTeamSize: 5
+    maxTeamSize: 5,
+    hasVotingFeatures: false
   }
 ];
 
@@ -352,6 +357,7 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
     fileName: 'test_sting_0',
     id: 1,
     maxXp: 1,
+    earlySubmissionXp: 0,
     openAt: 'test_string_0',
     title: 'test_string_0',
     shortSummary: 'test_string_0',
@@ -359,7 +365,8 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
     story: null,
     xp: 1,
     gradingStatus: GradingStatuses.grading,
-    maxTeamSize: 1
+    maxTeamSize: 1,
+    hasVotingFeatures: false
   }
 ];
 

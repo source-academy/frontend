@@ -2,7 +2,9 @@ import { Position } from '@blueprintjs/core';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
+  cLanguages,
   getLanguageConfig,
+  javaLanguages,
   pyLanguages,
   SALanguage,
   schemeLanguages,
@@ -21,7 +23,9 @@ const defaultSublanguages: {
 } = {
   [SupportedLanguage.JAVASCRIPT]: sourceLanguages[0],
   [SupportedLanguage.PYTHON]: pyLanguages[0],
-  [SupportedLanguage.SCHEME]: schemeLanguages[0]
+  [SupportedLanguage.SCHEME]: schemeLanguages[0],
+  [SupportedLanguage.JAVA]: javaLanguages[0],
+  [SupportedLanguage.C]: cLanguages[0]
 };
 
 const NavigationBarLangSelectButton = () => {

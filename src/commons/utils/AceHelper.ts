@@ -50,6 +50,10 @@ export const getModeString = (chapter: Chapter, variant: Variant, library: strin
     case Chapter.SCHEME_4:
     case Chapter.FULL_SCHEME:
       return 'scheme';
+    case Chapter.FULL_JAVA:
+      return 'java';
+    case Chapter.FULL_C:
+      return 'c_cpp';
     default:
       return `source${chapter}${variant}${library}`;
   }

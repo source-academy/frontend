@@ -1,12 +1,15 @@
+import { compileAndRun as compileAndRunCCode } from '@sourceacademy/c-slang/ctowasm/dist/index';
 import { tokenizer } from 'acorn';
 import { Context, interrupt, Result, resume, runFilesInContext } from 'js-slang';
 import { ACORN_PARSE_OPTIONS, TRY_AGAIN } from 'js-slang/dist/constants';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, ErrorSeverity, ErrorType, SourceError, Variant } from 'js-slang/dist/types';
 import { SagaIterator } from 'redux-saga';
 import { call, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
+import { makeCCompilerConfig, specialCReturnObject } from 'src/commons/utils/CToWasmHelper';
+import { javaRun } from 'src/commons/utils/JavaHelper';
 import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
 import { EVAL_STORY } from 'src/features/stories/StoriesTypes';
 
@@ -157,9 +160,92 @@ export function* evalCode(
       );
   }
 
+  function reportCCompilationError(errorMessage: string, context: Context) {
+    context.errors.push({
+      type: ErrorType.SYNTAX,
+      severity: ErrorSeverity.ERROR,
+      location: {
+        start: {
+          line: 0,
+          column: 0
+        },
+        end: {
+          line: 0,
+          column: 0
+        }
+      },
+      explain: () => errorMessage,
+      elaborate: () => ''
+    });
+  }
+
+  function reportCRuntimeError(errorMessage: string, context: Context) {
+    context.errors.push({
+      type: ErrorType.RUNTIME,
+      severity: ErrorSeverity.ERROR,
+      location: {
+        start: {
+          line: 0,
+          column: 0
+        },
+        end: {
+          line: 0,
+          column: 0
+        }
+      },
+      explain: () => errorMessage,
+      elaborate: () => ''
+    });
+  }
+
+  async function cCompileAndRun(cCode: string, context: Context) {
+    const cCompilerConfig = await makeCCompilerConfig(cCode, context);
+    return await compileAndRunCCode(cCode, cCompilerConfig)
+      .then(compilationResult => {
+        if (compilationResult.status === 'failure') {
+          // report any compilation failure
+          reportCCompilationError(
+            `Compilation failed with the following error(s):\n\n${compilationResult.errorMessage}`,
+            context
+          );
+          return {
+            status: 'error',
+            context
+          };
+        }
+        if (compilationResult.warnings.length > 0) {
+          return {
+            status: 'finished',
+            context,
+            value: {
+              toReplString: () =>
+                `Compilation and program execution successful with the following warning(s):\n${compilationResult.warnings.join(
+                  '\n'
+                )}`
+            }
+          };
+        }
+        if (specialCReturnObject === null) {
+          return {
+            status: 'finished',
+            context,
+            value: { toReplString: () => 'Compilation and program execution successful.' }
+          };
+        }
+        return { status: 'finished', context, value: specialCReturnObject };
+      })
+      .catch((e: any): Result => {
+        console.log(e);
+        reportCRuntimeError(e.message, context);
+        return { status: 'error' };
+      });
+  }
+
   const isNonDet: boolean = context.variant === Variant.NON_DET;
   const isLazy: boolean = context.variant === Variant.LAZY;
   const isWasm: boolean = context.variant === Variant.WASM;
+  const isC: boolean = context.chapter === Chapter.FULL_C;
+  const isJava: boolean = context.chapter === Chapter.FULL_JAVA;
 
   let lastDebuggerResult = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].lastDebuggerResult
@@ -177,6 +263,10 @@ export function* evalCode(
         ? call(resume, lastDebuggerResult)
         : isNonDet || isLazy || isWasm
         ? call_variant(context.variant)
+        : isC
+        ? call(cCompileAndRun, entrypointCode, context)
+        : isJava
+        ? call(javaRun, entrypointCode, context)
         : call(
             runFilesInContext,
             isFolderModeEnabled
@@ -240,14 +330,31 @@ export function* evalCode(
   ) {
     yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
     if (!isStoriesBlock) {
-      yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
-      // enable the CSE machine visualizer during errors
-      if (context.executionMethod === 'cse-machine' && needUpdateCse) {
-        yield put(actions.updateStepsTotal(context.runtime.envStepsTotal + 1, workspaceLocation));
-        yield put(actions.toggleUpdateCse(false, workspaceLocation as any));
-        yield put(
-          actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation)
-        );
+      const specialError = checkSpecialError(context.errors);
+      if (specialError !== null) {
+        switch (specialError) {
+          case 'source_academy_interrupt': {
+            yield* handleSourceAcademyInterrupt(context, entrypointCode, workspaceLocation);
+            break;
+          }
+          // This should not happen but we check just in case
+          default: {
+            yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
+          }
+        }
+      } else {
+        yield put(actions.evalInterpreterError(context.errors, workspaceLocation));
+        // enable the CSE machine visualizer during errors
+        if (context.executionMethod === 'cse-machine' && needUpdateCse) {
+          yield put(actions.updateStepsTotal(context.runtime.envStepsTotal + 1, workspaceLocation));
+          yield put(actions.toggleUpdateCse(false, workspaceLocation as any));
+          yield put(
+            actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation)
+          );
+          yield put(
+            actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation)
+          );
+        }
       }
     } else {
       // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
@@ -315,10 +422,42 @@ export function* evalCode(
     // But TS can't infer that yet, so we need a typecast here.
     yield put(actions.toggleUpdateCse(false, workspaceLocation as any));
     yield put(actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation));
+    yield put(actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation));
   }
   // Stop the home icon from flashing for an error if it is doing so since the evaluation is successful
   if (context.executionMethod === 'cse-machine' || context.executionMethod === 'interpreter') {
     const introIcon = document.getElementById(SideContentType.introduction + '-icon');
     introIcon && introIcon.classList.remove('side-content-tab-alert-error');
   }
+}
+
+// Special module errors
+const specialErrors = ['source_academy_interrupt'] as const;
+type SpecialError = (typeof specialErrors)[number];
+
+function checkSpecialError(errors: SourceError[]): SpecialError | null {
+  if (errors.length !== 1) {
+    return null;
+  }
+  const firstError = errors[0] as any;
+  if (typeof firstError.error !== 'string') {
+    return null;
+  }
+  if (!specialErrors.includes(firstError.error)) {
+    return null;
+  }
+
+  return firstError.error as SpecialError;
+}
+
+function* handleSourceAcademyInterrupt(
+  context: Context,
+  entrypointCode: string,
+  workspaceLocation: WorkspaceLocation
+) {
+  yield put(
+    actions.evalInterpreterSuccess('Program has been interrupted by module', workspaceLocation)
+  );
+  context.errors = [];
+  yield put(actions.notifyProgramEvaluated(null, null, entrypointCode, context, workspaceLocation));
 }
