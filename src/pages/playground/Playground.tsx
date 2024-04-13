@@ -607,6 +607,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     return (
       <ControlBarGoogleDriveButtons
         isFolderModeEnabled={isFolderModeEnabled}
+        workspaceLocation={workspaceLocation}
         currPersistenceFile={persistenceFile}
         loggedInAs={persistenceUser}
         isDirty={persistenceIsDirty}
@@ -629,7 +630,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     persistenceUser,
     persistenceIsDirty,
     dispatch,
-    googleAccessToken
+    googleAccessToken,
+    workspaceLocation
   ]);
 
   const githubPersistenceIsDirty =
@@ -641,6 +643,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       <ControlBarGitHubButtons
         key="github"
         isFolderModeEnabled={isFolderModeEnabled}
+        workspaceLocation={workspaceLocation}
         currPersistenceFile={persistenceFile}
         loggedInAs={githubOctokitObject.octokit}
         githubSaveInfo={githubSaveInfo}
@@ -659,7 +662,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     githubPersistenceIsDirty,
     githubSaveInfo,
     isFolderModeEnabled,
-    persistenceFile
+    persistenceFile,
+    workspaceLocation
   ]);
 
   const executionTime = useMemo(

@@ -15,6 +15,7 @@ const stateToIntent: { [state in PersistenceState]: Intent } = {
 
 type Props = {
   isFolderModeEnabled: boolean;
+  workspaceLocation: string;
   loggedInAs?: string;
   accessToken?: string;
   currPersistenceFile?: PersistenceFile;
@@ -35,12 +36,13 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
       ? 'DIRTY'
       : 'SAVED'
     : 'INACTIVE';
+  const isNotPlayground = props.workspaceLocation !== "playground";
   const mainButton = (
     <ControlButton
       label={(props.currPersistenceFile && props.currPersistenceFile.name) || 'Google Drive'}
       icon={IconNames.CLOUD}
       options={{ intent: stateToIntent[state] }}
-      //isDisabled={props.isFolderModeEnabled}
+      isDisabled={isNotPlayground}
     />
   );
   const openButton = (
@@ -86,13 +88,12 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
     <ControlButton label="Log In" icon={IconNames.LOG_IN} onClick={props.onClickLogIn} />
   );
 
-  //const tooltipContent = props.isFolderModeEnabled
-  //  ? 'Currently unsupported in Folder mode'
-  //  : undefined;
-  const tooltipContent = undefined;
+  const tooltipContent = isNotPlayground
+    ? 'Currently unsupported in non playground workspaces'
+    : undefined;
 
   return (
-    <Tooltip2 content={tooltipContent} disabled={false}>
+    <Tooltip2 content={tooltipContent} disabled={tooltipContent === undefined}>
       <Popover2
         autoFocus={false}
         content={
@@ -108,7 +109,7 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
         }
         onOpening={props.onPopoverOpening}
         popoverClassName={Classes.POPOVER_DISMISS}
-        //disabled={props.isFolderModeEnabled}
+        disabled={isNotPlayground}
       >
         {mainButton}
       </Popover2>
