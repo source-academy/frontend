@@ -1,11 +1,11 @@
 import { RectConfig } from 'konva/lib/shapes/Rect';
 import { TextConfig } from 'konva/lib/shapes/Text';
 import { Group } from 'react-konva';
+import { SharedProperties } from 'src/commons/utils/TypeHelper';
 
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
 import { Animatable, AnimatableTo, AnimationConfig } from './Animatable';
 import { AnimatedRectComponent, AnimatedTextComponent } from './AnimationComponents';
-import { SharedProperties } from './AnimationUtils';
 
 type TextRectSharedConfig = SharedProperties<TextConfig, RectConfig>;
 
