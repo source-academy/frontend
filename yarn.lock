@@ -8024,10 +8024,10 @@ java-parser@^2.0.5:
     chevrotain-allstar "0.3.1"
     lodash "4.17.21"
 
-java-slang@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/java-slang/-/java-slang-1.0.6.tgz#34a68954a8dfb5bde8572d49a6bea170d7026749"
-  integrity sha512-CHq2s9xuzuuPfygRp9pQncfPfIuzpHivXn3wfy4QBiQ801IvdVFL3w/nV6qQn6GUG+kvOU+qCuxUFsFH8X5Dhg==
+java-slang@^1.0.13:
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/java-slang/-/java-slang-1.0.13.tgz#601454c9dd28a41ea6918dab51a7e65401d2c2d9"
+  integrity sha512-xBh84Gcp7iyc3o9bWDbaIa7GXf75tpUVmDrd/gXIAU/gxNARitJdl5xCjQW5y4iesqwucV7cY+Ewx6MIt4xKeQ==
   dependencies:
     "@types/lodash" "^4.14.198"
     java-parser "^2.0.5"
