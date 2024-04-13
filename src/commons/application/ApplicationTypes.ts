@@ -219,7 +219,7 @@ export const javaLanguages: SALanguage[] = [
     variant: Variant.DEFAULT,
     displayName: 'Java',
     mainLanguage: SupportedLanguage.JAVA,
-    supports: {}
+    supports: { cseMachine: true }
   }
 ];
 export const cLanguages: SALanguage[] = [
