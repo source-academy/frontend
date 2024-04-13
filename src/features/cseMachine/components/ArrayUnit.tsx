@@ -1,3 +1,4 @@
+import { Text } from 'konva/lib/shapes/Text';
 import React from 'react';
 import { Text as KonvaText } from 'react-konva';
 
@@ -32,7 +33,7 @@ export class ArrayUnit extends Visible {
   /** check if this unit is the main reference of the value */
   readonly isMainReference: boolean;
   arrow: Arrow | undefined = undefined;
-  readonly indexRef = React.createRef<any>();
+  readonly indexRef = React.createRef<Text>();
 
   constructor(
     /** index of this unit in its parent */
@@ -76,7 +77,7 @@ export class ArrayUnit extends Visible {
     if (this.isLastUnit)
       cornerRadius.upperRight = cornerRadius.lowerRight = Config.DataCornerRadius;
 
-    const indexProps = {
+    const indexProps: React.ComponentProps<typeof KonvaText> = {
       fontFamily: defaultOptions.fontFamily,
       fontSize: defaultOptions.fontSize,
       fontStyle: defaultOptions.fontStyle,
