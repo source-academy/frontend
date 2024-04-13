@@ -17,8 +17,8 @@ export class ArrowFromStashItemComponent extends GenericArrow<
     if (!to) return [];
 
     const steps: StepsArray = [
-      (x, y) => [x + from.width() / 2, y + from.height() / 1],
-      () => [to.x() + (to.x() < from.x() ? to.width() / 2 : 0), to.y()]
+      (x, y) => [x + from.width() / 2, y + from.height()],
+      (x, y) => [to.x() + (to.x() < x ? to.width() / 2 : 0), to.y()]
     ];
 
     return steps;

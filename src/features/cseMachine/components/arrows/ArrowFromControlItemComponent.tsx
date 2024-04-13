@@ -17,10 +17,11 @@ export class ArrowFromControlItemComponent extends GenericArrow<
     if (!to) return [];
 
     const steps: StepsArray = [
-      (x, y) => [x + from.width() / 1, y + from.height() / 2],
+      (x, y) => [x + from.width(), y + from.height() / 2],
       () => [
         to.x(),
         to.y() +
+          // Draw arrow slightly below frame corner if frame is far enough
           (to.x() > ControlStashConfig.ControlItemWidth + 100
             ? ControlStashConfig.ControlItemTextPadding
             : 0)
