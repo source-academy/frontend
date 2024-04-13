@@ -23,7 +23,7 @@ export class ArrayValue extends Value {
     firstReference: ReferenceType
   ) {
     super();
-    Layout.memoizeValue(this);
+    Layout.memoizeValue(data, this);
     this.addReference(firstReference);
   }
 
@@ -72,6 +72,15 @@ export class ArrayValue extends Value {
       );
 
       this.units = [unit, ...this.units];
+    }
+  }
+
+  markAsReferenced() {
+    if (this.isReferenced()) return;
+    super.markAsReferenced();
+    for (const unit of this.units) {
+      unit.index.options.faded = false;
+      unit.value.markAsReferenced();
     }
   }
 
