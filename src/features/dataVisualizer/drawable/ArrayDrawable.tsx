@@ -27,12 +27,12 @@ class ArrayDrawable extends React.PureComponent<ArrayProps> {
           <Text
             key={'' + nodeValue + index}
             text={textToDisplay}
-            align={'center'}
+            align="center"
             width={Config.BoxWidth}
             x={Config.BoxWidth * index}
             y={Math.floor((Config.BoxHeight - 1.2 * 12) / 2)}
             fontStyle={textValue === undefined ? 'italic' : 'normal'}
-            fill={'white'}
+            fill="white"
             preventDefault={false}
           />
         );
@@ -55,7 +55,7 @@ class ArrayDrawable extends React.PureComponent<ArrayProps> {
           height={Config.BoxHeight}
           strokeWidth={Config.StrokeWidth}
           stroke={Config.Stroke}
-          fill={'#17181A'}
+          fill="#17181A"
           preventDefault={false}
         />
         {/* Vertical lines in the box */}

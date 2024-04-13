@@ -31,7 +31,7 @@ import React, { useState } from 'react';
 import { objectKeys } from 'src/commons/utils/TypeHelper';
 import { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
 
-import { AssessmentTypeBadge } from '../../teamFormation/subcomponents/TeamFormationBadges';
+import { AssessmentTypeBadge } from '../../grading/subcomponents/GradingBadges';
 import TeamFormationFilters from '../../teamFormation/subcomponents/TeamFormationFilters';
 import TeamFormationActions from './TeamFormationActions';
 

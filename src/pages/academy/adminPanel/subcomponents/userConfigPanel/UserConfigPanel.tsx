@@ -79,7 +79,7 @@ const UserConfigPanel: React.FC<Props> = props => {
   const grid = (
     <div className="Grid ag-grid-parent ag-theme-balham">
       <AgGridReact
-        domLayout={'autoHeight'}
+        domLayout="autoHeight"
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}

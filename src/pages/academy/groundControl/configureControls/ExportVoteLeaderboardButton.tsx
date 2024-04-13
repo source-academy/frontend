@@ -1,17 +1,15 @@
 import { IconNames } from '@blueprintjs/icons';
 import { createGrid, GridOptions } from 'ag-grid-community';
-import { Tokens } from 'src/commons/application/types/SessionTypes';
 import ControlButton from 'src/commons/ControlButton';
 import { getPopularVoteLeaderboard } from 'src/commons/sagas/RequestsSaga';
-import { useSession } from 'src/commons/utils/Hooks';
+import { useTokens } from 'src/commons/utils/Hooks';
 
 type Props = {
   assessmentId: number;
 };
 
 const ExportVoteLeaderboardButton: React.FC<Props> = ({ assessmentId }) => {
-  const { accessToken, refreshToken } = useSession();
-  const tokens = { accessToken, refreshToken } as Tokens;
+  const tokens = useTokens({ throwWhenEmpty: true });
 
   // onClick handler for fetching popular vote leaderboard, putting it into a grid and exporting data
   const exportPopularVoteLeaderboardToCsv = async () => {
