@@ -30,6 +30,7 @@ import {
   setSessionDetails,
   setSharedbConnected
 } from '../collabEditing/CollabEditingActions';
+import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
@@ -49,7 +50,6 @@ import {
   evalEditor,
   evalRepl,
   moveCursor,
-  notifyProgramEvaluated,
   removeEditorTab,
   removeEditorTabForFile,
   removeEditorTabsForDirectory,
@@ -841,17 +841,17 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
           breakpointSteps: action.payload.breakpointSteps
         }
       };
-    })
-    .addCase(notifyProgramEvaluated, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-
-      const debuggerContext = state[workspaceLocation].debuggerContext;
-      debuggerContext.result = action.payload.result;
-      debuggerContext.lastDebuggerResult = action.payload.lastDebuggerResult;
-      debuggerContext.code = action.payload.code;
-      debuggerContext.context = action.payload.context;
-      debuggerContext.workspaceLocation = action.payload.workspaceLocation;
     });
+  // .addCase(notifyProgramEvaluated, (state, action) => {
+  //   const workspaceLocation = getWorkspaceLocation(action);
+
+  //   const debuggerContext = state[workspaceLocation].debuggerContext;
+  //   debuggerContext.result = action.payload.result;
+  //   debuggerContext.lastDebuggerResult = action.payload.lastDebuggerResult;
+  //   debuggerContext.code = action.payload.code;
+  //   debuggerContext.context = action.payload.context;
+  //   debuggerContext.workspaceLocation = action.payload.workspaceLocation;
+  // });
 });
 
 /** Temporarily kept to prevent conflicts */
@@ -887,6 +887,23 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
           lastNonDetResult: action.payload.lastNonDetResult
         }
       };
+    case NOTIFY_PROGRAM_EVALUATED: {
+      const debuggerContext = {
+        ...state[workspaceLocation].debuggerContext,
+        result: action.payload.result,
+        lastDebuggerResult: action.payload.lastDebuggerResult,
+        code: action.payload.code,
+        context: action.payload.context,
+        workspaceLocation: action.payload.workspaceLocation
+      };
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          debuggerContext
+        }
+      };
+    }
     default:
       return state;
   }
