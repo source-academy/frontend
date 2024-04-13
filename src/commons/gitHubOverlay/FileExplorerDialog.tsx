@@ -171,17 +171,6 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
         }
 
         if (saveType === 'Create') {
-          const persistenceFile = getPersistenceFile(filePath);
-          if (persistenceFile === undefined) {
-            throw new Error('persistence file not found for this filepath: ' + filePath);
-          }
-          const parentFolderPath = persistenceFile.parentFolderPath;
-          if (parentFolderPath === undefined) {
-            throw new Error(
-              'repository name or parentfolderpath not found for this persistencefile: ' +
-                persistenceFile
-            );
-          }
           performCreatingSave(
             props.octokit,
             githubLoginID,
