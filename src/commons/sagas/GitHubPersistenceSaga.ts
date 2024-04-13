@@ -309,7 +309,7 @@ function* githubSaveAll(): any {
 }
 
 function* githubCreateFile({ payload }: ReturnType<typeof actions.githubCreateFile>): any {
-  yield call(store.dispatch, actions.disableFileSystemContextMenus());
+  // yield call(store.dispatch, actions.disableFileSystemContextMenus());
 
   const filePath = payload;
 
@@ -421,7 +421,7 @@ function* githubDeleteFile({ payload }: ReturnType<typeof actions.githubDeleteFi
 }
 
 function* githubDeleteFolder({ payload }: ReturnType<typeof actions.githubDeleteFolder>): any {
-  yield call(store.dispatch, actions.disableFileSystemContextMenus());
+  //yield call(store.dispatch, actions.disableFileSystemContextMenus());
 
   const filePath = payload;
 

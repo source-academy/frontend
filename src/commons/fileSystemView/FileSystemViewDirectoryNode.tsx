@@ -6,6 +6,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { githubCreateFile, githubDeleteFolder } from 'src/features/github/GitHubActions';
 import {
+  persistenceCreateFile,
   persistenceCreateFolder,
   persistenceDeleteFolder
 } from 'src/features/persistence/PersistenceActions';
@@ -123,7 +124,7 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
         if (err) {
           console.error(err);
         }
-        // dispatch(persistenceCreateFile(newFilePath));
+        dispatch(persistenceCreateFile(newFilePath));
         dispatch(githubCreateFile(newFilePath));
         forceRefreshFileSystemViewList();
       });
@@ -172,7 +173,7 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
         // }
         // informUserGithubCannotCreateFolder();
         // dispatch(enableFileSystemContextMenus());
-        // forceRefreshFileSystemViewList();
+        forceRefreshFileSystemViewList();
       });
     });
   };

@@ -42,7 +42,7 @@ import {
   showSuccessMessage,
   showWarningMessage
 } from '../utils/notifications/NotificationsHelper';
-import { filePathRegex } from '../utils/PersistenceHelper';
+import { areAllFilesSavedGoogleDrive, filePathRegex } from '../utils/PersistenceHelper';
 import { AsyncReturnType } from '../utils/TypeHelper';
 import { EditorTabState } from '../workspace/WorkspaceTypes';
 import { safeTakeEvery as takeEvery, safeTakeLatest as takeLatest } from './SafeEffects';
@@ -299,7 +299,6 @@ export function* persistenceSaga(): SagaIterator {
   });
 
   yield takeLatest(PERSISTENCE_SAVE_FILE_AS, function* (): any {
-    // TODO wrap first part in try catch finally block
     let toastKey: string | undefined;
     const persistenceFileArray: PersistenceFile[] = yield select(
       (state: OverallState) => state.fileSystem.persistenceFileArray
@@ -425,6 +424,21 @@ export function* persistenceSaga(): SagaIterator {
             );
             yield call(writeFileRecursively, fileSystem, localFileTarget.path!, code);
             yield call(store.dispatch, actions.updateRefreshFileViewKey());
+
+            // Check if all files are now updated
+            const updatedPersistenceFileArray: PersistenceFile[] = yield select(
+              (state: OverallState) => state.fileSystem.persistenceFileArray
+            );
+            if (areAllFilesSavedGoogleDrive(updatedPersistenceFileArray)) {
+              yield put(
+                actions.playgroundUpdatePersistenceFolder({
+                  id: currPersistenceFile.id,
+                  name: currPersistenceFile.name,
+                  parentId: currPersistenceFile.parentId,
+                  lastSaved: new Date()
+                })
+              );
+            }
           } else {
             yield call(updateFile, pickedFile.id, pickedFile.name, MIME_SOURCE, code, config);
           }
@@ -561,6 +575,7 @@ export function* persistenceSaga(): SagaIterator {
     let toastKey: string | undefined;
 
     try {
+      yield call(ensureInitialisedAndAuthorised);
       const [currFolderObject] = yield select((state: OverallState) => [
         state.playground.persistenceFile
       ]);
@@ -806,6 +821,12 @@ export function* persistenceSaga(): SagaIterator {
           throw new Error('this file is not in persistenceFileArray: ' + currFullFilePath);
         }
 
+        if (!currPersistenceFile.lastEdit || (currPersistenceFile.lastSaved && currPersistenceFile.lastEdit < currPersistenceFile.lastSaved)) {
+          // no need to update
+          yield call(console.log, "No need to update", currPersistenceFile);
+          continue;
+        }
+
         if (!currPersistenceFile.id || !currPersistenceFile.parentId) {
           // get folder
           throw new Error('this file does not have id/parentId: ' + currFullFilePath);
@@ -882,7 +903,6 @@ export function* persistenceSaga(): SagaIterator {
       let toastKey: string | undefined;
 
       const [currFolderObject] = yield select(
-        // TODO resolve type here?
         (state: OverallState) => [state.playground.persistenceFile]
       );
 
@@ -941,6 +961,22 @@ export function* persistenceSaga(): SagaIterator {
             `${currPersistenceFile.name} successfully saved to Google Drive.`,
             1000
           );
+
+          // Check if all files are now updated
+          const updatedPersistenceFileArray: PersistenceFile[] = yield select(
+            (state: OverallState) => state.fileSystem.persistenceFileArray
+          );
+          if (areAllFilesSavedGoogleDrive(updatedPersistenceFileArray)) {
+            yield put(
+              actions.playgroundUpdatePersistenceFolder({
+                id: currFolderObject.id,
+                name: currFolderObject.name,
+                parentId: currFolderObject.parentId,
+                lastSaved: new Date()
+              })
+            );
+          }
+
           return;
         }
 
@@ -968,13 +1004,12 @@ export function* persistenceSaga(): SagaIterator {
   yield takeEvery(
     PERSISTENCE_CREATE_FILE,
     function* ({ payload }: ReturnType<typeof actions.persistenceCreateFile>) {
-      yield call(store.dispatch, actions.disableFileSystemContextMenus());
-
       try {
+        yield call(store.dispatch, actions.disableFileSystemContextMenus());
         const newFilePath = payload;
         yield call(console.log, 'create file ', newFilePath);
 
-        // look for parent folder persistenceFile TODO modify action so name is supplied?
+        // look for parent folder persistenceFile
         const regexResult = filePathRegex.exec(newFilePath)!;
         const parentFolderPath = regexResult ? regexResult[1].slice(0, -1) : undefined;
         if (!parentFolderPath) {
@@ -992,6 +1027,7 @@ export function* persistenceSaga(): SagaIterator {
           yield call(console.log, 'parent pers file missing');
           return;
         }
+        yield call(ensureInitialisedAndAuthorised);
 
         yield call(
           console.log,
@@ -1042,9 +1078,8 @@ export function* persistenceSaga(): SagaIterator {
   yield takeEvery(
     PERSISTENCE_CREATE_FOLDER,
     function* ({ payload }: ReturnType<typeof actions.persistenceCreateFolder>) {
-      yield call(store.dispatch, actions.disableFileSystemContextMenus());
-
       try {
+        yield call(store.dispatch, actions.disableFileSystemContextMenus());
         const newFolderPath = payload;
         yield call(console.log, 'create folder ', newFolderPath);
 
@@ -1067,6 +1102,7 @@ export function* persistenceSaga(): SagaIterator {
           yield call(console.log, 'parent pers file missing');
           return;
         }
+        yield call(ensureInitialisedAndAuthorised);
 
         yield call(
           console.log,
@@ -1090,7 +1126,8 @@ export function* persistenceSaga(): SagaIterator {
             path: newFolderPath,
             id: newFolderId,
             name: newFolderName,
-            parentId: parentFolderId
+            parentId: parentFolderId,
+            isFolder: true
           })
         );
         yield call(store.dispatch, actions.updateRefreshFileViewKey());
@@ -1111,9 +1148,8 @@ export function* persistenceSaga(): SagaIterator {
   yield takeEvery(
     PERSISTENCE_DELETE_FILE,
     function* ({ payload }: ReturnType<typeof actions.persistenceDeleteFile>) {
-      yield call(store.dispatch, actions.disableFileSystemContextMenus());
-
       try {
+        yield call(store.dispatch, actions.disableFileSystemContextMenus());
         const filePath = payload;
         yield call(console.log, 'delete file ', filePath);
 
@@ -1126,6 +1162,7 @@ export function* persistenceSaga(): SagaIterator {
           yield call(console.log, 'cannot find pers file for ', filePath);
           return;
         }
+        yield call(ensureInitialisedAndAuthorised);
         yield call(deleteFileOrFolder, persistenceFile.id); // assume this succeeds all the time? TODO
         yield put(actions.deletePersistenceFile(persistenceFile));
         yield call(store.dispatch, actions.updateRefreshFileViewKey());
@@ -1146,9 +1183,8 @@ export function* persistenceSaga(): SagaIterator {
   yield takeEvery(
     PERSISTENCE_DELETE_FOLDER,
     function* ({ payload }: ReturnType<typeof actions.persistenceDeleteFolder>) {
-      yield call(store.dispatch, actions.disableFileSystemContextMenus());
-
       try {
+        yield call(store.dispatch, actions.disableFileSystemContextMenus());
         const folderPath = payload;
         yield call(console.log, 'delete folder ', folderPath);
 
@@ -1161,6 +1197,7 @@ export function* persistenceSaga(): SagaIterator {
           yield call(console.log, 'cannot find pers file');
           return;
         }
+        yield call(ensureInitialisedAndAuthorised);
         yield call(deleteFileOrFolder, persistenceFile.id);
         yield put(actions.deletePersistenceFile(persistenceFile));
         yield call(store.dispatch, actions.updateRefreshFileViewKey());
@@ -1183,9 +1220,8 @@ export function* persistenceSaga(): SagaIterator {
     function* ({
       payload: { oldFilePath, newFilePath }
     }: ReturnType<typeof actions.persistenceRenameFile>) {
-      yield call(store.dispatch, actions.disableFileSystemContextMenus());
-
       try {
+        yield call(store.dispatch, actions.disableFileSystemContextMenus());
         yield call(console.log, 'rename file ', oldFilePath, ' to ', newFilePath);
 
         // look for file
@@ -1197,6 +1233,8 @@ export function* persistenceSaga(): SagaIterator {
           yield call(console.log, 'cannot find pers file');
           return;
         }
+
+        yield call(ensureInitialisedAndAuthorised);
 
         // new name TODO: modify action so name is supplied?
         const regexResult = filePathRegex.exec(newFilePath)!;
@@ -1229,9 +1267,8 @@ export function* persistenceSaga(): SagaIterator {
     function* ({
       payload: { oldFolderPath, newFolderPath }
     }: ReturnType<typeof actions.persistenceRenameFolder>) {
-      yield call(store.dispatch, actions.disableFileSystemContextMenus());
-
       try {
+        yield call(store.dispatch, actions.disableFileSystemContextMenus());
         yield call(console.log, 'rename folder ', oldFolderPath, ' to ', newFolderPath);
 
         // look for folder
@@ -1243,6 +1280,8 @@ export function* persistenceSaga(): SagaIterator {
           yield call(console.log, 'cannot find pers file for ', oldFolderPath);
           return;
         }
+
+        yield call(ensureInitialisedAndAuthorised);
 
         // new name TODO: modify action so name is supplied?
         const regexResult = filePathRegex.exec(newFolderPath)!;
