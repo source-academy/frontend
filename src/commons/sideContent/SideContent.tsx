@@ -1,5 +1,4 @@
-import { Card, Icon, Tab, TabProps, Tabs } from '@blueprintjs/core';
-import { Tooltip2 } from '@blueprintjs/popover2';
+import { Card, Icon, Tab, TabProps, Tabs, Tooltip } from '@blueprintjs/core';
 
 import { assertType } from '../utils/TypeHelper';
 import { generateTabAlert, getTabId } from './SideContentHelper';
@@ -34,11 +33,11 @@ const renderTab = (
   const iconSize = 20;
   const tabId = getTabId(tab);
   const tabTitle = (
-    <Tooltip2 content={tab.label}>
+    <Tooltip content={tab.label}>
       <div className={generateTabAlert(shouldAlert)}>
         <Icon icon={tab.iconName} size={iconSize} />
       </div>
-    </Tooltip2>
+    </Tooltip>
   );
   const tabProps = assertType<TabProps>()({
     id: tabId,

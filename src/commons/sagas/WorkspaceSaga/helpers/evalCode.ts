@@ -250,6 +250,7 @@ export function* evalCode(
   let lastDebuggerResult = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].lastDebuggerResult
   );
+  const isUsingCse = yield select((state: OverallState) => state.workspaces['playground'].usingCse);
 
   // Handles `console.log` statements in fullJS
   const detachConsole: () => void =
@@ -266,7 +267,7 @@ export function* evalCode(
         : isC
         ? call(cCompileAndRun, entrypointCode, context)
         : isJava
-        ? call(javaRun, entrypointCode, context)
+        ? call(javaRun, entrypointCode, context, currentStep, isUsingCse)
         : call(
             runFilesInContext,
             isFolderModeEnabled

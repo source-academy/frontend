@@ -1,6 +1,13 @@
-import { Button, Dialog, DialogBody, DialogFooter, Intent, Position } from '@blueprintjs/core';
+import {
+  Button,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  Intent,
+  Popover,
+  Position
+} from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Popover2 } from '@blueprintjs/popover2';
 import React, { useCallback, useState } from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { AdminPanelCourseRegistration } from 'src/commons/application/types/SessionTypes';
@@ -31,7 +38,7 @@ const DeleteUserCell: React.FC<Props> = ({ data, handleDeleteUserFromCourse }) =
 
   return (
     <>
-      <Popover2
+      <Popover
         content="You cannot delete an admin!"
         interactionKind="click"
         position={Position.TOP}
@@ -43,7 +50,7 @@ const DeleteUserCell: React.FC<Props> = ({ data, handleDeleteUserFromCourse }) =
           onClick={clickHandler}
           disabled={data.role === Role.Admin}
         />
-      </Popover2>
+      </Popover>
       <Dialog
         icon={IconNames.WARNING_SIGN}
         isOpen={isDialogOpen}
