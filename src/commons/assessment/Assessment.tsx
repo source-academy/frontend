@@ -14,10 +14,10 @@ import {
   NonIdealState,
   Position,
   Spinner,
-  Text
+  Text,
+  Tooltip
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Tooltip2 } from '@blueprintjs/popover2';
 import classNames from 'classnames';
 import { sortBy } from 'lodash';
 import React, { useMemo, useState } from 'react';
@@ -233,12 +233,12 @@ const Assessment: React.FC<AssessmentProps> = props => {
         <H4 className="listing-title">
           {overview.title}
           {overview.private ? (
-            <Tooltip2
+            <Tooltip
               className="listing-title-tooltip"
               content="This assessment is password-protected."
             >
               <Icon icon="lock" />
-            </Tooltip2>
+            </Tooltip>
           ) : null}
           {renderProgressStatus ? showGradingTooltip(overview.isGradingPublished) : null}
         </H4>
@@ -437,9 +437,9 @@ const showGradingTooltip = (isGradingPublished: boolean) => {
   }
 
   return (
-    <Tooltip2 className="listing-title-tooltip" content={tooltip} placement={Position.RIGHT}>
+    <Tooltip className="listing-title-tooltip" content={tooltip} placement={Position.RIGHT}>
       <Icon icon={iconName} intent={intent} />
-    </Tooltip2>
+    </Tooltip>
   );
 };
 

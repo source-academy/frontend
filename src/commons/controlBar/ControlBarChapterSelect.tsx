@@ -1,6 +1,5 @@
-import { Button, Menu, MenuItem } from '@blueprintjs/core';
+import { Button, Menu, MenuItem, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Tooltip2 } from '@blueprintjs/popover2';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React from 'react';
@@ -60,13 +59,13 @@ const chapterRenderer: (isFolderModeEnabled: boolean) => ItemRenderer<SALanguage
       ? 'Folder mode makes use of lists which are not available in Source 1. To switch to Source 1, disable Folder mode.'
       : undefined;
     return (
-      <Tooltip2
+      <Tooltip
         key={lang.displayName}
         content={tooltipContent}
         disabled={tooltipContent === undefined}
       >
         <MenuItem onClick={handleClick} text={lang.displayName} disabled={isDisabled} />
-      </Tooltip2>
+      </Tooltip>
     );
   };
 
