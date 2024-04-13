@@ -8024,10 +8024,10 @@ java-parser@^2.0.5:
     chevrotain-allstar "0.3.1"
     lodash "4.17.21"
 
-java-slang@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/java-slang/-/java-slang-1.0.6.tgz#34a68954a8dfb5bde8572d49a6bea170d7026749"
-  integrity sha512-CHq2s9xuzuuPfygRp9pQncfPfIuzpHivXn3wfy4QBiQ801IvdVFL3w/nV6qQn6GUG+kvOU+qCuxUFsFH8X5Dhg==
+java-slang@^1.0.13:
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/java-slang/-/java-slang-1.0.13.tgz#601454c9dd28a41ea6918dab51a7e65401d2c2d9"
+  integrity sha512-xBh84Gcp7iyc3o9bWDbaIa7GXf75tpUVmDrd/gXIAU/gxNARitJdl5xCjQW5y4iesqwucV7cY+Ewx6MIt4xKeQ==
   dependencies:
     "@types/lodash" "^4.14.198"
     java-parser "^2.0.5"
@@ -8578,10 +8578,10 @@ js-sdsl@4.3.0, js-sdsl@^4.1.4:
   resolved "https://registry.yarnpkg.com/js-sdsl/-/js-sdsl-4.3.0.tgz#aeefe32a451f7af88425b11fdb5f58c90ae1d711"
   integrity sha512-mifzlm2+5nZ+lEcLJMoBK0/IH/bDg8XnJfd/Wq6IP+xoCjLZsTOnV2QpxlVbX9bMnkl5PdEjNtBJ9Cj1NjifhQ==
 
-js-slang@^1.0.65:
-  version "1.0.65"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.65.tgz#61356a93d48e5e6ac9a252529eef3a847ef76b01"
-  integrity sha512-0atWwWjfN8uLsw27P6rnW/AjtQc+RVliQ5H/stDHYpDTafOogAeY11Nq82qndn/r6SIX8FpPOl9OgXhNMkq2rw==
+js-slang@^1.0.66:
+  version "1.0.66"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.66.tgz#8ea8918cc0086f672bfc4696d2b33dc8a5187d91"
+  integrity sha512-BCB9COjncFklBoyVqP2/qK8xZq3LohSIKF6jzbF6NdjmXLyThvi6osbxyCRUGs6q5u1mMUkwJ54Hkfy6uCucmg==
   dependencies:
     "@babel/parser" "^7.19.4"
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
@@ -13123,11 +13123,6 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==
-
-typesafe-actions@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/typesafe-actions/-/typesafe-actions-5.1.0.tgz#9afe8b1e6a323af1fd59e6a57b11b7dd6623d2f1"
-  integrity sha512-bna6Yi1pRznoo6Bz1cE6btB/Yy8Xywytyfrzu/wc+NFW3ZF0I+2iCGImhBsoYYCOWuICtRO4yHcnDlzgo1AdNg==
 
 typescript-compare@^0.0.2:
   version "0.0.2"
