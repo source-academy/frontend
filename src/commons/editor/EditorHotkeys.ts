@@ -14,7 +14,11 @@ export const keyBindings = {
   highlightScope: {
     win: 'Ctrl-Shift-H',
     mac: 'Command-Shift-H'
-  }
+  },
+  typeInferenceDisplay: {
+    win: 'Ctrl-Shift-M',
+    mac: 'Command-Shift-M'
+  },
 };
 
 export type KeyFunction = keyof typeof keyBindings;

@@ -25,6 +25,7 @@ import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
 import useRefactor from './UseRefactor';
 import useShareAce from './UseShareAce';
+import useTypeInference from './UseTypeInference';
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
 export type EditorHook = (
@@ -663,7 +664,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
 });
 
 // don't create a new list every render.
-const hooks = [useHighlighting, useNavigation, useShareAce, useRefactor];
+const hooks = [useHighlighting, useNavigation, useShareAce, useRefactor, useTypeInference];
 
 const Editor: React.FC<EditorProps> = (props: EditorProps) => {
   const [sessions, setSessions] = React.useState<Record<string, Ace.EditSession>>({});
