@@ -1,3 +1,4 @@
+import { Classes } from '@blueprintjs/core';
 import { memo, useState } from 'react';
 import { useRequest } from 'src/commons/utils/Hooks';
 import { defaultChapter } from 'src/features/gameSimulator/GameSimulatorConstants';
@@ -20,7 +21,7 @@ const ChapterPublisher: React.FC = () => {
   return (
     <>
       <h3>Publish / Edit Chapters</h3>
-      <select className="bp5-menu" onChange={(e: any) => setChosenIndex(e.target.key)}>
+      <select className={Classes.MENU} onChange={(e: any) => setChosenIndex(e.target.key)}>
         {chapters.map((chapter, chapterIndex) => (
           <option key={chapterIndex} value={chapter.title}>
             {`Chapter ${chapterIndex}: ${chapter.title}`}
