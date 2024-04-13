@@ -603,7 +603,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     return (
       <ControlBarGoogleDriveButtons
         isFolderModeEnabled={isFolderModeEnabled}
-        currentObject={persistenceFile}
+        currPersistenceFile={persistenceFile}
         loggedInAs={persistenceUser}
         isDirty={persistenceIsDirty}
         accessToken={googleAccessToken}
@@ -637,6 +637,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       <ControlBarGitHubButtons
         key="github"
         isFolderModeEnabled={isFolderModeEnabled}
+        currPersistenceFile={persistenceFile}
         loggedInAs={githubOctokitObject.octokit}
         githubSaveInfo={githubSaveInfo}
         isDirty={githubPersistenceIsDirty}

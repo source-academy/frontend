@@ -2,6 +2,7 @@ import {
   EnvTree as EnvironmentTree,
   EnvTreeNode as EnvironmentTreeNode
 } from 'js-slang/dist/createContext';
+import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
 import { Environment } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
@@ -41,33 +42,52 @@ export interface IVisible extends Drawable {
 }
 
 /** unassigned is internally represented as a symbol */
-export type UnassignedData = symbol;
+export type Unassigned = symbol;
 
 /** types of primitives in JS Slang  */
-export type PrimitiveTypes = number | string | boolean | null | undefined;
+export type Primitive = number | string | boolean | null | undefined;
 
-/** types of functions in JS Slang */
-export type FnTypes = {
-  /** the function itself */
-  (): any;
+/** types of source objects such as runes */
+export type SourceObject = {
+  [index: string]: any;
+  toReplString: () => string;
+};
 
-  /** the enclosing environment */
-  environment: Environment;
+/** types of closures in JS Slang, redefined here for convenience. */
+export type Closure = JsSlangClosure;
 
-  /** string representation of the function */
-  functionName: string;
+/** types of built-in functions in JS Slang */
+export type BuiltInFn = () => never; // Use `never` to differentiate from `StreamFn`
 
-  /** unique id of the function */
-  id: string;
+/** types of pre-defined functions in JS Slang */
+export type PredefinedFn = Omit<Closure, 'predefined'> & { predefined: true };
 
-  node: any;
+/**
+ * Special type of a function returned from calling `stream`. It is mostly similar to a global
+ * function, but has the extra `environment` property as it should be drawn next to the frame
+ * in which `stream` is called.
+ *
+ * TODO: remove this and all other `StreamFn` code if `stream` becomes a pre-defined function
+ */
+export type StreamFn = (() => [any, StreamFn] | null) & { environment: Env };
+
+/** types of global functions in JS Slang */
+export type GlobalFn = BuiltInFn | PredefinedFn;
+
+/** types of global functions in JS Slang */
+export type NonGlobalFn = (Omit<Closure, 'predefined'> & { predefined: false }) | StreamFn;
+
+/** types of arrays in JS Slang */
+export type DataArray = Data[] & {
+  readonly id: string;
+  environment: Env;
 };
 
 /** the types of data in the JS Slang context */
-export type Data = PrimitiveTypes | FnTypes | (() => any) | UnassignedData | Data[];
+export type Data = Primitive | SourceObject | NonGlobalFn | GlobalFn | Unassigned | DataArray;
 
 /** modified `Environment` to store children and associated frame */
-export type Env = Environment | null;
+export type Env = Environment;
 
 /** modified `EnvTree` */
 export type EnvTree = EnvironmentTree & { root: EnvTreeNode };
