@@ -1,5 +1,4 @@
-import { astToString } from 'java-slang/dist/ast/utils/astToString';
-import { Closure as JavaMethod } from 'java-slang/dist/ec-evaluator/types';
+import { astToString, ECE } from 'java-slang';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Circle, Group, Label, Tag, Text } from 'react-konva';
@@ -25,7 +24,7 @@ export class Method extends Visible implements IHoverable {
   constructor(
     x: number,
     y: number,
-    private readonly _method: JavaMethod
+    private readonly _method: ECE.Closure
   ) {
     super();
 

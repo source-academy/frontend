@@ -1,4 +1,4 @@
-import { Name, StructType, Value } from 'java-slang/dist/ec-evaluator/types';
+import { ECE } from 'java-slang';
 import React from 'react';
 
 import { Visible } from '../../components/Visible';
@@ -17,14 +17,14 @@ export class Binding extends Visible {
   // Only Method has arrow.
   private readonly _arrow: Arrow | undefined;
 
-  constructor(name: Name, value: Value, x: number, y: number) {
+  constructor(name: ECE.Name, value: ECE.Value, x: number, y: number) {
     super();
 
     // Position.
     this._x = x;
     this._y = y;
 
-    if (value.kind === StructType.CLOSURE) {
+    if (value.kind === ECE.StructType.CLOSURE) {
       // Name.
       this._name = new Text(
         name + Config.VariableColon, // := is part of name
@@ -43,7 +43,7 @@ export class Binding extends Visible {
         this._value.x(),
         this._value.y()
       );
-    } else if (value.kind === StructType.VARIABLE) {
+    } else if (value.kind === ECE.StructType.VARIABLE) {
       // Name.
       this._name = new Text(
         name + Config.VariableColon, // := is part of name

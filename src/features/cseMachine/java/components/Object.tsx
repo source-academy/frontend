@@ -1,4 +1,4 @@
-import { Object as JavaObject } from 'java-slang/dist/ec-evaluator/types';
+import { ECE } from 'java-slang';
 import React from 'react';
 import { Group } from 'react-konva';
 
@@ -9,7 +9,7 @@ import { Frame } from './Frame';
 export class Obj extends Visible {
   constructor(
     private readonly _frames: Frame[],
-    private readonly _object: JavaObject
+    private readonly _object: ECE.Object
   ) {
     super();
 

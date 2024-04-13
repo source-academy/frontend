@@ -1,4 +1,4 @@
-import { Context } from 'java-slang/dist/ec-evaluator/types';
+import { ECE } from 'java-slang';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
@@ -35,7 +35,7 @@ export class CseMachine {
 
   /** updates the visualization state in the SideContentCseMachine component based on
    * the Java Slang context passed in */
-  static drawCse(context: Context) {
+  static drawCse(context: ECE.Context) {
     if (!this.setVis || !context.environment || !context.control || !context.stash) {
       throw new Error('Java CSE Machine not initialized');
     }

@@ -1,4 +1,4 @@
-import { EnvNode } from 'java-slang/dist/ec-evaluator/components';
+import { ECE } from 'java-slang';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Group, Label, Rect, Tag, Text as KonvaText } from 'react-konva';
@@ -22,7 +22,7 @@ export class Frame extends Visible implements IHoverable {
   private parent: Frame | undefined;
 
   constructor(
-    readonly frame: EnvNode,
+    readonly frame: ECE.EnvNode,
     x: number,
     y: number,
     readonly stroke: string,

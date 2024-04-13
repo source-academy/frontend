@@ -1,5 +1,4 @@
-import { Stash as JavaStash } from 'java-slang/dist/ec-evaluator/components';
-import { StashItem as JavaStashItem, StructType } from 'java-slang/dist/ec-evaluator/types';
+import { ECE } from 'java-slang';
 import React from 'react';
 import { Group } from 'react-konva';
 
@@ -13,7 +12,7 @@ import { Variable } from './Variable';
 export class Stash extends Visible {
   private readonly _stashItems: StashItem[] = [];
 
-  constructor(stash: JavaStash) {
+  constructor(stash: ECE.Stash) {
     super();
 
     // Position.
@@ -46,26 +45,26 @@ export class Stash extends Visible {
     return <Group key={CseMachine.key++}>{this._stashItems.map(s => s.draw())}</Group>;
   }
 
-  private getStashItemString = (stashItem: JavaStashItem): string => {
+  private getStashItemString = (stashItem: ECE.StashItem): string => {
     switch (stashItem.kind) {
       case 'Literal':
         return stashItem.literalType.value;
-      case StructType.VARIABLE:
+      case ECE.StructType.VARIABLE:
         return 'location';
-      case StructType.TYPE:
+      case ECE.StructType.TYPE:
         return stashItem.type;
       default:
         return stashItem.kind.toLowerCase();
     }
   };
 
-  private getStashItemRef = (stashItem: JavaStashItem) => {
-    return stashItem.kind === StructType.CLOSURE
+  private getStashItemRef = (stashItem: ECE.StashItem) => {
+    return stashItem.kind === ECE.StructType.CLOSURE
       ? CseMachine.environment &&
           (CseMachine.environment.classes
             .flatMap(c => c.bindings)
             .find(b => b.value instanceof Method && b.value.method === stashItem)?.value as Method)
-      : stashItem.kind === StructType.VARIABLE
+      : stashItem.kind === ECE.StructType.VARIABLE
       ? CseMachine.environment &&
         ((CseMachine.environment.frames
           .flatMap(c => c.bindings)
@@ -79,10 +78,10 @@ export class Stash extends Visible {
             .flatMap(o => o.bindings)
             .find(b => b.value instanceof Variable && b.value.variable === stashItem)
             ?.value as Variable))
-      : stashItem.kind === StructType.CLASS
+      : stashItem.kind === ECE.StructType.CLASS
       ? CseMachine.environment &&
         CseMachine.environment.classes.find(c => c.frame === stashItem.frame)
-      : stashItem.kind === StructType.OBJECT
+      : stashItem.kind === ECE.StructType.OBJECT
       ? CseMachine.environment &&
         CseMachine.environment.objects.find(o => o.frame === stashItem.frame)
       : undefined;

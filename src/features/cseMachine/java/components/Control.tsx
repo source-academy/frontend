@@ -1,20 +1,4 @@
-import { astToString } from 'java-slang/dist/ast/utils/astToString';
-import { Control as JavaControl } from 'java-slang/dist/ec-evaluator/components';
-import {
-  BinOpInstr,
-  ControlItem as JavaControlItem,
-  EnvInstr,
-  EvalVarInstr,
-  InstrType,
-  InvInstr,
-  NewInstr,
-  ResConOverloadInstr,
-  ResInstr,
-  ResOverloadInstr,
-  ResTypeContInstr,
-  ResTypeInstr
-} from 'java-slang/dist/ec-evaluator/types';
-import { isInstr, isNode } from 'java-slang/dist/ec-evaluator/utils';
+import { astToString, ECE } from 'java-slang';
 import { Group } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
@@ -26,7 +10,7 @@ import { ControlItem } from './ControlItem';
 export class Control extends Visible {
   private readonly _controlItems: ControlItem[] = [];
 
-  constructor(control: JavaControl) {
+  constructor(control: ECE.Control) {
     super();
 
     // Position.
@@ -48,14 +32,14 @@ export class Control extends Visible {
 
       // TODO reference draw ltr?
       const controlItemReference =
-        isInstr(controlItem) && controlItem.instrType === InstrType.ENV
-          ? CseMachine.environment?.frames.find(f => f.frame === (controlItem as EnvInstr).env)
+        ECE.isInstr(controlItem) && controlItem.instrType === ECE.InstrType.ENV
+          ? CseMachine.environment?.frames.find(f => f.frame === (controlItem as ECE.EnvInstr).env)
           : undefined;
 
       const controlItemTooltip = this.getControlItemTooltip(controlItem);
       this.getControlItemTooltip(controlItem);
 
-      const node = isNode(controlItem) ? controlItem : controlItem.srcNode;
+      const node = ECE.isNode(controlItem) ? controlItem : controlItem.srcNode;
       const highlightOnHover = () => {
         let start = -1;
         let end = -1;
@@ -95,116 +79,116 @@ export class Control extends Visible {
     );
   }
 
-  private getControlItemString = (controlItem: JavaControlItem): string => {
-    if (isNode(controlItem)) {
+  private getControlItemString = (controlItem: ECE.ControlItem): string => {
+    if (ECE.isNode(controlItem)) {
       return astToString(controlItem);
     }
 
     switch (controlItem.instrType) {
-      case InstrType.RESET:
+      case ECE.InstrType.RESET:
         return 'return';
-      case InstrType.ASSIGNMENT:
+      case ECE.InstrType.ASSIGNMENT:
         return 'asgn';
-      case InstrType.BINARY_OP:
-        const binOpInstr = controlItem as BinOpInstr;
+      case ECE.InstrType.BINARY_OP:
+        const binOpInstr = controlItem as ECE.BinOpInstr;
         return binOpInstr.symbol;
-      case InstrType.POP:
+      case ECE.InstrType.POP:
         return 'pop';
-      case InstrType.INVOCATION:
-        const appInstr = controlItem as InvInstr;
+      case ECE.InstrType.INVOCATION:
+        const appInstr = controlItem as ECE.InvInstr;
         return `invoke ${appInstr.arity}`;
-      case InstrType.ENV:
+      case ECE.InstrType.ENV:
         return 'env';
-      case InstrType.MARKER:
+      case ECE.InstrType.MARKER:
         return 'mark';
-      case InstrType.EVAL_VAR:
-        const evalVarInstr = controlItem as EvalVarInstr;
+      case ECE.InstrType.EVAL_VAR:
+        const evalVarInstr = controlItem as ECE.EvalVarInstr;
         return `name ${evalVarInstr.symbol}`;
-      case InstrType.NEW:
-        const newInstr = controlItem as NewInstr;
+      case ECE.InstrType.NEW:
+        const newInstr = controlItem as ECE.NewInstr;
         return `new ${newInstr.c.frame.name}`;
-      case InstrType.RES_TYPE:
-        const resTypeInstr = controlItem as ResTypeInstr;
+      case ECE.InstrType.RES_TYPE:
+        const resTypeInstr = controlItem as ECE.ResTypeInstr;
         return `res_type ${
           resTypeInstr.value.kind === 'Class'
             ? resTypeInstr.value.frame.name
             : astToString(resTypeInstr.value)
         }`;
-      case InstrType.RES_TYPE_CONT:
-        const resTypeContInstr = controlItem as ResTypeContInstr;
+      case ECE.InstrType.RES_TYPE_CONT:
+        const resTypeContInstr = controlItem as ECE.ResTypeContInstr;
         return `res_type_cont ${resTypeContInstr.name}`;
-      case InstrType.RES_OVERLOAD:
-        const resOverloadInstr = controlItem as ResOverloadInstr;
+      case ECE.InstrType.RES_OVERLOAD:
+        const resOverloadInstr = controlItem as ECE.ResOverloadInstr;
         return `res_overload ${resOverloadInstr.name} ${resOverloadInstr.arity}`;
-      case InstrType.RES_OVERRIDE:
+      case ECE.InstrType.RES_OVERRIDE:
         return `res_override`;
-      case InstrType.RES_CON_OVERLOAD:
-        const resConOverloadInstr = controlItem as ResConOverloadInstr;
+      case ECE.InstrType.RES_CON_OVERLOAD:
+        const resConOverloadInstr = controlItem as ECE.ResConOverloadInstr;
         return `res_con_overload ${resConOverloadInstr.arity}`;
-      case InstrType.RES:
-        const resInstr = controlItem as ResInstr;
+      case ECE.InstrType.RES:
+        const resInstr = controlItem as ECE.ResInstr;
         return `res ${resInstr.name}`;
-      case InstrType.DEREF:
+      case ECE.InstrType.DEREF:
         return 'deref';
       default:
         return 'INSTRUCTION';
     }
   };
 
-  private getControlItemTooltip = (controlItem: JavaControlItem): string => {
-    if (isNode(controlItem)) {
+  private getControlItemTooltip = (controlItem: ECE.ControlItem): string => {
+    if (ECE.isNode(controlItem)) {
       return astToString(controlItem);
     }
 
     switch (controlItem.instrType) {
-      case InstrType.RESET:
+      case ECE.InstrType.RESET:
         return 'Skip control items until marker instruction is reached';
-      case InstrType.ASSIGNMENT:
+      case ECE.InstrType.ASSIGNMENT:
         return 'Assign value on top of stash to location on top of stash';
-      case InstrType.BINARY_OP:
-        const binOpInstr = controlItem as BinOpInstr;
+      case ECE.InstrType.BINARY_OP:
+        const binOpInstr = controlItem as ECE.BinOpInstr;
         return `Perform ${binOpInstr.symbol} on top 2 stash values`;
-      case InstrType.POP:
+      case ECE.InstrType.POP:
         return 'Pop most recently pushed value from stash';
-      case InstrType.INVOCATION:
-        const appInstr = controlItem as InvInstr;
+      case ECE.InstrType.INVOCATION:
+        const appInstr = controlItem as ECE.InvInstr;
         return `Invoke method with ${appInstr.arity} argument${appInstr.arity === 1 ? '' : 's'}`;
-      case InstrType.ENV:
+      case ECE.InstrType.ENV:
         return 'Set current environment to this environment';
-      case InstrType.MARKER:
+      case ECE.InstrType.MARKER:
         return 'Mark return address';
-      case InstrType.EVAL_VAR:
-        const evalVarInstr = controlItem as EvalVarInstr;
+      case ECE.InstrType.EVAL_VAR:
+        const evalVarInstr = controlItem as ECE.EvalVarInstr;
         return `name ${evalVarInstr.symbol}`;
-      case InstrType.NEW:
-        const newInstr = controlItem as NewInstr;
+      case ECE.InstrType.NEW:
+        const newInstr = controlItem as ECE.NewInstr;
         return `Create new instance of class ${newInstr.c.frame.name}`;
-      case InstrType.RES_TYPE:
-        const resTypeInstr = controlItem as ResTypeInstr;
+      case ECE.InstrType.RES_TYPE:
+        const resTypeInstr = controlItem as ECE.ResTypeInstr;
         return `Resolve type of ${
           resTypeInstr.value.kind === 'Class'
             ? resTypeInstr.value.frame.name
             : astToString(resTypeInstr.value)
         }`;
-      case InstrType.RES_TYPE_CONT:
-        const resTypeContInstr = controlItem as ResTypeContInstr;
+      case ECE.InstrType.RES_TYPE_CONT:
+        const resTypeContInstr = controlItem as ECE.ResTypeContInstr;
         return `Resolve type of ${resTypeContInstr.name} in most recently pushed type from stash`;
-      case InstrType.RES_OVERLOAD:
-        const resOverloadInstr = controlItem as ResOverloadInstr;
+      case ECE.InstrType.RES_OVERLOAD:
+        const resOverloadInstr = controlItem as ECE.ResOverloadInstr;
         return `Resolve overloading of method ${resOverloadInstr.name} with ${
           resOverloadInstr.arity
         } argument${resOverloadInstr.arity === 1 ? '' : 's'}`;
-      case InstrType.RES_OVERRIDE:
+      case ECE.InstrType.RES_OVERRIDE:
         return 'Resolve overriding of resolved method on top of stash';
-      case InstrType.RES_CON_OVERLOAD:
-        const resConOverloadInstr = controlItem as ResConOverloadInstr;
+      case ECE.InstrType.RES_CON_OVERLOAD:
+        const resConOverloadInstr = controlItem as ECE.ResConOverloadInstr;
         return `Resolve constructor overloading of class on stash with ${
           resConOverloadInstr.arity
         } argument${resConOverloadInstr.arity === 1 ? '' : 's'}`;
-      case InstrType.RES:
-        const resInstr = controlItem as ResInstr;
+      case ECE.InstrType.RES:
+        const resInstr = controlItem as ECE.ResInstr;
         return `Resolve field ${resInstr.name} of most recently pushed value from stash`;
-      case InstrType.DEREF:
+      case ECE.InstrType.DEREF:
         return 'Dereference most recently pushed value from stash';
       default:
         return 'INSTRUCTION';

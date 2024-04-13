@@ -1,7 +1,4 @@
-import { SourceError as JavaSourceError } from 'java-slang/dist/ec-evaluator/errors';
-import { runECEvaluator } from 'java-slang/dist/ec-evaluator/index';
-import { Context as JavaContext } from 'java-slang/dist/ec-evaluator/types';
-import { compileFromSource, typeCheck } from 'java-slang';
+import { compileFromSource, ECE, typeCheck } from 'java-slang';
 import { BinaryWriter } from 'java-slang/dist/compiler/binary-writer';
 import setupJVM, { parseBin } from 'java-slang/dist/jvm';
 import { createModuleProxy, loadCachedFiles } from 'java-slang/dist/jvm/utils/integration';
@@ -161,7 +158,7 @@ export async function javaRun(
     });
 }
 
-export function visualizeJavaCseMachine({ context }: { context: JavaContext }) {
+export function visualizeJavaCseMachine({ context }: { context: ECE.Context }) {
   try {
     CseMachine.drawCse(context);
   } catch (err) {
@@ -170,7 +167,7 @@ export function visualizeJavaCseMachine({ context }: { context: JavaContext }) {
 }
 
 export async function runJavaCseMachine(code: string, targetStep: number, context: Context) {
-  const convertJavaErrorToJsError = (e: JavaSourceError): SourceError => ({
+  const convertJavaErrorToJsError = (e: ECE.SourceError): SourceError => ({
     type: ErrorType.RUNTIME,
     severity: ErrorSeverity.ERROR,
     location: {
@@ -187,7 +184,7 @@ export async function runJavaCseMachine(code: string, targetStep: number, contex
     elaborate: () => e.explain()
   });
   context.executionMethod = 'cse-machine';
-  return runECEvaluator(code, targetStep)
+  return ECE.runECEvaluator(code, targetStep)
     .then(result => {
       context.runtime.envStepsTotal = result.context.totalSteps;
       if (result.status === 'error') {

@@ -1,4 +1,4 @@
-import { StructType, Variable as JavaVariable } from 'java-slang/dist/ec-evaluator/types';
+import { ECE } from 'java-slang';
 import React from 'react';
 import { Group, Rect } from 'react-konva';
 
@@ -33,7 +33,7 @@ export class Variable extends Visible {
   constructor(
     x: number,
     y: number,
-    private readonly _variable: JavaVariable
+    private readonly _variable: ECE.Variable
   ) {
     super();
 
@@ -51,7 +51,7 @@ export class Variable extends Visible {
         this._x + Config.TextPaddingX,
         this._y + this._type.height() + Config.TextPaddingX
       );
-    } else if (this.variable.value.kind === StructType.SYMBOL) {
+    } else if (this.variable.value.kind === ECE.StructType.SYMBOL) {
       this._value = new Text(
         '',
         this._x + Config.TextPaddingX,

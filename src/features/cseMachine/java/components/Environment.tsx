@@ -1,5 +1,4 @@
-import { Environment as JavaEnvironment, EnvNode } from 'java-slang/dist/ec-evaluator/components';
-import { Class as JavaClass, StructType } from 'java-slang/dist/ec-evaluator/types';
+import { ECE } from 'java-slang';
 import { Group } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
@@ -18,7 +17,7 @@ export class Environment extends Visible {
   private readonly _classFrames: Frame[] = [];
   private readonly _lines: Line[] = [];
 
-  constructor(environment: JavaEnvironment) {
+  constructor(environment: ECE.Environment) {
     super();
 
     // Position.
@@ -35,7 +34,7 @@ export class Environment extends Visible {
     let methodFramesWidth = Number(Config.FrameMinWidth);
     environment.global.children.forEach(env => {
       if (env.name.includes('(')) {
-        let currEnv: EnvNode | undefined = env;
+        let currEnv: ECE.EnvNode | undefined = env;
         let parentFrame;
         while (currEnv) {
           const stroke = currEnv === environment.current ? Config.SA_CURRENT_ITEM : Config.SA_WHITE;
@@ -60,7 +59,7 @@ export class Environment extends Visible {
       let objectFrameWidth = Number(Config.FrameMinWidth);
 
       // Get top env.
-      let env: EnvNode | undefined = obj.frame;
+      let env: ECE.EnvNode | undefined = obj.frame;
       while (env.parent) {
         env = env.parent;
       }
@@ -92,11 +91,11 @@ export class Environment extends Visible {
     const classFramesX = objectFramesX + objectFramesWidth + Config.FrameMinWidth;
     let classFramesY = this._y;
     for (const [_, c] of environment.global.frame.entries()) {
-      const classEnv = (c as JavaClass).frame;
+      const classEnv = (c as ECE.Class).frame;
       const classFrameStroke =
         classEnv === environment.current ? Config.SA_CURRENT_ITEM : Config.SA_WHITE;
       const highlightOnHover = () => {
-        const node = (c as JavaClass).classDecl;
+        const node = (c as ECE.Class).classDecl;
         let start = -1;
         let end = -1;
         if (node.location) {
@@ -115,7 +114,7 @@ export class Environment extends Visible {
         highlightOnHover,
         unhighlightOnHover
       );
-      const superClassName = (c as JavaClass).superclass?.frame.name;
+      const superClassName = (c as ECE.Class).superclass?.frame.name;
       if (superClassName) {
         const parentFrame = this._classFrames.find(f => f.name.text === superClassName)!;
         classFrame.setParent(parentFrame);
@@ -127,7 +126,7 @@ export class Environment extends Visible {
     // Draw arrow for var ref in mtd frames to corresponding obj.
     this._methodFrames.forEach(mf => {
       mf.bindings.forEach(b => {
-        if (b.value instanceof Variable && b.value.variable.value.kind === StructType.OBJECT) {
+        if (b.value instanceof Variable && b.value.variable.value.kind === ECE.StructType.OBJECT) {
           const objFrame = b.value.variable.value.frame;
           const matchingObj = this._objects.filter(o => o.getFrame().frame === objFrame)[0];
           b.value.value = new Arrow(
@@ -145,7 +144,7 @@ export class Environment extends Visible {
       .flatMap(obj => obj.frames)
       .forEach(of => {
         of.bindings.forEach(b => {
-          if (b.value instanceof Variable && b.value.variable.value.kind === StructType.VARIABLE) {
+          if (b.value instanceof Variable && b.value.variable.value.kind === ECE.StructType.VARIABLE) {
             const variable = b.value.variable.value;
             const matchingVariable = this._classFrames
               .flatMap(c => c.bindings)
@@ -158,7 +157,7 @@ export class Environment extends Visible {
               matchingVariable.y() + matchingVariable.type.height()
             );
           }
-          if (b.value instanceof Variable && b.value.variable.value.kind === StructType.OBJECT) {
+          if (b.value instanceof Variable && b.value.variable.value.kind === ECE.StructType.OBJECT) {
             const obj = b.value.variable.value.frame;
             const matchingObj = this._objects.find(o => o.getFrame().frame === obj)!;
             // Variable always has a box.
