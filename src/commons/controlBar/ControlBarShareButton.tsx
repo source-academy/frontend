@@ -8,6 +8,8 @@ import ShareLinkState from 'src/features/playground/shareLinks/ShareLinkState';
 import ControlButton from '../ControlButton';
 import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
+import { request } from '../utils/RequestHelper';
+import { RemoveLast } from '../utils/TypeHelper';
 
 type ControlBarShareButtonProps = DispatchProps & StateProps;
 
@@ -23,12 +25,27 @@ type StateProps = {
   key: string;
   isSicp?: boolean;
   programConfig: ShareLinkState;
+  token: Tokens;
 };
 
 type State = {
   keyword: string;
   isLoading: boolean;
   isSuccess: boolean;
+};
+
+type ShareLinkRequestHelperParams = RemoveLast<Parameters<typeof request>>;
+
+export type Tokens = {
+  accessToken: string | undefined;
+  refreshToken: string | undefined;
+};
+
+export const requestToShareProgram = async (
+  ...[path, method, opts]: ShareLinkRequestHelperParams
+) => {
+  const resp = await request(path, method, opts);
+  return resp;
 };
 
 export class ControlBarShareButton extends React.PureComponent<ControlBarShareButtonProps, State> {
@@ -96,7 +113,7 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
                   label="Get Link"
                   icon={IconNames.SHARE}
                   // post request to backend, set keyword as return uuid
-                  onClick={this.fetchUUID}
+                  onClick={() => this.fetchUUID(this.props.token)}
                 />
               </div>
             ) : (
@@ -159,30 +176,29 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
     }
   }
 
-  private fetchUUID() {
+  private fetchUUID(tokens: Tokens) {
     const requestBody = {
       shared_program: {
         data: this.props.programConfig
       }
     };
-    const fetchOpts: RequestInit = {
-      method: 'POST',
-      body: JSON.stringify(requestBody),
-      headers: {
-        'Content-Type': 'application/json'
+
+    const getProgramUrl = async () => {
+      const resp = await requestToShareProgram(`shared_programs`, 'POST', {
+        body: requestBody,
+        ...tokens
+      });
+      if (!resp) {
+        return showWarningMessage('Fail to generate url!');
       }
+      const respJson = await resp.json();
+      this.setState({
+        keyword: `${window.location.host}/playground/share/` + respJson.uuid
+      });
+      this.setState({ isLoading: true, isSuccess: true });
+      return;
     };
-    fetch(`${Constants.backendUrl}/api/shared_programs`, fetchOpts)
-      .then(res => {
-        return res.json();
-      })
-      .then(resp => {
-        this.setState({
-          // seems like there's no frontend url env variable, should be replaced by frontend server accordingly
-          keyword: `http://localhost:8000/playground/share/` + resp.uuid
-        });
-        this.setState({ isLoading: true, isSuccess: true });
-      })
-      .catch(err => showWarningMessage('Fail to generate url! Error: ' + err));
+
+    getProgramUrl();
   }
 }

@@ -35,6 +35,7 @@ import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentH
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import { convertParamToBoolean, convertParamToInt } from 'src/commons/utils/ParamParseHelper';
 import { IParsedQuery, parseQuery } from 'src/commons/utils/QueryHelper';
 import {
@@ -109,7 +110,10 @@ import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalBut
 import { ControlBarExecutionTime } from '../../commons/controlBar/ControlBarExecutionTime';
 import { ControlBarGoogleDriveButtons } from '../../commons/controlBar/ControlBarGoogleDriveButtons';
 import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
-import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
+import {
+  ControlBarShareButton,
+  requestToShareProgram
+} from '../../commons/controlBar/ControlBarShareButton';
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
 import { ControlBarToggleFolderModeButton } from '../../commons/controlBar/ControlBarToggleFolderModeButton';
 import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
@@ -440,25 +444,34 @@ const Playground: React.FC<PlaygroundProps> = props => {
   }, [editorSessionId]);
 
   const hash = isSicpEditor ? props.initialEditorValueHash : location.hash;
-  const { uuid } = useParams<string>();
+  const { uuid } = useParams<{ uuid: string }>();
+  const config = useUrlEncoder();
+  const tokens = useTypedSelector((state: OverallState) => ({
+    accessToken: state.session.accessToken,
+    refreshToken: state.session.refreshToken
+  }));
 
   const handleURL = useCallback(
-    (uuid: string | undefined) => {
+    async (uuid: string | undefined) => {
       if (uuid !== undefined) {
-        fetch(`${Constants.backendUrl}/api/shared_programs/${uuid}`)
-          .then(response => response.json())
-          .then(resp => {
-            const res: ShareLinkState = new ShareLinkStateDecoder(resp).decodeWith(
-              new JsonDecoderDelegate()
-            );
-            resetConfig(
-              res,
-              { handleChangeExecTime, handleChapterSelect },
-              workspaceLocation,
-              dispatch,
-              fileSystem
-            );
-          });
+        const resp = await requestToShareProgram(`shared_programs/${uuid}`, 'GET', {
+          ...tokens
+        });
+        if (!resp) {
+          return showWarningMessage('Invalid share program link! ');
+        }
+        const respJson = await resp.json();
+        const res: ShareLinkState = new ShareLinkStateDecoder(respJson).decodeWith(
+          new JsonDecoderDelegate()
+        );
+        resetConfig(
+          res,
+          { handleChangeExecTime, handleChapterSelect },
+          workspaceLocation,
+          dispatch,
+          fileSystem
+        );
+        return;
       } else {
         const config = new ShareLinkStateDecoder(location.hash).decodeWith(
           new UrlParamsDecoderDelegate()
@@ -470,15 +483,20 @@ const Playground: React.FC<PlaygroundProps> = props => {
           dispatch,
           fileSystem
         );
+        return;
       }
     },
+    // disabled eslint here since tokens are checked separately, checking single object cause infinite rerender.
+    // eslint-disable-next-line
     [
       dispatch,
       fileSystem,
       handleChangeExecTime,
       handleChapterSelect,
       location.hash,
-      workspaceLocation
+      workspaceLocation,
+      tokens.accessToken,
+      tokens.refreshToken
     ]
   );
 
@@ -819,8 +837,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     ]
   );
 
-  const config = useUrlEncoder();
-
   const shareButton = useMemo(() => {
     const qs = isSicpEditor ? Links.playground + '#' + props.initialEditorValueHash : queryString;
     return (
@@ -830,12 +846,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
         handleUpdateShortURL={s => dispatch(updateShortURL(s))}
         queryString={qs}
         programConfig={config}
+        token={tokens}
         shortURL={shortURL}
         isSicp={isSicpEditor}
         key="share"
       />
     );
-  }, [dispatch, isSicpEditor, props.initialEditorValueHash, queryString, shortURL, config]);
+  }, [dispatch, isSicpEditor, props.initialEditorValueHash, queryString, shortURL, config, tokens]);
 
   const toggleFolderModeButton = useMemo(() => {
     return (
