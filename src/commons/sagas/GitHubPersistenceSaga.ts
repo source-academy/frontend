@@ -7,15 +7,15 @@ import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import {
-  GITHUB_OPEN_FILE,
-  GITHUB_SAVE_ALL,
-  GITHUB_SAVE_FILE,
-  GITHUB_SAVE_FILE_AS,
   GITHUB_CREATE_FILE,
   GITHUB_DELETE_FILE,
   GITHUB_DELETE_FOLDER,
+  GITHUB_OPEN_FILE,
   GITHUB_RENAME_FILE,
   GITHUB_RENAME_FOLDER,
+  GITHUB_SAVE_ALL,
+  GITHUB_SAVE_FILE,
+  GITHUB_SAVE_FILE_AS
 } from '../../features/github/GitHubTypes';
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
@@ -219,7 +219,6 @@ function* githubSaveFileAs(): any {
 
     yield call(promisifiedFileExplorer);
   }
-  
 }
 
 function* githubSaveAll(): any {
@@ -328,7 +327,7 @@ function* githubCreateFile({ payload }: ReturnType<typeof actions.githubCreateFi
   }
 
   if (repoName === '') {
-    yield call(console.log, "not synced to github");
+    yield call(console.log, 'not synced to github');
     return;
   }
 
@@ -385,7 +384,7 @@ function* githubDeleteFile({ payload }: ReturnType<typeof actions.githubDeleteFi
   }
 
   if (repoName === '') {
-    yield call(console.log, "not synced to github");
+    yield call(console.log, 'not synced to github');
     return;
   }
 
@@ -399,7 +398,7 @@ function* githubDeleteFile({ payload }: ReturnType<typeof actions.githubDeleteFi
     commitMessage,
     parentFolderPath
   );
-  
+
   yield call(store.dispatch, actions.enableFileSystemContextMenus());
   yield call(store.dispatch, actions.updateRefreshFileViewKey());
 }
@@ -432,7 +431,7 @@ function* githubDeleteFolder({ payload }: ReturnType<typeof actions.githubDelete
   const commitMessage = 'Changes made from Source Academy';
 
   if (repoName === '') {
-    yield call(console.log, "not synced to github");
+    yield call(console.log, 'not synced to github');
     return;
   }
 
@@ -480,7 +479,7 @@ function* githubRenameFile({ payload }: ReturnType<typeof actions.githubRenameFi
   const commitMessage = 'Changes made from Source Academy';
 
   if (repoName === '' || repoName === undefined) {
-    yield call(console.log, "not synced to github");
+    yield call(console.log, 'not synced to github');
     return;
   }
 
@@ -529,7 +528,7 @@ function* githubRenameFolder({ payload }: ReturnType<typeof actions.githubRename
   const commitMessage = 'Changes made from Source Academy';
 
   if (repoName === '' || repoName === undefined) {
-    yield call(console.log, "not synced to github");
+    yield call(console.log, 'not synced to github');
     return;
   }
 

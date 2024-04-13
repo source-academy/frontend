@@ -113,7 +113,7 @@ export default function* WorkspaceSaga(): SagaIterator {
       );
       // If the file system is not initialised, add an editor tab with the default editor value.
       if (fileSystem === null) {
-        yield put(actions.addEditorTab(workspaceLocation, defaultFilePath, defaultEditorValue)); 
+        yield put(actions.addEditorTab(workspaceLocation, defaultFilePath, defaultEditorValue));
         return;
       }
       const editorValue: string = yield new Promise((resolve, reject) => {

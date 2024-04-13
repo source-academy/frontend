@@ -3,19 +3,21 @@ import { Reducer } from 'redux';
 
 import { defaultFileSystem } from '../application/ApplicationTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
-import { 
+import { filePathRegex } from '../utils/PersistenceHelper';
+import {
   addGithubSaveInfo,
   addPersistenceFile,
   deleteAllGithubSaveInfo,
-  deleteAllPersistenceFiles,  deleteGithubSaveInfo,
+  deleteAllPersistenceFiles,
+  deleteGithubSaveInfo,
   deletePersistenceFile,
-  setInBrowserFileSystem, 
+  setInBrowserFileSystem,
   setPersistenceFileLastEditByPath,
   updateLastEditedFilePath,
-  updateRefreshFileViewKey,
   updatePersistenceFilePathAndNameByPath,
   updatePersistenceFolderPathAndNameByPath,
-  } from './FileSystemActions';
+  updateRefreshFileViewKey
+} from './FileSystemActions';
 import { FileSystemState } from './FileSystemTypes';
 
 export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = createReducer(
@@ -136,50 +138,55 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
       // get current level of folder
       const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(action.payload.newPath)!;
 
-      const currFolderSplit: string[] = regexResult[0].slice(1).split("/");
-      const currFolderIndex = currFolderSplit.length - 1;
+        const currFolderSplit: string[] = regexResult[0].slice(1).split('/');
+        const currFolderIndex = currFolderSplit.length - 1;
 
-      // /fold1/ becomes ["fold1"]
-      // /fold1/fold2/ becomes ["fold1", "fold2"]
-      // If in top level folder, becomes [""]
+        // /fold1/ becomes ["fold1"]
+        // /fold1/fold2/ becomes ["fold1", "fold2"]
+        // If in top level folder, becomes [""]
 
-      console.log(regexResult, currFolderSplit, "a1");
+        console.log(regexResult, currFolderSplit, 'a1');
 
-      // update all files that are its children
-      state.persistenceFileArray = filesState.filter(e => e.path).map((e => {
-        const r = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(e.path!)!;
-        const currParentFolders = r[0].slice(1).split("/");
-        console.log("currParentFolders", currParentFolders, "folderLevel", currFolderIndex);
-        if (currParentFolders.length <= currFolderIndex) {
-          return e; // not a child of folder
+        // update all files that are its children
+        state.persistenceFileArray = filesState
+          .filter(e => e.path)
+          .map(e => {
+            const r = filePathRegex.exec(e.path!)!;
+            const currParentFolders = r[0].slice(1).split('/');
+            console.log('currParentFolders', currParentFolders, 'folderLevel', currFolderIndex);
+            if (currParentFolders.length <= currFolderIndex) {
+              return e; // not a child of folder
+            }
+            if (currParentFolders[currFolderIndex] !== action.payload.oldFolderName) {
+              return e; // not a child of folder
+            }
+            // only children remain
+            currParentFolders[currFolderIndex] = action.payload.newFolderName;
+            currParentFolders[0] = '/' + currParentFolders[0];
+            const newPath = currParentFolders.join('/');
+            console.log('from', e.path, 'to', newPath);
+            return { ...e, path: newPath };
+          });
+      })
+      .addCase(setPersistenceFileLastEditByPath, (state, action) => {
+        const filesState = state['persistenceFileArray'];
+        const persistenceFileFindIndex = filesState.findIndex(e => e.path === action.payload.path);
+        if (persistenceFileFindIndex === -1) {
+          return;
         }
-        if (currParentFolders[currFolderIndex] !== action.payload.oldFolderName) {
-          return e; // not a child of folder
-        }
-        // only children remain
-        currParentFolders[currFolderIndex] = action.payload.newFolderName;
-        currParentFolders[0] = "/" + currParentFolders[0];
-        const newPath = currParentFolders.join("/");
-        console.log("from", e.path, "to", newPath);
-        return {...e, path: newPath};
-      }));
-    })
-    .addCase(setPersistenceFileLastEditByPath, (state, action) => {
-      const filesState = state['persistenceFileArray'];
-      const persistenceFileFindIndex = filesState.findIndex(e => e.path === action.payload.path);
-      if (persistenceFileFindIndex === -1) {
-        return;
-      }
-      const newPersistenceFile = {...filesState[persistenceFileFindIndex], lastEdit: action.payload.date};
-      filesState[persistenceFileFindIndex] = newPersistenceFile;
-      state.persistenceFileArray = filesState;
-    })
-    .addCase(updateLastEditedFilePath, (state, action) => {
-      state.lastEditedFilePath = action.payload.lastEditedFilePath;
-    })
-    .addCase(updateRefreshFileViewKey, (state, action) => {
-      state.refreshFileViewKey = (state.refreshFileViewKey + 1) % 2;
-      state.lastEditedFilePath = "";
-    })
+        const newPersistenceFile = {
+          ...filesState[persistenceFileFindIndex],
+          lastEdit: action.payload.date
+        };
+        filesState[persistenceFileFindIndex] = newPersistenceFile;
+        state.persistenceFileArray = filesState;
+      })
+      .addCase(updateLastEditedFilePath, (state, action) => {
+        state.lastEditedFilePath = action.payload.lastEditedFilePath;
+      })
+      .addCase(updateRefreshFileViewKey, (state, action) => {
+        state.refreshFileViewKey = (state.refreshFileViewKey + 1) % 2;
+        state.lastEditedFilePath = '';
+      });
   }
 );

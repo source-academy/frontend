@@ -18,6 +18,7 @@ export type PersistenceFile = {
   name: string;
   path?: string; // only for persistenceFileArray
   lastSaved?: Date;
+  lastSavedGithub?: Date;
   lastEdit?: Date;
   isFolder?: boolean;
   repoName?: string; // only when synced to github

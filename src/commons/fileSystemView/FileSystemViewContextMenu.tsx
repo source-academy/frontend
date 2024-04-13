@@ -44,45 +44,65 @@ const FileSystemViewContextMenu: React.FC<Props> = ({
         onClose={() => toggleMenu(false)}
       >
         {createNewFile && (
-          <MenuItem 
-            className={isContextMenuDisabled ? classes['context-menu-item-disabled'] : classes['context-menu-item']} 
-            onClick={createNewFile} 
+          <MenuItem
+            className={
+              isContextMenuDisabled
+                ? classes['context-menu-item-disabled']
+                : classes['context-menu-item']
+            }
+            onClick={createNewFile}
             disabled={isContextMenuDisabled}
           >
             New File
           </MenuItem>
         )}
         {createNewDirectory && (
-          <MenuItem 
-            className={isContextMenuDisabled ? classes['context-menu-item-disabled'] : classes['context-menu-item']} 
-            onClick={createNewDirectory} 
+          <MenuItem
+            className={
+              isContextMenuDisabled
+                ? classes['context-menu-item-disabled']
+                : classes['context-menu-item']
+            }
+            onClick={createNewDirectory}
             disabled={isContextMenuDisabled}
           >
             New Directory
           </MenuItem>
         )}
         {open && (
-          <MenuItem 
-            className={isContextMenuDisabled ? classes['context-menu-item-disabled'] : classes['context-menu-item']} 
-            onClick={open} 
+          <MenuItem
+            className={
+              isContextMenuDisabled
+                ? classes['context-menu-item-disabled']
+                : classes['context-menu-item']
+            }
+            onClick={open}
             disabled={isContextMenuDisabled}
           >
             Open
           </MenuItem>
         )}
         {rename && (
-          <MenuItem 
-            className={isContextMenuDisabled ? classes['context-menu-item-disabled'] : classes['context-menu-item']} 
-            onClick={rename} 
+          <MenuItem
+            className={
+              isContextMenuDisabled
+                ? classes['context-menu-item-disabled']
+                : classes['context-menu-item']
+            }
+            onClick={rename}
             disabled={isContextMenuDisabled}
           >
             Rename
           </MenuItem>
         )}
         {remove && (
-          <MenuItem 
-            className={isContextMenuDisabled ? classes['context-menu-item-disabled'] : classes['context-menu-item']} 
-            onClick={remove} 
+          <MenuItem
+            className={
+              isContextMenuDisabled
+                ? classes['context-menu-item-disabled']
+                : classes['context-menu-item']
+            }
+            onClick={remove}
             disabled={isContextMenuDisabled}
           >
             Delete

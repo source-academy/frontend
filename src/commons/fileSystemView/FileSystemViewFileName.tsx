@@ -2,7 +2,11 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { persistenceRenameFile, persistenceRenameFolder } from 'src/features/persistence/PersistenceActions';
+import { githubRenameFile, githubRenameFolder } from 'src/features/github/GitHubActions';
+import {
+  persistenceRenameFile,
+  persistenceRenameFolder
+} from 'src/features/persistence/PersistenceActions';
 import classes from 'src/styles/FileSystemView.module.scss';
 
 import { showSimpleErrorDialog } from '../utils/DialogHelper';
@@ -11,7 +15,6 @@ import {
   renameEditorTabsForDirectory
 } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import { githubRenameFile, githubRenameFolder } from 'src/features/github/GitHubActions';
 
 type Props = {
   workspaceLocation: WorkspaceLocation;
@@ -71,11 +74,11 @@ const FileSystemViewFileName: React.FC<Props> = ({
           }
 
           if (isDirectory) {
-            dispatch(persistenceRenameFolder({oldFolderPath: oldPath, newFolderPath: newPath}));
+            dispatch(persistenceRenameFolder({ oldFolderPath: oldPath, newFolderPath: newPath }));
             dispatch(githubRenameFolder(oldPath, newPath));
             dispatch(renameEditorTabsForDirectory(workspaceLocation, oldPath, newPath));
           } else {
-            dispatch(persistenceRenameFile({oldFilePath: oldPath, newFilePath: newPath}));
+            dispatch(persistenceRenameFile({ oldFilePath: oldPath, newFilePath: newPath }));
             dispatch(githubRenameFile(oldPath, newPath));
             dispatch(renameEditorTabForFile(workspaceLocation, oldPath, newPath));
           }

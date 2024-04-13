@@ -29,32 +29,31 @@ export const persistenceSaveFileAs = createAction(PERSISTENCE_SAVE_FILE_AS, () =
 
 export const persistenceCreateFile = createAction(
   PERSISTENCE_CREATE_FILE,
-  (newFilePath: string) => ({payload: newFilePath})
+  (newFilePath: string) => ({ payload: newFilePath })
 );
 
 export const persistenceCreateFolder = createAction(
   PERSISTENCE_CREATE_FOLDER,
-  (newFolderPath: string) => ({payload: newFolderPath})
+  (newFolderPath: string) => ({ payload: newFolderPath })
 );
 
-export const persistenceDeleteFile = createAction(
-  PERSISTENCE_DELETE_FILE,
-  (filePath: string) => ({payload: filePath})
-);
+export const persistenceDeleteFile = createAction(PERSISTENCE_DELETE_FILE, (filePath: string) => ({
+  payload: filePath
+}));
 
 export const persistenceDeleteFolder = createAction(
   PERSISTENCE_DELETE_FOLDER,
-  (folderPath: string) => ({payload: folderPath})
+  (folderPath: string) => ({ payload: folderPath })
 );
 
 export const persistenceRenameFile = createAction(
   PERSISTENCE_RENAME_FILE,
-  (filePaths: {oldFilePath: string, newFilePath: string}) => ({payload: filePaths})
+  (filePaths: { oldFilePath: string; newFilePath: string }) => ({ payload: filePaths })
 );
 
 export const persistenceRenameFolder = createAction(
   PERSISTENCE_RENAME_FOLDER,
-  (folderPaths: {oldFolderPath: string, newFolderPath: string}) => ({payload: folderPaths})
+  (folderPaths: { oldFolderPath: string; newFolderPath: string }) => ({ payload: folderPaths })
 );
 
 export const persistenceInitialise = createAction(PERSISTENCE_INITIALISE, () => ({ payload: {} }));

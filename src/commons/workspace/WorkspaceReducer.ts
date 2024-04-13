@@ -89,7 +89,8 @@ import {
   UPDATE_LAST_DEBUGGER_RESULT,
   UPDATE_LAST_NON_DET_RESULT,
   WorkspaceLocation,
-  WorkspaceManagerState} from './WorkspaceTypes';
+  WorkspaceManagerState
+} from './WorkspaceTypes';
 
 const getWorkspaceLocation = (action: any): WorkspaceLocation => {
   return action.payload ? action.payload.workspaceLocation : 'assessment';

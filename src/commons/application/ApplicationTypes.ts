@@ -362,7 +362,7 @@ export const defaultEditorValue = '// Type your program in here!';
  *
  * @param workspaceLocation the location of the workspace, used for context
  */
-export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): WorkspaceState => ({ // TODO remove default js
+export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): WorkspaceState => ({
   autogradingResults: [],
   context: createContext<WorkspaceLocation>(
     Constants.defaultSourceChapter,

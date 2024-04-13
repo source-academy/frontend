@@ -4,7 +4,9 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { githubDeleteFile } from 'src/features/github/GitHubActions';
 import { persistenceDeleteFile } from 'src/features/persistence/PersistenceActions';
+import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 import classes from 'src/styles/FileSystemView.module.scss';
 
 import { showSimpleConfirmDialog } from '../utils/DialogHelper';
@@ -13,8 +15,6 @@ import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
-import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
-import { githubDeleteFile } from 'src/features/github/GitHubActions';
 
 type Props = {
   workspaceLocation: WorkspaceLocation;
@@ -42,25 +42,25 @@ const FileSystemViewFileNode: React.FC<Props> = ({
   const [currColor, setCurrColor] = React.useState<string | undefined>(undefined);
 
   React.useEffect(() => {
-    const myFileMetadata = persistenceFileArray.filter(e => e.path === basePath+"/"+fileName)?.at(0);
+    const myFileMetadata = persistenceFileArray
+      .filter(e => e.path === basePath + '/' + fileName)
+      ?.at(0);
     const checkColor = (myFileMetadata: PersistenceFile | undefined) =>
-    myFileMetadata
-      ? myFileMetadata.lastSaved
-        ? myFileMetadata.lastEdit
-          ? myFileMetadata.lastEdit > myFileMetadata.lastSaved
-            ? Colors.ORANGE4
+      myFileMetadata
+        ? myFileMetadata.lastSaved
+          ? myFileMetadata.lastEdit
+            ? myFileMetadata.lastEdit > myFileMetadata.lastSaved
+              ? Colors.ORANGE4
+              : Colors.BLUE4
             : Colors.BLUE4
           : Colors.BLUE4
-        : Colors.BLUE4
-      : undefined;
+        : undefined;
     setCurrColor(checkColor(myFileMetadata));
-  }, [lastEditedFilePath]);
-  
+  }, [lastEditedFilePath, basePath, fileName, persistenceFileArray]);
 
   const [isEditing, setIsEditing] = React.useState(false);
   const dispatch = useDispatch();
   // const store = useStore<OverallState>();
-
 
   const fullPath = path.join(basePath, fileName);
 
@@ -131,10 +131,7 @@ const FileSystemViewFileNode: React.FC<Props> = ({
     >
       <div className={classes['file-system-view-node-container']} onClick={onClick}>
         <FileSystemViewIndentationPadding indentationLevel={indentationLevel} />
-        <Icon 
-          icon={IconNames.DOCUMENT} 
-          style={{color: currColor}}
-        />
+        <Icon icon={IconNames.DOCUMENT} style={{ color: currColor }} />
         <FileSystemViewFileName
           workspaceLocation={workspaceLocation}
           fileSystem={fileSystem}

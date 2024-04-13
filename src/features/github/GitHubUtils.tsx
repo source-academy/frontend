@@ -4,6 +4,7 @@ import {
   GetResponseTypeFromEndpointMethod
 } from '@octokit/types';
 import { FSModule } from 'browserfs/dist/node/core/FS';
+import { filePathRegex } from 'src/commons/utils/PersistenceHelper';
 
 import { getPersistenceFile, retrieveFilesInWorkspaceAsRecord, rmFilesInDirRecursively,writeFileRecursively } from '../../commons/fileSystem/FileSystemUtils';
 import { actions } from '../../commons/utils/ActionsHelper';
@@ -191,12 +192,12 @@ export async function checkIsFile(
     owner: repoOwner,
     repo: repoName,
     path: filePath
-  })
+  });
 
   const files = results.data;
 
   if (Array.isArray(files)) {
-    console.log("folder detected");
+    console.log('folder detected');
     return false;
   }
   
@@ -297,7 +298,9 @@ export async function openFileInEditor(
 
   store.dispatch(actions.updateRefreshFileViewKey());
   //refreshes editor tabs
-  store.dispatch(actions.removeEditorTabsForDirectory("playground", WORKSPACE_BASE_PATHS["playground"])); // TODO hardcoded
+  store.dispatch(
+    actions.removeEditorTabsForDirectory('playground', WORKSPACE_BASE_PATHS['playground'])
+  ); // TODO hardcoded
 }
 
 export async function openFolderInFolderMode(
@@ -310,7 +313,7 @@ export async function openFolderInFolderMode(
 
   store.dispatch(actions.deleteAllGithubSaveInfo());
 
-  //In order to get the file paths recursively, we require the tree_sha, 
+  //In order to get the file paths recursively, we require the tree_sha,
   // which is obtained from the most recent commit(any commit works but the most recent)
   // is the easiest
 
@@ -723,7 +726,7 @@ export async function performMultipleCreatingSave(
   }
 }
 
-export async function performFileDeletion (
+export async function performFileDeletion(
   octokit: Octokit,
   repoOwner: string,
   repoName: string,
@@ -757,7 +760,7 @@ export async function performFileDeletion (
     }
 
     const sha = files.sha;
-    
+
     await octokit.repos.deleteFile({
       owner: repoOwner,
       repo: repoName,
@@ -819,14 +822,14 @@ export async function performFolderDeletion(
     }
 
     const persistenceFileArray = store.getState().fileSystem.persistenceFileArray;
-    
+
     for (let i = 0; i < persistenceFileArray.length; i++) {
       await checkPersistenceFile(persistenceFileArray[i]);
     }
 
     async function checkPersistenceFile(persistenceFile: PersistenceFile) {
-      if (persistenceFile.path?.startsWith("/playground/" + filePath)) {
-        console.log("Deleting" + persistenceFile.path);
+      if (persistenceFile.path?.startsWith('/playground/' + filePath)) {
+        console.log('Deleting' + persistenceFile.path);
         await performFileDeletion(
           octokit,
           repoOwner,
@@ -850,7 +853,7 @@ export async function performFolderDeletion(
   }
 }
 
-export async function performFileRenaming (
+export async function performFileRenaming(
   octokit: Octokit,
   repoOwner: string,
   repoName: string,
@@ -872,7 +875,9 @@ export async function performFileRenaming (
   try {
     store.dispatch(actions.disableFileSystemContextMenus());
     type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
-    console.log("repoOwner is " + repoOwner + " repoName is " + repoName + " oldfilepath is " + oldFilePath);
+    console.log(
+      'repoOwner is ' + repoOwner + ' repoName is ' + repoName + ' oldfilepath is ' + oldFilePath
+    );
     const results: GetContentResponse = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,
@@ -889,11 +894,11 @@ export async function performFileRenaming (
 
     const sha = files.sha;
     const content = (results.data as any).content;
-    const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(newFilePath);
-        if (regexResult === null) {
-          console.log("Regex null");
-          return;
-        }
+    const regexResult = filePathRegex.exec(newFilePath);
+    if (regexResult === null) {
+      console.log('Regex null');
+      return;
+    }
     const newFileName = regexResult[2] + regexResult[3];
 
     await octokit.repos.deleteFile({
@@ -903,7 +908,6 @@ export async function performFileRenaming (
       message: commitMessage,
       sha: sha
     });
-
 
     await octokit.repos.createOrUpdateFileContents({
       owner: repoOwner,
@@ -915,7 +919,13 @@ export async function performFileRenaming (
       author: { name: githubName, email: githubEmail }
     });
 
-    store.dispatch(actions.updatePersistenceFilePathAndNameByPath("/playground/" + oldFilePath, "/playground/" + newFilePath, newFileName));
+    store.dispatch(
+      actions.updatePersistenceFilePathAndNameByPath(
+        '/playground/' + oldFilePath,
+        '/playground/' + newFilePath,
+        newFileName
+      )
+    );
     showSuccessMessage('Successfully renamed file in Github!', 1000);
   } catch (err) {
     console.error(err);
@@ -926,7 +936,7 @@ export async function performFileRenaming (
   }
 }
 
-export async function performFolderRenaming (
+export async function performFolderRenaming(
   octokit: Octokit,
   repoOwner: string,
   repoName: string,
@@ -942,13 +952,13 @@ export async function performFolderRenaming (
   githubEmail = githubEmail || 'No public email provided';
   githubName = githubName || 'Source Academy User';
   commitMessage = commitMessage || 'Changes made from Source Academy';
-  
+
   try {
     store.dispatch(actions.disableFileSystemContextMenus());
     const persistenceFileArray = store.getState().fileSystem.persistenceFileArray;
     type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
     type GetContentData = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.getContent>;
-    
+
     for (let i = 0; i < persistenceFileArray.length; i++) {
       const persistenceFile = persistenceFileArray[i];
       if (persistenceFile.path?.startsWith("/playground/" + oldFolderPath)) {
@@ -970,13 +980,13 @@ export async function performFolderRenaming (
 
         const regexResult0 = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(oldFolderPath);
         if (regexResult0 === null) {
-          console.log("Regex null");
+          console.log('Regex null');
           return;
         }
         const oldFolderName = regexResult0[2];
-        const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(newFolderPath);
+        const regexResult = filePathRegex.exec(newFolderPath);
         if (regexResult === null) {
-          console.log("Regex null");
+          console.log('Regex null');
           return;
         }
         const newFolderName = regexResult[2];
@@ -995,18 +1005,30 @@ export async function performFolderRenaming (
           path: newFilePath,
           message: commitMessage,
           content: content,
-          committer: { name: githubName, email: githubEmail},
-          author: { name: githubName, email: githubEmail}
+          committer: { name: githubName, email: githubEmail },
+          author: { name: githubName, email: githubEmail }
         });
 
-        console.log("oldfolderpath is " + oldFolderPath + " newfolderpath is " + newFolderPath + " oldfoldername is " + oldFolderName + " newfoldername is " + newFolderName);
+        console.log(
+          'oldfolderpath is ' +
+            oldFolderPath +
+            ' newfolderpath is ' +
+            newFolderPath +
+            ' oldfoldername is ' +
+            oldFolderName +
+            ' newfoldername is ' +
+            newFolderName
+        );
 
         console.log(store.getState().fileSystem.persistenceFileArray);
-        store.dispatch(actions.updatePersistenceFolderPathAndNameByPath(
-          "/playground/" + oldFolderPath, 
-          "/playground/" + newFolderPath, 
-          oldFolderName, 
-          newFolderName));
+        store.dispatch(
+          actions.updatePersistenceFolderPathAndNameByPath(
+            '/playground/' + oldFolderPath,
+            '/playground/' + newFolderPath,
+            oldFolderName,
+            newFolderName
+          )
+        );
       }
     }
 

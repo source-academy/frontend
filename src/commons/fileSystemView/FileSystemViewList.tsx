@@ -2,13 +2,13 @@ import { Spinner, SpinnerSize } from '@blueprintjs/core';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
+import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 import classes from 'src/styles/FileSystemView.module.scss';
 
 import Delay from '../delay/Delay';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewDirectoryNode from './FileSystemViewDirectoryNode';
 import FileSystemViewFileNode from './FileSystemViewFileNode';
-import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 
 type Props = {
   workspaceLocation: WorkspaceLocation;

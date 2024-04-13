@@ -16,9 +16,6 @@ import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
 import FileSystemViewList from './FileSystemViewList';
 import FileSystemViewPlaceholderNode from './FileSystemViewPlaceholderNode';
-import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
-import { githubCreateFile, githubDeleteFolder } from 'src/features/github/GitHubActions';
-import { enableFileSystemContextMenus } from 'src/features/playground/PlaygroundActions';
 
 type Props = {
   workspaceLocation: WorkspaceLocation;
@@ -156,8 +153,10 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
           return showSimpleConfirmDialog({
             contents: (
               <div>
-                <p>Warning: Github is unable to create empty directories. When you create your first file in this folder,
-                   Github will automatically sync this folder and the first file.
+                <p>
+                  Warning: Github is unable to create empty directories. When you create your first
+                  file in this folder, Github will automatically sync this folder and the first
+                  file.
                 </p>
                 <p>Please click 'Confirm' to continue.</p>
               </div>

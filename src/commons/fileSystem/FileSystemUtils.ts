@@ -2,11 +2,11 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import Stats from 'browserfs/dist/node/core/node_fs_stats';
 import path from 'path';
 import { GitHubSaveInfo } from 'src/features/github/GitHubTypes';
+import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 import { store } from 'src/pages/createStore';
 
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 
 type File = {
   path: string;
@@ -269,19 +269,20 @@ export const writeFileRecursively = (
 
 export const getGithubSaveInfo = () => {
   const persistenceFileArray = store.getState().fileSystem.persistenceFileArray;
-  const { 
-    editorTabs,
-    activeEditorTabIndex
-  } = store.getState().workspaces['playground'];
+  const { editorTabs, activeEditorTabIndex } = store.getState().workspaces['playground'];
   let currentFilePath = '';
   if (activeEditorTabIndex !== null) {
     currentFilePath = editorTabs[activeEditorTabIndex].filePath || '';
   }
-  const PersistenceFile: PersistenceFile = persistenceFileArray.find(e => e.path === currentFilePath) || {name: '', id: '', repoName: ''};
-  const githubSaveInfo: GitHubSaveInfo = { 
-    filePath: PersistenceFile.path, 
-    lastSaved: PersistenceFile.lastSaved, 
-    repoName: PersistenceFile.repoName || (persistenceFileArray[0] === undefined ? '' : persistenceFileArray[0].repoName)
+  const PersistenceFile: PersistenceFile = persistenceFileArray.find(
+    e => e.path === currentFilePath
+  ) || { name: '', id: '', repoName: '' };
+  const githubSaveInfo: GitHubSaveInfo = {
+    filePath: PersistenceFile.path,
+    lastSaved: PersistenceFile.lastSaved,
+    repoName:
+      PersistenceFile.repoName ||
+      (persistenceFileArray[0] === undefined ? '' : persistenceFileArray[0].repoName)
   };
   return githubSaveInfo;
 }
