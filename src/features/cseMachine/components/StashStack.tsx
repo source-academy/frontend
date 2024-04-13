@@ -38,6 +38,6 @@ export class StashStack extends Visible {
   }
 
   draw(): React.ReactNode {
-    return <React.Fragment>{this.stashItemComponents.map(c => c?.draw())}</React.Fragment>;
+    return <>{this.stashItemComponents.map(c => c?.draw())}</>;
   }
 }
