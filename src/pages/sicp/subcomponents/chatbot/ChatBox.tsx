@@ -1,11 +1,11 @@
 import { Button } from '@blueprintjs/core';
-import * as React from 'react';
+import React from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { useSession } from 'src/commons/utils/Hooks';
+import { useTokens } from 'src/commons/utils/Hooks';
+import { chat } from 'src/features/sicp/api';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
 import classes from 'src/styles/Chatbot.module.scss';
 
-import { chat } from '../../../../commons/sagas/RequestsSaga';
 import SICPNotes from './SicpNotes';
 
 type Props = {
@@ -22,7 +22,7 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
   const [userInput, setUserInput] = React.useState('');
   const [contentHistory, setContentHistory] = React.useState<Array<string>>([]);
   const [roleHistory, setRoleHistory] = React.useState<Array<string>>([]);
-  const { accessToken, refreshToken } = useSession();
+  const tokens = useTokens();
 
   const handleUserInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserInput(event.target.value);
@@ -75,7 +75,6 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
       payload.push({ role: roleHistory[i], content: contentHistory[i] });
     }
     payload.push({ role: 'user', content: _userInput });
-    const tokens = { accessToken: accessToken!, refreshToken: refreshToken! };
     chat(tokens, payload)
       .then(text => {
         const keptContentHistory =
