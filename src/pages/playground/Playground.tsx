@@ -28,6 +28,10 @@ import {
   setSessionDetails,
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
+import {
+  setPersistenceFileLastEditByPath,
+  updateLastEditedFilePath
+} from 'src/commons/fileSystem/FileSystemActions';
 import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
@@ -112,7 +116,10 @@ import {
   NormalEditorContainerProps
 } from '../../commons/editor/EditorContainer';
 import { Position } from '../../commons/editor/EditorTypes';
-import { getGithubSaveInfo, overwriteFilesInWorkspace } from '../../commons/fileSystem/FileSystemUtils';
+import {
+  getGithubSaveInfo,
+  overwriteFilesInWorkspace
+} from '../../commons/fileSystem/FileSystemUtils';
 import FileSystemView from '../../commons/fileSystemView/FileSystemView';
 import MobileWorkspace, {
   MobileWorkspaceProps
@@ -138,7 +145,6 @@ import {
   makeSubstVisualizerTabFrom,
   mobileOnlyTabIds
 } from './PlaygroundTabs';
-import { setPersistenceFileLastEditByPath, updateLastEditedFilePath } from 'src/commons/fileSystem/FileSystemActions';
 
 export type PlaygroundProps = {
   isSicpEditor?: boolean;
@@ -266,9 +272,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant }
   } = useTypedSelector(state => state.workspaces[workspaceLocation]);
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
-  const { queryString, shortURL, persistenceFile } = useTypedSelector(
-    state => state.playground
-  );
+  const { queryString, shortURL, persistenceFile } = useTypedSelector(state => state.playground);
   const githubSaveInfo = getGithubSaveInfo();
   //console.log(githubSaveInfo);
   const {
@@ -417,7 +421,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     const editDate = new Date();
     if (filePath) {
       //console.log(editorTabs);
-      console.log("dispatched " + filePath);
+      console.log('dispatched ' + filePath);
       dispatch(setPersistenceFileLastEditByPath(filePath, editDate));
       dispatch(updateLastEditedFilePath(filePath));
     }
@@ -596,7 +600,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [handleReplEval, isRunning, selectedTab]
   );
 
-  // Compute this here to avoid re-rendering the button every keystroke 
+  // Compute this here to avoid re-rendering the button every keystroke
   const persistenceIsDirty =
     persistenceFile && (!persistenceFile.lastSaved || persistenceFile.lastSaved < lastEdit);
   const persistenceButtons = useMemo(() => {
@@ -654,7 +658,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     githubOctokitObject.octokit,
     githubPersistenceIsDirty,
     githubSaveInfo,
-    isFolderModeEnabled
+    isFolderModeEnabled,
+    persistenceFile
   ]);
 
   const executionTime = useMemo(
@@ -1017,7 +1022,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
           : [])
       ]
     };
-  }, [isFolderModeEnabled, workspaceLocation, lastEditedFilePath, isContextMenuDisabled, refreshFileViewKey]);
+  }, [
+    isFolderModeEnabled,
+    workspaceLocation,
+    lastEditedFilePath,
+    isContextMenuDisabled,
+    refreshFileViewKey
+  ]);
 
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {

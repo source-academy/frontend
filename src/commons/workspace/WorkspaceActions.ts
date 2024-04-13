@@ -74,7 +74,8 @@ import {
   UPDATE_WORKSPACE,
   WorkspaceLocation,
   WorkspaceLocationsWithTools,
-  WorkspaceState} from './WorkspaceTypes';
+  WorkspaceState
+} from './WorkspaceTypes';
 
 export const setTokenCount = createAction(
   SET_TOKEN_COUNT,
@@ -515,4 +516,3 @@ export const updateLastNonDetResult = createAction(
     payload: { lastNonDetResult, workspaceLocation }
   })
 );
-

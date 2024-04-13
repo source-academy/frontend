@@ -13,7 +13,8 @@ import {
   PLAYGROUND_UPDATE_PERSISTENCE_FOLDER,
   PLAYGROUND_UPDATE_REPO_NAME,
   SHORTEN_URL,
-  UPDATE_SHORT_URL} from './PlaygroundTypes';
+  UPDATE_SHORT_URL
+} from './PlaygroundTypes';
 
 export const generateLzString = createAction(GENERATE_LZ_STRING, () => ({ payload: {} }));
 
@@ -34,7 +35,7 @@ export const playgroundUpdatePersistenceFile = createAction(
 
 export const playgroundUpdatePersistenceFolder = createAction(
   PLAYGROUND_UPDATE_PERSISTENCE_FOLDER,
-  (file?: PersistenceFile) => ({ payload: file ? {...file, isFolder: true} : undefined})
+  (file?: PersistenceFile) => ({ payload: file ? { ...file, isFolder: true } : undefined })
 );
 
 export const playgroundUpdateGitHubSaveInfo = createAction(
@@ -59,7 +60,6 @@ export const disableFileSystemContextMenus = createAction(
   () => ({ payload: {} })
 );
 
-export const enableFileSystemContextMenus = createAction(
-  ENABLE_FILE_SYSTEM_CONTEXT_MENUS,
-  () => ({ payload: {} })
-);
+export const enableFileSystemContextMenus = createAction(ENABLE_FILE_SYSTEM_CONTEXT_MENUS, () => ({
+  payload: {}
+}));

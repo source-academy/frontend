@@ -423,7 +423,14 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const resetWorkspaceOptions = assertType<WorkspaceState>()({
       autogradingResults: options.autogradingResults ?? [],
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      editorTabs: [{ value: options.editorValue ?? '', highlightedLines: [], breakpoints: [], githubSaveInfo: {repoName: '', filePath: ''} }],
+      editorTabs: [
+        {
+          value: options.editorValue ?? '',
+          highlightedLines: [],
+          breakpoints: [],
+          githubSaveInfo: { repoName: '', filePath: '' }
+        }
+      ],
       programPrependValue: options.programPrependValue ?? '',
       programPostpendValue: options.programPostpendValue ?? '',
       editorTestcases: options.editorTestcases ?? []

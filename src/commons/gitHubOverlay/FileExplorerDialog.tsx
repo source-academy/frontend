@@ -26,9 +26,9 @@ import {
   performMultipleCreatingSave,
   performOverwritingSaveForSaveAs
 } from '../../features/github/GitHubUtils';
+import { getPersistenceFile } from '../fileSystem/FileSystemUtils';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
-import { getPersistenceFile } from '../fileSystem/FileSystemUtils';
 
 export type FileExplorerDialogProps = {
   repoName: string;
@@ -123,8 +123,18 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
     if (props.pickerType === 'Save All') {
       if (await checkIsFile(props.octokit, githubLoginID, props.repoName, filePath)) {
       } else {
-        if (await checkFolderLocationIsValid(props.octokit, githubLoginID, props.repoName, filePath)) {
-          performMultipleCreatingSave(props.octokit, githubLoginID, props.repoName, filePath, githubName, githubEmail, '');
+        if (
+          await checkFolderLocationIsValid(props.octokit, githubLoginID, props.repoName, filePath)
+        ) {
+          performMultipleCreatingSave(
+            props.octokit,
+            githubLoginID,
+            props.repoName,
+            filePath,
+            githubName,
+            githubEmail,
+            ''
+          );
         }
       }
     }
@@ -161,6 +171,17 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
         }
 
         if (saveType === 'Create') {
+          const persistenceFile = getPersistenceFile(filePath);
+          if (persistenceFile === undefined) {
+            throw new Error('persistence file not found for this filepath: ' + filePath);
+          }
+          const parentFolderPath = persistenceFile.parentFolderPath;
+          if (parentFolderPath === undefined) {
+            throw new Error(
+              'repository name or parentfolderpath not found for this persistencefile: ' +
+                persistenceFile
+            );
+          }
           performCreatingSave(
             props.octokit,
             githubLoginID,
