@@ -225,7 +225,8 @@ export const rmdirRecursively = (fileSystem: FSModule, directoryPath: string): P
 export const writeFileRecursively = (
   fileSystem: FSModule,
   filePath: string,
-  fileContents: string
+  fileContents: string,
+  onlyCreateFolder?: boolean
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
     // Create directories along the path if they do not exist.
@@ -255,15 +256,16 @@ export const writeFileRecursively = (
       promise.catch(err => reject(err));
     }
 
-    // Write to the file.
-    fileSystem.writeFile(filePath, fileContents, err => {
-      if (err) {
-        reject(err);
-        return;
-      }
-
-      resolve();
-    });
+    if (!onlyCreateFolder) {
+      // Write to the file.
+      fileSystem.writeFile(filePath, fileContents, err => {
+        if (err) {
+          reject(err);
+          return;
+        }
+      });
+    }
+    resolve();
   });
 };
 

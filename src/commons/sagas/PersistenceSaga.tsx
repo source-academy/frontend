@@ -136,9 +136,6 @@ export function* persistenceSaga(): SagaIterator {
       }
 
       yield call(store.dispatch, actions.disableFileSystemContextMenus());
-
-      // Note: for mimeType, text/plain -> file, application/vnd.google-apps.folder -> folder
-
       if (mimeType === MIME_FOLDER) {
         // handle folders
         toastKey = yield call(showMessage, {
@@ -148,7 +145,6 @@ export function* persistenceSaga(): SagaIterator {
         });
 
         const fileList = yield call(getFilesOfFolder, id, name); // this needed the extra scope mimetypes to have every file
-        // TODO: add type for each resp?
         yield call(console.log, 'fileList', fileList);
 
         const fileSystem: FSModule | null = yield select(
@@ -156,19 +152,13 @@ export function* persistenceSaga(): SagaIterator {
         );
         // If the file system is not initialised, do nothing.
         if (fileSystem === null) {
-          yield call(console.log, 'no filesystem!');
-          return;
+          throw new Error("No filesystem!");
         }
 
-        // Begin
-
-        // rm everything TODO replace everything hardcoded with playground?
         yield call(rmFilesInDirRecursively, fileSystem, '/playground');
-
-        // clear all persistence files
         yield call(store.dispatch, actions.deleteAllPersistenceFiles());
 
-        // add tlrf
+        // add top level root folder
         yield put(
           actions.addPersistenceFile({
             id,
@@ -178,6 +168,8 @@ export function* persistenceSaga(): SagaIterator {
             isFolder: true
           })
         );
+
+        yield call(store.dispatch, actions.updateRefreshFileViewKey());
 
         for (const currFile of fileList) {
           if (currFile.isFolder === true) {
@@ -191,6 +183,14 @@ export function* persistenceSaga(): SagaIterator {
                 isFolder: true
               })
             );
+            yield call(
+              writeFileRecursively,
+              fileSystem,
+              '/playground' + currFile.path + "/dummy", // workaround to make empty folders
+              "",
+              true
+            );
+            yield call(store.dispatch, actions.updateRefreshFileViewKey());
             continue;
           }
           yield put(
@@ -206,8 +206,6 @@ export function* persistenceSaga(): SagaIterator {
             fileId: currFile.id,
             alt: 'media'
           });
-          console.log(currFile.path);
-          console.log(contents.body === '');
           yield call(
             writeFileRecursively,
             fileSystem,
@@ -215,41 +213,32 @@ export function* persistenceSaga(): SagaIterator {
             contents.body
           );
           yield call(showSuccessMessage, `Loaded file ${currFile.path}.`, 1000);
+          yield call(store.dispatch, actions.updateRefreshFileViewKey());
         }
 
         // set source to chapter 4 TODO is there a better way of handling this
         yield put(
           actions.chapterSelect(parseInt('4', 10) as Chapter, Variant.DEFAULT, 'playground')
         );
-        // open folder mode TODO enable button
-        //yield call(store.dispatch, actions.setFolderMode("playground", true));
+
         yield call(store.dispatch, actions.enableFileSystemContextMenus());
-
-        // DDDDDDDDDDDDDDDebug
-        const test = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
-        yield call(console.log, test);
-
-        // refresh needed
         yield call(
           store.dispatch,
           actions.removeEditorTabsForDirectory('playground', WORKSPACE_BASE_PATHS['playground'])
-        ); // TODO hardcoded
-        // TODO find a file to open instead of deleting all active tabs?
-        // TODO without modifying WorkspaceReducer in one function this would cause errors - called by onChange of Playground.tsx?
-        // TODO change behaviour of WorkspaceReducer to not create program.js every time folder mode changes with 0 tabs existing?
-        yield call(store.dispatch, actions.updateRefreshFileViewKey());
+        );
 
-        yield call(showSuccessMessage, `Loaded folder ${name}.`, 1000);
-
-        // TODO does not update playground on loading folder
-        yield call(console.log, 'ahfdaskjhfkjsadf', parentId);
         yield put(
           actions.playgroundUpdatePersistenceFolder({ id, name, parentId, lastSaved: new Date() })
         );
 
+        // delay to increase likelihood addPersistenceFile for last loaded file has completed
+        // and for the toasts to not overlap
+        yield call(() => new Promise( resolve => setTimeout(resolve, 1000)));
+        yield call(showSuccessMessage, `Loaded folder ${name}.`, 1000);
         return;
       }
 
+      // Below is for handling opening of single files
       toastKey = yield call(showMessage, {
         message: 'Opening file...',
         timeout: 0,
@@ -286,15 +275,15 @@ export function* persistenceSaga(): SagaIterator {
           )
         );
       }
-
       yield call(showSuccessMessage, `Loaded ${name}.`, 1000);
     } catch (ex) {
       console.error(ex);
-      yield call(showWarningMessage, `Error while opening file.`, 1000);
+      yield call(showWarningMessage, `Error while opening file/folder.`, 1000);
     } finally {
       if (toastKey) {
         dismiss(toastKey);
       }
+      yield call(store.dispatch, actions.updateRefreshFileViewKey());
     }
   });
 
