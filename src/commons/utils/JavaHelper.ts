@@ -1,6 +1,8 @@
 import { SourceError as JavaSourceError } from 'java-slang/dist/ec-evaluator/errors';
 import { runECEvaluator } from 'java-slang/dist/ec-evaluator/index';
 import { Context as JavaContext } from 'java-slang/dist/ec-evaluator/types';
+import { compileFromSource, typeCheck } from 'java-slang';
+import { BinaryWriter } from 'java-slang/dist/compiler/binary-writer';
 import setupJVM, { parseBin } from 'java-slang/dist/jvm';
 import { createModuleProxy, loadCachedFiles } from 'java-slang/dist/jvm/utils/integration';
 import { Context } from 'js-slang';
@@ -18,6 +20,33 @@ export async function javaRun(
   isUsingCse: boolean
 ) {
   let compiled = {};
+
+  const stderr = (type: 'TypeCheck' | 'Compile' | 'Runtime', msg: string) => {
+    context.errors.push({
+      type: type as any,
+      severity: 'Error' as any,
+      location: { start: { line: -1, column: -1 }, end: { line: -1, column: -1 } },
+      explain: () => msg,
+      elaborate: () => msg
+    });
+  };
+
+  const typeCheckResult = typeCheck(javaCode);
+  if (typeCheckResult.hasTypeErrors) {
+    const typeErrMsg = typeCheckResult.errorMsgs.join('\n');
+    stderr('TypeCheck', typeErrMsg);
+    return Promise.resolve({ status: 'error' });
+  }
+
+  try {
+    const classFile = compileFromSource(javaCode);
+    compiled = {
+      'Main.class': Buffer.from(new BinaryWriter().generateBinary(classFile)).toString('base64')
+    };
+  } catch (e) {
+    stderr('Compile', e);
+    return Promise.resolve({ status: 'error' });
+  }
 
   let files = {};
   let buffer: string[] = [];
@@ -56,6 +85,7 @@ export async function javaRun(
     }
     return parseBin(new DataView(bytes.buffer));
   };
+
   const loadNatives = async (path: string) => {
     // dynamic load modules
     if (path.startsWith('modules')) {
@@ -66,6 +96,7 @@ export async function javaRun(
     }
     return await import(`java-slang/dist/jvm/stdlib/${path}.js`);
   };
+
   const stdout = (str: string) => {
     if (str.endsWith('\n')) {
       buffer.push(str);
@@ -77,35 +108,8 @@ export async function javaRun(
       buffer.push(str);
     }
   };
-  const stderr = (msg: string) => {
-    context.errors.push({
-      type: 'Runtime' as any,
-      severity: 'Error' as any,
-      location: {
-        start: {
-          line: -1,
-          column: -1
-        },
-        end: {
-          line: -1,
-          column: -1
-        }
-      },
-      explain: () => msg,
-      elaborate: () => msg
-    });
-  };
 
   if (isUsingCse) return await runJavaCseMachine(javaCode, targetStep, context);
-
-  // FIXME: Remove when the compiler is working
-  try {
-    const json = JSON.parse(javaCode);
-    compiled = json;
-  } catch (e) {
-    stderr(e);
-    return Promise.resolve({ status: 'error' });
-  }
 
   // load cached classfiles from IndexedDB
   return loadCachedFiles(() =>
@@ -131,12 +135,20 @@ export async function javaRun(
             readFileSync: readClassFiles,
             readFile: loadNatives,
             stdout,
-            stderr,
+            stderr: (msg: string) => stderr('Runtime', msg),
             onFinish: () => {
               resolve(
                 context.errors.length
                   ? { status: 'error' }
-                  : { status: 'finished', context, value: '' }
+                  : {
+                      status: 'finished',
+                      context,
+                      value: new (class {
+                        toString() {
+                          return ' ';
+                        }
+                      })()
+                    }
               );
             }
           },
