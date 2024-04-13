@@ -1,17 +1,50 @@
+import { compileFromSource, ECE, typeCheck } from 'java-slang';
+import { BinaryWriter } from 'java-slang/dist/compiler/binary-writer';
 import setupJVM, { parseBin } from 'java-slang/dist/jvm';
 import { createModuleProxy, loadCachedFiles } from 'java-slang/dist/jvm/utils/integration';
 import { Context } from 'js-slang';
 import loadSourceModules from 'js-slang/dist/modules/loader';
+import { ErrorSeverity, ErrorType, Result, SourceError } from 'js-slang/dist/types';
 
+import { CseMachine } from '../../features/cseMachine/java/CseMachine';
 import Constants from './Constants';
 import DisplayBufferService from './DisplayBufferService';
 
 export async function javaRun(
-  _javaCode: string,
+  javaCode: string,
   context: Context,
+  targetStep: number,
+  isUsingCse: boolean,
   options?: { uploadIsActive?: boolean; uploads?: { [key: string]: any } }
 ) {
   let compiled = {};
+
+  const stderr = (type: 'TypeCheck' | 'Compile' | 'Runtime', msg: string) => {
+    context.errors.push({
+      type: type as any,
+      severity: 'Error' as any,
+      location: { start: { line: -1, column: -1 }, end: { line: -1, column: -1 } },
+      explain: () => msg,
+      elaborate: () => msg
+    });
+  };
+
+  const typeCheckResult = typeCheck(javaCode);
+  if (typeCheckResult.hasTypeErrors) {
+    const typeErrMsg = typeCheckResult.errorMsgs.join('\n');
+    stderr('TypeCheck', typeErrMsg);
+    return Promise.resolve({ status: 'error' });
+  }
+
+  try {
+    const classFile = compileFromSource(javaCode);
+    compiled = {
+      'Main.class': Buffer.from(new BinaryWriter().generateBinary(classFile)).toString('base64')
+    };
+  } catch (e) {
+    stderr('Compile', e);
+    return Promise.resolve({ status: 'error' });
+  }
 
   let files = {};
   let buffer: string[] = [];
@@ -50,6 +83,7 @@ export async function javaRun(
     }
     return parseBin(new DataView(bytes.buffer));
   };
+
   const loadNatives = async (path: string) => {
     // dynamic load modules
     if (path.startsWith('modules')) {
@@ -60,6 +94,7 @@ export async function javaRun(
     }
     return await import(`java-slang/dist/jvm/stdlib/${path}.js`);
   };
+
   const stdout = (str: string) => {
     if (str.endsWith('\n')) {
       buffer.push(str);
@@ -71,26 +106,10 @@ export async function javaRun(
       buffer.push(str);
     }
   };
-  const stderr = (msg: string) => {
-    context.errors.push({
-      type: 'Runtime' as any,
-      severity: 'Error' as any,
-      location: {
-        start: {
-          line: -1,
-          column: -1
-        },
-        end: {
-          line: -1,
-          column: -1
-        }
-      },
-      explain: () => msg,
-      elaborate: () => msg
-    });
-  };
 
-  if (options?.uploadIsActive) {
+  if (isUsingCse) {
+    return await runJavaCseMachine(javaCode, targetStep, context);
+  } else if (options?.uploadIsActive) {
     compiled = options.uploads ?? {};
   } else {
     stderr('Compiler not integrated');
@@ -121,12 +140,20 @@ export async function javaRun(
             readFileSync: readClassFiles,
             readFile: loadNatives,
             stdout,
-            stderr,
+            stderr: (msg: string) => stderr('Runtime', msg),
             onFinish: () => {
               resolve(
                 context.errors.length
                   ? { status: 'error' }
-                  : { status: 'finished', context, value: '' }
+                  : {
+                      status: 'finished',
+                      context,
+                      value: new (class {
+                        toString() {
+                          return ' ';
+                        }
+                      })()
+                    }
               );
             }
           },
@@ -136,5 +163,46 @@ export async function javaRun(
     })
     .catch(() => {
       return { status: 'error' };
+    });
+}
+
+export function visualizeJavaCseMachine({ context }: { context: ECE.Context }) {
+  try {
+    CseMachine.drawCse(context);
+  } catch (err) {
+    throw new Error('Java CSE machine is not enabled');
+  }
+}
+
+export async function runJavaCseMachine(code: string, targetStep: number, context: Context) {
+  const convertJavaErrorToJsError = (e: ECE.SourceError): SourceError => ({
+    type: ErrorType.RUNTIME,
+    severity: ErrorSeverity.ERROR,
+    // TODO update err source node location once location info is avail
+    location: {
+      start: {
+        line: 0,
+        column: 0
+      },
+      end: {
+        line: 0,
+        column: 0
+      }
+    },
+    explain: () => e.explain(),
+    elaborate: () => e.explain()
+  });
+  context.executionMethod = 'cse-machine';
+  return ECE.runECEvaluator(code, targetStep)
+    .then(result => {
+      context.runtime.envStepsTotal = result.context.totalSteps;
+      if (result.status === 'error') {
+        context.errors = result.context.errors.map(e => convertJavaErrorToJsError(e));
+      }
+      return result;
+    })
+    .catch(e => {
+      console.error(e);
+      return { status: 'error' } as Result;
     });
 }

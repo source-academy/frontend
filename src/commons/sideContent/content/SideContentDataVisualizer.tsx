@@ -96,7 +96,7 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
               >
                 Previous
               </Button>
-              <h3 className="bp5-text-large">
+              <h3 className={Classes.TEXT_LARGE}>
                 Call {this.state.currentStep + 1}/{this.state.steps.length}
               </h3>
               <Button
@@ -130,7 +130,7 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
                   <Card style={{ background: '#1a2530', padding: 10 }}>
                     {step.length > 1 && (
                       <h5
-                        className="bp5-heading bp5-monospace-text"
+                        className={classNames(Classes.HEADING, Classes.MONOSPACE_TEXT)}
                         style={{ marginTop: 0, marginBottom: 20, whiteSpace: 'nowrap' }}
                       >
                         Structure {i + 1}

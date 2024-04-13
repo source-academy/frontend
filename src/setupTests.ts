@@ -8,3 +8,10 @@ jest.mock('./commons/utils/notifications/createNotification', () => ({
     show: jest.fn()
   }
 }));
+
+jest.mock('java-slang', () => {
+  return {
+    compileFromSource: () => '',
+    typeCheck: () => ({ hasTypeErrors: false, errorMsgs: [] })
+  };
+});

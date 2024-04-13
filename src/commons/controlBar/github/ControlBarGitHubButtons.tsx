@@ -1,6 +1,5 @@
-import { ButtonGroup, Classes, Intent } from '@blueprintjs/core';
+import { ButtonGroup, Classes, Intent, Popover, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import { Octokit } from '@octokit/rest';
 import React from 'react';
 import { useResponsive } from 'src/commons/utils/Hooks';
@@ -90,8 +89,8 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
     : undefined;
 
   return (
-    <Tooltip2 content={tooltipContent} disabled={tooltipContent === undefined}>
-      <Popover2
+    <Tooltip content={tooltipContent} disabled={tooltipContent === undefined}>
+      <Popover
         autoFocus={false}
         content={
           <div>
@@ -107,7 +106,7 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
         disabled={props.isFolderModeEnabled}
       >
         {mainButton}
-      </Popover2>
-    </Tooltip2>
+      </Popover>
+    </Tooltip>
   );
 };
