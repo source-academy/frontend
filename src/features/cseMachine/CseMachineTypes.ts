@@ -2,7 +2,7 @@ import {
   EnvTree as EnvironmentTree,
   EnvTreeNode as EnvironmentTreeNode
 } from 'js-slang/dist/createContext';
-import JsSlangClosure from 'js-slang/dist/interpreter/closure';
+import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
 import { Environment } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
@@ -47,11 +47,35 @@ export type Unassigned = symbol;
 /** types of primitives in JS Slang  */
 export type Primitive = number | string | boolean | null | undefined;
 
-/** types of in-built functions in JS Slang */
-export type GlobalFn = Function;
+/** types of source objects such as runes */
+export type SourceObject = {
+  [index: string]: any;
+  toReplString: () => string;
+};
 
-/** types of functions in JS Slang */
+/** types of closures in JS Slang, redefined here for convenience. */
 export type Closure = JsSlangClosure;
+
+/** types of built-in functions in JS Slang */
+export type BuiltInFn = () => never; // Use `never` to differentiate from `StreamFn`
+
+/** types of pre-defined functions in JS Slang */
+export type PredefinedFn = Omit<Closure, 'predefined'> & { predefined: true };
+
+/**
+ * Special type of a function returned from calling `stream`. It is mostly similar to a global
+ * function, but has the extra `environment` property as it should be drawn next to the frame
+ * in which `stream` is called.
+ *
+ * TODO: remove this and all other `StreamFn` code if `stream` becomes a pre-defined function
+ */
+export type StreamFn = (() => [any, StreamFn] | null) & { environment: Env };
+
+/** types of global functions in JS Slang */
+export type GlobalFn = BuiltInFn | PredefinedFn;
+
+/** types of global functions in JS Slang */
+export type NonGlobalFn = (Omit<Closure, 'predefined'> & { predefined: false }) | StreamFn;
 
 /** types of arrays in JS Slang */
 export type DataArray = Data[] & {
@@ -60,7 +84,7 @@ export type DataArray = Data[] & {
 };
 
 /** the types of data in the JS Slang context */
-export type Data = Primitive | Closure | GlobalFn | Unassigned | DataArray;
+export type Data = Primitive | SourceObject | NonGlobalFn | GlobalFn | Unassigned | DataArray;
 
 /** modified `Environment` to store children and associated frame */
 export type Env = Environment;
