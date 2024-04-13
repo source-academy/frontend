@@ -3,31 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { ColumnFilter } from '@tanstack/react-table';
 import { Badge } from '@tremor/react';
 
-const BADGE_COLORS = {
-  // assessment types
-  missions: 'indigo',
-  quests: 'emerald',
-  paths: 'sky'
-};
-
-export function getBadgeColorFromLabel(label: string) {
-  return BADGE_COLORS[label.toLowerCase()] || 'gray';
-}
-
-type AssessmentTypeBadgeProps = {
-  type: string;
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-};
-
-const AssessmentTypeBadge: React.FC<AssessmentTypeBadgeProps> = ({ type, size = 'sm' }) => {
-  return (
-    <Badge
-      text={size === 'xs' ? type.charAt(0).toUpperCase() : type}
-      size={size}
-      color={getBadgeColorFromLabel(type)}
-    />
-  );
-};
+import { getBadgeColorFromLabel } from '../../grading/subcomponents/GradingBadges';
 
 type FilterBadgeProps = {
   filter: ColumnFilter;
@@ -48,4 +24,4 @@ const FilterBadge: React.FC<FilterBadgeProps> = ({ filter, onRemove }) => {
   );
 };
 
-export { AssessmentTypeBadge, FilterBadge };
+export { FilterBadge };
