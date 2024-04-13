@@ -88,7 +88,7 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
   };
 
   const keyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && !isLoading) {
       sendMessage();
     }
   };
@@ -117,14 +117,15 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
       </div>
       <input
         type="text"
+        disabled={isLoading}
         className={classes['user-input']}
-        placeholder="Type your message here..."
+        placeholder={isLoading ? 'Waiting for response...' : 'Type your message here...'}
         value={userInput}
         onChange={handleUserInput}
         onKeyDown={keyDown}
       />
       <div className={classes['button-container']}>
-        <Button className={classes['button-send']} onClick={sendMessage}>
+        <Button disabled={isLoading} className={classes['button-send']} onClick={sendMessage}>
           Send
         </Button>
         <Button className={classes['button-clean']} onClick={resetChat}>
