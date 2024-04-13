@@ -1,4 +1,4 @@
-import sicpNotes from './SicpNotes';
+import sicpNotes from './sicpNotes';
 
 const promptPrefix =
   'You are a competent tutor, assisting a student who is learning computer science following the textbook "Structure and Interpretation of Computer Programs,' +
