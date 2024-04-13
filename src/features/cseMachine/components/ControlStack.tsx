@@ -89,7 +89,7 @@ export class ControlStack extends Visible implements IHoverable {
       fontVariant: ControlStashConfig.FontVariant
     };
     return (
-      <React.Fragment>
+      <>
         {CseMachine.getStackTruncated() && Layout.control.size() > 10 && (
           <Label
             x={ControlStashConfig.ShowMoreButtonX}
@@ -116,7 +116,7 @@ export class ControlStack extends Visible implements IHoverable {
           </Label>
         )}
         {this.stackItemComponents.map(c => c?.draw())}
-      </React.Fragment>
+      </>
     );
   }
 }
