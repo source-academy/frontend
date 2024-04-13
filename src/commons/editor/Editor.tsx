@@ -19,6 +19,7 @@ import { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
 // Ideally, hooks should be specified by the parent component instead.
 import { IAceEditor } from 'react-ace/lib/types';
 import { getModeString, selectMode } from '../utils/AceHelper';
+import { objectEntries } from '../utils/TypeHelper';
 import { EditorBinding } from '../WorkspaceSettingsContext';
 import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
@@ -536,7 +537,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     ]
   );
 
-  aceEditorProps.commands = Object.entries(keyHandlers)
+  aceEditorProps.commands = objectEntries(keyHandlers)
     .filter(([_, exec]) => exec)
     .map(([name, exec]) => ({ name, bindKey: keyBindings[name], exec: exec! }));
 
