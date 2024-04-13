@@ -7,9 +7,10 @@ import { Layout } from '../CseMachineLayout';
 import { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
 import {
   currentItemSAColor,
-  getNonEmptyEnv,
   getTextWidth,
-  isDummyKey,
+  getUnreferencedObjects,
+  isClosure,
+  isDataArray,
   isPrimitiveData,
   isUnassigned
 } from '../CseMachineUtils';
@@ -30,6 +31,11 @@ const frameNames = new Map([
 
 /** this class encapsulates a frame of key-value bindings to be drawn on canvas */
 export class Frame extends Visible implements IHoverable {
+  private static envFrameMap: Map<string, Frame> = new Map();
+  public static getFrom(environment: Env): Frame | undefined {
+    return Frame.envFrameMap.get(environment.id);
+  }
+
   /** total height = frame height + frame title height */
   readonly totalHeight: number;
   /** width of this frame + max width of the bound values */
@@ -56,6 +62,7 @@ export class Frame extends Visible implements IHoverable {
     this._width = Config.FrameMinWidth;
     this.level = envTreeNode.level as Level;
     this.environment = envTreeNode.environment;
+    Frame.envFrameMap.set(this.environment.id, this);
     this.parentFrame = envTreeNode.parent?.frame;
     this._x = this.level.x();
     // derive the x coordinate from the left sibling frame
@@ -90,28 +97,53 @@ export class Frame extends Visible implements IHoverable {
     let prevBinding: Binding | null = null;
     let totalWidth = this._width;
 
-    const descriptors = Object.getOwnPropertyDescriptors(this.environment.head);
-    const entries = [];
-    const dummyEntries = [];
-    for (const entry of Object.entries(descriptors)) {
-      if (isDummyKey(entry[0])) {
-        const actualEnv = getNonEmptyEnv(entry[1].value.environment);
-        if (
-          this.environment.id === Config.GlobalEnvId ||
-          (actualEnv && actualEnv.id === this.environment.id)
-        ) {
-          dummyEntries.push(entry);
+    // get all keys and object descriptors of each value inside the head
+    const entries = Object.entries(Object.getOwnPropertyDescriptors(this.environment.head));
+
+    // get values that are unreferenced, which will used to created dummy bindings
+    const unreferencedValues = [...getUnreferencedObjects(this.environment)];
+
+    // TODO: find out why values are not added to heap on the correct order in JS Slang
+    // For now, sorting is a good workaround since id also increases in insertion order
+    unreferencedValues.sort((v1, v2) => Number(v1.id) - Number(v2.id));
+
+    // find objects that are nested inside other arrays, and prevent them from creating new
+    // dummy bindings by removing them from unreferencedValues, as they should be drawn
+    // around the original parent array instead
+    let i = 0;
+    while (i < unreferencedValues.length) {
+      const value = unreferencedValues[i];
+      if (isDataArray(value)) {
+        for (const data of value) {
+          if ((isDataArray(data) && data !== value) || isClosure(data)) {
+            const prev = unreferencedValues.findIndex(value => value.id === data.id);
+            if (prev > -1) {
+              unreferencedValues.splice(prev, 1);
+              if (prev <= i) i--;
+            }
+          }
         }
-      } else {
-        entries.push(entry);
       }
+      i++;
     }
-    entries.push(...dummyEntries);
+
+    // Add dummy bindings to `entries`
+    for (const value of unreferencedValues) {
+      const descriptor: TypedPropertyDescriptor<any> & PropertyDescriptor = {
+        value,
+        configurable: false,
+        enumerable: true,
+        writable: false
+      };
+      // The key is a number string to "disguise" as a dummy binding
+      // TODO: revamp the dummy binding behavior, don't rely on numeric keys
+      entries.push([`${i++}`, descriptor]);
+    }
 
     for (const [key, data] of entries) {
       // If the value is unassigned, retrieve declaration type from its description, otherwise, retrieve directly from the data's property
       const constant =
-        this.environment.head[key].description === 'const declaration' || !data.writable;
+        this.environment.head[key]?.description === 'const declaration' || !data.writable;
       const currBinding: Binding = new Binding(key, data.value, this, prevBinding, constant);
       this.bindings.push(currBinding);
       prevBinding = currBinding;

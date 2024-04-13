@@ -3,7 +3,7 @@ import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'rea
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
 import { IVisible, StepsArray } from '../../CseMachineTypes';
-import { defaultSAColor } from '../../CseMachineUtils';
+import { defaultSAColor, fadedSAColor } from '../../CseMachineUtils';
 import { Visible } from '../Visible';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
@@ -12,6 +12,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
   points: number[] = [];
   source: Source;
   target: Target | undefined;
+  faded: boolean = false;
 
   constructor(from: Source) {
     super();
@@ -20,6 +21,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
     this._x = from.x();
     this._y = from.y();
   }
+
   path(): string {
     return this._path;
   }
@@ -96,6 +98,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
     }
     // end path
     this._path += `L ${points[points.length - 2]} ${points[points.length - 1]} `;
+    const stroke = this.faded ? fadedSAColor() : defaultSAColor();
     return (
       <KonvaGroup
         key={Layout.key++}
@@ -104,7 +107,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
       >
         <KonvaPath
           {...ShapeDefaultProps}
-          stroke={defaultSAColor()}
+          stroke={stroke}
           strokeWidth={Config.ArrowStrokeWidth}
           hitStrokeWidth={Config.ArrowHitStrokeWidth}
           data={this.path()}
@@ -113,7 +116,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
         <KonvaArrow
           {...ShapeDefaultProps}
           points={points.slice(points.length - 4)}
-          fill={defaultSAColor()}
+          fill={stroke}
           strokeEnabled={false}
           pointerWidth={Config.ArrowHeadSize}
           key={Layout.key++}

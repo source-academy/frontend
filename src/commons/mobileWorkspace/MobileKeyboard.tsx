@@ -8,10 +8,12 @@ type Props = {
 };
 
 const MobileKeyboard: React.FC<Props> = props => {
-  const [isKeyboardShown, setIsKeyoardShown] = React.useState(false);
+  const [isKeyboardShown, setIsKeyboardShown] = React.useState(false);
   const [buttonContent, setButtonContent] = React.useState('ᐸ');
   const [keyboardPosition, setKeyboardPosition] = React.useState({ x: 0, y: 0 });
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
+  const [targetKeyboardInput, setTargetKeyboardInput] = React.useState<Ace.Editor | null>(null);
+  const [lastKeyPressed, setLastKeyPressed] = React.useState<string>('');
+  const [touchStartInfo, setTouchStartInfo] = React.useState({ x: 0, y: 0, time: 0 });
 
   const onDrag: DraggableEventHandler = (
     e: DraggableEvent,
@@ -31,53 +33,84 @@ const MobileKeyboard: React.FC<Props> = props => {
       document.getElementById('mobile-floating-toggle')!.style.setProperty('width', '42px');
       document.getElementById('mobile-floating-toggle')!.style.setProperty('opacity', '0.6');
       setButtonContent('ᐸ');
-      setIsKeyoardShown(false);
+      setIsKeyboardShown(false);
     } else {
       //do showing
       document.getElementById('mobile-keyboard-toggle')!.style.setProperty('display', 'flex');
       document.getElementById('mobile-floating-toggle')!.style.setProperty('width', '99%');
       document.getElementById('mobile-floating-toggle')!.style.setProperty('opacity', '1');
       setButtonContent('ᐳ');
-      setIsKeyoardShown(true);
+      setIsKeyboardShown(true);
     }
-  };
-
-  const handleRowToggle = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    setSelectedIndex((selectedIndex + 1) % 3);
-    const keyboardClass = document.getElementsByClassName('simple-keyboard-shortcut');
-    Array.from(keyboardClass as HTMLCollectionOf<HTMLElement>)[0].style.top =
-      -selectedIndex * 45 + 'px';
   };
 
   const handleKeyPress = (button: string) => {
     if (!props.targetKeyboardInput) {
       return;
     }
-    const editor = props.targetKeyboardInput;
-    if (button === '{arrowleft}') {
+
+    setTargetKeyboardInput(props.targetKeyboardInput);
+    setLastKeyPressed(button);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    // Get the touch coordinates and current time
+    const touch = e.touches[0];
+    setTouchStartInfo({
+      x: touch.clientX,
+      y: touch.clientY,
+      time: Date.now()
+    });
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    // Compare the end position with the start position
+    const touch = e.changedTouches[0];
+    const deltaX = touch.clientX - touchStartInfo.x;
+    const deltaY = touch.clientY - touchStartInfo.y;
+    const deltaTime = Date.now() - touchStartInfo.time;
+
+    // Define thresholds for what you consider a swipe vs a tap
+    const swipeThreshold = 30; // pixels
+    const tapThresholdTime = 200; // milliseconds
+
+    if (
+      Math.abs(deltaX) < swipeThreshold &&
+      Math.abs(deltaY) < swipeThreshold &&
+      deltaTime < tapThresholdTime
+    ) {
+      handleKeyRelease();
+    }
+  };
+
+  const handleKeyRelease = () => {
+    if (!targetKeyboardInput) {
+      return;
+    }
+
+    const editor = targetKeyboardInput;
+
+    if (lastKeyPressed === '{arrowleft}') {
       editor.navigateLeft();
-    } else if (button === '{arrowright}') {
+    } else if (lastKeyPressed === '{arrowright}') {
       editor.navigateRight();
-    } else if (button === '{bksp}') {
+    } else if (lastKeyPressed === '{bksp}') {
       editor.remove('left');
-    } else if (button === '{tab}') {
+    } else if (lastKeyPressed === '{tab}') {
       editor.insert('\t');
-    } else if (['+', '-', '*', '/', '%', '=>', '===', '&&', '||'].includes(button)) {
-      editor.insert(' ' + button + ' ');
+    } else if (['+', '-', '*', '/', '%', '=>', '===', '&&', '||'].includes(lastKeyPressed)) {
+      editor.insert(' ' + lastKeyPressed + ' ');
     } else {
-      editor.insert(button);
+      editor.insert(lastKeyPressed);
     }
   };
 
   const keyboardProps = {
     onKeyPress: handleKeyPress,
+    disableButtonHold: true,
     baseClass: 'simple-keyboard-shortcut',
     layout: {
-      default: [
-        '{ } ( ) " \' _ => ;',
-        '{tab} && || ! < > = ===',
-        '+ - * / % // {arrowleft} {arrowright}'
-      ]
+      default: ['{ } ( ) " \' _ => ; {tab} && || ! < > = === + - * / % // {arrowleft} {arrowright}']
     },
     buttonTheme: [
       {
@@ -112,16 +145,13 @@ const MobileKeyboard: React.FC<Props> = props => {
         </button>
 
         <div className="mobile-keyboard-toggle-container" id="mobile-keyboard-toggle">
-          <div className="mobile-keyboard-container">
+          <div
+            className="mobile-keyboard-container"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
             <Keyboard {...keyboardProps} />
           </div>
-          <button
-            className="mobile-keyboard-row-toggle"
-            onClick={handleRowToggle}
-            onMouseDown={handlePreventDefault}
-          >
-            ⤸
-          </button>
         </div>
 
         <div id="floating-dragHandle">:</div>
