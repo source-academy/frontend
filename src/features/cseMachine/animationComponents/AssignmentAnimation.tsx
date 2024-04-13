@@ -10,7 +10,7 @@ import { defaultOptions, Text } from '../components/Text';
 import { PrimitiveValue } from '../components/values/PrimitiveValue';
 import { Value } from '../components/values/Value';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
-import { getTextWidth } from '../CseMachineUtils';
+import { defaultActiveColor, defaultStrokeColor, getTextWidth } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
@@ -27,14 +27,16 @@ export class AssignmentAnimation extends Animatable {
   private stashItemIsFirst: boolean;
 
   constructor(
-    private asgnItem: ControlItemComponent | StashItemComponent,
+    private asgnItem: ControlItemComponent,
     private stashItem: StashItemComponent,
     private frame: Frame,
     private binding: Binding
   ) {
     super();
     this.stashItemIsFirst = stashItem.index === 0;
-    this.asgnItemAnimation = new AnimatedTextbox(asgnItem.text, getNodePosition(asgnItem));
+    this.asgnItemAnimation = new AnimatedTextbox(asgnItem.text, getNodePosition(asgnItem), {
+      rectProps: { stroke: defaultActiveColor() }
+    });
     this.stashItemAnimation = new AnimatedTextbox(stashItem.text, getNodePosition(stashItem));
     if (this.binding.value instanceof PrimitiveValue && this.binding.value.text instanceof Text) {
       this.bindingAnimation = new AnimatedTextComponent({
@@ -64,17 +66,20 @@ export class AssignmentAnimation extends Animatable {
 
   async animate() {
     const minAsgnItemWidth =
-      getTextWidth(this.asgnItem.text) + Number(ControlStashConfig.ControlItemTextPadding) * 2;
+      getTextWidth(this.asgnItem.text) + ControlStashConfig.ControlItemTextPadding * 2;
     // hide value of binding
     if (this.bindingAnimation) this.binding.value.ref.current?.hide();
     // hide arrow
     if (this.arrow) this.arrow.ref.current?.hide();
     // move asgn instruction next to stash item, while also decreasing its width
-    await this.asgnItemAnimation.animateTo({
-      x: this.stashItem.x() - (this.stashItemIsFirst ? minAsgnItemWidth : 0),
-      y: this.stashItem.y() + (this.stashItemIsFirst ? 0 : this.stashItem.height()),
-      width: minAsgnItemWidth
-    });
+    await Promise.all([
+      this.asgnItemAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
+      this.asgnItemAnimation.animateTo({
+        x: this.stashItem.x() - (this.stashItemIsFirst ? minAsgnItemWidth : 0),
+        y: this.stashItem.y() + (this.stashItemIsFirst ? 0 : this.stashItem.height()),
+        width: minAsgnItemWidth
+      })
+    ]);
     // move both asgn instruction and stash item down to the frame the binding is in
     await Promise.all([
       this.asgnItemAnimation.animateTo(

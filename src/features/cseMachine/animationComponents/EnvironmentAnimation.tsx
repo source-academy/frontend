@@ -24,12 +24,12 @@ export class EnvironmentAnimation extends Animatable {
     const currFramePosition = getNodePosition(currFrame);
     this.tempRect = new AnimatedRectComponent({
       ...currFramePosition,
-      cornerRadius: Number(Config.FrameCornerRadius)
+      cornerRadius: Config.FrameCornerRadius
     });
     const prevFramePosition = getNodePosition(prevFrame);
     this.frameAnimation = new AnimatedRectComponent({
       ...prevFramePosition,
-      cornerRadius: Number(Config.FrameCornerRadius),
+      cornerRadius: Config.FrameCornerRadius,
       stroke: defaultActiveColor()
     });
   }

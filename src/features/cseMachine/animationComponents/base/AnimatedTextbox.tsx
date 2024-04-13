@@ -32,7 +32,7 @@ export class AnimatedTextbox extends AnimatableTo<TextRectSharedConfig> {
     this.rectComponent = new AnimatedRectComponent(rectProps);
     this.rectComponent.addListener(this.onPropsChange);
     const textProps = {
-      padding: Number(ControlStashConfig.ControlItemTextPadding),
+      padding: ControlStashConfig.ControlItemTextPadding,
       ...sharedProps,
       ...additionalProps?.textProps,
       text

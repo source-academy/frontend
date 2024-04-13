@@ -43,6 +43,7 @@ export const Config = Object.freeze({
   MaxExportWidth: 20000,
   MaxExportHeight: 12000,
 
+  // Canvas background color
   BgColor: '#2c3e50',
   PrintBgColor: '#fff',
 
@@ -59,7 +60,7 @@ export const Config = Object.freeze({
   PrintStrokeColorFaded: '#ccc',
 
   // Colors of different states
-  ActiveColor: '#0000ff',
+  ActiveColor: '#030fff',
   PrintActiveColor: '#3d5afe',
   DangerColor: '#ff1744',
   PrintDangerColor: '#f44336',
@@ -67,7 +68,7 @@ export const Config = Object.freeze({
   PrintHoverColor: '#0dbf0d',
 
   // Colors for text hover background
-  // Note that these are also applied with 0.5 opacity when drawn
+  // Note that these are also applied with an opacity when drawn
   HoverBgColor: '#000',
   PrintHoverBgColor: '#bbb',
 

@@ -41,7 +41,7 @@ export class ControlToStashAnimation extends Animatable {
     this.controlTextAnimation = new AnimatedTextComponent({
       ...controlPosition,
       text: controlItem.text,
-      padding: Number(ControlStashConfig.ControlItemTextPadding)
+      padding: ControlStashConfig.ControlItemTextPadding
     });
     this.textChanged = controlItem.text !== stashItem.text;
     if (this.textChanged) {

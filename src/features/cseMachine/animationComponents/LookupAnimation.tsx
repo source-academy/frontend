@@ -7,7 +7,13 @@ import { Frame } from '../components/Frame';
 import { StashItemComponent } from '../components/StashItemComponent';
 import { Visible } from '../components/Visible';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
-import { getTextWidth } from '../CseMachineUtils';
+import {
+  defaultActiveColor,
+  defaultDangerColor,
+  defaultStrokeColor,
+  getTextWidth,
+  isStashItemInDanger
+} from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
@@ -26,11 +32,13 @@ export class LookupAnimation extends Animatable {
     private binding: Binding
   ) {
     super();
-    this.nameItemAnimation = new AnimatedTextbox(nameItem.text, getNodePosition(nameItem));
+    this.nameItemAnimation = new AnimatedTextbox(nameItem.text, getNodePosition(nameItem), {
+      rectProps: { stroke: defaultActiveColor() }
+    });
     this.stashItemAnimation = new AnimatedTextbox(stashItem.text, {
       ...getNodePosition(stashItem),
       x: frame.x(),
-      y: binding.y() + binding.height() / 2 - stashItem.height() / 2,
+      y: binding.key.y() + binding.key.height() / 2 - stashItem.height() / 2,
       opacity: 0
     });
     if (stashItem.arrow) {
@@ -54,42 +62,48 @@ export class LookupAnimation extends Animatable {
       this.stashItem.arrow.ref.current?.hide();
     }
     const minNameItemWidth =
-      getTextWidth(this.nameItem.text) + Number(ControlStashConfig.ControlItemTextPadding) * 2;
+      getTextWidth(this.nameItem.text) + ControlStashConfig.ControlItemTextPadding * 2;
     // move name item next to binding
-    await this.nameItemAnimation.animateTo(
-      {
-        x: this.frame.x() - minNameItemWidth,
-        y: this.binding.y() + this.binding.height() / 2 - this.nameItem.height() / 2,
-        width: minNameItemWidth
-      },
-      { duration: 1.5 }
-    );
-    // the name item 'pulls' the stash item out of the binding
     await Promise.all([
+      this.nameItemAnimation.animateRectTo({ stroke: defaultStrokeColor() }, { duration: 1.2 }),
       this.nameItemAnimation.animateTo(
         {
-          x: this.frame.x() - this.nameItemAnimation.width() - this.stashItemAnimation.width()
+          x: this.frame.x() - minNameItemWidth,
+          y: this.binding.key.y() + this.binding.key.height() / 2 - this.nameItem.height() / 2,
+          width: minNameItemWidth
         },
-        { duration: 1 }
-      ),
+        { duration: 1.2 }
+      )
+    ]);
+    // the name item 'pulls' the stash item out of the binding
+    await Promise.all([
+      this.nameItemAnimation.animateTo({
+        x: this.frame.x() - this.nameItemAnimation.width() - this.stashItemAnimation.width()
+      }),
       this.stashItemAnimation.animateTo({ x: this.frame.x() - this.stashItem.width(), opacity: 1 })
     ]);
     // move both name item and stash item to the stash, while fading out the name item
     await Promise.all([
-      this.nameItemAnimation.animateTo({
-        x: this.stashItem.x() - this.nameItemAnimation.width(),
-        y: this.stashItem.y(),
-        opacity: 0
-      }),
-      this.stashItemAnimation.animateTo({
-        x: this.stashItem.x(),
-        y: this.stashItem.y()
-      })
+      this.nameItemAnimation.animateTo(
+        {
+          x: this.stashItem.x() - this.nameItemAnimation.width(),
+          y: this.stashItem.y(),
+          opacity: 0
+        },
+        { duration: 1.2 }
+      ),
+      this.stashItemAnimation.animateTo(
+        {
+          x: this.stashItem.x(),
+          y: this.stashItem.y()
+        },
+        { duration: 1.2 }
+      ),
+      isStashItemInDanger(this.stashItem.index) &&
+        this.stashItemAnimation.animateRectTo({ stroke: defaultDangerColor() }, { duration: 1.2 }),
+      // fade in the arrow if there is one
+      this.arrowAnimation?.animateTo({ opacity: 1 }, { delay: 1.2 })
     ]);
-    // fade in the arrow if there is one
-    if (this.arrowAnimation) {
-      await this.arrowAnimation?.animateTo({ opacity: 1 });
-    }
     this.destroy();
   }
 

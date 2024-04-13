@@ -146,7 +146,7 @@ export class FrameCreationAnimation extends Animatable {
           ...framePosition,
           stroke: defaultActiveColor(),
           opacity: 1,
-          cornerRadius: Number(Config.FrameCornerRadius)
+          cornerRadius: Config.FrameCornerRadius
         },
         translateConfig
       ),
