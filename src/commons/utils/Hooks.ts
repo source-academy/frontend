@@ -139,7 +139,7 @@ export const useSession = () => {
 
 // Overload for useTokens
 type UseTokens = {
-  (): Partial<Tokens>;
+  (): Tokens;
   (options: { throwWhenEmpty: true }): Tokens;
   (options: { throwWhenEmpty: false }): Partial<Tokens>;
 };
