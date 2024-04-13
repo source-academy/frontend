@@ -1,5 +1,4 @@
-import { Intent, PopoverInteractionKind, Position, Tag } from '@blueprintjs/core';
-import { Popover2 } from '@blueprintjs/popover2';
+import { Intent, Popover, PopoverInteractionKind, Position, Tag } from '@blueprintjs/core';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -54,7 +53,7 @@ const NotificationBadge: React.FC<Props> = props => {
     const notificationTags = <div className="col">{notifications.map(makeNotificationTag)}</div>;
 
     return (
-      <Popover2
+      <Popover
         className={props.className}
         content={notificationTags}
         interactionKind={PopoverInteractionKind.HOVER}
@@ -64,7 +63,7 @@ const NotificationBadge: React.FC<Props> = props => {
         lazy={true}
       >
         {notificationIcon}
-      </Popover2>
+      </Popover>
     );
   }
 
@@ -75,16 +74,14 @@ const makeNotificationMessage = (type: NotificationType) => {
   switch (type) {
     case NotificationTypes.new:
       return 'This assessment is new.';
-    case NotificationTypes.deadline:
-      return 'This assessment is closing soon.';
-    case NotificationTypes.autograded:
-      return 'This assessment has been autograded.';
     case NotificationTypes.submitted:
       return 'This submission is new.';
     case NotificationTypes.unsubmitted:
       return 'This assessment has been unsubmitted.';
-    case NotificationTypes.graded:
-      return 'This assessment has been manually graded.';
+    case NotificationTypes.published_grading:
+      return "This submission's grading has been published.";
+    case NotificationTypes.unpublished_grading:
+      return "This submission's grading has been unpublished.";
     case NotificationTypes.new_message:
       return 'There are new messages.';
     default:
