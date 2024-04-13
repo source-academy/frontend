@@ -118,6 +118,8 @@ import {
 import { Position } from '../../commons/editor/EditorTypes';
 import {
   getGithubSaveInfo,
+  isGDriveSyncing,
+  isGithubSyncing,
   overwriteFilesInWorkspace
 } from '../../commons/fileSystem/FileSystemUtils';
 import FileSystemView from '../../commons/fileSystemView/FileSystemView';
@@ -603,6 +605,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   // Compute this here to avoid re-rendering the button every keystroke
   const persistenceIsDirty =
     persistenceFile && (!persistenceFile.lastSaved || persistenceFile.lastSaved < lastEdit);
+  const githubSynced = isGithubSyncing();
   const persistenceButtons = useMemo(() => {
     return (
       <ControlBarGoogleDriveButtons
@@ -612,6 +615,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         loggedInAs={persistenceUser}
         isDirty={persistenceIsDirty}
         accessToken={googleAccessToken}
+        isGithubSynced={githubSynced}
         key="googledrive"
         onClickSaveAs={() => dispatch(persistenceSaveFileAs())}
         onClickSaveAll={() => dispatch(persistenceSaveAll())}
@@ -631,13 +635,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
     persistenceIsDirty,
     dispatch,
     googleAccessToken,
-    workspaceLocation
+    workspaceLocation,
+    githubSynced
   ]);
 
   const githubPersistenceIsDirty =
     githubSaveInfo && (!githubSaveInfo.lastSaved || githubSaveInfo.lastSaved < lastEdit);
-  console.log(githubSaveInfo.lastSaved);
-  console.log(lastEdit);
+  const gdriveSynced = isGDriveSyncing();
   const githubButtons = useMemo(() => {
     return (
       <ControlBarGitHubButtons
@@ -648,6 +652,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         loggedInAs={githubOctokitObject.octokit}
         githubSaveInfo={githubSaveInfo}
         isDirty={githubPersistenceIsDirty}
+        isGDriveSynced={gdriveSynced}
         onClickOpen={() => dispatch(githubOpenFile())}
         onClickSaveAs={() => dispatch(githubSaveFileAs())}
         onClickSave={() => dispatch(githubSaveFile())}
@@ -663,7 +668,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     githubSaveInfo,
     isFolderModeEnabled,
     persistenceFile,
-    workspaceLocation
+    workspaceLocation,
+    gdriveSynced
   ]);
 
   const executionTime = useMemo(

@@ -20,6 +20,7 @@ type Props = {
   accessToken?: string;
   currPersistenceFile?: PersistenceFile;
   isDirty?: boolean;
+  isGithubSynced?: boolean;
   onClickOpen?: () => any;
   onClickSave?: () => any;
   onClickSaveAll?: () => any;
@@ -36,13 +37,14 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
       ? 'DIRTY'
       : 'SAVED'
     : 'INACTIVE';
-  const isNotPlayground = props.workspaceLocation !== "playground";
+  const isNotPlayground = props.workspaceLocation !== "playground" ;
+  const GithubSynced = props.isGithubSynced;
   const mainButton = (
     <ControlButton
       label={(props.currPersistenceFile && props.currPersistenceFile.name) || 'Google Drive'}
       icon={IconNames.CLOUD}
       options={{ intent: stateToIntent[state] }}
-      isDisabled={isNotPlayground}
+      isDisabled={isNotPlayground || GithubSynced}
     />
   );
   const openButton = (
@@ -109,7 +111,7 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
         }
         onOpening={props.onPopoverOpening}
         popoverClassName={Classes.POPOVER_DISMISS}
-        disabled={isNotPlayground}
+        disabled={isNotPlayground || GithubSynced}
       >
         {mainButton}
       </Popover2>

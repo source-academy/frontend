@@ -16,6 +16,7 @@ type Props = {
   loggedInAs?: Octokit;
   githubSaveInfo: GitHubSaveInfo;
   isDirty: boolean;
+  isGDriveSynced: boolean;
   onClickOpen?: () => void;
   onClickSave?: () => void;
   onClickSaveAs?: () => void;
@@ -41,6 +42,7 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
   const shouldDisableButtons = !isLoggedIn;
   const hasFilePath = filePath !== '';
   const hasOpenFile = isLoggedIn && hasFilePath;
+  const GDriveSynced = props.isGDriveSynced;
 
   const mainButtonDisplayText =
     (props.currPersistenceFile && hasOpenFile && props.currPersistenceFile.name) || 'GitHub';
@@ -54,7 +56,7 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
       label={mainButtonDisplayText}
       icon={IconNames.GIT_BRANCH}
       options={{ intent: mainButtonIntent }}
-      isDisabled={isNotPlayground}
+      isDisabled={isNotPlayground || GDriveSynced}
     />
   );
 
@@ -120,7 +122,7 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
           </div>
         }
         popoverClassName={Classes.POPOVER_DISMISS}
-        disabled={isNotPlayground}
+        disabled={isNotPlayground || GDriveSynced}
       >
         {mainButton}
       </Popover2>
