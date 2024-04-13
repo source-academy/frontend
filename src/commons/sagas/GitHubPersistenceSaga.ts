@@ -22,7 +22,7 @@ import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
 import { OverallState } from '../application/ApplicationTypes';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
-import { getPersistenceFile, retrieveFilesInWorkspaceAsRecord } from '../fileSystem/FileSystemUtils';
+import { getPersistenceFile, retrieveFilesInWorkspaceAsRecord} from '../fileSystem/FileSystemUtils';
 import FileExplorerDialog, { FileExplorerDialogProps } from '../gitHubOverlay/FileExplorerDialog';
 import RepositoryDialog, { RepositoryDialogProps } from '../gitHubOverlay/RepositoryDialog';
 import { actions } from '../utils/ActionsHelper';
@@ -179,6 +179,7 @@ function* githubSaveFileAs(): any {
   type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
     typeof octokit.repos.listForAuthenticatedUser
   >;
+
   const userRepos: ListForAuthenticatedUserData = yield call(
     async () =>
       await octokit.paginate(octokit.repos.listForAuthenticatedUser, {
@@ -315,7 +316,7 @@ function* githubCreateFile({ payload }: ReturnType<typeof actions.githubCreateFi
   const githubLoginId = authUser.data.login;
   const persistenceFile = getPersistenceFile('');
   if (persistenceFile === undefined) {
-    throw new Error("persistencefile not found for this filepath: " + filePath);
+    throw new Error("persistencefile not found for this filepath: " + '');
   }
   const repoName = persistenceFile.repoName;
   const githubEmail = authUser.data.email;
@@ -418,9 +419,9 @@ function* githubDeleteFolder({ payload }: ReturnType<typeof actions.githubDelete
   const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
 
   const githubLoginId = authUser.data.login;
-  const persistenceFile = getPersistenceFile(filePath);
+  const persistenceFile = getPersistenceFile('');
   if (persistenceFile === undefined) {
-    throw new Error("persistence file not found for this filepath: " + filePath);
+    throw new Error("persistence file not found for this filepath: " + '');
   }
   const repoName = persistenceFile.repoName;
   const parentFolderPath = persistenceFile.parentFolderPath;
@@ -515,9 +516,9 @@ function* githubRenameFolder({ payload }: ReturnType<typeof actions.githubRename
   const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
 
   const githubLoginId = authUser.data.login;
-  const persistenceFile = getPersistenceFile(oldFilePath);
+  const persistenceFile = getPersistenceFile('');
   if (persistenceFile === undefined) {
-    throw new Error("persistence file not found for this filepath: " + oldFilePath);
+    throw new Error("persistence file not found for this filepath: " + '');
   }
   const repoName = persistenceFile.repoName;
   const parentFolderPath = persistenceFile.parentFolderPath;

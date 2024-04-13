@@ -138,6 +138,14 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
       );
 
       if (canBeSaved) {
+        const persistenceFile = getPersistenceFile('');
+        if (persistenceFile === undefined) {
+          throw new Error("persistence file not found for this filepath: " + '');
+        }
+        const parentFolderPath = persistenceFile.parentFolderPath;
+        if (parentFolderPath === undefined) {
+          throw new Error("repository name or parentfolderpath not found for this persistencefile: " + persistenceFile);
+        }
         if (saveType === 'Overwrite' && (await checkIfUserAgreesToPerformOverwritingSave())) {
           performOverwritingSaveForSaveAs(
             props.octokit,
@@ -147,19 +155,12 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
             githubName,
             githubEmail,
             commitMessage,
-            props.editorContent
+            props.editorContent,
+            parentFolderPath
           );
         }
 
         if (saveType === 'Create') {
-          const persistenceFile = getPersistenceFile(filePath);
-          if (persistenceFile === undefined) {
-            throw new Error("persistence file not found for this filepath: " + filePath);
-          }
-          const parentFolderPath = persistenceFile.parentFolderPath;
-          if (parentFolderPath === undefined) {
-            throw new Error("repository name or parentfolderpath not found for this persistencefile: " + persistenceFile);
-          }
           performCreatingSave(
             props.octokit,
             githubLoginID,

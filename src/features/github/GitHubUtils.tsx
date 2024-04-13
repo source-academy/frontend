@@ -542,11 +542,11 @@ export async function performMultipleOverwritingSave(
         octokit,
         repoOwner,
         repoName,
-        filePath,
+        filePath.slice(12),
         githubName,
         githubEmail,
         changes.commitMessage,
-        changes.files[filePath].slice(12),
+        changes.files[filePath],
         parentFolderPath
       );
   }
@@ -568,7 +568,8 @@ export async function performOverwritingSaveForSaveAs(
   githubName: string | null,
   githubEmail: string | null,
   commitMessage: string,
-  content: string, // path of the parent of the opened subfolder in github
+  content: string,
+  parentFolderPath: string
 ) {
   if (octokit === undefined) return;
 
@@ -602,6 +603,34 @@ export async function performOverwritingSaveForSaveAs(
     }
 
     const sha = files.sha;
+    console.log("/playground/" + filePath.slice(parentFolderPath.length));
+    const persistenceFile = getPersistenceFile("/playground/" + filePath.slice(parentFolderPath.length));
+    if (persistenceFile !== undefined) {
+
+      //case where user saves as into the same folder
+      const parentFolderPath = persistenceFile.parentFolderPath;
+      const filePath = persistenceFile.path;
+      if (parentFolderPath === undefined || filePath === undefined) {
+        throw new Error("parentfolderpath or filepath not found for this persistencefile: " + persistenceFile);
+      }
+
+      const fileSystem: FSModule | null = store.getState().fileSystem.inBrowserFileSystem;
+      if (fileSystem === null) {
+        console.log("no filesystem!");
+        throw new Error("No filesystem");
+      }
+
+      writeFileRecursively(fileSystem, filePath, content);
+
+      store.dispatch(actions.addGithubSaveInfo({ 
+        id: '',
+        name: '',
+        repoName: repoName, 
+        path: filePath, 
+        lastSaved: new Date(),
+        parentFolderPath: parentFolderPath 
+    }));
+    }
 
     await octokit.repos.createOrUpdateFileContents({
       owner: repoOwner,
