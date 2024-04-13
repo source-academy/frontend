@@ -167,7 +167,11 @@ const makeQuestions = (task: XmlParseStrTask): [Question[], number] => {
 
 const makeMCQ = (problem: XmlParseStrCProblem, question: BaseQuestion): IMCQQuestion => {
   const choicesVal: MCQChoice[] = [];
-  const solution = problem.SNIPPET ? problem.SNIPPET[0].SOLUTION : undefined;
+  const snippet = problem.SNIPPET;
+  // FIXME: I think `XmlParseStrCProblem` type definition is incorrect
+  // FIXME: Remove `as unknown as keyof typeof snippet` when fixed
+  // @ts-expect-error broken type definition to be fixed above
+  const solution = snippet ? snippet[0 as unknown as keyof typeof snippet].SOLUTION : undefined;
   let solutionVal = 0;
   problem.CHOICE.forEach((choice: XmlParseStrProblemChoice, i: number) => {
     choicesVal.push({
