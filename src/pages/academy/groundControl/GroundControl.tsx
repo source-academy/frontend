@@ -232,7 +232,7 @@ const GroundControl: React.FC<Props> = props => {
     <div className="Grid ag-grid-parent ag-theme-balham">
       <AgGridReact
         alwaysShowHorizontalScroll={true}
-        domLayout={'autoHeight'}
+        domLayout="autoHeight"
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
