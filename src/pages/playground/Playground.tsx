@@ -1199,12 +1199,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
   };
 
   return isMobileBreakpoint ? (
-    <div className={classNames('Playground', Classes.DARK, isGreen ? 'GreenScreen' : undefined)}>
+    <div className={classNames('Playground', Classes.DARK, isGreen && 'GreenScreen')}>
       <MobileWorkspace {...mobileWorkspaceProps} />
     </div>
   ) : (
     <HotKeys
-      className={classNames('Playground', Classes.DARK, isGreen ? 'GreenScreen' : undefined)}
+      className={classNames('Playground', Classes.DARK, isGreen && 'GreenScreen')}
       keyMap={keyMap}
       handlers={handlers}
     >
