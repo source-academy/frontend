@@ -1,8 +1,7 @@
-import { compileFromSource } from 'java-slang/dist/compiler';
+import { compileFromSource, typeCheck } from 'java-slang';
 import { BinaryWriter } from 'java-slang/dist/compiler/binary-writer';
 import setupJVM, { parseBin } from 'java-slang/dist/jvm';
 import { createModuleProxy, loadCachedFiles } from 'java-slang/dist/jvm/utils/integration';
-import { convertErrorsToReadableMsgs, parseProgram, typeCheck } from 'java-slang/dist/types';
 import { Context } from 'js-slang';
 import loadSourceModules from 'js-slang/dist/modules/loader';
 
@@ -22,9 +21,9 @@ export async function javaRun(javaCode: string, context: Context) {
     });
   };
 
-  const typeCheckResult = typeCheck(parseProgram(javaCode));
+  const typeCheckResult = typeCheck(javaCode);
   if (typeCheckResult.hasTypeErrors) {
-    const typeErrMsg = convertErrorsToReadableMsgs(javaCode, typeCheckResult.errors).join('\n');
+    const typeErrMsg = typeCheckResult.errorMsgs.join('\n');
     stderr('TypeCheck', typeErrMsg);
     return Promise.resolve({ status: 'error' });
   }
