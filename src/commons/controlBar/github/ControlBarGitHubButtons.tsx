@@ -7,9 +7,11 @@ import { useResponsive } from 'src/commons/utils/Hooks';
 
 import { GitHubSaveInfo } from '../../../features/github/GitHubTypes';
 import ControlButton from '../../ControlButton';
+import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 
 type Props = {
   isFolderModeEnabled: boolean;
+  currPersistenceFile?: PersistenceFile;
   loggedInAs?: Octokit;
   githubSaveInfo: GitHubSaveInfo;
   isDirty: boolean;
@@ -31,14 +33,13 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
   const { isMobileBreakpoint } = useResponsive();
 
   const filePath = props.githubSaveInfo.filePath || '';
-  const fileName = (filePath.split('\\').pop() || '').split('/').pop() || '';
 
   const isLoggedIn = props.loggedInAs !== undefined;
   const shouldDisableButtons = !isLoggedIn;
   const hasFilePath = filePath !== '';
   const hasOpenFile = isLoggedIn && hasFilePath;
 
-  const mainButtonDisplayText = hasOpenFile ? fileName : 'GitHub';
+  const mainButtonDisplayText = (props.currPersistenceFile && props.currPersistenceFile.name) || 'GitHub';
   let mainButtonIntent: Intent = Intent.NONE;
   if (hasOpenFile) {
     mainButtonIntent = props.isDirty ? Intent.WARNING : Intent.PRIMARY;

@@ -17,7 +17,7 @@ type Props = {
   isFolderModeEnabled: boolean;
   loggedInAs?: string;
   accessToken?: string;
-  currentObject?: PersistenceFile;
+  currPersistenceFile?: PersistenceFile;
   isDirty?: boolean;
   onClickOpen?: () => any;
   onClickSave?: () => any;
@@ -30,14 +30,14 @@ type Props = {
 
 export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
   const { isMobileBreakpoint } = useResponsive();
-  const state: PersistenceState = props.currentObject
+  const state: PersistenceState = props.currPersistenceFile
     ? props.isDirty
       ? 'DIRTY'
       : 'SAVED'
     : 'INACTIVE';
   const mainButton = (
     <ControlButton
-      label={(props.currentObject && props.currentObject.name) || 'Google Drive'}
+      label={(props.currPersistenceFile && props.currPersistenceFile.name) || 'Google Drive'}
       icon={IconNames.CLOUD}
       options={{ intent: stateToIntent[state] }}
       //isDisabled={props.isFolderModeEnabled}
