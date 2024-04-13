@@ -148,7 +148,7 @@ type UseTokens = {
  * Returns the access token and refresh token from the session.
  * @param throwWhenEmpty (optional) If true, throws an error if no tokens are found.
  */
-export const useTokens: UseTokens = ({ throwWhenEmpty = false } = {}) => {
+export const useTokens: UseTokens = ({ throwWhenEmpty = true } = {}) => {
   const accessToken = useTypedSelector(state => state.session.accessToken);
   const refreshToken = useTypedSelector(state => state.session.refreshToken);
   if (throwWhenEmpty && (!accessToken || !refreshToken)) {
