@@ -44,14 +44,14 @@ export interface IVisible extends Drawable {
 /** unassigned is internally represented as a symbol */
 export type Unassigned = symbol;
 
-/** types of primitives in JS Slang  */
-export type Primitive = number | string | boolean | null | undefined;
-
 /** types of source objects such as runes */
 export type SourceObject = {
   [index: string]: any;
   toReplString: () => string;
 };
+
+/** types of primitives in JS Slang  */
+export type Primitive = number | string | boolean | null | undefined | SourceObject;
 
 /** types of closures in JS Slang, redefined here for convenience. */
 export type Closure = JsSlangClosure;
@@ -84,7 +84,7 @@ export type DataArray = Data[] & {
 };
 
 /** the types of data in the JS Slang context */
-export type Data = Primitive | SourceObject | NonGlobalFn | GlobalFn | Unassigned | DataArray;
+export type Data = Primitive | NonGlobalFn | GlobalFn | Unassigned | DataArray;
 
 /** modified `Environment` to store children and associated frame */
 export type Env = Environment;
