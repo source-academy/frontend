@@ -15,6 +15,7 @@ import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
 import FileSystemViewIndentationPadding from './FileSystemViewIndentationPadding';
+import { isGDriveSyncing, isGithubSyncing } from '../fileSystem/FileSystemUtils';
 
 type Props = {
   workspaceLocation: WorkspaceLocation;
@@ -107,8 +108,12 @@ const FileSystemViewFileNode: React.FC<Props> = ({
         if (err) {
           console.error(err);
         }
-        dispatch(persistenceDeleteFile(fullPath));
-        dispatch(githubDeleteFile(fullPath));
+        if (isGDriveSyncing()) {
+          dispatch(persistenceDeleteFile(fullPath));
+        }
+        if (isGithubSyncing()) {
+          dispatch(githubDeleteFile(fullPath));
+        }
         dispatch(removeEditorTabForFile(workspaceLocation, fullPath));
         refreshDirectory();
       });

@@ -15,6 +15,7 @@ import {
   renameEditorTabsForDirectory
 } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import { isGDriveSyncing, isGithubSyncing } from '../fileSystem/FileSystemUtils';
 
 type Props = {
   workspaceLocation: WorkspaceLocation;
@@ -74,12 +75,20 @@ const FileSystemViewFileName: React.FC<Props> = ({
           }
 
           if (isDirectory) {
-            dispatch(persistenceRenameFolder({ oldFolderPath: oldPath, newFolderPath: newPath }));
-            dispatch(githubRenameFolder(oldPath, newPath));
+            if (isGDriveSyncing()) {
+              dispatch(persistenceRenameFolder({ oldFolderPath: oldPath, newFolderPath: newPath }));
+            }
+            if (isGithubSyncing()) {
+              dispatch(githubRenameFolder(oldPath, newPath));    
+            }
             dispatch(renameEditorTabsForDirectory(workspaceLocation, oldPath, newPath));
           } else {
-            dispatch(persistenceRenameFile({ oldFilePath: oldPath, newFilePath: newPath }));
-            dispatch(githubRenameFile(oldPath, newPath));
+            if (isGDriveSyncing()) {
+              dispatch(persistenceRenameFile({ oldFilePath: oldPath, newFilePath: newPath }));
+            }
+            if (isGithubSyncing()) {
+              dispatch(githubRenameFile(oldPath, newPath));
+            }
             dispatch(renameEditorTabForFile(workspaceLocation, oldPath, newPath));
           }
           refreshDirectory();

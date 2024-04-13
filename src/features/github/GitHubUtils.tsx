@@ -20,12 +20,14 @@ import {
 import { actions } from '../../commons/utils/ActionsHelper';
 import { showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
 import {
+  dismiss,
+  showMessage,
   showSuccessMessage,
   showWarningMessage
 } from '../../commons/utils/notifications/NotificationsHelper';
 import { store } from '../../pages/createStore';
 import { PersistenceFile } from '../persistence/PersistenceTypes';
-import { disableFileSystemContextMenus } from '../playground/PlaygroundActions';
+import { Intent } from '@blueprintjs/core';
 
 /**
  * Exchanges the Access Code with the back-end to receive an Auth-Token
@@ -278,11 +280,9 @@ export async function openFileInEditor(
   const newEditorValue = Buffer.from(content, 'base64').toString();
   const activeEditorTabIndex = store.getState().workspaces.playground.activeEditorTabIndex;
   if (activeEditorTabIndex === null) {
-    store.dispatch(
-      actions.addEditorTab('playground', '/playground/' + newFilePath, newEditorValue)
-    );
+    store.dispatch(actions.addEditorTab('playground', '/playground/' + newFilePath, newEditorValue));
   } else {
-    store.dispatch(actions.updateEditorValue('playground', activeEditorTabIndex, newEditorValue));
+    store.dispatch(actions.updateActiveEditorTab('playground', { filePath: '/playground/' + newFilePath, value: newEditorValue}));
   }
   store.dispatch(
     actions.addGithubSaveInfo({
@@ -305,11 +305,10 @@ export async function openFileInEditor(
     await writeFileRecursively(fileSystem, '/playground/' + newFilePath, newEditorValue);
   }
 
-  store.dispatch(actions.updateRefreshFileViewKey());
   //refreshes editor tabs
-  store.dispatch(
-    actions.removeEditorTabsForDirectory('playground', WORKSPACE_BASE_PATHS['playground'])
-  ); // TODO hardcoded
+  // store.dispatch(
+  //   actions.removeEditorTabsForDirectory('playground', WORKSPACE_BASE_PATHS['playground'])
+  // ); // TODO hardcoded
 }
 
 export async function openFolderInFolderMode(
@@ -318,15 +317,19 @@ export async function openFolderInFolderMode(
   repoName: string,
   filePath: string
 ) {
-  if (octokit === undefined) return;
-
-  store.dispatch(actions.deleteAllGithubSaveInfo());
-
   //In order to get the file paths recursively, we require the tree_sha,
   // which is obtained from the most recent commit(any commit works but the most recent)
   // is the easiest
-
+  let toastKey: string | undefined;
   try {
+    if (octokit === undefined) return;
+    toastKey = showMessage({
+      message: `Opening files...`,
+      timeout: 0,
+      intent: Intent.PRIMARY
+  });
+    store.dispatch(actions.deleteAllGithubSaveInfo());
+
     const requests = await octokit.request('GET /repos/{owner}/{repo}/branches/master', {
       owner: repoOwner,
       repo: repoName
@@ -432,18 +435,24 @@ export async function openFolderInFolderMode(
         store.dispatch(updateRefreshFileViewKey());
         console.log('refreshed');
         showSuccessMessage('Successfully loaded file!', 1000);
+        if (toastKey) {
+          dismiss(toastKey);
+        }
       });
     };
 
-    readFile(files);
-
+    await readFile(files);
+  } catch (err) {
+    console.error(err);
+    showWarningMessage('Something went wrong when trying to open the folder', 1000);
+    if (toastKey) {
+      dismiss(toastKey);
+    }
+  } finally {
     //refreshes editor tabs
     store.dispatch(
       actions.removeEditorTabsForDirectory('playground', WORKSPACE_BASE_PATHS['playground'])
     ); // TODO hardcoded
-  } catch (err) {
-    console.error(err);
-    showWarningMessage('Something went wrong when trying to open the folder', 1000);
   }
 }
 
@@ -458,19 +467,17 @@ export async function performOverwritingSave(
   content: string,
   parentFolderPath: string // path of the parent of the opened subfolder in github
 ) {
-  if (octokit === undefined) return;
-
-  githubEmail = githubEmail || 'No public email provided';
-  githubName = githubName || 'Source Academy User';
-  commitMessage = commitMessage || 'Changes made from Source Academy';
-  content = content || '';
-  const githubFilePath = parentFolderPath + filePath;
-
-  store.dispatch(actions.disableFileSystemContextMenus());
-
-  const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
-
   try {
+    if (octokit === undefined) return;
+
+    githubEmail = githubEmail || 'No public email provided';
+    githubName = githubName || 'Source Academy User';
+    commitMessage = commitMessage || 'Changes made from Source Academy';
+    content = content || '';
+    const githubFilePath = parentFolderPath + filePath;
+
+    const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
+
     type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
     console.log(repoOwner);
     console.log(repoName);
@@ -516,13 +523,10 @@ export async function performOverwritingSave(
 
     //this is just so that playground is forcefully updated
     // store.dispatch(actions.playgroundUpdateRepoName(repoName));
-    showSuccessMessage('Successfully saved file!', 1000);
+    showSuccessMessage('Successfully saved file!', 800);
   } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to save the file.', 1000);
-  } finally {
-    store.dispatch(actions.enableFileSystemContextMenus());
-    store.dispatch(actions.updateRefreshFileViewKey());
   }
 }
 
@@ -533,14 +537,13 @@ export async function performMultipleOverwritingSave(
   githubEmail: string | null,
   changes: { commitMessage: string; files: Record<string, string> }
 ) {
-  if (octokit === undefined) return;
-
-  githubEmail = githubEmail || 'No public email provided';
-  githubName = githubName || 'Source Academy User';
-  changes.commitMessage = changes.commitMessage || 'Changes made from Source Academy';
-  store.dispatch(actions.disableFileSystemContextMenus());
-
   try {
+    if (octokit === undefined) return;
+
+    githubEmail = githubEmail || 'No public email provided';
+    githubName = githubName || 'Source Academy User';
+    changes.commitMessage = changes.commitMessage || 'Changes made from Source Academy';
+
     for (const filePath of Object.keys(changes.files)) {
       //this will create a separate commit for each file changed, which is not ideal.
       //the simple solution is to use a plugin github-commit-multiple-files
@@ -551,32 +554,32 @@ export async function performMultipleOverwritingSave(
         throw new Error('No persistence file found for this filePath: ' + filePath);
       }
       const repoName = persistenceFile.repoName;
-      if (repoName === undefined) {
-        throw new Error('No repository name found for this persistencefile: ' + persistenceFile);
-      }
       const parentFolderPath = persistenceFile.parentFolderPath;
-      if (parentFolderPath === undefined) {
-        throw new Error('No parent folder path found for this persistencefile: ' + persistenceFile);
+      const lastSaved = persistenceFile.lastSaved;
+      const lastEdit = persistenceFile.lastEdit;
+      if (parentFolderPath === undefined || repoName === undefined) {
+        throw new Error('No parent folder path or repository name or last saved found for this persistencefile: ' + persistenceFile);
       }
-      await performOverwritingSave(
-        octokit,
-        repoOwner,
-        repoName,
-        filePath.slice(12),
-        githubName,
-        githubEmail,
-        changes.commitMessage,
-        changes.files[filePath],
-        parentFolderPath
-      );
+      if (lastEdit) {
+        if (!lastSaved || lastSaved < lastEdit) {
+          await performOverwritingSave(
+            octokit,
+            repoOwner,
+            repoName,
+            filePath.slice(12),
+            githubName,
+            githubEmail,
+            changes.commitMessage,
+            changes.files[filePath],
+            parentFolderPath
+          );
+        }
+      }
     }
+    showSuccessMessage('Successfully saved all files!', 1000);
   } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to save the file.', 1000);
-  } finally {
-    showSuccessMessage('Successfully saved all files!', 1000);
-    store.dispatch(actions.enableFileSystemContextMenus());
-    store.dispatch(updateRefreshFileViewKey());
   }
 }
 
@@ -584,25 +587,22 @@ export async function performOverwritingSaveForSaveAs(
   octokit: Octokit,
   repoOwner: string,
   repoName: string,
-  filePath: string, // filepath of the file in folder mode file system (does not include "/playground/")
+  filePath: string, 
   githubName: string | null,
   githubEmail: string | null,
   commitMessage: string,
   content: string,
   parentFolderPath: string
 ) {
-  if (octokit === undefined) return;
-
-  githubEmail = githubEmail || 'No public email provided';
-  githubName = githubName || 'Source Academy User';
-  commitMessage = commitMessage || 'Changes made from Source Academy';
-  content = content || '';
-
-  store.dispatch(actions.disableFileSystemContextMenus());
-
-  const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
-
   try {
+    if (octokit === undefined) return;
+
+    githubEmail = githubEmail || 'No public email provided';
+    githubName = githubName || 'Source Academy User';
+    commitMessage = commitMessage || 'Changes made from Source Academy';
+    content = content || '';
+
+    const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
     type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
     console.log(repoOwner);
     console.log(repoName);
@@ -666,9 +666,6 @@ export async function performOverwritingSaveForSaveAs(
   } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to save the file.', 1000);
-  } finally {
-    store.dispatch(actions.enableFileSystemContextMenus());
-    store.dispatch(actions.updateRefreshFileViewKey());
   }
 }
 
@@ -693,7 +690,6 @@ export async function performCreatingSave(
 
   const contentEncoded = Buffer.from(content, 'utf8').toString('base64');
   try {
-    store.dispatch(actions.disableFileSystemContextMenus());
     await octokit.repos.createOrUpdateFileContents({
       owner: repoOwner,
       repo: repoName,
@@ -707,9 +703,6 @@ export async function performCreatingSave(
   } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to save the file.', 1000);
-  } finally {
-    store.dispatch(actions.enableFileSystemContextMenus());
-    store.dispatch(updateRefreshFileViewKey());
   }
 }
 
@@ -741,7 +734,6 @@ export async function performMultipleCreatingSave(
     fileSystem
   );
   try {
-    store.dispatch(actions.disableFileSystemContextMenus());
     for (const filePath of Object.keys(currFiles)) {
       console.log(folderPath);
       console.log(filePath);
@@ -771,9 +763,6 @@ export async function performMultipleCreatingSave(
   } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to save the file.', 1000);
-  } finally {
-    store.dispatch(actions.enableFileSystemContextMenus());
-    store.dispatch(updateRefreshFileViewKey());
   }
 }
 
@@ -795,7 +784,6 @@ export async function performFileDeletion(
   const githubFilePath = parentFolderPath + filePath;
 
   try {
-    store.dispatch(actions.disableFileSystemContextMenus());
     type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
     const results: GetContentResponse = await octokit.repos.getContent({
       owner: repoOwner,
@@ -833,9 +821,6 @@ export async function performFileDeletion(
   } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to delete the file.', 1000);
-  } finally {
-    store.dispatch(updateRefreshFileViewKey());
-    store.dispatch(actions.enableFileSystemContextMenus());
   }
 }
 
@@ -857,7 +842,6 @@ export async function performFolderDeletion(
   const githubFilePath = parentFolderPath + filePath;
 
   try {
-    store.dispatch(disableFileSystemContextMenus());
     const results = await octokit.repos.getContent({
       owner: repoOwner,
       repo: repoName,
@@ -898,8 +882,6 @@ export async function performFolderDeletion(
   } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to delete the folder.', 1000);
-  } finally {
-    store.dispatch(actions.enableFileSystemContextMenus());
   }
 }
 
@@ -923,7 +905,6 @@ export async function performFileRenaming(
   const newGithubFilePath = parentFolderPath + newFilePath;
 
   try {
-    store.dispatch(actions.disableFileSystemContextMenus());
     type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
     console.log(
       'repoOwner is ' + repoOwner + ' repoName is ' + repoName + ' oldfilepath is ' + oldFilePath
@@ -983,9 +964,6 @@ export async function performFileRenaming(
   } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to rename the file.', 1000);
-  } finally {
-    store.dispatch(actions.enableFileSystemContextMenus());
-    store.dispatch(updateRefreshFileViewKey());
   }
 }
 
@@ -1007,7 +985,6 @@ export async function performFolderRenaming(
   commitMessage = commitMessage || 'Changes made from Source Academy';
 
   try {
-    store.dispatch(actions.disableFileSystemContextMenus());
     const persistenceFileArray = store.getState().fileSystem.persistenceFileArray;
     type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
     type GetContentData = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.getContent>;
@@ -1090,8 +1067,5 @@ export async function performFolderRenaming(
   } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to rename the folder.', 1000);
-  } finally {
-    store.dispatch(updateRefreshFileViewKey());
-    store.dispatch(actions.enableFileSystemContextMenus());
   }
 }

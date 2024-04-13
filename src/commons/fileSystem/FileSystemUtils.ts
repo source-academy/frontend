@@ -297,3 +297,31 @@ export const getPersistenceFile = (filePath: string) => {
 
   return persistenceFile;
 };
+
+export const isGDriveSyncing = () => {
+  const persistenceFileArray = store.getState().fileSystem.persistenceFileArray;
+
+  if (persistenceFileArray.length === 0) {
+    return false;
+  }
+
+  if (!persistenceFileArray[0].id) {
+    return false;
+  }
+
+  return true;
+}
+
+export const isGithubSyncing = () => {
+  const persistenceFileArray = store.getState().fileSystem.persistenceFileArray;
+
+  if (persistenceFileArray.length === 0) {
+    return false;
+  }
+
+  if (!persistenceFileArray[0].repoName) {
+    return false;
+  }
+
+  return true;
+}

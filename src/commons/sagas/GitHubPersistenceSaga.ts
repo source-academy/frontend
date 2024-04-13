@@ -18,7 +18,7 @@ import {
   GITHUB_SAVE_FILE_AS
 } from '../../features/github/GitHubTypes';
 import * as GitHubUtils from '../../features/github/GitHubUtils';
-import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
+import { getGitHubOctokitInstance, performCreatingSave, performFileDeletion, performFileRenaming, performFolderDeletion, performFolderRenaming, performOverwritingSave } from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
 import { OverallState } from '../application/ApplicationTypes';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
@@ -31,8 +31,9 @@ import RepositoryDialog, { RepositoryDialogProps } from '../gitHubOverlay/Reposi
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { promisifyDialog } from '../utils/DialogHelper';
-import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
+import { dismiss, showMessage, showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { EditorTabState } from '../workspace/WorkspaceTypes';
+import { Intent } from '@blueprintjs/core';
 
 export function* GitHubPersistenceSaga(): SagaIterator {
   yield takeLatest(LOGIN_GITHUB, githubLoginSaga);
@@ -81,161 +82,13 @@ function* githubLogoutSaga() {
 }
 
 function* githubOpenFile(): any {
-  const octokit = GitHubUtils.getGitHubOctokitInstance();
-  if (octokit === undefined) {
-    return;
-  }
+  store.dispatch(actions.disableFileSystemContextMenus());
+  try {
+    const octokit = GitHubUtils.getGitHubOctokitInstance();
+    if (octokit === undefined) {
+      return;
+    }
 
-  type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
-    typeof octokit.repos.listForAuthenticatedUser
-  >;
-  const userRepos: ListForAuthenticatedUserData = yield call(
-    async () =>
-      await octokit.paginate(octokit.repos.listForAuthenticatedUser, {
-        // 100 is the maximum number of results that can be retrieved per page.
-        per_page: 100
-      })
-  );
-
-  const getRepoName = async () =>
-    await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
-      userRepos: userRepos,
-      onSubmit: resolve
-    }));
-  const repoName = yield call(getRepoName);
-
-  const editorContent = '';
-
-  if (repoName !== '') {
-    const pickerType = 'Open';
-    const promisifiedDialog = async () =>
-      await promisifyDialog<FileExplorerDialogProps, string>(FileExplorerDialog, resolve => ({
-        repoName: repoName,
-        pickerType: pickerType,
-        octokit: octokit,
-        editorContent: editorContent,
-        onSubmit: resolve
-      }));
-
-    yield call(promisifiedDialog);
-  }
-}
-
-function* githubSaveFile(): any {
-  const octokit = getGitHubOctokitInstance();
-  if (octokit === undefined) return;
-
-  type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
-    typeof octokit.users.getAuthenticated
-  >;
-  const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
-
-  const githubLoginId = authUser.data.login;
-  const githubEmail = authUser.data.email;
-  const githubName = authUser.data.name;
-  const commitMessage = 'Changes made from Source Academy';
-  const activeEditorTabIndex: number | null = yield select(
-    (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
-  );
-  if (activeEditorTabIndex === null) {
-    throw new Error('No active editor tab found.');
-  }
-  const editorTabs: EditorTabState[] = yield select(
-    (state: OverallState) => state.workspaces.playground.editorTabs
-  );
-  const content = editorTabs[activeEditorTabIndex].value;
-  const filePath = editorTabs[activeEditorTabIndex].filePath;
-  if (filePath === undefined) {
-    throw new Error('No file found for this editor tab.');
-  }
-  const persistenceFile = getPersistenceFile(filePath);
-  if (persistenceFile === undefined) {
-    throw new Error('No persistence file found for this filepath');
-  }
-  const repoName = persistenceFile.repoName || '';
-  const parentFolderPath = persistenceFile.parentFolderPath || '';
-  if (repoName === undefined || parentFolderPath === undefined) {
-    throw new Error(
-      'repository name or parentfolderpath not found for this persistencefile: ' + persistenceFile
-    );
-  }
-
-  GitHubUtils.performOverwritingSave(
-    octokit,
-    githubLoginId,
-    repoName,
-    filePath.slice(12),
-    githubEmail,
-    githubName,
-    commitMessage,
-    content,
-    parentFolderPath
-  );
-
-  store.dispatch(actions.updateRefreshFileViewKey());
-}
-
-function* githubSaveFileAs(): any {
-  const octokit = GitHubUtils.getGitHubOctokitInstance();
-  if (octokit === undefined) {
-    return;
-  }
-
-  type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
-    typeof octokit.repos.listForAuthenticatedUser
-  >;
-
-  const userRepos: ListForAuthenticatedUserData = yield call(
-    async () =>
-      await octokit.paginate(octokit.repos.listForAuthenticatedUser, {
-        // 100 is the maximum number of results that can be retrieved per page.
-        per_page: 100
-      })
-  );
-
-  const getRepoName = async () =>
-    await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
-      userRepos: userRepos,
-      onSubmit: resolve
-    }));
-  const repoName = yield call(getRepoName);
-
-  const activeEditorTabIndex: number | null = yield select(
-    (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
-  );
-  if (activeEditorTabIndex === null) {
-    throw new Error('No active editor tab found.');
-  }
-  const editorTabs: EditorTabState[] = yield select(
-    (state: OverallState) => state.workspaces.playground.editorTabs
-  );
-  const editorContent = editorTabs[activeEditorTabIndex].value;
-
-  if (repoName !== '') {
-    const pickerType = 'Save';
-
-    const promisifiedFileExplorer = async () =>
-      await promisifyDialog<FileExplorerDialogProps, string>(FileExplorerDialog, resolve => ({
-        repoName: repoName,
-        pickerType: pickerType,
-        octokit: octokit,
-        editorContent: editorContent,
-        onSubmit: resolve
-      }));
-
-    yield call(promisifiedFileExplorer);
-  }
-}
-
-function* githubSaveAll(): any {
-  const octokit = getGitHubOctokitInstance();
-  if (octokit === undefined) return;
-
-  type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
-    typeof octokit.users.getAuthenticated
-  >;
-
-  if (store.getState().fileSystem.persistenceFileArray.length === 0) {
     type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
       typeof octokit.repos.listForAuthenticatedUser
     >;
@@ -257,7 +110,7 @@ function* githubSaveAll(): any {
     const editorContent = '';
 
     if (repoName !== '') {
-      const pickerType = 'Save All';
+      const pickerType = 'Open';
       const promisifiedDialog = async () =>
         await promisifyDialog<FileExplorerDialogProps, string>(FileExplorerDialog, resolve => ({
           repoName: repoName,
@@ -269,307 +122,580 @@ function* githubSaveAll(): any {
 
       yield call(promisifiedDialog);
     }
-  } else {
+  } catch (e) {
+    yield call(console.log, e);
+    yield call(showWarningMessage, "Something went wrong when saving the file", 1000);
+  } finally {
+    store.dispatch(actions.enableFileSystemContextMenus());
+    store.dispatch(actions.updateRefreshFileViewKey());
+  }
+}
+
+function* githubSaveFile(): any {
+  let toastKey: string | undefined;
+  try {
+    store.dispatch(actions.disableFileSystemContextMenus());
+    const octokit = getGitHubOctokitInstance();
+    if (octokit === undefined) return;
+
+    type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
+      typeof octokit.users.getAuthenticated
+    >;
     const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
 
     const githubLoginId = authUser.data.login;
     const githubEmail = authUser.data.email;
     const githubName = authUser.data.name;
     const commitMessage = 'Changes made from Source Academy';
-    const fileSystem: FSModule | null = yield select(
-      (state: OverallState) => state.fileSystem.inBrowserFileSystem
+    const activeEditorTabIndex: number | null = yield select(
+      (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
     );
-    // If the file system is not initialised, do nothing.
-    if (fileSystem === null) {
-      yield call(console.log, 'no filesystem!');
-      return;
+    if (activeEditorTabIndex === null) {
+      throw new Error('No active editor tab found.');
     }
-    yield call(console.log, 'there is a filesystem');
-    const currFiles: Record<string, string> = yield call(
-      retrieveFilesInWorkspaceAsRecord,
-      'playground',
-      fileSystem
+    const editorTabs: EditorTabState[] = yield select(
+      (state: OverallState) => state.workspaces.playground.editorTabs
     );
-    // const modifiedcurrFiles : Record<string, string> = {};
-    // for (const filePath of Object.keys(currFiles)) {
-    //   modifiedcurrFiles[filePath.slice(12)] = currFiles[filePath];
-    // }
-    // console.log(modifiedcurrFiles);
+    const content = editorTabs[activeEditorTabIndex].value;
+    const filePath = editorTabs[activeEditorTabIndex].filePath;
+    if (filePath === undefined) {
+      throw new Error('No file found for this editor tab.');
+    }
+    toastKey = yield call(showMessage, {
+      message: `Saving ${filePath} to Github...`,
+      timeout: 0,
+      intent: Intent.PRIMARY
+    });
+    console.log("showing message");
+    const persistenceFile = getPersistenceFile(filePath);
+    if (persistenceFile === undefined) {
+      throw new Error('No persistence file found for this filepath');
+    }
+    const repoName = persistenceFile.repoName || '';
+    const parentFolderPath = persistenceFile.parentFolderPath || '';
+    if (repoName === undefined || parentFolderPath === undefined) {
+      throw new Error(
+        'repository name or parentfolderpath not found for this persistencefile: ' + persistenceFile
+      );
+    }
 
-    yield call(
-      GitHubUtils.performMultipleOverwritingSave,
+    yield call(performOverwritingSave,
       octokit,
       githubLoginId,
+      repoName,
+      filePath.slice(12),
       githubEmail,
       githubName,
-      { commitMessage: commitMessage, files: currFiles }
+      commitMessage,
+      content,
+      parentFolderPath
     );
-
+  } catch (e) {
+    yield call(console.log, e);
+    yield call(showWarningMessage, "Something went wrong when saving the file", 1000);
+  } finally {
+    store.dispatch(actions.enableFileSystemContextMenus());
+    if (toastKey){
+      dismiss(toastKey);
+    }
     store.dispatch(actions.updateRefreshFileViewKey());
   }
 }
 
-function* githubCreateFile({ payload }: ReturnType<typeof actions.githubCreateFile>): any {
-  // yield call(store.dispatch, actions.disableFileSystemContextMenus());
+function* githubSaveFileAs(): any {
+  let toastKey: string | undefined;
+  try {
+    store.dispatch(actions.disableFileSystemContextMenus());
+    toastKey = yield call(showMessage, {
+      message: `Saving as...`,
+      timeout: 0,
+      intent: Intent.PRIMARY
+    });
+    const octokit = GitHubUtils.getGitHubOctokitInstance();
+    if (octokit === undefined) {
+      return;
+    }
 
-  const filePath = payload;
+    type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
+      typeof octokit.repos.listForAuthenticatedUser
+    >;
 
-  const octokit = getGitHubOctokitInstance();
-  if (octokit === undefined) return;
-
-  type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
-    typeof octokit.users.getAuthenticated
-  >;
-  const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
-
-  const githubLoginId = authUser.data.login;
-  const persistenceFile = getPersistenceFile('');
-  if (persistenceFile === undefined) {
-    throw new Error('persistencefile not found for this filepath: ' + filePath);
-  }
-  const repoName = persistenceFile.repoName;
-  const githubEmail = authUser.data.email;
-  const githubName = authUser.data.name;
-  const commitMessage = 'Changes made from Source Academy';
-  const content = '';
-  const parentFolderPath = persistenceFile.parentFolderPath;
-  if (repoName === undefined || parentFolderPath === undefined) {
-    throw new Error(
-      'repository name or parentfolderpath not found for this persistencefile: ' + persistenceFile
+    const userRepos: ListForAuthenticatedUserData = yield call(
+      async () =>
+        await octokit.paginate(octokit.repos.listForAuthenticatedUser, {
+          // 100 is the maximum number of results that can be retrieved per page.
+          per_page: 100
+        })
     );
+
+    const getRepoName = async () =>
+      await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
+        userRepos: userRepos,
+        onSubmit: resolve
+      }));
+    const repoName = yield call(getRepoName);
+
+    const activeEditorTabIndex: number | null = yield select(
+      (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
+    );
+    if (activeEditorTabIndex === null) {
+      throw new Error('No active editor tab found.');
+    }
+    const editorTabs: EditorTabState[] = yield select(
+      (state: OverallState) => state.workspaces.playground.editorTabs
+    );
+    const editorContent = editorTabs[activeEditorTabIndex].value;
+
+    if (repoName !== '') {
+      const pickerType = 'Save';
+
+      const promisifiedFileExplorer = async () =>
+        await promisifyDialog<FileExplorerDialogProps, string>(FileExplorerDialog, resolve => ({
+          repoName: repoName,
+          pickerType: pickerType,
+          octokit: octokit,
+          editorContent: editorContent,
+          onSubmit: resolve
+        }));
+
+      yield call(promisifiedFileExplorer);
+    }
+  } catch (e) {
+    yield call(console.log, e);
+    yield call(showWarningMessage, "Something went wrong when saving as", 1000);
+  } finally {
+    store.dispatch(actions.enableFileSystemContextMenus());
+    if (toastKey) {
+      dismiss(toastKey);
+    }
   }
+}
 
-  if (repoName === '') {
-    yield call(console.log, 'not synced to github');
-    return;
+function* githubSaveAll(): any {
+  let toastKey: string | undefined;
+  try {
+    store.dispatch(actions.disableFileSystemContextMenus());
+    toastKey = yield call(showMessage, {
+      message: `Saving all your files to Github...`,
+      timeout: 0,
+      intent: Intent.PRIMARY
+    });
+    const octokit = getGitHubOctokitInstance();
+    if (octokit === undefined) return;
+
+    type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
+      typeof octokit.users.getAuthenticated
+    >;
+
+    if (store.getState().fileSystem.persistenceFileArray.length === 0) {
+      type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
+        typeof octokit.repos.listForAuthenticatedUser
+      >;
+      const userRepos: ListForAuthenticatedUserData = yield call(
+        async () =>
+          await octokit.paginate(octokit.repos.listForAuthenticatedUser, {
+            // 100 is the maximum number of results that can be retrieved per page.
+            per_page: 100
+          })
+      );
+
+      const getRepoName = async () =>
+        await promisifyDialog<RepositoryDialogProps, string>(RepositoryDialog, resolve => ({
+          userRepos: userRepos,
+          onSubmit: resolve
+        }));
+      const repoName = yield call(getRepoName);
+
+      const editorContent = '';
+
+      if (repoName !== '') {
+        const pickerType = 'Save All';
+        const promisifiedDialog = async () =>
+          await promisifyDialog<FileExplorerDialogProps, string>(FileExplorerDialog, resolve => ({
+            repoName: repoName,
+            pickerType: pickerType,
+            octokit: octokit,
+            editorContent: editorContent,
+            onSubmit: resolve
+          }));
+
+        yield call(promisifiedDialog);
+      }
+    } else {
+      const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
+
+      const githubLoginId = authUser.data.login;
+      const githubEmail = authUser.data.email;
+      const githubName = authUser.data.name;
+      const commitMessage = 'Changes made from Source Academy';
+      const fileSystem: FSModule | null = yield select(
+        (state: OverallState) => state.fileSystem.inBrowserFileSystem
+      );
+      // If the file system is not initialised, do nothing.
+      if (fileSystem === null) {
+        yield call(console.log, 'no filesystem!');
+        return;
+      }
+      yield call(console.log, 'there is a filesystem');
+      const currFiles: Record<string, string> = yield call(
+        retrieveFilesInWorkspaceAsRecord,
+        'playground',
+        fileSystem
+      );
+
+      yield call(
+        GitHubUtils.performMultipleOverwritingSave,
+        octokit,
+        githubLoginId,
+        githubEmail,
+        githubName,
+        { commitMessage: commitMessage, files: currFiles }
+      );
+    }
+   } catch (e) {
+    yield call(console.log, e);
+    yield call(showWarningMessage, "Something went wrong when saving all your files");
+  } finally {
+    store.dispatch(actions.updateRefreshFileViewKey());
+    store.dispatch(actions.enableFileSystemContextMenus());
+    if (toastKey) {
+      dismiss(toastKey);
+    }
   }
+}
 
-  console.log(repoName);
-  GitHubUtils.performCreatingSave(
-    octokit,
-    githubLoginId,
-    repoName,
-    filePath.slice(12),
-    githubEmail,
-    githubName,
-    commitMessage,
-    content,
-    parentFolderPath
-  );
+function* githubCreateFile({ payload }: ReturnType<typeof actions.githubCreateFile>): any {
+  let toastKey: string | undefined;
+  try {
+    store.dispatch(actions.disableFileSystemContextMenus());
+    toastKey = yield call(showMessage, {
+      message: `Creating file in Github...`,
+      timeout: 0,
+      intent: Intent.PRIMARY
+    });
 
-  yield call(
-    store.dispatch,
-    actions.addGithubSaveInfo({
-      id: '',
-      name: '',
-      path: filePath,
-      repoName: repoName,
-      lastSaved: new Date(),
-      parentFolderPath: parentFolderPath
-    })
-  );
-  yield call(store.dispatch, actions.enableFileSystemContextMenus());
-  yield call(store.dispatch, actions.updateRefreshFileViewKey());
+    const filePath = payload;
+
+    const octokit = getGitHubOctokitInstance();
+    if (octokit === undefined) return;
+
+    type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
+      typeof octokit.users.getAuthenticated
+    >;
+    const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
+
+    const githubLoginId = authUser.data.login;
+    const persistenceFile = getPersistenceFile('');
+    if (persistenceFile === undefined) {
+      throw new Error('persistencefile not found for this filepath: ' + filePath);
+    }
+    const repoName = persistenceFile.repoName;
+    const githubEmail = authUser.data.email;
+    const githubName = authUser.data.name;
+    const commitMessage = 'Changes made from Source Academy';
+    const content = '';
+    const parentFolderPath = persistenceFile.parentFolderPath;
+    if (repoName === undefined || parentFolderPath === undefined) {
+      throw new Error(
+        'repository name or parentfolderpath not found for this persistencefile: ' + persistenceFile
+      );
+    }
+
+    if (repoName === '') {
+      yield call(console.log, 'not synced to github');
+      return;
+    }
+
+    console.log(repoName);
+    yield call(performCreatingSave,
+      octokit,
+      githubLoginId,
+      repoName,
+      filePath.slice(12),
+      githubEmail,
+      githubName,
+      commitMessage,
+      content,
+      parentFolderPath
+    );
+
+    yield call(
+      store.dispatch,
+      actions.addGithubSaveInfo({
+        id: '',
+        name: '',
+        path: filePath,
+        repoName: repoName,
+        lastSaved: new Date(),
+        parentFolderPath: parentFolderPath
+      })
+    );
+  } catch (e) {
+    yield call(showWarningMessage, 'Something went wrong when trying to save the file.', 1000);
+    yield call(console.log, e);
+  } finally {
+    yield call(store.dispatch, actions.enableFileSystemContextMenus());
+    yield call(store.dispatch, actions.updateRefreshFileViewKey());
+    if (toastKey) {
+      dismiss(toastKey);
+    }
+  }
 }
 
 function* githubDeleteFile({ payload }: ReturnType<typeof actions.githubDeleteFile>): any {
-  //yield call(store.dispatch, actions.disableFileSystemContextMenus());
+  let toastKey: string | undefined;
+  try {
+    store.dispatch(actions.disableFileSystemContextMenus());
+    toastKey = yield call(showMessage, {
+      message: `Deleting file in Github...`,
+      timeout: 0,
+      intent: Intent.PRIMARY
+    });
 
-  const filePath = payload;
+    const filePath = payload;
 
-  const octokit = getGitHubOctokitInstance();
-  if (octokit === undefined) return;
+    const octokit = getGitHubOctokitInstance();
+    if (octokit === undefined) return;
 
-  type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
-    typeof octokit.users.getAuthenticated
-  >;
-  const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
+    type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
+      typeof octokit.users.getAuthenticated
+    >;
+    const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
 
-  const githubLoginId = authUser.data.login;
-  const persistenceFile = getPersistenceFile(filePath);
-  if (persistenceFile === undefined) {
-    throw new Error('persistence file not found for this filepath: ' + filePath);
-  }
-  const repoName = persistenceFile.repoName;
-  const parentFolderPath = persistenceFile.parentFolderPath;
-  const githubEmail = authUser.data.email;
-  const githubName = authUser.data.name;
-  const commitMessage = 'Changes made from Source Academy';
-  if (repoName === undefined || parentFolderPath === undefined) {
-    throw new Error(
-      'repository name or parentfolderpath not found for this persistencefile: ' + persistenceFile
+    const githubLoginId = authUser.data.login;
+    const persistenceFile = getPersistenceFile(filePath);
+    if (persistenceFile === undefined) {
+      throw new Error('persistence file not found for this filepath: ' + filePath);
+    }
+    const repoName = persistenceFile.repoName;
+    const parentFolderPath = persistenceFile.parentFolderPath;
+    const githubEmail = authUser.data.email;
+    const githubName = authUser.data.name;
+    const commitMessage = 'Changes made from Source Academy';
+    if (repoName === undefined || parentFolderPath === undefined) {
+      throw new Error(
+        'repository name or parentfolderpath not found for this persistencefile: ' + persistenceFile
+      );
+    }
+
+    if (repoName === '') {
+      yield call(console.log, 'not synced to github');
+      return;
+    }
+
+    yield call(performFileDeletion,
+      octokit,
+      githubLoginId,
+      repoName || '',
+      filePath.slice(12),
+      githubEmail,
+      githubName,
+      commitMessage,
+      parentFolderPath
     );
+  } catch (e) {
+    yield call(showWarningMessage, 'Something went wrong when trying to save the file.', 1000);
+    yield call(console.log, e);
+  } finally {
+    yield call(store.dispatch, actions.enableFileSystemContextMenus());
+    yield call(store.dispatch, actions.updateRefreshFileViewKey());
+    if (toastKey) {
+      dismiss(toastKey);
+    }
   }
-
-  if (repoName === '') {
-    yield call(console.log, 'not synced to github');
-    return;
-  }
-
-  GitHubUtils.performFileDeletion(
-    octokit,
-    githubLoginId,
-    repoName || '',
-    filePath.slice(12),
-    githubEmail,
-    githubName,
-    commitMessage,
-    parentFolderPath
-  );
-
-  yield call(store.dispatch, actions.enableFileSystemContextMenus());
-  yield call(store.dispatch, actions.updateRefreshFileViewKey());
 }
 
 function* githubDeleteFolder({ payload }: ReturnType<typeof actions.githubDeleteFolder>): any {
-  //yield call(store.dispatch, actions.disableFileSystemContextMenus());
+  let toastKey: string | undefined;
+  try {
+    store.dispatch(actions.disableFileSystemContextMenus());
+    toastKey = yield call(showMessage, {
+      message: `Deleting folder in Github...`,
+      timeout: 0,
+      intent: Intent.PRIMARY
+    });
 
-  const filePath = payload;
-
-  const octokit = getGitHubOctokitInstance();
-  if (octokit === undefined) return;
-
-  type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
-    typeof octokit.users.getAuthenticated
-  >;
-  const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
-
-  const githubLoginId = authUser.data.login;
-  const persistenceFile = getPersistenceFile('');
-  if (persistenceFile === undefined) {
-    throw new Error('persistence file not found for this filepath: ' + filePath);
-  }
-  const repoName = persistenceFile.repoName;
-  const parentFolderPath = persistenceFile.parentFolderPath;
-  if (repoName === undefined || parentFolderPath === undefined) {
-    throw new Error(
-      'repository name or parentfolderpath not found for this persistencefile: ' + persistenceFile
+    const filePath = payload;
+  
+    const octokit = getGitHubOctokitInstance();
+    if (octokit === undefined) return;
+  
+    type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
+      typeof octokit.users.getAuthenticated
+    >;
+    const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
+  
+    const githubLoginId = authUser.data.login;
+    const persistenceFile = getPersistenceFile('');
+    if (persistenceFile === undefined) {
+      throw new Error('persistence file not found for this filepath: ' + filePath);
+    }
+    const repoName = persistenceFile.repoName;
+    const parentFolderPath = persistenceFile.parentFolderPath;
+    if (repoName === undefined || parentFolderPath === undefined) {
+      throw new Error(
+        'repository name or parentfolderpath not found for this persistencefile: ' + persistenceFile
+      );
+    }
+    const githubEmail = authUser.data.email;
+    const githubName = authUser.data.name;
+    const commitMessage = 'Changes made from Source Academy';
+  
+    if (repoName === '') {
+      yield call(console.log, 'not synced to github');
+      return;
+    }
+  
+    yield call(performFolderDeletion,
+      octokit,
+      githubLoginId,
+      repoName || '',
+      filePath.slice(12),
+      githubEmail,
+      githubName,
+      commitMessage,
+      parentFolderPath
     );
+  } catch (e) {
+    yield call(showWarningMessage, 'Something went wrong when trying to save the file.', 1000);
+    yield call(console.log, e);
+  } finally {
+    yield call(store.dispatch, actions.enableFileSystemContextMenus());
+    yield call(store.dispatch, actions.updateRefreshFileViewKey());
+    if(toastKey) {
+      dismiss(toastKey);
+    }
   }
-  const githubEmail = authUser.data.email;
-  const githubName = authUser.data.name;
-  const commitMessage = 'Changes made from Source Academy';
-
-  if (repoName === '') {
-    yield call(console.log, 'not synced to github');
-    return;
-  }
-
-  GitHubUtils.performFolderDeletion(
-    octokit,
-    githubLoginId,
-    repoName || '',
-    filePath.slice(12),
-    githubEmail,
-    githubName,
-    commitMessage,
-    parentFolderPath
-  );
-
-  yield call(store.dispatch, actions.enableFileSystemContextMenus());
-  yield call(store.dispatch, actions.updateRefreshFileViewKey());
 }
 
 function* githubRenameFile({ payload }: ReturnType<typeof actions.githubRenameFile>): any {
-  //yield call(store.dispatch, actions.disableFileSystemContextMenus());
+  let toastKey: string | undefined;
+  try {
+    store.dispatch(actions.disableFileSystemContextMenus());
+    toastKey = yield call(showMessage, {
+      message: `Renaming file in Github...`,
+      timeout: 0,
+      intent: Intent.PRIMARY
+    });
 
-  const newFilePath = payload.newFilePath;
-  const oldFilePath = payload.oldFilePath;
+    const newFilePath = payload.newFilePath;
+    const oldFilePath = payload.oldFilePath;
 
-  const octokit = getGitHubOctokitInstance();
-  if (octokit === undefined) return;
+    const octokit = getGitHubOctokitInstance();
+    if (octokit === undefined) return;
 
-  type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
-    typeof octokit.users.getAuthenticated
-  >;
-  const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
+    type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
+      typeof octokit.users.getAuthenticated
+    >;
+    const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
 
-  const githubLoginId = authUser.data.login;
-  const persistenceFile = getPersistenceFile(oldFilePath);
-  if (persistenceFile === undefined) {
-    throw new Error('persistence file not found for this filepath: ' + oldFilePath);
-  }
-  const repoName = persistenceFile.repoName;
-  const parentFolderPath = persistenceFile.parentFolderPath;
-  if (repoName === undefined || parentFolderPath === undefined) {
-    throw new Error(
-      'repository name or parentfolderpath not found for this persistencefile: ' + persistenceFile
+    const githubLoginId = authUser.data.login;
+    const persistenceFile = getPersistenceFile(oldFilePath);
+    if (persistenceFile === undefined) {
+      throw new Error('persistence file not found for this filepath: ' + oldFilePath);
+    }
+    const repoName = persistenceFile.repoName;
+    const parentFolderPath = persistenceFile.parentFolderPath;
+    if (repoName === undefined || parentFolderPath === undefined) {
+      throw new Error(
+        'repository name or parentfolderpath not found for this persistencefile: ' + persistenceFile
+      );
+    }
+    const githubEmail = authUser.data.email;
+    const githubName = authUser.data.name;
+    const commitMessage = 'Changes made from Source Academy';
+
+    if (repoName === '' || repoName === undefined) {
+      yield call(console.log, 'not synced to github');
+      return;
+    }
+
+    yield call(performFileRenaming,
+      octokit,
+      githubLoginId,
+      repoName,
+      oldFilePath.slice(12),
+      githubName,
+      githubEmail,
+      commitMessage,
+      newFilePath.slice(12),
+      parentFolderPath
     );
+  } catch (e) {
+    yield call(showWarningMessage, 'Something went wrong when trying to save the file.', 1000);
+    yield call(console.log, e);
+  } finally {
+    yield call(store.dispatch, actions.enableFileSystemContextMenus());
+    yield call(store.dispatch, actions.updateRefreshFileViewKey());
+    if (toastKey) {
+      dismiss(toastKey);
+    }
   }
-  const githubEmail = authUser.data.email;
-  const githubName = authUser.data.name;
-  const commitMessage = 'Changes made from Source Academy';
-
-  if (repoName === '' || repoName === undefined) {
-    yield call(console.log, 'not synced to github');
-    return;
-  }
-
-  GitHubUtils.performFileRenaming(
-    octokit,
-    githubLoginId,
-    repoName,
-    oldFilePath.slice(12),
-    githubName,
-    githubEmail,
-    commitMessage,
-    newFilePath.slice(12),
-    parentFolderPath
-  );
-
-  yield call(store.dispatch, actions.enableFileSystemContextMenus());
-  yield call(store.dispatch, actions.updateRefreshFileViewKey());
 }
 
 function* githubRenameFolder({ payload }: ReturnType<typeof actions.githubRenameFile>): any {
-  //yield call(store.dispatch, actions.disableFileSystemContextMenus());
+  let toastKey: string | undefined;
+  try {
+    store.dispatch(actions.disableFileSystemContextMenus());
+    toastKey = yield call(showMessage, {
+      message: `Renaming folder in Github...`,
+      timeout: 0,
+      intent: Intent.PRIMARY
+    });
 
-  const newFilePath = payload.newFilePath;
-  const oldFilePath = payload.oldFilePath;
+    const newFilePath = payload.newFilePath;
+    const oldFilePath = payload.oldFilePath;
 
-  const octokit = getGitHubOctokitInstance();
-  if (octokit === undefined) return;
+    const octokit = getGitHubOctokitInstance();
+    if (octokit === undefined) return;
 
-  type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
-    typeof octokit.users.getAuthenticated
-  >;
-  const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
+    type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
+      typeof octokit.users.getAuthenticated
+    >;
+    const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
 
-  const githubLoginId = authUser.data.login;
-  const persistenceFile = getPersistenceFile('');
-  if (persistenceFile === undefined) {
-    throw new Error('persistence file not found for this filepath: ' + oldFilePath);
-  }
-  const repoName = persistenceFile.repoName;
-  const parentFolderPath = persistenceFile.parentFolderPath;
-  if (repoName === undefined || parentFolderPath === undefined) {
-    throw new Error(
-      'repository name or parentfolderpath not found for this persistencefile: ' + persistenceFile
+    const githubLoginId = authUser.data.login;
+    const persistenceFile = getPersistenceFile('');
+    if (persistenceFile === undefined) {
+      throw new Error('persistence file not found for this filepath: ' + oldFilePath);
+    }
+    const repoName = persistenceFile.repoName;
+    const parentFolderPath = persistenceFile.parentFolderPath;
+    if (repoName === undefined || parentFolderPath === undefined) {
+      throw new Error(
+        'repository name or parentfolderpath not found for this persistencefile: ' + persistenceFile
+      );
+    }
+    const githubEmail = authUser.data.email;
+    const githubName = authUser.data.name;
+    const commitMessage = 'Changes made from Source Academy';
+
+    if (repoName === '' || repoName === undefined) {
+      yield call(console.log, 'not synced to github');
+      return;
+    }
+
+    yield call(performFolderRenaming,
+      octokit,
+      githubLoginId,
+      repoName,
+      oldFilePath.slice(12),
+      githubName,
+      githubEmail,
+      commitMessage,
+      newFilePath.slice(12),
+      parentFolderPath
     );
+  } catch (e) {
+    yield call(showWarningMessage, 'Something went wrong when trying to save the file.', 1000);
+    yield call(console.log, e);
+  } finally {
+    yield call(store.dispatch, actions.enableFileSystemContextMenus());
+    yield call(store.dispatch, actions.updateRefreshFileViewKey());
+    if(toastKey) {
+      dismiss(toastKey);
+    }
   }
-  const githubEmail = authUser.data.email;
-  const githubName = authUser.data.name;
-  const commitMessage = 'Changes made from Source Academy';
-
-  if (repoName === '' || repoName === undefined) {
-    yield call(console.log, 'not synced to github');
-    return;
-  }
-
-  GitHubUtils.performFolderRenaming(
-    octokit,
-    githubLoginId,
-    repoName,
-    oldFilePath.slice(12),
-    githubName,
-    githubEmail,
-    commitMessage,
-    newFilePath.slice(12),
-    parentFolderPath
-  );
-
-  yield call(store.dispatch, actions.enableFileSystemContextMenus());
-  yield call(store.dispatch, actions.updateRefreshFileViewKey());
 }
 
 export default GitHubPersistenceSaga;
