@@ -1,14 +1,21 @@
-import { compileFromSource, typeCheck } from 'java-slang';
+import { compileFromSource, ECE, typeCheck } from 'java-slang';
 import { BinaryWriter } from 'java-slang/dist/compiler/binary-writer';
 import setupJVM, { parseBin } from 'java-slang/dist/jvm';
 import { createModuleProxy, loadCachedFiles } from 'java-slang/dist/jvm/utils/integration';
 import { Context } from 'js-slang';
 import loadSourceModules from 'js-slang/dist/modules/loader';
+import { ErrorSeverity, ErrorType, Result, SourceError } from 'js-slang/dist/types';
 
+import { CseMachine } from '../../features/cseMachine/java/CseMachine';
 import Constants from './Constants';
 import DisplayBufferService from './DisplayBufferService';
 
-export async function javaRun(javaCode: string, context: Context) {
+export async function javaRun(
+  javaCode: string,
+  context: Context,
+  targetStep: number,
+  isUsingCse: boolean
+) {
   let compiled = {};
 
   const stderr = (type: 'TypeCheck' | 'Compile' | 'Runtime', msg: string) => {
@@ -99,6 +106,8 @@ export async function javaRun(javaCode: string, context: Context) {
     }
   };
 
+  if (isUsingCse) return await runJavaCseMachine(javaCode, targetStep, context);
+
   // load cached classfiles from IndexedDB
   return loadCachedFiles(() =>
     // Initial loader to fetch commonly used classfiles
@@ -146,5 +155,46 @@ export async function javaRun(javaCode: string, context: Context) {
     })
     .catch(() => {
       return { status: 'error' };
+    });
+}
+
+export function visualizeJavaCseMachine({ context }: { context: ECE.Context }) {
+  try {
+    CseMachine.drawCse(context);
+  } catch (err) {
+    throw new Error('Java CSE machine is not enabled');
+  }
+}
+
+export async function runJavaCseMachine(code: string, targetStep: number, context: Context) {
+  const convertJavaErrorToJsError = (e: ECE.SourceError): SourceError => ({
+    type: ErrorType.RUNTIME,
+    severity: ErrorSeverity.ERROR,
+    // TODO update err source node location once location info is avail
+    location: {
+      start: {
+        line: 0,
+        column: 0
+      },
+      end: {
+        line: 0,
+        column: 0
+      }
+    },
+    explain: () => e.explain(),
+    elaborate: () => e.explain()
+  });
+  context.executionMethod = 'cse-machine';
+  return ECE.runECEvaluator(code, targetStep)
+    .then(result => {
+      context.runtime.envStepsTotal = result.context.totalSteps;
+      if (result.status === 'error') {
+        context.errors = result.context.errors.map(e => convertJavaErrorToJsError(e));
+      }
+      return result;
+    })
+    .catch(e => {
+      console.error(e);
+      return { status: 'error' } as Result;
     });
 }
