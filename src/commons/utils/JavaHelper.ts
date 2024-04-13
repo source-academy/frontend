@@ -34,7 +34,7 @@ export async function javaRun(javaCode: string, context: Context) {
       'Main.class': Buffer.from(new BinaryWriter().generateBinary(classFile)).toString('base64')
     };
   } catch (e) {
-    stderr('TypeCheck', e);
+    stderr('Compile', e);
     return Promise.resolve({ status: 'error' });
   }
 
