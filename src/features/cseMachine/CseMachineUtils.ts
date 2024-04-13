@@ -444,8 +444,10 @@ function findObjects(
   visited.add(array);
   for (const item of array) {
     if (isDataArray(item) || isClosure(item)) {
-      if (isEnvEqual(item.environment, environment)) set.add(item);
-      if (isDataArray(item)) findObjects(environment, set, item, visited);
+      if (isEnvEqual(item.environment, environment)) {
+        set.add(item);
+        if (isDataArray(item)) findObjects(environment, set, item, visited);
+      }
     }
   }
 }
@@ -466,6 +468,7 @@ export function getReferencedObjects(environment: Env): Set<DataArray | Closure>
  * environments, just not the given one)
  */
 export function getUnreferencedObjects(environment: Env): Set<DataArray | Closure> {
+  console.log(getReferencedObjects(environment));
   return setDifference(environment.heap.getHeap(), getReferencedObjects(environment));
 }
 
