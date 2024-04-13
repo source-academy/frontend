@@ -80,6 +80,13 @@ $code-color-notification: #f9f0d7;
     height: 100%;
     padding-bottom: 0.6rem;
     overflow: auto;
+
+    .fullscreen-button {
+      position: absolute;
+      right: 8px;
+      padding: 5px;
+      z-index: 10;
+    }
   }
 
   .left-parent {
