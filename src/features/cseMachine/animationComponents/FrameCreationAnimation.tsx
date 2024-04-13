@@ -18,6 +18,14 @@ import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
 import { AnimatedRectComponent, AnimatedTextComponent } from './base/AnimationComponents';
 import { getNodeDimensions, getNodeLocation, getNodePosition } from './base/AnimationUtils';
 
+/**
+ * Animation for the creation of a new frame. "Throws" out the frame from the origin, either
+ * a ControlItemComponent when evaluating a block or a StashItemComponent when a function is
+ * called.
+ *
+ * Used when a block containing bindings is evaluated, or as part of a function application
+ * animation when a non-nullary function is called.
+ */
 export class FrameCreationAnimation extends Animatable {
   private controlTextAnimation: AnimatedTextComponent;
   private borderAnimation: AnimatedRectComponent;

@@ -18,6 +18,12 @@ import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodeLocation, getNodePosition } from './base/AnimationUtils';
 import { FrameCreationAnimation } from './FrameCreationAnimation';
 
+/**
+ * Animation for function application. Visually moves the resultant items out of the stash
+ * into position somewhere in the control or environment.
+ *
+ * Used when a function is called, specifically the 'APPLICATION' instruction.
+ */
 export class FunctionApplicationAnimation extends Animatable {
   private callInstrAnimation: AnimatedTextbox;
   private stashItemAnimations: AnimatedTextbox[];
