@@ -8024,10 +8024,10 @@ java-parser@^2.0.5:
     chevrotain-allstar "0.3.1"
     lodash "4.17.21"
 
-java-slang@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/java-slang/-/java-slang-1.0.6.tgz#34a68954a8dfb5bde8572d49a6bea170d7026749"
-  integrity sha512-CHq2s9xuzuuPfygRp9pQncfPfIuzpHivXn3wfy4QBiQ801IvdVFL3w/nV6qQn6GUG+kvOU+qCuxUFsFH8X5Dhg==
+java-slang@^1.0.13:
+  version "1.0.13"
+  resolved "https://registry.yarnpkg.com/java-slang/-/java-slang-1.0.13.tgz#601454c9dd28a41ea6918dab51a7e65401d2c2d9"
+  integrity sha512-xBh84Gcp7iyc3o9bWDbaIa7GXf75tpUVmDrd/gXIAU/gxNARitJdl5xCjQW5y4iesqwucV7cY+Ewx6MIt4xKeQ==
   dependencies:
     "@types/lodash" "^4.14.198"
     java-parser "^2.0.5"
@@ -13123,11 +13123,6 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==
-
-typesafe-actions@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/typesafe-actions/-/typesafe-actions-5.1.0.tgz#9afe8b1e6a323af1fd59e6a57b11b7dd6623d2f1"
-  integrity sha512-bna6Yi1pRznoo6Bz1cE6btB/Yy8Xywytyfrzu/wc+NFW3ZF0I+2iCGImhBsoYYCOWuICtRO4yHcnDlzgo1AdNg==
 
 typescript-compare@^0.0.2:
   version "0.0.2"
