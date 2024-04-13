@@ -1,4 +1,6 @@
-import { FocusStyleManager } from '@blueprintjs/core';
+import { Button, FocusStyleManager, Tooltip } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import { useFullscreen } from '@mantine/hooks';
 import { Enable, NumberSize, Resizable, ResizableProps, ResizeCallback } from 're-resizable';
 import { Direction } from 're-resizable/lib/resizer';
 import React, { useEffect, useRef, useState } from 'react';
@@ -187,6 +189,21 @@ const Workspace: React.FC<WorkspaceProps> = props => {
     </Resizable>
   );
 
+  const {
+    ref: fullscreenRef,
+    toggle: toggleFullscreen,
+    fullscreen: isFullscreen
+  } = useFullscreen<HTMLDivElement>();
+
+  const fullscreenContainerRef = React.useRef<HTMLDivElement | null>(null);
+  const setFullscreenRefs = React.useCallback(
+    (node: HTMLDivElement | null) => {
+      fullscreenContainerRef.current = node;
+      fullscreenRef(node);
+    },
+    [fullscreenRef]
+  );
+
   return (
     <div className="workspace">
       <Prompt
@@ -206,7 +223,18 @@ const Workspace: React.FC<WorkspaceProps> = props => {
         <div className="row content-parent" ref={contentContainerDiv}>
           <div className="editor-divider" ref={editorDividerDiv} />
           <Resizable {...editorResizableProps()}>{createWorkspaceInput(props)}</Resizable>
-          <div className="right-parent">
+          <div className="right-parent" ref={setFullscreenRefs}>
+            <Tooltip
+              className="fullscreen-button"
+              content={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+              portalContainer={fullscreenContainerRef.current || undefined}
+            >
+              <Button
+                minimal
+                icon={isFullscreen ? IconNames.MINIMIZE : IconNames.MAXIMIZE}
+                onClick={toggleFullscreen}
+              />
+            </Tooltip>
             {props.sideContentIsResizeable === undefined || props.sideContentIsResizeable
               ? resizableSideContent
               : sideContent}
