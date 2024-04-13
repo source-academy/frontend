@@ -152,7 +152,7 @@ const renderMessageContent = (message: ChatMessage) => {
         {chunk}
       </SyntaxHighlighter>
     ) : (
-      <React.Fragment key={i}>{chunk}</React.Fragment>
+      <React.Fragment key={i}>{chunk.trim()}</React.Fragment>
     );
   });
 };
