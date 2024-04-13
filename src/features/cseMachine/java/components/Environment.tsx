@@ -144,7 +144,10 @@ export class Environment extends Visible {
       .flatMap(obj => obj.frames)
       .forEach(of => {
         of.bindings.forEach(b => {
-          if (b.value instanceof Variable && b.value.variable.value.kind === ECE.StructType.VARIABLE) {
+          if (
+            b.value instanceof Variable &&
+            b.value.variable.value.kind === ECE.StructType.VARIABLE
+          ) {
             const variable = b.value.variable.value;
             const matchingVariable = this._classFrames
               .flatMap(c => c.bindings)
@@ -157,7 +160,10 @@ export class Environment extends Visible {
               matchingVariable.y() + matchingVariable.type.height()
             );
           }
-          if (b.value instanceof Variable && b.value.variable.value.kind === ECE.StructType.OBJECT) {
+          if (
+            b.value instanceof Variable &&
+            b.value.variable.value.kind === ECE.StructType.OBJECT
+          ) {
             const obj = b.value.variable.value.frame;
             const matchingObj = this._objects.find(o => o.getFrame().frame === obj)!;
             // Variable always has a box.
