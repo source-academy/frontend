@@ -7,7 +7,7 @@ import { Visible } from '../../components/Visible';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
 import { IHoverable } from '../../CseMachineTypes';
-import { setHoveredCursor, setUnhoveredCursor } from '../../CseMachineUtils';
+import { defaultTextColor, setHoveredCursor, setUnhoveredCursor } from '../../CseMachineUtils';
 import { CseMachine } from '../CseMachine';
 import { Arrow } from './Arrow';
 import { Binding } from './Binding';
@@ -84,7 +84,7 @@ export class Frame extends Visible implements IHoverable {
 
   draw(): React.ReactNode {
     const textProps = {
-      fill: ControlStashConfig.SA_WHITE.toString(),
+      fill: defaultTextColor(),
       padding: Number(ControlStashConfig.ControlItemTextPadding),
       fontFamily: ControlStashConfig.FontFamily.toString(),
       fontSize: Number(ControlStashConfig.FontSize),
