@@ -8,7 +8,7 @@ import { EditorTabState } from 'src/commons/workspace/WorkspaceTypes';
 
 import ShareLinkState from '../ShareLinkState';
 
-export const useURLEncoder = () => {
+export const useUrlEncoder = () => {
   const isFolderModeEnabled = useTypedSelector(
     state => state.workspaces.playground.isFolderModeEnabled
   );
@@ -23,11 +23,11 @@ export const useURLEncoder = () => {
   const chapter = useTypedSelector(state => state.workspaces.playground.context.chapter);
   const variant = useTypedSelector(state => state.workspaces.playground.context.variant);
   const execTime = useTypedSelector(state => state.workspaces.playground.execTime);
-  const fileSystem = useGetFileSystem();
+  const files = useGetFile();
 
-  const result: Partial<ShareLinkState> = {
+  const result: ShareLinkState = {
     isFolder: isFolderModeEnabled.toString(),
-    files: useGetFile(fileSystem).toString(),
+    files: files.toString(),
     tabs: editorTabFilePaths.map(compressToEncodedURIComponent)[0],
     tabIdx: activeEditorTabIndex?.toString(),
     chap: chapter.toString(),
@@ -39,14 +39,10 @@ export const useURLEncoder = () => {
   return result;
 };
 
-const useGetFileSystem = () => {
+const useGetFile = () => {
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
-  return fileSystem as FSModule;
-};
-
-const useGetFile = (fileSystem: FSModule) => {
   const [files, setFiles] = useState<Record<string, string>>({});
-  retrieveFilesInWorkspaceAsRecord('playground', fileSystem).then(result => {
+  retrieveFilesInWorkspaceAsRecord('playground', fileSystem as FSModule).then(result => {
     setFiles(result);
   });
   return compressToEncodedURIComponent(qs.stringify(files));

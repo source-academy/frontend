@@ -11,7 +11,7 @@ class ShareLinkStateDecoder {
     this.encodedString = encodedString;
   }
 
-  decodeWith(decoderDelegate: DecoderDelegate): Partial<ShareLinkState> {
+  decodeWith(decoderDelegate: DecoderDelegate): ShareLinkState {
     return decoderDelegate.decode(this.encodedString);
   }
 }

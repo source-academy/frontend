@@ -1,7 +1,7 @@
 import ShareLinkState from '../../ShareLinkState';
 
 interface DecoderDelegate {
-  decode(str: string): Partial<ShareLinkState>;
+  decode(str: string): ShareLinkState;
 }
 
 export default DecoderDelegate;

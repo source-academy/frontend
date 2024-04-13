@@ -4,7 +4,7 @@ import ShareLinkState from '../../ShareLinkState';
 import DecoderDelegate from './DecoderDelegate';
 
 class UrlParamsDecoderDelegate implements DecoderDelegate {
-  decode(str: string): Partial<ShareLinkState> {
+  decode(str: string): ShareLinkState {
     const qs: Partial<IParsedQuery> = parseQuery(str);
     return {
       chap: qs.chap,

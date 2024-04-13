@@ -1,4 +1,4 @@
-type ShareLinkState = {
+type ShareLinkState = Partial<{
   isFolder: string;
   tabs: string;
   tabIdx: string;
@@ -8,6 +8,6 @@ type ShareLinkState = {
   exec: string;
   files: string;
   prgrm: string;
-};
+}>;
 
 export default ShareLinkState;

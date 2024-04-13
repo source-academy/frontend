@@ -90,7 +90,7 @@ import {
 import ShareLinkStateDecoder from 'src/features/playground/shareLinks/decoder/Decoder';
 import JsonDecoderDelegate from 'src/features/playground/shareLinks/decoder/delegates/JsonDecoderDelegate';
 import UrlParamsDecoderDelegate from 'src/features/playground/shareLinks/decoder/delegates/UrlParamsDecoderDelegate';
-import { useURLEncoder } from 'src/features/playground/shareLinks/encoder/URLEncoder';
+import { useUrlEncoder } from 'src/features/playground/shareLinks/encoder/Encoder';
 import ShareLinkState from 'src/features/playground/shareLinks/ShareLinkState';
 
 import {
@@ -237,7 +237,7 @@ export async function handleHash(
 }
 
 export async function resetConfig(
-  configObj: Partial<ShareLinkState>,
+  configObj: ShareLinkState,
   handlers: {
     handleChapterSelect: (chapter: Chapter, variant: Variant) => void;
     handleChangeExecTime: (execTime: number) => void;
@@ -330,9 +330,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const { isMobileBreakpoint } = useResponsive();
 
   const [deviceSecret, setDeviceSecret] = useState<string | undefined>();
+  const location = useLocation();
   const navigate = useNavigate();
   const store = useStore<OverallState>();
-  const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const shouldAddDevice = searchParams.get('add_device');
 
@@ -440,19 +440,17 @@ const Playground: React.FC<PlaygroundProps> = props => {
   }, [editorSessionId]);
 
   const hash = isSicpEditor ? props.initialEditorValueHash : location.hash;
-  const { uuid } = useParams();
+  const { uuid } = useParams<string>();
 
-  useEffect(() => {
-    const handleURL = (uuid: string | undefined) => {
+  const handleURL = useCallback(
+    (uuid: string | undefined) => {
       if (uuid !== undefined) {
         fetch(`${Constants.backendUrl}/api/shared_programs/${uuid}`)
           .then(response => response.json())
           .then(resp => {
-            // console.log("resp", resp)
-            const res: Partial<ShareLinkState> = new ShareLinkStateDecoder(resp).decodeWith(
+            const res: ShareLinkState = new ShareLinkStateDecoder(resp).decodeWith(
               new JsonDecoderDelegate()
             );
-            // console.log('decode', res);
             resetConfig(
               res,
               { handleChangeExecTime, handleChapterSelect },
@@ -473,8 +471,18 @@ const Playground: React.FC<PlaygroundProps> = props => {
           fileSystem
         );
       }
-    };
+    },
+    [
+      dispatch,
+      fileSystem,
+      handleChangeExecTime,
+      handleChapterSelect,
+      location.hash,
+      workspaceLocation
+    ]
+  );
 
+  useEffect(() => {
     if (!hash && uuid === undefined) {
       // If not a accessing via shared link, use the Source chapter and variant in the current course
       if (courseSourceChapter && courseSourceVariant) {
@@ -497,13 +505,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
     dispatch,
     fileSystem,
     hash,
-    location.hash,
     uuid,
     courseSourceChapter,
     courseSourceVariant,
     workspaceLocation,
     handleChapterSelect,
-    handleChangeExecTime
+    handleChangeExecTime,
+    handleURL
   ]);
 
   /**
@@ -811,7 +819,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     ]
   );
 
-  const config = useURLEncoder();
+  const config = useUrlEncoder();
 
   const shareButton = useMemo(() => {
     const qs = isSicpEditor ? Links.playground + '#' + props.initialEditorValueHash : queryString;

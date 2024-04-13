@@ -22,7 +22,7 @@ type StateProps = {
   shortURL?: string;
   key: string;
   isSicp?: boolean;
-  programConfig: Partial<ShareLinkState>;
+  programConfig: ShareLinkState;
 };
 
 type State = {
@@ -39,6 +39,7 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
     this.selectShareInputText = this.selectShareInputText.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.toggleButton = this.toggleButton.bind(this);
+    this.fetchUUID = this.fetchUUID.bind(this);
     this.shareInputElem = React.createRef();
     this.state = { keyword: '', isLoading: false, isSuccess: false };
   }
@@ -53,7 +54,7 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
 
   handleKeyDown = (event: any) => {
     if (event.key === 'Enter' && event.ctrlKey) {
-      // console.log('Ctrl+Enter pressed!');
+      // press Ctrl+Enter to generate and copy new share link directly
       this.setState({ keyword: 'Test' });
       this.props.handleShortenURL(this.state.keyword);
       this.setState({ isLoading: true });
@@ -144,7 +145,6 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
     }
 
     // reset state
-    // this.props.handleUpdateShortURL('');
     this.setState({ keyword: '', isLoading: false, isSuccess: false });
   }
 
@@ -178,11 +178,11 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
       })
       .then(resp => {
         this.setState({
-          // seems like there's no frontend url env variavle, should be replaced by frontend server accordingly
+          // seems like there's no frontend url env variable, should be replaced by frontend server accordingly
           keyword: `http://localhost:8000/playground/share/` + resp.uuid
         });
         this.setState({ isLoading: true, isSuccess: true });
       })
-      .catch(err => showWarningMessage('fail to generate url!' + err));
+      .catch(err => showWarningMessage('Fail to generate url! Error: ' + err));
   }
 }
