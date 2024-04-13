@@ -90,7 +90,7 @@ export class Environment extends Visible {
     // Create class frames.
     const classFramesX = objectFramesX + objectFramesWidth + Config.FrameMinWidth;
     let classFramesY = this._y;
-    for (const [_, c] of environment.global.frame.entries()) {
+    for (const c of environment.global.frame.values()) {
       const classEnv = (c as ECE.Class).frame;
       const classFrameStroke =
         classEnv === environment.current ? Config.SA_CURRENT_ITEM : Config.SA_WHITE;
