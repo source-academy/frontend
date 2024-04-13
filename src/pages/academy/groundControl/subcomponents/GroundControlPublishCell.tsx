@@ -6,7 +6,7 @@ import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTyp
 import ControlButton from '../../../../commons/ControlButton';
 
 type Props = {
-  handlePublishAssessment: (togglePublishTo: boolean, id: number) => void;
+  handlePublishAssessment: (togglePublishAssessmentTo: boolean, id: number) => void;
   data: AssessmentOverview;
 };
 

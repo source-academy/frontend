@@ -50,8 +50,7 @@ import {
   AssessmentConfiguration,
   AssessmentOverview,
   AssessmentStatuses,
-  AssessmentWorkspaceParams,
-  GradingStatuses
+  AssessmentWorkspaceParams
 } from './AssessmentTypes';
 
 export type AssessmentProps = {
@@ -161,10 +160,8 @@ const Assessment: React.FC<AssessmentProps> = props => {
     overview: AssessmentOverview,
     index: number,
     renderAttemptButton: boolean,
-    renderGradingStatus: boolean
+    renderGradingTooltip: boolean
   ) => {
-    const showGrade =
-      overview.gradingStatus === 'graded' || !props.assessmentConfiguration.isManuallyGraded;
     return (
       <div key={index}>
         <Card className="row listing" elevation={Elevation.ONE}>
@@ -181,10 +178,12 @@ const Assessment: React.FC<AssessmentProps> = props => {
             />
           </div>
           <div className={classNames('listing-text', !isMobileBreakpoint && 'col-xs-9')}>
-            {makeOverviewCardTitle(overview, index, renderGradingStatus)}
+            {makeOverviewCardTitle(overview, index, renderGradingTooltip)}
             <div className="listing-xp">
               <H6>
-                {showGrade ? `XP: ${overview.xp} / ${overview.maxXp}` : `Max XP: ${overview.maxXp}`}
+                {overview.isGradingPublished
+                  ? `XP: ${overview.xp} / ${overview.maxXp}`
+                  : `Max XP: ${overview.maxXp}`}
               </H6>
             </div>
             <div className="listing-description">
@@ -227,7 +226,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
   const makeOverviewCardTitle = (
     overview: AssessmentOverview,
     index: number,
-    renderGradingStatus: boolean
+    renderProgressStatus: boolean
   ) => (
     <div className="listing-header">
       <Text ellipsize={true}>
@@ -241,7 +240,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
               <Icon icon="lock" />
             </Tooltip2>
           ) : null}
-          {renderGradingStatus ? makeGradingStatus(overview.gradingStatus) : null}
+          {renderProgressStatus ? showGradingTooltip(overview.isGradingPublished) : null}
         </H4>
       </Text>
       <div className="listing-button">{makeSubmissionButton(overview, index)}</div>
@@ -421,33 +420,20 @@ const Assessment: React.FC<AssessmentProps> = props => {
   );
 };
 
-const makeGradingStatus = (gradingStatus: string) => {
+const showGradingTooltip = (isGradingPublished: boolean) => {
   let iconName: IconName;
   let intent: Intent;
   let tooltip: string;
 
-  switch (gradingStatus) {
-    case GradingStatuses.graded:
-      iconName = IconNames.TICK;
-      intent = Intent.SUCCESS;
-      tooltip = 'Fully graded';
-      break;
-    case GradingStatuses.grading:
-      iconName = IconNames.TIME;
-      intent = Intent.WARNING;
-      tooltip = 'Grading in progress';
-      break;
-    case GradingStatuses.none:
-      iconName = IconNames.CROSS;
-      intent = Intent.DANGER;
-      tooltip = 'Not graded yet';
-      break;
-    default:
-      // Shows default icon if this assessment is ungraded
-      iconName = IconNames.DISABLE;
-      intent = Intent.PRIMARY;
-      tooltip = `Not applicable`;
-      break;
+  if (isGradingPublished) {
+    iconName = IconNames.TICK;
+    intent = Intent.SUCCESS;
+    tooltip = 'Fully graded';
+  } else {
+    // shh, hide actual grading progress from users even if graded
+    iconName = IconNames.TIME;
+    intent = Intent.WARNING;
+    tooltip = 'Grading in progress';
   }
 
   return (
