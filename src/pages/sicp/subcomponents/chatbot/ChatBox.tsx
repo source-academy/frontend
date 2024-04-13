@@ -3,13 +3,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { useTokens } from 'src/commons/utils/Hooks';
 import { chat } from 'src/features/sicp/chatCompletion/api';
+import { buildPrompt, SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
 import classes from 'src/styles/Chatbot.module.scss';
 
-import SICPNotes from './SicpNotes';
-
 type Props = {
-  getSection: () => string;
+  getSection: () => SicpSection;
   getText: () => string;
 };
 
@@ -37,30 +36,6 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
     return temp.split('```');
   };
 
-  const text = () => {
-    return '\n(2) Here is the paragraph:\n' + getText();
-  };
-
-  const section = () => {
-    const sectionNumber = getSection();
-    return parseInt(sectionNumber.charAt(0), 10) > 3
-      ? '\n(1) There is no section summary for this section. Please answer the question based on the following paragraph\n'
-      : '\n(1) Here is the summary of this section:\n' + SICPNotes[getSection()];
-  };
-
-  function getPrompt() {
-    const prompt =
-      'You are a competent tutor, assisting a student who is learning computer science following the textbook "Structure and Interpretation of Computer Programs,' +
-      'JavaScript edition". The student request is about a paragraph of the book. The request may be a follow-up request to a request that was posed to you' +
-      'previously.\n' +
-      'What follows are:\n' +
-      '(1) the summary of section (2) the full paragraph. Please answer the student request,' +
-      'not the requests of the history. If the student request is not related to the book, ask them to ask questions that are related to the book. Donot say that I provide you text\n\n' +
-      section() +
-      text();
-    return prompt;
-  }
-
   const sendMessage = async () => {
     if (userInput.trim() === '') {
       return;
@@ -73,7 +48,7 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
     setMessages([...messages, { role: 'user', content: blocks }]);
     setIsLoading(true);
 
-    const prompt = getPrompt();
+    const prompt = buildPrompt(getSection(), getText());
     const payload: { role: string; content: string }[] = [{ role: 'system', content: prompt }];
     for (let i = 0; i < contentHistory.length; i++) {
       payload.push({ role: roleHistory[i], content: contentHistory[i] });
