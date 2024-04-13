@@ -22,7 +22,10 @@ import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
 import { OverallState } from '../application/ApplicationTypes';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
-import { getPersistenceFile, retrieveFilesInWorkspaceAsRecord } from '../fileSystem/FileSystemUtils';
+import {
+  getPersistenceFile,
+  retrieveFilesInWorkspaceAsRecord
+} from '../fileSystem/FileSystemUtils';
 import FileExplorerDialog, { FileExplorerDialogProps } from '../gitHubOverlay/FileExplorerDialog';
 import RepositoryDialog, { RepositoryDialogProps } from '../gitHubOverlay/RepositoryDialog';
 import { actions } from '../utils/ActionsHelper';
@@ -147,12 +150,14 @@ function* githubSaveFile(): any {
   }
   const persistenceFile = getPersistenceFile(filePath);
   if (persistenceFile === undefined) {
-    throw new Error('No persistence file found for this filepath')
+    throw new Error('No persistence file found for this filepath');
   }
   const repoName = persistenceFile.repoName || '';
   const parentFolderPath = persistenceFile.parentFolderPath || '';
   if (repoName === undefined || parentFolderPath === undefined) {
-    throw new Error("repository name or parentfolderpath not found for this persistencefile: " + persistenceFile);
+    throw new Error(
+      'repository name or parentfolderpath not found for this persistencefile: ' + persistenceFile
+    );
   }
 
   GitHubUtils.performOverwritingSave(
@@ -265,7 +270,7 @@ function* githubSaveAll(): any {
     }
   } else {
     const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
-  
+
     const githubLoginId = authUser.data.login;
     const githubEmail = authUser.data.email;
     const githubName = authUser.data.name;
@@ -275,25 +280,30 @@ function* githubSaveAll(): any {
     );
     // If the file system is not initialised, do nothing.
     if (fileSystem === null) {
-      yield call(console.log, "no filesystem!");
+      yield call(console.log, 'no filesystem!');
       return;
     }
-    yield call(console.log, "there is a filesystem");
-    const currFiles: Record<string, string> = yield call(retrieveFilesInWorkspaceAsRecord, "playground", fileSystem);
+    yield call(console.log, 'there is a filesystem');
+    const currFiles: Record<string, string> = yield call(
+      retrieveFilesInWorkspaceAsRecord,
+      'playground',
+      fileSystem
+    );
     // const modifiedcurrFiles : Record<string, string> = {};
     // for (const filePath of Object.keys(currFiles)) {
     //   modifiedcurrFiles[filePath.slice(12)] = currFiles[filePath];
     // }
     // console.log(modifiedcurrFiles);
-  
-    yield call(GitHubUtils.performMultipleOverwritingSave,
-        octokit,
-        githubLoginId,
-        githubEmail,
-        githubName,
-        { commitMessage: commitMessage, files: currFiles}
-      );
-    
+
+    yield call(
+      GitHubUtils.performMultipleOverwritingSave,
+      octokit,
+      githubLoginId,
+      githubEmail,
+      githubName,
+      { commitMessage: commitMessage, files: currFiles }
+    );
+
     store.dispatch(actions.updateRefreshFileViewKey());
   }
 }
@@ -314,16 +324,18 @@ function* githubCreateFile({ payload }: ReturnType<typeof actions.githubCreateFi
   const githubLoginId = authUser.data.login;
   const persistenceFile = getPersistenceFile('');
   if (persistenceFile === undefined) {
-    throw new Error("persistencefile not found for this filepath: " + filePath);
+    throw new Error('persistencefile not found for this filepath: ' + filePath);
   }
   const repoName = persistenceFile.repoName;
   const githubEmail = authUser.data.email;
   const githubName = authUser.data.name;
   const commitMessage = 'Changes made from Source Academy';
-  const content = ''
+  const content = '';
   const parentFolderPath = persistenceFile.parentFolderPath;
   if (repoName === undefined || parentFolderPath === undefined) {
-    throw new Error("repository name or parentfolderpath not found for this persistencefile: " + persistenceFile);
+    throw new Error(
+      'repository name or parentfolderpath not found for this persistencefile: ' + persistenceFile
+    );
   }
 
   if (repoName === '') {
@@ -343,15 +355,18 @@ function* githubCreateFile({ payload }: ReturnType<typeof actions.githubCreateFi
     content,
     parentFolderPath
   );
-  
-  yield call(store.dispatch, actions.addGithubSaveInfo({
-    id: '',
-    name: '',
-    path: filePath,
-    repoName: repoName,
-    lastSaved: new Date(),
-    parentFolderPath: parentFolderPath
-  }))
+
+  yield call(
+    store.dispatch,
+    actions.addGithubSaveInfo({
+      id: '',
+      name: '',
+      path: filePath,
+      repoName: repoName,
+      lastSaved: new Date(),
+      parentFolderPath: parentFolderPath
+    })
+  );
   yield call(store.dispatch, actions.enableFileSystemContextMenus());
   yield call(store.dispatch, actions.updateRefreshFileViewKey());
 }
@@ -372,7 +387,7 @@ function* githubDeleteFile({ payload }: ReturnType<typeof actions.githubDeleteFi
   const githubLoginId = authUser.data.login;
   const persistenceFile = getPersistenceFile(filePath);
   if (persistenceFile === undefined) {
-    throw new Error("persistence file not found for this filepath: " + filePath);
+    throw new Error('persistence file not found for this filepath: ' + filePath);
   }
   const repoName = persistenceFile.repoName;
   const parentFolderPath = persistenceFile.parentFolderPath;
@@ -380,7 +395,9 @@ function* githubDeleteFile({ payload }: ReturnType<typeof actions.githubDeleteFi
   const githubName = authUser.data.name;
   const commitMessage = 'Changes made from Source Academy';
   if (repoName === undefined || parentFolderPath === undefined) {
-    throw new Error("repository name or parentfolderpath not found for this persistencefile: " + persistenceFile);
+    throw new Error(
+      'repository name or parentfolderpath not found for this persistencefile: ' + persistenceFile
+    );
   }
 
   if (repoName === '') {
@@ -419,12 +436,14 @@ function* githubDeleteFolder({ payload }: ReturnType<typeof actions.githubDelete
   const githubLoginId = authUser.data.login;
   const persistenceFile = getPersistenceFile(filePath);
   if (persistenceFile === undefined) {
-    throw new Error("persistence file not found for this filepath: " + filePath);
+    throw new Error('persistence file not found for this filepath: ' + filePath);
   }
   const repoName = persistenceFile.repoName;
   const parentFolderPath = persistenceFile.parentFolderPath;
   if (repoName === undefined || parentFolderPath === undefined) {
-    throw new Error("repository name or parentfolderpath not found for this persistencefile: " + persistenceFile);
+    throw new Error(
+      'repository name or parentfolderpath not found for this persistencefile: ' + persistenceFile
+    );
   }
   const githubEmail = authUser.data.email;
   const githubName = authUser.data.name;
@@ -467,12 +486,14 @@ function* githubRenameFile({ payload }: ReturnType<typeof actions.githubRenameFi
   const githubLoginId = authUser.data.login;
   const persistenceFile = getPersistenceFile(oldFilePath);
   if (persistenceFile === undefined) {
-    throw new Error("persistence file not found for this filepath: " + oldFilePath);
+    throw new Error('persistence file not found for this filepath: ' + oldFilePath);
   }
   const repoName = persistenceFile.repoName;
   const parentFolderPath = persistenceFile.parentFolderPath;
   if (repoName === undefined || parentFolderPath === undefined) {
-    throw new Error("repository name or parentfolderpath not found for this persistencefile: " + persistenceFile);
+    throw new Error(
+      'repository name or parentfolderpath not found for this persistencefile: ' + persistenceFile
+    );
   }
   const githubEmail = authUser.data.email;
   const githubName = authUser.data.name;
@@ -493,7 +514,7 @@ function* githubRenameFile({ payload }: ReturnType<typeof actions.githubRenameFi
     commitMessage,
     newFilePath.slice(12),
     parentFolderPath
-  )
+  );
 
   yield call(store.dispatch, actions.enableFileSystemContextMenus());
   yield call(store.dispatch, actions.updateRefreshFileViewKey());
@@ -516,12 +537,14 @@ function* githubRenameFolder({ payload }: ReturnType<typeof actions.githubRename
   const githubLoginId = authUser.data.login;
   const persistenceFile = getPersistenceFile(oldFilePath);
   if (persistenceFile === undefined) {
-    throw new Error("persistence file not found for this filepath: " + oldFilePath);
+    throw new Error('persistence file not found for this filepath: ' + oldFilePath);
   }
   const repoName = persistenceFile.repoName;
   const parentFolderPath = persistenceFile.parentFolderPath;
   if (repoName === undefined || parentFolderPath === undefined) {
-    throw new Error("repository name or parentfolderpath not found for this persistencefile: " + persistenceFile);
+    throw new Error(
+      'repository name or parentfolderpath not found for this persistencefile: ' + persistenceFile
+    );
   }
   const githubEmail = authUser.data.email;
   const githubName = authUser.data.name;
@@ -542,7 +565,7 @@ function* githubRenameFolder({ payload }: ReturnType<typeof actions.githubRename
     commitMessage,
     newFilePath.slice(12),
     parentFolderPath
-  )
+  );
 
   yield call(store.dispatch, actions.enableFileSystemContextMenus());
   yield call(store.dispatch, actions.updateRefreshFileViewKey());

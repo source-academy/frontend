@@ -4,7 +4,12 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { persistenceCreateFolder, persistenceDeleteFolder } from 'src/features/persistence/PersistenceActions';
+import { githubCreateFile, githubDeleteFolder } from 'src/features/github/GitHubActions';
+import {
+  persistenceCreateFolder,
+  persistenceDeleteFolder
+} from 'src/features/persistence/PersistenceActions';
+import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 import classes from 'src/styles/FileSystemView.module.scss';
 
 import { rmdirRecursively } from '../fileSystem/FileSystemUtils';
@@ -149,25 +154,25 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
         }
 
         dispatch(persistenceCreateFolder(newDirectoryPath));
-        function informUserGithubCannotCreateFolder() {
-          return showSimpleConfirmDialog({
-            contents: (
-              <div>
-                <p>
-                  Warning: Github is unable to create empty directories. When you create your first
-                  file in this folder, Github will automatically sync this folder and the first
-                  file.
-                </p>
-                <p>Please click 'Confirm' to continue.</p>
-              </div>
-            ),
-            positiveIntent: 'primary',
-            positiveLabel: 'Confirm'
-          });
-        }
-        informUserGithubCannotCreateFolder();
-        dispatch(enableFileSystemContextMenus());
-        forceRefreshFileSystemViewList();
+        // function informUserGithubCannotCreateFolder() {
+        //   return showSimpleConfirmDialog({
+        //     contents: (
+        //       <div>
+        //         <p>
+        //           Warning: Github is unable to create empty directories. When you create your first
+        //           file in this folder, Github will automatically sync this folder and the first
+        //           file.
+        //         </p>
+        //         <p>Please click 'Confirm' to continue.</p>
+        //       </div>
+        //     ),
+        //     positiveIntent: 'primary',
+        //     positiveLabel: 'Confirm'
+        //   });
+        // }
+        // informUserGithubCannotCreateFolder();
+        // dispatch(enableFileSystemContextMenus());
+        // forceRefreshFileSystemViewList();
       });
     });
   };

@@ -1493,7 +1493,8 @@ async function getFilesOfFolder( // recursively get files
   return ans;
 }
 
-async function getIdOfFileOrFolder(parentFolderId: string, fileName: string): Promise<string> { // returns string id or empty string if failed
+async function getIdOfFileOrFolder(parentFolderId: string, fileName: string): Promise<string> {
+  // returns string id or empty string if failed
   let fileList: gapi.client.drive.File[] | undefined;
 
   await gapi.client.drive.files

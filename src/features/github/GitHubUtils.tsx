@@ -4,9 +4,19 @@ import {
   GetResponseTypeFromEndpointMethod
 } from '@octokit/types';
 import { FSModule } from 'browserfs/dist/node/core/FS';
+import {
+  addGithubSaveInfo,
+  updateRefreshFileViewKey
+} from 'src/commons/fileSystem/FileSystemActions';
 import { filePathRegex } from 'src/commons/utils/PersistenceHelper';
+import { WORKSPACE_BASE_PATHS } from 'src/pages/fileSystem/createInBrowserFileSystem';
 
-import { getPersistenceFile, retrieveFilesInWorkspaceAsRecord, rmFilesInDirRecursively,writeFileRecursively } from '../../commons/fileSystem/FileSystemUtils';
+import {
+  getPersistenceFile,
+  retrieveFilesInWorkspaceAsRecord,
+  rmFilesInDirRecursively,
+  writeFileRecursively
+} from '../../commons/fileSystem/FileSystemUtils';
 import { actions } from '../../commons/utils/ActionsHelper';
 import { showSimpleConfirmDialog } from '../../commons/utils/DialogHelper';
 import {
@@ -14,8 +24,6 @@ import {
   showWarningMessage
 } from '../../commons/utils/notifications/NotificationsHelper';
 import { store } from '../../pages/createStore';
-import { WORKSPACE_BASE_PATHS } from 'src/pages/fileSystem/createInBrowserFileSystem';
-import { addGithubSaveInfo, updateRefreshFileViewKey } from 'src/commons/fileSystem/FileSystemActions';
 import { PersistenceFile } from '../persistence/PersistenceTypes';
 import { disableFileSystemContextMenus } from '../playground/PlaygroundActions';
 
@@ -200,8 +208,8 @@ export async function checkIsFile(
     console.log('folder detected');
     return false;
   }
-  
-  console.log("file detected");
+
+  console.log('file detected');
   return true;
 }
 
@@ -247,9 +255,9 @@ export async function openFileInEditor(
   store.dispatch(actions.deleteAllGithubSaveInfo());
   const fileSystem: FSModule | null = store.getState().fileSystem.inBrowserFileSystem;
   if (fileSystem === null) {
-    console.log("no filesystem!");
+    console.log('no filesystem!');
   } else {
-    await rmFilesInDirRecursively(fileSystem, "/playground");
+    await rmFilesInDirRecursively(fileSystem, '/playground');
   }
   type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
   const results: GetContentResponse = await octokit.repos.getContent({
@@ -259,31 +267,33 @@ export async function openFileInEditor(
   });
   const content = (results.data as any).content;
 
-  const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(filePath);
-      if (regexResult === null) {
-        console.log("Regex null");
-        return;
-      }
-    const newFilePath = regexResult[2] + regexResult[3];
-    console.log(newFilePath);
+  const regexResult = filePathRegex.exec(filePath);
+  if (regexResult === null) {
+    console.log('Regex null');
+    return;
+  }
+  const newFilePath = regexResult[2] + regexResult[3];
+  console.log(newFilePath);
 
   const newEditorValue = Buffer.from(content, 'base64').toString();
   const activeEditorTabIndex = store.getState().workspaces.playground.activeEditorTabIndex;
   if (activeEditorTabIndex === null) {
-    store.dispatch(actions.addEditorTab('playground', "/playground/" + newFilePath , newEditorValue));
+    store.dispatch(
+      actions.addEditorTab('playground', '/playground/' + newFilePath, newEditorValue)
+    );
   } else {
     store.dispatch(actions.updateEditorValue('playground', activeEditorTabIndex, newEditorValue));
   }
-  store.dispatch(actions.addGithubSaveInfo(
-    {
+  store.dispatch(
+    actions.addGithubSaveInfo({
       id: '',
       name: '',
       repoName: repoName,
-      path: "/playground/" + newFilePath,
+      path: '/playground/' + newFilePath,
       lastSaved: new Date(),
       parentFolderPath: regexResult[1]
-    }
-  ))
+    })
+  );
 
   if (content) {
     showSuccessMessage('Successfully loaded file!', 1000);
@@ -292,9 +302,8 @@ export async function openFileInEditor(
   }
 
   if (fileSystem !== null) {
-    await writeFileRecursively(fileSystem, "/playground/" + newFilePath, newEditorValue);
+    await writeFileRecursively(fileSystem, '/playground/' + newFilePath, newEditorValue);
   }
-
 
   store.dispatch(actions.updateRefreshFileViewKey());
   //refreshes editor tabs
@@ -322,46 +331,48 @@ export async function openFolderInFolderMode(
       owner: repoOwner,
       repo: repoName
     });
-  
+
     const tree_sha = requests.data.commit.commit.tree.sha;
     console.log(requests);
-  
-    const results = await octokit.request('GET /repos/{owner}/{repo}/git/trees/{tree_sha}?recursive=1', {
-      owner: repoOwner,
-      repo: repoName,
-      tree_sha: tree_sha
-    });
-  
+
+    const results = await octokit.request(
+      'GET /repos/{owner}/{repo}/git/trees/{tree_sha}?recursive=1',
+      {
+        owner: repoOwner,
+        repo: repoName,
+        tree_sha: tree_sha
+      }
+    );
+
     const files_and_folders = results.data.tree;
     const files: any[] = [];
-  
-  
+
     //Filters out the files only since the tree returns both file and folder paths
     for (let index = 0; index < files_and_folders.length; index++) {
-      if (files_and_folders[index].type === "blob") {
+      if (files_and_folders[index].type === 'blob') {
         files[files.length] = files_and_folders[index].path;
       }
     }
-  
+
     console.log(files);
-  
+
     store.dispatch(actions.setFolderMode('playground', true)); //automatically opens folder mode
     const fileSystem: FSModule | null = store.getState().fileSystem.inBrowserFileSystem;
     if (fileSystem === null) {
-      console.log("no filesystem!");
+      console.log('no filesystem!');
       return;
     }
-  
+
     let parentFolderPath = filePath + '.js';
     console.log(parentFolderPath);
-    const regexResult = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(parentFolderPath);
-      if (regexResult === null) {
-        console.log("Regex null");
-        return;
-      }
+    const regexResult = filePathRegex.exec(parentFolderPath);
+    if (regexResult === null) {
+      console.log('Regex null');
+      return;
+    }
     parentFolderPath = regexResult[1] || '';
     console.log(regexResult);
-  
+
     // This is a helper function to asynchronously clear the current folder system, then get each
     // file and its contents one by one, then finally refresh the file system after all files
     // have been recursively created. There may be extra asyncs or promises but this is what works.
@@ -369,19 +380,19 @@ export async function openFolderInFolderMode(
       console.log(files);
       console.log(filePath);
       let promise = Promise.resolve();
-      console.log("removing files");
-      await rmFilesInDirRecursively(fileSystem, "/playground");
-      console.log("files removed");
+      console.log('removing files');
+      await rmFilesInDirRecursively(fileSystem, '/playground');
+      console.log('files removed');
       type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
-      console.log("starting to add files");
+      console.log('starting to add files');
       files.forEach((file: string) => {
         promise = promise.then(async () => {
           let results = {} as GetContentResponse;
           console.log(repoOwner);
           console.log(repoName);
           console.log(file);
-          if (file.startsWith(filePath + "/")) {
-            console.log("passed");
+          if (file.startsWith(filePath + '/')) {
+            console.log('passed');
             results = await octokit.repos.getContent({
               owner: repoOwner,
               repo: repoName,
@@ -389,59 +400,63 @@ export async function openFolderInFolderMode(
             });
             console.log(results);
             const content = (results.data as any)?.content;
-          
-            
+
             const fileContent = Buffer.from(content, 'base64').toString();
-            console.log("/playground/" + file.slice(parentFolderPath.length));
-            await writeFileRecursively(fileSystem, "/playground/" + file.slice(parentFolderPath.length), fileContent);
-            store.dispatch(actions.addGithubSaveInfo(
-              {
+            console.log('/playground/' + file.slice(parentFolderPath.length));
+            await writeFileRecursively(
+              fileSystem,
+              '/playground/' + file.slice(parentFolderPath.length),
+              fileContent
+            );
+            store.dispatch(
+              actions.addGithubSaveInfo({
                 id: '',
                 name: '',
                 repoName: repoName,
-                path: "/playground/" + file.slice(parentFolderPath.length),
+                path: '/playground/' + file.slice(parentFolderPath.length),
                 lastSaved: new Date(),
                 parentFolderPath: parentFolderPath
-              }
-            ))
+              })
+            );
             console.log(store.getState().fileSystem.persistenceFileArray);
-            console.log("wrote one file");
+            console.log('wrote one file');
           } else {
-            console.log("failed");
+            console.log('failed');
           }
-        })
-      })
+        });
+      });
       promise.then(() => {
         // store.dispatch(actions.playgroundUpdateRepoName(repoName));
-        console.log("promises fulfilled");
+        console.log('promises fulfilled');
         // store.dispatch(actions.setFolderMode('playground', true));
         store.dispatch(updateRefreshFileViewKey());
-        console.log("refreshed");
+        console.log('refreshed');
         showSuccessMessage('Successfully loaded file!', 1000);
-      })
-    }
-  
+      });
+    };
+
     readFile(files);
-  
+
     //refreshes editor tabs
-    store.dispatch(actions.removeEditorTabsForDirectory("playground", WORKSPACE_BASE_PATHS["playground"])); // TODO hardcoded
+    store.dispatch(
+      actions.removeEditorTabsForDirectory('playground', WORKSPACE_BASE_PATHS['playground'])
+    ); // TODO hardcoded
   } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to open the folder', 1000);
   }
-  
 }
 
 export async function performOverwritingSave(
   octokit: Octokit,
   repoOwner: string,
   repoName: string,
-  filePath: string,    // filepath of the file in folder mode file system (does not include "/playground/")
+  filePath: string, // filepath of the file in folder mode file system (does not include "/playground/")
   githubName: string | null,
   githubEmail: string | null,
   commitMessage: string,
   content: string,
-  parentFolderPath: string  // path of the parent of the opened subfolder in github
+  parentFolderPath: string // path of the parent of the opened subfolder in github
 ) {
   if (octokit === undefined) return;
 
@@ -487,15 +502,17 @@ export async function performOverwritingSave(
       committer: { name: githubName, email: githubEmail },
       author: { name: githubName, email: githubEmail }
     });
-    
-    store.dispatch(actions.addGithubSaveInfo({ 
+
+    store.dispatch(
+      actions.addGithubSaveInfo({
         id: '',
         name: '',
-        repoName: repoName, 
-        path: "/playground/" + filePath, 
+        repoName: repoName,
+        path: '/playground/' + filePath,
         lastSaved: new Date(),
-        parentFolderPath: parentFolderPath 
-    }));
+        parentFolderPath: parentFolderPath
+      })
+    );
 
     //this is just so that playground is forcefully updated
     // store.dispatch(actions.playgroundUpdateRepoName(repoName));
@@ -514,7 +531,7 @@ export async function performMultipleOverwritingSave(
   repoOwner: string,
   githubName: string | null,
   githubEmail: string | null,
-  changes: { commitMessage: string, files: Record<string, string> },
+  changes: { commitMessage: string; files: Record<string, string> }
 ) {
   if (octokit === undefined) return;
 
@@ -522,24 +539,24 @@ export async function performMultipleOverwritingSave(
   githubName = githubName || 'Source Academy User';
   changes.commitMessage = changes.commitMessage || 'Changes made from Source Academy';
   store.dispatch(actions.disableFileSystemContextMenus());
-  
+
   try {
     for (const filePath of Object.keys(changes.files)) {
-      //this will create a separate commit for each file changed, which is not ideal. 
+      //this will create a separate commit for each file changed, which is not ideal.
       //the simple solution is to use a plugin github-commit-multiple-files
       //but this changes file sha, which causes many problems down the road
       //eventually this should be changed to be done using git data api to build a commit from scratch
       const persistenceFile = getPersistenceFile(filePath);
       if (persistenceFile === undefined) {
-        throw new Error("No persistence file found for this filePath: " + filePath);
+        throw new Error('No persistence file found for this filePath: ' + filePath);
       }
       const repoName = persistenceFile.repoName;
       if (repoName === undefined) {
-        throw new Error("No repository name found for this persistencefile: " + persistenceFile);
+        throw new Error('No repository name found for this persistencefile: ' + persistenceFile);
       }
       const parentFolderPath = persistenceFile.parentFolderPath;
       if (parentFolderPath === undefined) {
-        throw new Error("No parent folder path found for this persistencefile: " + persistenceFile);
+        throw new Error('No parent folder path found for this persistencefile: ' + persistenceFile);
       }
       await performOverwritingSave(
         octokit,
@@ -552,7 +569,7 @@ export async function performMultipleOverwritingSave(
         changes.files[filePath].slice(12),
         parentFolderPath
       );
-  }
+    }
   } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to save the file.', 1000);
@@ -567,11 +584,11 @@ export async function performOverwritingSaveForSaveAs(
   octokit: Octokit,
   repoOwner: string,
   repoName: string,
-  filePath: string,    // filepath of the file in folder mode file system (does not include "/playground/")
+  filePath: string, // filepath of the file in folder mode file system (does not include "/playground/")
   githubName: string | null,
   githubEmail: string | null,
   commitMessage: string,
-  content: string, // path of the parent of the opened subfolder in github
+  content: string // path of the parent of the opened subfolder in github
 ) {
   if (octokit === undefined) return;
 
@@ -674,7 +691,7 @@ export async function performMultipleCreatingSave(
   folderPath: string,
   githubName: string | null,
   githubEmail: string | null,
-  commitMessage: string,
+  commitMessage: string
 ) {
   if (octokit === undefined) return;
 
@@ -686,11 +703,14 @@ export async function performMultipleCreatingSave(
   const fileSystem: FSModule | null = store.getState().fileSystem.inBrowserFileSystem;
   // If the file system is not initialised, do nothing.
   if (fileSystem === null) {
-    console.log("no filesystem!");
+    console.log('no filesystem!');
     return;
   }
-  console.log("there is a filesystem");
-  const currFiles: Record<string, string> = await retrieveFilesInWorkspaceAsRecord("playground", fileSystem);
+  console.log('there is a filesystem');
+  const currFiles: Record<string, string> = await retrieveFilesInWorkspaceAsRecord(
+    'playground',
+    fileSystem
+  );
   try {
     store.dispatch(actions.disableFileSystemContextMenus());
     for (const filePath of Object.keys(currFiles)) {
@@ -707,14 +727,16 @@ export async function performMultipleCreatingSave(
         committer: { name: githubName, email: githubEmail },
         author: { name: githubName, email: githubEmail }
       });
-      store.dispatch(addGithubSaveInfo({
-        id: '',
-        name: '',
-        repoName: repoName,
-        path: filePath,
-        parentFolderPath: folderPath,
-        lastSaved: new Date()
-      }));
+      store.dispatch(
+        addGithubSaveInfo({
+          id: '',
+          name: '',
+          repoName: repoName,
+          path: filePath,
+          parentFolderPath: folderPath,
+          lastSaved: new Date()
+        })
+      );
       showSuccessMessage('Successfully created file!', 1000);
     }
   } catch (err) {
@@ -771,10 +793,9 @@ export async function performFileDeletion(
 
     const persistenceFileArray = store.getState().fileSystem.persistenceFileArray;
     console.log(persistenceFileArray);
-    const persistenceFile = persistenceFileArray.find(e => 
-      e.path === "/playground/" + filePath);
+    const persistenceFile = persistenceFileArray.find(e => e.path === '/playground/' + filePath);
     if (!persistenceFile) {
-      console.log("Cannot find persistence file for " + "/playground/" + filePath);
+      console.log('Cannot find persistence file for /playground/' + filePath);
       return;
     }
     console.log(persistenceFile);
@@ -839,7 +860,7 @@ export async function performFolderDeletion(
           githubEmail,
           commitMessage,
           parentFolderPath
-        )
+        );
       }
     }
 
@@ -888,7 +909,10 @@ export async function performFileRenaming(
     const files: GetContentData = results.data;
 
     if (Array.isArray(files)) {
-      showWarningMessage('The file you are trying to rename appears to be a folder in Github', 1000);
+      showWarningMessage(
+        'The file you are trying to rename appears to be a folder in Github',
+        1000
+      );
       return;
     }
 
@@ -961,10 +985,11 @@ export async function performFolderRenaming(
 
     for (let i = 0; i < persistenceFileArray.length; i++) {
       const persistenceFile = persistenceFileArray[i];
-      if (persistenceFile.path?.startsWith("/playground/" + oldFolderPath)) {
-        console.log("Deleting" + persistenceFile.path);
+      if (persistenceFile.path?.startsWith('/playground/' + oldFolderPath)) {
+        console.log('Deleting' + persistenceFile.path);
         const oldFilePath = parentFolderPath + persistenceFile.path.slice(12);
-        const newFilePath = parentFolderPath + newFolderPath + persistenceFile.path.slice(12 + oldFolderPath.length);
+        const newFilePath =
+          parentFolderPath + newFolderPath + persistenceFile.path.slice(12 + oldFolderPath.length);
         const results: GetContentResponse = await octokit.repos.getContent({
           owner: repoOwner,
           repo: repoName,
@@ -978,7 +1003,7 @@ export async function performFolderRenaming(
         }
         const sha = file.sha;
 
-        const regexResult0 = /^(.*[\\\/])?(\.*.*?)(\.[^.]+?|)$/.exec(oldFolderPath);
+        const regexResult0 = filePathRegex.exec(oldFolderPath);
         if (regexResult0 === null) {
           console.log('Regex null');
           return;
@@ -1033,7 +1058,7 @@ export async function performFolderRenaming(
     }
 
     showSuccessMessage('Successfully renamed folder in Github!', 1000);
-  } catch(err) {
+  } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to rename the folder.', 1000);
   } finally {

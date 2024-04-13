@@ -24,7 +24,7 @@ export const setInBrowserFileSystem = createAction(
 
 export const addGithubSaveInfo = createAction(
   ADD_GITHUB_SAVE_INFO,
-  (persistenceFile: PersistenceFile) => ({ payload: { persistenceFile }})
+  (persistenceFile: PersistenceFile) => ({ payload: { persistenceFile } })
 );
 
 export const deleteGithubSaveInfo = createAction(

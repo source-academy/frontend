@@ -285,7 +285,7 @@ export const getGithubSaveInfo = () => {
       (persistenceFileArray[0] === undefined ? '' : persistenceFileArray[0].repoName)
   };
   return githubSaveInfo;
-}
+};
 
 export const getPersistenceFile = (filePath: string) => {
   const persistenceFileArray = store.getState().fileSystem.persistenceFileArray;
@@ -294,6 +294,6 @@ export const getPersistenceFile = (filePath: string) => {
     return persistenceFile;
   }
   const persistenceFile = persistenceFileArray.find(e => e.path === filePath);
-  
+
   return persistenceFile;
-}
+};
