@@ -92,7 +92,6 @@
     "rehype-react": "^8.0.0",
     "showdown": "^2.1.0",
     "sourceror": "^0.8.5",
-    "typesafe-actions": "^5.1.0",
     "unified": "^11.0.0",
     "uuid": "^9.0.0",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz",
