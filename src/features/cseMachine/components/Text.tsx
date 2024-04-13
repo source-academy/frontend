@@ -1,4 +1,5 @@
 import { KonvaEventObject } from 'konva/lib/Node';
+import { Label } from 'konva/lib/shapes/Label';
 import React from 'react';
 import { Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
 
@@ -47,7 +48,7 @@ export class Text extends Visible implements IHoverable {
   readonly fullStr: string; // full string representation of data
 
   readonly options: TextOptions = defaultOptions;
-  readonly labelRef: React.RefObject<any> = React.createRef();
+  readonly labelRef: React.RefObject<Label> = React.createRef();
 
   constructor(
     readonly data: Data,
@@ -83,14 +84,14 @@ export class Text extends Visible implements IHoverable {
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     setHoveredCursor(currentTarget);
-    this.labelRef.current.moveToTop();
-    this.labelRef.current.show();
+    this.labelRef.current?.moveToTop();
+    this.labelRef.current?.show();
     currentTarget.getLayer()?.draw();
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     setUnhoveredCursor(currentTarget);
-    this.labelRef.current.hide();
+    this.labelRef.current?.hide();
     currentTarget.getLayer()?.draw();
   };
 
