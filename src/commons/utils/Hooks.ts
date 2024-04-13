@@ -7,6 +7,7 @@ import {
 import { useMediaQuery } from 'react-responsive';
 
 import { OverallState } from '../application/ApplicationTypes';
+import { Tokens } from '../application/types/SessionTypes';
 import Constants from './Constants';
 import { readLocalStorage, setLocalStorage } from './LocalStorageHelper';
 
@@ -134,4 +135,24 @@ export const useSession = () => {
     isEnrolledInACourse,
     isLoggedIn
   };
+};
+
+// Overload for useTokens
+type UseTokens = {
+  (): Partial<Tokens>;
+  (options: { throwWhenEmpty: true }): Tokens;
+  (options: { throwWhenEmpty: false }): Partial<Tokens>;
+};
+
+/**
+ * Returns the access token and refresh token from the session.
+ * @param throwWhenEmpty (optional) If true, throws an error if no tokens are found.
+ */
+export const useTokens: UseTokens = ({ throwWhenEmpty = false } = {}) => {
+  const accessToken = useTypedSelector(state => state.session.accessToken);
+  const refreshToken = useTypedSelector(state => state.session.refreshToken);
+  if (throwWhenEmpty && (!accessToken || !refreshToken)) {
+    throw new Error('No access token or refresh token found');
+  }
+  return { accessToken, refreshToken } as Tokens;
 };
