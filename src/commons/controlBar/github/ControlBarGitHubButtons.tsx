@@ -11,6 +11,7 @@ import ControlButton from '../../ControlButton';
 
 type Props = {
   isFolderModeEnabled: boolean;
+  workspaceLocation: string;
   currPersistenceFile?: PersistenceFile;
   loggedInAs?: Octokit;
   githubSaveInfo: GitHubSaveInfo;
@@ -34,6 +35,8 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
 
   const filePath = props.githubSaveInfo.filePath || '';
 
+  const isNotPlayground = props.workspaceLocation !== "playground";
+
   const isLoggedIn = props.loggedInAs !== undefined;
   const shouldDisableButtons = !isLoggedIn;
   const hasFilePath = filePath !== '';
@@ -51,7 +54,7 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
       label={mainButtonDisplayText}
       icon={IconNames.GIT_BRANCH}
       options={{ intent: mainButtonIntent }}
-      //isDisabled={props.isFolderModeEnabled}
+      isDisabled={isNotPlayground}
     />
   );
 
@@ -97,13 +100,12 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
     <ControlButton label="Log In" icon={IconNames.LOG_IN} onClick={props.onClickLogIn} />
   );
 
-  //const tooltipContent = props.isFolderModeEnabled
-  //  ? 'Currently unsupported in Folder mode'
-  //  : undefined;
-  const tooltipContent = undefined;
+  const tooltipContent = isNotPlayground
+    ? 'Currently unsupported in non playground workspaces'
+    : undefined;
 
   return (
-    <Tooltip2 content={tooltipContent} disabled={false}>
+    <Tooltip2 content={tooltipContent} disabled={tooltipContent === undefined}>
       <Popover2
         autoFocus={false}
         content={
@@ -118,7 +120,7 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
           </div>
         }
         popoverClassName={Classes.POPOVER_DISMISS}
-        //disabled={props.isFolderModeEnabled}
+        disabled={isNotPlayground}
       >
         {mainButton}
       </Popover2>
