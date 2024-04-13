@@ -170,6 +170,7 @@ export async function runJavaCseMachine(code: string, targetStep: number, contex
   const convertJavaErrorToJsError = (e: ECE.SourceError): SourceError => ({
     type: ErrorType.RUNTIME,
     severity: ErrorSeverity.ERROR,
+    // TODO update err source node location once location info is avail
     location: {
       start: {
         line: 0,
