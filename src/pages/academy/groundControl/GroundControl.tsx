@@ -24,14 +24,14 @@ import {
 import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import {
-  // assignEntriesForVoting,
+  assignEntriesForVoting,
   changeDateAssessment,
   changeTeamSizeAssessment,
   configureAssessment,
   deleteAssessment,
   publishAssessment,
-  // publishGradingAll,
-  // unpublishGradingAll,
+  publishGradingAll,
+  unpublishGradingAll,
   uploadAssessment
 } from '../../../features/groundControl/GroundControlActions';
 import DefaultChapterSelect from './subcomponents/DefaultChapterSelect';
@@ -52,10 +52,13 @@ const GroundControl: React.FC = () => {
     handleAssessmentChangeDate,
     handleAssessmentChangeTeamSize,
     handleAssessmentOverviewFetch,
+    handleAssignEntriesForVoting,
     handleConfigureAssessment,
     handleDeleteAssessment,
     handleFetchCourseConfigs,
     handlePublishAssessment,
+    handlePublishGradingAll,
+    handleUnpublishGradingAll,
     handleUploadAssessment
   } = useMemo(
     () => ({
@@ -64,6 +67,7 @@ const GroundControl: React.FC = () => {
       handleAssessmentChangeTeamSize: (id: number, maxTeamSize: number) =>
         dispatch(changeTeamSizeAssessment(id, maxTeamSize)),
       handleAssessmentOverviewFetch: () => dispatch(fetchAssessmentOverviews()),
+      handleAssignEntriesForVoting: (id: number) => dispatch(assignEntriesForVoting(id)),
       handleConfigureAssessment: (
         id: number,
         hasVotingFeatures: boolean,
@@ -73,9 +77,8 @@ const GroundControl: React.FC = () => {
       handleFetchCourseConfigs: () => dispatch(fetchCourseConfig()),
       handlePublishAssessment: (togglePublishTo: boolean, id: number) =>
         dispatch(publishAssessment(togglePublishTo, id)),
-      // handlePublishGradingAll: (id: number) => void;
-      // handleUnpublishGradingAll: (id: number) => void;
-      // handleAssignEntriesForVoting: (id: number) => void;
+      handlePublishGradingAll: (id: number) => dispatch(publishGradingAll(id)),
+      handleUnpublishGradingAll: (id: number) => dispatch(unpublishGradingAll(id)),
       handleUploadAssessment: (file: File, forceUpdate: boolean, assessmentConfigId: number) =>
         dispatch(uploadAssessment(file, forceUpdate, assessmentConfigId))
     }),
@@ -172,22 +175,22 @@ const GroundControl: React.FC = () => {
         padding: 0
       }
     },
-    // {
-    //   headerName: 'Release Grading',
-    //   field: 'placeholderReleaseGrading' as any,
-    //   cellRenderer: ReleaseGradingCell,
-    //   cellRendererParams: {
-    //     handlePublishGradingAll: props.handlePublishGradingAll,
-    //     handleUnpublishGradingAll: props.handleUnpublishGradingAll
-    //   },
-    //   width: 120,
-    //   filter: false,
-    //   resizable: false,
-    //   sortable: false,
-    //   cellStyle: {
-    //     padding: 0
-    //   }
-    // },
+    {
+      headerName: 'Release Grading',
+      field: 'placeholderReleaseGrading' as any,
+      cellRenderer: ReleaseGradingCell,
+      cellRendererParams: {
+        handlePublishGradingAll: handlePublishGradingAll,
+        handleUnpublishGradingAll: handleUnpublishGradingAll
+      },
+      width: 120,
+      filter: false,
+      resizable: false,
+      sortable: false,
+      cellStyle: {
+        padding: 0
+      }
+    },
     {
       headerName: 'Actions',
       field: 'placeholderActions' as any,
@@ -195,9 +198,11 @@ const GroundControl: React.FC = () => {
         return (
           <>
             <DeleteCell handleDeleteAssessment={handleDeleteAssessment} data={data} />
-            <ConfigureCell handleConfigureAssessment={handleConfigureAssessment}
-                           // handleAssignEntriesForVoting={handleAssignEntriesForVoting}
-                           data={data} />
+            <ConfigureCell
+              handleConfigureAssessment={handleConfigureAssessment}
+              handleAssignEntriesForVoting={handleAssignEntriesForVoting}
+              data={data}
+            />
           </>
         );
       },
