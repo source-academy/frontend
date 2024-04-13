@@ -204,6 +204,10 @@ const GradingEditor: React.FC<Props> = props => {
     return props.xpAdjustment !== newXpAdjustmentInput || props.comments !== editorValue;
   };
 
+  const checkIsNewQuestion = () => {
+    return props.gradedAt === undefined;
+  };
+
   const generateMarkdownPreview = (markdown: string) =>
     Promise.resolve(
       <Markdown
@@ -217,9 +221,10 @@ const GradingEditor: React.FC<Props> = props => {
 
   // Render
   const hasUnsavedChanges = checkHasUnsavedChanges();
+  const isNewQuestion = checkIsNewQuestion();
   const saveButtonOpts = {
-    intent: hasUnsavedChanges ? Intent.WARNING : Intent.NONE,
-    minimal: !hasUnsavedChanges,
+    intent: hasUnsavedChanges || isNewQuestion ? Intent.WARNING : Intent.NONE,
+    minimal: !hasUnsavedChanges && !isNewQuestion,
     className: gradingEditorButtonClass
   };
   const discardButtonOpts = {
@@ -228,8 +233,8 @@ const GradingEditor: React.FC<Props> = props => {
     className: gradingEditorButtonClass
   };
   const saveAndContinueButtonOpts = {
-    intent: hasUnsavedChanges ? Intent.SUCCESS : Intent.NONE,
-    minimal: !hasUnsavedChanges,
+    intent: hasUnsavedChanges || isNewQuestion ? Intent.SUCCESS : Intent.NONE,
+    minimal: !hasUnsavedChanges && !isNewQuestion,
     className: gradingEditorButtonClass
   };
   const onTabChange = (tab: ReactMdeProps['selectedTab']) => setSelectedTab(tab);
@@ -243,7 +248,7 @@ const GradingEditor: React.FC<Props> = props => {
   return (
     <div className="GradingEditor">
       <Prompt
-        when={!currentlySaving && hasUnsavedChanges}
+        when={!currentlySaving && (hasUnsavedChanges || isNewQuestion)}
         message={'You have unsaved changes. Are you sure you want to leave?'}
       />
 

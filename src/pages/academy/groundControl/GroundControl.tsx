@@ -24,11 +24,14 @@ import {
 import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import {
+  // assignEntriesForVoting,
   changeDateAssessment,
   changeTeamSizeAssessment,
   configureAssessment,
   deleteAssessment,
   publishAssessment,
+  // publishGradingAll,
+  // unpublishGradingAll,
   uploadAssessment
 } from '../../../features/groundControl/GroundControlActions';
 import DefaultChapterSelect from './subcomponents/DefaultChapterSelect';
@@ -38,6 +41,7 @@ import Dropzone from './subcomponents/GroundControlDropzone';
 import EditCell from './subcomponents/GroundControlEditCell';
 import EditTeamSizeCell from './subcomponents/GroundControlEditTeamSizeCell';
 import PublishCell from './subcomponents/GroundControlPublishCell';
+import ReleaseGradingCell from './subcomponents/GroundControlReleaseGradingCell';
 
 const GroundControl: React.FC = () => {
   const [showDropzone, setShowDropzone] = useState(false);
@@ -69,6 +73,9 @@ const GroundControl: React.FC = () => {
       handleFetchCourseConfigs: () => dispatch(fetchCourseConfig()),
       handlePublishAssessment: (togglePublishTo: boolean, id: number) =>
         dispatch(publishAssessment(togglePublishTo, id)),
+      // handlePublishGradingAll: (id: number) => void;
+      // handleUnpublishGradingAll: (id: number) => void;
+      // handleAssignEntriesForVoting: (id: number) => void;
       handleUploadAssessment: (file: File, forceUpdate: boolean, assessmentConfigId: number) =>
         dispatch(uploadAssessment(file, forceUpdate, assessmentConfigId))
     }),
@@ -157,7 +164,7 @@ const GroundControl: React.FC = () => {
       cellRendererParams: {
         handlePublishAssessment: handlePublishAssessment
       },
-      width: 80,
+      width: 70,
       filter: false,
       resizable: false,
       sortable: false,
@@ -165,6 +172,22 @@ const GroundControl: React.FC = () => {
         padding: 0
       }
     },
+    // {
+    //   headerName: 'Release Grading',
+    //   field: 'placeholderReleaseGrading' as any,
+    //   cellRenderer: ReleaseGradingCell,
+    //   cellRendererParams: {
+    //     handlePublishGradingAll: props.handlePublishGradingAll,
+    //     handleUnpublishGradingAll: props.handleUnpublishGradingAll
+    //   },
+    //   width: 120,
+    //   filter: false,
+    //   resizable: false,
+    //   sortable: false,
+    //   cellStyle: {
+    //     padding: 0
+    //   }
+    // },
     {
       headerName: 'Actions',
       field: 'placeholderActions' as any,
@@ -172,7 +195,9 @@ const GroundControl: React.FC = () => {
         return (
           <>
             <DeleteCell handleDeleteAssessment={handleDeleteAssessment} data={data} />
-            <ConfigureCell handleConfigureAssessment={handleConfigureAssessment} data={data} />
+            <ConfigureCell handleConfigureAssessment={handleConfigureAssessment}
+                           // handleAssignEntriesForVoting={handleAssignEntriesForVoting}
+                           data={data} />
           </>
         );
       },
@@ -224,13 +249,14 @@ const GroundControl: React.FC = () => {
   const grid = (
     <div className="Grid ag-grid-parent ag-theme-balham">
       <AgGridReact
-        domLayout={'autoHeight'}
+        alwaysShowHorizontalScroll={true}
+        domLayout="autoHeight"
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
         onGridSizeChanged={resizeGrid}
         rowData={assessmentOverviews}
-        rowHeight={30}
+        rowHeight={35}
         suppressCellFocus={true}
         suppressMovableColumns={true}
         suppressPaginationPanel={true}

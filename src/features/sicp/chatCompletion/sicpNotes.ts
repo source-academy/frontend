@@ -1,3 +1,5 @@
+import { SicpSection } from './chatCompletion';
+
 const summary1 =
   '1. Building Abstractions with Functions' +
   '\n1. **Introduction to Programming Concepts:**' +
@@ -1144,7 +1146,7 @@ const summary3_5_5 =
 
 //...
 
-const SICPNotes = {
+const sicpNotes: Partial<Record<SicpSection, string>> = {
   '1': summary1,
   '1.1': summary1_1,
   '1.1.1': summary1_1_1,
@@ -1219,4 +1221,4 @@ const SICPNotes = {
   //...
 };
 
-export default SICPNotes;
+export default sicpNotes;

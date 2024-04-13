@@ -1,7 +1,6 @@
 import * as bpcore from '@blueprintjs/core';
 import { TabId } from '@blueprintjs/core';
 import * as bpicons from '@blueprintjs/icons';
-import * as bppopover from '@blueprintjs/popover2';
 import * as jsslang from 'js-slang';
 import * as jsslangDist from 'js-slang/dist';
 import lodash from 'lodash';
@@ -34,7 +33,6 @@ const requireProvider = (x: string) => {
     'react-dom': ReactDOM,
     '@blueprintjs/core': bpcore,
     '@blueprintjs/icons': bpicons,
-    '@blueprintjs/popover2': bppopover,
     'js-slang': jsslang,
     'js-slang/dist': jsslangDist,
     lodash,
@@ -86,6 +84,13 @@ export const useSideContent = (location: SideContentLocation, defaultTab?: SideC
   const dispatch = useDispatch();
   const setSelectedTab = useCallback(
     (newId: SideContentType) => {
+      if (
+        (selectedTab === SideContentType.substVisualizer ||
+          selectedTab === SideContentType.cseMachine) &&
+        newId === SideContentType.mobileEditorRun
+      ) {
+        return;
+      }
       dispatch(visitSideContent(newId, selectedTab, location));
     },
     [dispatch, location, selectedTab]

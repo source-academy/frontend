@@ -4,15 +4,15 @@ import { Group, Rect } from 'react-konva';
 import CseMachine from '../CseMachine';
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
-import { DataArray, Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
+import { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
 import {
   currentItemSAColor,
   getTextWidth,
   getUnreferencedObjects,
+  isClosure,
   isDataArray,
   isPrimitiveData,
-  isUnassigned,
-  setDifference
+  isUnassigned
 } from '../CseMachineUtils';
 import { ArrowFromFrame } from './arrows/ArrowFromFrame';
 import { Binding } from './Binding';
@@ -31,6 +31,11 @@ const frameNames = new Map([
 
 /** this class encapsulates a frame of key-value bindings to be drawn on canvas */
 export class Frame extends Visible implements IHoverable {
+  private static envFrameMap: Map<string, Frame> = new Map();
+  public static getFrom(environment: Env): Frame | undefined {
+    return Frame.envFrameMap.get(environment.id);
+  }
+
   /** total height = frame height + frame title height */
   readonly totalHeight: number;
   /** width of this frame + max width of the bound values */
@@ -57,6 +62,7 @@ export class Frame extends Visible implements IHoverable {
     this._width = Config.FrameMinWidth;
     this.level = envTreeNode.level as Level;
     this.environment = envTreeNode.environment;
+    Frame.envFrameMap.set(this.environment.id, this);
     this.parentFrame = envTreeNode.parent?.frame;
     this._x = this.level.x();
     // derive the x coordinate from the left sibling frame
@@ -95,25 +101,34 @@ export class Frame extends Visible implements IHoverable {
     const entries = Object.entries(Object.getOwnPropertyDescriptors(this.environment.head));
 
     // get values that are unreferenced, which will used to created dummy bindings
-    const unreferencedValues = getUnreferencedObjects(this.environment);
+    const unreferencedValues = [...getUnreferencedObjects(this.environment)];
 
-    // find arrays that are nested inside other arrays, and prevent them from creating new
-    // dummy bindings, as they should be drawn around the original parent array instead
-    const nestedArrays = new Set<DataArray>();
-    for (const value of unreferencedValues) {
+    // TODO: find out why values are not added to heap on the correct order in JS Slang
+    // For now, sorting is a good workaround since id also increases in insertion order
+    unreferencedValues.sort((v1, v2) => Number(v1.id) - Number(v2.id));
+
+    // find objects that are nested inside other arrays, and prevent them from creating new
+    // dummy bindings by removing them from unreferencedValues, as they should be drawn
+    // around the original parent array instead
+    let i = 0;
+    while (i < unreferencedValues.length) {
+      const value = unreferencedValues[i];
       if (isDataArray(value)) {
         for (const data of value) {
-          if (isDataArray(data) && data !== value) {
-            nestedArrays.add(data);
-            // Since deeply nested arrays always come first inside the heap order, there is no need
-            // to do a recursive search for deeply nested arrays, as they would have already been
-            // added to the nestedArrays set by this point.
+          if ((isDataArray(data) && data !== value) || isClosure(data)) {
+            const prev = unreferencedValues.findIndex(value => value.id === data.id);
+            if (prev > -1) {
+              unreferencedValues.splice(prev, 1);
+              if (prev <= i) i--;
+            }
           }
         }
       }
+      i++;
     }
+
     // Add dummy bindings to `entries`
-    for (const value of setDifference(unreferencedValues, nestedArrays)) {
+    for (const value of unreferencedValues) {
       const descriptor: TypedPropertyDescriptor<any> & PropertyDescriptor = {
         value,
         configurable: false,
@@ -122,7 +137,7 @@ export class Frame extends Visible implements IHoverable {
       };
       // The key is a number string to "disguise" as a dummy binding
       // TODO: revamp the dummy binding behavior, don't rely on numeric keys
-      entries.push(['0', descriptor]);
+      entries.push([`${i++}`, descriptor]);
     }
 
     for (const [key, data] of entries) {
