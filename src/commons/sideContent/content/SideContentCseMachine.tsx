@@ -14,7 +14,7 @@ import { Chapter } from 'js-slang/dist/types';
 import { debounce } from 'lodash';
 import React from 'react';
 import { HotKeys } from 'react-hotkeys';
-import { MapDispatchToProps, MapStateToProps, connect } from 'react-redux';
+import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Output } from 'src/commons/repl/Repl';
 import type { PlaygroundWorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
