@@ -285,3 +285,14 @@ export const getGithubSaveInfo = () => {
   };
   return githubSaveInfo;
 }
+
+export const getPersistenceFile = (filePath: string) => {
+  const persistenceFileArray = store.getState().fileSystem.persistenceFileArray;
+  if (filePath === '') {
+    const persistenceFile = persistenceFileArray[0];
+    return persistenceFile;
+  }
+  const persistenceFile = persistenceFileArray.find(e => e.path === filePath);
+  
+  return persistenceFile;
+}

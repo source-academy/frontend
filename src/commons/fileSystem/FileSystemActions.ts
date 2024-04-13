@@ -1,6 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
 import { FSModule } from 'browserfs/dist/node/core/FS';
-import { GitHubSaveInfo } from 'src/features/github/GitHubTypes';
 import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 
 import { 
@@ -23,7 +22,7 @@ export const setInBrowserFileSystem = createAction(
 
 export const addGithubSaveInfo = createAction(
   ADD_GITHUB_SAVE_INFO,
-  (githubSaveInfo: GitHubSaveInfo) => ({ payload: { githubSaveInfo }})
+  (persistenceFile: PersistenceFile) => ({ payload: { persistenceFile }})
 );
 
 export const deleteGithubSaveInfo = createAction(

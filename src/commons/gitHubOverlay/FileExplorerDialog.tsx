@@ -14,6 +14,7 @@ import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 
 import {
+  checkFolderLocationIsValid,
   checkIfFileCanBeOpened,
   checkIfFileCanBeSavedAndGetSaveType,
   checkIfUserAgreesToOverwriteEditorData,
@@ -22,10 +23,12 @@ import {
   openFileInEditor,
   openFolderInFolderMode,
   performCreatingSave,
-  performOverwritingSave
+  performMultipleCreatingSave,
+  performOverwritingSaveForSaveAs
 } from '../../features/github/GitHubUtils';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
+import { getPersistenceFile } from '../fileSystem/FileSystemUtils';
 
 export type FileExplorerDialogProps = {
   repoName: string;
@@ -47,7 +50,7 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
   return (
     <Dialog className="githubDialog" isOpen={true} onClose={handleClose}>
       <div className={classNames('githubDialogHeader', Classes.DIALOG_HEADER)}>
-        <h3>Select a File</h3>
+        <h3>Select a File/Folder</h3>
       </div>
       <div className={Classes.DIALOG_BODY}>
         <Tree
@@ -117,8 +120,13 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
       }
     }
 
-    if (props.pickerType == 'Saveall') {
-
+    if (props.pickerType === 'Save All') {
+      if (await checkIsFile(props.octokit, githubLoginID, props.repoName, filePath)) {
+      } else {
+        if (await checkFolderLocationIsValid(props.octokit, githubLoginID, props.repoName, filePath)) {
+          performMultipleCreatingSave(props.octokit, githubLoginID, props.repoName, filePath, githubName, githubEmail, '');
+        }
+      }
     }
 
     if (props.pickerType === 'Save') {
@@ -131,7 +139,7 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
 
       if (canBeSaved) {
         if (saveType === 'Overwrite' && (await checkIfUserAgreesToPerformOverwritingSave())) {
-          performOverwritingSave(
+          performOverwritingSaveForSaveAs(
             props.octokit,
             githubLoginID,
             props.repoName,
@@ -144,15 +152,24 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
         }
 
         if (saveType === 'Create') {
+          const persistenceFile = getPersistenceFile(filePath);
+          if (persistenceFile === undefined) {
+            throw new Error("persistence file not found for this filepath: " + filePath);
+          }
+          const parentFolderPath = persistenceFile.parentFolderPath;
+          if (parentFolderPath === undefined) {
+            throw new Error("repository name or parentfolderpath not found for this persistencefile: " + persistenceFile);
+          }
           performCreatingSave(
             props.octokit,
             githubLoginID,
             props.repoName,
-            filePath,
+            filePath.slice(parentFolderPath.length),
             githubName,
             githubEmail,
             commitMessage,
-            props.editorContent
+            props.editorContent,
+            parentFolderPath
           );
         }
       }

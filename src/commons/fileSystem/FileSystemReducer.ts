@@ -26,29 +26,31 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
         state.inBrowserFileSystem = action.payload.inBrowserFileSystem;
       })
       .addCase(addGithubSaveInfo, (state, action) => { // TODO rewrite
-        const githubSaveInfoPayload = action.payload.githubSaveInfo;
+        const persistenceFilePayload = action.payload.persistenceFile;
         const persistenceFileArray = state['persistenceFileArray'];
 
         const saveInfoIndex = persistenceFileArray.findIndex(e => {
-          return e.path === githubSaveInfoPayload.filePath &&
-          e.repoName === githubSaveInfoPayload.repoName;
+          return e.path === persistenceFilePayload.path &&
+          e.repoName === persistenceFilePayload.repoName;
         });
         if (saveInfoIndex === -1) {
           persistenceFileArray[persistenceFileArray.length] = {
             id: '',
             name: '',
-            path: githubSaveInfoPayload.filePath,
-            lastSaved: githubSaveInfoPayload.lastSaved,
-            repoName: githubSaveInfoPayload.repoName
+            path: persistenceFilePayload.path,
+            lastSaved: persistenceFilePayload.lastSaved,
+            repoName: persistenceFilePayload.repoName,
+            parentFolderPath: persistenceFilePayload.parentFolderPath
           };
         } else {
           // file already exists, to replace file
           persistenceFileArray[saveInfoIndex] = {
             id: '',
             name: '',
-            path: githubSaveInfoPayload.filePath,
-            lastSaved: githubSaveInfoPayload.lastSaved,
-            repoName: githubSaveInfoPayload.repoName
+            path: persistenceFilePayload.path,
+            lastSaved: persistenceFilePayload.lastSaved,
+            repoName: persistenceFilePayload.repoName,
+            parentFolderPath: persistenceFilePayload.parentFolderPath
           };
         }
         state.persistenceFileArray = persistenceFileArray;
@@ -57,7 +59,14 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
       const newPersistenceFileArray = state['persistenceFileArray'].filter(e => e.path !== action.payload.path);
       const isGDriveSyncing = action.payload.id ? true: false;
       if (isGDriveSyncing) {
-        const newPersFile = { id: action.payload.id, path: action.payload.path, repoName: '', name: action.payload.name};
+        const newPersFile = { 
+          id: action.payload.id,
+          name: action.payload.name,
+          lastEdit: action.payload.lastEdit,
+          lastSaved: action.payload.lastSaved,
+          parentId: action.payload.parentId,
+          path: action.payload.path
+        };
         const newPersFileArray = newPersistenceFileArray.concat(newPersFile);
         state.persistenceFileArray = newPersFileArray;
       } else {
@@ -65,7 +74,27 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
       }  
     })
     .addCase(deleteAllGithubSaveInfo, (state, action) => {
-      state.persistenceFileArray = [];
+      if (state.persistenceFileArray.length !== 0) {
+        const isGDriveSyncing = state.persistenceFileArray[0].id ? true: false;
+        const newPersistenceFileArray = state.persistenceFileArray;
+        if (isGDriveSyncing) {
+          newPersistenceFileArray.forEach(
+            (persistenceFile, index) => {
+              newPersistenceFileArray[index] = {
+                id: persistenceFile.id,
+                name: persistenceFile.name,
+                lastEdit: persistenceFile.lastEdit,
+                lastSaved: persistenceFile.lastSaved,
+                parentId: persistenceFile.parentId,
+                path: persistenceFile.path
+              }
+            }
+          )
+          state.persistenceFileArray = newPersistenceFileArray;
+        } else {
+          state.persistenceFileArray = [];
+        }
+      }
     })
     .addCase(addPersistenceFile, (state, action) => { // TODO rewrite
       const persistenceFilePayload = action.payload;

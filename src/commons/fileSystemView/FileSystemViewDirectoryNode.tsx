@@ -4,7 +4,7 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { persistenceCreateFile, persistenceCreateFolder, persistenceDeleteFolder } from 'src/features/persistence/PersistenceActions';
+import { persistenceCreateFolder, persistenceDeleteFolder } from 'src/features/persistence/PersistenceActions';
 import classes from 'src/styles/FileSystemView.module.scss';
 
 import { rmdirRecursively } from '../fileSystem/FileSystemUtils';
@@ -121,7 +121,7 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
         if (err) {
           console.error(err);
         }
-        dispatch(persistenceCreateFile(newFilePath));
+        // dispatch(persistenceCreateFile(newFilePath));
         dispatch(githubCreateFile(newFilePath));
         forceRefreshFileSystemViewList();
       });
