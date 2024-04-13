@@ -30,5 +30,5 @@ export const ControlStashConfig = Object.freeze({
   FontStyle: 'normal',
   FontVariant: 'normal',
   FontStyleHeader: 'bold',
-  FontSizeHeader: 18,
+  FontSizeHeader: 18
 });
