@@ -84,3 +84,26 @@ export const assertType =
     // Keep the original type as inferred by TS
   ): T =>
     obj;
+
+/**
+ * Type safe `Object.keys`
+ */
+export function objectKeys<T extends string | number | symbol>(obj: Record<T, any>): T[] {
+  return Object.keys(obj) as T[];
+}
+
+/**
+ * Type safe `Object.values`
+ */
+export function objectValues<T>(obj: Record<any, T>) {
+  return Object.values(obj) as T[];
+}
+
+/**
+ * Type safe `Object.entries`
+ */
+export function objectEntries<K extends string | number | symbol, V>(
+  obj: Partial<Record<K, V>>
+): [K, V][] {
+  return Object.entries(obj) as [K, V][];
+}
