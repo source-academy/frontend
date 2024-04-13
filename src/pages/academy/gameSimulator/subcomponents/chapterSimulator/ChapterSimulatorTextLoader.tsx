@@ -1,6 +1,6 @@
 import 'ace-builds/webpack-resolver';
 
-import { Button, Tab, Tabs } from '@blueprintjs/core';
+import { Button, Classes, Tab, Tabs } from '@blueprintjs/core';
 import { useState } from 'react';
 import { toTxtPath } from 'src/features/game/assets/TextAssets';
 import { toS3Path } from 'src/features/game/utils/GameUtils';
@@ -39,7 +39,7 @@ const ChapterSimulatorTextLoader: React.FC<StorageProps> = ({ storageName, s3Txt
 
   const chooseS3Txt = (
     <>
-      <select className="bp5-menu" onChange={changeChosenFilename}>
+      <select className={Classes.MENU} onChange={changeChosenFilename}>
         {s3TxtFiles.map(file => (
           <option value={file} key={file}>
             {file}

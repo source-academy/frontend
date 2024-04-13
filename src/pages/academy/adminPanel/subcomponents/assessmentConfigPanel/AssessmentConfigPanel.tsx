@@ -31,14 +31,40 @@ const AssessmentConfigPanel: React.FC<Props> = ({
 }) => {
   const gridApi = React.useRef<GridApi>();
 
+  // manually graded assessments should not be auto-published
+  // check and ensure that isManuallyGraded = true and isGradingAutoPublished = true cannot be set simultaneously
   const setIsManuallyGraded = (index: number, value: boolean) => {
     const temp = [...assessmentConfig.current];
     temp[index] = {
       ...temp[index],
       isManuallyGraded: value
     };
+
+    // use a second spread operator if mutation of temp[index] causes issues
+    if (value) {
+      temp[index].isGradingAutoPublished = false;
+      gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isGradingAutoPublished', false);
+    }
+
     setAssessmentConfig(temp);
     gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isManuallyGraded', value);
+  };
+
+  const setIsGradingAutoPublished = (index: number, value: boolean) => {
+    const temp = [...assessmentConfig.current];
+
+    temp[index] = {
+      ...temp[index],
+      isGradingAutoPublished: value
+    };
+
+    if (value) {
+      temp[index].isManuallyGraded = false;
+      gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isManuallyGraded', false);
+    }
+
+    setAssessmentConfig(temp);
+    gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isGradingAutoPublished', value);
   };
 
   const setDisplayInDashboard = (index: number, value: boolean) => {
@@ -102,6 +128,7 @@ const AssessmentConfigPanel: React.FC<Props> = ({
       assessmentConfigId: -1,
       type: 'untitled',
       isManuallyGraded: true,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 0,
       hasTokenCounter: false,
@@ -139,6 +166,15 @@ const AssessmentConfigPanel: React.FC<Props> = ({
       cellRendererParams: {
         setStateHandler: setIsManuallyGraded,
         field: 'isManuallyGraded'
+      }
+    },
+    {
+      headerName: 'Is Auto-published',
+      field: 'isGradingAutoPublished',
+      cellRenderer: BooleanCell,
+      cellRendererParams: {
+        setStateHandler: setIsGradingAutoPublished,
+        field: 'isGradingAutoPublished'
       }
     },
     {
