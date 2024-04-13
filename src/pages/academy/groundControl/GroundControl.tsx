@@ -22,6 +22,7 @@ import Dropzone from './subcomponents/GroundControlDropzone';
 import EditCell from './subcomponents/GroundControlEditCell';
 import EditTeamSizeCell from './subcomponents/GroundControlEditTeamSizeCell';
 import PublishCell from './subcomponents/GroundControlPublishCell';
+import ReleaseGradingCell from './subcomponents/GroundControlReleaseGradingCell';
 
 type Props = DispatchProps;
 
@@ -29,7 +30,9 @@ export type DispatchProps = {
   handleAssessmentOverviewFetch: () => void;
   handleDeleteAssessment: (id: number) => void;
   handleUploadAssessment: (file: File, forceUpdate: boolean, assessmentConfigId: number) => void;
-  handlePublishAssessment: (togglePublishTo: boolean, id: number) => void;
+  handlePublishAssessment: (togglePublishAssessmentTo: boolean, id: number) => void;
+  handlePublishGradingAll: (id: number) => void;
+  handleUnpublishGradingAll: (id: number) => void;
   handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) => void;
   handleAssessmentChangeTeamSize: (id: number, maxTeamSize: number) => void;
   handleConfigureAssessment: (
@@ -133,7 +136,23 @@ const GroundControl: React.FC<Props> = props => {
       cellRendererParams: {
         handlePublishAssessment: props.handlePublishAssessment
       },
-      width: 80,
+      width: 70,
+      filter: false,
+      resizable: false,
+      sortable: false,
+      cellStyle: {
+        padding: 0
+      }
+    },
+    {
+      headerName: 'Release Grading',
+      field: 'placeholderReleaseGrading' as any,
+      cellRenderer: ReleaseGradingCell,
+      cellRendererParams: {
+        handlePublishGradingAll: props.handlePublishGradingAll,
+        handleUnpublishGradingAll: props.handleUnpublishGradingAll
+      },
+      width: 120,
       filter: false,
       resizable: false,
       sortable: false,
@@ -148,7 +167,7 @@ const GroundControl: React.FC<Props> = props => {
       cellRendererParams: {
         handleDeleteAssessment: props.handleDeleteAssessment
       },
-      width: 80,
+      width: 70,
       filter: false,
       resizable: false,
       sortable: false,
@@ -164,7 +183,7 @@ const GroundControl: React.FC<Props> = props => {
         handleConfigureAssessment: props.handleConfigureAssessment,
         handleAssignEntriesForVoting: props.handleAssignEntriesForVoting
       },
-      width: 80,
+      width: 70,
       filter: false,
       resizable: false,
       sortable: false,
@@ -209,13 +228,14 @@ const GroundControl: React.FC<Props> = props => {
   const grid = (
     <div className="Grid">
       <DataTable
-        domLayout={'autoHeight'}
+        alwaysShowHorizontalScroll={true}
+        domLayout="autoHeight"
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
         onGridSizeChanged={resizeGrid}
         rowData={assessmentOverviews}
-        rowHeight={30}
+        rowHeight={35}
         suppressCellFocus={true}
         suppressMovableColumns={true}
         suppressPaginationPanel={true}

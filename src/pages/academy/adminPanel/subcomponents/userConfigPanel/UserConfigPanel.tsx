@@ -79,7 +79,7 @@ const UserConfigPanel: React.FC<Props> = props => {
   const grid = (
     <div className="Grid">
       <DataTable
-        domLayout={'autoHeight'}
+        domLayout="autoHeight"
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}

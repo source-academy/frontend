@@ -41,7 +41,7 @@ const Dashboard: React.FC = () => {
     <div className="Dashboard">
       <div className="Grid">
         <DataTable
-          domLayout={'autoHeight'}
+          domLayout="autoHeight"
           columnDefs={columnDefs}
           defaultColDef={defaultColumnDefs}
           onGridReady={onGridReady}

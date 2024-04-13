@@ -166,7 +166,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
         <Divider />
         <div className="SourcecastTable">
           <DataTable
-            domLayout={'autoHeight'}
+            domLayout="autoHeight"
             columnDefs={this.state.columnDefs}
             defaultColDef={this.defaultColumnDefs}
             onGridReady={this.onGridReady}

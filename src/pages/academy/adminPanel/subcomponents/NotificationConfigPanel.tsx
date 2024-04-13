@@ -191,7 +191,7 @@ const NotificationConfigPanel = () => {
   const grid = (
     <div className="Grid">
       <DataTable
-        domLayout={'autoHeight'}
+        domLayout="autoHeight"
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}

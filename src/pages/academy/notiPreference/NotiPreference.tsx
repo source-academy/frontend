@@ -154,7 +154,7 @@ const NotiPreference: React.FC = () => {
       <H1>Notifications</H1>
       <div className="Grid">
         <DataTable
-          domLayout={'autoHeight'}
+          domLayout="autoHeight"
           columnDefs={columnDefs}
           defaultColDef={defaultColumnDefs}
           onGridReady={onGridReady}
