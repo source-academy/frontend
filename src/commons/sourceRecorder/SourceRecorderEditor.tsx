@@ -2,7 +2,9 @@ import 'ace-builds/src-noconflict/ext-searchbox';
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'js-slang/dist/editors/ace/theme/source';
 
+import { Classes } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';
+import classNames from 'classnames';
 import { isEqual } from 'lodash';
 import React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
@@ -206,7 +208,10 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
 
   public render() {
     return (
-      <HotKeys className="Editor bp5-card bp5-elevation-0" handlers={handlers}>
+      <HotKeys
+        className={classNames('Editor', Classes.CARD, Classes.ELEVATION_0)}
+        handlers={handlers}
+      >
         <div className="row editor-react-ace">
           <AceEditor
             className="react-ace"

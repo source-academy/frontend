@@ -1,6 +1,5 @@
-import { ButtonGroup, Classes, Intent } from '@blueprintjs/core';
+import { ButtonGroup, Classes, Intent, Popover, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Popover2, Tooltip2 } from '@blueprintjs/popover2';
 import React from 'react';
 
 import { PersistenceFile, PersistenceState } from '../../features/persistence/PersistenceTypes';
@@ -69,9 +68,9 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
   );
 
   const loginButton = props.accessToken ? (
-    <Tooltip2 content={`Logged in as ${props.loggedInAs}`} disabled={!props.loggedInAs}>
+    <Tooltip content={`Logged in as ${props.loggedInAs}`} disabled={!props.loggedInAs}>
       <ControlButton label="Log Out" icon={IconNames.LOG_OUT} onClick={props.onClickLogOut} />
-    </Tooltip2>
+    </Tooltip>
   ) : (
     <ControlButton label="Log In" icon={IconNames.LOG_IN} onClick={props.onClickLogIn} />
   );
@@ -81,8 +80,8 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
     : undefined;
 
   return (
-    <Tooltip2 content={tooltipContent} disabled={tooltipContent === undefined}>
-      <Popover2
+    <Tooltip content={tooltipContent} disabled={tooltipContent === undefined}>
+      <Popover
         autoFocus={false}
         content={
           <div>
@@ -99,7 +98,7 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
         disabled={props.isFolderModeEnabled}
       >
         {mainButton}
-      </Popover2>
-    </Tooltip2>
+      </Popover>
+    </Tooltip>
   );
 };

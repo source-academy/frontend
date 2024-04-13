@@ -36,7 +36,7 @@ import { GradingOverview } from 'src/features/grading/GradingTypes';
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 
 import GradingActions from './GradingActions';
-import { AssessmentTypeBadge, GradingStatusBadge, SubmissionStatusBadge } from './GradingBadges';
+import { AssessmentTypeBadge, ProgressStatusBadge } from './GradingBadges';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
 
 const columnHelper = createColumnHelper<GradingOverview>();
@@ -90,17 +90,13 @@ const makeColumns = (handleClick: () => void) => [
     header: 'Group',
     cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
   }),
-  columnHelper.accessor('submissionStatus', {
+  columnHelper.accessor('progress', {
     header: 'Progress',
     cell: info => (
       <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
-        <SubmissionStatusBadge status={info.getValue()} />
+        <ProgressStatusBadge progress={info.getValue()} />
       </Filterable>
     )
-  }),
-  columnHelper.accessor('gradingStatus', {
-    header: 'Grading',
-    cell: info => <GradingStatusBadge status={info.getValue()} />
   }),
   columnHelper.accessor(({ currentXp, xpBonus, maxXp }) => ({ currentXp, xpBonus, maxXp }), {
     header: 'Raw XP (+Bonus)',
@@ -118,12 +114,12 @@ const makeColumns = (handleClick: () => void) => [
       );
     }
   }),
-  columnHelper.accessor(({ submissionId }) => ({ submissionId }), {
+  columnHelper.accessor(({ submissionId, progress }) => ({ submissionId, progress }), {
     header: 'Actions',
     enableColumnFilter: false,
     cell: info => {
-      const { submissionId } = info.getValue();
-      return <GradingActions submissionId={submissionId} />;
+      const { submissionId, progress } = info.getValue();
+      return <GradingActions submissionId={submissionId} progress={progress} />;
     }
   })
 ];
@@ -215,7 +211,7 @@ const GradingSubmissionTable: React.FC<Props> = ({
 
   useEffect(() => {
     resetPage();
-  }, [updateEntries, resetPage, searchValue]);
+  }, [updateEntries, resetPage]);
 
   useEffect(() => {
     updateEntries(page, backendFilterParams);

@@ -1,8 +1,9 @@
 import {
+  AssessmentStatus,
   AssessmentType,
   AutogradingResult,
-  GradingStatus,
   MCQChoice,
+  ProgressStatus,
   Question,
   Testcase
 } from '../../commons/assessment/AssessmentTypes';
@@ -22,16 +23,17 @@ export type GradingOverview = {
   xpAdjustment: number;
   currentXp: number;
   maxXp: number;
+  isGradingPublished: boolean;
+  progress: ProgressStatus;
   studentId: number;
   studentName: string | undefined;
   studentNames: string[] | undefined;
   studentUsername: string | undefined;
   studentUsernames: string[] | undefined;
+  submissionStatus: AssessmentStatus;
   submissionId: number;
-  submissionStatus: string;
   groupName: string;
   groupLeaderId?: number;
-  gradingStatus: GradingStatus;
   questionCount: number;
   gradedCount: number;
 };

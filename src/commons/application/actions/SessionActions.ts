@@ -1,7 +1,7 @@
 import { createAction } from '@reduxjs/toolkit';
 import {
   paginationToBackendParams,
-  ungradedToBackendParams
+  unpublishedToBackendParams
 } from 'src/features/grading/GradingUtils';
 import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
@@ -55,6 +55,7 @@ import {
   LOGOUT_GOOGLE,
   NotificationConfiguration,
   NotificationPreference,
+  PUBLISH_GRADING,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN,
@@ -77,6 +78,7 @@ import {
   SUBMIT_GRADING_AND_CONTINUE,
   TimeOption,
   Tokens,
+  UNPUBLISH_GRADING,
   UNSUBMIT_SUBMISSION,
   UPDATE_ASSESSMENT,
   UPDATE_ASSESSMENT_CONFIGS,
@@ -137,7 +139,7 @@ export const fetchGrading = createAction(FETCH_GRADING, (submissionId: number) =
 /**
  * @param filterToGroup - param that when set to true, only shows submissions under the group
  * of the grader
- * @param gradedFilter - backend params to filter to ungraded
+ * @param publishedFilter - backend params to filter to unpublished
  * @param pageParams - param that contains offset and pageSize, informing backend about how
  * many entries, starting from what offset, to get
  * @param filterParams - param that contains columnFilters converted into JSON for
@@ -147,10 +149,10 @@ export const fetchGradingOverviews = createAction(
   FETCH_GRADING_OVERVIEWS,
   (
     filterToGroup = true,
-    gradedFilter = ungradedToBackendParams(false),
+    publishedFilter = unpublishedToBackendParams(false),
     pageParams = paginationToBackendParams(0, 10),
     filterParams = {}
-  ) => ({ payload: { filterToGroup, gradedFilter, pageParams, filterParams } })
+  ) => ({ payload: { filterToGroup, publishedFilter, pageParams, filterParams } })
 );
 
 export const fetchTeamFormationOverviews = createAction(
@@ -338,6 +340,18 @@ export const updateGrading = createAction(
 );
 
 export const unsubmitSubmission = createAction(UNSUBMIT_SUBMISSION, (submissionId: number) => ({
+  payload: { submissionId }
+}));
+
+/**
+ * Publishing / unpublishing actions
+ */
+
+export const publishGrading = createAction(PUBLISH_GRADING, (submissionId: number) => ({
+  payload: { submissionId }
+}));
+
+export const unpublishGrading = createAction(UNPUBLISH_GRADING, (submissionId: number) => ({
   payload: { submissionId }
 }));
 
