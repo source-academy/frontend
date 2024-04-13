@@ -69,6 +69,7 @@ import {
   toggleUpdateCse,
   toggleUsingCse,
   toggleUsingSubst,
+  toggleUsingUpload,
   updateActiveEditorTab,
   updateActiveEditorTabIndex,
   updateBreakpointSteps,
@@ -81,15 +82,14 @@ import {
   updateStepsTotal,
   updateSublanguage,
   updateSubmissionsTableFilters,
-  updateWorkspace
+  updateWorkspace,
+  uploadFiles
 } from './WorkspaceActions';
 import {
   EditorTabState,
-  TOGGLE_USING_UPLOAD,
   UPDATE_CHANGEPOINTSTEPS,
   UPDATE_LAST_DEBUGGER_RESULT,
   UPDATE_LAST_NON_DET_RESULT,
-  UPLOAD_FILES,
   WorkspaceLocation,
   WorkspaceManagerState
 } from './WorkspaceTypes';
@@ -843,6 +843,18 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
           breakpointSteps: action.payload.breakpointSteps
         }
       };
+    })
+    .addCase(toggleUsingUpload, (state, action) => {
+      const { workspaceLocation } = action.payload;
+      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
+        state[workspaceLocation].usingUpload = action.payload.usingUpload;
+      }
+    })
+    .addCase(uploadFiles, (state, action) => {
+      const { workspaceLocation } = action.payload;
+      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
+        state[workspaceLocation].files = action.payload.files;
+      }
     });
   // .addCase(notifyProgramEvaluated, (state, action) => {
   //   const workspaceLocation = getWorkspaceLocation(action);
@@ -906,28 +918,6 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
         }
       };
     }
-    case TOGGLE_USING_UPLOAD: {
-      const { workspaceLocation } = action.payload;
-      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
-        return {
-          ...state,
-          [workspaceLocation]: {
-            ...state[workspaceLocation],
-            usingUpload: action.payload.usingUpload
-          }
-        };
-      } else {
-        return state;
-      }
-    }
-    case UPLOAD_FILES:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          files: action.payload.files
-        }
-      };
     default:
       return state;
   }

@@ -19,6 +19,7 @@ export async function javaRun(
 ) {
   let compiled = {};
 
+  // #region utils functions
   const stderr = (type: 'TypeCheck' | 'Compile' | 'Runtime', msg: string) => {
     context.errors.push({
       type: type as any,
@@ -28,23 +29,6 @@ export async function javaRun(
       elaborate: () => msg
     });
   };
-
-  const typeCheckResult = typeCheck(javaCode);
-  if (typeCheckResult.hasTypeErrors) {
-    const typeErrMsg = typeCheckResult.errorMsgs.join('\n');
-    stderr('TypeCheck', typeErrMsg);
-    return Promise.resolve({ status: 'error' });
-  }
-
-  try {
-    const classFile = compileFromSource(javaCode);
-    compiled = {
-      'Main.class': Buffer.from(new BinaryWriter().generateBinary(classFile)).toString('base64')
-    };
-  } catch (e) {
-    stderr('Compile', e);
-    return Promise.resolve({ status: 'error' });
-  }
 
   let files = {};
   let buffer: string[] = [];
@@ -107,13 +91,33 @@ export async function javaRun(
     }
   };
 
+  // #endregion
+
   if (isUsingCse) {
     return await runJavaCseMachine(javaCode, targetStep, context);
   } else if (options?.uploadIsActive) {
     compiled = options.uploads ?? {};
+    if (!options.uploads) {
+      stderr('Compile', 'No files uploaded');
+      return Promise.resolve({ status: 'error' });
+    }
   } else {
-    stderr('Compiler not integrated');
-    return Promise.resolve({ status: 'error' });
+    const typeCheckResult = typeCheck(javaCode);
+    if (typeCheckResult.hasTypeErrors) {
+      const typeErrMsg = typeCheckResult.errorMsgs.join('\n');
+      stderr('TypeCheck', typeErrMsg);
+      return Promise.resolve({ status: 'error' });
+    }
+
+    try {
+      const classFile = compileFromSource(javaCode);
+      compiled = {
+        'Main.class': Buffer.from(new BinaryWriter().generateBinary(classFile)).toString('base64')
+      };
+    } catch (e) {
+      stderr('Compile', e);
+      return Promise.resolve({ status: 'error' });
+    }
   }
 
   // load cached classfiles from IndexedDB
