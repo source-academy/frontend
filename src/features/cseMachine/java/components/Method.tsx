@@ -8,6 +8,8 @@ import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
 import { IHoverable } from '../../CseMachineTypes';
 import {
+  defaultStrokeColor,
+  defaultTextColor,
   getTextHeight,
   getTextWidth,
   setHoveredCursor,
@@ -75,7 +77,7 @@ export class Method extends Visible implements IHoverable {
             x={this._centerX - Config.FnRadius}
             y={this.y()}
             radius={Config.FnRadius}
-            stroke={ControlStashConfig.SA_WHITE}
+            stroke={defaultStrokeColor()}
           />
           {/* Left inner */}
           <Circle
@@ -84,7 +86,7 @@ export class Method extends Visible implements IHoverable {
             x={this._centerX - Config.FnRadius}
             y={this.y()}
             radius={Config.FnInnerRadius}
-            fill={String(ControlStashConfig.SA_WHITE)}
+            fill={defaultStrokeColor()}
           />
         </Group>
 
@@ -107,7 +109,7 @@ export class Method extends Visible implements IHoverable {
             fontFamily={ControlStashConfig.FontFamily}
             fontSize={ControlStashConfig.FontSize}
             fontStyle={ControlStashConfig.FontStyle}
-            fill={ControlStashConfig.SA_WHITE}
+            fill={defaultTextColor()}
             padding={5}
             key={CseMachine.key++}
           />
