@@ -9,6 +9,7 @@ import {
   DELETE_ALL_PERSISTENCE_FILES,
   DELETE_GITHUB_SAVE_INFO,
   DELETE_PERSISTENCE_FILE,
+  DELETE_PERSISTENCE_FOLDER_AND_CHILDREN,
   SET_IN_BROWSER_FILE_SYSTEM,
   SET_PERSISTENCE_FILE_LAST_EDIT_BY_PATH,
   UPDATE_LAST_EDITED_FILE_PATH,
@@ -43,6 +44,11 @@ export const addPersistenceFile = createAction(
 
 export const deletePersistenceFile = createAction(
   DELETE_PERSISTENCE_FILE,
+  (persistenceFile: PersistenceFile) => ({ payload: persistenceFile })
+);
+
+export const deletePersistenceFolderAndChildren = createAction(
+  DELETE_PERSISTENCE_FOLDER_AND_CHILDREN,
   (persistenceFile: PersistenceFile) => ({ payload: persistenceFile })
 );
 

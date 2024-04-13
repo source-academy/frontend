@@ -1199,13 +1199,20 @@ export function* persistenceSaga(): SagaIterator {
         }
         yield call(ensureInitialisedAndAuthorised);
         yield call(deleteFileOrFolder, persistenceFile.id);
-        yield put(actions.deletePersistenceFile(persistenceFile));
+        yield put(actions.deletePersistenceFolderAndChildren(persistenceFile));
         yield call(store.dispatch, actions.updateRefreshFileViewKey());
         yield call(
           showSuccessMessage,
           `Folder ${persistenceFile.name} successfully deleted from Google Drive.`,
           1000
         );
+        // Check if user deleted the whole folder
+        const updatedPersistenceFileArray: PersistenceFile[] = yield select(
+          (state: OverallState) => state.fileSystem.persistenceFileArray
+        );
+        if (updatedPersistenceFileArray.length === 0) {
+          yield put(actions.playgroundUpdatePersistenceFile(undefined));
+        }
       } catch (ex) {
         console.error(ex);
         yield call(showWarningMessage, `Error while deleting folder.`, 1000);

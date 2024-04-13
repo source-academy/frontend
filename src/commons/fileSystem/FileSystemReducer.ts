@@ -11,6 +11,7 @@ import {
   deleteAllPersistenceFiles,
   deleteGithubSaveInfo,
   deletePersistenceFile,
+  deletePersistenceFolderAndChildren,
   setInBrowserFileSystem,
   setPersistenceFileLastEditByPath,
   updateLastEditedFilePath,
@@ -133,6 +134,33 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
           state.persistenceFileArray = newPersistenceFileArray;
         }
       })
+      .addCase(deletePersistenceFolderAndChildren, (state, action) => { // check if github is syncing?
+        const newPersistenceFileArray = state['persistenceFileArray'].filter(
+          e => e.id !== action.payload.id
+        );
+        // get children
+        // get current level of folder
+        const regexResult = filePathRegex.exec(action.payload.path!)!;
+
+        const currFolderSplit: string[] = regexResult[0].slice(1).split('/');
+        const folderName = regexResult[2];
+        const currFolderLevel = currFolderSplit.length - 1;
+
+        state.persistenceFileArray = newPersistenceFileArray
+          .filter(e => e.path)
+          .filter(e => {
+            const r = filePathRegex.exec(e.path!)!;
+            const currParentFolders = r[0].slice(1).split('/');
+            console.log('currParentFolders', currParentFolders, 'folderLevel', currFolderLevel);
+            if (currParentFolders.length <= currFolderLevel) {
+              return true; // not a child of folder
+            }
+            if (currParentFolders[currFolderLevel] !== folderName) {
+              return true; // not a child of folder
+            }
+            return false;
+          });
+      })
       .addCase(deleteAllPersistenceFiles, (state, action) => {
         state.persistenceFileArray = [];
       })
@@ -158,7 +186,7 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
         const regexResult = filePathRegex.exec(action.payload.newPath)!;
 
         const currFolderSplit: string[] = regexResult[0].slice(1).split('/');
-        const currFolderIndex = currFolderSplit.length - 1;
+        const currFolderLevel = currFolderSplit.length - 1;
 
         // /fold1/ becomes ["fold1"]
         // /fold1/fold2/ becomes ["fold1", "fold2"]
@@ -172,15 +200,15 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
           .map(e => {
             const r = filePathRegex.exec(e.path!)!;
             const currParentFolders = r[0].slice(1).split('/');
-            console.log('currParentFolders', currParentFolders, 'folderLevel', currFolderIndex);
-            if (currParentFolders.length <= currFolderIndex) {
+            console.log('currParentFolders', currParentFolders, 'folderLevel', currFolderLevel);
+            if (currParentFolders.length <= currFolderLevel) {
               return e; // not a child of folder
             }
-            if (currParentFolders[currFolderIndex] !== action.payload.oldFolderName) {
+            if (currParentFolders[currFolderLevel] !== action.payload.oldFolderName) {
               return e; // not a child of folder
             }
             // only children remain
-            currParentFolders[currFolderIndex] = action.payload.newFolderName;
+            currParentFolders[currFolderLevel] = action.payload.newFolderName;
             currParentFolders[0] = '/' + currParentFolders[0];
             const newPath = currParentFolders.join('/');
             console.log('from', e.path, 'to', newPath);
