@@ -202,7 +202,7 @@ export default class QuizManager {
 
   /**
    * Get the number of questions of a quiz.
-   * 
+   *
    * @param quizId The Id of quiz.
    */
   public getNumOfQns(quizId: ItemId): number {

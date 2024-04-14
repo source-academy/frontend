@@ -125,8 +125,8 @@ export default class DialogueManager {
    * Find patterns of quiz score interpolation in a dialogue line,
    * and replace them by actual scores.
    * The pattern: "{<quizId>.score}"
-   * 
-   * @param line 
+   *
+   * @param line
    * @returns {string} the given line with all quiz score interpolation replaced by actual scores.
    */
   public makeLineWithQuizScores(line: string) {
@@ -135,7 +135,7 @@ export default class DialogueManager {
       quizScores.forEach(match => {
         const quizId = match.substring(1, match.lastIndexOf('.'));
         line = line.replace(match, GameGlobalAPI.getInstance().getQuizScore(quizId).toString());
-      })
+      });
     }
     return line;
   }

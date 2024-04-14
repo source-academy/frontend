@@ -478,9 +478,9 @@ class GameStateManager {
   /**
    * Get the score of a quiz.
    * Return 0 if the quiz has not been played.
-   *  
-   * @param quizId 
-   * @returns 
+   *
+   * @param quizId
+   * @returns
    */
   public getQuizScore(quizId: ItemId): number {
     const score = this.quizScores.get(quizId);
@@ -492,7 +492,7 @@ class GameStateManager {
 
   /**
    * Set the score of a quiz to a given number.
-   * 
+   *
    * @param quizId The id of the quiz.
    * @param newScore The new score to be set.
    */
@@ -553,7 +553,7 @@ class GameStateManager {
   /**
    * Return an array containing [string, number] pairs
    * representing quizzes and the corresponding scores.
-   * 
+   *
    * @returns {[string, number][]}
    */
   public getQuizScores(): [string, number][] {

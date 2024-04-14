@@ -47,7 +47,11 @@ export default class ActionConditionChecker {
       case GameStateStorage.PassedQuizState:
         return GameGlobalAPI.getInstance().isQuizComplete(conditionParams.id) === boolean;
       case GameStateStorage.QuizScoreState:
-        return (GameGlobalAPI.getInstance().getQuizScore(conditionParams.id) >= parseInt(conditionParams.score)) === boolean;
+        return (
+          GameGlobalAPI.getInstance().getQuizScore(conditionParams.id) >=
+            parseInt(conditionParams.score) ===
+          boolean
+        );
       default:
         return true;
     }
