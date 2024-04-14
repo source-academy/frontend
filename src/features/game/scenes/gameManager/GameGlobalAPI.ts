@@ -525,6 +525,10 @@ class GameGlobalAPI {
     await this.getGameManager().getQuizManager().showQuiz(quizId);
   }
 
+  public getQuizLength(quizId: ItemId): number {
+    return this.getGameManager().getQuizManager().getNumOfQns(quizId);
+  }
+
   public isQuizAttempted(key: string): boolean {
     return this.getGameManager().getStateManager().isQuizAttempted(key);
   }
@@ -533,12 +537,8 @@ class GameGlobalAPI {
     return this.getGameManager().getStateManager().isQuizComplete(key);
   }
 
-  public completeQuiz(key: string): void {
-    this.getGameManager().getStateManager().completeQuiz(key);
-  }
-
-  public attemptQuiz(key: string): void {
-    this.getGameManager().getStateManager().attemptQuiz(key);
+  public setQuizScore(key: string, score: number): void {
+    this.getGameManager().getStateManager().setQuizScore(key, score);
   }
 }
 

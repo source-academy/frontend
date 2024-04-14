@@ -52,8 +52,7 @@ export default class QuizManager {
         quiz.questions[i]
       );
     }
-    GameGlobalAPI.getInstance().attemptQuiz(quizId);
-    if (numOfCorrect === numOfQns) GameGlobalAPI.getInstance().completeQuiz(quizId);
+    GameGlobalAPI.getInstance().setQuizScore(quizId, numOfCorrect);
     await this.showResult(numOfQns, numOfCorrect, quiz.questions[0].speaker);
     await GameGlobalAPI.getInstance().showNextLine();
     await GameGlobalAPI.getInstance().getGameManager().getDialogueManager().showAll();
@@ -230,5 +229,15 @@ export default class QuizManager {
       .replace('{numOfQns}', numOfQns.toString());
     line += numOfCorrect === numOfQns ? resultMsg.allCorrect : resultMsg.notAllCorrect;
     return new Map([['0', [{ line: line, speakerDetail: speaker }]]]);
+  }
+
+  /**
+   * Get the number of questions of a quiz.
+   * 
+   * @param quizId The Id of quiz.
+   */
+  public getNumOfQns(quizId: ItemId): number {
+    const quiz = GameGlobalAPI.getInstance().getQuizById(quizId);
+    return quiz.questions.length;
   }
 }

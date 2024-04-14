@@ -34,8 +34,7 @@ export type GameSaveState = {
   completedObjectives: string[];
   triggeredInteractions: string[];
   triggeredStateChangeActions: string[];
-  attemptedQuizzes: string[];
-  completedQuizzes: string[];
+  quizScores: [string, number][];
 };
 
 /**

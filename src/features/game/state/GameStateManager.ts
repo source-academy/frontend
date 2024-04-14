@@ -33,8 +33,7 @@ class GameStateManager {
   private checkpointObjective: GameObjective;
   private checkpointTask: GameTask;
   private chapterNewlyCompleted: boolean;
-  private completedQuizzes: ItemId[];
-  private attemptedQuizzes: ItemId[];
+  private quizScores: Map<ItemId, number>;
 
   // Triggered Interactions
   private updatedLocations: Set<LocationId>;
@@ -48,8 +47,7 @@ class GameStateManager {
     this.checkpointObjective = gameCheckpoint.objectives;
     this.checkpointTask = gameCheckpoint.tasks;
     this.chapterNewlyCompleted = false;
-    this.attemptedQuizzes = [];
-    this.completedQuizzes = [];
+    this.quizScores = new Map<ItemId, number>();
 
     this.updatedLocations = new Set(this.gameMap.getLocationIds());
     this.triggeredInteractions = new Map<ItemId, boolean>();
@@ -86,8 +84,8 @@ class GameStateManager {
         this.checkpointTask.showTask(task);
       });
 
-    this.completedQuizzes = this.getSaveManager().getCompletedQuizzes();
-    this.attemptedQuizzes = this.getSaveManager().getAttemptedQuizzes();
+    this.quizScores = new Map<string, number>(this.getSaveManager().getQuizScores());
+
     this.chapterNewlyCompleted = this.getSaveManager().getChapterNewlyCompleted();
   }
 
@@ -458,43 +456,51 @@ class GameStateManager {
   ///////////////////////////////
 
   /**
-   * Checks whether a specific quiz has been completed.
+   * Checks whether a quiz has been obtained full marks.
    *
    * @param key quiz id
    * @returns {boolean}
    */
   public isQuizComplete(quizId: string): boolean {
-    return this.completedQuizzes.includes(quizId);
+    return this.quizScores.get(quizId) === GameGlobalAPI.getInstance().getQuizLength(quizId);
   }
 
   /**
-   * Checks whether a specific quiz has been attempted.
+   * Checks whether a specific quiz has been played.
    *
    * @param key quiz id
    * @returns {boolean}
    */
   public isQuizAttempted(quizId: string): boolean {
-    return this.attemptedQuizzes.includes(quizId);
+    return this.quizScores.has(quizId);
   }
 
   /**
-   * Record that a quiz has been completed.
-   * A quiz is completed when its maximum score is obtained.
-   *
-   * @param key task id
+   * Get the score of a quiz.
+   * Return undefined if the quiz has not been played.
+   *  
+   * @param quizId 
+   * @returns 
    */
-  public completeQuiz(quizId: string) {
-    if (!this.completedQuizzes.includes(quizId)) this.completedQuizzes.push(quizId);
+  public getQuizScore(quizId: ItemId) {
+    return this.quizScores.get(quizId);
   }
 
   /**
-   * Record that a quiz has been attempted.
-   * A quiz is attempted when user answers all questions.
-   *
-   * @param key task id
+   * Set the score of a quiz to a given number
+   * if the new score is higher than the current score,
+   * or the quiz has not been played.
+   * 
+   * @param quizId The id of the quiz.
+   * @param newScore The new score to be set.
    */
-  public attemptQuiz(quizId: string) {
-    if (!this.attemptedQuizzes.includes(quizId)) this.attemptedQuizzes.push(quizId);
+  public setQuizScore(quizId: string, newScore: number) {
+    const currentScore = this.getQuizScore(quizId);
+    if (currentScore && currentScore < newScore) {
+      this.quizScores.set(quizId, newScore);
+    } else if (!currentScore) {
+      this.quizScores.set(quizId, newScore);
+    }
   }
 
   ///////////////////////////////
@@ -548,21 +554,13 @@ class GameStateManager {
   }
 
   /**
-   * Gets array of all quizzes that have been completed.
-   *
-   * @returns {ItemId[]}
+   * Return an array containing [string, number] pairs
+   * representing quizzes and the corresponding scores.
+   * 
+   * @returns {[string, number][]}
    */
-  public getCompletedQuizzes(): ItemId[] {
-    return this.completedQuizzes;
-  }
-
-  /**
-   * Gets array of all quizzes that have been attempted.
-   *
-   * @returns {ItemId[]}
-   */
-  public getAttemptedQuizzes(): ItemId[] {
-    return this.attemptedQuizzes;
+  public getQuizScores(): [string, number][] {
+    return [...this.quizScores];
   }
 
   public getGameMap = () => this.gameMap;

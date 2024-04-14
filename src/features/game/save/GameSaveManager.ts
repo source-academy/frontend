@@ -150,8 +150,7 @@ export default class GameSaveManager {
   public getIncompleteTasks = () => this.getGameSaveState().incompleteTasks;
   public getLoadedPhase = () => this.getGameSaveState().currentPhase;
   public getChapterNewlyCompleted = () => this.getGameSaveState().chapterNewlyCompleted;
-  public getAttemptedQuizzes = () => this.getGameSaveState().attemptedQuizzes;
-  public getCompletedQuizzes = () => this.getGameSaveState().completedQuizzes;
+  public getQuizScores = () => this.getGameSaveState().quizScores;
 
   public getChapterNum = () => mandatory(this.chapterNum);
   public getCheckpointNum = () => mandatory(this.checkpointNum);

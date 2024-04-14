@@ -35,8 +35,7 @@ export function gameStateToJson(
         completedObjectives: gameStateManager.getCompletedObjectives(),
         triggeredInteractions: gameStateManager.getTriggeredInteractions(),
         triggeredStateChangeActions: gameStateManager.getTriggeredStateChangeActions(),
-        attemptedQuizzes: gameStateManager.getAttemptedQuizzes(),
-        completedQuizzes: gameStateManager.getCompletedQuizzes()
+        quizScores: gameStateManager.getQuizScores()
       }
     },
     userSaveState: {
@@ -83,8 +82,7 @@ export const createEmptyGameSaveState = (): GameSaveState => {
     completedObjectives: [],
     triggeredInteractions: [],
     triggeredStateChangeActions: [],
-    attemptedQuizzes: [],
-    completedQuizzes: []
+    quizScores: []
   };
 };
 
