@@ -322,13 +322,13 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       headerName: ColumnName.actionsIndex,
       field: ColumnFields.actionsIndex,
       flex: 1.25,
+      headerClass: generalColProperties.headerClass + ' grading-left-align',
       cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return params.data !== undefined
           ? {
               component: GradingActions,
               params: {
                 submissionId: params.data.actionsIndex,
-                style: { justifyContent: 'center' },
                 progress: params.data.progress,
                 filterMode: filterMode
               }
