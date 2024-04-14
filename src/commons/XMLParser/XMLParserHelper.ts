@@ -167,7 +167,11 @@ const makeQuestions = (task: XmlParseStrTask): [Question[], number] => {
 
 const makeMCQ = (problem: XmlParseStrCProblem, question: BaseQuestion): IMCQQuestion => {
   const choicesVal: MCQChoice[] = [];
-  const solution = problem.SNIPPET ? problem.SNIPPET[0].SOLUTION : undefined;
+  const snippet = problem.SNIPPET;
+  // FIXME: I think `XmlParseStrCProblem` type definition is incorrect
+  // FIXME: Remove `as unknown as keyof typeof snippet` when fixed
+  // @ts-expect-error broken type definition to be fixed above
+  const solution = snippet ? snippet[0 as unknown as keyof typeof snippet].SOLUTION : undefined;
   let solutionVal = 0;
   problem.CHOICE.forEach((choice: XmlParseStrProblemChoice, i: number) => {
     choicesVal.push({
@@ -269,7 +273,8 @@ const exportLibrary = (library: Library) => {
         name: library.external.name
       }
     }
-  };
+    // FIXME: Replace any with proper type
+  } as any;
 
   if (library.external.symbols.length !== 0) {
     /* tslint:disable:no-string-literal */
@@ -327,7 +332,8 @@ export const assessmentToXml = (
       },
       TEXT: question.content,
       CHOICE: [] as any[]
-    };
+      // FIXME: Replace any with proper type
+    } as any;
 
     if (question.library.chapter !== -1) {
       /* tslint:disable:no-string-literal */
