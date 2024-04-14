@@ -57,7 +57,7 @@ export const freshSortState: SortStateProperties = {
   studentName: SortStates.NONE,
   studentUsername: SortStates.NONE,
   groupName: SortStates.NONE,
-  submissionStatus: SortStates.NONE,
+  progressStatus: SortStates.NONE,
   xp: SortStates.NONE,
   actionsIndex: SortStates.NONE
 };
@@ -289,17 +289,16 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       }
     });
 
-    // TODO TO REMOVE this or gradingStatus
     cols.push({
       ...generalColProperties,
-      headerName: ColumnName.submissionStatus,
-      field: ColumnFields.submissionStatus,
+      headerName: ColumnName.progressStatus,
+      field: ColumnFields.progressStatus,
       cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return params.data !== undefined
           ? {
               component: GradingFilterable,
               params: {
-                value: params.data.submissionStatus,
+                value: params.data.progressStatus,
                 children: [<ProgressStatusBadge progress={params.data.progress} />],
                 filterMode: filterMode
               }
@@ -397,13 +396,12 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       columnFilters.reduce(
         (doesItContain, currentFilter) =>
           doesItContain ||
-          (currentFilter.id === ColumnFields.submissionStatus &&
-            currentFilter.value !== 'submitted'),
+          (currentFilter.id === ColumnFields.progressStatus && currentFilter.value !== 'submitted'),
         false
       )
     ) {
       setColumnFilters((prev: ColumnFiltersState) =>
-        prev.filter(filter => filter.id !== ColumnFields.submissionStatus)
+        prev.filter(filter => filter.id !== ColumnFields.progressStatus)
       );
       resetPage();
       return;
@@ -447,7 +445,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
                 ? currentSubmission.studentUsernames.join(', ')
                 : '',
               groupName: currentSubmission.groupName,
-              submissionStatus: currentSubmission.submissionStatus,
+              progressStatus: currentSubmission.submissionStatus,
               xp:
                 currentSubmission.currentXp +
                 ' (+' +

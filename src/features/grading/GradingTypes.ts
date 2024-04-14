@@ -17,7 +17,7 @@ export enum ColumnFields {
   studentName = 'studentName',
   studentUsername = 'studentUsername',
   groupName = 'groupName',
-  submissionStatus = 'submissionStatus',
+  progressStatus = 'progressStatus',
   gradingStatus = 'gradingStatus',
   xp = 'xp',
   actionsIndex = 'actionsIndex'
@@ -117,7 +117,7 @@ export enum ColumnName {
   studentName = 'Student(s)',
   studentUsername = 'Username(s)',
   groupName = 'Group',
-  submissionStatus = 'Progress',
+  progressStatus = 'Progress',
   xp = 'Raw XP (+Bonus)',
   actionsIndex = 'Actions'
 }
@@ -128,7 +128,7 @@ export type SortStateProperties = {
   studentName: SortStates;
   studentUsername: SortStates;
   groupName: SortStates;
-  submissionStatus: SortStates;
+  progressStatus: SortStates;
   xp: SortStates;
   actionsIndex: SortStates;
 };
@@ -139,7 +139,7 @@ export type IGradingTableRow = {
   studentName: string;
   studentUsername: string;
   groupName: string;
-  submissionStatus: string;
+  progressStatus: string;
   xp: string;
   actionsIndex: number; // actions needs a column, but only submission ID data, so it stores submission ID
   progress: ProgressStatus;

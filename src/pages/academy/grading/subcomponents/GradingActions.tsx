@@ -1,6 +1,5 @@
 import { Button, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
@@ -74,76 +73,63 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
     }
   };
 
-  useEffect(() => {
-    console.log(progress);
-  }, [])
-
   return (
     <GradingFlex
       justifyContent="flex-start"
       className="grading-actions-btn-wrappers"
       style={{ columnGap: '5px', ...style }}
     >
-      { 
-        (filterMode) 
-          ? <Link to={`/courses/${courseId}/grading/${submissionId}`}>
-              <GradingFlex alignItems="center" className="grading-action-icons grading-action-icons-bg">
-                <Icon htmlTitle="Grade" icon={IconNames.EDIT} />
-              </GradingFlex>
-            </Link>
-          : <></>
-      }
+      {filterMode ? (
+        <Link to={`/courses/${courseId}/grading/${submissionId}`}>
+          <GradingFlex alignItems="center" className="grading-action-icons grading-action-icons-bg">
+            <Icon htmlTitle="Grade" icon={IconNames.EDIT} />
+          </GradingFlex>
+        </Link>
+      ) : (
+        <></>
+      )}
 
-      { 
-        !(progress !== ProgressStatuses.graded && progress !== ProgressStatuses.submitted) 
-          ? <Button
-              className="grading-action-icons"
-              minimal={true}
-              style={{ padding: 0 }}
-              onClick={handleReautogradeClick}
-            >
-              <Icon htmlTitle="Reautograde" icon={IconNames.REFRESH} />
-            </Button>
-          : <></>
-      }
+      {!(progress !== ProgressStatuses.graded && progress !== ProgressStatuses.submitted) ? (
+        <Button
+          className="grading-action-icons"
+          minimal={true}
+          style={{ padding: 0 }}
+          onClick={handleReautogradeClick}
+        >
+          <Icon htmlTitle="Reautograde" icon={IconNames.REFRESH} />
+        </Button>
+      ) : (
+        <></>
+      )}
 
-      { 
-        !(progress !== ProgressStatuses.graded && progress !== ProgressStatuses.submitted) 
-          ? <Button
-              className="grading-action-icons"
-              minimal={true}
-              style={{ padding: 0 }}
-              onClick={handleUnsubmitClick}
-            >
-              <Icon htmlTitle="Unsubmit" icon={IconNames.UNDO} />
-            </Button>
-          : <></>
-      }
+      {!(progress !== ProgressStatuses.graded && progress !== ProgressStatuses.submitted) ? (
+        <Button
+          className="grading-action-icons"
+          minimal={true}
+          style={{ padding: 0 }}
+          onClick={handleUnsubmitClick}
+        >
+          <Icon htmlTitle="Unsubmit" icon={IconNames.UNDO} />
+        </Button>
+      ) : (
+        <></>
+      )}
 
-      { 
-        !(progress !== ProgressStatuses.graded) 
-          ? <Button
-              className="grading-action-icons"
-              minimal={true}
-              onClick={handlePublishClick}
-            >
-              <Icon htmlTitle="Publish" icon={IconNames.SEND_TO_GRAPH} />
-            </Button>
-          : <></>
-      }
+      {!(progress !== ProgressStatuses.graded) ? (
+        <Button className="grading-action-icons" minimal={true} onClick={handlePublishClick}>
+          <Icon htmlTitle="Publish" icon={IconNames.SEND_TO_GRAPH} />
+        </Button>
+      ) : (
+        <></>
+      )}
 
-      { 
-        !(progress !== ProgressStatuses.published) 
-          ? <Button
-              className="grading-action-icons" 
-              minimal={true}
-              onClick={handleUnpublishClick}
-            >
-              <Icon htmlTitle="Unpublish" icon={IconNames.EXCLUDE_ROW} />
-            </Button>
-          : <></>
-      }
-
+      {!(progress !== ProgressStatuses.published) ? (
+        <Button className="grading-action-icons" minimal={true} onClick={handleUnpublishClick}>
+          <Icon htmlTitle="Unpublish" icon={IconNames.EXCLUDE_ROW} />
+        </Button>
+      ) : (
+        <></>
+      )}
     </GradingFlex>
   );
 };
