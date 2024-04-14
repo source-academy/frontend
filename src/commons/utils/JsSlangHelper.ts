@@ -180,7 +180,7 @@ export function makeElevatedContext(context: Context) {
       if (prop === 'head') {
         return fakeFrame;
       }
-      return target[prop];
+      return target[prop as keyof typeof target];
     }
   });
 
@@ -189,7 +189,7 @@ export function makeElevatedContext(context: Context) {
       if (prop === '0') {
         return proxyGlobalEnv;
       }
-      return target[prop];
+      return target[prop as keyof typeof target];
     }
   });
 
@@ -198,7 +198,7 @@ export function makeElevatedContext(context: Context) {
       if (prop === 'environments') {
         return proxyEnvs;
       }
-      return target[prop];
+      return target[prop as keyof typeof target];
     }
   });
 
@@ -210,7 +210,7 @@ export function makeElevatedContext(context: Context) {
         case 'runtime':
           return proxyRuntime;
         default:
-          return target[prop];
+          return target[prop as keyof typeof target];
       }
     }
   });

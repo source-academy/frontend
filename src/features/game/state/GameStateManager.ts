@@ -232,7 +232,10 @@ class GameStateManager {
    * @returns {ItemId[]} items IDS of all game items of that type in the location
    */
   public getGameItemsInLocation(gameItemType: GameItemType, locationId: LocationId): ItemId[] {
-    return Array.from(this.gameMap.getLocationAtId(locationId)[gameItemType]) || [];
+    const location = this.gameMap.getLocationAtId(locationId);
+    const items = location[gameItemType as keyof typeof location];
+    // Non-strict equality check to match both null and undefined
+    return items == undefined ? [] : Array.from(items);
   }
 
   /**
@@ -245,7 +248,9 @@ class GameStateManager {
    * @param itemId item ID to be added
    */
   public addItem(gameItemType: GameItemType, locationId: LocationId, itemId: ItemId) {
-    this.gameMap.getLocationAtId(locationId)[gameItemType]?.add(itemId);
+    const location = this.gameMap.getLocationAtId(locationId);
+    const items = location[gameItemType as keyof typeof location];
+    (items as Set<any> | undefined)?.add(itemId);
 
     this.isCurrentLocation(locationId)
       ? this.getSubscriberForItemType(gameItemType)?.handleAdd(itemId)
@@ -263,7 +268,9 @@ class GameStateManager {
    * @param itemId item ID to be removed
    */
   public removeItem(gameItemType: GameItemType, locationId: LocationId, itemId: string) {
-    this.gameMap.getLocationAtId(locationId)[gameItemType]?.delete(itemId);
+    const location = this.gameMap.getLocationAtId(locationId);
+    const items = location[gameItemType as keyof typeof location];
+    (items as Set<any> | undefined)?.delete(itemId);
 
     this.isCurrentLocation(locationId)
       ? this.getSubscriberForItemType(gameItemType)?.handleDelete(itemId)
