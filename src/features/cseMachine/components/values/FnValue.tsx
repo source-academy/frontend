@@ -46,6 +46,7 @@ export class FnValue extends Value implements IHoverable {
   readonly tooltipWidth: number;
   readonly exportTooltip: string;
   readonly exportTooltipWidth: number;
+  readonly totalWidth: number;
   readonly labelRef: RefObject<Label> = React.createRef();
 
   centerX: number;
@@ -82,6 +83,11 @@ export class FnValue extends Value implements IHoverable {
       getTextWidth(this.paramsText),
       getTextWidth(this.exportBodyText)
     );
+    this.totalWidth =
+      this._width +
+      Config.TextPaddingX * 2 +
+      10 +
+      (CseMachine.getPrintableMode() ? this.exportTooltipWidth : this.tooltipWidth);
 
     this.addReference(firstReference);
   }

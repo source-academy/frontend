@@ -65,12 +65,11 @@ export class Binding extends Visible {
 
     // derive the width from the right bound of the value
     this._width = isMainReference(this.value, this)
-      ? this.value.x() +
-        this.value.width() -
+      ? this.value.x() -
         this.x() +
         (this.value instanceof FnValue || this.value instanceof GlobalFnValue
-          ? this.value.tooltipWidth
-          : 0)
+          ? this.value.totalWidth
+          : this.value.width())
       : this.key.width();
 
     this._height = Math.max(this.key.height(), this.value.height());

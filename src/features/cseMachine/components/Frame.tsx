@@ -1,3 +1,4 @@
+import { isPrimitive } from '@sentry/utils';
 import React from 'react';
 import { Group, Rect } from 'react-konva';
 
@@ -13,7 +14,8 @@ import {
   getUnreferencedObjects,
   isClosure,
   isDataArray,
-  isPrimitiveData,
+  isDummyKey,
+  isSourceObject,
   isUnassigned
 } from '../CseMachineUtils';
 import { ArrowFromFrame } from './arrows/ArrowFromFrame';
@@ -64,45 +66,18 @@ export class Frame extends Visible implements IHoverable {
     readonly leftSiblingFrame: Frame | null
   ) {
     super();
-    this._width = Config.FrameMinWidth;
+
     this.level = envTreeNode.level as Level;
+    this.parentFrame = envTreeNode.parent?.frame;
     this.environment = envTreeNode.environment;
     Frame.envFrameMap.set(this.environment.id, this);
-    this.parentFrame = envTreeNode.parent?.frame;
-    this._x = this.level.x();
-    // derive the x coordinate from the left sibling frame
-    this.leftSiblingFrame &&
-      (this._x +=
-        this.leftSiblingFrame.x() + this.leftSiblingFrame.totalWidth + Config.FrameMarginX);
+
+    this._x = this.leftSiblingFrame
+      ? this.leftSiblingFrame.x() + this.leftSiblingFrame.totalWidth + Config.FrameMarginX
+      : this.level.x();
     // ensure x coordinate cannot be less than that of parent frame
-    this.parentFrame && (this._x = Math.max(this._x, this.parentFrame.x()));
-
-    this.name = new Text(
-      frameNames.get(this.environment.name) || this.environment.name,
-      this.x(),
-      this.level.y(),
-      { maxWidth: this.width() }
-    );
-    this._y = this.level.y() + this.name.height() + Config.TextPaddingY / 2;
-
-    // width of the frame = max width of the bindings in the frame + frame padding * 2 (the left and right padding)
-    let maxBindingWidth = 0;
-    for (const [key, data] of Object.entries(this.environment.head)) {
-      const bindingWidth =
-        Math.max(Config.TextMinWidth, getTextWidth(key + Config.ConstantColon)) +
-        Config.TextPaddingX +
-        (isUnassigned(data)
-          ? Math.max(Config.TextMinWidth, getTextWidth(Config.UnassignedData))
-          : isPrimitiveData(data)
-          ? Math.max(Config.TextMinWidth, getTextWidth(String(data)))
-          : 0);
-      maxBindingWidth = Math.max(maxBindingWidth, bindingWidth);
-    }
-    this._width = maxBindingWidth + Config.FramePaddingX * 2;
-
-    // initializes bindings (keys + values)
-    let prevBinding: Binding | null = null;
-    let totalWidth = this._width;
+    if (this.parentFrame) this._x = Math.max(this._x, this.parentFrame.x());
+    this._y = this.level.y() + Config.FontSize + Config.TextPaddingY / 2;
 
     // get all keys and object descriptors of each value inside the head
     const entries = Object.entries(Object.getOwnPropertyDescriptors(this.environment.head));
@@ -143,26 +118,57 @@ export class Frame extends Visible implements IHoverable {
         writable: false
       };
       // The key is a number string to "disguise" as a dummy binding
-      // TODO: revamp the dummy binding behavior, don't rely on numeric keys
       entries.push([`${i++}`, descriptor]);
     }
 
+    // Find the correct width of the frame before creating the bindings
+    this._width = Config.FrameMinWidth;
+    let totalWidth = this._width + Config.FrameMinGapX;
     for (const [key, data] of entries) {
-      // If the value is unassigned, retrieve declaration type from its description, otherwise, retrieve directly from the data's property
+      if (isDummyKey(key)) continue;
+      const constant =
+        this.environment.head[key]?.description === 'const declaration' || !data.writable;
+      let bindingTextWidth = getTextWidth(
+        key + (constant ? Config.ConstantColon : Config.VariableColon)
+      );
+      if (isUnassigned(data.value)) {
+        bindingTextWidth += Config.TextPaddingX + getTextWidth(Config.UnassignedData);
+      } else if (isPrimitive(data.value)) {
+        bindingTextWidth +=
+          Config.TextPaddingX +
+          getTextWidth(
+            isSourceObject(data.value)
+              ? data.value.toReplString()
+              : JSON.stringify(data.value) || String(data.value)
+          );
+      }
+      this._width = Math.max(this._width, bindingTextWidth + Config.FramePaddingX * 2);
+      totalWidth = Math.max(totalWidth, this._width + Config.FrameMinGapX);
+    }
+
+    // Create all the bindings and values
+    let prevBinding: Binding | null = null;
+    for (const [key, data] of entries) {
       const constant =
         this.environment.head[key]?.description === 'const declaration' || !data.writable;
       const currBinding: Binding = new Binding(key, data.value, this, prevBinding, constant);
-      this.bindings.push(currBinding);
       prevBinding = currBinding;
+      this.bindings.push(currBinding);
       totalWidth = Math.max(totalWidth, currBinding.width() + Config.FramePaddingX);
     }
     this.totalWidth = totalWidth;
 
     // derive the height of the frame from the the position of the last binding
     this._height = prevBinding
-      ? prevBinding.y() + prevBinding.height() + Config.FramePaddingY - this.y()
+      ? prevBinding.y() - this.y() + prevBinding.height() + Config.FramePaddingY
       : Config.FramePaddingY * 2;
 
+    this.name = new Text(
+      frameNames.get(this.environment.name) ?? this.environment.name,
+      this.x(),
+      this.level.y(),
+      { maxWidth: this.width() }
+    );
     this.totalHeight = this.height() + this.name.height() + Config.TextPaddingY / 2;
 
     if (this.parentFrame) this.arrow = new ArrowFromFrame(this).to(this.parentFrame);

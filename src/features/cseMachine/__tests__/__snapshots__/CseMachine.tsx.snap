@@ -178,7 +178,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     listening={false}
   >
     <Path
-      data="M 140 127.5 L 486 400 L 486 400 "
+      data="M 140 127.5 L 380 400 L 380 400 "
       preventDefault={false}
       stroke="#999"
       strokeWidth={1}
@@ -190,7 +190,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         Array [
           140,
           127.5,
-          486,
+          380,
           400,
         ]
       }
@@ -304,7 +304,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     listening={false}
   >
     <Path
-      data="M 140 197.5 L 802 400 L 802 400 "
+      data="M 140 197.5 L 590 400 L 590 400 "
       preventDefault={false}
       stroke="#999"
       strokeWidth={1}
@@ -316,7 +316,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         Array [
           140,
           197.5,
-          802,
+          590,
           400,
         ]
       }
@@ -430,7 +430,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     listening={false}
   >
     <Path
-      data="M 140 267.5 L 1118 400 L 1118 400 "
+      data="M 140 267.5 L 800 400 L 800 400 "
       preventDefault={false}
       stroke="#999"
       strokeWidth={1}
@@ -442,7 +442,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         Array [
           140,
           267.5,
-          1118,
+          800,
           400,
         ]
       }
@@ -556,7 +556,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     listening={false}
   >
     <Path
-      data="M 140 337.5 L 1434 400 L 1434 400 "
+      data="M 140 337.5 L 1010 400 L 1010 400 "
       preventDefault={false}
       stroke="#999"
       strokeWidth={1}
@@ -568,7 +568,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         Array [
           140,
           337.5,
-          1434,
+          1010,
           400,
         ]
       }
@@ -1962,7 +1962,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     listening={false}
   >
     <Path
-      data="M 181.5 40 L 379 330 L 379 330 "
+      data="M 181.5 40 L 349 330 L 349 330 "
       preventDefault={false}
       stroke="#999"
       strokeWidth={1}
@@ -1974,7 +1974,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
         Array [
           181.5,
           40,
-          379,
+          349,
           330,
         ]
       }
