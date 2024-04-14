@@ -89,7 +89,8 @@ export default class QuizManager {
 
     //Create text writer to display quiz questions
     const quizQuestionWriter = createTypewriter(scene, questionTextStyle);
-    quizQuestionWriter.changeLine(question.question);
+    const lineWithName = question.question.replace('{name}', this.getUsername());
+    quizQuestionWriter.changeLine(lineWithName);
 
     GameGlobalAPI.getInstance().storeDialogueLine(question.question, question.speaker);
 
@@ -240,4 +241,6 @@ export default class QuizManager {
     const quiz = GameGlobalAPI.getInstance().getQuizById(quizId);
     return quiz.questions.length;
   }
+
+  private getUsername = () => SourceAcademyGame.getInstance().getAccountInfo().name;
 }
