@@ -91,7 +91,6 @@ import {
 import ShareLinkStateDecoder from 'src/features/playground/shareLinks/decoder/Decoder';
 import JsonDecoderDelegate from 'src/features/playground/shareLinks/decoder/delegates/JsonDecoderDelegate';
 import UrlParamsDecoderDelegate from 'src/features/playground/shareLinks/decoder/delegates/UrlParamsDecoderDelegate';
-import { usePlaygroundConfigurationEncoder } from 'src/features/playground/shareLinks/encoder/Encoder';
 import ShareLinkState from 'src/features/playground/shareLinks/ShareLinkState';
 
 import {
@@ -445,7 +444,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const hash = isSicpEditor ? props.initialEditorValueHash : location.hash;
   const { uuid } = useParams<{ uuid: string }>();
-  const config = usePlaygroundConfigurationEncoder();
   const tokens = useTypedSelector((state: OverallState) => ({
     accessToken: state.session.accessToken,
     refreshToken: state.session.refreshToken
@@ -845,14 +843,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
         handleShortenURL={s => dispatch(shortenURL(s))}
         handleUpdateShortURL={s => dispatch(updateShortURL(s))}
         queryString={qs}
-        programConfig={config}
-        token={tokens}
         shortURL={shortURL}
         isSicp={isSicpEditor}
         key="share"
       />
     );
-  }, [dispatch, isSicpEditor, props.initialEditorValueHash, queryString, shortURL, config, tokens]);
+  }, [dispatch, isSicpEditor, props.initialEditorValueHash, queryString, shortURL]);
 
   const toggleFolderModeButton = useMemo(() => {
     return (

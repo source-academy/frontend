@@ -7,8 +7,9 @@ import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { EditorTabState } from 'src/commons/workspace/WorkspaceTypes';
 
 import ShareLinkState from '../ShareLinkState';
+import ShareLinkStateEncoder from './Encoder';
 
-export const usePlaygroundConfigurationEncoder = () => {
+export const usePlaygroundConfigurationEncoder = (): ShareLinkStateEncoder => {
   const isFolderModeEnabled = useTypedSelector(
     state => state.workspaces.playground.isFolderModeEnabled
   );
@@ -36,7 +37,7 @@ export const usePlaygroundConfigurationEncoder = () => {
     exec: execTime.toString()
   };
 
-  return result;
+  return new ShareLinkStateEncoder(result);
 };
 
 const useGetFile = () => {

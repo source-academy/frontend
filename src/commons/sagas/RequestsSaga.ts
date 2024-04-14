@@ -1,6 +1,5 @@
 import { call } from 'redux-saga/effects';
 import { backendParamsToProgressStatus } from 'src/features/grading/GradingUtils';
-import ShareLinkState from 'src/features/playground/shareLinks/ShareLinkState';
 import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
 import {
@@ -1666,12 +1665,14 @@ export async function deleteDevice(device: Pick<Device, 'id'>, tokens?: Tokens):
  * POST /shared_programs
  */
 export async function postSharedProgram(
-  programConfig: ShareLinkState,
+  programConfig: string,
   tokens?: Tokens
 ): Promise<ShareLinkShortenedUrlResponse> {
   tokens = fillTokens(tokens);
   const resp = await request(`shared_programs`, 'POST', {
-    body: programConfig,
+    body: {
+      configuration: programConfig
+    },
     ...tokens
   });
 

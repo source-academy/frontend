@@ -3,8 +3,8 @@ import { IconNames } from '@blueprintjs/icons';
 import { useHotkeys } from '@mantine/hooks';
 import React, { useRef, useState } from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
-import { usePlaygroundConfigurationEncoder } from 'src/features/playground/shareLinks/encoder/Encoder';
-import ShareLinkState from 'src/features/playground/shareLinks/ShareLinkState';
+import JsonEncoderDelegate from 'src/features/playground/shareLinks/encoder/delegates/JsonEncoderDelegate';
+import { usePlaygroundConfigurationEncoder } from 'src/features/playground/shareLinks/encoder/EncoderHooks';
 
 import ControlButton from '../ControlButton';
 import { postSharedProgram } from '../sagas/RequestsSaga';
@@ -26,16 +26,9 @@ type StateProps = {
   shortURL?: string;
   key: string;
   isSicp?: boolean;
-  programConfig: ShareLinkState;
-  token: Tokens;
 };
 
 type ShareLinkRequestHelperParams = RemoveLast<Parameters<typeof request>>;
-
-export type Tokens = {
-  accessToken: string | undefined;
-  refreshToken: string | undefined;
-};
 
 export const requestToShareProgram = async (
   ...[path, method, opts]: ShareLinkRequestHelperParams
@@ -56,7 +49,9 @@ export const ControlBarShareButton: React.FC<ControlBarShareButtonProps> = props
 
     customStringKeyword;
 
-    return postSharedProgram(playgroundConfiguration)
+    const configuration = playgroundConfiguration.encodeWith(new JsonEncoderDelegate());
+
+    return postSharedProgram(configuration)
       .then(({ shortenedUrl }) => setShortenedUrl(shortenedUrl))
       .catch(err => showWarningMessage(err.toString()))
       .finally(() => setIsLoading(false));
