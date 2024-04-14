@@ -1,5 +1,6 @@
 import { call } from 'redux-saga/effects';
 import { backendParamsToProgressStatus } from 'src/features/grading/GradingUtils';
+import ShareLinkState from 'src/features/playground/shareLinks/ShareLinkState';
 import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
 import {
@@ -44,6 +45,7 @@ import {
   UpdateCourseConfiguration,
   User
 } from '../application/types/SessionTypes';
+import { ShareLinkShortenedUrlResponse } from '../application/types/ShareLinkTypes';
 import {
   Assessment,
   AssessmentConfiguration,
@@ -1658,6 +1660,31 @@ export async function deleteDevice(device: Pick<Device, 'id'>, tokens?: Tokens):
   }
 
   return true;
+}
+
+/**
+ * POST /shared_programs
+ */
+export async function postSharedProgram(
+  programConfig: ShareLinkState,
+  tokens?: Tokens
+): Promise<ShareLinkShortenedUrlResponse> {
+  tokens = fillTokens(tokens);
+  const resp = await request(`shared_programs`, 'POST', {
+    body: programConfig,
+    ...tokens
+  });
+
+  if (!resp) {
+    throw new Error('Failed to generate shortened URL!');
+  }
+
+  if (!resp.ok) {
+    const message = await resp.text();
+    throw new Error(`Failed to generate shortened URL: ${message}`);
+  }
+
+  return resp.json();
 }
 
 function fillTokens(tokens?: Tokens): Tokens {

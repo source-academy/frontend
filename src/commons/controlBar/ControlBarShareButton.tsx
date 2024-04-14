@@ -4,15 +4,16 @@ import {
   Position,
   Spinner,
   SpinnerSize,
-  Text,
   Tooltip
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
+import { usePlaygroundConfigurationEncoder } from 'src/features/playground/shareLinks/encoder/Encoder';
 import ShareLinkState from 'src/features/playground/shareLinks/ShareLinkState';
 
 import ControlButton from '../ControlButton';
+import { postSharedProgram } from '../sagas/RequestsSaga';
 import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { request } from '../utils/RequestHelper';
@@ -35,12 +36,6 @@ type StateProps = {
   token: Tokens;
 };
 
-type State = {
-  keyword: string;
-  isLoading: boolean;
-  isSuccess: boolean;
-};
-
 type ShareLinkRequestHelperParams = RemoveLast<Parameters<typeof request>>;
 
 export type Tokens = {
@@ -55,157 +50,96 @@ export const requestToShareProgram = async (
   return resp;
 };
 
-export class ControlBarShareButton extends React.PureComponent<ControlBarShareButtonProps, State> {
-  private shareInputElem: React.RefObject<HTMLInputElement>;
+export const ControlBarShareButton: React.FC<ControlBarShareButtonProps> = props => {
+  const shareInputElem = useRef<HTMLInputElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [shortenedUrl, setShortenedUrl] = useState('');
+  const [customStringKeyword, setCustomStringKeyword] = useState('');
+  const playgroundConfiguration = usePlaygroundConfigurationEncoder();
 
-  constructor(props: ControlBarShareButtonProps) {
-    super(props);
-    this.selectShareInputText = this.selectShareInputText.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.toggleButton = this.toggleButton.bind(this);
-    this.fetchUUID = this.fetchUUID.bind(this);
-    this.shareInputElem = React.createRef();
-    this.state = { keyword: '', isLoading: false, isSuccess: false };
-  }
+  const generateLink = () => {
+    setIsLoading(true);
 
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleKeyDown);
-  }
+    customStringKeyword;
 
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeyDown);
-  }
+    return postSharedProgram(playgroundConfiguration)
+      .then(({ shortenedUrl }) => setShortenedUrl(shortenedUrl))
+      .catch(err => showWarningMessage(err.toString()))
+      .finally(() => setIsLoading(false));
+  };
 
-  handleKeyDown = (event: any) => {
-    if (event.key === 'Enter' && event.ctrlKey) {
-      // press Ctrl+Enter to generate and copy new share link directly
-      this.setState({ keyword: 'Test' });
-      this.props.handleShortenURL(this.state.keyword);
-      this.setState({ isLoading: true });
-      if (this.props.shortURL || this.props.isSicp) {
-        this.selectShareInputText();
-        console.log('link created.');
-      }
+  const handleCustomStringChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setCustomStringKeyword(event.currentTarget.value);
+  };
+
+  // For visual effect of highlighting the text field on copy
+  const selectShareInputText = () => {
+    if (shareInputElem.current !== null) {
+      shareInputElem.current.focus();
+      shareInputElem.current.select();
     }
   };
 
-  public render() {
-    const shareButtonPopoverContent =
-      this.props.queryString === undefined ? (
-        <Text>
-          Share your programs! Type something into the editor (left), then click on this button
-          again.
-        </Text>
-      ) : this.props.isSicp ? (
-        <div>
-          <input defaultValue={this.props.queryString!} readOnly={true} ref={this.shareInputElem} />
-          <Tooltip content="Copy link to clipboard">
-            <CopyToClipboard text={this.props.queryString!}>
-              <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectShareInputText} />
-            </CopyToClipboard>
-          </Tooltip>
-        </div>
-      ) : (
-        <>
-          {!this.state.isSuccess || this.props.shortURL === 'ERROR' ? (
-            !this.state.isLoading || this.props.shortURL === 'ERROR' ? (
-              <div>
-                {Constants.urlShortenerBase}&nbsp;
-                <input
-                  placeholder={'custom string (optional)'}
-                  onChange={this.handleChange}
-                  style={{ width: 175 }}
-                />
-                <ControlButton
-                  label="Get Link"
-                  icon={IconNames.SHARE}
-                  // post request to backend, set keyword as return uuid
-                  onClick={() => this.fetchUUID(this.props.token)}
-                />
-              </div>
-            ) : (
-              <div>
-                <NonIdealState
-                  description="Generating Shareable Link..."
-                  icon={<Spinner size={SpinnerSize.SMALL} />}
-                />
-              </div>
-            )
-          ) : (
-            <div key={this.state.keyword}>
-              <input defaultValue={this.state.keyword} readOnly={true} ref={this.shareInputElem} />
-              <Tooltip content="Copy link to clipboard">
-                <CopyToClipboard text={this.state.keyword}>
-                  <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectShareInputText} />
-                </CopyToClipboard>
-              </Tooltip>
-            </div>
-          )}
-        </>
-      );
+  const generateLinkPopoverContent = (
+    <div>
+      {Constants.urlShortenerBase}&nbsp;
+      <input
+        placeholder={'custom string (optional)'}
+        onChange={handleCustomStringChange}
+        style={{ width: 175 }}
+      />
+      <ControlButton label="Get Link" icon={IconNames.SHARE} onClick={generateLink} />
+    </div>
+  );
 
-    return (
-      <Popover
-        popoverClassName="Popover-share"
-        inheritDarkTheme={false}
-        content={shareButtonPopoverContent}
-      >
-        <Tooltip content="Get shareable link" placement={Position.TOP}>
-          <ControlButton label="Share" icon={IconNames.SHARE} onClick={() => this.toggleButton()} />
-        </Tooltip>
-      </Popover>
-    );
-  }
+  const generatingLinkPopoverContent = (
+    <div>
+      <NonIdealState
+        description="Generating Shareable Link..."
+        icon={<Spinner size={SpinnerSize.SMALL} />}
+      />
+    </div>
+  );
 
-  public componentDidUpdate(prevProps: ControlBarShareButtonProps) {
-    if (this.props.shortURL !== prevProps.shortURL) {
-      this.setState({ keyword: '', isLoading: false });
-    }
-  }
+  const sicpCopyLinkPopoverContent = (
+    <div>
+      <input defaultValue={props.queryString!} readOnly={true} ref={shareInputElem} />
+      <Tooltip content="Copy link to clipboard">
+        <CopyToClipboard text={props.queryString!}>
+          <ControlButton icon={IconNames.DUPLICATE} onClick={selectShareInputText} />
+        </CopyToClipboard>
+      </Tooltip>
+    </div>
+  );
 
-  private toggleButton() {
-    if (this.props.handleGenerateLz) {
-      this.props.handleGenerateLz();
-    }
+  const copyLinkPopoverContent = (
+    <div key={shortenedUrl}>
+      <input defaultValue={shortenedUrl} readOnly={true} ref={shareInputElem} />
+      <Tooltip content="Copy link to clipboard">
+        <CopyToClipboard text={shortenedUrl}>
+          <ControlButton icon={IconNames.DUPLICATE} onClick={selectShareInputText} />
+        </CopyToClipboard>
+      </Tooltip>
+    </div>
+  );
 
-    // reset state
-    this.setState({ keyword: '', isLoading: false, isSuccess: false });
-  }
+  const shareButtonPopoverContent = isLoading
+    ? generatingLinkPopoverContent
+    : props.isSicp
+    ? sicpCopyLinkPopoverContent
+    : shortenedUrl
+    ? copyLinkPopoverContent
+    : generateLinkPopoverContent;
 
-  private handleChange(event: React.FormEvent<HTMLInputElement>) {
-    this.setState({ keyword: event.currentTarget.value });
-  }
-
-  private selectShareInputText() {
-    if (this.shareInputElem.current !== null) {
-      this.shareInputElem.current.focus();
-      this.shareInputElem.current.select();
-    }
-  }
-
-  private fetchUUID(tokens: Tokens) {
-    const requestBody = {
-      shared_program: {
-        data: this.props.programConfig
-      }
-    };
-
-    const getProgramUrl = async () => {
-      const resp = await requestToShareProgram(`shared_programs`, 'POST', {
-        body: requestBody,
-        ...tokens
-      });
-      if (!resp) {
-        return showWarningMessage('Fail to generate url!');
-      }
-      const respJson = await resp.json();
-      this.setState({
-        keyword: `${window.location.host}/playground/share/` + respJson.uuid
-      });
-      this.setState({ isLoading: true, isSuccess: true });
-      return;
-    };
-
-    getProgramUrl();
-  }
-}
+  return (
+    <Popover
+      popoverClassName="Popover-share"
+      inheritDarkTheme={false}
+      content={shareButtonPopoverContent}
+    >
+      <Tooltip content="Get shareable link" placement={Position.TOP}>
+        <ControlButton label="Share" icon={IconNames.SHARE} />
+      </Tooltip>
+    </Popover>
+  );
+};

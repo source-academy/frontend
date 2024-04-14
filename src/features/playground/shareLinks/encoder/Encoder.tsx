@@ -8,7 +8,7 @@ import { EditorTabState } from 'src/commons/workspace/WorkspaceTypes';
 
 import ShareLinkState from '../ShareLinkState';
 
-export const useUrlEncoder = () => {
+export const usePlaygroundConfigurationEncoder = () => {
   const isFolderModeEnabled = useTypedSelector(
     state => state.workspaces.playground.isFolderModeEnabled
   );
