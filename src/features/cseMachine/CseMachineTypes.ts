@@ -2,7 +2,7 @@ import {
   EnvTree as EnvironmentTree,
   EnvTreeNode as EnvironmentTreeNode
 } from 'js-slang/dist/createContext';
-import JsSlangClosure from 'js-slang/dist/interpreter/closure';
+import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
 import { Environment } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
