@@ -1,5 +1,6 @@
 import Heap from 'js-slang/dist/cse-machine/heap';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
+import { Frame } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
@@ -304,7 +305,7 @@ export class Layout {
     );
 
     let i = 0;
-    const newHead = {};
+    const newHead: Frame = {};
     const newHeap = new Heap();
     for (const fn of referencedFns) {
       if (isClosure(fn)) newHeap.add(fn);

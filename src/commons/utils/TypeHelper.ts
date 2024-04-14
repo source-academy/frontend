@@ -10,6 +10,32 @@ export type KeysOfType<O, T> = {
   [K in keyof O]: O[K] extends T ? K : never;
 }[keyof O];
 
+/**
+ * Does union(keyof <member>) for each member of T. This is unlike
+ * `keyof T` which would give keyof(union(<member>)).
+ * @param T - The union type to extract keys from
+ */
+export type DistributedKeyOf<T extends Record<any, any>> = T extends any ? keyof T : never;
+
+/**
+ * Generates a "set difference" of two types, keeping the properties of T that are not
+ * present in S.
+ * @param T - The type to extract keys from
+ * @param S - The type to compare against
+ */
+export type Diff<T extends Record<any, any>, S extends Record<any, any>> = Pick<
+  T,
+  Exclude<keyof T, keyof S>
+>;
+
+/**
+ * Merges two types together, keeping the properties of T and adding the
+ * properties of U that are not present in T.
+ * @param T - The first type
+ * @param U - The second type (also "universal" set of properties to add to T)
+ */
+export type Merge<T extends Record<any, any>, U extends Record<any, any>> = T & Diff<U, T>;
+
 // Adapted from https://github.com/piotrwitek/typesafe-actions/blob/a1fe54bb150ac1b935bb9ca78361d2d024d2efaf/src/type-helpers.ts#L117-L130
 export type ActionType<T extends Record<string, any>> = {
   [k in keyof T]: ReturnType<T[k]>;
@@ -100,3 +126,26 @@ export const assertType =
     // Keep the original type as inferred by TS
   ): T =>
     obj;
+
+/**
+ * Type safe `Object.keys`
+ */
+export function objectKeys<T extends string | number | symbol>(obj: Record<T, any>): T[] {
+  return Object.keys(obj) as T[];
+}
+
+/**
+ * Type safe `Object.values`
+ */
+export function objectValues<T>(obj: Record<any, T>) {
+  return Object.values(obj) as T[];
+}
+
+/**
+ * Type safe `Object.entries`
+ */
+export function objectEntries<K extends string | number | symbol, V>(
+  obj: Partial<Record<K, V>>
+): [K, V][] {
+  return Object.entries(obj) as [K, V][];
+}
