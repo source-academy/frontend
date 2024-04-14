@@ -45,6 +45,7 @@ import {
   Primitive,
   ReferenceType
 } from './CseMachineTypes';
+import { isCustomPrimitive } from './utils/altLangs';
 
 // TODO: can make use of lodash
 /** Returns `true` if `x` is an object */
@@ -142,7 +143,14 @@ export function isBoolean(data: Data): data is boolean {
 
 /** Returns `true` if `data` is a primitive, defined as a null | data | number */
 export function isPrimitiveData(data: Data): data is Primitive {
-  return isUndefined(data) || isNull(data) || isString(data) || isNumber(data) || isBoolean(data);
+  return (
+    isUndefined(data) ||
+    isNull(data) ||
+    isString(data) ||
+    isNumber(data) ||
+    isBoolean(data) ||
+    isCustomPrimitive(data)
+  );
 }
 
 // TODO: remove this in the future once ES typings are updated to contain the new set functions
