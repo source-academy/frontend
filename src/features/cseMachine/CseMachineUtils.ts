@@ -45,7 +45,11 @@ import {
   Primitive,
   ReferenceType
 } from './CseMachineTypes';
-import { isCustomPrimitive } from './utils/altLangs';
+import {
+  getAlternateControlItemComponent,
+  isCustomPrimitive,
+  needsNewRepresentation
+} from './utils/altLangs';
 
 // TODO: can make use of lodash
 /** Returns `true` if `x` is an object */
@@ -531,6 +535,19 @@ export function getControlItemComponent(
     ? index === Math.min(Layout.control.size() - 1, 9)
     : index === Layout.control.size() - 1;
   if (!isInstr(controlItem)) {
+    // there's no reason to provide an alternate representation
+    // for a instruction.
+    if (needsNewRepresentation(chapter)) {
+      return getAlternateControlItemComponent(
+        controlItem,
+        stackHeight,
+        highlightOnHover,
+        unhighlightOnHover,
+        topItem,
+        chapter
+      );
+    }
+
     if (isSchemeLanguage(chapter)) {
       // use the js-slang decoder on the control item
       controlItem = estreeDecode(controlItem as any);
@@ -797,12 +814,8 @@ export function getStashItemComponent(
   stashItem: StashValue,
   stackHeight: number,
   index: number,
-  chapter: Chapter
+  _chapter: Chapter
 ): StashItemComponent {
-  if (isSchemeLanguage(chapter)) {
-    // we can use schemeVisualise to get the representation of the value
-    // TODO
-  }
   if (isClosure(stashItem) || isGlobalFn(stashItem) || isDataArray(stashItem)) {
     for (const level of Layout.levels) {
       for (const frame of level.frames) {
