@@ -3,7 +3,14 @@ import { deviceTypes } from 'src/features/remoteExecution/RemoteExecutionTypes';
 
 import { externalLibraries } from '../application/types/ExternalTypes';
 
-const externalLibrariesDocumentation = {};
+type DocType = {
+  caption: string;
+  value: string;
+  meta: string;
+  docHTML?: string;
+};
+
+const externalLibrariesDocumentation: Record<string, DocType[]> = {};
 
 const MAX_CAPTION_LENGTH = 27;
 
@@ -15,13 +22,14 @@ function shortenCaption(name: string): string {
   return (name = name.substring(0, MAX_CAPTION_LENGTH - 3) + '...');
 }
 
-function mapExternalLibraryName(name: string) {
+function mapExternalLibraryName(name: string): DocType {
   if (name in SourceDocumentation.ext_lib) {
+    const key = name as keyof typeof SourceDocumentation.ext_lib;
     return {
-      caption: shortenCaption(name),
-      value: name,
-      meta: SourceDocumentation.ext_lib[name].meta,
-      docHTML: SourceDocumentation.ext_lib[name].description
+      caption: shortenCaption(key),
+      value: key,
+      meta: SourceDocumentation.ext_lib[key].meta,
+      docHTML: SourceDocumentation.ext_lib[key].description
     };
   } else {
     return {
@@ -42,7 +50,7 @@ for (const deviceType of deviceTypes) {
     deviceType.internalFunctions.map(mapExternalLibraryName);
 }
 
-const builtinDocumentation = {};
+const builtinDocumentation: Record<string, DocType[]> = {};
 
 Object.entries(SourceDocumentation.builtins).forEach((chapterDoc: any) => {
   const [chapter, docs] = chapterDoc;

@@ -42,7 +42,7 @@ const AVAILABLE_COLORS = {
   blue: ['#93c5fd', '#2563eb']
 };
 
-const BADGE_COLORS = {
+const BADGE_COLORS = Object.freeze({
   // assessment types
   missions: AVAILABLE_COLORS.indigo,
   quests: AVAILABLE_COLORS.emerald,
@@ -58,10 +58,11 @@ const BADGE_COLORS = {
   submitted: AVAILABLE_COLORS.yellow,
   graded: AVAILABLE_COLORS.green,
   published: AVAILABLE_COLORS.blue
-};
+});
 
 export function getBadgeColorFromLabel(label: string) {
-  return BADGE_COLORS[label.toLowerCase()] || AVAILABLE_COLORS.gray; //gray
+  const maybeKey = label.toLowerCase() as keyof typeof BADGE_COLORS;
+  return BADGE_COLORS[maybeKey] || AVAILABLE_COLORS.gray; //gray
 }
 
 type AssessmentTypeBadgeProps = {
