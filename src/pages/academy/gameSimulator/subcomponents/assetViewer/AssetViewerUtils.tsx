@@ -1,12 +1,6 @@
 import { TreeNodeInfo } from '@blueprintjs/core';
 import { set } from 'lodash';
 
-// FIXME: Get something like this working
-// type Tree<T> = T extends any[]
-//   ? T[]
-//   : T extends Record<string, any>
-//   ? Record<string, Tree<T>>
-//   : never;
 type Tree = Record<any, any> | string[] | any;
 
 /**
