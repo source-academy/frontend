@@ -83,7 +83,7 @@ export default class ObjectParser {
     };
 
     Parser.checkpoint.map.addMapAsset(this.objectAssetKey(shortPath), {
-      type: AssetType[type] || AssetType.Image,
+      type: AssetType[type as keyof typeof AssetType] || AssetType.Image,
       key: objectId,
       path: this.objectPath(shortPath),
       config: {
