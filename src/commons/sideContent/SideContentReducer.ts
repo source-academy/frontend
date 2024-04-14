@@ -13,7 +13,7 @@ import {
   VISIT_SIDE_CONTENT
 } from './SideContentTypes';
 
-export const SideContentReducer: Reducer<SideContentManagerState> = (
+export const SideContentReducer: Reducer<SideContentManagerState, SourceActionType> = (
   state = defaultSideContentManager,
   action: SourceActionType
 ) => {
@@ -26,7 +26,7 @@ export const SideContentReducer: Reducer<SideContentManagerState> = (
   return state;
 };
 
-const storySideContentReducer: Reducer<SideContentManagerState> = (
+const storySideContentReducer: Reducer<SideContentManagerState, SourceActionType> = (
   state = defaultSideContentManager,
   action
 ) => {
@@ -49,7 +49,7 @@ const storySideContentReducer: Reducer<SideContentManagerState> = (
   })(state, action);
 };
 
-const nonStorySideContentReducer: Reducer<SideContentManagerState> = (
+const nonStorySideContentReducer: Reducer<SideContentManagerState, SourceActionType> = (
   state = defaultSideContentManager,
   action
 ) => {
