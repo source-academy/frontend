@@ -427,7 +427,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
       dispatch(setPersistenceFileLastEditByPath(filePath, editDate));
       dispatch(updateLastEditedFilePath(filePath));
     }
-    setLastEdit(editDate);
+    if (!persistenceFile || persistenceFile?.isFolder) {
+      setLastEdit(editDate);
+    }
+    if (persistenceFile && !persistenceFile.isFolder && persistenceFile.path === filePath) {
+      // only set last edit if target file is the same
+      setLastEdit(editDate);
+    }
     // TODO change editor tab label to reflect path of opened file?
     handleEditorValueChange(editorTabIndex, newEditorValue);
   };

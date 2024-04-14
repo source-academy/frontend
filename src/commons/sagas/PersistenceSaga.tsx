@@ -22,7 +22,6 @@ import {
 } from '../../features/persistence/PersistenceTypes';
 import { store } from '../../pages/createStore';
 import { OverallState } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { LOGIN_GOOGLE, LOGOUT_GOOGLE } from '../application/types/SessionTypes';
 import {
   retrieveFilesInWorkspaceAsRecord,
@@ -107,6 +106,13 @@ export function* persistenceSaga(): SagaIterator {
     let toastKey: string | undefined;
     try {
       yield call(ensureInitialisedAndAuthorised);
+      const fileSystem: FSModule | null = yield select(
+        (state: OverallState) => state.fileSystem.inBrowserFileSystem
+      );
+      // If the file system is not initialised, do nothing.
+      if (fileSystem === null) {
+        throw new Error("No filesystem!");
+      }
       const { id, name, mimeType, picked, parentId } = yield call(
         pickFile,
         'Pick a file/folder to open',
@@ -125,7 +131,7 @@ export function* persistenceSaga(): SagaIterator {
         contents: (
           <p>
             Opening <strong>{name}</strong> will overwrite the current contents of your workspace.
-            Are you sure?
+            All local files/folders will be deleted. Are you sure?
           </p>
         ),
         positiveLabel: 'Open',
@@ -146,14 +152,6 @@ export function* persistenceSaga(): SagaIterator {
 
         const fileList = yield call(getFilesOfFolder, id, name); // this needed the extra scope mimetypes to have every file
         yield call(console.log, 'fileList', fileList);
-
-        const fileSystem: FSModule | null = yield select(
-          (state: OverallState) => state.fileSystem.inBrowserFileSystem
-        );
-        // If the file system is not initialised, do nothing.
-        if (fileSystem === null) {
-          throw new Error("No filesystem!");
-        }
 
         yield call(rmFilesInDirRecursively, fileSystem, '/playground');
         yield call(store.dispatch, actions.deleteAllPersistenceFiles());
@@ -221,14 +219,13 @@ export function* persistenceSaga(): SagaIterator {
           actions.chapterSelect(parseInt('4', 10) as Chapter, Variant.DEFAULT, 'playground')
         );
 
-        yield call(store.dispatch, actions.enableFileSystemContextMenus());
         yield call(
           store.dispatch,
           actions.removeEditorTabsForDirectory('playground', WORKSPACE_BASE_PATHS['playground'])
         );
 
         yield put(
-          actions.playgroundUpdatePersistenceFolder({ id, name, parentId, lastSaved: new Date() })
+          actions.playgroundUpdatePersistenceFile({ id, name, parentId, lastSaved: new Date(), isFolder: true })
         );
 
         // delay to increase likelihood addPersistenceFile for last loaded file has completed
@@ -245,36 +242,32 @@ export function* persistenceSaga(): SagaIterator {
         intent: Intent.PRIMARY
       });
 
-      const { result: meta } = yield call([gapi.client.drive.files, 'get'], {
-        // get fileid here using gapi.client.drive.files
-        fileId: id,
-        fields: 'appProperties'
-      });
       const contents = yield call([gapi.client.drive.files, 'get'], { fileId: id, alt: 'media' });
-      const activeEditorTabIndex: number | null = yield select(
-        (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
+
+      yield call(rmFilesInDirRecursively, fileSystem, '/playground');
+      yield call(store.dispatch, actions.deleteAllPersistenceFiles());
+
+      // add file to BrowserFS
+      yield call(
+        writeFileRecursively,
+        fileSystem,
+        '/playground/' + name,
+        contents.body
       );
-      if (activeEditorTabIndex === null) {
-        throw new Error('No active editor tab found.');
-      }
-      yield put(actions.updateEditorValue('playground', activeEditorTabIndex, contents.body)); // CONTENTS OF SELECTED FILE LOADED HERE
-      yield put(actions.playgroundUpdatePersistenceFile({ id, name, lastSaved: new Date() }));
-      if (meta && meta.appProperties) {
-        yield put(
-          actions.chapterSelect(
-            parseInt(meta.appProperties.chapter || '4', 10) as Chapter,
-            meta.appProperties.variant || Variant.DEFAULT,
-            'playground'
-          )
-        );
-        yield put(
-          actions.externalLibrarySelect(
-            Object.values(ExternalLibraryName).find(v => v === meta.appProperties.external) ||
-              ExternalLibraryName.NONE,
-            'playground'
-          )
-        );
-      }
+      // update playground PersistenceFile
+      const newPersistenceFile = { id, name, lastSaved: new Date(), path: '/playground/' + name};
+      yield put(actions.playgroundUpdatePersistenceFile(newPersistenceFile));
+      // add file to persistenceFileArray
+      yield put(actions.addPersistenceFile(newPersistenceFile));
+
+      yield call(
+        store.dispatch,
+        actions.removeEditorTabsForDirectory('playground', WORKSPACE_BASE_PATHS['playground'])
+      );
+      
+      // delay to increase likelihood addPersistenceFile for last loaded file has completed
+      // and for the toasts to not overlap
+      yield call(() => new Promise( resolve => setTimeout(resolve, 1000)));
       yield call(showSuccessMessage, `Loaded ${name}.`, 1000);
     } catch (ex) {
       console.error(ex);
@@ -283,6 +276,7 @@ export function* persistenceSaga(): SagaIterator {
       if (toastKey) {
         dismiss(toastKey);
       }
+      yield call(store.dispatch, actions.enableFileSystemContextMenus());
       yield call(store.dispatch, actions.updateRefreshFileViewKey());
     }
   });
@@ -310,7 +304,8 @@ export function* persistenceSaga(): SagaIterator {
       );
 
       if (activeEditorTabIndex === null) {
-        throw new Error('No active editor tab found.');
+        yield call(showWarningMessage, `Please open an editor tab.`, 1000);
+        return;
       }
       const code = editorTabs[activeEditorTabIndex].value;
 
@@ -420,11 +415,12 @@ export function* persistenceSaga(): SagaIterator {
             );
             if (areAllFilesSavedGoogleDrive(updatedPersistenceFileArray)) {
               yield put(
-                actions.playgroundUpdatePersistenceFolder({
+                actions.playgroundUpdatePersistenceFile({
                   id: currPersistenceFile.id,
                   name: currPersistenceFile.name,
                   parentId: currPersistenceFile.parentId,
-                  lastSaved: new Date()
+                  lastSaved: new Date(),
+                  isFolder: true
                 })
               );
             }
@@ -438,8 +434,10 @@ export function* persistenceSaga(): SagaIterator {
           );
           return;
         }
-        yield put(actions.playgroundUpdatePersistenceFile(pickedFile));
-        yield put(actions.persistenceSaveFile(pickedFile));
+        // Single file mode case
+        const singleFileModePersFile: PersistenceFile = {...pickedFile, lastSaved: new Date(), path: '/playground/' + pickedFile.name};
+        yield put(actions.playgroundUpdatePersistenceFile(singleFileModePersFile));
+        yield put(actions.persistenceSaveFile(singleFileModePersFile));
       } else {
         const response: AsyncReturnType<typeof showSimplePromptDialog> = yield call(
           showSimplePromptDialog,
@@ -464,8 +462,6 @@ export function* persistenceSaga(): SagaIterator {
         if (!response.buttonResponse) {
           return;
         }
-
-        // yield call(store.dispatch, actions.disableFileSystemContextMenus());
 
         const config: IPlaygroundConfig = {
           chapter,
@@ -542,7 +538,21 @@ export function* persistenceSaga(): SagaIterator {
           return;
         }
 
-        yield put(actions.playgroundUpdatePersistenceFile({ ...newFile, lastSaved: new Date() }));
+        
+        // Single file case
+        const newPersFile: PersistenceFile = {...newFile, lastSaved: new Date(), path: "/playground/" + newFile.name};
+        if (!currPersistenceFile) { // no file loaded prior
+          // update playground pers file
+          yield put(actions.playgroundUpdatePersistenceFile(newPersFile));
+          // add new pers file to persFileArray
+        } else { // file loaded prior
+          // update playground pers file
+          yield put(actions.playgroundUpdatePersistenceFile(newPersFile));
+          // remove old pers file from persFileArray
+          // add new pers file to persFileArray
+        }
+
+        // 
         yield call(
           showSuccessMessage,
           `${response.value} successfully saved to Google Drive.`,
@@ -760,11 +770,12 @@ export function* persistenceSaga(): SagaIterator {
         }
 
         yield put(
-          actions.playgroundUpdatePersistenceFolder({
+          actions.playgroundUpdatePersistenceFile({
             id: topLevelFolderId,
             name: topLevelFolderName,
             parentId: saveToDir.id,
-            lastSaved: new Date()
+            lastSaved: new Date(),
+            isFolder: true
           })
         );
 
@@ -860,11 +871,12 @@ export function* persistenceSaga(): SagaIterator {
       }
 
       yield put(
-        actions.playgroundUpdatePersistenceFolder({
+        actions.playgroundUpdatePersistenceFile({
           id: currFolderObject.id,
           name: currFolderObject.name,
           parentId: currFolderObject.parentId,
-          lastSaved: new Date()
+          lastSaved: new Date(),
+          isFolder: true
         })
       );
       yield call(store.dispatch, actions.updateRefreshFileViewKey());
@@ -891,7 +903,7 @@ export function* persistenceSaga(): SagaIterator {
       yield call(store.dispatch, actions.disableFileSystemContextMenus());
       let toastKey: string | undefined;
 
-      const [currFolderObject] = yield select(
+      const [playgroundPersistenceFile] = yield select(
         (state: OverallState) => [state.playground.persistenceFile]
       );
 
@@ -908,8 +920,9 @@ export function* persistenceSaga(): SagaIterator {
       );
 
       try {
-        if (activeEditorTabIndex === null) {
-          throw new Error('No active editor tab found.');
+        if (activeEditorTabIndex === null && !playgroundPersistenceFile.isFolder) {
+          yield call(showWarningMessage, `Please have ${name} open as the active editor tab.`, 1000);
+          return;
         }
         const code = editorTabs[activeEditorTabIndex].value;
 
@@ -918,7 +931,7 @@ export function* persistenceSaga(): SagaIterator {
           variant,
           external
         };
-        if ((currFolderObject as PersistenceFile).isFolder) {
+        if ((playgroundPersistenceFile as PersistenceFile).isFolder) {
           yield call(console.log, 'folder opened! updating pers specially');
           const persistenceFileArray: PersistenceFile[] = yield select(
             (state: OverallState) => state.fileSystem.persistenceFileArray
@@ -957,16 +970,22 @@ export function* persistenceSaga(): SagaIterator {
           );
           if (areAllFilesSavedGoogleDrive(updatedPersistenceFileArray)) {
             yield put(
-              actions.playgroundUpdatePersistenceFolder({
-                id: currFolderObject.id,
-                name: currFolderObject.name,
-                parentId: currFolderObject.parentId,
-                lastSaved: new Date()
+              actions.playgroundUpdatePersistenceFile({
+                id: playgroundPersistenceFile.id,
+                name: playgroundPersistenceFile.name,
+                parentId: playgroundPersistenceFile.parentId,
+                lastSaved: new Date(),
+                isFolder: true
               })
             );
           }
 
           return;
+        }
+
+        if ((editorTabs[activeEditorTabIndex] as EditorTabState).filePath !== playgroundPersistenceFile.path) {
+           yield call(showWarningMessage, `Please have ${name} open as the active editor tab.`, 1000);
+           return;
         }
 
         toastKey = yield call(showMessage, {
@@ -976,8 +995,11 @@ export function* persistenceSaga(): SagaIterator {
         });
 
         yield call(updateFile, id, name, MIME_SOURCE, code, config);
-        yield put(actions.playgroundUpdatePersistenceFile({ id, name, lastSaved: new Date() }));
+        const updatedPlaygroundPersFile = { ...playgroundPersistenceFile, lastSaved: new Date() };
+        yield put(actions.addPersistenceFile(updatedPlaygroundPersFile));
+        yield put(actions.playgroundUpdatePersistenceFile(updatedPlaygroundPersFile));
         yield call(showSuccessMessage, `${name} successfully saved to Google Drive.`, 1000);
+        yield call(store.dispatch, actions.updateRefreshFileViewKey());
       } catch (ex) {
         console.error(ex);
         yield call(showWarningMessage, `Error while saving file.`, 1000);
@@ -1312,7 +1334,7 @@ export function* persistenceSaga(): SagaIterator {
         if (currFolderObject.name === oldFolderName) {
           // update playground PersistenceFile
           yield put(
-            actions.playgroundUpdatePersistenceFolder({ ...currFolderObject, name: newFolderName })
+            actions.playgroundUpdatePersistenceFile({ ...currFolderObject, name: newFolderName, isFolder: true })
           );
         }
       } catch (ex) {
