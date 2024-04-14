@@ -48,6 +48,9 @@ export function getAlternateControlItemComponent(
         topItem
       );
     default:
-      throw new Error('Unknown chapter');
+      // this only happens if
+      // a chapter needing an alternate representation
+      // is not handled.
+      throw new Error('Unknown Chapter');
   }
 }
