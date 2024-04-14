@@ -23,6 +23,7 @@ import {
   ColumnFilter,
   ColumnFiltersState,
   ColumnName,
+  ColumnNameKeys,
   GradingColumnVisibility,
   GradingSubmissionTableProps,
   IGradingTableProperties,
@@ -66,7 +67,6 @@ export const freshSortState: SortStateProperties = {
 const disabledEditModeCols: string[] = [ColumnFields.actionsIndex];
 
 const disabledFilterModeCols: string[] = [
-  ColumnFields.gradingStatus,
   ColumnFields.xp,
   ColumnFields.actionsIndex
 ];
@@ -114,8 +114,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     resizable: false,
     sortable: true,
     headerComponentParams: {
-      hideColumn: (id: ColumnFieldsKeys) => handleColumnFilterAdd(id),
-      updateSortState: (affectedID: ColumnFieldsKeys, sortDirection: SortStates) => {
+      hideColumn: (id: ColumnNameKeys) => handleColumnFilterAdd(id),
+      updateSortState: (affectedID: ColumnNameKeys, sortDirection: SortStates) => {
         if (!disabledSortCols.includes(affectedID)) {
           const newState: SortStateProperties = { ...freshSortState };
           newState[affectedID] = sortDirection;
@@ -387,7 +387,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     }
   };
 
-  const handleColumnFilterAdd = (toAdd: ColumnFieldsKeys) => {
+  const handleColumnFilterAdd = (toAdd: ColumnNameKeys) => {
     setHiddenColumns((prev: GradingColumnVisibility) => [...prev, toAdd]);
   };
 

@@ -6,7 +6,11 @@ import {
 } from 'src/features/grading/GradingUtils';
 import { freshSortState } from 'src/pages/academy/grading/subcomponents/GradingSubmissionsTable';
 
-import { GradingOverviews, GradingQuery } from '../../../../features/grading/GradingTypes';
+import {
+  ColumnFields,
+  GradingOverviews,
+  GradingQuery
+} from '../../../../features/grading/GradingTypes';
 import { TeamFormationOverview } from '../../../../features/teamFormation/TeamFormationTypes';
 import {
   Assessment,
@@ -192,7 +196,7 @@ test('fetchGradingOverviews generates correct action object', () => {
   const publishedFilter = unpublishedToBackendParams(true);
   const pageParams = { offset: 123, pageSize: 456 };
   const filterParams = { abc: 'xxx', def: 'yyy' };
-  const allColsSortStates = { currentState: freshSortState, sortBy: '' };
+  const allColsSortStates = { currentState: freshSortState, sortBy: ColumnFields.assessmentName };
   const action = fetchGradingOverviews(
     filterToGroup,
     publishedFilter,

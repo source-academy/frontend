@@ -18,7 +18,6 @@ export enum ColumnFields {
   studentUsername = 'studentUsername',
   groupName = 'groupName',
   progressStatus = 'progressStatus',
-  gradingStatus = 'gradingStatus',
   xp = 'xp',
   actionsIndex = 'actionsIndex'
 }
@@ -122,7 +121,9 @@ export enum ColumnName {
   actionsIndex = 'Actions'
 }
 
-export type ColumnFieldsKeys = keyof typeof ColumnName;
+export type ColumnNameKeys = keyof typeof ColumnName;
+
+export type ColumnFieldsKeys = keyof typeof ColumnFields;
 
 export type SortStateProperties = {
   assessmentName: SortStates;
