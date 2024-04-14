@@ -69,7 +69,7 @@ const stringToGameStateStorageMap = {
   userstate: GameStateStorage.UserState,
   attemptedQuiz: GameStateStorage.AttemptedQuizState,
   passedQuiz: GameStateStorage.PassedQuizState,
-  quizScoreAtLeast: GameStateStorage.QuizScoreState
+  quizScore: GameStateStorage.QuizScoreState
 };
 
 const stringToUserStateTypeMap = {
