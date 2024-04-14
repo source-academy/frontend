@@ -2,8 +2,8 @@ import { astToString, ECE } from 'java-slang';
 import { Group } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
-import { Config } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
+import { defaultActiveColor, defaultStrokeColor } from '../../CseMachineUtils';
 import { CseMachine } from '../CseMachine';
 import { ControlItem } from './ControlItem';
 
@@ -26,9 +26,7 @@ export class Control extends Visible {
       const controlItemText = this.getControlItemString(controlItem);
 
       const controlItemStroke =
-        index === control.getStack().length - 1
-          ? Config.SA_CURRENT_ITEM
-          : ControlStashConfig.SA_WHITE;
+        index === control.getStack().length - 1 ? defaultActiveColor() : defaultStrokeColor();
 
       // TODO reference draw ltr?
       const controlItemReference =

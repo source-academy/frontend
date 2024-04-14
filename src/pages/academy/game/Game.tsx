@@ -69,6 +69,8 @@ function Game() {
 
     if (window.screen.orientation) {
       if (!isFullscreen) {
+        // @ts-expect-error: lock is not defined in the type definition
+        // as it is not suppored in some browsers (notably Firefox)
         window.screen.orientation.lock('landscape');
       } else {
         window.screen.orientation.unlock();
