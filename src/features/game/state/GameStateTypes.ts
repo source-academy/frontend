@@ -5,7 +5,8 @@ export enum GameStateStorage {
   ChecklistState = 'ChecklistState',
   TasklistState = 'TasklistState',
   AttemptedQuizState = 'AttemptedQuizState',
-  CompletedQuizState = 'CompletedQuizState'
+  PassedQuizState = 'PassedQuizState',
+  QuizScoreState = 'QuizScoreState'
 }
 
 /**

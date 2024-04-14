@@ -540,6 +540,10 @@ class GameGlobalAPI {
   public setQuizScore(key: string, score: number): void {
     this.getGameManager().getStateManager().setQuizScore(key, score);
   }
+
+  public getQuizScore(key: string): number {
+    return this.getGameManager().getStateManager().getQuizScore(key);
+  }
 }
 
 export default GameGlobalAPI;

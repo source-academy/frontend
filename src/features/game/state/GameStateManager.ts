@@ -477,30 +477,27 @@ class GameStateManager {
 
   /**
    * Get the score of a quiz.
-   * Return undefined if the quiz has not been played.
+   * Return 0 if the quiz has not been played.
    *  
    * @param quizId 
    * @returns 
    */
-  public getQuizScore(quizId: ItemId) {
-    return this.quizScores.get(quizId);
+  public getQuizScore(quizId: ItemId): number {
+    const score = this.quizScores.get(quizId);
+    if (score) {
+      return score;
+    }
+    return 0;
   }
 
   /**
-   * Set the score of a quiz to a given number
-   * if the new score is higher than the current score,
-   * or the quiz has not been played.
+   * Set the score of a quiz to a given number.
    * 
    * @param quizId The id of the quiz.
    * @param newScore The new score to be set.
    */
   public setQuizScore(quizId: string, newScore: number) {
-    const currentScore = this.getQuizScore(quizId);
-    if (currentScore && currentScore < newScore) {
-      this.quizScores.set(quizId, newScore);
-    } else if (!currentScore) {
-      this.quizScores.set(quizId, newScore);
-    }
+    this.quizScores.set(quizId, newScore);
   }
 
   ///////////////////////////////
