@@ -70,8 +70,9 @@ export default class DialogueManager {
     GameGlobalAPI.getInstance().playSound(SoundAssets.dialogueAdvance.key);
     const { line, speakerDetail, actionIds, prompt } =
       await this.getDialogueGenerator().generateNextLine();
-    const lineWithName = line.replace('{name}', this.getUsername());
-    this.getDialogueRenderer().changeText(this.lineWithQuizScores(lineWithName));
+    const lineWithQuizScores = this.makeLineWithQuizScores(line);
+    const lineWithName = lineWithQuizScores.replace('{name}', this.getUsername());
+    this.getDialogueRenderer().changeText(lineWithName);
     this.getSpeakerRenderer().changeSpeakerTo(speakerDetail);
 
     // Store the current line into the storage
@@ -128,7 +129,7 @@ export default class DialogueManager {
    * @param line 
    * @returns {string} the given line with all quiz score interpolation replaced by actual scores.
    */
-  public lineWithQuizScores(line: string) {
+  public makeLineWithQuizScores(line: string) {
     const quizScores = line.match(/\{.+?\.score\}/g);
     if (quizScores) {
       quizScores.forEach(match => {

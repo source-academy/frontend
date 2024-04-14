@@ -10,12 +10,6 @@ export const startPrompt = {
 
 export const questionPrompt = 'What is the correct answer?';
 
-export const resultMsg = {
-  message: 'You got {numOfCorrect} out of {numOfQns} questions correct. ',
-  allCorrect: 'Well done!',
-  notAllCorrect: "Let's keep going!"
-};
-
 export const QuizConstants = {
   textPad: 20,
   textConfig: { x: 15, y: -15, oriX: 0.5, oriY: 0.5 },

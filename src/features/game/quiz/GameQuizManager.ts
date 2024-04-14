@@ -1,6 +1,5 @@
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
-import { SpeakerDetail } from '../character/GameCharacterTypes';
 import { Constants, screenSize } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
 import { createDialogueBox, createTypewriter } from '../dialogue/GameDialogueHelper';
@@ -20,7 +19,6 @@ import {
   QuizConstants,
   quizOptStyle,
   quizTextStyle,
-  resultMsg,
   startPrompt
 } from './GameQuizConstants';
 import GameQuizReactionManager from './GameQuizReactionManager';
@@ -53,7 +51,6 @@ export default class QuizManager {
       );
     }
     GameGlobalAPI.getInstance().setQuizScore(quizId, numOfCorrect);
-    await this.showResult(numOfQns, numOfCorrect, quiz.questions[0].speaker);
     await GameGlobalAPI.getInstance().showNextLine();
     await GameGlobalAPI.getInstance().getGameManager().getDialogueManager().showAll();
   }
@@ -201,35 +198,6 @@ export default class QuizManager {
   private async showReaction(reaction: DialogueObject) {
     this.reactionManager = new GameQuizReactionManager(reaction);
     await this.reactionManager.showReaction();
-  }
-
-  /**
-   * Show the final score of the quiz as a quiz reaction.
-   *
-   * @param numOfQns The number of questions of the quiz.
-   * @param numOfCorrect The number of correctly answered questions.
-   */
-  private async showResult(numOfQns: number, numOfCorrect: number, speaker: SpeakerDetail) {
-    await this.showReaction(this.makeResultMsg(numOfQns, numOfCorrect, speaker));
-  }
-
-  /**
-   * Create DialogueObject containing the message of quiz score.
-   *
-   * @param numOfQns The number of questions of the quiz.
-   * @param numOfCorrect The number of correctly answered questions.
-   * @returns A DialogueObject containing the message of quiz score.
-   */
-  private makeResultMsg(
-    numOfQns: number,
-    numOfCorrect: number,
-    speaker: SpeakerDetail
-  ): DialogueObject {
-    let line = resultMsg.message
-      .replace('{numOfCorrect}', numOfCorrect.toString())
-      .replace('{numOfQns}', numOfQns.toString());
-    line += numOfCorrect === numOfQns ? resultMsg.allCorrect : resultMsg.notAllCorrect;
-    return new Map([['0', [{ line: line, speakerDetail: speaker }]]]);
   }
 
   /**
