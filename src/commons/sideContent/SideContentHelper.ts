@@ -1,7 +1,6 @@
 import * as bpcore from '@blueprintjs/core';
 import { TabId } from '@blueprintjs/core';
 import * as bpicons from '@blueprintjs/icons';
-import * as bppopover from '@blueprintjs/popover2';
 import * as jsslang from 'js-slang';
 import * as jsslangDist from 'js-slang/dist';
 import lodash from 'lodash';
@@ -34,7 +33,6 @@ const requireProvider = (x: string) => {
     'react-dom': ReactDOM,
     '@blueprintjs/core': bpcore,
     '@blueprintjs/icons': bpicons,
-    '@blueprintjs/popover2': bppopover,
     'js-slang': jsslang,
     'js-slang/dist': jsslangDist,
     lodash,
@@ -42,7 +40,7 @@ const requireProvider = (x: string) => {
   };
 
   if (!(x in exports)) throw new Error(`Dynamic require of ${x} is not supported`);
-  return exports[x];
+  return exports[x as keyof typeof exports] as any;
 };
 
 type RawTab = (provider: ReturnType<typeof requireProvider>) => { default: ModuleSideContent };

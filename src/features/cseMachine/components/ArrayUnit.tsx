@@ -1,13 +1,21 @@
+import { Text, TextConfig } from 'konva/lib/shapes/Text';
 import React from 'react';
+import { Text as KonvaText } from 'react-konva';
 
-import { Config } from '../CseMachineConfig';
+import CseMachine from '../CseMachine';
+import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Data } from '../CseMachineTypes';
-import { defaultSAColor } from '../CseMachineUtils';
-import { Arrow } from './arrows/Arrow';
+import {
+  defaultStrokeColor,
+  defaultTextColor,
+  fadedStrokeColor,
+  fadedTextColor
+} from '../CseMachineUtils';
 import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
+import { GenericArrow } from './arrows/GenericArrow';
 import { RoundedRect } from './shapes/RoundedRect';
-import { Text } from './Text';
+import { defaultOptions } from './Text';
 import { ArrayValue } from './values/ArrayValue';
 import { PrimitiveValue } from './values/PrimitiveValue';
 import { Value } from './values/Value';
@@ -24,9 +32,9 @@ export class ArrayUnit extends Visible {
   readonly isLastUnit: boolean;
   /** check if this unit is the main reference of the value */
   readonly isMainReference: boolean;
-  parent: ArrayValue;
-  arrow: Arrow | undefined = undefined;
-  index: Text;
+  /** arrow that is drawn from the array unit to the value */
+  arrow?: GenericArrow<ArrayUnit, Value>;
+  readonly indexRef = React.createRef<Text>();
 
   constructor(
     /** index of this unit in its parent */
@@ -34,10 +42,9 @@ export class ArrayUnit extends Visible {
     /** the value this unit contains*/
     readonly data: Data,
     /** parent of this unit */
-    parent: ArrayValue
+    readonly parent: ArrayValue
   ) {
     super();
-    this.parent = parent;
     this._x = this.parent.x() + this.idx * Config.DataUnitWidth;
     this._y = this.parent.y();
     this._height = Config.DataUnitHeight;
@@ -46,18 +53,23 @@ export class ArrayUnit extends Visible {
     this.isLastUnit = this.idx === this.parent.data.length - 1;
     this.value = Layout.createValue(this.data, this);
     this.isMainReference = this.value.references.length > 1;
-    this.index = new Text(this.idx, this.x(), this.y() - 0.4 * this.height());
   }
 
-  updatePosition = () => {};
+  showIndex() {
+    this.indexRef.current?.show();
+  }
 
-  onMouseEnter = () => {};
-
-  onMouseLeave = () => {};
+  hideIndex() {
+    if (!CseMachine.getPrintableMode()) this.indexRef.current?.hide();
+  }
 
   draw(): React.ReactNode {
     if (this.isDrawn()) return null;
     this._isDrawn = true;
+
+    if (!(this.value instanceof PrimitiveValue)) {
+      this.arrow = new ArrowFromArrayUnit(this).to(this.value);
+    }
 
     const cornerRadius = {
       upperLeft: 0,
@@ -70,6 +82,18 @@ export class ArrayUnit extends Visible {
     if (this.isLastUnit)
       cornerRadius.upperRight = cornerRadius.lowerRight = Config.DataCornerRadius;
 
+    const indexProps: TextConfig = {
+      fontFamily: defaultOptions.fontFamily,
+      fontSize: defaultOptions.fontSize,
+      fontStyle: defaultOptions.fontStyle,
+      fill: this.parent.isReferenced() ? defaultTextColor() : fadedTextColor(),
+      x: this.x(),
+      y: this.y() - defaultOptions.fontSize - 4,
+      width: this.width(),
+      padding: 2,
+      visible: CseMachine.getPrintableMode()
+    };
+
     return (
       <React.Fragment key={Layout.key++}>
         <RoundedRect
@@ -78,17 +102,21 @@ export class ArrayUnit extends Visible {
           y={this.y()}
           width={this.width()}
           height={this.height()}
-          stroke={defaultSAColor()}
+          stroke={this.parent.isReferenced() ? defaultStrokeColor() : fadedStrokeColor()}
           hitStrokeWidth={Config.DataHitStrokeWidth}
-          fillEnabled={false}
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
+          fillEnabled={true}
           cornerRadius={cornerRadius}
           forwardRef={this.ref}
         />
-        {this.index.draw()}
+        <KonvaText
+          key={Layout.key++}
+          ref={this.indexRef}
+          {...ShapeDefaultProps}
+          {...indexProps}
+          text={`${this.idx}`}
+        />
         {this.value.draw()}
-        {this.value instanceof PrimitiveValue || new ArrowFromArrayUnit(this).to(this.value).draw()}
+        {this.arrow?.draw()}
       </React.Fragment>
     );
   }

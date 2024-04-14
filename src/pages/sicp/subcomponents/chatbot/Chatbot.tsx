@@ -2,12 +2,13 @@ import { AnchorButton, Icon } from '@blueprintjs/core';
 import * as React from 'react';
 import logo from 'src/assets/SA.jpg';
 import { useSession } from 'src/commons/utils/Hooks';
+import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import classes from 'src/styles/Chatbot.module.scss';
 
 import ChatBox from './ChatBox';
 
 type Props = {
-  getSection: () => string;
+  getSection: () => SicpSection;
   getText: () => string;
 };
 

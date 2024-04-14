@@ -2,27 +2,27 @@ import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ColumnFilter } from '@tanstack/react-table';
 import { Badge } from '@tremor/react';
-import { GradingStatus } from 'src/commons/assessment/AssessmentTypes';
+import { ProgressStatus, ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 
-const BADGE_COLORS = {
+const BADGE_COLORS = Object.freeze({
   // assessment types
   missions: 'indigo',
   quests: 'emerald',
   paths: 'sky',
 
-  // submission status
-  submitted: 'green',
-  attempting: 'yellow',
-  attempted: 'red',
-
-  // grading status
-  graded: 'green',
-  grading: 'yellow',
-  none: 'red'
-};
+  // ProgressStatus
+  [ProgressStatuses.autograded]: 'purple',
+  [ProgressStatuses.not_attempted]: 'gray',
+  [ProgressStatuses.attempting]: 'red',
+  [ProgressStatuses.attempted]: 'red',
+  [ProgressStatuses.submitted]: 'yellow',
+  [ProgressStatuses.graded]: 'green',
+  [ProgressStatuses.published]: 'blue'
+});
 
 export function getBadgeColorFromLabel(label: string) {
-  return BADGE_COLORS[label.toLowerCase()] || 'gray';
+  const maybeKey = label.toLowerCase() as keyof typeof BADGE_COLORS;
+  return BADGE_COLORS[maybeKey] || 'gray';
 }
 
 type AssessmentTypeBadgeProps = {
@@ -40,36 +40,29 @@ const AssessmentTypeBadge: React.FC<AssessmentTypeBadgeProps> = ({ type, size = 
   );
 };
 
-type SubmissionStatusBadgeProps = {
-  status: string;
+type ProgressStatusBadgeProps = {
+  progress: ProgressStatus;
 };
 
-const SubmissionStatusBadge: React.FC<SubmissionStatusBadgeProps> = ({ status }) => {
-  const statusText = status.charAt(0).toUpperCase() + status.slice(1);
-  return <Badge text={statusText} color={getBadgeColorFromLabel(status)} />;
-};
-
-type GradingStatusBadgeProps = {
-  status: GradingStatus;
-};
-
-const GradingStatusBadge: React.FC<GradingStatusBadgeProps> = ({ status }) => {
-  const statusText = status.charAt(0).toUpperCase() + status.slice(1);
+const ProgressStatusBadge: React.FC<ProgressStatusBadgeProps> = ({ progress }) => {
+  const statusText = progress.charAt(0).toUpperCase() + progress.slice(1);
   const badgeIcon = () => (
     <Icon
       icon={
-        status === 'graded'
+        progress === ProgressStatuses.autograded
+          ? IconNames.AIRPLANE
+          : progress === ProgressStatuses.published
+          ? IconNames.ENDORSED
+          : progress === ProgressStatuses.graded
           ? IconNames.TICK
-          : status === 'grading'
+          : progress === ProgressStatuses.submitted
           ? IconNames.TIME
-          : status === 'none'
-          ? IconNames.CROSS
           : IconNames.DISABLE
       }
       style={{ marginRight: '0.5rem' }}
     />
   );
-  return <Badge text={statusText} color={getBadgeColorFromLabel(status)} icon={badgeIcon} />;
+  return <Badge text={statusText} color={getBadgeColorFromLabel(progress)} icon={badgeIcon} />;
 };
 
 type FilterBadgeProps = {
@@ -95,4 +88,4 @@ const FilterBadge: React.FC<FilterBadgeProps> = ({ filter, onRemove }) => {
   );
 };
 
-export { AssessmentTypeBadge, FilterBadge, GradingStatusBadge, SubmissionStatusBadge };
+export { AssessmentTypeBadge, FilterBadge, ProgressStatusBadge };

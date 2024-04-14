@@ -11,10 +11,10 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -32,13 +32,13 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     y={45}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -49,18 +49,16 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Group
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
+    listening={false}
   >
     <Path
-      data="M 140 57.5 L 170 390 L 170 390 M 140 57.5 L 170 390 L 170 390 "
-      hitStrokeWidth={5}
+      data="M 140 57.5 L 170 390 L 170 390 "
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
       strokeWidth={1}
     />
     <Arrow
-      fill="#999999"
+      fill="#999"
       pointerWidth={10}
       points={
         Array [
@@ -88,10 +86,10 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -109,13 +107,13 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     y={80}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -139,10 +137,10 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -160,13 +158,13 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     y={115}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -177,25 +175,23 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Group
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
+    listening={false}
   >
     <Path
-      data="M 140 127.5 L 486 390 L 486 390 M 140 127.5 L 486 390 L 486 390 "
-      hitStrokeWidth={5}
+      data="M 140 127.5 L 486 400 L 486 400 "
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
       strokeWidth={1}
     />
     <Arrow
-      fill="#999999"
+      fill="#999"
       pointerWidth={10}
       points={
         Array [
           140,
           127.5,
           486,
-          390,
+          400,
         ]
       }
       preventDefault={false}
@@ -216,10 +212,10 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -237,13 +233,13 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     y={150}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -267,10 +263,10 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -288,13 +284,13 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     y={185}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -305,25 +301,23 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Group
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
+    listening={false}
   >
     <Path
-      data="M 140 197.5 L 802 390 L 802 390 M 140 197.5 L 802 390 L 802 390 "
-      hitStrokeWidth={5}
+      data="M 140 197.5 L 802 400 L 802 400 "
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
       strokeWidth={1}
     />
     <Arrow
-      fill="#999999"
+      fill="#999"
       pointerWidth={10}
       points={
         Array [
           140,
           197.5,
           802,
-          390,
+          400,
         ]
       }
       preventDefault={false}
@@ -344,10 +338,10 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -365,13 +359,13 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     y={220}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -395,10 +389,10 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -416,13 +410,13 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     y={255}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -433,25 +427,23 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Group
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
+    listening={false}
   >
     <Path
-      data="M 140 267.5 L 1118 390 L 1118 390 M 140 267.5 L 1118 390 L 1118 390 "
-      hitStrokeWidth={5}
+      data="M 140 267.5 L 1118 400 L 1118 400 "
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
       strokeWidth={1}
     />
     <Arrow
-      fill="#999999"
+      fill="#999"
       pointerWidth={10}
       points={
         Array [
           140,
           267.5,
           1118,
-          390,
+          400,
         ]
       }
       preventDefault={false}
@@ -472,10 +464,10 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -493,13 +485,13 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     y={290}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -523,10 +515,10 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -544,13 +536,13 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     y={325}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -561,25 +553,23 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Group
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
+    listening={false}
   >
     <Path
-      data="M 140 337.5 L 1434 390 L 1434 390 M 140 337.5 L 1434 390 L 1434 390 "
-      hitStrokeWidth={5}
+      data="M 140 337.5 L 1434 400 L 1434 400 "
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
       strokeWidth={1}
     />
     <Arrow
-      fill="#999999"
+      fill="#999"
       pointerWidth={10}
       points={
         Array [
           140,
           337.5,
           1434,
-          390,
+          400,
         ]
       }
       preventDefault={false}
@@ -603,7 +593,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
       stroke="#030fff"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -621,13 +611,13 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     y={360}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -651,10 +641,10 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -670,13 +660,13 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     y={45}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -700,10 +690,10 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -719,13 +709,13 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     y={45}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -749,10 +739,10 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -768,13 +758,13 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     y={45}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -798,10 +788,10 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -817,13 +807,13 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     y={45}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -847,10 +837,10 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -866,13 +856,13 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     y={45}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -896,10 +886,10 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#ff0000"
+      stroke="#ff1744"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -915,13 +905,13 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     y={45}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -945,10 +935,10 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#ff0000"
+      stroke="#ff1744"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -964,13 +954,13 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     y={45}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -994,10 +984,10 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1015,13 +1005,13 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     y={45}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1045,10 +1035,10 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1066,13 +1056,13 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     y={80}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1096,10 +1086,10 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1117,13 +1107,13 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     y={115}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1147,10 +1137,10 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1168,13 +1158,13 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     y={150}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1185,18 +1175,16 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Group
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
+    listening={false}
   >
     <Path
-      data="M 140 162.5 L 170 240 L 170 240 M 140 162.5 L 170 240 L 170 240 "
-      hitStrokeWidth={5}
+      data="M 140 162.5 L 170 240 L 170 240 "
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
       strokeWidth={1}
     />
     <Arrow
-      fill="#999999"
+      fill="#999"
       pointerWidth={10}
       points={
         Array [
@@ -1224,10 +1212,10 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1245,13 +1233,13 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     y={185}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1275,10 +1263,10 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1296,13 +1284,13 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     y={220}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1313,18 +1301,16 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Group
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
+    listening={false}
   >
     <Path
-      data="M 140 232.5 L 170 390 L 170 390 M 140 232.5 L 170 390 L 170 390 "
-      hitStrokeWidth={5}
+      data="M 140 232.5 L 170 390 L 170 390 "
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
       strokeWidth={1}
     />
     <Arrow
-      fill="#999999"
+      fill="#999"
       pointerWidth={10}
       points={
         Array [
@@ -1352,10 +1338,10 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1373,13 +1359,13 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     y={255}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1403,10 +1389,10 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1424,13 +1410,13 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     y={290}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1454,10 +1440,10 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1475,13 +1461,13 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     y={325}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1505,10 +1491,10 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1526,13 +1512,13 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     y={360}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1556,10 +1542,10 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1577,13 +1563,13 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     y={395}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1607,10 +1593,10 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1628,13 +1614,13 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     y={430}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1661,7 +1647,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
       stroke="#030fff"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1679,13 +1665,13 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     y={465}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1709,10 +1695,10 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1730,13 +1716,13 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     y={45}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1760,10 +1746,10 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1781,13 +1767,13 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     y={80}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1798,18 +1784,16 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     />
   </Label>
   <Group
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
+    listening={false}
   >
     <Path
-      data="M 140 92.5 L 170 105 L 170 105 M 140 92.5 L 170 105 L 170 105 "
-      hitStrokeWidth={5}
+      data="M 140 92.5 L 170 105 L 170 105 "
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
       strokeWidth={1}
     />
     <Arrow
-      fill="#999999"
+      fill="#999"
       pointerWidth={10}
       points={
         Array [
@@ -1837,10 +1821,10 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1858,13 +1842,13 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     y={115}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1891,7 +1875,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
       stroke="#030fff"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1909,13 +1893,13 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     y={150}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1939,10 +1923,10 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1958,13 +1942,13 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     y={45}
   >
     <Tag
-      fill="black"
+      fill="#000"
       opacity={0.7}
       preventDefault={false}
-      stroke="black"
+      stroke="#000"
     />
     <Text
-      fill="#999999"
+      fill="#999"
       fontFamily="monospace, monospace"
       fontSize={15}
       fontStyle="normal"
@@ -1975,24 +1959,22 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     />
   </Label>
   <Group
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
+    listening={false}
   >
     <Path
-      data="M 181.5 40 L 356.5 330 L 356.5 330 M 181.5 40 L 356.5 330 L 356.5 330 "
-      hitStrokeWidth={5}
+      data="M 181.5 40 L 379 330 L 379 330 "
       preventDefault={false}
-      stroke="#999999"
+      stroke="#999"
       strokeWidth={1}
     />
     <Arrow
-      fill="#999999"
+      fill="#999"
       pointerWidth={10}
       points={
         Array [
           181.5,
           40,
-          356.5,
+          379,
           330,
         ]
       }
@@ -3528,7 +3510,7 @@ Array [
   [Function],
   "x: ",
   11,
-  "0:= ",
+  "1:= ",
   [Function],
 ]
 `;
@@ -3617,8 +3599,6 @@ Array [
   "pair: ",
   [Function],
   "accumulate: ",
-  [Function],
-  "0:= ",
   [Function],
   "x:= ",
   Array [
@@ -4133,9 +4113,7 @@ Object {
     "the_tail": [Function],
   },
   "heap": Heap {
-    "storage": Set {
-      [Function],
-    },
+    "storage": null,
   },
   "id": "79",
   "name": "blockEnvironment",
@@ -5003,9 +4981,7 @@ Object {
     ],
   },
   "heap": Heap {
-    "storage": Set {
-      [Function],
-    },
+    "storage": null,
   },
   "id": "75",
   "name": "es",
@@ -5801,9 +5777,7 @@ Object {
       ],
     },
     "heap": Heap {
-      "storage": Set {
-        [Function],
-      },
+      "storage": null,
     },
     "id": "75",
     "name": "es",
@@ -6167,13 +6141,11 @@ Array [
   [Function],
   "x: ",
   1,
-  "0:= ",
+  "1:= ",
   Array [],
   "n: ",
   1,
-  "0:= ",
-  [Function],
-  "0:= ",
+  "1:= ",
   Array [
     1,
     [Function],
@@ -6185,9 +6157,7 @@ Array [
   ],
   "n: ",
   2,
-  "0:= ",
-  [Function],
-  "0:= ",
+  "1:= ",
   Array [
     2,
     [Function],
@@ -6202,8 +6172,6 @@ Array [
   "n: ",
   2,
   "the_tail:= ",
-  [Function],
-  "0:= ",
   [Function],
   "_copy_of_i:= ",
   1,
@@ -6230,8 +6198,6 @@ Array [
   ],
   "n: ",
   2,
-  "0:= ",
-  [Function],
   "s: ",
   Array [
     2,
@@ -6266,7 +6232,7 @@ Array [
       ],
     ],
   ],
-  "0:= ",
+  "1:= ",
   Array [
     1,
     Array [
@@ -6285,7 +6251,7 @@ Array [
       ],
     ],
   ],
-  "0:= ",
+  "1:= ",
   Array [
     2,
     null,

@@ -21,7 +21,7 @@ const SideContentFaceapiDisplay: React.FC = () => {
     <div className="sa-video-header">
       <div className="sa-video-header-element">
         <Button
-          className={'sa-live-video-button'}
+          className="sa-live-video-button"
           style={{ height: 20 }}
           icon={IconNames.CAMERA}
           onClick={takePhoto}
@@ -35,7 +35,7 @@ const SideContentFaceapiDisplay: React.FC = () => {
       <Divider />
       <div className="sa-video-header-element">
         <Button
-          className={'sa-still-image-button'}
+          className="sa-still-image-button"
           style={{ height: 20 }}
           icon={IconNames.RESET}
           onClick={resetPhoto}

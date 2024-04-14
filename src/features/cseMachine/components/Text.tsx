@@ -1,11 +1,20 @@
 import { KonvaEventObject } from 'konva/lib/Node';
+import { Label } from 'konva/lib/shapes/Label';
 import React from 'react';
 import { Label as KonvaLabel, Tag as KonvaTag, Text as KonvaText } from 'react-konva';
 
+import CseMachine from '../CseMachine';
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Data, IHoverable } from '../CseMachineTypes';
-import { getTextWidth, setHoveredCursor, setUnhoveredCursor } from '../CseMachineUtils';
+import {
+  defaultTextColor,
+  fadedTextColor,
+  getTextWidth,
+  isSourceObject,
+  setHoveredCursor,
+  setUnhoveredCursor
+} from '../CseMachineUtils';
 import { isCustomPrimitive } from '../utils/altLangs';
 import { Visible } from './Visible';
 
@@ -16,6 +25,8 @@ export interface TextOptions {
   fontStyle: string;
   fontVariant: string;
   isStringIdentifiable: boolean;
+  faded: boolean;
+  hidden: boolean;
 }
 
 export const defaultOptions: TextOptions = {
@@ -24,7 +35,9 @@ export const defaultOptions: TextOptions = {
   fontSize: Config.FontSize, // in pixels. Default is 12
   fontStyle: Config.FontStyle, // can be normal, bold, or italic. Default is normal
   fontVariant: Config.FontVariant, // can be normal or small-caps. Default is normal
-  isStringIdentifiable: false // if true, contain strings within double quotation marks "". Default is false
+  isStringIdentifiable: false, // if true, contain strings within double quotation marks "". Default is false
+  faded: false, // if true, draws text with a lighter shade
+  hidden: false // if true, hides the text when only when first drawn
 };
 
 /** this class encapsulates a string to be drawn onto the canvas */
@@ -36,6 +49,7 @@ export class Text extends Visible implements IHoverable {
   readonly fullStr: string; // full string representation of data
 
   readonly options: TextOptions = defaultOptions;
+  readonly labelRef: React.RefObject<Label> = React.createRef();
 
   constructor(
     readonly data: Data,
@@ -49,13 +63,13 @@ export class Text extends Visible implements IHoverable {
 
     const { fontSize, fontStyle, fontFamily, maxWidth, isStringIdentifiable } = this.options;
 
-    this.fullStr = this.partialStr =
-      // if the data is a custom primitive, use its toString method
-      isCustomPrimitive(data)
-        ? String(data)
-        : isStringIdentifiable
-        ? JSON.stringify(data) || String(data)
-        : String(data);
+    this.fullStr = this.partialStr = isSourceObject(data)
+      ? data.toReplString()
+      : isCustomPrimitive(data)
+      ? String(data)
+      : isStringIdentifiable
+      ? JSON.stringify(data) || String(data)
+      : String(data);
     this._height = fontSize;
     const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
     if (widthOf(this.partialStr) > maxWidth) {
@@ -73,14 +87,14 @@ export class Text extends Visible implements IHoverable {
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     setHoveredCursor(currentTarget);
-    this.ref.current.moveToTop();
-    this.ref.current.show();
+    this.labelRef.current?.moveToTop();
+    this.labelRef.current?.show();
     currentTarget.getLayer()?.draw();
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     setUnhoveredCursor(currentTarget);
-    this.ref.current.hide();
+    this.labelRef.current?.hide();
     currentTarget.getLayer()?.draw();
   };
 
@@ -89,7 +103,8 @@ export class Text extends Visible implements IHoverable {
       fontFamily: this.options.fontFamily,
       fontSize: this.options.fontSize,
       fontStyle: this.options.fontStyle,
-      fill: Config.SA_WHITE
+      fill: this.options.faded ? fadedTextColor() : defaultTextColor(),
+      visible: !this.options.hidden
     };
     return (
       <React.Fragment key={Layout.key++}>
@@ -99,17 +114,27 @@ export class Text extends Visible implements IHoverable {
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
-          <KonvaText {...ShapeDefaultProps} key={Layout.key++} text={this.partialStr} {...props} />
+          <KonvaText
+            {...ShapeDefaultProps}
+            key={Layout.key++}
+            ref={this.ref}
+            text={this.partialStr}
+            {...props}
+          />
         </KonvaLabel>
         <KonvaLabel
           x={this.x()}
           y={this.y()}
-          ref={this.ref}
+          ref={this.labelRef}
           visible={false}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
-          <KonvaTag {...ShapeDefaultProps} fill={'black'} opacity={0.5} />
+          <KonvaTag
+            {...ShapeDefaultProps}
+            fill={CseMachine.getPrintableMode() ? Config.PrintHoverBgColor : Config.HoverBgColor}
+            opacity={0.5}
+          />
           <KonvaText {...ShapeDefaultProps} key={Layout.key++} text={this.fullStr} {...props} />
         </KonvaLabel>
       </React.Fragment>

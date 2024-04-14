@@ -7,19 +7,21 @@ import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */
 export class ArrowFromFn extends GenericArrow<FnValue | GlobalFnValue, Frame> {
+  constructor(from: FnValue | GlobalFnValue) {
+    super(from);
+    this.faded = !from.isReferenced();
+  }
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
     if (!to) return [];
 
-    const steps: StepsArray = [(x, y) => [x + Config.FnRadius * 3, y]];
-
-    if (to.y() < from.y() && from.y() < to.y() + to.height()) {
-      steps.push((x, y) => [x, y - Config.FnRadius * 2]);
-      steps.push((x, y) => [to.x() + (from.x() < to.x() ? 0 : to.width()), y]);
-    } else {
-      steps.push(() => [to.x() + to.width() / 2, to.y() + (to.y() < from.y() ? to.height() : 0)]);
-    }
+    const steps: StepsArray = [
+      (x, y) => [x + Config.FnRadius * 3, y],
+      (x, y) => [x, y - Config.FnRadius * 2],
+      (x, y) => [to.x() + (from.x() < to.x() ? 0 : to.width()), y]
+    ];
 
     return steps;
   }

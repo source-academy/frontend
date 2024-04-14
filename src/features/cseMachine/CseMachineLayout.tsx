@@ -1,6 +1,6 @@
 import Heap from 'js-slang/dist/cse-machine/heap';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
-import { Chapter } from 'js-slang/dist/types';
+import { Chapter, Frame } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
@@ -20,23 +20,28 @@ import CseMachine from './CseMachine';
 import { CseAnimation } from './CseMachineAnimation';
 import { Config, ShapeDefaultProps } from './CseMachineConfig';
 import {
-  Closure,
   Data,
   DataArray,
   EnvTree,
   EnvTreeNode,
   GlobalFn,
-  ReferenceType
+  NonGlobalFn,
+  ReferenceType,
+  StreamFn
 } from './CseMachineTypes';
 import {
-  convertClosureToGlobalFn,
+  assert,
   deepCopyTree,
+  defaultBackgroundColor,
   getNextChildren,
+  isBuiltInFn,
   isClosure,
   isDataArray,
-  isFunction,
+  isEnvEqual,
   isGlobalFn,
+  isNonGlobalFn,
   isPrimitiveData,
+  isStreamFn,
   isUnassigned,
   setDifference
 } from './CseMachineUtils';
@@ -64,8 +69,6 @@ export class Layout {
   /** scale factor for zooming and out of canvas */
   static scaleFactor = 1.02;
 
-  /** the environment tree */
-  static environmentTree: EnvTree;
   /** the global environment */
   static globalEnvNode: EnvTreeNode;
   /** grid of frames */
@@ -79,8 +82,12 @@ export class Layout {
   static previousControlComponent: ControlStack;
   static previousStashComponent: StashStack;
 
-  /** memoized values */
-  static values = new Map<Data, Value>();
+  /**
+   * memoized values, where keys are either ids for arrays and closures,
+   * or the function objects themselves for built-in functions and stream functions
+   */
+  static values = new Map<string | (() => any), Value>();
+
   /** memoized layout */
   static prevLayout: React.ReactNode;
   static currentDark: React.ReactNode;
@@ -90,6 +97,7 @@ export class Layout {
   static currentStackLight: React.ReactNode;
   static currentStackTruncLight: React.ReactNode;
   static stageRef: RefObject<any> = React.createRef();
+
   // buffer for faster rendering of diagram when scrolling
   static invisiblePaddingVertical: number = 300;
   static invisiblePaddingHorizontal: number = 300;
@@ -146,8 +154,7 @@ export class Layout {
     Layout.key = 0;
 
     // deep copy so we don't mutate the context
-    Layout.environmentTree = deepCopyTree(envTree);
-    Layout.globalEnvNode = Layout.environmentTree.root;
+    Layout.globalEnvNode = deepCopyTree(envTree).root;
     Layout.control = control;
     Layout.stash = stash;
 
@@ -207,42 +214,42 @@ export class Layout {
 
     const preludeEnvNode = Layout.globalEnvNode.children[0];
     const preludeEnv = preludeEnvNode.environment;
-    const globalEnvNode = Layout.globalEnvNode;
-    const globalEnv = globalEnvNode.environment;
+    const globalEnv = Layout.globalEnvNode.environment;
 
-    const preludeValueKeyMap = new Map(
-      Object.entries(preludeEnv.head).map(([key, value]) => [value, key])
-    );
-
-    // Change environments of each array and closure in the prelude to be the global environment
-    for (const value of preludeEnv.heap.getHeap()) {
-      Object.defineProperty(value, 'environment', { value: globalEnvNode.environment });
-      globalEnv.heap.add(value);
-      const key = preludeValueKeyMap.get(value);
-      if (key) {
-        globalEnv.head[key] = value;
+    // Add bindings from prelude environment head to global environment head
+    for (const [key, value] of Object.entries(preludeEnv.head)) {
+      delete preludeEnv.head[key];
+      globalEnv.head[key] = value;
+      if (isStreamFn(value) && isEnvEqual(value.environment, preludeEnv)) {
+        Object.defineProperty(value, 'environment', { value: globalEnv });
       }
+    }
+
+    // Move objects from prelude environment heap to global environment heap
+    for (const value of preludeEnv.heap.getHeap()) {
+      Object.defineProperty(value, 'environment', { value: globalEnv });
+      if (isDataArray(value)) {
+        for (const item of value) {
+          if (isStreamFn(item) && isEnvEqual(item.environment, preludeEnv)) {
+            Object.defineProperty(item, 'environment', { value: globalEnv });
+          }
+        }
+      }
+      preludeEnv.heap.move(value, globalEnv.heap);
     }
 
     // update globalEnvNode children
-    globalEnvNode.resetChildren(preludeEnvNode.children);
+    Layout.globalEnvNode.resetChildren(preludeEnvNode.children);
 
     // update the tail of each child's environment to point to the global environment
-    globalEnvNode.children.forEach(node => {
+    Layout.globalEnvNode.children.forEach(node => {
       node.environment.tail = globalEnv;
     });
-
-    // go through new bindings and update closures to be global functions
-    for (const value of Object.values(globalEnv.head)) {
-      if (isClosure(value)) {
-        convertClosureToGlobalFn(value);
-      }
-    }
   }
 
   /** remove any global functions not referenced elsewhere in the program */
   private static removeUnreferencedGlobalFns(): void {
-    const referencedGlobalFns = new Set<GlobalFn>();
+    const referencedFns = new Set<GlobalFn | NonGlobalFn>();
     const visitedData = new Set<DataArray>();
 
     const findGlobalFnReferences = (envNode: EnvTreeNode): void => {
@@ -250,7 +257,7 @@ export class Layout {
       const unreferenced = setDifference(envNode.environment.heap.getHeap(), new Set(headValues));
       for (const data of headValues) {
         if (isGlobalFn(data)) {
-          referencedGlobalFns.add(data);
+          referencedFns.add(data);
         } else if (isDataArray(data)) {
           findGlobalFnReferencesInData(data);
         }
@@ -269,7 +276,7 @@ export class Layout {
       visitedData.add(data);
       data.forEach(d => {
         if (isGlobalFn(d)) {
-          referencedGlobalFns.add(d);
+          referencedFns.add(d);
         } else if (isDataArray(d)) {
           findGlobalFnReferencesInData(d);
         }
@@ -279,15 +286,18 @@ export class Layout {
     // First, add any referenced global functions in the stash
     for (const item of Layout.stash.getStack()) {
       if (isGlobalFn(item)) {
-        referencedGlobalFns.add(item);
+        referencedFns.add(item);
       } else if (isDataArray(item)) {
         findGlobalFnReferencesInData(item);
       }
     }
 
-    // Then, find any references within any arrays inside the global environment heap
+    // Then, find any references within any arrays inside the global environment heap,
+    // and also add any non-global functions created in the global frame
     for (const data of Layout.globalEnvNode.environment.heap.getHeap()) {
-      if (isDataArray(data)) {
+      if (isNonGlobalFn(data)) {
+        referencedFns.add(data);
+      } else if (isDataArray(data)) {
         findGlobalFnReferencesInData(data);
       }
     }
@@ -299,13 +309,12 @@ export class Layout {
       Object.entries(Layout.globalEnvNode.environment.head).map(([key, value]) => [value, key])
     );
 
-    const newHead = {};
+    let i = 0;
+    const newHead: Frame = {};
     const newHeap = new Heap();
-    for (const fn of referencedGlobalFns) {
-      newHead[functionNames.get(fn)!] = fn;
-      if (fn.hasOwnProperty('environment')) {
-        newHeap.add(fn as Closure);
-      }
+    for (const fn of referencedFns) {
+      if (isClosure(fn)) newHeap.add(fn);
+      if (isGlobalFn(fn)) newHead[functionNames.get(fn) ?? `${i++}`] = fn;
     }
 
     // add any arrays from the original heap to the new heap
@@ -355,48 +364,39 @@ export class Layout {
     }
   }
 
-  /** memoize `Value` (used to detect circular references in non-primitive `Value`) */
-  static memoizeValue(value: Value): void {
-    Layout.values.set(value.data, value);
-  }
-
-  /** create an instance of the corresponding `Value` if it doesn't already exists,
-   *  else, return the existing value */
+  /** Creates an instance of the corresponding `Value` if it doesn't already exists,
+   *  else, returns the existing value */
   static createValue(data: Data, reference: ReferenceType): Value {
     if (isUnassigned(data)) {
+      assert(reference instanceof Binding);
       return new UnassignedValue(reference);
     } else if (isPrimitiveData(data)) {
       return new PrimitiveValue(data, reference);
     } else {
-      // try to find if this value is already created
-      const existingValue = Layout.values.get(data);
+      const existingValue = Layout.values.get(
+        isBuiltInFn(data) || isStreamFn(data) ? data : data.id
+      );
       if (existingValue) {
         existingValue.addReference(reference);
         return existingValue;
       }
 
-      // else create a new one
-      let newValue: Value = new PrimitiveValue(null, reference);
       if (isDataArray(data)) {
-        newValue = new ArrayValue(data, reference);
-      } else if (isFunction(data)) {
-        if (isClosure(data)) {
-          // normal JS Slang function
-          newValue = new FnValue(data, reference);
-        } else {
-          if (reference instanceof Binding) {
-            // function from the global env (has no extra props such as env, fnName)
-            newValue = new GlobalFnValue(data, reference);
-          } else {
-            // this should be impossible, since bindings for global function always get
-            // drawn first, before any other values like arrays get drawn
-            throw new Error('First reference of global function value is not a binding!');
-          }
-        }
+        return new ArrayValue(data, reference);
+      } else if (isGlobalFn(data)) {
+        assert(reference instanceof Binding);
+        return new GlobalFnValue(data, reference);
+      } else if (isNonGlobalFn(data)) {
+        return new FnValue(data, reference);
       }
 
-      return newValue;
+      return new PrimitiveValue(null, reference);
     }
+  }
+
+  static memoizeValue(data: GlobalFn | NonGlobalFn | StreamFn | DataArray, value: Value) {
+    if (isBuiltInFn(data) || isStreamFn(data)) Layout.values.set(data, value);
+    else Layout.values.set(data.id, value);
   }
 
   /**
@@ -498,7 +498,7 @@ export class Layout {
       return Layout.prevLayout;
     } else {
       const layout = (
-        <div className={'sa-cse-machine'} data-testid="sa-cse-machine">
+        <div className="sa-cse-machine" data-testid="sa-cse-machine">
           <div
             id="scroll-container"
             ref={Layout.scrollContainerRef}
@@ -517,15 +517,13 @@ export class Layout {
                 width: Layout.width(),
                 height: Layout.height(),
                 overflow: 'hidden',
-                backgroundColor: CseMachine.getPrintableMode()
-                  ? Config.PRINT_BACKGROUND
-                  : Config.SA_BLUE
+                backgroundColor: defaultBackgroundColor()
               }}
             >
               <Stage
                 width={Layout.stageWidth}
                 height={Layout.stageHeight}
-                ref={this.stageRef}
+                ref={Layout.stageRef}
                 draggable
                 onWheel={Layout.zoomStage}
                 className={classes['draggable']}
@@ -537,15 +535,16 @@ export class Layout {
                     y={0}
                     width={Layout.width()}
                     height={Layout.height()}
-                    fill={CseMachine.getPrintableMode() ? Config.PRINT_BACKGROUND : Config.SA_BLUE}
+                    fill={defaultBackgroundColor()}
                     key={Layout.key++}
                     listening={false}
                   />
                   {Layout.levels.map(level => level.draw())}
                   {CseMachine.getControlStash() && Layout.controlComponent.draw()}
                   {CseMachine.getControlStash() && Layout.stashComponent.draw()}
-                  {CseMachine.getControlStash() &&
-                    CseAnimation.animationComponents.map(c => c.draw())}
+                </Layer>
+                <Layer ref={CseAnimation.layerRef} listening={false}>
+                  {CseMachine.getControlStash() && CseAnimation.animations.map(c => c.draw())}
                 </Layer>
               </Stage>
             </div>
