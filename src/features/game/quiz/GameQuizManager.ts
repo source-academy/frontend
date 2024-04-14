@@ -92,7 +92,7 @@ export default class QuizManager {
     const lineWithName = question.question.replace('{name}', this.getUsername());
     quizQuestionWriter.changeLine(lineWithName);
 
-    GameGlobalAPI.getInstance().storeDialogueLine(question.question, question.speaker);
+    GameGlobalAPI.getInstance().storeDialogueLine(lineWithName, question.speaker);
 
     //Generate UI components for quizzes
     const header = new Phaser.GameObjects.Text(
