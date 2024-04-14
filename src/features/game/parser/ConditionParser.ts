@@ -1,4 +1,5 @@
 import { ActionCondition } from '../action/GameActionTypes';
+import { GameItemType } from '../location/GameMapTypes';
 import { GameStateStorage } from '../state/GameStateTypes';
 import StringUtils from '../utils/StringUtils';
 import Parser from './Parser';
@@ -53,6 +54,7 @@ export default class ConditionParser {
         };
 
       case GameStateStorage.AttemptedQuizState:
+        Parser.validator.assertItemType(GameItemType.quizzes, condParams[0]);
         return {
           state: GameStateStorage.AttemptedQuizState,
           conditionParams: {
@@ -62,6 +64,7 @@ export default class ConditionParser {
         };
 
       case GameStateStorage.CompletedQuizState:
+        Parser.validator.assertItemType(GameItemType.quizzes, condParams[0]);
         return {
           state: GameStateStorage.CompletedQuizState,
           conditionParams: {
