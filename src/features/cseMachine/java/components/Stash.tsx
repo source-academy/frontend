@@ -4,6 +4,7 @@ import { Group } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
+import { defaultTextColor } from '../../CseMachineUtils';
 import { CseMachine } from '../CseMachine';
 import { Method } from './Method';
 import { StashItem } from './StashItem';
@@ -23,7 +24,7 @@ export class Stash extends Visible {
     let stashItemX: number = this._x;
     for (const stashItem of stash.getStack()) {
       const stashItemText = this.getStashItemString(stashItem);
-      const stashItemStroke = ControlStashConfig.SA_WHITE;
+      const stashItemStroke = defaultTextColor();
       const stashItemReference = this.getStashItemRef(stashItem);
       const currStashItem = new StashItem(
         stashItemX,

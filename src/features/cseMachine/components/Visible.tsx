@@ -30,6 +30,6 @@ export abstract class Visible implements IVisible {
   reset(): void {
     this._isDrawn = false;
   }
-  readonly ref: RefObject<any> = React.createRef();
+  public ref: RefObject<any> = React.createRef();
   abstract draw(key?: number): React.ReactNode;
 }

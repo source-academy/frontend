@@ -22,15 +22,17 @@ class BufferService {
 
   public attachConsole(workspaceLocation: WorkspaceLocation): () => void {
     const bufferCallback = (log: string) => this.push(log, workspaceLocation);
-    const defaultConsole = {};
+    const defaultConsole: Record<string, any> = {};
     Object.entries(consoleOverloads).forEach(([method, overload]) => {
-      defaultConsole[method] = console[method];
-      console[method] = overload(bufferCallback);
+      const key = method as keyof typeof consoleOverloads;
+      defaultConsole[method] = console[key];
+      console[key] = overload(bufferCallback);
     });
 
     return () => {
       Object.entries(consoleOverloads).forEach(([method]) => {
-        console[method] = defaultConsole[method];
+        const key = method as keyof typeof consoleOverloads;
+        console[key] = defaultConsole[key];
       });
     };
   }

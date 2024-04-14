@@ -1,18 +1,14 @@
 import { Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { Value } from 'js-slang/dist/types';
-import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
-import { Group } from 'react-konva';
 
 import CseMachine from '../CseMachine';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
-import { Layout } from '../CseMachineLayout';
-import { IHoverable } from '../CseMachineTypes';
 import { getStashItemComponent } from '../CseMachineUtils';
 import { StashItemComponent } from './StashItemComponent';
 import { Visible } from './Visible';
 
-export class StashStack extends Visible implements IHoverable {
+export class StashStack extends Visible {
   /** array of stash item components */
   readonly stashItemComponents: StashItemComponent[];
 
@@ -40,18 +36,8 @@ export class StashStack extends Visible implements IHoverable {
       .slice(CseMachine.getStackTruncated() ? -10 : 0)
       .map(stashItemToComponent);
   }
-  onMouseEnter(e: KonvaEventObject<MouseEvent>): void {}
-  onMouseLeave(e: KonvaEventObject<MouseEvent>): void {}
-
-  destroy() {
-    this.ref.current.destroyChildren();
-  }
 
   draw(): React.ReactNode {
-    return (
-      <Group key={Layout.key++} ref={this.ref}>
-        {this.stashItemComponents.map(c => c?.draw())}
-      </Group>
-    );
+    return <>{this.stashItemComponents.map(c => c?.draw())}</>;
   }
 }
