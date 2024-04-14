@@ -22,6 +22,8 @@ export enum ColumnFields {
   actionsIndex = 'actionsIndex'
 }
 
+export type ColumnFieldsKeys = keyof typeof ColumnFields;
+
 export enum SortStates {
   ASC = 'sort-asc',
   DESC = 'sort-desc',
@@ -123,8 +125,6 @@ export enum ColumnName {
 
 export type ColumnNameKeys = keyof typeof ColumnName;
 
-export type ColumnFieldsKeys = keyof typeof ColumnFields;
-
 export type SortStateProperties = {
   assessmentName: SortStates;
   assessmentType: SortStates;
@@ -144,10 +144,9 @@ export type IGradingTableRow = {
   studentName: string;
   studentUsername: string;
   groupName: string;
-  progressStatus: string;
+  progressStatus: ProgressStatus;
   xp: string;
   actionsIndex: number; // actions needs a column, but only submission ID data, so it stores submission ID
-  progress: ProgressStatus;
   courseID: number;
 };
 

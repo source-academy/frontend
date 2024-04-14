@@ -53,6 +53,7 @@ const Grading: React.FC = () => {
 
   const [pageSize, setPageSize] = useState(10);
   const [showAllSubmissions, setShowAllSubmissions] = useState(false);
+  const [refreshQueryData, setRefreshQueryData] = useState({ page: 1, filterParams: {} });
   const [refreshQueried, setRefreshQueried] = useState(false); // for callback (immediately becomes false)
   const [animateRefresh, setAnimateRefresh] = useState(false); // for animation (becomes false on animation end)
   const [submissions, setSubmissions] = useState<GradingOverview[]>([]);
@@ -63,11 +64,7 @@ const Grading: React.FC = () => {
 
   const updateGradingOverviewsCallback = useCallback(
     (page: number, filterParams: Object) => {
-      // Prevents es-lint missing dependency warning
-      if (refreshQueried) {
-        return setRefreshQueried(false);
-      }
-
+      setRefreshQueryData({ page, filterParams });
       dispatch(setGradingHasLoadedBefore());
       dispatch(increaseRequestCounter());
       dispatch(
@@ -80,8 +77,32 @@ const Grading: React.FC = () => {
         )
       );
     },
-    [dispatch, showAllGroups, showAllSubmissions, pageSize, allColsSortStates, refreshQueried]
+    [dispatch, showAllGroups, showAllSubmissions, pageSize, allColsSortStates]
   );
+
+  useEffect(() => {
+    if (refreshQueried) {
+      dispatch(increaseRequestCounter());
+      dispatch(
+        fetchGradingOverviews(
+          showAllGroups,
+          unpublishedToBackendParams(showAllSubmissions),
+          paginationToBackendParams(refreshQueryData.page, pageSize),
+          refreshQueryData.filterParams,
+          allColsSortStates
+        )
+      );
+      setRefreshQueried(false);
+    }
+  }, [
+    dispatch,
+    showAllGroups,
+    showAllSubmissions,
+    pageSize,
+    allColsSortStates,
+    refreshQueried,
+    refreshQueryData
+  ]);
 
   useEffect(() => {
     setSubmissions(

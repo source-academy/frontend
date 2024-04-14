@@ -9,6 +9,7 @@ import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -297,7 +298,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
               component: GradingFilterable,
               params: {
                 value: params.data.progressStatus,
-                children: [<ProgressStatusBadge progress={params.data.progress} />],
+                children: [<ProgressStatusBadge progress={params.data.progressStatus} />],
                 filterMode: filterMode
               }
             }
@@ -327,7 +328,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
               component: GradingActions,
               params: {
                 submissionId: params.data.actionsIndex,
-                progress: params.data.progress,
+                progress: params.data.progressStatus,
                 filterMode: filterMode
               }
             }
@@ -394,7 +395,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       columnFilters.reduce(
         (doesItContain, currentFilter) =>
           doesItContain ||
-          (currentFilter.id === ColumnFields.progressStatus && currentFilter.value !== 'submitted'),
+          (currentFilter.id === ColumnFields.progressStatus &&
+            String(currentFilter.value).toLowerCase() !== ProgressStatuses.graded),
         false
       )
     ) {
@@ -429,7 +431,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
         const sameData: boolean = submissions.reduce(
           (sameData, currentSubmission, index) => {
-            newData.push({
+            const newRow: IGradingTableRow = {
               assessmentName: currentSubmission.assessmentName,
               assessmentType: currentSubmission.assessmentType,
               studentName: currentSubmission.studentName
@@ -443,7 +445,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
                 ? currentSubmission.studentUsernames.join(', ')
                 : '',
               groupName: currentSubmission.groupName,
-              progressStatus: currentSubmission.submissionStatus,
+              progressStatus: currentSubmission.progress,
               xp:
                 currentSubmission.currentXp +
                 ' (+' +
@@ -451,10 +453,17 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
                 ') / ' +
                 currentSubmission.maxXp,
               actionsIndex: currentSubmission.submissionId,
-              progress: currentSubmission.progress,
               courseID: courseId!
-            });
-            return sameData && currentSubmission.submissionId === rowData?.[index]?.actionsIndex;
+            };
+            newData.push(newRow);
+            return (
+              sameData &&
+              newRow.actionsIndex === rowData?.[index]?.actionsIndex &&
+              newRow.studentUsername === rowData?.[index]?.studentUsername &&
+              newRow.groupName === rowData?.[index]?.groupName &&
+              newRow.progressStatus === rowData?.[index]?.progressStatus &&
+              newRow.xp === rowData?.[index]?.xp
+            );
           },
           submissions.length === rowData?.length
         );

@@ -179,21 +179,4 @@ const ProgressStatusBadge: React.FC<ProgressStatusBadgeProps> = ({ progress }) =
   return <Badge text={statusText} color={getBadgeColorFromLabel(progress)} icon={badgeIcon} />;
 };
 
-// TO BE REMOVED
-type SubmissionStatusBadgeProps = {
-  status: string;
-};
-
-// TO BE REMOVED
-const SubmissionStatusBadge: React.FC<SubmissionStatusBadgeProps> = ({ status }) => {
-  const statusText = status.charAt(0).toUpperCase() + status.slice(1);
-  return <Badge text={statusText} color={getBadgeColorFromLabel(status)} />;
-};
-
-export {
-  AssessmentTypeBadge,
-  ColumnFilterBadge,
-  FilterBadge,
-  ProgressStatusBadge,
-  SubmissionStatusBadge
-};
+export { AssessmentTypeBadge, ColumnFilterBadge, FilterBadge, ProgressStatusBadge };
