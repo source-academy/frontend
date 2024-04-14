@@ -66,10 +66,7 @@ export const freshSortState: SortStateProperties = {
 
 const disabledEditModeCols: string[] = [ColumnFields.actionsIndex];
 
-const disabledFilterModeCols: string[] = [
-  ColumnFields.xp,
-  ColumnFields.actionsIndex
-];
+const disabledFilterModeCols: string[] = [ColumnFields.xp, ColumnFields.actionsIndex];
 
 const disabledSortCols: string[] = [ColumnFields.actionsIndex];
 
