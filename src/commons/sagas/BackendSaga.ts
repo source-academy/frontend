@@ -13,7 +13,8 @@ import {
   GradingOverview,
   GradingOverviews,
   GradingQuery,
-  GradingQuestion
+  GradingQuestion,
+  SortStates
 } from '../../features/grading/GradingTypes';
 import {
   ASSIGN_ENTRIES_FOR_VOTING,
@@ -475,17 +476,16 @@ function* BackendSaga(): SagaIterator {
         sortDirection: ''
       };
 
-      for (const key in allColsSortStates.currentState) {
-        if (allColsSortStates.sortBy === key) {
-          if (allColsSortStates.currentState[key] !== 'sort') {
+      Object.keys(allColsSortStates.currentState).forEach(key => {
+        if (allColsSortStates.sortBy === key && key != '') {
+          if (allColsSortStates.currentState[key] !== SortStates.NONE) {
             sortedBy.sortDirection = allColsSortStates.currentState[key];
           } else {
             sortedBy.sortBy = '';
             sortedBy.sortDirection = '';
           }
-          break;
         }
-      }
+      });
 
       const gradingOverviews: GradingOverviews | null = yield call(
         getGradingOverviews,

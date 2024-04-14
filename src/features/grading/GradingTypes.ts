@@ -75,7 +75,7 @@ export type GradingAnswer = GradingQuestion[];
 
 export type AllColsSortStates = {
   currentState: SortStateProperties;
-  sortBy: string;
+  sortBy: ColumnFieldsKeys | '';
 };
 
 export type ColumnFiltersState = ColumnFilter[];
@@ -85,7 +85,7 @@ export type ColumnFilter = {
   value: unknown;
 };
 
-export type GradingColumnVisibility = string[];
+export type GradingColumnVisibility = ColumnFieldsKeys[];
 
 export type GradingAssessment = {
   coverPicture: string;
@@ -122,6 +122,8 @@ export enum ColumnName {
   actionsIndex = 'Actions'
 }
 
+export type ColumnFieldsKeys = keyof typeof ColumnName;
+
 export type SortStateProperties = {
   assessmentName: SortStates;
   assessmentType: SortStates;
@@ -132,6 +134,8 @@ export type SortStateProperties = {
   xp: SortStates;
   actionsIndex: SortStates;
 };
+
+export type SortStatePropertiesTypes = keyof SortStateProperties;
 
 export type IGradingTableRow = {
   assessmentName: string;

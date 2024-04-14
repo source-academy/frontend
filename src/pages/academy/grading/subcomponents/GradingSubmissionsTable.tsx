@@ -19,6 +19,7 @@ import {
 } from 'src/commons/workspace/WorkspaceActions';
 import {
   ColumnFields,
+  ColumnFieldsKeys,
   ColumnFilter,
   ColumnFiltersState,
   ColumnName,
@@ -113,8 +114,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     resizable: false,
     sortable: true,
     headerComponentParams: {
-      hideColumn: (id: string) => handleColumnFilterAdd(id),
-      updateSortState: (affectedID: ColumnFields, sortDirection: SortStates) => {
+      hideColumn: (id: ColumnFieldsKeys) => handleColumnFilterAdd(id),
+      updateSortState: (affectedID: ColumnFieldsKeys, sortDirection: SortStates) => {
         if (!disabledSortCols.includes(affectedID)) {
           const newState: SortStateProperties = { ...freshSortState };
           newState[affectedID] = sortDirection;
@@ -386,7 +387,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     }
   };
 
-  const handleColumnFilterAdd = (toAdd: string) => {
+  const handleColumnFilterAdd = (toAdd: ColumnFieldsKeys) => {
     setHiddenColumns((prev: GradingColumnVisibility) => [...prev, toAdd]);
   };
 
@@ -492,16 +493,11 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           style={{ marginTop: '0.5rem' }}
         >
           <GradingFlex>
-            <GradingText secondaryText>Columns Hidden:</GradingText>
+            <GradingText isSecondaryText>Columns Hidden:</GradingText>
             <GradingColumnFilters
               filters={hiddenColumns}
-              filtersName={hiddenColumns.map(id => {
-                for (const item in ColumnName) {
-                  if (ColumnFields[item] === id) {
-                    return ColumnName[item];
-                  }
-                }
-                return '';
+              filtersName={hiddenColumns.map((id: ColumnFieldsKeys) => {
+                return ColumnName[id];
               })}
               onFilterRemove={handleColumnFilterRemove}
             />
@@ -519,7 +515,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         <GradingFlex alignItems="center">
           <GradingFlex style={{ alignItems: 'center', height: '1.75rem', width: '100%' }}>
             <Icon icon={IconNames.FILTER_LIST} />
-            <GradingText secondaryText style={{ marginLeft: '7.5px' }}>
+            <GradingText isSecondaryText style={{ marginLeft: '7.5px' }}>
               {columnFilters.length > 0 ? (
                 'Filters: '
               ) : filterMode === true ? (

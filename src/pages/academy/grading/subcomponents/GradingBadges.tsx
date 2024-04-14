@@ -9,12 +9,12 @@ declare type Size = (typeof sizeValues)[number];
 
 interface BadgeProps {
   text: string;
-  color?: string;
+  color?: string[];
   size?: Size;
   icon?: () => ReactNode;
 }
 
-const Badge: React.FC<BadgeProps> = (props: BadgeProps) => {
+export const Badge: React.FC<BadgeProps> = (props: BadgeProps) => {
   return (
     <div
       className={'grading-badge grading-badge-' + (props.size ? props.size : 'sm')}
@@ -60,9 +60,36 @@ const BADGE_COLORS = Object.freeze({
   [ProgressStatuses.published]: AVAILABLE_COLORS.blue
 });
 
+// For supporting tables that still use Tremor & Tanstack (e.g TeamFormationBadges since they copied the old tanstack grading code)
+// TO BE REMOVED AFTER THEY MIGRATE TO BLUEPRINTJS/AGGRID
+const BADGE_COLORS_LEGACY = Object.freeze({
+  // assessment types
+  missions: 'indigo',
+  quests: 'emerald',
+  paths: 'sky',
+
+  // submission status
+  [ProgressStatuses.autograded]: 'purple',
+  [ProgressStatuses.not_attempted]: 'gray',
+  [ProgressStatuses.attempting]: 'red',
+  [ProgressStatuses.attempted]: 'red',
+
+  // grading status
+  [ProgressStatuses.submitted]: 'yellow',
+  [ProgressStatuses.graded]: 'green',
+  [ProgressStatuses.published]: 'blue'
+});
+
 export function getBadgeColorFromLabel(label: string) {
   const maybeKey = label.toLowerCase() as keyof typeof BADGE_COLORS;
   return BADGE_COLORS[maybeKey] || AVAILABLE_COLORS.gray;
+}
+
+// For supporting tables that still use Tremor & Tanstack (e.g TeamFormationBadges since they copied the old tanstack grading code)
+// TO BE REMOVED AFTER THEY MIGRATE TO BLUEPRINTJS/AGGRID
+export function getBadgeColorFromLabelLegacy(label: string) {
+  const maybeKey = label.toLowerCase() as keyof typeof BADGE_COLORS_LEGACY;
+  return BADGE_COLORS_LEGACY[maybeKey] || 'gray';
 }
 
 type AssessmentTypeBadgeProps = {

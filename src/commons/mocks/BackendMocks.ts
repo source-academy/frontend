@@ -5,7 +5,8 @@ import { FETCH_GROUP_GRADING_SUMMARY } from '../../features/dashboard/DashboardT
 import {
   GradingOverviews,
   GradingQuery,
-  GradingQuestion
+  GradingQuestion,
+  SortStates
 } from '../../features/grading/GradingTypes';
 import {
   OverallState,
@@ -186,17 +187,18 @@ export function* mockBackendSaga(): SagaIterator {
         sortBy: allColsSortStates.sortBy,
         sortDirection: ''
       };
-      for (const key in allColsSortStates.currentState) {
-        if (allColsSortStates.sortBy === key) {
-          if (allColsSortStates.currentState[key] !== 'sort') {
+
+      Object.keys(allColsSortStates.currentState).forEach(key => {
+        if (allColsSortStates.sortBy === key && key != '') {
+          if (allColsSortStates.currentState[key] !== SortStates.NONE) {
             sortedBy.sortDirection = allColsSortStates.currentState[key];
           } else {
             sortedBy.sortBy = '';
             sortedBy.sortDirection = '';
           }
-          break;
         }
-      }
+      });
+
       const gradingOverviews = yield call(() =>
         mockFetchGradingOverview(accessToken, filterToGroup, pageParams, filterParams, sortedBy)
       );

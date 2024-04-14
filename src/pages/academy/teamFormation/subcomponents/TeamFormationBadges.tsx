@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { ColumnFilter } from '@tanstack/react-table';
 import { Badge } from '@tremor/react';
 
-import { getBadgeColorFromLabel } from '../../grading/subcomponents/GradingBadges';
+import { getBadgeColorFromLabelLegacy } from '../../grading/subcomponents/GradingBadges';
 
 type FilterBadgeProps = {
   filter: ColumnFilter;
@@ -18,7 +18,7 @@ const FilterBadge: React.FC<FilterBadgeProps> = ({ filter, onRemove }) => {
       <Badge
         text={filterValue}
         icon={() => <Icon icon={IconNames.CROSS} style={{ marginRight: '0.25rem' }} />}
-        color={getBadgeColorFromLabel(filterValue)}
+        color={getBadgeColorFromLabelLegacy(filterValue)}
       />
     </button>
   );
