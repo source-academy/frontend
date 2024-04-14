@@ -49,20 +49,20 @@ const BADGE_COLORS = Object.freeze({
   paths: AVAILABLE_COLORS.sky,
 
   // submission status
-  autograded: AVAILABLE_COLORS.purple,
-  not_attempted: AVAILABLE_COLORS.gray,
-  attempting: AVAILABLE_COLORS.red,
-  attempted: AVAILABLE_COLORS.red,
+  [ProgressStatuses.autograded]: AVAILABLE_COLORS.purple,
+  [ProgressStatuses.not_attempted]: AVAILABLE_COLORS.gray,
+  [ProgressStatuses.attempting]: AVAILABLE_COLORS.red,
+  [ProgressStatuses.attempted]: AVAILABLE_COLORS.red,
 
   // grading status
-  submitted: AVAILABLE_COLORS.yellow,
-  graded: AVAILABLE_COLORS.green,
-  published: AVAILABLE_COLORS.blue
+  [ProgressStatuses.submitted]: AVAILABLE_COLORS.yellow,
+  [ProgressStatuses.graded]: AVAILABLE_COLORS.green,
+  [ProgressStatuses.published]: AVAILABLE_COLORS.blue
 });
 
 export function getBadgeColorFromLabel(label: string) {
   const maybeKey = label.toLowerCase() as keyof typeof BADGE_COLORS;
-  return BADGE_COLORS[maybeKey] || AVAILABLE_COLORS.gray; //gray
+  return BADGE_COLORS[maybeKey] || AVAILABLE_COLORS.gray;
 }
 
 type AssessmentTypeBadgeProps = {
