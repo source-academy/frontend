@@ -172,7 +172,9 @@ export default class GamePhaseManager {
    * @returns {boolean}
    */
   public isCurrentPhaseTerminal(): boolean {
-    return Object.values(GameTerminalPhaseType).includes(this.getCurrentPhase());
+    return Object.values(GameTerminalPhaseType).includes(
+      this.getCurrentPhase() as unknown as GameTerminalPhaseType
+    );
   }
 
   /**

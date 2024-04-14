@@ -30,10 +30,5 @@ export const ControlStashConfig = Object.freeze({
   FontStyle: 'normal',
   FontVariant: 'normal',
   FontStyleHeader: 'bold',
-  FontSizeHeader: 18,
-
-  SA_WHITE: '#999999',
-  SA_BLUE: '#2c3e50',
-  PRINT_BACKGROUND: 'white',
-  STASH_DANGER_ITEM: '#ff0000'
+  FontSizeHeader: 18
 });

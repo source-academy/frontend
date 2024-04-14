@@ -15,7 +15,8 @@ import { astToString } from 'js-slang/dist/utils/ast/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
-import { cloneDeep } from 'lodash';
+import { Text } from 'konva/lib/shapes/Text';
+import { cloneDeep, isObject } from 'lodash';
 import classes from 'src/styles/Draggable.module.scss';
 
 import { ArrayUnit } from './components/ArrayUnit';
@@ -29,7 +30,6 @@ import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
 import CseMachine from './CseMachine';
 import { Config } from './CseMachineConfig';
-import { ControlStashConfig } from './CseMachineControlStashConfig';
 import { Layout } from './CseMachineLayout';
 import {
   BuiltInFn,
@@ -46,7 +46,8 @@ import {
   Primitive,
   ReferenceType,
   SourceObject,
-  StreamFn
+  StreamFn,
+  Unassigned
 } from './CseMachineTypes';
 
 class AssertionError extends Error {
@@ -58,12 +59,6 @@ class AssertionError extends Error {
 
 export function assert(condition: boolean, msg?: string): asserts condition {
   if (!condition) throw new AssertionError(msg);
-}
-
-// TODO: can make use of lodash
-/** Returns `true` if `x` is an object */
-export function isObject(x: any): x is object {
-  return x === Object(x);
 }
 
 /** Returns `true` if `object` is empty */
@@ -183,7 +178,7 @@ export function isNumber(data: Data): data is number {
 }
 
 /** Returns `true` if `data` is a symbol */
-export function isUnassigned(data: Data): data is symbol {
+export function isUnassigned(data: Data): data is Unassigned {
   return typeof data === 'symbol';
 }
 
@@ -192,9 +187,16 @@ export function isBoolean(data: Data): data is boolean {
   return typeof data === 'boolean';
 }
 
-/** Returns `true` if `data` is a primitive, defined as a null | data | number */
+/** Returns `true` if `data` is a primitive, which are non-reference types and source objects */
 export function isPrimitiveData(data: Data): data is Primitive {
-  return isUndefined(data) || isNull(data) || isString(data) || isNumber(data) || isBoolean(data);
+  return (
+    isUndefined(data) ||
+    isNull(data) ||
+    isString(data) ||
+    isNumber(data) ||
+    isBoolean(data) ||
+    isSourceObject(data)
+  );
 }
 
 // TODO: remove this in the future once ES typings are updated to contain the new set functions
@@ -376,8 +378,8 @@ export function setHoveredStyle(target: Node | Group, hoveredAttrs: any = {}): v
   nodes.push(target);
   nodes.forEach(node => {
     node.setAttrs({
-      stroke: node.attrs.stroke ? Config.HoveredColor : node.attrs.stroke,
-      fill: node.attrs.fill ? Config.HoveredColor : node.attrs.fill,
+      stroke: node.attrs.stroke ? Config.HoverColor : node.attrs.stroke,
+      fill: node.attrs.fill ? Config.HoverColor : node.attrs.fill,
       ...hoveredAttrs
     });
   });
@@ -392,14 +394,14 @@ export function setUnhoveredStyle(target: Node | Group, unhoveredAttrs: any = {}
   nodes.forEach(node => {
     node.setAttrs({
       stroke: node.attrs.stroke
-        ? CseMachine.getPrintableMode()
-          ? Config.SA_BLUE
-          : Config.SA_WHITE
+        ? node instanceof Text
+          ? defaultTextColor()
+          : defaultStrokeColor()
         : node.attrs.stroke,
       fill: node.attrs.fill
-        ? CseMachine.getPrintableMode()
-          ? Config.SA_BLUE
-          : Config.SA_WHITE
+        ? node instanceof Text
+          ? defaultTextColor()
+          : defaultStrokeColor()
         : node.attrs.fill,
       ...unhoveredAttrs
     });
@@ -442,8 +444,10 @@ function findObjects(
   visited.add(array);
   for (const item of array) {
     if (isDataArray(item) || isClosure(item)) {
-      if (isEnvEqual(item.environment, environment)) set.add(item);
-      if (isDataArray(item)) findObjects(environment, set, item, visited);
+      if (isEnvEqual(item.environment, environment)) {
+        set.add(item);
+        if (isDataArray(item)) findObjects(environment, set, item, visited);
+      }
     }
   }
 }
@@ -461,7 +465,7 @@ export function getReferencedObjects(environment: Env): Set<DataArray | Closure>
 /**
  * Get the set of all objects in the heap of the given environment that are **not**
  * referenced in the head. (Note that these objects can still be referenced from other
- * environments, just not the given one)
+ * environments, just not the given one.)
  */
 export function getUnreferencedObjects(environment: Env): Set<DataArray | Closure> {
   return setDifference(environment.heap.getHeap(), getReferencedObjects(environment));
@@ -851,21 +855,23 @@ export const isStashItemInDanger = (stashIndex: number): boolean => {
   return false;
 };
 
-export const defaultSAColor = () =>
-  CseMachine.getPrintableMode() ? Config.SA_BLUE : Config.SA_WHITE;
+export const defaultBackgroundColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintBgColor : Config.BgColor;
 
-export const fadedSAColor = () =>
-  CseMachine.getPrintableMode() ? Config.SA_FADED_BLUE : Config.SA_FADED_WHITE;
+export const defaultTextColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintTextColor : Config.TextColor;
 
-export const stackItemSAColor = (index: number) =>
-  isStashItemInDanger(index)
-    ? ControlStashConfig.STASH_DANGER_ITEM
-    : CseMachine.getPrintableMode()
-    ? ControlStashConfig.SA_BLUE
-    : ControlStashConfig.SA_WHITE;
-export const currentItemSAColor = (test: boolean) =>
-  test
-    ? Config.SA_CURRENT_ITEM
-    : CseMachine.getPrintableMode()
-    ? ControlStashConfig.SA_BLUE
-    : ControlStashConfig.SA_WHITE;
+export const fadedTextColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintTextColorFaded : Config.TextColorFaded;
+
+export const defaultStrokeColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintStrokeColor : Config.StrokeColor;
+
+export const fadedStrokeColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintStrokeColorFaded : Config.StrokeColorFaded;
+
+export const defaultActiveColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintActiveColor : Config.ActiveColor;
+
+export const defaultDangerColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintDangerColor : Config.DangerColor;
