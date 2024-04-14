@@ -82,6 +82,12 @@ export class Frame extends Visible implements IHoverable {
     // get all keys and object descriptors of each value inside the head
     const entries = Object.entries(Object.getOwnPropertyDescriptors(this.environment.head));
 
+    // move the global frame default text to the first position if it isn't in there already
+    if (this.environment.name === 'global' && entries[0][0] !== Config.GlobalFrameDefaultText) {
+      const index = entries.findIndex(([key]) => key === Config.GlobalFrameDefaultText);
+      entries.unshift(entries.splice(index, 1)[0]);
+    }
+
     // get values that are unreferenced, which will used to created dummy bindings
     const unreferencedValues = [...getUnreferencedObjects(this.environment)];
 
