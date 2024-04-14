@@ -1,8 +1,8 @@
-import ShareLinkState from '../../ShareLinkState';
+import { ParsedIntermediateShareLinkState } from '../../ShareLinkState';
 import EncoderDelegate from './EncoderDelegate';
 
 class JsonEncoderDelegate implements EncoderDelegate {
-  encode(state: ShareLinkState) {
+  encode(state: ParsedIntermediateShareLinkState) {
     return JSON.stringify(state);
   }
 }

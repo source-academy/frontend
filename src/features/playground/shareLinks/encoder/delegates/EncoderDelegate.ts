@@ -1,7 +1,7 @@
-import ShareLinkState from '../../ShareLinkState';
+import { ParsedIntermediateShareLinkState } from '../../ShareLinkState';
 
 interface EncoderDelegate {
-  encode(state: ShareLinkState): string;
+  encode(state: ParsedIntermediateShareLinkState): string;
 }
 
 export default EncoderDelegate;

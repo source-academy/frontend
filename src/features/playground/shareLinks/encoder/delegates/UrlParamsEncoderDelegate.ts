@@ -1,10 +1,10 @@
 import qs from 'query-string';
 
-import ShareLinkState from '../../ShareLinkState';
+import { ParsedIntermediateShareLinkState } from '../../ShareLinkState';
 import EncoderDelegate from './EncoderDelegate';
 
 class UrlParamsEncoderDelegate implements EncoderDelegate {
-  encode(state: ShareLinkState): string {
+  encode(state: ParsedIntermediateShareLinkState): string {
     return qs.stringify(state);
   }
 }

@@ -12,20 +12,9 @@ import { externalUrlShortenerRequest } from '../sagas/PlaygroundSaga';
 import { postSharedProgram } from '../sagas/RequestsSaga';
 import Constants, { Links } from '../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { request } from '../utils/RequestHelper';
-import { RemoveLast } from '../utils/TypeHelper';
 
 type ControlBarShareButtonProps = {
   isSicp?: boolean;
-};
-
-type ShareLinkRequestHelperParams = RemoveLast<Parameters<typeof request>>;
-
-export const requestToShareProgram = async (
-  ...[path, method, opts]: ShareLinkRequestHelperParams
-) => {
-  const resp = await request(path, method, opts);
-  return resp;
 };
 
 /**
