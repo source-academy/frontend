@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { useFullscreen } from '@mantine/hooks';
 import { Enable, NumberSize, Resizable, ResizableProps, ResizeCallback } from 're-resizable';
 import { Direction } from 're-resizable/lib/resizer';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import ControlBar, { ControlBarProps } from '../controlBar/ControlBar';
 import EditorContainer, { EditorContainerProps } from '../editor/EditorContainer';
@@ -35,15 +35,15 @@ type StateProps = {
 };
 
 const Workspace: React.FC<WorkspaceProps> = props => {
-  const sideBarResizable = React.useRef<Resizable | null>(null);
-  const contentContainerDiv = React.useRef<HTMLDivElement | null>(null);
-  const editorDividerDiv = React.useRef<HTMLDivElement | null>(null);
-  const leftParentResizable = React.useRef<Resizable | null>(null);
-  const maxDividerHeight = React.useRef<number | null>(null);
-  const sideDividerDiv = React.useRef<HTMLDivElement | null>(null);
+  const sideBarResizable = useRef<Resizable | null>(null);
+  const contentContainerDiv = useRef<HTMLDivElement>(null);
+  const editorDividerDiv = useRef<HTMLDivElement>(null);
+  const leftParentResizable = useRef<Resizable | null>(null);
+  const maxDividerHeight = useRef<number | null>(null);
+  const sideDividerDiv = useRef<HTMLDivElement>(null);
   const [contentContainerWidth] = useDimensions(contentContainerDiv);
-  const [expandedSideBarWidth, setExpandedSideBarWidth] = React.useState(200);
-  const [isSideBarExpanded, setIsSideBarExpanded] = React.useState(true);
+  const [expandedSideBarWidth, setExpandedSideBarWidth] = useState(200);
+  const [isSideBarExpanded, setIsSideBarExpanded] = useState(true);
 
   const sideBarCollapsedWidth = 40;
 
@@ -52,7 +52,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
 
   FocusStyleManager.onlyShowFocusOnTabs();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.sideContentIsResizeable && maxDividerHeight.current === null) {
       maxDividerHeight.current = sideDividerDiv.current!.clientHeight;
     }

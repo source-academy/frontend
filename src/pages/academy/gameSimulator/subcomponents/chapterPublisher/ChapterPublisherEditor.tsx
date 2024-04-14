@@ -1,4 +1,4 @@
-import { Button, Intent, Switch } from '@blueprintjs/core';
+import { Button, Classes, Intent, Switch } from '@blueprintjs/core';
 import { DatePicker } from '@blueprintjs/datetime';
 import { memo, useCallback, useEffect, useState } from 'react';
 import { getStandardDateTime } from 'src/commons/utils/DateHelper';
@@ -115,7 +115,8 @@ const ChapterPublisherEditor: React.FC<ChapterSimProps> = ({ chapterDetail, chap
   return (
     <>
       <h4>
-        Title: <input className="bp5-input" type="text" placeholder="New title" {...titleProps} />
+        Title:{' '}
+        <input className={Classes.INPUT} type="text" placeholder="New title" {...titleProps} />
       </h4>
       <b>Open date: </b>
       {openDate && getStandardDateTime(openDate.toISOString())}
@@ -127,7 +128,8 @@ const ChapterPublisherEditor: React.FC<ChapterSimProps> = ({ chapterDetail, chap
         highlightCurrentDay
       />
       <h4>
-        Chapter Preview Image URL: <input className="bp5-input" type="text" {...imageUrlProps} />
+        Chapter Preview Image URL:{' '}
+        <input className={Classes.INPUT} type="text" {...imageUrlProps} />
       </h4>
       <h4>Chapter Files (.txt):</h4>
       <SortableList items={chosenFiles} onSortEnd={onSortEnd} />
