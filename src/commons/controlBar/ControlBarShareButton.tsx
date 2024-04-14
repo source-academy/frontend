@@ -4,27 +4,18 @@ import { useHotkeys } from '@mantine/hooks';
 import React, { useRef, useState } from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 import JsonEncoderDelegate from 'src/features/playground/shareLinks/encoder/delegates/JsonEncoderDelegate';
+import UrlParamsEncoderDelegate from 'src/features/playground/shareLinks/encoder/delegates/UrlParamsEncoderDelegate';
 import { usePlaygroundConfigurationEncoder } from 'src/features/playground/shareLinks/encoder/EncoderHooks';
 
 import ControlButton from '../ControlButton';
+import { externalUrlShortenerRequest } from '../sagas/PlaygroundSaga';
 import { postSharedProgram } from '../sagas/RequestsSaga';
-import Constants from '../utils/Constants';
-import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
+import Constants, { Links } from '../utils/Constants';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { request } from '../utils/RequestHelper';
 import { RemoveLast } from '../utils/TypeHelper';
 
-type ControlBarShareButtonProps = DispatchProps & StateProps;
-
-type DispatchProps = {
-  handleGenerateLz?: () => void;
-  handleShortenURL: (s: string) => void;
-  handleUpdateShortURL: (s: string) => void;
-};
-
-type StateProps = {
-  queryString?: string;
-  shortURL?: string;
-  key: string;
+type ControlBarShareButtonProps = {
   isSicp?: boolean;
 };
 
@@ -37,6 +28,21 @@ export const requestToShareProgram = async (
   return resp;
 };
 
+/**
+ * Generates the share link for programs in the Playground.
+ *
+ * For playground-only (no backend) deployments:
+ * - Generate a URL with playground configuration encoded as hash parameters
+ * - URL sent to external URL shortener service
+ * - Shortened URL displayed to user
+ * - (note: SICP CodeSnippets use these hash parameters)
+ *
+ * For 'with backend' deployments:
+ * - Send the playground configuration to the backend
+ * - Backend stores configuration and assigns a UUID
+ * - Backend pings the external URL shortener service with UUID link
+ * - Shortened URL returned to Frontend and displayed to user
+ */
 export const ControlBarShareButton: React.FC<ControlBarShareButtonProps> = props => {
   const shareInputElem = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +50,7 @@ export const ControlBarShareButton: React.FC<ControlBarShareButtonProps> = props
   const [customStringKeyword, setCustomStringKeyword] = useState('');
   const playgroundConfiguration = usePlaygroundConfigurationEncoder();
 
-  const generateLink = () => {
+  const generateLinkBackend = () => {
     setIsLoading(true);
 
     customStringKeyword;
@@ -56,6 +62,32 @@ export const ControlBarShareButton: React.FC<ControlBarShareButtonProps> = props
       .catch(err => showWarningMessage(err.toString()))
       .finally(() => setIsLoading(false));
   };
+
+  const generateLinkPlaygroundOnly = () => {
+    const hash = playgroundConfiguration.encodeWith(new UrlParamsEncoderDelegate());
+    setIsLoading(true);
+
+    return externalUrlShortenerRequest(hash, customStringKeyword)
+      .then(({ shortenedUrl, message }) => {
+        setShortenedUrl(shortenedUrl);
+        if (message) showSuccessMessage(message);
+      })
+      .catch(err => showWarningMessage(err.toString()))
+      .finally(() => setIsLoading(false));
+  };
+
+  const generateLinkSicp = () => {
+    const hash = playgroundConfiguration.encodeWith(new UrlParamsEncoderDelegate());
+    const shortenedUrl = `${Links.playground}#${hash}`;
+    setShortenedUrl(shortenedUrl);
+  };
+
+  const generateLink = props.isSicp
+    ? generateLinkSicp
+    : Constants.playgroundOnly
+    ? generateLinkPlaygroundOnly
+    : generateLinkBackend;
+
   useHotkeys([['ctrl+w', generateLink]], []);
 
   const handleCustomStringChange = (event: React.FormEvent<HTMLInputElement>) => {
@@ -91,17 +123,6 @@ export const ControlBarShareButton: React.FC<ControlBarShareButtonProps> = props
     </div>
   );
 
-  const sicpCopyLinkPopoverContent = (
-    <div>
-      <input defaultValue={props.queryString!} readOnly={true} ref={shareInputElem} />
-      <Tooltip content="Copy link to clipboard">
-        <CopyToClipboard text={props.queryString!}>
-          <ControlButton icon={IconNames.DUPLICATE} onClick={selectShareInputText} />
-        </CopyToClipboard>
-      </Tooltip>
-    </div>
-  );
-
   const copyLinkPopoverContent = (
     <div key={shortenedUrl}>
       <input defaultValue={shortenedUrl} readOnly={true} ref={shareInputElem} />
@@ -115,8 +136,6 @@ export const ControlBarShareButton: React.FC<ControlBarShareButtonProps> = props
 
   const shareButtonPopoverContent = isLoading
     ? generatingLinkPopoverContent
-    : props.isSicp
-    ? sicpCopyLinkPopoverContent
     : shortenedUrl
     ? copyLinkPopoverContent
     : generateLinkPopoverContent;

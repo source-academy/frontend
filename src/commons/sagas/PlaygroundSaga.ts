@@ -1,25 +1,13 @@
-import { FSModule } from 'browserfs/dist/node/core/FS';
-import { Chapter, Variant } from 'js-slang/dist/types';
-import { compressToEncodedURIComponent } from 'lz-string';
-import qs from 'query-string';
+import { Chapter } from 'js-slang/dist/types';
 import { SagaIterator } from 'redux-saga';
-import { call, delay, put, race, select } from 'redux-saga/effects';
+import { call, put, select } from 'redux-saga/effects';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
-import {
-  changeQueryString,
-  shortenURL,
-  updateShortURL
-} from '../../features/playground/PlaygroundActions';
-import { GENERATE_LZ_STRING, SHORTEN_URL } from '../../features/playground/PlaygroundTypes';
 import { isSourceLanguage, OverallState } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
 import { visitSideContent } from '../sideContent/SideContentActions';
 import { SideContentType, VISIT_SIDE_CONTENT } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
-import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import {
   clearReplOutput,
   setEditorHighlightedLines,
@@ -29,46 +17,10 @@ import {
   updateCurrentStep,
   updateStepsTotal
 } from '../workspace/WorkspaceActions';
-import { EditorTabState, PlaygroundWorkspaceState } from '../workspace/WorkspaceTypes';
+import { PlaygroundWorkspaceState } from '../workspace/WorkspaceTypes';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export default function* PlaygroundSaga(): SagaIterator {
-  yield takeEvery(GENERATE_LZ_STRING, updateQueryString);
-
-  yield takeEvery(SHORTEN_URL, function* (action: ReturnType<typeof shortenURL>): any {
-    const queryString = yield select((state: OverallState) => state.playground.queryString);
-    const keyword = action.payload;
-    const errorMsg = 'ERROR';
-
-    let resp, timeout;
-
-    //we catch and move on if there are errors (plus have a timeout in case)
-    try {
-      const { result, hasTimedOut } = yield race({
-        result: call(shortenURLRequest, queryString, keyword),
-        hasTimedOut: delay(10000)
-      });
-
-      resp = result;
-      timeout = hasTimedOut;
-    } catch (_) {}
-
-    if (!resp || timeout) {
-      yield put(updateShortURL(errorMsg));
-      return yield call(showWarningMessage, 'Something went wrong trying to create the link.');
-    }
-
-    if (resp.status !== 'success' && !resp.shorturl) {
-      yield put(updateShortURL(errorMsg));
-      return yield call(showWarningMessage, resp.message);
-    }
-
-    if (resp.status !== 'success') {
-      yield call(showSuccessMessage, resp.message);
-    }
-    yield put(updateShortURL(Constants.urlShortenerBase + resp.url.keyword));
-  });
-
   yield takeEvery(
     VISIT_SIDE_CONTENT,
     function* ({
@@ -126,60 +78,30 @@ export default function* PlaygroundSaga(): SagaIterator {
   );
 }
 
-function* updateQueryString() {
-  const isFolderModeEnabled: boolean = yield select(
-    (state: OverallState) => state.workspaces.playground.isFolderModeEnabled
-  );
-  const fileSystem: FSModule = yield select(
-    (state: OverallState) => state.fileSystem.inBrowserFileSystem
-  );
-  const files: Record<string, string> = yield call(
-    retrieveFilesInWorkspaceAsRecord,
-    'playground',
-    fileSystem
-  );
-  const editorTabs: EditorTabState[] = yield select(
-    (state: OverallState) => state.workspaces.playground.editorTabs
-  );
-  const editorTabFilePaths = editorTabs
-    .map((editorTab: EditorTabState) => editorTab.filePath)
-    .filter((filePath): filePath is string => filePath !== undefined);
-  const activeEditorTabIndex: number | null = yield select(
-    (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
-  );
-  const chapter: Chapter = yield select(
-    (state: OverallState) => state.workspaces.playground.context.chapter
-  );
-  const variant: Variant = yield select(
-    (state: OverallState) => state.workspaces.playground.context.variant
-  );
-  const external: ExternalLibraryName = yield select(
-    (state: OverallState) => state.workspaces.playground.externalLibrary
-  );
-  const execTime: number = yield select(
-    (state: OverallState) => state.workspaces.playground.execTime
-  );
-  const newQueryString = qs.stringify({
-    isFolder: isFolderModeEnabled,
-    files: compressToEncodedURIComponent(qs.stringify(files)),
-    tabs: editorTabFilePaths.map(compressToEncodedURIComponent),
-    tabIdx: activeEditorTabIndex,
-    chap: chapter,
-    variant,
-    ext: external,
-    exec: execTime
-  });
-  yield put(changeQueryString(newQueryString));
-}
-
+type UrlShortenerResponse = {
+  status: string;
+  code: string;
+  url: {
+    keyword: string;
+    url: string;
+    title: string;
+    date: string;
+    ip: string;
+    clicks: string;
+  };
+  message: string;
+  title: string;
+  shorturl: string;
+  statusCode: number;
+};
 /**
  * Gets short url from microservice
  * @returns {(Response|null)} Response if successful, otherwise null.
  */
-export async function shortenURLRequest(
+export async function externalUrlShortenerRequest(
   queryString: string,
   keyword: string
-): Promise<Response | null> {
+): Promise<{ shortenedUrl: string; message: string }> {
   const url = `${window.location.protocol}//${window.location.host}/playground#${queryString}`;
 
   const params = {
@@ -199,9 +121,15 @@ export async function shortenURLRequest(
 
   const resp = await fetch(`${Constants.urlShortenerBase}yourls-api.php`, fetchOpts);
   if (!resp || !resp.ok) {
-    return null;
+    throw new Error('Something went wrong trying to create the link.');
   }
 
-  const res = await resp.json();
-  return res;
+  const res: UrlShortenerResponse = await resp.json();
+  if (res.status !== 'success' && !res.shorturl) {
+    throw new Error(res.message);
+  }
+
+  const message = res.status !== 'success' ? res.message : '';
+  const shortenedUrl = Constants.urlShortenerBase + res.url.keyword;
+  return { shortenedUrl, message };
 }

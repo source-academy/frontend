@@ -82,12 +82,7 @@ import {
   persistenceSaveFile,
   persistenceSaveFileAs
 } from 'src/features/persistence/PersistenceActions';
-import {
-  generateLzString,
-  playgroundConfigLanguage,
-  shortenURL,
-  updateShortURL
-} from 'src/features/playground/PlaygroundActions';
+import { playgroundConfigLanguage } from 'src/features/playground/PlaygroundActions';
 import ShareLinkStateDecoder from 'src/features/playground/shareLinks/decoder/Decoder';
 import JsonDecoderDelegate from 'src/features/playground/shareLinks/decoder/delegates/JsonDecoderDelegate';
 import UrlParamsDecoderDelegate from 'src/features/playground/shareLinks/decoder/delegates/UrlParamsDecoderDelegate';
@@ -127,7 +122,7 @@ import MobileWorkspace, {
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import { SideBarTab } from '../../commons/sideBar/SideBar';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
-import Constants, { Links } from '../../commons/utils/Constants';
+import Constants from '../../commons/utils/Constants';
 import { generateLanguageIntroduction } from '../../commons/utils/IntroductionHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { initSession, log } from '../../features/eventLogging';
@@ -359,9 +354,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant }
   } = useTypedSelector(state => state.workspaces[workspaceLocation]);
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
-  const { queryString, shortURL, persistenceFile, githubSaveInfo } = useTypedSelector(
-    state => state.playground
-  );
+  const { persistenceFile, githubSaveInfo } = useTypedSelector(state => state.playground);
   const {
     sourceChapter: courseSourceChapter,
     sourceVariant: courseSourceVariant,
@@ -836,19 +829,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
   );
 
   const shareButton = useMemo(() => {
-    const qs = isSicpEditor ? Links.playground + '#' + props.initialEditorValueHash : queryString;
-    return (
-      <ControlBarShareButton
-        handleGenerateLz={() => dispatch(generateLzString())}
-        handleShortenURL={s => dispatch(shortenURL(s))}
-        handleUpdateShortURL={s => dispatch(updateShortURL(s))}
-        queryString={qs}
-        shortURL={shortURL}
-        isSicp={isSicpEditor}
-        key="share"
-      />
-    );
-  }, [dispatch, isSicpEditor, props.initialEditorValueHash, queryString, shortURL]);
+    return <ControlBarShareButton isSicp={isSicpEditor} key="share" />;
+  }, [isSicpEditor]);
 
   const toggleFolderModeButton = useMemo(() => {
     return (
