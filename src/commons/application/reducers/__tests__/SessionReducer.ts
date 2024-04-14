@@ -158,6 +158,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200,
       isManuallyGraded: false,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false,
       hasVotingFeatures: false
@@ -171,6 +172,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200,
       isManuallyGraded: false,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false,
       hasVotingFeatures: false
@@ -184,6 +186,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       hoursBeforeEarlyXpDecay: 48,
       earlySubmissionXp: 200,
       isManuallyGraded: false,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false,
       hasVotingFeatures: false
@@ -331,6 +334,7 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
   {
     type: 'Missions',
     isManuallyGraded: true,
+    isPublished: false,
     closeAt: 'test_string',
     coverImage: 'test_string',
     id: 0,
@@ -342,7 +346,7 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: null,
     xp: 0,
-    gradingStatus: ProgressStatuses.none,
+    isGradingPublished: false,
     maxTeamSize: 5,
     hasVotingFeatures: false
   }
@@ -352,6 +356,7 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
   {
     type: 'Contests',
     isManuallyGraded: true,
+    isPublished: false,
     closeAt: 'test_string_0',
     coverImage: 'test_string_0',
     fileName: 'test_sting_0',
@@ -364,7 +369,7 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
     status: AssessmentStatuses.attempted,
     story: null,
     xp: 1,
-    gradingStatus: ProgressStatuses.grading,
+    isGradingPublished: false,
     maxTeamSize: 1,
     hasVotingFeatures: false
   }
@@ -537,11 +542,12 @@ const gradingOverviewTest1: GradingOverview[] = [
     studentUsername: 'E0123456',
     studentUsernames: [],
     submissionId: 1,
-    submissionStatus: 'attempting',
+    submissionStatus: AssessmentStatuses.attempting,
+    progress: ProgressStatuses.attempting,
+    isGradingPublished: false,
     groupName: 'group',
-    gradingStatus: 'excluded',
-    questionCount: 0,
-    gradedCount: 6
+    questionCount: 4,
+    gradedCount: 2
   }
 ];
 
@@ -562,11 +568,12 @@ const gradingOverviewTest2: GradingOverview[] = [
     studentUsername: 'E0000000',
     studentUsernames: [],
     submissionId: 2,
-    submissionStatus: 'attempted',
+    submissionStatus: AssessmentStatuses.attempted,
+    progress: ProgressStatuses.graded,
+    isGradingPublished: false,
     groupName: 'another group',
-    gradingStatus: 'excluded',
-    questionCount: 6,
-    gradedCount: 0
+    questionCount: 3,
+    gradedCount: 3
   }
 ];
 

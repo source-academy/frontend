@@ -44,6 +44,7 @@ import {
   AssessmentOverview,
   AssessmentStatuses,
   FETCH_ASSESSMENT_OVERVIEWS,
+  ProgressStatuses,
   Question,
   SUBMIT_ASSESSMENT
 } from '../assessment/AssessmentTypes';
@@ -301,7 +302,7 @@ export function* mockBackendSaga(): SagaIterator {
       );
       const index = overviews.data.findIndex(
         overview =>
-          overview.submissionId === submissionId && overview.submissionStatus === 'submitted'
+          overview.submissionId === submissionId && overview.progress === ProgressStatuses.submitted
       );
       if (index === -1) {
         yield call(showWarningMessage, '400: Bad Request');
@@ -309,7 +310,7 @@ export function* mockBackendSaga(): SagaIterator {
       }
       const newOverviews = overviews.data.map(overview => {
         if (overview.submissionId === submissionId) {
-          return { ...overview, submissionStatus: 'attempted' };
+          overview.progress = ProgressStatuses.attempted;
         }
         return overview;
       });

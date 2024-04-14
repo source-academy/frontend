@@ -13,7 +13,6 @@ import {
   IProgrammingQuestion,
   Library,
   MCQChoice,
-  ProgressStatuses,
   Question,
   Testcase,
   TestcaseTypes
@@ -72,6 +71,7 @@ const makeAssessmentOverview = (result: any, maxXpVal: number): AssessmentOvervi
   return {
     type: capitalizeFirstLetter(rawOverview.kind) as AssessmentType,
     isManuallyGraded: true, // TODO: This is temporarily hardcoded to true. To be redone when overhauling MissionControl
+    isPublished: false,
     closeAt: rawOverview.duedate,
     coverImage: rawOverview.coverimage,
     id: EDITING_ID,
@@ -84,8 +84,8 @@ const makeAssessmentOverview = (result: any, maxXpVal: number): AssessmentOvervi
     shortSummary: task.WEBSUMMARY ? task.WEBSUMMARY[0] : '',
     status: AssessmentStatuses.attempting,
     story: rawOverview.story,
+    isGradingPublished: false,
     xp: 0,
-    gradingStatus: 'none' as ProgressStatuses,
     maxTeamSize: 1,
     hasVotingFeatures: false
   };

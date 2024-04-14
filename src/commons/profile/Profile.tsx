@@ -4,11 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { fetchAssessmentOverviews, fetchTotalXp } from '../application/actions/SessionActions';
-import {
-  AssessmentStatuses,
-  AssessmentType,
-  ProgressStatuses
-} from '../assessment/AssessmentTypes';
+import { AssessmentStatuses, AssessmentType } from '../assessment/AssessmentTypes';
 import Constants from '../utils/Constants';
 import { useSession } from '../utils/Hooks';
 import ProfileCard from './ProfileCard';
@@ -130,12 +126,7 @@ const Profile: React.FC<ProfileProps> = props => {
 
       // Build condensed assessment cards from an array of assessments
       const summaryCallouts = assessmentOverviews!
-        .filter(
-          item =>
-            item.status === AssessmentStatuses.submitted &&
-            (item.gradingStatus === ProgressStatuses.graded ||
-              item.gradingStatus === ProgressStatuses.excluded)
-        )
+        .filter(item => item.isGradingPublished)
         .map((assessment, index) => {
           return (
             <ProfileCard

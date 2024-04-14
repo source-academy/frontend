@@ -32,7 +32,7 @@ import {
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 
 import GradingActions from './GradingActions';
-import { AssessmentTypeBadge, ProgressStatusBadge, SubmissionStatusBadge } from './GradingBadges';
+import { AssessmentTypeBadge, ProgressStatusBadge } from './GradingBadges';
 import GradingColumnCustomHeaders from './GradingColumnCustomHeaders';
 import GradingColumnFilters from './GradingColumnFilters';
 import GradingFilterable from './GradingFilterable';
@@ -58,7 +58,6 @@ export const freshSortState: SortStateProperties = {
   studentUsername: SortStates.NONE,
   groupName: SortStates.NONE,
   submissionStatus: SortStates.NONE,
-  gradingStatus: SortStates.NONE,
   xp: SortStates.NONE,
   actionsIndex: SortStates.NONE
 };
@@ -301,27 +300,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
               component: GradingFilterable,
               params: {
                 value: params.data.submissionStatus,
-                children: [<SubmissionStatusBadge status={params.data.submissionStatus} />],
+                children: [<ProgressStatusBadge progress={params.data.progress} />],
                 filterMode: filterMode
-              }
-            }
-          : undefined;
-      }
-    });
-
-    cols.push({
-      ...generalColProperties,
-      headerName: ColumnName.gradingStatus,
-      field: ColumnFields.gradingStatus,
-      cellClass:
-        generalColProperties.cellClass +
-        (!filterMode ? ' grading-def-cell-pointer' : ' grading-def-cell-selectable'),
-      cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
-        return params.data !== undefined
-          ? {
-              component: ProgressStatusBadge,
-              params: {
-                progress: params.data.gradingStatus
               }
             }
           : undefined;
@@ -349,8 +329,9 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
               component: GradingActions,
               params: {
                 submissionId: params.data.actionsIndex,
-                // progress: params.data.progress, // TODO add this
-                style: { justifyContent: 'center' }
+                style: { justifyContent: 'center' },
+                progress: params.data.progress,
+                filterMode: filterMode
               }
             }
           : undefined;
@@ -439,7 +420,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
   useEffect(() => {
     resetPage();
-  }, [updateEntries, resetPage, searchValue]);
+  }, [updateEntries, resetPage]);
 
   useEffect(() => {
     updateEntries(page, backendFilterParams);
@@ -467,7 +448,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
                 : '',
               groupName: currentSubmission.groupName,
               submissionStatus: currentSubmission.submissionStatus,
-              gradingStatus: currentSubmission.gradingStatus,
               xp:
                 currentSubmission.currentXp +
                 ' (+' +
@@ -475,7 +455,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
                 ') / ' +
                 currentSubmission.maxXp,
               actionsIndex: currentSubmission.submissionId,
-              //progress: currentSubmission.progress, // TODO to add this
+              progress: currentSubmission.progress,
               courseID: courseId!
             });
             return sameData && currentSubmission.submissionId === rowData?.[index]?.actionsIndex;

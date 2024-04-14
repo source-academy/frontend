@@ -1,6 +1,7 @@
 import { ColDef } from 'ag-grid-community';
 
 import {
+  AssessmentStatus,
   AssessmentType,
   AutogradingResult,
   MCQChoice,
@@ -42,16 +43,17 @@ export type GradingOverview = {
   xpAdjustment: number;
   currentXp: number;
   maxXp: number;
+  isGradingPublished: boolean;
+  progress: ProgressStatus;
   studentId: number;
   studentName: string | undefined;
   studentNames: string[] | undefined;
   studentUsername: string | undefined;
   studentUsernames: string[] | undefined;
+  submissionStatus: AssessmentStatus;
   submissionId: number;
-  submissionStatus: string;
   groupName: string;
   groupLeaderId?: number;
-  gradingStatus: ProgressStatus;
   questionCount: number;
   gradedCount: number;
 };
@@ -116,7 +118,6 @@ export enum ColumnName {
   studentUsername = 'Username(s)',
   groupName = 'Group',
   submissionStatus = 'Progress',
-  gradingStatus = 'Grading',
   xp = 'Raw XP (+Bonus)',
   actionsIndex = 'Actions'
 }
@@ -128,7 +129,6 @@ export type SortStateProperties = {
   studentUsername: SortStates;
   groupName: SortStates;
   submissionStatus: SortStates;
-  gradingStatus: SortStates;
   xp: SortStates;
   actionsIndex: SortStates;
 };
@@ -140,10 +140,9 @@ export type IGradingTableRow = {
   studentUsername: string;
   groupName: string;
   submissionStatus: string;
-  gradingStatus: string;
   xp: string;
   actionsIndex: number; // actions needs a column, but only submission ID data, so it stores submission ID
-  //progress: ProgressStatus; // TODO to add this
+  progress: ProgressStatus;
   courseID: number;
 };
 

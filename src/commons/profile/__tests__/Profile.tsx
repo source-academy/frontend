@@ -24,6 +24,7 @@ const assessmentConfigurations: AssessmentConfiguration[] = [
   assessmentConfigId: i,
   type: c,
   isManuallyGraded: false,
+  isGradingAutoPublished: false,
   displayInDashboard: false,
   hasTokenCounter: false,
   hasVotingFeatures: false,
@@ -94,11 +95,7 @@ test('Profile renders correctly when there are closed and graded, or closed and 
     }
   );
 
-  const numProfileCards = mockAssessmentOverviews.filter(
-    item =>
-      item.status === AssessmentStatuses.submitted &&
-      (item.gradingStatus === 'graded' || item.gradingStatus === 'excluded')
-  ).length;
+  const numProfileCards = mockAssessmentOverviews.filter(item => item.isGradingPublished).length;
 
   [
     'profile-summary-navlink',

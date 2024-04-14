@@ -1,4 +1,5 @@
 import { call } from 'redux-saga/effects';
+import { backendParamsToProgressStatus } from 'src/features/grading/GradingUtils';
 import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
 import {
@@ -50,7 +51,6 @@ import {
   ContestEntry,
   IContestVotingQuestion,
   IProgrammingQuestion,
-  ProgressStatus,
   QuestionType,
   QuestionTypes
 } from '../assessment/AssessmentTypes';
@@ -429,12 +429,6 @@ export const getAssessmentOverviews = async (
   const assessmentOverviews = await resp.json();
 
   return assessmentOverviews.map((overview: any) => {
-    overview.gradingStatus = computeGradingStatus(
-      overview.isManuallyGraded,
-      overview.status,
-      overview.gradedCount,
-      overview.questionCount
-    );
     delete overview.gradedCount;
     delete overview.questionCount;
 
@@ -481,12 +475,6 @@ export const getUserAssessmentOverviews = async (
   }
   const assessmentOverviews = await resp.json();
   return assessmentOverviews.map((overview: any) => {
-    overview.gradingStatus = computeGradingStatus(
-      overview.isManuallyGraded,
-      overview.status,
-      overview.gradedCount,
-      overview.questionCount
-    );
     delete overview.gradedCount;
     delete overview.questionCount;
 
@@ -676,8 +664,14 @@ export const getGradingOverviews = async (
         submissionStatus: overview.status,
         groupName: overview.student ? overview.student.groupName : '-',
         groupLeaderId: overview.student ? overview.student.groupLeaderId : undefined,
-        // Grading Status
-        gradingStatus: 'none',
+        isGradingPublished: overview.isGradingPublished,
+        progress: backendParamsToProgressStatus(
+          overview.assessment.isManuallyGraded,
+          overview.isGradingPublished,
+          overview.status,
+          overview.gradedCount,
+          overview.assessment.questionCount
+        ),
         questionCount: overview.assessment.questionCount,
         gradedCount: overview.gradedCount,
         // XP
@@ -687,12 +681,6 @@ export const getGradingOverviews = async (
         maxXp: overview.assessment.maxXp,
         xpBonus: overview.xpBonus
       };
-      gradingOverview.gradingStatus = computeGradingStatus(
-        overview.assessment.isManuallyGraded,
-        gradingOverview.submissionStatus,
-        gradingOverview.gradedCount,
-        gradingOverview.questionCount
-      );
       return gradingOverview;
     })
   };
@@ -1014,6 +1002,64 @@ export const postUnsubmit = async (
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`${courseId()}/admin/grading/${submissionId}/unsubmit`, 'POST', {
+    ...tokens,
+    noHeaderAccept: true
+  });
+
+  return resp;
+};
+
+/**
+ * POST /courses/{courseId}/admin/grading/{submissionId}/publish_grades
+ */
+export const publishGrading = async (
+  submissionId: number,
+  tokens: Tokens
+): Promise<Response | null> => {
+  const resp = await request(`${courseId()}/admin/grading/${submissionId}/publish_grades`, 'POST', {
+    ...tokens,
+    noHeaderAccept: true
+  });
+
+  return resp;
+};
+
+/**
+ * POST /courses/{course_id}/admin/grading/{assessmentid}/publish_all_grades
+ */
+export const publishGradingAll = async (id: number, tokens: Tokens): Promise<Response | null> => {
+  const resp = await request(`${courseId()}/admin/grading/${id}/publish_all_grades`, 'POST', {
+    ...tokens,
+    noHeaderAccept: true
+  });
+
+  return resp;
+};
+
+/**
+ * POST /courses/{courseId}/admin/grading/{submissionId}/unpublish_grades
+ */
+export const unpublishGrading = async (
+  submissionId: number,
+  tokens: Tokens
+): Promise<Response | null> => {
+  const resp = await request(
+    `${courseId()}/admin/grading/${submissionId}/unpublish_grades`,
+    'POST',
+    {
+      ...tokens,
+      noHeaderAccept: true
+    }
+  );
+
+  return resp;
+};
+
+/**
+ * POST /courses/{course_id}/admin/grading/{assessmentid}/unpublish_all_grades
+ */
+export const unpublishGradingAll = async (id: number, tokens: Tokens): Promise<Response | null> => {
+  const resp = await request(`${courseId()}/admin/grading/${id}/unpublish_all_grades`, 'POST', {
     ...tokens,
     noHeaderAccept: true
   });
@@ -1609,28 +1655,6 @@ export async function deleteDevice(device: Pick<Device, 'id'>, tokens?: Tokens):
   return true;
 }
 
-/**
- * POST /chat
- */
-
-export async function chat(
-  tokens: Tokens,
-  payload: { role: string; content: string }[]
-): Promise<string> {
-  const response = await request(`chat`, 'POST', {
-    ...tokens,
-    body: { json: payload }
-  });
-  if (!response) {
-    throw new Error('Unknown error occurred.');
-  }
-  if (!response.ok) {
-    const message = await response.text();
-    throw new Error(`Failed to chat to louis: ${message}`);
-  }
-  return response.text();
-}
-
 function fillTokens(tokens?: Tokens): Tokens {
   tokens = tokens || getTokensFromStore();
   if (!tokens) {
@@ -1667,22 +1691,6 @@ export function* handleResponseError(resp: Response | null): any {
 
   yield call(showWarningMessage, respText);
 }
-
-const computeGradingStatus = (
-  isManuallyGraded: boolean,
-  submissionStatus: any,
-  numGraded: number,
-  numQuestions: number
-): ProgressStatus =>
-  // isGraded refers to whether the assessment type is graded or not, as specified in
-  // the respective assessment configuration
-  isManuallyGraded && submissionStatus === 'submitted'
-    ? numGraded === 0
-      ? 'none'
-      : numGraded === numQuestions
-      ? 'graded'
-      : 'grading'
-    : 'excluded';
 
 const courseId: () => string = () => {
   const id = store.getState().session.courseId;

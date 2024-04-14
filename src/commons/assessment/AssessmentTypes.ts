@@ -13,11 +13,6 @@ export enum AssessmentStatuses {
 }
 export type AssessmentStatus = keyof typeof AssessmentStatuses;
 
-export type AssessmentWorkspaceParams = {
-  assessmentId?: string;
-  questionId?: string;
-};
-
 // Devnote: If adjusting this, ensure that each status can be uniquely attributed to one set of backend parameters, and vice versa.
 // This allows for a clean conversion from progress status to backend parameters, ensuring only backend pagination.
 // Adjust the conversion functions in GradingUtils accordingly.
@@ -28,13 +23,15 @@ export enum ProgressStatuses {
   attempted = 'attempted',
   submitted = 'submitted',
   graded = 'graded',
-  published = 'published',
-  excluded = 'excluded', // TODO TO BE REMOVED
-  grading = 'grading', // TODO TO BE REMOVED
-  none = 'none' // TODO TO BE REMOVED
+  published = 'published'
 }
 
 export type ProgressStatus = keyof typeof ProgressStatuses;
+
+export type AssessmentWorkspaceParams = {
+  assessmentId?: string;
+  questionId?: string;
+};
 
 export type AssessmentType = string;
 
@@ -69,9 +66,8 @@ export type AssessmentOverview = {
   closeAt: string;
   coverImage: string;
   fileName?: string; // For mission control
-  gradingStatus: ProgressStatus;
   id: number;
-  isPublished?: boolean;
+  isPublished?: boolean; // refers to assessment as a whole being published
   hasVotingFeatures: boolean;
   hasTokenCounter?: boolean;
   isVotingPublished?: boolean;
@@ -80,6 +76,7 @@ export type AssessmentOverview = {
   number?: string; // For mission control
   openAt: string;
   private?: boolean;
+  isGradingPublished: boolean; // refers to specific assessment submission being published
   reading?: string; // For mission control
   shortSummary: string;
   status: AssessmentStatus;
@@ -108,6 +105,7 @@ export type AssessmentConfiguration = {
   assessmentConfigId: number;
   type: AssessmentType;
   isManuallyGraded: boolean;
+  isGradingAutoPublished: boolean;
   displayInDashboard: boolean;
   hoursBeforeEarlyXpDecay: number;
   earlySubmissionXp: number;
@@ -252,6 +250,7 @@ export const overviewTemplate = (): AssessmentOverview => {
     closeAt: '2100-12-01T00:00+08',
     coverImage: 'https://fakeimg.pl/300/',
     id: -1,
+    isPublished: false,
     maxXp: 0,
     earlySubmissionXp: 0,
     openAt: '2000-01-01T00:00+08',
@@ -260,8 +259,8 @@ export const overviewTemplate = (): AssessmentOverview => {
     shortSummary: 'Insert short summary here',
     status: AssessmentStatuses.not_attempted,
     story: 'mission',
+    isGradingPublished: false,
     xp: 0,
-    gradingStatus: 'none',
     maxTeamSize: 1,
     hasVotingFeatures: false
   };

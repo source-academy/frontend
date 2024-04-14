@@ -49,8 +49,6 @@ const BADGE_COLORS = {
   paths: AVAILABLE_COLORS.sky,
 
   // submission status
-  // submitted: AVAILABLE_COLORS.green, // TO BE REMOVED
-  // attempting: AVAILABLE_COLORS.yellow, // TO BE REMOVED
   autograded: AVAILABLE_COLORS.purple,
   not_attempted: AVAILABLE_COLORS.gray,
   attempting: AVAILABLE_COLORS.red,
@@ -59,8 +57,6 @@ const BADGE_COLORS = {
   // grading status
   submitted: AVAILABLE_COLORS.yellow,
   graded: AVAILABLE_COLORS.green,
-  grading: AVAILABLE_COLORS.yellow, // TO BE REMOVED
-  none: AVAILABLE_COLORS.red, // TO BE REMOVED
   published: AVAILABLE_COLORS.blue
 };
 
@@ -147,10 +143,6 @@ const ProgressStatusBadge: React.FC<ProgressStatusBadgeProps> = ({ progress }) =
           ? IconNames.TICK
           : progress === ProgressStatuses.submitted
           ? IconNames.TIME
-          : progress === ProgressStatuses.grading // TODO TO BE REMOVED
-          ? IconNames.TIME // TODO TO BE REMOVED
-          : progress === ProgressStatuses.none // TODO TO BE REMOVED
-          ? IconNames.CROSS // TODO  TO BE REMOVED
           : IconNames.DISABLE
       }
       style={{ marginRight: '0.5rem' }}

@@ -10,7 +10,6 @@ import {
   IMCQQuestion,
   IProgrammingQuestion,
   Library,
-  ProgressStatuses,
   TestcaseTypes
 } from '../assessment/AssessmentTypes';
 
@@ -20,6 +19,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       assessmentConfigId: 1,
       type: 'Missions',
       isManuallyGraded: true,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
@@ -30,6 +30,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       assessmentConfigId: 2,
       type: 'Quests',
       isManuallyGraded: true,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
@@ -39,7 +40,8 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
     {
       assessmentConfigId: 3,
       type: 'Paths',
-      isManuallyGraded: true,
+      isManuallyGraded: false,
+      isGradingAutoPublished: true,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
@@ -50,6 +52,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       assessmentConfigId: 4,
       type: 'Contests',
       isManuallyGraded: true,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
@@ -60,6 +63,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       assessmentConfigId: 5,
       type: 'Others',
       isManuallyGraded: true,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
@@ -72,6 +76,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       assessmentConfigId: 1,
       type: 'Mission Impossible',
       isManuallyGraded: true,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
@@ -82,6 +87,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       assessmentConfigId: 2,
       type: 'Data Structures',
       isManuallyGraded: true,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
@@ -92,6 +98,7 @@ export const mockAssessmentConfigurations: AssessmentConfiguration[][] = [
       assessmentConfigId: 3,
       type: 'Algorithm Frenzy',
       isManuallyGraded: true,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hoursBeforeEarlyXpDecay: 48,
       hasTokenCounter: false,
@@ -108,6 +115,7 @@ const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
     id: 1,
+    isPublished: false,
     maxXp: 1000,
     earlySubmissionXp: 0,
     openAt: '2038-06-18T05:24:26.026Z',
@@ -117,7 +125,7 @@ const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: 'mission-1',
     xp: 0,
-    gradingStatus: ProgressStatuses.none,
+    isGradingPublished: false,
     maxTeamSize: 1,
     hasVotingFeatures: false
   }
@@ -130,6 +138,7 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
     id: 2,
+    isPublished: false,
     maxXp: 1000,
     earlySubmissionXp: 0,
     openAt: '2018-06-18T05:24:26.026Z',
@@ -151,13 +160,14 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.attempted,
     story: 'mission-1',
     xp: 1,
-    gradingStatus: ProgressStatuses.none,
+    isGradingPublished: false,
     maxTeamSize: 4,
     hasVotingFeatures: false
   },
   {
     type: 'Missions',
     isManuallyGraded: true,
+    isPublished: false,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=World&font=lobster',
     id: 3,
@@ -170,13 +180,14 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.attempting,
     story: 'mission-2',
     xp: 2,
-    gradingStatus: ProgressStatuses.none,
+    isGradingPublished: false,
     maxTeamSize: 1,
     hasVotingFeatures: false
   },
   {
     type: 'Quests',
     isManuallyGraded: true,
+    isPublished: false,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
     id: 4,
@@ -189,13 +200,14 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: 'sidequest-2.1',
     xp: 3,
-    gradingStatus: ProgressStatuses.none,
+    isGradingPublished: false,
     maxTeamSize: 2,
     hasVotingFeatures: false
   },
   {
     type: 'Paths',
     isManuallyGraded: true,
+    isPublished: false,
     closeAt: '2069-04-20T01:23:45.111Z',
     coverImage: 'https://fakeimg.pl/700x400/417678,64/?text=%E3%83%91%E3%82%B9&font=noto',
     id: 5,
@@ -208,13 +220,14 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: null,
     xp: 0,
-    gradingStatus: ProgressStatuses.excluded,
+    isGradingPublished: false,
     maxTeamSize: 2,
     hasVotingFeatures: false
   },
   {
     type: 'Others',
     isManuallyGraded: false,
+    isPublished: false,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
     id: 6,
@@ -227,9 +240,9 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.not_attempted,
     story: 'sidequest-2.1',
     xp: 3,
-    gradingStatus: ProgressStatuses.none,
     private: true,
     maxTeamSize: 1,
+    isGradingPublished: false,
     hasVotingFeatures: false
   }
 ];
@@ -238,6 +251,7 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
   {
     type: 'Missions',
     isManuallyGraded: true,
+    isPublished: false,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
     id: 7,
@@ -250,13 +264,14 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     status: AssessmentStatuses.submitted,
     story: 'mission-3',
     xp: 800,
-    gradingStatus: ProgressStatuses.grading,
+    isGradingPublished: false,
     maxTeamSize: 1,
     hasVotingFeatures: false
   },
   {
     type: 'Quests',
     isManuallyGraded: true,
+    isPublished: false,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
     id: 8,
@@ -265,17 +280,18 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Closed (not graded) Sidequest',
     shortSummary:
-      'This is a test for the grading status tooltip when the assessment is not graded. It should render as a red cross.',
+      'This is a test for the grading status tooltip when the assessment is not published. It should render as a yellow waiting clock.',
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 500,
-    gradingStatus: ProgressStatuses.none,
+    isGradingPublished: false,
     maxTeamSize: 1,
     hasVotingFeatures: false
   },
   {
     type: 'Quests',
     isManuallyGraded: true,
+    isPublished: true,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
     id: 9,
@@ -283,18 +299,19 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     earlySubmissionXp: 0,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Closed (fully graded) Sidequest',
-    shortSummary:
-      'This is a test for the grading status tooltip when the assessment is fully graded. It should render as a green tick. This sidequest links to the mock Sidequest 4.',
+    shortSummary: `This is a test for the grading status tooltip when a manually graded assessment is fully graded but not published.
+       It should still render as a yellow clock. This sidequest links to the mock Sidequest 4.`,
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 150,
-    gradingStatus: ProgressStatuses.graded,
+    isGradingPublished: false,
     maxTeamSize: 1,
     hasVotingFeatures: false
   },
   {
-    type: 'Quests',
-    isManuallyGraded: true,
+    type: 'Paths',
+    isManuallyGraded: false,
+    isPublished: true,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
     id: 10,
@@ -303,11 +320,11 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Ungraded assessment',
     shortSummary:
-      'This is a test for the grading status tooltip when the assessment does not require manual grading (e.g. paths and contests). It should render as a blue disable sign. This sidequest links to the mock Sidequest 4.',
+      'This is a test for the grading status tooltip when the assessment does not require manual grading (e.g. paths and contests) but is unpublished. It should still render as a yellow clock. This sidequest links to the mock Sidequest 4.',
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 100,
-    gradingStatus: ProgressStatuses.excluded,
+    isGradingPublished: false,
     maxTeamSize: 1,
     hasVotingFeatures: false
   }

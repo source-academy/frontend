@@ -2,13 +2,19 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import { mockStudents } from 'src/commons/mocks/UserMocks';
 import {
   paginationToBackendParams,
-  ungradedToBackendParams
+  unpublishedToBackendParams
 } from 'src/features/grading/GradingUtils';
 import { freshSortState } from 'src/pages/academy/grading/subcomponents/GradingSubmissionsTable';
 
 import { GradingOverviews, GradingQuery } from '../../../../features/grading/GradingTypes';
 import { TeamFormationOverview } from '../../../../features/teamFormation/TeamFormationTypes';
-import { Assessment, AssessmentOverview } from '../../../assessment/AssessmentTypes';
+import {
+  Assessment,
+  AssessmentConfiguration,
+  AssessmentOverview,
+  AssessmentStatuses,
+  ProgressStatuses
+} from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../../ApplicationTypes';
 import {
@@ -173,7 +179,7 @@ test('fetchGradingOverviews generates correct default action object', () => {
     type: FETCH_GRADING_OVERVIEWS,
     payload: {
       filterToGroup: true,
-      gradedFilter: ungradedToBackendParams(false),
+      publishedFilter: unpublishedToBackendParams(false),
       pageParams: paginationToBackendParams(0, 10),
       filterParams: {},
       allColsSortStates: { currentState: freshSortState, sortBy: '' }
@@ -183,13 +189,13 @@ test('fetchGradingOverviews generates correct default action object', () => {
 
 test('fetchGradingOverviews generates correct action object', () => {
   const filterToGroup = false;
-  const gradedFilter = ungradedToBackendParams(true);
+  const publishedFilter = unpublishedToBackendParams(true);
   const pageParams = { offset: 123, pageSize: 456 };
   const filterParams = { abc: 'xxx', def: 'yyy' };
   const allColsSortStates = { currentState: freshSortState, sortBy: '' };
   const action = fetchGradingOverviews(
     filterToGroup,
-    gradedFilter,
+    publishedFilter,
     pageParams,
     filterParams,
     allColsSortStates
@@ -198,7 +204,7 @@ test('fetchGradingOverviews generates correct action object', () => {
     type: FETCH_GRADING_OVERVIEWS,
     payload: {
       filterToGroup: filterToGroup,
-      gradedFilter: gradedFilter,
+      publishedFilter: publishedFilter,
       pageParams: pageParams,
       filterParams: filterParams,
       allColsSortStates: allColsSortStates
@@ -338,11 +344,12 @@ test('setCourseRegistration generates correct action object', () => {
 });
 
 test('setAssessmentConfigurations generates correct action object', () => {
-  const assesmentConfigurations = [
+  const assesmentConfigurations: AssessmentConfiguration[] = [
     {
       assessmentConfigId: 1,
       type: 'Mission1',
       isManuallyGraded: true,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false,
       hasVotingFeatures: false,
@@ -353,6 +360,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
       assessmentConfigId: 2,
       type: 'Mission2',
       isManuallyGraded: true,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false,
       hasVotingFeatures: false,
@@ -363,6 +371,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
       assessmentConfigId: 3,
       type: 'Mission3',
       isManuallyGraded: true,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false,
       hasVotingFeatures: false,
@@ -543,6 +552,7 @@ test('updateAssessmentOverviews generates correct action object', () => {
     {
       type: 'Missions',
       isManuallyGraded: true,
+      isPublished: false,
       closeAt: 'test_string',
       coverImage: 'test_string',
       id: 0,
@@ -551,10 +561,10 @@ test('updateAssessmentOverviews generates correct action object', () => {
       openAt: 'test_string',
       title: 'test_string',
       shortSummary: 'test_string',
-      status: 'not_attempted',
+      status: AssessmentStatuses.not_attempted,
       story: null,
       xp: 0,
-      gradingStatus: 'none',
+      isGradingPublished: false,
       maxTeamSize: 1,
       hasVotingFeatures: false
     }
@@ -605,9 +615,10 @@ test('updateGradingOverviews generates correct action object', () => {
         studentUsername: 'E0123456',
         studentUsernames: [],
         submissionId: 1,
-        submissionStatus: 'attempting',
+        isGradingPublished: false,
+        progress: ProgressStatuses.attempting,
         groupName: 'group',
-        gradingStatus: 'excluded',
+        submissionStatus: AssessmentStatuses.attempting,
         questionCount: 6,
         gradedCount: 0
       }
@@ -782,6 +793,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       assessmentConfigId: 1,
       type: 'Missions',
       isManuallyGraded: true,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false,
       hasVotingFeatures: false,
@@ -792,6 +804,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       assessmentConfigId: 2,
       type: 'Quests',
       isManuallyGraded: true,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false,
       hasVotingFeatures: false,
@@ -801,7 +814,8 @@ test('updateAssessmentTypes generates correct action object', () => {
     {
       assessmentConfigId: 3,
       type: 'Paths',
-      isManuallyGraded: true,
+      isManuallyGraded: false,
+      isGradingAutoPublished: true,
       displayInDashboard: true,
       hasTokenCounter: false,
       hasVotingFeatures: false,
@@ -812,6 +826,7 @@ test('updateAssessmentTypes generates correct action object', () => {
       assessmentConfigId: 4,
       type: 'Contests',
       isManuallyGraded: true,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false,
       hasVotingFeatures: false,
@@ -820,8 +835,20 @@ test('updateAssessmentTypes generates correct action object', () => {
     },
     {
       assessmentConfigId: 5,
+      type: 'PEs',
+      isManuallyGraded: false,
+      isGradingAutoPublished: false,
+      displayInDashboard: true,
+      hasTokenCounter: false,
+      hasVotingFeatures: false,
+      hoursBeforeEarlyXpDecay: 0,
+      earlySubmissionXp: 0
+    },
+    {
+      assessmentConfigId: 6,
       type: 'Others',
       isManuallyGraded: true,
+      isGradingAutoPublished: false,
       displayInDashboard: true,
       hasTokenCounter: false,
       hasVotingFeatures: false,
@@ -841,6 +868,7 @@ test('deleteAssessmentConfig generates correct action object', () => {
     assessmentConfigId: 1,
     type: 'Mission1',
     isManuallyGraded: true,
+    isGradingAutoPublished: false,
     displayInDashboard: true,
     hasTokenCounter: false,
     hasVotingFeatures: false,
