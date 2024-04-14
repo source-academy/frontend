@@ -1,12 +1,6 @@
-import {
-  NonIdealState,
-  Popover,
-  Position,
-  Spinner,
-  SpinnerSize,
-  Tooltip
-} from '@blueprintjs/core';
+import { NonIdealState, Popover, Position, Spinner, SpinnerSize, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { useHotkeys } from '@mantine/hooks';
 import React, { useRef, useState } from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 import { usePlaygroundConfigurationEncoder } from 'src/features/playground/shareLinks/encoder/Encoder';
@@ -67,6 +61,7 @@ export const ControlBarShareButton: React.FC<ControlBarShareButtonProps> = props
       .catch(err => showWarningMessage(err.toString()))
       .finally(() => setIsLoading(false));
   };
+  useHotkeys([['ctrl+w', generateLink]], []);
 
   const handleCustomStringChange = (event: React.FormEvent<HTMLInputElement>) => {
     setCustomStringKeyword(event.currentTarget.value);
