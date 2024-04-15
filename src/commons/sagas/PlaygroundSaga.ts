@@ -4,7 +4,7 @@ import { call, put, select } from 'redux-saga/effects';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
-import { isSourceLanguage, OverallState } from '../application/ApplicationTypes';
+import { isSchemeLanguage, isSourceLanguage, OverallState } from '../application/ApplicationTypes';
 import { visitSideContent } from '../sideContent/SideContentActions';
 import { SideContentType, VISIT_SIDE_CONTENT } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
@@ -73,6 +73,10 @@ export default function* PlaygroundSaga(): SagaIterator {
         } else {
           yield put(toggleUsingCse(true, workspaceLocation));
         }
+      }
+
+      if (isSchemeLanguage(playgroundSourceChapter) && newId === SideContentType.cseMachine) {
+        yield put(toggleUsingCse(true, workspaceLocation));
       }
     }
   );
