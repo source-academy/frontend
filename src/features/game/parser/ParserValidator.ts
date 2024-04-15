@@ -121,6 +121,7 @@ export default class ParserValidator {
       (assertionDetails: AssertionDetail[], gameItemType: GameItemType) => {
         assertionDetails.forEach((assertionDetail: AssertionDetail) => {
           const { itemId, actionType } = assertionDetail;
+          // @ts-expect-error TS 5.0, violating abstraction of class and object using .has
           if (!Parser.checkpoint.map[gameItemType].has(itemId)) {
             if (actionType) {
               this.actionAssertionError(itemId, gameItemType, actionType);

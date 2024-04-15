@@ -48,7 +48,7 @@ exports[`Playground tests Playground renders correctly 1`] = `
             </button>
           </span>
           <span
-            class="bp5-popover2-target bp5-popover-target"
+            class="bp5-popover-target"
           >
             <span
               class="bp5-popover-target"
@@ -97,7 +97,7 @@ exports[`Playground tests Playground renders correctly 1`] = `
             class="bp5-popover-target"
           >
             <span
-              class="bp5-popover2-target bp5-popover-target"
+              class="bp5-popover-target"
             >
               <button
                 class="bp5-button bp5-minimal"
@@ -137,7 +137,7 @@ exports[`Playground tests Playground renders correctly 1`] = `
             class="bp5-popover-target"
           >
             <span
-              class="bp5-popover2-target bp5-popover-target"
+              class="bp5-popover-target"
             >
               <button
                 class="bp5-button bp5-minimal"
@@ -159,7 +159,7 @@ exports[`Playground tests Playground renders correctly 1`] = `
             class="bp5-popover-target"
           >
             <span
-              class="bp5-popover2-target bp5-popover-target"
+              class="bp5-popover-target"
             >
               <button
                 class="bp5-button bp5-minimal"
@@ -979,17 +979,19 @@ and also the
                               data-testid="cse-machine-default-text"
                               id="cse-machine-default-text"
                             >
-                              The CSE machine generates control, stash and environment model diagrams following a notation introduced in
-                               
-                              <a
-                                href="https://sourceacademy.org/sicpjs/3.2"
-                                rel="noopener noreferrer"
-                                target="_blank"
-                              >
-                                <i>
-                                  Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3, Section 2
-                                </i>
-                              </a>
+                              <span>
+                                The CSE machine generates control, stash and environment model diagrams following a notation introduced in
+                                 
+                                <a
+                                  href="https://sourceacademy.org/sicpjs/3.2"
+                                  rel="noopener noreferrer"
+                                  target="_blank"
+                                >
+                                  <i>
+                                    Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3, Section 2
+                                  </i>
+                                </a>
+                              </span>
                               .
                               <br />
                               <br />
@@ -1317,7 +1319,7 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
             </button>
           </span>
           <span
-            class="bp5-popover2-target bp5-popover-target"
+            class="bp5-popover-target"
           >
             <span
               class="bp5-popover-target"
@@ -1390,7 +1392,7 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
             class="bp5-popover-target"
           >
             <span
-              class="bp5-popover2-target bp5-popover-target"
+              class="bp5-popover-target"
             >
               <button
                 class="bp5-button bp5-minimal"
@@ -1454,7 +1456,7 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
             class="bp5-popover-target"
           >
             <span
-              class="bp5-popover2-target bp5-popover-target"
+              class="bp5-popover-target"
             >
               <button
                 class="bp5-button bp5-minimal"
@@ -1488,7 +1490,7 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
             class="bp5-popover-target"
           >
             <span
-              class="bp5-popover2-target bp5-popover-target"
+              class="bp5-popover-target"
             >
               <button
                 class="bp5-button bp5-minimal"

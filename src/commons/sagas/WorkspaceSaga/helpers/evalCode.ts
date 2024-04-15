@@ -14,7 +14,7 @@ import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
 import { EVAL_STORY } from 'src/features/stories/StoriesTypes';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
-import { OverallState } from '../../../application/ApplicationTypes';
+import { isSchemeLanguage, OverallState } from '../../../application/ApplicationTypes';
 import {
   BEGIN_DEBUG_PAUSE,
   BEGIN_INTERRUPT_EXECUTION,
@@ -95,7 +95,8 @@ export function* evalCode(
             .currentStep
       )
     : -1;
-  const cseActiveAndCorrectChapter = context.chapter >= 3 && cseIsActive;
+  const cseActiveAndCorrectChapter =
+    (isSchemeLanguage(context.chapter) || context.chapter >= 3) && cseIsActive;
   if (cseActiveAndCorrectChapter) {
     context.executionMethod = 'cse-machine';
   }
@@ -250,6 +251,7 @@ export function* evalCode(
   let lastDebuggerResult = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].lastDebuggerResult
   );
+  const isUsingCse = yield select((state: OverallState) => state.workspaces['playground'].usingCse);
 
   // Handles `console.log` statements in fullJS
   const detachConsole: () => void =
@@ -266,7 +268,7 @@ export function* evalCode(
         : isC
         ? call(cCompileAndRun, entrypointCode, context)
         : isJava
-        ? call(javaRun, entrypointCode, context)
+        ? call(javaRun, entrypointCode, context, currentStep, isUsingCse)
         : call(
             runFilesInContext,
             isFolderModeEnabled

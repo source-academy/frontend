@@ -5,6 +5,7 @@ import qs from 'query-string';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select } from 'redux-saga/effects';
 import CseMachine from 'src/features/cseMachine/CseMachine';
+import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
 import {
   changeQueryString,
@@ -12,7 +13,7 @@ import {
   updateShortURL
 } from '../../features/playground/PlaygroundActions';
 import { GENERATE_LZ_STRING, SHORTEN_URL } from '../../features/playground/PlaygroundTypes';
-import { isSourceLanguage, OverallState } from '../application/ApplicationTypes';
+import { isSchemeLanguage, isSourceLanguage, OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/FileSystemUtils';
 import { visitSideContent } from '../sideContent/SideContentActions';
@@ -100,10 +101,15 @@ export default function* PlaygroundSaga(): SagaIterator {
       if (newId !== SideContentType.cseMachine) {
         yield put(toggleUsingCse(false, workspaceLocation));
         yield call([CseMachine, CseMachine.clearCse]);
+        yield call([JavaCseMachine, JavaCseMachine.clearCse]);
         yield put(updateCurrentStep(-1, workspaceLocation));
         yield put(updateStepsTotal(0, workspaceLocation));
         yield put(toggleUpdateCse(true, workspaceLocation));
         yield put(setEditorHighlightedLines(workspaceLocation, 0, []));
+      }
+
+      if (playgroundSourceChapter === Chapter.FULL_JAVA && newId === SideContentType.cseMachine) {
+        yield put(toggleUsingCse(true, workspaceLocation));
       }
 
       if (
@@ -115,6 +121,10 @@ export default function* PlaygroundSaga(): SagaIterator {
         } else {
           yield put(toggleUsingCse(true, workspaceLocation));
         }
+      }
+
+      if (isSchemeLanguage(playgroundSourceChapter) && newId === SideContentType.cseMachine) {
+        yield put(toggleUsingCse(true, workspaceLocation));
       }
     }
   );

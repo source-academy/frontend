@@ -2,13 +2,15 @@ import 'katex/dist/katex.min.css';
 
 import { Button, Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import Constants from 'src/commons/utils/Constants';
+import { useSession } from 'src/commons/utils/Hooks';
 import { setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
 import { resetWorkspace, toggleUsingSubst } from 'src/commons/workspace/WorkspaceActions';
+import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 import {
@@ -35,17 +37,19 @@ export const CodeSnippetContext = React.createContext({
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
 
 const Sicp: React.FC = () => {
-  const [data, setData] = React.useState(<></>);
-  const [loading, setLoading] = React.useState(false);
-  const [active, setActive] = React.useState('0');
+  const [data, setData] = useState(<></>);
+  const [loading, setLoading] = useState(false);
+  const [active, setActive] = useState('0');
   const { section } = useParams<{ section: string }>();
-  const parentRef = React.useRef<HTMLDivElement>(null);
-  const refs = React.useRef({});
+  const parentRef = useRef<HTMLDivElement>(null);
+  const refs = useRef<Record<string, HTMLElement | null>>({});
   const navigate = useNavigate();
   const location = useLocation();
+  const { isLoggedIn } = useSession();
 
   function getSection() {
-    return location.pathname.replace('/sicpjs/', ''); // To discard the '/sicpjs/'
+    // To discard the '/sicpjs/'
+    return location.pathname.replace('/sicpjs/', '') as SicpSection;
   }
 
   const getText = () => {
@@ -69,7 +73,7 @@ const Sicp: React.FC = () => {
     return visibleParagraphs;
   };
 
-  const scrollRefIntoView = (ref: HTMLDivElement | null) => {
+  const scrollRefIntoView = (ref: HTMLElement | null) => {
     if (!ref || !parentRef?.current) {
       return;
     }
@@ -197,7 +201,7 @@ const Sicp: React.FC = () => {
           )}
         </CodeSnippetContext.Provider>
       </SicpErrorBoundary>
-      <Chatbot getSection={getSection} getText={getText} />
+      {isLoggedIn && <Chatbot getSection={getSection} getText={getText} />}
     </div>
   );
 };

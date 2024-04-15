@@ -198,8 +198,22 @@ const schemeSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displa
 ];
 
 export const schemeLanguages: SALanguage[] = schemeSubLanguages.map(sublang => {
-  return { ...sublang, mainLanguage: SupportedLanguage.SCHEME, supports: { repl: true } };
+  return {
+    ...sublang,
+    mainLanguage: SupportedLanguage.SCHEME,
+    supports: { repl: true, cseMachine: true }
+  };
 });
+
+export function isSchemeLanguage(chapter: Chapter): boolean {
+  return [
+    Chapter.SCHEME_1,
+    Chapter.SCHEME_2,
+    Chapter.SCHEME_3,
+    Chapter.SCHEME_4,
+    Chapter.FULL_SCHEME
+  ].includes(chapter);
+}
 
 const pySubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>> = [
   { chapter: Chapter.PYTHON_1, variant: Variant.DEFAULT, displayName: 'Python \xa71' }
@@ -219,7 +233,7 @@ export const javaLanguages: SALanguage[] = [
     variant: Variant.DEFAULT,
     displayName: 'Java',
     mainLanguage: SupportedLanguage.JAVA,
-    supports: {}
+    supports: { cseMachine: true }
   }
 ];
 export const cLanguages: SALanguage[] = [
