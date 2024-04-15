@@ -3,7 +3,7 @@ import { expectSaga } from 'redux-saga-test-plan';
 
 import { PLAYGROUND_UPDATE_PERSISTENCE_FILE } from '../../../features/playground/PlaygroundTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
-import { REMOVE_GOOGLE_USER_AND_ACCESS_TOKEN } from '../../application/types/SessionTypes';
+// import { REMOVE_GOOGLE_USER_AND_ACCESS_TOKEN } from '../../application/types/SessionTypes';
 import { actions } from '../../utils/ActionsHelper';
 import {
   CHANGE_EXTERNAL_LIBRARY,
