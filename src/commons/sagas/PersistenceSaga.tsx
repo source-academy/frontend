@@ -24,6 +24,7 @@ import { store } from '../../pages/createStore';
 import { OverallState } from '../application/ApplicationTypes';
 import { LOGIN_GOOGLE, LOGOUT_GOOGLE } from '../application/types/SessionTypes';
 import {
+  isGithubSyncing,
   retrieveFilesInWorkspaceAsRecord,
   rmFilesInDirRecursively,
   writeFileRecursively
@@ -569,7 +570,7 @@ export function* persistenceSaga(): SagaIterator {
 
         
         // Case where playground PersistenceFile is in single file mode
-        // Does nothing
+        // Does nothing extra
         yield call(
           showSuccessMessage,
           `${response.value} successfully saved to Google Drive.`,
@@ -627,17 +628,23 @@ export function* persistenceSaga(): SagaIterator {
       };
 
       if (!currFolderObject || !(currFolderObject as PersistenceFile).isFolder) {
+        yield call(console.log, 'here');
         // Check if there is only a single top level folder
         const testPaths: Set<string> = new Set();
+        let fileExistsInTopLevel = false;
         Object.keys(currFiles).forEach(e => {
           const regexResult = filePathRegex.exec(e)!;
+          const testStr = regexResult![1].slice('/playground/'.length, -1).split('/')[0];
+          if (testStr === '') {
+            fileExistsInTopLevel = true;
+          }
           testPaths.add(regexResult![1].slice('/playground/'.length, -1).split('/')[0]); //TODO hardcoded playground
         });
-        if (testPaths.size !== 1) {
+        if (testPaths.size !== 1 || fileExistsInTopLevel) {
           yield call(showSimpleErrorDialog, {
             title: 'Unable to Save All',
             contents: (
-              <p>There must be exactly one top level folder present in order to use Save All.</p>
+              <p>There must be only exactly one non-empty top level folder present to use Save All.</p>
             ),
             label: 'OK'
           });
@@ -937,11 +944,23 @@ export function* persistenceSaga(): SagaIterator {
       );
 
       try {
-        if (activeEditorTabIndex === null && !playgroundPersistenceFile.isFolder) {
-          yield call(showWarningMessage, `Please have ${name} open as the active editor tab.`, 1000);
+        if (activeEditorTabIndex === null) {
+          if (!playgroundPersistenceFile) yield call(showWarningMessage, `Please have an editor tab open.`, 1000);
+          else if (!playgroundPersistenceFile.isFolder) {
+            yield call(showWarningMessage, `Please have ${name} open as the active editor tab.`, 1000);
+          } else {
+            yield call(showWarningMessage, `Please have the file you want to save open as the active editor tab.`, 1000);
+          }
           return;
         }
         const code = editorTabs[activeEditorTabIndex].value;
+
+        // check if editor is correct for single file mode
+        if (playgroundPersistenceFile && !playgroundPersistenceFile.isFolder && 
+          (editorTabs[activeEditorTabIndex] as EditorTabState).filePath !== playgroundPersistenceFile.path) {
+          yield call(showWarningMessage, `Please have ${name} open as the active editor tab.`, 1000);
+          return;
+       }
 
         const config: IPlaygroundConfig = {
           chapter,
@@ -1000,11 +1019,6 @@ export function* persistenceSaga(): SagaIterator {
           return;
         }
 
-        if ((editorTabs[activeEditorTabIndex] as EditorTabState).filePath !== playgroundPersistenceFile.path) {
-           yield call(showWarningMessage, `Please have ${name} open as the active editor tab.`, 1000);
-           return;
-        }
-
         toastKey = yield call(showMessage, {
           message: `Saving as ${name}...`,
           timeout: 0,
@@ -1032,6 +1046,8 @@ export function* persistenceSaga(): SagaIterator {
   yield takeEvery(
     PERSISTENCE_CREATE_FILE,
     function* ({ payload }: ReturnType<typeof actions.persistenceCreateFile>) {
+      const bailNow: boolean = yield call(isGithubSyncing);
+      if (bailNow) return;
       try {
         yield call(store.dispatch, actions.disableFileSystemContextMenus());
         const newFilePath = payload;
@@ -1106,6 +1122,8 @@ export function* persistenceSaga(): SagaIterator {
   yield takeEvery(
     PERSISTENCE_CREATE_FOLDER,
     function* ({ payload }: ReturnType<typeof actions.persistenceCreateFolder>) {
+      const bailNow: boolean = yield call(isGithubSyncing);
+      if (bailNow) return;
       try {
         yield call(store.dispatch, actions.disableFileSystemContextMenus());
         const newFolderPath = payload;
@@ -1176,6 +1194,8 @@ export function* persistenceSaga(): SagaIterator {
   yield takeEvery(
     PERSISTENCE_DELETE_FILE,
     function* ({ payload }: ReturnType<typeof actions.persistenceDeleteFile>) {
+      const bailNow: boolean = yield call(isGithubSyncing);
+      if (bailNow) return;
       try {
         yield call(store.dispatch, actions.disableFileSystemContextMenus());
         const filePath = payload;
@@ -1191,9 +1211,19 @@ export function* persistenceSaga(): SagaIterator {
           return;
         }
         yield call(ensureInitialisedAndAuthorised);
-        yield call(deleteFileOrFolder, persistenceFile.id); // assume this succeeds all the time? TODO
+        yield call(deleteFileOrFolder, persistenceFile.id);
         yield put(actions.deletePersistenceFile(persistenceFile));
         yield call(store.dispatch, actions.updateRefreshFileViewKey());
+
+        // If the user comes here in single file mode, then the file they deleted
+        // must be the file they are tracking.
+        const [currFileObject] = yield select((state: OverallState) => [
+          state.playground.persistenceFile
+        ]);
+        if (!currFileObject.isFolder) {
+          yield put(actions.playgroundUpdatePersistenceFile(undefined));
+        }
+
         yield call(
           showSuccessMessage,
           `${persistenceFile.name} successfully deleted from Google Drive.`,
@@ -1211,6 +1241,8 @@ export function* persistenceSaga(): SagaIterator {
   yield takeEvery(
     PERSISTENCE_DELETE_FOLDER,
     function* ({ payload }: ReturnType<typeof actions.persistenceDeleteFolder>) {
+      const bailNow: boolean = yield call(isGithubSyncing);
+      if (bailNow) return;
       try {
         yield call(store.dispatch, actions.disableFileSystemContextMenus());
         const folderPath = payload;
@@ -1255,6 +1287,8 @@ export function* persistenceSaga(): SagaIterator {
     function* ({
       payload: { oldFilePath, newFilePath }
     }: ReturnType<typeof actions.persistenceRenameFile>) {
+      const bailNow: boolean = yield call(isGithubSyncing);
+      if (bailNow) return;
       try {
         yield call(store.dispatch, actions.disableFileSystemContextMenus());
         yield call(console.log, 'rename file ', oldFilePath, ' to ', newFilePath);
@@ -1275,6 +1309,10 @@ export function* persistenceSaga(): SagaIterator {
         const regexResult = filePathRegex.exec(newFilePath)!;
         const newFileName = regexResult[2] + regexResult[3];
 
+        // old name
+        const regexResult2 = filePathRegex.exec(oldFilePath)!;
+        const oldFileName = regexResult2[2] + regexResult2[3];
+
         // call gapi
         yield call(renameFileOrFolder, persistenceFile.id, newFileName);
 
@@ -1282,6 +1320,16 @@ export function* persistenceSaga(): SagaIterator {
         yield put(
           actions.updatePersistenceFilePathAndNameByPath(oldFilePath, newFilePath, newFileName)
         );
+        const [currFileObject] = yield select((state: OverallState) => [
+          state.playground.persistenceFile
+        ]);
+        if (currFileObject.name === oldFileName) {
+          // update playground PersistenceFile
+          yield put(
+            actions.playgroundUpdatePersistenceFile({ ...currFileObject, name: newFileName})
+          );
+        }
+
         yield call(store.dispatch, actions.updateRefreshFileViewKey());
         yield call(
           showSuccessMessage,
@@ -1302,6 +1350,8 @@ export function* persistenceSaga(): SagaIterator {
     function* ({
       payload: { oldFolderPath, newFolderPath }
     }: ReturnType<typeof actions.persistenceRenameFolder>) {
+      const bailNow: boolean = yield call(isGithubSyncing);
+      if (bailNow) return;
       try {
         yield call(store.dispatch, actions.disableFileSystemContextMenus());
         yield call(console.log, 'rename folder ', oldFolderPath, ' to ', newFolderPath);
