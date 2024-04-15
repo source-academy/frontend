@@ -5,7 +5,6 @@ import React from 'react';
 import { useResponsive } from 'src/commons/utils/Hooks';
 import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 
-import { GitHubSaveInfo } from '../../../features/github/GitHubTypes';
 import ControlButton from '../../ControlButton';
 
 type Props = {
@@ -13,8 +12,7 @@ type Props = {
   workspaceLocation: string;
   currPersistenceFile?: PersistenceFile;
   loggedInAs?: Octokit;
-  githubSaveInfo: GitHubSaveInfo;
-  isDirty: boolean;
+  isDirty?: boolean;
   isGDriveSynced: boolean;
   onClickOpen?: () => void;
   onClickSave?: () => void;
@@ -33,7 +31,7 @@ type Props = {
 export const ControlBarGitHubButtons: React.FC<Props> = props => {
   const { isMobileBreakpoint } = useResponsive();
 
-  const filePath = props.githubSaveInfo.filePath || '';
+  const filePath = props.currPersistenceFile ? props.currPersistenceFile.path : '';
 
   const isNotPlayground = props.workspaceLocation !== "playground";
 

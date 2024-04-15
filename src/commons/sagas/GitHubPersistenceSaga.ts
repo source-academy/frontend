@@ -24,16 +24,18 @@ import { OverallState } from '../application/ApplicationTypes';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
 import {
   getPersistenceFile,
+  isGithubSyncing,
   retrieveFilesInWorkspaceAsRecord
 } from '../fileSystem/FileSystemUtils';
 import FileExplorerDialog, { FileExplorerDialogProps } from '../gitHubOverlay/FileExplorerDialog';
 import RepositoryDialog, { RepositoryDialogProps } from '../gitHubOverlay/RepositoryDialog';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
-import { promisifyDialog } from '../utils/DialogHelper';
+import { promisifyDialog, showSimpleErrorDialog } from '../utils/DialogHelper';
 import { dismiss, showMessage, showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { EditorTabState } from '../workspace/WorkspaceTypes';
 import { Intent } from '@blueprintjs/core';
+import { filePathRegex } from '../utils/PersistenceHelper';
 
 export function* GitHubPersistenceSaga(): SagaIterator {
   yield takeLatest(LOGIN_GITHUB, githubLoginSaga);
@@ -288,6 +290,39 @@ function* githubSaveAll(): any {
     >;
 
     if (store.getState().fileSystem.persistenceFileArray.length === 0) {
+      // check if there is only one top level folder 
+      const fileSystem: FSModule | null = yield select(
+        (state: OverallState) => state.fileSystem.inBrowserFileSystem
+      );
+
+      // If the file system is not initialised, do nothing.
+      if (fileSystem === null) {
+        yield call(console.log, 'no filesystem!'); // TODO change to throw new Error
+        return;
+      }
+      const currFiles: Record<string, string> = yield call(
+        retrieveFilesInWorkspaceAsRecord,
+        'playground',
+        fileSystem
+      );
+      const testPaths: Set<string> = new Set();
+        Object.keys(currFiles).forEach(e => {
+          const regexResult = filePathRegex.exec(e)!;
+          testPaths.add(regexResult![1].slice('/playground/'.length, -1).split('/')[0]); //TODO hardcoded playground
+        });
+      if (testPaths.size !== 1) {
+        yield call(showSimpleErrorDialog, {
+          title: 'Unable to Save All',
+          contents: (
+            "There must be exactly one top level folder present in order to use Save All."
+          ),
+          label: 'OK'
+        });
+        return;
+      }
+
+      //only one top level folder, proceeding to selection
+
       type ListForAuthenticatedUserData = GetResponseDataTypeFromEndpointMethod<
         typeof octokit.repos.listForAuthenticatedUser
       >;
@@ -366,6 +401,9 @@ function* githubSaveAll(): any {
 
 function* githubCreateFile({ payload }: ReturnType<typeof actions.githubCreateFile>): any {
   let toastKey: string | undefined;
+  if (!isGithubSyncing()) {
+    return;
+  }
   try {
     store.dispatch(actions.disableFileSystemContextMenus());
     toastKey = yield call(showMessage, {
@@ -444,6 +482,9 @@ function* githubCreateFile({ payload }: ReturnType<typeof actions.githubCreateFi
 
 function* githubDeleteFile({ payload }: ReturnType<typeof actions.githubDeleteFile>): any {
   let toastKey: string | undefined;
+  if (!isGithubSyncing()) {
+    return;
+  }
   try {
     store.dispatch(actions.disableFileSystemContextMenus());
     toastKey = yield call(showMessage, {
@@ -507,6 +548,9 @@ function* githubDeleteFile({ payload }: ReturnType<typeof actions.githubDeleteFi
 
 function* githubDeleteFolder({ payload }: ReturnType<typeof actions.githubDeleteFolder>): any {
   let toastKey: string | undefined;
+  if (!isGithubSyncing()) {
+    return;
+  }
   try {
     store.dispatch(actions.disableFileSystemContextMenus());
     toastKey = yield call(showMessage, {
@@ -570,6 +614,9 @@ function* githubDeleteFolder({ payload }: ReturnType<typeof actions.githubDelete
 
 function* githubRenameFile({ payload }: ReturnType<typeof actions.githubRenameFile>): any {
   let toastKey: string | undefined;
+  if (!isGithubSyncing()) {
+    return;
+  }
   try {
     store.dispatch(actions.disableFileSystemContextMenus());
     toastKey = yield call(showMessage, {
@@ -635,6 +682,9 @@ function* githubRenameFile({ payload }: ReturnType<typeof actions.githubRenameFi
 
 function* githubRenameFolder({ payload }: ReturnType<typeof actions.githubRenameFile>): any {
   let toastKey: string | undefined;
+  if (!isGithubSyncing()) {
+    return;
+  }
   try {
     store.dispatch(actions.disableFileSystemContextMenus());
     toastKey = yield call(showMessage, {

@@ -117,7 +117,6 @@ import {
 } from '../../commons/editor/EditorContainer';
 import { Position } from '../../commons/editor/EditorTypes';
 import {
-  getGithubSaveInfo,
   isGDriveSyncing,
   isGithubSyncing,
   overwriteFilesInWorkspace
@@ -275,8 +274,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
   } = useTypedSelector(state => state.workspaces[workspaceLocation]);
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
   const { queryString, shortURL, persistenceFile } = useTypedSelector(state => state.playground);
-  const githubSaveInfo = getGithubSaveInfo();
-  //console.log(githubSaveInfo);
   const {
     sourceChapter: courseSourceChapter,
     sourceVariant: courseSourceVariant,
@@ -646,7 +643,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   ]);
 
   const githubPersistenceIsDirty =
-    githubSaveInfo && (!githubSaveInfo.lastSaved || githubSaveInfo.lastSaved < lastEdit);
+    persistenceFile && (!persistenceFile.lastSaved || persistenceFile.lastSaved < lastEdit);
   const gdriveSynced = isGDriveSyncing();
   const githubButtons = useMemo(() => {
     return (
@@ -656,7 +653,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
         workspaceLocation={workspaceLocation}
         currPersistenceFile={persistenceFile}
         loggedInAs={githubOctokitObject.octokit}
-        githubSaveInfo={githubSaveInfo}
         isDirty={githubPersistenceIsDirty}
         isGDriveSynced={gdriveSynced}
         onClickOpen={() => dispatch(githubOpenFile())}
@@ -671,7 +667,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     dispatch,
     githubOctokitObject.octokit,
     githubPersistenceIsDirty,
-    githubSaveInfo,
     isFolderModeEnabled,
     persistenceFile,
     workspaceLocation,
@@ -758,14 +753,14 @@ const Playground: React.FC<PlaygroundProps> = props => {
       <ControlBarToggleFolderModeButton
         isFolderModeEnabled={isFolderModeEnabled}
         isSessionActive={editorSessionId !== ''}
-        isPersistenceActive={persistenceFile !== undefined || githubSaveInfo.repoName !== ''}
+        isPersistenceActive={persistenceFile !== undefined}
         toggleFolderMode={() => dispatch(toggleFolderMode(workspaceLocation))}
         key="folder"
       />
     );
   }, [
     dispatch,
-    githubSaveInfo.repoName,
+    persistenceFile?.repoName,
     isFolderModeEnabled,
     persistenceFile,
     editorSessionId,

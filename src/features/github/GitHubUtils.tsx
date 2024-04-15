@@ -4,12 +4,7 @@ import {
   GetResponseTypeFromEndpointMethod
 } from '@octokit/types';
 import { FSModule } from 'browserfs/dist/node/core/FS';
-import {
-  addGithubSaveInfo,
-  updateRefreshFileViewKey
-} from 'src/commons/fileSystem/FileSystemActions';
 import { filePathRegex } from 'src/commons/utils/PersistenceHelper';
-import { WORKSPACE_BASE_PATHS } from 'src/pages/fileSystem/createInBrowserFileSystem';
 
 import {
   getPersistenceFile,
@@ -279,10 +274,9 @@ export async function openFileInEditor(
 
   const newEditorValue = Buffer.from(content, 'base64').toString();
   const activeEditorTabIndex = store.getState().workspaces.playground.activeEditorTabIndex;
-  if (activeEditorTabIndex === null) {
-    store.dispatch(actions.addEditorTab('playground', '/playground/' + newFilePath, newEditorValue));
-  } else {
-    store.dispatch(actions.updateActiveEditorTab('playground', { filePath: '/playground/' + newFilePath, value: newEditorValue}));
+
+  if (fileSystem !== null) {
+    await writeFileRecursively(fileSystem, '/playground/' + newFilePath, newEditorValue);
   }
   store.dispatch(
     actions.addGithubSaveInfo({
@@ -295,20 +289,34 @@ export async function openFileInEditor(
     })
   );
 
+  // Delay to increase likelihood addPersistenceFile for last loaded file has completed
+  // and for refreshfileview to happen after everything is loaded
+  const wait = () => new Promise( resolve => setTimeout(resolve, 1000));
+  await wait();
+
+  store.dispatch(
+    actions.playgroundUpdatePersistenceFile({
+      id: '',
+      name: newFilePath,
+      repoName: repoName,
+      path: '/playground/' + newFilePath,
+      lastSaved: new Date(),
+      parentFolderPath: regexResult[1]
+    })
+  );
+  if (activeEditorTabIndex === null) {
+    store.dispatch(actions.addEditorTab('playground', '/playground/' + newFilePath, newEditorValue));
+  } else {
+    store.dispatch(actions.updateActiveEditorTab('playground', { filePath: '/playground/' + newFilePath, value: newEditorValue}));
+  }
+
+  store.dispatch(actions.updateRefreshFileViewKey());
+
   if (content) {
     showSuccessMessage('Successfully loaded file!', 1000);
   } else {
     showWarningMessage('Successfully loaded file but file was empty!', 1000);
   }
-
-  if (fileSystem !== null) {
-    await writeFileRecursively(fileSystem, '/playground/' + newFilePath, newEditorValue);
-  }
-
-  //refreshes editor tabs
-  // store.dispatch(
-  //   actions.removeEditorTabsForDirectory('playground', WORKSPACE_BASE_PATHS['playground'])
-  // ); // TODO hardcoded
 }
 
 export async function openFolderInFolderMode(
@@ -376,20 +384,14 @@ export async function openFolderInFolderMode(
     parentFolderPath = regexResult[1] || '';
     console.log(regexResult);
 
-    // This is a helper function to asynchronously clear the current folder system, then get each
-    // file and its contents one by one, then finally refresh the file system after all files
-    // have been recursively created. There may be extra asyncs or promises but this is what works.
-    const readFile = async (files: Array<string>) => {
       console.log(files);
       console.log(filePath);
-      let promise = Promise.resolve();
       console.log('removing files');
       await rmFilesInDirRecursively(fileSystem, '/playground');
       console.log('files removed');
       type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
       console.log('starting to add files');
-      files.forEach((file: string) => {
-        promise = promise.then(async () => {
+    for (const file of files) {
           let results = {} as GetContentResponse;
           console.log(repoOwner);
           console.log(repoName);
@@ -421,38 +423,49 @@ export async function openFolderInFolderMode(
                 parentFolderPath: parentFolderPath
               })
             );
+        const regexResult = filePathRegex.exec(filePath);
+        if (regexResult === null) {
+          console.log('Regex null');
+          return;
+        }
+        console.log(regexResult[2]);
+        store.dispatch(
+          actions.playgroundUpdatePersistenceFile({
+            id: '',
+            name: regexResult[2],
+            repoName: repoName,
+            lastSaved: new Date(),
+            parentFolderPath: parentFolderPath
+          })
+        )
             console.log(store.getState().fileSystem.persistenceFileArray);
             console.log('wrote one file');
           } else {
             console.log('failed');
           }
-        });
-      });
-      promise.then(() => {
-        // store.dispatch(actions.playgroundUpdateRepoName(repoName));
-        console.log('promises fulfilled');
-        // store.dispatch(actions.setFolderMode('playground', true));
-        store.dispatch(updateRefreshFileViewKey());
-        console.log('refreshed');
-        showSuccessMessage('Successfully loaded file!', 1000);
-        if (toastKey) {
-          dismiss(toastKey);
-        }
-      });
-    };
+    }
 
-    await readFile(files);
+    // Delay to increase likelihood addPersistenceFile for last loaded file has completed
+    // and for refreshfileview to happen after everything is loaded
+    const wait = () => new Promise( resolve => setTimeout(resolve, 1000));
+    await wait();
+    store.dispatch(actions.updateRefreshFileViewKey());
+    console.log('refreshed');
+    showSuccessMessage('Successfully loaded file!', 1000);
+    if (toastKey) {
+      dismiss(toastKey);
+    }
+    // //refreshes editor tabs
+    // store.dispatch(
+    //   actions.removeEditorTabsForDirectory('playground', WORKSPACE_BASE_PATHS['playground'])
+    // ); // TODO hardcoded
   } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to open the folder', 1000);
     if (toastKey) {
       dismiss(toastKey);
     }
-  } finally {
-    //refreshes editor tabs
-    store.dispatch(
-      actions.removeEditorTabsForDirectory('playground', WORKSPACE_BASE_PATHS['playground'])
-    ); // TODO hardcoded
+    store.dispatch(actions.updateRefreshFileViewKey());
   }
 }
 
@@ -520,9 +533,15 @@ export async function performOverwritingSave(
         parentFolderPath: parentFolderPath
       })
     );
+    const playgroundPersistenceFile = store.getState().playground.persistenceFile;
+    store.dispatch(actions.playgroundUpdatePersistenceFile({
+      id: '',
+      name: playgroundPersistenceFile?.name || '',
+      repoName: repoName,
+      lastSaved: new Date(),
+      parentFolderPath: parentFolderPath
+    }))
 
-    //this is just so that playground is forcefully updated
-    // store.dispatch(actions.playgroundUpdateRepoName(repoName));
     showSuccessMessage('Successfully saved file!', 800);
   } catch (err) {
     console.error(err);
@@ -749,7 +768,7 @@ export async function performMultipleCreatingSave(
         author: { name: githubName, email: githubEmail }
       });
       store.dispatch(
-        addGithubSaveInfo({
+        actions.addGithubSaveInfo({
           id: '',
           name: '',
           repoName: repoName,
@@ -878,7 +897,7 @@ export async function performFolderDeletion(
     }
 
     showSuccessMessage('Successfully deleted folder from GitHub!', 1000);
-    store.dispatch(updateRefreshFileViewKey());
+    store.dispatch(actions.updateRefreshFileViewKey());
   } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to delete the folder.', 1000);
