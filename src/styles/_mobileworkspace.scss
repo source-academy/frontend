@@ -121,6 +121,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
 
           .hg-row {
             height: 40px;
+            overflow-x: auto;
 
             .hg-button {
               background: $cadet-color-2;
@@ -144,12 +145,6 @@ $shadow-light: rgba(0, 0, 0, 0.2);
             }
           }
         }
-      }
-
-      .mobile-keyboard-row-toggle {
-        width: 28px;
-        font-size: 28px;
-        padding: 0 2px 0 0;
       }
     }
 

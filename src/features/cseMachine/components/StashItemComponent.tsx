@@ -4,20 +4,24 @@ import { Label, Tag, Text } from 'react-konva';
 
 import { FnValue } from '../components/values/FnValue';
 import { GlobalFnValue } from '../components/values/GlobalFnValue';
-import { ShapeDefaultProps } from '../CseMachineConfig';
+import CseMachine from '../CseMachine';
+import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { Layout } from '../CseMachineLayout';
 import { IHoverable } from '../CseMachineTypes';
 import {
+  defaultDangerColor,
+  defaultStrokeColor,
+  defaultTextColor,
   getTextWidth,
-  isClosure,
   isDataArray,
+  isNonGlobalFn,
+  isSourceObject,
   isStashItemInDanger,
   setHoveredCursor,
   setHoveredStyle,
   setUnhoveredCursor,
   setUnhoveredStyle,
-  stackItemSAColor,
   truncateText
 } from '../CseMachineUtils';
 import { ArrowFromStashItemComponent } from './arrows/ArrowFromStashItemComponent';
@@ -44,12 +48,14 @@ export class StashItemComponent extends Visible implements IHoverable {
     const valToStashRep = (val: any): string => {
       return typeof val === 'string'
         ? `'${val}'`.trim()
-        : isClosure(val)
+        : isNonGlobalFn(val)
         ? 'closure'
         : isDataArray(val)
         ? arrowTo
           ? 'pair/array'
           : JSON.stringify(val)
+        : isSourceObject(val)
+        ? val.toReplString()
         : String(value);
     };
     this.text = truncateText(
@@ -69,20 +75,29 @@ export class StashItemComponent extends Visible implements IHoverable {
     this._x = ControlStashConfig.StashPosX + stackWidth;
     this._y = ControlStashConfig.StashPosY;
     if (arrowTo) {
+      arrowTo.markAsReferenced();
       this.arrow = new ArrowFromStashItemComponent(this).to(arrowTo) as ArrowFromStashItemComponent;
     }
   }
 
+  // Save previous z-index to go back to later
+  private zIndex = 0;
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
     !isStashItemInDanger(this.index) && setHoveredStyle(e.currentTarget);
     setHoveredCursor(e.currentTarget);
+    this.zIndex = this.ref.current.zIndex();
+    this.ref.current.moveToTop();
+    this.tooltipRef.current.moveToTop();
     this.tooltipRef.current.show();
   };
 
   onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
-    !isStashItemInDanger(this.index) && setUnhoveredStyle(e.currentTarget);
     setUnhoveredCursor(e.currentTarget);
     this.tooltipRef.current.hide();
+    if (!isStashItemInDanger(this.index)) {
+      setUnhoveredStyle(e.currentTarget);
+    }
+    this.ref.current.zIndex(this.zIndex);
   };
 
   destroy() {
@@ -91,7 +106,7 @@ export class StashItemComponent extends Visible implements IHoverable {
 
   draw(): React.ReactNode {
     const textProps = {
-      fill: ControlStashConfig.SA_WHITE,
+      fill: defaultTextColor(),
       padding: ControlStashConfig.StashItemTextPadding,
       fontFamily: ControlStashConfig.FontFamily,
       fontSize: ControlStashConfig.FontSize,
@@ -99,7 +114,7 @@ export class StashItemComponent extends Visible implements IHoverable {
       fontVariant: ControlStashConfig.FontVariant
     };
     const tagProps = {
-      stroke: stackItemSAColor(this.index),
+      stroke: isStashItemInDanger(this.index) ? defaultDangerColor() : defaultStrokeColor(),
       cornerRadius: ControlStashConfig.StashItemCornerRadius
     };
     return (
@@ -122,13 +137,14 @@ export class StashItemComponent extends Visible implements IHoverable {
         >
           <Tag
             {...ShapeDefaultProps}
-            stroke="black"
-            fill={'black'}
+            stroke={Config.HoverBgColor}
+            fill={Config.HoverBgColor}
             opacity={ControlStashConfig.TooltipOpacity}
           />
           <Text
             {...ShapeDefaultProps}
             {...textProps}
+            fill={CseMachine.getPrintableMode() ? Config.PrintBgColor : Config.TextColor}
             text={this.tooltip}
             padding={ControlStashConfig.TooltipPadding}
           />

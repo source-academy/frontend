@@ -1,6 +1,5 @@
-import { Colors } from '@blueprintjs/core';
+import { Colors, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Tooltip2 } from '@blueprintjs/popover2';
 import React from 'react';
 
 import ControlButton from '../ControlButton';
@@ -28,7 +27,7 @@ export const ControlBarToggleFolderModeButton: React.FC<Props> = ({
     ? 'Folder mode is not available for this version of Source'
     : `${isFolderModeEnabled ? 'Disable' : 'Enable'} Folder mode`;
   return (
-    <Tooltip2 content={tooltipContent}>
+    <Tooltip content={tooltipContent}>
       <ControlButton
         label="Folder"
         icon={IconNames.FOLDER_CLOSE}
@@ -38,6 +37,6 @@ export const ControlBarToggleFolderModeButton: React.FC<Props> = ({
         onClick={toggleFolderMode}
         isDisabled={isSessionActive || isPersistenceActive || !isSupportedSource}
       />
-    </Tooltip2>
+    </Tooltip>
   );
 };

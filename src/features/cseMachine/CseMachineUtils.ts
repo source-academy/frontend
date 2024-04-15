@@ -1,3 +1,6 @@
+import { estreeDecode } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/encoder-visitor';
+import { unparse } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/reverse_parser';
+import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
 import {
   AppInstr,
   ArrLitInstr,
@@ -9,12 +12,14 @@ import {
   InstrType,
   UnOpInstr
 } from 'js-slang/dist/cse-machine/types';
-import { Environment, Value as StashValue } from 'js-slang/dist/types';
+import { Chapter, Environment, Value as StashValue } from 'js-slang/dist/types';
 import { astToString } from 'js-slang/dist/utils/ast/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
-import { cloneDeep } from 'lodash';
+import { Text } from 'konva/lib/shapes/Text';
+import { cloneDeep, isObject } from 'lodash';
+import { isSchemeLanguage } from 'src/commons/application/ApplicationTypes';
 import classes from 'src/styles/Draggable.module.scss';
 
 import { ArrayUnit } from './components/ArrayUnit';
@@ -28,9 +33,9 @@ import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
 import CseMachine from './CseMachine';
 import { Config } from './CseMachineConfig';
-import { ControlStashConfig } from './CseMachineControlStashConfig';
 import { Layout } from './CseMachineLayout';
 import {
+  BuiltInFn,
   Closure,
   Data,
   DataArray,
@@ -39,19 +44,38 @@ import {
   EnvTree,
   EnvTreeNode,
   GlobalFn,
+  NonGlobalFn,
+  PredefinedFn,
   Primitive,
-  ReferenceType
+  ReferenceType,
+  SourceObject,
+  StreamFn,
+  Unassigned
 } from './CseMachineTypes';
+import {
+  getAlternateControlItemComponent,
+  isCustomPrimitive,
+  needsNewRepresentation
+} from './utils/altLangs';
+class AssertionError extends Error {
+  constructor(msg?: string) {
+    super(msg);
+    this.name = 'AssertionError';
+  }
+}
 
-// TODO: can make use of lodash
-/** Returns `true` if `x` is an object */
-export function isObject(x: any): x is object {
-  return x === Object(x);
+export function assert(condition: boolean, msg?: string): asserts condition {
+  if (!condition) throw new AssertionError(msg);
 }
 
 /** Returns `true` if `object` is empty */
 export function isEmptyObject(object: Object): object is EmptyObject {
   return Object.keys(object).length === 0;
+}
+
+/** Returns `true` if `x` is a source object, e.g. runes */
+export function isSourceObject(x: any): x is SourceObject {
+  return isObject(x) && 'toReplString' in x && isFunction(x.toReplString);
 }
 
 /** Returns `true` if `object` is `Environment` */
@@ -93,18 +117,51 @@ export function isFunction(x: any): x is Function {
   return x && {}.toString.call(x) === '[object Function]';
 }
 
+/** Returns `true` if `data` is a built-in function */
+export function isBuiltInFn(data: Data): data is BuiltInFn {
+  // Extra `environment` check for functions returned from `stream`
+  // TODO: remove if `stream` becomes a pre-defined function
+  return isFunction(data) && !isClosure(data) && !{}.hasOwnProperty.call(data, 'environment');
+}
+
+/** Returns `true` if `data` is a pre-defined function */
+export function isPredefinedFn(data: Data): data is PredefinedFn {
+  return isClosure(data) && data.predefined;
+}
+
+const closureFields = ['id', 'environment', 'functionName', 'predefined', 'node', 'originalNode'];
+
 /** Returns `true` if `data` is a JS Slang closure */
 export function isClosure(data: Data): data is Closure {
+  const obj = {};
   return (
-    isFunction(data) &&
-    {}.hasOwnProperty.call(data, 'environment') &&
-    {}.hasOwnProperty.call(data, 'functionName')
+    data instanceof JsSlangClosure ||
+    (isFunction(data) &&
+      closureFields.reduce((prev, field) => prev && obj.hasOwnProperty.call(data, field), true))
   );
 }
 
-/** Returns `true` if `x` is a JS Slang function in the global frame */
-export function isGlobalFn(x: any): x is GlobalFn {
-  return isFunction(x) && !isClosure(x);
+/**
+ * Returns `true` if `data` is a function returned from calling `stream`.
+ * TODO: remove if `stream` becomes a pre-defined function
+ */
+export function isStreamFn(data: Data): data is StreamFn {
+  return isFunction(data) && !isClosure(data) && {}.hasOwnProperty.call(data, 'environment');
+}
+
+/** Returns `true` if `data` is a function that is built-in or pre-defined */
+export function isGlobalFn(data: Data): data is GlobalFn {
+  return isBuiltInFn(data) || isPredefinedFn(data);
+}
+
+/**
+ * Returns `true` if `data` is **not** a function that is built-in or pre-defined.
+ * In other words, it is either a closure that is not predefined, or a stream function.
+ *
+ * TODO: remove checking for `isStreamFn` if `stream` becomes pre-defined
+ */
+export function isNonGlobalFn(data: Data): data is NonGlobalFn {
+  return (isClosure(data) && !isPredefinedFn(data)) || isStreamFn(data);
 }
 
 /** Returns `true` if `data` is null */
@@ -128,7 +185,7 @@ export function isNumber(data: Data): data is number {
 }
 
 /** Returns `true` if `data` is a symbol */
-export function isUnassigned(data: Data): data is symbol {
+export function isUnassigned(data: Data): data is Unassigned {
   return typeof data === 'symbol';
 }
 
@@ -137,9 +194,17 @@ export function isBoolean(data: Data): data is boolean {
   return typeof data === 'boolean';
 }
 
-/** Returns `true` if `data` is a primitive, defined as a null | data | number */
+/** Returns `true` if `data` is a primitive, which are non-reference types and source objects */
 export function isPrimitiveData(data: Data): data is Primitive {
-  return isUndefined(data) || isNull(data) || isString(data) || isNumber(data) || isBoolean(data);
+  return (
+    isUndefined(data) ||
+    isNull(data) ||
+    isString(data) ||
+    isNumber(data) ||
+    isBoolean(data) ||
+    isSourceObject(data) ||
+    isCustomPrimitive(data)
+  );
 }
 
 // TODO: remove this in the future once ES typings are updated to contain the new set functions
@@ -161,21 +226,11 @@ export function setDifference<T>(set1: Set<T>, set2: Set<T>) {
 }
 
 /**
- * Mutates the given closure and converts it into a global function,
- * by removing the `functionName` property
- */
-export function convertClosureToGlobalFn(fn: Closure) {
-  delete (fn as Partial<Closure>).functionName;
-}
-
-/**
  * Returns `true` if `reference` is the main reference of `value`. The main reference priority
- * order is as follows:
- * 1. The first `ArrayUnit` inside `value.references` that also shares the same environment
- * 2. The first `Binding` inside `value.references` that also shares the same environment
+ * order is the first binding or array unit which shares the same environment with `value`.
  *
  * An exception is for a global function value, in which case the global frame binding is
- * always prioritised.
+ * always prioritised over array units.
  */
 export function isMainReference(value: Value, reference: ReferenceType) {
   if (isGlobalFn(value.data)) {
@@ -184,21 +239,25 @@ export function isMainReference(value: Value, reference: ReferenceType) {
       isEnvEqual(reference.frame.environment, Layout.globalEnvNode.environment)
     );
   }
-  if (!isClosure(value.data) && !isDataArray(value.data)) {
+  if (!isNonGlobalFn(value.data) && !isDataArray(value.data)) {
     return true;
   }
   const valueEnv = value.data.environment;
-  const firstArrayUnit = value.references.find(
-    r => r instanceof ArrayUnit && isEnvEqual(r.parent.data.environment, valueEnv)
+  const mainReference = value.references.find(r =>
+    isEnvEqual(r instanceof ArrayUnit ? r.parent.data.environment : r.frame.environment, valueEnv)
   );
-  if (firstArrayUnit) {
-    return reference === firstArrayUnit;
-  } else {
-    const firstBinding = value.references.find(
-      r => r instanceof Binding && isEnvEqual(r.frame.environment, valueEnv)
-    );
-    return reference === firstBinding;
-  }
+  return reference === mainReference;
+}
+
+/**
+ * Returns `true` if `reference` is a dummy reference,
+ * i.e. it is a dummy binding, or the reference is from an array which is unreferenced
+ */
+export function isDummyReference(reference: ReferenceType) {
+  return (
+    (reference instanceof Binding && reference.isDummyBinding) ||
+    (reference instanceof ArrayUnit && !reference.parent.isReferenced())
+  );
 }
 
 /** checks if `value` is a `number` */
@@ -215,6 +274,9 @@ export function isDummyKey(key: string) {
   return isNumeric(key);
 }
 
+const canvas = document.createElement('canvas');
+const context = canvas.getContext('2d');
+
 /**
  * Uses canvas.measureText to compute and return the width of the given text of given font in pixels.
  *
@@ -225,9 +287,6 @@ export function getTextWidth(
   text: string,
   font: string = `${Config.FontStyle} ${Config.FontSize}px ${Config.FontFamily}`
 ): number {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-
   if (!context || !text) {
     return 0;
   }
@@ -261,9 +320,6 @@ export function getTextHeight(
   font: string = `${Config.FontStyle} ${Config.FontSize}px ${Config.FontFamily}`,
   fontSize: number = Config.FontSize
 ): number {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-
   if (!context || !text) {
     return 0;
   }
@@ -276,27 +332,32 @@ export function getTextHeight(
   return numberOfLines * fontSize;
 }
 
-/** Returns the parameter string of the given function */
-export function getParamsText(data: Function): string {
+/** Returns the parameter string of the given function, surrounded by brackets */
+export function getParamsText(data: Closure | GlobalFn | StreamFn): string {
   if (isClosure(data)) {
-    return data.node.params.map((node: any) => node.name).join(',');
+    let params = data.functionName.slice(0, data.functionName.indexOf('=>')).trim();
+    if (!params.startsWith('(')) params = '(' + params + ')';
+    return params;
   } else {
     const fnString = data.toString();
-    return fnString.substring(fnString.indexOf('('), fnString.indexOf('{')).trim();
+    return fnString.substring(fnString.indexOf('('), fnString.indexOf(')') + 1);
   }
 }
 
 /** Returns the body string of the given function */
-export function getBodyText(data: Function): string {
+export function getBodyText(data: Closure | GlobalFn | StreamFn): string {
   const fnString = data.toString();
   if (isClosure(data)) {
     let body =
-      data.node.type === 'FunctionDeclaration' || fnString.substring(0, 8) === 'function'
+      fnString.substring(0, 8) === 'function'
         ? fnString.substring(fnString.indexOf('{'))
         : fnString.substring(fnString.indexOf('=') + 3);
 
     if (body[0] !== '{') body = '{\n  return ' + body + ';\n}';
     return body;
+  } else if (isStreamFn(data)) {
+    // TODO: remove if `stream` becomes pre-defined
+    return '{\n  [implementation hidden]\n}';
   } else {
     return fnString.substring(fnString.indexOf('{'));
   }
@@ -325,8 +386,8 @@ export function setHoveredStyle(target: Node | Group, hoveredAttrs: any = {}): v
   nodes.push(target);
   nodes.forEach(node => {
     node.setAttrs({
-      stroke: node.attrs.stroke ? Config.HoveredColor : node.attrs.stroke,
-      fill: node.attrs.fill ? Config.HoveredColor : node.attrs.fill,
+      stroke: node.attrs.stroke ? Config.HoverColor : node.attrs.stroke,
+      fill: node.attrs.fill ? Config.HoverColor : node.attrs.fill,
       ...hoveredAttrs
     });
   });
@@ -341,14 +402,14 @@ export function setUnhoveredStyle(target: Node | Group, unhoveredAttrs: any = {}
   nodes.forEach(node => {
     node.setAttrs({
       stroke: node.attrs.stroke
-        ? CseMachine.getPrintableMode()
-          ? Config.SA_BLUE
-          : Config.SA_WHITE
+        ? node instanceof Text
+          ? defaultTextColor()
+          : defaultStrokeColor()
         : node.attrs.stroke,
       fill: node.attrs.fill
-        ? CseMachine.getPrintableMode()
-          ? Config.SA_BLUE
-          : Config.SA_WHITE
+        ? node instanceof Text
+          ? defaultTextColor()
+          : defaultStrokeColor()
         : node.attrs.fill,
       ...unhoveredAttrs
     });
@@ -391,8 +452,10 @@ function findObjects(
   visited.add(array);
   for (const item of array) {
     if (isDataArray(item) || isClosure(item)) {
-      if (isEnvEqual(item.environment, environment)) set.add(item);
-      if (isDataArray(item)) findObjects(environment, set, item, visited);
+      if (isEnvEqual(item.environment, environment)) {
+        set.add(item);
+        if (isDataArray(item)) findObjects(environment, set, item, visited);
+      }
     }
   }
 }
@@ -410,7 +473,7 @@ export function getReferencedObjects(environment: Env): Set<DataArray | Closure>
 /**
  * Get the set of all objects in the heap of the given environment that are **not**
  * referenced in the head. (Note that these objects can still be referenced from other
- * environments, just not the given one)
+ * environments, just not the given one.)
  */
 export function getUnreferencedObjects(environment: Env): Set<DataArray | Closure> {
   return setDifference(environment.heap.getHeap(), getReferencedObjects(environment));
@@ -513,12 +576,39 @@ export function getControlItemComponent(
   stackHeight: number,
   index: number,
   highlightOnHover: () => void,
-  unhighlightOnHover: () => void
+  unhighlightOnHover: () => void,
+  chapter: Chapter
 ): ControlItemComponent {
   const topItem = CseMachine.getStackTruncated()
     ? index === Math.min(Layout.control.size() - 1, 9)
     : index === Layout.control.size() - 1;
   if (!isInstr(controlItem)) {
+    // there's no reason to provide an alternate representation
+    // for a instruction.
+    if (needsNewRepresentation(chapter)) {
+      return getAlternateControlItemComponent(
+        controlItem,
+        stackHeight,
+        highlightOnHover,
+        unhighlightOnHover,
+        topItem,
+        chapter
+      );
+    }
+
+    if (isSchemeLanguage(chapter)) {
+      // use the js-slang decoder on the control item
+      controlItem = estreeDecode(controlItem as any);
+      const text = unparse(controlItem as any);
+      return new ControlItemComponent(
+        text,
+        text,
+        stackHeight,
+        highlightOnHover,
+        unhighlightOnHover,
+        topItem
+      );
+    }
     switch (controlItem.type) {
       case 'Program':
         // If the control item is the whole program
@@ -659,7 +749,7 @@ export function getControlItemComponent(
             (accum, level) =>
               accum
                 ? accum
-                : level.frames.find(frame => frame.environment?.id === getEnvID(envInstr.env)),
+                : level.frames.find(frame => frame.environment?.id === getEnvId(envInstr.env)),
             undefined
           )
         );
@@ -737,6 +827,24 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
+      case InstrType.GENERATE_CONT:
+        return new ControlItemComponent(
+          'generate cont',
+          'Generate continuation',
+          stackHeight,
+          highlightOnHover,
+          unhighlightOnHover,
+          topItem
+        );
+      case InstrType.RESUME_CONT:
+        return new ControlItemComponent(
+          'call cont',
+          'call a continuation',
+          stackHeight,
+          highlightOnHover,
+          unhighlightOnHover,
+          topItem
+        );
       default:
         return new ControlItemComponent(
           'INSTRUCTION',
@@ -750,40 +858,29 @@ export function getControlItemComponent(
   }
 }
 
-export function getStashItemComponent(stashItem: StashValue, stackHeight: number, index: number) {
-  if (isClosure(stashItem) || isGlobalFn(stashItem) || isDataArray(stashItem)) {
-    for (const level of Layout.levels) {
-      for (const frame of level.frames) {
-        if (isClosure(stashItem) || isGlobalFn(stashItem)) {
-          const fn: FnValue | GlobalFnValue | undefined = frame.bindings.find(binding => {
-            if (isClosure(stashItem) && isClosure(binding.data)) {
-              return binding.data.id === stashItem.id;
-            } else if (isGlobalFn(stashItem) && isGlobalFn(binding.data)) {
-              return binding.data?.toString() === stashItem.toString();
-            }
-            return false;
-          })?.value as unknown as FnValue | GlobalFnValue;
-          if (fn) return new StashItemComponent(stashItem, stackHeight, index, fn);
-        } else {
-          const ar: ArrayValue | undefined = frame.bindings.find(binding => {
-            if (isDataArray(binding.data)) {
-              return binding.data === stashItem;
-            }
-            return false;
-          })?.value as ArrayValue;
-          if (ar) return new StashItemComponent(stashItem, stackHeight, index, ar);
-        }
-      }
+export function getStashItemComponent(
+  stashItem: StashValue,
+  stackHeight: number,
+  index: number,
+  _chapter: Chapter
+): StashItemComponent {
+  let arrowTo: ArrayValue | FnValue | GlobalFnValue | undefined;
+  if (isFunction(stashItem) || isDataArray(stashItem)) {
+    if (isClosure(stashItem) || isDataArray(stashItem)) {
+      arrowTo = Layout.values.get(stashItem.id) as ArrayValue | FnValue;
+    } else {
+      arrowTo = Layout.values.get(stashItem) as FnValue | GlobalFnValue;
     }
   }
-  return new StashItemComponent(stashItem, stackHeight, index);
+  return new StashItemComponent(stashItem, stackHeight, index, arrowTo);
 }
 
 // Helper function to get environment ID. Accounts for the hidden prelude environment right
 // after the global environment. Does not need to be used for frame environments, only for
 // environments from the context.
-export const getEnvID = (environment: Environment): string =>
-  environment.tail?.name === 'global' ? environment.tail.id : environment.id;
+export const getEnvId = (environment: Environment): string => {
+  return environment.name === 'prelude' ? environment.tail!.id : environment.id;
+};
 
 // Function that returns whether the stash item will be popped off in the next step
 export const isStashItemInDanger = (stashIndex: number): boolean => {
@@ -816,18 +913,23 @@ export const isStashItemInDanger = (stashIndex: number): boolean => {
   return false;
 };
 
-export const defaultSAColor = () =>
-  CseMachine.getPrintableMode() ? Config.SA_BLUE : Config.SA_WHITE;
+export const defaultBackgroundColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintBgColor : Config.BgColor;
 
-export const stackItemSAColor = (index: number) =>
-  isStashItemInDanger(index)
-    ? ControlStashConfig.STASH_DANGER_ITEM
-    : CseMachine.getPrintableMode()
-    ? ControlStashConfig.SA_BLUE
-    : ControlStashConfig.SA_WHITE;
-export const currentItemSAColor = (test: boolean) =>
-  test
-    ? Config.SA_CURRENT_ITEM
-    : CseMachine.getPrintableMode()
-    ? ControlStashConfig.SA_BLUE
-    : ControlStashConfig.SA_WHITE;
+export const defaultTextColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintTextColor : Config.TextColor;
+
+export const fadedTextColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintTextColorFaded : Config.TextColorFaded;
+
+export const defaultStrokeColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintStrokeColor : Config.StrokeColor;
+
+export const fadedStrokeColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintStrokeColorFaded : Config.StrokeColorFaded;
+
+export const defaultActiveColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintActiveColor : Config.ActiveColor;
+
+export const defaultDangerColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintDangerColor : Config.DangerColor;

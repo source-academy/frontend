@@ -7,11 +7,14 @@ import {
 } from '../../../commons/application/actions/SessionActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import {
+  assignEntriesForVoting,
   changeDateAssessment,
   changeTeamSizeAssessment,
   configureAssessment,
   deleteAssessment,
   publishAssessment,
+  publishGradingAll,
+  unpublishGradingAll,
   uploadAssessment
 } from '../../../features/groundControl/GroundControlActions';
 import GroundControl, { DispatchProps } from './GroundControl';
@@ -27,8 +30,11 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDeleteAssessment: deleteAssessment,
       handleUploadAssessment: uploadAssessment,
       handlePublishAssessment: publishAssessment,
+      handlePublishGradingAll: publishGradingAll,
+      handleUnpublishGradingAll: unpublishGradingAll,
       handleFetchCourseConfigs: fetchCourseConfig,
-      handleConfigureAssessment: configureAssessment
+      handleConfigureAssessment: configureAssessment,
+      handleAssignEntriesForVoting: assignEntriesForVoting
     },
     dispatch
   );

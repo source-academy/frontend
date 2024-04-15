@@ -94,6 +94,7 @@ export function visualizeCseMachine({ context }: { context: Context }) {
   try {
     CseMachine.drawCse(context);
   } catch (err) {
+    console.error(err);
     throw new Error('CSE machine is not enabled');
   }
 }
@@ -179,7 +180,7 @@ export function makeElevatedContext(context: Context) {
       if (prop === 'head') {
         return fakeFrame;
       }
-      return target[prop];
+      return target[prop as keyof typeof target];
     }
   });
 
@@ -188,7 +189,7 @@ export function makeElevatedContext(context: Context) {
       if (prop === '0') {
         return proxyGlobalEnv;
       }
-      return target[prop];
+      return target[prop as keyof typeof target];
     }
   });
 
@@ -197,7 +198,7 @@ export function makeElevatedContext(context: Context) {
       if (prop === 'environments') {
         return proxyEnvs;
       }
-      return target[prop];
+      return target[prop as keyof typeof target];
     }
   });
 
@@ -209,7 +210,7 @@ export function makeElevatedContext(context: Context) {
         case 'runtime':
           return proxyRuntime;
         default:
-          return target[prop];
+          return target[prop as keyof typeof target];
       }
     }
   });

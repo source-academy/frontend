@@ -4,11 +4,17 @@ import { isEqual, isNull } from 'lodash';
 import { Reducer } from 'redux';
 
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
-import { SET_IS_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
 import { logOut } from '../application/actions/CommonsActions';
 import {
+  debuggerReset,
+  debuggerResume,
+  endDebuggerPause,
+  endInterruptExecution,
+  evalInterpreterError,
   evalInterpreterSuccess,
+  evalTestcaseFailure,
+  evalTestcaseSuccess,
   handleConsoleLog
 } from '../application/actions/InterpreterActions';
 import {
@@ -21,27 +27,16 @@ import {
   ResultOutput
 } from '../application/ApplicationTypes';
 import {
-  DEBUG_RESET,
-  DEBUG_RESUME,
-  END_DEBUG_PAUSE,
-  END_INTERRUPT_EXECUTION,
-  EVAL_INTERPRETER_ERROR,
-  EVAL_TESTCASE_FAILURE,
-  EVAL_TESTCASE_SUCCESS,
-  UPDATE_EDITOR_HIGHLIGHTED_LINES,
-  UPDATE_EDITOR_HIGHLIGHTED_LINES_CONTROL
-} from '../application/types/InterpreterTypes';
-import { Testcase } from '../assessment/AssessmentTypes';
-import {
-  SET_EDITOR_SESSION_ID,
-  SET_SESSION_DETAILS,
-  SET_SHAREDB_CONNECTED
-} from '../collabEditing/CollabEditingTypes';
+  setEditorSessionId,
+  setSessionDetails,
+  setSharedbConnected
+} from '../collabEditing/CollabEditingActions';
 import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
 import {
+  addEditorTab,
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeExecTime,
@@ -55,29 +50,42 @@ import {
   endClearContext,
   evalEditor,
   evalRepl,
+  moveCursor,
+  removeEditorTab,
+  removeEditorTabForFile,
+  removeEditorTabsForDirectory,
+  renameEditorTabForFile,
+  renameEditorTabsForDirectory,
+  resetTestcase,
+  resetWorkspace,
   sendReplInputToOutput,
-  setTokenCount
+  setEditorBreakpoint,
+  setEditorHighlightedLines,
+  setEditorHighlightedLinesControl,
+  setFolderMode,
+  setIsEditorReadonly,
+  setTokenCount,
+  shiftEditorTab,
+  toggleEditorAutorun,
+  toggleUpdateCse,
+  toggleUsingCse,
+  toggleUsingSubst,
+  updateActiveEditorTab,
+  updateActiveEditorTabIndex,
+  updateBreakpointSteps,
+  updateCurrentAssessmentId,
+  updateCurrentStep,
+  updateCurrentSubmissionId,
+  updateEditorValue,
+  updateHasUnsavedChanges,
+  updateReplValue,
+  updateStepsTotal,
+  updateSublanguage,
+  updateSubmissionsTableFilters,
+  updateWorkspace
 } from './WorkspaceActions';
 import {
-  ADD_EDITOR_TAB,
   EditorTabState,
-  MOVE_CURSOR,
-  REMOVE_EDITOR_TAB,
-  REMOVE_EDITOR_TAB_FOR_FILE,
-  REMOVE_EDITOR_TABS_FOR_DIRECTORY,
-  RENAME_EDITOR_TAB_FOR_FILE,
-  RENAME_EDITOR_TABS_FOR_DIRECTORY,
-  RESET_TESTCASE,
-  RESET_WORKSPACE,
-  SET_FOLDER_MODE,
-  SHIFT_EDITOR_TAB,
-  TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_UPDATE_CSE,
-  TOGGLE_USING_CSE,
-  TOGGLE_USING_SUBST,
-  UPDATE_ACTIVE_EDITOR_TAB,
-  UPDATE_ACTIVE_EDITOR_TAB_INDEX,
-  UPDATE_BREAKPOINTSTEPS,
   UPDATE_CHANGEPOINTSTEPS,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
@@ -88,11 +96,6 @@ import {
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_LAST_DEBUGGER_RESULT,
   UPDATE_LAST_NON_DET_RESULT,
-  UPDATE_REPL_VALUE,
-  UPDATE_STEPSTOTAL,
-  UPDATE_SUBLANGUAGE,
-  UPDATE_SUBMISSIONS_TABLE_FILTERS,
-  UPDATE_WORKSPACE,
   WorkspaceLocation,
   WorkspaceManagerState
 } from './WorkspaceTypes';
@@ -368,60 +371,26 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
 
       state[workspaceLocation].output = newOutput;
       state[workspaceLocation].isRunning = false;
-    });
-});
+    })
+    .addCase(evalTestcaseSuccess, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      const testcase = state[workspaceLocation].editorTestcases[action.payload.index];
+      testcase.result = action.payload.value;
+      testcase.errors = undefined;
+      state[workspaceLocation].isRunning = false;
+    })
+    .addCase(evalTestcaseFailure, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      const testcase = state[workspaceLocation].editorTestcases[action.payload.index];
+      testcase.result = undefined;
+      testcase.errors = action.payload.value;
+    })
+    .addCase(evalInterpreterError, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
 
-const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
-  state = defaultWorkspaceManager,
-  action
-) => {
-  const workspaceLocation = getWorkspaceLocation(action);
-  let newOutput: InterpreterOutput[];
-  let lastOutput: InterpreterOutput;
+      const lastOutput: InterpreterOutput = state[workspaceLocation].output.slice(-1)[0];
+      let newOutput: InterpreterOutput[];
 
-  switch (action.type) {
-    case EVAL_TESTCASE_SUCCESS:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          editorTestcases: state[workspaceLocation].editorTestcases.map(
-            (testcase: Testcase, i: any) => {
-              if (i === action.payload.index) {
-                return {
-                  ...testcase,
-                  result: action.payload.value,
-                  errors: undefined
-                };
-              } else {
-                return testcase;
-              }
-            }
-          ),
-          isRunning: false
-        }
-      };
-    case EVAL_TESTCASE_FAILURE:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          editorTestcases: state[workspaceLocation].editorTestcases.map(
-            (testcase: Testcase, i: number) => {
-              if (i === action.payload.index) {
-                return {
-                  ...testcase,
-                  result: undefined,
-                  errors: action.payload.value
-                };
-              }
-              return testcase;
-            }
-          )
-        }
-      };
-    case EVAL_INTERPRETER_ERROR:
-      lastOutput = state[workspaceLocation].output.slice(-1)[0];
       if (lastOutput !== undefined && lastOutput.type === 'running') {
         newOutput = state[workspaceLocation].output.slice(0, -1).concat({
           type: action.payload.type,
@@ -435,21 +404,18 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
           consoleLogs: []
         } as ErrorOutput);
       }
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          output: newOutput,
-          isRunning: false,
-          isDebugging: false
-        }
-      };
+
+      state[workspaceLocation].output = newOutput;
+      state[workspaceLocation].isRunning = false;
+      state[workspaceLocation].isDebugging = false;
+    })
     /**
      * Called to signal the end of an interruption,
      * i.e called after the interpreter is told to stop interruption,
      * to cause UI changes.
      */
-    case END_INTERRUPT_EXECUTION:
+    .addCase(endInterruptExecution, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       /**
        * Set the isRunning property of the
        * context to false, to ensure a re-render.
@@ -457,68 +423,39 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
        * function does not finish interrupting before
        * this action is called.
        */
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          isRunning: false,
-          isDebugging: false
-        }
-      };
-    case END_DEBUG_PAUSE:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          isRunning: false,
-          isDebugging: true
-        }
-      };
-    case DEBUG_RESUME:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          isRunning: true,
-          isDebugging: false
-        }
-      };
-    case DEBUG_RESET:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          isRunning: false,
-          isDebugging: false
-        }
-      };
-    case RESET_TESTCASE:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          editorTestcases: state[workspaceLocation].editorTestcases.map(
-            (testcase: Testcase, i: any) => {
-              if (i === action.payload.index) {
-                return {
-                  ...testcase,
-                  result: undefined,
-                  errors: undefined
-                };
-              } else {
-                return testcase;
-              }
-            }
-          )
-        }
-      };
-
+      state[workspaceLocation].isRunning = false;
+      state[workspaceLocation].isDebugging = false;
+    })
+    .addCase(endDebuggerPause, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].isRunning = false;
+      state[workspaceLocation].isDebugging = true;
+    })
+    .addCase(debuggerResume, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].isRunning = true;
+      state[workspaceLocation].isDebugging = false;
+    })
+    .addCase(debuggerReset, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].isRunning = false;
+      state[workspaceLocation].isDebugging = false;
+    })
+    .addCase(resetTestcase, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      const testcase = state[workspaceLocation].editorTestcases[action.payload.index];
+      testcase.result = undefined;
+      testcase.errors = undefined;
+    })
     /**
      * Resets the workspace to default settings,
      * including the js-slang Context. Apply
      * any specified settings (workspaceOptions)
      */
-    case RESET_WORKSPACE:
+    .addCase(resetWorkspace, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      // For some reason mutating the state directly results in type
+      // errors, so we have to do it the old-fashioned way
       return {
         ...state,
         [workspaceLocation]: {
@@ -527,11 +464,15 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
           ...action.payload.workspaceOptions
         }
       };
+    })
     /**
      * Updates workspace without changing anything
      * which has not been specified
      */
-    case UPDATE_WORKSPACE:
+    .addCase(updateWorkspace, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      // For some reason mutating the state directly results in type
+      // errors, so we have to do it the old-fashioned way
       return {
         ...state,
         [workspaceLocation]: {
@@ -539,123 +480,62 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
           ...action.payload.workspaceOptions
         }
       };
-    case SET_EDITOR_SESSION_ID:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          editorSessionId: action.payload.editorSessionId
-        }
-      };
-    case SET_SESSION_DETAILS:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          sessionDetails: action.payload.sessionDetails
-        }
-      };
-    case SET_IS_EDITOR_READONLY:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          isEditorReadonly: action.payload.isEditorReadonly
-        }
-      };
-    case SET_SHAREDB_CONNECTED:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          sharedbConnected: action.payload.connected
-        }
-      };
-    case TOGGLE_EDITOR_AUTORUN:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          isEditorAutorun: !state[workspaceLocation].isEditorAutorun
-        }
-      };
-    case TOGGLE_USING_SUBST: {
+    })
+    .addCase(setEditorSessionId, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].editorSessionId = action.payload.editorSessionId;
+    })
+    .addCase(setSessionDetails, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].sessionDetails = action.payload.sessionDetails;
+    })
+    .addCase(setIsEditorReadonly, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].isEditorReadonly = action.payload.isEditorReadonly;
+    })
+    .addCase(setSharedbConnected, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].sharedbConnected = action.payload.connected;
+    })
+    .addCase(toggleEditorAutorun, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].isEditorAutorun = !state[workspaceLocation].isEditorAutorun;
+    })
+    .addCase(toggleUsingSubst, (state, action) => {
       const { workspaceLocation } = action.payload;
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
-        return {
-          ...state,
-          [workspaceLocation]: {
-            ...state[workspaceLocation],
-            usingSubst: action.payload.usingSubst
-          }
-        };
-      } else {
-        return state;
+        state[workspaceLocation].usingSubst = action.payload.usingSubst;
       }
-    }
-    case TOGGLE_USING_CSE: {
+    })
+    .addCase(toggleUsingCse, (state, action) => {
       const { workspaceLocation } = action.payload;
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
-        return {
-          ...state,
-          [workspaceLocation]: {
-            ...state[workspaceLocation],
-            usingCse: action.payload.usingCse
-          }
-        };
-      } else {
-        return state;
+        state[workspaceLocation].usingCse = action.payload.usingCse;
       }
-    }
-    case TOGGLE_UPDATE_CSE: {
+    })
+    .addCase(toggleUpdateCse, (state, action) => {
       const { workspaceLocation } = action.payload;
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
-        return {
-          ...state,
-          [workspaceLocation]: {
-            ...state[workspaceLocation],
-            updateCse: action.payload.updateCse
-          }
-        };
-      } else {
-        return state;
+        state[workspaceLocation].updateCse = action.payload.updateCse;
       }
-    }
-    case UPDATE_SUBMISSIONS_TABLE_FILTERS:
-      return {
-        ...state,
-        grading: {
-          ...state.grading,
-          submissionsTableFilters: action.payload.filters
-        }
-      };
-    case UPDATE_CURRENT_ASSESSMENT_ID:
-      return {
-        ...state,
-        assessment: {
-          ...state.assessment,
-          currentAssessment: action.payload.assessmentId,
-          currentQuestion: action.payload.questionId
-        }
-      };
-    case UPDATE_CURRENT_SUBMISSION_ID:
-      return {
-        ...state,
-        grading: {
-          ...state.grading,
-          currentSubmission: action.payload.submissionId,
-          currentQuestion: action.payload.questionId
-        }
-      };
-    case SET_FOLDER_MODE:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          isFolderModeEnabled: action.payload.isFolderModeEnabled
-        }
-      };
-    case UPDATE_ACTIVE_EDITOR_TAB_INDEX: {
+    })
+    .addCase(updateSubmissionsTableFilters, (state, action) => {
+      state.grading.submissionsTableFilters = action.payload.filters;
+    })
+    .addCase(updateCurrentAssessmentId, (state, action) => {
+      state.assessment.currentAssessment = action.payload.assessmentId;
+      state.assessment.currentQuestion = action.payload.questionId;
+    })
+    .addCase(updateCurrentSubmissionId, (state, action) => {
+      state.grading.currentSubmission = action.payload.submissionId;
+      state.grading.currentQuestion = action.payload.questionId;
+    })
+    .addCase(setFolderMode, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].isFolderModeEnabled = action.payload.isFolderModeEnabled;
+    })
+    .addCase(updateActiveEditorTabIndex, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       const activeEditorTabIndex = action.payload.activeEditorTabIndex;
       if (activeEditorTabIndex !== null) {
         if (activeEditorTabIndex < 0) {
@@ -666,20 +546,15 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
         }
       }
 
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          activeEditorTabIndex: activeEditorTabIndex
-        }
-      };
-    }
-    case UPDATE_ACTIVE_EDITOR_TAB: {
+      state[workspaceLocation].activeEditorTabIndex = activeEditorTabIndex;
+    })
+    .addCase(updateActiveEditorTab, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       const { activeEditorTabOptions } = action.payload;
       const activeEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
       // Do not modify the workspace state if there is no active editor tab.
       if (activeEditorTabIndex === null) {
-        return state;
+        return;
       }
 
       const updatedEditorTabs = [...state[workspaceLocation].editorTabs];
@@ -688,15 +563,10 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
         ...activeEditorTabOptions
       };
 
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          editorTabs: updatedEditorTabs
-        }
-      };
-    }
-    case UPDATE_EDITOR_VALUE: {
+      state[workspaceLocation].editorTabs = updatedEditorTabs;
+    })
+    .addCase(updateEditorValue, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       const { editorTabIndex, newEditorValue } = action.payload;
       if (editorTabIndex < 0) {
         throw new Error('Editor tab index must be non-negative!');
@@ -705,21 +575,10 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
         throw new Error('Editor tab index must have a corresponding editor tab!');
       }
 
-      const newEditorTabs = [...state[workspaceLocation].editorTabs];
-      newEditorTabs[editorTabIndex] = {
-        ...newEditorTabs[editorTabIndex],
-        value: newEditorValue
-      };
-
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          editorTabs: newEditorTabs
-        }
-      };
-    }
-    case UPDATE_EDITOR_BREAKPOINTS: {
+      state[workspaceLocation].editorTabs[editorTabIndex].value = newEditorValue;
+    })
+    .addCase(setEditorBreakpoint, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       const { editorTabIndex, newBreakpoints } = action.payload;
       if (editorTabIndex < 0) {
         throw new Error('Editor tab index must be non-negative!');
@@ -728,21 +587,11 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
         throw new Error('Editor tab index must have a corresponding editor tab!');
       }
 
-      const newEditorTabs = [...state[workspaceLocation].editorTabs];
-      newEditorTabs[editorTabIndex] = {
-        ...newEditorTabs[editorTabIndex],
-        breakpoints: newBreakpoints
-      };
-
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          editorTabs: newEditorTabs
-        }
-      };
-    }
-    case UPDATE_EDITOR_HIGHLIGHTED_LINES: {
+      state[workspaceLocation].editorTabs[editorTabIndex].breakpoints = newBreakpoints;
+    })
+    .addCase(setEditorHighlightedLines, (state, action) => {
+      // TODO: This and the subsequent reducer achieves the same thing?
+      const workspaceLocation = getWorkspaceLocation(action);
       const { editorTabIndex, newHighlightedLines } = action.payload;
       if (editorTabIndex < 0) {
         throw new Error('Editor tab index must be non-negative!');
@@ -751,21 +600,10 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
         throw new Error('Editor tab index must have a corresponding editor tab!');
       }
 
-      const newEditorTabs = [...state[workspaceLocation].editorTabs];
-      newEditorTabs[editorTabIndex] = {
-        ...newEditorTabs[editorTabIndex],
-        highlightedLines: newHighlightedLines
-      };
-
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          editorTabs: newEditorTabs
-        }
-      };
-    }
-    case UPDATE_EDITOR_HIGHLIGHTED_LINES_CONTROL: {
+      state[workspaceLocation].editorTabs[editorTabIndex].highlightedLines = newHighlightedLines;
+    })
+    .addCase(setEditorHighlightedLinesControl, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       const { editorTabIndex, newHighlightedLines } = action.payload;
 
       if (editorTabIndex < 0) {
@@ -775,21 +613,10 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
         throw new Error('Editor tab index must have a corresponding editor tab!');
       }
 
-      const newEditorTabs = [...state[workspaceLocation].editorTabs];
-      newEditorTabs[editorTabIndex] = {
-        ...newEditorTabs[editorTabIndex],
-        highlightedLines: newHighlightedLines
-      };
-
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          editorTabs: newEditorTabs
-        }
-      };
-    }
-    case MOVE_CURSOR: {
+      state[workspaceLocation].editorTabs[editorTabIndex].highlightedLines = newHighlightedLines;
+    })
+    .addCase(moveCursor, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       const { editorTabIndex, newCursorPosition } = action.payload;
       if (editorTabIndex < 0) {
         throw new Error('Editor tab index must be non-negative!');
@@ -798,21 +625,10 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
         throw new Error('Editor tab index must have a corresponding editor tab!');
       }
 
-      const newEditorTabs = [...state[workspaceLocation].editorTabs];
-      newEditorTabs[editorTabIndex] = {
-        ...newEditorTabs[editorTabIndex],
-        newCursorPosition
-      };
-
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          editorTabs: newEditorTabs
-        }
-      };
-    }
-    case ADD_EDITOR_TAB: {
+      state[workspaceLocation].editorTabs[editorTabIndex].newCursorPosition = newCursorPosition;
+    })
+    .addCase(addEditorTab, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       const { filePath, editorValue } = action.payload;
 
       const editorTabs = state[workspaceLocation].editorTabs;
@@ -821,13 +637,8 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
       );
       const fileIsAlreadyOpen = openedEditorTabIndex !== -1;
       if (fileIsAlreadyOpen) {
-        return {
-          ...state,
-          [workspaceLocation]: {
-            ...state[workspaceLocation],
-            activeEditorTabIndex: openedEditorTabIndex
-          }
-        };
+        state[workspaceLocation].activeEditorTabIndex = openedEditorTabIndex;
+        return;
       }
 
       const newEditorTab: EditorTabState = {
@@ -836,23 +647,13 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
         highlightedLines: [],
         breakpoints: []
       };
-      const newEditorTabs: EditorTabState[] = [
-        ...state[workspaceLocation].editorTabs,
-        newEditorTab
-      ];
+      editorTabs.push(newEditorTab);
       // Set the newly added editor tab as the active tab.
-      const newActiveEditorTabIndex = newEditorTabs.length - 1;
-
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          activeEditorTabIndex: newActiveEditorTabIndex,
-          editorTabs: newEditorTabs
-        }
-      };
-    }
-    case SHIFT_EDITOR_TAB: {
+      const newActiveEditorTabIndex = editorTabs.length - 1;
+      state[workspaceLocation].activeEditorTabIndex = newActiveEditorTabIndex;
+    })
+    .addCase(shiftEditorTab, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       const { previousEditorTabIndex, newEditorTabIndex } = action.payload;
       if (previousEditorTabIndex < 0) {
         throw new Error('Previous editor tab index must be non-negative!');
@@ -882,16 +683,11 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
         ...filteredEditorTabs.slice(newEditorTabIndex)
       ];
 
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          activeEditorTabIndex: newActiveEditorTabIndex,
-          editorTabs: newEditorTabs
-        }
-      };
-    }
-    case REMOVE_EDITOR_TAB: {
+      state[workspaceLocation].activeEditorTabIndex = newActiveEditorTabIndex;
+      state[workspaceLocation].editorTabs = newEditorTabs;
+    })
+    .addCase(removeEditorTab, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       const editorTabIndex = action.payload.editorTabIndex;
       if (editorTabIndex < 0) {
         throw new Error('Editor tab index must be non-negative!');
@@ -910,16 +706,11 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
         newEditorTabs.length
       );
 
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          activeEditorTabIndex: newActiveEditorTabIndex,
-          editorTabs: newEditorTabs
-        }
-      };
-    }
-    case REMOVE_EDITOR_TAB_FOR_FILE: {
+      state[workspaceLocation].activeEditorTabIndex = newActiveEditorTabIndex;
+      state[workspaceLocation].editorTabs = newEditorTabs;
+    })
+    .addCase(removeEditorTabForFile, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       const removedFilePath = action.payload.removedFilePath;
 
       const editorTabs = state[workspaceLocation].editorTabs;
@@ -927,7 +718,7 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
         (editorTab: EditorTabState) => editorTab.filePath === removedFilePath
       );
       if (editorTabIndexToRemove === -1) {
-        return state;
+        return;
       }
       const newEditorTabs = editorTabs.filter(
         (editorTab: EditorTabState, index: number) => index !== editorTabIndexToRemove
@@ -940,16 +731,11 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
         newEditorTabs.length
       );
 
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          activeEditorTabIndex: newActiveEditorTabIndex,
-          editorTabs: newEditorTabs
-        }
-      };
-    }
-    case REMOVE_EDITOR_TABS_FOR_DIRECTORY: {
+      state[workspaceLocation].activeEditorTabIndex = newActiveEditorTabIndex;
+      state[workspaceLocation].editorTabs = newEditorTabs;
+    })
+    .addCase(removeEditorTabsForDirectory, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       const removedDirectoryPath = action.payload.removedDirectoryPath;
 
       const editorTabs = state[workspaceLocation].editorTabs;
@@ -962,7 +748,7 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
         })
         .filter((index: number | null): index is number => index !== null);
       if (editorTabIndicesToRemove.length === 0) {
-        return state;
+        return;
       }
 
       let newActiveEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
@@ -977,37 +763,21 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
         );
       }
 
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          activeEditorTabIndex: newActiveEditorTabIndex,
-          editorTabs: newEditorTabs
-        }
-      };
-    }
-    case RENAME_EDITOR_TAB_FOR_FILE: {
+      state[workspaceLocation].activeEditorTabIndex = newActiveEditorTabIndex;
+      state[workspaceLocation].editorTabs = newEditorTabs;
+    })
+    .addCase(renameEditorTabForFile, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       const { oldFilePath, newFilePath } = action.payload;
 
       const editorTabs = state[workspaceLocation].editorTabs;
-      const newEditorTabs = editorTabs.map((editorTab: EditorTabState) =>
-        editorTab.filePath === oldFilePath
-          ? {
-              ...editorTab,
-              filePath: newFilePath
-            }
-          : editorTab
-      );
-
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          editorTabs: newEditorTabs
-        }
-      };
-    }
-    case RENAME_EDITOR_TABS_FOR_DIRECTORY: {
+      const tabToEdit = editorTabs.find(({ filePath }) => filePath === oldFilePath);
+      if (tabToEdit) {
+        tabToEdit.filePath = newFilePath;
+      }
+    })
+    .addCase(renameEditorTabsForDirectory, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       const { oldDirectoryPath, newDirectoryPath } = action.payload;
 
       const editorTabs = state[workspaceLocation].editorTabs;
@@ -1020,14 +790,8 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
           : editorTab
       );
 
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          editorTabs: newEditorTabs
-        }
-      };
-    }
+      state[workspaceLocation].editorTabs = newEditorTabs;
+    })
     case UPDATE_EDITOR_TAB_READ_ONLY: {
       const { editorTabIndex, isReadOnly } = action.payload;
       if (isNull(editorTabIndex) || editorTabIndex < 0) {
@@ -1056,15 +820,14 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
       };
     }
 
-    case UPDATE_REPL_VALUE:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          replValue: action.payload.newReplValue
-        }
-      };
-    case UPDATE_HAS_UNSAVED_CHANGES:
+    .addCase(updateReplValue, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].replValue = action.payload.newReplValue;
+    })
+    .addCase(updateHasUnsavedChanges, (state, action) => {
+      // For some reason mutating the state directly results in type
+      // errors, so we have to do it the old-fashioned way
+      const workspaceLocation = getWorkspaceLocation(action);
       return {
         ...state,
         [workspaceLocation]: {
@@ -1072,19 +835,17 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
           hasUnsavedChanges: action.payload.hasUnsavedChanges
         }
       };
-    case UPDATE_SUBLANGUAGE:
-      return {
-        ...state,
-        playground: {
-          ...state.playground,
-          context: {
-            ...state.playground.context,
-            chapter: action.payload.sublang.chapter,
-            variant: action.payload.sublang.variant
-          }
-        }
-      };
-    case UPDATE_CURRENTSTEP:
+    })
+    .addCase(updateSublanguage, (state, action) => {
+      // TODO: Mark for removal
+      const { chapter, variant } = action.payload.sublang;
+      state.playground.context.chapter = chapter;
+      state.playground.context.variant = variant;
+    })
+    .addCase(updateCurrentStep, (state, action) => {
+      // For some reason mutating the state directly results in type
+      // errors, so we have to do it the old-fashioned way
+      const workspaceLocation = getWorkspaceLocation(action);
       return {
         ...state,
         [workspaceLocation]: {
@@ -1092,7 +853,11 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
           currentStep: action.payload.steps
         }
       };
-    case UPDATE_STEPSTOTAL:
+    })
+    .addCase(updateStepsTotal, (state, action) => {
+      // For some reason mutating the state directly results in type
+      // errors, so we have to do it the old-fashioned way
+      const workspaceLocation = getWorkspaceLocation(action);
       return {
         ...state,
         [workspaceLocation]: {
@@ -1100,7 +865,11 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
           stepsTotal: action.payload.steps
         }
       };
-    case UPDATE_BREAKPOINTSTEPS:
+    })
+    .addCase(updateBreakpointSteps, (state, action) => {
+      // For some reason mutating the state directly results in type
+      // errors, so we have to do it the old-fashioned way
+      const workspaceLocation = getWorkspaceLocation(action);
       return {
         ...state,
         [workspaceLocation]: {
@@ -1108,6 +877,27 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
           breakpointSteps: action.payload.breakpointSteps
         }
       };
+    });
+  // .addCase(notifyProgramEvaluated, (state, action) => {
+  //   const workspaceLocation = getWorkspaceLocation(action);
+
+  //   const debuggerContext = state[workspaceLocation].debuggerContext;
+  //   debuggerContext.result = action.payload.result;
+  //   debuggerContext.lastDebuggerResult = action.payload.lastDebuggerResult;
+  //   debuggerContext.code = action.payload.code;
+  //   debuggerContext.context = action.payload.context;
+  //   debuggerContext.workspaceLocation = action.payload.workspaceLocation;
+  // });
+});
+
+/** Temporarily kept to prevent conflicts */
+const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
+  state = defaultWorkspaceManager,
+  action
+) => {
+  const workspaceLocation = getWorkspaceLocation(action);
+
+  switch (action.type) {
     case UPDATE_CHANGEPOINTSTEPS:
       return {
         ...state,

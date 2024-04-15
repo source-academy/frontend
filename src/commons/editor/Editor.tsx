@@ -1,25 +1,27 @@
 /* eslint-disable simple-import-sort/imports */
-import { Ace, require as acequire, createEditSession } from 'ace-builds';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import 'ace-builds/src-noconflict/ext-settings_menu';
 import 'js-slang/dist/editors/ace/theme/source';
 
+import { Classes } from '@blueprintjs/core';
 import * as AceBuilds from 'ace-builds';
+import { Ace, require as acequire, createEditSession } from 'ace-builds';
+import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React from 'react';
 import AceEditor, { IAceEditorProps, IEditorProps } from 'react-ace';
+import { IAceEditor } from 'react-ace/lib/types';
 import { HotKeys } from 'react-hotkeys';
-
-import { keyBindings, KeyFunction } from './EditorHotkeys';
+import { EditorBinding } from '../WorkspaceSettingsContext';
+import { getModeString, selectMode } from '../utils/AceHelper';
+import { objectEntries } from '../utils/TypeHelper';
+import { KeyFunction, keyBindings } from './EditorHotkeys';
 import { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
 
 // =============== Hooks ===============
 // TODO: Should further refactor into EditorBase + different variants.
 // Ideally, hooks should be specified by the parent component instead.
-import { IAceEditor } from 'react-ace/lib/types';
-import { getModeString, selectMode } from '../utils/AceHelper';
-import { EditorBinding } from '../WorkspaceSettingsContext';
 import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
 import useRefactor from './UseRefactor';
@@ -436,8 +438,8 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     session.on('changeAnnotation' as any, makeHandleAnnotationChange(session));
 
     // Start autocompletion
-    if (props.sourceChapter === Chapter.FULL_C) {
-      // for C language, use the default autocomplete provided by ace editor
+    if (props.sourceChapter === Chapter.FULL_C || props.sourceChapter === Chapter.FULL_JAVA) {
+      // for C, Java language, use the default autocomplete provided by ace editor
       const { textCompleter, keyWordCompleter, setCompleters } = acequire('ace/ext/language_tools');
       setCompleters([textCompleter, keyWordCompleter]);
     } else {
@@ -537,7 +539,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
     ]
   );
 
-  aceEditorProps.commands = Object.entries(keyHandlers)
+  aceEditorProps.commands = objectEntries(keyHandlers)
     .filter(([_, exec]) => exec)
     .map(([name, exec]) => ({ name, bindKey: keyBindings[name], exec: exec! }));
 
@@ -651,7 +653,10 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   }, []);
 
   return (
-    <HotKeys className="Editor bp5-card bp5-elevation-0" handlers={handlers}>
+    <HotKeys
+      className={classNames('Editor', Classes.CARD, Classes.ELEVATION_0)}
+      handlers={handlers}
+    >
       <div className="row editor-react-ace" data-testid="Editor">
         <AceEditor {...aceEditorProps} ref={reactAceRef} />
       </div>

@@ -122,6 +122,7 @@ export enum SupportedLanguage {
   JAVASCRIPT = 'JavaScript',
   SCHEME = 'Scheme',
   PYTHON = 'Python',
+  JAVA = 'Java',
   C = 'C'
 }
 
@@ -129,6 +130,7 @@ export const SUPPORTED_LANGUAGES = [
   SupportedLanguage.JAVASCRIPT,
   SupportedLanguage.SCHEME,
   SupportedLanguage.PYTHON,
+  SupportedLanguage.JAVA,
   SupportedLanguage.C
 ];
 
@@ -196,8 +198,22 @@ const schemeSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displa
 ];
 
 export const schemeLanguages: SALanguage[] = schemeSubLanguages.map(sublang => {
-  return { ...sublang, mainLanguage: SupportedLanguage.SCHEME, supports: { repl: true } };
+  return {
+    ...sublang,
+    mainLanguage: SupportedLanguage.SCHEME,
+    supports: { repl: true, cseMachine: true }
+  };
 });
+
+export function isSchemeLanguage(chapter: Chapter): boolean {
+  return [
+    Chapter.SCHEME_1,
+    Chapter.SCHEME_2,
+    Chapter.SCHEME_3,
+    Chapter.SCHEME_4,
+    Chapter.FULL_SCHEME
+  ].includes(chapter);
+}
 
 const pySubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>> = [
   { chapter: Chapter.PYTHON_1, variant: Variant.DEFAULT, displayName: 'Python \xa71' }
@@ -211,6 +227,15 @@ export const pyLanguages: SALanguage[] = pySubLanguages.map(sublang => {
   return { ...sublang, mainLanguage: SupportedLanguage.PYTHON, supports: { repl: true } };
 });
 
+export const javaLanguages: SALanguage[] = [
+  {
+    chapter: Chapter.FULL_JAVA,
+    variant: Variant.DEFAULT,
+    displayName: 'Java',
+    mainLanguage: SupportedLanguage.JAVA,
+    supports: { cseMachine: true }
+  }
+];
 export const cLanguages: SALanguage[] = [
   {
     chapter: Chapter.FULL_C,
@@ -290,6 +315,7 @@ export const ALL_LANGUAGES: readonly SALanguage[] = [
   htmlLanguage,
   ...schemeLanguages,
   ...pyLanguages,
+  ...javaLanguages,
   ...cLanguages
 ];
 // TODO: Remove this function once logic has been fully migrated

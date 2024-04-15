@@ -30,7 +30,7 @@ export default class LocationDetailsParser {
       });
 
       Parser.checkpoint.map.addMapAsset(this.locationAssetKey(shortPath), {
-        type: AssetType[type] || AssetType.Image,
+        type: AssetType[type as keyof typeof AssetType] || AssetType.Image,
         key: id,
         path: this.locationPath(shortPath),
         config: {

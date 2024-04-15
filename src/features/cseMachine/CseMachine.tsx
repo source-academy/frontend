@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Layout } from './CseMachineLayout';
 import { EnvTree } from './CseMachineTypes';
-import { deepCopyTree, getEnvID } from './CseMachineUtils';
+import { deepCopyTree, getEnvId } from './CseMachineUtils';
 
 type SetVis = (vis: React.ReactNode) => void;
 type SetEditorHighlightedLines = (segments: [number, number][]) => void;
@@ -75,7 +75,7 @@ export default class CseMachine {
   static drawCse(context: Context) {
     // store environmentTree at last breakpoint.
     CseMachine.environmentTree = deepCopyTree(context.runtime.environmentTree as EnvTree);
-    CseMachine.currentEnvId = getEnvID(context.runtime.environments[0]);
+    CseMachine.currentEnvId = getEnvId(context.runtime.environments[0]);
     if (!this.setVis || !context.runtime.control || !context.runtime.stash)
       throw new Error('CSE machine not initialized');
     CseMachine.control = context.runtime.control;
@@ -84,7 +84,8 @@ export default class CseMachine {
     Layout.setContext(
       context.runtime.environmentTree as EnvTree,
       context.runtime.control,
-      context.runtime.stash
+      context.runtime.stash,
+      context.chapter
     );
     this.setVis(Layout.draw());
     this.setIsStepLimitExceeded(context.runtime.control.isEmpty());

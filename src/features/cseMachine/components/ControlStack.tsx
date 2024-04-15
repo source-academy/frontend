@@ -1,9 +1,10 @@
 import { Control } from 'js-slang/dist/cse-machine/interpreter';
 import { ControlItem, Instr } from 'js-slang/dist/cse-machine/types';
+import { Chapter, StatementSequence } from 'js-slang/dist/types';
 import { Node } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
-import { Group, Label, Tag, Text } from 'react-konva';
+import { Label, Tag, Text } from 'react-konva';
 
 import CseMachine from '../CseMachine';
 import { Config } from '../CseMachineConfig';
@@ -11,7 +12,8 @@ import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { Layout } from '../CseMachineLayout';
 import { IHoverable } from '../CseMachineTypes';
 import {
-  defaultSAColor,
+  defaultStrokeColor,
+  defaultTextColor,
   getControlItemComponent,
   setHoveredCursor,
   setHoveredStyle,
@@ -27,7 +29,8 @@ export class ControlStack extends Visible implements IHoverable {
 
   constructor(
     /** the control object */
-    readonly control: Control
+    readonly control: Control,
+    readonly chapter: Chapter
   ) {
     super();
     this._x = ControlStashConfig.ControlPosX;
@@ -35,6 +38,7 @@ export class ControlStack extends Visible implements IHoverable {
     this._width = ControlStashConfig.ControlItemWidth;
     this._height = ControlStashConfig.StashItemHeight + ControlStashConfig.StashItemTextPadding * 2;
     this.control = control;
+    this.chapter = chapter;
 
     // Function to convert the stack items to their components
     let i = 0;
@@ -56,7 +60,8 @@ export class ControlStack extends Visible implements IHoverable {
         this._height,
         i,
         highlightOnHover,
-        unhighlightOnHover
+        unhighlightOnHover,
+        this.chapter
       );
       this._height += component.height();
       i += 1;
@@ -69,17 +74,15 @@ export class ControlStack extends Visible implements IHoverable {
       .slice(CseMachine.getStackTruncated() ? -10 : 0)
       .map(controlItemToComponent);
   }
+
   onMouseEnter(e: KonvaEventObject<MouseEvent>): void {
     setHoveredStyle(e.currentTarget);
     setHoveredCursor(e.currentTarget);
   }
+
   onMouseLeave(e: KonvaEventObject<MouseEvent>): void {
     setUnhoveredStyle(e.currentTarget);
     setUnhoveredCursor(e.currentTarget);
-  }
-
-  destroy() {
-    this.ref.current.destroyChildren();
   }
 
   draw(): React.ReactNode {
@@ -90,7 +93,7 @@ export class ControlStack extends Visible implements IHoverable {
       fontVariant: ControlStashConfig.FontVariant
     };
     return (
-      <Group key={Layout.key++} ref={this.ref}>
+      <>
         {CseMachine.getStackTruncated() && Layout.control.size() > 10 && (
           <Label
             x={ControlStashConfig.ShowMoreButtonX}
@@ -103,21 +106,21 @@ export class ControlStack extends Visible implements IHoverable {
             }}
           >
             <Tag
-              stroke={defaultSAColor()}
+              stroke={defaultStrokeColor()}
               cornerRadius={ControlStashConfig.ControlItemCornerRadius}
             />
             <Text
               {...textProps}
               text={`${Config.Ellipsis}`}
               align="center"
-              fill={defaultSAColor()}
+              fill={defaultTextColor()}
               width={ControlStashConfig.ShowMoreButtonWidth}
               height={ControlStashConfig.ShowMoreButtonHeight}
             />
           </Label>
         )}
         {this.stackItemComponents.map(c => c?.draw())}
-      </Group>
+      </>
     );
   }
 }
@@ -142,6 +145,6 @@ export const isInstr = (command: ControlItem): command is Instr => {
  * @param command A ControlItem
  * @returns true if the ControlItem is an esNode and false if it is an instruction.
  */
-export const isNode = (command: ControlItem): command is Node => {
+export const isNode = (command: ControlItem): command is Node | StatementSequence => {
   return (command as Node).type !== undefined;
 };
