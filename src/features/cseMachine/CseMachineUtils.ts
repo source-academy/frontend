@@ -1,3 +1,5 @@
+import { estreeDecode } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/encoder-visitor';
+import { unparse } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/reverse_parser';
 import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
 import {
   AppInstr,
@@ -10,13 +12,14 @@ import {
   InstrType,
   UnOpInstr
 } from 'js-slang/dist/cse-machine/types';
-import { Environment, Value as StashValue } from 'js-slang/dist/types';
+import { Chapter, Environment, Value as StashValue } from 'js-slang/dist/types';
 import { astToString } from 'js-slang/dist/utils/ast/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
 import { Text } from 'konva/lib/shapes/Text';
 import { cloneDeep, isObject } from 'lodash';
+import { isSchemeLanguage } from 'src/commons/application/ApplicationTypes';
 import classes from 'src/styles/Draggable.module.scss';
 
 import { ArrayUnit } from './components/ArrayUnit';
@@ -49,7 +52,11 @@ import {
   StreamFn,
   Unassigned
 } from './CseMachineTypes';
-
+import {
+  getAlternateControlItemComponent,
+  isCustomPrimitive,
+  needsNewRepresentation
+} from './utils/altLangs';
 class AssertionError extends Error {
   constructor(msg?: string) {
     super(msg);
@@ -195,7 +202,8 @@ export function isPrimitiveData(data: Data): data is Primitive {
     isString(data) ||
     isNumber(data) ||
     isBoolean(data) ||
-    isSourceObject(data)
+    isSourceObject(data) ||
+    isCustomPrimitive(data)
   );
 }
 
@@ -568,12 +576,39 @@ export function getControlItemComponent(
   stackHeight: number,
   index: number,
   highlightOnHover: () => void,
-  unhighlightOnHover: () => void
+  unhighlightOnHover: () => void,
+  chapter: Chapter
 ): ControlItemComponent {
   const topItem = CseMachine.getStackTruncated()
     ? index === Math.min(Layout.control.size() - 1, 9)
     : index === Layout.control.size() - 1;
   if (!isInstr(controlItem)) {
+    // there's no reason to provide an alternate representation
+    // for a instruction.
+    if (needsNewRepresentation(chapter)) {
+      return getAlternateControlItemComponent(
+        controlItem,
+        stackHeight,
+        highlightOnHover,
+        unhighlightOnHover,
+        topItem,
+        chapter
+      );
+    }
+
+    if (isSchemeLanguage(chapter)) {
+      // use the js-slang decoder on the control item
+      controlItem = estreeDecode(controlItem as any);
+      const text = unparse(controlItem as any);
+      return new ControlItemComponent(
+        text,
+        text,
+        stackHeight,
+        highlightOnHover,
+        unhighlightOnHover,
+        topItem
+      );
+    }
     switch (controlItem.type) {
       case 'Program':
         // If the control item is the whole program
@@ -792,6 +827,24 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
+      case InstrType.GENERATE_CONT:
+        return new ControlItemComponent(
+          'generate cont',
+          'Generate continuation',
+          stackHeight,
+          highlightOnHover,
+          unhighlightOnHover,
+          topItem
+        );
+      case InstrType.RESUME_CONT:
+        return new ControlItemComponent(
+          'call cont',
+          'call a continuation',
+          stackHeight,
+          highlightOnHover,
+          unhighlightOnHover,
+          topItem
+        );
       default:
         return new ControlItemComponent(
           'INSTRUCTION',
@@ -805,7 +858,12 @@ export function getControlItemComponent(
   }
 }
 
-export function getStashItemComponent(stashItem: StashValue, stackHeight: number, index: number) {
+export function getStashItemComponent(
+  stashItem: StashValue,
+  stackHeight: number,
+  index: number,
+  _chapter: Chapter
+): StashItemComponent {
   let arrowTo: ArrayValue | FnValue | GlobalFnValue | undefined;
   if (isFunction(stashItem) || isDataArray(stashItem)) {
     if (isClosure(stashItem) || isDataArray(stashItem)) {
