@@ -108,12 +108,9 @@ const FileSystemViewFileNode: React.FC<Props> = ({
         if (err) {
           console.error(err);
         }
-        if (isGDriveSyncing()) {
-          dispatch(persistenceDeleteFile(fullPath));
-        }
-        if (isGithubSyncing()) {
-          dispatch(githubDeleteFile(fullPath));
-        }
+        dispatch(persistenceDeleteFile(fullPath));
+        dispatch(githubDeleteFile(fullPath));
+        
         dispatch(removeEditorTabForFile(workspaceLocation, fullPath));
         refreshDirectory();
       });
