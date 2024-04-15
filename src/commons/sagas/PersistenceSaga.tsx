@@ -262,7 +262,7 @@ export function* persistenceSaga(): SagaIterator {
         if (activeEditorTabIndex === null) {
           throw new Error('No active editor tab found.');
         }
-        const code = editorTabs[activeEditorTabIndex].value;
+        const code = editorTabs[activeEditorTabIndex] ? editorTabs[activeEditorTabIndex].value : "";
 
         const config: IPlaygroundConfig = {
           chapter,
