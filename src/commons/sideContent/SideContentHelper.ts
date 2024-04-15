@@ -40,7 +40,7 @@ const requireProvider = (x: string) => {
   };
 
   if (!(x in exports)) throw new Error(`Dynamic require of ${x} is not supported`);
-  return exports[x];
+  return exports[x as keyof typeof exports] as any;
 };
 
 type RawTab = (provider: ReturnType<typeof requireProvider>) => { default: ModuleSideContent };

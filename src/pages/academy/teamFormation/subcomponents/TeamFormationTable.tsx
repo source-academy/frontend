@@ -28,6 +28,7 @@ import {
   TextInput
 } from '@tremor/react';
 import React, { useState } from 'react';
+import { objectKeys } from 'src/commons/utils/TypeHelper';
 import { TeamFormationOverview } from 'src/features/teamFormation/TeamFormationTypes';
 
 import { AssessmentTypeBadge } from '../../grading/subcomponents/GradingBadges';
@@ -60,9 +61,12 @@ const columns = [
           {', '}
         </React.Fragment>
       )),
-    filterFn: (row: Row<TeamFormationOverview>, id: string | number, filterValue: any): boolean => {
-      const rowValue = row.original[id];
-      return Array.isArray(rowValue) && rowValue.includes(filterValue);
+    filterFn: (row, id: string | number, filterValue: any): boolean => {
+      const rowValue = row.original[id as keyof typeof row.original];
+      if (typeof rowValue === 'string' || typeof rowValue === 'number') {
+        return rowValue === filterValue;
+      }
+      return rowValue.some(v => v === filterValue);
     }
   }),
   columnHelper.accessor(({ teamId }) => ({ teamId }), {
@@ -97,7 +101,7 @@ const TeamFormationTable: React.FC<TeamFormationTableProps> = ({ group, teams })
     columnId: string | number,
     filterValue: any
   ): boolean => {
-    for (const column of Object.keys(row.original)) {
+    for (const column of objectKeys(row.original)) {
       const rowValue = row.original[column];
 
       if (Array.isArray(rowValue)) {

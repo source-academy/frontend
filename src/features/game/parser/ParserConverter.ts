@@ -86,30 +86,44 @@ const stringToUserStateTypeMap = {
  * This also acts as a validity checker to ensure that
  * strings such as action types (eg 'show_dialogue') and
  * game modes (eg 'explore') are actually valid enums
+ *
+ * TODO: Investigate if the typing can be improved
  */
 export default class ParserConverter {
   public static stringToSize(str: string) {
-    return stringToSizeMap[str] || GameSize.Medium;
+    return stringToSizeMap[str as keyof typeof stringToSizeMap] || GameSize.Medium;
   }
 
   public static stringToPosition(str: string) {
-    return stringToPositionMap[str] || GamePosition.Middle;
+    return stringToPositionMap[str as keyof typeof stringToPositionMap] || GamePosition.Middle;
   }
 
   public static stringToGameMode(str: string) {
-    return mandatory(stringToGameModeMap[str], `Invalid location mode, ${str}`);
+    return mandatory(
+      stringToGameModeMap[str as keyof typeof stringToGameModeMap],
+      `Invalid location mode, ${str}`
+    );
   }
 
   public static stringToActionType(str: string) {
-    return mandatory(stringToActionTypeMap[str], `Invalid action type, ${str}`);
+    return mandatory(
+      stringToActionTypeMap[str as keyof typeof stringToActionTypeMap],
+      `Invalid action type, ${str}`
+    );
   }
 
   public static stringToGameStateStorage(str: string) {
-    return mandatory(stringToGameStateStorageMap[str], `Invalid condition type, ${str}`);
+    return mandatory(
+      stringToGameStateStorageMap[str as keyof typeof stringToGameStateStorageMap],
+      `Invalid condition type, ${str}`
+    );
   }
 
   public static stringToGameItemType(str: string) {
-    return mandatory(stringToGameItemMap[str], `Invalid entity type, ${str}`);
+    return mandatory(
+      stringToGameItemMap[str as keyof typeof stringToGameItemMap],
+      `Invalid entity type, ${str}`
+    );
   }
 
   public static stringToBoolean(str: string) {
@@ -117,6 +131,9 @@ export default class ParserConverter {
   }
 
   public static stringToUserStateType(str: string) {
-    return mandatory(stringToUserStateTypeMap[str], `Invalid user state type ${str}`);
+    return mandatory(
+      stringToUserStateTypeMap[str as keyof typeof stringToUserStateTypeMap],
+      `Invalid user state type ${str}`
+    );
   }
 }
