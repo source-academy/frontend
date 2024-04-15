@@ -362,9 +362,7 @@ const getDefaultLanguageConfig = (): SALanguage => {
 export const defaultLanguageConfig: SALanguage = getDefaultLanguageConfig();
 
 export const defaultPlayground: PlaygroundState = {
-  githubSaveInfo: { repoName: '', filePath: '' },
   languageConfig: defaultLanguageConfig,
-  repoName: '',
   isFileSystemContextMenusDisabled: false
 };
 
