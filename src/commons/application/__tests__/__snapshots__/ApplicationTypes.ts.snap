@@ -21,6 +21,7 @@ Array [
     "displayName": "Scheme §1",
     "mainLanguage": "Scheme",
     "supports": Object {
+      "cseMachine": true,
       "repl": true,
     },
     "variant": "explicit-control",
@@ -30,6 +31,7 @@ Array [
     "displayName": "Scheme §2",
     "mainLanguage": "Scheme",
     "supports": Object {
+      "cseMachine": true,
       "repl": true,
     },
     "variant": "explicit-control",
@@ -39,6 +41,7 @@ Array [
     "displayName": "Scheme §3",
     "mainLanguage": "Scheme",
     "supports": Object {
+      "cseMachine": true,
       "repl": true,
     },
     "variant": "explicit-control",
@@ -48,6 +51,7 @@ Array [
     "displayName": "Scheme §4",
     "mainLanguage": "Scheme",
     "supports": Object {
+      "cseMachine": true,
       "repl": true,
     },
     "variant": "explicit-control",
@@ -57,6 +61,7 @@ Array [
     "displayName": "Full Scheme",
     "mainLanguage": "Scheme",
     "supports": Object {
+      "cseMachine": true,
       "repl": true,
     },
     "variant": "explicit-control",
