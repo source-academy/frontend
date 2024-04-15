@@ -107,6 +107,7 @@ export function* persistenceSaga(): SagaIterator {
   yield takeLatest(PERSISTENCE_OPEN_PICKER, function* (): any {
     let toastKey: string | undefined;
     try {
+      // Make sure access token is valid
       yield call(ensureInitialisedAndAuthorised);
       const fileSystem: FSModule | null = yield select(
         (state: OverallState) => state.fileSystem.inBrowserFileSystem
@@ -121,7 +122,7 @@ export function* persistenceSaga(): SagaIterator {
         {
           pickFolders: true
         }
-      ); // id, name, picked gotten here
+      );
 
       yield call(console.log, parentId);
       if (!picked) {
@@ -144,21 +145,24 @@ export function* persistenceSaga(): SagaIterator {
       }
 
       yield call(store.dispatch, actions.disableFileSystemContextMenus());
+
+      // User picked a folder to open
       if (mimeType === MIME_FOLDER) {
-        // handle folders
         toastKey = yield call(showMessage, {
           message: 'Opening folder...',
           timeout: 0,
           intent: Intent.PRIMARY
         });
 
+        // Get all files that are children of the picked folder from GDrive API
         const fileList = yield call(getFilesOfFolder, id, name); // this needed the extra scope mimetypes to have every file
         yield call(console.log, 'fileList', fileList);
 
+        // Delete everything in browserFS and persistenceFileArray
         yield call(rmFilesInDirRecursively, fileSystem, '/playground');
         yield call(store.dispatch, actions.deleteAllPersistenceFiles());
 
-        // add top level root folder
+        // Add top level root folder to persistenceFileArray
         yield put(
           actions.addPersistenceFile({
             id,
@@ -174,6 +178,7 @@ export function* persistenceSaga(): SagaIterator {
         for (const currFile of fileList) {
           if (currFile.isFolder === true) {
             yield call(console.log, 'not file ', currFile);
+            // Add folder to persistenceFileArray
             yield put(
               actions.addPersistenceFile({
                 id: currFile.id,
@@ -183,6 +188,7 @@ export function* persistenceSaga(): SagaIterator {
                 isFolder: true
               })
             );
+            // Add empty folder to BrowserFS
             yield call(
               writeFileRecursively,
               fileSystem,
@@ -193,6 +199,9 @@ export function* persistenceSaga(): SagaIterator {
             yield call(store.dispatch, actions.updateRefreshFileViewKey());
             continue;
           }
+
+          // currFile is a file
+          // Add file to persistenceFileArray
           yield put(
             actions.addPersistenceFile({
               id: currFile.id,
@@ -202,10 +211,12 @@ export function* persistenceSaga(): SagaIterator {
               lastSaved: new Date()
             })
           );
+          // Get contents of file
           const contents = yield call([gapi.client.drive.files, 'get'], {
             fileId: currFile.id,
             alt: 'media'
           });
+          // Write contents of file to BrowserFS
           yield call(
             writeFileRecursively,
             fileSystem,
@@ -216,21 +227,23 @@ export function* persistenceSaga(): SagaIterator {
           yield call(store.dispatch, actions.updateRefreshFileViewKey());
         }
 
-        // set source to chapter 4 TODO is there a better way of handling this
+        // Set source to chapter 4 TODO hardcoded
         yield put(
           actions.chapterSelect(parseInt('4', 10) as Chapter, Variant.DEFAULT, 'playground')
         );
 
+        // Close all editor tabs
         yield call(
           store.dispatch,
           actions.removeEditorTabsForDirectory('playground', WORKSPACE_BASE_PATHS['playground'])
         );
 
+        // Update playground PersistenceFile with entry representing top level root folder
         yield put(
           actions.playgroundUpdatePersistenceFile({ id, name, parentId, lastSaved: new Date(), isFolder: true })
         );
 
-        // delay to increase likelihood addPersistenceFile for last loaded file has completed
+        // Delay to increase likelihood addPersistenceFile for last loaded file has completed
         // and for the toasts to not overlap
         yield call(() => new Promise( resolve => setTimeout(resolve, 1000)));
         yield call(showSuccessMessage, `Loaded folder ${name}.`, 1000);
@@ -244,30 +257,32 @@ export function* persistenceSaga(): SagaIterator {
         intent: Intent.PRIMARY
       });
 
+      // Get content of chosen file
       const contents = yield call([gapi.client.drive.files, 'get'], { fileId: id, alt: 'media' });
 
+      // Delete everything in BrowserFS and persistenceFileArray
       yield call(rmFilesInDirRecursively, fileSystem, '/playground');
       yield call(store.dispatch, actions.deleteAllPersistenceFiles());
 
-      // add file to BrowserFS
+      // Write file to BrowserFS
       yield call(
         writeFileRecursively,
         fileSystem,
         '/playground/' + name,
         contents.body
       );
-      // update playground PersistenceFile
+      // Update playground PersistenceFile
       const newPersistenceFile = { id, name, lastSaved: new Date(), path: '/playground/' + name};
       yield put(actions.playgroundUpdatePersistenceFile(newPersistenceFile));
-      // add file to persistenceFileArray
+      // Add file to persistenceFileArray
       yield put(actions.addPersistenceFile(newPersistenceFile));
-
+      // Close all editor tabs
       yield call(
         store.dispatch,
         actions.removeEditorTabsForDirectory('playground', WORKSPACE_BASE_PATHS['playground'])
       );
       
-      // delay to increase likelihood addPersistenceFile for last loaded file has completed
+      // Delay to increase likelihood addPersistenceFile for last loaded file has completed
       // and for the toasts to not overlap
       yield call(() => new Promise( resolve => setTimeout(resolve, 1000)));
       yield call(showSuccessMessage, `Loaded ${name}.`, 1000);
@@ -285,13 +300,13 @@ export function* persistenceSaga(): SagaIterator {
 
   yield takeLatest(PERSISTENCE_SAVE_FILE_AS, function* (): any {
     let toastKey: string | undefined;
+
     const persistenceFileArray: PersistenceFile[] = yield select(
       (state: OverallState) => state.fileSystem.persistenceFileArray
     );
     const [currPersistenceFile] = yield select((state: OverallState) => [
       state.playground.persistenceFile
     ]);
-    yield call(console.log, 'currpersfile ', currPersistenceFile);
     try {
       yield call(ensureInitialisedAndAuthorised);
 
@@ -321,7 +336,9 @@ export function* persistenceSaga(): SagaIterator {
         }
       );
 
-      const saveToDir: PersistenceFile = pickedDir.picked // TODO is there a better way?
+      // If user picked a folder, use id of that picked folder
+      // Else use special root id representing root of GDrive
+      const saveToDir: PersistenceFile = pickedDir.picked
         ? { ...pickedDir }
         : { id: ROOT_ID, name: 'My Drive' };
 
@@ -337,6 +354,7 @@ export function* persistenceSaga(): SagaIterator {
       );
 
       if (pickedFile.picked) {
+        // User will overwrite an existing file
         const reallyOverwrite: boolean = yield call(showSimpleConfirmDialog, {
           title: 'Saving to Google Drive',
           contents: (
@@ -361,12 +379,9 @@ export function* persistenceSaga(): SagaIterator {
           variant,
           external
         };
-        // Case: Picked a file to overwrite
         if (currPersistenceFile && currPersistenceFile.isFolder) {
-          yield call(console.log, 'folder opened, handling save_as differently! overwriting file');
-          // First case: Chosen location is within TLRF - so need to call methods to update PersistenceFileArray
-          // Other case: Chosen location is outside TLRF - don't care
-
+          // User is currently syncing a folder
+          // and user wants to overwrite an existing file
           yield call(
             console.log,
             'curr pers file ',
@@ -376,6 +391,8 @@ export function* persistenceSaga(): SagaIterator {
             ' pickedFile ',
             pickedFile
           );
+          // Check if overwritten file is within synced folder
+          // If it is, update its entry in persistenceFileArray and contents in BrowserFS
           const localFileTarget = persistenceFileArray.find(e => e.id === pickedFile.id);
           if (localFileTarget) {
             toastKey = yield call(showMessage, {
@@ -387,7 +404,6 @@ export function* persistenceSaga(): SagaIterator {
               (state: OverallState) => state.fileSystem.inBrowserFileSystem
             );
             if (fileSystem === null) {
-              yield call(console.log, 'no filesystem!');
               throw new Error('No filesystem');
             }
 
@@ -411,6 +427,7 @@ export function* persistenceSaga(): SagaIterator {
             yield call(store.dispatch, actions.updateRefreshFileViewKey());
 
             // Check if all files are now updated
+            // If they are, update lastSaved if playgroundPersistenceFile
             const updatedPersistenceFileArray: PersistenceFile[] = yield select(
               (state: OverallState) => state.fileSystem.persistenceFileArray
             );
@@ -431,7 +448,7 @@ export function* persistenceSaga(): SagaIterator {
               yield put(actions.updateEditorValue('playground', targetEditorTabIndex, code));
             }
           } else {
-            // User overwriting file outside TLRF
+            // User overwriting file outside synced folder
             yield call(updateFile, pickedFile.id, pickedFile.name, MIME_SOURCE, code, config);
           }
           yield call(
@@ -442,18 +459,16 @@ export function* persistenceSaga(): SagaIterator {
           return;
         }
 
-        // Chose to overwrite file - single file case
+        // Chose to overwrite file - user syncing single file
+        // Checks if user chose to overwrite the synced file for whatever reason
+        // Updates the relevant PersistenceFiles
         if (currPersistenceFile && currPersistenceFile.id === pickedFile.id) {
-          // User chose to overwrite the tracked file
           const newPersFile: PersistenceFile = {...pickedFile, lastSaved: new Date(), path: "/playground/" + pickedFile.name};
-          // Update playground persistenceFile
           yield put(actions.playgroundUpdatePersistenceFile(newPersFile));
-          // Update entry in persFileArray
           yield put(actions.addPersistenceFile(newPersFile));
-
         }
 
-        // Save in Google Drive
+        // Save to Google Drive
         yield call(
           updateFile,
           pickedFile.id,
@@ -469,6 +484,7 @@ export function* persistenceSaga(): SagaIterator {
           1000
         );
       } else {
+        // Saving as a new file branch
         const response: AsyncReturnType<typeof showSimplePromptDialog> = yield call(
           showSimplePromptDialog,
           {
@@ -514,14 +530,13 @@ export function* persistenceSaga(): SagaIterator {
           config
         );
 
-        //Case: Chose to save as a new file
+        //Case: Chose to save as a new file, and user is syncing a folder
+        //Check if user saved a new file somewhere within the synced folder
         if (currPersistenceFile && currPersistenceFile.isFolder) {
           yield call(
             console.log,
             'folder opened, handling save_as differently! saving as new file'
           );
-          // First case: Chosen location is within TLRF - so need to call methods to update PersistenceFileArray
-          // Other case: Chosen location is outside TLRF - don't care
 
           yield call(
             console.log,
@@ -545,11 +560,11 @@ export function* persistenceSaga(): SagaIterator {
           }
 
           if (needToUpdateLocal) {
+            // Adds new file entry to persistenceFileArray 
             const fileSystem: FSModule | null = yield select(
               (state: OverallState) => state.fileSystem.inBrowserFileSystem
             );
             if (fileSystem === null) {
-              yield call(console.log, 'no filesystem!');
               throw new Error('No filesystem');
             }
             const newPath = localFolderTarget!.path + '/' + response.value;
@@ -569,8 +584,8 @@ export function* persistenceSaga(): SagaIterator {
         }
 
         
-        // Case where playground PersistenceFile is in single file mode
-        // Does nothing extra
+        // Case: playground PersistenceFile is in single file mode
+        // Does nothing
         yield call(
           showSuccessMessage,
           `${response.value} successfully saved to Google Drive.`,
@@ -603,18 +618,15 @@ export function* persistenceSaga(): SagaIterator {
 
       // If the file system is not initialised, do nothing.
       if (fileSystem === null) {
-        yield call(console.log, 'no filesystem!'); // TODO change to throw new Error
-        return;
+        throw new Error('No filesystem');
       }
 
+      // Get file record from BrowserFS
       const currFiles: Record<string, string> = yield call(
         retrieveFilesInWorkspaceAsRecord,
         'playground',
         fileSystem
       );
-      yield call(console.log, 'currfiles', currFiles);
-
-      yield call(console.log, 'there is a filesystem');
 
       const [chapter, variant, external] = yield select((state: OverallState) => [
         state.workspaces.playground.context.chapter,
@@ -627,18 +639,19 @@ export function* persistenceSaga(): SagaIterator {
         external
       };
 
+      // Case: User is NOT currently syncing a folder. Ie, either syncing single file
+      // or nothing at all
       if (!currFolderObject || !(currFolderObject as PersistenceFile).isFolder) {
-        yield call(console.log, 'here');
-        // Check if there is only a single top level folder
+        // Check if there is only a single top level folder in BrowserFS
         const testPaths: Set<string> = new Set();
         let fileExistsInTopLevel = false;
         Object.keys(currFiles).forEach(e => {
           const regexResult = filePathRegex.exec(e)!;
           const testStr = regexResult![1].slice('/playground/'.length, -1).split('/')[0];
-          if (testStr === '') {
+          if (testStr === '') { // represents a file in /playground/
             fileExistsInTopLevel = true;
           }
-          testPaths.add(regexResult![1].slice('/playground/'.length, -1).split('/')[0]); //TODO hardcoded playground
+          testPaths.add(regexResult![1].slice('/playground/'.length, -1).split('/')[0]);
         });
         if (testPaths.size !== 1 || fileExistsInTopLevel) {
           yield call(showSimpleErrorDialog, {
@@ -651,9 +664,8 @@ export function* persistenceSaga(): SagaIterator {
           return;
         }
 
-        // Now, perform old save all
-
-        // Ask user to confirm location
+        // Local top level folder will now be written
+        // Ask user to pick a location
         const pickedDir: PickFileResult = yield call(
           pickFile,
           'Pick a folder, or cancel to pick the root folder',
@@ -664,7 +676,7 @@ export function* persistenceSaga(): SagaIterator {
           }
         );
 
-        const saveToDir: PersistenceFile = pickedDir.picked // TODO is there a better way?
+        const saveToDir: PersistenceFile = pickedDir.picked
           ? { ...pickedDir }
           : { id: ROOT_ID, name: 'My Drive' };
         const topLevelFolderName = testPaths.values().next().value;
@@ -675,13 +687,13 @@ export function* persistenceSaga(): SagaIterator {
         );
 
         if (topLevelFolderId !== '') {
-          // File already exists
+          // Folder with same name already exists in GDrive
           const reallyOverwrite: boolean = yield call(showSimpleConfirmDialog, {
             title: 'Saving to Google Drive',
             contents: (
               <span>
-                Overwrite <strong>{topLevelFolderName}</strong> inside{' '}
-                <strong>{saveToDir.name}</strong>? No deletions will be made remotely, only content
+                Merge <strong>{topLevelFolderName}</strong> inside{' '}
+                <strong>{saveToDir.name}</strong> with your local folder? No deletions will be made remotely, only content
                 updates, but new remote files may be created.
               </span>
             )
@@ -690,7 +702,7 @@ export function* persistenceSaga(): SagaIterator {
             return;
           }
         } else {
-          // Create new folder
+          // Create/merge folder
           const reallyCreate: boolean = yield call(showSimpleConfirmDialog, {
             title: 'Saving to Google Drive',
             contents: (
@@ -710,7 +722,6 @@ export function* persistenceSaga(): SagaIterator {
           timeout: 0,
           intent: Intent.PRIMARY
         });
-        // it is time
         yield call(store.dispatch, actions.disableFileSystemContextMenus());
 
         interface FolderIdBundle {
@@ -726,12 +737,15 @@ export function* persistenceSaga(): SagaIterator {
             .slice(('/playground/' + topLevelFolderName + '/').length, -1)
             .split('/');
 
+          // Get folder id of parent folder of currFile
           const gcfirResult: FolderIdBundle = yield call(
             getContainingFolderIdRecursively,
             currFileParentFolders,
             topLevelFolderId
-          ); // TODO can be optimized by checking persistenceFileArray
+          );
           const currFileParentFolderId = gcfirResult.id;
+
+          // Check if currFile exists remotely by filename
           let currFileId: string = yield call(
             getIdOfFileOrFolder,
             currFileParentFolderId,
@@ -739,28 +753,17 @@ export function* persistenceSaga(): SagaIterator {
           );
 
           if (currFileId === '') {
-            // file does not exist, create file
-            yield call(console.log, 'creating ', currFileName);
+            // File does not exist, create file
             const res: PersistenceFile = yield call(
               createFile,
               currFileName,
               currFileParentFolderId,
               MIME_SOURCE,
-              currFileContent,
+              '',
               config
             );
             currFileId = res.id;
           }
-
-          yield call(
-            console.log,
-            'name',
-            currFileName,
-            'content',
-            currFileContent,
-            'parent folder id',
-            currFileParentFolderId
-          );
 
           const currPersistenceFile: PersistenceFile = {
             name: currFileName,
@@ -769,9 +772,10 @@ export function* persistenceSaga(): SagaIterator {
             lastSaved: new Date(),
             path: currFullFilePath
           };
+          // Add currFile's persistenceFile to persistenceFileArray
           yield put(actions.addPersistenceFile(currPersistenceFile));
 
-          yield call(console.log, 'updating ', currFileName, ' id: ', currFileId);
+          // Update currFile's content 
           yield call(updateFile, currFileId, currFileName, MIME_SOURCE, currFileContent, config);
 
           let currParentFolderName = currFileParentFolders[currFileParentFolders.length - 1];
