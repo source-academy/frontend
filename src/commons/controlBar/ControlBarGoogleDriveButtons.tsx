@@ -36,11 +36,14 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
       ? 'DIRTY'
       : 'SAVED'
     : 'INACTIVE';
-  const isNotPlayground = props.workspaceLocation !== "playground" ;
+  const isNotPlayground = props.workspaceLocation !== 'playground';
   const GithubSynced = props.isGithubSynced;
   const mainButton = (
     <ControlButton
-      label={!GithubSynced && (props.currPersistenceFile && props.currPersistenceFile.name) || 'Google Drive'}
+      label={
+        (!GithubSynced && props.currPersistenceFile && props.currPersistenceFile.name) ||
+        'Google Drive'
+      }
       icon={IconNames.CLOUD}
       options={GithubSynced ? undefined : { intent: stateToIntent[state] }}
       isDisabled={isNotPlayground || GithubSynced}

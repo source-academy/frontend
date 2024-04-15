@@ -75,7 +75,7 @@ const FileSystemViewFileName: React.FC<Props> = ({
 
           if (isDirectory) {
             dispatch(persistenceRenameFolder({ oldFolderPath: oldPath, newFolderPath: newPath }));
-            dispatch(githubRenameFolder(oldPath, newPath));    
+            dispatch(githubRenameFolder(oldPath, newPath));
             dispatch(renameEditorTabsForDirectory(workspaceLocation, oldPath, newPath));
           } else {
             dispatch(persistenceRenameFile({ oldFilePath: oldPath, newFilePath: newPath }));

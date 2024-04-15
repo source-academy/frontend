@@ -1,3 +1,4 @@
+import { Intent } from '@blueprintjs/core';
 import { Octokit } from '@octokit/rest';
 import {
   GetResponseDataTypeFromEndpointMethod,
@@ -5,6 +6,7 @@ import {
 } from '@octokit/types';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import { filePathRegex } from 'src/commons/utils/PersistenceHelper';
+import { WORKSPACE_BASE_PATHS } from 'src/pages/fileSystem/createInBrowserFileSystem';
 
 import {
   getPersistenceFile,
@@ -22,8 +24,6 @@ import {
 } from '../../commons/utils/notifications/NotificationsHelper';
 import { store } from '../../pages/createStore';
 import { PersistenceFile } from '../persistence/PersistenceTypes';
-import { Intent } from '@blueprintjs/core';
-import { WORKSPACE_BASE_PATHS } from 'src/pages/fileSystem/createInBrowserFileSystem';
 
 /**
  * Exchanges the Access Code with the back-end to receive an Auth-Token
@@ -262,13 +262,13 @@ export async function openFileInEditor(
       path: filePath
     });
     const content = (results.data as any).content;
-  
+
     const regexResult = filePathRegex.exec(filePath)!;
     const newFilePath = regexResult[2] + regexResult[3];
-  
+
     const newEditorValue = Buffer.from(content, 'base64').toString();
     const activeEditorTabIndex = store.getState().workspaces.playground.activeEditorTabIndex;
-  
+
     if (fileSystem !== null) {
       await writeFileRecursively(fileSystem, '/playground/' + newFilePath, newEditorValue);
     }
@@ -282,12 +282,12 @@ export async function openFileInEditor(
         parentFolderPath: regexResult[1]
       })
     );
-  
+
     // Delay to increase likelihood addPersistenceFile for last loaded file has completed
     // and for refreshfileview to happen after everything is loaded
-    const wait = () => new Promise( resolve => setTimeout(resolve, 1000));
+    const wait = () => new Promise(resolve => setTimeout(resolve, 1000));
     await wait();
-  
+
     store.dispatch(
       actions.playgroundUpdatePersistenceFile({
         id: '',
@@ -299,9 +299,16 @@ export async function openFileInEditor(
       })
     );
     if (activeEditorTabIndex === null) {
-      store.dispatch(actions.addEditorTab('playground', '/playground/' + newFilePath, newEditorValue));
+      store.dispatch(
+        actions.addEditorTab('playground', '/playground/' + newFilePath, newEditorValue)
+      );
     } else {
-      store.dispatch(actions.updateActiveEditorTab('playground', { filePath: '/playground/' + newFilePath, value: newEditorValue}));
+      store.dispatch(
+        actions.updateActiveEditorTab('playground', {
+          filePath: '/playground/' + newFilePath,
+          value: newEditorValue
+        })
+      );
     }
 
     if (content) {
@@ -311,7 +318,7 @@ export async function openFileInEditor(
     }
   } catch (e) {
     console.error(e);
-    showWarningMessage("Something went wrong when trying to open the file.", 1000);
+    showWarningMessage('Something went wrong when trying to open the file.', 1000);
   } finally {
     store.dispatch(actions.enableFileSystemContextMenus());
     store.dispatch(actions.updateRefreshFileViewKey());
@@ -335,7 +342,7 @@ export async function openFolderInFolderMode(
       message: `Opening files...`,
       timeout: 0,
       intent: Intent.PRIMARY
-  });
+    });
     store.dispatch(actions.deleteAllGithubSaveInfo());
 
     const requests = await octokit.request('GET /repos/{owner}/{repo}/branches/master', {
@@ -367,40 +374,40 @@ export async function openFolderInFolderMode(
     store.dispatch(actions.setFolderMode('playground', true)); //automatically opens folder mode
     const fileSystem: FSModule | null = store.getState().fileSystem.inBrowserFileSystem;
     if (fileSystem === null) {
-      throw new Error("No filesystem!");
+      throw new Error('No filesystem!');
     }
 
     let parentFolderPath = filePath + '.js';
     const regexResult = filePathRegex.exec(parentFolderPath)!;
     parentFolderPath = regexResult[1] || '';
     await rmFilesInDirRecursively(fileSystem, '/playground');
-      type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+    type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
     for (const file of files) {
-          let results = {} as GetContentResponse;
-          if (file.startsWith(filePath + '/')) {
-            results = await octokit.repos.getContent({
-              owner: repoOwner,
-              repo: repoName,
-              path: file
-            });
-            const content = (results.data as any)?.content;
+      let results = {} as GetContentResponse;
+      if (file.startsWith(filePath + '/')) {
+        results = await octokit.repos.getContent({
+          owner: repoOwner,
+          repo: repoName,
+          path: file
+        });
+        const content = (results.data as any)?.content;
 
-            const fileContent = Buffer.from(content, 'base64').toString();
-            await writeFileRecursively(
-              fileSystem,
-              '/playground/' + file.slice(parentFolderPath.length),
-              fileContent
-            );
-            store.dispatch(
-              actions.addGithubSaveInfo({
-                id: '',
-                name: '',
-                repoName: repoName,
-                path: '/playground/' + file.slice(parentFolderPath.length),
-                lastSaved: new Date(),
-                parentFolderPath: parentFolderPath
-              })
-            );
+        const fileContent = Buffer.from(content, 'base64').toString();
+        await writeFileRecursively(
+          fileSystem,
+          '/playground/' + file.slice(parentFolderPath.length),
+          fileContent
+        );
+        store.dispatch(
+          actions.addGithubSaveInfo({
+            id: '',
+            name: '',
+            repoName: repoName,
+            path: '/playground/' + file.slice(parentFolderPath.length),
+            lastSaved: new Date(),
+            parentFolderPath: parentFolderPath
+          })
+        );
         const regexResult = filePathRegex.exec(filePath)!;
         store.dispatch(
           actions.playgroundUpdatePersistenceFile({
@@ -410,15 +417,17 @@ export async function openFolderInFolderMode(
             lastSaved: new Date(),
             parentFolderPath: parentFolderPath
           })
-        )
-          }
+        );
+      }
     }
 
     // Delay to increase likelihood addPersistenceFile for last loaded file has completed
     // and for refreshfileview to happen after everything is loaded
-    const wait = () => new Promise( resolve => setTimeout(resolve, 1000));
+    const wait = () => new Promise(resolve => setTimeout(resolve, 1000));
     await wait();
-    store.dispatch(actions.removeEditorTabsForDirectory('playground', WORKSPACE_BASE_PATHS['playground']));
+    store.dispatch(
+      actions.removeEditorTabsForDirectory('playground', WORKSPACE_BASE_PATHS['playground'])
+    );
     showSuccessMessage('Successfully loaded file!', 1000);
   } catch (err) {
     console.error(err);
@@ -501,20 +510,22 @@ export async function performOverwritingSave(
       })
     );
     const playgroundPersistenceFile = store.getState().playground.persistenceFile;
-    store.dispatch(actions.playgroundUpdatePersistenceFile({
-      id: '',
-      name: playgroundPersistenceFile?.name || '',
-      repoName: repoName,
-      lastSaved: new Date(),
-      parentFolderPath: parentFolderPath
-    }));
+    store.dispatch(
+      actions.playgroundUpdatePersistenceFile({
+        id: '',
+        name: playgroundPersistenceFile?.name || '',
+        repoName: repoName,
+        lastSaved: new Date(),
+        parentFolderPath: parentFolderPath
+      })
+    );
 
     showSuccessMessage('Successfully saved file!', 800);
   } catch (err) {
     console.error(err);
     showWarningMessage('Something went wrong when trying to save the file.', 1000);
   } finally {
-    if (toastKey){
+    if (toastKey) {
       dismiss(toastKey);
     }
     store.dispatch(actions.enableFileSystemContextMenus());
@@ -556,29 +567,36 @@ export async function performMultipleOverwritingSave(
       const lastSaved = persistenceFile.lastSaved;
       const lastEdit = persistenceFile.lastEdit;
       if (parentFolderPath === undefined || repoName === undefined) {
-        throw new Error('No parent folder path or repository name or last saved found for this persistencefile: ' + persistenceFile);
+        throw new Error(
+          'No parent folder path or repository name or last saved found for this persistencefile: ' +
+            persistenceFile
+        );
       }
       if (lastEdit) {
         if (!lastSaved || lastSaved < lastEdit) {
           const githubFilePath = parentFolderPath + filePath.slice(12);
-          type GetContentResponse = GetResponseTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+          type GetContentResponse = GetResponseTypeFromEndpointMethod<
+            typeof octokit.repos.getContent
+          >;
           const results: GetContentResponse = await octokit.repos.getContent({
             owner: repoOwner,
             repo: repoName,
             path: githubFilePath
           });
-      
-          type GetContentData = GetResponseDataTypeFromEndpointMethod<typeof octokit.repos.getContent>;
+
+          type GetContentData = GetResponseDataTypeFromEndpointMethod<
+            typeof octokit.repos.getContent
+          >;
           const files: GetContentData = results.data;
-      
+
           // Cannot save over folder
           if (Array.isArray(files)) {
             return;
           }
-      
+
           const sha = files.sha;
           const contentEncoded = Buffer.from(changes.files[filePath], 'utf8').toString('base64');
-      
+
           await octokit.repos.createOrUpdateFileContents({
             owner: repoOwner,
             repo: repoName,
@@ -589,7 +607,7 @@ export async function performMultipleOverwritingSave(
             committer: { name: githubName, email: githubEmail },
             author: { name: githubName, email: githubEmail }
           });
-      
+
           store.dispatch(
             actions.addGithubSaveInfo({
               id: '',
@@ -601,18 +619,20 @@ export async function performMultipleOverwritingSave(
             })
           );
           const playgroundPersistenceFile = store.getState().playground.persistenceFile;
-          store.dispatch(actions.playgroundUpdatePersistenceFile({
-            id: '',
-            name: playgroundPersistenceFile?.name || '',
-            repoName: repoName,
-            lastSaved: new Date(),
-            parentFolderPath: parentFolderPath
-          }));
+          store.dispatch(
+            actions.playgroundUpdatePersistenceFile({
+              id: '',
+              name: playgroundPersistenceFile?.name || '',
+              repoName: repoName,
+              lastSaved: new Date(),
+              parentFolderPath: parentFolderPath
+            })
+          );
         }
       }
     }
 
-    const wait = () => new Promise( resolve => setTimeout(resolve, 1000));
+    const wait = () => new Promise(resolve => setTimeout(resolve, 1000));
     await wait();
 
     showSuccessMessage('Successfully saved all files!', 1000);
@@ -632,7 +652,7 @@ export async function performOverwritingSaveForSaveAs(
   octokit: Octokit,
   repoOwner: string,
   repoName: string,
-  filePath: string, 
+  filePath: string,
   githubName: string | null,
   githubEmail: string | null,
   commitMessage: string,
@@ -671,31 +691,36 @@ export async function performOverwritingSaveForSaveAs(
     }
 
     const sha = files.sha;
-    const persistenceFile = getPersistenceFile("/playground/" + filePath.slice(parentFolderPath.length));
+    const persistenceFile = getPersistenceFile(
+      '/playground/' + filePath.slice(parentFolderPath.length)
+    );
     if (persistenceFile !== undefined) {
-
       //case where user saves as into the same folder
       const parentFolderPath = persistenceFile.parentFolderPath;
       const filePath = persistenceFile.path;
       if (parentFolderPath === undefined || filePath === undefined) {
-        throw new Error("parentfolderpath or filepath not found for this persistencefile: " + persistenceFile);
+        throw new Error(
+          'parentfolderpath or filepath not found for this persistencefile: ' + persistenceFile
+        );
       }
 
       const fileSystem: FSModule | null = store.getState().fileSystem.inBrowserFileSystem;
       if (fileSystem === null) {
-        throw new Error("No filesystem!");
+        throw new Error('No filesystem!');
       }
 
       writeFileRecursively(fileSystem, filePath, content);
 
-      store.dispatch(actions.addGithubSaveInfo({ 
-        id: '',
-        name: '',
-        repoName: repoName, 
-        path: filePath, 
-        lastSaved: new Date(),
-        parentFolderPath: parentFolderPath 
-        }));
+      store.dispatch(
+        actions.addGithubSaveInfo({
+          id: '',
+          name: '',
+          repoName: repoName,
+          path: filePath,
+          lastSaved: new Date(),
+          parentFolderPath: parentFolderPath
+        })
+      );
     }
 
     await octokit.repos.createOrUpdateFileContents({
@@ -732,7 +757,6 @@ export async function performCreatingSave(
   content: string,
   parentFolderPath: string
 ) {
-
   githubEmail = githubEmail || 'No public email provided';
   githubName = githubName || 'Source Academy User';
   commitMessage = commitMessage || 'Changes made from Source Academy';
@@ -791,7 +815,7 @@ export async function performMultipleCreatingSave(
   const fileSystem: FSModule | null = store.getState().fileSystem.inBrowserFileSystem;
   // If the file system is not initialised, do nothing.
   if (fileSystem === null) {
-    throw new Error("No filesystem!");
+    throw new Error('No filesystem!');
   }
   const currFiles: Record<string, string> = await retrieveFilesInWorkspaceAsRecord(
     'playground',
@@ -829,15 +853,17 @@ export async function performMultipleCreatingSave(
       showSuccessMessage('Successfully created file!', 1000);
     }
     const regexResult = filePathRegex.exec(folderPath)!;
-    store.dispatch(actions.playgroundUpdatePersistenceFile({
-      id: '',
-      name: regexResult[2],
-      repoName: repoName,
-      parentFolderPath: folderPath,
-      lastSaved: new Date()
-    }))
+    store.dispatch(
+      actions.playgroundUpdatePersistenceFile({
+        id: '',
+        name: regexResult[2],
+        repoName: repoName,
+        parentFolderPath: folderPath,
+        lastSaved: new Date()
+      })
+    );
 
-    const wait = () => new Promise( resolve => setTimeout(resolve, 1000));
+    const wait = () => new Promise(resolve => setTimeout(resolve, 1000));
     await wait();
   } catch (err) {
     console.error(err);

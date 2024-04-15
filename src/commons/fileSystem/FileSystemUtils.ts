@@ -312,7 +312,7 @@ export const isGDriveSyncing = () => {
   }
 
   return true;
-}
+};
 
 export const isGithubSyncing = () => {
   const persistenceFileArray = store.getState().fileSystem.persistenceFileArray;
@@ -326,4 +326,4 @@ export const isGithubSyncing = () => {
   }
 
   return true;
-}
+};

@@ -9,10 +9,7 @@ import { EVAL_STORY } from 'src/features/stories/StoriesTypes';
 
 import { EventType } from '../../../features/achievement/AchievementTypes';
 import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
-import {
-  OverallState,
-  styliseSublanguage
-} from '../../application/ApplicationTypes';
+import { OverallState, styliseSublanguage } from '../../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../../application/types/ExternalTypes';
 import {
   DEBUG_RESET,

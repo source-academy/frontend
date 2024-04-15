@@ -13,18 +13,22 @@ import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 export const filePathRegex = /^(.*[\\/])?(\.*.*?)(\.[^.]+?|)$/;
 
 /**
- * Checks if any persistenceFile in a given persistenceFileArray 
+ * Checks if any persistenceFile in a given persistenceFileArray
  * has a lastEdit that is more recent than lastSaved.
  * @param pf persistenceFileArray.
  * @returns boolean representing whether any file has yet to be updated.
  */
 export const areAllFilesSavedGoogleDrive = (pf: PersistenceFile[]) => {
-    for (const currPersistenceFile of pf) {
-        if (!currPersistenceFile.lastEdit || (currPersistenceFile.lastSaved && currPersistenceFile.lastEdit < currPersistenceFile.lastSaved)) {
-            continue;
-        } else {
-            return false;
-        }
+  for (const currPersistenceFile of pf) {
+    if (
+      !currPersistenceFile.lastEdit ||
+      (currPersistenceFile.lastSaved &&
+        currPersistenceFile.lastEdit < currPersistenceFile.lastSaved)
+    ) {
+      continue;
+    } else {
+      return false;
     }
-    return true;
-}
+  }
+  return true;
+};

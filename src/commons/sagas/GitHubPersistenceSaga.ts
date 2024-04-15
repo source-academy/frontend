@@ -1,3 +1,4 @@
+import { Intent } from '@blueprintjs/core';
 import {
   GetResponseDataTypeFromEndpointMethod,
   GetResponseTypeFromEndpointMethod
@@ -18,7 +19,15 @@ import {
   GITHUB_SAVE_FILE_AS
 } from '../../features/github/GitHubTypes';
 import * as GitHubUtils from '../../features/github/GitHubUtils';
-import { getGitHubOctokitInstance, performCreatingSave, performFileDeletion, performFileRenaming, performFolderDeletion, performFolderRenaming, performOverwritingSave } from '../../features/github/GitHubUtils';
+import {
+  getGitHubOctokitInstance,
+  performCreatingSave,
+  performFileDeletion,
+  performFileRenaming,
+  performFolderDeletion,
+  performFolderRenaming,
+  performOverwritingSave
+} from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
 import { OverallState } from '../application/ApplicationTypes';
 import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
@@ -32,10 +41,14 @@ import RepositoryDialog, { RepositoryDialogProps } from '../gitHubOverlay/Reposi
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { promisifyDialog, showSimpleErrorDialog } from '../utils/DialogHelper';
-import { dismiss, showMessage, showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { EditorTabState } from '../workspace/WorkspaceTypes';
-import { Intent } from '@blueprintjs/core';
+import {
+  dismiss,
+  showMessage,
+  showSuccessMessage,
+  showWarningMessage
+} from '../utils/notifications/NotificationsHelper';
 import { filePathRegex } from '../utils/PersistenceHelper';
+import { EditorTabState } from '../workspace/WorkspaceTypes';
 
 export function* GitHubPersistenceSaga(): SagaIterator {
   yield takeLatest(LOGIN_GITHUB, githubLoginSaga);
@@ -125,7 +138,7 @@ function* githubOpenFile(): any {
     }
   } catch (e) {
     yield call(console.error, e);
-    yield call(showWarningMessage, "Something went wrong when saving the file", 1000);
+    yield call(showWarningMessage, 'Something went wrong when saving the file', 1000);
   }
 }
 
@@ -169,7 +182,8 @@ function* githubSaveFile(): any {
       );
     }
 
-    yield call(performOverwritingSave,
+    yield call(
+      performOverwritingSave,
       octokit,
       githubLoginId,
       repoName,
@@ -182,7 +196,7 @@ function* githubSaveFile(): any {
     );
   } catch (e) {
     yield call(console.error, e);
-    yield call(showWarningMessage, "Something went wrong when saving the file", 1000);
+    yield call(showWarningMessage, 'Something went wrong when saving the file', 1000);
   }
 }
 
@@ -239,7 +253,7 @@ function* githubSaveFileAs(): any {
     }
   } catch (e) {
     yield call(console.error, e);
-    yield call(showWarningMessage, "Something went wrong when saving as", 1000);
+    yield call(showWarningMessage, 'Something went wrong when saving as', 1000);
   }
 }
 
@@ -253,14 +267,14 @@ function* githubSaveAll(): any {
     >;
 
     if (store.getState().fileSystem.persistenceFileArray.length === 0) {
-      // check if there is only one top level folder 
+      // check if there is only one top level folder
       const fileSystem: FSModule | null = yield select(
         (state: OverallState) => state.fileSystem.inBrowserFileSystem
       );
 
       // If the file system is not initialised, do nothing.
       if (fileSystem === null) {
-        throw new Error("No filesystem!");
+        throw new Error('No filesystem!');
       }
       const currFiles: Record<string, string> = yield call(
         retrieveFilesInWorkspaceAsRecord,
@@ -268,16 +282,14 @@ function* githubSaveAll(): any {
         fileSystem
       );
       const testPaths: Set<string> = new Set();
-        Object.keys(currFiles).forEach(e => {
-          const regexResult = filePathRegex.exec(e)!;
-          testPaths.add(regexResult![1].slice('/playground/'.length, -1).split('/')[0]); //TODO hardcoded playground
-        });
+      Object.keys(currFiles).forEach(e => {
+        const regexResult = filePathRegex.exec(e)!;
+        testPaths.add(regexResult![1].slice('/playground/'.length, -1).split('/')[0]); //TODO hardcoded playground
+      });
       if (testPaths.size !== 1) {
         yield call(showSimpleErrorDialog, {
           title: 'Unable to Save All',
-          contents: (
-            "There must be exactly one top level folder present in order to use Save All."
-          ),
+          contents: 'There must be exactly one top level folder present in order to use Save All.',
           label: 'OK'
         });
         return;
@@ -330,7 +342,7 @@ function* githubSaveAll(): any {
       );
       // If the file system is not initialised, do nothing.
       if (fileSystem === null) {
-        throw new Error("No filesystem!");
+        throw new Error('No filesystem!');
       }
       const currFiles: Record<string, string> = yield call(
         retrieveFilesInWorkspaceAsRecord,
@@ -347,9 +359,9 @@ function* githubSaveAll(): any {
         { commitMessage: commitMessage, files: currFiles }
       );
     }
-   } catch (e) {
+  } catch (e) {
     yield call(console.error, e);
-    yield call(showWarningMessage, "Something went wrong when saving all your files");
+    yield call(showWarningMessage, 'Something went wrong when saving all your files');
   }
 }
 
@@ -394,10 +406,11 @@ function* githubCreateFile({ payload }: ReturnType<typeof actions.githubCreateFi
     }
 
     if (repoName === '') {
-      throw new Error("Not synced to Github!");
+      throw new Error('Not synced to Github!');
     }
 
-    yield call(performCreatingSave,
+    yield call(
+      performCreatingSave,
       octokit,
       githubLoginId,
       repoName,
@@ -472,10 +485,11 @@ function* githubDeleteFile({ payload }: ReturnType<typeof actions.githubDeleteFi
     }
 
     if (repoName === '') {
-      throw new Error("Not synced to Github!");
+      throw new Error('Not synced to Github!');
     }
 
-    yield call(performFileDeletion,
+    yield call(
+      performFileDeletion,
       octokit,
       githubLoginId,
       repoName || '',
@@ -511,15 +525,15 @@ function* githubDeleteFolder({ payload }: ReturnType<typeof actions.githubDelete
     });
 
     const filePath = payload;
-  
+
     const octokit = getGitHubOctokitInstance();
     if (octokit === undefined) return;
-  
+
     type GetAuthenticatedResponse = GetResponseTypeFromEndpointMethod<
       typeof octokit.users.getAuthenticated
     >;
     const authUser: GetAuthenticatedResponse = yield call(octokit.users.getAuthenticated);
-  
+
     const githubLoginId = authUser.data.login;
     const persistenceFile = getPersistenceFile('');
     if (persistenceFile === undefined) {
@@ -535,12 +549,13 @@ function* githubDeleteFolder({ payload }: ReturnType<typeof actions.githubDelete
     const githubEmail = authUser.data.email;
     const githubName = authUser.data.name;
     const commitMessage = 'Changes made from Source Academy';
-  
+
     if (repoName === '') {
-      throw new Error("Not synced to Github!");
+      throw new Error('Not synced to Github!');
     }
-  
-    yield call(performFolderDeletion,
+
+    yield call(
+      performFolderDeletion,
       octokit,
       githubLoginId,
       repoName || '',
@@ -556,7 +571,7 @@ function* githubDeleteFolder({ payload }: ReturnType<typeof actions.githubDelete
   } finally {
     yield call(store.dispatch, actions.enableFileSystemContextMenus());
     yield call(store.dispatch, actions.updateRefreshFileViewKey());
-    if(toastKey) {
+    if (toastKey) {
       dismiss(toastKey);
     }
   }
@@ -603,10 +618,11 @@ function* githubRenameFile({ payload }: ReturnType<typeof actions.githubRenameFi
     const commitMessage = 'Changes made from Source Academy';
 
     if (repoName === '' || repoName === undefined) {
-      throw new Error("Not synced to Github!");
+      throw new Error('Not synced to Github!');
     }
 
-    yield call(performFileRenaming,
+    yield call(
+      performFileRenaming,
       octokit,
       githubLoginId,
       repoName,
@@ -670,10 +686,11 @@ function* githubRenameFolder({ payload }: ReturnType<typeof actions.githubRename
     const commitMessage = 'Changes made from Source Academy';
 
     if (repoName === '' || repoName === undefined) {
-      throw new Error("Not synced to Github!");
+      throw new Error('Not synced to Github!');
     }
 
-    yield call(performFolderRenaming,
+    yield call(
+      performFolderRenaming,
       octokit,
       githubLoginId,
       repoName,
@@ -690,7 +707,7 @@ function* githubRenameFolder({ payload }: ReturnType<typeof actions.githubRename
   } finally {
     yield call(store.dispatch, actions.enableFileSystemContextMenus());
     yield call(store.dispatch, actions.updateRefreshFileViewKey());
-    if(toastKey) {
+    if (toastKey) {
       dismiss(toastKey);
     }
   }

@@ -84,6 +84,7 @@ import {
   persistenceSaveFile,
   persistenceSaveFileAs
 } from 'src/features/persistence/PersistenceActions';
+import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 import {
   generateLzString,
   playgroundConfigLanguage,
@@ -146,7 +147,6 @@ import {
   makeSubstVisualizerTabFrom,
   mobileOnlyTabIds
 } from './PlaygroundTabs';
-import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 
 export type PlaygroundProps = {
   isSicpEditor?: boolean;
@@ -424,7 +424,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       dispatch(updateLastEditedFilePath(filePath));
     }
     // only call setLastEdit if file path of open editor is found in persistenceFileArray
-    const persistenceFileArray: PersistenceFile[] = store.getState().fileSystem.persistenceFileArray;
+    const persistenceFileArray: PersistenceFile[] =
+      store.getState().fileSystem.persistenceFileArray;
     if (persistenceFileArray.find(e => e.path === filePath)) {
       setLastEdit(editDate);
     }
@@ -754,14 +755,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         key="folder"
       />
     );
-  }, [
-    dispatch,
-    persistenceFile?.repoName,
-    isFolderModeEnabled,
-    persistenceFile,
-    editorSessionId,
-    workspaceLocation
-  ]);
+  }, [dispatch, isFolderModeEnabled, persistenceFile, editorSessionId, workspaceLocation]);
 
   useEffect(() => {
     // TODO: To migrate the state logic away from playgroundSourceChapter

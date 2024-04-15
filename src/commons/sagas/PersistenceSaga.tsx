@@ -114,7 +114,7 @@ export function* persistenceSaga(): SagaIterator {
       );
       // If the file system is not initialised, do nothing.
       if (fileSystem === null) {
-        throw new Error("No filesystem!");
+        throw new Error('No filesystem!');
       }
       const { id, name, mimeType, picked, parentId } = yield call(
         pickFile,
@@ -189,8 +189,8 @@ export function* persistenceSaga(): SagaIterator {
             yield call(
               writeFileRecursively,
               fileSystem,
-              '/playground' + currFile.path + "/dummy", // workaround to make empty folders
-              "",
+              '/playground' + currFile.path + '/dummy', // workaround to make empty folders
+              '',
               true
             );
             yield call(store.dispatch, actions.updateRefreshFileViewKey());
@@ -237,12 +237,18 @@ export function* persistenceSaga(): SagaIterator {
 
         // Update playground PersistenceFile with entry representing top level root folder
         yield put(
-          actions.playgroundUpdatePersistenceFile({ id, name, parentId, lastSaved: new Date(), isFolder: true })
+          actions.playgroundUpdatePersistenceFile({
+            id,
+            name,
+            parentId,
+            lastSaved: new Date(),
+            isFolder: true
+          })
         );
 
         // Delay to increase likelihood addPersistenceFile for last loaded file has completed
         // and for the toasts to not overlap
-        yield call(() => new Promise( resolve => setTimeout(resolve, 1000)));
+        yield call(() => new Promise(resolve => setTimeout(resolve, 1000)));
         yield call(showSuccessMessage, `Loaded folder ${name}.`, 1000);
         return;
       }
@@ -262,14 +268,9 @@ export function* persistenceSaga(): SagaIterator {
       yield call(store.dispatch, actions.deleteAllPersistenceFiles());
 
       // Write file to BrowserFS
-      yield call(
-        writeFileRecursively,
-        fileSystem,
-        '/playground/' + name,
-        contents.body
-      );
+      yield call(writeFileRecursively, fileSystem, '/playground/' + name, contents.body);
       // Update playground PersistenceFile
-      const newPersistenceFile = { id, name, lastSaved: new Date(), path: '/playground/' + name};
+      const newPersistenceFile = { id, name, lastSaved: new Date(), path: '/playground/' + name };
       yield put(actions.playgroundUpdatePersistenceFile(newPersistenceFile));
       // Add file to persistenceFileArray
       yield put(actions.addPersistenceFile(newPersistenceFile));
@@ -278,10 +279,10 @@ export function* persistenceSaga(): SagaIterator {
         store.dispatch,
         actions.removeEditorTabsForDirectory('playground', WORKSPACE_BASE_PATHS['playground'])
       );
-      
+
       // Delay to increase likelihood addPersistenceFile for last loaded file has completed
       // and for the toasts to not overlap
-      yield call(() => new Promise( resolve => setTimeout(resolve, 1000)));
+      yield call(() => new Promise(resolve => setTimeout(resolve, 1000)));
       yield call(showSuccessMessage, `Loaded ${name}.`, 1000);
     } catch (ex) {
       console.error(ex);
@@ -430,7 +431,9 @@ export function* persistenceSaga(): SagaIterator {
               );
             }
             // Check if any editor tab is that updated file, and update contents
-            const targetEditorTabIndex = (editorTabs as EditorTabState[]).findIndex(e => e.filePath === localFileTarget.path!);
+            const targetEditorTabIndex = (editorTabs as EditorTabState[]).findIndex(
+              e => e.filePath === localFileTarget.path!
+            );
             if (targetEditorTabIndex !== -1) {
               yield put(actions.updateEditorValue('playground', targetEditorTabIndex, code));
             }
@@ -450,20 +453,17 @@ export function* persistenceSaga(): SagaIterator {
         // Checks if user chose to overwrite the synced file for whatever reason
         // Updates the relevant PersistenceFiles
         if (currPersistenceFile && currPersistenceFile.id === pickedFile.id) {
-          const newPersFile: PersistenceFile = {...pickedFile, lastSaved: new Date(), path: "/playground/" + pickedFile.name};
+          const newPersFile: PersistenceFile = {
+            ...pickedFile,
+            lastSaved: new Date(),
+            path: '/playground/' + pickedFile.name
+          };
           yield put(actions.playgroundUpdatePersistenceFile(newPersFile));
           yield put(actions.addPersistenceFile(newPersFile));
         }
 
         // Save to Google Drive
-        yield call(
-          updateFile,
-          pickedFile.id,
-          pickedFile.name,
-          MIME_SOURCE,
-          code,
-          config
-        );
+        yield call(updateFile, pickedFile.id, pickedFile.name, MIME_SOURCE, code, config);
 
         yield call(
           showSuccessMessage,
@@ -531,7 +531,7 @@ export function* persistenceSaga(): SagaIterator {
           }
 
           if (needToUpdateLocal) {
-            // Adds new file entry to persistenceFileArray 
+            // Adds new file entry to persistenceFileArray
             const fileSystem: FSModule | null = yield select(
               (state: OverallState) => state.fileSystem.inBrowserFileSystem
             );
@@ -554,7 +554,6 @@ export function* persistenceSaga(): SagaIterator {
           return;
         }
 
-        
         // Case: playground PersistenceFile is in single file mode
         // Does nothing
         yield call(
@@ -620,7 +619,8 @@ export function* persistenceSaga(): SagaIterator {
         Object.keys(currFiles).forEach(e => {
           const regexResult = filePathRegex.exec(e)!;
           const testStr = regexResult![1].slice('/playground/'.length, -1).split('/')[0];
-          if (testStr === '') { // represents a file in /playground/
+          if (testStr === '') {
+            // represents a file in /playground/
             fileExistsInTopLevel = true;
           }
           testPaths.add(regexResult![1].slice('/playground/'.length, -1).split('/')[0]);
@@ -629,7 +629,9 @@ export function* persistenceSaga(): SagaIterator {
           yield call(showSimpleErrorDialog, {
             title: 'Unable to Save All',
             contents: (
-              <p>There must be only exactly one non-empty top level folder present to use Save All.</p>
+              <p>
+                There must be only exactly one non-empty top level folder present to use Save All.
+              </p>
             ),
             label: 'OK'
           });
@@ -664,9 +666,9 @@ export function* persistenceSaga(): SagaIterator {
             title: 'Saving to Google Drive',
             contents: (
               <span>
-                Merge <strong>{topLevelFolderName}</strong> inside{' '}
-                <strong>{saveToDir.name}</strong> with your local folder? No deletions will be made remotely, only content
-                updates, but new remote files may be created.
+                Merge <strong>{topLevelFolderName}</strong> inside <strong>{saveToDir.name}</strong>{' '}
+                with your local folder? No deletions will be made remotely, only content updates,
+                but new remote files may be created.
               </span>
             )
           });
@@ -738,7 +740,7 @@ export function* persistenceSaga(): SagaIterator {
             );
             currFileId = res.id;
           } else {
-            // Update currFile's content 
+            // Update currFile's content
             yield call(updateFile, currFileId, currFileName, MIME_SOURCE, currFileContent, config);
           }
           const currPersistenceFile: PersistenceFile = {
@@ -818,7 +820,11 @@ export function* persistenceSaga(): SagaIterator {
         }
 
         // Check if currFile even needs to update - if it doesn't, skip
-        if (!currPersistenceFile.lastEdit || (currPersistenceFile.lastSaved && currPersistenceFile.lastEdit < currPersistenceFile.lastSaved)) {
+        if (
+          !currPersistenceFile.lastEdit ||
+          (currPersistenceFile.lastSaved &&
+            currPersistenceFile.lastEdit < currPersistenceFile.lastSaved)
+        ) {
           continue;
         }
 
@@ -873,9 +879,9 @@ export function* persistenceSaga(): SagaIterator {
       yield call(store.dispatch, actions.disableFileSystemContextMenus());
       let toastKey: string | undefined;
 
-      const [playgroundPersistenceFile] = yield select(
-        (state: OverallState) => [state.playground.persistenceFile]
-      );
+      const [playgroundPersistenceFile] = yield select((state: OverallState) => [
+        state.playground.persistenceFile
+      ]);
 
       yield call(ensureInitialisedAndAuthorised);
 
@@ -891,22 +897,39 @@ export function* persistenceSaga(): SagaIterator {
 
       try {
         if (activeEditorTabIndex === null) {
-          if (!playgroundPersistenceFile) yield call(showWarningMessage, `Please have an editor tab open.`, 1000);
+          if (!playgroundPersistenceFile)
+            yield call(showWarningMessage, `Please have an editor tab open.`, 1000);
           else if (!playgroundPersistenceFile.isFolder) {
-            yield call(showWarningMessage, `Please have ${name} open as the active editor tab.`, 1000);
+            yield call(
+              showWarningMessage,
+              `Please have ${name} open as the active editor tab.`,
+              1000
+            );
           } else {
-            yield call(showWarningMessage, `Please have the file you want to save open as the active editor tab.`, 1000);
+            yield call(
+              showWarningMessage,
+              `Please have the file you want to save open as the active editor tab.`,
+              1000
+            );
           }
           return;
         }
         const code = editorTabs[activeEditorTabIndex].value;
 
         // Check if editor is correct for single file sync mode
-        if (playgroundPersistenceFile && !playgroundPersistenceFile.isFolder && 
-          (editorTabs[activeEditorTabIndex] as EditorTabState).filePath !== playgroundPersistenceFile.path) {
-          yield call(showWarningMessage, `Please have ${name} open as the active editor tab.`, 1000);
+        if (
+          playgroundPersistenceFile &&
+          !playgroundPersistenceFile.isFolder &&
+          (editorTabs[activeEditorTabIndex] as EditorTabState).filePath !==
+            playgroundPersistenceFile.path
+        ) {
+          yield call(
+            showWarningMessage,
+            `Please have ${name} open as the active editor tab.`,
+            1000
+          );
           return;
-       }
+        }
 
         const config: IPlaygroundConfig = {
           chapter,
@@ -1263,7 +1286,7 @@ export function* persistenceSaga(): SagaIterator {
         if (currFileObject.name === oldFileName) {
           // Update playground PersistenceFile if user is syncing a single file
           yield put(
-            actions.playgroundUpdatePersistenceFile({ ...currFileObject, name: newFileName})
+            actions.playgroundUpdatePersistenceFile({ ...currFileObject, name: newFileName })
           );
         }
 
@@ -1335,7 +1358,11 @@ export function* persistenceSaga(): SagaIterator {
         if (currFolderObject.name === oldFolderName) {
           // Update playground PersistenceFile with new name if top level folder was renamed
           yield put(
-            actions.playgroundUpdatePersistenceFile({ ...currFolderObject, name: newFolderName, isFolder: true })
+            actions.playgroundUpdatePersistenceFile({
+              ...currFolderObject,
+              name: newFolderName,
+              isFolder: true
+            })
           );
         }
       } catch (ex) {
@@ -1499,7 +1526,7 @@ function pickFile(
  * @param currFolderName Name of the top level folder.
  * @param currPath Path of the top level folder.
  * @returns Array of objects with name, id, path, isFolder string fields, which represent
- * files/empty folders in the folder. 
+ * files/empty folders in the folder.
  */
 async function getFilesOfFolder( // recursively get files
   folderId: string,
@@ -1614,7 +1641,7 @@ function renameFileOrFolder(id: string, newName: string): Promise<any> {
  * @param parentFolders Ordered array of strings of folder names. Top level folder is index 0.
  * @param topFolderId id of the top level folder.
  * @param currDepth Used when recursing.
- * @returns Object with id and parentId string fields, representing id of folder and 
+ * @returns Object with id and parentId string fields, representing id of folder and
  * id of immediate parent of folder respectively.
  */
 async function getContainingFolderIdRecursively(

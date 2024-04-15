@@ -134,7 +134,8 @@ export const FileSystemReducer: Reducer<FileSystemState, SourceActionType> = cre
           state.persistenceFileArray = newPersistenceFileArray;
         }
       })
-      .addCase(deletePersistenceFolderAndChildren, (state, action) => { // check if github is syncing?
+      .addCase(deletePersistenceFolderAndChildren, (state, action) => {
+        // check if github is syncing?
         const newPersistenceFileArray = state['persistenceFileArray'].filter(
           e => e.id !== action.payload.id
         );

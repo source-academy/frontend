@@ -33,7 +33,7 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
 
   const filePath = props.currPersistenceFile ? props.currPersistenceFile.path : '';
 
-  const isNotPlayground = props.workspaceLocation !== "playground";
+  const isNotPlayground = props.workspaceLocation !== 'playground';
 
   const isLoggedIn = props.loggedInAs !== undefined;
   const shouldDisableButtons = !isLoggedIn;
@@ -42,7 +42,8 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
   const GDriveSynced = props.isGDriveSynced;
 
   const mainButtonDisplayText =
-    !GDriveSynced && (props.currPersistenceFile && hasOpenFile && props.currPersistenceFile.name) || 'GitHub';
+    (!GDriveSynced && props.currPersistenceFile && hasOpenFile && props.currPersistenceFile.name) ||
+    'GitHub';
   let mainButtonIntent: Intent = Intent.NONE;
   if (hasOpenFile) {
     mainButtonIntent = props.isDirty ? Intent.WARNING : Intent.PRIMARY;
