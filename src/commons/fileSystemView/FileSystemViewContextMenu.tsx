@@ -7,7 +7,6 @@ import classes from 'src/styles/ContextMenu.module.scss';
 type Props = {
   children?: JSX.Element;
   className?: string;
-
   createNewFile?: () => void;
   createNewDirectory?: () => void;
   open?: () => void;

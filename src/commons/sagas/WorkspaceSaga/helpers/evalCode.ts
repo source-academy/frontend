@@ -106,7 +106,6 @@ export function* evalCode(
   );
 
   const entrypointCode = files[entrypointFilePath];
-
   const lastNonDetResult = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].lastNonDetResult
   );
