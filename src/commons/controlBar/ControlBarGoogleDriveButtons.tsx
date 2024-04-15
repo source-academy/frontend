@@ -83,9 +83,9 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
   );
 
   const loginButton = props.accessToken ? (
-    <Tooltip2 content={`Logged in as ${props.loggedInAs}`} disabled={!props.loggedInAs}>
+    <Tooltip content={`Logged in as ${props.loggedInAs}`} disabled={!props.loggedInAs}>
       <ControlButton label="Log Out" icon={IconNames.LOG_OUT} onClick={props.onClickLogOut} />
-    </Tooltip2>
+    </Tooltip>
   ) : (
     <ControlButton label="Log In" icon={IconNames.LOG_IN} onClick={props.onClickLogIn} />
   );

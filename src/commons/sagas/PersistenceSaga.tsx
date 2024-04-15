@@ -82,6 +82,7 @@ function* googleLogin() {
 export function* persistenceSaga(): SagaIterator {
   yield takeLatest(LOGOUT_GOOGLE, function* (): any {
     yield put(actions.playgroundUpdatePersistenceFile(undefined));
+    yield call(store.dispatch, actions.deleteAllPersistenceFiles());
     yield call(ensureInitialised);
     yield call(gapi.client.setToken, null);
     yield put(actions.removeGoogleUserAndAccessToken());
@@ -348,22 +349,22 @@ export function* persistenceSaga(): SagaIterator {
         }
 
         yield call(store.dispatch, actions.disableFileSystemContextMenus());
+
+        const [chapter, variant, external] = yield select((state: OverallState) => [
+          state.workspaces.playground.context.chapter,
+          state.workspaces.playground.context.variant,
+          state.workspaces.playground.externalLibrary
+        ]);
+        const config: IPlaygroundConfig = {
+          chapter,
+          variant,
+          external
+        };
         // Case: Picked a file to overwrite
         if (currPersistenceFile && currPersistenceFile.isFolder) {
           yield call(console.log, 'folder opened, handling save_as differently! overwriting file');
           // First case: Chosen location is within TLRF - so need to call methods to update PersistenceFileArray
           // Other case: Chosen location is outside TLRF - don't care
-
-          const [chapter, variant, external] = yield select((state: OverallState) => [
-            state.workspaces.playground.context.chapter,
-            state.workspaces.playground.context.variant,
-            state.workspaces.playground.externalLibrary
-          ]);
-          const config: IPlaygroundConfig = {
-            chapter,
-            variant,
-            external
-          };
 
           yield call(
             console.log,
@@ -381,7 +382,6 @@ export function* persistenceSaga(): SagaIterator {
               timeout: 0,
               intent: Intent.PRIMARY
             });
-            // identical to just saving a file locally
             const fileSystem: FSModule | null = yield select(
               (state: OverallState) => state.fileSystem.inBrowserFileSystem
             );
@@ -424,7 +424,13 @@ export function* persistenceSaga(): SagaIterator {
                 })
               );
             }
+            // Check if any editor tab is that updated file, and update contents
+            const targetEditorTabIndex = (editorTabs as EditorTabState[]).findIndex(e => e.filePath === localFileTarget.path!);
+            if (targetEditorTabIndex !== -1) {
+              yield put(actions.updateEditorValue('playground', targetEditorTabIndex, code));
+            }
           } else {
+            // User overwriting file outside TLRF
             yield call(updateFile, pickedFile.id, pickedFile.name, MIME_SOURCE, code, config);
           }
           yield call(
@@ -434,10 +440,33 @@ export function* persistenceSaga(): SagaIterator {
           );
           return;
         }
-        // Single file mode case
-        const singleFileModePersFile: PersistenceFile = {...pickedFile, lastSaved: new Date(), path: '/playground/' + pickedFile.name};
-        yield put(actions.playgroundUpdatePersistenceFile(singleFileModePersFile));
-        yield put(actions.persistenceSaveFile(singleFileModePersFile));
+
+        // Chose to overwrite file - single file case
+        if (currPersistenceFile && currPersistenceFile.id === pickedFile.id) {
+          // User chose to overwrite the tracked file
+          const newPersFile: PersistenceFile = {...pickedFile, lastSaved: new Date(), path: "/playground/" + pickedFile.name};
+          // Update playground persistenceFile
+          yield put(actions.playgroundUpdatePersistenceFile(newPersFile));
+          // Update entry in persFileArray
+          yield put(actions.addPersistenceFile(newPersFile));
+
+        }
+
+        // Save in Google Drive
+        yield call(
+          updateFile,
+          pickedFile.id,
+          pickedFile.name,
+          MIME_SOURCE,
+          code,
+          config
+        );
+
+        yield call(
+          showSuccessMessage,
+          `${pickedFile.name} successfully saved to Google Drive.`,
+          1000
+        );
       } else {
         const response: AsyncReturnType<typeof showSimplePromptDialog> = yield call(
           showSimplePromptDialog,
@@ -539,20 +568,8 @@ export function* persistenceSaga(): SagaIterator {
         }
 
         
-        // Single file case
-        const newPersFile: PersistenceFile = {...newFile, lastSaved: new Date(), path: "/playground/" + newFile.name};
-        if (!currPersistenceFile) { // no file loaded prior
-          // update playground pers file
-          yield put(actions.playgroundUpdatePersistenceFile(newPersFile));
-          // add new pers file to persFileArray
-        } else { // file loaded prior
-          // update playground pers file
-          yield put(actions.playgroundUpdatePersistenceFile(newPersFile));
-          // remove old pers file from persFileArray
-          // add new pers file to persFileArray
-        }
-
-        // 
+        // Case where playground PersistenceFile is in single file mode
+        // Does nothing
         yield call(
           showSuccessMessage,
           `${response.value} successfully saved to Google Drive.`,
