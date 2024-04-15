@@ -83,6 +83,7 @@ test('Autograder renders placeholders correctly when testcases and results are e
   const props: SideContentAutograderProps = {
     autogradingResults: [],
     testcases: [],
+    currentFileBeingRan: "",
     workspaceLocation: 'assessment',
     handleTestcaseEval: (testcaseId: number) => {}
   };
@@ -107,6 +108,7 @@ test('Autograder renders placeholders correctly when testcases and results are e
 test('Autograder renders public testcases with different statuses correctly', () => {
   const props: SideContentAutograderProps = {
     autogradingResults: [],
+    currentFileBeingRan: 'test1.js',
     testcases: mockPublicTestcases,
     workspaceLocation: 'assessment',
     handleTestcaseEval: (testcaseId: number) => {}
@@ -152,6 +154,7 @@ test('Autograder renders public testcases with different statuses correctly', ()
 test('Autograder renders opaque testcases with different statuses correctly in AssessmentWorkspace', () => {
   const props: SideContentAutograderProps = {
     autogradingResults: [],
+    currentFileBeingRan: 'test1.js',
     testcases: mockOpaqueTestcases,
     workspaceLocation: 'assessment',
     handleTestcaseEval: (testcaseId: number) => {}
@@ -181,6 +184,7 @@ test('Autograder renders opaque testcases with different statuses correctly in A
 test('Autograder renders opaque testcases with different statuses correctly in GradingWorkspace', () => {
   const props: SideContentAutograderProps = {
     autogradingResults: [],
+    currentFileBeingRan: 'test1.js',
     testcases: mockOpaqueTestcases,
     workspaceLocation: 'grading',
     handleTestcaseEval: (testcaseId: number) => {}
@@ -212,6 +216,7 @@ test('Autograder renders opaque testcases with different statuses correctly in G
 test('Autograder renders secret testcases with different statuses correctly', () => {
   const props: SideContentAutograderProps = {
     autogradingResults: [],
+    currentFileBeingRan: 'test1.js',
     testcases: mockSecretTestcases,
     workspaceLocation: 'grading',
     handleTestcaseEval: (testcaseId: number) => {}
@@ -251,6 +256,7 @@ test('Autograder renders secret testcases with different statuses correctly', ()
 test('Autograder renders autograder results with different statuses correctly', () => {
   const props: SideContentAutograderProps = {
     autogradingResults: mockAutogradingResults,
+    currentFileBeingRan: 'test1.js',
     testcases: [],
     workspaceLocation: 'assessment',
     handleTestcaseEval: (testcaseId: number) => {}
