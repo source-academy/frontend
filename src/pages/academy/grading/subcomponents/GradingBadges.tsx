@@ -4,7 +4,7 @@ import { ColumnFilter } from '@tanstack/react-table';
 import { Badge } from '@tremor/react';
 import { ProgressStatus, ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 
-const BADGE_COLORS = {
+const BADGE_COLORS = Object.freeze({
   // assessment types
   missions: 'indigo',
   quests: 'emerald',
@@ -18,10 +18,11 @@ const BADGE_COLORS = {
   [ProgressStatuses.submitted]: 'yellow',
   [ProgressStatuses.graded]: 'green',
   [ProgressStatuses.published]: 'blue'
-};
+});
 
 export function getBadgeColorFromLabel(label: string) {
-  return BADGE_COLORS[label.toLowerCase()] || 'gray';
+  const maybeKey = label.toLowerCase() as keyof typeof BADGE_COLORS;
+  return BADGE_COLORS[maybeKey] || 'gray';
 }
 
 type AssessmentTypeBadgeProps = {

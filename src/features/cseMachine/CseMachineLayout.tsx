@@ -1,5 +1,6 @@
 import Heap from 'js-slang/dist/cse-machine/heap';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
+import { Chapter, Frame } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
@@ -136,7 +137,12 @@ export class Layout {
   }
 
   /** processes the runtime context from JS Slang */
-  static setContext(envTree: EnvTree, control: Control, stash: Stash): void {
+  static setContext(
+    envTree: EnvTree,
+    control: Control,
+    stash: Stash,
+    chapter: Chapter = Chapter.SOURCE_4
+  ): void {
     Layout.currentLight = undefined;
     Layout.currentDark = undefined;
     Layout.currentStackDark = undefined;
@@ -159,7 +165,7 @@ export class Layout {
     // initialize levels and frames
     Layout.initializeGrid();
     // initialize control and stash
-    Layout.initializeControlStash();
+    Layout.initializeControlStash(chapter);
 
     if (CseMachine.getControlStash()) {
       Layout.controlStashHeight = Math.max(
@@ -192,11 +198,11 @@ export class Layout {
     CseAnimation.updateAnimation();
   }
 
-  static initializeControlStash() {
+  static initializeControlStash(chapter: Chapter) {
     Layout.previousControlComponent = Layout.controlComponent;
     Layout.previousStashComponent = Layout.stashComponent;
-    this.controlComponent = new ControlStack(this.control);
-    this.stashComponent = new StashStack(this.stash);
+    this.controlComponent = new ControlStack(this.control, chapter);
+    this.stashComponent = new StashStack(this.stash, chapter);
   }
 
   /**
@@ -204,7 +210,7 @@ export class Layout {
    * objects into the global environment head and heap
    */
   private static removePreludeEnv() {
-    if (!Layout.globalEnvNode.children) return;
+    if (!Layout.globalEnvNode.children || Layout.globalEnvNode.children.length === 0) return;
 
     const preludeEnvNode = Layout.globalEnvNode.children[0];
     const preludeEnv = preludeEnvNode.environment;
@@ -304,7 +310,7 @@ export class Layout {
     );
 
     let i = 0;
-    const newHead = {};
+    const newHead: Frame = {};
     const newHeap = new Heap();
     for (const fn of referencedFns) {
       if (isClosure(fn)) newHeap.add(fn);
