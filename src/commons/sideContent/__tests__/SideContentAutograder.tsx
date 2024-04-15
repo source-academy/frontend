@@ -83,7 +83,7 @@ test('Autograder renders placeholders correctly when testcases and results are e
   const props: SideContentAutograderProps = {
     autogradingResults: [],
     testcases: [],
-    currentFileBeingRan: "",
+    currentFileBeingRan: '',
     workspaceLocation: 'assessment',
     handleTestcaseEval: (testcaseId: number) => {}
   };
