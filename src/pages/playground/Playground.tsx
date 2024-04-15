@@ -82,6 +82,7 @@ import {
 } from 'src/features/persistence/PersistenceActions';
 import { playgroundConfigLanguage } from 'src/features/playground/PlaygroundActions';
 import ShareLinkStateDecoder from 'src/features/playground/shareLinks/decoder/Decoder';
+import JsonDecoderDelegate from 'src/features/playground/shareLinks/decoder/delegates/JsonDecoderDelegate';
 import UrlParamsDecoderDelegate from 'src/features/playground/shareLinks/decoder/delegates/UrlParamsDecoderDelegate';
 import { ShareLinkState } from 'src/features/playground/shareLinks/ShareLinkState';
 
@@ -325,7 +326,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
       new ShareLinkStateDecoder(hash).decodeWith(new UrlParamsDecoderDelegate(), workspaceLocation);
 
     const getPlaygroundConfigurationFromUuid = (uuid: string): Promise<ShareLinkState> =>
-      getSharedProgram(uuid);
+      getSharedProgram(uuid).then(jsonText =>
+        new ShareLinkStateDecoder(jsonText).decodeWith(new JsonDecoderDelegate(), workspaceLocation)
+      );
 
     const isLoadingFromPlaygroundConfiguration = hash || uuid;
 

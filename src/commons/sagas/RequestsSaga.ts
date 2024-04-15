@@ -1,6 +1,5 @@
 import { call } from 'redux-saga/effects';
 import { backendParamsToProgressStatus } from 'src/features/grading/GradingUtils';
-import { ShareLinkState } from 'src/features/playground/shareLinks/ShareLinkState';
 import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
 import {
@@ -1665,7 +1664,7 @@ export async function deleteDevice(device: Pick<Device, 'id'>, tokens?: Tokens):
 /**
  * GET /shared_programs/:uuid
  */
-export async function getSharedProgram(uuid: string, tokens?: Tokens): Promise<ShareLinkState> {
+export async function getSharedProgram(uuid: string, tokens?: Tokens): Promise<string> {
   tokens = fillTokens(tokens);
   const resp = await request(`shared_programs/${uuid}`, 'GET', {
     ...tokens
@@ -1679,7 +1678,7 @@ export async function getSharedProgram(uuid: string, tokens?: Tokens): Promise<S
     throw new Error('Invalid shared link!');
   }
 
-  return resp.json();
+  return resp.text();
 }
 
 /**
