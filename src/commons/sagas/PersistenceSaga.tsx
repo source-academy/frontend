@@ -156,7 +156,6 @@ export function* persistenceSaga(): SagaIterator {
 
         // Get all files that are children of the picked folder from GDrive API
         const fileList = yield call(getFilesOfFolder, id, name); // this needed the extra scope mimetypes to have every file
-        yield call(console.log, 'fileList', fileList);
 
         // Delete everything in browserFS and persistenceFileArray
         yield call(rmFilesInDirRecursively, fileSystem, '/playground');
@@ -177,7 +176,6 @@ export function* persistenceSaga(): SagaIterator {
 
         for (const currFile of fileList) {
           if (currFile.isFolder === true) {
-            yield call(console.log, 'not file ', currFile);
             // Add folder to persistenceFileArray
             yield put(
               actions.addPersistenceFile({
@@ -379,18 +377,8 @@ export function* persistenceSaga(): SagaIterator {
           variant,
           external
         };
+        // Case: User is currently syncing a folder and user wants to overwrite an existing file
         if (currPersistenceFile && currPersistenceFile.isFolder) {
-          // User is currently syncing a folder
-          // and user wants to overwrite an existing file
-          yield call(
-            console.log,
-            'curr pers file ',
-            currPersistenceFile,
-            ' pickedDir ',
-            pickedDir,
-            ' pickedFile ',
-            pickedFile
-          );
           // Check if overwritten file is within synced folder
           // If it is, update its entry in persistenceFileArray and contents in BrowserFS
           const localFileTarget = persistenceFileArray.find(e => e.id === pickedFile.id);
@@ -531,24 +519,8 @@ export function* persistenceSaga(): SagaIterator {
         );
 
         //Case: Chose to save as a new file, and user is syncing a folder
-        //Check if user saved a new file somewhere within the synced folder
         if (currPersistenceFile && currPersistenceFile.isFolder) {
-          yield call(
-            console.log,
-            'folder opened, handling save_as differently! saving as new file'
-          );
-
-          yield call(
-            console.log,
-            'curr persFileArr ',
-            persistenceFileArray,
-            ' pickedDir ',
-            pickedDir,
-            ' pickedFile ',
-            pickedFile,
-            ' saveToDir ',
-            saveToDir
-          );
+          //Check if user saved a new file somewhere within the synced folder
           let needToUpdateLocal = false;
           let localFolderTarget: PersistenceFile;
           for (let i = 0; i < persistenceFileArray.length; i++) {
@@ -687,7 +659,7 @@ export function* persistenceSaga(): SagaIterator {
         );
 
         if (topLevelFolderId !== '') {
-          // Folder with same name already exists in GDrive
+          // Folder with same name already exists in GDrive in picked location
           const reallyOverwrite: boolean = yield call(showSimpleConfirmDialog, {
             title: 'Saving to Google Drive',
             contents: (
@@ -702,7 +674,8 @@ export function* persistenceSaga(): SagaIterator {
             return;
           }
         } else {
-          // Create/merge folder
+          // Folder with same name does not exist in GDrive in picked location
+          // Create the new folder in GDrive to be used as top level folder
           const reallyCreate: boolean = yield call(showSimpleConfirmDialog, {
             title: 'Saving to Google Drive',
             contents: (
@@ -738,6 +711,7 @@ export function* persistenceSaga(): SagaIterator {
             .split('/');
 
           // Get folder id of parent folder of currFile
+          // TODO: can be optimized
           const gcfirResult: FolderIdBundle = yield call(
             getContainingFolderIdRecursively,
             currFileParentFolders,
@@ -778,6 +752,8 @@ export function* persistenceSaga(): SagaIterator {
           // Update currFile's content 
           yield call(updateFile, currFileId, currFileName, MIME_SOURCE, currFileContent, config);
 
+          // If currParentFolderName is something, then currFile is inside top level root folder
+          // If it is nothing, currFile is the top level root folder, and currParentFolderName will be ''
           let currParentFolderName = currFileParentFolders[currFileParentFolders.length - 1];
           if (currParentFolderName !== '') currParentFolderName = topLevelFolderName;
           const parentPersistenceFile: PersistenceFile = {
@@ -787,6 +763,8 @@ export function* persistenceSaga(): SagaIterator {
             parentId: gcfirResult.parentId,
             isFolder: true
           };
+
+          // Add the persistenceFile representing the parent folder of currFile to persistenceFileArray
           yield put(actions.addPersistenceFile(parentPersistenceFile));
 
           yield call(
@@ -797,6 +775,7 @@ export function* persistenceSaga(): SagaIterator {
           yield call(store.dispatch, actions.updateRefreshFileViewKey());
         }
 
+        // Update playground's persistenceFile
         yield put(
           actions.playgroundUpdatePersistenceFile({
             id: topLevelFolderId,
@@ -806,9 +785,6 @@ export function* persistenceSaga(): SagaIterator {
             isFolder: true
           })
         );
-
-        yield call(store.dispatch, actions.enableFileSystemContextMenus());
-        yield call(store.dispatch, actions.updateRefreshFileViewKey());
 
         yield call(
           showSuccessMessage,
@@ -828,7 +804,6 @@ export function* persistenceSaga(): SagaIterator {
         intent: Intent.PRIMARY
       });
 
-      console.log('currFolderObj', currFolderObject);
       const persistenceFileArray: PersistenceFile[] = yield select(
         (state: OverallState) => state.fileSystem.persistenceFileArray
       );
@@ -836,68 +811,35 @@ export function* persistenceSaga(): SagaIterator {
         const currFileContent = currFiles[currFullFilePath];
         const regexResult = filePathRegex.exec(currFullFilePath)!;
         const currFileName = regexResult[2] + regexResult[3];
-        //const currFileParentFolders: string[] = regexResult[1].slice(
-        //  ("/playground/" + currFolderObject.name + "/").length, -1)
-        //  .split("/");
 
-        // /fold1/ becomes ["fold1"]
-        // /fold1/fold2/ becomes ["fold1", "fold2"]
-        // If in top level folder, becomes [""]
-
+        // Check if currFile is in persistenceFileArray
         const currPersistenceFile = persistenceFileArray.find(e => e.path === currFullFilePath);
         if (currPersistenceFile === undefined) {
           throw new Error('this file is not in persistenceFileArray: ' + currFullFilePath);
         }
 
+        // Check if currFile even needs to update - if it doesn't, skip
         if (!currPersistenceFile.lastEdit || (currPersistenceFile.lastSaved && currPersistenceFile.lastEdit < currPersistenceFile.lastSaved)) {
-          // no need to update
-          yield call(console.log, "No need to update", currPersistenceFile);
           continue;
         }
 
+        // Check if currFile has info on parentId - should never trigger
         if (!currPersistenceFile.id || !currPersistenceFile.parentId) {
-          // get folder
           throw new Error('this file does not have id/parentId: ' + currFullFilePath);
         }
 
-        const currFileId = currPersistenceFile.id!;
-        const currFileParentFolderId = currPersistenceFile.parentId!;
-
-        //const currFileParentFolderId: string = yield call(getContainingFolderIdRecursively, currFileParentFolders,
-        //  currFolderObject.id);
-
-        yield call(
-          console.log,
-          'name',
-          currFileName,
-          'content',
-          currFileContent,
-          'parent folder id',
-          currFileParentFolderId
-        );
-
-        //const currFileId: string = yield call(getFileFromFolder, currFileParentFolderId, currFileName);
-
-        //if (currFileId === "") {
-        // file does not exist, create file
-        // TODO: should never come here
-        //yield call(console.log, "creating ", currFileName);
-        //yield call(createFile, currFileName, currFileParentFolderId, MIME_SOURCE, currFileContent, config);
-
-        yield call(console.log, 'updating ', currFileName, ' id: ', currFileId);
+        // TODO: Check if currFile exists remotely by filename?
+        const currFileId: string = currPersistenceFile.id;
+        // Update currFile content in GDrive
         yield call(updateFile, currFileId, currFileName, MIME_SOURCE, currFileContent, config);
-
+        // Update currFile entry in persistenceFileArray's lastSaved
         currPersistenceFile.lastSaved = new Date();
         yield put(actions.addPersistenceFile(currPersistenceFile));
 
         yield call(showSuccessMessage, `${currFileName} successfully saved to Google Drive.`, 1000);
-
-        // TODO: create getFileIdRecursively, that uses currFileParentFolderId
-        //         to query GDrive api to get a particular file's GDrive id OR modify reading func to save each obj's id somewhere
-        //       Then use updateFile like in persistence_save_file to update files that exist
-        //         on GDrive, or createFile if the file doesn't exist
       }
 
+      // Update playground PersistenceFile's lastSaved
       yield put(
         actions.playgroundUpdatePersistenceFile({
           id: currFolderObject.id,
@@ -928,6 +870,7 @@ export function* persistenceSaga(): SagaIterator {
   yield takeEvery(
     PERSISTENCE_SAVE_FILE,
     function* ({ payload: { id, name } }: ReturnType<typeof actions.persistenceSaveFile>) {
+      // Uncallable when user is not syncing anything
       yield call(store.dispatch, actions.disableFileSystemContextMenus());
       let toastKey: string | undefined;
 
@@ -959,7 +902,7 @@ export function* persistenceSaga(): SagaIterator {
         }
         const code = editorTabs[activeEditorTabIndex].value;
 
-        // check if editor is correct for single file mode
+        // Check if editor is correct for single file sync mode
         if (playgroundPersistenceFile && !playgroundPersistenceFile.isFolder && 
           (editorTabs[activeEditorTabIndex] as EditorTabState).filePath !== playgroundPersistenceFile.path) {
           yield call(showWarningMessage, `Please have ${name} open as the active editor tab.`, 1000);
@@ -971,11 +914,12 @@ export function* persistenceSaga(): SagaIterator {
           variant,
           external
         };
+        // Case: Syncing a folder
         if ((playgroundPersistenceFile as PersistenceFile).isFolder) {
-          yield call(console.log, 'folder opened! updating pers specially');
           const persistenceFileArray: PersistenceFile[] = yield select(
             (state: OverallState) => state.fileSystem.persistenceFileArray
           );
+          // Get persistenceFile of filepath of target file of currently focused editor tab
           const currPersistenceFile = persistenceFileArray.find(
             e => e.path === (editorTabs[activeEditorTabIndex] as EditorTabState).filePath
           );
@@ -987,6 +931,7 @@ export function* persistenceSaga(): SagaIterator {
             timeout: 0,
             intent: Intent.PRIMARY
           });
+          // Update remote contents of target file
           yield call(
             updateFile,
             currPersistenceFile.id,
@@ -995,6 +940,7 @@ export function* persistenceSaga(): SagaIterator {
             code,
             config
           );
+          // Update persistenceFileArray entry of target file
           currPersistenceFile.lastSaved = new Date();
           yield put(actions.addPersistenceFile(currPersistenceFile));
           yield call(store.dispatch, actions.updateRefreshFileViewKey());
@@ -1005,6 +951,7 @@ export function* persistenceSaga(): SagaIterator {
           );
 
           // Check if all files are now updated
+          // If so, update playground PersistenceFile's lastSaved
           const updatedPersistenceFileArray: PersistenceFile[] = yield select(
             (state: OverallState) => state.fileSystem.persistenceFileArray
           );
@@ -1023,12 +970,14 @@ export function* persistenceSaga(): SagaIterator {
           return;
         }
 
+        // Case: Not syncing a folder === syncing a single file
         toastKey = yield call(showMessage, {
           message: `Saving as ${name}...`,
           timeout: 0,
           intent: Intent.PRIMARY
         });
 
+        // Updates file's remote contents, persistenceFileArray, playground PersistenceFile
         yield call(updateFile, id, name, MIME_SOURCE, code, config);
         const updatedPlaygroundPersFile = { ...playgroundPersistenceFile, lastSaved: new Date() };
         yield put(actions.addPersistenceFile(updatedPlaygroundPersFile));
@@ -1051,20 +1000,19 @@ export function* persistenceSaga(): SagaIterator {
     PERSISTENCE_CREATE_FILE,
     function* ({ payload }: ReturnType<typeof actions.persistenceCreateFile>) {
       const bailNow: boolean = yield call(isGithubSyncing);
-      if (bailNow) return;
+      if (bailNow) return; // TODO remove after changing GDrive/Github to be able to work concurrently
       try {
         yield call(store.dispatch, actions.disableFileSystemContextMenus());
-        const newFilePath = payload;
-        yield call(console.log, 'create file ', newFilePath);
 
-        // look for parent folder persistenceFile
+        const newFilePath = payload;
+
+        // Look for target file's parent folder's entry in persistenceFileArray
         const regexResult = filePathRegex.exec(newFilePath)!;
         const parentFolderPath = regexResult ? regexResult[1].slice(0, -1) : undefined;
         if (!parentFolderPath) {
           throw new Error('Parent folder path not found');
         }
         const newFileName = regexResult![2] + regexResult![3];
-        yield call(console.log, regexResult, 'regexresult!!!!!!!!!!!!!!!!!');
         const persistenceFileArray: PersistenceFile[] = yield select(
           (state: OverallState) => state.fileSystem.persistenceFileArray
         );
@@ -1072,20 +1020,11 @@ export function* persistenceSaga(): SagaIterator {
           e => e.path === parentFolderPath
         );
         if (!parentFolderPersistenceFile) {
-          yield call(console.log, 'parent pers file missing');
-          return;
+          throw new Error("Parent pers file not found");
         }
         yield call(ensureInitialisedAndAuthorised);
 
-        yield call(
-          console.log,
-          'parent found ',
-          parentFolderPersistenceFile,
-          ' for file ',
-          newFilePath
-        );
-
-        // create file
+        // Create file remotely
         const parentFolderId = parentFolderPersistenceFile.id;
         const [chapter, variant, external] = yield select((state: OverallState) => [
           state.workspaces.playground.context.chapter,
@@ -1105,6 +1044,8 @@ export function* persistenceSaga(): SagaIterator {
           '',
           config
         );
+
+        // Add new file to persistenceFileArray
         yield put(
           actions.addPersistenceFile({
             ...newFilePersistenceFile,
@@ -1127,15 +1068,12 @@ export function* persistenceSaga(): SagaIterator {
     PERSISTENCE_CREATE_FOLDER,
     function* ({ payload }: ReturnType<typeof actions.persistenceCreateFolder>) {
       const bailNow: boolean = yield call(isGithubSyncing);
-      if (bailNow) return;
+      if (bailNow) return; // TODO remove after changing GDrive/Github to be able to work concurrently
       try {
         yield call(store.dispatch, actions.disableFileSystemContextMenus());
         const newFolderPath = payload;
-        yield call(console.log, 'create folder ', newFolderPath);
 
-        // const persistenceFileArray: PersistenceFile[] = yield select((state: OverallState) => state.fileSystem.persistenceFileArray);
-
-        // look for parent folder persistenceFile TODO modify action so name is supplied?
+        // Look for parent folder's entry in persistenceFileArray
         const regexResult = filePathRegex.exec(newFolderPath);
         const parentFolderPath = regexResult ? regexResult[1].slice(0, -1) : undefined;
         if (!parentFolderPath) {
@@ -1149,20 +1087,11 @@ export function* persistenceSaga(): SagaIterator {
           e => e.path === parentFolderPath
         );
         if (!parentFolderPersistenceFile) {
-          yield call(console.log, 'parent pers file missing');
-          return;
+          throw new Error('parent pers file missing');
         }
         yield call(ensureInitialisedAndAuthorised);
 
-        yield call(
-          console.log,
-          'parent found ',
-          parentFolderPersistenceFile,
-          ' for file ',
-          newFolderPath
-        );
-
-        // create folder
+        // Create folder remotely
         const parentFolderId = parentFolderPersistenceFile.id;
 
         const newFolderId: string = yield call(
@@ -1170,6 +1099,8 @@ export function* persistenceSaga(): SagaIterator {
           parentFolderId,
           newFolderName
         );
+
+        // Add folder to persistenceFileArray
         yield put(
           actions.addPersistenceFile({
             lastSaved: new Date(),
@@ -1199,28 +1130,28 @@ export function* persistenceSaga(): SagaIterator {
     PERSISTENCE_DELETE_FILE,
     function* ({ payload }: ReturnType<typeof actions.persistenceDeleteFile>) {
       const bailNow: boolean = yield call(isGithubSyncing);
-      if (bailNow) return;
+      if (bailNow) return; // TODO remove after changing GDrive/Github to be able to work concurrently
       try {
         yield call(store.dispatch, actions.disableFileSystemContextMenus());
         const filePath = payload;
-        yield call(console.log, 'delete file ', filePath);
 
-        // look for file
+        // Look for file's entry in persistenceFileArray
         const persistenceFileArray: PersistenceFile[] = yield select(
           (state: OverallState) => state.fileSystem.persistenceFileArray
         );
         const persistenceFile = persistenceFileArray.find(e => e.path === filePath);
         if (!persistenceFile || persistenceFile.id === '') {
-          yield call(console.log, 'cannot find pers file for ', filePath);
+          // Cannot find pers file
           return;
         }
+        // Delete file from persistenceFileArray and GDrive
         yield call(ensureInitialisedAndAuthorised);
         yield call(deleteFileOrFolder, persistenceFile.id);
         yield put(actions.deletePersistenceFile(persistenceFile));
         yield call(store.dispatch, actions.updateRefreshFileViewKey());
 
         // If the user comes here in single file mode, then the file they deleted
-        // must be the file they are tracking.
+        // must be the file they are tracking. So delete playground persistenceFile
         const [currFileObject] = yield select((state: OverallState) => [
           state.playground.persistenceFile
         ]);
@@ -1246,23 +1177,24 @@ export function* persistenceSaga(): SagaIterator {
     PERSISTENCE_DELETE_FOLDER,
     function* ({ payload }: ReturnType<typeof actions.persistenceDeleteFolder>) {
       const bailNow: boolean = yield call(isGithubSyncing);
-      if (bailNow) return;
+      if (bailNow) return; // TODO remove after changing GDrive/Github to be able to work concurrently
       try {
         yield call(store.dispatch, actions.disableFileSystemContextMenus());
         const folderPath = payload;
-        yield call(console.log, 'delete folder ', folderPath);
 
-        // identical to delete file
+        // Find folder's entry in persistenceFileArray
         const persistenceFileArray: PersistenceFile[] = yield select(
           (state: OverallState) => state.fileSystem.persistenceFileArray
         );
         const persistenceFile = persistenceFileArray.find(e => e.path === folderPath);
         if (!persistenceFile || persistenceFile.id === '') {
-          yield call(console.log, 'cannot find pers file');
+          // Cannot find pers file
           return;
         }
+        // Delete folder in GDrive
         yield call(ensureInitialisedAndAuthorised);
         yield call(deleteFileOrFolder, persistenceFile.id);
+        // Delete folder and all children's entries in persistenceFileArray
         yield put(actions.deletePersistenceFolderAndChildren(persistenceFile));
         yield call(store.dispatch, actions.updateRefreshFileViewKey());
         yield call(
@@ -1270,7 +1202,8 @@ export function* persistenceSaga(): SagaIterator {
           `Folder ${persistenceFile.name} successfully deleted from Google Drive.`,
           1000
         );
-        // Check if user deleted the whole folder
+        // Check if user deleted the top level folder that he is syncing
+        // If so then delete playground PersistenceFile
         const updatedPersistenceFileArray: PersistenceFile[] = yield select(
           (state: OverallState) => state.fileSystem.persistenceFileArray
         );
@@ -1292,35 +1225,32 @@ export function* persistenceSaga(): SagaIterator {
       payload: { oldFilePath, newFilePath }
     }: ReturnType<typeof actions.persistenceRenameFile>) {
       const bailNow: boolean = yield call(isGithubSyncing);
-      if (bailNow) return;
+      if (bailNow) return; // TODO remove after changing GDrive/Github to be able to work concurrently
       try {
         yield call(store.dispatch, actions.disableFileSystemContextMenus());
-        yield call(console.log, 'rename file ', oldFilePath, ' to ', newFilePath);
 
-        // look for file
+        // Look for entry of file in persistenceFileArray
         const persistenceFileArray: PersistenceFile[] = yield select(
           (state: OverallState) => state.fileSystem.persistenceFileArray
         );
         const persistenceFile = persistenceFileArray.find(e => e.path === oldFilePath);
         if (!persistenceFile) {
-          yield call(console.log, 'cannot find pers file');
+          // Cannot find pers file
           return;
         }
 
         yield call(ensureInitialisedAndAuthorised);
 
-        // new name TODO: modify action so name is supplied?
         const regexResult = filePathRegex.exec(newFilePath)!;
         const newFileName = regexResult[2] + regexResult[3];
 
-        // old name
         const regexResult2 = filePathRegex.exec(oldFilePath)!;
         const oldFileName = regexResult2[2] + regexResult2[3];
 
-        // call gapi
+        // Rename file remotely
         yield call(renameFileOrFolder, persistenceFile.id, newFileName);
 
-        // handle pers file
+        // Rename file's entry in persistenceFileArray
         yield put(
           actions.updatePersistenceFilePathAndNameByPath(oldFilePath, newFilePath, newFileName)
         );
@@ -1328,7 +1258,7 @@ export function* persistenceSaga(): SagaIterator {
           state.playground.persistenceFile
         ]);
         if (currFileObject.name === oldFileName) {
-          // update playground PersistenceFile
+          // Update playground PersistenceFile if user is syncing a single file
           yield put(
             actions.playgroundUpdatePersistenceFile({ ...currFileObject, name: newFileName})
           );
@@ -1355,35 +1285,32 @@ export function* persistenceSaga(): SagaIterator {
       payload: { oldFolderPath, newFolderPath }
     }: ReturnType<typeof actions.persistenceRenameFolder>) {
       const bailNow: boolean = yield call(isGithubSyncing);
-      if (bailNow) return;
+      if (bailNow) return; // TODO remove after changing GDrive/Github to be able to work concurrently
       try {
         yield call(store.dispatch, actions.disableFileSystemContextMenus());
-        yield call(console.log, 'rename folder ', oldFolderPath, ' to ', newFolderPath);
 
-        // look for folder
+        // Look for folder's entry in persistenceFileArray
         const persistenceFileArray: PersistenceFile[] = yield select(
           (state: OverallState) => state.fileSystem.persistenceFileArray
         );
         const persistenceFile = persistenceFileArray.find(e => e.path === oldFolderPath);
         if (!persistenceFile) {
-          yield call(console.log, 'cannot find pers file for ', oldFolderPath);
+          // Cannot find pers file
           return;
         }
 
         yield call(ensureInitialisedAndAuthorised);
 
-        // new name TODO: modify action so name is supplied?
         const regexResult = filePathRegex.exec(newFolderPath)!;
         const newFolderName = regexResult[2] + regexResult[3];
 
-        // old name TODO: modify action so name is supplied?
         const regexResult2 = filePathRegex.exec(oldFolderPath)!;
         const oldFolderName = regexResult2[2] + regexResult2[3];
 
-        // call gapi
+        // Rename folder remotely
         yield call(renameFileOrFolder, persistenceFile.id, newFolderName);
 
-        // handle pers file
+        // Rename folder and all folder's children in persistenceFileArray
         yield put(
           actions.updatePersistenceFolderPathAndNameByPath(
             oldFolderPath,
@@ -1403,7 +1330,7 @@ export function* persistenceSaga(): SagaIterator {
           state.playground.persistenceFile
         ]);
         if (currFolderObject.name === oldFolderName) {
-          // update playground PersistenceFile
+          // Update playground PersistenceFile with new name if top level folder was renamed
           yield put(
             actions.playgroundUpdatePersistenceFile({ ...currFolderObject, name: newFolderName, isFolder: true })
           );
@@ -1547,7 +1474,6 @@ function pickFile(
         .setCallback((data: any) => {
           switch (data[google.picker.Response.ACTION]) {
             case google.picker.Action.PICKED: {
-              console.log('data', data);
               const { id, name, mimeType, parentId } = data.docs[0];
               res({ id, name, mimeType, parentId, picked: true });
               break;
@@ -1564,14 +1490,20 @@ function pickFile(
   });
 }
 
+/**
+ * Recursively get all files and folders with a given top level folder.
+ * @param folderId GDrive API id of the top level folder.
+ * @param currFolderName Name of the top level folder.
+ * @param currPath Path of the top level folder.
+ * @returns Array of objects with name, id, path, isFolder string fields, which represent
+ * files/empty folders in the folder. 
+ */
 async function getFilesOfFolder( // recursively get files
   folderId: string,
   currFolderName: string,
   currPath: string = '' // pass in name of folder picked
 ) {
-  console.log(folderId, currPath, currFolderName);
   let fileList: gapi.client.drive.File[] | undefined;
-
   await gapi.client.drive.files
     .list({
       q: `'${folderId}' in parents and trashed = false`
@@ -1579,8 +1511,6 @@ async function getFilesOfFolder( // recursively get files
     .then(res => {
       fileList = res.result.files;
     });
-
-  console.log('fileList', fileList);
 
   if (!fileList || fileList.length === 0) {
     return [
@@ -1593,10 +1523,10 @@ async function getFilesOfFolder( // recursively get files
     ];
   }
 
-  let ans: any[] = []; // TODO: add type for each resp?
+  let ans: any[] = []; // TODO add types?
   for (const currFile of fileList) {
     if (currFile.mimeType === MIME_FOLDER) {
-      // folder
+      // currFile is folder
       ans = ans.concat(
         await getFilesOfFolder(currFile.id!, currFile.name!, currPath + '/' + currFolderName)
       );
@@ -1608,7 +1538,7 @@ async function getFilesOfFolder( // recursively get files
         isFolder: true
       });
     } else {
-      // file
+      // currFile is file
       ans.push({
         name: currFile.name,
         id: currFile.id,
@@ -1621,8 +1551,14 @@ async function getFilesOfFolder( // recursively get files
   return ans;
 }
 
+/**
+ * Calls GDrive API to get id of an item, given id of the item's parent folder and item name.
+ * @param parentFolderId GDrive API id of the folder containing the item to be checked.
+ * @param fileName Name of the item to be checked.
+ * @returns id of the item.
+ */
 async function getIdOfFileOrFolder(parentFolderId: string, fileName: string): Promise<string> {
-  // returns string id or empty string if failed
+  // Returns string id or empty string if failed
   let fileList: gapi.client.drive.File[] | undefined;
 
   await gapi.client.drive.files
@@ -1633,29 +1569,35 @@ async function getIdOfFileOrFolder(parentFolderId: string, fileName: string): Pr
       fileList = res.result.files;
     });
 
-  console.log(fileList);
-
   if (!fileList || fileList.length === 0) {
-    // file does not exist
-    console.log('file not exist: ' + fileName);
+    // File does not exist
     return '';
   }
 
-  //check if file is correct
+  // Check if file is correct
   if (fileList![0].name === fileName) {
-    // file is correct
+    // File is correct
     return fileList![0].id!;
   } else {
     return '';
   }
 }
 
+/**
+ * Calls API to delete file/folder from GDrive
+ * @param id id of the file/folder
+ */
 function deleteFileOrFolder(id: string): Promise<any> {
   return gapi.client.drive.files.delete({
     fileId: id
   });
 }
 
+/**
+ * Calls API to rename file/folder in GDrive
+ * @param id id of the file/folder
+ * @param newName New name of the file/folder
+ */
 function renameFileOrFolder(id: string, newName: string): Promise<any> {
   return gapi.client.drive.files.update({
     fileId: id,
@@ -1663,6 +1605,15 @@ function renameFileOrFolder(id: string, newName: string): Promise<any> {
   });
 }
 
+/**
+ * Returns the id of the last entry in parentFolders by repeatedly calling GDrive API.
+ * Creates folders if needed.
+ * @param parentFolders Ordered array of strings of folder names. Top level folder is index 0.
+ * @param topFolderId id of the top level folder.
+ * @param currDepth Used when recursing.
+ * @returns Object with id and parentId string fields, representing id of folder and 
+ * id of immediate parent of folder respectively.
+ */
 async function getContainingFolderIdRecursively(
   parentFolders: string[],
   topFolderId: string,
@@ -1692,21 +1643,19 @@ async function getContainingFolderIdRecursively(
     });
 
   if (!folderList) {
-    console.log('create!', currFolderName);
+    // Create folder currFolderName
     const newId = await createFolderAndReturnId(immediateParentFolderId, currFolderName);
     return { id: newId, parentId: immediateParentFolderId };
   }
 
-  console.log('folderList gcfir', folderList);
-
   for (const currFolder of folderList) {
     if (currFolder.name === currFolderName) {
-      console.log('found ', currFolder.name, ' and id is ', currFolder.id);
+      // Found currFolder.name and id is currFolder.id
       return { id: currFolder.id!, parentId: immediateParentFolderId };
     }
   }
 
-  console.log('create!', currFolderName);
+  // Create folder currFolderName
   const newId = await createFolderAndReturnId(immediateParentFolderId, currFolderName);
   return { id: newId, parentId: immediateParentFolderId };
 }
@@ -1759,8 +1708,6 @@ function updateFile(
       ...config
     }
   };
-
-  console.log('META', meta);
 
   const { body, headers } = createMultipartBody(meta, contents, mimeType);
 
