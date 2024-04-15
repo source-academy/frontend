@@ -1,6 +1,6 @@
+import { RequestMock } from '../../mocks/RequestMock';
 import Constants from '../../utils/Constants';
 import { externalUrlShortenerRequest } from '../PlaygroundSaga';
-import { RequestMock } from './RequestMock';
 
 describe('Playground saga tests', () => {
   Constants.urlShortenerBase = 'http://url-shortener.com/';

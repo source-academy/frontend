@@ -1,6 +1,6 @@
+import { mockTokens, RequestMock } from '../../mocks/RequestMock';
 import * as RequestsSaga from '../../utils/RequestHelper';
 import { getSharedProgram, postSharedProgram } from '../RequestsSaga';
-import { mockTokens, RequestMock } from './RequestMock';
 
 describe('RequestsSaga tests', () => {
   const request = jest.spyOn(RequestsSaga, 'request');

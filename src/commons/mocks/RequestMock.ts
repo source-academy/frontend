@@ -1,4 +1,4 @@
-import * as RequestsSaga from '../../utils/RequestHelper';
+import * as RequestsSaga from '../utils/RequestHelper';
 
 export class RequestMock {
   static noResponse(): typeof RequestsSaga.request {
