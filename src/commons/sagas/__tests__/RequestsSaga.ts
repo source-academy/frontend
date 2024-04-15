@@ -14,10 +14,10 @@ describe('RequestsSaga tests', () => {
 
   describe('GET /shared_programs/:uuid', () => {
     test('Success', async () => {
-      request.mockImplementationOnce(RequestMock.success(mockJsonFn));
+      request.mockImplementationOnce(RequestMock.success(undefined, mockTextFn));
       await getSharedProgram('uuid', mockTokens);
 
-      expect(mockJsonFn).toHaveBeenCalledTimes(1);
+      expect(mockTextFn).toHaveBeenCalledTimes(1);
     });
 
     test('No response', async () => {

@@ -14,9 +14,13 @@ export class RequestMock {
     return () => Promise.resolve(resp);
   }
 
-  static success(jsonMockFn: jest.Mock = jest.fn()): typeof RequestsSaga.request {
+  static success(
+    jsonMockFn: jest.Mock = jest.fn(),
+    textMockFn: jest.Mock = jest.fn()
+  ): typeof RequestsSaga.request {
     const resp = {
       json: jsonMockFn,
+      text: textMockFn,
       ok: true
     } as unknown as Response;
 
