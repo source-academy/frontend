@@ -124,7 +124,6 @@ export function* persistenceSaga(): SagaIterator {
         }
       );
 
-      yield call(console.log, parentId);
       if (!picked) {
         return;
       }
@@ -572,6 +571,7 @@ export function* persistenceSaga(): SagaIterator {
         dismiss(toastKey);
       }
       yield call(store.dispatch, actions.enableFileSystemContextMenus());
+      yield call(store.dispatch, actions.updateRefreshFileViewKey());
     }
   });
 
@@ -733,12 +733,14 @@ export function* persistenceSaga(): SagaIterator {
               currFileName,
               currFileParentFolderId,
               MIME_SOURCE,
-              '',
+              currFileContent,
               config
             );
             currFileId = res.id;
+          } else {
+            // Update currFile's content 
+            yield call(updateFile, currFileId, currFileName, MIME_SOURCE, currFileContent, config);
           }
-
           const currPersistenceFile: PersistenceFile = {
             name: currFileName,
             id: currFileId,
@@ -748,9 +750,6 @@ export function* persistenceSaga(): SagaIterator {
           };
           // Add currFile's persistenceFile to persistenceFileArray
           yield put(actions.addPersistenceFile(currPersistenceFile));
-
-          // Update currFile's content 
-          yield call(updateFile, currFileId, currFileName, MIME_SOURCE, currFileContent, config);
 
           // If currParentFolderName is something, then currFile is inside top level root folder
           // If it is nothing, currFile is the top level root folder, and currParentFolderName will be ''
@@ -1010,7 +1009,8 @@ export function* persistenceSaga(): SagaIterator {
         const regexResult = filePathRegex.exec(newFilePath)!;
         const parentFolderPath = regexResult ? regexResult[1].slice(0, -1) : undefined;
         if (!parentFolderPath) {
-          throw new Error('Parent folder path not found');
+          // Parent folder path not found
+          return;
         }
         const newFileName = regexResult![2] + regexResult![3];
         const persistenceFileArray: PersistenceFile[] = yield select(
@@ -1020,7 +1020,8 @@ export function* persistenceSaga(): SagaIterator {
           e => e.path === parentFolderPath
         );
         if (!parentFolderPersistenceFile) {
-          throw new Error("Parent pers file not found");
+          // Parent pers file not found"
+          return;
         }
         yield call(ensureInitialisedAndAuthorised);
 
@@ -1077,7 +1078,8 @@ export function* persistenceSaga(): SagaIterator {
         const regexResult = filePathRegex.exec(newFolderPath);
         const parentFolderPath = regexResult ? regexResult[1].slice(0, -1) : undefined;
         if (!parentFolderPath) {
-          throw new Error('parent missing');
+          // parent missing
+          return;
         }
         const newFolderName = regexResult![2];
         const persistenceFileArray: PersistenceFile[] = yield select(
@@ -1087,7 +1089,8 @@ export function* persistenceSaga(): SagaIterator {
           e => e.path === parentFolderPath
         );
         if (!parentFolderPersistenceFile) {
-          throw new Error('parent pers file missing');
+          // parent pers file missing
+          return;
         }
         yield call(ensureInitialisedAndAuthorised);
 

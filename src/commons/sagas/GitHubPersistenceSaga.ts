@@ -84,7 +84,6 @@ function* githubLogoutSaga() {
 }
 
 function* githubOpenFile(): any {
-  store.dispatch(actions.disableFileSystemContextMenus());
   try {
     const octokit = GitHubUtils.getGitHubOctokitInstance();
     if (octokit === undefined) {
@@ -125,18 +124,13 @@ function* githubOpenFile(): any {
       yield call(promisifiedDialog);
     }
   } catch (e) {
-    yield call(console.log, e);
+    yield call(console.error, e);
     yield call(showWarningMessage, "Something went wrong when saving the file", 1000);
-  } finally {
-    store.dispatch(actions.enableFileSystemContextMenus());
-    store.dispatch(actions.updateRefreshFileViewKey());
   }
 }
 
 function* githubSaveFile(): any {
-  let toastKey: string | undefined;
   try {
-    store.dispatch(actions.disableFileSystemContextMenus());
     const octokit = getGitHubOctokitInstance();
     if (octokit === undefined) return;
 
@@ -163,12 +157,6 @@ function* githubSaveFile(): any {
     if (filePath === undefined) {
       throw new Error('No file found for this editor tab.');
     }
-    toastKey = yield call(showMessage, {
-      message: `Saving ${filePath} to Github...`,
-      timeout: 0,
-      intent: Intent.PRIMARY
-    });
-    console.log("showing message");
     const persistenceFile = getPersistenceFile(filePath);
     if (persistenceFile === undefined) {
       throw new Error('No persistence file found for this filepath');
@@ -193,26 +181,13 @@ function* githubSaveFile(): any {
       parentFolderPath
     );
   } catch (e) {
-    yield call(console.log, e);
+    yield call(console.error, e);
     yield call(showWarningMessage, "Something went wrong when saving the file", 1000);
-  } finally {
-    store.dispatch(actions.enableFileSystemContextMenus());
-    if (toastKey){
-      dismiss(toastKey);
-    }
-    store.dispatch(actions.updateRefreshFileViewKey());
   }
 }
 
 function* githubSaveFileAs(): any {
-  let toastKey: string | undefined;
   try {
-    store.dispatch(actions.disableFileSystemContextMenus());
-    toastKey = yield call(showMessage, {
-      message: `Saving as...`,
-      timeout: 0,
-      intent: Intent.PRIMARY
-    });
     const octokit = GitHubUtils.getGitHubOctokitInstance();
     if (octokit === undefined) {
       return;
@@ -263,25 +238,13 @@ function* githubSaveFileAs(): any {
       yield call(promisifiedFileExplorer);
     }
   } catch (e) {
-    yield call(console.log, e);
+    yield call(console.error, e);
     yield call(showWarningMessage, "Something went wrong when saving as", 1000);
-  } finally {
-    store.dispatch(actions.enableFileSystemContextMenus());
-    if (toastKey) {
-      dismiss(toastKey);
-    }
   }
 }
 
 function* githubSaveAll(): any {
-  let toastKey: string | undefined;
   try {
-    store.dispatch(actions.disableFileSystemContextMenus());
-    toastKey = yield call(showMessage, {
-      message: `Saving all your files to Github...`,
-      timeout: 0,
-      intent: Intent.PRIMARY
-    });
     const octokit = getGitHubOctokitInstance();
     if (octokit === undefined) return;
 
@@ -297,8 +260,7 @@ function* githubSaveAll(): any {
 
       // If the file system is not initialised, do nothing.
       if (fileSystem === null) {
-        yield call(console.log, 'no filesystem!'); // TODO change to throw new Error
-        return;
+        throw new Error("No filesystem!");
       }
       const currFiles: Record<string, string> = yield call(
         retrieveFilesInWorkspaceAsRecord,
@@ -368,10 +330,8 @@ function* githubSaveAll(): any {
       );
       // If the file system is not initialised, do nothing.
       if (fileSystem === null) {
-        yield call(console.log, 'no filesystem!');
-        return;
+        throw new Error("No filesystem!");
       }
-      yield call(console.log, 'there is a filesystem');
       const currFiles: Record<string, string> = yield call(
         retrieveFilesInWorkspaceAsRecord,
         'playground',
@@ -388,14 +348,8 @@ function* githubSaveAll(): any {
       );
     }
    } catch (e) {
-    yield call(console.log, e);
+    yield call(console.error, e);
     yield call(showWarningMessage, "Something went wrong when saving all your files");
-  } finally {
-    store.dispatch(actions.updateRefreshFileViewKey());
-    store.dispatch(actions.enableFileSystemContextMenus());
-    if (toastKey) {
-      dismiss(toastKey);
-    }
   }
 }
 
@@ -440,11 +394,9 @@ function* githubCreateFile({ payload }: ReturnType<typeof actions.githubCreateFi
     }
 
     if (repoName === '') {
-      yield call(console.log, 'not synced to github');
-      return;
+      throw new Error("Not synced to Github!");
     }
 
-    console.log(repoName);
     yield call(performCreatingSave,
       octokit,
       githubLoginId,
@@ -470,7 +422,7 @@ function* githubCreateFile({ payload }: ReturnType<typeof actions.githubCreateFi
     );
   } catch (e) {
     yield call(showWarningMessage, 'Something went wrong when trying to save the file.', 1000);
-    yield call(console.log, e);
+    yield call(console.error, e);
   } finally {
     yield call(store.dispatch, actions.enableFileSystemContextMenus());
     yield call(store.dispatch, actions.updateRefreshFileViewKey());
@@ -520,8 +472,7 @@ function* githubDeleteFile({ payload }: ReturnType<typeof actions.githubDeleteFi
     }
 
     if (repoName === '') {
-      yield call(console.log, 'not synced to github');
-      return;
+      throw new Error("Not synced to Github!");
     }
 
     yield call(performFileDeletion,
@@ -536,7 +487,7 @@ function* githubDeleteFile({ payload }: ReturnType<typeof actions.githubDeleteFi
     );
   } catch (e) {
     yield call(showWarningMessage, 'Something went wrong when trying to save the file.', 1000);
-    yield call(console.log, e);
+    yield call(console.error, e);
   } finally {
     yield call(store.dispatch, actions.enableFileSystemContextMenus());
     yield call(store.dispatch, actions.updateRefreshFileViewKey());
@@ -586,8 +537,7 @@ function* githubDeleteFolder({ payload }: ReturnType<typeof actions.githubDelete
     const commitMessage = 'Changes made from Source Academy';
   
     if (repoName === '') {
-      yield call(console.log, 'not synced to github');
-      return;
+      throw new Error("Not synced to Github!");
     }
   
     yield call(performFolderDeletion,
@@ -602,7 +552,7 @@ function* githubDeleteFolder({ payload }: ReturnType<typeof actions.githubDelete
     );
   } catch (e) {
     yield call(showWarningMessage, 'Something went wrong when trying to save the file.', 1000);
-    yield call(console.log, e);
+    yield call(console.error, e);
   } finally {
     yield call(store.dispatch, actions.enableFileSystemContextMenus());
     yield call(store.dispatch, actions.updateRefreshFileViewKey());
@@ -653,8 +603,7 @@ function* githubRenameFile({ payload }: ReturnType<typeof actions.githubRenameFi
     const commitMessage = 'Changes made from Source Academy';
 
     if (repoName === '' || repoName === undefined) {
-      yield call(console.log, 'not synced to github');
-      return;
+      throw new Error("Not synced to Github!");
     }
 
     yield call(performFileRenaming,
@@ -670,7 +619,7 @@ function* githubRenameFile({ payload }: ReturnType<typeof actions.githubRenameFi
     );
   } catch (e) {
     yield call(showWarningMessage, 'Something went wrong when trying to save the file.', 1000);
-    yield call(console.log, e);
+    yield call(console.error, e);
   } finally {
     yield call(store.dispatch, actions.enableFileSystemContextMenus());
     yield call(store.dispatch, actions.updateRefreshFileViewKey());
@@ -721,8 +670,7 @@ function* githubRenameFolder({ payload }: ReturnType<typeof actions.githubRename
     const commitMessage = 'Changes made from Source Academy';
 
     if (repoName === '' || repoName === undefined) {
-      yield call(console.log, 'not synced to github');
-      return;
+      throw new Error("Not synced to Github!");
     }
 
     yield call(performFolderRenaming,
@@ -738,7 +686,7 @@ function* githubRenameFolder({ payload }: ReturnType<typeof actions.githubRename
     );
   } catch (e) {
     yield call(showWarningMessage, 'Something went wrong when trying to save the file.', 1000);
-    yield call(console.log, e);
+    yield call(console.error, e);
   } finally {
     yield call(store.dispatch, actions.enableFileSystemContextMenus());
     yield call(store.dispatch, actions.updateRefreshFileViewKey());

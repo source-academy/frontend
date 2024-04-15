@@ -146,6 +146,7 @@ import {
   makeSubstVisualizerTabFrom,
   mobileOnlyTabIds
 } from './PlaygroundTabs';
+import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 
 export type PlaygroundProps = {
   isSicpEditor?: boolean;
@@ -419,19 +420,14 @@ const Playground: React.FC<PlaygroundProps> = props => {
     const filePath = editorTabs[editorTabIndex]?.filePath;
     const editDate = new Date();
     if (filePath) {
-      //console.log(editorTabs);
-      console.log('dispatched ' + filePath);
       dispatch(setPersistenceFileLastEditByPath(filePath, editDate));
       dispatch(updateLastEditedFilePath(filePath));
     }
-    if (!persistenceFile || persistenceFile?.isFolder) {
+    // only call setLastEdit if file path of open editor is found in persistenceFileArray
+    const persistenceFileArray: PersistenceFile[] = store.getState().fileSystem.persistenceFileArray;
+    if (persistenceFileArray.find(e => e.path === filePath)) {
       setLastEdit(editDate);
     }
-    if (persistenceFile && !persistenceFile.isFolder && persistenceFile.path === filePath) {
-      // only set last edit if target file is the same
-      setLastEdit(editDate);
-    }
-    // TODO change editor tab label to reflect path of opened file?
     handleEditorValueChange(editorTabIndex, newEditorValue);
   };
 

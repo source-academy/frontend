@@ -40,9 +40,9 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
   const GithubSynced = props.isGithubSynced;
   const mainButton = (
     <ControlButton
-      label={(props.currPersistenceFile && props.currPersistenceFile.name) || 'Google Drive'}
+      label={!GithubSynced && (props.currPersistenceFile && props.currPersistenceFile.name) || 'Google Drive'}
       icon={IconNames.CLOUD}
-      options={{ intent: stateToIntent[state] }}
+      options={GithubSynced ? undefined : { intent: stateToIntent[state] }}
       isDisabled={isNotPlayground || GithubSynced}
     />
   );

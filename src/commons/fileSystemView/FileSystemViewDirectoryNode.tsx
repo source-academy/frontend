@@ -13,7 +13,7 @@ import {
 import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 import classes from 'src/styles/FileSystemView.module.scss';
 
-import { isGDriveSyncing, isGithubSyncing, rmdirRecursively } from '../fileSystem/FileSystemUtils';
+import { rmdirRecursively } from '../fileSystem/FileSystemUtils';
 import { showSimpleConfirmDialog, showSimpleErrorDialog } from '../utils/DialogHelper';
 import { removeEditorTabsForDirectory } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
@@ -90,12 +90,8 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
       if (!shouldProceed) {
         return;
       }
-      if (isGDriveSyncing()) {
-        dispatch(persistenceDeleteFolder(fullPath));
-      }
-      if (isGithubSyncing()) {
-        dispatch(githubDeleteFolder(fullPath));
-      }
+      dispatch(persistenceDeleteFolder(fullPath));
+      dispatch(githubDeleteFolder(fullPath));
       dispatch(removeEditorTabsForDirectory(workspaceLocation, fullPath));
       rmdirRecursively(fileSystem, fullPath).then(refreshParentDirectory);
     });
@@ -128,12 +124,8 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
         if (err) {
           console.error(err);
         }
-        if (isGDriveSyncing()) {
-          dispatch(persistenceCreateFile(newFilePath));
-        }
-        if (isGithubSyncing()) {
-          dispatch(githubCreateFile(newFilePath));
-        }
+        dispatch(persistenceCreateFile(newFilePath));
+        dispatch(githubCreateFile(newFilePath));
         forceRefreshFileSystemViewList();
       });
     });

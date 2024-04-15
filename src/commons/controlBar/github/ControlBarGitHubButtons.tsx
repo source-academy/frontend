@@ -42,7 +42,7 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
   const GDriveSynced = props.isGDriveSynced;
 
   const mainButtonDisplayText =
-    (props.currPersistenceFile && hasOpenFile && props.currPersistenceFile.name) || 'GitHub';
+    !GDriveSynced && (props.currPersistenceFile && hasOpenFile && props.currPersistenceFile.name) || 'GitHub';
   let mainButtonIntent: Intent = Intent.NONE;
   if (hasOpenFile) {
     mainButtonIntent = props.isDirty ? Intent.WARNING : Intent.PRIMARY;
@@ -52,7 +52,7 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
     <ControlButton
       label={mainButtonDisplayText}
       icon={IconNames.GIT_BRANCH}
-      options={{ intent: mainButtonIntent }}
+      options={GDriveSynced ? undefined : { intent: mainButtonIntent }}
       isDisabled={isNotPlayground || GDriveSynced}
     />
   );

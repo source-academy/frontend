@@ -73,12 +73,6 @@ const FileSystemViewFileNode: React.FC<Props> = ({
         throw new Error('File contents are undefined.');
       }
       dispatch(addEditorTab(workspaceLocation, fullPath, fileContents));
-      // const idx = store.getState().workspaces['playground'].activeEditorTabIndex || 0;
-      // const repoName = store.getState().playground.repoName || '';
-      // const editorFilePath = store.getState().workspaces['playground'].editorTabs[idx].filePath || '';
-      // console.log(repoName);
-      // console.log(editorFilePath);
-      // console.log(store.getState().workspaces['playground'].editorTabs);
     });
   };
 

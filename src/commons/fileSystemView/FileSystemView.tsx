@@ -28,7 +28,7 @@ const FileSystemView: React.FC<Props> = ({
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
   const persistenceFileArray = useTypedSelector(state => state.fileSystem.persistenceFileArray);
 
-  console.log('lefp', lastEditedFilePath, 'pfa', persistenceFileArray);
+  // console.log('lefp', lastEditedFilePath, 'pfa', persistenceFileArray);
 
   const [isAddingNewFile, setIsAddingNewFile] = React.useState(false);
   const [isAddingNewDirectory, setIsAddingNewDirectory] = React.useState(false);
