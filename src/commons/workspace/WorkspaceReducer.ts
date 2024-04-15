@@ -82,18 +82,12 @@ import {
   updateStepsTotal,
   updateSublanguage,
   updateSubmissionsTableFilters,
+  updateTabReadOnly,
   updateWorkspace
 } from './WorkspaceActions';
 import {
   EditorTabState,
   UPDATE_CHANGEPOINTSTEPS,
-  UPDATE_CURRENT_ASSESSMENT_ID,
-  UPDATE_CURRENT_SUBMISSION_ID,
-  UPDATE_CURRENTSTEP,
-  UPDATE_EDITOR_BREAKPOINTS,
-  UPDATE_EDITOR_TAB_READ_ONLY,
-  UPDATE_EDITOR_VALUE,
-  UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_LAST_DEBUGGER_RESULT,
   UPDATE_LAST_NON_DET_RESULT,
   WorkspaceLocation,
@@ -792,7 +786,8 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
 
       state[workspaceLocation].editorTabs = newEditorTabs;
     })
-    case UPDATE_EDITOR_TAB_READ_ONLY: {
+    .addCase(updateTabReadOnly, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
       const { editorTabIndex, isReadOnly } = action.payload;
       if (isNull(editorTabIndex) || editorTabIndex < 0) {
         return state;
@@ -818,8 +813,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
           editorTabs: newEditorTabs
         }
       };
-    }
-
+    })
     .addCase(updateReplValue, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].replValue = action.payload.newReplValue;

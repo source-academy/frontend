@@ -121,6 +121,12 @@ export type AssessmentWorkspaceProps = {
   assessmentConfiguration: AssessmentConfiguration;
 };
 
+type OptionFileType = {
+  answer: string;
+  prepend: string;
+  postpend: string;
+};
+
 const workspaceLocation: WorkspaceLocation = 'assessment';
 
 const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
@@ -406,9 +412,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     const question = assessment.questions[questionId];
 
-    // TODO: REMOVE AFTER TESTING !!!
-    question.library.chapter = Chapter.SOURCE_4;
-
     const options: {
       autogradingResults?: AutogradingResult[];
       editorValue?: string;
@@ -416,7 +419,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       programPostpendValue?: string;
       editorTestcases?: Testcase[];
     } = {};
-    const optionFiles = {};
+
+    const optionFiles: Record<string, OptionFileType | string> = {};
 
     switch (question.type) {
       case QuestionTypes.programming:
@@ -484,7 +488,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       programPrependValue: options.programPrependValue ?? '',
       programPostpendValue: options.programPostpendValue ?? '',
       editorTestcases: options.editorTestcases ?? [],
-      files: optionFiles
+      files: optionFiles as Record<string, OptionFileType>
     });
     handleResetWorkspace(resetWorkspaceOptions);
     handleChangeExecTime(
@@ -797,12 +801,14 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     );
 
     // Define the function to check if the Save button should be disabled
+    // TODO: Seems to break save functionality inside Assessments
     const shouldDisableSaveButton = (): boolean | undefined => {
       const isIndividualAssessment: boolean = assessmentOverview?.maxTeamSize === 1;
       if (isIndividualAssessment) {
         return false;
       }
-      return !teamFormationOverview;
+      // TODO: return !teamFormationOverview;
+      return false;
     };
 
     const saveButton =
