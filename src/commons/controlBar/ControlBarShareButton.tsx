@@ -77,7 +77,7 @@ export const ControlBarShareButton: React.FC<ControlBarShareButtonProps> = props
     ? generateLinkPlaygroundOnly
     : generateLinkBackend;
 
-  useHotkeys([['ctrl+w', generateLink]], []);
+  useHotkeys([['ctrl+e', generateLink]], []);
 
   const handleCustomStringChange = (event: React.FormEvent<HTMLInputElement>) => {
     setCustomStringKeyword(event.currentTarget.value);
