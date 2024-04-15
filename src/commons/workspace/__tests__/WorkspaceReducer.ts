@@ -136,7 +136,7 @@ describe('BROWSE_REPL_HISTORY_DOWN', () => {
 
     actions.forEach(action => {
       let result = WorkspaceReducer(replDownDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...replDownDefaultState,
         [location]: {
@@ -203,7 +203,7 @@ describe('BROWSE_REPL_HISTORY_UP', () => {
 
     actions.forEach(action => {
       let result = WorkspaceReducer(replUpDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...replUpDefaultState,
         [location]: {
@@ -280,7 +280,7 @@ describe('CLEAR_REPL_INPUT', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(clearReplDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...clearReplDefaultState,
         [location]: {
@@ -300,7 +300,7 @@ describe('CLEAR_REPL_OUTPUT', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(clearReplDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...clearReplDefaultState,
         [location]: {
@@ -331,7 +331,7 @@ describe('CLEAR_REPL_OUTPUT_LAST', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(clearReplLastPriorState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...clearReplLastPriorState,
         [location]: {
@@ -355,7 +355,7 @@ describe('DEBUG_RESET', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(debugResetDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...debugResetDefaultState,
         [location]: {
@@ -378,7 +378,7 @@ describe('DEBUG_RESUME', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(debugResumeDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...debugResumeDefaultState,
         [location]: {
@@ -416,7 +416,7 @@ describe('END_CLEAR_CONTEXT', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       const context = createContext<WorkspaceLocation>(
         library.chapter,
         library.external.symbols,
@@ -449,7 +449,7 @@ describe('END_DEBUG_PAUSE', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(debugPauseDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...debugPauseDefaultState,
         [location]: {
@@ -474,7 +474,7 @@ describe('END_INTERRUPT_EXECUTION', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(interruptExecutionDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...interruptExecutionDefaultState,
         [location]: {
@@ -497,7 +497,7 @@ describe('EVAL_EDITOR', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(evalEditorDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...evalEditorDefaultState,
         [location]: {
@@ -535,7 +535,7 @@ describe('EVAL_INTERPRETER_ERROR', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(evalEditorDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...evalEditorDefaultState,
         [location]: {
@@ -561,7 +561,7 @@ describe('EVAL_INTERPRETER_ERROR', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(evalEditorDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...evalEditorDefaultState,
         [location]: {
@@ -595,7 +595,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(evalEditorDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...evalEditorDefaultState,
         [location]: {
@@ -625,7 +625,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(evalEditorDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...evalEditorDefaultState,
         [location]: {
@@ -648,7 +648,7 @@ describe('EVAL_REPL', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceManager,
         [location]: {
@@ -696,7 +696,7 @@ describe('EVAL_TESTCASE_FAILURE', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(evalFailureDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...evalFailureDefaultState,
         [location]: {
@@ -725,7 +725,7 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(testcaseSuccessDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...testcaseSuccessDefaultState,
         [location]: {
@@ -754,7 +754,7 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(testcaseSuccessDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...testcaseSuccessDefaultState,
         [location]: {
@@ -778,7 +778,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
     const actions = generateActions(HANDLE_CONSOLE_LOG, { logString: [logString] });
     actions.forEach(action => {
       const result = WorkspaceReducer(cloneDeep(consoleLogDefaultState), action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
 
       expect(result).toEqual({
         ...consoleLogDefaultState,
@@ -805,7 +805,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(consoleLogDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...consoleLogDefaultState,
         [location]: {
@@ -827,7 +827,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(consoleLogDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...consoleLogDefaultState,
         [location]: {
@@ -895,7 +895,7 @@ describe('RESET_TESTCASE', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(resetTestcaseDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...resetTestcaseDefaultState,
         [location]: {
@@ -928,7 +928,7 @@ describe('RESET_WORKSPACE', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(resetWorkspaceDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       const newContext = createDefaultWorkspace(location);
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
@@ -969,7 +969,7 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(inputToOutputDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...inputToOutputDefaultState,
         [location]: {
@@ -1004,7 +1004,7 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(inputToOutputDefaultState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...inputToOutputDefaultState,
         [location]: {
@@ -1024,7 +1024,7 @@ describe('SET_EDITOR_SESSION_ID', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceManager,
         [location]: {
@@ -1043,7 +1043,7 @@ describe('SET_SHAREDB_CONNECTED', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceManager,
         [location]: {
@@ -1061,7 +1061,7 @@ describe('TOGGLE_EDITOR_AUTORUN', () => {
 
     actions.forEach(action => {
       let result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceManager,
         [location]: {
@@ -1131,7 +1131,7 @@ describe('SET_FOLDER_MODE', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceManager,
         [location]: {
@@ -1183,7 +1183,7 @@ describe('UPDATE_ACTIVE_EDITOR_TAB_INDEX', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -1241,7 +1241,7 @@ describe('UPDATE_ACTIVE_EDITOR_TAB', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       const newContext = createDefaultWorkspace(location);
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
@@ -1341,7 +1341,7 @@ describe('UPDATE_EDITOR_VALUE', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceState,
         [location]: {
@@ -1408,7 +1408,7 @@ describe('UPDATE_EDITOR_BREAKPOINTS', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceState,
         [location]: {
@@ -1487,7 +1487,7 @@ describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceState,
         [location]: {
@@ -1569,7 +1569,7 @@ describe('MOVE_CURSOR', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceState,
         [location]: {
@@ -1608,7 +1608,7 @@ describe('ADD_EDITOR_TAB', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -1640,7 +1640,7 @@ describe('ADD_EDITOR_TAB', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -1777,7 +1777,7 @@ describe('SHIFT_EDITOR_TAB', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -1807,7 +1807,7 @@ describe('SHIFT_EDITOR_TAB', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -1878,7 +1878,7 @@ describe('REMOVE_EDITOR_TAB', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -1905,7 +1905,7 @@ describe('REMOVE_EDITOR_TAB', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -1932,7 +1932,7 @@ describe('REMOVE_EDITOR_TAB', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -1959,7 +1959,7 @@ describe('REMOVE_EDITOR_TAB', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -1986,7 +1986,7 @@ describe('REMOVE_EDITOR_TAB', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -2046,7 +2046,7 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -2073,7 +2073,7 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -2100,7 +2100,7 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -2127,7 +2127,7 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -2154,7 +2154,7 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -2231,7 +2231,7 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -2258,7 +2258,7 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -2285,7 +2285,7 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -2312,7 +2312,7 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -2339,7 +2339,7 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -2400,7 +2400,7 @@ describe('RENAME_EDITOR_TAB_FOR_FILE', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -2470,7 +2470,7 @@ describe('RENAME_EDITOR_TABS_FOR_DIRECTORY', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       // Note: we stringify because context contains functions which cause
       // the two to compare unequal; stringifying strips functions
       expect(JSON.stringify(result)).toEqual(
@@ -2500,7 +2500,7 @@ describe('UPDATE_HAS_UNSAVED_CHANGES', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceManager,
         [location]: {
@@ -2519,7 +2519,7 @@ describe('UPDATE_REPL_VALUE', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
       expect(result).toEqual({
         ...defaultWorkspaceManager,
         [location]: {
@@ -2538,7 +2538,7 @@ describe('TOGGLE_USING_SUBST', () => {
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
+      const location: WorkspaceLocation = action.payload.workspaceLocation;
 
       const expectedResult =
         location === playgroundWorkspace || location === sicpWorkspace
