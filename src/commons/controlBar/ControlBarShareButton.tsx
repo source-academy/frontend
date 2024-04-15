@@ -1,211 +1,143 @@
-import {
-  NonIdealState,
-  Popover,
-  Position,
-  Spinner,
-  SpinnerSize,
-  Text,
-  Tooltip
-} from '@blueprintjs/core';
+import { NonIdealState, Popover, Position, Spinner, SpinnerSize, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
+import { useHotkeys } from '@mantine/hooks';
+import React, { useRef, useState } from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
-import ShareLinkState from 'src/features/playground/shareLinks/ShareLinkState';
+import JsonEncoderDelegate from 'src/features/playground/shareLinks/encoder/delegates/JsonEncoderDelegate';
+import UrlParamsEncoderDelegate from 'src/features/playground/shareLinks/encoder/delegates/UrlParamsEncoderDelegate';
+import { usePlaygroundConfigurationEncoder } from 'src/features/playground/shareLinks/encoder/EncoderHooks';
 
 import ControlButton from '../ControlButton';
-import Constants from '../utils/Constants';
-import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { request } from '../utils/RequestHelper';
-import { RemoveLast } from '../utils/TypeHelper';
+import { externalUrlShortenerRequest } from '../sagas/PlaygroundSaga';
+import { postSharedProgram } from '../sagas/RequestsSaga';
+import Constants, { Links } from '../utils/Constants';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
-type ControlBarShareButtonProps = DispatchProps & StateProps;
-
-type DispatchProps = {
-  handleGenerateLz?: () => void;
-  handleShortenURL: (s: string) => void;
-  handleUpdateShortURL: (s: string) => void;
-};
-
-type StateProps = {
-  queryString?: string;
-  shortURL?: string;
-  key: string;
+type ControlBarShareButtonProps = {
   isSicp?: boolean;
-  programConfig: ShareLinkState;
-  token: Tokens;
 };
 
-type State = {
-  keyword: string;
-  isLoading: boolean;
-  isSuccess: boolean;
-};
+/**
+ * Generates the share link for programs in the Playground.
+ *
+ * For playground-only (no backend) deployments:
+ * - Generate a URL with playground configuration encoded as hash parameters
+ * - URL sent to external URL shortener service
+ * - Shortened URL displayed to user
+ * - (note: SICP CodeSnippets use these hash parameters)
+ *
+ * For 'with backend' deployments:
+ * - Send the playground configuration to the backend
+ * - Backend stores configuration and assigns a UUID
+ * - Backend pings the external URL shortener service with UUID link
+ * - Shortened URL returned to Frontend and displayed to user
+ */
+export const ControlBarShareButton: React.FC<ControlBarShareButtonProps> = props => {
+  const shareInputElem = useRef<HTMLInputElement>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [shortenedUrl, setShortenedUrl] = useState('');
+  const [customStringKeyword, setCustomStringKeyword] = useState('');
+  const playgroundConfiguration = usePlaygroundConfigurationEncoder();
 
-type ShareLinkRequestHelperParams = RemoveLast<Parameters<typeof request>>;
+  const generateLinkBackend = () => {
+    setIsLoading(true);
 
-export type Tokens = {
-  accessToken: string | undefined;
-  refreshToken: string | undefined;
-};
+    customStringKeyword;
 
-export const requestToShareProgram = async (
-  ...[path, method, opts]: ShareLinkRequestHelperParams
-) => {
-  const resp = await request(path, method, opts);
-  return resp;
-};
+    const configuration = playgroundConfiguration.encodeWith(new JsonEncoderDelegate());
 
-export class ControlBarShareButton extends React.PureComponent<ControlBarShareButtonProps, State> {
-  private shareInputElem: React.RefObject<HTMLInputElement>;
+    return postSharedProgram(configuration)
+      .then(({ shortenedUrl }) => setShortenedUrl(shortenedUrl))
+      .catch(err => showWarningMessage(err.toString()))
+      .finally(() => setIsLoading(false));
+  };
 
-  constructor(props: ControlBarShareButtonProps) {
-    super(props);
-    this.selectShareInputText = this.selectShareInputText.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.toggleButton = this.toggleButton.bind(this);
-    this.fetchUUID = this.fetchUUID.bind(this);
-    this.shareInputElem = React.createRef();
-    this.state = { keyword: '', isLoading: false, isSuccess: false };
-  }
+  const generateLinkPlaygroundOnly = () => {
+    const hash = playgroundConfiguration.encodeWith(new UrlParamsEncoderDelegate());
+    setIsLoading(true);
 
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleKeyDown);
-  }
+    return externalUrlShortenerRequest(hash, customStringKeyword)
+      .then(({ shortenedUrl, message }) => {
+        setShortenedUrl(shortenedUrl);
+        if (message) showSuccessMessage(message);
+      })
+      .catch(err => showWarningMessage(err.toString()))
+      .finally(() => setIsLoading(false));
+  };
 
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeyDown);
-  }
+  const generateLinkSicp = () => {
+    const hash = playgroundConfiguration.encodeWith(new UrlParamsEncoderDelegate());
+    const shortenedUrl = `${Links.playground}#${hash}`;
+    setShortenedUrl(shortenedUrl);
+  };
 
-  handleKeyDown = (event: any) => {
-    if (event.key === 'Enter' && event.ctrlKey) {
-      // press Ctrl+Enter to generate and copy new share link directly
-      this.setState({ keyword: 'Test' });
-      this.props.handleShortenURL(this.state.keyword);
-      this.setState({ isLoading: true });
-      if (this.props.shortURL || this.props.isSicp) {
-        this.selectShareInputText();
-        console.log('link created.');
-      }
+  const generateLink = props.isSicp
+    ? generateLinkSicp
+    : Constants.playgroundOnly
+    ? generateLinkPlaygroundOnly
+    : generateLinkBackend;
+
+  useHotkeys([['ctrl+e', generateLink]], []);
+
+  const handleCustomStringChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setCustomStringKeyword(event.currentTarget.value);
+  };
+
+  // For visual effect of highlighting the text field on copy
+  const selectShareInputText = () => {
+    if (shareInputElem.current !== null) {
+      shareInputElem.current.focus();
+      shareInputElem.current.select();
     }
   };
 
-  public render() {
-    const shareButtonPopoverContent =
-      this.props.queryString === undefined ? (
-        <Text>
-          Share your programs! Type something into the editor (left), then click on this button
-          again.
-        </Text>
-      ) : this.props.isSicp ? (
-        <div>
-          <input defaultValue={this.props.queryString!} readOnly={true} ref={this.shareInputElem} />
-          <Tooltip content="Copy link to clipboard">
-            <CopyToClipboard text={this.props.queryString!}>
-              <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectShareInputText} />
-            </CopyToClipboard>
-          </Tooltip>
-        </div>
-      ) : (
-        <>
-          {!this.state.isSuccess || this.props.shortURL === 'ERROR' ? (
-            !this.state.isLoading || this.props.shortURL === 'ERROR' ? (
-              <div>
-                {Constants.urlShortenerBase}&nbsp;
-                <input
-                  placeholder={'custom string (optional)'}
-                  onChange={this.handleChange}
-                  style={{ width: 175 }}
-                />
-                <ControlButton
-                  label="Get Link"
-                  icon={IconNames.SHARE}
-                  // post request to backend, set keyword as return uuid
-                  onClick={() => this.fetchUUID(this.props.token)}
-                />
-              </div>
-            ) : (
-              <div>
-                <NonIdealState
-                  description="Generating Shareable Link..."
-                  icon={<Spinner size={SpinnerSize.SMALL} />}
-                />
-              </div>
-            )
-          ) : (
-            <div key={this.state.keyword}>
-              <input defaultValue={this.state.keyword} readOnly={true} ref={this.shareInputElem} />
-              <Tooltip content="Copy link to clipboard">
-                <CopyToClipboard text={this.state.keyword}>
-                  <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectShareInputText} />
-                </CopyToClipboard>
-              </Tooltip>
-            </div>
-          )}
-        </>
-      );
+  const generateLinkPopoverContent = (
+    <div>
+      {Constants.urlShortenerBase}&nbsp;
+      <input
+        placeholder={'custom string (optional)'}
+        onChange={handleCustomStringChange}
+        style={{ width: 175 }}
+      />
+      <ControlButton label="Get Link" icon={IconNames.SHARE} onClick={generateLink} />
+    </div>
+  );
 
-    return (
-      <Popover
-        popoverClassName="Popover-share"
-        inheritDarkTheme={false}
-        content={shareButtonPopoverContent}
-      >
-        <Tooltip content="Get shareable link" placement={Position.TOP}>
-          <ControlButton label="Share" icon={IconNames.SHARE} onClick={() => this.toggleButton()} />
-        </Tooltip>
-      </Popover>
-    );
-  }
+  const generatingLinkPopoverContent = (
+    <div>
+      <NonIdealState
+        description="Generating Shareable Link..."
+        icon={<Spinner size={SpinnerSize.SMALL} />}
+      />
+    </div>
+  );
 
-  public componentDidUpdate(prevProps: ControlBarShareButtonProps) {
-    if (this.props.shortURL !== prevProps.shortURL) {
-      this.setState({ keyword: '', isLoading: false });
-    }
-  }
+  const copyLinkPopoverContent = (
+    <div key={shortenedUrl}>
+      <input defaultValue={shortenedUrl} readOnly={true} ref={shareInputElem} />
+      <Tooltip content="Copy link to clipboard">
+        <CopyToClipboard text={shortenedUrl}>
+          <ControlButton icon={IconNames.DUPLICATE} onClick={selectShareInputText} />
+        </CopyToClipboard>
+      </Tooltip>
+    </div>
+  );
 
-  private toggleButton() {
-    if (this.props.handleGenerateLz) {
-      this.props.handleGenerateLz();
-    }
+  const shareButtonPopoverContent = isLoading
+    ? generatingLinkPopoverContent
+    : shortenedUrl
+    ? copyLinkPopoverContent
+    : generateLinkPopoverContent;
 
-    // reset state
-    this.setState({ keyword: '', isLoading: false, isSuccess: false });
-  }
-
-  private handleChange(event: React.FormEvent<HTMLInputElement>) {
-    this.setState({ keyword: event.currentTarget.value });
-  }
-
-  private selectShareInputText() {
-    if (this.shareInputElem.current !== null) {
-      this.shareInputElem.current.focus();
-      this.shareInputElem.current.select();
-    }
-  }
-
-  private fetchUUID(tokens: Tokens) {
-    const requestBody = {
-      shared_program: {
-        data: this.props.programConfig
-      }
-    };
-
-    const getProgramUrl = async () => {
-      const resp = await requestToShareProgram(`shared_programs`, 'POST', {
-        body: requestBody,
-        ...tokens
-      });
-      if (!resp) {
-        return showWarningMessage('Fail to generate url!');
-      }
-      const respJson = await resp.json();
-      this.setState({
-        keyword: `${window.location.host}/playground/share/` + respJson.uuid
-      });
-      this.setState({ isLoading: true, isSuccess: true });
-      return;
-    };
-
-    getProgramUrl();
-  }
-}
+  return (
+    <Popover
+      popoverClassName="Popover-share"
+      inheritDarkTheme={false}
+      content={shareButtonPopoverContent}
+    >
+      <Tooltip content="Get shareable link" placement={Position.TOP}>
+        <ControlButton label="Share" icon={IconNames.SHARE} />
+      </Tooltip>
+    </Popover>
+  );
+};

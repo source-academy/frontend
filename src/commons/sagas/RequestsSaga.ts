@@ -44,6 +44,7 @@ import {
   UpdateCourseConfiguration,
   User
 } from '../application/types/SessionTypes';
+import { ShareLinkShortenedUrlResponse } from '../application/types/ShareLinkTypes';
 import {
   Assessment,
   AssessmentConfiguration,
@@ -1658,6 +1659,53 @@ export async function deleteDevice(device: Pick<Device, 'id'>, tokens?: Tokens):
   }
 
   return true;
+}
+
+/**
+ * GET /shared_programs/:uuid
+ */
+export async function getSharedProgram(uuid: string, tokens?: Tokens): Promise<string> {
+  tokens = fillTokens(tokens);
+  const resp = await request(`shared_programs/${uuid}`, 'GET', {
+    ...tokens
+  });
+
+  if (!resp) {
+    throw new Error('Failed to fetch program from shared link!');
+  }
+
+  if (!resp.ok) {
+    throw new Error('Invalid shared link!');
+  }
+
+  return resp.text();
+}
+
+/**
+ * POST /shared_programs
+ */
+export async function postSharedProgram(
+  programConfig: string,
+  tokens?: Tokens
+): Promise<ShareLinkShortenedUrlResponse> {
+  tokens = fillTokens(tokens);
+  const resp = await request(`shared_programs`, 'POST', {
+    body: {
+      configuration: programConfig
+    },
+    ...tokens
+  });
+
+  if (!resp) {
+    throw new Error('Failed to generate shortened URL!');
+  }
+
+  if (!resp.ok) {
+    const message = await resp.text();
+    throw new Error(`Failed to generate shortened URL: ${message}`);
+  }
+
+  return resp.json();
 }
 
 function fillTokens(tokens?: Tokens): Tokens {

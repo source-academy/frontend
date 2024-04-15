@@ -1,18 +1,16 @@
 import { FSModule } from 'browserfs/dist/node/core/FS';
-import { compressToEncodedURIComponent } from 'lz-string';
-import qs from 'query-string';
 import { useState } from 'react';
 import { retrieveFilesInWorkspaceAsRecord } from 'src/commons/fileSystem/utils';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { EditorTabState } from 'src/commons/workspace/WorkspaceTypes';
 
-import ShareLinkState from '../ShareLinkState';
+import { ShareLinkState } from '../ShareLinkState';
+import ShareLinkStateEncoder from './Encoder';
 
-export const useUrlEncoder = () => {
+export const usePlaygroundConfigurationEncoder = (): ShareLinkStateEncoder => {
   const isFolderModeEnabled = useTypedSelector(
     state => state.workspaces.playground.isFolderModeEnabled
   );
-
   const editorTabs = useTypedSelector(state => state.workspaces.playground.editorTabs);
   const editorTabFilePaths = editorTabs
     .map((editorTab: EditorTabState) => editorTab.filePath)
@@ -26,17 +24,16 @@ export const useUrlEncoder = () => {
   const files = useGetFile();
 
   const result: ShareLinkState = {
-    isFolder: isFolderModeEnabled.toString(),
-    files: files.toString(),
-    tabs: editorTabFilePaths.map(compressToEncodedURIComponent)[0],
-    tabIdx: activeEditorTabIndex?.toString(),
-    chap: chapter.toString(),
+    isFolder: isFolderModeEnabled,
+    files: files,
+    tabs: editorTabFilePaths,
+    tabIdx: activeEditorTabIndex,
+    chap: chapter,
     variant,
-    ext: 'NONE',
-    exec: execTime.toString()
+    exec: execTime
   };
 
-  return result;
+  return new ShareLinkStateEncoder(result);
 };
 
 const useGetFile = () => {
@@ -45,5 +42,5 @@ const useGetFile = () => {
   retrieveFilesInWorkspaceAsRecord('playground', fileSystem as FSModule).then(result => {
     setFiles(result);
   });
-  return compressToEncodedURIComponent(qs.stringify(files));
+  return files;
 };
