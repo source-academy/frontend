@@ -1,30 +1,9 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
-import { compressToEncodedURIComponent } from 'lz-string';
-import qs from 'query-string';
-import { call } from 'redux-saga/effects';
-import { expectSaga } from 'redux-saga-test-plan';
-
-import { updateShortURL } from '../../../features/playground/PlaygroundActions';
-import { SHORTEN_URL } from '../../../features/playground/PlaygroundTypes';
-import {
-  createDefaultWorkspace,
-  defaultState,
-  defaultWorkspaceManager,
-  getDefaultFilePath,
-  OverallState
-} from '../../application/ApplicationTypes';
-import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import Constants from '../../utils/Constants';
-import {
-  showSuccessMessage,
-  showWarningMessage
-} from '../../utils/notifications/NotificationsHelper';
-import PlaygroundSaga, { shortenURLRequest } from '../PlaygroundSaga';
+import { externalUrlShortenerRequest } from '../PlaygroundSaga';
+import { RequestMock } from './RequestMock';
 
 describe('Playground saga tests', () => {
   Constants.urlShortenerBase = 'http://url-shortener.com/';
-  const errMsg = 'Something went wrong trying to create the link.';
-  const defaultPlaygroundFilePath = getDefaultFilePath('playground');
 
   // This test relies on BrowserFS which works in browser environments and not Node.js.
   // FIXME: Uncomment this test if BrowserFS adds support for running in Node.js.
@@ -62,398 +41,70 @@ describe('Playground saga tests', () => {
   //     .silentRun();
   // });
 
-  test('puts updateShortURL with correct params when shorten request is successful', () => {
-    const dummyFiles: Record<string, string> = {
-      [defaultPlaygroundFilePath]: '1 + 1;'
-    };
-    const defaultPlaygroundState = createDefaultWorkspace('playground');
-    const dummyState: OverallState = {
-      ...defaultState,
-      workspaces: {
-        ...defaultWorkspaceManager,
-        playground: {
-          ...defaultPlaygroundState,
-          externalLibrary: ExternalLibraryName.NONE,
-          editorTabs: [
-            {
-              filePath: defaultPlaygroundFilePath,
-              value: dummyFiles[defaultPlaygroundFilePath],
-              breakpoints: [],
-              highlightedLines: []
-            }
-          ],
-          usingSubst: false,
-          usingCse: false,
-          updateCse: true,
-          currentStep: -1,
-          stepsTotal: 0,
-          breakpointSteps: [],
-          changepointSteps: []
-        }
-      }
-    };
-    const queryString = createQueryString(dummyFiles, dummyState);
-    const nxState: OverallState = {
-      ...dummyState,
-      playground: {
-        queryString,
-        ...dummyState.playground
-      }
-    };
+  describe('externalUrlShortenerRequest', () => {
+    const mockFetch = jest.spyOn(global, 'fetch');
+    const mockJsonFn = jest.fn();
 
-    // a fake response that looks like the real one
-    const mockResp = {
-      url: {
-        keyword: 't',
-        url: 'https://www.google.com',
-        title: 'Google',
-        date: '2020-05-21 10:51:59',
-        ip: '11.11.11.11'
-      },
-      status: 'success',
-      message: 'https://www.google.com added to database',
-      title: 'Google',
-      shorturl: 'http://url-shortener.com/t',
-      statusCode: 200
-    };
+    beforeEach(() => {
+      mockJsonFn.mockReset();
+    });
 
-    return expectSaga(PlaygroundSaga)
-      .withState(nxState)
-      .dispatch({
-        type: SHORTEN_URL,
-        payload: ''
-      })
-      .provide([[call(shortenURLRequest, queryString, ''), mockResp]])
-      .not.call(showWarningMessage, errMsg)
-      .not.call(showSuccessMessage, mockResp.message)
-      .put(updateShortURL(mockResp.shorturl))
-      .silentRun();
-  });
+    test('200 with success status', async () => {
+      const keyword = 'abcde';
+      mockJsonFn.mockResolvedValue({
+        shorturl: 'shorturl',
+        status: 'success',
+        url: { keyword }
+      });
+      mockFetch.mockImplementationOnce(RequestMock.success(mockJsonFn) as unknown as typeof fetch);
+      const result = await externalUrlShortenerRequest('queryString', keyword);
 
-  test('puts updateShortURL with correct params when shorten request with keyword is successful', () => {
-    const dummyFiles: Record<string, string> = {
-      [defaultPlaygroundFilePath]: '1 + 1;'
-    };
-    const defaultPlaygroundState = createDefaultWorkspace('playground');
-    const dummyState: OverallState = {
-      ...defaultState,
-      workspaces: {
-        ...defaultWorkspaceManager,
-        playground: {
-          ...defaultPlaygroundState,
-          externalLibrary: ExternalLibraryName.NONE,
-          editorTabs: [
-            {
-              filePath: defaultPlaygroundFilePath,
-              value: dummyFiles[defaultPlaygroundFilePath],
-              breakpoints: [],
-              highlightedLines: []
-            }
-          ],
-          usingSubst: false,
-          usingCse: false,
-          updateCse: true,
-          currentStep: -1,
-          stepsTotal: 0,
-          breakpointSteps: [],
-          changepointSteps: []
-        }
-      }
-    };
-    const queryString = createQueryString(dummyFiles, dummyState);
-    const nxState: OverallState = {
-      ...dummyState,
-      playground: {
-        queryString,
-        ...dummyState.playground
-      }
-    };
+      const shortenedUrl = Constants.urlShortenerBase + keyword;
+      const message = '';
+      expect(result).toStrictEqual({ shortenedUrl, message });
+    });
 
-    // a fake response that looks like the real one
-    const mockResp = {
-      url: {
-        keyword: 't',
-        url: 'https://www.google.com',
-        title: 'Google',
-        date: '2020-05-21 10:51:59',
-        ip: '11.11.11.11'
-      },
-      status: 'success',
-      message: 'https://www.google.com added to database',
-      title: 'Google',
-      shorturl: 'http://url-shortener.com/t',
-      statusCode: 200
-    };
+    test('200 with non-success status (due to duplicate URL), returns message', async () => {
+      const keyword = 'abcde';
+      const message = 'Link already exists in database!';
+      mockJsonFn.mockResolvedValue({
+        shorturl: 'shorturl',
+        status: 'fail',
+        url: { keyword },
+        message
+      });
+      mockFetch.mockImplementationOnce(RequestMock.success(mockJsonFn) as unknown as typeof fetch);
+      const result = await externalUrlShortenerRequest('queryString', keyword);
 
-    return expectSaga(PlaygroundSaga)
-      .withState(nxState)
-      .dispatch({
-        type: SHORTEN_URL,
-        payload: 'tester'
-      })
-      .provide([[call(shortenURLRequest, queryString, 'tester'), mockResp]])
-      .not.call(showWarningMessage, errMsg)
-      .not.call(showSuccessMessage, mockResp.message)
-      .put(updateShortURL(mockResp.shorturl))
-      .silentRun();
-  });
+      const shortenedUrl = Constants.urlShortenerBase + keyword;
+      expect(result).toStrictEqual({ shortenedUrl, message });
+    });
 
-  test('shows warning message when shorten request failed', () => {
-    const dummyFiles: Record<string, string> = {
-      [defaultPlaygroundFilePath]: '1 + 1;'
-    };
-    const defaultPlaygroundState = createDefaultWorkspace('playground');
-    const dummyState: OverallState = {
-      ...defaultState,
-      workspaces: {
-        ...defaultWorkspaceManager,
-        playground: {
-          ...defaultPlaygroundState,
-          externalLibrary: ExternalLibraryName.NONE,
-          editorTabs: [
-            {
-              filePath: defaultPlaygroundFilePath,
-              value: dummyFiles[defaultPlaygroundFilePath],
-              breakpoints: [],
-              highlightedLines: []
-            }
-          ],
-          usingSubst: false,
-          usingCse: false,
-          updateCse: true,
-          currentStep: -1,
-          stepsTotal: 0,
-          breakpointSteps: [],
-          changepointSteps: []
-        }
-      }
-    };
-    const queryString = createQueryString(dummyFiles, dummyState);
-    const nxState: OverallState = {
-      ...dummyState,
-      playground: {
-        queryString,
-        ...dummyState.playground
-      }
-    };
+    test('200 with non-success status and no shorturl', async () => {
+      const message = 'Unable to generate shortlink';
+      mockJsonFn.mockResolvedValue({
+        status: 'fail',
+        message
+      });
+      mockFetch.mockImplementationOnce(RequestMock.success(mockJsonFn) as unknown as typeof fetch);
 
-    return expectSaga(PlaygroundSaga)
-      .withState(nxState)
-      .dispatch({
-        type: SHORTEN_URL,
-        payload: ''
-      })
-      .provide([[call(shortenURLRequest, queryString, ''), null]])
-      .call(showWarningMessage, errMsg)
-      .put(updateShortURL('ERROR'))
-      .silentRun();
-  });
+      await expect(externalUrlShortenerRequest('queryString', 'keyword')).rejects.toThrow(message);
+    });
 
-  test('shows message and gives url when shorten request returns duplicate error', () => {
-    const dummyFiles: Record<string, string> = {
-      [defaultPlaygroundFilePath]: '1 + 1;'
-    };
-    const defaultPlaygroundState = createDefaultWorkspace('playground');
-    const dummyState: OverallState = {
-      ...defaultState,
-      workspaces: {
-        ...defaultWorkspaceManager,
-        playground: {
-          ...defaultPlaygroundState,
-          externalLibrary: ExternalLibraryName.NONE,
-          editorTabs: [
-            {
-              filePath: defaultPlaygroundFilePath,
-              value: dummyFiles[defaultPlaygroundFilePath],
-              breakpoints: [],
-              highlightedLines: []
-            }
-          ],
-          usingSubst: false,
-          usingCse: false,
-          updateCse: true,
-          currentStep: -1,
-          stepsTotal: 0,
-          breakpointSteps: [],
-          changepointSteps: []
-        }
-      }
-    };
-    const queryString = createQueryString(dummyFiles, dummyState);
-    const nxState: OverallState = {
-      ...dummyState,
-      playground: {
-        queryString,
-        ...dummyState.playground
-      }
-    };
+    test('No response', async () => {
+      mockFetch.mockImplementationOnce(RequestMock.noResponse() as unknown as typeof fetch);
 
-    // a fake response that looks like the real one
-    const mockResp = {
-      status: 'fail',
-      code: 'error:url',
-      url: {
-        keyword: 't',
-        url: 'https://www.google.com',
-        title: 'Google',
-        date: '2020-05-21 10:51:59',
-        ip: '11.11.11.11',
-        clicks: '0'
-      },
-      message: 'https://www.google.com already exists in database',
-      title: 'Google',
-      shorturl: 'http://url-shortener.com/t',
-      statusCode: 200
-    };
+      await expect(externalUrlShortenerRequest('queryString', 'keyword')).rejects.toThrow(
+        'Something went wrong trying to create the link.'
+      );
+    });
 
-    return expectSaga(PlaygroundSaga)
-      .withState(nxState)
-      .dispatch({
-        type: SHORTEN_URL,
-        payload: ''
-      })
-      .provide([[call(shortenURLRequest, queryString, ''), mockResp]])
-      .call(showSuccessMessage, mockResp.message)
-      .not.call(showWarningMessage, errMsg)
-      .put(updateShortURL(mockResp.shorturl))
-      .silentRun();
-  });
+    test('Non-ok response', async () => {
+      mockFetch.mockImplementationOnce(RequestMock.nonOk() as unknown as typeof fetch);
 
-  test('shows warning when shorten request returns some error without url', () => {
-    const dummyFiles: Record<string, string> = {
-      [defaultPlaygroundFilePath]: '1 + 1;'
-    };
-    const defaultPlaygroundState = createDefaultWorkspace('playground');
-    const dummyState: OverallState = {
-      ...defaultState,
-      workspaces: {
-        ...defaultWorkspaceManager,
-        playground: {
-          ...defaultPlaygroundState,
-          externalLibrary: ExternalLibraryName.NONE,
-          editorTabs: [
-            {
-              filePath: defaultPlaygroundFilePath,
-              value: dummyFiles[defaultPlaygroundFilePath],
-              breakpoints: [],
-              highlightedLines: []
-            }
-          ],
-          usingSubst: false,
-          usingCse: false,
-          updateCse: true,
-          currentStep: -1,
-          stepsTotal: 0,
-          breakpointSteps: [],
-          changepointSteps: []
-        }
-      }
-    };
-    const queryString = createQueryString(dummyFiles, dummyState);
-    const nxState: OverallState = {
-      ...dummyState,
-      playground: {
-        queryString,
-        ...dummyState.playground
-      }
-    };
-
-    // a fake response that looks like the real one
-    const mockResp = {
-      status: 'fail',
-      code: 'error:keyword',
-      message: 'Short URL t already exists in database or is reserved',
-      statusCode: 200
-    };
-
-    return expectSaga(PlaygroundSaga)
-      .withState(nxState)
-      .dispatch({
-        type: SHORTEN_URL,
-        payload: ''
-      })
-      .provide([[call(shortenURLRequest, queryString, ''), mockResp]])
-      .call(showWarningMessage, mockResp.message)
-      .put(updateShortURL('ERROR'))
-      .silentRun();
-  });
-
-  test('returns errMsg when API call timesout', () => {
-    const dummyFiles: Record<string, string> = {
-      [defaultPlaygroundFilePath]: '1 + 1;'
-    };
-    const defaultPlaygroundState = createDefaultWorkspace('playground');
-    const dummyState: OverallState = {
-      ...defaultState,
-      workspaces: {
-        ...defaultWorkspaceManager,
-        playground: {
-          ...defaultPlaygroundState,
-          externalLibrary: ExternalLibraryName.NONE,
-          editorTabs: [
-            {
-              filePath: defaultPlaygroundFilePath,
-              value: dummyFiles[defaultPlaygroundFilePath],
-              breakpoints: [],
-              highlightedLines: []
-            }
-          ],
-          usingSubst: false,
-          usingCse: false,
-          updateCse: true,
-          currentStep: -1,
-          stepsTotal: 0,
-          breakpointSteps: [],
-          changepointSteps: []
-        }
-      }
-    };
-    const queryString = createQueryString(dummyFiles, dummyState);
-    const nxState: OverallState = {
-      ...dummyState,
-      playground: {
-        queryString,
-        ...dummyState.playground
-      }
-    };
-
-    return expectSaga(PlaygroundSaga)
-      .withState(nxState)
-      .dispatch({
-        type: SHORTEN_URL,
-        payload: ''
-      })
-      .provide({
-        race: () => ({
-          result: undefined,
-          hasTimedOut: true
-        })
-      })
-      .call(showWarningMessage, errMsg)
-      .put(updateShortURL('ERROR'))
-      .silentRun();
+      await expect(externalUrlShortenerRequest('queryString', 'keyword')).rejects.toThrow(
+        'Something went wrong trying to create the link.'
+      );
+    });
   });
 });
-
-function createQueryString(files: Record<string, string>, state: OverallState): string {
-  const isFolderModeEnabled: boolean = state.workspaces.playground.isFolderModeEnabled;
-  const editorTabFilePaths: string[] = state.workspaces.playground.editorTabs
-    .map(editorTab => editorTab.filePath)
-    .filter((filePath): filePath is string => filePath !== undefined);
-  const activeEditorTabIndex: number | null = state.workspaces.playground.activeEditorTabIndex;
-  const chapter: Chapter = state.workspaces.playground.context.chapter;
-  const variant: Variant = state.workspaces.playground.context.variant;
-  const external: ExternalLibraryName = state.workspaces.playground.externalLibrary;
-  const execTime: number = state.workspaces.playground.execTime;
-  const newQueryString: string = qs.stringify({
-    isFolder: isFolderModeEnabled,
-    files: compressToEncodedURIComponent(qs.stringify(files)),
-    tabs: editorTabFilePaths.map(compressToEncodedURIComponent),
-    tabIdx: activeEditorTabIndex,
-    chap: chapter,
-    variant,
-    ext: external,
-    exec: execTime
-  });
-  return newQueryString;
-}
