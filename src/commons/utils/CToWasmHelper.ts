@@ -38,12 +38,11 @@ export async function loadModulesUsedInCProgram(
     return allModuleFunctions;
   }
 
-  const modulesToLoad = includedModules.filter(m => {
-    const moduleName = m.slice(1, m.length - 1);
-    return modulesAvailableForC.has(moduleName);
-  });
+  const modulesToLoad = new Set(
+    includedModules.map(m => m.slice(1, m.length - 1)).filter(m => modulesAvailableForC.has(m))
+  );
 
-  const loadedModules = await loadSourceModules(new Set(modulesToLoad), context, true);
+  const loadedModules = await loadSourceModules(modulesToLoad, context, true);
   Object.values(loadedModules).forEach(functions => {
     Object.entries(functions).forEach(([name, func]) => {
       allModuleFunctions[name] = func;
