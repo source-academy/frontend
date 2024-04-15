@@ -14,7 +14,7 @@ import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
 import { EVAL_STORY } from 'src/features/stories/StoriesTypes';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
-import { OverallState } from '../../../application/ApplicationTypes';
+import { isSchemeLanguage, OverallState } from '../../../application/ApplicationTypes';
 import {
   BEGIN_DEBUG_PAUSE,
   BEGIN_INTERRUPT_EXECUTION,
@@ -104,7 +104,8 @@ export function* evalCode(
             .currentStep
       )
     : -1;
-  const cseActiveAndCorrectChapter = context.chapter >= 3 && cseIsActive;
+  const cseActiveAndCorrectChapter =
+    (isSchemeLanguage(context.chapter) || context.chapter >= 3) && cseIsActive;
   if (cseActiveAndCorrectChapter) {
     context.executionMethod = 'cse-machine';
   }

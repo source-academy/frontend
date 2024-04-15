@@ -1,5 +1,6 @@
 import Heap from 'js-slang/dist/cse-machine/heap';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
+import { Chapter, Frame } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
@@ -31,6 +32,7 @@ import {
 import {
   assert,
   deepCopyTree,
+  defaultBackgroundColor,
   getNextChildren,
   isBuiltInFn,
   isClosure,
@@ -39,7 +41,6 @@ import {
   isGlobalFn,
   isNonGlobalFn,
   isPrimitiveData,
-  isSourceObject,
   isStreamFn,
   isUnassigned,
   setDifference
@@ -81,8 +82,12 @@ export class Layout {
   static previousControlComponent: ControlStack;
   static previousStashComponent: StashStack;
 
-  /** memoized values */
+  /**
+   * memoized values, where keys are either ids for arrays and closures,
+   * or the function objects themselves for built-in functions and stream functions
+   */
   static values = new Map<string | (() => any), Value>();
+
   /** memoized layout */
   static prevLayout: React.ReactNode;
   static currentDark: React.ReactNode;
@@ -92,6 +97,7 @@ export class Layout {
   static currentStackLight: React.ReactNode;
   static currentStackTruncLight: React.ReactNode;
   static stageRef: RefObject<any> = React.createRef();
+
   // buffer for faster rendering of diagram when scrolling
   static invisiblePaddingVertical: number = 300;
   static invisiblePaddingHorizontal: number = 300;
@@ -131,7 +137,12 @@ export class Layout {
   }
 
   /** processes the runtime context from JS Slang */
-  static setContext(envTree: EnvTree, control: Control, stash: Stash): void {
+  static setContext(
+    envTree: EnvTree,
+    control: Control,
+    stash: Stash,
+    chapter: Chapter = Chapter.SOURCE_4
+  ): void {
     Layout.currentLight = undefined;
     Layout.currentDark = undefined;
     Layout.currentStackDark = undefined;
@@ -154,7 +165,7 @@ export class Layout {
     // initialize levels and frames
     Layout.initializeGrid();
     // initialize control and stash
-    Layout.initializeControlStash();
+    Layout.initializeControlStash(chapter);
 
     if (CseMachine.getControlStash()) {
       Layout.controlStashHeight = Math.max(
@@ -187,11 +198,11 @@ export class Layout {
     CseAnimation.updateAnimation();
   }
 
-  static initializeControlStash() {
+  static initializeControlStash(chapter: Chapter) {
     Layout.previousControlComponent = Layout.controlComponent;
     Layout.previousStashComponent = Layout.stashComponent;
-    this.controlComponent = new ControlStack(this.control);
-    this.stashComponent = new StashStack(this.stash);
+    this.controlComponent = new ControlStack(this.control, chapter);
+    this.stashComponent = new StashStack(this.stash, chapter);
   }
 
   /**
@@ -199,7 +210,7 @@ export class Layout {
    * objects into the global environment head and heap
    */
   private static removePreludeEnv() {
-    if (!Layout.globalEnvNode.children) return;
+    if (!Layout.globalEnvNode.children || Layout.globalEnvNode.children.length === 0) return;
 
     const preludeEnvNode = Layout.globalEnvNode.children[0];
     const preludeEnv = preludeEnvNode.environment;
@@ -299,7 +310,7 @@ export class Layout {
     );
 
     let i = 0;
-    const newHead = {};
+    const newHead: Frame = {};
     const newHeap = new Heap();
     for (const fn of referencedFns) {
       if (isClosure(fn)) newHeap.add(fn);
@@ -370,19 +381,16 @@ export class Layout {
         return existingValue;
       }
 
-      let newValue: Value | undefined;
       if (isDataArray(data)) {
-        newValue = new ArrayValue(data, reference);
+        return new ArrayValue(data, reference);
       } else if (isGlobalFn(data)) {
         assert(reference instanceof Binding);
-        newValue = new GlobalFnValue(data, reference);
+        return new GlobalFnValue(data, reference);
       } else if (isNonGlobalFn(data)) {
-        newValue = new FnValue(data, reference);
-      } else if (isSourceObject(data)) {
-        return new PrimitiveValue(data.toReplString(), reference);
+        return new FnValue(data, reference);
       }
 
-      return newValue ?? new PrimitiveValue(null, reference);
+      return new PrimitiveValue(null, reference);
     }
   }
 
@@ -509,15 +517,13 @@ export class Layout {
                 width: Layout.width(),
                 height: Layout.height(),
                 overflow: 'hidden',
-                backgroundColor: CseMachine.getPrintableMode()
-                  ? Config.PRINT_BACKGROUND
-                  : Config.SA_BLUE
+                backgroundColor: defaultBackgroundColor()
               }}
             >
               <Stage
                 width={Layout.stageWidth}
                 height={Layout.stageHeight}
-                ref={this.stageRef}
+                ref={Layout.stageRef}
                 draggable
                 onWheel={Layout.zoomStage}
                 className={classes['draggable']}
@@ -529,15 +535,16 @@ export class Layout {
                     y={0}
                     width={Layout.width()}
                     height={Layout.height()}
-                    fill={CseMachine.getPrintableMode() ? Config.PRINT_BACKGROUND : Config.SA_BLUE}
+                    fill={defaultBackgroundColor()}
                     key={Layout.key++}
                     listening={false}
                   />
                   {Layout.levels.map(level => level.draw())}
                   {CseMachine.getControlStash() && Layout.controlComponent.draw()}
                   {CseMachine.getControlStash() && Layout.stashComponent.draw()}
-                  {CseMachine.getControlStash() &&
-                    CseAnimation.animationComponents.map(c => c.draw())}
+                </Layer>
+                <Layer ref={CseAnimation.layerRef} listening={false}>
+                  {CseMachine.getControlStash() && CseAnimation.animations.map(c => c.draw())}
                 </Layer>
               </Stage>
             </div>

@@ -1,3 +1,5 @@
+import { estreeDecode } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/encoder-visitor';
+import { unparse } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/reverse_parser';
 import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
 import {
   AppInstr,
@@ -10,12 +12,14 @@ import {
   InstrType,
   UnOpInstr
 } from 'js-slang/dist/cse-machine/types';
-import { Environment, Value as StashValue } from 'js-slang/dist/types';
+import { Chapter, Environment, Value as StashValue } from 'js-slang/dist/types';
 import { astToString } from 'js-slang/dist/utils/ast/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
-import { cloneDeep } from 'lodash';
+import { Text } from 'konva/lib/shapes/Text';
+import { cloneDeep, isObject } from 'lodash';
+import { isSchemeLanguage } from 'src/commons/application/ApplicationTypes';
 import classes from 'src/styles/Draggable.module.scss';
 
 import { ArrayUnit } from './components/ArrayUnit';
@@ -29,7 +33,6 @@ import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
 import CseMachine from './CseMachine';
 import { Config } from './CseMachineConfig';
-import { ControlStashConfig } from './CseMachineControlStashConfig';
 import { Layout } from './CseMachineLayout';
 import {
   BuiltInFn,
@@ -46,9 +49,14 @@ import {
   Primitive,
   ReferenceType,
   SourceObject,
-  StreamFn
+  StreamFn,
+  Unassigned
 } from './CseMachineTypes';
-
+import {
+  getAlternateControlItemComponent,
+  isCustomPrimitive,
+  needsNewRepresentation
+} from './utils/altLangs';
 class AssertionError extends Error {
   constructor(msg?: string) {
     super(msg);
@@ -58,12 +66,6 @@ class AssertionError extends Error {
 
 export function assert(condition: boolean, msg?: string): asserts condition {
   if (!condition) throw new AssertionError(msg);
-}
-
-// TODO: can make use of lodash
-/** Returns `true` if `x` is an object */
-export function isObject(x: any): x is object {
-  return x === Object(x);
 }
 
 /** Returns `true` if `object` is empty */
@@ -183,7 +185,7 @@ export function isNumber(data: Data): data is number {
 }
 
 /** Returns `true` if `data` is a symbol */
-export function isUnassigned(data: Data): data is symbol {
+export function isUnassigned(data: Data): data is Unassigned {
   return typeof data === 'symbol';
 }
 
@@ -192,9 +194,17 @@ export function isBoolean(data: Data): data is boolean {
   return typeof data === 'boolean';
 }
 
-/** Returns `true` if `data` is a primitive, defined as a null | data | number */
+/** Returns `true` if `data` is a primitive, which are non-reference types and source objects */
 export function isPrimitiveData(data: Data): data is Primitive {
-  return isUndefined(data) || isNull(data) || isString(data) || isNumber(data) || isBoolean(data);
+  return (
+    isUndefined(data) ||
+    isNull(data) ||
+    isString(data) ||
+    isNumber(data) ||
+    isBoolean(data) ||
+    isSourceObject(data) ||
+    isCustomPrimitive(data)
+  );
 }
 
 // TODO: remove this in the future once ES typings are updated to contain the new set functions
@@ -376,8 +386,8 @@ export function setHoveredStyle(target: Node | Group, hoveredAttrs: any = {}): v
   nodes.push(target);
   nodes.forEach(node => {
     node.setAttrs({
-      stroke: node.attrs.stroke ? Config.HoveredColor : node.attrs.stroke,
-      fill: node.attrs.fill ? Config.HoveredColor : node.attrs.fill,
+      stroke: node.attrs.stroke ? Config.HoverColor : node.attrs.stroke,
+      fill: node.attrs.fill ? Config.HoverColor : node.attrs.fill,
       ...hoveredAttrs
     });
   });
@@ -392,14 +402,14 @@ export function setUnhoveredStyle(target: Node | Group, unhoveredAttrs: any = {}
   nodes.forEach(node => {
     node.setAttrs({
       stroke: node.attrs.stroke
-        ? CseMachine.getPrintableMode()
-          ? Config.SA_BLUE
-          : Config.SA_WHITE
+        ? node instanceof Text
+          ? defaultTextColor()
+          : defaultStrokeColor()
         : node.attrs.stroke,
       fill: node.attrs.fill
-        ? CseMachine.getPrintableMode()
-          ? Config.SA_BLUE
-          : Config.SA_WHITE
+        ? node instanceof Text
+          ? defaultTextColor()
+          : defaultStrokeColor()
         : node.attrs.fill,
       ...unhoveredAttrs
     });
@@ -442,8 +452,10 @@ function findObjects(
   visited.add(array);
   for (const item of array) {
     if (isDataArray(item) || isClosure(item)) {
-      if (isEnvEqual(item.environment, environment)) set.add(item);
-      if (isDataArray(item)) findObjects(environment, set, item, visited);
+      if (isEnvEqual(item.environment, environment)) {
+        set.add(item);
+        if (isDataArray(item)) findObjects(environment, set, item, visited);
+      }
     }
   }
 }
@@ -461,7 +473,7 @@ export function getReferencedObjects(environment: Env): Set<DataArray | Closure>
 /**
  * Get the set of all objects in the heap of the given environment that are **not**
  * referenced in the head. (Note that these objects can still be referenced from other
- * environments, just not the given one)
+ * environments, just not the given one.)
  */
 export function getUnreferencedObjects(environment: Env): Set<DataArray | Closure> {
   return setDifference(environment.heap.getHeap(), getReferencedObjects(environment));
@@ -564,12 +576,39 @@ export function getControlItemComponent(
   stackHeight: number,
   index: number,
   highlightOnHover: () => void,
-  unhighlightOnHover: () => void
+  unhighlightOnHover: () => void,
+  chapter: Chapter
 ): ControlItemComponent {
   const topItem = CseMachine.getStackTruncated()
     ? index === Math.min(Layout.control.size() - 1, 9)
     : index === Layout.control.size() - 1;
   if (!isInstr(controlItem)) {
+    // there's no reason to provide an alternate representation
+    // for a instruction.
+    if (needsNewRepresentation(chapter)) {
+      return getAlternateControlItemComponent(
+        controlItem,
+        stackHeight,
+        highlightOnHover,
+        unhighlightOnHover,
+        topItem,
+        chapter
+      );
+    }
+
+    if (isSchemeLanguage(chapter)) {
+      // use the js-slang decoder on the control item
+      controlItem = estreeDecode(controlItem as any);
+      const text = unparse(controlItem as any);
+      return new ControlItemComponent(
+        text,
+        text,
+        stackHeight,
+        highlightOnHover,
+        unhighlightOnHover,
+        topItem
+      );
+    }
     switch (controlItem.type) {
       case 'Program':
         // If the control item is the whole program
@@ -788,6 +827,24 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
+      case InstrType.GENERATE_CONT:
+        return new ControlItemComponent(
+          'generate cont',
+          'Generate continuation',
+          stackHeight,
+          highlightOnHover,
+          unhighlightOnHover,
+          topItem
+        );
+      case InstrType.RESUME_CONT:
+        return new ControlItemComponent(
+          'call cont',
+          'call a continuation',
+          stackHeight,
+          highlightOnHover,
+          unhighlightOnHover,
+          topItem
+        );
       default:
         return new ControlItemComponent(
           'INSTRUCTION',
@@ -801,7 +858,12 @@ export function getControlItemComponent(
   }
 }
 
-export function getStashItemComponent(stashItem: StashValue, stackHeight: number, index: number) {
+export function getStashItemComponent(
+  stashItem: StashValue,
+  stackHeight: number,
+  index: number,
+  _chapter: Chapter
+): StashItemComponent {
   let arrowTo: ArrayValue | FnValue | GlobalFnValue | undefined;
   if (isFunction(stashItem) || isDataArray(stashItem)) {
     if (isClosure(stashItem) || isDataArray(stashItem)) {
@@ -851,21 +913,23 @@ export const isStashItemInDanger = (stashIndex: number): boolean => {
   return false;
 };
 
-export const defaultSAColor = () =>
-  CseMachine.getPrintableMode() ? Config.SA_BLUE : Config.SA_WHITE;
+export const defaultBackgroundColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintBgColor : Config.BgColor;
 
-export const fadedSAColor = () =>
-  CseMachine.getPrintableMode() ? Config.SA_FADED_BLUE : Config.SA_FADED_WHITE;
+export const defaultTextColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintTextColor : Config.TextColor;
 
-export const stackItemSAColor = (index: number) =>
-  isStashItemInDanger(index)
-    ? ControlStashConfig.STASH_DANGER_ITEM
-    : CseMachine.getPrintableMode()
-    ? ControlStashConfig.SA_BLUE
-    : ControlStashConfig.SA_WHITE;
-export const currentItemSAColor = (test: boolean) =>
-  test
-    ? Config.SA_CURRENT_ITEM
-    : CseMachine.getPrintableMode()
-    ? ControlStashConfig.SA_BLUE
-    : ControlStashConfig.SA_WHITE;
+export const fadedTextColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintTextColorFaded : Config.TextColorFaded;
+
+export const defaultStrokeColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintStrokeColor : Config.StrokeColor;
+
+export const fadedStrokeColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintStrokeColorFaded : Config.StrokeColorFaded;
+
+export const defaultActiveColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintActiveColor : Config.ActiveColor;
+
+export const defaultDangerColor = () =>
+  CseMachine.getPrintableMode() ? Config.PrintDangerColor : Config.DangerColor;

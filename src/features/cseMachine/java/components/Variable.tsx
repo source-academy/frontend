@@ -4,6 +4,7 @@ import { Group, Rect } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
+import { defaultTextColor } from '../../CseMachineUtils';
 import { CseMachine } from '../CseMachine';
 import { Arrow } from './Arrow';
 import { Text } from './Text';
@@ -97,7 +98,7 @@ export class Variable extends Visible {
           y={this._y + this._type.height()}
           width={this._width}
           height={this._height - this._type.height()}
-          stroke={Config.SA_WHITE}
+          stroke={defaultTextColor()}
           key={CseMachine.key++}
         />
 

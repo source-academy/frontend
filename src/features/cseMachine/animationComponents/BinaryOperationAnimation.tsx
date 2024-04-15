@@ -1,56 +1,54 @@
-import { NodeConfig } from 'konva/lib/Node';
 import React from 'react';
 import { Group } from 'react-konva';
 
 import { ControlItemComponent } from '../components/ControlItemComponent';
 import { StashItemComponent } from '../components/StashItemComponent';
-import { Animatable, AnimatedTextboxComponent } from './AnimationComponents';
-import { getNodePositionFromItem } from './AnimationUtils';
+import { ControlStashConfig } from '../CseMachineControlStashConfig';
+import {
+  defaultActiveColor,
+  defaultDangerColor,
+  defaultStrokeColor,
+  getTextWidth,
+  isStashItemInDanger
+} from '../CseMachineUtils';
+import { Animatable } from './base/Animatable';
+import { AnimatedTextbox } from './base/AnimatedTextbox';
+import { getNodePosition } from './base/AnimationUtils';
 
+/** Animation for a binary operation, e.g. `+`, `===` */
 export class BinaryOperationAnimation extends Animatable {
-  private binaryOperatorAnimation: AnimatedTextboxComponent;
-  private leftOperandAnimation: AnimatedTextboxComponent;
-  private rightOperandAnimation: AnimatedTextboxComponent;
-  private resultAnimation: AnimatedTextboxComponent;
-  private resultPosition: NodeConfig;
+  private binaryOperatorAnimation: AnimatedTextbox;
+  private leftOperandAnimation: AnimatedTextbox;
+  private rightOperandAnimation: AnimatedTextbox;
+  private resultAnimation: AnimatedTextbox;
 
   constructor(
-    binaryOperator: ControlItemComponent,
+    private binaryOperator: ControlItemComponent,
     leftOperand: StashItemComponent,
-    rightOperand: StashItemComponent,
+    private rightOperand: StashItemComponent,
     private result: StashItemComponent
   ) {
     super();
-    const binOpPosition = getNodePositionFromItem(binaryOperator);
-    const leftOpPosition = getNodePositionFromItem(leftOperand);
-    const rightOpPosition = getNodePositionFromItem(rightOperand);
-    const resultPosition = getNodePositionFromItem(result);
-    this.resultPosition = resultPosition;
-    this.binaryOperatorAnimation = new AnimatedTextboxComponent(
-      binOpPosition,
-      rightOpPosition,
-      binaryOperator.text
+    this.binaryOperatorAnimation = new AnimatedTextbox(
+      binaryOperator.text,
+      getNodePosition(binaryOperator),
+      { rectProps: { stroke: defaultActiveColor() } }
     );
-    this.rightOperandAnimation = new AnimatedTextboxComponent(
-      rightOpPosition,
-      { ...rightOpPosition, x: rightOpPosition.x + rightOpPosition.width },
-      rightOperand.text
+    this.rightOperandAnimation = new AnimatedTextbox(
+      rightOperand.text,
+      getNodePosition(rightOperand),
+      { rectProps: { stroke: defaultDangerColor() } }
     );
-    this.leftOperandAnimation = new AnimatedTextboxComponent(
-      leftOpPosition,
-      { opacity: 0 },
-      leftOperand.text
+    this.leftOperandAnimation = new AnimatedTextbox(
+      leftOperand.text,
+      getNodePosition(leftOperand),
+      { rectProps: { stroke: defaultDangerColor() } }
     );
-    this.resultAnimation = new AnimatedTextboxComponent(
-      {
-        ...resultPosition,
-        x: rightOpPosition.x,
-        opacity: 0
-      },
-      { ...resultPosition, opacity: 1 },
-      result.text,
-      { delayMultiplier: 0.5 }
-    );
+    this.resultAnimation = new AnimatedTextbox(result.text, {
+      ...getNodePosition(result),
+      x: rightOperand.x(),
+      opacity: 0
+    });
   }
 
   draw(): React.ReactNode {
@@ -65,25 +63,45 @@ export class BinaryOperationAnimation extends Animatable {
   }
 
   async animate() {
-    this.result.ref.current.hide();
+    this.result.ref.current?.hide();
+    const rightOpPosition = getNodePosition(this.rightOperand);
+    const resultPosition = getNodePosition(this.result);
+    const minBinOpWidth =
+      getTextWidth(this.binaryOperator.text) + ControlStashConfig.ControlItemTextPadding * 2;
+    const fadeDuration = 3 / 4;
+    const fadeInDelay = 1 / 4;
+    // Shifts the right operand to the right and move the operator in between the operands
     await Promise.all([
-      this.binaryOperatorAnimation.animate(),
-      this.rightOperandAnimation.animate()
+      this.binaryOperatorAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
+      this.binaryOperatorAnimation.animateTo({ ...rightOpPosition, width: minBinOpWidth }),
+      this.leftOperandAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
+      this.rightOperandAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
+      this.rightOperandAnimation.animateTo({
+        ...rightOpPosition,
+        x: rightOpPosition.x + minBinOpWidth
+      })
     ]);
-    const to = { ...this.resultPosition, opacity: 0 };
-    this.binaryOperatorAnimation.setDestination(to);
-    this.rightOperandAnimation.setDestination(to);
+    // Merges the operators and operands together to form the result
     await Promise.all([
-      this.binaryOperatorAnimation.animate(),
-      this.leftOperandAnimation.animate(),
-      this.rightOperandAnimation.animate(),
-      this.resultAnimation.animate()
+      this.binaryOperatorAnimation.animateTo(resultPosition),
+      this.binaryOperatorAnimation.animateTo({ opacity: 0 }, { duration: fadeDuration }),
+      this.leftOperandAnimation.animateTo({ opacity: 0 }, { duration: fadeDuration }),
+      this.rightOperandAnimation.animateTo(resultPosition),
+      this.rightOperandAnimation.animateTo({ opacity: 0 }, { duration: fadeDuration }),
+      this.resultAnimation.animateTo(resultPosition),
+      this.resultAnimation.animateTo(
+        { opacity: 1 },
+        { duration: fadeDuration, delay: fadeInDelay }
+      ),
+      isStashItemInDanger(this.result.index) &&
+        this.resultAnimation.animateRectTo({ stroke: defaultDangerColor() })
     ]);
-    this.ref.current?.hide();
-    this.result.ref.current?.show();
+    this.destroy();
   }
 
   destroy() {
+    this.ref.current?.hide();
+    this.result.ref.current?.show();
     this.binaryOperatorAnimation.destroy();
     this.leftOperandAnimation.destroy();
     this.rightOperandAnimation.destroy();
