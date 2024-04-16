@@ -399,7 +399,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         (doesItContain, currentFilter) =>
           doesItContain ||
           (currentFilter.id === ColumnFields.progressStatus &&
-            String(currentFilter.value).toLowerCase() !== ProgressStatuses.graded),
+            String(currentFilter.value).toLowerCase() !== ProgressStatuses.graded &&
+            String(currentFilter.value).toLowerCase() !== ProgressStatuses.submitted),
         false
       )
     ) {
