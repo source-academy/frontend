@@ -28,12 +28,21 @@ class SideContentUpload extends React.Component<OwnProps> {
     return (
       <div>
         <p>
-          Upload class files to run in the JVM.
+          Bypass the compiler and type checker by uploading class files to run in the JVM.
           <br />
           <br />
-          Code in the editor will be ignored when running while this tab is active.
+          Only .class files are accepted. Code in the editor will be ignored when running while this
+          tab is active.
           <br />
           <br />
+          Compile the files with the following command:
+          <code>javac *.java -target 8 -source 8</code>
+          <br />
+          <br />
+          Avoid running class files downloaded from unknown sources.
+          <br />
+          <br />
+          <strong>Main class must be named Main and uploaded as Main.class.</strong>
         </p>
         <input
           type="file"
