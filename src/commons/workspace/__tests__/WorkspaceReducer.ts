@@ -858,6 +858,7 @@ describe('LOG_OUT', () => {
       sharedbConnected: false,
       usingSubst: false,
       usingCse: false,
+      usingUpload: false,
       updateCse: true,
       currentStep: -1,
       stepsTotal: 0,
