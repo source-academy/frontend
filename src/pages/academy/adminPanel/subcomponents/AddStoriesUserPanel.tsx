@@ -178,7 +178,7 @@ const AddStoriesUserPanel: React.FC<Props> = props => {
                 {({ getRootProps, acceptedFile, ProgressBar, getRemoveFileProps }: any) => (
                   <>
                     <label className={Classes.FILE_INPUT} {...getRootProps()}>
-                      <div style={{minWidth: 250}}> </div>
+                      <div style={{ minWidth: 250 }}> </div>
                       <span className={Classes.FILE_UPLOAD_INPUT}>Upload CSV</span>
                     </label>
                     <Popover
