@@ -1280,6 +1280,11 @@
   resolved "https://registry.yarnpkg.com/@chevrotain/utils/-/utils-11.0.3.tgz#e39999307b102cff3645ec4f5b3665f5297a2224"
   integrity sha512-YslZMgtJUyuMbZ+aKvfF3x1f5liK4mWNxghFRv7jqRR9C3R3fAOGTTKvxXDa2Y1s9zSbcpuO0cAxDYsc9SrXoQ==
 
+"@commander-js/extra-typings@^12.0.1":
+  version "12.0.1"
+  resolved "https://registry.yarnpkg.com/@commander-js/extra-typings/-/extra-typings-12.0.1.tgz#4a74a9ccf1d19ef24e71df59359c6d90a605a469"
+  integrity sha512-OvkMobb1eMqOCuJdbuSin/KJkkZr7n24/UNV+Lcz/0Dhepf3r2p9PaGwpRpAWej7A+gQnny4h8mGhpFl4giKkg==
+
 "@craco/craco@^7.1.0":
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/@craco/craco/-/craco-7.1.0.tgz#12bd394c7f0334e214302e4d35a1768f68042fbb"
@@ -8670,12 +8675,13 @@ js-sdsl@4.3.0:
   resolved "https://registry.yarnpkg.com/js-sdsl/-/js-sdsl-4.3.0.tgz#aeefe32a451f7af88425b11fdb5f58c90ae1d711"
   integrity sha512-mifzlm2+5nZ+lEcLJMoBK0/IH/bDg8XnJfd/Wq6IP+xoCjLZsTOnV2QpxlVbX9bMnkl5PdEjNtBJ9Cj1NjifhQ==
 
-js-slang@^1.0.68:
-  version "1.0.68"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.68.tgz#8540cc556a3afe8ced21740e917dd387d022986c"
-  integrity sha512-oOcj+m8tiPf0XVQWJtWRydgL58CabqIaaSf0JlT55Ute+CLuGKP+otlVnkFMP0F9KGUjMovicopcDPO238ZfQg==
+js-slang@^1.0.71:
+  version "1.0.71"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.71.tgz#f38012a1057e32f9c81a8065ea1a543ff5e9f373"
+  integrity sha512-TC7uGAQHIspB4fk4zswmxPmDOwXka7qZ6dF2BLCH/esRJY5GWfQQnGeFjdMTEz+yjrIr0XBZKkdF/Zg/4kUtqA==
   dependencies:
     "@babel/parser" "^7.19.4"
+    "@commander-js/extra-typings" "^12.0.1"
     "@joeychenofficial/alt-ergo-modified" "^2.4.0"
     "@ts-morph/bootstrap" "^0.18.0"
     "@types/estree" "0.0.52"
@@ -8684,10 +8690,10 @@ js-slang@^1.0.68:
     acorn-loose "^8.0.0"
     acorn-walk "^8.0.0"
     astring "^1.4.3"
+    commander "^12.0.0"
     gpu.js "^2.16.0"
     js-base64 "^3.7.5"
     lodash "^4.17.21"
-    node-getopt "^0.3.2"
     source-map "0.7.3"
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
@@ -9723,7 +9729,7 @@ node-forge@^1:
   resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-1.3.1.tgz#be8da2af243b2417d5f646a770663a92b7e9ded3"
   integrity sha512-dPEtOeMvF9VMcYV/1Wb8CPoVAXtp6MKMlcbAt4ddqmGqUJ6fQZFXkNZNkNlfevtNkGtaSoXf/vNNNSvgrdXwtA==
 
-node-getopt@^0.3, node-getopt@^0.3.2:
+node-getopt@^0.3:
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/node-getopt/-/node-getopt-0.3.2.tgz#57507cd22f6f69650aa99252304a842f1224e44c"
   integrity sha512-yqkmYrMbK1wPrfz7mgeYvA4tBperLg9FQ4S3Sau3nSAkpOA0x0zC8nQ1siBwozy1f4SE8vq2n1WKv99r+PCa1Q==
