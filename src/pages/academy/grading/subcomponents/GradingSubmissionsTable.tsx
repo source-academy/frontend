@@ -320,7 +320,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       ...generalColProperties,
       headerName: ColumnName.actionsIndex,
       field: ColumnFields.actionsIndex,
-      flex: 1.25,
+      flex: 1.4,
       headerClass: generalColProperties.headerClass + ' grading-left-align',
       cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return params.data !== undefined
@@ -345,6 +345,9 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     if (!filterMode && !disabledEditModeCols.includes(colClicked)) {
       navigate(`/courses/${courseId}/grading/${event.data.actionsIndex}`);
     } else if (filterMode && !disabledFilterModeCols.includes(colClicked)) {
+      if (event.data[colClicked] === null || event.data[colClicked] === '') {
+        return;
+      }
       handleFilterAdd({ id: colClicked, value: event.data[colClicked] });
     }
   };
