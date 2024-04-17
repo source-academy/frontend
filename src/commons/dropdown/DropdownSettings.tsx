@@ -11,12 +11,14 @@ import { IconNames } from '@blueprintjs/icons';
 import React, { useContext } from 'react';
 
 import { EditorBinding, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
+import { LocaleSelector } from './LocaleSelector';
 
 const options = [
   { label: 'None', value: EditorBinding.NONE },
   { label: 'Vim', value: EditorBinding.VIM },
   { label: 'Emacs', value: EditorBinding.EMACS }
 ] as const;
+
 
 type Props = {
   isOpen: boolean;
@@ -59,6 +61,9 @@ const DropdownSettings: React.FC<Props> = ({ isOpen, onClose }) => {
             <Icon icon={IconNames.Help} />
           </Tooltip>
         </FormGroup>
+
+        <LocaleSelector />
+
       </DialogBody>
     </Dialog>
   );
