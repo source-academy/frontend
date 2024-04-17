@@ -1,3 +1,7 @@
+/**
+ * This code was part of the @convergencelabs/ace-collab-ext NPM package.
+ */
+
 import './ace-collab-ext.css';
 
 import { Ace } from 'ace-builds';

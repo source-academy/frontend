@@ -25,7 +25,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
   const user = {
     name: useTypedSelector(state => state.session.name),
-    color: getColor() //'#5f9ea0' // TODO: random generator
+    color: getColor()
   };
 
   React.useEffect(() => {
@@ -101,7 +101,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       // Removes all cursors
       cursorManager.removeAll();
     };
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editorSessionId, sessionDetails, reactAceRef]);
 };
 

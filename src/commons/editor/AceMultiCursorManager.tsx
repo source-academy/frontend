@@ -1,3 +1,7 @@
+/**
+ * This code was part of the @convergencelabs/ace-collab-ext NPM package.
+ */
+
 import { Ace } from 'ace-builds';
 
 import AceCursorMarker from './AceCursorMarker';
