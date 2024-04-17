@@ -1,5 +1,5 @@
-import translationEN from './en/translation.json';
-import translationPseudo from './pseudo/translation.json';
+import translationEN from './en/common.json';
+import translationPseudo from './pseudo/common.json';
 
 export enum i18nLanguageCode {
   ENGLISH = 'en',

@@ -78,7 +78,7 @@ const NavigationBar: React.FC = () => {
         <Icon icon={navbarEntry.icon} />
         <div>
           {
-            <Translation>
+            <Translation keyPrefix={"navigationBar"}>
               {(t, { i18n }) => t(navbarEntry.text)}
             </Translation>
           }
@@ -386,8 +386,8 @@ export const createDesktopNavlink: CreateNavlinkFunction = navbarEntry => (
   >
     <Icon icon={navbarEntry.icon} />
     <div className={classNames(navbarEntry.hiddenInBreakpoints?.map(bp => `hidden-${bp}`))}>
-      <Translation>
-        {(t, { i18n }) => t(navbarEntry.text)}
+      <Translation keyPrefix={"navigationBar"}>
+        {(t) => t(navbarEntry.text)}
       </Translation>
     </div>
     {navbarEntry.hasNotifications && (

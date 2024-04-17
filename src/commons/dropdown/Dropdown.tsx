@@ -1,6 +1,7 @@
 import { Menu, MenuItem, Popover, Position } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 import { logOut } from '../application/actions/CommonsActions';
@@ -20,6 +21,8 @@ const Dropdown: React.FC = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMyCoursesOpen, setIsMyCoursesOpen] = useState(false);
   const [isCreateCourseOpen, setIsCreateCourseOpen] = useState(false);
+
+  const { t } = useTranslation('translation', { keyPrefix: 'dropdown' })
 
   const { isLoggedIn, name, courses, courseId } = useSession();
   const dispatch = useDispatch();
@@ -43,15 +46,15 @@ const Dropdown: React.FC = () => {
     ) : null;
 
   const myCourses = isLoggedIn ? (
-    <MenuItem icon={IconNames.PROPERTIES} onClick={toggleMyCoursesOpen} text="My Courses" />
+    <MenuItem icon={IconNames.PROPERTIES} onClick={toggleMyCoursesOpen} text={ t('My Courses') } />
   ) : null;
 
   const createCourse = isLoggedIn ? (
-    <MenuItem icon={IconNames.ADD} onClick={toggleCreateCourseOpen} text="Create Course" />
+    <MenuItem icon={IconNames.ADD} onClick={toggleCreateCourseOpen} text={ t("Create Course") } />
   ) : null;
 
   const logout = isLoggedIn ? (
-    <MenuItem icon={IconNames.LOG_OUT} text="Logout" onClick={handleLogOut} />
+    <MenuItem icon={IconNames.LOG_OUT} text={ t("Logout") } onClick={handleLogOut} />
   ) : null;
 
   const menu = (
@@ -59,9 +62,9 @@ const Dropdown: React.FC = () => {
       {profile}
       {myCourses}
       {createCourse}
-      <MenuItem icon={IconNames.COG} onClick={toggleSettingsOpen} text="Settings" />
-      <MenuItem icon={IconNames.HELP} onClick={toggleAboutOpen} text="About" />
-      <MenuItem icon={IconNames.ERROR} onClick={toggleHelpOpen} text="Help" />
+      <MenuItem icon={IconNames.COG} onClick={toggleSettingsOpen} text={ t("Settings") } />
+      <MenuItem icon={IconNames.HELP} onClick={toggleAboutOpen} text={ t("About") } />
+      <MenuItem icon={IconNames.ERROR} onClick={toggleHelpOpen} text={ t("Help") } />
       {logout}
     </Menu>
   );
