@@ -16,6 +16,7 @@ import { IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Location } from 'history';
 import { useCallback, useMemo, useState } from 'react';
+import { Translation } from 'react-i18next';
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import classes from 'src/styles/NavigationBar.module.scss';
 
@@ -75,7 +76,13 @@ const NavigationBar: React.FC = () => {
         key={navbarEntry.text}
       >
         <Icon icon={navbarEntry.icon} />
-        <div>{navbarEntry.text}</div>
+        <div>
+          {
+            <Translation>
+              {(t, { i18n }) => t(navbarEntry.text)}
+            </Translation>
+          }
+        </div>
         {navbarEntry.hasNotifications && (
           <NotificationBadge
             notificationFilter={filterNotificationsByType(navbarEntry.text)}
@@ -310,8 +317,8 @@ const NavigationBar: React.FC = () => {
             ? renderPlaygroundOnlyNavbarLeftMobile()
             : renderPlaygroundOnlyNavbarLeftDesktop()
           : isMobileBreakpoint
-          ? renderFullAcademyNavbarLeftMobile()
-          : renderFullAcademyNavbarLeftDesktop()}
+            ? renderFullAcademyNavbarLeftMobile()
+            : renderFullAcademyNavbarLeftDesktop()}
         {commonNavbarRight}
       </Navbar>
 
@@ -379,7 +386,9 @@ export const createDesktopNavlink: CreateNavlinkFunction = navbarEntry => (
   >
     <Icon icon={navbarEntry.icon} />
     <div className={classNames(navbarEntry.hiddenInBreakpoints?.map(bp => `hidden-${bp}`))}>
-      {navbarEntry.text}
+      <Translation>
+        {(t, { i18n }) => t(navbarEntry.text)}
+      </Translation>
     </div>
     {navbarEntry.hasNotifications && (
       <NotificationBadge

@@ -1,6 +1,5 @@
 import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
-import { t } from 'i18next';
 import React from 'react';
 import { AssessmentType } from 'src/commons/assessment/AssessmentTypes';
 import { useSession } from 'src/commons/utils/Hooks';
@@ -89,35 +88,35 @@ const getStaffNavlinkInfo = ({
     {
       to: `/courses/${courseId}/groundcontrol`,
       icon: IconNames.SATELLITE,
-      text: t('Ground Control'),
+      text: 'Ground Control',
       disabled: !isStaffOrAdmin,
       hiddenInBreakpoints: ['xs', 'sm']
     },
     {
       to: `/courses/${courseId}/dashboard`,
       icon: IconNames.GLOBE,
-      text: t('Dashboard'),
+      text: 'Dashboard',
       disabled: !isStaffOrAdmin,
       hiddenInBreakpoints: ['xs', 'sm']
     },
     {
       to: `/courses/${courseId}/sourcereel`,
       icon: IconNames.MOBILE_VIDEO,
-      text: t('Sourcereel'),
+      text: 'Sourcereel',
       disabled: !isStaffOrAdmin,
       hiddenInBreakpoints: ['xs', 'sm', 'md']
     },
     {
       to: `/courses/${courseId}/teamformation`,
       icon: IconNames.FORM,
-      text: t('Team Formation'),
+      text: 'Team Formation',
       disabled: !isStaffOrAdmin,
       hiddenInBreakpoints: ['xs', 'sm', 'md']
     },
     {
       to: `/courses/${courseId}/grading`,
       icon: IconNames.ENDORSED,
-      text: t('Grading'),
+      text: 'Grading',
       disabled: !isStaffOrAdmin,
       hasNotifications: true,
       hiddenInBreakpoints: ['xs', 'sm', 'md']
@@ -125,14 +124,14 @@ const getStaffNavlinkInfo = ({
     {
       to: `/courses/${courseId}/gamesimulator`,
       icon: IconNames.CROWN,
-      text: t('Game Simulator'),
+      text: 'Game Simulator',
       disabled: !isStaffOrAdmin,
       hiddenInBreakpoints: ['xs', 'sm', 'md']
     },
     {
       to: `/courses/${courseId}/adminpanel`,
       icon: IconNames.SETTINGS,
-      text: t('Admin Panel'),
+      text: 'Admin Panel',
       disabled: !isAdmin,
       hiddenInBreakpoints: ['xs', 'sm', 'md', 'lg']
     }
