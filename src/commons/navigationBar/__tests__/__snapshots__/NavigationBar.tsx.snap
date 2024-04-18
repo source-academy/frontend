@@ -146,7 +146,11 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
                 <div
                   className="hidden-xs hidden-sm"
                 >
-                  Missions
+                  <Translation
+                    keyPrefix="navigationBar"
+                  >
+                    [Function]
+                  </Translation>
                 </div>
                 <NotificationBadge
                   disableHover={true}
@@ -166,7 +170,11 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
                 <div
                   className="hidden-xs hidden-sm"
                 >
-                  Quests
+                  <Translation
+                    keyPrefix="navigationBar"
+                  >
+                    [Function]
+                  </Translation>
                 </div>
                 <NotificationBadge
                   disableHover={true}
@@ -186,7 +194,11 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
                 <div
                   className="hidden-xs hidden-sm"
                 >
-                  Paths
+                  <Translation
+                    keyPrefix="navigationBar"
+                  >
+                    [Function]
+                  </Translation>
                 </div>
                 <NotificationBadge
                   disableHover={true}
@@ -206,7 +218,11 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
                 <div
                   className="hidden-xs hidden-sm"
                 >
-                  Contests
+                  <Translation
+                    keyPrefix="navigationBar"
+                  >
+                    [Function]
+                  </Translation>
                 </div>
                 <NotificationBadge
                   disableHover={true}
@@ -226,7 +242,11 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
                 <div
                   className="hidden-xs hidden-sm"
                 >
-                  Missions
+                  <Translation
+                    keyPrefix="navigationBar"
+                  >
+                    [Function]
+                  </Translation>
                 </div>
                 <NotificationBadge
                   disableHover={true}
@@ -288,7 +308,11 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
         <div
           className=""
         >
-          Sourcecast
+          <Translation
+            keyPrefix="navigationBar"
+          >
+            [Function]
+          </Translation>
         </div>
       </NavLink>
       <NavLink
@@ -304,7 +328,11 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
         <div
           className=""
         >
-          Playground
+          <Translation
+            keyPrefix="navigationBar"
+          >
+            [Function]
+          </Translation>
         </div>
       </NavLink>
       <NavLink
@@ -320,7 +348,11 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
         <div
           className=""
         >
-          SICP JS
+          <Translation
+            keyPrefix="navigationBar"
+          >
+            [Function]
+          </Translation>
         </div>
       </NavLink>
       <NavLink
@@ -336,7 +368,11 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
         <div
           className=""
         >
-          Achievements
+          <Translation
+            keyPrefix="navigationBar"
+          >
+            [Function]
+          </Translation>
         </div>
       </NavLink>
     </Blueprint5.NavbarGroup>
@@ -481,7 +517,11 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
         <div
           className=""
         >
-          SICP JS
+          <Translation
+            keyPrefix="navigationBar"
+          >
+            [Function]
+          </Translation>
         </div>
       </NavLink>
     </Blueprint5.NavbarGroup>
