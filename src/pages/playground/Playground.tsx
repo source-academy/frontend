@@ -758,7 +758,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       return tabs;
     }
 
-    if (currentLang === Chapter.FULL_JAVA) {
+    if (currentLang === Chapter.FULL_JAVA && process.env.NODE_ENV === 'development') {
       tabs.push(
         makeUploadTabFrom(workspaceLocation, files =>
           dispatch(uploadFiles(files, workspaceLocation))
