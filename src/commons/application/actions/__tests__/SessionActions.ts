@@ -298,6 +298,7 @@ test('setCourseConfiguration generates correct action object', () => {
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help text',
+    defaultLlmPrompt: 'defaul Llm Prompt',
     assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
   };
   const action = setCourseConfiguration(courseConfig);
@@ -760,6 +761,7 @@ test('updateCourseConfig generates correct action object', () => {
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help text',
+    defaultLlmPrompt: 'default LLM Prompt',
     assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
   };
   const action = updateCourseConfig(courseConfig);

@@ -189,6 +189,7 @@ const mockCourseConfiguration1: CourseConfiguration = {
   sourceChapter: Chapter.SOURCE_1,
   sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
+  defaultLlmPrompt: 'default LLM prompt',
   assetsPrefix: ''
 };
 
@@ -220,6 +221,7 @@ const mockCourseConfiguration2: CourseConfiguration = {
   sourceChapter: Chapter.SOURCE_4,
   sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
+  defaultLlmPrompt: 'default LLM prompt',
   assetsPrefix: ''
 };
 
@@ -968,6 +970,7 @@ describe('Test UPDATE_COURSE_CONFIG action', () => {
     sourceChapter: Chapter.SOURCE_4,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help',
+    defaultLlmPrompt: 'default LLM prompt',
     assetsPrefix: ''
   };
 
@@ -1065,7 +1068,8 @@ describe('Test CREATE_COURSE action', () => {
     enableStories: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
-    moduleHelpText: 'Help Text'
+    moduleHelpText: 'Help Text',
+    defaultLlmPrompt: 'default Llm prompt'
   };
   const user = mockUser;
   const courseConfiguration = mockCourseConfiguration1;

@@ -318,11 +318,7 @@ const GradingWorkspace: React.FC<Props> = props => {
                 : grading!.answers[questionId].team!.map(member => member.username)
             }
             comments={grading!.answers[questionId].grade.comments ?? ''}
-            graderName={
-              grading!.answers[questionId].grade.grader
-                ? grading!.answers[questionId].grade.grader!.name
-                : undefined
-            }
+            graderName={grading!.answers[questionId].grade.grader?.name}
             gradedAt={
               grading!.answers[questionId].grade.gradedAt
                 ? grading!.answers[questionId].grade.gradedAt!

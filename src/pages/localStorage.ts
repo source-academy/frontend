@@ -70,6 +70,7 @@ export const saveState = (state: OverallState) => {
         enableSourcecast: state.session.enableSourcecast,
         enableStories: state.session.enableStories,
         moduleHelpText: state.session.moduleHelpText,
+        defaultLlmPrompt: state.session.defaultLlmPrompt,
         assetsPrefix: state.session.assetsPrefix,
         assessmentConfigurations: state.session.assessmentConfigurations,
         notificationConfigs: state.session.notificationConfigs,
