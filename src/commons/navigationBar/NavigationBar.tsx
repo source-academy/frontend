@@ -78,7 +78,7 @@ const NavigationBar: React.FC = () => {
         <Icon icon={navbarEntry.icon} />
         <div>
           {
-            <Translation keyPrefix={"navigationBar"}>
+            <Translation keyPrefix={'navigationBar'}>
               {(t, { i18n }) => t(navbarEntry.text)}
             </Translation>
           }
@@ -317,8 +317,8 @@ const NavigationBar: React.FC = () => {
             ? renderPlaygroundOnlyNavbarLeftMobile()
             : renderPlaygroundOnlyNavbarLeftDesktop()
           : isMobileBreakpoint
-            ? renderFullAcademyNavbarLeftMobile()
-            : renderFullAcademyNavbarLeftDesktop()}
+          ? renderFullAcademyNavbarLeftMobile()
+          : renderFullAcademyNavbarLeftDesktop()}
         {commonNavbarRight}
       </Navbar>
 
@@ -386,9 +386,7 @@ export const createDesktopNavlink: CreateNavlinkFunction = navbarEntry => (
   >
     <Icon icon={navbarEntry.icon} />
     <div className={classNames(navbarEntry.hiddenInBreakpoints?.map(bp => `hidden-${bp}`))}>
-      <Translation keyPrefix={"navigationBar"}>
-        {(t) => t(navbarEntry.text)}
-      </Translation>
+      <Translation keyPrefix={'navigationBar'}>{t => t(navbarEntry.text)}</Translation>
     </div>
     {navbarEntry.hasNotifications && (
       <NotificationBadge

@@ -1,21 +1,19 @@
-import { FormGroup, HTMLSelect, Icon, PopoverPosition, Tooltip } from "@blueprintjs/core";
-import { IconNames } from "@blueprintjs/icons";
-import { useState } from "react";
-import i18n from "src/i18n/i18n";
-import { i18nLanguageCode, resources } from "src/i18n/locales";
+import { FormGroup, HTMLSelect, Icon, PopoverPosition, Tooltip } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import { useState } from 'react';
+import i18n from 'src/i18n/i18n';
+import { i18nLanguageCode, resources } from 'src/i18n/locales';
 
-const languageOptions = Object.keys(resources).map((abbr) => ({
+const languageOptions = Object.keys(resources).map(abbr => ({
   label: resources[abbr].name,
-  value: abbr,
+  value: abbr
 }));
 
 export const LocaleSelector: React.FC = () => {
-
   const [currI18nLanguage, setI18nLanguage] = useState(i18n.language)!;
 
-
   const handleLanguageChange: React.ChangeEventHandler<HTMLSelectElement> = e => {
-    const targetLanguage : i18nLanguageCode = e.target.value as i18nLanguageCode;
+    const targetLanguage: i18nLanguageCode = e.target.value as i18nLanguageCode;
 
     setI18nLanguage(targetLanguage);
     i18n.changeLanguage(targetLanguage);
@@ -37,5 +35,5 @@ export const LocaleSelector: React.FC = () => {
         <Icon icon={IconNames.Help} />
       </Tooltip>
     </FormGroup>
-  )
-}
+  );
+};

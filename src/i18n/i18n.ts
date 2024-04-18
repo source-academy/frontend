@@ -4,7 +4,6 @@ import { initReactI18next } from 'react-i18next';
 
 import { i18nLanguageCode, resources } from './locales';
 
-
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -13,9 +12,8 @@ i18n
     debug: true,
     resources,
     interpolation: {
-      escapeValue: false, // not needed for react as it escapes by default
+      escapeValue: false // not needed for react as it escapes by default
     }
   });
-
 
 export default i18n;

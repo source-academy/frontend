@@ -19,7 +19,6 @@ const options = [
   { label: 'Emacs', value: EditorBinding.EMACS }
 ] as const;
 
-
 type Props = {
   isOpen: boolean;
   onClose: () => void;
@@ -63,7 +62,6 @@ const DropdownSettings: React.FC<Props> = ({ isOpen, onClose }) => {
         </FormGroup>
 
         <LocaleSelector />
-
       </DialogBody>
     </Dialog>
   );
