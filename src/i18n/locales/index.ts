@@ -27,7 +27,6 @@ const developmentOnlyLanguages = {
   }
 };
 
-
 export const resources = {
   ...defaultLanguage,
   ...productionReadyLanguages,
