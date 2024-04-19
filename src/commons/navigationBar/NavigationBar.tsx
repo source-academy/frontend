@@ -18,6 +18,7 @@ import { Location } from 'history';
 import { useCallback, useMemo, useState } from 'react';
 import { Translation } from 'react-i18next';
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import { i18nDefaultLangKeys } from 'src/i18n/i18next';
 import classes from 'src/styles/NavigationBar.module.scss';
 
 import Dropdown from '../dropdown/Dropdown';
@@ -78,12 +79,8 @@ const NavigationBar: React.FC = () => {
         <Icon icon={navbarEntry.icon} />
         <div>
           {
-            <Translation ns='commons' keyPrefix='navigationBar'>
-              {
-                // @ts-expect-error the t function expects a specific set of strings
-                // as valid translation keys but we are passing in a string type
-                t => t(navbarEntry.text)
-              }
+            <Translation ns="commons" keyPrefix="navigationBar">
+              {t => t(navbarEntry.text as keyof i18nDefaultLangKeys['commons']['navigationBar'])}
             </Translation>
           }
         </div>
@@ -390,12 +387,8 @@ export const createDesktopNavlink: CreateNavlinkFunction = navbarEntry => (
   >
     <Icon icon={navbarEntry.icon} />
     <div className={classNames(navbarEntry.hiddenInBreakpoints?.map(bp => `hidden-${bp}`))}>
-      <Translation ns='commons' keyPrefix='navigationBar'>
-        {
-          // @ts-expect-error the t function expects a specific set of strings
-          // as valid translation keys but we are passing in a string type
-          t => t(navbarEntry.text)
-        }
+      <Translation ns="commons" keyPrefix="navigationBar">
+        {t => t(navbarEntry.text as keyof i18nDefaultLangKeys['commons']['navigationBar'])}
       </Translation>
     </div>
     {navbarEntry.hasNotifications && (
