@@ -79,7 +79,11 @@ const NavigationBar: React.FC = () => {
         <Icon icon={navbarEntry.icon} />
         <div>
           <Translation ns="commons" keyPrefix="navigationBar">
-            {t => t(navbarEntry.text as keyof i18nDefaultLangKeys['commons']['navigationBar'])}
+            {t =>
+              t(navbarEntry.text as keyof i18nDefaultLangKeys['commons']['navigationBar'], {
+                defaultValue: navbarEntry.text
+              })
+            }
           </Translation>
         </div>
         {navbarEntry.hasNotifications && (
@@ -386,7 +390,11 @@ export const createDesktopNavlink: CreateNavlinkFunction = navbarEntry => (
     <Icon icon={navbarEntry.icon} />
     <div className={classNames(navbarEntry.hiddenInBreakpoints?.map(bp => `hidden-${bp}`))}>
       <Translation ns="commons" keyPrefix="navigationBar">
-        {t => t(navbarEntry.text as keyof i18nDefaultLangKeys['commons']['navigationBar'])}
+        {t =>
+          t(navbarEntry.text as keyof i18nDefaultLangKeys['commons']['navigationBar'], {
+            defaultValue: navbarEntry.text
+          })
+        }
       </Translation>
     </div>
     {navbarEntry.hasNotifications && (
