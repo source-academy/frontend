@@ -113,7 +113,7 @@ const LoginButton = ({
       rightIcon={IconNames.LOG_IN}
       onClick={useCallback(() => handleClick(id), [handleClick, id])}
     >
-      <Translation ns={'login'}>{t => t('Log in with', { name: name })}</Translation>
+      <Translation ns="login">{t => t('Log in with', { name: name })}</Translation>
     </Button>
   );
 };

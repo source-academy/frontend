@@ -78,7 +78,7 @@ const NavigationBar: React.FC = () => {
         <Icon icon={navbarEntry.icon} />
         <div>
           {
-            <Translation ns={'commons'} keyPrefix={'navigationBar'}>
+            <Translation ns='commons' keyPrefix='navigationBar'>
               {
                 // @ts-expect-error the t function expects a specific set of strings
                 // as valid translation keys but we are passing in a string type
@@ -390,7 +390,7 @@ export const createDesktopNavlink: CreateNavlinkFunction = navbarEntry => (
   >
     <Icon icon={navbarEntry.icon} />
     <div className={classNames(navbarEntry.hiddenInBreakpoints?.map(bp => `hidden-${bp}`))}>
-      <Translation ns={'commons'} keyPrefix={'navigationBar'}>
+      <Translation ns='commons' keyPrefix='navigationBar'>
         {
           // @ts-expect-error the t function expects a specific set of strings
           // as valid translation keys but we are passing in a string type
