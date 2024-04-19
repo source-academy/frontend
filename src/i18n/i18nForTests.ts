@@ -3,18 +3,15 @@ import { initReactI18next } from 'react-i18next';
 
 import { defaultResources, i18nLanguageCode } from './locales';
 
-i18n
-  .use(initReactI18next)
-  .init({
-    lng: i18nLanguageCode.ENGLISH,
-    fallbackLng: i18nLanguageCode.ENGLISH,
-    debug: true,
-    ns: ['translationsNS'],
-    defaultNS: 'commons',
-    resources: defaultResources,
-    interpolation: {
-      escapeValue: false // not needed for react!!
-    },
-  });
+i18n.use(initReactI18next).init({
+  lng: i18nLanguageCode.ENGLISH,
+  fallbackLng: i18nLanguageCode.ENGLISH,
+  debug: true,
+  defaultNS: 'commons',
+  resources: defaultResources,
+  interpolation: {
+    escapeValue: false // not needed for react!!
+  }
+});
 
 export default i18n;

@@ -78,11 +78,9 @@ const NavigationBar: React.FC = () => {
       >
         <Icon icon={navbarEntry.icon} />
         <div>
-          {
-            <Translation ns="commons" keyPrefix="navigationBar">
-              {t => t(navbarEntry.text as keyof i18nDefaultLangKeys['commons']['navigationBar'])}
-            </Translation>
-          }
+          <Translation ns="commons" keyPrefix="navigationBar">
+            {t => t(navbarEntry.text as keyof i18nDefaultLangKeys['commons']['navigationBar'])}
+          </Translation>
         </div>
         {navbarEntry.hasNotifications && (
           <NotificationBadge
