@@ -6,6 +6,13 @@ export enum i18nLanguageCode {
   PSEUDO = 'pseudo'
 }
 
+export const defaultResources = {
+  [i18nLanguageCode.ENGLISH]: {
+    name: 'English',
+    ...translationEN
+  }
+};
+
 export const resources = {
   [i18nLanguageCode.ENGLISH]: {
     name: 'English',
