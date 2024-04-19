@@ -3,9 +3,9 @@ import 'i18next';
 // import all namespaces (for the default language, only)
 import commons from 'locales/en/commons.json';
 
-import { i18nLanguageCode, resources } from './locales';
+import { defaultLanguage, i18nLanguageCode } from './locales';
 
-export type i18nDefaultLangKeys = (typeof resources)[i18nLanguageCode.ENGLISH];
+export type i18nDefaultLangKeys = (typeof defaultLanguage)[i18nLanguageCode.DEFAULT];
 
 declare module 'i18next' {
   // Extend CustomTypeOptions
