@@ -1,5 +1,5 @@
 import translationEN from './en';
-import translationPSEUDO from './pseudo'
+import translationPSEUDO from './pseudo';
 
 export enum i18nLanguageCode {
   ENGLISH = 'en',

@@ -68,7 +68,7 @@ const Login: React.FC = () => {
         <Card elevation={Elevation.FOUR}>
           <div>
             <NonIdealState
-              description={t("Logging In...")}
+              description={t('Logging In...')}
               icon={<Spinner size={SpinnerSize.LARGE} />}
             />
           </div>
@@ -113,9 +113,7 @@ const LoginButton = ({
       rightIcon={IconNames.LOG_IN}
       onClick={useCallback(() => handleClick(id), [handleClick, id])}
     >
-      <Translation ns={'login'}>
-        {(t) => t("Log in with", { name : name })}
-      </Translation>
+      <Translation ns={'login'}>{t => t('Log in with', { name: name })}</Translation>
     </Button>
   );
 };
