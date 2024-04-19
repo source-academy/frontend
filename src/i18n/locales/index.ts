@@ -18,8 +18,12 @@ export const resources = {
     name: 'English',
     ...translationEN
   },
-  [i18nLanguageCode.PSEUDO]: {
-    name: 'Pseudo',
-    ...translationPSEUDO
-  }
+  ...(process.env.NODE_ENV === 'development'
+    ? {
+        [i18nLanguageCode.PSEUDO]: {
+          name: 'Pseudo',
+          ...translationPSEUDO
+        }
+      }
+    : {})
 };
