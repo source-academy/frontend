@@ -46,6 +46,8 @@ export class FnValue extends Value implements IHoverable {
   readonly tooltipWidth: number;
   readonly exportTooltip: string;
   readonly exportTooltipWidth: number;
+
+  /** width of the closure circles + label */
   readonly totalWidth: number;
   readonly labelRef: RefObject<Label> = React.createRef();
 
@@ -66,7 +68,6 @@ export class FnValue extends Value implements IHoverable {
     this._width = this.radius * 4;
     this._height = this.radius * 2;
 
-    this.enclosingFrame = Frame.getFrom(this.data.environment);
     this.fnName = isStreamFn(this.data) ? '' : this.data.functionName;
 
     this.paramsText = `params: ${getParamsText(this.data)}`;
@@ -106,7 +107,7 @@ export class FnValue extends Value implements IHoverable {
         this._y = newReference.y() + Config.DataUnitHeight / 2 - this.radius;
       } else {
         this._x = newReference.x();
-        this._y = newReference.y() + newReference.parent.height() + Config.DataUnitHeight;
+        this._y = newReference.y() + newReference.parent.totalHeight + Config.DataUnitHeight;
       }
       this.centerX = this._x + Config.DataUnitWidth / 2;
       this._x = this.centerX - this.radius * 2;
@@ -135,6 +136,7 @@ export class FnValue extends Value implements IHoverable {
     if (this.fnName === undefined) {
       throw new Error('Closure has no main reference and is not initialised!');
     }
+    this.enclosingFrame = Frame.getFrom(this.data.environment);
     if (this.enclosingFrame) {
       this._arrow = new ArrowFromFn(this).to(this.enclosingFrame) as ArrowFromFn;
     }

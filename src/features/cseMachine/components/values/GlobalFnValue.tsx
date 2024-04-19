@@ -28,8 +28,7 @@ import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
 import { Value } from './Value';
 
-/** this encapsulates a function from the global frame
- * (which has no extra props such as environment or fnName) */
+/** this encapsulates a function from the global frame */
 export class GlobalFnValue extends Value implements IHoverable {
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;

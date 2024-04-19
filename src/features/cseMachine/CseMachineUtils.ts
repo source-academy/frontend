@@ -230,7 +230,7 @@ export function setDifference<T>(set1: Set<T>, set2: Set<T>) {
  * order is the first binding or array unit which shares the same environment with `value`.
  *
  * An exception is for a global function value, in which case the global frame binding is
- * always prioritised over array units.
+ * always prioritised over other bindings or array units.
  */
 export function isMainReference(value: Value, reference: ReferenceType) {
   if (isGlobalFn(value.data)) {
