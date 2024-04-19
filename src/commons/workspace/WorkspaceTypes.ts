@@ -6,6 +6,7 @@ import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
+import { UploadResult } from '../sideContent/content/SideContentUpload';
 
 export const ADD_HTML_CONSOLE_ERROR = 'ADD_HTML_CONSOLE_ERROR';
 export const BEGIN_CLEAR_CONTEXT = 'BEGIN_CLEAR_CONTEXT';
@@ -154,7 +155,7 @@ export type WorkspaceState = {
   readonly debuggerContext: DebuggerContext;
   readonly lastDebuggerResult: any;
   readonly lastNonDetResult: Result | null;
-  readonly files: { [key: string]: any };
+  readonly files: UploadResult;
 };
 
 type ReplHistory = {

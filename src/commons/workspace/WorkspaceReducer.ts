@@ -851,7 +851,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       }
     })
     .addCase(uploadFiles, (state, action) => {
-      const { workspaceLocation } = action.payload;
+      const workspaceLocation = action.payload.workspaceLocation;
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
         state[workspaceLocation].files = action.payload.files;
       }

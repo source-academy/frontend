@@ -11,6 +11,7 @@ import {
 } from '../application/types/InterpreterTypes';
 import { Library } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
+import { UploadResult } from '../sideContent/content/SideContentUpload';
 import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import {
   ADD_EDITOR_TAB,
@@ -528,7 +529,7 @@ export const toggleUsingUpload = createAction(
 
 export const uploadFiles = createAction(
   UPLOAD_FILES,
-  (files: { [key: string]: any }, workspaceLocation: WorkspaceLocation) => ({
+  (files: UploadResult, workspaceLocation: WorkspaceLocation) => ({
     payload: { files, workspaceLocation }
   })
 );

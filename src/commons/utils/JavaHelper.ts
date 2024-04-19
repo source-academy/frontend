@@ -7,6 +7,7 @@ import loadSourceModules from 'js-slang/dist/modules/loader';
 import { ErrorSeverity, ErrorType, Result, SourceError } from 'js-slang/dist/types';
 
 import { CseMachine } from '../../features/cseMachine/java/CseMachine';
+import { UploadResult } from '../sideContent/content/SideContentUpload';
 import Constants from './Constants';
 import DisplayBufferService from './DisplayBufferService';
 
@@ -15,11 +16,10 @@ export async function javaRun(
   context: Context,
   targetStep: number,
   isUsingCse: boolean,
-  options?: { uploadIsActive?: boolean; uploads?: { [key: string]: any } }
+  options?: { uploadIsActive?: boolean; uploads?: UploadResult }
 ) {
   let compiled = {};
 
-  // #region utils functions
   const stderr = (type: 'TypeCheck' | 'Compile' | 'Runtime', msg: string) => {
     context.errors.push({
       type: type as any,
@@ -90,8 +90,6 @@ export async function javaRun(
       buffer.push(str);
     }
   };
-
-  // #endregion
 
   if (isUsingCse) {
     return await runJavaCseMachine(javaCode, targetStep, context);
