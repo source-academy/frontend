@@ -1,18 +1,18 @@
-import translationEN from './en/commons.json';
-import translationPseudo from './pseudo/commons.json';
+import translationEN from './en';
+import translationPSEUDO from './pseudo'
 
 export enum i18nLanguageCode {
   ENGLISH = 'en',
   PSEUDO = 'pseudo'
 }
 
-export const resources: { [language: string]: any } = {
+export const resources = {
   [i18nLanguageCode.ENGLISH]: {
     name: 'English',
-    translation: translationEN
+    ...translationEN
   },
   [i18nLanguageCode.PSEUDO]: {
     name: 'Pseudo',
-    translation: translationPseudo
+    ...translationPSEUDO
   }
 };

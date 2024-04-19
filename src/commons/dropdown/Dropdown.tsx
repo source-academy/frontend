@@ -22,7 +22,7 @@ const Dropdown: React.FC = () => {
   const [isMyCoursesOpen, setIsMyCoursesOpen] = useState(false);
   const [isCreateCourseOpen, setIsCreateCourseOpen] = useState(false);
 
-  const { t } = useTranslation('translation', { keyPrefix: 'dropdown' });
+  const { t } = useTranslation('commons', { keyPrefix: 'dropdown' });
 
   const { isLoggedIn, name, courses, courseId } = useSession();
   const dispatch = useDispatch();

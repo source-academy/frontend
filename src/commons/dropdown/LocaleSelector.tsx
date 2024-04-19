@@ -4,8 +4,8 @@ import { useState } from 'react';
 import i18n from 'src/i18n/i18n';
 import { i18nLanguageCode, resources } from 'src/i18n/locales';
 
-const languageOptions = Object.keys(resources).map(abbr => ({
-  label: resources[abbr].name,
+const languageOptions = Object.keys(resources).map((abbr) => ({
+  label: resources[abbr as keyof typeof resources].name,
   value: abbr
 }));
 
