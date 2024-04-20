@@ -29,7 +29,7 @@ const codeSamples = [
   `
     const fn = () => "L";
     const x = ["long string", pair(() => 1, () => 2), list(1, pair(2, 3), () => 3), () => "THIS", 5, 6];
-    const y = list(x[1], x[2], tail(x[1]), tail(x[2]), fn);        
+    const y = list(x[1], x[2], tail(x[1]), tail(x[2]), fn);
     debugger;`,
   `
     const fn = () => 1;

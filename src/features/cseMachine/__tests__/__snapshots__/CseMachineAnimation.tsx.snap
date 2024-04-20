@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AnimationComponent animates correctly with custom animation config 1`] = `
+<Text
+  listening={false}
+  opacity={0}
+  perfectDrawEnabled={false}
+  text="test"
+  x={0}
+  y={100}
+/>
+`;
+
+exports[`AnimationComponent animates correctly with default animation config 1`] = `
+<Rect
+  height={100}
+  listening={false}
+  perfectDrawEnabled={false}
+/>
+`;
