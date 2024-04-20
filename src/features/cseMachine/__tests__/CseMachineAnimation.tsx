@@ -1,9 +1,9 @@
-import * as ReactKonva from 'react-konva';
 import Konva from 'konva';
+import * as ReactKonva from 'react-konva';
 
+import { AnimationConfig } from '../animationComponents/base/Animatable';
 import { AnimationComponent } from '../animationComponents/base/AnimationComponents';
 import { CseAnimation } from '../CseMachineAnimation';
-import { AnimationConfig } from '../animationComponents/base/Animatable';
 
 const mockStage = new Konva.Stage({
   container: document.createElement('div'),
