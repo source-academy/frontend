@@ -1,14 +1,10 @@
 import { IconNames } from '@blueprintjs/icons';
+import React from 'react';
 
 import { SideContentLocation, SideContentTab, SideContentType } from '../SideContentTypes';
 
 export type UploadResult = {
   [key: string]: any;
-};
-
-type OwnProps = {
-  workspaceLocation: SideContentLocation;
-  onUpload: (files: UploadResult) => void;
 };
 
 async function getBase64(file: Blob, onFinish: (result: string) => void) {
@@ -23,10 +19,15 @@ async function getBase64(file: Blob, onFinish: (result: string) => void) {
   });
 }
 
+type Props = {
+  workspaceLocation: SideContentLocation;
+  onUpload: (files: UploadResult) => void;
+};
+
 /**
- * This class is responsible for uploading Java class files to bypass the compiler.
+ * This component is responsible for uploading Java class files to bypass the compiler.
  */
-const SideContentUpload = (props: OwnProps) => {
+const SideContentUpload: React.FC<Props> = props => {
   return (
     <div>
       <p>Bypass the compiler and type checker by uploading class files to run in the JVM.</p>
