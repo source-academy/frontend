@@ -70,9 +70,13 @@ export class CseAnimation {
     const currStashComponent = Layout.stashComponent.stashItemComponents.at(-1)!;
     switch (node.type) {
       case 'Program':
-        CseAnimation.animations.push(
-          new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())
-        );
+        if (node.body.length === 1) {
+          CseAnimation.handleNode(node.body[0]);
+        } else {
+          CseAnimation.animations.push(
+            new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())
+          );
+        }
         if (CseMachine.getCurrentEnvId() !== '-1') {
           CseAnimation.animations.push(
             new FrameCreationAnimation(lastControlComponent, CseAnimation.currentFrame)
@@ -132,8 +136,9 @@ export class CseAnimation {
         CseAnimation.handleNode(node.expression);
         break;
       case 'StatementSequence':
-        if (node.body.length === 1) CseAnimation.handleNode(node.body[0]);
-        else {
+        if (node.body.length === 1) {
+          CseAnimation.handleNode(node.body[0]);
+        } else {
           CseAnimation.animations.push(
             new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())
           );

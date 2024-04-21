@@ -614,12 +614,8 @@ export function getControlItemComponent(
       case 'Program':
         // If the control item is the whole program
         // add {} to represent the implicit block
-        const originalText = astToString(controlItem)
-          .trim()
-          .split('\n')
-          .map(line => `\t\t${line}`)
-          .join('\n');
-        const textP = `{\n${originalText}\n}`;
+        const originalText = astToString(controlItem).trim().replaceAll('\n', '\n\t\t');
+        const textP = `{\n\t\t${originalText}\n}`;
         return new ControlItemComponent(
           textP,
           textP,
@@ -630,11 +626,7 @@ export function getControlItemComponent(
         );
       case 'StatementSequence':
         // remove whitespace between statements
-        const textS = astToString(controlItem)
-          .trim()
-          .split('\n')
-          .map(line => line.trim())
-          .join('\n');
+        const textS = controlItem.body.map(item => astToString(item).trim()).join('\n');
         return new ControlItemComponent(
           textS,
           textS,
