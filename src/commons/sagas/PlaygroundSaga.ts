@@ -13,7 +13,7 @@ import {
   updateShortURL
 } from '../../features/playground/PlaygroundActions';
 import { GENERATE_LZ_STRING, SHORTEN_URL } from '../../features/playground/PlaygroundTypes';
-import { isSourceLanguage, OverallState } from '../application/ApplicationTypes';
+import { isSchemeLanguage, isSourceLanguage, OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
 import { visitSideContent } from '../sideContent/SideContentActions';
@@ -121,6 +121,10 @@ export default function* PlaygroundSaga(): SagaIterator {
         } else {
           yield put(toggleUsingCse(true, workspaceLocation));
         }
+      }
+
+      if (isSchemeLanguage(playgroundSourceChapter) && newId === SideContentType.cseMachine) {
+        yield put(toggleUsingCse(true, workspaceLocation));
       }
     }
   );

@@ -1,5 +1,6 @@
 import { Control } from 'js-slang/dist/cse-machine/interpreter';
 import { ControlItem, Instr } from 'js-slang/dist/cse-machine/types';
+import { Chapter, StatementSequence } from 'js-slang/dist/types';
 import { Node } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
@@ -28,7 +29,8 @@ export class ControlStack extends Visible implements IHoverable {
 
   constructor(
     /** the control object */
-    readonly control: Control
+    readonly control: Control,
+    readonly chapter: Chapter
   ) {
     super();
     this._x = ControlStashConfig.ControlPosX;
@@ -36,6 +38,7 @@ export class ControlStack extends Visible implements IHoverable {
     this._width = ControlStashConfig.ControlItemWidth;
     this._height = ControlStashConfig.StashItemHeight + ControlStashConfig.StashItemTextPadding * 2;
     this.control = control;
+    this.chapter = chapter;
 
     // Function to convert the stack items to their components
     let i = 0;
@@ -57,7 +60,8 @@ export class ControlStack extends Visible implements IHoverable {
         this._height,
         i,
         highlightOnHover,
-        unhighlightOnHover
+        unhighlightOnHover,
+        this.chapter
       );
       this._height += component.height();
       i += 1;
@@ -141,6 +145,6 @@ export const isInstr = (command: ControlItem): command is Instr => {
  * @param command A ControlItem
  * @returns true if the ControlItem is an esNode and false if it is an instruction.
  */
-export const isNode = (command: ControlItem): command is Node => {
+export const isNode = (command: ControlItem): command is Node | StatementSequence => {
   return (command as Node).type !== undefined;
 };
