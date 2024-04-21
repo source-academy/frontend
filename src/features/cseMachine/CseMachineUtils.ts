@@ -433,8 +433,8 @@ export function getNonEmptyEnv(environment: Env): Env {
 
 /** Returns whether the given environments `env1` and `env2` refer to the same environment. */
 export function isEnvEqual(env1: Env, env2: Env): boolean {
-  // Cannot check env references because of deep cloning and the step after where
-  // property descriptors are copied over, so can only check id
+  // Cannot check env references because of partial cloning of environment tree,
+  // so we can only check id
   return env1.id === env2.id;
 }
 
