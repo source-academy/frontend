@@ -845,13 +845,13 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       };
     })
     .addCase(toggleUsingUpload, (state, action) => {
-      const { workspaceLocation } = action.payload;
+      const workspaceLocation = getWorkspaceLocation(action);
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
         state[workspaceLocation].usingUpload = action.payload.usingUpload;
       }
     })
     .addCase(uploadFiles, (state, action) => {
-      const workspaceLocation = action.payload.workspaceLocation;
+      const workspaceLocation = getWorkspaceLocation(action);
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
         state[workspaceLocation].files = action.payload.files;
       }
