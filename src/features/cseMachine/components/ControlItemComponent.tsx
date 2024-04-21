@@ -69,12 +69,12 @@ export class ControlItemComponent extends Visible implements IHoverable {
   }
 
   // Save previous z-index to go back to later
-  private zIndex = 0;
+  private zIndex = 1;
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
     this.highlightOnHover();
     !this.topItem && setHoveredStyle(e.currentTarget);
     setHoveredCursor(e.currentTarget);
-    this.zIndex = this.ref.current.zIndex();
+    this.zIndex = Math.max(this.ref.current.zIndex(), 1);
     this.ref.current.moveToTop();
     this.tooltipRef.current.moveToTop();
     this.tooltipRef.current.show();

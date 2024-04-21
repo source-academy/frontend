@@ -120,7 +120,6 @@ export class CseAnimation {
       case 'IfStatement':
       case 'MemberExpression':
       case 'ReturnStatement':
-      case 'StatementSequence':
       case 'UnaryExpression':
       case 'VariableDeclaration':
       case 'FunctionDeclaration':
@@ -131,6 +130,14 @@ export class CseAnimation {
         break;
       case 'ExpressionStatement':
         CseAnimation.handleNode(node.expression);
+        break;
+      case 'StatementSequence':
+        if (node.body.length === 1) CseAnimation.handleNode(node.body[0]);
+        else {
+          CseAnimation.animations.push(
+            new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())
+          );
+        }
         break;
     }
   }

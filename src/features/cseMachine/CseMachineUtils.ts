@@ -609,6 +609,7 @@ export function getControlItemComponent(
         topItem
       );
     }
+
     switch (controlItem.type) {
       case 'Program':
         // If the control item is the whole program
@@ -622,6 +623,21 @@ export function getControlItemComponent(
         return new ControlItemComponent(
           textP,
           textP,
+          stackHeight,
+          highlightOnHover,
+          unhighlightOnHover,
+          topItem
+        );
+      case 'StatementSequence':
+        // remove whitespace between statements
+        const textS = astToString(controlItem)
+          .trim()
+          .split('\n')
+          .map(line => line.trim())
+          .join('\n');
+        return new ControlItemComponent(
+          textS,
+          textS,
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
@@ -875,11 +891,16 @@ export function getStashItemComponent(
   return new StashItemComponent(stashItem, stackHeight, index, arrowTo);
 }
 
-// Helper function to get environment ID. Accounts for the hidden prelude environment right
-// after the global environment. Does not need to be used for frame environments, only for
-// environments from the context.
+// Helper function to get environment ID.
+// Accounts for the hidden prelude environment and empty environments.
 export const getEnvId = (environment: Environment): string => {
-  return environment.name === 'prelude' ? environment.tail!.id : environment.id;
+  while (
+    environment.tail &&
+    (environment.name === 'prelude' || Object.keys(environment.head).length === 0)
+  ) {
+    environment = environment.tail;
+  }
+  return environment.id;
 };
 
 // Function that returns whether the stash item will be popped off in the next step
