@@ -845,7 +845,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       };
     })
     .addCase(toggleUsingUpload, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
+      const { workspaceLocation } = action.payload;
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
         state[workspaceLocation].usingUpload = action.payload.usingUpload;
       }
