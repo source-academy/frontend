@@ -35,6 +35,8 @@ export async function javaRun(
     return Promise.resolve({ status: 'error' });
   }
 
+  if (isUsingCse) return await runJavaCseMachine(javaCode, targetStep, context);
+
   try {
     const classFile = compileFromSource(javaCode);
     compiled = {
@@ -105,8 +107,6 @@ export async function javaRun(
       buffer.push(str);
     }
   };
-
-  if (isUsingCse) return await runJavaCseMachine(javaCode, targetStep, context);
 
   // load cached classfiles from IndexedDB
   return loadCachedFiles(() =>
