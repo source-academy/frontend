@@ -91,9 +91,7 @@ export async function javaRun(
     }
   };
 
-  if (isUsingCse) {
-    return await runJavaCseMachine(javaCode, targetStep, context);
-  } else if (options?.uploadIsActive) {
+  if (options?.uploadIsActive) {
     compiled = options.uploads ?? {};
     if (!options.uploads) {
       stderr('Compile', 'No files uploaded');
@@ -105,6 +103,10 @@ export async function javaRun(
       const typeErrMsg = typeCheckResult.errorMsgs.join('\n');
       stderr('TypeCheck', typeErrMsg);
       return Promise.resolve({ status: 'error' });
+    }
+
+    if (isUsingCse) {
+      return await runJavaCseMachine(javaCode, targetStep, context);
     }
 
     try {

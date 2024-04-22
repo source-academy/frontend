@@ -16,7 +16,9 @@ import { IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Location } from 'history';
 import { useCallback, useMemo, useState } from 'react';
+import { Translation } from 'react-i18next';
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import { i18nDefaultLangKeys } from 'src/i18n/i18next';
 import classes from 'src/styles/NavigationBar.module.scss';
 
 import Dropdown from '../dropdown/Dropdown';
@@ -75,7 +77,15 @@ const NavigationBar: React.FC = () => {
         key={navbarEntry.text}
       >
         <Icon icon={navbarEntry.icon} />
-        <div>{navbarEntry.text}</div>
+        <div>
+          <Translation ns="commons" keyPrefix="navigationBar">
+            {t =>
+              t(navbarEntry.text as keyof i18nDefaultLangKeys['commons']['navigationBar'], {
+                defaultValue: navbarEntry.text
+              })
+            }
+          </Translation>
+        </div>
         {navbarEntry.hasNotifications && (
           <NotificationBadge
             notificationFilter={filterNotificationsByType(navbarEntry.text)}
@@ -379,7 +389,13 @@ export const createDesktopNavlink: CreateNavlinkFunction = navbarEntry => (
   >
     <Icon icon={navbarEntry.icon} />
     <div className={classNames(navbarEntry.hiddenInBreakpoints?.map(bp => `hidden-${bp}`))}>
-      {navbarEntry.text}
+      <Translation ns="commons" keyPrefix="navigationBar">
+        {t =>
+          t(navbarEntry.text as keyof i18nDefaultLangKeys['commons']['navigationBar'], {
+            defaultValue: navbarEntry.text
+          })
+        }
+      </Translation>
     </div>
     {navbarEntry.hasNotifications && (
       <NotificationBadge
