@@ -759,11 +759,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
 
     if (currentLang === Chapter.FULL_JAVA && process.env.NODE_ENV === 'development') {
-      tabs.push(
-        makeUploadTabFrom(workspaceLocation, files =>
-          dispatch(uploadFiles(files, workspaceLocation))
-        )
-      );
+      tabs.push(makeUploadTabFrom(files => dispatch(uploadFiles(files, workspaceLocation))));
     }
 
     if (!usingRemoteExecution) {

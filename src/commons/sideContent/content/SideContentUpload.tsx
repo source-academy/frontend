@@ -2,7 +2,7 @@ import { FileInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useCallback } from 'react';
 
-import { SideContentLocation, SideContentTab, SideContentType } from '../SideContentTypes';
+import { SideContentTab, SideContentType } from '../SideContentTypes';
 
 export type UploadResult = {
   [key: string]: any;
@@ -21,14 +21,13 @@ async function getBase64(file: Blob, onFinish: (result: string) => void) {
 }
 
 type Props = {
-  workspaceLocation: SideContentLocation;
   onUpload: (files: UploadResult) => void;
 };
 
 /**
  * This component is responsible for uploading Java class files to bypass the compiler.
  */
-const SideContentUpload: React.FC<Props> = ({ onUpload, workspaceLocation }) => {
+const SideContentUpload: React.FC<Props> = ({ onUpload }) => {
   const handleFileUpload: React.ChangeEventHandler<HTMLInputElement> = useCallback(
     e => {
       const ret: { [key: string]: string } = {};
@@ -72,13 +71,10 @@ const SideContentUpload: React.FC<Props> = ({ onUpload, workspaceLocation }) => 
   );
 };
 
-const makeUploadTabFrom = (
-  location: SideContentLocation,
-  onUpload: (files: UploadResult) => void
-): SideContentTab => ({
+const makeUploadTabFrom = (onUpload: (files: UploadResult) => void): SideContentTab => ({
   label: 'Upload files',
   iconName: IconNames.Upload,
-  body: <SideContentUpload workspaceLocation={location} onUpload={onUpload} />,
+  body: <SideContentUpload onUpload={onUpload} />,
   id: SideContentType.upload
 });
 
