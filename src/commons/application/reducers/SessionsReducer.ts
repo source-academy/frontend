@@ -1,162 +1,120 @@
+import { createReducer } from '@reduxjs/toolkit';
 import { Reducer } from 'redux';
-
 import {
-  REMOTE_EXEC_UPDATE_DEVICES,
-  REMOTE_EXEC_UPDATE_SESSION
-} from '../../../features/remoteExecution/RemoteExecutionTypes';
+  remoteExecUpdateDevices,
+  remoteExecUpdateSession
+} from 'src/features/remoteExecution/RemoteExecutionActions';
+
 import { SourceActionType } from '../../utils/ActionsHelper';
-import { defaultSession } from '../ApplicationTypes';
-import { LOG_OUT } from '../types/CommonsTypes';
+import { logOut } from '../actions/CommonsActions';
 import {
-  REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN,
-  SessionState,
-  SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
-  SET_ASSESSMENT_CONFIGURATIONS,
-  SET_CONFIGURABLE_NOTIFICATION_CONFIGS,
-  SET_COURSE_CONFIGURATION,
-  SET_COURSE_REGISTRATION,
-  SET_GITHUB_ACCESS_TOKEN,
-  SET_GITHUB_OCTOKIT_OBJECT,
-  SET_GOOGLE_USER,
-  SET_NOTIFICATION_CONFIGS,
-  SET_TOKENS,
-  SET_USER,
-  UPDATE_ASSESSMENT,
-  UPDATE_ASSESSMENT_OVERVIEWS,
-  UPDATE_GRADING,
-  UPDATE_GRADING_OVERVIEWS,
-  UPDATE_NOTIFICATIONS,
-  UPDATE_STUDENTS,
-  UPDATE_TEAM_FORMATION_OVERVIEW,
-  UPDATE_TEAM_FORMATION_OVERVIEWS,
-  UPDATE_TOTAL_XP
-} from '../types/SessionTypes';
+  removeGitHubOctokitObjectAndAccessToken,
+  setAdminPanelCourseRegistrations,
+  setAssessmentConfigurations,
+  setConfigurableNotificationConfigs,
+  setCourseConfiguration,
+  setCourseRegistration,
+  setGitHubAccessToken,
+  setGitHubOctokitObject,
+  setGoogleUser,
+  setNotificationConfigs,
+  setTokens,
+  setUser,
+  updateAssessment,
+  updateAssessmentOverviews,
+  updateGrading,
+  updateGradingOverviews,
+  updateNotifications,
+  updateStudents,
+  updateTeamFormationOverview,
+  updateTeamFormationOverviews,
+  updateTotalXp
+} from '../actions/SessionActions';
+import { defaultSession } from '../ApplicationTypes';
+import { SessionState } from '../types/SessionTypes';
 
-export const SessionsReducer: Reducer<SessionState, SourceActionType> = (
-  state = defaultSession,
-  action
-) => {
-  switch (action.type) {
-    case LOG_OUT:
+export const SessionsReducer: Reducer<SessionState, SourceActionType> = (state, action) => {
+  state = newSessionsReducer(state, action);
+  return state;
+};
+
+const newSessionsReducer = createReducer(defaultSession, builder => {
+  builder
+    .addCase(logOut, () => {
       return defaultSession;
-    case SET_GITHUB_OCTOKIT_OBJECT:
-      return {
-        ...state,
-        githubOctokitObject: { octokit: action.payload }
-      };
-    case SET_GITHUB_ACCESS_TOKEN:
-      return {
-        ...state,
-        githubAccessToken: action.payload
-      };
-    case SET_GOOGLE_USER:
-      return {
-        ...state,
-        googleUser: action.payload
-      };
-    case SET_TOKENS:
-      return {
-        ...state,
-        ...action.payload
-      };
-    case SET_USER:
-      return {
-        ...state,
-        ...action.payload
-      };
-    case SET_COURSE_CONFIGURATION:
-      return {
-        ...state,
-        ...action.payload
-      };
-    case SET_COURSE_REGISTRATION:
-      return {
-        ...state,
-        ...action.payload
-      };
-    case SET_ASSESSMENT_CONFIGURATIONS:
-      return {
-        ...state,
-        assessmentConfigurations: action.payload
-      };
-    case SET_NOTIFICATION_CONFIGS:
-      return {
-        ...state,
-        notificationConfigs: action.payload
-      };
-    case SET_CONFIGURABLE_NOTIFICATION_CONFIGS:
-      return {
-        ...state,
-        configurableNotificationConfigs: action.payload
-      };
-    case SET_ADMIN_PANEL_COURSE_REGISTRATIONS:
-      return {
-        ...state,
-        userCourseRegistrations: action.payload
-      };
-    case UPDATE_ASSESSMENT:
+    })
+    .addCase(setGitHubOctokitObject, (state, action) => {
+      state.githubOctokitObject = { octokit: action.payload };
+    })
+    .addCase(setGitHubAccessToken, (state, action) => {
+      state.githubAccessToken = action.payload;
+    })
+    .addCase(setGoogleUser, (state, action) => {
+      state.googleUser = action.payload;
+    })
+    .addCase(setTokens, (state, action) => {
+      return { ...state, ...action.payload };
+    })
+    .addCase(setUser, (state, action) => {
+      return { ...state, ...action.payload };
+    })
+    .addCase(setCourseConfiguration, (state, action) => {
+      return { ...state, ...action.payload };
+    })
+    .addCase(setCourseRegistration, (state, action) => {
+      return { ...state, ...action.payload };
+    })
+    .addCase(setAssessmentConfigurations, (state, action) => {
+      state.assessmentConfigurations = action.payload;
+    })
+    .addCase(setNotificationConfigs, (state, action) => {
+      state.notificationConfigs = action.payload;
+    })
+    .addCase(setConfigurableNotificationConfigs, (state, action) => {
+      state.configurableNotificationConfigs = action.payload;
+    })
+    .addCase(setAdminPanelCourseRegistrations, (state, action) => {
+      state.userCourseRegistrations = action.payload;
+    })
+    .addCase(updateAssessment, (state, action) => {
       const newAssessments = new Map(state.assessments);
       newAssessments.set(action.payload.id, action.payload);
-      return {
-        ...state,
-        assessments: newAssessments
-      };
-    case UPDATE_ASSESSMENT_OVERVIEWS:
-      return {
-        ...state,
-        assessmentOverviews: action.payload
-      };
-    case UPDATE_TOTAL_XP:
-      return { ...state, xp: action.payload };
-    case UPDATE_GRADING:
+      state.assessments = newAssessments;
+    })
+    .addCase(updateAssessmentOverviews, (state, action) => {
+      state.assessmentOverviews = action.payload;
+    })
+    .addCase(updateTotalXp, (state, action) => {
+      state.xp = action.payload;
+    })
+    .addCase(updateGrading, (state, action) => {
       const newGradings = new Map(state.gradings);
       newGradings.set(action.payload.submissionId, action.payload.grading);
-      return {
-        ...state,
-        gradings: newGradings
-      };
-    case UPDATE_GRADING_OVERVIEWS:
-      return {
-        ...state,
-        gradingOverviews: action.payload
-      };
-    case UPDATE_NOTIFICATIONS:
-      return {
-        ...state,
-        notifications: action.payload
-      };
-    case UPDATE_STUDENTS:
-      return {
-        ...state,
-        students: action.payload
-      };
-    case UPDATE_TEAM_FORMATION_OVERVIEWS:
-      return {
-        ...state,
-        teamFormationOverviews: action.payload
-      };
-    case UPDATE_TEAM_FORMATION_OVERVIEW:
-      return {
-        ...state,
-        teamFormationOverview: action.payload
-      };
-    case REMOTE_EXEC_UPDATE_DEVICES:
-      return {
-        ...state,
-        remoteExecutionDevices: action.payload
-      };
-    case REMOTE_EXEC_UPDATE_SESSION:
-      return {
-        ...state,
-        remoteExecutionSession: action.payload
-      };
-    case REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN:
-      return {
-        ...state,
-        githubOctokitObject: { octokit: undefined },
-        githubAccessToken: undefined
-      };
-    default:
-      return state;
-  }
-};
+      state.gradings = newGradings;
+    })
+    .addCase(updateGradingOverviews, (state, action) => {
+      state.gradingOverviews = action.payload;
+    })
+    .addCase(updateNotifications, (state, action) => {
+      state.notifications = action.payload;
+    })
+    .addCase(updateStudents, (state, action) => {
+      state.students = action.payload;
+    })
+    .addCase(updateTeamFormationOverviews, (state, action) => {
+      state.teamFormationOverviews = action.payload;
+    })
+    .addCase(updateTeamFormationOverview, (state, action) => {
+      state.teamFormationOverview = action.payload;
+    })
+    .addCase(remoteExecUpdateDevices, (state, action) => {
+      state.remoteExecutionDevices = action.payload;
+    })
+    .addCase(remoteExecUpdateSession, (state, action) => {
+      state.remoteExecutionSession = action.payload;
+    })
+    .addCase(removeGitHubOctokitObjectAndAccessToken, (state, action) => {
+      state.githubOctokitObject = { octokit: undefined };
+      state.githubAccessToken = undefined;
+    });
+});
