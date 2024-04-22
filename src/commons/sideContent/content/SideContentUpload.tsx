@@ -28,6 +28,8 @@ type Props = {
  * This component is responsible for uploading Java class files to bypass the compiler.
  */
 const SideContentUpload: React.FC<Props> = ({ onUpload }) => {
+  const [count, setCount] = React.useState(0);
+
   const handleFileUpload: React.ChangeEventHandler<HTMLInputElement> = useCallback(
     e => {
       const ret: { [key: string]: string } = {};
@@ -43,6 +45,7 @@ const SideContentUpload: React.FC<Props> = ({ onUpload }) => {
       }
       Promise.all(promises).then(() => {
         onUpload(ret);
+        setCount(promises.length);
       });
     },
     [onUpload]
@@ -66,6 +69,7 @@ const SideContentUpload: React.FC<Props> = ({ onUpload }) => {
       <FileInput
         inputProps={{ multiple: true, accept: '.class' }}
         onInputChange={handleFileUpload}
+        text={count === 0 ? 'Choose files...' : `${count} file(s) uploaded.`}
       />
     </div>
   );
