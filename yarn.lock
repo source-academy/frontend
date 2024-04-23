@@ -8703,10 +8703,10 @@ js-sdsl@4.3.0:
   resolved "https://registry.yarnpkg.com/js-sdsl/-/js-sdsl-4.3.0.tgz#aeefe32a451f7af88425b11fdb5f58c90ae1d711"
   integrity sha512-mifzlm2+5nZ+lEcLJMoBK0/IH/bDg8XnJfd/Wq6IP+xoCjLZsTOnV2QpxlVbX9bMnkl5PdEjNtBJ9Cj1NjifhQ==
 
-js-slang@^1.0.72:
-  version "1.0.72"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.72.tgz#120453d97c5d8647f8408cab02d6fa1f880c3ad1"
-  integrity sha512-p3eLED3MevtIdQxohW+KhZpJ0aphzMA/Qg4dMUJH9qc94ecoBD4aba3XSuUzilk+Tw6bE4JKlggB6c4ZCEFCgg==
+js-slang@^1.0.73:
+  version "1.0.73"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.73.tgz#b6c6f970733da95e5862c0d1d66a62d5fd9fad64"
+  integrity sha512-Vf7d5tuPVVQNRHWbVbDEUAw0jnzNcosL3+cqHko/ZNxOzB94qtwitSYF+7coGM9sckQq6G3PK1/ker6Oj7cm+g==
   dependencies:
     "@babel/parser" "^7.19.4"
     "@commander-js/extra-typings" "^12.0.1"
