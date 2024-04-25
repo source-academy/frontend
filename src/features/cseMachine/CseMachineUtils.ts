@@ -624,17 +624,6 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
-      case 'StatementSequence':
-        // remove whitespace between statements
-        const textS = controlItem.body.map(item => astToString(item).trim()).join('\n');
-        return new ControlItemComponent(
-          textS,
-          textS,
-          stackHeight,
-          highlightOnHover,
-          unhighlightOnHover,
-          topItem
-        );
       case 'Literal':
         const textL =
           typeof controlItem.value === 'string' ? `"${controlItem.value}"` : controlItem.value;
