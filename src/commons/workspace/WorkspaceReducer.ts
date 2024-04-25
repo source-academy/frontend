@@ -48,16 +48,13 @@ import {
   updateCurrentAssessmentId,
   updateCurrentSubmissionId,
   updateHasUnsavedChanges,
+  updateLastDebuggerResult,
+  updateLastNonDetResult,
   updateSublanguage,
   updateSubmissionsTableFilters,
   updateWorkspace
 } from './WorkspaceActions';
-import {
-  UPDATE_LAST_DEBUGGER_RESULT,
-  UPDATE_LAST_NON_DET_RESULT,
-  WorkspaceLocation,
-  WorkspaceManagerState
-} from './WorkspaceTypes';
+import { WorkspaceLocation, WorkspaceManagerState } from './WorkspaceTypes';
 
 export const getWorkspaceLocation = (action: any): WorkspaceLocation => {
   return action.payload ? action.payload.workspaceLocation : 'assessment';
@@ -375,17 +372,24 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       const { chapter, variant } = action.payload.sublang;
       state.playground.context.chapter = chapter;
       state.playground.context.variant = variant;
+    })
+    // .addCase(notifyProgramEvaluated, (state, action) => {
+    //   const workspaceLocation = getWorkspaceLocation(action);
+    //   const debuggerContext = state[workspaceLocation].debuggerContext;
+    //   debuggerContext.result = action.payload.result;
+    //   debuggerContext.lastDebuggerResult = action.payload.lastDebuggerResult;
+    //   debuggerContext.code = action.payload.code;
+    //   debuggerContext.context = action.payload.context;
+    //   debuggerContext.workspaceLocation = action.payload.workspaceLocation;
+    // })
+    .addCase(updateLastDebuggerResult, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].lastDebuggerResult = action.payload.lastDebuggerResult;
+    })
+    .addCase(updateLastNonDetResult, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].lastNonDetResult = action.payload.lastNonDetResult;
     });
-  // .addCase(notifyProgramEvaluated, (state, action) => {
-  //   const workspaceLocation = getWorkspaceLocation(action);
-
-  //   const debuggerContext = state[workspaceLocation].debuggerContext;
-  //   debuggerContext.result = action.payload.result;
-  //   debuggerContext.lastDebuggerResult = action.payload.lastDebuggerResult;
-  //   debuggerContext.code = action.payload.code;
-  //   debuggerContext.context = action.payload.context;
-  //   debuggerContext.workspaceLocation = action.payload.workspaceLocation;
-  // });
 });
 
 /** Temporarily kept to prevent conflicts */
@@ -396,22 +400,6 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
   const workspaceLocation = getWorkspaceLocation(action);
 
   switch (action.type) {
-    case UPDATE_LAST_DEBUGGER_RESULT:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          lastDebuggerResult: action.payload.lastDebuggerResult
-        }
-      };
-    case UPDATE_LAST_NON_DET_RESULT:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          lastNonDetResult: action.payload.lastNonDetResult
-        }
-      };
     case NOTIFY_PROGRAM_EVALUATED: {
       const debuggerContext = {
         ...state[workspaceLocation].debuggerContext,
