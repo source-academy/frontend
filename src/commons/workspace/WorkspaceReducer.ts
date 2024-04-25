@@ -6,9 +6,6 @@ import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/Sour
 import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
 import { logOut } from '../application/actions/CommonsActions';
 import {
-  debuggerReset,
-  debuggerResume,
-  endDebuggerPause,
   endInterruptExecution,
   evalInterpreterError,
   evalInterpreterSuccess,
@@ -33,6 +30,7 @@ import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import { createContext } from '../utils/JsSlangHelper';
 import { handleCseAndStepperActions } from './reducers/cseReducer';
+import { handleDebuggerActions } from './reducers/debuggerReducer';
 import { handleEditorActions } from './reducers/editorReducer';
 import { handleReplActions } from './reducers/replReducer';
 import {
@@ -110,6 +108,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
   handleEditorActions(builder);
   handleCseAndStepperActions(builder);
   handleReplActions(builder);
+  handleDebuggerActions(builder);
   builder
     .addCase(setTokenCount, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
@@ -285,21 +284,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
        * function does not finish interrupting before
        * this action is called.
        */
-      state[workspaceLocation].isRunning = false;
-      state[workspaceLocation].isDebugging = false;
-    })
-    .addCase(endDebuggerPause, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].isRunning = false;
-      state[workspaceLocation].isDebugging = true;
-    })
-    .addCase(debuggerResume, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].isRunning = true;
-      state[workspaceLocation].isDebugging = false;
-    })
-    .addCase(debuggerReset, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].isRunning = false;
       state[workspaceLocation].isDebugging = false;
     })
