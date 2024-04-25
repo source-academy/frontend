@@ -362,8 +362,8 @@ const getDefaultLanguageConfig = (): SALanguage => {
 export const defaultLanguageConfig: SALanguage = getDefaultLanguageConfig();
 
 export const defaultPlayground: PlaygroundState = {
-  githubSaveInfo: { repoName: '', filePath: '' },
-  languageConfig: defaultLanguageConfig
+  languageConfig: defaultLanguageConfig,
+  isFileSystemContextMenusDisabled: false
 };
 
 export const defaultEditorValue = '// Type your program in here!';
@@ -539,6 +539,7 @@ export const defaultSession: SessionState = {
   assessmentOverviews: undefined,
   agreedToResearch: undefined,
   sessionId: Date.now(),
+  googleAccessToken: undefined,
   githubOctokitObject: { octokit: undefined },
   gradingOverviews: undefined,
   students: undefined,
@@ -570,7 +571,10 @@ export const createDefaultStoriesEnv = (
 });
 
 export const defaultFileSystem: FileSystemState = {
-  inBrowserFileSystem: null
+  inBrowserFileSystem: null,
+  persistenceFileArray: [],
+  lastEditedFilePath: '',
+  refreshFileViewKey: 0
 };
 
 export const defaultSideContent: SideContentState = {

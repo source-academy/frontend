@@ -1,6 +1,9 @@
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import Stats from 'browserfs/dist/node/core/node_fs_stats';
 import path from 'path';
+import { GitHubSaveInfo } from 'src/features/github/GitHubTypes';
+import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
+import { store } from 'src/pages/createStore';
 
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
@@ -222,7 +225,8 @@ export const rmdirRecursively = (fileSystem: FSModule, directoryPath: string): P
 export const writeFileRecursively = (
   fileSystem: FSModule,
   filePath: string,
-  fileContents: string
+  fileContents: string,
+  onlyCreateFolder?: boolean
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
     // Create directories along the path if they do not exist.
@@ -252,14 +256,74 @@ export const writeFileRecursively = (
       promise.catch(err => reject(err));
     }
 
-    // Write to the file.
-    fileSystem.writeFile(filePath, fileContents, err => {
-      if (err) {
-        reject(err);
-        return;
-      }
-
-      resolve();
-    });
+    if (!onlyCreateFolder) {
+      // Write to the file.
+      fileSystem.writeFile(filePath, fileContents, err => {
+        if (err) {
+          reject(err);
+          return;
+        }
+      });
+    }
+    resolve();
   });
+};
+
+export const getGithubSaveInfo = () => {
+  const persistenceFileArray = store.getState().fileSystem.persistenceFileArray;
+  const { editorTabs, activeEditorTabIndex } = store.getState().workspaces['playground'];
+  let currentFilePath = '';
+  if (activeEditorTabIndex !== null) {
+    currentFilePath = editorTabs[activeEditorTabIndex].filePath || '';
+  }
+  const PersistenceFile: PersistenceFile = persistenceFileArray.find(
+    e => e.path === currentFilePath
+  ) || { name: '', id: '', repoName: '' };
+  const githubSaveInfo: GitHubSaveInfo = {
+    filePath: PersistenceFile.path,
+    lastSaved: PersistenceFile.lastSaved,
+    repoName:
+      PersistenceFile.repoName ||
+      (persistenceFileArray[0] === undefined ? '' : persistenceFileArray[0].repoName)
+  };
+  return githubSaveInfo;
+};
+
+export const getPersistenceFile = (filePath: string) => {
+  const persistenceFileArray = store.getState().fileSystem.persistenceFileArray;
+  if (filePath === '') {
+    const persistenceFile = persistenceFileArray[0];
+    return persistenceFile;
+  }
+  const persistenceFile = persistenceFileArray.find(e => e.path === filePath);
+
+  return persistenceFile;
+};
+
+export const isGDriveSyncing = () => {
+  const persistenceFileArray = store.getState().fileSystem.persistenceFileArray;
+
+  if (persistenceFileArray.length === 0) {
+    return false;
+  }
+
+  if (!persistenceFileArray[0].id) {
+    return false;
+  }
+
+  return true;
+};
+
+export const isGithubSyncing = () => {
+  const persistenceFileArray = store.getState().fileSystem.persistenceFileArray;
+
+  if (persistenceFileArray.length === 0) {
+    return false;
+  }
+
+  if (!persistenceFileArray[0].repoName) {
+    return false;
+  }
+
+  return true;
 };

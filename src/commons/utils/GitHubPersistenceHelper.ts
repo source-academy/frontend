@@ -4,6 +4,7 @@ import { Octokit } from '@octokit/rest';
  * Returns an instance to Octokit created using the authentication token
  */
 export function generateOctokitInstance(authToken: string) {
+  // const octokitPlugin = Octokit.plugin(require('octokit-commit-multiple-files'));
   const octokit = new Octokit({
     auth: authToken,
     userAgent: 'Source Academy Playground',

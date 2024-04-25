@@ -19,7 +19,7 @@ export const ControlBarToggleFolderModeButton: React.FC<Props> = ({
 }) => {
   const tooltipContent = isSessionActive
     ? 'Currently unsupported while a collaborative session is active'
-    : isPersistenceActive
+    : false && isPersistenceActive
     ? 'Currently unsupported while a persistence method is active'
     : `${isFolderModeEnabled ? 'Disable' : 'Enable'} Folder mode`;
   return (
@@ -31,7 +31,8 @@ export const ControlBarToggleFolderModeButton: React.FC<Props> = ({
           iconColor: isFolderModeEnabled ? Colors.BLUE4 : undefined
         }}
         onClick={toggleFolderMode}
-        isDisabled={isSessionActive || isPersistenceActive}
+        isDisabled={false}
+        //isDisabled={isSessionActive || isPersistenceActive}
       />
     </Tooltip>
   );

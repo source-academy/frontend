@@ -20,7 +20,8 @@ const mockChangedStoredState: SavedState = {
     role: undefined,
     name: 'Jeff',
     userId: 1,
-    githubAccessToken: 'githubAccessToken'
+    githubAccessToken: 'githubAccessToken',
+    googleAccessToken: 'googleAccessToken'
   },
   playgroundIsFolderModeEnabled: true,
   playgroundActiveEditorTabIndex: {
@@ -57,7 +58,8 @@ const mockChangedState: OverallState = {
     role: undefined,
     name: 'Jeff',
     userId: 1,
-    githubAccessToken: 'githubAccessToken'
+    githubAccessToken: 'githubAccessToken',
+    googleAccessToken: 'googleAccessToken'
   },
   workspaces: {
     ...defaultState.workspaces,

@@ -9,12 +9,7 @@ import { EVAL_STORY } from 'src/features/stories/StoriesTypes';
 
 import { EventType } from '../../../features/achievement/AchievementTypes';
 import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
-import { WORKSPACE_BASE_PATHS } from '../../../pages/fileSystem/createInBrowserFileSystem';
-import {
-  defaultEditorValue,
-  OverallState,
-  styliseSublanguage
-} from '../../application/ApplicationTypes';
+import { OverallState, styliseSublanguage } from '../../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../../application/types/ExternalTypes';
 import {
   DEBUG_RESET,
@@ -24,7 +19,6 @@ import {
 } from '../../application/types/InterpreterTypes';
 import { Library, Testcase } from '../../assessment/AssessmentTypes';
 import { Documentation } from '../../documentation/Documentation';
-import { writeFileRecursively } from '../../fileSystem/utils';
 import { resetSideContent } from '../../sideContent/SideContentActions';
 import { actions } from '../../utils/ActionsHelper';
 import {
@@ -42,7 +36,6 @@ import {
   ADD_HTML_CONSOLE_ERROR,
   BEGIN_CLEAR_CONTEXT,
   CHAPTER_SELECT,
-  EditorTabState,
   EVAL_EDITOR,
   EVAL_EDITOR_AND_TESTCASES,
   EVAL_REPL,
@@ -100,45 +93,6 @@ export default function* WorkspaceSaga(): SagaIterator {
     // Do nothing if Folder mode is enabled.
     if (isFolderModeEnabled) {
       return;
-    }
-
-    const editorTabs: EditorTabState[] = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].editorTabs
-    );
-    // If Folder mode is disabled and there are no open editor tabs, add an editor tab.
-    if (editorTabs.length === 0) {
-      const defaultFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
-      const fileSystem: FSModule | null = yield select(
-        (state: OverallState) => state.fileSystem.inBrowserFileSystem
-      );
-      // If the file system is not initialised, add an editor tab with the default editor value.
-      if (fileSystem === null) {
-        yield put(actions.addEditorTab(workspaceLocation, defaultFilePath, defaultEditorValue));
-        return;
-      }
-      const editorValue: string = yield new Promise((resolve, reject) => {
-        fileSystem.exists(defaultFilePath, fileExists => {
-          if (!fileExists) {
-            // If the file does not exist, we need to also create it in the file system.
-            writeFileRecursively(fileSystem, defaultFilePath, defaultEditorValue)
-              .then(() => resolve(defaultEditorValue))
-              .catch(err => reject(err));
-            return;
-          }
-          fileSystem.readFile(defaultFilePath, 'utf-8', (err, fileContents) => {
-            if (err) {
-              reject(err);
-              return;
-            }
-            if (fileContents === undefined) {
-              reject(new Error('File exists but has no contents.'));
-              return;
-            }
-            resolve(fileContents);
-          });
-        });
-      });
-      yield put(actions.addEditorTab(workspaceLocation, defaultFilePath, editorValue));
     }
   });
 

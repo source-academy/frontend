@@ -14,14 +14,19 @@ import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 
 import {
+  checkFolderLocationIsValid,
   checkIfFileCanBeOpened,
   checkIfFileCanBeSavedAndGetSaveType,
   checkIfUserAgreesToOverwriteEditorData,
   checkIfUserAgreesToPerformOverwritingSave,
+  checkIsFile,
   openFileInEditor,
+  openFolderInFolderMode,
   performCreatingSave,
-  performOverwritingSave
+  performMultipleCreatingSave,
+  performOverwritingSaveForSaveAs
 } from '../../features/github/GitHubUtils';
+import { getPersistenceFile } from '../fileSystem/FileSystemUtils';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 import { GitHubTreeNodeCreator } from './GitHubTreeNodeCreator';
 
@@ -45,7 +50,7 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
   return (
     <Dialog className="githubDialog" isOpen={true} onClose={handleClose}>
       <div className={classNames('githubDialogHeader', Classes.DIALOG_HEADER)}>
-        <h3>Select a File</h3>
+        <h3>Select a File/Folder</h3>
       </div>
       <div className={Classes.DIALOG_BODY}>
         <Tree
@@ -106,7 +111,30 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
     if (props.pickerType === 'Open') {
       if (await checkIfFileCanBeOpened(props.octokit, githubLoginID, props.repoName, filePath)) {
         if (await checkIfUserAgreesToOverwriteEditorData()) {
-          openFileInEditor(props.octokit, githubLoginID, props.repoName, filePath);
+          if (await checkIsFile(props.octokit, githubLoginID, props.repoName, filePath)) {
+            openFileInEditor(props.octokit, githubLoginID, props.repoName, filePath);
+          } else {
+            openFolderInFolderMode(props.octokit, githubLoginID, props.repoName, filePath);
+          }
+        }
+      }
+    }
+
+    if (props.pickerType === 'Save All') {
+      if (await checkIsFile(props.octokit, githubLoginID, props.repoName, filePath)) {
+      } else {
+        if (
+          await checkFolderLocationIsValid(props.octokit, githubLoginID, props.repoName, filePath)
+        ) {
+          performMultipleCreatingSave(
+            props.octokit,
+            githubLoginID,
+            props.repoName,
+            filePath,
+            githubName,
+            githubEmail,
+            ''
+          );
         }
       }
     }
@@ -120,8 +148,19 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
       );
 
       if (canBeSaved) {
+        const persistenceFile = getPersistenceFile('');
+        if (persistenceFile === undefined) {
+          throw new Error('persistence file not found for this filepath: ' + '');
+        }
+        const parentFolderPath = persistenceFile.parentFolderPath;
+        if (parentFolderPath === undefined) {
+          throw new Error(
+            'repository name or parentfolderpath not found for this persistencefile: ' +
+              persistenceFile
+          );
+        }
         if (saveType === 'Overwrite' && (await checkIfUserAgreesToPerformOverwritingSave())) {
-          performOverwritingSave(
+          performOverwritingSaveForSaveAs(
             props.octokit,
             githubLoginID,
             props.repoName,
@@ -129,7 +168,8 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
             githubName,
             githubEmail,
             commitMessage,
-            props.editorContent
+            props.editorContent,
+            parentFolderPath
           );
         }
 
@@ -138,11 +178,12 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
             props.octokit,
             githubLoginID,
             props.repoName,
-            filePath,
+            filePath.slice(parentFolderPath.length),
             githubName,
             githubEmail,
             commitMessage,
-            props.editorContent
+            props.editorContent,
+            parentFolderPath
           );
         }
       }

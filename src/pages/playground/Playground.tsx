@@ -19,6 +19,7 @@ import {
 } from 'src/commons/application/actions/InterpreterActions';
 import {
   loginGitHub,
+  loginGoogle,
   logoutGitHub,
   logoutGoogle
 } from 'src/commons/application/actions/SessionActions';
@@ -27,6 +28,10 @@ import {
   setSessionDetails,
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
+import {
+  setPersistenceFileLastEditByPath,
+  updateLastEditedFilePath
+} from 'src/commons/fileSystem/FileSystemActions';
 import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
@@ -68,15 +73,18 @@ import {
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import {
   githubOpenFile,
+  githubSaveAll,
   githubSaveFile,
   githubSaveFileAs
 } from 'src/features/github/GitHubActions';
 import {
   persistenceInitialise,
   persistenceOpenPicker,
+  persistenceSaveAll,
   persistenceSaveFile,
   persistenceSaveFileAs
 } from 'src/features/persistence/PersistenceActions';
+import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 import {
   generateLzString,
   playgroundConfigLanguage,
@@ -109,7 +117,11 @@ import {
   NormalEditorContainerProps
 } from '../../commons/editor/EditorContainer';
 import { Position } from '../../commons/editor/EditorTypes';
-import { overwriteFilesInWorkspace } from '../../commons/fileSystem/utils';
+import {
+  isGDriveSyncing,
+  isGithubSyncing,
+  overwriteFilesInWorkspace
+} from '../../commons/fileSystem/FileSystemUtils';
 import FileSystemView from '../../commons/fileSystemView/FileSystemView';
 import MobileWorkspace, {
   MobileWorkspaceProps
@@ -262,13 +274,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
     context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant }
   } = useTypedSelector(state => state.workspaces[workspaceLocation]);
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
-  const { queryString, shortURL, persistenceFile, githubSaveInfo } = useTypedSelector(
-    state => state.playground
-  );
+  const { queryString, shortURL, persistenceFile } = useTypedSelector(state => state.playground);
   const {
     sourceChapter: courseSourceChapter,
     sourceVariant: courseSourceVariant,
     googleUser: persistenceUser,
+    googleAccessToken,
     githubOctokitObject
   } = useTypedSelector(state => state.session);
 
@@ -402,13 +413,24 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [isGreen]
   );
 
-  const onEditorValueChange = React.useCallback(
-    (editorTabIndex: number, newEditorValue: string) => {
-      setLastEdit(new Date());
-      handleEditorValueChange(editorTabIndex, newEditorValue);
-    },
-    [handleEditorValueChange]
-  );
+  const lastEditedFilePath = useTypedSelector(state => state.fileSystem.lastEditedFilePath);
+  const refreshFileViewKey = useTypedSelector(state => state.fileSystem.refreshFileViewKey);
+
+  const onEditorValueChange = (editorTabIndex: number, newEditorValue: string) => {
+    const filePath = editorTabs[editorTabIndex]?.filePath;
+    const editDate = new Date();
+    if (filePath) {
+      dispatch(setPersistenceFileLastEditByPath(filePath, editDate));
+      dispatch(updateLastEditedFilePath(filePath));
+    }
+    // only call setLastEdit if file path of open editor is found in persistenceFileArray
+    const persistenceFileArray: PersistenceFile[] =
+      store.getState().fileSystem.persistenceFileArray;
+    if (persistenceFileArray.find(e => e.path === filePath)) {
+      setLastEdit(editDate);
+    }
+    handleEditorValueChange(editorTabIndex, newEditorValue);
+  };
 
   // const onChangeTabs = useCallback(
   //   (
@@ -583,38 +605,57 @@ const Playground: React.FC<PlaygroundProps> = props => {
   // Compute this here to avoid re-rendering the button every keystroke
   const persistenceIsDirty =
     persistenceFile && (!persistenceFile.lastSaved || persistenceFile.lastSaved < lastEdit);
+  const githubSynced = isGithubSyncing();
   const persistenceButtons = useMemo(() => {
     return (
       <ControlBarGoogleDriveButtons
         isFolderModeEnabled={isFolderModeEnabled}
-        currentFile={persistenceFile}
+        workspaceLocation={workspaceLocation}
+        currPersistenceFile={persistenceFile}
         loggedInAs={persistenceUser}
         isDirty={persistenceIsDirty}
+        accessToken={googleAccessToken}
+        isGithubSynced={githubSynced}
         key="googledrive"
         onClickSaveAs={() => dispatch(persistenceSaveFileAs())}
+        onClickSaveAll={() => dispatch(persistenceSaveAll())}
         onClickOpen={() => dispatch(persistenceOpenPicker())}
         onClickSave={
           persistenceFile ? () => dispatch(persistenceSaveFile(persistenceFile)) : undefined
         }
+        onClickLogIn={() => dispatch(loginGoogle())}
         onClickLogOut={() => dispatch(logoutGoogle())}
         onPopoverOpening={() => dispatch(persistenceInitialise())}
       />
     );
-  }, [isFolderModeEnabled, persistenceFile, persistenceUser, persistenceIsDirty, dispatch]);
+  }, [
+    isFolderModeEnabled,
+    persistenceFile,
+    persistenceUser,
+    persistenceIsDirty,
+    dispatch,
+    googleAccessToken,
+    workspaceLocation,
+    githubSynced
+  ]);
 
   const githubPersistenceIsDirty =
-    githubSaveInfo && (!githubSaveInfo.lastSaved || githubSaveInfo.lastSaved < lastEdit);
+    persistenceFile && (!persistenceFile.lastSaved || persistenceFile.lastSaved < lastEdit);
+  const gdriveSynced = isGDriveSyncing();
   const githubButtons = useMemo(() => {
     return (
       <ControlBarGitHubButtons
         key="github"
         isFolderModeEnabled={isFolderModeEnabled}
+        workspaceLocation={workspaceLocation}
+        currPersistenceFile={persistenceFile}
         loggedInAs={githubOctokitObject.octokit}
-        githubSaveInfo={githubSaveInfo}
         isDirty={githubPersistenceIsDirty}
+        isGDriveSynced={gdriveSynced}
         onClickOpen={() => dispatch(githubOpenFile())}
         onClickSaveAs={() => dispatch(githubSaveFileAs())}
         onClickSave={() => dispatch(githubSaveFile())}
+        onClickSaveAll={() => dispatch(githubSaveAll())}
         onClickLogIn={() => dispatch(loginGitHub())}
         onClickLogOut={() => dispatch(logoutGitHub())}
       />
@@ -623,8 +664,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
     dispatch,
     githubOctokitObject.octokit,
     githubPersistenceIsDirty,
-    githubSaveInfo,
-    isFolderModeEnabled
+    isFolderModeEnabled,
+    persistenceFile,
+    workspaceLocation,
+    gdriveSynced
   ]);
 
   const executionTime = useMemo(
@@ -707,19 +750,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
       <ControlBarToggleFolderModeButton
         isFolderModeEnabled={isFolderModeEnabled}
         isSessionActive={editorSessionId !== ''}
-        isPersistenceActive={persistenceFile !== undefined || githubSaveInfo.repoName !== ''}
+        isPersistenceActive={persistenceFile !== undefined}
         toggleFolderMode={() => dispatch(toggleFolderMode(workspaceLocation))}
         key="folder"
       />
     );
-  }, [
-    dispatch,
-    githubSaveInfo.repoName,
-    isFolderModeEnabled,
-    persistenceFile,
-    editorSessionId,
-    workspaceLocation
-  ]);
+  }, [dispatch, isFolderModeEnabled, persistenceFile, editorSessionId, workspaceLocation]);
 
   useEffect(() => {
     // TODO: To migrate the state logic away from playgroundSourceChapter
@@ -956,6 +992,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     disableScrolling: isSicpEditor
   };
 
+  const isContextMenuDisabled = store.getState().playground.isFileSystemContextMenusDisabled;
+
   const sideBarProps: { tabs: SideBarTab[] } = useMemo(() => {
     // The sidebar is rendered if and only if there is at least one tab present.
     // Because whether the sidebar is rendered or not affects the sidebar resizing
@@ -973,6 +1011,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
                   <FileSystemView
                     workspaceLocation="playground"
                     basePath={WORKSPACE_BASE_PATHS[workspaceLocation]}
+                    lastEditedFilePath={lastEditedFilePath}
+                    isContextMenuDisabled={isContextMenuDisabled}
+                    key={refreshFileViewKey}
                   />
                 ),
                 iconName: IconNames.FOLDER_CLOSE,
@@ -982,7 +1023,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
           : [])
       ]
     };
-  }, [isFolderModeEnabled, workspaceLocation]);
+  }, [
+    isFolderModeEnabled,
+    workspaceLocation,
+    lastEditedFilePath,
+    isContextMenuDisabled,
+    refreshFileViewKey
+  ]);
 
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {

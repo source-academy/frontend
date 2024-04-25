@@ -1,9 +1,12 @@
-import { Icon } from '@blueprintjs/core';
+import { Colors, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { githubDeleteFile } from 'src/features/github/GitHubActions';
+import { persistenceDeleteFile } from 'src/features/persistence/PersistenceActions';
+import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 import classes from 'src/styles/FileSystemView.module.scss';
 
 import { showSimpleConfirmDialog } from '../utils/DialogHelper';
@@ -17,33 +20,58 @@ type Props = {
   workspaceLocation: WorkspaceLocation;
   fileSystem: FSModule;
   basePath: string;
+  lastEditedFilePath: string;
+  persistenceFileArray: PersistenceFile[];
   fileName: string;
   indentationLevel: number;
   refreshDirectory: () => void;
+  isContextMenuDisabled: boolean;
 };
 
 const FileSystemViewFileNode: React.FC<Props> = ({
   workspaceLocation,
   fileSystem,
   basePath,
+  lastEditedFilePath,
+  persistenceFileArray,
   fileName,
   indentationLevel,
-  refreshDirectory
+  refreshDirectory,
+  isContextMenuDisabled
 }) => {
+  const [currColor, setCurrColor] = React.useState<string | undefined>(undefined);
+
+  React.useEffect(() => {
+    const myFileMetadata = persistenceFileArray
+      .filter(e => e.path === basePath + '/' + fileName)
+      ?.at(0);
+    const checkColor = (myFileMetadata: PersistenceFile | undefined) =>
+      myFileMetadata
+        ? myFileMetadata.lastSaved
+          ? myFileMetadata.lastEdit
+            ? myFileMetadata.lastEdit > myFileMetadata.lastSaved
+              ? Colors.ORANGE4
+              : Colors.BLUE4
+            : Colors.BLUE4
+          : Colors.BLUE4
+        : undefined;
+    setCurrColor(checkColor(myFileMetadata));
+  }, [lastEditedFilePath, basePath, fileName, persistenceFileArray]);
+
   const [isEditing, setIsEditing] = React.useState(false);
   const dispatch = useDispatch();
+  // const store = useStore<OverallState>();
 
   const fullPath = path.join(basePath, fileName);
 
   const handleOpenFile = () => {
-    fileSystem.readFile(fullPath, 'utf-8', (err, fileContents) => {
+    fileSystem.readFile(fullPath, 'utf-8', async (err, fileContents) => {
       if (err) {
         console.error(err);
       }
       if (fileContents === undefined) {
         throw new Error('File contents are undefined.');
       }
-
       dispatch(addEditorTab(workspaceLocation, fullPath, fileContents));
     });
   };
@@ -73,6 +101,8 @@ const FileSystemViewFileNode: React.FC<Props> = ({
         if (err) {
           console.error(err);
         }
+        dispatch(persistenceDeleteFile(fullPath));
+        dispatch(githubDeleteFile(fullPath));
 
         dispatch(removeEditorTabForFile(workspaceLocation, fullPath));
         refreshDirectory();
@@ -92,10 +122,11 @@ const FileSystemViewFileNode: React.FC<Props> = ({
       open={handleOpenFile}
       rename={handleRenameFile}
       remove={handleRemoveFile}
+      isContextMenuDisabled={isContextMenuDisabled}
     >
       <div className={classes['file-system-view-node-container']} onClick={onClick}>
         <FileSystemViewIndentationPadding indentationLevel={indentationLevel} />
-        <Icon icon={IconNames.DOCUMENT} />
+        <Icon icon={IconNames.DOCUMENT} style={{ color: currColor }} />
         <FileSystemViewFileName
           workspaceLocation={workspaceLocation}
           fileSystem={fileSystem}

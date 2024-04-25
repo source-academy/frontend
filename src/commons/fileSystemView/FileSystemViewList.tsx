@@ -2,6 +2,7 @@ import { Spinner, SpinnerSize } from '@blueprintjs/core';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
+import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 import classes from 'src/styles/FileSystemView.module.scss';
 
 import Delay from '../delay/Delay';
@@ -13,14 +14,20 @@ type Props = {
   workspaceLocation: WorkspaceLocation;
   fileSystem: FSModule;
   basePath: string;
+  lastEditedFilePath: string;
+  persistenceFileArray: PersistenceFile[];
   indentationLevel: number;
+  isContextMenuDisabled: boolean;
 };
 
 const FileSystemViewList: React.FC<Props> = ({
   workspaceLocation,
   fileSystem,
   basePath,
-  indentationLevel
+  lastEditedFilePath,
+  persistenceFileArray,
+  indentationLevel,
+  isContextMenuDisabled
 }) => {
   const [dirNames, setDirNames] = React.useState<string[] | undefined>(undefined);
   const [fileNames, setFileNames] = React.useState<string[] | undefined>(undefined);
@@ -84,9 +91,12 @@ const FileSystemViewList: React.FC<Props> = ({
             key={dirName}
             fileSystem={fileSystem}
             basePath={basePath}
+            lastEditedFilePath={lastEditedFilePath}
+            persistenceFileArray={persistenceFileArray}
             directoryName={dirName}
             indentationLevel={indentationLevel}
             refreshParentDirectory={readDirectory}
+            isContextMenuDisabled={isContextMenuDisabled}
           />
         );
       })}
@@ -97,9 +107,12 @@ const FileSystemViewList: React.FC<Props> = ({
             key={fileName}
             fileSystem={fileSystem}
             basePath={basePath}
+            lastEditedFilePath={lastEditedFilePath}
+            persistenceFileArray={persistenceFileArray}
             fileName={fileName}
             indentationLevel={indentationLevel}
             refreshDirectory={readDirectory}
+            isContextMenuDisabled={isContextMenuDisabled}
           />
         );
       })}

@@ -14,33 +14,48 @@ const stateToIntent: { [state in PersistenceState]: Intent } = {
 
 type Props = {
   isFolderModeEnabled: boolean;
+  workspaceLocation: string;
   loggedInAs?: string;
-  currentFile?: PersistenceFile;
+  accessToken?: string;
+  currPersistenceFile?: PersistenceFile;
   isDirty?: boolean;
+  isGithubSynced?: boolean;
   onClickOpen?: () => any;
   onClickSave?: () => any;
+  onClickSaveAll?: () => any;
   onClickSaveAs?: () => any;
   onClickLogOut?: () => any;
+  onClickLogIn?: () => any;
   onPopoverOpening?: () => any;
 };
 
 export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
   const { isMobileBreakpoint } = useResponsive();
-  const state: PersistenceState = props.currentFile
+  const state: PersistenceState = props.currPersistenceFile
     ? props.isDirty
       ? 'DIRTY'
       : 'SAVED'
     : 'INACTIVE';
+  const isNotPlayground = props.workspaceLocation !== 'playground';
+  const GithubSynced = props.isGithubSynced;
   const mainButton = (
     <ControlButton
-      label={(props.currentFile && props.currentFile.name) || 'Google Drive'}
+      label={
+        (!GithubSynced && props.currPersistenceFile && props.currPersistenceFile.name) ||
+        'Google Drive'
+      }
       icon={IconNames.CLOUD}
-      options={{ intent: stateToIntent[state] }}
-      isDisabled={props.isFolderModeEnabled}
+      options={GithubSynced ? undefined : { intent: stateToIntent[state] }}
+      isDisabled={isNotPlayground || GithubSynced}
     />
   );
   const openButton = (
-    <ControlButton label="Open" icon={IconNames.DOCUMENT_OPEN} onClick={props.onClickOpen} />
+    <ControlButton
+      label="Open"
+      icon={IconNames.DOCUMENT_OPEN}
+      onClick={props.onClickOpen}
+      isDisabled={props.accessToken ? false : true}
+    />
   );
   const saveButton = (
     <ControlButton
@@ -52,15 +67,34 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
     />
   );
   const saveAsButton = (
-    <ControlButton label="Save as" icon={IconNames.SEND_TO} onClick={props.onClickSaveAs} />
+    <ControlButton
+      label="Save As"
+      icon={IconNames.SEND_TO}
+      onClick={props.onClickSaveAs}
+      isDisabled={props.accessToken ? false : true}
+    />
   );
-  const logoutButton = props.loggedInAs && (
-    <Tooltip content={`Logged in as ${props.loggedInAs}`}>
-      <ControlButton label="Log out" icon={IconNames.LOG_OUT} onClick={props.onClickLogOut} />
+
+  const saveAllButton = (
+    <ControlButton
+      label="Save All"
+      icon={IconNames.DOUBLE_CHEVRON_UP}
+      onClick={props.onClickSaveAll}
+      // disable if persistenceObject is not a folder
+      isDisabled={props.accessToken ? false : true}
+    />
+  );
+
+  const loginButton = props.accessToken ? (
+    <Tooltip content={`Logged in as ${props.loggedInAs}`} disabled={!props.loggedInAs}>
+      <ControlButton label="Log Out" icon={IconNames.LOG_OUT} onClick={props.onClickLogOut} />
     </Tooltip>
+  ) : (
+    <ControlButton label="Log In" icon={IconNames.LOG_IN} onClick={props.onClickLogIn} />
   );
-  const tooltipContent = props.isFolderModeEnabled
-    ? 'Currently unsupported in Folder mode'
+
+  const tooltipContent = isNotPlayground
+    ? 'Currently unsupported in non playground workspaces'
     : undefined;
 
   return (
@@ -73,13 +107,14 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
               {openButton}
               {saveButton}
               {saveAsButton}
-              {logoutButton}
+              {saveAllButton}
+              {loginButton}
             </ButtonGroup>
           </div>
         }
         onOpening={props.onPopoverOpening}
         popoverClassName={Classes.POPOVER_DISMISS}
-        disabled={props.isFolderModeEnabled}
+        disabled={isNotPlayground || GithubSynced}
       >
         {mainButton}
       </Popover>

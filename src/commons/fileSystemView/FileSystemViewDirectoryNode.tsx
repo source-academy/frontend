@@ -4,9 +4,16 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { githubCreateFile, githubDeleteFolder } from 'src/features/github/GitHubActions';
+import {
+  persistenceCreateFile,
+  persistenceCreateFolder,
+  persistenceDeleteFolder
+} from 'src/features/persistence/PersistenceActions';
+import { PersistenceFile } from 'src/features/persistence/PersistenceTypes';
 import classes from 'src/styles/FileSystemView.module.scss';
 
-import { rmdirRecursively } from '../fileSystem/utils';
+import { rmdirRecursively } from '../fileSystem/FileSystemUtils';
 import { showSimpleConfirmDialog, showSimpleErrorDialog } from '../utils/DialogHelper';
 import { removeEditorTabsForDirectory } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
@@ -20,22 +27,28 @@ type Props = {
   workspaceLocation: WorkspaceLocation;
   fileSystem: FSModule;
   basePath: string;
+  lastEditedFilePath: string;
+  persistenceFileArray: PersistenceFile[];
   directoryName: string;
   indentationLevel: number;
   refreshParentDirectory: () => void;
+  isContextMenuDisabled: boolean;
 };
 
 const FileSystemViewDirectoryNode: React.FC<Props> = ({
   workspaceLocation,
   fileSystem,
   basePath,
+  lastEditedFilePath,
+  persistenceFileArray,
   directoryName,
   indentationLevel,
-  refreshParentDirectory
+  refreshParentDirectory,
+  isContextMenuDisabled
 }) => {
   const fullPath = path.join(basePath, directoryName);
 
-  const [isExpanded, setIsExpanded] = React.useState(false);
+  const [isExpanded, setIsExpanded] = React.useState(true);
   const [isEditing, setIsEditing] = React.useState(false);
   const [isAddingNewFile, setIsAddingNewFile] = React.useState(false);
   const [isAddingNewDirectory, setIsAddingNewDirectory] = React.useState(false);
@@ -77,7 +90,8 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
       if (!shouldProceed) {
         return;
       }
-
+      dispatch(persistenceDeleteFolder(fullPath));
+      dispatch(githubDeleteFolder(fullPath));
       dispatch(removeEditorTabsForDirectory(workspaceLocation, fullPath));
       rmdirRecursively(fileSystem, fullPath).then(refreshParentDirectory);
     });
@@ -110,7 +124,8 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
         if (err) {
           console.error(err);
         }
-
+        dispatch(persistenceCreateFile(newFilePath));
+        dispatch(githubCreateFile(newFilePath));
         forceRefreshFileSystemViewList();
       });
     });
@@ -139,6 +154,25 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
           console.error(err);
         }
 
+        dispatch(persistenceCreateFolder(newDirectoryPath));
+        // function informUserGithubCannotCreateFolder() {
+        //   return showSimpleConfirmDialog({
+        //     contents: (
+        //       <div>
+        //         <p>
+        //           Warning: Github is unable to create empty directories. When you create your first
+        //           file in this folder, Github will automatically sync this folder and the first
+        //           file.
+        //         </p>
+        //         <p>Please click 'Confirm' to continue.</p>
+        //       </div>
+        //     ),
+        //     positiveIntent: 'primary',
+        //     positiveLabel: 'Confirm'
+        //   });
+        // }
+        // informUserGithubCannotCreateFolder();
+        // dispatch(enableFileSystemContextMenus());
         forceRefreshFileSystemViewList();
       });
     });
@@ -151,6 +185,7 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
         createNewDirectory={handleCreateNewDirectory}
         rename={handleRenameDirectory}
         remove={handleRemoveDirectory}
+        isContextMenuDisabled={isContextMenuDisabled}
       >
         <div className={classes['file-system-view-node-container']} onClick={toggleIsExpanded}>
           <FileSystemViewIndentationPadding indentationLevel={indentationLevel} />
@@ -194,7 +229,10 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
           key={fileSystemViewListKey}
           fileSystem={fileSystem}
           basePath={fullPath}
+          lastEditedFilePath={lastEditedFilePath}
+          persistenceFileArray={persistenceFileArray}
           indentationLevel={indentationLevel + 1}
+          isContextMenuDisabled={isContextMenuDisabled}
         />
       )}
     </div>
