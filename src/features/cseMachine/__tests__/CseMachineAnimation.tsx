@@ -6,6 +6,8 @@ import { AnimatableTo, AnimationConfig } from '../animationComponents/base/Anima
 import { AnimationComponent } from '../animationComponents/base/AnimationComponents';
 import { CseAnimation } from '../CseMachineAnimation';
 
+jest.setTimeout(10000);
+
 const mockStage = new Konva.Stage({
   container: document.createElement('div'),
   width: 500,
@@ -119,8 +121,6 @@ async function testAnimationComponent<
   await Promise.all([...animations.map(params => component.animateTo(...params)), checker()]);
   node.destroy();
 }
-
-jest.setTimeout(10000);
 
 test('AnimationComponent animates correctly with default animation config', async () => {
   await testAnimationComponent({

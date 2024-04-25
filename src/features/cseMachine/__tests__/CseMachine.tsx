@@ -233,7 +233,7 @@ const codeSamplesControlStash: [string, string, number, boolean?][] = [
   ]
 ];
 
-codeSamplesControlStash.forEach((codeSample, idx) => {
+codeSamplesControlStash.forEach(codeSample => {
   test('CSE Machine Control Stash correctly renders: ' + codeSample[0], async () => {
     const code = codeSample[1] as string;
     const currentStep = codeSample[2] as number;

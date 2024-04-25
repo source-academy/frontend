@@ -47,7 +47,7 @@ export class StashItemComponent extends Visible implements IHoverable {
     super();
     const valToStashRep = (val: any): string => {
       return typeof val === 'string'
-        ? `'${val}'`.trim()
+        ? `"${val}"`.trim()
         : isNonGlobalFn(val)
         ? 'closure'
         : isDataArray(val)
