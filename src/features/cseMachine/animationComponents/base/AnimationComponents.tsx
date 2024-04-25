@@ -54,7 +54,7 @@ abstract class BaseAnimationComponent<
         const node: Konva.Node = this.ref.current;
         const from: Partial<KonvaConfig> = {};
         for (const attr in data.to) {
-          from[attr] = node.getAttr(attr);
+          from[attr] = attrs[attr] ?? node.getAttr(attr);
         }
         data.from = from;
         data.current = {};

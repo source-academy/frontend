@@ -1,5 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`AnimationComponent animates correctly with conflicting animateTo calls 1`] = `
+<Rect
+  fill="#000"
+  height={100}
+  listening={false}
+  perfectDrawEnabled={false}
+  width={100}
+  x={0}
+  y={0}
+/>
+`;
+
 exports[`AnimationComponent animates correctly with custom animation config 1`] = `
 <Text
   listening={false}
@@ -13,8 +25,32 @@ exports[`AnimationComponent animates correctly with custom animation config 1`] 
 
 exports[`AnimationComponent animates correctly with default animation config 1`] = `
 <Rect
+  fill="#000"
   height={100}
   listening={false}
   perfectDrawEnabled={false}
+/>
+`;
+
+exports[`AnimationComponent animates correctly with parallel animateTo calls 1 1`] = `
+<Path
+  data="L 0 0 M 100 100"
+  listening={false}
+  opacity={0}
+  perfectDrawEnabled={false}
+  x={0}
+  y={0}
+/>
+`;
+
+exports[`AnimationComponent animates correctly with parallel animateTo calls 2 1`] = `
+<Circle
+  fill="#000"
+  height={100}
+  listening={false}
+  perfectDrawEnabled={false}
+  width={100}
+  x={0}
+  y={0}
 />
 `;
