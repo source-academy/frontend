@@ -34,13 +34,13 @@ import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
+import { handleCseAndStepperActions } from './reducers/cseReducer';
 import { handleEditorActions } from './reducers/editorReducer';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
   changeExecTime,
   changeExternalLibrary,
-  changeStepLimit,
   clearReplInput,
   clearReplOutput,
   clearReplOutputLast,
@@ -55,16 +55,10 @@ import {
   setIsEditorReadonly,
   setTokenCount,
   toggleEditorAutorun,
-  toggleUpdateCse,
-  toggleUsingCse,
-  toggleUsingSubst,
-  updateBreakpointSteps,
   updateCurrentAssessmentId,
-  updateCurrentStep,
   updateCurrentSubmissionId,
   updateHasUnsavedChanges,
   updateReplValue,
-  updateStepsTotal,
   updateSublanguage,
   updateSubmissionsTableFilters,
   updateWorkspace
@@ -124,6 +118,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> 
 
 const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
   handleEditorActions(builder);
+  handleCseAndStepperActions(builder);
   builder
     .addCase(setTokenCount, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
@@ -192,10 +187,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     .addCase(changeExecTime, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].execTime = action.payload.execTime;
-    })
-    .addCase(changeStepLimit, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].stepLimit = action.payload.stepLimit;
     })
     .addCase(clearReplInput, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
@@ -479,24 +470,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].isEditorAutorun = !state[workspaceLocation].isEditorAutorun;
     })
-    .addCase(toggleUsingSubst, (state, action) => {
-      const { workspaceLocation } = action.payload;
-      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
-        state[workspaceLocation].usingSubst = action.payload.usingSubst;
-      }
-    })
-    .addCase(toggleUsingCse, (state, action) => {
-      const { workspaceLocation } = action.payload;
-      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
-        state[workspaceLocation].usingCse = action.payload.usingCse;
-      }
-    })
-    .addCase(toggleUpdateCse, (state, action) => {
-      const { workspaceLocation } = action.payload;
-      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
-        state[workspaceLocation].updateCse = action.payload.updateCse;
-      }
-    })
     .addCase(updateSubmissionsTableFilters, (state, action) => {
       state.grading.submissionsTableFilters = action.payload.filters;
     })
@@ -529,42 +502,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       const { chapter, variant } = action.payload.sublang;
       state.playground.context.chapter = chapter;
       state.playground.context.variant = variant;
-    })
-    .addCase(updateCurrentStep, (state, action) => {
-      // For some reason mutating the state directly results in type
-      // errors, so we have to do it the old-fashioned way
-      const workspaceLocation = getWorkspaceLocation(action);
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          currentStep: action.payload.steps
-        }
-      };
-    })
-    .addCase(updateStepsTotal, (state, action) => {
-      // For some reason mutating the state directly results in type
-      // errors, so we have to do it the old-fashioned way
-      const workspaceLocation = getWorkspaceLocation(action);
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          stepsTotal: action.payload.steps
-        }
-      };
-    })
-    .addCase(updateBreakpointSteps, (state, action) => {
-      // For some reason mutating the state directly results in type
-      // errors, so we have to do it the old-fashioned way
-      const workspaceLocation = getWorkspaceLocation(action);
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          breakpointSteps: action.payload.breakpointSteps
-        }
-      };
     });
   // .addCase(notifyProgramEvaluated, (state, action) => {
   //   const workspaceLocation = getWorkspaceLocation(action);
