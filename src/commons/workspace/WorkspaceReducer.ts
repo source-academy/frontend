@@ -34,7 +34,7 @@ import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
-import { handleMultiFileActions } from './reducers/multiFileReducer';
+import { handleEditorActions } from './reducers/editorReducer';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -123,7 +123,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> 
 };
 
 const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
-  handleMultiFileActions(builder);
+  handleEditorActions(builder);
   builder
     .addCase(setTokenCount, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);

@@ -20,7 +20,7 @@ import {
 import { getWorkspaceLocation } from '../WorkspaceReducer';
 import { EditorTabState, WorkspaceManagerState } from '../WorkspaceTypes';
 
-export const handleMultiFileActions = (builder: ActionReducerMapBuilder<WorkspaceManagerState>) => {
+export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceManagerState>) => {
   builder
     .addCase(setFolderMode, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
