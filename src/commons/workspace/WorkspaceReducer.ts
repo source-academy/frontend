@@ -55,7 +55,6 @@ import {
   updateWorkspace
 } from './WorkspaceActions';
 import {
-  UPDATE_CHANGEPOINTSTEPS,
   UPDATE_LAST_DEBUGGER_RESULT,
   UPDATE_LAST_NON_DET_RESULT,
   WorkspaceLocation,
@@ -413,14 +412,6 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
   const workspaceLocation = getWorkspaceLocation(action);
 
   switch (action.type) {
-    case UPDATE_CHANGEPOINTSTEPS:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          changepointSteps: action.payload.changepointSteps
-        }
-      };
     case UPDATE_LAST_DEBUGGER_RESULT:
       return {
         ...state,
@@ -429,7 +420,6 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
           lastDebuggerResult: action.payload.lastDebuggerResult
         }
       };
-
     case UPDATE_LAST_NON_DET_RESULT:
       return {
         ...state,

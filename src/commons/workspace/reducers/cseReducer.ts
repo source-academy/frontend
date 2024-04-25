@@ -6,6 +6,7 @@ import {
   toggleUsingCse,
   toggleUsingSubst,
   updateBreakpointSteps,
+  updateChangePointSteps,
   updateCurrentStep,
   updateStepsTotal
 } from '../WorkspaceActions';
@@ -72,6 +73,18 @@ export const handleCseAndStepperActions = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           breakpointSteps: action.payload.breakpointSteps
+        }
+      };
+    })
+    .addCase(updateChangePointSteps, (state, action) => {
+      // For some reason mutating the state directly results in type
+      // errors, so we have to do it the old-fashioned way
+      const workspaceLocation = getWorkspaceLocation(action);
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          changepointSteps: action.payload.changepointSteps
         }
       };
     });
