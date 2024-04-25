@@ -192,7 +192,7 @@ codeSamples.forEach((code, idx) => {
   });
 });
 
-const codeSamplesControlStash = [
+const codeSamplesControlStash: [string, string, number, boolean?][] = [
   [
     'arrows from the environment instruction to the frame and arrows from the stash to closures',
     `
@@ -228,7 +228,7 @@ const codeSamplesControlStash = [
       }
       fact(10);
       `,
-    160,
+    140,
     true
   ]
 ];
@@ -238,7 +238,7 @@ codeSamplesControlStash.forEach((codeSample, idx) => {
     const code = codeSample[1] as string;
     const currentStep = codeSample[2] as number;
     const truncate = codeSample[3];
-    if (truncate) {
+    if (Boolean(truncate) !== CseMachine.getStackTruncated()) {
       CseMachine.toggleStackTruncated();
     }
     if (!CseMachine.getControlStash()) {
