@@ -14,8 +14,11 @@ import {
   defaultWorkspaceManager,
   OverallState
 } from '../application/ApplicationTypes';
+import { SourceActionType } from '../utils/ActionsHelper';
 
-export function mockInitialStore(overrides?: DeepPartial<OverallState>): Store<OverallState> {
+export function mockInitialStore(
+  overrides?: DeepPartial<OverallState>
+): Store<OverallState, SourceActionType> {
   const createStore = (mockStore as any)();
   const state: OverallState = {
     router: defaultRouter,
