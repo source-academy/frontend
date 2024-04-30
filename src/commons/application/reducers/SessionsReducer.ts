@@ -33,7 +33,10 @@ import {
 import { defaultSession } from '../ApplicationTypes';
 import { SessionState } from '../types/SessionTypes';
 
-export const SessionsReducer: Reducer<SessionState, SourceActionType> = (state, action) => {
+export const SessionsReducer: Reducer<SessionState, SourceActionType> = (
+  state = defaultSession,
+  action
+) => {
   state = newSessionsReducer(state, action);
   return state;
 };
@@ -77,9 +80,7 @@ const newSessionsReducer = createReducer(defaultSession, builder => {
       state.userCourseRegistrations = action.payload;
     })
     .addCase(updateAssessment, (state, action) => {
-      const newAssessments = new Map(state.assessments);
-      newAssessments.set(action.payload.id, action.payload);
-      state.assessments = newAssessments;
+      state.assessments.set(action.payload.id, action.payload);
     })
     .addCase(updateAssessmentOverviews, (state, action) => {
       state.assessmentOverviews = action.payload;
@@ -88,9 +89,7 @@ const newSessionsReducer = createReducer(defaultSession, builder => {
       state.xp = action.payload;
     })
     .addCase(updateGrading, (state, action) => {
-      const newGradings = new Map(state.gradings);
-      newGradings.set(action.payload.submissionId, action.payload.grading);
-      state.gradings = newGradings;
+      state.gradings.set(action.payload.submissionId, action.payload.grading);
     })
     .addCase(updateGradingOverviews, (state, action) => {
       state.gradingOverviews = action.payload;

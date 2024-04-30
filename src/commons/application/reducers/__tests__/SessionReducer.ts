@@ -1,3 +1,4 @@
+import { enableMapSet } from 'immer';
 import { Chapter, Variant } from 'js-slang/dist/types';
 
 import { GradingOverview, GradingQuery } from '../../../../features/grading/GradingTypes';
@@ -26,6 +27,11 @@ import {
   UPDATE_NOTIFICATIONS
 } from '../../types/SessionTypes';
 import { SessionsReducer } from '../SessionsReducer';
+
+// SessionState involves the use of maps, so we need
+// to enable the use of maps in Immer for this test file,
+// just as we do in `createStore.ts` for the whole app.
+enableMapSet();
 
 test('LOG_OUT works correctly on default session', () => {
   const action = {
