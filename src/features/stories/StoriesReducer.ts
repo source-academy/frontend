@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { Reducer } from 'redux';
-import { LOG_OUT } from 'src/commons/application/types/CommonsTypes';
+import { logOut } from 'src/commons/application/actions/CommonsActions';
 
 import {
   createDefaultStoriesEnv,
@@ -13,24 +13,22 @@ import {
 import { SourceActionType } from '../../commons/utils/ActionsHelper';
 import {
   addStoryEnv,
+  clearStoriesUserAndGroup,
   clearStoryEnv,
   evalStory,
   evalStoryError,
   evalStorySuccess,
   handleStoriesConsoleLog,
   notifyStoriesEvaluated,
-  toggleStoriesUsingSubst
+  setCurrentStoriesGroup,
+  setCurrentStoriesUser,
+  setCurrentStory,
+  setCurrentStoryId,
+  toggleStoriesUsingSubst,
+  updateStoriesList
 } from './StoriesActions';
 import { DEFAULT_ENV } from './storiesComponents/UserBlogContent';
-import {
-  CLEAR_STORIES_USER_AND_GROUP,
-  SET_CURRENT_STORIES_GROUP,
-  SET_CURRENT_STORIES_USER,
-  SET_CURRENT_STORY,
-  SET_CURRENT_STORY_ID,
-  StoriesState,
-  UPDATE_STORIES_LIST
-} from './StoriesTypes';
+import { StoriesState } from './StoriesTypes';
 
 export const StoriesReducer: Reducer<StoriesState, SourceActionType> = (
   state = defaultStories,
@@ -152,6 +150,35 @@ const newStoriesReducer = createReducer(defaultStories, builder => {
     .addCase(toggleStoriesUsingSubst, (state, action) => {
       const env = getStoriesEnv(action);
       state.envs[env].usingSubst = action.payload.usingSubst;
+    })
+    // New cases post-refactor
+    .addCase(updateStoriesList, (state, action) => {
+      state.storyList = action.payload;
+    })
+    .addCase(setCurrentStoryId, (state, action) => {
+      state.currentStoryId = action.payload;
+    })
+    .addCase(setCurrentStory, (state, action) => {
+      state.currentStory = action.payload;
+    })
+    .addCase(clearStoriesUserAndGroup, state => {
+      state.userId = undefined;
+      state.userName = undefined;
+      state.groupId = undefined;
+      state.groupName = undefined;
+      state.role = undefined;
+    })
+    .addCase(setCurrentStoriesUser, (state, action) => {
+      state.userName = action.payload.name;
+      state.userId = action.payload.id;
+    })
+    .addCase(setCurrentStoriesGroup, (state, action) => {
+      state.groupId = action.payload.id;
+      state.groupName = action.payload.name;
+      state.role = action.payload.role;
+    })
+    .addCase(logOut, () => {
+      return defaultStories;
     });
 });
 
@@ -160,46 +187,6 @@ const oldStoriesReducer: Reducer<StoriesState, SourceActionType> = (
   action
 ) => {
   switch (action.type) {
-    // New cases post-refactor
-    case UPDATE_STORIES_LIST:
-      return {
-        ...state,
-        storyList: action.payload
-      };
-    case SET_CURRENT_STORY_ID:
-      return {
-        ...state,
-        currentStoryId: action.payload
-      };
-    case SET_CURRENT_STORY:
-      return {
-        ...state,
-        currentStory: action.payload
-      };
-    case CLEAR_STORIES_USER_AND_GROUP:
-      return {
-        ...state,
-        userId: undefined,
-        userName: undefined,
-        groupId: undefined,
-        groupName: undefined,
-        role: undefined
-      };
-    case SET_CURRENT_STORIES_USER:
-      return {
-        ...state,
-        userName: action.payload.name,
-        userId: action.payload.id
-      };
-    case SET_CURRENT_STORIES_GROUP:
-      return {
-        ...state,
-        groupId: action.payload.id,
-        groupName: action.payload.name,
-        role: action.payload.role
-      };
-    case LOG_OUT:
-      return defaultStories;
     default:
       return state;
   }
