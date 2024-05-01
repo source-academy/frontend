@@ -12,9 +12,9 @@ const mockProps = (sourceChapter: Chapter, sourceVariant: Variant) => {
   };
 };
 
-test('Markdown page renders correctly', () => {
+test('Markdown page renders correctly', async () => {
   const app = <Markdown {...mockProps(Chapter.SOURCE_1, Variant.DEFAULT)} />;
-  const tree = renderTreeJson(app);
+  const tree = await renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 });
 
