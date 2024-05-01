@@ -72,13 +72,10 @@ const mockContestVotingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
 
 const mockStore = mockInitialStore({
   session: {
-    assessments: mockAssessments.reduce(
-      (acc, assessment) => {
-        acc[assessment.id] = assessment;
-        return acc;
-      },
-      {} as { [id: number]: Assessment }
-    )
+    assessments: mockAssessments.reduce<{ [id: number]: Assessment }>((acc, assessment) => {
+      acc[assessment.id] = assessment;
+      return acc;
+    }, {})
   }
 });
 
