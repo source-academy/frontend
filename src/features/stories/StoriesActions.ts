@@ -1,16 +1,12 @@
 import { createAction } from '@reduxjs/toolkit';
 import { Chapter, Context, SourceError, Value, Variant } from 'js-slang/dist/types';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
+import { createActions } from 'src/commons/redux/utils';
 
 import {
-  ADD_STORY_ENV,
   CLEAR_STORIES_USER_AND_GROUP,
-  CLEAR_STORY_ENV,
   CREATE_STORY,
   DELETE_STORY,
-  EVAL_STORY,
-  EVAL_STORY_ERROR,
-  EVAL_STORY_SUCCESS,
   GET_STORIES_LIST,
   GET_STORIES_USER,
   HANDLE_STORIES_CONSOLE_LOG,
@@ -27,27 +23,13 @@ import {
   UPDATE_STORIES_LIST
 } from './StoriesTypes';
 
-export const addStoryEnv = createAction(
-  ADD_STORY_ENV,
-  (env: string, chapter: Chapter, variant: Variant) => ({ payload: { env, chapter, variant } })
-);
-
-export const clearStoryEnv = createAction(CLEAR_STORY_ENV, (env?: string) => ({
-  payload: { env }
-}));
-
-export const evalStory = createAction(EVAL_STORY, (env: string, code: string) => ({
-  payload: { env, code }
-}));
-
-export const evalStoryError = createAction(
-  EVAL_STORY_ERROR,
-  (errors: SourceError[], env: string) => ({ payload: { type: 'errors', errors, env } })
-);
-
-export const evalStorySuccess = createAction(EVAL_STORY_SUCCESS, (value: Value, env: string) => ({
-  payload: { type: 'result', value, env }
-}));
+export const actions = createActions('stories', {
+  addStoryEnv: (env: string, chapter: Chapter, variant: Variant) => ({ env, chapter, variant }),
+  clearStoryEnv: (env?: string) => ({ env }),
+  evalStory: (env: string, code: string) => ({ env, code }),
+  evalStoryError: (errors: SourceError[], env: string) => ({ type: 'errors', errors, env }),
+  evalStorySuccess: (value: Value, env: string) => ({ type: 'result', value, env })
+});
 
 export const handleStoriesConsoleLog = createAction(
   HANDLE_STORIES_CONSOLE_LOG,

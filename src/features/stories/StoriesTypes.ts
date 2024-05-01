@@ -3,11 +3,6 @@ import { DebuggerContext } from 'src/commons/workspace/WorkspaceTypes';
 
 import { InterpreterOutput, StoriesRole } from '../../commons/application/ApplicationTypes';
 
-export const ADD_STORY_ENV = 'ADD_STORY_ENV';
-export const CLEAR_STORY_ENV = 'CLEAR_STORY_ENV';
-export const EVAL_STORY = 'EVAL_STORY';
-export const EVAL_STORY_ERROR = 'EVAL_STORY_ERROR';
-export const EVAL_STORY_SUCCESS = 'EVAL_STORY_SUCCESS';
 export const HANDLE_STORIES_CONSOLE_LOG = 'HANDLE_STORIES_CONSOLE_LOG';
 export const NOTIFY_STORIES_EVALUATED = 'NOTIFY_STORIES_EVALUATED';
 export const TOGGLE_STORIES_USING_SUBST = 'TOGGLE_STORIES_USING_SUBST';
