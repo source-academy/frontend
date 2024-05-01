@@ -1,3 +1,4 @@
+import { Context } from 'js-slang';
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { ADD_NEW_STORIES_USERS_TO_COURSE } from 'src/features/academy/AcademyTypes';
@@ -13,6 +14,7 @@ import {
 import {
   CREATE_STORY,
   DELETE_STORY,
+  EVAL_STORY,
   GET_STORIES_LIST,
   GET_STORIES_USER,
   SAVE_STORY,
@@ -24,11 +26,13 @@ import {
 
 import { OverallState, StoriesRole } from '../application/ApplicationTypes';
 import { Tokens } from '../application/types/SessionTypes';
+import { resetSideContent } from '../sideContent/SideContentActions';
 import { actions } from '../utils/ActionsHelper';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { defaultStoryContent } from '../utils/StoriesHelper';
 import { selectTokens } from './BackendSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
+import { evalCode } from './WorkspaceSaga/helpers/evalCode';
 
 export function* storiesSaga(): SagaIterator {
   yield takeLatest(GET_STORIES_LIST, function* () {
@@ -148,6 +152,21 @@ export function* storiesSaga(): SagaIterator {
       //       once that page is implemented
     }
   );
+
+  yield takeEvery(EVAL_STORY, function* (action: ReturnType<typeof actions.evalStory>) {
+    const env = action.payload.env;
+    const code = action.payload.code;
+    const execTime: number = yield select(
+      (state: OverallState) => state.stories.envs[env].execTime
+    );
+    const context: Context = yield select((state: OverallState) => state.stories.envs[env].context);
+    const codeFilePath = '/code.js';
+    const codeFiles = {
+      [codeFilePath]: code
+    };
+    yield put(resetSideContent(`stories.${env}`));
+    yield call(evalCode, codeFiles, codeFilePath, context, execTime, 'stories', EVAL_STORY, env);
+  });
 }
 
 export default storiesSaga;
