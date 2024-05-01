@@ -2,7 +2,12 @@
 /*eslint-env browser*/
 import { SagaIterator } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
-import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from 'src/features/academy/AcademyTypes';
+import {
+  ADD_NEW_STORIES_USERS_TO_COURSE,
+  ADD_NEW_USERS_TO_COURSE,
+  CREATE_COURSE
+} from 'src/features/academy/AcademyTypes';
+import { postNewStoriesUsers } from 'src/features/stories/storiesComponents/BackendAccess';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
 import {
@@ -1269,6 +1274,19 @@ function* BackendSaga(): SagaIterator {
 
       yield put(actions.fetchAdminPanelCourseRegistrations());
       yield call(showSuccessMessage, 'Users added!');
+    }
+  );
+
+  yield takeEvery(
+    ADD_NEW_STORIES_USERS_TO_COURSE,
+    function* (action: ReturnType<typeof actions.addNewStoriesUsersToCourse>): any {
+      const tokens: Tokens = yield selectTokens();
+      const { users, provider } = action.payload;
+
+      yield call(postNewStoriesUsers, tokens, users, provider);
+
+      // TODO: Refresh the list of story users
+      //       once that page is implemented
     }
   );
 

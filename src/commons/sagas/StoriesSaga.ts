@@ -1,13 +1,11 @@
 import { Context } from 'js-slang';
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
-import { ADD_NEW_STORIES_USERS_TO_COURSE } from 'src/features/academy/AcademyTypes';
 import {
   deleteStory,
   getStories,
   getStoriesUser,
   getStory,
-  postNewStoriesUsers,
   postStory,
   updateStory
 } from 'src/features/stories/storiesComponents/BackendAccess';
@@ -139,19 +137,6 @@ export function* storiesSaga(): SagaIterator {
     yield put(actions.setCurrentStoriesUser(me.id, me.name));
     yield put(actions.setCurrentStoriesGroup(me.groupId, me.groupName, me.role));
   });
-
-  yield takeEvery(
-    ADD_NEW_STORIES_USERS_TO_COURSE,
-    function* (action: ReturnType<typeof actions.addNewStoriesUsersToCourse>): any {
-      const tokens: Tokens = yield selectTokens();
-      const { users, provider } = action.payload;
-
-      yield call(postNewStoriesUsers, tokens, users, provider);
-
-      // TODO: Refresh the list of story users
-      //       once that page is implemented
-    }
-  );
 
   yield takeEvery(EVAL_STORY, function* (action: ReturnType<typeof actions.evalStory>) {
     const env = action.payload.env;
