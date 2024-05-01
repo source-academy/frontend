@@ -47,7 +47,9 @@ export function combineSagaHandlers<
 >(
   actions: TActions,
   handlers: {
-    [K in keyof TActions]: (action: ReturnType<TActions[K]>) => SagaIterator;
+    // TODO: Maybe this can be stricter? And remove the optional type after
+    // migration is fully done
+    [K in keyof TActions]?: (action: ReturnType<TActions[K]>) => SagaIterator;
   },
   others?: (takeEvery: typeof saferTakeEvery) => SagaIterator
 ): () => SagaIterator {
