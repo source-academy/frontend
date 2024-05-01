@@ -23,7 +23,7 @@ jobs:
           cache: yarn
       - name: Setup Sentry CLI
         run: |
-          curl -sL https://sentry.io/get-cli/ | INSTALL_DIR=. bash
+          curl -sL https://sentry.io/get-cli/ | SENTRY_CLI_VERSION=2.31.0 INSTALL_DIR=. bash
       - id: get-time
         run: echo "time=$(date -Iseconds)" >> $GITHUB_OUTPUT
       - name: yarn install and build
