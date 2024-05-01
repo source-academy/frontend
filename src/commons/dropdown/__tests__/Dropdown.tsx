@@ -1,4 +1,3 @@
-import { waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
 import { Store } from 'redux';
@@ -46,11 +45,11 @@ test('Dropdown does not mount Profile, DropdownCourses and DropdownCreateCourses
     courseId: 1
   });
   const app = getElement(mockStore);
-  const tree = await waitFor(() => renderTreeJson(app));
+  const tree = await renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
   // Expect the Profile component to NOT be mounted
-  const dropdown = await waitFor(() => renderTree(app));
+  const dropdown = await renderTree(app);
   expect(dropdown.root.findAllByType(Profile).length).toBe(0);
   expect(dropdown.root.findAllByType(DropdownCourses).length).toBe(0);
   expect(dropdown.root.findAllByType(DropdownCreateCourse).length).toBe(0);
@@ -63,11 +62,11 @@ test('Dropdown correctly mounts Profile, DropdownCourses, and DropdownCreateCour
     courseId: 1
   });
   const app = getElement(mockStore);
-  const tree = await waitFor(() => renderTreeJson(app));
+  const tree = await renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
   // Expect the Profile component to be mounted
-  const dropdown = await waitFor(() => renderTree(app));
+  const dropdown = await renderTree(app);
   expect(dropdown.root.findByType(Profile)).toBeTruthy();
   expect(dropdown.root.findByType(DropdownCourses)).toBeTruthy();
   expect(dropdown.root.findByType(DropdownCreateCourse)).toBeTruthy();

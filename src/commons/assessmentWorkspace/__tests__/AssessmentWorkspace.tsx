@@ -118,9 +118,9 @@ describe('AssessmentWorkspace', () => {
     });
   });
 
-  test('AssessmentWorkspace page "loading" content renders correctly', () => {
+  test('AssessmentWorkspace page "loading" content renders correctly', async () => {
     const app = createMemoryRouterWithRoutes(mockUndefinedAssessmentWorkspaceProps);
-    const tree = renderTreeJson(app);
+    const tree = await renderTreeJson(app);
     expect(tree).toMatchSnapshot();
 
     render(app);

@@ -19,13 +19,13 @@ const Component = (props: SideContentHtmlDisplayProps) => {
   );
 };
 
-test('HTML Display renders correctly', () => {
+test('HTML Display renders correctly', async () => {
   const mockProps = {
     content: stringify('<p>Hello World!</p>'),
     workspaceLocation: 'playground' as SideContentLocation,
     handleAddHtmlConsoleError: (errorMsg: string) => {}
   };
-  const htmlDisplay = renderTreeJson(<Component {...mockProps} />);
+  const htmlDisplay = await renderTreeJson(<Component {...mockProps} />);
   expect(htmlDisplay).toMatchSnapshot();
 });
 

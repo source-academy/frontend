@@ -47,11 +47,11 @@ const createTestComponent = (mockStore: Store<OverallState>) => (
   </Provider>
 );
 
-test('Assessment page "loading" content renders correctly', () => {
+test('Assessment page "loading" content renders correctly', async () => {
   const mockStore = getOverriddenStore({});
   const app = createTestComponent(mockStore);
 
-  const tree = renderTreeJson(app);
+  const tree = await renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
   render(app);
@@ -62,7 +62,7 @@ test('Assessment page with 0 missions renders correctly', async () => {
   const mockStore = getOverriddenStore({ assessmentOverviews: [] });
   const app = createTestComponent(mockStore);
 
-  const tree = renderTreeJson(app);
+  const tree = await renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
   await act(() => render(app));
@@ -76,7 +76,7 @@ test('Assessment page with multiple loaded missions renders correctly', async ()
   });
   const app = createTestComponent(mockStore);
 
-  const tree = renderTreeJson(app);
+  const tree = await renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
   await act(() => render(app));
@@ -90,7 +90,7 @@ test('Assessment page does not show attempt Button for upcoming assessments for 
   });
   const app = createTestComponent(mockStore);
 
-  const tree = renderTreeJson(app);
+  const tree = await renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
   await act(() => render(app));

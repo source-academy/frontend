@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 
 import SideContentContestVotingContainer from '../content/SideContentContestVotingContainer';
@@ -32,7 +32,7 @@ const element = <SideContentContestVotingContainer {...mockProps} />;
 
 // Basic snapshot testing to catch unexpected changes
 test('SideContentContestVotingContainer matches snapshot', async () => {
-  const tree = await waitFor(() => renderTreeJson(element));
+  const tree = await renderTreeJson(element);
   expect(tree).toMatchSnapshot();
 });
 

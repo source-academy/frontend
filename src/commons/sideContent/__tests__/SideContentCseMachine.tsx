@@ -1,4 +1,4 @@
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { runInContext } from 'js-slang/dist/';
 import { Provider } from 'react-redux';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
@@ -16,7 +16,7 @@ const element = (
 );
 
 test('CSE Machine component renders correctly', async () => {
-  const tree = await waitFor(() => renderTreeJson(element));
+  const tree = await renderTreeJson(element);
   expect(tree).toMatchSnapshot();
 });
 
