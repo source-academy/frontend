@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
 import { Store } from 'redux';
@@ -47,25 +47,25 @@ const createTestComponent = (mockStore: Store<OverallState>) => (
   </Provider>
 );
 
-test('Assessment page "loading" content renders correctly', () => {
+test('Assessment page "loading" content renders correctly', async () => {
   const mockStore = getOverriddenStore({});
   const app = createTestComponent(mockStore);
 
-  const tree = renderTreeJson(app);
+  const tree = await renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
   render(app);
   screen.getByText('Fetching assessment...');
 });
 
-test('Assessment page with 0 missions renders correctly', () => {
+test('Assessment page with 0 missions renders correctly', async () => {
   const mockStore = getOverriddenStore({ assessmentOverviews: [] });
   const app = createTestComponent(mockStore);
 
-  const tree = renderTreeJson(app);
+  const tree = await renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
-  render(app);
+  await act(() => render(app));
   screen.getByText('There are no assessments.');
 });
 
@@ -76,23 +76,23 @@ test('Assessment page with multiple loaded missions renders correctly', async ()
   });
   const app = createTestComponent(mockStore);
 
-  const tree = renderTreeJson(app);
+  const tree = await renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
-  render(app);
+  await act(() => render(app));
   expect(screen.getAllByTestId('Assessment-Attempt-Button').length).toBe(3);
 });
 
-test('Assessment page does not show attempt Button for upcoming assessments for student user', () => {
+test('Assessment page does not show attempt Button for upcoming assessments for student user', async () => {
   const mockStore = getOverriddenStore({
     assessmentOverviews: mockAssessmentOverviews,
     role: Role.Student
   });
   const app = createTestComponent(mockStore);
 
-  const tree = renderTreeJson(app);
+  const tree = await renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
-  render(app);
+  await act(() => render(app));
   expect(screen.getAllByTestId('Assessment-Attempt-Button').length).toBe(2);
 });

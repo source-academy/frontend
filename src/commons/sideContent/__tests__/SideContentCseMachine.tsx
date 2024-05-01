@@ -15,13 +15,13 @@ const element = (
   </Provider>
 );
 
-test('CSE Machine component renders correctly', () => {
-  const tree = renderTreeJson(element);
+test('CSE Machine component renders correctly', async () => {
+  const tree = await renderTreeJson(element);
   expect(tree).toMatchSnapshot();
 });
 
 test('CSE Machine sets visualization state and renders', async () => {
-  render(element);
+  await act(() => render(element));
   expect(screen.queryAllByTestId('cse-machine-default-text')).toHaveLength(1);
   expect(screen.queryAllByTestId('sa-cse-machine')).toHaveLength(0);
 

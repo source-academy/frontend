@@ -122,7 +122,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const [sessionId, setSessionId] = useState('');
   const { isMobileBreakpoint } = useResponsive();
 
-  const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
+  const assessment = useTypedSelector(state => state.session.assessments[props.assessmentId]);
   const assessmentOverviews = useTypedSelector(state => state.session.assessmentOverviews);
   const teamFormationOverview = useTypedSelector(state => state.session.teamFormationOverview);
   const assessmentOverview = assessmentOverviews?.find(assessmentOverview => {
