@@ -2,7 +2,6 @@ import { render, screen } from '@testing-library/react';
 import { require as acequire } from 'ace-builds';
 import { Provider } from 'react-redux';
 import { createMemoryRouter, RouterProvider } from 'react-router';
-import { Assessment } from 'src/commons/assessment/AssessmentTypes';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import { assertType } from 'src/commons/utils/TypeHelper';
@@ -72,10 +71,7 @@ const mockContestVotingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
 
 const mockStore = mockInitialStore({
   session: {
-    assessments: mockAssessments.reduce<{ [id: number]: Assessment }>((acc, assessment) => {
-      acc[assessment.id] = assessment;
-      return acc;
-    }, {})
+    assessments: Object.fromEntries(mockAssessments.map(assessment => [assessment.id, assessment]))
   }
 });
 

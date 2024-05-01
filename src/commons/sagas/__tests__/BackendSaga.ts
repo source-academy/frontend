@@ -131,13 +131,7 @@ import {
 
 const mockAssessment: Assessment = mockAssessments[0];
 
-const mockMapAssessments = mockAssessments.reduce<{ [id: number]: Assessment }>(
-  (acc, assessment) => {
-    acc[assessment.id] = assessment;
-    return acc;
-  },
-  {}
-);
+const mockMapAssessments = Object.fromEntries(mockAssessments.map(a => [a.id, a]));
 
 const mockAssessmentQuestion = mockAssessmentQuestions[0];
 
