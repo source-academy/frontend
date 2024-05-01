@@ -14,8 +14,11 @@ import {
   defaultWorkspaceManager,
   OverallState
 } from '../application/ApplicationTypes';
+import { SourceActionType } from '../utils/ActionsHelper';
 
-export function mockInitialStore(overrides?: DeepPartial<OverallState>): Store<OverallState> {
+export function mockInitialStore(
+  overrides?: DeepPartial<OverallState>
+): Store<OverallState, SourceActionType> {
   const createStore = (mockStore as any)();
   const state: OverallState = {
     router: defaultRouter,
@@ -28,5 +31,15 @@ export function mockInitialStore(overrides?: DeepPartial<OverallState>): Store<O
     fileSystem: defaultFileSystem,
     sideContent: defaultSideContentManager
   };
-  return createStore(_.merge(state, overrides));
+
+  const lodashMergeCustomizer = (objValue: any, srcValue: any) => {
+    if (_.isObject(objValue)) {
+      return {
+        ...objValue, // destination object
+        ...srcValue // overrides
+      };
+    }
+  };
+
+  return createStore(_.mergeWith(state, overrides, lodashMergeCustomizer));
 }

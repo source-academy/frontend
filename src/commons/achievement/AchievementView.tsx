@@ -51,7 +51,7 @@ const AchievementView: React.FC<Props> = ({ focusUuid, userState }) => {
 
   const inferencer = useContext(AchievementContext);
   const assessments = useTypedSelector(store => store.session.assessments);
-  const selectedAssessment: Assessment | undefined = assessments.get(assessmentId!);
+  const selectedAssessment: Assessment | undefined = assessments[assessmentId!];
   const allAssessmentConfigs = useTypedSelector(store => store.session.assessmentOverviews) ?? [];
   const selectedAssessmentConfig = allAssessmentConfigs.find(config => config.id === assessmentId);
 

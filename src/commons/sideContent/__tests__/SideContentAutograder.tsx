@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/types';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 
@@ -79,7 +79,7 @@ const resultCardClasses = [
   'ResultCard wrong'
 ];
 
-test('Autograder renders placeholders correctly when testcases and results are empty', () => {
+test('Autograder renders placeholders correctly when testcases and results are empty', async () => {
   const props: SideContentAutograderProps = {
     autogradingResults: [],
     testcases: [],
@@ -90,7 +90,7 @@ test('Autograder renders placeholders correctly when testcases and results are e
   const tree = shallowRender(app);
   expect(tree).toMatchSnapshot();
 
-  render(app);
+  await act(() => render(app));
 
   // Both noResults <div>s are rendered (one under 'Testcases', other under 'Autograder Results')
   expect(screen.queryAllByTestId('noResults')).toHaveLength(2);
@@ -104,7 +104,7 @@ test('Autograder renders placeholders correctly when testcases and results are e
   expect(screen.queryAllByTestId('ResultCard')).toHaveLength(0);
 });
 
-test('Autograder renders public testcases with different statuses correctly', () => {
+test('Autograder renders public testcases with different statuses correctly', async () => {
   const props: SideContentAutograderProps = {
     autogradingResults: [],
     testcases: mockPublicTestcases,
@@ -115,7 +115,7 @@ test('Autograder renders public testcases with different statuses correctly', ()
   const tree = shallowRender(app);
   expect(tree).toMatchSnapshot();
 
-  render(app);
+  await act(() => render(app));
 
   // Expect only the header <div> for testcases section to be rendered
   expect(screen.queryAllByTestId('testcases-header')).toHaveLength(1);
@@ -149,7 +149,7 @@ test('Autograder renders public testcases with different statuses correctly', ()
   ]);
 });
 
-test('Autograder renders opaque testcases with different statuses correctly in AssessmentWorkspace', () => {
+test('Autograder renders opaque testcases with different statuses correctly in AssessmentWorkspace', async () => {
   const props: SideContentAutograderProps = {
     autogradingResults: [],
     testcases: mockOpaqueTestcases,
@@ -160,7 +160,7 @@ test('Autograder renders opaque testcases with different statuses correctly in A
   const tree = shallowRender(app);
   expect(tree).toMatchSnapshot();
 
-  render(app);
+  await act(() => render(app));
 
   // No autograder result Card components should be rendered
   expect(screen.queryAllByTestId('ResultCard')).toHaveLength(0);
@@ -178,7 +178,7 @@ test('Autograder renders opaque testcases with different statuses correctly in A
   });
 });
 
-test('Autograder renders opaque testcases with different statuses correctly in GradingWorkspace', () => {
+test('Autograder renders opaque testcases with different statuses correctly in GradingWorkspace', async () => {
   const props: SideContentAutograderProps = {
     autogradingResults: [],
     testcases: mockOpaqueTestcases,
@@ -189,7 +189,7 @@ test('Autograder renders opaque testcases with different statuses correctly in G
   const tree = shallowRender(app);
   expect(tree).toMatchSnapshot();
 
-  render(app);
+  await act(() => render(app));
 
   // No autograder result Card components should be rendered
   expect(screen.queryAllByTestId('ResultCard')).toHaveLength(0);
@@ -209,7 +209,7 @@ test('Autograder renders opaque testcases with different statuses correctly in G
   ]);
 });
 
-test('Autograder renders secret testcases with different statuses correctly', () => {
+test('Autograder renders secret testcases with different statuses correctly', async () => {
   const props: SideContentAutograderProps = {
     autogradingResults: [],
     testcases: mockSecretTestcases,
@@ -220,7 +220,7 @@ test('Autograder renders secret testcases with different statuses correctly', ()
   const tree = shallowRender(app);
   expect(tree).toMatchSnapshot();
 
-  render(app);
+  await act(() => render(app));
 
   // Expect only the header <div> for testcases section to be rendered
   expect(screen.queryAllByTestId('testcases-header')).toHaveLength(1);
@@ -248,7 +248,7 @@ test('Autograder renders secret testcases with different statuses correctly', ()
   ]);
 });
 
-test('Autograder renders autograder results with different statuses correctly', () => {
+test('Autograder renders autograder results with different statuses correctly', async () => {
   const props: SideContentAutograderProps = {
     autogradingResults: mockAutogradingResults,
     testcases: [],
@@ -259,7 +259,7 @@ test('Autograder renders autograder results with different statuses correctly', 
   const tree = shallowRender(app);
   expect(tree).toMatchSnapshot();
 
-  render(app);
+  await act(() => render(app));
 
   // Expect only the header <div> for autograder results section to be rendered
   expect(screen.queryAllByTestId('testcases-header')).toHaveLength(0);
