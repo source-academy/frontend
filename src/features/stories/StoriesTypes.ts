@@ -3,17 +3,6 @@ import { DebuggerContext } from 'src/commons/workspace/WorkspaceTypes';
 
 import { InterpreterOutput, StoriesRole } from '../../commons/application/ApplicationTypes';
 
-export const HANDLE_STORIES_CONSOLE_LOG = 'HANDLE_STORIES_CONSOLE_LOG';
-export const NOTIFY_STORIES_EVALUATED = 'NOTIFY_STORIES_EVALUATED';
-export const TOGGLE_STORIES_USING_SUBST = 'TOGGLE_STORIES_USING_SUBST';
-// New actions post-refactor
-export const GET_STORIES_LIST = 'GET_STORIES_LIST';
-export const UPDATE_STORIES_LIST = 'UPDATE_STORIES_LIST';
-export const SET_CURRENT_STORY_ID = 'SET_CURRENT_STORY_ID';
-export const SET_CURRENT_STORY = 'SET_CURRENT_STORY';
-export const CREATE_STORY = 'CREATE_STORY';
-export const SAVE_STORY = 'SAVE_STORY';
-export const DELETE_STORY = 'DELETE_STORY';
 // Auth-related actions
 export const GET_STORIES_USER = 'GET_STORIES_USER';
 export const CLEAR_STORIES_USER_AND_GROUP = 'CLEAR_STORIES_USER_AND_GROUP';
