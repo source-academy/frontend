@@ -11,14 +11,14 @@ describe('Sicp exercise renders', () => {
     user = userEvent.setup();
   });
 
-  test('correctly', () => {
+  test('correctly', async () => {
     const props = {
       title: 'Title',
       body: <div>body</div>,
       solution: <div>solution</div>
     };
 
-    const tree = renderTreeJson(<SicpExercise {...props} />);
+    const tree = await renderTreeJson(<SicpExercise {...props} />);
     expect(tree).toMatchSnapshot();
   });
 
