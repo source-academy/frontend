@@ -80,7 +80,7 @@ const newSessionsReducer = createReducer(defaultSession, builder => {
       state.userCourseRegistrations = action.payload;
     })
     .addCase(updateAssessment, (state, action) => {
-      state.assessments.set(action.payload.id, action.payload);
+      state.assessments[action.payload.id] = action.payload;
     })
     .addCase(updateAssessmentOverviews, (state, action) => {
       state.assessmentOverviews = action.payload;
@@ -89,7 +89,7 @@ const newSessionsReducer = createReducer(defaultSession, builder => {
       state.xp = action.payload;
     })
     .addCase(updateGrading, (state, action) => {
-      state.gradings.set(action.payload.submissionId, action.payload.grading);
+      state.gradings[action.payload.submissionId] = action.payload.grading;
     })
     .addCase(updateGradingOverviews, (state, action) => {
       state.gradingOverviews = action.payload;

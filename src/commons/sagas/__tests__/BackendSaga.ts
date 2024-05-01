@@ -131,7 +131,13 @@ import {
 
 const mockAssessment: Assessment = mockAssessments[0];
 
-const mockMapAssessments = new Map<number, Assessment>(mockAssessments.map(a => [a.id, a]));
+const mockMapAssessments = mockAssessments.reduce(
+  (acc, assessment) => {
+    acc[assessment.id] = assessment;
+    return acc;
+  },
+  {} as { [id: number]: Assessment }
+);
 
 const mockAssessmentQuestion = mockAssessmentQuestions[0];
 
@@ -662,7 +668,7 @@ describe('Test FETCH_ASSESSMENT action', () => {
 });
 
 describe('Test SUBMIT_ANSWER action', () => {
-  test('when response is ok', () => {
+  test('when response is ok', async () => {
     const mockAnsweredAssessmentQuestion: Question =
       mockAssessmentQuestion.type === 'mcq'
         ? { ...mockAssessmentQuestion, answer: 42 }
@@ -679,7 +685,7 @@ describe('Test SUBMIT_ANSWER action', () => {
       ...mockAssessment,
       questions: mockNewQuestions
     };
-    expectSaga(BackendSaga)
+    await expectSaga(BackendSaga)
       .withState(mockStates)
       .provide([
         [
@@ -699,12 +705,12 @@ describe('Test SUBMIT_ANSWER action', () => {
       .dispatch({ type: SUBMIT_ANSWER, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
     // To make sure no changes in state
-    return expect(
-      mockStates.session.assessments.get(mockNewAssessment.id)!.questions[0].answer
-    ).toEqual(null);
+    return expect(mockStates.session.assessments[mockNewAssessment.id].questions[0].answer).toEqual(
+      null
+    );
   });
 
-  test('when role is not student', () => {
+  test('when role is not student', async () => {
     const mockAnsweredAssessmentQuestion: Question =
       mockAssessmentQuestion.type === 'mcq'
         ? { ...mockAssessmentQuestion, answer: 42 }
@@ -721,7 +727,7 @@ describe('Test SUBMIT_ANSWER action', () => {
       ...mockAssessment,
       questions: mockNewQuestions
     };
-    expectSaga(BackendSaga)
+    await expectSaga(BackendSaga)
       .withState({ ...mockStates, session: { ...mockStates.session, role: Role.Staff } })
       .provide([
         [
@@ -741,9 +747,9 @@ describe('Test SUBMIT_ANSWER action', () => {
       .dispatch({ type: SUBMIT_ANSWER, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
     // To make sure no changes in state
-    return expect(
-      mockStates.session.assessments.get(mockNewAssessment.id)!.questions[0].answer
-    ).toEqual(null);
+    return expect(mockStates.session.assessments[mockNewAssessment.id].questions[0].answer).toEqual(
+      null
+    );
   });
 
   test('when response is null', () => {
@@ -778,7 +784,7 @@ describe('Test SUBMIT_ANSWER action', () => {
 });
 
 describe('Test SUBMIT_ASSESSMENT action', () => {
-  test('when response is ok', () => {
+  test('when response is ok', async () => {
     const mockAssessmentId = mockAssessment.id;
     const mockNewOverviews = mockAssessmentOverviews.map(overview => {
       if (overview.id === mockAssessmentId) {
@@ -786,7 +792,7 @@ describe('Test SUBMIT_ASSESSMENT action', () => {
       }
       return overview;
     });
-    expectSaga(BackendSaga)
+    await expectSaga(BackendSaga)
       .withState(mockStates)
       .provide([[call(postAssessment, mockAssessmentId, mockTokens), okResp]])
       .not.call(showWarningMessage)
@@ -812,7 +818,7 @@ describe('Test SUBMIT_ASSESSMENT action', () => {
       .silentRun();
   });
 
-  test('when role is not a student', () => {
+  test('when role is not a student', async () => {
     const mockAssessmentId = mockAssessment.id;
     const mockNewOverviews = mockAssessmentOverviews.map(overview => {
       if (overview.id === mockAssessmentId) {
@@ -820,7 +826,7 @@ describe('Test SUBMIT_ASSESSMENT action', () => {
       }
       return overview;
     });
-    expectSaga(BackendSaga)
+    await expectSaga(BackendSaga)
       .withState({ ...mockStates, session: { ...mockStates.session, role: Role.Staff } })
       .provide([[call(postAssessment, mockAssessmentId, mockTokens), okResp]])
       .not.call(showWarningMessage)

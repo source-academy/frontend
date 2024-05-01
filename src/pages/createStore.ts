@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { enableMapSet, setAutoFreeze } from 'immer';
+import { setAutoFreeze } from 'immer';
 import { throttle } from 'lodash';
 import createSagaMiddleware from 'redux-saga';
 import { SourceActionType } from 'src/commons/utils/ActionsHelper';
@@ -10,9 +10,6 @@ import MainSaga from '../commons/sagas/MainSaga';
 import { generateOctokitInstance } from '../commons/utils/GitHubPersistenceHelper';
 import { loadStoredState, SavedState, saveState } from './localStorage';
 
-// SessionState involves the use of maps, so we need
-// to enable the use of maps in Immer for this test file,
-enableMapSet();
 // FIXME: Hotfix: Disable auto freezing of states for RTK as this breaks the code evaluation sagas
 setAutoFreeze(false);
 

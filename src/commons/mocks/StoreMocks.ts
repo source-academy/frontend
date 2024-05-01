@@ -31,5 +31,15 @@ export function mockInitialStore(
     fileSystem: defaultFileSystem,
     sideContent: defaultSideContentManager
   };
-  return createStore(_.merge(state, overrides));
+
+  const lodashMergeCustomizer = (objValue: any, srcValue: any) => {
+    if (_.isObject(objValue)) {
+      return {
+        ...objValue, // destination object
+        ...srcValue // overrides
+      };
+    }
+  };
+
+  return createStore(_.mergeWith(state, overrides, lodashMergeCustomizer));
 }
