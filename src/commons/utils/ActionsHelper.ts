@@ -16,7 +16,7 @@ import * as RemoteExecutionActions from '../../features/remoteExecution/RemoteEx
 import * as SourcecastActions from '../../features/sourceRecorder/sourcecast/SourcecastActions';
 import * as SourceRecorderActions from '../../features/sourceRecorder/SourceRecorderActions';
 import * as SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
-import * as StoriesActions from '../../features/stories/StoriesActions';
+import StoriesActions from '../../features/stories/StoriesActions';
 import { ActionType } from './TypeHelper';
 
 export const actions = {

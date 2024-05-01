@@ -13,7 +13,7 @@ import {
   StoryParams
 } from './StoriesTypes';
 
-export const newActions = createActions('stories', {
+const newActions = createActions('stories', {
   addStoryEnv: (env: string, chapter: Chapter, variant: Variant) => ({ env, chapter, variant }),
   clearStoryEnv: (env?: string) => ({ env }),
   evalStory: (env: string, code: string) => ({ env, code }),
@@ -53,3 +53,32 @@ export const setCurrentStoriesGroup = createAction(
 export const clearStoriesUserAndGroup = createAction(CLEAR_STORIES_USER_AND_GROUP, () => ({
   payload: {}
 }));
+
+// For compatibility with existing code (reducer)
+export const {
+  addStoryEnv,
+  clearStoryEnv,
+  evalStory,
+  evalStoryError,
+  evalStorySuccess,
+  handleStoriesConsoleLog,
+  notifyStoriesEvaluated,
+  toggleStoriesUsingSubst,
+  // New action creators post-refactor
+  getStoriesList,
+  updateStoriesList,
+  setCurrentStory,
+  setCurrentStoryId,
+  createStory,
+  saveStory,
+  deleteStory
+} = newActions;
+
+// For compatibility with existing code (actions helper)
+export default {
+  ...newActions,
+  getStoriesUser,
+  setCurrentStoriesUser,
+  setCurrentStoriesGroup,
+  clearStoriesUserAndGroup
+};
