@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 
 import SideContentContestVotingContainer from '../content/SideContentContestVotingContainer';
@@ -31,12 +31,13 @@ const mockProps = {
 const element = <SideContentContestVotingContainer {...mockProps} />;
 
 // Basic snapshot testing to catch unexpected changes
-test('SideContentContestVotingContainer matches snapshot', () => {
-  expect(renderTreeJson(element)).toMatchSnapshot();
+test('SideContentContestVotingContainer matches snapshot', async () => {
+  const tree = await waitFor(() => renderTreeJson(element));
+  expect(tree).toMatchSnapshot();
 });
 
-test('Tiers and entry bank are properly rendered and displayed', () => {
-  render(element);
+test('Tiers and entry bank are properly rendered and displayed', async () => {
+  await act(() => render(element));
 
   const mockTiers = screen.getAllByTestId('tier');
   const [mockSTier, mockATier, mockBTier, mockCTier, mockDTier, mockBank] = mockTiers;
@@ -49,8 +50,8 @@ test('Tiers and entry bank are properly rendered and displayed', () => {
   expect(mockBank.id).toBe('bank');
 });
 
-test('Entries are only saved when all entries are assigned a tier', () => {
-  render(element);
+test('Entries are only saved when all entries are assigned a tier', async () => {
+  await act(() => render(element));
 
   const contestCards = screen.getAllByTestId('voting-item');
   const mockSContainer = screen.getAllByTestId('voting-item-container')[0];

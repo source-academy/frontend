@@ -1,3 +1,4 @@
+import { waitFor } from '@testing-library/react';
 import lzString from 'lz-string';
 import { BrowserRouter } from 'react-router-dom';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
@@ -55,8 +56,10 @@ const processTag = (tag: string, obj: JsonType) => {
 };
 
 const testTagSuccessful = (obj: JsonType, tag: string, text: string = '') => {
-  test(tag + ' ' + text + ' successful', () => {
-    const tree = renderTreeJson(<BrowserRouter>{processTag(tag, obj)}</BrowserRouter>);
+  test(tag + ' ' + text + ' successful', async () => {
+    const tree = await waitFor(() =>
+      renderTreeJson(<BrowserRouter>{processTag(tag, obj)}</BrowserRouter>)
+    );
     expect(tree).toMatchSnapshot();
   });
 };

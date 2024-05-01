@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
 import { Store } from 'redux';
@@ -58,14 +58,14 @@ test('Assessment page "loading" content renders correctly', () => {
   screen.getByText('Fetching assessment...');
 });
 
-test('Assessment page with 0 missions renders correctly', () => {
+test('Assessment page with 0 missions renders correctly', async () => {
   const mockStore = getOverriddenStore({ assessmentOverviews: [] });
   const app = createTestComponent(mockStore);
 
   const tree = renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
-  render(app);
+  await act(() => render(app));
   screen.getByText('There are no assessments.');
 });
 
@@ -79,11 +79,11 @@ test('Assessment page with multiple loaded missions renders correctly', async ()
   const tree = renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
-  render(app);
+  await act(() => render(app));
   expect(screen.getAllByTestId('Assessment-Attempt-Button').length).toBe(3);
 });
 
-test('Assessment page does not show attempt Button for upcoming assessments for student user', () => {
+test('Assessment page does not show attempt Button for upcoming assessments for student user', async () => {
   const mockStore = getOverriddenStore({
     assessmentOverviews: mockAssessmentOverviews,
     role: Role.Student
@@ -93,6 +93,6 @@ test('Assessment page does not show attempt Button for upcoming assessments for 
   const tree = renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
-  render(app);
+  await act(() => render(app));
   expect(screen.getAllByTestId('Assessment-Attempt-Button').length).toBe(2);
 });

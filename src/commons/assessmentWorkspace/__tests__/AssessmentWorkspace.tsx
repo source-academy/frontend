@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { require as acequire } from 'ace-builds';
 import { Provider } from 'react-redux';
 import { createMemoryRouter, RouterProvider } from 'react-router';
@@ -101,7 +101,7 @@ const createMemoryRouterWithRoutes = (props: AssessmentWorkspaceProps) => {
 };
 
 const renderElement = (props: AssessmentWorkspaceProps) =>
-  render(createMemoryRouterWithRoutes(props));
+  waitFor(() => render(createMemoryRouterWithRoutes(props)));
 
 const getEditor = () => screen.queryByTestId('Editor');
 const getMCQChooser = () => screen.queryByTestId('MCQChooser');
@@ -127,8 +127,8 @@ describe('AssessmentWorkspace', () => {
     screen.getByText('Getting mission ready...');
   });
 
-  test('AssessmentWorkspace page with programming question renders correctly', () => {
-    const { container } = renderElement(mockProgrammingAssessmentWorkspaceProps);
+  test('AssessmentWorkspace page with programming question renders correctly', async () => {
+    const { container } = await renderElement(mockProgrammingAssessmentWorkspaceProps);
 
     expect(container).toMatchSnapshot();
     expect(getEditor()).toBeTruthy();
@@ -138,8 +138,8 @@ describe('AssessmentWorkspace', () => {
     expect(getContestVotingTab(container)).toBeNull();
   });
 
-  test('AssessmentWorkspace page with overdue assessment renders correctly', () => {
-    const { container } = renderElement(mockClosedProgrammingAssessmentWorkspaceProps);
+  test('AssessmentWorkspace page with overdue assessment renders correctly', async () => {
+    const { container } = await renderElement(mockClosedProgrammingAssessmentWorkspaceProps);
 
     expect(container).toMatchSnapshot();
     expect(getEditor()).toBeTruthy();
@@ -149,8 +149,8 @@ describe('AssessmentWorkspace', () => {
     expect(getContestVotingTab(container)).toBeNull();
   });
 
-  test('AssessmentWorkspace page with MCQ question renders correctly', () => {
-    const { container } = renderElement(mockMcqAssessmentWorkspaceProps);
+  test('AssessmentWorkspace page with MCQ question renders correctly', async () => {
+    const { container } = await renderElement(mockMcqAssessmentWorkspaceProps);
 
     expect(container).toMatchSnapshot();
     expect(getEditor()).toBeNull();
@@ -160,8 +160,8 @@ describe('AssessmentWorkspace', () => {
     expect(getContestVotingTab(container)).toBeNull();
   });
 
-  test('AssessmentWorkspace page with ContestVoting question renders correctly', () => {
-    const { container } = renderElement(mockContestVotingAssessmentWorkspaceProps);
+  test('AssessmentWorkspace page with ContestVoting question renders correctly', async () => {
+    const { container } = await renderElement(mockContestVotingAssessmentWorkspaceProps);
 
     expect(container).toMatchSnapshot();
     expect(getEditor()).toBeTruthy();
@@ -171,8 +171,8 @@ describe('AssessmentWorkspace', () => {
     expect(getContestVotingTab(container)).toBeTruthy();
   });
 
-  test('AssessmentWorkspace renders Grading tab correctly if the question has been graded', () => {
-    const { container } = renderElement(mockGradedProgrammingAssessmentWorkspaceProps);
+  test('AssessmentWorkspace renders Grading tab correctly if the question has been graded', async () => {
+    const { container } = await renderElement(mockGradedProgrammingAssessmentWorkspaceProps);
 
     expect(container).toMatchSnapshot();
     expect(getEditor()).toBeTruthy();

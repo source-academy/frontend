@@ -1,3 +1,4 @@
+import { waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
 import { Store } from 'redux';
@@ -39,34 +40,34 @@ const getElement = (mockStore: Store<OverallState>) => (
   </Provider>
 );
 
-test('Dropdown does not mount Profile, DropdownCourses and DropdownCreateCourses components when a user is not logged in', () => {
+test('Dropdown does not mount Profile, DropdownCourses and DropdownCreateCourses components when a user is not logged in', async () => {
   const mockStore = getMockedStore({
     courses: [],
     courseId: 1
   });
   const app = getElement(mockStore);
-  const tree = renderTreeJson(app);
+  const tree = await waitFor(() => renderTreeJson(app));
   expect(tree).toMatchSnapshot();
 
   // Expect the Profile component to NOT be mounted
-  const dropdown = renderTree(app);
+  const dropdown = await waitFor(() => renderTree(app));
   expect(dropdown.root.findAllByType(Profile).length).toBe(0);
   expect(dropdown.root.findAllByType(DropdownCourses).length).toBe(0);
   expect(dropdown.root.findAllByType(DropdownCreateCourse).length).toBe(0);
 });
 
-test('Dropdown correctly mounts Profile, DropdownCourses, and DropdownCreateCourses components when a user is logged in', () => {
+test('Dropdown correctly mounts Profile, DropdownCourses, and DropdownCreateCourses components when a user is logged in', async () => {
   const mockStore = getMockedStore({
     name: 'Some user',
     courses: [],
     courseId: 1
   });
   const app = getElement(mockStore);
-  const tree = renderTreeJson(app);
+  const tree = await waitFor(() => renderTreeJson(app));
   expect(tree).toMatchSnapshot();
 
   // Expect the Profile component to be mounted
-  const dropdown = renderTree(app);
+  const dropdown = await waitFor(() => renderTree(app));
   expect(dropdown.root.findByType(Profile)).toBeTruthy();
   expect(dropdown.root.findByType(DropdownCourses)).toBeTruthy();
   expect(dropdown.root.findByType(DropdownCreateCourse)).toBeTruthy();
