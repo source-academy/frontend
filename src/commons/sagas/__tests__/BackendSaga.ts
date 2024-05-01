@@ -333,6 +333,9 @@ describe('Test FETCH_AUTH action', () => {
   const courseRegistration = mockCourseRegistration1;
   const assessmentConfigurations = mockAssessmentConfigurations;
 
+  // API call is made when dispatching subsequent action, causing console warning
+  jest.spyOn(global, 'fetch').mockReturnValue(Promise.resolve({} as Response));
+
   test('when tokens, user, course registration and course configuration are obtained', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
