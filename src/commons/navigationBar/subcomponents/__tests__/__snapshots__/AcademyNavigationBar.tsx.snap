@@ -20,7 +20,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
       <div
         className="hidden-xs hidden-sm"
       >
-        Missions
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
       <NotificationBadge
         disableHover={true}
@@ -40,7 +45,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
       <div
         className="hidden-xs hidden-sm"
       >
-        Quests
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
       <NotificationBadge
         disableHover={true}
@@ -60,7 +70,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
       <div
         className="hidden-xs hidden-sm"
       >
-        Paths
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
       <NotificationBadge
         disableHover={true}
@@ -80,7 +95,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
       <div
         className="hidden-xs hidden-sm"
       >
-        Contests
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
       <NotificationBadge
         disableHover={true}
@@ -100,7 +120,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
       <div
         className="hidden-xs hidden-sm"
       >
-        Others
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
       <NotificationBadge
         disableHover={true}
@@ -124,7 +149,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
       <div
         className="hidden-xs hidden-sm hidden-md hidden-lg"
       >
-        Notifications
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
     </NavLink>
   </Blueprint5.NavbarGroup>
@@ -151,7 +181,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
       <div
         className="hidden-xs hidden-sm"
       >
-        Missions
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
       <NotificationBadge
         disableHover={true}
@@ -171,7 +206,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
       <div
         className="hidden-xs hidden-sm"
       >
-        Quests
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
       <NotificationBadge
         disableHover={true}
@@ -191,7 +231,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
       <div
         className="hidden-xs hidden-sm"
       >
-        Paths
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
       <NotificationBadge
         disableHover={true}
@@ -211,7 +256,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
       <div
         className="hidden-xs hidden-sm"
       >
-        Contests
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
       <NotificationBadge
         disableHover={true}
@@ -231,7 +281,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
       <div
         className="hidden-xs hidden-sm"
       >
-        Others
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
       <NotificationBadge
         disableHover={true}
@@ -255,7 +310,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
       <div
         className="hidden-xs hidden-sm"
       >
-        Ground Control
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
     </NavLink>
     <NavLink
@@ -271,7 +331,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
       <div
         className="hidden-xs hidden-sm"
       >
-        Dashboard
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
     </NavLink>
     <NavLink
@@ -287,7 +352,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
       <div
         className="hidden-xs hidden-sm hidden-md"
       >
-        Sourcereel
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
     </NavLink>
     <NavLink
@@ -303,7 +373,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
       <div
         className="hidden-xs hidden-sm hidden-md"
       >
-        Team Formation
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
     </NavLink>
     <NavLink
@@ -319,7 +394,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
       <div
         className="hidden-xs hidden-sm hidden-md"
       >
-        Grading
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
       <NotificationBadge
         disableHover={true}
@@ -339,7 +419,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
       <div
         className="hidden-xs hidden-sm hidden-md"
       >
-        Game Simulator
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
     </NavLink>
     <NavLink
@@ -355,7 +440,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
       <div
         className="hidden-xs hidden-sm hidden-md hidden-lg"
       >
-        Admin Panel
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
     </NavLink>
     <NavLink
@@ -371,7 +461,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
       <div
         className="hidden-xs hidden-sm hidden-md hidden-lg"
       >
-        Notifications
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
     </NavLink>
   </Blueprint5.NavbarGroup>
@@ -398,7 +493,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Te
       <div
         className="hidden-xs hidden-sm"
       >
-        Missions
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
       <NotificationBadge
         disableHover={true}
@@ -418,7 +518,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Te
       <div
         className="hidden-xs hidden-sm"
       >
-        Quests
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
       <NotificationBadge
         disableHover={true}
@@ -438,7 +543,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Te
       <div
         className="hidden-xs hidden-sm"
       >
-        Paths
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
       <NotificationBadge
         disableHover={true}
@@ -458,7 +568,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Te
       <div
         className="hidden-xs hidden-sm"
       >
-        Contests
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
       <NotificationBadge
         disableHover={true}
@@ -478,7 +593,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Te
       <div
         className="hidden-xs hidden-sm"
       >
-        Others
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
       <NotificationBadge
         disableHover={true}
@@ -502,7 +622,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Te
       <div
         className="hidden-xs hidden-sm"
       >
-        Ground Control
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
     </NavLink>
     <NavLink
@@ -518,7 +643,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Te
       <div
         className="hidden-xs hidden-sm"
       >
-        Dashboard
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
     </NavLink>
     <NavLink
@@ -534,7 +664,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Te
       <div
         className="hidden-xs hidden-sm hidden-md"
       >
-        Sourcereel
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
     </NavLink>
     <NavLink
@@ -550,7 +685,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Te
       <div
         className="hidden-xs hidden-sm hidden-md"
       >
-        Team Formation
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
     </NavLink>
     <NavLink
@@ -566,7 +706,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Te
       <div
         className="hidden-xs hidden-sm hidden-md"
       >
-        Grading
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
       <NotificationBadge
         disableHover={true}
@@ -586,7 +731,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Te
       <div
         className="hidden-xs hidden-sm hidden-md"
       >
-        Game Simulator
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
     </NavLink>
     <NavLink
@@ -602,7 +752,12 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Te
       <div
         className="hidden-xs hidden-sm hidden-md hidden-lg"
       >
-        Notifications
+        <Translation
+          keyPrefix="navigationBar"
+          ns="commons"
+        >
+          [Function]
+        </Translation>
       </div>
     </NavLink>
   </Blueprint5.NavbarGroup>

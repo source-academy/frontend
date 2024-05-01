@@ -5,8 +5,8 @@ const mockProps: ContentDisplayProps = {
   display: <div> Test Content </div>
 };
 
-test('ContentDisplay page renders correctly', () => {
+test('ContentDisplay page renders correctly', async () => {
   const app = <ContentDisplay {...mockProps} />;
-  const tree = renderTreeJson(app);
+  const tree = await renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 });
