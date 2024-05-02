@@ -1,71 +1,87 @@
+import { createReducer } from '@reduxjs/toolkit';
+import { Reducer } from 'redux';
+
 import { defaultSideContent, defaultSideContentManager } from '../application/ApplicationTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
-import { getDynamicTabs, getTabId } from './SideContentHelper';
-import { getLocation } from './SideContentHelper';
-import { CHANGE_SIDE_CONTENT_HEIGHT, SPAWN_SIDE_CONTENT } from './SideContentTypes';
+import { changeSideContentHeight, endAlertSideContent } from './SideContentActions';
+import { getDynamicTabs, getLocation, getTabId } from './SideContentHelper';
 import {
-  END_ALERT_SIDE_CONTENT,
   REMOVE_SIDE_CONTENT_ALERT,
   RESET_SIDE_CONTENT,
   SideContentManagerState,
+  SPAWN_SIDE_CONTENT,
   VISIT_SIDE_CONTENT
 } from './SideContentTypes';
 
-export function SideContentReducer(
-  state: SideContentManagerState = defaultSideContentManager,
+export const SideContentReducer: Reducer<SideContentManagerState, SourceActionType> = (
+  state = defaultSideContentManager,
   action: SourceActionType
-): SideContentManagerState {
+) => {
   if (!(action as any).payload?.workspaceLocation) {
     return state;
   }
+  state = storySideContentReducer(state, action);
+  state = nonStorySideContentReducer(state, action);
+  state = oldSideContentReducer(state, action);
+  return state;
+};
+
+const storySideContentReducer: Reducer<SideContentManagerState, SourceActionType> = (
+  state = defaultSideContentManager,
+  action
+) => {
+  const [workspaceLocation, storyEnv] = getLocation((action as any).payload.workspaceLocation);
+  if (workspaceLocation !== 'stories') {
+    return state;
+  }
+
+  const sideContentState = state.stories[storyEnv];
+  return createReducer(defaultSideContentManager, builder => {
+    builder
+      .addCase(changeSideContentHeight, (state, action) => {
+        state.stories[storyEnv].height = action.payload.height;
+      })
+      .addCase(endAlertSideContent, (state, action) => {
+        if (action.payload.id !== sideContentState.selectedTab) {
+          state.stories[storyEnv].alerts.push(action.payload.id);
+        }
+      });
+  })(state, action);
+};
+
+const nonStorySideContentReducer: Reducer<SideContentManagerState, SourceActionType> = (
+  state = defaultSideContentManager,
+  action
+) => {
+  const [workspaceLocation] = getLocation((action as any).payload.workspaceLocation);
+  if (workspaceLocation === 'stories') {
+    return state;
+  }
+
+  const sideContentState = state[workspaceLocation];
+  return createReducer(defaultSideContentManager, builder => {
+    builder
+      .addCase(changeSideContentHeight, (state, action) => {
+        state[workspaceLocation].height = action.payload.height;
+      })
+      .addCase(endAlertSideContent, (state, action) => {
+        if (action.payload.id !== sideContentState.selectedTab) {
+          state[workspaceLocation].alerts.push(action.payload.id);
+        }
+      });
+  })(state, action);
+};
+
+function oldSideContentReducer(
+  state: SideContentManagerState = defaultSideContentManager,
+  action: SourceActionType
+): SideContentManagerState {
   const [workspaceLocation, storyEnv] = getLocation((action as any).payload.workspaceLocation);
 
   const sideContentState =
     workspaceLocation === 'stories' ? state.stories[storyEnv] : state[workspaceLocation];
 
   switch (action.type) {
-    case CHANGE_SIDE_CONTENT_HEIGHT:
-      return workspaceLocation === 'stories'
-        ? {
-            ...state,
-            stories: {
-              ...state.stories,
-              [storyEnv]: {
-                ...state.stories[storyEnv],
-                height: action.payload.height
-              }
-            }
-          }
-        : {
-            ...state,
-            [workspaceLocation]: {
-              ...state[workspaceLocation],
-              height: action.payload.height
-            }
-          };
-    case END_ALERT_SIDE_CONTENT: {
-      if (action.payload.id !== sideContentState.selectedTab) {
-        return workspaceLocation === 'stories'
-          ? {
-              ...state,
-              stories: {
-                ...state.stories,
-                [storyEnv]: {
-                  ...state.stories[storyEnv],
-                  alerts: [...state.stories[storyEnv].alerts, action.payload.id]
-                }
-              }
-            }
-          : {
-              ...state,
-              [workspaceLocation]: {
-                ...state[workspaceLocation],
-                alerts: [...state[workspaceLocation].alerts, action.payload.id]
-              }
-            };
-      }
-      return state;
-    }
     case REMOVE_SIDE_CONTENT_ALERT:
       return workspaceLocation === 'stories'
         ? {
