@@ -206,7 +206,7 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
 
   public render() {
     return (
-      <Card className='Editor'>
+      <Card className="Editor">
         <div className="row editor-react-ace">
           <AceEditor
             className="react-ace"
