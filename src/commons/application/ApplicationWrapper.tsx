@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { RouterProvider } from 'react-router';
 import { createBrowserRouter } from 'react-router-dom';
+import { getAcademyRoutes } from 'src/pages/academy/academyRoutes';
 
 import { getFullAcademyRouterConfig, playgroundOnlyRouterConfig } from '../../routes/routerConfig';
 import { getHealth } from '../sagas/RequestsSaga';
@@ -22,7 +23,7 @@ import { updateReactRouter } from './actions/CommonsActions';
  */
 const ApplicationWrapper: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoggedIn, role, name, courseId } = useSession();
+  const { isLoggedIn, role, name, courseId, assessmentConfigurations } = useSession();
   const [isApiHealthy, setIsApiHealthy] = useState(true);
 
   useEffect(() => {
@@ -31,15 +32,15 @@ const ApplicationWrapper: React.FC = () => {
     }
   }, []);
 
+  const academyRoutes = useMemo(
+    () => getAcademyRoutes(assessmentConfigurations),
+    [assessmentConfigurations]
+  );
+
   const router = useMemo(() => {
     const routerConfig = Constants.playgroundOnly
       ? playgroundOnlyRouterConfig
-      : getFullAcademyRouterConfig({
-          name,
-          role,
-          isLoggedIn,
-          courseId
-        });
+      : getFullAcademyRouterConfig({ name, role, isLoggedIn, courseId, academyRoutes });
 
     const r = createBrowserRouter(routerConfig, {
       future: { v7_relativeSplatPath: true }
@@ -47,7 +48,7 @@ const ApplicationWrapper: React.FC = () => {
     dispatch(updateReactRouter(r));
 
     return r;
-  }, [isLoggedIn, role, name, courseId, dispatch]);
+  }, [name, role, isLoggedIn, courseId, academyRoutes, dispatch]);
 
   if (!isApiHealthy) {
     return (

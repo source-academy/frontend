@@ -63,12 +63,14 @@ export const getFullAcademyRouterConfig = ({
   name,
   role,
   isLoggedIn,
-  courseId
+  courseId,
+  academyRoutes = []
 }: {
   name?: string;
   role?: Role;
   isLoggedIn: boolean;
   courseId?: number | null;
+  academyRoutes?: RouteObject[];
 }): RouteObject[] => {
   const welcomeLoader = () => {
     if (name === undefined) {
@@ -113,7 +115,12 @@ export const getFullAcademyRouterConfig = ({
         { path: 'login', lazy: Login },
         { path: 'welcome', lazy: Welcome, loader: welcomeLoader },
         { path: 'courses', element: <Navigate to="/" /> },
-        { path: 'courses/:courseId/*', lazy: Academy, loader: ensureUserAndRole },
+        {
+          path: 'courses/:courseId/*',
+          lazy: Academy,
+          loader: ensureUserAndRole,
+          children: [...academyRoutes]
+        },
         { path: 'playground', lazy: Playground, loader: ensureUserAndRole },
         { path: 'mission-control/:assessmentId?/:questionId?', lazy: MissionControl },
         { path: 'courses/:courseId/stories/new', lazy: EditStory, loader: ensureUserAndRole },
