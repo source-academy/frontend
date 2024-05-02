@@ -135,6 +135,7 @@
     "@types/xml2js": "^0.4.11",
     "@typescript-eslint/eslint-plugin": "^7.4.0",
     "@typescript-eslint/parser": "^7.4.0",
+    "babel-jest": "^29.7.0",
     "buffer": "^6.0.3",
     "canvas": "^2.11.2",
     "constants-browserify": "^1.0.0",
