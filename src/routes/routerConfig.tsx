@@ -48,7 +48,7 @@ const commonChildrenRoutes: RouteObject[] = [
 
 export const playgroundOnlyRouterConfig: RouteObject[] = [
   {
-    path: '/*',
+    path: '*',
     element: <Application />,
     children: [
       { path: '', element: <Navigate to="/playground" replace /> },
@@ -102,7 +102,7 @@ export const getFullAcademyRouterConfig = ({
 
   return [
     {
-      path: '/*',
+      path: '*',
       element: <Application />,
       children: [
         {

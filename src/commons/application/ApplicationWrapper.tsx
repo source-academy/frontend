@@ -41,7 +41,9 @@ const ApplicationWrapper: React.FC = () => {
           courseId
         });
 
-    const r = createBrowserRouter(routerConfig);
+    const r = createBrowserRouter(routerConfig, {
+      future: { v7_relativeSplatPath: true }
+    });
     dispatch(updateReactRouter(r));
 
     return r;
