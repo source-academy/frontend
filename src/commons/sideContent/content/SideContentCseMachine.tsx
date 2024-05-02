@@ -9,13 +9,14 @@ import {
   Tooltip
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { HotkeyItem } from '@mantine/hooks';
 import classNames from 'classnames';
 import { Chapter } from 'js-slang/dist/types';
 import { debounce } from 'lodash';
 import React from 'react';
-import { HotKeys } from 'react-hotkeys';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import HotKeys from 'src/commons/hotkeys/HotKeys';
 import { Output } from 'src/commons/repl/Repl';
 import type { PlaygroundWorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
 import CseMachine from 'src/features/cseMachine/CseMachine';
@@ -71,13 +72,6 @@ type DispatchProps = {
     newHighlightedLines: HighlightedLines[]
   ) => void;
   handleAlertSideContent: () => void;
-};
-
-const cseMachineKeyMap = {
-  FIRST_STEP: 'a',
-  NEXT_STEP: 'f',
-  PREVIOUS_STEP: 'b',
-  LAST_STEP: 'e'
 };
 
 class SideContentCseMachineBase extends React.Component<CseMachineProps, State> {
@@ -200,24 +194,23 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   }
 
   public render() {
-    const cseMachineHandlers = this.state.visualization
-      ? {
-          FIRST_STEP: this.stepFirst,
-          NEXT_STEP: this.stepNext,
-          PREVIOUS_STEP: this.stepPrevious,
-          LAST_STEP: this.stepLast(this.props.stepsTotal)
-        }
-      : {
-          FIRST_STEP: () => {},
-          NEXT_STEP: () => {},
-          PREVIOUS_STEP: () => {},
-          LAST_STEP: () => {}
-        };
+    const hotkeyBindings: HotkeyItem[] = this.state.visualization
+      ? [
+          ['a', this.stepFirst],
+          ['f', this.stepNext],
+          ['b', this.stepPrevious],
+          ['e', this.stepLast(this.props.stepsTotal)]
+        ]
+      : [
+          ['a', () => {}],
+          ['f', () => {}],
+          ['b', () => {}],
+          ['e', () => {}]
+        ];
 
     return (
       <HotKeys
-        keyMap={cseMachineKeyMap}
-        handlers={cseMachineHandlers}
+        bindings={hotkeyBindings}
         style={{
           maxHeight: '100%',
           overflow: this.state.visualization ? 'hidden' : 'auto'

@@ -16,13 +16,20 @@ type HotKeysProps = {
   bindings: HotkeyItem[];
 };
 
-const HotKeys: React.FC<PropsWithChildren<HotKeysProps>> = ({ bindings, children }) => {
+const HotKeys: React.FC<
+  PropsWithChildren<
+    HotKeysProps & {
+      style?: React.CSSProperties;
+    }
+  >
+> = ({ bindings, children, style }) => {
   const handler = getHotkeyHandler(bindings);
 
   return (
     <div
       tabIndex={-1} // tab index necessary to fire keydown events on div element
       onKeyDown={handler}
+      style={style}
     >
       {children}
     </div>
