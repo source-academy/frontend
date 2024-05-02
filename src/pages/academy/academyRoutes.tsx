@@ -6,23 +6,15 @@ import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 import { assessmentRegExp, gradingRegExp, teamRegExp } from 'src/features/academy/AcademyTypes';
 import { GuardedRoute } from 'src/routes/routeGuard';
 
-import Achievement from '../achievement/Achievement';
 import { store } from '../createStore';
-import NotFound from '../notFound/NotFound';
-import Sourcecast from '../sourcecast/Sourcecast';
-import AdminPanel from './adminPanel/AdminPanel';
-import Dashboard from './dashboard/Dashboard';
-import Game from './game/Game';
-import GameSimulator from './gameSimulator/GameSimulator';
-import Grading from './grading/Grading';
-import GroundControl from './groundControl/GroundControlContainer';
-import NotiPreference from './notiPreference/NotiPreference';
-import Sourcereel from './sourcereel/Sourcereel';
-import TeamFormationForm from './teamFormation/subcomponents/TeamFormationForm';
-import TeamFormationImport from './teamFormation/subcomponents/TeamFormationImport';
-import TeamFormation from './teamFormation/TeamFormation';
 
 const notFoundPath = 'not_found';
+
+const Game = () => import('./game/Game');
+const NotiPreference = () => import('./notiPreference/NotiPreference');
+const Sourcecast = () => import('../sourcecast/Sourcecast');
+const Achievement = () => import('../achievement/Achievement');
+const NotFound = () => import('../notFound/NotFound');
 
 const getCommonAcademyRoutes = (
   assessmentConfigurations: AssessmentConfiguration[]
@@ -57,7 +49,7 @@ const getCommonAcademyRoutes = (
     return null;
   };
 
-  const gameRoute = new GuardedRoute({ path: 'game', element: <Game /> })
+  const gameRoute = new GuardedRoute({ path: 'game', lazy: Game })
     .check(s => !!s.session.enableGame, notFoundPath)
     .build();
 
@@ -69,27 +61,38 @@ const getCommonAcademyRoutes = (
       element: <Assessment />,
       loader: assessmentLoader
     },
-    { path: 'notipreference', element: <NotiPreference /> },
-    { path: 'sourcecast/:sourcecastId?', element: <Sourcecast /> },
-    { path: 'achievements/*', element: <Achievement /> },
-    { path: notFoundPath, element: <NotFound /> },
+    { path: 'notipreference', lazy: NotiPreference },
+    { path: 'sourcecast/:sourcecastId?', lazy: Sourcecast },
+    { path: 'achievements/*', lazy: Achievement },
+    { path: notFoundPath, lazy: NotFound },
     { path: '*', loader: () => redirect(notFoundPath) }
   ];
 };
 
+const GroundControl = () => import('./groundControl/GroundControlContainer');
+const Grading = () => import('./grading/Grading');
+const Sourcereel = () => import('./sourcereel/Sourcereel');
+const GameSimulator = () => import('./gameSimulator/GameSimulator');
+const TeamFormation = () => import('./teamFormation/TeamFormation');
+const TeamFormationForm = () => import('./teamFormation/subcomponents/TeamFormationForm');
+const TeamFormationImport = () => import('./teamFormation/subcomponents/TeamFormationImport');
+const Dashboard = () => import('./dashboard/Dashboard');
+
 const staffRoutes: RouteObject[] = [
-  { path: 'groundcontrol', element: <GroundControl /> },
-  { path: `grading/${gradingRegExp}`, element: <Grading /> },
-  { path: 'sourcereel', element: <Sourcereel /> },
-  { path: 'gamesimulator', element: <GameSimulator /> },
-  { path: 'teamformation', element: <TeamFormation /> },
-  { path: 'teamformation/create', element: <TeamFormationForm /> },
-  { path: `teamformation/edit/${teamRegExp}`, element: <TeamFormationForm /> },
-  { path: 'teamformation/import', element: <TeamFormationImport /> },
-  { path: 'dashboard', element: <Dashboard /> }
+  { path: 'groundcontrol', lazy: GroundControl },
+  { path: `grading/${gradingRegExp}`, lazy: Grading },
+  { path: 'sourcereel', lazy: Sourcereel },
+  { path: 'gamesimulator', lazy: GameSimulator },
+  { path: 'teamformation', lazy: TeamFormation },
+  { path: 'teamformation/create', lazy: TeamFormationForm },
+  { path: `teamformation/edit/${teamRegExp}`, lazy: TeamFormationForm },
+  { path: 'teamformation/import', lazy: TeamFormationImport },
+  { path: 'dashboard', lazy: Dashboard }
 ].map(r => new GuardedRoute(r).check(s => s.session.role !== Role.Student, notFoundPath).build());
 
-const adminRoutes: RouteObject[] = [{ path: 'adminpanel', element: <AdminPanel /> }].map(r =>
+const AdminPanel = () => import('./adminPanel/AdminPanel');
+
+const adminRoutes: RouteObject[] = [{ path: 'adminpanel', lazy: AdminPanel }].map(r =>
   new GuardedRoute(r).check(s => s.session.role === Role.Admin, notFoundPath).build()
 );
 

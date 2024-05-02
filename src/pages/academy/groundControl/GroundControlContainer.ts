@@ -41,4 +41,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
 
 const GroundControlContainer = connect(mapStateToProps, mapDispatchToProps)(GroundControl);
 
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = GroundControlContainer;
+Component.displayName = 'GroundControl';
+
 export default GroundControlContainer;
