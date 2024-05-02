@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import { parseError } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React from 'react';
-import { HotKeys } from 'react-hotkeys';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
@@ -52,12 +51,11 @@ const Repl: React.FC<ReplProps> = props => {
       <div className="repl-output-parent">
         {cards}
         {!props.inputHidden && (
-          <HotKeys
+          <div
             className={classNames('repl-input-parent', 'row', Classes.CARD, Classes.ELEVATION_0)}
-            handlers={handlers}
           >
             <ReplInput {...props} />
-          </HotKeys>
+          </div>
         )}
       </div>
     </div>
@@ -131,11 +129,6 @@ export const Output: React.FC<OutputProps> = props => {
     default:
       return <Card>''</Card>;
   }
-};
-
-/* Override handler, so does not trigger when focus is in editor */
-const handlers = {
-  goGreen: () => {}
 };
 
 export default Repl;

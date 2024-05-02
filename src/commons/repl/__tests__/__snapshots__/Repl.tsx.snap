@@ -135,13 +135,8 @@ exports[`Repl renders correctly 1`] = `
       }
       usingSubst={false}
     />
-    <HotKeysEnabled
+    <div
       className="repl-input-parent row bp5-card bp5-elevation-0"
-      handlers={
-        Object {
-          "goGreen": [Function],
-        }
-      }
     >
       <ReplInput
         externalLibrary="NONE"
@@ -201,7 +196,7 @@ exports[`Repl renders correctly 1`] = `
         sourceChapter={1}
         sourceVariant="default"
       />
-    </HotKeysEnabled>
+    </div>
   </div>
 </div>
 `;

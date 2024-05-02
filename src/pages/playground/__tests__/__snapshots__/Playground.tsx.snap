@@ -4,7 +4,6 @@ exports[`Playground tests Playground renders correctly 1`] = `
 <div>
   <div
     class="Playground bp5-dark"
-    tabindex="-1"
   >
     <div
       class="workspace"
@@ -395,7 +394,6 @@ exports[`Playground tests Playground renders correctly 1`] = `
             >
               <div
                 class="Editor bp5-card bp5-elevation-0"
-                tabindex="-1"
               >
                 <div
                   class="row editor-react-ace"
@@ -1391,7 +1389,6 @@ and also the
               >
                 <div
                   class="repl-input-parent row bp5-card bp5-elevation-0"
-                  tabindex="-1"
                 >
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark repl-react-ace react-ace"
@@ -1563,7 +1560,6 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
 <div>
   <div
     class="Playground bp5-dark"
-    tabindex="-1"
   >
     <div
       class="workspace"
@@ -1954,7 +1950,6 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
             >
               <div
                 class="Editor bp5-card bp5-elevation-0"
-                tabindex="-1"
               >
                 <div
                   class="row editor-react-ace"
@@ -2705,7 +2700,6 @@ and also the
               >
                 <div
                   class="repl-input-parent row bp5-card bp5-elevation-0"
-                  tabindex="-1"
                 >
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark repl-react-ace react-ace"

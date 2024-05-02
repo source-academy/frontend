@@ -12,7 +12,6 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import React from 'react';
 import AceEditor, { IAceEditorProps, IEditorProps } from 'react-ace';
 import { IAceEditor } from 'react-ace/lib/types';
-import { HotKeys } from 'react-hotkeys';
 import { EditorBinding } from '../WorkspaceSettingsContext';
 import { getModeString, selectMode } from '../utils/AceHelper';
 import { objectEntries } from '../utils/TypeHelper';
@@ -325,11 +324,6 @@ const moveCursor = (editor: AceEditor['editor'], position: Position) => {
   editor.moveCursorToPosition(position);
   editor.renderer.showCursor();
   editor.renderer.scrollCursorIntoView(position, 0.5);
-};
-
-/* Override handler, so does not trigger when focus is in editor */
-const handlers = {
-  goGreen: () => {}
 };
 
 const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
@@ -652,14 +646,11 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   }, []);
 
   return (
-    <HotKeys
-      className={classNames('Editor', Classes.CARD, Classes.ELEVATION_0)}
-      handlers={handlers}
-    >
+    <div className={classNames('Editor', Classes.CARD, Classes.ELEVATION_0)}>
       <div className="row editor-react-ace" data-testid="Editor">
         <AceEditor {...aceEditorProps} ref={reactAceRef} />
       </div>
-    </HotKeys>
+    </div>
   );
 });
 
