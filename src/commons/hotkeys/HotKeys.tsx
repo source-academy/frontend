@@ -1,5 +1,9 @@
 import { getHotkeyHandler, HotkeyItem } from '@mantine/hooks';
-import { PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from 'react';
+
+type HotKeysProps = {
+  bindings: HotkeyItem[];
+};
 
 /**
  * This HOC was created to facilitate the migration out of react-hotkeys in favor of @mantine/hooks useHotkeys,
@@ -12,10 +16,6 @@ import { PropsWithChildren } from 'react';
  * TODO:
  * - Eventually migrate out of class-based React in the aforementioned components and use useHotkeys directly.
  */
-type HotKeysProps = {
-  bindings: HotkeyItem[];
-};
-
 const HotKeys: React.FC<
   PropsWithChildren<
     HotKeysProps & {
