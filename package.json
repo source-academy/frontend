@@ -76,7 +76,7 @@
     "react-hotkeys": "^2.0.0",
     "react-i18next": "^14.1.0",
     "react-konva": "^18.2.10",
-    "react-latex-next": "^2.1.0",
+    "react-latex-next": "^3.0.0",
     "react-mde": "^11.5.0",
     "react-papaparse": "^4.0.2",
     "react-qr-reader": "^3.0.0-beta-1",
