@@ -41,18 +41,9 @@ const ViewStory = async () => {
 const Stories = () => import('../pages/stories/Stories');
 
 const commonChildrenRoutes: RouteObject[] = [
-  {
-    path: 'contributors',
-    lazy: Contributors
-  },
-  {
-    path: 'callback/github',
-    lazy: GitHubCallback
-  },
-  {
-    path: 'sicpjs/:section?',
-    lazy: Sicp
-  }
+  { path: 'contributors', lazy: Contributors },
+  { path: 'callback/github', lazy: GitHubCallback },
+  { path: 'sicpjs/:section?', lazy: Sicp }
 ];
 
 export const playgroundOnlyRouterConfig: RouteObject[] = [
@@ -60,19 +51,10 @@ export const playgroundOnlyRouterConfig: RouteObject[] = [
     path: '/*',
     element: <Application />,
     children: [
-      {
-        path: '',
-        element: <Navigate to="/playground" replace />
-      },
-      {
-        path: 'playground',
-        lazy: Playground
-      },
+      { path: '', element: <Navigate to="/playground" replace /> },
+      { path: 'playground', lazy: Playground },
       ...commonChildrenRoutes,
-      {
-        path: '*',
-        lazy: NotFound
-      }
+      { path: '*', lazy: NotFound }
     ]
   }
 ];
@@ -122,58 +104,18 @@ export const getFullAcademyRouterConfig = ({
             />
           )
         },
-        {
-          path: 'login',
-          lazy: Login
-        },
-        {
-          path: 'welcome',
-          lazy: Welcome,
-          loader: welcomeLoader
-        },
-        {
-          path: 'courses',
-          element: <Navigate to="/" />
-        },
-        {
-          path: 'courses/:courseId/*',
-          lazy: Academy,
-          loader: ensureUserAndRole
-        },
-        {
-          path: 'playground',
-          lazy: Playground,
-          loader: ensureUserAndRole
-        },
-        {
-          path: 'mission-control/:assessmentId?/:questionId?',
-          lazy: MissionControl
-        },
-        {
-          path: 'courses/:courseId/stories/new',
-          lazy: EditStory,
-          loader: ensureUserAndRole
-        },
-        {
-          path: 'courses/:courseId/stories/view/:id',
-          lazy: ViewStory,
-          loader: ensureUserAndRole
-        },
-        {
-          path: 'courses/:courseId/stories/edit/:id',
-          lazy: EditStory,
-          loader: ensureUserAndRole
-        },
-        {
-          path: 'courses/:courseId/stories',
-          lazy: Stories,
-          loader: ensureUserAndRole
-        },
+        { path: 'login', lazy: Login },
+        { path: 'welcome', lazy: Welcome, loader: welcomeLoader },
+        { path: 'courses', element: <Navigate to="/" /> },
+        { path: 'courses/:courseId/*', lazy: Academy, loader: ensureUserAndRole },
+        { path: 'playground', lazy: Playground, loader: ensureUserAndRole },
+        { path: 'mission-control/:assessmentId?/:questionId?', lazy: MissionControl },
+        { path: 'courses/:courseId/stories/new', lazy: EditStory, loader: ensureUserAndRole },
+        { path: 'courses/:courseId/stories/view/:id', lazy: ViewStory, loader: ensureUserAndRole },
+        { path: 'courses/:courseId/stories/edit/:id', lazy: EditStory, loader: ensureUserAndRole },
+        { path: 'courses/:courseId/stories', lazy: Stories, loader: ensureUserAndRole },
         ...commonChildrenRoutes,
-        {
-          path: '*',
-          lazy: NotFound
-        }
+        { path: '*', lazy: NotFound }
       ]
     }
   ];
