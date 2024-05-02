@@ -54,7 +54,7 @@ export function combineSagaHandlers<
   others?: (takeEvery: typeof saferTakeEvery) => SagaIterator
 ): () => SagaIterator {
   const sagaHandlers = Object.entries(handlers).map(([actionName, saga]) =>
-    saferTakeEvery(actions[actionName].type, saga)
+    saferTakeEvery(actions[actionName], saga)
   );
   return function* (): SagaIterator {
     yield* sagaHandlers;
@@ -82,6 +82,7 @@ export function saferTakeEvery<
     }
   }
 
+  console.log(actionPattern);
   return takeEvery(actionPattern.type, wrapper);
 }
 
