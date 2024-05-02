@@ -4,10 +4,9 @@ import 'ace-builds/src-noconflict/ext-searchbox';
 import 'ace-builds/src-noconflict/ext-settings_menu';
 import 'js-slang/dist/editors/ace/theme/source';
 
-import { Classes } from '@blueprintjs/core';
+import { Card } from '@blueprintjs/core';
 import * as AceBuilds from 'ace-builds';
 import { Ace, require as acequire, createEditSession } from 'ace-builds';
-import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React from 'react';
 import AceEditor, { IAceEditorProps, IEditorProps } from 'react-ace';
@@ -646,11 +645,11 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   }, []);
 
   return (
-    <div className={classNames('Editor', Classes.CARD, Classes.ELEVATION_0)}>
+    <Card className="Editor">
       <div className="row editor-react-ace" data-testid="Editor">
         <AceEditor {...aceEditorProps} ref={reactAceRef} />
       </div>
-    </div>
+    </Card>
   );
 });
 

@@ -1,4 +1,4 @@
-import { Card, Classes, Pre } from '@blueprintjs/core';
+import { Card, Pre } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';
 import classNames from 'classnames';
 import { parseError } from 'js-slang';
@@ -51,11 +51,9 @@ const Repl: React.FC<ReplProps> = props => {
       <div className="repl-output-parent">
         {cards}
         {!props.inputHidden && (
-          <div
-            className={classNames('repl-input-parent', 'row', Classes.CARD, Classes.ELEVATION_0)}
-          >
+          <Card className={classNames('repl-input-parent', 'row')}>
             <ReplInput {...props} />
-          </div>
+          </Card>
         )}
       </div>
     </div>

@@ -320,8 +320,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
   // Playground hotkeys
   const [isGreen, setIsGreen] = useState(false);
   const playgroundHotkeyBindings: HotkeyItem[] = useMemo(
-    () => [['alt+shift+h', () => setIsGreen(!isGreen)]],
-    [isGreen, setIsGreen]
+    () => [['alt+shift+h', () => setIsGreen(v => !v)]],
+    [setIsGreen]
   );
   useHotkeys(playgroundHotkeyBindings);
 
