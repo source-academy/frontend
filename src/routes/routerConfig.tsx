@@ -90,6 +90,16 @@ export const getFullAcademyRouterConfig = ({
     return null;
   };
 
+  const homePageRedirect = () => {
+    if (!isLoggedIn) {
+      return redirect('/login', { status: 401 });
+    }
+    if (courseId === null) {
+      return redirect('/welcome');
+    }
+    return null;
+  };
+
   return [
     {
       path: '/*',
@@ -97,12 +107,8 @@ export const getFullAcademyRouterConfig = ({
       children: [
         {
           path: '',
-          element: (
-            <Navigate
-              to={!isLoggedIn ? '/login' : courseId === null ? '/welcome' : `/courses/${courseId}`}
-              replace
-            />
-          )
+          element: <Navigate to={`/courses/${courseId}`} replace />,
+          loader: homePageRedirect
         },
         { path: 'login', lazy: Login },
         { path: 'welcome', lazy: Welcome, loader: welcomeLoader },
