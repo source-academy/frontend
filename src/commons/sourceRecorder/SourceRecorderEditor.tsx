@@ -2,9 +2,8 @@ import 'ace-builds/src-noconflict/ext-searchbox';
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'js-slang/dist/editors/ace/theme/source';
 
-import { Classes } from '@blueprintjs/core';
+import { Card } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';
-import classNames from 'classnames';
 import { isEqual } from 'lodash';
 import React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
@@ -207,7 +206,7 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
 
   public render() {
     return (
-      <div className={classNames('Editor', Classes.CARD, Classes.ELEVATION_0)}>
+      <Card className='Editor'>
         <div className="row editor-react-ace">
           <AceEditor
             className="react-ace"
@@ -251,7 +250,7 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
             keyboardHandler={this.props.editorBinding}
           />
         </div>
-      </div>
+      </Card>
     );
   }
 
