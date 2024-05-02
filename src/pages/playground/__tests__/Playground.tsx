@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { require as acequire } from 'ace-builds';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import { Chapter } from 'js-slang/dist/types';
@@ -66,7 +66,7 @@ describe('Playground tests', () => {
 
     // Using @testing-library/react to render snapshot instead of react-test-renderer
     // as the useRefs require the notion of React DOM
-    const tree = render(<RouterProvider router={router} />).container;
+    const tree = await waitFor(() => render(<RouterProvider router={router} />).container);
     expect(tree).toMatchSnapshot();
 
     expect(getSourceChapterFromStore(mockStore)).toBe(defaultPlayground.languageConfig.chapter);
@@ -81,7 +81,7 @@ describe('Playground tests', () => {
 
     // Using @testing-library/react to render snapshot instead of react-test-renderer
     // as the useRefs require the notion of React DOM
-    const tree = render(<RouterProvider router={router} />).container;
+    const tree = await waitFor(() => render(<RouterProvider router={router} />).container);
     expect(tree).toMatchSnapshot();
 
     expect(getSourceChapterFromStore(mockStore)).toBe(Chapter.SOURCE_2);
