@@ -1,10 +1,8 @@
 import { render } from '@testing-library/react';
-import { I18nextProvider } from 'react-i18next';
 import { Provider, useDispatch } from 'react-redux';
 import * as ReactRouter from 'react-router';
 import { StaticRouter } from 'react-router-dom/server';
 import { fetchAuth } from 'src/commons/application/actions/SessionActions';
-import i18n from 'src/i18n/i18nForTests';
 
 import { mockInitialStore } from '../../../commons/mocks/StoreMocks';
 import Login from '../Login';
@@ -37,11 +35,9 @@ describe('Login', () => {
     const store = mockInitialStore();
     const app = (
       <Provider store={store}>
-        <I18nextProvider i18n={i18n}>
-          <StaticRouter location="/login">
-            <Login />
-          </StaticRouter>
-        </I18nextProvider>
+        <StaticRouter location="/login">
+          <Login />
+        </StaticRouter>
       </Provider>
     );
     const tree = render(app);
