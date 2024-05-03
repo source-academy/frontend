@@ -1,8 +1,22 @@
 /* eslint-disable simple-import-sort/imports */
+
+// Next line necessary to prevent "ReferenceError: ace is not defined" error.
+// See https://github.com/securingsincity/react-ace/issues/1233 (although there is no explanation).
+import 'ace-builds/src-noconflict/ace';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import 'ace-builds/src-noconflict/ext-settings_menu';
 import 'js-slang/dist/editors/ace/theme/source';
+
+/**
+ * ace-builds/webpack-resolver is causing some issues in the testing environment.
+ * Without it, we have to manually import the following keybindings to ensure they are packaged
+ * together with the editor during lazy loading.
+ *
+ * Supersedes changes from: https://github.com/source-academy/frontend/issues/2543
+ */
+import 'ace-builds/src-noconflict/keybinding-vim';
+import 'ace-builds/src-noconflict/keybinding-emacs';
 
 import { Card } from '@blueprintjs/core';
 import * as AceBuilds from 'ace-builds';
