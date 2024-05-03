@@ -143,7 +143,6 @@ const cracoConfig = {
         ),
         '^.+\\.module\\.(css|sass|scss)$'
       ];
-      jestConfig.moduleNameMapper['ace-builds'] = '<rootDir>/node_modules/ace-builds';
       jestConfig.moduleNameMapper['unist-util-visit-parents/do-not-use-color'] =
         '<rootDir>/node_modules/unist-util-visit-parents/lib';
       jestConfig.moduleNameMapper['vfile/do-not-use-conditional-minpath'] =
@@ -152,6 +151,11 @@ const cracoConfig = {
         '<rootDir>/node_modules/vfile/lib';
       jestConfig.moduleNameMapper['vfile/do-not-use-conditional-minurl'] =
         '<rootDir>/node_modules/vfile/lib';
+
+      jestConfig.setupFiles = [
+        ...jestConfig.setupFiles,
+        './src/i18n/i18n.ts' // Setup i18next configuration
+      ]
       return jestConfig;
     }
   },

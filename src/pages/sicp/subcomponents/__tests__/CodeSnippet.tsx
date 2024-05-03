@@ -1,7 +1,3 @@
-import 'ace-builds';
-import 'ace-builds/webpack-resolver';
-import 'ace-builds/src-noconflict/ace';
-
 import lzString from 'lz-string';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 

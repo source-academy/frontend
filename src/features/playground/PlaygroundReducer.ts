@@ -1,47 +1,35 @@
+import { createReducer } from '@reduxjs/toolkit';
 import { Reducer } from 'redux';
 
 import { defaultPlayground } from '../../commons/application/ApplicationTypes';
 import { SourceActionType } from '../../commons/utils/ActionsHelper';
 import {
-  CHANGE_QUERY_STRING,
-  PLAYGROUND_UPDATE_GITHUB_SAVE_INFO,
-  PLAYGROUND_UPDATE_LANGUAGE_CONFIG,
-  PLAYGROUND_UPDATE_PERSISTENCE_FILE,
-  PlaygroundState,
-  UPDATE_SHORT_URL
-} from './PlaygroundTypes';
+  changeQueryString,
+  playgroundConfigLanguage,
+  playgroundUpdateGitHubSaveInfo,
+  playgroundUpdatePersistenceFile,
+  updateShortURL
+} from './PlaygroundActions';
+import { PlaygroundState } from './PlaygroundTypes';
 
-export const PlaygroundReducer: Reducer<PlaygroundState, SourceActionType> = (
-  state = defaultPlayground,
-  action
-) => {
-  switch (action.type) {
-    case CHANGE_QUERY_STRING:
-      return {
-        ...state,
-        queryString: action.payload
-      };
-    case UPDATE_SHORT_URL:
-      return {
-        ...state,
-        shortURL: action.payload
-      };
-    case PLAYGROUND_UPDATE_GITHUB_SAVE_INFO:
-      return {
-        ...state,
-        githubSaveInfo: action.payload
-      };
-    case PLAYGROUND_UPDATE_PERSISTENCE_FILE:
-      return {
-        ...state,
-        persistenceFile: action.payload
-      };
-    case PLAYGROUND_UPDATE_LANGUAGE_CONFIG:
-      return {
-        ...state,
-        languageConfig: action.payload
-      };
-    default:
-      return state;
+export const PlaygroundReducer: Reducer<PlaygroundState, SourceActionType> = createReducer(
+  defaultPlayground,
+  builder => {
+    builder
+      .addCase(changeQueryString, (state, action) => {
+        state.queryString = action.payload;
+      })
+      .addCase(updateShortURL, (state, action) => {
+        state.shortURL = action.payload;
+      })
+      .addCase(playgroundUpdateGitHubSaveInfo, (state, action) => {
+        state.githubSaveInfo = action.payload;
+      })
+      .addCase(playgroundUpdatePersistenceFile, (state, action) => {
+        state.persistenceFile = action.payload;
+      })
+      .addCase(playgroundConfigLanguage, (state, action) => {
+        state.languageConfig = action.payload;
+      });
   }
-};
+);

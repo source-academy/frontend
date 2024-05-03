@@ -6,9 +6,6 @@ import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/Sour
 import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
 import { logOut } from '../application/actions/CommonsActions';
 import {
-  debuggerReset,
-  debuggerResume,
-  endDebuggerPause,
   endInterruptExecution,
   evalInterpreterError,
   evalInterpreterSuccess,
@@ -17,7 +14,6 @@ import {
   handleConsoleLog
 } from '../application/actions/InterpreterActions';
 import {
-  CodeOutput,
   createDefaultWorkspace,
   defaultWorkspaceManager,
   ErrorOutput,
@@ -32,69 +28,37 @@ import {
 } from '../collabEditing/CollabEditingActions';
 import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
-import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
+import { handleCseAndStepperActions } from './reducers/cseReducer';
+import { handleDebuggerActions } from './reducers/debuggerReducer';
+import { handleEditorActions } from './reducers/editorReducer';
+import { handleReplActions } from './reducers/replReducer';
 import {
-  addEditorTab,
-  browseReplHistoryDown,
-  browseReplHistoryUp,
   changeExecTime,
   changeExternalLibrary,
-  changeStepLimit,
-  clearReplInput,
-  clearReplOutput,
-  clearReplOutputLast,
   disableTokenCounter,
   enableTokenCounter,
   endClearContext,
   evalEditor,
-  evalRepl,
-  moveCursor,
-  removeEditorTab,
-  removeEditorTabForFile,
-  removeEditorTabsForDirectory,
-  renameEditorTabForFile,
-  renameEditorTabsForDirectory,
   resetTestcase,
   resetWorkspace,
-  sendReplInputToOutput,
-  setEditorBreakpoint,
-  setEditorHighlightedLines,
-  setEditorHighlightedLinesControl,
-  setFolderMode,
   setIsEditorReadonly,
   setTokenCount,
-  shiftEditorTab,
   toggleEditorAutorun,
-  toggleUpdateCse,
-  toggleUsingCse,
-  toggleUsingSubst,
   toggleUsingUpload,
-  updateActiveEditorTab,
-  updateActiveEditorTabIndex,
-  updateBreakpointSteps,
   updateCurrentAssessmentId,
-  updateCurrentStep,
   updateCurrentSubmissionId,
-  updateEditorValue,
   updateHasUnsavedChanges,
-  updateReplValue,
-  updateStepsTotal,
+  updateLastDebuggerResult,
+  updateLastNonDetResult,
   updateSublanguage,
   updateSubmissionsTableFilters,
   updateWorkspace,
   uploadFiles
 } from './WorkspaceActions';
-import {
-  EditorTabState,
-  UPDATE_CHANGEPOINTSTEPS,
-  UPDATE_LAST_DEBUGGER_RESULT,
-  UPDATE_LAST_NON_DET_RESULT,
-  WorkspaceLocation,
-  WorkspaceManagerState
-} from './WorkspaceTypes';
+import { WorkspaceLocation, WorkspaceManagerState } from './WorkspaceTypes';
 
-const getWorkspaceLocation = (action: any): WorkspaceLocation => {
+export const getWorkspaceLocation = (action: any): WorkspaceLocation => {
   return action.payload ? action.payload.workspaceLocation : 'assessment';
 };
 
@@ -140,90 +104,18 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> 
 };
 
 const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
+  handleEditorActions(builder);
+  handleCseAndStepperActions(builder);
+  handleReplActions(builder);
+  handleDebuggerActions(builder);
   builder
     .addCase(setTokenCount, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].tokenCount = action.payload.tokenCount;
     })
-    .addCase(browseReplHistoryDown, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      if (state[workspaceLocation].replHistory.browseIndex === null) {
-        // Not yet started browsing history, nothing to do
-        return;
-      }
-      if (state[workspaceLocation].replHistory.browseIndex !== 0) {
-        // Browsing history, and still have earlier records to show
-        const newIndex = state[workspaceLocation].replHistory.browseIndex! - 1;
-        const newReplValue = state[workspaceLocation].replHistory.records[newIndex];
-
-        state[workspaceLocation].replValue = newReplValue;
-        state[workspaceLocation].replHistory.browseIndex = newIndex;
-        return;
-      }
-      // Browsing history, no earlier records to show; return replValue to
-      // the last value when user started browsing
-      const newIndex = null;
-      const newReplValue = state[workspaceLocation].replHistory.originalValue;
-      const newRecords = state[workspaceLocation].replHistory.records.slice();
-
-      state[workspaceLocation].replValue = newReplValue;
-      state[workspaceLocation].replHistory = {
-        browseIndex: newIndex,
-        records: newRecords,
-        originalValue: ''
-      };
-    })
-    .addCase(browseReplHistoryUp, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      const lastRecords = state[workspaceLocation].replHistory.records;
-      const lastIndex = state[workspaceLocation].replHistory.browseIndex;
-      if (
-        lastRecords.length === 0 ||
-        (lastIndex !== null && lastRecords[lastIndex + 1] === undefined)
-      ) {
-        // There is no more later history to show
-        return;
-      }
-      if (lastIndex === null) {
-        // Not yet started browsing, initialise the index & array
-        const newIndex = 0;
-        const newRecords = lastRecords.slice();
-        const originalValue = state[workspaceLocation].replValue;
-        const newReplValue = newRecords[newIndex];
-
-        state[workspaceLocation].replValue = newReplValue;
-        state[workspaceLocation].replHistory = {
-          browseIndex: newIndex,
-          records: newRecords,
-          originalValue
-        };
-        return;
-      }
-      // Browsing history, and still have later history to show
-      const newIndex = lastIndex + 1;
-      const newReplValue = lastRecords[newIndex];
-      state[workspaceLocation].replValue = newReplValue;
-      state[workspaceLocation].replHistory.browseIndex = newIndex;
-    })
     .addCase(changeExecTime, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].execTime = action.payload.execTime;
-    })
-    .addCase(changeStepLimit, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].stepLimit = action.payload.stepLimit;
-    })
-    .addCase(clearReplInput, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].replValue = '';
-    })
-    .addCase(clearReplOutputLast, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].output.pop();
-    })
-    .addCase(clearReplOutput, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].output = [];
     })
     .addCase(endClearContext, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
@@ -243,28 +135,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
           externalLibrary: action.payload.library.external.name
         }
       };
-    })
-    .addCase(sendReplInputToOutput, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      // CodeOutput properties exist in parallel with workspaceLocation
-      const newOutput: InterpreterOutput[] = state[workspaceLocation].output.concat(
-        action.payload as CodeOutput
-      );
-
-      let newReplHistoryRecords: string[];
-      if (action.payload.value !== '') {
-        newReplHistoryRecords = [action.payload.value].concat(
-          state[workspaceLocation].replHistory.records
-        );
-      } else {
-        newReplHistoryRecords = state[workspaceLocation].replHistory.records;
-      }
-      if (newReplHistoryRecords.length > Constants.maxBrowseIndex) {
-        newReplHistoryRecords.pop();
-      }
-
-      state[workspaceLocation].output = newOutput;
-      state[workspaceLocation].replHistory.records = newReplHistoryRecords;
     })
     .addCase(changeExternalLibrary, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
@@ -317,10 +187,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].isRunning = true;
       state[workspaceLocation].isDebugging = false;
-    })
-    .addCase(evalRepl, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].isRunning = true;
     })
     .addCase(evalInterpreterSuccess, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
@@ -420,21 +286,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       state[workspaceLocation].isRunning = false;
       state[workspaceLocation].isDebugging = false;
     })
-    .addCase(endDebuggerPause, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].isRunning = false;
-      state[workspaceLocation].isDebugging = true;
-    })
-    .addCase(debuggerResume, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].isRunning = true;
-      state[workspaceLocation].isDebugging = false;
-    })
-    .addCase(debuggerReset, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].isRunning = false;
-      state[workspaceLocation].isDebugging = false;
-    })
     .addCase(resetTestcase, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const testcase = state[workspaceLocation].editorTestcases[action.payload.index];
@@ -495,24 +346,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].isEditorAutorun = !state[workspaceLocation].isEditorAutorun;
     })
-    .addCase(toggleUsingSubst, (state, action) => {
-      const { workspaceLocation } = action.payload;
-      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
-        state[workspaceLocation].usingSubst = action.payload.usingSubst;
-      }
-    })
-    .addCase(toggleUsingCse, (state, action) => {
-      const { workspaceLocation } = action.payload;
-      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
-        state[workspaceLocation].usingCse = action.payload.usingCse;
-      }
-    })
-    .addCase(toggleUpdateCse, (state, action) => {
-      const { workspaceLocation } = action.payload;
-      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
-        state[workspaceLocation].updateCse = action.payload.updateCse;
-      }
-    })
     .addCase(updateSubmissionsTableFilters, (state, action) => {
       state.grading.submissionsTableFilters = action.payload.filters;
     })
@@ -523,272 +356,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     .addCase(updateCurrentSubmissionId, (state, action) => {
       state.grading.currentSubmission = action.payload.submissionId;
       state.grading.currentQuestion = action.payload.questionId;
-    })
-    .addCase(setFolderMode, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].isFolderModeEnabled = action.payload.isFolderModeEnabled;
-    })
-    .addCase(updateActiveEditorTabIndex, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      const activeEditorTabIndex = action.payload.activeEditorTabIndex;
-      if (activeEditorTabIndex !== null) {
-        if (activeEditorTabIndex < 0) {
-          throw new Error('Active editor tab index must be non-negative!');
-        }
-        if (activeEditorTabIndex >= state[workspaceLocation].editorTabs.length) {
-          throw new Error('Active editor tab index must have a corresponding editor tab!');
-        }
-      }
-
-      state[workspaceLocation].activeEditorTabIndex = activeEditorTabIndex;
-    })
-    .addCase(updateActiveEditorTab, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      const { activeEditorTabOptions } = action.payload;
-      const activeEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
-      // Do not modify the workspace state if there is no active editor tab.
-      if (activeEditorTabIndex === null) {
-        return;
-      }
-
-      const updatedEditorTabs = [...state[workspaceLocation].editorTabs];
-      updatedEditorTabs[activeEditorTabIndex] = {
-        ...updatedEditorTabs[activeEditorTabIndex],
-        ...activeEditorTabOptions
-      };
-
-      state[workspaceLocation].editorTabs = updatedEditorTabs;
-    })
-    .addCase(updateEditorValue, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      const { editorTabIndex, newEditorValue } = action.payload;
-      if (editorTabIndex < 0) {
-        throw new Error('Editor tab index must be non-negative!');
-      }
-      if (editorTabIndex >= state[workspaceLocation].editorTabs.length) {
-        throw new Error('Editor tab index must have a corresponding editor tab!');
-      }
-
-      state[workspaceLocation].editorTabs[editorTabIndex].value = newEditorValue;
-    })
-    .addCase(setEditorBreakpoint, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      const { editorTabIndex, newBreakpoints } = action.payload;
-      if (editorTabIndex < 0) {
-        throw new Error('Editor tab index must be non-negative!');
-      }
-      if (editorTabIndex >= state[workspaceLocation].editorTabs.length) {
-        throw new Error('Editor tab index must have a corresponding editor tab!');
-      }
-
-      state[workspaceLocation].editorTabs[editorTabIndex].breakpoints = newBreakpoints;
-    })
-    .addCase(setEditorHighlightedLines, (state, action) => {
-      // TODO: This and the subsequent reducer achieves the same thing?
-      const workspaceLocation = getWorkspaceLocation(action);
-      const { editorTabIndex, newHighlightedLines } = action.payload;
-      if (editorTabIndex < 0) {
-        throw new Error('Editor tab index must be non-negative!');
-      }
-      if (editorTabIndex >= state[workspaceLocation].editorTabs.length) {
-        throw new Error('Editor tab index must have a corresponding editor tab!');
-      }
-
-      state[workspaceLocation].editorTabs[editorTabIndex].highlightedLines = newHighlightedLines;
-    })
-    .addCase(setEditorHighlightedLinesControl, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      const { editorTabIndex, newHighlightedLines } = action.payload;
-
-      if (editorTabIndex < 0) {
-        throw new Error('Editor tab index must be non-negative!');
-      }
-      if (editorTabIndex >= state[workspaceLocation].editorTabs.length) {
-        throw new Error('Editor tab index must have a corresponding editor tab!');
-      }
-
-      state[workspaceLocation].editorTabs[editorTabIndex].highlightedLines = newHighlightedLines;
-    })
-    .addCase(moveCursor, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      const { editorTabIndex, newCursorPosition } = action.payload;
-      if (editorTabIndex < 0) {
-        throw new Error('Editor tab index must be non-negative!');
-      }
-      if (editorTabIndex >= state[workspaceLocation].editorTabs.length) {
-        throw new Error('Editor tab index must have a corresponding editor tab!');
-      }
-
-      state[workspaceLocation].editorTabs[editorTabIndex].newCursorPosition = newCursorPosition;
-    })
-    .addCase(addEditorTab, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      const { filePath, editorValue } = action.payload;
-
-      const editorTabs = state[workspaceLocation].editorTabs;
-      const openedEditorTabIndex = editorTabs.findIndex(
-        (editorTab: EditorTabState) => editorTab.filePath === filePath
-      );
-      const fileIsAlreadyOpen = openedEditorTabIndex !== -1;
-      if (fileIsAlreadyOpen) {
-        state[workspaceLocation].activeEditorTabIndex = openedEditorTabIndex;
-        return;
-      }
-
-      const newEditorTab: EditorTabState = {
-        filePath,
-        value: editorValue,
-        highlightedLines: [],
-        breakpoints: []
-      };
-      editorTabs.push(newEditorTab);
-      // Set the newly added editor tab as the active tab.
-      const newActiveEditorTabIndex = editorTabs.length - 1;
-      state[workspaceLocation].activeEditorTabIndex = newActiveEditorTabIndex;
-    })
-    .addCase(shiftEditorTab, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      const { previousEditorTabIndex, newEditorTabIndex } = action.payload;
-      if (previousEditorTabIndex < 0) {
-        throw new Error('Previous editor tab index must be non-negative!');
-      }
-      if (previousEditorTabIndex >= state[workspaceLocation].editorTabs.length) {
-        throw new Error('Previous editor tab index must have a corresponding editor tab!');
-      }
-      if (newEditorTabIndex < 0) {
-        throw new Error('New editor tab index must be non-negative!');
-      }
-      if (newEditorTabIndex >= state[workspaceLocation].editorTabs.length) {
-        throw new Error('New editor tab index must have a corresponding editor tab!');
-      }
-
-      const newActiveEditorTabIndex =
-        state[workspaceLocation].activeEditorTabIndex === previousEditorTabIndex
-          ? newEditorTabIndex
-          : state[workspaceLocation].activeEditorTabIndex;
-      const editorTabs = state[workspaceLocation].editorTabs;
-      const shiftedEditorTab = editorTabs[previousEditorTabIndex];
-      const filteredEditorTabs = editorTabs.filter(
-        (editorTab: EditorTabState, index: number) => index !== previousEditorTabIndex
-      );
-      const newEditorTabs = [
-        ...filteredEditorTabs.slice(0, newEditorTabIndex),
-        shiftedEditorTab,
-        ...filteredEditorTabs.slice(newEditorTabIndex)
-      ];
-
-      state[workspaceLocation].activeEditorTabIndex = newActiveEditorTabIndex;
-      state[workspaceLocation].editorTabs = newEditorTabs;
-    })
-    .addCase(removeEditorTab, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      const editorTabIndex = action.payload.editorTabIndex;
-      if (editorTabIndex < 0) {
-        throw new Error('Editor tab index must be non-negative!');
-      }
-      if (editorTabIndex >= state[workspaceLocation].editorTabs.length) {
-        throw new Error('Editor tab index must have a corresponding editor tab!');
-      }
-      const newEditorTabs = state[workspaceLocation].editorTabs.filter(
-        (editorTab: EditorTabState, index: number) => index !== editorTabIndex
-      );
-
-      const activeEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
-      const newActiveEditorTabIndex = getNextActiveEditorTabIndexAfterTabRemoval(
-        activeEditorTabIndex,
-        editorTabIndex,
-        newEditorTabs.length
-      );
-
-      state[workspaceLocation].activeEditorTabIndex = newActiveEditorTabIndex;
-      state[workspaceLocation].editorTabs = newEditorTabs;
-    })
-    .addCase(removeEditorTabForFile, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      const removedFilePath = action.payload.removedFilePath;
-
-      const editorTabs = state[workspaceLocation].editorTabs;
-      const editorTabIndexToRemove = editorTabs.findIndex(
-        (editorTab: EditorTabState) => editorTab.filePath === removedFilePath
-      );
-      if (editorTabIndexToRemove === -1) {
-        return;
-      }
-      const newEditorTabs = editorTabs.filter(
-        (editorTab: EditorTabState, index: number) => index !== editorTabIndexToRemove
-      );
-
-      const activeEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
-      const newActiveEditorTabIndex = getNextActiveEditorTabIndexAfterTabRemoval(
-        activeEditorTabIndex,
-        editorTabIndexToRemove,
-        newEditorTabs.length
-      );
-
-      state[workspaceLocation].activeEditorTabIndex = newActiveEditorTabIndex;
-      state[workspaceLocation].editorTabs = newEditorTabs;
-    })
-    .addCase(removeEditorTabsForDirectory, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      const removedDirectoryPath = action.payload.removedDirectoryPath;
-
-      const editorTabs = state[workspaceLocation].editorTabs;
-      const editorTabIndicesToRemove = editorTabs
-        .map((editorTab: EditorTabState, index: number) => {
-          if (editorTab.filePath?.startsWith(removedDirectoryPath)) {
-            return index;
-          }
-          return null;
-        })
-        .filter((index: number | null): index is number => index !== null);
-      if (editorTabIndicesToRemove.length === 0) {
-        return;
-      }
-
-      let newActiveEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
-      const newEditorTabs = [...editorTabs];
-      for (let i = editorTabIndicesToRemove.length - 1; i >= 0; i--) {
-        const editorTabIndexToRemove = editorTabIndicesToRemove[i];
-        newEditorTabs.splice(editorTabIndexToRemove, 1);
-        newActiveEditorTabIndex = getNextActiveEditorTabIndexAfterTabRemoval(
-          newActiveEditorTabIndex,
-          editorTabIndexToRemove,
-          newEditorTabs.length
-        );
-      }
-
-      state[workspaceLocation].activeEditorTabIndex = newActiveEditorTabIndex;
-      state[workspaceLocation].editorTabs = newEditorTabs;
-    })
-    .addCase(renameEditorTabForFile, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      const { oldFilePath, newFilePath } = action.payload;
-
-      const editorTabs = state[workspaceLocation].editorTabs;
-      const tabToEdit = editorTabs.find(({ filePath }) => filePath === oldFilePath);
-      if (tabToEdit) {
-        tabToEdit.filePath = newFilePath;
-      }
-    })
-    .addCase(renameEditorTabsForDirectory, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      const { oldDirectoryPath, newDirectoryPath } = action.payload;
-
-      const editorTabs = state[workspaceLocation].editorTabs;
-      const newEditorTabs = editorTabs.map((editorTab: EditorTabState) =>
-        editorTab.filePath?.startsWith(oldDirectoryPath)
-          ? {
-              ...editorTab,
-              filePath: editorTab.filePath?.replace(oldDirectoryPath, newDirectoryPath)
-            }
-          : editorTab
-      );
-
-      state[workspaceLocation].editorTabs = newEditorTabs;
-    })
-    .addCase(updateReplValue, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].replValue = action.payload.newReplValue;
     })
     .addCase(updateHasUnsavedChanges, (state, action) => {
       // For some reason mutating the state directly results in type
@@ -808,42 +375,15 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       state.playground.context.chapter = chapter;
       state.playground.context.variant = variant;
     })
-    .addCase(updateCurrentStep, (state, action) => {
-      // For some reason mutating the state directly results in type
-      // errors, so we have to do it the old-fashioned way
-      const workspaceLocation = getWorkspaceLocation(action);
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          currentStep: action.payload.steps
-        }
-      };
-    })
-    .addCase(updateStepsTotal, (state, action) => {
-      // For some reason mutating the state directly results in type
-      // errors, so we have to do it the old-fashioned way
-      const workspaceLocation = getWorkspaceLocation(action);
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          stepsTotal: action.payload.steps
-        }
-      };
-    })
-    .addCase(updateBreakpointSteps, (state, action) => {
-      // For some reason mutating the state directly results in type
-      // errors, so we have to do it the old-fashioned way
-      const workspaceLocation = getWorkspaceLocation(action);
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          breakpointSteps: action.payload.breakpointSteps
-        }
-      };
-    })
+    // .addCase(notifyProgramEvaluated, (state, action) => {
+    //   const workspaceLocation = getWorkspaceLocation(action);
+    //   const debuggerContext = state[workspaceLocation].debuggerContext;
+    //   debuggerContext.result = action.payload.result;
+    //   debuggerContext.lastDebuggerResult = action.payload.lastDebuggerResult;
+    //   debuggerContext.code = action.payload.code;
+    //   debuggerContext.context = action.payload.context;
+    //   debuggerContext.workspaceLocation = action.payload.workspaceLocation;
+    // })
     .addCase(toggleUsingUpload, (state, action) => {
       const { workspaceLocation } = action.payload;
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
@@ -855,17 +395,15 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
         state[workspaceLocation].files = action.payload.files;
       }
+    })
+    .addCase(updateLastDebuggerResult, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].lastDebuggerResult = action.payload.lastDebuggerResult;
+    })
+    .addCase(updateLastNonDetResult, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].lastNonDetResult = action.payload.lastNonDetResult;
     });
-  // .addCase(notifyProgramEvaluated, (state, action) => {
-  //   const workspaceLocation = getWorkspaceLocation(action);
-
-  //   const debuggerContext = state[workspaceLocation].debuggerContext;
-  //   debuggerContext.result = action.payload.result;
-  //   debuggerContext.lastDebuggerResult = action.payload.lastDebuggerResult;
-  //   debuggerContext.code = action.payload.code;
-  //   debuggerContext.context = action.payload.context;
-  //   debuggerContext.workspaceLocation = action.payload.workspaceLocation;
-  // });
 });
 
 /** Temporarily kept to prevent conflicts */
@@ -876,31 +414,6 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
   const workspaceLocation = getWorkspaceLocation(action);
 
   switch (action.type) {
-    case UPDATE_CHANGEPOINTSTEPS:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          changepointSteps: action.payload.changepointSteps
-        }
-      };
-    case UPDATE_LAST_DEBUGGER_RESULT:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          lastDebuggerResult: action.payload.lastDebuggerResult
-        }
-      };
-
-    case UPDATE_LAST_NON_DET_RESULT:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          lastNonDetResult: action.payload.lastNonDetResult
-        }
-      };
     case NOTIFY_PROGRAM_EVALUATED: {
       const debuggerContext = {
         ...state[workspaceLocation].debuggerContext,
@@ -921,32 +434,4 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
     default:
       return state;
   }
-};
-
-const getNextActiveEditorTabIndexAfterTabRemoval = (
-  activeEditorTabIndex: number | null,
-  removedEditorTabIndex: number,
-  newEditorTabsLength: number
-) => {
-  return activeEditorTabIndex !== removedEditorTabIndex
-    ? // If the active editor tab is not the one that is removed,
-      // the active editor tab remains the same if its index is
-      // less than the removed editor tab index or null.
-      activeEditorTabIndex === null || activeEditorTabIndex < removedEditorTabIndex
-      ? activeEditorTabIndex
-      : // Otherwise, the active editor tab index needs to have 1
-        // subtracted because every tab to the right of the editor
-        // tab being removed has their index decremented by 1.
-        activeEditorTabIndex - 1
-    : newEditorTabsLength === 0
-    ? // If there are no editor tabs after removal, there cannot
-      // be an active editor tab.
-      null
-    : removedEditorTabIndex === 0
-    ? // If the removed editor tab is the leftmost tab, the active
-      // editor tab will be the new leftmost tab.
-      0
-    : // Otherwise, the active editor tab will be the tab to the
-      // left of the removed tab.
-      removedEditorTabIndex - 1;
 };
