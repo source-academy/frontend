@@ -3,6 +3,7 @@
 // Todo: Use ES module
 const eslint = require('@eslint/js');
 const tseslint = require('typescript-eslint');
+const reactRefresh = require('eslint-plugin-react-refresh');
 
 const FlatCompat = require('@eslint/eslintrc').FlatCompat;
 const compat = new FlatCompat({
@@ -13,6 +14,15 @@ module.exports = tseslint.config(
   { ignores: ['eslint.config.js'] },
   // eslint.configs.recommended,
   ...tseslint.configs.recommended,
+  // TODO: Enable when ready
+  // {
+  //   plugins: {
+  //     'react-refresh': reactRefresh
+  //   },
+  //   rules: {
+  //     'react-refresh/only-export-components': 'warn'
+  //   }
+  // },
   ...compat.config({
     extends: [
       'plugin:react-hooks/recommended'
