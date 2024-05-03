@@ -135,13 +135,10 @@ exports[`Repl renders correctly 1`] = `
       }
       usingSubst={false}
     />
-    <HotKeysEnabled
-      className="repl-input-parent row bp5-card bp5-elevation-0"
-      handlers={
-        Object {
-          "goGreen": [Function],
-        }
-      }
+    <Blueprint5.Card
+      className="repl-input-parent row"
+      elevation={0}
+      interactive={false}
     >
       <ReplInput
         externalLibrary="NONE"
@@ -201,7 +198,7 @@ exports[`Repl renders correctly 1`] = `
         sourceChapter={1}
         sourceVariant="default"
       />
-    </HotKeysEnabled>
+    </Blueprint5.Card>
   </div>
 </div>
 `;
