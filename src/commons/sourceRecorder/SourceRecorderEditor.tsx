@@ -2,13 +2,11 @@ import 'ace-builds/src-noconflict/ext-searchbox';
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'js-slang/dist/editors/ace/theme/source';
 
-import { Classes } from '@blueprintjs/core';
+import { Card } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';
-import classNames from 'classnames';
 import { isEqual } from 'lodash';
 import React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
-import { HotKeys } from 'react-hotkeys';
 
 import {
   CodeDelta,
@@ -208,10 +206,7 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
 
   public render() {
     return (
-      <HotKeys
-        className={classNames('Editor', Classes.CARD, Classes.ELEVATION_0)}
-        handlers={handlers}
-      >
+      <Card className="Editor">
         <div className="row editor-react-ace">
           <AceEditor
             className="react-ace"
@@ -255,7 +250,7 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
             keyboardHandler={this.props.editorBinding}
           />
         </div>
-      </HotKeys>
+      </Card>
     );
   }
 
@@ -325,10 +320,5 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
     this.props.handleDeclarationNavigate(this.AceEditor.current!.editor.getCursorPosition());
   };
 }
-
-/* Override handler, so does not trigger when focus is in editor */
-const handlers = {
-  goGreen: () => {}
-};
 
 export default SourcecastEditor;

@@ -4,7 +4,6 @@ exports[`Playground tests Playground renders correctly 1`] = `
 <div>
   <div
     class="Playground bp5-dark"
-    tabindex="-1"
   >
     <div
       class="workspace"
@@ -395,7 +394,6 @@ exports[`Playground tests Playground renders correctly 1`] = `
             >
               <div
                 class="Editor bp5-card bp5-elevation-0"
-                tabindex="-1"
               >
                 <div
                   class="row editor-react-ace"
@@ -813,70 +811,74 @@ and also the
                           class="side-content-text"
                         >
                           <div
-                            class="sa-data-visualizer bp5-dark"
+                            tabindex="-1"
                           >
-                            <p
-                              class="bp5-running-text"
-                              id="data-visualizer-default-text"
+                            <div
+                              class="sa-data-visualizer bp5-dark"
                             >
-                              The data visualizer helps you to visualize data structures.
-                              <br />
-                              <br />
-                              It is activated by calling the function
-                               
-                              <code>
-                                draw_data(x
-                                <sub>
-                                  1
-                                </sub>
-                                , x
-                                <sub>
-                                  2
-                                </sub>
-                                , ... x
-                                <sub>
-                                  n
-                                </sub>
-                                )
-                              </code>
-                              , where
-                               
-                              <code>
-                                x
-                                <sub>
-                                  k
-                                </sub>
-                              </code>
-                               
-                              would be the
-                               
-                              <code>
-                                k
-                                <sup>
-                                  th
-                                </sup>
-                              </code>
-                               
-                              data structure that you want to visualize and 
-                              <code>
-                                n
-                              </code>
-                               is the number of structures.
-                              <br />
-                              <br />
-                              The data visualizer uses box-and-pointer diagrams, as introduced in
-                               
-                              <a
-                                href="https://sourceacademy.org/sicpjs/2.2"
-                                rel="noopener noreferrer"
-                                target="_blank"
+                              <p
+                                class="bp5-running-text"
+                                id="data-visualizer-default-text"
                               >
-                                <i>
-                                  Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 2, Section 2
-                                </i>
-                              </a>
-                              .
-                            </p>
+                                The data visualizer helps you to visualize data structures.
+                                <br />
+                                <br />
+                                It is activated by calling the function
+                                 
+                                <code>
+                                  draw_data(x
+                                  <sub>
+                                    1
+                                  </sub>
+                                  , x
+                                  <sub>
+                                    2
+                                  </sub>
+                                  , ... x
+                                  <sub>
+                                    n
+                                  </sub>
+                                  )
+                                </code>
+                                , where
+                                 
+                                <code>
+                                  x
+                                  <sub>
+                                    k
+                                  </sub>
+                                </code>
+                                 
+                                would be the
+                                 
+                                <code>
+                                  k
+                                  <sup>
+                                    th
+                                  </sup>
+                                </code>
+                                 
+                                data structure that you want to visualize and 
+                                <code>
+                                  n
+                                </code>
+                                 is the number of structures.
+                                <br />
+                                <br />
+                                The data visualizer uses box-and-pointer diagrams, as introduced in
+                                 
+                                <a
+                                  href="https://sourceacademy.org/sicpjs/2.2"
+                                  rel="noopener noreferrer"
+                                  target="_blank"
+                                >
+                                  <i>
+                                    Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 2, Section 2
+                                  </i>
+                                </a>
+                                .
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -1391,7 +1393,6 @@ and also the
               >
                 <div
                   class="repl-input-parent row bp5-card bp5-elevation-0"
-                  tabindex="-1"
                 >
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark repl-react-ace react-ace"
@@ -1563,7 +1564,6 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
 <div>
   <div
     class="Playground bp5-dark"
-    tabindex="-1"
   >
     <div
       class="workspace"
@@ -1954,7 +1954,6 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
             >
               <div
                 class="Editor bp5-card bp5-elevation-0"
-                tabindex="-1"
               >
                 <div
                   class="row editor-react-ace"
@@ -2372,70 +2371,74 @@ and also the
                           class="side-content-text"
                         >
                           <div
-                            class="sa-data-visualizer bp5-dark"
+                            tabindex="-1"
                           >
-                            <p
-                              class="bp5-running-text"
-                              id="data-visualizer-default-text"
+                            <div
+                              class="sa-data-visualizer bp5-dark"
                             >
-                              The data visualizer helps you to visualize data structures.
-                              <br />
-                              <br />
-                              It is activated by calling the function
-                               
-                              <code>
-                                draw_data(x
-                                <sub>
-                                  1
-                                </sub>
-                                , x
-                                <sub>
-                                  2
-                                </sub>
-                                , ... x
-                                <sub>
-                                  n
-                                </sub>
-                                )
-                              </code>
-                              , where
-                               
-                              <code>
-                                x
-                                <sub>
-                                  k
-                                </sub>
-                              </code>
-                               
-                              would be the
-                               
-                              <code>
-                                k
-                                <sup>
-                                  th
-                                </sup>
-                              </code>
-                               
-                              data structure that you want to visualize and 
-                              <code>
-                                n
-                              </code>
-                               is the number of structures.
-                              <br />
-                              <br />
-                              The data visualizer uses box-and-pointer diagrams, as introduced in
-                               
-                              <a
-                                href="https://sourceacademy.org/sicpjs/2.2"
-                                rel="noopener noreferrer"
-                                target="_blank"
+                              <p
+                                class="bp5-running-text"
+                                id="data-visualizer-default-text"
                               >
-                                <i>
-                                  Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 2, Section 2
-                                </i>
-                              </a>
-                              .
-                            </p>
+                                The data visualizer helps you to visualize data structures.
+                                <br />
+                                <br />
+                                It is activated by calling the function
+                                 
+                                <code>
+                                  draw_data(x
+                                  <sub>
+                                    1
+                                  </sub>
+                                  , x
+                                  <sub>
+                                    2
+                                  </sub>
+                                  , ... x
+                                  <sub>
+                                    n
+                                  </sub>
+                                  )
+                                </code>
+                                , where
+                                 
+                                <code>
+                                  x
+                                  <sub>
+                                    k
+                                  </sub>
+                                </code>
+                                 
+                                would be the
+                                 
+                                <code>
+                                  k
+                                  <sup>
+                                    th
+                                  </sup>
+                                </code>
+                                 
+                                data structure that you want to visualize and 
+                                <code>
+                                  n
+                                </code>
+                                 is the number of structures.
+                                <br />
+                                <br />
+                                The data visualizer uses box-and-pointer diagrams, as introduced in
+                                 
+                                <a
+                                  href="https://sourceacademy.org/sicpjs/2.2"
+                                  rel="noopener noreferrer"
+                                  target="_blank"
+                                >
+                                  <i>
+                                    Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 2, Section 2
+                                  </i>
+                                </a>
+                                .
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -2450,190 +2453,185 @@ and also the
                           class="side-content-text"
                         >
                           <div
+                            class="sa-substituter bp5-dark"
                             tabindex="-1"
                           >
-                            <div>
+                            <div
+                              class="bp5-slider bp5-disabled"
+                            >
                               <div
-                                class="sa-substituter bp5-dark"
+                                class="bp5-slider-track"
                               >
                                 <div
-                                  class="bp5-slider bp5-disabled"
-                                >
-                                  <div
-                                    class="bp5-slider-track"
-                                  >
-                                    <div
-                                      class="bp5-slider-progress"
-                                      style="left: 0.00%; right: 0.00%; top: 0px;"
-                                    />
-                                    <div
-                                      class="bp5-slider-progress bp5-intent-primary"
-                                      style="left: 0.00%; right: 0.00%; top: 0px;"
-                                    />
-                                    <div
-                                      class="bp5-slider-progress"
-                                      style="left: 0.00%; right: 0.00%; top: 0px;"
-                                    />
-                                  </div>
-                                  <div
-                                    class="bp5-slider-axis"
-                                  />
-                                  <span
-                                    aria-disabled="true"
-                                    aria-orientation="horizontal"
-                                    aria-valuemax="0"
-                                    aria-valuemin="1"
-                                    aria-valuenow="1"
-                                    class="bp5-slider-handle"
-                                    role="slider"
-                                    style="left: calc(0.00% - 0px);"
-                                    tabindex="0"
-                                  >
-                                    <span
-                                      class="bp5-slider-label"
-                                    >
-                                      1
-                                    </span>
-                                  </span>
-                                </div>
+                                  class="bp5-slider-progress"
+                                  style="left: 0.00%; right: 0.00%; top: 0px;"
+                                />
                                 <div
-                                  style="display: flex; justify-content: center; align-items: center;"
+                                  class="bp5-slider-progress bp5-intent-primary"
+                                  style="left: 0.00%; right: 0.00%; top: 0px;"
+                                />
+                                <div
+                                  class="bp5-slider-progress"
+                                  style="left: 0.00%; right: 0.00%; top: 0px;"
+                                />
+                              </div>
+                              <div
+                                class="bp5-slider-axis"
+                              />
+                              <span
+                                aria-disabled="true"
+                                aria-orientation="horizontal"
+                                aria-valuemax="0"
+                                aria-valuemin="1"
+                                aria-valuenow="1"
+                                class="bp5-slider-handle"
+                                role="slider"
+                                style="left: calc(0.00% - 0px);"
+                                tabindex="0"
+                              >
+                                <span
+                                  class="bp5-slider-label"
                                 >
-                                  <div
-                                    class="bp5-button-group"
+                                  1
+                                </span>
+                              </span>
+                            </div>
+                            <div
+                              style="display: flex; justify-content: center; align-items: center;"
+                            >
+                              <div
+                                class="bp5-button-group"
+                              >
+                                <button
+                                  class="bp5-button bp5-disabled"
+                                  disabled=""
+                                  tabindex="-1"
+                                  type="button"
+                                >
+                                  <span
+                                    aria-hidden="true"
+                                    class="bp5-icon bp5-icon-double-chevron-left"
                                   >
-                                    <button
-                                      class="bp5-button bp5-disabled"
-                                      disabled=""
-                                      tabindex="-1"
-                                      type="button"
+                                    <svg
+                                      data-icon="double-chevron-left"
+                                      height="16"
+                                      role="img"
+                                      viewBox="0 0 16 16"
+                                      width="16"
                                     >
-                                      <span
-                                        aria-hidden="true"
-                                        class="bp5-icon bp5-icon-double-chevron-left"
-                                      >
-                                        <svg
-                                          data-icon="double-chevron-left"
-                                          height="16"
-                                          role="img"
-                                          viewBox="0 0 16 16"
-                                          width="16"
-                                        >
-                                          <path
-                                            d="M4.41 8L7.7 4.71c.19-.18.3-.43.3-.71a1.003 1.003 0 00-1.71-.71l-4 4C2.11 7.47 2 7.72 2 8c0 .28.11.53.29.71l4 4a1.003 1.003 0 001.42-1.42L4.41 8zm5 0l3.29-3.29c.19-.18.3-.43.3-.71a1.003 1.003 0 00-1.71-.71l-4 4C7.11 7.47 7 7.72 7 8c0 .28.11.53.29.71l4 4a1.003 1.003 0 001.42-1.42L9.41 8z"
-                                            fill-rule="evenodd"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </button>
-                                    <button
-                                      class="bp5-button bp5-disabled"
-                                      disabled=""
-                                      tabindex="-1"
-                                      type="button"
+                                      <path
+                                        d="M4.41 8L7.7 4.71c.19-.18.3-.43.3-.71a1.003 1.003 0 00-1.71-.71l-4 4C2.11 7.47 2 7.72 2 8c0 .28.11.53.29.71l4 4a1.003 1.003 0 001.42-1.42L4.41 8zm5 0l3.29-3.29c.19-.18.3-.43.3-.71a1.003 1.003 0 00-1.71-.71l-4 4C7.11 7.47 7 7.72 7 8c0 .28.11.53.29.71l4 4a1.003 1.003 0 001.42-1.42L9.41 8z"
+                                        fill-rule="evenodd"
+                                      />
+                                    </svg>
+                                  </span>
+                                </button>
+                                <button
+                                  class="bp5-button bp5-disabled"
+                                  disabled=""
+                                  tabindex="-1"
+                                  type="button"
+                                >
+                                  <span
+                                    aria-hidden="true"
+                                    class="bp5-icon bp5-icon-chevron-left"
+                                  >
+                                    <svg
+                                      data-icon="chevron-left"
+                                      height="16"
+                                      role="img"
+                                      viewBox="0 0 16 16"
+                                      width="16"
                                     >
-                                      <span
-                                        aria-hidden="true"
-                                        class="bp5-icon bp5-icon-chevron-left"
-                                      >
-                                        <svg
-                                          data-icon="chevron-left"
-                                          height="16"
-                                          role="img"
-                                          viewBox="0 0 16 16"
-                                          width="16"
-                                        >
-                                          <path
-                                            d="M7.41 8l3.29-3.29c.19-.18.3-.43.3-.71a1.003 1.003 0 00-1.71-.71l-4 4C5.11 7.47 5 7.72 5 8c0 .28.11.53.29.71l4 4a1.003 1.003 0 001.42-1.42L7.41 8z"
-                                            fill-rule="evenodd"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </button>
-                                    <button
-                                      class="bp5-button bp5-disabled"
-                                      disabled=""
-                                      tabindex="-1"
-                                      type="button"
+                                      <path
+                                        d="M7.41 8l3.29-3.29c.19-.18.3-.43.3-.71a1.003 1.003 0 00-1.71-.71l-4 4C5.11 7.47 5 7.72 5 8c0 .28.11.53.29.71l4 4a1.003 1.003 0 001.42-1.42L7.41 8z"
+                                        fill-rule="evenodd"
+                                      />
+                                    </svg>
+                                  </span>
+                                </button>
+                                <button
+                                  class="bp5-button bp5-disabled"
+                                  disabled=""
+                                  tabindex="-1"
+                                  type="button"
+                                >
+                                  <span
+                                    aria-hidden="true"
+                                    class="bp5-icon bp5-icon-chevron-right"
+                                  >
+                                    <svg
+                                      data-icon="chevron-right"
+                                      height="16"
+                                      role="img"
+                                      viewBox="0 0 16 16"
+                                      width="16"
                                     >
-                                      <span
-                                        aria-hidden="true"
-                                        class="bp5-icon bp5-icon-chevron-right"
-                                      >
-                                        <svg
-                                          data-icon="chevron-right"
-                                          height="16"
-                                          role="img"
-                                          viewBox="0 0 16 16"
-                                          width="16"
-                                        >
-                                          <path
-                                            d="M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z"
-                                            fill-rule="evenodd"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </button>
-                                    <button
-                                      class="bp5-button bp5-disabled"
-                                      disabled=""
-                                      tabindex="-1"
-                                      type="button"
+                                      <path
+                                        d="M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z"
+                                        fill-rule="evenodd"
+                                      />
+                                    </svg>
+                                  </span>
+                                </button>
+                                <button
+                                  class="bp5-button bp5-disabled"
+                                  disabled=""
+                                  tabindex="-1"
+                                  type="button"
+                                >
+                                  <span
+                                    aria-hidden="true"
+                                    class="bp5-icon bp5-icon-double-chevron-right"
+                                  >
+                                    <svg
+                                      data-icon="double-chevron-right"
+                                      height="16"
+                                      role="img"
+                                      viewBox="0 0 16 16"
+                                      width="16"
                                     >
-                                      <span
-                                        aria-hidden="true"
-                                        class="bp5-icon bp5-icon-double-chevron-right"
-                                      >
-                                        <svg
-                                          data-icon="double-chevron-right"
-                                          height="16"
-                                          role="img"
-                                          viewBox="0 0 16 16"
-                                          width="16"
-                                        >
-                                          <path
-                                            d="M9 8c0-.28-.11-.53-.29-.71l-4-4a1.003 1.003 0 00-1.42 1.42L6.59 8 3.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4C8.89 8.53 9 8.28 9 8zm4.71-.71l-4-4a1.003 1.003 0 00-1.42 1.42L11.59 8 8.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z"
-                                            fill-rule="evenodd"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </button>
-                                  </div>
-                                </div>
-                                 
+                                      <path
+                                        d="M9 8c0-.28-.11-.53-.29-.71l-4-4a1.003 1.003 0 00-1.42 1.42L6.59 8 3.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4C8.89 8.53 9 8.28 9 8zm4.71-.71l-4-4a1.003 1.003 0 00-1.42 1.42L11.59 8 8.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z"
+                                        fill-rule="evenodd"
+                                      />
+                                    </svg>
+                                  </span>
+                                </button>
+                              </div>
+                            </div>
+                             
+                            <br />
+                            <div>
+                              <div
+                                class="bp5-running-text"
+                                id="substituter-default-text"
+                              >
+                                Welcome to the Stepper!
                                 <br />
-                                <div>
-                                  <div
-                                    class="bp5-running-text"
-                                    id="substituter-default-text"
-                                  >
-                                    Welcome to the Stepper!
-                                    <br />
-                                    <br />
-                                    On this tab, the REPL will be hidden from view, so do check that your code has no errors before running the stepper. You may use this tool by writing your program on the left, then dragging the slider above to see its evaluation.
-                                    <br />
-                                    <br />
-                                    On even-numbered steps, the part of the program that will be evaluated next is highlighted in yellow. On odd-numbered steps, the result of the evaluation is highlighted in green. You can change the maximum steps limit (500-5000, default 1000) in the control bar.
-                                    <br />
-                                    <br />
-                                    <div
-                                      class="bp5-divider"
-                                    />
-                                    Some useful keyboard shortcuts:
-                                    <br />
-                                    <br />
-                                    a: Move to the first step
-                                    <br />
-                                    e: Move to the last step
-                                    <br />
-                                    f: Move to the next step
-                                    <br />
-                                    b: Move to the previous step
-                                    <br />
-                                    <br />
-                                    Note that these shortcuts are only active when the browser focus is on this tab (click on or above the explanation text).
-                                  </div>
-                                </div>
+                                <br />
+                                On this tab, the REPL will be hidden from view, so do check that your code has no errors before running the stepper. You may use this tool by writing your program on the left, then dragging the slider above to see its evaluation.
+                                <br />
+                                <br />
+                                On even-numbered steps, the part of the program that will be evaluated next is highlighted in yellow. On odd-numbered steps, the result of the evaluation is highlighted in green. You can change the maximum steps limit (500-5000, default 1000) in the control bar.
+                                <br />
+                                <br />
+                                <div
+                                  class="bp5-divider"
+                                />
+                                Some useful keyboard shortcuts:
+                                <br />
+                                <br />
+                                a: Move to the first step
+                                <br />
+                                e: Move to the last step
+                                <br />
+                                f: Move to the next step
+                                <br />
+                                b: Move to the previous step
+                                <br />
+                                <br />
+                                Note that these shortcuts are only active when the browser focus is on this tab (click on or above the explanation text).
                               </div>
                             </div>
                           </div>
@@ -2705,7 +2703,6 @@ and also the
               >
                 <div
                   class="repl-input-parent row bp5-card bp5-elevation-0"
-                  tabindex="-1"
                 >
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark repl-react-ace react-ace"
