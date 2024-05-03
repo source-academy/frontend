@@ -70,7 +70,6 @@ const AdminPanel: React.FC = () => {
       moduleHelpText: session.moduleHelpText
     });
   }, [
-    session.assessmentConfigurations,
     session.courseName,
     session.courseShortName,
     session.enableAchievements,
