@@ -19,6 +19,7 @@ import {
 } from 'src/commons/application/actions/InterpreterActions';
 import {
   loginGitHub,
+  loginGoogle,
   logoutGitHub,
   logoutGoogle
 } from 'src/commons/application/actions/SessionActions';
@@ -267,6 +268,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sourceChapter: courseSourceChapter,
     sourceVariant: courseSourceVariant,
     googleUser: persistenceUser,
+    googleAccessToken,
     githubOctokitObject
   } = useTypedSelector(state => state.session);
 
@@ -588,17 +590,26 @@ const Playground: React.FC<PlaygroundProps> = props => {
         currentFile={persistenceFile}
         loggedInAs={persistenceUser}
         isDirty={persistenceIsDirty}
+        accessToken={googleAccessToken}
         key="googledrive"
         onClickSaveAs={() => dispatch(persistenceSaveFileAs())}
         onClickOpen={() => dispatch(persistenceOpenPicker())}
         onClickSave={
           persistenceFile ? () => dispatch(persistenceSaveFile(persistenceFile)) : undefined
         }
+        onClickLogIn={() => dispatch(loginGoogle())}
         onClickLogOut={() => dispatch(logoutGoogle())}
         onPopoverOpening={() => dispatch(persistenceInitialise())}
       />
     );
-  }, [isFolderModeEnabled, persistenceFile, persistenceUser, persistenceIsDirty, dispatch]);
+  }, [
+    isFolderModeEnabled,
+    persistenceFile,
+    persistenceUser,
+    persistenceIsDirty,
+    dispatch,
+    googleAccessToken
+  ]);
 
   const githubPersistenceIsDirty =
     githubSaveInfo && (!githubSaveInfo.lastSaved || githubSaveInfo.lastSaved < lastEdit);

@@ -50,6 +50,7 @@ import {
   FETCH_USER_AND_COURSE,
   LOGIN,
   LOGIN_GITHUB,
+  LOGIN_GOOGLE,
   LOGOUT_GITHUB,
   LOGOUT_GOOGLE,
   NotificationConfiguration,
@@ -58,6 +59,7 @@ import {
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN,
+  REMOVE_GOOGLE_USER_AND_ACCESS_TOKEN,
   SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
   SET_ASSESSMENT_CONFIGURATIONS,
   SET_CONFIGURABLE_NOTIFICATION_CONFIGS,
@@ -65,6 +67,7 @@ import {
   SET_COURSE_REGISTRATION,
   SET_GITHUB_ACCESS_TOKEN,
   SET_GITHUB_OCTOKIT_OBJECT,
+  SET_GOOGLE_ACCESS_TOKEN,
   SET_GOOGLE_USER,
   SET_NOTIFICATION_CONFIGS,
   SET_TOKENS,
@@ -161,6 +164,8 @@ export const fetchStudents = createAction(FETCH_STUDENTS, () => ({ payload: {} }
 
 export const login = createAction(LOGIN, (providerId: string) => ({ payload: providerId }));
 
+export const loginGoogle = createAction(LOGIN_GOOGLE, () => ({ payload: {} }));
+
 export const logoutGoogle = createAction(LOGOUT_GOOGLE, () => ({ payload: {} }));
 
 export const loginGitHub = createAction(LOGIN_GITHUB, () => ({ payload: {} }));
@@ -205,6 +210,11 @@ export const setAdminPanelCourseRegistrations = createAction(
 
 export const setGoogleUser = createAction(SET_GOOGLE_USER, (user?: string) => ({ payload: user }));
 
+export const setGoogleAccessToken = createAction(
+  SET_GOOGLE_ACCESS_TOKEN,
+  (accessToken?: string) => ({ payload: accessToken })
+);
+
 export const setGitHubOctokitObject = createAction(
   SET_GITHUB_OCTOKIT_OBJECT,
   (authToken?: string) => ({ payload: generateOctokitInstance(authToken || '') })
@@ -216,6 +226,11 @@ export const setGitHubAccessToken = createAction(SET_GITHUB_ACCESS_TOKEN, (authT
 
 export const removeGitHubOctokitObjectAndAccessToken = createAction(
   REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN,
+  () => ({ payload: {} })
+);
+
+export const removeGoogleUserAndAccessToken = createAction(
+  REMOVE_GOOGLE_USER_AND_ACCESS_TOKEN,
   () => ({ payload: {} })
 );
 

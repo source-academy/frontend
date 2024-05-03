@@ -537,6 +537,7 @@ export const defaultSession: SessionState = {
   assessmentOverviews: undefined,
   agreedToResearch: undefined,
   sessionId: Date.now(),
+  googleAccessToken: undefined,
   githubOctokitObject: { octokit: undefined },
   gradingOverviews: undefined,
   students: undefined,

@@ -9,6 +9,7 @@ import { SourceActionType } from '../../utils/ActionsHelper';
 import { logOut } from '../actions/CommonsActions';
 import {
   removeGitHubOctokitObjectAndAccessToken,
+  removeGoogleUserAndAccessToken,
   setAdminPanelCourseRegistrations,
   setAssessmentConfigurations,
   setConfigurableNotificationConfigs,
@@ -16,6 +17,7 @@ import {
   setCourseRegistration,
   setGitHubAccessToken,
   setGitHubOctokitObject,
+  setGoogleAccessToken,
   setGoogleUser,
   setNotificationConfigs,
   setTokens,
@@ -111,6 +113,13 @@ const newSessionsReducer = createReducer(defaultSession, builder => {
     })
     .addCase(remoteExecUpdateSession, (state, action) => {
       state.remoteExecutionSession = action.payload;
+    })
+    .addCase(setGoogleAccessToken, (state, action) => {
+      state.googleAccessToken = action.payload;
+    })
+    .addCase(removeGoogleUserAndAccessToken, (state, action) => {
+      state.googleUser = undefined;
+      state.googleAccessToken = undefined;
     })
     .addCase(removeGitHubOctokitObjectAndAccessToken, (state, action) => {
       state.githubOctokitObject = { octokit: undefined };

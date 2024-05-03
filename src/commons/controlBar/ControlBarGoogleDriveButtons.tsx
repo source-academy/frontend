@@ -15,12 +15,14 @@ const stateToIntent: { [state in PersistenceState]: Intent } = {
 type Props = {
   isFolderModeEnabled: boolean;
   loggedInAs?: string;
+  accessToken?: string;
   currentFile?: PersistenceFile;
   isDirty?: boolean;
   onClickOpen?: () => any;
   onClickSave?: () => any;
   onClickSaveAs?: () => any;
   onClickLogOut?: () => any;
+  onClickLogIn?: () => any;
   onPopoverOpening?: () => any;
 };
 
@@ -40,7 +42,12 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
     />
   );
   const openButton = (
-    <ControlButton label="Open" icon={IconNames.DOCUMENT_OPEN} onClick={props.onClickOpen} />
+    <ControlButton
+      label="Open"
+      icon={IconNames.DOCUMENT_OPEN}
+      onClick={props.onClickOpen}
+      isDisabled={props.accessToken ? false : true}
+    />
   );
   const saveButton = (
     <ControlButton
@@ -52,13 +59,22 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
     />
   );
   const saveAsButton = (
-    <ControlButton label="Save as" icon={IconNames.SEND_TO} onClick={props.onClickSaveAs} />
+    <ControlButton
+      label="Save as"
+      icon={IconNames.SEND_TO}
+      onClick={props.onClickSaveAs}
+      isDisabled={props.accessToken ? false : true}
+    />
   );
-  const logoutButton = props.loggedInAs && (
-    <Tooltip content={`Logged in as ${props.loggedInAs}`}>
-      <ControlButton label="Log out" icon={IconNames.LOG_OUT} onClick={props.onClickLogOut} />
+
+  const loginButton = props.accessToken ? (
+    <Tooltip content={`Logged in as ${props.loggedInAs}`} disabled={!props.loggedInAs}>
+      <ControlButton label="Log Out" icon={IconNames.LOG_OUT} onClick={props.onClickLogOut} />
     </Tooltip>
+  ) : (
+    <ControlButton label="Log In" icon={IconNames.LOG_IN} onClick={props.onClickLogIn} />
   );
+
   const tooltipContent = props.isFolderModeEnabled
     ? 'Currently unsupported in Folder mode'
     : undefined;
@@ -73,7 +89,7 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
               {openButton}
               {saveButton}
               {saveAsButton}
-              {logoutButton}
+              {loginButton}
             </ButtonGroup>
           </div>
         }
