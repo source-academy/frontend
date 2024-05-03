@@ -5,7 +5,6 @@ import Phaser from 'phaser';
 import { SagaIterator } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 import CseMachine from 'src/features/cseMachine/CseMachine';
-import { EVAL_STORY } from 'src/features/stories/StoriesTypes';
 
 import { EventType } from '../../../features/achievement/AchievementTypes';
 import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
@@ -25,7 +24,6 @@ import {
 import { Library, Testcase } from '../../assessment/AssessmentTypes';
 import { Documentation } from '../../documentation/Documentation';
 import { writeFileRecursively } from '../../fileSystem/utils';
-import { resetSideContent } from '../../sideContent/SideContentActions';
 import { actions } from '../../utils/ActionsHelper';
 import {
   highlightClean,
@@ -280,21 +278,6 @@ export default function* WorkspaceSaga(): SagaIterator {
       [codeFilePath]: code
     };
     yield call(evalCode, codeFiles, codeFilePath, context, execTime, workspaceLocation, EVAL_REPL);
-  });
-
-  yield takeEvery(EVAL_STORY, function* (action: ReturnType<typeof actions.evalStory>) {
-    const env = action.payload.env;
-    const code = action.payload.code;
-    const execTime: number = yield select(
-      (state: OverallState) => state.stories.envs[env].execTime
-    );
-    context = yield select((state: OverallState) => state.stories.envs[env].context);
-    const codeFilePath = '/code.js';
-    const codeFiles = {
-      [codeFilePath]: code
-    };
-    yield put(resetSideContent(`stories.${env}`));
-    yield call(evalCode, codeFiles, codeFilePath, context, execTime, 'stories', EVAL_STORY, env);
   });
 
   yield takeEvery(DEBUG_RESUME, function* (action: ReturnType<typeof actions.debuggerResume>) {
