@@ -50,3 +50,19 @@ export function deepFilter<T>(
   helper(nestedObject);
   return matches;
 }
+
+// TODO: Fix type inference for this function,
+// then use it in tests. We no longer need to
+// check the action type as everything gets migrated
+// to RTK and explicit action types are no longer needed.
+// /**
+//  * The `expectActionPayload` function is used to test the payload
+//  * of an action.
+//  * @param action The action to test
+//  */
+// export function expectActionPayload<Action extends ActionCreatorWithPreparedPayload<any, any>>(
+//   action: ReturnType<Action>
+// ) {
+//   const payload: ReturnType<Action>['payload'] = action.payload;
+//   return expect(payload);
+// }

@@ -2,7 +2,6 @@ import { Action } from 'redux';
 import type { SagaIterator } from 'redux-saga';
 import { put, take } from 'redux-saga/effects';
 import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
-import { NOTIFY_STORIES_EVALUATED } from 'src/features/stories/StoriesTypes';
 
 import * as actions from '../sideContent/SideContentActions';
 import {
@@ -52,7 +51,7 @@ export default function* SideContentSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    NOTIFY_STORIES_EVALUATED,
+    notifyStoriesEvaluated.type,
     function* (action: ReturnType<typeof notifyStoriesEvaluated>) {
       yield put(actions.spawnSideContent(`stories.${action.payload.env}`, action.payload));
     }
