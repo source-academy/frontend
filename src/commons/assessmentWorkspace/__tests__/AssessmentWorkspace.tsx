@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { require as acequire } from 'ace-builds';
 import { Provider } from 'react-redux';
 import { createMemoryRouter, RouterProvider } from 'react-router';
@@ -100,8 +100,11 @@ const createMemoryRouterWithRoutes = (props: AssessmentWorkspaceProps) => {
   );
 };
 
-const renderElement = (props: AssessmentWorkspaceProps) =>
-  waitFor(() => render(createMemoryRouterWithRoutes(props)));
+const renderElement = async (props: AssessmentWorkspaceProps) => {
+  const app = render(createMemoryRouterWithRoutes(props));
+  await act(() => app);
+  return app;
+};
 
 const getEditor = () => screen.queryByTestId('Editor');
 const getMCQChooser = () => screen.queryByTestId('MCQChooser');
