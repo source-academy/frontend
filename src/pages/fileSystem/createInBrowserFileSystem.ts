@@ -14,8 +14,8 @@ import { EditorTabState, WorkspaceManagerState } from '../../commons/workspace/W
  * linked to the file system.
  */
 export const WORKSPACE_BASE_PATHS: Record<keyof WorkspaceManagerState, string> = {
-  assessment: '',
-  grading: '',
+  assessment: '/assessment',
+  grading: '/grading',
   playground: '/playground',
   sicp: '/sicp',
   sourcecast: '',
@@ -39,6 +39,18 @@ export const createInBrowserFileSystem = (store: Store<OverallState>): Promise<v
             fs: 'IndexedDB',
             options: {
               storeName: 'sicp'
+            }
+          },
+          [WORKSPACE_BASE_PATHS.assessment]: {
+            fs: 'IndexedDB',
+            options: {
+              storeName: 'assessment'
+            }
+          },
+          [WORKSPACE_BASE_PATHS.grading]: {
+            fs: 'IndexedDB',
+            options: {
+              storeName: 'grading'
             }
           }
         }

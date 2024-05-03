@@ -21,6 +21,13 @@ export const ControlBarRunButton: React.FC<ControlButtonRunButtonProps> = props 
   const tooltipContent = props.isEntrypointFileDefined
     ? '...or press shift-enter in the editor'
     : 'Open a file to evaluate the program with the file as the entrypoint';
+
+  /*
+  ? props.readOnly
+      ? 'Evaluation is disabled in read-only mode'
+      : '...or press shift-enter in the editor'
+    : 'Open a file to evaluate the program with the file as the entrypoint';
+  */
   return (
     <Tooltip content={tooltipContent} placement={Position.TOP}>
       <ControlButton

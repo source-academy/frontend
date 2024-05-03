@@ -54,6 +54,7 @@ export const REMOVE_EDITOR_TAB_FOR_FILE = 'REMOVE_EDITOR_TAB_FOR_FILE';
 export const REMOVE_EDITOR_TABS_FOR_DIRECTORY = 'REMOVE_EDITOR_TABS_FOR_DIRECTORY';
 export const RENAME_EDITOR_TAB_FOR_FILE = 'RENAME_EDITOR_TAB_FOR_FILE';
 export const RENAME_EDITOR_TABS_FOR_DIRECTORY = 'RENAME_EDITOR_TABS_FOR_DIRECTORY';
+export const UPDATE_EDITOR_TAB_READ_ONLY = 'UPDATE_EDITOR_TAB_READ_ONLY';
 export const UPDATE_HAS_UNSAVED_CHANGES = 'UPDATE_HAS_UNSAVED_CHANGES';
 export const UPDATE_REPL_VALUE = 'UPDATE_REPL_VALUE';
 export const UPDATE_WORKSPACE = 'UPDATE_WORKSPACE';
@@ -119,6 +120,7 @@ export type EditorTabState = {
   readonly highlightedLines: HighlightedLines[];
   readonly breakpoints: string[];
   readonly newCursorPosition?: Position;
+  readonly readOnly?: boolean;
 };
 
 export type WorkspaceState = {
@@ -151,6 +153,7 @@ export type WorkspaceState = {
   readonly debuggerContext: DebuggerContext;
   readonly lastDebuggerResult: any;
   readonly lastNonDetResult: Result | null;
+  readonly files: Record<string, { answer: string; prepend: string; postpend: string }>;
 };
 
 type ReplHistory = {

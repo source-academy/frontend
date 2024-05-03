@@ -15,9 +15,10 @@ import FileSystemViewPlaceholderNode from './FileSystemViewPlaceholderNode';
 type Props = {
   workspaceLocation: WorkspaceLocation;
   basePath: string;
+  disableEditing?: boolean; // Disables creation/renaming/deleting of files
 };
 
-const FileSystemView: React.FC<Props> = ({ workspaceLocation, basePath }) => {
+const FileSystemView: React.FC<Props> = ({ workspaceLocation, basePath, disableEditing }) => {
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
 
   const [isAddingNewFile, setIsAddingNewFile] = React.useState(false);
@@ -95,6 +96,7 @@ const FileSystemView: React.FC<Props> = ({ workspaceLocation, basePath }) => {
   return (
     <div className={classes['file-system-view-container']}>
       <FileSystemViewList
+        disableEditing={disableEditing}
         workspaceLocation={workspaceLocation}
         key={fileSystemViewListKey}
         fileSystem={fileSystem}
@@ -121,7 +123,9 @@ const FileSystemView: React.FC<Props> = ({ workspaceLocation, basePath }) => {
           />
         </div>
       )}
+
       <FileSystemViewContextMenu
+        disableEditing={disableEditing}
         className={classes['file-system-view-empty-space']}
         createNewFile={handleCreateNewFile}
         createNewDirectory={handleCreateNewDirectory}

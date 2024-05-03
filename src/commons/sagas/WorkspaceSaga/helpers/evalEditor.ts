@@ -20,9 +20,11 @@ import { evalCode } from './evalCode';
 import { insertDebuggerStatements } from './insertDebuggerStatements';
 
 export function* evalEditor(
-  workspaceLocation: WorkspaceLocation
+  workspaceLocation: WorkspaceLocation,
+  isGraderTab = false
 ): Generator<StrictEffect, void, any> {
   const [
+    workspaceFiles,
     prepend,
     activeEditorTabIndex,
     editorTabs,
@@ -31,6 +33,7 @@ export function* evalEditor(
     fileSystem,
     remoteExecutionSession
   ]: [
+    Record<string, { answer: string; prepend: string; postpend: string }>,
     string,
     number | null,
     EditorTabState[],
@@ -39,6 +42,7 @@ export function* evalEditor(
     FSModule,
     DeviceSession | undefined
   ] = yield select((state: OverallState) => [
+    state.workspaces[workspaceLocation].files,
     state.workspaces[workspaceLocation].programPrependValue,
     state.workspaces[workspaceLocation].activeEditorTabIndex,
     state.workspaces[workspaceLocation].editorTabs,
@@ -53,15 +57,23 @@ export function* evalEditor(
   }
 
   const defaultFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
+  let entrypointFilePath = editorTabs[activeEditorTabIndex].filePath ?? defaultFilePath;
   let files: Record<string, string>;
   if (isFolderModeEnabled) {
     files = yield call(retrieveFilesInWorkspaceAsRecord, workspaceLocation, fileSystem);
+    if ((workspaceLocation === 'assessment' || workspaceLocation === 'grading') && isGraderTab) {
+      const questionNumber = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].currentQuestion
+      );
+      if (typeof questionNumber !== undefined) {
+        entrypointFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/${questionNumber + 1}.js`;
+      }
+    }
   } else {
     files = {
       [defaultFilePath]: editorTabs[activeEditorTabIndex].value
     };
   }
-  const entrypointFilePath = editorTabs[activeEditorTabIndex].filePath ?? defaultFilePath;
 
   yield put(actions.addEvent([EventType.RUN_CODE]));
 
@@ -90,12 +102,25 @@ export function* evalEditor(
       );
     }
 
+    // Append the prepend and postpend to the files, except for entrypointFile which should only have
+    // the postpend appended, since the prepend should be evaluated silently with a privileged context
+    for (const [filePath, fileContents] of Object.entries(workspaceFiles)) {
+      if (filePath === entrypointFilePath) {
+        files[filePath] = files[filePath] + fileContents.postpend;
+      } else {
+        files[filePath] = fileContents.prepend + files[filePath] + fileContents.postpend;
+      }
+    }
+
+    const prependVal =
+      entrypointFilePath in workspaceFiles ? workspaceFiles[entrypointFilePath].prepend : prepend;
+    // console.log('prependVal', prependVal)
     // Evaluate the prepend silently with a privileged context, if it exists
-    if (prepend.length) {
+    if (prependVal.length) {
       const elevatedContext = makeElevatedContext(context);
       const prependFilePath = '/prepend.js';
       const prependFiles = {
-        [prependFilePath]: prepend
+        [prependFilePath]: prependVal
       };
       yield call(
         evalCode,

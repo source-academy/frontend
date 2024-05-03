@@ -703,6 +703,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const toggleFolderModeButton = useMemo(() => {
     return (
       <ControlBarToggleFolderModeButton
+        isSupportedSource={languageConfig.supports.multiFile || false}
         isFolderModeEnabled={isFolderModeEnabled}
         isSessionActive={editorSessionId !== ''}
         isPersistenceActive={persistenceFile !== undefined || githubSaveInfo.repoName !== ''}
@@ -989,7 +990,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         languageConfig.chapter === Chapter.FULL_JS ? null : shareButton,
         chapterSelectButton,
         isSicpEditor ? null : sessionButtons,
-        languageConfig.supports.multiFile ? toggleFolderModeButton : null,
+        toggleFolderModeButton,
         persistenceButtons,
         githubButtons,
         usingRemoteExecution || !isSourceLanguage(languageConfig.chapter)

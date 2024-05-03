@@ -14,13 +14,15 @@ type Props = {
   fileSystem: FSModule;
   basePath: string;
   indentationLevel: number;
+  disableEditing?: boolean;
 };
 
 const FileSystemViewList: React.FC<Props> = ({
   workspaceLocation,
   fileSystem,
   basePath,
-  indentationLevel
+  indentationLevel,
+  disableEditing
 }) => {
   const [dirNames, setDirNames] = React.useState<string[] | undefined>(undefined);
   const [fileNames, setFileNames] = React.useState<string[] | undefined>(undefined);
@@ -80,6 +82,7 @@ const FileSystemViewList: React.FC<Props> = ({
       {dirNames.map(dirName => {
         return (
           <FileSystemViewDirectoryNode
+            disableEditing={disableEditing}
             workspaceLocation={workspaceLocation}
             key={dirName}
             fileSystem={fileSystem}
@@ -93,6 +96,7 @@ const FileSystemViewList: React.FC<Props> = ({
       {fileNames.map(fileName => {
         return (
           <FileSystemViewFileNode
+            disableEditing={disableEditing}
             workspaceLocation={workspaceLocation}
             key={fileName}
             fileSystem={fileSystem}

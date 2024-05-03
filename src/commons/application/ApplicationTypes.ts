@@ -419,7 +419,8 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   enableDebugging: true,
   debuggerContext: {} as DebuggerContext,
   lastDebuggerResult: undefined,
-  lastNonDetResult: null
+  lastNonDetResult: null,
+  files: {}
 });
 
 const defaultFileName = 'program.js';

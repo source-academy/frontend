@@ -1,5 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { stringify } from 'js-slang/dist/utils/stringify';
+import { isEqual, isNull } from 'lodash';
 import { Reducer } from 'redux';
 
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
@@ -52,9 +53,10 @@ import {
   updateLastNonDetResult,
   updateSublanguage,
   updateSubmissionsTableFilters,
+  updateTabReadOnly,
   updateWorkspace
 } from './WorkspaceActions';
-import { WorkspaceLocation, WorkspaceManagerState } from './WorkspaceTypes';
+import { EditorTabState, WorkspaceLocation, WorkspaceManagerState } from './WorkspaceTypes';
 
 export const getWorkspaceLocation = (action: any): WorkspaceLocation => {
   return action.payload ? action.payload.workspaceLocation : 'assessment';
@@ -385,6 +387,34 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     .addCase(updateLastDebuggerResult, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].lastDebuggerResult = action.payload.lastDebuggerResult;
+    })
+    .addCase(updateTabReadOnly, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      const { editorTabIndex, isReadOnly } = action.payload;
+      if (isNull(editorTabIndex) || editorTabIndex < 0) {
+        return state;
+      }
+      const editorTabs = state[workspaceLocation].editorTabs;
+      const newEditorTabs = editorTabs.map((editorTab: EditorTabState, index: number | null) =>
+        index === editorTabIndex
+          ? {
+              ...editorTab,
+              readOnly: isReadOnly
+            }
+          : editorTab
+      );
+
+      if (isEqual(editorTabs, newEditorTabs)) {
+        return state;
+      }
+
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          editorTabs: newEditorTabs
+        }
+      };
     })
     .addCase(updateLastNonDetResult, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);

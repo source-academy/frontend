@@ -2,14 +2,18 @@ import { Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core'
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { fetchGrading } from 'src/commons/application/actions/SessionActions';
+import { ControlBarToggleFolderModeButton } from 'src/commons/controlBar/ControlBarToggleFolderModeButton';
+import { handleReadFile, overwriteFilesInWorkspace } from 'src/commons/fileSystem/utils';
+import FileSystemView from 'src/commons/fileSystemView/FileSystemView';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { showSimpleErrorDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import {
+  addEditorTab,
   beginClearContext,
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -24,12 +28,15 @@ import {
   resetWorkspace,
   runAllTestcases,
   setEditorBreakpoint,
+  toggleFolderMode,
   updateActiveEditorTabIndex,
   updateCurrentSubmissionId,
   updateEditorValue,
   updateHasUnsavedChanges,
-  updateReplValue
+  updateReplValue,
+  updateTabReadOnly
 } from 'src/commons/workspace/WorkspaceActions';
+import { WORKSPACE_BASE_PATHS } from 'src/pages/fileSystem/createInBrowserFileSystem';
 
 import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
 import {
@@ -57,7 +64,7 @@ import { useSideContent } from '../../../../commons/sideContent/SideContentHelpe
 import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
 import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
 import { WorkspaceLocation, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
-import { AnsweredQuestion } from '../../../../features/grading/GradingTypes';
+import { AnsweredQuestion, GradingQuestion } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditor';
 
 const workspaceLocation: WorkspaceLocation = 'grading';
@@ -79,9 +86,11 @@ const GradingWorkspace: React.FC<Props> = props => {
     workspaceLocation,
     SideContentType.grading
   );
+  const [isEditable] = useState(false);
 
   const grading = useTypedSelector(state => state.session.gradings[props.submissionId]);
   const courseId = useTypedSelector(state => state.session.courseId);
+  const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
   const {
     autogradingResults,
     isFolderModeEnabled,
@@ -157,6 +166,21 @@ const GradingWorkspace: React.FC<Props> = props => {
         dispatch(promptAutocomplete(workspaceLocation, row, col, callback))
     };
   }, [dispatch]);
+  const currentQuestionFilePath = `/${workspaceLocation}/${props.questionId + 1}.js`;
+
+  useEffect(() => {
+    // all tabs are read-only in grading
+    dispatch(updateTabReadOnly(workspaceLocation, activeEditorTabIndex, true));
+  }, [activeEditorTabIndex]);
+
+  const onEditorValueChange = React.useCallback(
+    (editorTabIndex: number, newEditorValue: string) => {
+      if (isEditable) {
+        handleEditorValueChange(editorTabIndex, newEditorValue);
+      }
+    },
+    [handleEditorValueChange, isEditable]
+  );
 
   /**
    * After mounting (either an older copy of the grading
@@ -223,6 +247,29 @@ const GradingWorkspace: React.FC<Props> = props => {
   });
 
   /**
+   * Rewrites the file with our desired file tree
+   * Sets the currentQuestionFilePath to be the current active editor
+   */
+  const rewriteFilesWithContent = async (
+    currentQuestionFilePath: string,
+    newFileTree: Record<string, string>
+  ) => {
+    if (fileSystem) {
+      await overwriteFilesInWorkspace(workspaceLocation, fileSystem, newFileTree);
+      dispatch(removeEditorTab(workspaceLocation, 0)); // remove the default tab which keeps appearing ;c
+      dispatch(
+        addEditorTab(
+          workspaceLocation,
+          currentQuestionFilePath,
+          newFileTree[currentQuestionFilePath] ?? ''
+        )
+      );
+      dispatch(updateActiveEditorTabIndex(workspaceLocation, 0));
+      dispatch(updateTabReadOnly(workspaceLocation, 0, true)); // all read-only
+    }
+  };
+
+  /**
    * Checks if there is a need to reset the workspace, then executes
    * a dispatch (in the props) if needed.
    *
@@ -238,6 +285,9 @@ const GradingWorkspace: React.FC<Props> = props => {
     }
     const question = grading!.answers[questionId].question as Question;
 
+    // TODO: REMOVE AFTER TESTING !!!
+    question.library.chapter = Chapter.SOURCE_2;
+
     let autogradingResults: AutogradingResult[] = [];
     let editorValue: string = '';
     let programPrependValue: string = '';
@@ -251,6 +301,19 @@ const GradingWorkspace: React.FC<Props> = props => {
       programPostpendValue = questionData.postpend;
       editorTestcases = questionData.testcases;
 
+      // We use || not ?? to match both null and an empty string
+      // Sets the current active tab to the current "question file" and also force re-writes the file system
+      // The leading slash "/" at the front is VERY IMPORTANT! DO NOT DELETE
+
+      // "otherFiles" refers to all other files that have an "answer" record
+      const otherFiles: Record<string, string> = {};
+      grading?.answers.forEach((answer: GradingQuestion, index) => {
+        const question = answer.question;
+        if (question.type === 'programming' && question.answer && index !== questionId) {
+          otherFiles[`/${workspaceLocation}/${index + 1}.js`] = question.answer;
+        }
+      });
+
       editorValue = questionData.answer as string;
       if (!editorValue) {
         editorValue = questionData.solutionTemplate!;
@@ -261,6 +324,11 @@ const GradingWorkspace: React.FC<Props> = props => {
         });
         editorValue = unansweredPrependValue + editorValue;
       }
+
+      rewriteFilesWithContent(currentQuestionFilePath, {
+        [currentQuestionFilePath]: editorValue,
+        ...otherFiles
+      });
     }
 
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
@@ -283,10 +351,6 @@ const GradingWorkspace: React.FC<Props> = props => {
     handleChangeExecTime(question.library.execTimeMs ?? defaultWorkspaceManager.grading.execTime);
     handleClearContext(question.library, true);
     handleUpdateHasUnsavedChanges(false);
-    if (editorValue) {
-      // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-      handleEditorValueChange(0, editorValue);
-    }
   };
 
   /** Pre-condition: Grading has been loaded */
@@ -343,7 +407,9 @@ const GradingWorkspace: React.FC<Props> = props => {
         iconName: IconNames.AIRPLANE,
         body: (
           <SideContentAutograder
+            isFolderModeEnabled={isFolderModeEnabled}
             testcases={editorTestcases}
+            currentFileBeingRan={`/${questionId + 1}.js`}
             autogradingResults={autogradingResults}
             handleTestcaseEval={handleTestcaseEval}
             workspaceLocation="grading"
@@ -438,8 +504,40 @@ const GradingWorkspace: React.FC<Props> = props => {
       />
     );
 
+    const toggleFolderModeButton = (
+      <ControlBarToggleFolderModeButton
+        isSupportedSource={question.library.chapter >= 2}
+        isFolderModeEnabled={isFolderModeEnabled}
+        isSessionActive={false}
+        isPersistenceActive={false}
+        toggleFolderMode={async () => {
+          dispatch(toggleFolderMode(workspaceLocation));
+          if (isFolderModeEnabled && fileSystem) {
+            // Set active tab back to default question if user disables folder mode
+            let isFound = false;
+            editorTabs.forEach((tab, index) => {
+              if (tab.filePath && tab.filePath === currentQuestionFilePath) {
+                isFound = true;
+                dispatch(updateActiveEditorTabIndex(workspaceLocation, index));
+              }
+            });
+            // Original question tab not found, we need to open it
+            if (!isFound) {
+              const fileContents = await handleReadFile(fileSystem, currentQuestionFilePath);
+              dispatch(
+                addEditorTab(workspaceLocation, currentQuestionFilePath, fileContents ?? '')
+              );
+              // Set to the end of the editorTabs array (i.e the newly created editorTab)
+              dispatch(updateActiveEditorTabIndex(workspaceLocation, editorTabs.length));
+            }
+          }
+        }}
+        key="folder"
+      />
+    );
+
     return {
-      editorButtons: [runButton],
+      editorButtons: [runButton, toggleFolderModeButton],
       flowButtons: [previousButton, questionView, nextButton]
     };
   };
@@ -456,14 +554,16 @@ const GradingWorkspace: React.FC<Props> = props => {
     return [evalButton, clearButton];
   };
 
-  const handleEval = () => {
-    handleEditorEval();
-
+  const activeTab = useRef(selectedTab);
+  activeTab.current = selectedTab;
+  const handleEval = useCallback(() => {
     // Run testcases when the autograder tab is selected
-    if (selectedTab === SideContentType.autograder) {
+    if (activeTab.current === SideContentType.autograder) {
       handleRunAllTestcases();
+    } else {
+      handleEditorEval();
     }
-  };
+  }, [handleEditorEval, handleRunAllTestcases]);
 
   // Rendering logic
   if (grading === undefined) {
@@ -496,7 +596,7 @@ const GradingWorkspace: React.FC<Props> = props => {
             sessionDetails: null,
             handleDeclarationNavigate: handleDeclarationNavigate,
             handleEditorEval: handleEval,
-            handleEditorValueChange: handleEditorValueChange,
+            handleEditorValueChange: onEditorValueChange,
             handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
             handlePromptAutocomplete: handlePromptAutocomplete,
             isEditorAutorun: false,
@@ -511,7 +611,24 @@ const GradingWorkspace: React.FC<Props> = props => {
       handleMCQSubmit: (i: number) => {}
     },
     sideBarProps: {
-      tabs: []
+      tabs: [
+        ...(isFolderModeEnabled
+          ? [
+              {
+                label: 'Folder',
+                body: (
+                  <FileSystemView
+                    disableEditing={true}
+                    workspaceLocation={workspaceLocation}
+                    basePath={WORKSPACE_BASE_PATHS[workspaceLocation]}
+                  />
+                ),
+                iconName: IconNames.FOLDER_CLOSE,
+                id: SideContentType.folder
+              }
+            ]
+          : [])
+      ]
     },
     sideContentProps: sideContentProps(props, questionId),
     replProps: {

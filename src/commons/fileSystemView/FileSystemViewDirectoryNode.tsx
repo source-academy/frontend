@@ -23,6 +23,7 @@ type Props = {
   directoryName: string;
   indentationLevel: number;
   refreshParentDirectory: () => void;
+  disableEditing?: boolean;
 };
 
 const FileSystemViewDirectoryNode: React.FC<Props> = ({
@@ -31,7 +32,8 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
   basePath,
   directoryName,
   indentationLevel,
-  refreshParentDirectory
+  refreshParentDirectory,
+  disableEditing
 }) => {
   const fullPath = path.join(basePath, directoryName);
 
@@ -151,6 +153,7 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
         createNewDirectory={handleCreateNewDirectory}
         rename={handleRenameDirectory}
         remove={handleRemoveDirectory}
+        disableEditing={disableEditing}
       >
         <div className={classes['file-system-view-node-container']} onClick={toggleIsExpanded}>
           <FileSystemViewIndentationPadding indentationLevel={indentationLevel} />

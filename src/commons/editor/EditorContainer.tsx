@@ -40,7 +40,14 @@ export const convertEditorTabStateToProps = (
   return {
     editorTabIndex,
     editorValue: editorTab.value,
-    ..._.pick(editorTab, 'filePath', 'highlightedLines', 'breakpoints', 'newCursorPosition')
+    ..._.pick(
+      editorTab,
+      'filePath',
+      'highlightedLines',
+      'breakpoints',
+      'newCursorPosition',
+      'readOnly'
+    )
   };
 };
 
@@ -89,6 +96,7 @@ const EditorContainer: React.FC<EditorContainerProps> = (props: EditorContainerP
     <div className="editor-container">
       {isFolderModeEnabled && (
         <EditorTabContainer
+          editorTabs={editorTabs}
           baseFilePath={baseFilePath ?? ''}
           activeEditorTabIndex={activeEditorTabIndex}
           filePaths={filePaths}
