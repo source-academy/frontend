@@ -1,10 +1,11 @@
 import { Button, Card, Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { HotkeyItem } from '@mantine/hooks';
 import classNames from 'classnames';
 import React from 'react';
-import { configure, GlobalHotKeys } from 'react-hotkeys';
 import { connect, MapDispatchToProps } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import HotKeys from 'src/commons/hotkeys/HotKeys';
 
 import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
 import { Step } from '../../../features/dataVisualizer/dataVisualizerTypes';
@@ -23,11 +24,6 @@ type OwnProps = {
 
 type DispatchProps = {
   alertSideContent: () => void;
-};
-
-const dataVisualizerKeyMap = {
-  PREVIOUS_STEP: 'left',
-  NEXT_STEP: 'right'
 };
 
 /**
@@ -49,29 +45,18 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
   }
 
   public render() {
+    const step: Step | undefined = this.state.steps[this.state.currentStep];
     const firstStep: () => boolean = () => this.state.currentStep === 0;
     const finalStep: () => boolean = () =>
       !this.state.steps || this.state.currentStep === this.state.steps.length - 1;
 
-    const dataVisualizerHandlers = {
-      PREVIOUS_STEP: this.onPrevButtonClick,
-      NEXT_STEP: this.onNextButtonClick
-    };
-
-    configure({
-      ignoreEventsCondition: event => {
-        return (
-          (event.key === 'ArrowLeft' && firstStep()) || (event.key === 'ArrowRight' && finalStep())
-        );
-      },
-      ignoreRepeatedEventsWhenKeyHeldDown: false,
-      stopEventPropagationAfterIgnoring: false
-    });
-
-    const step: Step | undefined = this.state.steps[this.state.currentStep];
+    const hotkeyBindings: HotkeyItem[] = [
+      ['ArrowLeft', this.onPrevButtonClick],
+      ['ArrowRight', this.onNextButtonClick]
+    ];
 
     return (
-      <GlobalHotKeys keyMap={dataVisualizerKeyMap} handlers={dataVisualizerHandlers}>
+      <HotKeys bindings={hotkeyBindings}>
         <div className={classNames('sa-data-visualizer', Classes.DARK)}>
           {this.state.steps.length > 1 ? (
             <div
@@ -174,19 +159,21 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
             </p>
           )}
         </div>
-      </GlobalHotKeys>
+      </HotKeys>
     );
   }
 
   private onPrevButtonClick = () => {
+    const firstStep = 0;
     this.setState(state => {
-      return { currentStep: state.currentStep - 1 };
+      return { currentStep: Math.max(firstStep, state.currentStep - 1) };
     });
   };
 
   private onNextButtonClick = () => {
+    const finalStep = this.state.steps.length - 1;
     this.setState(state => {
-      return { currentStep: state.currentStep + 1 };
+      return { currentStep: Math.min(finalStep, state.currentStep + 1) };
     });
   };
 }
