@@ -2,18 +2,14 @@
 
 exports[`CSE Machine component renders correctly 1`] = `
 <div
-  onBlur={[Function]}
-  onFocus={[Function]}
   onKeyDown={[Function]}
-  onKeyPress={[Function]}
-  onKeyUp={[Function]}
   style={
     Object {
       "maxHeight": "100%",
       "overflow": "auto",
     }
   }
-  tabIndex="-1"
+  tabIndex={-1}
 >
   <div
     className="sa-substituter bp5-dark"

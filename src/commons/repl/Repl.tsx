@@ -1,10 +1,9 @@
-import { Card, Classes, Pre } from '@blueprintjs/core';
+import { Card, Pre } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';
 import classNames from 'classnames';
 import { parseError } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React from 'react';
-import { HotKeys } from 'react-hotkeys';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
@@ -52,12 +51,9 @@ const Repl: React.FC<ReplProps> = props => {
       <div className="repl-output-parent">
         {cards}
         {!props.inputHidden && (
-          <HotKeys
-            className={classNames('repl-input-parent', 'row', Classes.CARD, Classes.ELEVATION_0)}
-            handlers={handlers}
-          >
+          <Card className={classNames('repl-input-parent', 'row')}>
             <ReplInput {...props} />
-          </HotKeys>
+          </Card>
         )}
       </div>
     </div>
@@ -131,11 +127,6 @@ export const Output: React.FC<OutputProps> = props => {
     default:
       return <Card>''</Card>;
   }
-};
-
-/* Override handler, so does not trigger when focus is in editor */
-const handlers = {
-  goGreen: () => {}
 };
 
 export default Repl;

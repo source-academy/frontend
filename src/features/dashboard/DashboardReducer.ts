@@ -1,20 +1,16 @@
+import { createReducer } from '@reduxjs/toolkit';
 import { Reducer } from 'redux';
 
 import { defaultDashboard } from '../../commons/application/ApplicationTypes';
 import { SourceActionType } from '../../commons/utils/ActionsHelper';
-import { DashboardState, UPDATE_GROUP_GRADING_SUMMARY } from './DashboardTypes';
+import { updateGroupGradingSummary } from './DashboardActions';
+import { DashboardState } from './DashboardTypes';
 
-export const DashboardReducer: Reducer<DashboardState, SourceActionType> = (
-  state = defaultDashboard,
-  action
-) => {
-  switch (action.type) {
-    case UPDATE_GROUP_GRADING_SUMMARY:
-      return {
-        ...state,
-        gradingSummary: action.payload
-      };
-    default:
-      return state;
+export const DashboardReducer: Reducer<DashboardState, SourceActionType> = createReducer(
+  defaultDashboard,
+  builder => {
+    builder.addCase(updateGroupGradingSummary, (state, action) => {
+      state.gradingSummary = action.payload;
+    });
   }
-};
+);

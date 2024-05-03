@@ -393,8 +393,8 @@ function* BackendSaga(): SagaIterator {
     const assessmentId: number = yield select(
       (state: OverallState) => state.workspaces.assessment.currentAssessment!
     );
-    const assessment: any = yield select((state: OverallState) =>
-      state.session.assessments.get(assessmentId)
+    const assessment: any = yield select(
+      (state: OverallState) => state.session.assessments[assessmentId]
     );
     const newQuestions = assessment.questions.slice().map((question: Question) => {
       if (question.id === questionId) {
@@ -751,8 +751,8 @@ function* BackendSaga(): SagaIterator {
     yield call(showSuccessMessage, 'Submitted!', 1000);
 
     // Now, update the grade for the question in the Grading in the store
-    const grading: GradingQuery = yield select((state: OverallState) =>
-      state.session.gradings.get(submissionId)
+    const grading: GradingQuery = yield select(
+      (state: OverallState) => state.session.gradings[submissionId]
     );
     const newGrading = grading.answers.slice().map((gradingQuestion: GradingQuestion) => {
       if (gradingQuestion.question.id === questionId) {
