@@ -3,10 +3,9 @@ import 'ag-grid-community/styles/ag-theme-balham.css';
 
 import { Button, Divider, H1, Intent, Tab, Tabs } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
-import React from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Role } from 'src/commons/application/ApplicationTypes';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession } from 'src/commons/utils/Hooks';
 import {
   addNewStoriesUsersToCourse,
   addNewUsersToCourse
@@ -27,31 +26,32 @@ import {
 import { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
 import { AssessmentConfiguration } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
-import AddStoriesUserPanel, { NameUsernameRole } from './subcomponents/AddStoriesUserPanel';
-import AddUserPanel, { UsernameRoleGroup } from './subcomponents/AddUserPanel';
+import AddStoriesUserPanel from './subcomponents/AddStoriesUserPanel';
+import AddUserPanel from './subcomponents/AddUserPanel';
 import AssessmentConfigPanel from './subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';
 import NotificationConfigPanel from './subcomponents/NotificationConfigPanel';
 import UserConfigPanel from './subcomponents/userConfigPanel/UserConfigPanel';
 
-const AdminPanel: React.FC = () => {
-  const [hasChangesCourseConfig, setHasChangesCourseConfig] = React.useState(false);
-  const [hasChangesAssessmentConfig, setHasChangesAssessmentConfig] = React.useState(false);
+const defaultCourseConfig: UpdateCourseConfiguration = {
+  courseName: '',
+  courseShortName: '',
+  viewable: true,
+  enableGame: true,
+  enableAchievements: true,
+  enableSourcecast: true,
+  enableStories: false,
+  moduleHelpText: ''
+};
 
-  const [courseConfiguration, setCourseConfiguration] = React.useState<UpdateCourseConfiguration>({
-    courseName: '',
-    courseShortName: '',
-    viewable: true,
-    enableGame: true,
-    enableAchievements: true,
-    enableSourcecast: true,
-    enableStories: false,
-    moduleHelpText: ''
-  });
+const AdminPanel: React.FC = () => {
+  const [hasChangesCourseConfig, setHasChangesCourseConfig] = useState(false);
+  const [hasChangesAssessmentConfig, setHasChangesAssessmentConfig] = useState(false);
+  const [courseConfiguration, setCourseConfiguration] = useState(defaultCourseConfig);
 
   const dispatch = useDispatch();
 
-  const session = useTypedSelector(state => state.session);
+  const session = useSession();
 
   /**
    * Mutable ref to track the assessment configuration form state instead of useState. This is
@@ -69,15 +69,14 @@ const AdminPanel: React.FC = () => {
     AssessmentConfiguration[]
   >([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(fetchCourseConfig());
     dispatch(fetchAssessmentConfigs());
     dispatch(fetchAdminPanelCourseRegistrations());
     dispatch(fetchNotificationConfigs());
   }, [dispatch]);
 
-  // After updated configs have been loaded from the backend, put them into local React state
-  React.useEffect(() => {
+  useEffect(() => {
     setCourseConfiguration({
       courseName: session.courseName,
       courseShortName: session.courseShortName,
@@ -91,7 +90,17 @@ const AdminPanel: React.FC = () => {
 
     // IMPT: To prevent mutation of props
     assessmentConfig.current = cloneDeep(session.assessmentConfigurations);
-  }, [session]);
+  }, [
+    session.assessmentConfigurations,
+    session.courseName,
+    session.courseShortName,
+    session.enableAchievements,
+    session.enableGame,
+    session.enableSourcecast,
+    session.enableStories,
+    session.moduleHelpText,
+    session.viewable
+  ]);
 
   const courseConfigPanelProps = {
     courseConfiguration: courseConfiguration,
@@ -101,7 +110,7 @@ const AdminPanel: React.FC = () => {
     }
   };
 
-  const assessmentConfigPanelProps = React.useMemo(() => {
+  const assessmentConfigPanelProps = useMemo(() => {
     return {
       // Would have been loaded by the useEffect above
       assessmentConfig: assessmentConfig as React.MutableRefObject<AssessmentConfiguration[]>,
@@ -121,38 +130,17 @@ const AdminPanel: React.FC = () => {
     };
   }, [assessmentConfigsToDelete]);
 
-  const userConfigPanelProps = {
-    courseRegId: session.courseRegId,
-    userCourseRegistrations: session.userCourseRegistrations,
-    handleUpdateUserRole: (courseRegId: number, role: Role) =>
-      dispatch(updateUserRole(courseRegId, role)),
-    handleDeleteUserFromCourse: (courseRegId: number) =>
-      dispatch(deleteUserCourseRegistration(courseRegId))
-  };
-
-  const addUserPanelProps = {
-    handleAddNewUsersToCourse: (users: UsernameRoleGroup[], provider: string) =>
-      dispatch(addNewUsersToCourse(users, provider))
-  };
-
-  const addStoriesUserPanelProps = {
-    handleAddNewUsersToCourse: (users: NameUsernameRole[], provider: string) =>
-      dispatch(addNewStoriesUsersToCourse(users, provider))
-  };
-
   // Handler to submit changes to Course Configration and Assessment Configuration to the backend.
   // Changes made to users are handled separately.
-  const submitHandler = () => {
+  const submitHandler = useCallback(() => {
     if (hasChangesCourseConfig) {
       dispatch(updateCourseConfig(courseConfiguration));
       setHasChangesCourseConfig(false);
     }
-    if (assessmentConfigsToDelete.length > 0) {
-      assessmentConfigsToDelete.forEach(assessmentConfig => {
-        dispatch(deleteAssessmentConfig(assessmentConfig));
-      });
-      setAssessmentConfigsToDelete([]);
-    }
+    assessmentConfigsToDelete.forEach(assessmentConfig => {
+      dispatch(deleteAssessmentConfig(assessmentConfig));
+    });
+    setAssessmentConfigsToDelete([]);
     if (hasChangesAssessmentConfig) {
       // Reset the store first so that old props do not propagate down and cause a flicker
       dispatch(setAssessmentConfigurations([]));
@@ -161,7 +149,13 @@ const AdminPanel: React.FC = () => {
       dispatch(updateAssessmentConfigs(assessmentConfig.current!));
       setHasChangesAssessmentConfig(false);
     }
-  };
+  }, [
+    assessmentConfigsToDelete,
+    courseConfiguration,
+    dispatch,
+    hasChangesAssessmentConfig,
+    hasChangesCourseConfig
+  ]);
 
   const data = (
     <div className="admin-panel">
@@ -189,12 +183,43 @@ const AdminPanel: React.FC = () => {
             </>
           }
         />
-        <Tab id="users" title="Users" panel={<UserConfigPanel {...userConfigPanelProps} />} />
-        <Tab id="add-users" title="Add Users" panel={<AddUserPanel {...addUserPanelProps} />} />
+        <Tab
+          id="users"
+          title="Users"
+          panel={
+            <UserConfigPanel
+              courseRegId={session.courseRegId}
+              userCourseRegistrations={session.userCourseRegistrations}
+              handleUpdateUserRole={(courseRegId, role) =>
+                dispatch(updateUserRole(courseRegId, role))
+              }
+              handleDeleteUserFromCourse={(courseRegId: number) =>
+                dispatch(deleteUserCourseRegistration(courseRegId))
+              }
+            />
+          }
+        />
+        <Tab
+          id="add-users"
+          title="Add Users"
+          panel={
+            <AddUserPanel
+              handleAddNewUsersToCourse={(users, provider) =>
+                dispatch(addNewUsersToCourse(users, provider))
+              }
+            />
+          }
+        />
         <Tab
           id="add-stories-users"
           title="Add Stories Users"
-          panel={<AddStoriesUserPanel {...addStoriesUserPanelProps} />}
+          panel={
+            <AddStoriesUserPanel
+              handleAddNewUsersToCourse={(users, provider) =>
+                dispatch(addNewStoriesUsersToCourse(users, provider))
+              }
+            />
+          }
         />
         <Tab id="notification-config" title="Notifications" panel={<NotificationConfigPanel />} />
       </Tabs>
