@@ -11,7 +11,7 @@ const compat = new FlatCompat({
 
 module.exports = tseslint.config(
   { ignores: ['eslint.config.js'] },
-  eslint.configs.recommended,
+  // eslint.configs.recommended,
   ...tseslint.configs.recommended,
   ...compat.config({
     extends: [
