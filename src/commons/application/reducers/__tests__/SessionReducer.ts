@@ -288,14 +288,14 @@ test('UPDATE_ASSESSMENT works correctly in inserting assessment', () => {
     type: UPDATE_ASSESSMENT,
     payload: assessmentTest1
   } as const;
-  const resultMap: Map<number, Assessment> = SessionsReducer(defaultSession, action).assessments;
+  const resultMap = SessionsReducer(defaultSession, action).assessments;
 
-  expect(resultMap.get(assessmentTest1.id)).toEqual(assessmentTest1);
+  expect(resultMap[assessmentTest1.id]).toEqual(assessmentTest1);
 });
 
 test('UPDATE_ASSESSMENT works correctly in inserting assessment and retains old data', () => {
-  const assessments = new Map<number, Assessment>();
-  assessments.set(assessmentTest3.id, assessmentTest3);
+  const assessments: { [id: number]: Assessment } = {};
+  assessments[assessmentTest3.id] = assessmentTest3;
 
   const newDefaultSession: SessionState = {
     ...defaultSession,
@@ -306,15 +306,15 @@ test('UPDATE_ASSESSMENT works correctly in inserting assessment and retains old 
     type: UPDATE_ASSESSMENT,
     payload: assessmentTest2
   } as const;
-  const resultMap: Map<number, Assessment> = SessionsReducer(newDefaultSession, action).assessments;
+  const resultMap = SessionsReducer(newDefaultSession, action).assessments;
 
-  expect(resultMap.get(assessmentTest2.id)).toEqual(assessmentTest2);
-  expect(resultMap.get(assessmentTest3.id)).toEqual(assessmentTest3);
+  expect(resultMap[assessmentTest2.id]).toEqual(assessmentTest2);
+  expect(resultMap[assessmentTest3.id]).toEqual(assessmentTest3);
 });
 
 test('UPDATE_ASSESSMENT works correctly in updating assessment', () => {
-  const assessments = new Map<number, Assessment>();
-  assessments.set(assessmentTest1.id, assessmentTest1);
+  const assessments: { [id: number]: Assessment } = {};
+  assessments[assessmentTest1.id] = assessmentTest1;
 
   const newDefaultSession = {
     ...defaultSession,
@@ -324,9 +324,9 @@ test('UPDATE_ASSESSMENT works correctly in updating assessment', () => {
     type: UPDATE_ASSESSMENT,
     payload: assessmentTest2
   } as const;
-  const resultMap: Map<number, Assessment> = SessionsReducer(newDefaultSession, action).assessments;
+  const resultMap = SessionsReducer(newDefaultSession, action).assessments;
 
-  expect(resultMap.get(assessmentTest2.id)).toEqual(assessmentTest2);
+  expect(resultMap[assessmentTest2.id]).toEqual(assessmentTest2);
 });
 
 // Test data for UPDATE_ASSESSMENT_OVERVIEWS
@@ -475,15 +475,15 @@ test('UPDATE_GRADING works correctly in inserting gradings', () => {
     }
   } as const;
 
-  const gradingMap: Map<number, GradingQuery> = SessionsReducer(defaultSession, action).gradings;
-  expect(gradingMap.get(submissionId)).toEqual(gradingTest1);
+  const gradingMap = SessionsReducer(defaultSession, action).gradings;
+  expect(gradingMap[submissionId]).toEqual(gradingTest1);
 });
 
 test('UPDATE_GRADING works correctly in inserting gradings and retains old data', () => {
   const submissionId1 = 45;
   const submissionId2 = 56;
-  const gradings = new Map<number, GradingQuery>();
-  gradings.set(submissionId1, gradingTest1);
+  const gradings: { [id: number]: GradingQuery } = {};
+  gradings[submissionId1] = gradingTest1;
 
   const newDefaultSession = {
     ...defaultSession,
@@ -498,15 +498,15 @@ test('UPDATE_GRADING works correctly in inserting gradings and retains old data'
     }
   } as const;
 
-  const gradingMap: Map<number, GradingQuery> = SessionsReducer(newDefaultSession, action).gradings;
-  expect(gradingMap.get(submissionId1)).toEqual(gradingTest1);
-  expect(gradingMap.get(submissionId2)).toEqual(gradingTest2);
+  const gradingMap = SessionsReducer(newDefaultSession, action).gradings;
+  expect(gradingMap[submissionId1]).toEqual(gradingTest1);
+  expect(gradingMap[submissionId2]).toEqual(gradingTest2);
 });
 
 test('UPDATE_GRADING works correctly in updating gradings', () => {
   const submissionId = 23;
-  const gradings = new Map<number, GradingQuery>();
-  gradings.set(submissionId, gradingTest1);
+  const gradings: { [id: number]: GradingQuery } = {};
+  gradings[submissionId] = gradingTest1;
   const newDefaultSession = {
     ...defaultSession,
     gradings
@@ -520,8 +520,8 @@ test('UPDATE_GRADING works correctly in updating gradings', () => {
     }
   } as const;
 
-  const gradingMap: Map<number, GradingQuery> = SessionsReducer(newDefaultSession, action).gradings;
-  expect(gradingMap.get(submissionId)).toEqual(gradingTest2);
+  const gradingMap = SessionsReducer(newDefaultSession, action).gradings;
+  expect(gradingMap[submissionId]).toEqual(gradingTest2);
 });
 
 // UPDATE_GRADING_OVERVIEWS test data

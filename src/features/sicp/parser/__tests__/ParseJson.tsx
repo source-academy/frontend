@@ -55,8 +55,8 @@ const processTag = (tag: string, obj: JsonType) => {
 };
 
 const testTagSuccessful = (obj: JsonType, tag: string, text: string = '') => {
-  test(tag + ' ' + text + ' successful', () => {
-    const tree = renderTreeJson(<BrowserRouter>{processTag(tag, obj)}</BrowserRouter>);
+  test(tag + ' ' + text + ' successful', async () => {
+    const tree = await renderTreeJson(<BrowserRouter>{processTag(tag, obj)}</BrowserRouter>);
     expect(tree).toMatchSnapshot();
   });
 };
@@ -323,9 +323,9 @@ describe('Parse reference', () => {
 });
 
 describe('Parse object', () => {
-  test('successful', () => {
+  test('successful', async () => {
     const obj = mockData['text'];
-    const tree = renderTreeJson(parseObj(obj, 0, mockRef));
+    const tree = await renderTreeJson(parseObj(obj, 0, mockRef));
     expect(tree).toMatchSnapshot();
   });
 
@@ -335,29 +335,29 @@ describe('Parse object', () => {
     expect(() => parseObj(obj, 0, mockRef)).toThrowError(ParseJsonError);
   });
 
-  test('no tag', () => {
+  test('no tag', async () => {
     const obj = { child: [mockData['text']] };
-    const tree = renderTreeJson(parseObj(obj, 0, mockRef));
+    const tree = await renderTreeJson(parseObj(obj, 0, mockRef));
     expect(tree).toMatchSnapshot();
   });
 });
 
 describe('Parse array', () => {
-  test('no child successful', () => {
+  test('no child successful', async () => {
     const arr = [] as JsonType[];
-    const tree = renderTreeJson(parseArr(arr, mockRef));
+    const tree = await renderTreeJson(parseArr(arr, mockRef));
     expect(tree).toMatchSnapshot();
   });
 
-  test('one child successful', () => {
+  test('one child successful', async () => {
     const arr = [mockData['text']];
-    const tree = renderTreeJson(parseArr(arr, mockRef));
+    const tree = await renderTreeJson(parseArr(arr, mockRef));
     expect(tree).toMatchSnapshot();
   });
 
-  test('two child successful', () => {
+  test('two child successful', async () => {
     const arr = [mockData['text'], mockData['text']];
-    const tree = renderTreeJson(parseArr(arr, mockRef));
+    const tree = await renderTreeJson(parseArr(arr, mockRef));
     expect(tree).toMatchSnapshot();
   });
 });

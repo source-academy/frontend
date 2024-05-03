@@ -80,7 +80,7 @@ const GradingWorkspace: React.FC<Props> = props => {
     SideContentType.grading
   );
 
-  const grading = useTypedSelector(state => state.session.gradings.get(props.submissionId));
+  const grading = useTypedSelector(state => state.session.gradings[props.submissionId]);
   const courseId = useTypedSelector(state => state.session.courseId);
   const {
     autogradingResults,
