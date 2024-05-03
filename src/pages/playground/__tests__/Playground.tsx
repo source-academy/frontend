@@ -1,6 +1,5 @@
 import { Router } from '@remix-run/router';
 import { act, render } from '@testing-library/react';
-import { require as acequire } from 'ace-builds';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import { Chapter } from 'js-slang/dist/types';
 import { Provider } from 'react-redux';
@@ -20,13 +19,6 @@ import Playground, { handleHash } from '../Playground';
 // Mock inspector
 (window as any).Inspector = jest.fn();
 (window as any).Inspector.highlightClean = jest.fn();
-
-jest.mock('ace-builds', () => ({
-  ...jest.requireActual('ace-builds'),
-  require: jest.fn()
-}));
-
-const acequireMock = acequire as jest.Mock;
 
 // Using @testing-library/react to render snapshot instead of react-test-renderer
 // as the useRefs require the notion of React DOM
@@ -61,10 +53,6 @@ describe('Playground tests', () => {
         )
       }
     ];
-    acequireMock.mockReturnValue({
-      Mode: jest.fn(),
-      setCompleters: jest.fn()
-    });
   });
 
   test('Playground renders correctly', async () => {
