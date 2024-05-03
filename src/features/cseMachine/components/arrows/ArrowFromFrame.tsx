@@ -16,7 +16,7 @@ export class ArrowFromFrame extends GenericArrow<Frame, Frame> {
       steps.push((x, y) => [to.x() + Config.FramePaddingX, y]);
     }
 
-    steps.push((x, y) => [to.x() + Config.FramePaddingX, to.y() + to.height()]);
+    steps.push(() => [to.x() + Config.FramePaddingX, to.y() + to.height()]);
     return steps;
   }
 }

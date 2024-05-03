@@ -28,9 +28,9 @@ describe('NavigationBarLangSelectButton', () => {
     user = userEvent.setup();
   });
 
-  it('should render correctly', () => {
+  it('should render correctly', async () => {
     const { app } = createAppWithStore();
-    const wrapper = renderTreeJson(app);
+    const wrapper = await renderTreeJson(app);
     expect(wrapper).toMatchSnapshot();
   });
 

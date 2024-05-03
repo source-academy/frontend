@@ -97,8 +97,8 @@ const SideContentContestVoting: React.FC<SideContentContestVotingProps> = ({
     [currentDraggedItem]
   );
 
-  const contestEntryRefs = useRef({});
-  const tierContainerRefs = useRef({});
+  const contestEntryRefs = useRef<Record<number, HTMLDivElement | null>>({});
+  const tierContainerRefs = useRef<Record<number, HTMLDivElement | null>>({});
 
   const tierBoard = useMemo(() => {
     return TIERS.map((tier, index) => (

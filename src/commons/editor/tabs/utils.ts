@@ -27,7 +27,9 @@ export const getShortestUniqueFilePaths = (originalFilePaths: string[]): string[
   // Split each original file path into path segments and store the mapping from file
   // path to path segments for O(1) lookup. Since we only deal with the BrowserFS file
   // system, the path separator will always be '/'.
-  const filePathSegments: Record<string, string[]> = originalFilePaths.reduce(
+  const filePathSegments: Record<string, string[]> = originalFilePaths.reduce<
+    typeof filePathSegments
+  >(
     (segments, filePath) => ({
       ...segments,
       // It is necessary to remove empty segments to deal with the very first '/' in
@@ -48,15 +50,18 @@ export const getShortestUniqueFilePaths = (originalFilePaths: string[]): string[
     // to any original file path which transforms into it.
     const shortenedToOriginalFilePaths: Record<string, string[]> = Object.entries(
       filePathSegments
-    ).reduce((filePaths, [originalFilePath, filePathSegments]) => {
-      // Note that if there are fewer path segments than the number being sliced,
-      // all of the path segments will be returned without error.
-      const shortenedFilePath = '/' + filePathSegments.slice(-numOfPathSegments).join('/');
-      return {
-        ...filePaths,
-        [shortenedFilePath]: (filePaths[shortenedFilePath] ?? []).concat(originalFilePath)
-      };
-    }, {});
+    ).reduce<typeof shortenedToOriginalFilePaths>(
+      (filePaths, [originalFilePath, filePathSegments]) => {
+        // Note that if there are fewer path segments than the number being sliced,
+        // all of the path segments will be returned without error.
+        const shortenedFilePath = '/' + filePathSegments.slice(-numOfPathSegments).join('/');
+        return {
+          ...filePaths,
+          [shortenedFilePath]: (filePaths[shortenedFilePath] ?? []).concat(originalFilePath)
+        };
+      },
+      {}
+    );
     // Each shortened file path that only has a single corresponding original file
     // path is added to the unique shortened file paths record and their entry in
     // the file path segments record is removed to prevent further processing.
