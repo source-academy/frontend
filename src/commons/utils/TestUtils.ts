@@ -1,4 +1,4 @@
-import { waitFor } from '@testing-library/react';
+import { act } from '@testing-library/react';
 import React from 'react';
 import renderer from 'react-test-renderer';
 import { createRenderer } from 'react-test-renderer/shallow';
@@ -9,12 +9,15 @@ export const shallowRender = (element: React.ReactElement) => {
   return renderer.getRenderOutput();
 };
 
-export const renderTreeJson = (element: React.ReactElement) => {
-  return waitFor(() => renderer.create(element).toJSON());
+export const renderTree = async (element: React.ReactElement) => {
+  const app = renderer.create(element);
+  await act(() => app);
+  return app;
 };
 
-export const renderTree = (element: React.ReactElement) => {
-  return waitFor(() => renderer.create(element));
+export const renderTreeJson = async (element: React.ReactElement) => {
+  const app = await renderTree(element);
+  return app.toJSON();
 };
 
 /**
