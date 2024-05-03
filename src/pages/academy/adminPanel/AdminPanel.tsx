@@ -2,8 +2,7 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-balham.css';
 
 import { Button, Divider, H1, Intent, Tab, Tabs } from '@blueprintjs/core';
-import { cloneDeep } from 'lodash';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSession } from 'src/commons/utils/Hooks';
 import {
@@ -18,17 +17,17 @@ import {
   fetchAssessmentConfigs,
   fetchCourseConfig,
   fetchNotificationConfigs,
-  setAssessmentConfigurations,
   updateAssessmentConfigs,
   updateCourseConfig,
   updateUserRole
 } from '../../../commons/application/actions/SessionActions';
 import { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
-import { AssessmentConfiguration } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import AddStoriesUserPanel from './subcomponents/AddStoriesUserPanel';
 import AddUserPanel from './subcomponents/AddUserPanel';
-import AssessmentConfigPanel from './subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
+import AssessmentConfigPanel, {
+  ImperativeAssessmentConfigPanel
+} from './subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';
 import NotificationConfigPanel from './subcomponents/NotificationConfigPanel';
 import UserConfigPanel from './subcomponents/userConfigPanel/UserConfigPanel';
@@ -50,24 +49,7 @@ const AdminPanel: React.FC = () => {
   const [courseConfiguration, setCourseConfiguration] = useState(defaultCourseConfig);
 
   const dispatch = useDispatch();
-
   const session = useSession();
-
-  /**
-   * Mutable ref to track the assessment configuration form state instead of useState. This is
-   * because ag-grid does not update the cellRendererParams whenever there is an update in rowData,
-   * leading to a stale closure problem where the handlers in AssessmentConfigPanel capture the old
-   * value of assessmentConfig.
-   *
-   * Also, useState causes a flicker in ag-grid during rerenders. Thus we use this mutable ref and
-   * ag-grid's API to update cell values instead.
-   */
-  const assessmentConfig = React.useRef(session.assessmentConfigurations);
-
-  // Tracks the assessment configurations to be deleted in the backend when the save button is clicked
-  const [assessmentConfigsToDelete, setAssessmentConfigsToDelete] = React.useState<
-    AssessmentConfiguration[]
-  >([]);
 
   useEffect(() => {
     dispatch(fetchCourseConfig());
@@ -87,9 +69,6 @@ const AdminPanel: React.FC = () => {
       enableStories: session.enableStories,
       moduleHelpText: session.moduleHelpText
     });
-
-    // IMPT: To prevent mutation of props
-    assessmentConfig.current = cloneDeep(session.assessmentConfigurations);
   }, [
     session.assessmentConfigurations,
     session.courseName,
@@ -102,6 +81,8 @@ const AdminPanel: React.FC = () => {
     session.viewable
   ]);
 
+  const tableRef = useRef<ImperativeAssessmentConfigPanel>(null);
+
   const courseConfigPanelProps = {
     courseConfiguration: courseConfiguration,
     setCourseConfiguration: (courseConfig: UpdateCourseConfiguration) => {
@@ -110,26 +91,6 @@ const AdminPanel: React.FC = () => {
     }
   };
 
-  const assessmentConfigPanelProps = useMemo(() => {
-    return {
-      // Would have been loaded by the useEffect above
-      assessmentConfig: assessmentConfig as React.MutableRefObject<AssessmentConfiguration[]>,
-      setAssessmentConfig: (val: AssessmentConfiguration[]) => {
-        assessmentConfig.current = val;
-        setHasChangesAssessmentConfig(true);
-      },
-      setAssessmentConfigsToDelete: (deletedElement: AssessmentConfiguration) => {
-        // If it is not a newly created row that is yet to be persisted in the backend
-        if (deletedElement.assessmentConfigId !== -1) {
-          const temp = [...assessmentConfigsToDelete];
-          temp.push(deletedElement);
-          setAssessmentConfigsToDelete(temp);
-        }
-      },
-      setHasChangesAssessmentConfig: setHasChangesAssessmentConfig
-    };
-  }, [assessmentConfigsToDelete]);
-
   // Handler to submit changes to Course Configration and Assessment Configuration to the backend.
   // Changes made to users are handled separately.
   const submitHandler = useCallback(() => {
@@ -137,24 +98,23 @@ const AdminPanel: React.FC = () => {
       dispatch(updateCourseConfig(courseConfiguration));
       setHasChangesCourseConfig(false);
     }
-    assessmentConfigsToDelete.forEach(assessmentConfig => {
-      dispatch(deleteAssessmentConfig(assessmentConfig));
-    });
-    setAssessmentConfigsToDelete([]);
+    const tableState = tableRef.current?.getData() ?? [];
+    const currentConfigs = session.assessmentConfigurations ?? [];
+    const currentIds = new Set(tableState.map(config => config.assessmentConfigId));
+    const configsToDelete = currentConfigs.filter(
+      config => !currentIds.has(config.assessmentConfigId)
+    );
+    configsToDelete.forEach(config => dispatch(deleteAssessmentConfig(config)));
     if (hasChangesAssessmentConfig) {
-      // Reset the store first so that old props do not propagate down and cause a flicker
-      dispatch(setAssessmentConfigurations([]));
-
-      // assessmentConfig.current will exist after the first load
-      dispatch(updateAssessmentConfigs(assessmentConfig.current!));
+      dispatch(updateAssessmentConfigs(tableState));
       setHasChangesAssessmentConfig(false);
     }
   }, [
-    assessmentConfigsToDelete,
     courseConfiguration,
     dispatch,
     hasChangesAssessmentConfig,
-    hasChangesCourseConfig
+    hasChangesCourseConfig,
+    session.assessmentConfigurations
   ]);
 
   const data = (
@@ -169,9 +129,14 @@ const AdminPanel: React.FC = () => {
             <>
               <CourseConfigPanel {...courseConfigPanelProps} />
               <Divider />
-              <AssessmentConfigPanel {...assessmentConfigPanelProps} />
+              <AssessmentConfigPanel
+                ref={tableRef}
+                initialConfigs={session.assessmentConfigurations ?? []}
+                setHasChangesAssessmentConfig={setHasChangesAssessmentConfig}
+              />
               <Button
                 text="Save"
+                disabled={!hasChangesCourseConfig && !hasChangesAssessmentConfig}
                 style={{ marginTop: '15px' }}
                 intent={
                   hasChangesCourseConfig || hasChangesAssessmentConfig
