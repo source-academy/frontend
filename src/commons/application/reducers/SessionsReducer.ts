@@ -9,6 +9,7 @@ import { SourceActionType } from '../../utils/ActionsHelper';
 import { logOut } from '../actions/CommonsActions';
 import {
   removeGitHubOctokitObjectAndAccessToken,
+  removeGoogleUserAndAccessToken,
   setAdminPanelCourseRegistrations,
   setAssessmentConfigurations,
   setConfigurableNotificationConfigs,
@@ -16,6 +17,7 @@ import {
   setCourseRegistration,
   setGitHubAccessToken,
   setGitHubOctokitObject,
+  setGoogleAccessToken,
   setGoogleUser,
   setNotificationConfigs,
   setTokens,
@@ -40,17 +42,7 @@ export const SessionsReducer: Reducer<SessionState, SourceActionType> = (
   state = newSessionsReducer(state, action);
   return state;
 };
-// case SET_GOOGLE_ACCESS_TOKEN:
-//   return {
-//     ...state,
-//     googleAccessToken: action.payload
-//   };
-// case REMOVE_GOOGLE_USER_AND_ACCESS_TOKEN:
-//   return {
-//     ...state,
-//     googleUser: undefined,
-//     googleAccessToken: undefined
-//   };
+
 const newSessionsReducer = createReducer(defaultSession, builder => {
   builder
     .addCase(logOut, () => {
@@ -121,6 +113,13 @@ const newSessionsReducer = createReducer(defaultSession, builder => {
     })
     .addCase(remoteExecUpdateSession, (state, action) => {
       state.remoteExecutionSession = action.payload;
+    })
+    .addCase(setGoogleAccessToken, (state, action) => {
+      state.googleAccessToken = action.payload;
+    })
+    .addCase(removeGoogleUserAndAccessToken, (state, action) => {
+      state.googleUser = undefined;
+      state.googleAccessToken = undefined;
     })
     .addCase(removeGitHubOctokitObjectAndAccessToken, (state, action) => {
       state.githubOctokitObject = { octokit: undefined };
