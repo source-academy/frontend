@@ -53,7 +53,7 @@
     "i18next": "^23.11.2",
     "i18next-browser-languagedetector": "^7.2.1",
     "java-slang": "^1.0.13",
-    "js-slang": "^1.0.73",
+    "js-slang": "^1.0.74",
     "js-yaml": "^4.1.0",
     "konva": "^9.2.0",
     "lodash": "^4.17.21",
