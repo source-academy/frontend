@@ -1,6 +1,8 @@
 import { TreeNodeInfo } from '@blueprintjs/core';
 import { set } from 'lodash';
 
+type Tree = Record<any, any> | string[] | any;
+
 /**
  * This function takes a list of filepaths and returns blueprint core tree nodes.
  * Each node represents a file / folder.
@@ -21,7 +23,7 @@ export function convertAssetPathsToTree(
   iconRenderer: (pathName: string) => JSX.Element,
   rootFolders: string[] = []
 ): TreeNodeInfo[] {
-  const assetObj = {};
+  const assetObj: Tree = {};
   assetPaths.forEach(assetPath => set(assetObj, assetPath.split('/'), 'FILE'));
   rootFolders.forEach(folder => {
     if (!assetObj[folder] || assetObj[folder] === 'FILE') {
@@ -29,10 +31,7 @@ export function convertAssetPathsToTree(
     }
   });
 
-  const convertAssetObjectsToTree = (
-    parentFolders: string[],
-    assetObj: object | Array<string>
-  ): TreeNodeInfo[] => {
+  const convertAssetObjectsToTree = (parentFolders: string[], assetObj: Tree): TreeNodeInfo[] => {
     return Object.keys(assetObj).map(file => {
       const shortPath = '/' + parentFolders.join('/') + '/' + file;
       return {

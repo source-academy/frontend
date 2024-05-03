@@ -129,12 +129,12 @@ export type SessionState = {
   readonly sessionId: number;
 
   readonly assessmentOverviews?: AssessmentOverview[];
-  readonly assessments: Map<number, Assessment>;
+  readonly assessments: { [id: number]: Assessment };
   readonly gradingOverviews?: GradingOverviews;
   readonly students?: User[];
   readonly teamFormationOverview?: TeamFormationOverview;
   readonly teamFormationOverviews?: TeamFormationOverview[];
-  readonly gradings: Map<number, GradingQuery>;
+  readonly gradings: { [id: number]: GradingQuery };
   readonly notifications: Notification[];
   readonly googleUser?: string;
   readonly googleAccessToken?: string;

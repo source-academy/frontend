@@ -1,4 +1,4 @@
-import { Icon } from '@blueprintjs/core';
+import { Button, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { useFullscreen } from '@mantine/hooks';
 import React from 'react';
@@ -69,6 +69,8 @@ function Game() {
 
     if (window.screen.orientation) {
       if (!isFullscreen) {
+        // @ts-expect-error: lock is not defined in the type definition
+        // as it is not suppored in some browsers (notably Firefox)
         window.screen.orientation.lock('landscape');
       } else {
         window.screen.orientation.unlock();
@@ -93,51 +95,53 @@ function Game() {
 
   // Logic for the fullscreen button to dynamically adjust its size, position and padding
   // based on the size of the game display.
-  const [iconSize, setIconSize] = React.useState(0);
   const [iconLeft, setIconLeft] = React.useState('0px');
   const [iconPadding, setIconPadding] = React.useState('0px');
 
+  const handleResize = React.useCallback(() => {
+    if (gameDisplayRef.current) {
+      const aspectRatio = 16 / 9;
+      const height = gameDisplayRef.current.offsetHeight;
+      const width = gameDisplayRef.current.offsetWidth;
+      const padding = height / 50;
+      const leftOffset =
+        isFullscreen || height * aspectRatio > width ? 0 : (width - height * aspectRatio) / 2;
+      setIconPadding(`${padding}px`);
+      setIconLeft(`${leftOffset}px`);
+    }
+  }, [isFullscreen]);
+
+  // When exiting fullscreen, the browser might not have completed the transition
+  // at the time handleResize is called, so the height of gameDisplayRef.current
+  // is still the fullscreen height.
+  // To fix this, we delay handleResize by 100ms.
+  const delayedHandleResize = React.useCallback(() => {
+    setTimeout(handleResize, 100);
+  }, [handleResize]);
+
   React.useEffect(() => {
-    const handleResize = () => {
-      if (gameDisplayRef.current) {
-        const aspectRatio = 16 / 9;
-        const height = gameDisplayRef.current.offsetHeight;
-        const width = gameDisplayRef.current.offsetWidth;
-        const size = height / 40;
-        const padding = height / 50;
-        const leftOffset =
-          isFullscreen || height * aspectRatio > width ? 0 : (width - height * aspectRatio) / 2;
-        setIconSize(size);
-        setIconPadding(`${padding}px`);
-        setIconLeft(`${leftOffset}px`);
-      }
-    };
-
-    // When exiting fullscreen, the browser might not have completed the transition
-    // at the time handleResize is called, so the height of gameDisplayRef.current
-    // is still the fullscreen height.
-    // To fix this, we delay handleResize by 100ms.
-    const delayedHandleResize = () => {
-      setTimeout(handleResize, 100);
-    };
-
     window.addEventListener('resize', delayedHandleResize);
     delayedHandleResize();
 
     return () => window.removeEventListener('resize', delayedHandleResize);
-  }, [isFullscreen]);
+  }, [delayedHandleResize]);
 
   return (
     <>
       <div id="game-display" ref={setGameDisplayRefs}>
-        <Icon
-          id="fullscreen-button"
-          icon={isFullscreen ? IconNames.MINIMIZE : IconNames.FULLSCREEN}
-          color="white"
-          htmlTitle={isFullscreen ? 'Exit full screen' : 'Full screen'}
-          size={iconSize}
-          onClick={enhancedToggleFullscreen}
-          style={{ left: iconLeft, padding: iconPadding }}
+        <Tooltip
+          className="fullscreen-button"
+          content={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+          portalContainer={gameDisplayRef.current || undefined}
+          renderTarget={({ isOpen, ...targetProps }) => (
+            <Button
+              {...targetProps}
+              minimal
+              icon={isFullscreen ? IconNames.MINIMIZE : IconNames.MAXIMIZE}
+              onClick={enhancedToggleFullscreen}
+              style={{ left: iconLeft, padding: iconPadding }}
+            />
+          )}
         />
       </div>
       {isTestStudent && (
