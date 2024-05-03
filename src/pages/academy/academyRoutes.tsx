@@ -88,7 +88,14 @@ const staffRoutes: RouteObject[] = [
   { path: `teamformation/edit/${teamRegExp}`, lazy: TeamFormationForm },
   { path: 'teamformation/import', lazy: TeamFormationImport },
   { path: 'dashboard', lazy: Dashboard }
-].map(r => new GuardedRoute(r).check(s => s.session.role !== Role.Student, notFoundPath).build());
+].map(r =>
+  new GuardedRoute(r)
+    .check(s => {
+      const role = s.session.role;
+      return role === Role.Staff || role === Role.Admin;
+    }, notFoundPath)
+    .build()
+);
 
 const AdminPanel = () => import('./adminPanel/AdminPanel');
 
