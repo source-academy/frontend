@@ -82,6 +82,9 @@ const AdminPanel: React.FC = () => {
   ]);
 
   const tableRef = useRef<ImperativeAssessmentConfigPanel>(null);
+  useEffect(() => {
+    tableRef.current?.resetData();
+  }, [session.assessmentConfigurations]);
 
   const courseConfigPanelProps = {
     courseConfiguration: courseConfiguration,
