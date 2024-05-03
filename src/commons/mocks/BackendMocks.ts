@@ -1,5 +1,5 @@
 import { SagaIterator } from 'redux-saga';
-import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { put, takeEvery } from 'redux-saga/effects';
 
 import { FETCH_GROUP_GRADING_SUMMARY } from '../../features/dashboard/DashboardTypes';
 // import {
@@ -7,38 +7,38 @@ import { FETCH_GROUP_GRADING_SUMMARY } from '../../features/dashboard/DashboardT
 //   GradingQuery,
 //   GradingQuestion
 // } from '../../features/grading/GradingTypes';
-import {
-  OverallState
-  // Role,
-  // SALanguage,
-  // styliseSublanguage,
-  // SupportedLanguage
-} from '../application/ApplicationTypes';
+// import {
+//   OverallState
+//   // Role,
+//   // SALanguage,
+//   // styliseSublanguage,
+//   // SupportedLanguage
+// } from '../application/ApplicationTypes';
 // import {
 //   AdminPanelCourseRegistration,
 //   Tokens,
 // } from '../application/types/SessionTypes';
-import {
-  AssessmentOverview,
-  AssessmentStatuses,
-  FETCH_ASSESSMENT_OVERVIEWS,
-  // ProgressStatuses,
-  // Question,
-  SUBMIT_ASSESSMENT
-} from '../assessment/AssessmentTypes';
+// import {
+//   AssessmentOverview,
+//   AssessmentStatuses,
+//   // FETCH_ASSESSMENT_OVERVIEWS,
+//   // ProgressStatuses,
+//   // Question,
+//   // SUBMIT_ASSESSMENT
+// } from '../assessment/AssessmentTypes';
 // import {
 //   Notification,
 //   NotificationFilterFunction
 // } from '../notificationBadge/NotificationBadgeTypes';
 // import { routerNavigate } from '../sagas/BackendSaga';
 import { actions } from '../utils/ActionsHelper';
-import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
+// import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
 // import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import {
-  // mockAssessmentConfigurations,
-  mockAssessmentOverviews
-  // mockAssessments
-} from './AssessmentMocks';
+// import {
+//   // mockAssessmentConfigurations,
+//   mockAssessmentOverviews
+//   // mockAssessments
+// } from './AssessmentMocks';
 import { mockGradingSummary } from './GradingMocks';
 // import {
 //   mockBulkUploadTeam,
@@ -101,9 +101,9 @@ export function* mockBackendSaga(): SagaIterator {
   //   yield put(actions.setCourseConfiguration(courseConfiguration));
   // });
 
-  yield takeEvery(FETCH_ASSESSMENT_OVERVIEWS, function* () {
-    yield put(actions.updateAssessmentOverviews([...mockAssessmentOverviews]));
-  });
+  // yield takeEvery(FETCH_ASSESSMENT_OVERVIEWS, function* () {
+  //   yield put(actions.updateAssessmentOverviews([...mockAssessmentOverviews]));
+  // });
 
   // yield takeEvery(FETCH_ASSESSMENT, function* (action: ReturnType<typeof actions.fetchAssessment>) {
   //   const { assessmentId: id } = action.payload;
@@ -136,26 +136,26 @@ export function* mockBackendSaga(): SagaIterator {
   //   return yield put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false));
   // });
 
-  yield takeEvery(
-    SUBMIT_ASSESSMENT,
-    function* (action: ReturnType<typeof actions.submitAssessment>): any {
-      const assessmentId = action.payload;
+  // yield takeEvery(
+  //   SUBMIT_ASSESSMENT,
+  //   function* (action: ReturnType<typeof actions.submitAssessment>): any {
+  //     const assessmentId = action.payload;
 
-      // Update the status of the assessment overview in the store
-      const overviews: AssessmentOverview[] = yield select(
-        (state: OverallState) => state.session.assessmentOverviews
-      );
-      const newOverviews = overviews.map(overview => {
-        if (overview.id === assessmentId) {
-          return { ...overview, status: AssessmentStatuses.submitted };
-        }
-        return overview;
-      });
+  //     // Update the status of the assessment overview in the store
+  //     const overviews: AssessmentOverview[] = yield select(
+  //       (state: OverallState) => state.session.assessmentOverviews
+  //     );
+  //     const newOverviews = overviews.map(overview => {
+  //       if (overview.id === assessmentId) {
+  //         return { ...overview, status: AssessmentStatuses.submitted };
+  //       }
+  //       return overview;
+  //     });
 
-      yield call(showSuccessMessage, 'Submitted!', 2000);
-      return yield put(actions.updateAssessmentOverviews(newOverviews));
-    }
-  );
+  //     yield call(showSuccessMessage, 'Submitted!', 2000);
+  //     return yield put(actions.updateAssessmentOverviews(newOverviews));
+  //   }
+  // );
 
   // yield takeEvery(
   //   FETCH_GRADING_OVERVIEWS,

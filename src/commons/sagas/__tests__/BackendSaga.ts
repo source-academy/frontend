@@ -17,6 +17,7 @@ import {
   fetchAdminPanelCourseRegistrations,
   fetchAssessment,
   fetchAssessmentConfigs,
+  fetchAssessmentOverviews,
   fetchAuth,
   fetchCourseConfig,
   fetchNotifications,
@@ -32,6 +33,7 @@ import {
   setTokens,
   setUser,
   submitAnswer,
+  submitAssessment,
   updateAssessment,
   updateAssessmentConfigs,
   updateAssessmentOverviews,
@@ -62,9 +64,7 @@ import {
   Assessment,
   AssessmentConfiguration,
   AssessmentStatuses,
-  FETCH_ASSESSMENT_OVERVIEWS,
-  Question,
-  SUBMIT_ASSESSMENT
+  Question
 } from '../../assessment/AssessmentTypes';
 import {
   mockAssessmentOverviews,
@@ -565,7 +565,7 @@ describe('Test FETCH_ASSESSMENT_OVERVIEWS action', () => {
       .provide([[call(getAssessmentOverviews, mockTokens), mockAssessmentOverviews]])
       .put(updateAssessmentOverviews(mockAssessmentOverviews))
       .hasFinalState({ session: mockTokens })
-      .dispatch({ type: FETCH_ASSESSMENT_OVERVIEWS })
+      .dispatch({ type: fetchAssessmentOverviews.type })
       .silentRun();
   });
 
@@ -577,7 +577,7 @@ describe('Test FETCH_ASSESSMENT_OVERVIEWS action', () => {
       .call(getAssessmentOverviews, mockTokens)
       .not.put.actionType(updateAssessmentOverviews.type)
       .hasFinalState({ session: mockTokens })
-      .dispatch({ type: FETCH_ASSESSMENT_OVERVIEWS })
+      .dispatch({ type: fetchAssessmentOverviews.type })
       .silentRun();
   });
 });
@@ -784,7 +784,7 @@ describe('Test SUBMIT_ASSESSMENT action', () => {
       .not.call(showWarningMessage)
       .call(showSuccessMessage, 'Submitted!', 2000)
       .put(updateAssessmentOverviews(mockNewOverviews))
-      .dispatch({ type: SUBMIT_ASSESSMENT, payload: mockAssessmentId })
+      .dispatch({ type: submitAssessment.type, payload: mockAssessmentId })
       .silentRun();
     expect(mockStates.session.assessmentOverviews[0].id).toEqual(mockAssessmentId);
     return expect(mockStates.session.assessmentOverviews[0].status).not.toEqual(
@@ -800,7 +800,7 @@ describe('Test SUBMIT_ASSESSMENT action', () => {
       .call(showWarningMessage, "Couldn't reach our servers. Are you online?")
       .not.put.actionType(updateAssessmentOverviews.type)
       .hasFinalState({ session: { ...mockTokens, role: Role.Student } })
-      .dispatch({ type: SUBMIT_ASSESSMENT, payload: 0 })
+      .dispatch({ type: submitAssessment.type, payload: 0 })
       .silentRun();
   });
 
@@ -818,7 +818,7 @@ describe('Test SUBMIT_ASSESSMENT action', () => {
       .not.call(showWarningMessage)
       .call(showSuccessMessage, 'Submitted!', 2000)
       .put(updateAssessmentOverviews(mockNewOverviews))
-      .dispatch({ type: SUBMIT_ASSESSMENT, payload: mockAssessmentId })
+      .dispatch({ type: submitAssessment.type, payload: mockAssessmentId })
       .silentRun();
     expect(mockStates.session.assessmentOverviews[0].id).toEqual(mockAssessmentId);
     return expect(mockStates.session.assessmentOverviews[0].status).not.toEqual(

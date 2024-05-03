@@ -9,8 +9,12 @@ import {
   getAbilityGlow
 } from '../../features/achievement/AchievementConstants';
 import { AchievementStatus, AchievementUser } from '../../features/achievement/AchievementTypes';
-import { fetchAssessment, fetchAssessmentAdmin } from '../application/actions/SessionActions';
-import { Assessment, FETCH_ASSESSMENT_OVERVIEWS } from '../assessment/AssessmentTypes';
+import {
+  fetchAssessment,
+  fetchAssessmentAdmin,
+  fetchAssessmentOverviews
+} from '../application/actions/SessionActions';
+import { Assessment } from '../assessment/AssessmentTypes';
 import { useTypedSelector } from '../utils/Hooks';
 import AchievementCommentCard from './AchievementCommentCard';
 import { prettifyDate } from './utils/DateHelper';
@@ -36,7 +40,7 @@ const AchievementView: React.FC<Props> = ({ focusUuid, userState }) => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch({ type: FETCH_ASSESSMENT_OVERVIEWS });
+    dispatch(fetchAssessmentOverviews());
     if (!assessmentId) {
       return;
     }
