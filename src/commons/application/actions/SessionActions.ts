@@ -1,4 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
+import { createActions } from 'src/commons/redux/utils';
 import {
   paginationToBackendParams,
   unpublishedToBackendParams
@@ -20,247 +21,134 @@ import {
 import { generateOctokitInstance } from '../../utils/GitHubPersistenceHelper';
 import { Role } from '../ApplicationTypes';
 import {
-  ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
-  BULK_UPLOAD_TEAM,
-  CHECK_ANSWER_LAST_MODIFIED_AT,
   CourseRegistration,
-  CREATE_TEAM,
-  DELETE_ASSESSMENT_CONFIG,
-  DELETE_TEAM,
-  DELETE_TIME_OPTIONS,
-  DELETE_USER_COURSE_REGISTRATION,
-  FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
-  FETCH_ASSESSMENT,
-  FETCH_ASSESSMENT_ADMIN,
-  FETCH_ASSESSMENT_CONFIGS,
-  FETCH_ASSESSMENT_OVERVIEWS,
-  FETCH_AUTH,
-  FETCH_CONFIGURABLE_NOTIFICATION_CONFIGS,
-  FETCH_COURSE_CONFIG,
-  FETCH_GRADING,
-  FETCH_GRADING_OVERVIEWS,
-  FETCH_NOTIFICATION_CONFIGS,
-  FETCH_NOTIFICATIONS,
-  FETCH_STUDENTS,
-  FETCH_TEAM_FORMATION_OVERVIEW,
-  FETCH_TEAM_FORMATION_OVERVIEWS,
-  FETCH_TOTAL_XP,
-  FETCH_TOTAL_XP_ADMIN,
-  FETCH_USER_AND_COURSE,
-  LOGIN,
-  LOGIN_GITHUB,
-  LOGOUT_GITHUB,
-  LOGOUT_GOOGLE,
   NotificationConfiguration,
   NotificationPreference,
-  PUBLISH_GRADING,
-  REAUTOGRADE_ANSWER,
-  REAUTOGRADE_SUBMISSION,
-  REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN,
-  SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
-  SET_ASSESSMENT_CONFIGURATIONS,
-  SET_CONFIGURABLE_NOTIFICATION_CONFIGS,
-  SET_COURSE_CONFIGURATION,
-  SET_COURSE_REGISTRATION,
-  SET_GITHUB_ACCESS_TOKEN,
-  SET_GITHUB_OCTOKIT_OBJECT,
-  SET_GOOGLE_USER,
-  SET_NOTIFICATION_CONFIGS,
-  SET_TOKENS,
-  SET_USER,
-  SUBMIT_ANSWER,
-  SUBMIT_ASSESSMENT,
-  SUBMIT_GRADING,
-  SUBMIT_GRADING_AND_CONTINUE,
   TimeOption,
   Tokens,
-  UNPUBLISH_GRADING,
-  UNSUBMIT_SUBMISSION,
   UPDATE_ASSESSMENT,
-  UPDATE_ASSESSMENT_CONFIGS,
-  UPDATE_ASSESSMENT_OVERVIEWS,
-  UPDATE_COURSE_CONFIG,
   UPDATE_COURSE_RESEARCH_AGREEMENT,
-  UPDATE_GRADING,
-  UPDATE_GRADING_OVERVIEWS,
-  UPDATE_LATEST_VIEWED_COURSE,
-  UPDATE_NOTIFICATION_CONFIG,
-  UPDATE_NOTIFICATION_PREFERENCES,
-  UPDATE_NOTIFICATIONS,
-  UPDATE_STUDENTS,
-  UPDATE_TEAM,
-  UPDATE_TEAM_FORMATION_OVERVIEW,
-  UPDATE_TEAM_FORMATION_OVERVIEWS,
-  UPDATE_TIME_OPTIONS,
   UPDATE_TOTAL_XP,
-  UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
   User
 } from '../types/SessionTypes';
 
-export const fetchAuth = createAction(FETCH_AUTH, (code: string, providerId?: string) => ({
-  payload: { code, providerId }
-}));
-
-export const fetchUserAndCourse = createAction(FETCH_USER_AND_COURSE, () => ({ payload: {} }));
-
-export const fetchCourseConfig = createAction(FETCH_COURSE_CONFIG, () => ({ payload: {} }));
-
-export const fetchAssessment = createAction(
-  FETCH_ASSESSMENT,
-  (assessmentId: number, assessmentPassword?: string) => ({
-    payload: { assessmentId, assessmentPassword }
-  })
-);
-
-export const fetchAssessmentAdmin = createAction(
-  FETCH_ASSESSMENT_ADMIN,
-  (assessmentId: number, courseRegId: number) => ({ payload: { assessmentId, courseRegId } })
-);
-
-export const fetchAssessmentOverviews = createAction(FETCH_ASSESSMENT_OVERVIEWS, () => ({
-  payload: {}
-}));
-
-export const fetchTotalXp = createAction(FETCH_TOTAL_XP, () => ({ payload: {} }));
-
-export const fetchTotalXpAdmin = createAction(FETCH_TOTAL_XP_ADMIN, (courseRegId: number) => ({
-  payload: courseRegId
-}));
-
-export const fetchGrading = createAction(FETCH_GRADING, (submissionId: number) => ({
-  payload: submissionId
-}));
-
-/**
- * @param filterToGroup - param that when set to true, only shows submissions under the group
- * of the grader
- * @param publishedFilter - backend params to filter to unpublished
- * @param pageParams - param that contains offset and pageSize, informing backend about how
- * many entries, starting from what offset, to get
- * @param filterParams - param that contains columnFilters converted into JSON for
- * processing into query parameters
- */
-export const fetchGradingOverviews = createAction(
-  FETCH_GRADING_OVERVIEWS,
-  (
+const newActions = createActions('session', {
+  fetchAuth: (code: string, providerId?: string) => ({ code, providerId }),
+  fetchUserAndCourse: () => ({}),
+  fetchCourseConfig: () => ({}),
+  fetchAssessment: (assessmentId: number, assessmentPassword?: string) => ({
+    assessmentId,
+    assessmentPassword
+  }),
+  fetchAssessmentAdmin: (assessmentId: number, courseRegId: number) => ({
+    assessmentId,
+    courseRegId
+  }),
+  fetchAssessmentOverviews: () => ({}),
+  fetchTotalXp: () => ({}),
+  fetchTotalXpAdmin: (courseRegId: number) => courseRegId,
+  fetchGrading: (submissionId: number) => submissionId,
+  /**
+   * @param filterToGroup - param that when set to true, only shows submissions under the group
+   * of the grader
+   * @param publishedFilter - backend params to filter to unpublished
+   * @param pageParams - param that contains offset and pageSize, informing backend about how
+   * many entries, starting from what offset, to get
+   * @param filterParams - param that contains columnFilters converted into JSON for
+   * processing into query parameters
+   */
+  fetchGradingOverviews: (
     filterToGroup = true,
     publishedFilter = unpublishedToBackendParams(false),
     pageParams = paginationToBackendParams(0, 10),
     filterParams = {}
-  ) => ({ payload: { filterToGroup, publishedFilter, pageParams, filterParams } })
-);
+  ) => ({ filterToGroup, publishedFilter, pageParams, filterParams }),
+  fetchTeamFormationOverviews: (filterToGroup = true) => filterToGroup,
+  fetchStudents: () => ({}),
+  login: (providerId: string) => providerId,
+  logoutGoogle: () => ({}),
+  loginGitHub: () => ({}),
+  logoutGitHub: () => ({}),
+  setTokens: ({ accessToken, refreshToken }: Tokens) => ({ accessToken, refreshToken }),
+  setUser: (user: User) => user,
+  setCourseConfiguration: (courseConfiguration: UpdateCourseConfiguration) => courseConfiguration,
+  setCourseRegistration: (courseRegistration: Partial<CourseRegistration>) => courseRegistration,
+  setAssessmentConfigurations: (assessmentConfigurations: AssessmentConfiguration[]) =>
+    assessmentConfigurations,
+  setConfigurableNotificationConfigs: (notificationConfigs: NotificationConfiguration[]) =>
+    notificationConfigs,
+  setNotificationConfigs: (notificationConfigs: NotificationConfiguration[]) => notificationConfigs,
+  setAdminPanelCourseRegistrations: (courseRegistrations: AdminPanelCourseRegistration[]) =>
+    courseRegistrations,
+  setGoogleUser: (user?: string) => user,
+  setGitHubOctokitObject: (authToken?: string) => generateOctokitInstance(authToken || ''),
+  setGitHubAccessToken: (authToken?: string) => authToken,
+  removeGitHubOctokitObjectAndAccessToken: () => ({}),
+  submitAnswer: (id: number, answer: string | number | ContestEntry[]) => ({ id, answer }),
+  checkAnswerLastModifiedAt: (id: number, lastModifiedAt: string, saveAnswer: Function) => ({
+    id,
+    lastModifiedAt,
+    saveAnswer
+  }),
+  submitAssessment: (id: number) => id,
+  submitGrading: (
+    submissionId: number,
+    questionId: number,
+    xpAdjustment: number = 0,
+    comments?: string
+  ) => ({ submissionId, questionId, xpAdjustment, comments }),
+  submitGradingAndContinue: (
+    submissionId: number,
+    questionId: number,
+    xpAdjustment: number = 0,
+    comments?: string
+  ) => ({ submissionId, questionId, xpAdjustment, comments }),
+  reautogradeSubmission: (submissionId: number) => submissionId,
+  reautogradeAnswer: (submissionId: number, questionId: number) => ({ submissionId, questionId }),
+  updateAssessmentOverviews: (overviews: AssessmentOverview[]) => overviews
+});
 
-export const fetchTeamFormationOverviews = createAction(
-  FETCH_TEAM_FORMATION_OVERVIEWS,
-  (filterToGroup = true) => ({ payload: filterToGroup })
-);
-
-export const fetchStudents = createAction(FETCH_STUDENTS, () => ({ payload: {} }));
-
-export const login = createAction(LOGIN, (providerId: string) => ({ payload: providerId }));
-
-export const logoutGoogle = createAction(LOGOUT_GOOGLE, () => ({ payload: {} }));
-
-export const loginGitHub = createAction(LOGIN_GITHUB, () => ({ payload: {} }));
-
-export const logoutGitHub = createAction(LOGOUT_GITHUB, () => ({ payload: {} }));
-
-export const setTokens = createAction(SET_TOKENS, ({ accessToken, refreshToken }: Tokens) => ({
-  payload: { accessToken, refreshToken }
-}));
-
-export const setUser = createAction(SET_USER, (user: User) => ({ payload: user }));
-
-export const setCourseConfiguration = createAction(
-  SET_COURSE_CONFIGURATION,
-  (courseConfiguration: UpdateCourseConfiguration) => ({ payload: courseConfiguration })
-);
-
-export const setCourseRegistration = createAction(
-  SET_COURSE_REGISTRATION,
-  (courseRegistration: Partial<CourseRegistration>) => ({ payload: courseRegistration })
-);
-
-export const setAssessmentConfigurations = createAction(
-  SET_ASSESSMENT_CONFIGURATIONS,
-  (assessmentConfigurations: AssessmentConfiguration[]) => ({ payload: assessmentConfigurations })
-);
-
-export const setConfigurableNotificationConfigs = createAction(
-  SET_CONFIGURABLE_NOTIFICATION_CONFIGS,
-  (notificationConfigs: NotificationConfiguration[]) => ({ payload: notificationConfigs })
-);
-
-export const setNotificationConfigs = createAction(
-  SET_NOTIFICATION_CONFIGS,
-  (notificationConfigs: NotificationConfiguration[]) => ({ payload: notificationConfigs })
-);
-
-export const setAdminPanelCourseRegistrations = createAction(
-  SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
-  (courseRegistrations: AdminPanelCourseRegistration[]) => ({ payload: courseRegistrations })
-);
-
-export const setGoogleUser = createAction(SET_GOOGLE_USER, (user?: string) => ({ payload: user }));
-
-export const setGitHubOctokitObject = createAction(
-  SET_GITHUB_OCTOKIT_OBJECT,
-  (authToken?: string) => ({ payload: generateOctokitInstance(authToken || '') })
-);
-
-export const setGitHubAccessToken = createAction(SET_GITHUB_ACCESS_TOKEN, (authToken?: string) => ({
-  payload: authToken
-}));
-
-export const removeGitHubOctokitObjectAndAccessToken = createAction(
-  REMOVE_GITHUB_OCTOKIT_OBJECT_AND_ACCESS_TOKEN,
-  () => ({ payload: {} })
-);
-
-export const submitAnswer = createAction(
-  SUBMIT_ANSWER,
-  (id: number, answer: string | number | ContestEntry[]) => ({ payload: { id, answer } })
-);
-
-export const checkAnswerLastModifiedAt = createAction(
-  CHECK_ANSWER_LAST_MODIFIED_AT,
-  (id: number, lastModifiedAt: string, saveAnswer: Function) => ({
-    payload: { id, lastModifiedAt, saveAnswer }
-  })
-);
-
-export const submitAssessment = createAction(SUBMIT_ASSESSMENT, (id: number) => ({ payload: id }));
-
-export const submitGrading = createAction(
-  SUBMIT_GRADING,
-  (submissionId: number, questionId: number, xpAdjustment: number = 0, comments?: string) => ({
-    payload: { submissionId, questionId, xpAdjustment, comments }
-  })
-);
-
-export const submitGradingAndContinue = createAction(
-  SUBMIT_GRADING_AND_CONTINUE,
-  (submissionId: number, questionId: number, xpAdjustment: number = 0, comments?: string) => ({
-    payload: { submissionId, questionId, xpAdjustment, comments }
-  })
-);
-
-export const reautogradeSubmission = createAction(
-  REAUTOGRADE_SUBMISSION,
-  (submissionId: number) => ({ payload: submissionId })
-);
-
-export const reautogradeAnswer = createAction(
-  REAUTOGRADE_ANSWER,
-  (submissionId: number, questionId: number) => ({ payload: { submissionId, questionId } })
-);
-
-export const updateAssessmentOverviews = createAction(
-  UPDATE_ASSESSMENT_OVERVIEWS,
-  (overviews: AssessmentOverview[]) => ({ payload: overviews })
-);
+// For compatibility with existing code (reducer)
+export const {
+  fetchAuth,
+  fetchUserAndCourse,
+  fetchCourseConfig,
+  fetchAssessment,
+  fetchAssessmentAdmin,
+  fetchAssessmentOverviews,
+  fetchTotalXp,
+  fetchTotalXpAdmin,
+  fetchGrading,
+  fetchGradingOverviews,
+  fetchTeamFormationOverviews,
+  fetchStudents,
+  login,
+  logoutGoogle,
+  loginGitHub,
+  logoutGitHub,
+  setTokens,
+  setUser,
+  setCourseConfiguration,
+  setCourseRegistration,
+  setAssessmentConfigurations,
+  setConfigurableNotificationConfigs,
+  setNotificationConfigs,
+  setAdminPanelCourseRegistrations,
+  setGoogleUser,
+  setGitHubOctokitObject,
+  setGitHubAccessToken,
+  removeGitHubOctokitObjectAndAccessToken,
+  submitAnswer,
+  checkAnswerLastModifiedAt,
+  submitAssessment,
+  submitGrading,
+  submitGradingAndContinue,
+  reautogradeSubmission,
+  reautogradeAnswer,
+  updateAssessmentOverviews
+} = newActions;
 
 export const updateTotalXp = createAction(UPDATE_TOTAL_XP, (totalXp: number) => ({
   payload: totalXp
@@ -270,160 +158,101 @@ export const updateAssessment = createAction(UPDATE_ASSESSMENT, (assessment: Ass
   payload: assessment
 }));
 
-export const updateGradingOverviews = createAction(
-  UPDATE_GRADING_OVERVIEWS,
-  (overviews: GradingOverviews) => ({ payload: overviews })
-);
-
-export const fetchTeamFormationOverview = createAction(
-  FETCH_TEAM_FORMATION_OVERVIEW,
-  (assessmentId: number) => ({ payload: { assessmentId } })
-);
-
-export const createTeam = createAction(
-  CREATE_TEAM,
-  (assessment: AssessmentOverview, teams: OptionType[][]) => ({ payload: { assessment, teams } })
-);
-
-export const updateTeam = createAction(
-  UPDATE_TEAM,
-  (teamId: number, assessment: AssessmentOverview, teams: OptionType[][]) => ({
-    payload: { teamId, assessment, teams }
-  })
-);
-
-export const deleteTeam = createAction(DELETE_TEAM, (teamId: number) => ({ payload: { teamId } }));
-
-export const bulkUploadTeam = createAction(
-  BULK_UPLOAD_TEAM,
-  (assessment: AssessmentOverview, file: File, students: User[] | undefined) => ({
-    payload: { assessment, file, students }
-  })
-);
-
-export const updateTeamFormationOverviews = createAction(
-  UPDATE_TEAM_FORMATION_OVERVIEWS,
-  (overviews: TeamFormationOverview[]) => ({ payload: overviews })
-);
-
-export const updateTeamFormationOverview = createAction(
-  UPDATE_TEAM_FORMATION_OVERVIEW,
-  (overview: TeamFormationOverview) => ({ payload: overview })
-);
-
-export const updateStudents = createAction(UPDATE_STUDENTS, (students: User[]) => ({
-  payload: students
-}));
-
-/**
- * An extra id parameter is included here because of
- * no id for Grading.
- */
-export const updateGrading = createAction(
-  UPDATE_GRADING,
-  (submissionId: number, grading: GradingQuery) => ({ payload: { submissionId, grading } })
-);
-
-export const unsubmitSubmission = createAction(UNSUBMIT_SUBMISSION, (submissionId: number) => ({
-  payload: { submissionId }
-}));
-
-/**
- * Publishing / unpublishing actions
- */
-
-export const publishGrading = createAction(PUBLISH_GRADING, (submissionId: number) => ({
-  payload: { submissionId }
-}));
-
-export const unpublishGrading = createAction(UNPUBLISH_GRADING, (submissionId: number) => ({
-  payload: { submissionId }
-}));
-
-/**
- * Notification actions
- */
-
-export const fetchNotifications = createAction(FETCH_NOTIFICATIONS, () => ({ payload: {} }));
-
-export const acknowledgeNotifications = createAction(
-  ACKNOWLEDGE_NOTIFICATIONS,
-  (withFilter?: NotificationFilterFunction) => ({ payload: { withFilter } })
-);
-
-export const updateNotifications = createAction(
-  UPDATE_NOTIFICATIONS,
-  (notifications: Notification[]) => ({ payload: notifications })
-);
-
-export const updateLatestViewedCourse = createAction(
-  UPDATE_LATEST_VIEWED_COURSE,
-  (courseId: number) => ({ payload: { courseId } })
-);
-
-export const updateCourseConfig = createAction(
-  UPDATE_COURSE_CONFIG,
-  (courseConfiguration: UpdateCourseConfiguration) => ({ payload: courseConfiguration })
-);
-
-export const fetchAssessmentConfigs = createAction(FETCH_ASSESSMENT_CONFIGS, () => ({
-  payload: {}
-}));
-
-export const updateAssessmentConfigs = createAction(
-  UPDATE_ASSESSMENT_CONFIGS,
-  (assessmentConfigs: AssessmentConfiguration[]) => ({ payload: assessmentConfigs })
-);
-
-export const updateNotificationConfigs = createAction(
-  UPDATE_NOTIFICATION_CONFIG,
-  (notificationConfigs: NotificationConfiguration[]) => ({ payload: notificationConfigs })
-);
-
-export const updateNotificationPreferences = createAction(
-  UPDATE_NOTIFICATION_PREFERENCES,
-  (notificationPreferences: NotificationPreference[], courseRegId: number) => ({
-    payload: { notificationPreferences, courseRegId }
-  })
-);
-
-export const deleteAssessmentConfig = createAction(
-  DELETE_ASSESSMENT_CONFIG,
-  (assessmentConfig: AssessmentConfiguration) => ({ payload: assessmentConfig })
-);
-
-export const fetchAdminPanelCourseRegistrations = createAction(
-  FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
-  () => ({ payload: {} })
-);
-
-export const fetchConfigurableNotificationConfigs = createAction(
-  FETCH_CONFIGURABLE_NOTIFICATION_CONFIGS,
-  (courseRegId: number) => ({ payload: { courseRegId } })
-);
-
-export const fetchNotificationConfigs = createAction(FETCH_NOTIFICATION_CONFIGS, () => ({
-  payload: {}
-}));
-
-export const updateTimeOptions = createAction(UPDATE_TIME_OPTIONS, (timeOptions: TimeOption[]) => ({
-  payload: timeOptions
-}));
-
-export const deleteTimeOptions = createAction(DELETE_TIME_OPTIONS, (timeOptionIds: number[]) => ({
-  payload: timeOptionIds
-}));
-
-export const updateUserRole = createAction(UPDATE_USER_ROLE, (courseRegId: number, role: Role) => ({
-  payload: { courseRegId, role }
-}));
-
-export const deleteUserCourseRegistration = createAction(
-  DELETE_USER_COURSE_REGISTRATION,
-  (courseRegId: number) => ({ payload: { courseRegId } })
-);
+const newActions2 = createActions('session', {
+  updateGradingOverviews: (overviews: GradingOverviews) => overviews,
+  fetchTeamFormationOverview: (assessmentId: number) => ({ assessmentId }),
+  createTeam: (assessment: AssessmentOverview, teams: OptionType[][]) => ({ assessment, teams }),
+  updateTeam: (teamId: number, assessment: AssessmentOverview, teams: OptionType[][]) => ({
+    teamId,
+    assessment,
+    teams
+  }),
+  deleteTeam: (teamId: number) => ({ teamId }),
+  bulkUploadTeam: (assessment: AssessmentOverview, file: File, students: User[] | undefined) => ({
+    assessment,
+    file,
+    students
+  }),
+  updateTeamFormationOverviews: (overviews: TeamFormationOverview[]) => overviews,
+  updateTeamFormationOverview: (overview: TeamFormationOverview) => overview,
+  updateStudents: (students: User[]) => students,
+  /**
+   * An extra id parameter is included here because of
+   * no id for Grading.
+   */
+  updateGrading: (submissionId: number, grading: GradingQuery) => ({ submissionId, grading }),
+  unsubmitSubmission: (submissionId: number) => ({ submissionId }),
+  // Publishing / unpublishing actions
+  publishGrading: (submissionId: number) => ({ submissionId }),
+  unpublishGrading: (submissionId: number) => ({ submissionId }),
+  // Notification actions
+  fetchNotifications: () => ({}),
+  acknowledgeNotifications: (withFilter?: NotificationFilterFunction) => ({ withFilter }),
+  updateNotifications: (notifications: Notification[]) => notifications,
+  updateLatestViewedCourse: (courseId: number) => ({ courseId }),
+  updateCourseConfig: (courseConfiguration: UpdateCourseConfiguration) => courseConfiguration,
+  fetchAssessmentConfigs: () => ({}),
+  updateAssessmentConfigs: (assessmentConfigs: AssessmentConfiguration[]) => assessmentConfigs,
+  updateNotificationConfigs: (notificationConfigs: NotificationConfiguration[]) =>
+    notificationConfigs,
+  updateNotificationPreferences: (
+    notificationPreferences: NotificationPreference[],
+    courseRegId: number
+  ) => ({ notificationPreferences, courseRegId }),
+  deleteAssessmentConfig: (assessmentConfig: AssessmentConfiguration) => assessmentConfig,
+  fetchAdminPanelCourseRegistrations: () => ({}),
+  fetchConfigurableNotificationConfigs: (courseRegId: number) => ({ courseRegId }),
+  fetchNotificationConfigs: () => ({}),
+  updateTimeOptions: (timeOptions: TimeOption[]) => timeOptions,
+  deleteTimeOptions: (timeOptionIds: number[]) => timeOptionIds,
+  updateUserRole: (courseRegId: number, role: Role) => ({ courseRegId, role }),
+  deleteUserCourseRegistration: (courseRegId: number) => ({ courseRegId })
+});
 
 export const updateCourseResearchAgreement = createAction(
   UPDATE_COURSE_RESEARCH_AGREEMENT,
   (agreedToResearch: boolean) => ({ payload: { agreedToResearch } })
 );
+
+// For compatibility with existing code (reducer)
+export const {
+  updateGradingOverviews,
+  fetchTeamFormationOverview,
+  createTeam,
+  updateTeam,
+  deleteTeam,
+  bulkUploadTeam,
+  updateTeamFormationOverviews,
+  updateTeamFormationOverview,
+  updateStudents,
+  updateGrading,
+  unsubmitSubmission,
+  publishGrading,
+  unpublishGrading,
+  fetchNotifications,
+  acknowledgeNotifications,
+  updateNotifications,
+  updateLatestViewedCourse,
+  updateCourseConfig,
+  fetchAssessmentConfigs,
+  updateAssessmentConfigs,
+  updateNotificationConfigs,
+  updateNotificationPreferences,
+  deleteAssessmentConfig,
+  fetchAdminPanelCourseRegistrations,
+  fetchConfigurableNotificationConfigs,
+  fetchNotificationConfigs,
+  updateTimeOptions,
+  deleteTimeOptions,
+  updateUserRole,
+  deleteUserCourseRegistration
+} = newActions2;
+
+// For compatibility with existing code (actions helper)
+export default {
+  ...newActions,
+  updateTotalXp,
+  updateAssessment,
+  ...newActions2,
+  updateCourseResearchAgreement
+};
