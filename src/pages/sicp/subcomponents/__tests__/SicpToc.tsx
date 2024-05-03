@@ -3,12 +3,12 @@ import { renderTreeJson } from 'src/commons/utils/TestUtils';
 
 import SicpToc from '../SicpToc';
 
-test('Sicp toc renders correctly', () => {
+test('Sicp toc renders correctly', async () => {
   const props = {
     handleCloseToc: () => {}
   };
 
-  const tree = renderTreeJson(
+  const tree = await renderTreeJson(
     <MemoryRouter>
       <SicpToc {...props} />
     </MemoryRouter>

@@ -1,5 +1,5 @@
-import { render } from '@testing-library/react';
-import { require as acequire } from 'ace-builds';
+import { Router } from '@remix-run/router';
+import { act, render } from '@testing-library/react';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import { Chapter } from 'js-slang/dist/types';
 import { Provider } from 'react-redux';
@@ -20,12 +20,13 @@ import Playground, { handleHash } from '../Playground';
 (window as any).Inspector = jest.fn();
 (window as any).Inspector.highlightClean = jest.fn();
 
-jest.mock('ace-builds', () => ({
-  ...jest.requireActual('ace-builds'),
-  require: jest.fn()
-}));
-
-const acequireMock = acequire as jest.Mock;
+// Using @testing-library/react to render snapshot instead of react-test-renderer
+// as the useRefs require the notion of React DOM
+const renderTree = async (router: Router) => {
+  const app = render(<RouterProvider router={router} />);
+  await act(() => app);
+  return app.container;
+};
 
 describe('Playground tests', () => {
   let routes: RouteObject[];
@@ -52,10 +53,6 @@ describe('Playground tests', () => {
         )
       }
     ];
-    acequireMock.mockReturnValue({
-      Mode: jest.fn(),
-      setCompleters: jest.fn()
-    });
   });
 
   test('Playground renders correctly', async () => {
@@ -64,9 +61,7 @@ describe('Playground tests', () => {
       initialIndex: 0
     });
 
-    // Using @testing-library/react to render snapshot instead of react-test-renderer
-    // as the useRefs require the notion of React DOM
-    const tree = render(<RouterProvider router={router} />).container;
+    const tree = await renderTree(router);
     expect(tree).toMatchSnapshot();
 
     expect(getSourceChapterFromStore(mockStore)).toBe(defaultPlayground.languageConfig.chapter);
@@ -79,9 +74,7 @@ describe('Playground tests', () => {
       initialIndex: 0
     });
 
-    // Using @testing-library/react to render snapshot instead of react-test-renderer
-    // as the useRefs require the notion of React DOM
-    const tree = render(<RouterProvider router={router} />).container;
+    const tree = await renderTree(router);
     expect(tree).toMatchSnapshot();
 
     expect(getSourceChapterFromStore(mockStore)).toBe(Chapter.SOURCE_2);

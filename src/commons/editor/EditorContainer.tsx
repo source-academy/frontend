@@ -1,9 +1,3 @@
-// Necessary to prevent "ReferenceError: ace is not defined" error.
-// See https://github.com/securingsincity/react-ace/issues/1233 (although there is no explanation).
-import 'ace-builds/src-noconflict/ace';
-// For webpack to resolve properly during lazy loading (see https://github.com/source-academy/frontend/issues/2543)
-import 'ace-builds/webpack-resolver';
-
 import _ from 'lodash';
 import React from 'react';
 

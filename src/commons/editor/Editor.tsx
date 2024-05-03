@@ -1,18 +1,30 @@
 /* eslint-disable simple-import-sort/imports */
+
+// Next line necessary to prevent "ReferenceError: ace is not defined" error.
+// See https://github.com/securingsincity/react-ace/issues/1233 (although there is no explanation).
+import 'ace-builds/src-noconflict/ace';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import 'ace-builds/src-noconflict/ext-settings_menu';
 import 'js-slang/dist/editors/ace/theme/source';
 
-import { Classes } from '@blueprintjs/core';
+/**
+ * ace-builds/webpack-resolver is causing some issues in the testing environment.
+ * Without it, we have to manually import the following keybindings to ensure they are packaged
+ * together with the editor during lazy loading.
+ *
+ * Supersedes changes from: https://github.com/source-academy/frontend/issues/2543
+ */
+import 'ace-builds/src-noconflict/keybinding-vim';
+import 'ace-builds/src-noconflict/keybinding-emacs';
+
+import { Card } from '@blueprintjs/core';
 import * as AceBuilds from 'ace-builds';
 import { Ace, require as acequire, createEditSession } from 'ace-builds';
-import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React from 'react';
 import AceEditor, { IAceEditorProps, IEditorProps } from 'react-ace';
 import { IAceEditor } from 'react-ace/lib/types';
-import { HotKeys } from 'react-hotkeys';
 import { EditorBinding } from '../WorkspaceSettingsContext';
 import { getModeString, selectMode } from '../utils/AceHelper';
 import { objectEntries } from '../utils/TypeHelper';
@@ -326,11 +338,6 @@ const moveCursor = (editor: AceEditor['editor'], position: Position) => {
   editor.moveCursorToPosition(position);
   editor.renderer.showCursor();
   editor.renderer.scrollCursorIntoView(position, 0.5);
-};
-
-/* Override handler, so does not trigger when focus is in editor */
-const handlers = {
-  goGreen: () => {}
 };
 
 const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
@@ -653,14 +660,11 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   }, []);
 
   return (
-    <HotKeys
-      className={classNames('Editor', Classes.CARD, Classes.ELEVATION_0)}
-      handlers={handlers}
-    >
+    <Card className="Editor">
       <div className="row editor-react-ace" data-testid="Editor">
         <AceEditor {...aceEditorProps} ref={reactAceRef} />
       </div>
-    </HotKeys>
+    </Card>
   );
 });
 

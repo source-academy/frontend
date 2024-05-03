@@ -140,7 +140,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   // based on whether it is the actual question being attempted. To enable read-only mode, set isEditable to false.
   const [isEditable, setIsEditable] = useState(true);
 
-  const assessment = useTypedSelector(state => state.session.assessments.get(props.assessmentId));
+  const assessment = useTypedSelector(state => state.session.assessments[props.assessmentId]);
   const assessmentOverviews = useTypedSelector(state => state.session.assessmentOverviews);
   const teamFormationOverview = useTypedSelector(state => state.session.teamFormationOverview);
   const assessmentOverview = assessmentOverviews?.find(assessmentOverview => {
