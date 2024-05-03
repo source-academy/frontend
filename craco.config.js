@@ -151,6 +151,11 @@ const cracoConfig = {
         '<rootDir>/node_modules/vfile/lib';
       jestConfig.moduleNameMapper['vfile/do-not-use-conditional-minurl'] =
         '<rootDir>/node_modules/vfile/lib';
+
+      jestConfig.setupFiles = [
+        ...jestConfig.setupFiles,
+        './src/i18n/i18n.ts' // Setup i18next configuration
+      ]
       return jestConfig;
     }
   },
