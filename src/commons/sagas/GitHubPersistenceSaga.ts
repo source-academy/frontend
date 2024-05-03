@@ -13,8 +13,8 @@ import {
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
+import { loginGitHub, logoutGitHub } from '../application/actions/SessionActions';
 import { OverallState } from '../application/ApplicationTypes';
-import { LOGIN_GITHUB, LOGOUT_GITHUB } from '../application/types/SessionTypes';
 import FileExplorerDialog, { FileExplorerDialogProps } from '../gitHubOverlay/FileExplorerDialog';
 import RepositoryDialog, { RepositoryDialogProps } from '../gitHubOverlay/RepositoryDialog';
 import { actions } from '../utils/ActionsHelper';
@@ -24,8 +24,8 @@ import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
 import { EditorTabState } from '../workspace/WorkspaceTypes';
 
 export function* GitHubPersistenceSaga(): SagaIterator {
-  yield takeLatest(LOGIN_GITHUB, githubLoginSaga);
-  yield takeLatest(LOGOUT_GITHUB, githubLogoutSaga);
+  yield takeLatest(loginGitHub.type, githubLoginSaga);
+  yield takeLatest(logoutGitHub.type, githubLogoutSaga);
 
   yield takeLatest(GITHUB_OPEN_FILE, githubOpenFile);
   yield takeLatest(GITHUB_SAVE_FILE, githubSaveFile);
