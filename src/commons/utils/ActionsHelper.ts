@@ -1,6 +1,6 @@
 import * as CommonsActions from '../../commons/application/actions/CommonsActions';
 import * as InterpreterActions from '../../commons/application/actions/InterpreterActions';
-import * as SessionActions from '../../commons/application/actions/SessionActions';
+import SessionActions from '../../commons/application/actions/SessionActions';
 import * as CollabEditingActions from '../../commons/collabEditing/CollabEditingActions';
 import * as FileSystemActions from '../../commons/fileSystem/FileSystemActions';
 import * as SideContentActions from '../../commons/sideContent/SideContentActions';
