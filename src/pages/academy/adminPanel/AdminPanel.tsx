@@ -4,7 +4,7 @@ import 'ag-grid-community/styles/ag-theme-balham.css';
 import { Button, Divider, H1, Intent, Tab, Tabs } from '@blueprintjs/core';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Role, StoriesRole } from 'src/commons/application/ApplicationTypes';
+import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   addNewStoriesUsersToCourse,
@@ -180,13 +180,15 @@ const AdminPanel: React.FC = () => {
                 dispatch(deleteUserCourseRegistration(courseRegId))
               }
             />
-          } />
+          }
+        />
         <Tab
           id="stories-users"
           title="Stories Users"
           panel={<StoriesUserConfigPanel {...storiesUserConfigPanelProps} />}
         />
-        <Tab id="add-users"
+        <Tab
+          id="add-users"
           title="Add Users"
           panel={
             <AddUserPanel
