@@ -1,14 +1,14 @@
 import * as CommonsActions from '../../commons/application/actions/CommonsActions';
-import * as InterpreterActions from '../../commons/application/actions/InterpreterActions';
+import InterpreterActions from '../../commons/application/actions/InterpreterActions';
 import SessionActions from '../../commons/application/actions/SessionActions';
 import * as CollabEditingActions from '../../commons/collabEditing/CollabEditingActions';
 import * as FileSystemActions from '../../commons/fileSystem/FileSystemActions';
 import * as SideContentActions from '../../commons/sideContent/SideContentActions';
 import * as WorkspaceActions from '../../commons/workspace/WorkspaceActions';
-import * as AcademyActions from '../../features/academy/AcademyActions';
+import AcademyActions from '../../features/academy/AcademyActions';
 import * as AchievementActions from '../../features/achievement/AchievementActions';
 import * as DashboardActions from '../../features/dashboard/DashboardActions';
-import * as GitHubActions from '../../features/github/GitHubActions';
+import GitHubActions from '../../features/github/GitHubActions';
 import * as GroundControlActions from '../../features/groundControl/GroundControlActions';
 import * as PersistenceActions from '../../features/persistence/PersistenceActions';
 import * as PlaygroundActions from '../../features/playground/PlaygroundActions';
