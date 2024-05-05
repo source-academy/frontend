@@ -23,15 +23,15 @@ import {
   setSessionDetails,
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
-import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
-import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
+import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
+import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
-  showFulTSWarningOnUrlLoad,
   showFullJSWarningOnUrlLoad,
+  showFulTSWarningOnUrlLoad,
   showHTMLDisclaimer
 } from 'src/commons/utils/WarningDialogHelper';
 import {
@@ -79,13 +79,14 @@ import {
   shortenURL,
   updateShortURL
 } from 'src/features/playground/PlaygroundActions';
+
 import {
-  OverallState,
-  ResultOutput,
-  SALanguage,
   getDefaultFilePath,
   getLanguageConfig,
-  isSourceLanguage
+  isSourceLanguage,
+  OverallState,
+  ResultOutput,
+  SALanguage
 } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAutorunButtons';
@@ -100,8 +101,8 @@ import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimi
 import { ControlBarToggleFolderModeButton } from '../../commons/controlBar/ControlBarToggleFolderModeButton';
 import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
 import {
-  NormalEditorContainerProps,
-  convertEditorTabStateToProps
+  convertEditorTabStateToProps,
+  NormalEditorContainerProps
 } from '../../commons/editor/EditorContainer';
 import { Position } from '../../commons/editor/EditorTypes';
 import { overwriteFilesInWorkspace } from '../../commons/fileSystem/utils';

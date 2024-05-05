@@ -16,11 +16,11 @@ import React, { useCallback, useEffect } from 'react';
 import { Translation, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
+import SessionActions from 'src/commons/application/actions/SessionActions';
 import { AuthProviderType } from 'src/commons/utils/AuthHelper';
 import { useSession } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/Login.module.scss';
 
-import SessionActions from 'src/commons/application/actions/SessionActions';
 import Constants from '../../commons/utils/Constants';
 import { parseQuery } from '../../commons/utils/QueryHelper';
 

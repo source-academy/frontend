@@ -1,4 +1,4 @@
-import { Icon as BpIcon, Button } from '@blueprintjs/core';
+import { Button, Icon as BpIcon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Flex, Icon } from '@tremor/react';
 import { useDispatch } from 'react-redux';
