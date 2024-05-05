@@ -3,9 +3,9 @@ import { createMemoryRouter } from 'react-router';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import { mockTeamFormationOverviews } from 'src/commons/mocks/TeamFormationMocks';
-import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from 'src/features/academy/AcademyTypes';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
+import { addNewUsersToCourse, createCourse } from 'src/features/academy/AcademyActions';
 import { updateGroupGradingSummary } from '../../../features/dashboard/DashboardActions';
 import {
   FETCH_GROUP_GRADING_SUMMARY,
@@ -1099,7 +1099,7 @@ describe('Test CREATE_COURSE action', () => {
           okResp
         ]
       ])
-      .dispatch({ type: CREATE_COURSE, payload: courseConfig })
+      .dispatch({ type: createCourse.type, payload: courseConfig })
       .silentRun();
   });
 
@@ -1113,7 +1113,7 @@ describe('Test CREATE_COURSE action', () => {
       .not.call.fn(putAssessmentConfigs)
       .not.call.fn(showSuccessMessage)
       .provide([[call(postCreateCourse, mockTokens, courseConfig), errorResp]])
-      .dispatch({ type: CREATE_COURSE, payload: courseConfig })
+      .dispatch({ type: createCourse.type, payload: courseConfig })
       .silentRun();
   });
 });
@@ -1152,7 +1152,7 @@ describe('Test ADD_NEW_USERS_TO_COURSE action', () => {
         [call(putNewUsers, mockTokens, users, provider), okResp],
         [call(getUserCourseRegistrations, mockTokens), userCourseRegistrations]
       ])
-      .dispatch({ type: ADD_NEW_USERS_TO_COURSE, payload: { users, provider } })
+      .dispatch({ type: addNewUsersToCourse.type, payload: { users, provider } })
       .silentRun();
   });
 
@@ -1163,10 +1163,12 @@ describe('Test ADD_NEW_USERS_TO_COURSE action', () => {
       .not.put.actionType(fetchAdminPanelCourseRegistrations.type)
       .not.call.fn(showSuccessMessage)
       .provide([[call(putNewUsers, mockTokens, users, provider), errorResp]])
-      .dispatch({ type: ADD_NEW_USERS_TO_COURSE, payload: { users, provider } })
+      .dispatch({ type: addNewUsersToCourse.type, payload: { users, provider } })
       .silentRun();
   });
 });
+
+// TODO: Test addNewStoriesUsersToCourse
 
 describe('Test UPDATE_USER_ROLE action', () => {
   const courseRegId = 2;
