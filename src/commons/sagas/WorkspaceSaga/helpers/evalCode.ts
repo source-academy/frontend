@@ -11,7 +11,6 @@ import * as Sourceror from 'sourceror';
 import { makeCCompilerConfig, specialCReturnObject } from 'src/commons/utils/CToWasmHelper';
 import { javaRun } from 'src/commons/utils/JavaHelper';
 import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
-import { EVAL_STORY } from 'src/features/stories/StoriesTypes';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
 import { isSchemeLanguage, OverallState } from '../../../application/ApplicationTypes';
@@ -48,7 +47,7 @@ export function* evalCode(
 ): SagaIterator {
   context.runtime.debuggerOn =
     (actionType === EVAL_EDITOR || actionType === DEBUG_RESUME) && context.chapter > 2;
-  const isStoriesBlock = actionType === EVAL_STORY || workspaceLocation === 'stories';
+  const isStoriesBlock = actionType === actions.evalStory.type || workspaceLocation === 'stories';
 
   // Logic for execution of substitution model visualizer
   const correctWorkspace = workspaceLocation === 'playground' || workspaceLocation === 'sicp';
