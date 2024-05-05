@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button, H2, Intent } from '@blueprintjs/core';
 import { ColDef, GridApi, GridReadyEvent, ValueFormatterFunc } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';

@@ -19,7 +19,7 @@ import { actions } from '../utils/ActionsHelper';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { defaultStoryContent } from '../utils/StoriesHelper';
 import { selectTokens } from './BackendSaga';
-import { evalCode } from './WorkspaceSaga/helpers/evalCode';
+import { evalCodeSaga } from './WorkspaceSaga/helpers/evalCode';
 
 const StoriesSaga = combineSagaHandlers(StoriesActions, {
   // TODO: This should be using `takeLatest`, not `takeEvery`
@@ -131,7 +131,16 @@ const StoriesSaga = combineSagaHandlers(StoriesActions, {
       [codeFilePath]: code
     };
     yield put(resetSideContent(`stories.${env}`));
-    yield call(evalCode, codeFiles, codeFilePath, context, execTime, 'stories', action.type, env);
+    yield call(
+      evalCodeSaga,
+      codeFiles,
+      codeFilePath,
+      context,
+      execTime,
+      'stories',
+      action.type,
+      env
+    );
   }
 });
 
