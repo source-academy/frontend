@@ -13,6 +13,7 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import React, { useCallback, useEffect } from 'react';
+import { Translation, useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import { AuthProviderType } from 'src/commons/utils/AuthHelper';
@@ -34,6 +35,7 @@ const Login: React.FC = () => {
   const { isLoggedIn, courseId } = useSession();
   const navigate = useNavigate();
   const { code, ticket, provider: providerId } = parseQuery(location.search);
+  const { t } = useTranslation('login');
 
   // `code` parameter from OAuth2 redirect, `ticket` from CAS redirect
   const authCode = code || ticket;
@@ -66,7 +68,7 @@ const Login: React.FC = () => {
         <Card elevation={Elevation.FOUR}>
           <div>
             <NonIdealState
-              description="Logging In..."
+              description={t('Logging In')}
               icon={<Spinner size={SpinnerSize.LARGE} />}
             />
           </div>
@@ -111,7 +113,7 @@ const LoginButton = ({
       rightIcon={IconNames.LOG_IN}
       onClick={useCallback(() => handleClick(id), [handleClick, id])}
     >
-      {`Log in with ${name}`}
+      <Translation ns="login">{t => t('Log in with', { name: name })}</Translation>
     </Button>
   );
 };
