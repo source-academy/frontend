@@ -136,9 +136,7 @@ const StoriesSaga = combineSagaHandlers(StoriesActions, {
     yield put(resetSideContent(`stories.${env}`));
     yield call(evalCode, codeFiles, codeFilePath, context, execTime, 'stories', action.type, env);
   },
-  fetchAdminPanelStoriesUsers: function* (
-    action: ReturnType<typeof actions.fetchAdminPanelStoriesUsers>
-  ): any {
+  fetchAdminPanelStoriesUsers: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     const storiesUsers = yield call(getAdminPanelStoriesUsers, tokens);
@@ -147,7 +145,7 @@ const StoriesSaga = combineSagaHandlers(StoriesActions, {
       yield put(actions.setAdminPanelStoriesUsers(storiesUsers));
     }
   },
-  updateStoriesUserRole: function* (action: ReturnType<typeof actions.updateStoriesUserRole>): any {
+  updateStoriesUserRole: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { userId, role }: { userId: number; role: StoriesRole } = action.payload;
 
@@ -158,9 +156,7 @@ const StoriesSaga = combineSagaHandlers(StoriesActions, {
       yield call(showSuccessMessage, 'Role updated!');
     }
   },
-  deleteStoriesUserUserGroups: function* (
-    action: ReturnType<typeof actions.deleteStoriesUserUserGroups>
-  ): any {
+  deleteStoriesUserUserGroups: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { userId }: { userId: number } = action.payload;
 
