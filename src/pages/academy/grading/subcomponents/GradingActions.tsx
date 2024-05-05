@@ -1,14 +1,9 @@
-import { Button, Icon as BpIcon } from '@blueprintjs/core';
+import { Icon as BpIcon, Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Flex, Icon } from '@tremor/react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import {
-  publishGrading,
-  reautogradeSubmission,
-  unpublishGrading,
-  unsubmitSubmission
-} from 'src/commons/application/actions/SessionActions';
+import SessionActions from 'src/commons/application/actions/SessionActions';
 import { ProgressStatus, ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -34,7 +29,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, progress }) => {
       positiveLabel: 'Reautograde'
     });
     if (confirm) {
-      dispatch(reautogradeSubmission(submissionId));
+      dispatch(SessionActions.reautogradeSubmission(submissionId));
     }
   };
 
@@ -45,7 +40,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, progress }) => {
       positiveLabel: 'Unsubmit'
     });
     if (confirm) {
-      dispatch(unsubmitSubmission(submissionId));
+      dispatch(SessionActions.unsubmitSubmission(submissionId));
     }
   };
 
@@ -56,7 +51,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, progress }) => {
       positiveLabel: 'Publish'
     });
     if (confirm) {
-      dispatch(publishGrading(submissionId));
+      dispatch(SessionActions.publishGrading(submissionId));
     }
   };
 
@@ -67,7 +62,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, progress }) => {
       positiveLabel: 'Unpublish'
     });
     if (confirm) {
-      dispatch(unpublishGrading(submissionId));
+      dispatch(SessionActions.unpublishGrading(submissionId));
     }
   };
 

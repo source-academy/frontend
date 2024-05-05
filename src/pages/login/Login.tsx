@@ -20,7 +20,7 @@ import { AuthProviderType } from 'src/commons/utils/AuthHelper';
 import { useSession } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/Login.module.scss';
 
-import { fetchAuth, login } from '../../commons/application/actions/SessionActions';
+import SessionActions from 'src/commons/application/actions/SessionActions';
 import Constants from '../../commons/utils/Constants';
 import { parseQuery } from '../../commons/utils/QueryHelper';
 
@@ -40,7 +40,10 @@ const Login: React.FC = () => {
   // `code` parameter from OAuth2 redirect, `ticket` from CAS redirect
   const authCode = code || ticket;
 
-  const handleLogin = useCallback((providerId: string) => dispatch(login(providerId)), [dispatch]);
+  const handleLogin = useCallback(
+    (providerId: string) => dispatch(SessionActions.login(providerId)),
+    [dispatch]
+  );
 
   const isSaml = Constants.authProviders.get(providerId)?.type === AuthProviderType.SAML_SSO;
 
@@ -58,7 +61,7 @@ const Login: React.FC = () => {
     // Else fetch JWT tokens and user info from backend when auth provider code is present
     // SAML does not require code, as relay is handled in backend
     if ((authCode || isSaml) && !isLoggedIn) {
-      dispatch(fetchAuth(authCode, providerId));
+      dispatch(SessionActions.fetchAuth(authCode, providerId));
     }
   }, [authCode, isSaml, providerId, dispatch, courseId, navigate, isLoggedIn]);
 

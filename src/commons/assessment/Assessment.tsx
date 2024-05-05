@@ -27,11 +27,7 @@ import { NavLink } from 'react-router-dom';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
-import {
-  acknowledgeNotifications,
-  fetchAssessmentOverviews,
-  submitAssessment
-} from '../application/actions/SessionActions';
+import SessionActions from '../application/actions/SessionActions';
 import { Role } from '../application/ApplicationTypes';
 import AssessmentWorkspace, {
   AssessmentWorkspaceProps
@@ -74,7 +70,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
   const setBetchaAssessmentNull = () => setBetchaAssessment(null);
   const handleSubmitAssessment = () => {
     if (betchaAssessment) {
-      dispatch(submitAssessment(betchaAssessment.id));
+      dispatch(SessionActions.submitAssessment(betchaAssessment.id));
       setBetchaAssessmentNull();
     }
   };
@@ -137,7 +133,9 @@ const Assessment: React.FC<AssessmentProps> = props => {
           icon={icon}
           minimal={true}
           onClick={() =>
-            dispatch(acknowledgeNotifications(filterNotificationsByAssessment(overview.id)))
+            dispatch(
+              SessionActions.acknowledgeNotifications(filterNotificationsByAssessment(overview.id))
+            )
           }
         >
           <span data-testid="Assessment-Attempt-Button">{label}</span>
@@ -413,7 +411,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
     <div className="Assessment">
       <ContentDisplay
         display={display}
-        loadContentDispatch={() => dispatch(fetchAssessmentOverviews())}
+        loadContentDispatch={() => dispatch(SessionActions.fetchAssessmentOverviews())}
       />
       {betchaDialog}
     </div>
