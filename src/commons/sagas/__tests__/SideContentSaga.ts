@@ -5,11 +5,10 @@ import { expectSaga } from 'redux-saga-test-plan';
 import * as sideContentHelper from 'src/commons/sideContent/SideContentHelper';
 import { SideContentReducer } from 'src/commons/sideContent/SideContentReducer';
 import {
-  NOTIFY_PROGRAM_EVALUATED,
-  type SideContentManagerState,
   SideContentState,
   SideContentTab,
-  SideContentType
+  SideContentType,
+  type SideContentManagerState
 } from 'src/commons/sideContent/SideContentTypes';
 import { actions } from 'src/commons/utils/ActionsHelper';
 
@@ -40,7 +39,7 @@ describe('Side Content Alerts for normal side content', () => {
       .dispatch(actions.beginAlertSideContent(SideContentType.cseMachine, 'playground'))
       .dispatch(actions.beginAlertSideContent(SideContentType.dataVisualizer, 'playground'))
       .dispatch(actions.notifyProgramEvaluated({}, {}, '', {} as Context, 'playground'))
-      .take(NOTIFY_PROGRAM_EVALUATED)
+      .take(actions.notifyProgramEvaluated.type)
       .put(actions.endAlertSideContent(SideContentType.cseMachine, 'playground'))
       .put(actions.endAlertSideContent(SideContentType.dataVisualizer, 'playground'))
       .silentRun();
@@ -60,7 +59,7 @@ describe('Side Content Alerts for normal side content', () => {
     )
       .dispatch(actions.beginAlertSideContent(SideContentType.dataVisualizer, 'playground'))
       .dispatch(actions.notifyProgramEvaluated({}, {}, '', {} as Context, 'playground'))
-      .take(NOTIFY_PROGRAM_EVALUATED)
+      .take(actions.notifyProgramEvaluated.type)
       .silentRun();
 
     expect(storeState).toMatchObject({
@@ -82,7 +81,7 @@ describe('Side Content Alerts for normal side content', () => {
     )
       .dispatch(actions.beginAlertSideContent(SideContentType.dataVisualizer, 'playground'))
       .dispatch(actions.notifyProgramEvaluated({}, {}, '', {} as Context, 'playground'))
-      .take(NOTIFY_PROGRAM_EVALUATED)
+      .take(actions.notifyProgramEvaluated.type)
       .silentRun();
 
     expect(storeState).toMatchObject({
