@@ -62,11 +62,7 @@ import {
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
-import {
-  githubOpenFile,
-  githubSaveFile,
-  githubSaveFileAs
-} from 'src/features/github/GitHubActions';
+import GithubActions from 'src/features/github/GitHubActions';
 import {
   persistenceInitialise,
   persistenceOpenPicker,
@@ -606,9 +602,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
         loggedInAs={githubOctokitObject.octokit}
         githubSaveInfo={githubSaveInfo}
         isDirty={githubPersistenceIsDirty}
-        onClickOpen={() => dispatch(githubOpenFile())}
-        onClickSaveAs={() => dispatch(githubSaveFileAs())}
-        onClickSave={() => dispatch(githubSaveFile())}
+        onClickOpen={() => dispatch(GithubActions.githubOpenFile())}
+        onClickSaveAs={() => dispatch(GithubActions.githubSaveFileAs())}
+        onClickSave={() => dispatch(GithubActions.githubSaveFile())}
         onClickLogIn={() => dispatch(SessionActions.loginGitHub())}
         onClickLogOut={() => dispatch(SessionActions.logoutGitHub())}
       />
