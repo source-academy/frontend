@@ -1,12 +1,12 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { HotkeyItem, useHotkeys } from '@mantine/hooks';
 import { Ace, Range } from 'ace-builds';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
 import React, { Dispatch, useCallback, useEffect, useMemo, useState } from 'react';
-import { HotKeys } from 'react-hotkeys';
 import { useDispatch, useStore } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import { useParams } from 'react-router';
@@ -140,8 +140,6 @@ export type PlaygroundProps = {
   prependLength?: number;
   handleCloseEditor?: () => void;
 };
-
-const keyMap = { goGreen: 'h u l k' };
 
 export async function setStateFromPlaygroundConfiguration(
   configObj: ShareLinkState,
@@ -279,7 +277,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
   }
 
   const [lastEdit, setLastEdit] = useState(new Date());
-  const [isGreen, setIsGreen] = useState(false);
   const { selectedTab, setSelectedTab } = useSideContent(
     workspaceLocation,
     shouldAddDevice ? SideContentType.remoteExecution : SideContentType.introduction
@@ -292,6 +289,14 @@ const Playground: React.FC<PlaygroundProps> = props => {
       chapter: playgroundSourceChapter
     })
   );
+
+  // Playground hotkeys
+  const [isGreen, setIsGreen] = useState(false);
+  const playgroundHotkeyBindings: HotkeyItem[] = useMemo(
+    () => [['alt+shift+h', () => setIsGreen(v => !v)]],
+    [setIsGreen]
+  );
+  useHotkeys(playgroundHotkeyBindings);
 
   const remoteExecutionTab: SideContentTab = useMemo(
     () => makeRemoteExecutionTabFrom(deviceSecret, setDeviceSecret),
@@ -387,13 +392,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
       setSelectedTab(SideContentType.introduction);
     }
   }, [isMobileBreakpoint, selectedTab, setSelectedTab]);
-
-  const handlers = useMemo(
-    () => ({
-      goGreen: () => setIsGreen(!isGreen)
-    }),
-    [isGreen]
-  );
 
   const onEditorValueChange = React.useCallback(
     (editorTabIndex: number, newEditorValue: string) => {
@@ -1033,13 +1031,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
       <MobileWorkspace {...mobileWorkspaceProps} />
     </div>
   ) : (
-    <HotKeys
-      className={classNames('Playground', Classes.DARK, isGreen && 'GreenScreen')}
-      keyMap={keyMap}
-      handlers={handlers}
-    >
+    <div className={classNames('Playground', Classes.DARK, isGreen && 'GreenScreen')}>
       <Workspace {...workspaceProps} />
-    </HotKeys>
+    </div>
   );
 };
 

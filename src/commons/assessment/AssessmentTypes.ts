@@ -2,9 +2,6 @@ import { Chapter, SourceError, Variant } from 'js-slang/dist/types';
 
 import { ExternalLibrary, ExternalLibraryName } from '../application/types/ExternalTypes';
 
-export const FETCH_ASSESSMENT_OVERVIEWS = 'FETCH_ASSESSMENT_OVERVIEWS';
-export const SUBMIT_ASSESSMENT = 'SUBMIT_ASSESSMENT';
-
 export enum AssessmentStatuses {
   attempting = 'attempting',
   attempted = 'attempted',

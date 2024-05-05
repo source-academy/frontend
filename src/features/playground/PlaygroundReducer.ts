@@ -1,35 +1,27 @@
+import { createReducer } from '@reduxjs/toolkit';
 import { Reducer } from 'redux';
 
 import { defaultPlayground } from '../../commons/application/ApplicationTypes';
 import { SourceActionType } from '../../commons/utils/ActionsHelper';
 import {
-  PLAYGROUND_UPDATE_GITHUB_SAVE_INFO,
-  PLAYGROUND_UPDATE_LANGUAGE_CONFIG,
-  PLAYGROUND_UPDATE_PERSISTENCE_FILE,
-  PlaygroundState
-} from './PlaygroundTypes';
+  playgroundConfigLanguage,
+  playgroundUpdateGitHubSaveInfo,
+  playgroundUpdatePersistenceFile
+} from './PlaygroundActions';
+import { PlaygroundState } from './PlaygroundTypes';
 
-export const PlaygroundReducer: Reducer<PlaygroundState, SourceActionType> = (
-  state = defaultPlayground,
-  action
-) => {
-  switch (action.type) {
-    case PLAYGROUND_UPDATE_GITHUB_SAVE_INFO:
-      return {
-        ...state,
-        githubSaveInfo: action.payload
-      };
-    case PLAYGROUND_UPDATE_PERSISTENCE_FILE:
-      return {
-        ...state,
-        persistenceFile: action.payload
-      };
-    case PLAYGROUND_UPDATE_LANGUAGE_CONFIG:
-      return {
-        ...state,
-        languageConfig: action.payload
-      };
-    default:
-      return state;
+export const PlaygroundReducer: Reducer<PlaygroundState, SourceActionType> = createReducer(
+  defaultPlayground,
+  builder => {
+    builder
+      .addCase(playgroundUpdateGitHubSaveInfo, (state, action) => {
+        state.githubSaveInfo = action.payload;
+      })
+      .addCase(playgroundUpdatePersistenceFile, (state, action) => {
+        state.persistenceFile = action.payload;
+      })
+      .addCase(playgroundConfigLanguage, (state, action) => {
+        state.languageConfig = action.payload;
+      });
   }
-};
+);
