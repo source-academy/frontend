@@ -1,5 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import { require as acequire } from 'ace-builds';
+import { act, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
@@ -9,12 +8,6 @@ import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSe
 
 import { mockAssessments } from '../../mocks/AssessmentMocks';
 import AssessmentWorkspace, { AssessmentWorkspaceProps } from '../AssessmentWorkspace';
-
-jest.mock('ace-builds', () => ({
-  ...jest.requireActual('ace-builds'),
-  require: jest.fn()
-}));
-const acequireMock = acequire as jest.Mock;
 
 const defaultProps = assertType<AssessmentWorkspaceProps>()({
   assessmentId: 0,
@@ -100,8 +93,11 @@ const createMemoryRouterWithRoutes = (props: AssessmentWorkspaceProps) => {
   );
 };
 
-const renderElement = (props: AssessmentWorkspaceProps) =>
-  waitFor(() => render(createMemoryRouterWithRoutes(props)));
+const renderElement = async (props: AssessmentWorkspaceProps) => {
+  const app = render(createMemoryRouterWithRoutes(props));
+  await act(() => app);
+  return app;
+};
 
 const getEditor = () => screen.queryByTestId('Editor');
 const getMCQChooser = () => screen.queryByTestId('MCQChooser');
@@ -111,13 +107,6 @@ const getGradingResultTab = (tree: HTMLElement) => tree.querySelector('.GradingR
 const getContestVotingTab = (tree: HTMLElement) => tree.querySelector('.ContestEntryVoting');
 
 describe('AssessmentWorkspace', () => {
-  beforeEach(() => {
-    acequireMock.mockReturnValue({
-      Mode: jest.fn(),
-      setCompleters: jest.fn()
-    });
-  });
-
   test('AssessmentWorkspace page "loading" content renders correctly', async () => {
     const app = createMemoryRouterWithRoutes(mockUndefinedAssessmentWorkspaceProps);
     const tree = await renderTreeJson(app);

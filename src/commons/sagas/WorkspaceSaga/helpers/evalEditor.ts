@@ -1,5 +1,6 @@
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import { call, put, select, StrictEffect } from 'redux-saga/effects';
+import { evalEditor } from 'src/commons/workspace/WorkspaceActions';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
 import { DeviceSession } from '../../../../features/remoteExecution/RemoteExecutionTypes';
@@ -8,18 +9,13 @@ import { OverallState } from '../../../application/ApplicationTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../../../fileSystem/utils';
 import { actions } from '../../../utils/ActionsHelper';
 import { makeElevatedContext } from '../../../utils/JsSlangHelper';
-import {
-  EditorTabState,
-  EVAL_EDITOR,
-  EVAL_SILENT,
-  WorkspaceLocation
-} from '../../../workspace/WorkspaceTypes';
+import { EditorTabState, EVAL_SILENT, WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import { blockExtraMethods } from './blockExtraMethods';
 import { clearContext } from './clearContext';
-import { evalCode } from './evalCode';
+import { evalCodeSaga } from './evalCode';
 import { insertDebuggerStatements } from './insertDebuggerStatements';
 
-export function* evalEditor(
+export function* evalEditorSaga(
   workspaceLocation: WorkspaceLocation
 ): Generator<StrictEffect, void, any> {
   const [
@@ -98,7 +94,7 @@ export function* evalEditor(
         [prependFilePath]: prepend
       };
       yield call(
-        evalCode,
+        evalCodeSaga,
         prependFiles,
         prependFilePath,
         elevatedContext,
@@ -111,13 +107,13 @@ export function* evalEditor(
     }
 
     yield call(
-      evalCode,
+      evalCodeSaga,
       files,
       entrypointFilePath,
       context,
       execTime,
       workspaceLocation,
-      EVAL_EDITOR
+      evalEditor.type
     );
   }
 }

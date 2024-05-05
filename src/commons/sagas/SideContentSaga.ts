@@ -2,14 +2,9 @@ import { Action } from 'redux';
 import type { SagaIterator } from 'redux-saga';
 import { put, take } from 'redux-saga/effects';
 import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
-import { NOTIFY_STORIES_EVALUATED } from 'src/features/stories/StoriesTypes';
 
 import * as actions from '../sideContent/SideContentActions';
-import {
-  BEGIN_ALERT_SIDE_CONTENT,
-  NOTIFY_PROGRAM_EVALUATED,
-  SPAWN_SIDE_CONTENT
-} from '../sideContent/SideContentTypes';
+import { BEGIN_ALERT_SIDE_CONTENT, SPAWN_SIDE_CONTENT } from '../sideContent/SideContentTypes';
 import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
@@ -35,7 +30,7 @@ export default function* SideContentSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    NOTIFY_PROGRAM_EVALUATED,
+    notifyProgramEvaluated.type,
     function* (action: ReturnType<typeof notifyProgramEvaluated>) {
       if (!action.payload.workspaceLocation || action.payload.workspaceLocation === 'stories')
         return;
@@ -52,7 +47,7 @@ export default function* SideContentSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    NOTIFY_STORIES_EVALUATED,
+    notifyStoriesEvaluated.type,
     function* (action: ReturnType<typeof notifyStoriesEvaluated>) {
       yield put(actions.spawnSideContent(`stories.${action.payload.env}`, action.payload));
     }
