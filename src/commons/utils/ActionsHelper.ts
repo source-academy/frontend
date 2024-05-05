@@ -1,6 +1,6 @@
 import * as CommonsActions from '../../commons/application/actions/CommonsActions';
 import * as InterpreterActions from '../../commons/application/actions/InterpreterActions';
-import * as SessionActions from '../../commons/application/actions/SessionActions';
+import SessionActions from '../../commons/application/actions/SessionActions';
 import * as CollabEditingActions from '../../commons/collabEditing/CollabEditingActions';
 import * as FileSystemActions from '../../commons/fileSystem/FileSystemActions';
 import * as SideContentActions from '../../commons/sideContent/SideContentActions';
@@ -16,7 +16,7 @@ import * as RemoteExecutionActions from '../../features/remoteExecution/RemoteEx
 import * as SourcecastActions from '../../features/sourceRecorder/sourcecast/SourcecastActions';
 import * as SourceRecorderActions from '../../features/sourceRecorder/SourceRecorderActions';
 import * as SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
-import * as StoriesActions from '../../features/stories/StoriesActions';
+import StoriesActions from '../../features/stories/StoriesActions';
 import { ActionType } from './TypeHelper';
 
 export const actions = {
