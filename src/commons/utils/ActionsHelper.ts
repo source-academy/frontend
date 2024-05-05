@@ -4,7 +4,7 @@ import SessionActions from '../../commons/application/actions/SessionActions';
 import * as CollabEditingActions from '../../commons/collabEditing/CollabEditingActions';
 import * as FileSystemActions from '../../commons/fileSystem/FileSystemActions';
 import * as SideContentActions from '../../commons/sideContent/SideContentActions';
-import * as WorkspaceActions from '../../commons/workspace/WorkspaceActions';
+import WorkspaceActions from '../../commons/workspace/WorkspaceActions';
 import AcademyActions from '../../features/academy/AcademyActions';
 import * as AchievementActions from '../../features/achievement/AchievementActions';
 import * as DashboardActions from '../../features/dashboard/DashboardActions';
