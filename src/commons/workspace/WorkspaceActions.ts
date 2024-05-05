@@ -6,8 +6,8 @@ import { SALanguage } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { Library } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
-import { UploadResult } from '../sideContent/content/SideContentUpload';
 import { createActions } from '../redux/utils';
+import { UploadResult } from '../sideContent/content/SideContentUpload';
 import {
   EditorTabState,
   SubmissionsTableFilters,
