@@ -6,15 +6,15 @@ import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
 
 import {
-  GITHUB_OPEN_FILE,
-  GITHUB_SAVE_FILE,
-  GITHUB_SAVE_FILE_AS
-} from '../../features/github/GitHubTypes';
+  githubOpenFile,
+  githubSaveFile,
+  githubSaveFileAs
+} from 'src/features/github/GitHubActions';
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
-import { loginGitHub, logoutGitHub } from '../application/actions/SessionActions';
 import { OverallState } from '../application/ApplicationTypes';
+import { loginGitHub, logoutGitHub } from '../application/actions/SessionActions';
 import FileExplorerDialog, { FileExplorerDialogProps } from '../gitHubOverlay/FileExplorerDialog';
 import RepositoryDialog, { RepositoryDialogProps } from '../gitHubOverlay/RepositoryDialog';
 import { actions } from '../utils/ActionsHelper';
@@ -27,9 +27,9 @@ export function* GitHubPersistenceSaga(): SagaIterator {
   yield takeLatest(loginGitHub.type, githubLoginSaga);
   yield takeLatest(logoutGitHub.type, githubLogoutSaga);
 
-  yield takeLatest(GITHUB_OPEN_FILE, githubOpenFile);
-  yield takeLatest(GITHUB_SAVE_FILE, githubSaveFile);
-  yield takeLatest(GITHUB_SAVE_FILE_AS, githubSaveFileAs);
+  yield takeLatest(githubOpenFile.type, githubOpenFileSaga);
+  yield takeLatest(githubSaveFile.type, githubSaveFileSaga);
+  yield takeLatest(githubSaveFileAs.type, githubSaveFileAsSaga);
 }
 
 function* githubLoginSaga() {
@@ -62,7 +62,7 @@ function* githubLogoutSaga() {
   yield call(showSuccessMessage, `Logged out from GitHub`, 1000);
 }
 
-function* githubOpenFile(): any {
+function* githubOpenFileSaga(): any {
   const octokit = GitHubUtils.getGitHubOctokitInstance();
   if (octokit === undefined) {
     return;
@@ -103,7 +103,7 @@ function* githubOpenFile(): any {
   }
 }
 
-function* githubSaveFile(): any {
+function* githubSaveFileSaga(): any {
   const octokit = getGitHubOctokitInstance();
   if (octokit === undefined) return;
 
@@ -141,7 +141,7 @@ function* githubSaveFile(): any {
   );
 }
 
-function* githubSaveFileAs(): any {
+function* githubSaveFileAsSaga(): any {
   const octokit = GitHubUtils.getGitHubOctokitInstance();
   if (octokit === undefined) {
     return;
