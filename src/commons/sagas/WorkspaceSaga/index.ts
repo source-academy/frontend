@@ -2,8 +2,12 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import { Context, findDeclaration, getNames } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import Phaser from 'phaser';
-import { SagaIterator } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
+import InterpreterActions, {
+  debuggerResume
+} from 'src/commons/application/actions/InterpreterActions';
+import { combineSagaHandlers } from 'src/commons/redux/utils';
+import WorkspaceActions, { evalRepl } from 'src/commons/workspace/WorkspaceActions';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 
 import { EventType } from '../../../features/achievement/AchievementTypes';
@@ -15,12 +19,6 @@ import {
   styliseSublanguage
 } from '../../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../../application/types/ExternalTypes';
-import {
-  DEBUG_RESET,
-  DEBUG_RESUME,
-  UPDATE_EDITOR_HIGHLIGHTED_LINES,
-  UPDATE_EDITOR_HIGHLIGHTED_LINES_CONTROL
-} from '../../application/types/InterpreterTypes';
 import { Library, Testcase } from '../../assessment/AssessmentTypes';
 import { Documentation } from '../../documentation/Documentation';
 import { writeFileRecursively } from '../../fileSystem/utils';
@@ -36,34 +34,16 @@ import {
   showWarningMessage
 } from '../../utils/notifications/NotificationsHelper';
 import { showFullJSDisclaimer, showFullTSDisclaimer } from '../../utils/WarningDialogHelper';
-import {
-  ADD_HTML_CONSOLE_ERROR,
-  BEGIN_CLEAR_CONTEXT,
-  CHAPTER_SELECT,
-  EditorTabState,
-  EVAL_EDITOR,
-  EVAL_EDITOR_AND_TESTCASES,
-  EVAL_REPL,
-  EVAL_TESTCASE,
-  NAV_DECLARATION,
-  PLAYGROUND_EXTERNAL_SELECT,
-  PROMPT_AUTOCOMPLETE,
-  SET_FOLDER_MODE,
-  TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_FOLDER_MODE,
-  UPDATE_EDITOR_VALUE
-} from '../../workspace/WorkspaceTypes';
-import { safeTakeEvery as takeEvery, safeTakeLeading as takeLeading } from '../SafeEffects';
-import { evalCode } from './helpers/evalCode';
-import { evalEditor } from './helpers/evalEditor';
+import { EditorTabState } from '../../workspace/WorkspaceTypes';
+import { evalCodeSaga } from './helpers/evalCode';
+import { evalEditorSaga } from './helpers/evalEditor';
 import { runTestCase } from './helpers/runTestCase';
 
-export default function* WorkspaceSaga(): SagaIterator {
-  let context: Context;
-
-  yield takeEvery(
-    ADD_HTML_CONSOLE_ERROR,
-    function* (action: ReturnType<typeof actions.addHtmlConsoleError>) {
+const WorkspaceSaga = combineSagaHandlers(
+  // TODO: Refactor and combine in a future commit
+  { ...WorkspaceActions, ...InterpreterActions },
+  {
+    addHtmlConsoleError: function* (action) {
       // TODO: Do not use if-else logic
       if (!action.payload.storyEnv) {
         yield put(
@@ -74,12 +54,8 @@ export default function* WorkspaceSaga(): SagaIterator {
           actions.handleStoriesConsoleLog(action.payload.storyEnv, action.payload.errorMsg)
         );
       }
-    }
-  );
-
-  yield takeEvery(
-    TOGGLE_FOLDER_MODE,
-    function* (action: ReturnType<typeof actions.toggleFolderMode>) {
+    },
+    toggleFolderMode: function* (action) {
       const workspaceLocation = action.payload.workspaceLocation;
       const isFolderModeEnabled: boolean = yield select(
         (state: OverallState) => state.workspaces[workspaceLocation].isFolderModeEnabled
@@ -87,63 +63,58 @@ export default function* WorkspaceSaga(): SagaIterator {
       yield put(actions.setFolderMode(workspaceLocation, !isFolderModeEnabled));
       const warningMessage = `Folder mode ${!isFolderModeEnabled ? 'enabled' : 'disabled'}`;
       yield call(showWarningMessage, warningMessage, 750);
-    }
-  );
-
-  yield takeEvery(SET_FOLDER_MODE, function* (action: ReturnType<typeof actions.setFolderMode>) {
-    const workspaceLocation = action.payload.workspaceLocation;
-    const isFolderModeEnabled: boolean = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].isFolderModeEnabled
-    );
-    // Do nothing if Folder mode is enabled.
-    if (isFolderModeEnabled) {
-      return;
-    }
-
-    const editorTabs: EditorTabState[] = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].editorTabs
-    );
-    // If Folder mode is disabled and there are no open editor tabs, add an editor tab.
-    if (editorTabs.length === 0) {
-      const defaultFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
-      const fileSystem: FSModule | null = yield select(
-        (state: OverallState) => state.fileSystem.inBrowserFileSystem
+    },
+    setFolderMode: function* (action): any {
+      const workspaceLocation = action.payload.workspaceLocation;
+      const isFolderModeEnabled: boolean = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].isFolderModeEnabled
       );
-      // If the file system is not initialised, add an editor tab with the default editor value.
-      if (fileSystem === null) {
-        yield put(actions.addEditorTab(workspaceLocation, defaultFilePath, defaultEditorValue));
+      // Do nothing if Folder mode is enabled.
+      if (isFolderModeEnabled) {
         return;
       }
-      const editorValue: string = yield new Promise((resolve, reject) => {
-        fileSystem.exists(defaultFilePath, fileExists => {
-          if (!fileExists) {
-            // If the file does not exist, we need to also create it in the file system.
-            writeFileRecursively(fileSystem, defaultFilePath, defaultEditorValue)
-              .then(() => resolve(defaultEditorValue))
-              .catch(err => reject(err));
-            return;
-          }
-          fileSystem.readFile(defaultFilePath, 'utf-8', (err, fileContents) => {
-            if (err) {
-              reject(err);
+
+      const editorTabs: EditorTabState[] = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].editorTabs
+      );
+      // If Folder mode is disabled and there are no open editor tabs, add an editor tab.
+      if (editorTabs.length === 0) {
+        const defaultFilePath = `${WORKSPACE_BASE_PATHS[workspaceLocation]}/program.js`;
+        const fileSystem: FSModule | null = yield select(
+          (state: OverallState) => state.fileSystem.inBrowserFileSystem
+        );
+        // If the file system is not initialised, add an editor tab with the default editor value.
+        if (fileSystem === null) {
+          yield put(actions.addEditorTab(workspaceLocation, defaultFilePath, defaultEditorValue));
+          return;
+        }
+        const editorValue: string = yield new Promise((resolve, reject) => {
+          fileSystem.exists(defaultFilePath, fileExists => {
+            if (!fileExists) {
+              // If the file does not exist, we need to also create it in the file system.
+              writeFileRecursively(fileSystem, defaultFilePath, defaultEditorValue)
+                .then(() => resolve(defaultEditorValue))
+                .catch(err => reject(err));
               return;
             }
-            if (fileContents === undefined) {
-              reject(new Error('File exists but has no contents.'));
-              return;
-            }
-            resolve(fileContents);
+            fileSystem.readFile(defaultFilePath, 'utf-8', (err, fileContents) => {
+              if (err) {
+                reject(err);
+                return;
+              }
+              if (fileContents === undefined) {
+                reject(new Error('File exists but has no contents.'));
+                return;
+              }
+              resolve(fileContents);
+            });
           });
         });
-      });
-      yield put(actions.addEditorTab(workspaceLocation, defaultFilePath, editorValue));
-    }
-  });
-
-  // Mirror editor updates to the associated file in the filesystem.
-  yield takeEvery(
-    UPDATE_EDITOR_VALUE,
-    function* (action: ReturnType<typeof actions.updateEditorValue>) {
+        yield put(actions.addEditorTab(workspaceLocation, defaultFilePath, editorValue));
+      }
+    },
+    // Mirror editor updates to the associated file in the filesystem.
+    updateEditorValue: function* (action): any {
       const workspaceLocation = action.payload.workspaceLocation;
       const editorTabIndex = action.payload.editorTabIndex;
 
@@ -170,20 +141,17 @@ export default function* WorkspaceSaga(): SagaIterator {
         }
       });
       yield;
-    }
-  );
-
-  yield takeEvery(EVAL_EDITOR, function* (action: ReturnType<typeof actions.evalEditor>) {
-    const workspaceLocation = action.payload.workspaceLocation;
-    yield* evalEditor(workspaceLocation);
-  });
-
-  yield takeEvery(
-    PROMPT_AUTOCOMPLETE,
-    function* (action: ReturnType<typeof actions.promptAutocomplete>): any {
+    },
+    evalEditor: function* (action) {
+      const workspaceLocation = action.payload.workspaceLocation;
+      yield* evalEditorSaga(workspaceLocation);
+    },
+    promptAutocomplete: function* (action): any {
       const workspaceLocation = action.payload.workspaceLocation;
 
-      context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
+      const context: Context = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].context
+      );
 
       const code: string = yield select((state: OverallState) => {
         const prependCode = state.workspaces[workspaceLocation].programPrependValue;
@@ -245,84 +213,87 @@ export default function* WorkspaceSaga(): SagaIterator {
         null,
         editorSuggestions.concat(builtinSuggestions, extLibSuggestions)
       );
-    }
-  );
-
-  yield takeEvery(
-    TOGGLE_EDITOR_AUTORUN,
-    function* (action: ReturnType<typeof actions.toggleEditorAutorun>): any {
+    },
+    toggleEditorAutorun: function* (action): any {
       const workspaceLocation = action.payload.workspaceLocation;
       const isEditorAutorun = yield select(
         (state: OverallState) => state.workspaces[workspaceLocation].isEditorAutorun
       );
       yield call(showWarningMessage, 'Autorun ' + (isEditorAutorun ? 'Started' : 'Stopped'), 750);
-    }
-  );
-
-  yield takeEvery(EVAL_REPL, function* (action: ReturnType<typeof actions.evalRepl>) {
-    const workspaceLocation = action.payload.workspaceLocation;
-    const code: string = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].replValue
-    );
-    const execTime: number = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].execTime
-    );
-    yield put(actions.beginInterruptExecution(workspaceLocation));
-    yield put(actions.clearReplInput(workspaceLocation));
-    yield put(actions.sendReplInputToOutput(code, workspaceLocation));
-    context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
-    // Reset old context.errors
-    context.errors = [];
-    const codeFilePath = '/code.js';
-    const codeFiles = {
-      [codeFilePath]: code
-    };
-    yield call(evalCode, codeFiles, codeFilePath, context, execTime, workspaceLocation, EVAL_REPL);
-  });
-
-  yield takeEvery(DEBUG_RESUME, function* (action: ReturnType<typeof actions.debuggerResume>) {
-    const workspaceLocation = action.payload.workspaceLocation;
-    const code: string = yield select(
+    },
+    evalRepl: function* (action) {
+      const workspaceLocation = action.payload.workspaceLocation;
+      const code: string = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].replValue
+      );
+      const execTime: number = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].execTime
+      );
+      yield put(actions.beginInterruptExecution(workspaceLocation));
+      yield put(actions.clearReplInput(workspaceLocation));
+      yield put(actions.sendReplInputToOutput(code, workspaceLocation));
+      const context: Context = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].context
+      );
+      // Reset old context.errors
+      context.errors = [];
+      const codeFilePath = '/code.js';
+      const codeFiles = {
+        [codeFilePath]: code
+      };
+      yield call(
+        evalCodeSaga,
+        codeFiles,
+        codeFilePath,
+        context,
+        execTime,
+        workspaceLocation,
+        evalRepl.type
+      );
+    },
+    debuggerResume: function* (action) {
+      const workspaceLocation = action.payload.workspaceLocation;
+      const code: string = yield select(
+        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+        (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].value
+      );
+      const execTime: number = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].execTime
+      );
+      yield put(actions.beginInterruptExecution(workspaceLocation));
+      /** Clear the context, with the same chapter and externalSymbols as before. */
+      yield put(actions.clearReplOutput(workspaceLocation));
+      const context: Context = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].context
+      );
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].value
-    );
-    const execTime: number = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].execTime
-    );
-    yield put(actions.beginInterruptExecution(workspaceLocation));
-    /** Clear the context, with the same chapter and externalSymbols as before. */
-    yield put(actions.clearReplOutput(workspaceLocation));
-    context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
-    const codeFilePath = '/code.js';
-    const codeFiles = {
-      [codeFilePath]: code
-    };
-    yield call(
-      evalCode,
-      codeFiles,
-      codeFilePath,
-      context,
-      execTime,
-      workspaceLocation,
-      DEBUG_RESUME
-    );
-  });
-
-  yield takeEvery(DEBUG_RESET, function* (action: ReturnType<typeof actions.debuggerReset>) {
-    const workspaceLocation = action.payload.workspaceLocation;
-    context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
-    yield put(actions.clearReplOutput(workspaceLocation));
-    // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-    yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
-    context.runtime.break = false;
-    yield put(actions.updateLastDebuggerResult(undefined, workspaceLocation));
-  });
-
-  yield takeEvery(
-    UPDATE_EDITOR_HIGHLIGHTED_LINES,
-    function* (action: ReturnType<typeof actions.setEditorHighlightedLines>) {
+      yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
+      const codeFilePath = '/code.js';
+      const codeFiles = {
+        [codeFilePath]: code
+      };
+      yield call(
+        evalCodeSaga,
+        codeFiles,
+        codeFilePath,
+        context,
+        execTime,
+        workspaceLocation,
+        debuggerResume.type
+      );
+    },
+    debuggerReset: function* (action) {
+      const workspaceLocation = action.payload.workspaceLocation;
+      const context: Context = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].context
+      );
+      yield put(actions.clearReplOutput(workspaceLocation));
+      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
+      yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
+      context.runtime.break = false;
+      yield put(actions.updateLastDebuggerResult(undefined, workspaceLocation));
+    },
+    setEditorHighlightedLines: function* (action): any {
       const newHighlightedLines = action.payload.newHighlightedLines;
       if (newHighlightedLines.length === 0) {
         highlightClean();
@@ -339,12 +310,8 @@ export default function* WorkspaceSaga(): SagaIterator {
         }
       }
       yield;
-    }
-  );
-
-  yield takeEvery(
-    UPDATE_EDITOR_HIGHLIGHTED_LINES_CONTROL,
-    function* (action: ReturnType<typeof actions.setEditorHighlightedLines>) {
+    },
+    setEditorHighlightedLinesControl: function* (action): any {
       const newHighlightedLines = action.payload.newHighlightedLines;
       if (newHighlightedLines.length === 0) {
         yield call(highlightCleanForControl);
@@ -360,76 +327,70 @@ export default function* WorkspaceSaga(): SagaIterator {
           // in CSE Machine. Can be ignored.
         }
       }
-    }
-  );
+    },
+    evalTestcase: function* (action) {
+      yield put(actions.addEvent([EventType.RUN_TESTCASE]));
+      const workspaceLocation = action.payload.workspaceLocation;
+      const index = action.payload.testcaseId;
+      yield* runTestCase(workspaceLocation, index);
+    },
+    chapterSelect: function* (action) {
+      const { workspaceLocation, chapter: newChapter, variant: newVariant } = action.payload;
+      const [oldVariant, oldChapter, symbols, globals, externalLibraryName]: [
+        Variant,
+        Chapter,
+        string[],
+        Array<[string, any]>,
+        ExternalLibraryName
+      ] = yield select((state: OverallState) => [
+        state.workspaces[workspaceLocation].context.variant,
+        state.workspaces[workspaceLocation].context.chapter,
+        state.workspaces[workspaceLocation].context.externalSymbols,
+        state.workspaces[workspaceLocation].globals,
+        state.workspaces[workspaceLocation].externalLibrary
+      ]);
 
-  yield takeEvery(EVAL_TESTCASE, function* (action: ReturnType<typeof actions.evalTestcase>) {
-    yield put(actions.addEvent([EventType.RUN_TESTCASE]));
-    const workspaceLocation = action.payload.workspaceLocation;
-    const index = action.payload.testcaseId;
-    yield* runTestCase(workspaceLocation, index);
-  });
+      const chapterChanged: boolean = newChapter !== oldChapter || newVariant !== oldVariant;
+      const toChangeChapter: boolean =
+        newChapter === Chapter.FULL_JS
+          ? chapterChanged && (yield call(showFullJSDisclaimer))
+          : newChapter === Chapter.FULL_TS
+          ? chapterChanged && (yield call(showFullTSDisclaimer))
+          : chapterChanged;
 
-  yield takeEvery(CHAPTER_SELECT, function* (action: ReturnType<typeof actions.chapterSelect>) {
-    const { workspaceLocation, chapter: newChapter, variant: newVariant } = action.payload;
-    const [oldVariant, oldChapter, symbols, globals, externalLibraryName]: [
-      Variant,
-      Chapter,
-      string[],
-      Array<[string, any]>,
-      ExternalLibraryName
-    ] = yield select((state: OverallState) => [
-      state.workspaces[workspaceLocation].context.variant,
-      state.workspaces[workspaceLocation].context.chapter,
-      state.workspaces[workspaceLocation].context.externalSymbols,
-      state.workspaces[workspaceLocation].globals,
-      state.workspaces[workspaceLocation].externalLibrary
-    ]);
-
-    const chapterChanged: boolean = newChapter !== oldChapter || newVariant !== oldVariant;
-    const toChangeChapter: boolean =
-      newChapter === Chapter.FULL_JS
-        ? chapterChanged && (yield call(showFullJSDisclaimer))
-        : newChapter === Chapter.FULL_TS
-        ? chapterChanged && (yield call(showFullTSDisclaimer))
-        : chapterChanged;
-
-    if (toChangeChapter) {
-      const library: Library = {
-        chapter: newChapter,
-        variant: newVariant,
-        external: {
-          name: externalLibraryName,
-          symbols
-        },
-        globals
-      };
-      yield put(actions.beginClearContext(workspaceLocation, library, false));
-      yield put(actions.clearReplOutput(workspaceLocation));
-      yield put(actions.debuggerReset(workspaceLocation));
-      if (workspaceLocation !== 'stories') yield put(actions.resetSideContent(workspaceLocation));
-      yield call(
-        showSuccessMessage,
-        `Switched to ${styliseSublanguage(newChapter, newVariant)}`,
-        1000
-      );
-    }
-  });
-
-  /**
-   * Note that the PLAYGROUND_EXTERNAL_SELECT action is made to
-   * select the library for playground.
-   * This is because assessments do not have a chapter & library select, the question
-   * specifies the chapter and library to be used.
-   *
-   * To abstract this to assessments, the state structure must be manipulated to store
-   * the external library name in a WorkspaceState (as compared to IWorkspaceManagerState).
-   *
-   * @see IWorkspaceManagerState @see WorkspaceState
-   */
-  yield takeEvery(
-    PLAYGROUND_EXTERNAL_SELECT,
-    function* (action: ReturnType<typeof actions.externalLibrarySelect>) {
+      if (toChangeChapter) {
+        const library: Library = {
+          chapter: newChapter,
+          variant: newVariant,
+          external: {
+            name: externalLibraryName,
+            symbols
+          },
+          globals
+        };
+        yield put(actions.beginClearContext(workspaceLocation, library, false));
+        yield put(actions.clearReplOutput(workspaceLocation));
+        yield put(actions.debuggerReset(workspaceLocation));
+        if (workspaceLocation !== 'stories') yield put(actions.resetSideContent(workspaceLocation));
+        yield call(
+          showSuccessMessage,
+          `Switched to ${styliseSublanguage(newChapter, newVariant)}`,
+          1000
+        );
+      }
+    },
+    /**
+     * Note that the PLAYGROUND_EXTERNAL_SELECT action is made to
+     * select the library for playground.
+     * This is because assessments do not have a chapter & library select, the question
+     * specifies the chapter and library to be used.
+     *
+     * To abstract this to assessments, the state structure must be manipulated to store
+     * the external library name in a WorkspaceState (as compared to IWorkspaceManagerState).
+     *
+     * @see IWorkspaceManagerState @see WorkspaceState
+     */
+    externalLibrarySelect: function* (action) {
       const { workspaceLocation, externalLibraryName: newExternalLibraryName } = action.payload;
       const [chapter, globals, oldExternalLibraryName]: [
         Chapter,
@@ -457,18 +418,14 @@ export default function* WorkspaceSaga(): SagaIterator {
           yield call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000);
         }
       }
-    }
-  );
-
-  /**
-   * Handles the side effect of resetting the WebGL context when context is reset.
-   *
-   * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on
-   * the function.
-   */
-  yield takeEvery(
-    BEGIN_CLEAR_CONTEXT,
-    function* (action: ReturnType<typeof actions.beginClearContext>) {
+    },
+    /**
+     * Handles the side effect of resetting the WebGL context when context is reset.
+     *
+     * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on
+     * the function.
+     */
+    beginClearContext: function* (action): any {
       yield call([DataVisualizer, DataVisualizer.clear]);
       yield call([CseMachine, CseMachine.clear]);
       const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
@@ -488,18 +445,16 @@ export default function* WorkspaceSaga(): SagaIterator {
         )
       );
       yield undefined;
-    }
-  );
-
-  yield takeEvery(
-    NAV_DECLARATION,
-    function* (action: ReturnType<typeof actions.navigateToDeclaration>) {
+    },
+    navigateToDeclaration: function* (action) {
       const workspaceLocation = action.payload.workspaceLocation;
       const code: string = yield select(
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
         (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].value
       );
-      context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
+      const context: Context = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].context
+      );
 
       const result = findDeclaration(code, context, {
         line: action.payload.cursorPosition.row + 1,
@@ -514,15 +469,12 @@ export default function* WorkspaceSaga(): SagaIterator {
           })
         );
       }
-    }
-  );
-
-  yield takeLeading(
-    EVAL_EDITOR_AND_TESTCASES,
-    function* (action: ReturnType<typeof actions.runAllTestcases>) {
+    },
+    // TODO: Should be takeLeading, not takeEvery
+    runAllTestcases: function* (action): any {
       const { workspaceLocation } = action.payload;
 
-      yield call(evalEditor, workspaceLocation);
+      yield call(evalEditorSaga, workspaceLocation);
 
       const testcases: Testcase[] = yield select(
         (state: OverallState) => state.workspaces[workspaceLocation].editorTestcases
@@ -544,5 +496,7 @@ export default function* WorkspaceSaga(): SagaIterator {
         }
       }
     }
-  );
-}
+  }
+);
+
+export default WorkspaceSaga;
