@@ -7,20 +7,20 @@ import { StoriesReducer as stories } from '../../../features/stories/StoriesRedu
 import { FileSystemReducer as fileSystem } from '../../fileSystem/FileSystemReducer';
 import { SideContentReducer as sideContent } from '../../sideContent/SideContentReducer';
 import { WorkspaceReducer as workspaces } from '../../workspace/WorkspaceReducer';
+import { OverallState } from '../ApplicationTypes';
 import { RouterReducer as router } from './CommonsReducer';
 import { SessionsReducer as session } from './SessionsReducer';
 
-const createRootReducer = () =>
-  combineReducers({
-    router,
-    achievement,
-    dashboard,
-    playground,
-    session,
-    stories,
-    workspaces,
-    fileSystem,
-    sideContent
-  });
+const rootReducer = combineReducers<OverallState>({
+  router,
+  achievement,
+  dashboard,
+  playground,
+  session,
+  stories,
+  workspaces,
+  fileSystem,
+  sideContent
+});
 
-export default createRootReducer;
+export default rootReducer;
