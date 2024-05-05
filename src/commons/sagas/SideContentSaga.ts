@@ -4,11 +4,7 @@ import { put, take } from 'redux-saga/effects';
 import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
 
 import * as actions from '../sideContent/SideContentActions';
-import {
-  BEGIN_ALERT_SIDE_CONTENT,
-  NOTIFY_PROGRAM_EVALUATED,
-  SPAWN_SIDE_CONTENT
-} from '../sideContent/SideContentTypes';
+import { BEGIN_ALERT_SIDE_CONTENT, SPAWN_SIDE_CONTENT } from '../sideContent/SideContentTypes';
 import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
@@ -34,7 +30,7 @@ export default function* SideContentSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    NOTIFY_PROGRAM_EVALUATED,
+    notifyProgramEvaluated.type,
     function* (action: ReturnType<typeof notifyProgramEvaluated>) {
       if (!action.payload.workspaceLocation || action.payload.workspaceLocation === 'stories')
         return;
