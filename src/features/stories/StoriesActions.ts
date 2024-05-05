@@ -1,88 +1,44 @@
 import { createAction } from '@reduxjs/toolkit';
 import { Chapter, Context, SourceError, Value, Variant } from 'js-slang/dist/types';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
+import { createActions } from 'src/commons/redux/utils';
 
 import {
-  ADD_STORY_ENV,
   CLEAR_STORIES_USER_AND_GROUP,
-  CLEAR_STORY_ENV,
-  CREATE_STORY,
-  DELETE_STORY,
-  EVAL_STORY,
-  EVAL_STORY_ERROR,
-  EVAL_STORY_SUCCESS,
-  GET_STORIES_LIST,
   GET_STORIES_USER,
-  HANDLE_STORIES_CONSOLE_LOG,
-  NOTIFY_STORIES_EVALUATED,
-  SAVE_STORY,
   SET_CURRENT_STORIES_GROUP,
   SET_CURRENT_STORIES_USER,
-  SET_CURRENT_STORY,
-  SET_CURRENT_STORY_ID,
   StoryData,
   StoryListViews,
-  StoryParams,
-  TOGGLE_STORIES_USING_SUBST,
-  UPDATE_STORIES_LIST
+  StoryParams
 } from './StoriesTypes';
 
-export const addStoryEnv = createAction(
-  ADD_STORY_ENV,
-  (env: string, chapter: Chapter, variant: Variant) => ({ payload: { env, chapter, variant } })
-);
+const newActions = createActions('stories', {
+  addStoryEnv: (env: string, chapter: Chapter, variant: Variant) => ({ env, chapter, variant }),
+  clearStoryEnv: (env?: string) => ({ env }),
+  evalStory: (env: string, code: string) => ({ env, code }),
+  evalStoryError: (errors: SourceError[], env: string) => ({ type: 'errors', errors, env }),
+  evalStorySuccess: (value: Value, env: string) => ({ type: 'result', value, env }),
+  handleStoriesConsoleLog: (env: string, ...logString: string[]) => ({ logString, env }),
+  notifyStoriesEvaluated: (
+    result: any,
+    lastDebuggerResult: any,
+    code: string,
+    context: Context,
+    env: string
+  ) => ({ result, lastDebuggerResult, code, context, env }),
+  toggleStoriesUsingSubst: (usingSubst: boolean, env: String) => ({ usingSubst, env }),
 
-export const clearStoryEnv = createAction(CLEAR_STORY_ENV, (env?: string) => ({
-  payload: { env }
-}));
+  // New action creators post-refactor
+  getStoriesList: () => ({}),
+  updateStoriesList: (storyLists: StoryListViews) => storyLists,
+  setCurrentStory: (story: StoryData | null) => story,
+  setCurrentStoryId: (id: number | null) => id,
+  createStory: (story: StoryParams) => story,
+  saveStory: (story: StoryParams, id: number) => ({ story, id }),
+  deleteStory: (id: number) => id
+});
 
-export const evalStory = createAction(EVAL_STORY, (env: string, code: string) => ({
-  payload: { env, code }
-}));
-
-export const evalStoryError = createAction(
-  EVAL_STORY_ERROR,
-  (errors: SourceError[], env: string) => ({ payload: { type: 'errors', errors, env } })
-);
-
-export const evalStorySuccess = createAction(EVAL_STORY_SUCCESS, (value: Value, env: string) => ({
-  payload: { type: 'result', value, env }
-}));
-
-export const handleStoriesConsoleLog = createAction(
-  HANDLE_STORIES_CONSOLE_LOG,
-  (env: string, ...logString: string[]) => ({ payload: { logString, env } })
-);
-
-export const notifyStoriesEvaluated = createAction(
-  NOTIFY_STORIES_EVALUATED,
-  (result: any, lastDebuggerResult: any, code: string, context: Context, env: string) => ({
-    payload: { result, lastDebuggerResult, code, context, env }
-  })
-);
-
-export const toggleStoriesUsingSubst = createAction(
-  TOGGLE_STORIES_USING_SUBST,
-  (usingSubst: boolean, env: String) => ({ payload: { usingSubst, env } })
-);
-
-// New action creators post-refactor
-export const getStoriesList = createAction(GET_STORIES_LIST, () => ({ payload: {} }));
-export const updateStoriesList = createAction(
-  UPDATE_STORIES_LIST,
-  (storyLists: StoryListViews) => ({ payload: storyLists })
-);
-export const setCurrentStory = createAction(SET_CURRENT_STORY, (story: StoryData | null) => ({
-  payload: story
-}));
-export const setCurrentStoryId = createAction(SET_CURRENT_STORY_ID, (id: number | null) => ({
-  payload: id
-}));
-export const createStory = createAction(CREATE_STORY, (story: StoryParams) => ({ payload: story }));
-export const saveStory = createAction(SAVE_STORY, (story: StoryParams, id: number) => ({
-  payload: { story, id }
-}));
-export const deleteStory = createAction(DELETE_STORY, (id: number) => ({ payload: id }));
 // Auth-related actions
 export const getStoriesUser = createAction(GET_STORIES_USER, () => ({ payload: {} }));
 export const setCurrentStoriesUser = createAction(
@@ -97,3 +53,32 @@ export const setCurrentStoriesGroup = createAction(
 export const clearStoriesUserAndGroup = createAction(CLEAR_STORIES_USER_AND_GROUP, () => ({
   payload: {}
 }));
+
+// For compatibility with existing code (reducer)
+export const {
+  addStoryEnv,
+  clearStoryEnv,
+  evalStory,
+  evalStoryError,
+  evalStorySuccess,
+  handleStoriesConsoleLog,
+  notifyStoriesEvaluated,
+  toggleStoriesUsingSubst,
+  // New action creators post-refactor
+  getStoriesList,
+  updateStoriesList,
+  setCurrentStory,
+  setCurrentStoryId,
+  createStory,
+  saveStory,
+  deleteStory
+} = newActions;
+
+// For compatibility with existing code (actions helper)
+export default {
+  ...newActions,
+  getStoriesUser,
+  setCurrentStoriesUser,
+  setCurrentStoriesGroup,
+  clearStoriesUserAndGroup
+};

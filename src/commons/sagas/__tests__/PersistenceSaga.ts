@@ -510,6 +510,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
       .withState({
         workspaces: {
           playground: {
+            activeEditorTabIndex: 0,
             editorTabs: [{ value: FILE_DATA }],
             externalLibrary: SOURCE_LIBRARY,
             context: {
