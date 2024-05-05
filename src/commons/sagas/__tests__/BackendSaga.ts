@@ -80,12 +80,8 @@ import {
   showSuccessMessage,
   showWarningMessage
 } from '../../utils/notifications/NotificationsHelper';
-import { updateHasUnsavedChanges } from '../../workspace/WorkspaceActions';
-import {
-  CHANGE_SUBLANGUAGE,
-  UPDATE_HAS_UNSAVED_CHANGES,
-  WorkspaceLocation
-} from '../../workspace/WorkspaceTypes';
+import { changeSublanguage, updateHasUnsavedChanges } from '../../workspace/WorkspaceActions';
+import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import BackendSaga from '../BackendSaga';
 import {
   getAssessment,
@@ -762,7 +758,7 @@ describe('Test SUBMIT_ANSWER action', () => {
       .call(showWarningMessage, "Couldn't reach our servers. Are you online?")
       .not.call.fn(showSuccessMessage)
       .not.put.actionType(UPDATE_ASSESSMENT)
-      .not.put.actionType(UPDATE_HAS_UNSAVED_CHANGES)
+      .not.put.actionType(updateHasUnsavedChanges.type)
       .hasFinalState({ session: { ...mockTokens, role: Role.Student } })
       .dispatch({ type: submitAnswer.type, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
@@ -886,7 +882,7 @@ describe('Test CHANGE_SUBLANGUAGE action', () => {
           { ok: true }
         ]
       ])
-      .dispatch({ type: CHANGE_SUBLANGUAGE, payload: { sublang } })
+      .dispatch({ type: changeSublanguage.type, payload: { sublang } })
       .silentRun();
   });
 });

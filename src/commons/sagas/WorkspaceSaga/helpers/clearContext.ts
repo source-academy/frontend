@@ -3,10 +3,11 @@ import { defineSymbol } from 'js-slang/dist/createContext';
 import { Variant } from 'js-slang/dist/types';
 import { put, select, take } from 'redux-saga/effects';
 
+import { endClearContext } from 'src/commons/workspace/WorkspaceActions';
 import { OverallState } from '../../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../../application/types/ExternalTypes';
 import { actions } from '../../../utils/ActionsHelper';
-import { END_CLEAR_CONTEXT, WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 
 export function* clearContext(workspaceLocation: WorkspaceLocation, entrypointCode: string) {
   const [chapter, symbols, externalLibraryName, globals, variant]: [
@@ -36,7 +37,7 @@ export function* clearContext(workspaceLocation: WorkspaceLocation, entrypointCo
   // Clear the context, with the same chapter and externalSymbols as before.
   yield put(actions.beginClearContext(workspaceLocation, library, false));
   // Wait for the clearing to be done.
-  yield take(END_CLEAR_CONTEXT);
+  yield take(endClearContext.type);
 
   const context: Context = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].context
