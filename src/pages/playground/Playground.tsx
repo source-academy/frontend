@@ -17,25 +17,21 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
-import {
-  loginGitHub,
-  logoutGitHub,
-  logoutGoogle
-} from 'src/commons/application/actions/SessionActions';
+import SessionActions from 'src/commons/application/actions/SessionActions';
 import {
   setEditorSessionId,
   setSessionDetails,
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
+import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
+import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
-import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
-import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
-  showFullJSWarningOnUrlLoad,
   showFulTSWarningOnUrlLoad,
+  showFullJSWarningOnUrlLoad,
   showHTMLDisclaimer
 } from 'src/commons/utils/WarningDialogHelper';
 import {
@@ -83,14 +79,13 @@ import {
   shortenURL,
   updateShortURL
 } from 'src/features/playground/PlaygroundActions';
-
 import {
-  getDefaultFilePath,
-  getLanguageConfig,
-  isSourceLanguage,
   OverallState,
   ResultOutput,
-  SALanguage
+  SALanguage,
+  getDefaultFilePath,
+  getLanguageConfig,
+  isSourceLanguage
 } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAutorunButtons';
@@ -105,8 +100,8 @@ import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimi
 import { ControlBarToggleFolderModeButton } from '../../commons/controlBar/ControlBarToggleFolderModeButton';
 import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
 import {
-  convertEditorTabStateToProps,
-  NormalEditorContainerProps
+  NormalEditorContainerProps,
+  convertEditorTabStateToProps
 } from '../../commons/editor/EditorContainer';
 import { Position } from '../../commons/editor/EditorTypes';
 import { overwriteFilesInWorkspace } from '../../commons/fileSystem/utils';
@@ -594,7 +589,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         onClickSave={
           persistenceFile ? () => dispatch(persistenceSaveFile(persistenceFile)) : undefined
         }
-        onClickLogOut={() => dispatch(logoutGoogle())}
+        onClickLogOut={() => dispatch(SessionActions.logoutGoogle())}
         onPopoverOpening={() => dispatch(persistenceInitialise())}
       />
     );
@@ -613,8 +608,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
         onClickOpen={() => dispatch(githubOpenFile())}
         onClickSaveAs={() => dispatch(githubSaveFileAs())}
         onClickSave={() => dispatch(githubSaveFile())}
-        onClickLogIn={() => dispatch(loginGitHub())}
-        onClickLogOut={() => dispatch(logoutGitHub())}
+        onClickLogIn={() => dispatch(SessionActions.loginGitHub())}
+        onClickLogOut={() => dispatch(SessionActions.logoutGitHub())}
       />
     );
   }, [

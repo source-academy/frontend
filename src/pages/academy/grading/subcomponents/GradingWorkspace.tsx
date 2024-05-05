@@ -5,7 +5,7 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
-import { fetchGrading } from 'src/commons/application/actions/SessionActions';
+import SessionActions from 'src/commons/application/actions/SessionActions';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { showSimpleErrorDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -135,7 +135,8 @@ const GradingWorkspace: React.FC<Props> = props => {
         dispatch(updateEditorValue(workspaceLocation, 0, newEditorValue)),
       handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
         dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)),
-      handleGradingFetch: (submissionId: number) => dispatch(fetchGrading(submissionId)),
+      handleGradingFetch: (submissionId: number) =>
+        dispatch(SessionActions.fetchGrading(submissionId)),
       handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
       handleReplOutputClear: () => dispatch(clearReplOutput(workspaceLocation)),
       handleReplValueChange: (newValue: string) =>
