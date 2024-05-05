@@ -1,5 +1,16 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { cloneDeep } from 'lodash';
+import {
+  debuggerReset,
+  debuggerResume,
+  endDebuggerPause,
+  endInterruptExecution,
+  evalInterpreterError,
+  evalInterpreterSuccess,
+  evalTestcaseFailure,
+  evalTestcaseSuccess,
+  handleConsoleLog
+} from 'src/commons/application/actions/InterpreterActions';
 
 import {
   CodeOutput,
@@ -10,18 +21,6 @@ import {
 } from '../../application/ApplicationTypes';
 import { LOG_OUT } from '../../application/types/CommonsTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
-import {
-  DEBUG_RESET,
-  DEBUG_RESUME,
-  END_DEBUG_PAUSE,
-  END_INTERRUPT_EXECUTION,
-  EVAL_INTERPRETER_ERROR,
-  EVAL_INTERPRETER_SUCCESS,
-  EVAL_TESTCASE_FAILURE,
-  EVAL_TESTCASE_SUCCESS,
-  HANDLE_CONSOLE_LOG,
-  UPDATE_EDITOR_HIGHLIGHTED_LINES
-} from '../../application/types/InterpreterTypes';
 import { Library, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import {
   SET_EDITOR_SESSION_ID,
@@ -30,41 +29,44 @@ import {
 import { HighlightedLines, Position } from '../../editor/EditorTypes';
 import Constants from '../../utils/Constants';
 import { createContext } from '../../utils/JsSlangHelper';
+import {
+  addEditorTab,
+  browseReplHistoryDown,
+  browseReplHistoryUp,
+  changeExternalLibrary,
+  clearReplInput,
+  clearReplOutput,
+  clearReplOutputLast,
+  endClearContext,
+  evalEditor,
+  evalRepl,
+  moveCursor,
+  removeEditorTab,
+  removeEditorTabForFile,
+  removeEditorTabsForDirectory,
+  renameEditorTabForFile,
+  renameEditorTabsForDirectory,
+  resetTestcase,
+  resetWorkspace,
+  sendReplInputToOutput,
+  setEditorBreakpoint,
+  setEditorHighlightedLines,
+  setFolderMode,
+  shiftEditorTab,
+  toggleEditorAutorun,
+  toggleUsingSubst,
+  updateActiveEditorTab,
+  updateActiveEditorTabIndex,
+  updateCurrentAssessmentId,
+  updateCurrentSubmissionId,
+  updateEditorValue,
+  updateHasUnsavedChanges,
+  updateReplValue
+} from '../WorkspaceActions';
 import { WorkspaceReducer } from '../WorkspaceReducer';
 import {
-  ADD_EDITOR_TAB,
-  BROWSE_REPL_HISTORY_DOWN,
-  BROWSE_REPL_HISTORY_UP,
-  CHANGE_EXTERNAL_LIBRARY,
-  CLEAR_REPL_INPUT,
-  CLEAR_REPL_OUTPUT,
-  CLEAR_REPL_OUTPUT_LAST,
   EditorTabState,
-  END_CLEAR_CONTEXT,
-  EVAL_EDITOR,
-  EVAL_REPL,
-  MOVE_CURSOR,
   PlaygroundWorkspaceState,
-  REMOVE_EDITOR_TAB,
-  REMOVE_EDITOR_TAB_FOR_FILE,
-  REMOVE_EDITOR_TABS_FOR_DIRECTORY,
-  RENAME_EDITOR_TAB_FOR_FILE,
-  RENAME_EDITOR_TABS_FOR_DIRECTORY,
-  RESET_TESTCASE,
-  RESET_WORKSPACE,
-  SEND_REPL_INPUT_TO_OUTPUT,
-  SET_FOLDER_MODE,
-  SHIFT_EDITOR_TAB,
-  TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_USING_SUBST,
-  UPDATE_ACTIVE_EDITOR_TAB,
-  UPDATE_ACTIVE_EDITOR_TAB_INDEX,
-  UPDATE_CURRENT_ASSESSMENT_ID,
-  UPDATE_CURRENT_SUBMISSION_ID,
-  UPDATE_EDITOR_BREAKPOINTS,
-  UPDATE_EDITOR_VALUE,
-  UPDATE_HAS_UNSAVED_CHANGES,
-  UPDATE_REPL_VALUE,
   WorkspaceLocation,
   WorkspaceManagerState
 } from '../WorkspaceTypes';
@@ -132,7 +134,7 @@ describe('BROWSE_REPL_HISTORY_DOWN', () => {
     };
 
     const replDownDefaultState: WorkspaceManagerState = generateDefaultWorkspace({ replHistory });
-    const actions = generateActions(BROWSE_REPL_HISTORY_DOWN, { replHistory });
+    const actions = generateActions(browseReplHistoryDown.type, { replHistory });
 
     actions.forEach(action => {
       let result = WorkspaceReducer(replDownDefaultState, action);
@@ -176,7 +178,7 @@ describe('BROWSE_REPL_HISTORY_DOWN', () => {
     };
 
     const replDownDefaultState: WorkspaceManagerState = generateDefaultWorkspace({ replHistory });
-    const actions = generateActions(BROWSE_REPL_HISTORY_DOWN, { replHistory });
+    const actions = generateActions(browseReplHistoryDown.type, { replHistory });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(replDownDefaultState, action);
@@ -199,7 +201,7 @@ describe('BROWSE_REPL_HISTORY_UP', () => {
       replHistory,
       replValue
     });
-    const actions = generateActions(BROWSE_REPL_HISTORY_UP, { replHistory });
+    const actions = generateActions(browseReplHistoryUp.type, { replHistory });
 
     actions.forEach(action => {
       let result = WorkspaceReducer(replUpDefaultState, action);
@@ -254,7 +256,7 @@ describe('CHANGE_EXTERNAL_LIBRARY', () => {
   test('sets externalLibrary correctly', () => {
     const newExternal = 'new_external_test' as ExternalLibraryName;
     const playgroundAction = {
-      type: CHANGE_EXTERNAL_LIBRARY,
+      type: changeExternalLibrary.type,
       payload: {
         newExternal,
         workspaceLocation: playgroundWorkspace
@@ -276,7 +278,7 @@ describe('CLEAR_REPL_INPUT', () => {
   test('clears replValue', () => {
     const replValue = 'test repl value';
     const clearReplDefaultState: WorkspaceManagerState = generateDefaultWorkspace({ replValue });
-    const actions = generateActions(CLEAR_REPL_INPUT);
+    const actions = generateActions(clearReplInput.type);
 
     actions.forEach(action => {
       const result = WorkspaceReducer(clearReplDefaultState, action);
@@ -296,7 +298,7 @@ describe('CLEAR_REPL_OUTPUT', () => {
   test('clears output', () => {
     const output: InterpreterOutput[] = [{ type: 'code', value: 'test repl input' }];
     const clearReplDefaultState: WorkspaceManagerState = generateDefaultWorkspace({ output });
-    const actions = generateActions(CLEAR_REPL_OUTPUT);
+    const actions = generateActions(clearReplOutput.type);
 
     actions.forEach(action => {
       const result = WorkspaceReducer(clearReplDefaultState, action);
@@ -327,7 +329,7 @@ describe('CLEAR_REPL_OUTPUT_LAST', () => {
       }
     ];
     const clearReplLastPriorState: WorkspaceManagerState = generateDefaultWorkspace({ output });
-    const actions = generateActions(CLEAR_REPL_OUTPUT_LAST);
+    const actions = generateActions(clearReplOutputLast.type);
 
     actions.forEach(action => {
       const result = WorkspaceReducer(clearReplLastPriorState, action);
@@ -351,7 +353,7 @@ describe('DEBUG_RESET', () => {
       isRunning,
       isDebugging
     });
-    const actions = generateActions(DEBUG_RESET);
+    const actions = generateActions(debuggerReset.type);
 
     actions.forEach(action => {
       const result = WorkspaceReducer(debugResetDefaultState, action);
@@ -374,7 +376,7 @@ describe('DEBUG_RESUME', () => {
     const debugResumeDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       isDebugging
     });
-    const actions = generateActions(DEBUG_RESUME);
+    const actions = generateActions(debuggerResume.type);
 
     actions.forEach(action => {
       const result = WorkspaceReducer(debugResumeDefaultState, action);
@@ -412,7 +414,7 @@ describe('END_CLEAR_CONTEXT', () => {
       globals: mockGlobals
     };
 
-    const actions = generateActions(END_CLEAR_CONTEXT, { library });
+    const actions = generateActions(endClearContext.type, { library });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceManager, action);
@@ -445,7 +447,7 @@ describe('END_DEBUG_PAUSE', () => {
   test('sets isRunning to false and isDebugging to true', () => {
     const isRunning = true;
     const debugPauseDefaultState: WorkspaceManagerState = generateDefaultWorkspace({ isRunning });
-    const actions = generateActions(END_DEBUG_PAUSE);
+    const actions = generateActions(endDebuggerPause.type);
 
     actions.forEach(action => {
       const result = WorkspaceReducer(debugPauseDefaultState, action);
@@ -470,7 +472,7 @@ describe('END_INTERRUPT_EXECUTION', () => {
       isRunning,
       isDebugging
     });
-    const actions = generateActions(END_INTERRUPT_EXECUTION);
+    const actions = generateActions(endInterruptExecution.type);
 
     actions.forEach(action => {
       const result = WorkspaceReducer(interruptExecutionDefaultState, action);
@@ -493,7 +495,7 @@ describe('EVAL_EDITOR', () => {
     const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       isDebugging
     });
-    const actions = generateActions(EVAL_EDITOR);
+    const actions = generateActions(evalEditor.type);
 
     actions.forEach(action => {
       const result = WorkspaceReducer(evalEditorDefaultState, action);
@@ -531,7 +533,7 @@ describe('EVAL_INTERPRETER_ERROR', () => {
       isRunning,
       isDebugging
     });
-    const actions = generateActions(EVAL_INTERPRETER_ERROR);
+    const actions = generateActions(evalInterpreterError.type);
 
     actions.forEach(action => {
       const result = WorkspaceReducer(evalEditorDefaultState, action);
@@ -557,7 +559,7 @@ describe('EVAL_INTERPRETER_ERROR', () => {
       isDebugging
     });
 
-    const actions = generateActions(EVAL_INTERPRETER_ERROR);
+    const actions = generateActions(evalInterpreterError.type);
 
     actions.forEach(action => {
       const result = WorkspaceReducer(evalEditorDefaultState, action);
@@ -591,7 +593,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
       editorTabs: [{ highlightedLines, breakpoints }]
     });
 
-    const actions = generateActions(EVAL_INTERPRETER_SUCCESS);
+    const actions = generateActions(evalInterpreterSuccess.type);
 
     actions.forEach(action => {
       const result = WorkspaceReducer(evalEditorDefaultState, action);
@@ -621,7 +623,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
       editorTabs: [{ highlightedLines, breakpoints }]
     });
 
-    const actions = generateActions(EVAL_INTERPRETER_SUCCESS);
+    const actions = generateActions(evalInterpreterSuccess.type);
 
     actions.forEach(action => {
       const result = WorkspaceReducer(evalEditorDefaultState, action);
@@ -644,7 +646,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
 
 describe('EVAL_REPL', () => {
   test('sets isRunning to true', () => {
-    const actions = generateActions(EVAL_REPL);
+    const actions = generateActions(evalRepl.type);
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceManager, action);
@@ -692,7 +694,7 @@ describe('EVAL_TESTCASE_FAILURE', () => {
     const evalFailureDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       editorTestcases
     });
-    const actions = generateActions(EVAL_TESTCASE_FAILURE, { value, index: 1 });
+    const actions = generateActions(evalTestcaseFailure.type, { value, index: 1 });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(evalFailureDefaultState, action);
@@ -721,7 +723,7 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
       editorTestcases
     });
 
-    const actions = generateActions(EVAL_TESTCASE_SUCCESS, { value, index: 1 });
+    const actions = generateActions(evalTestcaseSuccess.type, { value, index: 1 });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(testcaseSuccessDefaultState, action);
@@ -750,7 +752,7 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
       editorTestcases
     });
 
-    const actions = generateActions(EVAL_TESTCASE_SUCCESS, { value, index: 0 });
+    const actions = generateActions(evalTestcaseSuccess.type, { value, index: 0 });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(testcaseSuccessDefaultState, action);
@@ -775,7 +777,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
   test('works correctly with RunningOutput', () => {
     const logString = 'test-log-string';
     const consoleLogDefaultState = generateDefaultWorkspace({ output: outputWithRunningOutput });
-    const actions = generateActions(HANDLE_CONSOLE_LOG, { logString: [logString] });
+    const actions = generateActions(handleConsoleLog.type, { logString: [logString] });
     actions.forEach(action => {
       const result = WorkspaceReducer(cloneDeep(consoleLogDefaultState), action);
       const location: WorkspaceLocation = action.payload.workspaceLocation;
@@ -801,7 +803,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
     const consoleLogDefaultState = generateDefaultWorkspace({
       output: outputWithRunningAndCodeOutput
     });
-    const actions = generateActions(HANDLE_CONSOLE_LOG, { logString: [logString] });
+    const actions = generateActions(handleConsoleLog.type, { logString: [logString] });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(consoleLogDefaultState, action);
@@ -823,7 +825,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
     const logString = 'test-log-string-3';
     const consoleLogDefaultState = generateDefaultWorkspace({ output: [] });
 
-    const actions = generateActions(HANDLE_CONSOLE_LOG, { logString: [logString] });
+    const actions = generateActions(handleConsoleLog.type, { logString: [logString] });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(consoleLogDefaultState, action);
@@ -890,7 +892,7 @@ describe('RESET_TESTCASE', () => {
       editorTestcases
     });
 
-    const actions = generateActions(RESET_TESTCASE, {
+    const actions = generateActions(resetTestcase.type, {
       index: 1
     });
 
@@ -925,7 +927,7 @@ describe('RESET_WORKSPACE', () => {
       replValue: 'test repl value'
     };
 
-    const actions = generateActions(RESET_WORKSPACE, { workspaceOptions });
+    const actions = generateActions(resetWorkspace.type, { workspaceOptions });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(resetWorkspaceDefaultState, action);
@@ -960,7 +962,7 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
     });
     const newOutput = 'new-output-test';
 
-    const actions = generateActions(SEND_REPL_INPUT_TO_OUTPUT, {
+    const actions = generateActions(sendReplInputToOutput.type, {
       type: 'code',
       value: newOutput
     });
@@ -1001,7 +1003,7 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
     });
     const newOutput = '';
 
-    const actions = generateActions(SEND_REPL_INPUT_TO_OUTPUT, { type: 'code', value: newOutput });
+    const actions = generateActions(sendReplInputToOutput.type, { type: 'code', value: newOutput });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(inputToOutputDefaultState, action);
@@ -1058,7 +1060,7 @@ describe('SET_SHAREDB_CONNECTED', () => {
 
 describe('TOGGLE_EDITOR_AUTORUN', () => {
   test('toggles isEditorAutorun correctly', () => {
-    const actions = generateActions(TOGGLE_EDITOR_AUTORUN);
+    const actions = generateActions(toggleEditorAutorun.type);
 
     actions.forEach(action => {
       let result = WorkspaceReducer(defaultWorkspaceManager, action);
@@ -1088,7 +1090,7 @@ describe('UPDATE_CURRENT_ASSESSMENT_ID', () => {
     const assessmentId = 3;
     const questionId = 7;
     const assessmentAction = {
-      type: UPDATE_CURRENT_ASSESSMENT_ID,
+      type: updateCurrentAssessmentId.type,
       payload: { assessmentId, questionId }
     } as const;
 
@@ -1109,7 +1111,7 @@ describe('UPDATE_CURRENT_SUBMISSION_ID', () => {
     const submissionId = 5;
     const questionId = 8;
     const assessmentAction = {
-      type: UPDATE_CURRENT_SUBMISSION_ID,
+      type: updateCurrentSubmissionId.type,
       payload: { submissionId, questionId }
     } as const;
 
@@ -1128,7 +1130,7 @@ describe('UPDATE_CURRENT_SUBMISSION_ID', () => {
 describe('SET_FOLDER_MODE', () => {
   test('sets isFolderModeEnabled correctly', () => {
     const isFolderModeEnabled = true;
-    const actions = generateActions(SET_FOLDER_MODE, { isFolderModeEnabled });
+    const actions = generateActions(setFolderMode.type, { isFolderModeEnabled });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceManager, action);
@@ -1165,7 +1167,7 @@ describe('UPDATE_ACTIVE_EDITOR_TAB_INDEX', () => {
       editorTabs
     });
 
-    const actions = generateActions(UPDATE_ACTIVE_EDITOR_TAB_INDEX, { activeEditorTabIndex });
+    const actions = generateActions(updateActiveEditorTabIndex.type, { activeEditorTabIndex });
 
     actions.forEach(action => {
       const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
@@ -1180,7 +1182,7 @@ describe('UPDATE_ACTIVE_EDITOR_TAB_INDEX', () => {
       editorTabs
     });
 
-    const actions = generateActions(UPDATE_ACTIVE_EDITOR_TAB_INDEX, { activeEditorTabIndex });
+    const actions = generateActions(updateActiveEditorTabIndex.type, { activeEditorTabIndex });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -1207,7 +1209,7 @@ describe('UPDATE_ACTIVE_EDITOR_TAB_INDEX', () => {
       editorTabs
     });
 
-    const actions = generateActions(UPDATE_ACTIVE_EDITOR_TAB_INDEX, { activeEditorTabIndex });
+    const actions = generateActions(updateActiveEditorTabIndex.type, { activeEditorTabIndex });
 
     actions.forEach(action => {
       const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
@@ -1238,7 +1240,7 @@ describe('UPDATE_ACTIVE_EDITOR_TAB', () => {
       ]
     });
 
-    const actions = generateActions(UPDATE_ACTIVE_EDITOR_TAB, { activeEditorTabOptions });
+    const actions = generateActions(updateActiveEditorTab.type, { activeEditorTabOptions });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -1278,7 +1280,7 @@ describe('UPDATE_ACTIVE_EDITOR_TAB', () => {
       editorTabs: []
     });
 
-    const actions = generateActions(UPDATE_ACTIVE_EDITOR_TAB, { activeEditorTabOptions });
+    const actions = generateActions(updateActiveEditorTab.type, { activeEditorTabOptions });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -1308,7 +1310,7 @@ describe('UPDATE_EDITOR_VALUE', () => {
       editorTabs
     });
 
-    const actions = generateActions(UPDATE_EDITOR_VALUE, { editorTabIndex, newEditorValue });
+    const actions = generateActions(updateEditorValue.type, { editorTabIndex, newEditorValue });
 
     actions.forEach(action => {
       const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
@@ -1323,7 +1325,7 @@ describe('UPDATE_EDITOR_VALUE', () => {
       editorTabs
     });
 
-    const actions = generateActions(UPDATE_EDITOR_VALUE, { editorTabIndex, newEditorValue });
+    const actions = generateActions(updateEditorValue.type, { editorTabIndex, newEditorValue });
 
     actions.forEach(action => {
       const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
@@ -1338,7 +1340,7 @@ describe('UPDATE_EDITOR_VALUE', () => {
       editorTabs
     });
 
-    const actions = generateActions(UPDATE_EDITOR_VALUE, { editorTabIndex, newEditorValue });
+    const actions = generateActions(updateEditorValue.type, { editorTabIndex, newEditorValue });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -1375,7 +1377,7 @@ describe('UPDATE_EDITOR_BREAKPOINTS', () => {
       editorTabs
     });
 
-    const actions = generateActions(UPDATE_EDITOR_BREAKPOINTS, { editorTabIndex, newBreakpoints });
+    const actions = generateActions(setEditorBreakpoint.type, { editorTabIndex, newBreakpoints });
 
     actions.forEach(action => {
       const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
@@ -1390,7 +1392,7 @@ describe('UPDATE_EDITOR_BREAKPOINTS', () => {
       editorTabs
     });
 
-    const actions = generateActions(UPDATE_EDITOR_BREAKPOINTS, { editorTabIndex, newBreakpoints });
+    const actions = generateActions(setEditorBreakpoint.type, { editorTabIndex, newBreakpoints });
 
     actions.forEach(action => {
       const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
@@ -1405,7 +1407,7 @@ describe('UPDATE_EDITOR_BREAKPOINTS', () => {
       editorTabs
     });
 
-    const actions = generateActions(UPDATE_EDITOR_BREAKPOINTS, { editorTabIndex, newBreakpoints });
+    const actions = generateActions(setEditorBreakpoint.type, { editorTabIndex, newBreakpoints });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -1445,7 +1447,7 @@ describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
       editorTabs
     });
 
-    const actions = generateActions(UPDATE_EDITOR_HIGHLIGHTED_LINES, {
+    const actions = generateActions(setEditorHighlightedLines.type, {
       editorTabIndex,
       newHighlightedLines
     });
@@ -1463,7 +1465,7 @@ describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
       editorTabs
     });
 
-    const actions = generateActions(UPDATE_EDITOR_HIGHLIGHTED_LINES, {
+    const actions = generateActions(setEditorHighlightedLines.type, {
       editorTabIndex,
       newHighlightedLines
     });
@@ -1481,7 +1483,7 @@ describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
       editorTabs
     });
 
-    const actions = generateActions(UPDATE_EDITOR_HIGHLIGHTED_LINES, {
+    const actions = generateActions(setEditorHighlightedLines.type, {
       editorTabIndex,
       newHighlightedLines
     });
@@ -1527,7 +1529,7 @@ describe('MOVE_CURSOR', () => {
       editorTabs
     });
 
-    const actions = generateActions(MOVE_CURSOR, {
+    const actions = generateActions(moveCursor.type, {
       editorTabIndex,
       newCursorPosition
     });
@@ -1545,7 +1547,7 @@ describe('MOVE_CURSOR', () => {
       editorTabs
     });
 
-    const actions = generateActions(MOVE_CURSOR, {
+    const actions = generateActions(moveCursor.type, {
       editorTabIndex,
       newCursorPosition
     });
@@ -1563,7 +1565,7 @@ describe('MOVE_CURSOR', () => {
       editorTabs
     });
 
-    const actions = generateActions(MOVE_CURSOR, {
+    const actions = generateActions(moveCursor.type, {
       editorTabIndex,
       newCursorPosition
     });
@@ -1605,7 +1607,7 @@ describe('ADD_EDITOR_TAB', () => {
       editorTabs
     });
 
-    const actions = generateActions(ADD_EDITOR_TAB, { filePath, editorValue });
+    const actions = generateActions(addEditorTab.type, { filePath, editorValue });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -1637,7 +1639,7 @@ describe('ADD_EDITOR_TAB', () => {
       editorTabs
     });
 
-    const actions = generateActions(ADD_EDITOR_TAB, { filePath, editorValue });
+    const actions = generateActions(addEditorTab.type, { filePath, editorValue });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -1693,7 +1695,7 @@ describe('SHIFT_EDITOR_TAB', () => {
       editorTabs
     });
 
-    const actions = generateActions(SHIFT_EDITOR_TAB, {
+    const actions = generateActions(shiftEditorTab.type, {
       previousEditorTabIndex,
       newEditorTabIndex
     });
@@ -1712,7 +1714,7 @@ describe('SHIFT_EDITOR_TAB', () => {
       editorTabs
     });
 
-    const actions = generateActions(SHIFT_EDITOR_TAB, {
+    const actions = generateActions(shiftEditorTab.type, {
       previousEditorTabIndex,
       newEditorTabIndex
     });
@@ -1733,7 +1735,7 @@ describe('SHIFT_EDITOR_TAB', () => {
       editorTabs
     });
 
-    const actions = generateActions(SHIFT_EDITOR_TAB, {
+    const actions = generateActions(shiftEditorTab.type, {
       previousEditorTabIndex,
       newEditorTabIndex
     });
@@ -1752,7 +1754,7 @@ describe('SHIFT_EDITOR_TAB', () => {
       editorTabs
     });
 
-    const actions = generateActions(SHIFT_EDITOR_TAB, {
+    const actions = generateActions(shiftEditorTab.type, {
       previousEditorTabIndex,
       newEditorTabIndex
     });
@@ -1771,7 +1773,7 @@ describe('SHIFT_EDITOR_TAB', () => {
       editorTabs
     });
 
-    const actions = generateActions(SHIFT_EDITOR_TAB, {
+    const actions = generateActions(shiftEditorTab.type, {
       previousEditorTabIndex,
       newEditorTabIndex
     });
@@ -1801,7 +1803,7 @@ describe('SHIFT_EDITOR_TAB', () => {
       editorTabs
     });
 
-    const actions = generateActions(SHIFT_EDITOR_TAB, {
+    const actions = generateActions(shiftEditorTab.type, {
       previousEditorTabIndex,
       newEditorTabIndex
     });
@@ -1845,7 +1847,7 @@ describe('REMOVE_EDITOR_TAB', () => {
       editorTabs
     });
 
-    const actions = generateActions(REMOVE_EDITOR_TAB, { editorTabIndex });
+    const actions = generateActions(removeEditorTab.type, { editorTabIndex });
 
     actions.forEach(action => {
       const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
@@ -1860,7 +1862,7 @@ describe('REMOVE_EDITOR_TAB', () => {
       editorTabs
     });
 
-    const actions = generateActions(REMOVE_EDITOR_TAB, { editorTabIndex });
+    const actions = generateActions(removeEditorTab.type, { editorTabIndex });
 
     actions.forEach(action => {
       const resultThunk = () => WorkspaceReducer(defaultWorkspaceState, action);
@@ -1875,7 +1877,7 @@ describe('REMOVE_EDITOR_TAB', () => {
       editorTabs: [zerothEditorTab]
     });
 
-    const actions = generateActions(REMOVE_EDITOR_TAB, { editorTabIndex });
+    const actions = generateActions(removeEditorTab.type, { editorTabIndex });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -1902,7 +1904,7 @@ describe('REMOVE_EDITOR_TAB', () => {
       editorTabs
     });
 
-    const actions = generateActions(REMOVE_EDITOR_TAB, { editorTabIndex });
+    const actions = generateActions(removeEditorTab.type, { editorTabIndex });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -1929,7 +1931,7 @@ describe('REMOVE_EDITOR_TAB', () => {
       editorTabs
     });
 
-    const actions = generateActions(REMOVE_EDITOR_TAB, { editorTabIndex });
+    const actions = generateActions(removeEditorTab.type, { editorTabIndex });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -1956,7 +1958,7 @@ describe('REMOVE_EDITOR_TAB', () => {
       editorTabs
     });
 
-    const actions = generateActions(REMOVE_EDITOR_TAB, { editorTabIndex });
+    const actions = generateActions(removeEditorTab.type, { editorTabIndex });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -1983,7 +1985,7 @@ describe('REMOVE_EDITOR_TAB', () => {
       editorTabs
     });
 
-    const actions = generateActions(REMOVE_EDITOR_TAB, { editorTabIndex });
+    const actions = generateActions(removeEditorTab.type, { editorTabIndex });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2026,7 +2028,7 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
       editorTabs
     });
 
-    const actions = generateActions(REMOVE_EDITOR_TAB_FOR_FILE, { removedFilePath });
+    const actions = generateActions(removeEditorTabForFile.type, { removedFilePath });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2043,7 +2045,7 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
       editorTabs: [zerothEditorTab]
     });
 
-    const actions = generateActions(REMOVE_EDITOR_TAB_FOR_FILE, { removedFilePath });
+    const actions = generateActions(removeEditorTabForFile.type, { removedFilePath });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2070,7 +2072,7 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
       editorTabs
     });
 
-    const actions = generateActions(REMOVE_EDITOR_TAB_FOR_FILE, { removedFilePath });
+    const actions = generateActions(removeEditorTabForFile.type, { removedFilePath });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2097,7 +2099,7 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
       editorTabs
     });
 
-    const actions = generateActions(REMOVE_EDITOR_TAB_FOR_FILE, { removedFilePath });
+    const actions = generateActions(removeEditorTabForFile.type, { removedFilePath });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2124,7 +2126,7 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
       editorTabs
     });
 
-    const actions = generateActions(REMOVE_EDITOR_TAB_FOR_FILE, { removedFilePath });
+    const actions = generateActions(removeEditorTabForFile.type, { removedFilePath });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2151,7 +2153,7 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
       editorTabs
     });
 
-    const actions = generateActions(REMOVE_EDITOR_TAB_FOR_FILE, { removedFilePath });
+    const actions = generateActions(removeEditorTabForFile.type, { removedFilePath });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2211,7 +2213,7 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
       editorTabs
     });
 
-    const actions = generateActions(REMOVE_EDITOR_TABS_FOR_DIRECTORY, { removedDirectoryPath });
+    const actions = generateActions(removeEditorTabsForDirectory.type, { removedDirectoryPath });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2228,7 +2230,7 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
       editorTabs
     });
 
-    const actions = generateActions(REMOVE_EDITOR_TABS_FOR_DIRECTORY, { removedDirectoryPath });
+    const actions = generateActions(removeEditorTabsForDirectory.type, { removedDirectoryPath });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2255,7 +2257,7 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
       editorTabs
     });
 
-    const actions = generateActions(REMOVE_EDITOR_TABS_FOR_DIRECTORY, { removedDirectoryPath });
+    const actions = generateActions(removeEditorTabsForDirectory.type, { removedDirectoryPath });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2282,7 +2284,7 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
       editorTabs
     });
 
-    const actions = generateActions(REMOVE_EDITOR_TABS_FOR_DIRECTORY, { removedDirectoryPath });
+    const actions = generateActions(removeEditorTabsForDirectory.type, { removedDirectoryPath });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2309,7 +2311,7 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
       editorTabs
     });
 
-    const actions = generateActions(REMOVE_EDITOR_TABS_FOR_DIRECTORY, { removedDirectoryPath });
+    const actions = generateActions(removeEditorTabsForDirectory.type, { removedDirectoryPath });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2336,7 +2338,7 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
       editorTabs
     });
 
-    const actions = generateActions(REMOVE_EDITOR_TABS_FOR_DIRECTORY, { removedDirectoryPath });
+    const actions = generateActions(removeEditorTabsForDirectory.type, { removedDirectoryPath });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2379,7 +2381,7 @@ describe('RENAME_EDITOR_TAB_FOR_FILE', () => {
       editorTabs
     });
 
-    const actions = generateActions(RENAME_EDITOR_TAB_FOR_FILE, { oldFilePath, newFilePath });
+    const actions = generateActions(renameEditorTabForFile.type, { oldFilePath, newFilePath });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2397,7 +2399,7 @@ describe('RENAME_EDITOR_TAB_FOR_FILE', () => {
       editorTabs
     });
 
-    const actions = generateActions(RENAME_EDITOR_TAB_FOR_FILE, { oldFilePath, newFilePath });
+    const actions = generateActions(renameEditorTabForFile.type, { oldFilePath, newFilePath });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceState, action);
@@ -2444,7 +2446,7 @@ describe('RENAME_EDITOR_TABS_FOR_DIRECTORY', () => {
       editorTabs
     });
 
-    const actions = generateActions(RENAME_EDITOR_TABS_FOR_DIRECTORY, {
+    const actions = generateActions(renameEditorTabsForDirectory.type, {
       oldDirectoryPath,
       newDirectoryPath
     });
@@ -2464,7 +2466,7 @@ describe('RENAME_EDITOR_TABS_FOR_DIRECTORY', () => {
       editorTabs
     });
 
-    const actions = generateActions(RENAME_EDITOR_TABS_FOR_DIRECTORY, {
+    const actions = generateActions(renameEditorTabsForDirectory.type, {
       oldDirectoryPath,
       newDirectoryPath
     });
@@ -2497,7 +2499,7 @@ describe('RENAME_EDITOR_TABS_FOR_DIRECTORY', () => {
 describe('UPDATE_HAS_UNSAVED_CHANGES', () => {
   test('sets hasUnsavedChanges correctly', () => {
     const hasUnsavedChanges = true;
-    const actions = generateActions(UPDATE_HAS_UNSAVED_CHANGES, { hasUnsavedChanges });
+    const actions = generateActions(updateHasUnsavedChanges.type, { hasUnsavedChanges });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceManager, action);
@@ -2516,7 +2518,7 @@ describe('UPDATE_HAS_UNSAVED_CHANGES', () => {
 describe('UPDATE_REPL_VALUE', () => {
   test('sets replValue correctly', () => {
     const newReplValue = 'test new repl value';
-    const actions = generateActions(UPDATE_REPL_VALUE, { newReplValue });
+    const actions = generateActions(updateReplValue.type, { newReplValue });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceManager, action);
@@ -2535,7 +2537,7 @@ describe('UPDATE_REPL_VALUE', () => {
 describe('TOGGLE_USING_SUBST', () => {
   test('sets usingSubst correctly', () => {
     const usingSubst = true;
-    const actions = generateActions(TOGGLE_USING_SUBST, { usingSubst });
+    const actions = generateActions(toggleUsingSubst.type, { usingSubst });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceManager, action);
@@ -2556,3 +2558,5 @@ describe('TOGGLE_USING_SUBST', () => {
     });
   });
 });
+
+// TODO: Add toggleusingcse

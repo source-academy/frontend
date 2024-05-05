@@ -26,7 +26,6 @@ import {
   setSessionDetails,
   setSharedbConnected
 } from '../collabEditing/CollabEditingActions';
-import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import { createContext } from '../utils/JsSlangHelper';
 import { handleCseAndStepperActions } from './reducers/cseReducer';
@@ -40,6 +39,7 @@ import {
   enableTokenCounter,
   endClearContext,
   evalEditor,
+  notifyProgramEvaluated,
   resetTestcase,
   resetWorkspace,
   setIsEditorReadonly,
@@ -414,7 +414,7 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
   const workspaceLocation = getWorkspaceLocation(action);
 
   switch (action.type) {
-    case NOTIFY_PROGRAM_EVALUATED: {
+    case notifyProgramEvaluated.type: {
       const debuggerContext = {
         ...state[workspaceLocation].debuggerContext,
         result: action.payload.result,
