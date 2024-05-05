@@ -1,8 +1,8 @@
 import { Context, interrupt, runInContext } from 'js-slang';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { call, put, race, take } from 'redux-saga/effects';
-
 import { beginInterruptExecution } from 'src/commons/application/actions/InterpreterActions';
+
 import { TestcaseType, TestcaseTypes } from '../../../assessment/AssessmentTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';

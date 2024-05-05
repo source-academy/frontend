@@ -1,6 +1,5 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { cloneDeep } from 'lodash';
-
 import {
   debuggerReset,
   debuggerResume,
@@ -12,12 +11,13 @@ import {
   evalTestcaseSuccess,
   handleConsoleLog
 } from 'src/commons/application/actions/InterpreterActions';
+
 import {
   CodeOutput,
-  InterpreterOutput,
-  RunningOutput,
   createDefaultWorkspace,
-  defaultWorkspaceManager
+  defaultWorkspaceManager,
+  InterpreterOutput,
+  RunningOutput
 } from '../../application/ApplicationTypes';
 import { LOG_OUT } from '../../application/types/CommonsTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';

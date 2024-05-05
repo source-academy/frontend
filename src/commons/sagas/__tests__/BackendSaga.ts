@@ -3,9 +3,9 @@ import { createMemoryRouter } from 'react-router';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import { mockTeamFormationOverviews } from 'src/commons/mocks/TeamFormationMocks';
+import { addNewUsersToCourse, createCourse } from 'src/features/academy/AcademyActions';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
-import { addNewUsersToCourse, createCourse } from 'src/features/academy/AcademyActions';
 import { updateGroupGradingSummary } from '../../../features/dashboard/DashboardActions';
 import {
   FETCH_GROUP_GRADING_SUMMARY,

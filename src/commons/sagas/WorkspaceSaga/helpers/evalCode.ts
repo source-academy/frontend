@@ -8,18 +8,17 @@ import { Chapter, ErrorSeverity, ErrorType, SourceError, Variant } from 'js-slan
 import { SagaIterator } from 'redux-saga';
 import { call, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
+import {
+  beginDebuggerPause,
+  beginInterruptExecution,
+  debuggerResume
+} from 'src/commons/application/actions/InterpreterActions';
 import { makeCCompilerConfig, specialCReturnObject } from 'src/commons/utils/CToWasmHelper';
 import { javaRun } from 'src/commons/utils/JavaHelper';
 import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
 import { isSchemeLanguage, OverallState } from '../../../application/ApplicationTypes';
-
-import {
-  beginDebuggerPause,
-  beginInterruptExecution,
-  debuggerResume
-} from 'src/commons/application/actions/InterpreterActions';
 import { SideContentType } from '../../../sideContent/SideContentTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import DisplayBufferService from '../../../utils/DisplayBufferService';

@@ -1,11 +1,11 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { expectSaga } from 'redux-saga-test-plan';
-
 import {
   changeExternalLibrary,
   chapterSelect,
   updateEditorValue
 } from 'src/commons/workspace/WorkspaceActions';
+
 import { PLAYGROUND_UPDATE_PERSISTENCE_FILE } from '../../../features/playground/PlaygroundTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import { actions } from '../../utils/ActionsHelper';

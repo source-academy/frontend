@@ -4,17 +4,17 @@ import {
 } from '@octokit/types';
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeLatest } from 'redux-saga/effects';
-
 import {
   githubOpenFile,
   githubSaveFile,
   githubSaveFileAs
 } from 'src/features/github/GitHubActions';
+
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
-import { OverallState } from '../application/ApplicationTypes';
 import { loginGitHub, logoutGitHub } from '../application/actions/SessionActions';
+import { OverallState } from '../application/ApplicationTypes';
 import FileExplorerDialog, { FileExplorerDialogProps } from '../gitHubOverlay/FileExplorerDialog';
 import RepositoryDialog, { RepositoryDialogProps } from '../gitHubOverlay/RepositoryDialog';
 import { actions } from '../utils/ActionsHelper';

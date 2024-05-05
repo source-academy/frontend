@@ -3,13 +3,13 @@ import { Context, findDeclaration, getNames } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import Phaser from 'phaser';
 import { call, put, select } from 'redux-saga/effects';
-import CseMachine from 'src/features/cseMachine/CseMachine';
-
 import InterpreterActions, {
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
 import { combineSagaHandlers } from 'src/commons/redux/utils';
 import WorkspaceActions, { evalRepl } from 'src/commons/workspace/WorkspaceActions';
+import CseMachine from 'src/features/cseMachine/CseMachine';
+
 import { EventType } from '../../../features/achievement/AchievementTypes';
 import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
 import { WORKSPACE_BASE_PATHS } from '../../../pages/fileSystem/createInBrowserFileSystem';

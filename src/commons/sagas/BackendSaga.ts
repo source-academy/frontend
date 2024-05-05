@@ -2,14 +2,14 @@
 /*eslint-env browser*/
 import { SagaIterator } from 'redux-saga';
 import { all, call, fork, put, select } from 'redux-saga/effects';
-import { postNewStoriesUsers } from 'src/features/stories/storiesComponents/BackendAccess';
-import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
-
 import {
   addNewStoriesUsersToCourse,
   addNewUsersToCourse,
   createCourse
 } from 'src/features/academy/AcademyActions';
+import { postNewStoriesUsers } from 'src/features/stories/storiesComponents/BackendAccess';
+import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
+
 import {
   FETCH_GROUP_GRADING_SUMMARY,
   GradingSummary
@@ -31,15 +31,15 @@ import {
   UNPUBLISH_GRADING_ALL,
   UPLOAD_ASSESSMENT
 } from '../../features/groundControl/GroundControlTypes';
+import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import {
   SAVE_SOURCECAST_DATA,
   SourcecastData
 } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
 import { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
-import { OverallState, Role } from '../application/ApplicationTypes';
 import SessionActions from '../application/actions/SessionActions';
+import { OverallState, Role } from '../application/ApplicationTypes';
 import { RouterState } from '../application/types/CommonsTypes';
 import {
   AdminPanelCourseRegistration,

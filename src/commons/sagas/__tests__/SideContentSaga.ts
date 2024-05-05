@@ -5,10 +5,10 @@ import { expectSaga } from 'redux-saga-test-plan';
 import * as sideContentHelper from 'src/commons/sideContent/SideContentHelper';
 import { SideContentReducer } from 'src/commons/sideContent/SideContentReducer';
 import {
+  type SideContentManagerState,
   SideContentState,
   SideContentTab,
-  SideContentType,
-  type SideContentManagerState
+  SideContentType
 } from 'src/commons/sideContent/SideContentTypes';
 import { actions } from 'src/commons/utils/ActionsHelper';
 
