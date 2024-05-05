@@ -74,9 +74,8 @@ const StoriesSaga = combineSagaHandlers(StoriesActions, {
         pinOrder: null,
         status: StoryStatus.Draft,
         statusMessage: ''
-        };
-        yield put(actions.setCurrentStory(defaultStory));
-
+      };
+      yield put(actions.setCurrentStory(defaultStory));
     }
   },
   createStory: function* (action) {
