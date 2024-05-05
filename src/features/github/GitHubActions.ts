@@ -1,9 +1,15 @@
-import { createAction } from '@reduxjs/toolkit';
+import { createActions } from 'src/commons/redux/utils';
 
-import { GITHUB_OPEN_FILE, GITHUB_SAVE_FILE, GITHUB_SAVE_FILE_AS } from './GitHubTypes';
+const newActions = createActions('github', {
+  githubOpenFile: () => ({}),
+  githubSaveFile: () => ({}),
+  githubSaveFileAs: () => ({})
+});
 
-export const githubOpenFile = createAction(GITHUB_OPEN_FILE, () => ({ payload: {} }));
+// For compatibility with existing code (reducer)
+export const { githubOpenFile, githubSaveFile, githubSaveFileAs } = newActions;
 
-export const githubSaveFile = createAction(GITHUB_SAVE_FILE, () => ({ payload: {} }));
-
-export const githubSaveFileAs = createAction(GITHUB_SAVE_FILE_AS, () => ({ payload: {} }));
+// For compatibility with existing code (actions helper)
+export default {
+  ...newActions
+};

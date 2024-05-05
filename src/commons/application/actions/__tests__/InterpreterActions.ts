@@ -1,17 +1,5 @@
 import { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import {
-  BEGIN_DEBUG_PAUSE,
-  BEGIN_INTERRUPT_EXECUTION,
-  DEBUG_RESET,
-  DEBUG_RESUME,
-  END_DEBUG_PAUSE,
-  END_INTERRUPT_EXECUTION,
-  EVAL_INTERPRETER_ERROR,
-  EVAL_INTERPRETER_SUCCESS,
-  EVAL_TESTCASE_SUCCESS,
-  HANDLE_CONSOLE_LOG
-} from '../../types/InterpreterTypes';
-import {
   beginDebuggerPause,
   beginInterruptExecution,
   debuggerReset,
@@ -32,7 +20,7 @@ test('handleConsoleLog generates correct action object', () => {
   const logString = 'test-log-string';
   const action = handleConsoleLog(assessmentWorkspace, logString);
   expect(action).toEqual({
-    type: HANDLE_CONSOLE_LOG,
+    type: handleConsoleLog.type,
     payload: {
       logString: [logString],
       workspaceLocation: assessmentWorkspace
@@ -44,7 +32,7 @@ test('evalInterpreterSuccess generates correct action object', () => {
   const value = 'value';
   const action = evalInterpreterSuccess(value, gradingWorkspace);
   expect(action).toEqual({
-    type: EVAL_INTERPRETER_SUCCESS,
+    type: evalInterpreterSuccess.type,
     payload: {
       type: 'result',
       value,
@@ -58,7 +46,7 @@ test('evalTestcaseSuccess generates correct action object', () => {
   const index = 3;
   const action = evalTestcaseSuccess(value, playgroundWorkspace, index);
   expect(action).toEqual({
-    type: EVAL_TESTCASE_SUCCESS,
+    type: evalTestcaseSuccess.type,
     payload: {
       type: 'result',
       value,
@@ -72,7 +60,7 @@ test('evalInterpreterError generates correct action object', () => {
   const errors: any = [];
   const action = evalInterpreterError(errors, assessmentWorkspace);
   expect(action).toEqual({
-    type: EVAL_INTERPRETER_ERROR,
+    type: evalInterpreterError.type,
     payload: {
       type: 'errors',
       errors,
@@ -84,7 +72,7 @@ test('evalInterpreterError generates correct action object', () => {
 test('beginInterruptExecution generates correct action object', () => {
   const action = beginInterruptExecution(gradingWorkspace);
   expect(action).toEqual({
-    type: BEGIN_INTERRUPT_EXECUTION,
+    type: beginInterruptExecution.type,
     payload: {
       workspaceLocation: gradingWorkspace
     }
@@ -94,7 +82,7 @@ test('beginInterruptExecution generates correct action object', () => {
 test('endInterruptExecution generates correct action object', () => {
   const action = endInterruptExecution(playgroundWorkspace);
   expect(action).toEqual({
-    type: END_INTERRUPT_EXECUTION,
+    type: endInterruptExecution.type,
     payload: {
       workspaceLocation: playgroundWorkspace
     }
@@ -104,7 +92,7 @@ test('endInterruptExecution generates correct action object', () => {
 test('beginDebuggerPause generates correct action object', () => {
   const action = beginDebuggerPause(assessmentWorkspace);
   expect(action).toEqual({
-    type: BEGIN_DEBUG_PAUSE,
+    type: beginDebuggerPause.type,
     payload: {
       workspaceLocation: assessmentWorkspace
     }
@@ -114,7 +102,7 @@ test('beginDebuggerPause generates correct action object', () => {
 test('endDebuggerPause generates correct action object', () => {
   const action = endDebuggerPause(gradingWorkspace);
   expect(action).toEqual({
-    type: END_DEBUG_PAUSE,
+    type: endDebuggerPause.type,
     payload: {
       workspaceLocation: gradingWorkspace
     }
@@ -124,7 +112,7 @@ test('endDebuggerPause generates correct action object', () => {
 test('debuggerResume generates correct action object', () => {
   const action = debuggerResume(playgroundWorkspace);
   expect(action).toEqual({
-    type: DEBUG_RESUME,
+    type: debuggerResume.type,
     payload: {
       workspaceLocation: playgroundWorkspace
     }
@@ -134,7 +122,7 @@ test('debuggerResume generates correct action object', () => {
 test('debuggerReset generates correct action object', () => {
   const action = debuggerReset(assessmentWorkspace);
   expect(action).toEqual({
-    type: DEBUG_RESET,
+    type: debuggerReset.type,
     payload: {
       workspaceLocation: assessmentWorkspace
     }
