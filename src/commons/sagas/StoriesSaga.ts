@@ -14,6 +14,7 @@ import {
 } from 'src/features/stories/storiesComponents/BackendAccess';
 import { StoryData, StoryListView, StoryView } from 'src/features/stories/StoriesTypes';
 
+import SessionActions from '../application/actions/SessionActions';
 import { OverallState, StoriesRole } from '../application/ApplicationTypes';
 import { Tokens } from '../application/types/SessionTypes';
 import { combineSagaHandlers } from '../redux/utils';
@@ -24,7 +25,9 @@ import { defaultStoryContent } from '../utils/StoriesHelper';
 import { selectTokens } from './BackendSaga';
 import { evalCode } from './WorkspaceSaga/helpers/evalCode';
 
-const StoriesSaga = combineSagaHandlers(StoriesActions, {
+// TODO: Refactor and combine in a future commit
+const sagaActions = { ...StoriesActions, ...SessionActions };
+const StoriesSaga = combineSagaHandlers(sagaActions, {
   // TODO: This should be using `takeLatest`, not `takeEvery`
   getStoriesList: function* () {
     const tokens: Tokens = yield selectTokens();
