@@ -9,7 +9,7 @@ import { makeElevatedContext } from '../../../utils/JsSlangHelper';
 import { EVAL_SILENT, WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import { blockExtraMethods } from './blockExtraMethods';
 import { clearContext } from './clearContext';
-import { evalCode } from './evalCode';
+import { evalCodeSaga } from './evalCode';
 import { evalTestCode } from './evalTestCode';
 import { restoreExtraMethods } from './restoreExtraMethods';
 
@@ -55,7 +55,7 @@ export function* runTestCase(
     [prependFilePath]: prepend
   };
   yield call(
-    evalCode,
+    evalCodeSaga,
     prependFiles,
     prependFilePath,
     elevatedContext,
@@ -73,7 +73,7 @@ export function* runTestCase(
     [valueFilePath]: value
   };
   yield call(
-    evalCode,
+    evalCodeSaga,
     valueFiles,
     valueFilePath,
     context,
@@ -98,7 +98,7 @@ export function* runTestCase(
       [postpendFilePath]: postpend
     };
     yield call(
-      evalCode,
+      evalCodeSaga,
       postpendFiles,
       postpendFilePath,
       elevatedContext,

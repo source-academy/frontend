@@ -3,7 +3,7 @@ import { call } from 'redux-saga/effects';
 
 import { getDifferenceInMethods, getRestoreExtraMethodsString } from '../../../utils/JsSlangHelper';
 import { EVAL_SILENT, WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
-import { evalCode } from './evalCode';
+import { evalCodeSaga } from './evalCode';
 
 export function* restoreExtraMethods(
   elevatedContext: Context,
@@ -19,7 +19,7 @@ export function* restoreExtraMethods(
     [restorerFilePath]: restorer
   };
   yield call(
-    evalCode,
+    evalCodeSaga,
     restorerFiles,
     restorerFilePath,
     elevatedContext,
