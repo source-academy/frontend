@@ -22,50 +22,8 @@ import {
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../../ApplicationTypes';
 import {
-  ACKNOWLEDGE_NOTIFICATIONS,
-  DELETE_ASSESSMENT_CONFIG,
-  DELETE_USER_COURSE_REGISTRATION,
-  FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
-  FETCH_ASSESSMENT,
-  FETCH_ASSESSMENT_CONFIGS,
-  FETCH_ASSESSMENT_OVERVIEWS,
-  FETCH_AUTH,
-  FETCH_COURSE_CONFIG,
-  FETCH_GRADING,
-  FETCH_GRADING_OVERVIEWS,
-  FETCH_NOTIFICATIONS,
-  FETCH_STUDENTS,
-  FETCH_TEAM_FORMATION_OVERVIEWS,
-  FETCH_USER_AND_COURSE,
-  LOGIN,
-  REAUTOGRADE_ANSWER,
-  REAUTOGRADE_SUBMISSION,
-  SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
-  SET_ASSESSMENT_CONFIGURATIONS,
-  SET_COURSE_CONFIGURATION,
-  SET_COURSE_REGISTRATION,
-  SET_GITHUB_ACCESS_TOKEN,
-  SET_GITHUB_OCTOKIT_OBJECT,
-  SET_TOKENS,
-  SET_USER,
-  SUBMIT_ANSWER,
-  SUBMIT_ASSESSMENT,
-  SUBMIT_GRADING,
-  SUBMIT_GRADING_AND_CONTINUE,
-  UNSUBMIT_SUBMISSION,
   UPDATE_ASSESSMENT,
-  UPDATE_ASSESSMENT_CONFIGS,
-  UPDATE_ASSESSMENT_OVERVIEWS,
-  UPDATE_COURSE_CONFIG,
   UPDATE_COURSE_RESEARCH_AGREEMENT,
-  UPDATE_GRADING,
-  UPDATE_GRADING_OVERVIEWS,
-  UPDATE_LATEST_VIEWED_COURSE,
-  UPDATE_NOTIFICATIONS,
-  UPDATE_STUDENTS,
-  UPDATE_TEAM_FORMATION_OVERVIEW,
-  UPDATE_TEAM_FORMATION_OVERVIEWS,
-  UPDATE_USER_ROLE,
   User
 } from '../../types/SessionTypes';
 import {
@@ -119,7 +77,7 @@ test('acknowledgeNotifications generates correct action object', () => {
   const action = acknowledgeNotifications();
 
   expect(action).toEqual({
-    type: ACKNOWLEDGE_NOTIFICATIONS,
+    type: acknowledgeNotifications.type,
     payload: {
       withFilter: undefined
     }
@@ -130,7 +88,7 @@ test('fetchAuth generates correct action object', () => {
   const code = 'luminus-code-test';
   const action = fetchAuth(code);
   expect(action).toEqual({
-    type: FETCH_AUTH,
+    type: fetchAuth.type,
     payload: { code }
   });
 });
@@ -138,7 +96,7 @@ test('fetchAuth generates correct action object', () => {
 test('fetchUserAndCourse generates correct action object', () => {
   const action = fetchUserAndCourse();
   expect(action).toEqual({
-    type: FETCH_USER_AND_COURSE,
+    type: fetchUserAndCourse.type,
     payload: {}
   });
 });
@@ -146,7 +104,7 @@ test('fetchUserAndCourse generates correct action object', () => {
 test('fetchCourseConfig generates correct action object', () => {
   const action = fetchCourseConfig();
   expect(action).toEqual({
-    type: FETCH_COURSE_CONFIG,
+    type: fetchCourseConfig.type,
     payload: {}
   });
 });
@@ -155,7 +113,7 @@ test('fetchAssessment generates correct action object', () => {
   const id = 3;
   const action = fetchAssessment(id);
   expect(action).toEqual({
-    type: FETCH_ASSESSMENT,
+    type: fetchAssessment.type,
     payload: { assessmentId: id }
   });
 });
@@ -163,7 +121,7 @@ test('fetchAssessment generates correct action object', () => {
 test('fetchAssessmentOverviews generates correct action object', () => {
   const action = fetchAssessmentOverviews();
   expect(action).toEqual({
-    type: FETCH_ASSESSMENT_OVERVIEWS,
+    type: fetchAssessmentOverviews.type,
     payload: {}
   });
 });
@@ -172,7 +130,7 @@ test('fetchGrading generates correct action object', () => {
   const submissionId = 5;
   const action = fetchGrading(submissionId);
   expect(action).toEqual({
-    type: FETCH_GRADING,
+    type: fetchGrading.type,
     payload: submissionId
   });
 });
@@ -180,7 +138,7 @@ test('fetchGrading generates correct action object', () => {
 test('fetchGradingOverviews generates correct default action object', () => {
   const action = fetchGradingOverviews();
   expect(action).toEqual({
-    type: FETCH_GRADING_OVERVIEWS,
+    type: fetchGradingOverviews.type,
     payload: {
       filterToGroup: true,
       publishedFilter: unpublishedToBackendParams(false),
@@ -205,7 +163,7 @@ test('fetchGradingOverviews generates correct action object', () => {
     allColsSortStates
   );
   expect(action).toEqual({
-    type: FETCH_GRADING_OVERVIEWS,
+    type: fetchGradingOverviews.type,
     payload: {
       filterToGroup: filterToGroup,
       publishedFilter: publishedFilter,
@@ -219,7 +177,7 @@ test('fetchGradingOverviews generates correct action object', () => {
 test('fetchTeamFormationOverviews generates correct default action object', () => {
   const action = fetchTeamFormationOverviews();
   expect(action).toEqual({
-    type: FETCH_TEAM_FORMATION_OVERVIEWS,
+    type: fetchTeamFormationOverviews.type,
     payload: true
   });
 });
@@ -228,7 +186,7 @@ test('fetchTeamFormationOverviews generates correct action object', () => {
   const filterToGroup = false;
   const action = fetchTeamFormationOverviews(filterToGroup);
   expect(action).toEqual({
-    type: FETCH_TEAM_FORMATION_OVERVIEWS,
+    type: fetchTeamFormationOverviews.type,
     payload: filterToGroup
   });
 });
@@ -236,7 +194,7 @@ test('fetchTeamFormationOverviews generates correct action object', () => {
 test('fetchStudents generates correct action object', () => {
   const action = fetchStudents();
   expect(action).toEqual({
-    type: FETCH_STUDENTS,
+    type: fetchStudents.type,
     payload: {}
   });
 });
@@ -245,7 +203,7 @@ test('fetchNotifications generates correct action object', () => {
   const action = fetchNotifications();
 
   expect(action).toEqual({
-    type: FETCH_NOTIFICATIONS,
+    type: fetchNotifications.type,
     payload: {}
   });
 });
@@ -253,7 +211,7 @@ test('fetchNotifications generates correct action object', () => {
 test('login action generates correct action object', () => {
   const action = login('provider');
   expect(action).toEqual({
-    type: LOGIN,
+    type: login.type,
     payload: 'provider'
   });
 });
@@ -263,7 +221,7 @@ test('setTokens generates correct action object', () => {
   const refreshToken = 'refresh-token-test';
   const action = setTokens({ accessToken, refreshToken });
   expect(action).toEqual({
-    type: SET_TOKENS,
+    type: setTokens.type,
     payload: {
       accessToken,
       refreshToken
@@ -295,7 +253,7 @@ test('setUser generates correct action object', () => {
   };
   const action = setUser(user);
   expect(action).toEqual({
-    type: SET_USER,
+    type: setUser.type,
     payload: user
   });
 });
@@ -316,7 +274,7 @@ test('setCourseConfiguration generates correct action object', () => {
   };
   const action = setCourseConfiguration(courseConfig);
   expect(action).toEqual({
-    type: SET_COURSE_CONFIGURATION,
+    type: setCourseConfiguration.type,
     payload: courseConfig
   });
 });
@@ -342,7 +300,7 @@ test('setCourseRegistration generates correct action object', () => {
   };
   const action = setCourseRegistration(courseRegistration);
   expect(action).toEqual({
-    type: SET_COURSE_REGISTRATION,
+    type: setCourseRegistration.type,
     payload: courseRegistration
   });
 });
@@ -385,7 +343,7 @@ test('setAssessmentConfigurations generates correct action object', () => {
   ];
   const action = setAssessmentConfigurations(assesmentConfigurations);
   expect(action).toEqual({
-    type: SET_ASSESSMENT_CONFIGURATIONS,
+    type: setAssessmentConfigurations.type,
     payload: assesmentConfigurations
   });
 });
@@ -409,7 +367,7 @@ test('setAdminPanelCourseRegistrations generates correct action object', async (
   ];
   const action = setAdminPanelCourseRegistrations(userCourseRegistrations);
   expect(action).toEqual({
-    type: SET_ADMIN_PANEL_COURSE_REGISTRATIONS,
+    type: setAdminPanelCourseRegistrations.type,
     payload: userCourseRegistrations
   });
 });
@@ -417,7 +375,7 @@ test('setAdminPanelCourseRegistrations generates correct action object', async (
 test('setGitHubOctokitInstance generates correct action object', async () => {
   const authToken = 'testAuthToken12345';
   const action = setGitHubOctokitObject(authToken);
-  expect(action.type).toEqual(SET_GITHUB_OCTOKIT_OBJECT);
+  expect(action.type).toEqual(setGitHubOctokitObject.type);
 
   const authObject = (await action.payload.auth()) as any;
   expect(authObject.token).toBe('testAuthToken12345');
@@ -428,7 +386,7 @@ test('setGitHubAccessToken generates correct action object', () => {
   const authToken = 'testAuthToken12345';
   const action = setGitHubAccessToken(authToken);
   expect(action).toEqual({
-    type: SET_GITHUB_ACCESS_TOKEN,
+    type: setGitHubAccessToken.type,
     payload: authToken
   });
 });
@@ -438,7 +396,7 @@ test('submitAnswer generates correct action object', () => {
   const answer = 'test-answer-here';
   const action = submitAnswer(id, answer);
   expect(action).toEqual({
-    type: SUBMIT_ANSWER,
+    type: submitAnswer.type,
     payload: {
       id,
       answer
@@ -450,7 +408,7 @@ test('submitAssessment generates correct action object', () => {
   const id = 7;
   const action = submitAssessment(id);
   expect(action).toEqual({
-    type: SUBMIT_ASSESSMENT,
+    type: submitAssessment.type,
     payload: id
   });
 });
@@ -461,7 +419,7 @@ test('submitGrading generates correct action object with default values', () => 
 
   const action = submitGrading(submissionId, questionId);
   expect(action).toEqual({
-    type: SUBMIT_GRADING,
+    type: submitGrading.type,
     payload: {
       submissionId,
       questionId,
@@ -477,7 +435,7 @@ test('submitGradingAndContinue generates correct action object with default valu
 
   const action = submitGradingAndContinue(submissionId, questionId);
   expect(action).toEqual({
-    type: SUBMIT_GRADING_AND_CONTINUE,
+    type: submitGradingAndContinue.type,
     payload: {
       submissionId,
       questionId,
@@ -494,7 +452,7 @@ test('submitGrading generates correct action object', () => {
   const comments = 'my comment';
   const action = submitGrading(submissionId, questionId, xpAdjustment, comments);
   expect(action).toEqual({
-    type: SUBMIT_GRADING,
+    type: submitGrading.type,
     payload: {
       submissionId,
       questionId,
@@ -511,7 +469,7 @@ test('submitGradingAndContinue generates correct action object', () => {
   const comments = 'another comment';
   const action = submitGradingAndContinue(submissionId, questionId, xpAdjustment, comments);
   expect(action).toEqual({
-    type: SUBMIT_GRADING_AND_CONTINUE,
+    type: submitGradingAndContinue.type,
     payload: {
       submissionId,
       questionId,
@@ -525,7 +483,7 @@ test('reautogradeSubmission generates correct action object', () => {
   const submissionId = 123;
   const action = reautogradeSubmission(submissionId);
   expect(action).toEqual({
-    type: REAUTOGRADE_SUBMISSION,
+    type: reautogradeSubmission.type,
     payload: submissionId
   });
 });
@@ -535,7 +493,7 @@ test('reautogradeAnswer generates correct action object', () => {
   const questionId = 456;
   const action = reautogradeAnswer(submissionId, questionId);
   expect(action).toEqual({
-    type: REAUTOGRADE_ANSWER,
+    type: reautogradeAnswer.type,
     payload: { submissionId, questionId }
   });
 });
@@ -544,7 +502,7 @@ test('unsubmitSubmission generates correct action object', () => {
   const submissionId = 10;
   const action = unsubmitSubmission(submissionId);
   expect(action).toEqual({
-    type: UNSUBMIT_SUBMISSION,
+    type: unsubmitSubmission.type,
     payload: {
       submissionId
     }
@@ -575,7 +533,7 @@ test('updateAssessmentOverviews generates correct action object', () => {
   ];
   const action = updateAssessmentOverviews(overviews);
   expect(action).toEqual({
-    type: UPDATE_ASSESSMENT_OVERVIEWS,
+    type: updateAssessmentOverviews.type,
     payload: overviews
   });
 });
@@ -631,7 +589,7 @@ test('updateGradingOverviews generates correct action object', () => {
 
   const action = updateGradingOverviews(overviews);
   expect(action).toEqual({
-    type: UPDATE_GRADING_OVERVIEWS,
+    type: updateGradingOverviews.type,
     payload: overviews
   });
 });
@@ -641,7 +599,7 @@ test('updateStudents generates correct action object', () => {
 
   const action = updateStudents(students);
   expect(action).toEqual({
-    type: UPDATE_STUDENTS,
+    type: updateStudents.type,
     payload: students
   });
 });
@@ -658,7 +616,7 @@ test('updateTeamFormationOverview generates correct action object', () => {
 
   const action = updateTeamFormationOverview(overview);
   expect(action).toEqual({
-    type: UPDATE_TEAM_FORMATION_OVERVIEW,
+    type: updateTeamFormationOverview.type,
     payload: overview
   });
 });
@@ -677,7 +635,7 @@ test('updateTeamFormationOverviews generates correct action object', () => {
 
   const action = updateTeamFormationOverviews(overviews);
   expect(action).toEqual({
-    type: UPDATE_TEAM_FORMATION_OVERVIEWS,
+    type: updateTeamFormationOverviews.type,
     payload: overviews
   });
 });
@@ -719,7 +677,7 @@ test('updateGrading generates correct action object', () => {
 
   const action = updateGrading(submissionId, grading);
   expect(action).toEqual({
-    type: UPDATE_GRADING,
+    type: updateGrading.type,
     payload: {
       submissionId,
       grading
@@ -748,7 +706,7 @@ test('updateNotifications generates correct action object', () => {
   const action = updateNotifications(notifications);
 
   expect(action).toEqual({
-    type: UPDATE_NOTIFICATIONS,
+    type: updateNotifications.type,
     payload: notifications
   });
 });
@@ -757,7 +715,7 @@ test('updateLatestViewedCourse generates correct action object', () => {
   const courseId = 2;
   const action = updateLatestViewedCourse(courseId);
   expect(action).toEqual({
-    type: UPDATE_LATEST_VIEWED_COURSE,
+    type: updateLatestViewedCourse.type,
     payload: { courseId }
   });
 });
@@ -778,7 +736,7 @@ test('updateCourseConfig generates correct action object', () => {
   };
   const action = updateCourseConfig(courseConfig);
   expect(action).toEqual({
-    type: UPDATE_COURSE_CONFIG,
+    type: updateCourseConfig.type,
     payload: courseConfig
   });
 });
@@ -786,7 +744,7 @@ test('updateCourseConfig generates correct action object', () => {
 test('fetchAssessmentConfig generates correct action object', () => {
   const action = fetchAssessmentConfigs();
   expect(action).toEqual({
-    type: FETCH_ASSESSMENT_CONFIGS,
+    type: fetchAssessmentConfigs.type,
     payload: {}
   });
 });
@@ -862,7 +820,7 @@ test('updateAssessmentTypes generates correct action object', () => {
   ];
   const action = updateAssessmentConfigs(assessmentConfigs);
   expect(action).toEqual({
-    type: UPDATE_ASSESSMENT_CONFIGS,
+    type: updateAssessmentConfigs.type,
     payload: assessmentConfigs
   });
 });
@@ -881,7 +839,7 @@ test('deleteAssessmentConfig generates correct action object', () => {
   };
   const action = deleteAssessmentConfig(assessmentConfig);
   expect(action).toEqual({
-    type: DELETE_ASSESSMENT_CONFIG,
+    type: deleteAssessmentConfig.type,
     payload: assessmentConfig
   });
 });
@@ -889,7 +847,7 @@ test('deleteAssessmentConfig generates correct action object', () => {
 test('fetchAdminPanelCourseRegistrations generates correct action object', () => {
   const action = fetchAdminPanelCourseRegistrations();
   expect(action).toEqual({
-    type: FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
+    type: fetchAdminPanelCourseRegistrations.type,
     payload: {}
   });
 });
@@ -899,7 +857,7 @@ test('updateUserRole generates correct action object', () => {
   const role = Role.Staff;
   const action = updateUserRole(courseRegId, role);
   expect(action).toEqual({
-    type: UPDATE_USER_ROLE,
+    type: updateUserRole.type,
     payload: { courseRegId, role }
   });
 });
@@ -917,7 +875,7 @@ test('deleteUserCourseRegistration generates correct action object', () => {
   const courseRegId = 1;
   const action = deleteUserCourseRegistration(courseRegId);
   expect(action).toEqual({
-    type: DELETE_USER_COURSE_REGISTRATION,
+    type: deleteUserCourseRegistration.type,
     payload: { courseRegId }
   });
 });
