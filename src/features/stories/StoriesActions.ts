@@ -56,8 +56,9 @@ export const setCurrentStoriesGroup = createAction(
 export const clearStoriesUserAndGroup = createAction(CLEAR_STORIES_USER_AND_GROUP, () => ({
   payload: {}
 }));
-export const fetchAdminPanelStoriesUsers = () =>
-  createAction(FETCH_ADMIN_PANEL_STORIES_USERS, () => ({ payload: {} }));
+export const fetchAdminPanelStoriesUsers = createAction(FETCH_ADMIN_PANEL_STORIES_USERS, () => ({
+  payload: {}
+}));
 export const setAdminPanelStoriesUsers = createAction(
   SET_ADMIN_PANEL_STORIES_USERS,
   (users: AdminPanelStoriesUser[]) => ({ payload: { users } })
