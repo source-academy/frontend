@@ -23,7 +23,7 @@ import { updateReactRouter } from './actions/CommonsActions';
  */
 const ApplicationWrapper: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoggedIn, name, courseId, assessmentConfigurations } = useSession();
+  const { isLoggedIn, name, courseId } = useSession();
   const [isApiHealthy, setIsApiHealthy] = useState(true);
 
   useEffect(() => {
@@ -32,10 +32,7 @@ const ApplicationWrapper: React.FC = () => {
     }
   }, []);
 
-  const academyRoutes = useMemo(
-    () => getAcademyRoutes(assessmentConfigurations),
-    [assessmentConfigurations]
-  );
+  const academyRoutes = useMemo(() => getAcademyRoutes(), []);
 
   const router = useMemo(() => {
     const routerConfig = Constants.playgroundOnly

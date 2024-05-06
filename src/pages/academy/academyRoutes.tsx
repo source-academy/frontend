@@ -1,3 +1,4 @@
+import { memoize } from 'lodash';
 import { LoaderFunction, Navigate, redirect, RouteObject } from 'react-router';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import Assessment from 'src/commons/assessment/Assessment';
@@ -16,16 +17,26 @@ const Sourcecast = () => import('../sourcecast/Sourcecast');
 const Achievement = () => import('../achievement/Achievement');
 const NotFound = () => import('../notFound/NotFound');
 
-const getCommonAcademyRoutes = (
-  assessmentConfigurations: AssessmentConfiguration[]
-): RouteObject[] => {
-  const assessmentRoutes =
-    assessmentConfigurations?.reduce((acc: Record<string, AssessmentConfiguration>, config) => {
-      acc[assessmentTypeLink(config.type)] = config;
-      return acc;
-    }, {}) ?? {};
+// Memoized for efficiency. Relies on immutability of Redux store to ensure
+// that `assessmentConfigurations` is not mutated, thereby ensuring correct
+// caching behavior.
+const buildAssessmentRoutes = memoize(
+  (assessmentConfigurations: AssessmentConfiguration[] = []) => {
+    return assessmentConfigurations?.reduce(
+      (acc: Record<string, AssessmentConfiguration>, config) => {
+        acc[assessmentTypeLink(config.type)] = config;
+        return acc;
+      },
+      {}
+    );
+  }
+);
 
+const getCommonAcademyRoutes = (): RouteObject[] => {
   const assessmentLoader: LoaderFunction = ({ params }) => {
+    const { assessmentConfigurations } = store.getState().session;
+    const assessmentRoutes = buildAssessmentRoutes(assessmentConfigurations);
+
     const requestedType = params['assessmentConfigType'];
     for (const type of Object.keys(assessmentRoutes)) {
       if (requestedType == type) {
@@ -36,7 +47,7 @@ const getCommonAcademyRoutes = (
   };
 
   const homePageRedirect = () => {
-    const { role, enableGame } = store.getState().session;
+    const { role, enableGame, assessmentConfigurations } = store.getState().session;
     if (enableGame) {
       return redirect('game');
     }
@@ -103,13 +114,7 @@ const adminRoutes: RouteObject[] = [{ path: 'adminpanel', lazy: AdminPanel }].ma
   new GuardedRoute(r).check(s => s.session.role === Role.Admin, notFoundPath).build()
 );
 
-export const getAcademyRoutes = (
-  assessmentConfigurations?: AssessmentConfiguration[]
-): RouteObject[] => {
-  const routes: RouteObject[] = [
-    ...getCommonAcademyRoutes(assessmentConfigurations ?? []),
-    ...staffRoutes,
-    ...adminRoutes
-  ];
+export const getAcademyRoutes = (): RouteObject[] => {
+  const routes: RouteObject[] = [...getCommonAcademyRoutes(), ...staffRoutes, ...adminRoutes];
   return routes;
 };
