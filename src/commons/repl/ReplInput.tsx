@@ -1,5 +1,4 @@
 import { Classes } from '@blueprintjs/core';
-import { useMediaQuery } from '@mantine/hooks';
 import { Ace } from 'ace-builds';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
@@ -9,7 +8,7 @@ import ReactAce from 'react-ace/lib/ace';
 
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { getModeString, selectMode } from '../utils/AceHelper';
-import Constants from '../utils/Constants';
+import { useResponsive } from '../utils/Hooks';
 // source mode and chapter imported in Editor.tsx
 
 export type ReplInputProps = DispatchProps & StateProps & OwnProps;
@@ -41,7 +40,7 @@ export const ReplInput: React.FC<ReplInputProps> = props => {
   const replInput = React.useRef<ReactAce>(null);
   const replInputBottom = React.useRef<HTMLDivElement>(null);
 
-  const isMobileBreakpoint = useMediaQuery(`(max-width: ${Constants.mobileBreakpoint}px)`, true);
+  const { isDesktopBreakpoint } = useResponsive();
 
   const execBrowseHistoryDown: () => void = props.handleBrowseHistoryDown;
   const execBrowseHistoryUp: () => void = props.handleBrowseHistoryUp;
@@ -141,7 +140,7 @@ export const ReplInput: React.FC<ReplInputProps> = props => {
         ref={replInput}
       />
       <div className={classNames(Classes.BUTTON_GROUP, Classes.DARK)}>{replButtons()}</div>
-      {!isMobileBreakpoint && <div ref={replInputBottom} />}
+      {isDesktopBreakpoint && <div ref={replInputBottom} />}
     </>
   );
 };
