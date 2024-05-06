@@ -120,7 +120,7 @@ export const useDimensions = (ref: RefObject<HTMLElement>): [width: number, heig
 export const useResponsive = () => {
   const isMobileBreakpoint = useMediaQuery(`(max-width: ${Constants.mobileBreakpoint}px)`);
   return {
-    isMobileBreakpoint: !!(isMobileBreakpoint ?? false),
+    isMobileBreakpoint: isMobileBreakpoint ?? false,
     isDesktopBreakpoint: !(isMobileBreakpoint ?? true)
   };
 };
