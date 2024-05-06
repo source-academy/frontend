@@ -23,7 +23,7 @@ import { updateReactRouter } from './actions/CommonsActions';
  */
 const ApplicationWrapper: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoggedIn, role, name, courseId, assessmentConfigurations } = useSession();
+  const { isLoggedIn, name, courseId, assessmentConfigurations } = useSession();
   const [isApiHealthy, setIsApiHealthy] = useState(true);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const ApplicationWrapper: React.FC = () => {
   const router = useMemo(() => {
     const routerConfig = Constants.playgroundOnly
       ? playgroundOnlyRouterConfig
-      : getFullAcademyRouterConfig({ name, role, isLoggedIn, courseId, academyRoutes });
+      : getFullAcademyRouterConfig({ name, isLoggedIn, courseId, academyRoutes });
 
     const r = createBrowserRouter(routerConfig, {
       future: { v7_relativeSplatPath: true }
@@ -48,7 +48,7 @@ const ApplicationWrapper: React.FC = () => {
     dispatch(updateReactRouter(r));
 
     return r;
-  }, [name, role, isLoggedIn, courseId, academyRoutes, dispatch]);
+  }, [name, isLoggedIn, courseId, academyRoutes, dispatch]);
 
   if (!isApiHealthy) {
     return (

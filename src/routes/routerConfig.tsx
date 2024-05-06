@@ -1,7 +1,6 @@
 import { Navigate, redirect, RouteObject } from 'react-router';
 
 import Application from '../commons/application/Application';
-import { Role } from '../commons/application/ApplicationTypes';
 import { GuardedRoute } from './routeGuard';
 
 /**
@@ -62,13 +61,11 @@ export const playgroundOnlyRouterConfig: RouteObject[] = [
 
 export const getFullAcademyRouterConfig = ({
   name,
-  role,
   isLoggedIn,
   courseId,
   academyRoutes = []
 }: {
   name?: string;
-  role?: Role;
   isLoggedIn: boolean;
   courseId?: number | null;
   academyRoutes?: RouteObject[];
