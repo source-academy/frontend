@@ -4,12 +4,7 @@ import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
-import {
-  beginDebuggerPause,
-  beginInterruptExecution,
-  debuggerReset,
-  debuggerResume
-} from 'src/commons/application/actions/InterpreterActions';
+import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { fetchSourcecastIndex } from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
 import {
@@ -208,10 +203,11 @@ const Sourcereel: React.FC = () => {
   };
   const autorunButtonHandlers = useMemo(() => {
     return {
-      handleDebuggerPause: () => dispatch(beginDebuggerPause(workspaceLocation)),
-      handleDebuggerResume: () => dispatch(debuggerResume(workspaceLocation)),
-      handleDebuggerReset: () => dispatch(debuggerReset(workspaceLocation)),
-      handleInterruptEval: () => dispatch(beginInterruptExecution(workspaceLocation)),
+      handleDebuggerPause: () => dispatch(InterpreterActions.beginDebuggerPause(workspaceLocation)),
+      handleDebuggerResume: () => dispatch(InterpreterActions.debuggerResume(workspaceLocation)),
+      handleDebuggerReset: () => dispatch(InterpreterActions.debuggerReset(workspaceLocation)),
+      handleInterruptEval: () =>
+        dispatch(InterpreterActions.beginInterruptExecution(workspaceLocation)),
       handleToggleEditorAutorun: () => dispatch(toggleEditorAutorun(workspaceLocation))
     };
   }, [dispatch]);
@@ -485,5 +481,10 @@ const Sourcereel: React.FC = () => {
 };
 
 const INTRODUCTION = 'Welcome to Sourcereel!';
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = Sourcereel;
+Component.displayName = 'Sourcereel';
 
 export default Sourcereel;

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { AchievementUser } from 'src/features/achievement/AchievementTypes';
 
-import { fetchTotalXp, fetchTotalXpAdmin } from '../application/actions/SessionActions';
+import SessionActions from '../application/actions/SessionActions';
 import { useTypedSelector } from '../utils/Hooks';
 import AchievementLevel from './overview/AchievementLevel';
 
@@ -20,9 +20,9 @@ const AchievementOverview: React.FC<Props> = ({ name, userState }) => {
   useEffect(() => {
     // If user is student, fetch assessment details from assessment route instead, as seen below
     if (crid && crid !== userCrid) {
-      dispatch(fetchTotalXpAdmin(crid));
+      dispatch(SessionActions.fetchTotalXpAdmin(crid));
     } else {
-      dispatch(fetchTotalXp());
+      dispatch(SessionActions.fetchTotalXp());
     }
   }, [crid, userCrid, dispatch]);
 

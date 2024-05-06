@@ -6,18 +6,7 @@ import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
 import { showFullJSDisclaimer, showFullTSDisclaimer } from 'src/commons/utils/WarningDialogHelper';
 
-import {
-  beginDebuggerPause,
-  beginInterruptExecution,
-  debuggerReset,
-  debuggerResume,
-  endDebuggerPause,
-  endInterruptExecution,
-  evalInterpreterError,
-  evalInterpreterSuccess,
-  evalTestcaseFailure,
-  evalTestcaseSuccess
-} from '../../application/actions/InterpreterActions';
+import InterpreterActions from '../../application/actions/InterpreterActions';
 import {
   defaultState,
   fullJSLanguage,
@@ -169,7 +158,7 @@ describe('EVAL_EDITOR', () => {
     return (
       expectSaga(workspaceSaga)
         .withState(newDefaultState)
-        .put(beginInterruptExecution(workspaceLocation))
+        .put(InterpreterActions.beginInterruptExecution(workspaceLocation))
         .put(beginClearContext(workspaceLocation, library, false))
         .put(clearReplOutput(workspaceLocation))
         // calls evalCode here with the prepend in elevated Context: silent run
@@ -188,7 +177,7 @@ describe('EVAL_EDITOR', () => {
           ]
         })
         // running the prepend block should return 'reeee', but silent run -> not written to REPL
-        .not.put(evalInterpreterSuccess('reeee', workspaceLocation))
+        .not.put(InterpreterActions.evalInterpreterSuccess('reeee', workspaceLocation))
         // Single call to evalCode made by blockExtraMethods
         .call.like({ fn: runFilesInContext })
         // calls evalCode here with the student's program in normal Context
@@ -208,7 +197,7 @@ describe('EVAL_EDITOR', () => {
           ]
         })
         // running the student's program should return -1, which is written to REPL
-        .put(evalInterpreterSuccess(-1, workspaceLocation))
+        .put(InterpreterActions.evalInterpreterSuccess(-1, workspaceLocation))
         // should NOT attempt to execute the postpend block after above
         .not.call(runFilesInContext)
         .dispatch({
@@ -262,7 +251,7 @@ describe('EVAL_REPL', () => {
     return (
       expectSaga(workspaceSaga)
         .withState(newState)
-        .put(beginInterruptExecution(workspaceLocation))
+        .put(InterpreterActions.beginInterruptExecution(workspaceLocation))
         .put(clearReplInput(workspaceLocation))
         .put(sendReplInputToOutput(replValue, workspaceLocation))
         // also calls evalCode here
@@ -335,7 +324,7 @@ describe('DEBUG_RESUME', () => {
             }
           }
         })
-        .put(beginInterruptExecution(workspaceLocation))
+        .put(InterpreterActions.beginInterruptExecution(workspaceLocation))
         .put(clearReplOutput(workspaceLocation))
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
         .put(setEditorHighlightedLines(workspaceLocation, 0, []))
@@ -348,11 +337,11 @@ describe('DEBUG_RESUME', () => {
             {},
             execTime,
             workspaceLocation,
-            debuggerResume.type
+            InterpreterActions.debuggerResume.type
           ]
         })
         .dispatch({
-          type: debuggerResume.type,
+          type: InterpreterActions.debuggerResume.type,
           payload: { workspaceLocation }
         })
         .silentRun()
@@ -374,7 +363,7 @@ describe('DEBUG_RESET', () => {
         // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
         .put(setEditorHighlightedLines(workspaceLocation, 0, []))
         .dispatch({
-          type: debuggerReset.type,
+          type: InterpreterActions.debuggerReset.type,
           payload: { workspaceLocation }
         })
         .silentRun()
@@ -440,7 +429,7 @@ describe('EVAL_TESTCASE', () => {
       expectSaga(workspaceSaga)
         .withState(newDefaultState)
         // Should interrupt execution and clear context but not clear REPL
-        .not.put(beginInterruptExecution(workspaceLocation))
+        .not.put(InterpreterActions.beginInterruptExecution(workspaceLocation))
         .put(beginClearContext(workspaceLocation, library, false))
         .not.put.actionType(clearReplOutput.type)
         // Expect it to shard a new privileged context here and execute chunks in order
@@ -454,7 +443,7 @@ describe('EVAL_TESTCASE', () => {
           ]
         })
         // running the prepend block should return 'boink', but silent run -> not written to REPL
-        .not.put(evalInterpreterSuccess('boink', workspaceLocation))
+        .not.put(InterpreterActions.evalInterpreterSuccess('boink', workspaceLocation))
         // Single call to evalCode made by blockExtraMethods
         .call.like({ fn: runFilesInContext })
         // calls evalCode here with the student's program in normal Context
@@ -468,7 +457,7 @@ describe('EVAL_TESTCASE', () => {
           ]
         })
         // running the student's program should return 69, which is NOT written to REPL (silent)
-        .not.put(evalInterpreterSuccess(69, workspaceLocation))
+        .not.put(InterpreterActions.evalInterpreterSuccess(69, workspaceLocation))
         // Single call to evalCode made by restoreExtraMethods to enable postpend to run in S4
         .call.like({ fn: runFilesInContext })
         // calls evalCode here again with the postpend now in elevated Context: silent run
@@ -481,7 +470,7 @@ describe('EVAL_TESTCASE', () => {
           ]
         })
         // running the postpend block should return true, but silent run -> not written to REPL
-        .not.put(evalInterpreterSuccess(true, workspaceLocation))
+        .not.put(InterpreterActions.evalInterpreterSuccess(true, workspaceLocation))
         // Single call to evalCode made by blockExtraMethods after postpend execution is complete
         .call.like({ fn: runFilesInContext })
         // finally calls evalTestCode on the testcase
@@ -490,8 +479,8 @@ describe('EVAL_TESTCASE', () => {
           args: [editorTestcases[0].program]
         })
         // this testcase should execute fine in the elevated context and thus write result to REPL
-        .put(evalInterpreterSuccess(42, workspaceLocation))
-        .put(evalTestcaseSuccess(42, workspaceLocation, testcaseId))
+        .put(InterpreterActions.evalInterpreterSuccess(42, workspaceLocation))
+        .put(InterpreterActions.evalTestcaseSuccess(42, workspaceLocation, testcaseId))
         .dispatch({
           type: evalTestcase.type,
           payload: { workspaceLocation, testcaseId }
@@ -865,7 +854,7 @@ describe('evalCode', () => {
           throwInfiniteLoops: true,
           envSteps: -1
         })
-        .put(evalInterpreterSuccess(value, workspaceLocation))
+        .put(InterpreterActions.evalInterpreterSuccess(value, workspaceLocation))
         .silentRun();
     });
 
@@ -891,8 +880,8 @@ describe('evalCode', () => {
           throwInfiniteLoops: true,
           envSteps: -1
         })
-        .put(endDebuggerPause(workspaceLocation))
-        .put(evalInterpreterSuccess('Breakpoint hit!', workspaceLocation))
+        .put(InterpreterActions.endDebuggerPause(workspaceLocation))
+        .put(InterpreterActions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation))
         .silentRun();
     });
 
@@ -915,7 +904,7 @@ describe('evalCode', () => {
           throwInfiniteLoops: true,
           envSteps: -1
         })
-        .put.like({ action: { type: evalInterpreterError.type } })
+        .put.like({ action: { type: InterpreterActions.evalInterpreterError.type } })
         .silentRun();
     });
 
@@ -950,7 +939,7 @@ describe('evalCode', () => {
           throwInfiniteLoops: true,
           envSteps: -1
         })
-        .put(evalInterpreterError(context.errors, workspaceLocation))
+        .put(InterpreterActions.evalInterpreterError(context.errors, workspaceLocation))
         .silentRun();
     });
   });
@@ -972,7 +961,7 @@ describe('evalCode', () => {
     });
 
     test('calls resume, puts evalInterpreterSuccess when resume returns finished', () => {
-      actionType = debuggerResume.type;
+      actionType = InterpreterActions.debuggerResume.type;
 
       return expectSaga(
         evalCodeSaga,
@@ -986,12 +975,12 @@ describe('evalCode', () => {
         .withState(state)
         .provide([[call(resume, lastDebuggerResult), { status: 'finished', value }]])
         .call(resume, lastDebuggerResult)
-        .put(evalInterpreterSuccess(value, workspaceLocation))
+        .put(InterpreterActions.evalInterpreterSuccess(value, workspaceLocation))
         .silentRun();
     });
 
     test('calls resume, puts endDebuggerPause and evalInterpreterSuccess when resume returns suspended', () => {
-      actionType = debuggerResume.type;
+      actionType = InterpreterActions.debuggerResume.type;
 
       return expectSaga(
         evalCodeSaga,
@@ -1005,13 +994,13 @@ describe('evalCode', () => {
         .withState(state)
         .provide([[call(resume, lastDebuggerResult), { status: 'suspended' }]])
         .call(resume, lastDebuggerResult)
-        .put(endDebuggerPause(workspaceLocation))
-        .put(evalInterpreterSuccess('Breakpoint hit!', workspaceLocation))
+        .put(InterpreterActions.endDebuggerPause(workspaceLocation))
+        .put(InterpreterActions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation))
         .silentRun();
     });
 
     test('calls resume, puts evalInterpreterError when resume returns error', () => {
-      actionType = debuggerResume.type;
+      actionType = InterpreterActions.debuggerResume.type;
 
       return expectSaga(
         evalCodeSaga,
@@ -1024,7 +1013,7 @@ describe('evalCode', () => {
       )
         .withState(state)
         .call(resume, lastDebuggerResult)
-        .put.like({ action: { type: evalInterpreterError.type } })
+        .put.like({ action: { type: InterpreterActions.evalInterpreterError.type } })
         .silentRun();
     });
   });
@@ -1044,13 +1033,13 @@ describe('evalCode', () => {
         .provide({
           race: () => ({
             interrupted: {
-              type: beginInterruptExecution.type,
+              type: InterpreterActions.beginInterruptExecution.type,
               payload: { workspaceLocation }
             }
           })
         })
-        .put(debuggerReset(workspaceLocation))
-        .put(endInterruptExecution(workspaceLocation))
+        .put(InterpreterActions.debuggerReset(workspaceLocation))
+        .put(InterpreterActions.endInterruptExecution(workspaceLocation))
         .call(showWarningMessage, 'Execution aborted', 750)
         .silentRun()
         .then(result => {
@@ -1074,12 +1063,12 @@ describe('evalCode', () => {
         .provide({
           race: () => ({
             paused: {
-              type: beginDebuggerPause.type,
+              type: InterpreterActions.beginDebuggerPause.type,
               payload: { workspaceLocation }
             }
           })
         })
-        .put(endDebuggerPause(workspaceLocation))
+        .put(InterpreterActions.endDebuggerPause(workspaceLocation))
         .call(showWarningMessage, 'Execution paused', 750)
         .silentRun();
     });
@@ -1106,7 +1095,12 @@ describe('evalCode', () => {
             { status: 'error', value }
           ]
         ])
-        .put(evalInterpreterSuccess('Program has been interrupted by module', workspaceLocation))
+        .put(
+          InterpreterActions.evalInterpreterSuccess(
+            'Program has been interrupted by module',
+            workspaceLocation
+          )
+        )
         .silentRun();
     });
   });
@@ -1144,8 +1138,8 @@ describe('evalTestCode', () => {
       return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
         .withState(state)
         .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
-        .put(evalInterpreterSuccess(value, workspaceLocation))
-        .put(evalTestcaseSuccess(value, workspaceLocation, index))
+        .put(InterpreterActions.evalInterpreterSuccess(value, workspaceLocation))
+        .put(InterpreterActions.evalTestcaseSuccess(value, workspaceLocation, index))
         .not.put(clearReplOutputLast(workspaceLocation))
         .silentRun();
     });
@@ -1156,8 +1150,8 @@ describe('evalTestCode', () => {
       return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
         .withState(state)
         .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
-        .put(evalInterpreterSuccess(value, workspaceLocation))
-        .put(evalTestcaseSuccess(value, workspaceLocation, index))
+        .put(InterpreterActions.evalInterpreterSuccess(value, workspaceLocation))
+        .put(InterpreterActions.evalTestcaseSuccess(value, workspaceLocation, index))
         .put(clearReplOutputLast(workspaceLocation))
         .silentRun();
     });
@@ -1166,8 +1160,8 @@ describe('evalTestCode', () => {
       return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
         .withState(state)
         .provide([[call(runInContext, code, context, options), { status: 'error' }]])
-        .put(evalInterpreterError(context.errors, workspaceLocation))
-        .put(evalTestcaseFailure(context.errors, workspaceLocation, index))
+        .put(InterpreterActions.evalInterpreterError(context.errors, workspaceLocation))
+        .put(InterpreterActions.evalTestcaseFailure(context.errors, workspaceLocation, index))
         .not.put(clearReplOutputLast(workspaceLocation))
         .silentRun();
     });
@@ -1178,8 +1172,8 @@ describe('evalTestCode', () => {
       return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
         .withState(state)
         .provide([[call(runInContext, code, context, options), { status: 'error' }]])
-        .put(evalInterpreterError(context.errors, workspaceLocation))
-        .put(evalTestcaseFailure(context.errors, workspaceLocation, index))
+        .put(InterpreterActions.evalInterpreterError(context.errors, workspaceLocation))
+        .put(InterpreterActions.evalTestcaseFailure(context.errors, workspaceLocation, index))
         .put(clearReplOutputLast(workspaceLocation))
         .silentRun();
     });
@@ -1200,12 +1194,12 @@ describe('evalTestCode', () => {
         .provide({
           race: () => ({
             interrupted: {
-              type: beginInterruptExecution.type,
+              type: InterpreterActions.beginInterruptExecution.type,
               payload: { workspaceLocation }
             }
           })
         })
-        .put(endInterruptExecution(workspaceLocation))
+        .put(InterpreterActions.endInterruptExecution(workspaceLocation))
         .call(showWarningMessage, `Execution of testcase ${index} aborted`, 750)
         .silentRun()
         .then(() => {

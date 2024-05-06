@@ -14,7 +14,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
-import { submitAnswer } from '../application/actions/SessionActions';
+import SessionActions from '../application/actions/SessionActions';
 import {
   Assessment,
   AssessmentOverview,
@@ -171,7 +171,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
       handleUpdateWorkspace: (options: Partial<WorkspaceState>) =>
         dispatch(updateWorkspace(workspaceLocation, options)),
       handleSubmitAnswer: (id: number, answer: string | number) =>
-        dispatch(submitAnswer(id, answer)),
+        dispatch(SessionActions.submitAnswer(id, answer)),
       handleSideContentHeightChange: (heightChange: number) =>
         dispatch(changeSideContentHeight(heightChange, workspaceLocation)),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>

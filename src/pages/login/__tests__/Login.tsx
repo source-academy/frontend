@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import { Provider, useDispatch } from 'react-redux';
 import * as ReactRouter from 'react-router';
 import { StaticRouter } from 'react-router-dom/server';
-import { fetchAuth } from 'src/commons/application/actions/SessionActions';
+import SessionActions from 'src/commons/application/actions/SessionActions';
 
 import { mockInitialStore } from '../../../commons/mocks/StoreMocks';
 import Login from '../Login';
@@ -70,7 +70,7 @@ describe('Login', () => {
     );
     render(app);
 
-    expect(dispatchMock).toBeCalledWith(fetchAuth(code, providerId));
+    expect(dispatchMock).toBeCalledWith(SessionActions.fetchAuth(code, providerId));
   });
 
   test('Redirects to /welcome when isLoggedIn and no course', () => {

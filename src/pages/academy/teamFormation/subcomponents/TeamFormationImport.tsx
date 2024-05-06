@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { Form } from 'react-router-dom';
 import Select from 'react-select';
-import { bulkUploadTeam } from 'src/commons/application/actions/SessionActions';
+import SessionActions from 'src/commons/application/actions/SessionActions';
 import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/TeamFormation.module.scss';
@@ -47,7 +47,7 @@ const TeamFormationImport: React.FC = () => {
       alert('Please upload the teams.');
       return;
     }
-    dispatch(bulkUploadTeam(selectedAssessment, file, students));
+    dispatch(SessionActions.bulkUploadTeam(selectedAssessment, file, students));
     navigate(`/courses/${courseId}/teamformation`);
   };
 
@@ -108,5 +108,10 @@ const TeamFormationImport: React.FC = () => {
     </div>
   );
 };
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = TeamFormationImport;
+Component.displayName = 'TeamFormationImport';
 
 export default TeamFormationImport;

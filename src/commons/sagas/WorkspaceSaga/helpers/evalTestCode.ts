@@ -1,7 +1,7 @@
 import { Context, interrupt, runInContext } from 'js-slang';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { call, put, race, take } from 'redux-saga/effects';
-import { beginInterruptExecution } from 'src/commons/application/actions/InterpreterActions';
+import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 
 import { TestcaseType, TestcaseTypes } from '../../../assessment/AssessmentTypes';
 import { actions } from '../../../utils/ActionsHelper';
@@ -28,7 +28,7 @@ export function* evalTestCode(
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
      * i.e the trigger for the interpreter to interrupt execution.
      */
-    interrupted: take(beginInterruptExecution.type)
+    interrupted: take(InterpreterActions.beginInterruptExecution.type)
   });
 
   if (interrupted) {
