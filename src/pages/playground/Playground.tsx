@@ -11,17 +11,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useStore } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import { AnyAction, Dispatch } from 'redux';
-import {
-  beginDebuggerPause,
-  beginInterruptExecution,
-  debuggerReset,
-  debuggerResume
-} from 'src/commons/application/actions/InterpreterActions';
-import {
-  loginGitHub,
-  logoutGitHub,
-  logoutGoogle
-} from 'src/commons/application/actions/SessionActions';
+import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
+import SessionActions from 'src/commons/application/actions/SessionActions';
 import {
   setEditorSessionId,
   setSessionDetails,
@@ -66,11 +57,7 @@ import {
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
-import {
-  githubOpenFile,
-  githubSaveFile,
-  githubSaveFileAs
-} from 'src/features/github/GitHubActions';
+import GithubActions from 'src/features/github/GitHubActions';
 import {
   persistenceInitialise,
   persistenceOpenPicker,
@@ -468,11 +455,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const autorunButtonHandlers = useMemo(() => {
     return {
       handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
-      handleInterruptEval: () => dispatch(beginInterruptExecution(workspaceLocation)),
+      handleInterruptEval: () =>
+        dispatch(InterpreterActions.beginInterruptExecution(workspaceLocation)),
       handleToggleEditorAutorun: () => dispatch(toggleEditorAutorun(workspaceLocation)),
-      handleDebuggerPause: () => dispatch(beginDebuggerPause(workspaceLocation)),
-      handleDebuggerReset: () => dispatch(debuggerReset(workspaceLocation)),
-      handleDebuggerResume: () => dispatch(debuggerResume(workspaceLocation))
+      handleDebuggerPause: () => dispatch(InterpreterActions.beginDebuggerPause(workspaceLocation)),
+      handleDebuggerReset: () => dispatch(InterpreterActions.debuggerReset(workspaceLocation)),
+      handleDebuggerResume: () => dispatch(InterpreterActions.debuggerResume(workspaceLocation))
     };
   }, [dispatch, workspaceLocation]);
 
@@ -594,7 +582,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         onClickSave={
           persistenceFile ? () => dispatch(persistenceSaveFile(persistenceFile)) : undefined
         }
-        onClickLogOut={() => dispatch(logoutGoogle())}
+        onClickLogOut={() => dispatch(SessionActions.logoutGoogle())}
         onPopoverOpening={() => dispatch(persistenceInitialise())}
       />
     );
@@ -610,11 +598,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
         loggedInAs={githubOctokitObject.octokit}
         githubSaveInfo={githubSaveInfo}
         isDirty={githubPersistenceIsDirty}
-        onClickOpen={() => dispatch(githubOpenFile())}
-        onClickSaveAs={() => dispatch(githubSaveFileAs())}
-        onClickSave={() => dispatch(githubSaveFile())}
-        onClickLogIn={() => dispatch(loginGitHub())}
-        onClickLogOut={() => dispatch(logoutGitHub())}
+        onClickOpen={() => dispatch(GithubActions.githubOpenFile())}
+        onClickSaveAs={() => dispatch(GithubActions.githubSaveFileAs())}
+        onClickSave={() => dispatch(GithubActions.githubSaveFile())}
+        onClickLogIn={() => dispatch(SessionActions.loginGitHub())}
+        onClickLogOut={() => dispatch(SessionActions.logoutGitHub())}
       />
     );
   }, [

@@ -4,10 +4,7 @@ import { AgGridReact } from 'ag-grid-react';
 import { cloneDeep } from 'lodash';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import {
-  fetchConfigurableNotificationConfigs,
-  updateNotificationPreferences
-} from 'src/commons/application/actions/SessionActions';
+import SessionActions from 'src/commons/application/actions/SessionActions';
 import {
   NotificationConfiguration,
   NotificationPreference,
@@ -34,7 +31,7 @@ const NotiPreference: React.FC = () => {
   React.useEffect(() => {
     if (!session.courseRegId) return;
 
-    dispatch(fetchConfigurableNotificationConfigs(session.courseRegId));
+    dispatch(SessionActions.fetchConfigurableNotificationConfigs(session.courseRegId));
   }, [dispatch, session.courseRegId]);
 
   // After updated configs have been loaded from the backend, put them into local React state
@@ -144,7 +141,7 @@ const NotiPreference: React.FC = () => {
           notificationConfigId: config.id
         };
       }) ?? [];
-    dispatch(updateNotificationPreferences(preferences, session.courseRegId!));
+    dispatch(SessionActions.updateNotificationPreferences(preferences, session.courseRegId!));
 
     setHasChanges(false);
   };

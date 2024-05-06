@@ -9,11 +9,7 @@ import {
   getAbilityGlow
 } from '../../features/achievement/AchievementConstants';
 import { AchievementStatus, AchievementUser } from '../../features/achievement/AchievementTypes';
-import {
-  fetchAssessment,
-  fetchAssessmentAdmin,
-  fetchAssessmentOverviews
-} from '../application/actions/SessionActions';
+import SessionActions from '../application/actions/SessionActions';
 import { Assessment } from '../assessment/AssessmentTypes';
 import { useTypedSelector } from '../utils/Hooks';
 import AchievementCommentCard from './AchievementCommentCard';
@@ -40,17 +36,17 @@ const AchievementView: React.FC<Props> = ({ focusUuid, userState }) => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchAssessmentOverviews());
+    dispatch(SessionActions.fetchAssessmentOverviews());
     if (!assessmentId) {
       return;
     }
     if (isAdminView) {
       // Fetch selected user's assessment from admin route
       // Safe to use non-null assertion (refer to `isAdminView` declaration above)
-      dispatch(fetchAssessmentAdmin(assessmentId, courseRegId!));
+      dispatch(SessionActions.fetchAssessmentAdmin(assessmentId, courseRegId!));
     } else {
       // If user is student, fetch assessment details from assessment route instead, as seen below
-      dispatch(fetchAssessment(assessmentId));
+      dispatch(SessionActions.fetchAssessment(assessmentId));
     }
   }, [dispatch, assessmentId, courseRegId, isAdminView]);
 

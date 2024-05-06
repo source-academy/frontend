@@ -8,20 +8,15 @@ import Constants from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/Academy.module.scss';
 
-import {
-  fetchNotifications,
-  fetchStudents,
-  fetchTeamFormationOverviews,
-  updateLatestViewedCourse
-} from '../../commons/application/actions/SessionActions';
+import SessionActions from '../../commons/application/actions/SessionActions';
 import { numberRegExp } from '../../features/academy/AcademyTypes';
 
 const Academy: React.FC = () => {
   const dispatch = useDispatch();
   React.useEffect(() => {
-    dispatch(fetchStudents());
-    dispatch(fetchNotifications());
-    dispatch(fetchTeamFormationOverviews(false));
+    dispatch(SessionActions.fetchStudents());
+    dispatch(SessionActions.fetchNotifications());
+    dispatch(SessionActions.fetchTeamFormationOverviews(false));
   }, [dispatch]);
 
   const { agreedToResearch } = useSession();
@@ -50,7 +45,7 @@ const CourseSelectingAcademy: React.FC = () => {
     }
 
     if (routeCourseId !== undefined && !Number.isNaN(routeCourseId) && courseId !== routeCourseId) {
-      dispatch(updateLatestViewedCourse(routeCourseId));
+      dispatch(SessionActions.updateLatestViewedCourse(routeCourseId));
     }
   }, [courseId, dispatch, routeCourseId, navigate, routeCourseIdStr]);
 

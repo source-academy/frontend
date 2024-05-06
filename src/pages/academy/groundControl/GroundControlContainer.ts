@@ -1,10 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import {
-  fetchAssessmentOverviews,
-  fetchCourseConfig
-} from '../../../commons/application/actions/SessionActions';
+import SessionActions from '../../../commons/application/actions/SessionActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import {
   assignEntriesForVoting,
@@ -26,13 +23,13 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     {
       handleAssessmentChangeDate: changeDateAssessment,
       handleAssessmentChangeTeamSize: changeTeamSizeAssessment,
-      handleAssessmentOverviewFetch: fetchAssessmentOverviews,
+      handleAssessmentOverviewFetch: SessionActions.fetchAssessmentOverviews,
       handleDeleteAssessment: deleteAssessment,
       handleUploadAssessment: uploadAssessment,
       handlePublishAssessment: publishAssessment,
       handlePublishGradingAll: publishGradingAll,
       handleUnpublishGradingAll: unpublishGradingAll,
-      handleFetchCourseConfigs: fetchCourseConfig,
+      handleFetchCourseConfigs: SessionActions.fetchCourseConfig,
       handleConfigureAssessment: configureAssessment,
       handleAssignEntriesForVoting: assignEntriesForVoting
     },
