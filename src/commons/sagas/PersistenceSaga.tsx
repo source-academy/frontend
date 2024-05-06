@@ -11,7 +11,7 @@ import {
   PersistenceFile
 } from '../../features/persistence/PersistenceTypes';
 import { store } from '../../pages/createStore';
-import { logoutGoogle } from '../application/actions/SessionActions';
+import SessionActions from '../application/actions/SessionActions';
 import { OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { actions } from '../utils/ActionsHelper';
@@ -37,7 +37,7 @@ const MIME_SOURCE = 'text/plain';
 // const MIME_FOLDER = 'application/vnd.google-apps.folder';
 
 export function* persistenceSaga(): SagaIterator {
-  yield takeLatest(logoutGoogle.type, function* () {
+  yield takeLatest(SessionActions.logoutGoogle.type, function* () {
     yield put(actions.playgroundUpdatePersistenceFile(undefined));
     yield call(ensureInitialised);
     yield call([gapi.auth2.getAuthInstance(), 'signOut']);

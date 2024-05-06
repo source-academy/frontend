@@ -6,7 +6,7 @@ import { Button, Card, Flex, Text, Title } from '@tremor/react';
 import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
-import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
+import SessionActions from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useSession } from 'src/commons/utils/Hooks';
@@ -53,7 +53,7 @@ const Grading: React.FC = () => {
   const updateGradingOverviewsCallback = useCallback(
     (page: number, filterParams: Object) => {
       dispatch(
-        fetchGradingOverviews(
+        SessionActions.fetchGradingOverviews(
           showAllGroups,
           unpublishedToBackendParams(showAllSubmissions),
           paginationToBackendParams(page, pageSize),
@@ -102,7 +102,7 @@ const Grading: React.FC = () => {
 
   return (
     <ContentDisplay
-      loadContentDispatch={() => dispatch(fetchGradingOverviews(showAllGroups))}
+      loadContentDispatch={() => dispatch(SessionActions.fetchGradingOverviews(showAllGroups))}
       display={
         gradingOverviews?.data === undefined ? (
           loadingDisplay
@@ -161,5 +161,10 @@ const Grading: React.FC = () => {
     />
   );
 };
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = Grading;
+Component.displayName = 'Grading';
 
 export default Grading;
