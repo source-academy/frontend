@@ -17,10 +17,7 @@ import React, { useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSession } from 'src/commons/utils/Hooks';
 
-import {
-  fetchAssessmentOverviews,
-  fetchCourseConfig
-} from '../../../commons/application/actions/SessionActions';
+import SessionActions from '../../../commons/application/actions/SessionActions';
 import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import {
@@ -66,7 +63,7 @@ const GroundControl: React.FC = () => {
         dispatch(changeDateAssessment(id, openAt, closeAt)),
       handleAssessmentChangeTeamSize: (id: number, maxTeamSize: number) =>
         dispatch(changeTeamSizeAssessment(id, maxTeamSize)),
-      handleAssessmentOverviewFetch: () => dispatch(fetchAssessmentOverviews()),
+      handleAssessmentOverviewFetch: () => dispatch(SessionActions.fetchAssessmentOverviews()),
       handleAssignEntriesForVoting: (id: number) => dispatch(assignEntriesForVoting(id)),
       handleConfigureAssessment: (
         id: number,
@@ -74,7 +71,7 @@ const GroundControl: React.FC = () => {
         hasTokenCounter: boolean
       ) => dispatch(configureAssessment(id, hasVotingFeatures, hasTokenCounter)),
       handleDeleteAssessment: (id: number) => dispatch(deleteAssessment(id)),
-      handleFetchCourseConfigs: () => dispatch(fetchCourseConfig()),
+      handleFetchCourseConfigs: () => dispatch(SessionActions.fetchCourseConfig()),
       handlePublishAssessment: (togglePublishTo: boolean, id: number) =>
         dispatch(publishAssessment(togglePublishTo, id)),
       handlePublishGradingAll: (id: number) => dispatch(publishGradingAll(id)),
@@ -307,5 +304,10 @@ const dateFilterComparator = (filterDate: Date, cellValue: string) => {
   const cellDate = new Date(cellValue);
   return cellDate < filterDate ? -1 : cellDate > filterDate ? 1 : 0;
 };
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = GroundControl;
+Component.displayName = 'GroundControl';
 
 export default GroundControl;
