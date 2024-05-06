@@ -24,7 +24,7 @@ import {
 } from 'src/features/remoteExecution/RemoteExecutionTypes';
 import { store } from 'src/pages/createStore';
 
-import { beginInterruptExecution } from '../application/actions/InterpreterActions';
+import InterpreterActions from '../application/actions/InterpreterActions';
 import { OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { actions } from '../utils/ActionsHelper';
@@ -304,7 +304,7 @@ export function* remoteExecutionSaga(): SagaIterator {
     client.sendRun(Buffer.from(assembled));
   });
 
-  yield takeEvery(beginInterruptExecution.type, function* () {
+  yield takeEvery(InterpreterActions.beginInterruptExecution.type, function* () {
     const session: DeviceSession | undefined = yield select(
       (state: OverallState) => state.session.remoteExecutionSession
     );

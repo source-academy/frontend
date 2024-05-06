@@ -3,7 +3,7 @@ import loadSourceModules from 'js-slang/dist/modules/loader';
 import type { ModuleFunctions } from 'js-slang/dist/modules/moduleTypes';
 import type { Context } from 'js-slang/dist/types';
 
-import { handleConsoleLog } from '../application/actions/InterpreterActions';
+import InterpreterActions from '../application/actions/InterpreterActions';
 
 export async function makeCCompilerConfig(
   program: string,
@@ -13,7 +13,9 @@ export async function makeCCompilerConfig(
   return {
     printFunction: (v: string) => {
       if (typeof (window as any).__REDUX_STORE__ !== 'undefined') {
-        (window as any).__REDUX_STORE__.dispatch(handleConsoleLog(context.externalContext, v));
+        (window as any).__REDUX_STORE__.dispatch(
+          InterpreterActions.handleConsoleLog(context.externalContext, v)
+        );
       }
     },
     externalFunctions
