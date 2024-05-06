@@ -12,6 +12,7 @@ import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { deleteStory, getStoriesList, saveStory } from 'src/features/stories/StoriesActions';
 import { getYamlHeader } from 'src/features/stories/storiesComponents/UserBlogContent';
+import { StoryStatus } from 'src/features/stories/StoriesTypes';
 
 import StoriesTable from './StoriesTable';
 import StoryActions from './StoryActions';
@@ -48,13 +49,13 @@ const Stories: React.FC = () => {
     [dispatch]
   );
 
-  const storyList = useTypedSelector(state => state.stories.storyList);
+  const storyLists = useTypedSelector(state => state.stories.storyLists);
 
   const handleTogglePinStory = useCallback(
     (id: number) => {
       // Safe to use ! as the story ID comes a story in storyList
-      const story = storyList.find(story => story.id === id)!;
-      const pinnedLength = storyList.filter(story => story.isPinned).length;
+      const story = storyLists.published.find(story => story.id === id)!;
+      const pinnedLength = storyLists.published.filter(story => story.isPinned).length;
       const newStory = {
         ...story,
         isPinned: !story.isPinned,
@@ -63,19 +64,19 @@ const Stories: React.FC = () => {
       };
       dispatch(saveStory(newStory, id));
     },
-    [dispatch, storyList]
+    [dispatch, storyLists]
   );
 
   const handleMovePinUp = useCallback(
     (id: number) => {
       // Safe to use ! as the story ID comes a story in storyList
-      const oldIndex = storyList.findIndex(story => story.id === id)!;
+      const oldIndex = storyLists.published.findIndex(story => story.id === id)!;
       if (oldIndex === 0) {
         return;
       }
 
-      const toMoveUp = storyList[oldIndex];
-      const toMoveDown = storyList[oldIndex - 1];
+      const toMoveUp = storyLists.published[oldIndex];
+      const toMoveDown = storyLists.published[oldIndex - 1];
 
       const storiesToUpdate = [
         { ...toMoveUp, pinOrder: oldIndex - 1 },
@@ -83,19 +84,19 @@ const Stories: React.FC = () => {
       ];
       storiesToUpdate.forEach(story => dispatch(saveStory(story, story.id)));
     },
-    [dispatch, storyList]
+    [dispatch, storyLists]
   );
 
   const handleMovePinDown = useCallback(
     (id: number) => {
       // Safe to use ! as the story ID comes a story in storyList
-      const oldIndex = storyList.findIndex(story => story.id === id)!;
-      const pinnedLength = storyList.filter(story => story.isPinned).length;
+      const oldIndex = storyLists.published.findIndex(story => story.id === id)!;
+      const pinnedLength = storyLists.published.filter(story => story.isPinned).length;
       if (oldIndex === pinnedLength - 1) {
         return;
       }
-      const toMoveDown = storyList[oldIndex];
-      const toMoveUp = storyList[oldIndex + 1];
+      const toMoveDown = storyLists.published[oldIndex];
+      const toMoveUp = storyLists.published[oldIndex + 1];
 
       const storiesToUpdate = [
         { ...toMoveDown, pinOrder: oldIndex + 1 },
@@ -103,7 +104,33 @@ const Stories: React.FC = () => {
       ];
       storiesToUpdate.forEach(story => dispatch(saveStory(story, story.id)));
     },
-    [dispatch, storyList]
+    [dispatch, storyLists]
+  );
+
+  const handleRejectStory = useCallback(
+    (id: number) => {
+      // Safe to use ! as the story ID comes a story in storyList
+      const story = storyLists.pending.find(story => story.id === id)!;
+      const newStory = {
+        ...story,
+        status: StoryStatus.Rejected
+      };
+      dispatch(saveStory(newStory, id));
+    },
+    [dispatch, storyLists]
+  );
+
+  const handlePublishStory = useCallback(
+    (id: number) => {
+      // Safe to use ! as the story ID comes a story in storyList
+      const story = storyLists.pending.find(story => story.id === id)!;
+      const newStory = {
+        ...story,
+        status: StoryStatus.Published
+      };
+      dispatch(saveStory(newStory, id));
+    },
+    [dispatch, storyLists]
   );
 
   return isStoriesDisabled ? (
@@ -138,36 +165,130 @@ const Stories: React.FC = () => {
             />
           </Flex>
 
-          <StoriesTable
-            headers={columns}
-            stories={storyList
-              // Filter out the YAML header from the content
-              .map(story => ({ ...story, content: getYamlHeader(story.content).content }))
-              .filter(
-                story =>
-                  // Always show pinned stories
-                  story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
-              )}
-            storyActions={story => {
-              const isAuthor = storiesUserId === story.authorId;
-              const hasWritePermissions =
-                storiesRole === StoriesRole.Moderator || storiesRole === StoriesRole.Admin;
-              return (
-                <StoryActions
-                  storyId={story.id}
-                  handleDeleteStory={handleDeleteStory}
-                  handleTogglePin={handleTogglePinStory}
-                  handleMovePinUp={handleMovePinUp}
-                  handleMovePinDown={handleMovePinDown}
-                  canView // everyone has view permissions, even anonymous users
-                  canEdit={isAuthor || hasWritePermissions}
-                  canDelete={isAuthor || hasWritePermissions}
-                  canPin={hasWritePermissions}
-                  isPinned={story.isPinned}
-                />
-              );
-            }}
-          />
+          {storyLists.published.length > 0 && (
+            <StoriesTable
+              title="Published Stories"
+              headers={columns}
+              stories={storyLists.published
+                // Filter out the YAML header from the content
+                .map(story => ({ ...story, content: getYamlHeader(story.content).content }))
+                .filter(
+                  story =>
+                    // Always show pinned stories
+                    story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
+                )}
+              storyActions={story => {
+                const isAuthor = storiesUserId === story.authorId;
+                const hasWritePermissions =
+                  storiesRole === StoriesRole.Moderator || storiesRole === StoriesRole.Admin;
+                return (
+                  <StoryActions
+                    storyId={story.id}
+                    handleDeleteStory={handleDeleteStory}
+                    handleTogglePin={handleTogglePinStory}
+                    handleMovePinUp={handleMovePinUp}
+                    handleMovePinDown={handleMovePinDown}
+                    canView // everyone has view permissions, even anonymous users
+                    canEdit={isAuthor || hasWritePermissions}
+                    canDelete={isAuthor || hasWritePermissions}
+                    canPin={hasWritePermissions}
+                    isPinned={story.isPinned}
+                  />
+                );
+              }}
+            />
+          )}
+
+          {storyLists.pending.length > 0 && (
+            <StoriesTable
+              title="Pending Stories"
+              headers={columns}
+              stories={storyLists.pending
+                // Filter out the YAML header from the content
+                .map(story => ({ ...story, content: getYamlHeader(story.content).content }))
+                .filter(
+                  story =>
+                    // Always show pinned stories
+                    story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
+                )}
+              storyActions={story => {
+                const isAuthor = storiesUserId === story.authorId;
+                const hasWritePermissions =
+                  storiesRole === StoriesRole.Moderator || storiesRole === StoriesRole.Admin;
+                return (
+                  <StoryActions
+                    storyId={story.id}
+                    handleDeleteStory={handleDeleteStory}
+                    handleRejectStory={handleRejectStory}
+                    handlePublishStory={handlePublishStory}
+                    canView // everyone has view permissions, even anonymous users
+                    canEdit={isAuthor || hasWritePermissions}
+                    canDelete={isAuthor || hasWritePermissions}
+                    canModerate={hasWritePermissions}
+                    isPending={true}
+                  />
+                );
+              }}
+            />
+          )}
+
+          {storyLists.rejected.length > 0 && (
+            <StoriesTable
+              title="Rejected Stories"
+              headers={columns}
+              stories={storyLists.rejected
+                // Filter out the YAML header from the content
+                .map(story => ({ ...story, content: getYamlHeader(story.content).content }))
+                .filter(
+                  story =>
+                    // Always show pinned stories
+                    story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
+                )}
+              storyActions={story => {
+                const isAuthor = storiesUserId === story.authorId;
+                const hasWritePermissions =
+                  storiesRole === StoriesRole.Moderator || storiesRole === StoriesRole.Admin;
+                return (
+                  <StoryActions
+                    storyId={story.id}
+                    handleDeleteStory={handleDeleteStory}
+                    canView // everyone has view permissions, even anonymous users
+                    canEdit={isAuthor || hasWritePermissions}
+                    canDelete={isAuthor || hasWritePermissions}
+                  />
+                );
+              }}
+            />
+          )}
+
+          {storyLists.draft.length > 0 && (
+            <StoriesTable
+              title="Draft Stories"
+              headers={columns}
+              stories={storyLists.draft
+                // Filter out the YAML header from the content
+                .map(story => ({ ...story, content: getYamlHeader(story.content).content }))
+                .filter(
+                  story =>
+                    // Always show pinned stories
+                    story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
+                )}
+              storyActions={story => {
+                const isAuthor = storiesUserId === story.authorId;
+                const hasWritePermissions =
+                  storiesRole === StoriesRole.Moderator || storiesRole === StoriesRole.Admin;
+                return (
+                  <StoryActions
+                    storyId={story.id}
+                    handleDeleteStory={handleDeleteStory}
+                    canView // everyone has view permissions, even anonymous users
+                    canEdit={isAuthor || hasWritePermissions}
+                    canDelete={isAuthor || hasWritePermissions}
+                  />
+                );
+              }}
+            />
+          )}
         </Card>
       }
     />

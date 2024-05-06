@@ -546,7 +546,12 @@ export const defaultSession: SessionState = {
 };
 
 export const defaultStories: StoriesState = {
-  storyList: [],
+  storyLists: {
+    draft: [],
+    pending: [],
+    rejected: [],
+    published: []
+  },
   currentStoryId: null,
   currentStory: null,
   envs: {}

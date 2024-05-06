@@ -153,7 +153,7 @@ const newStoriesReducer = createReducer(defaultStories, builder => {
     })
     // New cases post-refactor
     .addCase(updateStoriesList, (state, action) => {
-      state.storyList = action.payload;
+      state.storyLists = action.payload;
     })
     .addCase(setCurrentStoryId, (state, action) => {
       state.currentStoryId = action.payload;

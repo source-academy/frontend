@@ -9,7 +9,7 @@ import {
   SET_CURRENT_STORIES_GROUP,
   SET_CURRENT_STORIES_USER,
   StoryData,
-  StoryListView,
+  StoryListViews,
   StoryParams
 } from './StoriesTypes';
 
@@ -31,7 +31,7 @@ const newActions = createActions('stories', {
 
   // New action creators post-refactor
   getStoriesList: () => ({}),
-  updateStoriesList: (storyList: StoryListView[]) => storyList,
+  updateStoriesList: (storyLists: StoryListViews) => storyLists,
   setCurrentStory: (story: StoryData | null) => story,
   setCurrentStoryId: (id: number | null) => id,
   createStory: (story: StoryParams) => story,

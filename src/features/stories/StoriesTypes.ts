@@ -19,9 +19,18 @@ export type StoryData = {
   title: string;
   content: string;
   pinOrder: number | null;
+  status: StoryStatus;
+  statusMessage: string;
 };
 
 export type StoryParams = StoryData;
+
+export enum StoryStatus {
+  Draft = 0,
+  Pending,
+  Rejected,
+  Published
+}
 
 export type StoryListView = StoryData &
   StoryMetadata & {
@@ -53,8 +62,15 @@ export type StoriesAuthState = {
   readonly role?: StoriesRole;
 };
 
+export type StoryListViews = {
+  readonly draft: StoryListView[];
+  readonly pending: StoryListView[];
+  readonly rejected: StoryListView[];
+  readonly published: StoryListView[];
+};
+
 export type StoriesState = {
-  readonly storyList: StoryListView[];
+  readonly storyLists: StoryListViews;
   readonly currentStoryId: number | null;
   readonly currentStory: StoryData | null;
   readonly envs: { [key: string]: StoriesEnvState };

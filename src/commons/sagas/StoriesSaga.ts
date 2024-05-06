@@ -9,7 +9,13 @@ import {
   postStory,
   updateStory
 } from 'src/features/stories/storiesComponents/BackendAccess';
-import { StoryData, StoryListView, StoryView } from 'src/features/stories/StoriesTypes';
+import {
+  StoryData,
+  StoryListView,
+  StoryListViews,
+  StoryStatus,
+  StoryView
+} from 'src/features/stories/StoriesTypes';
 
 import { OverallState, StoriesRole } from '../application/ApplicationTypes';
 import { Tokens } from '../application/types/SessionTypes';
@@ -25,10 +31,33 @@ const StoriesSaga = combineSagaHandlers(StoriesActions, {
   // TODO: This should be using `takeLatest`, not `takeEvery`
   getStoriesList: function* () {
     const tokens: Tokens = yield selectTokens();
-    const allStories: StoryListView[] = yield call(async () => {
-      const resp = await getStories(tokens);
+
+    const draftStories: StoryListView[] = yield call(async () => {
+      const resp = await getStories(tokens, StoryStatus.Draft);
       return resp ?? [];
     });
+
+    const pendingStories: StoryListView[] = yield call(async () => {
+      const resp = await getStories(tokens, StoryStatus.Pending);
+      return resp ?? [];
+    });
+
+    const rejectedStories: StoryListView[] = yield call(async () => {
+      const resp = await getStories(tokens, StoryStatus.Rejected);
+      return resp ?? [];
+    });
+
+    const publishedStories: StoryListView[] = yield call(async () => {
+      const resp = await getStories(tokens, StoryStatus.Published);
+      return resp ?? [];
+    });
+
+    const allStories: StoryListViews = {
+      draft: draftStories,
+      pending: pendingStories,
+      rejected: rejectedStories,
+      published: publishedStories
+    };
 
     yield put(actions.updateStoriesList(allStories));
   },
@@ -42,7 +71,9 @@ const StoriesSaga = combineSagaHandlers(StoriesActions, {
       const defaultStory: StoryData = {
         title: '',
         content: defaultStoryContent,
-        pinOrder: null
+        pinOrder: null,
+        status: StoryStatus.Draft,
+        statusMessage: ''
       };
       yield put(actions.setCurrentStory(defaultStory));
     }
@@ -82,7 +113,9 @@ const StoriesSaga = combineSagaHandlers(StoriesActions, {
       id,
       story.title,
       story.content,
-      story.pinOrder
+      story.pinOrder,
+      story.status,
+      story.statusMessage
     );
 
     // TODO: Check correctness

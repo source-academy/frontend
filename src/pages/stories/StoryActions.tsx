@@ -15,6 +15,10 @@ type Props = {
   handleTogglePin?: (id: number) => void;
   handleMovePinUp?: (id: number) => void;
   handleMovePinDown?: (id: number) => void;
+  canModerate?: boolean;
+  isPending?: boolean;
+  handleRejectStory?: (id: number) => void;
+  handlePublishStory?: (id: number) => void;
 };
 
 const StoryActions: React.FC<Props> = ({
@@ -27,7 +31,11 @@ const StoryActions: React.FC<Props> = ({
   isPinned = false,
   handleTogglePin = () => {},
   handleMovePinUp = () => {},
-  handleMovePinDown = () => {}
+  handleMovePinDown = () => {},
+  canModerate = false,
+  isPending = false,
+  handleRejectStory = () => {},
+  handlePublishStory = () => {}
 }) => {
   return (
     <Flex justifyContent="justify-start" spaceX="space-x-2">
@@ -86,6 +94,26 @@ const StoryActions: React.FC<Props> = ({
           <Icon
             tooltip="Delete"
             icon={() => <BpIcon icon={IconNames.TRASH} />}
+            variant="light"
+            color="red"
+          />
+        </button>
+      )}
+      {isPending && canModerate && (
+        <button style={{ padding: 0 }} onClick={() => handleRejectStory(storyId)}>
+          <Icon
+            tooltip="Reject"
+            icon={() => <BpIcon icon={IconNames.CROSS} />}
+            variant="light"
+            color="red"
+          />
+        </button>
+      )}
+      {isPending && canModerate && (
+        <button style={{ padding: 0 }} onClick={() => handlePublishStory(storyId)}>
+          <Icon
+            tooltip="Publish"
+            icon={() => <BpIcon icon={IconNames.TICK} />}
             variant="light"
             color="red"
           />
