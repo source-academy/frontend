@@ -2,6 +2,7 @@ import { Navigate, redirect, RouteObject } from 'react-router';
 
 import Application from '../commons/application/Application';
 import { Role } from '../commons/application/ApplicationTypes';
+import { GuardedRoute } from './routeGuard';
 
 /**
  * Partial migration to be compatible with react-router v6.4 data loader APIs.
@@ -82,14 +83,11 @@ export const getFullAcademyRouterConfig = ({
     return null;
   };
 
-  const ensureUserAndRole = () => {
-    if (name === undefined) {
-      return redirect('/login');
-    }
-    if (role === undefined) {
-      return redirect('/welcome');
-    }
-    return null;
+  const ensureUserAndRole = (r: RouteObject) => {
+    return new GuardedRoute(r)
+      .check(s => s.session.name !== undefined, '/login')
+      .check(s => s.session.role !== undefined, '/welcome')
+      .build();
   };
 
   const homePageRedirect = () => {
@@ -115,18 +113,13 @@ export const getFullAcademyRouterConfig = ({
         { path: 'login', lazy: Login },
         { path: 'welcome', lazy: Welcome, loader: welcomeLoader },
         { path: 'courses', element: <Navigate to="/" /> },
-        {
-          path: 'courses/:courseId/*',
-          lazy: Academy,
-          loader: ensureUserAndRole,
-          children: [...academyRoutes]
-        },
-        { path: 'playground', lazy: Playground, loader: ensureUserAndRole },
+        ensureUserAndRole({ path: 'courses/:courseId/*', lazy: Academy, children: academyRoutes }),
+        ensureUserAndRole({ path: 'playground', lazy: Playground }),
         { path: 'mission-control/:assessmentId?/:questionId?', lazy: MissionControl },
-        { path: 'courses/:courseId/stories/new', lazy: EditStory, loader: ensureUserAndRole },
-        { path: 'courses/:courseId/stories/view/:id', lazy: ViewStory, loader: ensureUserAndRole },
-        { path: 'courses/:courseId/stories/edit/:id', lazy: EditStory, loader: ensureUserAndRole },
-        { path: 'courses/:courseId/stories', lazy: Stories, loader: ensureUserAndRole },
+        ensureUserAndRole({ path: 'courses/:courseId/stories/new', lazy: EditStory }),
+        ensureUserAndRole({ path: 'courses/:courseId/stories/view/:id', lazy: ViewStory }),
+        ensureUserAndRole({ path: 'courses/:courseId/stories/edit/:id', lazy: EditStory }),
+        ensureUserAndRole({ path: 'courses/:courseId/stories', lazy: Stories }),
         ...commonChildrenRoutes,
         { path: '*', lazy: NotFound }
       ]
