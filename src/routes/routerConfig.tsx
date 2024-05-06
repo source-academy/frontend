@@ -1,7 +1,7 @@
 import { Navigate, redirect, RouteObject } from 'react-router';
 
 import Application from '../commons/application/Application';
-import { Role } from '../commons/application/ApplicationTypes';
+import { GuardedRoute } from './routeGuard';
 
 /**
  * Partial migration to be compatible with react-router v6.4 data loader APIs.
@@ -41,52 +41,34 @@ const ViewStory = async () => {
 const Stories = () => import('../pages/stories/Stories');
 
 const commonChildrenRoutes: RouteObject[] = [
-  {
-    path: 'contributors',
-    lazy: Contributors
-  },
-  {
-    path: 'callback/github',
-    lazy: GitHubCallback
-  },
-  {
-    path: 'sicpjs/:section?',
-    lazy: Sicp
-  }
+  { path: 'contributors', lazy: Contributors },
+  { path: 'callback/github', lazy: GitHubCallback },
+  { path: 'sicpjs/:section?', lazy: Sicp }
 ];
 
 export const playgroundOnlyRouterConfig: RouteObject[] = [
   {
-    path: '/*',
+    path: '*',
     element: <Application />,
     children: [
-      {
-        path: '',
-        element: <Navigate to="/playground" replace />
-      },
-      {
-        path: 'playground',
-        lazy: Playground
-      },
+      { path: '', element: <Navigate to="/playground" replace /> },
+      { path: 'playground', lazy: Playground },
       ...commonChildrenRoutes,
-      {
-        path: '*',
-        lazy: NotFound
-      }
+      { path: '*', lazy: NotFound }
     ]
   }
 ];
 
 export const getFullAcademyRouterConfig = ({
   name,
-  role,
   isLoggedIn,
-  courseId
+  courseId,
+  academyRoutes = []
 }: {
   name?: string;
-  role?: Role;
   isLoggedIn: boolean;
   courseId?: number | null;
+  academyRoutes?: RouteObject[];
 }): RouteObject[] => {
   const welcomeLoader = () => {
     if (name === undefined) {
@@ -98,11 +80,18 @@ export const getFullAcademyRouterConfig = ({
     return null;
   };
 
-  const ensureUserAndRole = () => {
-    if (name === undefined) {
-      return redirect('/login');
+  const ensureUserAndRole = (r: RouteObject) => {
+    return new GuardedRoute(r)
+      .check(s => s.session.name !== undefined, '/login')
+      .check(s => s.session.role !== undefined, '/welcome')
+      .build();
+  };
+
+  const homePageRedirect = () => {
+    if (!isLoggedIn) {
+      return redirect('/login', { status: 401 });
     }
-    if (role === undefined) {
+    if (courseId === null) {
       return redirect('/welcome');
     }
     return null;
@@ -110,70 +99,26 @@ export const getFullAcademyRouterConfig = ({
 
   return [
     {
-      path: '/*',
+      path: '*',
       element: <Application />,
       children: [
         {
           path: '',
-          element: (
-            <Navigate
-              to={!isLoggedIn ? '/login' : courseId === null ? '/welcome' : `/courses/${courseId}`}
-              replace
-            />
-          )
+          element: <Navigate to={`/courses/${courseId}`} replace />,
+          loader: homePageRedirect
         },
-        {
-          path: 'login',
-          lazy: Login
-        },
-        {
-          path: 'welcome',
-          lazy: Welcome,
-          loader: welcomeLoader
-        },
-        {
-          path: 'courses',
-          element: <Navigate to="/" />
-        },
-        {
-          path: 'courses/:courseId/*',
-          lazy: Academy,
-          loader: ensureUserAndRole
-        },
-        {
-          path: 'playground',
-          lazy: Playground,
-          loader: ensureUserAndRole
-        },
-        {
-          path: 'mission-control/:assessmentId?/:questionId?',
-          lazy: MissionControl
-        },
-        {
-          path: 'courses/:courseId/stories/new',
-          lazy: EditStory,
-          loader: ensureUserAndRole
-        },
-        {
-          path: 'courses/:courseId/stories/view/:id',
-          lazy: ViewStory,
-          loader: ensureUserAndRole
-        },
-        {
-          path: 'courses/:courseId/stories/edit/:id',
-          lazy: EditStory,
-          loader: ensureUserAndRole
-        },
-        {
-          path: 'courses/:courseId/stories',
-          lazy: Stories,
-          loader: ensureUserAndRole
-        },
+        { path: 'login', lazy: Login },
+        { path: 'welcome', lazy: Welcome, loader: welcomeLoader },
+        { path: 'courses', element: <Navigate to="/" /> },
+        ensureUserAndRole({ path: 'courses/:courseId/*', lazy: Academy, children: academyRoutes }),
+        ensureUserAndRole({ path: 'playground', lazy: Playground }),
+        { path: 'mission-control/:assessmentId?/:questionId?', lazy: MissionControl },
+        ensureUserAndRole({ path: 'courses/:courseId/stories/new', lazy: EditStory }),
+        ensureUserAndRole({ path: 'courses/:courseId/stories/view/:id', lazy: ViewStory }),
+        ensureUserAndRole({ path: 'courses/:courseId/stories/edit/:id', lazy: EditStory }),
+        ensureUserAndRole({ path: 'courses/:courseId/stories', lazy: Stories }),
         ...commonChildrenRoutes,
-        {
-          path: '*',
-          lazy: NotFound
-        }
+        { path: '*', lazy: NotFound }
       ]
     }
   ];

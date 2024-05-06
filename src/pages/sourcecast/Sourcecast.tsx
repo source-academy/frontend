@@ -5,12 +5,7 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
-import {
-  beginDebuggerPause,
-  beginInterruptExecution,
-  debuggerReset,
-  debuggerResume
-} from 'src/commons/application/actions/InterpreterActions';
+import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 import { Position } from 'src/commons/editor/EditorTypes';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
@@ -218,10 +213,11 @@ const Sourcecast: React.FC = () => {
 
   const autorunButtonHandlers = useMemo(() => {
     return {
-      handleDebuggerPause: () => dispatch(beginDebuggerPause(workspaceLocation)),
-      handleDebuggerReset: () => dispatch(debuggerReset(workspaceLocation)),
-      handleDebuggerResume: () => dispatch(debuggerResume(workspaceLocation)),
-      handleInterruptEval: () => dispatch(beginInterruptExecution(workspaceLocation)),
+      handleDebuggerPause: () => dispatch(InterpreterActions.beginDebuggerPause(workspaceLocation)),
+      handleDebuggerReset: () => dispatch(InterpreterActions.debuggerReset(workspaceLocation)),
+      handleDebuggerResume: () => dispatch(InterpreterActions.debuggerResume(workspaceLocation)),
+      handleInterruptEval: () =>
+        dispatch(InterpreterActions.beginInterruptExecution(workspaceLocation)),
       handleToggleEditorAutorun: () => dispatch(toggleEditorAutorun(workspaceLocation))
     };
   }, [dispatch]);
@@ -440,5 +436,10 @@ const Sourcecast: React.FC = () => {
 };
 
 const INTRODUCTION = 'Welcome to Sourcecast!';
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = Sourcecast;
+Component.displayName = 'Sourcecast';
 
 export default Sourcecast;

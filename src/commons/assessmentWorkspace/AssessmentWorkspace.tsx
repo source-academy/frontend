@@ -28,12 +28,7 @@ import {
   KeyboardCommand,
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
-import {
-  checkAnswerLastModifiedAt,
-  fetchAssessment,
-  fetchTeamFormationOverview,
-  submitAnswer
-} from '../application/actions/SessionActions';
+import SessionActions from '../application/actions/SessionActions';
 import { defaultWorkspaceManager } from '../application/ApplicationTypes';
 import {
   AssessmentConfiguration,
@@ -174,7 +169,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   } = useMemo(() => {
     return {
       handleTeamOverviewFetch: (assessmentId: number) =>
-        dispatch(fetchTeamFormationOverview(assessmentId)),
+        dispatch(SessionActions.fetchTeamFormationOverview(assessmentId)),
       handleTestcaseEval: (id: number) => dispatch(evalTestcase(workspaceLocation, id)),
       handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
         dispatch(beginClearContext(workspaceLocation, library, shouldInitLibrary)),
@@ -187,16 +182,16 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       handleRunAllTestcases: () => dispatch(runAllTestcases(workspaceLocation)),
       handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
       handleAssessmentFetch: (assessmentId: number, assessmentPassword?: string) =>
-        dispatch(fetchAssessment(assessmentId, assessmentPassword)),
+        dispatch(SessionActions.fetchAssessment(assessmentId, assessmentPassword)),
       handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
         dispatch(updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)),
       handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
         dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)),
       handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
       handleCheckLastModifiedAt: (id: number, lastModifiedAt: string, saveAnswer: Function) =>
-        dispatch(checkAnswerLastModifiedAt(id, lastModifiedAt, saveAnswer)),
+        dispatch(SessionActions.checkAnswerLastModifiedAt(id, lastModifiedAt, saveAnswer)),
       handleSave: (id: number, answer: number | string | ContestEntry[]) =>
-        dispatch(submitAnswer(id, answer)),
+        dispatch(SessionActions.submitAnswer(id, answer)),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
         dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges)),
       handleEnableTokenCounter: () => dispatch(enableTokenCounter(workspaceLocation)),

@@ -7,7 +7,7 @@ import {
   getStoreExtraMethodsString
 } from '../../../utils/JsSlangHelper';
 import { EVAL_SILENT, WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
-import { evalCode } from './evalCode';
+import { evalCodeSaga } from './evalCode';
 
 export function* blockExtraMethods(
   elevatedContext: Context,
@@ -25,7 +25,7 @@ export function* blockExtraMethods(
       [storeValuesFilePath]: storeValues
     };
     yield call(
-      evalCode,
+      evalCodeSaga,
       storeValuesFiles,
       storeValuesFilePath,
       elevatedContext,
@@ -41,7 +41,7 @@ export function* blockExtraMethods(
     [nullifierFilePath]: nullifier
   };
   yield call(
-    evalCode,
+    evalCodeSaga,
     nullifierFiles,
     nullifierFilePath,
     elevatedContext,
