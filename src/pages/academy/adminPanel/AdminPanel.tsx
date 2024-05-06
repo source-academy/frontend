@@ -93,7 +93,8 @@ const AdminPanel: React.FC = () => {
     storiesUsers: stories.storiesUsers,
     handleUpdateStoriesUserRole: (id: number, role: StoriesRole) =>
       dispatch(SessionActions.updateStoriesUserRole(id, role as unknown as StoriesRole)),
-    handleDeleteStoriesUserFromUserGroup: (id: number) => dispatch(SessionActions.deleteStoriesUserUserGroups(id))
+    handleDeleteStoriesUserFromUserGroup: (id: number) =>
+      dispatch(SessionActions.deleteStoriesUserUserGroups(id))
   };
 
   // Handler to submit changes to Course Configration and Assessment Configuration to the backend.
