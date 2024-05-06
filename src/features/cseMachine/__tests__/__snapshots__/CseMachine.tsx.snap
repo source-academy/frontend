@@ -2705,6 +2705,7 @@ Object {
     ],
     "callee": Node {
       "end": 97,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 15,
@@ -2720,6 +2721,7 @@ Object {
       "type": "Identifier",
     },
     "end": 101,
+    "isEnvDependent": true,
     "loc": SourceLocation {
       "end": Position {
         "column": 19,
@@ -3017,6 +3019,7 @@ Object {
     ],
     "callee": Node {
       "end": 418,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 29,
@@ -3032,6 +3035,7 @@ Object {
       "type": "Identifier",
     },
     "end": 421,
+    "isEnvDependent": true,
     "loc": SourceLocation {
       "end": Position {
         "column": 32,
@@ -3088,6 +3092,7 @@ Object {
     ],
     "callee": Node {
       "end": 317,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 73,
@@ -3103,6 +3108,7 @@ Object {
       "type": "Identifier",
     },
     "end": 320,
+    "isEnvDependent": true,
     "loc": SourceLocation {
       "end": Position {
         "column": 76,
@@ -3153,6 +3159,7 @@ Object {
     ],
     "callee": Node {
       "end": 13849,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 23,
@@ -3168,6 +3175,7 @@ Object {
       "type": "Identifier",
     },
     "end": 13856,
+    "isEnvDependent": true,
     "loc": SourceLocation {
       "end": Position {
         "column": 30,
@@ -3291,6 +3299,7 @@ Object {
     ],
     "callee": Node {
       "end": 404,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 15,
@@ -3306,6 +3315,7 @@ Object {
       "type": "Identifier",
     },
     "end": 425,
+    "isEnvDependent": true,
     "loc": SourceLocation {
       "end": Position {
         "column": 36,
@@ -3407,6 +3417,7 @@ Object {
       ],
       "callee": Node {
         "end": 317,
+        "isEnvDependent": true,
         "loc": SourceLocation {
           "end": Position {
             "column": 73,
@@ -3422,6 +3433,7 @@ Object {
         "type": "Identifier",
       },
       "end": 320,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 76,
@@ -3780,6 +3792,7 @@ Object {
       ],
       "callee": Node {
         "end": 404,
+        "isEnvDependent": true,
         "loc": SourceLocation {
           "end": Position {
             "column": 15,
@@ -3795,6 +3808,7 @@ Object {
         "type": "Identifier",
       },
       "end": 425,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 36,
@@ -4221,6 +4235,7 @@ Object {
     ],
     "callee": Node {
       "end": 375,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 34,
@@ -4236,6 +4251,7 @@ Object {
       "type": "Identifier",
     },
     "end": 381,
+    "isEnvDependent": true,
     "loc": SourceLocation {
       "end": Position {
         "column": 40,
@@ -4291,6 +4307,7 @@ Object {
         ],
         "callee": Node {
           "end": 404,
+          "isEnvDependent": true,
           "loc": SourceLocation {
             "end": Position {
               "column": 15,
@@ -4306,6 +4323,7 @@ Object {
           "type": "Identifier",
         },
         "end": 425,
+        "isEnvDependent": true,
         "loc": SourceLocation {
           "end": Position {
             "column": 36,
@@ -4405,6 +4423,7 @@ Object {
     ],
     "callee": Node {
       "end": 305,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 61,
@@ -4420,6 +4439,7 @@ Object {
       "type": "Identifier",
     },
     "end": 328,
+    "isEnvDependent": true,
     "loc": SourceLocation {
       "end": Position {
         "column": 84,
@@ -4475,6 +4495,7 @@ Object {
         ],
         "callee": Node {
           "end": 404,
+          "isEnvDependent": true,
           "loc": SourceLocation {
             "end": Position {
               "column": 15,
@@ -4490,6 +4511,7 @@ Object {
           "type": "Identifier",
         },
         "end": 425,
+        "isEnvDependent": true,
         "loc": SourceLocation {
           "end": Position {
             "column": 36,
@@ -5017,6 +5039,7 @@ Object {
       ],
       "callee": Node {
         "end": 375,
+        "isEnvDependent": true,
         "loc": SourceLocation {
           "end": Position {
             "column": 34,
@@ -5032,6 +5055,7 @@ Object {
         "type": "Identifier",
       },
       "end": 381,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 40,
@@ -5087,6 +5111,7 @@ Object {
           ],
           "callee": Node {
             "end": 404,
+            "isEnvDependent": true,
             "loc": SourceLocation {
               "end": Position {
                 "column": 15,
@@ -5102,6 +5127,7 @@ Object {
             "type": "Identifier",
           },
           "end": 425,
+          "isEnvDependent": true,
           "loc": SourceLocation {
             "end": Position {
               "column": 36,
@@ -5235,6 +5261,7 @@ Object {
       ],
       "callee": Node {
         "end": 305,
+        "isEnvDependent": true,
         "loc": SourceLocation {
           "end": Position {
             "column": 61,
@@ -5250,6 +5277,7 @@ Object {
         "type": "Identifier",
       },
       "end": 328,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 84,
@@ -5305,6 +5333,7 @@ Object {
           ],
           "callee": Node {
             "end": 404,
+            "isEnvDependent": true,
             "loc": SourceLocation {
               "end": Position {
                 "column": 15,
@@ -5320,6 +5349,7 @@ Object {
             "type": "Identifier",
           },
           "end": 425,
+          "isEnvDependent": true,
           "loc": SourceLocation {
             "end": Position {
               "column": 36,

@@ -2,7 +2,6 @@ import { IconName } from '@blueprintjs/core';
 
 import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
-export const NOTIFY_PROGRAM_EVALUATED = 'NOTIFY_PROGRAM_EVALUATED';
 export const BEGIN_ALERT_SIDE_CONTENT = 'BEGIN_ALERT_SIDE_CONTENT';
 export const END_ALERT_SIDE_CONTENT = 'END_ALERT_SIDE_CONTENT';
 export const VISIT_SIDE_CONTENT = 'VISIT_SIDE_CONTENT';

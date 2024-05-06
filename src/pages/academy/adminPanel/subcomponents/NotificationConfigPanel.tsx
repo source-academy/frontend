@@ -1,16 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button, H2, Intent } from '@blueprintjs/core';
 import { ColDef, GridApi, GridReadyEvent, ValueFormatterFunc } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import {
-  deleteTimeOptions,
-  fetchNotificationConfigs,
-  updateNotificationConfigs,
-  updateTimeOptions
-} from 'src/commons/application/actions/SessionActions';
+import SessionActions from 'src/commons/application/actions/SessionActions';
 import { NotificationConfiguration, TimeOption } from 'src/commons/application/types/SessionTypes';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
@@ -54,7 +48,7 @@ const NotificationConfigPanel = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchNotificationConfigs());
+    dispatch(SessionActions.fetchNotificationConfigs());
   }, [dispatch]);
 
   useEffect(() => {
@@ -177,14 +171,16 @@ const NotificationConfigPanel = () => {
       });
 
       if (allTimeOptions.length > 0) {
-        dispatch(updateTimeOptions(allTimeOptions));
+        dispatch(SessionActions.updateTimeOptions(allTimeOptions));
       }
 
       if (timeOptionsToDelete.length > 0) {
-        dispatch(deleteTimeOptions(timeOptionsToDelete.map(timeOption => timeOption.id)));
+        dispatch(
+          SessionActions.deleteTimeOptions(timeOptionsToDelete.map(timeOption => timeOption.id))
+        );
         setTimeOptionsToDelete([]);
       }
-      dispatch(updateNotificationConfigs(notificationConfig.current ?? []));
+      dispatch(SessionActions.updateNotificationConfigs(notificationConfig.current ?? []));
     }
   };
 
