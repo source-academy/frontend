@@ -207,4 +207,9 @@ const TeamFormationForm: React.FC = () => {
   );
 };
 
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = TeamFormationForm;
+Component.displayName = 'TeamFormationForm';
+
 export default TeamFormationForm;

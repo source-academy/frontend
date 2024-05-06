@@ -177,4 +177,9 @@ const NotiPreference: React.FC = () => {
   return <ContentDisplay display={data} fullWidth={false} />;
 };
 
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = NotiPreference;
+Component.displayName = 'NotiPreference';
+
 export default NotiPreference;

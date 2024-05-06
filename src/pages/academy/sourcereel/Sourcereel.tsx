@@ -482,4 +482,9 @@ const Sourcereel: React.FC = () => {
 
 const INTRODUCTION = 'Welcome to Sourcereel!';
 
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = Sourcereel;
+Component.displayName = 'Sourcereel';
+
 export default Sourcereel;

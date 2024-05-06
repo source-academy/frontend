@@ -60,7 +60,6 @@ const AdminPanel: React.FC = () => {
       moduleHelpText: session.moduleHelpText
     });
   }, [
-    session.assessmentConfigurations,
     session.courseName,
     session.courseShortName,
     session.enableAchievements,
@@ -186,5 +185,10 @@ const AdminPanel: React.FC = () => {
 
   return <ContentDisplay display={data} fullWidth={false} />;
 };
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = AdminPanel;
+Component.displayName = 'AdminPanel';
 
 export default AdminPanel;
