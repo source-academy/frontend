@@ -112,46 +112,6 @@ const newActions = createActions('session', {
   updateAssessmentOverviews: (overviews: AssessmentOverview[]) => overviews
 });
 
-// For compatibility with existing code (reducer)
-export const {
-  fetchAuth,
-  fetchUserAndCourse,
-  fetchCourseConfig,
-  fetchAssessment,
-  fetchAssessmentAdmin,
-  fetchAssessmentOverviews,
-  fetchTotalXp,
-  fetchTotalXpAdmin,
-  fetchGrading,
-  fetchGradingOverviews,
-  fetchTeamFormationOverviews,
-  fetchStudents,
-  login,
-  logoutGoogle,
-  loginGitHub,
-  logoutGitHub,
-  setTokens,
-  setUser,
-  setCourseConfiguration,
-  setCourseRegistration,
-  setAssessmentConfigurations,
-  setConfigurableNotificationConfigs,
-  setNotificationConfigs,
-  setAdminPanelCourseRegistrations,
-  setGoogleUser,
-  setGitHubOctokitObject,
-  setGitHubAccessToken,
-  removeGitHubOctokitObjectAndAccessToken,
-  submitAnswer,
-  checkAnswerLastModifiedAt,
-  submitAssessment,
-  submitGrading,
-  submitGradingAndContinue,
-  reautogradeSubmission,
-  reautogradeAnswer,
-  updateAssessmentOverviews
-} = newActions;
-
 export const updateTotalXp = createAction(UPDATE_TOTAL_XP, (totalXp: number) => ({
   payload: totalXp
 }));

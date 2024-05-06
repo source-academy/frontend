@@ -11,7 +11,7 @@ import AchievementTask from '../../../commons/achievement/AchievementTask';
 import AchievementView from '../../../commons/achievement/AchievementView';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import insertFakeAchievements from '../../../commons/achievement/utils/InsertFakeAchievements';
-import { fetchAssessmentOverviews } from '../../../commons/application/actions/SessionActions';
+import SessionActions from '../../../commons/application/actions/SessionActions';
 import {
   getAchievements,
   getGoals,
@@ -80,7 +80,7 @@ const AchievementDashboard: React.FC = () => {
     handleUpdateGoalProgress
   } = useMemo(() => {
     return {
-      handleFetchAssessmentOverviews: () => dispatch(fetchAssessmentOverviews()),
+      handleFetchAssessmentOverviews: () => dispatch(SessionActions.fetchAssessmentOverviews()),
       handleGetAchievements: () => dispatch(getAchievements()),
       handleGetGoals: (studentCourseRegId: number) => dispatch(getGoals(studentCourseRegId)),
       handleGetOwnGoals: () => dispatch(getOwnGoals()),

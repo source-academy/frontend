@@ -12,19 +12,7 @@ import {
 } from 'src/features/academy/AcademyActions';
 import { fetchAdminPanelStoriesUsers } from 'src/features/stories/StoriesActions';
 
-import {
-  deleteAssessmentConfig,
-  deleteStoriesUserUserGroups,
-  deleteUserCourseRegistration,
-  fetchAdminPanelCourseRegistrations,
-  fetchAssessmentConfigs,
-  fetchCourseConfig,
-  fetchNotificationConfigs,
-  updateAssessmentConfigs,
-  updateCourseConfig,
-  updateStoriesUserRole,
-  updateUserRole
-} from '../../../commons/application/actions/SessionActions';
+import SessionActions from '../../../commons/application/actions/SessionActions';
 import { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import AddStoriesUserPanel from './subcomponents/AddStoriesUserPanel';
@@ -58,10 +46,10 @@ const AdminPanel: React.FC = () => {
   const stories = useTypedSelector(state => state.stories);
 
   useEffect(() => {
-    dispatch(fetchCourseConfig());
-    dispatch(fetchAssessmentConfigs());
-    dispatch(fetchAdminPanelCourseRegistrations());
-    dispatch(fetchNotificationConfigs());
+    dispatch(SessionActions.fetchCourseConfig());
+    dispatch(SessionActions.fetchAssessmentConfigs());
+    dispatch(SessionActions.fetchAdminPanelCourseRegistrations());
+    dispatch(SessionActions.fetchNotificationConfigs());
     dispatch(fetchAdminPanelStoriesUsers());
   }, [dispatch]);
 
@@ -77,7 +65,6 @@ const AdminPanel: React.FC = () => {
       moduleHelpText: session.moduleHelpText
     });
   }, [
-    session.assessmentConfigurations,
     session.courseName,
     session.courseShortName,
     session.enableAchievements,
@@ -105,15 +92,15 @@ const AdminPanel: React.FC = () => {
     userId: stories.userId,
     storiesUsers: stories.storiesUsers,
     handleUpdateStoriesUserRole: (id: number, role: StoriesRole) =>
-      dispatch(updateStoriesUserRole(id, role as unknown as StoriesRole)),
-    handleDeleteStoriesUserFromUserGroup: (id: number) => dispatch(deleteStoriesUserUserGroups(id))
+      dispatch(SessionActions.updateStoriesUserRole(id, role as unknown as StoriesRole)),
+    handleDeleteStoriesUserFromUserGroup: (id: number) => dispatch(SessionActions.deleteStoriesUserUserGroups(id))
   };
 
   // Handler to submit changes to Course Configration and Assessment Configuration to the backend.
   // Changes made to users are handled separately.
   const submitHandler = useCallback(() => {
     if (hasChangesCourseConfig) {
-      dispatch(updateCourseConfig(courseConfiguration));
+      dispatch(SessionActions.updateCourseConfig(courseConfiguration));
       setHasChangesCourseConfig(false);
     }
     const tableState = tableRef.current?.getData() ?? [];
@@ -122,9 +109,9 @@ const AdminPanel: React.FC = () => {
     const configsToDelete = currentConfigs.filter(
       config => !currentIds.has(config.assessmentConfigId)
     );
-    configsToDelete.forEach(config => dispatch(deleteAssessmentConfig(config)));
+    configsToDelete.forEach(config => dispatch(SessionActions.deleteAssessmentConfig(config)));
     if (hasChangesAssessmentConfig) {
-      dispatch(updateAssessmentConfigs(tableState));
+      dispatch(SessionActions.updateAssessmentConfigs(tableState));
       setHasChangesAssessmentConfig(false);
     }
   }, [
@@ -174,10 +161,10 @@ const AdminPanel: React.FC = () => {
               courseRegId={session.courseRegId}
               userCourseRegistrations={session.userCourseRegistrations}
               handleUpdateUserRole={(courseRegId, role) =>
-                dispatch(updateUserRole(courseRegId, role))
+                dispatch(SessionActions.updateUserRole(courseRegId, role))
               }
               handleDeleteUserFromCourse={(courseRegId: number) =>
-                dispatch(deleteUserCourseRegistration(courseRegId))
+                dispatch(SessionActions.deleteUserCourseRegistration(courseRegId))
               }
             />
           }
@@ -216,5 +203,10 @@ const AdminPanel: React.FC = () => {
 
   return <ContentDisplay display={data} fullWidth={false} />;
 };
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = AdminPanel;
+Component.displayName = 'AdminPanel';
 
 export default AdminPanel;

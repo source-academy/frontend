@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { RouterProvider } from 'react-router';
 import { createBrowserRouter } from 'react-router-dom';
+import { getAcademyRoutes } from 'src/pages/academy/academyRoutes';
 
 import { getFullAcademyRouterConfig, playgroundOnlyRouterConfig } from '../../routes/routerConfig';
 import { getHealth } from '../sagas/RequestsSaga';
@@ -15,14 +16,13 @@ import { updateReactRouter } from './actions/CommonsActions';
 /**
  * Application wrapper component which figures out which deployment and set of routes to render.
  *
- * There are 3 main types of deployments as follows:
+ * There are 2 main types of deployments as follows:
  * 1. Playground-only (stripped-down backendless version of SA - e.g. https://sourceacademy.org)
  * 2. Full Academy (full SA to be deployed and configured with the backend - e.g. https://sourceacademy.nus.edu.sg)
- * 3. Disabled (disabled SA which only allows `staff` and `admin` accounts to log in - e.g. during examinations)
  */
 const ApplicationWrapper: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoggedIn, role, name, courseId } = useSession();
+  const { isLoggedIn, name, courseId } = useSession();
   const [isApiHealthy, setIsApiHealthy] = useState(true);
 
   useEffect(() => {
@@ -31,21 +31,20 @@ const ApplicationWrapper: React.FC = () => {
     }
   }, []);
 
+  const academyRoutes = useMemo(() => getAcademyRoutes(), []);
+
   const router = useMemo(() => {
     const routerConfig = Constants.playgroundOnly
       ? playgroundOnlyRouterConfig
-      : getFullAcademyRouterConfig({
-          name,
-          role,
-          isLoggedIn,
-          courseId
-        });
+      : getFullAcademyRouterConfig({ name, isLoggedIn, courseId, academyRoutes });
 
-    const r = createBrowserRouter(routerConfig);
+    const r = createBrowserRouter(routerConfig, {
+      future: { v7_relativeSplatPath: true }
+    });
     dispatch(updateReactRouter(r));
 
     return r;
-  }, [isLoggedIn, role, name, courseId, dispatch]);
+  }, [name, isLoggedIn, courseId, academyRoutes, dispatch]);
 
   if (!isApiHealthy) {
     return (

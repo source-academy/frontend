@@ -23,7 +23,7 @@ import { actions } from '../utils/ActionsHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { defaultStoryContent } from '../utils/StoriesHelper';
 import { selectTokens } from './BackendSaga';
-import { evalCode } from './WorkspaceSaga/helpers/evalCode';
+import { evalCodeSaga } from './WorkspaceSaga/helpers/evalCode';
 
 // TODO: Refactor and combine in a future commit
 const sagaActions = { ...StoriesActions, ...SessionActions };
@@ -137,7 +137,16 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
       [codeFilePath]: code
     };
     yield put(resetSideContent(`stories.${env}`));
-    yield call(evalCode, codeFiles, codeFilePath, context, execTime, 'stories', action.type, env);
+    yield call(
+      evalCodeSaga,
+      codeFiles,
+      codeFilePath,
+      context,
+      execTime,
+      'stories',
+      action.type,
+      env
+    );
   },
   fetchAdminPanelStoriesUsers: function* (action) {
     const tokens: Tokens = yield selectTokens();
