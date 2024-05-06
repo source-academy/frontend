@@ -75,8 +75,7 @@ const getCommonAcademyRoutes = (): RouteObject[] => {
     { path: 'notipreference', lazy: NotiPreference },
     { path: 'sourcecast/:sourcecastId?', lazy: Sourcecast },
     { path: 'achievements/*', lazy: Achievement },
-    { path: notFoundPath, lazy: NotFound },
-    { path: '*', loader: () => redirect(notFoundPath) }
+    { path: '*', lazy: NotFound }
   ];
 };
 
