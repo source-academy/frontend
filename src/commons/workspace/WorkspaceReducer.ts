@@ -5,14 +5,7 @@ import { Reducer } from 'redux';
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
 import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
 import { logOut } from '../application/actions/CommonsActions';
-import {
-  endInterruptExecution,
-  evalInterpreterError,
-  evalInterpreterSuccess,
-  evalTestcaseFailure,
-  evalTestcaseSuccess,
-  handleConsoleLog
-} from '../application/actions/InterpreterActions';
+import InterpreterActions from '../application/actions/InterpreterActions';
 import {
   createDefaultWorkspace,
   defaultWorkspaceManager,
@@ -138,7 +131,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].externalLibrary = action.payload.newExternal;
     })
-    .addCase(handleConsoleLog, (state, action) => {
+    .addCase(InterpreterActions.handleConsoleLog, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       /* Possible cases:
        * (1) state[workspaceLocation].output === [], i.e. state[workspaceLocation].output[-1] === undefined
@@ -186,7 +179,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       state[workspaceLocation].isRunning = true;
       state[workspaceLocation].isDebugging = false;
     })
-    .addCase(evalInterpreterSuccess, (state, action) => {
+    .addCase(InterpreterActions.evalInterpreterSuccess, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const execType = state[workspaceLocation].context.executionMethod;
       const tokens = state[workspaceLocation].tokenCount;
@@ -230,20 +223,20 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       state[workspaceLocation].output = newOutput;
       state[workspaceLocation].isRunning = false;
     })
-    .addCase(evalTestcaseSuccess, (state, action) => {
+    .addCase(InterpreterActions.evalTestcaseSuccess, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const testcase = state[workspaceLocation].editorTestcases[action.payload.index];
       testcase.result = action.payload.value;
       testcase.errors = undefined;
       state[workspaceLocation].isRunning = false;
     })
-    .addCase(evalTestcaseFailure, (state, action) => {
+    .addCase(InterpreterActions.evalTestcaseFailure, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const testcase = state[workspaceLocation].editorTestcases[action.payload.index];
       testcase.result = undefined;
       testcase.errors = action.payload.value;
     })
-    .addCase(evalInterpreterError, (state, action) => {
+    .addCase(InterpreterActions.evalInterpreterError, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
 
       const lastOutput: InterpreterOutput = state[workspaceLocation].output.slice(-1)[0];
@@ -272,7 +265,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
      * i.e called after the interpreter is told to stop interruption,
      * to cause UI changes.
      */
-    .addCase(endInterruptExecution, (state, action) => {
+    .addCase(InterpreterActions.endInterruptExecution, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       /**
        * Set the isRunning property of the

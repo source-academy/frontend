@@ -11,12 +11,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useStore } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import { AnyAction, Dispatch } from 'redux';
-import {
-  beginDebuggerPause,
-  beginInterruptExecution,
-  debuggerReset,
-  debuggerResume
-} from 'src/commons/application/actions/InterpreterActions';
+import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import {
   setEditorSessionId,
@@ -460,11 +455,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const autorunButtonHandlers = useMemo(() => {
     return {
       handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
-      handleInterruptEval: () => dispatch(beginInterruptExecution(workspaceLocation)),
+      handleInterruptEval: () =>
+        dispatch(InterpreterActions.beginInterruptExecution(workspaceLocation)),
       handleToggleEditorAutorun: () => dispatch(toggleEditorAutorun(workspaceLocation)),
-      handleDebuggerPause: () => dispatch(beginDebuggerPause(workspaceLocation)),
-      handleDebuggerReset: () => dispatch(debuggerReset(workspaceLocation)),
-      handleDebuggerResume: () => dispatch(debuggerResume(workspaceLocation))
+      handleDebuggerPause: () => dispatch(InterpreterActions.beginDebuggerPause(workspaceLocation)),
+      handleDebuggerReset: () => dispatch(InterpreterActions.debuggerReset(workspaceLocation)),
+      handleDebuggerResume: () => dispatch(InterpreterActions.debuggerResume(workspaceLocation))
     };
   }, [dispatch, workspaceLocation]);
 

@@ -1,16 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { cloneDeep } from 'lodash';
-import {
-  debuggerReset,
-  debuggerResume,
-  endDebuggerPause,
-  endInterruptExecution,
-  evalInterpreterError,
-  evalInterpreterSuccess,
-  evalTestcaseFailure,
-  evalTestcaseSuccess,
-  handleConsoleLog
-} from 'src/commons/application/actions/InterpreterActions';
+import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 
 import {
   CodeOutput,
@@ -353,7 +343,7 @@ describe('DEBUG_RESET', () => {
       isRunning,
       isDebugging
     });
-    const actions = generateActions(debuggerReset.type);
+    const actions = generateActions(InterpreterActions.debuggerReset.type);
 
     actions.forEach(action => {
       const result = WorkspaceReducer(debugResetDefaultState, action);
@@ -376,7 +366,7 @@ describe('DEBUG_RESUME', () => {
     const debugResumeDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       isDebugging
     });
-    const actions = generateActions(debuggerResume.type);
+    const actions = generateActions(InterpreterActions.debuggerResume.type);
 
     actions.forEach(action => {
       const result = WorkspaceReducer(debugResumeDefaultState, action);
@@ -447,7 +437,7 @@ describe('END_DEBUG_PAUSE', () => {
   test('sets isRunning to false and isDebugging to true', () => {
     const isRunning = true;
     const debugPauseDefaultState: WorkspaceManagerState = generateDefaultWorkspace({ isRunning });
-    const actions = generateActions(endDebuggerPause.type);
+    const actions = generateActions(InterpreterActions.endDebuggerPause.type);
 
     actions.forEach(action => {
       const result = WorkspaceReducer(debugPauseDefaultState, action);
@@ -472,7 +462,7 @@ describe('END_INTERRUPT_EXECUTION', () => {
       isRunning,
       isDebugging
     });
-    const actions = generateActions(endInterruptExecution.type);
+    const actions = generateActions(InterpreterActions.endInterruptExecution.type);
 
     actions.forEach(action => {
       const result = WorkspaceReducer(interruptExecutionDefaultState, action);
@@ -533,7 +523,7 @@ describe('EVAL_INTERPRETER_ERROR', () => {
       isRunning,
       isDebugging
     });
-    const actions = generateActions(evalInterpreterError.type);
+    const actions = generateActions(InterpreterActions.evalInterpreterError.type);
 
     actions.forEach(action => {
       const result = WorkspaceReducer(evalEditorDefaultState, action);
@@ -559,7 +549,7 @@ describe('EVAL_INTERPRETER_ERROR', () => {
       isDebugging
     });
 
-    const actions = generateActions(evalInterpreterError.type);
+    const actions = generateActions(InterpreterActions.evalInterpreterError.type);
 
     actions.forEach(action => {
       const result = WorkspaceReducer(evalEditorDefaultState, action);
@@ -593,7 +583,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
       editorTabs: [{ highlightedLines, breakpoints }]
     });
 
-    const actions = generateActions(evalInterpreterSuccess.type);
+    const actions = generateActions(InterpreterActions.evalInterpreterSuccess.type);
 
     actions.forEach(action => {
       const result = WorkspaceReducer(evalEditorDefaultState, action);
@@ -623,7 +613,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
       editorTabs: [{ highlightedLines, breakpoints }]
     });
 
-    const actions = generateActions(evalInterpreterSuccess.type);
+    const actions = generateActions(InterpreterActions.evalInterpreterSuccess.type);
 
     actions.forEach(action => {
       const result = WorkspaceReducer(evalEditorDefaultState, action);
@@ -694,7 +684,10 @@ describe('EVAL_TESTCASE_FAILURE', () => {
     const evalFailureDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       editorTestcases
     });
-    const actions = generateActions(evalTestcaseFailure.type, { value, index: 1 });
+    const actions = generateActions(InterpreterActions.evalTestcaseFailure.type, {
+      value,
+      index: 1
+    });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(evalFailureDefaultState, action);
@@ -723,7 +716,10 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
       editorTestcases
     });
 
-    const actions = generateActions(evalTestcaseSuccess.type, { value, index: 1 });
+    const actions = generateActions(InterpreterActions.evalTestcaseSuccess.type, {
+      value,
+      index: 1
+    });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(testcaseSuccessDefaultState, action);
@@ -752,7 +748,10 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
       editorTestcases
     });
 
-    const actions = generateActions(evalTestcaseSuccess.type, { value, index: 0 });
+    const actions = generateActions(InterpreterActions.evalTestcaseSuccess.type, {
+      value,
+      index: 0
+    });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(testcaseSuccessDefaultState, action);
@@ -777,7 +776,9 @@ describe('HANDLE_CONSOLE_LOG', () => {
   test('works correctly with RunningOutput', () => {
     const logString = 'test-log-string';
     const consoleLogDefaultState = generateDefaultWorkspace({ output: outputWithRunningOutput });
-    const actions = generateActions(handleConsoleLog.type, { logString: [logString] });
+    const actions = generateActions(InterpreterActions.handleConsoleLog.type, {
+      logString: [logString]
+    });
     actions.forEach(action => {
       const result = WorkspaceReducer(cloneDeep(consoleLogDefaultState), action);
       const location: WorkspaceLocation = action.payload.workspaceLocation;
@@ -803,7 +804,9 @@ describe('HANDLE_CONSOLE_LOG', () => {
     const consoleLogDefaultState = generateDefaultWorkspace({
       output: outputWithRunningAndCodeOutput
     });
-    const actions = generateActions(handleConsoleLog.type, { logString: [logString] });
+    const actions = generateActions(InterpreterActions.handleConsoleLog.type, {
+      logString: [logString]
+    });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(consoleLogDefaultState, action);
@@ -825,7 +828,9 @@ describe('HANDLE_CONSOLE_LOG', () => {
     const logString = 'test-log-string-3';
     const consoleLogDefaultState = generateDefaultWorkspace({ output: [] });
 
-    const actions = generateActions(handleConsoleLog.type, { logString: [logString] });
+    const actions = generateActions(InterpreterActions.handleConsoleLog.type, {
+      logString: [logString]
+    });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(consoleLogDefaultState, action);
