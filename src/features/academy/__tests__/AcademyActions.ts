@@ -4,7 +4,6 @@ import { UpdateCourseConfiguration } from 'src/commons/application/types/Session
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
 import { addNewUsersToCourse, createCourse } from '../AcademyActions';
-import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from '../AcademyTypes';
 
 test('addNewUsersToCourse generates correct action object', () => {
   const users: UsernameRoleGroup[] = [
@@ -15,7 +14,7 @@ test('addNewUsersToCourse generates correct action object', () => {
 
   const action = addNewUsersToCourse(users, provider);
   expect(action).toEqual({
-    type: ADD_NEW_USERS_TO_COURSE,
+    type: addNewUsersToCourse.type,
     payload: {
       users,
       provider
@@ -39,7 +38,7 @@ test('createCourse generates correct action object', () => {
 
   const action = createCourse(courseConfig);
   expect(action).toEqual({
-    type: CREATE_COURSE,
+    type: createCourse.type,
     payload: courseConfig
   });
 });

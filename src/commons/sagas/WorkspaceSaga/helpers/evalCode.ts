@@ -8,26 +8,24 @@ import { Chapter, ErrorSeverity, ErrorType, SourceError, Variant } from 'js-slan
 import { SagaIterator } from 'redux-saga';
 import { call, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
+import {
+  beginDebuggerPause,
+  beginInterruptExecution,
+  debuggerResume
+} from 'src/commons/application/actions/InterpreterActions';
 import { makeCCompilerConfig, specialCReturnObject } from 'src/commons/utils/CToWasmHelper';
 import { javaRun } from 'src/commons/utils/JavaHelper';
 import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
 import { isSchemeLanguage, OverallState } from '../../../application/ApplicationTypes';
-import {
-  BEGIN_DEBUG_PAUSE,
-  BEGIN_INTERRUPT_EXECUTION,
-  DEBUG_RESUME
-} from '../../../application/types/InterpreterTypes';
 import { SideContentType } from '../../../sideContent/SideContentTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import DisplayBufferService from '../../../utils/DisplayBufferService';
 import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../../../utils/SourcerorHelper';
-import { notifyProgramEvaluated } from '../../../workspace/WorkspaceActions';
+import { evalEditor, evalRepl, notifyProgramEvaluated } from '../../../workspace/WorkspaceActions';
 import {
-  EVAL_EDITOR,
-  EVAL_REPL,
   EVAL_SILENT,
   PlaygroundWorkspaceState,
   SicpWorkspaceState,
@@ -36,7 +34,7 @@ import {
 import { dumpDisplayBuffer } from './dumpDisplayBuffer';
 import { updateInspector } from './updateInspector';
 
-export function* evalCode(
+export function* evalCodeSaga(
   files: Record<string, string>,
   entrypointFilePath: string,
   context: Context,
@@ -46,7 +44,7 @@ export function* evalCode(
   storyEnv?: string
 ): SagaIterator {
   context.runtime.debuggerOn =
-    (actionType === EVAL_EDITOR || actionType === DEBUG_RESUME) && context.chapter > 2;
+    (actionType === evalEditor.type || actionType === debuggerResume.type) && context.chapter > 2;
   const isStoriesBlock = actionType === actions.evalStory.type || workspaceLocation === 'stories';
 
   // Logic for execution of substitution model visualizer
@@ -130,7 +128,7 @@ export function* evalCode(
       });
     } else if (variant === Variant.WASM) {
       // Note: WASM does not support multiple file programs.
-      return call(wasm_compile_and_run, entrypointCode, context, actionType === EVAL_REPL);
+      return call(wasm_compile_and_run, entrypointCode, context, actionType === evalRepl.type);
     } else {
       throw new Error('Unknown variant: ' + variant);
     }
@@ -260,7 +258,7 @@ export function* evalCode(
 
   const { result, interrupted, paused } = yield race({
     result:
-      actionType === DEBUG_RESUME
+      actionType === debuggerResume.type
         ? call(resume, lastDebuggerResult)
         : isNonDet || isLazy || isWasm
         ? call_variant(context.variant)
@@ -291,8 +289,8 @@ export function* evalCode(
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
      * i.e the trigger for the interpreter to interrupt execution.
      */
-    interrupted: take(BEGIN_INTERRUPT_EXECUTION),
-    paused: take(BEGIN_DEBUG_PAUSE)
+    interrupted: take(beginInterruptExecution.type),
+    paused: take(beginDebuggerPause.type)
   });
 
   detachConsole();
@@ -314,7 +312,7 @@ export function* evalCode(
     return;
   }
 
-  if (actionType === EVAL_EDITOR) {
+  if (actionType === evalEditor.type) {
     yield put(actions.updateLastDebuggerResult(result, workspaceLocation));
   }
 
@@ -380,7 +378,7 @@ export function* evalCode(
   yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
 
   // Change token count if its assessment and EVAL_EDITOR
-  if (actionType === EVAL_EDITOR && workspaceLocation === 'assessment') {
+  if (actionType === evalEditor.type && workspaceLocation === 'assessment') {
     const tokens = [...tokenizer(entrypointCode, ACORN_PARSE_OPTIONS)];
     const tokenCounter = tokens.length;
     yield put(actions.setTokenCount(workspaceLocation, tokenCounter));
@@ -400,7 +398,11 @@ export function* evalCode(
     (state: OverallState) => state.workspaces[workspaceLocation].lastDebuggerResult
   );
   // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
-  if (actionType === EVAL_EDITOR || actionType === EVAL_REPL || actionType === DEBUG_RESUME) {
+  if (
+    actionType === evalEditor.type ||
+    actionType === evalRepl.type ||
+    actionType === debuggerResume.type
+  ) {
     if (context.errors.length > 0) {
       yield put(actions.addEvent([EventType.ERROR]));
     }
