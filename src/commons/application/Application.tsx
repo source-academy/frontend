@@ -6,7 +6,7 @@ import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
 import { useLocalStorageState, useSession } from '../utils/Hooks';
 import { defaultWorkspaceSettings, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
-import { fetchUserAndCourse } from './actions/SessionActions';
+import SessionActions from './actions/SessionActions';
 
 const Application: React.FC = () => {
   const dispatch = useDispatch();
@@ -26,7 +26,7 @@ const Application: React.FC = () => {
   // if the user was previously logged in
   React.useEffect(() => {
     if (isLoggedIn) {
-      dispatch(fetchUserAndCourse());
+      dispatch(SessionActions.fetchUserAndCourse());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

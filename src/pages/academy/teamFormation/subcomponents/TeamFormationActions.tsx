@@ -4,7 +4,7 @@ import { Flex, Icon } from '@tremor/react';
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { deleteTeam } from 'src/commons/application/actions/SessionActions';
+import SessionActions from 'src/commons/application/actions/SessionActions';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useSession } from 'src/commons/utils/Hooks';
 
@@ -28,7 +28,7 @@ const TeamFormationActions: React.FC<Props> = ({ teamId }) => {
       positiveLabel: 'Delete Team'
     });
     if (confirm) {
-      dispatch(deleteTeam(teamId));
+      dispatch(SessionActions.deleteTeam(teamId));
     }
   }, [dispatch, teamId]);
 
