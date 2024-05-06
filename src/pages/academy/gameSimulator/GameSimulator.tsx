@@ -63,4 +63,9 @@ const GameSimulator: React.FC = () => {
   );
 };
 
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = GameSimulator;
+Component.displayName = 'GameSimulator';
+
 export default GameSimulator;

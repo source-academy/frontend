@@ -1,5 +1,5 @@
 import { expectSaga } from 'redux-saga-test-plan';
-import { removeGitHubOctokitObjectAndAccessToken } from 'src/commons/application/actions/SessionActions';
+import SessionActions from 'src/commons/application/actions/SessionActions';
 
 import { actions } from '../../utils/ActionsHelper';
 
@@ -12,7 +12,7 @@ const GitHubPersistenceSaga = require('../GitHubPersistenceSaga').default;
 test('logoutGitHub results in REMOVE_GITHUB_OCTOKIT_OBJECT being dispatched', async () => {
   await expectSaga(GitHubPersistenceSaga)
     .put({
-      type: removeGitHubOctokitObjectAndAccessToken.type,
+      type: SessionActions.removeGitHubOctokitObjectAndAccessToken.type,
       payload: {}
     })
     .dispatch(actions.logoutGitHub())

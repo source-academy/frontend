@@ -12,7 +12,7 @@ import SourceAcademyGame, {
   createSourceAcademyGame
 } from 'src/features/game/SourceAcademyGame';
 
-function Game() {
+const Game: React.FC = () => {
   const session = useTypedSelector(state => state.session);
   const dispatch = useDispatch();
 
@@ -166,6 +166,11 @@ function Game() {
       )}
     </>
   );
-}
+};
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = Game;
+Component.displayName = 'Game';
 
 export default Game;

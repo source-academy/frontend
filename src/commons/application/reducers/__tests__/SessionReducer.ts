@@ -8,19 +8,7 @@ import {
   ProgressStatuses
 } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
-import {
-  setAdminPanelCourseRegistrations,
-  setAssessmentConfigurations,
-  setCourseConfiguration,
-  setCourseRegistration,
-  setGitHubAccessToken,
-  setTokens,
-  setUser,
-  updateAssessmentOverviews,
-  updateGrading,
-  updateGradingOverviews,
-  updateNotifications
-} from '../../actions/SessionActions';
+import SessionActions from '../../actions/SessionActions';
 import { defaultSession, GameState, Role, Story } from '../../ApplicationTypes';
 import { LOG_OUT } from '../../types/CommonsTypes';
 import { SessionState, UPDATE_ASSESSMENT } from '../../types/SessionTypes';
@@ -41,7 +29,7 @@ test('SET_TOKEN sets accessToken and refreshToken correctly', () => {
   const refreshToken = 'refresh_token_test';
 
   const action = {
-    type: setTokens.type,
+    type: SessionActions.setTokens.type,
     payload: {
       accessToken,
       refreshToken
@@ -79,7 +67,7 @@ test('SET_USER works correctly', () => {
   };
 
   const action = {
-    type: setUser.type,
+    type: SessionActions.setUser.type,
     payload
   } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
@@ -105,7 +93,7 @@ test('SET_COURSE_CONFIGURATION works correctly', () => {
     assessmentTypes: ['Missions', 'Quests', 'Paths', 'Contests', 'Others']
   };
   const action = {
-    type: setCourseConfiguration.type,
+    type: SessionActions.setCourseConfiguration.type,
     payload
   } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
@@ -135,7 +123,7 @@ test('SET_COURSE_REGISTRATION works correctly', () => {
     agreedToReseach: true
   };
   const action = {
-    type: setCourseRegistration.type,
+    type: SessionActions.setCourseRegistration.type,
     payload
   } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
@@ -193,7 +181,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
   ];
 
   const action = {
-    type: setAssessmentConfigurations.type,
+    type: SessionActions.setAssessmentConfigurations.type,
     payload
   } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
@@ -223,7 +211,7 @@ test('SET_ADMIN_PANEL_COURSE_REGISTRATIONS works correctly', () => {
   ];
 
   const action = {
-    type: setAdminPanelCourseRegistrations.type,
+    type: SessionActions.setAdminPanelCourseRegistrations.type,
     payload
   } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
@@ -237,7 +225,7 @@ test('SET_ADMIN_PANEL_COURSE_REGISTRATIONS works correctly', () => {
 test('SET_GITHUB_ACCESS_TOKEN works correctly', () => {
   const token = 'githubAccessToken';
   const action = {
-    type: setGitHubAccessToken.type,
+    type: SessionActions.setGitHubAccessToken.type,
     payload: token
   } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);
@@ -376,7 +364,7 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
 
 test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in inserting assessment overviews', () => {
   const action = {
-    type: updateAssessmentOverviews.type,
+    type: SessionActions.updateAssessmentOverviews.type,
     payload: assessmentOverviewsTest1
   } as const;
 
@@ -395,7 +383,7 @@ test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in updating assessment overvie
   };
   const assessmentOverviewsPayload = [...assessmentOverviewsTest2, ...assessmentOverviewsTest1];
   const action = {
-    type: updateAssessmentOverviews.type,
+    type: SessionActions.updateAssessmentOverviews.type,
     payload: assessmentOverviewsPayload
   } as const;
 
@@ -467,7 +455,7 @@ const gradingTest2: GradingQuery = {
 test('UPDATE_GRADING works correctly in inserting gradings', () => {
   const submissionId = 23;
   const action = {
-    type: updateGrading.type,
+    type: SessionActions.updateGrading.type,
     payload: {
       submissionId,
       grading: gradingTest1
@@ -490,7 +478,7 @@ test('UPDATE_GRADING works correctly in inserting gradings and retains old data'
   };
 
   const action = {
-    type: updateGrading.type,
+    type: SessionActions.updateGrading.type,
     payload: {
       submissionId: submissionId2,
       grading: gradingTest2
@@ -512,7 +500,7 @@ test('UPDATE_GRADING works correctly in updating gradings', () => {
   };
 
   const action = {
-    type: updateGrading.type,
+    type: SessionActions.updateGrading.type,
     payload: {
       submissionId,
       grading: gradingTest2
@@ -578,7 +566,7 @@ const gradingOverviewTest2: GradingOverview[] = [
 
 test('UPDATE_GRADING_OVERVIEWS works correctly in inserting grading overviews', () => {
   const action = {
-    type: updateGradingOverviews.type,
+    type: SessionActions.updateGradingOverviews.type,
     payload: {
       count: gradingOverviewTest1.length,
       data: gradingOverviewTest1
@@ -605,7 +593,7 @@ test('UPDATE_GRADING_OVERVIEWS works correctly in updating grading overviews', (
     data: [...gradingOverviewTest2, ...gradingOverviewTest1]
   };
   const action = {
-    type: updateGradingOverviews.type,
+    type: SessionActions.updateGradingOverviews.type,
     payload: gradingOverviewsPayload
   } as const;
   const result: SessionState = SessionsReducer(newDefaultSession, action);
@@ -632,7 +620,7 @@ test('UPDATE_NOTIFICATIONS works correctly in updating notifications', () => {
   ];
 
   const action = {
-    type: updateNotifications.type,
+    type: SessionActions.updateNotifications.type,
     payload: notifications
   } as const;
 
