@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { Form, useParams } from 'react-router-dom';
 import Select, { ActionMeta, MultiValue } from 'react-select';
-import { createTeam, updateTeam } from 'src/commons/application/actions/SessionActions';
+import SessionActions from 'src/commons/application/actions/SessionActions';
 import { User } from 'src/commons/application/types/SessionTypes';
 import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 import { useSession } from 'src/commons/utils/Hooks';
@@ -106,9 +106,9 @@ const TeamFormationForm: React.FC = () => {
     }
 
     if (teamId) {
-      dispatch(updateTeam(parseInt(teamId, 10), selectedAssessment, teams));
+      dispatch(SessionActions.updateTeam(parseInt(teamId, 10), selectedAssessment, teams));
     } else {
-      dispatch(createTeam(selectedAssessment, teams));
+      dispatch(SessionActions.createTeam(selectedAssessment, teams));
     }
     navigate(`/courses/${courseId}/teamformation`);
   };
@@ -206,5 +206,10 @@ const TeamFormationForm: React.FC = () => {
     </div>
   );
 };
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = TeamFormationForm;
+Component.displayName = 'TeamFormationForm';
 
 export default TeamFormationForm;

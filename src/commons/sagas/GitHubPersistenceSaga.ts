@@ -2,35 +2,34 @@ import {
   GetResponseDataTypeFromEndpointMethod,
   GetResponseTypeFromEndpointMethod
 } from '@octokit/types';
-import { SagaIterator } from 'redux-saga';
-import { call, put, select, takeLatest } from 'redux-saga/effects';
+import { call, put, select } from 'redux-saga/effects';
+import GitHubActions from 'src/features/github/GitHubActions';
 
-import {
-  GITHUB_OPEN_FILE,
-  GITHUB_SAVE_FILE,
-  GITHUB_SAVE_FILE_AS
-} from '../../features/github/GitHubTypes';
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
-import { loginGitHub, logoutGitHub } from '../application/actions/SessionActions';
+import SessionActions from '../application/actions/SessionActions';
 import { OverallState } from '../application/ApplicationTypes';
 import FileExplorerDialog, { FileExplorerDialogProps } from '../gitHubOverlay/FileExplorerDialog';
 import RepositoryDialog, { RepositoryDialogProps } from '../gitHubOverlay/RepositoryDialog';
+import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { promisifyDialog } from '../utils/DialogHelper';
 import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
 import { EditorTabState } from '../workspace/WorkspaceTypes';
 
-export function* GitHubPersistenceSaga(): SagaIterator {
-  yield takeLatest(loginGitHub.type, githubLoginSaga);
-  yield takeLatest(logoutGitHub.type, githubLogoutSaga);
-
-  yield takeLatest(GITHUB_OPEN_FILE, githubOpenFile);
-  yield takeLatest(GITHUB_SAVE_FILE, githubSaveFile);
-  yield takeLatest(GITHUB_SAVE_FILE_AS, githubSaveFileAs);
-}
+export const GitHubPersistenceSaga = combineSagaHandlers(
+  // TODO: Refactor and combine in a future commit
+  { ...SessionActions, ...GitHubActions },
+  {
+    loginGitHub: githubLoginSaga,
+    logoutGitHub: githubLogoutSaga,
+    githubOpenFile: githubOpenFileSaga,
+    githubSaveFile: githubSaveFileSaga,
+    githubSaveFileAs: githubSaveFileAsSaga
+  }
+);
 
 function* githubLoginSaga() {
   const githubOauthLoginLink = `https://github.com/login/oauth/authorize?client_id=${Constants.githubClientId}&scope=repo`;
@@ -62,7 +61,7 @@ function* githubLogoutSaga() {
   yield call(showSuccessMessage, `Logged out from GitHub`, 1000);
 }
 
-function* githubOpenFile(): any {
+function* githubOpenFileSaga(): any {
   const octokit = GitHubUtils.getGitHubOctokitInstance();
   if (octokit === undefined) {
     return;
@@ -103,7 +102,7 @@ function* githubOpenFile(): any {
   }
 }
 
-function* githubSaveFile(): any {
+function* githubSaveFileSaga(): any {
   const octokit = getGitHubOctokitInstance();
   if (octokit === undefined) return;
 
@@ -141,7 +140,7 @@ function* githubSaveFile(): any {
   );
 }
 
-function* githubSaveFileAs(): any {
+function* githubSaveFileAsSaga(): any {
   const octokit = GitHubUtils.getGitHubOctokitInstance();
   if (octokit === undefined) {
     return;

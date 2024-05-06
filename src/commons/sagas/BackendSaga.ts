@@ -3,10 +3,10 @@
 import { SagaIterator } from 'redux-saga';
 import { all, call, fork, put, select } from 'redux-saga/effects';
 import {
-  ADD_NEW_STORIES_USERS_TO_COURSE,
-  ADD_NEW_USERS_TO_COURSE,
-  CREATE_COURSE
-} from 'src/features/academy/AcademyTypes';
+  addNewStoriesUsersToCourse,
+  addNewUsersToCourse,
+  createCourse
+} from 'src/features/academy/AcademyActions';
 import { postNewStoriesUsers } from 'src/features/stories/storiesComponents/BackendAccess';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
@@ -69,7 +69,8 @@ import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';
 import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import { changeSublanguage } from '../workspace/WorkspaceActions';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
   checkAnswerLastModifiedAt,
   deleteAssessment,
@@ -844,7 +845,7 @@ function* oldBackendSagaOne(): SagaIterator {
   );
 
   yield takeEvery(
-    CHANGE_SUBLANGUAGE,
+    changeSublanguage.type,
     function* (action: ReturnType<typeof actions.changeSublanguage>): any {
       const tokens: Tokens = yield selectTokens();
       const { sublang } = action.payload;
@@ -1057,77 +1058,80 @@ const newBackendSagaThree = combineSagaHandlers(SessionActions, {
 });
 
 function* oldBackendSagaTwo(): SagaIterator {
-  yield takeEvery(CREATE_COURSE, function* (action: ReturnType<typeof actions.createCourse>): any {
-    const tokens: Tokens = yield selectTokens();
-    const courseConfig: UpdateCourseConfiguration = action.payload;
+  yield takeEvery(
+    createCourse.type,
+    function* (action: ReturnType<typeof actions.createCourse>): any {
+      const tokens: Tokens = yield selectTokens();
+      const courseConfig: UpdateCourseConfiguration = action.payload;
 
-    const resp: Response | null = yield call(postCreateCourse, tokens, courseConfig);
-    if (!resp || !resp.ok) {
-      return yield handleResponseError(resp);
-    }
-
-    const {
-      user,
-      courseRegistration,
-      courseConfiguration
-    }: {
-      user: User | null;
-      courseRegistration: CourseRegistration | null;
-      courseConfiguration: CourseConfiguration | null;
-      assessmentConfigurations: AssessmentConfiguration[] | null;
-    } = yield call(getUser, tokens);
-
-    if (!user || !courseRegistration || !courseConfiguration) {
-      return yield showWarningMessage('An error occurred. Please try again.');
-    }
-
-    /**
-     * setUser updates the Dropdown course selection menu with the updated courses
-     *
-     * Setting the role here handles an edge case where a user creates his first ever course.
-     * Without it, the history.push below would not work as the /courses routes will not be rendered
-     * (see Application.tsx)
-     */
-    yield put(actions.setUser(user));
-    yield put(actions.setCourseRegistration({ role: Role.Student }));
-
-    if (courseConfiguration.enableStories) {
-      yield put(actions.getStoriesUser());
-      // TODO: Fetch associated stories group ID
-    } else {
-      yield put(actions.clearStoriesUserAndGroup());
-    }
-
-    const placeholderAssessmentConfig: AssessmentConfiguration[] = [
-      {
-        type: 'Missions',
-        assessmentConfigId: -1,
-        isManuallyGraded: true,
-        isGradingAutoPublished: false,
-        displayInDashboard: true,
-        hoursBeforeEarlyXpDecay: 0,
-        hasTokenCounter: false,
-        hasVotingFeatures: false,
-        earlySubmissionXp: 0
+      const resp: Response | null = yield call(postCreateCourse, tokens, courseConfig);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
       }
-    ];
 
-    const resp1: Response | null = yield call(
-      putAssessmentConfigs,
-      tokens,
-      placeholderAssessmentConfig,
-      courseRegistration.courseId
-    );
-    if (!resp1 || !resp1.ok) {
-      return yield handleResponseError(resp);
+      const {
+        user,
+        courseRegistration,
+        courseConfiguration
+      }: {
+        user: User | null;
+        courseRegistration: CourseRegistration | null;
+        courseConfiguration: CourseConfiguration | null;
+        assessmentConfigurations: AssessmentConfiguration[] | null;
+      } = yield call(getUser, tokens);
+
+      if (!user || !courseRegistration || !courseConfiguration) {
+        return yield showWarningMessage('An error occurred. Please try again.');
+      }
+
+      /**
+       * setUser updates the Dropdown course selection menu with the updated courses
+       *
+       * Setting the role here handles an edge case where a user creates his first ever course.
+       * Without it, the history.push below would not work as the /courses routes will not be rendered
+       * (see Application.tsx)
+       */
+      yield put(actions.setUser(user));
+      yield put(actions.setCourseRegistration({ role: Role.Student }));
+
+      if (courseConfiguration.enableStories) {
+        yield put(actions.getStoriesUser());
+        // TODO: Fetch associated stories group ID
+      } else {
+        yield put(actions.clearStoriesUserAndGroup());
+      }
+
+      const placeholderAssessmentConfig: AssessmentConfiguration[] = [
+        {
+          type: 'Missions',
+          assessmentConfigId: -1,
+          isManuallyGraded: true,
+          isGradingAutoPublished: false,
+          displayInDashboard: true,
+          hoursBeforeEarlyXpDecay: 0,
+          hasTokenCounter: false,
+          hasVotingFeatures: false,
+          earlySubmissionXp: 0
+        }
+      ];
+
+      const resp1: Response | null = yield call(
+        putAssessmentConfigs,
+        tokens,
+        placeholderAssessmentConfig,
+        courseRegistration.courseId
+      );
+      if (!resp1 || !resp1.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield call(showSuccessMessage, 'Successfully created your new course!');
+      yield routerNavigate(`/courses/${courseRegistration.courseId}`);
     }
-
-    yield call(showSuccessMessage, 'Successfully created your new course!');
-    yield routerNavigate(`/courses/${courseRegistration.courseId}`);
-  });
+  );
 
   yield takeEvery(
-    ADD_NEW_USERS_TO_COURSE,
+    addNewUsersToCourse.type,
     function* (action: ReturnType<typeof actions.addNewUsersToCourse>): any {
       const tokens: Tokens = yield selectTokens();
       const { users, provider }: { users: UsernameRoleGroup[]; provider: string } = action.payload;
@@ -1143,7 +1147,7 @@ function* oldBackendSagaTwo(): SagaIterator {
   );
 
   yield takeEvery(
-    ADD_NEW_STORIES_USERS_TO_COURSE,
+    addNewStoriesUsersToCourse.type,
     function* (action: ReturnType<typeof actions.addNewStoriesUsersToCourse>): any {
       const tokens: Tokens = yield selectTokens();
       const { users, provider } = action.payload;

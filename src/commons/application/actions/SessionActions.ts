@@ -118,46 +118,6 @@ const newActions = createActions('session', {
   updateAssessmentOverviews: (overviews: AssessmentOverview[]) => overviews
 });
 
-// For compatibility with existing code (reducer)
-export const {
-  fetchAuth,
-  fetchUserAndCourse,
-  fetchCourseConfig,
-  fetchAssessment,
-  fetchAssessmentAdmin,
-  fetchAssessmentOverviews,
-  fetchTotalXp,
-  fetchTotalXpAdmin,
-  fetchGrading,
-  fetchGradingOverviews,
-  fetchTeamFormationOverviews,
-  fetchStudents,
-  login,
-  logoutGoogle,
-  loginGitHub,
-  logoutGitHub,
-  setTokens,
-  setUser,
-  setCourseConfiguration,
-  setCourseRegistration,
-  setAssessmentConfigurations,
-  setConfigurableNotificationConfigs,
-  setNotificationConfigs,
-  setAdminPanelCourseRegistrations,
-  setGoogleUser,
-  setGitHubOctokitObject,
-  setGitHubAccessToken,
-  removeGitHubOctokitObjectAndAccessToken,
-  submitAnswer,
-  checkAnswerLastModifiedAt,
-  submitAssessment,
-  submitGrading,
-  submitGradingAndContinue,
-  reautogradeSubmission,
-  reautogradeAnswer,
-  updateAssessmentOverviews
-} = newActions;
-
 export const updateTotalXp = createAction(UPDATE_TOTAL_XP, (totalXp: number) => ({
   payload: totalXp
 }));
@@ -221,40 +181,6 @@ export const updateCourseResearchAgreement = createAction(
   UPDATE_COURSE_RESEARCH_AGREEMENT,
   (agreedToResearch: boolean) => ({ payload: { agreedToResearch } })
 );
-
-// For compatibility with existing code (reducer)
-export const {
-  updateGradingOverviews,
-  fetchTeamFormationOverview,
-  createTeam,
-  updateTeam,
-  deleteTeam,
-  bulkUploadTeam,
-  updateTeamFormationOverviews,
-  updateTeamFormationOverview,
-  updateStudents,
-  updateGrading,
-  unsubmitSubmission,
-  publishGrading,
-  unpublishGrading,
-  fetchNotifications,
-  acknowledgeNotifications,
-  updateNotifications,
-  updateLatestViewedCourse,
-  updateCourseConfig,
-  fetchAssessmentConfigs,
-  updateAssessmentConfigs,
-  updateNotificationConfigs,
-  updateNotificationPreferences,
-  deleteAssessmentConfig,
-  fetchAdminPanelCourseRegistrations,
-  fetchConfigurableNotificationConfigs,
-  fetchNotificationConfigs,
-  updateTimeOptions,
-  deleteTimeOptions,
-  updateUserRole,
-  deleteUserCourseRegistration
-} = newActions2;
 
 // For compatibility with existing code (actions helper)
 export default {

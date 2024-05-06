@@ -14,11 +14,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
 import { useDispatch } from 'react-redux';
 
-import {
-  reautogradeAnswer,
-  submitGrading,
-  submitGradingAndContinue
-} from '../../../../commons/application/actions/SessionActions';
+import SessionActions from '../../../../commons/application/actions/SessionActions';
 import ControlButton from '../../../../commons/ControlButton';
 import Markdown from '../../../../commons/Markdown';
 import { Prompt } from '../../../../commons/ReactRouterPrompt';
@@ -58,9 +54,10 @@ const GradingEditor: React.FC<Props> = props => {
   const { handleGradingSave, handleGradingSaveAndContinue, handleReautogradeAnswer } = useMemo(
     () =>
       ({
-        handleGradingSave: (...args) => dispatch(submitGrading(...args)),
-        handleGradingSaveAndContinue: (...args) => dispatch(submitGradingAndContinue(...args)),
-        handleReautogradeAnswer: (...args) => dispatch(reautogradeAnswer(...args))
+        handleGradingSave: (...args) => dispatch(SessionActions.submitGrading(...args)),
+        handleGradingSaveAndContinue: (...args) =>
+          dispatch(SessionActions.submitGradingAndContinue(...args)),
+        handleReautogradeAnswer: (...args) => dispatch(SessionActions.reautogradeAnswer(...args))
       }) satisfies {
         handleGradingSave: GradingSaveFunction;
         handleGradingSaveAndContinue: GradingSaveFunction;

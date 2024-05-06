@@ -5,14 +5,7 @@ import { Reducer } from 'redux';
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
 import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
 import { logOut } from '../application/actions/CommonsActions';
-import {
-  endInterruptExecution,
-  evalInterpreterError,
-  evalInterpreterSuccess,
-  evalTestcaseFailure,
-  evalTestcaseSuccess,
-  handleConsoleLog
-} from '../application/actions/InterpreterActions';
+import InterpreterActions from '../application/actions/InterpreterActions';
 import {
   createDefaultWorkspace,
   defaultWorkspaceManager,
@@ -26,38 +19,13 @@ import {
   setSessionDetails,
   setSharedbConnected
 } from '../collabEditing/CollabEditingActions';
-import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import { createContext } from '../utils/JsSlangHelper';
 import { handleCseAndStepperActions } from './reducers/cseReducer';
 import { handleDebuggerActions } from './reducers/debuggerReducer';
 import { handleEditorActions } from './reducers/editorReducer';
 import { handleReplActions } from './reducers/replReducer';
-import {
-  changeExecTime,
-  changeExternalLibrary,
-  decreaseRequestCounter,
-  disableTokenCounter,
-  enableTokenCounter,
-  endClearContext,
-  evalEditor,
-  increaseRequestCounter,
-  resetTestcase,
-  resetWorkspace,
-  setGradingHasLoadedBefore,
-  setIsEditorReadonly,
-  setTokenCount,
-  toggleEditorAutorun,
-  updateAllColsSortStates,
-  updateCurrentAssessmentId,
-  updateCurrentSubmissionId,
-  updateHasUnsavedChanges,
-  updateLastDebuggerResult,
-  updateLastNonDetResult,
-  updateSublanguage,
-  updateSubmissionsTableFilters,
-  updateWorkspace
-} from './WorkspaceActions';
+import WorkspaceActions from './WorkspaceActions';
 import { WorkspaceLocation, WorkspaceManagerState } from './WorkspaceTypes';
 
 export const getWorkspaceLocation = (action: any): WorkspaceLocation => {
@@ -111,15 +79,15 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
   handleReplActions(builder);
   handleDebuggerActions(builder);
   builder
-    .addCase(setTokenCount, (state, action) => {
+    .addCase(WorkspaceActions.setTokenCount, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].tokenCount = action.payload.tokenCount;
     })
-    .addCase(changeExecTime, (state, action) => {
+    .addCase(WorkspaceActions.changeExecTime, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].execTime = action.payload.execTime;
     })
-    .addCase(endClearContext, (state, action) => {
+    .addCase(WorkspaceActions.endClearContext, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       // For some reason mutating the state directly results in type
       // errors, so we have to do it the old-fashioned way
@@ -138,11 +106,11 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
         }
       };
     })
-    .addCase(changeExternalLibrary, (state, action) => {
+    .addCase(WorkspaceActions.changeExternalLibrary, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].externalLibrary = action.payload.newExternal;
     })
-    .addCase(handleConsoleLog, (state, action) => {
+    .addCase(InterpreterActions.handleConsoleLog, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       /* Possible cases:
        * (1) state[workspaceLocation].output === [], i.e. state[workspaceLocation].output[-1] === undefined
@@ -177,20 +145,20 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
         playground: playgroundWorkspace
       };
     })
-    .addCase(enableTokenCounter, (state, action) => {
+    .addCase(WorkspaceActions.enableTokenCounter, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].hasTokenCounter = true;
     })
-    .addCase(disableTokenCounter, (state, action) => {
+    .addCase(WorkspaceActions.disableTokenCounter, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].hasTokenCounter = false;
     })
-    .addCase(evalEditor, (state, action) => {
+    .addCase(WorkspaceActions.evalEditor, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].isRunning = true;
       state[workspaceLocation].isDebugging = false;
     })
-    .addCase(evalInterpreterSuccess, (state, action) => {
+    .addCase(InterpreterActions.evalInterpreterSuccess, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const execType = state[workspaceLocation].context.executionMethod;
       const tokens = state[workspaceLocation].tokenCount;
@@ -234,20 +202,20 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       state[workspaceLocation].output = newOutput;
       state[workspaceLocation].isRunning = false;
     })
-    .addCase(evalTestcaseSuccess, (state, action) => {
+    .addCase(InterpreterActions.evalTestcaseSuccess, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const testcase = state[workspaceLocation].editorTestcases[action.payload.index];
       testcase.result = action.payload.value;
       testcase.errors = undefined;
       state[workspaceLocation].isRunning = false;
     })
-    .addCase(evalTestcaseFailure, (state, action) => {
+    .addCase(InterpreterActions.evalTestcaseFailure, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const testcase = state[workspaceLocation].editorTestcases[action.payload.index];
       testcase.result = undefined;
       testcase.errors = action.payload.value;
     })
-    .addCase(evalInterpreterError, (state, action) => {
+    .addCase(InterpreterActions.evalInterpreterError, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
 
       const lastOutput: InterpreterOutput = state[workspaceLocation].output.slice(-1)[0];
@@ -276,7 +244,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
      * i.e called after the interpreter is told to stop interruption,
      * to cause UI changes.
      */
-    .addCase(endInterruptExecution, (state, action) => {
+    .addCase(InterpreterActions.endInterruptExecution, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       /**
        * Set the isRunning property of the
@@ -288,7 +256,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       state[workspaceLocation].isRunning = false;
       state[workspaceLocation].isDebugging = false;
     })
-    .addCase(resetTestcase, (state, action) => {
+    .addCase(WorkspaceActions.resetTestcase, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const testcase = state[workspaceLocation].editorTestcases[action.payload.index];
       testcase.result = undefined;
@@ -299,7 +267,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
      * including the js-slang Context. Apply
      * any specified settings (workspaceOptions)
      */
-    .addCase(resetWorkspace, (state, action) => {
+    .addCase(WorkspaceActions.resetWorkspace, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       // For some reason mutating the state directly results in type
       // errors, so we have to do it the old-fashioned way
@@ -316,7 +284,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
      * Updates workspace without changing anything
      * which has not been specified
      */
-    .addCase(updateWorkspace, (state, action) => {
+    .addCase(WorkspaceActions.updateWorkspace, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       // For some reason mutating the state directly results in type
       // errors, so we have to do it the old-fashioned way
@@ -328,24 +296,24 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
         }
       };
     })
-    .addCase(increaseRequestCounter, (state, action) => {
+    .addCase(WorkspaceActions.increaseRequestCounter, (state, action) => {
       state.grading.requestCounter += 1;
     })
-    .addCase(decreaseRequestCounter, (state, action) => {
+    .addCase(WorkspaceActions.decreaseRequestCounter, (state, action) => {
       state.grading.requestCounter = Math.max(0, state.grading.requestCounter - 1);
     })
     .addCase(setEditorSessionId, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].editorSessionId = action.payload.editorSessionId;
     })
-    .addCase(setGradingHasLoadedBefore, (state, action) => {
+    .addCase(WorkspaceActions.setGradingHasLoadedBefore, (state, action) => {
       state.grading.hasLoadedBefore = action.payload;
     })
     .addCase(setSessionDetails, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].sessionDetails = action.payload.sessionDetails;
     })
-    .addCase(setIsEditorReadonly, (state, action) => {
+    .addCase(WorkspaceActions.setIsEditorReadonly, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].isEditorReadonly = action.payload.isEditorReadonly;
     })
@@ -353,25 +321,25 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].sharedbConnected = action.payload.connected;
     })
-    .addCase(toggleEditorAutorun, (state, action) => {
+    .addCase(WorkspaceActions.toggleEditorAutorun, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].isEditorAutorun = !state[workspaceLocation].isEditorAutorun;
     })
-    .addCase(updateAllColsSortStates, (state, action) => {
+    .addCase(WorkspaceActions.updateSubmissionsTableFilters, (state, action) => {
+      state.grading.submissionsTableFilters = action.payload.filters;
+    })
+    .addCase(WorkspaceActions.updateAllColsSortStates, (state, action) => {
       state.grading.allColsSortStates = action.payload.sortStates;
     })
-    .addCase(updateCurrentAssessmentId, (state, action) => {
+    .addCase(WorkspaceActions.updateCurrentAssessmentId, (state, action) => {
       state.assessment.currentAssessment = action.payload.assessmentId;
       state.assessment.currentQuestion = action.payload.questionId;
     })
-    .addCase(updateCurrentSubmissionId, (state, action) => {
+    .addCase(WorkspaceActions.updateCurrentSubmissionId, (state, action) => {
       state.grading.currentSubmission = action.payload.submissionId;
       state.grading.currentQuestion = action.payload.questionId;
     })
-    .addCase(updateSubmissionsTableFilters, (state, action) => {
-      state.grading.submissionsTableFilters = action.payload.filters;
-    })
-    .addCase(updateHasUnsavedChanges, (state, action) => {
+    .addCase(WorkspaceActions.updateHasUnsavedChanges, (state, action) => {
       // For some reason mutating the state directly results in type
       // errors, so we have to do it the old-fashioned way
       const workspaceLocation = getWorkspaceLocation(action);
@@ -383,7 +351,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
         }
       };
     })
-    .addCase(updateSublanguage, (state, action) => {
+    .addCase(WorkspaceActions.updateSublanguage, (state, action) => {
       // TODO: Mark for removal
       const { chapter, variant } = action.payload.sublang;
       state.playground.context.chapter = chapter;
@@ -398,11 +366,11 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     //   debuggerContext.context = action.payload.context;
     //   debuggerContext.workspaceLocation = action.payload.workspaceLocation;
     // })
-    .addCase(updateLastDebuggerResult, (state, action) => {
+    .addCase(WorkspaceActions.updateLastDebuggerResult, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].lastDebuggerResult = action.payload.lastDebuggerResult;
     })
-    .addCase(updateLastNonDetResult, (state, action) => {
+    .addCase(WorkspaceActions.updateLastNonDetResult, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].lastNonDetResult = action.payload.lastNonDetResult;
     });
@@ -416,7 +384,7 @@ const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
   const workspaceLocation = getWorkspaceLocation(action);
 
   switch (action.type) {
-    case NOTIFY_PROGRAM_EVALUATED: {
+    case WorkspaceActions.notifyProgramEvaluated.type: {
       const debuggerContext = {
         ...state[workspaceLocation].debuggerContext,
         result: action.payload.result,

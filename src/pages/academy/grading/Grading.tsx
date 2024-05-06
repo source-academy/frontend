@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
-import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
+import SessionActions from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
@@ -68,7 +68,7 @@ const Grading: React.FC = () => {
       dispatch(setGradingHasLoadedBefore());
       dispatch(increaseRequestCounter());
       dispatch(
-        fetchGradingOverviews(
+        SessionActions.fetchGradingOverviews(
           showAllGroups,
           unpublishedToBackendParams(showAllSubmissions),
           paginationToBackendParams(page, pageSize),
@@ -150,7 +150,7 @@ const Grading: React.FC = () => {
     <ContentDisplay
       loadContentDispatch={() => {
         if (!hasLoadedBefore) {
-          dispatch(fetchGradingOverviews(showAllGroups));
+          dispatch(SessionActions.fetchGradingOverviews(showAllGroups));
         }
       }}
       display={
@@ -229,5 +229,10 @@ const Grading: React.FC = () => {
     />
   );
 };
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = Grading;
+Component.displayName = 'Grading';
 
 export default Grading;

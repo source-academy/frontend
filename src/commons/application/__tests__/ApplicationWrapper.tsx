@@ -4,8 +4,6 @@ import { createMemoryRouter, RouterProvider } from 'react-router';
 import { createStore } from 'src/pages/createStore';
 import { getFullAcademyRouterConfig, playgroundOnlyRouterConfig } from 'src/routes/routerConfig';
 
-import { Role } from '../ApplicationTypes';
-
 // JSDOM does not implement window.matchMedia, so we have to mock it.
 window.matchMedia =
   window.matchMedia ||
@@ -26,7 +24,6 @@ describe('ApplicationWrapper', () => {
   test('ApplicationWrapper renders NotFound on unknown routes (Full Academy)', async () => {
     const routerConfig = getFullAcademyRouterConfig({
       name: 'Bob',
-      role: Role.Student,
       isLoggedIn: false,
       courseId: 1
     });
