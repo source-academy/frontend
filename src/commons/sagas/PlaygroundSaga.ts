@@ -26,6 +26,7 @@ import {
   toggleUpdateCse,
   toggleUsingCse,
   toggleUsingSubst,
+  toggleUsingUpload,
   updateCurrentStep,
   updateStepsTotal
 } from '../workspace/WorkspaceActions';
@@ -121,6 +122,12 @@ export default function* PlaygroundSaga(): SagaIterator {
         } else {
           yield put(toggleUsingCse(true, workspaceLocation));
         }
+      }
+
+      if (newId === SideContentType.upload) {
+        yield put(toggleUsingUpload(true, workspaceLocation));
+      } else {
+        yield put(toggleUsingUpload(false, workspaceLocation));
       }
 
       if (isSchemeLanguage(playgroundSourceChapter) && newId === SideContentType.cseMachine) {

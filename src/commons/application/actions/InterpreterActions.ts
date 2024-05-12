@@ -3,7 +3,7 @@ import { createActions } from 'src/commons/redux/utils';
 
 import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 
-const newActions = createActions('interpreter', {
+const InterpreterActions = createActions('interpreter', {
   handleConsoleLog: (workspaceLocation: WorkspaceLocation, ...logString: string[]) => ({
     logString,
     workspaceLocation
@@ -38,22 +38,5 @@ const newActions = createActions('interpreter', {
   debuggerReset: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation })
 });
 
-// For compatibility with existing code (reducer)
-export const {
-  handleConsoleLog,
-  evalInterpreterSuccess,
-  evalTestcaseSuccess,
-  evalTestcaseFailure,
-  evalInterpreterError,
-  beginInterruptExecution,
-  endInterruptExecution,
-  beginDebuggerPause,
-  endDebuggerPause,
-  debuggerResume,
-  debuggerReset
-} = newActions;
-
 // For compatibility with existing code (actions helper)
-export default {
-  ...newActions
-};
+export default InterpreterActions;

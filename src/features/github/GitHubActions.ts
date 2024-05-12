@@ -6,9 +6,6 @@ const newActions = createActions('github', {
   githubSaveFileAs: () => ({})
 });
 
-// For compatibility with existing code (reducer)
-export const { githubOpenFile, githubSaveFile, githubSaveFileAs } = newActions;
-
 // For compatibility with existing code (actions helper)
 export default {
   ...newActions
