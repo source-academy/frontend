@@ -3,21 +3,21 @@ import type { SagaIterator } from 'redux-saga';
 import { put, take } from 'redux-saga/effects';
 import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
 
-import * as actions from '../sideContent/SideContentActions';
-import { BEGIN_ALERT_SIDE_CONTENT, SPAWN_SIDE_CONTENT } from '../sideContent/SideContentTypes';
+import SideContentActions from '../sideContent/SideContentActions';
 import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 const isSpawnSideContent = (
   action: Action
-): action is ReturnType<typeof actions.spawnSideContent> => action.type === SPAWN_SIDE_CONTENT;
+): action is ReturnType<typeof SideContentActions.spawnSideContent> =>
+  action.type === SideContentActions.spawnSideContent.type;
 
 export default function* SideContentSaga(): SagaIterator {
   yield takeEvery(
-    BEGIN_ALERT_SIDE_CONTENT,
+    SideContentActions.beginAlertSideContent.type,
     function* ({
       payload: { id, workspaceLocation }
-    }: ReturnType<typeof actions.beginAlertSideContent>) {
+    }: ReturnType<typeof SideContentActions.beginAlertSideContent>) {
       // When a program finishes evaluation, we clear all alerts,
       // So we must wait until after and all module tabs have been spawned
       // to process any kind of alerts that were raised by non-module side content
@@ -25,7 +25,7 @@ export default function* SideContentSaga(): SagaIterator {
         (action: Action) =>
           isSpawnSideContent(action) && action.payload.workspaceLocation === workspaceLocation
       );
-      yield put(actions.endAlertSideContent(id, workspaceLocation));
+      yield put(SideContentActions.endAlertSideContent(id, workspaceLocation));
     }
   );
 
@@ -42,14 +42,18 @@ export default function* SideContentSaga(): SagaIterator {
         context: action.payload.context,
         workspaceLocation: action.payload.workspaceLocation
       };
-      yield put(actions.spawnSideContent(action.payload.workspaceLocation, debuggerContext));
+      yield put(
+        SideContentActions.spawnSideContent(action.payload.workspaceLocation, debuggerContext)
+      );
     }
   );
 
   yield takeEvery(
     notifyStoriesEvaluated.type,
     function* (action: ReturnType<typeof notifyStoriesEvaluated>) {
-      yield put(actions.spawnSideContent(`stories.${action.payload.env}`, action.payload));
+      yield put(
+        SideContentActions.spawnSideContent(`stories.${action.payload.env}`, action.payload)
+      );
     }
   );
 }

@@ -1,6 +1,5 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
-import { CHANGE_SIDE_CONTENT_HEIGHT } from 'src/commons/sideContent/SideContentTypes';
 
 import {
   createDefaultWorkspace,
@@ -91,7 +90,7 @@ test('changeSideContentHeight generates correct action object', () => {
   const height = 100;
   const action = changeSideContentHeight(height, gradingWorkspace);
   expect(action).toEqual({
-    type: CHANGE_SIDE_CONTENT_HEIGHT,
+    type: changeSideContentHeight.type,
     payload: {
       height,
       workspaceLocation: gradingWorkspace

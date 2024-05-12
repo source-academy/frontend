@@ -13,11 +13,11 @@ import {
   updateShortURL
 } from '../../features/playground/PlaygroundActions';
 import { GENERATE_LZ_STRING, SHORTEN_URL } from '../../features/playground/PlaygroundTypes';
-import { isSchemeLanguage, isSourceLanguage, OverallState } from '../application/ApplicationTypes';
+import { isSchemeLanguage, isSourceLanguage,OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
 import { visitSideContent } from '../sideContent/SideContentActions';
-import { SideContentType, VISIT_SIDE_CONTENT } from '../sideContent/SideContentTypes';
+import { SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import {
@@ -71,7 +71,7 @@ export default function* PlaygroundSaga(): SagaIterator {
   });
 
   yield takeEvery(
-    VISIT_SIDE_CONTENT,
+    visitSideContent.type,
     function* ({
       payload: { newId, prevId, workspaceLocation }
     }: ReturnType<typeof visitSideContent>) {
