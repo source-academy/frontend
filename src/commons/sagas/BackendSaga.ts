@@ -4,8 +4,8 @@ import { SagaIterator } from 'redux-saga';
 import { all, call, fork, put, select } from 'redux-saga/effects';
 import AcademyActions from 'src/features/academy/AcademyActions';
 import GroundControlActions from 'src/features/groundControl/GroundControlActions';
-import { fetchSourcecastIndex } from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
-import { saveSourcecastData } from 'src/features/sourceRecorder/SourceRecorderActions';
+import SourcecastActions from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
+import SourceRecorderActions from 'src/features/sourceRecorder/SourceRecorderActions';
 import { postNewStoriesUsers } from 'src/features/stories/storiesComponents/BackendAccess';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
@@ -20,9 +20,7 @@ import {
   GradingQuestion
 } from '../../features/grading/GradingTypes';
 import { SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
-import SourcereelActions, {
-  deleteSourcecastEntry as deleteSourcecastEntryAction
-} from '../../features/sourceRecorder/sourcereel/SourcereelActions';
+import SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
 import { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
 import SessionActions from '../application/actions/SessionActions';
 import { OverallState, Role } from '../application/ApplicationTypes';
@@ -129,7 +127,14 @@ export function* routerNavigate(path: string) {
 }
 
 // TODO: Refactor and combine in a future commit
-const sagaActions = { ...SessionActions, ...SourcereelActions, ...AcademyActions };
+const sagaActions = {
+  ...SessionActions,
+  ...SourcereelActions,
+  ...AcademyActions,
+  ...SourcecastActions,
+  ...SourceRecorderActions,
+  ...WorkspaceActions
+};
 const newBackendSagaOne = combineSagaHandlers(sagaActions, {
   fetchAuth: function* (action): any {
     const { code, providerId: payloadProviderId } = action.payload;
@@ -740,104 +745,83 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
     if (!resp || !resp.ok) {
       return yield handleResponseError(resp);
     }
-  }
-});
-
-function* oldBackendSagaOne(): SagaIterator {
-  yield takeEvery(
-    deleteSourcecastEntryAction.type,
-    function* (action: ReturnType<typeof actions.deleteSourcecastEntry>): any {
-      const role: Role = yield select((state: OverallState) => state.session.role!);
-      if (role === Role.Student) {
-        return yield call(showWarningMessage, 'Only staff can delete sourcecasts.');
-      }
-
-      const tokens: Tokens = yield selectTokens();
-      const { id } = action.payload;
-
-      const resp: Response | null = yield deleteSourcecastEntry(id, tokens);
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
-
-      const sourcecastIndex: SourcecastData[] | null = yield call(getSourcecastIndex, tokens);
-      if (sourcecastIndex) {
-        yield put(actions.updateSourcecastIndex(sourcecastIndex, action.payload.workspaceLocation));
-      }
-
-      yield call(showSuccessMessage, 'Deleted successfully!', 1000);
+  },
+  deleteSourcecastEntry: function* (action) {
+    const role: Role = yield select((state: OverallState) => state.session.role!);
+    if (role === Role.Student) {
+      return yield call(showWarningMessage, 'Only staff can delete sourcecasts.');
     }
-  );
 
-  yield takeEvery(
-    fetchSourcecastIndex.type,
-    function* (action: ReturnType<typeof actions.fetchSourcecastIndex>) {
-      const tokens: Tokens = yield selectTokens();
+    const tokens: Tokens = yield selectTokens();
+    const { id } = action.payload;
 
-      const sourcecastIndex: SourcecastData[] | null = yield call(getSourcecastIndex, tokens);
-      if (sourcecastIndex) {
-        yield put(actions.updateSourcecastIndex(sourcecastIndex, action.payload.workspaceLocation));
-      }
+    const resp: Response | null = yield deleteSourcecastEntry(id, tokens);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
     }
-  );
 
-  yield takeEvery(
-    saveSourcecastData.type,
-    function* (action: ReturnType<typeof actions.saveSourcecastData>): any {
-      const [role, courseId]: [Role, number | undefined] = yield select((state: OverallState) => [
-        state.session.role!,
-        state.session.courseId
-      ]);
-      if (role === Role.Student) {
-        return yield call(showWarningMessage, 'Only staff can save sourcecasts.');
-      }
-
-      const { title, description, uid, audio, playbackData } = action.payload;
-      const tokens: Tokens = yield selectTokens();
-
-      const resp: Response | null = yield postSourcecast(
-        title,
-        description,
-        uid,
-        audio,
-        playbackData,
-        tokens
-      );
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
-
-      yield call(showSuccessMessage, 'Saved successfully!', 1000);
-      yield routerNavigate(`/courses/${courseId}/sourcecast`);
+    const sourcecastIndex: SourcecastData[] | null = yield call(getSourcecastIndex, tokens);
+    if (sourcecastIndex) {
+      yield put(actions.updateSourcecastIndex(sourcecastIndex, action.payload.workspaceLocation));
     }
-  );
 
-  yield takeEvery(
-    WorkspaceActions.changeSublanguage.type,
-    function* (action: ReturnType<typeof actions.changeSublanguage>): any {
-      const tokens: Tokens = yield selectTokens();
-      const { sublang } = action.payload;
+    yield call(showSuccessMessage, 'Deleted successfully!', 1000);
+  },
+  fetchSourcecastIndex: function* (action) {
+    const tokens: Tokens = yield selectTokens();
 
-      const resp: Response | null = yield call(putCourseConfig, tokens, {
+    const sourcecastIndex: SourcecastData[] | null = yield call(getSourcecastIndex, tokens);
+    if (sourcecastIndex) {
+      yield put(actions.updateSourcecastIndex(sourcecastIndex, action.payload.workspaceLocation));
+    }
+  },
+  saveSourcecastData: function* (action) {
+    const [role, courseId]: [Role, number | undefined] = yield select((state: OverallState) => [
+      state.session.role!,
+      state.session.courseId
+    ]);
+    if (role === Role.Student) {
+      return yield call(showWarningMessage, 'Only staff can save sourcecasts.');
+    }
+
+    const { title, description, uid, audio, playbackData } = action.payload;
+    const tokens: Tokens = yield selectTokens();
+
+    const resp: Response | null = yield postSourcecast(
+      title,
+      description,
+      uid,
+      audio,
+      playbackData,
+      tokens
+    );
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
+
+    yield call(showSuccessMessage, 'Saved successfully!', 1000);
+    yield routerNavigate(`/courses/${courseId}/sourcecast`);
+  },
+  changeSublanguage: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const { sublang } = action.payload;
+
+    const resp: Response | null = yield call(putCourseConfig, tokens, {
+      sourceChapter: sublang.chapter,
+      sourceVariant: sublang.variant
+    });
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
+
+    yield put(
+      actions.setCourseConfiguration({
         sourceChapter: sublang.chapter,
         sourceVariant: sublang.variant
-      });
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
-
-      yield put(
-        actions.setCourseConfiguration({
-          sourceChapter: sublang.chapter,
-          sourceVariant: sublang.variant
-        })
-      );
-      yield call(showSuccessMessage, 'Updated successfully!', 1000);
-    }
-  );
-}
-
-const newBackendSagaThree = combineSagaHandlers(sagaActions, {
+      })
+    );
+    yield call(showSuccessMessage, 'Updated successfully!', 1000);
+  },
   updateLatestViewedCourse: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { courseId } = action.payload;
@@ -1124,7 +1108,7 @@ const newBackendSagaThree = combineSagaHandlers(sagaActions, {
     yield put(actions.setCourseRegistration({ agreedToResearch }));
     yield call(showSuccessMessage, 'Research preference saved!');
   },
-  updateUserRole: function* (action): any {
+  updateUserRole: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { courseRegId, role }: { courseRegId: number; role: Role } = action.payload;
 
@@ -1136,7 +1120,7 @@ const newBackendSagaThree = combineSagaHandlers(sagaActions, {
     yield put(actions.fetchAdminPanelCourseRegistrations());
     yield call(showSuccessMessage, 'Role updated!');
   },
-  deleteUserCourseRegistration: function* (action): any {
+  deleteUserCourseRegistration: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { courseRegId }: { courseRegId: number } = action.payload;
 
@@ -1357,13 +1341,7 @@ function* handleReautogradeResponse(resp: Response | null): any {
 }
 
 function* BackendSaga(): SagaIterator {
-  yield all([
-    fork(newBackendSagaOne),
-    fork(newBackendSagaTwo),
-    fork(newBackendSagaThree),
-    fork(oldBackendSagaOne),
-    fork(oldBackendSagaThree)
-  ]);
+  yield all([fork(newBackendSagaOne), fork(newBackendSagaTwo), fork(oldBackendSagaThree)]);
 }
 
 export default BackendSaga;
