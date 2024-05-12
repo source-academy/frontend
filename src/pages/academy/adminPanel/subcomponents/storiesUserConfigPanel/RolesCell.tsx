@@ -3,16 +3,14 @@ import React from 'react';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { AdminPanelStoriesUser } from 'src/features/stories/StoriesTypes';
 
-type RolesCellProps = OwnProps;
-
-type OwnProps = {
+type Props = {
   data: AdminPanelStoriesUser;
   rowIndex: number;
   id: number;
   handleUpdateStoriesUserRole: (id: number, role: StoriesRole) => void;
 };
 
-const RolesCell: React.FC<RolesCellProps> = props => {
+const RolesCell: React.FC<Props> = props => {
   const { data } = props;
 
   const changeHandler = React.useCallback(
@@ -23,18 +21,9 @@ const RolesCell: React.FC<RolesCellProps> = props => {
   );
 
   const roleOptions = [
-    {
-      label: 'User',
-      value: StoriesRole.Standard
-    },
-    {
-      label: 'Moderator',
-      value: StoriesRole.Moderator
-    },
-    {
-      label: 'Admin',
-      value: StoriesRole.Admin
-    }
+    { label: 'User', value: StoriesRole.Standard },
+    { label: 'Moderator', value: StoriesRole.Moderator },
+    { label: 'Admin', value: StoriesRole.Admin }
   ];
   return (
     <Popover
