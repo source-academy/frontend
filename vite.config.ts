@@ -1,5 +1,7 @@
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
+import inject from '@rollup/plugin-inject';
 import react from '@vitejs/plugin-react';
+import nodePolyfills from 'rollup-plugin-polyfill-node';
 import * as sass from 'sass';
 import { defineConfig, loadEnv } from 'vite';
 import svgr from 'vite-plugin-svgr';
@@ -54,7 +56,11 @@ export default defineConfig(({ mode }) => {
       port: 8000
     },
     build: {
-      target: 'esnext'
+      target: 'esnext',
+      rollupOptions: {
+        // https://github.com/vitejs/vite/discussions/6180#discussioncomment-7254293
+        plugins: [inject({ Buffer: ['buffer/', 'Buffer'] }), nodePolyfills()] as any
+      }
     }
   };
 });
