@@ -12,7 +12,7 @@ import GitHubActions from '../../features/github/GitHubActions';
 import GroundControlActions from '../../features/groundControl/GroundControlActions';
 import * as PersistenceActions from '../../features/persistence/PersistenceActions';
 import * as PlaygroundActions from '../../features/playground/PlaygroundActions';
-import * as RemoteExecutionActions from '../../features/remoteExecution/RemoteExecutionActions';
+import RemoteExecutionActions from '../../features/remoteExecution/RemoteExecutionActions';
 import * as SourcecastActions from '../../features/sourceRecorder/sourcecast/SourcecastActions';
 import * as SourceRecorderActions from '../../features/sourceRecorder/SourceRecorderActions';
 import SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
