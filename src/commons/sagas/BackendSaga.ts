@@ -36,7 +36,7 @@ import {
   SAVE_SOURCECAST_DATA,
   SourcecastData
 } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
+import { deleteSourcecastEntry as deleteSourcecastEntryAction } from '../../features/sourceRecorder/sourcereel/SourcereelActions';
 import { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
 import SessionActions from '../application/actions/SessionActions';
 import { OverallState, Role } from '../application/ApplicationTypes';
@@ -758,7 +758,7 @@ const newBackendSagaTwo = combineSagaHandlers(SessionActions, {
 
 function* oldBackendSagaOne(): SagaIterator {
   yield takeEvery(
-    DELETE_SOURCECAST_ENTRY,
+    deleteSourcecastEntryAction,
     function* (action: ReturnType<typeof actions.deleteSourcecastEntry>): any {
       const role: Role = yield select((state: OverallState) => state.session.role!);
       if (role === Role.Student) {
