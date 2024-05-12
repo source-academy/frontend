@@ -1,4 +1,5 @@
-import { compileAndRun as compileAndRunCCode } from '@sourceacademy/c-slang/ctowasm/dist/index';
+/* eslint-disable-file */
+// import { compileAndRun as compileAndRunCCode } from '@sourceacademy/c-slang/ctowasm/dist/index';
 import { tokenizer } from 'acorn';
 import { Context, interrupt, Result, resume, runFilesInContext } from 'js-slang';
 import { ACORN_PARSE_OPTIONS, TRY_AGAIN } from 'js-slang/dist/constants';
@@ -9,7 +10,6 @@ import { SagaIterator } from 'redux-saga';
 import { call, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
-import { makeCCompilerConfig, specialCReturnObject } from 'src/commons/utils/CToWasmHelper';
 import { javaRun } from 'src/commons/utils/JavaHelper';
 import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
 
@@ -203,46 +203,48 @@ export function* evalCodeSaga(
   }
 
   async function cCompileAndRun(cCode: string, context: Context) {
-    const cCompilerConfig = await makeCCompilerConfig(cCode, context);
-    return await compileAndRunCCode(cCode, cCompilerConfig)
-      .then(compilationResult => {
-        if (compilationResult.status === 'failure') {
-          // report any compilation failure
-          reportCCompilationError(
-            `Compilation failed with the following error(s):\n\n${compilationResult.errorMessage}`,
-            context
-          );
-          return {
-            status: 'error',
-            context
-          };
-        }
-        if (compilationResult.warnings.length > 0) {
-          return {
-            status: 'finished',
-            context,
-            value: {
-              toReplString: () =>
-                `Compilation and program execution successful with the following warning(s):\n${compilationResult.warnings.join(
-                  '\n'
-                )}`
-            }
-          };
-        }
-        if (specialCReturnObject === null) {
-          return {
-            status: 'finished',
-            context,
-            value: { toReplString: () => 'Compilation and program execution successful.' }
-          };
-        }
-        return { status: 'finished', context, value: specialCReturnObject };
-      })
-      .catch((e: any): Result => {
-        console.log(e);
-        reportCRuntimeError(e.message, context);
-        return { status: 'error' };
-      });
+    // const cCompilerConfig = await makeCCompilerConfig(cCode, context);
+    // FIXME: Restore
+    return Promise.resolve({ status: 'error' });
+    // return await compileAndRunCCode(cCode, cCompilerConfig)
+    //   .then(compilationResult => {
+    //     if (compilationResult.status === 'failure') {
+    //       // report any compilation failure
+    //       reportCCompilationError(
+    //         `Compilation failed with the following error(s):\n\n${compilationResult.errorMessage}`,
+    //         context
+    //       );
+    //       return {
+    //         status: 'error',
+    //         context
+    //       };
+    //     }
+    //     if (compilationResult.warnings.length > 0) {
+    //       return {
+    //         status: 'finished',
+    //         context,
+    //         value: {
+    //           toReplString: () =>
+    //             `Compilation and program execution successful with the following warning(s):\n${compilationResult.warnings.join(
+    //               '\n'
+    //             )}`
+    //         }
+    //       };
+    //     }
+    //     if (specialCReturnObject === null) {
+    //       return {
+    //         status: 'finished',
+    //         context,
+    //         value: { toReplString: () => 'Compilation and program execution successful.' }
+    //       };
+    //     }
+    //     return { status: 'finished', context, value: specialCReturnObject };
+    //   })
+    //   .catch((e: any): Result => {
+    //     console.log(e);
+    //     reportCRuntimeError(e.message, context);
+    //     return { status: 'error' };
+    //   });
   }
 
   const isNonDet: boolean = context.variant === Variant.NON_DET;
