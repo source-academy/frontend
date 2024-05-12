@@ -37,7 +37,7 @@ export function computeRedirectUri(providerId: string): string | undefined {
     return undefined;
   }
   const port = window.location.port === '' ? '' : `:${window.location.port}`;
-  const callback = `${window.location.protocol}//${window.location.hostname}${port}/login${
+  const callback = `${window.location.protocol}//${window.location.hostname}${port}/login/callback${
     ep.isDefault ? '' : '?provider=' + encodeURIComponent(providerId)
   }`;
   return callback;
