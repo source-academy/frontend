@@ -1,10 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import {
-  fetchAssessmentOverviews,
-  fetchCourseConfig
-} from '../../../commons/application/actions/SessionActions';
+import SessionActions from '../../../commons/application/actions/SessionActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import {
   assignEntriesForVoting,
@@ -26,13 +23,13 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     {
       handleAssessmentChangeDate: changeDateAssessment,
       handleAssessmentChangeTeamSize: changeTeamSizeAssessment,
-      handleAssessmentOverviewFetch: fetchAssessmentOverviews,
+      handleAssessmentOverviewFetch: SessionActions.fetchAssessmentOverviews,
       handleDeleteAssessment: deleteAssessment,
       handleUploadAssessment: uploadAssessment,
       handlePublishAssessment: publishAssessment,
       handlePublishGradingAll: publishGradingAll,
       handleUnpublishGradingAll: unpublishGradingAll,
-      handleFetchCourseConfigs: fetchCourseConfig,
+      handleFetchCourseConfigs: SessionActions.fetchCourseConfig,
       handleConfigureAssessment: configureAssessment,
       handleAssignEntriesForVoting: assignEntriesForVoting
     },
@@ -40,5 +37,10 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
   );
 
 const GroundControlContainer = connect(mapStateToProps, mapDispatchToProps)(GroundControl);
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = GroundControlContainer;
+Component.displayName = 'GroundControl';
 
 export default GroundControlContainer;
