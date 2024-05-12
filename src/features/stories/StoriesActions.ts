@@ -64,26 +64,6 @@ export const setAdminPanelStoriesUsers = createAction(
   (users: AdminPanelStoriesUser[]) => ({ payload: { users } })
 );
 
-// For compatibility with existing code (reducer)
-export const {
-  addStoryEnv,
-  clearStoryEnv,
-  evalStory,
-  evalStoryError,
-  evalStorySuccess,
-  handleStoriesConsoleLog,
-  notifyStoriesEvaluated,
-  toggleStoriesUsingSubst,
-  // New action creators post-refactor
-  getStoriesList,
-  updateStoriesList,
-  setCurrentStory,
-  setCurrentStoryId,
-  createStory,
-  saveStory,
-  deleteStory
-} = newActions;
-
 // For compatibility with existing code (actions helper)
 export default {
   ...newActions,
