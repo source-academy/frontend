@@ -61,12 +61,13 @@ const MobileHamburger: React.FC<{ navlinks: NavbarEntryInfo[] }> = ({ navlinks }
         />
       )}
       <NavLink
-        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        className="NavigationBar__link"
         to={Constants.playgroundOnly ? '/' : courseId == null ? '/welcome' : `/courses/${courseId}`}
       >
-        <Icon icon={IconNames.SYMBOL_DIAMOND} />
-        <NavbarHeading style={{ paddingBottom: '0px' }}>
-          {courseShortName || Constants.sourceAcademyDeploymentName}
+        <NavbarHeading>
+          <Button className="app-title" minimal icon={IconNames.SYMBOL_DIAMOND}>
+            {courseShortName || Constants.sourceAcademyDeploymentName}
+          </Button>
         </NavbarHeading>
       </NavLink>
       {renderDrawer && (
@@ -230,14 +231,18 @@ const NavigationBar: React.FC = () => {
           disabled={!enableDesktopPopover}
         >
           <NavLink
-            className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
-              [Classes.ACTIVE]: highlightDesktopLogo(location)
-            })}
+            className="NavigationBar__link"
             to={courseId == null ? '/welcome' : `/courses/${courseId}`}
           >
-            <Icon icon={IconNames.SYMBOL_DIAMOND} />
-            <NavbarHeading style={{ paddingBottom: '0px' }}>
-              {courseShortName || Constants.sourceAcademyDeploymentName}
+            <NavbarHeading>
+              <Button
+                className="app-title"
+                minimal
+                icon={IconNames.SYMBOL_DIAMOND}
+                active={highlightDesktopLogo(location)}
+              >
+                {courseShortName || Constants.sourceAcademyDeploymentName}
+              </Button>
             </NavbarHeading>
           </NavLink>
         </Popover>
