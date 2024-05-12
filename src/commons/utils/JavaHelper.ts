@@ -2,7 +2,7 @@ import { compileFromSource, ECE, typeCheck } from 'java-slang';
 import { BinaryWriter } from 'java-slang/dist/compiler/binary-writer';
 import setupJVM, { parseBin } from 'java-slang/dist/jvm';
 import { createModuleProxy, loadCachedFiles } from 'java-slang/dist/jvm/utils/integration';
-import { Context } from 'js-slang';
+import { Context, Result } from 'js-slang';
 import loadSourceModules from 'js-slang/dist/modules/loader';
 import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/types';
 
@@ -207,6 +207,7 @@ export async function runJavaCseMachine(code: string, targetStep: number, contex
     })
     .catch(e => {
       console.error(e);
-      return { status: 'error' };
+      const errorResult: Result = { status: 'error' };
+      return errorResult;
     });
 }
