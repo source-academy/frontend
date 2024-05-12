@@ -6,8 +6,7 @@ import { BitmapFontStyle } from 'src/features/game/commons/CommonTypes';
 
 import { dateOneYearFromNow } from './GameSimulatorUtils';
 
-export const gameSimulatorConfig = {
-  debug: true,
+export const gameSimulatorConfig: Phaser.Types.Core.GameConfig = {
   type: Phaser.CANVAS,
   width: screenSize.x,
   height: screenSize.y,
