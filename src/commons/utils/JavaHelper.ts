@@ -4,7 +4,7 @@ import setupJVM, { parseBin } from 'java-slang/dist/jvm';
 import { createModuleProxy, loadCachedFiles } from 'java-slang/dist/jvm/utils/integration';
 import { Context } from 'js-slang';
 import loadSourceModules from 'js-slang/dist/modules/loader';
-import { ErrorSeverity, ErrorType, Result, SourceError } from 'js-slang/dist/types';
+import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/types';
 
 import { CseMachine } from '../../features/cseMachine/java/CseMachine';
 import { UploadResult } from '../sideContent/content/SideContentUpload';
@@ -30,11 +30,11 @@ export async function javaRun(
     });
   };
 
-  let files = {};
+  let files: UploadResult = {};
   let buffer: string[] = [];
 
   const readClassFiles = (path: string) => {
-    let item = files[path as keyof typeof files];
+    let item = files[path];
 
     // not found: attempt to fetch from CDN
     if (!item && path) {
@@ -52,11 +52,11 @@ export async function javaRun(
       // we might want to cache the files in IndexedDB here
       files = { ...files, ...json };
 
-      if (!files[path as keyof typeof files]) {
+      if (!files[path]) {
         throw new Error('File not found: ' + path);
       }
 
-      item = files[path as keyof typeof files];
+      item = files[path];
     }
 
     // convert base64 to classfile object
@@ -207,6 +207,6 @@ export async function runJavaCseMachine(code: string, targetStep: number, contex
     })
     .catch(e => {
       console.error(e);
-      return { status: 'error' } as Result;
+      return { status: 'error' };
     });
 }
