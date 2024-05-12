@@ -491,10 +491,7 @@ class GameStateManager {
    */
   public getQuizScore(quizId: ItemId): number {
     const score = this.quizScores.get(quizId);
-    if (score) {
-      return score;
-    }
-    return 0;
+    return score ?? 0;
   }
 
   /**
