@@ -10,7 +10,7 @@ import {
   addNewStoriesUsersToCourse,
   addNewUsersToCourse
 } from 'src/features/academy/AcademyActions';
-import { fetchAdminPanelStoriesUsers } from 'src/features/stories/StoriesActions';
+import StoriesActions from 'src/features/stories/StoriesActions';
 
 import SessionActions from '../../../commons/application/actions/SessionActions';
 import { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
@@ -50,8 +50,13 @@ const AdminPanel: React.FC = () => {
     dispatch(SessionActions.fetchAssessmentConfigs());
     dispatch(SessionActions.fetchAdminPanelCourseRegistrations());
     dispatch(SessionActions.fetchNotificationConfigs());
-    dispatch(fetchAdminPanelStoriesUsers());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (session.enableStories) {
+      dispatch(StoriesActions.fetchAdminPanelStoriesUsers());
+    }
+  }, [dispatch, session.enableStories]);
 
   useEffect(() => {
     setCourseConfiguration({
