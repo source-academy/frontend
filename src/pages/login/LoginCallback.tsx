@@ -44,7 +44,7 @@ const LoginCallback: React.FC = () => {
 
     // No authCode (OAuth, CAS) nor jwt cookie (SAML redirect)
     navigate('/login');
-  }, [authCode, isLoggedIn, dispatch]);
+  }, [authCode, isLoggedIn, dispatch, jwtCookie, navigate, providerId]);
 
   return (
     <div className={classNames(classes['Login'], Classes.DARK)}>
