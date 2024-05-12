@@ -37,18 +37,5 @@ const SourcereelActions = createActions('sourcereel', {
   timerStop: (workspaceLocation: WorkspaceLocation) => ({ timeNow: Date.now(), workspaceLocation })
 });
 
-// For compatibility with existing code (reducer)
-export const {
-  deleteSourcecastEntry,
-  recordInit,
-  recordInput,
-  resetInputs,
-  timerPause,
-  timerReset,
-  timerResume,
-  timerStart,
-  timerStop
-} = SourcereelActions;
-
 // For compatibility with existing code (actions helper)
 export default SourcereelActions;
