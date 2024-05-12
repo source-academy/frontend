@@ -159,7 +159,7 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
   },
   updateStoriesUserRole: function* (action) {
     const tokens: Tokens = yield selectTokens();
-    const { userId, role }: { userId: number; role: StoriesRole } = action.payload;
+    const { userId, role } = action.payload;
 
     const resp: Response | null = yield call(putStoriesUserRole, tokens, userId, role);
 
@@ -170,7 +170,7 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
   },
   deleteStoriesUserUserGroups: function* (action) {
     const tokens: Tokens = yield selectTokens();
-    const { userId }: { userId: number } = action.payload;
+    const { userId } = action.payload;
 
     const resp: Response | null = yield call(deleteUserUserGroups, tokens, userId);
     if (resp) {
