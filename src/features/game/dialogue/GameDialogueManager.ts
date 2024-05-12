@@ -141,7 +141,7 @@ export default class DialogueManager {
   }
 
   private getDialogueGenerator = () => this.dialogueGenerator as DialogueGenerator;
-  public getDialogueRenderer = () => this.dialogueRenderer as DialogueRenderer;
+  private getDialogueRenderer = () => this.dialogueRenderer as DialogueRenderer;
   private getSpeakerRenderer = () => this.speakerRenderer as DialogueSpeakerRenderer;
   private getInputManager = () => this.gameInputManager as GameInputManager;
 
