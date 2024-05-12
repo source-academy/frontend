@@ -16,12 +16,8 @@ import {
 } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../../ApplicationTypes';
-import {
-  UPDATE_ASSESSMENT,
-  UPDATE_COURSE_RESEARCH_AGREEMENT,
-  User
-} from '../../types/SessionTypes';
-import SessionActions, { updateAssessment, updateCourseResearchAgreement } from '../SessionActions';
+import { User } from '../../types/SessionTypes';
+import SessionActions from '../SessionActions';
 
 test('acknowledgeNotifications generates correct action object', () => {
   const action = SessionActions.acknowledgeNotifications();
@@ -501,9 +497,9 @@ test('updateAssessment generates correct action object', () => {
     title: 'first assessment'
   };
 
-  const action = updateAssessment(assessment);
+  const action = SessionActions.updateAssessment(assessment);
   expect(action).toEqual({
-    type: UPDATE_ASSESSMENT,
+    type: SessionActions.updateAssessment.type,
     payload: assessment
   });
 });
@@ -815,9 +811,9 @@ test('updateUserRole generates correct action object', () => {
 
 test('updateCourseResearchAgreement generates correct action object', () => {
   const agreedToResearch = true;
-  const action = updateCourseResearchAgreement(agreedToResearch);
+  const action = SessionActions.updateCourseResearchAgreement(agreedToResearch);
   expect(action).toEqual({
-    type: UPDATE_COURSE_RESEARCH_AGREEMENT,
+    type: SessionActions.updateCourseResearchAgreement.type,
     payload: { agreedToResearch }
   });
 });
