@@ -2,7 +2,7 @@ import * as Sentry from '@sentry/browser';
 import { SagaIterator } from 'redux-saga';
 import { call } from 'redux-saga/effects';
 
-import { login, setUser } from '../application/actions/SessionActions';
+import SessionActions from '../application/actions/SessionActions';
 import { LOG_OUT } from '../application/types/CommonsTypes';
 import { actions } from '../utils/ActionsHelper';
 import { computeEndpointUrl } from '../utils/AuthHelper';
@@ -10,9 +10,9 @@ import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export default function* LoginSaga(): SagaIterator {
-  yield takeEvery(login.type, updateLoginHref);
+  yield takeEvery(SessionActions.login.type, updateLoginHref);
 
-  yield takeEvery(setUser.type, (action: ReturnType<typeof actions.setUser>) => {
+  yield takeEvery(SessionActions.setUser.type, (action: ReturnType<typeof actions.setUser>) => {
     Sentry.setUser({ id: action.payload.userId.toString() });
   });
 

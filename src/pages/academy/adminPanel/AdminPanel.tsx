@@ -4,23 +4,15 @@ import 'ag-grid-community/styles/ag-theme-balham.css';
 import { Button, Divider, H1, Intent, Tab, Tabs } from '@blueprintjs/core';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useSession } from 'src/commons/utils/Hooks';
+import { StoriesRole } from 'src/commons/application/ApplicationTypes';
+import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   addNewStoriesUsersToCourse,
   addNewUsersToCourse
 } from 'src/features/academy/AcademyActions';
+import { fetchAdminPanelStoriesUsers } from 'src/features/stories/StoriesActions';
 
-import {
-  deleteAssessmentConfig,
-  deleteUserCourseRegistration,
-  fetchAdminPanelCourseRegistrations,
-  fetchAssessmentConfigs,
-  fetchCourseConfig,
-  fetchNotificationConfigs,
-  updateAssessmentConfigs,
-  updateCourseConfig,
-  updateUserRole
-} from '../../../commons/application/actions/SessionActions';
+import SessionActions from '../../../commons/application/actions/SessionActions';
 import { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
 import AddStoriesUserPanel from './subcomponents/AddStoriesUserPanel';
@@ -30,6 +22,7 @@ import AssessmentConfigPanel, {
 } from './subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';
 import NotificationConfigPanel from './subcomponents/NotificationConfigPanel';
+import StoriesUserConfigPanel from './subcomponents/storiesUserConfigPanel/StoriesUserConfigPanel';
 import UserConfigPanel from './subcomponents/userConfigPanel/UserConfigPanel';
 
 const defaultCourseConfig: UpdateCourseConfiguration = {
@@ -50,12 +43,14 @@ const AdminPanel: React.FC = () => {
 
   const dispatch = useDispatch();
   const session = useSession();
+  const stories = useTypedSelector(state => state.stories);
 
   useEffect(() => {
-    dispatch(fetchCourseConfig());
-    dispatch(fetchAssessmentConfigs());
-    dispatch(fetchAdminPanelCourseRegistrations());
-    dispatch(fetchNotificationConfigs());
+    dispatch(SessionActions.fetchCourseConfig());
+    dispatch(SessionActions.fetchAssessmentConfigs());
+    dispatch(SessionActions.fetchAdminPanelCourseRegistrations());
+    dispatch(SessionActions.fetchNotificationConfigs());
+    dispatch(fetchAdminPanelStoriesUsers());
   }, [dispatch]);
 
   useEffect(() => {
@@ -70,7 +65,6 @@ const AdminPanel: React.FC = () => {
       moduleHelpText: session.moduleHelpText
     });
   }, [
-    session.assessmentConfigurations,
     session.courseName,
     session.courseShortName,
     session.enableAchievements,
@@ -94,11 +88,20 @@ const AdminPanel: React.FC = () => {
     }
   };
 
+  const storiesUserConfigPanelProps = {
+    userId: stories.userId,
+    storiesUsers: stories.storiesUsers,
+    handleUpdateStoriesUserRole: (id: number, role: StoriesRole) =>
+      dispatch(SessionActions.updateStoriesUserRole(id, role)),
+    handleDeleteStoriesUserFromUserGroup: (id: number) =>
+      dispatch(SessionActions.deleteStoriesUserUserGroups(id))
+  };
+
   // Handler to submit changes to Course Configration and Assessment Configuration to the backend.
   // Changes made to users are handled separately.
   const submitHandler = useCallback(() => {
     if (hasChangesCourseConfig) {
-      dispatch(updateCourseConfig(courseConfiguration));
+      dispatch(SessionActions.updateCourseConfig(courseConfiguration));
       setHasChangesCourseConfig(false);
     }
     const tableState = tableRef.current?.getData() ?? [];
@@ -107,9 +110,9 @@ const AdminPanel: React.FC = () => {
     const configsToDelete = currentConfigs.filter(
       config => !currentIds.has(config.assessmentConfigId)
     );
-    configsToDelete.forEach(config => dispatch(deleteAssessmentConfig(config)));
+    configsToDelete.forEach(config => dispatch(SessionActions.deleteAssessmentConfig(config)));
     if (hasChangesAssessmentConfig) {
-      dispatch(updateAssessmentConfigs(tableState));
+      dispatch(SessionActions.updateAssessmentConfigs(tableState));
       setHasChangesAssessmentConfig(false);
     }
   }, [
@@ -159,13 +162,18 @@ const AdminPanel: React.FC = () => {
               courseRegId={session.courseRegId}
               userCourseRegistrations={session.userCourseRegistrations}
               handleUpdateUserRole={(courseRegId, role) =>
-                dispatch(updateUserRole(courseRegId, role))
+                dispatch(SessionActions.updateUserRole(courseRegId, role))
               }
               handleDeleteUserFromCourse={(courseRegId: number) =>
-                dispatch(deleteUserCourseRegistration(courseRegId))
+                dispatch(SessionActions.deleteUserCourseRegistration(courseRegId))
               }
             />
           }
+        />
+        <Tab
+          id="stories-users"
+          title="Stories Users"
+          panel={<StoriesUserConfigPanel {...storiesUserConfigPanelProps} />}
         />
         <Tab
           id="add-users"
@@ -196,5 +204,10 @@ const AdminPanel: React.FC = () => {
 
   return <ContentDisplay display={data} fullWidth={false} />;
 };
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = AdminPanel;
+Component.displayName = 'AdminPanel';
 
 export default AdminPanel;

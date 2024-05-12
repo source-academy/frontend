@@ -2,11 +2,12 @@ import { compileFromSource, ECE, typeCheck } from 'java-slang';
 import { BinaryWriter } from 'java-slang/dist/compiler/binary-writer';
 import setupJVM, { parseBin } from 'java-slang/dist/jvm';
 import { createModuleProxy, loadCachedFiles } from 'java-slang/dist/jvm/utils/integration';
-import { Context } from 'js-slang';
+import { Context, Result } from 'js-slang';
 import loadSourceModules from 'js-slang/dist/modules/loader';
-import { ErrorSeverity, ErrorType, Result, SourceError } from 'js-slang/dist/types';
+import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/types';
 
 import { CseMachine } from '../../features/cseMachine/java/CseMachine';
+import { UploadResult } from '../sideContent/content/SideContentUpload';
 import Constants from './Constants';
 import DisplayBufferService from './DisplayBufferService';
 
@@ -14,7 +15,8 @@ export async function javaRun(
   javaCode: string,
   context: Context,
   targetStep: number,
-  isUsingCse: boolean
+  isUsingCse: boolean,
+  options?: { uploadIsActive?: boolean; uploads?: UploadResult }
 ) {
   let compiled = {};
 
@@ -28,30 +30,11 @@ export async function javaRun(
     });
   };
 
-  const typeCheckResult = typeCheck(javaCode);
-  if (typeCheckResult.hasTypeErrors) {
-    const typeErrMsg = typeCheckResult.errorMsgs.join('\n');
-    stderr('TypeCheck', typeErrMsg);
-    return Promise.resolve({ status: 'error' });
-  }
-
-  if (isUsingCse) return await runJavaCseMachine(javaCode, targetStep, context);
-
-  try {
-    const classFile = compileFromSource(javaCode);
-    compiled = {
-      'Main.class': Buffer.from(new BinaryWriter().generateBinary(classFile)).toString('base64')
-    };
-  } catch (e) {
-    stderr('Compile', e);
-    return Promise.resolve({ status: 'error' });
-  }
-
-  let files = {};
+  let files: UploadResult = {};
   let buffer: string[] = [];
 
   const readClassFiles = (path: string) => {
-    let item = files[path as keyof typeof files];
+    let item = files[path];
 
     // not found: attempt to fetch from CDN
     if (!item && path) {
@@ -69,11 +52,11 @@ export async function javaRun(
       // we might want to cache the files in IndexedDB here
       files = { ...files, ...json };
 
-      if (!files[path as keyof typeof files]) {
+      if (!files[path]) {
         throw new Error('File not found: ' + path);
       }
 
-      item = files[path as keyof typeof files];
+      item = files[path];
     }
 
     // convert base64 to classfile object
@@ -107,6 +90,35 @@ export async function javaRun(
       buffer.push(str);
     }
   };
+
+  if (options?.uploadIsActive) {
+    compiled = options.uploads ?? {};
+    if (!options.uploads) {
+      stderr('Compile', 'No files uploaded');
+      return Promise.resolve({ status: 'error' });
+    }
+  } else {
+    const typeCheckResult = typeCheck(javaCode);
+    if (typeCheckResult.hasTypeErrors) {
+      const typeErrMsg = typeCheckResult.errorMsgs.join('\n');
+      stderr('TypeCheck', typeErrMsg);
+      return Promise.resolve({ status: 'error' });
+    }
+
+    if (isUsingCse) {
+      return await runJavaCseMachine(javaCode, targetStep, context);
+    }
+
+    try {
+      const classFile = compileFromSource(javaCode);
+      compiled = {
+        'Main.class': Buffer.from(new BinaryWriter().generateBinary(classFile)).toString('base64')
+      };
+    } catch (e) {
+      stderr('Compile', e);
+      return Promise.resolve({ status: 'error' });
+    }
+  }
 
   // load cached classfiles from IndexedDB
   return loadCachedFiles(() =>
@@ -195,6 +207,7 @@ export async function runJavaCseMachine(code: string, targetStep: number, contex
     })
     .catch(e => {
       console.error(e);
-      return { status: 'error' } as Result;
+      const errorResult: Result = { status: 'error' };
+      return errorResult;
     });
 }

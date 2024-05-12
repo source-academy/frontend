@@ -2,7 +2,7 @@ import { Intent, Popover, PopoverInteractionKind, Position, Tag } from '@bluepri
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import { acknowledgeNotifications } from '../application/actions/SessionActions';
+import SessionActions from '../application/actions/SessionActions';
 import { useSession } from '../utils/Hooks';
 import { filterNotificationsById } from './NotificationBadgeHelper';
 import { Notification, NotificationType, NotificationTypes } from './NotificationBadgeTypes';
@@ -35,7 +35,7 @@ const NotificationBadge: React.FC<Props> = props => {
   if (!props.disableHover) {
     const makeNotificationTag = (notification: Notification) => {
       const onRemove = () =>
-        dispatch(acknowledgeNotifications(filterNotificationsById(notification.id)));
+        dispatch(SessionActions.acknowledgeNotifications(filterNotificationsById(notification.id)));
 
       return (
         <Tag

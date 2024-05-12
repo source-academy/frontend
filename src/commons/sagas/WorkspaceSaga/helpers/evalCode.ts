@@ -8,11 +8,7 @@ import { Chapter, ErrorSeverity, ErrorType, SourceError, Variant } from 'js-slan
 import { SagaIterator } from 'redux-saga';
 import { call, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
-import {
-  beginDebuggerPause,
-  beginInterruptExecution,
-  debuggerResume
-} from 'src/commons/application/actions/InterpreterActions';
+import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 import { makeCCompilerConfig, specialCReturnObject } from 'src/commons/utils/CToWasmHelper';
 import { javaRun } from 'src/commons/utils/JavaHelper';
 import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
@@ -44,7 +40,8 @@ export function* evalCodeSaga(
   storyEnv?: string
 ): SagaIterator {
   context.runtime.debuggerOn =
-    (actionType === evalEditor.type || actionType === debuggerResume.type) && context.chapter > 2;
+    (actionType === evalEditor.type || actionType === InterpreterActions.debuggerResume.type) &&
+    context.chapter > 2;
   const isStoriesBlock = actionType === actions.evalStory.type || workspaceLocation === 'stories';
 
   // Logic for execution of substitution model visualizer
@@ -66,6 +63,15 @@ export function* evalCodeSaga(
   if (substActiveAndCorrectChapter) {
     context.executionMethod = 'interpreter';
   }
+
+  const uploadIsActive: boolean = correctWorkspace
+    ? yield select(
+        (state: OverallState) =>
+          (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
+            .usingUpload
+      )
+    : false;
+  const uploads = yield select((state: OverallState) => state.workspaces[workspaceLocation].files);
 
   // For the CSE machine slider
   const cseIsActive: boolean = correctWorkspace
@@ -258,14 +264,17 @@ export function* evalCodeSaga(
 
   const { result, interrupted, paused } = yield race({
     result:
-      actionType === debuggerResume.type
+      actionType === InterpreterActions.debuggerResume.type
         ? call(resume, lastDebuggerResult)
         : isNonDet || isLazy || isWasm
         ? call_variant(context.variant)
         : isC
         ? call(cCompileAndRun, entrypointCode, context)
         : isJava
-        ? call(javaRun, entrypointCode, context, currentStep, isUsingCse)
+        ? call(javaRun, entrypointCode, context, currentStep, isUsingCse, {
+            uploadIsActive,
+            uploads
+          })
         : call(
             runFilesInContext,
             isFolderModeEnabled
@@ -289,8 +298,8 @@ export function* evalCodeSaga(
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
      * i.e the trigger for the interpreter to interrupt execution.
      */
-    interrupted: take(beginInterruptExecution.type),
-    paused: take(beginDebuggerPause.type)
+    interrupted: take(InterpreterActions.beginInterruptExecution.type),
+    paused: take(InterpreterActions.beginDebuggerPause.type)
   });
 
   detachConsole();
@@ -401,7 +410,7 @@ export function* evalCodeSaga(
   if (
     actionType === evalEditor.type ||
     actionType === evalRepl.type ||
-    actionType === debuggerResume.type
+    actionType === InterpreterActions.debuggerResume.type
   ) {
     if (context.errors.length > 0) {
       yield put(actions.addEvent([EventType.ERROR]));

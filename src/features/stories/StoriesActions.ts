@@ -4,8 +4,11 @@ import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { createActions } from 'src/commons/redux/utils';
 
 import {
+  AdminPanelStoriesUser,
   CLEAR_STORIES_USER_AND_GROUP,
+  FETCH_ADMIN_PANEL_STORIES_USERS,
   GET_STORIES_USER,
+  SET_ADMIN_PANEL_STORIES_USERS,
   SET_CURRENT_STORIES_GROUP,
   SET_CURRENT_STORIES_USER,
   StoryData,
@@ -53,6 +56,13 @@ export const setCurrentStoriesGroup = createAction(
 export const clearStoriesUserAndGroup = createAction(CLEAR_STORIES_USER_AND_GROUP, () => ({
   payload: {}
 }));
+export const fetchAdminPanelStoriesUsers = createAction(FETCH_ADMIN_PANEL_STORIES_USERS, () => ({
+  payload: {}
+}));
+export const setAdminPanelStoriesUsers = createAction(
+  SET_ADMIN_PANEL_STORIES_USERS,
+  (users: AdminPanelStoriesUser[]) => ({ payload: { users } })
+);
 
 // For compatibility with existing code (reducer)
 export const {
@@ -80,5 +90,7 @@ export default {
   getStoriesUser,
   setCurrentStoriesUser,
   setCurrentStoriesGroup,
-  clearStoriesUserAndGroup
+  clearStoriesUserAndGroup,
+  fetchAdminPanelStoriesUsers,
+  setAdminPanelStoriesUsers
 };
