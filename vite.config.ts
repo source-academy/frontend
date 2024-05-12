@@ -1,3 +1,4 @@
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 import react from '@vitejs/plugin-react';
 import * as sass from 'sass';
 import { defineConfig, loadEnv } from 'vite';
@@ -26,6 +27,15 @@ export default defineConfig(({ mode }) => {
     define: {
       'process.env': env
     },
+    optimizeDeps: {
+      esbuildOptions: {
+        // Node.js global to browser globalThis
+        define: {
+          global: 'globalThis'
+        },
+        plugins: [NodeGlobalsPolyfillPlugin({ buffer: true, process: false })]
+      }
+    },
     css: {
       preprocessorOptions: {
         scss: {
@@ -40,7 +50,7 @@ export default defineConfig(({ mode }) => {
     },
     server: {
       // TODO: Change to 8000 after CRA migration is complete
-      port: 8001
+      port: 8000
     }
   };
 });

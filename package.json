@@ -106,6 +106,7 @@
     "@babel/preset-typescript": "^7.24.1",
     "@babel/runtime": "^7.24.5",
     "@craco/craco": "^7.1.0",
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@svgr/webpack": "^8.0.0",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^14.0.0",
