@@ -173,6 +173,7 @@
     "url": "^0.11.1",
     "vite": "^5.2.11",
     "vite-plugin-svgr": "^4.2.0",
+    "vite-plugin-wasm": "^3.3.0",
     "vite-tsconfig-paths": "^4.3.2",
     "webpack-bundle-analyzer": "^4.9.0"
   },

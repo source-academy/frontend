@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import * as sass from 'sass';
 import { defineConfig, loadEnv } from 'vite';
 import svgr from 'vite-plugin-svgr';
+import wasm from 'vite-plugin-wasm';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 const ignoreSvgIcon = () => new sass.SassString('');
@@ -16,7 +17,7 @@ export default defineConfig(({ mode }) => {
   return {
     envPrefix,
     // https://cathalmacdonnacha.com/migrating-from-create-react-app-cra-to-vite
-    plugins: [react(), tsconfigPaths(), svgr({ include: '**/*.svg?react' })],
+    plugins: [react(), tsconfigPaths(), svgr({ include: '**/*.svg?react' }), wasm()],
     resolve: {
       alias: {
         fs: 'browserfs',
@@ -51,6 +52,9 @@ export default defineConfig(({ mode }) => {
     server: {
       // TODO: Change to 8000 after CRA migration is complete
       port: 8000
+    },
+    build: {
+      target: 'esnext'
     }
   };
 });
