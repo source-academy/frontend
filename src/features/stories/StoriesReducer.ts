@@ -28,7 +28,7 @@ import {
   updateStoriesList
 } from './StoriesActions';
 import { DEFAULT_ENV } from './storiesComponents/UserBlogContent';
-import { StoriesState } from './StoriesTypes';
+import { SET_ADMIN_PANEL_STORIES_USERS, StoriesState } from './StoriesTypes';
 
 export const StoriesReducer: Reducer<StoriesState, SourceActionType> = (
   state = defaultStories,
@@ -187,6 +187,11 @@ const oldStoriesReducer: Reducer<StoriesState, SourceActionType> = (
   action
 ) => {
   switch (action.type) {
+    case SET_ADMIN_PANEL_STORIES_USERS:
+      return {
+        ...state,
+        storiesUsers: action.payload.users
+      };
     default:
       return state;
   }
