@@ -1,4 +1,4 @@
-import 'ace-builds/webpack-resolver';
+import 'ace-builds/esm-resolver';
 
 import { Button, Classes, Tab, Tabs } from '@blueprintjs/core';
 import { useState } from 'react';
