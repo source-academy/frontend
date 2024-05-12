@@ -6,7 +6,7 @@ import * as FileSystemActions from '../../commons/fileSystem/FileSystemActions';
 import SideContentActions from '../../commons/sideContent/SideContentActions';
 import WorkspaceActions from '../../commons/workspace/WorkspaceActions';
 import AcademyActions from '../../features/academy/AcademyActions';
-import * as AchievementActions from '../../features/achievement/AchievementActions';
+import AchievementActions from '../../features/achievement/AchievementActions';
 import * as DashboardActions from '../../features/dashboard/DashboardActions';
 import GitHubActions from '../../features/github/GitHubActions';
 import * as GroundControlActions from '../../features/groundControl/GroundControlActions';

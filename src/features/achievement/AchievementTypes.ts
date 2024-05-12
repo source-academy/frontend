@@ -2,24 +2,6 @@ import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 
 import { BooleanExpression } from './ExpressionTypes';
 
-export const ADD_EVENT = 'ADD_EVENT';
-export const BULK_UPDATE_ACHIEVEMENTS = 'BULK_UPDATE_ACHIEVEMENTS';
-export const BULK_UPDATE_GOALS = 'BULK_UPDATE_GOALS';
-export const HANDLE_EVENT = 'HANDLE_EVENT';
-export const GET_ACHIEVEMENTS = 'GET_ACHIEVEMENTS';
-export const GET_GOALS = 'GET_GOALS';
-export const GET_OWN_GOALS = 'GET_OWN_GOALS';
-export const GET_USER_ASSESSMENT_OVERVIEWS = 'GET_USER_ASSESSMENT_OVERVIEWS';
-export const GET_USERS = 'GET_USERS';
-export const REMOVE_ACHIEVEMENT = 'REMOVE_ACHIEVEMENT';
-export const REMOVE_GOAL = 'REMOVE_GOAL';
-export const SAVE_ACHIEVEMENTS = 'SAVE_ACHIEVEMENTS';
-export const SAVE_GOALS = 'SAVE_GOALS';
-export const SAVE_USER_ASSESSMENT_OVERVIEWS = 'SAVE_USER_ASSESSMENT_OVERVIEWS';
-export const SAVE_USERS = 'SAVE_USERS';
-export const UPDATE_GOAL_PROGRESS = 'UPDATE_GOAL_PROGRESS';
-export const UPDATE_OWN_GOAL_PROGRESS = 'UPDATE_OWN_GOAL_PROGRESS';
-
 export enum AchievementStatus {
   ACTIVE = 'ACTIVE', // deadline not over and not completed
   COMPLETED = 'COMPLETED', // completed, regardless of deadline
