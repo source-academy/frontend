@@ -84,7 +84,7 @@ class GameStateManager {
         this.checkpointTask.showTask(task);
       });
 
-    this.quizScores = new Map<string, number>(this.getSaveManager().getQuizScores());
+    this.quizScores = new Map(this.getSaveManager().getQuizScores());
 
     this.chapterNewlyCompleted = this.getSaveManager().getChapterNewlyCompleted();
   }
