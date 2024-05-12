@@ -84,7 +84,7 @@ const Grading: React.FC = () => {
     if (refreshQueried) {
       dispatch(increaseRequestCounter());
       dispatch(
-        fetchGradingOverviews(
+        SessionActions.fetchGradingOverviews(
           showAllGroups,
           unpublishedToBackendParams(showAllSubmissions),
           paginationToBackendParams(refreshQueryData.page, pageSize),
