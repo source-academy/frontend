@@ -1,3 +1,5 @@
+import '@convergencelabs/ace-collab-ext/dist/css/ace-collab-ext.css';
+
 import { AceMultiCursorManager } from '@convergencelabs/ace-collab-ext';
 import * as Sentry from '@sentry/browser';
 import sharedbAce from '@sourceacademy/sharedb-ace';
