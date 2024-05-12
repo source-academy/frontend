@@ -1,15 +1,15 @@
 import { defaultSideContent, defaultSideContentManager } from '../application/ApplicationTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
-import { getDynamicTabs, getTabId } from './SideContentHelper';
-import { getLocation } from './SideContentHelper';
-import { CHANGE_SIDE_CONTENT_HEIGHT, SPAWN_SIDE_CONTENT } from './SideContentTypes';
 import {
-  END_ALERT_SIDE_CONTENT,
-  REMOVE_SIDE_CONTENT_ALERT,
-  RESET_SIDE_CONTENT,
-  SideContentManagerState,
-  VISIT_SIDE_CONTENT
-} from './SideContentTypes';
+  changeSideContentHeight,
+  endAlertSideContent,
+  removeSideContentAlert,
+  resetSideContent,
+  spawnSideContent,
+  visitSideContent
+} from './SideContentActions';
+import { getDynamicTabs, getLocation, getTabId } from './SideContentHelper';
+import { SideContentManagerState } from './SideContentTypes';
 
 export function SideContentReducer(
   state: SideContentManagerState = defaultSideContentManager,
@@ -24,7 +24,7 @@ export function SideContentReducer(
     workspaceLocation === 'stories' ? state.stories[storyEnv] : state[workspaceLocation];
 
   switch (action.type) {
-    case CHANGE_SIDE_CONTENT_HEIGHT:
+    case changeSideContentHeight.type:
       return workspaceLocation === 'stories'
         ? {
             ...state,
@@ -43,7 +43,7 @@ export function SideContentReducer(
               height: action.payload.height
             }
           };
-    case END_ALERT_SIDE_CONTENT: {
+    case endAlertSideContent.type: {
       if (action.payload.id !== sideContentState.selectedTab) {
         return workspaceLocation === 'stories'
           ? {
@@ -66,7 +66,7 @@ export function SideContentReducer(
       }
       return state;
     }
-    case REMOVE_SIDE_CONTENT_ALERT:
+    case removeSideContentAlert.type:
       return workspaceLocation === 'stories'
         ? {
             ...state,
@@ -85,7 +85,7 @@ export function SideContentReducer(
               alerts: state[workspaceLocation].alerts.filter(id => id !== action.payload.id)
             }
           };
-    case RESET_SIDE_CONTENT:
+    case resetSideContent.type:
       return workspaceLocation === 'stories'
         ? {
             ...state,
@@ -98,7 +98,7 @@ export function SideContentReducer(
             ...state,
             [workspaceLocation]: defaultSideContent
           };
-    case SPAWN_SIDE_CONTENT: {
+    case spawnSideContent.type: {
       const dynamicTabs = getDynamicTabs(action.payload.debuggerContext);
       const alerts = dynamicTabs.map(getTabId).filter(id => id !== sideContentState.selectedTab);
       return workspaceLocation === 'stories'
@@ -122,7 +122,7 @@ export function SideContentReducer(
             }
           };
     }
-    case VISIT_SIDE_CONTENT:
+    case visitSideContent.type:
       return workspaceLocation === 'stories'
         ? {
             ...state,
