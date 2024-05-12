@@ -3,16 +3,14 @@
 import { SagaIterator } from 'redux-saga';
 import { all, call, fork, put, select } from 'redux-saga/effects';
 import AcademyActions from 'src/features/academy/AcademyActions';
+import DashboardActions from 'src/features/dashboard/DashboardActions';
 import GroundControlActions from 'src/features/groundControl/GroundControlActions';
 import SourcecastActions from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
 import SourceRecorderActions from 'src/features/sourceRecorder/SourceRecorderActions';
 import { postNewStoriesUsers } from 'src/features/stories/storiesComponents/BackendAccess';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
-import {
-  FETCH_GROUP_GRADING_SUMMARY,
-  GradingSummary
-} from '../../features/dashboard/DashboardTypes';
+import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import {
   GradingOverview,
   GradingOverviews,
@@ -1136,7 +1134,7 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
 
 function* oldBackendSagaThree(): SagaIterator {
   yield takeEvery(
-    FETCH_GROUP_GRADING_SUMMARY,
+    DashboardActions.fetchGroupGradingSummary.type,
     function* (action: ReturnType<typeof actions.fetchGroupGradingSummary>) {
       const tokens: Tokens = yield selectTokens();
 

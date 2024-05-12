@@ -6,11 +6,7 @@ import { mockTeamFormationOverviews } from 'src/commons/mocks/TeamFormationMocks
 import { addNewUsersToCourse, createCourse } from 'src/features/academy/AcademyActions';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
-import { updateGroupGradingSummary } from '../../../features/dashboard/DashboardActions';
-import {
-  FETCH_GROUP_GRADING_SUMMARY,
-  UPDATE_GROUP_GRADING_SUMMARY
-} from '../../../features/dashboard/DashboardTypes';
+import DashboardActions from '../../../features/dashboard/DashboardActions';
 import SessionActions from '../../application/actions/SessionActions';
 import {
   GameState,
@@ -1303,9 +1299,9 @@ describe('Test FETCH_GROUP_GRADING_SUMMARY action', () => {
     return expectSaga(BackendSaga)
       .withState({ session: { ...mockTokens, role: Role.Staff } })
       .provide([[call(getGradingSummary, mockTokens), mockGradingSummary]])
-      .put(updateGroupGradingSummary(mockGradingSummary))
+      .put(DashboardActions.updateGroupGradingSummary(mockGradingSummary))
       .hasFinalState({ session: { ...mockTokens, role: Role.Staff } })
-      .dispatch({ type: FETCH_GROUP_GRADING_SUMMARY })
+      .dispatch({ type: DashboardActions.fetchGroupGradingSummary.type })
       .silentRun();
   });
 
@@ -1314,9 +1310,9 @@ describe('Test FETCH_GROUP_GRADING_SUMMARY action', () => {
       .withState({ session: { ...mockTokens, role: Role.Staff } })
       .provide([[call(getGradingSummary, mockTokens), null]])
       .call(getGradingSummary, mockTokens)
-      .not.put.actionType(UPDATE_GROUP_GRADING_SUMMARY)
+      .not.put.actionType(DashboardActions.updateGroupGradingSummary.type)
       .hasFinalState({ session: { ...mockTokens, role: Role.Staff } })
-      .dispatch({ type: FETCH_GROUP_GRADING_SUMMARY })
+      .dispatch({ type: DashboardActions.fetchGroupGradingSummary.type })
       .silentRun();
   });
 });
