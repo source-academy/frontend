@@ -23,18 +23,5 @@ const GroundControlActions = createActions('groundControl', {
   assignEntriesForVoting: (id: number) => ({ id })
 });
 
-// For compatibility with existing code (reducer)
-export const {
-  changeDateAssessment,
-  changeTeamSizeAssessment,
-  deleteAssessment,
-  publishAssessment,
-  publishGradingAll,
-  unpublishGradingAll,
-  uploadAssessment,
-  configureAssessment,
-  assignEntriesForVoting
-} = GroundControlActions;
-
 // For compatibility with existing code (actions helper)
 export default GroundControlActions;
