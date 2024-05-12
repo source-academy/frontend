@@ -13,7 +13,7 @@ import GroundControlActions from '../../features/groundControl/GroundControlActi
 import * as PersistenceActions from '../../features/persistence/PersistenceActions';
 import * as PlaygroundActions from '../../features/playground/PlaygroundActions';
 import RemoteExecutionActions from '../../features/remoteExecution/RemoteExecutionActions';
-import * as SourcecastActions from '../../features/sourceRecorder/sourcecast/SourcecastActions';
+import SourcecastActions from '../../features/sourceRecorder/sourcecast/SourcecastActions';
 import SourceRecorderActions from '../../features/sourceRecorder/SourceRecorderActions';
 import SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
 import StoriesActions from '../../features/stories/StoriesActions';
