@@ -1,7 +1,7 @@
 import * as CommonsActions from '../../commons/application/actions/CommonsActions';
 import InterpreterActions from '../../commons/application/actions/InterpreterActions';
 import SessionActions from '../../commons/application/actions/SessionActions';
-import * as CollabEditingActions from '../../commons/collabEditing/CollabEditingActions';
+import CollabEditingActions from '../../commons/collabEditing/CollabEditingActions';
 import * as FileSystemActions from '../../commons/fileSystem/FileSystemActions';
 import SideContentActions from '../../commons/sideContent/SideContentActions';
 import WorkspaceActions from '../../commons/workspace/WorkspaceActions';
