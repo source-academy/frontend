@@ -38,22 +38,18 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
         usePortal={true}
       >
         <NavLink
-          className="NavigationBar__link bp5-button bp5-minimal bp5-active"
+          className="NavigationBar__link"
           to="/welcome"
         >
-          <Blueprint5.Icon
-            autoLoad={true}
-            icon="symbol-diamond"
-            tagName="span"
-          />
-          <Blueprint5.NavbarHeading
-            style={
-              Object {
-                "paddingBottom": "0px",
-              }
-            }
-          >
-            Source Academy @ NUS
+          <Blueprint5.NavbarHeading>
+            <Blueprint5.Button
+              active={true}
+              className="app-title"
+              icon="symbol-diamond"
+              minimal={true}
+            >
+              Source Academy @ NUS
+            </Blueprint5.Button>
           </Blueprint5.NavbarHeading>
         </NavLink>
       </Blueprint5.Popover>
@@ -251,22 +247,18 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
         usePortal={true}
       >
         <NavLink
-          className="NavigationBar__link bp5-button bp5-minimal bp5-active"
+          className="NavigationBar__link"
           to="/courses/1"
         >
-          <Blueprint5.Icon
-            autoLoad={true}
-            icon="symbol-diamond"
-            tagName="span"
-          />
-          <Blueprint5.NavbarHeading
-            style={
-              Object {
-                "paddingBottom": "0px",
-              }
-            }
-          >
-            CS1101S
+          <Blueprint5.NavbarHeading>
+            <Blueprint5.Button
+              active={true}
+              className="app-title"
+              icon="symbol-diamond"
+              minimal={true}
+            >
+              CS1101S
+            </Blueprint5.Button>
           </Blueprint5.NavbarHeading>
         </NavLink>
       </Blueprint5.Popover>
@@ -410,22 +402,18 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
         usePortal={true}
       >
         <NavLink
-          className="NavigationBar__link bp5-button bp5-minimal bp5-active"
+          className="NavigationBar__link"
           to="/welcome"
         >
-          <Blueprint5.Icon
-            autoLoad={true}
-            icon="symbol-diamond"
-            tagName="span"
-          />
-          <Blueprint5.NavbarHeading
-            style={
-              Object {
-                "paddingBottom": "0px",
-              }
-            }
-          >
-            Source Academy @ NUS
+          <Blueprint5.NavbarHeading>
+            <Blueprint5.Button
+              active={true}
+              className="app-title"
+              icon="symbol-diamond"
+              minimal={true}
+            >
+              Source Academy @ NUS
+            </Blueprint5.Button>
           </Blueprint5.NavbarHeading>
         </NavLink>
       </Blueprint5.Popover>
