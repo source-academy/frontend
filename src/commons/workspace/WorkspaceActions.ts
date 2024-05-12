@@ -8,16 +8,19 @@ import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { Library } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
 import { createActions } from '../redux/utils';
+import { UploadResult } from '../sideContent/content/SideContentUpload';
 import {
   DECREMENT_REQUEST_COUNTER,
   EditorTabState,
   INCREMENT_REQUEST_COUNTER,
   SET_GRADING_HAS_LOADED_BEFORE,
   SubmissionsTableFilters,
+  TOGGLE_USING_UPLOAD,
   UPDATE_ALL_COLS_SORT_STATES,
   UPDATE_GRADING_COLUMN_VISIBILITY,
   UPDATE_LAST_DEBUGGER_RESULT,
   UPDATE_LAST_NON_DET_RESULT,
+  UPLOAD_FILES,
   WorkspaceLocation,
   WorkspaceLocationsWithTools,
   WorkspaceState
@@ -284,6 +287,20 @@ export const updateLastNonDetResult = createAction(
   })
 );
 
+export const toggleUsingUpload = createAction(
+  TOGGLE_USING_UPLOAD,
+  (usingUpload: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
+    payload: { usingUpload, workspaceLocation }
+  })
+);
+
+export const uploadFiles = createAction(
+  UPLOAD_FILES,
+  (files: UploadResult, workspaceLocation: WorkspaceLocation) => ({
+    payload: { files, workspaceLocation }
+  })
+);
+
 export const setGradingHasLoadedBefore = createAction(SET_GRADING_HAS_LOADED_BEFORE, () => ({
   payload: true
 }));
@@ -374,6 +391,8 @@ export default {
   ...newActions,
   updateLastDebuggerResult,
   updateLastNonDetResult,
+  toggleUsingUpload,
+  uploadFiles,
   setGradingHasLoadedBefore,
   increaseRequestCounter,
   decreaseRequestCounter,

@@ -41,7 +41,8 @@ export enum SideContentType {
   testcases = 'testcases',
   toneMatrix = 'tone_matrix',
   htmlDisplay = 'html_display',
-  storiesRun = 'stories_run'
+  storiesRun = 'stories_run',
+  upload = 'upload'
 }
 
 /**

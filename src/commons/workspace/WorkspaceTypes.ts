@@ -7,6 +7,7 @@ import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
+import { UploadResult } from '../sideContent/content/SideContentUpload';
 
 export const DECREMENT_REQUEST_COUNTER = 'DECREMENT_REQUEST_COUNTER';
 export const EVAL_SILENT = 'EVAL_SILENT';
@@ -16,6 +17,8 @@ export const UPDATE_GRADING_COLUMN_VISIBILITY = 'UPDATE_GRADING_COLUMN_VISIBILIT
 export const UPDATE_ALL_COLS_SORT_STATES = 'UPDATE_ALL_COLS_SORT_STATES';
 export const UPDATE_LAST_DEBUGGER_RESULT = 'UPDATE_LAST_DEBUGGER_RESULT';
 export const UPDATE_LAST_NON_DET_RESULT = 'UPDATE_LAST_NON_DET_RESULT';
+export const TOGGLE_USING_UPLOAD = 'TOGGLE_USING_UPLOAD';
+export const UPLOAD_FILES = 'UPLOAD_FILES';
 
 export type WorkspaceLocation = keyof WorkspaceManagerState;
 export type WorkspaceLocationsWithTools = Extract<WorkspaceLocation, 'playground' | 'sicp'>;
@@ -43,6 +46,7 @@ type GradingWorkspaceState = GradingWorkspaceAttr & WorkspaceState;
 type PlaygroundWorkspaceAttr = {
   readonly usingSubst: boolean;
   readonly usingCse: boolean;
+  readonly usingUpload: boolean;
   readonly updateCse: boolean;
   readonly currentStep: number;
   readonly stepsTotal: number;
@@ -106,6 +110,7 @@ export type WorkspaceState = {
   readonly debuggerContext: DebuggerContext;
   readonly lastDebuggerResult: any;
   readonly lastNonDetResult: Result | null;
+  readonly files: UploadResult;
 };
 
 type ReplHistory = {
