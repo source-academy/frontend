@@ -6,10 +6,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
-import {
-  addNewStoriesUsersToCourse,
-  addNewUsersToCourse
-} from 'src/features/academy/AcademyActions';
+import AcademyActions from 'src/features/academy/AcademyActions';
 import StoriesActions from 'src/features/stories/StoriesActions';
 
 import SessionActions from '../../../commons/application/actions/SessionActions';
@@ -186,7 +183,7 @@ const AdminPanel: React.FC = () => {
           panel={
             <AddUserPanel
               handleAddNewUsersToCourse={(users, provider) =>
-                dispatch(addNewUsersToCourse(users, provider))
+                dispatch(AcademyActions.addNewUsersToCourse(users, provider))
               }
             />
           }
@@ -197,7 +194,7 @@ const AdminPanel: React.FC = () => {
           panel={
             <AddStoriesUserPanel
               handleAddNewUsersToCourse={(users, provider) =>
-                dispatch(addNewStoriesUsersToCourse(users, provider))
+                dispatch(AcademyActions.addNewStoriesUsersToCourse(users, provider))
               }
             />
           }
