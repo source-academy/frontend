@@ -1,5 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { cloneDeep } from 'lodash';
+import CommonsActions from 'src/commons/application/actions/CommonsActions';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 import {
   setEditorSessionId,
@@ -13,7 +14,6 @@ import {
   InterpreterOutput,
   RunningOutput
 } from '../../application/ApplicationTypes';
-import { LOG_OUT } from '../../application/types/CommonsTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import { Library, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../../editor/EditorTypes';
@@ -846,7 +846,7 @@ describe('LOG_OUT', () => {
     };
 
     const playgroundAction = {
-      type: LOG_OUT,
+      type: CommonsActions.logOut.type,
       payload: {}
     } as const;
 
