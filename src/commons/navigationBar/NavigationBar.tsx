@@ -15,7 +15,7 @@ import {
 import { IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Location } from 'history';
-import { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Translation } from 'react-i18next';
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { i18nDefaultLangKeys } from 'src/i18n/i18next';
@@ -42,10 +42,52 @@ export type NavbarEntryInfo = {
   hiddenInBreakpoints?: ('xs' | 'sm' | 'md' | 'lg')[]; // hide text in Blueprint breakpoints
 };
 
-type CreateNavlinkFunction = (navbarEntry: NavbarEntryInfo) => React.ReactElement;
+const MobileHamburger: React.FC<{ navlinks: NavbarEntryInfo[] }> = ({ navlinks }) => {
+  // Don't render drawer when there are 0 navlinks in it
+  const [mobileSideMenuOpen, setMobileSideMenuOpen] = useState(false);
+  const shownNavlinks = navlinks.filter(e => !e.disabled);
+  const renderDrawer = shownNavlinks.length > 0;
+
+  const { courseShortName, courseId } = useSession();
+
+  return (
+    <NavbarGroup align={Alignment.LEFT}>
+      {renderDrawer && (
+        <Button
+          onClick={() => setMobileSideMenuOpen(!mobileSideMenuOpen)}
+          icon={IconNames.MENU}
+          large={true}
+          minimal={true}
+        />
+      )}
+      <NavLink
+        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        to={Constants.playgroundOnly ? '/' : courseId == null ? '/welcome' : `/courses/${courseId}`}
+      >
+        <Icon icon={IconNames.SYMBOL_DIAMOND} />
+        <NavbarHeading style={{ paddingBottom: '0px' }}>
+          {courseShortName || Constants.sourceAcademyDeploymentName}
+        </NavbarHeading>
+      </NavLink>
+      {renderDrawer && (
+        <Drawer
+          isOpen={mobileSideMenuOpen}
+          position="left"
+          onClose={() => setMobileSideMenuOpen(false)}
+          title=""
+          className={Classes.DARK}
+          style={{ overflowY: 'auto' }}
+        >
+          {shownNavlinks.map((entry, i) => (
+            <MobileNavLink key={i} {...entry} handleClick={() => setMobileSideMenuOpen(false)} />
+          ))}
+        </Drawer>
+      )}
+    </NavbarGroup>
+  );
+};
 
 const NavigationBar: React.FC = () => {
-  const [mobileSideMenuOpen, setMobileSideMenuOpen] = useState(false);
   const { isMobileBreakpoint } = useResponsive();
   const location = useLocation();
   const {
@@ -65,55 +107,6 @@ const NavigationBar: React.FC = () => {
   );
 
   FocusStyleManager.onlyShowFocusOnTabs();
-
-  const createMobileNavlink: CreateNavlinkFunction = useCallback(
-    navbarEntry => (
-      <MobileNavLink {...navbarEntry} handleClick={() => setMobileSideMenuOpen(false)} />
-    ),
-    [setMobileSideMenuOpen]
-  );
-
-  const wrapWithMobileHamburger = (navlinks: (React.ReactElement | null)[]) => {
-    // Don't render drawer when there are 0 navlinks in it
-    const nonNullNavlinks = navlinks.filter(e => e !== null);
-    const renderDrawer = nonNullNavlinks.length > 0;
-
-    return (
-      <NavbarGroup align={Alignment.LEFT}>
-        {renderDrawer && (
-          <Button
-            onClick={() => setMobileSideMenuOpen(!mobileSideMenuOpen)}
-            icon={IconNames.MENU}
-            large={true}
-            minimal={true}
-          />
-        )}
-        <NavLink
-          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-          to={
-            Constants.playgroundOnly ? '/' : courseId == null ? '/welcome' : `/courses/${courseId}`
-          }
-        >
-          <Icon icon={IconNames.SYMBOL_DIAMOND} />
-          <NavbarHeading style={{ paddingBottom: '0px' }}>
-            {courseShortName || Constants.sourceAcademyDeploymentName}
-          </NavbarHeading>
-        </NavLink>
-        {renderDrawer && (
-          <Drawer
-            isOpen={mobileSideMenuOpen}
-            position="left"
-            onClose={() => setMobileSideMenuOpen(false)}
-            title=""
-            className={Classes.DARK}
-            style={{ overflowY: 'auto' }}
-          >
-            {navlinks}
-          </Drawer>
-        )}
-      </NavbarGroup>
-    );
-  };
 
   const fullAcademyNavbarLeftAssessmentsInfo: NavbarEntryInfo[] = useMemo(
     () =>
@@ -193,10 +186,9 @@ const NavigationBar: React.FC = () => {
     </NavbarGroup>
   );
 
-  const renderPlaygroundOnlyNavbarLeftMobile = () =>
-    wrapWithMobileHamburger(
-      renderNavlinksFromInfo(playgroundOnlyNavbarLeftInfo, createMobileNavlink)
-    );
+  const renderPlaygroundOnlyNavbarLeftMobile = () => (
+    <MobileHamburger navlinks={playgroundOnlyNavbarLeftInfo} />
+  );
 
   const renderFullAcademyNavbarLeftDesktop = () => {
     const entries = assessmentTypesToNavlinkInfo({
@@ -256,10 +248,9 @@ const NavigationBar: React.FC = () => {
     );
   };
 
-  const renderFullAcademyNavbarLeftMobile = () =>
-    wrapWithMobileHamburger(
-      renderNavlinksFromInfo(fullAcademyMobileNavbarLeftInfoWithAssessments, createMobileNavlink)
-    );
+  const renderFullAcademyNavbarLeftMobile = () => (
+    <MobileHamburger navlinks={fullAcademyMobileNavbarLeftInfoWithAssessments} />
+  );
 
   const commonNavbarRight = (
     <NavbarGroup align={Alignment.RIGHT}>
@@ -344,18 +335,6 @@ const playgroundOnlyNavbarLeftInfo: NavbarEntryInfo[] = [
   //   disabled: true
   // }
 ];
-
-const renderNavlinksFromInfo = (
-  navbarEntries: NavbarEntryInfo[],
-  createNavlink: CreateNavlinkFunction
-): (React.ReactElement | null)[] =>
-  navbarEntries.map(entry => {
-    if (entry.disabled) {
-      return null;
-    }
-
-    return createNavlink(entry);
-  });
 
 export const DesktopNavLink: React.FC<NavbarEntryInfo> = props => {
   const responsive = useResponsive();
