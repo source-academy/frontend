@@ -552,7 +552,8 @@ export const defaultStories: StoriesState = {
   storyList: [],
   currentStoryId: null,
   currentStory: null,
-  envs: {}
+  envs: {},
+  storiesUsers: []
 };
 
 export const createDefaultStoriesEnv = (

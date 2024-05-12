@@ -12,10 +12,6 @@ import {
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../ApplicationTypes';
 
-export const UPDATE_TOTAL_XP = 'UPDATE_TOTAL_XP';
-export const UPDATE_ASSESSMENT = 'UPDATE_ASSESSMENT';
-export const UPDATE_COURSE_RESEARCH_AGREEMENT = 'UPDATE_COURSE_RESEARCH_AGREEMENT';
-
 export type SessionState = {
   // Tokens
   readonly accessToken?: string;
