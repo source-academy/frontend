@@ -68,31 +68,7 @@ const NavigationBar: React.FC = () => {
 
   const createMobileNavlink: CreateNavlinkFunction = useCallback(
     navbarEntry => (
-      <NavLink
-        to={navbarEntry.to}
-        className={({ isActive }) =>
-          classNames(Classes.BUTTON, Classes.MINIMAL, Classes.LARGE, { [Classes.ACTIVE]: isActive })
-        }
-        onClick={() => setMobileSideMenuOpen(false)}
-        key={navbarEntry.text}
-      >
-        <Icon icon={navbarEntry.icon} />
-        <div>
-          <Translation ns="commons" keyPrefix="navigationBar">
-            {t =>
-              t(navbarEntry.text as keyof i18nDefaultLangKeys['commons']['navigationBar'], {
-                defaultValue: navbarEntry.text
-              })
-            }
-          </Translation>
-        </div>
-        {navbarEntry.hasNotifications && (
-          <NotificationBadge
-            notificationFilter={filterNotificationsByType(navbarEntry.text)}
-            disableHover={true}
-          />
-        )}
-      </NavLink>
+      <MobileNavLink {...navbarEntry} handleClick={() => setMobileSideMenuOpen(false)} />
     ),
     [setMobileSideMenuOpen]
   );
@@ -211,7 +187,9 @@ const NavigationBar: React.FC = () => {
 
   const renderPlaygroundOnlyNavbarLeftDesktop = () => (
     <NavbarGroup align={Alignment.LEFT}>
-      {renderNavlinksFromInfo(playgroundOnlyNavbarLeftInfo, createDesktopNavlink)}
+      {playgroundOnlyNavbarLeftInfo.map((entry, i) => (
+        <DesktopNavLink key={i} {...entry} />
+      ))}
     </NavbarGroup>
   );
 
@@ -221,17 +199,18 @@ const NavigationBar: React.FC = () => {
     );
 
   const renderFullAcademyNavbarLeftDesktop = () => {
+    const entries = assessmentTypesToNavlinkInfo({
+      assessmentTypes,
+      courseId,
+      isEnrolledInACourse
+    });
+
     const desktopNavbarLeftPopoverContent = (
       <Navbar>
         <NavbarGroup>
-          {renderNavlinksFromInfo(
-            assessmentTypesToNavlinkInfo({
-              assessmentTypes,
-              courseId,
-              isEnrolledInACourse
-            }),
-            createDesktopNavlink
-          )}
+          {entries.map((entry, i) => (
+            <DesktopNavLink key={i} {...entry} />
+          ))}
         </NavbarGroup>
       </Navbar>
     );
@@ -270,7 +249,9 @@ const NavigationBar: React.FC = () => {
             </NavbarHeading>
           </NavLink>
         </Popover>
-        {renderNavlinksFromInfo(fullAcademyNavbarLeftCommonInfo, createDesktopNavlink)}
+        {fullAcademyNavbarLeftCommonInfo.map((entry, i) => (
+          <DesktopNavLink key={i} {...entry} />
+        ))}
       </NavbarGroup>
     );
   };
@@ -364,7 +345,7 @@ const playgroundOnlyNavbarLeftInfo: NavbarEntryInfo[] = [
   // }
 ];
 
-export const renderNavlinksFromInfo = (
+const renderNavlinksFromInfo = (
   navbarEntries: NavbarEntryInfo[],
   createNavlink: CreateNavlinkFunction
 ): (React.ReactElement | null)[] =>
@@ -376,34 +357,66 @@ export const renderNavlinksFromInfo = (
     return createNavlink(entry);
   });
 
-export const createDesktopNavlink: CreateNavlinkFunction = navbarEntry => (
-  <NavLink
-    className={({ isActive }) =>
-      classNames(Classes.BUTTON, Classes.MINIMAL, {
-        [Classes.ACTIVE]: isActive
-      })
-    }
-    to={navbarEntry.to}
-    key={navbarEntry.text}
-    title={navbarEntry.text}
-  >
-    <Icon icon={navbarEntry.icon} />
-    <div className={classNames(navbarEntry.hiddenInBreakpoints?.map(bp => `hidden-${bp}`))}>
-      <Translation ns="commons" keyPrefix="navigationBar">
-        {t =>
-          t(navbarEntry.text as keyof i18nDefaultLangKeys['commons']['navigationBar'], {
-            defaultValue: navbarEntry.text
-          })
-        }
-      </Translation>
-    </div>
-    {navbarEntry.hasNotifications && (
-      <NotificationBadge
-        notificationFilter={filterNotificationsByType(navbarEntry.text)}
-        disableHover={true}
-      />
-    )}
-  </NavLink>
-);
+export const DesktopNavLink: React.FC<NavbarEntryInfo> = props => {
+  const responsive = useResponsive();
+  const shouldHide = props.hiddenInBreakpoints?.some(bp => responsive[bp]);
+  return props.disabled ? null : (
+    <NavLink
+      className={({ isActive }) => classNames(isActive && Classes.ACTIVE)}
+      to={props.to}
+      key={props.text}
+      title={props.text}
+    >
+      <Button minimal icon={props.icon}>
+        {!shouldHide && (
+          <Translation ns="commons" keyPrefix="navigationBar">
+            {t =>
+              t(props.text as keyof i18nDefaultLangKeys['commons']['navigationBar'], {
+                defaultValue: props.text
+              })
+            }
+          </Translation>
+        )}
+      </Button>
+      {props.hasNotifications && (
+        <NotificationBadge
+          notificationFilter={filterNotificationsByType(props.text)}
+          disableHover={true}
+        />
+      )}
+    </NavLink>
+  );
+};
+
+const MobileNavLink: React.FC<
+  NavbarEntryInfo & { handleClick?: React.MouseEventHandler<HTMLAnchorElement> }
+> = props =>
+  props.disabled ? null : (
+    <NavLink
+      to={props.to}
+      className={({ isActive }) =>
+        classNames(Classes.BUTTON, Classes.MINIMAL, Classes.LARGE, { [Classes.ACTIVE]: isActive })
+      }
+      onClick={props.handleClick}
+      key={props.text}
+    >
+      <Icon icon={props.icon} />
+      <div>
+        <Translation ns="commons" keyPrefix="navigationBar">
+          {t =>
+            t(props.text as keyof i18nDefaultLangKeys['commons']['navigationBar'], {
+              defaultValue: props.text
+            })
+          }
+        </Translation>
+      </div>
+      {props.hasNotifications && (
+        <NotificationBadge
+          notificationFilter={filterNotificationsByType(props.text)}
+          disableHover={true}
+        />
+      )}
+    </NavLink>
+  );
 
 export default NavigationBar;
