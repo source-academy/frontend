@@ -15,13 +15,13 @@ export function computeEndpointUrl(providerId: string): string | undefined {
     const epUrl = new URL(ep.endpoint);
     switch (ep.type) {
       case AuthProviderType.OAUTH2:
-        epUrl.searchParams.set('redirect_uri', computeRedirectUri(providerId)!);
+        epUrl.searchParams.set('redirect_uri', computeFrontendRedirectUri(providerId)!);
         break;
       case AuthProviderType.CAS:
-        epUrl.searchParams.set('service', computeRedirectUri(providerId)!);
+        epUrl.searchParams.set('service', computeFrontendRedirectUri(providerId)!);
         break;
       case AuthProviderType.SAML_SSO:
-        epUrl.searchParams.set('target_url', computeRedirectUri(providerId)!);
+        epUrl.searchParams.set('target_url', computeSamlRedirectUri(providerId)!);
         break;
     }
     return epUrl.toString();
@@ -31,7 +31,7 @@ export function computeEndpointUrl(providerId: string): string | undefined {
   }
 }
 
-export function computeRedirectUri(providerId: string): string | undefined {
+export function computeFrontendRedirectUri(providerId: string): string | undefined {
   const ep = Constants.authProviders.get(providerId);
   if (!ep) {
     return undefined;
@@ -40,6 +40,17 @@ export function computeRedirectUri(providerId: string): string | undefined {
   const callback = `${window.location.protocol}//${window.location.hostname}${port}/login/callback${
     ep.isDefault ? '' : '?provider=' + encodeURIComponent(providerId)
   }`;
+  return callback;
+}
+
+function computeSamlRedirectUri(providerId: string): string | undefined {
+  const ep = Constants.authProviders.get(providerId);
+  if (!ep) {
+    return undefined;
+  }
+  const callback = `${Constants.backendUrl}/v2/auth/saml_redirect?provider=${encodeURIComponent(
+    providerId
+  )}`;
   return callback;
 }
 

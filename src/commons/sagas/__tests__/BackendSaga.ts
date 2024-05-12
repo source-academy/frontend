@@ -42,7 +42,7 @@ import {
 import { mockGradingSummary } from '../../mocks/GradingMocks';
 import { mockNotifications, mockStudents } from '../../mocks/UserMocks';
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
-import { AuthProviderType, computeRedirectUri } from '../../utils/AuthHelper';
+import { AuthProviderType, computeFrontendRedirectUri } from '../../utils/AuthHelper';
 import Constants from '../../utils/Constants';
 import {
   showSuccessMessage,
@@ -273,7 +273,7 @@ describe('Test FETCH_AUTH action', () => {
     isDefault: true,
     type: AuthProviderType.OAUTH2
   });
-  const redirectUrl = computeRedirectUri(providerId);
+  const redirectUrl = computeFrontendRedirectUri(providerId);
 
   const user = mockUser;
   const courseConfiguration = mockCourseConfiguration1;
