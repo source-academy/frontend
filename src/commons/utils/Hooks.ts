@@ -1,10 +1,10 @@
+import { useMediaQuery } from '@mantine/hooks';
 import React, { RefObject } from 'react';
 import {
   TypedUseSelectorHook,
   // eslint-disable-next-line no-restricted-imports
   useSelector
 } from 'react-redux';
-import { useMediaQuery } from 'react-responsive';
 
 import { OverallState } from '../application/ApplicationTypes';
 import { Tokens } from '../application/types/SessionTypes';
@@ -118,8 +118,11 @@ export const useDimensions = (ref: RefObject<HTMLElement>): [width: number, heig
  * or desktop as defined by the constants file.
  */
 export const useResponsive = () => {
-  const isMobileBreakpoint = useMediaQuery({ maxWidth: Constants.mobileBreakpoint });
-  return { isMobileBreakpoint };
+  const isMobileBreakpoint = useMediaQuery(`(max-width: ${Constants.mobileBreakpoint}px)`);
+  return {
+    isMobileBreakpoint: isMobileBreakpoint,
+    isDesktopBreakpoint: isMobileBreakpoint === undefined ? undefined : !isMobileBreakpoint
+  };
 };
 
 /**
