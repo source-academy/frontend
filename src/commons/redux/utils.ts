@@ -7,6 +7,7 @@ import {
 import * as Sentry from '@sentry/browser';
 import { SagaIterator } from 'redux-saga';
 import { StrictEffect, takeEvery } from 'redux-saga/effects';
+import type { ErrorPayload } from 'vite';
 
 /**
  * Creates actions, given a base name and base actions
@@ -82,18 +83,17 @@ export function saferTakeEvery<
     }
   }
 
-  console.log(actionPattern);
   return takeEvery(actionPattern.type, wrapper);
 }
 
 function handleUncaughtError(error: any) {
   if (process.env.NODE_ENV === 'development') {
-    // react-error-overlay is a "special" package that's automatically included
-    // in development mode by CRA
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    import('react-error-overlay').then(reo => reo.reportRuntimeError(error));
+    const showErrorOverlay = (err: Partial<ErrorPayload['err']>) => {
+      const ErrorOverlay = customElements.get('vite-error-overlay');
+      if (ErrorOverlay == null) return;
+      document.body.appendChild(new ErrorOverlay(err));
+    };
+    showErrorOverlay(error);
   }
   Sentry.captureException(error);
   console.error(error);
