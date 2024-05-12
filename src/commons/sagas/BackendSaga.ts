@@ -4,6 +4,7 @@ import { SagaIterator } from 'redux-saga';
 import { all, call, fork, put, select } from 'redux-saga/effects';
 import AcademyActions from 'src/features/academy/AcademyActions';
 import GroundControlActions from 'src/features/groundControl/GroundControlActions';
+import { saveSourcecastData } from 'src/features/sourceRecorder/SourceRecorderActions';
 import { postNewStoriesUsers } from 'src/features/stories/storiesComponents/BackendAccess';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
@@ -18,10 +19,7 @@ import {
   GradingQuestion
 } from '../../features/grading/GradingTypes';
 import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
-import {
-  SAVE_SOURCECAST_DATA,
-  SourcecastData
-} from '../../features/sourceRecorder/SourceRecorderTypes';
+import { SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import SourcereelActions, {
   deleteSourcecastEntry as deleteSourcecastEntryAction
 } from '../../features/sourceRecorder/sourcereel/SourcereelActions';
@@ -784,7 +782,7 @@ function* oldBackendSagaOne(): SagaIterator {
   );
 
   yield takeEvery(
-    SAVE_SOURCECAST_DATA,
+    saveSourcecastData.type,
     function* (action: ReturnType<typeof actions.saveSourcecastData>): any {
       const [role, courseId]: [Role, number | undefined] = yield select((state: OverallState) => [
         state.session.role!,
