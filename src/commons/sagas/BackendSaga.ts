@@ -747,7 +747,7 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
 
 function* oldBackendSagaOne(): SagaIterator {
   yield takeEvery(
-    deleteSourcecastEntryAction,
+    deleteSourcecastEntryAction.type,
     function* (action: ReturnType<typeof actions.deleteSourcecastEntry>): any {
       const role: Role = yield select((state: OverallState) => state.session.role!);
       if (role === Role.Student) {
