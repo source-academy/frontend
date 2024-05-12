@@ -186,40 +186,6 @@ export const deleteStoriesUserUserGroups = createAction(
   (userId: number) => ({ payload: { userId } })
 );
 
-// For compatibility with existing code (reducer)
-export const {
-  updateGradingOverviews,
-  fetchTeamFormationOverview,
-  createTeam,
-  updateTeam,
-  deleteTeam,
-  bulkUploadTeam,
-  updateTeamFormationOverviews,
-  updateTeamFormationOverview,
-  updateStudents,
-  updateGrading,
-  unsubmitSubmission,
-  publishGrading,
-  unpublishGrading,
-  fetchNotifications,
-  acknowledgeNotifications,
-  updateNotifications,
-  updateLatestViewedCourse,
-  updateCourseConfig,
-  fetchAssessmentConfigs,
-  updateAssessmentConfigs,
-  updateNotificationConfigs,
-  updateNotificationPreferences,
-  deleteAssessmentConfig,
-  fetchAdminPanelCourseRegistrations,
-  fetchConfigurableNotificationConfigs,
-  fetchNotificationConfigs,
-  updateTimeOptions,
-  deleteTimeOptions,
-  updateUserRole,
-  deleteUserCourseRegistration
-} = newActions2;
-
 // For compatibility with existing code (actions helper)
 export default {
   ...newActions,
