@@ -1,10 +1,10 @@
 import { defaultPlayground } from '../../../commons/application/ApplicationTypes';
+import PlaygroundActions from '../PlaygroundActions';
 import { PlaygroundReducer } from '../PlaygroundReducer';
-import { CHANGE_QUERY_STRING } from '../PlaygroundTypes';
 
 test('CHANGE_QUERY_STRING sets queryString correctly ', () => {
   const action = {
-    type: CHANGE_QUERY_STRING,
+    type: PlaygroundActions.changeQueryString.type,
     payload: 'hello world'
   } as const;
   expect(PlaygroundReducer(defaultPlayground, action)).toEqual({
