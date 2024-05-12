@@ -413,10 +413,10 @@ const newBackendSagaOne = combineSagaHandlers(SessionActions, {
       sortDirection: ''
     };
 
-    Object.keys(allColsSortStates.currentState).forEach(key => {
-      if (allColsSortStates.sortBy === key && key != '') {
-        if (allColsSortStates.currentState[key] !== SortStates.NONE) {
-          sortedBy.sortDirection = allColsSortStates.currentState[key];
+    Object.entries(allColsSortStates.currentState).forEach(([key, value]) => {
+      if (allColsSortStates.sortBy === key && key !== '') {
+        if (value !== SortStates.NONE) {
+          sortedBy.sortDirection = value;
         } else {
           sortedBy.sortBy = '';
           sortedBy.sortDirection = '';
