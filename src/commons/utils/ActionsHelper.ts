@@ -1,4 +1,4 @@
-import * as CommonsActions from '../../commons/application/actions/CommonsActions';
+import CommonsActions from '../../commons/application/actions/CommonsActions';
 import InterpreterActions from '../../commons/application/actions/InterpreterActions';
 import SessionActions from '../../commons/application/actions/SessionActions';
 import CollabEditingActions from '../../commons/collabEditing/CollabEditingActions';
