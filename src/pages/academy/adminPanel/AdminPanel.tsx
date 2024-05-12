@@ -92,7 +92,7 @@ const AdminPanel: React.FC = () => {
     userId: stories.userId,
     storiesUsers: stories.storiesUsers,
     handleUpdateStoriesUserRole: (id: number, role: StoriesRole) =>
-      dispatch(SessionActions.updateStoriesUserRole(id, role as unknown as StoriesRole)),
+      dispatch(SessionActions.updateStoriesUserRole(id, role)),
     handleDeleteStoriesUserFromUserGroup: (id: number) =>
       dispatch(SessionActions.deleteStoriesUserUserGroups(id))
   };
