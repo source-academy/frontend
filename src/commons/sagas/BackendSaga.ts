@@ -3,6 +3,7 @@
 import { SagaIterator } from 'redux-saga';
 import { all, call, fork, put, select } from 'redux-saga/effects';
 import AcademyActions from 'src/features/academy/AcademyActions';
+import GroundControlActions from 'src/features/groundControl/GroundControlActions';
 import { postNewStoriesUsers } from 'src/features/stories/storiesComponents/BackendAccess';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
@@ -16,17 +17,6 @@ import {
   GradingQuery,
   GradingQuestion
 } from '../../features/grading/GradingTypes';
-import {
-  ASSIGN_ENTRIES_FOR_VOTING,
-  CHANGE_DATE_ASSESSMENT,
-  CHANGE_TEAM_SIZE_ASSESSMENT,
-  CONFIGURE_ASSESSMENT,
-  DELETE_ASSESSMENT,
-  PUBLISH_ASSESSMENT,
-  PUBLISH_GRADING_ALL,
-  UNPUBLISH_GRADING_ALL,
-  UPLOAD_ASSESSMENT
-} from '../../features/groundControl/GroundControlTypes';
 import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import {
   SAVE_SOURCECAST_DATA,
@@ -1176,7 +1166,7 @@ function* oldBackendSagaThree(): SagaIterator {
   );
 
   yield takeEvery(
-    CHANGE_DATE_ASSESSMENT,
+    GroundControlActions.changeDateAssessment.type,
     function* (action: ReturnType<typeof actions.changeDateAssessment>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload.id;
@@ -1194,7 +1184,7 @@ function* oldBackendSagaThree(): SagaIterator {
   );
 
   yield takeEvery(
-    CHANGE_TEAM_SIZE_ASSESSMENT,
+    GroundControlActions.changeTeamSizeAssessment.type,
     function* (action: ReturnType<typeof actions.changeTeamSizeAssessment>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload.id;
@@ -1211,7 +1201,7 @@ function* oldBackendSagaThree(): SagaIterator {
   );
 
   yield takeEvery(
-    DELETE_ASSESSMENT,
+    GroundControlActions.deleteAssessment.type,
     function* (action: ReturnType<typeof actions.deleteAssessment>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload;
@@ -1227,7 +1217,7 @@ function* oldBackendSagaThree(): SagaIterator {
   );
 
   yield takeEvery(
-    PUBLISH_ASSESSMENT,
+    GroundControlActions.publishAssessment.type,
     function* (action: ReturnType<typeof actions.publishAssessment>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload.id;
@@ -1253,7 +1243,7 @@ function* oldBackendSagaThree(): SagaIterator {
   );
 
   yield takeEvery(
-    UPLOAD_ASSESSMENT,
+    GroundControlActions.uploadAssessment.type,
     function* (action: ReturnType<typeof actions.uploadAssessment>): any {
       const tokens: Tokens = yield selectTokens();
       const { file, forceUpdate, assessmentConfigId } = action.payload;
@@ -1280,7 +1270,7 @@ function* oldBackendSagaThree(): SagaIterator {
   );
 
   yield takeEvery(
-    CONFIGURE_ASSESSMENT,
+    GroundControlActions.configureAssessment.type,
     function* (action: ReturnType<typeof actions.configureAssessment>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload.id;
@@ -1302,7 +1292,7 @@ function* oldBackendSagaThree(): SagaIterator {
   );
 
   yield takeEvery(
-    ASSIGN_ENTRIES_FOR_VOTING,
+    GroundControlActions.assignEntriesForVoting.type,
     function* (action: ReturnType<typeof actions.assignEntriesForVoting>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload.id;
@@ -1324,7 +1314,7 @@ function* oldBackendSagaThree(): SagaIterator {
   );
 
   yield takeEvery(
-    PUBLISH_GRADING_ALL,
+    GroundControlActions.publishGradingAll.type,
     function* (action: ReturnType<typeof actions.publishGradingAll>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload;
@@ -1340,7 +1330,7 @@ function* oldBackendSagaThree(): SagaIterator {
   );
 
   yield takeEvery(
-    UNPUBLISH_GRADING_ALL,
+    GroundControlActions.unpublishGradingAll.type,
     function* (action: ReturnType<typeof actions.unpublishGradingAll>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload;
