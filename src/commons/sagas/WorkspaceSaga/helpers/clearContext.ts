@@ -2,7 +2,7 @@ import { Context } from 'js-slang';
 import { defineSymbol } from 'js-slang/dist/createContext';
 import { Variant } from 'js-slang/dist/types';
 import { put, select, take } from 'redux-saga/effects';
-import { endClearContext } from 'src/commons/workspace/WorkspaceActions';
+import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 
 import { OverallState } from '../../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../../application/types/ExternalTypes';
@@ -37,7 +37,7 @@ export function* clearContext(workspaceLocation: WorkspaceLocation, entrypointCo
   // Clear the context, with the same chapter and externalSymbols as before.
   yield put(actions.beginClearContext(workspaceLocation, library, false));
   // Wait for the clearing to be done.
-  yield take(endClearContext.type);
+  yield take(WorkspaceActions.endClearContext.type);
 
   const context: Context = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].context

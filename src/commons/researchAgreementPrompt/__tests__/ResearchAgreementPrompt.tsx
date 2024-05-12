@@ -1,9 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
-import { Provider } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { updateCourseResearchAgreement } from 'src/commons/application/actions/SessionActions';
+import { Provider, useDispatch } from 'react-redux';
+import SessionActions from 'src/commons/application/actions/SessionActions';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 
 import ResearchAgreementPrompt from '../ResearchAgreementPrompt';
@@ -41,7 +40,7 @@ describe('ResearchAgreementPrompt', () => {
     await user.click(button);
 
     expect(dispatchMock).toBeCalledTimes(1);
-    expect(dispatchMock).toBeCalledWith(updateCourseResearchAgreement(false));
+    expect(dispatchMock).toBeCalledWith(SessionActions.updateCourseResearchAgreement(false));
   });
 
   test('"I consent!" dispatches correctly', async () => {
@@ -50,6 +49,6 @@ describe('ResearchAgreementPrompt', () => {
     await user.click(button);
 
     expect(dispatchMock).toBeCalledTimes(1);
-    expect(dispatchMock).toBeCalledWith(updateCourseResearchAgreement(true));
+    expect(dispatchMock).toBeCalledWith(SessionActions.updateCourseResearchAgreement(true));
   });
 });

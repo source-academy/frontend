@@ -5,16 +5,8 @@ import { SourceActionType } from 'src/commons/utils/ActionsHelper';
 import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../../../commons/application/types/ExternalTypes';
 import { CodeDelta, Input, PlaybackData, RecordingStatus } from '../../SourceRecorderTypes';
+import SourcereelActions from '../SourcereelActions';
 import { SourcereelReducer } from '../SourcereelReducer';
-import {
-  RECORD_INIT,
-  RECORD_INPUT,
-  TIMER_PAUSE,
-  TIMER_RESET,
-  TIMER_RESUME,
-  TIMER_START,
-  TIMER_STOP
-} from '../SourcereelTypes';
 
 const generateAction = <T, S extends SourceActionType['type']>(type: S, payload: T) =>
   createAction(type, (payload: T) => ({ payload }))(payload);
@@ -26,7 +18,10 @@ describe('RECORD_INIT', () => {
       chapter: Chapter.SOURCE_1,
       externalLibrary: ExternalLibraryName.NONE
     };
-    const action = generateAction(RECORD_INIT, { initData, workspaceLocation: undefined! });
+    const action = generateAction(SourcereelActions.recordInit.type, {
+      initData,
+      workspaceLocation: undefined!
+    });
     const result = SourcereelReducer(defaultWorkspaceManager.sourcereel, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcereel,
@@ -59,7 +54,10 @@ describe('RECORD_INPUT', () => {
       data: delta
     };
 
-    const action = generateAction(RECORD_INPUT, { input, workspaceLocation: undefined! });
+    const action = generateAction(SourcereelActions.recordInput.type, {
+      input,
+      workspaceLocation: undefined!
+    });
     const result = SourcereelReducer(defaultWorkspaceManager.sourcereel, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcereel,
@@ -74,7 +72,10 @@ describe('RECORD_INPUT', () => {
 describe('TIMER_PAUSE', () => {
   test('pauses timer correctly', () => {
     const timeNow = 123456;
-    const action = generateAction(TIMER_PAUSE, { timeNow, workspaceLocation: undefined! });
+    const action = generateAction(SourcereelActions.timerPause.type, {
+      timeNow,
+      workspaceLocation: undefined!
+    });
     const result = SourcereelReducer(defaultWorkspaceManager.sourcereel, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcereel,
@@ -89,7 +90,9 @@ describe('TIMER_PAUSE', () => {
 
 describe('TIMER_RESET', () => {
   test('pauses timer correctly', () => {
-    const action = generateAction(TIMER_RESET, { workspaceLocation: undefined! });
+    const action = generateAction(SourcereelActions.timerReset.type, {
+      workspaceLocation: undefined!
+    });
     const result = SourcereelReducer(defaultWorkspaceManager.sourcereel, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcereel,
@@ -103,7 +106,7 @@ describe('TIMER_RESET', () => {
 describe('TIMER_RESUME', () => {
   test('pauses timer correctly', () => {
     const timeNow = 123456;
-    const action = generateAction(TIMER_RESUME, {
+    const action = generateAction(SourcereelActions.timerResume.type, {
       timeNow,
       workspaceLocation: undefined!,
       timeBefore: 0
@@ -120,7 +123,10 @@ describe('TIMER_RESUME', () => {
 describe('TIMER_START', () => {
   test('pauses timer correctly', () => {
     const timeNow = 123456;
-    const action = generateAction(TIMER_START, { timeNow, workspaceLocation: undefined! });
+    const action = generateAction(SourcereelActions.timerStart.type, {
+      timeNow,
+      workspaceLocation: undefined!
+    });
     const result = SourcereelReducer(defaultWorkspaceManager.sourcereel, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcereel,
@@ -134,7 +140,10 @@ describe('TIMER_START', () => {
 describe('TIMER_STOP', () => {
   test('pauses timer correctly', () => {
     const timeNow = 123456;
-    const action = generateAction(TIMER_STOP, { timeNow, workspaceLocation: undefined! });
+    const action = generateAction(SourcereelActions.timerStop.type, {
+      timeNow,
+      workspaceLocation: undefined!
+    });
     const result = SourcereelReducer(defaultWorkspaceManager.sourcereel, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcereel,
