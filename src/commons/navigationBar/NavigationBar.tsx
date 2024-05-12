@@ -394,14 +394,11 @@ const MobileNavLink: React.FC<
   props.disabled ? null : (
     <NavLink
       to={props.to}
-      className={({ isActive }) =>
-        classNames(Classes.BUTTON, Classes.MINIMAL, Classes.LARGE, { [Classes.ACTIVE]: isActive })
-      }
+      className={({ isActive }) => classNames(isActive && Classes.ACTIVE)}
       onClick={props.handleClick}
       key={props.text}
     >
-      <Icon icon={props.icon} />
-      <div>
+      <Button minimal large icon={props.icon}>
         <Translation ns="commons" keyPrefix="navigationBar">
           {t =>
             t(props.text as keyof i18nDefaultLangKeys['commons']['navigationBar'], {
@@ -409,7 +406,7 @@ const MobileNavLink: React.FC<
             })
           }
         </Translation>
-      </div>
+      </Button>
       {props.hasNotifications && (
         <NotificationBadge
           notificationFilter={filterNotificationsByType(props.text)}
