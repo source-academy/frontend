@@ -69,6 +69,10 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
     }
   };
 
+  const isGraded = progress === ProgressStatuses.graded;
+  const isSubmitted = progress === ProgressStatuses.submitted;
+  const isPublished = progress === ProgressStatuses.published;
+
   return (
     <GradingFlex
       justifyContent="flex-start"
@@ -85,7 +89,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
         </Link>
       )}
 
-      {(progress === ProgressStatuses.graded || progress === ProgressStatuses.submitted) && (
+      {(isGraded || isSubmitted) && (
         <Button
           className="grading-action-icons"
           minimal
@@ -98,7 +102,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
         </Button>
       )}
 
-      {(progress === ProgressStatuses.graded || progress === ProgressStatuses.submitted) && (
+      {(isGraded || isSubmitted) && (
         <Button
           className="grading-action-icons"
           minimal
@@ -111,7 +115,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
         </Button>
       )}
 
-      {progress === ProgressStatuses.graded && (
+      {isGraded && (
         <Button className="grading-action-icons" minimal onClick={handlePublishClick}>
           <Tooltip content="Publish">
             <Icon icon={IconNames.SEND_TO_GRAPH} />
@@ -119,7 +123,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
         </Button>
       )}
 
-      {progress === ProgressStatuses.published && (
+      {isPublished && (
         <Button className="grading-action-icons" minimal onClick={handleUnpublishClick}>
           <Tooltip content="Unpublish">
             <Icon icon={IconNames.EXCLUDE_ROW} />
