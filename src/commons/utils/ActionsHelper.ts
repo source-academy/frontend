@@ -15,7 +15,7 @@ import * as PlaygroundActions from '../../features/playground/PlaygroundActions'
 import * as RemoteExecutionActions from '../../features/remoteExecution/RemoteExecutionActions';
 import * as SourcecastActions from '../../features/sourceRecorder/sourcecast/SourcecastActions';
 import * as SourceRecorderActions from '../../features/sourceRecorder/SourceRecorderActions';
-import * as SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
+import SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
 import StoriesActions from '../../features/stories/StoriesActions';
 import { ActionType } from './TypeHelper';
 
