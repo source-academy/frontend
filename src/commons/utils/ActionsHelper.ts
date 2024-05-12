@@ -9,7 +9,7 @@ import AcademyActions from '../../features/academy/AcademyActions';
 import AchievementActions from '../../features/achievement/AchievementActions';
 import * as DashboardActions from '../../features/dashboard/DashboardActions';
 import GitHubActions from '../../features/github/GitHubActions';
-import * as GroundControlActions from '../../features/groundControl/GroundControlActions';
+import GroundControlActions from '../../features/groundControl/GroundControlActions';
 import * as PersistenceActions from '../../features/persistence/PersistenceActions';
 import * as PlaygroundActions from '../../features/playground/PlaygroundActions';
 import * as RemoteExecutionActions from '../../features/remoteExecution/RemoteExecutionActions';
