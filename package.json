@@ -18,6 +18,7 @@
     "format:tsx": "prettier --list-different \"src/**/*.{js,jsx,ts,tsx}\"",
     "format:scss": "prettier --list-different --parser scss \"src/**/*.scss\"",
     "format:ci": "yarn run format:tsx && yarn run format:scss",
+    "dev": "vite",
     "start": "cross-env DISABLE_ESLINT_PLUGIN=true BROWSER=none PORT=8000 craco start",
     "test": "cross-env TZ=UTF-8 craco test",
     "test-coveralls": "./scripts/test-coveralls.sh",

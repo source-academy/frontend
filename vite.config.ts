@@ -34,6 +34,10 @@ export default defineConfig(({ mode }) => {
           }
         }
       }
+    },
+    server: {
+      // TODO: Change to 8000 after CRA migration is complete
+      port: 8001
     }
   };
 });
