@@ -19,8 +19,8 @@ import {
   PlaybackStatus,
   SourcecastData
 } from '../../SourceRecorderTypes';
+import { updateSourcecastIndex } from '../SourcecastActions';
 import { SourcecastReducer } from '../SourcecastReducer';
-import { UPDATE_SOURCECAST_INDEX } from '../SourcecastTypes';
 
 const generateAction = <T, S extends SourceActionType['type']>(type: S, payload: T) =>
   createAction(type, (payload: T) => ({ payload }))(payload);
@@ -243,7 +243,7 @@ describe('UPDATE_SOURCECAST_INDEX', () => {
       }
     ];
 
-    const action = generateAction(UPDATE_SOURCECAST_INDEX, {
+    const action = generateAction(updateSourcecastIndex.type, {
       index: sourcecastData,
       workspaceLocation: undefined!
     });
