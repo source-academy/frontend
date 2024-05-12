@@ -48,7 +48,6 @@ import {
   NotificationConfiguration,
   TimeOption,
   Tokens,
-  UPDATE_COURSE_RESEARCH_AGREEMENT,
   UpdateCourseConfiguration,
   User
 } from '../application/types/SessionTypes';
@@ -1141,7 +1140,7 @@ function* oldBackendSagaTwo(): SagaIterator {
   );
 
   yield takeEvery(
-    UPDATE_COURSE_RESEARCH_AGREEMENT,
+    SessionActions.updateCourseResearchAgreement.type,
     function* (action: ReturnType<typeof actions.updateCourseResearchAgreement>): any {
       const tokens: Tokens = yield selectTokens();
       const { agreedToResearch } = action.payload;
