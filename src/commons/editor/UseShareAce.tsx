@@ -1,3 +1,4 @@
+import { AceMultiCursorManager } from '@convergencelabs/ace-collab-ext';
 import * as Sentry from '@sentry/browser';
 import sharedbAce from '@sourceacademy/sharedb-ace';
 import React from 'react';
@@ -5,7 +6,6 @@ import React from 'react';
 import { getDocInfoFromSessionId, getSessionUrl } from '../collabEditing/CollabEditingHelper';
 import { useTypedSelector } from '../utils/Hooks';
 import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
-import AceMultiCursorManager from './AceMultiCursorManager';
 import { EditorHook } from './Editor';
 
 // EditorHook structure:
