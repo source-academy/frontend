@@ -1,35 +1,36 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ReactNode } from 'react';
+import React from 'react';
 import { ProgressStatus, ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 import { ColumnFilter } from 'src/features/grading/GradingTypes';
 
 declare const sizeValues: readonly ['xs', 'sm', 'md', 'lg', 'xl'];
 declare type Size = (typeof sizeValues)[number];
 
-interface BadgeProps {
+type BadgeProps = {
   text: string;
-  color?: string[];
+  /** First color is bg, second is text. Refer to {typeof AVAILABLE_COLORS} */
+  color?: readonly [string, string];
   size?: Size;
-  icon?: () => ReactNode;
-}
+  icon?: () => React.ReactNode;
+};
 
 export const Badge: React.FC<BadgeProps> = (props: BadgeProps) => {
   return (
     <div
-      className={'grading-badge grading-badge-' + (props.size ? props.size : 'sm')}
+      className={'grading-badge grading-badge-' + (props.size ?? 'sm')}
       style={{
-        color: props.color ? props.color[1] : '#000000',
+        color: props.color?.[1] ?? '#000000',
         backgroundColor: props.color ? props.color[0] + '40' : ''
       }}
     >
-      {props.icon ? props.icon() : <></>}
+      {props.icon?.()}
       <span className="grading-badge-text">{props.text}</span>
     </div>
   );
 };
 
-// First colour is bg, second is text (text is more saturated/darker). Colours are referenced from tailwind css.
+// First color is bg, second is text (text is more saturated/darker). Colors are referenced from tailwind css.
 const AVAILABLE_COLORS = {
   indigo: ['#818cf8', '#4f46e5'],
   emerald: ['#6ee7b7', '#059669'],
@@ -40,7 +41,7 @@ const AVAILABLE_COLORS = {
   gray: ['#9ca3af', '#374151'],
   purple: ['#c084fc', '#7e22ce'],
   blue: ['#93c5fd', '#2563eb']
-};
+} as const;
 
 const BADGE_COLORS = Object.freeze({
   // assessment types
@@ -80,7 +81,7 @@ const BADGE_COLORS_LEGACY = Object.freeze({
   [ProgressStatuses.published]: 'blue'
 });
 
-export function getBadgeColorFromLabel(label: string) {
+function getBadgeColorFromLabel(label: string) {
   const maybeKey = label.toLowerCase() as keyof typeof BADGE_COLORS;
   return BADGE_COLORS[maybeKey] || AVAILABLE_COLORS.gray;
 }
