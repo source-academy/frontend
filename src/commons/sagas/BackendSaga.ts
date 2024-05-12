@@ -4,6 +4,7 @@ import { SagaIterator } from 'redux-saga';
 import { all, call, fork, put, select } from 'redux-saga/effects';
 import AcademyActions from 'src/features/academy/AcademyActions';
 import GroundControlActions from 'src/features/groundControl/GroundControlActions';
+import { fetchSourcecastIndex } from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
 import { saveSourcecastData } from 'src/features/sourceRecorder/SourceRecorderActions';
 import { postNewStoriesUsers } from 'src/features/stories/storiesComponents/BackendAccess';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
@@ -18,7 +19,6 @@ import {
   GradingQuery,
   GradingQuestion
 } from '../../features/grading/GradingTypes';
-import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import SourcereelActions, {
   deleteSourcecastEntry as deleteSourcecastEntryAction
@@ -770,7 +770,7 @@ function* oldBackendSagaOne(): SagaIterator {
   );
 
   yield takeEvery(
-    FETCH_SOURCECAST_INDEX,
+    fetchSourcecastIndex.type,
     function* (action: ReturnType<typeof actions.fetchSourcecastIndex>) {
       const tokens: Tokens = yield selectTokens();
 
