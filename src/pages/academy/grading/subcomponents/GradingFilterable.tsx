@@ -1,10 +1,12 @@
-type FilterableProps = {
+import React from 'react';
+
+type Props = {
   value: string;
   children?: React.ReactNode;
   filterMode: boolean;
 };
 
-const GradingFilterable: React.FC<FilterableProps> = ({ value, children, filterMode }) => {
+const GradingFilterable: React.FC<Props> = ({ value, children, filterMode }) => {
   return (
     <button
       type="button"
