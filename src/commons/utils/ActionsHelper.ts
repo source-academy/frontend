@@ -14,7 +14,7 @@ import * as PersistenceActions from '../../features/persistence/PersistenceActio
 import * as PlaygroundActions from '../../features/playground/PlaygroundActions';
 import RemoteExecutionActions from '../../features/remoteExecution/RemoteExecutionActions';
 import * as SourcecastActions from '../../features/sourceRecorder/sourcecast/SourcecastActions';
-import * as SourceRecorderActions from '../../features/sourceRecorder/SourceRecorderActions';
+import SourceRecorderActions from '../../features/sourceRecorder/SourceRecorderActions';
 import SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
 import StoriesActions from '../../features/stories/StoriesActions';
 import { ActionType } from './TypeHelper';
