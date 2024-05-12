@@ -65,7 +65,7 @@ import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';
 import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { changeSublanguage } from '../workspace/WorkspaceActions';
+import WorkspaceActions from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
   checkAnswerLastModifiedAt,
@@ -825,7 +825,7 @@ function* oldBackendSagaOne(): SagaIterator {
   );
 
   yield takeEvery(
-    changeSublanguage.type,
+    WorkspaceActions.changeSublanguage.type,
     function* (action: ReturnType<typeof actions.changeSublanguage>): any {
       const tokens: Tokens = yield selectTokens();
       const { sublang } = action.payload;

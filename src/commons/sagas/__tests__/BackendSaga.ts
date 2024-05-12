@@ -46,7 +46,7 @@ import {
   showSuccessMessage,
   showWarningMessage
 } from '../../utils/notifications/NotificationsHelper';
-import { changeSublanguage, updateHasUnsavedChanges } from '../../workspace/WorkspaceActions';
+import WorkspaceActions from '../../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import BackendSaga from '../BackendSaga';
 import {
@@ -649,7 +649,7 @@ describe('Test SUBMIT_ANSWER action', () => {
       .not.call.fn(showWarningMessage)
       .call(showSuccessMessage, 'Saved!', 1000)
       .put(SessionActions.updateAssessment(mockNewAssessment))
-      .put(updateHasUnsavedChanges('assessment' as WorkspaceLocation, false))
+      .put(WorkspaceActions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false))
       .dispatch({ type: SessionActions.submitAnswer.type, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
     // To make sure no changes in state
@@ -691,7 +691,7 @@ describe('Test SUBMIT_ANSWER action', () => {
       .not.call.fn(showWarningMessage)
       .call(showSuccessMessage, 'Saved!', 1000)
       .put(SessionActions.updateAssessment(mockNewAssessment))
-      .put(updateHasUnsavedChanges('assessment' as WorkspaceLocation, false))
+      .put(WorkspaceActions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false))
       .dispatch({ type: SessionActions.submitAnswer.type, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
     // To make sure no changes in state
@@ -724,7 +724,7 @@ describe('Test SUBMIT_ANSWER action', () => {
       .call(showWarningMessage, "Couldn't reach our servers. Are you online?")
       .not.call.fn(showSuccessMessage)
       .not.put.actionType(SessionActions.updateAssessment.type)
-      .not.put.actionType(updateHasUnsavedChanges.type)
+      .not.put.actionType(WorkspaceActions.updateHasUnsavedChanges.type)
       .hasFinalState({ session: { ...mockTokens, role: Role.Student } })
       .dispatch({ type: SessionActions.submitAnswer.type, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
@@ -851,7 +851,7 @@ describe('Test CHANGE_SUBLANGUAGE action', () => {
           { ok: true }
         ]
       ])
-      .dispatch({ type: changeSublanguage.type, payload: { sublang } })
+      .dispatch({ type: WorkspaceActions.changeSublanguage.type, payload: { sublang } })
       .silentRun();
   });
 });
