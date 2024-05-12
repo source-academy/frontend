@@ -1,9 +1,9 @@
 import { FocusStyleManager } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { useMediaQuery } from '@mantine/hooks';
 import { Ace } from 'ace-builds';
 import React, { useCallback, useEffect, useState } from 'react';
 import { DraggableEvent } from 'react-draggable';
-import { useMediaQuery } from 'react-responsive';
 
 import ControlBar from '../controlBar/ControlBar';
 import EditorContainer, { EditorContainerProps } from '../editor/EditorContainer';
@@ -29,7 +29,7 @@ export type MobileWorkspaceProps = {
 
 const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   const isAndroid = /Android/.test(navigator.userAgent);
-  const isPortrait = useMediaQuery({ orientation: 'portrait' });
+  const isPortrait = useMediaQuery('(orientation: portrait)');
   const [draggableReplPosition, setDraggableReplPosition] = useState({ x: 0, y: 0 });
 
   // For disabling draggable Repl when in stepper tab

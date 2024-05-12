@@ -20,7 +20,7 @@ import { actions } from '../../../utils/ActionsHelper';
 import DisplayBufferService from '../../../utils/DisplayBufferService';
 import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../../../utils/SourcerorHelper';
-import { evalEditor, evalRepl, notifyProgramEvaluated } from '../../../workspace/WorkspaceActions';
+import WorkspaceActions from '../../../workspace/WorkspaceActions';
 import {
   EVAL_SILENT,
   PlaygroundWorkspaceState,
@@ -40,7 +40,8 @@ export function* evalCodeSaga(
   storyEnv?: string
 ): SagaIterator {
   context.runtime.debuggerOn =
-    (actionType === evalEditor.type || actionType === InterpreterActions.debuggerResume.type) &&
+    (actionType === WorkspaceActions.evalEditor.type ||
+      actionType === InterpreterActions.debuggerResume.type) &&
     context.chapter > 2;
   const isStoriesBlock = actionType === actions.evalStory.type || workspaceLocation === 'stories';
 
@@ -63,6 +64,15 @@ export function* evalCodeSaga(
   if (substActiveAndCorrectChapter) {
     context.executionMethod = 'interpreter';
   }
+
+  const uploadIsActive: boolean = correctWorkspace
+    ? yield select(
+        (state: OverallState) =>
+          (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
+            .usingUpload
+      )
+    : false;
+  const uploads = yield select((state: OverallState) => state.workspaces[workspaceLocation].files);
 
   // For the CSE machine slider
   const cseIsActive: boolean = correctWorkspace
@@ -125,7 +135,12 @@ export function* evalCodeSaga(
       });
     } else if (variant === Variant.WASM) {
       // Note: WASM does not support multiple file programs.
-      return call(wasm_compile_and_run, entrypointCode, context, actionType === evalRepl.type);
+      return call(
+        wasm_compile_and_run,
+        entrypointCode,
+        context,
+        actionType === WorkspaceActions.evalRepl.type
+      );
     } else {
       throw new Error('Unknown variant: ' + variant);
     }
@@ -262,7 +277,10 @@ export function* evalCodeSaga(
         : isC
         ? call(cCompileAndRun, entrypointCode, context)
         : isJava
-        ? call(javaRun, entrypointCode, context, currentStep, isUsingCse)
+        ? call(javaRun, entrypointCode, context, currentStep, isUsingCse, {
+            uploadIsActive,
+            uploads
+          })
         : call(
             runFilesInContext,
             isFolderModeEnabled
@@ -309,7 +327,7 @@ export function* evalCodeSaga(
     return;
   }
 
-  if (actionType === evalEditor.type) {
+  if (actionType === WorkspaceActions.evalEditor.type) {
     yield put(actions.updateLastDebuggerResult(result, workspaceLocation));
   }
 
@@ -375,7 +393,7 @@ export function* evalCodeSaga(
   yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
 
   // Change token count if its assessment and EVAL_EDITOR
-  if (actionType === evalEditor.type && workspaceLocation === 'assessment') {
+  if (actionType === WorkspaceActions.evalEditor.type && workspaceLocation === 'assessment') {
     const tokens = [...tokenizer(entrypointCode, ACORN_PARSE_OPTIONS)];
     const tokenCounter = tokens.length;
     yield put(actions.setTokenCount(workspaceLocation, tokenCounter));
@@ -396,15 +414,21 @@ export function* evalCodeSaga(
   );
   // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
   if (
-    actionType === evalEditor.type ||
-    actionType === evalRepl.type ||
+    actionType === WorkspaceActions.evalEditor.type ||
+    actionType === WorkspaceActions.evalRepl.type ||
     actionType === InterpreterActions.debuggerResume.type
   ) {
     if (context.errors.length > 0) {
       yield put(actions.addEvent([EventType.ERROR]));
     }
     yield put(
-      notifyProgramEvaluated(result, lastDebuggerResult, entrypointCode, context, workspaceLocation)
+      WorkspaceActions.notifyProgramEvaluated(
+        result,
+        lastDebuggerResult,
+        entrypointCode,
+        context,
+        workspaceLocation
+      )
     );
   }
   if (isStoriesBlock) {

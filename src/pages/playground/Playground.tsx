@@ -21,6 +21,7 @@ import {
 import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
+import makeUploadTabFrom from 'src/commons/sideContent/content/SideContentUpload';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
@@ -29,33 +30,7 @@ import {
   showFulTSWarningOnUrlLoad,
   showHTMLDisclaimer
 } from 'src/commons/utils/WarningDialogHelper';
-import {
-  addEditorTab,
-  addHtmlConsoleError,
-  browseReplHistoryDown,
-  browseReplHistoryUp,
-  changeExecTime,
-  changeStepLimit,
-  chapterSelect,
-  clearReplOutput,
-  evalEditor,
-  evalRepl,
-  navigateToDeclaration,
-  promptAutocomplete,
-  removeEditorTab,
-  removeEditorTabsForDirectory,
-  sendReplInputToOutput,
-  setEditorBreakpoint,
-  setEditorHighlightedLines,
-  setFolderMode,
-  toggleEditorAutorun,
-  toggleFolderMode,
-  toggleUpdateCse,
-  toggleUsingSubst,
-  updateActiveEditorTabIndex,
-  updateEditorValue,
-  updateReplValue
-} from 'src/commons/workspace/WorkspaceActions';
+import WorkspaceActions, { uploadFiles } from 'src/commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import GithubActions from 'src/features/github/GitHubActions';
 import {
@@ -174,12 +149,12 @@ export async function handleHash(
     // BrowserFS does not provide a way of listening to changes in the file system, which makes
     // updating the file system view troublesome. To force the file system view to re-render
     // (and thus display the updated file system), we first disable Folder mode.
-    dispatch(setFolderMode(workspaceLocation, false));
+    dispatch(WorkspaceActions.setFolderMode(workspaceLocation, false));
     const isFolderModeEnabled = convertParamToBoolean(qs.isFolder) ?? false;
     // If Folder mode should be enabled, enabling it after disabling it earlier will cause the
     // newly-added files to be shown. Note that this has to take place after the files are
     // already added to the file system.
-    dispatch(setFolderMode(workspaceLocation, isFolderModeEnabled));
+    dispatch(WorkspaceActions.setFolderMode(workspaceLocation, isFolderModeEnabled));
 
     // By default, open a single editor tab containing the default playground file.
     const editorTabFilePaths = qs.tabs?.split(',').map(decompressFromEncodedURIComponent) ?? [
@@ -187,17 +162,20 @@ export async function handleHash(
     ];
     // Remove all editor tabs before populating with the ones from the query string.
     dispatch(
-      removeEditorTabsForDirectory(workspaceLocation, WORKSPACE_BASE_PATHS[workspaceLocation])
+      WorkspaceActions.removeEditorTabsForDirectory(
+        workspaceLocation,
+        WORKSPACE_BASE_PATHS[workspaceLocation]
+      )
     );
     // Add editor tabs from the query string.
     editorTabFilePaths.forEach(filePath =>
       // Fall back on the empty string if the file contents do not exist.
-      dispatch(addEditorTab(workspaceLocation, filePath, files[filePath] ?? ''))
+      dispatch(WorkspaceActions.addEditorTab(workspaceLocation, filePath, files[filePath] ?? ''))
     );
 
     // By default, use the first editor tab.
     const activeEditorTabIndex = convertParamToInt(qs.tabIdx) ?? 0;
-    dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex));
+    dispatch(WorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex));
     if (chapter) {
       // TODO: To migrate the state logic away from playgroundSourceChapter
       //       and playgroundSourceVariant into the language config instead
@@ -269,17 +247,21 @@ const Playground: React.FC<PlaygroundProps> = props => {
   } = useMemo(() => {
     return {
       handleChangeExecTime: (execTime: number) =>
-        dispatch(changeExecTime(execTime, workspaceLocation)),
+        dispatch(WorkspaceActions.changeExecTime(execTime, workspaceLocation)),
       handleChapterSelect: (chapter: Chapter, variant: Variant) =>
-        dispatch(chapterSelect(chapter, variant, workspaceLocation)),
+        dispatch(WorkspaceActions.chapterSelect(chapter, variant, workspaceLocation)),
       handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
-        dispatch(updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)),
+        dispatch(
+          WorkspaceActions.updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)
+        ),
       handleSetEditorBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
-        dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)),
-      handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
-      handleReplOutputClear: () => dispatch(clearReplOutput(workspaceLocation)),
+        dispatch(
+          WorkspaceActions.setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)
+        ),
+      handleReplEval: () => dispatch(WorkspaceActions.evalRepl(workspaceLocation)),
+      handleReplOutputClear: () => dispatch(WorkspaceActions.clearReplOutput(workspaceLocation)),
       handleUsingSubst: (usingSubst: boolean) =>
-        dispatch(toggleUsingSubst(usingSubst, workspaceLocation))
+        dispatch(WorkspaceActions.toggleUsingSubst(usingSubst, workspaceLocation))
     };
   }, [dispatch, workspaceLocation]);
 
@@ -352,7 +334,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         dispatch(playgroundConfigLanguage(languageConfig));
         // Disable Folder mode when forcing the Source chapter and variant to follow the current course's.
         // This is because Folder mode only works in Source 2+.
-        dispatch(setFolderMode(workspaceLocation, false));
+        dispatch(WorkspaceActions.setFolderMode(workspaceLocation, false));
       }
       return;
     }
@@ -454,10 +436,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const autorunButtonHandlers = useMemo(() => {
     return {
-      handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
+      handleEditorEval: () => dispatch(WorkspaceActions.evalEditor(workspaceLocation)),
       handleInterruptEval: () =>
         dispatch(InterpreterActions.beginInterruptExecution(workspaceLocation)),
-      handleToggleEditorAutorun: () => dispatch(toggleEditorAutorun(workspaceLocation)),
+      handleToggleEditorAutorun: () =>
+        dispatch(WorkspaceActions.toggleEditorAutorun(workspaceLocation)),
       handleDebuggerPause: () => dispatch(InterpreterActions.beginDebuggerPause(workspaceLocation)),
       handleDebuggerReset: () => dispatch(InterpreterActions.debuggerReset(workspaceLocation)),
       handleDebuggerResume: () => dispatch(InterpreterActions.debuggerResume(workspaceLocation))
@@ -630,14 +613,14 @@ const Playground: React.FC<PlaygroundProps> = props => {
         stepLimit={stepLimit}
         stepSize={usingSubst ? 2 : 1}
         handleChangeStepLimit={limit => {
-          dispatch(changeStepLimit(limit, workspaceLocation));
-          usingCse && dispatch(toggleUpdateCse(true, workspaceLocation));
+          dispatch(WorkspaceActions.changeStepLimit(limit, workspaceLocation));
+          usingCse && dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
         }}
         handleOnBlurAutoScale={limit => {
           limit % 2 === 0 || !usingSubst
-            ? dispatch(changeStepLimit(limit, workspaceLocation))
-            : dispatch(changeStepLimit(limit + 1, workspaceLocation));
-          usingCse && dispatch(toggleUpdateCse(true, workspaceLocation));
+            ? dispatch(WorkspaceActions.changeStepLimit(limit, workspaceLocation))
+            : dispatch(WorkspaceActions.changeStepLimit(limit + 1, workspaceLocation));
+          usingCse && dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
         }}
         key="step_limit"
       />
@@ -694,7 +677,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         isFolderModeEnabled={isFolderModeEnabled}
         isSessionActive={editorSessionId !== ''}
         isPersistenceActive={persistenceFile !== undefined || githubSaveInfo.repoName !== ''}
-        toggleFolderMode={() => dispatch(toggleFolderMode(workspaceLocation))}
+        toggleFolderMode={() => dispatch(WorkspaceActions.toggleFolderMode(workspaceLocation))}
         key="folder"
       />
     );
@@ -734,12 +717,16 @@ const Playground: React.FC<PlaygroundProps> = props => {
         tabs.push(
           makeHtmlDisplayTabFrom(
             output[0] as ResultOutput,
-            errorMsg => dispatch(addHtmlConsoleError(errorMsg, workspaceLocation)),
+            errorMsg => dispatch(WorkspaceActions.addHtmlConsoleError(errorMsg, workspaceLocation)),
             workspaceLocation
           )
         );
       }
       return tabs;
+    }
+
+    if (currentLang === Chapter.FULL_JAVA && process.env.NODE_ENV === 'development') {
+      tabs.push(makeUploadTabFrom(files => dispatch(uploadFiles(files, workspaceLocation))));
     }
 
     if (!usingRemoteExecution) {
@@ -798,8 +785,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       };
 
       pushLog(input);
-      dispatch(toggleUpdateCse(true, workspaceLocation));
-      dispatch(setEditorHighlightedLines(workspaceLocation, 0, []));
+      dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
+      dispatch(WorkspaceActions.setEditorHighlightedLines(workspaceLocation, 0, []));
     },
     [pushLog, dispatch, workspaceLocation]
   );
@@ -858,7 +845,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         }
       }
       handleSetEditorBreakpoints(editorTabIndex, breakpoints);
-      dispatch(toggleUpdateCse(true, workspaceLocation));
+      dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
     },
     [
       selectedTab,
@@ -876,17 +863,19 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const editorContainerHandlers = useMemo(() => {
     return {
       handleDeclarationNavigate: (cursorPosition: Position) =>
-        dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
+        dispatch(WorkspaceActions.navigateToDeclaration(workspaceLocation, cursorPosition)),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
+        dispatch(WorkspaceActions.promptAutocomplete(workspaceLocation, row, col, callback)),
       handleSendReplInputToOutput: (code: string) =>
-        dispatch(sendReplInputToOutput(code, workspaceLocation)),
+        dispatch(WorkspaceActions.sendReplInputToOutput(code, workspaceLocation)),
       handleSetSharedbConnected: (connected: boolean) =>
         dispatch(setSharedbConnected(workspaceLocation, connected)),
       setActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
-        dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+        dispatch(
+          WorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)
+        ),
       removeEditorTabByIndex: (editorTabIndex: number) =>
-        dispatch(removeEditorTab(workspaceLocation, editorTabIndex))
+        dispatch(WorkspaceActions.removeEditorTab(workspaceLocation, editorTabIndex))
     };
   }, [dispatch, workspaceLocation]);
   const editorContainerProps: NormalEditorContainerProps = {
@@ -918,10 +907,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const replHandlers = useMemo(() => {
     return {
-      handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
-      handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
+      handleBrowseHistoryDown: () =>
+        dispatch(WorkspaceActions.browseReplHistoryDown(workspaceLocation)),
+      handleBrowseHistoryUp: () =>
+        dispatch(WorkspaceActions.browseReplHistoryUp(workspaceLocation)),
       handleReplValueChange: (newValue: string) =>
-        dispatch(updateReplValue(newValue, workspaceLocation))
+        dispatch(WorkspaceActions.updateReplValue(newValue, workspaceLocation))
     };
   }, [dispatch, workspaceLocation]);
   const replProps = {
