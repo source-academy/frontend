@@ -8,9 +8,7 @@ import { AdminPanelStoriesUser } from 'src/features/stories/StoriesTypes';
 import RolesCell from './RolesCell';
 import StoriesUserActionsCell from './StoriesUserActionsCell';
 
-export type StoriesUserConfigPanelProps = OwnProps;
-
-type OwnProps = {
+type Props = {
   userId?: number;
   storiesUsers?: AdminPanelStoriesUser[];
   handleUpdateStoriesUserRole: (id: number, role: StoriesRole) => void;
@@ -24,14 +22,14 @@ type OwnProps = {
  *   other admins can do so, to prevent a scenario where there are
  *   no admins left in a course)
  */
-const StoriesUserConfigPanel: React.FC<StoriesUserConfigPanelProps> = props => {
+const StoriesUserConfigPanel: React.FC<Props> = props => {
   const gridApi = React.useRef<GridApi>();
 
   const storiesUsers = props.storiesUsers?.map(e =>
     !e.name ? { ...e, name: '(user has yet to log in)' } : e
   );
 
-  const columnDefs: ColDef[] = [
+  const columnDefs: ColDef<AdminPanelStoriesUser>[] = [
     {
       headerName: 'Name',
       field: 'name',
@@ -41,10 +39,6 @@ const StoriesUserConfigPanel: React.FC<StoriesUserConfigPanelProps> = props => {
       headerName: 'Username',
       field: 'username'
     },
-    // {
-    //   headerName: 'Group',
-    //   field: 'group'
-    // },
     {
       headerName: 'Role',
       field: 'role',
@@ -57,7 +51,7 @@ const StoriesUserConfigPanel: React.FC<StoriesUserConfigPanelProps> = props => {
     },
     {
       headerName: 'Actions',
-      field: 'actions',
+      field: 'actions' as any,
       cellRenderer: StoriesUserActionsCell,
       cellRendererParams: {
         handleDeleteStoriesUserFromUserGroup: props.handleDeleteStoriesUserFromUserGroup
@@ -81,7 +75,7 @@ const StoriesUserConfigPanel: React.FC<StoriesUserConfigPanelProps> = props => {
   const grid = (
     <div className="Grid ag-grid-parent ag-theme-balham">
       <AgGridReact
-        domLayout={'autoHeight'}
+        domLayout="autoHeight"
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
