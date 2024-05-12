@@ -14,7 +14,7 @@ import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import Constants from 'src/commons/utils/Constants';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { addHtmlConsoleError } from 'src/commons/workspace/WorkspaceActions';
+import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import StoriesActions from 'src/features/stories/StoriesActions';
 import { makeSubstVisualizerTabFrom } from 'src/pages/playground/PlaygroundTabs';
 
@@ -137,7 +137,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
         tabs.push(
           makeHtmlDisplayTabFrom(
             output[outputIndex] as ResultOutput,
-            errorMsg => dispatch(addHtmlConsoleError(errorMsg, 'stories', env)),
+            errorMsg => dispatch(WorkspaceActions.addHtmlConsoleError(errorMsg, 'stories', env)),
             `stories.${env}`
           )
         );
