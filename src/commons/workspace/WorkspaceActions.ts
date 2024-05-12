@@ -7,11 +7,14 @@ import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { Library } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
 import { createActions } from '../redux/utils';
+import { UploadResult } from '../sideContent/content/SideContentUpload';
 import {
   EditorTabState,
   SubmissionsTableFilters,
+  TOGGLE_USING_UPLOAD,
   UPDATE_LAST_DEBUGGER_RESULT,
   UPDATE_LAST_NON_DET_RESULT,
+  UPLOAD_FILES,
   WorkspaceLocation,
   WorkspaceLocationsWithTools,
   WorkspaceState
@@ -278,6 +281,20 @@ export const updateLastNonDetResult = createAction(
   })
 );
 
+export const toggleUsingUpload = createAction(
+  TOGGLE_USING_UPLOAD,
+  (usingUpload: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
+    payload: { usingUpload, workspaceLocation }
+  })
+);
+
+export const uploadFiles = createAction(
+  UPLOAD_FILES,
+  (files: UploadResult, workspaceLocation: WorkspaceLocation) => ({
+    payload: { files, workspaceLocation }
+  })
+);
+
 // For compatibility with existing code (reducer)
 export const {
   setTokenCount,
@@ -345,5 +362,7 @@ export const {
 export default {
   ...newActions,
   updateLastDebuggerResult,
-  updateLastNonDetResult
+  updateLastNonDetResult,
+  toggleUsingUpload,
+  uploadFiles
 };
