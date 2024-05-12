@@ -22,6 +22,7 @@ import { getSharedProgram } from 'src/commons/sagas/RequestsSaga';
 import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
+import makeUploadTabFrom from 'src/commons/sideContent/content/SideContentUpload';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
@@ -56,7 +57,8 @@ import {
   toggleUsingSubst,
   updateActiveEditorTabIndex,
   updateEditorValue,
-  updateReplValue
+  updateReplValue,
+  uploadFiles
 } from 'src/commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import GithubActions from 'src/features/github/GitHubActions';
@@ -721,6 +723,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
         );
       }
       return tabs;
+    }
+
+    if (currentLang === Chapter.FULL_JAVA && process.env.NODE_ENV === 'development') {
+      tabs.push(makeUploadTabFrom(files => dispatch(uploadFiles(files, workspaceLocation))));
     }
 
     if (!usingRemoteExecution) {

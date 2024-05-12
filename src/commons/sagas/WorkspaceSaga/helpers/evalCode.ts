@@ -64,6 +64,15 @@ export function* evalCodeSaga(
     context.executionMethod = 'interpreter';
   }
 
+  const uploadIsActive: boolean = correctWorkspace
+    ? yield select(
+        (state: OverallState) =>
+          (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
+            .usingUpload
+      )
+    : false;
+  const uploads = yield select((state: OverallState) => state.workspaces[workspaceLocation].files);
+
   // For the CSE machine slider
   const cseIsActive: boolean = correctWorkspace
     ? yield select(
@@ -262,7 +271,10 @@ export function* evalCodeSaga(
         : isC
         ? call(cCompileAndRun, entrypointCode, context)
         : isJava
-        ? call(javaRun, entrypointCode, context, currentStep, isUsingCse)
+        ? call(javaRun, entrypointCode, context, currentStep, isUsingCse, {
+            uploadIsActive,
+            uploads
+          })
         : call(
             runFilesInContext,
             isFolderModeEnabled

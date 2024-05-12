@@ -3,25 +3,31 @@ import { call, put, select } from 'redux-saga/effects';
 import StoriesActions from 'src/features/stories/StoriesActions';
 import {
   deleteStory,
+  deleteUserUserGroups,
+  getAdminPanelStoriesUsers,
   getStories,
   getStoriesUser,
   getStory,
   postStory,
+  putStoriesUserRole,
   updateStory
 } from 'src/features/stories/storiesComponents/BackendAccess';
 import { StoryData, StoryListView, StoryView } from 'src/features/stories/StoriesTypes';
 
+import SessionActions from '../application/actions/SessionActions';
 import { OverallState, StoriesRole } from '../application/ApplicationTypes';
 import { Tokens } from '../application/types/SessionTypes';
 import { combineSagaHandlers } from '../redux/utils';
 import { resetSideContent } from '../sideContent/SideContentActions';
 import { actions } from '../utils/ActionsHelper';
-import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { defaultStoryContent } from '../utils/StoriesHelper';
 import { selectTokens } from './BackendSaga';
 import { evalCodeSaga } from './WorkspaceSaga/helpers/evalCode';
 
-const StoriesSaga = combineSagaHandlers(StoriesActions, {
+// TODO: Refactor and combine in a future commit
+const sagaActions = { ...StoriesActions, ...SessionActions };
+const StoriesSaga = combineSagaHandlers(sagaActions, {
   // TODO: This should be using `takeLatest`, not `takeEvery`
   getStoriesList: function* () {
     const tokens: Tokens = yield selectTokens();
@@ -141,6 +147,36 @@ const StoriesSaga = combineSagaHandlers(StoriesActions, {
       action.type,
       env
     );
+  },
+  fetchAdminPanelStoriesUsers: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+
+    const storiesUsers = yield call(getAdminPanelStoriesUsers, tokens);
+
+    if (storiesUsers) {
+      yield put(actions.setAdminPanelStoriesUsers(storiesUsers));
+    }
+  },
+  updateStoriesUserRole: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const { userId, role } = action.payload;
+
+    const resp: Response | null = yield call(putStoriesUserRole, tokens, userId, role);
+
+    if (resp) {
+      yield put(actions.fetchAdminPanelStoriesUsers());
+      yield call(showSuccessMessage, 'Role updated!');
+    }
+  },
+  deleteStoriesUserUserGroups: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const { userId } = action.payload;
+
+    const resp: Response | null = yield call(deleteUserUserGroups, tokens, userId);
+    if (resp) {
+      yield put(actions.fetchAdminPanelStoriesUsers());
+      yield call(showSuccessMessage, 'Stories user deleted!');
+    }
   }
 });
 
