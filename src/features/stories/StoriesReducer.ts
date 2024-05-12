@@ -11,22 +11,7 @@ import {
   ResultOutput
 } from '../../commons/application/ApplicationTypes';
 import { SourceActionType } from '../../commons/utils/ActionsHelper';
-import {
-  addStoryEnv,
-  clearStoriesUserAndGroup,
-  clearStoryEnv,
-  evalStory,
-  evalStoryError,
-  evalStorySuccess,
-  handleStoriesConsoleLog,
-  notifyStoriesEvaluated,
-  setCurrentStoriesGroup,
-  setCurrentStoriesUser,
-  setCurrentStory,
-  setCurrentStoryId,
-  toggleStoriesUsingSubst,
-  updateStoriesList
-} from './StoriesActions';
+import StoriesActions from './StoriesActions';
 import { DEFAULT_ENV } from './storiesComponents/UserBlogContent';
 import { SET_ADMIN_PANEL_STORIES_USERS, StoriesState } from './StoriesTypes';
 
@@ -43,7 +28,7 @@ const getStoriesEnv = (action: any) => action.payload?.env ?? DEFAULT_ENV;
 
 const newStoriesReducer = createReducer(defaultStories, builder => {
   builder
-    .addCase(addStoryEnv, (state, action) => {
+    .addCase(StoriesActions.addStoryEnv, (state, action) => {
       const env = getStoriesEnv(action);
       state.envs[env] = createDefaultStoriesEnv(
         action.payload.env,
@@ -51,7 +36,7 @@ const newStoriesReducer = createReducer(defaultStories, builder => {
         action.payload.variant
       );
     })
-    .addCase(clearStoryEnv, (state, action) => {
+    .addCase(StoriesActions.clearStoryEnv, (state, action) => {
       if (!action.payload.env) {
         state.envs = {};
       } else {
@@ -63,11 +48,11 @@ const newStoriesReducer = createReducer(defaultStories, builder => {
         );
       }
     })
-    .addCase(evalStory, (state, action) => {
+    .addCase(StoriesActions.evalStory, (state, action) => {
       const env = getStoriesEnv(action);
       state.envs[env].isRunning = true;
     })
-    .addCase(evalStoryError, (state, action) => {
+    .addCase(StoriesActions.evalStoryError, (state, action) => {
       const env = getStoriesEnv(action);
       const lastOutput: InterpreterOutput = state.envs[env].output.slice(-1)[0];
       let newOutput: InterpreterOutput[];
@@ -87,7 +72,7 @@ const newStoriesReducer = createReducer(defaultStories, builder => {
       state.envs[env].output = newOutput;
       state.envs[env].isRunning = false;
     })
-    .addCase(evalStorySuccess, (state, action) => {
+    .addCase(StoriesActions.evalStorySuccess, (state, action) => {
       const env = getStoriesEnv(action);
       const execType = state.envs[env].context.executionMethod;
       const newOutputEntry: Partial<ResultOutput> = {
@@ -113,7 +98,7 @@ const newStoriesReducer = createReducer(defaultStories, builder => {
       state.envs[env].output = newOutput;
       state.envs[env].isRunning = false;
     })
-    .addCase(handleStoriesConsoleLog, (state, action) => {
+    .addCase(StoriesActions.handleStoriesConsoleLog, (state, action) => {
       const env = getStoriesEnv(action);
       /* Possible cases:
        * (1) state.envs[env].output === [], i.e. state.envs[env].output[-1] === undefined
@@ -138,7 +123,7 @@ const newStoriesReducer = createReducer(defaultStories, builder => {
       }
       state.envs[env].output = newOutput;
     })
-    .addCase(notifyStoriesEvaluated, (state, action) => {
+    .addCase(StoriesActions.notifyStoriesEvaluated, (state, action) => {
       const env = getStoriesEnv(action);
       const debuggerContext = state.envs[env].debuggerContext;
       debuggerContext.result = action.payload.result;
@@ -147,32 +132,32 @@ const newStoriesReducer = createReducer(defaultStories, builder => {
       debuggerContext.context = action.payload.context;
       debuggerContext.workspaceLocation = 'stories';
     })
-    .addCase(toggleStoriesUsingSubst, (state, action) => {
+    .addCase(StoriesActions.toggleStoriesUsingSubst, (state, action) => {
       const env = getStoriesEnv(action);
       state.envs[env].usingSubst = action.payload.usingSubst;
     })
     // New cases post-refactor
-    .addCase(updateStoriesList, (state, action) => {
+    .addCase(StoriesActions.updateStoriesList, (state, action) => {
       state.storyList = action.payload;
     })
-    .addCase(setCurrentStoryId, (state, action) => {
+    .addCase(StoriesActions.setCurrentStoryId, (state, action) => {
       state.currentStoryId = action.payload;
     })
-    .addCase(setCurrentStory, (state, action) => {
+    .addCase(StoriesActions.setCurrentStory, (state, action) => {
       state.currentStory = action.payload;
     })
-    .addCase(clearStoriesUserAndGroup, state => {
+    .addCase(StoriesActions.clearStoriesUserAndGroup, state => {
       state.userId = undefined;
       state.userName = undefined;
       state.groupId = undefined;
       state.groupName = undefined;
       state.role = undefined;
     })
-    .addCase(setCurrentStoriesUser, (state, action) => {
+    .addCase(StoriesActions.setCurrentStoriesUser, (state, action) => {
       state.userName = action.payload.name;
       state.userId = action.payload.id;
     })
-    .addCase(setCurrentStoriesGroup, (state, action) => {
+    .addCase(StoriesActions.setCurrentStoriesGroup, (state, action) => {
       state.groupId = action.payload.id;
       state.groupName = action.payload.name;
       state.role = action.payload.role;

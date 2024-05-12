@@ -11,12 +11,7 @@ import ControlBar, { ControlBarProps } from 'src/commons/controlBar/ControlBar';
 import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { scrollSync } from 'src/commons/utils/StoriesHelper';
-import {
-  createStory,
-  saveStory,
-  setCurrentStory,
-  setCurrentStoryId
-} from 'src/features/stories/StoriesActions';
+import StoriesActions from 'src/features/stories/StoriesActions';
 
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
 
@@ -32,10 +27,10 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
   const { id: idToSet } = useParams<{ id: string }>();
   useEffect(() => {
     // Clear screen on first load
-    dispatch(setCurrentStory(null));
+    dispatch(StoriesActions.setCurrentStory(null));
     // Either a new story (idToSet is null) or an existing story
     // If existing story, setting it will automatically fetch the new story
-    dispatch(setCurrentStoryId(idToSet ? parseInt(idToSet) : null));
+    dispatch(StoriesActions.setCurrentStoryId(idToSet ? parseInt(idToSet) : null));
   }, [dispatch, idToSet]);
 
   // Loading state, show empty screen
@@ -52,7 +47,7 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
 
   const onEditorValueChange = (val: string) => {
     setIsDirty(true);
-    dispatch(setCurrentStory({ ...story, content: val }));
+    dispatch(StoriesActions.setCurrentStory({ ...story, content: val }));
   };
 
   const { title, content } = story;
@@ -68,7 +63,7 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
           value={title}
           onChange={e => {
             const newTitle = e.target.value;
-            dispatch(setCurrentStory({ ...story, title: newTitle }));
+            dispatch(StoriesActions.setCurrentStory({ ...story, title: newTitle }));
             setIsDirty(true);
           }}
         />
@@ -79,10 +74,10 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
           onClickSave={() => {
             if (storyId) {
               // Update story
-              dispatch(saveStory(story, storyId));
+              dispatch(StoriesActions.saveStory(story, storyId));
             } else {
               // Create story
-              dispatch(createStory(story));
+              dispatch(StoriesActions.createStory(story));
             }
             // TODO: Set isDirty to false
           }}
