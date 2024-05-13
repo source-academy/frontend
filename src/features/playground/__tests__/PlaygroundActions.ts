@@ -1,19 +1,18 @@
-import { changeQueryString, generateLzString } from '../PlaygroundActions';
-import { CHANGE_QUERY_STRING, GENERATE_LZ_STRING } from '../PlaygroundTypes';
+import PlaygroundActions from '../PlaygroundActions';
 
 test('generateLzString generates correct action object', () => {
-  const action = generateLzString();
+  const action = PlaygroundActions.generateLzString();
   expect(action).toEqual({
-    type: GENERATE_LZ_STRING,
+    type: PlaygroundActions.generateLzString.type,
     payload: {}
   });
 });
 
 test('changeQueryString generates correct action object', () => {
   const queryString = 'test-query-string';
-  const action = changeQueryString(queryString);
+  const action = PlaygroundActions.changeQueryString(queryString);
   expect(action).toEqual({
-    type: CHANGE_QUERY_STRING,
+    type: PlaygroundActions.changeQueryString.type,
     payload: queryString
   });
 });

@@ -2,8 +2,8 @@ import * as Sentry from '@sentry/browser';
 import { SagaIterator } from 'redux-saga';
 import { call } from 'redux-saga/effects';
 
+import CommonsActions from '../application/actions/CommonsActions';
 import SessionActions from '../application/actions/SessionActions';
-import { LOG_OUT } from '../application/types/CommonsTypes';
 import { actions } from '../utils/ActionsHelper';
 import { computeEndpointUrl } from '../utils/AuthHelper';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
@@ -16,7 +16,7 @@ export default function* LoginSaga(): SagaIterator {
     Sentry.setUser({ id: action.payload.userId.toString() });
   });
 
-  yield takeEvery(LOG_OUT, () => {
+  yield takeEvery(CommonsActions.logOut.type, () => {
     Sentry.setUser(null);
   });
 }

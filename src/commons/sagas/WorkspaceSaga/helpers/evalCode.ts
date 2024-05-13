@@ -11,7 +11,7 @@ import { call, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 import { javaRun } from 'src/commons/utils/JavaHelper';
-import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
+import StoriesActions from 'src/features/stories/StoriesActions';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
 import { isSchemeLanguage, OverallState } from '../../../application/ApplicationTypes';
@@ -436,7 +436,13 @@ export function* evalCodeSaga(
   if (isStoriesBlock) {
     yield put(
       // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
-      notifyStoriesEvaluated(result, lastDebuggerResult, entrypointCode, context, storyEnv!)
+      StoriesActions.notifyStoriesEvaluated(
+        result,
+        lastDebuggerResult,
+        entrypointCode,
+        context,
+        storyEnv!
+      )
     );
   }
 

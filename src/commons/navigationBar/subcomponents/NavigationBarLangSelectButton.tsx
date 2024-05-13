@@ -14,7 +14,7 @@ import {
 } from 'src/commons/application/ApplicationTypes';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { chapterSelect } from 'src/commons/workspace/WorkspaceActions';
+import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { playgroundConfigLanguage } from 'src/features/playground/PlaygroundActions';
 
 // TODO: Hardcoded to use the first sublanguage for each language
@@ -35,7 +35,7 @@ const NavigationBarLangSelectButton = () => {
   const selectLang = (language: SupportedLanguage) => {
     const { chapter, variant } = defaultSublanguages[language];
     dispatch(playgroundConfigLanguage(getLanguageConfig(chapter, variant)));
-    dispatch(chapterSelect(chapter, variant, 'playground'));
+    dispatch(WorkspaceActions.chapterSelect(chapter, variant, 'playground'));
     setIsOpen(false);
   };
 
