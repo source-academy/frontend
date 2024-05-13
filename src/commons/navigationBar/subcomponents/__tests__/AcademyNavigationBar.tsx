@@ -27,7 +27,8 @@ const assessmentPaths = assessmentTypes.map(e => e.toLowerCase()).map(createCour
 const staffPaths = staffRoutes.map(createCoursePath);
 const adminPaths = adminRoutes.map(createCoursePath);
 
-const createMatchFn = (to: string) => (e: React.ReactElement) => e.props.to === to;
+const createMatchFn = (to: string) => (e: React.ReactElement) =>
+  e.props.to === to && !e.props.disabled;
 const getChildren = (e: React.ReactElement) => e.props.children;
 
 const validateAssessmentPaths = (tree: React.ReactElement, exist: boolean = true) =>
