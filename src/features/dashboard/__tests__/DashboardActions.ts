@@ -1,14 +1,10 @@
-import { fetchGroupGradingSummary, updateGroupGradingSummary } from '../DashboardActions';
-import {
-  FETCH_GROUP_GRADING_SUMMARY,
-  GradingSummary,
-  UPDATE_GROUP_GRADING_SUMMARY
-} from '../DashboardTypes';
+import DashboardActions from '../DashboardActions';
+import { GradingSummary } from '../DashboardTypes';
 
 test('fetchGroupGradingSummary generates correct action object', () => {
-  const action = fetchGroupGradingSummary();
+  const action = DashboardActions.fetchGroupGradingSummary();
   expect(action).toEqual({
-    type: FETCH_GROUP_GRADING_SUMMARY,
+    type: DashboardActions.fetchGroupGradingSummary.type,
     payload: {}
   });
 });
@@ -34,9 +30,9 @@ test('updateGroupGradingSummary generates correct action object', () => {
       }
     ]
   };
-  const action = updateGroupGradingSummary(overviews);
+  const action = DashboardActions.updateGroupGradingSummary(overviews);
   expect(action).toEqual({
-    type: UPDATE_GROUP_GRADING_SUMMARY,
+    type: DashboardActions.updateGroupGradingSummary.type,
     payload: overviews
   });
 });

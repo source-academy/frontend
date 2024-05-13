@@ -8,15 +8,15 @@ import {
   ProgressStatuses
 } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
+import CommonsActions from '../../actions/CommonsActions';
 import SessionActions from '../../actions/SessionActions';
 import { defaultSession, GameState, Role, Story } from '../../ApplicationTypes';
-import { LOG_OUT } from '../../types/CommonsTypes';
 import { SessionState } from '../../types/SessionTypes';
 import { SessionsReducer } from '../SessionsReducer';
 
 test('LOG_OUT works correctly on default session', () => {
   const action = {
-    type: LOG_OUT,
+    type: CommonsActions.logOut.type,
     payload: {}
   } as const;
   const result: SessionState = SessionsReducer(defaultSession, action);

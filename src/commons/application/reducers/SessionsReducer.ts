@@ -1,9 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { Reducer } from 'redux';
-import {
-  remoteExecUpdateDevices,
-  remoteExecUpdateSession
-} from 'src/features/remoteExecution/RemoteExecutionActions';
+import RemoteExecutionActions from 'src/features/remoteExecution/RemoteExecutionActions';
 
 import { SourceActionType } from '../../utils/ActionsHelper';
 import { logOut } from '../actions/CommonsActions';
@@ -84,10 +81,10 @@ const newSessionsReducer = createReducer(defaultSession, builder => {
     .addCase(SessionActions.updateTeamFormationOverview, (state, action) => {
       state.teamFormationOverview = action.payload;
     })
-    .addCase(remoteExecUpdateDevices, (state, action) => {
+    .addCase(RemoteExecutionActions.remoteExecUpdateDevices, (state, action) => {
       state.remoteExecutionDevices = action.payload;
     })
-    .addCase(remoteExecUpdateSession, (state, action) => {
+    .addCase(RemoteExecutionActions.remoteExecUpdateSession, (state, action) => {
       state.remoteExecutionSession = action.payload;
     })
     .addCase(SessionActions.removeGitHubOctokitObjectAndAccessToken, (state, action) => {

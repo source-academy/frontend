@@ -14,12 +14,8 @@ import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import Constants from 'src/commons/utils/Constants';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { addHtmlConsoleError } from 'src/commons/workspace/WorkspaceActions';
-import {
-  clearStoryEnv,
-  evalStory,
-  toggleStoriesUsingSubst
-} from 'src/features/stories/StoriesActions';
+import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
+import StoriesActions from 'src/features/stories/StoriesActions';
 import { makeSubstVisualizerTabFrom } from 'src/pages/playground/PlaygroundTabs';
 
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
@@ -88,7 +84,9 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     ) => {
       // TODO: Migrate relevant updated logic from Playground component
       // TODO: Use language config for source chapter.
-      dispatch(toggleStoriesUsingSubst(newTabId === SideContentType.substVisualizer, env));
+      dispatch(
+        StoriesActions.toggleStoriesUsingSubst(newTabId === SideContentType.substVisualizer, env)
+      );
 
       setSelectedTab(newTabId);
     },
@@ -139,7 +137,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
         tabs.push(
           makeHtmlDisplayTabFrom(
             output[outputIndex] as ResultOutput,
-            errorMsg => dispatch(addHtmlConsoleError(errorMsg, 'stories', env)),
+            errorMsg => dispatch(WorkspaceActions.addHtmlConsoleError(errorMsg, 'stories', env)),
             `stories.${env}`
           )
         );
@@ -193,7 +191,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     // is handled by the component setting.
     if (selectedTab) onChangeTabs(selectedTab, selectedTab, {} as any);
 
-    dispatch(evalStory(env, code));
+    dispatch(StoriesActions.evalStory(env, code));
     setOutputIndex(output.length);
   };
 
@@ -202,7 +200,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   execRef.current = execEvaluate;
 
   const execResetEnv = () => {
-    dispatch(clearStoryEnv(env));
+    dispatch(StoriesActions.clearStoryEnv(env));
   };
 
   selectMode(chapter, variant, ExternalLibraryName.NONE);

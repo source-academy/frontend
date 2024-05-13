@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import classes from 'src/styles/FileSystemView.module.scss';
 
 import { showSimpleConfirmDialog } from '../utils/DialogHelper';
-import { addEditorTab, removeEditorTabForFile } from '../workspace/WorkspaceActions';
+import WorkspaceActions from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
@@ -44,7 +44,7 @@ const FileSystemViewFileNode: React.FC<Props> = ({
         throw new Error('File contents are undefined.');
       }
 
-      dispatch(addEditorTab(workspaceLocation, fullPath, fileContents));
+      dispatch(WorkspaceActions.addEditorTab(workspaceLocation, fullPath, fileContents));
     });
   };
 
@@ -74,7 +74,7 @@ const FileSystemViewFileNode: React.FC<Props> = ({
           console.error(err);
         }
 
-        dispatch(removeEditorTabForFile(workspaceLocation, fullPath));
+        dispatch(WorkspaceActions.removeEditorTabForFile(workspaceLocation, fullPath));
         refreshDirectory();
       });
     });
