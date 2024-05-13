@@ -119,7 +119,18 @@ export const useDimensions = (ref: RefObject<HTMLElement>): [width: number, heig
  */
 export const useResponsive = () => {
   const isMobileBreakpoint = useMediaQuery(`(max-width: ${Constants.mobileBreakpoint}px)`);
+
+  // Based on values from flexboxgrid-helpers
+  const xs = useMediaQuery('(max-width: 48em)');
+  const sm = useMediaQuery('(min-width:48em) and (max-width:64em)');
+  const md = useMediaQuery('(min-width:64em) and (max-width:75em)');
+  const lg = useMediaQuery('(min-width:75em)');
+
   return {
+    xs,
+    sm,
+    md,
+    lg,
     isMobileBreakpoint: isMobileBreakpoint,
     isDesktopBreakpoint: isMobileBreakpoint === undefined ? undefined : !isMobileBreakpoint
   };
