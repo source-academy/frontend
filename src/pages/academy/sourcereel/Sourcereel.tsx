@@ -16,17 +16,7 @@ import {
   setSourcecastDuration,
   setSourcecastStatus
 } from 'src/features/sourceRecorder/SourceRecorderActions';
-import {
-  deleteSourcecastEntry,
-  recordInit,
-  recordInput,
-  resetInputs,
-  timerPause,
-  timerReset,
-  timerResume,
-  timerStart,
-  timerStop
-} from 'src/features/sourceRecorder/sourcereel/SourcereelActions';
+import SourcereelActions from 'src/features/sourceRecorder/sourcereel/SourcereelActions';
 
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { ControlBarAutorunButtons } from '../../../commons/controlBar/ControlBarAutorunButtons';
@@ -119,7 +109,8 @@ const Sourcereel: React.FC = () => {
         dispatch(WorkspaceActions.updateEditorValue(workspaceLocation, 0, newEditorValue)),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
         dispatch(WorkspaceActions.externalLibrarySelect(externalLibraryName, workspaceLocation)),
-      handleRecordInput: (input: Input) => dispatch(recordInput(input, workspaceLocation)),
+      handleRecordInput: (input: Input) =>
+        dispatch(SourcereelActions.recordInput(input, workspaceLocation)),
       handleReplEval: () => dispatch(WorkspaceActions.evalRepl(workspaceLocation)),
       handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
         dispatch(setSourcecastStatus(playbackStatus, sourcecastLocation)),
@@ -163,7 +154,7 @@ const Sourcereel: React.FC = () => {
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       editorValue: editorTabs[0].value
     };
-    dispatch(recordInit(initData, workspaceLocation));
+    dispatch(SourcereelActions.recordInit(initData, workspaceLocation));
   };
 
   const handleRecordPause = () =>
@@ -308,9 +299,10 @@ const Sourcereel: React.FC = () => {
       handleReplValueChange: (newValue: string) =>
         dispatch(WorkspaceActions.updateReplValue(newValue, workspaceLocation)),
       handleDeleteSourcecastEntry: (id: number) =>
-        dispatch(deleteSourcecastEntry(id, sourcecastLocation)),
+        dispatch(SourcereelActions.deleteSourcecastEntry(id, sourcecastLocation)),
       // SourcereelControlbar handlers
-      handleResetInputs: (inputs: Input[]) => dispatch(resetInputs(inputs, workspaceLocation)),
+      handleResetInputs: (inputs: Input[]) =>
+        dispatch(SourcereelActions.resetInputs(inputs, workspaceLocation)),
       handleSaveSourcecastData: (
         title: string,
         description: string,
@@ -331,12 +323,12 @@ const Sourcereel: React.FC = () => {
         dispatch(
           setSourcecastData(title, description, uid, audioUrl, playbackData, sourcecastLocation)
         ),
-      handleTimerPause: () => dispatch(timerPause(workspaceLocation)),
-      handleTimerReset: () => dispatch(timerReset(workspaceLocation)),
+      handleTimerPause: () => dispatch(SourcereelActions.timerPause(workspaceLocation)),
+      handleTimerReset: () => dispatch(SourcereelActions.timerReset(workspaceLocation)),
       handleTimerResume: (timeBefore: number) =>
-        dispatch(timerResume(timeBefore, workspaceLocation)),
-      handleTimerStart: () => dispatch(timerStart(workspaceLocation)),
-      handleTimerStop: () => dispatch(timerStop(workspaceLocation))
+        dispatch(SourcereelActions.timerResume(timeBefore, workspaceLocation)),
+      handleTimerStart: () => dispatch(SourcereelActions.timerStart(workspaceLocation)),
+      handleTimerStop: () => dispatch(SourcereelActions.timerStop(workspaceLocation))
     };
   }, [dispatch]);
 

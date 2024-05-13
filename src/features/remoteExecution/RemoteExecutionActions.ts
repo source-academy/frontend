@@ -16,16 +16,5 @@ const RemoteExecutionActions = createActions('remoteExecution', {
   remoteExecReplInput: (input: string) => input
 });
 
-// For compatibility with existing code (reducer)
-export const {
-  remoteExecFetchDevices,
-  remoteExecUpdateDevices,
-  remoteExecUpdateSession,
-  remoteExecConnect,
-  remoteExecDisconnect,
-  remoteExecRun,
-  remoteExecReplInput
-} = RemoteExecutionActions;
-
 // For compatibility with existing code (actions helper)
 export default RemoteExecutionActions;

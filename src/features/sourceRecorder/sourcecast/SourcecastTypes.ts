@@ -7,9 +7,6 @@ import {
   SourcecastData
 } from '../SourceRecorderTypes';
 
-export const FETCH_SOURCECAST_INDEX = 'FETCH_SOURCECAST_INDEX';
-export const UPDATE_SOURCECAST_INDEX = 'UPDATE_SOURCECAST_INDEX';
-
 type SourcecastWorkspaceAttr = {
   readonly audioUrl: string;
   readonly codeDeltasToApply: CodeDelta[] | null;

@@ -32,6 +32,7 @@ import {
 
 const SessionActions = createActions('session', {
   fetchAuth: (code: string, providerId?: string) => ({ code, providerId }),
+  handleSamlRedirect: (jwtCookie: string) => ({ jwtCookie }),
   fetchUserAndCourse: () => ({}),
   fetchCourseConfig: () => ({}),
   fetchAssessment: (assessmentId: number, assessmentPassword?: string) => ({

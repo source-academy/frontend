@@ -7,12 +7,7 @@ import { call, delay, put, race, select } from 'redux-saga/effects';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
-import {
-  changeQueryString,
-  shortenURL,
-  updateShortURL
-} from '../../features/playground/PlaygroundActions';
-import { GENERATE_LZ_STRING, SHORTEN_URL } from '../../features/playground/PlaygroundTypes';
+import PlaygroundActions from '../../features/playground/PlaygroundActions';
 import { isSchemeLanguage, isSourceLanguage, OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
@@ -25,41 +20,44 @@ import { EditorTabState, PlaygroundWorkspaceState } from '../workspace/Workspace
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export default function* PlaygroundSaga(): SagaIterator {
-  yield takeEvery(GENERATE_LZ_STRING, updateQueryString);
+  yield takeEvery(PlaygroundActions.generateLzString.type, updateQueryString);
 
-  yield takeEvery(SHORTEN_URL, function* (action: ReturnType<typeof shortenURL>): any {
-    const queryString = yield select((state: OverallState) => state.playground.queryString);
-    const keyword = action.payload;
-    const errorMsg = 'ERROR';
+  yield takeEvery(
+    PlaygroundActions.shortenURL.type,
+    function* (action: ReturnType<typeof PlaygroundActions.shortenURL>): any {
+      const queryString = yield select((state: OverallState) => state.playground.queryString);
+      const keyword = action.payload;
+      const errorMsg = 'ERROR';
 
-    let resp, timeout;
+      let resp, timeout;
 
-    //we catch and move on if there are errors (plus have a timeout in case)
-    try {
-      const { result, hasTimedOut } = yield race({
-        result: call(shortenURLRequest, queryString, keyword),
-        hasTimedOut: delay(10000)
-      });
+      //we catch and move on if there are errors (plus have a timeout in case)
+      try {
+        const { result, hasTimedOut } = yield race({
+          result: call(shortenURLRequest, queryString, keyword),
+          hasTimedOut: delay(10000)
+        });
 
-      resp = result;
-      timeout = hasTimedOut;
-    } catch (_) {}
+        resp = result;
+        timeout = hasTimedOut;
+      } catch (_) {}
 
-    if (!resp || timeout) {
-      yield put(updateShortURL(errorMsg));
-      return yield call(showWarningMessage, 'Something went wrong trying to create the link.');
+      if (!resp || timeout) {
+        yield put(PlaygroundActions.updateShortURL(errorMsg));
+        return yield call(showWarningMessage, 'Something went wrong trying to create the link.');
+      }
+
+      if (resp.status !== 'success' && !resp.shorturl) {
+        yield put(PlaygroundActions.updateShortURL(errorMsg));
+        return yield call(showWarningMessage, resp.message);
+      }
+
+      if (resp.status !== 'success') {
+        yield call(showSuccessMessage, resp.message);
+      }
+      yield put(PlaygroundActions.updateShortURL(Constants.urlShortenerBase + resp.url.keyword));
     }
-
-    if (resp.status !== 'success' && !resp.shorturl) {
-      yield put(updateShortURL(errorMsg));
-      return yield call(showWarningMessage, resp.message);
-    }
-
-    if (resp.status !== 'success') {
-      yield call(showSuccessMessage, resp.message);
-    }
-    yield put(updateShortURL(Constants.urlShortenerBase + resp.url.keyword));
-  });
+  );
 
   yield takeEvery(
     visitSideContent.type,
@@ -171,7 +169,7 @@ function* updateQueryString() {
     ext: external,
     exec: execTime
   });
-  yield put(changeQueryString(newQueryString));
+  yield put(PlaygroundActions.changeQueryString(newQueryString));
 }
 
 /**

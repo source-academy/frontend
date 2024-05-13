@@ -27,11 +27,7 @@ import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMa
 import { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
 import { HighlightedLines } from '../../editor/EditorTypes';
 import Constants, { Links } from '../../utils/Constants';
-import {
-  evalEditor,
-  setEditorHighlightedLinesControl,
-  updateCurrentStep
-} from '../../workspace/WorkspaceActions';
+import WorkspaceActions from '../../workspace/WorkspaceActions';
 import { beginAlertSideContent } from '../SideContentActions';
 import { getLocation } from '../SideContentHelper';
 import { NonStoryWorkspaceLocation, SideContentTab, SideContentType } from '../SideContentTypes';
@@ -576,15 +572,16 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch, props) =>
   bindActionCreators(
     {
-      handleEditorEval: () => evalEditor(props.workspaceLocation),
-      handleStepUpdate: (steps: number) => updateCurrentStep(steps, props.workspaceLocation),
+      handleEditorEval: () => WorkspaceActions.evalEditor(props.workspaceLocation),
+      handleStepUpdate: (steps: number) =>
+        WorkspaceActions.updateCurrentStep(steps, props.workspaceLocation),
       handleAlertSideContent: () =>
         beginAlertSideContent(SideContentType.cseMachine, props.workspaceLocation),
       setEditorHighlightedLines: (
         editorTabIndex: number,
         newHighlightedLines: HighlightedLines[]
       ) =>
-        setEditorHighlightedLinesControl(
+        WorkspaceActions.setEditorHighlightedLinesControl(
           props.workspaceLocation,
           editorTabIndex,
           newHighlightedLines
