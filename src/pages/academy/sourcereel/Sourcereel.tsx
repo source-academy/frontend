@@ -16,17 +16,7 @@ import {
   setSourcecastDuration,
   setSourcecastStatus
 } from 'src/features/sourceRecorder/SourceRecorderActions';
-import {
-  deleteSourcecastEntry,
-  recordInit,
-  recordInput,
-  resetInputs,
-  timerPause,
-  timerReset,
-  timerResume,
-  timerStart,
-  timerStop
-} from 'src/features/sourceRecorder/sourcereel/SourcereelActions';
+import SourcereelActions from 'src/features/sourceRecorder/sourcereel/SourcereelActions';
 
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { ControlBarAutorunButtons } from '../../../commons/controlBar/ControlBarAutorunButtons';
@@ -48,24 +38,7 @@ import SourceRecorderControlBar, {
 import SourcecastTable from '../../../commons/sourceRecorder/SourceRecorderTable';
 import { useTypedSelector } from '../../../commons/utils/Hooks';
 import Workspace, { WorkspaceProps } from '../../../commons/workspace/Workspace';
-import {
-  browseReplHistoryDown,
-  browseReplHistoryUp,
-  chapterSelect,
-  clearReplOutput,
-  evalEditor,
-  evalRepl,
-  externalLibrarySelect,
-  navigateToDeclaration,
-  promptAutocomplete,
-  removeEditorTab,
-  setEditorBreakpoint,
-  setIsEditorReadonly,
-  toggleEditorAutorun,
-  updateActiveEditorTabIndex,
-  updateEditorValue,
-  updateReplValue
-} from '../../../commons/workspace/WorkspaceActions';
+import WorkspaceActions from '../../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
 import {
   CodeDelta,
@@ -129,19 +102,20 @@ const Sourcereel: React.FC = () => {
   } = useMemo(() => {
     return {
       handleChapterSelect: (chapter: Chapter) =>
-        dispatch(chapterSelect(chapter, Variant.DEFAULT, workspaceLocation)),
-      handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
+        dispatch(WorkspaceActions.chapterSelect(chapter, Variant.DEFAULT, workspaceLocation)),
+      handleEditorEval: () => dispatch(WorkspaceActions.evalEditor(workspaceLocation)),
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange: (newEditorValue: string) =>
-        dispatch(updateEditorValue(workspaceLocation, 0, newEditorValue)),
+        dispatch(WorkspaceActions.updateEditorValue(workspaceLocation, 0, newEditorValue)),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
-        dispatch(externalLibrarySelect(externalLibraryName, workspaceLocation)),
-      handleRecordInput: (input: Input) => dispatch(recordInput(input, workspaceLocation)),
-      handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
+        dispatch(WorkspaceActions.externalLibrarySelect(externalLibraryName, workspaceLocation)),
+      handleRecordInput: (input: Input) =>
+        dispatch(SourcereelActions.recordInput(input, workspaceLocation)),
+      handleReplEval: () => dispatch(WorkspaceActions.evalRepl(workspaceLocation)),
       handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
         dispatch(setSourcecastStatus(playbackStatus, sourcecastLocation)),
       handleSetIsEditorReadonly: (readonly: boolean) =>
-        dispatch(setIsEditorReadonly(workspaceLocation, readonly))
+        dispatch(WorkspaceActions.setIsEditorReadonly(workspaceLocation, readonly))
     };
   }, [dispatch]);
 
@@ -180,7 +154,7 @@ const Sourcereel: React.FC = () => {
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       editorValue: editorTabs[0].value
     };
-    dispatch(recordInit(initData, workspaceLocation));
+    dispatch(SourcereelActions.recordInit(initData, workspaceLocation));
   };
 
   const handleRecordPause = () =>
@@ -208,7 +182,8 @@ const Sourcereel: React.FC = () => {
       handleDebuggerReset: () => dispatch(InterpreterActions.debuggerReset(workspaceLocation)),
       handleInterruptEval: () =>
         dispatch(InterpreterActions.beginInterruptExecution(workspaceLocation)),
-      handleToggleEditorAutorun: () => dispatch(toggleEditorAutorun(workspaceLocation))
+      handleToggleEditorAutorun: () =>
+        dispatch(WorkspaceActions.toggleEditorAutorun(workspaceLocation))
     };
   }, [dispatch]);
   const autorunButtons = (
@@ -252,7 +227,7 @@ const Sourcereel: React.FC = () => {
   const clearButton = useMemo(
     () => (
       <ControlBarClearButton
-        handleReplOutputClear={() => dispatch(clearReplOutput(workspaceLocation))}
+        handleReplOutputClear={() => dispatch(WorkspaceActions.clearReplOutput(workspaceLocation))}
         key="clear_repl"
       />
     ),
@@ -266,14 +241,16 @@ const Sourcereel: React.FC = () => {
   const editorContainerHandlers = useMemo(() => {
     return {
       setActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
-        dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+        dispatch(
+          WorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)
+        ),
       removeEditorTabByIndex: (editorTabIndex: number) =>
-        dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
+        dispatch(WorkspaceActions.removeEditorTab(workspaceLocation, editorTabIndex)),
       handleDeclarationNavigate: (cursorPosition: Position) =>
-        dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
+        dispatch(WorkspaceActions.navigateToDeclaration(workspaceLocation, cursorPosition)),
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorUpdateBreakpoints: (newBreakpoints: string[]) =>
-        dispatch(setEditorBreakpoint(workspaceLocation, 0, newBreakpoints))
+        dispatch(WorkspaceActions.setEditorBreakpoint(workspaceLocation, 0, newBreakpoints))
     };
   }, [dispatch]);
   const editorContainerProps: SourcecastEditorContainerProps = {
@@ -315,14 +292,17 @@ const Sourcereel: React.FC = () => {
 
   const workspaceHandlers = useMemo(() => {
     return {
-      handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
-      handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
+      handleBrowseHistoryDown: () =>
+        dispatch(WorkspaceActions.browseReplHistoryDown(workspaceLocation)),
+      handleBrowseHistoryUp: () =>
+        dispatch(WorkspaceActions.browseReplHistoryUp(workspaceLocation)),
       handleReplValueChange: (newValue: string) =>
-        dispatch(updateReplValue(newValue, workspaceLocation)),
+        dispatch(WorkspaceActions.updateReplValue(newValue, workspaceLocation)),
       handleDeleteSourcecastEntry: (id: number) =>
-        dispatch(deleteSourcecastEntry(id, sourcecastLocation)),
+        dispatch(SourcereelActions.deleteSourcecastEntry(id, sourcecastLocation)),
       // SourcereelControlbar handlers
-      handleResetInputs: (inputs: Input[]) => dispatch(resetInputs(inputs, workspaceLocation)),
+      handleResetInputs: (inputs: Input[]) =>
+        dispatch(SourcereelActions.resetInputs(inputs, workspaceLocation)),
       handleSaveSourcecastData: (
         title: string,
         description: string,
@@ -343,12 +323,12 @@ const Sourcereel: React.FC = () => {
         dispatch(
           setSourcecastData(title, description, uid, audioUrl, playbackData, sourcecastLocation)
         ),
-      handleTimerPause: () => dispatch(timerPause(workspaceLocation)),
-      handleTimerReset: () => dispatch(timerReset(workspaceLocation)),
+      handleTimerPause: () => dispatch(SourcereelActions.timerPause(workspaceLocation)),
+      handleTimerReset: () => dispatch(SourcereelActions.timerReset(workspaceLocation)),
       handleTimerResume: (timeBefore: number) =>
-        dispatch(timerResume(timeBefore, workspaceLocation)),
-      handleTimerStart: () => dispatch(timerStart(workspaceLocation)),
-      handleTimerStop: () => dispatch(timerStop(workspaceLocation))
+        dispatch(SourcereelActions.timerResume(timeBefore, workspaceLocation)),
+      handleTimerStart: () => dispatch(SourcereelActions.timerStart(workspaceLocation)),
+      handleTimerStop: () => dispatch(SourcereelActions.timerStop(workspaceLocation))
     };
   }, [dispatch]);
 
@@ -450,7 +430,7 @@ const Sourcereel: React.FC = () => {
       handleSetSourcecastDuration: (duration: number) =>
         dispatch(setSourcecastDuration(duration, sourcecastLocation)),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        dispatch(promptAutocomplete(workspaceLocation, row, col, callback))
+        dispatch(WorkspaceActions.promptAutocomplete(workspaceLocation, row, col, callback))
     };
   }, [dispatch]);
   const sourcecastControlbarProps: SourceRecorderControlBarProps = {

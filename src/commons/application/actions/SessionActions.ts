@@ -1,4 +1,3 @@
-import { createAction } from '@reduxjs/toolkit';
 import { createActions } from 'src/commons/redux/utils';
 import {
   paginationToBackendParams,
@@ -23,21 +22,17 @@ import { Role, StoriesRole } from '../ApplicationTypes';
 import {
   AdminPanelCourseRegistration,
   CourseRegistration,
-  DELETE_STORIES_USER_USER_GROUPS,
   NotificationConfiguration,
   NotificationPreference,
   TimeOption,
   Tokens,
-  UPDATE_ASSESSMENT,
-  UPDATE_COURSE_RESEARCH_AGREEMENT,
-  UPDATE_STORIES_USER_ROLE,
-  UPDATE_TOTAL_XP,
   UpdateCourseConfiguration,
   User
 } from '../types/SessionTypes';
 
-const newActions = createActions('session', {
+const SessionActions = createActions('session', {
   fetchAuth: (code: string, providerId?: string) => ({ code, providerId }),
+  handleSamlRedirect: (jwtCookie: string) => ({ jwtCookie }),
   fetchUserAndCourse: () => ({}),
   fetchCourseConfig: () => ({}),
   fetchAssessment: (assessmentId: number, assessmentPassword?: string) => ({
@@ -109,18 +104,9 @@ const newActions = createActions('session', {
   ) => ({ submissionId, questionId, xpAdjustment, comments }),
   reautogradeSubmission: (submissionId: number) => submissionId,
   reautogradeAnswer: (submissionId: number, questionId: number) => ({ submissionId, questionId }),
-  updateAssessmentOverviews: (overviews: AssessmentOverview[]) => overviews
-});
-
-export const updateTotalXp = createAction(UPDATE_TOTAL_XP, (totalXp: number) => ({
-  payload: totalXp
-}));
-
-export const updateAssessment = createAction(UPDATE_ASSESSMENT, (assessment: Assessment) => ({
-  payload: assessment
-}));
-
-const newActions2 = createActions('session', {
+  updateAssessmentOverviews: (overviews: AssessmentOverview[]) => overviews,
+  updateTotalXp: (totalXp: number) => totalXp,
+  updateAssessment: (assessment: Assessment) => assessment,
   updateGradingOverviews: (overviews: GradingOverviews) => overviews,
   fetchTeamFormationOverview: (assessmentId: number) => ({ assessmentId }),
   createTeam: (assessment: AssessmentOverview, teams: OptionType[][]) => ({ assessment, teams }),
@@ -168,31 +154,13 @@ const newActions2 = createActions('session', {
   updateTimeOptions: (timeOptions: TimeOption[]) => timeOptions,
   deleteTimeOptions: (timeOptionIds: number[]) => timeOptionIds,
   updateUserRole: (courseRegId: number, role: Role) => ({ courseRegId, role }),
-  deleteUserCourseRegistration: (courseRegId: number) => ({ courseRegId })
+  deleteUserCourseRegistration: (courseRegId: number) => ({ courseRegId }),
+  updateCourseResearchAgreement: (agreedToResearch: boolean) => ({ agreedToResearch }),
+  updateStoriesUserRole: (userId: number, role: StoriesRole) => ({ userId, role }),
+  deleteStoriesUserUserGroups: (userId: number) => ({ userId })
 });
-
-export const updateCourseResearchAgreement = createAction(
-  UPDATE_COURSE_RESEARCH_AGREEMENT,
-  (agreedToResearch: boolean) => ({ payload: { agreedToResearch } })
-);
-
-export const updateStoriesUserRole = createAction(
-  UPDATE_STORIES_USER_ROLE,
-  (userId: number, role: StoriesRole) => ({ payload: { userId, role } })
-);
-
-export const deleteStoriesUserUserGroups = createAction(
-  DELETE_STORIES_USER_USER_GROUPS,
-  (userId: number) => ({ payload: { userId } })
-);
 
 // For compatibility with existing code (actions helper)
 export default {
-  ...newActions,
-  updateTotalXp,
-  updateAssessment,
-  ...newActions2,
-  updateCourseResearchAgreement,
-  updateStoriesUserRole,
-  deleteStoriesUserUserGroups
+  ...SessionActions
 };

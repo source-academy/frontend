@@ -1,64 +1,41 @@
-import { createAction } from '@reduxjs/toolkit';
+import { createActions } from 'src/commons/redux/utils';
 
 import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
 import { Input, PlaybackData } from '../SourceRecorderTypes';
-import {
-  DELETE_SOURCECAST_ENTRY,
-  RECORD_INIT,
-  RECORD_INPUT,
-  RESET_INPUTS,
-  TIMER_PAUSE,
-  TIMER_RESET,
-  TIMER_RESUME,
-  TIMER_START,
-  TIMER_STOP
-} from './SourcereelTypes';
 
-export const deleteSourcecastEntry = createAction(
-  DELETE_SOURCECAST_ENTRY,
-  (id: number, workspaceLocation: WorkspaceLocation) => ({ payload: { id, workspaceLocation } })
-);
+const SourcereelActions = createActions('sourcereel', {
+  deleteSourcecastEntry: (id: number, workspaceLocation: WorkspaceLocation) => ({
+    id,
+    workspaceLocation
+  }),
+  recordInit: (initData: PlaybackData['init'], workspaceLocation: WorkspaceLocation) => ({
+    initData,
+    workspaceLocation
+  }),
+  recordInput: (input: Input, workspaceLocation: WorkspaceLocation) => ({
+    input,
+    workspaceLocation
+  }),
+  resetInputs: (inputs: Input[], workspaceLocation: WorkspaceLocation) => ({
+    inputs,
+    workspaceLocation
+  }),
+  timerPause: (workspaceLocation: WorkspaceLocation) => ({
+    timeNow: Date.now(),
+    workspaceLocation
+  }),
+  timerReset: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
+  timerResume: (timeBefore: number, workspaceLocation: WorkspaceLocation) => ({
+    timeBefore,
+    timeNow: Date.now(),
+    workspaceLocation
+  }),
+  timerStart: (workspaceLocation: WorkspaceLocation) => ({
+    timeNow: Date.now(),
+    workspaceLocation
+  }),
+  timerStop: (workspaceLocation: WorkspaceLocation) => ({ timeNow: Date.now(), workspaceLocation })
+});
 
-export const recordInit = createAction(
-  RECORD_INIT,
-  (initData: PlaybackData['init'], workspaceLocation: WorkspaceLocation) => ({
-    payload: { initData, workspaceLocation }
-  })
-);
-
-export const recordInput = createAction(
-  RECORD_INPUT,
-  (input: Input, workspaceLocation: WorkspaceLocation) => ({
-    payload: { input, workspaceLocation }
-  })
-);
-
-export const resetInputs = createAction(
-  RESET_INPUTS,
-  (inputs: Input[], workspaceLocation: WorkspaceLocation) => ({
-    payload: { inputs, workspaceLocation }
-  })
-);
-
-export const timerPause = createAction(TIMER_PAUSE, (workspaceLocation: WorkspaceLocation) => ({
-  payload: { timeNow: Date.now(), workspaceLocation }
-}));
-
-export const timerReset = createAction(TIMER_RESET, (workspaceLocation: WorkspaceLocation) => ({
-  payload: { workspaceLocation }
-}));
-
-export const timerResume = createAction(
-  TIMER_RESUME,
-  (timeBefore: number, workspaceLocation: WorkspaceLocation) => ({
-    payload: { timeBefore, timeNow: Date.now(), workspaceLocation }
-  })
-);
-
-export const timerStart = createAction(TIMER_START, (workspaceLocation: WorkspaceLocation) => ({
-  payload: { timeNow: Date.now(), workspaceLocation }
-}));
-
-export const timerStop = createAction(TIMER_STOP, (workspaceLocation: WorkspaceLocation) => ({
-  payload: { timeNow: Date.now(), workspaceLocation }
-}));
+// For compatibility with existing code (actions helper)
+export default SourcereelActions;

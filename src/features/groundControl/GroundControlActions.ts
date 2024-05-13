@@ -1,58 +1,27 @@
-import { createAction } from '@reduxjs/toolkit';
+import { createActions } from 'src/commons/redux/utils';
 
-import {
-  ASSIGN_ENTRIES_FOR_VOTING,
-  CHANGE_DATE_ASSESSMENT,
-  CHANGE_TEAM_SIZE_ASSESSMENT,
-  CONFIGURE_ASSESSMENT,
-  DELETE_ASSESSMENT,
-  PUBLISH_ASSESSMENT,
-  PUBLISH_GRADING_ALL,
-  UNPUBLISH_GRADING_ALL,
-  UPLOAD_ASSESSMENT
-} from './GroundControlTypes';
+const GroundControlActions = createActions('groundControl', {
+  changeDateAssessment: (id: number, openAt: string, closeAt: string) => ({ id, openAt, closeAt }),
+  changeTeamSizeAssessment: (id: number, maxTeamSize: number) => ({ id, maxTeamSize }),
+  deleteAssessment: (id: number) => id,
+  publishAssessment: (togglePublishAssessmentTo: boolean, id: number) => ({
+    id,
+    togglePublishAssessmentTo
+  }),
+  publishGradingAll: (id: number) => id,
+  unpublishGradingAll: (id: number) => id,
+  uploadAssessment: (file: File, forceUpdate: boolean, assessmentConfigId: number) => ({
+    file,
+    forceUpdate,
+    assessmentConfigId
+  }),
+  configureAssessment: (id: number, hasVotingFeatures: boolean, hasTokenCounter: boolean) => ({
+    id,
+    hasVotingFeatures,
+    hasTokenCounter
+  }),
+  assignEntriesForVoting: (id: number) => ({ id })
+});
 
-export const changeDateAssessment = createAction(
-  CHANGE_DATE_ASSESSMENT,
-  (id: number, openAt: string, closeAt: string) => ({ payload: { id, openAt, closeAt } })
-);
-
-export const changeTeamSizeAssessment = createAction(
-  CHANGE_TEAM_SIZE_ASSESSMENT,
-  (id: number, maxTeamSize: number) => ({ payload: { id, maxTeamSize } })
-);
-
-export const deleteAssessment = createAction(DELETE_ASSESSMENT, (id: number) => ({ payload: id }));
-
-export const publishAssessment = createAction(
-  PUBLISH_ASSESSMENT,
-  (togglePublishAssessmentTo: boolean, id: number) => ({
-    payload: { id, togglePublishAssessmentTo }
-  })
-);
-
-export const publishGradingAll = createAction(PUBLISH_GRADING_ALL, (id: number) => ({
-  payload: id
-}));
-
-export const unpublishGradingAll = createAction(UNPUBLISH_GRADING_ALL, (id: number) => ({
-  payload: id
-}));
-
-export const uploadAssessment = createAction(
-  UPLOAD_ASSESSMENT,
-  (file: File, forceUpdate: boolean, assessmentConfigId: number) => ({
-    payload: { file, forceUpdate, assessmentConfigId }
-  })
-);
-
-export const configureAssessment = createAction(
-  CONFIGURE_ASSESSMENT,
-  (id: number, hasVotingFeatures: boolean, hasTokenCounter: boolean) => ({
-    payload: { id, hasVotingFeatures, hasTokenCounter }
-  })
-);
-
-export const assignEntriesForVoting = createAction(ASSIGN_ENTRIES_FOR_VOTING, (id: number) => ({
-  payload: { id }
-}));
+// For compatibility with existing code (actions helper)
+export default GroundControlActions;

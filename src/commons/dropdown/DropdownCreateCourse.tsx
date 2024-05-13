@@ -16,7 +16,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { createCourse } from 'src/features/academy/AcademyActions';
+import AcademyActions from 'src/features/academy/AcademyActions';
 
 import { CourseHelpTextEditorTab } from '../../pages/academy/adminPanel/subcomponents/CourseConfigPanel';
 import { sourceLanguages } from '../application/ApplicationTypes';
@@ -71,7 +71,7 @@ const DropdownCreateCourse: React.FC<Props> = props => {
       showWarningMessage('Course Name cannot be empty!');
       return;
     }
-    dispatch(createCourse(courseConfig));
+    dispatch(AcademyActions.createCourse(courseConfig));
     props.onClose();
   };
 

@@ -3,28 +3,23 @@ import { Reducer } from 'redux';
 import { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
 import { defaultAchievement } from '../../commons/application/ApplicationTypes';
-import {
-  saveAchievements,
-  saveGoals,
-  saveUserAssessmentOverviews,
-  saveUsers
-} from './AchievementActions';
+import AchievementActions from './AchievementActions';
 import { AchievementState } from './AchievementTypes';
 
 export const AchievementReducer: Reducer<AchievementState, SourceActionType> = createReducer(
   defaultAchievement,
   builder => {
     builder
-      .addCase(saveAchievements, (state, action) => {
+      .addCase(AchievementActions.saveAchievements, (state, action) => {
         state.achievements = action.payload;
       })
-      .addCase(saveGoals, (state, action) => {
+      .addCase(AchievementActions.saveGoals, (state, action) => {
         state.goals = action.payload;
       })
-      .addCase(saveUsers, (state, action) => {
+      .addCase(AchievementActions.saveUsers, (state, action) => {
         state.users = action.payload;
       })
-      .addCase(saveUserAssessmentOverviews, (state, action) => {
+      .addCase(AchievementActions.saveUserAssessmentOverviews, (state, action) => {
         state.assessmentOverviews = action.payload;
       });
   }

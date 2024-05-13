@@ -52,26 +52,7 @@ import { changeSideContentHeight } from '../sideContent/SideContentActions';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import { useTypedSelector } from '../utils/Hooks';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
-import {
-  beginClearContext,
-  browseReplHistoryDown,
-  browseReplHistoryUp,
-  clearReplOutput,
-  evalEditor,
-  evalRepl,
-  evalTestcase,
-  navigateToDeclaration,
-  promptAutocomplete,
-  removeEditorTab,
-  resetWorkspace,
-  setEditorBreakpoint,
-  updateActiveEditorTabIndex,
-  updateCurrentAssessmentId,
-  updateEditorValue,
-  updateHasUnsavedChanges,
-  updateReplValue,
-  updateWorkspace
-} from '../workspace/WorkspaceActions';
+import WorkspaceActions from '../workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import {
   retrieveLocalAssessment,
@@ -151,39 +132,47 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     removeEditorTabByIndex
   } = useMemo(() => {
     return {
-      handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
-      handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
+      handleBrowseHistoryDown: () =>
+        dispatch(WorkspaceActions.browseReplHistoryDown(workspaceLocation)),
+      handleBrowseHistoryUp: () =>
+        dispatch(WorkspaceActions.browseReplHistoryUp(workspaceLocation)),
       handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
-        dispatch(beginClearContext(workspaceLocation, library, shouldInitLibrary)),
+        dispatch(WorkspaceActions.beginClearContext(workspaceLocation, library, shouldInitLibrary)),
       handleDeclarationNavigate: (cursorPosition: Position) =>
-        dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
-      handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
+        dispatch(WorkspaceActions.navigateToDeclaration(workspaceLocation, cursorPosition)),
+      handleEditorEval: () => dispatch(WorkspaceActions.evalEditor(workspaceLocation)),
       handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
-        dispatch(updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)),
+        dispatch(
+          WorkspaceActions.updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)
+        ),
       handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
-        dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)),
-      handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
-      handleReplOutputClear: () => dispatch(clearReplOutput(workspaceLocation)),
+        dispatch(
+          WorkspaceActions.setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)
+        ),
+      handleReplEval: () => dispatch(WorkspaceActions.evalRepl(workspaceLocation)),
+      handleReplOutputClear: () => dispatch(WorkspaceActions.clearReplOutput(workspaceLocation)),
       handleReplValueChange: (newValue: string) =>
-        dispatch(updateReplValue(newValue, workspaceLocation)),
+        dispatch(WorkspaceActions.updateReplValue(newValue, workspaceLocation)),
       handleResetWorkspace: (options: Partial<WorkspaceState>) =>
-        dispatch(resetWorkspace(workspaceLocation, options)),
+        dispatch(WorkspaceActions.resetWorkspace(workspaceLocation, options)),
       handleUpdateWorkspace: (options: Partial<WorkspaceState>) =>
-        dispatch(updateWorkspace(workspaceLocation, options)),
+        dispatch(WorkspaceActions.updateWorkspace(workspaceLocation, options)),
       handleSubmitAnswer: (id: number, answer: string | number) =>
         dispatch(SessionActions.submitAnswer(id, answer)),
       handleSideContentHeightChange: (heightChange: number) =>
         dispatch(changeSideContentHeight(heightChange, workspaceLocation)),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
-        dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges)),
+        dispatch(WorkspaceActions.updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges)),
       handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) =>
-        dispatch(updateCurrentAssessmentId(assessmentId, questionId)),
+        dispatch(WorkspaceActions.updateCurrentAssessmentId(assessmentId, questionId)),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
+        dispatch(WorkspaceActions.promptAutocomplete(workspaceLocation, row, col, callback)),
       setActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
-        dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+        dispatch(
+          WorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)
+        ),
       removeEditorTabByIndex: (editorTabIndex: number) =>
-        dispatch(removeEditorTab(workspaceLocation, editorTabIndex))
+        dispatch(WorkspaceActions.removeEditorTab(workspaceLocation, editorTabIndex))
     };
   }, [dispatch]);
 
@@ -334,7 +323,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   const handleTestcaseEval = (testcase: Testcase) => {
     const editorTestcases = [testcase];
     handleUpdateWorkspace({ editorTestcases });
-    dispatch(evalTestcase(workspaceLocation, 0));
+    dispatch(WorkspaceActions.evalTestcase(workspaceLocation, 0));
   };
 
   const handleSave = () => {

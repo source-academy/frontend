@@ -1,6 +1,3 @@
-export const FETCH_GROUP_GRADING_SUMMARY = 'FETCH_GROUP_GRADING_SUMMARY';
-export const UPDATE_GROUP_GRADING_SUMMARY = 'UPDATE_GROUP_GRADING_SUMMARY';
-
 export type DashboardState = {
   gradingSummary: GradingSummary;
 };

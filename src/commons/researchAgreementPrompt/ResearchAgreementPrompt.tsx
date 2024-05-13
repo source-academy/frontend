@@ -1,7 +1,7 @@
 import { Button, Classes, Dialog, H4, Intent } from '@blueprintjs/core';
 import { useDispatch } from 'react-redux';
 
-import { updateCourseResearchAgreement } from '../application/actions/SessionActions';
+import SessionActions from '../application/actions/SessionActions';
 import Constants from '../utils/Constants';
 
 const ResearchAgreementPrompt: React.FC = () => {
@@ -36,12 +36,12 @@ const ResearchAgreementPrompt: React.FC = () => {
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
             <Button
               text="I would like to opt out"
-              onClick={() => dispatch(updateCourseResearchAgreement(false))}
+              onClick={() => dispatch(SessionActions.updateCourseResearchAgreement(false))}
             />
             <Button
               text="I consent!"
               intent={Intent.SUCCESS}
-              onClick={() => dispatch(updateCourseResearchAgreement(true))}
+              onClick={() => dispatch(SessionActions.updateCourseResearchAgreement(true))}
             />
           </div>
         </div>

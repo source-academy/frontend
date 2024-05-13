@@ -4,7 +4,7 @@ import { useFullscreen } from '@mantine/hooks';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { getAchievements, getOwnGoals } from 'src/features/achievement/AchievementActions';
+import AchievementActions from 'src/features/achievement/AchievementActions';
 import { saveData } from 'src/features/game/save/GameSaveRequests';
 import { FullSaveState } from 'src/features/game/save/GameSaveTypes';
 import SourceAcademyGame, {
@@ -23,8 +23,8 @@ const Game: React.FC = () => {
   const [isUsingMock, setIsUsingMock] = React.useState(false);
 
   React.useEffect(() => {
-    dispatch(getAchievements());
-    dispatch(getOwnGoals());
+    dispatch(AchievementActions.getAchievements());
+    dispatch(AchievementActions.getOwnGoals());
   }, [dispatch]);
 
   React.useEffect(() => {

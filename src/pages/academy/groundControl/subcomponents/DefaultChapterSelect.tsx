@@ -21,7 +21,7 @@ import {
   styliseSublanguage
 } from '../../../../commons/application/ApplicationTypes';
 import ControlButton from '../../../../commons/ControlButton';
-import { changeSublanguage } from '../../../../commons/workspace/WorkspaceActions';
+import WorkspaceActions from '../../../../commons/workspace/WorkspaceActions';
 
 const DefaultChapterSelect: React.FC = () => {
   const [chosenSublang, setSublanguage] = useState<SALanguage>(sourceLanguages[0]);
@@ -35,7 +35,7 @@ const DefaultChapterSelect: React.FC = () => {
 
   const dispatch = useDispatch();
   const handleUpdateSublanguage = useCallback(
-    (sublang: SALanguage) => dispatch(changeSublanguage(sublang)),
+    (sublang: SALanguage) => dispatch(WorkspaceActions.changeSublanguage(sublang)),
     [dispatch]
   );
 

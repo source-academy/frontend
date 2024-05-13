@@ -5,10 +5,7 @@ import { useDispatch } from 'react-redux';
 import classes from 'src/styles/FileSystemView.module.scss';
 
 import { showSimpleErrorDialog } from '../utils/DialogHelper';
-import {
-  renameEditorTabForFile,
-  renameEditorTabsForDirectory
-} from '../workspace/WorkspaceActions';
+import WorkspaceActions from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 type Props = {
@@ -69,9 +66,11 @@ const FileSystemViewFileName: React.FC<Props> = ({
           }
 
           if (isDirectory) {
-            dispatch(renameEditorTabsForDirectory(workspaceLocation, oldPath, newPath));
+            dispatch(
+              WorkspaceActions.renameEditorTabsForDirectory(workspaceLocation, oldPath, newPath)
+            );
           } else {
-            dispatch(renameEditorTabForFile(workspaceLocation, oldPath, newPath));
+            dispatch(WorkspaceActions.renameEditorTabForFile(workspaceLocation, oldPath, newPath));
           }
           refreshDirectory();
         });
