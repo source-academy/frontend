@@ -1,5 +1,6 @@
 /*eslint no-eval: "error"*/
 /*eslint-env browser*/
+import _ from 'lodash';
 import { SagaIterator } from 'redux-saga';
 import { all, call, fork, put, select } from 'redux-saga/effects';
 import AcademyActions from 'src/features/academy/AcademyActions';
@@ -47,7 +48,7 @@ import {
 } from '../notificationBadge/NotificationBadgeTypes';
 import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';
-import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
+import { computeFrontendRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
@@ -147,52 +148,14 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
     }
 
     const clientId = getClientId(providerId);
-    const redirectUrl = computeRedirectUri(providerId);
+    const redirectUrl = computeFrontendRedirectUri(providerId);
 
     const tokens: Tokens | null = yield call(postAuth, code, providerId, clientId, redirectUrl);
     if (!tokens) {
       return yield routerNavigate('/');
     }
     yield put(actions.setTokens(tokens));
-
-    // Note: courseRegistration, courseConfiguration and assessmentConfigurations
-    // are either all null OR all not null
-    const {
-      user,
-      courseRegistration,
-      courseConfiguration,
-      assessmentConfigurations
-    }: {
-      user: User | null;
-      courseRegistration: CourseRegistration | null;
-      courseConfiguration: CourseConfiguration | null;
-      assessmentConfigurations: AssessmentConfiguration[] | null;
-    } = yield call(getUser, tokens);
-
-    if (!user) {
-      return;
-    }
-
-    yield put(actions.setUser(user));
-
-    // Handle case where user does not have a latest viewed course in the backend
-    // but is enrolled in some course (this happens occationally due to e.g. removal from a course)
-    if (courseConfiguration === null && user.courses.length > 0) {
-      yield put(actions.updateLatestViewedCourse(user.courses[0].courseId));
-    }
-
-    if (courseRegistration && courseConfiguration && assessmentConfigurations) {
-      yield put(actions.setCourseRegistration(courseRegistration));
-      yield put(actions.setCourseConfiguration(courseConfiguration));
-      yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
-
-      if (courseConfiguration.enableStories) {
-        yield put(actions.getStoriesUser());
-        // TODO: Fetch associated stories group ID
-      } else {
-        yield put(actions.clearStoriesUserAndGroup());
-      }
-    }
+    yield put(actions.fetchUserAndCourse());
     /**
      * NOTE: Navigation logic is now handled in <Login /> component.
      * - Due to route hoisting in react-router v6, which requires us to declare routes at the top level,
@@ -201,9 +164,18 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
      * - Thus handling navigation in <Login /> allows us to directly access the latest router via `useNavigate`.
      */
   },
+  handleSamlRedirect: function* (action) {
+    const { jwtCookie } = action.payload;
+    const tokens = _.mapKeys(JSON.parse(jwtCookie), (v, k) => _.camelCase(k)) as Tokens;
+
+    yield put(actions.setTokens(tokens));
+    yield put(actions.fetchUserAndCourse());
+  },
   fetchUserAndCourse: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
+    // Note: courseRegistration, courseConfiguration and assessmentConfigurations
+    // are either all null OR all not null
     const {
       user,
       courseRegistration,

@@ -82,7 +82,6 @@ export function saferTakeEvery<
     }
   }
 
-  console.log(actionPattern);
   return takeEvery(actionPattern.type, wrapper);
 }
 
