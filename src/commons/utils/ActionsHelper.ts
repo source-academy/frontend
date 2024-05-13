@@ -3,19 +3,19 @@ import InterpreterActions from '../../commons/application/actions/InterpreterAct
 import SessionActions from '../../commons/application/actions/SessionActions';
 import * as CollabEditingActions from '../../commons/collabEditing/CollabEditingActions';
 import * as FileSystemActions from '../../commons/fileSystem/FileSystemActions';
-import * as SideContentActions from '../../commons/sideContent/SideContentActions';
+import SideContentActions from '../../commons/sideContent/SideContentActions';
 import WorkspaceActions from '../../commons/workspace/WorkspaceActions';
 import AcademyActions from '../../features/academy/AcademyActions';
-import * as AchievementActions from '../../features/achievement/AchievementActions';
+import AchievementActions from '../../features/achievement/AchievementActions';
 import * as DashboardActions from '../../features/dashboard/DashboardActions';
 import GitHubActions from '../../features/github/GitHubActions';
-import * as GroundControlActions from '../../features/groundControl/GroundControlActions';
+import GroundControlActions from '../../features/groundControl/GroundControlActions';
 import * as PersistenceActions from '../../features/persistence/PersistenceActions';
 import * as PlaygroundActions from '../../features/playground/PlaygroundActions';
-import * as RemoteExecutionActions from '../../features/remoteExecution/RemoteExecutionActions';
+import RemoteExecutionActions from '../../features/remoteExecution/RemoteExecutionActions';
 import * as SourcecastActions from '../../features/sourceRecorder/sourcecast/SourcecastActions';
 import * as SourceRecorderActions from '../../features/sourceRecorder/SourceRecorderActions';
-import * as SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
+import SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
 import StoriesActions from '../../features/stories/StoriesActions';
 import { ActionType } from './TypeHelper';
 

@@ -1,10 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { expectSaga } from 'redux-saga-test-plan';
-import {
-  changeExternalLibrary,
-  chapterSelect,
-  updateEditorValue
-} from 'src/commons/workspace/WorkspaceActions';
+import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 
 import { PLAYGROUND_UPDATE_PERSISTENCE_FILE } from '../../../features/playground/PlaygroundTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
@@ -146,9 +142,9 @@ describe('PERSISTENCE_OPEN_PICKER', () => {
         }
       })
       .not.put.like({ action: { type: PLAYGROUND_UPDATE_PERSISTENCE_FILE } })
-      .not.put.like({ action: { type: updateEditorValue.type } })
-      .not.put.like({ action: { type: chapterSelect.type } })
-      .not.put.like({ action: { type: changeExternalLibrary.type } })
+      .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
+      .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
+      .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
       .silentRun();
   });
 
@@ -168,9 +164,9 @@ describe('PERSISTENCE_OPEN_PICKER', () => {
         }
       })
       .not.put.like({ action: { type: PLAYGROUND_UPDATE_PERSISTENCE_FILE } })
-      .not.put.like({ action: { type: updateEditorValue.type } })
-      .not.put.like({ action: { type: chapterSelect.type } })
-      .not.put.like({ action: { type: changeExternalLibrary.type } })
+      .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
+      .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
+      .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
       .silentRun();
   });
 });
@@ -218,9 +214,9 @@ test('PERSISTENCE_SAVE_FILE saves', () => {
     .put.like({
       action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME })
     })
-    .not.put.like({ action: { type: updateEditorValue.type } })
-    .not.put.like({ action: { type: chapterSelect.type } })
-    .not.put.like({ action: { type: changeExternalLibrary.type } })
+    .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
+    .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
+    .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
     .silentRun();
 });
 
@@ -278,9 +274,9 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
       .put.like({
         action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME })
       })
-      .not.put.like({ action: { type: updateEditorValue.type } })
-      .not.put.like({ action: { type: chapterSelect.type } })
-      .not.put.like({ action: { type: changeExternalLibrary.type } })
+      .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
+      .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
+      .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
       .silentRun();
     expect(updateFileCalled).toBe(true);
   });
@@ -336,9 +332,9 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
       .put.like({
         action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME })
       })
-      .not.put.like({ action: { type: updateEditorValue.type } })
-      .not.put.like({ action: { type: chapterSelect.type } })
-      .not.put.like({ action: { type: changeExternalLibrary.type } })
+      .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
+      .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
+      .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
       .silentRun();
     expect(updateFileCalled).toBe(true);
   });
@@ -396,9 +392,9 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
       .put.like({
         action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME })
       })
-      .not.put.like({ action: { type: updateEditorValue.type } })
-      .not.put.like({ action: { type: chapterSelect.type } })
-      .not.put.like({ action: { type: changeExternalLibrary.type } })
+      .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
+      .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
+      .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
       .silentRun();
     expect(createFileCalled).toBe(true);
   });
@@ -456,9 +452,9 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
       .put.like({
         action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME })
       })
-      .not.put.like({ action: { type: updateEditorValue.type } })
-      .not.put.like({ action: { type: chapterSelect.type } })
-      .not.put.like({ action: { type: changeExternalLibrary.type } })
+      .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
+      .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
+      .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
       .silentRun();
     expect(createFileCalled).toBe(true);
   });
@@ -500,9 +496,9 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
         }
       })
       .not.put.like({ action: { type: PLAYGROUND_UPDATE_PERSISTENCE_FILE } })
-      .not.put.like({ action: { type: updateEditorValue.type } })
-      .not.put.like({ action: { type: chapterSelect.type } })
-      .not.put.like({ action: { type: changeExternalLibrary.type } })
+      .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
+      .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
+      .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
       .silentRun());
 
   test('does not create a new file if cancelled', () =>
@@ -544,8 +540,8 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
         }
       })
       .not.put.like({ action: { type: PLAYGROUND_UPDATE_PERSISTENCE_FILE } })
-      .not.put.like({ action: { type: updateEditorValue.type } })
-      .not.put.like({ action: { type: chapterSelect.type } })
-      .not.put.like({ action: { type: changeExternalLibrary.type } })
+      .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
+      .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
+      .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
       .silentRun());
 });

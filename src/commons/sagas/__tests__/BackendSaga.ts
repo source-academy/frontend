@@ -11,7 +11,7 @@ import {
   FETCH_GROUP_GRADING_SUMMARY,
   UPDATE_GROUP_GRADING_SUMMARY
 } from '../../../features/dashboard/DashboardTypes';
-import SessionActions, { updateAssessment } from '../../application/actions/SessionActions';
+import SessionActions from '../../application/actions/SessionActions';
 import {
   GameState,
   Role,
@@ -23,8 +23,6 @@ import {
   AdminPanelCourseRegistration,
   CourseConfiguration,
   CourseRegistration,
-  UPDATE_ASSESSMENT,
-  UPDATE_COURSE_RESEARCH_AGREEMENT,
   UpdateCourseConfiguration,
   User
 } from '../../application/types/SessionTypes';
@@ -48,7 +46,7 @@ import {
   showSuccessMessage,
   showWarningMessage
 } from '../../utils/notifications/NotificationsHelper';
-import { changeSublanguage, updateHasUnsavedChanges } from '../../workspace/WorkspaceActions';
+import WorkspaceActions from '../../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import BackendSaga from '../BackendSaga';
 import {
@@ -598,7 +596,7 @@ describe('Test FETCH_ASSESSMENT action', () => {
     return expectSaga(BackendSaga)
       .withState({ session: mockTokens })
       .provide([[call(getAssessment, mockId, mockTokens, undefined, undefined), mockAssessment]])
-      .put(updateAssessment(mockAssessment))
+      .put(SessionActions.updateAssessment(mockAssessment))
       .hasFinalState({ session: mockTokens })
       .dispatch({ type: SessionActions.fetchAssessment.type, payload: { assessmentId: mockId } })
       .silentRun();
@@ -610,7 +608,7 @@ describe('Test FETCH_ASSESSMENT action', () => {
       .withState({ session: mockTokens })
       .provide([[call(getAssessment, mockId, mockTokens, undefined, undefined), null]])
       .call(getAssessment, mockId, mockTokens, undefined, undefined)
-      .not.put.actionType(UPDATE_ASSESSMENT)
+      .not.put.actionType(SessionActions.updateAssessment.type)
       .hasFinalState({ session: mockTokens })
       .dispatch({ type: SessionActions.fetchAssessment.type, payload: { assessmentId: mockId } })
       .silentRun();
@@ -650,8 +648,8 @@ describe('Test SUBMIT_ANSWER action', () => {
       ])
       .not.call.fn(showWarningMessage)
       .call(showSuccessMessage, 'Saved!', 1000)
-      .put(updateAssessment(mockNewAssessment))
-      .put(updateHasUnsavedChanges('assessment' as WorkspaceLocation, false))
+      .put(SessionActions.updateAssessment(mockNewAssessment))
+      .put(WorkspaceActions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false))
       .dispatch({ type: SessionActions.submitAnswer.type, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
     // To make sure no changes in state
@@ -692,8 +690,8 @@ describe('Test SUBMIT_ANSWER action', () => {
       ])
       .not.call.fn(showWarningMessage)
       .call(showSuccessMessage, 'Saved!', 1000)
-      .put(updateAssessment(mockNewAssessment))
-      .put(updateHasUnsavedChanges('assessment' as WorkspaceLocation, false))
+      .put(SessionActions.updateAssessment(mockNewAssessment))
+      .put(WorkspaceActions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false))
       .dispatch({ type: SessionActions.submitAnswer.type, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
     // To make sure no changes in state
@@ -725,8 +723,8 @@ describe('Test SUBMIT_ANSWER action', () => {
       )
       .call(showWarningMessage, "Couldn't reach our servers. Are you online?")
       .not.call.fn(showSuccessMessage)
-      .not.put.actionType(UPDATE_ASSESSMENT)
-      .not.put.actionType(updateHasUnsavedChanges.type)
+      .not.put.actionType(SessionActions.updateAssessment.type)
+      .not.put.actionType(WorkspaceActions.updateHasUnsavedChanges.type)
       .hasFinalState({ session: { ...mockTokens, role: Role.Student } })
       .dispatch({ type: SessionActions.submitAnswer.type, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
@@ -853,7 +851,7 @@ describe('Test CHANGE_SUBLANGUAGE action', () => {
           { ok: true }
         ]
       ])
-      .dispatch({ type: changeSublanguage.type, payload: { sublang } })
+      .dispatch({ type: WorkspaceActions.changeSublanguage.type, payload: { sublang } })
       .silentRun();
   });
 });
@@ -1198,7 +1196,10 @@ describe('Test UPDATE_COURSE_RESEARCH_AGREEMENT', () => {
       .put(SessionActions.setCourseRegistration({ agreedToResearch }))
       .call.fn(showSuccessMessage)
       .provide([[call(putCourseResearchAgreement, mockTokens, agreedToResearch), okResp]])
-      .dispatch({ type: UPDATE_COURSE_RESEARCH_AGREEMENT, payload: { agreedToResearch } })
+      .dispatch({
+        type: SessionActions.updateCourseResearchAgreement.type,
+        payload: { agreedToResearch }
+      })
       .silentRun();
   });
 
@@ -1209,7 +1210,10 @@ describe('Test UPDATE_COURSE_RESEARCH_AGREEMENT', () => {
       .not.put.actionType(SessionActions.setCourseRegistration.type)
       .not.call.fn(showSuccessMessage)
       .provide([[call(putCourseResearchAgreement, mockTokens, agreedToResearch), errorResp]])
-      .dispatch({ type: UPDATE_COURSE_RESEARCH_AGREEMENT, payload: { agreedToResearch } })
+      .dispatch({
+        type: SessionActions.updateCourseResearchAgreement.type,
+        payload: { agreedToResearch }
+      })
       .silentRun();
   });
 });

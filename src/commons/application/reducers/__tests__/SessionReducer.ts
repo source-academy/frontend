@@ -11,7 +11,7 @@ import { Notification } from '../../../notificationBadge/NotificationBadgeTypes'
 import SessionActions from '../../actions/SessionActions';
 import { defaultSession, GameState, Role, Story } from '../../ApplicationTypes';
 import { LOG_OUT } from '../../types/CommonsTypes';
-import { SessionState, UPDATE_ASSESSMENT } from '../../types/SessionTypes';
+import { SessionState } from '../../types/SessionTypes';
 import { SessionsReducer } from '../SessionsReducer';
 
 test('LOG_OUT works correctly on default session', () => {
@@ -272,7 +272,7 @@ const assessmentTest3: Assessment = {
 
 test('UPDATE_ASSESSMENT works correctly in inserting assessment', () => {
   const action = {
-    type: UPDATE_ASSESSMENT,
+    type: SessionActions.updateAssessment.type,
     payload: assessmentTest1
   } as const;
   const resultMap = SessionsReducer(defaultSession, action).assessments;
@@ -290,7 +290,7 @@ test('UPDATE_ASSESSMENT works correctly in inserting assessment and retains old 
   };
 
   const action = {
-    type: UPDATE_ASSESSMENT,
+    type: SessionActions.updateAssessment.type,
     payload: assessmentTest2
   } as const;
   const resultMap = SessionsReducer(newDefaultSession, action).assessments;
@@ -308,7 +308,7 @@ test('UPDATE_ASSESSMENT works correctly in updating assessment', () => {
     assessments
   };
   const action = {
-    type: UPDATE_ASSESSMENT,
+    type: SessionActions.updateAssessment.type,
     payload: assessmentTest2
   } as const;
   const resultMap = SessionsReducer(newDefaultSession, action).assessments;
