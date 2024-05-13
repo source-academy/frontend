@@ -1,29 +1,29 @@
 import { mockAchievements } from '../../../commons/mocks/AchievementMocks';
-import { getAchievements, removeAchievement, saveAchievements } from '../AchievementActions';
+import AchievementActions from '../AchievementActions';
 
 test('saveAchievements generates correct action object', () => {
-  const action = saveAchievements([]);
+  const action = AchievementActions.saveAchievements([]);
 
   expect(action).toEqual({
-    type: saveAchievements.type,
+    type: AchievementActions.saveAchievements.type,
     payload: []
   });
 });
 
 test('getAchievements generates correct action object', () => {
-  const action = getAchievements();
+  const action = AchievementActions.getAchievements();
 
   expect(action).toEqual({
-    type: getAchievements.type,
+    type: AchievementActions.getAchievements.type,
     payload: {}
   });
 });
 
 test('removeAchievement generates correct action object', () => {
-  const action = removeAchievement(mockAchievements[0].uuid);
+  const action = AchievementActions.removeAchievement(mockAchievements[0].uuid);
 
   expect(action).toEqual({
-    type: removeAchievement.type,
+    type: AchievementActions.removeAchievement.type,
     payload: mockAchievements[0].uuid
   });
 });

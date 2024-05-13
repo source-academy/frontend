@@ -1,14 +1,13 @@
 import { WorkspaceLocation } from '../../../../commons/workspace/WorkspaceTypes';
 import { SourcecastData } from '../../SourceRecorderTypes';
 import { fetchSourcecastIndex, updateSourcecastIndex } from '../SourcecastActions';
-import { FETCH_SOURCECAST_INDEX, UPDATE_SOURCECAST_INDEX } from '../SourcecastTypes';
 
 const sourcecastWorkspace: WorkspaceLocation = 'sourcecast';
 
 test('fetchSourcecastIndex generates correct action object', () => {
   const action = fetchSourcecastIndex(sourcecastWorkspace);
   expect(action).toEqual({
-    type: FETCH_SOURCECAST_INDEX,
+    type: fetchSourcecastIndex.type,
     payload: {
       workspaceLocation: sourcecastWorkspace
     }
@@ -32,7 +31,7 @@ test('updateSourcecastIndex generates correct action object', () => {
   };
   const action = updateSourcecastIndex([sourcecastData], sourcecastWorkspace);
   expect(action).toEqual({
-    type: UPDATE_SOURCECAST_INDEX,
+    type: updateSourcecastIndex.type,
     payload: { index: [sourcecastData], workspaceLocation: sourcecastWorkspace }
   });
 });

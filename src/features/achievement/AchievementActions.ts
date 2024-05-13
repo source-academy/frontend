@@ -49,26 +49,5 @@ const AchievementActions = createActions('achievement', {
   saveUserAssessmentOverviews: (assessmentOverviews: AssessmentOverview[]) => assessmentOverviews
 });
 
-// For compatibility with existing code (reducer)
-export const {
-  bulkUpdateAchievements,
-  bulkUpdateGoals,
-  getAchievements,
-  getGoals,
-  getOwnGoals,
-  getUserAssessmentOverviews,
-  getUsers,
-  removeAchievement,
-  removeGoal,
-  updateOwnGoalProgress,
-  addEvent,
-  handleEvent,
-  updateGoalProgress,
-  saveAchievements,
-  saveGoals,
-  saveUsers,
-  saveUserAssessmentOverviews
-} = AchievementActions;
-
 // For compatibility with existing code (actions helper)
 export default AchievementActions;

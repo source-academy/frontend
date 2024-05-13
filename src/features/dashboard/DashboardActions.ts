@@ -1,16 +1,14 @@
-import { createAction } from '@reduxjs/toolkit';
+import { createActions } from 'src/commons/redux/utils';
 
-import {
-  FETCH_GROUP_GRADING_SUMMARY,
-  GradingSummary,
-  UPDATE_GROUP_GRADING_SUMMARY
-} from './DashboardTypes';
+import { GradingSummary } from './DashboardTypes';
 
-export const fetchGroupGradingSummary = createAction(FETCH_GROUP_GRADING_SUMMARY, () => ({
-  payload: {}
-}));
+const DashboardActions = createActions('dashboard', {
+  fetchGroupGradingSummary: () => ({}),
+  updateGroupGradingSummary: (gradingSummary: GradingSummary) => gradingSummary
+});
 
-export const updateGroupGradingSummary = createAction(
-  UPDATE_GROUP_GRADING_SUMMARY,
-  (gradingSummary: GradingSummary) => ({ payload: gradingSummary })
-);
+// For compatibility with existing code (reducer)
+export const { fetchGroupGradingSummary, updateGroupGradingSummary } = DashboardActions;
+
+// For compatibility with existing code (actions helper)
+export default DashboardActions;

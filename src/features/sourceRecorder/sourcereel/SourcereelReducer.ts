@@ -2,7 +2,7 @@ import { createReducer } from '@reduxjs/toolkit';
 import { defaultWorkspaceManager } from 'src/commons/application/ApplicationTypes';
 
 import { RecordingStatus } from '../SourceRecorderTypes';
-import * as SourcereelActions from './SourcereelActions';
+import SourcereelActions from './SourcereelActions';
 
 export const SourcereelReducer = createReducer(defaultWorkspaceManager.sourcereel, builder => {
   builder

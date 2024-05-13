@@ -7,14 +7,7 @@ import AchievementPreview from '../../../commons/achievement/control/Achievement
 import GoalEditor from '../../../commons/achievement/control/GoalEditor';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import { Prompt } from '../../../commons/ReactRouterPrompt';
-import {
-  bulkUpdateAchievements,
-  bulkUpdateGoals,
-  getAchievements,
-  getOwnGoals,
-  removeAchievement,
-  removeGoal
-} from '../../../features/achievement/AchievementActions';
+import AchievementActions from '../../../features/achievement/AchievementActions';
 import { AchievementContext } from '../../../features/achievement/AchievementConstants';
 import { AchievementItem, GoalDefinition } from '../../../features/achievement/AchievementTypes';
 
@@ -30,12 +23,14 @@ const AchievementControl: React.FC = () => {
   } = useMemo(
     () => ({
       handleBulkUpdateAchievements: (achievement: AchievementItem[]) =>
-        dispatch(bulkUpdateAchievements(achievement)),
-      handleBulkUpdateGoals: (goals: GoalDefinition[]) => dispatch(bulkUpdateGoals(goals)),
-      handleGetAchievements: () => dispatch(getAchievements()),
-      handleGetOwnGoals: () => dispatch(getOwnGoals()),
-      handleRemoveAchievement: (uuid: string) => dispatch(removeAchievement(uuid)),
-      handleRemoveGoal: (uuid: string) => dispatch(removeGoal(uuid))
+        dispatch(AchievementActions.bulkUpdateAchievements(achievement)),
+      handleBulkUpdateGoals: (goals: GoalDefinition[]) =>
+        dispatch(AchievementActions.bulkUpdateGoals(goals)),
+      handleGetAchievements: () => dispatch(AchievementActions.getAchievements()),
+      handleGetOwnGoals: () => dispatch(AchievementActions.getOwnGoals()),
+      handleRemoveAchievement: (uuid: string) =>
+        dispatch(AchievementActions.removeAchievement(uuid)),
+      handleRemoveGoal: (uuid: string) => dispatch(AchievementActions.removeGoal(uuid))
     }),
     [dispatch]
   );
