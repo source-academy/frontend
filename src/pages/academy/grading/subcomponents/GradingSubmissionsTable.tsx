@@ -32,6 +32,7 @@ import {
   SortStateProperties,
   SortStates
 } from 'src/features/grading/GradingTypes';
+import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 
 import GradingActions from './GradingActions';
@@ -410,7 +411,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       resetPage();
       return;
     }
-    dispatch(updateSubmissionsTableFilters({ columnFilters }));
+    dispatch(WorkspaceActions.updateSubmissionsTableFilters({ columnFilters }));
   }, [columnFilters, showAllSubmissions, dispatch, resetPage]);
 
   useEffect(() => {

@@ -1,11 +1,11 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 
-import { addStoryEnv, clearStoryEnv, evalStory } from '../StoriesActions';
+import StoriesActions from '../StoriesActions';
 
 test('addStoryEnv generates correct action object', () => {
-  const action = addStoryEnv('testEnv', Chapter.SOURCE_4, Variant.DEFAULT);
+  const action = StoriesActions.addStoryEnv('testEnv', Chapter.SOURCE_4, Variant.DEFAULT);
   expect(action).toEqual({
-    type: addStoryEnv.type,
+    type: StoriesActions.addStoryEnv.type,
     payload: {
       env: 'testEnv',
       chapter: Chapter.SOURCE_4,
@@ -15,9 +15,9 @@ test('addStoryEnv generates correct action object', () => {
 });
 
 test('clearStoryEnv generates correct action object', () => {
-  const action = clearStoryEnv();
+  const action = StoriesActions.clearStoryEnv();
   expect(action).toEqual({
-    type: clearStoryEnv.type,
+    type: StoriesActions.clearStoryEnv.type,
     payload: {
       env: undefined
     }
@@ -25,9 +25,9 @@ test('clearStoryEnv generates correct action object', () => {
 });
 
 test('clearStoryEnv with environment generates correct action object', () => {
-  const action = clearStoryEnv('default');
+  const action = StoriesActions.clearStoryEnv('default');
   expect(action).toEqual({
-    type: clearStoryEnv.type,
+    type: StoriesActions.clearStoryEnv.type,
     payload: {
       env: 'default'
     }
@@ -35,9 +35,9 @@ test('clearStoryEnv with environment generates correct action object', () => {
 });
 
 test('evalStory generates correct action object', () => {
-  const action = evalStory('testEnv', '1;');
+  const action = StoriesActions.evalStory('testEnv', '1;');
   expect(action).toEqual({
-    type: evalStory.type,
+    type: StoriesActions.evalStory.type,
     payload: {
       env: 'testEnv',
       code: '1;'

@@ -7,156 +7,180 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
   <Blueprint5.NavbarGroup
     align="left"
   >
-    <NavLink
-      className={[Function]}
-      title="Missions"
+    <DesktopNavLink
+      disabled={false}
+      hasNotifications={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+        ]
+      }
+      icon="flame"
+      text="Missions"
       to="/courses/0/missions"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="flame"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Quests"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hasNotifications={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+        ]
+      }
+      icon="lightbulb"
+      text="Quests"
       to="/courses/0/quests"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="lightbulb"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Paths"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hasNotifications={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+        ]
+      }
+      icon="predictive-analysis"
+      text="Paths"
       to="/courses/0/paths"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="predictive-analysis"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Contests"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hasNotifications={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+        ]
+      }
+      icon="comparison"
+      text="Contests"
       to="/courses/0/contests"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="comparison"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Others"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hasNotifications={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+        ]
+      }
+      icon="manual"
+      text="Others"
       to="/courses/0/others"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="manual"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
+    />
   </Blueprint5.NavbarGroup>
   <Blueprint5.NavbarGroup
     align="right"
   >
-    <NavLink
-      className={[Function]}
-      title="Notifications"
+    <DesktopNavLink
+      disabled={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+        ]
+      }
+      icon="satellite"
+      text="Ground Control"
+      to="/courses/0/groundcontrol"
+    />
+    <DesktopNavLink
+      disabled={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+        ]
+      }
+      icon="globe"
+      text="Dashboard"
+      to="/courses/0/dashboard"
+    />
+    <DesktopNavLink
+      disabled={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+          "md",
+        ]
+      }
+      icon="mobile-video"
+      text="Sourcereel"
+      to="/courses/0/sourcereel"
+    />
+    <DesktopNavLink
+      disabled={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+          "md",
+        ]
+      }
+      icon="form"
+      text="Team Formation"
+      to="/courses/0/teamformation"
+    />
+    <DesktopNavLink
+      disabled={true}
+      hasNotifications={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+          "md",
+        ]
+      }
+      icon="endorsed"
+      text="Grading"
+      to="/courses/0/grading"
+    />
+    <DesktopNavLink
+      disabled={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+          "md",
+        ]
+      }
+      icon="crown"
+      text="Game Simulator"
+      to="/courses/0/gamesimulator"
+    />
+    <DesktopNavLink
+      disabled={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+          "md",
+          "lg",
+        ]
+      }
+      icon="settings"
+      text="Admin Panel"
+      to="/courses/0/adminpanel"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+          "md",
+          "lg",
+        ]
+      }
+      icon="notifications"
+      text="Notifications"
       to="/courses/0/notipreference"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="notifications"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm hidden-md hidden-lg"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-    </NavLink>
+    />
   </Blueprint5.NavbarGroup>
 </Blueprint5.Navbar>
 `;
@@ -168,307 +192,180 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
   <Blueprint5.NavbarGroup
     align="left"
   >
-    <NavLink
-      className={[Function]}
-      title="Missions"
+    <DesktopNavLink
+      disabled={false}
+      hasNotifications={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+        ]
+      }
+      icon="flame"
+      text="Missions"
       to="/courses/0/missions"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="flame"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Quests"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hasNotifications={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+        ]
+      }
+      icon="lightbulb"
+      text="Quests"
       to="/courses/0/quests"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="lightbulb"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Paths"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hasNotifications={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+        ]
+      }
+      icon="predictive-analysis"
+      text="Paths"
       to="/courses/0/paths"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="predictive-analysis"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Contests"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hasNotifications={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+        ]
+      }
+      icon="comparison"
+      text="Contests"
       to="/courses/0/contests"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="comparison"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Others"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hasNotifications={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+        ]
+      }
+      icon="manual"
+      text="Others"
       to="/courses/0/others"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="manual"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
+    />
   </Blueprint5.NavbarGroup>
   <Blueprint5.NavbarGroup
     align="right"
   >
-    <NavLink
-      className={[Function]}
-      title="Ground Control"
+    <DesktopNavLink
+      disabled={false}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+        ]
+      }
+      icon="satellite"
+      text="Ground Control"
       to="/courses/0/groundcontrol"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="satellite"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Dashboard"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+        ]
+      }
+      icon="globe"
+      text="Dashboard"
       to="/courses/0/dashboard"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="globe"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Sourcereel"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+          "md",
+        ]
+      }
+      icon="mobile-video"
+      text="Sourcereel"
       to="/courses/0/sourcereel"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="mobile-video"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm hidden-md"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Team Formation"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+          "md",
+        ]
+      }
+      icon="form"
+      text="Team Formation"
       to="/courses/0/teamformation"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="form"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm hidden-md"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Grading"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hasNotifications={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+          "md",
+        ]
+      }
+      icon="endorsed"
+      text="Grading"
       to="/courses/0/grading"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="endorsed"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm hidden-md"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Game Simulator"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+          "md",
+        ]
+      }
+      icon="crown"
+      text="Game Simulator"
       to="/courses/0/gamesimulator"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="crown"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm hidden-md"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Admin Panel"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+          "md",
+          "lg",
+        ]
+      }
+      icon="settings"
+      text="Admin Panel"
       to="/courses/0/adminpanel"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="settings"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm hidden-md hidden-lg"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Notifications"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+          "md",
+          "lg",
+        ]
+      }
+      icon="notifications"
+      text="Notifications"
       to="/courses/0/notipreference"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="notifications"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm hidden-md hidden-lg"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-    </NavLink>
+    />
   </Blueprint5.NavbarGroup>
 </Blueprint5.Navbar>
 `;
@@ -480,286 +377,180 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Te
   <Blueprint5.NavbarGroup
     align="left"
   >
-    <NavLink
-      className={[Function]}
-      title="Missions"
+    <DesktopNavLink
+      disabled={false}
+      hasNotifications={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+        ]
+      }
+      icon="flame"
+      text="Missions"
       to="/courses/0/missions"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="flame"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Quests"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hasNotifications={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+        ]
+      }
+      icon="lightbulb"
+      text="Quests"
       to="/courses/0/quests"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="lightbulb"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Paths"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hasNotifications={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+        ]
+      }
+      icon="predictive-analysis"
+      text="Paths"
       to="/courses/0/paths"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="predictive-analysis"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Contests"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hasNotifications={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+        ]
+      }
+      icon="comparison"
+      text="Contests"
       to="/courses/0/contests"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="comparison"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Others"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hasNotifications={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+        ]
+      }
+      icon="manual"
+      text="Others"
       to="/courses/0/others"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="manual"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
+    />
   </Blueprint5.NavbarGroup>
   <Blueprint5.NavbarGroup
     align="right"
   >
-    <NavLink
-      className={[Function]}
-      title="Ground Control"
+    <DesktopNavLink
+      disabled={false}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+        ]
+      }
+      icon="satellite"
+      text="Ground Control"
       to="/courses/0/groundcontrol"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="satellite"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Dashboard"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+        ]
+      }
+      icon="globe"
+      text="Dashboard"
       to="/courses/0/dashboard"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="globe"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Sourcereel"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+          "md",
+        ]
+      }
+      icon="mobile-video"
+      text="Sourcereel"
       to="/courses/0/sourcereel"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="mobile-video"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm hidden-md"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Team Formation"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+          "md",
+        ]
+      }
+      icon="form"
+      text="Team Formation"
       to="/courses/0/teamformation"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="form"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm hidden-md"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Grading"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hasNotifications={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+          "md",
+        ]
+      }
+      icon="endorsed"
+      text="Grading"
       to="/courses/0/grading"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="endorsed"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm hidden-md"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-      <NotificationBadge
-        disableHover={true}
-        notificationFilter={[Function]}
-      />
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Game Simulator"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+          "md",
+        ]
+      }
+      icon="crown"
+      text="Game Simulator"
       to="/courses/0/gamesimulator"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="crown"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm hidden-md"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-    </NavLink>
-    <NavLink
-      className={[Function]}
-      title="Notifications"
+    />
+    <DesktopNavLink
+      disabled={true}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+          "md",
+          "lg",
+        ]
+      }
+      icon="settings"
+      text="Admin Panel"
+      to="/courses/0/adminpanel"
+    />
+    <DesktopNavLink
+      disabled={false}
+      hiddenInBreakpoints={
+        Array [
+          "xs",
+          "sm",
+          "md",
+          "lg",
+        ]
+      }
+      icon="notifications"
+      text="Notifications"
       to="/courses/0/notipreference"
-    >
-      <Blueprint5.Icon
-        autoLoad={true}
-        icon="notifications"
-        tagName="span"
-      />
-      <div
-        className="hidden-xs hidden-sm hidden-md hidden-lg"
-      >
-        <Translation
-          keyPrefix="navigationBar"
-          ns="commons"
-        >
-          [Function]
-        </Translation>
-      </div>
-    </NavLink>
+    />
   </Blueprint5.NavbarGroup>
 </Blueprint5.Navbar>
 `;

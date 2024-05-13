@@ -1,42 +1,32 @@
-import { createAction } from '@reduxjs/toolkit';
 import { SALanguage } from 'src/commons/application/ApplicationTypes';
+import { createActions } from 'src/commons/redux/utils';
 
 import { PersistenceFile } from '../persistence/PersistenceTypes';
-import {
-  CHANGE_QUERY_STRING,
-  GENERATE_LZ_STRING,
-  PLAYGROUND_UPDATE_GITHUB_SAVE_INFO,
-  PLAYGROUND_UPDATE_LANGUAGE_CONFIG,
-  PLAYGROUND_UPDATE_PERSISTENCE_FILE,
-  SHORTEN_URL,
-  UPDATE_SHORT_URL
-} from './PlaygroundTypes';
 
-export const generateLzString = createAction(GENERATE_LZ_STRING, () => ({ payload: {} }));
+const PlaygroundActions = createActions('playground', {
+  generateLzString: () => ({}),
+  shortenURL: (keyword: string) => keyword,
+  updateShortURL: (shortURL: string) => shortURL,
+  changeQueryString: (queryString: string) => queryString,
+  playgroundUpdatePersistenceFile: (file?: PersistenceFile) => file,
+  playgroundUpdateGitHubSaveInfo: (repoName: string, filePath: string, lastSaved: Date) => ({
+    repoName,
+    filePath,
+    lastSaved
+  }),
+  playgroundConfigLanguage: (languageConfig: SALanguage) => languageConfig
+});
 
-export const shortenURL = createAction(SHORTEN_URL, (keyword: string) => ({ payload: keyword }));
+// For compatibility with existing code (reducer)
+export const {
+  generateLzString,
+  shortenURL,
+  updateShortURL,
+  changeQueryString,
+  playgroundUpdatePersistenceFile,
+  playgroundUpdateGitHubSaveInfo,
+  playgroundConfigLanguage
+} = PlaygroundActions;
 
-export const updateShortURL = createAction(UPDATE_SHORT_URL, (shortURL: string) => ({
-  payload: shortURL
-}));
-
-export const changeQueryString = createAction(CHANGE_QUERY_STRING, (queryString: string) => ({
-  payload: queryString
-}));
-
-export const playgroundUpdatePersistenceFile = createAction(
-  PLAYGROUND_UPDATE_PERSISTENCE_FILE,
-  (file?: PersistenceFile) => ({ payload: file })
-);
-
-export const playgroundUpdateGitHubSaveInfo = createAction(
-  PLAYGROUND_UPDATE_GITHUB_SAVE_INFO,
-  (repoName: string, filePath: string, lastSaved: Date) => ({
-    payload: { repoName, filePath, lastSaved }
-  })
-);
-
-export const playgroundConfigLanguage = createAction(
-  PLAYGROUND_UPDATE_LANGUAGE_CONFIG,
-  (languageConfig: SALanguage) => ({ payload: languageConfig })
-);
+// For compatibility with existing code (actions helper)
+export default PlaygroundActions;

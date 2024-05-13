@@ -1,7 +1,7 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
+import DashboardActions from 'src/features/dashboard/DashboardActions';
 
-import { FETCH_GROUP_GRADING_SUMMARY } from '../../features/dashboard/DashboardTypes';
 import {
   GradingOverviews,
   GradingQuery,
@@ -467,7 +467,7 @@ export function* mockBackendSaga(): SagaIterator {
     }
   );
 
-  yield takeEvery(FETCH_GROUP_GRADING_SUMMARY, function* () {
+  yield takeEvery(DashboardActions.fetchGroupGradingSummary.type, function* () {
     yield put(actions.updateGroupGradingSummary({ ...mockGradingSummary }));
   });
 }
