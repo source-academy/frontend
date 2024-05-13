@@ -40,7 +40,7 @@ import {
 import { mockGradingSummary } from '../../mocks/GradingMocks';
 import { mockNotifications, mockStudents } from '../../mocks/UserMocks';
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
-import { AuthProviderType, computeRedirectUri } from '../../utils/AuthHelper';
+import { AuthProviderType, computeFrontendRedirectUri } from '../../utils/AuthHelper';
 import Constants from '../../utils/Constants';
 import {
   showSuccessMessage,
@@ -271,7 +271,7 @@ describe('Test FETCH_AUTH action', () => {
     isDefault: true,
     type: AuthProviderType.OAUTH2
   });
-  const redirectUrl = computeRedirectUri(providerId);
+  const redirectUrl = computeFrontendRedirectUri(providerId);
 
   const user = mockUser;
   const courseConfiguration = mockCourseConfiguration1;
@@ -376,6 +376,7 @@ describe('Test FETCH_AUTH action', () => {
 
   test('when user is null', () => {
     return expectSaga(BackendSaga)
+      .withState({ session: mockTokens }) // need to mock tokens for the selectTokens() call
       .provide([
         [call(postAuth, code, providerId, clientId, redirectUrl), mockTokens],
         [
@@ -399,6 +400,17 @@ describe('Test FETCH_AUTH action', () => {
       .dispatch({ type: SessionActions.fetchAuth.type, payload: { code, providerId } })
       .silentRun();
   });
+});
+
+test('Test handleSamlRedirect action', () => {
+  const jwtCookie = `{"access_token":"${mockTokens.accessToken}","refresh_token":"${mockTokens.refreshToken}"}`;
+
+  return expectSaga(BackendSaga)
+    .withState({ session: mockTokens }) // need to mock tokens for the downstream selectTokens() call in fetchUserAndCourse()
+    .put(SessionActions.setTokens(mockTokens))
+    .put(SessionActions.fetchUserAndCourse())
+    .dispatch({ type: SessionActions.handleSamlRedirect.type, payload: { jwtCookie } })
+    .silentRun();
 });
 
 describe('Test FETCH_USER_AND_COURSE action', () => {
