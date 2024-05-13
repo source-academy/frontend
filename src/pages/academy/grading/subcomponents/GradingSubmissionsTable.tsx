@@ -13,11 +13,7 @@ import { ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import {
-  updateAllColsSortStates,
-  updateGradingColumnVisibility,
-  updateSubmissionsTableFilters
-} from 'src/commons/workspace/WorkspaceActions';
+import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import {
   ColumnFields,
   ColumnFieldsKeys,
@@ -32,7 +28,6 @@ import {
   SortStateProperties,
   SortStates
 } from 'src/features/grading/GradingTypes';
-import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 
 import GradingActions from './GradingActions';
@@ -119,7 +114,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           const newState: SortStateProperties = { ...freshSortState };
           newState[affectedID] = sortDirection;
           dispatch(
-            updateAllColsSortStates({
+            WorkspaceActions.updateAllColsSortStates({
               currentState: newState,
               sortBy: affectedID
             })
@@ -415,7 +410,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   }, [columnFilters, showAllSubmissions, dispatch, resetPage]);
 
   useEffect(() => {
-    dispatch(updateGradingColumnVisibility(hiddenColumns));
+    dispatch(WorkspaceActions.updateGradingColumnVisibility(hiddenColumns));
     if (gridRef.current?.api) {
       gridRef.current.api.setColumnsVisible(hiddenColumns, false);
     }
