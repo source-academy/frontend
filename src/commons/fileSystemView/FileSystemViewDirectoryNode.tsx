@@ -8,7 +8,7 @@ import classes from 'src/styles/FileSystemView.module.scss';
 
 import { rmdirRecursively } from '../fileSystem/utils';
 import { showSimpleConfirmDialog, showSimpleErrorDialog } from '../utils/DialogHelper';
-import { removeEditorTabsForDirectory } from '../workspace/WorkspaceActions';
+import WorkspaceActions from '../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import FileSystemViewContextMenu from './FileSystemViewContextMenu';
 import FileSystemViewFileName from './FileSystemViewFileName';
@@ -78,7 +78,7 @@ const FileSystemViewDirectoryNode: React.FC<Props> = ({
         return;
       }
 
-      dispatch(removeEditorTabsForDirectory(workspaceLocation, fullPath));
+      dispatch(WorkspaceActions.removeEditorTabsForDirectory(workspaceLocation, fullPath));
       rmdirRecursively(fileSystem, fullPath).then(refreshParentDirectory);
     });
   };

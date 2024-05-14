@@ -3,15 +3,6 @@ import { DebuggerContext } from 'src/commons/workspace/WorkspaceTypes';
 
 import { InterpreterOutput, StoriesRole } from '../../commons/application/ApplicationTypes';
 
-// Auth-related actions
-export const GET_STORIES_USER = 'GET_STORIES_USER';
-export const CLEAR_STORIES_USER_AND_GROUP = 'CLEAR_STORIES_USER_AND_GROUP';
-// TODO: Investigate possibility of combining the two actions
-export const SET_CURRENT_STORIES_USER = 'SET_CURRENT_STORIES_USER';
-export const SET_CURRENT_STORIES_GROUP = 'SET_CURRENT_STORIES_GROUP';
-export const FETCH_ADMIN_PANEL_STORIES_USERS = 'FETCH_ADMIN_PANEL_STORIES_USERS';
-export const SET_ADMIN_PANEL_STORIES_USERS = 'SET_ADMIN_PANEL_STORIES_USERS';
-
 export type StoryMetadata = {
   authorId: number;
   authorName: string;

@@ -1,10 +1,9 @@
-import { LOG_OUT } from '../../types/CommonsTypes';
-import { logOut } from '../CommonsActions';
+import CommonsActions from '../CommonsActions';
 
 test('logOut generates correct action object', () => {
-  const action = logOut();
+  const action = CommonsActions.logOut();
   expect(action).toEqual({
-    type: LOG_OUT,
+    type: CommonsActions.logOut.type,
     payload: {}
   });
 });

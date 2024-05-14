@@ -3,14 +3,10 @@ import { createMemoryRouter } from 'react-router';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import { mockTeamFormationOverviews } from 'src/commons/mocks/TeamFormationMocks';
-import { addNewUsersToCourse, createCourse } from 'src/features/academy/AcademyActions';
+import AcademyActions from 'src/features/academy/AcademyActions';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
-import { updateGroupGradingSummary } from '../../../features/dashboard/DashboardActions';
-import {
-  FETCH_GROUP_GRADING_SUMMARY,
-  UPDATE_GROUP_GRADING_SUMMARY
-} from '../../../features/dashboard/DashboardTypes';
+import DashboardActions from '../../../features/dashboard/DashboardActions';
 import SessionActions from '../../application/actions/SessionActions';
 import {
   GameState,
@@ -1080,7 +1076,7 @@ describe('Test CREATE_COURSE action', () => {
           okResp
         ]
       ])
-      .dispatch({ type: createCourse.type, payload: courseConfig })
+      .dispatch({ type: AcademyActions.createCourse.type, payload: courseConfig })
       .silentRun();
   });
 
@@ -1094,7 +1090,7 @@ describe('Test CREATE_COURSE action', () => {
       .not.call.fn(putAssessmentConfigs)
       .not.call.fn(showSuccessMessage)
       .provide([[call(postCreateCourse, mockTokens, courseConfig), errorResp]])
-      .dispatch({ type: createCourse.type, payload: courseConfig })
+      .dispatch({ type: AcademyActions.createCourse.type, payload: courseConfig })
       .silentRun();
   });
 });
@@ -1133,7 +1129,7 @@ describe('Test ADD_NEW_USERS_TO_COURSE action', () => {
         [call(putNewUsers, mockTokens, users, provider), okResp],
         [call(getUserCourseRegistrations, mockTokens), userCourseRegistrations]
       ])
-      .dispatch({ type: addNewUsersToCourse.type, payload: { users, provider } })
+      .dispatch({ type: AcademyActions.addNewUsersToCourse.type, payload: { users, provider } })
       .silentRun();
   });
 
@@ -1144,7 +1140,7 @@ describe('Test ADD_NEW_USERS_TO_COURSE action', () => {
       .not.put.actionType(SessionActions.fetchAdminPanelCourseRegistrations.type)
       .not.call.fn(showSuccessMessage)
       .provide([[call(putNewUsers, mockTokens, users, provider), errorResp]])
-      .dispatch({ type: addNewUsersToCourse.type, payload: { users, provider } })
+      .dispatch({ type: AcademyActions.addNewUsersToCourse.type, payload: { users, provider } })
       .silentRun();
   });
 });
@@ -1315,9 +1311,9 @@ describe('Test FETCH_GROUP_GRADING_SUMMARY action', () => {
     return expectSaga(BackendSaga)
       .withState({ session: { ...mockTokens, role: Role.Staff } })
       .provide([[call(getGradingSummary, mockTokens), mockGradingSummary]])
-      .put(updateGroupGradingSummary(mockGradingSummary))
+      .put(DashboardActions.updateGroupGradingSummary(mockGradingSummary))
       .hasFinalState({ session: { ...mockTokens, role: Role.Staff } })
-      .dispatch({ type: FETCH_GROUP_GRADING_SUMMARY })
+      .dispatch({ type: DashboardActions.fetchGroupGradingSummary.type })
       .silentRun();
   });
 
@@ -1326,9 +1322,9 @@ describe('Test FETCH_GROUP_GRADING_SUMMARY action', () => {
       .withState({ session: { ...mockTokens, role: Role.Staff } })
       .provide([[call(getGradingSummary, mockTokens), null]])
       .call(getGradingSummary, mockTokens)
-      .not.put.actionType(UPDATE_GROUP_GRADING_SUMMARY)
+      .not.put.actionType(DashboardActions.updateGroupGradingSummary.type)
       .hasFinalState({ session: { ...mockTokens, role: Role.Staff } })
-      .dispatch({ type: FETCH_GROUP_GRADING_SUMMARY })
+      .dispatch({ type: DashboardActions.fetchGroupGradingSummary.type })
       .silentRun();
   });
 });
