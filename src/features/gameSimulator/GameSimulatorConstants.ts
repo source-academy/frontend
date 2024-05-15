@@ -4,10 +4,12 @@ import FontAssets from 'src/features/game/assets/FontAssets';
 import { screenSize } from 'src/features/game/commons/CommonConstants';
 import { BitmapFontStyle } from 'src/features/game/commons/CommonTypes';
 
+import CheckpointTransition from '../game/scenes/checkpointTransition/CheckpointTransition';
+import GameManager from '../game/scenes/gameManager/GameManager';
+import GameSimulatorMenu from './GameSimulatorMenu';
 import { dateOneYearFromNow } from './GameSimulatorUtils';
 
-export const gameSimulatorConfig = {
-  debug: true,
+export const gameSimulatorConfig: Phaser.Types.Core.GameConfig = {
   type: Phaser.CANVAS,
   width: screenSize.x,
   height: screenSize.y,
@@ -20,7 +22,8 @@ export const gameSimulatorConfig = {
   },
   fps: {
     target: 24
-  }
+  },
+  scene: [GameSimulatorMenu, GameManager, CheckpointTransition]
 };
 
 export const gameSimulatorMenuAssets: AssetMap<ImageAsset> = {
