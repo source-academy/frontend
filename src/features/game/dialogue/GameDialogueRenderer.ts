@@ -19,7 +19,6 @@ class DialogueRenderer {
    */
   constructor(typewriterStyle: Phaser.Types.GameObjects.Text.TextStyle) {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
-
     this.dialogueBox = createDialogueBox(gameManager).setInteractive({
       useHandCursor: true,
       pixelPerfect: true
