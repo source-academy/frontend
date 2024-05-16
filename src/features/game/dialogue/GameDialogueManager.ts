@@ -130,12 +130,9 @@ export default class DialogueManager {
    * @returns {string} the given line with all quiz score interpolation replaced by actual scores.
    */
   public makeLineWithQuizScores(line: string) {
-    const quizScores = line.match(/\{.+?\.score\}/g);
-    if (quizScores) {
-      quizScores.forEach(match => {
-        const quizId = match.substring(1, match.lastIndexOf('.'));
-        line = line.replace(match, GameGlobalAPI.getInstance().getQuizScore(quizId).toString());
-      });
+    const quizScores = line.matchAll(/\{(.+?)\.score\}/g);
+    for (const match of quizScores) {
+      line = line.replace(match[0], GameGlobalAPI.getInstance().getQuizScore(match[1]).toString());
     }
     return line;
   }
