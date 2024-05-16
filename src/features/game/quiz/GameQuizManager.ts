@@ -185,7 +185,6 @@ export default class QuizManager {
       ...rightSideExitTweenProps
     });
 
-    //await sleep(rightSideExitTweenProps.duration);
     fadeAndDestroy(scene, quizContainer, { fadeDuration: Constants.fadeDuration });
     return response;
   }
