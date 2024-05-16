@@ -114,6 +114,6 @@ export default class DialogueSpeakerRenderer {
   }
 
   public getUsername = () => SourceAcademyGame.getInstance().getAccountInfo().name;
-  public getSpeakerSprite = () => this.speakerSprite as Phaser.GameObjects.Image;
-  public getSpeakerSpriteBox = () => this.speakerSpriteBox as Phaser.GameObjects.Container;
+  private getSpeakerSprite = () => this.speakerSprite as Phaser.GameObjects.Image;
+  private getSpeakerSpriteBox = () => this.speakerSpriteBox as Phaser.GameObjects.Container;
 }
