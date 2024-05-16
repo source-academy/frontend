@@ -4,10 +4,6 @@ import { createActions } from 'src/commons/redux/utils';
 import { PersistenceFile } from '../persistence/PersistenceTypes';
 
 const PlaygroundActions = createActions('playground', {
-  generateLzString: () => ({}),
-  shortenURL: (keyword: string) => keyword,
-  updateShortURL: (shortURL: string) => shortURL,
-  changeQueryString: (queryString: string) => queryString,
   playgroundUpdatePersistenceFile: (file?: PersistenceFile) => file,
   playgroundUpdateGitHubSaveInfo: (repoName: string, filePath: string, lastSaved: Date) => ({
     repoName,
@@ -19,10 +15,6 @@ const PlaygroundActions = createActions('playground', {
 
 // For compatibility with existing code (reducer)
 export const {
-  generateLzString,
-  shortenURL,
-  updateShortURL,
-  changeQueryString,
   playgroundUpdatePersistenceFile,
   playgroundUpdateGitHubSaveInfo,
   playgroundConfigLanguage

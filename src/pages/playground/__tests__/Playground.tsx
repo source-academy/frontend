@@ -12,9 +12,12 @@ import {
 } from 'src/commons/application/ApplicationTypes';
 import { WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
 import { EditorBinding } from 'src/commons/WorkspaceSettingsContext';
+import ShareLinkStateEncoder from 'src/features/playground/shareLinks/encoder/Encoder';
+import { ShareLinkState } from 'src/features/playground/shareLinks/ShareLinkState';
 import { createStore } from 'src/pages/createStore';
 
-import Playground, { handleHash } from '../Playground';
+import * as EncoderHooks from '../../../features/playground/shareLinks/encoder/EncoderHooks';
+import Playground, { setStateFromPlaygroundConfiguration } from '../Playground';
 
 // Mock inspector
 (window as any).Inspector = jest.fn();
@@ -31,6 +34,11 @@ const renderTree = async (router: Router) => {
 describe('Playground tests', () => {
   let routes: RouteObject[];
   let mockStore: Store<OverallState>;
+
+  // BrowserFS has to be mocked in nodejs environments
+  jest
+    .spyOn(EncoderHooks, 'usePlaygroundConfigurationEncoder')
+    .mockReturnValue(new ShareLinkStateEncoder({} as ShareLinkState));
 
   const getSourceChapterFromStore = (store: Store<OverallState>) =>
     store.getState().playground.languageConfig.chapter;
@@ -81,31 +89,33 @@ describe('Playground tests', () => {
     expect(getEditorValueFromStore(mockStore)).toBe("display('hello!');");
   });
 
-  describe('handleHash', () => {
-    test('disables loading hash with fullJS chapter in URL params', () => {
-      const testHash = '#chap=-1&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA';
+  describe('setStateFromPlaygroundConfiguration', () => {
+    test('disables loading playground with fullJS/ fullTS chapter in playground configuration', () => {
+      const chaptersThatDisableLoading: Chapter[] = [Chapter.FULL_JS, Chapter.FULL_TS];
 
       const mockHandleEditorValueChanged = jest.fn();
       const mockHandleChapterSelect = jest.fn();
       const mockHandleChangeExecTime = jest.fn();
 
-      handleHash(
-        testHash,
-        {
-          handleChapterSelect: mockHandleChapterSelect,
-          handleChangeExecTime: mockHandleChangeExecTime
-        },
-        'playground',
-        // We cannot make use of 'dispatch' & BrowserFS in test cases. However, the
-        // behaviour being tested here does not actually invoke either of these. As
-        // a workaround, we pass in 'undefined' instead & cast to the expected types.
-        undefined as unknown as Dispatch,
-        undefined as unknown as FSModule
-      );
+      for (const chap of chaptersThatDisableLoading) {
+        setStateFromPlaygroundConfiguration(
+          { chap } as ShareLinkState,
+          {
+            handleChapterSelect: mockHandleChapterSelect,
+            handleChangeExecTime: mockHandleChangeExecTime
+          },
+          'playground',
+          // We cannot make use of 'dispatch' & BrowserFS in test cases. However, the
+          // behaviour being tested here does not actually invoke either of these. As
+          // a workaround, we pass in 'undefined' instead & cast to the expected types.
+          undefined as unknown as Dispatch,
+          null as unknown as FSModule
+        );
 
-      expect(mockHandleEditorValueChanged).not.toHaveBeenCalled();
-      expect(mockHandleChapterSelect).not.toHaveBeenCalled();
-      expect(mockHandleChangeExecTime).not.toHaveBeenCalled();
+        expect(mockHandleEditorValueChanged).not.toHaveBeenCalled();
+        expect(mockHandleChapterSelect).not.toHaveBeenCalled();
+        expect(mockHandleChangeExecTime).not.toHaveBeenCalled();
+      }
     });
   });
 });
