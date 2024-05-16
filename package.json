@@ -13,9 +13,9 @@
   },
   "scripts": {
     "analyze": "yarn build --stats; webpack-bundle-analyzer build/bundle-stats.json",
-    "build": "cross-env DISABLE_ESLINT_PLUGIN=true NODE_OPTIONS=--max_old_space_size=8192 craco build",
+    "build-cra": "cross-env DISABLE_ESLINT_PLUGIN=true NODE_OPTIONS=--max_old_space_size=8192 craco build",
     "//": "TODO: Add tsc --noEmit to check for type errors",
-    "build-vite": "vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "coverage": "./scripts/coverage-fix.sh do && craco test --coverage && ./scripts/coverage-fix.sh undo",
     "format": "eslint --fix src && prettier --write \"src/**/*.{js,jsx,ts,tsx}\" && prettier --write --parser scss \"src/**/*.scss\"",
