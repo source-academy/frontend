@@ -5,42 +5,6 @@ import { externalUrlShortenerRequest } from '../PlaygroundSaga';
 describe('Playground saga tests', () => {
   Constants.urlShortenerBase = 'http://url-shortener.com/';
 
-  // This test relies on BrowserFS which works in browser environments and not Node.js.
-  // FIXME: Uncomment this test if BrowserFS adds support for running in Node.js.
-  // test('puts changeQueryString action with correct string argument when passed a dummy program', () => {
-  //   const dummyFiles: Record<string, string> = {
-  //     [defaultPlaygroundFilePath]: '1 + 1;'
-  //   };
-  //   const defaultPlaygroundState = createDefaultWorkspace('playground');
-  //   const dummyState: OverallState = {
-  //     ...defaultState,
-  //     workspaces: {
-  //       ...defaultWorkspaceManager,
-  //       playground: {
-  //         ...defaultPlaygroundState,
-  //         externalLibrary: ExternalLibraryName.NONE,
-  //         editorTabs: [
-  //           {
-  //             filePath: defaultPlaygroundFilePath,
-  //             value: dummyFiles[defaultPlaygroundFilePath],
-  //             breakpoints: [],
-  //             highlightedLines: []
-  //           }
-  //         ],
-  //         usingSubst: false
-  //       }
-  //     }
-  //   };
-  //   const expectedString: string = createQueryString(dummyFiles, dummyState);
-  //   return expectSaga(PlaygroundSaga)
-  //     .withState(dummyState)
-  //     .put(changeQueryString(expectedString))
-  //     .dispatch({
-  //       type: GENERATE_LZ_STRING
-  //     })
-  //     .silentRun();
-  // });
-
   describe('externalUrlShortenerRequest', () => {
     const mockFetch = jest.spyOn(global, 'fetch');
     const mockJsonFn = jest.fn();
