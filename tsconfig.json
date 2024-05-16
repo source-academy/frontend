@@ -5,7 +5,16 @@
     "module": "esnext",
     "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "types": ["vite/client", "vite-plugin-svgr/client"],
+    "types": [
+      "vite/client",
+      "vite-plugin-svgr/client",
+      "jest",
+      "gapi",
+      "gapi.auth2",
+      "gapi.client",
+      "gapi.client.drive",
+      "google.picker"
+    ],
     "sourceMap": true,
     "allowJs": true,
     "jsx": "react-jsx",
