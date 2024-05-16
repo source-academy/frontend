@@ -284,10 +284,8 @@ class GameGlobalAPI {
     await this.getGameManager().getDialogueManager().showDialogue(dialogueId);
   }
 
-  public async showNextLine(resolve : () => void) {
-    await this.getGameManager()
-      .getDialogueManager()
-      .showNextLine(resolve);
+  public async showNextLine(resolve: () => void) {
+    await this.getGameManager().getDialogueManager().showNextLine(resolve);
   }
 
   /////////////////////
