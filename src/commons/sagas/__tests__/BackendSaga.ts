@@ -3,15 +3,11 @@ import { createMemoryRouter } from 'react-router';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import { mockTeamFormationOverviews } from 'src/commons/mocks/TeamFormationMocks';
-import { addNewUsersToCourse, createCourse } from 'src/features/academy/AcademyActions';
+import AcademyActions from 'src/features/academy/AcademyActions';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
-import { updateGroupGradingSummary } from '../../../features/dashboard/DashboardActions';
-import {
-  FETCH_GROUP_GRADING_SUMMARY,
-  UPDATE_GROUP_GRADING_SUMMARY
-} from '../../../features/dashboard/DashboardTypes';
-import SessionActions, { updateAssessment } from '../../application/actions/SessionActions';
+import DashboardActions from '../../../features/dashboard/DashboardActions';
+import SessionActions from '../../application/actions/SessionActions';
 import {
   GameState,
   Role,
@@ -23,8 +19,6 @@ import {
   AdminPanelCourseRegistration,
   CourseConfiguration,
   CourseRegistration,
-  UPDATE_ASSESSMENT,
-  UPDATE_COURSE_RESEARCH_AGREEMENT,
   UpdateCourseConfiguration,
   User
 } from '../../application/types/SessionTypes';
@@ -42,13 +36,13 @@ import {
 import { mockGradingSummary } from '../../mocks/GradingMocks';
 import { mockNotifications, mockStudents } from '../../mocks/UserMocks';
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
-import { AuthProviderType, computeRedirectUri } from '../../utils/AuthHelper';
+import { AuthProviderType, computeFrontendRedirectUri } from '../../utils/AuthHelper';
 import Constants from '../../utils/Constants';
 import {
   showSuccessMessage,
   showWarningMessage
 } from '../../utils/notifications/NotificationsHelper';
-import { changeSublanguage, updateHasUnsavedChanges } from '../../workspace/WorkspaceActions';
+import WorkspaceActions from '../../workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import BackendSaga from '../BackendSaga';
 import {
@@ -273,7 +267,7 @@ describe('Test FETCH_AUTH action', () => {
     isDefault: true,
     type: AuthProviderType.OAUTH2
   });
-  const redirectUrl = computeRedirectUri(providerId);
+  const redirectUrl = computeFrontendRedirectUri(providerId);
 
   const user = mockUser;
   const courseConfiguration = mockCourseConfiguration1;
@@ -378,6 +372,7 @@ describe('Test FETCH_AUTH action', () => {
 
   test('when user is null', () => {
     return expectSaga(BackendSaga)
+      .withState({ session: mockTokens }) // need to mock tokens for the selectTokens() call
       .provide([
         [call(postAuth, code, providerId, clientId, redirectUrl), mockTokens],
         [
@@ -401,6 +396,17 @@ describe('Test FETCH_AUTH action', () => {
       .dispatch({ type: SessionActions.fetchAuth.type, payload: { code, providerId } })
       .silentRun();
   });
+});
+
+test('Test handleSamlRedirect action', () => {
+  const jwtCookie = `{"access_token":"${mockTokens.accessToken}","refresh_token":"${mockTokens.refreshToken}"}`;
+
+  return expectSaga(BackendSaga)
+    .withState({ session: mockTokens }) // need to mock tokens for the downstream selectTokens() call in fetchUserAndCourse()
+    .put(SessionActions.setTokens(mockTokens))
+    .put(SessionActions.fetchUserAndCourse())
+    .dispatch({ type: SessionActions.handleSamlRedirect.type, payload: { jwtCookie } })
+    .silentRun();
 });
 
 describe('Test FETCH_USER_AND_COURSE action', () => {
@@ -598,7 +604,7 @@ describe('Test FETCH_ASSESSMENT action', () => {
     return expectSaga(BackendSaga)
       .withState({ session: mockTokens })
       .provide([[call(getAssessment, mockId, mockTokens, undefined, undefined), mockAssessment]])
-      .put(updateAssessment(mockAssessment))
+      .put(SessionActions.updateAssessment(mockAssessment))
       .hasFinalState({ session: mockTokens })
       .dispatch({ type: SessionActions.fetchAssessment.type, payload: { assessmentId: mockId } })
       .silentRun();
@@ -610,7 +616,7 @@ describe('Test FETCH_ASSESSMENT action', () => {
       .withState({ session: mockTokens })
       .provide([[call(getAssessment, mockId, mockTokens, undefined, undefined), null]])
       .call(getAssessment, mockId, mockTokens, undefined, undefined)
-      .not.put.actionType(UPDATE_ASSESSMENT)
+      .not.put.actionType(SessionActions.updateAssessment.type)
       .hasFinalState({ session: mockTokens })
       .dispatch({ type: SessionActions.fetchAssessment.type, payload: { assessmentId: mockId } })
       .silentRun();
@@ -650,8 +656,8 @@ describe('Test SUBMIT_ANSWER action', () => {
       ])
       .not.call.fn(showWarningMessage)
       .call(showSuccessMessage, 'Saved!', 1000)
-      .put(updateAssessment(mockNewAssessment))
-      .put(updateHasUnsavedChanges('assessment' as WorkspaceLocation, false))
+      .put(SessionActions.updateAssessment(mockNewAssessment))
+      .put(WorkspaceActions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false))
       .dispatch({ type: SessionActions.submitAnswer.type, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
     // To make sure no changes in state
@@ -692,8 +698,8 @@ describe('Test SUBMIT_ANSWER action', () => {
       ])
       .not.call.fn(showWarningMessage)
       .call(showSuccessMessage, 'Saved!', 1000)
-      .put(updateAssessment(mockNewAssessment))
-      .put(updateHasUnsavedChanges('assessment' as WorkspaceLocation, false))
+      .put(SessionActions.updateAssessment(mockNewAssessment))
+      .put(WorkspaceActions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false))
       .dispatch({ type: SessionActions.submitAnswer.type, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
     // To make sure no changes in state
@@ -725,8 +731,8 @@ describe('Test SUBMIT_ANSWER action', () => {
       )
       .call(showWarningMessage, "Couldn't reach our servers. Are you online?")
       .not.call.fn(showSuccessMessage)
-      .not.put.actionType(UPDATE_ASSESSMENT)
-      .not.put.actionType(updateHasUnsavedChanges.type)
+      .not.put.actionType(SessionActions.updateAssessment.type)
+      .not.put.actionType(WorkspaceActions.updateHasUnsavedChanges.type)
       .hasFinalState({ session: { ...mockTokens, role: Role.Student } })
       .dispatch({ type: SessionActions.submitAnswer.type, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
@@ -853,7 +859,7 @@ describe('Test CHANGE_SUBLANGUAGE action', () => {
           { ok: true }
         ]
       ])
-      .dispatch({ type: changeSublanguage.type, payload: { sublang } })
+      .dispatch({ type: WorkspaceActions.changeSublanguage.type, payload: { sublang } })
       .silentRun();
   });
 });
@@ -1070,7 +1076,7 @@ describe('Test CREATE_COURSE action', () => {
           okResp
         ]
       ])
-      .dispatch({ type: createCourse.type, payload: courseConfig })
+      .dispatch({ type: AcademyActions.createCourse.type, payload: courseConfig })
       .silentRun();
   });
 
@@ -1084,7 +1090,7 @@ describe('Test CREATE_COURSE action', () => {
       .not.call.fn(putAssessmentConfigs)
       .not.call.fn(showSuccessMessage)
       .provide([[call(postCreateCourse, mockTokens, courseConfig), errorResp]])
-      .dispatch({ type: createCourse.type, payload: courseConfig })
+      .dispatch({ type: AcademyActions.createCourse.type, payload: courseConfig })
       .silentRun();
   });
 });
@@ -1123,7 +1129,7 @@ describe('Test ADD_NEW_USERS_TO_COURSE action', () => {
         [call(putNewUsers, mockTokens, users, provider), okResp],
         [call(getUserCourseRegistrations, mockTokens), userCourseRegistrations]
       ])
-      .dispatch({ type: addNewUsersToCourse.type, payload: { users, provider } })
+      .dispatch({ type: AcademyActions.addNewUsersToCourse.type, payload: { users, provider } })
       .silentRun();
   });
 
@@ -1134,7 +1140,7 @@ describe('Test ADD_NEW_USERS_TO_COURSE action', () => {
       .not.put.actionType(SessionActions.fetchAdminPanelCourseRegistrations.type)
       .not.call.fn(showSuccessMessage)
       .provide([[call(putNewUsers, mockTokens, users, provider), errorResp]])
-      .dispatch({ type: addNewUsersToCourse.type, payload: { users, provider } })
+      .dispatch({ type: AcademyActions.addNewUsersToCourse.type, payload: { users, provider } })
       .silentRun();
   });
 });
@@ -1198,7 +1204,10 @@ describe('Test UPDATE_COURSE_RESEARCH_AGREEMENT', () => {
       .put(SessionActions.setCourseRegistration({ agreedToResearch }))
       .call.fn(showSuccessMessage)
       .provide([[call(putCourseResearchAgreement, mockTokens, agreedToResearch), okResp]])
-      .dispatch({ type: UPDATE_COURSE_RESEARCH_AGREEMENT, payload: { agreedToResearch } })
+      .dispatch({
+        type: SessionActions.updateCourseResearchAgreement.type,
+        payload: { agreedToResearch }
+      })
       .silentRun();
   });
 
@@ -1209,7 +1218,10 @@ describe('Test UPDATE_COURSE_RESEARCH_AGREEMENT', () => {
       .not.put.actionType(SessionActions.setCourseRegistration.type)
       .not.call.fn(showSuccessMessage)
       .provide([[call(putCourseResearchAgreement, mockTokens, agreedToResearch), errorResp]])
-      .dispatch({ type: UPDATE_COURSE_RESEARCH_AGREEMENT, payload: { agreedToResearch } })
+      .dispatch({
+        type: SessionActions.updateCourseResearchAgreement.type,
+        payload: { agreedToResearch }
+      })
       .silentRun();
   });
 });
@@ -1299,9 +1311,9 @@ describe('Test FETCH_GROUP_GRADING_SUMMARY action', () => {
     return expectSaga(BackendSaga)
       .withState({ session: { ...mockTokens, role: Role.Staff } })
       .provide([[call(getGradingSummary, mockTokens), mockGradingSummary]])
-      .put(updateGroupGradingSummary(mockGradingSummary))
+      .put(DashboardActions.updateGroupGradingSummary(mockGradingSummary))
       .hasFinalState({ session: { ...mockTokens, role: Role.Staff } })
-      .dispatch({ type: FETCH_GROUP_GRADING_SUMMARY })
+      .dispatch({ type: DashboardActions.fetchGroupGradingSummary.type })
       .silentRun();
   });
 
@@ -1310,9 +1322,9 @@ describe('Test FETCH_GROUP_GRADING_SUMMARY action', () => {
       .withState({ session: { ...mockTokens, role: Role.Staff } })
       .provide([[call(getGradingSummary, mockTokens), null]])
       .call(getGradingSummary, mockTokens)
-      .not.put.actionType(UPDATE_GROUP_GRADING_SUMMARY)
+      .not.put.actionType(DashboardActions.updateGroupGradingSummary.type)
       .hasFinalState({ session: { ...mockTokens, role: Role.Staff } })
-      .dispatch({ type: FETCH_GROUP_GRADING_SUMMARY })
+      .dispatch({ type: DashboardActions.fetchGroupGradingSummary.type })
       .silentRun();
   });
 });

@@ -73,29 +73,7 @@ import { useResponsive, useTypedSelector } from '../utils/Hooks';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import { assertType } from '../utils/TypeHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
-import {
-  beginClearContext,
-  browseReplHistoryDown,
-  browseReplHistoryUp,
-  changeExecTime,
-  clearReplOutput,
-  disableTokenCounter,
-  enableTokenCounter,
-  evalEditor,
-  evalRepl,
-  evalTestcase,
-  navigateToDeclaration,
-  promptAutocomplete,
-  removeEditorTab,
-  resetWorkspace,
-  runAllTestcases,
-  setEditorBreakpoint,
-  updateActiveEditorTabIndex,
-  updateCurrentAssessmentId,
-  updateEditorValue,
-  updateHasUnsavedChanges,
-  updateReplValue
-} from '../workspace/WorkspaceActions';
+import WorkspaceActions from '../workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 
@@ -170,32 +148,39 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     return {
       handleTeamOverviewFetch: (assessmentId: number) =>
         dispatch(SessionActions.fetchTeamFormationOverview(assessmentId)),
-      handleTestcaseEval: (id: number) => dispatch(evalTestcase(workspaceLocation, id)),
+      handleTestcaseEval: (id: number) =>
+        dispatch(WorkspaceActions.evalTestcase(workspaceLocation, id)),
       handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
-        dispatch(beginClearContext(workspaceLocation, library, shouldInitLibrary)),
+        dispatch(WorkspaceActions.beginClearContext(workspaceLocation, library, shouldInitLibrary)),
       handleChangeExecTime: (execTimeMs: number) =>
-        dispatch(changeExecTime(execTimeMs, workspaceLocation)),
+        dispatch(WorkspaceActions.changeExecTime(execTimeMs, workspaceLocation)),
       handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) =>
-        dispatch(updateCurrentAssessmentId(assessmentId, questionId)),
+        dispatch(WorkspaceActions.updateCurrentAssessmentId(assessmentId, questionId)),
       handleResetWorkspace: (options: Partial<WorkspaceState>) =>
-        dispatch(resetWorkspace(workspaceLocation, options)),
-      handleRunAllTestcases: () => dispatch(runAllTestcases(workspaceLocation)),
-      handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
+        dispatch(WorkspaceActions.resetWorkspace(workspaceLocation, options)),
+      handleRunAllTestcases: () => dispatch(WorkspaceActions.runAllTestcases(workspaceLocation)),
+      handleEditorEval: () => dispatch(WorkspaceActions.evalEditor(workspaceLocation)),
       handleAssessmentFetch: (assessmentId: number, assessmentPassword?: string) =>
         dispatch(SessionActions.fetchAssessment(assessmentId, assessmentPassword)),
       handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
-        dispatch(updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)),
+        dispatch(
+          WorkspaceActions.updateEditorValue(workspaceLocation, editorTabIndex, newEditorValue)
+        ),
       handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
-        dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)),
-      handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
+        dispatch(
+          WorkspaceActions.setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)
+        ),
+      handleReplEval: () => dispatch(WorkspaceActions.evalRepl(workspaceLocation)),
       handleCheckLastModifiedAt: (id: number, lastModifiedAt: string, saveAnswer: Function) =>
         dispatch(SessionActions.checkAnswerLastModifiedAt(id, lastModifiedAt, saveAnswer)),
       handleSave: (id: number, answer: number | string | ContestEntry[]) =>
         dispatch(SessionActions.submitAnswer(id, answer)),
       handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) =>
-        dispatch(updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges)),
-      handleEnableTokenCounter: () => dispatch(enableTokenCounter(workspaceLocation)),
-      handleDisableTokenCounter: () => dispatch(disableTokenCounter(workspaceLocation))
+        dispatch(WorkspaceActions.updateHasUnsavedChanges(workspaceLocation, hasUnsavedChanges)),
+      handleEnableTokenCounter: () =>
+        dispatch(WorkspaceActions.enableTokenCounter(workspaceLocation)),
+      handleDisableTokenCounter: () =>
+        dispatch(WorkspaceActions.disableTokenCounter(workspaceLocation))
     };
   }, [dispatch]);
 
@@ -800,7 +785,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const replButtons = useMemo(() => {
     const clearButton = (
       <ControlBarClearButton
-        handleReplOutputClear={() => dispatch(clearReplOutput(workspaceLocation))}
+        handleReplOutputClear={() => dispatch(WorkspaceActions.clearReplOutput(workspaceLocation))}
         key="clear_repl"
       />
     );
@@ -814,22 +799,26 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const editorContainerHandlers = useMemo(() => {
     return {
       setActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
-        dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+        dispatch(
+          WorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)
+        ),
       removeEditorTabByIndex: (editorTabIndex: number) =>
-        dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
+        dispatch(WorkspaceActions.removeEditorTab(workspaceLocation, editorTabIndex)),
       handleDeclarationNavigate: (cursorPosition: Position) =>
-        dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
+        dispatch(WorkspaceActions.navigateToDeclaration(workspaceLocation, cursorPosition)),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        dispatch(promptAutocomplete(workspaceLocation, row, col, callback))
+        dispatch(WorkspaceActions.promptAutocomplete(workspaceLocation, row, col, callback))
     };
   }, [dispatch]);
 
   const replHandlers = useMemo(() => {
     return {
-      handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
-      handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
+      handleBrowseHistoryDown: () =>
+        dispatch(WorkspaceActions.browseReplHistoryDown(workspaceLocation)),
+      handleBrowseHistoryUp: () =>
+        dispatch(WorkspaceActions.browseReplHistoryUp(workspaceLocation)),
       handleReplValueChange: (newValue: string) =>
-        dispatch(updateReplValue(newValue, workspaceLocation))
+        dispatch(WorkspaceActions.updateReplValue(newValue, workspaceLocation))
     };
   }, [dispatch]);
 

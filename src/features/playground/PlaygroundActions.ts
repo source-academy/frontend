@@ -1,26 +1,24 @@
-import { createAction } from '@reduxjs/toolkit';
 import { SALanguage } from 'src/commons/application/ApplicationTypes';
+import { createActions } from 'src/commons/redux/utils';
 
 import { PersistenceFile } from '../persistence/PersistenceTypes';
-import {
-  PLAYGROUND_UPDATE_GITHUB_SAVE_INFO,
-  PLAYGROUND_UPDATE_LANGUAGE_CONFIG,
-  PLAYGROUND_UPDATE_PERSISTENCE_FILE
-} from './PlaygroundTypes';
 
-export const playgroundUpdatePersistenceFile = createAction(
-  PLAYGROUND_UPDATE_PERSISTENCE_FILE,
-  (file?: PersistenceFile) => ({ payload: file })
-);
+const PlaygroundActions = createActions('playground', {
+  playgroundUpdatePersistenceFile: (file?: PersistenceFile) => file,
+  playgroundUpdateGitHubSaveInfo: (repoName: string, filePath: string, lastSaved: Date) => ({
+    repoName,
+    filePath,
+    lastSaved
+  }),
+  playgroundConfigLanguage: (languageConfig: SALanguage) => languageConfig
+});
 
-export const playgroundUpdateGitHubSaveInfo = createAction(
-  PLAYGROUND_UPDATE_GITHUB_SAVE_INFO,
-  (repoName: string, filePath: string, lastSaved: Date) => ({
-    payload: { repoName, filePath, lastSaved }
-  })
-);
+// For compatibility with existing code (reducer)
+export const {
+  playgroundUpdatePersistenceFile,
+  playgroundUpdateGitHubSaveInfo,
+  playgroundConfigLanguage
+} = PlaygroundActions;
 
-export const playgroundConfigLanguage = createAction(
-  PLAYGROUND_UPDATE_LANGUAGE_CONFIG,
-  (languageConfig: SALanguage) => ({ payload: languageConfig })
-);
+// For compatibility with existing code (actions helper)
+export default PlaygroundActions;

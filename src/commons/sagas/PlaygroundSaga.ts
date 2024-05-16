@@ -6,24 +6,15 @@ import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMa
 
 import { isSchemeLanguage, isSourceLanguage, OverallState } from '../application/ApplicationTypes';
 import { visitSideContent } from '../sideContent/SideContentActions';
-import { SideContentType, VISIT_SIDE_CONTENT } from '../sideContent/SideContentTypes';
+import { SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
-import {
-  clearReplOutput,
-  setEditorHighlightedLines,
-  toggleUpdateCse,
-  toggleUsingCse,
-  toggleUsingSubst,
-  toggleUsingUpload,
-  updateCurrentStep,
-  updateStepsTotal
-} from '../workspace/WorkspaceActions';
+import WorkspaceActions from '../workspace/WorkspaceActions';
 import { PlaygroundWorkspaceState } from '../workspace/WorkspaceTypes';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export default function* PlaygroundSaga(): SagaIterator {
   yield takeEvery(
-    VISIT_SIDE_CONTENT,
+    visitSideContent.type,
     function* ({
       payload: { newId, prevId, workspaceLocation }
     }: ReturnType<typeof visitSideContent>) {
@@ -46,23 +37,23 @@ export default function* PlaygroundSaga(): SagaIterator {
         const hasBreakpoints = editorTabs.find(({ breakpoints }) => breakpoints.find(x => !!x));
 
         if (!hasBreakpoints) {
-          yield put(toggleUsingSubst(false, workspaceLocation));
-          yield put(clearReplOutput(workspaceLocation));
+          yield put(WorkspaceActions.toggleUsingSubst(false, workspaceLocation));
+          yield put(WorkspaceActions.clearReplOutput(workspaceLocation));
         }
       }
 
       if (newId !== SideContentType.cseMachine) {
-        yield put(toggleUsingCse(false, workspaceLocation));
+        yield put(WorkspaceActions.toggleUsingCse(false, workspaceLocation));
         yield call([CseMachine, CseMachine.clearCse]);
         yield call([JavaCseMachine, JavaCseMachine.clearCse]);
-        yield put(updateCurrentStep(-1, workspaceLocation));
-        yield put(updateStepsTotal(0, workspaceLocation));
-        yield put(toggleUpdateCse(true, workspaceLocation));
-        yield put(setEditorHighlightedLines(workspaceLocation, 0, []));
+        yield put(WorkspaceActions.updateCurrentStep(-1, workspaceLocation));
+        yield put(WorkspaceActions.updateStepsTotal(0, workspaceLocation));
+        yield put(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
+        yield put(WorkspaceActions.setEditorHighlightedLines(workspaceLocation, 0, []));
       }
 
       if (playgroundSourceChapter === Chapter.FULL_JAVA && newId === SideContentType.cseMachine) {
-        yield put(toggleUsingCse(true, workspaceLocation));
+        yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
       }
 
       if (
@@ -70,20 +61,20 @@ export default function* PlaygroundSaga(): SagaIterator {
         (newId === SideContentType.substVisualizer || newId === SideContentType.cseMachine)
       ) {
         if (playgroundSourceChapter <= Chapter.SOURCE_2) {
-          yield put(toggleUsingSubst(true, workspaceLocation));
+          yield put(WorkspaceActions.toggleUsingSubst(true, workspaceLocation));
         } else {
-          yield put(toggleUsingCse(true, workspaceLocation));
+          yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
         }
       }
 
       if (newId === SideContentType.upload) {
-        yield put(toggleUsingUpload(true, workspaceLocation));
+        yield put(WorkspaceActions.toggleUsingUpload(true, workspaceLocation));
       } else {
-        yield put(toggleUsingUpload(false, workspaceLocation));
+        yield put(WorkspaceActions.toggleUsingUpload(false, workspaceLocation));
       }
 
       if (isSchemeLanguage(playgroundSourceChapter) && newId === SideContentType.cseMachine) {
-        yield put(toggleUsingCse(true, workspaceLocation));
+        yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
       }
     }
   );
@@ -105,6 +96,7 @@ type UrlShortenerResponse = {
   shorturl: string;
   statusCode: number;
 };
+
 /**
  * Gets short url from microservice
  * @returns {(Response|null)} Response if successful, otherwise null.

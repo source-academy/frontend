@@ -10,7 +10,7 @@ import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import ContentDisplay from 'src/commons/ContentDisplay';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { deleteStory, getStoriesList, saveStory } from 'src/features/stories/StoriesActions';
+import StoriesActions from 'src/features/stories/StoriesActions';
 import { getYamlHeader } from 'src/features/stories/storiesComponents/UserBlogContent';
 
 import StoriesTable from './StoriesTable';
@@ -41,7 +41,7 @@ const Stories: React.FC = () => {
         positiveLabel: 'Delete'
       });
       if (confirm) {
-        dispatch(deleteStory(id));
+        dispatch(StoriesActions.deleteStory(id));
         // deleteStory will auto-refresh the list of stories after
       }
     },
@@ -61,7 +61,7 @@ const Stories: React.FC = () => {
         // Pinning a story appends to the end of the pinned list
         pinOrder: story.isPinned ? null : pinnedLength
       };
-      dispatch(saveStory(newStory, id));
+      dispatch(StoriesActions.saveStory(newStory, id));
     },
     [dispatch, storyList]
   );
@@ -81,7 +81,7 @@ const Stories: React.FC = () => {
         { ...toMoveUp, pinOrder: oldIndex - 1 },
         { ...toMoveDown, pinOrder: oldIndex }
       ];
-      storiesToUpdate.forEach(story => dispatch(saveStory(story, story.id)));
+      storiesToUpdate.forEach(story => dispatch(StoriesActions.saveStory(story, story.id)));
     },
     [dispatch, storyList]
   );
@@ -101,7 +101,7 @@ const Stories: React.FC = () => {
         { ...toMoveDown, pinOrder: oldIndex + 1 },
         { ...toMoveUp, pinOrder: oldIndex }
       ];
-      storiesToUpdate.forEach(story => dispatch(saveStory(story, story.id)));
+      storiesToUpdate.forEach(story => dispatch(StoriesActions.saveStory(story, story.id)));
     },
     [dispatch, storyList]
   );
@@ -118,7 +118,7 @@ const Stories: React.FC = () => {
     />
   ) : (
     <ContentDisplay
-      loadContentDispatch={() => dispatch(getStoriesList())}
+      loadContentDispatch={() => dispatch(StoriesActions.getStoriesList())}
       display={
         <Card>
           <Flex justifyContent="justify-between">

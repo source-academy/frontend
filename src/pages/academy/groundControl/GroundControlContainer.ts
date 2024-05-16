@@ -3,17 +3,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import SessionActions from '../../../commons/application/actions/SessionActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
-import {
-  assignEntriesForVoting,
-  changeDateAssessment,
-  changeTeamSizeAssessment,
-  configureAssessment,
-  deleteAssessment,
-  publishAssessment,
-  publishGradingAll,
-  unpublishGradingAll,
-  uploadAssessment
-} from '../../../features/groundControl/GroundControlActions';
+import GroundControlActions from '../../../features/groundControl/GroundControlActions';
 import GroundControl, { DispatchProps } from './GroundControl';
 
 const mapStateToProps: MapStateToProps<{}, {}, OverallState> = state => ({});
@@ -21,17 +11,17 @@ const mapStateToProps: MapStateToProps<{}, {}, OverallState> = state => ({});
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleAssessmentChangeDate: changeDateAssessment,
-      handleAssessmentChangeTeamSize: changeTeamSizeAssessment,
+      handleAssessmentChangeDate: GroundControlActions.changeDateAssessment,
+      handleAssessmentChangeTeamSize: GroundControlActions.changeTeamSizeAssessment,
       handleAssessmentOverviewFetch: SessionActions.fetchAssessmentOverviews,
-      handleDeleteAssessment: deleteAssessment,
-      handleUploadAssessment: uploadAssessment,
-      handlePublishAssessment: publishAssessment,
-      handlePublishGradingAll: publishGradingAll,
-      handleUnpublishGradingAll: unpublishGradingAll,
+      handleDeleteAssessment: GroundControlActions.deleteAssessment,
+      handleUploadAssessment: GroundControlActions.uploadAssessment,
+      handlePublishAssessment: GroundControlActions.publishAssessment,
+      handlePublishGradingAll: GroundControlActions.publishGradingAll,
+      handleUnpublishGradingAll: GroundControlActions.unpublishGradingAll,
       handleFetchCourseConfigs: SessionActions.fetchCourseConfig,
-      handleConfigureAssessment: configureAssessment,
-      handleAssignEntriesForVoting: assignEntriesForVoting
+      handleConfigureAssessment: GroundControlActions.configureAssessment,
+      handleAssignEntriesForVoting: GroundControlActions.assignEntriesForVoting
     },
     dispatch
   );

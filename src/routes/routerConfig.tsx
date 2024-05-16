@@ -22,6 +22,8 @@ import { GuardedRoute } from './routeGuard';
 // };
 
 const Login = () => import('../pages/login/Login');
+const LoginPage = () => import('../pages/login/LoginPage');
+const LoginCallback = () => import('../pages/login/LoginCallback');
 const Contributors = () => import('../pages/contributors/Contributors');
 const GitHubCallback = () => import('../pages/githubCallback/GitHubCallback');
 const Sicp = () => import('../pages/sicp/Sicp');
@@ -107,7 +109,14 @@ export const getFullAcademyRouterConfig = ({
           element: <Navigate to={`/courses/${courseId}`} replace />,
           loader: homePageRedirect
         },
-        { path: 'login', lazy: Login },
+        {
+          path: 'login',
+          lazy: Login,
+          children: [
+            { path: '', lazy: LoginPage },
+            { path: 'callback', lazy: LoginCallback }
+          ]
+        },
         { path: 'welcome', lazy: Welcome, loader: welcomeLoader },
         { path: 'courses', element: <Navigate to="/" /> },
         ensureUserAndRole({ path: 'courses/:courseId/*', lazy: Academy, children: academyRoutes }),
