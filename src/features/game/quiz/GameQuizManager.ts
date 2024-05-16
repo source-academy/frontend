@@ -34,8 +34,8 @@ export default class QuizManager {
    */
   public async showQuiz(quizId: ItemId) {
     const quiz = GameGlobalAPI.getInstance().getQuizById(quizId);
-    const numOfQns = quiz.questions.length;
-    if (numOfQns === 0) {
+    const numOfQuestions = quiz.questions.length;
+    if (numOfQuestions === 0) {
       return;
     }
     if (!(await this.showStartPrompt(GameGlobalAPI.getInstance().getGameManager()))) {
@@ -44,7 +44,7 @@ export default class QuizManager {
     }
     await GameGlobalAPI.getInstance().getGameManager().getDialogueManager().hideAll();
     let numOfCorrect = 0;
-    for (let i = 0; i < numOfQns; i++) {
+    for (let i = 0; i < numOfQuestions; i++) {
       numOfCorrect += await this.showQuizQuestion(
         GameGlobalAPI.getInstance().getGameManager(),
         quiz.questions[i]
