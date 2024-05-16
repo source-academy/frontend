@@ -159,7 +159,7 @@ export default class QuizManager {
               QuizConstants.width * (quizPartitions - Math.floor(index / 5) - 1),
             (buttonPositions[index][1] % (5 * QuizConstants.yInterval)) +
               quizHeaderBg.getBounds().bottom +
-              75
+              QuizConstants.optionsYOffSet
           )
         )
       );

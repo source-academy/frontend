@@ -17,7 +17,8 @@ export const QuizConstants = {
   width: 450,
   yInterval: 100,
   headerOff: 60,
-  speakerTextConfig: { x: 320, y: 745, oriX: 0.5, oriY: 0.5 }
+  speakerTextConfig: { x: 320, y: 745, oriX: 0.5, oriY: 0.5 },
+  optionsYOffSet: 75
 };
 
 export const quizTextStyle = {
