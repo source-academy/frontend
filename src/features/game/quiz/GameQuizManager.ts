@@ -39,7 +39,7 @@ export default class QuizManager {
       return;
     }
     if (!(await this.showStartPrompt(GameGlobalAPI.getInstance().getGameManager()))) {
-      await GameGlobalAPI.getInstance().showNextLine();
+      await GameGlobalAPI.getInstance().showNextLine(() => {});
       return;
     }
     await GameGlobalAPI.getInstance().getGameManager().getDialogueManager().hideAll();
@@ -51,7 +51,7 @@ export default class QuizManager {
       );
     }
     GameGlobalAPI.getInstance().setQuizScore(quizId, numOfCorrect);
-    await GameGlobalAPI.getInstance().showNextLine();
+    await GameGlobalAPI.getInstance().showNextLine(() => {});
     await GameGlobalAPI.getInstance().getGameManager().getDialogueManager().showAll();
   }
 
