@@ -21,7 +21,7 @@ export default class QuizParser {
     const quizParagraphs = StringUtils.splitToParagraph(quizText);
     quizParagraphs.forEach(([quizId, quizBody]: [string, string[]]) => {
       if (quizBody.length === 0) {
-        console.error('No quiz content found for quizId');
+        throw new Error('Parsing error: No quiz content found for quizId');
         return;
       }
       this.parseQuiz(quizId, quizBody);
