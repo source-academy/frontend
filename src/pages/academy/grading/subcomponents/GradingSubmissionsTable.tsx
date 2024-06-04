@@ -13,11 +13,7 @@ import { ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import {
-  updateAllColsSortStates,
-  updateGradingColumnVisibility,
-  updateSubmissionsTableFilters
-} from 'src/commons/workspace/WorkspaceActions';
+import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import {
   ColumnFields,
   ColumnFieldsKeys,
@@ -118,7 +114,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           const newState: SortStateProperties = { ...freshSortState };
           newState[affectedID] = sortDirection;
           dispatch(
-            updateAllColsSortStates({
+            WorkspaceActions.updateAllColsSortStates({
               currentState: newState,
               sortBy: affectedID
             })
@@ -320,7 +316,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       ...generalColProperties,
       headerName: ColumnName.actionsIndex,
       field: ColumnFields.actionsIndex,
-      flex: 1.25,
+      flex: 1.4,
       headerClass: generalColProperties.headerClass + ' grading-left-align',
       cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return params.data !== undefined
@@ -345,6 +341,9 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     if (!filterMode && !disabledEditModeCols.includes(colClicked)) {
       navigate(`/courses/${courseId}/grading/${event.data.actionsIndex}`);
     } else if (filterMode && !disabledFilterModeCols.includes(colClicked)) {
+      if (event.data[colClicked] === null || event.data[colClicked] === '') {
+        return;
+      }
       handleFilterAdd({ id: colClicked, value: event.data[colClicked] });
     }
   };
@@ -396,7 +395,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         (doesItContain, currentFilter) =>
           doesItContain ||
           (currentFilter.id === ColumnFields.progressStatus &&
-            String(currentFilter.value).toLowerCase() !== ProgressStatuses.graded),
+            String(currentFilter.value).toLowerCase() !== ProgressStatuses.graded &&
+            String(currentFilter.value).toLowerCase() !== ProgressStatuses.submitted),
         false
       )
     ) {
@@ -406,11 +406,11 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       resetPage();
       return;
     }
-    dispatch(updateSubmissionsTableFilters({ columnFilters }));
+    dispatch(WorkspaceActions.updateSubmissionsTableFilters({ columnFilters }));
   }, [columnFilters, showAllSubmissions, dispatch, resetPage]);
 
   useEffect(() => {
-    dispatch(updateGradingColumnVisibility(hiddenColumns));
+    dispatch(WorkspaceActions.updateGradingColumnVisibility(hiddenColumns));
     if (gridRef.current?.api) {
       gridRef.current.api.setColumnsVisible(hiddenColumns, false);
     }

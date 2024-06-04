@@ -22,16 +22,12 @@ import classNames from 'classnames';
 import { sortBy } from 'lodash';
 import React, { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Navigate, useParams } from 'react-router';
+import { Navigate, useLoaderData, useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
-import {
-  acknowledgeNotifications,
-  fetchAssessmentOverviews,
-  submitAssessment
-} from '../application/actions/SessionActions';
+import SessionActions from '../application/actions/SessionActions';
 import { Role } from '../application/ApplicationTypes';
 import AssessmentWorkspace, {
   AssessmentWorkspaceProps
@@ -53,11 +49,7 @@ import {
   AssessmentWorkspaceParams
 } from './AssessmentTypes';
 
-export type AssessmentProps = {
-  assessmentConfiguration: AssessmentConfiguration;
-};
-
-const Assessment: React.FC<AssessmentProps> = props => {
+const Assessment: React.FC = () => {
   const params = useParams<AssessmentWorkspaceParams>();
   const { isMobileBreakpoint } = useResponsive();
   const [betchaAssessment, setBetchaAssessment] = useState<AssessmentOverview | null>(null);
@@ -74,7 +66,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
   const setBetchaAssessmentNull = () => setBetchaAssessment(null);
   const handleSubmitAssessment = () => {
     if (betchaAssessment) {
-      dispatch(submitAssessment(betchaAssessment.id));
+      dispatch(SessionActions.submitAssessment(betchaAssessment.id));
       setBetchaAssessmentNull();
     }
   };
@@ -137,7 +129,9 @@ const Assessment: React.FC<AssessmentProps> = props => {
           icon={icon}
           minimal={true}
           onClick={() =>
-            dispatch(acknowledgeNotifications(filterNotificationsByAssessment(overview.id)))
+            dispatch(
+              SessionActions.acknowledgeNotifications(filterNotificationsByAssessment(overview.id))
+            )
           }
         >
           <span data-testid="Assessment-Attempt-Button">{label}</span>
@@ -248,10 +242,10 @@ const Assessment: React.FC<AssessmentProps> = props => {
   );
 
   // Rendering Logic
+  const assessmentConfigToLoad = useLoaderData() as AssessmentConfiguration;
   const assessmentOverviews = useMemo(
-    () =>
-      assessmentOverviewsUnfiltered?.filter(ao => ao.type === props.assessmentConfiguration.type),
-    [assessmentOverviewsUnfiltered, props.assessmentConfiguration.type]
+    () => assessmentOverviewsUnfiltered?.filter(ao => ao.type === assessmentConfigToLoad.type),
+    [assessmentConfigToLoad.type, assessmentOverviewsUnfiltered]
   );
 
   // If assessmentId or questionId is defined but not numeric, redirect back to the Assessment overviews page
@@ -259,7 +253,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
     (params.assessmentId && !params.assessmentId?.match(numberRegExp)) ||
     (params.questionId && !params.questionId?.match(numberRegExp))
   ) {
-    return <Navigate to={`/courses/${courseId}/${props.assessmentConfiguration.type}`} />;
+    return <Navigate to={`/courses/${courseId}/${assessmentConfigToLoad.type}`} />;
   }
 
   const assessmentId: number | null = convertParamToInt(params.assessmentId);
@@ -282,7 +276,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
       canSave:
         role !== Role.Student ||
         (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt)),
-      assessmentConfiguration: props.assessmentConfiguration
+      assessmentConfiguration: assessmentConfigToLoad
     };
     return <AssessmentWorkspace {...assessmentWorkspaceProps} />;
   }
@@ -413,7 +407,7 @@ const Assessment: React.FC<AssessmentProps> = props => {
     <div className="Assessment">
       <ContentDisplay
         display={display}
-        loadContentDispatch={() => dispatch(fetchAssessmentOverviews())}
+        loadContentDispatch={() => dispatch(SessionActions.fetchAssessmentOverviews())}
       />
       {betchaDialog}
     </div>

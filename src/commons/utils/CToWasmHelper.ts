@@ -3,7 +3,7 @@ import loadSourceModules from 'js-slang/dist/modules/loader';
 import type { ModuleFunctions } from 'js-slang/dist/modules/moduleTypes';
 import type { Context } from 'js-slang/dist/types';
 
-import { handleConsoleLog } from '../application/actions/InterpreterActions';
+import InterpreterActions from '../application/actions/InterpreterActions';
 
 export async function makeCCompilerConfig(
   program: string,
@@ -13,7 +13,9 @@ export async function makeCCompilerConfig(
   return {
     printFunction: (v: string) => {
       if (typeof (window as any).__REDUX_STORE__ !== 'undefined') {
-        (window as any).__REDUX_STORE__.dispatch(handleConsoleLog(context.externalContext, v));
+        (window as any).__REDUX_STORE__.dispatch(
+          InterpreterActions.handleConsoleLog(context.externalContext, v)
+        );
       }
     },
     externalFunctions
@@ -38,12 +40,11 @@ export async function loadModulesUsedInCProgram(
     return allModuleFunctions;
   }
 
-  const modulesToLoad = includedModules.filter(m => {
-    const moduleName = m.slice(1, m.length - 1);
-    return modulesAvailableForC.has(moduleName);
-  });
+  const modulesToLoad = new Set(
+    includedModules.map(m => m.slice(1, m.length - 1)).filter(m => modulesAvailableForC.has(m))
+  );
 
-  const loadedModules = await loadSourceModules(new Set(modulesToLoad), context, true);
+  const loadedModules = await loadSourceModules(modulesToLoad, context, true);
   Object.values(loadedModules).forEach(functions => {
     Object.entries(functions).forEach(([name, func]) => {
       allModuleFunctions[name] = func;

@@ -1,15 +1,16 @@
 import React from 'react';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import CheckpointTransition from 'src/features/game/scenes/checkpointTransition/CheckpointTransition';
-import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import SourceAcademyGame, { AccountInfo, GameType } from 'src/features/game/SourceAcademyGame';
 import { gameSimulatorConfig } from 'src/features/gameSimulator/GameSimulatorConstants';
-import GameSimulatorMenu from 'src/features/gameSimulator/GameSimulatorMenu';
 import { GameSimulatorState } from 'src/features/gameSimulator/GameSimulatorTypes';
 
 import AssetViewer from './subcomponents/assetViewer/AssetViewer';
 import ChapterPublisher from './subcomponents/chapterPublisher/ChapterPublisher';
 import ChapterSimulator from './subcomponents/chapterSimulator/ChapterSimulator';
+
+const createGameSimulatorGame = () => {
+  return new SourceAcademyGame(gameSimulatorConfig, GameType.Simulator);
+};
 
 /**
  * This component renders the Main Page of the Game Simulator.
@@ -29,16 +30,14 @@ const GameSimulator: React.FC = () => {
     GameSimulatorState.DEFAULT
   );
 
-  const createGameSimulatorGame = () => {
-    const game = new SourceAcademyGame(gameSimulatorConfig, GameType.Simulator);
-    game.scene.add('GameSimulatorMenu', GameSimulatorMenu, true);
-    game.scene.add('GameManager', GameManager);
-    game.scene.add('CheckpointTransition', CheckpointTransition);
-    return game;
-  };
-
   React.useEffect(() => {
-    createGameSimulatorGame().setGameSimStateSetter(setGameSimulatorState);
+    const game = createGameSimulatorGame();
+    game.setGameSimStateSetter(setGameSimulatorState);
+    return () => {
+      game.isMounted = false;
+      game.stopAllSounds();
+      game.destroy(true);
+    };
   }, []);
 
   React.useEffect(() => {
@@ -62,5 +61,10 @@ const GameSimulator: React.FC = () => {
     </div>
   );
 };
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = GameSimulator;
+Component.displayName = 'GameSimulator';
 
 export default GameSimulator;

@@ -38,25 +38,51 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
         usePortal={true}
       >
         <NavLink
-          className="NavigationBar__link bp5-button bp5-minimal bp5-active"
+          className="NavigationBar__link"
           to="/welcome"
         >
-          <Blueprint5.Icon
-            autoLoad={true}
-            icon="symbol-diamond"
-            tagName="span"
-          />
-          <Blueprint5.NavbarHeading
-            style={
-              Object {
-                "paddingBottom": "0px",
-              }
-            }
-          >
-            Source Academy @ NUS
+          <Blueprint5.NavbarHeading>
+            <Blueprint5.Button
+              active={true}
+              className="app-title"
+              icon="symbol-diamond"
+              minimal={true}
+            >
+              Source Academy @ NUS
+            </Blueprint5.Button>
           </Blueprint5.NavbarHeading>
         </NavLink>
       </Blueprint5.Popover>
+      <DesktopNavLink
+        disabled={true}
+        icon="music"
+        text="Sourcecast"
+        to="/courses/undefined/sourcecast"
+      />
+      <DesktopNavLink
+        disabled={true}
+        icon="code"
+        text="Playground"
+        to="/playground"
+      />
+      <DesktopNavLink
+        disabled={true}
+        icon="book"
+        text="SICP JS"
+        to="/sicpjs"
+      />
+      <DesktopNavLink
+        disabled={true}
+        icon="mountain"
+        text="Achievements"
+        to="/courses/undefined/achievements"
+      />
+      <DesktopNavLink
+        disabled={true}
+        icon="git-repo"
+        text="Stories"
+        to="/courses/undefined/stories"
+      />
     </Blueprint5.NavbarGroup>
     <Blueprint5.NavbarGroup
       align="right"
@@ -133,106 +159,71 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
             <Blueprint5.NavbarGroup
               align="left"
             >
-              <NavLink
-                className={[Function]}
-                title="Missions"
+              <DesktopNavLink
+                disabled={false}
+                hasNotifications={true}
+                hiddenInBreakpoints={
+                  Array [
+                    "xs",
+                    "sm",
+                  ]
+                }
+                icon="flame"
+                text="Missions"
                 to="/courses/1/missions"
-              >
-                <Blueprint5.Icon
-                  autoLoad={true}
-                  icon="flame"
-                  tagName="span"
-                />
-                <div
-                  className="hidden-xs hidden-sm"
-                >
-                  Missions
-                </div>
-                <NotificationBadge
-                  disableHover={true}
-                  notificationFilter={[Function]}
-                />
-              </NavLink>
-              <NavLink
-                className={[Function]}
-                title="Quests"
+              />
+              <DesktopNavLink
+                disabled={false}
+                hasNotifications={true}
+                hiddenInBreakpoints={
+                  Array [
+                    "xs",
+                    "sm",
+                  ]
+                }
+                icon="lightbulb"
+                text="Quests"
                 to="/courses/1/quests"
-              >
-                <Blueprint5.Icon
-                  autoLoad={true}
-                  icon="lightbulb"
-                  tagName="span"
-                />
-                <div
-                  className="hidden-xs hidden-sm"
-                >
-                  Quests
-                </div>
-                <NotificationBadge
-                  disableHover={true}
-                  notificationFilter={[Function]}
-                />
-              </NavLink>
-              <NavLink
-                className={[Function]}
-                title="Paths"
+              />
+              <DesktopNavLink
+                disabled={false}
+                hasNotifications={true}
+                hiddenInBreakpoints={
+                  Array [
+                    "xs",
+                    "sm",
+                  ]
+                }
+                icon="predictive-analysis"
+                text="Paths"
                 to="/courses/1/paths"
-              >
-                <Blueprint5.Icon
-                  autoLoad={true}
-                  icon="predictive-analysis"
-                  tagName="span"
-                />
-                <div
-                  className="hidden-xs hidden-sm"
-                >
-                  Paths
-                </div>
-                <NotificationBadge
-                  disableHover={true}
-                  notificationFilter={[Function]}
-                />
-              </NavLink>
-              <NavLink
-                className={[Function]}
-                title="Contests"
+              />
+              <DesktopNavLink
+                disabled={false}
+                hasNotifications={true}
+                hiddenInBreakpoints={
+                  Array [
+                    "xs",
+                    "sm",
+                  ]
+                }
+                icon="comparison"
+                text="Contests"
                 to="/courses/1/contests"
-              >
-                <Blueprint5.Icon
-                  autoLoad={true}
-                  icon="comparison"
-                  tagName="span"
-                />
-                <div
-                  className="hidden-xs hidden-sm"
-                >
-                  Contests
-                </div>
-                <NotificationBadge
-                  disableHover={true}
-                  notificationFilter={[Function]}
-                />
-              </NavLink>
-              <NavLink
-                className={[Function]}
-                title="Missions"
+              />
+              <DesktopNavLink
+                disabled={false}
+                hasNotifications={true}
+                hiddenInBreakpoints={
+                  Array [
+                    "xs",
+                    "sm",
+                  ]
+                }
+                icon="manual"
+                text="Missions"
                 to="/courses/1/missions"
-              >
-                <Blueprint5.Icon
-                  autoLoad={true}
-                  icon="manual"
-                  tagName="span"
-                />
-                <div
-                  className="hidden-xs hidden-sm"
-                >
-                  Missions
-                </div>
-                <NotificationBadge
-                  disableHover={true}
-                  notificationFilter={[Function]}
-                />
-              </NavLink>
+              />
             </Blueprint5.NavbarGroup>
           </Blueprint5.Navbar>
         }
@@ -256,89 +247,51 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
         usePortal={true}
       >
         <NavLink
-          className="NavigationBar__link bp5-button bp5-minimal bp5-active"
+          className="NavigationBar__link"
           to="/courses/1"
         >
-          <Blueprint5.Icon
-            autoLoad={true}
-            icon="symbol-diamond"
-            tagName="span"
-          />
-          <Blueprint5.NavbarHeading
-            style={
-              Object {
-                "paddingBottom": "0px",
-              }
-            }
-          >
-            CS1101S
+          <Blueprint5.NavbarHeading>
+            <Blueprint5.Button
+              active={true}
+              className="app-title"
+              icon="symbol-diamond"
+              minimal={true}
+            >
+              CS1101S
+            </Blueprint5.Button>
           </Blueprint5.NavbarHeading>
         </NavLink>
       </Blueprint5.Popover>
-      <NavLink
-        className={[Function]}
-        title="Sourcecast"
+      <DesktopNavLink
+        disabled={false}
+        icon="music"
+        text="Sourcecast"
         to="/courses/1/sourcecast"
-      >
-        <Blueprint5.Icon
-          autoLoad={true}
-          icon="music"
-          tagName="span"
-        />
-        <div
-          className=""
-        >
-          Sourcecast
-        </div>
-      </NavLink>
-      <NavLink
-        className={[Function]}
-        title="Playground"
+      />
+      <DesktopNavLink
+        disabled={false}
+        icon="code"
+        text="Playground"
         to="/playground"
-      >
-        <Blueprint5.Icon
-          autoLoad={true}
-          icon="code"
-          tagName="span"
-        />
-        <div
-          className=""
-        >
-          Playground
-        </div>
-      </NavLink>
-      <NavLink
-        className={[Function]}
-        title="SICP JS"
+      />
+      <DesktopNavLink
+        disabled={false}
+        icon="book"
+        text="SICP JS"
         to="/sicpjs"
-      >
-        <Blueprint5.Icon
-          autoLoad={true}
-          icon="book"
-          tagName="span"
-        />
-        <div
-          className=""
-        >
-          SICP JS
-        </div>
-      </NavLink>
-      <NavLink
-        className={[Function]}
-        title="Achievements"
+      />
+      <DesktopNavLink
+        disabled={false}
+        icon="mountain"
+        text="Achievements"
         to="/courses/1/achievements"
-      >
-        <Blueprint5.Icon
-          autoLoad={true}
-          icon="mountain"
-          tagName="span"
-        />
-        <div
-          className=""
-        >
-          Achievements
-        </div>
-      </NavLink>
+      />
+      <DesktopNavLink
+        disabled={true}
+        icon="git-repo"
+        text="Stories"
+        to="/courses/1/stories"
+      />
     </Blueprint5.NavbarGroup>
     <Blueprint5.NavbarGroup
       align="right"
@@ -449,41 +402,51 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
         usePortal={true}
       >
         <NavLink
-          className="NavigationBar__link bp5-button bp5-minimal bp5-active"
+          className="NavigationBar__link"
           to="/welcome"
         >
-          <Blueprint5.Icon
-            autoLoad={true}
-            icon="symbol-diamond"
-            tagName="span"
-          />
-          <Blueprint5.NavbarHeading
-            style={
-              Object {
-                "paddingBottom": "0px",
-              }
-            }
-          >
-            Source Academy @ NUS
+          <Blueprint5.NavbarHeading>
+            <Blueprint5.Button
+              active={true}
+              className="app-title"
+              icon="symbol-diamond"
+              minimal={true}
+            >
+              Source Academy @ NUS
+            </Blueprint5.Button>
           </Blueprint5.NavbarHeading>
         </NavLink>
       </Blueprint5.Popover>
-      <NavLink
-        className={[Function]}
-        title="SICP JS"
+      <DesktopNavLink
+        disabled={true}
+        icon="music"
+        text="Sourcecast"
+        to="/courses/undefined/sourcecast"
+      />
+      <DesktopNavLink
+        disabled={true}
+        icon="code"
+        text="Playground"
+        to="/playground"
+      />
+      <DesktopNavLink
+        disabled={false}
+        icon="book"
+        text="SICP JS"
         to="/sicpjs"
-      >
-        <Blueprint5.Icon
-          autoLoad={true}
-          icon="book"
-          tagName="span"
-        />
-        <div
-          className=""
-        >
-          SICP JS
-        </div>
-      </NavLink>
+      />
+      <DesktopNavLink
+        disabled={true}
+        icon="mountain"
+        text="Achievements"
+        to="/courses/undefined/achievements"
+      />
+      <DesktopNavLink
+        disabled={true}
+        icon="git-repo"
+        text="Stories"
+        to="/courses/undefined/stories"
+      />
     </Blueprint5.NavbarGroup>
     <Blueprint5.NavbarGroup
       align="right"

@@ -2,13 +2,11 @@ import { Chapter, Language, SourceError, Variant } from 'js-slang/dist/types';
 
 import { AchievementState } from '../../features/achievement/AchievementTypes';
 import { DashboardState } from '../../features/dashboard/DashboardTypes';
-import { GradingQuery } from '../../features/grading/GradingTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
 import { freshSortState } from '../../pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
-import { Assessment } from '../assessment/AssessmentTypes';
 import { FileSystemState } from '../fileSystem/FileSystemTypes';
 import { SideContentManagerState, SideContentState } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
@@ -422,7 +420,8 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   enableDebugging: true,
   debuggerContext: {} as DebuggerContext,
   lastDebuggerResult: undefined,
-  lastNonDetResult: null
+  lastNonDetResult: null,
+  files: {}
 });
 
 const defaultFileName = 'program.js';
@@ -457,6 +456,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     usingSubst: false,
     usingCse: false,
     updateCse: true,
+    usingUpload: false,
     currentStep: -1,
     stepsTotal: 0,
     breakpointSteps: [],
@@ -511,6 +511,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     usingSubst: false,
     usingCse: false,
     updateCse: true,
+    usingUpload: false,
     currentStep: -1,
     stepsTotal: 0,
     breakpointSteps: [],
@@ -543,7 +544,7 @@ export const defaultSession: SessionState = {
     story: '',
     playStory: false
   },
-  assessments: new Map<number, Assessment>(),
+  assessments: {},
   assessmentOverviews: undefined,
   agreedToResearch: undefined,
   sessionId: Date.now(),
@@ -551,7 +552,7 @@ export const defaultSession: SessionState = {
   gradingOverviews: undefined,
   students: undefined,
   teamFormationOverviews: undefined,
-  gradings: new Map<number, GradingQuery>(),
+  gradings: {},
   notifications: []
 };
 
@@ -559,7 +560,8 @@ export const defaultStories: StoriesState = {
   storyList: [],
   currentStoryId: null,
   currentStory: null,
-  envs: {}
+  envs: {},
+  storiesUsers: []
 };
 
 export const createDefaultStoriesEnv = (

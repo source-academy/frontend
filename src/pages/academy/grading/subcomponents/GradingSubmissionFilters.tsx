@@ -1,3 +1,4 @@
+import React from 'react';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import { ColumnFilter, ColumnFiltersState } from 'src/features/grading/GradingTypes';
 

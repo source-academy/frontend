@@ -3,7 +3,7 @@ import { IconName, IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { fetchAssessmentOverviews, fetchTotalXp } from '../application/actions/SessionActions';
+import SessionActions from '../application/actions/SessionActions';
 import { AssessmentStatuses, AssessmentType } from '../assessment/AssessmentTypes';
 import Constants from '../utils/Constants';
 import { useSession } from '../utils/Hooks';
@@ -34,13 +34,13 @@ const Profile: React.FC<ProfileProps> = props => {
   useEffect(() => {
     if (isLoggedIn && isEnrolledInACourse && !assessmentOverviews) {
       // If assessment overviews are not loaded, fetch them
-      dispatch(fetchAssessmentOverviews());
+      dispatch(SessionActions.fetchAssessmentOverviews());
     }
   }, [assessmentOverviews, dispatch, isLoggedIn, isEnrolledInACourse, xp]);
 
   useEffect(() => {
     if (isEnrolledInACourse && !xp) {
-      dispatch(fetchTotalXp());
+      dispatch(SessionActions.fetchTotalXp());
     }
   }, [isEnrolledInACourse, dispatch, xp]);
 

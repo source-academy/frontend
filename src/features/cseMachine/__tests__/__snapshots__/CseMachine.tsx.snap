@@ -22,7 +22,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
       height={35}
       padding={10}
       preventDefault={false}
-      text="env"
+      text="*"
       width={120}
     />
   </Label>
@@ -45,33 +45,9 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="Set current environment to this environment"
+      text="Perform * on top 2 stash values"
     />
   </Label>
-  <Group
-    listening={false}
-  >
-    <Path
-      data="M 140 57.5 L 170 390 L 170 390 "
-      preventDefault={false}
-      stroke="#999"
-      strokeWidth={1}
-    />
-    <Arrow
-      fill="#999"
-      pointerWidth={10}
-      points={
-        Array [
-          140,
-          57.5,
-          170,
-          390,
-        ]
-      }
-      preventDefault={false}
-      strokeEnabled={false}
-    />
-  </Group>
 </React.Fragment>
 `;
 
@@ -86,7 +62,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999"
+      stroke="#030fff"
     />
     <Text
       fill="#999"
@@ -127,510 +103,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
 `;
 
 exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 3`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    x={20}
-    y={110}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#999"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      height={35}
-      padding={10}
-      preventDefault={false}
-      text="env"
-      width={120}
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={145}
-    y={115}
-  >
-    <Tag
-      fill="#000"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="#000"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="Set current environment to this environment"
-    />
-  </Label>
-  <Group
-    listening={false}
-  >
-    <Path
-      data="M 140 127.5 L 486 400 L 486 400 "
-      preventDefault={false}
-      stroke="#999"
-      strokeWidth={1}
-    />
-    <Arrow
-      fill="#999"
-      pointerWidth={10}
-      points={
-        Array [
-          140,
-          127.5,
-          486,
-          400,
-        ]
-      }
-      preventDefault={false}
-      strokeEnabled={false}
-    />
-  </Group>
-</React.Fragment>
-`;
-
-exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 4`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    x={20}
-    y={145}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#999"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      height={35}
-      padding={10}
-      preventDefault={false}
-      text="*"
-      width={120}
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={145}
-    y={150}
-  >
-    <Tag
-      fill="#000"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="#000"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="Perform * on top 2 stash values"
-    />
-  </Label>
-</React.Fragment>
-`;
-
-exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 5`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    x={20}
-    y={180}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#999"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      height={35}
-      padding={10}
-      preventDefault={false}
-      text="env"
-      width={120}
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={145}
-    y={185}
-  >
-    <Tag
-      fill="#000"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="#000"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="Set current environment to this environment"
-    />
-  </Label>
-  <Group
-    listening={false}
-  >
-    <Path
-      data="M 140 197.5 L 802 400 L 802 400 "
-      preventDefault={false}
-      stroke="#999"
-      strokeWidth={1}
-    />
-    <Arrow
-      fill="#999"
-      pointerWidth={10}
-      points={
-        Array [
-          140,
-          197.5,
-          802,
-          400,
-        ]
-      }
-      preventDefault={false}
-      strokeEnabled={false}
-    />
-  </Group>
-</React.Fragment>
-`;
-
-exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 6`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    x={20}
-    y={215}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#999"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      height={35}
-      padding={10}
-      preventDefault={false}
-      text="*"
-      width={120}
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={145}
-    y={220}
-  >
-    <Tag
-      fill="#000"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="#000"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="Perform * on top 2 stash values"
-    />
-  </Label>
-</React.Fragment>
-`;
-
-exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 7`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    x={20}
-    y={250}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#999"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      height={35}
-      padding={10}
-      preventDefault={false}
-      text="env"
-      width={120}
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={145}
-    y={255}
-  >
-    <Tag
-      fill="#000"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="#000"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="Set current environment to this environment"
-    />
-  </Label>
-  <Group
-    listening={false}
-  >
-    <Path
-      data="M 140 267.5 L 1118 400 L 1118 400 "
-      preventDefault={false}
-      stroke="#999"
-      strokeWidth={1}
-    />
-    <Arrow
-      fill="#999"
-      pointerWidth={10}
-      points={
-        Array [
-          140,
-          267.5,
-          1118,
-          400,
-        ]
-      }
-      preventDefault={false}
-      strokeEnabled={false}
-    />
-  </Group>
-</React.Fragment>
-`;
-
-exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 8`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    x={20}
-    y={285}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#999"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      height={35}
-      padding={10}
-      preventDefault={false}
-      text="*"
-      width={120}
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={145}
-    y={290}
-  >
-    <Tag
-      fill="#000"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="#000"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="Perform * on top 2 stash values"
-    />
-  </Label>
-</React.Fragment>
-`;
-
-exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 9`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    x={20}
-    y={320}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#999"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      height={35}
-      padding={10}
-      preventDefault={false}
-      text="env"
-      width={120}
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={145}
-    y={325}
-  >
-    <Tag
-      fill="#000"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="#000"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="Set current environment to this environment"
-    />
-  </Label>
-  <Group
-    listening={false}
-  >
-    <Path
-      data="M 140 337.5 L 1434 400 L 1434 400 "
-      preventDefault={false}
-      stroke="#999"
-      strokeWidth={1}
-    />
-    <Arrow
-      fill="#999"
-      pointerWidth={10}
-      points={
-        Array [
-          140,
-          337.5,
-          1434,
-          400,
-        ]
-      }
-      preventDefault={false}
-      strokeEnabled={false}
-    />
-  </Group>
-</React.Fragment>
-`;
-
-exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 10`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    x={20}
-    y={355}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#030fff"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      height={35}
-      padding={10}
-      preventDefault={false}
-      text="*"
-      width={120}
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={145}
-    y={360}
-  >
-    <Tag
-      fill="#000"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="#000"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="Perform * on top 2 stash values"
-    />
-  </Label>
-</React.Fragment>
-`;
-
-exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 11`] = `
 <React.Fragment>
   <Label
     onMouseEnter={[Function]}
@@ -679,7 +151,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
 </React.Fragment>
 `;
 
-exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 12`] = `
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 4`] = `
 <React.Fragment>
   <Label
     onMouseEnter={[Function]}
@@ -690,7 +162,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999"
+      stroke="#ff1744"
     />
     <Text
       fill="#999"
@@ -728,7 +200,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
 </React.Fragment>
 `;
 
-exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 13`] = `
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 5`] = `
 <React.Fragment>
   <Label
     onMouseEnter={[Function]}
@@ -739,7 +211,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#999"
+      stroke="#ff1744"
     />
     <Text
       fill="#999"
@@ -749,7 +221,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
       fontVariant="normal"
       padding={10}
       preventDefault={false}
-      text="8"
+      text="40320"
     />
   </Label>
   <Label
@@ -771,203 +243,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="8"
-    />
-  </Label>
-</React.Fragment>
-`;
-
-exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 14`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    x={236}
-    y={5}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#999"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={10}
-      preventDefault={false}
-      text="7"
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={241}
-    y={45}
-  >
-    <Tag
-      fill="#000"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="#000"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="7"
-    />
-  </Label>
-</React.Fragment>
-`;
-
-exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 15`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    x={265}
-    y={5}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#999"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={10}
-      preventDefault={false}
-      text="6"
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={270}
-    y={45}
-  >
-    <Tag
-      fill="#000"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="#000"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="6"
-    />
-  </Label>
-</React.Fragment>
-`;
-
-exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 16`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    x={294}
-    y={5}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#ff1744"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={10}
-      preventDefault={false}
-      text="5"
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={299}
-    y={45}
-  >
-    <Tag
-      fill="#000"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="#000"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="5"
-    />
-  </Label>
-</React.Fragment>
-`;
-
-exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 17`] = `
-<React.Fragment>
-  <Label
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    x={323}
-    y={5}
-  >
-    <Tag
-      cornerRadius={5}
-      preventDefault={false}
-      stroke="#ff1744"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={10}
-      preventDefault={false}
-      text="24"
-    />
-  </Label>
-  <Label
-    visible={false}
-    x={328}
-    y={45}
-  >
-    <Tag
-      fill="#000"
-      opacity={0.7}
-      preventDefault={false}
-      stroke="#000"
-    />
-    <Text
-      fill="#999"
-      fontFamily="monospace, monospace"
-      fontSize={15}
-      fontStyle="normal"
-      fontVariant="normal"
-      padding={5}
-      preventDefault={false}
-      text="24"
+      text="40320"
     />
   </Label>
 </React.Fragment>
@@ -3429,6 +2705,7 @@ Object {
     ],
     "callee": Node {
       "end": 97,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 15,
@@ -3444,6 +2721,7 @@ Object {
       "type": "Identifier",
     },
     "end": 101,
+    "isEnvDependent": true,
     "loc": SourceLocation {
       "end": Position {
         "column": 19,
@@ -3741,6 +3019,7 @@ Object {
     ],
     "callee": Node {
       "end": 418,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 29,
@@ -3756,6 +3035,7 @@ Object {
       "type": "Identifier",
     },
     "end": 421,
+    "isEnvDependent": true,
     "loc": SourceLocation {
       "end": Position {
         "column": 32,
@@ -3812,6 +3092,7 @@ Object {
     ],
     "callee": Node {
       "end": 317,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 73,
@@ -3827,6 +3108,7 @@ Object {
       "type": "Identifier",
     },
     "end": 320,
+    "isEnvDependent": true,
     "loc": SourceLocation {
       "end": Position {
         "column": 76,
@@ -3877,6 +3159,7 @@ Object {
     ],
     "callee": Node {
       "end": 13849,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 23,
@@ -3892,6 +3175,7 @@ Object {
       "type": "Identifier",
     },
     "end": 13856,
+    "isEnvDependent": true,
     "loc": SourceLocation {
       "end": Position {
         "column": 30,
@@ -4015,6 +3299,7 @@ Object {
     ],
     "callee": Node {
       "end": 404,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 15,
@@ -4030,6 +3315,7 @@ Object {
       "type": "Identifier",
     },
     "end": 425,
+    "isEnvDependent": true,
     "loc": SourceLocation {
       "end": Position {
         "column": 36,
@@ -4131,6 +3417,7 @@ Object {
       ],
       "callee": Node {
         "end": 317,
+        "isEnvDependent": true,
         "loc": SourceLocation {
           "end": Position {
             "column": 73,
@@ -4146,6 +3433,7 @@ Object {
         "type": "Identifier",
       },
       "end": 320,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 76,
@@ -4504,6 +3792,7 @@ Object {
       ],
       "callee": Node {
         "end": 404,
+        "isEnvDependent": true,
         "loc": SourceLocation {
           "end": Position {
             "column": 15,
@@ -4519,6 +3808,7 @@ Object {
         "type": "Identifier",
       },
       "end": 425,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 36,
@@ -4945,6 +4235,7 @@ Object {
     ],
     "callee": Node {
       "end": 375,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 34,
@@ -4960,6 +4251,7 @@ Object {
       "type": "Identifier",
     },
     "end": 381,
+    "isEnvDependent": true,
     "loc": SourceLocation {
       "end": Position {
         "column": 40,
@@ -5015,6 +4307,7 @@ Object {
         ],
         "callee": Node {
           "end": 404,
+          "isEnvDependent": true,
           "loc": SourceLocation {
             "end": Position {
               "column": 15,
@@ -5030,6 +4323,7 @@ Object {
           "type": "Identifier",
         },
         "end": 425,
+        "isEnvDependent": true,
         "loc": SourceLocation {
           "end": Position {
             "column": 36,
@@ -5129,6 +4423,7 @@ Object {
     ],
     "callee": Node {
       "end": 305,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 61,
@@ -5144,6 +4439,7 @@ Object {
       "type": "Identifier",
     },
     "end": 328,
+    "isEnvDependent": true,
     "loc": SourceLocation {
       "end": Position {
         "column": 84,
@@ -5199,6 +4495,7 @@ Object {
         ],
         "callee": Node {
           "end": 404,
+          "isEnvDependent": true,
           "loc": SourceLocation {
             "end": Position {
               "column": 15,
@@ -5214,6 +4511,7 @@ Object {
           "type": "Identifier",
         },
         "end": 425,
+        "isEnvDependent": true,
         "loc": SourceLocation {
           "end": Position {
             "column": 36,
@@ -5741,6 +5039,7 @@ Object {
       ],
       "callee": Node {
         "end": 375,
+        "isEnvDependent": true,
         "loc": SourceLocation {
           "end": Position {
             "column": 34,
@@ -5756,6 +5055,7 @@ Object {
         "type": "Identifier",
       },
       "end": 381,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 40,
@@ -5811,6 +5111,7 @@ Object {
           ],
           "callee": Node {
             "end": 404,
+            "isEnvDependent": true,
             "loc": SourceLocation {
               "end": Position {
                 "column": 15,
@@ -5826,6 +5127,7 @@ Object {
             "type": "Identifier",
           },
           "end": 425,
+          "isEnvDependent": true,
           "loc": SourceLocation {
             "end": Position {
               "column": 36,
@@ -5959,6 +5261,7 @@ Object {
       ],
       "callee": Node {
         "end": 305,
+        "isEnvDependent": true,
         "loc": SourceLocation {
           "end": Position {
             "column": 61,
@@ -5974,6 +5277,7 @@ Object {
         "type": "Identifier",
       },
       "end": 328,
+      "isEnvDependent": true,
       "loc": SourceLocation {
         "end": Position {
           "column": 84,
@@ -6029,6 +5333,7 @@ Object {
           ],
           "callee": Node {
             "end": 404,
+            "isEnvDependent": true,
             "loc": SourceLocation {
               "end": Position {
                 "column": 15,
@@ -6044,6 +5349,7 @@ Object {
             "type": "Identifier",
           },
           "end": 425,
+          "isEnvDependent": true,
           "loc": SourceLocation {
             "end": Position {
               "column": 36,

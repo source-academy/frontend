@@ -5,8 +5,7 @@
   align-items: center;
 }
 
-#fullscreen-button {
+.fullscreen-button {
   position: absolute;
-  cursor: pointer;
-  z-index: 100;
+  z-index: 10;
 }

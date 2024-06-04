@@ -1,17 +1,13 @@
-import { Button, Icon } from '@blueprintjs/core';
+import { Button, Icon, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import {
-  publishGrading,
-  reautogradeSubmission,
-  unpublishGrading,
-  unsubmitSubmission
-} from 'src/commons/application/actions/SessionActions';
+import SessionActions from 'src/commons/application/actions/SessionActions';
 import { ProgressStatus, ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession } from 'src/commons/utils/Hooks';
 
 type Props = {
   submissionId: number;
@@ -22,7 +18,7 @@ type Props = {
 
 const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filterMode }) => {
   const dispatch = useDispatch();
-  const courseId = useTypedSelector(store => store.session.courseId);
+  const { courseId } = useSession();
 
   const handleReautogradeClick = async () => {
     const confirm = await showSimpleConfirmDialog({
@@ -36,7 +32,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
       positiveLabel: 'Reautograde'
     });
     if (confirm) {
-      dispatch(reautogradeSubmission(submissionId));
+      dispatch(SessionActions.reautogradeSubmission(submissionId));
     }
   };
 
@@ -47,7 +43,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
       positiveLabel: 'Unsubmit'
     });
     if (confirm) {
-      dispatch(unsubmitSubmission(submissionId));
+      dispatch(SessionActions.unsubmitSubmission(submissionId));
     }
   };
 
@@ -58,7 +54,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
       positiveLabel: 'Publish'
     });
     if (confirm) {
-      dispatch(publishGrading(submissionId));
+      dispatch(SessionActions.publishGrading(submissionId));
     }
   };
 
@@ -69,9 +65,13 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
       positiveLabel: 'Unpublish'
     });
     if (confirm) {
-      dispatch(unpublishGrading(submissionId));
+      dispatch(SessionActions.unpublishGrading(submissionId));
     }
   };
+
+  const isGraded = progress === ProgressStatuses.graded;
+  const isSubmitted = progress === ProgressStatuses.submitted;
+  const isPublished = progress === ProgressStatuses.published;
 
   return (
     <GradingFlex
@@ -79,56 +79,56 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
       className="grading-actions-btn-wrappers"
       style={{ columnGap: '5px', ...style }}
     >
-      {filterMode ? (
+      {filterMode && (
         <Link to={`/courses/${courseId}/grading/${submissionId}`}>
           <GradingFlex alignItems="center" className="grading-action-icons grading-action-icons-bg">
-            <Icon htmlTitle="Grade" icon={IconNames.EDIT} />
+            <Tooltip content="Grade">
+              <Icon icon={IconNames.EDIT} />
+            </Tooltip>
           </GradingFlex>
         </Link>
-      ) : (
-        <></>
       )}
 
-      {!(progress !== ProgressStatuses.graded && progress !== ProgressStatuses.submitted) ? (
+      {(isGraded || isSubmitted) && (
         <Button
           className="grading-action-icons"
-          minimal={true}
+          minimal
           style={{ padding: 0 }}
           onClick={handleReautogradeClick}
         >
-          <Icon htmlTitle="Reautograde" icon={IconNames.REFRESH} />
+          <Tooltip content="Reautograde">
+            <Icon icon={IconNames.REFRESH} />
+          </Tooltip>
         </Button>
-      ) : (
-        <></>
       )}
 
-      {!(progress !== ProgressStatuses.graded && progress !== ProgressStatuses.submitted) ? (
+      {(isGraded || isSubmitted) && (
         <Button
           className="grading-action-icons"
-          minimal={true}
+          minimal
           style={{ padding: 0 }}
           onClick={handleUnsubmitClick}
         >
-          <Icon htmlTitle="Unsubmit" icon={IconNames.UNDO} />
+          <Tooltip content="Unsubmit">
+            <Icon icon={IconNames.UNDO} />
+          </Tooltip>
         </Button>
-      ) : (
-        <></>
       )}
 
-      {!(progress !== ProgressStatuses.graded) ? (
-        <Button className="grading-action-icons" minimal={true} onClick={handlePublishClick}>
-          <Icon htmlTitle="Publish" icon={IconNames.SEND_TO_GRAPH} />
+      {isGraded && (
+        <Button className="grading-action-icons" minimal onClick={handlePublishClick}>
+          <Tooltip content="Publish">
+            <Icon icon={IconNames.SEND_TO_GRAPH} />
+          </Tooltip>
         </Button>
-      ) : (
-        <></>
       )}
 
-      {!(progress !== ProgressStatuses.published) ? (
-        <Button className="grading-action-icons" minimal={true} onClick={handleUnpublishClick}>
-          <Icon htmlTitle="Unpublish" icon={IconNames.EXCLUDE_ROW} />
+      {isPublished && (
+        <Button className="grading-action-icons" minimal onClick={handleUnpublishClick}>
+          <Tooltip content="Unpublish">
+            <Icon icon={IconNames.EXCLUDE_ROW} />
+          </Tooltip>
         </Button>
-      ) : (
-        <></>
       )}
     </GradingFlex>
   );

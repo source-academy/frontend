@@ -160,8 +160,7 @@ export default class SourceAcademyGame extends Phaser.Game {
     this.global.isUsingMock ? GameChapterMocks : this.global.gameChapters;
 }
 
-const config = {
-  debug: true,
+const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.CANVAS,
   width: screenSize.x,
   height: screenSize.y,

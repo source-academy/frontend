@@ -11,9 +11,9 @@ import {
   PersistenceFile
 } from '../../features/persistence/PersistenceTypes';
 import { store } from '../../pages/createStore';
+import SessionActions from '../application/actions/SessionActions';
 import { OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { LOGOUT_GOOGLE } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { showSimpleConfirmDialog, showSimplePromptDialog } from '../utils/DialogHelper';
@@ -37,7 +37,7 @@ const MIME_SOURCE = 'text/plain';
 // const MIME_FOLDER = 'application/vnd.google-apps.folder';
 
 export function* persistenceSaga(): SagaIterator {
-  yield takeLatest(LOGOUT_GOOGLE, function* () {
+  yield takeLatest(SessionActions.logoutGoogle.type, function* () {
     yield put(actions.playgroundUpdatePersistenceFile(undefined));
     yield call(ensureInitialised);
     yield call([gapi.auth2.getAuthInstance(), 'signOut']);

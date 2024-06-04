@@ -5,34 +5,12 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
-import {
-  beginDebuggerPause,
-  beginInterruptExecution,
-  debuggerReset,
-  debuggerResume
-} from 'src/commons/application/actions/InterpreterActions';
+import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 import { Position } from 'src/commons/editor/EditorTypes';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
-import {
-  browseReplHistoryDown,
-  browseReplHistoryUp,
-  chapterSelect,
-  clearReplOutput,
-  evalEditor,
-  evalRepl,
-  externalLibrarySelect,
-  navigateToDeclaration,
-  promptAutocomplete,
-  removeEditorTab,
-  setEditorBreakpoint,
-  setIsEditorReadonly,
-  toggleEditorAutorun,
-  updateActiveEditorTabIndex,
-  updateEditorValue,
-  updateReplValue
-} from 'src/commons/workspace/WorkspaceActions';
+import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import { fetchSourcecastIndex } from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
 import {
@@ -120,14 +98,14 @@ const Sourcecast: React.FC = () => {
     return {
       handleFetchSourcecastIndex: () => dispatch(fetchSourcecastIndex(workspaceLocation)),
       handleChapterSelect: (chapter: Chapter) =>
-        dispatch(chapterSelect(chapter, Variant.DEFAULT, workspaceLocation)),
-      handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
+        dispatch(WorkspaceActions.chapterSelect(chapter, Variant.DEFAULT, workspaceLocation)),
+      handleEditorEval: () => dispatch(WorkspaceActions.evalEditor(workspaceLocation)),
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange: (newEditorValue: string) =>
-        dispatch(updateEditorValue(workspaceLocation, 0, newEditorValue)),
+        dispatch(WorkspaceActions.updateEditorValue(workspaceLocation, 0, newEditorValue)),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
-        dispatch(externalLibrarySelect(externalLibraryName, workspaceLocation)),
-      handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
+        dispatch(WorkspaceActions.externalLibrarySelect(externalLibraryName, workspaceLocation)),
+      handleReplEval: () => dispatch(WorkspaceActions.evalRepl(workspaceLocation)),
       handleSetSourcecastData: (
         title: string,
         description: string,
@@ -140,7 +118,7 @@ const Sourcecast: React.FC = () => {
         ),
       handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
         dispatch(setSourcecastStatus(playbackStatus, workspaceLocation)),
-      handleReplOutputClear: () => dispatch(clearReplOutput(workspaceLocation)),
+      handleReplOutputClear: () => dispatch(WorkspaceActions.clearReplOutput(workspaceLocation)),
       handleSideContentHeightChange: (change: number) =>
         dispatch(changeSideContentHeight(change, workspaceLocation))
     };
@@ -218,11 +196,13 @@ const Sourcecast: React.FC = () => {
 
   const autorunButtonHandlers = useMemo(() => {
     return {
-      handleDebuggerPause: () => dispatch(beginDebuggerPause(workspaceLocation)),
-      handleDebuggerReset: () => dispatch(debuggerReset(workspaceLocation)),
-      handleDebuggerResume: () => dispatch(debuggerResume(workspaceLocation)),
-      handleInterruptEval: () => dispatch(beginInterruptExecution(workspaceLocation)),
-      handleToggleEditorAutorun: () => dispatch(toggleEditorAutorun(workspaceLocation))
+      handleDebuggerPause: () => dispatch(InterpreterActions.beginDebuggerPause(workspaceLocation)),
+      handleDebuggerReset: () => dispatch(InterpreterActions.debuggerReset(workspaceLocation)),
+      handleDebuggerResume: () => dispatch(InterpreterActions.debuggerResume(workspaceLocation)),
+      handleInterruptEval: () =>
+        dispatch(InterpreterActions.beginInterruptExecution(workspaceLocation)),
+      handleToggleEditorAutorun: () =>
+        dispatch(WorkspaceActions.toggleEditorAutorun(workspaceLocation))
     };
   }, [dispatch]);
   const autorunButtons = (
@@ -302,14 +282,16 @@ const Sourcecast: React.FC = () => {
   const editorContainerHandlers = useMemo(() => {
     return {
       handleDeclarationNavigate: (cursorPosition: Position) =>
-        dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
+        dispatch(WorkspaceActions.navigateToDeclaration(workspaceLocation, cursorPosition)),
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorUpdateBreakpoints: (newBreakpoints: string[]) =>
-        dispatch(setEditorBreakpoint(workspaceLocation, 0, newBreakpoints)),
+        dispatch(WorkspaceActions.setEditorBreakpoint(workspaceLocation, 0, newBreakpoints)),
       setActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
-        dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+        dispatch(
+          WorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)
+        ),
       removeEditorTabByIndex: (editorTabIndex: number) =>
-        dispatch(removeEditorTab(workspaceLocation, editorTabIndex))
+        dispatch(WorkspaceActions.removeEditorTab(workspaceLocation, editorTabIndex))
     };
   }, [dispatch]);
   const editorContainerProps: SourcecastEditorContainerProps = {
@@ -333,10 +315,12 @@ const Sourcecast: React.FC = () => {
 
   const replHandlers = useMemo(() => {
     return {
-      handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
-      handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
+      handleBrowseHistoryDown: () =>
+        dispatch(WorkspaceActions.browseReplHistoryDown(workspaceLocation)),
+      handleBrowseHistoryUp: () =>
+        dispatch(WorkspaceActions.browseReplHistoryUp(workspaceLocation)),
       handleReplValueChange: (newValue: string) =>
-        dispatch(updateReplValue(newValue, workspaceLocation))
+        dispatch(WorkspaceActions.updateReplValue(newValue, workspaceLocation))
     };
   }, [dispatch]);
   const replProps = {
@@ -395,13 +379,13 @@ const Sourcecast: React.FC = () => {
   const sourcecastControlbarHandlers = useMemo(() => {
     return {
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        dispatch(promptAutocomplete(workspaceLocation, row, col, callback)),
+        dispatch(WorkspaceActions.promptAutocomplete(workspaceLocation, row, col, callback)),
       handleSetCurrentPlayerTime: (playerTime: number) =>
         dispatch(setCurrentPlayerTime(playerTime, workspaceLocation)),
       handleSetCodeDeltasToApply: (deltas: CodeDelta[]) =>
         dispatch(setCodeDeltasToApply(deltas, workspaceLocation)),
       handleSetIsEditorReadonly: (editorReadonly: boolean) =>
-        dispatch(setIsEditorReadonly(workspaceLocation, editorReadonly)),
+        dispatch(WorkspaceActions.setIsEditorReadonly(workspaceLocation, editorReadonly)),
       handleSetInputToApply: (inputToApply: Input) =>
         dispatch(setInputToApply(inputToApply, workspaceLocation)),
       handleSetSourcecastDuration: (duration: number) =>
@@ -440,5 +424,10 @@ const Sourcecast: React.FC = () => {
 };
 
 const INTRODUCTION = 'Welcome to Sourcecast!';
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = Sourcecast;
+Component.displayName = 'Sourcecast';
 
 export default Sourcecast;

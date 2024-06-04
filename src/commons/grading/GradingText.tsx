@@ -1,28 +1,24 @@
-import { Text } from '@blueprintjs/core';
-import { Classes } from '@blueprintjs/core';
+import { Classes, Text } from '@blueprintjs/core';
+import classNames from 'classnames';
+import React from 'react';
 
-type GradingTextProps = {
+const defaultStyles: React.CSSProperties = {
+  width: 'max-content',
+  margin: 'auto 0'
+};
+
+type Props = {
   children?: React.ReactNode;
   style?: React.CSSProperties;
   isSecondaryText?: boolean;
   className?: string;
-} & React.RefAttributes<HTMLDivElement>;
+};
 
-const GradingText: React.FC<GradingTextProps> = ({
-  children,
-  style,
-  isSecondaryText,
-  className = ''
-}) => {
-  const defaultStyle: React.CSSProperties = {
-    width: 'max-content',
-    margin: 'auto 0'
-  };
-
+const GradingText: React.FC<Props> = ({ children, style, isSecondaryText, className }) => {
   return (
     <Text
-      className={Classes.UI_TEXT + ' ' + className + (isSecondaryText ? ' bp5-text-muted' : '')}
-      style={{ ...defaultStyle, ...style }}
+      className={classNames(Classes.UI_TEXT, className, isSecondaryText && Classes.TEXT_MUTED)}
+      style={{ ...defaultStyles, ...style }}
     >
       {children}
     </Text>

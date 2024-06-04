@@ -3,8 +3,7 @@ import { Role } from 'src/commons/application/ApplicationTypes';
 import { UpdateCourseConfiguration } from 'src/commons/application/types/SessionTypes';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
-import { addNewUsersToCourse, createCourse } from '../AcademyActions';
-import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from '../AcademyTypes';
+import AcademyActions from '../AcademyActions';
 
 test('addNewUsersToCourse generates correct action object', () => {
   const users: UsernameRoleGroup[] = [
@@ -13,9 +12,9 @@ test('addNewUsersToCourse generates correct action object', () => {
   ];
   const provider: string = 'test';
 
-  const action = addNewUsersToCourse(users, provider);
+  const action = AcademyActions.addNewUsersToCourse(users, provider);
   expect(action).toEqual({
-    type: ADD_NEW_USERS_TO_COURSE,
+    type: AcademyActions.addNewUsersToCourse.type,
     payload: {
       users,
       provider
@@ -37,9 +36,9 @@ test('createCourse generates correct action object', () => {
     moduleHelpText: 'Help Text'
   };
 
-  const action = createCourse(courseConfig);
+  const action = AcademyActions.createCourse(courseConfig);
   expect(action).toEqual({
-    type: CREATE_COURSE,
+    type: AcademyActions.createCourse.type,
     payload: courseConfig
   });
 });

@@ -1,14 +1,17 @@
 /*eslint no-eval: "error"*/
 /*eslint-env browser*/
+import _ from 'lodash';
 import { SagaIterator } from 'redux-saga';
-import { call, put, select } from 'redux-saga/effects';
-import { ADD_NEW_USERS_TO_COURSE, CREATE_COURSE } from 'src/features/academy/AcademyTypes';
+import { all, call, fork, put, select } from 'redux-saga/effects';
+import AcademyActions from 'src/features/academy/AcademyActions';
+import DashboardActions from 'src/features/dashboard/DashboardActions';
+import GroundControlActions from 'src/features/groundControl/GroundControlActions';
+import SourcecastActions from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
+import SourceRecorderActions from 'src/features/sourceRecorder/SourceRecorderActions';
+import { postNewStoriesUsers } from 'src/features/stories/storiesComponents/BackendAccess';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
-import {
-  FETCH_GROUP_GRADING_SUMMARY,
-  GradingSummary
-} from '../../features/dashboard/DashboardTypes';
+import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import {
   GradingOverview,
   GradingOverviews,
@@ -16,75 +19,19 @@ import {
   GradingQuestion,
   SortStates
 } from '../../features/grading/GradingTypes';
-import {
-  ASSIGN_ENTRIES_FOR_VOTING,
-  CHANGE_DATE_ASSESSMENT,
-  CHANGE_TEAM_SIZE_ASSESSMENT,
-  CONFIGURE_ASSESSMENT,
-  DELETE_ASSESSMENT,
-  PUBLISH_ASSESSMENT,
-  PUBLISH_GRADING_ALL,
-  UNPUBLISH_GRADING_ALL,
-  UPLOAD_ASSESSMENT
-} from '../../features/groundControl/GroundControlTypes';
-import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
-import {
-  SAVE_SOURCECAST_DATA,
-  SourcecastData
-} from '../../features/sourceRecorder/SourceRecorderTypes';
-import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
+import { SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
+import SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
 import { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
+import SessionActions from '../application/actions/SessionActions';
 import { OverallState, Role } from '../application/ApplicationTypes';
 import { RouterState } from '../application/types/CommonsTypes';
 import {
-  ACKNOWLEDGE_NOTIFICATIONS,
   AdminPanelCourseRegistration,
-  BULK_UPLOAD_TEAM,
-  CHECK_ANSWER_LAST_MODIFIED_AT,
   CourseConfiguration,
   CourseRegistration,
-  CREATE_TEAM,
-  DELETE_ASSESSMENT_CONFIG,
-  DELETE_TEAM,
-  DELETE_TIME_OPTIONS,
-  DELETE_USER_COURSE_REGISTRATION,
-  FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
-  FETCH_ASSESSMENT,
-  FETCH_ASSESSMENT_ADMIN,
-  FETCH_ASSESSMENT_CONFIGS,
-  FETCH_AUTH,
-  FETCH_CONFIGURABLE_NOTIFICATION_CONFIGS,
-  FETCH_COURSE_CONFIG,
-  FETCH_GRADING,
-  FETCH_GRADING_OVERVIEWS,
-  FETCH_NOTIFICATION_CONFIGS,
-  FETCH_NOTIFICATIONS,
-  FETCH_STUDENTS,
-  FETCH_TEAM_FORMATION_OVERVIEW,
-  FETCH_TEAM_FORMATION_OVERVIEWS,
-  FETCH_TOTAL_XP,
-  FETCH_TOTAL_XP_ADMIN,
-  FETCH_USER_AND_COURSE,
   NotificationConfiguration,
-  PUBLISH_GRADING,
-  REAUTOGRADE_ANSWER,
-  REAUTOGRADE_SUBMISSION,
-  SUBMIT_ANSWER,
-  SUBMIT_GRADING,
-  SUBMIT_GRADING_AND_CONTINUE,
   TimeOption,
   Tokens,
-  UNPUBLISH_GRADING,
-  UNSUBMIT_SUBMISSION,
-  UPDATE_ASSESSMENT_CONFIGS,
-  UPDATE_COURSE_CONFIG,
-  UPDATE_COURSE_RESEARCH_AGREEMENT,
-  UPDATE_LATEST_VIEWED_COURSE,
-  UPDATE_NOTIFICATION_CONFIG,
-  UPDATE_NOTIFICATION_PREFERENCES,
-  UPDATE_TEAM,
-  UPDATE_TIME_OPTIONS,
-  UPDATE_USER_ROLE,
   UpdateCourseConfiguration,
   User
 } from '../application/types/SessionTypes';
@@ -93,19 +40,19 @@ import {
   AssessmentConfiguration,
   AssessmentOverview,
   AssessmentStatuses,
-  FETCH_ASSESSMENT_OVERVIEWS,
   ProgressStatuses,
-  Question,
-  SUBMIT_ASSESSMENT
+  Question
 } from '../assessment/AssessmentTypes';
 import {
   Notification,
   NotificationFilterFunction
 } from '../notificationBadge/NotificationBadgeTypes';
+import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';
-import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
+import { computeFrontendRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { CHANGE_SUBLANGUAGE, WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import WorkspaceActions from '../workspace/WorkspaceActions';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
   checkAnswerLastModifiedAt,
   deleteAssessment,
@@ -179,8 +126,17 @@ export function* routerNavigate(path: string) {
   return router?.navigate(path);
 }
 
-function* BackendSaga(): SagaIterator {
-  yield takeEvery(FETCH_AUTH, function* (action: ReturnType<typeof actions.fetchAuth>): any {
+// TODO: Refactor and combine in a future commit
+const sagaActions = {
+  ...SessionActions,
+  ...SourcereelActions,
+  ...AcademyActions,
+  ...SourcecastActions,
+  ...SourceRecorderActions,
+  ...WorkspaceActions
+};
+const newBackendSagaOne = combineSagaHandlers(sagaActions, {
+  fetchAuth: function* (action): any {
     const { code, providerId: payloadProviderId } = action.payload;
 
     const providerId = payloadProviderId || (getDefaultProvider() || [null])[0];
@@ -193,13 +149,31 @@ function* BackendSaga(): SagaIterator {
     }
 
     const clientId = getClientId(providerId);
-    const redirectUrl = computeRedirectUri(providerId);
+    const redirectUrl = computeFrontendRedirectUri(providerId);
 
     const tokens: Tokens | null = yield call(postAuth, code, providerId, clientId, redirectUrl);
     if (!tokens) {
       return yield routerNavigate('/');
     }
     yield put(actions.setTokens(tokens));
+    yield put(actions.fetchUserAndCourse());
+    /**
+     * NOTE: Navigation logic is now handled in <Login /> component.
+     * - Due to route hoisting in react-router v6, which requires us to declare routes at the top level,
+     *   we need to rerender the router to include Academy routes when the user logs in, which occurs in ApplicationWrapper.tsx.
+     * - However, the current router instance we have access to HERE in this saga via `routerNavigate` is the old router instance.
+     * - Thus handling navigation in <Login /> allows us to directly access the latest router via `useNavigate`.
+     */
+  },
+  handleSamlRedirect: function* (action) {
+    const { jwtCookie } = action.payload;
+    const tokens = _.mapKeys(JSON.parse(jwtCookie), (v, k) => _.camelCase(k)) as Tokens;
+
+    yield put(actions.setTokens(tokens));
+    yield put(actions.fetchUserAndCourse());
+  },
+  fetchUserAndCourse: function* (action) {
+    const tokens: Tokens = yield selectTokens();
 
     // Note: courseRegistration, courseConfiguration and assessmentConfigurations
     // are either all null OR all not null
@@ -239,60 +213,8 @@ function* BackendSaga(): SagaIterator {
         yield put(actions.clearStoriesUserAndGroup());
       }
     }
-    /**
-     * NOTE: Navigation logic is now handled in <Login /> component.
-     * - Due to route hoisting in react-router v6, which requires us to declare routes at the top level,
-     *   we need to rerender the router to include Academy routes when the user logs in, which occurs in ApplicationWrapper.tsx.
-     * - However, the current router instance we have access to HERE in this saga via `routerNavigate` is the old router instance.
-     * - Thus handling navigation in <Login /> allows us to directly access the latest router via `useNavigate`.
-     */
-  });
-
-  yield takeEvery(
-    FETCH_USER_AND_COURSE,
-    function* (action: ReturnType<typeof actions.fetchUserAndCourse>): any {
-      const tokens: Tokens = yield selectTokens();
-
-      const {
-        user,
-        courseRegistration,
-        courseConfiguration,
-        assessmentConfigurations
-      }: {
-        user: User | null;
-        courseRegistration: CourseRegistration | null;
-        courseConfiguration: CourseConfiguration | null;
-        assessmentConfigurations: AssessmentConfiguration[] | null;
-      } = yield call(getUser, tokens);
-
-      if (!user) {
-        return;
-      }
-
-      yield put(actions.setUser(user));
-
-      // Handle case where user does not have a latest viewed course in the backend
-      // but is enrolled in some course (this happens occationally due to e.g. removal from a course)
-      if (courseConfiguration === null && user.courses.length > 0) {
-        yield put(actions.updateLatestViewedCourse(user.courses[0].courseId));
-      }
-
-      if (courseRegistration && courseConfiguration && assessmentConfigurations) {
-        yield put(actions.setCourseRegistration(courseRegistration));
-        yield put(actions.setCourseConfiguration(courseConfiguration));
-        yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
-
-        if (courseConfiguration.enableStories) {
-          yield put(actions.getStoriesUser());
-          // TODO: Fetch associated stories group ID
-        } else {
-          yield put(actions.clearStoriesUserAndGroup());
-        }
-      }
-    }
-  );
-
-  yield takeEvery(FETCH_COURSE_CONFIG, function* () {
+  },
+  fetchCourseConfig: function* () {
     const tokens: Tokens = yield selectTokens();
     const { config }: { config: CourseConfiguration | null } = yield call(getCourseConfig, tokens);
     if (config) {
@@ -305,9 +227,8 @@ function* BackendSaga(): SagaIterator {
         yield put(actions.clearStoriesUserAndGroup());
       }
     }
-  });
-
-  yield takeEvery(FETCH_ASSESSMENT_OVERVIEWS, function* () {
+  },
+  fetchAssessmentOverviews: function* () {
     const tokens: Tokens = yield selectTokens();
 
     const assessmentOverviews: AssessmentOverview[] | null = yield call(
@@ -317,32 +238,26 @@ function* BackendSaga(): SagaIterator {
     if (assessmentOverviews) {
       yield put(actions.updateAssessmentOverviews(assessmentOverviews));
     }
-  });
-
-  yield takeEvery(FETCH_TOTAL_XP, function* () {
+  },
+  fetchTotalXp: function* () {
     const tokens: Tokens = yield selectTokens();
 
     const res: { totalXp: number } = yield call(getTotalXp, tokens);
     if (res) {
       yield put(actions.updateTotalXp(res.totalXp));
     }
-  });
+  },
+  fetchTotalXpAdmin: function* (action) {
+    const tokens: Tokens = yield selectTokens();
 
-  yield takeEvery(
-    FETCH_TOTAL_XP_ADMIN,
-    function* (action: ReturnType<typeof actions.fetchTotalXpAdmin>) {
-      const tokens: Tokens = yield selectTokens();
+    const courseRegId = action.payload;
 
-      const courseRegId = action.payload;
-
-      const res: { totalXp: number } = yield call(getTotalXp, tokens, courseRegId);
-      if (res) {
-        yield put(actions.updateTotalXp(res.totalXp));
-      }
+    const res: { totalXp: number } = yield call(getTotalXp, tokens, courseRegId);
+    if (res) {
+      yield put(actions.updateTotalXp(res.totalXp));
     }
-  );
-
-  yield takeEvery(FETCH_ASSESSMENT, function* (action: ReturnType<typeof actions.fetchAssessment>) {
+  },
+  fetchAssessment: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     const { assessmentId, assessmentPassword } = action.payload;
@@ -357,28 +272,23 @@ function* BackendSaga(): SagaIterator {
     if (assessment) {
       yield put(actions.updateAssessment(assessment));
     }
-  });
+  },
+  fetchAssessmentAdmin: function* (action) {
+    const tokens: Tokens = yield selectTokens();
 
-  yield takeEvery(
-    FETCH_ASSESSMENT_ADMIN,
-    function* (action: ReturnType<typeof actions.fetchAssessmentAdmin>) {
-      const tokens: Tokens = yield selectTokens();
+    const { assessmentId, courseRegId } = action.payload;
 
-      const { assessmentId, courseRegId } = action.payload;
-
-      const assessment: Assessment | null = yield call(
-        getAssessment,
-        assessmentId,
-        tokens,
-        courseRegId
-      );
-      if (assessment) {
-        yield put(actions.updateAssessment(assessment));
-      }
+    const assessment: Assessment | null = yield call(
+      getAssessment,
+      assessmentId,
+      tokens,
+      courseRegId
+    );
+    if (assessment) {
+      yield put(actions.updateAssessment(assessment));
     }
-  );
-
-  yield takeEvery(SUBMIT_ANSWER, function* (action: ReturnType<typeof actions.submitAnswer>): any {
+  },
+  submitAnswer: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const questionId = action.payload.id;
     const answer = action.payload.answer;
@@ -394,8 +304,8 @@ function* BackendSaga(): SagaIterator {
     const assessmentId: number = yield select(
       (state: OverallState) => state.workspaces.assessment.currentAssessment!
     );
-    const assessment: any = yield select((state: OverallState) =>
-      state.session.assessments.get(assessmentId)
+    const assessment: any = yield select(
+      (state: OverallState) => state.session.assessments[assessmentId]
     );
     const newQuestions = assessment.questions.slice().map((question: Question) => {
       if (question.id === questionId) {
@@ -410,116 +320,99 @@ function* BackendSaga(): SagaIterator {
 
     yield put(actions.updateAssessment(newAssessment));
     return yield put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false));
-  });
+  },
+  checkAnswerLastModifiedAt: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const questionId = action.payload.id;
+    const lastModifiedAt = action.payload.lastModifiedAt;
+    const saveAnswer = action.payload.saveAnswer;
 
-  yield takeEvery(
-    CHECK_ANSWER_LAST_MODIFIED_AT,
-    function* (action: ReturnType<typeof actions.checkAnswerLastModifiedAt>): any {
-      const tokens: Tokens = yield selectTokens();
-      const questionId = action.payload.id;
-      const lastModifiedAt = action.payload.lastModifiedAt;
-      const saveAnswer = action.payload.saveAnswer;
+    const resp: boolean | null = yield call(
+      checkAnswerLastModifiedAt,
+      questionId,
+      lastModifiedAt,
+      tokens
+    );
+    saveAnswer(resp);
+  },
+  submitAssessment: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const assessmentId = action.payload;
 
-      const resp: boolean | null = yield call(
-        checkAnswerLastModifiedAt,
-        questionId,
-        lastModifiedAt,
-        tokens
-      );
-      saveAnswer(resp);
+    const resp: Response | null = yield call(postAssessment, assessmentId, tokens);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
     }
-  );
 
-  yield takeEvery(
-    SUBMIT_ASSESSMENT,
-    function* (action: ReturnType<typeof actions.submitAssessment>): any {
-      const tokens: Tokens = yield selectTokens();
-      const assessmentId = action.payload;
+    yield call(showSuccessMessage, 'Submitted!', 2000);
 
-      const resp: Response | null = yield call(postAssessment, assessmentId, tokens);
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
+    // Now, update the status of the assessment overview in the store
+    const overviews: AssessmentOverview[] = yield select(
+      (state: OverallState) => state.session.assessmentOverviews
+    );
+    const newOverviews = overviews.map(overview => {
+      if (overview.id === assessmentId) {
+        return { ...overview, status: AssessmentStatuses.submitted };
       }
+      return overview;
+    });
 
-      yield call(showSuccessMessage, 'Submitted!', 2000);
+    return yield put(actions.updateAssessmentOverviews(newOverviews));
+  },
+  fetchGradingOverviews: function* (action) {
+    const tokens: Tokens = yield selectTokens();
 
-      // Now, update the status of the assessment overview in the store
-      const overviews: AssessmentOverview[] = yield select(
-        (state: OverallState) => state.session.assessmentOverviews
-      );
-      const newOverviews = overviews.map(overview => {
-        if (overview.id === assessmentId) {
-          return { ...overview, status: AssessmentStatuses.submitted };
+    const role: Role = yield select((state: OverallState) => state.session.role!);
+    if (role === Role.Student) {
+      return;
+    }
+
+    const { filterToGroup, publishedFilter, pageParams, filterParams, allColsSortStates } =
+      action.payload;
+
+    const sortedBy = {
+      sortBy: allColsSortStates.sortBy,
+      sortDirection: ''
+    };
+
+    Object.entries(allColsSortStates.currentState).forEach(([key, value]) => {
+      if (allColsSortStates.sortBy === key && key !== '') {
+        if (value !== SortStates.NONE) {
+          sortedBy.sortDirection = value;
+        } else {
+          sortedBy.sortBy = '';
+          sortedBy.sortDirection = '';
         }
-        return overview;
-      });
-
-      return yield put(actions.updateAssessmentOverviews(newOverviews));
-    }
-  );
-
-  yield takeEvery(
-    FETCH_GRADING_OVERVIEWS,
-    function* (action: ReturnType<typeof actions.fetchGradingOverviews>) {
-      const tokens: Tokens = yield selectTokens();
-
-      const role: Role = yield select((state: OverallState) => state.session.role!);
-      if (role === Role.Student) {
-        return;
       }
+    });
 
-      const { filterToGroup, publishedFilter, pageParams, filterParams, allColsSortStates } =
-        action.payload;
-
-      const sortedBy = {
-        sortBy: allColsSortStates.sortBy,
-        sortDirection: ''
-      };
-
-      Object.keys(allColsSortStates.currentState).forEach(key => {
-        if (allColsSortStates.sortBy === key && key != '') {
-          if (allColsSortStates.currentState[key] !== SortStates.NONE) {
-            sortedBy.sortDirection = allColsSortStates.currentState[key];
-          } else {
-            sortedBy.sortBy = '';
-            sortedBy.sortDirection = '';
-          }
-        }
-      });
-
-      const gradingOverviews: GradingOverviews | null = yield call(
-        getGradingOverviews,
-        tokens,
-        filterToGroup,
-        publishedFilter,
-        pageParams,
-        filterParams,
-        sortedBy
-      );
-      if (gradingOverviews) {
-        yield put(actions.updateGradingOverviews(gradingOverviews));
-      }
+    const gradingOverviews: GradingOverviews | null = yield call(
+      getGradingOverviews,
+      tokens,
+      filterToGroup,
+      publishedFilter,
+      pageParams,
+      filterParams,
+      sortedBy
+    );
+    if (gradingOverviews) {
+      yield put(actions.updateGradingOverviews(gradingOverviews));
     }
-  );
+  },
+  fetchTeamFormationOverview: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const { assessmentId } = action.payload;
 
-  yield takeEvery(
-    FETCH_TEAM_FORMATION_OVERVIEW,
-    function* (action: ReturnType<typeof actions.fetchTeamFormationOverview>) {
-      const tokens: Tokens = yield selectTokens();
-      const { assessmentId } = action.payload;
-
-      const teamFormationOverview: TeamFormationOverview | null = yield call(
-        getTeamFormationOverview,
-        assessmentId,
-        tokens
-      );
-      if (teamFormationOverview) {
-        yield put(actions.updateTeamFormationOverview(teamFormationOverview));
-      }
+    const teamFormationOverview: TeamFormationOverview | null = yield call(
+      getTeamFormationOverview,
+      assessmentId,
+      tokens
+    );
+    if (teamFormationOverview) {
+      yield put(actions.updateTeamFormationOverview(teamFormationOverview));
     }
-  );
-
-  yield takeEvery(FETCH_TEAM_FORMATION_OVERVIEWS, function* () {
+  },
+  fetchTeamFormationOverviews: function* () {
     const tokens: Tokens = yield selectTokens();
 
     const role: Role = yield select((state: OverallState) => state.session.role!);
@@ -534,9 +427,8 @@ function* BackendSaga(): SagaIterator {
     if (teamFormationOverviews) {
       yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
     }
-  });
-
-  yield takeEvery(FETCH_STUDENTS, function* (): any {
+  },
+  fetchStudents: function* () {
     const tokens: Tokens = yield selectTokens();
     const role: Role = yield select((state: OverallState) => state.session.role!);
     if (role === Role.Student) {
@@ -546,9 +438,8 @@ function* BackendSaga(): SagaIterator {
     if (students) {
       yield put(actions.updateStudents(students));
     }
-  });
-
-  yield takeEvery(CREATE_TEAM, function* (action: ReturnType<typeof actions.createTeam>): any {
+  },
+  createTeam: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { assessment, teams } = action.payload;
 
@@ -567,37 +458,32 @@ function* BackendSaga(): SagaIterator {
     if (resp && resp.status === 409) {
       return yield call(showWarningMessage, resp.statusText);
     }
-  });
+  },
+  bulkUploadTeam: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const { assessment, file, students } = action.payload;
 
-  yield takeEvery(
-    BULK_UPLOAD_TEAM,
-    function* (action: ReturnType<typeof actions.bulkUploadTeam>): any {
-      const tokens: Tokens = yield selectTokens();
-      const { assessment, file, students } = action.payload;
-
-      const resp: Response | null = yield call(
-        postUploadTeams,
-        assessment.id,
-        file,
-        students,
-        tokens
-      );
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
-      const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
-        getTeamFormationOverviews,
-        tokens
-      );
-
-      yield call(showSuccessMessage, 'Team created successfully', 1000);
-      if (teamFormationOverviews) {
-        yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
-      }
+    const resp: Response | null = yield call(
+      postUploadTeams,
+      assessment.id,
+      file,
+      students,
+      tokens
+    );
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
     }
-  );
+    const teamFormationOverviews: TeamFormationOverview[] | null = yield call(
+      getTeamFormationOverviews,
+      tokens
+    );
 
-  yield takeEvery(UPDATE_TEAM, function* (action: ReturnType<typeof actions.updateTeam>): any {
+    yield call(showSuccessMessage, 'Team created successfully', 1000);
+    if (teamFormationOverviews) {
+      yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
+    }
+  },
+  updateTeam: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { teamId, assessment, teams } = action.payload;
     const resp: Response | null = yield call(putTeams, assessment.id, teamId, teams, tokens);
@@ -613,9 +499,8 @@ function* BackendSaga(): SagaIterator {
     if (teamFormationOverviews) {
       yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
     }
-  });
-
-  yield takeEvery(DELETE_TEAM, function* (action: ReturnType<typeof actions.deleteTeam>): any {
+  },
+  deleteTeam: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { teamId } = action.payload;
 
@@ -632,9 +517,8 @@ function* BackendSaga(): SagaIterator {
     if (teamFormationOverviews) {
       yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
     }
-  });
-
-  yield takeEvery(FETCH_GRADING, function* (action: ReturnType<typeof actions.fetchGrading>) {
+  },
+  fetchGrading: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const id = action.payload;
 
@@ -642,408 +526,348 @@ function* BackendSaga(): SagaIterator {
     if (grading) {
       yield put(actions.updateGrading(id, grading));
     }
-  });
-
+  },
   /**
    * Unsubmits the submission and updates the grading overviews of the new status.
    */
-  yield takeEvery(
-    UNSUBMIT_SUBMISSION,
-    function* (action: ReturnType<typeof actions.unsubmitSubmission>): any {
-      const tokens: Tokens = yield selectTokens();
-      const { submissionId } = action.payload;
-
-      const resp: Response | null = yield postUnsubmit(submissionId, tokens);
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
-
-      const overviews: GradingOverview[] = yield select(
-        (state: OverallState) => state.session.gradingOverviews?.data || []
-      );
-      const newOverviews = overviews.map(overview => {
-        if (overview.submissionId === submissionId) {
-          return { ...overview, progress: ProgressStatuses.attempted };
-        }
-        return overview;
-      });
-
-      const totalPossibleEntries = yield select(
-        (state: OverallState) => state.session.gradingOverviews?.count
-      );
-
-      yield call(showSuccessMessage, 'Unsubmit successful', 1000);
-      yield put(
-        actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews })
-      );
-    }
-  );
-
-  yield takeEvery(
-    PUBLISH_GRADING,
-    function* (action: ReturnType<typeof actions.publishGrading>): any {
-      const tokens: Tokens = yield selectTokens();
-      const { submissionId } = action.payload;
-
-      const resp: Response | null = yield publishGrading(submissionId, tokens);
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
-
-      const overviews: GradingOverview[] = yield select(
-        (state: OverallState) => state.session.gradingOverviews?.data || []
-      );
-      const newOverviews = overviews.map(overview => {
-        if (overview.submissionId === submissionId) {
-          return { ...overview, progress: ProgressStatuses.published };
-        }
-        return overview;
-      });
-
-      const totalPossibleEntries = yield select(
-        (state: OverallState) => state.session.gradingOverviews?.count
-      );
-
-      yield call(showSuccessMessage, 'Publish grading successful', 1000);
-      yield put(
-        actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews })
-      );
-    }
-  );
-
-  yield takeEvery(
-    UNPUBLISH_GRADING,
-    function* (action: ReturnType<typeof actions.unpublishGrading>): any {
-      const tokens: Tokens = yield selectTokens();
-      const { submissionId } = action.payload;
-
-      const resp: Response | null = yield unpublishGrading(submissionId, tokens);
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
-
-      const overviews: GradingOverview[] = yield select(
-        (state: OverallState) => state.session.gradingOverviews?.data || []
-      );
-      const newOverviews = overviews.map(overview => {
-        if (overview.submissionId === submissionId) {
-          return { ...overview, progress: ProgressStatuses.graded };
-        }
-        return overview;
-      });
-
-      const totalPossibleEntries = yield select(
-        (state: OverallState) => state.session.gradingOverviews?.count
-      );
-
-      yield call(showSuccessMessage, 'Unpublish grading successful', 1000);
-      yield put(
-        actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews })
-      );
-    }
-  );
-
-  const sendGrade = function* (
-    action:
-      | ReturnType<typeof actions.submitGrading>
-      | ReturnType<typeof actions.submitGradingAndContinue>
-  ): any {
-    const role: Role = yield select((state: OverallState) => state.session.role!);
-    if (role === Role.Student) {
-      return yield call(showWarningMessage, 'Only staff can submit answers.');
-    }
-
-    const { submissionId, questionId, xpAdjustment, comments } = action.payload;
+  unsubmitSubmission: function* (action) {
     const tokens: Tokens = yield selectTokens();
+    const { submissionId } = action.payload;
 
-    const resp: Response | null = yield postGrading(
+    const resp: Response | null = yield postUnsubmit(submissionId, tokens);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
+
+    const overviews: GradingOverview[] = yield select(
+      (state: OverallState) => state.session.gradingOverviews?.data || []
+    );
+    const newOverviews = overviews.map(overview => {
+      if (overview.submissionId === submissionId) {
+        return { ...overview, progress: ProgressStatuses.attempted };
+      }
+      return overview;
+    });
+
+    const totalPossibleEntries = yield select(
+      (state: OverallState) => state.session.gradingOverviews?.count
+    );
+
+    yield call(showSuccessMessage, 'Unsubmit successful', 1000);
+    yield put(actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews }));
+  },
+  publishGrading: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const { submissionId } = action.payload;
+
+    const resp: Response | null = yield publishGrading(submissionId, tokens);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
+
+    const overviews: GradingOverview[] = yield select(
+      (state: OverallState) => state.session.gradingOverviews?.data || []
+    );
+    const newOverviews = overviews.map(overview => {
+      if (overview.submissionId === submissionId) {
+        return { ...overview, progress: ProgressStatuses.published };
+      }
+      return overview;
+    });
+
+    const totalPossibleEntries = yield select(
+      (state: OverallState) => state.session.gradingOverviews?.count
+    );
+
+    yield call(showSuccessMessage, 'Publish grading successful', 1000);
+    yield put(actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews }));
+  },
+  unpublishGrading: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const { submissionId } = action.payload;
+
+    const resp: Response | null = yield unpublishGrading(submissionId, tokens);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
+
+    const overviews: GradingOverview[] = yield select(
+      (state: OverallState) => state.session.gradingOverviews?.data || []
+    );
+    const newOverviews = overviews.map(overview => {
+      if (overview.submissionId === submissionId) {
+        return { ...overview, progress: ProgressStatuses.graded };
+      }
+      return overview;
+    });
+
+    const totalPossibleEntries = yield select(
+      (state: OverallState) => state.session.gradingOverviews?.count
+    );
+
+    yield call(showSuccessMessage, 'Unpublish grading successful', 1000);
+    yield put(actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews }));
+  },
+  submitGrading: sendGrade,
+  submitGradingAndContinue: sendGradeAndContinue
+});
+
+function* sendGrade(
+  action:
+    | ReturnType<typeof actions.submitGrading>
+    | ReturnType<typeof actions.submitGradingAndContinue>
+): any {
+  const role: Role = yield select((state: OverallState) => state.session.role!);
+  if (role === Role.Student) {
+    return yield call(showWarningMessage, 'Only staff can submit answers.');
+  }
+
+  const { submissionId, questionId, xpAdjustment, comments } = action.payload;
+  const tokens: Tokens = yield selectTokens();
+
+  const resp: Response | null = yield postGrading(
+    submissionId,
+    questionId,
+    xpAdjustment,
+    tokens,
+    comments
+  );
+  if (!resp || !resp.ok) {
+    return yield handleResponseError(resp);
+  }
+
+  yield call(showSuccessMessage, 'Submitted!', 1000);
+
+  // Now, update the grade for the question in the Grading in the store
+  const grading: GradingQuery = yield select(
+    (state: OverallState) => state.session.gradings[submissionId]
+  );
+  const newGrading = grading.answers.slice().map((gradingQuestion: GradingQuestion) => {
+    if (gradingQuestion.question.id === questionId) {
+      gradingQuestion.grade = {
+        xpAdjustment,
+        xp: gradingQuestion.grade.xp,
+        comments,
+        gradedAt: new Date().toISOString()
+      };
+    }
+    return gradingQuestion;
+  });
+
+  yield put(
+    actions.updateGrading(submissionId, { answers: newGrading, assessment: grading.assessment })
+  );
+}
+
+function* sendGradeAndContinue(action: ReturnType<typeof actions.submitGradingAndContinue>) {
+  yield* sendGrade(action);
+
+  const { submissionId } = action.payload;
+  const [currentQuestion, courseId]: [number | undefined, number] = yield select(
+    (state: OverallState) => [state.workspaces.grading.currentQuestion, state.session.courseId!]
+  );
+
+  /**
+   * Move to next question for grading: this only works because the
+   * SUBMIT_GRADING_AND_CONTINUE Redux action is currently only
+   * used in the Grading Workspace
+   *
+   * If the questionId is out of bounds, the componentDidUpdate callback of
+   * GradingWorkspace will cause a redirect back to '/academy/grading'
+   */
+  yield routerNavigate(
+    `/courses/${courseId}/grading/${submissionId}/${(currentQuestion || 0) + 1}`
+  );
+}
+
+const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
+  reautogradeSubmission: function* (action) {
+    const submissionId = action.payload;
+    const tokens: Tokens = yield selectTokens();
+    const resp: Response | null = yield call(postReautogradeSubmission, submissionId, tokens);
+
+    yield call(handleReautogradeResponse, resp);
+  },
+  reautogradeAnswer: function* (action) {
+    const { submissionId, questionId } = action.payload;
+    const tokens: Tokens = yield selectTokens();
+    const resp: Response | null = yield call(
+      postReautogradeAnswer,
       submissionId,
       questionId,
-      xpAdjustment,
-      tokens,
-      comments
+      tokens
+    );
+
+    yield call(handleReautogradeResponse, resp);
+  },
+  fetchNotifications: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const notifications: Notification[] = yield call(getNotifications, tokens);
+
+    yield put(actions.updateNotifications(notifications));
+  },
+  acknowledgeNotifications: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const notificationFilter: NotificationFilterFunction | undefined = action.payload.withFilter;
+    const notifications: Notification[] = yield select(
+      (state: OverallState) => state.session.notifications
+    );
+
+    let notificationsToAcknowledge = notifications;
+
+    if (notificationFilter) {
+      notificationsToAcknowledge = notificationFilter(notifications);
+    }
+
+    if (notificationsToAcknowledge.length === 0) {
+      return;
+    }
+
+    const ids = notificationsToAcknowledge.map(n => n.id);
+    const newNotifications: Notification[] = notifications.filter(
+      notification => !ids.includes(notification.id)
+    );
+
+    yield put(actions.updateNotifications(newNotifications));
+
+    const resp: Response | null = yield call(postAcknowledgeNotifications, tokens, ids);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
+  },
+  deleteSourcecastEntry: function* (action) {
+    const role: Role = yield select((state: OverallState) => state.session.role!);
+    if (role === Role.Student) {
+      return yield call(showWarningMessage, 'Only staff can delete sourcecasts.');
+    }
+
+    const tokens: Tokens = yield selectTokens();
+    const { id } = action.payload;
+
+    const resp: Response | null = yield deleteSourcecastEntry(id, tokens);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
+
+    const sourcecastIndex: SourcecastData[] | null = yield call(getSourcecastIndex, tokens);
+    if (sourcecastIndex) {
+      yield put(actions.updateSourcecastIndex(sourcecastIndex, action.payload.workspaceLocation));
+    }
+
+    yield call(showSuccessMessage, 'Deleted successfully!', 1000);
+  },
+  fetchSourcecastIndex: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+
+    const sourcecastIndex: SourcecastData[] | null = yield call(getSourcecastIndex, tokens);
+    if (sourcecastIndex) {
+      yield put(actions.updateSourcecastIndex(sourcecastIndex, action.payload.workspaceLocation));
+    }
+  },
+  saveSourcecastData: function* (action) {
+    const [role, courseId]: [Role, number | undefined] = yield select((state: OverallState) => [
+      state.session.role!,
+      state.session.courseId
+    ]);
+    if (role === Role.Student) {
+      return yield call(showWarningMessage, 'Only staff can save sourcecasts.');
+    }
+
+    const { title, description, uid, audio, playbackData } = action.payload;
+    const tokens: Tokens = yield selectTokens();
+
+    const resp: Response | null = yield postSourcecast(
+      title,
+      description,
+      uid,
+      audio,
+      playbackData,
+      tokens
     );
     if (!resp || !resp.ok) {
       return yield handleResponseError(resp);
     }
 
-    yield call(showSuccessMessage, 'Submitted!', 1000);
+    yield call(showSuccessMessage, 'Saved successfully!', 1000);
+    yield routerNavigate(`/courses/${courseId}/sourcecast`);
+  },
+  changeSublanguage: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const { sublang } = action.payload;
 
-    // Now, update the grade for the question in the Grading in the store
-    const grading: GradingQuery = yield select((state: OverallState) =>
-      state.session.gradings.get(submissionId)
-    );
-    const newGrading = grading.answers.slice().map((gradingQuestion: GradingQuestion) => {
-      if (gradingQuestion.question.id === questionId) {
-        gradingQuestion.grade = {
-          xpAdjustment,
-          xp: gradingQuestion.grade.xp,
-          comments,
-          gradedAt: new Date().toISOString()
-        };
-      }
-      return gradingQuestion;
+    const resp: Response | null = yield call(putCourseConfig, tokens, {
+      sourceChapter: sublang.chapter,
+      sourceVariant: sublang.variant
     });
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
 
     yield put(
-      actions.updateGrading(submissionId, { answers: newGrading, assessment: grading.assessment })
-    );
-  };
-
-  const sendGradeAndContinue = function* (
-    action: ReturnType<typeof actions.submitGradingAndContinue>
-  ) {
-    yield* sendGrade(action);
-
-    const { submissionId } = action.payload;
-    const [currentQuestion, courseId]: [number | undefined, number] = yield select(
-      (state: OverallState) => [state.workspaces.grading.currentQuestion, state.session.courseId!]
-    );
-
-    /**
-     * Move to next question for grading: this only works because the
-     * SUBMIT_GRADING_AND_CONTINUE Redux action is currently only
-     * used in the Grading Workspace
-     *
-     * If the questionId is out of bounds, the componentDidUpdate callback of
-     * GradingWorkspace will cause a redirect back to '/academy/grading'
-     */
-    yield routerNavigate(
-      `/courses/${courseId}/grading/${submissionId}/${(currentQuestion || 0) + 1}`
-    );
-  };
-
-  yield takeEvery(SUBMIT_GRADING, sendGrade);
-
-  yield takeEvery(SUBMIT_GRADING_AND_CONTINUE, sendGradeAndContinue);
-
-  yield takeEvery(
-    REAUTOGRADE_SUBMISSION,
-    function* (action: ReturnType<typeof actions.reautogradeSubmission>) {
-      const submissionId = action.payload;
-      const tokens: Tokens = yield selectTokens();
-      const resp: Response | null = yield call(postReautogradeSubmission, submissionId, tokens);
-
-      yield call(handleReautogradeResponse, resp);
-    }
-  );
-
-  yield takeEvery(
-    REAUTOGRADE_ANSWER,
-    function* (action: ReturnType<typeof actions.reautogradeAnswer>) {
-      const { submissionId, questionId } = action.payload;
-      const tokens: Tokens = yield selectTokens();
-      const resp: Response | null = yield call(
-        postReautogradeAnswer,
-        submissionId,
-        questionId,
-        tokens
-      );
-
-      yield call(handleReautogradeResponse, resp);
-    }
-  );
-
-  yield takeEvery(
-    FETCH_NOTIFICATIONS,
-    function* (action: ReturnType<typeof actions.fetchNotifications>) {
-      const tokens: Tokens = yield selectTokens();
-      const notifications: Notification[] = yield call(getNotifications, tokens);
-
-      yield put(actions.updateNotifications(notifications));
-    }
-  );
-
-  yield takeEvery(
-    ACKNOWLEDGE_NOTIFICATIONS,
-    function* (action: ReturnType<typeof actions.acknowledgeNotifications>): any {
-      const tokens: Tokens = yield selectTokens();
-      const notificationFilter: NotificationFilterFunction | undefined = action.payload.withFilter;
-      const notifications: Notification[] = yield select(
-        (state: OverallState) => state.session.notifications
-      );
-
-      let notificationsToAcknowledge = notifications;
-
-      if (notificationFilter) {
-        notificationsToAcknowledge = notificationFilter(notifications);
-      }
-
-      if (notificationsToAcknowledge.length === 0) {
-        return;
-      }
-
-      const ids = notificationsToAcknowledge.map(n => n.id);
-      const newNotifications: Notification[] = notifications.filter(
-        notification => !ids.includes(notification.id)
-      );
-
-      yield put(actions.updateNotifications(newNotifications));
-
-      const resp: Response | null = yield call(postAcknowledgeNotifications, tokens, ids);
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
-    }
-  );
-
-  yield takeEvery(
-    DELETE_SOURCECAST_ENTRY,
-    function* (action: ReturnType<typeof actions.deleteSourcecastEntry>): any {
-      const role: Role = yield select((state: OverallState) => state.session.role!);
-      if (role === Role.Student) {
-        return yield call(showWarningMessage, 'Only staff can delete sourcecasts.');
-      }
-
-      const tokens: Tokens = yield selectTokens();
-      const { id } = action.payload;
-
-      const resp: Response | null = yield deleteSourcecastEntry(id, tokens);
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
-
-      const sourcecastIndex: SourcecastData[] | null = yield call(getSourcecastIndex, tokens);
-      if (sourcecastIndex) {
-        yield put(actions.updateSourcecastIndex(sourcecastIndex, action.payload.workspaceLocation));
-      }
-
-      yield call(showSuccessMessage, 'Deleted successfully!', 1000);
-    }
-  );
-
-  yield takeEvery(
-    FETCH_SOURCECAST_INDEX,
-    function* (action: ReturnType<typeof actions.fetchSourcecastIndex>) {
-      const tokens: Tokens = yield selectTokens();
-
-      const sourcecastIndex: SourcecastData[] | null = yield call(getSourcecastIndex, tokens);
-      if (sourcecastIndex) {
-        yield put(actions.updateSourcecastIndex(sourcecastIndex, action.payload.workspaceLocation));
-      }
-    }
-  );
-
-  yield takeEvery(
-    SAVE_SOURCECAST_DATA,
-    function* (action: ReturnType<typeof actions.saveSourcecastData>): any {
-      const [role, courseId]: [Role, number | undefined] = yield select((state: OverallState) => [
-        state.session.role!,
-        state.session.courseId
-      ]);
-      if (role === Role.Student) {
-        return yield call(showWarningMessage, 'Only staff can save sourcecasts.');
-      }
-
-      const { title, description, uid, audio, playbackData } = action.payload;
-      const tokens: Tokens = yield selectTokens();
-
-      const resp: Response | null = yield postSourcecast(
-        title,
-        description,
-        uid,
-        audio,
-        playbackData,
-        tokens
-      );
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
-
-      yield call(showSuccessMessage, 'Saved successfully!', 1000);
-      yield routerNavigate(`/courses/${courseId}/sourcecast`);
-    }
-  );
-
-  yield takeEvery(
-    CHANGE_SUBLANGUAGE,
-    function* (action: ReturnType<typeof actions.changeSublanguage>): any {
-      const tokens: Tokens = yield selectTokens();
-      const { sublang } = action.payload;
-
-      const resp: Response | null = yield call(putCourseConfig, tokens, {
+      actions.setCourseConfiguration({
         sourceChapter: sublang.chapter,
         sourceVariant: sublang.variant
-      });
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
+      })
+    );
+    yield call(showSuccessMessage, 'Updated successfully!', 1000);
+  },
+  updateLatestViewedCourse: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const { courseId } = action.payload;
 
-      yield put(
-        actions.setCourseConfiguration({
-          sourceChapter: sublang.chapter,
-          sourceVariant: sublang.variant
-        })
-      );
-      yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    const resp: Response | null = yield call(putLatestViewedCourse, tokens, courseId);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
     }
-  );
 
-  yield takeEvery(
-    UPDATE_LATEST_VIEWED_COURSE,
-    function* (action: ReturnType<typeof actions.updateLatestViewedCourse>): any {
-      const tokens: Tokens = yield selectTokens();
-      const { courseId } = action.payload;
+    const {
+      courseRegistration,
+      courseConfiguration,
+      assessmentConfigurations
+    }: {
+      courseRegistration: CourseRegistration | null;
+      courseConfiguration: CourseConfiguration | null;
+      assessmentConfigurations: AssessmentConfiguration[] | null;
+    } = yield call(getLatestCourseRegistrationAndConfiguration, tokens);
 
-      const resp: Response | null = yield call(putLatestViewedCourse, tokens, courseId);
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
-
-      const {
-        courseRegistration,
-        courseConfiguration,
-        assessmentConfigurations
-      }: {
-        courseRegistration: CourseRegistration | null;
-        courseConfiguration: CourseConfiguration | null;
-        assessmentConfigurations: AssessmentConfiguration[] | null;
-      } = yield call(getLatestCourseRegistrationAndConfiguration, tokens);
-
-      if (!courseRegistration || !courseConfiguration || !assessmentConfigurations) {
-        yield call(showWarningMessage, `Failed to load course!`);
-        return yield routerNavigate('/welcome');
-      }
-
-      yield put(actions.setCourseConfiguration(courseConfiguration));
-      yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
-      yield put(actions.setCourseRegistration(courseRegistration));
-
-      if (courseConfiguration.enableStories) {
-        yield put(actions.getStoriesUser());
-        // TODO: Fetch associated stories group ID
-      } else {
-        yield put(actions.clearStoriesUserAndGroup());
-      }
-
-      yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);
+    if (!courseRegistration || !courseConfiguration || !assessmentConfigurations) {
+      yield call(showWarningMessage, `Failed to load course!`);
+      return yield routerNavigate('/welcome');
     }
-  );
 
-  yield takeEvery(
-    UPDATE_COURSE_CONFIG,
-    function* (action: ReturnType<typeof actions.updateCourseConfig>): any {
-      const tokens: Tokens = yield selectTokens();
-      const courseConfig: UpdateCourseConfiguration = action.payload;
+    yield put(actions.setCourseConfiguration(courseConfiguration));
+    yield put(actions.setAssessmentConfigurations(assessmentConfigurations));
+    yield put(actions.setCourseRegistration(courseRegistration));
 
-      const resp: Response | null = yield call(putCourseConfig, tokens, courseConfig);
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
-
-      if (courseConfig.enableStories) {
-        yield put(actions.getStoriesUser());
-        // TODO: Fetch associated stories group ID
-      } else {
-        yield put(actions.clearStoriesUserAndGroup());
-      }
-
-      yield put(actions.setCourseConfiguration(courseConfig));
-      yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    if (courseConfiguration.enableStories) {
+      yield put(actions.getStoriesUser());
+      // TODO: Fetch associated stories group ID
+    } else {
+      yield put(actions.clearStoriesUserAndGroup());
     }
-  );
 
-  yield takeEvery(FETCH_ASSESSMENT_CONFIGS, function* (): any {
+    yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);
+  },
+  updateCourseConfig: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const courseConfig: UpdateCourseConfiguration = action.payload;
+
+    const resp: Response | null = yield call(putCourseConfig, tokens, courseConfig);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
+
+    if (courseConfig.enableStories) {
+      yield put(actions.getStoriesUser());
+      // TODO: Fetch associated stories group ID
+    } else {
+      yield put(actions.clearStoriesUserAndGroup());
+    }
+
+    yield put(actions.setCourseConfiguration(courseConfig));
+    yield call(showSuccessMessage, 'Updated successfully!', 1000);
+  },
+  fetchAssessmentConfigs: function* () {
     const tokens: Tokens = yield selectTokens();
 
     const assessmentConfigs: AssessmentConfiguration[] | null = yield call(
@@ -1053,27 +877,22 @@ function* BackendSaga(): SagaIterator {
     if (assessmentConfigs) {
       yield put(actions.setAssessmentConfigurations(assessmentConfigs));
     }
-  });
+  },
+  fetchConfigurableNotificationConfigs: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const { courseRegId }: { courseRegId: number } = action.payload;
 
-  yield takeEvery(
-    FETCH_CONFIGURABLE_NOTIFICATION_CONFIGS,
-    function* (action: ReturnType<typeof actions.fetchConfigurableNotificationConfigs>): any {
-      const tokens: Tokens = yield selectTokens();
-      const { courseRegId }: { courseRegId: number } = action.payload;
+    const notificationConfigs: NotificationConfiguration[] | null = yield call(
+      getConfigurableNotificationConfigs,
+      tokens,
+      courseRegId
+    );
 
-      const notificationConfigs: NotificationConfiguration[] | null = yield call(
-        getConfigurableNotificationConfigs,
-        tokens,
-        courseRegId
-      );
-
-      if (notificationConfigs) {
-        yield put(actions.setConfigurableNotificationConfigs(notificationConfigs));
-      }
+    if (notificationConfigs) {
+      yield put(actions.setConfigurableNotificationConfigs(notificationConfigs));
     }
-  );
-
-  yield takeEvery(FETCH_NOTIFICATION_CONFIGS, function* (): any {
+  },
+  fetchNotificationConfigs: function* () {
     const tokens: Tokens = yield selectTokens();
 
     const notificationConfigs: NotificationConfiguration[] | null = yield call(
@@ -1084,129 +903,100 @@ function* BackendSaga(): SagaIterator {
     if (notificationConfigs) {
       yield put(actions.setNotificationConfigs(notificationConfigs));
     }
-  });
+  },
+  updateAssessmentConfigs: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const assessmentConfigs: AssessmentConfiguration[] = action.payload;
 
-  yield takeEvery(
-    UPDATE_ASSESSMENT_CONFIGS,
-    function* (action: ReturnType<typeof actions.updateAssessmentConfigs>): any {
-      const tokens: Tokens = yield selectTokens();
-      const assessmentConfigs: AssessmentConfiguration[] = action.payload;
-
-      const resp: Response | null = yield call(putAssessmentConfigs, tokens, assessmentConfigs);
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
-
-      const updatedAssessmentConfigs: AssessmentConfiguration[] | null = yield call(
-        getAssessmentConfigs,
-        tokens
-      );
-
-      if (updatedAssessmentConfigs) {
-        yield put(actions.setAssessmentConfigurations(updatedAssessmentConfigs));
-      }
-      yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    const resp: Response | null = yield call(putAssessmentConfigs, tokens, assessmentConfigs);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
     }
-  );
 
-  yield takeEvery(
-    UPDATE_NOTIFICATION_CONFIG,
-    function* (action: ReturnType<typeof actions.updateNotificationConfigs>): any {
-      const tokens: Tokens = yield selectTokens();
-      const notificationConfigs: NotificationConfiguration[] = action.payload;
+    const updatedAssessmentConfigs: AssessmentConfiguration[] | null = yield call(
+      getAssessmentConfigs,
+      tokens
+    );
 
-      const resp: Response | null = yield call(putNotificationConfigs, tokens, notificationConfigs);
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
-
-      const updatedNotificationConfigs: NotificationConfiguration[] | null = yield call(
-        getNotificationConfigs,
-        tokens
-      );
-
-      if (updatedNotificationConfigs) {
-        yield put(actions.setNotificationConfigs(updatedNotificationConfigs));
-      }
-
-      yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    if (updatedAssessmentConfigs) {
+      yield put(actions.setAssessmentConfigurations(updatedAssessmentConfigs));
     }
-  );
+    yield call(showSuccessMessage, 'Updated successfully!', 1000);
+  },
+  updateNotificationConfigs: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const notificationConfigs: NotificationConfiguration[] = action.payload;
 
-  yield takeEvery(
-    UPDATE_NOTIFICATION_PREFERENCES,
-    function* (action: ReturnType<typeof actions.updateNotificationPreferences>): any {
-      const tokens: Tokens = yield selectTokens();
-      const { notificationPreferences, courseRegId } = action.payload;
-      const resp: Response | null = yield call(
-        putNotificationPreferences,
-        tokens,
-        notificationPreferences,
-        courseRegId
-      );
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
-
-      yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    const resp: Response | null = yield call(putNotificationConfigs, tokens, notificationConfigs);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
     }
-  );
 
-  yield takeEvery(
-    DELETE_ASSESSMENT_CONFIG,
-    function* (action: ReturnType<typeof actions.deleteAssessmentConfig>): any {
-      const tokens: Tokens = yield selectTokens();
-      const assessmentConfig: AssessmentConfiguration = action.payload;
+    const updatedNotificationConfigs: NotificationConfiguration[] | null = yield call(
+      getNotificationConfigs,
+      tokens
+    );
 
-      const resp: Response | null = yield call(removeAssessmentConfig, tokens, assessmentConfig);
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
+    if (updatedNotificationConfigs) {
+      yield put(actions.setNotificationConfigs(updatedNotificationConfigs));
     }
-  );
 
-  yield takeEvery(
-    UPDATE_TIME_OPTIONS,
-    function* (action: ReturnType<typeof actions.updateTimeOptions>): any {
-      const tokens: Tokens = yield selectTokens();
-      const timeOptions: TimeOption[] = action.payload;
-
-      const resp: Response | null = yield call(putTimeOptions, tokens, timeOptions);
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
+    yield call(showSuccessMessage, 'Updated successfully!', 1000);
+  },
+  updateNotificationPreferences: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const { notificationPreferences, courseRegId } = action.payload;
+    const resp: Response | null = yield call(
+      putNotificationPreferences,
+      tokens,
+      notificationPreferences,
+      courseRegId
+    );
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
     }
-  );
 
-  yield takeEvery(
-    DELETE_TIME_OPTIONS,
-    function* (action: ReturnType<typeof actions.deleteTimeOptions>): any {
-      const tokens: Tokens = yield selectTokens();
-      const timeOptionIds: number[] = action.payload;
+    yield call(showSuccessMessage, 'Updated successfully!', 1000);
+  },
+  deleteAssessmentConfig: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const assessmentConfig: AssessmentConfiguration = action.payload;
 
-      const resp: Response | null = yield call(removeTimeOptions, tokens, timeOptionIds);
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
+    const resp: Response | null = yield call(removeAssessmentConfig, tokens, assessmentConfig);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
     }
-  );
+  },
+  updateTimeOptions: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const timeOptions: TimeOption[] = action.payload;
 
-  yield takeEvery(
-    FETCH_ADMIN_PANEL_COURSE_REGISTRATIONS,
-    function* (action: ReturnType<typeof actions.fetchAdminPanelCourseRegistrations>) {
-      const tokens: Tokens = yield selectTokens();
-
-      const courseRegistrations: AdminPanelCourseRegistration[] | null = yield call(
-        getUserCourseRegistrations,
-        tokens
-      );
-      if (courseRegistrations) {
-        yield put(actions.setAdminPanelCourseRegistrations(courseRegistrations));
-      }
+    const resp: Response | null = yield call(putTimeOptions, tokens, timeOptions);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
     }
-  );
+  },
+  deleteTimeOptions: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const timeOptionIds: number[] = action.payload;
 
-  yield takeEvery(CREATE_COURSE, function* (action: ReturnType<typeof actions.createCourse>): any {
+    const resp: Response | null = yield call(removeTimeOptions, tokens, timeOptionIds);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
+  },
+  fetchAdminPanelCourseRegistrations: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+
+    const courseRegistrations: AdminPanelCourseRegistration[] | null = yield call(
+      getUserCourseRegistrations,
+      tokens
+    );
+    if (courseRegistrations) {
+      yield put(actions.setAdminPanelCourseRegistrations(courseRegistrations));
+    }
+  },
+  createCourse: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const courseConfig: UpdateCourseConfiguration = action.payload;
 
@@ -1273,78 +1063,69 @@ function* BackendSaga(): SagaIterator {
 
     yield call(showSuccessMessage, 'Successfully created your new course!');
     yield routerNavigate(`/courses/${courseRegistration.courseId}`);
-  });
+  },
+  addNewUsersToCourse: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const { users, provider }: { users: UsernameRoleGroup[]; provider: string } = action.payload;
 
-  yield takeEvery(
-    ADD_NEW_USERS_TO_COURSE,
-    function* (action: ReturnType<typeof actions.addNewUsersToCourse>): any {
-      const tokens: Tokens = yield selectTokens();
-      const { users, provider }: { users: UsernameRoleGroup[]; provider: string } = action.payload;
-
-      const resp: Response | null = yield call(putNewUsers, tokens, users, provider);
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
-
-      yield put(actions.fetchAdminPanelCourseRegistrations());
-      yield call(showSuccessMessage, 'Users added!');
+    const resp: Response | null = yield call(putNewUsers, tokens, users, provider);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
     }
-  );
 
-  yield takeEvery(
-    UPDATE_USER_ROLE,
-    function* (action: ReturnType<typeof actions.updateUserRole>): any {
-      const tokens: Tokens = yield selectTokens();
-      const { courseRegId, role }: { courseRegId: number; role: Role } = action.payload;
+    yield put(actions.fetchAdminPanelCourseRegistrations());
+    yield call(showSuccessMessage, 'Users added!');
+  },
+  addNewStoriesUsersToCourse: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const { users, provider } = action.payload;
 
-      const resp: Response | null = yield call(putUserRole, tokens, courseRegId, role);
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
+    yield call(postNewStoriesUsers, tokens, users, provider);
 
-      yield put(actions.fetchAdminPanelCourseRegistrations());
-      yield call(showSuccessMessage, 'Role updated!');
+    // TODO: Refresh the list of story users
+    //       once that page is implemented
+  },
+  updateCourseResearchAgreement: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const { agreedToResearch } = action.payload;
+
+    const resp: Response | null = yield call(putCourseResearchAgreement, tokens, agreedToResearch);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
     }
-  );
 
-  yield takeEvery(
-    UPDATE_COURSE_RESEARCH_AGREEMENT,
-    function* (action: ReturnType<typeof actions.updateCourseResearchAgreement>): any {
-      const tokens: Tokens = yield selectTokens();
-      const { agreedToResearch } = action.payload;
+    yield put(actions.setCourseRegistration({ agreedToResearch }));
+    yield call(showSuccessMessage, 'Research preference saved!');
+  },
+  updateUserRole: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const { courseRegId, role }: { courseRegId: number; role: Role } = action.payload;
 
-      const resp: Response | null = yield call(
-        putCourseResearchAgreement,
-        tokens,
-        agreedToResearch
-      );
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
-
-      yield put(actions.setCourseRegistration({ agreedToResearch }));
-      yield call(showSuccessMessage, 'Research preference saved!');
+    const resp: Response | null = yield call(putUserRole, tokens, courseRegId, role);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
     }
-  );
 
-  yield takeEvery(
-    DELETE_USER_COURSE_REGISTRATION,
-    function* (action: ReturnType<typeof actions.deleteUserCourseRegistration>): any {
-      const tokens: Tokens = yield selectTokens();
-      const { courseRegId }: { courseRegId: number } = action.payload;
+    yield put(actions.fetchAdminPanelCourseRegistrations());
+    yield call(showSuccessMessage, 'Role updated!');
+  },
+  deleteUserCourseRegistration: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const { courseRegId }: { courseRegId: number } = action.payload;
 
-      const resp: Response | null = yield call(removeUserCourseRegistration, tokens, courseRegId);
-      if (!resp || !resp.ok) {
-        return yield handleResponseError(resp);
-      }
-
-      yield put(actions.fetchAdminPanelCourseRegistrations());
-      yield call(showSuccessMessage, 'User deleted!');
+    const resp: Response | null = yield call(removeUserCourseRegistration, tokens, courseRegId);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
     }
-  );
 
+    yield put(actions.fetchAdminPanelCourseRegistrations());
+    yield call(showSuccessMessage, 'User deleted!');
+  }
+});
+
+function* oldBackendSagaThree(): SagaIterator {
   yield takeEvery(
-    FETCH_GROUP_GRADING_SUMMARY,
+    DashboardActions.fetchGroupGradingSummary.type,
     function* (action: ReturnType<typeof actions.fetchGroupGradingSummary>) {
       const tokens: Tokens = yield selectTokens();
 
@@ -1356,7 +1137,7 @@ function* BackendSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    CHANGE_DATE_ASSESSMENT,
+    GroundControlActions.changeDateAssessment.type,
     function* (action: ReturnType<typeof actions.changeDateAssessment>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload.id;
@@ -1374,7 +1155,7 @@ function* BackendSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    CHANGE_TEAM_SIZE_ASSESSMENT,
+    GroundControlActions.changeTeamSizeAssessment.type,
     function* (action: ReturnType<typeof actions.changeTeamSizeAssessment>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload.id;
@@ -1391,7 +1172,7 @@ function* BackendSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    DELETE_ASSESSMENT,
+    GroundControlActions.deleteAssessment.type,
     function* (action: ReturnType<typeof actions.deleteAssessment>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload;
@@ -1407,7 +1188,7 @@ function* BackendSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    PUBLISH_ASSESSMENT,
+    GroundControlActions.publishAssessment.type,
     function* (action: ReturnType<typeof actions.publishAssessment>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload.id;
@@ -1433,7 +1214,7 @@ function* BackendSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    UPLOAD_ASSESSMENT,
+    GroundControlActions.uploadAssessment.type,
     function* (action: ReturnType<typeof actions.uploadAssessment>): any {
       const tokens: Tokens = yield selectTokens();
       const { file, forceUpdate, assessmentConfigId } = action.payload;
@@ -1460,7 +1241,7 @@ function* BackendSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    CONFIGURE_ASSESSMENT,
+    GroundControlActions.configureAssessment.type,
     function* (action: ReturnType<typeof actions.configureAssessment>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload.id;
@@ -1482,7 +1263,7 @@ function* BackendSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    ASSIGN_ENTRIES_FOR_VOTING,
+    GroundControlActions.assignEntriesForVoting.type,
     function* (action: ReturnType<typeof actions.assignEntriesForVoting>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload.id;
@@ -1504,7 +1285,7 @@ function* BackendSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    PUBLISH_GRADING_ALL,
+    GroundControlActions.publishGradingAll.type,
     function* (action: ReturnType<typeof actions.publishGradingAll>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload;
@@ -1520,7 +1301,7 @@ function* BackendSaga(): SagaIterator {
   );
 
   yield takeEvery(
-    UNPUBLISH_GRADING_ALL,
+    GroundControlActions.unpublishGradingAll.type,
     function* (action: ReturnType<typeof actions.unpublishGradingAll>): any {
       const tokens: Tokens = yield selectTokens();
       const id = action.payload;
@@ -1546,6 +1327,10 @@ function* handleReautogradeResponse(resp: Response | null): any {
   }
 
   return yield call(showWarningMessage, 'Failed to queue autograde job.');
+}
+
+function* BackendSaga(): SagaIterator {
+  yield all([fork(newBackendSagaOne), fork(newBackendSagaTwo), fork(oldBackendSagaThree)]);
 }
 
 export default BackendSaga;

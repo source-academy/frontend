@@ -1,6 +1,5 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
-import { CHANGE_SIDE_CONTENT_HEIGHT } from 'src/commons/sideContent/SideContentTypes';
 
 import {
   createDefaultWorkspace,
@@ -8,122 +7,36 @@ import {
   SupportedLanguage
 } from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
-import { UPDATE_EDITOR_HIGHLIGHTED_LINES } from '../../application/types/InterpreterTypes';
 import { Library } from '../../assessment/AssessmentTypes';
 import { HighlightedLines } from '../../editor/EditorTypes';
-import {
-  addEditorTab,
-  beginClearContext,
-  browseReplHistoryDown,
-  browseReplHistoryUp,
-  changeExternalLibrary,
-  changeSublanguage,
-  chapterSelect,
-  clearReplInput,
-  clearReplOutput,
-  clearReplOutputLast,
-  endClearContext,
-  evalEditor,
-  evalRepl,
-  evalTestcase,
-  externalLibrarySelect,
-  moveCursor,
-  navigateToDeclaration,
-  removeEditorTab,
-  removeEditorTabForFile,
-  removeEditorTabsForDirectory,
-  renameEditorTabForFile,
-  renameEditorTabsForDirectory,
-  resetTestcase,
-  resetWorkspace,
-  sendReplInputToOutput,
-  setEditorBreakpoint,
-  setEditorHighlightedLines,
-  setFolderMode,
-  shiftEditorTab,
-  toggleEditorAutorun,
-  toggleFolderMode,
-  toggleUsingSubst,
-  updateActiveEditorTab,
-  updateActiveEditorTabIndex,
-  updateCurrentAssessmentId,
-  updateCurrentSubmissionId,
-  updateEditorValue,
-  updateHasUnsavedChanges,
-  updateReplValue,
-  updateSublanguage,
-  updateSubmissionsTableFilters
-} from '../WorkspaceActions';
-import {
-  ADD_EDITOR_TAB,
-  BEGIN_CLEAR_CONTEXT,
-  BROWSE_REPL_HISTORY_DOWN,
-  BROWSE_REPL_HISTORY_UP,
-  CHANGE_EXTERNAL_LIBRARY,
-  CHANGE_SUBLANGUAGE,
-  CHAPTER_SELECT,
-  CLEAR_REPL_INPUT,
-  CLEAR_REPL_OUTPUT,
-  CLEAR_REPL_OUTPUT_LAST,
-  EditorTabState,
-  END_CLEAR_CONTEXT,
-  EVAL_EDITOR,
-  EVAL_REPL,
-  EVAL_TESTCASE,
-  MOVE_CURSOR,
-  NAV_DECLARATION,
-  PLAYGROUND_EXTERNAL_SELECT,
-  REMOVE_EDITOR_TAB,
-  REMOVE_EDITOR_TAB_FOR_FILE,
-  REMOVE_EDITOR_TABS_FOR_DIRECTORY,
-  RENAME_EDITOR_TAB_FOR_FILE,
-  RENAME_EDITOR_TABS_FOR_DIRECTORY,
-  RESET_TESTCASE,
-  RESET_WORKSPACE,
-  SEND_REPL_INPUT_TO_OUTPUT,
-  SET_FOLDER_MODE,
-  SHIFT_EDITOR_TAB,
-  TOGGLE_EDITOR_AUTORUN,
-  TOGGLE_FOLDER_MODE,
-  TOGGLE_USING_SUBST,
-  UPDATE_ACTIVE_EDITOR_TAB,
-  UPDATE_ACTIVE_EDITOR_TAB_INDEX,
-  UPDATE_CURRENT_ASSESSMENT_ID,
-  UPDATE_CURRENT_SUBMISSION_ID,
-  UPDATE_EDITOR_BREAKPOINTS,
-  UPDATE_EDITOR_VALUE,
-  UPDATE_HAS_UNSAVED_CHANGES,
-  UPDATE_REPL_VALUE,
-  UPDATE_SUBLANGUAGE,
-  UPDATE_SUBMISSIONS_TABLE_FILTERS,
-  WorkspaceLocation
-} from '../WorkspaceTypes';
+import WorkspaceActions from '../WorkspaceActions';
+import { EditorTabState, WorkspaceLocation } from '../WorkspaceTypes';
 
 const assessmentWorkspace: WorkspaceLocation = 'assessment';
 const gradingWorkspace: WorkspaceLocation = 'grading';
 const playgroundWorkspace: WorkspaceLocation = 'playground';
 
 test('browseReplHistoryDown generates correct action object', () => {
-  const action = browseReplHistoryDown(assessmentWorkspace);
+  const action = WorkspaceActions.browseReplHistoryDown(assessmentWorkspace);
   expect(action).toEqual({
-    type: BROWSE_REPL_HISTORY_DOWN,
+    type: WorkspaceActions.browseReplHistoryDown.type,
     payload: { workspaceLocation: assessmentWorkspace }
   });
 });
 
 test('browseReplHistoryUp generates correct action object', () => {
-  const action = browseReplHistoryUp(gradingWorkspace);
+  const action = WorkspaceActions.browseReplHistoryUp(gradingWorkspace);
   expect(action).toEqual({
-    type: BROWSE_REPL_HISTORY_UP,
+    type: WorkspaceActions.browseReplHistoryUp.type,
     payload: { workspaceLocation: gradingWorkspace }
   });
 });
 
 test('changeExternalLibrary generates correct action object', () => {
   const newExternal = 'new-external-test' as ExternalLibraryName;
-  const action = changeExternalLibrary(newExternal, playgroundWorkspace);
+  const action = WorkspaceActions.changeExternalLibrary(newExternal, playgroundWorkspace);
   expect(action).toEqual({
-    type: CHANGE_EXTERNAL_LIBRARY,
+    type: WorkspaceActions.changeExternalLibrary.type,
     payload: {
       newExternal,
       workspaceLocation: playgroundWorkspace
@@ -135,7 +48,7 @@ test('changeSideContentHeight generates correct action object', () => {
   const height = 100;
   const action = changeSideContentHeight(height, gradingWorkspace);
   expect(action).toEqual({
-    type: CHANGE_SIDE_CONTENT_HEIGHT,
+    type: changeSideContentHeight.type,
     payload: {
       height,
       workspaceLocation: gradingWorkspace
@@ -146,9 +59,9 @@ test('changeSideContentHeight generates correct action object', () => {
 test('chapterSelect generates correct action object', () => {
   const chapter = Chapter.SOURCE_3;
   const variant = Variant.DEFAULT;
-  const action = chapterSelect(chapter, variant, playgroundWorkspace);
+  const action = WorkspaceActions.chapterSelect(chapter, variant, playgroundWorkspace);
   expect(action).toEqual({
-    type: CHAPTER_SELECT,
+    type: WorkspaceActions.chapterSelect.type,
     payload: {
       chapter,
       variant,
@@ -159,9 +72,9 @@ test('chapterSelect generates correct action object', () => {
 
 test('externalLibrarySelect generates correct action object', () => {
   const externalLibraryName = ExternalLibraryName.SOUNDS;
-  const action = externalLibrarySelect(externalLibraryName, assessmentWorkspace);
+  const action = WorkspaceActions.externalLibrarySelect(externalLibraryName, assessmentWorkspace);
   expect(action).toEqual({
-    type: PLAYGROUND_EXTERNAL_SELECT,
+    type: WorkspaceActions.externalLibrarySelect.type,
     payload: {
       externalLibraryName,
       workspaceLocation: assessmentWorkspace,
@@ -171,9 +84,9 @@ test('externalLibrarySelect generates correct action object', () => {
 });
 
 test('toggleEditorAutorun generates correct action object', () => {
-  const action = toggleEditorAutorun(gradingWorkspace);
+  const action = WorkspaceActions.toggleEditorAutorun(gradingWorkspace);
   expect(action).toEqual({
-    type: TOGGLE_EDITOR_AUTORUN,
+    type: WorkspaceActions.toggleEditorAutorun.type,
     payload: {
       workspaceLocation: gradingWorkspace
     }
@@ -190,9 +103,9 @@ test('beginClearContext generates correct action object', () => {
     globals: []
   };
 
-  const action = beginClearContext(playgroundWorkspace, library, true);
+  const action = WorkspaceActions.beginClearContext(playgroundWorkspace, library, true);
   expect(action).toEqual({
-    type: BEGIN_CLEAR_CONTEXT,
+    type: WorkspaceActions.beginClearContext.type,
     payload: {
       library,
       workspaceLocation: playgroundWorkspace,
@@ -202,9 +115,9 @@ test('beginClearContext generates correct action object', () => {
 });
 
 test('clearReplInput generates correct action object', () => {
-  const action = clearReplInput(assessmentWorkspace);
+  const action = WorkspaceActions.clearReplInput(assessmentWorkspace);
   expect(action).toEqual({
-    type: CLEAR_REPL_INPUT,
+    type: WorkspaceActions.clearReplInput.type,
     payload: {
       workspaceLocation: assessmentWorkspace
     }
@@ -212,9 +125,9 @@ test('clearReplInput generates correct action object', () => {
 });
 
 test('clearReplOutputLast generates correct action object', () => {
-  const action = clearReplOutputLast(assessmentWorkspace);
+  const action = WorkspaceActions.clearReplOutputLast(assessmentWorkspace);
   expect(action).toEqual({
-    type: CLEAR_REPL_OUTPUT_LAST,
+    type: WorkspaceActions.clearReplOutputLast.type,
     payload: {
       workspaceLocation: assessmentWorkspace
     }
@@ -222,9 +135,9 @@ test('clearReplOutputLast generates correct action object', () => {
 });
 
 test('clearReplOutput generates correct action object', () => {
-  const action = clearReplOutput(gradingWorkspace);
+  const action = WorkspaceActions.clearReplOutput(gradingWorkspace);
   expect(action).toEqual({
-    type: CLEAR_REPL_OUTPUT,
+    type: WorkspaceActions.clearReplOutput.type,
     payload: {
       workspaceLocation: gradingWorkspace
     }
@@ -241,9 +154,9 @@ test('endClearContext generates correct action object', () => {
     globals: []
   };
 
-  const action = endClearContext(library, playgroundWorkspace);
+  const action = WorkspaceActions.endClearContext(library, playgroundWorkspace);
   expect(action).toEqual({
-    type: END_CLEAR_CONTEXT,
+    type: WorkspaceActions.endClearContext.type,
     payload: {
       library,
       workspaceLocation: playgroundWorkspace
@@ -252,9 +165,9 @@ test('endClearContext generates correct action object', () => {
 });
 
 test('evalEditor generates correct action object', () => {
-  const action = evalEditor(assessmentWorkspace);
+  const action = WorkspaceActions.evalEditor(assessmentWorkspace);
   expect(action).toEqual({
-    type: EVAL_EDITOR,
+    type: WorkspaceActions.evalEditor.type,
     payload: {
       workspaceLocation: assessmentWorkspace
     }
@@ -262,9 +175,9 @@ test('evalEditor generates correct action object', () => {
 });
 
 test('evalRepl generates correct action object', () => {
-  const action = evalRepl(gradingWorkspace);
+  const action = WorkspaceActions.evalRepl(gradingWorkspace);
   expect(action).toEqual({
-    type: EVAL_REPL,
+    type: WorkspaceActions.evalRepl.type,
     payload: {
       workspaceLocation: gradingWorkspace
     }
@@ -273,9 +186,9 @@ test('evalRepl generates correct action object', () => {
 
 test('evalTestcase generates correct action object', () => {
   const testcaseId = 3;
-  const action = evalTestcase(playgroundWorkspace, testcaseId);
+  const action = WorkspaceActions.evalTestcase(playgroundWorkspace, testcaseId);
   expect(action).toEqual({
-    type: EVAL_TESTCASE,
+    type: WorkspaceActions.evalTestcase.type,
     payload: {
       testcaseId,
       workspaceLocation: playgroundWorkspace
@@ -284,9 +197,9 @@ test('evalTestcase generates correct action object', () => {
 });
 
 test('toggleFolderMode generates correct action object', () => {
-  const action = toggleFolderMode(gradingWorkspace);
+  const action = WorkspaceActions.toggleFolderMode(gradingWorkspace);
   expect(action).toEqual({
-    type: TOGGLE_FOLDER_MODE,
+    type: WorkspaceActions.toggleFolderMode.type,
     payload: {
       workspaceLocation: gradingWorkspace
     }
@@ -295,9 +208,9 @@ test('toggleFolderMode generates correct action object', () => {
 
 test('setFolderMode generates correct action object', () => {
   const isFolderModeEnabled = true;
-  const action = setFolderMode(gradingWorkspace, isFolderModeEnabled);
+  const action = WorkspaceActions.setFolderMode(gradingWorkspace, isFolderModeEnabled);
   expect(action).toEqual({
-    type: SET_FOLDER_MODE,
+    type: WorkspaceActions.setFolderMode.type,
     payload: {
       workspaceLocation: gradingWorkspace,
       isFolderModeEnabled
@@ -307,9 +220,12 @@ test('setFolderMode generates correct action object', () => {
 
 test('updateActiveEditorTabIndex generates correct action object', () => {
   const activeEditorTabIndex = 3;
-  const action = updateActiveEditorTabIndex(playgroundWorkspace, activeEditorTabIndex);
+  const action = WorkspaceActions.updateActiveEditorTabIndex(
+    playgroundWorkspace,
+    activeEditorTabIndex
+  );
   expect(action).toEqual({
-    type: UPDATE_ACTIVE_EDITOR_TAB_INDEX,
+    type: WorkspaceActions.updateActiveEditorTabIndex.type,
     payload: {
       workspaceLocation: playgroundWorkspace,
       activeEditorTabIndex
@@ -319,9 +235,9 @@ test('updateActiveEditorTabIndex generates correct action object', () => {
 
 test('updateActiveEditorTab generates correct action object', () => {
   const newEditorTab: Partial<EditorTabState> = { value: 'Hello World' };
-  const action = updateActiveEditorTab(assessmentWorkspace, newEditorTab);
+  const action = WorkspaceActions.updateActiveEditorTab(assessmentWorkspace, newEditorTab);
   expect(action).toEqual({
-    type: UPDATE_ACTIVE_EDITOR_TAB,
+    type: WorkspaceActions.updateActiveEditorTab.type,
     payload: {
       workspaceLocation: assessmentWorkspace,
       activeEditorTabOptions: newEditorTab
@@ -332,9 +248,13 @@ test('updateActiveEditorTab generates correct action object', () => {
 test('updateEditorValue generates correct action object', () => {
   const editorTabIndex = 3;
   const newEditorValue = 'new_editor_value';
-  const action = updateEditorValue(assessmentWorkspace, editorTabIndex, newEditorValue);
+  const action = WorkspaceActions.updateEditorValue(
+    assessmentWorkspace,
+    editorTabIndex,
+    newEditorValue
+  );
   expect(action).toEqual({
-    type: UPDATE_EDITOR_VALUE,
+    type: WorkspaceActions.updateEditorValue.type,
     payload: {
       workspaceLocation: assessmentWorkspace,
       editorTabIndex,
@@ -346,9 +266,13 @@ test('updateEditorValue generates correct action object', () => {
 test('setEditorBreakpoint generates correct action object', () => {
   const editorTabIndex = 3;
   const newBreakpoints = ['ace_breakpoint', 'ace_breakpoint'];
-  const action = setEditorBreakpoint(gradingWorkspace, editorTabIndex, newBreakpoints);
+  const action = WorkspaceActions.setEditorBreakpoint(
+    gradingWorkspace,
+    editorTabIndex,
+    newBreakpoints
+  );
   expect(action).toEqual({
-    type: UPDATE_EDITOR_BREAKPOINTS,
+    type: WorkspaceActions.setEditorBreakpoint.type,
     payload: {
       workspaceLocation: gradingWorkspace,
       editorTabIndex,
@@ -363,13 +287,13 @@ test('setEditorHighlightedLines generates correct action object', () => {
     [1, 2],
     [5, 6]
   ];
-  const action = setEditorHighlightedLines(
+  const action = WorkspaceActions.setEditorHighlightedLines(
     playgroundWorkspace,
     editorTabIndex,
     newHighlightedLines
   );
   expect(action).toEqual({
-    type: UPDATE_EDITOR_HIGHLIGHTED_LINES,
+    type: WorkspaceActions.setEditorHighlightedLines.type,
     payload: {
       workspaceLocation: playgroundWorkspace,
       editorTabIndex,
@@ -378,12 +302,18 @@ test('setEditorHighlightedLines generates correct action object', () => {
   });
 });
 
+// TODO: Test setEditorHighlightedLinesControl
+
 test('moveCursor generates correct action object', () => {
   const editorTabIndex = 3;
   const newCursorPosition = { row: 0, column: 0 };
-  const action = moveCursor(playgroundWorkspace, editorTabIndex, newCursorPosition);
+  const action = WorkspaceActions.moveCursor(
+    playgroundWorkspace,
+    editorTabIndex,
+    newCursorPosition
+  );
   expect(action).toEqual({
-    type: MOVE_CURSOR,
+    type: WorkspaceActions.moveCursor.type,
     payload: {
       workspaceLocation: playgroundWorkspace,
       editorTabIndex,
@@ -395,9 +325,9 @@ test('moveCursor generates correct action object', () => {
 test('addEditorTab generates correct action object', () => {
   const filePath = '/playground/program.js';
   const editorValue = 'Hello World!';
-  const action = addEditorTab(playgroundWorkspace, filePath, editorValue);
+  const action = WorkspaceActions.addEditorTab(playgroundWorkspace, filePath, editorValue);
   expect(action).toEqual({
-    type: ADD_EDITOR_TAB,
+    type: WorkspaceActions.addEditorTab.type,
     payload: {
       workspaceLocation: playgroundWorkspace,
       filePath,
@@ -409,9 +339,13 @@ test('addEditorTab generates correct action object', () => {
 test('shiftEditorTab generates correct action object', () => {
   const previousEditorTabIndex = 3;
   const newEditorTabIndex = 1;
-  const action = shiftEditorTab(playgroundWorkspace, previousEditorTabIndex, newEditorTabIndex);
+  const action = WorkspaceActions.shiftEditorTab(
+    playgroundWorkspace,
+    previousEditorTabIndex,
+    newEditorTabIndex
+  );
   expect(action).toEqual({
-    type: SHIFT_EDITOR_TAB,
+    type: WorkspaceActions.shiftEditorTab.type,
     payload: {
       workspaceLocation: playgroundWorkspace,
       previousEditorTabIndex,
@@ -422,9 +356,9 @@ test('shiftEditorTab generates correct action object', () => {
 
 test('removeEditorTab generates correct action object', () => {
   const editorTabIndex = 3;
-  const action = removeEditorTab(playgroundWorkspace, editorTabIndex);
+  const action = WorkspaceActions.removeEditorTab(playgroundWorkspace, editorTabIndex);
   expect(action).toEqual({
-    type: REMOVE_EDITOR_TAB,
+    type: WorkspaceActions.removeEditorTab.type,
     payload: {
       workspaceLocation: playgroundWorkspace,
       editorTabIndex
@@ -434,9 +368,9 @@ test('removeEditorTab generates correct action object', () => {
 
 test('removeEditorTabForFile generates correct action object', () => {
   const removedFilePath = '/dir1/a.js';
-  const action = removeEditorTabForFile(playgroundWorkspace, removedFilePath);
+  const action = WorkspaceActions.removeEditorTabForFile(playgroundWorkspace, removedFilePath);
   expect(action).toEqual({
-    type: REMOVE_EDITOR_TAB_FOR_FILE,
+    type: WorkspaceActions.removeEditorTabForFile.type,
     payload: {
       workspaceLocation: playgroundWorkspace,
       removedFilePath
@@ -446,9 +380,12 @@ test('removeEditorTabForFile generates correct action object', () => {
 
 test('removeEditorTabsForDirectory generates correct action object', () => {
   const removedDirectoryPath = '/dir1';
-  const action = removeEditorTabsForDirectory(playgroundWorkspace, removedDirectoryPath);
+  const action = WorkspaceActions.removeEditorTabsForDirectory(
+    playgroundWorkspace,
+    removedDirectoryPath
+  );
   expect(action).toEqual({
-    type: REMOVE_EDITOR_TABS_FOR_DIRECTORY,
+    type: WorkspaceActions.removeEditorTabsForDirectory.type,
     payload: {
       workspaceLocation: playgroundWorkspace,
       removedDirectoryPath
@@ -459,9 +396,13 @@ test('removeEditorTabsForDirectory generates correct action object', () => {
 test('renameEditorTabForFile generates correct action object', () => {
   const oldFilePath = '/dir1/a.js';
   const newFilePath = '/dir1/b.js';
-  const action = renameEditorTabForFile(playgroundWorkspace, oldFilePath, newFilePath);
+  const action = WorkspaceActions.renameEditorTabForFile(
+    playgroundWorkspace,
+    oldFilePath,
+    newFilePath
+  );
   expect(action).toEqual({
-    type: RENAME_EDITOR_TAB_FOR_FILE,
+    type: WorkspaceActions.renameEditorTabForFile.type,
     payload: {
       workspaceLocation: playgroundWorkspace,
       oldFilePath,
@@ -473,13 +414,13 @@ test('renameEditorTabForFile generates correct action object', () => {
 test('renameEditorTabsForDirectory generates correct action object', () => {
   const oldDirectoryPath = '/dir1';
   const newDirectoryPath = '/dir2';
-  const action = renameEditorTabsForDirectory(
+  const action = WorkspaceActions.renameEditorTabsForDirectory(
     playgroundWorkspace,
     oldDirectoryPath,
     newDirectoryPath
   );
   expect(action).toEqual({
-    type: RENAME_EDITOR_TABS_FOR_DIRECTORY,
+    type: WorkspaceActions.renameEditorTabsForDirectory.type,
     payload: {
       workspaceLocation: playgroundWorkspace,
       oldDirectoryPath,
@@ -490,9 +431,9 @@ test('renameEditorTabsForDirectory generates correct action object', () => {
 
 test('updateReplValue generates correct action object', () => {
   const newReplValue = 'new_repl_value';
-  const action = updateReplValue(newReplValue, assessmentWorkspace);
+  const action = WorkspaceActions.updateReplValue(newReplValue, assessmentWorkspace);
   expect(action).toEqual({
-    type: UPDATE_REPL_VALUE,
+    type: WorkspaceActions.updateReplValue.type,
     payload: {
       newReplValue,
       workspaceLocation: assessmentWorkspace
@@ -502,9 +443,9 @@ test('updateReplValue generates correct action object', () => {
 
 test('sendReplInputToOutput generates correct action object', () => {
   const newOutput = 'new_output';
-  const action = sendReplInputToOutput(newOutput, gradingWorkspace);
+  const action = WorkspaceActions.sendReplInputToOutput(newOutput, gradingWorkspace);
   expect(action).toEqual({
-    type: SEND_REPL_INPUT_TO_OUTPUT,
+    type: WorkspaceActions.sendReplInputToOutput.type,
     payload: {
       type: 'code',
       value: newOutput,
@@ -515,9 +456,9 @@ test('sendReplInputToOutput generates correct action object', () => {
 
 test('resetTestcase generates correct action object', () => {
   const index = 420;
-  const action = resetTestcase(assessmentWorkspace, index);
+  const action = WorkspaceActions.resetTestcase(assessmentWorkspace, index);
   expect(action).toEqual({
-    type: RESET_TESTCASE,
+    type: WorkspaceActions.resetTestcase.type,
     payload: {
       workspaceLocation: assessmentWorkspace,
       index
@@ -526,9 +467,9 @@ test('resetTestcase generates correct action object', () => {
 });
 
 test('resetWorkspace generates correct default action object', () => {
-  const action = resetWorkspace(playgroundWorkspace);
+  const action = WorkspaceActions.resetWorkspace(playgroundWorkspace);
   expect(action).toEqual({
-    type: RESET_WORKSPACE,
+    type: WorkspaceActions.resetWorkspace.type,
     payload: {
       workspaceLocation: playgroundWorkspace
     }
@@ -537,9 +478,9 @@ test('resetWorkspace generates correct default action object', () => {
 
 test('resetWorkspace generates correct action object with provided workspace', () => {
   const workspaceOptions = createDefaultWorkspace(assessmentWorkspace);
-  const action = resetWorkspace(assessmentWorkspace, workspaceOptions);
+  const action = WorkspaceActions.resetWorkspace(assessmentWorkspace, workspaceOptions);
   expect(action).toEqual({
-    type: RESET_WORKSPACE,
+    type: WorkspaceActions.resetWorkspace.type,
     payload: {
       workspaceLocation: assessmentWorkspace,
       workspaceOptions
@@ -558,9 +499,9 @@ test('updateSubmissionsTableFilters generates correct action object', () => {
       value: 'Missions'
     }
   ];
-  const action = updateSubmissionsTableFilters({ columnFilters });
+  const action = WorkspaceActions.updateSubmissionsTableFilters({ columnFilters });
   expect(action).toEqual({
-    type: UPDATE_SUBMISSIONS_TABLE_FILTERS,
+    type: WorkspaceActions.updateSubmissionsTableFilters.type,
     payload: {
       filters: {
         columnFilters
@@ -572,9 +513,9 @@ test('updateSubmissionsTableFilters generates correct action object', () => {
 test('updateCurrentAssessmentId generates correct action object', () => {
   const assessmentId = 2;
   const questionId = 4;
-  const action = updateCurrentAssessmentId(assessmentId, questionId);
+  const action = WorkspaceActions.updateCurrentAssessmentId(assessmentId, questionId);
   expect(action).toEqual({
-    type: UPDATE_CURRENT_ASSESSMENT_ID,
+    type: WorkspaceActions.updateCurrentAssessmentId.type,
     payload: {
       assessmentId,
       questionId
@@ -585,9 +526,9 @@ test('updateCurrentAssessmentId generates correct action object', () => {
 test('updateCurrentSubmissionId generates correct action object', () => {
   const submissionId = 3;
   const questionId = 6;
-  const action = updateCurrentSubmissionId(submissionId, questionId);
+  const action = WorkspaceActions.updateCurrentSubmissionId(submissionId, questionId);
   expect(action).toEqual({
-    type: UPDATE_CURRENT_SUBMISSION_ID,
+    type: WorkspaceActions.updateCurrentSubmissionId.type,
     payload: {
       submissionId,
       questionId
@@ -597,9 +538,9 @@ test('updateCurrentSubmissionId generates correct action object', () => {
 
 test('updateHasUnsavedChanges generates correct action object', () => {
   const hasUnsavedChanges = true;
-  const action = updateHasUnsavedChanges(assessmentWorkspace, hasUnsavedChanges);
+  const action = WorkspaceActions.updateHasUnsavedChanges(assessmentWorkspace, hasUnsavedChanges);
   expect(action).toEqual({
-    type: UPDATE_HAS_UNSAVED_CHANGES,
+    type: WorkspaceActions.updateHasUnsavedChanges.type,
     payload: {
       workspaceLocation: assessmentWorkspace,
       hasUnsavedChanges
@@ -609,9 +550,9 @@ test('updateHasUnsavedChanges generates correct action object', () => {
 
 test('navigateToDeclaration generates correct action object', () => {
   const cursorPosition = { row: 0, column: 0 };
-  const action = navigateToDeclaration(playgroundWorkspace, cursorPosition);
+  const action = WorkspaceActions.navigateToDeclaration(playgroundWorkspace, cursorPosition);
   expect(action).toEqual({
-    type: NAV_DECLARATION,
+    type: WorkspaceActions.navigateToDeclaration.type,
     payload: {
       workspaceLocation: playgroundWorkspace,
       cursorPosition
@@ -627,9 +568,9 @@ test('changeSublanguage generates correct action object', () => {
     mainLanguage: SupportedLanguage.JAVASCRIPT,
     supports: {}
   };
-  const action = changeSublanguage(sublang);
+  const action = WorkspaceActions.changeSublanguage(sublang);
   expect(action).toEqual({
-    type: CHANGE_SUBLANGUAGE,
+    type: WorkspaceActions.changeSublanguage.type,
     payload: {
       sublang
     }
@@ -644,9 +585,9 @@ test('updateChapter generates correct action object', () => {
     mainLanguage: SupportedLanguage.JAVASCRIPT,
     supports: {}
   };
-  const action = updateSublanguage(sublang);
+  const action = WorkspaceActions.updateSublanguage(sublang);
   expect(action).toEqual({
-    type: UPDATE_SUBLANGUAGE,
+    type: WorkspaceActions.updateSublanguage.type,
     payload: {
       sublang
     }
@@ -654,12 +595,14 @@ test('updateChapter generates correct action object', () => {
 });
 
 test('toggleUsingSubst generates correct action object', () => {
-  const action = toggleUsingSubst(true, playgroundWorkspace);
+  const action = WorkspaceActions.toggleUsingSubst(true, playgroundWorkspace);
   expect(action).toEqual({
-    type: TOGGLE_USING_SUBST,
+    type: WorkspaceActions.toggleUsingSubst.type,
     payload: {
       workspaceLocation: playgroundWorkspace,
       usingSubst: true
     }
   });
 });
+
+// TODO: Add toggleusingcse

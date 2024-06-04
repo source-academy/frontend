@@ -15,8 +15,10 @@ import {
 import { IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Location } from 'history';
-import { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import { Translation } from 'react-i18next';
 import { NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import { i18nDefaultLangKeys } from 'src/i18n/i18next';
 import classes from 'src/styles/NavigationBar.module.scss';
 
 import Dropdown from '../dropdown/Dropdown';
@@ -40,10 +42,53 @@ export type NavbarEntryInfo = {
   hiddenInBreakpoints?: ('xs' | 'sm' | 'md' | 'lg')[]; // hide text in Blueprint breakpoints
 };
 
-type CreateNavlinkFunction = (navbarEntry: NavbarEntryInfo) => React.ReactElement;
+const MobileHamburger: React.FC<{ navlinks: NavbarEntryInfo[] }> = ({ navlinks }) => {
+  // Don't render drawer when there are 0 navlinks in it
+  const [mobileSideMenuOpen, setMobileSideMenuOpen] = useState(false);
+  const shownNavlinks = navlinks.filter(e => !e.disabled);
+  const renderDrawer = shownNavlinks.length > 0;
+
+  const { courseShortName, courseId } = useSession();
+
+  return (
+    <NavbarGroup align={Alignment.LEFT}>
+      {renderDrawer && (
+        <Button
+          onClick={() => setMobileSideMenuOpen(!mobileSideMenuOpen)}
+          icon={IconNames.MENU}
+          large={true}
+          minimal={true}
+        />
+      )}
+      <NavLink
+        className="NavigationBar__link"
+        to={Constants.playgroundOnly ? '/' : courseId == null ? '/welcome' : `/courses/${courseId}`}
+      >
+        <NavbarHeading>
+          <Button className="app-title" minimal icon={IconNames.SYMBOL_DIAMOND}>
+            {courseShortName || Constants.sourceAcademyDeploymentName}
+          </Button>
+        </NavbarHeading>
+      </NavLink>
+      {renderDrawer && (
+        <Drawer
+          isOpen={mobileSideMenuOpen}
+          position="left"
+          onClose={() => setMobileSideMenuOpen(false)}
+          title=""
+          className={Classes.DARK}
+          style={{ overflowY: 'auto' }}
+        >
+          {shownNavlinks.map((entry, i) => (
+            <MobileNavLink key={i} {...entry} handleClick={() => setMobileSideMenuOpen(false)} />
+          ))}
+        </Drawer>
+      )}
+    </NavbarGroup>
+  );
+};
 
 const NavigationBar: React.FC = () => {
-  const [mobileSideMenuOpen, setMobileSideMenuOpen] = useState(false);
   const { isMobileBreakpoint } = useResponsive();
   const location = useLocation();
   const {
@@ -63,71 +108,6 @@ const NavigationBar: React.FC = () => {
   );
 
   FocusStyleManager.onlyShowFocusOnTabs();
-
-  const createMobileNavlink: CreateNavlinkFunction = useCallback(
-    navbarEntry => (
-      <NavLink
-        to={navbarEntry.to}
-        className={({ isActive }) =>
-          classNames(Classes.BUTTON, Classes.MINIMAL, Classes.LARGE, { [Classes.ACTIVE]: isActive })
-        }
-        onClick={() => setMobileSideMenuOpen(false)}
-        key={navbarEntry.text}
-      >
-        <Icon icon={navbarEntry.icon} />
-        <div>{navbarEntry.text}</div>
-        {navbarEntry.hasNotifications && (
-          <NotificationBadge
-            notificationFilter={filterNotificationsByType(navbarEntry.text)}
-            disableHover={true}
-          />
-        )}
-      </NavLink>
-    ),
-    [setMobileSideMenuOpen]
-  );
-
-  const wrapWithMobileHamburger = (navlinks: (React.ReactElement | null)[]) => {
-    // Don't render drawer when there are 0 navlinks in it
-    const nonNullNavlinks = navlinks.filter(e => e !== null);
-    const renderDrawer = nonNullNavlinks.length > 0;
-
-    return (
-      <NavbarGroup align={Alignment.LEFT}>
-        {renderDrawer && (
-          <Button
-            onClick={() => setMobileSideMenuOpen(!mobileSideMenuOpen)}
-            icon={IconNames.MENU}
-            large={true}
-            minimal={true}
-          />
-        )}
-        <NavLink
-          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-          to={
-            Constants.playgroundOnly ? '/' : courseId == null ? '/welcome' : `/courses/${courseId}`
-          }
-        >
-          <Icon icon={IconNames.SYMBOL_DIAMOND} />
-          <NavbarHeading style={{ paddingBottom: '0px' }}>
-            {courseShortName || Constants.sourceAcademyDeploymentName}
-          </NavbarHeading>
-        </NavLink>
-        {renderDrawer && (
-          <Drawer
-            isOpen={mobileSideMenuOpen}
-            position="left"
-            onClose={() => setMobileSideMenuOpen(false)}
-            title=""
-            className={Classes.DARK}
-            style={{ overflowY: 'auto' }}
-          >
-            {navlinks}
-          </Drawer>
-        )}
-      </NavbarGroup>
-    );
-  };
 
   const fullAcademyNavbarLeftAssessmentsInfo: NavbarEntryInfo[] = useMemo(
     () =>
@@ -201,27 +181,29 @@ const NavigationBar: React.FC = () => {
 
   const renderPlaygroundOnlyNavbarLeftDesktop = () => (
     <NavbarGroup align={Alignment.LEFT}>
-      {renderNavlinksFromInfo(playgroundOnlyNavbarLeftInfo, createDesktopNavlink)}
+      {playgroundOnlyNavbarLeftInfo.map((entry, i) => (
+        <DesktopNavLink key={i} {...entry} />
+      ))}
     </NavbarGroup>
   );
 
-  const renderPlaygroundOnlyNavbarLeftMobile = () =>
-    wrapWithMobileHamburger(
-      renderNavlinksFromInfo(playgroundOnlyNavbarLeftInfo, createMobileNavlink)
-    );
+  const renderPlaygroundOnlyNavbarLeftMobile = () => (
+    <MobileHamburger navlinks={playgroundOnlyNavbarLeftInfo} />
+  );
 
   const renderFullAcademyNavbarLeftDesktop = () => {
+    const entries = assessmentTypesToNavlinkInfo({
+      assessmentTypes,
+      courseId,
+      isEnrolledInACourse
+    });
+
     const desktopNavbarLeftPopoverContent = (
       <Navbar>
         <NavbarGroup>
-          {renderNavlinksFromInfo(
-            assessmentTypesToNavlinkInfo({
-              assessmentTypes,
-              courseId,
-              isEnrolledInACourse
-            }),
-            createDesktopNavlink
-          )}
+          {entries.map((entry, i) => (
+            <DesktopNavLink key={i} {...entry} />
+          ))}
         </NavbarGroup>
       </Navbar>
     );
@@ -249,26 +231,31 @@ const NavigationBar: React.FC = () => {
           disabled={!enableDesktopPopover}
         >
           <NavLink
-            className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
-              [Classes.ACTIVE]: highlightDesktopLogo(location)
-            })}
+            className="NavigationBar__link"
             to={courseId == null ? '/welcome' : `/courses/${courseId}`}
           >
-            <Icon icon={IconNames.SYMBOL_DIAMOND} />
-            <NavbarHeading style={{ paddingBottom: '0px' }}>
-              {courseShortName || Constants.sourceAcademyDeploymentName}
+            <NavbarHeading>
+              <Button
+                className="app-title"
+                minimal
+                icon={IconNames.SYMBOL_DIAMOND}
+                active={highlightDesktopLogo(location)}
+              >
+                {courseShortName || Constants.sourceAcademyDeploymentName}
+              </Button>
             </NavbarHeading>
           </NavLink>
         </Popover>
-        {renderNavlinksFromInfo(fullAcademyNavbarLeftCommonInfo, createDesktopNavlink)}
+        {fullAcademyNavbarLeftCommonInfo.map((entry, i) => (
+          <DesktopNavLink key={i} {...entry} />
+        ))}
       </NavbarGroup>
     );
   };
 
-  const renderFullAcademyNavbarLeftMobile = () =>
-    wrapWithMobileHamburger(
-      renderNavlinksFromInfo(fullAcademyMobileNavbarLeftInfoWithAssessments, createMobileNavlink)
-    );
+  const renderFullAcademyNavbarLeftMobile = () => (
+    <MobileHamburger navlinks={fullAcademyMobileNavbarLeftInfoWithAssessments} />
+  );
 
   const commonNavbarRight = (
     <NavbarGroup align={Alignment.RIGHT}>
@@ -354,40 +341,63 @@ const playgroundOnlyNavbarLeftInfo: NavbarEntryInfo[] = [
   // }
 ];
 
-export const renderNavlinksFromInfo = (
-  navbarEntries: NavbarEntryInfo[],
-  createNavlink: CreateNavlinkFunction
-): (React.ReactElement | null)[] =>
-  navbarEntries.map(entry => {
-    if (entry.disabled) {
-      return null;
-    }
+export const DesktopNavLink: React.FC<NavbarEntryInfo> = props => {
+  const responsive = useResponsive();
+  const shouldHide = props.hiddenInBreakpoints?.some(bp => responsive[bp]);
+  return props.disabled ? null : (
+    <NavLink
+      className={({ isActive }) => classNames(isActive && Classes.ACTIVE)}
+      to={props.to}
+      key={props.text}
+      title={props.text}
+    >
+      <Button minimal icon={props.icon}>
+        {!shouldHide && (
+          <Translation ns="commons" keyPrefix="navigationBar">
+            {t =>
+              t(props.text as keyof i18nDefaultLangKeys['commons']['navigationBar'], {
+                defaultValue: props.text
+              })
+            }
+          </Translation>
+        )}
+      </Button>
+      {props.hasNotifications && (
+        <NotificationBadge
+          notificationFilter={filterNotificationsByType(props.text)}
+          disableHover={true}
+        />
+      )}
+    </NavLink>
+  );
+};
 
-    return createNavlink(entry);
-  });
-
-export const createDesktopNavlink: CreateNavlinkFunction = navbarEntry => (
-  <NavLink
-    className={({ isActive }) =>
-      classNames(Classes.BUTTON, Classes.MINIMAL, {
-        [Classes.ACTIVE]: isActive
-      })
-    }
-    to={navbarEntry.to}
-    key={navbarEntry.text}
-    title={navbarEntry.text}
-  >
-    <Icon icon={navbarEntry.icon} />
-    <div className={classNames(navbarEntry.hiddenInBreakpoints?.map(bp => `hidden-${bp}`))}>
-      {navbarEntry.text}
-    </div>
-    {navbarEntry.hasNotifications && (
-      <NotificationBadge
-        notificationFilter={filterNotificationsByType(navbarEntry.text)}
-        disableHover={true}
-      />
-    )}
-  </NavLink>
-);
+const MobileNavLink: React.FC<
+  NavbarEntryInfo & { handleClick?: React.MouseEventHandler<HTMLAnchorElement> }
+> = props =>
+  props.disabled ? null : (
+    <NavLink
+      to={props.to}
+      className={({ isActive }) => classNames(isActive && Classes.ACTIVE)}
+      onClick={props.handleClick}
+      key={props.text}
+    >
+      <Button minimal large icon={props.icon}>
+        <Translation ns="commons" keyPrefix="navigationBar">
+          {t =>
+            t(props.text as keyof i18nDefaultLangKeys['commons']['navigationBar'], {
+              defaultValue: props.text
+            })
+          }
+        </Translation>
+      </Button>
+      {props.hasNotifications && (
+        <NotificationBadge
+          notificationFilter={filterNotificationsByType(props.text)}
+          disableHover={true}
+        />
+      )}
+    </NavLink>
+  );
 
 export default NavigationBar;
