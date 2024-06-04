@@ -11,6 +11,7 @@ const GradingFilterable: React.FC<FilterableProps> = ({ value, children, filterM
       className={
         filterMode ? 'grading-overview-filterable-btns' : 'grading-overview-unfilterable-btns'
       }
+      key={value}
     >
       {children || value}
     </button>

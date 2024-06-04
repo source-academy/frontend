@@ -189,7 +189,7 @@ export function* mockBackendSaga(): SagaIterator {
       };
 
       Object.keys(allColsSortStates.currentState).forEach(key => {
-        if (allColsSortStates.sortBy === key && key != '') {
+        if (allColsSortStates.sortBy === key && key) {
           if (allColsSortStates.currentState[key] !== SortStates.NONE) {
             sortedBy.sortDirection = allColsSortStates.currentState[key];
           } else {
