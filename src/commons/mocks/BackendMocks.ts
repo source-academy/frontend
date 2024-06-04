@@ -5,7 +5,8 @@ import DashboardActions from 'src/features/dashboard/DashboardActions';
 import {
   GradingOverviews,
   GradingQuery,
-  GradingQuestion
+  GradingQuestion,
+  SortStates
 } from '../../features/grading/GradingTypes';
 import SessionActions from '../application/actions/SessionActions';
 import {
@@ -166,9 +167,25 @@ export function* mockBackendSaga(): SagaIterator {
     SessionActions.fetchGradingOverviews.type,
     function* (action: ReturnType<typeof actions.fetchGradingOverviews>): any {
       const accessToken = yield select((state: OverallState) => state.session.accessToken);
-      const { filterToGroup, pageParams, filterParams } = action.payload;
+      const { filterToGroup, pageParams, filterParams, allColsSortStates } = action.payload;
+      const sortedBy = {
+        sortBy: allColsSortStates.sortBy,
+        sortDirection: ''
+      };
+
+      Object.keys(allColsSortStates.currentState).forEach(key => {
+        if (allColsSortStates.sortBy === key && key) {
+          if (allColsSortStates.currentState[key] !== SortStates.NONE) {
+            sortedBy.sortDirection = allColsSortStates.currentState[key];
+          } else {
+            sortedBy.sortBy = '';
+            sortedBy.sortDirection = '';
+          }
+        }
+      });
+
       const gradingOverviews = yield call(() =>
-        mockFetchGradingOverview(accessToken, filterToGroup, pageParams, filterParams)
+        mockFetchGradingOverview(accessToken, filterToGroup, pageParams, filterParams, sortedBy)
       );
       if (gradingOverviews !== null) {
         yield put(actions.updateGradingOverviews(gradingOverviews));

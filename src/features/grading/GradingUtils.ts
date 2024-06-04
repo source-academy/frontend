@@ -6,7 +6,7 @@ import {
   ProgressStatuses
 } from 'src/commons/assessment/AssessmentTypes';
 
-import { GradingOverview } from './GradingTypes';
+import { ColumnFields, GradingOverview } from './GradingTypes';
 
 export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined) => {
   if (!gradingOverviews) return;
@@ -71,17 +71,17 @@ export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined
 // TODO: Two-way conversion function for frontend-backend parameter conversion
 export const convertFilterToBackendParams = (column: ColumnFilter) => {
   switch (column.id) {
-    case 'assessmentName':
+    case ColumnFields.assessmentName:
       return { title: column.value };
-    case 'assessmentType':
+    case ColumnFields.assessmentType:
       return { type: column.value };
-    case 'studentName':
+    case ColumnFields.studentName:
       return { name: column.value };
-    case 'studentUsername':
+    case ColumnFields.studentUsername:
       return { username: column.value };
-    case 'progress':
+    case ColumnFields.progressStatus:
       return progressStatusToBackendParams(column.value as ProgressStatus);
-    case 'groupName':
+    case ColumnFields.groupName:
       return { groupName: column.value };
     default:
       return {};
