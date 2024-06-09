@@ -123,7 +123,7 @@ const GroundControl: React.FC<Props> = props => {
       }
     },
     {
-      headerName: 'Publish',
+      headerName: 'Published',
       field: 'placeholderPublish' as any,
       cellRenderer: PublishCell,
       cellRendererParams: {
@@ -135,7 +135,7 @@ const GroundControl: React.FC<Props> = props => {
       cellStyle: { padding: 0 }
     },
     {
-      headerName: 'Release Grading',
+      headerName: 'Grading',
       field: 'placeholderReleaseGrading' as any,
       cellRenderer: ReleaseGradingCell,
       cellRendererParams: {
@@ -148,9 +148,20 @@ const GroundControl: React.FC<Props> = props => {
       cellStyle: { padding: 0 }
     },
     {
-      headerName: 'Delete',
+      headerName: 'Actions',
       field: 'placeholderDelete' as any,
-      cellRenderer: DeleteCell,
+      cellRenderer: ({ data }: { data: AssessmentOverview }) => {
+        return (
+          <>
+            <DeleteCell data={data} handleDeleteAssessment={props.handleDeleteAssessment} />
+            <ConfigureCell
+              data={data}
+              handleConfigureAssessment={props.handleConfigureAssessment}
+              handleAssignEntriesForVoting={props.handleAssignEntriesForVoting}
+            />
+          </>
+        );
+      },
       cellRendererParams: {
         handleDeleteAssessment: props.handleDeleteAssessment
       },
@@ -158,21 +169,6 @@ const GroundControl: React.FC<Props> = props => {
       resizable: false,
       sortable: false,
       cellStyle: { padding: 0 }
-    },
-    {
-      headerName: 'Configure',
-      field: 'placeholderConfigure' as any,
-      cellRenderer: ConfigureCell,
-      cellRendererParams: {
-        handleConfigureAssessment: props.handleConfigureAssessment,
-        handleAssignEntriesForVoting: props.handleAssignEntriesForVoting
-      },
-      filter: false,
-      resizable: false,
-      sortable: false,
-      cellStyle: {
-        padding: 0
-      }
     }
   ];
 
