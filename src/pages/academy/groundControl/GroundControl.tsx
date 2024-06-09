@@ -74,12 +74,6 @@ const GroundControl: React.FC<Props> = props => {
     });
   };
 
-  const resizeGrid = () => {
-    if (gridApi) {
-      gridApi.sizeColumnsToFit();
-    }
-  };
-
   const toggleDropzone = () => {
     setShowDropzone(!showDropzone);
   };
@@ -216,7 +210,6 @@ const GroundControl: React.FC<Props> = props => {
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
-        onGridSizeChanged={resizeGrid}
         rowData={assessmentOverviews}
         rowHeight={35}
         suppressCellFocus={true}

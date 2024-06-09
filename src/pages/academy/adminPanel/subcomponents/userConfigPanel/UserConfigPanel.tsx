@@ -72,7 +72,6 @@ const UserConfigPanel: React.FC<Props> = props => {
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
-        onGridSizeChanged={() => gridApi.current?.sizeColumnsToFit()}
         rowData={userCourseRegistrations}
         rowHeight={36}
         suppressCellFocus={true}

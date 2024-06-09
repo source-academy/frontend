@@ -71,7 +71,6 @@ const StoriesUserConfigPanel: React.FC<Props> = props => {
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
-        onGridSizeChanged={() => gridApi.current?.sizeColumnsToFit()}
         rowData={storiesUsers}
         rowHeight={36}
         suppressCellFocus={true}
