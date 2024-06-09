@@ -15,6 +15,13 @@ type Props = {
   handleDeleteUserFromCourse: (courseRegId: number) => void;
 };
 
+const defaultColumnDefs: ColDef = {
+  flex: 1,
+  filter: true,
+  resizable: true,
+  sortable: true
+};
+
 /**
  * Only admins can access this panel.
  * - Admins cannot be deleted
@@ -30,19 +37,9 @@ const UserConfigPanel: React.FC<Props> = props => {
   );
 
   const columnDefs: ColDef<AdminPanelCourseRegistration>[] = [
-    {
-      headerName: 'Name',
-      field: 'name',
-      sort: 'asc'
-    },
-    {
-      headerName: 'Username',
-      field: 'username'
-    },
-    {
-      headerName: 'Group',
-      field: 'group'
-    },
+    { headerName: 'Name', field: 'name', sort: 'asc' },
+    { headerName: 'Username', field: 'username' },
+    { headerName: 'Group', field: 'group' },
     {
       headerName: 'Role',
       field: 'role',
@@ -50,8 +47,7 @@ const UserConfigPanel: React.FC<Props> = props => {
       cellRendererParams: {
         courseRegId: props.courseRegId,
         handleUpdateUserRole: props.handleUpdateUserRole
-      },
-      width: 110
+      }
     },
     {
       headerName: 'Actions',
@@ -60,17 +56,10 @@ const UserConfigPanel: React.FC<Props> = props => {
       cellRendererParams: {
         handleDeleteUserFromCourse: props.handleDeleteUserFromCourse
       },
-      width: 120,
       filter: false,
       resizable: false
     }
   ];
-
-  const defaultColumnDefs = {
-    filter: true,
-    resizable: true,
-    sortable: true
-  };
 
   const onGridReady = (params: GridReadyEvent) => {
     gridApi.current = params.api;
