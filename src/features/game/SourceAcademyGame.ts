@@ -171,6 +171,9 @@ const config: Phaser.Types.Core.GameConfig = {
     mode: Phaser.Scale.FIT,
     parent: 'game-display'
   },
+  dom: {
+    createContainer: true
+  },
   fps: {
     target: 24
   },
