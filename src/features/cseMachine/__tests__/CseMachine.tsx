@@ -1,15 +1,26 @@
 import { runInContext } from 'js-slang/dist/';
 import createContext from 'js-slang/dist/createContext';
 
+import { Binding } from '../components/Binding';
 import { ControlItemComponent } from '../components/ControlItemComponent';
+import { Frame } from '../components/Frame';
 import { StashItemComponent } from '../components/StashItemComponent';
 import { ArrayValue } from '../components/values/ArrayValue';
 import { FnValue } from '../components/values/FnValue';
 import { GlobalFnValue } from '../components/values/GlobalFnValue';
 import CseMachine from '../CseMachine';
+import { Config } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Env, EnvTree } from '../CseMachineTypes';
-import { isDataArray, isFunction } from '../CseMachineUtils';
+import { isMainReference } from '../CseMachineUtils';
+
+function isArray(x: any): x is any[] {
+  return Array.isArray(x);
+}
+
+function isFunction(x: any): x is Function {
+  return typeof x === 'function';
+}
 
 // The following are code samples that are more complex/known to have caused bugs
 // Some are commented out to keep the tests shorter
@@ -18,7 +29,7 @@ const codeSamples = [
   `
     const fn = () => "L";
     const x = ["long string", pair(() => 1, () => 2), list(1, pair(2, 3), () => 3), () => "THIS", 5, 6];
-    const y = list(x[1], x[2], tail(x[1]), tail(x[2]), fn);        
+    const y = list(x[1], x[2], tail(x[1]), tail(x[2]), fn);
     debugger;`,
   `
     const fn = () => 1;
@@ -49,7 +60,7 @@ const codeSamples = [
     const z = f(11);
     debugger;`,
   `
-    const x = list(1,pair, accumulate);
+    const x = list(1, pair, accumulate);
     debugger;`,
   `
     const x = [];
@@ -85,12 +96,18 @@ codeSamples.forEach((code, idx) => {
       context.runtime.stash!
     );
 
+    // Map of environment.id to Frame
+    const frameMap = new Map<string, Frame>();
+
     const toTest: any[] = [];
     const environmentsToTest: Env[] = [];
+
+    // Testing environment contents and order
     Layout.levels.forEach(({ frames }) => {
-      frames.forEach(({ environment, bindings }) => {
-        environmentsToTest.push(environment);
-        bindings.forEach(({ keyString, data }) => {
+      frames.forEach(frame => {
+        frameMap.set(frame.environment.id, frame);
+        environmentsToTest.push(frame.environment);
+        frame.bindings.forEach(({ keyString, data }) => {
           toTest.push(keyString);
           toTest.push(data);
         });
@@ -100,64 +117,71 @@ codeSamples.forEach((code, idx) => {
       expect(environment).toMatchSnapshot();
     });
     expect(toTest).toMatchSnapshot();
-    // Note: Old code is kept here as a reference for later
-    // const checkNonCompactLayout = () => {
-    //   Layout.draw();
-    //   Layout.values.forEach(v => {
-    //     if (v instanceof GlobalFnValue || v instanceof FnValue) {
-    //       const arrow = v.arrow();
-    //       expect(arrow).toBeDefined();
-    //       expect(arrow?.target).toBeDefined();
-    //       const path = arrow!.path().match(/[^ ]+/g) ?? [];
-    //       expect(path.length).toEqual(14);
-    //       expect(path[1]).toEqual(path[4]); // move up
-    //       expect(path[8]).toEqual(path[10]); // move left
-    //       expect(Frame.lastXCoordBelow(v.x())).toEqual(Frame.lastXCoordBelow(arrow!.target!.x())); // target
-    //     } else if (v instanceof ArrayValue) {
-    //       v.arrows().forEach(arrow => {
-    //         expect(arrow).toBeDefined();
-    //         expect(arrow?.target).toBeDefined();
-    //         if (
-    //           arrow instanceof ArrowFromArrayUnit &&
-    //           arrow.target instanceof ArrayValue &&
-    //           arrow.source instanceof ArrayUnit
-    //         ) {
-    //           const sourceArray = arrow.source.parent as ArrayValue;
-    //           const targetArray = arrow.target as ArrayValue;
-    //           if (sourceArray.level === targetArray.level) {
-    //             // for arrows within same array level
-    //             const path = arrow!.path().match(/[^ ]+/g) ?? [];
-    //             expect(parseFloat(path[1])).toEqual(arrow.source.x() + Config.DataUnitWidth / 2);
-    //             expect(parseFloat(path[2])).toEqual(arrow.source.y() + Config.DataUnitHeight / 2);
-    //             if (sourceArray.data === targetArray.data) {
-    //               expect(path.length).toEqual(22); // up, right, down.
-    //               expect(path[1]).toEqual(path[4]);
-    //               expect(path[17]).toEqual(path[20]);
-    //               expect(parseFloat(path[20]) - parseFloat(path[1])).toBeCloseTo(
-    //                 Config.DataUnitWidth / 3
-    //               );
-    //             }
-    //           }
-    //         }
-    //       });
-    //     }
-    //   });
-    // };
     const checkLayout = () => {
       Layout.draw();
-      // TODO: write proper tests to check layout, similar to the above tests for the old components.
-      // In addition to the tests below, it would also be nice to check each frame and its bindings as well,
-      // and check all the relevant arrows are drawn correctly
+      const globalFrame = frameMap.get(Layout.globalEnvNode.environment.id);
       Layout.values.forEach(v => {
         if (v instanceof GlobalFnValue || v instanceof FnValue) {
-          // TODO: check the arrow of each function value that starts from its tail, and points to the
-          // environment frame that the function value originates from.
-          // 1. Check that arrow and its target is defined, and format the path into an array
-          // 2. Check that path[1] === path[4], i.e. the arrow moves up first
-          // 3. Check that path[8] === path[10], i.e. the arrow moves left afterwards
-          // 4. Check that the arrow is indeed drawn to the correct frame.
+          const arrow = v.arrow();
+          expect(arrow).toBeDefined();
+          expect(arrow!.target).toBeDefined();
+          // Split path text into an array by the spaces
+          const path = arrow!.path().match(/[^ ]+/g) ?? [];
+          expect(path).toHaveLength(14);
+          expect(path[1]).toEqual(path[4]); // moves up
+          expect(path[8]).toEqual(path[10]); // moves left
+          const targetFrame =
+            v instanceof FnValue ? frameMap.get(v.data.environment.id) : globalFrame;
+          expect(targetFrame).toBeDefined();
+          expect(arrow!.target).toEqual(targetFrame);
+          expect(v.x()).toBeGreaterThan(targetFrame!.x());
+          expect(v.y()).toBeGreaterThan(targetFrame!.y());
         } else if (v instanceof ArrayValue) {
-          // TODO: check the arrows of each array unit
+          const targetFrame = frameMap.get(v.data.environment.id);
+          expect(targetFrame).toBeDefined();
+          expect(v.x()).toBeGreaterThan(targetFrame!.x());
+          expect(v.y()).toBeGreaterThan(targetFrame!.y());
+          v.units.forEach((unit, i) => {
+            expect(unit.index).toEqual(i);
+            const lastIndex = i === v.units.length - 1;
+            if (isFunction(unit.data) || isArray(unit.data)) {
+              expect(unit.arrow).toBeDefined();
+              expect(unit.arrow!.target).toBeDefined();
+              const path = unit.arrow!.path().match(/[^ ]+/g) ?? [];
+              if (unit.value instanceof GlobalFnValue) {
+                // Check value has a binding in the global frame
+                expect(
+                  unit.value.references.filter(r => r instanceof Binding && r.frame === globalFrame)
+                ).toHaveLength(1);
+              } else {
+                expect(unit.data).toHaveProperty('environment');
+                if (isMainReference(unit.value, unit)) {
+                  if (lastIndex) {
+                    expect(unit.isLastUnit).toEqual(true);
+                    expect(unit.value.x()).toBeGreaterThan(v.x());
+                    expect(Number(path[1])).toBeLessThan(Number(path[4])); // arrow moves right
+                    expect(path[2]).toEqual(path[5]); // horizontal arrow
+                    // Box-and-pointer notation, y-coordinate should be the same
+                    if (isArray(unit.data)) expect(unit.value.y()).toEqual(v.y());
+                    // y-coordinates of functions should be at the mid-point of the array
+                    else expect(unit.value.y()).toEqual(v.y() + Config.DataUnitHeight / 2);
+                  } else {
+                    expect(unit.value.y()).toBeGreaterThan(v.y());
+                    expect(path[1]).toEqual(path[4]); // vertical arrow
+                    expect(Number(path[2])).toBeLessThan(Number(path[5])); // arrow moves down
+                    // Arrays have matching x-coordinates
+                    if (isArray(unit.data)) expect(unit.value.x()).toEqual(unit.x());
+                    // Functions have the centers aligned instead
+                    else {
+                      expect(unit.value.x() + unit.value.width() / 2).toEqual(
+                        unit.x() + unit.width() / 2
+                      );
+                    }
+                  }
+                }
+              }
+            }
+          });
         }
       });
     };
@@ -168,7 +192,7 @@ codeSamples.forEach((code, idx) => {
   });
 });
 
-const codeSamplesControlStash = [
+const codeSamplesControlStash: [string, string, number, boolean?][] = [
   [
     'arrows from the environment instruction to the frame and arrows from the stash to closures',
     `
@@ -204,17 +228,17 @@ const codeSamplesControlStash = [
       }
       fact(10);
       `,
-    160,
+    140,
     true
   ]
 ];
 
-codeSamplesControlStash.forEach((codeSample, idx) => {
+codeSamplesControlStash.forEach(codeSample => {
   test('CSE Machine Control Stash correctly renders: ' + codeSample[0], async () => {
     const code = codeSample[1] as string;
     const currentStep = codeSample[2] as number;
     const truncate = codeSample[3];
-    if (truncate) {
+    if (Boolean(truncate) !== CseMachine.getStackTruncated()) {
       CseMachine.toggleStackTruncated();
     }
     if (!CseMachine.getControlStash()) {
@@ -237,7 +261,7 @@ codeSamplesControlStash.forEach((codeSample, idx) => {
     if (truncate) expect(controlItemsToTest.length).toBeLessThanOrEqual(10);
     stashItemsToTest.forEach(item => {
       expect(item.draw()).toMatchSnapshot();
-      if (isFunction(item.value) || isDataArray(item.value)) expect(item.arrow).toBeDefined();
+      if (isFunction(item.value) || isArray(item.value)) expect(item.arrow).toBeDefined();
     });
   });
 });
