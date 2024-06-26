@@ -66,11 +66,12 @@ export default class DialogueManager {
       });
   }
 
-  private async showNextLine(resolve: () => void) {
+  public async showNextLine(resolve: () => void) {
     GameGlobalAPI.getInstance().playSound(SoundAssets.dialogueAdvance.key);
     const { line, speakerDetail, actionIds, prompt } =
       await this.getDialogueGenerator().generateNextLine();
-    const lineWithName = line.replace('{name}', this.getUsername());
+    const lineWithQuizScores = this.makeLineWithQuizScores(line);
+    const lineWithName = lineWithQuizScores.replace('{name}', this.getUsername());
     this.getDialogueRenderer().changeText(lineWithName);
     this.getSpeakerRenderer().changeSpeakerTo(speakerDetail);
 
@@ -79,6 +80,7 @@ export default class DialogueManager {
 
     // Disable interactions while processing actions
     GameGlobalAPI.getInstance().enableSprite(this.getDialogueRenderer().getDialogueBox(), false);
+    this.getInputManager().enableKeyboardInput(false);
 
     if (prompt) {
       // disable keyboard input to prevent continue dialogue
@@ -94,12 +96,45 @@ export default class DialogueManager {
     }
     await GameGlobalAPI.getInstance().processGameActionsInSamePhase(actionIds);
     GameGlobalAPI.getInstance().enableSprite(this.getDialogueRenderer().getDialogueBox(), true);
+    this.getInputManager().enableKeyboardInput(true);
 
     if (!line) {
       // clear keyboard listeners when dialogue ends
       this.getInputManager().clearKeyboardListeners([keyboardShortcuts.Next]);
       resolve();
     }
+  }
+
+  /**
+   * Hide all dialogue boxes, speaker boxes and speaker sprites
+   * */
+  public async hideAll() {
+    await this.getDialogueRenderer().hide();
+    await this.getSpeakerRenderer().hide();
+  }
+
+  /**
+   * Make all dialogue boxes, speaker boxes and speaker sprites visible
+   * */
+  public async showAll() {
+    await this.getDialogueRenderer().show();
+    await this.getSpeakerRenderer().show();
+  }
+
+  /**
+   * Find patterns of quiz score interpolation in a dialogue line,
+   * and replace them by actual scores.
+   * The pattern: "{<quizId>.score}"
+   *
+   * @param line
+   * @returns {string} the given line with all quiz score interpolation replaced by actual scores.
+   */
+  public makeLineWithQuizScores(line: string) {
+    const quizScores = line.matchAll(/\{(.+?)\.score\}/g);
+    for (const match of quizScores) {
+      line = line.replace(match[0], GameGlobalAPI.getInstance().getQuizScore(match[1]).toString());
+    }
+    return line;
   }
 
   private getDialogueGenerator = () => this.dialogueGenerator as DialogueGenerator;

@@ -7,14 +7,14 @@ import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
 import StringUtils from '../utils/StringUtils';
 import { createBitmapText } from '../utils/TextUtils';
-import DialogueConstants, { speakerTextStyle } from './GameDialogueConstants';
+import { QuizConstants, speakerTextStyle } from './GameQuizConstants';
 
 /**
- * Class that manages speakerbox portion of the dialgoue box
- * And renders the characters in Speaker Layer
+ * Class that manages speaker box portion of the quiz speaker box
+ * render characters in QuizSpeaker Layer
  *
  */
-export default class DialogueSpeakerRenderer {
+export class QuizSpeakerRenderer {
   private currentSpeakerId?: string;
   private speakerSprite?: Phaser.GameObjects.Image;
   private speakerSpriteBox?: Phaser.GameObjects.Container;
@@ -32,7 +32,7 @@ export default class DialogueSpeakerRenderer {
     if (newSpeakerDetail === undefined) return;
 
     this.currentSpeakerId &&
-      GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Speaker, Layer.SpeakerBox]);
+      GameGlobalAPI.getInstance().clearSeveralLayers([Layer.QuizSpeaker, Layer.QuizSpeakerBox]);
     this.showNewSpeaker(newSpeakerDetail);
   }
 
@@ -52,7 +52,7 @@ export default class DialogueSpeakerRenderer {
             GameGlobalAPI.getInstance().getCharacterById(speakerId).name,
             GamePosition.Left
           );
-    GameGlobalAPI.getInstance().addToLayer(Layer.SpeakerBox, speakerContainer);
+    GameGlobalAPI.getInstance().addToLayer(Layer.QuizSpeakerBox, speakerContainer);
   }
 
   private drawSpeakerSprite({ speakerId, speakerPosition, expression }: SpeakerDetail) {
@@ -66,7 +66,7 @@ export default class DialogueSpeakerRenderer {
       speakerPosition
     );
     this.speakerSprite = speakerSprite;
-    GameGlobalAPI.getInstance().addToLayer(Layer.Speaker, speakerSprite);
+    GameGlobalAPI.getInstance().addToLayer(Layer.QuizSpeaker, speakerSprite);
   }
 
   private createSpeakerBox(text: string, position: GamePosition) {
@@ -82,7 +82,7 @@ export default class DialogueSpeakerRenderer {
     const speakerText = createBitmapText(
       gameManager,
       '',
-      DialogueConstants.speakerTextConfig,
+      QuizConstants.speakerTextConfig,
       speakerTextStyle
     );
 

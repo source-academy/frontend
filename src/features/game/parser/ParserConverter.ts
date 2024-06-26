@@ -59,13 +59,17 @@ const stringToActionTypeMap = {
   show_object_layer: GameActionType.ShowObjectLayer,
   navigate_to_assessment: GameActionType.NavigateToAssessment,
   update_assessment_status: GameActionType.UpdateAssessmentStatus,
-  delay: GameActionType.Delay
+  delay: GameActionType.Delay,
+  show_quiz: GameActionType.ShowQuiz
 };
 
 const stringToGameStateStorageMap = {
   checklist: GameStateStorage.ChecklistState,
   tasklist: GameStateStorage.TasklistState,
-  userstate: GameStateStorage.UserState
+  userstate: GameStateStorage.UserState,
+  attemptedQuiz: GameStateStorage.AttemptedQuizState,
+  passedQuiz: GameStateStorage.PassedQuizState,
+  quizScore: GameStateStorage.QuizScoreState
 };
 
 const stringToUserStateTypeMap = {

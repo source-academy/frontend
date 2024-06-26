@@ -33,6 +33,7 @@ class GameStateManager {
   private checkpointObjective: GameObjective;
   private checkpointTask: GameTask;
   private chapterNewlyCompleted: boolean;
+  private quizScores: Map<ItemId, number>;
 
   // Triggered Interactions
   private updatedLocations: Set<LocationId>;
@@ -46,6 +47,7 @@ class GameStateManager {
     this.checkpointObjective = gameCheckpoint.objectives;
     this.checkpointTask = gameCheckpoint.tasks;
     this.chapterNewlyCompleted = false;
+    this.quizScores = new Map<ItemId, number>();
 
     this.updatedLocations = new Set(this.gameMap.getLocationIds());
     this.triggeredInteractions = new Map<ItemId, boolean>();
@@ -81,6 +83,8 @@ class GameStateManager {
         this.checkpointTask.setTask(task, false);
         this.checkpointTask.showTask(task);
       });
+
+    this.quizScores = new Map(this.getSaveManager().getQuizScores());
 
     this.chapterNewlyCompleted = this.getSaveManager().getChapterNewlyCompleted();
   }
@@ -455,6 +459,52 @@ class GameStateManager {
   }
 
   ///////////////////////////////
+  //          Quiz             //
+  ///////////////////////////////
+
+  /**
+   * Checks whether a quiz has been obtained full marks.
+   *
+   * @param key quiz id
+   * @returns {boolean}
+   */
+  public isQuizComplete(quizId: string): boolean {
+    return this.quizScores.get(quizId) === GameGlobalAPI.getInstance().getQuizLength(quizId);
+  }
+
+  /**
+   * Checks whether a specific quiz has been played.
+   *
+   * @param key quiz id
+   * @returns {boolean}
+   */
+  public isQuizAttempted(quizId: string): boolean {
+    return this.quizScores.has(quizId);
+  }
+
+  /**
+   * Get the score of a quiz.
+   * Return 0 if the quiz has not been played.
+   *
+   * @param quizId
+   * @returns
+   */
+  public getQuizScore(quizId: ItemId): number {
+    const score = this.quizScores.get(quizId);
+    return score ?? 0;
+  }
+
+  /**
+   * Set the score of a quiz to a given number.
+   *
+   * @param quizId The id of the quiz.
+   * @param newScore The new score to be set.
+   */
+  public setQuizScore(quizId: string, newScore: number) {
+    this.quizScores.set(quizId, newScore);
+  }
+
+  ///////////////////////////////
   //          Saving           //
   ///////////////////////////////
 
@@ -502,6 +552,16 @@ class GameStateManager {
    */
   public getTriggeredStateChangeActions(): string[] {
     return this.triggeredStateChangeActions;
+  }
+
+  /**
+   * Return an array containing [string, number] pairs
+   * representing quizzes and the corresponding scores.
+   *
+   * @returns {[string, number][]}
+   */
+  public getQuizScores(): [string, number][] {
+    return [...this.quizScores];
   }
 
   public getGameMap = () => this.gameMap;

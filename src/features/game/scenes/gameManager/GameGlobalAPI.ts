@@ -14,6 +14,7 @@ import { AnyId, GameItemType, GameLocation, LocationId } from '../../location/Ga
 import { GameMode } from '../../mode/GameModeTypes';
 import { ObjectProperty } from '../../objects/GameObjectTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
+import { Quiz } from '../../quiz/GameQuizType';
 import { SettingsJson } from '../../save/GameSaveTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { StateObserver, UserStateType } from '../../state/GameStateTypes';
@@ -283,6 +284,10 @@ class GameGlobalAPI {
     await this.getGameManager().getDialogueManager().showDialogue(dialogueId);
   }
 
+  public async showNextLine(resolve: () => void) {
+    await this.getGameManager().getDialogueManager().showNextLine(resolve);
+  }
+
   /////////////////////
   //   Storage      //
   /////////////////////
@@ -501,8 +506,41 @@ class GameGlobalAPI {
   public getBBoxById(bboxId: ItemId): BBoxProperty {
     return mandatory(this.getGameMap().getBBoxPropMap().get(bboxId));
   }
+
+  public getQuizById(quizId: ItemId): Quiz {
+    return mandatory(this.getGameMap().getQuizMap().get(quizId));
+  }
+
   public getAssetByKey(assetKey: AssetKey) {
     return this.getGameMap().getAssetByKey(assetKey);
+  }
+
+  /////////////////////
+  //      Quiz       //
+  /////////////////////
+
+  public async showQuiz(quizId: ItemId) {
+    await this.getGameManager().getQuizManager().showQuiz(quizId);
+  }
+
+  public getQuizLength(quizId: ItemId): number {
+    return this.getGameManager().getQuizManager().getNumOfQns(quizId);
+  }
+
+  public isQuizAttempted(key: string): boolean {
+    return this.getGameManager().getStateManager().isQuizAttempted(key);
+  }
+
+  public isQuizComplete(key: string): boolean {
+    return this.getGameManager().getStateManager().isQuizComplete(key);
+  }
+
+  public setQuizScore(key: string, score: number): void {
+    this.getGameManager().getStateManager().setQuizScore(key, score);
+  }
+
+  public getQuizScore(key: string): number {
+    return this.getGameManager().getStateManager().getQuizScore(key);
   }
 }
 
