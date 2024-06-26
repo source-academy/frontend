@@ -1,4 +1,4 @@
-import { Dialog, DialogBody, DialogFooter, Intent } from '@blueprintjs/core';
+import { Dialog, DialogBody, DialogFooter, Intent, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useCallback, useState } from 'react';
 
@@ -24,7 +24,9 @@ const DeleteCell: React.FC<Props> = ({ handleDeleteAssessment, data }) => {
 
   return (
     <>
-      <ControlButton icon={IconNames.TRASH} onClick={handleOpenDialog} />
+      <Tooltip content="Delete" placement="top">
+        <ControlButton icon={IconNames.TRASH} onClick={handleOpenDialog} />
+      </Tooltip>
       <Dialog
         icon={IconNames.WARNING_SIGN}
         isOpen={isDialogOpen}

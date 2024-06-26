@@ -6,17 +6,25 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { NotificationConfiguration, TimeOption } from 'src/commons/application/types/SessionTypes';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession } from 'src/commons/utils/Hooks';
 
 import BooleanCell from './assessmentConfigPanel/BooleanCell';
 import SelectCell from './notificationConfigPanel/SelectCell';
 import TimeOptionCell from './notificationConfigPanel/TimeOptionCell';
 
-const NotificationConfigPanel = () => {
+const defaultColumnDefs: ColDef = {
+  flex: 1,
+  minWidth: 70,
+  filter: false,
+  resizable: true,
+  sortable: false
+};
+
+const NotificationConfigPanel: React.FC = () => {
   const gridApi = React.useRef<GridApi>();
 
   const dispatch = useDispatch();
-  const session = useTypedSelector(state => state.session);
+  const session = useSession();
 
   /**
    * Mutable ref to track the assessment configuration form state instead of useState. This is
@@ -143,15 +151,8 @@ const NotificationConfigPanel = () => {
     }
   ];
 
-  const defaultColumnDefs = {
-    filter: false,
-    resizable: true,
-    sortable: false
-  };
-
   const onGridReady = (params: GridReadyEvent) => {
     gridApi.current = params.api;
-    params.api.sizeColumnsToFit();
   };
 
   // Handler to submit changes to Notification Configration to the backend.
@@ -191,7 +192,6 @@ const NotificationConfigPanel = () => {
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
-        onGridSizeChanged={() => gridApi.current?.sizeColumnsToFit()}
         rowData={notificationConfig.current}
         rowHeight={36}
         rowDragManaged={true}

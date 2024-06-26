@@ -58,7 +58,7 @@ const massPublishingChanges = (
     keyID: '2',
     callbackFn: publishAll,
     data: data,
-    change: 'Publish graded submissions',
+    change: 'Publish all graded submissions',
     description: 'Ungraded or already-published submissions are not affected.',
     icon: IconNames.ENDORSED
   }

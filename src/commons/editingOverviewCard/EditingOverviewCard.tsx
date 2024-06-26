@@ -3,6 +3,7 @@ import {
   Card,
   Classes,
   Dialog,
+  DialogBody,
   Elevation,
   H3,
   H4,
@@ -179,7 +180,7 @@ export const EditingOverviewCard: React.FC<EditingOverviewCardProps> = props => 
       onClose={toggleOptionsOverlay}
       title="Other options"
     >
-      <div className={Classes.DIALOG_BODY}>
+      <DialogBody>
         <H3>Assessment Type</H3>
         {assessmentTypeSelect(props.overview.type, saveCategory)}
         <H3>Number</H3>
@@ -201,7 +202,7 @@ export const EditingOverviewCard: React.FC<EditingOverviewCardProps> = props => 
             ? makeEditingOverviewTextarea('fileName')
             : createPlaceholder(props.overview.fileName || '')}
         </div>
-      </div>
+      </DialogBody>
     </Dialog>
   );
 

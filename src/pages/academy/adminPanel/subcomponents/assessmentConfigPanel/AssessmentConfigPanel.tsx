@@ -47,6 +47,14 @@ type Props = {
   setHasChangesAssessmentConfig: (val: boolean) => void;
 };
 
+const defaultColumnDefs: ColDef = {
+  flex: 3,
+  minWidth: 70,
+  filter: false,
+  resizable: true,
+  sortable: false
+};
+
 const AssessmentConfigPanel: WithImperativeApi<
   ImperativeAssessmentConfigPanel,
   React.FC<Props>
@@ -230,14 +238,14 @@ const AssessmentConfigPanel: WithImperativeApi<
           }
         },
         {
-          headerName: 'Delete Row',
+          headerName: 'Delete',
           field: 'placeholderToPreventColumnRerender' as any,
           cellRenderer: DeleteRowCell,
           cellRendererParams: {
             deleteRowHandler: deleteRowHandler
           },
-          maxWidth: 120,
-          resizable: false
+          resizable: false,
+          flex: 2
         }
       ],
       [
@@ -249,12 +257,6 @@ const AssessmentConfigPanel: WithImperativeApi<
         setHoursBeforeDecay
       ]
     );
-
-    const defaultColumnDefs = {
-      filter: false,
-      resizable: true,
-      sortable: false
-    };
 
     // Tracks the movement of rows in our local React state while dragging
     const onRowDragMove = useCallback(
@@ -297,7 +299,6 @@ const AssessmentConfigPanel: WithImperativeApi<
 
     const onGridReady = (params: GridReadyEvent) => {
       gridApi.current = params.api;
-      params.api.sizeColumnsToFit();
     };
 
     const grid = (
@@ -307,7 +308,6 @@ const AssessmentConfigPanel: WithImperativeApi<
           columnDefs={columnDefs}
           defaultColDef={defaultColumnDefs}
           onGridReady={onGridReady}
-          onGridSizeChanged={() => gridApi.current?.sizeColumnsToFit()}
           rowData={tableState.current}
           rowHeight={36}
           rowDragManaged={true}

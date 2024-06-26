@@ -12,7 +12,7 @@ import {
   Position
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { GridApi, GridReadyEvent } from 'ag-grid-community';
+import { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { uniqBy } from 'lodash';
 import React from 'react';
@@ -31,36 +31,23 @@ export type UsernameRoleGroup = {
   group?: string;
 };
 
+const columnDefs: ColDef<UsernameRoleGroup>[] = [
+  { headerName: 'Username', field: 'username' },
+  { headerName: 'Role', field: 'role' },
+  { headerName: 'Group', field: 'group' }
+];
+
+const defaultColumnDefs: ColDef = {
+  flex: 1,
+  filter: true,
+  resizable: true,
+  sortable: true
+};
+
 const AddUserPanel: React.FC<Props> = props => {
   const [users, setUsers] = React.useState<UsernameRoleGroup[]>([]);
   const [invalidCsvMsg, setInvalidCsvMsg] = React.useState<string | JSX.Element>('');
-  const gridApi = React.useRef<GridApi>();
   const { CSVReader } = useCSVReader();
-
-  const columnDefs = [
-    {
-      headerName: 'Username',
-      field: 'username'
-    },
-    {
-      headerName: 'Role',
-      field: 'role'
-    },
-    {
-      headerName: 'Group',
-      field: 'group'
-    }
-  ];
-
-  const defaultColumnDefs = {
-    filter: true,
-    resizable: true,
-    sortable: true
-  };
-
-  const onGridReady = (params: GridReadyEvent) => {
-    gridApi.current = params.api;
-  };
 
   const grid = (
     <div className="Grid ag-grid-parent ag-theme-balham">
@@ -68,8 +55,6 @@ const AddUserPanel: React.FC<Props> = props => {
         domLayout="autoHeight"
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
-        onGridReady={onGridReady}
-        onGridSizeChanged={() => gridApi.current?.sizeColumnsToFit()}
         rowData={users}
         rowHeight={36}
         suppressCellFocus={true}

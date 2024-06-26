@@ -1,4 +1,4 @@
-import { Card, Classes, Dialog, H1, InputGroup } from '@blueprintjs/core';
+import { Card, Dialog, DialogBody, DialogFooter, H1, InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 import Recorder from 'yareco';
@@ -126,7 +126,7 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
           title="Upload Sourcecast"
           canOutsideClickClose={true}
         >
-          <div className={Classes.DIALOG_BODY}>
+          <DialogBody>
             <InputGroup
               id="title"
               leftIcon={IconNames.HEADER}
@@ -150,21 +150,23 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
               placeholder="UID (optional, only alphanumeric, dash and underscore allowed)"
               value={this.state.saveUID}
             />
-          </div>
-          <div className={Classes.DIALOG_FOOTER}>
-            <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-              <ControlButton
-                label="Confirm Upload"
-                icon={IconNames.TICK}
-                onClick={this.handleRecorderSaving}
-              />
-              <ControlButton
-                label="Cancel"
-                icon={IconNames.CROSS}
-                onClick={this.handleCloseDialog}
-              />
-            </div>
-          </div>
+          </DialogBody>
+          <DialogFooter
+            actions={
+              <>
+                <ControlButton
+                  label="Confirm Upload"
+                  icon={IconNames.TICK}
+                  onClick={this.handleRecorderSaving}
+                />
+                <ControlButton
+                  label="Cancel"
+                  icon={IconNames.CROSS}
+                  onClick={this.handleCloseDialog}
+                />
+              </>
+            }
+          />
         </Dialog>
         <br />
         <div className="Timer">
