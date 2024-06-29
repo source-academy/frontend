@@ -176,7 +176,7 @@
     "typescript": "^5.4.3",
     "typescript-eslint": "^7.8.0",
     "url": "^0.11.1",
-    "vite": "^5.2.11",
+    "vite": "^5.3.2",
     "vite-plugin-svgr": "^4.2.0",
     "vite-plugin-wasm": "^3.3.0",
     "vite-tsconfig-paths": "^4.3.2",
