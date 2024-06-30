@@ -1,4 +1,4 @@
-import { Button, ButtonGroup, Classes, Dialog, Intent } from '@blueprintjs/core';
+import { Button, Dialog, DialogBody, DialogFooter, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -120,26 +120,28 @@ const ManageQuestionTab: React.FC<ManageQuestionTabProps> = props => {
       isOpen={showSaveOverlay}
       title="Confirmation: Save unsaved changes?"
     >
-      <div className={Classes.DIALOG_BODY}>
+      <DialogBody>
         <Markdown content="Are you sure you want to save over your unsaved changes?" />
-      </div>
-      <div className={Classes.DIALOG_FOOTER}>
-        <ButtonGroup>
-          <ControlButton
-            label="Cancel"
-            onClick={() => setShowSaveOverlay(false)}
-            options={{ minimal: false }}
-          />
-          <ControlButton
-            label="Confirm"
-            onClick={() => {
-              modifyAssessment();
-              setShowSaveOverlay(false);
-            }}
-            options={{ minimal: false, intent: Intent.DANGER }}
-          />
-        </ButtonGroup>
-      </div>
+      </DialogBody>
+      <DialogFooter
+        actions={
+          <>
+            <ControlButton
+              label="Cancel"
+              onClick={() => setShowSaveOverlay(false)}
+              options={{ minimal: false }}
+            />
+            <ControlButton
+              label="Confirm"
+              onClick={() => {
+                modifyAssessment();
+                setShowSaveOverlay(false);
+              }}
+              options={{ minimal: false, intent: Intent.DANGER }}
+            />
+          </>
+        }
+      />
     </Dialog>
   );
 

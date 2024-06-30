@@ -11,16 +11,24 @@ import {
   TimeOption
 } from 'src/commons/application/types/SessionTypes';
 import ContentDisplay from 'src/commons/ContentDisplay';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession } from 'src/commons/utils/Hooks';
 
 import BooleanCell from './subcomponents/BooleanCell';
 import SelectCell from './subcomponents/SelectCell';
+
+const defaultColumnDefs: ColDef = {
+  flex: 1,
+  minWidth: 70,
+  filter: false,
+  resizable: true,
+  sortable: false
+};
 
 const NotiPreference: React.FC = () => {
   const gridApi = React.useRef<GridApi>();
 
   const dispatch = useDispatch();
-  const session = useTypedSelector(state => state.session);
+  const session = useSession();
 
   const [hasChanges, setHasChanges] = useState(false);
 
@@ -120,15 +128,8 @@ const NotiPreference: React.FC = () => {
     }
   ];
 
-  const defaultColumnDefs = {
-    filter: false,
-    resizable: true,
-    sortable: false
-  };
-
   const onGridReady = (params: GridReadyEvent) => {
     gridApi.current = params.api;
-    params.api.sizeColumnsToFit();
   };
 
   const submitHandler = () => {
@@ -155,7 +156,6 @@ const NotiPreference: React.FC = () => {
           columnDefs={columnDefs}
           defaultColDef={defaultColumnDefs}
           onGridReady={onGridReady}
-          onGridSizeChanged={() => gridApi.current?.sizeColumnsToFit()}
           rowData={configurableNotificationConfigs.current}
           rowHeight={36}
           rowDragManaged={true}
