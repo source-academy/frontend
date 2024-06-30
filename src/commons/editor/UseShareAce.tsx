@@ -1,8 +1,12 @@
+import '@convergencelabs/ace-collab-ext/dist/css/ace-collab-ext.css';
+
+import { AceMultiCursorManager } from '@convergencelabs/ace-collab-ext';
 import * as Sentry from '@sentry/browser';
 import sharedbAce from '@sourceacademy/sharedb-ace';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { getDocInfoFromSessionId, getSessionUrl } from '../collabEditing/CollabEditingHelper';
+import { useSession } from '../utils/Hooks';
 import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
 import { EditorHook } from './Editor';
 
@@ -21,20 +25,27 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
   const { editorSessionId, sessionDetails } = inProps;
 
+  const { name } = useSession();
+
+  const user = useMemo(() => ({ name, color: getColor() }), [name]);
+
   React.useEffect(() => {
     if (!editorSessionId || !sessionDetails) {
       return;
     }
 
     const editor = reactAceRef.current!.editor;
+    const cursorManager = new AceMultiCursorManager(editor.getSession());
     const ShareAce = new sharedbAce(sessionDetails.docId, {
+      user,
+      cursorManager,
       WsUrl: getSessionUrl(editorSessionId, true),
       pluginWsUrl: null,
       namespace: 'sa'
     });
 
     ShareAce.on('ready', () => {
-      ShareAce.add(editor, ['contents'], []);
+      ShareAce.add(editor, cursorManager, ['contents'], []);
       propsRef.current.handleSetSharedbConnected!(true);
 
       // Disables editor in a read-only session
@@ -87,8 +98,23 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
       // Resets editor to normal after leaving the session
       editor.setReadOnly(false);
+
+      // Removes all cursors
+      cursorManager.removeAll();
     };
-  }, [editorSessionId, sessionDetails, reactAceRef]);
+  }, [editorSessionId, sessionDetails, reactAceRef, user]);
 };
+
+function getColor() {
+  return (
+    'hsl(' +
+    360 * Math.random() +
+    ',' +
+    (25 + 70 * Math.random()) +
+    '%,' +
+    (50 + 20 * Math.random()) +
+    '%)'
+  );
+}
 
 export default useShareAce;

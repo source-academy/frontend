@@ -104,6 +104,7 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-typescript": "^7.24.1",
     "@babel/runtime": "^7.24.5",
+    "@convergencelabs/ace-collab-ext": "^0.6.0",
     "@craco/craco": "^7.1.0",
     "@svgr/webpack": "^8.0.0",
     "@testing-library/jest-dom": "^6.0.0",
