@@ -3,10 +3,10 @@ import '@convergencelabs/ace-collab-ext/dist/css/ace-collab-ext.css';
 import { AceMultiCursorManager } from '@convergencelabs/ace-collab-ext';
 import * as Sentry from '@sentry/browser';
 import sharedbAce from '@sourceacademy/sharedb-ace';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { getDocInfoFromSessionId, getSessionUrl } from '../collabEditing/CollabEditingHelper';
-import { useTypedSelector } from '../utils/Hooks';
+import { useSession } from '../utils/Hooks';
 import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
 import { EditorHook } from './Editor';
 
@@ -25,10 +25,9 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
   const { editorSessionId, sessionDetails } = inProps;
 
-  const user = {
-    name: useTypedSelector(state => state.session.name),
-    color: getColor()
-  };
+  const { name } = useSession();
+
+  const user = useMemo(() => ({ name, color: getColor() }), [name]);
 
   React.useEffect(() => {
     if (!editorSessionId || !sessionDetails) {
@@ -103,8 +102,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       // Removes all cursors
       cursorManager.removeAll();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editorSessionId, sessionDetails, reactAceRef]);
+  }, [editorSessionId, sessionDetails, reactAceRef, user]);
 };
 
 function getColor() {
