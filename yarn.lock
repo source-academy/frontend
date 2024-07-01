@@ -2394,10 +2394,10 @@
     peggy "^3.0.2"
     wabt "^1.0.32"
 
-"@sourceacademy/sharedb-ace@^2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@sourceacademy/sharedb-ace/-/sharedb-ace-2.0.2.tgz#1789fddf947bcd55da39ff76c93b4ecf7382860f"
-  integrity sha512-PR6sTpQS8W77hMiJf1R3QzGWvV1/lbT/XuJuaCD1DWKVRFY8t3uWkxYSqaoeURK9KW4EWm9YM1DMSif9dPxkCA==
+"@sourceacademy/sharedb-ace@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@sourceacademy/sharedb-ace/-/sharedb-ace-2.0.3.tgz#21d653c5a845c33c817fb9543e8e80e523d2a8e5"
+  integrity sha512-KuLm3szb90aYPRe3zdBP1BuUZQ4TuZ/Wzm1Xq5P415AQBQ5KyC2o0kWmzk/LeNehcUNZNInA7UJFhBYowtVRCw==
   dependencies:
     event-emitter-es6 "^1.1.5"
     logdown "^3.3.1"

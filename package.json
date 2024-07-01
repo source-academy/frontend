@@ -35,7 +35,7 @@
     "@reduxjs/toolkit": "^1.9.7",
     "@sentry/browser": "^7.57.0",
     "@sourceacademy/c-slang": "^1.0.20",
-    "@sourceacademy/sharedb-ace": "^2.0.2",
+    "@sourceacademy/sharedb-ace": "^2.0.3",
     "@sourceacademy/sling-client": "^0.1.0",
     "@szhsin/react-menu": "^4.0.0",
     "@tanstack/react-table": "^8.9.3",
@@ -100,7 +100,6 @@
     "yareco": "^0.1.5"
   },
   "devDependencies": {
-    "//": "See: https://github.com/facebook/react/issues/28313#issuecomment-2076798972, https://github.com/t3-oss/create-t3-turbo/issues/984#issuecomment-2076413457",
     "@babel/core": "^7.24.5",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-typescript": "^7.24.1",
@@ -143,6 +142,7 @@
     "cross-env": "^7.0.3",
     "eslint": "^9.1.1",
     "eslint-plugin-react": "^7.34.1",
+    "//": "See: https://github.com/facebook/react/issues/28313#issuecomment-2076798972, https://github.com/t3-oss/create-t3-turbo/issues/984#issuecomment-2076413457",
     "eslint-plugin-react-hooks": "5.1.0-canary-cb151849e1-20240424",
     "eslint-plugin-react-refresh": "^0.4.6",
     "eslint-plugin-simple-import-sort": "^12.0.0",
