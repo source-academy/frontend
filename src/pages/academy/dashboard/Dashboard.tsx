@@ -1,7 +1,7 @@
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-balham.css';
 
-import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
+import { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { startCase } from 'lodash';
 import React from 'react';
@@ -12,6 +12,7 @@ import ContentDisplay from '../../../commons/ContentDisplay';
 import { fetchGroupGradingSummary } from '../../../features/dashboard/DashboardActions';
 
 const defaultColumnDefs: ColDef = {
+  flex: 1,
   filter: true,
   resizable: true,
   sortable: true
@@ -20,18 +21,6 @@ const defaultColumnDefs: ColDef = {
 const Dashboard: React.FC = () => {
   const dispatch = useDispatch();
   const gradingSummary = useTypedSelector(state => state.dashboard.gradingSummary);
-
-  let gridApi: GridApi | undefined;
-
-  const onGridReady = (params: GridReadyEvent) => {
-    gridApi = params.api;
-  };
-
-  const resizeGrid = () => {
-    if (gridApi) {
-      gridApi.sizeColumnsToFit();
-    }
-  };
 
   const columnDefs = gradingSummary.cols.map(e => {
     return {
@@ -47,8 +36,6 @@ const Dashboard: React.FC = () => {
           domLayout="autoHeight"
           columnDefs={columnDefs}
           defaultColDef={defaultColumnDefs}
-          onGridReady={onGridReady}
-          onGridSizeChanged={resizeGrid}
           rowData={gradingSummary.rows}
           rowHeight={30}
           suppressCellFocus={true}

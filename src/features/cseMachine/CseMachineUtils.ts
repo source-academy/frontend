@@ -824,24 +824,6 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
-      case InstrType.GENERATE_CONT:
-        return new ControlItemComponent(
-          'generate cont',
-          'Generate continuation',
-          stackHeight,
-          highlightOnHover,
-          unhighlightOnHover,
-          topItem
-        );
-      case InstrType.RESUME_CONT:
-        return new ControlItemComponent(
-          'call cont',
-          'call a continuation',
-          stackHeight,
-          highlightOnHover,
-          unhighlightOnHover,
-          topItem
-        );
       default:
         return new ControlItemComponent(
           'INSTRUCTION',
