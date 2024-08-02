@@ -11,6 +11,10 @@ env:
   NODE_OPTIONS: --max_old_space_size=8192
   GENERATE_SOURCEMAP: false
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+  
 jobs:
   lint:
     runs-on: ubuntu-latest
