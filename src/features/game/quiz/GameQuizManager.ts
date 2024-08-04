@@ -77,7 +77,7 @@ export default class QuizManager {
   public async showQuizQuestion(scene: Phaser.Scene, question: Question) {
     const choices = question.options;
     const quizContainer = new Phaser.GameObjects.Container(scene, 0, 0);
-
+    const selfQuestionPrompt = question.prompt ?? questionPrompt;
     const quizPartitions = Math.ceil(choices.length / 5);
     const quizHeight = choices.length;
 
@@ -96,7 +96,7 @@ export default class QuizManager {
       scene,
       screenSize.x - QuizConstants.textPad,
       QuizConstants.y,
-      questionPrompt,
+      selfQuestionPrompt,
       quizTextStyle
     ).setOrigin(1.0, 0.0);
 

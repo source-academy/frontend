@@ -7,6 +7,7 @@ export type Quiz = {
 
 export type Question = {
   question: string;
+  prompt?: string;
   speaker: SpeakerDetail;
   answer: Number;
   options: Option[];
