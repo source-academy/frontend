@@ -6,11 +6,16 @@ import { request } from 'src/commons/utils/RequestHelper';
  */
 export async function chat(
   tokens: Tokens,
+  chatId: string,
   payload: { role: string; content: string }[]
 ): Promise<string> {
   const response = await request(`chat`, 'POST', {
     ...tokens,
-    body: { json: payload }
+    body: {
+      conversationId: chatId,
+      context: payload,
+      userMessage: payload[payload.length - 1]
+    }
   });
   if (!response) {
     throw new Error('Unknown error occurred.');
