@@ -1,6 +1,7 @@
 import { call } from 'redux-saga/effects';
 import { backendParamsToProgressStatus } from 'src/features/grading/GradingUtils';
 import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
+import XLSX from 'xlsx';
 
 import {
   AchievementGoal,
@@ -59,9 +60,6 @@ import { castLibrary } from '../utils/CastBackend';
 import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { request } from '../utils/RequestHelper';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const XLSX = require('xlsx');
 
 /**
  * GET /

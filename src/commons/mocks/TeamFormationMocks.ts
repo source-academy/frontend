@@ -1,11 +1,9 @@
 import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
+import XLSX from 'xlsx';
 
 import { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
 import { Role } from '../application/ApplicationTypes';
 import { mockFetchRole, mockFetchStudents } from './UserMocks';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const XLSX = require('xlsx');
 
 export const mockTeamFormationOverviews: TeamFormationOverview[] = [
   {
