@@ -1,7 +1,8 @@
 import {
-  ButtonGroup,
   Classes,
   Dialog,
+  DialogBody,
+  DialogFooter,
   Intent,
   NonIdealState,
   Spinner,
@@ -214,31 +215,33 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
       isOpen={showResetTemplateOverlay}
       title="Confirmation: Reset editor?"
     >
-      <div className={Classes.DIALOG_BODY}>
+      <DialogBody>
         <Markdown content="Are you sure you want to reset to your last save?" />
-      </div>
-      <div className={Classes.DIALOG_FOOTER}>
-        <ButtonGroup>
-          <ControlButton
-            label="Cancel"
-            onClick={() => setShowResetTemplateOverlay(false)}
-            options={{ minimal: false }}
-          />
-          <ControlButton
-            label="Confirm"
-            onClick={() => {
-              const assessment = retrieveLocalAssessment()!;
-              setAssessment(assessment);
-              setHasUnsavedChanges(false);
-              setShowResetTemplateOverlay(false);
-              setOriginalMaxXp(getMaxXp());
-              handleRefreshLibrary();
-              resetWorkspaceValues();
-            }}
-            options={{ minimal: false, intent: Intent.DANGER }}
-          />
-        </ButtonGroup>
-      </div>
+      </DialogBody>
+      <DialogFooter
+        actions={
+          <>
+            <ControlButton
+              label="Cancel"
+              onClick={() => setShowResetTemplateOverlay(false)}
+              options={{ minimal: false }}
+            />
+            <ControlButton
+              label="Confirm"
+              onClick={() => {
+                const assessment = retrieveLocalAssessment()!;
+                setAssessment(assessment);
+                setHasUnsavedChanges(false);
+                setShowResetTemplateOverlay(false);
+                setOriginalMaxXp(getMaxXp());
+                handleRefreshLibrary();
+                resetWorkspaceValues();
+              }}
+              options={{ minimal: false, intent: Intent.DANGER }}
+            />
+          </>
+        }
+      />
     </Dialog>
   );
 

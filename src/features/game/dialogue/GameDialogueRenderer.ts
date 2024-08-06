@@ -68,6 +68,24 @@ class DialogueRenderer {
   }
 
   /**
+   * Hide the dialoguebox
+   */
+  public async hide() {
+    this.typewriter.container.setVisible(false);
+    this.dialogueBox.setVisible(false);
+    this.blinkingDiamond.container.setVisible(false);
+  }
+
+  /**
+   * Make the dialoguebox visible
+   */
+  public async show() {
+    this.typewriter.container.setVisible(true);
+    this.dialogueBox.setVisible(true);
+    this.blinkingDiamond.container.setVisible(true);
+  }
+
+  /**
    * Change the text written in the box
    */
   public changeText(message: string) {

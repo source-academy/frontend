@@ -15,6 +15,13 @@ type Props = {
   handleDeleteStoriesUserFromUserGroup: (id: number) => void;
 };
 
+const defaultColumnDefs: ColDef = {
+  flex: 1,
+  filter: true,
+  resizable: true,
+  sortable: true
+};
+
 /**
  * Only admins can access this panel.
  * - Admins cannot be deleted
@@ -30,15 +37,8 @@ const StoriesUserConfigPanel: React.FC<Props> = props => {
   );
 
   const columnDefs: ColDef<AdminPanelStoriesUser>[] = [
-    {
-      headerName: 'Name',
-      field: 'name',
-      sort: 'asc'
-    },
-    {
-      headerName: 'Username',
-      field: 'username'
-    },
+    { headerName: 'Name', field: 'name', sort: 'asc' },
+    { headerName: 'Username', field: 'username' },
     {
       headerName: 'Role',
       field: 'role',
@@ -46,8 +46,7 @@ const StoriesUserConfigPanel: React.FC<Props> = props => {
       cellRendererParams: {
         id: props.userId,
         handleUpdateStoriesUserRole: props.handleUpdateStoriesUserRole
-      },
-      width: 110
+      }
     },
     {
       headerName: 'Actions',
@@ -56,17 +55,10 @@ const StoriesUserConfigPanel: React.FC<Props> = props => {
       cellRendererParams: {
         handleDeleteStoriesUserFromUserGroup: props.handleDeleteStoriesUserFromUserGroup
       },
-      width: 120,
       filter: false,
       resizable: false
     }
   ];
-
-  const defaultColumnDefs = {
-    filter: true,
-    resizable: true,
-    sortable: true
-  };
 
   const onGridReady = (params: GridReadyEvent) => {
     gridApi.current = params.api;
@@ -79,7 +71,6 @@ const StoriesUserConfigPanel: React.FC<Props> = props => {
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
-        onGridSizeChanged={() => gridApi.current?.sizeColumnsToFit()}
         rowData={storiesUsers}
         rowHeight={36}
         suppressCellFocus={true}
@@ -92,7 +83,7 @@ const StoriesUserConfigPanel: React.FC<Props> = props => {
   return (
     <div className="users-configuration">
       <div className="users-header-container">
-        <H2>Users</H2>
+        <H2>Stories Users</H2>
         <Button
           text="Export as CSV"
           className="export-csv-button"

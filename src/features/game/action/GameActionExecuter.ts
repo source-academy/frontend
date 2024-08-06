@@ -102,6 +102,11 @@ export default class GameActionExecuter {
       case GameActionType.Delay:
         await sleep(actionParams.duration);
         return;
+      case GameActionType.ShowQuiz:
+        globalAPI.enableKeyboardInput(false);
+        await globalAPI.showQuiz(actionParams.id);
+        globalAPI.enableKeyboardInput(true);
+        return;
       default:
         return;
     }
@@ -141,6 +146,7 @@ export default class GameActionExecuter {
       case GameActionType.PlaySFX:
       case GameActionType.ShowObjectLayer:
       case GameActionType.Delay:
+      case GameActionType.ShowQuiz:
         return false;
     }
   }
