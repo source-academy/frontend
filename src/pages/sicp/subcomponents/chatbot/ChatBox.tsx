@@ -6,6 +6,7 @@ import { chat } from 'src/features/sicp/chatCompletion/api';
 import { buildPrompt, SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
 import classes from 'src/styles/Chatbot.module.scss';
+import { v4 as uuid } from 'uuid';
 
 type Props = {
   getSection: () => SicpSection;
@@ -29,6 +30,7 @@ const CONTEXT_SIZE = 20;
 const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
   const chatRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [chatId, setChatId] = useState(uuid());
   const [messages, setMessages] = useState<ChatMessage[]>([initialMessage]);
   const [userInput, setUserInput] = useState('');
   const tokens = useTokens();
@@ -71,7 +73,7 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
       })
     ];
 
-    chat(tokens, payload)
+    chat(tokens, chatId, payload)
       .then(text => {
         setMessages(prev => [...prev, { role: 'bot', content: text }]);
       })
@@ -81,10 +83,11 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [getSection, getText, isLoading, messages, tokens]);
+  }, [chatId, getSection, getText, isLoading, messages, tokens]);
 
   const resetChat = () => {
     setMessages([initialMessage]);
+    setChatId(uuid());
   };
 
   const keyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
