@@ -465,57 +465,349 @@
   }
 }
 
+// Grading Section
+.grading-overview-unfilterable-btns,
 .grading-overview-filterable-btns {
-  padding: 0;
+  padding: 0 2px;
+  text-align: inherit;
+  outline: none;
+  line-height: 1.5;
 
-  // Hides overflowed text for the buttons
+  a {
+    text-decoration: none;
+    color: black;
+  }
+
   &,
   p {
     text-overflow: ellipsis;
     overflow: hidden;
+  }
+}
 
-    // For general filterable buttons
-    & {
-      max-width: 20vw;
-    }
-
-    /* Special case for filtered buttons (those you click to remove filter)
-      -16px for icon
-      -0.875rem for icon margins
-      -1.125rem for additional padding
-    */
-    p {
-      max-width: calc(20vw - 16px - 2rem);
-    }
+.grading-overview-filterable-btns {
+  &:hover:not(:has(> .grading-badge)) {
+    text-decoration: underline;
   }
 
-  // Invisible border for backgroundless buttons
-  &:not(:has(> div)) {
-    text-decoration: none;
+  &:hover:has(> .grading-badge) {
+    filter: brightness(0.75);
+  }
+}
+
+.grading-overview-unfilterable-btns,
+.grading-overview-filterable-btns,
+.grading-overview-rounded-btns {
+  border-radius: 9999px;
+}
+
+.contentdisplay-content-parent:has(div.grading-table-wrapper) {
+  max-width: 100%;
+
+  .contentdisplay-content {
+    min-width: 1200px;
+  }
+}
+
+.grading-table-col-icons {
+  pointer-events: none;
+  opacity: 0;
+  padding: 6px;
+  height: fit-content;
+  line-height: initial !important;
+  border-radius: 5px;
+  margin-right: 2.5px;
+  position: absolute;
+  right: 0;
+
+  &:hover {
+    background-color: #00000022;
+  }
+}
+
+.grading-default-headers {
+  justify-content: space-between;
+  width: 100%;
+  transition: 0.1s ease;
+  cursor: pointer;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+
+  &:not(.grading-left-align) {
+    padding: 0 !important;
+  }
+
+  span.ag-header-cell-text {
+    margin: 0 auto;
+    font-size: 0.8rem;
+    color: #6b7280;
+    font-weight: 600;
+    margin: auto;
+    padding: 0 5px;
   }
 
   &:hover {
-    // Buttons with bg
-    > div > span {
-      // Use of contrast due to unknown background color
-      filter: contrast(0.9);
-    }
+    --ag-header-cell-hover-background-color: #e5e7eb;
+  }
 
-    // Backgroundless buttons
-    &:not(:has(> div)) {
-      text-decoration: underline;
+  &:hover .grading-table-col-icons {
+    pointer-events: all;
+    opacity: 1;
+    position: relative;
+    transition: 0.1s ease;
+  }
+}
+
+.grading-table-header-individual {
+  width: 100%;
+}
+
+.grading-table-rows {
+  &.ag-row-hover {
+    --ag-row-hover-color: #f5f5f5;
+  }
+
+  &.ag-row.ag-row-last {
+    border-bottom: 0px !important;
+  }
+}
+
+.ag-header-cell.grading-left-align {
+  span.ag-header-cell-text {
+    margin: auto auto auto 0px;
+  }
+}
+
+.ag-header-cell.hide-cols-btn {
+  width: 32px;
+  height: 32px;
+}
+
+.grading-filter-btn {
+  padding: 7.5px 15px;
+  border-radius: 25px;
+  margin: 0 15px 0 auto;
+  background-color: #dbeafef5 !important;
+  color: #3b82f6 !important;
+  min-width: fit-content;
+
+  &.grading-filter-btn-on {
+    background-color: #f5f5f5 !important;
+    color: black !important;
+  }
+
+  &:hover {
+    filter: contrast(0.9);
+  }
+}
+
+.grading-def-cell {
+  text-align: center;
+  display: flex !important;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 0.875rem;
+  user-select: text;
+  border: 0px !important;
+
+  &:hover:has(.grading-overview-filterable-btns) {
+    .grading-overview-filterable-btns {
+      &:not(:has(> .grading-badge)) {
+        text-decoration: underline;
+      }
+
+      &:has(> .grading-badge) {
+        filter: brightness(0.75);
+      }
+    }
+  }
+
+  &:active {
+    border-style: outset;
+  }
+
+  &.grading-def-cell-pointer {
+    cursor: pointer;
+  }
+
+  &.grading-def-cell-selectable {
+    cursor: text;
+    border-style: outset;
+  }
+
+  &.grading-cell-align-left {
+    text-align: left !important;
+  }
+
+  &.grading-xp-cell {
+    text-wrap: wrap;
+    line-height: 15px;
+  }
+}
+
+.grading-table-footer {
+  padding-top: 15px;
+  margin-bottom: 15px;
+}
+
+.grading-search-input {
+  max-width: 24rem;
+  width: 100%;
+  margin-left: 0.75rem;
+
+  > input {
+    height: 40px;
+    border-radius: 6px;
+    box-shadow: none;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    font-size: 0.875rem !important;
+
+    &::placeholder {
+      color: #b3b3b3;
     }
   }
 }
 
-.grading-overview-footer-sibling {
-  // Footer component
-  ~ div ~ div {
-    pointer-events: none;
+.grading-badge {
+  border-radius: 9999px;
+  padding: 0.1rem 0.2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  line-height: normal !important;
+  width: fit-content;
+  max-width: max(1200px * 0.2, 20vw);
+  margin: auto;
+  color: rgba(0, 0, 0, 0.7);
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
 
-    // Footer's children
-    > * > * {
-      pointer-events: all;
+  &.grading-badge-xs {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  &.grading-badge-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  &.grading-badge-md {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  &.grading-badge-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  &.grading-badge-xl {
+    padding: 1rem 2rem;
+    font-size: 1.25rem;
+  }
+}
+
+.grading-badge-text {
+  line-height: normal !important;
+  width: fit-content;
+  max-width: max(calc(1200px * 0.2 - 16px - 2rem), calc(20vw - 16px - 2rem));
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.grading-loading-icon {
+  animation: spin 1s linear infinite;
+  margin: 4px;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 48px;
+  height: 48px;
+  border: 4px solid #b3b3b3 !important;
+  border-bottom-color: transparent !important;
+  border-radius: 50%;
+  z-index: 10;
+  color: #374151;
+}
+
+.grading-actions-btn-wrappers {
+  > a {
+    display: flex;
+  }
+}
+
+.grading-action-icons {
+  color: #3b82f6;
+  border-radius: 10px;
+  margin: auto 0;
+  background-color: #7dbcff00;
+  transition: 0.1s ease;
+
+  svg {
+    fill: #3b82f6 !important;
+  }
+
+  &.grading-action-icons-bg {
+    background-color: #7dbcff80;
+
+    &:hover {
+      background-color: #7dbcffb3;
     }
+  }
+
+  .bp5-icon {
+    margin: 6px;
+  }
+
+  .bp5-popover-target {
+    max-height: 32px;
+  }
+}
+
+.grading-table-wrapper {
+  padding: 1rem 1.5rem 0 1.5rem;
+
+  * {
+    border: none;
+    outline: none;
+    text-decoration: none;
+    background-color: transparent;
+  }
+
+  button {
+    cursor: pointer;
+  }
+}
+
+.export-csv-btn {
+  color: #3b82f6 !important;
+
+  svg {
+    fill: #3b82f6 !important;
+  }
+
+  &:hover {
+    text-decoration: underline !important;
+    background-color: transparent !important;
+  }
+}
+
+.grading-refresh-loop {
+  svg {
+    animation: 0.2s ease rotateHalf;
+  }
+  cursor: not-allowed !important;
+  pointer-events: none;
+}
+
+@keyframes rotateHalf {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
   }
 }
