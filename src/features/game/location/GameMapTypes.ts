@@ -48,5 +48,6 @@ export enum GameItemType {
   characters = 'characters',
   actions = 'actions',
   bgmKey = 'bgmKey',
-  collectibles = 'collectibles'
+  collectibles = 'collectibles',
+  quizzes = 'quizzes'
 }

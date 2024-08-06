@@ -185,6 +185,11 @@ export default class ActionParser {
       case GameActionType.Delay:
         actionParamObj.duration = parseInt(actionParams[0]) * 1000;
         break;
+
+      case GameActionType.ShowQuiz:
+        actionParamObj.id = actionParams[0];
+        Parser.validator.assertItemType(GameItemType.quizzes, actionParams[0], actionType);
+        break;
     }
 
     const actionId = Parser.generateActionId();
