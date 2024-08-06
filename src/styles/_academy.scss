@@ -307,55 +307,6 @@
   }
 }
 
-.ag-grid-controls {
-  .pagination-details.pagination-details.pagination-details {
-    /* Chain selectors for increased specificity: set default cursor */
-    cursor: default;
-    font-weight: bold;
-
-    .#{$ns}-button-text {
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-    }
-  }
-}
-
-.ag-header-cell.ag-header-cell.ag-header-cell {
-  /* Chain selectors for increased specificity: reduce internal padding of header cells */
-  padding-left: 0.375em;
-  padding-right: 0.375em;
-
-  .ag-header-cell-label {
-    /* Increase font size of headers; pad left to centre with filter icon */
-    font-size: 1.1em;
-    font-weight: bold;
-    justify-content: center;
-    padding-left: 1em;
-  }
-
-  &:not(.ag-header-cell-sortable) .ag-header-cell-label {
-    padding-right: 1em;
-  }
-
-  .ag-cell-label-container:not(:has(> span.ag-header-icon.ag-header-cell-menu-button))
-    > .ag-header-cell-label {
-    padding-right: 1em;
-  }
-}
-
-.ag-cell {
-  font-size: 1.1em;
-  /* Override to reduce ag-grid default padding */
-  padding-left: 0.375em;
-  padding-right: 0.375em;
-  text-align: center;
-}
-
-#filterBar {
-  width: 400px;
-}
-
 .md th,
 .md td {
   text-align: left;
@@ -596,18 +547,24 @@
     font-size: 0.8rem;
     color: #6b7280;
     font-weight: 600;
+    margin: auto;
+    padding: 0 5px;
   }
 
   &:hover {
     --ag-header-cell-hover-background-color: #e5e7eb;
   }
 
-  &:hover > .grading-table-col-icons {
+  &:hover .grading-table-col-icons {
     pointer-events: all;
     opacity: 1;
     position: relative;
     transition: 0.1s ease;
   }
+}
+
+.grading-table-header-individual {
+  width: 100%;
 }
 
 .grading-table-rows {
@@ -622,7 +579,7 @@
 
 .ag-header-cell.grading-left-align {
   span.ag-header-cell-text {
-    margin: 0 auto 0 0;
+    margin: auto auto auto 0px;
   }
 }
 
@@ -808,6 +765,10 @@
 
   .bp5-icon {
     margin: 6px;
+  }
+
+  .bp5-popover-target {
+    max-height: 32px
   }
 }
 

@@ -2,6 +2,7 @@ import { Icon } from '@blueprintjs/core';
 import { CustomHeaderProps } from 'ag-grid-react';
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
+import GradingFlex from 'src/commons/grading/GradingFlex';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { SortStates } from 'src/features/grading/GradingTypes';
 
@@ -30,7 +31,9 @@ const GradingColumnCustomHeaders: React.FC<Props> = props => {
   }, [colsSortState, props.column]);
 
   return (
-    <div className={classNames(props.eGridHeader.classList)}>
+    <GradingFlex
+      className={classNames(props.eGridHeader.classList) + ' grading-table-header-individual'}
+    >
       <span className="ag-header-cell-text">{props.displayName}</span>
 
       {!props.disabledSortCols.includes(props.column.getColId()) && (
@@ -48,7 +51,7 @@ const GradingColumnCustomHeaders: React.FC<Props> = props => {
       >
         <Icon icon="eye-off" />
       </div>
-    </div>
+    </GradingFlex>
   );
 };
 
