@@ -25,7 +25,8 @@ export enum GameActionType {
   ShowObjectLayer = 'ShowObjectLayer',
   NavigateToAssessment = 'NavigateToAssessment',
   UpdateAssessmentStatus = 'UpdateAssessmentStatus',
-  Delay = 'Delay'
+  Delay = 'Delay',
+  ShowQuiz = 'ShowQuiz'
 }
 
 /**

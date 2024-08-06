@@ -1,4 +1,5 @@
 import { ActionCondition } from '../action/GameActionTypes';
+import { GameItemType } from '../location/GameMapTypes';
 import { GameStateStorage } from '../state/GameStateTypes';
 import StringUtils from '../utils/StringUtils';
 import Parser from './Parser';
@@ -51,6 +52,41 @@ export default class ConditionParser {
           },
           boolean: !hasExclamation
         };
+
+      case GameStateStorage.AttemptedQuizState:
+        Parser.validator.assertItemType(GameItemType.quizzes, condParams[0]);
+        return {
+          state: GameStateStorage.AttemptedQuizState,
+          conditionParams: {
+            id: condParams[0]
+          },
+          boolean: !hasExclamation
+        };
+
+      case GameStateStorage.PassedQuizState:
+        Parser.validator.assertItemType(GameItemType.quizzes, condParams[0]);
+        return {
+          state: GameStateStorage.PassedQuizState,
+          conditionParams: {
+            id: condParams[0]
+          },
+          boolean: !hasExclamation
+        };
+
+      case GameStateStorage.QuizScoreState:
+        Parser.validator.assertItemType(GameItemType.quizzes, condParams[0]);
+        if (Number.isNaN(parseInt(condParams[1]))) {
+          throw new Error('Parsing error: quiz score condition requires number as second param');
+        }
+        return {
+          state: GameStateStorage.QuizScoreState,
+          conditionParams: {
+            id: condParams[0],
+            score: condParams[1]
+          },
+          boolean: !hasExclamation
+        };
+
       default:
         throw new Error('Parsing error: Invalid condition param');
     }

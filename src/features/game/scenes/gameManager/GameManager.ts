@@ -27,6 +27,7 @@ import GameObjectManager from '../../objects/GameObjectManager';
 import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import GamePopUpManager from '../../popUp/GamePopUpManager';
+import GameQuizManager from '../../quiz/GameQuizManager';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import GameStateManager from '../../state/GameStateManager';
 import GameTaskLogManager from '../../task/GameTaskLogManager';
@@ -75,6 +76,7 @@ class GameManager extends Phaser.Scene {
   private toolbarManager?: GameToolbarManager;
   private taskLogManager?: GameTaskLogManager;
   private dashboardManager?: GameDashboardManager;
+  private quizManager?: GameQuizManager;
 
   constructor() {
     super('GameManager');
@@ -125,6 +127,7 @@ class GameManager extends Phaser.Scene {
       ],
       [this.logManager, this.taskLogManager, this.collectibleManager, this.achievementManager]
     );
+    this.quizManager = new GameQuizManager();
   }
 
   //////////////////////
@@ -432,6 +435,7 @@ class GameManager extends Phaser.Scene {
   public getToolbarManager = () => mandatory(this.toolbarManager);
   public getTaskLogManager = () => mandatory(this.taskLogManager);
   public getDashboardManager = () => mandatory(this.dashboardManager);
+  public getQuizManager = () => mandatory(this.quizManager);
 }
 
 export default GameManager;
