@@ -2,8 +2,8 @@ import { Button } from '@blueprintjs/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { useTokens } from 'src/commons/utils/Hooks';
-import { chat } from 'src/features/sicp/chatCompletion/api';
-import { buildPrompt, SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
+import { continueChat, initChat } from 'src/features/sicp/chatCompletion/api';
+import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
 import classes from 'src/styles/Chatbot.module.scss';
 import { v4 as uuid } from 'uuid';
@@ -13,25 +13,29 @@ type Props = {
   getText: () => string;
 };
 
-type ChatMessage = { role: 'user' | 'bot'; content: string };
-const initialMessage: ChatMessage = {
+const INITIAL_MESSAGE: ChatMessage = {
   content: 'Ask me something about this paragraph!',
-  role: 'bot'
-};
-const botErrorMessage: ChatMessage = {
-  content: 'Sorry, I am down with a cold, please try again later.',
-  role: 'bot'
+  role: 'assistant'
 };
 
-type Payload = { role: 'user' | 'assistant' | 'system'; content: string }[];
-/** At most CONTEXT_SIZE messages are passed for chat completion. */
-const CONTEXT_SIZE = 20;
+const BOT_ERROR_MESSAGE: ChatMessage = {
+  content: 'Sorry, I am down with a cold, please try again later.',
+  role: 'assistant'
+};
 
 const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
+  const resetChat = () => {
+    initChat(tokens, getSection(), getText()).then(resp => {
+      const message = resp.response;
+      const conversationId = resp.conversationId;
+      setMessages([message]);
+      setChatId(conversationId);
+    });
+  };
   const chatRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [chatId, setChatId] = useState(uuid());
-  const [messages, setMessages] = useState<ChatMessage[]>([initialMessage]);
+  const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_MESSAGE]);
   const [userInput, setUserInput] = useState('');
   const tokens = useTokens();
 
@@ -39,55 +43,24 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
     setUserInput(event.target.value);
   };
 
-  const sendMessage = async () => {
+  const sendMessage = () => {
     if (userInput.trim() === '') {
       return;
     }
     setUserInput('');
     setMessages(prev => [...prev, { role: 'user', content: userInput }]);
-  };
-
-  // Watch whenever a new message comes in
-  useEffect(() => {
-    if (messages.length === 0) {
-      return;
-    }
-
-    const lastMessage = messages[messages.length - 1];
-    if (lastMessage.role === 'bot' || isLoading) {
-      // Bot has responded, or user request for the new message already sent
-      return;
-    }
-
-    // User just sent a message
     setIsLoading(true);
-
-    // Bot needs to respond, send payload to chat completion
-    const prompt = buildPrompt(getSection(), getText());
-    const payload: Payload = [
-      { role: 'system', content: prompt },
-      ...messages.slice(-CONTEXT_SIZE).map(message => {
-        const role = message.role === 'user' ? 'user' : 'assistant';
-        const segment: Payload[number] = { role, content: message.content };
-        return segment;
+    continueChat(tokens, chatId, userInput)
+      .then(resp => {
+        const message = resp.response;
+        setMessages(prev => [...prev, { role: 'assistant', content: message }]);
       })
-    ];
-
-    chat(tokens, chatId, payload)
-      .then(text => {
-        setMessages(prev => [...prev, { role: 'bot', content: text }]);
-      })
-      .catch(e => {
-        setMessages(prev => [...prev, botErrorMessage]);
+      .catch(() => {
+        setMessages(prev => [...prev, BOT_ERROR_MESSAGE]);
       })
       .finally(() => {
         setIsLoading(false);
       });
-  }, [chatId, getSection, getText, isLoading, messages, tokens]);
-
-  const resetChat = () => {
-    setMessages([initialMessage]);
-    setChatId(uuid());
   };
 
   const keyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -96,13 +69,18 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
     }
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages, isLoading]);
-
   const scrollToBottom = () => {
     chatRef.current?.scrollTo({ top: chatRef.current?.scrollHeight });
   };
+
+  // Run once when component is mounted
+  useEffect(() => {
+    resetChat();
+  }, []);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isLoading]);
 
   return (
     <div className={classes['chat-container']}>
@@ -113,7 +91,7 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
             className={classes[`${message.role}`]}
             style={{ whiteSpace: 'pre-line' }}
           >
-            {renderMessageContent(message)}
+            {renderMessageContent(message, index)}
           </div>
         ))}
         {isLoading && <p>loading...</p>}
@@ -139,9 +117,9 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
   );
 };
 
-const renderMessageContent = (message: ChatMessage) => {
+const renderMessageContent = (message: ChatMessage, index: number) => {
   let contentToRender = message.content;
-  if (message.role === 'bot') {
+  if (message.role === 'assistant' && index > 0) {
     contentToRender += '\n\nThe answer is generated by GPT-4 and may not be correct.';
   }
   // TODO: Parse full Markdown, make snippets runnable
