@@ -12,10 +12,6 @@ import { FullSaveState } from './GameSaveTypes';
  * @param fullSaveState - the entire game data that needs to be saved, including game state and userstate
  */
 export async function saveData(fullSaveState: FullSaveState) {
-  if (SourceAcademyGame.getInstance().getAccountInfo().role !== 'student') {
-    return;
-  }
-
   const options = {
     method: 'PUT',
     headers: createHeaders(SourceAcademyGame.getInstance().getAccountInfo().accessToken),
