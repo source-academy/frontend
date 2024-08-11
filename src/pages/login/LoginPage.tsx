@@ -59,7 +59,7 @@ const LoginButton = ({
 }: {
   handleClick: (id: string) => void;
   id: string;
-  name?: string;
+  name: string;
 }) => {
   return (
     <Button
