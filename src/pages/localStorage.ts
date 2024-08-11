@@ -72,8 +72,6 @@ export const saveState = (state: OverallState) => {
         moduleHelpText: state.session.moduleHelpText,
         assetsPrefix: state.session.assetsPrefix,
         assessmentConfigurations: state.session.assessmentConfigurations,
-        notificationConfigs: state.session.notificationConfigs,
-        configurableNotificationConfigs: state.session.configurableNotificationConfigs,
         githubAccessToken: state.session.githubAccessToken
       },
       achievements: state.achievement.achievements,
