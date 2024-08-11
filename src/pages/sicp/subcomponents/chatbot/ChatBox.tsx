@@ -1,12 +1,11 @@
 import { Button } from '@blueprintjs/core';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { useTokens } from 'src/commons/utils/Hooks';
 import { continueChat, initChat } from 'src/features/sicp/chatCompletion/api';
 import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
 import classes from 'src/styles/Chatbot.module.scss';
-import { v4 as uuid } from 'uuid';
 
 type Props = {
   getSection: () => SicpSection;
@@ -23,18 +22,14 @@ const BOT_ERROR_MESSAGE: Readonly<ChatMessage> = {
   role: 'assistant'
 };
 
+const scrollToBottom = (ref: React.RefObject<HTMLDivElement>) => {
+  ref.current?.scrollTo({ top: ref.current?.scrollHeight });
+};
+
 const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
-  const resetChat = () => {
-    initChat(tokens, getSection(), getText()).then(resp => {
-      const message = resp.response;
-      const conversationId = resp.conversationId;
-      setMessages([message]);
-      setChatId(conversationId);
-    });
-  };
   const chatRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [chatId, setChatId] = useState(uuid());
+  const [chatId, setChatId] = useState<string>();
   const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_MESSAGE]);
   const [userInput, setUserInput] = useState('');
   const tokens = useTokens();
@@ -43,14 +38,14 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
     setUserInput(event.target.value);
   };
 
-  const sendMessage = () => {
+  const sendMessage = useCallback(() => {
     if (userInput.trim() === '') {
       return;
     }
     setUserInput('');
     setMessages(prev => [...prev, { role: 'user', content: userInput }]);
     setIsLoading(true);
-    continueChat(tokens, chatId, userInput)
+    continueChat(tokens, chatId!, userInput)
       .then(resp => {
         const message = resp.response;
         setMessages(prev => [...prev, { role: 'assistant', content: message }]);
@@ -61,25 +56,34 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
       .finally(() => {
         setIsLoading(false);
       });
-  };
+  }, [chatId, tokens, userInput]);
 
-  const keyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && !isLoading) {
-      sendMessage();
-    }
-  };
+  const keyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
+    e => {
+      if (e.key === 'Enter' && !isLoading) {
+        sendMessage();
+      }
+    },
+    [isLoading, sendMessage]
+  );
 
-  const scrollToBottom = () => {
-    chatRef.current?.scrollTo({ top: chatRef.current?.scrollHeight });
-  };
+  const resetChat = useCallback(() => {
+    initChat(tokens, getSection(), getText()).then(resp => {
+      const message = resp.response;
+      const conversationId = resp.conversationId;
+      setMessages([message]);
+      setChatId(conversationId);
+    });
+  }, [getSection, getText, tokens]);
 
   // Run once when component is mounted
   useEffect(() => {
     resetChat();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    scrollToBottom();
+    scrollToBottom(chatRef);
   }, [messages, isLoading]);
 
   return (
