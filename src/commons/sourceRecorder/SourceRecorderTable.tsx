@@ -191,7 +191,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
     this.setState({ filterValue: changeVal });
 
     if (this.gridApi) {
-      this.gridApi.setQuickFilter(changeVal);
+      this.gridApi.setGridOption('quickFilterText', changeVal);
     }
   };
 

@@ -3,6 +3,8 @@ import {
   Button,
   Classes,
   Dialog,
+  DialogBody,
+  DialogFooter,
   InputGroup,
   Intent,
   Tree,
@@ -47,7 +49,7 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
       <div className={classNames('githubDialogHeader', Classes.DIALOG_HEADER)}>
         <h3>Select a File</h3>
       </div>
-      <div className={Classes.DIALOG_BODY}>
+      <DialogBody>
         <Tree
           contents={repoFiles}
           onNodeClick={handleNodeClick}
@@ -71,13 +73,15 @@ const FileExplorerDialog: React.FC<FileExplorerDialogProps> = props => {
             />
           </div>
         )}
-      </div>
-      <div className={Classes.DIALOG_FOOTER}>
-        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-          <Button onClick={handleClose}>Close</Button>
-          <AnchorButton onClick={handleSubmit} intent={Intent.PRIMARY} text={props.pickerType} />
-        </div>
-      </div>
+      </DialogBody>
+      <DialogFooter
+        actions={
+          <>
+            <Button onClick={handleClose}>Close</Button>
+            <AnchorButton onClick={handleSubmit} intent={Intent.PRIMARY} text={props.pickerType} />
+          </>
+        }
+      />
     </Dialog>
   );
 

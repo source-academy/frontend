@@ -1,4 +1,4 @@
-import { Classes, Dialog } from '@blueprintjs/core';
+import { Dialog, DialogBody, DialogFooter } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useState } from 'react';
 
@@ -35,15 +35,17 @@ const SourceRecorderDeleteCell: React.FC<SourceRecorderDeleteCellProps> = props 
         title="Delete Sourcecast"
         canOutsideClickClose={true}
       >
-        <div className={Classes.DIALOG_BODY}>
+        <DialogBody>
           <p>Are you sure to delete this sourcecast entry?</p>
-        </div>
-        <div className={Classes.DIALOG_FOOTER}>
-          <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <ControlButton label="Confirm Delete" icon={IconNames.TRASH} onClick={handleDelete} />
-            <ControlButton label="Cancel" icon={IconNames.CROSS} onClick={handleCloseDialog} />
-          </div>
-        </div>
+        </DialogBody>
+        <DialogFooter
+          actions={
+            <>
+              <ControlButton label="Confirm Delete" icon={IconNames.TRASH} onClick={handleDelete} />
+              <ControlButton label="Cancel" icon={IconNames.CROSS} onClick={handleCloseDialog} />
+            </>
+          }
+        />
       </Dialog>
     </div>
   );

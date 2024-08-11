@@ -89,6 +89,10 @@ for (let i = 1; ; ++i) {
   authProviders.set(id, { name, endpoint, isDefault: false, type: AuthProviderType.SAML_SSO });
 }
 
+const featureFlags = {
+  enableSicpChatbot: isTrue(process.env.REACT_APP_FEATURE_ENABLE_SICP_CHATBOT)
+};
+
 export enum Links {
   githubIssues = 'https://github.com/source-academy/frontend/issues',
   githubOrg = 'https://github.com/source-academy',
@@ -139,7 +143,8 @@ const Constants = {
   sicpBackendUrl,
   javaPackagesUrl,
   workspaceSettingsLocalStorageKey,
-  caFulfillmentLevel
+  caFulfillmentLevel,
+  featureFlags
 };
 
 export default Constants;

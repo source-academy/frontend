@@ -1,16 +1,14 @@
 import { Tokens } from 'src/commons/application/types/SessionTypes';
 import { request } from 'src/commons/utils/RequestHelper';
 
-/**
- * POST /chat
- */
-export async function chat(
+export async function initChat(
   tokens: Tokens,
-  payload: { role: string; content: string }[]
-): Promise<string> {
-  const response = await request(`chat`, 'POST', {
+  section: string,
+  textBookContent: string
+): Promise<InitChatResponse> {
+  const response = await request('chats', 'POST', {
     ...tokens,
-    body: { json: payload }
+    body: { section: section, initialContext: textBookContent }
   });
   if (!response) {
     throw new Error('Unknown error occurred.');
@@ -19,5 +17,24 @@ export async function chat(
     const message = await response.text();
     throw new Error(`Failed to chat to louis: ${message}`);
   }
-  return response.text();
+  return await response.json();
+}
+
+export async function continueChat(
+  tokens: Tokens,
+  chatId: string,
+  userMessage: string
+): Promise<ContinueChatResponse> {
+  const response = await request(`chats/${chatId}/message`, 'POST', {
+    ...tokens,
+    body: { message: userMessage }
+  });
+  if (!response) {
+    throw new Error('Unknown error occurred.');
+  }
+  if (!response.ok) {
+    const message = await response.text();
+    throw new Error(`Failed to chat to louis: ${message}`);
+  }
+  return await response.json();
 }

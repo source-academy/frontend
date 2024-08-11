@@ -5,14 +5,20 @@ on:
     branches:
       - master
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
 
 env:
   TZ: Asia/Singapore
   NODE_OPTIONS: --max_old_space_size=8192
   GENERATE_SOURCEMAP: false
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+  
 jobs:
   lint:
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     strategy:
       matrix:

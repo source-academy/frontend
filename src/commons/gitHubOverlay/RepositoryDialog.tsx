@@ -3,6 +3,8 @@ import {
   Button,
   Classes,
   Dialog,
+  DialogBody,
+  DialogFooter,
   Intent,
   Radio,
   RadioGroup
@@ -25,7 +27,7 @@ const RepositoryDialog: React.FC<RepositoryDialogProps> = props => {
       <div className={classNames('githubDialogHeader', Classes.DIALOG_HEADER)}>
         <h3>Select a Repository</h3>
       </div>
-      <div className={Classes.DIALOG_BODY}>
+      <DialogBody>
         <RadioGroup
           className="RepositoryRadioGroup"
           onChange={handleSelect}
@@ -35,15 +37,17 @@ const RepositoryDialog: React.FC<RepositoryDialogProps> = props => {
             <Radio label={repo.name} key={repo.id} value={repo.name} />
           ))}
         </RadioGroup>
-      </div>
-      <div className={classNames(Classes.DIALOG_FOOTER)}>
-        <div className={classNames(Classes.DIALOG_FOOTER_ACTIONS)}>
-          <Button onClick={handleClose}>Close</Button>
-          <AnchorButton onClick={handleSubmit} intent={Intent.PRIMARY}>
-            Select
-          </AnchorButton>
-        </div>
-      </div>
+      </DialogBody>
+      <DialogFooter
+        actions={
+          <>
+            <Button onClick={handleClose}>Close</Button>
+            <AnchorButton onClick={handleSubmit} intent={Intent.PRIMARY}>
+              Select
+            </AnchorButton>
+          </>
+        }
+      />
     </Dialog>
   );
 

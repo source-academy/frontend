@@ -6,7 +6,8 @@ import {
   Divider,
   Intent,
   NumericInput,
-  Switch
+  Switch,
+  Tooltip
 } from '@blueprintjs/core';
 import { IconNames, Team } from '@blueprintjs/icons';
 import React, { useCallback, useState } from 'react';
@@ -55,7 +56,9 @@ const ConfigureCell: React.FC<Props> = ({
 
   return (
     <>
-      <ControlButton icon={IconNames.COG} onClick={handleOpenDialog} />
+      <Tooltip content="Configure" placement="top">
+        <ControlButton icon={IconNames.COG} onClick={handleOpenDialog} />
+      </Tooltip>
       <Dialog
         icon={IconNames.Cog}
         isOpen={isDialogOpen}

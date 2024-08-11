@@ -8,6 +8,7 @@ import DialoguesParser from './DialogueParser';
 import LocationsParser from './LocationDetailsParser';
 import LocationParser from './LocationParser';
 import ParserValidator, { GameEntityType } from './ParserValidator';
+import QuizParser from './QuizParser';
 import TasksParser from './TasksParser';
 
 /**
@@ -93,6 +94,9 @@ class Parser {
         break;
       case 'dialogues':
         DialoguesParser.parse(body);
+        break;
+      case 'quizzes':
+        QuizParser.parse(body);
         break;
       default:
         return false;

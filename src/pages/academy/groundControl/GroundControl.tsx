@@ -47,6 +47,14 @@ export type DispatchProps = {
   handleFetchCourseConfigs: () => void;
 };
 
+const defaultColumnDefs: ColDef = {
+  flex: 2,
+  minWidth: 70,
+  filter: true,
+  resizable: true,
+  sortable: true
+};
+
 const GroundControl: React.FC<Props> = props => {
   const [showDropzone, setShowDropzone] = useState(false);
   const { assessmentOverviews, assessmentConfigurations } = useSession();
@@ -66,31 +74,14 @@ const GroundControl: React.FC<Props> = props => {
     });
   };
 
-  const resizeGrid = () => {
-    if (gridApi) {
-      gridApi.sizeColumnsToFit();
-    }
-  };
-
   const toggleDropzone = () => {
     setShowDropzone(!showDropzone);
   };
 
   const columnDefs: ColDef<AssessmentOverview>[] = [
-    {
-      field: 'number',
-      headerName: 'ID',
-      width: 50
-    },
-    {
-      headerName: 'Title',
-      field: 'title'
-    },
-    {
-      headerName: 'Category',
-      field: 'type',
-      width: 100
-    },
+    { field: 'number', headerName: 'ID', flex: 1 },
+    { headerName: 'Title', field: 'title' },
+    { headerName: 'Category', field: 'type' },
     {
       headerName: 'Open Date',
       field: 'openAt',
@@ -105,7 +96,7 @@ const GroundControl: React.FC<Props> = props => {
         handleAssessmentChangeDate: props.handleAssessmentChangeDate,
         forOpenDate: true
       },
-      width: 150
+      flex: 3
     },
     {
       headerName: 'Close Date',
@@ -121,7 +112,7 @@ const GroundControl: React.FC<Props> = props => {
         handleAssessmentChangeDate: props.handleAssessmentChangeDate,
         forOpenDate: false
       },
-      width: 150
+      flex: 3
     },
     {
       headerName: 'Max Team Size',
@@ -129,78 +120,57 @@ const GroundControl: React.FC<Props> = props => {
       cellRenderer: EditTeamSizeCell,
       cellRendererParams: {
         onTeamSizeChange: props.handleAssessmentChangeTeamSize
-      },
-      width: 100
+      }
     },
     {
-      headerName: 'Publish',
+      headerName: 'Published',
       field: 'placeholderPublish' as any,
       cellRenderer: PublishCell,
       cellRendererParams: {
         handlePublishAssessment: props.handlePublishAssessment
       },
-      width: 70,
       filter: false,
       resizable: false,
       sortable: false,
-      cellStyle: {
-        padding: 0
-      }
+      cellStyle: { padding: 0 }
     },
     {
-      headerName: 'Release Grading',
+      headerName: 'Grading',
       field: 'placeholderReleaseGrading' as any,
       cellRenderer: ReleaseGradingCell,
       cellRendererParams: {
         handlePublishGradingAll: props.handlePublishGradingAll,
         handleUnpublishGradingAll: props.handleUnpublishGradingAll
       },
-      width: 120,
       filter: false,
       resizable: false,
       sortable: false,
-      cellStyle: {
-        padding: 0
-      }
+      cellStyle: { padding: 0 }
     },
     {
-      headerName: 'Delete',
+      headerName: 'Actions',
       field: 'placeholderDelete' as any,
-      cellRenderer: DeleteCell,
+      cellRenderer: ({ data }: { data: AssessmentOverview }) => {
+        return (
+          <>
+            <DeleteCell data={data} handleDeleteAssessment={props.handleDeleteAssessment} />
+            <ConfigureCell
+              data={data}
+              handleConfigureAssessment={props.handleConfigureAssessment}
+              handleAssignEntriesForVoting={props.handleAssignEntriesForVoting}
+            />
+          </>
+        );
+      },
       cellRendererParams: {
         handleDeleteAssessment: props.handleDeleteAssessment
       },
-      width: 70,
       filter: false,
       resizable: false,
       sortable: false,
-      cellStyle: {
-        padding: 0
-      }
-    },
-    {
-      headerName: 'Configure',
-      field: 'placeholderConfigure' as any,
-      cellRenderer: ConfigureCell,
-      cellRendererParams: {
-        handleConfigureAssessment: props.handleConfigureAssessment,
-        handleAssignEntriesForVoting: props.handleAssignEntriesForVoting
-      },
-      width: 70,
-      filter: false,
-      resizable: false,
-      sortable: false,
-      cellStyle: {
-        padding: 0
-      }
+      cellStyle: { padding: 0 }
     }
   ];
-
-  const defaultColumnDefs = {
-    filter: true,
-    resizable: true,
-    sortable: true
-  };
 
   const controls = (
     <div className="GridControls ground-control-controls">
@@ -236,7 +206,6 @@ const GroundControl: React.FC<Props> = props => {
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
-        onGridSizeChanged={resizeGrid}
         rowData={assessmentOverviews}
         rowHeight={35}
         suppressCellFocus={true}
