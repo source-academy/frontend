@@ -1,4 +1,5 @@
 import { Navigate, redirect, RouteObject } from 'react-router';
+import Constants from 'src/commons/utils/Constants';
 
 import Application from '../commons/application/Application';
 import { GuardedRoute } from './routeGuard';
@@ -101,7 +102,12 @@ export const getFullAcademyRouterConfig = ({
   };
 
   return [
-    { path: 'nus_login', lazy: Login, children: [{ path: '', lazy: NusLogin }] },
+    {
+      path: 'nus_login',
+      lazy: Login,
+      loader: () => (Constants.hasNusAuthProviders ? null : redirect('/login')),
+      children: [{ path: '', lazy: NusLogin }]
+    },
     {
       path: '*',
       element: <Application />,
@@ -114,6 +120,7 @@ export const getFullAcademyRouterConfig = ({
         {
           path: 'login',
           lazy: Login,
+          loader: () => (Constants.hasOtherAuthProviders ? null : redirect('/nus_login')),
           children: [
             { path: '', lazy: LoginPage },
             { path: 'callback', lazy: LoginCallback }
