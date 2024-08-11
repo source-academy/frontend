@@ -24,6 +24,7 @@ import { GuardedRoute } from './routeGuard';
 const Login = () => import('../pages/login/Login');
 const LoginPage = () => import('../pages/login/LoginPage');
 const LoginCallback = () => import('../pages/login/LoginCallback');
+const NusLogin = () => import('../pages/login/NusLogin');
 const Contributors = () => import('../pages/contributors/Contributors');
 const GitHubCallback = () => import('../pages/githubCallback/GitHubCallback');
 const Sicp = () => import('../pages/sicp/Sicp');
@@ -114,7 +115,8 @@ export const getFullAcademyRouterConfig = ({
           lazy: Login,
           children: [
             { path: '', lazy: LoginPage },
-            { path: 'callback', lazy: LoginCallback }
+            { path: 'callback', lazy: LoginCallback },
+            { path: 'nus', lazy: NusLogin }
           ]
         },
         { path: 'welcome', lazy: Welcome, loader: welcomeLoader },
