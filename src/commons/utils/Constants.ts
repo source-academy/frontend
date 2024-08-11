@@ -90,7 +90,7 @@ for (let i = 1; ; ++i) {
 }
 
 const featureFlags = {
-  enableSicpChatBot: isTrue(process.env.REACT_APP_FEATURE_ENABLE_SICP_CHATBOT)
+  enableSicpChatbot: isTrue(process.env.REACT_APP_FEATURE_ENABLE_SICP_CHATBOT)
 };
 
 export enum Links {

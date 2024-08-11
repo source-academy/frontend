@@ -201,7 +201,7 @@ const Sicp: React.FC = () => {
           )}
         </CodeSnippetContext.Provider>
       </SicpErrorBoundary>
-      {isLoggedIn && Constants.featureFlags.enableSicpChatBot && (
+      {isLoggedIn && Constants.featureFlags.enableSicpChatbot && (
         <Chatbot getSection={getSection} getText={getText} />
       )}
     </div>
