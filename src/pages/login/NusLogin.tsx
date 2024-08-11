@@ -30,11 +30,11 @@ const NusLogin: React.FC = () => {
 
   return (
     <div className={classes['container']}>
-      <div className={classNames('col-lg-8', classes['unpadded'])}>
+      <div className={classNames('col-lg-8', 'hidden-xs', classes['unpadded'])}>
         <img className={classes['logo']} src={BLUE_BG} alt="nusInfoBackgroundImg" />
       </div>
       <div className={classNames('col-xs-12 col-lg-4', classes['unpadded'])}>
-        <div className="row">
+        <div className={classNames('row', classes['row'])}>
           <Card className={classes['header']} elevation={Elevation.ZERO}>
             <a
               className={classes['logo']}
@@ -49,7 +49,7 @@ const NusLogin: React.FC = () => {
             <H3 style={{ marginBottom: 0 }}>{Constants.sourceAcademyDeploymentName}</H3>
           </Card>
         </div>
-        <div className="row" style={{ height: '100%' }}>
+        <div className={classNames('row', classes['row'])} style={{ height: '100%' }}>
           <Card
             className={classNames(classes['text-center'], classes['body'])}
             elevation={Elevation.ZERO}
