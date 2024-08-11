@@ -1,3 +1,5 @@
+@import '../../styles/global';
+
 .container {
   display: flex;
   min-height: 100dvh;
@@ -35,7 +37,7 @@
 .buttons-wrapper {
   width: 70%;
 
-  button {
+  button:not(.outlined) {
     box-shadow: 0 0 0 0 transparent !important;
     background-color: #013399 !important;
 

@@ -2,6 +2,7 @@ import { Button, ButtonGroup, Card, Divider, Elevation, H1, H3 } from '@blueprin
 import classNames from 'classnames';
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import Constants from 'src/commons/utils/Constants';
 import classes from 'src/pages/login/NusLogin.module.scss';
@@ -27,6 +28,7 @@ const NusLogin: React.FC = () => {
     (providerId: string) => dispatch(SessionActions.login(providerId)),
     [dispatch]
   );
+  const navigate = useNavigate();
 
   return (
     <div className={classes['container']}>
@@ -61,6 +63,14 @@ const NusLogin: React.FC = () => {
                   {name}
                 </Button>
               ))}
+              <Button
+                intent="primary"
+                outlined
+                className={classes['outlined']}
+                onClick={() => navigate('/login')}
+              >
+                Non-NUS Users
+              </Button>
             </ButtonGroup>
           </Card>
         </div>
