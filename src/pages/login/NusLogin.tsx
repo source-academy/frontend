@@ -38,7 +38,7 @@ const NusLogin: React.FC = () => {
           <Card className={classes['header']} elevation={Elevation.ZERO}>
             <a
               className={classes['logo']}
-              href="http://www.nus.edu.sg"
+              href="https://www.nus.edu.sg"
               target="_blank"
               rel="noopener noreferer nofollow"
             >
