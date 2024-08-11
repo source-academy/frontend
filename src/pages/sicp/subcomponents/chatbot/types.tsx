@@ -1,14 +1,14 @@
-interface ChatMessage {
+type ChatMessage = {
   role: 'user' | 'assistant';
   content: string;
-}
+};
 
-interface InitChatResponse {
+type InitChatResponse = {
   response: ChatMessage;
   conversationId: string;
-}
+};
 
-interface ContinueChatResponse {
+type ContinueChatResponse = {
   response: string;
   conversationId: string;
-}
+};
