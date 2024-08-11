@@ -22,9 +22,6 @@ import { Role, StoriesRole } from '../ApplicationTypes';
 import {
   AdminPanelCourseRegistration,
   CourseRegistration,
-  NotificationConfiguration,
-  NotificationPreference,
-  TimeOption,
   Tokens,
   UpdateCourseConfiguration,
   User
@@ -74,9 +71,6 @@ const SessionActions = createActions('session', {
   setCourseRegistration: (courseRegistration: Partial<CourseRegistration>) => courseRegistration,
   setAssessmentConfigurations: (assessmentConfigurations: AssessmentConfiguration[]) =>
     assessmentConfigurations,
-  setConfigurableNotificationConfigs: (notificationConfigs: NotificationConfiguration[]) =>
-    notificationConfigs,
-  setNotificationConfigs: (notificationConfigs: NotificationConfiguration[]) => notificationConfigs,
   setAdminPanelCourseRegistrations: (courseRegistrations: AdminPanelCourseRegistration[]) =>
     courseRegistrations,
   setGoogleUser: (user?: string) => user,
@@ -141,18 +135,8 @@ const SessionActions = createActions('session', {
   updateCourseConfig: (courseConfiguration: UpdateCourseConfiguration) => courseConfiguration,
   fetchAssessmentConfigs: () => ({}),
   updateAssessmentConfigs: (assessmentConfigs: AssessmentConfiguration[]) => assessmentConfigs,
-  updateNotificationConfigs: (notificationConfigs: NotificationConfiguration[]) =>
-    notificationConfigs,
-  updateNotificationPreferences: (
-    notificationPreferences: NotificationPreference[],
-    courseRegId: number
-  ) => ({ notificationPreferences, courseRegId }),
   deleteAssessmentConfig: (assessmentConfig: AssessmentConfiguration) => assessmentConfig,
   fetchAdminPanelCourseRegistrations: () => ({}),
-  fetchConfigurableNotificationConfigs: (courseRegId: number) => ({ courseRegId }),
-  fetchNotificationConfigs: () => ({}),
-  updateTimeOptions: (timeOptions: TimeOption[]) => timeOptions,
-  deleteTimeOptions: (timeOptionIds: number[]) => timeOptionIds,
   updateUserRole: (courseRegId: number, role: Role) => ({ courseRegId, role }),
   deleteUserCourseRegistration: (courseRegId: number) => ({ courseRegId }),
   updateCourseResearchAgreement: (agreedToResearch: boolean) => ({ agreedToResearch }),
