@@ -6,7 +6,7 @@ export async function initChat(
   section: string,
   textBookContent: string
 ): Promise<InitChatResponse> {
-  const response = await request(`chats`, 'POST', {
+  const response = await request('chats', 'POST', {
     ...tokens,
     body: { section: section, initialContext: textBookContent }
   });
@@ -17,8 +17,7 @@ export async function initChat(
     const message = await response.text();
     throw new Error(`Failed to chat to louis: ${message}`);
   }
-  const jsonResponse = await response.text();
-  return JSON.parse(jsonResponse) as InitChatResponse;
+  return await response.json();
 }
 
 export async function continueChat(
@@ -37,6 +36,5 @@ export async function continueChat(
     const message = await response.text();
     throw new Error(`Failed to chat to louis: ${message}`);
   }
-  const jsonResponse = await response.text();
-  return JSON.parse(jsonResponse) as ContinueChatResponse;
+  return await response.json();
 }
