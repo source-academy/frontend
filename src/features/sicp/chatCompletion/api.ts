@@ -27,7 +27,7 @@ export async function continueChat(
 ): Promise<ContinueChatResponse> {
   const response = await request(`chats/${chatId}/message`, 'POST', {
     ...tokens,
-    body: { conversation_id: chatId, message: userMessage }
+    body: { message: userMessage }
   });
   if (!response) {
     throw new Error('Unknown error occurred.');
