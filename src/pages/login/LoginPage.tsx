@@ -39,9 +39,6 @@ const LoginPage: React.FC = () => {
         </div>
         <div>
           <ButtonGroup fill={true} vertical={true}>
-            {providers.map(({ id, name }) => (
-              <LoginButton handleClick={handleLogin} name={name} id={id} key={id} />
-            ))}
             {hasNusProvider && (
               <LoginButton
                 handleClick={() => navigate('/nus_login')}
@@ -50,6 +47,9 @@ const LoginPage: React.FC = () => {
                 key="nus"
               />
             )}
+            {providers.map(({ id, name }) => (
+              <LoginButton handleClick={handleLogin} name={name} id={id} key={id} />
+            ))}
           </ButtonGroup>
         </div>
       </Card>
