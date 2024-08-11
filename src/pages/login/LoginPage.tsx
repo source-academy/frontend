@@ -4,15 +4,21 @@ import classNames from 'classnames';
 import { useCallback } from 'react';
 import { Translation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import classes from 'src/styles/Login.module.scss';
 
 import Constants from '../../commons/utils/Constants';
 
-const providers = [...Constants.authProviders.entries()].map(([id, { name }]) => ({
-  id,
-  name
-}));
+const providers = [...Constants.authProviders.entries()]
+  .map(([id, { name }]) => ({
+    id,
+    name
+  }))
+  .filter(e => !e.name.includes('NUS'));
+const hasNusProvider = [...Constants.authProviders.values()].some(({ name }) =>
+  name.includes('NUS')
+);
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -20,6 +26,7 @@ const LoginPage: React.FC = () => {
     (providerId: string) => dispatch(SessionActions.login(providerId)),
     [dispatch]
   );
+  const navigate = useNavigate();
 
   return (
     <div className={classNames(classes['Login'], Classes.DARK)}>
@@ -35,6 +42,14 @@ const LoginPage: React.FC = () => {
             {providers.map(({ id, name }) => (
               <LoginButton handleClick={handleLogin} name={name} id={id} key={id} />
             ))}
+            {hasNusProvider && (
+              <LoginButton
+                handleClick={() => navigate('/login/nus')}
+                rawname="Log in for NUS users"
+                id="nus"
+                key="nus"
+              />
+            )}
           </ButtonGroup>
         </div>
       </Card>
@@ -45,11 +60,13 @@ const LoginPage: React.FC = () => {
 const LoginButton = ({
   handleClick,
   id,
-  name
+  name,
+  rawname
 }: {
   handleClick: (id: string) => void;
   id: string;
-  name: string;
+  name?: string;
+  rawname?: string;
 }) => {
   return (
     <Button
@@ -57,7 +74,7 @@ const LoginButton = ({
       rightIcon={IconNames.LOG_IN}
       onClick={useCallback(() => handleClick(id), [handleClick, id])}
     >
-      <Translation ns="login">{t => t('Log in with', { name: name })}</Translation>
+      {rawname ?? <Translation ns="login">{t => t('Log in with', { name: name })}</Translation>}
     </Button>
   );
 };
