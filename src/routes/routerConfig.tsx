@@ -121,10 +121,12 @@ export const getFullAcademyRouterConfig = ({
           path: 'login',
           lazy: Login,
           loader: () => (Constants.hasOtherAuthProviders ? null : redirect('/nus_login')),
-          children: [
-            { path: '', lazy: LoginPage },
-            { path: 'callback', lazy: LoginCallback }
-          ]
+          children: [{ path: '', lazy: LoginPage }]
+        },
+        {
+          path: 'login',
+          lazy: Login,
+          children: [{ path: 'callback', lazy: LoginCallback }]
         },
         { path: 'welcome', lazy: Welcome, loader: welcomeLoader },
         { path: 'courses', element: <Navigate to="/" /> },
