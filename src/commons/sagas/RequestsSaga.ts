@@ -1571,3 +1571,14 @@ const courseId: () => string = () => {
     throw new Error(`No course selected`);
   }
 };
+
+export const courseIdWithoutPrefix: () => string = () => {
+  const id = store.getState().session.courseId;
+  if (id) {
+    return `${id}`;
+  } else {
+    // TODO: Rewrite this logic
+    showWarningMessage(`No course selected!`, 1000);
+    throw new Error(`No course selected`);
+  }
+};
