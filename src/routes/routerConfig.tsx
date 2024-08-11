@@ -101,6 +101,7 @@ export const getFullAcademyRouterConfig = ({
   };
 
   return [
+    { path: 'nus_login', lazy: NusLogin },
     {
       path: '*',
       element: <Application />,
@@ -115,8 +116,7 @@ export const getFullAcademyRouterConfig = ({
           lazy: Login,
           children: [
             { path: '', lazy: LoginPage },
-            { path: 'callback', lazy: LoginCallback },
-            { path: 'nus', lazy: NusLogin }
+            { path: 'callback', lazy: LoginCallback }
           ]
         },
         { path: 'welcome', lazy: Welcome, loader: welcomeLoader },

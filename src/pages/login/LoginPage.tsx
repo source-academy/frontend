@@ -44,7 +44,7 @@ const LoginPage: React.FC = () => {
             ))}
             {hasNusProvider && (
               <LoginButton
-                handleClick={() => navigate('/login/nus')}
+                handleClick={() => navigate('/nus_login')}
                 rawname="Log in for NUS users"
                 id="nus"
                 key="nus"
