@@ -45,7 +45,7 @@ const LoginPage: React.FC = () => {
             {hasNusProvider && (
               <LoginButton
                 handleClick={() => navigate('/nus_login')}
-                rawname="Log in for NUS users"
+                name="NUS"
                 id="nus"
                 key="nus"
               />
@@ -60,13 +60,11 @@ const LoginPage: React.FC = () => {
 const LoginButton = ({
   handleClick,
   id,
-  name,
-  rawname
+  name
 }: {
   handleClick: (id: string) => void;
   id: string;
   name?: string;
-  rawname?: string;
 }) => {
   return (
     <Button
@@ -74,7 +72,7 @@ const LoginButton = ({
       rightIcon={IconNames.LOG_IN}
       onClick={useCallback(() => handleClick(id), [handleClick, id])}
     >
-      {rawname ?? <Translation ns="login">{t => t('Log in with', { name: name })}</Translation>}
+      <Translation ns="login">{t => t('Log in with', { name: name })}</Translation>
     </Button>
   );
 };
