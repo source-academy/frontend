@@ -13,12 +13,12 @@ type Props = {
   getText: () => string;
 };
 
-const INITIAL_MESSAGE: ChatMessage = {
+const INITIAL_MESSAGE: Readonly<ChatMessage> = {
   content: 'Ask me something about this paragraph!',
   role: 'assistant'
 };
 
-const BOT_ERROR_MESSAGE: ChatMessage = {
+const BOT_ERROR_MESSAGE: Readonly<ChatMessage> = {
   content: 'Sorry, I am down with a cold, please try again later.',
   role: 'assistant'
 };
