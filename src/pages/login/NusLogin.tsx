@@ -9,7 +9,7 @@ import classes from 'src/pages/login/NusLogin.module.scss';
 
 import sourceAcademyLogo from '../../assets/SA.jpg';
 
-const nusProviders = [...Constants.authProviders.entries()]
+const nusProviders = [...Constants.nusAuthProviders.entries()]
   .map(([id, { name }]) => ({
     id,
     name
@@ -63,14 +63,16 @@ const NusLogin: React.FC = () => {
                   {name}
                 </Button>
               ))}
-              <Button
-                intent="primary"
-                outlined
-                className={classes['outlined']}
-                onClick={() => navigate('/login')}
-              >
-                Non-NUS Users
-              </Button>
+              {Constants.hasOtherAuthProviders && (
+                <Button
+                  intent="primary"
+                  outlined
+                  className={classes['outlined']}
+                  onClick={() => navigate('/login')}
+                >
+                  Non-NUS Users
+                </Button>
+              )}
             </ButtonGroup>
           </Card>
         </div>

@@ -10,15 +10,10 @@ import classes from 'src/styles/Login.module.scss';
 
 import Constants from '../../commons/utils/Constants';
 
-const providers = [...Constants.authProviders.entries()]
-  .map(([id, { name }]) => ({
-    id,
-    name
-  }))
-  .filter(e => !e.name.includes('NUS'));
-const hasNusProvider = [...Constants.authProviders.values()].some(({ name }) =>
-  name.includes('NUS')
-);
+const providers = [...Constants.otherAuthProviders.entries()].map(([id, { name }]) => ({
+  id,
+  name
+}));
 
 const LoginPage: React.FC = () => {
   const dispatch = useDispatch();
@@ -39,7 +34,7 @@ const LoginPage: React.FC = () => {
         </div>
         <div>
           <ButtonGroup fill={true} vertical={true}>
-            {hasNusProvider && (
+            {Constants.hasNusAuthProviders && (
               <LoginButton
                 handleClick={() => navigate('/nus_login')}
                 name="NUS"
