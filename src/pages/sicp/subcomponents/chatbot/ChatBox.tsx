@@ -22,6 +22,11 @@ const BOT_ERROR_MESSAGE: Readonly<ChatMessage> = {
   role: 'assistant'
 };
 
+const MESSAGE_TOO_LONG_MESSAGE: Readonly<ChatMessage> = {
+  content: 'Your message is too long. Please try again with a shorter message.',
+  role: 'assistant'
+};
+
 const scrollToBottom = (ref: React.RefObject<HTMLDivElement>) => {
   ref.current?.scrollTo({ top: ref.current?.scrollHeight });
 };
@@ -32,6 +37,7 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
   const [chatId, setChatId] = useState<string>();
   const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_MESSAGE]);
   const [userInput, setUserInput] = useState('');
+  const [maxContentSize, setMaxContentSize] = useState(1000);
   const tokens = useTokens();
 
   const handleUserInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,6 +46,10 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
 
   const sendMessage = useCallback(() => {
     if (userInput.trim() === '') {
+      return;
+    }
+    if (userInput.length > maxContentSize) {
+      setMessages(prev => [...prev, MESSAGE_TOO_LONG_MESSAGE]);
       return;
     }
     setUserInput('');
@@ -56,7 +66,7 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [chatId, tokens, userInput]);
+  }, [chatId, tokens, userInput, maxContentSize]);
 
   const keyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
     e => {
@@ -71,7 +81,9 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
     initChat(tokens, getSection(), getText()).then(resp => {
       const message = resp.response;
       const conversationId = resp.conversationId;
+      const maxMessageSize = resp.maxContentSize;
       setMessages([message]);
+      setMaxContentSize(maxMessageSize);
       setChatId(conversationId);
     });
   }, [getSection, getText, tokens]);
