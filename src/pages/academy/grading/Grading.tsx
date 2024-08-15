@@ -54,7 +54,7 @@ const Grading: React.FC = () => {
     (page: number, filterParams: Object) => {
       dispatch(
         SessionActions.fetchGradingOverviews(
-          showAllGroups,
+          !showAllGroups,
           unpublishedToBackendParams(showAllSubmissions),
           paginationToBackendParams(page, pageSize),
           filterParams
