@@ -1,14 +1,11 @@
 import { Switch } from '@blueprintjs/core';
 import React from 'react';
+import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { KeysOfType } from 'src/commons/utils/TypeHelper';
 
-interface dataProps {
-  [key: string]: boolean;
-}
-
 type Props = {
-  data: dataProps;
-  field: KeysOfType<dataProps, boolean>;
+  data: AssessmentConfiguration;
+  field: KeysOfType<AssessmentConfiguration, boolean>;
   rowIndex: number;
   setStateHandler: (index: number, value: boolean) => void;
 };

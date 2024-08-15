@@ -69,7 +69,7 @@ const Grading: React.FC = () => {
       dispatch(increaseRequestCounter());
       dispatch(
         SessionActions.fetchGradingOverviews(
-          showAllGroups,
+          !showAllGroups,
           unpublishedToBackendParams(showAllSubmissions),
           paginationToBackendParams(page, pageSize),
           filterParams,
