@@ -16,18 +16,18 @@ const ChapterPublisher: React.FC = () => {
   const { value: textAssets } = useRequest<string[]>(fetchTextAssets, []);
   const { value: chapters } = useRequest<ChapterDetail[]>(fetchChapters, []);
 
-  const [chosenIndex, setChosenIndex] = useState(-1);
+  const [chosenIndex, setChosenIndex] = useState(defaultChapter.id);
 
   return (
     <>
       <h3>Publish / Edit Chapters</h3>
-      <select className={Classes.MENU} onChange={(e: any) => setChosenIndex(e.target.key)}>
+      <select className={Classes.MENU} onChange={(e: any) => { setChosenIndex(e.target.value) }}>
         {chapters.map((chapter, chapterIndex) => (
-          <option key={chapterIndex} value={chapter.title}>
+          <option value={chapterIndex}>
             {`Chapter ${chapterIndex}: ${chapter.title}`}
           </option>
         ))}
-        <option key={defaultChapter.id} value="">
+        <option value={defaultChapter.id}>
           New chapter
         </option>
       </select>
