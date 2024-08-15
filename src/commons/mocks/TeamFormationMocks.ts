@@ -4,7 +4,7 @@ import { TeamFormationOverview } from '../../features/teamFormation/TeamFormatio
 import { Role } from '../application/ApplicationTypes';
 import { mockFetchRole, mockFetchStudents } from './UserMocks';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const XLSX = require('xlsx');
 
 export const mockTeamFormationOverviews: TeamFormationOverview[] = [

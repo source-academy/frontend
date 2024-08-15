@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-require-imports */
 const webpack = require('webpack');
 
 const cracoConfig = {
@@ -178,4 +178,4 @@ const replaceSlashes = target => {
   return target.replaceAll('/', '[/\\\\]');
 };
 
-module.exports = cracoConfig
+module.exports = cracoConfig;
