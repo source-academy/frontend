@@ -71,15 +71,23 @@ export class Frame extends Visible implements IHoverable {
   }
 
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
-    this.highlightOnHover && this.highlightOnHover();
-    (this.tooltip || this.highlightOnHover) && setHoveredCursor(e.currentTarget);
-    this.tooltip && this.tooltipRef.current.show();
+    this.highlightOnHover?.();
+    if (this.tooltip || this.highlightOnHover) {
+      setHoveredCursor(e.currentTarget);
+    }
+    if (this.tooltip) {
+      this.tooltipRef.current.show();
+    }
   };
 
   onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
-    this.unhighlightOnHover && this.unhighlightOnHover();
-    (this.tooltip || this.unhighlightOnHover) && setUnhoveredCursor(e.currentTarget);
-    this.tooltip && this.tooltipRef.current.hide();
+    this.unhighlightOnHover?.();
+    if (this.tooltip || this.unhighlightOnHover) {
+      setUnhoveredCursor(e.currentTarget);
+    }
+    if (this.tooltip) {
+      this.tooltipRef.current.hide();
+    }
   };
 
   draw(): React.ReactNode {

@@ -88,8 +88,12 @@ const AchievementManualEditor: React.FC<Props> = props => {
       };
       updateGoalProgress(selectedUser.courseRegId, progress);
     } else {
-      !goal && showWarningMessage('Goal not selected');
-      !selectedUser && showWarningMessage('User not selected');
+      if (!goal) {
+        showWarningMessage('Goal not selected');
+      }
+      if (!selectedUser) {
+        showWarningMessage('User not selected');
+      }
     }
   };
 
