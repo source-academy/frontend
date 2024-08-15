@@ -1,6 +1,6 @@
+import { Store } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
-import { Store } from 'redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
 import { UserCourse } from 'src/commons/application/types/SessionTypes';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';

@@ -1,5 +1,5 @@
+import { Store } from '@reduxjs/toolkit';
 import _ from 'lodash';
-import { DeepPartial, Store } from 'redux';
 import mockStore from 'redux-mock-store';
 
 import {
@@ -15,6 +15,7 @@ import {
   OverallState
 } from '../application/ApplicationTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
+import { DeepPartial } from '../utils/TypeHelper';
 
 export function mockInitialStore(
   overrides?: DeepPartial<OverallState>

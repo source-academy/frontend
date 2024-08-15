@@ -1,6 +1,5 @@
-import { createReducer } from '@reduxjs/toolkit';
+import { createReducer, Reducer } from '@reduxjs/toolkit';
 import { stringify } from 'js-slang/dist/utils/stringify';
-import { Reducer } from 'redux';
 import { logOut } from 'src/commons/application/actions/CommonsActions';
 
 import {
