@@ -158,7 +158,7 @@ const AchievementSaga = combineSagaHandlers(AchievementActions, {
         (cseTab && cseTab.ariaHidden === 'false') ||
         (substTab && substTab.ariaHidden === 'false')
       ) {
-        introIcon && introIcon.classList.add('side-content-tab-alert-error');
+        introIcon?.classList.add('side-content-tab-alert-error');
       }
     }
     if (role && enableAchievements && !Constants.playgroundOnly) {

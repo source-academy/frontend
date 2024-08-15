@@ -15,8 +15,8 @@ import 'js-slang/dist/editors/ace/theme/source';
  *
  * Supersedes changes from: https://github.com/source-academy/frontend/issues/2543
  */
-import 'ace-builds/src-noconflict/keybinding-vim';
 import 'ace-builds/src-noconflict/keybinding-emacs';
+import 'ace-builds/src-noconflict/keybinding-vim';
 
 import { Card } from '@blueprintjs/core';
 import * as AceBuilds from 'ace-builds';
@@ -603,7 +603,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
         editor.focus();
       }
       closer = null;
-      callback && callback();
+      callback?.();
     }
 
     /**
