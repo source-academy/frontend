@@ -10,5 +10,5 @@ export type DashboardState = {
  */
 export type GradingSummary = {
   cols: string[];
-  rows: Object[];
+  rows: object[];
 };

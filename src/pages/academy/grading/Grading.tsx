@@ -51,7 +51,7 @@ const Grading: React.FC = () => {
 
   const dispatch = useDispatch();
   const updateGradingOverviewsCallback = useCallback(
-    (page: number, filterParams: Object) => {
+    (page: number, filterParams: object) => {
       dispatch(
         SessionActions.fetchGradingOverviews(
           !showAllGroups,
