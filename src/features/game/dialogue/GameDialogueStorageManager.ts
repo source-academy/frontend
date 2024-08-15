@@ -49,10 +49,10 @@ export default class GameDialogueStorageManager {
     return !speakerId
       ? ''
       : speakerId === 'you'
-      ? this.getUsername()
-      : speakerId === 'narrator'
-      ? 'Narrator'
-      : GameGlobalAPI.getInstance().getCharacterById(speakerId).name;
+        ? this.getUsername()
+        : speakerId === 'narrator'
+          ? 'Narrator'
+          : GameGlobalAPI.getInstance().getCharacterById(speakerId).name;
   }
 
   /**

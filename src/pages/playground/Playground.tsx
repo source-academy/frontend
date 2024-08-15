@@ -974,8 +974,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
         usingRemoteExecution || !isSourceLanguage(languageConfig.chapter)
           ? null
           : usingSubst || usingCse
-          ? stepperStepLimit
-          : executionTime
+            ? stepperStepLimit
+            : executionTime
       ]
     },
     editorContainerProps: editorContainerProps,

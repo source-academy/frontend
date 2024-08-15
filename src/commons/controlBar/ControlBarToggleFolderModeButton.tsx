@@ -20,8 +20,8 @@ export const ControlBarToggleFolderModeButton: React.FC<Props> = ({
   const tooltipContent = isSessionActive
     ? 'Currently unsupported while a collaborative session is active'
     : isPersistenceActive
-    ? 'Currently unsupported while a persistence method is active'
-    : `${isFolderModeEnabled ? 'Disable' : 'Enable'} Folder mode`;
+      ? 'Currently unsupported while a persistence method is active'
+      : `${isFolderModeEnabled ? 'Disable' : 'Enable'} Folder mode`;
   return (
     <Tooltip content={tooltipContent}>
       <ControlButton

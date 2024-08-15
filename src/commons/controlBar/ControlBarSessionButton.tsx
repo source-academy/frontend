@@ -215,8 +215,8 @@ export class ControlBarSessionButtons extends React.PureComponent<
                 this.props.editorSessionId === ''
                   ? undefined
                   : this.props.sharedbConnected
-                  ? Colors.GREEN3
-                  : Colors.RED3
+                    ? Colors.GREEN3
+                    : Colors.RED3
             }}
             isDisabled={this.props.isFolderModeEnabled}
           />

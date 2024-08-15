@@ -49,14 +49,14 @@ export class StashItemComponent extends Visible implements IHoverable {
       return typeof val === 'string'
         ? `'${val}'`.trim()
         : isNonGlobalFn(val)
-        ? 'closure'
-        : isDataArray(val)
-        ? arrowTo
-          ? 'pair/array'
-          : JSON.stringify(val)
-        : isSourceObject(val)
-        ? val.toReplString()
-        : String(value);
+          ? 'closure'
+          : isDataArray(val)
+            ? arrowTo
+              ? 'pair/array'
+              : JSON.stringify(val)
+            : isSourceObject(val)
+              ? val.toReplString()
+              : String(value);
     };
     this.text = truncateText(
       valToStashRep(value),

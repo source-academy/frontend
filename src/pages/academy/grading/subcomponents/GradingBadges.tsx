@@ -52,12 +52,12 @@ const ProgressStatusBadge: React.FC<ProgressStatusBadgeProps> = ({ progress }) =
         progress === ProgressStatuses.autograded
           ? IconNames.AIRPLANE
           : progress === ProgressStatuses.published
-          ? IconNames.ENDORSED
-          : progress === ProgressStatuses.graded
-          ? IconNames.TICK
-          : progress === ProgressStatuses.submitted
-          ? IconNames.TIME
-          : IconNames.DISABLE
+            ? IconNames.ENDORSED
+            : progress === ProgressStatuses.graded
+              ? IconNames.TICK
+              : progress === ProgressStatuses.submitted
+                ? IconNames.TIME
+                : IconNames.DISABLE
       }
       style={{ marginRight: '0.5rem' }}
     />
