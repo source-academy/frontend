@@ -83,7 +83,9 @@ export class StashItemComponent extends Visible implements IHoverable {
   // Save previous z-index to go back to later
   private zIndex = 0;
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
-    !isStashItemInDanger(this.index) && setHoveredStyle(e.currentTarget);
+    if (!isStashItemInDanger(this.index)) {
+      setHoveredStyle(e.currentTarget);
+    }
     setHoveredCursor(e.currentTarget);
     this.zIndex = this.ref.current.zIndex();
     this.ref.current.moveToTop();

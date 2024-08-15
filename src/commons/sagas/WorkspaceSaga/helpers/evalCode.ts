@@ -457,7 +457,7 @@ export function* evalCodeSaga(
   // Stop the home icon from flashing for an error if it is doing so since the evaluation is successful
   if (context.executionMethod === 'cse-machine' || context.executionMethod === 'interpreter') {
     const introIcon = document.getElementById(SideContentType.introduction + '-icon');
-    introIcon && introIcon.classList.remove('side-content-tab-alert-error');
+    introIcon?.classList.remove('side-content-tab-alert-error');
   }
 }
 
