@@ -63,7 +63,7 @@ const Grading: React.FC = () => {
   const hasLoadedBefore = useTypedSelector(state => state.workspaces.grading.hasLoadedBefore);
 
   const updateGradingOverviewsCallback = useCallback(
-    (page: number, filterParams: Object) => {
+    (page: number, filterParams: object) => {
       setRefreshQueryData({ page, filterParams });
       dispatch(setGradingHasLoadedBefore());
       dispatch(increaseRequestCounter());

@@ -44,7 +44,9 @@ export class Environment extends Visible {
           this._methodFrames.push(frame);
           methodFramesY += frame.height() + Config.FramePaddingY;
           methodFramesWidth = Math.max(methodFramesWidth, frame.width());
-          parentFrame && frame.setParent(parentFrame);
+          if (parentFrame) {
+            frame.setParent(parentFrame);
+          }
 
           parentFrame = frame;
           currEnv = currEnv.children.length ? currEnv.children[0] : undefined;

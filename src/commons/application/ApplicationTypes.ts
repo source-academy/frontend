@@ -569,7 +569,7 @@ export const createDefaultStoriesEnv = (
   chapter: Chapter,
   variant: Variant
 ): StoriesEnvState => ({
-  context: createContext<String>(chapter, [], envName, variant),
+  context: createContext<string>(chapter, [], envName, variant),
   execTime: 1000,
   isRunning: false,
   output: [],

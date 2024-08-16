@@ -49,14 +49,14 @@ export class StashItemComponent extends Visible implements IHoverable {
       return typeof val === 'string'
         ? `'${val}'`.trim()
         : isNonGlobalFn(val)
-        ? 'closure'
-        : isDataArray(val)
-        ? arrowTo
-          ? 'pair/array'
-          : JSON.stringify(val)
-        : isSourceObject(val)
-        ? val.toReplString()
-        : String(value);
+          ? 'closure'
+          : isDataArray(val)
+            ? arrowTo
+              ? 'pair/array'
+              : JSON.stringify(val)
+            : isSourceObject(val)
+              ? val.toReplString()
+              : String(value);
     };
     this.text = truncateText(
       valToStashRep(value),
@@ -83,7 +83,9 @@ export class StashItemComponent extends Visible implements IHoverable {
   // Save previous z-index to go back to later
   private zIndex = 0;
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
-    !isStashItemInDanger(this.index) && setHoveredStyle(e.currentTarget);
+    if (!isStashItemInDanger(this.index)) {
+      setHoveredStyle(e.currentTarget);
+    }
     setHoveredCursor(e.currentTarget);
     this.zIndex = this.ref.current.zIndex();
     this.ref.current.moveToTop();

@@ -25,11 +25,12 @@ export class Level extends Visible {
       ? ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth + Config.CanvasPaddingX
       : Config.CanvasPaddingX;
     this._y = Config.CanvasPaddingY;
-    CseMachine.getControlStash() &&
-      !this.parentLevel &&
-      (this._y +=
-        ControlStashConfig.StashItemHeight + ControlStashConfig.ControlItemTextPadding * 3);
-    this.parentLevel && (this._y += this.parentLevel.height() + this.parentLevel.y());
+    if (CseMachine.getControlStash() && !this.parentLevel) {
+      this._y += ControlStashConfig.StashItemHeight + ControlStashConfig.ControlItemTextPadding * 3;
+    }
+    if (this.parentLevel) {
+      this._y += this.parentLevel.height() + this.parentLevel.y();
+    }
     let prevFrame: Frame | null = null;
     envTreeNodes.forEach(e => {
       e.level = this;
