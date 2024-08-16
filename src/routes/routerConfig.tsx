@@ -132,6 +132,7 @@ export const getFullAcademyRouterConfig = ({
         { path: 'courses', element: <Navigate to="/" /> },
         ensureUserAndRole({ path: 'courses/:courseId/*', lazy: Academy, children: academyRoutes }),
         ensureUserAndRole({ path: 'playground', lazy: Playground }),
+        ensureUserAndRole({ path: 'playground/share/:uuid?', lazy: Playground }),
         { path: 'mission-control/:assessmentId?/:questionId?', lazy: MissionControl },
         ensureUserAndRole({ path: 'courses/:courseId/stories/new', lazy: EditStory }),
         ensureUserAndRole({ path: 'courses/:courseId/stories/view/:id', lazy: ViewStory }),

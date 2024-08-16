@@ -6,11 +6,10 @@ import { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
-import { decompressFromEncodedURIComponent } from 'lz-string';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { Dispatch, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useStore } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router';
-import { AnyAction, Dispatch } from 'redux';
+import { useLocation, useNavigate, useParams } from 'react-router';
+import { AnyAction } from 'redux';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import {
@@ -18,6 +17,8 @@ import {
   setSessionDetails,
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
+import { overwriteFilesInWorkspace } from 'src/commons/fileSystem/utils';
+import { getSharedProgram } from 'src/commons/sagas/RequestsSaga';
 import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
@@ -25,6 +26,7 @@ import makeUploadTabFrom from 'src/commons/sideContent/content/SideContentUpload
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import {
   showFullJSWarningOnUrlLoad,
   showFulTSWarningOnUrlLoad,
@@ -39,15 +41,13 @@ import {
   persistenceSaveFile,
   persistenceSaveFileAs
 } from 'src/features/persistence/PersistenceActions';
-import {
-  generateLzString,
-  playgroundConfigLanguage,
-  shortenURL,
-  updateShortURL
-} from 'src/features/playground/PlaygroundActions';
+import { playgroundConfigLanguage } from 'src/features/playground/PlaygroundActions';
+import ShareLinkStateDecoder from 'src/features/playground/shareLinks/decoder/Decoder';
+import JsonDecoderDelegate from 'src/features/playground/shareLinks/decoder/delegates/JsonDecoderDelegate';
+import UrlParamsDecoderDelegate from 'src/features/playground/shareLinks/decoder/delegates/UrlParamsDecoderDelegate';
+import { ShareLinkState } from 'src/features/playground/shareLinks/ShareLinkState';
 
 import {
-  getDefaultFilePath,
   getLanguageConfig,
   isSourceLanguage,
   OverallState,
@@ -71,17 +71,14 @@ import {
   NormalEditorContainerProps
 } from '../../commons/editor/EditorContainer';
 import { Position } from '../../commons/editor/EditorTypes';
-import { overwriteFilesInWorkspace } from '../../commons/fileSystem/utils';
 import FileSystemView from '../../commons/fileSystemView/FileSystemView';
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import { SideBarTab } from '../../commons/sideBar/SideBar';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
-import Constants, { Links } from '../../commons/utils/Constants';
+import Constants from '../../commons/utils/Constants';
 import { generateLanguageIntroduction } from '../../commons/utils/IntroductionHelper';
-import { convertParamToBoolean, convertParamToInt } from '../../commons/utils/ParamParseHelper';
-import { IParsedQuery, parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { initSession, log } from '../../features/eventLogging';
 import {
@@ -105,8 +102,8 @@ export type PlaygroundProps = {
   handleCloseEditor?: () => void;
 };
 
-export async function handleHash(
-  hash: string,
+export async function setStateFromPlaygroundConfiguration(
+  configObj: ShareLinkState,
   handlers: {
     handleChapterSelect: (chapter: Chapter, variant: Variant) => void;
     handleChangeExecTime: (execTime: number) => void;
@@ -115,33 +112,20 @@ export async function handleHash(
   dispatch: Dispatch<AnyAction>,
   fileSystem: FSModule | null
 ) {
-  // Make the parsed query string object a Partial because we might access keys which are not set.
-  const qs: Partial<IParsedQuery> = parseQuery(hash);
+  const { chap, exec, files, isFolder, tabIdx, tabs, variant } = configObj;
 
-  const chapter = convertParamToInt(qs.chap) ?? undefined;
-  if (chapter === Chapter.FULL_JS) {
+  if (chap === Chapter.FULL_JS) {
     showFullJSWarningOnUrlLoad();
-  } else if (chapter === Chapter.FULL_TS) {
+  } else if (chap === Chapter.FULL_TS) {
     showFulTSWarningOnUrlLoad();
   } else {
-    if (chapter === Chapter.HTML) {
+    if (chap === Chapter.HTML) {
       const continueToHtml = await showHTMLDisclaimer();
       if (!continueToHtml) {
         return;
       }
     }
 
-    // For backward compatibility with old share links - 'prgrm' is no longer used.
-    const program = qs.prgrm === undefined ? '' : decompressFromEncodedURIComponent(qs.prgrm);
-
-    // By default, create just the default file.
-    const defaultFilePath = getDefaultFilePath(workspaceLocation);
-    const files: Record<string, string> =
-      qs.files === undefined
-        ? {
-            [defaultFilePath]: program
-          }
-        : parseQuery(decompressFromEncodedURIComponent(qs.files));
     if (fileSystem !== null) {
       await overwriteFilesInWorkspace(workspaceLocation, fileSystem, files);
     }
@@ -150,16 +134,12 @@ export async function handleHash(
     // updating the file system view troublesome. To force the file system view to re-render
     // (and thus display the updated file system), we first disable Folder mode.
     dispatch(WorkspaceActions.setFolderMode(workspaceLocation, false));
-    const isFolderModeEnabled = convertParamToBoolean(qs.isFolder) ?? false;
+
     // If Folder mode should be enabled, enabling it after disabling it earlier will cause the
     // newly-added files to be shown. Note that this has to take place after the files are
     // already added to the file system.
-    dispatch(WorkspaceActions.setFolderMode(workspaceLocation, isFolderModeEnabled));
+    dispatch(WorkspaceActions.setFolderMode(workspaceLocation, isFolder));
 
-    // By default, open a single editor tab containing the default playground file.
-    const editorTabFilePaths = qs.tabs?.split(',').map(decompressFromEncodedURIComponent) ?? [
-      defaultFilePath
-    ];
     // Remove all editor tabs before populating with the ones from the query string.
     dispatch(
       WorkspaceActions.removeEditorTabsForDirectory(
@@ -168,28 +148,22 @@ export async function handleHash(
       )
     );
     // Add editor tabs from the query string.
-    editorTabFilePaths.forEach(filePath =>
+    tabs.forEach(filePath =>
       // Fall back on the empty string if the file contents do not exist.
       dispatch(WorkspaceActions.addEditorTab(workspaceLocation, filePath, files[filePath] ?? ''))
     );
 
-    // By default, use the first editor tab.
-    const activeEditorTabIndex = convertParamToInt(qs.tabIdx) ?? 0;
-    dispatch(WorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex));
-    if (chapter) {
-      // TODO: To migrate the state logic away from playgroundSourceChapter
-      //       and playgroundSourceVariant into the language config instead
-      const languageConfig = getLanguageConfig(chapter, qs.variant as Variant);
-      handlers.handleChapterSelect(chapter, languageConfig.variant);
-      // Hardcoded for Playground only for now, while we await workspace refactoring
-      // to decouple the SicpWorkspace from the Playground.
-      dispatch(playgroundConfigLanguage(languageConfig));
-    }
+    dispatch(WorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, tabIdx));
 
-    const execTime = Math.max(convertParamToInt(qs.exec || '1000') || 1000, 1000);
-    if (execTime) {
-      handlers.handleChangeExecTime(execTime);
-    }
+    // TODO: To migrate the state logic away from playgroundSourceChapter
+    //       and playgroundSourceVariant into the language config instead
+    const languageConfig = getLanguageConfig(chap, variant);
+    handlers.handleChapterSelect(chap, languageConfig.variant);
+    // Hardcoded for Playground only for now, while we await workspace refactoring
+    // to decouple the SicpWorkspace from the Playground.
+    dispatch(playgroundConfigLanguage(languageConfig));
+
+    handlers.handleChangeExecTime(exec);
   }
 }
 
@@ -225,9 +199,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant }
   } = useTypedSelector(state => state.workspaces[workspaceLocation]);
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
-  const { queryString, shortURL, persistenceFile, githubSaveInfo } = useTypedSelector(
-    state => state.playground
-  );
+  const { persistenceFile, githubSaveInfo } = useTypedSelector(state => state.playground);
   const {
     sourceChapter: courseSourceChapter,
     sourceVariant: courseSourceVariant,
@@ -320,9 +292,36 @@ const Playground: React.FC<PlaygroundProps> = props => {
   }, [editorSessionId]);
 
   const hash = isSicpEditor ? props.initialEditorValueHash : location.hash;
+  const { uuid } = useParams<{ uuid: string }>();
 
   useEffect(() => {
-    if (!hash) {
+    const getPlaygroundConfigurationFromHash = async (hash: string): Promise<ShareLinkState> =>
+      new ShareLinkStateDecoder(hash).decodeWith(new UrlParamsDecoderDelegate(), workspaceLocation);
+
+    const getPlaygroundConfigurationFromUuid = (uuid: string): Promise<ShareLinkState> =>
+      getSharedProgram(uuid).then(jsonText =>
+        new ShareLinkStateDecoder(jsonText).decodeWith(new JsonDecoderDelegate(), workspaceLocation)
+      );
+
+    const isLoadingFromPlaygroundConfiguration = hash || uuid;
+
+    if (isLoadingFromPlaygroundConfiguration) {
+      const getPlaygroundConfiguration = hash
+        ? getPlaygroundConfigurationFromHash(hash)
+        : getPlaygroundConfigurationFromUuid(uuid!);
+
+      getPlaygroundConfiguration
+        .then(playgroundConfiguration =>
+          setStateFromPlaygroundConfiguration(
+            playgroundConfiguration,
+            { handleChangeExecTime, handleChapterSelect },
+            workspaceLocation,
+            dispatch,
+            fileSystem
+          )
+        )
+        .catch(err => showWarningMessage(err.toString()));
+    } else {
       // If not a accessing via shared link, use the Source chapter and variant in the current course
       if (courseSourceChapter && courseSourceVariant) {
         handleChapterSelect(courseSourceChapter, courseSourceVariant);
@@ -336,19 +335,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
         // This is because Folder mode only works in Source 2+.
         dispatch(WorkspaceActions.setFolderMode(workspaceLocation, false));
       }
-      return;
     }
-    handleHash(
-      hash,
-      { handleChangeExecTime, handleChapterSelect },
-      workspaceLocation,
-      dispatch,
-      fileSystem
-    );
   }, [
     dispatch,
     fileSystem,
     hash,
+    uuid,
     courseSourceChapter,
     courseSourceVariant,
     workspaceLocation,
@@ -663,19 +655,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
   );
 
   const shareButton = useMemo(() => {
-    const qs = isSicpEditor ? Links.playground + '#' + props.initialEditorValueHash : queryString;
-    return (
-      <ControlBarShareButton
-        handleGenerateLz={() => dispatch(generateLzString())}
-        handleShortenURL={s => dispatch(shortenURL(s))}
-        handleUpdateShortURL={s => dispatch(updateShortURL(s))}
-        queryString={qs}
-        shortURL={shortURL}
-        isSicp={isSicpEditor}
-        key="share"
-      />
-    );
-  }, [dispatch, isSicpEditor, props.initialEditorValueHash, queryString, shortURL]);
+    return <ControlBarShareButton isSicp={isSicpEditor} key="share" />;
+  }, [isSicpEditor]);
 
   const toggleFolderModeButton = useMemo(() => {
     return (
