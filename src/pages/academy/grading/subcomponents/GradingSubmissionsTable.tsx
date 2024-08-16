@@ -429,44 +429,41 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       if (requestCounter <= 0) {
         const newData: IGradingTableRow[] = [];
 
-        const sameData: boolean = submissions.reduce(
-          (sameData, currentSubmission, index) => {
-            const newRow: IGradingTableRow = {
-              assessmentName: currentSubmission.assessmentName,
-              assessmentType: currentSubmission.assessmentType,
-              studentName: currentSubmission.studentName
-                ? currentSubmission.studentName
-                : currentSubmission.studentNames
+        const sameData: boolean = submissions.reduce((sameData, currentSubmission, index) => {
+          const newRow: IGradingTableRow = {
+            assessmentName: currentSubmission.assessmentName,
+            assessmentType: currentSubmission.assessmentType,
+            studentName: currentSubmission.studentName
+              ? currentSubmission.studentName
+              : currentSubmission.studentNames
                 ? currentSubmission.studentNames.join(', ')
                 : '',
-              studentUsername: currentSubmission.studentUsername
-                ? currentSubmission.studentUsername
-                : currentSubmission.studentUsernames
+            studentUsername: currentSubmission.studentUsername
+              ? currentSubmission.studentUsername
+              : currentSubmission.studentUsernames
                 ? currentSubmission.studentUsernames.join(', ')
                 : '',
-              groupName: currentSubmission.groupName,
-              progressStatus: currentSubmission.progress,
-              xp:
-                currentSubmission.currentXp +
-                ' (+' +
-                currentSubmission.xpBonus +
-                ') / ' +
-                currentSubmission.maxXp,
-              actionsIndex: currentSubmission.submissionId,
-              courseID: courseId!
-            };
-            newData.push(newRow);
-            return (
-              sameData &&
-              newRow.actionsIndex === rowData?.[index]?.actionsIndex &&
-              newRow.studentUsername === rowData?.[index]?.studentUsername &&
-              newRow.groupName === rowData?.[index]?.groupName &&
-              newRow.progressStatus === rowData?.[index]?.progressStatus &&
-              newRow.xp === rowData?.[index]?.xp
-            );
-          },
-          submissions.length === rowData?.length
-        );
+            groupName: currentSubmission.groupName,
+            progressStatus: currentSubmission.progress,
+            xp:
+              currentSubmission.currentXp +
+              ' (+' +
+              currentSubmission.xpBonus +
+              ') / ' +
+              currentSubmission.maxXp,
+            actionsIndex: currentSubmission.submissionId,
+            courseID: courseId!
+          };
+          newData.push(newRow);
+          return (
+            sameData &&
+            newRow.actionsIndex === rowData?.[index]?.actionsIndex &&
+            newRow.studentUsername === rowData?.[index]?.studentUsername &&
+            newRow.groupName === rowData?.[index]?.groupName &&
+            newRow.progressStatus === rowData?.[index]?.progressStatus &&
+            newRow.xp === rowData?.[index]?.xp
+          );
+        }, submissions.length === rowData?.length);
 
         if (!sameData) {
           setRowData(newData);

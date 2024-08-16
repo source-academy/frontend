@@ -109,7 +109,7 @@ export type GradingSubmissionTableProps = {
   totalRows: number;
   pageSize: number;
   submissions: GradingOverview[];
-  updateEntries: (page: number, filterParams: Object) => void;
+  updateEntries: (page: number, filterParams: object) => void;
 };
 
 export enum ColumnName {
