@@ -155,8 +155,8 @@ export default class StringUtils {
     return commentIndex === -1
       ? text
       : removeAfter
-      ? text.slice(0, commentIndex)
-      : text.slice(commentIndex + commentChars.length);
+        ? text.slice(0, commentIndex)
+        : text.slice(commentIndex + commentChars.length);
   }
 
   /**

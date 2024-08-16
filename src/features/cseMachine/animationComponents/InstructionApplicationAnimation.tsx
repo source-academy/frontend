@@ -93,7 +93,9 @@ export class InstructionApplicationAnimation extends Animatable {
           x: startX,
           y:
             resultY +
-            (this.resultItemIsFirst ? 0 : this.resultItem?.height() ?? this.stashItems[0].height()),
+            (this.resultItemIsFirst
+              ? 0
+              : (this.resultItem?.height() ?? this.stashItems[0].height())),
           width: minInstrWidth
         },
         animationConfig

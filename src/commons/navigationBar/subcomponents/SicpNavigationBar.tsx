@@ -104,7 +104,7 @@ const SicpNavigationBar: React.FC = () => {
     }
   };
 
-  function search(keyStr: String, trie: TrieNode) {
+  function search(keyStr: string, trie: TrieNode) {
     const keys = [...keyStr];
     let node = trie;
     for (let i = 0; i < keys.length; i++) {
@@ -130,7 +130,7 @@ const SicpNavigationBar: React.FC = () => {
     return results;
   }
 
-  function autocomplete(incompleteKeys: String, trie: TrieNode, n: number = 25) {
+  function autocomplete(incompleteKeys: string, trie: TrieNode, n: number = 25) {
     let node = trie;
     for (let i = 0; i < incompleteKeys.length; i++) {
       if (!node.children[incompleteKeys[i]]) {

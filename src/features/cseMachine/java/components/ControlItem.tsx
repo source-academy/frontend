@@ -75,14 +75,18 @@ export class ControlItem extends Visible implements IHoverable {
 
   onMouseEnter = (e: KonvaEventObject<MouseEvent>): void => {
     this.highlightOnHover();
-    !this.isCurrentItem() && setHoveredStyle(e.currentTarget);
+    if (!this.isCurrentItem()) {
+      setHoveredStyle(e.currentTarget);
+    }
     setHoveredCursor(e.currentTarget);
     this._tooltipRef.current.show();
   };
 
   onMouseLeave = (e: KonvaEventObject<MouseEvent>): void => {
     this.unhighlightOnHover();
-    !this.isCurrentItem() && setUnhoveredStyle(e.currentTarget);
+    if (!this.isCurrentItem()) {
+      setUnhoveredStyle(e.currentTarget);
+    }
     setUnhoveredCursor(e.currentTarget);
     this._tooltipRef.current.hide();
   };

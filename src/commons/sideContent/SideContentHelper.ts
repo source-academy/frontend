@@ -78,7 +78,7 @@ export const useSideContent = (location: SideContentLocation, defaultTab?: SideC
   const [workspaceLocation, storyEnv] = getLocation(location);
   const { alerts, dynamicTabs, selectedTab, height }: SideContentState = useTypedSelector(state =>
     workspaceLocation === 'stories'
-      ? state.sideContent.stories[storyEnv] ?? { ...defaultSideContent }
+      ? (state.sideContent.stories[storyEnv] ?? { ...defaultSideContent })
       : state.sideContent[workspaceLocation]
   );
   const dispatch = useDispatch();

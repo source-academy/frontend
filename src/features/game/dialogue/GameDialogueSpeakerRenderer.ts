@@ -31,8 +31,9 @@ export default class DialogueSpeakerRenderer {
   public changeSpeakerTo(newSpeakerDetail?: SpeakerDetail | null) {
     if (newSpeakerDetail === undefined) return;
 
-    this.currentSpeakerId &&
+    if (this.currentSpeakerId) {
       GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Speaker, Layer.SpeakerBox]);
+    }
     this.showNewSpeaker(newSpeakerDetail);
   }
 
