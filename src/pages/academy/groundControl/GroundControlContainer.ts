@@ -1,5 +1,5 @@
+import { bindActionCreators, Dispatch } from '@reduxjs/toolkit';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
 
 import SessionActions from '../../../commons/application/actions/SessionActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
