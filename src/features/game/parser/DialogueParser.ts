@@ -120,7 +120,9 @@ export default class DialogueParser {
           break;
         case isActionLabel(rawStr):
           const lastLine = dialogueLines[dialogueLines.length - 1];
-          !lastLine.actionIds && (lastLine.actionIds = []);
+          if (!lastLine.actionIds) {
+            lastLine.actionIds = [];
+          }
           lastLine.actionIds.push(ActionParser.parseAction(rawStr));
           break;
         case isSpeaker(rawStr):

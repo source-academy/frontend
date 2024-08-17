@@ -122,7 +122,10 @@ const ChapterPublisherEditor: React.FC<ChapterSimProps> = ({ chapterDetail, chap
       {openDate && getStandardDateTime(openDate.toISOString())}
       <DatePicker
         onChange={(date: Date | null) => {
-          date && setOpenDate(date);
+          if (!date) {
+            return;
+          }
+          setOpenDate(date);
         }}
         showActionsBar
         highlightCurrentDay

@@ -128,7 +128,7 @@ type Props = {
   totalRows: number;
   pageSize: number;
   submissions: GradingOverview[];
-  updateEntries: (page: number, filterParams: Object) => void;
+  updateEntries: (page: number, filterParams: object) => void;
 };
 
 const GradingSubmissionTable: React.FC<Props> = ({

@@ -54,9 +54,9 @@ export function* evalCodeSaga(
             .usingSubst
       )
     : isStoriesBlock
-    ? // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
-      yield select((state: OverallState) => state.stories.envs[storyEnv!].usingSubst)
-    : false;
+      ? // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
+        yield select((state: OverallState) => state.stories.envs[storyEnv!].usingSubst)
+      : false;
   const stepLimit: number = isStoriesBlock
     ? yield select((state: OverallState) => state.stories.envs[storyEnv!].stepLimit)
     : yield select((state: OverallState) => state.workspaces[workspaceLocation].stepLimit);
@@ -93,12 +93,12 @@ export function* evalCodeSaga(
   const currentStep: number = needUpdateCse
     ? -1
     : correctWorkspace
-    ? yield select(
-        (state: OverallState) =>
-          (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
-            .currentStep
-      )
-    : -1;
+      ? yield select(
+          (state: OverallState) =>
+            (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
+              .currentStep
+        )
+      : -1;
   const cseActiveAndCorrectChapter =
     (isSchemeLanguage(context.chapter) || context.chapter >= 3) && cseIsActive;
   if (cseActiveAndCorrectChapter) {
@@ -273,32 +273,32 @@ export function* evalCodeSaga(
       actionType === InterpreterActions.debuggerResume.type
         ? call(resume, lastDebuggerResult)
         : isNonDet || isLazy || isWasm
-        ? call_variant(context.variant)
-        : isC
-        ? call(cCompileAndRun, entrypointCode, context)
-        : isJava
-        ? call(javaRun, entrypointCode, context, currentStep, isUsingCse, {
-            uploadIsActive,
-            uploads
-          })
-        : call(
-            runFilesInContext,
-            isFolderModeEnabled
-              ? files
-              : {
-                  [entrypointFilePath]: files[entrypointFilePath]
-                },
-            entrypointFilePath,
-            context,
-            {
-              scheduler: 'preemptive',
-              originalMaxExecTime: execTime,
-              stepLimit: stepLimit,
-              throwInfiniteLoops: true,
-              useSubst: substActiveAndCorrectChapter,
-              envSteps: currentStep
-            }
-          ),
+          ? call_variant(context.variant)
+          : isC
+            ? call(cCompileAndRun, entrypointCode, context)
+            : isJava
+              ? call(javaRun, entrypointCode, context, currentStep, isUsingCse, {
+                  uploadIsActive,
+                  uploads
+                })
+              : call(
+                  runFilesInContext,
+                  isFolderModeEnabled
+                    ? files
+                    : {
+                        [entrypointFilePath]: files[entrypointFilePath]
+                      },
+                  entrypointFilePath,
+                  context,
+                  {
+                    scheduler: 'preemptive',
+                    originalMaxExecTime: execTime,
+                    stepLimit: stepLimit,
+                    throwInfiniteLoops: true,
+                    useSubst: substActiveAndCorrectChapter,
+                    envSteps: currentStep
+                  }
+                ),
 
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
@@ -457,7 +457,7 @@ export function* evalCodeSaga(
   // Stop the home icon from flashing for an error if it is doing so since the evaluation is successful
   if (context.executionMethod === 'cse-machine' || context.executionMethod === 'interpreter') {
     const introIcon = document.getElementById(SideContentType.introduction + '-icon');
-    introIcon && introIcon.classList.remove('side-content-tab-alert-error');
+    introIcon?.classList.remove('side-content-tab-alert-error');
   }
 }
 

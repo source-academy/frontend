@@ -6,7 +6,7 @@ import { actions } from '../../utils/ActionsHelper';
 // mock away the store
 jest.mock('../../../pages/createStore');
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const GitHubPersistenceSaga = require('../GitHubPersistenceSaga').default;
 
 test('logoutGitHub results in REMOVE_GITHUB_OCTOKIT_OBJECT being dispatched', async () => {

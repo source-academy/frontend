@@ -55,9 +55,8 @@ export function convertAssetPathsToTree(
  * @param fn Function to apply to every element in the tree
  */
 export function treeMap(nodes: TreeNodeInfo[] | undefined, fn: (node: TreeNodeInfo) => void) {
-  nodes &&
-    nodes.forEach(node => {
-      fn(node);
-      treeMap(node.childNodes, fn);
-    });
+  nodes?.forEach(node => {
+    fn(node);
+    treeMap(node.childNodes, fn);
+  });
 }

@@ -209,7 +209,9 @@ class GameStateManager {
    */
   public addLocationMode(locationId: LocationId, mode: GameMode) {
     this.gameMap.getLocationAtId(locationId).modes.add(mode);
-    !this.isCurrentLocation(locationId) && this.addLocationNotif(locationId);
+    if (!this.isCurrentLocation(locationId)) {
+      this.addLocationNotif(locationId);
+    }
   }
 
   /**
@@ -221,7 +223,9 @@ class GameStateManager {
    */
   public removeLocationMode(locationId: LocationId, mode: GameMode) {
     this.gameMap.getLocationAtId(locationId).modes.delete(mode);
-    !this.isCurrentLocation(locationId) && this.addLocationNotif(locationId);
+    if (!this.isCurrentLocation(locationId)) {
+      this.addLocationNotif(locationId);
+    }
   }
 
   ///////////////////////////////
@@ -256,9 +260,11 @@ class GameStateManager {
     const items = location[gameItemType as keyof typeof location];
     (items as Set<any> | undefined)?.add(itemId);
 
-    this.isCurrentLocation(locationId)
-      ? this.getSubscriberForItemType(gameItemType)?.handleAdd(itemId)
-      : this.addLocationNotif(locationId);
+    if (this.isCurrentLocation(locationId)) {
+      this.getSubscriberForItemType(gameItemType)?.handleAdd(itemId);
+    } else {
+      this.addLocationNotif(locationId);
+    }
   }
 
   /**
@@ -276,9 +282,11 @@ class GameStateManager {
     const items = location[gameItemType as keyof typeof location];
     (items as Set<any> | undefined)?.delete(itemId);
 
-    this.isCurrentLocation(locationId)
-      ? this.getSubscriberForItemType(gameItemType)?.handleDelete(itemId)
-      : this.addLocationNotif(locationId);
+    if (this.isCurrentLocation(locationId)) {
+      this.getSubscriberForItemType(gameItemType)?.handleDelete(itemId);
+    } else {
+      this.addLocationNotif(locationId);
+    }
   }
 
   /**
@@ -295,9 +303,11 @@ class GameStateManager {
     this.gameMap.getLocations().forEach((location, locId) => {
       if (!location.objects.has(id)) return;
 
-      this.isCurrentLocation(locId)
-        ? this.getSubscriberForItemType(GameItemType.objects)?.handleMutate(id)
-        : this.addLocationNotif(locId);
+      if (this.isCurrentLocation(locId)) {
+        this.getSubscriberForItemType(GameItemType.objects)?.handleMutate(id);
+      } else {
+        this.addLocationNotif(locId);
+      }
     });
   }
 
@@ -315,9 +325,11 @@ class GameStateManager {
     this.gameMap.getLocations().forEach((location, locId) => {
       if (!location.boundingBoxes.has(id)) return;
 
-      this.isCurrentLocation(locId)
-        ? this.getSubscriberForItemType(GameItemType.boundingBoxes)?.handleMutate(id)
-        : this.addLocationNotif(locId);
+      if (this.isCurrentLocation(locId)) {
+        this.getSubscriberForItemType(GameItemType.boundingBoxes)?.handleMutate(id);
+      } else {
+        this.addLocationNotif(locId);
+      }
     });
   }
 
@@ -355,9 +367,11 @@ class GameStateManager {
     this.gameMap.getLocations().forEach((location, locId) => {
       if (!location.characters.has(id)) return;
 
-      this.isCurrentLocation(locId)
-        ? this.getSubscriberForItemType(GameItemType.characters)?.handleMutate(id)
-        : this.addLocationNotif(locId);
+      if (this.isCurrentLocation(locId)) {
+        this.getSubscriberForItemType(GameItemType.characters)?.handleMutate(id);
+      } else {
+        this.addLocationNotif(locId);
+      }
     });
   }
 

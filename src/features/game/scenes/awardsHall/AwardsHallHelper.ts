@@ -63,7 +63,9 @@ export const createAwardsHoverContainer = (scene: Phaser.Scene, award: AwardProp
   hoverContainer.add([hoverTextBg, awardTitle, awardDesc, scrollFrameTop, scrollFrameBot]);
 
   // Only show asset key if award is completed
-  award.completed && hoverContainer.add(awardAssetKey);
+  if (award.completed) {
+    hoverContainer.add(awardAssetKey);
+  }
 
   hoverContainer.setVisible(false);
   return hoverContainer;

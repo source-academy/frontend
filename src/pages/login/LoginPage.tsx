@@ -4,12 +4,13 @@ import classNames from 'classnames';
 import { useCallback } from 'react';
 import { Translation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import classes from 'src/styles/Login.module.scss';
 
 import Constants from '../../commons/utils/Constants';
 
-const providers = [...Constants.authProviders.entries()].map(([id, { name }]) => ({
+const providers = [...Constants.otherAuthProviders.entries()].map(([id, { name }]) => ({
   id,
   name
 }));
@@ -20,6 +21,7 @@ const LoginPage: React.FC = () => {
     (providerId: string) => dispatch(SessionActions.login(providerId)),
     [dispatch]
   );
+  const navigate = useNavigate();
 
   return (
     <div className={classNames(classes['Login'], Classes.DARK)}>
@@ -32,6 +34,14 @@ const LoginPage: React.FC = () => {
         </div>
         <div>
           <ButtonGroup fill={true} vertical={true}>
+            {Constants.hasNusAuthProviders && (
+              <LoginButton
+                handleClick={() => navigate('/nus_login')}
+                name="NUS"
+                id="nus"
+                key="nus"
+              />
+            )}
             {providers.map(({ id, name }) => (
               <LoginButton handleClick={handleLogin} name={name} id={id} key={id} />
             ))}

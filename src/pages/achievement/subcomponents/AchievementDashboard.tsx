@@ -90,11 +90,17 @@ const AchievementDashboard: React.FC = () => {
    * Fetch the latest achievements and goals from backend when the page is rendered
    */
   useEffect(() => {
-    selectedUser ? handleGetGoals(selectedUser.courseRegId) : handleGetOwnGoals();
+    if (selectedUser) {
+      handleGetGoals(selectedUser.courseRegId);
+    } else {
+      handleGetOwnGoals();
+    }
 
-    selectedUser
-      ? handleGetUserAssessmentOverviews(selectedUser.courseRegId)
-      : handleFetchAssessmentOverviews();
+    if (selectedUser) {
+      handleGetUserAssessmentOverviews(selectedUser.courseRegId);
+    } else {
+      handleFetchAssessmentOverviews();
+    }
 
     handleGetAchievements();
   }, [
@@ -112,9 +118,9 @@ const AchievementDashboard: React.FC = () => {
 
   // Inserts assessment achievements for each assessment retrieved
   // Note that assessmentConfigs is updated when the page loads (see Application.tsx)
-  userAssessmentOverviews &&
-    assessmentConfigs &&
+  if (userAssessmentOverviews && assessmentConfigs) {
     insertFakeAchievements(userAssessmentOverviews, assessmentConfigs, inferencer);
+  }
 
   const filterState = useState<FilterStatus>(FilterStatus.ALL);
   const [filterStatus] = filterState;

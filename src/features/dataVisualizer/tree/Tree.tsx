@@ -58,8 +58,8 @@ export class Tree {
       return isArray(structure)
         ? constructTree(structure)
         : isFunction(structure)
-        ? constructFunction(structure)
-        : constructData(structure);
+          ? constructFunction(structure)
+          : constructData(structure);
     }
 
     /**

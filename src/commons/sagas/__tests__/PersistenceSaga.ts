@@ -12,7 +12,7 @@ import { actions } from '../../utils/ActionsHelper';
 // store import is mocked
 jest.mock('../../../pages/createStore');
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const PersistenceSaga = require('../PersistenceSaga').default;
 
 const USER_EMAIL = 'test@email.com';

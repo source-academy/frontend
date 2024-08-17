@@ -1,6 +1,7 @@
 @import '_global';
 
 .Login {
+  background-size: cover;
   background-image: linear-gradient(
       to right,
       rgba(0, 0, 0, 0.3),
@@ -8,6 +9,8 @@
       rgba(0, 0, 0, 0.3)
     ),
     url('#{$images-path}/login_background.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   height: 100%;
   width: 100%;
   display: flex;

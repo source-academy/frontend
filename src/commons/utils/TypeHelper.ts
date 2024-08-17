@@ -41,15 +41,20 @@ export type ActionType<T extends Record<string, any>> = {
   [k in keyof T]: ReturnType<T[k]>;
 }[keyof T];
 
+// Copied from redux v4
+export type DeepPartial<T> = {
+  [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];
+};
+
 /** Omits the index signature `[key: string]: any;` from type `T` */
 export type RemoveIndex<T> = {
   [K in keyof T as string extends K
     ? never
     : number extends K
-    ? never
-    : symbol extends K
-    ? never
-    : K]: T[K];
+      ? never
+      : symbol extends K
+        ? never
+        : K]: T[K];
 };
 
 /**
