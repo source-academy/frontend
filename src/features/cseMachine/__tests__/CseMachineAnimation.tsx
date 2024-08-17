@@ -201,8 +201,8 @@ test('AnimationComponent animates correctly with parallel animateTo calls 2', as
           elapsed < d
             ? [easing(elapsed, 0, 100, d), 4]
             : elapsed < d * 2
-            ? [easing(elapsed - d, 100, 100, d), 4]
-            : [easing(elapsed - d * 2, 200, -50, d), 2]
+              ? [easing(elapsed - d, 100, 100, d), 4]
+              : [easing(elapsed - d * 2, 200, -50, d), 2]
       };
     }
   });
