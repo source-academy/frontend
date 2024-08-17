@@ -1,5 +1,4 @@
-import { createReducer } from '@reduxjs/toolkit';
-import { Reducer } from 'redux';
+import { createReducer, Reducer } from '@reduxjs/toolkit';
 import { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
 import { defaultAchievement } from '../../commons/application/ApplicationTypes';

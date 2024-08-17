@@ -1,8 +1,8 @@
+import { Store } from '@reduxjs/toolkit';
 import { render } from '@testing-library/react';
 import { Provider, useDispatch } from 'react-redux';
 import * as ReactRouter from 'react-router';
 import { createMemoryRouter, RouterProvider } from 'react-router';
-import { Store } from 'redux';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
 
