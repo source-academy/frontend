@@ -5,7 +5,7 @@ import Phaser from 'phaser';
 import { call, put, select } from 'redux-saga/effects';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 import { combineSagaHandlers } from 'src/commons/redux/utils';
-import WorkspaceActions, { evalRepl } from 'src/commons/workspace/WorkspaceActions';
+import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 
 import { EventType } from '../../../features/achievement/AchievementTypes';
@@ -246,7 +246,7 @@ const WorkspaceSaga = combineSagaHandlers(
         context,
         execTime,
         workspaceLocation,
-        evalRepl.type
+        WorkspaceActions.evalRepl.type
       );
     },
     debuggerResume: function* (action) {
@@ -353,8 +353,8 @@ const WorkspaceSaga = combineSagaHandlers(
         newChapter === Chapter.FULL_JS
           ? chapterChanged && (yield call(showFullJSDisclaimer))
           : newChapter === Chapter.FULL_TS
-          ? chapterChanged && (yield call(showFullTSDisclaimer))
-          : chapterChanged;
+            ? chapterChanged && (yield call(showFullTSDisclaimer))
+            : chapterChanged;
 
       if (toChangeChapter) {
         const library: Library = {

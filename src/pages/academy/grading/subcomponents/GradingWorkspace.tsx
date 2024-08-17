@@ -9,27 +9,7 @@ import SessionActions from 'src/commons/application/actions/SessionActions';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { showSimpleErrorDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import {
-  beginClearContext,
-  browseReplHistoryDown,
-  browseReplHistoryUp,
-  changeExecTime,
-  clearReplOutput,
-  evalEditor,
-  evalRepl,
-  evalTestcase,
-  navigateToDeclaration,
-  promptAutocomplete,
-  removeEditorTab,
-  resetWorkspace,
-  runAllTestcases,
-  setEditorBreakpoint,
-  updateActiveEditorTabIndex,
-  updateCurrentSubmissionId,
-  updateEditorValue,
-  updateHasUnsavedChanges,
-  updateReplValue
-} from 'src/commons/workspace/WorkspaceActions';
+import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 
 import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
 import {
@@ -120,42 +100,48 @@ const GradingWorkspace: React.FC<Props> = props => {
     handlePromptAutocomplete
   } = useMemo(() => {
     return {
-      handleBrowseHistoryDown: () => dispatch(browseReplHistoryDown(workspaceLocation)),
-      handleBrowseHistoryUp: () => dispatch(browseReplHistoryUp(workspaceLocation)),
+      handleBrowseHistoryDown: () =>
+        dispatch(WorkspaceActions.browseReplHistoryDown(workspaceLocation)),
+      handleBrowseHistoryUp: () =>
+        dispatch(WorkspaceActions.browseReplHistoryUp(workspaceLocation)),
       handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
-        dispatch(beginClearContext(workspaceLocation, library, shouldInitLibrary)),
+        dispatch(WorkspaceActions.beginClearContext(workspaceLocation, library, shouldInitLibrary)),
       handleDeclarationNavigate: (cursorPosition: Position) =>
-        dispatch(navigateToDeclaration(workspaceLocation, cursorPosition)),
-      handleEditorEval: () => dispatch(evalEditor(workspaceLocation)),
+        dispatch(WorkspaceActions.navigateToDeclaration(workspaceLocation, cursorPosition)),
+      handleEditorEval: () => dispatch(WorkspaceActions.evalEditor(workspaceLocation)),
       handleSetActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
-        dispatch(updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)),
+        dispatch(
+          WorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)
+        ),
       handleRemoveEditorTabByIndex: (editorTabIndex: number) =>
-        dispatch(removeEditorTab(workspaceLocation, editorTabIndex)),
+        dispatch(WorkspaceActions.removeEditorTab(workspaceLocation, editorTabIndex)),
       handleEditorValueChange: (editorTabIndex: number, newEditorValue: string) =>
-        dispatch(updateEditorValue(workspaceLocation, 0, newEditorValue)),
+        dispatch(WorkspaceActions.updateEditorValue(workspaceLocation, 0, newEditorValue)),
       handleEditorUpdateBreakpoints: (editorTabIndex: number, newBreakpoints: string[]) =>
-        dispatch(setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)),
+        dispatch(
+          WorkspaceActions.setEditorBreakpoint(workspaceLocation, editorTabIndex, newBreakpoints)
+        ),
       handleGradingFetch: (submissionId: number) =>
         dispatch(SessionActions.fetchGrading(submissionId)),
-      handleReplEval: () => dispatch(evalRepl(workspaceLocation)),
-      handleReplOutputClear: () => dispatch(clearReplOutput(workspaceLocation)),
+      handleReplEval: () => dispatch(WorkspaceActions.evalRepl(workspaceLocation)),
+      handleReplOutputClear: () => dispatch(WorkspaceActions.clearReplOutput(workspaceLocation)),
       handleReplValueChange: (newValue: string) =>
-        dispatch(updateReplValue(newValue, workspaceLocation)),
+        dispatch(WorkspaceActions.updateReplValue(newValue, workspaceLocation)),
       handleResetWorkspace: (options: Partial<WorkspaceState>) =>
-        dispatch(resetWorkspace(workspaceLocation, options)),
+        dispatch(WorkspaceActions.resetWorkspace(workspaceLocation, options)),
       handleChangeExecTime: (execTimeMs: number) =>
-        dispatch(changeExecTime(execTimeMs, workspaceLocation)),
+        dispatch(WorkspaceActions.changeExecTime(execTimeMs, workspaceLocation)),
       handleSideContentHeightChange: (heightChange: number) =>
         dispatch(changeSideContentHeight(heightChange, workspaceLocation)),
       handleTestcaseEval: (testcaseId: number) =>
-        dispatch(evalTestcase(workspaceLocation, testcaseId)),
-      handleRunAllTestcases: () => dispatch(runAllTestcases(workspaceLocation)),
+        dispatch(WorkspaceActions.evalTestcase(workspaceLocation, testcaseId)),
+      handleRunAllTestcases: () => dispatch(WorkspaceActions.runAllTestcases(workspaceLocation)),
       handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) =>
-        dispatch(updateCurrentSubmissionId(submissionId, questionId)),
+        dispatch(WorkspaceActions.updateCurrentSubmissionId(submissionId, questionId)),
       handleUpdateHasUnsavedChanges: (unsavedChanges: boolean) =>
-        dispatch(updateHasUnsavedChanges(workspaceLocation, unsavedChanges)),
+        dispatch(WorkspaceActions.updateHasUnsavedChanges(workspaceLocation, unsavedChanges)),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        dispatch(promptAutocomplete(workspaceLocation, row, col, callback))
+        dispatch(WorkspaceActions.promptAutocomplete(workspaceLocation, row, col, callback))
     };
   }, [dispatch]);
 

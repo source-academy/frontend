@@ -3,8 +3,7 @@ import { SoundAsset } from '../../assets/AssetsTypes';
 import { getAwardProp } from '../../awards/GameAwardsHelper';
 import { BBoxProperty } from '../../boundingBoxes/GameBoundingBoxTypes';
 import { Character, SpeakerDetail } from '../../character/GameCharacterTypes';
-import { GamePosition, GameSize, ItemId } from '../../commons/CommonTypes';
-import { AssetKey } from '../../commons/CommonTypes';
+import { AssetKey, GamePosition, GameSize, ItemId } from '../../commons/CommonTypes';
 import { Dialogue } from '../../dialogue/GameDialogueTypes';
 import { displayMiniMessage } from '../../effects/MiniMessage';
 import { displayNotification } from '../../effects/Notification';
@@ -14,6 +13,7 @@ import { AnyId, GameItemType, GameLocation, LocationId } from '../../location/Ga
 import { GameMode } from '../../mode/GameModeTypes';
 import { ObjectProperty } from '../../objects/GameObjectTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
+import { Quiz } from '../../quiz/GameQuizType';
 import { SettingsJson } from '../../save/GameSaveTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { StateObserver, UserStateType } from '../../state/GameStateTypes';
@@ -283,6 +283,10 @@ class GameGlobalAPI {
     await this.getGameManager().getDialogueManager().showDialogue(dialogueId);
   }
 
+  public async showNextLine(resolve: () => void) {
+    await this.getGameManager().getDialogueManager().showNextLine(resolve);
+  }
+
   /////////////////////
   //   Storage      //
   /////////////////////
@@ -403,9 +407,11 @@ class GameGlobalAPI {
   }
 
   public enableSprite(gameObject: Phaser.GameObjects.GameObject, active: boolean) {
-    active
-      ? this.getGameManager().input.enable(gameObject)
-      : this.getGameManager().input.disable(gameObject);
+    if (active) {
+      this.getGameManager().input.enable(gameObject);
+    } else {
+      this.getGameManager().input.disable(gameObject);
+    }
   }
 
   /////////////////////
@@ -501,8 +507,41 @@ class GameGlobalAPI {
   public getBBoxById(bboxId: ItemId): BBoxProperty {
     return mandatory(this.getGameMap().getBBoxPropMap().get(bboxId));
   }
+
+  public getQuizById(quizId: ItemId): Quiz {
+    return mandatory(this.getGameMap().getQuizMap().get(quizId));
+  }
+
   public getAssetByKey(assetKey: AssetKey) {
     return this.getGameMap().getAssetByKey(assetKey);
+  }
+
+  /////////////////////
+  //      Quiz       //
+  /////////////////////
+
+  public async showQuiz(quizId: ItemId) {
+    await this.getGameManager().getQuizManager().showQuiz(quizId);
+  }
+
+  public getQuizLength(quizId: ItemId): number {
+    return this.getGameManager().getQuizManager().getNumOfQns(quizId);
+  }
+
+  public isQuizAttempted(key: string): boolean {
+    return this.getGameManager().getStateManager().isQuizAttempted(key);
+  }
+
+  public isQuizComplete(key: string): boolean {
+    return this.getGameManager().getStateManager().isQuizComplete(key);
+  }
+
+  public setQuizScore(key: string, score: number): void {
+    this.getGameManager().getStateManager().setQuizScore(key, score);
+  }
+
+  public getQuizScore(key: string): number {
+    return this.getGameManager().getStateManager().getQuizScore(key);
   }
 }
 

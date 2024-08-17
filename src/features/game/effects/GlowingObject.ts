@@ -69,13 +69,13 @@ export default class GlowingImage {
   }
 
   public startGlow() {
-    this.glowClearer && this.glowClearer();
+    this.glowClearer?.();
     this.glowClearer = blink(this.scene, this.imageGlow);
     this.imageGlow.setAlpha(1);
   }
 
   public clearGlow() {
-    this.glowClearer && this.glowClearer();
+    this.glowClearer?.();
     this.imageGlow.setAlpha(0);
   }
 
@@ -85,7 +85,7 @@ export default class GlowingImage {
 
   public clearBlink() {
     this.getContainer().setAlpha(1);
-    this.blinkClearer && this.blinkClearer();
+    this.blinkClearer?.();
   }
 
   public getContainer() {

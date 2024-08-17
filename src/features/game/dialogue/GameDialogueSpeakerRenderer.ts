@@ -16,6 +16,8 @@ import DialogueConstants, { speakerTextStyle } from './GameDialogueConstants';
  */
 export default class DialogueSpeakerRenderer {
   private currentSpeakerId?: string;
+  private speakerSprite?: Phaser.GameObjects.Image;
+  private speakerSpriteBox?: Phaser.GameObjects.Container;
 
   /**
    * Changes the speaker shown in the speaker box and the speaker rendered on screen
@@ -29,8 +31,9 @@ export default class DialogueSpeakerRenderer {
   public changeSpeakerTo(newSpeakerDetail?: SpeakerDetail | null) {
     if (newSpeakerDetail === undefined) return;
 
-    this.currentSpeakerId &&
+    if (this.currentSpeakerId) {
       GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Speaker, Layer.SpeakerBox]);
+    }
     this.showNewSpeaker(newSpeakerDetail);
   }
 
@@ -63,6 +66,7 @@ export default class DialogueSpeakerRenderer {
       expression,
       speakerPosition
     );
+    this.speakerSprite = speakerSprite;
     GameGlobalAPI.getInstance().addToLayer(Layer.Speaker, speakerSprite);
   }
 
@@ -90,8 +94,27 @@ export default class DialogueSpeakerRenderer {
 
     container.add([rectangle, speakerText]);
     speakerText.text = StringUtils.capitalize(text);
+    this.speakerSpriteBox = container;
     return container;
   }
 
+  /**
+   * Hide the speaker box and sprite
+   */
+  public async hide() {
+    this.getSpeakerSprite().setVisible(false);
+    this.getSpeakerSpriteBox().setVisible(false);
+  }
+
+  /**
+   * Show the hidden speaker box and sprite
+   */
+  public async show() {
+    this.getSpeakerSprite().setVisible(true);
+    this.getSpeakerSpriteBox().setVisible(true);
+  }
+
   public getUsername = () => SourceAcademyGame.getInstance().getAccountInfo().name;
+  private getSpeakerSprite = () => this.speakerSprite as Phaser.GameObjects.Image;
+  private getSpeakerSpriteBox = () => this.speakerSpriteBox as Phaser.GameObjects.Container;
 }

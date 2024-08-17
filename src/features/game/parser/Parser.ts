@@ -8,6 +8,7 @@ import DialoguesParser from './DialogueParser';
 import LocationsParser from './LocationDetailsParser';
 import LocationParser from './LocationParser';
 import ParserValidator, { GameEntityType } from './ParserValidator';
+import QuizParser from './QuizParser';
 import TasksParser from './TasksParser';
 
 /**
@@ -55,6 +56,7 @@ class Parser {
       if (body.length === 0 && header.includes(':')) {
         Parser.parseCheckpointConfig(header);
       } else {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         Parser.parseCheckpointParagraphs(header, body) || LocationParser.parse(header, body);
       }
     });
@@ -93,6 +95,9 @@ class Parser {
         break;
       case 'dialogues':
         DialoguesParser.parse(body);
+        break;
+      case 'quizzes':
+        QuizParser.parse(body);
         break;
       default:
         return false;

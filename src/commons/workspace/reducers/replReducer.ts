@@ -2,22 +2,13 @@ import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
 import { CodeOutput, InterpreterOutput } from '../../application/ApplicationTypes';
 import Constants from '../../utils/Constants';
-import {
-  browseReplHistoryDown,
-  browseReplHistoryUp,
-  clearReplInput,
-  clearReplOutput,
-  clearReplOutputLast,
-  evalRepl,
-  sendReplInputToOutput,
-  updateReplValue
-} from '../WorkspaceActions';
+import WorkspaceActions from '../WorkspaceActions';
 import { getWorkspaceLocation } from '../WorkspaceReducer';
 import { WorkspaceManagerState } from '../WorkspaceTypes';
 
 export const handleReplActions = (builder: ActionReducerMapBuilder<WorkspaceManagerState>) => {
   builder
-    .addCase(browseReplHistoryDown, (state, action) => {
+    .addCase(WorkspaceActions.browseReplHistoryDown, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       if (state[workspaceLocation].replHistory.browseIndex === null) {
         // Not yet started browsing history, nothing to do
@@ -45,7 +36,7 @@ export const handleReplActions = (builder: ActionReducerMapBuilder<WorkspaceMana
         originalValue: ''
       };
     })
-    .addCase(browseReplHistoryUp, (state, action) => {
+    .addCase(WorkspaceActions.browseReplHistoryUp, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const lastRecords = state[workspaceLocation].replHistory.records;
       const lastIndex = state[workspaceLocation].replHistory.browseIndex;
@@ -77,19 +68,19 @@ export const handleReplActions = (builder: ActionReducerMapBuilder<WorkspaceMana
       state[workspaceLocation].replValue = newReplValue;
       state[workspaceLocation].replHistory.browseIndex = newIndex;
     })
-    .addCase(clearReplInput, (state, action) => {
+    .addCase(WorkspaceActions.clearReplInput, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].replValue = '';
     })
-    .addCase(clearReplOutputLast, (state, action) => {
+    .addCase(WorkspaceActions.clearReplOutputLast, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].output.pop();
     })
-    .addCase(clearReplOutput, (state, action) => {
+    .addCase(WorkspaceActions.clearReplOutput, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].output = [];
     })
-    .addCase(sendReplInputToOutput, (state, action) => {
+    .addCase(WorkspaceActions.sendReplInputToOutput, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       // CodeOutput properties exist in parallel with workspaceLocation
       const newOutput: InterpreterOutput[] = state[workspaceLocation].output.concat(
@@ -111,11 +102,11 @@ export const handleReplActions = (builder: ActionReducerMapBuilder<WorkspaceMana
       state[workspaceLocation].output = newOutput;
       state[workspaceLocation].replHistory.records = newReplHistoryRecords;
     })
-    .addCase(evalRepl, (state, action) => {
+    .addCase(WorkspaceActions.evalRepl, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].isRunning = true;
     })
-    .addCase(updateReplValue, (state, action) => {
+    .addCase(WorkspaceActions.updateReplValue, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].replValue = action.payload.newReplValue;
     });

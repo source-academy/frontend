@@ -1,31 +1,17 @@
-import { SagaIterator } from 'redux-saga';
 import { call, delay, put, select } from 'redux-saga/effects';
+import AchievementActions from 'src/features/achievement/AchievementActions';
 
-import {
-  AchievementGoal,
-  ADD_EVENT,
-  BULK_UPDATE_ACHIEVEMENTS,
-  BULK_UPDATE_GOALS,
-  EventType,
-  GET_ACHIEVEMENTS,
-  GET_GOALS,
-  GET_OWN_GOALS,
-  GET_USER_ASSESSMENT_OVERVIEWS,
-  GET_USERS,
-  HANDLE_EVENT,
-  REMOVE_ACHIEVEMENT,
-  REMOVE_GOAL,
-  UPDATE_GOAL_PROGRESS,
-  UPDATE_OWN_GOAL_PROGRESS
-} from '../../features/achievement/AchievementTypes';
+import { AchievementGoal, EventType } from '../../features/achievement/AchievementTypes';
 import { updateGoalProcessed } from '../achievement/AchievementManualEditor';
 import AchievementInferencer from '../achievement/utils/AchievementInferencer';
 import { goalIncludesEvents, incrementCount } from '../achievement/utils/EventHandler';
 import { OverallState } from '../application/ApplicationTypes';
 import { Tokens } from '../application/types/SessionTypes';
+import { combineSagaHandlers } from '../redux/utils';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
+import { selectTokens } from './BackendSaga';
 import {
   bulkUpdateAchievements,
   bulkUpdateGoals,
@@ -39,47 +25,31 @@ import {
   updateGoalProgress,
   updateOwnGoalProgress
 } from './RequestsSaga';
-import { safeTakeEvery as takeEvery } from './SafeEffects';
 
-function selectTokens() {
-  return select((state: OverallState) => ({
-    accessToken: state.session.accessToken,
-    refreshToken: state.session.refreshToken
-  }));
-}
+const AchievementSaga = combineSagaHandlers(AchievementActions, {
+  bulkUpdateAchievements: function* (action) {
+    const tokens: Tokens = yield selectTokens();
 
-export default function* AchievementSaga(): SagaIterator {
-  yield takeEvery(
-    BULK_UPDATE_ACHIEVEMENTS,
-    function* (action: ReturnType<typeof actions.bulkUpdateAchievements>): any {
-      const tokens: Tokens = yield selectTokens();
+    const achievements = action.payload;
 
-      const achievements = action.payload;
+    const resp = yield call(bulkUpdateAchievements, achievements, tokens);
 
-      const resp = yield call(bulkUpdateAchievements, achievements, tokens);
-
-      if (!resp) {
-        return;
-      }
+    if (!resp) {
+      return;
     }
-  );
+  },
+  bulkUpdateGoals: function* (action) {
+    const tokens: Tokens = yield selectTokens();
 
-  yield takeEvery(
-    BULK_UPDATE_GOALS,
-    function* (action: ReturnType<typeof actions.bulkUpdateGoals>): any {
-      const tokens: Tokens = yield selectTokens();
+    const goals = action.payload;
 
-      const goals = action.payload;
+    const resp = yield call(bulkUpdateGoals, goals, tokens);
 
-      const resp = yield call(bulkUpdateGoals, goals, tokens);
-
-      if (!resp) {
-        return;
-      }
+    if (!resp) {
+      return;
     }
-  );
-
-  yield takeEvery(GET_ACHIEVEMENTS, function* (): any {
+  },
+  getAchievements: function* () {
     const tokens: Tokens = yield selectTokens();
 
     const achievements = yield call(getAchievements, tokens);
@@ -87,9 +57,8 @@ export default function* AchievementSaga(): SagaIterator {
     if (achievements) {
       yield put(actions.saveAchievements(achievements));
     }
-  });
-
-  yield takeEvery(GET_GOALS, function* (action: ReturnType<typeof actions.getGoals>): any {
+  },
+  getGoals: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     const studentCourseRegId = action.payload;
@@ -99,9 +68,8 @@ export default function* AchievementSaga(): SagaIterator {
     if (goals) {
       yield put(actions.saveGoals(goals));
     }
-  });
-
-  yield takeEvery(GET_OWN_GOALS, function* (action: ReturnType<typeof actions.getOwnGoals>): any {
+  },
+  getOwnGoals: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     const goals = yield call(getOwnGoals, tokens);
@@ -109,9 +77,8 @@ export default function* AchievementSaga(): SagaIterator {
     if (goals) {
       yield put(actions.saveGoals(goals));
     }
-  });
-
-  yield takeEvery(GET_USERS, function* (action: ReturnType<typeof actions.getUsers>): any {
+  },
+  getUsers: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     const users = yield call(getAllUsers, tokens);
@@ -119,24 +86,19 @@ export default function* AchievementSaga(): SagaIterator {
     if (users) {
       yield put(actions.saveUsers(users));
     }
-  });
+  },
+  removeAchievement: function* (action) {
+    const tokens: Tokens = yield selectTokens();
 
-  yield takeEvery(
-    REMOVE_ACHIEVEMENT,
-    function* (action: ReturnType<typeof actions.removeAchievement>): any {
-      const tokens: Tokens = yield selectTokens();
+    const achievement = action.payload;
 
-      const achievement = action.payload;
+    const resp = yield call(removeAchievement, achievement, tokens);
 
-      const resp = yield call(removeAchievement, achievement, tokens);
-
-      if (!resp) {
-        return;
-      }
+    if (!resp) {
+      return;
     }
-  );
-
-  yield takeEvery(REMOVE_GOAL, function* (action: ReturnType<typeof actions.removeGoal>): any {
+  },
+  removeGoal: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     const definition = action.payload;
@@ -146,47 +108,38 @@ export default function* AchievementSaga(): SagaIterator {
     if (!resp) {
       return;
     }
-  });
+  },
+  updateOwnGoalProgress: function* (action) {
+    const tokens: Tokens = yield selectTokens();
 
-  yield takeEvery(
-    UPDATE_OWN_GOAL_PROGRESS,
-    function* (action: ReturnType<typeof actions.updateOwnGoalProgress>): any {
-      const tokens: Tokens = yield selectTokens();
+    const progress = action.payload;
 
-      const progress = action.payload;
+    const resp = yield call(updateOwnGoalProgress, progress, tokens);
 
-      const resp = yield call(updateOwnGoalProgress, progress, tokens);
-
-      if (!resp) {
-        return;
-      }
+    if (!resp) {
+      return;
     }
-  );
+  },
+  updateGoalProgress: function* (action) {
+    const tokens: Tokens = yield selectTokens();
 
-  yield takeEvery(
-    UPDATE_GOAL_PROGRESS,
-    function* (action: ReturnType<typeof actions.updateGoalProgress>): any {
-      const tokens: Tokens = yield selectTokens();
+    const { studentCourseRegId, progress } = action.payload;
 
-      const { studentCourseRegId, progress } = action.payload;
+    const resp = yield call(updateGoalProgress, studentCourseRegId, progress, tokens);
 
-      const resp = yield call(updateGoalProgress, studentCourseRegId, progress, tokens);
-
-      if (!resp) {
-        return;
-      }
-      if (resp.ok) {
-        yield put(actions.getGoals(studentCourseRegId));
-        updateGoalProcessed();
-      }
+    if (!resp) {
+      return;
     }
-  );
+    if (resp.ok) {
+      yield put(actions.getGoals(studentCourseRegId));
+      updateGoalProcessed();
+    }
+  },
+  addEvent: function* (action) {
+    let loggedEvents: EventType[][] = [];
+    let timeoutSet: boolean = false;
+    const updateInterval = 3000;
 
-  let loggedEvents: EventType[][] = [];
-  let timeoutSet: boolean = false;
-  const updateInterval = 3000;
-
-  yield takeEvery(ADD_EVENT, function* (action: ReturnType<typeof actions.addEvent>): any {
     const role = yield select((state: OverallState) => state.session.role);
     const enableAchievements = yield select(
       (state: OverallState) => state.session.enableAchievements
@@ -205,7 +158,7 @@ export default function* AchievementSaga(): SagaIterator {
         (cseTab && cseTab.ariaHidden === 'false') ||
         (substTab && substTab.ariaHidden === 'false')
       ) {
-        introIcon && introIcon.classList.add('side-content-tab-alert-error');
+        introIcon?.classList.add('side-content-tab-alert-error');
       }
     }
     if (role && enableAchievements && !Constants.playgroundOnly) {
@@ -221,9 +174,8 @@ export default function* AchievementSaga(): SagaIterator {
         loggedEvents = [];
       }
     }
-  });
-
-  yield takeEvery(HANDLE_EVENT, function* (action: ReturnType<typeof actions.handleEvent>): any {
+  },
+  handleEvent: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     // get the most recent list of achievements
@@ -266,18 +218,16 @@ export default function* AchievementSaga(): SagaIterator {
         return;
       }
     }
-  });
+  },
+  getUserAssessmentOverviews: function* (action) {
+    const tokens: Tokens = yield selectTokens();
 
-  yield takeEvery(
-    GET_USER_ASSESSMENT_OVERVIEWS,
-    function* (action: ReturnType<typeof actions.getUserAssessmentOverviews>): any {
-      const tokens: Tokens = yield selectTokens();
+    const assessmentOverviews = yield call(getUserAssessmentOverviews, action.payload, tokens);
 
-      const assessmentOverviews = yield call(getUserAssessmentOverviews, action.payload, tokens);
-
-      if (assessmentOverviews) {
-        yield put(actions.saveUserAssessmentOverviews(assessmentOverviews));
-      }
+    if (assessmentOverviews) {
+      yield put(actions.saveUserAssessmentOverviews(assessmentOverviews));
     }
-  );
-}
+  }
+});
+
+export default AchievementSaga;

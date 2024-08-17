@@ -11,7 +11,7 @@ import * as Sourceror from 'sourceror';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 import { makeCCompilerConfig, specialCReturnObject } from 'src/commons/utils/CToWasmHelper';
 import { javaRun } from 'src/commons/utils/JavaHelper';
-import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
+import StoriesActions from 'src/features/stories/StoriesActions';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
 import { isSchemeLanguage, OverallState } from '../../../application/ApplicationTypes';
@@ -20,7 +20,7 @@ import { actions } from '../../../utils/ActionsHelper';
 import DisplayBufferService from '../../../utils/DisplayBufferService';
 import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../../../utils/SourcerorHelper';
-import { evalEditor, evalRepl, notifyProgramEvaluated } from '../../../workspace/WorkspaceActions';
+import WorkspaceActions from '../../../workspace/WorkspaceActions';
 import {
   EVAL_SILENT,
   PlaygroundWorkspaceState,
@@ -40,7 +40,8 @@ export function* evalCodeSaga(
   storyEnv?: string
 ): SagaIterator {
   context.runtime.debuggerOn =
-    (actionType === evalEditor.type || actionType === InterpreterActions.debuggerResume.type) &&
+    (actionType === WorkspaceActions.evalEditor.type ||
+      actionType === InterpreterActions.debuggerResume.type) &&
     context.chapter > 2;
   const isStoriesBlock = actionType === actions.evalStory.type || workspaceLocation === 'stories';
 
@@ -53,9 +54,9 @@ export function* evalCodeSaga(
             .usingSubst
       )
     : isStoriesBlock
-    ? // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
-      yield select((state: OverallState) => state.stories.envs[storyEnv!].usingSubst)
-    : false;
+      ? // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
+        yield select((state: OverallState) => state.stories.envs[storyEnv!].usingSubst)
+      : false;
   const stepLimit: number = isStoriesBlock
     ? yield select((state: OverallState) => state.stories.envs[storyEnv!].stepLimit)
     : yield select((state: OverallState) => state.workspaces[workspaceLocation].stepLimit);
@@ -63,6 +64,15 @@ export function* evalCodeSaga(
   if (substActiveAndCorrectChapter) {
     context.executionMethod = 'interpreter';
   }
+
+  const uploadIsActive: boolean = correctWorkspace
+    ? yield select(
+        (state: OverallState) =>
+          (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
+            .usingUpload
+      )
+    : false;
+  const uploads = yield select((state: OverallState) => state.workspaces[workspaceLocation].files);
 
   // For the CSE machine slider
   const cseIsActive: boolean = correctWorkspace
@@ -83,12 +93,12 @@ export function* evalCodeSaga(
   const currentStep: number = needUpdateCse
     ? -1
     : correctWorkspace
-    ? yield select(
-        (state: OverallState) =>
-          (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
-            .currentStep
-      )
-    : -1;
+      ? yield select(
+          (state: OverallState) =>
+            (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
+              .currentStep
+        )
+      : -1;
   const cseActiveAndCorrectChapter =
     (isSchemeLanguage(context.chapter) || context.chapter >= 3) && cseIsActive;
   if (cseActiveAndCorrectChapter) {
@@ -125,7 +135,12 @@ export function* evalCodeSaga(
       });
     } else if (variant === Variant.WASM) {
       // Note: WASM does not support multiple file programs.
-      return call(wasm_compile_and_run, entrypointCode, context, actionType === evalRepl.type);
+      return call(
+        wasm_compile_and_run,
+        entrypointCode,
+        context,
+        actionType === WorkspaceActions.evalRepl.type
+      );
     } else {
       throw new Error('Unknown variant: ' + variant);
     }
@@ -258,29 +273,32 @@ export function* evalCodeSaga(
       actionType === InterpreterActions.debuggerResume.type
         ? call(resume, lastDebuggerResult)
         : isNonDet || isLazy || isWasm
-        ? call_variant(context.variant)
-        : isC
-        ? call(cCompileAndRun, entrypointCode, context)
-        : isJava
-        ? call(javaRun, entrypointCode, context, currentStep, isUsingCse)
-        : call(
-            runFilesInContext,
-            isFolderModeEnabled
-              ? files
-              : {
-                  [entrypointFilePath]: files[entrypointFilePath]
-                },
-            entrypointFilePath,
-            context,
-            {
-              scheduler: 'preemptive',
-              originalMaxExecTime: execTime,
-              stepLimit: stepLimit,
-              throwInfiniteLoops: true,
-              useSubst: substActiveAndCorrectChapter,
-              envSteps: currentStep
-            }
-          ),
+          ? call_variant(context.variant)
+          : isC
+            ? call(cCompileAndRun, entrypointCode, context)
+            : isJava
+              ? call(javaRun, entrypointCode, context, currentStep, isUsingCse, {
+                  uploadIsActive,
+                  uploads
+                })
+              : call(
+                  runFilesInContext,
+                  isFolderModeEnabled
+                    ? files
+                    : {
+                        [entrypointFilePath]: files[entrypointFilePath]
+                      },
+                  entrypointFilePath,
+                  context,
+                  {
+                    scheduler: 'preemptive',
+                    originalMaxExecTime: execTime,
+                    stepLimit: stepLimit,
+                    throwInfiniteLoops: true,
+                    useSubst: substActiveAndCorrectChapter,
+                    envSteps: currentStep
+                  }
+                ),
 
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
@@ -309,7 +327,7 @@ export function* evalCodeSaga(
     return;
   }
 
-  if (actionType === evalEditor.type) {
+  if (actionType === WorkspaceActions.evalEditor.type) {
     yield put(actions.updateLastDebuggerResult(result, workspaceLocation));
   }
 
@@ -375,7 +393,7 @@ export function* evalCodeSaga(
   yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
 
   // Change token count if its assessment and EVAL_EDITOR
-  if (actionType === evalEditor.type && workspaceLocation === 'assessment') {
+  if (actionType === WorkspaceActions.evalEditor.type && workspaceLocation === 'assessment') {
     const tokens = [...tokenizer(entrypointCode, ACORN_PARSE_OPTIONS)];
     const tokenCounter = tokens.length;
     yield put(actions.setTokenCount(workspaceLocation, tokenCounter));
@@ -396,21 +414,33 @@ export function* evalCodeSaga(
   );
   // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
   if (
-    actionType === evalEditor.type ||
-    actionType === evalRepl.type ||
+    actionType === WorkspaceActions.evalEditor.type ||
+    actionType === WorkspaceActions.evalRepl.type ||
     actionType === InterpreterActions.debuggerResume.type
   ) {
     if (context.errors.length > 0) {
       yield put(actions.addEvent([EventType.ERROR]));
     }
     yield put(
-      notifyProgramEvaluated(result, lastDebuggerResult, entrypointCode, context, workspaceLocation)
+      WorkspaceActions.notifyProgramEvaluated(
+        result,
+        lastDebuggerResult,
+        entrypointCode,
+        context,
+        workspaceLocation
+      )
     );
   }
   if (isStoriesBlock) {
     yield put(
       // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
-      notifyStoriesEvaluated(result, lastDebuggerResult, entrypointCode, context, storyEnv!)
+      StoriesActions.notifyStoriesEvaluated(
+        result,
+        lastDebuggerResult,
+        entrypointCode,
+        context,
+        storyEnv!
+      )
     );
   }
 
@@ -427,7 +457,7 @@ export function* evalCodeSaga(
   // Stop the home icon from flashing for an error if it is doing so since the evaluation is successful
   if (context.executionMethod === 'cse-machine' || context.executionMethod === 'interpreter') {
     const introIcon = document.getElementById(SideContentType.introduction + '-icon');
-    introIcon && introIcon.classList.remove('side-content-tab-alert-error');
+    introIcon?.classList.remove('side-content-tab-alert-error');
   }
 }
 

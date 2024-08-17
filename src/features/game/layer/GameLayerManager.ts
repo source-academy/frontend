@@ -35,7 +35,8 @@ class GameLayerManager {
    */
   public hideLayer(layerType: Layer) {
     const layerToHide = this.layers.get(layerType);
-    layerToHide && layerToHide.setVisible(false) && layerToHide.setAlpha(0);
+    layerToHide?.setVisible(false);
+    layerToHide?.setAlpha(0);
   }
 
   /**
@@ -45,7 +46,8 @@ class GameLayerManager {
    */
   public showLayer(layerType: Layer) {
     const layerToShow = this.layers.get(layerType);
-    layerToShow && layerToShow.setVisible(true) && layerToShow.setAlpha(1);
+    layerToShow?.setVisible(true);
+    layerToShow?.setAlpha(1);
   }
 
   /**

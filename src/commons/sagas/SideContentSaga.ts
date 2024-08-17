@@ -1,55 +1,46 @@
-import { Action } from 'redux';
-import type { SagaIterator } from 'redux-saga';
+import { Action } from '@reduxjs/toolkit';
 import { put, take } from 'redux-saga/effects';
-import { notifyStoriesEvaluated } from 'src/features/stories/StoriesActions';
+import StoriesActions from 'src/features/stories/StoriesActions';
 
-import * as actions from '../sideContent/SideContentActions';
-import { BEGIN_ALERT_SIDE_CONTENT, SPAWN_SIDE_CONTENT } from '../sideContent/SideContentTypes';
-import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
-import { safeTakeEvery as takeEvery } from './SafeEffects';
+import { combineSagaHandlers } from '../redux/utils';
+import SideContentActions from '../sideContent/SideContentActions';
+import WorkspaceActions from '../workspace/WorkspaceActions';
 
 const isSpawnSideContent = (
   action: Action
-): action is ReturnType<typeof actions.spawnSideContent> => action.type === SPAWN_SIDE_CONTENT;
+): action is ReturnType<typeof SideContentActions.spawnSideContent> =>
+  action.type === SideContentActions.spawnSideContent.type;
 
-export default function* SideContentSaga(): SagaIterator {
-  yield takeEvery(
-    BEGIN_ALERT_SIDE_CONTENT,
-    function* ({
-      payload: { id, workspaceLocation }
-    }: ReturnType<typeof actions.beginAlertSideContent>) {
-      // When a program finishes evaluation, we clear all alerts,
-      // So we must wait until after and all module tabs have been spawned
-      // to process any kind of alerts that were raised by non-module side content
-      yield take(
-        (action: Action) =>
-          isSpawnSideContent(action) && action.payload.workspaceLocation === workspaceLocation
-      );
-      yield put(actions.endAlertSideContent(id, workspaceLocation));
-    }
-  );
+// TODO: Refactor and combine in a future commit
+const sagaActions = { ...SideContentActions, ...WorkspaceActions, ...StoriesActions };
+export const SideContentSaga = combineSagaHandlers(sagaActions, {
+  beginAlertSideContent: function* ({ payload: { id, workspaceLocation } }) {
+    // When a program finishes evaluation, we clear all alerts,
+    // So we must wait until after and all module tabs have been spawned
+    // to process any kind of alerts that were raised by non-module side content
+    yield take(
+      (action: Action) =>
+        isSpawnSideContent(action) && action.payload.workspaceLocation === workspaceLocation
+    );
+    yield put(SideContentActions.endAlertSideContent(id, workspaceLocation));
+  },
+  notifyProgramEvaluated: function* (action) {
+    if (!action.payload.workspaceLocation || action.payload.workspaceLocation === 'stories') return;
 
-  yield takeEvery(
-    notifyProgramEvaluated.type,
-    function* (action: ReturnType<typeof notifyProgramEvaluated>) {
-      if (!action.payload.workspaceLocation || action.payload.workspaceLocation === 'stories')
-        return;
+    const debuggerContext = {
+      result: action.payload.result,
+      lastDebuggerResult: action.payload.lastDebuggerResult,
+      code: action.payload.code,
+      context: action.payload.context,
+      workspaceLocation: action.payload.workspaceLocation
+    };
+    yield put(
+      SideContentActions.spawnSideContent(action.payload.workspaceLocation, debuggerContext)
+    );
+  },
+  notifyStoriesEvaluated: function* (action) {
+    yield put(SideContentActions.spawnSideContent(`stories.${action.payload.env}`, action.payload));
+  }
+});
 
-      const debuggerContext = {
-        result: action.payload.result,
-        lastDebuggerResult: action.payload.lastDebuggerResult,
-        code: action.payload.code,
-        context: action.payload.context,
-        workspaceLocation: action.payload.workspaceLocation
-      };
-      yield put(actions.spawnSideContent(action.payload.workspaceLocation, debuggerContext));
-    }
-  );
-
-  yield takeEvery(
-    notifyStoriesEvaluated.type,
-    function* (action: ReturnType<typeof notifyStoriesEvaluated>) {
-      yield put(actions.spawnSideContent(`stories.${action.payload.env}`, action.payload));
-    }
-  );
-}
+export default SideContentSaga;

@@ -1,10 +1,9 @@
 import { act, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
-import { DeepPartial } from 'redux';
 import { OverallState, Role } from 'src/commons/application/ApplicationTypes';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
-import { assertType } from 'src/commons/utils/TypeHelper';
+import { assertType, DeepPartial } from 'src/commons/utils/TypeHelper';
 
 import { AssessmentConfiguration, AssessmentStatuses } from '../../assessment/AssessmentTypes';
 import { mockAssessmentOverviews } from '../../mocks/AssessmentMocks';

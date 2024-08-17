@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { parseString } from 'xml2js';
 
-import { updateAssessment } from '../application/actions/SessionActions';
+import SessionActions from '../application/actions/SessionActions';
 import {
   Assessment,
   AssessmentOverview,
@@ -29,7 +29,7 @@ const MissionCreator: React.FC<Props> = props => {
 
   const dispatch = useDispatch();
   const newAssessment = useCallback(
-    (assessment: Assessment) => dispatch(updateAssessment(assessment)),
+    (assessment: Assessment) => dispatch(SessionActions.updateAssessment(assessment)),
     [dispatch]
   );
 

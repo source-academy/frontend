@@ -12,10 +12,6 @@ import {
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../ApplicationTypes';
 
-export const UPDATE_TOTAL_XP = 'UPDATE_TOTAL_XP';
-export const UPDATE_ASSESSMENT = 'UPDATE_ASSESSMENT';
-export const UPDATE_COURSE_RESEARCH_AGREEMENT = 'UPDATE_COURSE_RESEARCH_AGREEMENT';
-
 export type SessionState = {
   // Tokens
   readonly accessToken?: string;
@@ -50,9 +46,6 @@ export type SessionState = {
 
   readonly assessmentConfigurations?: AssessmentConfiguration[];
   readonly userCourseRegistrations?: AdminPanelCourseRegistration[];
-
-  readonly notificationConfigs?: NotificationConfiguration[];
-  readonly configurableNotificationConfigs?: NotificationConfiguration[];
 
   // For research data collection
   readonly agreedToResearch?: boolean | null;
@@ -128,35 +121,3 @@ export type AdminPanelCourseRegistration = {
 };
 
 export type UpdateCourseConfiguration = Partial<CourseConfiguration>;
-
-export type TimeOption = {
-  id: number;
-  isDefault: boolean;
-  minutes: number;
-  notificationConfigId?: number;
-};
-
-export type NotificationPreference = {
-  id: number;
-  isEnabled: boolean | null;
-  timeOptionId: number | null;
-  notificationConfigId?: number;
-};
-
-export type NotificationConfiguration = {
-  id: number;
-  isEnabled: boolean;
-  notificationType: {
-    id: number;
-    name: string;
-    isEnabled: boolean;
-    forStaff: boolean;
-  };
-  timeOptions: TimeOption[];
-  assessmentConfig: {
-    id: number;
-    type: string;
-  } | null;
-  notificationPreference: NotificationPreference;
-  course: any;
-};

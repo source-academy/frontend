@@ -3,6 +3,8 @@ import {
   ButtonProps,
   Classes,
   Dialog,
+  DialogBody,
+  DialogFooter,
   DialogProps,
   IconName,
   Intent
@@ -54,11 +56,10 @@ export function ConfirmDialog<T>(
       icon={props.icon}
       {...props.props}
     >
-      <div className={Classes.DIALOG_BODY}>{props.contents}</div>
-      <div className={Classes.DIALOG_FOOTER}>
+      <DialogBody>{props.contents}</DialogBody>
+      <DialogFooter actions={!props.largeButtons && <>{buttons}</>}>
         {props.largeButtons && buttons}
-        {!props.largeButtons && <div className={Classes.DIALOG_FOOTER_ACTIONS}>{buttons}</div>}
-      </div>
+      </DialogFooter>
     </Dialog>
   );
 }

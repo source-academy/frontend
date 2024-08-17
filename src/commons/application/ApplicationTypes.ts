@@ -419,7 +419,8 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   enableDebugging: true,
   debuggerContext: {} as DebuggerContext,
   lastDebuggerResult: undefined,
-  lastNonDetResult: null
+  lastNonDetResult: null,
+  files: {}
 });
 
 const defaultFileName = 'program.js';
@@ -447,6 +448,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     usingSubst: false,
     usingCse: false,
     updateCse: true,
+    usingUpload: false,
     currentStep: -1,
     stepsTotal: 0,
     breakpointSteps: [],
@@ -501,6 +503,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     usingSubst: false,
     usingCse: false,
     updateCse: true,
+    usingUpload: false,
     currentStep: -1,
     stepsTotal: 0,
     breakpointSteps: [],
@@ -549,7 +552,8 @@ export const defaultStories: StoriesState = {
   storyList: [],
   currentStoryId: null,
   currentStory: null,
-  envs: {}
+  envs: {},
+  storiesUsers: []
 };
 
 export const createDefaultStoriesEnv = (
@@ -557,7 +561,7 @@ export const createDefaultStoriesEnv = (
   chapter: Chapter,
   variant: Variant
 ): StoriesEnvState => ({
-  context: createContext<String>(chapter, [], envName, variant),
+  context: createContext<string>(chapter, [], envName, variant),
   execTime: 1000,
   isRunning: false,
   output: [],

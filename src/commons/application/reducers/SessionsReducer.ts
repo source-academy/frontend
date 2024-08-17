@@ -1,9 +1,5 @@
-import { createReducer } from '@reduxjs/toolkit';
-import { Reducer } from 'redux';
-import {
-  remoteExecUpdateDevices,
-  remoteExecUpdateSession
-} from 'src/features/remoteExecution/RemoteExecutionActions';
+import { createReducer, Reducer } from '@reduxjs/toolkit';
+import RemoteExecutionActions from 'src/features/remoteExecution/RemoteExecutionActions';
 
 import { SourceActionType } from '../../utils/ActionsHelper';
 import { logOut } from '../actions/CommonsActions';
@@ -48,12 +44,6 @@ const newSessionsReducer = createReducer(defaultSession, builder => {
     .addCase(SessionActions.setAssessmentConfigurations, (state, action) => {
       state.assessmentConfigurations = action.payload;
     })
-    .addCase(SessionActions.setNotificationConfigs, (state, action) => {
-      state.notificationConfigs = action.payload;
-    })
-    .addCase(SessionActions.setConfigurableNotificationConfigs, (state, action) => {
-      state.configurableNotificationConfigs = action.payload;
-    })
     .addCase(SessionActions.setAdminPanelCourseRegistrations, (state, action) => {
       state.userCourseRegistrations = action.payload;
     })
@@ -84,10 +74,10 @@ const newSessionsReducer = createReducer(defaultSession, builder => {
     .addCase(SessionActions.updateTeamFormationOverview, (state, action) => {
       state.teamFormationOverview = action.payload;
     })
-    .addCase(remoteExecUpdateDevices, (state, action) => {
+    .addCase(RemoteExecutionActions.remoteExecUpdateDevices, (state, action) => {
       state.remoteExecutionDevices = action.payload;
     })
-    .addCase(remoteExecUpdateSession, (state, action) => {
+    .addCase(RemoteExecutionActions.remoteExecUpdateSession, (state, action) => {
       state.remoteExecutionSession = action.payload;
     })
     .addCase(SessionActions.removeGitHubOctokitObjectAndAccessToken, (state, action) => {

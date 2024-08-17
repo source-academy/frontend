@@ -50,8 +50,8 @@ const AchievementManualEditor: React.FC<Props> = props => {
             user1.name != null && user2.name != null
               ? user1.name.localeCompare(user2.name)
               : user1.name == null
-              ? 1 // user1.name is null, user1 > user2
-              : -1 // user2.name is null, user1 < user2
+                ? 1 // user1.name is null, user1 > user2
+                : -1 // user2.name is null, user1 < user2
         )
       : props.users
           .filter(user => user.group === studio)
@@ -60,8 +60,8 @@ const AchievementManualEditor: React.FC<Props> = props => {
               user1.name != null && user2.name != null
                 ? user1.name.localeCompare(user2.name)
                 : user1.name == null
-                ? 1 // user1.name is null, user1 > user2
-                : -1 // user2.name is null, user1 < user2
+                  ? 1 // user1.name is null, user1 > user2
+                  : -1 // user2.name is null, user1 < user2
           );
 
   useEffect(() => {
@@ -88,8 +88,12 @@ const AchievementManualEditor: React.FC<Props> = props => {
       };
       updateGoalProgress(selectedUser.courseRegId, progress);
     } else {
-      !goal && showWarningMessage('Goal not selected');
-      !selectedUser && showWarningMessage('User not selected');
+      if (!goal) {
+        showWarningMessage('Goal not selected');
+      }
+      if (!selectedUser) {
+        showWarningMessage('User not selected');
+      }
     }
   };
 

@@ -1,6 +1,11 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { cloneDeep } from 'lodash';
+import CommonsActions from 'src/commons/application/actions/CommonsActions';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
+import {
+  setEditorSessionId,
+  setSharedbConnected
+} from 'src/commons/collabEditing/CollabEditingActions';
 
 import {
   CodeOutput,
@@ -9,13 +14,8 @@ import {
   InterpreterOutput,
   RunningOutput
 } from '../../application/ApplicationTypes';
-import { LOG_OUT } from '../../application/types/CommonsTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import { Library, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
-import {
-  SET_EDITOR_SESSION_ID,
-  SET_SHAREDB_CONNECTED
-} from '../../collabEditing/CollabEditingTypes';
 import { HighlightedLines, Position } from '../../editor/EditorTypes';
 import Constants from '../../utils/Constants';
 import { createContext } from '../../utils/JsSlangHelper';
@@ -832,6 +832,7 @@ describe('LOG_OUT', () => {
       sharedbConnected: false,
       usingSubst: false,
       usingCse: false,
+      usingUpload: false,
       updateCse: true,
       currentStep: -1,
       stepsTotal: 0,
@@ -845,7 +846,7 @@ describe('LOG_OUT', () => {
     };
 
     const playgroundAction = {
-      type: LOG_OUT,
+      type: CommonsActions.logOut.type,
       payload: {}
     } as const;
 
@@ -997,7 +998,7 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
 describe('SET_EDITOR_SESSION_ID', () => {
   test('sets editorSessionId correctly', () => {
     const editorSessionId = 'test_editor_session_id';
-    const actions = generateActions(SET_EDITOR_SESSION_ID, { editorSessionId });
+    const actions = generateActions(setEditorSessionId.type, { editorSessionId });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceManager, action);
@@ -1016,7 +1017,7 @@ describe('SET_EDITOR_SESSION_ID', () => {
 describe('SET_SHAREDB_CONNECTED', () => {
   test('sets sharedbConnected correctly', () => {
     const connected = true;
-    const actions = generateActions(SET_SHAREDB_CONNECTED, { connected });
+    const actions = generateActions(setSharedbConnected.type, { connected });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceManager, action);

@@ -49,10 +49,10 @@ export default class GameDialogueStorageManager {
     return !speakerId
       ? ''
       : speakerId === 'you'
-      ? this.getUsername()
-      : speakerId === 'narrator'
-      ? 'Narrator'
-      : GameGlobalAPI.getInstance().getCharacterById(speakerId).name;
+        ? this.getUsername()
+        : speakerId === 'narrator'
+          ? 'Narrator'
+          : GameGlobalAPI.getInstance().getCharacterById(speakerId).name;
   }
 
   /**
@@ -71,9 +71,9 @@ export default class GameDialogueStorageManager {
    *
    * @returns the Dialogue storage as an Array of strings.
    */
-  public getDialogueStorage(): Array<String> {
+  public getDialogueStorage(): Array<string> {
     if (!this.dialogueStorage) {
-      return new Array<String>();
+      return new Array<string>();
     }
     return this.dialogueStorage.map(storageLine => `${storageLine.speaker}:\n${storageLine.line}`);
   }

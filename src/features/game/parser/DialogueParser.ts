@@ -1,4 +1,4 @@
-import { Dialogue, DialogueLine, PartName } from '../dialogue/GameDialogueTypes';
+import { Dialogue, DialogueLine, DialogueObject, PartName } from '../dialogue/GameDialogueTypes';
 import { GameItemType } from '../location/GameMapTypes';
 import { mapValues } from '../utils/GameUtils';
 import StringUtils from '../utils/StringUtils';
@@ -120,7 +120,9 @@ export default class DialogueParser {
           break;
         case isActionLabel(rawStr):
           const lastLine = dialogueLines[dialogueLines.length - 1];
-          !lastLine.actionIds && (lastLine.actionIds = []);
+          if (!lastLine.actionIds) {
+            lastLine.actionIds = [];
+          }
           lastLine.actionIds.push(ActionParser.parseAction(rawStr));
           break;
         case isSpeaker(rawStr):
@@ -142,6 +144,16 @@ export default class DialogueParser {
       currIndex++;
     }
     return dialogueLines;
+  }
+  /**
+   * This function parses a diaglogue written in a quiz as reaction
+   * and returns a DialogueObject.
+   * Itis only called by the QuizParser.
+   *
+   * @param {Array<string>} dialogueBody the lines inside a dialogue
+   */
+  public static parseQuizReaction(dialogueBody: string[]): DialogueObject {
+    return this.parseDialogueContent(dialogueBody);
   }
 }
 

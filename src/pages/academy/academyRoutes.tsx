@@ -12,7 +12,6 @@ import { store } from '../createStore';
 const notFoundPath = 'not_found';
 
 const Game = () => import('./game/Game');
-const NotiPreference = () => import('./notiPreference/NotiPreference');
 const Sourcecast = () => import('../sourcecast/Sourcecast');
 const Achievement = () => import('../achievement/Achievement');
 const NotFound = () => import('../notFound/NotFound');
@@ -72,7 +71,6 @@ const getCommonAcademyRoutes = (): RouteObject[] => {
       element: <Assessment />,
       loader: assessmentLoader
     },
-    { path: 'notipreference', lazy: NotiPreference },
     { path: 'sourcecast/:sourcecastId?', lazy: Sourcecast },
     { path: 'achievements/*', lazy: Achievement },
     { path: '*', lazy: NotFound }

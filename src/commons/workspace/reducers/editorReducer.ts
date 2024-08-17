@@ -1,32 +1,16 @@
 import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
 
-import {
-  addEditorTab,
-  moveCursor,
-  removeEditorTab,
-  removeEditorTabForFile,
-  removeEditorTabsForDirectory,
-  renameEditorTabForFile,
-  renameEditorTabsForDirectory,
-  setEditorBreakpoint,
-  setEditorHighlightedLines,
-  setEditorHighlightedLinesControl,
-  setFolderMode,
-  shiftEditorTab,
-  updateActiveEditorTab,
-  updateActiveEditorTabIndex,
-  updateEditorValue
-} from '../WorkspaceActions';
+import WorkspaceActions from '../WorkspaceActions';
 import { getWorkspaceLocation } from '../WorkspaceReducer';
 import { EditorTabState, WorkspaceManagerState } from '../WorkspaceTypes';
 
 export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceManagerState>) => {
   builder
-    .addCase(setFolderMode, (state, action) => {
+    .addCase(WorkspaceActions.setFolderMode, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].isFolderModeEnabled = action.payload.isFolderModeEnabled;
     })
-    .addCase(updateActiveEditorTabIndex, (state, action) => {
+    .addCase(WorkspaceActions.updateActiveEditorTabIndex, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const activeEditorTabIndex = action.payload.activeEditorTabIndex;
       if (activeEditorTabIndex !== null) {
@@ -40,7 +24,7 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
 
       state[workspaceLocation].activeEditorTabIndex = activeEditorTabIndex;
     })
-    .addCase(updateActiveEditorTab, (state, action) => {
+    .addCase(WorkspaceActions.updateActiveEditorTab, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const { activeEditorTabOptions } = action.payload;
       const activeEditorTabIndex = state[workspaceLocation].activeEditorTabIndex;
@@ -57,7 +41,7 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
 
       state[workspaceLocation].editorTabs = updatedEditorTabs;
     })
-    .addCase(updateEditorValue, (state, action) => {
+    .addCase(WorkspaceActions.updateEditorValue, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const { editorTabIndex, newEditorValue } = action.payload;
       if (editorTabIndex < 0) {
@@ -69,7 +53,7 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
 
       state[workspaceLocation].editorTabs[editorTabIndex].value = newEditorValue;
     })
-    .addCase(setEditorBreakpoint, (state, action) => {
+    .addCase(WorkspaceActions.setEditorBreakpoint, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const { editorTabIndex, newBreakpoints } = action.payload;
       if (editorTabIndex < 0) {
@@ -81,7 +65,7 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
 
       state[workspaceLocation].editorTabs[editorTabIndex].breakpoints = newBreakpoints;
     })
-    .addCase(setEditorHighlightedLines, (state, action) => {
+    .addCase(WorkspaceActions.setEditorHighlightedLines, (state, action) => {
       // TODO: This and the subsequent reducer achieves the same thing?
       const workspaceLocation = getWorkspaceLocation(action);
       const { editorTabIndex, newHighlightedLines } = action.payload;
@@ -94,7 +78,7 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
 
       state[workspaceLocation].editorTabs[editorTabIndex].highlightedLines = newHighlightedLines;
     })
-    .addCase(setEditorHighlightedLinesControl, (state, action) => {
+    .addCase(WorkspaceActions.setEditorHighlightedLinesControl, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const { editorTabIndex, newHighlightedLines } = action.payload;
 
@@ -107,7 +91,7 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
 
       state[workspaceLocation].editorTabs[editorTabIndex].highlightedLines = newHighlightedLines;
     })
-    .addCase(moveCursor, (state, action) => {
+    .addCase(WorkspaceActions.moveCursor, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const { editorTabIndex, newCursorPosition } = action.payload;
       if (editorTabIndex < 0) {
@@ -119,7 +103,7 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
 
       state[workspaceLocation].editorTabs[editorTabIndex].newCursorPosition = newCursorPosition;
     })
-    .addCase(addEditorTab, (state, action) => {
+    .addCase(WorkspaceActions.addEditorTab, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const { filePath, editorValue } = action.payload;
 
@@ -144,7 +128,7 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
       const newActiveEditorTabIndex = editorTabs.length - 1;
       state[workspaceLocation].activeEditorTabIndex = newActiveEditorTabIndex;
     })
-    .addCase(shiftEditorTab, (state, action) => {
+    .addCase(WorkspaceActions.shiftEditorTab, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const { previousEditorTabIndex, newEditorTabIndex } = action.payload;
       if (previousEditorTabIndex < 0) {
@@ -178,7 +162,7 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
       state[workspaceLocation].activeEditorTabIndex = newActiveEditorTabIndex;
       state[workspaceLocation].editorTabs = newEditorTabs;
     })
-    .addCase(removeEditorTab, (state, action) => {
+    .addCase(WorkspaceActions.removeEditorTab, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const editorTabIndex = action.payload.editorTabIndex;
       if (editorTabIndex < 0) {
@@ -201,7 +185,7 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
       state[workspaceLocation].activeEditorTabIndex = newActiveEditorTabIndex;
       state[workspaceLocation].editorTabs = newEditorTabs;
     })
-    .addCase(removeEditorTabForFile, (state, action) => {
+    .addCase(WorkspaceActions.removeEditorTabForFile, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const removedFilePath = action.payload.removedFilePath;
 
@@ -226,7 +210,7 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
       state[workspaceLocation].activeEditorTabIndex = newActiveEditorTabIndex;
       state[workspaceLocation].editorTabs = newEditorTabs;
     })
-    .addCase(removeEditorTabsForDirectory, (state, action) => {
+    .addCase(WorkspaceActions.removeEditorTabsForDirectory, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const removedDirectoryPath = action.payload.removedDirectoryPath;
 
@@ -258,7 +242,7 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
       state[workspaceLocation].activeEditorTabIndex = newActiveEditorTabIndex;
       state[workspaceLocation].editorTabs = newEditorTabs;
     })
-    .addCase(renameEditorTabForFile, (state, action) => {
+    .addCase(WorkspaceActions.renameEditorTabForFile, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const { oldFilePath, newFilePath } = action.payload;
 
@@ -268,7 +252,7 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
         tabToEdit.filePath = newFilePath;
       }
     })
-    .addCase(renameEditorTabsForDirectory, (state, action) => {
+    .addCase(WorkspaceActions.renameEditorTabsForDirectory, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       const { oldDirectoryPath, newDirectoryPath } = action.payload;
 
@@ -302,14 +286,14 @@ const getNextActiveEditorTabIndexAfterTabRemoval = (
         // tab being removed has their index decremented by 1.
         activeEditorTabIndex - 1
     : newEditorTabsLength === 0
-    ? // If there are no editor tabs after removal, there cannot
-      // be an active editor tab.
-      null
-    : removedEditorTabIndex === 0
-    ? // If the removed editor tab is the leftmost tab, the active
-      // editor tab will be the new leftmost tab.
-      0
-    : // Otherwise, the active editor tab will be the tab to the
-      // left of the removed tab.
-      removedEditorTabIndex - 1;
+      ? // If there are no editor tabs after removal, there cannot
+        // be an active editor tab.
+        null
+      : removedEditorTabIndex === 0
+        ? // If the removed editor tab is the leftmost tab, the active
+          // editor tab will be the new leftmost tab.
+          0
+        : // Otherwise, the active editor tab will be the tab to the
+          // left of the removed tab.
+          removedEditorTabIndex - 1;
 };

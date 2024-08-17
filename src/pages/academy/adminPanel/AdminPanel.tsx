@@ -4,11 +4,10 @@ import 'ag-grid-community/styles/ag-theme-balham.css';
 import { Button, Divider, H1, Intent, Tab, Tabs } from '@blueprintjs/core';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useSession } from 'src/commons/utils/Hooks';
-import {
-  addNewStoriesUsersToCourse,
-  addNewUsersToCourse
-} from 'src/features/academy/AcademyActions';
+import { StoriesRole } from 'src/commons/application/ApplicationTypes';
+import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
+import AcademyActions from 'src/features/academy/AcademyActions';
+import StoriesActions from 'src/features/stories/StoriesActions';
 
 import SessionActions from '../../../commons/application/actions/SessionActions';
 import { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
@@ -19,7 +18,7 @@ import AssessmentConfigPanel, {
   ImperativeAssessmentConfigPanel
 } from './subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';
-import NotificationConfigPanel from './subcomponents/NotificationConfigPanel';
+import StoriesUserConfigPanel from './subcomponents/storiesUserConfigPanel/StoriesUserConfigPanel';
 import UserConfigPanel from './subcomponents/userConfigPanel/UserConfigPanel';
 
 const defaultCourseConfig: UpdateCourseConfiguration = {
@@ -40,13 +39,19 @@ const AdminPanel: React.FC = () => {
 
   const dispatch = useDispatch();
   const session = useSession();
+  const stories = useTypedSelector(state => state.stories);
 
   useEffect(() => {
     dispatch(SessionActions.fetchCourseConfig());
     dispatch(SessionActions.fetchAssessmentConfigs());
     dispatch(SessionActions.fetchAdminPanelCourseRegistrations());
-    dispatch(SessionActions.fetchNotificationConfigs());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (session.enableStories) {
+      dispatch(StoriesActions.fetchAdminPanelStoriesUsers());
+    }
+  }, [dispatch, session.enableStories]);
 
   useEffect(() => {
     setCourseConfiguration({
@@ -81,6 +86,15 @@ const AdminPanel: React.FC = () => {
       setCourseConfiguration(courseConfig);
       setHasChangesCourseConfig(true);
     }
+  };
+
+  const storiesUserConfigPanelProps = {
+    userId: stories.userId,
+    storiesUsers: stories.storiesUsers,
+    handleUpdateStoriesUserRole: (id: number, role: StoriesRole) =>
+      dispatch(SessionActions.updateStoriesUserRole(id, role)),
+    handleDeleteStoriesUserFromUserGroup: (id: number) =>
+      dispatch(SessionActions.deleteStoriesUserUserGroups(id))
   };
 
   // Handler to submit changes to Course Configration and Assessment Configuration to the backend.
@@ -157,12 +171,17 @@ const AdminPanel: React.FC = () => {
           }
         />
         <Tab
+          id="stories-users"
+          title="Stories Users"
+          panel={<StoriesUserConfigPanel {...storiesUserConfigPanelProps} />}
+        />
+        <Tab
           id="add-users"
           title="Add Users"
           panel={
             <AddUserPanel
               handleAddNewUsersToCourse={(users, provider) =>
-                dispatch(addNewUsersToCourse(users, provider))
+                dispatch(AcademyActions.addNewUsersToCourse(users, provider))
               }
             />
           }
@@ -173,12 +192,11 @@ const AdminPanel: React.FC = () => {
           panel={
             <AddStoriesUserPanel
               handleAddNewUsersToCourse={(users, provider) =>
-                dispatch(addNewStoriesUsersToCourse(users, provider))
+                dispatch(AcademyActions.addNewStoriesUsersToCourse(users, provider))
               }
             />
           }
         />
-        <Tab id="notification-config" title="Notifications" panel={<NotificationConfigPanel />} />
       </Tabs>
     </div>
   );

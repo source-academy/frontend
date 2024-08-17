@@ -1,4 +1,5 @@
 import { Navigate, redirect, RouteObject } from 'react-router';
+import Constants from 'src/commons/utils/Constants';
 
 import Application from '../commons/application/Application';
 import { GuardedRoute } from './routeGuard';
@@ -22,6 +23,9 @@ import { GuardedRoute } from './routeGuard';
 // };
 
 const Login = () => import('../pages/login/Login');
+const LoginPage = () => import('../pages/login/LoginPage');
+const LoginCallback = () => import('../pages/login/LoginCallback');
+const NusLogin = () => import('../pages/login/NusLogin');
 const Contributors = () => import('../pages/contributors/Contributors');
 const GitHubCallback = () => import('../pages/githubCallback/GitHubCallback');
 const Sicp = () => import('../pages/sicp/Sicp');
@@ -99,6 +103,12 @@ export const getFullAcademyRouterConfig = ({
 
   return [
     {
+      path: 'nus_login',
+      lazy: Login,
+      loader: () => (Constants.hasNusAuthProviders ? null : redirect('/login')),
+      children: [{ path: '', lazy: NusLogin }]
+    },
+    {
       path: '*',
       element: <Application />,
       children: [
@@ -107,7 +117,17 @@ export const getFullAcademyRouterConfig = ({
           element: <Navigate to={`/courses/${courseId}`} replace />,
           loader: homePageRedirect
         },
-        { path: 'login', lazy: Login },
+        {
+          path: 'login',
+          lazy: Login,
+          loader: () => (Constants.hasOtherAuthProviders ? null : redirect('/nus_login')),
+          children: [{ path: '', lazy: LoginPage }]
+        },
+        {
+          path: 'login',
+          lazy: Login,
+          children: [{ path: 'callback', lazy: LoginCallback }]
+        },
         { path: 'welcome', lazy: Welcome, loader: welcomeLoader },
         { path: 'courses', element: <Navigate to="/" /> },
         ensureUserAndRole({ path: 'courses/:courseId/*', lazy: Academy, children: academyRoutes }),

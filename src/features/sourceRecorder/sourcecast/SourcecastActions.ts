@@ -1,17 +1,18 @@
-import { createAction } from '@reduxjs/toolkit';
+import { createActions } from 'src/commons/redux/utils';
 
 import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
 import { SourcecastData } from '../SourceRecorderTypes';
-import { FETCH_SOURCECAST_INDEX, UPDATE_SOURCECAST_INDEX } from './SourcecastTypes';
 
-export const fetchSourcecastIndex = createAction(
-  FETCH_SOURCECAST_INDEX,
-  (workspaceLocation: WorkspaceLocation) => ({ payload: { workspaceLocation } })
-);
-
-export const updateSourcecastIndex = createAction(
-  UPDATE_SOURCECAST_INDEX,
-  (index: SourcecastData[], workspaceLocation: WorkspaceLocation) => ({
-    payload: { index, workspaceLocation }
+const SourcecastActions = createActions('sourcecast', {
+  fetchSourcecastIndex: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
+  updateSourcecastIndex: (index: SourcecastData[], workspaceLocation: WorkspaceLocation) => ({
+    index,
+    workspaceLocation
   })
-);
+});
+
+// For compatibility with existing code (reducer)
+export const { fetchSourcecastIndex, updateSourcecastIndex } = SourcecastActions;
+
+// For compatibility with existing code (actions helper)
+export default SourcecastActions;

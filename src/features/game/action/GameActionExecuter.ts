@@ -91,7 +91,11 @@ export default class GameActionExecuter {
         await SourceAcademyGame.getInstance().getSoundManager().playSound(actionParams.id);
         return;
       case GameActionType.ShowObjectLayer:
-        actionParams.show ? globalAPI.showLayer(Layer.Objects) : globalAPI.hideLayer(Layer.Objects);
+        if (actionParams.show) {
+          globalAPI.showLayer(Layer.Objects);
+        } else {
+          globalAPI.hideLayer(Layer.Objects);
+        }
         return;
       case GameActionType.NavigateToAssessment:
         await globalAPI.promptNavigateToAssessment(actionParams.assessmentId);
@@ -101,6 +105,11 @@ export default class GameActionExecuter {
         return;
       case GameActionType.Delay:
         await sleep(actionParams.duration);
+        return;
+      case GameActionType.ShowQuiz:
+        globalAPI.enableKeyboardInput(false);
+        await globalAPI.showQuiz(actionParams.id);
+        globalAPI.enableKeyboardInput(true);
         return;
       default:
         return;
@@ -141,6 +150,7 @@ export default class GameActionExecuter {
       case GameActionType.PlaySFX:
       case GameActionType.ShowObjectLayer:
       case GameActionType.Delay:
+      case GameActionType.ShowQuiz:
         return false;
     }
   }

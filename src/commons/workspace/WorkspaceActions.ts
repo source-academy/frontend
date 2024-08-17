@@ -7,11 +7,14 @@ import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { Library } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
 import { createActions } from '../redux/utils';
+import { UploadResult } from '../sideContent/content/SideContentUpload';
 import {
   EditorTabState,
   SubmissionsTableFilters,
+  TOGGLE_USING_UPLOAD,
   UPDATE_LAST_DEBUGGER_RESULT,
   UPDATE_LAST_NON_DET_RESULT,
+  UPLOAD_FILES,
   WorkspaceLocation,
   WorkspaceLocationsWithTools,
   WorkspaceState
@@ -278,72 +281,25 @@ export const updateLastNonDetResult = createAction(
   })
 );
 
-// For compatibility with existing code (reducer)
-export const {
-  setTokenCount,
-  browseReplHistoryDown,
-  browseReplHistoryUp,
-  changeExternalLibrary,
-  changeExecTime,
-  changeStepLimit,
-  chapterSelect,
-  externalLibrarySelect,
-  toggleEditorAutorun,
-  beginClearContext,
-  clearReplInput,
-  clearReplOutput,
-  clearReplOutputLast,
-  endClearContext,
-  evalEditor,
-  evalRepl,
-  evalTestcase,
-  runAllTestcases,
-  toggleFolderMode,
-  enableTokenCounter,
-  disableTokenCounter,
-  setFolderMode,
-  updateActiveEditorTabIndex,
-  updateActiveEditorTab,
-  updateEditorValue,
-  setEditorBreakpoint,
-  setEditorHighlightedLines,
-  setEditorHighlightedLinesControl,
-  moveCursor,
-  addEditorTab,
-  shiftEditorTab,
-  removeEditorTab,
-  removeEditorTabForFile,
-  removeEditorTabsForDirectory,
-  renameEditorTabForFile,
-  renameEditorTabsForDirectory,
-  updateReplValue,
-  sendReplInputToOutput,
-  resetTestcase,
-  navigateToDeclaration,
-  resetWorkspace,
-  updateWorkspace,
-  setIsEditorReadonly,
-  updateSubmissionsTableFilters,
-  updateCurrentAssessmentId,
-  updateCurrentSubmissionId,
-  updateHasUnsavedChanges,
-  changeSublanguage,
-  updateSublanguage,
-  promptAutocomplete,
-  notifyProgramEvaluated,
-  toggleUsingSubst,
-  addHtmlConsoleError,
-  toggleUsingCse,
-  toggleUpdateCse,
-  updateCurrentStep,
-  updateStepsTotal,
-  updateBreakpointSteps,
-  updateChangePointSteps
-} = newActions;
+export const toggleUsingUpload = createAction(
+  TOGGLE_USING_UPLOAD,
+  (usingUpload: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
+    payload: { usingUpload, workspaceLocation }
+  })
+);
+
+export const uploadFiles = createAction(
+  UPLOAD_FILES,
+  (files: UploadResult, workspaceLocation: WorkspaceLocation) => ({
+    payload: { files, workspaceLocation }
+  })
+);
 
 // For compatibility with existing code (actions helper)
 export default {
   ...newActions,
   updateLastDebuggerResult,
-  updateLastNonDetResult
+  updateLastNonDetResult,
+  toggleUsingUpload,
+  uploadFiles
 };

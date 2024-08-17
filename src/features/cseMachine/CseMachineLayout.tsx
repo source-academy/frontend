@@ -460,7 +460,9 @@ export class Layout {
    * by scrolling or by the trackpad.
    */
   static zoomStage(event: KonvaEventObject<WheelEvent> | boolean, multiplier: number = 1) {
-    typeof event != 'boolean' && event.evt.preventDefault();
+    if (typeof event != 'boolean') {
+      event.evt.preventDefault();
+    }
     if (Layout.stageRef.current !== null) {
       const stage = Layout.stageRef.current;
       const oldScale = stage.scaleX();

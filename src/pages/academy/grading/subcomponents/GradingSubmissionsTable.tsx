@@ -31,7 +31,7 @@ import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { updateSubmissionsTableFilters } from 'src/commons/workspace/WorkspaceActions';
+import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 
@@ -128,7 +128,7 @@ type Props = {
   totalRows: number;
   pageSize: number;
   submissions: GradingOverview[];
-  updateEntries: (page: number, filterParams: Object) => void;
+  updateEntries: (page: number, filterParams: object) => void;
 };
 
 const GradingSubmissionTable: React.FC<Props> = ({
@@ -206,7 +206,7 @@ const GradingSubmissionTable: React.FC<Props> = ({
   };
 
   useEffect(() => {
-    dispatch(updateSubmissionsTableFilters({ columnFilters }));
+    dispatch(WorkspaceActions.updateSubmissionsTableFilters({ columnFilters }));
   }, [columnFilters, dispatch]);
 
   useEffect(() => {

@@ -1,6 +1,5 @@
-import { createReducer } from '@reduxjs/toolkit';
+import { createReducer, Reducer } from '@reduxjs/toolkit';
 import { stringify } from 'js-slang/dist/utils/stringify';
-import { Reducer } from 'redux';
 
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
 import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
@@ -354,6 +353,18 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     //   debuggerContext.context = action.payload.context;
     //   debuggerContext.workspaceLocation = action.payload.workspaceLocation;
     // })
+    .addCase(WorkspaceActions.toggleUsingUpload, (state, action) => {
+      const { workspaceLocation } = action.payload;
+      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
+        state[workspaceLocation].usingUpload = action.payload.usingUpload;
+      }
+    })
+    .addCase(WorkspaceActions.uploadFiles, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
+        state[workspaceLocation].files = action.payload.files;
+      }
+    })
     .addCase(WorkspaceActions.updateLastDebuggerResult, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].lastDebuggerResult = action.payload.lastDebuggerResult;

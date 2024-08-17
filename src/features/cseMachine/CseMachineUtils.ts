@@ -69,7 +69,7 @@ export function assert(condition: boolean, msg?: string): asserts condition {
 }
 
 /** Returns `true` if `object` is empty */
-export function isEmptyObject(object: Object): object is EmptyObject {
+export function isEmptyObject(object: object): object is EmptyObject {
   return Object.keys(object).length === 0;
 }
 
@@ -79,17 +79,17 @@ export function isSourceObject(x: any): x is SourceObject {
 }
 
 /** Returns `true` if `object` is `Environment` */
-export function isEnvironment(object: Object): object is Environment {
+export function isEnvironment(object: object): object is Environment {
   return 'head' in object && 'tail' in object && 'name' in object;
 }
 
 /** Returns `true` if `object` is `EnvTreeNode` */
-export function isEnvTreeNode(object: Object): object is EnvTreeNode {
+export function isEnvTreeNode(object: object): object is EnvTreeNode {
   return 'parent' in object && 'children' in object;
 }
 
 /** Returns `true` if `object` is `EnvTree` */
-export function isEnvTree(object: Object): object is EnvTree {
+export function isEnvTree(object: object): object is EnvTree {
   return 'root' in object;
 }
 
@@ -822,24 +822,6 @@ export function getControlItemComponent(
         return new ControlItemComponent(
           'mark',
           'Mark return address',
-          stackHeight,
-          highlightOnHover,
-          unhighlightOnHover,
-          topItem
-        );
-      case InstrType.GENERATE_CONT:
-        return new ControlItemComponent(
-          'generate cont',
-          'Generate continuation',
-          stackHeight,
-          highlightOnHover,
-          unhighlightOnHover,
-          topItem
-        );
-      case InstrType.RESUME_CONT:
-        return new ControlItemComponent(
-          'call cont',
-          'call a continuation',
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,

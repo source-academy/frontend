@@ -1,4 +1,3 @@
-import { createAction } from '@reduxjs/toolkit';
 import { createActions } from 'src/commons/redux/utils';
 import {
   paginationToBackendParams,
@@ -19,23 +18,18 @@ import {
   NotificationFilterFunction
 } from '../../notificationBadge/NotificationBadgeTypes';
 import { generateOctokitInstance } from '../../utils/GitHubPersistenceHelper';
-import { Role } from '../ApplicationTypes';
+import { Role, StoriesRole } from '../ApplicationTypes';
 import {
   AdminPanelCourseRegistration,
   CourseRegistration,
-  NotificationConfiguration,
-  NotificationPreference,
-  TimeOption,
   Tokens,
-  UPDATE_ASSESSMENT,
-  UPDATE_COURSE_RESEARCH_AGREEMENT,
-  UPDATE_TOTAL_XP,
   UpdateCourseConfiguration,
   User
 } from '../types/SessionTypes';
 
-const newActions = createActions('session', {
+const SessionActions = createActions('session', {
   fetchAuth: (code: string, providerId?: string) => ({ code, providerId }),
+  handleSamlRedirect: (jwtCookie: string) => ({ jwtCookie }),
   fetchUserAndCourse: () => ({}),
   fetchCourseConfig: () => ({}),
   fetchAssessment: (assessmentId: number, assessmentPassword?: string) => ({
@@ -77,9 +71,6 @@ const newActions = createActions('session', {
   setCourseRegistration: (courseRegistration: Partial<CourseRegistration>) => courseRegistration,
   setAssessmentConfigurations: (assessmentConfigurations: AssessmentConfiguration[]) =>
     assessmentConfigurations,
-  setConfigurableNotificationConfigs: (notificationConfigs: NotificationConfiguration[]) =>
-    notificationConfigs,
-  setNotificationConfigs: (notificationConfigs: NotificationConfiguration[]) => notificationConfigs,
   setAdminPanelCourseRegistrations: (courseRegistrations: AdminPanelCourseRegistration[]) =>
     courseRegistrations,
   setGoogleUser: (user?: string) => user,
@@ -107,18 +98,9 @@ const newActions = createActions('session', {
   ) => ({ submissionId, questionId, xpAdjustment, comments }),
   reautogradeSubmission: (submissionId: number) => submissionId,
   reautogradeAnswer: (submissionId: number, questionId: number) => ({ submissionId, questionId }),
-  updateAssessmentOverviews: (overviews: AssessmentOverview[]) => overviews
-});
-
-export const updateTotalXp = createAction(UPDATE_TOTAL_XP, (totalXp: number) => ({
-  payload: totalXp
-}));
-
-export const updateAssessment = createAction(UPDATE_ASSESSMENT, (assessment: Assessment) => ({
-  payload: assessment
-}));
-
-const newActions2 = createActions('session', {
+  updateAssessmentOverviews: (overviews: AssessmentOverview[]) => overviews,
+  updateTotalXp: (totalXp: number) => totalXp,
+  updateAssessment: (assessment: Assessment) => assessment,
   updateGradingOverviews: (overviews: GradingOverviews) => overviews,
   fetchTeamFormationOverview: (assessmentId: number) => ({ assessmentId }),
   createTeam: (assessment: AssessmentOverview, teams: OptionType[][]) => ({ assessment, teams }),
@@ -153,32 +135,16 @@ const newActions2 = createActions('session', {
   updateCourseConfig: (courseConfiguration: UpdateCourseConfiguration) => courseConfiguration,
   fetchAssessmentConfigs: () => ({}),
   updateAssessmentConfigs: (assessmentConfigs: AssessmentConfiguration[]) => assessmentConfigs,
-  updateNotificationConfigs: (notificationConfigs: NotificationConfiguration[]) =>
-    notificationConfigs,
-  updateNotificationPreferences: (
-    notificationPreferences: NotificationPreference[],
-    courseRegId: number
-  ) => ({ notificationPreferences, courseRegId }),
   deleteAssessmentConfig: (assessmentConfig: AssessmentConfiguration) => assessmentConfig,
   fetchAdminPanelCourseRegistrations: () => ({}),
-  fetchConfigurableNotificationConfigs: (courseRegId: number) => ({ courseRegId }),
-  fetchNotificationConfigs: () => ({}),
-  updateTimeOptions: (timeOptions: TimeOption[]) => timeOptions,
-  deleteTimeOptions: (timeOptionIds: number[]) => timeOptionIds,
   updateUserRole: (courseRegId: number, role: Role) => ({ courseRegId, role }),
-  deleteUserCourseRegistration: (courseRegId: number) => ({ courseRegId })
+  deleteUserCourseRegistration: (courseRegId: number) => ({ courseRegId }),
+  updateCourseResearchAgreement: (agreedToResearch: boolean) => ({ agreedToResearch }),
+  updateStoriesUserRole: (userId: number, role: StoriesRole) => ({ userId, role }),
+  deleteStoriesUserUserGroups: (userId: number) => ({ userId })
 });
-
-export const updateCourseResearchAgreement = createAction(
-  UPDATE_COURSE_RESEARCH_AGREEMENT,
-  (agreedToResearch: boolean) => ({ payload: { agreedToResearch } })
-);
 
 // For compatibility with existing code (actions helper)
 export default {
-  ...newActions,
-  updateTotalXp,
-  updateAssessment,
-  ...newActions2,
-  updateCourseResearchAgreement
+  ...SessionActions
 };

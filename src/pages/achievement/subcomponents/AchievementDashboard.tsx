@@ -12,14 +12,7 @@ import AchievementView from '../../../commons/achievement/AchievementView';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import insertFakeAchievements from '../../../commons/achievement/utils/InsertFakeAchievements';
 import SessionActions from '../../../commons/application/actions/SessionActions';
-import {
-  getAchievements,
-  getGoals,
-  getOwnGoals,
-  getUserAssessmentOverviews,
-  getUsers,
-  updateGoalProgress
-} from '../../../features/achievement/AchievementActions';
+import AchievementActions from '../../../features/achievement/AchievementActions';
 import { AchievementContext } from '../../../features/achievement/AchievementConstants';
 import {
   AchievementUser,
@@ -81,14 +74,15 @@ const AchievementDashboard: React.FC = () => {
   } = useMemo(() => {
     return {
       handleFetchAssessmentOverviews: () => dispatch(SessionActions.fetchAssessmentOverviews()),
-      handleGetAchievements: () => dispatch(getAchievements()),
-      handleGetGoals: (studentCourseRegId: number) => dispatch(getGoals(studentCourseRegId)),
-      handleGetOwnGoals: () => dispatch(getOwnGoals()),
+      handleGetAchievements: () => dispatch(AchievementActions.getAchievements()),
+      handleGetGoals: (studentCourseRegId: number) =>
+        dispatch(AchievementActions.getGoals(studentCourseRegId)),
+      handleGetOwnGoals: () => dispatch(AchievementActions.getOwnGoals()),
       handleGetUserAssessmentOverviews: (studentCourseRegId: number) =>
-        dispatch(getUserAssessmentOverviews(studentCourseRegId)),
-      handleGetUsers: () => dispatch(getUsers()),
+        dispatch(AchievementActions.getUserAssessmentOverviews(studentCourseRegId)),
+      handleGetUsers: () => dispatch(AchievementActions.getUsers()),
       handleUpdateGoalProgress: (studentCourseRegId: number, progress: GoalProgress) =>
-        dispatch(updateGoalProgress(studentCourseRegId, progress))
+        dispatch(AchievementActions.updateGoalProgress(studentCourseRegId, progress))
     };
   }, [dispatch]);
 
@@ -96,11 +90,17 @@ const AchievementDashboard: React.FC = () => {
    * Fetch the latest achievements and goals from backend when the page is rendered
    */
   useEffect(() => {
-    selectedUser ? handleGetGoals(selectedUser.courseRegId) : handleGetOwnGoals();
+    if (selectedUser) {
+      handleGetGoals(selectedUser.courseRegId);
+    } else {
+      handleGetOwnGoals();
+    }
 
-    selectedUser
-      ? handleGetUserAssessmentOverviews(selectedUser.courseRegId)
-      : handleFetchAssessmentOverviews();
+    if (selectedUser) {
+      handleGetUserAssessmentOverviews(selectedUser.courseRegId);
+    } else {
+      handleFetchAssessmentOverviews();
+    }
 
     handleGetAchievements();
   }, [
@@ -118,9 +118,9 @@ const AchievementDashboard: React.FC = () => {
 
   // Inserts assessment achievements for each assessment retrieved
   // Note that assessmentConfigs is updated when the page loads (see Application.tsx)
-  userAssessmentOverviews &&
-    assessmentConfigs &&
+  if (userAssessmentOverviews && assessmentConfigs) {
     insertFakeAchievements(userAssessmentOverviews, assessmentConfigs, inferencer);
+  }
 
   const filterState = useState<FilterStatus>(FilterStatus.ALL);
   const [filterStatus] = filterState;
