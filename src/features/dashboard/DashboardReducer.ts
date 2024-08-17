@@ -1,5 +1,4 @@
-import { createReducer } from '@reduxjs/toolkit';
-import { Reducer } from 'redux';
+import { createReducer, Reducer } from '@reduxjs/toolkit';
 
 import { defaultDashboard } from '../../commons/application/ApplicationTypes';
 import { SourceActionType } from '../../commons/utils/ActionsHelper';

@@ -148,15 +148,6 @@ export const getAcademyNavbarRightInfo = ({
   isEnrolledInACourse: boolean;
   courseId?: number;
   role?: Role;
-}): NavbarEntryInfo[] => [
-  ...getStaffNavlinkInfo({ courseId, role }),
-  {
-    to: `/courses/${courseId}/notipreference`,
-    icon: IconNames.NOTIFICATIONS,
-    text: 'Notifications',
-    disabled: !isEnrolledInACourse,
-    hiddenInBreakpoints: ['xs', 'sm', 'md', 'lg']
-  }
-];
+}): NavbarEntryInfo[] => [...getStaffNavlinkInfo({ courseId, role })];
 
 export default AcademyNavigationBar;

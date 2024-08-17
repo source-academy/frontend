@@ -1,6 +1,7 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { HotkeyItem, useHotkeys } from '@mantine/hooks';
+import { AnyAction, Dispatch } from '@reduxjs/toolkit';
 import { Ace, Range } from 'ace-builds';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
@@ -10,7 +11,6 @@ import { decompressFromEncodedURIComponent } from 'lz-string';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useStore } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
-import { AnyAction, Dispatch } from 'redux';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import {
@@ -614,13 +614,19 @@ const Playground: React.FC<PlaygroundProps> = props => {
         stepSize={usingSubst ? 2 : 1}
         handleChangeStepLimit={limit => {
           dispatch(WorkspaceActions.changeStepLimit(limit, workspaceLocation));
-          usingCse && dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
+          if (usingCse) {
+            dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
+          }
         }}
         handleOnBlurAutoScale={limit => {
-          limit % 2 === 0 || !usingSubst
-            ? dispatch(WorkspaceActions.changeStepLimit(limit, workspaceLocation))
-            : dispatch(WorkspaceActions.changeStepLimit(limit + 1, workspaceLocation));
-          usingCse && dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
+          if (limit % 2 === 0 || !usingSubst) {
+            dispatch(WorkspaceActions.changeStepLimit(limit, workspaceLocation));
+          } else {
+            dispatch(WorkspaceActions.changeStepLimit(limit + 1, workspaceLocation));
+          }
+          if (usingCse) {
+            dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
+          }
         }}
         key="step_limit"
       />
@@ -974,8 +980,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
         usingRemoteExecution || !isSourceLanguage(languageConfig.chapter)
           ? null
           : usingSubst || usingCse
-          ? stepperStepLimit
-          : executionTime
+            ? stepperStepLimit
+            : executionTime
       ]
     },
     editorContainerProps: editorContainerProps,

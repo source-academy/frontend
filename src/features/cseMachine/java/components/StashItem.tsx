@@ -41,8 +41,8 @@ export class StashItem extends Visible {
         reference instanceof Frame
           ? reference.y() + reference.name.height()
           : reference instanceof Method
-          ? reference.y()
-          : reference.y() + reference.type.height();
+            ? reference.y()
+            : reference.y() + reference.type.height();
       this._arrow = new Arrow(
         this._x + this._width / 2,
         this._y + this._height,

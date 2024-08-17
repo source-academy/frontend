@@ -1,7 +1,7 @@
 import { IconNames } from '@blueprintjs/icons';
+import { bindActionCreators } from '@reduxjs/toolkit';
 import React, { useEffect } from 'react';
 import { connect, MapDispatchToProps } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { ResultOutput } from 'src/commons/application/ApplicationTypes';
 
 import { beginAlertSideContent } from '../SideContentActions';

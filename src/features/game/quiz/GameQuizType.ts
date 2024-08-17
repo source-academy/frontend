@@ -9,7 +9,7 @@ export type Question = {
   question: string;
   prompt?: string;
   speaker: SpeakerDetail;
-  answer: Number;
+  answer: number;
   options: Option[];
 };
 

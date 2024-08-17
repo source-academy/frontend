@@ -76,8 +76,8 @@ const SideContentTestcaseCard: React.FC<SideContentTestcaseCardProps> = props =>
               {testcase.errors
                 ? parseError(testcase.errors)
                 : testcase.result !== undefined
-                ? stringify(testcase.result)
-                : 'No Answer'}
+                  ? stringify(testcase.result)
+                  : 'No Answer'}
             </Pre>
           </>
         )}

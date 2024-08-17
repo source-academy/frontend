@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom';
 
 // Mock ResizeObserver in tests
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 global.ResizeObserver = require('resize-observer-polyfill');
 
 jest.mock('./commons/utils/notifications/createNotification', () => ({

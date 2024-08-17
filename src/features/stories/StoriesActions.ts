@@ -18,7 +18,7 @@ const StoriesActions = createActions('stories', {
     context: Context,
     env: string
   ) => ({ result, lastDebuggerResult, code, context, env }),
-  toggleStoriesUsingSubst: (usingSubst: boolean, env: String) => ({ usingSubst, env }),
+  toggleStoriesUsingSubst: (usingSubst: boolean, env: string) => ({ usingSubst, env }),
 
   // New action creators post-refactor
   getStoriesList: () => ({}),

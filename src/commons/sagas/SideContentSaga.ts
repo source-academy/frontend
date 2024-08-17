@@ -1,4 +1,4 @@
-import { Action } from 'redux';
+import { Action } from '@reduxjs/toolkit';
 import { put, take } from 'redux-saga/effects';
 import StoriesActions from 'src/features/stories/StoriesActions';
 

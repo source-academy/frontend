@@ -32,7 +32,9 @@ export function Typewriter(
   let typeWriting: NodeJS.Timeout;
 
   const clearTyping = () => {
-    typeWriting && clearInterval(typeWriting);
+    if (typeWriting) {
+      clearInterval(typeWriting);
+    }
   };
 
   /* Reset line and type out */

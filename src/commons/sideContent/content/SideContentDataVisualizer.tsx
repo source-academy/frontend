@@ -1,10 +1,10 @@
 import { Button, Card, Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { HotkeyItem } from '@mantine/hooks';
+import { bindActionCreators } from '@reduxjs/toolkit';
 import classNames from 'classnames';
 import React from 'react';
 import { connect, MapDispatchToProps } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
 
 import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';

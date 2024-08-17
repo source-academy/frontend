@@ -1,8 +1,8 @@
+import { Store } from '@reduxjs/toolkit';
 import { render } from '@testing-library/react';
 import { Provider, useDispatch } from 'react-redux';
-import { createMemoryRouter, RouterProvider } from 'react-router';
 import * as ReactRouter from 'react-router';
-import { Store } from 'redux';
+import { createMemoryRouter, RouterProvider } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
 
@@ -22,7 +22,7 @@ jest.mock('../../../commons/utils/Constants', () => {
   return {
     __esModule: true,
     default: {
-      authProviders: new Map([['luminus', { name: 'LumiNUS' }]]),
+      otherAuthProviders: new Map([['luminus', { name: 'LumiNUS' }]]),
       defaultSourceChapter: 4,
       defaultSourceVariant: 'default'
     }

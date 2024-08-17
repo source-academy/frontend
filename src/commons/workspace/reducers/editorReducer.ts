@@ -286,14 +286,14 @@ const getNextActiveEditorTabIndexAfterTabRemoval = (
         // tab being removed has their index decremented by 1.
         activeEditorTabIndex - 1
     : newEditorTabsLength === 0
-    ? // If there are no editor tabs after removal, there cannot
-      // be an active editor tab.
-      null
-    : removedEditorTabIndex === 0
-    ? // If the removed editor tab is the leftmost tab, the active
-      // editor tab will be the new leftmost tab.
-      0
-    : // Otherwise, the active editor tab will be the tab to the
-      // left of the removed tab.
-      removedEditorTabIndex - 1;
+      ? // If there are no editor tabs after removal, there cannot
+        // be an active editor tab.
+        null
+      : removedEditorTabIndex === 0
+        ? // If the removed editor tab is the leftmost tab, the active
+          // editor tab will be the new leftmost tab.
+          0
+        : // Otherwise, the active editor tab will be the tab to the
+          // left of the removed tab.
+          removedEditorTabIndex - 1;
 };
