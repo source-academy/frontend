@@ -179,7 +179,7 @@ const Assessment: React.FC = () => {
                   ? `XP: ${overview.xp} / ${overview.maxXp}`
                   : `Max XP: ${overview.maxXp}`}
               </H6>
-              {hasBonusXp && (
+              {overview.earlySubmissionXp > 0 && (
                 <Tooltip
                   content={`Max XP ends at ${getPrettyDateAfterHours(overview.openAt, overview.hoursBeforeEarlyXpDecay)}`}
                 >
