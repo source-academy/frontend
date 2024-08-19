@@ -132,15 +132,7 @@
 
   &:hover:has(.grading-overview-filterable-btns) {
     .grading-overview-filterable-btns {
-      // TODO: Fix this
-      &:not(:has(> .grading-badge)) {
-        text-decoration: underline;
-      }
-
-      // TODO: Fix this
-      &:has(> .grading-badge) {
-        filter: brightness(0.75);
-      }
+      text-decoration: underline;
     }
   }
 

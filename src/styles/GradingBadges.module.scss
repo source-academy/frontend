@@ -39,6 +39,14 @@
     padding: 1rem 2rem;
     font-size: 1.25rem;
   }
+
+  // div: .grading-def-cell
+  // button: .grading-overview-filterable-btns
+  // TODO: This also affects .grading-overview-unfilterable-btns
+  div:hover > button:has(&) {
+    text-decoration: none !important;
+    filter: brightness(0.75);
+  }
 }
 
 .grading-badge-text {
