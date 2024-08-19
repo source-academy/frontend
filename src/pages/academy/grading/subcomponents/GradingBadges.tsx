@@ -15,10 +15,10 @@ type BadgeProps = {
   /** First color is bg, second is text. Refer to {typeof AVAILABLE_COLORS} */
   color?: readonly [string, string];
   size?: Size;
-  icon?: () => React.ReactNode;
+  icon?: React.ReactNode;
 };
 
-export const Badge: React.FC<BadgeProps> = (props: BadgeProps) => {
+const Badge: React.FC<BadgeProps> = props => {
   return (
     <div
       className={classNames(
@@ -30,7 +30,7 @@ export const Badge: React.FC<BadgeProps> = (props: BadgeProps) => {
         backgroundColor: props.color ? props.color[0] + '40' : ''
       }}
     >
-      {props.icon?.()}
+      {props.icon}
       <span className={badgeClasses['grading-badge-text']}>{props.text}</span>
     </div>
   );
@@ -130,7 +130,7 @@ const ColumnFilterBadge: React.FC<ColumnFilterBadgeProps> = ({ filter, onRemove,
     >
       <Badge
         text={filtersName}
-        icon={() => <Icon icon={IconNames.CROSS} style={{ marginRight: '0.25rem' }} />}
+        icon={<Icon icon={IconNames.CROSS} style={{ marginRight: '0.25rem' }} />}
         color={getBadgeColorFromLabel(filter)}
       />
     </button>
@@ -154,7 +154,7 @@ const FilterBadge: React.FC<FilterBadgeProps> = ({ filter, onRemove }) => {
     >
       <Badge
         text={filterValue}
-        icon={() => <Icon icon={IconNames.CROSS} style={{ marginRight: '0.25rem' }} />}
+        icon={<Icon icon={IconNames.CROSS} style={{ marginRight: '0.25rem' }} />}
         color={getBadgeColorFromLabel(filterValue)}
       />
     </button>
@@ -167,7 +167,7 @@ type ProgressStatusBadgeProps = {
 
 const ProgressStatusBadge: React.FC<ProgressStatusBadgeProps> = ({ progress }) => {
   const statusText = progress.charAt(0).toUpperCase() + progress.slice(1);
-  const badgeIcon = () => (
+  const badgeIcon = (
     <Icon
       icon={
         progress === ProgressStatuses.autograded
