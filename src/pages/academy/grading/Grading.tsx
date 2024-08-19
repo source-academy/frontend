@@ -153,7 +153,7 @@ const Grading: React.FC = () => {
         gradingOverviews?.data === undefined ? (
           loadingDisplay
         ) : (
-          <GradingFlex flexDirection="column" className="grading-table-wrapper">
+          <div className="grading-table-wrapper">
             <GradingFlex justifyContent="space-between">
               <GradingFlex justifyContent="flex-start" style={{ columnGap: '1.5rem' }}>
                 <GradingText style={{ fontSize: '1.125rem', opacity: 0.9 }}>
@@ -218,7 +218,7 @@ const Grading: React.FC = () => {
               submissions={submissions}
               updateEntries={updateGradingOverviewsCallback}
             />
-          </GradingFlex>
+          </div>
         )
       }
       fullWidth

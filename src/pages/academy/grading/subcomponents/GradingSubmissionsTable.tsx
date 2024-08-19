@@ -90,6 +90,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
     ...tableFilters.columnFilters
   ]);
+  const [cellFilters, setCellFilters] = useState<{ id: ColumnFields; value: string }[]>([]);
   const [hiddenColumns, setHiddenColumns] = useState<GradingColumnVisibility>(
     columnVisibility ? columnVisibility : []
   );
@@ -103,7 +104,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
   const defaultColumnDefs: ColDef = {
     filter: false,
-    resizable: false,
+    floatingFilter: true,
+    resizable: true,
     sortable: true,
     headerComponentParams: {
       hideColumn: (id: ColumnNameKeys) => handleColumnFilterAdd(id),
@@ -142,8 +144,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     suppressMenuHide: true,
     suppressPaginationPanel: true,
     suppressRowClickSelection: true,
-    tableHeight:
-      String(ROW_HEIGHT * (rowData.length > 0 ? rowData.length : 2) + HEADER_HEIGHT + 4) + 'px',
     tableMargins: '1rem 0 0 0'
   };
 
@@ -162,11 +162,14 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     debouncedUpdateSearchValue(e.target.value);
   };
 
+  const debouncedUpdateCellFilters = useMemo(() => debounce(setCellFilters, 300), []);
+
   // Converts the columnFilters array into backend query parameters.
   const backendFilterParams = useMemo(() => {
     const filters: Array<{ [key: string]: any }> = [
       { id: ColumnFields.assessmentName, value: searchValue },
-      ...columnFilters
+      ...columnFilters,
+      ...cellFilters
     ].map(convertFilterToBackendParams);
 
     const params: Record<string, any> = {};
@@ -176,7 +179,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       });
     });
     return params;
-  }, [columnFilters, searchValue]);
+  }, [cellFilters, columnFilters, searchValue]);
 
   const cellClickedEvent = (event: CellClickedEvent) => {
     const colClicked: string = event.colDef.field ? event.colDef.field : '';
@@ -392,13 +395,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         ></InputGroup>
       </GradingFlex>
 
-      <div
-        className="ag-theme-quartz"
-        style={{
-          height: tableProperties.tableHeight,
-          margin: tableProperties.tableMargins
-        }}
-      >
+      <div className="ag-theme-quartz" style={{ margin: tableProperties.tableMargins }}>
         <AgGridReact
           columnDefs={colDefs}
           onCellClicked={cellClickedEvent}
@@ -416,6 +413,25 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           suppressMenuHide={tableProperties.suppressMenuHide}
           suppressPaginationPanel={tableProperties.suppressPaginationPanel}
           suppressRowClickSelection={tableProperties.suppressRowClickSelection}
+          domLayout="autoHeight"
+          onFilterChanged={e => {
+            if (!e.afterFloatingFilter) {
+              return;
+            }
+            const filters = e.api.getFilterModel();
+            const cellFilters = [];
+            for (const [key, { filter: query }] of Object.entries(filters)) {
+              switch (key) {
+                // Fields that BE supports filtering on
+                case ColumnFields.studentName:
+                case ColumnFields.studentUsername:
+                case ColumnFields.groupName:
+                  cellFilters.push({ id: key, value: query });
+                  break;
+              }
+            }
+            debouncedUpdateCellFilters(cellFilters);
+          }}
         />
       </div>
 

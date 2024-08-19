@@ -81,10 +81,7 @@ export type AllColsSortStates = {
 
 export type ColumnFiltersState = ColumnFilter[];
 
-export type ColumnFilter = {
-  id: string;
-  value: unknown;
-};
+export type ColumnFilter = { id: string; value: unknown };
 
 export type GradingColumnVisibility = ColumnFieldsKeys[];
 
@@ -163,7 +160,6 @@ export type IGradingTableProperties = {
   suppressMenuHide: boolean;
   suppressPaginationPanel: boolean;
   suppressRowClickSelection: boolean;
-  tableHeight: string;
   tableMargins: string;
 };
 
