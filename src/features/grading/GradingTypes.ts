@@ -163,7 +163,6 @@ export type IGradingTableProperties = {
   suppressMenuHide: boolean;
   suppressPaginationPanel: boolean;
   suppressRowClickSelection: boolean;
-  tableHeight: string;
   tableMargins: string;
 };
 

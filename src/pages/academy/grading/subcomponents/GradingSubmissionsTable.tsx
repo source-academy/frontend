@@ -143,8 +143,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     suppressMenuHide: true,
     suppressPaginationPanel: true,
     suppressRowClickSelection: true,
-    tableHeight:
-      String(ROW_HEIGHT * (rowData.length > 0 ? rowData.length : 2) + HEADER_HEIGHT + 4) + 'px',
     tableMargins: '1rem 0 0 0'
   };
 
@@ -393,13 +391,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         ></InputGroup>
       </GradingFlex>
 
-      <div
-        className="ag-theme-quartz"
-        style={{
-          height: tableProperties.tableHeight,
-          margin: tableProperties.tableMargins
-        }}
-      >
+      <div className="ag-theme-quartz" style={{ margin: tableProperties.tableMargins }}>
         <AgGridReact
           columnDefs={colDefs}
           onCellClicked={cellClickedEvent}
@@ -417,6 +409,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           suppressMenuHide={tableProperties.suppressMenuHide}
           suppressPaginationPanel={tableProperties.suppressPaginationPanel}
           suppressRowClickSelection={tableProperties.suppressRowClickSelection}
+          domLayout="autoHeight"
         />
       </div>
 
