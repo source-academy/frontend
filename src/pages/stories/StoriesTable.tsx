@@ -40,8 +40,8 @@ const StoriesTable: React.FC<Props> = ({ headers, stories, storyActions }) => {
         headerName: 'Title',
         cellRenderer: ({ data, value }: CustomCellRendererProps<StoryListView>) =>
           data && (
-            <GradingFlex alignItems="center">
-              {data.isPinned && <Icon icon={IconNames.PIN} style={{ marginRight: 8 }} />}
+            <GradingFlex alignItems="center" style={{ columnGap: 8 }}>
+              {data.isPinned && <Icon icon={IconNames.PIN} />}
               {value}
             </GradingFlex>
           )
