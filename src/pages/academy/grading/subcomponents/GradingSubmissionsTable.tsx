@@ -198,15 +198,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         (acc, curr) => acc || (curr.id === id && curr.value === value),
         false
       );
-      return alreadyExists
-        ? [...prev]
-        : [
-            ...prev,
-            {
-              id: id,
-              value: value
-            }
-          ];
+      return alreadyExists ? [...prev] : [...prev, { id, value }];
     });
     resetPage();
   };
