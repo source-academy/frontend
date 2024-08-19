@@ -41,7 +41,7 @@ const StoriesTable: React.FC<Props> = ({ headers, stories, storyActions }) => {
         cellRenderer: ({ data, value }: CustomCellRendererProps<StoryListView>) =>
           data && (
             <GradingFlex alignItems="center" style={{ columnGap: 8 }}>
-              {data.isPinned && <Icon icon={IconNames.PIN} />}
+              {data.isPinned && <Icon intent="primary" icon={IconNames.PIN} />}
               {value}
             </GradingFlex>
           )
@@ -57,6 +57,7 @@ const StoriesTable: React.FC<Props> = ({ headers, stories, storyActions }) => {
         flex: 3,
         field: 'actions' as any,
         headerName: 'Actions',
+        sortable: false,
         cellRenderer: ({ data }: CustomCellRendererProps<StoryListView>) => storyActions(data!)
       }
     ],

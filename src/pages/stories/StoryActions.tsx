@@ -38,7 +38,12 @@ const StoryActions: React.FC<Props> = ({
           placement={Position.TOP}
           content="View"
         >
-          <Button icon={IconNames.EyeOpen} minimal onClick={() => navigate(`./view/${storyId}`)} />
+          <Button
+            intent="success"
+            icon={IconNames.EyeOpen}
+            minimal
+            onClick={() => navigate(`./view/${storyId}`)}
+          />
         </Tooltip>
       )}
       {canEdit && (
@@ -47,7 +52,12 @@ const StoryActions: React.FC<Props> = ({
           placement={Position.TOP}
           content="Edit"
         >
-          <Button icon={IconNames.EDIT} minimal onClick={() => navigate(`./edit/${storyId}`)} />
+          <Button
+            intent="primary"
+            icon={IconNames.EDIT}
+            minimal
+            onClick={() => navigate(`./edit/${storyId}`)}
+          />
         </Tooltip>
       )}
       {canPin && isPinned && (
@@ -79,6 +89,7 @@ const StoryActions: React.FC<Props> = ({
           content={isPinned ? 'Unpin' : 'Pin'}
         >
           <Button
+            intent="warning"
             icon={isPinned ? IconNames.EXCLUDE_ROW : IconNames.PIN}
             minimal
             onClick={() => handleTogglePin(storyId)}
@@ -91,7 +102,12 @@ const StoryActions: React.FC<Props> = ({
           placement={Position.TOP}
           content="Delete"
         >
-          <Button icon={IconNames.TRASH} minimal onClick={() => handleDeleteStory(storyId)} />
+          <Button
+            intent="danger"
+            icon={IconNames.TRASH}
+            minimal
+            onClick={() => handleDeleteStory(storyId)}
+          />
         </Tooltip>
       )}
     </GradingFlex>
