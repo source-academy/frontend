@@ -1,18 +1,14 @@
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-quartz.css';
+
 import { Icon as BpIcon } from '@blueprintjs/core/lib/esm/components/icon/icon';
 import { IconNames } from '@blueprintjs/icons';
-import {
-  Flex,
-  Icon,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeaderCell,
-  TableRow,
-  Text
-} from '@tremor/react';
-import React from 'react';
+import { ColDef } from 'ag-grid-community';
+import { AgGridReact, CustomCellRendererProps } from 'ag-grid-react';
+import React, { useMemo } from 'react';
+import GradingFlex from 'src/commons/grading/GradingFlex';
 import { StoryListView } from 'src/features/stories/StoriesTypes';
+import classes from 'src/styles/Stories.module.scss';
 
 type Props = {
   headers: Array<{ id: string; header: string }>;
@@ -22,45 +18,62 @@ type Props = {
 
 const MAX_EXCERPT_LENGTH = 35;
 
+const truncate = (content: string) => {
+  return content.replaceAll(/\s+/g, ' ').length <= MAX_EXCERPT_LENGTH
+    ? content.replaceAll(/\s+/g, ' ')
+    : content.split(/\s+/).reduce((acc, cur) => {
+        return acc.length + cur.length <= MAX_EXCERPT_LENGTH ? acc + ' ' + cur : acc;
+      }, '') + '…';
+};
+
+const defaultColDef: ColDef<StoryListView> = {
+  cellClass: ({ data }) => (data?.isPinned ? classes['highlight-row'] : '')
+};
+
 const StoriesTable: React.FC<Props> = ({ headers, stories, storyActions }) => {
+  const columns: ColDef<StoryListView>[] = useMemo(
+    () => [
+      { flex: 2, field: 'authorName', headerName: 'Author' },
+      {
+        flex: 4,
+        field: 'title',
+        headerName: 'Title',
+        cellRenderer: ({ data, value }: CustomCellRendererProps<StoryListView>) =>
+          data && (
+            <GradingFlex alignItems="center">
+              {data.isPinned && <BpIcon icon={IconNames.PIN} style={{ marginRight: 8 }} />}
+              {value}
+            </GradingFlex>
+          )
+      },
+      {
+        flex: 6,
+        field: 'content',
+        headerName: 'Content',
+        valueFormatter: ({ value }) => truncate(value),
+        cellStyle: { textAlign: 'left' }
+      },
+      {
+        flex: 3,
+        field: 'actions' as any,
+        headerName: 'Actions',
+        cellRenderer: ({ data }: CustomCellRendererProps<StoryListView>) => storyActions(data!)
+      }
+    ],
+    [storyActions]
+  );
+
   return (
-    <Table marginTop="mt-10">
-      <TableHead>
-        <TableRow>
-          {headers.map(({ id, header }) => (
-            <TableHeaderCell key={id}>{header}</TableHeaderCell>
-          ))}
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {stories.map(story => {
-          const { id, authorName, isPinned, title, content } = story;
-          return (
-            <TableRow key={id}>
-              <TableCell>{authorName}</TableCell>
-              <TableCell>
-                <Flex justifyContent="justify-start">
-                  {isPinned && <Icon icon={() => <BpIcon icon={IconNames.PIN} />} />}
-                  <Text>{title}</Text>
-                </Flex>
-              </TableCell>
-              <TableCell>
-                <Text>
-                  {content.replaceAll(/\s+/g, ' ').length <= MAX_EXCERPT_LENGTH
-                    ? content.replaceAll(/\s+/g, ' ')
-                    : content.split(/\s+/).reduce((acc, cur) => {
-                        return acc.length + cur.length <= MAX_EXCERPT_LENGTH
-                          ? acc + ' ' + cur
-                          : acc;
-                      }, '') + '…'}
-                </Text>
-              </TableCell>
-              <TableCell>{storyActions(story)}</TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+    <div className="ag-theme-quartz" style={{ marginTop: 40 }}>
+      <AgGridReact
+        rowData={stories}
+        columnDefs={columns}
+        defaultColDef={defaultColDef}
+        domLayout="autoHeight"
+        suppressMovableColumns
+        suppressCellFocus
+      />
+    </div>
   );
 };
 
