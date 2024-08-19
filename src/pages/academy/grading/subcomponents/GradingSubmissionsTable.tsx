@@ -103,6 +103,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
   const defaultColumnDefs: ColDef = {
     filter: false,
+    floatingFilter: true,
     resizable: true,
     sortable: true,
     headerComponentParams: {
