@@ -1,9 +1,11 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import classNames from 'classnames';
 import React from 'react';
 import { ProgressStatus, ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 import { ColumnFilter } from 'src/features/grading/GradingTypes';
 import classes from 'src/styles/Grading.module.scss';
+import badgeClasses from 'src/styles/GradingBadges.module.scss';
 
 declare const sizeValues: readonly ['xs', 'sm', 'md', 'lg', 'xl'];
 declare type Size = (typeof sizeValues)[number];
@@ -19,14 +21,17 @@ type BadgeProps = {
 export const Badge: React.FC<BadgeProps> = (props: BadgeProps) => {
   return (
     <div
-      className={'grading-badge grading-badge-' + (props.size ?? 'sm')}
+      className={classNames(
+        badgeClasses['grading-badge'],
+        badgeClasses[`grading-badge-${props.size ?? 'sm'}`]
+      )}
       style={{
         color: props.color?.[1] ?? '#000000',
         backgroundColor: props.color ? props.color[0] + '40' : ''
       }}
     >
       {props.icon?.()}
-      <span className="grading-badge-text">{props.text}</span>
+      <span className={badgeClasses['grading-badge-text']}>{props.text}</span>
     </div>
   );
 };
