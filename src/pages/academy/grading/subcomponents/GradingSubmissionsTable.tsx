@@ -373,7 +373,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
                   : '')
               ) : (
                 <strong>Disable Grading Mode to enable click to filter</strong>
-              )}{' '}
+              )}
             </GradingText>
           </GradingFlex>
           <GradingSubmissionFilters filters={columnFilters} onFilterRemove={handleFilterRemove} />
