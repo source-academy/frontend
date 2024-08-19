@@ -26,11 +26,13 @@ type AssessmentWorkspaceAttr = {
 type AssessmentWorkspaceState = AssessmentWorkspaceAttr & WorkspaceState;
 
 type GradingWorkspaceAttr = {
-  readonly submissionsTableFilters: SubmissionsTableFilters;
-  readonly columnVisiblity: GradingColumnVisibility;
   readonly currentSubmission?: number;
   readonly currentQuestion?: number;
   readonly hasUnsavedChanges: boolean;
+  // TODO: The below should be a separate state
+  // instead of using the grading workspace state
+  readonly submissionsTableFilters: SubmissionsTableFilters;
+  readonly columnVisiblity: GradingColumnVisibility;
   readonly requestCounter: number;
   readonly allColsSortStates: AllColsSortStates;
   readonly hasLoadedBefore: boolean;
