@@ -88,3 +88,35 @@
     transition: 0.1s ease;
   }
 }
+
+.grading-table-header-individual {
+  width: 100%;
+}
+
+.grading-table-rows {
+  &:global(.ag-row-hover) {
+    --ag-row-hover-color: #f5f5f5;
+  }
+
+  &:global(.ag-row.ag-row-last) {
+    border-bottom: 0px !important;
+  }
+}
+
+.grading-filter-btn {
+  padding: 7.5px 15px;
+  border-radius: 25px;
+  margin: 0 15px 0 auto;
+  background-color: #dbeafef5 !important;
+  color: #3b82f6 !important;
+  min-width: fit-content;
+
+  &.grading-filter-btn-on {
+    background-color: #f5f5f5 !important;
+    color: black !important;
+  }
+
+  &:hover {
+    filter: contrast(0.9);
+  }
+}

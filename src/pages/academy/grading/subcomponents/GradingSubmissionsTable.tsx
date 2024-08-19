@@ -141,7 +141,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       "Hmm... we didn't find any submissions, you might want to debug your filter() function.",
     pageSize: pageSize,
     pagination: true,
-    rowClass: classNames(classes['grading-left-align'], 'grading-table-rows'),
+    rowClass: classNames(classes['grading-left-align'], classes['grading-table-rows']),
     rowHeight: ROW_HEIGHT,
     suppressMenuHide: true,
     suppressPaginationPanel: true,
@@ -538,7 +538,10 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
         <Button
           minimal={true}
-          className={(filterMode ? 'grading-filter-btn-on ' : '') + 'grading-filter-btn'}
+          className={classNames(
+            classes['grading-filter-btn'],
+            filterMode && classes['grading-filter-btn-on']
+          )}
           onClick={e => setFilterMode((prev: boolean) => !prev)}
         >
           {filterMode ? 'Filter Mode' : 'Grading Mode'}
