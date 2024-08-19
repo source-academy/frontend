@@ -9,11 +9,7 @@ import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
-import {
-  decreaseRequestCounter,
-  increaseRequestCounter,
-  setGradingHasLoadedBefore
-} from 'src/commons/workspace/WorkspaceActions';
+import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import { GradingOverview } from 'src/features/grading/GradingTypes';
 import {
@@ -65,8 +61,8 @@ const Grading: React.FC = () => {
   const updateGradingOverviewsCallback = useCallback(
     (page: number, filterParams: object) => {
       setRefreshQueryData({ page, filterParams });
-      dispatch(setGradingHasLoadedBefore());
-      dispatch(increaseRequestCounter());
+      dispatch(WorkspaceActions.setGradingHasLoadedBefore());
+      dispatch(WorkspaceActions.increaseRequestCounter());
       dispatch(
         SessionActions.fetchGradingOverviews(
           !showAllGroups,
@@ -82,7 +78,7 @@ const Grading: React.FC = () => {
 
   useEffect(() => {
     if (refreshQueried) {
-      dispatch(increaseRequestCounter());
+      dispatch(WorkspaceActions.increaseRequestCounter());
       dispatch(
         SessionActions.fetchGradingOverviews(
           showAllGroups,
@@ -117,7 +113,7 @@ const Grading: React.FC = () => {
           : e
       ) ?? []
     );
-    dispatch(decreaseRequestCounter());
+    dispatch(WorkspaceActions.decreaseRequestCounter());
   }, [gradingOverviews, dispatch]);
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page

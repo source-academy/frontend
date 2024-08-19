@@ -10,14 +10,9 @@ import { HighlightedLines, Position } from '../editor/EditorTypes';
 import { createActions } from '../redux/utils';
 import { UploadResult } from '../sideContent/content/SideContentUpload';
 import {
-  DECREMENT_REQUEST_COUNTER,
   EditorTabState,
-  INCREMENT_REQUEST_COUNTER,
-  SET_GRADING_HAS_LOADED_BEFORE,
   SubmissionsTableFilters,
   TOGGLE_USING_UPLOAD,
-  UPDATE_ALL_COLS_SORT_STATES,
-  UPDATE_GRADING_COLUMN_VISIBILITY,
   UPDATE_LAST_DEBUGGER_RESULT,
   UPDATE_LAST_NON_DET_RESULT,
   UPLOAD_FILES,
@@ -270,7 +265,13 @@ const newActions = createActions('workspace', {
   updateChangePointSteps: (changepointSteps: number[], workspaceLocation: WorkspaceLocation) => ({
     changepointSteps,
     workspaceLocation
-  })
+  }),
+  // For grading table
+  increaseRequestCounter: 0,
+  decreaseRequestCounter: 0,
+  setGradingHasLoadedBefore: () => true,
+  updateAllColsSortStates: (sortStates: AllColsSortStates) => ({ sortStates }),
+  updateGradingColumnVisibility: (filters: GradingColumnVisibility) => ({ filters })
 });
 
 export const updateLastDebuggerResult = createAction(
@@ -301,38 +302,11 @@ export const uploadFiles = createAction(
   })
 );
 
-export const setGradingHasLoadedBefore = createAction(SET_GRADING_HAS_LOADED_BEFORE, () => ({
-  payload: true
-}));
-
-export const increaseRequestCounter = createAction(INCREMENT_REQUEST_COUNTER, () => ({
-  payload: {}
-}));
-
-export const decreaseRequestCounter = createAction(DECREMENT_REQUEST_COUNTER, () => ({
-  payload: {}
-}));
-
-export const updateAllColsSortStates = createAction(
-  UPDATE_ALL_COLS_SORT_STATES,
-  (sortStates: AllColsSortStates) => ({ payload: { sortStates } })
-);
-
-export const updateGradingColumnVisibility = createAction(
-  UPDATE_GRADING_COLUMN_VISIBILITY,
-  (filters: GradingColumnVisibility) => ({ payload: { filters } })
-);
-
 // For compatibility with existing code (actions helper)
 export default {
   ...newActions,
   updateLastDebuggerResult,
   updateLastNonDetResult,
   toggleUsingUpload,
-  uploadFiles,
-  setGradingHasLoadedBefore,
-  increaseRequestCounter,
-  decreaseRequestCounter,
-  updateAllColsSortStates,
-  updateGradingColumnVisibility
+  uploadFiles
 };

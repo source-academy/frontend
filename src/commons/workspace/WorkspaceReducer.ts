@@ -295,10 +295,10 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
         }
       };
     })
-    .addCase(WorkspaceActions.increaseRequestCounter, (state, action) => {
+    .addCase(WorkspaceActions.increaseRequestCounter, state => {
       state.grading.requestCounter += 1;
     })
-    .addCase(WorkspaceActions.decreaseRequestCounter, (state, action) => {
+    .addCase(WorkspaceActions.decreaseRequestCounter, state => {
       state.grading.requestCounter = Math.max(0, state.grading.requestCounter - 1);
     })
     .addCase(setEditorSessionId, (state, action) => {

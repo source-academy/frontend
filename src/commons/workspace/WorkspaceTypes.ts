@@ -9,12 +9,7 @@ import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
 import { UploadResult } from '../sideContent/content/SideContentUpload';
 
-export const DECREMENT_REQUEST_COUNTER = 'DECREMENT_REQUEST_COUNTER';
 export const EVAL_SILENT = 'EVAL_SILENT';
-export const INCREMENT_REQUEST_COUNTER = 'INCREMENT_REQUEST_COUNTER';
-export const SET_GRADING_HAS_LOADED_BEFORE = 'SET_GRADING_HAS_LOADED_BEFORE';
-export const UPDATE_GRADING_COLUMN_VISIBILITY = 'UPDATE_GRADING_COLUMN_VISIBILITY';
-export const UPDATE_ALL_COLS_SORT_STATES = 'UPDATE_ALL_COLS_SORT_STATES';
 export const UPDATE_LAST_DEBUGGER_RESULT = 'UPDATE_LAST_DEBUGGER_RESULT';
 export const UPDATE_LAST_NON_DET_RESULT = 'UPDATE_LAST_NON_DET_RESULT';
 export const TOGGLE_USING_UPLOAD = 'TOGGLE_USING_UPLOAD';
