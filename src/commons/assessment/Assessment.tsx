@@ -38,7 +38,7 @@ import Markdown from '../Markdown';
 import NotificationBadge from '../notificationBadge/NotificationBadge';
 import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
 import Constants from '../utils/Constants';
-import { beforeNow, getPrettyDate } from '../utils/DateHelper';
+import { beforeNow, getPrettyDate, getPrettyDateAfterHours } from '../utils/DateHelper';
 import { useResponsive, useSession } from '../utils/Hooks';
 import { assessmentTypeLink, convertParamToInt } from '../utils/ParamParseHelper';
 import AssessmentNotFound from './AssessmentNotFound';
@@ -179,6 +179,13 @@ const Assessment: React.FC = () => {
                   ? `XP: ${overview.xp} / ${overview.maxXp}`
                   : `Max XP: ${overview.maxXp}`}
               </H6>
+              {hasBonusXp && (
+                <Tooltip
+                  content={`Max XP ends at ${getPrettyDateAfterHours(overview.openAt, overview.hoursBeforeEarlyXpDecay)}`}
+                >
+                  <Icon icon={IconNames.InfoSign} />
+                </Tooltip>
+              )}
             </div>
             <div className="listing-description">
               <Markdown content={overview.shortSummary} />
