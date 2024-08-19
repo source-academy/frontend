@@ -62,6 +62,7 @@ export const generateCols = (filterMode: boolean) => {
     ...generalColProperties,
     headerName: ColumnName.studentName,
     field: ColumnFields.studentName,
+    filter: true,
     flex: 1.5,
     cellClass: classNames(generalColProperties.cellClass, classes['grading-cell-align-left']),
     headerClass: classNames(generalColProperties.headerClass, classes['grading-left-align']),
@@ -82,6 +83,7 @@ export const generateCols = (filterMode: boolean) => {
     ...generalColProperties,
     headerName: ColumnName.studentUsername,
     field: ColumnFields.studentUsername,
+    filter: true,
     cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
       return params.data !== undefined
         ? {
@@ -99,6 +101,7 @@ export const generateCols = (filterMode: boolean) => {
     ...generalColProperties,
     headerName: ColumnName.groupName,
     field: ColumnFields.groupName,
+    filter: true,
     flex: 0.75,
     cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
       return params.data !== undefined

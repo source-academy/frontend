@@ -90,6 +90,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
     ...tableFilters.columnFilters
   ]);
+  const [cellFilters, setCellFilters] = useState<{ id: ColumnFields; value: string }[]>([]);
   const [hiddenColumns, setHiddenColumns] = useState<GradingColumnVisibility>(
     columnVisibility ? columnVisibility : []
   );
@@ -161,11 +162,14 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     debouncedUpdateSearchValue(e.target.value);
   };
 
+  const debouncedUpdateCellFilters = useMemo(() => debounce(setCellFilters, 300), []);
+
   // Converts the columnFilters array into backend query parameters.
   const backendFilterParams = useMemo(() => {
     const filters: Array<{ [key: string]: any }> = [
       { id: ColumnFields.assessmentName, value: searchValue },
-      ...columnFilters
+      ...columnFilters,
+      ...cellFilters
     ].map(convertFilterToBackendParams);
 
     const params: Record<string, any> = {};
@@ -175,7 +179,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       });
     });
     return params;
-  }, [columnFilters, searchValue]);
+  }, [cellFilters, columnFilters, searchValue]);
 
   const cellClickedEvent = (event: CellClickedEvent) => {
     const colClicked: string = event.colDef.field ? event.colDef.field : '';
@@ -410,6 +414,25 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           suppressPaginationPanel={tableProperties.suppressPaginationPanel}
           suppressRowClickSelection={tableProperties.suppressRowClickSelection}
           domLayout="autoHeight"
+          onFilterChanged={e => {
+            if (!e.afterFloatingFilter) {
+              return;
+            }
+            const filters = e.api.getFilterModel();
+            const cellFilters = [];
+            for (const [key, { filter: query }] of Object.entries(filters)) {
+              switch (key) {
+                // Fields that BE supports filtering on
+                case ColumnFields.studentName:
+                case ColumnFields.studentUsername:
+                case ColumnFields.groupName:
+                  console.log(query);
+                  cellFilters.push({ id: key, value: query });
+                  break;
+              }
+            }
+            debouncedUpdateCellFilters(cellFilters);
+          }}
         />
       </div>
 

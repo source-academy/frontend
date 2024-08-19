@@ -81,10 +81,7 @@ export type AllColsSortStates = {
 
 export type ColumnFiltersState = ColumnFilter[];
 
-export type ColumnFilter = {
-  id: string;
-  value: unknown;
-};
+export type ColumnFilter = { id: string; value: unknown };
 
 export type GradingColumnVisibility = ColumnFieldsKeys[];
 
