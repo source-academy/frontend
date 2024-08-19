@@ -1,7 +1,7 @@
-import { Button, Icon, Position, Tooltip } from '@blueprintjs/core';
+import { Button, Position, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 
 type Props = {
@@ -29,21 +29,26 @@ const StoryActions: React.FC<Props> = ({
   handleMovePinUp = () => {},
   handleMovePinDown = () => {}
 }) => {
+  const navigate = useNavigate();
   return (
     <GradingFlex style={{ height: '100%' }}>
       {canView && (
-        <Link to={`./view/${storyId}`}>
-          <Tooltip position={Position.TOP} content="View">
-            <Icon icon={IconNames.EyeOpen} />
-          </Tooltip>
-        </Link>
+        <Tooltip
+          targetProps={{ style: { display: 'flex' } }}
+          placement={Position.TOP}
+          content="View"
+        >
+          <Button icon={IconNames.EyeOpen} minimal onClick={() => navigate(`./view/${storyId}`)} />
+        </Tooltip>
       )}
       {canEdit && (
-        <Link to={`./edit/${storyId}`}>
-          <Tooltip position={Position.TOP} content="Edit">
-            <Icon icon={IconNames.EDIT} />
-          </Tooltip>
-        </Link>
+        <Tooltip
+          targetProps={{ style: { display: 'flex' } }}
+          placement={Position.TOP}
+          content="Edit"
+        >
+          <Button icon={IconNames.EDIT} minimal onClick={() => navigate(`./edit/${storyId}`)} />
+        </Tooltip>
       )}
       {canPin && isPinned && (
         <>
