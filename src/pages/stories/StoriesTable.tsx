@@ -65,7 +65,7 @@ const StoriesTable: React.FC<Props> = ({ headers, stories, storyActions }) => {
   );
 
   return (
-    <div className="ag-theme-quartz" style={{ marginTop: 40 }}>
+    <div className="ag-theme-quartz" style={{ marginTop: 24 }}>
       <AgGridReact
         rowData={stories}
         columnDefs={columns}
