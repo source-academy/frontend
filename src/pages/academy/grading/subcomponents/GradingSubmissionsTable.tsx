@@ -47,8 +47,6 @@ export const getNextSortState = (current: SortStates) => {
       return SortStates.DESC;
     case SortStates.DESC:
       return SortStates.NONE;
-    default:
-      return SortStates.NONE;
   }
 };
 
