@@ -160,7 +160,7 @@ const Grading: React.FC = () => {
                   Submissions
                 </GradingText>
                 <Button
-                  minimal={true}
+                  minimal
                   icon={IconNames.EXPORT}
                   onClick={() => exportGradingCSV(gradingOverviews.data)}
                   className="export-csv-btn"
@@ -200,7 +200,7 @@ const Grading: React.FC = () => {
               <GradingText>entries per page.</GradingText>
               <Button
                 className={animateRefresh ? 'grading-refresh-loop' : ''}
-                minimal={true}
+                minimal
                 style={{ padding: 0 }}
                 onClick={e => {
                   setRefreshQueried(true);
@@ -221,7 +221,7 @@ const Grading: React.FC = () => {
           </GradingFlex>
         )
       }
-      fullWidth={true}
+      fullWidth
     />
   );
 };
