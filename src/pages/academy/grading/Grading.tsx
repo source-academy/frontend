@@ -1,16 +1,17 @@
-import '@tremor/react/dist/esm/tremor.css';
-
-import { Icon as BpIcon, NonIdealState, Position, Spinner, SpinnerSize } from '@blueprintjs/core';
+import { Button, Icon, NonIdealState, Position, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Button, Card, Flex, Text, Title } from '@tremor/react';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/commons/application/ApplicationTypes';
+import GradingFlex from 'src/commons/grading/GradingFlex';
+import GradingText from 'src/commons/grading/GradingText';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
-import { useSession } from 'src/commons/utils/Hooks';
+import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
+import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
+import { GradingOverview } from 'src/features/grading/GradingTypes';
 import {
   exportGradingCSV,
   paginationToBackendParams,
@@ -48,21 +49,72 @@ const Grading: React.FC = () => {
 
   const [pageSize, setPageSize] = useState(10);
   const [showAllSubmissions, setShowAllSubmissions] = useState(false);
+  const [refreshQueryData, setRefreshQueryData] = useState({ page: 1, filterParams: {} });
+  const [refreshQueried, setRefreshQueried] = useState(false); // for callback (immediately becomes false)
+  const [animateRefresh, setAnimateRefresh] = useState(false); // for animation (becomes false on animation end)
+  const [submissions, setSubmissions] = useState<GradingOverview[]>([]);
 
   const dispatch = useDispatch();
+  const allColsSortStates = useTypedSelector(state => state.workspaces.grading.allColsSortStates);
+  const hasLoadedBefore = useTypedSelector(state => state.workspaces.grading.hasLoadedBefore);
+
   const updateGradingOverviewsCallback = useCallback(
     (page: number, filterParams: object) => {
+      setRefreshQueryData({ page, filterParams });
+      dispatch(WorkspaceActions.setGradingHasLoadedBefore());
+      dispatch(WorkspaceActions.increaseRequestCounter());
       dispatch(
         SessionActions.fetchGradingOverviews(
           !showAllGroups,
           unpublishedToBackendParams(showAllSubmissions),
           paginationToBackendParams(page, pageSize),
-          filterParams
+          filterParams,
+          allColsSortStates
         )
       );
     },
-    [dispatch, showAllGroups, showAllSubmissions, pageSize]
+    [dispatch, showAllGroups, showAllSubmissions, pageSize, allColsSortStates]
   );
+
+  useEffect(() => {
+    if (refreshQueried) {
+      dispatch(WorkspaceActions.increaseRequestCounter());
+      dispatch(
+        SessionActions.fetchGradingOverviews(
+          showAllGroups,
+          unpublishedToBackendParams(showAllSubmissions),
+          paginationToBackendParams(refreshQueryData.page, pageSize),
+          refreshQueryData.filterParams,
+          allColsSortStates
+        )
+      );
+      setRefreshQueried(false);
+    }
+  }, [
+    dispatch,
+    showAllGroups,
+    showAllSubmissions,
+    pageSize,
+    allColsSortStates,
+    refreshQueried,
+    refreshQueryData
+  ]);
+
+  useEffect(() => {
+    setSubmissions(
+      gradingOverviews?.data?.map(e =>
+        !e.studentName
+          ? {
+              ...e,
+              studentName: Array.isArray(e.studentNames)
+                ? e.studentNames.join(', ')
+                : e.studentNames
+            }
+          : e
+      ) ?? []
+    );
+    dispatch(WorkspaceActions.decreaseRequestCounter());
+  }, [gradingOverviews, dispatch]);
 
   // If submissionId or questionId is defined but not numeric, redirect back to the Grading overviews page
   if (
@@ -90,39 +142,38 @@ const Grading: React.FC = () => {
     />
   );
 
-  const submissions =
-    gradingOverviews?.data?.map(e =>
-      !e.studentName
-        ? {
-            ...e,
-            studentName: Array.isArray(e.studentNames) ? e.studentNames.join(', ') : e.studentNames
-          }
-        : e
-    ) ?? [];
-
   return (
     <ContentDisplay
-      loadContentDispatch={() => dispatch(SessionActions.fetchGradingOverviews(showAllGroups))}
+      loadContentDispatch={() => {
+        if (!hasLoadedBefore) {
+          dispatch(SessionActions.fetchGradingOverviews(showAllGroups));
+        }
+      }}
       display={
         gradingOverviews?.data === undefined ? (
           loadingDisplay
         ) : (
-          <Card>
-            <Flex justifyContent="justify-between">
-              <Flex justifyContent="justify-start" spaceX="space-x-6">
-                <Title>Submissions</Title>
+          <GradingFlex flexDirection="column" className="grading-table-wrapper">
+            <GradingFlex justifyContent="space-between">
+              <GradingFlex justifyContent="flex-start" style={{ columnGap: '1.5rem' }}>
+                <GradingText style={{ fontSize: '1.125rem', opacity: 0.9 }}>
+                  Submissions
+                </GradingText>
                 <Button
-                  variant="light"
-                  size="xs"
-                  icon={() => <BpIcon icon={IconNames.EXPORT} style={{ marginRight: '0.5rem' }} />}
+                  minimal
+                  icon={IconNames.EXPORT}
                   onClick={() => exportGradingCSV(gradingOverviews.data)}
+                  className="export-csv-btn"
                 >
                   Export to CSV
                 </Button>
-              </Flex>
-            </Flex>
-            <Flex justifyContent="justify-start" marginTop="mt-2" spaceX="space-x-2">
-              <Text>Viewing</Text>
+              </GradingFlex>
+            </GradingFlex>
+            <GradingFlex
+              justifyContent="flex-start"
+              style={{ columnGap: '0.5rem', marginTop: '0.5rem' }}
+            >
+              <GradingText>Viewing</GradingText>
               <SimpleDropdown
                 options={showOptions}
                 selectedValue={showAllSubmissions}
@@ -130,7 +181,7 @@ const Grading: React.FC = () => {
                 popoverProps={{ position: Position.BOTTOM }}
                 buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
               />
-              <Text>submissions from</Text>
+              <GradingText>submissions from</GradingText>
               <SimpleDropdown
                 options={groupOptions}
                 selectedValue={showAllGroups}
@@ -138,7 +189,7 @@ const Grading: React.FC = () => {
                 popoverProps={{ position: Position.BOTTOM }}
                 buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
               />
-              <Text>showing</Text>
+              <GradingText>showing</GradingText>
               <SimpleDropdown
                 options={pageSizeOptions}
                 selectedValue={pageSize}
@@ -146,18 +197,31 @@ const Grading: React.FC = () => {
                 popoverProps={{ position: Position.BOTTOM }}
                 buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
               />
-              <Text>entries per page.</Text>
-            </Flex>
+              <GradingText>entries per page.</GradingText>
+              <Button
+                className={animateRefresh ? 'grading-refresh-loop' : ''}
+                minimal
+                style={{ padding: 0 }}
+                onClick={e => {
+                  setRefreshQueried(true);
+                  setAnimateRefresh(true);
+                }}
+                onAnimationEnd={e => setAnimateRefresh(false)}
+              >
+                <Icon htmlTitle="Refresh" icon={IconNames.REFRESH} />
+              </Button>
+            </GradingFlex>
             <GradingSubmissionsTable
+              showAllSubmissions={showAllSubmissions}
               totalRows={gradingOverviews.count}
               pageSize={pageSize}
               submissions={submissions}
               updateEntries={updateGradingOverviewsCallback}
             />
-          </Card>
+          </GradingFlex>
         )
       }
-      fullWidth={true}
+      fullWidth
     />
   );
 };

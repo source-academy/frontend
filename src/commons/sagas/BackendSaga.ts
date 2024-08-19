@@ -16,7 +16,8 @@ import {
   GradingOverview,
   GradingOverviews,
   GradingQuery,
-  GradingQuestion
+  GradingQuestion,
+  SortStates
 } from '../../features/grading/GradingTypes';
 import { SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
@@ -358,7 +359,24 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
       return;
     }
 
-    const { filterToGroup, publishedFilter, pageParams, filterParams } = action.payload;
+    const { filterToGroup, publishedFilter, pageParams, filterParams, allColsSortStates } =
+      action.payload;
+
+    const sortedBy = {
+      sortBy: allColsSortStates.sortBy,
+      sortDirection: ''
+    };
+
+    Object.entries(allColsSortStates.currentState).forEach(([key, value]) => {
+      if (allColsSortStates.sortBy === key && key !== '') {
+        if (value !== SortStates.NONE) {
+          sortedBy.sortDirection = value;
+        } else {
+          sortedBy.sortBy = '';
+          sortedBy.sortDirection = '';
+        }
+      }
+    });
 
     const gradingOverviews: GradingOverviews | null = yield call(
       getGradingOverviews,
@@ -366,7 +384,8 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
       filterToGroup,
       publishedFilter,
       pageParams,
-      filterParams
+      filterParams,
+      sortedBy
     );
     if (gradingOverviews) {
       yield put(actions.updateGradingOverviews(gradingOverviews));
