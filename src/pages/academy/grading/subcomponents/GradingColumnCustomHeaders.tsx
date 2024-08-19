@@ -43,7 +43,7 @@ const GradingColumnCustomHeaders: React.FC<Props> = props => {
       {!props.disabledSortCols.includes(props.column.getColId()) && (
         <div
           className={classNames(classes['grading-table-col-icons'], 'grading-table-sort-cols')}
-          onClick={e => nextSortState()}
+          onClick={() => nextSortState()}
         >
           <Icon icon={sortState} />
         </div>
@@ -51,7 +51,7 @@ const GradingColumnCustomHeaders: React.FC<Props> = props => {
 
       <div
         className={classNames(classes['grading-table-col-icons'], 'grading-table-hide-cols')}
-        onClick={e => props.hideColumn(props.column.getColId())}
+        onClick={() => props.hideColumn(props.column.getColId())}
       >
         <Icon icon="eye-off" />
       </div>
