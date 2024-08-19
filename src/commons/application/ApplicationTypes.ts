@@ -440,10 +440,12 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     submissionsTableFilters: {
       columnFilters: []
     },
-    columnVisiblity: [],
     currentSubmission: undefined,
     currentQuestion: undefined,
     hasUnsavedChanges: false,
+    // TODO: The below should be a separate state
+    // instead of using the grading workspace state
+    columnVisiblity: [],
     requestCounter: 0,
     allColsSortStates: {
       currentState: freshSortState,
