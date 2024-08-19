@@ -3,7 +3,7 @@ import 'ag-grid-community/styles/ag-theme-quartz.css';
 
 import { Button, H6, Icon, InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { CellClickedEvent, ColDef, ICellRendererParams } from 'ag-grid-community';
+import { CellClickedEvent, ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
@@ -32,12 +32,10 @@ import {
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
 import classes from 'src/styles/Grading.module.scss';
 
-import GradingActions from './GradingActions';
-import { AssessmentTypeBadge, ProgressStatusBadge } from './GradingBadges';
 import GradingColumnCustomHeaders from './GradingColumnCustomHeaders';
 import GradingColumnFilters from './GradingColumnFilters';
-import GradingFilterable from './GradingFilterable';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
+import { generateCols } from './gradingSubmissionsTableUtils';
 
 export const getNextSortState = (current: SortStates) => {
   switch (current) {
@@ -179,162 +177,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     });
     return params;
   }, [columnFilters, searchValue]);
-
-  // generateCols is to initialise the columns (and headers). The rows with data are added in the useEffect with ignored dependencies.
-  const generateCols = useCallback(() => {
-    const cols: ColDef<IGradingTableRow>[] = [];
-
-    const generalColProperties = {
-      suppressMovable: true,
-      cellClass: classNames(classes['grading-def-cell'], classes['grading-def-cell-pointer']),
-      headerClass: classes['grading-default-headers'],
-      flex: 1 // weight of column width
-    } satisfies ColDef<IGradingTableRow>;
-
-    cols.push({
-      ...generalColProperties,
-      headerName: ColumnName.assessmentName,
-      field: ColumnFields.assessmentName,
-      flex: 3,
-      cellClass: classNames(generalColProperties.cellClass, classes['grading-cell-align-left']),
-      headerClass: classNames(generalColProperties.headerClass, classes['grading-left-align']),
-      cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
-        return params.data !== undefined
-          ? {
-              component: GradingFilterable,
-              params: {
-                value: params.data.assessmentName,
-                filterMode: filterMode
-              }
-            }
-          : undefined;
-      }
-    });
-
-    cols.push({
-      ...generalColProperties,
-      headerName: ColumnName.assessmentType,
-      field: ColumnFields.assessmentType,
-      cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
-        return params.data !== undefined
-          ? {
-              component: GradingFilterable,
-              params: {
-                value: params.data.assessmentType,
-                children: [<AssessmentTypeBadge type={params.data.assessmentType} />],
-                filterMode: filterMode
-              }
-            }
-          : undefined;
-      }
-    });
-
-    cols.push({
-      ...generalColProperties,
-      headerName: ColumnName.studentName,
-      field: ColumnFields.studentName,
-      flex: 1.5,
-      cellClass: classNames(generalColProperties.cellClass, classes['grading-cell-align-left']),
-      headerClass: classNames(generalColProperties.headerClass, classes['grading-left-align']),
-      cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
-        return params.data !== undefined
-          ? {
-              component: GradingFilterable,
-              params: {
-                value: params.data.studentName,
-                filterMode: filterMode
-              }
-            }
-          : undefined;
-      }
-    });
-
-    cols.push({
-      ...generalColProperties,
-      headerName: ColumnName.studentUsername,
-      field: ColumnFields.studentUsername,
-      cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
-        return params.data !== undefined
-          ? {
-              component: GradingFilterable,
-              params: {
-                value: params.data.studentUsername,
-                filterMode: filterMode
-              }
-            }
-          : undefined;
-      }
-    });
-
-    cols.push({
-      ...generalColProperties,
-      headerName: ColumnName.groupName,
-      field: ColumnFields.groupName,
-      flex: 0.75,
-      cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
-        return params.data !== undefined
-          ? {
-              component: GradingFilterable,
-              params: {
-                value: params.data.groupName,
-                filterMode: filterMode
-              }
-            }
-          : undefined;
-      }
-    });
-
-    cols.push({
-      ...generalColProperties,
-      headerName: ColumnName.progressStatus,
-      field: ColumnFields.progressStatus,
-      cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
-        return params.data !== undefined
-          ? {
-              component: GradingFilterable,
-              params: {
-                value: params.data.progressStatus,
-                children: [<ProgressStatusBadge progress={params.data.progressStatus} />],
-                filterMode: filterMode
-              }
-            }
-          : undefined;
-      }
-    });
-
-    cols.push({
-      ...generalColProperties,
-      headerName: ColumnName.xp,
-      field: ColumnFields.xp,
-      cellClass: classNames(
-        generalColProperties.cellClass,
-        classes['grading-xp-cell'],
-        !filterMode ? classes['grading-def-cell-pointer'] : classes['grading-def-cell-selectable']
-      )
-    });
-
-    cols.push({
-      ...generalColProperties,
-      headerName: ColumnName.actionsIndex,
-      field: ColumnFields.actionsIndex,
-      flex: 1.4,
-      headerClass: classNames(generalColProperties.headerClass, classes['grading-left-align']),
-      cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
-        return params.data !== undefined
-          ? {
-              component: GradingActions,
-              params: {
-                submissionId: params.data.actionsIndex,
-                progress: params.data.progressStatus,
-                filterMode: filterMode
-              }
-            }
-          : undefined;
-      }
-    });
-
-    return cols;
-  }, [filterMode]);
 
   const cellClickedEvent = (event: CellClickedEvent) => {
     const colClicked: string = event.colDef.field ? event.colDef.field : '';
@@ -484,9 +326,11 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [requestCounter, submissions, courseId, gridRef.current?.api]);
 
+  const columns = useMemo(() => generateCols(filterMode), [filterMode]);
+
   useEffect(() => {
-    setColDefs(generateCols());
-  }, [resetPage, filterMode, generateCols]);
+    setColDefs(columns);
+  }, [resetPage, columns]);
 
   return (
     <>
