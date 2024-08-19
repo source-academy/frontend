@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 import { ProgressStatus, ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 import { ColumnFilter } from 'src/features/grading/GradingTypes';
+import classes from 'src/styles/Grading.module.scss';
 
 declare const sizeValues: readonly ['xs', 'sm', 'md', 'lg', 'xl'];
 declare type Size = (typeof sizeValues)[number];
@@ -118,7 +119,7 @@ const ColumnFilterBadge: React.FC<ColumnFilterBadgeProps> = ({ filter, onRemove,
   return (
     <button
       type="button"
-      className="grading-overview-filterable-btns"
+      className={classes['grading-overview-filterable-btns']}
       onClick={() => onRemove(filter)}
       style={{ marginLeft: '5px' }}
     >
@@ -142,7 +143,7 @@ const FilterBadge: React.FC<FilterBadgeProps> = ({ filter, onRemove }) => {
   return (
     <button
       type="button"
-      className="grading-overview-filterable-btns"
+      className={classes['grading-overview-filterable-btns']}
       onClick={() => onRemove(filter)}
       style={{ marginLeft: '5px' }}
     >

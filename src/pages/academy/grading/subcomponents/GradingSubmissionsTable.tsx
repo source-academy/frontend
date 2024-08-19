@@ -5,6 +5,7 @@ import { Button, H6, Icon, InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { CellClickedEvent, ColDef, ICellRendererParams } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
+import classNames from 'classnames';
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -29,6 +30,7 @@ import {
   SortStates
 } from 'src/features/grading/GradingTypes';
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
+import classes from 'src/styles/Grading.module.scss';
 
 import GradingActions from './GradingActions';
 import { AssessmentTypeBadge, ProgressStatusBadge } from './GradingBadges';
@@ -139,7 +141,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       "Hmm... we didn't find any submissions, you might want to debug your filter() function.",
     pageSize: pageSize,
     pagination: true,
-    rowClass: 'grading-left-align grading-table-rows',
+    rowClass: classNames(classes['grading-left-align'], 'grading-table-rows'),
     rowHeight: ROW_HEIGHT,
     suppressMenuHide: true,
     suppressPaginationPanel: true,
@@ -184,12 +186,12 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   const generateCols = useCallback(() => {
     const cols: ColDef<IGradingTableRow>[] = [];
 
-    const generalColProperties: ColDef<IGradingTableRow> = {
+    const generalColProperties = {
       suppressMovable: true,
       cellClass: 'grading-def-cell grading-def-cell-pointer',
-      headerClass: 'grading-default-headers',
+      headerClass: classes['grading-default-headers'],
       flex: 1 // weight of column width
-    };
+    } satisfies ColDef<IGradingTableRow>;
 
     cols.push({
       ...generalColProperties,
@@ -197,7 +199,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       field: ColumnFields.assessmentName,
       flex: 3,
       cellClass: generalColProperties.cellClass + ' grading-cell-align-left',
-      headerClass: generalColProperties.headerClass + ' grading-left-align',
+      headerClass: classNames(generalColProperties.headerClass, classes['grading-left-align']),
       cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return params.data !== undefined
           ? {
@@ -235,7 +237,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       field: ColumnFields.studentName,
       flex: 1.5,
       cellClass: generalColProperties.cellClass + ' grading-cell-align-left',
-      headerClass: generalColProperties.headerClass + ' grading-left-align',
+      headerClass: classNames(generalColProperties.headerClass, classes['grading-left-align']),
       cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return params.data !== undefined
           ? {
@@ -317,7 +319,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       headerName: ColumnName.actionsIndex,
       field: ColumnFields.actionsIndex,
       flex: 1.4,
-      headerClass: generalColProperties.headerClass + ' grading-left-align',
+      headerClass: classNames(generalColProperties.headerClass, classes['grading-left-align']),
       cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return params.data !== undefined
           ? {

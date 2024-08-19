@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { SortStates } from 'src/features/grading/GradingTypes';
+import classes from 'src/styles/Grading.module.scss';
 
 import { getNextSortState } from './GradingSubmissionsTable';
 
@@ -38,7 +39,7 @@ const GradingColumnCustomHeaders: React.FC<Props> = props => {
 
       {!props.disabledSortCols.includes(props.column.getColId()) && (
         <div
-          className="grading-table-col-icons grading-table-sort-cols"
+          className={classNames(classes['grading-table-col-icons'], 'grading-table-sort-cols')}
           onClick={e => nextSortState()}
         >
           <Icon icon={sortState} />
@@ -46,7 +47,7 @@ const GradingColumnCustomHeaders: React.FC<Props> = props => {
       )}
 
       <div
-        className="grading-table-col-icons grading-table-hide-cols"
+        className={classNames(classes['grading-table-col-icons'], 'grading-table-hide-cols')}
         onClick={e => props.hideColumn(props.column.getColId())}
       >
         <Icon icon="eye-off" />

@@ -1,4 +1,5 @@
 import React from 'react';
+import classes from 'src/styles/Grading.module.scss';
 
 type Props = {
   value: string;
@@ -11,7 +12,9 @@ const GradingFilterable: React.FC<Props> = ({ value, children, filterMode }) => 
     <button
       type="button"
       className={
-        filterMode ? 'grading-overview-filterable-btns' : 'grading-overview-unfilterable-btns'
+        classes[
+          filterMode ? 'grading-overview-filterable-btns' : 'grading-overview-unfilterable-btns'
+        ]
       }
       key={value}
     >
