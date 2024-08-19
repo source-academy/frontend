@@ -188,7 +188,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
     const generalColProperties = {
       suppressMovable: true,
-      cellClass: 'grading-def-cell grading-def-cell-pointer',
+      cellClass: classNames(classes['grading-def-cell'], classes['grading-def-cell-pointer']),
       headerClass: classes['grading-default-headers'],
       flex: 1 // weight of column width
     } satisfies ColDef<IGradingTableRow>;
@@ -198,7 +198,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       headerName: ColumnName.assessmentName,
       field: ColumnFields.assessmentName,
       flex: 3,
-      cellClass: generalColProperties.cellClass + ' grading-cell-align-left',
+      cellClass: classNames(generalColProperties.cellClass, classes['grading-cell-align-left']),
       headerClass: classNames(generalColProperties.headerClass, classes['grading-left-align']),
       cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return params.data !== undefined
@@ -236,7 +236,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       headerName: ColumnName.studentName,
       field: ColumnFields.studentName,
       flex: 1.5,
-      cellClass: generalColProperties.cellClass + ' grading-cell-align-left',
+      cellClass: classNames(generalColProperties.cellClass, classes['grading-cell-align-left']),
       headerClass: classNames(generalColProperties.headerClass, classes['grading-left-align']),
       cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
         return params.data !== undefined
@@ -308,10 +308,11 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       ...generalColProperties,
       headerName: ColumnName.xp,
       field: ColumnFields.xp,
-      cellClass:
-        generalColProperties.cellClass +
-        ' grading-xp-cell' +
-        (!filterMode ? ' grading-def-cell-pointer' : ' grading-def-cell-selectable')
+      cellClass: classNames(
+        generalColProperties.cellClass,
+        classes['grading-xp-cell'],
+        !filterMode ? classes['grading-def-cell-pointer'] : classes['grading-def-cell-selectable']
+      )
     });
 
     cols.push({

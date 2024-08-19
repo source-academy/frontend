@@ -479,50 +479,6 @@
   height: 32px;
 }
 
-.grading-def-cell {
-  text-align: center;
-  display: flex !important;
-  justify-content: center;
-  flex-direction: column;
-  font-size: 0.875rem;
-  user-select: text;
-  border: 0px !important;
-
-  &:hover:has(.grading-overview-filterable-btns) {
-    .grading-overview-filterable-btns {
-      &:not(:has(> .grading-badge)) {
-        text-decoration: underline;
-      }
-
-      &:has(> .grading-badge) {
-        filter: brightness(0.75);
-      }
-    }
-  }
-
-  &:active {
-    border-style: outset;
-  }
-
-  &.grading-def-cell-pointer {
-    cursor: pointer;
-  }
-
-  &.grading-def-cell-selectable {
-    cursor: text;
-    border-style: outset;
-  }
-
-  &.grading-cell-align-left {
-    text-align: left !important;
-  }
-
-  &.grading-xp-cell {
-    text-wrap: wrap;
-    line-height: 15px;
-  }
-}
-
 .grading-table-footer {
   padding-top: 15px;
   margin-bottom: 15px;
