@@ -426,7 +426,6 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
                 case ColumnFields.studentName:
                 case ColumnFields.studentUsername:
                 case ColumnFields.groupName:
-                  console.log(query);
                   cellFilters.push({ id: key, value: query });
                   break;
               }
