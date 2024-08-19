@@ -1,7 +1,7 @@
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 
-import { Icon as BpIcon } from '@blueprintjs/core/lib/esm/components/icon/icon';
+import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ColDef } from 'ag-grid-community';
 import { AgGridReact, CustomCellRendererProps } from 'ag-grid-react';
@@ -41,7 +41,7 @@ const StoriesTable: React.FC<Props> = ({ headers, stories, storyActions }) => {
         cellRenderer: ({ data, value }: CustomCellRendererProps<StoryListView>) =>
           data && (
             <GradingFlex alignItems="center">
-              {data.isPinned && <BpIcon icon={IconNames.PIN} style={{ marginRight: 8 }} />}
+              {data.isPinned && <Icon icon={IconNames.PIN} style={{ marginRight: 8 }} />}
               {value}
             </GradingFlex>
           )
