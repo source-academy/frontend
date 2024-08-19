@@ -543,11 +543,11 @@
     }
   }
 
-  .bp5-icon {
+  .#{$ns}-icon {
     margin: 6px;
   }
 
-  .bp5-popover-target {
+  .#{$ns}-popover-target {
     max-height: 32px;
   }
 }
