@@ -5,6 +5,7 @@ import { DashboardState } from '../../features/dashboard/DashboardTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
+import { freshSortState } from '../../pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import { FileSystemState } from '../fileSystem/FileSystemTypes';
 import { SideContentManagerState, SideContentState } from '../sideContent/SideContentTypes';
@@ -441,7 +442,16 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     },
     currentSubmission: undefined,
     currentQuestion: undefined,
-    hasUnsavedChanges: false
+    hasUnsavedChanges: false,
+    // TODO: The below should be a separate state
+    // instead of using the grading workspace state
+    columnVisiblity: [],
+    requestCounter: 0,
+    allColsSortStates: {
+      currentState: freshSortState,
+      sortBy: ''
+    },
+    hasLoadedBefore: false
   },
   playground: {
     ...createDefaultWorkspace('playground'),

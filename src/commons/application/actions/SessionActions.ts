@@ -3,9 +3,14 @@ import {
   paginationToBackendParams,
   unpublishedToBackendParams
 } from 'src/features/grading/GradingUtils';
+import { freshSortState } from 'src/pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
-import { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';
+import {
+  AllColsSortStates,
+  GradingOverviews,
+  GradingQuery
+} from '../../../features/grading/GradingTypes';
 import { TeamFormationOverview } from '../../../features/teamFormation/TeamFormationTypes';
 import {
   Assessment,
@@ -52,13 +57,16 @@ const SessionActions = createActions('session', {
    * many entries, starting from what offset, to get
    * @param filterParams - param that contains columnFilters converted into JSON for
    * processing into query parameters
+   * @param allColsSortStates - param that contains the sort states of all columns and
+   * the col it should be sorted by
    */
   fetchGradingOverviews: (
     filterToGroup = true,
     publishedFilter = unpublishedToBackendParams(false),
     pageParams = paginationToBackendParams(0, 10),
-    filterParams = {}
-  ) => ({ filterToGroup, publishedFilter, pageParams, filterParams }),
+    filterParams = {},
+    allColsSortStates: AllColsSortStates = { currentState: freshSortState, sortBy: '' }
+  ) => ({ filterToGroup, publishedFilter, pageParams, filterParams, allColsSortStates }),
   fetchTeamFormationOverviews: (filterToGroup = true) => filterToGroup,
   fetchStudents: () => ({}),
   login: (providerId: string) => providerId,

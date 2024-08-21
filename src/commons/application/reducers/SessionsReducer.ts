@@ -1,5 +1,4 @@
-import { createReducer } from '@reduxjs/toolkit';
-import { Reducer } from 'redux';
+import { createReducer, Reducer } from '@reduxjs/toolkit';
 import RemoteExecutionActions from 'src/features/remoteExecution/RemoteExecutionActions';
 
 import { SourceActionType } from '../../utils/ActionsHelper';

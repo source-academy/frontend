@@ -1,5 +1,6 @@
 import { Context, Result } from 'js-slang';
 
+import { AllColsSortStates, GradingColumnVisibility } from '../../features/grading/GradingTypes';
 import { SourcecastWorkspaceState } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SourcereelWorkspaceState } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
 import { InterpreterOutput } from '../application/ApplicationTypes';
@@ -25,10 +26,16 @@ type AssessmentWorkspaceAttr = {
 type AssessmentWorkspaceState = AssessmentWorkspaceAttr & WorkspaceState;
 
 type GradingWorkspaceAttr = {
-  readonly submissionsTableFilters: SubmissionsTableFilters;
   readonly currentSubmission?: number;
   readonly currentQuestion?: number;
   readonly hasUnsavedChanges: boolean;
+  // TODO: The below should be a separate state
+  // instead of using the grading workspace state
+  readonly submissionsTableFilters: SubmissionsTableFilters;
+  readonly columnVisiblity: GradingColumnVisibility;
+  readonly requestCounter: number;
+  readonly allColsSortStates: AllColsSortStates;
+  readonly hasLoadedBefore: boolean;
 };
 
 type GradingWorkspaceState = GradingWorkspaceAttr & WorkspaceState;
