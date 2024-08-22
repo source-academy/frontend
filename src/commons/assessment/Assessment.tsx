@@ -182,7 +182,7 @@ const Assessment: React.FC = () => {
               </H6>
               {overview.earlySubmissionXp > 0 && (
                 <Tooltip
-                  content={`Max XP ends at ${getPrettyDateAfterHours(overview.openAt, overview.hoursBeforeEarlyXpDecay)}`}
+                  content={`Max XP ends on ${getPrettyDateAfterHours(overview.openAt, overview.hoursBeforeEarlyXpDecay)}`}
                 >
                   <Icon icon={IconNames.InfoSign} />
                 </Tooltip>
