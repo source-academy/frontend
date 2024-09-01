@@ -74,18 +74,24 @@ const Assessment: React.FC = () => {
   const sortAssessments = (assessments: AssessmentOverview[]) => sortBy(assessments, [a => -a.id]);
 
   const makeSubmissionButton = (overview: AssessmentOverview, index: number) => (
-    <Button
-      disabled={overview.status !== AssessmentStatuses.attempted}
-      icon={IconNames.CONFIRM}
-      intent={overview.status === AssessmentStatuses.attempted ? Intent.DANGER : Intent.NONE}
-      minimal={true}
-      // intentional: each listing renders its own version of onClick
-      // tslint:disable-next-line:jsx-no-lambda
-      onClick={() => setBetchaAssessment(overview)}
+    <Tooltip
+      disabled={overview.status === AssessmentStatuses.attempted}
+      content={'You can finalize after saving an answer for each question!'}
+      position={Position.RIGHT}
     >
-      <span>Finalize</span>
-      <span className="custom-hidden-xxs"> Submission</span>
-    </Button>
+      <Button
+        disabled={overview.status !== AssessmentStatuses.attempted}
+        icon={IconNames.CONFIRM}
+        intent={overview.status === AssessmentStatuses.attempted ? Intent.DANGER : Intent.NONE}
+        minimal={true}
+        // intentional: each listing renders its own version of onClick
+        // tslint:disable-next-line:jsx-no-lambda
+        onClick={() => setBetchaAssessment(overview)}
+      >
+        <span>Finalize</span>
+        <span className="custom-hidden-xxs"> Submission</span>
+      </Button>
+    </Tooltip>
   );
 
   const makeAssessmentInteractButton = (overview: AssessmentOverview) => {
