@@ -109,9 +109,7 @@ const AdminPanel = () => import('./adminPanel/AdminPanel');
 const adminRoutes: RouteObject[] = [
   { path: 'groundcontrol', lazy: GroundControl },
   { path: 'adminpanel', lazy: AdminPanel }
-].map(r =>
-  new GuardedRoute(r).check(s => s.session.role === Role.Admin, notFoundPath).build()
-);
+].map(r => new GuardedRoute(r).check(s => s.session.role === Role.Admin, notFoundPath).build());
 
 export const getAcademyRoutes = (): RouteObject[] => {
   const routes: RouteObject[] = [...getCommonAcademyRoutes(), ...staffRoutes, ...adminRoutes];
