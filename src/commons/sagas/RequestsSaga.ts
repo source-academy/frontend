@@ -426,14 +426,6 @@ export const getAssessmentOverviews = async (
   const assessmentOverviews = await resp.json();
 
   return assessmentOverviews.map((overview: any) => {
-    // TODO: remove and replace with just isGradingPublished.
-    overview.progress = backendParamsToProgressStatus(
-      overview.isManuallyGraded,
-      overview.isGradingPublished,
-      overview.status,
-      overview.gradedCount,
-      overview.questionCount
-    );
     delete overview.gradedCount;
     delete overview.questionCount;
 
@@ -480,14 +472,6 @@ export const getUserAssessmentOverviews = async (
   }
   const assessmentOverviews = await resp.json();
   return assessmentOverviews.map((overview: any) => {
-    // TODO: remove from assessment overviews, replacing with just isGradingPublished.
-    overview.progress = backendParamsToProgressStatus(
-      overview.assessment.isManuallyGraded,
-      overview.isGradingPublished,
-      overview.status,
-      overview.gradedCount,
-      overview.questionCount
-    );
     delete overview.gradedCount;
     delete overview.questionCount;
 
@@ -658,49 +642,44 @@ export const getGradingOverviews = async (
 
   return {
     count: gradingOverviews.count,
-    data: gradingOverviews.data
-      .map((overview: any) => {
-        const gradingOverview: GradingOverview = {
-          assessmentId: overview.assessment.id,
-          assessmentNumber: overview.assessment.assessmentNumber,
-          assessmentName: overview.assessment.title,
-          assessmentType: overview.assessment.type,
-          studentId: overview.student ? overview.student.id : -1,
-          studentName: overview.student ? overview.student.name : undefined,
-          studentNames: overview.team
-            ? overview.team.team_members.map((member: { name: any }) => member.name)
-            : undefined,
-          studentUsername: overview.student ? overview.student.name : undefined,
-          studentUsernames: overview.team
-            ? overview.team.team_members.map((member: { username: any }) => member.username)
-            : undefined,
-          submissionId: overview.id,
-          submissionStatus: overview.status,
-          groupName: overview.student ? overview.student.groupName : '-',
-          groupLeaderId: overview.student ? overview.student.groupLeaderId : undefined,
-          progress: backendParamsToProgressStatus(
-            overview.assessment.isManuallyGraded,
-            overview.isGradingPublished,
-            overview.status,
-            overview.gradedCount,
-            overview.assessment.questionCount
-          ),
-          questionCount: overview.assessment.questionCount,
-          gradedCount: overview.gradedCount,
-          // XP
-          initialXp: overview.xp,
-          xpAdjustment: overview.xpAdjustment,
-          currentXp: overview.xp + overview.xpAdjustment,
-          maxXp: overview.assessment.maxXp,
-          xpBonus: overview.xpBonus
-        };
-        return gradingOverview;
-      })
-      .sort((subX: GradingOverview, subY: GradingOverview) =>
-        subX.assessmentId !== subY.assessmentId
-          ? subY.assessmentId - subX.assessmentId
-          : subY.submissionId - subX.submissionId
-      )
+    data: gradingOverviews.data.map((overview: any) => {
+      const gradingOverview: GradingOverview = {
+        assessmentId: overview.assessment.id,
+        assessmentNumber: overview.assessment.assessmentNumber,
+        assessmentName: overview.assessment.title,
+        assessmentType: overview.assessment.type,
+        studentId: overview.student ? overview.student.id : -1,
+        studentName: overview.student ? overview.student.name : undefined,
+        studentNames: overview.team
+          ? overview.team.team_members.map((member: { name: any }) => member.name)
+          : undefined,
+        studentUsername: overview.student ? overview.student.username : undefined,
+        studentUsernames: overview.team
+          ? overview.team.team_members.map((member: { username: any }) => member.username)
+          : undefined,
+        submissionId: overview.id,
+        submissionStatus: overview.status,
+        groupName: overview.student ? overview.student.groupName : '-',
+        groupLeaderId: overview.student ? overview.student.groupLeaderId : undefined,
+        isGradingPublished: overview.isGradingPublished,
+        progress: backendParamsToProgressStatus(
+          overview.assessment.isManuallyGraded,
+          overview.isGradingPublished,
+          overview.status,
+          overview.gradedCount,
+          overview.assessment.questionCount
+        ),
+        questionCount: overview.assessment.questionCount,
+        gradedCount: overview.gradedCount,
+        // XP
+        initialXp: overview.xp,
+        xpAdjustment: overview.xpAdjustment,
+        currentXp: overview.xp + overview.xpAdjustment,
+        maxXp: overview.assessment.maxXp,
+        xpBonus: overview.xpBonus
+      };
+      return gradingOverview;
+    })
   };
 };
 
