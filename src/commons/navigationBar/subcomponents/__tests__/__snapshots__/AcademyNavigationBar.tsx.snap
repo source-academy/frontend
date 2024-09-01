@@ -419,7 +419,7 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Te
     align="right"
   >
     <DesktopNavLink
-      disabled={false}
+      disabled={true}
       hiddenInBreakpoints={
         Array [
           "xs",

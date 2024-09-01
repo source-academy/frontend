@@ -13,13 +13,12 @@ const useSelectorMock = useTypedSelector as jest.Mock;
 const assessmentTypes = ['Missions', 'Quests', 'Paths', 'Contests', 'Others'];
 const staffRoutes = [
   'grading',
-  'groundcontrol',
   'sourcereel',
   'gamesimulator',
   'dashboard',
   'teamformation'
 ];
-const adminRoutes = ['adminpanel'];
+const adminRoutes = ['groundcontrol', 'adminpanel'];
 const courseId = 0;
 const createCoursePath = (path: string) => `/courses/${courseId}/${path}`;
 
