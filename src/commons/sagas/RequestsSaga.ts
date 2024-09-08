@@ -1283,13 +1283,13 @@ export const getGradingSummary = async (tokens: Tokens): Promise<GradingSummary 
 };
 
 /**
- * PUT /courses/{courseId}/staff/config
+ * PUT /courses/{courseId}/admin/config
  */
 export const putCourseConfig = async (
   tokens: Tokens,
   courseConfig: UpdateCourseConfiguration
 ): Promise<Response | null> => {
-  const resp = await request(`${courseId()}/staff/config`, 'PUT', {
+  const resp = await request(`${courseId()}/admin/config`, 'PUT', {
     ...tokens,
     body: courseConfig,
     noHeaderAccept: true
@@ -1299,12 +1299,12 @@ export const putCourseConfig = async (
 };
 
 /**
- * GET /courses/{courseId}/staff/config/assessment_configs
+ * GET /courses/{courseId}/admin/config/assessment_configs
  */
 export const getAssessmentConfigs = async (
   tokens: Tokens
 ): Promise<AssessmentConfiguration[] | null> => {
-  const resp = await request(`${courseId()}/staff/config/assessment_configs`, 'GET', {
+  const resp = await request(`${courseId()}/admin/config/assessment_configs`, 'GET', {
     ...tokens
   });
   if (!resp || !resp.ok) {
@@ -1315,7 +1315,7 @@ export const getAssessmentConfigs = async (
 };
 
 /**
- * PUT /courses/{courseId}/staff/config/assessment_configs
+ * PUT /courses/{courseId}/admin/config/assessment_configs
  */
 export const putAssessmentConfigs = async (
   tokens: Tokens,
@@ -1325,7 +1325,7 @@ export const putAssessmentConfigs = async (
   const resp = await request(
     `${
       overrideCourseId != null ? `courses/${overrideCourseId}` : courseId()
-    }/staff/config/assessment_configs`,
+    }/admin/config/assessment_configs`,
     'PUT',
     {
       ...tokens,
@@ -1338,14 +1338,14 @@ export const putAssessmentConfigs = async (
 };
 
 /**
- * DELETE /courses/{courseId}/staff/config/assessment_config/{assessmentConfigId}
+ * DELETE /courses/{courseId}/admin/config/assessment_config/{assessmentConfigId}
  */
 export const removeAssessmentConfig = async (
   tokens: Tokens,
   assessmentConfig: AssessmentConfiguration
 ): Promise<Response | null> => {
   const resp = await request(
-    `${courseId()}/staff/config/assessment_config/${assessmentConfig.assessmentConfigId}`,
+    `${courseId()}/admin/config/assessment_config/${assessmentConfig.assessmentConfigId}`,
     'DELETE',
     {
       ...tokens,
@@ -1407,13 +1407,13 @@ export const putUserRole = async (
 };
 
 /**
- * DELETE /courses/{courseId}/staff/users/{courseRegId}
+ * DELETE /courses/{courseId}/admin/users/{courseRegId}
  */
 export const removeUserCourseRegistration = async (
   tokens: Tokens,
   courseRegId: number
 ): Promise<Response | null> => {
-  const resp = await request(`${courseId()}/staff/users/${courseRegId}`, 'DELETE', {
+  const resp = await request(`${courseId()}/admin/users/${courseRegId}`, 'DELETE', {
     ...tokens,
     noHeaderAccept: true
   });
