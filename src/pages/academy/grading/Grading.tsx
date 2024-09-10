@@ -7,7 +7,6 @@ import SessionActions from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
-import { selectTokens } from 'src/commons/sagas/BackendSaga';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
@@ -43,7 +42,6 @@ const pageSizeOptions = [
 
 const Grading: React.FC = () => {
   const { courseId, gradingOverviews, role, group } = useSession();
-  selectTokens();
   const params = useParams<{ submissionId: string; questionId: string }>();
 
   const isAdmin = role === Role.Admin;
