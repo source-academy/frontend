@@ -25,6 +25,7 @@ import { useDispatch } from 'react-redux';
 import { Navigate, useLoaderData, useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
+import classes from 'src/styles/Academy.module.scss';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import SessionActions from '../application/actions/SessionActions';
@@ -38,7 +39,7 @@ import Markdown from '../Markdown';
 import NotificationBadge from '../notificationBadge/NotificationBadge';
 import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
 import Constants from '../utils/Constants';
-import { beforeNow, getPrettyDate } from '../utils/DateHelper';
+import { beforeNow, getPrettyDate, getPrettyDateAfterHours } from '../utils/DateHelper';
 import { useResponsive, useSession } from '../utils/Hooks';
 import { assessmentTypeLink, convertParamToInt } from '../utils/ParamParseHelper';
 import AssessmentNotFound from './AssessmentNotFound';
@@ -179,12 +180,19 @@ const Assessment: React.FC = () => {
           </div>
           <div className={classNames('listing-text', !isMobileBreakpoint && 'col-xs-9')}>
             {makeOverviewCardTitle(overview, index, renderGradingTooltip)}
-            <div className="listing-xp">
+            <div className={classes['listing-xp']}>
               <H6>
                 {overview.isGradingPublished
                   ? `XP: ${overview.xp} / ${overview.maxXp}`
                   : `Max XP: ${overview.maxXp}`}
               </H6>
+              {overview.earlySubmissionXp > 0 && (
+                <Tooltip
+                  content={`Max XP ends on ${getPrettyDateAfterHours(overview.openAt, overview.hoursBeforeEarlyXpDecay)}`}
+                >
+                  <Icon icon={IconNames.InfoSign} />
+                </Tooltip>
+              )}
             </div>
             <div className="listing-description">
               <Markdown content={overview.shortSummary} />

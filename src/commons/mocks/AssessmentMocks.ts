@@ -127,7 +127,8 @@ const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
     xp: 0,
     isGradingPublished: false,
     maxTeamSize: 1,
-    hasVotingFeatures: false
+    hasVotingFeatures: false,
+    hoursBeforeEarlyXpDecay: 0
   }
 ];
 
@@ -162,7 +163,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     xp: 1,
     isGradingPublished: false,
     maxTeamSize: 4,
-    hasVotingFeatures: false
+    hasVotingFeatures: false,
+    hoursBeforeEarlyXpDecay: 0
   },
   {
     type: 'Missions',
@@ -182,7 +184,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     xp: 2,
     isGradingPublished: false,
     maxTeamSize: 1,
-    hasVotingFeatures: false
+    hasVotingFeatures: false,
+    hoursBeforeEarlyXpDecay: 0
   },
   {
     type: 'Quests',
@@ -202,7 +205,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     xp: 3,
     isGradingPublished: false,
     maxTeamSize: 2,
-    hasVotingFeatures: false
+    hasVotingFeatures: false,
+    hoursBeforeEarlyXpDecay: 0
   },
   {
     type: 'Paths',
@@ -222,7 +226,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     xp: 0,
     isGradingPublished: false,
     maxTeamSize: 2,
-    hasVotingFeatures: false
+    hasVotingFeatures: false,
+    hoursBeforeEarlyXpDecay: 0
   },
   {
     type: 'Others',
@@ -243,7 +248,8 @@ const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
     private: true,
     maxTeamSize: 1,
     isGradingPublished: false,
-    hasVotingFeatures: false
+    hasVotingFeatures: false,
+    hoursBeforeEarlyXpDecay: 0
   }
 ];
 
@@ -266,7 +272,8 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     xp: 800,
     isGradingPublished: false,
     maxTeamSize: 1,
-    hasVotingFeatures: false
+    hasVotingFeatures: false,
+    hoursBeforeEarlyXpDecay: 0
   },
   {
     type: 'Quests',
@@ -286,7 +293,8 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     xp: 500,
     isGradingPublished: false,
     maxTeamSize: 1,
-    hasVotingFeatures: false
+    hasVotingFeatures: false,
+    hoursBeforeEarlyXpDecay: 0
   },
   {
     type: 'Quests',
@@ -306,7 +314,8 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     xp: 150,
     isGradingPublished: false,
     maxTeamSize: 1,
-    hasVotingFeatures: false
+    hasVotingFeatures: false,
+    hoursBeforeEarlyXpDecay: 0
   },
   {
     type: 'Paths',
@@ -326,7 +335,8 @@ const mockClosedAssessmentOverviews: AssessmentOverview[] = [
     xp: 100,
     isGradingPublished: false,
     maxTeamSize: 1,
-    hasVotingFeatures: false
+    hasVotingFeatures: false,
+    hoursBeforeEarlyXpDecay: 0
   }
 ];
 

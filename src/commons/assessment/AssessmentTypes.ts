@@ -81,6 +81,7 @@ export type AssessmentOverview = {
   title: string;
   xp: number;
   maxTeamSize: number; // For team assessment
+  hoursBeforeEarlyXpDecay: number;
 };
 
 /*
@@ -259,7 +260,8 @@ export const overviewTemplate = (): AssessmentOverview => {
     isGradingPublished: false,
     xp: 0,
     maxTeamSize: 1,
-    hasVotingFeatures: false
+    hasVotingFeatures: false,
+    hoursBeforeEarlyXpDecay: 0
   };
 };
 
