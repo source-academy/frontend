@@ -465,57 +465,134 @@
   }
 }
 
-.grading-overview-filterable-btns {
-  padding: 0;
+// Grading Section
+.contentdisplay-content-parent:has(div.grading-table-wrapper) {
+  max-width: 100%;
 
-  // Hides overflowed text for the buttons
-  &,
-  p {
-    text-overflow: ellipsis;
-    overflow: hidden;
-
-    // For general filterable buttons
-    & {
-      max-width: 20vw;
-    }
-
-    /* Special case for filtered buttons (those you click to remove filter)
-      -16px for icon
-      -0.875rem for icon margins
-      -1.125rem for additional padding
-    */
-    p {
-      max-width: calc(20vw - 16px - 2rem);
-    }
+  .contentdisplay-content {
+    min-width: 1200px;
   }
+}
 
-  // Invisible border for backgroundless buttons
-  &:not(:has(> div)) {
-    text-decoration: none;
-  }
+.ag-header-cell.hide-cols-btn {
+  width: 32px;
+  height: 32px;
+}
 
-  &:hover {
-    // Buttons with bg
-    > div > span {
-      // Use of contrast due to unknown background color
-      filter: contrast(0.9);
-    }
+.grading-table-footer {
+  padding-top: 15px;
+  margin-bottom: 15px;
+}
 
-    // Backgroundless buttons
-    &:not(:has(> div)) {
-      text-decoration: underline;
+.grading-search-input {
+  max-width: 24rem;
+  width: 100%;
+  margin-left: 0.75rem;
+
+  > input {
+    height: 40px;
+    border-radius: 6px;
+    box-shadow: none;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    font-size: 0.875rem !important;
+
+    &::placeholder {
+      color: #b3b3b3;
     }
   }
 }
 
-.grading-overview-footer-sibling {
-  // Footer component
-  ~ div ~ div {
-    pointer-events: none;
+.grading-loading-icon {
+  animation: spin 1s linear infinite;
+  margin: 4px;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 48px;
+  height: 48px;
+  border: 4px solid #b3b3b3 !important;
+  border-bottom-color: transparent !important;
+  border-radius: 50%;
+  z-index: 10;
+  color: #374151;
+}
 
-    // Footer's children
-    > * > * {
-      pointer-events: all;
+.grading-actions-btn-wrappers {
+  > a {
+    display: flex;
+  }
+}
+
+.grading-action-icons {
+  color: #3b82f6;
+  border-radius: 10px;
+  margin: auto 0;
+  background-color: #7dbcff00;
+  transition: 0.1s ease;
+
+  svg {
+    fill: #3b82f6 !important;
+  }
+
+  &.grading-action-icons-bg {
+    background-color: #7dbcff80;
+
+    &:hover {
+      background-color: #7dbcffb3;
     }
+  }
+
+  .#{$ns}-icon {
+    margin: 6px;
+  }
+
+  .#{$ns}-popover-target {
+    max-height: 32px;
+  }
+}
+
+.grading-table-wrapper {
+  padding: 1rem 1.5rem 0 1.5rem;
+
+  * {
+    border: none;
+    outline: none;
+    text-decoration: none;
+    background-color: transparent;
+  }
+
+  button {
+    cursor: pointer;
+  }
+}
+
+.export-csv-btn {
+  color: #3b82f6 !important;
+
+  svg {
+    fill: #3b82f6 !important;
+  }
+
+  &:hover {
+    text-decoration: underline !important;
+    background-color: transparent !important;
+  }
+}
+
+.grading-refresh-loop {
+  svg {
+    animation: 0.2s ease rotateHalf;
+  }
+  cursor: not-allowed !important;
+  pointer-events: none;
+}
+
+@keyframes rotateHalf {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
   }
 }
