@@ -41,3 +41,10 @@ export const getStandardDate = (dateString: string): string => {
   const prettyDate = date.format('MMMM Do YYYY');
   return prettyDate;
 };
+
+export const getPrettyDateAfterHours = (dateString: string, hours: number): string => {
+  const date = moment(dateString).add(hours, 'hours');
+  const absolutePrettyDate = date.format('Do MMMM, HH:mm');
+  const relativePrettyDate = date.fromNow();
+  return `${absolutePrettyDate} (${relativePrettyDate})`;
+};
