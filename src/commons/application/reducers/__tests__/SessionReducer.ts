@@ -335,7 +335,8 @@ const assessmentOverviewsTest1: AssessmentOverview[] = [
     xp: 0,
     isGradingPublished: false,
     maxTeamSize: 5,
-    hasVotingFeatures: false
+    hasVotingFeatures: false,
+    hoursBeforeEarlyXpDecay: 0
   }
 ];
 
@@ -358,7 +359,8 @@ const assessmentOverviewsTest2: AssessmentOverview[] = [
     xp: 1,
     isGradingPublished: false,
     maxTeamSize: 1,
-    hasVotingFeatures: false
+    hasVotingFeatures: false,
+    hoursBeforeEarlyXpDecay: 0
   }
 ];
 
