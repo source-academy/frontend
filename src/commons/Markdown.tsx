@@ -27,7 +27,8 @@ const Markdown: React.FC<Props> = props => {
       className={classNames(props.className ? props.className : 'md', Classes.RUNNING_TEXT)}
       dangerouslySetInnerHTML={{
         __html: DOMPurify.sanitize(converter.makeHtml(props.content), {
-          USE_PROFILES: { html: true }
+          USE_PROFILES: { html: true },
+          ADD_ATTR: ['target']
         })
       }}
     />
