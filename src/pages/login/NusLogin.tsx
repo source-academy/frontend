@@ -36,7 +36,7 @@ const NusLogin: React.FC = () => {
       <div className={classNames('col-xs-12 col-lg-4', classes['unpadded'])}>
         <div className={classNames('row', classes['row'])}>
           <Card className={classes['header']} elevation={Elevation.ZERO}>
-            <a
+            <div className={classNames('col-xs-5', classes['logo'])}>
               className={classes['logo']}
               href="https://www.nus.edu.sg"
               target="_blank"
@@ -44,9 +44,12 @@ const NusLogin: React.FC = () => {
             >
               <img src={NUS_LOGO} alt="NUS" />
             </a>
+            </div>
             <Divider style={{ height: '100%' }} />
+            <div className={classNames('col-xs-5', classes['logo'])}>
             <img src={sourceAcademyLogo} alt="Source Academy" />
             <H3 style={{ marginBottom: 0 }}>{Constants.sourceAcademyDeploymentName}</H3>
+            </div>
           </Card>
         </div>
         <div className={classNames('row', classes['row'])} style={{ height: '100%' }}>
