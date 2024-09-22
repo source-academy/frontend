@@ -31,7 +31,7 @@ const NusLogin: React.FC = () => {
   return (
     <div className={classes['container']}>
       <div className={classNames('col-lg-8', 'hidden-xs', classes['unpadded'])}>
-        <img className={classes['logo']} src={BLUE_BG} alt="nusInfoBackgroundImg" />
+        <img className={classes['background']} src={BLUE_BG} alt="nusInfoBackgroundImg" />
       </div>
       <div className={classNames('col-xs-12 col-lg-4', classes['unpadded'])}>
         <div className={classNames('row', classes['row'])}>
