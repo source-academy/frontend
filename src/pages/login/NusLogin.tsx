@@ -36,7 +36,8 @@ const NusLogin: React.FC = () => {
       <div className={classNames('col-xs-12 col-lg-4', classes['unpadded'])}>
         <Card className={classNames('row', classes['row'], classes['header'])} elevation={Elevation.ZERO}>
           <div className={classNames('col-xs-5', classes['logo'])}>
-              className={classes['logo']}
+            <a
+              className={classes['logo-link']}
               href="https://www.nus.edu.sg"
               target="_blank"
               rel="noopener noreferer nofollow"

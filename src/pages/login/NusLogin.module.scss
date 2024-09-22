@@ -38,6 +38,12 @@
   max-height: 100%;
 }
 
+.logo-link {
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
 .text-center {
   text-align: center;
 }
