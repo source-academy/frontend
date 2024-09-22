@@ -1,5 +1,6 @@
 import { Octokit } from '@octokit/rest';
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act } from 'react';
 
 import * as GitHubUtils from '../../../features/github/GitHubUtils';
 import FileExplorerDialog from '../FileExplorerDialog';

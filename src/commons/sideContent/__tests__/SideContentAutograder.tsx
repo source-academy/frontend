@@ -1,5 +1,6 @@
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/types';
+import { act } from 'react';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import { AutogradingResult, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';

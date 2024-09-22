@@ -1,5 +1,4 @@
-import { act } from '@testing-library/react';
-import React from 'react';
+import React, { act } from 'react';
 import renderer from 'react-test-renderer';
 import { createRenderer } from 'react-test-renderer/shallow';
 
