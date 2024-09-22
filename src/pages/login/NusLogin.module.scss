@@ -19,6 +19,7 @@
 }
 
 .header {
+  position: relative;
   padding-top: 3rem;
   border-radius: 0;
   box-shadow: 0 0 0 0 transparent;
@@ -26,13 +27,15 @@
   display: flex;
   gap: 0.75rem;
   width: 100%;
-  justify-content: center;
+  height: 100%;
   align-items: center;
 }
 
 .logo {
-  display: inline-block;
+  display: flex;
+  justify-content: center;
   height: 100%;
+  max-height: 100%;
 }
 
 .text-center {
