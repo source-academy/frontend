@@ -42,10 +42,10 @@ const NusLogin: React.FC = () => {
               target="_blank"
               rel="noopener noreferer nofollow"
             >
-              <img className={classes['logo']} src={NUS_LOGO} alt="NUS" />
+              <img src={NUS_LOGO} alt="NUS" />
             </a>
             <Divider style={{ height: '100%' }} />
-            <img className={classes['logo']} src={sourceAcademyLogo} alt="Source Academy" />
+            <img src={sourceAcademyLogo} alt="Source Academy" />
             <H3 style={{ marginBottom: 0 }}>{Constants.sourceAcademyDeploymentName}</H3>
           </Card>
         </div>
