@@ -48,7 +48,7 @@ const NusLogin: React.FC = () => {
           <Divider style={{ height: '100%' }} />
           <div className={classNames('col-xs-5', classes['logo'])}>
             <img src={sourceAcademyLogo} alt="Source Academy" />
-            <H3 style={{ marginBottom: 0 }}>{Constants.sourceAcademyDeploymentName}</H3>
+            <H3 style={{ marginBottom: 0, alignSelf: 'center' }}>{Constants.sourceAcademyDeploymentName}</H3>
           </div>
         </Card>
         <div className={classNames('row', classes['row'])} style={{ height: '100%' }}>
