@@ -105,30 +105,28 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
         {isLoading && <p>loading...</p>}
       </div>
       <div className={classes['control-container']}>
-      <input
-        type="text"
-        disabled={isLoading}
-        className={classes['user-input']}
-        placeholder={isLoading ? 'Waiting for response...' : 'Type your message here...'}
-        value={userInput}
-        onChange={handleUserInput}
-        onKeyDown={keyDown}
-        maxLength={maxContentSize}
-      />
-      <div className={classes['input-count-container']}>
-      <div className={classes['input-count']}>
-        {`${userInput.length}/${maxContentSize}`}
-      </div>
-      </div>
-  
-      <div className={classes['button-container']}>
-        <Button disabled={isLoading} className={classes['button-send']} onClick={sendMessage}>
-          Send
-        </Button>
-        <Button className={classes['button-clean']} onClick={resetChat}>
-          Clean
-        </Button>
-      </div>
+        <input
+          type="text"
+          disabled={isLoading}
+          className={classes['user-input']}
+          placeholder={isLoading ? 'Waiting for response...' : 'Type your message here...'}
+          value={userInput}
+          onChange={handleUserInput}
+          onKeyDown={keyDown}
+          maxLength={maxContentSize}
+        />
+        <div className={classes['input-count-container']}>
+          <div className={classes['input-count']}>{`${userInput.length}/${maxContentSize}`}</div>
+        </div>
+
+        <div className={classes['button-container']}>
+          <Button disabled={isLoading} className={classes['button-send']} onClick={sendMessage}>
+            Send
+          </Button>
+          <Button className={classes['button-clean']} onClick={resetChat}>
+            Clean
+          </Button>
+        </div>
       </div>
     </div>
   );
