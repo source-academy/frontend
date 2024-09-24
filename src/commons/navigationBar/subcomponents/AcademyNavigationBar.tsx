@@ -91,7 +91,7 @@ const getStaffNavlinkInfo = ({
       to: `/courses/${courseId}/groundcontrol`,
       icon: IconNames.SATELLITE,
       text: 'Ground Control',
-      disabled: !isStaffOrAdmin,
+      disabled: !isAdmin,
       hiddenInBreakpoints: ['xs', 'sm']
     },
     {
