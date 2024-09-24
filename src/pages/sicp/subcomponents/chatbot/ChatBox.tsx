@@ -22,11 +22,6 @@ const BOT_ERROR_MESSAGE: Readonly<ChatMessage> = {
   role: 'assistant'
 };
 
-const MESSAGE_TOO_LONG_MESSAGE: Readonly<ChatMessage> = {
-  content: 'Your message is too long. Please try again with a shorter message.',
-  role: 'assistant'
-};
-
 const scrollToBottom = (ref: React.RefObject<HTMLDivElement>) => {
   ref.current?.scrollTo({ top: ref.current?.scrollHeight });
 };
@@ -46,10 +41,6 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
 
   const sendMessage = useCallback(() => {
     if (userInput.trim() === '') {
-      return;
-    }
-    if (userInput.length > maxContentSize) {
-      setMessages(prev => [...prev, MESSAGE_TOO_LONG_MESSAGE]);
       return;
     }
     setUserInput('');
@@ -85,6 +76,7 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
       setMessages([message]);
       setMaxContentSize(maxMessageSize);
       setChatId(conversationId);
+      setUserInput('');
     });
   }, [getSection, getText, tokens]);
 
@@ -112,6 +104,7 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
         ))}
         {isLoading && <p>loading...</p>}
       </div>
+      <div className={classes['control-container']}>
       <input
         type="text"
         disabled={isLoading}
@@ -120,7 +113,14 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
         value={userInput}
         onChange={handleUserInput}
         onKeyDown={keyDown}
+        maxLength={maxContentSize}
       />
+      <div className={classes['input-count-container']}>
+      <div className={classes['input-count']}>
+        {`${userInput.length}/${maxContentSize}`}
+      </div>
+      </div>
+  
       <div className={classes['button-container']}>
         <Button disabled={isLoading} className={classes['button-send']} onClick={sendMessage}>
           Send
@@ -128,6 +128,7 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
         <Button className={classes['button-clean']} onClick={resetChat}>
           Clean
         </Button>
+      </div>
       </div>
     </div>
   );
