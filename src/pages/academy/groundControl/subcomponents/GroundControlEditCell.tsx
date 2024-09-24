@@ -1,7 +1,7 @@
 import { Dialog, DialogBody, DialogFooter, Intent } from '@blueprintjs/core';
 import { DateInput3 } from '@blueprintjs/datetime2';
 import { IconNames } from '@blueprintjs/icons';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import React, { useCallback, useState } from 'react';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
@@ -21,10 +21,10 @@ const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDa
   const maxDate = new Date(2030, 11, 31);
 
   const currentDateString = forOpenDate ? data.openAt : data.closeAt;
-  const currentDate = moment(currentDateString, moment.ISO_8601, true);
+  const currentDate = dayjs(currentDateString, undefined, true);
 
   const [isDialogOpen, setDialogState] = useState(false);
-  const [newDate, setNewDate] = useState<moment.Moment | null>(currentDate);
+  const [newDate, setNewDate] = useState<dayjs.Dayjs | null>(currentDate);
 
   const handleOpenDialog = useCallback(() => setDialogState(true), []);
   const handleCloseDialog = useCallback(() => setDialogState(false), []);
@@ -46,13 +46,13 @@ const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDa
   }, [newDate, currentDate, data, handleAssessmentChangeDate, forOpenDate, handleCloseDialog]);
 
   const handleParseDate = (str: string) => {
-    const date = moment(str, dateDisplayFormat, true);
+    const date = dayjs(str, dateDisplayFormat, true);
     return date.isValid() ? date.toDate() : false;
   };
-  const handleFormatDate = (date: Date) => moment(date).format(dateDisplayFormat);
+  const handleFormatDate = (date: Date) => dayjs(date).format(dateDisplayFormat);
 
   const handleDateChange = React.useCallback(
-    (selectedDate: string | null) => setNewDate(moment(selectedDate)),
+    (selectedDate: string | null) => setNewDate(dayjs(selectedDate)),
     []
   );
   const handleDateError = React.useCallback(() => {
