@@ -6,10 +6,10 @@ exports[`Markdown page renders correctly 1`] = `
   dangerouslySetInnerHTML={
     Object {
       "__html": "<p>Welcome to the Source Academy playground!</p>
-<p>The book <a href=\\"https://sourceacademy.org/sicpjs/\\" rel=\\"noopener noreferrer\\" target=\\"_blank\\"><em>Structure and Interpretation of Computer Programs, JavaScript Edition</em></a>
-uses JavaScript sublanguages that we call <a href=\\"https://docs.sourceacademy.org/\\" rel=\\"noopener noreferrer\\" target=\\"_blank\\"><em>Source</em></a>. You have chosen the sublanguage <a href=\\"https://docs.sourceacademy.org/source_1/\\" rel=\\"noopener noreferrer\\" target=\\"_blank\\"><em>Source §1</em></a>.</p>
-<p>In the editor on the left, you can use the <a href=\\"https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts\\" rel=\\"noopener noreferrer\\" target=\\"_blank\\"><em>Ace keyboard shortcuts</em></a> 
-and also the <a href=\\"https://github.com/source-academy/frontend/wiki/Source-Academy-Keyboard-Shortcuts\\" rel=\\"noopener noreferrer\\" target=\\"_blank\\"><em>Source Academy keyboard shortcuts</em></a>.</p>",
+<p>The book <a target=\\"_blank\\" rel=\\"noopener noreferrer\\" href=\\"https://sourceacademy.org/sicpjs/\\"><em>Structure and Interpretation of Computer Programs, JavaScript Edition</em></a>
+uses JavaScript sublanguages that we call <a target=\\"_blank\\" rel=\\"noopener noreferrer\\" href=\\"https://docs.sourceacademy.org/\\"><em>Source</em></a>. You have chosen the sublanguage <a target=\\"_blank\\" rel=\\"noopener noreferrer\\" href=\\"https://docs.sourceacademy.org/source_1/\\"><em>Source §1</em></a>.</p>
+<p>In the editor on the left, you can use the <a target=\\"_blank\\" rel=\\"noopener noreferrer\\" href=\\"https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts\\"><em>Ace keyboard shortcuts</em></a> 
+and also the <a target=\\"_blank\\" rel=\\"noopener noreferrer\\" href=\\"https://github.com/source-academy/frontend/wiki/Source-Academy-Keyboard-Shortcuts\\"><em>Source Academy keyboard shortcuts</em></a>.</p>",
     }
   }
 />

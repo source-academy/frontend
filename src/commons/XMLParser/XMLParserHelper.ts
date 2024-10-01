@@ -87,7 +87,8 @@ const makeAssessmentOverview = (result: any, maxXpVal: number): AssessmentOvervi
     isGradingPublished: false,
     xp: 0,
     maxTeamSize: 1,
-    hasVotingFeatures: false
+    hasVotingFeatures: false,
+    hoursBeforeEarlyXpDecay: 0
   };
 };
 

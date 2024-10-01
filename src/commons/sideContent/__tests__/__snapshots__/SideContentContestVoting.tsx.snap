@@ -45,7 +45,6 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
         onMouseLeave={[Function]}
       >
         <span
-          aria-expanded={false}
           aria-hidden={true}
           className="bp5-icon bp5-icon-help"
           tabIndex={0}

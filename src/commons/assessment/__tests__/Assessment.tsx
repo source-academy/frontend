@@ -1,5 +1,6 @@
 import { Store } from '@reduxjs/toolkit';
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import { act } from 'react';
 import { Provider } from 'react-redux';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { OverallState, Role } from 'src/commons/application/ApplicationTypes';
