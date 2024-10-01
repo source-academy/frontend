@@ -49,6 +49,7 @@ import {
 import {
   getDefaultFilePath,
   getLanguageConfig,
+  isSchemeLanguage,
   isSourceLanguage,
   OverallState,
   ResultOutput,
@@ -977,7 +978,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
         languageConfig.supports.multiFile ? toggleFolderModeButton : null,
         persistenceButtons,
         githubButtons,
-        usingRemoteExecution || !isSourceLanguage(languageConfig.chapter)
+        usingRemoteExecution ||
+        !(isSourceLanguage(languageConfig.chapter) || isSchemeLanguage(languageConfig.chapter))
           ? null
           : usingSubst || usingCse
             ? stepperStepLimit
