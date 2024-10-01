@@ -49,7 +49,7 @@ import {
 import {
   getDefaultFilePath,
   getLanguageConfig,
-  isSchemeLanguage,
+  isCseVariant,
   isSourceLanguage,
   OverallState,
   ResultOutput,
@@ -60,7 +60,6 @@ import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAut
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
-import { ControlBarExecutionTime } from '../../commons/controlBar/ControlBarExecutionTime';
 import { ControlBarGoogleDriveButtons } from '../../commons/controlBar/ControlBarGoogleDriveButtons';
 import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
@@ -211,7 +210,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     editorTabs,
     editorSessionId,
     sessionDetails,
-    execTime,
+    //execTime,
     stepLimit,
     isEditorAutorun,
     isRunning,
@@ -597,6 +596,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     isFolderModeEnabled
   ]);
 
+  /*
   const executionTime = useMemo(
     () => (
       <ControlBarExecutionTime
@@ -607,6 +607,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     ),
     [execTime, handleChangeExecTime]
   );
+  */
 
   const stepperStepLimit = useMemo(
     () => (
@@ -978,12 +979,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         languageConfig.supports.multiFile ? toggleFolderModeButton : null,
         persistenceButtons,
         githubButtons,
-        usingRemoteExecution ||
-        !(isSourceLanguage(languageConfig.chapter) || isSchemeLanguage(languageConfig.chapter))
-          ? null
-          : usingSubst || usingCse
-            ? stepperStepLimit
-            : executionTime
+        usingSubst || isCseVariant(languageConfig.variant) ? stepperStepLimit : null
       ]
     },
     editorContainerProps: editorContainerProps,
