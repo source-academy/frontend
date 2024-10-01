@@ -210,7 +210,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     editorTabs,
     editorSessionId,
     sessionDetails,
-    //execTime,
     stepLimit,
     isEditorAutorun,
     isRunning,
