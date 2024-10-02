@@ -1,12 +1,15 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom';
+import Messages, { MessageType, sendToWebview } from 'src/features/vscode/messages';
 
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
 import { useLocalStorageState, useSession } from '../utils/Hooks';
+import WorkspaceActions from '../workspace/WorkspaceActions';
 import { defaultWorkspaceSettings, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
 import SessionActions from './actions/SessionActions';
+import VscodeActions from './actions/VscodeActions';
 
 const Application: React.FC = () => {
   const dispatch = useDispatch();
@@ -69,6 +72,47 @@ const Application: React.FC = () => {
       }
     };
   }, [isPWA, isMobile]);
+
+  // Effect to fetch the latest user info and course configurations from the backend on refresh,
+  // if the user was previously logged in
+  React.useEffect(() => {
+    // Polyfill confirm() to instead show as VSCode notification
+    window.confirm = () => {
+      console.log('You gotta confirm!');
+      return true;
+    };
+
+    const message = Messages.WebviewStarted();
+    sendToWebview(message);
+
+    window.addEventListener('message', event => {
+      const message: MessageType = event.data;
+      // Only accept messages from the vscode webview
+      if (!event.origin.startsWith('vscode-webview://')) {
+        return;
+      }
+      // console.log(`FRONTEND: Message from ${event.origin}: ${JSON.stringify(message)}`);
+      switch (message.type) {
+        case 'WebviewStarted':
+          console.log('Received WebviewStarted message, will set vsc');
+          dispatch(VscodeActions.setVscode());
+          break;
+        case 'Text':
+          const code = message.code;
+          console.log(`FRONTEND: TextMessage: ${code}`);
+          // TODO: Don't change ace editor directly
+          // const elements = document.getElementsByClassName('react-ace');
+          // if (elements.length === 0) {
+          //   return;
+          // }
+          // // @ts-expect-error: ace is not available at compile time
+          // const editor = ace.edit(elements[0]);
+          // editor.setValue(code);
+          dispatch(WorkspaceActions.updateEditorValue('assessment', 0, code));
+          break;
+      }
+    });
+  }, []);
 
   return (
     <WorkspaceSettingsContext.Provider value={[workspaceSettings, setWorkspaceSettings]}>

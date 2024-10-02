@@ -20,6 +20,7 @@ import {
 import { RouterState } from './types/CommonsTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
 import { SessionState } from './types/SessionTypes';
+import { VscodeState as VscodeState } from './types/VscodeTypes';
 
 export type OverallState = {
   readonly router: RouterState;
@@ -31,6 +32,7 @@ export type OverallState = {
   readonly dashboard: DashboardState;
   readonly fileSystem: FileSystemState;
   readonly sideContent: SideContentManagerState;
+  readonly vscode: VscodeState;
 };
 
 export type Story = {
@@ -604,6 +606,10 @@ export const defaultSideContentManager: SideContentManagerState = {
   stories: {}
 };
 
+export const defaultVscode: VscodeState = {
+  isVscode: false
+};
+
 export const defaultState: OverallState = {
   router: defaultRouter,
   achievement: defaultAchievement,
@@ -613,5 +619,6 @@ export const defaultState: OverallState = {
   stories: defaultStories,
   workspaces: defaultWorkspaceManager,
   fileSystem: defaultFileSystem,
-  sideContent: defaultSideContentManager
+  sideContent: defaultSideContentManager,
+  vscode: defaultVscode
 };
