@@ -353,8 +353,8 @@ const WorkspaceSaga = combineSagaHandlers(
         newChapter === Chapter.FULL_JS
           ? chapterChanged && (yield call(showFullJSDisclaimer))
           : newChapter === Chapter.FULL_TS
-          ? chapterChanged && (yield call(showFullTSDisclaimer))
-          : chapterChanged;
+            ? chapterChanged && (yield call(showFullTSDisclaimer))
+            : chapterChanged;
 
       if (toChangeChapter) {
         const library: Library = {

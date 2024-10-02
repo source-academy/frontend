@@ -1,5 +1,4 @@
-import { createReducer } from '@reduxjs/toolkit';
-import { Reducer } from 'redux';
+import { createReducer, Reducer } from '@reduxjs/toolkit';
 import RemoteExecutionActions from 'src/features/remoteExecution/RemoteExecutionActions';
 
 import { SourceActionType } from '../../utils/ActionsHelper';
@@ -44,12 +43,6 @@ const newSessionsReducer = createReducer(defaultSession, builder => {
     })
     .addCase(SessionActions.setAssessmentConfigurations, (state, action) => {
       state.assessmentConfigurations = action.payload;
-    })
-    .addCase(SessionActions.setNotificationConfigs, (state, action) => {
-      state.notificationConfigs = action.payload;
-    })
-    .addCase(SessionActions.setConfigurableNotificationConfigs, (state, action) => {
-      state.configurableNotificationConfigs = action.payload;
     })
     .addCase(SessionActions.setAdminPanelCourseRegistrations, (state, action) => {
       state.userCourseRegistrations = action.payload;

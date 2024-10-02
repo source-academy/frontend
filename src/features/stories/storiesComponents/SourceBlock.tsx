@@ -59,8 +59,8 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     commandsEnv === undefined
       ? DEFAULT_ENV
       : envList.includes(commandsEnv)
-      ? commandsEnv
-      : DEFAULT_ENV;
+        ? commandsEnv
+        : DEFAULT_ENV;
 
   const chapter = useTypedSelector(
     store => store.stories.envs[env]?.context.chapter || Constants.defaultSourceChapter

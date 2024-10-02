@@ -1,6 +1,5 @@
-import { createReducer } from '@reduxjs/toolkit';
+import { createReducer, Reducer } from '@reduxjs/toolkit';
 import { stringify } from 'js-slang/dist/utils/stringify';
-import { Reducer } from 'redux';
 
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
 import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
@@ -296,9 +295,18 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
         }
       };
     })
+    .addCase(WorkspaceActions.increaseRequestCounter, state => {
+      state.grading.requestCounter += 1;
+    })
+    .addCase(WorkspaceActions.decreaseRequestCounter, state => {
+      state.grading.requestCounter = Math.max(0, state.grading.requestCounter - 1);
+    })
     .addCase(setEditorSessionId, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].editorSessionId = action.payload.editorSessionId;
+    })
+    .addCase(WorkspaceActions.setGradingHasLoadedBefore, (state, action) => {
+      state.grading.hasLoadedBefore = action.payload;
     })
     .addCase(setSessionDetails, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
@@ -318,6 +326,9 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     })
     .addCase(WorkspaceActions.updateSubmissionsTableFilters, (state, action) => {
       state.grading.submissionsTableFilters = action.payload.filters;
+    })
+    .addCase(WorkspaceActions.updateAllColsSortStates, (state, action) => {
+      state.grading.allColsSortStates = action.payload.sortStates;
     })
     .addCase(WorkspaceActions.updateCurrentAssessmentId, (state, action) => {
       state.assessment.currentAssessment = action.payload.assessmentId;

@@ -31,8 +31,9 @@ export class QuizSpeakerRenderer {
   public changeSpeakerTo(newSpeakerDetail?: SpeakerDetail | null) {
     if (newSpeakerDetail === undefined) return;
 
-    this.currentSpeakerId &&
+    if (this.currentSpeakerId) {
       GameGlobalAPI.getInstance().clearSeveralLayers([Layer.QuizSpeaker, Layer.QuizSpeakerBox]);
+    }
     this.showNewSpeaker(newSpeakerDetail);
   }
 

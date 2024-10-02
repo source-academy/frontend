@@ -1,7 +1,8 @@
-import { act, render, screen } from '@testing-library/react';
+import { Store } from '@reduxjs/toolkit';
+import { render, screen } from '@testing-library/react';
+import { act } from 'react';
 import { Provider } from 'react-redux';
 import { createMemoryRouter, RouterProvider } from 'react-router';
-import { Store } from 'redux';
 import { OverallState, Role } from 'src/commons/application/ApplicationTypes';
 import { mockAssessmentOverviews } from 'src/commons/mocks/AssessmentMocks';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';

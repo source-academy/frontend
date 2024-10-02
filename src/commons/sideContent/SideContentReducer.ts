@@ -1,3 +1,5 @@
+import { Reducer } from '@reduxjs/toolkit';
+
 import { defaultSideContent, defaultSideContentManager } from '../application/ApplicationTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import {
@@ -11,10 +13,10 @@ import {
 import { getDynamicTabs, getLocation, getTabId } from './SideContentHelper';
 import { SideContentManagerState } from './SideContentTypes';
 
-export function SideContentReducer(
+export const SideContentReducer: Reducer<SideContentManagerState, SourceActionType> = (
   state: SideContentManagerState = defaultSideContentManager,
   action: SourceActionType
-): SideContentManagerState {
+): SideContentManagerState => {
   if (!(action as any).payload?.workspaceLocation) {
     return state;
   }
@@ -146,4 +148,4 @@ export function SideContentReducer(
     default:
       return state;
   }
-}
+};

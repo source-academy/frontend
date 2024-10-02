@@ -3,9 +3,14 @@ import {
   paginationToBackendParams,
   unpublishedToBackendParams
 } from 'src/features/grading/GradingUtils';
+import { freshSortState } from 'src/pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
-import { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';
+import {
+  AllColsSortStates,
+  GradingOverviews,
+  GradingQuery
+} from '../../../features/grading/GradingTypes';
 import { TeamFormationOverview } from '../../../features/teamFormation/TeamFormationTypes';
 import {
   Assessment,
@@ -22,9 +27,6 @@ import { Role, StoriesRole } from '../ApplicationTypes';
 import {
   AdminPanelCourseRegistration,
   CourseRegistration,
-  NotificationConfiguration,
-  NotificationPreference,
-  TimeOption,
   Tokens,
   UpdateCourseConfiguration,
   User
@@ -55,13 +57,16 @@ const SessionActions = createActions('session', {
    * many entries, starting from what offset, to get
    * @param filterParams - param that contains columnFilters converted into JSON for
    * processing into query parameters
+   * @param allColsSortStates - param that contains the sort states of all columns and
+   * the col it should be sorted by
    */
   fetchGradingOverviews: (
     filterToGroup = true,
     publishedFilter = unpublishedToBackendParams(false),
     pageParams = paginationToBackendParams(0, 10),
-    filterParams = {}
-  ) => ({ filterToGroup, publishedFilter, pageParams, filterParams }),
+    filterParams = {},
+    allColsSortStates: AllColsSortStates = { currentState: freshSortState, sortBy: '' }
+  ) => ({ filterToGroup, publishedFilter, pageParams, filterParams, allColsSortStates }),
   fetchTeamFormationOverviews: (filterToGroup = true) => filterToGroup,
   fetchStudents: () => ({}),
   login: (providerId: string) => providerId,
@@ -74,9 +79,6 @@ const SessionActions = createActions('session', {
   setCourseRegistration: (courseRegistration: Partial<CourseRegistration>) => courseRegistration,
   setAssessmentConfigurations: (assessmentConfigurations: AssessmentConfiguration[]) =>
     assessmentConfigurations,
-  setConfigurableNotificationConfigs: (notificationConfigs: NotificationConfiguration[]) =>
-    notificationConfigs,
-  setNotificationConfigs: (notificationConfigs: NotificationConfiguration[]) => notificationConfigs,
   setAdminPanelCourseRegistrations: (courseRegistrations: AdminPanelCourseRegistration[]) =>
     courseRegistrations,
   setGoogleUser: (user?: string) => user,
@@ -141,18 +143,8 @@ const SessionActions = createActions('session', {
   updateCourseConfig: (courseConfiguration: UpdateCourseConfiguration) => courseConfiguration,
   fetchAssessmentConfigs: () => ({}),
   updateAssessmentConfigs: (assessmentConfigs: AssessmentConfiguration[]) => assessmentConfigs,
-  updateNotificationConfigs: (notificationConfigs: NotificationConfiguration[]) =>
-    notificationConfigs,
-  updateNotificationPreferences: (
-    notificationPreferences: NotificationPreference[],
-    courseRegId: number
-  ) => ({ notificationPreferences, courseRegId }),
   deleteAssessmentConfig: (assessmentConfig: AssessmentConfiguration) => assessmentConfig,
   fetchAdminPanelCourseRegistrations: () => ({}),
-  fetchConfigurableNotificationConfigs: (courseRegId: number) => ({ courseRegId }),
-  fetchNotificationConfigs: () => ({}),
-  updateTimeOptions: (timeOptions: TimeOption[]) => timeOptions,
-  deleteTimeOptions: (timeOptionIds: number[]) => timeOptionIds,
   updateUserRole: (courseRegId: number, role: Role) => ({ courseRegId, role }),
   deleteUserCourseRegistration: (courseRegId: number) => ({ courseRegId }),
   updateCourseResearchAgreement: (agreedToResearch: boolean) => ({ agreedToResearch }),

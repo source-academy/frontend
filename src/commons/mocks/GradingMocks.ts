@@ -100,7 +100,8 @@ export const mockFetchGradingOverview = (
   accessToken: string,
   group: boolean,
   pageParams: { offset: number; pageSize: number },
-  backendParams: Object
+  backendParams: object,
+  sortedBy: { sortBy: string; sortDirection: string }
 ): GradingOverview[] | null => {
   // mocks backend role fetching
   const permittedRoles: Role[] = [Role.Admin, Role.Staff];

@@ -16,7 +16,8 @@ import {
   GradingOverview,
   GradingOverviews,
   GradingQuery,
-  GradingQuestion
+  GradingQuestion,
+  SortStates
 } from '../../features/grading/GradingTypes';
 import { SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
@@ -28,8 +29,6 @@ import {
   AdminPanelCourseRegistration,
   CourseConfiguration,
   CourseRegistration,
-  NotificationConfiguration,
-  TimeOption,
   Tokens,
   UpdateCourseConfiguration,
   User
@@ -60,13 +59,11 @@ import {
   getAssessment,
   getAssessmentConfigs,
   getAssessmentOverviews,
-  getConfigurableNotificationConfigs,
   getCourseConfig,
   getGrading,
   getGradingOverviews,
   getGradingSummary,
   getLatestCourseRegistrationAndConfiguration,
-  getNotificationConfigs,
   getNotifications,
   getSourcecastIndex,
   getStudents,
@@ -95,13 +92,9 @@ import {
   putCourseResearchAgreement,
   putLatestViewedCourse,
   putNewUsers,
-  putNotificationConfigs,
-  putNotificationPreferences,
   putTeams,
-  putTimeOptions,
   putUserRole,
   removeAssessmentConfig,
-  removeTimeOptions,
   removeUserCourseRegistration,
   unpublishGrading,
   unpublishGradingAll,
@@ -366,7 +359,24 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
       return;
     }
 
-    const { filterToGroup, publishedFilter, pageParams, filterParams } = action.payload;
+    const { filterToGroup, publishedFilter, pageParams, filterParams, allColsSortStates } =
+      action.payload;
+
+    const sortedBy = {
+      sortBy: allColsSortStates.sortBy,
+      sortDirection: ''
+    };
+
+    Object.entries(allColsSortStates.currentState).forEach(([key, value]) => {
+      if (allColsSortStates.sortBy === key && key !== '') {
+        if (value !== SortStates.NONE) {
+          sortedBy.sortDirection = value;
+        } else {
+          sortedBy.sortBy = '';
+          sortedBy.sortDirection = '';
+        }
+      }
+    });
 
     const gradingOverviews: GradingOverviews | null = yield call(
       getGradingOverviews,
@@ -374,7 +384,8 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
       filterToGroup,
       publishedFilter,
       pageParams,
-      filterParams
+      filterParams,
+      sortedBy
     );
     if (gradingOverviews) {
       yield put(actions.updateGradingOverviews(gradingOverviews));
@@ -859,32 +870,6 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
       yield put(actions.setAssessmentConfigurations(assessmentConfigs));
     }
   },
-  fetchConfigurableNotificationConfigs: function* (action) {
-    const tokens: Tokens = yield selectTokens();
-    const { courseRegId }: { courseRegId: number } = action.payload;
-
-    const notificationConfigs: NotificationConfiguration[] | null = yield call(
-      getConfigurableNotificationConfigs,
-      tokens,
-      courseRegId
-    );
-
-    if (notificationConfigs) {
-      yield put(actions.setConfigurableNotificationConfigs(notificationConfigs));
-    }
-  },
-  fetchNotificationConfigs: function* () {
-    const tokens: Tokens = yield selectTokens();
-
-    const notificationConfigs: NotificationConfiguration[] | null = yield call(
-      getNotificationConfigs,
-      tokens
-    );
-
-    if (notificationConfigs) {
-      yield put(actions.setNotificationConfigs(notificationConfigs));
-    }
-  },
   updateAssessmentConfigs: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const assessmentConfigs: AssessmentConfiguration[] = action.payload;
@@ -904,64 +889,11 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
     }
     yield call(showSuccessMessage, 'Updated successfully!', 1000);
   },
-  updateNotificationConfigs: function* (action) {
-    const tokens: Tokens = yield selectTokens();
-    const notificationConfigs: NotificationConfiguration[] = action.payload;
-
-    const resp: Response | null = yield call(putNotificationConfigs, tokens, notificationConfigs);
-    if (!resp || !resp.ok) {
-      return yield handleResponseError(resp);
-    }
-
-    const updatedNotificationConfigs: NotificationConfiguration[] | null = yield call(
-      getNotificationConfigs,
-      tokens
-    );
-
-    if (updatedNotificationConfigs) {
-      yield put(actions.setNotificationConfigs(updatedNotificationConfigs));
-    }
-
-    yield call(showSuccessMessage, 'Updated successfully!', 1000);
-  },
-  updateNotificationPreferences: function* (action) {
-    const tokens: Tokens = yield selectTokens();
-    const { notificationPreferences, courseRegId } = action.payload;
-    const resp: Response | null = yield call(
-      putNotificationPreferences,
-      tokens,
-      notificationPreferences,
-      courseRegId
-    );
-    if (!resp || !resp.ok) {
-      return yield handleResponseError(resp);
-    }
-
-    yield call(showSuccessMessage, 'Updated successfully!', 1000);
-  },
   deleteAssessmentConfig: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const assessmentConfig: AssessmentConfiguration = action.payload;
 
     const resp: Response | null = yield call(removeAssessmentConfig, tokens, assessmentConfig);
-    if (!resp || !resp.ok) {
-      return yield handleResponseError(resp);
-    }
-  },
-  updateTimeOptions: function* (action) {
-    const tokens: Tokens = yield selectTokens();
-    const timeOptions: TimeOption[] = action.payload;
-
-    const resp: Response | null = yield call(putTimeOptions, tokens, timeOptions);
-    if (!resp || !resp.ok) {
-      return yield handleResponseError(resp);
-    }
-  },
-  deleteTimeOptions: function* (action) {
-    const tokens: Tokens = yield selectTokens();
-    const timeOptionIds: number[] = action.payload;
-
-    const resp: Response | null = yield call(removeTimeOptions, tokens, timeOptionIds);
     if (!resp || !resp.ok) {
       return yield handleResponseError(resp);
     }

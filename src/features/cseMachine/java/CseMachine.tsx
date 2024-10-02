@@ -49,7 +49,7 @@ export class CseMachine {
 
     // Set icon to blink.
     const icon = document.getElementById('env_visualizer-icon');
-    icon && icon.classList.add('side-content-tab-alert');
+    icon?.classList.add('side-content-tab-alert');
   }
 
   static clearCse() {
@@ -66,7 +66,9 @@ export class CseMachine {
    * by scrolling or by the trackpad.
    */
   static zoomStage(event: KonvaEventObject<WheelEvent> | boolean, multiplier: number = 1) {
-    typeof event != 'boolean' && event.evt.preventDefault();
+    if (typeof event != 'boolean') {
+      event.evt.preventDefault();
+    }
     if (CseMachine.stageRef.current) {
       const stage = CseMachine.stageRef.current;
       const oldScale = stage.scaleX();

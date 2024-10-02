@@ -2,6 +2,7 @@ import { createAction } from '@reduxjs/toolkit';
 import { Context, Result } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
 
+import { AllColsSortStates, GradingColumnVisibility } from '../../features/grading/GradingTypes';
 import { SALanguage } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { Library } from '../assessment/AssessmentTypes';
@@ -264,7 +265,13 @@ const newActions = createActions('workspace', {
   updateChangePointSteps: (changepointSteps: number[], workspaceLocation: WorkspaceLocation) => ({
     changepointSteps,
     workspaceLocation
-  })
+  }),
+  // For grading table
+  increaseRequestCounter: 0,
+  decreaseRequestCounter: 0,
+  setGradingHasLoadedBefore: () => true,
+  updateAllColsSortStates: (sortStates: AllColsSortStates) => ({ sortStates }),
+  updateGradingColumnVisibility: (filters: GradingColumnVisibility) => ({ filters })
 });
 
 export const updateLastDebuggerResult = createAction(

@@ -1,0 +1,58 @@
+@import '_global';
+
+.grading-badge {
+  border-radius: 9999px;
+  padding: 0.1rem 0.2rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  line-height: normal !important;
+  width: fit-content;
+  max-width: max(1200px * 0.2, 20vw);
+  margin: auto;
+  color: rgba(0, 0, 0, 0.7);
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
+
+  &.grading-badge-xs {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  &.grading-badge-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  &.grading-badge-md {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  &.grading-badge-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  &.grading-badge-xl {
+    padding: 1rem 2rem;
+    font-size: 1.25rem;
+  }
+
+  // div: .grading-def-cell
+  // button: .grading-overview-filterable-btns
+  // TODO: This also affects .grading-overview-unfilterable-btns
+  div:hover > button:has(&) {
+    text-decoration: none !important;
+    filter: brightness(0.75);
+  }
+}
+
+.grading-badge-text {
+  line-height: normal !important;
+  width: fit-content;
+  max-width: max(calc(1200px * 0.2 - 16px - 2rem), calc(20vw - 16px - 2rem));
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

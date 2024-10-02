@@ -167,20 +167,6 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
       text="Admin Panel"
       to="/courses/0/adminpanel"
     />
-    <DesktopNavLink
-      disabled={false}
-      hiddenInBreakpoints={
-        Array [
-          "xs",
-          "sm",
-          "md",
-          "lg",
-        ]
-      }
-      icon="notifications"
-      text="Notifications"
-      to="/courses/0/notipreference"
-    />
   </Blueprint5.NavbarGroup>
 </Blueprint5.Navbar>
 `;
@@ -352,20 +338,6 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Gr
       text="Admin Panel"
       to="/courses/0/adminpanel"
     />
-    <DesktopNavLink
-      disabled={false}
-      hiddenInBreakpoints={
-        Array [
-          "xs",
-          "sm",
-          "md",
-          "lg",
-        ]
-      }
-      icon="notifications"
-      text="Notifications"
-      to="/courses/0/notipreference"
-    />
   </Blueprint5.NavbarGroup>
 </Blueprint5.Navbar>
 `;
@@ -447,7 +419,7 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Te
     align="right"
   >
     <DesktopNavLink
-      disabled={false}
+      disabled={true}
       hiddenInBreakpoints={
         Array [
           "xs",
@@ -536,20 +508,6 @@ exports[`MissionControl, GroundControl, Sourcereel, GameSimulator, Dashboard, Te
       icon="settings"
       text="Admin Panel"
       to="/courses/0/adminpanel"
-    />
-    <DesktopNavLink
-      disabled={false}
-      hiddenInBreakpoints={
-        Array [
-          "xs",
-          "sm",
-          "md",
-          "lg",
-        ]
-      }
-      icon="notifications"
-      text="Notifications"
-      to="/courses/0/notipreference"
     />
   </Blueprint5.NavbarGroup>
 </Blueprint5.Navbar>

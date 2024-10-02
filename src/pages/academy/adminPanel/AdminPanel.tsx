@@ -18,7 +18,6 @@ import AssessmentConfigPanel, {
   ImperativeAssessmentConfigPanel
 } from './subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';
-import NotificationConfigPanel from './subcomponents/NotificationConfigPanel';
 import StoriesUserConfigPanel from './subcomponents/storiesUserConfigPanel/StoriesUserConfigPanel';
 import UserConfigPanel from './subcomponents/userConfigPanel/UserConfigPanel';
 
@@ -46,7 +45,6 @@ const AdminPanel: React.FC = () => {
     dispatch(SessionActions.fetchCourseConfig());
     dispatch(SessionActions.fetchAssessmentConfigs());
     dispatch(SessionActions.fetchAdminPanelCourseRegistrations());
-    dispatch(SessionActions.fetchNotificationConfigs());
   }, [dispatch]);
 
   useEffect(() => {
@@ -199,7 +197,6 @@ const AdminPanel: React.FC = () => {
             />
           }
         />
-        <Tab id="notification-config" title="Notifications" panel={<NotificationConfigPanel />} />
       </Tabs>
     </div>
   );

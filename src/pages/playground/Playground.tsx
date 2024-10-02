@@ -1,6 +1,7 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { HotkeyItem, useHotkeys } from '@mantine/hooks';
+import { AnyAction, Dispatch } from '@reduxjs/toolkit';
 import { Ace, Range } from 'ace-builds';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
@@ -10,7 +11,6 @@ import { decompressFromEncodedURIComponent } from 'lz-string';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useStore } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
-import { AnyAction, Dispatch } from 'redux';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import {
@@ -18,6 +18,7 @@ import {
   setSessionDetails,
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
+import { ControlBarExecutionTime } from 'src/commons/controlBar/ControlBarExecutionTime';
 import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
@@ -49,6 +50,7 @@ import {
 import {
   getDefaultFilePath,
   getLanguageConfig,
+  isCseVariant,
   isSourceLanguage,
   OverallState,
   ResultOutput,
@@ -59,7 +61,6 @@ import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAut
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
-import { ControlBarExecutionTime } from '../../commons/controlBar/ControlBarExecutionTime';
 import { ControlBarGoogleDriveButtons } from '../../commons/controlBar/ControlBarGoogleDriveButtons';
 import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
@@ -210,8 +211,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     editorTabs,
     editorSessionId,
     sessionDetails,
-    execTime,
     stepLimit,
+    execTime,
     isEditorAutorun,
     isRunning,
     isDebugging,
@@ -614,13 +615,19 @@ const Playground: React.FC<PlaygroundProps> = props => {
         stepSize={usingSubst ? 2 : 1}
         handleChangeStepLimit={limit => {
           dispatch(WorkspaceActions.changeStepLimit(limit, workspaceLocation));
-          usingCse && dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
+          if (usingCse) {
+            dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
+          }
         }}
         handleOnBlurAutoScale={limit => {
-          limit % 2 === 0 || !usingSubst
-            ? dispatch(WorkspaceActions.changeStepLimit(limit, workspaceLocation))
-            : dispatch(WorkspaceActions.changeStepLimit(limit + 1, workspaceLocation));
-          usingCse && dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
+          if (limit % 2 === 0 || !usingSubst) {
+            dispatch(WorkspaceActions.changeStepLimit(limit, workspaceLocation));
+          } else {
+            dispatch(WorkspaceActions.changeStepLimit(limit + 1, workspaceLocation));
+          }
+          if (usingCse) {
+            dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
+          }
         }}
         key="step_limit"
       />
@@ -971,11 +978,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
         languageConfig.supports.multiFile ? toggleFolderModeButton : null,
         persistenceButtons,
         githubButtons,
-        usingRemoteExecution || !isSourceLanguage(languageConfig.chapter)
-          ? null
-          : usingSubst || usingCse
+        usingSubst || usingCse || isCseVariant(languageConfig.variant)
           ? stepperStepLimit
-          : executionTime
+          : isSourceLanguage(languageConfig.chapter)
+            ? executionTime
+            : null
       ]
     },
     editorContainerProps: editorContainerProps,

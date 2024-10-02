@@ -83,7 +83,7 @@ export default class QuizParser {
    *
    * @param answer The string containing the correct answer of a question
    */
-  private static getQuizAnswer(answer: string): Number {
+  private static getQuizAnswer(answer: string): number {
     const ans = answer.split(':');
     if (ans.length < 2 || Number.isNaN(parseInt(ans[1]))) {
       throw new Error('Parsing error: Invalid answer for Quiz');

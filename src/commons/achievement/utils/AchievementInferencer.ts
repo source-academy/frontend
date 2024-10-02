@@ -907,10 +907,10 @@ class AchievementInferencer {
     node.status = achievementCompleted
       ? AchievementStatus.COMPLETED
       : hasReleased
-      ? hasUnexpiredDeadline
-        ? AchievementStatus.ACTIVE
-        : AchievementStatus.EXPIRED
-      : AchievementStatus.UNRELEASED;
+        ? hasUnexpiredDeadline
+          ? AchievementStatus.ACTIVE
+          : AchievementStatus.EXPIRED
+        : AchievementStatus.UNRELEASED;
   }
 
   /**

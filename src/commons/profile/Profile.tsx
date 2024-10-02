@@ -96,10 +96,10 @@ const Profile: React.FC<ProfileProps> = props => {
         return frac < 0
           ? ''
           : frac >= 0.8
-          ? ' progress-steelblue'
-          : frac >= 0.45
-          ? ' progress-deepskyblue'
-          : ' progress-skyblue';
+            ? ' progress-steelblue'
+            : frac >= 0.45
+              ? ' progress-deepskyblue'
+              : ' progress-skyblue';
       };
 
       // Given an assessment category, return its icon

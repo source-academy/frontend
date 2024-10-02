@@ -56,6 +56,7 @@ class Parser {
       if (body.length === 0 && header.includes(':')) {
         Parser.parseCheckpointConfig(header);
       } else {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         Parser.parseCheckpointParagraphs(header, body) || LocationParser.parse(header, body);
       }
     });

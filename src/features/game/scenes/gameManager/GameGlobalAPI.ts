@@ -3,8 +3,7 @@ import { SoundAsset } from '../../assets/AssetsTypes';
 import { getAwardProp } from '../../awards/GameAwardsHelper';
 import { BBoxProperty } from '../../boundingBoxes/GameBoundingBoxTypes';
 import { Character, SpeakerDetail } from '../../character/GameCharacterTypes';
-import { GamePosition, GameSize, ItemId } from '../../commons/CommonTypes';
-import { AssetKey } from '../../commons/CommonTypes';
+import { AssetKey, GamePosition, GameSize, ItemId } from '../../commons/CommonTypes';
 import { Dialogue } from '../../dialogue/GameDialogueTypes';
 import { displayMiniMessage } from '../../effects/MiniMessage';
 import { displayNotification } from '../../effects/Notification';
@@ -408,9 +407,11 @@ class GameGlobalAPI {
   }
 
   public enableSprite(gameObject: Phaser.GameObjects.GameObject, active: boolean) {
-    active
-      ? this.getGameManager().input.enable(gameObject)
-      : this.getGameManager().input.disable(gameObject);
+    if (active) {
+      this.getGameManager().input.enable(gameObject);
+    } else {
+      this.getGameManager().input.disable(gameObject);
+    }
   }
 
   /////////////////////

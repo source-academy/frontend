@@ -38,9 +38,6 @@ import {
   AdminPanelCourseRegistration,
   CourseConfiguration,
   CourseRegistration,
-  NotificationConfiguration,
-  NotificationPreference,
-  TimeOption,
   Tokens,
   UpdateCourseConfiguration,
   User
@@ -626,10 +623,11 @@ export const getGradingOverviews = async (
   group: boolean,
   graded: Record<string, any> | undefined,
   pageParams: Record<string, any>,
-  filterParams: Record<string, any>
+  filterParams: Record<string, any>,
+  sortedBy: Record<string, any>
 ): Promise<GradingOverviews | null> => {
   // gradedQuery placed behind filterQuery to override progress filter if any
-  const params = new URLSearchParams({ ...pageParams, ...filterParams, ...graded });
+  const params = new URLSearchParams({ ...pageParams, ...filterParams, ...graded, ...sortedBy });
   params.append('group', `${group}`);
 
   const resp = await request(`${courseId()}/admin/grading?${params.toString()}`, 'GET', {
@@ -642,50 +640,44 @@ export const getGradingOverviews = async (
 
   return {
     count: gradingOverviews.count,
-    data: gradingOverviews.data
-      .map((overview: any) => {
-        const gradingOverview: GradingOverview = {
-          assessmentId: overview.assessment.id,
-          assessmentNumber: overview.assessment.assessmentNumber,
-          assessmentName: overview.assessment.title,
-          assessmentType: overview.assessment.type,
-          studentId: overview.student ? overview.student.id : -1,
-          studentName: overview.student ? overview.student.name : undefined,
-          studentNames: overview.team
-            ? overview.team.team_members.map((member: { name: any }) => member.name)
-            : undefined,
-          studentUsername: overview.student ? overview.student.username : undefined,
-          studentUsernames: overview.team
-            ? overview.team.team_members.map((member: { username: any }) => member.username)
-            : undefined,
-          submissionId: overview.id,
-          submissionStatus: overview.status,
-          groupName: overview.student ? overview.student.groupName : '-',
-          groupLeaderId: overview.student ? overview.student.groupLeaderId : undefined,
-          isGradingPublished: overview.isGradingPublished,
-          progress: backendParamsToProgressStatus(
-            overview.assessment.isManuallyGraded,
-            overview.isGradingPublished,
-            overview.status,
-            overview.gradedCount,
-            overview.assessment.questionCount
-          ),
-          questionCount: overview.assessment.questionCount,
-          gradedCount: overview.gradedCount,
-          // XP
-          initialXp: overview.xp,
-          xpAdjustment: overview.xpAdjustment,
-          currentXp: overview.xp + overview.xpAdjustment,
-          maxXp: overview.assessment.maxXp,
-          xpBonus: overview.xpBonus
-        };
-        return gradingOverview;
-      })
-      .sort((subX: GradingOverview, subY: GradingOverview) =>
-        subX.assessmentId !== subY.assessmentId
-          ? subY.assessmentId - subX.assessmentId
-          : subY.submissionId - subX.submissionId
-      )
+    data: gradingOverviews.data.map((overview: any) => {
+      const gradingOverview: GradingOverview = {
+        assessmentId: overview.assessment.id,
+        assessmentNumber: overview.assessment.assessmentNumber,
+        assessmentName: overview.assessment.title,
+        assessmentType: overview.assessment.type,
+        studentId: overview.student ? overview.student.id : -1,
+        studentName: overview.student ? overview.student.name : undefined,
+        studentNames: overview.team
+          ? overview.team.team_members.map((member: { name: any }) => member.name)
+          : undefined,
+        studentUsername: overview.student ? overview.student.username : undefined,
+        studentUsernames: overview.team
+          ? overview.team.team_members.map((member: { username: any }) => member.username)
+          : undefined,
+        submissionId: overview.id,
+        submissionStatus: overview.status,
+        groupName: overview.student ? overview.student.groupName : '-',
+        groupLeaderId: overview.student ? overview.student.groupLeaderId : undefined,
+        isGradingPublished: overview.isGradingPublished,
+        progress: backendParamsToProgressStatus(
+          overview.assessment.isManuallyGraded,
+          overview.isGradingPublished,
+          overview.status,
+          overview.gradedCount,
+          overview.assessment.questionCount
+        ),
+        questionCount: overview.assessment.questionCount,
+        gradedCount: overview.gradedCount,
+        // XP
+        initialXp: overview.xp,
+        xpAdjustment: overview.xpAdjustment,
+        currentXp: overview.xp + overview.xpAdjustment,
+        maxXp: overview.assessment.maxXp,
+        xpBonus: overview.xpBonus
+      };
+      return gradingOverview;
+    })
   };
 };
 
@@ -1343,50 +1335,6 @@ export const putAssessmentConfigs = async (
   return resp;
 };
 
-export const putNotificationConfigs = async (
-  tokens: Tokens,
-  notificationConfigs: NotificationConfiguration[]
-) => {
-  return await request(`notifications/config`, 'PUT', {
-    ...tokens,
-    body: notificationConfigs,
-    noHeaderAccept: true
-  });
-};
-
-export const putTimeOption = async (
-  tokens: Tokens,
-  timeOption: TimeOption
-): Promise<Response | null> => {
-  const resp = await request(`notifications/options/${timeOption.id}`, 'PUT', {
-    ...tokens,
-    body: {
-      isDefault: timeOption.isDefault
-    },
-    noHeaderAccept: true
-  });
-
-  return resp;
-};
-
-export const postTimeOption = async (
-  tokens: Tokens,
-  timeOption: TimeOption,
-  notificationConfigId: number
-): Promise<Response | null> => {
-  const resp = await request(`notifications/options`, 'POST', {
-    ...tokens,
-    body: {
-      isDefault: timeOption.isDefault,
-      minutes: timeOption.minutes,
-      notification_config_id: notificationConfigId
-    },
-    noHeaderAccept: true
-  });
-
-  return resp;
-};
-
 /**
  * DELETE /courses/{courseId}/admin/config/assessment_config/{assessmentConfigId}
  */
@@ -1402,95 +1350,6 @@ export const removeAssessmentConfig = async (
       noHeaderAccept: true
     }
   );
-
-  return resp;
-};
-
-export const removeTimeOptions = async (
-  tokens: Tokens,
-  timeOptionIds: number[]
-): Promise<Response | null> => {
-  const resp = await request(`notifications/options`, 'DELETE', {
-    ...tokens,
-    body: timeOptionIds,
-    noHeaderAccept: true
-  });
-
-  return resp;
-};
-
-export const putTimeOptions = async (
-  tokens: Tokens,
-  timeOptions: TimeOption[]
-): Promise<Response | null> => {
-  const resp = await request(`notifications/options`, 'PUT', {
-    ...tokens,
-    body: timeOptions,
-    noHeaderAccept: true
-  });
-
-  return resp;
-};
-
-export const getNotificationConfigs = async (
-  tokens: Tokens
-): Promise<NotificationConfiguration[] | null> => {
-  const resp = await request(`notifications/config/${courseIdWithoutPrefix()}`, 'GET', {
-    ...tokens
-  });
-  if (!resp || !resp.ok) {
-    return null;
-  }
-
-  return await resp.json();
-};
-
-export const getConfigurableNotificationConfigs = async (
-  tokens: Tokens,
-  courseRegId: number
-): Promise<NotificationConfiguration[] | null> => {
-  const resp = await request(`notifications/config/user/${courseRegId}`, 'GET', {
-    ...tokens
-  });
-  if (!resp || !resp.ok) {
-    return null;
-  }
-
-  return await resp.json();
-};
-
-export const postNotificationPreference = async (
-  tokens: Tokens,
-  notiPref: NotificationPreference,
-  notificationConfigId: number,
-  courseRegId: number
-): Promise<Response | null> => {
-  const resp = await request(`notifications/preference`, 'POST', {
-    ...tokens,
-    body: {
-      is_enabled: notiPref.isEnabled,
-      time_option_id: notiPref.timeOptionId,
-      notification_config_id: notificationConfigId,
-      course_reg_id: courseRegId
-    },
-    noHeaderAccept: true
-  });
-
-  return resp;
-};
-
-export const putNotificationPreferences = async (
-  tokens: Tokens,
-  notiPrefs: NotificationPreference[],
-  courseRegId: number
-): Promise<Response | null> => {
-  const resp = await request(`notifications/preferences`, 'PUT', {
-    ...tokens,
-    body: notiPrefs.map(pref => {
-      return { ...pref, courseRegId: courseRegId };
-    }),
-    noHeaderAccept: true
-  });
 
   return resp;
 };

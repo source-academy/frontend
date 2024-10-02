@@ -37,16 +37,16 @@ const SideContentContestLeaderboard: React.FC<SideContentContestLeaderboardProps
     return leaderboardType === SideContentType.scoreLeaderboard
       ? 'Score Leaderboard'
       : leaderboardType === SideContentType.popularVoteLeaderboard
-      ? 'Popular Vote Leaderboard'
-      : 'Contest Leaderboard';
+        ? 'Popular Vote Leaderboard'
+        : 'Contest Leaderboard';
   }, [leaderboardType]);
 
   const contestLeaderboardTooltipContent = useMemo(() => {
     return leaderboardType === SideContentType.scoreLeaderboard
       ? 'View the highest scoring contest entries!'
       : leaderboardType === SideContentType.popularVoteLeaderboard
-      ? 'View the most popular contest entries!'
-      : 'View the top-rated contest entries!';
+        ? 'View the most popular contest entries!'
+        : 'View the top-rated contest entries!';
   }, [leaderboardType]);
 
   const columnHeader = (colClass: string, colTitle: string) => (
@@ -66,8 +66,8 @@ const SideContentContestLeaderboard: React.FC<SideContentContestLeaderboardProps
           leaderboardType === SideContentType.scoreLeaderboard
             ? 'Calculated Score'
             : leaderboardType === SideContentType.popularVoteLeaderboard
-            ? 'Popularity Score'
-            : 'Metric'
+              ? 'Popularity Score'
+              : 'Metric'
         )}
       </div>
     );

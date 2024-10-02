@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 import {
   cardBackgroundUrl,
@@ -23,7 +23,7 @@ function insertFakeAchievements(
   inferencer: AchievementInferencer
 ) {
   const sortedOverviews = [...assessmentOverviews].sort((overview1, overview2) =>
-    moment(overview1.closeAt).diff(moment(overview2.closeAt))
+    dayjs(overview1.closeAt).diff(dayjs(overview2.closeAt))
   );
   const length = assessmentOverviews.length;
 
@@ -114,25 +114,27 @@ function insertFakeAchievements(
   // will not appear if there are no completed assessments of that type
   categorisedUuids.forEach((uuids, idx) => {
     const assessmentType = assessmentTypes[idx];
-    uuids.length > 0 &&
-      inferencer.insertFakeAchievement({
-        uuid: assessmentType,
-        title: 'Completed ' + assessmentType,
-        xp: 0,
-        isVariableXp: false,
-        deadline: undefined,
-        release: undefined,
-        isTask: true,
-        position: -1 - idx, // negative number to ensure that they stay on top
-        prerequisiteUuids: uuids,
-        goalUuids: [],
-        cardBackground: `${cardBackgroundUrl}/default.png`,
-        view: {
-          coverImage: `${coverImageUrl}/default.png`,
-          description: 'Your completed ' + assessmentType + ' are listed here!',
-          completionText: ''
-        }
-      });
+    if (uuids.length == 0) {
+      return;
+    }
+    inferencer.insertFakeAchievement({
+      uuid: assessmentType,
+      title: 'Completed ' + assessmentType,
+      xp: 0,
+      isVariableXp: false,
+      deadline: undefined,
+      release: undefined,
+      isTask: true,
+      position: -1 - idx, // negative number to ensure that they stay on top
+      prerequisiteUuids: uuids,
+      goalUuids: [],
+      cardBackground: `${cardBackgroundUrl}/default.png`,
+      view: {
+        coverImage: `${coverImageUrl}/default.png`,
+        description: 'Your completed ' + assessmentType + ' are listed here!',
+        completionText: ''
+      }
+    });
   });
 }
 

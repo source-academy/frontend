@@ -53,16 +53,44 @@ const authProviders: Map<
   { name: string; endpoint: string; isDefault: boolean; type: AuthProviderType }
 > = new Map();
 
+let hasNusAuthProviders = false;
+const nusAuthProviders: Map<
+  string,
+  { name: string; endpoint: string; isDefault: boolean; type: AuthProviderType }
+> = new Map();
+
+for (let i = 1; ; ++i) {
+  const id = process.env[`REACT_APP_NUS_SAML_PROVIDER${i}`];
+  if (!id) {
+    break;
+  }
+
+  hasNusAuthProviders = true;
+  const name = process.env[`REACT_APP_NUS_SAML_PROVIDER${i}_NAME`] || 'Unnamed provider';
+  const endpoint = process.env[`REACT_APP_NUS_SAML_PROVIDER${i}_ENDPOINT`] || '';
+
+  authProviders.set(id, { name, endpoint, isDefault: false, type: AuthProviderType.SAML_SSO });
+  nusAuthProviders.set(id, { name, endpoint, isDefault: false, type: AuthProviderType.SAML_SSO });
+}
+
+let hasOtherAuthProviders = false;
+const otherAuthProviders: Map<
+  string,
+  { name: string; endpoint: string; isDefault: boolean; type: AuthProviderType }
+> = new Map();
+
 for (let i = 1; ; ++i) {
   const id = process.env[`REACT_APP_OAUTH2_PROVIDER${i}`];
   if (!id) {
     break;
   }
 
+  hasOtherAuthProviders = true;
   const name = process.env[`REACT_APP_OAUTH2_PROVIDER${i}_NAME`] || 'Unnamed provider';
   const endpoint = process.env[`REACT_APP_OAUTH2_PROVIDER${i}_ENDPOINT`] || '';
 
   authProviders.set(id, { name, endpoint, isDefault: i === 1, type: AuthProviderType.OAUTH2 });
+  otherAuthProviders.set(id, { name, endpoint, isDefault: i === 1, type: AuthProviderType.OAUTH2 });
 }
 
 for (let i = 1; ; ++i) {
@@ -71,10 +99,12 @@ for (let i = 1; ; ++i) {
     break;
   }
 
+  hasOtherAuthProviders = true;
   const name = process.env[`REACT_APP_CAS_PROVIDER${i}_NAME`] || 'Unnamed provider';
   const endpoint = process.env[`REACT_APP_CAS_PROVIDER${i}_ENDPOINT`] || '';
 
   authProviders.set(id, { name, endpoint, isDefault: false, type: AuthProviderType.CAS });
+  otherAuthProviders.set(id, { name, endpoint, isDefault: false, type: AuthProviderType.CAS });
 }
 
 for (let i = 1; ; ++i) {
@@ -83,11 +113,17 @@ for (let i = 1; ; ++i) {
     break;
   }
 
+  hasOtherAuthProviders = true;
   const name = process.env[`REACT_APP_SAML_PROVIDER${i}_NAME`] || 'Unnamed provider';
   const endpoint = process.env[`REACT_APP_SAML_PROVIDER${i}_ENDPOINT`] || '';
 
   authProviders.set(id, { name, endpoint, isDefault: false, type: AuthProviderType.SAML_SSO });
+  otherAuthProviders.set(id, { name, endpoint, isDefault: false, type: AuthProviderType.SAML_SSO });
 }
+
+const featureFlags = {
+  enableSicpChatbot: isTrue(process.env.REACT_APP_FEATURE_ENABLE_SICP_CHATBOT)
+};
 
 export enum Links {
   githubIssues = 'https://github.com/source-academy/frontend/issues',
@@ -127,6 +163,10 @@ const Constants = {
   urlShortenerSignature,
   moduleBackendUrl,
   authProviders,
+  hasNusAuthProviders,
+  nusAuthProviders,
+  hasOtherAuthProviders,
+  otherAuthProviders,
   playgroundOnly,
   sentryDsn,
   googleClientId,
@@ -139,7 +179,8 @@ const Constants = {
   sicpBackendUrl,
   javaPackagesUrl,
   workspaceSettingsLocalStorageKey,
-  caFulfillmentLevel
+  caFulfillmentLevel,
+  featureFlags
 };
 
 export default Constants;
