@@ -18,6 +18,7 @@ import {
   setSessionDetails,
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
+import { ControlBarExecutionTime } from 'src/commons/controlBar/ControlBarExecutionTime';
 import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
@@ -211,6 +212,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     editorSessionId,
     sessionDetails,
     stepLimit,
+    execTime,
     isEditorAutorun,
     isRunning,
     isDebugging,
@@ -595,7 +597,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     isFolderModeEnabled
   ]);
 
-  /*
   const executionTime = useMemo(
     () => (
       <ControlBarExecutionTime
@@ -606,7 +607,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     ),
     [execTime, handleChangeExecTime]
   );
-  */
 
   const stepperStepLimit = useMemo(
     () => (
@@ -978,7 +978,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
         languageConfig.supports.multiFile ? toggleFolderModeButton : null,
         persistenceButtons,
         githubButtons,
-        usingSubst || isCseVariant(languageConfig.variant) ? stepperStepLimit : null
+        usingSubst || usingCse || isCseVariant(languageConfig.variant)
+          ? stepperStepLimit
+          : isSourceLanguage(languageConfig.chapter)
+            ? executionTime
+            : null
       ]
     },
     editorContainerProps: editorContainerProps,
