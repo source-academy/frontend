@@ -1,5 +1,6 @@
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { act } from 'react';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import SideContentContestLeaderboard from '../content/SideContentContestLeaderboard';
