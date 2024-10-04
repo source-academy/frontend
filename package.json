@@ -33,7 +33,7 @@
     "@mantine/hooks": "^7.11.2",
     "@octokit/rest": "^20.0.0",
     "@reduxjs/toolkit": "^1.9.7",
-    "@sentry/browser": "^7.57.0",
+    "@sentry/browser": "^8.33.0",
     "@sourceacademy/c-slang": "^1.0.21",
     "@sourceacademy/sharedb-ace": "^2.0.3",
     "@sourceacademy/sling-client": "^0.1.0",
