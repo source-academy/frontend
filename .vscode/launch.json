@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "firefox",
+        // The following two lines make use of an already created profile
+        "profile": "vscode-debug-react",
+        "keepProfileChanges": true,
+
+        "request": "launch",
+        "name": "Launch Firefox against localhost",
+        "url": "http://localhost:8000",
+        "webRoot": "${workspaceFolder}",
+
+        "skipFiles": [
+            "<node_internals>/**",
+            "${workspaceFolder}/node_modules/@reduxjs/**"
+        ]
+      }
+    ]
+  }
