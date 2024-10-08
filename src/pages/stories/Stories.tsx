@@ -1,13 +1,12 @@
-import '@tremor/react/dist/esm/tremor.css';
-
-import { Button as BpButton, Icon as BpIcon, NonIdealState } from '@blueprintjs/core';
+import { Button, InputGroup, NonIdealState } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Card, Flex, TextInput, Title } from '@tremor/react';
 import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import ContentDisplay from 'src/commons/ContentDisplay';
+import GradingFlex from 'src/commons/grading/GradingFlex';
+import GradingText from 'src/commons/grading/GradingText';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import StoriesActions from 'src/features/stories/StoriesActions';
@@ -120,23 +119,25 @@ const Stories: React.FC = () => {
     <ContentDisplay
       loadContentDispatch={() => dispatch(StoriesActions.getStoriesList())}
       display={
-        <Card>
-          <Flex justifyContent="justify-between">
-            <Flex justifyContent="justify-start" spaceX="space-x-6">
-              <Title>All Stories</Title>
+        <>
+          <GradingFlex justifyContent="space-between">
+            <GradingFlex justifyContent="flex-start" alignItems="center" style={{ columnGap: 16 }}>
+              <GradingText style={{ fontSize: '1.125rem', opacity: 0.9 }}>All Stories</GradingText>
               {isLoggedIn && (
-                <BpButton onClick={handleNewStory} icon={IconNames.PLUS}>
+                <Button onClick={handleNewStory} icon={IconNames.PLUS}>
                   Add Story
-                </BpButton>
+                </Button>
               )}
-            </Flex>
-            <TextInput
-              maxWidth="max-w-xl"
-              icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
+            </GradingFlex>
+            <InputGroup
+              className="grading-search-input"
               placeholder="Search for author..."
+              leftIcon="search"
+              large={true}
+              value={query}
               onChange={e => setQuery(e.target.value)}
             />
-          </Flex>
+          </GradingFlex>
 
           <StoriesTable
             headers={columns}
@@ -168,7 +169,7 @@ const Stories: React.FC = () => {
               );
             }}
           />
-        </Card>
+        </>
       }
     />
   );
