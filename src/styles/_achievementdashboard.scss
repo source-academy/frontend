@@ -629,7 +629,7 @@
         color: white;
         display: flex;
         flex-direction: column;
-        height: $view-height / 3;
+        height: calc($view-height / 3);
         justify-content: center;
         margin: 1em auto;
         width: $view-width;
