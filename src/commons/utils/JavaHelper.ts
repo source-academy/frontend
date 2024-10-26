@@ -76,7 +76,8 @@ export async function javaRun(
       const { proxy } = createModuleProxy(module, moduleFuncs[module]);
       return { default: proxy };
     }
-    return await import(`java-slang/dist/jvm/stdlib/${path}.js`);
+    // FIXME: Investigate
+    return await import(/* @vite-ignore */ `java-slang/dist/jvm/stdlib/${path}.js`);
   };
 
   const stdout = (str: string) => {
