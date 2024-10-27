@@ -99,6 +99,8 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
   // This is what that controls Grading Mode. If future feedback says it's better to default to filter mode, change it here.
   const [filterMode, setFilterMode] = useState<boolean>(false);
 
+  const isLoading = useMemo(() => requestCounter > 0, [requestCounter]);
+
   const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
   const resetPage = useCallback(() => setPage(0), [setPage]);
 
@@ -400,7 +402,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           components={tableProperties.customComponents}
           defaultColDef={tableProperties.defaultColDefs}
           headerHeight={tableProperties.headerHeight}
-          loading={requestCounter > 0}
+          loading={isLoading}
           overlayLoadingTemplate={tableProperties.overlayLoadingTemplate}
           overlayNoRowsTemplate={tableProperties.overlayNoRowsTemplate}
           pagination={tableProperties.pagination}
@@ -442,14 +444,14 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           minimal
           icon={IconNames.DOUBLE_CHEVRON_LEFT}
           onClick={() => setPage(0)}
-          disabled={page <= 0}
+          disabled={page <= 0 || isLoading}
         />
         <Button
           small
           minimal
           icon={IconNames.ARROW_LEFT}
           onClick={() => setPage(page - 1)}
-          disabled={page <= 0}
+          disabled={page <= 0 || isLoading}
         />
         <H6 style={{ margin: 'auto 0' }}>
           Page {maxPage + 1 === 0 ? 0 : page + 1} of {maxPage + 1}
@@ -459,14 +461,14 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           minimal
           icon={IconNames.ARROW_RIGHT}
           onClick={() => setPage(page + 1)}
-          disabled={page >= maxPage}
+          disabled={page >= maxPage || isLoading}
         />
         <Button
           small
           minimal
           icon={IconNames.DOUBLE_CHEVRON_RIGHT}
           onClick={() => setPage(maxPage)}
-          disabled={page >= maxPage}
+          disabled={page >= maxPage || isLoading}
         />
       </GradingFlex>
     </>
