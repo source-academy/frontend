@@ -264,56 +264,52 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
   useEffect(() => {
     if (gridRef.current?.api) {
-      if (requestCounter <= 0) {
-        const newData: IGradingTableRow[] = [];
+      const newData: IGradingTableRow[] = [];
 
-        const sameData: boolean = submissions.reduce((sameData, currentSubmission, index) => {
-          const newRow: IGradingTableRow = {
-            assessmentName: currentSubmission.assessmentName,
-            assessmentType: currentSubmission.assessmentType,
-            studentName: currentSubmission.studentName
-              ? currentSubmission.studentName
-              : currentSubmission.studentNames
-                ? currentSubmission.studentNames.join(', ')
-                : '',
-            studentUsername: currentSubmission.studentUsername
-              ? currentSubmission.studentUsername
-              : currentSubmission.studentUsernames
-                ? currentSubmission.studentUsernames.join(', ')
-                : '',
-            groupName: currentSubmission.groupName,
-            progressStatus: currentSubmission.progress,
-            xp:
-              currentSubmission.currentXp +
-              ' (+' +
-              currentSubmission.xpBonus +
-              ') / ' +
-              currentSubmission.maxXp,
-            actionsIndex: currentSubmission.submissionId,
-            courseID: courseId!
-          };
-          newData.push(newRow);
-          return (
-            sameData &&
-            newRow.actionsIndex === rowData?.[index]?.actionsIndex &&
-            newRow.studentUsername === rowData?.[index]?.studentUsername &&
-            newRow.groupName === rowData?.[index]?.groupName &&
-            newRow.progressStatus === rowData?.[index]?.progressStatus &&
-            newRow.xp === rowData?.[index]?.xp
-          );
-        }, submissions.length === rowData?.length);
+      const sameData: boolean = submissions.reduce((sameData, currentSubmission, index) => {
+        const newRow: IGradingTableRow = {
+          assessmentName: currentSubmission.assessmentName,
+          assessmentType: currentSubmission.assessmentType,
+          studentName: currentSubmission.studentName
+            ? currentSubmission.studentName
+            : currentSubmission.studentNames
+              ? currentSubmission.studentNames.join(', ')
+              : '',
+          studentUsername: currentSubmission.studentUsername
+            ? currentSubmission.studentUsername
+            : currentSubmission.studentUsernames
+              ? currentSubmission.studentUsernames.join(', ')
+              : '',
+          groupName: currentSubmission.groupName,
+          progressStatus: currentSubmission.progress,
+          xp:
+            currentSubmission.currentXp +
+            ' (+' +
+            currentSubmission.xpBonus +
+            ') / ' +
+            currentSubmission.maxXp,
+          actionsIndex: currentSubmission.submissionId,
+          courseID: courseId!
+        };
+        newData.push(newRow);
+        return (
+          sameData &&
+          newRow.actionsIndex === rowData?.[index]?.actionsIndex &&
+          newRow.studentUsername === rowData?.[index]?.studentUsername &&
+          newRow.groupName === rowData?.[index]?.groupName &&
+          newRow.progressStatus === rowData?.[index]?.progressStatus &&
+          newRow.xp === rowData?.[index]?.xp
+        );
+      }, submissions.length === rowData?.length);
 
-        if (!sameData) {
-          setRowData(newData);
-        }
+      if (!sameData) {
+        setRowData(newData);
+      }
 
-        gridRef.current!.api.hideOverlay();
+      gridRef.current!.api.hideOverlay();
 
-        if (newData.length === 0 && requestCounter <= 0) {
-          gridRef.current!.api.showNoRowsOverlay();
-        }
-      } else {
-        gridRef.current!.api.showLoadingOverlay();
+      if (newData.length === 0 && requestCounter <= 0) {
+        gridRef.current!.api.showNoRowsOverlay();
       }
     }
     // We ignore the dependency on rowData purposely as we setRowData above.
@@ -404,6 +400,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           components={tableProperties.customComponents}
           defaultColDef={tableProperties.defaultColDefs}
           headerHeight={tableProperties.headerHeight}
+          loading={requestCounter > 0}
           overlayLoadingTemplate={tableProperties.overlayLoadingTemplate}
           overlayNoRowsTemplate={tableProperties.overlayNoRowsTemplate}
           pagination={tableProperties.pagination}
