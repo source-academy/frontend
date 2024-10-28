@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 import {
   cardBackgroundUrl,
@@ -23,7 +23,7 @@ function insertFakeAchievements(
   inferencer: AchievementInferencer
 ) {
   const sortedOverviews = [...assessmentOverviews].sort((overview1, overview2) =>
-    moment(overview1.closeAt).diff(moment(overview2.closeAt))
+    dayjs(overview1.closeAt).diff(dayjs(overview2.closeAt))
   );
   const length = assessmentOverviews.length;
 

@@ -214,6 +214,10 @@ export function isSchemeLanguage(chapter: Chapter): boolean {
   ].includes(chapter);
 }
 
+export function isCseVariant(variant: Variant): boolean {
+  return variant == Variant.EXPLICIT_CONTROL;
+}
+
 const pySubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>> = [
   { chapter: Chapter.PYTHON_1, variant: Variant.DEFAULT, displayName: 'Python \xa71' }
   //{ chapter: Chapter.PYTHON_2, variant: Variant.DEFAULT, displayName: 'Python \xa72' },

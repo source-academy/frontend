@@ -18,6 +18,7 @@ import {
   setSessionDetails,
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
+import { ControlBarExecutionTime } from 'src/commons/controlBar/ControlBarExecutionTime';
 import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
@@ -49,6 +50,7 @@ import {
 import {
   getDefaultFilePath,
   getLanguageConfig,
+  isCseVariant,
   isSourceLanguage,
   OverallState,
   ResultOutput,
@@ -59,7 +61,6 @@ import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAut
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
-import { ControlBarExecutionTime } from '../../commons/controlBar/ControlBarExecutionTime';
 import { ControlBarGoogleDriveButtons } from '../../commons/controlBar/ControlBarGoogleDriveButtons';
 import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
@@ -210,8 +211,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     editorTabs,
     editorSessionId,
     sessionDetails,
-    execTime,
     stepLimit,
+    execTime,
     isEditorAutorun,
     isRunning,
     isDebugging,
@@ -977,11 +978,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
         languageConfig.supports.multiFile ? toggleFolderModeButton : null,
         persistenceButtons,
         githubButtons,
-        usingRemoteExecution || !isSourceLanguage(languageConfig.chapter)
-          ? null
-          : usingSubst || usingCse
-            ? stepperStepLimit
-            : executionTime
+        usingSubst || usingCse || isCseVariant(languageConfig.variant)
+          ? stepperStepLimit
+          : isSourceLanguage(languageConfig.chapter)
+            ? executionTime
+            : null
       ]
     },
     editorContainerProps: editorContainerProps,

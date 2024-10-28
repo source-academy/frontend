@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 const now = new Date();
 
@@ -38,12 +38,12 @@ export const timeFromExpired = (deadline?: Date) =>
 export const prettifyDate = (deadline?: Date) => {
   if (deadline === undefined) return '';
 
-  return moment(deadline).format('D MMMM YYYY HH:mm');
+  return dayjs(deadline).format('D MMMM YYYY HH:mm');
 };
 
 export const prettifyTime = (time?: Date) => {
   if (time === undefined) return '';
-  return moment(time).format('HH:mm');
+  return dayjs(time).format('HH:mm');
 };
 
 // Converts Date to deadline countdown
@@ -54,11 +54,11 @@ export const prettifyDeadline = (deadline?: Date) => {
     return 'Expired';
   }
 
-  const now = moment();
+  const now = dayjs();
 
-  const weeksAway = Math.ceil(moment(deadline).diff(now, 'weeks', true));
-  const daysAway = Math.ceil(moment(deadline).diff(now, 'days', true));
-  const hoursAway = Math.ceil(moment(deadline).diff(now, 'hours', true));
+  const weeksAway = Math.ceil(dayjs(deadline).diff(now, 'weeks', true));
+  const daysAway = Math.ceil(dayjs(deadline).diff(now, 'days', true));
+  const hoursAway = Math.ceil(dayjs(deadline).diff(now, 'hours', true));
 
   let prettifiedDeadline = '';
   if (weeksAway > 1) {
