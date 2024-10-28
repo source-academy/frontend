@@ -87,7 +87,6 @@ const TeamFormationImport = () => import('./teamFormation/subcomponents/TeamForm
 const Dashboard = () => import('./dashboard/Dashboard');
 
 const staffRoutes: RouteObject[] = [
-  { path: 'groundcontrol', lazy: GroundControl },
   { path: `grading/${gradingRegExp}`, lazy: Grading },
   { path: 'sourcereel', lazy: Sourcereel },
   { path: 'gamesimulator', lazy: GameSimulator },
@@ -107,9 +106,10 @@ const staffRoutes: RouteObject[] = [
 
 const AdminPanel = () => import('./adminPanel/AdminPanel');
 
-const adminRoutes: RouteObject[] = [{ path: 'adminpanel', lazy: AdminPanel }].map(r =>
-  new GuardedRoute(r).check(s => s.session.role === Role.Admin, notFoundPath).build()
-);
+const adminRoutes: RouteObject[] = [
+  { path: 'groundcontrol', lazy: GroundControl },
+  { path: 'adminpanel', lazy: AdminPanel }
+].map(r => new GuardedRoute(r).check(s => s.session.role === Role.Admin, notFoundPath).build());
 
 export const getAcademyRoutes = (): RouteObject[] => {
   const routes: RouteObject[] = [...getCommonAcademyRoutes(), ...staffRoutes, ...adminRoutes];
