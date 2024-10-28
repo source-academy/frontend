@@ -145,7 +145,7 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "https-browserify": "^1.0.0",
     "husky": "^9.0.0",
-    "npm-run-all2": "^6.0.0",
+    "npm-run-all2": "^7.0.0",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
     "prettier": "^3.3.3",
