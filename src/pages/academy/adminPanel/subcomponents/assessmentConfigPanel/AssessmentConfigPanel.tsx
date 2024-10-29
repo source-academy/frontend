@@ -280,6 +280,12 @@ const AssessmentConfigPanel: WithImperativeApi<
       [configs]
     );
 
+    // Updates the data passed into ag-grid
+    // (this is necessary to update the rowIndex in our custom cellRenderer)
+    const onRowDragLeaveOrEnd = (event: RowDragEvent) => {
+      // gridApi.current?.setRowData(assessmentConfig.current);
+    };
+
     // Updates our local React state whenever there are changes
     // to the Assessment Type column.
     const onCellValueChanged = (event: CellValueChangedEvent) => {
@@ -311,6 +317,8 @@ const AssessmentConfigPanel: WithImperativeApi<
           suppressMovableColumns={true}
           suppressPaginationPanel={true}
           onRowDragMove={onRowDragMove}
+          onRowDragLeave={onRowDragLeaveOrEnd}
+          onRowDragEnd={onRowDragLeaveOrEnd}
           onCellValueChanged={onCellValueChanged}
         />
         <div className="footer-text">
