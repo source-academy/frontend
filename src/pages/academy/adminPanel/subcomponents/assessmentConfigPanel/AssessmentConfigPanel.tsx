@@ -283,7 +283,7 @@ const AssessmentConfigPanel: WithImperativeApi<
     // Updates the data passed into ag-grid
     // (this is necessary to update the rowIndex in our custom cellRenderer)
     const onRowDragLeaveOrEnd = (event: RowDragEvent) => {
-      // gridApi.current?.setRowData(assessmentConfig.current);
+      gridApi.current?.setGridOption('rowData', configs);
     };
 
     // Updates our local React state whenever there are changes
