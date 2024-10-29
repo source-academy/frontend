@@ -191,9 +191,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   }, []);
 
   useEffect(() => {
-    handleTeamOverviewFetch(props.assessmentId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (assessmentOverview && assessmentOverview.maxTeamSize > 1) {
+      handleTeamOverviewFetch(props.assessmentId);
+    }
+  }, [assessmentOverview, handleTeamOverviewFetch, props.assessmentId]);
 
   /**
    * After mounting (either an older copy of the assessment

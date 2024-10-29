@@ -1,6 +1,6 @@
 import { Button, Icon, NonIdealState, Position, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useParams } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
@@ -57,6 +57,9 @@ const Grading: React.FC = () => {
   const dispatch = useDispatch();
   const allColsSortStates = useTypedSelector(state => state.workspaces.grading.allColsSortStates);
   const hasLoadedBefore = useTypedSelector(state => state.workspaces.grading.hasLoadedBefore);
+  const requestCounter = useTypedSelector(state => state.workspaces.grading.requestCounter);
+
+  const isLoading = useMemo(() => requestCounter > 0, [requestCounter]);
 
   const updateGradingOverviewsCallback = useCallback(
     (page: number, filterParams: object) => {
@@ -207,6 +210,7 @@ const Grading: React.FC = () => {
                   setAnimateRefresh(true);
                 }}
                 onAnimationEnd={e => setAnimateRefresh(false)}
+                disabled={isLoading}
               >
                 <Icon htmlTitle="Refresh" icon={IconNames.REFRESH} />
               </Button>

@@ -35,18 +35,13 @@ const AchievementControl: React.FC = () => {
     [dispatch]
   );
 
-  // TODO: This is a hacky fix. By right, we shouldn't need to use an
-  // inferencer instance since we can encapsulate the logic using hooks
-  // and component state.
   const [initialAchievements, initialGoals] = useTypedSelector(state => [
     state.achievement.achievements,
     state.achievement.goals
   ]);
   const inferencer = useMemo(
     () => new AchievementInferencer(initialAchievements, initialGoals),
-    // We only want to create the inferencer once
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [initialAchievements, initialGoals]
   );
 
   /**
