@@ -390,7 +390,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           large={true}
           value={searchQuery}
           onChange={handleSearchQueryUpdate}
-        ></InputGroup>
+        />
       </GradingFlex>
 
       <div className="ag-theme-quartz" style={{ margin: tableProperties.tableMargins }}>
