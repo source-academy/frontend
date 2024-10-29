@@ -3794,24 +3794,24 @@ adjust-sourcemap-loader@^4.0.0:
     loader-utils "^2.0.0"
     regex-parser "^2.2.11"
 
-ag-charts-types@10.0.2:
-  version "10.0.2"
-  resolved "https://registry.yarnpkg.com/ag-charts-types/-/ag-charts-types-10.0.2.tgz#fe4d7aa3cdc4ba6f354d7b4bbf65818e242f2fd6"
-  integrity sha512-Nxo5slHOXlaeg0gRIsVnovAosQzzlYfWJtdDy0Aq/VvpJru/PJ+5i2c9aCyEhgRxhBjImsoegwkgRj7gNOWV6Q==
+ag-charts-types@10.3.1:
+  version "10.3.1"
+  resolved "https://registry.yarnpkg.com/ag-charts-types/-/ag-charts-types-10.3.1.tgz#b60163a5da5f27222db71d4fcc20c0aed1854c9c"
+  integrity sha512-oZvu9vJLk6lmzaYi0TmVVmHFZJpVNFziU0bnllx4wR3muXCmnxz5LouKIZ8CYnNiC7VO5HmHNlFu+0DmEO5zxg==
 
-ag-grid-community@32.0.2, ag-grid-community@^32.0.2:
-  version "32.0.2"
-  resolved "https://registry.yarnpkg.com/ag-grid-community/-/ag-grid-community-32.0.2.tgz#a69d99ee944fa07ab5faa103f6f930fbd2d4b432"
-  integrity sha512-vLJJUjnsG9hNK41GNuW2EHu1W264kxA/poOpcX4kmyrjU5Uzvelsbj3HdKAO9POV28iqyRdKGYfAWdn8QzA7KA==
+ag-grid-community@32.3.1, ag-grid-community@^32.3.1:
+  version "32.3.1"
+  resolved "https://registry.yarnpkg.com/ag-grid-community/-/ag-grid-community-32.3.1.tgz#9b7b0580635e6243c6b0c50af66b590d55289293"
+  integrity sha512-j/VpFbDO+7tDNG5xq9JIg3zSYxKbTKlAYjaAFSUwiJF8SDyWYUALWjtiCa+mr/RowyGRTcFv5sc+HCbS6C4UKQ==
   dependencies:
-    ag-charts-types "10.0.2"
+    ag-charts-types "10.3.1"
 
-ag-grid-react@^32.0.2:
-  version "32.0.2"
-  resolved "https://registry.yarnpkg.com/ag-grid-react/-/ag-grid-react-32.0.2.tgz#675b477f23f1f1338af0c15f174f9da3c68baec9"
-  integrity sha512-IWYsoyJ/Z763rWbE5/9SaT1n5xwIKrm/QzOG14l7i8z5J6JdJwfV0aQFATmEE8Xws2H48vlLcLdW1cv4hwV3eg==
+ag-grid-react@^32.3.1:
+  version "32.3.1"
+  resolved "https://registry.yarnpkg.com/ag-grid-react/-/ag-grid-react-32.3.1.tgz#6cea84597b1ccf663027d8113a228e690509de09"
+  integrity sha512-5xd9LGiJHghbb7KwlqzayJ+7Ot+kYXcBwwZan0cT2xtVHpJi9sz//PoWGzBILhxX707ocXz0ICsEyErAa+8WWw==
   dependencies:
-    ag-grid-community "32.0.2"
+    ag-grid-community "32.3.1"
     prop-types "^15.8.1"
 
 agent-base@6:
