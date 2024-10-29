@@ -1,23 +1,25 @@
 import { Button, Dialog, DialogBody, DialogFooter, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { IRowNode } from 'ag-grid-community';
 import React, { useCallback, useState } from 'react';
 import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import ControlButton from 'src/commons/ControlButton';
 
 type Props = {
   data: AssessmentConfiguration;
-  rowIndex: number;
+  node: IRowNode<AssessmentConfiguration>;
   deleteRowHandler: (index: number) => void;
 };
 
-const DeleteRowCell: React.FC<Props> = ({ data, rowIndex, deleteRowHandler }) => {
+const DeleteRowCell: React.FC<Props> = ({ data, node, deleteRowHandler }) => {
+  const { rowIndex } = node;
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const clickHandler = () => {
     setIsDialogOpen(true);
   };
   const handleDelete = useCallback(() => {
-    deleteRowHandler(rowIndex);
+    deleteRowHandler(rowIndex!);
     setIsDialogOpen(false);
   }, [deleteRowHandler, rowIndex]);
 
