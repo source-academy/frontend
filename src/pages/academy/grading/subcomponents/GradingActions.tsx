@@ -1,4 +1,4 @@
-import { Button, Icon, Tooltip } from '@blueprintjs/core';
+import { Button, Icon, Position, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 import { useDispatch } from 'react-redux';
@@ -82,7 +82,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
       {filterMode && (
         <Link to={`/courses/${courseId}/grading/${submissionId}`}>
           <GradingFlex alignItems="center" className="grading-action-icons grading-action-icons-bg">
-            <Tooltip content="Grade">
+            <Tooltip position={Position.TOP} content="Grade">
               <Icon icon={IconNames.EDIT} />
             </Tooltip>
           </GradingFlex>
@@ -96,7 +96,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
           style={{ padding: 0 }}
           onClick={handleReautogradeClick}
         >
-          <Tooltip content="Reautograde">
+          <Tooltip position={Position.TOP} content="Reautograde">
             <Icon icon={IconNames.REFRESH} />
           </Tooltip>
         </Button>
@@ -109,7 +109,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
           style={{ padding: 0 }}
           onClick={handleUnsubmitClick}
         >
-          <Tooltip content="Unsubmit">
+          <Tooltip position={Position.TOP} content="Unsubmit">
             <Icon icon={IconNames.UNDO} />
           </Tooltip>
         </Button>
@@ -117,7 +117,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
 
       {isGraded && (
         <Button className="grading-action-icons" minimal onClick={handlePublishClick}>
-          <Tooltip content="Publish">
+          <Tooltip position={Position.TOP} content="Publish">
             <Icon icon={IconNames.SEND_TO_GRAPH} />
           </Tooltip>
         </Button>
@@ -125,7 +125,7 @@ const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filter
 
       {isPublished && (
         <Button className="grading-action-icons" minimal onClick={handleUnpublishClick}>
-          <Tooltip content="Unpublish">
+          <Tooltip position={Position.TOP} content="Unpublish">
             <Icon icon={IconNames.EXCLUDE_ROW} />
           </Tooltip>
         </Button>
