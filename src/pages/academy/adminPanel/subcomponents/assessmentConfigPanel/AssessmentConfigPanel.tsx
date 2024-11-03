@@ -84,7 +84,7 @@ const AssessmentConfigPanel: WithImperativeApi<
 
     // Manually graded assessments should not be auto-published
     // Check and ensure that isManuallyGraded = true and isGradingAutoPublished = true cannot be set simultaneously
-    const setIsManuallyGraded = (index: number, value: boolean) => {
+    const setIsManuallyGraded = useCallback((index: number, value: boolean) => {
       setConfigs(prev => {
         const newConfigs = cloneDeep(prev) ?? [];
         newConfigs[index].isManuallyGraded = value;
@@ -98,9 +98,9 @@ const AssessmentConfigPanel: WithImperativeApi<
         gridApi.current?.getDisplayedRowAtIndex(index)?.setDataValue('isManuallyGraded', value);
         return newConfigs;
       });
-    };
+    }, []);
 
-    const setIsGradingAutoPublished = (index: number, value: boolean) => {
+    const setIsGradingAutoPublished = useCallback((index: number, value: boolean) => {
       setConfigs(prev => {
         const newConfigs = cloneDeep(prev) ?? [];
         newConfigs[index].isGradingAutoPublished = value;
@@ -114,7 +114,7 @@ const AssessmentConfigPanel: WithImperativeApi<
           ?.setDataValue('isGradingAutoPublished', value);
         return newConfigs;
       });
-    };
+    }, []);
 
     const valueSetter = useCallback(
       <T extends keyof AssessmentConfiguration>(field: T) =>
@@ -254,7 +254,9 @@ const AssessmentConfigPanel: WithImperativeApi<
         setEarlyXp,
         setHasTokenCounter,
         setHasVotingFeatures,
-        setHoursBeforeDecay
+        setHoursBeforeDecay,
+        setIsGradingAutoPublished,
+        setIsManuallyGraded
       ]
     );
 
@@ -281,7 +283,7 @@ const AssessmentConfigPanel: WithImperativeApi<
     // Updates the data passed into ag-grid
     // (this is necessary to update the rowIndex in our custom cellRenderer)
     const onRowDragLeaveOrEnd = (event: RowDragEvent) => {
-      // gridApi.current?.setRowData(assessmentConfig.current);
+      gridApi.current?.setGridOption('rowData', configs);
     };
 
     // Updates our local React state whenever there are changes
