@@ -25,7 +25,7 @@ import { Frame } from './components/Frame';
 import { ArrayValue } from './components/values/ArrayValue';
 import CseMachine from './CseMachine';
 import { Layout } from './CseMachineLayout';
-import { isBuiltInFn, isStreamFn } from './CseMachineUtils';
+import { isBuiltInFn, isInstr, isStreamFn } from './CseMachineUtils';
 
 export class CseAnimation {
   static readonly animations: Animatable[] = [];
@@ -153,7 +153,7 @@ export class CseAnimation {
     }
     if (isNode(lastControlItem)) {
       CseAnimation.handleNode(lastControlItem);
-    } else {
+    } else if (isInstr(lastControlItem)) {
       switch (lastControlItem.instrType) {
         case InstrType.APPLICATION:
           const appInstr = lastControlItem as AppInstr;
@@ -283,6 +283,8 @@ export class CseAnimation {
         case InstrType.RESET:
           break;
       }
+    } else {
+      return;
     }
   }
 

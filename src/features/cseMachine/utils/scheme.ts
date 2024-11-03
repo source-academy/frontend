@@ -1,3 +1,4 @@
+import { schemeVisualise } from 'js-slang/dist/alt-langs/scheme/scheme-mapper';
 import { estreeDecode } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/encoder-visitor';
 import { unparse } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/reverse_parser';
 import { Node } from 'js-slang/dist/types';
@@ -13,4 +14,8 @@ export function isSchemeNumber(data: Data): boolean {
 
 export function convertNodeToScheme(node: Node): string {
   return unparse(estreeDecode(node as any));
+}
+
+export function schemeToString(data: any): string {
+  return schemeVisualise(data).toString();
 }

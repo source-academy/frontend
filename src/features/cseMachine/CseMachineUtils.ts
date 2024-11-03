@@ -25,6 +25,7 @@ import classes from 'src/styles/Draggable.module.scss';
 import { ArrayUnit } from './components/ArrayUnit';
 import { Binding } from './components/Binding';
 import { ControlItemComponent } from './components/ControlItemComponent';
+import { isNode } from './components/ControlStack';
 import { Frame } from './components/Frame';
 import { StashItemComponent } from './components/StashItemComponent';
 import { ArrayValue } from './components/values/ArrayValue';
@@ -57,6 +58,7 @@ import {
   isCustomPrimitive,
   needsNewRepresentation
 } from './utils/altLangs';
+import { schemeToString } from './utils/scheme';
 class AssertionError extends Error {
   constructor(msg?: string) {
     super(msg);
@@ -583,6 +585,19 @@ export function getControlItemComponent(
     ? index === Math.min(Layout.control.size() - 1, 9)
     : index === Layout.control.size() - 1;
   if (!isInstr(controlItem)) {
+    if (!isNode(controlItem)) {
+      // at the moment, the only non-node and non-instruction control items are
+      // literals from scheme.
+      const representation = schemeToString(controlItem as any);
+      return new ControlItemComponent(
+        representation,
+        representation,
+        stackHeight,
+        highlightOnHover,
+        unhighlightOnHover,
+        topItem
+      );
+    }
     // there's no reason to provide an alternate representation
     // for a instruction.
     if (needsNewRepresentation(chapter)) {
@@ -609,11 +624,13 @@ export function getControlItemComponent(
         topItem
       );
     }
-    switch (controlItem.type) {
+
+    // at this point, the control item is a node.
+    switch ((controlItem as any).type) {
       case 'Program':
         // If the control item is the whole program
         // add {} to represent the implicit block
-        const originalText = astToString(controlItem)
+        const originalText = astToString(controlItem as any)
           .trim()
           .split('\n')
           .map(line => `\t\t${line}`)
@@ -629,7 +646,9 @@ export function getControlItemComponent(
         );
       case 'Literal':
         const textL =
-          typeof controlItem.value === 'string' ? `"${controlItem.value}"` : controlItem.value;
+          typeof (controlItem as any).value === 'string'
+            ? `"${(controlItem as any).value}"`
+            : (controlItem as any).value;
         return new ControlItemComponent(
           textL,
           String(textL),
@@ -639,7 +658,7 @@ export function getControlItemComponent(
           topItem
         );
       default:
-        const text = astToString(controlItem).trim();
+        const text = astToString(controlItem as any).trim();
         return new ControlItemComponent(
           text,
           text,
