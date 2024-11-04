@@ -29,6 +29,7 @@ import { isNode } from './components/ControlStack';
 import { Frame } from './components/Frame';
 import { StashItemComponent } from './components/StashItemComponent';
 import { ArrayValue } from './components/values/ArrayValue';
+import { ContValue } from './components/values/ContValue';
 import { FnValue } from './components/values/FnValue';
 import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { Value } from './components/values/Value';
@@ -58,7 +59,7 @@ import {
   isCustomPrimitive,
   needsNewRepresentation
 } from './utils/altLangs';
-import { schemeToString } from './utils/scheme';
+import { isContinuation, schemeToString } from './utils/scheme';
 class AssertionError extends Error {
   constructor(msg?: string) {
     super(msg);
@@ -235,6 +236,13 @@ export function setDifference<T>(set1: Set<T>, set2: Set<T>) {
  * always prioritised over array units.
  */
 export function isMainReference(value: Value, reference: ReferenceType) {
+  /*
+  if (isContinuation(value.data)) {
+    return (
+      reference instanceof Binding &&
+      isEnvEqual(reference.frame.environment, value.data.getEnv()[0])
+    );
+  }*/
   if (isGlobalFn(value.data)) {
     return (
       reference instanceof Binding &&
@@ -865,12 +873,12 @@ export function getStashItemComponent(
   index: number,
   _chapter: Chapter
 ): StashItemComponent {
-  let arrowTo: ArrayValue | FnValue | GlobalFnValue | undefined;
-  if (isFunction(stashItem) || isDataArray(stashItem)) {
+  let arrowTo: ArrayValue | FnValue | GlobalFnValue | ContValue | undefined;
+  if (isFunction(stashItem) || isDataArray(stashItem || isContinuation(stashItem))) {
     if (isClosure(stashItem) || isDataArray(stashItem)) {
       arrowTo = Layout.values.get(stashItem.id) as ArrayValue | FnValue;
     } else {
-      arrowTo = Layout.values.get(stashItem) as FnValue | GlobalFnValue;
+      arrowTo = Layout.values.get(stashItem) as FnValue | GlobalFnValue | ContValue;
     }
   }
   return new StashItemComponent(stashItem, stackHeight, index, arrowTo);
