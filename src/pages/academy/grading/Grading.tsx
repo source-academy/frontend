@@ -7,6 +7,7 @@ import SessionActions from 'src/commons/application/actions/SessionActions';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
+import { getAllGradingOverviews } from 'src/commons/sagas/RequestsSaga';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
@@ -58,6 +59,10 @@ const Grading: React.FC = () => {
   const allColsSortStates = useTypedSelector(state => state.workspaces.grading.allColsSortStates);
   const hasLoadedBefore = useTypedSelector(state => state.workspaces.grading.hasLoadedBefore);
   const requestCounter = useTypedSelector(state => state.workspaces.grading.requestCounter);
+  const tokens = useTypedSelector(state => ({
+    accessToken: state.session.accessToken || 'Invalid',
+    refreshToken: state.session.refreshToken || 'Invalid'
+  }));
 
   const isLoading = useMemo(() => requestCounter > 0, [requestCounter]);
 
@@ -165,7 +170,9 @@ const Grading: React.FC = () => {
                 <Button
                   minimal
                   icon={IconNames.EXPORT}
-                  onClick={() => exportGradingCSV(gradingOverviews.data)}
+                  onClick={() => {
+                    getAllGradingOverviews(tokens).then(resp => exportGradingCSV(resp?.data));
+                  }}
                   className="export-csv-btn"
                 >
                   Export to CSV
