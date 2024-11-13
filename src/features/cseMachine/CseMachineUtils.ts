@@ -875,10 +875,10 @@ export function getStashItemComponent(
 ): StashItemComponent {
   let arrowTo: ArrayValue | FnValue | GlobalFnValue | ContValue | undefined;
   if (isFunction(stashItem) || isDataArray(stashItem || isContinuation(stashItem))) {
-    if (isClosure(stashItem) || isDataArray(stashItem)) {
-      arrowTo = Layout.values.get(stashItem.id) as ArrayValue | FnValue;
+    if (isClosure(stashItem) || isDataArray(stashItem) || isContinuation(stashItem)) {
+      arrowTo = Layout.values.get(stashItem.id) as ArrayValue | FnValue | ContValue;
     } else {
-      arrowTo = Layout.values.get(stashItem) as FnValue | GlobalFnValue | ContValue;
+      arrowTo = Layout.values.get(stashItem) as FnValue | GlobalFnValue;
     }
   }
   return new StashItemComponent(stashItem, stackHeight, index, arrowTo);

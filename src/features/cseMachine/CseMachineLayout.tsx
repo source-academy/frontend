@@ -378,7 +378,7 @@ export class Layout {
       return new PrimitiveValue(data, reference);
     } else {
       const existingValue = Layout.values.get(
-        isBuiltInFn(data) || isStreamFn(data) || isContinuation(data) ? data : data.id
+        isBuiltInFn(data) || isStreamFn(data) ? data : data.id
       );
       if (existingValue) {
         existingValue.addReference(reference);
