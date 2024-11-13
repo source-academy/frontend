@@ -23,7 +23,7 @@ export class ArrowFromFn extends GenericArrow<FnValue | GlobalFnValue | ContValu
         this.source instanceof ContValue
           ? [x + Config.FnRadius * 2, y]
           : [x + Config.FnRadius * 3, y],
-      (x, y) => 
+      (x, y) =>
         this.source instanceof ContValue
           ? [x, to.y() + Config.FnRadius]
           : [x, y - Config.FnRadius * 2],
