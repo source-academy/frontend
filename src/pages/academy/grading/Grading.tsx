@@ -59,10 +59,8 @@ const Grading: React.FC = () => {
   const allColsSortStates = useTypedSelector(state => state.workspaces.grading.allColsSortStates);
   const hasLoadedBefore = useTypedSelector(state => state.workspaces.grading.hasLoadedBefore);
   const requestCounter = useTypedSelector(state => state.workspaces.grading.requestCounter);
-  const tokens = useTypedSelector(state => ({
-    accessToken: state.session.accessToken || 'Invalid',
-    refreshToken: state.session.refreshToken || 'Invalid'
-  }));
+  const accessToken = useTypedSelector(state => state.session.accessToken);
+  const refreshToken = useTypedSelector(state => state.session.refreshToken);
 
   const isLoading = useMemo(() => requestCounter > 0, [requestCounter]);
 
@@ -171,6 +169,10 @@ const Grading: React.FC = () => {
                   minimal
                   icon={IconNames.EXPORT}
                   onClick={() => {
+                    const tokens = {
+                      accessToken: accessToken!,
+                      refreshToken: refreshToken!
+                    };
                     getAllGradingOverviews(tokens).then(resp => exportGradingCSV(resp?.data));
                   }}
                   className="export-csv-btn"
