@@ -3,15 +3,20 @@ import { _Symbol } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/bas
 import { SchemeNumber } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/core-math';
 import { estreeDecode } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/encoder-visitor';
 import { unparse } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/reverse_parser';
+import { List, Pair } from 'js-slang/dist/stdlib/list';
 import { Node } from 'js-slang/dist/types';
 
 import { Continuation } from './scheme';
-
 export { Continuation } from 'js-slang/dist/cse-machine/continuations';
 
-/** Returns `true` if `data` is a scheme number
- * TODO: make this less hacky.
- */
+export function isPair(data: any): data is Pair<any, any> {
+  return data instanceof Array && data.length === 2;
+}
+
+export function isList(data: any): data is List {
+  return data === null || (isPair(data) && isList(data[1]));
+}
+
 export function isSchemeNumber(data: any): data is SchemeNumber {
   return (data as any)?.numberType !== undefined;
 }

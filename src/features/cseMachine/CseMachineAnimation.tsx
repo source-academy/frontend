@@ -1,11 +1,9 @@
-import { _Symbol } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/base';
 import { AppInstr, ArrLitInstr, AssmtInstr, InstrType } from 'js-slang/dist/cse-machine/types';
 import { Node } from 'js-slang/dist/types';
 import { Layer } from 'konva/lib/Layer';
 import { Easings } from 'konva/lib/Tween';
 import React from 'react';
 
-import { is_list } from '../dataVisualizer/list';
 import { ArrayAccessAnimation } from './animationComponents/ArrayAccessAnimation';
 import { ArrayAssignmentAnimation } from './animationComponents/ArrayAssignmentAnimation';
 import { AssignmentAnimation } from './animationComponents/AssignmentAnimation';
@@ -28,6 +26,7 @@ import { ArrayValue } from './components/values/ArrayValue';
 import CseMachine from './CseMachine';
 import { Layout } from './CseMachineLayout';
 import { isBuiltInFn, isInstr, isStreamFn } from './CseMachineUtils';
+import { isList, isSymbol } from './utils/scheme';
 
 export class CseAnimation {
   static readonly animations: Animatable[] = [];
@@ -300,17 +299,17 @@ export class CseAnimation {
         );
       }
       // 2. The value is a symbol. (lookup, control -> stash)
-      else if (lastControlItem instanceof _Symbol) {
+      else if (isSymbol(lastControlItem)) {
         CseAnimation.animations.push(
           // we ignore the possibility of macros for now.
           new ControlToStashAnimation(lastControlComponent, currStashComponent!)
         );
       }
       // 3. The value is a list. (control -> control)
-      else if (is_list(lastControlItem)) {
+      else if (isList(lastControlItem)) {
         // base our decision on the first element of the list.
         const firstElement = (lastControlItem as any)[0];
-        if (firstElement instanceof _Symbol) {
+        if (isSymbol(firstElement)) {
           switch (firstElement.sym) {
             case 'lambda':
             case 'define':
