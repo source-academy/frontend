@@ -88,7 +88,7 @@ export class Layout {
    * memoized values, where keys are either ids for arrays and closures,
    * or the function objects themselves for built-in functions and stream functions
    */
-  static values = new Map<string | (() => any) | Continuation, Value>();
+  static values = new Map<string | (() => any), Value>();
 
   /** memoized layout */
   static prevLayout: React.ReactNode;
@@ -404,8 +404,7 @@ export class Layout {
     data: GlobalFn | NonGlobalFn | StreamFn | Continuation | DataArray,
     value: Value
   ) {
-    if (isBuiltInFn(data) || isStreamFn(data) || isContinuation(data))
-      Layout.values.set(data, value);
+    if (isBuiltInFn(data) || isStreamFn(data)) Layout.values.set(data, value);
     else Layout.values.set((data as any).id, value);
   }
 

@@ -287,8 +287,7 @@ export class CseAnimation {
       }
     } else {
       // these are either scheme lists or values.
-      // There are 4 cases.
-      // 1. The value is a number, boolean, string or null. (control -> stash)
+      // The value is a number, boolean, string or null. (control -> stash)
       if (
         lastControlItem === null ||
         typeof lastControlItem === 'number' ||
@@ -299,14 +298,13 @@ export class CseAnimation {
           new ControlToStashAnimation(lastControlComponent, currStashComponent!)
         );
       }
-      // 2. The value is a symbol. (lookup, control -> stash)
+      // The value is a symbol. (lookup, control -> stash)
       else if (lastControlItem instanceof _Symbol) {
         CseAnimation.animations.push(
-          // we ignore the possibility of macros for now.
           new ControlToStashAnimation(lastControlComponent, currStashComponent!)
         );
       }
-      // 3. The value is a list. (control -> control)
+      // The value is a list. (control -> control)
       else if (is_list(lastControlItem)) {
         // base our decision on the first element of the list.
         const firstElement = (lastControlItem as any)[0];
@@ -338,7 +336,8 @@ export class CseAnimation {
             case 'syntax-rules':
             // nothing.
             default:
-              // it's probably an application.
+              // it's probably an application, or a macro expansion.
+              // either way, it's a control -> control expansion.
               CseAnimation.animations.push(
                 new ControlExpansionAnimation(
                   lastControlComponent,
@@ -353,14 +352,6 @@ export class CseAnimation {
             new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())
           );
         }
-      }
-      // 4. The value is a dotted list. (control -> control)
-      else if (Array.isArray(lastControlItem)) {
-        // it's probably an error,
-        // but we can treat it as a control expansion.
-        CseAnimation.animations.push(
-          new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())
-        );
       }
       return;
     }
