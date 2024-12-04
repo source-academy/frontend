@@ -236,13 +236,12 @@ export function setDifference<T>(set1: Set<T>, set2: Set<T>) {
  * always prioritised over array units.
  */
 export function isMainReference(value: Value, reference: ReferenceType) {
-  /*
   if (isContinuation(value.data)) {
     return (
       reference instanceof Binding &&
       isEnvEqual(reference.frame.environment, value.data.getEnv()[0])
     );
-  }*/
+  }
   if (isGlobalFn(value.data)) {
     return (
       reference instanceof Binding &&
