@@ -4,12 +4,13 @@ import { StepsArray } from '../../CseMachineTypes';
 import { Frame } from '../Frame';
 import { StashItemComponent } from '../StashItemComponent';
 import { ArrayValue } from '../values/ArrayValue';
+import { ContValue } from '../values/ContValue';
 import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */
 export class ArrowFromStashItemComponent extends GenericArrow<
   StashItemComponent,
-  Frame | FnValue | GlobalFnValue | ArrayValue
+  Frame | FnValue | GlobalFnValue | ArrayValue | ContValue
 > {
   protected calculateSteps() {
     const from = this.source;

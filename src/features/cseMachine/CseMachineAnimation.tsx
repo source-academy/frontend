@@ -25,7 +25,8 @@ import { Frame } from './components/Frame';
 import { ArrayValue } from './components/values/ArrayValue';
 import CseMachine from './CseMachine';
 import { Layout } from './CseMachineLayout';
-import { isBuiltInFn, isStreamFn } from './CseMachineUtils';
+import { isBuiltInFn, isInstr, isStreamFn } from './CseMachineUtils';
+import { isList, isSymbol } from './utils/scheme';
 
 export class CseAnimation {
   static readonly animations: Animatable[] = [];
@@ -153,7 +154,7 @@ export class CseAnimation {
     }
     if (isNode(lastControlItem)) {
       CseAnimation.handleNode(lastControlItem);
-    } else {
+    } else if (isInstr(lastControlItem)) {
       switch (lastControlItem.instrType) {
         case InstrType.APPLICATION:
           const appInstr = lastControlItem as AppInstr;
@@ -283,6 +284,75 @@ export class CseAnimation {
         case InstrType.RESET:
           break;
       }
+    } else {
+      // these are either scheme lists or values.
+      // The value is a number, boolean, string or null. (control -> stash)
+      if (
+        lastControlItem === null ||
+        typeof lastControlItem === 'number' ||
+        typeof lastControlItem === 'boolean' ||
+        typeof lastControlItem === 'string'
+      ) {
+        CseAnimation.animations.push(
+          new ControlToStashAnimation(lastControlComponent, currStashComponent!)
+        );
+      }
+      // The value is a symbol. (lookup, control -> stash)
+      else if (isSymbol(lastControlItem)) {
+        CseAnimation.animations.push(
+          new ControlToStashAnimation(lastControlComponent, currStashComponent!)
+        );
+      }
+      // The value is a list. (control -> control)
+      else if (isList(lastControlItem)) {
+        // base our decision on the first element of the list.
+        const firstElement = (lastControlItem as any)[0];
+        if (isSymbol(firstElement)) {
+          switch (firstElement.sym) {
+            case 'lambda':
+            case 'define':
+            case 'set!':
+            case 'if':
+            case 'begin':
+              CseAnimation.animations.push(
+                new ControlExpansionAnimation(
+                  lastControlComponent,
+                  CseAnimation.getNewControlItems()
+                )
+              );
+              break;
+            case 'quote':
+              CseAnimation.animations.push(
+                new ControlToStashAnimation(lastControlComponent, currStashComponent!)
+              );
+              break;
+            case 'define-syntax':
+              // undefined was pushed onto the stash.
+              CseAnimation.animations.push(
+                new ControlToStashAnimation(lastControlComponent, currStashComponent!)
+              );
+              break;
+            case 'syntax-rules':
+            // nothing.
+            default:
+              // it's probably an application, or a macro expansion.
+              // either way, it's a control -> control expansion.
+              CseAnimation.animations.push(
+                new ControlExpansionAnimation(
+                  lastControlComponent,
+                  CseAnimation.getNewControlItems()
+                )
+              );
+              break;
+          }
+        } else {
+          // it's probably an application.
+          CseAnimation.animations.push(
+            new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())
+          );
+        }
+      }
+      return;
     }
   }
 

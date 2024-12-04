@@ -16,6 +16,7 @@ import {
   isPrimitiveData,
   isUnassigned
 } from '../CseMachineUtils';
+import { isContinuation } from '../utils/scheme';
 import { ArrowFromFrame } from './arrows/ArrowFromFrame';
 import { GenericArrow } from './arrows/GenericArrow';
 import { Binding } from './Binding';
@@ -124,7 +125,7 @@ export class Frame extends Visible implements IHoverable {
       const value = unreferencedValues[i];
       if (isDataArray(value)) {
         for (const data of value) {
-          if ((isDataArray(data) && data !== value) || isClosure(data)) {
+          if ((isDataArray(data) && data !== value) || isClosure(data) || isContinuation(data)) {
             const prev = unreferencedValues.findIndex(value => value.id === data.id);
             if (prev > -1) {
               unreferencedValues.splice(prev, 1);

@@ -6,12 +6,12 @@ import { isSchemeLanguage } from 'src/commons/application/ApplicationTypes';
 
 import { ControlItemComponent } from '../components/ControlItemComponent';
 import { Data } from '../CseMachineTypes';
-import { convertNodeToScheme, isSchemeNumber } from './scheme';
+import { convertNodeToScheme, isSchemeNumber, isSymbol } from './scheme';
 
 // used to define custom primitives from alternate languages.
 // MAKE SURE the custom primitive has a toString() method!
 export function isCustomPrimitive(data: Data): boolean {
-  return isSchemeNumber(data);
+  return isSchemeNumber(data) || isSymbol(data);
 }
 
 // tells the CSE machine whether a new representation is needed.
