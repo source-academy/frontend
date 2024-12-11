@@ -31,24 +31,31 @@ const NusLogin: React.FC = () => {
   return (
     <div className={classes['container']}>
       <div className={classNames('col-lg-8', 'hidden-xs', classes['unpadded'])}>
-        <img className={classes['logo']} src={BLUE_BG} alt="nusInfoBackgroundImg" />
+        <img className={classes['background']} src={BLUE_BG} alt="nusInfoBackgroundImg" />
       </div>
       <div className={classNames('col-xs-12 col-lg-4', classes['unpadded'])}>
-        <div className={classNames('row', classes['row'])}>
-          <Card className={classes['header']} elevation={Elevation.ZERO}>
+        <Card
+          className={classNames('row center-xs', classes['row'], classes['header'])}
+          elevation={Elevation.ZERO}
+        >
+          <div className={classNames('col-lg-6 col-sm-3 col-xs-5', classes['logo'])}>
             <a
-              className={classes['logo']}
+              className={classes['logo-link']}
               href="https://www.nus.edu.sg"
               target="_blank"
               rel="noopener noreferer nofollow"
             >
-              <img className={classes['logo']} src={NUS_LOGO} alt="NUS" />
+              <img src={NUS_LOGO} alt="NUS" />
             </a>
-            <Divider style={{ height: '100%' }} />
-            <img className={classes['logo']} src={sourceAcademyLogo} alt="Source Academy" />
-            <H3 style={{ marginBottom: 0 }}>{Constants.sourceAcademyDeploymentName}</H3>
-          </Card>
-        </div>
+          </div>
+          <Divider style={{ height: '100%' }} />
+          <div className={classNames('col-lg-5 col-sm-3 col-xs-5', classes['logo'])}>
+            <img src={sourceAcademyLogo} alt="Source Academy" />
+            <H3 style={{ marginBottom: 0, alignSelf: 'center' }}>
+              {Constants.sourceAcademyDeploymentName}
+            </H3>
+          </div>
+        </Card>
         <div className={classNames('row', classes['row'])} style={{ height: '100%' }}>
           <Card
             className={classNames(classes['text-center'], classes['body'])}
