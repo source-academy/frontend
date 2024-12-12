@@ -230,7 +230,7 @@ export function setDifference<T>(set1: Set<T>, set2: Set<T>) {
  * order is the first binding or array unit which shares the same environment with `value`.
  *
  * An exception is for a global function value, in which case the global frame binding is
- * always prioritised over array units.
+ * always prioritised over other bindings or array units.
  */
 export function isMainReference(value: Value, reference: ReferenceType) {
   if (isGlobalFn(value.data)) {
@@ -433,8 +433,8 @@ export function getNonEmptyEnv(environment: Env): Env {
 
 /** Returns whether the given environments `env1` and `env2` refer to the same environment. */
 export function isEnvEqual(env1: Env, env2: Env): boolean {
-  // Cannot check env references because of deep cloning and the step after where
-  // property descriptors are copied over, so can only check id
+  // Cannot check env references because of partial cloning of environment tree,
+  // so we can only check id
   return env1.id === env2.id;
 }
 
@@ -609,16 +609,13 @@ export function getControlItemComponent(
         topItem
       );
     }
+
     switch (controlItem.type) {
       case 'Program':
         // If the control item is the whole program
         // add {} to represent the implicit block
-        const originalText = astToString(controlItem)
-          .trim()
-          .split('\n')
-          .map(line => `\t\t${line}`)
-          .join('\n');
-        const textP = `{\n${originalText}\n}`;
+        const originalText = astToString(controlItem).trim().replaceAll('\n', '\n\t\t');
+        const textP = `{\n\t\t${originalText}\n}`;
         return new ControlItemComponent(
           textP,
           textP,
@@ -857,11 +854,16 @@ export function getStashItemComponent(
   return new StashItemComponent(stashItem, stackHeight, index, arrowTo);
 }
 
-// Helper function to get environment ID. Accounts for the hidden prelude environment right
-// after the global environment. Does not need to be used for frame environments, only for
-// environments from the context.
+// Helper function to get environment ID.
+// Accounts for the hidden prelude environment and empty environments.
 export const getEnvId = (environment: Environment): string => {
-  return environment.name === 'prelude' ? environment.tail!.id : environment.id;
+  while (
+    environment.tail &&
+    (environment.name === 'prelude' || Object.keys(environment.head).length === 0)
+  ) {
+    environment = environment.tail;
+  }
+  return environment.id;
 };
 
 // Function that returns whether the stash item will be popped off in the next step
