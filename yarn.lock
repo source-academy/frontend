@@ -8862,10 +8862,10 @@ js-sdsl@4.3.0:
   resolved "https://registry.yarnpkg.com/js-sdsl/-/js-sdsl-4.3.0.tgz#aeefe32a451f7af88425b11fdb5f58c90ae1d711"
   integrity sha512-mifzlm2+5nZ+lEcLJMoBK0/IH/bDg8XnJfd/Wq6IP+xoCjLZsTOnV2QpxlVbX9bMnkl5PdEjNtBJ9Cj1NjifhQ==
 
-js-slang@^1.0.76:
-  version "1.0.76"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.76.tgz#5f2827b85b80880c5777913dbbac3f6b03f233e2"
-  integrity sha512-Ue/2aXJ7zwRCObW//aouHeqJMaP9110/5bcTBJ+jWF/EWnn3IXzh93CzR5bxsuYwGp6EYqLDSkSsxlmnZuDFFw==
+js-slang@^1.0.77:
+  version "1.0.77"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-1.0.77.tgz#d5dec0869705fc4d8891803d9f1c5e314afec896"
+  integrity sha512-PvjqxL2EsMLiyiBHWE4FXUPxzKc5ib41N1QVYLEO3s5UIcLElFs8zRYRvUG/r28Ot9sVINVzcThV4AI1rI2BbQ==
   dependencies:
     "@babel/parser" "^7.19.4"
     "@commander-js/extra-typings" "^12.0.1"
@@ -9041,9 +9041,9 @@ jsprim@^1.2.2:
     object.assign "^4.1.3"
 
 katex@^0.16.0:
-  version "0.16.10"
-  resolved "https://registry.yarnpkg.com/katex/-/katex-0.16.10.tgz#6f81b71ac37ff4ec7556861160f53bc5f058b185"
-  integrity sha512-ZiqaC04tp2O5utMsl2TEZTXxa6WSC4yo0fv5ML++D3QZv/vx2Mct0mTlRx3O+uUkjfuAgOkzsCmq5MiUEsDDdA==
+  version "0.16.21"
+  resolved "https://registry.yarnpkg.com/katex/-/katex-0.16.21.tgz#8f63c659e931b210139691f2cc7bb35166b792a3"
+  integrity sha512-XvqR7FgOHtWupfMiigNzmh+MgUVmDGU2kXZm899ZkPfcuoPuFxyHmXsgATDpFZDAXCI8tvinaVcDo8PIIJSo4A==
   dependencies:
     commander "^8.3.0"
 
