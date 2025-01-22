@@ -31,6 +31,15 @@ export const selectMode = (chapter: Chapter, variant: Variant, library: string) 
   ModeSelector(chapter, variant, library);
 };
 
+import 'ace-builds/src-noconflict/mode-c_cpp';
+import 'ace-builds/src-noconflict/mode-html';
+import 'ace-builds/src-noconflict/mode-java';
+import 'ace-builds/src-noconflict/mode-javascript';
+import 'ace-builds/src-noconflict/mode-python';
+import 'ace-builds/src-noconflict/mode-scheme';
+import 'ace-builds/src-noconflict/mode-typescript';
+import 'js-slang/dist/editors/ace/theme/source';
+
 export const getModeString = (chapter: Chapter, variant: Variant, library: string) => {
   // TODO: Create our own highlighting rules for the different sublanguages
   switch (chapter) {

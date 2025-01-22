@@ -35,8 +35,13 @@ const AchievementControl: React.FC = () => {
     [dispatch]
   );
 
-  const inferencer = useTypedSelector(
-    state => new AchievementInferencer(state.achievement.achievements, state.achievement.goals)
+  const [initialAchievements, initialGoals] = useTypedSelector(state => [
+    state.achievement.achievements,
+    state.achievement.goals
+  ]);
+  const inferencer = useMemo(
+    () => new AchievementInferencer(initialAchievements, initialGoals),
+    [initialAchievements, initialGoals]
   );
 
   /**
