@@ -1,21 +1,24 @@
-import { Button, Icon as BpIcon } from '@blueprintjs/core';
+import { Button, Icon, Position, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Flex, Icon } from '@tremor/react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { ProgressStatus, ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
+import GradingFlex from 'src/commons/grading/GradingFlex';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession } from 'src/commons/utils/Hooks';
 
 type Props = {
   submissionId: number;
+  style?: React.CSSProperties;
   progress: ProgressStatus;
+  filterMode: boolean;
 };
 
-const GradingActions: React.FC<Props> = ({ submissionId, progress }) => {
+const GradingActions: React.FC<Props> = ({ submissionId, style, progress, filterMode }) => {
   const dispatch = useDispatch();
-  const courseId = useTypedSelector(store => store.session.courseId);
+  const { courseId } = useSession();
 
   const handleReautogradeClick = async () => {
     const confirm = await showSimpleConfirmDialog({
@@ -66,46 +69,68 @@ const GradingActions: React.FC<Props> = ({ submissionId, progress }) => {
     }
   };
 
+  const isGraded = progress === ProgressStatuses.graded;
+  const isSubmitted = progress === ProgressStatuses.submitted;
+  const isPublished = progress === ProgressStatuses.published;
+
   return (
-    <Flex justifyContent="justify-start" spaceX="space-x-2">
-      <Link to={`/courses/${courseId}/grading/${submissionId}`}>
-        <Icon tooltip="Grade" icon={() => <BpIcon icon={IconNames.EDIT} />} variant="light" />
-      </Link>
+    <GradingFlex
+      justifyContent="flex-start"
+      className="grading-actions-btn-wrappers"
+      style={{ columnGap: '5px', ...style }}
+    >
+      {filterMode && (
+        <Link to={`/courses/${courseId}/grading/${submissionId}`}>
+          <GradingFlex alignItems="center" className="grading-action-icons grading-action-icons-bg">
+            <Tooltip position={Position.TOP} content="Grade">
+              <Icon icon={IconNames.EDIT} />
+            </Tooltip>
+          </GradingFlex>
+        </Link>
+      )}
 
-      <button
-        type="button"
-        style={{ padding: 0 }}
-        hidden={progress !== ProgressStatuses.graded && progress !== ProgressStatuses.submitted}
-        onClick={handleReautogradeClick}
-      >
-        <Icon
-          tooltip="Reautograde"
-          icon={() => <BpIcon icon={IconNames.REFRESH} />}
-          variant="simple"
-        />
-      </button>
+      {(isGraded || isSubmitted) && (
+        <Button
+          className="grading-action-icons"
+          minimal
+          style={{ padding: 0 }}
+          onClick={handleReautogradeClick}
+        >
+          <Tooltip position={Position.TOP} content="Reautograde">
+            <Icon icon={IconNames.REFRESH} />
+          </Tooltip>
+        </Button>
+      )}
 
-      <button
-        type="button"
-        style={{ padding: 0 }}
-        hidden={progress !== ProgressStatuses.graded && progress !== ProgressStatuses.submitted}
-        onClick={handleUnsubmitClick}
-      >
-        <Icon tooltip="Unsubmit" icon={() => <BpIcon icon={IconNames.UNDO} />} variant="simple" />
-      </button>
+      {(isGraded || isSubmitted) && (
+        <Button
+          className="grading-action-icons"
+          minimal
+          style={{ padding: 0 }}
+          onClick={handleUnsubmitClick}
+        >
+          <Tooltip position={Position.TOP} content="Unsubmit">
+            <Icon icon={IconNames.UNDO} />
+          </Tooltip>
+        </Button>
+      )}
 
-      <Button
-        onClick={handlePublishClick}
-        hidden={progress !== ProgressStatuses.graded}
-        text={'Publish'}
-      />
+      {isGraded && (
+        <Button className="grading-action-icons" minimal onClick={handlePublishClick}>
+          <Tooltip position={Position.TOP} content="Publish">
+            <Icon icon={IconNames.SEND_TO_GRAPH} />
+          </Tooltip>
+        </Button>
+      )}
 
-      <Button
-        onClick={handleUnpublishClick}
-        hidden={progress !== ProgressStatuses.published}
-        text={'Unpublish'}
-      />
-    </Flex>
+      {isPublished && (
+        <Button className="grading-action-icons" minimal onClick={handleUnpublishClick}>
+          <Tooltip position={Position.TOP} content="Unpublish">
+            <Icon icon={IconNames.EXCLUDE_ROW} />
+          </Tooltip>
+        </Button>
+      )}
+    </GradingFlex>
   );
 };
 

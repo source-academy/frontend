@@ -1,8 +1,9 @@
 import { Dispatch, Store } from '@reduxjs/toolkit';
 import { Router } from '@remix-run/router';
-import { act, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import { Chapter } from 'js-slang/dist/types';
+import { act } from 'react';
 import { Provider } from 'react-redux';
 import { createMemoryRouter, RouteObject, RouterProvider } from 'react-router';
 import {

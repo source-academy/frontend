@@ -4,8 +4,13 @@ import {
   paginationToBackendParams,
   unpublishedToBackendParams
 } from 'src/features/grading/GradingUtils';
+import { freshSortState } from 'src/pages/academy/grading/subcomponents/GradingSubmissionsTable';
 
-import { GradingOverviews, GradingQuery } from '../../../../features/grading/GradingTypes';
+import {
+  ColumnFields,
+  GradingOverviews,
+  GradingQuery
+} from '../../../../features/grading/GradingTypes';
 import { TeamFormationOverview } from '../../../../features/teamFormation/TeamFormationTypes';
 import {
   Assessment,
@@ -89,7 +94,8 @@ test('fetchGradingOverviews generates correct default action object', () => {
       filterToGroup: true,
       publishedFilter: unpublishedToBackendParams(false),
       pageParams: paginationToBackendParams(0, 10),
-      filterParams: {}
+      filterParams: {},
+      allColsSortStates: { currentState: freshSortState, sortBy: '' }
     }
   });
 });
@@ -99,11 +105,13 @@ test('fetchGradingOverviews generates correct action object', () => {
   const publishedFilter = unpublishedToBackendParams(true);
   const pageParams = { offset: 123, pageSize: 456 };
   const filterParams = { abc: 'xxx', def: 'yyy' };
+  const allColsSortStates = { currentState: freshSortState, sortBy: ColumnFields.assessmentName };
   const action = SessionActions.fetchGradingOverviews(
     filterToGroup,
     publishedFilter,
     pageParams,
-    filterParams
+    filterParams,
+    allColsSortStates
   );
   expect(action).toEqual({
     type: SessionActions.fetchGradingOverviews.type,
@@ -111,7 +119,8 @@ test('fetchGradingOverviews generates correct action object', () => {
       filterToGroup: filterToGroup,
       publishedFilter: publishedFilter,
       pageParams: pageParams,
-      filterParams: filterParams
+      filterParams: filterParams,
+      allColsSortStates: allColsSortStates
     }
   });
 });
@@ -475,7 +484,8 @@ test('updateAssessmentOverviews generates correct action object', () => {
       xp: 0,
       isGradingPublished: false,
       maxTeamSize: 1,
-      hasVotingFeatures: false
+      hasVotingFeatures: false,
+      hoursBeforeEarlyXpDecay: 0
     }
   ];
   const action = SessionActions.updateAssessmentOverviews(overviews);

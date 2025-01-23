@@ -1,4 +1,5 @@
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import { act } from 'react';
 import { Route, Routes } from 'react-router';
 import { StaticRouter } from 'react-router-dom/server';
 

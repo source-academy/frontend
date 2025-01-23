@@ -12,6 +12,7 @@ import { ControlStack } from './components/ControlStack';
 import { Level } from './components/Level';
 import { StashStack } from './components/StashStack';
 import { ArrayValue } from './components/values/ArrayValue';
+import { ContValue } from './components/values/ContValue';
 import { FnValue } from './components/values/FnValue';
 import { GlobalFnValue } from './components/values/GlobalFnValue';
 import { PrimitiveValue } from './components/values/PrimitiveValue';
@@ -46,6 +47,7 @@ import {
   isUnassigned,
   setDifference
 } from './CseMachineUtils';
+import { Continuation, isContinuation, isSchemeNumber, isSymbol } from './utils/scheme';
 
 /** this class encapsulates the logic for calculating the layout */
 export class Layout {
@@ -374,6 +376,8 @@ export class Layout {
       return new UnassignedValue(reference);
     } else if (isPrimitiveData(data)) {
       return new PrimitiveValue(data, reference);
+    } else if (isSymbol(data) || isSchemeNumber(data)) {
+      return new PrimitiveValue(data, reference);
     } else {
       const existingValue = Layout.values.get(
         isBuiltInFn(data) || isStreamFn(data) ? data : data.id
@@ -385,6 +389,8 @@ export class Layout {
 
       if (isDataArray(data)) {
         return new ArrayValue(data, reference);
+      } else if (isContinuation(data)) {
+        return new ContValue(data, reference);
       } else if (isGlobalFn(data)) {
         assert(reference instanceof Binding);
         return new GlobalFnValue(data, reference);
@@ -396,9 +402,12 @@ export class Layout {
     }
   }
 
-  static memoizeValue(data: GlobalFn | NonGlobalFn | StreamFn | DataArray, value: Value) {
+  static memoizeValue(
+    data: GlobalFn | NonGlobalFn | StreamFn | Continuation | DataArray,
+    value: Value
+  ) {
     if (isBuiltInFn(data) || isStreamFn(data)) Layout.values.set(data, value);
-    else Layout.values.set(data.id, value);
+    else Layout.values.set((data as any).id, value);
   }
 
   /**

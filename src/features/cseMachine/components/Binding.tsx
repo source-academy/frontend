@@ -9,6 +9,7 @@ import { GenericArrow } from './arrows/GenericArrow';
 import { Frame } from './Frame';
 import { Text } from './Text';
 import { ArrayValue } from './values/ArrayValue';
+import { ContValue } from './values/ContValue';
 import { FnValue } from './values/FnValue';
 import { GlobalFnValue } from './values/GlobalFnValue';
 import { PrimitiveValue } from './values/PrimitiveValue';
@@ -67,11 +68,11 @@ export class Binding extends Visible {
     this._width = isMainReference(this.value, this)
       ? this.value.x() -
         this.x() +
-        (this.value instanceof ArrayValue ||
-        this.value instanceof FnValue ||
-        this.value instanceof GlobalFnValue
-          ? this.value.totalWidth
-          : this.value.width())
+        (this.value instanceof FnValue ||
+        this.value instanceof GlobalFnValue ||
+        this.value instanceof ContValue
+          ? this.value.tooltipWidth
+          : 0)
       : this.key.width();
 
     this._height = Math.max(

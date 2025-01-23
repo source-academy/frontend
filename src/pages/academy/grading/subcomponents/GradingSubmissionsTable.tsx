@@ -1,157 +1,154 @@
-import '@tremor/react/dist/esm/tremor.css';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-quartz.css';
 
-import { Icon as BpIcon } from '@blueprintjs/core';
+import { Button, H6, Icon, InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import {
-  Column,
-  ColumnFilter,
-  ColumnFiltersState,
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  useReactTable
-} from '@tanstack/react-table';
-import {
-  Bold,
-  Button,
-  Flex,
-  Footer,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeaderCell,
-  TableRow,
-  Text,
-  TextInput
-} from '@tremor/react';
+import { CellClickedEvent, ColDef } from 'ag-grid-community';
+import { AgGridReact } from 'ag-grid-react';
+import classNames from 'classnames';
 import { debounce } from 'lodash';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
+import GradingFlex from 'src/commons/grading/GradingFlex';
+import GradingText from 'src/commons/grading/GradingText';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
-import { GradingOverview } from 'src/features/grading/GradingTypes';
+import {
+  ColumnFields,
+  ColumnFieldsKeys,
+  ColumnFilter,
+  ColumnFiltersState,
+  ColumnName,
+  ColumnNameKeys,
+  GradingColumnVisibility,
+  GradingSubmissionTableProps,
+  IGradingTableProperties,
+  IGradingTableRow,
+  SortStateProperties,
+  SortStates
+} from 'src/features/grading/GradingTypes';
 import { convertFilterToBackendParams } from 'src/features/grading/GradingUtils';
+import classes from 'src/styles/Grading.module.scss';
 
-import GradingActions from './GradingActions';
-import { AssessmentTypeBadge, ProgressStatusBadge } from './GradingBadges';
+import GradingColumnCustomHeaders from './GradingColumnCustomHeaders';
+import GradingColumnFilters from './GradingColumnFilters';
 import GradingSubmissionFilters from './GradingSubmissionFilters';
+import { generateCols } from './gradingSubmissionsTableUtils';
 
-const columnHelper = createColumnHelper<GradingOverview>();
-
-const makeColumns = (handleClick: () => void) => [
-  columnHelper.accessor('assessmentName', {
-    header: 'Name',
-    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
-  }),
-  columnHelper.accessor('assessmentType', {
-    header: 'Type',
-    cell: info => (
-      <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
-        <AssessmentTypeBadge type={info.getValue()} />
-      </Filterable>
-    )
-  }),
-  columnHelper.accessor('studentName', {
-    header: 'Student(s)',
-    cell: info => {
-      const value = info.getValue();
-      const fallbackValue = info.row.original.studentNames;
-      const finalValue = value || '';
-      const finalFallbackValue = fallbackValue?.join(', ') || '';
-      return (
-        <Filterable
-          onClick={handleClick}
-          column={info.column}
-          value={finalValue !== '' ? finalValue : finalFallbackValue}
-        />
-      );
-    }
-  }),
-  columnHelper.accessor('studentUsername', {
-    header: 'Username(s)',
-    cell: info => {
-      const value = info.getValue();
-      const fallbackValue = info.row.original.studentUsernames;
-      const finalValue = value || '';
-      const finalFallbackValue = fallbackValue?.join(', ') || '';
-      return (
-        <Filterable
-          onClick={handleClick}
-          column={info.column}
-          value={finalValue !== '' ? finalValue : finalFallbackValue}
-        />
-      );
-    }
-  }),
-  columnHelper.accessor('groupName', {
-    header: 'Group',
-    cell: info => <Filterable onClick={handleClick} column={info.column} value={info.getValue()} />
-  }),
-  columnHelper.accessor('progress', {
-    header: 'Progress',
-    cell: info => (
-      <Filterable onClick={handleClick} column={info.column} value={info.getValue()}>
-        <ProgressStatusBadge progress={info.getValue()} />
-      </Filterable>
-    )
-  }),
-  columnHelper.accessor(({ currentXp, xpBonus, maxXp }) => ({ currentXp, xpBonus, maxXp }), {
-    header: 'Raw XP (+Bonus)',
-    enableColumnFilter: false,
-    cell: info => {
-      const { currentXp, xpBonus, maxXp } = info.getValue();
-      return (
-        <Flex justifyContent="justify-start" spaceX="space-x-2">
-          <Text>
-            {currentXp} (+{xpBonus})
-          </Text>
-          <Text>/</Text>
-          <Text>{maxXp}</Text>
-        </Flex>
-      );
-    }
-  }),
-  columnHelper.accessor(({ submissionId, progress }) => ({ submissionId, progress }), {
-    header: 'Actions',
-    enableColumnFilter: false,
-    cell: info => {
-      const { submissionId, progress } = info.getValue();
-      return <GradingActions submissionId={submissionId} progress={progress} />;
-    }
-  })
-];
-
-type Props = {
-  totalRows: number;
-  pageSize: number;
-  submissions: GradingOverview[];
-  updateEntries: (page: number, filterParams: object) => void;
+export const getNextSortState = (current: SortStates) => {
+  switch (current) {
+    case SortStates.NONE:
+      return SortStates.ASC;
+    case SortStates.ASC:
+      return SortStates.DESC;
+    case SortStates.DESC:
+      return SortStates.NONE;
+  }
 };
 
-const GradingSubmissionTable: React.FC<Props> = ({
+export const freshSortState: SortStateProperties = {
+  assessmentName: SortStates.NONE,
+  assessmentType: SortStates.NONE,
+  studentName: SortStates.NONE,
+  studentUsername: SortStates.NONE,
+  groupName: SortStates.NONE,
+  progressStatus: SortStates.NONE,
+  xp: SortStates.NONE,
+  actionsIndex: SortStates.NONE
+};
+
+const disabledEditModeCols: string[] = [ColumnFields.actionsIndex];
+
+const disabledFilterModeCols: string[] = [ColumnFields.xp, ColumnFields.actionsIndex];
+
+const disabledSortCols: string[] = [ColumnFields.actionsIndex];
+
+const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
+  showAllSubmissions,
   totalRows,
   pageSize,
   submissions,
   updateEntries
 }) => {
   const dispatch = useDispatch();
-  const tableFilters = useTypedSelector(state => state.workspaces.grading.submissionsTableFilters);
+  const navigate = useNavigate();
 
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
-    ...tableFilters.columnFilters
-  ]);
+  const tableFilters = useTypedSelector(state => state.workspaces.grading.submissionsTableFilters);
+  const columnVisibility = useTypedSelector(state => state.workspaces.grading.columnVisiblity);
+  const requestCounter = useTypedSelector(state => state.workspaces.grading.requestCounter);
+  const courseId = useTypedSelector(store => store.session.courseId);
+
+  const gridRef = useRef<AgGridReact<IGradingTableRow>>(null);
 
   const [page, setPage] = useState(0);
-  const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
-  const resetPage = useCallback(() => setPage(0), [setPage]);
-
   /** The value to be shown in the search bar */
   const [searchQuery, setSearchQuery] = useState('');
   /** The actual value sent to the backend */
   const [searchValue, setSearchValue] = useState('');
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([
+    ...tableFilters.columnFilters
+  ]);
+  const [cellFilters, setCellFilters] = useState<{ id: ColumnFields; value: string }[]>([]);
+  const [hiddenColumns, setHiddenColumns] = useState<GradingColumnVisibility>(
+    columnVisibility ? columnVisibility : []
+  );
+  const [rowData, setRowData] = useState<IGradingTableRow[]>([]);
+  const [colDefs, setColDefs] = useState<ColDef<IGradingTableRow>[]>();
+  // This is what that controls Grading Mode. If future feedback says it's better to default to filter mode, change it here.
+  const [filterMode, setFilterMode] = useState<boolean>(false);
+
+  const isLoading = useMemo(() => requestCounter > 0, [requestCounter]);
+
+  const maxPage = useMemo(() => Math.ceil(totalRows / pageSize) - 1, [totalRows, pageSize]);
+  const resetPage = useCallback(() => setPage(0), [setPage]);
+
+  const defaultColumnDefs: ColDef = {
+    filter: false,
+    floatingFilter: true,
+    resizable: true,
+    sortable: true,
+    headerComponentParams: {
+      hideColumn: (id: ColumnNameKeys) => handleColumnFilterAdd(id),
+      updateSortState: (affectedID: ColumnNameKeys, sortDirection: SortStates) => {
+        if (!disabledSortCols.includes(affectedID)) {
+          const newState: SortStateProperties = { ...freshSortState };
+          newState[affectedID] = sortDirection;
+          dispatch(
+            WorkspaceActions.updateAllColsSortStates({
+              currentState: newState,
+              sortBy: affectedID
+            })
+          );
+        }
+      },
+      disabledSortCols: disabledSortCols
+    }
+  };
+
+  const ROW_HEIGHT: number = 60; // in px, declared here to calculate table height
+  const HEADER_HEIGHT: number = 48; // in px, declared here to calculate table height
+
+  const tableProperties: IGradingTableProperties = {
+    customComponents: {
+      agColumnHeader: GradingColumnCustomHeaders
+    },
+    defaultColDefs: defaultColumnDefs,
+    headerHeight: HEADER_HEIGHT,
+    overlayLoadingTemplate: '<div class="grading-loading-icon"></div>',
+    overlayNoRowsTemplate:
+      "Hmm... we didn't find any submissions, you might want to debug your filter() function.",
+    pageSize: pageSize,
+    pagination: true,
+    rowClass: classNames(classes['grading-left-align'], classes['grading-table-rows']),
+    rowHeight: ROW_HEIGHT,
+    suppressMenuHide: true,
+    suppressPaginationPanel: true,
+    suppressRowClickSelection: true,
+    tableMargins: '1rem 0 0 0'
+  };
+
   // Placing searchValue as a dependency for triggering a page reset will result in double-querying.
   const debouncedUpdateSearchValue = useMemo(
     () =>
@@ -161,16 +158,20 @@ const GradingSubmissionTable: React.FC<Props> = ({
       }, 300),
     [resetPage]
   );
+
   const handleSearchQueryUpdate: React.ChangeEventHandler<HTMLInputElement> = e => {
     setSearchQuery(e.target.value);
     debouncedUpdateSearchValue(e.target.value);
   };
 
+  const debouncedUpdateCellFilters = useMemo(() => debounce(setCellFilters, 300), []);
+
   // Converts the columnFilters array into backend query parameters.
   const backendFilterParams = useMemo(() => {
     const filters: Array<{ [key: string]: any }> = [
-      { id: 'assessmentName', value: searchValue },
-      ...columnFilters
+      { id: ColumnFields.assessmentName, value: searchValue },
+      ...columnFilters,
+      ...cellFilters
     ].map(convertFilterToBackendParams);
 
     const params: Record<string, any> = {};
@@ -180,24 +181,32 @@ const GradingSubmissionTable: React.FC<Props> = ({
       });
     });
     return params;
-  }, [columnFilters, searchValue]);
+  }, [cellFilters, columnFilters, searchValue]);
 
-  const columns = useMemo(() => makeColumns(resetPage), [resetPage]);
-  const table = useReactTable({
-    data: submissions,
-    columns,
-    state: {
-      columnFilters,
-      pagination: {
-        pageIndex: 0,
-        pageSize: pageSize
+  const cellClickedEvent = (event: CellClickedEvent) => {
+    const colClicked: string = event.colDef.field ? event.colDef.field : '';
+
+    if (!filterMode && !disabledEditModeCols.includes(colClicked)) {
+      navigate(`/courses/${courseId}/grading/${event.data.actionsIndex}`);
+    } else if (filterMode && !disabledFilterModeCols.includes(colClicked)) {
+      if (event.data[colClicked] === null || event.data[colClicked] === '') {
+        return;
       }
-    },
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel()
-  });
+      handleFilterAdd({ id: colClicked, value: event.data[colClicked] });
+    }
+  };
+
+  // Filter is to filter by cell value
+  const handleFilterAdd = ({ id, value }: ColumnFilter) => {
+    setColumnFilters((prev: ColumnFiltersState) => {
+      const alreadyExists = prev.reduce(
+        (acc, curr) => acc || (curr.id === id && curr.value === value),
+        false
+      );
+      return alreadyExists ? [...prev] : [...prev, { id, value }];
+    });
+    resetPage();
+  };
 
   const handleFilterRemove = ({ id, value }: ColumnFilter) => {
     const newFilters = columnFilters.filter(filter => filter.id !== id && filter.value !== value);
@@ -205,9 +214,47 @@ const GradingSubmissionTable: React.FC<Props> = ({
     resetPage();
   };
 
+  // Column Filter is to hide Columns
+  const handleColumnFilterRemove = (toRemove: string) => {
+    if (gridRef.current?.api) {
+      setHiddenColumns((prev: GradingColumnVisibility) =>
+        prev.filter(column => column !== toRemove)
+      );
+      gridRef.current.api.setColumnsVisible([toRemove], true);
+    }
+  };
+
+  const handleColumnFilterAdd = (toAdd: ColumnNameKeys) => {
+    setHiddenColumns((prev: GradingColumnVisibility) => [...prev, toAdd]);
+  };
+
   useEffect(() => {
+    if (
+      !showAllSubmissions &&
+      columnFilters.reduce(
+        (doesItContain, currentFilter) =>
+          doesItContain ||
+          (currentFilter.id === ColumnFields.progressStatus &&
+            String(currentFilter.value).toLowerCase() !== ProgressStatuses.graded &&
+            String(currentFilter.value).toLowerCase() !== ProgressStatuses.submitted),
+        false
+      )
+    ) {
+      setColumnFilters((prev: ColumnFiltersState) =>
+        prev.filter(filter => filter.id !== ColumnFields.progressStatus)
+      );
+      resetPage();
+      return;
+    }
     dispatch(WorkspaceActions.updateSubmissionsTableFilters({ columnFilters }));
-  }, [columnFilters, dispatch]);
+  }, [columnFilters, showAllSubmissions, dispatch, resetPage]);
+
+  useEffect(() => {
+    dispatch(WorkspaceActions.updateGradingColumnVisibility(hiddenColumns));
+    if (gridRef.current?.api) {
+      gridRef.current.api.setColumnsVisible(hiddenColumns, false);
+    }
+  }, [hiddenColumns, dispatch]);
 
   useEffect(() => {
     resetPage();
@@ -217,115 +264,214 @@ const GradingSubmissionTable: React.FC<Props> = ({
     updateEntries(page, backendFilterParams);
   }, [updateEntries, page, backendFilterParams]);
 
+  useEffect(() => {
+    if (gridRef.current?.api) {
+      const newData: IGradingTableRow[] = [];
+
+      const sameData: boolean = submissions.reduce((sameData, currentSubmission, index) => {
+        const newRow: IGradingTableRow = {
+          assessmentName: currentSubmission.assessmentName,
+          assessmentType: currentSubmission.assessmentType,
+          studentName: currentSubmission.studentName
+            ? currentSubmission.studentName
+            : currentSubmission.studentNames
+              ? currentSubmission.studentNames.join(', ')
+              : '',
+          studentUsername: currentSubmission.studentUsername
+            ? currentSubmission.studentUsername
+            : currentSubmission.studentUsernames
+              ? currentSubmission.studentUsernames.join(', ')
+              : '',
+          groupName: currentSubmission.groupName,
+          progressStatus: currentSubmission.progress,
+          xp:
+            currentSubmission.currentXp +
+            ' (+' +
+            currentSubmission.xpBonus +
+            ') / ' +
+            currentSubmission.maxXp,
+          actionsIndex: currentSubmission.submissionId,
+          courseID: courseId!
+        };
+        newData.push(newRow);
+        return (
+          sameData &&
+          newRow.actionsIndex === rowData?.[index]?.actionsIndex &&
+          newRow.studentUsername === rowData?.[index]?.studentUsername &&
+          newRow.groupName === rowData?.[index]?.groupName &&
+          newRow.progressStatus === rowData?.[index]?.progressStatus &&
+          newRow.xp === rowData?.[index]?.xp
+        );
+      }, submissions.length === rowData?.length);
+
+      if (!sameData) {
+        setRowData(newData);
+      }
+
+      gridRef.current!.api.hideOverlay();
+
+      if (newData.length === 0 && requestCounter <= 0) {
+        gridRef.current!.api.showNoRowsOverlay();
+      }
+    }
+    // We ignore the dependency on rowData purposely as we setRowData above.
+    // If not, it could cause a double execution, which is a bit expensive.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [requestCounter, submissions, courseId, gridRef.current?.api]);
+
+  const columns = useMemo(() => generateCols(filterMode), [filterMode]);
+
+  useEffect(() => {
+    setColDefs(columns);
+  }, [resetPage, columns]);
+
   return (
     <>
-      <Flex marginTop="mt-2" justifyContent="justify-between" alignItems="items-center">
-        <Flex alignItems="items-center" spaceX="space-x-2">
-          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', height: '1.75rem' }}>
-            <BpIcon icon={IconNames.FILTER_LIST} />
-            <Text>
-              {columnFilters.length > 0
-                ? 'Filters: '
-                : 'No filters applied. Click on any cell to filter by its value.'}{' '}
-            </Text>
-          </div>
-          <GradingSubmissionFilters filters={columnFilters} onFilterRemove={handleFilterRemove} />
-        </Flex>
+      {hiddenColumns.length > 0 ? (
+        <GradingFlex
+          justifyContent="space-between"
+          alignItems="center"
+          style={{ marginTop: '0.5rem' }}
+        >
+          <GradingFlex>
+            <GradingText isSecondaryText>Columns Hidden:</GradingText>
+            <GradingColumnFilters
+              filters={hiddenColumns}
+              filtersName={hiddenColumns.map((id: ColumnFieldsKeys) => {
+                return ColumnName[id];
+              })}
+              onFilterRemove={handleColumnFilterRemove}
+            />
+          </GradingFlex>
+        </GradingFlex>
+      ) : (
+        <></>
+      )}
 
-        <TextInput
-          maxWidth="max-w-sm"
-          icon={() => <BpIcon icon={IconNames.SEARCH} style={{ marginLeft: '0.75rem' }} />}
+      <GradingFlex
+        justifyContent="space-between"
+        alignItems="center"
+        style={{ marginTop: '0.5rem' }}
+      >
+        <GradingFlex alignItems="center">
+          <GradingFlex style={{ alignItems: 'center', height: '1.75rem', width: '100%' }}>
+            <Icon icon={IconNames.FILTER_LIST} />
+            <GradingText isSecondaryText style={{ marginLeft: '7.5px' }}>
+              {columnFilters.length > 0 ? (
+                'Filters: '
+              ) : filterMode === true ? (
+                'No filters applied. Click on any cell to filter by its value.' +
+                (hiddenColumns.length === 0
+                  ? " Click on any column header's eye icon to hide it."
+                  : '')
+              ) : (
+                <strong>Disable Grading Mode to enable click to filter</strong>
+              )}
+            </GradingText>
+          </GradingFlex>
+          <GradingSubmissionFilters filters={columnFilters} onFilterRemove={handleFilterRemove} />
+        </GradingFlex>
+
+        <Button
+          minimal={true}
+          className={classNames(
+            classes['grading-filter-btn'],
+            filterMode && classes['grading-filter-btn-on']
+          )}
+          onClick={e => setFilterMode((prev: boolean) => !prev)}
+        >
+          {filterMode ? 'Filter Mode' : 'Grading Mode'}
+        </Button>
+
+        <InputGroup
+          className="grading-search-input"
           placeholder="Search by assessment name"
+          leftIcon="search"
+          large={true}
           value={searchQuery}
           onChange={handleSearchQueryUpdate}
         />
-      </Flex>
-      <Table marginTop="mt-2">
-        <TableHead>
-          {table.getHeaderGroups().map(headerGroup => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
-                <TableHeaderCell key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(header.column.columnDef.header, header.getContext())}
-                </TableHeaderCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableHead>
-        <TableBody>
-          {table.getRowModel().rows.map(row => (
-            <TableRow key={row.id}>
-              {row.getVisibleCells().map(cell => (
-                <TableCell key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-        <div className="grading-overview-footer-sibling"></div>
-        <Footer>
-          <Flex justifyContent="justify-center" spaceX="space-x-3">
-            <Button
-              size="xs"
-              icon={() => <BpIcon icon={IconNames.DOUBLE_CHEVRON_LEFT} />}
-              variant="light"
-              onClick={() => setPage(0)}
-              disabled={page <= 0}
-            />
-            <Button
-              size="xs"
-              icon={() => <BpIcon icon={IconNames.ARROW_LEFT} />}
-              variant="light"
-              onClick={() => setPage(page - 1)}
-              disabled={page <= 0}
-            />
-            <Bold>
-              Page {page + 1} of {maxPage + 1}
-            </Bold>
-            <Button
-              size="xs"
-              icon={() => <BpIcon icon={IconNames.ARROW_RIGHT} />}
-              variant="light"
-              onClick={() => setPage(page + 1)}
-              disabled={page >= maxPage}
-            />
-            <Button
-              size="xs"
-              icon={() => <BpIcon icon={IconNames.DOUBLE_CHEVRON_RIGHT} />}
-              variant="light"
-              onClick={() => setPage(maxPage)}
-              disabled={page >= maxPage}
-            />
-          </Flex>
-        </Footer>
-      </Table>
-      <Flex marginTop="-mt-6">
-        <></>
-      </Flex>
+      </GradingFlex>
+
+      <div className="ag-theme-quartz" style={{ margin: tableProperties.tableMargins }}>
+        <AgGridReact
+          columnDefs={colDefs}
+          onCellClicked={cellClickedEvent}
+          ref={gridRef}
+          rowData={rowData}
+          components={tableProperties.customComponents}
+          defaultColDef={tableProperties.defaultColDefs}
+          headerHeight={tableProperties.headerHeight}
+          loading={isLoading}
+          overlayLoadingTemplate={tableProperties.overlayLoadingTemplate}
+          overlayNoRowsTemplate={tableProperties.overlayNoRowsTemplate}
+          pagination={tableProperties.pagination}
+          paginationPageSize={tableProperties.pageSize}
+          rowClass={tableProperties.rowClass}
+          rowHeight={tableProperties.rowHeight}
+          suppressMenuHide={tableProperties.suppressMenuHide}
+          suppressPaginationPanel={tableProperties.suppressPaginationPanel}
+          suppressRowClickSelection={tableProperties.suppressRowClickSelection}
+          domLayout="autoHeight"
+          onFilterChanged={e => {
+            if (!e.afterFloatingFilter) {
+              return;
+            }
+            const filters = e.api.getFilterModel();
+            const cellFilters = [];
+            for (const [key, { filter: query }] of Object.entries(filters)) {
+              switch (key) {
+                // Fields that BE supports filtering on
+                case ColumnFields.studentName:
+                case ColumnFields.studentUsername:
+                case ColumnFields.groupName:
+                  cellFilters.push({ id: key, value: query });
+                  break;
+              }
+            }
+            debouncedUpdateCellFilters(cellFilters);
+          }}
+        />
+      </div>
+
+      <GradingFlex
+        justifyContent="center"
+        className="grading-table-footer"
+        style={{ width: '100%', columnGap: '5px' }}
+      >
+        <Button
+          small
+          minimal
+          icon={IconNames.DOUBLE_CHEVRON_LEFT}
+          onClick={() => setPage(0)}
+          disabled={page <= 0 || isLoading}
+        />
+        <Button
+          small
+          minimal
+          icon={IconNames.ARROW_LEFT}
+          onClick={() => setPage(page - 1)}
+          disabled={page <= 0 || isLoading}
+        />
+        <H6 style={{ margin: 'auto 0' }}>
+          Page {maxPage + 1 === 0 ? 0 : page + 1} of {maxPage + 1}
+        </H6>
+        <Button
+          small
+          minimal
+          icon={IconNames.ARROW_RIGHT}
+          onClick={() => setPage(page + 1)}
+          disabled={page >= maxPage || isLoading}
+        />
+        <Button
+          small
+          minimal
+          icon={IconNames.DOUBLE_CHEVRON_RIGHT}
+          onClick={() => setPage(maxPage)}
+          disabled={page >= maxPage || isLoading}
+        />
+      </GradingFlex>
     </>
-  );
-};
-
-type FilterableProps = {
-  column: Column<any, unknown>;
-  value: string;
-  children?: React.ReactNode;
-  onClick?: () => void;
-};
-
-const Filterable: React.FC<FilterableProps> = ({ column, value, children, onClick }) => {
-  const handleFilterChange = () => {
-    column.setFilterValue(value);
-    onClick?.();
-  };
-
-  return (
-    <button type="button" className="grading-overview-filterable-btns" onClick={handleFilterChange}>
-      {children || value}
-    </button>
   );
 };
 

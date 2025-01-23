@@ -24,8 +24,10 @@ import {
   setUnhoveredStyle,
   truncateText
 } from '../CseMachineUtils';
+import { isContinuation } from '../utils/scheme';
 import { ArrowFromStashItemComponent } from './arrows/ArrowFromStashItemComponent';
 import { ArrayValue } from './values/ArrayValue';
+import { ContValue } from './values/ContValue';
 import { Visible } from './Visible';
 
 export class StashItemComponent extends Visible implements IHoverable {
@@ -42,21 +44,23 @@ export class StashItemComponent extends Visible implements IHoverable {
     stackWidth: number,
     /** The index number of this stack item */
     readonly index: number,
-    arrowTo?: FnValue | GlobalFnValue | ArrayValue
+    arrowTo?: FnValue | GlobalFnValue | ContValue | ArrayValue
   ) {
     super();
     const valToStashRep = (val: any): string => {
       return typeof val === 'string'
-        ? `"${val}"`.trim()
-        : isNonGlobalFn(val)
-          ? 'closure'
-          : isDataArray(val)
-            ? arrowTo
-              ? 'pair/array'
-              : JSON.stringify(val)
-            : isSourceObject(val)
-              ? val.toReplString()
-              : String(value);
+        ? `'${val}'`.trim()
+        : isContinuation(val)
+          ? 'continuation'
+          : isNonGlobalFn(val)
+            ? 'closure'
+            : isDataArray(val)
+              ? arrowTo
+                ? 'pair/array'
+                : JSON.stringify(val)
+              : isSourceObject(val)
+                ? val.toReplString()
+                : String(value);
     };
     this.text = truncateText(
       valToStashRep(value),
