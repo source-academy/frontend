@@ -1,3 +1,5 @@
+import { _Symbol } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/base';
+import { SchemeNumber } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/core-math';
 import React from 'react';
 
 import { Config } from '../../CseMachineConfig';
@@ -16,7 +18,7 @@ export class PrimitiveValue extends Value {
 
   constructor(
     /** data */
-    readonly data: Primitive,
+    readonly data: Primitive | _Symbol | SchemeNumber,
     /** what this value is being referenced by */
     reference: ReferenceType
   ) {

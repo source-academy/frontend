@@ -6,6 +6,7 @@ import { ControlItemComponent } from '../ControlItemComponent';
 import { Frame } from '../Frame';
 import { StashItemComponent } from '../StashItemComponent';
 import { Text } from '../Text';
+import { ContValue } from '../values/ContValue';
 import { FnValue } from '../values/FnValue';
 import { GlobalFnValue } from '../values/GlobalFnValue';
 import { Visible } from '../Visible';
@@ -36,7 +37,7 @@ export abstract class Arrow {
   /** factory method that returns the corresponding arrow depending on where the arrow is `from` */
   public static from(source: Visible): GenericArrow<Visible, Visible> {
     if (source instanceof Frame) return new ArrowFromFrame(source);
-    if (source instanceof FnValue || source instanceof GlobalFnValue)
+    if (source instanceof FnValue || source instanceof GlobalFnValue || source instanceof ContValue)
       return new ArrowFromFn(source);
     if (source instanceof Text) return new ArrowFromText(source);
     if (source instanceof ArrayUnit) return new ArrowFromArrayUnit(source);
