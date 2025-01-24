@@ -228,7 +228,6 @@ const Workspace: React.FC<WorkspaceProps> = props => {
           ) : (
             <Resizable {...editorResizableProps()}>{createWorkspaceInput(props)}</Resizable>
           )}
-          <div style={{ width: '0px' }}>{createWorkspaceInput(props)}</div>
           <div className="right-parent" ref={setFullscreenRefs}>
             <Tooltip
               className="fullscreen-button"
