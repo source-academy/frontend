@@ -98,6 +98,7 @@ import {
   makeSubstVisualizerTabFrom,
   mobileOnlyTabIds
 } from './PlaygroundTabs';
+import GradingWorkspace from '../academy/grading/subcomponents/GradingWorkspace';
 
 export type PlaygroundProps = {
   isSicpEditor?: boolean;
@@ -1035,8 +1036,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
       <MobileWorkspace {...mobileWorkspaceProps} />
     </div>
   ) : (
+    
     <div className={classNames('Playground', Classes.DARK, isGreen && 'GreenScreen')}>
-      <Workspace {...workspaceProps} />
+      
+      <GradingWorkspace submissionId={1} questionId={1}/>
+      {false && <Workspace {...workspaceProps} />}
     </div>
   );
 };

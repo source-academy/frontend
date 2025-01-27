@@ -25,6 +25,7 @@ import {
   showWarningMessage
 } from '../../../../commons/utils/notifications/NotificationsHelper';
 import { convertParamToInt } from '../../../../commons/utils/ParamParseHelper';
+import GradingCommentSelector from './GradingCommentSelector';
 
 type GradingSaveFunction = (
   submissionId: number,
@@ -303,6 +304,11 @@ const GradingEditor: React.FC<Props> = props => {
           </div>
         </div>
       </div>
+      
+      <GradingCommentSelector 
+        setEditor={setEditorValue}
+        comments={["Test comment 1", "Test comment 3"]}
+      />
 
       <div className="react-mde-parent">
         <ReactMde
