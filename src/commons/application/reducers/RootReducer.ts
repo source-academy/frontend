@@ -5,6 +5,7 @@ import { AchievementReducer as achievement } from '../../../features/achievement
 import { DashboardReducer as dashboard } from '../../../features/dashboard/DashboardReducer';
 import { PlaygroundReducer as playground } from '../../../features/playground/PlaygroundReducer';
 import { StoriesReducer as stories } from '../../../features/stories/StoriesReducer';
+import { FeatureFlagsReducer as featureFlags } from 'src/commons/featureFlags';
 import { FileSystemReducer as fileSystem } from '../../fileSystem/FileSystemReducer';
 import { SideContentReducer as sideContent } from '../../sideContent/SideContentReducer';
 import { WorkspaceReducer as workspaces } from '../../workspace/WorkspaceReducer';
@@ -20,6 +21,7 @@ const rootReducer: Reducer<OverallState, SourceActionType> = combineReducers({
   session,
   stories,
   workspaces,
+  featureFlags,
   fileSystem,
   sideContent
 });

@@ -16,6 +16,7 @@ import {
 } from '../application/ApplicationTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import { DeepPartial } from '../utils/TypeHelper';
+import { defaultFeatureFlags } from '../featureFlags';
 
 export function mockInitialStore(
   overrides?: DeepPartial<OverallState>
@@ -29,6 +30,7 @@ export function mockInitialStore(
     workspaces: defaultWorkspaceManager,
     session: defaultSession,
     stories: defaultStories,
+    featureFlags: defaultFeatureFlags,
     fileSystem: defaultFileSystem,
     sideContent: defaultSideContentManager
   };

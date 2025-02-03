@@ -20,6 +20,7 @@ import {
 import { RouterState } from './types/CommonsTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
 import { SessionState } from './types/SessionTypes';
+import { defaultFeatureFlags, FeatureFlagsState } from '../featureFlags';
 
 export type OverallState = {
   readonly router: RouterState;
@@ -29,6 +30,7 @@ export type OverallState = {
   readonly stories: StoriesState;
   readonly workspaces: WorkspaceManagerState;
   readonly dashboard: DashboardState;
+  readonly featureFlags: FeatureFlagsState;
   readonly fileSystem: FileSystemState;
   readonly sideContent: SideContentManagerState;
 };
@@ -612,6 +614,7 @@ export const defaultState: OverallState = {
   session: defaultSession,
   stories: defaultStories,
   workspaces: defaultWorkspaceManager,
+  featureFlags: defaultFeatureFlags,
   fileSystem: defaultFileSystem,
   sideContent: defaultSideContentManager
 };
