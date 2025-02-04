@@ -14,9 +14,9 @@ import {
   defaultWorkspaceManager,
   OverallState
 } from '../application/ApplicationTypes';
+import { defaultFeatureFlags } from '../featureFlags';
 import { SourceActionType } from '../utils/ActionsHelper';
 import { DeepPartial } from '../utils/TypeHelper';
-import { defaultFeatureFlags } from '../featureFlags';
 
 export function mockInitialStore(
   overrides?: DeepPartial<OverallState>

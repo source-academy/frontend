@@ -7,10 +7,15 @@ import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { Chapter, ErrorSeverity, ErrorType, SourceError, Variant } from 'js-slang/dist/types';
 import { eventChannel, SagaIterator } from 'redux-saga';
 import { call, cancel, cancelled, delay, fork, put, race, select, take } from 'redux-saga/effects';
+import { IConduit } from 'sa-conductor/dist/conduit';
 import * as Sourceror from 'sourceror';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
+import { selectFeature } from 'src/commons/featureFlags/selectFeature';
 import { makeCCompilerConfig, specialCReturnObject } from 'src/commons/utils/CToWasmHelper';
 import { javaRun } from 'src/commons/utils/JavaHelper';
+import { BrowserHostPlugin } from 'src/features/conductor/BrowserHostPlugin';
+import { createConductor } from 'src/features/conductor/createConductor';
+import { featureConductor } from 'src/features/conductor/featureConductor';
 import StoriesActions from 'src/features/stories/StoriesActions';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
@@ -29,11 +34,6 @@ import {
 } from '../../../workspace/WorkspaceTypes';
 import { dumpDisplayBuffer } from './dumpDisplayBuffer';
 import { updateInspector } from './updateInspector';
-import { createConductor } from 'src/features/conductor/createConductor';
-import { IConduit } from 'sa-conductor/dist/conduit';
-import { BrowserHostPlugin } from 'src/features/conductor/BrowserHostPlugin';
-import { featureConductor } from 'src/features/conductor/featureConductor';
-import { selectFeature } from 'src/commons/featureFlags/selectFeature';
 
 export function* evalCodeSaga(
   files: Record<string, string>,

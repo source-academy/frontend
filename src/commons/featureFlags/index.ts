@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 import { FeatureFlag } from "./FeatureFlag";
 
 export type FeatureFlagsState = {
@@ -17,7 +18,7 @@ const featureFlagsSlice = createSlice({
             state.modifiedFlags[action.payload.featureFlag[0]] = action.payload.value;
         },
         resetFlag<T>(state: FeatureFlagsState, action: { payload: { featureFlag: FeatureFlag<T> } }) {
-            state.modifiedFlags[action.payload.featureFlag[0]];
+            delete state.modifiedFlags[action.payload.featureFlag[0]];
         }
     }
 });

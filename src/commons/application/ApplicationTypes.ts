@@ -7,6 +7,7 @@ import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/S
 import { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
 import { freshSortState } from '../../pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
+import { defaultFeatureFlags, FeatureFlagsState } from '../featureFlags';
 import { FileSystemState } from '../fileSystem/FileSystemTypes';
 import { SideContentManagerState, SideContentState } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
@@ -20,7 +21,6 @@ import {
 import { RouterState } from './types/CommonsTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
 import { SessionState } from './types/SessionTypes';
-import { defaultFeatureFlags, FeatureFlagsState } from '../featureFlags';
 
 export type OverallState = {
   readonly router: RouterState;
