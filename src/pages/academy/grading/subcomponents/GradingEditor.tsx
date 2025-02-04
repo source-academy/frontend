@@ -27,6 +27,9 @@ import {
 import { convertParamToInt } from '../../../../commons/utils/ParamParseHelper';
 import GradingCommentSelector from './GradingCommentSelector';
 
+import { useTokens } from 'src/commons/utils/Hooks';
+import { postGenerateComments } from '../../../../commons/sagas/RequestsSaga';
+
 type GradingSaveFunction = (
   submissionId: number,
   questionId: number,
@@ -52,6 +55,7 @@ const gradingEditorButtonClass = 'grading-editor-button';
 
 const GradingEditor: React.FC<Props> = props => {
   const dispatch = useDispatch();
+  const tokens = useTokens();
   const { handleGradingSave, handleGradingSaveAndContinue, handleReautogradeAnswer } = useMemo(
     () =>
       ({
@@ -101,6 +105,15 @@ const GradingEditor: React.FC<Props> = props => {
     makeInitialState();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.submissionId, props.questionId]);
+
+  const getCommentSuggestions = async () => {
+    const resp = await postGenerateComments(
+      tokens,props.submissionId,props.questionId
+    )
+    return resp
+  }
+
+  const [suggestions, setSuggestions] = useState<string[]>([])
 
   const makeInitialState = () => {
     setXpAdjustmentInput(props.xpAdjustment.toString());
@@ -307,8 +320,16 @@ const GradingEditor: React.FC<Props> = props => {
       
       <GradingCommentSelector 
         setEditor={setEditorValue}
-        comments={["Test comment 1", "Test comment 3"]}
+        comments={suggestions}
       />
+      <Button
+        onClick={async ()=>{
+          const resp = await getCommentSuggestions();
+          console.log(resp!.comments)
+          setSuggestions(resp!.comments);
+        }}>
+        Get comments
+      </Button>
 
       <div className="react-mde-parent">
         <ReactMde

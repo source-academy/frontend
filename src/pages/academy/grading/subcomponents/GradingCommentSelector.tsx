@@ -6,21 +6,22 @@ type Props = {
 };
 
 const GradingCommentSelector : React.FC<Props> = (prop) => {
-  return (
-    <div className="grading-comment-selector">
-        <div className="grading-comment-selector-title">
-            Comment Suggestions: 
-        </div>
-        {prop.comments.map(el => {
-            return <div 
-                className="grading-comment-selector-item"
-                onClick={() => {prop.setEditor(el)}}
-            >
-                {el}
+
+    return (
+        <div className="grading-comment-selector">
+            <div className="grading-comment-selector-title">
+                Comment Suggestions: 
             </div>
-        })}
-    </div>
-  )
+            {prop.comments.map(el => {
+                return <div 
+                    className="grading-comment-selector-item"
+                    onClick={() => {prop.setEditor(el)}}
+                >
+                    {el}
+                </div>
+            })}
+        </div>
+    )
 }
 
 export default GradingCommentSelector

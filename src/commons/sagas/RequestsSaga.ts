@@ -1332,6 +1332,26 @@ export const removeAssessmentConfig = async (
 };
 
 /**
+ * POST /courses/{courseId}/admin/generate-comments/{submissionId}/{questionId}
+ */
+export const postGenerateComments = async (
+  tokens: Tokens,
+  submission_id: integer,
+  question_id: integer
+): Promise<{comments:string[]} | null> => {
+  const resp = await request(`${courseId()}/admin/generate-comments/${submission_id}/${question_id}`, 'POST', {
+    ...tokens
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  return await resp.json();
+};
+
+
+
+/**
  * GET /courses/{courseId}/admin/users
  */
 export const getUserCourseRegistrations = async (
