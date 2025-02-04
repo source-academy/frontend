@@ -79,6 +79,19 @@ class GameObjectManager implements StateObserver {
     }
   }
 
+  public objectHoverGlow(objectId: ItemId, turnOn: boolean) {
+    const object = this.objects.get(objectId);
+    if (!object) {
+      return;
+    }
+    if (turnOn) {
+      (object.sprite as GlowingImage).hoverGlowStart();
+    } else {
+      (object.sprite as GlowingImage).hoverGlowEnd();
+    }
+
+  }
+
   /**
    * Create the object from the given object property.
    * Because we want this sprite to be activatable
