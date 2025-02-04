@@ -43,14 +43,18 @@ export class ControlStack extends Visible implements IHoverable {
     // Function to convert the stack items to their components
     let i = 0;
     const controlItemToComponent = (controlItem: ControlItem) => {
-      const node = isNode(controlItem) ? controlItem : controlItem.srcNode;
+      const node = isNode(controlItem)
+        ? controlItem
+        : isInstr(controlItem)
+          ? controlItem.srcNode
+          : controlItem;
       let highlightOnHover = () => {};
       let unhighlightOnHover = () => {};
 
       highlightOnHover = () => {
-        if (node.loc) {
-          const start = node.loc.start.line - 1;
-          const end = node.loc.end.line - 1;
+        if ((node as any).loc !== undefined) {
+          const start = (node as any).loc.start.line - 1;
+          const end = (node as any).loc.end.line - 1;
           CseMachine.setEditorHighlightedLines([[start, end]]);
         }
       };
