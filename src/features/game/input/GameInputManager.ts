@@ -41,7 +41,7 @@ class GameInputManager {
    * @param active if true, keyboard input is enabled. Else, keyboard input is disabled.
    */
   public enableKeyboardInput(active: boolean) {
-    if (this.scene.input.keyboard) this.scene.input.keyboard!.enabled = active;
+    if (this.scene.input.keyboard) this.scene.input.keyboard.enabled = active;
   }
 
   /**
@@ -57,11 +57,11 @@ class GameInputManager {
     event: string | symbol,
     callback: Function
   ) {
-    if (this.scene.input.keyboard) {
-      const keyObj = this.scene.input.keyboard.addKey(key);
-      const keyboardListener = keyObj.addListener(event, callback);
-      this.keyboardListeners.push(keyboardListener);
-    }
+    if (!this.scene.input.keyboard) return;
+
+    const keyObj = this.scene.input.keyboard.addKey(key);
+    const keyboardListener = keyObj.addListener(event, callback);
+    this.keyboardListeners.push(keyboardListener);
   }
 
   /**
