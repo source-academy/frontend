@@ -9647,7 +9647,7 @@ __metadata:
     i18next-browser-languagedetector: "npm:^8.0.0"
     java-slang: "npm:^1.0.13"
     js-cookie: "npm:^3.0.5"
-    js-slang: "npm:^1.0.76"
+    js-slang: "npm:^1.0.79"
     js-yaml: "npm:^4.1.0"
     konva: "npm:^9.2.0"
     lodash: "npm:^4.17.21"
@@ -12096,9 +12096,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-slang@npm:^1.0.76":
-  version: 1.0.76
-  resolution: "js-slang@npm:1.0.76"
+"js-slang@npm:^1.0.79":
+  version: 1.0.79
+  resolution: "js-slang@npm:1.0.79"
   dependencies:
     "@babel/parser": "npm:^7.19.4"
     "@commander-js/extra-typings": "npm:^12.0.1"
@@ -12117,7 +12117,7 @@ __metadata:
     source-map: "npm:0.7.3"
   bin:
     js-slang: dist/repl/index.js
-  checksum: 10c0/34d342b2c2378beec9f3362dc489b901617a55ce4ab62bbe49c6e115b4af891ba27ae03de39d2a262728f243fe9fd6dbc6802a0efd2c8b914f53ff2474cb48ef
+  checksum: 10c0/e0e7db8a985ead985b30ad8644f371f4981cdac7ee6b1fb13a993f064ae22982a4924cd34a3e3387d065a21b3ad211f19bb03888b74baad771e4533aaee13d48
   languageName: node
   linkType: hard
 
