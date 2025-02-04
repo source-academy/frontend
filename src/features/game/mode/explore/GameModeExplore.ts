@@ -1,4 +1,5 @@
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+
 import SoundAssets from '../../assets/SoundAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { Constants, screenSize } from '../../commons/CommonConstants';
@@ -141,6 +142,7 @@ class GameModeExplore implements IGameUI {
   private explorePointerOver(id: ItemId) {
     const hasTriggered = GameGlobalAPI.getInstance().hasTriggeredInteraction(id);
     GameGlobalAPI.getInstance().objectHoverGlow(id, true);
+    
     if (hasTriggered) {
       GameGlobalAPI.getInstance().setDefaultCursor(ExploreModeConstants.checked);
       

@@ -89,7 +89,6 @@ class GameObjectManager implements StateObserver {
     } else {
       (object.sprite as GlowingImage).hoverGlowEnd();
     }
-
   }
 
   /**
