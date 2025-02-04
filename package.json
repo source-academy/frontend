@@ -64,7 +64,7 @@
     "mdast-util-from-markdown": "^2.0.0",
     "mdast-util-to-hast": "^13.0.0",
     "normalize.css": "^8.0.1",
-    "phaser": "^3.55.2",
+    "phaser": "^3.87.0",
     "query-string": "^9.0.0",
     "re-resizable": "^6.9.9",
     "react": "^18.3.1",
@@ -100,6 +100,7 @@
     "yareco": "^0.1.5"
   },
   "devDependencies": {
+    "//": "See: https://github.com/facebook/react/issues/28313#issuecomment-2076798972, https://github.com/t3-oss/create-t3-turbo/issues/984#issuecomment-2076413457",
     "@babel/core": "^7.24.5",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-typescript": "^7.24.1",
@@ -138,7 +139,6 @@
     "cross-env": "^7.0.3",
     "eslint": "^9.9.0",
     "eslint-plugin-react": "^7.35.0",
-    "//": "See: https://github.com/facebook/react/issues/28313#issuecomment-2076798972, https://github.com/t3-oss/create-t3-turbo/issues/984#issuecomment-2076413457",
     "eslint-plugin-react-hooks": "5.1.0-canary-cb151849e1-20240424",
     "eslint-plugin-react-refresh": "^0.4.9",
     "eslint-plugin-simple-import-sort": "^12.1.1",
@@ -146,6 +146,7 @@
     "husky": "^9.0.0",
     "npm-run-all2": "^7.0.0",
     "os-browserify": "^0.3.0",
+    "path": "^0.12.7",
     "path-browserify": "^1.0.1",
     "prettier": "^3.3.3",
     "process": "^0.11.10",
@@ -177,5 +178,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
