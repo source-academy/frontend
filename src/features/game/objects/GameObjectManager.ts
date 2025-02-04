@@ -79,6 +79,11 @@ class GameObjectManager implements StateObserver {
     }
   }
 
+  /**
+   * Apply glow effect on the object, for when it's hovered on
+   *
+   * @param objectId id of the object
+   */
   public objectHoverGlow(objectId: ItemId, turnOn: boolean) {
     const object = this.objects.get(objectId);
     if (!object) {

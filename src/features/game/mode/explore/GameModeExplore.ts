@@ -104,7 +104,7 @@ class GameModeExplore implements IGameUI {
           return;
         }
 
-        activatable.clickArea.on('pointerout', () => 
+        activatable.clickArea.on('pointerout', () =>
           this.explorePointerOut(activatable.interactionId)
         );
         activatable.clickArea.on('pointerover', () =>
@@ -142,10 +142,9 @@ class GameModeExplore implements IGameUI {
   private explorePointerOver(id: ItemId) {
     const hasTriggered = GameGlobalAPI.getInstance().hasTriggeredInteraction(id);
     GameGlobalAPI.getInstance().objectHoverGlow(id, true);
-    
+
     if (hasTriggered) {
       GameGlobalAPI.getInstance().setDefaultCursor(ExploreModeConstants.checked);
-      
     } else {
       GameGlobalAPI.getInstance().setDefaultCursor(ExploreModeConstants.hover);
     }
