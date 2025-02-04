@@ -32,7 +32,7 @@ class GameInputManager {
    * @param active if true, mouse input is enabled. Else, mouse input is disabled.
    */
   public enableMouseInput(active: boolean) {
-    this.scene.input.mouse!.enabled = active; // ! to convince typescript Mouse Manager exists
+    if (this.scene.input.mouse) this.scene.input.mouse.enabled = active;
   }
 
   /**
@@ -41,7 +41,7 @@ class GameInputManager {
    * @param active if true, keyboard input is enabled. Else, keyboard input is disabled.
    */
   public enableKeyboardInput(active: boolean) {
-    this.scene.input.keyboard!.enabled = active; // ! to convince typescript Keyboard Plugin exists
+    if (this.scene.input.keyboard) this.scene.input.keyboard!.enabled = active;
   }
 
   /**
@@ -57,9 +57,11 @@ class GameInputManager {
     event: string | symbol,
     callback: Function
   ) {
-    const keyObj = this.scene.input.keyboard!.addKey(key); // ! to convince typescript Keyboard Plugin exists
-    const keyboardListener = keyObj.addListener(event, callback);
-    this.keyboardListeners.push(keyboardListener);
+    if (this.scene.input.keyboard) {
+      const keyObj = this.scene.input.keyboard.addKey(key);
+      const keyboardListener = keyObj.addListener(event, callback);
+      this.keyboardListeners.push(keyboardListener);
+    }
   }
 
   /**
