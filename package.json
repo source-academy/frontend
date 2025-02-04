@@ -1,6 +1,7 @@
 {
   "private": true,
   "name": "frontend",
+  "packageManager": "yarn@4.6.0",
   "version": "1.4.3",
   "scripts-info": {
     "analyze": "Analyze bundle size breakdown",
@@ -140,7 +141,6 @@
     "cross-env": "^7.0.3",
     "eslint": "^9.9.0",
     "eslint-plugin-react": "^7.35.0",
-    "//": "See: https://github.com/facebook/react/issues/28313#issuecomment-2076798972, https://github.com/t3-oss/create-t3-turbo/issues/984#issuecomment-2076413457",
     "eslint-plugin-react-hooks": "5.1.0-canary-cb151849e1-20240424",
     "eslint-plugin-react-refresh": "^0.4.9",
     "eslint-plugin-simple-import-sort": "^12.1.1",
@@ -164,9 +164,6 @@
     "typescript-eslint": "^8.1.0",
     "url": "^0.11.1",
     "webpack-bundle-analyzer": "^4.9.0"
-  },
-  "resolutions": {
-    "**/gl": "^8.0.2"
   },
   "browserslist": {
     "production": [
