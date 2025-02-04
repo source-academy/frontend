@@ -10411,6 +10411,11 @@ performance-now@^2.1.0:
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha512-7EAHlyLHI56VEIdK57uwHdHKIaAGbnXPiw0yWbarQZOKaKpvUIgW0jWRVLiatnM+XXlSwsanIBH/hzGMJulMow==
 
+phaser3spectorjs@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/phaser3spectorjs/-/phaser3spectorjs-0.0.8.tgz#a7996eebc9c498b6d9d19ecda35f16ad3918a8a8"
+  integrity sha512-0dSO7/aMjEUPrp5EcjRvRRsEf+jXDbmzalPeJ6VtTB2Pn1PeaKc+qlL/DmO3l1Dvc5lkzc+Sil1Ta+Hkyi5cbA==
+
 phaser@^3.87.0:
   version "3.87.0"
   resolved "https://registry.yarnpkg.com/phaser/-/phaser-3.87.0.tgz#209f1673b311a3f76d59f14b785699709a8f9cf5"
