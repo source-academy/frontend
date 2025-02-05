@@ -5,12 +5,17 @@ import { ACORN_PARSE_OPTIONS, TRY_AGAIN } from 'js-slang/dist/constants';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { Chapter, ErrorSeverity, ErrorType, SourceError, Variant } from 'js-slang/dist/types';
-import { SagaIterator } from 'redux-saga';
-import { call, put, race, select, take } from 'redux-saga/effects';
+import { eventChannel, SagaIterator } from 'redux-saga';
+import { call, cancel, cancelled, delay, fork, put, race, select, take } from 'redux-saga/effects';
+import { IConduit } from 'sa-conductor/dist/conduit';
 import * as Sourceror from 'sourceror';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
+import { selectFeature } from 'src/commons/featureFlags/selectFeature';
 import { makeCCompilerConfig, specialCReturnObject } from 'src/commons/utils/CToWasmHelper';
 import { javaRun } from 'src/commons/utils/JavaHelper';
+import { BrowserHostPlugin } from 'src/features/conductor/BrowserHostPlugin';
+import { createConductor } from 'src/features/conductor/createConductor';
+import { featureConductor } from 'src/features/conductor/featureConductor';
 import StoriesActions from 'src/features/stories/StoriesActions';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
@@ -39,6 +44,18 @@ export function* evalCodeSaga(
   actionType: string,
   storyEnv?: string
 ): SagaIterator {
+  if (yield call(selectFeature, featureConductor)) {
+    return yield call(
+      evalCodeConductorSaga,
+      files,
+      entrypointFilePath,
+      context,
+      execTime,
+      workspaceLocation,
+      actionType,
+      storyEnv
+    );
+  }
   context.runtime.debuggerOn =
     (actionType === WorkspaceActions.evalEditor.type ||
       actionType === InterpreterActions.debuggerResume.type) &&
@@ -459,6 +476,60 @@ export function* evalCodeSaga(
     const introIcon = document.getElementById(SideContentType.introduction + '-icon');
     introIcon?.classList.remove('side-content-tab-alert-error');
   }
+}
+
+function* handleStdout(
+  hostPlugin: BrowserHostPlugin,
+  workspaceLocation: WorkspaceLocation
+): SagaIterator {
+  const outputChan = eventChannel(emitter => {
+    hostPlugin.receiveOutput = emitter;
+    return () => {
+      if (hostPlugin.receiveOutput === emitter) delete hostPlugin.receiveOutput;
+    };
+  });
+  try {
+    while (true) {
+      const output = yield take(outputChan);
+      yield put(actions.handleConsoleLog(workspaceLocation, output));
+    }
+  } finally {
+    if (yield cancelled()) {
+      outputChan.close();
+    }
+  }
+}
+
+export function* evalCodeConductorSaga(
+  files: Record<string, string>,
+  entrypointFilePath: string,
+  context: Context,
+  execTime: number,
+  workspaceLocation: WorkspaceLocation,
+  actionType: string,
+  storyEnv?: string
+): SagaIterator {
+  const evaluatorResponse: Response = yield call(
+    fetch,
+    'https://fyp.tsammeow.dev/evaluator/worker.js' // temporary evaluator
+  );
+  if (!evaluatorResponse.ok) throw Error("can't get evaluator");
+  const evaluatorBlob: Blob = yield call([evaluatorResponse, 'blob']);
+  const url: string = yield call(URL.createObjectURL, evaluatorBlob);
+  const { hostPlugin, conduit }: { hostPlugin: BrowserHostPlugin; conduit: IConduit } = yield call(
+    createConductor,
+    url,
+    async (fileName: string) => files[fileName]
+  );
+  const stdoutTask = yield fork(handleStdout, hostPlugin, workspaceLocation);
+  yield call([hostPlugin, 'runEvaluator'], entrypointFilePath);
+  yield delay(execTime);
+  yield call([conduit, 'terminate']);
+  yield cancel(stdoutTask);
+  //yield put(actions.debuggerReset(workspaceLocation));
+  yield put(actions.endInterruptExecution(workspaceLocation));
+  //console.log("killed");
+  //yield call(URL.revokeObjectURL, url);
 }
 
 // Special module errors

@@ -1,4 +1,5 @@
 import { combineReducers, Reducer } from '@reduxjs/toolkit';
+import { FeatureFlagsReducer as featureFlags } from 'src/commons/featureFlags';
 import { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
 import { AchievementReducer as achievement } from '../../../features/achievement/AchievementReducer';
@@ -20,6 +21,7 @@ const rootReducer: Reducer<OverallState, SourceActionType> = combineReducers({
   session,
   stories,
   workspaces,
+  featureFlags,
   fileSystem,
   sideContent
 });

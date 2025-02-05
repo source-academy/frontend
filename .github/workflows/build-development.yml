@@ -27,7 +27,7 @@ jobs:
         run: echo "time=$(date -Iseconds)" >> $GITHUB_OUTPUT
       - name: yarn install and build
         run: |
-          yarn install --frozen-lockfile
+          yarn install --immutable
           yarn run build
         env:
           REACT_APP_URL_SHORTENER_SIGNATURE: ${{ secrets.REACT_APP_URL_SHORTENER_SIGNATURE }}
