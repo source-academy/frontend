@@ -23,6 +23,13 @@ export const makeIntroductionTabFrom = (content: string): SideContentTab => ({
   id: SideContentType.introduction
 });
 
+export const makeSessionManagementTabFrom = (content:string) : SideContentTab => ({
+  label: 'Session Management',
+  iconName: IconNames.PEOPLE,
+  body: <Markdown content={"Manage your session here."}/>,
+  id: SideContentType.sessionManagement
+});
+
 export const makeRemoteExecutionTabFrom = (
   deviceSecret: string | undefined,
   callback: React.Dispatch<React.SetStateAction<string | undefined>>

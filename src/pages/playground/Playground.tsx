@@ -95,6 +95,7 @@ import {
   desktopOnlyTabIds,
   makeIntroductionTabFrom,
   makeRemoteExecutionTabFrom,
+  makeSessionManagementTabFrom,
   makeSubstVisualizerTabFrom,
   mobileOnlyTabIds
 } from './PlaygroundTabs';
@@ -299,6 +300,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
     () => makeRemoteExecutionTabFrom(deviceSecret, setDeviceSecret),
     [deviceSecret]
   );
+
+  const sessionManagementTab: SideContentTab = useMemo(
+    () => makeSessionManagementTabFrom("test"),
+    []
+  )
 
   const usingRemoteExecution =
     useTypedSelector(state => !!state.session.remoteExecutionSession) && !isSicpEditor;
@@ -751,6 +757,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
     if (!isSicpEditor && !Constants.playgroundOnly) {
       tabs.push(remoteExecutionTab);
+      if (editorSessionId !== ''){
+        tabs.push(sessionManagementTab);
+      }
     }
 
     return tabs;
@@ -765,7 +774,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     shouldShowDataVisualizer,
     shouldShowCseMachine,
     shouldShowSubstVisualizer,
-    remoteExecutionTab
+    remoteExecutionTab,
+    editorSessionId
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
