@@ -1,26 +1,29 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
-import { FeatureFlag } from "./FeatureFlag";
+import { FeatureFlag } from './FeatureFlag';
 
 export type FeatureFlagsState = {
-    modifiedFlags: Record<string, any>
+  modifiedFlags: Record<string, any>;
 };
 
 export const defaultFeatureFlags = {
-    modifiedFlags: {}
+  modifiedFlags: {}
 };
 
 const featureFlagsSlice = createSlice({
-    name: "featureFlags",
-    initialState: defaultFeatureFlags,
-    reducers: {
-        setFlag<T>(state: FeatureFlagsState, action: { payload: { featureFlag: FeatureFlag<T>, value: T } }) {
-            state.modifiedFlags[action.payload.featureFlag[0]] = action.payload.value;
-        },
-        resetFlag<T>(state: FeatureFlagsState, action: { payload: { featureFlag: FeatureFlag<T> } }) {
-            delete state.modifiedFlags[action.payload.featureFlag[0]];
-        }
+  name: 'featureFlags',
+  initialState: defaultFeatureFlags,
+  reducers: {
+    setFlag<T>(
+      state: FeatureFlagsState,
+      action: { payload: { featureFlag: FeatureFlag<T>; value: T } }
+    ) {
+      state.modifiedFlags[action.payload.featureFlag[0]] = action.payload.value;
+    },
+    resetFlag<T>(state: FeatureFlagsState, action: { payload: { featureFlag: FeatureFlag<T> } }) {
+      delete state.modifiedFlags[action.payload.featureFlag[0]];
     }
+  }
 });
 
 export const FeatureFlagsActions = featureFlagsSlice.actions;

@@ -45,7 +45,16 @@ export function* evalCodeSaga(
   storyEnv?: string
 ): SagaIterator {
   if (yield call(selectFeature, featureConductor)) {
-    return yield call(evalCodeConductorSaga, files, entrypointFilePath, context, execTime, workspaceLocation, actionType, storyEnv);
+    return yield call(
+      evalCodeConductorSaga,
+      files,
+      entrypointFilePath,
+      context,
+      execTime,
+      workspaceLocation,
+      actionType,
+      storyEnv
+    );
   }
   context.runtime.debuggerOn =
     (actionType === WorkspaceActions.evalEditor.type ||
@@ -469,12 +478,15 @@ export function* evalCodeSaga(
   }
 }
 
-function* handleStdout(hostPlugin: BrowserHostPlugin, workspaceLocation: WorkspaceLocation): SagaIterator {
+function* handleStdout(
+  hostPlugin: BrowserHostPlugin,
+  workspaceLocation: WorkspaceLocation
+): SagaIterator {
   const outputChan = eventChannel(emitter => {
     hostPlugin.receiveOutput = emitter;
     return () => {
       if (hostPlugin.receiveOutput === emitter) delete hostPlugin.receiveOutput;
-    }
+    };
   });
   try {
     while (true) {
@@ -497,16 +509,22 @@ export function* evalCodeConductorSaga(
   actionType: string,
   storyEnv?: string
 ): SagaIterator {
-  const evaluatorResponse: Response = yield call(fetch, "https://fyp.tsammeow.dev/evaluator/worker.js"); // temporary evaluator
+  const evaluatorResponse: Response = yield call(
+    fetch,
+    'https://fyp.tsammeow.dev/evaluator/worker.js' // temporary evaluator
+  );
   if (!evaluatorResponse.ok) throw Error("can't get evaluator");
-  const evaluatorBlob: Blob = yield call([evaluatorResponse, "blob"]);
+  const evaluatorBlob: Blob = yield call([evaluatorResponse, 'blob']);
   const url: string = yield call(URL.createObjectURL, evaluatorBlob);
-  const { hostPlugin, conduit }: { hostPlugin: BrowserHostPlugin, conduit: IConduit } =
-    yield call(createConductor, url, async (fileName: string) => files[fileName]);
+  const { hostPlugin, conduit }: { hostPlugin: BrowserHostPlugin; conduit: IConduit } = yield call(
+    createConductor,
+    url,
+    async (fileName: string) => files[fileName]
+  );
   const stdoutTask = yield fork(handleStdout, hostPlugin, workspaceLocation);
-  yield call([hostPlugin, "runEvaluator"], entrypointFilePath);
+  yield call([hostPlugin, 'runEvaluator'], entrypointFilePath);
   yield delay(execTime);
-  yield call([conduit, "terminate"]);
+  yield call([conduit, 'terminate']);
   yield cancel(stdoutTask);
   //yield put(actions.debuggerReset(workspaceLocation));
   yield put(actions.endInterruptExecution(workspaceLocation));
