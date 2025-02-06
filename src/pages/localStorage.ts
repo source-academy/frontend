@@ -1,5 +1,4 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 import { StoriesAuthState } from 'src/features/stories/StoriesTypes';
 
 import { OverallState, SALanguage } from '../commons/application/ApplicationTypes';
@@ -38,11 +37,11 @@ export const loadStoredState = (): SavedState | undefined => {
     if (!serializedState) {
       return undefined;
     }
-    const decompressed = decompressFromUTF16(serializedState);
-    if (!decompressed) {
-      return undefined;
-    }
-    return JSON.parse(decompressed) as SavedState;
+    // const decompressed = decompressFromUTF16(serializedState);
+    // if (!decompressed) {
+    //   return undefined;
+    // }
+    return JSON.parse(serializedState) as SavedState;
   } catch (err) {
     showWarningMessage('Error loading from local storage');
     return undefined;
@@ -91,7 +90,7 @@ export const saveState = (state: OverallState) => {
         role: state.stories.role
       }
     };
-    const serialized = compressToUTF16(JSON.stringify(stateToBeSaved));
+    const serialized = JSON.stringify(stateToBeSaved);
     localStorage.setItem('storedState', serialized);
   } catch (err) {
     showWarningMessage('Error saving to local storage');
