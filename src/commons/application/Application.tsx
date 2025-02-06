@@ -82,7 +82,7 @@ const Application: React.FC = () => {
       return true;
     };
 
-    const message = Messages.WebviewStarted();
+    const message = Messages.WebviewStarted(null);
     sendToWebview(message);
 
     window.addEventListener('message', event => {
@@ -96,6 +96,12 @@ const Application: React.FC = () => {
         case 'WebviewStarted':
           console.log('Received WebviewStarted message, will set vsc');
           dispatch(VscodeActions.setVscode());
+
+          if (message.token) {
+            const token = JSON.parse(message.token.trim());
+            console.log(`FRONTEND: WebviewStarted: ${token}`);
+            dispatch(SessionActions.setTokens({accessToken: token.accessToken, refreshToken: token.refreshToken}));
+          }
           break;
         case 'Text':
           const code = message.code;
