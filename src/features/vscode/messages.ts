@@ -1,4 +1,4 @@
-// This file also needs to be copied to source-academy/frontend
+// This file is copied from https://github.com/source-academy/sa-vscode/blob/main/src/utils/messages.ts
 type BaseMessage<T extends string, P extends object> = {
   type: T;
 } & P;
