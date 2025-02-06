@@ -223,7 +223,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
         </Resizable>
         <div className="row content-parent" ref={contentContainerDiv}>
           <div className="editor-divider" ref={editorDividerDiv} />
-          {!isVscode || (
+          {!isVscode && (
             <Resizable {...editorResizableProps()}>{createWorkspaceInput(props)}</Resizable>
           )}
           <div className="right-parent" ref={setFullscreenRefs}>
