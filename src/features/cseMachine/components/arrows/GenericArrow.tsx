@@ -61,7 +61,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
         const y2 = yb + br * Math.sign(dy2);
 
         // draw quadratic curves over corners
-        this._path += `L ${x1} ${y1} Q ${xb} ${yb} ${x2} ${y2}`;
+        this._path += `L ${x1} ${y1} Q ${xb} ${yb} ${x2} ${y2} `;
         n += 2;
       }
     }
