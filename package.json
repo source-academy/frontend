@@ -92,7 +92,7 @@
     "redux-mock-store": "^1.5.4",
     "redux-saga": "^1.2.3",
     "rehype-react": "^8.0.0",
-    "sa-conductor": "https://github.com/tsammeow/sa-conductor.git#0.0.11",
+    "sa-conductor": "https://github.com/tsammeow/sa-conductor.git#0.0.13",
     "sa-languages": "https://github.com/tsammeow/sa-languages.git",
     "showdown": "^2.1.0",
     "sourceror": "^0.8.5",
