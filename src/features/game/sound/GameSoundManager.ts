@@ -161,14 +161,18 @@ class GameSoundManager {
     const soundAsset = mandatory(this.getSoundAsset(soundKey));
     const bgmVol = soundAsset.config.volume !== undefined ? soundAsset.config.volume : 1;
 
-    this.currBgMusic = this.getBaseSoundManager().add(soundAsset.key, {
-      ...soundAsset.config,
-      volume: bgmVol * this.bgmVol
-    }) as Phaser.Sound.WebAudioSound;
-    this.currBgMusicKey = soundAsset.key;
-
-    // Finally, play it
-    this.currBgMusic.play();
+    try {
+      this.currBgMusic = this.getBaseSoundManager().add(soundAsset.key, {
+        ...soundAsset.config,
+        volume: bgmVol * this.bgmVol
+      }) as Phaser.Sound.WebAudioSound;
+      this.currBgMusicKey = soundAsset.key;
+  
+      // Finally, play it
+      this.currBgMusic.play();
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   /**
