@@ -6,7 +6,7 @@ import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { Chapter, ErrorSeverity, ErrorType, SourceError, Variant } from 'js-slang/dist/types';
 import { eventChannel, SagaIterator } from 'redux-saga';
-import { call, cancel, cancelled, delay, fork, put, race, select, take } from 'redux-saga/effects';
+import { call, cancel, cancelled, fork, put, race, select, take } from 'redux-saga/effects';
 import { IConduit } from 'sa-conductor/dist/conduit';
 import * as Sourceror from 'sourceror';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
@@ -524,13 +524,25 @@ export function* evalCodeConductorSaga(
   );
   const stdoutTask = yield fork(handleStdout, hostPlugin, workspaceLocation);
   yield call([hostPlugin, 'runEvaluator'], entrypointFilePath);
-  yield delay(execTime);
+  while (true) {
+    const { stop } = yield race({
+      repl: take(actions.evalRepl),
+      stop: take(actions.beginInterruptExecution)
+    });
+    if (stop) break;
+    const code: string = yield select(
+      (state: OverallState) => state.workspaces[workspaceLocation].replValue
+    );
+    yield put(actions.sendReplInputToOutput(code, workspaceLocation));
+    yield put(actions.clearReplInput(workspaceLocation));
+    yield call([hostPlugin, 'sendChunk'], code);
+  }
   yield call([conduit, 'terminate']);
   yield cancel(stdoutTask);
   //yield put(actions.debuggerReset(workspaceLocation));
   yield put(actions.endInterruptExecution(workspaceLocation));
-  //console.log("killed");
-  //yield call(URL.revokeObjectURL, url);
+  console.log('killed');
+  yield call(URL.revokeObjectURL, url);
 }
 
 // Special module errors
