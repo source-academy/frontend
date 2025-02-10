@@ -15,7 +15,8 @@ import { makeCCompilerConfig, specialCReturnObject } from 'src/commons/utils/CTo
 import { javaRun } from 'src/commons/utils/JavaHelper';
 import { BrowserHostPlugin } from 'src/features/conductor/BrowserHostPlugin';
 import { createConductor } from 'src/features/conductor/createConductor';
-import { featureConductor } from 'src/features/conductor/featureConductor';
+import { flagConductorEnable } from 'src/features/conductor/flagConductorEnable';
+import { flagConductorEvaluatorUrl } from 'src/features/conductor/flagConductorEvaluatorUrl';
 import StoriesActions from 'src/features/stories/StoriesActions';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
@@ -44,7 +45,7 @@ export function* evalCodeSaga(
   actionType: string,
   storyEnv?: string
 ): SagaIterator {
-  if (yield call(selectFeature, featureConductor)) {
+  if (yield call(selectFeature, flagConductorEnable)) {
     return yield call(
       evalCodeConductorSaga,
       files,
@@ -511,7 +512,7 @@ export function* evalCodeConductorSaga(
 ): SagaIterator {
   const evaluatorResponse: Response = yield call(
     fetch,
-    'https://fyp.tsammeow.dev/evaluator/worker.js' // temporary evaluator
+    yield call(selectFeature, flagConductorEvaluatorUrl) // temporary evaluator
   );
   if (!evaluatorResponse.ok) throw Error("can't get evaluator");
   const evaluatorBlob: Blob = yield call([evaluatorResponse, 'blob']);

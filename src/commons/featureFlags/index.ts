@@ -18,10 +18,10 @@ const featureFlagsSlice = createSlice({
       state: FeatureFlagsState,
       action: { payload: { featureFlag: FeatureFlag<T>; value: T } }
     ) {
-      state.modifiedFlags[action.payload.featureFlag[0]] = action.payload.value;
+      state.modifiedFlags[action.payload.featureFlag.flagName] = action.payload.value;
     },
     resetFlag<T>(state: FeatureFlagsState, action: { payload: { featureFlag: FeatureFlag<T> } }) {
-      delete state.modifiedFlags[action.payload.featureFlag[0]];
+      delete state.modifiedFlags[action.payload.featureFlag.flagName];
     }
   }
 });
@@ -29,3 +29,11 @@ const featureFlagsSlice = createSlice({
 export const FeatureFlagsActions = featureFlagsSlice.actions;
 
 export const FeatureFlagsReducer = featureFlagsSlice.reducer;
+
+export function createFeatureFlag<T>(
+  flagName: string,
+  defaultValue: T,
+  flagDesc?: string
+): FeatureFlag<T> {
+  return new FeatureFlag<T>(flagName, defaultValue, flagDesc);
+}
