@@ -167,7 +167,7 @@ class GameSoundManager {
         volume: bgmVol * this.bgmVol
       }) as Phaser.Sound.WebAudioSound;
       this.currBgMusicKey = soundAsset.key;
-  
+
       // Finally, play it
       this.currBgMusic.play();
     } catch (err) {
