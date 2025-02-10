@@ -10,7 +10,7 @@ import { call, cancel, cancelled, fork, put, race, select, take } from 'redux-sa
 import { IConduit } from 'sa-conductor/dist/conduit';
 import * as Sourceror from 'sourceror';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
-import { selectFeature } from 'src/commons/featureFlags/selectFeature';
+import { selectFeatureSaga } from 'src/commons/featureFlags/selectFeatureSaga';
 import { makeCCompilerConfig, specialCReturnObject } from 'src/commons/utils/CToWasmHelper';
 import { javaRun } from 'src/commons/utils/JavaHelper';
 import { BrowserHostPlugin } from 'src/features/conductor/BrowserHostPlugin';
@@ -45,7 +45,7 @@ export function* evalCodeSaga(
   actionType: string,
   storyEnv?: string
 ): SagaIterator {
-  if (yield call(selectFeature, flagConductorEnable)) {
+  if (yield call(selectFeatureSaga, flagConductorEnable)) {
     return yield call(
       evalCodeConductorSaga,
       files,
@@ -512,7 +512,7 @@ export function* evalCodeConductorSaga(
 ): SagaIterator {
   const evaluatorResponse: Response = yield call(
     fetch,
-    yield call(selectFeature, flagConductorEvaluatorUrl) // temporary evaluator
+    yield call(selectFeatureSaga, flagConductorEvaluatorUrl) // temporary evaluator
   );
   if (!evaluatorResponse.ok) throw Error("can't get evaluator");
   const evaluatorBlob: Blob = yield call([evaluatorResponse, 'blob']);
