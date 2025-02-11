@@ -90,8 +90,14 @@ export const ControlBarAutorunButtons: React.FC<ControlBarAutorunButtonProps> = 
           />
         </div>
       )}
-      {showAutoRunIndicator || showRunButton}
-      {showStopButton}
+      {conductorEnabled ? (
+        <>
+          {showAutoRunIndicator || showRunButton}
+          {showStopButton}
+        </>
+      ) : (
+        showAutoRunIndicator || showStopButton || showRunButton
+      )}
       {showDebuggerPause}
       {showDebuggerResume}
       {showDebuggerReset('Stop Debugger')}

@@ -1,6 +1,4 @@
 import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
-import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
-import { store } from 'src/pages/createStore';
 
 import { CodeOutput, InterpreterOutput } from '../../application/ApplicationTypes';
 import Constants from '../../utils/Constants';
@@ -105,9 +103,6 @@ export const handleReplActions = (builder: ActionReducerMapBuilder<WorkspaceMana
       state[workspaceLocation].replHistory.records = newReplHistoryRecords;
     })
     .addCase(WorkspaceActions.evalRepl, (state, action) => {
-      if (selectConductorEnable(store.getState())) {
-        return; // no-op: either we will already be running, or it will not start running
-      }
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].isRunning = true;
     })
