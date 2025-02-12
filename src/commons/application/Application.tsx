@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom';
-import Messages, { MessageType, sendToWebview } from 'src/features/vscode/messages';
+import Messages, { MessageType, MessageTypeNames, sendToWebview } from 'src/features/vscode/messages';
 
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
@@ -82,7 +82,7 @@ const Application: React.FC = () => {
       return true;
     };
 
-    const message = Messages.WebviewStarted(null);
+    const message = Messages.ExtensionPing();
     sendToWebview(message);
 
     window.addEventListener('message', event => {
@@ -91,9 +91,9 @@ const Application: React.FC = () => {
       if (!event.origin.startsWith('vscode-webview://')) {
         return;
       }
-      // console.log(`FRONTEND: Message from ${event.origin}: ${JSON.stringify(message)}`);
+      console.log(`FRONTEND: Message from ${event.origin}: ${JSON.stringify(message)}`);
       switch (message.type) {
-        case 'WebviewStarted':
+        case MessageTypeNames.ExtensionPong:
           console.log('Received WebviewStarted message, will set vsc');
           dispatch(VscodeActions.setVscode());
 
@@ -103,7 +103,7 @@ const Application: React.FC = () => {
             dispatch(SessionActions.setTokens({accessToken: token.accessToken, refreshToken: token.refreshToken}));
           }
           break;
-        case 'Text':
+        case MessageTypeNames.Text:
           const code = message.code;
           console.log(`FRONTEND: TextMessage: ${code}`);
           // TODO: Don't change ace editor directly
