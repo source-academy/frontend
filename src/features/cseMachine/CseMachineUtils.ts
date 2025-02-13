@@ -756,7 +756,7 @@ export function getControlItemComponent(
       case InstrType.BRANCH:
         return new ControlItemComponent(
           'branch',
-          'Pop boolean value from stash and execute corresponding branch',
+          'Branch to the consequent or alternative',
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,
