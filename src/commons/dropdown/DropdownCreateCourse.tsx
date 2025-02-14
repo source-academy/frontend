@@ -40,6 +40,7 @@ const DropdownCreateCourse: React.FC<Props> = props => {
     enableAchievements: true,
     enableSourcecast: true,
     enableStories: false,
+    enableExamMode: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: ''
@@ -231,6 +232,18 @@ const DropdownCreateCourse: React.FC<Props> = props => {
                 setCourseConfig({
                   ...courseConfig,
                   enableStories: (e.target as HTMLInputElement).checked
+                })
+              }
+            />
+
+            <Switch
+              checked={courseConfig.enableExamMode}
+              inline
+              label="Enable Exam Mode"
+              onChange={e =>
+                setCourseConfig({
+                  ...courseConfig,
+                  enableExamMode: (e.target as HTMLInputElement).checked
                 })
               }
             />
