@@ -15,7 +15,7 @@ import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 import { createNewSession, getDocInfoFromSessionId } from '../collabEditing/CollabEditingHelper';
 import ControlButton from '../ControlButton';
-import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
 type ControlBarSessionButtonsProps = DispatchProps & StateProps;
 
@@ -53,7 +53,12 @@ export class ControlBarSessionButtons extends React.PureComponent<
 
   constructor(props: ControlBarSessionButtonsProps) {
     super(props);
-    this.state = { joinElemValue: '', sessionEditingId: '', sessionViewingId: '', sessionIndicatorActive: !!props.sharedbConnected};
+    this.state = {
+      joinElemValue: '',
+      sessionEditingId: '',
+      sessionViewingId: '',
+      sessionIndicatorActive: !!props.sharedbConnected
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.sessionEditingIdInputElem = React.createRef();
@@ -93,7 +98,6 @@ export class ControlBarSessionButtons extends React.PureComponent<
           });
           this.props.handleSetEditorSessionId!(resp.sessionEditingId);
           this.props.handleSetSessionDetails!({ docId: resp.docId, readOnly: false });
-          this.setState
         }, handleError);
       }
     };
@@ -120,7 +124,10 @@ export class ControlBarSessionButtons extends React.PureComponent<
                   readOnly={true}
                   ref={this.sessionEditingIdInputElem}
                 />
-                <CopyToClipboard text={'' + this.state.sessionEditingId}>
+                <CopyToClipboard
+                  text={'' + this.state.sessionEditingId}
+                  onCopy={() => showSuccessMessage('Copied to clipboard')}
+                >
                   <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectSessionEditingId} />
                 </CopyToClipboard>
               </FormGroup>
@@ -132,7 +139,10 @@ export class ControlBarSessionButtons extends React.PureComponent<
                   readOnly={true}
                   ref={this.sessionViewingIdInputElem}
                 />
-                <CopyToClipboard text={'' + this.state.sessionViewingId}>
+                <CopyToClipboard
+                  text={'' + this.state.sessionViewingId}
+                  onCopy={() => showSuccessMessage('Copied to clipboard')}
+                >
                   <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectSessionViewingId} />
                 </CopyToClipboard>
               </FormGroup>
@@ -222,9 +232,11 @@ export class ControlBarSessionButtons extends React.PureComponent<
 
     const temporarySessionIndicator = (
       <Text>
-        {this.props.editorSessionId !== '' ? 'Current Session ID: ' + this.props.editorSessionId : 'No session active.'}
+        {this.props.editorSessionId !== ''
+          ? 'Current Session ID: ' + this.props.editorSessionId
+          : 'No session active.'}
       </Text>
-    )
+    );
 
     return (
       <Tooltip content={tooltipContent} disabled={tooltipContent === undefined}>
