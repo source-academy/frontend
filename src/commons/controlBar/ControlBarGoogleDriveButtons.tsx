@@ -4,7 +4,7 @@ import React from 'react';
 
 import { PersistenceFile, PersistenceState } from '../../features/persistence/PersistenceTypes';
 import ControlButton from '../ControlButton';
-import { useResponsive } from '../utils/Hooks';
+import { useResponsive, useSession } from '../utils/Hooks';
 
 const stateToIntent: { [state in PersistenceState]: Intent } = {
   INACTIVE: Intent.NONE,
@@ -25,6 +25,7 @@ type Props = {
 };
 
 export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
+  const { enableExamMode } = useSession();
   const { isMobileBreakpoint } = useResponsive();
   const state: PersistenceState = props.currentFile
     ? props.isDirty
@@ -64,25 +65,29 @@ export const ControlBarGoogleDriveButtons: React.FC<Props> = props => {
     : undefined;
 
   return (
-    <Tooltip content={tooltipContent} disabled={tooltipContent === undefined}>
-      <Popover
-        autoFocus={false}
-        content={
-          <div>
-            <ButtonGroup large={!isMobileBreakpoint}>
-              {openButton}
-              {saveButton}
-              {saveAsButton}
-              {logoutButton}
-            </ButtonGroup>
-          </div>
-        }
-        onOpening={props.onPopoverOpening}
-        popoverClassName={Classes.POPOVER_DISMISS}
-        disabled={props.isFolderModeEnabled}
-      >
-        {mainButton}
-      </Popover>
-    </Tooltip>
+    enableExamMode ? (
+      <></>
+    ) : (
+      <Tooltip content={tooltipContent} disabled={tooltipContent === undefined}>
+        <Popover
+          autoFocus={false}
+          content={
+            <div>
+              <ButtonGroup large={!isMobileBreakpoint}>
+                {openButton}
+                {saveButton}
+                {saveAsButton}
+                {logoutButton}
+              </ButtonGroup>
+            </div>
+          }
+          onOpening={props.onPopoverOpening}
+          popoverClassName={Classes.POPOVER_DISMISS}
+          disabled={props.isFolderModeEnabled}
+        >
+          {mainButton}
+        </Popover>
+      </Tooltip>
+    )
   );
 };

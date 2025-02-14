@@ -25,7 +25,7 @@ import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentH
 import makeUploadTabFrom from 'src/commons/sideContent/content/SideContentUpload';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
-import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
+import { useResponsive, useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   showFullJSWarningOnUrlLoad,
   showFulTSWarningOnUrlLoad,
@@ -197,6 +197,7 @@ export async function handleHash(
 const Playground: React.FC<PlaygroundProps> = props => {
   const { isSicpEditor } = props;
   const workspaceLocation: WorkspaceLocation = isSicpEditor ? 'sicp' : 'playground';
+  const { enableExamMode } = useSession();
   const { isMobileBreakpoint } = useResponsive();
 
   const [deviceSecret, setDeviceSecret] = useState<string | undefined>();
@@ -972,9 +973,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
     controlBarProps: {
       editorButtons: [
         autorunButtons,
-        languageConfig.chapter === Chapter.FULL_JS ? null : shareButton,
+        languageConfig.chapter === Chapter.FULL_JS || enableExamMode ? null : shareButton,
         chapterSelectButton,
-        isSicpEditor ? null : sessionButtons,
+        isSicpEditor || enableExamMode ? null : sessionButtons,
         languageConfig.supports.multiFile ? toggleFolderModeButton : null,
         persistenceButtons,
         githubButtons,

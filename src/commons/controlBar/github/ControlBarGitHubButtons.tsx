@@ -2,7 +2,7 @@ import { ButtonGroup, Classes, Intent, Popover, Tooltip } from '@blueprintjs/cor
 import { IconNames } from '@blueprintjs/icons';
 import { Octokit } from '@octokit/rest';
 import React from 'react';
-import { useResponsive } from 'src/commons/utils/Hooks';
+import { useResponsive, useSession } from 'src/commons/utils/Hooks';
 
 import { GitHubSaveInfo } from '../../../features/github/GitHubTypes';
 import ControlButton from '../../ControlButton';
@@ -26,6 +26,7 @@ type Props = {
  * @param props Component properties
  */
 export const ControlBarGitHubButtons: React.FC<Props> = props => {
+  const { enableExamMode } = useSession();
   const { isMobileBreakpoint } = useResponsive();
 
   const filePath = props.githubSaveInfo.filePath || '';
@@ -89,24 +90,28 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
     : undefined;
 
   return (
-    <Tooltip content={tooltipContent} disabled={tooltipContent === undefined}>
-      <Popover
-        autoFocus={false}
-        content={
-          <div>
-            <ButtonGroup large={!isMobileBreakpoint}>
-              {openButton}
-              {saveButton}
-              {saveAsButton}
-              {loginButton}
-            </ButtonGroup>
-          </div>
-        }
-        popoverClassName={Classes.POPOVER_DISMISS}
-        disabled={props.isFolderModeEnabled}
-      >
-        {mainButton}
-      </Popover>
-    </Tooltip>
+    enableExamMode ? (
+      <></>
+    ) : (
+      <Tooltip content={tooltipContent} disabled={tooltipContent === undefined}>
+        <Popover
+          autoFocus={false}
+          content={
+            <div>
+              <ButtonGroup large={!isMobileBreakpoint}>
+                {openButton}
+                {saveButton}
+                {saveAsButton}
+                {loginButton}
+              </ButtonGroup>
+            </div>
+          }
+          popoverClassName={Classes.POPOVER_DISMISS}
+          disabled={props.isFolderModeEnabled}
+        >
+          {mainButton}
+        </Popover>
+      </Tooltip>
+    )
   );
 };
