@@ -73,6 +73,7 @@ const AdminPanel: React.FC = () => {
     session.enableGame,
     session.enableSourcecast,
     session.enableStories,
+    session.enableExamMode,
     session.moduleHelpText,
     session.viewable
   ]);
