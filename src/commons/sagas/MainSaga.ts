@@ -4,6 +4,7 @@ import { all, fork } from 'redux-saga/effects';
 import { mockBackendSaga } from '../mocks/BackendMocks';
 import Constants from '../utils/Constants';
 import AchievementSaga from './AchievementSaga';
+import LeaderboardSaga from './LeaderboardSaga';
 import BackendSaga from './BackendSaga';
 import GitHubPersistenceSaga from './GitHubPersistenceSaga';
 import LoginSaga from './LoginSaga';
@@ -21,6 +22,7 @@ export default function* MainSaga(): SagaIterator {
     fork(LoginSaga),
     fork(PlaygroundSaga),
     fork(AchievementSaga),
+    fork(LeaderboardSaga),
     fork(PersistenceSaga),
     fork(GitHubPersistenceSaga),
     fork(RemoteExecutionSaga),

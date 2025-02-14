@@ -36,6 +36,8 @@ const CourseConfigPanel: React.FC<Props> = props => {
     viewable,
     enableGame,
     enableAchievements,
+    enableOverallLeaderboard,
+    enableContestLeaderboard,
     enableSourcecast,
     enableStories,
     moduleHelpText
@@ -163,6 +165,26 @@ const CourseConfigPanel: React.FC<Props> = props => {
               props.setCourseConfiguration({
                 ...props.courseConfiguration,
                 enableAchievements: (e.target as HTMLInputElement).checked
+              })
+            }
+          />
+          <Switch
+            checked={enableOverallLeaderboard}
+            label="Enable Overall Leaderboard"
+            onChange={e =>
+              props.setCourseConfiguration({
+                ...props.courseConfiguration,
+                enableOverallLeaderboard: (e.target as HTMLInputElement).checked
+              })
+            }
+          />
+          <Switch
+            checked={enableContestLeaderboard}
+            label="Enable Contest Leaderboard"
+            onChange={e =>
+              props.setCourseConfiguration({
+                ...props.courseConfiguration,
+                enableContestLeaderboard: (e.target as HTMLInputElement).checked
               })
             }
           />

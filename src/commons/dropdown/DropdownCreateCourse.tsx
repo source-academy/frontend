@@ -38,6 +38,8 @@ const DropdownCreateCourse: React.FC<Props> = props => {
     viewable: true,
     enableGame: true,
     enableAchievements: true,
+    enableOverallLeaderboard: true,
+    enableContestLeaderboard: true,
     enableSourcecast: true,
     enableStories: false,
     sourceChapter: Chapter.SOURCE_1,
@@ -194,6 +196,28 @@ const DropdownCreateCourse: React.FC<Props> = props => {
                 setCourseConfig({
                   ...courseConfig,
                   enableAchievements: (e.target as HTMLInputElement).checked
+                })
+              }
+            />
+            <Switch
+              checked={courseConfig.enableOverallLeaderboard}
+              inline
+              label="Enable Overall Leaderboard"
+              onChange={e =>
+                setCourseConfig({
+                  ...courseConfig,
+                  enableOverallLeaderboard: (e.target as HTMLInputElement).checked
+                })
+              }
+            />
+            <Switch
+              checked={courseConfig.enableContestLeaderboard}
+              inline
+              label="Enable Contest Leaderboard"
+              onChange={e =>
+                setCourseConfig({
+                  ...courseConfig,
+                  enableContestLeaderboard: (e.target as HTMLInputElement).checked
                 })
               }
             />

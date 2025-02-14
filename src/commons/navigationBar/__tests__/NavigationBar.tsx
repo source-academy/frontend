@@ -37,6 +37,8 @@ describe('NavigationBar', () => {
       courseId: 1,
       courseShortName: 'CS1101S',
       enableAchievements: true,
+      enableContestLeaderboard: false,
+      enableOverallLeaderboard: false,
       enableSourcecast: true,
       assessmentConfigurations: [
         {

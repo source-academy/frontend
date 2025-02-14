@@ -56,6 +56,7 @@ import { castLibrary } from '../utils/CastBackend';
 import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { request } from '../utils/RequestHelper';
+import { LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const XLSX = require('xlsx');
@@ -455,6 +456,33 @@ export const getTotalXp = async (tokens: Tokens, courseRegId?: number): Promise<
   }
   const totalXp = await resp.json();
   return totalXp;
+};
+
+/**
+ * GET /courses/{courseId}/all_user_xp
+ */
+export const getAllTotalXp = async (tokens: Tokens): Promise<number | null> => {
+  let resp;
+  resp = await request(`${courseId()}/all_users_xp`, 'GET', {
+    ...tokens
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+  
+  const rows = await resp.json();
+
+  return rows.users.map(
+    (row: any): LeaderboardRow => ({
+      rank: row.rank,
+      name: row.name,
+      username: row.username,
+      xp: row.total_xp,
+      avatar: "",
+      achievements: ""
+    })
+  );
 };
 
 /**

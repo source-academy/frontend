@@ -1,3 +1,4 @@
+import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 import CommonsActions from '../../commons/application/actions/CommonsActions';
 import InterpreterActions from '../../commons/application/actions/InterpreterActions';
 import SessionActions from '../../commons/application/actions/SessionActions';
@@ -21,6 +22,7 @@ import { ActionType } from './TypeHelper';
 
 export const actions = {
   ...AchievementActions,
+  ...LeaderboardActions,
   ...CommonsActions,
   ...CollabEditingActions,
   ...DashboardActions,
