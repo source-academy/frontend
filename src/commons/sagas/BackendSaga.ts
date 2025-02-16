@@ -822,6 +822,21 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
       assessmentConfigurations: AssessmentConfiguration[] | null;
     } = yield call(getLatestCourseRegistrationAndConfiguration, tokens);
 
+    if (courseConfiguration?.enableExamMode) {
+      const {
+        user
+      }: {
+        user: User | null;
+        courseRegistration: CourseRegistration | null;
+        courseConfiguration: CourseConfiguration | null;
+        assessmentConfigurations: AssessmentConfiguration[] | null;
+      } = yield call(getUser, tokens);
+      
+      if (user) {
+        yield put(actions.setUser(user));
+      }
+    }
+
     if (!courseRegistration || !courseConfiguration || !assessmentConfigurations) {
       yield call(showWarningMessage, `Failed to load course!`);
       return yield routerNavigate('/welcome');

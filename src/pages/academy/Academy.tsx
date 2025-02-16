@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { Navigate, Outlet, useNavigate, useParams } from 'react-router';
 import ResearchAgreementPrompt from 'src/commons/researchAgreementPrompt/ResearchAgreementPrompt';
 import Constants from 'src/commons/utils/Constants';
-import { useSession } from 'src/commons/utils/Hooks';
+import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/Academy.module.scss';
 
 import SessionActions from '../../commons/application/actions/SessionActions';
@@ -37,6 +37,7 @@ const CourseSelectingAcademy: React.FC = () => {
   const { courseId } = useSession();
   const { courseId: routeCourseIdStr } = useParams<{ courseId?: string }>();
   const routeCourseId = routeCourseIdStr != null ? parseInt(routeCourseIdStr, 10) : undefined;
+  const isUnderExamMode = useTypedSelector(state => state.session.enableExamMode);
 
   React.useEffect(() => {
     // Regex to handle case where routeCourseIdStr is not a number
@@ -47,7 +48,11 @@ const CourseSelectingAcademy: React.FC = () => {
     if (routeCourseId !== undefined && !Number.isNaN(routeCourseId) && courseId !== routeCourseId) {
       dispatch(SessionActions.updateLatestViewedCourse(routeCourseId));
     }
-  }, [courseId, dispatch, routeCourseId, navigate, routeCourseIdStr]);
+
+    if (isUnderExamMode) {
+      navigate(`/courses/${courseId}`);
+    }
+  }, [courseId, dispatch, routeCourseId, navigate, routeCourseIdStr, isUnderExamMode]);
 
   return Number.isNaN(routeCourseId) ? (
     <Navigate to="/" />
