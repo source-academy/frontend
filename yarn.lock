@@ -9697,7 +9697,7 @@ __metadata:
     redux-saga-test-plan: "npm:^4.0.6"
     rehype-react: "npm:^8.0.0"
     resize-observer-polyfill: "npm:^1.5.1"
-    sa-conductor: "https://github.com/tsammeow/sa-conductor.git#0.1.3"
+    sa-conductor: "https://github.com/tsammeow/sa-conductor.git#0.1.4"
     sa-languages: "https://github.com/tsammeow/sa-languages.git"
     sass: "npm:^1.63.6"
     showdown: "npm:^2.1.0"
@@ -16751,10 +16751,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sa-conductor@https://github.com/tsammeow/sa-conductor.git#0.1.3":
-  version: 0.1.3
-  resolution: "sa-conductor@https://github.com/tsammeow/sa-conductor.git#commit=c1021d469b8800c019e9551e0d601da712aca920"
-  checksum: 10c0/c8d6c9687c0d528cf4ab3c281b8508fcc013d7723463ea57af9653ce9d907840a660cf8c6c5a0767d438aef2482830ca2b422fb32d558a0acea83626d2601513
+"sa-conductor@https://github.com/tsammeow/sa-conductor.git#0.1.4":
+  version: 0.1.4
+  resolution: "sa-conductor@https://github.com/tsammeow/sa-conductor.git#commit=85b1dc310460de8d34cb4612b0438539d48c62ce"
+  checksum: 10c0/096166b514332f67a140073e448d86405cba25616d7b7fa35686c5e3ecba6a07c82f89a13a00d67c36f998a9065e60d22e48a3aa0f8223f02d30dd270bfccf71
   languageName: node
   linkType: hard
 
