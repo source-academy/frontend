@@ -89,29 +89,27 @@ export const ControlBarGitHubButtons: React.FC<Props> = props => {
     ? 'Currently unsupported in Folder mode'
     : undefined;
 
-  return (
-    enableExamMode ? (
-      <></>
-    ) : (
-      <Tooltip content={tooltipContent} disabled={tooltipContent === undefined}>
-        <Popover
-          autoFocus={false}
-          content={
-            <div>
-              <ButtonGroup large={!isMobileBreakpoint}>
-                {openButton}
-                {saveButton}
-                {saveAsButton}
-                {loginButton}
-              </ButtonGroup>
-            </div>
-          }
-          popoverClassName={Classes.POPOVER_DISMISS}
-          disabled={props.isFolderModeEnabled}
-        >
-          {mainButton}
-        </Popover>
-      </Tooltip>
-    )
+  return enableExamMode ? (
+    <></>
+  ) : (
+    <Tooltip content={tooltipContent} disabled={tooltipContent === undefined}>
+      <Popover
+        autoFocus={false}
+        content={
+          <div>
+            <ButtonGroup large={!isMobileBreakpoint}>
+              {openButton}
+              {saveButton}
+              {saveAsButton}
+              {loginButton}
+            </ButtonGroup>
+          </div>
+        }
+        popoverClassName={Classes.POPOVER_DISMISS}
+        disabled={props.isFolderModeEnabled}
+      >
+        {mainButton}
+      </Popover>
+    </Tooltip>
   );
 };

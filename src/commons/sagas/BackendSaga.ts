@@ -831,7 +831,7 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
         courseConfiguration: CourseConfiguration | null;
         assessmentConfigurations: AssessmentConfiguration[] | null;
       } = yield call(getUser, tokens);
-      
+
       if (user) {
         yield put(actions.setUser(user));
       }
