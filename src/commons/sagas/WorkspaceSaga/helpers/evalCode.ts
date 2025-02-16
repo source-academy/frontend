@@ -523,7 +523,7 @@ export function* evalCodeConductorSaga(
     async (fileName: string) => files[fileName]
   );
   const stdoutTask = yield fork(handleStdout, hostPlugin, workspaceLocation);
-  yield call([hostPlugin, 'runEvaluator'], entrypointFilePath);
+  yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);
   while (true) {
     const { stop } = yield race({
       repl: take(actions.evalRepl),
