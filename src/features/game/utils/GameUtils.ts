@@ -60,7 +60,10 @@ export function toS3Path(fileName: string, courseCoded = false) {
   if (fileName.startsWith('/')) {
     fileName = fileName.substring(1);
   }
-  return Constants.assetsFolder + (courseCoded && Constants.useBackendAssetPrefix ? assetsPrefix() + fileName : fileName);
+  return (
+    Constants.assetsFolder +
+    (courseCoded && Constants.useBackendAssetPrefix ? assetsPrefix() + fileName : fileName)
+  );
 }
 
 /**
