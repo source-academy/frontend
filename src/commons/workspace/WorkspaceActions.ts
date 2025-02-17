@@ -113,8 +113,9 @@ const newActions = createActions('workspace', {
   updateEditorValue: (
     workspaceLocation: WorkspaceLocation,
     editorTabIndex: number,
-    newEditorValue: string
-  ) => ({ workspaceLocation, editorTabIndex, newEditorValue }),
+    newEditorValue: string,
+    isFromVscode: boolean = false
+  ) => ({ workspaceLocation, editorTabIndex, newEditorValue, isFromVscode }),
   setEditorBreakpoint: (
     workspaceLocation: WorkspaceLocation,
     editorTabIndex: number,
