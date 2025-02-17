@@ -25,7 +25,7 @@ import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentH
 import makeUploadTabFrom from 'src/commons/sideContent/content/SideContentUpload';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
-import { useResponsive, useSession, useTypedSelector } from 'src/commons/utils/Hooks';
+import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   showFullJSWarningOnUrlLoad,
   showFulTSWarningOnUrlLoad,
@@ -197,7 +197,6 @@ export async function handleHash(
 const Playground: React.FC<PlaygroundProps> = props => {
   const { isSicpEditor } = props;
   const workspaceLocation: WorkspaceLocation = isSicpEditor ? 'sicp' : 'playground';
-  const { enableExamMode } = useSession();
   const { isMobileBreakpoint } = useResponsive();
 
   const [deviceSecret, setDeviceSecret] = useState<string | undefined>();
@@ -234,7 +233,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sourceChapter: courseSourceChapter,
     sourceVariant: courseSourceVariant,
     googleUser: persistenceUser,
-    githubOctokitObject
+    githubOctokitObject,
+    enableExamMode
   } = useTypedSelector(state => state.session);
 
   const dispatch = useDispatch();
@@ -750,7 +750,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       }
     }
 
-    if (!isSicpEditor && !Constants.playgroundOnly) {
+    if (!isSicpEditor && !Constants.playgroundOnly && !enableExamMode) {
       tabs.push(remoteExecutionTab);
     }
 
@@ -766,7 +766,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     shouldShowDataVisualizer,
     shouldShowCseMachine,
     shouldShowSubstVisualizer,
-    remoteExecutionTab
+    remoteExecutionTab,
+    enableExamMode
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
@@ -977,8 +978,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
         chapterSelectButton,
         isSicpEditor || enableExamMode ? null : sessionButtons,
         languageConfig.supports.multiFile ? toggleFolderModeButton : null,
-        persistenceButtons,
-        githubButtons,
+        enableExamMode ? null : persistenceButtons,
+        enableExamMode ? null : githubButtons,
         usingSubst || usingCse || isCseVariant(languageConfig.variant)
           ? stepperStepLimit
           : isSourceLanguage(languageConfig.chapter)
