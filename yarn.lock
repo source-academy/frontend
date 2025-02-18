@@ -9698,7 +9698,7 @@ __metadata:
     rehype-react: "npm:^8.0.0"
     resize-observer-polyfill: "npm:^1.5.1"
     sa-conductor: "https://github.com/tsammeow/sa-conductor.git#0.1.4"
-    sa-languages: "https://github.com/tsammeow/sa-languages.git"
+    sa-languages: "https://github.com/source-academy/sa-languages.git"
     sass: "npm:^1.63.6"
     showdown: "npm:^2.1.0"
     sourceror: "npm:^0.8.5"
@@ -16758,9 +16758,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sa-languages@https://github.com/tsammeow/sa-languages.git":
+"sa-languages@https://github.com/source-academy/sa-languages.git":
   version: 0.0.1
-  resolution: "sa-languages@https://github.com/tsammeow/sa-languages.git#commit=cc1c95614ebbec49e4d3957fd3c1ee1944aa70d8"
+  resolution: "sa-languages@https://github.com/source-academy/sa-languages.git#commit=cc1c95614ebbec49e4d3957fd3c1ee1944aa70d8"
   checksum: 10c0/48b24888503d19e8fba7281bcadea8472cc4d4da24d57491ac7d342f437042795d84faa6ba8edfc1e77ca65019777aaff8f97e66bea2d298ac721aba5af87c13
   languageName: node
   linkType: hard
