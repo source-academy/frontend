@@ -88,6 +88,14 @@ export default class GlowingImage {
     this.blinkClearer?.();
   }
 
+  public hoverGlowStart() {
+    this.imageGlow.setAlpha(0.5);
+  }
+
+  public hoverGlowEnd() {
+    this.imageGlow.setAlpha(0);
+  }
+
   public getContainer() {
     return this.container;
   }
