@@ -209,9 +209,9 @@ export default class ParserValidator {
                   sound => sound.soundType === GameSoundType.BGM && sound.key === itemId
                 ).length;
               if (numberOfBgm === 0) {
-                throw new Error(`Cannot find bgm key "${itemId}"`);
+                console.error(`Cannot find bgm key "${itemId}"`);
               } else if (numberOfBgm > 1) {
-                throw new Error(`More than 1 bgm key "${itemId}"`);
+                console.error(`More than 1 bgm key "${itemId}"`);
               }
               break;
 
