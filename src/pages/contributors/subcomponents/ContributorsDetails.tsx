@@ -11,17 +11,17 @@ const ContributorsDetails: React.FC = () => (
     <Card className={classes['contributorsDetails']} elevation={Elevation.ONE}>
       <H3>The Team behind the Source Academy</H3>
       <p className={classes['description']}>
-        The <i>Source Academy</i> is designed and developed by a team of students, most of who have
+        The <i>Source Academy</i> is designed and developed by a team of students, most of whom have
         used the system to learn the fundamentals of computing and enjoyed it. This page includes
-        all developers who contributed to the Source Academy <i>Strange</i> (2024) and its
-        precursors <i>Merlin</i> (2023), <i>Rook</i> (2022), <i>Knight</i> (2020) and <i>Cadet</i>{' '}
-        (2018). These versions succeeded Source Academy 2 (2017) and ultimately the original Source
-        Academy (2016).
+        all developers who contributed to the Source Academy <i>Charm</i> (2025) and its precursors{' '}
+        <i>Strange</i> (2024), <i>Merlin</i> (2023), <i>Rook</i> (2022), <i>Knight</i> (2020) and{' '}
+        <i>Cadet</i> (2018). These versions succeeded Source Academy 2 (2017) and ultimately the
+        original Source Academy (2016).
       </p>
       <div className={classes['leadership']}>
         <H5>
           <strong>
-            <u>2024 Leadership (Strange)</u>
+            <u>2025 Leadership (Charm)</u>
           </strong>
         </H5>
         <p>
@@ -37,7 +37,7 @@ const ContributorsDetails: React.FC = () => (
         </p>
         {dot}
         <p>
-          Richard Dominick
+          Gabriel Chang
           <br />
           <strong>(Backend)</strong>
         </p>
@@ -311,6 +311,49 @@ const ContributorsDetails: React.FC = () => (
           Richard Dominick
           <br />
           <strong>(Robotics)</strong>
+        </p>
+      </div>
+
+      <div className={classes['leadership']}>
+        <p className={classes['evenWider']}>
+          <strong>2024 Leadership (Strange)</strong>
+        </p>
+        <br />
+
+        <p>
+          Richard Dominick
+          <br />
+          <strong>(CTO)</strong>
+        </p>
+        {dot}
+        <p>
+          Zhang Yao
+          <br />
+          <strong>(Frontend)</strong>
+        </p>
+        {dot}
+        <p>
+          Richard Dominick
+          <br />
+          <strong>(Backend)</strong>
+        </p>
+        {dot}
+        <p>
+          Lee Hyung Woon
+          <br />
+          <strong>(Game)</strong>
+        </p>
+        {dot}
+        <p>
+          Kyriel Mortel Abad
+          <br />
+          <strong>(Languages)</strong>
+        </p>
+        {dot}
+        <p>
+          Lee Yi
+          <br />
+          <strong>(Modules)</strong>
         </p>
       </div>
       <div className={classes['contributors']}>
