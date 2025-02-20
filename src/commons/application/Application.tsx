@@ -107,6 +107,7 @@ const Application: React.FC = () => {
             const token = JSON.parse(message.token.trim());
             console.log(`FRONTEND: WebviewStarted: ${token}`);
             dispatch(SessionActions.setTokens({accessToken: token.accessToken, refreshToken: token.refreshToken}));
+            dispatch(SessionActions.fetchUserAndCourse());
           }
           break;
         case MessageTypeNames.Text:
