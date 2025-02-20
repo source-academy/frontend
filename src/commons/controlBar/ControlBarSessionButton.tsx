@@ -4,7 +4,6 @@ import {
   Divider,
   FormGroup,
   Menu,
-  MenuDivider,
   Popover,
   Text,
   Tooltip
@@ -36,7 +35,6 @@ type State = {
   joinElemValue: string;
   sessionEditingId: string;
   sessionViewingId: string;
-  sessionIndicatorActive: boolean;
 };
 
 function handleError(error: any) {
@@ -49,42 +47,16 @@ export class ControlBarSessionButtons extends React.PureComponent<
 > {
   private sessionEditingIdInputElem: React.RefObject<HTMLInputElement>;
   private sessionViewingIdInputElem: React.RefObject<HTMLInputElement>;
-  private timeoutId: NodeJS.Timeout | null = null;
 
   constructor(props: ControlBarSessionButtonsProps) {
     super(props);
-    this.state = {
-      joinElemValue: '',
-      sessionEditingId: '',
-      sessionViewingId: '',
-      sessionIndicatorActive: !!props.sharedbConnected
-    };
+    this.state = { joinElemValue: '', sessionEditingId: '', sessionViewingId: '' };
 
     this.handleChange = this.handleChange.bind(this);
     this.sessionEditingIdInputElem = React.createRef();
     this.sessionViewingIdInputElem = React.createRef();
     this.selectSessionEditingId = this.selectSessionEditingId.bind(this);
     this.selectSessionViewingId = this.selectSessionViewingId.bind(this);
-  }
-
-  componentDidUpdate(prevProps: ControlBarSessionButtonsProps) {
-    if (prevProps.sharedbConnected !== this.props.sharedbConnected) {
-      if (this.timeoutId) {
-        clearTimeout(this.timeoutId);
-      }
-      const currentSharedbConnected = this.props.sharedbConnected;
-      if (currentSharedbConnected) {
-        if (!this.state.sessionIndicatorActive) {
-          this.setState({ sessionIndicatorActive: true });
-        }
-      } else {
-        this.timeoutId = setTimeout(() => {
-          if (this.props.sharedbConnected === currentSharedbConnected) {
-            this.setState({ sessionIndicatorActive: false });
-          }
-        }, 3000);
-      }
-    }
   }
 
   public render() {
@@ -230,14 +202,6 @@ export class ControlBarSessionButtons extends React.PureComponent<
       ? 'Currently unsupported in Folder mode'
       : undefined;
 
-    const temporarySessionIndicator = (
-      <Text>
-        {this.props.editorSessionId !== ''
-          ? 'Current Session ID: ' + this.props.editorSessionId
-          : 'No session active.'}
-      </Text>
-    );
-
     return (
       <Tooltip content={tooltipContent} disabled={tooltipContent === undefined}>
         <Popover
@@ -245,8 +209,6 @@ export class ControlBarSessionButtons extends React.PureComponent<
             <Menu large={true}>
               {inviteButton}
               {this.props.editorSessionId === '' ? joinButton : leaveButton}
-              <MenuDivider></MenuDivider>
-              {temporarySessionIndicator}
             </Menu>
           }
           disabled={this.props.isFolderModeEnabled}
@@ -258,7 +220,7 @@ export class ControlBarSessionButtons extends React.PureComponent<
               iconColor:
                 this.props.editorSessionId === ''
                   ? undefined
-                  : this.state.sessionIndicatorActive
+                  : this.props.sharedbConnected
                     ? Colors.GREEN3
                     : Colors.RED3
             }}
