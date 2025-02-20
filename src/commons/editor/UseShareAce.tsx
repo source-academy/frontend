@@ -1,6 +1,10 @@
 import '@convergencelabs/ace-collab-ext/dist/css/ace-collab-ext.css';
 
-import { AceMultiCursorManager, AceMultiSelectionManager } from '@convergencelabs/ace-collab-ext';
+import {
+  AceMultiCursorManager,
+  AceMultiSelectionManager,
+  AceRadarView
+} from '@convergencelabs/ace-collab-ext';
 import * as Sentry from '@sentry/browser';
 import sharedbAce from '@sourceacademy/sharedb-ace';
 import React, { useMemo } from 'react';
@@ -27,7 +31,10 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
   const { name } = useSession();
 
-  const user = useMemo(() => ({ name, color: getColor() }), [name]);
+  const user = useMemo(
+    () => ({ id: editorSessionId, name, color: getColor() }),
+    [editorSessionId, name]
+  );
 
   React.useEffect(() => {
     if (!editorSessionId || !sessionDetails) {
@@ -38,17 +45,16 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
     const session = editor.getSession();
     const cursorManager = new AceMultiCursorManager(session);
     const selectionManager = new AceMultiSelectionManager(session);
+    const radarManager = new AceRadarView('ace-radar-view', editor);
     const ShareAce = new sharedbAce(sessionDetails.docId, {
       user,
-      cursorManager,
-      selectionManager,
       WsUrl: getSessionUrl(editorSessionId, true),
       pluginWsUrl: null,
       namespace: 'sa'
     });
 
     ShareAce.on('ready', () => {
-      ShareAce.add(editor, cursorManager, selectionManager, ['contents'], []);
+      ShareAce.add(editor, cursorManager, selectionManager, radarManager, ['contents'], []);
       propsRef.current.handleSetSharedbConnected!(true);
 
       // Disables editor in a read-only session
@@ -56,7 +62,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
       showSuccessMessage(
         `You have joined a session as ${sessionDetails.readOnly ? 'a viewer' : 'an editor'}.`
-      )
+      );
     });
     ShareAce.on('error', (path: string, error: any) => {
       console.error('ShareAce error', error);

@@ -302,9 +302,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
   );
 
   const sessionManagementTab: SideContentTab = useMemo(
-    () => makeSessionManagementTabFrom("test"),
+    () => makeSessionManagementTabFrom('test'),
     []
-  )
+  );
 
   const usingRemoteExecution =
     useTypedSelector(state => !!state.session.remoteExecutionSession) && !isSicpEditor;
@@ -757,7 +757,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
     if (!isSicpEditor && !Constants.playgroundOnly) {
       tabs.push(remoteExecutionTab);
-      if (editorSessionId !== ''){
+      if (editorSessionId !== '') {
         tabs.push(sessionManagementTab);
       }
     }
@@ -775,7 +775,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     shouldShowCseMachine,
     shouldShowSubstVisualizer,
     remoteExecutionTab,
-    editorSessionId
+    editorSessionId,
+    sessionManagementTab
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile

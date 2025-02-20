@@ -23,10 +23,10 @@ export const makeIntroductionTabFrom = (content: string): SideContentTab => ({
   id: SideContentType.introduction
 });
 
-export const makeSessionManagementTabFrom = (content:string) : SideContentTab => ({
+export const makeSessionManagementTabFrom = (content: string): SideContentTab => ({
   label: 'Session Management',
   iconName: IconNames.PEOPLE,
-  body: <Markdown content={"Manage your session here."}/>,
+  body: <Markdown content={'Manage your session here.'} />,
   id: SideContentType.sessionManagement
 });
 

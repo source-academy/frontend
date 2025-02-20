@@ -660,8 +660,11 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
 
   return (
     <Card className="Editor">
-      <div className="row editor-react-ace" data-testid="Editor">
+      <div className="row editor-react-ace" data-testid="Editor" id="editor-react-ace">
         <AceEditor {...aceEditorProps} ref={reactAceRef} />
+        {/* TODO: Add here to set the below element to display: none when not connected */}
+        {/* TODO: Ideally, it should also be able to detect if you're alone */}
+        <div id="ace-radar-view" />
       </div>
     </Card>
   );
