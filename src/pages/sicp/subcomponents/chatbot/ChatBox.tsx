@@ -32,6 +32,7 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
   const [chatId, setChatId] = useState<string>();
   const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_MESSAGE]);
   const [userInput, setUserInput] = useState('');
+  const [maxContentSize, setMaxContentSize] = useState(1000);
   const tokens = useTokens();
 
   const handleUserInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,7 +57,7 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [chatId, tokens, userInput]);
+  }, [chatId, tokens, userInput, maxContentSize]);
 
   const keyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
     e => {
@@ -71,8 +72,11 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
     initChat(tokens, getSection(), getText()).then(resp => {
       const message = resp.response;
       const conversationId = resp.conversationId;
+      const maxMessageSize = resp.maxContentSize;
       setMessages([message]);
+      setMaxContentSize(maxMessageSize);
       setChatId(conversationId);
+      setUserInput('');
     });
   }, [getSection, getText, tokens]);
 
@@ -100,22 +104,29 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
         ))}
         {isLoading && <p>loading...</p>}
       </div>
-      <input
-        type="text"
-        disabled={isLoading}
-        className={classes['user-input']}
-        placeholder={isLoading ? 'Waiting for response...' : 'Type your message here...'}
-        value={userInput}
-        onChange={handleUserInput}
-        onKeyDown={keyDown}
-      />
-      <div className={classes['button-container']}>
-        <Button disabled={isLoading} className={classes['button-send']} onClick={sendMessage}>
-          Send
-        </Button>
-        <Button className={classes['button-clean']} onClick={resetChat}>
-          Clean
-        </Button>
+      <div className={classes['control-container']}>
+        <input
+          type="text"
+          disabled={isLoading}
+          className={classes['user-input']}
+          placeholder={isLoading ? 'Waiting for response...' : 'Type your message here...'}
+          value={userInput}
+          onChange={handleUserInput}
+          onKeyDown={keyDown}
+          maxLength={maxContentSize}
+        />
+        <div className={classes['input-count-container']}>
+          <div className={classes['input-count']}>{`${userInput.length}/${maxContentSize}`}</div>
+        </div>
+
+        <div className={classes['button-container']}>
+          <Button disabled={isLoading} className={classes['button-send']} onClick={sendMessage}>
+            Send
+          </Button>
+          <Button className={classes['button-clean']} onClick={resetChat}>
+            Clean
+          </Button>
+        </div>
       </div>
     </div>
   );
