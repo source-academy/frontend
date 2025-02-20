@@ -9056,10 +9056,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eventemitter3@npm:^4.0.0, eventemitter3@npm:^4.0.1, eventemitter3@npm:^4.0.7":
+"eventemitter3@npm:^4.0.0, eventemitter3@npm:^4.0.1":
   version: 4.0.7
   resolution: "eventemitter3@npm:4.0.7"
   checksum: 10c0/5f6d97cbcbac47be798e6355e3a7639a84ee1f7d9b199a07017f1d2f1e2fe236004d14fa5dfaeba661f94ea57805385e326236a6debbc7145c8877fbc0297c6b
+  languageName: node
+  linkType: hard
+
+"eventemitter3@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "eventemitter3@npm:5.0.1"
+  checksum: 10c0/4ba5c00c506e6c786b4d6262cfbce90ddc14c10d4667e5c83ae993c9de88aa856033994dd2b35b83e8dc1170e224e66a319fa80adc4c32adcd2379bbc75da814
   languageName: node
   linkType: hard
 
@@ -9662,8 +9669,10 @@ __metadata:
     normalize.css: "npm:^8.0.1"
     npm-run-all2: "npm:^7.0.0"
     os-browserify: "npm:^0.3.0"
+    path: "npm:^0.12.7"
     path-browserify: "npm:^1.0.1"
-    phaser: "npm:^3.55.2"
+    phaser: "npm:~3.87.0"
+    phaser3spectorjs: "npm:^0.0.8"
     prettier: "npm:^3.3.3"
     process: "npm:^0.11.10"
     query-string: "npm:^9.0.0"
@@ -14249,13 +14258,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"phaser@npm:^3.55.2":
-  version: 3.55.2
-  resolution: "phaser@npm:3.55.2"
+"phaser3spectorjs@npm:^0.0.8":
+  version: 0.0.8
+  resolution: "phaser3spectorjs@npm:0.0.8"
+  checksum: 10c0/84933cc3e314279d2bd2c4b3356f2c93e0fe6918dcf6d7ab88d0df4d3457df05703e895012a27ba50d8dd3d9bc61183b58a7b8dde9ec81fc3d887e0fd77184dd
+  languageName: node
+  linkType: hard
+
+"phaser@npm:~3.87.0":
+  version: 3.87.0
+  resolution: "phaser@npm:3.87.0"
   dependencies:
-    eventemitter3: "npm:^4.0.7"
-    path: "npm:^0.12.7"
-  checksum: 10c0/aed4c37a22174e843344328c6b0cc0a6160a49fe12d37a6fa0aab82d37d6bfc00a3c76fa792621fa61b02148e340c39dae5be4f0f5b7cb95df7c774b826455b3
+    eventemitter3: "npm:^5.0.1"
+  checksum: 10c0/39f5baef2cbd3c30ae65efb7f1b4a034f5fd87f51f74547574602a6bada014999a900561cb0efa17e086a6a06f886525d0832b1d465af382db8674c1ed42ef67
   languageName: node
   linkType: hard
 

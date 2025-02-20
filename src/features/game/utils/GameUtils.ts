@@ -58,9 +58,12 @@ export function limitNumber(value: number, min: number, max: number) {
  */
 export function toS3Path(fileName: string, courseCoded = false) {
   if (fileName.startsWith('/')) {
-    fileName = fileName.substr(1);
+    fileName = fileName.substring(1);
   }
-  return Constants.assetsFolder + (courseCoded ? assetsPrefix() + fileName : fileName);
+  return (
+    Constants.assetsFolder +
+    (courseCoded && !Constants.useEmptyAssetPrefix ? assetsPrefix() + fileName : fileName)
+  );
 }
 
 /**
