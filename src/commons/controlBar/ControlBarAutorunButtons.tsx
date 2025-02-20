@@ -1,8 +1,10 @@
 import { Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
+import { flagConductorEnable } from 'src/features/conductor/flagConductorEnable';
 
 import ControlButton from '../ControlButton';
+import { useFeature } from '../featureFlags/useFeature';
 import { useResponsive } from '../utils/Hooks';
 import { ControlBarRunButton } from './ControlBarRunButton';
 
@@ -46,7 +48,8 @@ export const ControlBarAutorunButtons: React.FC<ControlBarAutorunButtonProps> = 
 
   // stop button does not do anything due to the blocking nature of eval methods (e.g. runInContext)
   // to prevent "flickering", we will just disable Stop Button for now
-  const showStopButton = false && (
+  const conductorEnabled = useFeature(flagConductorEnable);
+  const showStopButton = conductorEnabled && props.isRunning && (
     <ControlButton label="Stop" icon={IconNames.STOP} onClick={props.handleInterruptEval} />
   );
 
@@ -87,7 +90,14 @@ export const ControlBarAutorunButtons: React.FC<ControlBarAutorunButtonProps> = 
           />
         </div>
       )}
-      {showAutoRunIndicator || showStopButton || showRunButton}
+      {conductorEnabled ? (
+        <>
+          {showAutoRunIndicator || showRunButton}
+          {showStopButton}
+        </>
+      ) : (
+        showAutoRunIndicator || showStopButton || showRunButton
+      )}
       {showDebuggerPause}
       {showDebuggerResume}
       {showDebuggerReset('Stop Debugger')}

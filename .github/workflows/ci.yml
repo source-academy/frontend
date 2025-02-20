@@ -26,13 +26,17 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      # Has to be run before actions/setup-node.
+      # See: https://github.com/actions/setup-node/issues/480
+      - name: Enable corepack for Yarn
+        run: corepack enable
       - name: Setup node
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: yarn
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
       - name: Run command
         run: yarn run ${{ matrix.commands }}
       - name: Coveralls - Upload test coverage report
