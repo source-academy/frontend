@@ -96,6 +96,13 @@ const Application: React.FC = () => {
         case MessageTypeNames.ExtensionPong:
           console.log('Received WebviewStarted message, will set vsc');
           dispatch(VscodeActions.setVscode());
+
+          if (message.token) {
+            const token = JSON.parse(message.token.trim());
+            console.log(`FRONTEND: WebviewStarted: ${token}`);
+            dispatch(SessionActions.setTokens({accessToken: token.accessToken, refreshToken: token.refreshToken}));
+            dispatch(SessionActions.fetchUserAndCourse());
+          }
           break;
         case MessageTypeNames.Text:
           const code = message.code;
