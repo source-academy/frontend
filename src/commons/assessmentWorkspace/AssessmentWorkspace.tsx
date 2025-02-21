@@ -808,7 +808,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       handleDeclarationNavigate: (cursorPosition: Position) =>
         dispatch(WorkspaceActions.navigateToDeclaration(workspaceLocation, cursorPosition)),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        dispatch(WorkspaceActions.promptAutocomplete(workspaceLocation, row, col, callback))
+        dispatch(WorkspaceActions.promptAutocomplete(workspaceLocation, row, col, callback)),
     };
   }, [dispatch]);
 
@@ -905,6 +905,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           editorVariant: 'normal',
           isFolderModeEnabled,
           activeEditorTabIndex,
+          setUsersArray: () => {},
           setActiveEditorTabIndex: editorContainerHandlers.setActiveEditorTabIndex,
           removeEditorTabByIndex: editorContainerHandlers.removeEditorTabByIndex,
           editorTabs: editorTabs.map(convertEditorTabStateToProps),

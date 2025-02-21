@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 
 import SourcecastEditor, {
   SourceRecorderEditorProps
@@ -16,6 +16,7 @@ type OwnProps = {
   setActiveEditorTabIndex: (activeEditorTabIndex: number | null) => void;
   removeEditorTabByIndex: (editorTabIndex: number) => void;
   editorTabs: EditorTabStateProps[];
+  setUsersArray: Dispatch<SetStateAction<any[]>>;
 };
 
 export type NormalEditorContainerProps = Omit<EditorProps, keyof EditorTabStateProps> &

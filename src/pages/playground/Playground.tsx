@@ -287,6 +287,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       chapter: playgroundSourceChapter
     })
   );
+  const [usersArray, setUsersArray] = useState<any[]>([]);
 
   // Playground hotkeys
   const [isGreen, setIsGreen] = useState(false);
@@ -302,9 +303,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
   );
 
   const sessionManagementTab: SideContentTab = useMemo(
-    () => makeSessionManagementTabFrom('test'),
-    []
-  );
+    () => {
+      return makeSessionManagementTabFrom(usersArray, true);
+    },
+    [usersArray]
+  )
 
   const usingRemoteExecution =
     useTypedSelector(state => !!state.session.remoteExecutionSession) && !isSicpEditor;
@@ -755,12 +758,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
       }
     }
 
-    if (!isSicpEditor && !Constants.playgroundOnly) {
-      tabs.push(remoteExecutionTab);
-      if (editorSessionId !== '') {
-        tabs.push(sessionManagementTab);
+      if (!isSicpEditor && !Constants.playgroundOnly) {
+        tabs.push(remoteExecutionTab);
+        if (editorSessionId !== ''){
+          tabs.push(sessionManagementTab);
+          // TODO: make it do highlighty things like stepper
+        }
       }
-    }
 
     return tabs;
   }, [
@@ -776,7 +780,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     shouldShowSubstVisualizer,
     remoteExecutionTab,
     editorSessionId,
-    sessionManagementTab
+    usersArray
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
@@ -893,10 +897,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
           WorkspaceActions.updateActiveEditorTabIndex(workspaceLocation, activeEditorTabIndex)
         ),
       removeEditorTabByIndex: (editorTabIndex: number) =>
-        dispatch(WorkspaceActions.removeEditorTab(workspaceLocation, editorTabIndex))
+        dispatch(WorkspaceActions.removeEditorTab(workspaceLocation, editorTabIndex)),
     };
   }, [dispatch, workspaceLocation]);
   const editorContainerProps: NormalEditorContainerProps = {
+    setUsersArray:setUsersArray,
     editorSessionId,
     sessionDetails,
     isEditorAutorun,
@@ -1009,7 +1014,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         beforeDynamicTabs: tabs,
         afterDynamicTabs: []
       },
-      workspaceLocation
+      workspaceLocation,
     },
     sideContentIsResizeable:
       selectedTab !== SideContentType.substVisualizer && selectedTab !== SideContentType.cseMachine

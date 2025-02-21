@@ -476,6 +476,7 @@ const GradingWorkspace: React.FC<Props> = props => {
             editorVariant: 'normal',
             isFolderModeEnabled: isFolderModeEnabled,
             activeEditorTabIndex: activeEditorTabIndex,
+            setUsersArray: () => {},
             setActiveEditorTabIndex: handleSetActiveEditorTabIndex,
             removeEditorTabByIndex: handleRemoveEditorTabByIndex,
             editorTabs: editorTabs.map(convertEditorTabStateToProps),
