@@ -5,6 +5,12 @@ const protocolMap = Object.freeze({
   'https:': 'wss:'
 });
 
+export enum CollabEditingAccess {
+  OWNER = 'owner',
+  EDITOR = 'editor',
+  VIEWER = 'viewer'
+}
+
 export function getSessionUrl(sessionId: string, ws?: boolean): string {
   const url = new URL(sessionId, Constants.sharedbBackendUrl);
   if (ws && Object.keys(protocolMap).includes(url.protocol)) {

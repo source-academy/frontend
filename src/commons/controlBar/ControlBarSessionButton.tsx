@@ -20,7 +20,9 @@ type ControlBarSessionButtonsProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleSetEditorSessionId?: (editorSessionId: string) => void;
-  handleSetSessionDetails?: (sessionDetails: { docId: string; readOnly: boolean } | null) => void;
+  handleSetSessionDetails?: (
+    sessionDetails: { docId: string; readOnly: boolean; owner: boolean } | null
+  ) => void;
 };
 
 type StateProps = {
@@ -69,7 +71,7 @@ export class ControlBarSessionButtons extends React.PureComponent<
             sessionViewingId: resp.sessionViewingId
           });
           this.props.handleSetEditorSessionId!(resp.sessionEditingId);
-          this.props.handleSetSessionDetails!({ docId: resp.docId, readOnly: false });
+          this.props.handleSetSessionDetails!({ docId: resp.docId, readOnly: false, owner: true });
         }, handleError);
       }
     };
@@ -141,7 +143,7 @@ export class ControlBarSessionButtons extends React.PureComponent<
         docInfo => {
           if (docInfo !== null) {
             this.props.handleSetEditorSessionId!(this.state!.joinElemValue);
-            this.props.handleSetSessionDetails!(docInfo);
+            this.props.handleSetSessionDetails!({ ...docInfo, owner: false });
             if (docInfo.readOnly) {
               this.setState({
                 sessionEditingId: '',

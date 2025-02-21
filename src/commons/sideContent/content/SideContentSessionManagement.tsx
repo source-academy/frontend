@@ -3,11 +3,12 @@
 // import { SessionUser } from '../SideContentTypes';
 // import SideContentRoleSelector from './SideContentRoleSelector';
 import { Classes, HTMLTable, Switch } from '@blueprintjs/core';
+import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/distribution/types';
 import React, { useMemo, useState } from 'react';
 // import { H6 } from '@blueprintjs/core';
 
 type Props = {
-  usersArray: any[];
+  usersArray: SharedbAceUser[];
   canManage: boolean;
 };
 

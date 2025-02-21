@@ -7,34 +7,16 @@ import {
 } from '@convergencelabs/ace-collab-ext';
 import * as Sentry from '@sentry/browser';
 import sharedbAce from '@sourceacademy/sharedb-ace';
-import React, { useMemo } from 'react';
+import React from 'react';
 
-import { getDocInfoFromSessionId, getSessionUrl } from '../collabEditing/CollabEditingHelper';
+import {
+  CollabEditingAccess,
+  getDocInfoFromSessionId,
+  getSessionUrl
+} from '../collabEditing/CollabEditingHelper';
 import { useSession } from '../utils/Hooks';
 import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
 import { EditorHook } from './Editor';
-
-type User = {
-  id: any;
-  name: string;
-  color: string;
-};
-
-type UsersObj = {
-  [key: string]: {
-    user: User;
-    cursorPos: {
-      row: number;
-      column: number;
-    };
-  };
-};
-
-type LocalPresences = {
-  [key: string]: {
-    value: any;
-  };
-};
 
 // EditorHook structure:
 // EditorHooks grant access to 4 things:
@@ -52,53 +34,22 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
   const { editorSessionId, sessionDetails } = inProps;
   const { name, userId } = useSession();
 
-  // const { sessionDetails } = inProps;
-  // const { name, userId: editorSessionId } = useSession();
-
-  const sessionCreatorId = 0;
-
-  // TODO: Set meaningful name here instead of simply "undefined"
-  const user = useMemo(
-    () => ({
-      id: editorSessionId,
-      userId,
-      name,
-      color: getColor(),
-      accessLevel: userId === sessionCreatorId ? 2 : 1
-    }),
-    [editorSessionId, name, sessionCreatorId]
-  );
-
   React.useEffect(() => {
     if (!editorSessionId || !sessionDetails) {
       return;
     }
 
-    const updateUsers = () => {
-      const localPresences: LocalPresences = ShareAce.usersPresence.localPresences;
-      const localData = Object.values(localPresences)[0].value.user;
-      let usersArray = [
-        {
-          id: localData.id,
-          name: localData.name + ' (You)',
-          color: localData.color,
-          accessLevel: localData.id === sessionCreatorId ? 2 : sessionDetails.readOnly ? 0 : 1
-        }
-      ];
-      const remotePresences: UsersObj = ShareAce.usersPresence.remotePresences;
-      usersArray = [
-        ...usersArray,
-        ...Object.values(remotePresences).map(entry => ({
-          id: entry.user.id,
-          name: entry.user.name,
-          color: entry.user.color,
-          accessLevel:
-            entry.user.id === sessionCreatorId ? 2 : entry.user.id == sessionDetails.docId ? 1 : 0,
-          cursorPos: entry.cursorPos
-        }))
-      ];
-      // console.log(ShareAce.usersPresence);
-      inProps.setUsersArray(usersArray);
+    const collabEditorAccess = sessionDetails.owner
+      ? CollabEditingAccess.OWNER
+      : sessionDetails.readOnly
+        ? CollabEditingAccess.VIEWER
+        : CollabEditingAccess.EDITOR;
+
+    const user = {
+      // TODO: Set meaningful name here instead of simply "undefined"
+      name: name || 'undefined',
+      color: getColor(),
+      role: collabEditorAccess
     };
 
     const editor = reactAceRef.current!.editor;
@@ -127,7 +78,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       if (!sessionDetails) {
         return;
       }
-      ShareAce.add(editor, ['contents'], {
+      const binding = ShareAce.add(editor, ['contents'], {
         cursorManager,
         selectionManager,
         radarManager
@@ -138,7 +89,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       editor.setReadOnly(sessionDetails.readOnly);
 
       showSuccessMessage(
-        'You have joined a session as ' + (sessionDetails.readOnly ? 'a viewer.' : 'an editor.')
+        `You have joined a session as ${sessionDetails.readOnly ? 'a viewer' : 'an editor'}.`
       );
     };
 
@@ -193,8 +144,6 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       // Resets editor to normal after leaving the session
       editor.setReadOnly(false);
 
-      ShareAce.usersPresence.off('receive', updateUsers);
-
       // Removes all cursors
       cursorManager.removeAll();
 
@@ -204,9 +153,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       // @ts-expect-error hotfix to remove all views in radarManager
       radarManager.removeAllViews();
     };
-  }, [editorSessionId, sessionDetails, reactAceRef, user]);
-
-  return;
+  }, [editorSessionId, sessionDetails, reactAceRef, userId, name]);
 };
 
 function getColor() {

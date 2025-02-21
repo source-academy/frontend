@@ -8,7 +8,7 @@ const CollabEditingActions = createActions('collabEditing', {
   }),
   setSessionDetails: (
     workspaceLocation: WorkspaceLocation,
-    sessionDetails: { docId: string; readOnly: boolean } | null
+    sessionDetails: { docId: string; readOnly: boolean; owner: boolean } | null
   ) => ({ workspaceLocation, sessionDetails }),
   /**
    * Sets ShareDB connection status.
