@@ -28,12 +28,15 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
   propsRef.current = inProps;
 
   const { editorSessionId, sessionDetails } = inProps;
+  const { name, userId } = useSession();
 
-  const { name } = useSession();
+  // const { sessionDetails } = inProps;
+  // const { name, userId: editorSessionId } = useSession();
 
+  // TODO: Set meaningful name here instead of simply "undefined"
   const user = useMemo(
-    () => ({ id: editorSessionId, name, color: getColor() }),
-    [editorSessionId, name]
+    () => ({ name: name || 'undefined', userId, color: getColor() }),
+    [name, userId]
   );
 
   React.useEffect(() => {
@@ -43,18 +46,35 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
     const editor = reactAceRef.current!.editor;
     const session = editor.getSession();
+    // TODO: Hover over the indicator to show the username as well
     const cursorManager = new AceMultiCursorManager(session);
     const selectionManager = new AceMultiSelectionManager(session);
     const radarManager = new AceRadarView('ace-radar-view', editor);
+
+    // @ts-expect-error hotfix to remove all views in radarManager
+    radarManager.removeAllViews = () => {
+      // @ts-expect-error hotfix to remove all views in radarManager
+      for (const id in radarManager._views) {
+        radarManager.removeView(id);
+      }
+    };
+
+    // TODO: Figure out a deterministic way to pass a consistent ID like `userId`
     const ShareAce = new sharedbAce(sessionDetails.docId, {
       user,
       WsUrl: getSessionUrl(editorSessionId, true),
-      pluginWsUrl: null,
       namespace: 'sa'
     });
 
-    ShareAce.on('ready', () => {
-      ShareAce.add(editor, cursorManager, selectionManager, radarManager, ['contents'], []);
+    const shareAceReady = () => {
+      if (!sessionDetails) {
+        return;
+      }
+      ShareAce.add(editor, ['contents'], {
+        cursorManager,
+        selectionManager,
+        radarManager
+      });
       propsRef.current.handleSetSharedbConnected!(true);
 
       // Disables editor in a read-only session
@@ -63,11 +83,15 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       showSuccessMessage(
         `You have joined a session as ${sessionDetails.readOnly ? 'a viewer' : 'an editor'}.`
       );
-    });
-    ShareAce.on('error', (path: string, error: any) => {
+    };
+
+    const shareAceError = (path: string, error: any) => {
       console.error('ShareAce error', error);
       Sentry.captureException(error);
-    });
+    };
+
+    ShareAce.on('ready', shareAceReady);
+    ShareAce.on('error', shareAceError);
 
     // WebSocket connection status detection logic
     const WS = ShareAce.WS;
@@ -91,6 +115,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
     // Checks connection status every 5sec
     interval = setInterval(checkStatus, 5000);
 
+    // TODO: clear the following event listeners
     WS.addEventListener('open', () => {
       propsRef.current.handleSetSharedbConnected!(true);
     });
@@ -105,6 +130,9 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       }
       ShareAce.WS.close();
 
+      ShareAce.off('ready', shareAceReady);
+      ShareAce.off('error', shareAceError);
+
       // Resets editor to normal after leaving the session
       editor.setReadOnly(false);
 
@@ -113,6 +141,9 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
       // Removes all selections
       selectionManager.removeAll();
+
+      // @ts-expect-error hotfix to remove all views in radarManager
+      radarManager.removeAllViews();
     };
   }, [editorSessionId, sessionDetails, reactAceRef, user]);
 };

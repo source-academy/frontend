@@ -882,13 +882,17 @@ $code-color-notification: #f9f0d7;
 
   #ace-radar-view {
     display: inline-block;
-    min-width: 20px;
+    max-width: 2%;
     background: #2F3129;
   }
 
   .ace-radar-view-cursor-indicator {
     // Looks ugly so we just disable it since it serves no purpose anyway
     display: none;
+  }
+
+  .ace-radar-view-wrapper {
+    width: 1px;
   }
 
   .Autograder,
