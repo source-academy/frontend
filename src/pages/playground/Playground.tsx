@@ -287,6 +287,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       chapter: playgroundSourceChapter
     })
   );
+  const [usersArray, setUsersArray] = useState<any[]>([]);
 
   // Playground hotkeys
   const [isGreen, setIsGreen] = useState(false);
@@ -301,10 +302,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [deviceSecret]
   );
 
-  const sessionManagementTab: SideContentTab = useMemo(
-    () => makeSessionManagementTabFrom('test'),
-    []
-  );
+  const sessionManagementTab: SideContentTab = useMemo(() => {
+    return makeSessionManagementTabFrom(usersArray, true);
+  }, [usersArray]);
 
   const usingRemoteExecution =
     useTypedSelector(state => !!state.session.remoteExecutionSession) && !isSicpEditor;
@@ -759,6 +759,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       tabs.push(remoteExecutionTab);
       if (editorSessionId !== '') {
         tabs.push(sessionManagementTab);
+        // TODO: make it do highlighty things like stepper
       }
     }
 
@@ -776,7 +777,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     shouldShowSubstVisualizer,
     remoteExecutionTab,
     editorSessionId,
-    sessionManagementTab
+    usersArray
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
@@ -897,6 +898,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     };
   }, [dispatch, workspaceLocation]);
   const editorContainerProps: NormalEditorContainerProps = {
+    setUsersArray: setUsersArray,
     editorSessionId,
     sessionDetails,
     isEditorAutorun,

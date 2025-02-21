@@ -3,6 +3,7 @@ import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
 import Markdown from 'src/commons/Markdown';
 import SideContentRemoteExecution from 'src/commons/sideContent/content/remoteExecution/SideContentRemoteExecution';
+import SideContentSessionManagement from 'src/commons/sideContent/content/SideContentSessionManagement';
 import SideContentSubstVisualizer from 'src/commons/sideContent/content/SideContentSubstVisualizer';
 import {
   SideContentLocation,
@@ -23,10 +24,13 @@ export const makeIntroductionTabFrom = (content: string): SideContentTab => ({
   id: SideContentType.introduction
 });
 
-export const makeSessionManagementTabFrom = (content: string): SideContentTab => ({
+export const makeSessionManagementTabFrom = (
+  users: Array<any>,
+  canManage: boolean
+): SideContentTab => ({
   label: 'Session Management',
   iconName: IconNames.PEOPLE,
-  body: <Markdown content={'Manage your session here.'} />,
+  body: <SideContentSessionManagement usersArray={users} canManage={canManage} />,
   id: SideContentType.sessionManagement
 });
 

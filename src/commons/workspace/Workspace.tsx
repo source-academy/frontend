@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { useFullscreen } from '@mantine/hooks';
 import { Enable, NumberSize, Resizable, ResizableProps, ResizeCallback } from 're-resizable';
 import { Direction } from 're-resizable/lib/resizer';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 
 import ControlBar, { ControlBarProps } from '../controlBar/ControlBar';
 import EditorContainer, { EditorContainerProps } from '../editor/EditorContainer';
@@ -44,6 +44,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   const [contentContainerWidth] = useDimensions(contentContainerDiv);
   const [expandedSideBarWidth, setExpandedSideBarWidth] = useState(200);
   const [isSideBarExpanded, setIsSideBarExpanded] = useState(true);
+  const setSessionUsersArray = props.editorContainerProps?.setUsersArray;
 
   const sideBarCollapsedWidth = 40;
 
@@ -51,6 +52,11 @@ const Workspace: React.FC<WorkspaceProps> = props => {
   const collapseSideBar = () => setIsSideBarExpanded(false);
 
   FocusStyleManager.onlyShowFocusOnTabs();
+
+  const editorContainerProps: EditorContainerProps = {
+    ...(props.editorContainerProps as EditorContainerProps),
+    setUsersArray: setSessionUsersArray as Dispatch<SetStateAction<any[]>>
+  };
 
   useEffect(() => {
     if (props.sideContentIsResizeable && maxDividerHeight.current === null) {
@@ -175,7 +181,7 @@ const Workspace: React.FC<WorkspaceProps> = props => {
    */
   const createWorkspaceInput = (props: WorkspaceProps) => {
     if (props.editorContainerProps) {
-      return <EditorContainer {...props.editorContainerProps} />;
+      return <EditorContainer {...editorContainerProps} />;
     } else {
       return <McqChooser {...props.mcqProps!} />;
     }

@@ -298,6 +298,7 @@ const Sourcecast: React.FC = () => {
     editorVariant: 'sourcecast',
     isFolderModeEnabled,
     activeEditorTabIndex,
+    setUsersArray: () => {},
     setActiveEditorTabIndex: editorContainerHandlers.setActiveEditorTabIndex,
     removeEditorTabByIndex: editorContainerHandlers.removeEditorTabByIndex,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),

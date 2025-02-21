@@ -58,6 +58,7 @@ type DispatchProps = {
   handleSendReplInputToOutput?: (newOutput: string) => void;
   handleSetSharedbConnected?: (connected: boolean) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
+  setUsersArray: React.Dispatch<React.SetStateAction<any[]>>;
 };
 
 type EditorStateProps = {

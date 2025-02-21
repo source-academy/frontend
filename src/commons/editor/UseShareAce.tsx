@@ -14,6 +14,28 @@ import { useSession } from '../utils/Hooks';
 import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
 import { EditorHook } from './Editor';
 
+type User = {
+  id: any;
+  name: string;
+  color: string;
+};
+
+type UsersObj = {
+  [key: string]: {
+    user: User;
+    cursorPos: {
+      row: number;
+      column: number;
+    };
+  };
+};
+
+type LocalPresences = {
+  [key: string]: {
+    value: any;
+  };
+};
+
 // EditorHook structure:
 // EditorHooks grant access to 4 things:
 // inProps are provided by the parent component
@@ -33,16 +55,51 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
   // const { sessionDetails } = inProps;
   // const { name, userId: editorSessionId } = useSession();
 
+  const sessionCreatorId = 0;
+
   // TODO: Set meaningful name here instead of simply "undefined"
   const user = useMemo(
-    () => ({ name: name || 'undefined', userId, color: getColor() }),
-    [name, userId]
+    () => ({
+      id: editorSessionId,
+      userId,
+      name,
+      color: getColor(),
+      accessLevel: userId === sessionCreatorId ? 2 : 1
+    }),
+    [editorSessionId, name, sessionCreatorId]
   );
 
   React.useEffect(() => {
     if (!editorSessionId || !sessionDetails) {
       return;
     }
+
+    const updateUsers = () => {
+      const localPresences: LocalPresences = ShareAce.usersPresence.localPresences;
+      const localData = Object.values(localPresences)[0].value.user;
+      let usersArray = [
+        {
+          id: localData.id,
+          name: localData.name + ' (You)',
+          color: localData.color,
+          accessLevel: localData.id === sessionCreatorId ? 2 : sessionDetails.readOnly ? 0 : 1
+        }
+      ];
+      const remotePresences: UsersObj = ShareAce.usersPresence.remotePresences;
+      usersArray = [
+        ...usersArray,
+        ...Object.values(remotePresences).map(entry => ({
+          id: entry.user.id,
+          name: entry.user.name,
+          color: entry.user.color,
+          accessLevel:
+            entry.user.id === sessionCreatorId ? 2 : entry.user.id == sessionDetails.docId ? 1 : 0,
+          cursorPos: entry.cursorPos
+        }))
+      ];
+      // console.log(ShareAce.usersPresence);
+      inProps.setUsersArray(usersArray);
+    };
 
     const editor = reactAceRef.current!.editor;
     const session = editor.getSession();
@@ -81,7 +138,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       editor.setReadOnly(sessionDetails.readOnly);
 
       showSuccessMessage(
-        `You have joined a session as ${sessionDetails.readOnly ? 'a viewer' : 'an editor'}.`
+        'You have joined a session as ' + (sessionDetails.readOnly ? 'a viewer.' : 'an editor.')
       );
     };
 
@@ -136,6 +193,8 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       // Resets editor to normal after leaving the session
       editor.setReadOnly(false);
 
+      ShareAce.usersPresence.off('receive', updateUsers);
+
       // Removes all cursors
       cursorManager.removeAll();
 
@@ -146,6 +205,8 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       radarManager.removeAllViews();
     };
   }, [editorSessionId, sessionDetails, reactAceRef, user]);
+
+  return;
 };
 
 function getColor() {

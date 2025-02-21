@@ -135,6 +135,7 @@ const newActions = createActions('workspace', {
     editorTabIndex: number,
     newCursorPosition: Position
   ) => ({ workspaceLocation, editorTabIndex, newCursorPosition }),
+  setUsersArray: (workspaceLocation: WorkspaceLocation, usersArray: any[]) => ({ usersArray }),
   addEditorTab: (workspaceLocation: WorkspaceLocation, filePath: string, editorValue: string) => ({
     workspaceLocation,
     filePath,
