@@ -43,11 +43,13 @@ const ViewStory = async () => {
   return { Component: ViewStoryComponent };
 };
 const Stories = () => import('../pages/stories/Stories');
+const Features = () => import('../pages/featureFlags/FeatureFlags');
 
 const commonChildrenRoutes: RouteObject[] = [
   { path: 'contributors', lazy: Contributors },
   { path: 'callback/github', lazy: GitHubCallback },
-  { path: 'sicpjs/:section?', lazy: Sicp }
+  { path: 'sicpjs/:section?', lazy: Sicp },
+  { path: 'features', lazy: Features }
 ];
 
 export const playgroundOnlyRouterConfig: RouteObject[] = [
