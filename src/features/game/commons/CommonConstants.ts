@@ -4,6 +4,7 @@ import FontAssets from '../assets/FontAssets';
 
 export const Constants = {
   assetsFolder: Links.sourceAcademyAssets,
+  useEmptyAssetPrefix: process.env.REACT_APP_USE_EMPTY_ASSET_PREFIX?.toUpperCase() === 'TRUE',
   fadeDuration: 600,
   nullFunction: () => {},
   nullInteractionId: '',
