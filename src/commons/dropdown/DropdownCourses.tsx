@@ -1,10 +1,13 @@
 import { Dialog, DialogBody, HTMLSelect } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
+import SessionActions from '../application/actions/SessionActions';
 import { Role } from '../application/ApplicationTypes';
 import { UserCourse } from '../application/types/SessionTypes';
+import { useTypedSelector } from '../utils/Hooks';
 
 type Props = {
   isOpen: boolean;
@@ -15,6 +18,8 @@ type Props = {
 
 const DropdownCourses: React.FC<Props> = ({ isOpen, onClose, courses, courseId }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const latestCourse = useTypedSelector(state => state.session.courseId);
 
   const options = courses.map(course => ({
     value: course.courseId,
@@ -22,10 +27,16 @@ const DropdownCourses: React.FC<Props> = ({ isOpen, onClose, courses, courseId }
     disabled: !course.viewable && course.role !== Role.Admin
   }));
 
-  const onChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    navigate(`/courses/${e.currentTarget.value}`);
+  const onChangeHandler = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    await dispatch(SessionActions.updateLatestViewedCourse(Number(e.currentTarget.value)));
     onClose();
   };
+
+  useEffect(() => {
+    if (latestCourse) {
+      navigate(`/courses/${latestCourse}`);
+    }
+  }, [latestCourse, navigate]);
 
   return (
     <Dialog
