@@ -108,6 +108,7 @@ const UserBlogContent: React.FC<Props> = ({ fileContent }) => {
   return content ? (
     <div className="userblogContent">
       <div className="content">{renderStoryMarkdown(content)}</div>
+      <div>Hello world!</div>
     </div>
   ) : (
     <div />
