@@ -18,7 +18,7 @@ import { getNodePosition } from './base/AnimationUtils';
 
 /**
  * Animation for any single item movement from control to stash.
- * Used for literals and arrow function expressions
+ * Used for literals and arrow function expressions.
  */
 export class ControlToStashAnimation extends Animatable {
   private borderRectAnimation: AnimatedRectComponent;
