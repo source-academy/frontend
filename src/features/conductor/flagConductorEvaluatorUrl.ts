@@ -1,4 +1,4 @@
-import { createFeatureFlag } from 'src/commons/featureFlags';
+import { createFeatureFlag } from '../../commons/featureFlags';
 
 export const flagConductorEvaluatorUrl = createFeatureFlag(
   'conductor.evaluator.url',
