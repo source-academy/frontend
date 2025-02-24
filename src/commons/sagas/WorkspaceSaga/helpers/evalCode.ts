@@ -7,7 +7,7 @@ import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { Chapter, ErrorSeverity, ErrorType, SourceError, Variant } from 'js-slang/dist/types';
 import { eventChannel, SagaIterator } from 'redux-saga';
 import { call, cancel, cancelled, fork, put, race, select, take } from 'redux-saga/effects';
-import { IConduit } from 'sa-conductor/dist/conduit';
+import { IConduit } from 'conductor/dist/conduit';
 import * as Sourceror from 'sourceror';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 import { selectFeatureSaga } from 'src/commons/featureFlags/selectFeatureSaga';
@@ -520,7 +520,8 @@ export function* evalCodeConductorSaga(
   const { hostPlugin, conduit }: { hostPlugin: BrowserHostPlugin; conduit: IConduit } = yield call(
     createConductor,
     url,
-    async (fileName: string) => files[fileName]
+    async (fileName: string) => files[fileName],
+    (pluginName: string) => {} // TODO: implement dynamic plugin loading
   );
   const stdoutTask = yield fork(handleStdout, hostPlugin, workspaceLocation);
   yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);

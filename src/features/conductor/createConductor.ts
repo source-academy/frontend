@@ -1,14 +1,14 @@
-import { Conduit, IConduit } from 'sa-conductor/dist/conduit';
+import { Conduit, IConduit } from 'conductor/dist/conduit';
 
 import { BrowserHostPlugin } from './BrowserHostPlugin';
 
 export function createConductor(
   evaluatorPath: string,
-  onRequestFile: (fileName: string) => Promise<string | undefined>
+  onRequestFile: (fileName: string) => Promise<string | undefined>,
+  onRequestLoadPlugin: (pluginName: string) => void
 ): { hostPlugin: BrowserHostPlugin; conduit: IConduit } {
   const worker = new Worker(evaluatorPath);
-  const hostPlugin = new BrowserHostPlugin(onRequestFile);
   const conduit = new Conduit(worker, true);
-  conduit.registerPlugin(hostPlugin);
+  const hostPlugin = conduit.registerPlugin(BrowserHostPlugin, onRequestFile, onRequestLoadPlugin);
   return { hostPlugin, conduit };
 }
