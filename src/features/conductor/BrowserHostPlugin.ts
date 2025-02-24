@@ -2,8 +2,15 @@ import { BasicHostPlugin } from 'conductor/dist/conductor/host';
 import { IChannel, IConduit } from 'conductor/dist/conduit';
 
 export class BrowserHostPlugin extends BasicHostPlugin {
-  requestFile: (fileName: string) => Promise<string | undefined>;
-  requestLoadPlugin: (pluginName: string) => void;
+  requestFile(fileName: string): Promise<string | undefined> {
+    return this.__onRequestFile(fileName);
+  }
+  requestLoadPlugin(pluginName: string): void {
+    return this.__onRequestLoadPlugin(pluginName);
+  }
+
+  private __onRequestFile: (fileName: string) => Promise<string | undefined>;
+  private __onRequestLoadPlugin: (pluginName: string) => void;
 
   static readonly channelAttach = super.channelAttach;
   constructor(
@@ -13,7 +20,7 @@ export class BrowserHostPlugin extends BasicHostPlugin {
     onRequestLoadPlugin: (pluginName: string) => void
   ) {
     super(conduit, channels);
-    this.requestFile = onRequestFile;
-    this.requestLoadPlugin = onRequestLoadPlugin;
+    this.__onRequestFile = onRequestFile;
+    this.__onRequestLoadPlugin = onRequestLoadPlugin;
   }
 }
