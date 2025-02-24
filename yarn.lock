@@ -6869,8 +6869,8 @@ __metadata:
 
 "conductor@https://github.com/source-academy/conductor.git#0.2.0":
   version: 0.2.0
-  resolution: "conductor@https://github.com/source-academy/conductor.git#commit=3fcbb477d06c66975da0cf0cf3cb50b612f32e58"
-  checksum: 10c0/beaad1e37f5e8089784255edbbeda8b4e024f94f92d41af364adeeb36302ba2d430247d351dc30195319c6c7943167bfb1fd812f09e0a73176fb973be9210917
+  resolution: "conductor@https://github.com/source-academy/conductor.git#commit=ff4327b38b3ea20516f1f4b9ae512d494518b36a"
+  checksum: 10c0/100ea2c5c716abf98a879e8f98a9ec63651d39a99e384fa9649db156e660a9918c4375c91e916f3f4efa9889c3ce9893936063a038b31683db530423b3abd14a
   languageName: node
   linkType: hard
 
