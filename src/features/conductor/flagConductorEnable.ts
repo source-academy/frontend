@@ -1,5 +1,5 @@
-import { createFeatureFlag } from 'src/commons/featureFlags';
-import { featureSelector } from 'src/commons/featureFlags/featureSelector';
+import { createFeatureFlag } from '../../commons/featureFlags';
+import { featureSelector } from '../../commons/featureFlags/featureSelector';
 
 export const flagConductorEnable = createFeatureFlag(
   'conductor.enable',
