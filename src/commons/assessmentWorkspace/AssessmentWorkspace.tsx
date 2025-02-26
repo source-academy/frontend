@@ -185,12 +185,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-  //   handleEditorValueChange(0, '');
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
   useEffect(() => {
     if (assessmentOverview && assessmentOverview.maxTeamSize > 1) {
       handleTeamOverviewFetch(props.assessmentId);
