@@ -73,14 +73,16 @@ const Application: React.FC = () => {
     };
   }, [isPWA, isMobile]);
 
-  // Effect to fetch the latest user info and course configurations from the backend on refresh,
-  // if the user was previously logged in
+  // Effect to handle messages from VS Code
   React.useEffect(() => {
-    // Polyfill confirm() to instead show as VSCode notification
-    window.confirm = () => {
-      console.log('You gotta confirm!');
-      return true;
-    };
+    if (!window.confirm) {
+      // Polyfill confirm() to instead show as VS Code notification
+      // TODO: Pass text as a new Message to the webview
+      window.confirm = (text) => {
+        console.log(`Confirmation automatically accepted: ${text ?? "No text provided"}`);
+        return true;
+      };
+    }
 
     const message = Messages.ExtensionPing();
     sendToWebview(message);
