@@ -10,7 +10,6 @@ import GradingText from 'src/commons/grading/GradingText';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import StoriesActions from 'src/features/stories/StoriesActions';
-import { getYamlHeader } from 'src/features/stories/storiesComponents/UserBlogContent';
 
 import StoriesTable from './StoriesTable';
 import StoryActions from './StoryActions';
@@ -142,8 +141,6 @@ const Stories: React.FC = () => {
           <StoriesTable
             headers={columns}
             stories={storyList
-              // Filter out the YAML header from the content
-              .map(story => ({ ...story, content: getYamlHeader(story.content).content }))
               .filter(
                 story =>
                   // Always show pinned stories

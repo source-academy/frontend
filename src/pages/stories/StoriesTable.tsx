@@ -19,6 +19,12 @@ type Props = {
 const MAX_EXCERPT_LENGTH = 35;
 
 const truncate = (content: string) => {
+  console.log(content);
+  console.log(content.replaceAll(/\s+/g, ' ').length <= MAX_EXCERPT_LENGTH
+  ? content.replaceAll(/\s+/g, ' ')
+  : content.split(/\s+/).reduce((acc, cur) => {
+      return acc.length + cur.length <= MAX_EXCERPT_LENGTH ? acc + ' ' + cur : acc;
+    }, '') + '…');
   return content.replaceAll(/\s+/g, ' ').length <= MAX_EXCERPT_LENGTH
     ? content.replaceAll(/\s+/g, ' ')
     : content.split(/\s+/).reduce((acc, cur) => {
@@ -50,7 +56,7 @@ const StoriesTable: React.FC<Props> = ({ headers, stories, storyActions }) => {
         flex: 6,
         field: 'content',
         headerName: 'Content',
-        valueFormatter: ({ value }) => truncate(value),
+        valueFormatter: ({ value }) => truncate(value[0].content),
         cellStyle: { textAlign: 'left' }
       },
       {

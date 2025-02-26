@@ -1,6 +1,6 @@
 import { Context } from 'js-slang';
 import { DebuggerContext } from 'src/commons/workspace/WorkspaceTypes';
-
+import { StoryCell } from './storiesComponents/BackendAccess';
 import { InterpreterOutput, StoriesRole } from '../../commons/application/ApplicationTypes';
 
 export type StoryMetadata = {
@@ -10,7 +10,8 @@ export type StoryMetadata = {
 
 export type StoryData = {
   title: string;
-  content: string;
+  header: string;
+  content: StoryCell[];
   pinOrder: number | null;
 };
 

@@ -10,6 +10,7 @@ import SourceBlock, { SourceBlockProps } from 'src/features/stories/storiesCompo
 import { unified } from 'unified';
 
 import { ReplaceTypeAtIndex } from './TypeHelper';
+import { StoryCell } from 'src/features/stories/storiesComponents/BackendAccess';
 
 export const defaultStoryContent = `---
 config:
@@ -131,6 +132,70 @@ show(heart);
 \`\`\`
 `;
 
+export const defaultHeader: string = `---
+config:
+  chapter: 4
+  variant: default
+
+env:
+  iterFib:
+    chapter: 4
+    variant: default
+  recuFib:
+    chapter: 4
+    variant: default
+  rune:
+    chapter: 4
+    variant: default
+---`; 
+
+export const defaultContent: StoryCell[] = [
+  {
+    id: 0,
+    isCode: true,
+    env: "",
+    content: 
+    `function print(message) {
+display(message);
+draw_data(list(1, 2, 3, 4));
+}
+display("hello world1");
+`,
+  },
+  {
+    id: 1,
+    isCode: false,
+    env: "",
+    content: 
+    `# Hello world!
+## hello world!!
+hello world!!!
+hello world!!!
+\`\`\`\`
+\`\`\`{source}
+print("hello world")
+\`\`\`
+\`\`\`\`
+`,
+  },
+  {
+    id: 2,
+    isCode: true,
+    env: "recuFib",
+    content: 
+    `print("source academy stories");
+`,
+  },
+  {
+    id: 3,
+    isCode: true,
+    env: "",
+    content: 
+    `print("hello world");
+`,
+  }
+];
+
 export const scrollSync = (editor: IEditorProps, preview: HTMLElement) => {
   const editorScrollTop = editor.session.getScrollTop();
   const editorScrollHeight = editor.renderer.layerConfig.maxHeight;
@@ -156,6 +221,7 @@ type HandlerType = {
   ) => ReturnType<HandlerOption[key]>;
 };
 
+let currentIndex: number;
 const handleCustomComponents: HandlerType = {
   code: (state, node) => {
     const rawLang = node.lang ?? '';
@@ -167,7 +233,8 @@ const handleCustomComponents: HandlerType = {
     // const lang = rawLang.substring(1, rawLang.length - 1);
     const props: SourceBlockProps = {
       content: node.value,
-      commands: node.meta ?? ''
+      commands: node.meta ?? '',
+      index: currentIndex,
     };
     // Disable typecheck as "source-block" is not a standard HTML tag
     const element = h('source-block', props) as any;
@@ -175,7 +242,8 @@ const handleCustomComponents: HandlerType = {
   }
 };
 
-export const renderStoryMarkdown = (markdown: string): React.ReactNode => {
+export const renderStoryMarkdown = (markdown: string, index: number): React.ReactNode => {
+  currentIndex = index;
   const mdast = fromMarkdown(markdown);
   const hast = toHast(mdast, { handlers: handleCustomComponents }) ?? h();
   return (

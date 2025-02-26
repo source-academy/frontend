@@ -21,7 +21,7 @@ import { combineSagaHandlers } from '../redux/utils';
 import { resetSideContent } from '../sideContent/SideContentActions';
 import { actions } from '../utils/ActionsHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { defaultStoryContent } from '../utils/StoriesHelper';
+import { defaultHeader, defaultContent } from '../utils/StoriesHelper';
 import { selectTokens } from './BackendSaga';
 import { evalCodeSaga } from './WorkspaceSaga/helpers/evalCode';
 
@@ -47,7 +47,8 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
     } else {
       const defaultStory: StoryData = {
         title: '',
-        content: defaultStoryContent,
+        header: defaultHeader,
+        content: defaultContent,
         pinOrder: null
       };
       yield put(actions.setCurrentStory(defaultStory));
@@ -68,6 +69,7 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
       tokens,
       userId,
       story.title,
+      story.header,
       story.content,
       story.pinOrder
     );
@@ -87,6 +89,7 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
       tokens,
       id,
       story.title,
+      story.header,
       story.content,
       story.pinOrder
     );

@@ -1,13 +1,16 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import yaml from 'js-yaml';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import debounceRender from 'react-debounce-render';
 import Constants from 'src/commons/utils/Constants';
 import { propsAreEqual } from 'src/commons/utils/MemoizeHelper';
-import { renderStoryMarkdown } from 'src/commons/utils/StoriesHelper';
+// import { renderStoryMarkdown } from 'src/commons/utils/StoriesHelper';
+import EditStoryCell from './EditStoryCell';
 import StoriesActions from 'src/features/stories/StoriesActions';
 
 import { store } from '../../../pages/createStore';
+import ViewStoryCell from './ViewStoryCell';
+import { StoryCell } from './BackendAccess';
 
 export const DEFAULT_ENV = 'default';
 
@@ -92,23 +95,32 @@ export function getYamlHeader(content: string): { header: string; content: strin
 }
 
 type Props = {
-  fileContent: string;
+  header: string;
+  contents: StoryCell[];
+  isViewOnly: boolean;
+  editContent: (id: number, newContent: string) => void;
 };
 
-const UserBlogContent: React.FC<Props> = ({ fileContent }) => {
-  const [content, setContent] = useState('');
+const UserBlogContent: React.FC<Props> = ({ header, contents, isViewOnly, editContent}) => {
 
   useEffect(() => {
-    const { header, content } = getYamlHeader(fileContent);
-    setContent(content);
+    // const header = getYamlHeader(fileContent).header;
     store.dispatch(StoriesActions.clearStoryEnv());
     handleHeaders(header);
-  }, [fileContent]);
+  }, [header, contents]);
 
-  return content ? (
+  return contents.length > 0 ? (
     <div className="userblogContent">
-      <div className="content">{renderStoryMarkdown(content)}</div>
-      <div>Hello world!</div>
+      {isViewOnly 
+      ? contents.map((story, key) => <ViewStoryCell
+          key={key}
+          story={story}
+        />)
+      : contents.map((story, key) => <EditStoryCell 
+          key={key}
+          story={story}
+          editContent={editContent}
+        />)}
     </div>
   ) : (
     <div />

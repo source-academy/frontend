@@ -12,6 +12,86 @@ import { store } from 'src/pages/createStore';
 import { Tokens } from '../../../commons/application/types/SessionTypes';
 import { NameUsernameRole } from '../../../pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
 import { AdminPanelStoriesUser, StoryListView, StoryView } from '../StoriesTypes';
+import { defaultStoryContent } from 'src/commons/utils/StoriesHelper';
+
+export type StoryCell = {
+  id: number;
+  isCode: boolean;
+  env: string;
+  content: string;
+};
+
+const tempHeader: String = `---
+config:
+  chapter: 4
+  variant: default
+
+env:
+  iterFib:
+    chapter: 4
+    variant: default
+  recuFib:
+    chapter: 4
+    variant: default
+  rune:
+    chapter: 4
+    variant: default
+---`; 
+
+const tempContent: StoryCell[] = [
+//   {
+//     id: 0,
+//     isCode: true,
+//     env: "",
+//     content: 
+//     `function print(message) {
+//   display(message);
+// }
+// draw_data(list(1, 2, 3, 4));
+// display("hello world1");
+// `,
+//   },
+  {
+    id: 1,
+    isCode: false,
+    env: "",
+    content: 
+    `# Hello world!
+## hello world!!
+hello world!!!
+hello world!!!
+\`\`\`\`
+\`\`\`{source}
+print("hello world")
+\`\`\`
+\`\`\`\`
+`,
+  },
+  {
+    id: 2,
+    isCode: true,
+    env: "recuFib",
+    content: 
+    `print("source academy stories");
+`,
+  },
+  {
+    id: 3,
+    isCode: true,
+    env: "",
+    content: 
+    `print("hello world");
+`,
+  },
+  {
+    id: 4,
+    isCode: true,
+    env: "",
+    content: 
+    `print("hello world");
+`,
+  }
+];
 
 // Helpers
 
@@ -83,7 +163,8 @@ export const getStories = async (tokens: Tokens): Promise<StoryListView[] | null
     return null;
   }
   const stories = await resp.json();
-  return stories;
+  // return stories;
+  return stories.map((story: any) => ({...story, header: tempHeader, content: tempContent}));
 };
 
 export const getStory = async (tokens: Tokens, storyId: number): Promise<StoryView | null> => {
@@ -95,7 +176,12 @@ export const getStory = async (tokens: Tokens, storyId: number): Promise<StoryVi
   if (!resp) {
     return null;
   }
-  const story = await resp.json();
+  let story = await resp.json();
+  // return story;
+
+  // changes
+  story = {...story, header: tempHeader};
+  story.content = tempContent;
   return story;
 };
 
@@ -103,11 +189,12 @@ export const postStory = async (
   tokens: Tokens,
   authorId: number,
   title: string,
-  content: string,
+  header: string,
+  content: StoryCell[],
   pinOrder: number | null
 ): Promise<StoryView | null> => {
   const resp = await requestStoryBackend(`/groups/${getStoriesGroupId()}/stories`, 'POST', {
-    body: { authorId, title, content, pinOrder },
+    body: { authorId, title, defaultStoryContent, pinOrder },
     ...tokens
   });
   if (!resp) {
@@ -123,11 +210,12 @@ export const updateStory = async (
   tokens: Tokens,
   id: number,
   title: string,
-  content: string,
+  header: string,
+  content: StoryCell[],
   pinOrder: number | null
 ): Promise<StoryView | null> => {
   const resp = await requestStoryBackend(`/groups/${getStoriesGroupId()}/stories/${id}`, 'PUT', {
-    body: { title, content, pinOrder },
+    body: { title, defaultStoryContent, pinOrder },
     ...tokens
   });
   if (!resp) {

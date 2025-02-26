@@ -22,10 +22,13 @@ import { ExternalLibraryName } from '../../../commons/application/types/External
 import { Output } from '../../../commons/repl/Repl';
 import { getModeString, selectMode } from '../../../commons/utils/AceHelper';
 import { DEFAULT_ENV } from './UserBlogContent';
+import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
+import { StoryCell } from './BackendAccess';
 
 export type SourceBlockProps = {
   content: string;
   commands: string; // env is in commands
+  index: number;
 };
 
 /**
@@ -50,7 +53,9 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   const dispatch = useDispatch();
   const [code, setCode] = useState<string>(props.content);
   const [outputIndex, setOutputIndex] = useState(Infinity);
+  const [isDirty, setIsDirty] = useState<boolean>(false);
 
+  const { currentStory: story } = useTypedSelector(store => store.stories);
   const envList = useTypedSelector(store => Object.keys(store.stories.envs));
 
   // setting env
@@ -203,6 +208,17 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     dispatch(StoriesActions.clearStoryEnv(env));
   };
 
+  const editorOnChange = (code: string) => {
+    setCode(code);
+    setIsDirty(true);
+  }
+
+  const saveButClicked = () => {
+    setIsDirty(false);
+    story!.content.filter((story: StoryCell) => story.id == props.index)[0].content = code;
+    dispatch(StoriesActions.setCurrentStory({...story!, content: [...story!.content]}));
+  }
+
   selectMode(chapter, variant, ExternalLibraryName.NONE);
 
   return (
@@ -210,11 +226,17 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       <div className="workspace">
         <Card>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <ControlBarRunButton
-              key="runButton"
-              handleEditorEval={execEvaluate}
-              isEntrypointFileDefined
-            />
+            {isDirty 
+            ? <ControlButtonSaveButton 
+                key="save_story"
+                onClickSave={saveButClicked}
+                hasUnsavedChanges={isDirty}
+              />
+            : <ControlBarRunButton
+                key="runButton"
+                handleEditorEval={execEvaluate}
+                isEntrypointFileDefined
+              />}
             <span style={{ display: 'inline-block', fontSize: '0.9rem', textAlign: 'center' }}>
               {envDisplayLabel}
             </span>
@@ -230,7 +252,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
                   height="1px"
                   width="100%"
                   value={code}
-                  onChange={code => setCode(code)}
+                  onChange={editorOnChange}
                   commands={[
                     {
                       name: 'evaluate',
