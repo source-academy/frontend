@@ -1,6 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/types';
 import yaml from 'js-yaml';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import debounceRender from 'react-debounce-render';
 import Constants from 'src/commons/utils/Constants';
 import { propsAreEqual } from 'src/commons/utils/MemoizeHelper';
@@ -10,7 +10,14 @@ import StoriesActions from 'src/features/stories/StoriesActions';
 
 import { store } from '../../../pages/createStore';
 import ViewStoryCell from './ViewStoryCell';
-import { StoryCell } from './BackendAccess';
+import { StoryCell } from "../StoriesTypes";
+import NewStoryCell from './CreateStoryCell';
+import { TextInput } from '@tremor/react';
+import { Menu, MenuItem } from '@blueprintjs/core';
+import { styliseSublanguage } from 'src/commons/application/ApplicationTypes';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
+import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
+import ControlBar, { ControlBarProps } from 'src/commons/controlBar/ControlBar';
 
 export const DEFAULT_ENV = 'default';
 
@@ -36,7 +43,7 @@ function handleEnvironment(envConfig: Record<string, any>): void {
   }
 }
 
-function handleHeaders(headers: string): void {
+export function handleHeaders(headers: string): void {
   if (headers === '') {
     store.dispatch(
       StoriesActions.addStoryEnv(
@@ -64,7 +71,7 @@ function handleHeaders(headers: string): void {
       }
     }
   } catch (err) {
-    console.warn(err);
+    console.warn(err,);
     if (err instanceof yaml.YAMLException) {
       // default headers
       store.dispatch(
@@ -94,23 +101,117 @@ export function getYamlHeader(content: string): { header: string; content: strin
   };
 }
 
+export function getEnvironments(header: string): string[] {
+  const environments: string[] = [];
+  const temp = header.split("\n");
+  for (let i = 2; i < temp.length - 1; i += 3) {
+    environments.push(temp[i].substring(2, temp[i].length - 1));
+  }
+  return environments;
+}
+
+export function constructHeader(header: string, env: string, chapter: Chapter, variant: Variant): string {
+  const newHeader: string[] = header.split('\n');
+  newHeader.push(`  ${env}:`);
+  newHeader.push(`    chapter: ${chapter}`);
+  newHeader.push(`    variant: ${variant}`);
+  return newHeader.join('\n');
+}
+
 type Props = {
   header: string;
   contents: StoryCell[];
   isViewOnly: boolean;
   editContent: (id: number, newContent: string) => void;
+  editHeader: (newHeader: string) => void;
+  saveNewStoryCell: (index: number, isCode: boolean, env: string, content: string) => void;
 };
 
-const UserBlogContent: React.FC<Props> = ({ header, contents, isViewOnly, editContent}) => {
+const UserBlogContent: React.FC<Props> = ({ 
+    header, 
+    contents, 
+    isViewOnly, 
+    editContent, 
+    editHeader,
+    saveNewStoryCell
+  }) => {
+
+  const [envs, setEnvs] = useState<string[]>(getEnvironments(header));
+  const [newEnv, setNewEnv] = useState<string>("");
+  // TODO: enable different variant
+  const variant: Variant = Variant.DEFAULT;
+  const [currentChapter, setEnvChapter] = useState<Chapter>(Chapter.SOURCE_1);
+  const [isDirty, setIsDirty] = useState<boolean>(false);
 
   useEffect(() => {
     // const header = getYamlHeader(fileContent).header;
     store.dispatch(StoriesActions.clearStoryEnv());
     handleHeaders(header);
-  }, [header, contents]);
+    setEnvs(getEnvironments(header));
+  }, [header]);
+
+  const saveButClicked = () => {
+    setNewEnv("");
+    setIsDirty(false);
+    if (newEnv.trim() === "") {
+      showWarningMessage("environment name cannot be empty");
+      return;
+    } else if (envs.includes(newEnv)) {
+      showWarningMessage(`${newEnv} already exists!`)
+      return;
+    }
+    header = header.concat(`
+  ${newEnv}:
+    chapter: ${currentChapter}
+    variant: default`
+    );
+    editHeader(header);
+  }
+
+  const controlBarProps: ControlBarProps = {
+    editorButtons: [
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          gap: "5px",
+          alignItems: 'center',
+          justifyContent: "space-between",
+          width: "100%"
+        }}>
+        <TextInput
+          maxWidth="max-w-xl"
+          placeholder="Enter New Environment"
+          value={newEnv}
+          onChange={e => {
+            setNewEnv(e.target.value);
+            if (e.target.value.trim() !== "") {
+              setIsDirty(true);
+            } else {
+              setIsDirty(false);
+            }
+          }}
+        />
+        <Menu style={{margin: "0px"}}>
+          <MenuItem text={styliseSublanguage(currentChapter, variant)}>
+            <MenuItem onClick={() => setEnvChapter(1)} text={styliseSublanguage(Chapter.SOURCE_1, variant)}/>
+            <MenuItem onClick={() => setEnvChapter(2)} text={styliseSublanguage(Chapter.SOURCE_2, variant)}/>
+            <MenuItem onClick={() => setEnvChapter(3)} text={styliseSublanguage(Chapter.SOURCE_3, variant)}/>
+            <MenuItem onClick={() => setEnvChapter(4)} text={styliseSublanguage(Chapter.SOURCE_4, variant)}/>
+          </MenuItem>
+        </Menu>
+        <ControlButtonSaveButton
+          key="save_story"
+          onClickSave={saveButClicked}
+          hasUnsavedChanges={isDirty}
+        />
+      </div>
+    ]
+  };
 
   return contents.length > 0 ? (
     <div className="userblogContent">
+      {!isViewOnly && <ControlBar {...controlBarProps}/>}
       {isViewOnly 
       ? contents.map((story, key) => <ViewStoryCell
           key={key}
@@ -118,9 +219,18 @@ const UserBlogContent: React.FC<Props> = ({ header, contents, isViewOnly, editCo
         />)
       : contents.map((story, key) => <EditStoryCell 
           key={key}
+          envs={envs}
           story={story}
           editContent={editContent}
+          saveNewStoryCell={saveNewStoryCell}
         />)}
+      {!isViewOnly && <div className='content'>
+        <NewStoryCell 
+          index={contents.length}
+          envs={envs}
+          saveNewStoryCell={saveNewStoryCell}
+        />
+      </div>}
     </div>
   ) : (
     <div />

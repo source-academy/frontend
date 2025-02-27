@@ -1,5 +1,5 @@
 import { renderStoryMarkdown } from "src/commons/utils/StoriesHelper";
-import { StoryCell } from "./BackendAccess";
+import { StoryCell } from '../StoriesTypes';
 import { useEffect, useState } from "react";
 
 type Props = {
@@ -8,7 +8,7 @@ type Props = {
 
 function ViewStoryCell(props: Props) {
 
-    const { id, isCode, env, content } = props.story;
+    const { index, isCode, env, content } = props.story;
     const [storyContent, setStoryContent] = useState<string>(content);
 
     useEffect(() => {
@@ -18,7 +18,7 @@ function ViewStoryCell(props: Props) {
     }, []);
 
     return <div className="content">
-        {renderStoryMarkdown(storyContent, id)}
+        {renderStoryMarkdown(storyContent, index, true)}
     </div>
 }
 

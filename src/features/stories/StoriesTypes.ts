@@ -1,7 +1,13 @@
 import { Context } from 'js-slang';
 import { DebuggerContext } from 'src/commons/workspace/WorkspaceTypes';
-import { StoryCell } from './storiesComponents/BackendAccess';
 import { InterpreterOutput, StoriesRole } from '../../commons/application/ApplicationTypes';
+
+export type StoryCell = {
+  index: number;
+  isCode: boolean;
+  env: string;
+  content: string;
+};
 
 export type StoryMetadata = {
   authorId: number;

@@ -1,4 +1,4 @@
-import { Card, Classes } from '@blueprintjs/core';
+import { Card, Classes, Menu, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React, { useEffect, useRef, useState } from 'react';
@@ -21,14 +21,14 @@ import { makeSubstVisualizerTabFrom } from 'src/pages/playground/PlaygroundTabs'
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Output } from '../../../commons/repl/Repl';
 import { getModeString, selectMode } from '../../../commons/utils/AceHelper';
-import { DEFAULT_ENV } from './UserBlogContent';
+import { DEFAULT_ENV, handleHeaders } from './UserBlogContent';
 import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
-import { StoryCell } from './BackendAccess';
 
 export type SourceBlockProps = {
   content: string;
   commands: string; // env is in commands
   index: number;
+  isViewOnly: boolean;
 };
 
 /**
@@ -74,6 +74,9 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     store => store.stories.envs[env]?.context.variant || Constants.defaultSourceVariant
   );
 
+  const [currentEnv, setCurrentEnv] = useState<string>(env);
+  const [currentChapter, setCurrentChapter] = useState<Chapter>(chapter);
+
   useEffect(() => {
     setCode(props.content);
   }, [props.content]);
@@ -103,6 +106,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     env === DEFAULT_ENV
       ? styliseSublanguage(chapter, variant)
       : env + ' | ' + styliseSublanguage(chapter, variant);
+  
 
   // TODO: Add CSE machine tabs and shift to language config
 
@@ -215,8 +219,32 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
 
   const saveButClicked = () => {
     setIsDirty(false);
-    story!.content.filter((story: StoryCell) => story.id == props.index)[0].content = code;
-    dispatch(StoriesActions.setCurrentStory({...story!, content: [...story!.content]}));
+    setCode(code.trim());
+    story!.content[props.index].content = code.trim();
+    if (currentEnv !== env) {
+      story!.content[props.index].env = currentEnv;
+    }
+    let newHeader = story!.header.split('\n');
+    if (currentChapter !== chapter) {
+      const index = envList.indexOf(env);
+      newHeader[index * 3 + 3] = `    chapter: ${chapter}`;
+    }
+    execResetEnv();
+    handleHeaders(newHeader.join('\n'));
+    dispatch(StoriesActions.setCurrentStory({...story!, content: [...story!.content], header: newHeader.join('\n')}));
+  }
+
+  const changeEnv = (env: string) => {
+    setCurrentEnv(env);
+    let header = story!.header.split('\n');
+    const index = envList.indexOf(env);
+    setCurrentChapter(+header[3 + index * 3].substring(13));
+    setIsDirty(true);
+  }
+
+  const changeEnvChapter = (chapter: Chapter) => {
+    setCurrentChapter(chapter);
+    setIsDirty(true);
   }
 
   selectMode(chapter, variant, ExternalLibraryName.NONE);
@@ -238,7 +266,33 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
                 isEntrypointFileDefined
               />}
             <span style={{ display: 'inline-block', fontSize: '0.9rem', textAlign: 'center' }}>
-              {envDisplayLabel}
+              {props.isViewOnly 
+                ? envDisplayLabel
+                : <div style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: "5px",
+                  alignItems: "center"
+                }}>
+                    <Menu>
+                      <MenuItem text={currentEnv}>
+                        {envList.map((env: string, index: number) => <MenuItem 
+                            key={index}
+                            text={env}
+                            onClick={() => changeEnv(env)}
+                          />)}
+                      </MenuItem>
+                    </Menu>
+                    <p> | </p>
+                    <Menu>
+                      <MenuItem text={styliseSublanguage(currentChapter, variant)}>
+                        <MenuItem onClick={() => changeEnvChapter(1)} text={styliseSublanguage(Chapter.SOURCE_1, variant)}/>
+                        <MenuItem onClick={() => changeEnvChapter(2)} text={styliseSublanguage(Chapter.SOURCE_2, variant)}/>
+                        <MenuItem onClick={() => changeEnvChapter(3)} text={styliseSublanguage(Chapter.SOURCE_3, variant)}/>
+                        <MenuItem onClick={() => changeEnvChapter(4)} text={styliseSublanguage(Chapter.SOURCE_4, variant)}/>
+                      </MenuItem>
+                    </Menu>
+                  </div>}
             </span>
             <ControlButton label="Reset Env" onClick={execResetEnv} icon={IconNames.RESET} />
           </div>

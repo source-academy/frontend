@@ -10,7 +10,10 @@ import {
   getStory,
   postStory,
   putStoriesUserRole,
-  updateStory
+  updateStory,
+  // updateHeader,
+  tempHeader,
+  tempContent
 } from 'src/features/stories/storiesComponents/BackendAccess';
 import { StoryData, StoryListView, StoryView } from 'src/features/stories/StoriesTypes';
 
@@ -21,7 +24,7 @@ import { combineSagaHandlers } from '../redux/utils';
 import { resetSideContent } from '../sideContent/SideContentActions';
 import { actions } from '../utils/ActionsHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { defaultHeader, defaultContent } from '../utils/StoriesHelper';
+// import { defaultHeader, defaultContent } from '../utils/StoriesHelper';
 import { selectTokens } from './BackendSaga';
 import { evalCodeSaga } from './WorkspaceSaga/helpers/evalCode';
 
@@ -47,8 +50,8 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
     } else {
       const defaultStory: StoryData = {
         title: '',
-        header: defaultHeader,
-        content: defaultContent,
+        header: tempHeader,
+        content: tempContent,
         pinOrder: null
       };
       yield put(actions.setCurrentStory(defaultStory));
@@ -109,6 +112,11 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
 
     yield put(actions.getStoriesList());
   },
+
+  // updateHeader: function* (action) {
+  //   const newHeader = action.payload;
+  //   yield call(updateHeader, newHeader);
+  // },
 
   getStoriesUser: function* () {
     const tokens: Tokens = yield selectTokens();

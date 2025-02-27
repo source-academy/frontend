@@ -14,7 +14,7 @@ import { useTypedSelector } from 'src/commons/utils/Hooks';
 import StoriesActions from 'src/features/stories/StoriesActions';
 
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
-import { StoryCell } from 'src/features/stories/storiesComponents/BackendAccess';
+import { StoryCell } from 'src/features/stories/StoriesTypes';
 
 type Props = {
   isViewOnly?: boolean;
@@ -44,10 +44,30 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
 
   const { header: header , content: contents } = story!; 
 
-  const editContent = (id: number, newContent: string) => {
-    contents.filter((story: StoryCell) => story.id == id)[0].content = newContent;
+  const editContent = (index: number, newContent: string) => {
+    contents.filter((story: StoryCell) => story.index == index)[0].content = newContent;
     dispatch(StoriesActions.setCurrentStory({...story, content: [...contents]}));
   } 
+
+  const editHeader = (newHeader: string) => {
+    dispatch(StoriesActions.setCurrentStory({...story, header: newHeader}));
+  }
+
+  const saveNewStoryCell = (index: number, isCode: boolean, env: string, content: string) => {
+    const contents = story.content;
+    for (let i = index; i < contents.length; i++) {
+      contents[i].index += 1;
+    } 
+    const newContent: StoryCell = {
+      index: index,
+      isCode: isCode,
+      env: env,
+      content: content,
+    }
+    contents.push(newContent);
+    contents.sort((a, b) => a.index - b.index);
+    dispatch(StoriesActions.setCurrentStory({...story, content: [...contents]}));
+  }
 
   // const onEditorScroll = (e: IEditorProps) => {
   //   const userblogContainer = document.getElementById('userblogContainer');
@@ -121,7 +141,14 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
           />
         )} */}
         <div className="newUserblog" id="userblogContainer">
-          <UserBlogContent header={header} contents={contents} isViewOnly={isViewOnly} editContent={editContent}/>
+          <UserBlogContent 
+            header={header} 
+            contents={contents} 
+            isViewOnly={isViewOnly} 
+            editContent={editContent}
+            editHeader={editHeader}
+            saveNewStoryCell={saveNewStoryCell}
+          />
         </div>
       </div>
     </div>

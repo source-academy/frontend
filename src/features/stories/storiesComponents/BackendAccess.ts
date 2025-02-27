@@ -13,19 +13,13 @@ import { Tokens } from '../../../commons/application/types/SessionTypes';
 import { NameUsernameRole } from '../../../pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
 import { AdminPanelStoriesUser, StoryListView, StoryView } from '../StoriesTypes';
 import { defaultStoryContent } from 'src/commons/utils/StoriesHelper';
+import { StoryCell } from '../StoriesTypes';
 
-export type StoryCell = {
-  id: number;
-  isCode: boolean;
-  env: string;
-  content: string;
-};
+// config:
+//   chapter: 4
+//   variant: default
 
-const tempHeader: String = `---
-config:
-  chapter: 4
-  variant: default
-
+export const tempHeader: string = `---
 env:
   iterFib:
     chapter: 4
@@ -35,24 +29,23 @@ env:
     variant: default
   rune:
     chapter: 4
-    variant: default
----`; 
+    variant: default`; 
 
-const tempContent: StoryCell[] = [
-//   {
-//     id: 0,
-//     isCode: true,
-//     env: "",
-//     content: 
-//     `function print(message) {
-//   display(message);
-// }
-// draw_data(list(1, 2, 3, 4));
-// display("hello world1");
-// `,
-//   },
+export const tempContent: StoryCell[] = [
   {
-    id: 1,
+    index: 0,
+    isCode: true,
+    env: "iterFib",
+    content: 
+    `function print(message) {
+  display(message);
+}
+draw_data(list(1, 2, 3, 4));
+display("hello world1");
+`,
+  },
+  {
+    index: 1,
     isCode: false,
     env: "",
     content: 
@@ -68,7 +61,7 @@ print("hello world")
 `,
   },
   {
-    id: 2,
+    index: 2,
     isCode: true,
     env: "recuFib",
     content: 
@@ -76,17 +69,17 @@ print("hello world")
 `,
   },
   {
-    id: 3,
+    index: 3,
     isCode: true,
-    env: "",
+    env: "iterFib",
     content: 
     `print("hello world");
 `,
   },
   {
-    id: 4,
+    index: 4,
     isCode: true,
-    env: "",
+    env: "iterFib",
     content: 
     `print("hello world");
 `,
@@ -293,3 +286,8 @@ export const deleteUserUserGroups = async (
   const user = await resp.json();
   return user;
 };
+
+// export const updateHeader = (newHeader: string): string | null => {
+//   tempHeader = newHeader;
+//   return tempHeader;
+// }
