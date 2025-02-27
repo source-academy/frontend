@@ -7,6 +7,7 @@ import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/S
 import { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
 import { freshSortState } from '../../pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
+import { defaultFeatureFlags, FeatureFlagsState } from '../featureFlags';
 import { FileSystemState } from '../fileSystem/FileSystemTypes';
 import { SideContentManagerState, SideContentState } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
@@ -29,6 +30,7 @@ export type OverallState = {
   readonly stories: StoriesState;
   readonly workspaces: WorkspaceManagerState;
   readonly dashboard: DashboardState;
+  readonly featureFlags: FeatureFlagsState;
   readonly fileSystem: FileSystemState;
   readonly sideContent: SideContentManagerState;
 };
@@ -608,6 +610,7 @@ export const defaultState: OverallState = {
   session: defaultSession,
   stories: defaultStories,
   workspaces: defaultWorkspaceManager,
+  featureFlags: defaultFeatureFlags,
   fileSystem: defaultFileSystem,
   sideContent: defaultSideContentManager
 };
