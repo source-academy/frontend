@@ -6867,6 +6867,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"conductor@https://github.com/source-academy/conductor.git#0.2.0":
+  version: 0.2.0
+  resolution: "conductor@https://github.com/source-academy/conductor.git#commit=ff4327b38b3ea20516f1f4b9ae512d494518b36a"
+  checksum: 10c0/100ea2c5c716abf98a879e8f98a9ec63651d39a99e384fa9649db156e660a9918c4375c91e916f3f4efa9889c3ce9893936063a038b31683db530423b3abd14a
+  languageName: node
+  linkType: hard
+
 "confusing-browser-globals@npm:^1.0.11":
   version: 1.0.11
   resolution: "confusing-browser-globals@npm:1.0.11"
@@ -9640,6 +9647,7 @@ __metadata:
     buffer: "npm:^6.0.3"
     canvas: "npm:^2.11.2"
     classnames: "npm:^2.3.2"
+    conductor: "https://github.com/source-academy/conductor.git#0.2.0"
     constants-browserify: "npm:^1.0.0"
     coveralls: "npm:^3.1.1"
     cross-env: "npm:^7.0.3"
@@ -9662,6 +9670,7 @@ __metadata:
     js-slang: "npm:^1.0.80"
     js-yaml: "npm:^4.1.0"
     konva: "npm:^9.2.0"
+    language-directory: "https://github.com/source-academy/language-directory.git"
     lodash: "npm:^4.17.21"
     lz-string: "npm:^1.4.4"
     mdast-util-from-markdown: "npm:^2.0.0"
@@ -9706,8 +9715,6 @@ __metadata:
     redux-saga-test-plan: "npm:^4.0.6"
     rehype-react: "npm:^8.0.0"
     resize-observer-polyfill: "npm:^1.5.1"
-    sa-conductor: "https://github.com/tsammeow/sa-conductor.git#0.1.4"
-    sa-languages: "https://github.com/source-academy/sa-languages.git"
     sass: "npm:^1.63.6"
     showdown: "npm:^2.1.0"
     sourceror: "npm:^0.8.5"
@@ -12400,6 +12407,13 @@ __metadata:
   version: 9.2.0
   resolution: "konva@npm:9.2.0"
   checksum: 10c0/65b36f1ffa08285830d7150e665c462d8ca6617db0ba7ea3d340f39b39c74135b5849057722439b55dcebf9c9f7625e828ccc2dbb413b35c3e553fca274ce7b3
+  languageName: node
+  linkType: hard
+
+"language-directory@https://github.com/source-academy/language-directory.git":
+  version: 0.0.1
+  resolution: "language-directory@https://github.com/source-academy/language-directory.git#commit=8e406e4b28a7df5e3e66fdf3005092d0cf861143"
+  checksum: 10c0/2db1dd6a94497232e2a183f10769f9e98658636ad3c0c56ae2d54abd5a414dcfbaa994e651ac94507d129147da523254d81103a75f5e0ad2cbaf2274ee3f146d
   languageName: node
   linkType: hard
 
@@ -16763,20 +16777,6 @@ __metadata:
   dependencies:
     queue-microtask: "npm:^1.2.2"
   checksum: 10c0/200b5ab25b5b8b7113f9901bfe3afc347e19bb7475b267d55ad0eb86a62a46d77510cb0f232507c9e5d497ebda569a08a9867d0d14f57a82ad5564d991588b39
-  languageName: node
-  linkType: hard
-
-"sa-conductor@https://github.com/tsammeow/sa-conductor.git#0.1.4":
-  version: 0.1.4
-  resolution: "sa-conductor@https://github.com/tsammeow/sa-conductor.git#commit=85b1dc310460de8d34cb4612b0438539d48c62ce"
-  checksum: 10c0/096166b514332f67a140073e448d86405cba25616d7b7fa35686c5e3ecba6a07c82f89a13a00d67c36f998a9065e60d22e48a3aa0f8223f02d30dd270bfccf71
-  languageName: node
-  linkType: hard
-
-"sa-languages@https://github.com/source-academy/sa-languages.git":
-  version: 0.0.1
-  resolution: "sa-languages@https://github.com/source-academy/sa-languages.git#commit=cc1c95614ebbec49e4d3957fd3c1ee1944aa70d8"
-  checksum: 10c0/48b24888503d19e8fba7281bcadea8472cc4d4da24d57491ac7d342f437042795d84faa6ba8edfc1e77ca65019777aaff8f97e66bea2d298ac721aba5af87c13
   languageName: node
   linkType: hard
 
