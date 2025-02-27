@@ -2,6 +2,7 @@ import { ItemId } from '../commons/CommonTypes';
 import { GameItemType } from '../location/GameMapTypes';
 import { GameSoundType } from '../sound/GameSoundTypes';
 import Parser from './Parser';
+import SoundAssets from '../assets/SoundAssets';
 
 export enum GameEntityType {
   locations = 'locations',
@@ -203,22 +204,24 @@ export default class ParserValidator {
               break;
 
             case GameEntityType.bgms:
-              const numberOfBgm = Parser.checkpoint.map
-                .getSoundAssets()
-                .filter(
+              const numberOfBgm = [
+                  ...Parser.checkpoint.map.getSoundAssets(), // Imported sound assets
+                  ...Object.values(SoundAssets) // Default sound assets
+                ].filter(
                   sound => sound.soundType === GameSoundType.BGM && sound.key === itemId
                 ).length;
               if (numberOfBgm === 0) {
-                console.error(`Cannot find bgm key "${itemId}"`);
+                throw new Error(`Cannot find bgm key "${itemId}"`);
               } else if (numberOfBgm > 1) {
-                console.error(`More than 1 bgm key "${itemId}"`);
+                throw new Error(`More than 1 bgm key "${itemId}"`);
               }
               break;
 
             case GameEntityType.sfxs:
-              const numberOfSfx = Parser.checkpoint.map
-                .getSoundAssets()
-                .filter(
+              const numberOfSfx = [
+                  ...Parser.checkpoint.map.getSoundAssets(), // Imported sound assets
+                  ...Object.values(SoundAssets) // Default sound assets
+                ].filter(
                   sound => sound.soundType === GameSoundType.SFX && sound.key === itemId
                 ).length;
               if (numberOfSfx === 0) {
