@@ -1,10 +1,10 @@
-import { Links } from 'src/commons/utils/Constants';
+import UtilConstants, { Links } from 'src/commons/utils/Constants';
 
 import FontAssets from '../assets/FontAssets';
 
 export const Constants = {
   assetsFolder: Links.sourceAcademyAssets,
-  useEmptyAssetPrefix: process.env.REACT_APP_USE_EMPTY_ASSET_PREFIX?.toUpperCase() === 'TRUE',
+  useEmptyAssetPrefix: UtilConstants.useEmptyAssetPrefix,
   fadeDuration: 600,
   nullFunction: () => {},
   nullInteractionId: '',
