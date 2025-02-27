@@ -1,8 +1,8 @@
+import SoundAssets from '../assets/SoundAssets';
 import { ItemId } from '../commons/CommonTypes';
 import { GameItemType } from '../location/GameMapTypes';
 import { GameSoundType } from '../sound/GameSoundTypes';
 import Parser from './Parser';
-import SoundAssets from '../assets/SoundAssets';
 
 export enum GameEntityType {
   locations = 'locations',
