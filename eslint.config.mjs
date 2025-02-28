@@ -1,19 +1,16 @@
 // @ts-check
 
-// Todo: Use ES module
-const eslint = require('@eslint/js');
-const tseslint = require('typescript-eslint');
-const reactRefresh = require('eslint-plugin-react-refresh');
+// import eslint from '@eslint/js';
+import { config, configs } from 'typescript-eslint';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import simpleImportSort from 'eslint-plugin-simple-import-sort'
+// import reactRefresh from 'eslint-plugin-react-refresh';
 
-const FlatCompat = require('@eslint/eslintrc').FlatCompat;
-const compat = new FlatCompat({
-  baseDirectory: `${__dirname}`
-});
-
-module.exports = tseslint.config(
-  { ignores: ['eslint.config.js'] },
+export default config(
+  { ignores: ['eslint.config.mjs'] },
   // eslint.configs.recommended,
-  ...tseslint.configs.recommended,
+  ...configs.recommended,
   // TODO: Enable when ready
   // {
   //   plugins: {
@@ -23,14 +20,15 @@ module.exports = tseslint.config(
   //     'react-refresh/only-export-components': 'warn'
   //   }
   // },
-  ...compat.config({
-    extends: [
-      'plugin:react-hooks/recommended'
-      // "plugin:react/recommended",
-      // "plugin:react/jsx-runtime"
-    ],
-    plugins: ['simple-import-sort'],
+  {
+    files: ['**/*.ts*'],
+    plugins: {
+      'react-hooks': reactHooksPlugin,
+      'react': reactPlugin,
+      'simple-import-sort': simpleImportSort
+    },
     rules: {
+      ...reactHooksPlugin.configs['recommended-latest'].rules,
       'no-restricted-imports': [
         'error',
         {
@@ -73,5 +71,5 @@ module.exports = tseslint.config(
       ],
       'simple-import-sort/imports': 'error'
     }
-  })
+  }
 );

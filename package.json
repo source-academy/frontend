@@ -141,7 +141,7 @@
     "cross-env": "^7.0.3",
     "eslint": "^9.9.0",
     "eslint-plugin-react": "^7.35.0",
-    "eslint-plugin-react-hooks": "5.1.0-canary-cb151849e1-20240424",
+    "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.9",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "https-browserify": "^1.0.0",
