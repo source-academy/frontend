@@ -18,6 +18,7 @@ import { styliseSublanguage } from 'src/commons/application/ApplicationTypes';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
 import ControlBar, { ControlBarProps } from 'src/commons/controlBar/ControlBar';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 export const DEFAULT_ENV = 'default';
 
@@ -217,13 +218,20 @@ const UserBlogContent: React.FC<Props> = ({
           key={key}
           story={story}
         />)
-      : contents.map((story, key) => <EditStoryCell 
-          key={key}
-          envs={envs}
-          story={story}
-          editContent={editContent}
-          saveNewStoryCell={saveNewStoryCell}
-        />)}
+      : <SortableContext items={contents.map((content, index) => {
+        return {
+          ...content,
+          id: index
+        }
+      })} strategy={verticalListSortingStrategy}>
+        {contents.map((story, key) => <EditStoryCell 
+            key={key}
+            envs={envs}
+            story={story}
+            editContent={editContent}
+            saveNewStoryCell={saveNewStoryCell}
+          />)}
+      </SortableContext>}
       {!isViewOnly && <div className='content'>
         <NewStoryCell 
           index={contents.length}

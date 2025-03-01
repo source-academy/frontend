@@ -15,6 +15,7 @@ import StoriesActions from 'src/features/stories/StoriesActions';
 
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
 import { StoryCell } from 'src/features/stories/StoriesTypes';
+import { DndContext, DragEndEvent, closestCorners } from "@dnd-kit/core";
 
 type Props = {
   isViewOnly?: boolean;
@@ -120,37 +121,55 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
     ]
   };
 
+  const handleDragEnd = (event: DragEndEvent) => {
+    const {active, over} = event;
+
+    // sequence does not change
+    if (active.id == over!.id) {
+      return;
+    }
+    const activeIndex: number = contents.findIndex((content) => content.index === active.id);
+    const overIndex: number = contents.findIndex((content) => content.index === over!.id);
+    const temp: StoryCell = contents[activeIndex];
+    contents[activeIndex] = contents[overIndex];
+    contents[overIndex] = temp;
+    console.log(contents);
+    dispatch(StoriesActions.setCurrentStory({...story, content: [...contents]})); 
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }} className={classNames(Classes.DARK)}>
       <ControlBar {...controlBarProps} />
-      <div style={{ width: '100vw', height: '100%', display: 'flex' }}>
-        {/* {!isViewOnly && (
-          <AceEditor
-            className="repl-react-ace react-ace"
-            width="100%"
-            height="100%"
-            theme="source"
-            value={content}
-            onChange={onEditorValueChange}
-            onScroll={onEditorScroll}
-            fontSize={17}
-            highlightActiveLine={false}
-            showPrintMargin={false}
-            wrapEnabled={true}
-            setOptions={{ fontFamily: "'Inconsolata', 'Consolas', monospace" }}
-          />
-        )} */}
-        <div className="newUserblog" id="userblogContainer">
-          <UserBlogContent 
-            header={header} 
-            contents={contents} 
-            isViewOnly={isViewOnly} 
-            editContent={editContent}
-            editHeader={editHeader}
-            saveNewStoryCell={saveNewStoryCell}
-          />
+      <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
+        <div style={{ width: '100vw', height: '100%', display: 'flex' }}>
+          {/* {!isViewOnly && (
+            <AceEditor
+              className="repl-react-ace react-ace"
+              width="100%"
+              height="100%"
+              theme="source"
+              value={content}
+              onChange={onEditorValueChange}
+              onScroll={onEditorScroll}
+              fontSize={17}
+              highlightActiveLine={false}
+              showPrintMargin={false}
+              wrapEnabled={true}
+              setOptions={{ fontFamily: "'Inconsolata', 'Consolas', monospace" }}
+            />
+          )} */}
+          <div className="newUserblog" id="userblogContainer">
+            <UserBlogContent 
+              header={header} 
+              contents={contents} 
+              isViewOnly={isViewOnly} 
+              editContent={editContent}
+              editHeader={editHeader}
+              saveNewStoryCell={saveNewStoryCell}
+            />
+          </div>
         </div>
-      </div>
+      </DndContext>
     </div>
   );
 };

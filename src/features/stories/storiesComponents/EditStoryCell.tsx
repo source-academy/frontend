@@ -5,6 +5,8 @@ import { StoryCell } from '../StoriesTypes';
 import { ControlButtonSaveButton } from "src/commons/controlBar/ControlBarSaveButton";
 import { Button } from "@blueprintjs/core";
 import NewStoryCell from "./CreateStoryCell";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 type Props = {
     story: StoryCell;
@@ -16,12 +18,19 @@ type Props = {
 function EditStoryCell(props: Props) {
 
     const { index, isCode, env, content } = props.story;
+    const id = index;
     const [isEditMode, setEditMode] = useState<boolean>(false);
     const [storyContent, setStoryContent] = useState<string>(content);
     const [isDirty, setIsDirty] = useState<boolean>(false);
     const [showButs, setShowButs] = useState<boolean>(false);
     const [showNewCellUp, setShowNewCellUp] = useState<boolean>(false);
     const [showNewCellDown, setShowNewCellDown] = useState<boolean>(false);
+    const {attributes, listeners, setNodeRef, transform, transition} = useSortable({id});
+
+    const style = {
+        transition,
+        transform: CSS.Transform.toString(transform),
+    };
 
     const saveButClicked = () => {
         setEditMode(false);
@@ -53,7 +62,11 @@ function EditStoryCell(props: Props) {
     return <div className="content" 
         onDoubleClick={handleDoubleClick} 
         onMouseEnter={() => setShowButs(true)}
-        onMouseLeave={() => setShowButs(false)}>
+        onMouseLeave={() => setShowButs(false)}
+        ref={setNodeRef}
+        {...attributes}
+        {...listeners}
+        style={style}>
         {showNewCellUp && <NewStoryCell 
             index={index}
             envs={props.envs}
