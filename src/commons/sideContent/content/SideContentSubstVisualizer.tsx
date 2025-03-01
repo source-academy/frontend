@@ -1,16 +1,29 @@
 import 'js-slang/dist/editors/ace/theme/source';
 
-import { Button, ButtonGroup, Card, Classes, Divider, Pre, Slider } from '@blueprintjs/core';
+import {
+  Button,
+  ButtonGroup,
+  Callout,
+  Card,
+  Classes,
+  Divider,
+  Popover,
+  Pre,
+  Slider
+} from '@blueprintjs/core';
 import { getHotkeyHandler, HotkeyItem } from '@mantine/hooks';
 import classNames from 'classnames';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
-import { IStepperPropContents } from 'js-slang/dist/stepper/stepper';
 import React, { useCallback, useEffect, useState } from 'react';
-import AceEditor from 'react-ace';
 import { useDispatch } from 'react-redux';
 
 import { beginAlertSideContent } from '../SideContentActions';
 import { SideContentLocation, SideContentType } from '../SideContentTypes';
+import { IStepperPropContents, redex } from 'js-slang/dist/stepper/stepperV2';
+import { StepperExpression } from 'js-slang/dist/stepper/stepperV2/nodes/Expression';
+import { StepperLiteral } from 'js-slang/dist/stepper/stepperV2/nodes/Literal';
+import { StepperUnaryExpression } from 'js-slang/dist/stepper/stepperV2/nodes/UnaryExpression';
+import { StepperBinaryExpression } from 'js-slang/dist/stepper/stepperV2/nodes/BinaryExpression';
 
 const SubstDefaultText = () => {
   return (
@@ -57,24 +70,24 @@ const SubstCodeDisplay = (props: { content: string }) => {
   );
 };
 
-type SubstVisualizerProps = {
+type SubstVisualizerPropsAST = {
   content: IStepperPropContents[];
   workspaceLocation: SideContentLocation;
 };
 
-const SideContentSubstVisualizer: React.FC<SubstVisualizerProps> = props => {
+const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
   const [stepValue, setStepValue] = useState(1);
   const lastStepValue = props.content.length;
-  const hasRunCode = lastStepValue !== 0; // 'content' property is initialised to '[]' by Playground component
-
+  const hasRunCode = lastStepValue !== 0;
   const dispatch = useDispatch();
   const alertSideContent = useCallback(
     () => dispatch(beginAlertSideContent(SideContentType.substVisualizer, props.workspaceLocation)),
     [props.workspaceLocation, dispatch]
   );
-
+  console.log(props)
   // set source mode as 2
   useEffect(() => {
+    
     HighlightRulesSelector(2);
     ModeSelector(2);
   }, []);
@@ -87,49 +100,6 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerProps> = props => {
     }
   }, [props.content, setStepValue, alertSideContent]);
 
-  // Stepper function call helpers
-  const getPreviousFunctionCall = useCallback(
-    (value: number) => {
-      const contIndex = value <= lastStepValue ? value - 1 : 0;
-      const currentFunction = props.content[contIndex]?.function;
-      if (currentFunction === undefined) {
-        return null;
-      }
-      for (let i = contIndex - 1; i > -1; i--) {
-        const previousFunction = props.content[i].function;
-        if (previousFunction !== undefined && currentFunction === previousFunction) {
-          return i + 1;
-        }
-      }
-      return null;
-    },
-    [lastStepValue, props.content]
-  );
-
-  const getNextFunctionCall = useCallback(
-    (value: number) => {
-      const contIndex = value <= lastStepValue ? value - 1 : 0;
-      const currentFunction = props.content[contIndex]?.function;
-      if (currentFunction === undefined) {
-        return null;
-      }
-      for (let i = contIndex + 1; i < props.content.length; i++) {
-        const nextFunction = props.content[i].function;
-        if (nextFunction !== undefined && currentFunction === nextFunction) {
-          return i + 1;
-        }
-      }
-      return null;
-    },
-    [lastStepValue, props.content]
-  );
-
-  // Stepper handlers
-  const hasPreviousFunctionCall = getPreviousFunctionCall(stepValue) !== null;
-  const hasNextFunctionCall = getNextFunctionCall(stepValue) !== null;
-  const stepPreviousFunctionCall = () =>
-    setStepValue(getPreviousFunctionCall(stepValue) ?? stepValue);
-  const stepNextFunctionCall = () => setStepValue(getNextFunctionCall(stepValue) ?? stepValue);
   const stepFirst = () => setStepValue(1);
   const stepLast = () => setStepValue(lastStepValue);
   const stepPrevious = () => setStepValue(Math.max(1, stepValue - 1));
@@ -151,66 +121,18 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerProps> = props => {
       ];
   const hotkeyHandler = getHotkeyHandler(hotkeyBindings);
 
-  // Rendering helpers
-  const getText = useCallback(
-    (value: number) => {
+  const getExplanation = useCallback(
+    (value: number): string => {
       const contIndex = value <= lastStepValue ? value - 1 : 0;
-      const pathified = props.content[contIndex];
-      const redexed = pathified.code;
-      const redex = pathified.redex;
-      const split = pathified.code.split('@redex');
-      if (split.length > 1) {
-        let text = split[0];
-        for (let i = 1; i < split.length; i++) {
-          text = text + redex + split[i];
-        }
-        return text;
-      } else {
-        return redexed;
-      }
+      return props.content[contIndex][2];
     },
     [lastStepValue, props.content]
   );
 
-  const getDiffMarkers = useCallback(
-    (value: number) => {
+  const getAST = useCallback(
+    (value: number): IStepperPropContents => {
       const contIndex = value <= lastStepValue ? value - 1 : 0;
-      const pathified = props.content[contIndex];
-      const redexed = pathified.code;
-      const redex = pathified.redex.split('\n');
-
-      const diffMarkers = [] as any[];
-      if (redex.length > 0) {
-        const mainprog = redexed.split('@redex');
-        let text = mainprog[0];
-        let front = text.split('\n');
-
-        let startR = front.length - 1;
-        let startC = front[startR].length;
-
-        for (let i = 0; i < mainprog.length - 1; i++) {
-          const endR = startR + redex.length - 1;
-          const endC =
-            redex.length === 1
-              ? startC + redex[redex.length - 1].length
-              : redex[redex.length - 1].length;
-
-          diffMarkers.push({
-            startRow: startR,
-            startCol: startC,
-            endRow: endR,
-            endCol: endC,
-            className: value % 2 === 0 ? 'beforeMarker' : 'afterMarker',
-            type: 'background'
-          });
-
-          text = text + redex + mainprog[i + 1];
-          front = text.split('\n');
-          startR = front.length - 1;
-          startC = front[startR].length;
-        }
-      }
-      return diffMarkers;
+      return props.content[contIndex];
     },
     [lastStepValue, props.content]
   );
@@ -230,11 +152,7 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerProps> = props => {
       />
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <ButtonGroup>
-          <Button
-            disabled={!hasRunCode || !hasPreviousFunctionCall}
-            icon="double-chevron-left"
-            onClick={stepPreviousFunctionCall}
-          />
+          <Button disabled={!hasRunCode} icon="double-chevron-left" onClick={stepFirst} />
           <Button
             disabled={!hasRunCode || stepValue === 1}
             icon="chevron-left"
@@ -245,47 +163,106 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerProps> = props => {
             icon="chevron-right"
             onClick={stepNext}
           />
-          <Button
-            disabled={!hasRunCode || !hasNextFunctionCall}
-            icon="double-chevron-right"
-            onClick={stepNextFunctionCall}
-          />
+          <Button disabled={!hasRunCode} icon="double-chevron-right" onClick={stepLast} />
         </ButtonGroup>
       </div>{' '}
       <br />
-      {hasRunCode ? (
-        <AceEditor
-          className="react-ace"
-          mode="source2defaultNONE"
-          theme="source"
-          fontSize={17}
-          highlightActiveLine={false}
-          wrapEnabled={true}
-          height="unset"
-          width="100%"
-          showGutter={false}
-          readOnly={true}
-          maxLines={Infinity}
-          value={getText(stepValue)}
-          markers={getDiffMarkers(stepValue)}
-          setOptions={{
-            fontFamily: "'Inconsolata', 'Consolas', monospace"
-          }}
-        />
-      ) : (
-        <SubstDefaultText />
-      )}
-      {hasRunCode ? (
-        <SubstCodeDisplay
-          content={
-            stepValue <= lastStepValue
-              ? props.content[stepValue - 1].explanation
-              : props.content[0].explanation
-          }
-        />
-      ) : null}
+      {hasRunCode ? <StepperDisplayer {...getAST(stepValue)} /> : <SubstDefaultText />}
+      {hasRunCode ? <SubstCodeDisplay content={getExplanation(stepValue)} /> : null}
+      <div className="stepper-display">
+        <div>Expression stepper</div>
+        <div>{'Double arrows << and >> are replaced with stepFirst and stepLast.'}</div>
+      </div>
     </div>
   );
 };
+
+
+// custom AST renderer
+function StepperDisplayer(props: IStepperPropContents) {
+  const getNodeType = useCallback(
+    (node: StepperExpression): string => {
+      if (props[1] === node) {
+        return "beforeMarker";
+      }
+      if (redex.postRedex === node) {
+        return "afterMarker";
+      }
+      return "";
+    },
+    [props]
+  );
+
+  const convertNode = useCallback(
+    (node: StepperExpression): React.ReactNode => {
+      const convertors = {
+        Literal(node: StepperLiteral) {
+          return <span>{node.value}</span>;
+        },
+        UnaryExpression(node: StepperUnaryExpression) {
+          return (
+            <span>
+              {` ${node.operator}`}
+              {convertNode(node.argument)}
+            </span>
+          );
+        },
+        BinaryExpression(node: StepperBinaryExpression) {
+          return (
+            <span>
+              {convertNode(node.left)}
+              {` ${node.operator} `}
+              {convertNode(node.right)}
+            </span>
+          );
+        }
+      };
+      const convertor = convertors[node.type];
+      // @ts-expect-error node actually has type StepperExpression
+      const converted = convertor(node);
+      if (getNodeType(node) === "") {
+        return <span>{converted}</span>;
+      } else {
+        return (
+          <span className={getNodeType(node)}>
+            <Popover
+              interactionKind="hover"
+              placement="bottom"
+              minimal={true}
+              content={
+                <div className=".bp5-running-text {{.modifier}}">
+                  <Callout title={node.type} icon="function" intent={getNodeType(node) === "beforeMarker" ? "warning" : "success"}>
+                    <div>
+                      <span>{"Contraction rule "}</span>
+                      <code className="bp5-code">{getNodeType(node) === "beforeMarker" ? "E1 -> E2" : "finished"}</code>
+                    </div>
+                    <Popover interactionKind='click' placement='left' minimal={true} 
+                      content={<div className='.bp5-running-text {{.modifier}}'>
+                          <pre className="bp5-code-block">
+                          <code>{JSON.stringify(node, null, 4)}</code>
+                        </pre>
+                      </div>}
+                    >
+                      <Button icon="eye-open">View AST</Button> 
+                    </Popover>
+                  </Callout>
+                </div>
+              }
+            >
+              {converted}
+            </Popover>
+          </span>
+        );
+      }
+    },
+    [props, getNodeType]
+  );
+
+  const getConvertedNode = useCallback((): React.ReactNode => {
+    return convertNode(props[0]);
+  }, [props, convertNode]);
+  
+  return <div className="stepper-display">{getConvertedNode()}</div>;
+}
 
 export default SideContentSubstVisualizer;
