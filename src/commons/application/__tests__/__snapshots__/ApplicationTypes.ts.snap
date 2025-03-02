@@ -229,19 +229,6 @@ Array [
   },
   Object {
     "chapter": 3,
-    "displayName": "Source §3 Non-Det",
-    "mainLanguage": "JavaScript",
-    "supports": Object {
-      "cseMachine": false,
-      "dataVisualizer": true,
-      "multiFile": true,
-      "repl": true,
-      "substVisualizer": false,
-    },
-    "variant": "non-det",
-  },
-  Object {
-    "chapter": 3,
     "displayName": "Source §3 Native",
     "mainLanguage": "JavaScript",
     "supports": Object {

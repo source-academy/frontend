@@ -1,10 +1,7 @@
 import { useMediaQuery } from '@mantine/hooks';
 import React, { RefObject } from 'react';
-import {
-  TypedUseSelectorHook,
-  // eslint-disable-next-line no-restricted-imports
-  useSelector
-} from 'react-redux';
+// eslint-disable-next-line no-restricted-imports
+import { TypedUseSelectorHook, useSelector } from 'react-redux';
 
 import { OverallState } from '../application/ApplicationTypes';
 import { Tokens } from '../application/types/SessionTypes';
