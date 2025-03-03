@@ -20,11 +20,6 @@ import { useDispatch } from 'react-redux';
 import { beginAlertSideContent } from '../SideContentActions';
 import { SideContentLocation, SideContentType } from '../SideContentTypes';
 import { IStepperPropContents, toStringWithMarker } from 'js-slang/dist/stepper/stepperV2';
-import { StepperExpression } from 'js-slang/dist/stepper/stepperV2/nodes/Expression';
-import { StepperLiteral } from 'js-slang/dist/stepper/stepperV2/nodes/Literal';
-import { StepperUnaryExpression } from 'js-slang/dist/stepper/stepperV2/nodes/UnaryExpression';
-import { StepperBinaryExpression } from 'js-slang/dist/stepper/stepperV2/nodes/BinaryExpression';
-import { generate } from 'astring';
 
 const SubstDefaultText = () => {
   return (
@@ -87,6 +82,7 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
   );
   // set source mode as 2
   useEffect(() => {
+    
     HighlightRulesSelector(2);
     ModeSelector(2);
   }, []);
@@ -169,7 +165,7 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
       {hasRunCode ? <CustomASTRenderer {...getAST(stepValue)} /> : <SubstDefaultText />}
       {hasRunCode ? <SubstCodeDisplay content={getExplanation(stepValue)} /> : null}
       <div className="stepper-display">
-        <div>Expression stepper</div>
+        <div>Expression stepper </div>
         <div>{'Double arrows << and >> are replaced with stepFirst and stepLast.'}</div>
       </div>
     </div>
@@ -178,6 +174,7 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
 
 /////////////////////////////////// Custom AST Renderer for Stepper //////////////////////////////////
 // Iterative solution: get marked position for custom markers
+// Normally, this will be handled using ACEEditor
 function CustomASTRenderer(props: IStepperPropContents) {
   const getStringWithMarker = useCallback(() => {
     return toStringWithMarker(props);

@@ -420,6 +420,7 @@ $code-color-notification: #f9f0d7;
 
           .stepper-display {
             font-family: 'Inconsolata', 'Consolas', monospace;
+            font-size: 16px;
           }
           
           .stepper-literal {
@@ -430,6 +431,10 @@ $code-color-notification: #f9f0d7;
             color: #F89210;
           }
 
+          .stepper-display {
+            font-family: 'Inconsolata', 'Consolas', monospace;
+          }
+          
           .beforeMarker {
             background: rgba(179, 101, 57, 0.75);
             pointer-events: auto;
