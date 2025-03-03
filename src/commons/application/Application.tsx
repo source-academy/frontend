@@ -1,7 +1,11 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom';
-import Messages, { MessageType, MessageTypeNames, sendToWebview } from 'src/features/vscode/messages';
+import Messages, {
+  MessageType,
+  MessageTypeNames,
+  sendToWebview
+} from 'src/features/vscode/messages';
 
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
@@ -78,8 +82,8 @@ const Application: React.FC = () => {
     if (!window.confirm) {
       // Polyfill confirm() to instead show as VS Code notification
       // TODO: Pass text as a new Message to the webview
-      window.confirm = (text) => {
-        console.log(`Confirmation automatically accepted: ${text ?? "No text provided"}`);
+      window.confirm = text => {
+        console.log(`Confirmation automatically accepted: ${text ?? 'No text provided'}`);
         return true;
       };
     }
@@ -102,7 +106,12 @@ const Application: React.FC = () => {
           if (message.token) {
             const token = JSON.parse(message.token.trim());
             console.log(`FRONTEND: WebviewStarted: ${token}`);
-            dispatch(SessionActions.setTokens({accessToken: token.accessToken, refreshToken: token.refreshToken}));
+            dispatch(
+              SessionActions.setTokens({
+                accessToken: token.accessToken,
+                refreshToken: token.refreshToken
+              })
+            );
             dispatch(SessionActions.fetchUserAndCourse());
           }
           break;
@@ -121,6 +130,7 @@ const Application: React.FC = () => {
           break;
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

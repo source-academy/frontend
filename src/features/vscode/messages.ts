@@ -14,9 +14,9 @@ const Messages = createMessages({
   NewEditor: (assessmentName: string, questionId: number, code: string) => ({
     assessmentName,
     questionId,
-    code,
+    code
   }),
-  Text: (code: string) => ({ code }),
+  Text: (code: string) => ({ code })
 });
 
 export default Messages;
@@ -32,20 +32,18 @@ type BaseMessage<T extends string, P extends object> = {
 
 // A helper function to create messages dynamically from schema (hoisted!)
 function createMessages<T extends Record<string, (...args: any[]) => object>>(
-  creators: T,
+  creators: T
 ): {
-  [K in Extract<keyof T, string>]: (
-    ...args: Parameters<T[K]>
-  ) => BaseMessage<K, ReturnType<T[K]>>;
+  [K in Extract<keyof T, string>]: (...args: Parameters<T[K]>) => BaseMessage<K, ReturnType<T[K]>>;
 } {
   return Object.fromEntries(
     Object.entries(creators).map(([key, creator]) => [
       key,
       (...args: any[]) => ({
         type: key,
-        ...creator(...args),
-      }),
-    ]),
+        ...creator(...args)
+      })
+    ])
   ) as any;
 }
 
@@ -61,14 +59,14 @@ export type MessageType = MessageTypes[keyof MessageTypes];
 export const MessageTypeNames = (() =>
   ({
     ...Object.keys(Messages)
-      .filter((k) => isNaN(Number(k)))
+      .filter(k => isNaN(Number(k)))
       .reduce(
         (acc, cur) => ({
           ...acc,
-          [cur]: cur,
+          [cur]: cur
         }),
-        {},
-      ),
+        {}
+      )
   }) as {
     [k in keyof typeof Messages]: k;
   })();
@@ -77,19 +75,19 @@ export const MessageTypeNames = (() =>
 // Wrapper functions
 // ================================================================================
 
-export const FRONTEND_ELEMENT_ID = "frontend";
+export const FRONTEND_ELEMENT_ID = 'frontend';
 
 export function sendToWebview(message: MessageType) {
-  window.parent.postMessage(message, "*");
+  window.parent.postMessage(message, '*');
 }
 export function sendToFrontend(document: Document, message: MessageType) {
   const iframe: HTMLIFrameElement = document.getElementById(
-    FRONTEND_ELEMENT_ID,
+    FRONTEND_ELEMENT_ID
   ) as HTMLIFrameElement;
   const contentWindow = iframe.contentWindow;
   if (!contentWindow) {
     return;
   }
   // TODO: Don't hardcode this!
-  contentWindow.postMessage(message, "http://localhost:8000");
+  contentWindow.postMessage(message, 'http://localhost:8000');
 }
