@@ -135,6 +135,10 @@ class GameGlobalAPI {
     this.getGameManager().getObjectManager().makeObjectBlink(objectId, turnOn);
   }
 
+  public objectHoverGlow(objectId: ItemId, turnOn: boolean) {
+    this.getGameManager().getObjectManager().objectHoverGlow(objectId, turnOn);
+  }
+
   public setObjProperty(id: ItemId, newObjProp: ObjectProperty) {
     this.getGameManager().getStateManager().setObjProperty(id, newObjProp);
   }

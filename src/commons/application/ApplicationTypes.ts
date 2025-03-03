@@ -7,6 +7,7 @@ import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/S
 import { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
 import { freshSortState } from '../../pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
+import { defaultFeatureFlags, FeatureFlagsState } from '../featureFlags';
 import { FileSystemState } from '../fileSystem/FileSystemTypes';
 import { SideContentManagerState, SideContentState } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
@@ -30,6 +31,7 @@ export type OverallState = {
   readonly stories: StoriesState;
   readonly workspaces: WorkspaceManagerState;
   readonly dashboard: DashboardState;
+  readonly featureFlags: FeatureFlagsState;
   readonly fileSystem: FileSystemState;
   readonly sideContent: SideContentManagerState;
   readonly vscode: VscodeState;
@@ -158,7 +160,6 @@ type LanguageFeatures = Partial<{
 const variantDisplay: Map<Variant, string> = new Map([
   [Variant.TYPED, 'Typed'],
   [Variant.WASM, 'WebAssembly'],
-  [Variant.NON_DET, 'Non-Det'],
   [Variant.CONCURRENT, 'Concurrent'],
   [Variant.LAZY, 'Lazy'],
   [Variant.GPU, 'GPU'],
@@ -270,7 +271,6 @@ const sourceSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant'>> = [
   { chapter: Chapter.SOURCE_3, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_3, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_3, variant: Variant.CONCURRENT },
-  { chapter: Chapter.SOURCE_3, variant: Variant.NON_DET },
   { chapter: Chapter.SOURCE_3, variant: Variant.NATIVE },
 
   { chapter: Chapter.SOURCE_4, variant: Variant.DEFAULT },
@@ -293,8 +293,7 @@ export const sourceLanguages: SALanguage[] = sourceSubLanguages.map(sublang => {
     (variant === Variant.DEFAULT || variant === Variant.NATIVE || variant === Variant.TYPED);
 
   // Enable CSE Machine for Source Chapter 3 and above
-  supportedFeatures.cseMachine =
-    chapter >= Chapter.SOURCE_3 && variant !== Variant.CONCURRENT && variant !== Variant.NON_DET;
+  supportedFeatures.cseMachine = chapter >= Chapter.SOURCE_3 && variant !== Variant.CONCURRENT;
 
   // Local imports/exports require Source 2+ as Source 1 does not have lists.
   supportedFeatures.multiFile = chapter >= Chapter.SOURCE_2;
@@ -426,7 +425,6 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   enableDebugging: true,
   debuggerContext: {} as DebuggerContext,
   lastDebuggerResult: undefined,
-  lastNonDetResult: null,
   files: {}
 });
 
@@ -618,6 +616,7 @@ export const defaultState: OverallState = {
   session: defaultSession,
   stories: defaultStories,
   workspaces: defaultWorkspaceManager,
+  featureFlags: defaultFeatureFlags,
   fileSystem: defaultFileSystem,
   sideContent: defaultSideContentManager,
   vscode: defaultVscode

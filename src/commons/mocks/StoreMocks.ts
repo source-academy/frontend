@@ -15,6 +15,7 @@ import {
   defaultWorkspaceManager,
   OverallState
 } from '../application/ApplicationTypes';
+import { defaultFeatureFlags } from '../featureFlags';
 import { SourceActionType } from '../utils/ActionsHelper';
 import { DeepPartial } from '../utils/TypeHelper';
 
@@ -30,6 +31,7 @@ export function mockInitialStore(
     workspaces: defaultWorkspaceManager,
     session: defaultSession,
     stories: defaultStories,
+    featureFlags: defaultFeatureFlags,
     fileSystem: defaultFileSystem,
     sideContent: defaultSideContentManager,
     vscode: defaultVscode

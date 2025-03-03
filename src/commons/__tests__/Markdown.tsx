@@ -37,9 +37,6 @@ test('Markdown page renders correct Source information', () => {
   const source3Default = <Markdown {...mockProps(Chapter.SOURCE_3, Variant.DEFAULT)} />;
   expect(source3Default.props.content).toContain('Source \xa73');
 
-  const source3NonDet = <Markdown {...mockProps(Chapter.SOURCE_3, Variant.NON_DET)} />;
-  expect(source3NonDet.props.content).toContain('Source \xa73 Non-Det');
-
   const source3Concurrent = <Markdown {...mockProps(Chapter.SOURCE_3, Variant.CONCURRENT)} />;
   expect(source3Concurrent.props.content).toContain('Source \xa73 Concurrent');
 

@@ -21,6 +21,7 @@ const storiesBackendUrl = process.env.REACT_APP_STORIES_BACKEND_URL;
 const cadetLoggerUrl = isTest ? undefined : process.env.REACT_APP_CADET_LOGGER;
 const cadetLoggerInterval = parseInt(process.env.REACT_APP_CADET_LOGGER_INTERVAL || '10000', 10);
 const useBackend = !isTest && isTrue(process.env.REACT_APP_USE_BACKEND);
+const useEmptyAssetPrefix = isTrue(process.env.REACT_APP_USE_EMPTY_ASSET_PREFIX);
 const defaultSourceChapter = Chapter.SOURCE_4;
 const defaultSourceVariant = Variant.DEFAULT;
 const defaultQuestionId = 0;
@@ -154,6 +155,7 @@ const Constants = {
   storiesBackendUrl,
   cadetLoggerUrl,
   useBackend,
+  useEmptyAssetPrefix,
   defaultSourceChapter,
   defaultSourceVariant,
   defaultQuestionId,

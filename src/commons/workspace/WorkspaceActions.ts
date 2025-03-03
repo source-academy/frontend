@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { Context, Result } from 'js-slang';
+import type { Context } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
 
 import { AllColsSortStates, GradingColumnVisibility } from '../../features/grading/GradingTypes';
@@ -14,7 +14,6 @@ import {
   SubmissionsTableFilters,
   TOGGLE_USING_UPLOAD,
   UPDATE_LAST_DEBUGGER_RESULT,
-  UPDATE_LAST_NON_DET_RESULT,
   UPLOAD_FILES,
   WorkspaceLocation,
   WorkspaceLocationsWithTools,
@@ -282,13 +281,6 @@ export const updateLastDebuggerResult = createAction(
   })
 );
 
-export const updateLastNonDetResult = createAction(
-  UPDATE_LAST_NON_DET_RESULT,
-  (lastNonDetResult: Result, workspaceLocation: WorkspaceLocation) => ({
-    payload: { lastNonDetResult, workspaceLocation }
-  })
-);
-
 export const toggleUsingUpload = createAction(
   TOGGLE_USING_UPLOAD,
   (usingUpload: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
@@ -307,7 +299,6 @@ export const uploadFiles = createAction(
 export default {
   ...newActions,
   updateLastDebuggerResult,
-  updateLastNonDetResult,
   toggleUsingUpload,
   uploadFiles
 };
