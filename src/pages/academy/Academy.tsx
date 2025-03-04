@@ -37,7 +37,7 @@ const CourseSelectingAcademy: React.FC = () => {
   const { courseId } = useSession();
   const { courseId: routeCourseIdStr } = useParams<{ courseId?: string }>();
   const routeCourseId = routeCourseIdStr != null ? parseInt(routeCourseIdStr, 10) : undefined;
-  const isUnderExamMode = useTypedSelector(state => state.session.enableExamMode);
+  const enableExamMode = useTypedSelector(state => state.session.enableExamMode);
 
   React.useEffect(() => {
     // Regex to handle case where routeCourseIdStr is not a number
@@ -49,10 +49,10 @@ const CourseSelectingAcademy: React.FC = () => {
       dispatch(SessionActions.updateLatestViewedCourse(routeCourseId));
     }
 
-    if (isUnderExamMode) {
+    if (enableExamMode) {
       navigate(`/courses/${courseId}`);
     }
-  }, [courseId, dispatch, routeCourseId, navigate, routeCourseIdStr, isUnderExamMode]);
+  }, [courseId, dispatch, routeCourseId, navigate, routeCourseIdStr, enableExamMode]);
 
   return Number.isNaN(routeCourseId) ? (
     <Navigate to="/" />
