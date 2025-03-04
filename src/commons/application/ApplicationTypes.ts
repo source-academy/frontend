@@ -161,8 +161,6 @@ const variantDisplay: Map<Variant, string> = new Map([
   [Variant.TYPED, 'Typed'],
   [Variant.WASM, 'WebAssembly'],
   [Variant.CONCURRENT, 'Concurrent'],
-  [Variant.LAZY, 'Lazy'],
-  [Variant.GPU, 'GPU'],
   [Variant.NATIVE, 'Native'],
   [Variant.EXPLICIT_CONTROL, 'Explicit-Control']
 ]);
@@ -260,12 +258,10 @@ const sourceSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant'>> = [
   { chapter: Chapter.SOURCE_1, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_1, variant: Variant.TYPED },
   { chapter: Chapter.SOURCE_1, variant: Variant.WASM },
-  { chapter: Chapter.SOURCE_1, variant: Variant.LAZY },
   { chapter: Chapter.SOURCE_1, variant: Variant.NATIVE },
 
   { chapter: Chapter.SOURCE_2, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_2, variant: Variant.TYPED },
-  { chapter: Chapter.SOURCE_2, variant: Variant.LAZY },
   { chapter: Chapter.SOURCE_2, variant: Variant.NATIVE },
 
   { chapter: Chapter.SOURCE_3, variant: Variant.DEFAULT },
@@ -275,7 +271,6 @@ const sourceSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant'>> = [
 
   { chapter: Chapter.SOURCE_4, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_4, variant: Variant.TYPED },
-  { chapter: Chapter.SOURCE_4, variant: Variant.GPU },
   { chapter: Chapter.SOURCE_4, variant: Variant.NATIVE },
   { chapter: Chapter.SOURCE_4, variant: Variant.EXPLICIT_CONTROL }
 ];
