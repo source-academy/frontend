@@ -26,7 +26,6 @@ The Source Academy (<https://sourceacademy.org/>) is an immersive online experie
 
 1. Install the version of `yarn` as specified in `package.json`, `packageManager`. 
 
-   > [!TIP]  
    > We recommend using `corepack` to manage the version of `yarn`, you may simply run `corepack enable` to complete this step.
 
 1. Run `yarn install` to install dependencies.
