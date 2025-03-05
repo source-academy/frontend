@@ -20,7 +20,7 @@ const FILE_ID = '123';
 const FILE_NAME = 'file';
 const FILE_DATA = '// Hello world';
 const SOURCE_CHAPTER = Chapter.SOURCE_3;
-const SOURCE_VARIANT = Variant.LAZY;
+const SOURCE_VARIANT = Variant.DEFAULT;
 const SOURCE_LIBRARY = ExternalLibraryName.SOUNDS;
 
 beforeAll(() => {
