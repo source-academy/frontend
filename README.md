@@ -26,6 +26,8 @@ The Source Academy (<https://sourceacademy.org/>) is an immersive online experie
 
 1. Clone this repository and navigate to it using your command line
 
+1. Install the version of `yarn` as specified in `package.json`, `packageManager`. On macos, you may need to run `corepack enable`.
+
 1. Run `yarn install` to install dependencies.
 
    - If you are on Ubuntu and encounter the error message: `No such file or directory: 'install'`, you might be running the incorrect "yarn" from the cmdtest testing suite instead of the JavaScript package manager of the same name. Refer to this [StackOverflow post](https://stackoverflow.com/questions/46013544/yarn-install-command-error-no-such-file-or-directory-install).
