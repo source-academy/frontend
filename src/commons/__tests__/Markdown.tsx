@@ -22,17 +22,11 @@ test('Markdown page renders correct Source information', () => {
   const source1Default = <Markdown {...mockProps(Chapter.SOURCE_1, Variant.DEFAULT)} />;
   expect(source1Default.props.content).toContain('Source \xa71');
 
-  const source1Lazy = <Markdown {...mockProps(Chapter.SOURCE_1, Variant.LAZY)} />;
-  expect(source1Lazy.props.content).toContain('Source \xa71 Lazy');
-
   const source1Wasm = <Markdown {...mockProps(Chapter.SOURCE_1, Variant.WASM)} />;
   expect(source1Wasm.props.content).toContain('Source \xa71 WebAssembly');
 
   const source2Default = <Markdown {...mockProps(Chapter.SOURCE_2, Variant.DEFAULT)} />;
   expect(source2Default.props.content).toContain('Source \xa72');
-
-  const source2Lazy = <Markdown {...mockProps(Chapter.SOURCE_2, Variant.LAZY)} />;
-  expect(source2Lazy.props.content).toContain('Source \xa72 Lazy');
 
   const source3Default = <Markdown {...mockProps(Chapter.SOURCE_3, Variant.DEFAULT)} />;
   expect(source3Default.props.content).toContain('Source \xa73');
@@ -42,7 +36,4 @@ test('Markdown page renders correct Source information', () => {
 
   const source4Default = <Markdown {...mockProps(Chapter.SOURCE_4, Variant.DEFAULT)} />;
   expect(source4Default.props.content).toContain('Source \xa74');
-
-  const source4GPU = <Markdown {...mockProps(Chapter.SOURCE_4, Variant.GPU)} />;
-  expect(source4GPU.props.content).toContain('Source \xa74 GPU');
 });

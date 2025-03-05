@@ -112,19 +112,6 @@ Array [
   },
   Object {
     "chapter": 1,
-    "displayName": "Source §1 Lazy",
-    "mainLanguage": "JavaScript",
-    "supports": Object {
-      "cseMachine": false,
-      "dataVisualizer": false,
-      "multiFile": false,
-      "repl": true,
-      "substVisualizer": false,
-    },
-    "variant": "lazy",
-  },
-  Object {
-    "chapter": 1,
     "displayName": "Source §1 Native",
     "mainLanguage": "JavaScript",
     "supports": Object {
@@ -161,19 +148,6 @@ Array [
       "substVisualizer": true,
     },
     "variant": "typed",
-  },
-  Object {
-    "chapter": 2,
-    "displayName": "Source §2 Lazy",
-    "mainLanguage": "JavaScript",
-    "supports": Object {
-      "cseMachine": false,
-      "dataVisualizer": true,
-      "multiFile": true,
-      "repl": true,
-      "substVisualizer": false,
-    },
-    "variant": "lazy",
   },
   Object {
     "chapter": 2,
@@ -265,19 +239,6 @@ Array [
       "substVisualizer": false,
     },
     "variant": "typed",
-  },
-  Object {
-    "chapter": 4,
-    "displayName": "Source §4 GPU",
-    "mainLanguage": "JavaScript",
-    "supports": Object {
-      "cseMachine": true,
-      "dataVisualizer": true,
-      "multiFile": true,
-      "repl": true,
-      "substVisualizer": false,
-    },
-    "variant": "gpu",
   },
   Object {
     "chapter": 4,
