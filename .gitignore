@@ -24,8 +24,6 @@ terraform*
 .env.test.local
 .env.production.local
 .idea/
-.vscode/
-cadet-frontend.iml
 
 npm-debug.log*
 .eslintcache
