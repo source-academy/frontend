@@ -50,3 +50,6 @@ yarn-error.log
 
 #!.yarn/cache
 .pnp.*
+
+# We use .node-version
+/.tool-versions
