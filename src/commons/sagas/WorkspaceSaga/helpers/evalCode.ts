@@ -130,15 +130,7 @@ export function* evalCodeSaga(
   const entrypointCode = files[entrypointFilePath];
 
   function call_variant(variant: Variant) {
-    if (variant === Variant.LAZY) {
-      return call(runFilesInContext, files, entrypointFilePath, context, {
-        scheduler: 'preemptive',
-        originalMaxExecTime: execTime,
-        stepLimit: stepLimit,
-        useSubst: substActiveAndCorrectChapter,
-        envSteps: currentStep
-      });
-    } else if (variant === Variant.WASM) {
+    if (variant === Variant.WASM) {
       // Note: WASM does not support multiple file programs.
       return call(
         wasm_compile_and_run,
@@ -256,7 +248,6 @@ export function* evalCodeSaga(
       });
   }
 
-  const isLazy: boolean = context.variant === Variant.LAZY;
   const isWasm: boolean = context.variant === Variant.WASM;
   const isC: boolean = context.chapter === Chapter.FULL_C;
   const isJava: boolean = context.chapter === Chapter.FULL_JAVA;
@@ -284,7 +275,7 @@ export function* evalCodeSaga(
     result:
       actionType === InterpreterActions.debuggerResume.type
         ? call(resume, lastDebuggerResult)
-        : isLazy || isWasm
+        : isWasm
           ? call_variant(context.variant)
           : isC
             ? call(cCompileAndRun, entrypointCode, context)
