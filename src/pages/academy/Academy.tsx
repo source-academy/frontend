@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { Navigate, Outlet, useNavigate, useParams } from 'react-router';
 import ResearchAgreementPrompt from 'src/commons/researchAgreementPrompt/ResearchAgreementPrompt';
 import Constants from 'src/commons/utils/Constants';
-import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/Academy.module.scss';
 
 import SessionActions from '../../commons/application/actions/SessionActions';
@@ -34,10 +34,9 @@ const Academy: React.FC = () => {
 const CourseSelectingAcademy: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { courseId } = useSession();
+  const { courseId, enableExamMode } = useSession();
   const { courseId: routeCourseIdStr } = useParams<{ courseId?: string }>();
   const routeCourseId = routeCourseIdStr != null ? parseInt(routeCourseIdStr, 10) : undefined;
-  const enableExamMode = useTypedSelector(state => state.session.enableExamMode);
 
   React.useEffect(() => {
     // Regex to handle case where routeCourseIdStr is not a number
