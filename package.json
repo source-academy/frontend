@@ -48,7 +48,7 @@
     "array-move": "^4.0.0",
     "browserfs": "^1.4.3",
     "classnames": "^2.3.2",
-    "conductor": "https://github.com/source-academy/conductor.git#0.2.0",
+    "conductor": "https://github.com/source-academy/conductor.git#0.2.1",
     "dayjs": "^1.11.13",
     "dompurify": "^3.2.4",
     "flexboxgrid": "^6.3.1",
