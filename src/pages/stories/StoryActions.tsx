@@ -1,8 +1,8 @@
-import { Icon as BpIcon } from '@blueprintjs/core';
+import { Button, Position, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Flex, Icon } from '@tremor/react';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import GradingFlex from 'src/commons/grading/GradingFlex';
 
 type Props = {
   storyId: number;
@@ -29,69 +29,88 @@ const StoryActions: React.FC<Props> = ({
   handleMovePinUp = () => {},
   handleMovePinDown = () => {}
 }) => {
+  const navigate = useNavigate();
   return (
-    <Flex justifyContent="justify-start" spaceX="space-x-2">
+    <GradingFlex style={{ height: '100%' }}>
       {canView && (
-        <Link to={`./view/${storyId}`}>
-          <Icon
-            tooltip="View"
-            icon={() => <BpIcon icon={IconNames.EyeOpen} />}
-            variant="light"
-            color="green"
+        <Tooltip
+          targetProps={{ style: { display: 'flex' } }}
+          placement={Position.TOP}
+          content="View"
+        >
+          <Button
+            intent="success"
+            icon={IconNames.EyeOpen}
+            minimal
+            onClick={() => navigate(`./view/${storyId}`)}
           />
-        </Link>
+        </Tooltip>
       )}
       {canEdit && (
-        <Link to={`./edit/${storyId}`}>
-          <Icon
-            tooltip="Edit"
-            icon={() => <BpIcon icon={IconNames.EDIT} />}
-            variant="light"
-            color="sky"
+        <Tooltip
+          targetProps={{ style: { display: 'flex' } }}
+          placement={Position.TOP}
+          content="Edit"
+        >
+          <Button
+            intent="primary"
+            icon={IconNames.EDIT}
+            minimal
+            onClick={() => navigate(`./edit/${storyId}`)}
           />
-        </Link>
+        </Tooltip>
       )}
       {canPin && isPinned && (
         <>
-          <button style={{ padding: 0 }} onClick={() => handleMovePinUp(storyId)}>
-            <Icon
-              tooltip="Reorder up"
-              icon={() => <BpIcon icon={IconNames.ARROW_UP} />}
-              variant="light"
-              color="pink"
+          <Tooltip
+            targetProps={{ style: { display: 'flex' } }}
+            placement={Position.TOP}
+            content="Reorder up"
+          >
+            <Button icon={IconNames.ARROW_UP} minimal onClick={() => handleMovePinUp(storyId)} />
+          </Tooltip>
+          <Tooltip
+            targetProps={{ style: { display: 'flex' } }}
+            placement={Position.TOP}
+            content="Reorder down"
+          >
+            <Button
+              icon={IconNames.ARROW_DOWN}
+              minimal
+              onClick={() => handleMovePinDown(storyId)}
             />
-          </button>
-          <button style={{ padding: 0 }} onClick={() => handleMovePinDown(storyId)}>
-            <Icon
-              tooltip="Reorder down"
-              icon={() => <BpIcon icon={IconNames.ARROW_DOWN} />}
-              variant="light"
-              color="pink"
-            />
-          </button>
+          </Tooltip>
         </>
       )}
       {canPin && (
-        <button style={{ padding: 0 }} onClick={() => handleTogglePin(storyId)}>
-          <Icon
-            tooltip={isPinned ? 'Unpin' : 'Pin'}
-            icon={() => <BpIcon icon={isPinned ? IconNames.EXCLUDE_ROW : IconNames.PIN} />}
-            variant="light"
-            color="indigo"
+        <Tooltip
+          targetProps={{ style: { display: 'flex' } }}
+          placement={Position.TOP}
+          content={isPinned ? 'Unpin' : 'Pin'}
+        >
+          <Button
+            intent="warning"
+            icon={isPinned ? IconNames.EXCLUDE_ROW : IconNames.PIN}
+            minimal
+            onClick={() => handleTogglePin(storyId)}
           />
-        </button>
+        </Tooltip>
       )}
       {canDelete && (
-        <button style={{ padding: 0 }} onClick={() => handleDeleteStory(storyId)}>
-          <Icon
-            tooltip="Delete"
-            icon={() => <BpIcon icon={IconNames.TRASH} />}
-            variant="light"
-            color="red"
+        <Tooltip
+          targetProps={{ style: { display: 'flex' } }}
+          placement={Position.TOP}
+          content="Delete"
+        >
+          <Button
+            intent="danger"
+            icon={IconNames.TRASH}
+            minimal
+            onClick={() => handleDeleteStory(storyId)}
           />
-        </button>
+        </Tooltip>
       )}
-    </Flex>
+    </GradingFlex>
   );
 };
 

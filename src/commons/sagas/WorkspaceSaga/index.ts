@@ -3,12 +3,14 @@ import { Context, findDeclaration, getNames } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import Phaser from 'phaser';
 import { call, put, select } from 'redux-saga/effects';
-import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
-import { combineSagaHandlers } from 'src/commons/redux/utils';
-import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
-import CseMachine from 'src/features/cseMachine/CseMachine';
 
+import InterpreterActions from '../../../commons/application/actions/InterpreterActions';
+import { selectFeatureSaga } from '../../../commons/featureFlags/selectFeatureSaga';
+import { combineSagaHandlers } from '../../../commons/redux/utils';
+import WorkspaceActions from '../../../commons/workspace/WorkspaceActions';
 import { EventType } from '../../../features/achievement/AchievementTypes';
+import { flagConductorEnable } from '../../../features/conductor/flagConductorEnable';
+import CseMachine from '../../../features/cseMachine/CseMachine';
 import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
 import { WORKSPACE_BASE_PATHS } from '../../../pages/fileSystem/createInBrowserFileSystem';
 import {
@@ -220,6 +222,9 @@ const WorkspaceSaga = combineSagaHandlers(
       yield call(showWarningMessage, 'Autorun ' + (isEditorAutorun ? 'Started' : 'Stopped'), 750);
     },
     evalRepl: function* (action) {
+      if (yield call(selectFeatureSaga, flagConductorEnable)) {
+        return; // no-op: evalCodeConductorSaga will pick up this action and handle it from there
+      }
       const workspaceLocation = action.payload.workspaceLocation;
       const code: string = yield select(
         (state: OverallState) => state.workspaces[workspaceLocation].replValue
