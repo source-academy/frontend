@@ -235,18 +235,6 @@ const DropdownCreateCourse: React.FC<Props> = props => {
                 })
               }
             />
-
-            <Switch
-              checked={courseConfig.enableExamMode}
-              inline
-              label="Enable Exam Mode"
-              onChange={e =>
-                setCourseConfig({
-                  ...courseConfig,
-                  enableExamMode: (e.target as HTMLInputElement).checked
-                })
-              }
-            />
           </div>
         </div>
         <div>

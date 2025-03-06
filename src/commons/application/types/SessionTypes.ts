@@ -44,6 +44,7 @@ export type SessionState = {
   readonly sourceVariant?: Variant;
   readonly moduleHelpText?: string;
   readonly assetsPrefix?: string;
+  readonly isOfficialCourse?: boolean;
 
   readonly assessmentConfigurations?: AssessmentConfiguration[];
   readonly userCourseRegistrations?: AdminPanelCourseRegistration[];
@@ -111,6 +112,7 @@ export type CourseConfiguration = {
   sourceVariant: Variant;
   moduleHelpText: string;
   assetsPrefix: string;
+  isOfficialCourse: boolean;
 };
 
 export type AdminPanelCourseRegistration = {

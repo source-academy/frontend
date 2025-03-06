@@ -64,7 +64,8 @@ const AdminPanel: React.FC = () => {
       enableSourcecast: session.enableSourcecast,
       enableStories: session.enableStories,
       enableExamMode: session.enableExamMode,
-      moduleHelpText: session.moduleHelpText
+      moduleHelpText: session.moduleHelpText,
+      isOfficialCourse: session.isOfficialCourse
     });
   }, [
     session.courseName,
@@ -75,6 +76,7 @@ const AdminPanel: React.FC = () => {
     session.enableStories,
     session.enableExamMode,
     session.moduleHelpText,
+    session.isOfficialCourse,
     session.viewable
   ]);
 

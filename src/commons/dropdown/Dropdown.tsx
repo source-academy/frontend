@@ -24,7 +24,7 @@ const Dropdown: React.FC = () => {
 
   const { t } = useTranslation('commons', { keyPrefix: 'dropdown' });
 
-  const { isLoggedIn, name, courses, courseId } = useSession();
+  const { isLoggedIn, name, courses, courseId, enableExamMode } = useSession();
   const dispatch = useDispatch();
   const handleLogOut = () => dispatch(logOut());
 
@@ -49,9 +49,10 @@ const Dropdown: React.FC = () => {
     <MenuItem icon={IconNames.PROPERTIES} onClick={toggleMyCoursesOpen} text={t('My Courses')} />
   ) : null;
 
-  const createCourse = isLoggedIn ? (
-    <MenuItem icon={IconNames.ADD} onClick={toggleCreateCourseOpen} text={t('Create Course')} />
-  ) : null;
+  const createCourse =
+    isLoggedIn && !enableExamMode ? (
+      <MenuItem icon={IconNames.ADD} onClick={toggleCreateCourseOpen} text={t('Create Course')} />
+    ) : null;
 
   const logout = isLoggedIn ? (
     <MenuItem icon={IconNames.LOG_OUT} text={t('Logout')} onClick={handleLogOut} />
