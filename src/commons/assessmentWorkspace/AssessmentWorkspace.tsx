@@ -19,6 +19,7 @@ import { useDispatch, useStore } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { onClickProgress } from 'src/features/assessments/AssessmentUtils';
+import Messages, { sendToWebview } from 'src/features/vscode/messages';
 import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 import { mobileOnlyTabIds } from 'src/pages/playground/PlaygroundTabs';
 
@@ -184,12 +185,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         dispatch(WorkspaceActions.disableTokenCounter(workspaceLocation))
     };
   }, [dispatch]);
-
-  useEffect(() => {
-    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-    handleEditorValueChange(0, '');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const code = useTypedSelector(store => store.leaderboard.code) || 'Initial code';
   const state = useStore<OverallState>();
@@ -438,9 +433,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     );
     handleClearContext(question.library, true);
     handleUpdateHasUnsavedChanges(false);
+    sendToWebview(Messages.NewEditor(`assessment${assessment.id}`, props.questionId, ''));
     if (options.editorValue) {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange(0, options.editorValue);
+    } else {
+      handleEditorValueChange(0, '');
     }
   };
 

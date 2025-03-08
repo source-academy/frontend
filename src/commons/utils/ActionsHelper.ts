@@ -19,6 +19,8 @@ import SourcecastActions from '../../features/sourceRecorder/sourcecast/Sourceca
 import SourceRecorderActions from '../../features/sourceRecorder/SourceRecorderActions';
 import SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
 import StoriesActions from '../../features/stories/StoriesActions';
+import VscodeActions from '../application/actions/VscodeActions';
+import { FeatureFlagsActions } from '../featureFlags';
 import { ActionType } from './TypeHelper';
 
 export const actions = {
@@ -41,7 +43,10 @@ export const actions = {
   ...RemoteExecutionActions,
   ...FileSystemActions,
   ...StoriesActions,
-  ...SideContentActions
+  ...SideContentActions,
+  ...VscodeActions,
+  ...SideContentActions,
+  ...FeatureFlagsActions
 };
 
 export type SourceActionType = ActionType<typeof actions>;

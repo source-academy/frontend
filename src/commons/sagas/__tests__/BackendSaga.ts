@@ -838,8 +838,8 @@ describe('Test CHANGE_SUBLANGUAGE action', () => {
   test('when chapter is changed', () => {
     const sublang: SALanguage = {
       chapter: Chapter.SOURCE_4,
-      variant: Variant.GPU,
-      displayName: 'Source \xa74 GPU',
+      variant: Variant.CONCURRENT,
+      displayName: 'Source \xa74 Concurrent',
       mainLanguage: SupportedLanguage.JAVASCRIPT,
       supports: {}
     };
@@ -860,7 +860,7 @@ describe('Test CHANGE_SUBLANGUAGE action', () => {
         [
           call(putCourseConfig, mockTokens, {
             sourceChapter: Chapter.SOURCE_4,
-            sourceVariant: Variant.GPU
+            sourceVariant: Variant.CONCURRENT
           }),
           { ok: true }
         ]

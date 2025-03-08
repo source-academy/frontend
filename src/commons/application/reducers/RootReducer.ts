@@ -1,4 +1,5 @@
 import { combineReducers, Reducer } from '@reduxjs/toolkit';
+import { FeatureFlagsReducer as featureFlags } from 'src/commons/featureFlags';
 import { SourceActionType } from 'src/commons/utils/ActionsHelper';
 import { LeaderboardReducer as leaderboard } from 'src/features/leaderboard/LeaderboardReducer';
 
@@ -12,6 +13,7 @@ import { WorkspaceReducer as workspaces } from '../../workspace/WorkspaceReducer
 import { OverallState } from '../ApplicationTypes';
 import { RouterReducer as router } from './CommonsReducer';
 import { SessionsReducer as session } from './SessionsReducer';
+import { VscodeReducer as vscode } from './VscodeReducer';
 
 const rootReducer: Reducer<OverallState, SourceActionType> = combineReducers({
   router,
@@ -22,8 +24,10 @@ const rootReducer: Reducer<OverallState, SourceActionType> = combineReducers({
   session,
   stories,
   workspaces,
+  featureFlags,
   fileSystem,
-  sideContent
+  sideContent,
+  vscode
 });
 
 export default rootReducer;
