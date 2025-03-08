@@ -139,7 +139,7 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
     />
     <Route
       element={null}
-      path="/courses/:courseId/leaderboard"
+      path="/courses/:courseId/leaderboard/*"
     />
     <Route
       element={<SicpNavigationBar />}
@@ -358,7 +358,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
     />
     <Route
       element={null}
-      path="/courses/:courseId/leaderboard"
+      path="/courses/:courseId/leaderboard/*"
     />
     <Route
       element={<SicpNavigationBar />}
@@ -523,7 +523,7 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
     />
     <Route
       element={null}
-      path="/courses/:courseId/leaderboard"
+      path="/courses/:courseId/leaderboard/*"
     />
     <Route
       element={<SicpNavigationBar />}

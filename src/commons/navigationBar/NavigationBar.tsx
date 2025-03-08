@@ -318,7 +318,7 @@ const NavigationBar: React.FC = () => {
         <Route path="/contributors" element={null} />
         <Route path="/courses/:courseId/sourcecast" element={null} />
         <Route path="/courses/:courseId/achievements" element={null} />
-        <Route path="/courses/:courseId/leaderboard" element={null} />
+        <Route path="/courses/:courseId/leaderboard/*" element={null} />
         <Route path="/sicpjs/:section?" element={<SicpNavigationBar />} />
         <Route
           path="*"
