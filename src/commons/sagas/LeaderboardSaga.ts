@@ -1,43 +1,48 @@
-import LeaderboardActions from "src/features/leaderboard/LeaderboardActions";
-import { combineSagaHandlers } from "../redux/utils";
 import { call, put } from 'redux-saga/effects';
+import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
+
 import { Tokens } from '../application/types/SessionTypes';
+import { combineSagaHandlers } from '../redux/utils';
+import { actions } from '../utils/ActionsHelper';
 import { selectTokens } from './BackendSaga';
-import { getAllTotalXp, getContestScoreLeaderboard, getContestPopularVoteLeaderboard } from "./RequestsSaga";
-import { actions } from "../utils/ActionsHelper";
+import {
+  getAllTotalXp,
+  getContestPopularVoteLeaderboard,
+  getContestScoreLeaderboard
+} from './RequestsSaga';
 
 const LeaderboardSaga = combineSagaHandlers(LeaderboardActions, {
-    getAllUsersXp: function* (action) {
-        const tokens: Tokens = yield selectTokens();
-    
-        const usersXp = yield call(getAllTotalXp, tokens);
-    
-        if (usersXp) {
-          yield put(actions.saveAllUsersXp(usersXp))
-        }
-    },
+  getAllUsersXp: function* (action) {
+    const tokens: Tokens = yield selectTokens();
 
-    getAllContestScores: function* (action) {
-      const tokens: Tokens = yield selectTokens();
-      const assessmentId = action.payload;
-  
-      const contestScores = yield call(getContestScoreLeaderboard, assessmentId, tokens);
-  
-      if (contestScores) {
-        yield put(actions.saveAllContestScores(contestScores))
-      }
-    },
+    const usersXp = yield call(getAllTotalXp, tokens);
 
-    getAllContestPopularVotes: function* (action) {
-      const tokens: Tokens = yield selectTokens();
-      const assessmentId = action.payload;
-  
-      const contestPopularVotes = yield call(getContestPopularVoteLeaderboard, assessmentId, tokens);
-  
-      if (contestPopularVotes) {
-        yield put(actions.saveAllContestPopularVotes(contestPopularVotes))
-      }
+    if (usersXp) {
+      yield put(actions.saveAllUsersXp(usersXp));
     }
+  },
+
+  getAllContestScores: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const assessmentId = action.payload;
+
+    const contestScores = yield call(getContestScoreLeaderboard, assessmentId, tokens);
+
+    if (contestScores) {
+      yield put(actions.saveAllContestScores(contestScores));
+    }
+  },
+
+  getAllContestPopularVotes: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const assessmentId = action.payload;
+
+    const contestPopularVotes = yield call(getContestPopularVoteLeaderboard, assessmentId, tokens);
+
+    if (contestPopularVotes) {
+      yield put(actions.saveAllContestPopularVotes(contestPopularVotes));
+    }
+  }
 });
 
-export default LeaderboardSaga
+export default LeaderboardSaga;

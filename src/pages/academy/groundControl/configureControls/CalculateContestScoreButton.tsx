@@ -14,7 +14,9 @@ const CalculateContestScoreButton: React.FC<Props> = ({ assessmentId }) => {
     <div className="control-button-container">
       <ControlButton
         icon={IconNames.CALCULATOR}
-        onClick={async () => {calculateContestScore(assessmentId, tokens)}}
+        onClick={async () => {
+          calculateContestScore(assessmentId, tokens);
+        }}
         label="Calculate Contest Score"
       />
     </div>

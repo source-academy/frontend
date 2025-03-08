@@ -22,7 +22,7 @@ export const LeaderboardReducer: Reducer<LeaderboardState, SourceActionType> = c
         state.code = action.payload;
       })
       .addCase(LeaderboardActions.clearCode, (state, action) => {
-        state.code = "";
+        state.code = '';
       });
   }
 );

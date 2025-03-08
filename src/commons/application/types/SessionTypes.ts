@@ -40,7 +40,7 @@ export type SessionState = {
   readonly enableSourcecast?: boolean;
   readonly enableStories?: boolean;
   readonly enableOverallLeaderboard?: boolean;
-  readonly enableContestLeaderboard?: boolean; 
+  readonly enableContestLeaderboard?: boolean;
   readonly topLeaderboardDisplay?: number;
   readonly sourceChapter?: Chapter;
   readonly sourceVariant?: Variant;

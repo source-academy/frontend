@@ -19,6 +19,7 @@ import { useDispatch, useStore } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { onClickProgress } from 'src/features/assessments/AssessmentUtils';
+import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 import { mobileOnlyTabIds } from 'src/pages/playground/PlaygroundTabs';
 
 import { initSession, log } from '../../features/eventLogging';
@@ -76,7 +77,6 @@ import Workspace, { WorkspaceProps } from '../workspace/Workspace';
 import WorkspaceActions from '../workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
-import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 
 export type AssessmentWorkspaceProps = {
   assessmentId: number;
@@ -191,17 +191,20 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const code = useTypedSelector(store =>store.leaderboard.code) || "Initial code";
+  const code = useTypedSelector(store => store.leaderboard.code) || 'Initial code';
   const state = useStore<OverallState>();
   useEffect(() => {
-    console.log("CODE: ", code);
+    console.log('CODE: ', code);
     const timeoutId = setTimeout(() => {
-      if (code !== "Initial code") {
-        console.log("UPDATING");
+      if (code !== 'Initial code') {
+        console.log('UPDATING');
         dispatch(WorkspaceActions.updateEditorValue(workspaceLocation, 0, code));
-        console.log("UPDATED EDITOR VALUE WORKSPACE: ", state.getState().workspaces[workspaceLocation].editorTabs[0].value);
+        console.log(
+          'UPDATED EDITOR VALUE WORKSPACE: ',
+          state.getState().workspaces[workspaceLocation].editorTabs[0].value
+        );
       }
-  
+
       // Clear the code after the delay
       dispatch(LeaderboardActions.clearCode());
     }, 0);
@@ -254,7 +257,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       } else {
         answer = (question as IProgrammingQuestion).solutionTemplate;
       }
-    } else if (question.type === QuestionTypes.voting && code !== "Initial code") {
+    } else if (question.type === QuestionTypes.voting && code !== 'Initial code') {
       answer = code;
     }
 

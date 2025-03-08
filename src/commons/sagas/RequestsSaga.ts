@@ -1,5 +1,6 @@
 import { call } from 'redux-saga/effects';
 import { backendParamsToProgressStatus } from 'src/features/grading/GradingUtils';
+import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
 import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
 import {
@@ -56,7 +57,6 @@ import { castLibrary } from '../utils/CastBackend';
 import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { request } from '../utils/RequestHelper';
-import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const XLSX = require('xlsx');
@@ -462,15 +462,14 @@ export const getTotalXp = async (tokens: Tokens, courseRegId?: number): Promise<
  * GET /courses/{courseId}/all_user_xp
  */
 export const getAllTotalXp = async (tokens: Tokens): Promise<number | null> => {
-  let resp;
-  resp = await request(`${courseId()}/all_users_xp`, 'GET', {
+  const resp = await request(`${courseId()}/all_users_xp`, 'GET', {
     ...tokens
   });
 
   if (!resp || !resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
   }
-  
+
   const rows = await resp.json();
 
   return rows.users.map(
@@ -479,8 +478,8 @@ export const getAllTotalXp = async (tokens: Tokens): Promise<number | null> => {
       name: row.name,
       username: row.username,
       xp: row.total_xp,
-      avatar: "",
-      achievements: ""
+      avatar: '',
+      achievements: ''
     })
   );
 };
@@ -492,15 +491,18 @@ export const getContestScoreLeaderboard = async (
   assessmentId: number,
   tokens: Tokens
 ): Promise<number | null> => {
-  let resp;
-  resp = await request(`${courseId()}/leaderboard/contests/${assessmentId}/get_score_leaderboard`, 'GET', {
-    ...tokens
-  });
+  const resp = await request(
+    `${courseId()}/leaderboard/contests/${assessmentId}/get_score_leaderboard`,
+    'GET',
+    {
+      ...tokens
+    }
+  );
 
   if (!resp || !resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
   }
-  
+
   const rows = await resp.json();
 
   return rows.contest_score.map(
@@ -509,7 +511,7 @@ export const getContestScoreLeaderboard = async (
       name: row.name,
       username: row.username,
       score: row.score,
-      avatar: "",
+      avatar: '',
       code: row.code,
       submissionId: row.submission_id,
       votingId: rows.voting_id
@@ -524,15 +526,18 @@ export const getContestPopularVoteLeaderboard = async (
   assessmentId: number,
   tokens: Tokens
 ): Promise<number | null> => {
-  let resp;
-  resp = await request(`${courseId()}/leaderboard/contests/${assessmentId}/get_popular_vote_leaderboard`, 'GET', {
-    ...tokens
-  });
+  const resp = await request(
+    `${courseId()}/leaderboard/contests/${assessmentId}/get_popular_vote_leaderboard`,
+    'GET',
+    {
+      ...tokens
+    }
+  );
 
   if (!resp || !resp.ok) {
     return null; // invalid accessToken _and_ refreshToken
   }
-  
+
   const rows = await resp.json();
 
   return rows.contest_popular.map(
@@ -541,7 +546,7 @@ export const getContestPopularVoteLeaderboard = async (
       name: row.name,
       username: row.username,
       score: row.score,
-      avatar: "",
+      avatar: '',
       code: row.code,
       submissionId: row.submission_id,
       votingId: rows.voting_id
@@ -1239,11 +1244,15 @@ export const deleteSourcecastEntry = async (
 export const calculateContestScore = async (
   assessmentId: number,
   tokens: Tokens
-) : Promise<Response | null> => {
-  const resp = await request(`${courseId()}/admin/assessments/${assessmentId}/calculateContestScore`, 'POST', {
-    ...tokens
-  });
-  
+): Promise<Response | null> => {
+  const resp = await request(
+    `${courseId()}/admin/assessments/${assessmentId}/calculateContestScore`,
+    'POST',
+    {
+      ...tokens
+    }
+  );
+
   return resp;
 };
 

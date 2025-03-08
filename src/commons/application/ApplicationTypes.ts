@@ -1,6 +1,6 @@
 import { Chapter, Language, SourceError, Variant } from 'js-slang/dist/types';
-
 import { LeaderboardState } from 'src/features/leaderboard/LeaderboardTypes';
+
 import { AchievementState } from '../../features/achievement/AchievementTypes';
 import { DashboardState } from '../../features/dashboard/DashboardTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
@@ -357,8 +357,8 @@ export const defaultLeaderboard: LeaderboardState = {
   userXp: [],
   contestScore: [],
   contestPopularVote: [],
-  code: "Initial code"
-}
+  code: 'Initial code'
+};
 
 const getDefaultLanguageConfig = (): SALanguage => {
   const languageConfig = ALL_LANGUAGES.find(

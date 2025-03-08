@@ -1,4 +1,4 @@
-$gold-color: #FFD700;
+$gold-color: #ffd700;
 $silver-color: #919191;
 $bronze-color: #cd7f32;
 $primary-color: white;
@@ -44,7 +44,9 @@ $xp-color: rgb(31, 147, 255);
       top: -50px;
       text-align: center;
       width: 120px;
-      transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+      transition:
+        transform 0.3s ease-in-out,
+        opacity 0.3s ease-in-out;
     }
 
     .player-bar {
@@ -58,15 +60,16 @@ $xp-color: rgb(31, 147, 255);
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-      
+      transition:
+        transform 0.3s ease-in-out,
+        box-shadow 0.3s ease-in-out;
+
       &:hover {
         transform: scale(1.1);
       }
       &:hover + .player-name {
         transform: scale(1.1);
       }
-      
     }
 
     .player-rank {
@@ -142,7 +145,7 @@ $xp-color: rgb(31, 147, 255);
     border: 1px solid #ccc;
     border-radius: 5px;
     max-width: 500px;
-    width: auto;//250px;
+    width: auto; //250px;
     text-align: left;
     cursor: pointer;
   }
@@ -170,7 +173,7 @@ $xp-color: rgb(31, 147, 255);
 }
 
 /* General ag-Grid customization */
-.ag-theme-alpine .ag-header-cell[col-id="name"] .ag-header-cell-label {
+.ag-theme-alpine .ag-header-cell[col-id='name'] .ag-header-cell-label {
   text-align: left !important;
   border-left: none !important;
   justify-content: flex-start !important;
@@ -286,7 +289,8 @@ h2 {
   color: white;
 }
 
-@media (max-width: 768px) { // small screen changes
+@media (max-width: 768px) {
+  // small screen changes
   .top-three {
     flex-direction: column;
     align-items: center;

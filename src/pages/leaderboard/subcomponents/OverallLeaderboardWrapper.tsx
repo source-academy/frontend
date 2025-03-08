@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
-import OverallLeaderboard from './OverallLeaderboard';
 import NotFound from '../../notFound/NotFound';
+import OverallLeaderboard from './OverallLeaderboard';
 
 const OverallLeaderboardWrapper: React.FC = () => {
-  const enableOverallLeaderboard = useTypedSelector(store => store.session.enableOverallLeaderboard);
-  
+  const enableOverallLeaderboard = useTypedSelector(
+    store => store.session.enableOverallLeaderboard
+  );
+
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
@@ -19,7 +21,7 @@ const OverallLeaderboardWrapper: React.FC = () => {
   if (!isReady || !enableOverallLeaderboard) {
     return <NotFound />;
   }
-  
+
   if (!enableOverallLeaderboard) {
     return <NotFound />;
   } else {

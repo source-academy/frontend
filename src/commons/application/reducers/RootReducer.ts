@@ -1,7 +1,7 @@
 import { combineReducers, Reducer } from '@reduxjs/toolkit';
 import { SourceActionType } from 'src/commons/utils/ActionsHelper';
-
 import { LeaderboardReducer as leaderboard } from 'src/features/leaderboard/LeaderboardReducer';
+
 import { AchievementReducer as achievement } from '../../../features/achievement/AchievementReducer';
 import { DashboardReducer as dashboard } from '../../../features/dashboard/DashboardReducer';
 import { PlaygroundReducer as playground } from '../../../features/playground/PlaygroundReducer';
