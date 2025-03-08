@@ -1,3 +1,5 @@
+import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
+
 import { GameAction } from '../../action/GameActionTypes';
 import { SoundAsset } from '../../assets/AssetsTypes';
 import { getAwardProp } from '../../awards/GameAwardsHelper';
@@ -450,15 +452,23 @@ class GameGlobalAPI {
   //    Assessment   //
   /////////////////////
 
-  public async promptNavigateToAssessment(assessmentId: number) {
+  public async promptNavigateToAssessment(assessmentId: string) {
     const response = await promptWithChoices(
       GameGlobalAPI.getInstance().getGameManager(),
       `Are you ready for the challenge?`,
       ['Yes', 'No']
     );
     if (response === 0) {
-      window.open(`/courses/${courseId()}/missions/${assessmentId}/0`, 'blank');
-      window.focus();
+      const assessments = await getAssessmentOverviews(
+        SourceAcademyGame.getInstance().getAccountInfo()
+      );
+      if (assessments) {
+        const { id, type } = assessments.filter(
+          assessment => assessment.number === assessmentId
+        )[0];
+        window.open(`/courses/${courseId()}/${type.toLowerCase()}/${id}/0`, 'blank');
+        window.focus();
+      }
     }
   }
 
