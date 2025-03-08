@@ -354,7 +354,10 @@ export const defaultAchievement: AchievementState = {
 };
 
 export const defaultLeaderboard: LeaderboardState = {
-  userXp: []
+  userXp: [],
+  contestScore: [],
+  contestPopularVote: [],
+  code: "Initial code"
 }
 
 const getDefaultLanguageConfig = (): SALanguage => {

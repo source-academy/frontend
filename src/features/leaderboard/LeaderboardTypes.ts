@@ -7,6 +7,26 @@ export type LeaderboardRow = {
     achievements: string;
 };
 
-export type LeaderboardState = {
-    userXp: LeaderboardRow[]
+export type ContestLeaderboardRow = {
+    rank: number;
+    name: string;
+    username: string;
+    score: number;
+    avatar: string;
+    code: string;
+    submissionId: number;
+    votingId: number;
 };
+
+export type LeaderboardState = {
+    userXp: LeaderboardRow[];
+    contestScore: ContestLeaderboardRow[];
+    contestPopularVote: ContestLeaderboardRow[];
+    code: string;
+};
+
+export type LeaderboardContestDetails = {
+    contest_id: number;
+    title: string;
+    published: boolean | undefined;
+}

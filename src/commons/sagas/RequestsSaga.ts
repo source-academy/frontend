@@ -56,7 +56,7 @@ import { castLibrary } from '../utils/CastBackend';
 import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { request } from '../utils/RequestHelper';
-import { LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
+import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const XLSX = require('xlsx');
@@ -481,6 +481,70 @@ export const getAllTotalXp = async (tokens: Tokens): Promise<number | null> => {
       xp: row.total_xp,
       avatar: "",
       achievements: ""
+    })
+  );
+};
+
+/**
+ * GET /courses/{courseId}/leaderboard/contests/{assessment_id}/get_score_leaderboard
+ */
+export const getContestScoreLeaderboard = async (
+  assessmentId: number,
+  tokens: Tokens
+): Promise<number | null> => {
+  let resp;
+  resp = await request(`${courseId()}/leaderboard/contests/${assessmentId}/get_score_leaderboard`, 'GET', {
+    ...tokens
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+  
+  const rows = await resp.json();
+
+  return rows.contest_score.map(
+    (row: any): ContestLeaderboardRow => ({
+      rank: row.rank,
+      name: row.name,
+      username: row.username,
+      score: row.score,
+      avatar: "",
+      code: row.code,
+      submissionId: row.submission_id,
+      votingId: rows.voting_id
+    })
+  );
+};
+
+/**
+ * GET /courses/{courseId}/leaderboard/contests/{assessment_id}/get_popular_vote_leaderboard
+ */
+export const getContestPopularVoteLeaderboard = async (
+  assessmentId: number,
+  tokens: Tokens
+): Promise<number | null> => {
+  let resp;
+  resp = await request(`${courseId()}/leaderboard/contests/${assessmentId}/get_popular_vote_leaderboard`, 'GET', {
+    ...tokens
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+  
+  const rows = await resp.json();
+
+  return rows.contest_popular.map(
+    (row: any): ContestLeaderboardRow => ({
+      rank: row.rank,
+      name: row.name,
+      username: row.username,
+      score: row.score,
+      avatar: "",
+      code: row.code,
+      submissionId: row.submission_id,
+      votingId: rows.voting_id
     })
   );
 };
@@ -1166,6 +1230,20 @@ export const deleteSourcecastEntry = async (
     noHeaderAccept: true
   });
 
+  return resp;
+};
+
+/**
+ * POST /courses/{courseId}/admin/assessments/{assessmentId}/calculateContestScore
+ */
+export const calculateContestScore = async (
+  assessmentId: number,
+  tokens: Tokens
+) : Promise<Response | null> => {
+  const resp = await request(`${courseId()}/admin/assessments/${assessmentId}/calculateContestScore`, 'POST', {
+    ...tokens
+  });
+  
   return resp;
 };
 
