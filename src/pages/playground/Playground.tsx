@@ -233,7 +233,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sourceChapter: courseSourceChapter,
     sourceVariant: courseSourceVariant,
     googleUser: persistenceUser,
-    githubOctokitObject
+    githubOctokitObject,
+    enableExamMode
   } = useTypedSelector(state => state.session);
 
   const dispatch = useDispatch();
@@ -749,7 +750,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       }
     }
 
-    if (!isSicpEditor && !Constants.playgroundOnly) {
+    if (!isSicpEditor && !Constants.playgroundOnly && !enableExamMode) {
       tabs.push(remoteExecutionTab);
     }
 
@@ -765,7 +766,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     shouldShowDataVisualizer,
     shouldShowCseMachine,
     shouldShowSubstVisualizer,
-    remoteExecutionTab
+    remoteExecutionTab,
+    enableExamMode
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
@@ -972,12 +974,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
     controlBarProps: {
       editorButtons: [
         autorunButtons,
-        languageConfig.chapter === Chapter.FULL_JS ? null : shareButton,
+        languageConfig.chapter === Chapter.FULL_JS || enableExamMode ? null : shareButton,
         chapterSelectButton,
-        isSicpEditor ? null : sessionButtons,
+        isSicpEditor || enableExamMode ? null : sessionButtons,
         languageConfig.supports.multiFile ? toggleFolderModeButton : null,
-        persistenceButtons,
-        githubButtons,
+        enableExamMode ? null : persistenceButtons,
+        enableExamMode ? null : githubButtons,
         usingSubst || usingCse || isCseVariant(languageConfig.variant)
           ? stepperStepLimit
           : isSourceLanguage(languageConfig.chapter)

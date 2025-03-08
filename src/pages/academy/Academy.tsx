@@ -34,7 +34,7 @@ const Academy: React.FC = () => {
 const CourseSelectingAcademy: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { courseId } = useSession();
+  const { courseId, enableExamMode } = useSession();
   const { courseId: routeCourseIdStr } = useParams<{ courseId?: string }>();
   const routeCourseId = routeCourseIdStr != null ? parseInt(routeCourseIdStr, 10) : undefined;
 
@@ -47,7 +47,11 @@ const CourseSelectingAcademy: React.FC = () => {
     if (routeCourseId !== undefined && !Number.isNaN(routeCourseId) && courseId !== routeCourseId) {
       dispatch(SessionActions.updateLatestViewedCourse(routeCourseId));
     }
-  }, [courseId, dispatch, routeCourseId, navigate, routeCourseIdStr]);
+
+    if (enableExamMode) {
+      navigate(`/courses/${courseId}`);
+    }
+  }, [courseId, dispatch, routeCourseId, navigate, routeCourseIdStr, enableExamMode]);
 
   return Number.isNaN(routeCourseId) ? (
     <Navigate to="/" />

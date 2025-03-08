@@ -38,7 +38,9 @@ const CourseConfigPanel: React.FC<Props> = props => {
     enableAchievements,
     enableSourcecast,
     enableStories,
-    moduleHelpText
+    enableExamMode,
+    moduleHelpText,
+    isOfficialCourse
   } = props.courseConfiguration;
 
   const writePanel = (
@@ -186,6 +188,18 @@ const CourseConfigPanel: React.FC<Props> = props => {
               })
             }
           />
+          {isOfficialCourse && (
+            <Switch
+              checked={enableExamMode}
+              label="Enable Exam Mode"
+              onChange={e =>
+                props.setCourseConfiguration({
+                  ...props.courseConfiguration,
+                  enableExamMode: (e.target as HTMLInputElement).checked
+                })
+              }
+            />
+          )}
         </div>
       </div>
     </div>

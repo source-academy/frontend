@@ -29,6 +29,7 @@ const defaultCourseConfig: UpdateCourseConfiguration = {
   enableAchievements: true,
   enableSourcecast: true,
   enableStories: false,
+  enableExamMode: false,
   moduleHelpText: ''
 };
 
@@ -62,7 +63,9 @@ const AdminPanel: React.FC = () => {
       enableAchievements: session.enableAchievements,
       enableSourcecast: session.enableSourcecast,
       enableStories: session.enableStories,
-      moduleHelpText: session.moduleHelpText
+      enableExamMode: session.enableExamMode,
+      moduleHelpText: session.moduleHelpText,
+      isOfficialCourse: session.isOfficialCourse
     });
   }, [
     session.courseName,
@@ -71,7 +74,9 @@ const AdminPanel: React.FC = () => {
     session.enableGame,
     session.enableSourcecast,
     session.enableStories,
+    session.enableExamMode,
     session.moduleHelpText,
+    session.isOfficialCourse,
     session.viewable
   ]);
 
