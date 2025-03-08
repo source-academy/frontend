@@ -15,7 +15,7 @@ import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useStore } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { onClickProgress } from 'src/features/assessments/AssessmentUtils';
@@ -29,7 +29,7 @@ import {
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 import SessionActions from '../application/actions/SessionActions';
-import { defaultWorkspaceManager } from '../application/ApplicationTypes';
+import { defaultWorkspaceManager, OverallState } from '../application/ApplicationTypes';
 import {
   AssessmentConfiguration,
   AutogradingResult,
@@ -76,6 +76,7 @@ import Workspace, { WorkspaceProps } from '../workspace/Workspace';
 import WorkspaceActions from '../workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
+import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 
 export type AssessmentWorkspaceProps = {
   assessmentId: number;
@@ -190,6 +191,23 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const code = useTypedSelector(store =>store.leaderboard.code) || "Initial code";
+  const state = useStore<OverallState>();
+  useEffect(() => {
+    console.log("CODE: ", code);
+    const timeoutId = setTimeout(() => {
+      if (code !== "Initial code") {
+        console.log("UPDATING");
+        dispatch(WorkspaceActions.updateEditorValue(workspaceLocation, 0, code));
+        console.log("UPDATED EDITOR VALUE WORKSPACE: ", state.getState().workspaces[workspaceLocation].editorTabs[0].value);
+      }
+  
+      // Clear the code after the delay
+      dispatch(LeaderboardActions.clearCode());
+    }, 0);
+    return () => clearTimeout(timeoutId);
+  }, [dispatch, code]);
+
   useEffect(() => {
     if (assessmentOverview && assessmentOverview.maxTeamSize > 1) {
       handleTeamOverviewFetch(props.assessmentId);
@@ -236,6 +254,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       } else {
         answer = (question as IProgrammingQuestion).solutionTemplate;
       }
+    } else if (question.type === QuestionTypes.voting && code !== "Initial code") {
+      answer = code;
     }
 
     // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
