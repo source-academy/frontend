@@ -38,10 +38,11 @@ const DropdownCreateCourse: React.FC<Props> = props => {
     viewable: true,
     enableGame: true,
     enableAchievements: true,
-    enableOverallLeaderboard: true,
-    enableContestLeaderboard: true,
     enableSourcecast: true,
     enableStories: false,
+    enableOverallLeaderboard: true,
+    enableContestLeaderboard: true,
+    topLeaderboardDisplay: 100,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: ''
@@ -259,6 +260,24 @@ const DropdownCreateCourse: React.FC<Props> = props => {
               }
             />
           </div>
+        </div>
+        <div>
+          <FormGroup
+            label="Leaderboard Top XX Display"
+            labelInfo="(configurable later on)"
+            labelFor="leaderboard-top-display"
+          >
+          <InputGroup
+            id="topLeaderboardDisplay"
+            value={String(courseConfig.topLeaderboardDisplay)}
+            onChange={e =>
+              setCourseConfig({
+                ...courseConfig,
+                topLeaderboardDisplay: Number(e.target.value)
+              })
+            }
+          />
+          </FormGroup>
         </div>
         <div>
           <FormGroup

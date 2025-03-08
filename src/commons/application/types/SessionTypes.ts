@@ -37,10 +37,11 @@ export type SessionState = {
   readonly viewable?: boolean;
   readonly enableGame?: boolean;
   readonly enableAchievements?: boolean;
-  readonly enableOverallLeaderboard?: boolean;
-  readonly enableContestLeaderboard?: boolean;
   readonly enableSourcecast?: boolean;
   readonly enableStories?: boolean;
+  readonly enableOverallLeaderboard?: boolean;
+  readonly enableContestLeaderboard?: boolean; 
+  readonly topLeaderboardDisplay?: number;
   readonly sourceChapter?: Chapter;
   readonly sourceVariant?: Variant;
   readonly moduleHelpText?: string;
@@ -105,10 +106,11 @@ export type CourseConfiguration = {
   viewable: boolean;
   enableGame: boolean;
   enableAchievements: boolean;
-  enableOverallLeaderboard: boolean;
-  enableContestLeaderboard: boolean;
   enableSourcecast: boolean;
   enableStories: boolean;
+  enableOverallLeaderboard: boolean;
+  enableContestLeaderboard: boolean;
+  topLeaderboardDisplay: number;
   sourceChapter: Chapter;
   sourceVariant: Variant;
   moduleHelpText: string;
