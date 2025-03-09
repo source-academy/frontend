@@ -10,7 +10,6 @@ import StoriesActions from 'src/features/stories/StoriesActions';
 
 import { store } from '../../../pages/createStore';
 import ViewStoryCell from './ViewStoryCell';
-import { StoryCell } from "../StoriesTypes";
 import NewStoryCell from './CreateStoryCell';
 import { TextInput } from '@tremor/react';
 import { Menu, MenuItem } from '@blueprintjs/core';
@@ -18,7 +17,9 @@ import { styliseSublanguage } from 'src/commons/application/ApplicationTypes';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
 import ControlBar, { ControlBarProps } from 'src/commons/controlBar/ControlBar';
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { useDispatch } from 'react-redux';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+// import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 export const DEFAULT_ENV = 'default';
 
@@ -72,7 +73,6 @@ export function handleHeaders(headers: string): void {
       }
     }
   } catch (err) {
-    console.warn(err,);
     if (err instanceof yaml.YAMLException) {
       // default headers
       store.dispatch(
@@ -120,36 +120,42 @@ export function constructHeader(header: string, env: string, chapter: Chapter, v
 }
 
 type Props = {
-  header: string;
-  contents: StoryCell[];
   isViewOnly: boolean;
-  editContent: (id: number, newContent: string) => void;
-  editHeader: (newHeader: string) => void;
-  saveNewStoryCell: (index: number, isCode: boolean, env: string, content: string) => void;
 };
 
 const UserBlogContent: React.FC<Props> = ({ 
-    header, 
-    contents, 
-    isViewOnly, 
-    editContent, 
-    editHeader,
-    saveNewStoryCell
+    isViewOnly,
   }) => {
 
-  const [envs, setEnvs] = useState<string[]>(getEnvironments(header));
   const [newEnv, setNewEnv] = useState<string>("");
   // TODO: enable different variant
   const variant: Variant = Variant.DEFAULT;
   const [currentChapter, setEnvChapter] = useState<Chapter>(Chapter.SOURCE_1);
   const [isDirty, setIsDirty] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const { currentStory: story, currentStoryId: storyId } = useTypedSelector(store => store.stories);
+  const { content: contents, header: header } = story!; 
+  const [envs, setEnvs] = useState<string[]>(getEnvironments(header));
 
   useEffect(() => {
     // const header = getYamlHeader(fileContent).header;
     store.dispatch(StoriesActions.clearStoryEnv());
     handleHeaders(header);
     setEnvs(getEnvironments(header));
+    console.log("header resets");
   }, [header]);
+
+  if (!story) {
+    // will never reach here, as it has been check in Story.tsx
+    return <div></div>;
+  }
+
+  const editHeader = (newHeader: string) => {
+    console.log("header is editted");
+    const newStory = {...story, header: newHeader};
+    dispatch(StoriesActions.setCurrentStory(newStory));
+    dispatch(StoriesActions.saveStory(newStory, storyId!));
+  }
 
   const saveButClicked = () => {
     setNewEnv("");
@@ -161,12 +167,12 @@ const UserBlogContent: React.FC<Props> = ({
       showWarningMessage(`${newEnv} already exists!`)
       return;
     }
-    header = header.concat(`
+    const newHeader = header.concat(`
   ${newEnv}:
     chapter: ${currentChapter}
     variant: default`
     );
-    editHeader(header);
+    editHeader(newHeader);
   }
 
   const controlBarProps: ControlBarProps = {
@@ -218,25 +224,23 @@ const UserBlogContent: React.FC<Props> = ({
           key={key}
           story={story}
         />)
-      : <SortableContext items={contents.map((content, index) => {
-        return {
-          ...content,
-          id: index
-        }
-      })} strategy={verticalListSortingStrategy}>
-        {contents.map((story, key) => <EditStoryCell 
+      // : <SortableContext items={contents.map((content) => {
+      //   return {
+      //     ...content,
+      //     id: content.id,
+      //   }
+      // })} strategy={verticalListSortingStrategy}>
+      : contents.map((_, key) => { 
+        // console.log(story);
+        return <EditStoryCell 
             key={key}
-            envs={envs}
-            story={story}
-            editContent={editContent}
-            saveNewStoryCell={saveNewStoryCell}
-          />)}
-      </SortableContext>}
+            index={key}
+            // story={{...story}}
+          />})}
+      {/*  </SortableContext>} */}
       {!isViewOnly && <div className='content'>
         <NewStoryCell 
           index={contents.length}
-          envs={envs}
-          saveNewStoryCell={saveNewStoryCell}
         />
       </div>}
     </div>

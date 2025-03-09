@@ -12,8 +12,8 @@ import {
   putStoriesUserRole,
   updateStory,
   // updateHeader,
-  tempHeader,
-  tempContent
+  defaultHeader,
+  defaultContent
 } from 'src/features/stories/storiesComponents/BackendAccess';
 import { StoryData, StoryListView, StoryView } from 'src/features/stories/StoriesTypes';
 
@@ -50,8 +50,8 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
     } else {
       const defaultStory: StoryData = {
         title: '',
-        header: tempHeader,
-        content: tempContent,
+        header: defaultHeader,
+        content: defaultContent,
         pinOrder: null
       };
       yield put(actions.setCurrentStory(defaultStory));
@@ -87,6 +87,8 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
   saveStory: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { story, id } = action.payload;
+    console.log("In saveStory");
+    console.log(story.header);
     const updatedStory: StoryView | null = yield call(
       updateStory,
       tokens,

@@ -3,6 +3,7 @@ import { DebuggerContext } from 'src/commons/workspace/WorkspaceTypes';
 import { InterpreterOutput, StoriesRole } from '../../commons/application/ApplicationTypes';
 
 export type StoryCell = {
+  // id: number;
   index: number;
   isCode: boolean;
   env: string;

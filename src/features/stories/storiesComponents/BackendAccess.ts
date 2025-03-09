@@ -19,7 +19,7 @@ import { StoryCell } from '../StoriesTypes';
 //   chapter: 4
 //   variant: default
 
-export const tempHeader: string = `---
+export const defaultHeader: string = `---
 env:
   iterFib:
     chapter: 4
@@ -31,8 +31,9 @@ env:
     chapter: 4
     variant: default`; 
 
-export const tempContent: StoryCell[] = [
+export const defaultContent: StoryCell[] = [
   {
+    // id: 0,
     index: 0,
     isCode: true,
     env: "iterFib",
@@ -45,6 +46,7 @@ display("hello world1");
 `,
   },
   {
+    // id: 1,
     index: 1,
     isCode: false,
     env: "",
@@ -61,6 +63,7 @@ print("hello world")
 `,
   },
   {
+    // id: 2,
     index: 2,
     isCode: true,
     env: "recuFib",
@@ -69,6 +72,7 @@ print("hello world")
 `,
   },
   {
+    // id: 3,
     index: 3,
     isCode: true,
     env: "iterFib",
@@ -77,14 +81,18 @@ print("hello world")
 `,
   },
   {
+    // id: 4,
     index: 4,
     isCode: true,
     env: "iterFib",
     content: 
-    `print("hello world");
+    `print("why this cell?");
 `,
   }
 ];
+
+let tempHeader = defaultHeader;
+let tempContent = defaultContent;
 
 // Helpers
 
@@ -157,7 +165,7 @@ export const getStories = async (tokens: Tokens): Promise<StoryListView[] | null
   }
   const stories = await resp.json();
   // return stories;
-  return stories.map((story: any) => ({...story, header: tempHeader, content: tempContent}));
+  return stories.map((story: any) => ({...story, header: tempContent, content: tempContent}));
 };
 
 export const getStory = async (tokens: Tokens, storyId: number): Promise<StoryView | null> => {
@@ -173,8 +181,9 @@ export const getStory = async (tokens: Tokens, storyId: number): Promise<StoryVi
   // return story;
 
   // changes
-  story = {...story, header: tempHeader};
-  story.content = tempContent;
+  story = {...story, header: tempHeader, content: tempContent};
+  console.log("get Story");
+  console.log(tempContent, tempHeader);
   return story;
 };
 
@@ -217,7 +226,15 @@ export const updateStory = async (
   }
   showSuccessMessage('Story saved');
   const updatedStory = await resp.json();
-  return updatedStory;
+  // return updatedStory;
+
+  // change
+  console.log("in updateStory");
+  tempContent = content;
+  tempHeader = header;
+  console.log(content, header);
+  const story = {...updatedStory, content: content, header: header};
+  return story;
 };
 
 // Returns the deleted story, or null if errors occur

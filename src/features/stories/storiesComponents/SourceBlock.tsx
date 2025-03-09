@@ -21,8 +21,11 @@ import { makeSubstVisualizerTabFrom } from 'src/pages/playground/PlaygroundTabs'
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Output } from '../../../commons/repl/Repl';
 import { getModeString, selectMode } from '../../../commons/utils/AceHelper';
-import { DEFAULT_ENV, handleHeaders } from './UserBlogContent';
+import { DEFAULT_ENV, getEnvironments, handleHeaders } from './UserBlogContent';
 import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
+// import { SourceBlockContext } from './EditStoryCell';
+// import { useSortable } from '@dnd-kit/sortable';
+// import { CSS } from "@dnd-kit/utilities";
 
 export type SourceBlockProps = {
   content: string;
@@ -55,8 +58,10 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   const [outputIndex, setOutputIndex] = useState(Infinity);
   const [isDirty, setIsDirty] = useState<boolean>(false);
 
-  const { currentStory: story } = useTypedSelector(store => store.stories);
+  const { currentStory: story, currentStoryId: storyId } = useTypedSelector(store => store.stories);
   const envList = useTypedSelector(store => Object.keys(store.stories.envs));
+  const { header: header } = story!;
+  const envs = getEnvironments(header);
 
   // setting env
   const commandsEnv = parseMetadata('env', props.commands);
@@ -74,12 +79,22 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     store => store.stories.envs[env]?.context.variant || Constants.defaultSourceVariant
   );
 
+  const getChapter = () => {
+    const envIndex = envs.indexOf(env);
+    // number indicating the chapter start from index 13
+    return parseInt(header.split(`\n`)[envIndex * 3 + 3].substring(13));
+  }
+
   const [currentEnv, setCurrentEnv] = useState<string>(env);
   const [currentChapter, setCurrentChapter] = useState<Chapter>(chapter);
 
   useEffect(() => {
     setCode(props.content);
   }, [props.content]);
+
+  useEffect(() => {
+    setCurrentChapter(getChapter());
+  }, [story]);
 
   const output = useTypedSelector(store => store.stories.envs[env]?.output || []);
   const { selectedTab, setSelectedTab } = useSideContent(`stories.${env}`);
@@ -222,16 +237,20 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     setCode(code.trim());
     story!.content[props.index].content = code.trim();
     if (currentEnv !== env) {
+      console.log("In source block: env is editted");
       story!.content[props.index].env = currentEnv;
     }
     let newHeader = story!.header.split('\n');
     if (currentChapter !== chapter) {
+      console.log("In source block: chapter is editted");
       const index = envList.indexOf(env);
-      newHeader[index * 3 + 3] = `    chapter: ${chapter}`;
+      newHeader[index * 3 + 3] = `    chapter: ${currentChapter}`;
     }
     execResetEnv();
     handleHeaders(newHeader.join('\n'));
-    dispatch(StoriesActions.setCurrentStory({...story!, content: [...story!.content], header: newHeader.join('\n')}));
+    const newStory = {...story!, content: [...story!.content], header: newHeader.join('\n')};
+    dispatch(StoriesActions.setCurrentStory(newStory));
+    dispatch(StoriesActions.saveStory(newStory, storyId!));
   }
 
   const changeEnv = (env: string) => {
@@ -250,7 +269,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   selectMode(chapter, variant, ExternalLibraryName.NONE);
 
   return (
-    <div className={Classes.DARK}>
+    <div className={Classes.DARK} onPointerDown={(e) => e.stopPropagation()}>
       <div className="workspace">
         <Card>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -286,10 +305,10 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
                     <p> | </p>
                     <Menu>
                       <MenuItem text={styliseSublanguage(currentChapter, variant)}>
-                        <MenuItem onClick={() => changeEnvChapter(1)} text={styliseSublanguage(Chapter.SOURCE_1, variant)}/>
-                        <MenuItem onClick={() => changeEnvChapter(2)} text={styliseSublanguage(Chapter.SOURCE_2, variant)}/>
-                        <MenuItem onClick={() => changeEnvChapter(3)} text={styliseSublanguage(Chapter.SOURCE_3, variant)}/>
-                        <MenuItem onClick={() => changeEnvChapter(4)} text={styliseSublanguage(Chapter.SOURCE_4, variant)}/>
+                        {[1, 2, 3, 4].map((chapter: Chapter, index: number) => <MenuItem 
+                          key={index} 
+                          onClick={() => changeEnvChapter(chapter)} text={styliseSublanguage(chapter, variant)}/>
+                        )}
                       </MenuItem>
                     </Menu>
                   </div>}
@@ -297,7 +316,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
             <ControlButton label="Reset Env" onClick={execResetEnv} icon={IconNames.RESET} />
           </div>
           <div>
-            <div className="right-parent">
+            <div className="right-parent" onPointerDown={(e) => {e.stopPropagation()}}>
               <Card>
                 <AceEditor
                   className="repl-react-ace react-ace"
@@ -307,6 +326,8 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
                   width="100%"
                   value={code}
                   onChange={editorOnChange}
+                  // onFocus={() => setIsTyping(true)}
+                  // onBlur={() => setIsTyping(false)}
                   commands={[
                     {
                       name: 'evaluate',

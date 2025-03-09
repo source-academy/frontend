@@ -1,26 +1,35 @@
 import { Menu, MenuItem } from "@blueprintjs/core";
 import { useState } from "react";
 import AceEditor from 'react-ace';
+import { useDispatch } from "react-redux";
 import { ControlButtonSaveButton } from "src/commons/controlBar/ControlBarSaveButton";
+import { useTypedSelector } from "src/commons/utils/Hooks";
 import { showWarningMessage } from "src/commons/utils/notifications/NotificationsHelper";
+import { StoryCell } from "../StoriesTypes";
+import StoriesActions from "../StoriesActions";
+import { getEnvironments } from "./UserBlogContent";
 
 type Props = {
     index: number;
-    envs: string[];
-    saveNewStoryCell: (index: number, isCode: boolean, env: string, content: string) => void;
 };
 
 const NewStoryCell: React.FC<Props> = ({
     index, 
-    envs,
-    saveNewStoryCell
 }) => {
 
+    const dispatch = useDispatch();
+    const { currentStory: story, currentStoryId: storyId } = useTypedSelector(store => store.stories);
+    const envs = getEnvironments(story!.header);
     const [isCode, setIsCode] = useState<boolean>(false);
     const [env, setEnv] = useState<string>(envs[0]);
     const [code, setCode] = useState<string>("");
     const [isDirty, setIsDirty] = useState<boolean>(false);
+    // const setIsTyping = useContext(SourceBlockContext);
 
+    if (!story) {
+        return  <div></div>;
+    }
+    
     const editorOnChange = (code: string) => {
         setCode(code);
         setIsDirty(code.trim() !== ""); 
@@ -33,12 +42,33 @@ const NewStoryCell: React.FC<Props> = ({
         setIsDirty(false);
     }
 
+    const saveNewStoryCell = () => {
+        const contents = story.content;
+        for (let i = index; i < contents.length; i++) {
+          contents[i].index += 1;
+        } 
+        const newContent: StoryCell = {
+          // id: index,
+          index: index,
+          isCode: isCode,
+          env: isCode ? env : "",
+          content: code,
+        }
+        contents.push(newContent);
+        contents.sort((a, b) => a.index - b.index);
+        const newStory = {...story, content: [...contents]};
+        console.log("a new cell is saved");
+        console.log(newStory);
+        dispatch(StoriesActions.setCurrentStory({...newStory}));
+        dispatch(StoriesActions.saveStory(newStory, storyId!));
+      }
+
     const saveButClicked = () => {
         if (!isDirty) {
             showWarningMessage("Cannot save empty story cell!");
             return;
         }
-        saveNewStoryCell(index, isCode, isCode ? env : "", code);
+        saveNewStoryCell();
         reset();
     }
 
@@ -49,7 +79,8 @@ const NewStoryCell: React.FC<Props> = ({
             gap: "5px",
             padding: "5px",
             backgroundColor: "#2c3e50"
-        }}>
+        }}
+        onPointerDown={(e) => e.stopPropagation()}>
             <ControlButtonSaveButton 
                 key="save_story"
                 onClickSave={saveButClicked}
@@ -81,6 +112,8 @@ const NewStoryCell: React.FC<Props> = ({
             theme="source"
             value={code}
             onChange={editorOnChange}
+            // onFocus={() => setIsTyping(true)}
+            // onBlur={() => setIsTyping(false)}
             minLines={5}
             maxLines={20}
             fontSize={17}

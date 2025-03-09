@@ -14,8 +14,7 @@ import { useTypedSelector } from 'src/commons/utils/Hooks';
 import StoriesActions from 'src/features/stories/StoriesActions';
 
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
-import { StoryCell } from 'src/features/stories/StoriesTypes';
-import { DndContext, DragEndEvent, closestCorners } from "@dnd-kit/core";
+// import { DndContext, DragEndEvent, closestCorners } from "@dnd-kit/core";
 
 type Props = {
   isViewOnly?: boolean;
@@ -24,12 +23,10 @@ type Props = {
 const Story: React.FC<Props> = ({ isViewOnly = false }) => {
   const dispatch = useDispatch();
   const [isDirty, setIsDirty] = useState(false);
-  // const [header, setHeader] = useState(tempHeader);
 
   const { currentStory: story, currentStoryId: storyId } = useTypedSelector(store => store.stories);
-  // const header = story?.header;
-  // const [contents, setContents] = useState<StoryCell[]>(tempContent);
   const { id: idToSet } = useParams<{ id: string }>();
+
   useEffect(() => {
     // Clear screen on first load
     dispatch(StoriesActions.setCurrentStory(null));
@@ -41,33 +38,6 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
   // Loading state, show empty screen
   if (!story) {
     return <></>;
-  }
-
-  const { header: header , content: contents } = story!; 
-
-  const editContent = (index: number, newContent: string) => {
-    contents.filter((story: StoryCell) => story.index == index)[0].content = newContent;
-    dispatch(StoriesActions.setCurrentStory({...story, content: [...contents]}));
-  } 
-
-  const editHeader = (newHeader: string) => {
-    dispatch(StoriesActions.setCurrentStory({...story, header: newHeader}));
-  }
-
-  const saveNewStoryCell = (index: number, isCode: boolean, env: string, content: string) => {
-    const contents = story.content;
-    for (let i = index; i < contents.length; i++) {
-      contents[i].index += 1;
-    } 
-    const newContent: StoryCell = {
-      index: index,
-      isCode: isCode,
-      env: env,
-      content: content,
-    }
-    contents.push(newContent);
-    contents.sort((a, b) => a.index - b.index);
-    dispatch(StoriesActions.setCurrentStory({...story, content: [...contents]}));
   }
 
   // const onEditorScroll = (e: IEditorProps) => {
@@ -83,7 +53,7 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
   // };
 
   // const { title, content } = story;
-  const { title } = story;
+  const { title: title } = story;
 
   const controlBarProps: ControlBarProps = {
     editorButtons: [
@@ -121,26 +91,42 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
     ]
   };
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    const {active, over} = event;
+  // const handleDragEnd = (event: DragEndEvent) => {
+  //   const {active, over} = event;
 
-    // sequence does not change
-    if (active.id == over!.id) {
-      return;
-    }
-    const activeIndex: number = contents.findIndex((content) => content.index === active.id);
-    const overIndex: number = contents.findIndex((content) => content.index === over!.id);
-    const temp: StoryCell = contents[activeIndex];
-    contents[activeIndex] = contents[overIndex];
-    contents[overIndex] = temp;
-    console.log(contents);
-    dispatch(StoriesActions.setCurrentStory({...story, content: [...contents]})); 
-  }
+  //   // sequence does not change
+  //   if (active.id == over!.id) {
+  //     return;
+  //   } 
+  //   let highIndex: number;
+  //   let lowIndex: number;
+  //   if (active.id > over!.id) {
+  //     console.log("front")
+  //     highIndex = contents.findIndex((content) => content.id === active.id);
+  //     lowIndex = contents.findIndex((content) => content.id === over!.id);
+  //     for (let i = lowIndex; i < highIndex; i++) {
+  //       contents[i].index += 1;
+  //     }
+  //     contents[highIndex].index = lowIndex;
+  //   } else {
+  //     console.log("back");
+  //     highIndex = contents.findIndex((content) => content.id === over!.id);
+  //     lowIndex = contents.findIndex((content) => content.id === active.id);
+  //     for (let i = lowIndex + 1; i <= highIndex; i++) {
+  //       contents[i].index -= 1;
+  //     }
+  //     contents[lowIndex].index = highIndex;
+  //   }
+  //   contents.sort((a, b) => a.index - b.index);
+  //   console.log(contents);
+  //   // setContents([...contents]);
+  //   dispatch(StoriesActions.setCurrentStory({...story, content: [...contents]})); 
+  // }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }} className={classNames(Classes.DARK)}>
       <ControlBar {...controlBarProps} />
-      <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
+      {/* <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}> */}
         <div style={{ width: '100vw', height: '100%', display: 'flex' }}>
           {/* {!isViewOnly && (
             <AceEditor
@@ -160,16 +146,11 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
           )} */}
           <div className="newUserblog" id="userblogContainer">
             <UserBlogContent 
-              header={header} 
-              contents={contents} 
               isViewOnly={isViewOnly} 
-              editContent={editContent}
-              editHeader={editHeader}
-              saveNewStoryCell={saveNewStoryCell}
             />
           </div>
         </div>
-      </DndContext>
+      {/* </DndContext> */}
     </div>
   );
 };
