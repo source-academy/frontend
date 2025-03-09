@@ -19,8 +19,8 @@ import { useDispatch, useStore } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { onClickProgress } from 'src/features/assessments/AssessmentUtils';
-import Messages, { sendToWebview } from 'src/features/vscode/messages';
 import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
+import Messages, { sendToWebview } from 'src/features/vscode/messages';
 import { mobileOnlyTabIds } from 'src/pages/playground/PlaygroundTabs';
 
 import { initSession, log } from '../../features/eventLogging';
