@@ -1,5 +1,6 @@
 import { call } from 'redux-saga/effects';
 import { backendParamsToProgressStatus } from 'src/features/grading/GradingUtils';
+import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
 import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
 import {
@@ -455,6 +456,102 @@ export const getTotalXp = async (tokens: Tokens, courseRegId?: number): Promise<
   }
   const totalXp = await resp.json();
   return totalXp;
+};
+
+/**
+ * GET /courses/{courseId}/all_user_xp
+ */
+export const getAllTotalXp = async (tokens: Tokens): Promise<number | null> => {
+  const resp = await request(`${courseId()}/all_users_xp`, 'GET', {
+    ...tokens
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  const rows = await resp.json();
+
+  return rows.users.map(
+    (row: any): LeaderboardRow => ({
+      rank: row.rank,
+      name: row.name,
+      username: row.username,
+      xp: row.total_xp,
+      avatar: '',
+      achievements: ''
+    })
+  );
+};
+
+/**
+ * GET /courses/{courseId}/leaderboard/contests/{assessment_id}/get_score_leaderboard
+ */
+export const getContestScoreLeaderboard = async (
+  assessmentId: number,
+  tokens: Tokens
+): Promise<number | null> => {
+  const resp = await request(
+    `${courseId()}/leaderboard/contests/${assessmentId}/get_score_leaderboard`,
+    'GET',
+    {
+      ...tokens
+    }
+  );
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  const rows = await resp.json();
+
+  return rows.contest_score.map(
+    (row: any): ContestLeaderboardRow => ({
+      rank: row.rank,
+      name: row.name,
+      username: row.username,
+      score: row.score,
+      avatar: '',
+      code: row.code,
+      submissionId: row.submission_id,
+      votingId: rows.voting_id
+    })
+  );
+};
+
+/**
+ * GET /courses/{courseId}/leaderboard/contests/{assessment_id}/get_popular_vote_leaderboard
+ */
+export const getContestPopularVoteLeaderboard = async (
+  assessmentId: number,
+  tokens: Tokens
+): Promise<number | null> => {
+  const resp = await request(
+    `${courseId()}/leaderboard/contests/${assessmentId}/get_popular_vote_leaderboard`,
+    'GET',
+    {
+      ...tokens
+    }
+  );
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  const rows = await resp.json();
+
+  return rows.contest_popular.map(
+    (row: any): ContestLeaderboardRow => ({
+      rank: row.rank,
+      name: row.name,
+      username: row.username,
+      score: row.score,
+      avatar: '',
+      code: row.code,
+      submissionId: row.submission_id,
+      votingId: rows.voting_id
+    })
+  );
 };
 
 /**
@@ -1137,6 +1234,24 @@ export const deleteSourcecastEntry = async (
     ...tokens,
     noHeaderAccept: true
   });
+
+  return resp;
+};
+
+/**
+ * POST /courses/{courseId}/admin/assessments/{assessmentId}/calculateContestScore
+ */
+export const calculateContestScore = async (
+  assessmentId: number,
+  tokens: Tokens
+): Promise<Response | null> => {
+  const resp = await request(
+    `${courseId()}/admin/assessments/${assessmentId}/calculateContestScore`,
+    'POST',
+    {
+      ...tokens
+    }
+  );
 
   return resp;
 };

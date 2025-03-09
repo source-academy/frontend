@@ -29,6 +29,8 @@ test('createCourse generates correct action object', () => {
     viewable: true,
     enableGame: true,
     enableAchievements: true,
+    enableOverallLeaderboard: true,
+    enableContestLeaderboard: true,
     enableSourcecast: true,
     enableStories: false,
     sourceChapter: Chapter.SOURCE_1,
