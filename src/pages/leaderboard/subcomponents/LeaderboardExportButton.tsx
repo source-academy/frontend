@@ -1,8 +1,9 @@
 import 'src/styles/Leaderboard.scss';
 
 import React from 'react';
-import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes'; 
 import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes'; 
+
 import { Role } from '../../../commons/application/ApplicationTypes';
 
 type Props =

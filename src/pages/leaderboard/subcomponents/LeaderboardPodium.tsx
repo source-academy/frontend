@@ -1,7 +1,7 @@
 import 'src/styles/Leaderboard.scss';
 
 import React from 'react';
-import { LeaderboardRow, ContestLeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
+import { ContestLeaderboardRow,LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
 
 type Props = 
   | {type: "overall", data: LeaderboardRow[], outputType: undefined}
