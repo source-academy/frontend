@@ -23,6 +23,7 @@ import { Output } from '../../../commons/repl/Repl';
 import { getModeString, selectMode } from '../../../commons/utils/AceHelper';
 import { DEFAULT_ENV, getEnvironments, handleHeaders } from './UserBlogContent';
 import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
+import { StoryCell } from '../StoriesTypes';
 // import { SourceBlockContext } from './EditStoryCell';
 // import { useSortable } from '@dnd-kit/sortable';
 // import { CSS } from "@dnd-kit/utilities";
@@ -57,7 +58,6 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   const [code, setCode] = useState<string>(props.content);
   const [outputIndex, setOutputIndex] = useState(Infinity);
   const [isDirty, setIsDirty] = useState<boolean>(false);
-
   const { currentStory: story, currentStoryId: storyId } = useTypedSelector(store => store.stories);
   const envList = useTypedSelector(store => Object.keys(store.stories.envs));
   const { header: header } = story!;
@@ -79,14 +79,14 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     store => store.stories.envs[env]?.context.variant || Constants.defaultSourceVariant
   );
 
+  const [currentEnv, setCurrentEnv] = useState<string>(env);
+  const [currentChapter, setCurrentChapter] = useState<Chapter>(chapter);
+
   const getChapter = () => {
     const envIndex = envs.indexOf(env);
     // number indicating the chapter start from index 13
     return parseInt(header.split(`\n`)[envIndex * 3 + 3].substring(13));
   }
-
-  const [currentEnv, setCurrentEnv] = useState<string>(env);
-  const [currentChapter, setCurrentChapter] = useState<Chapter>(chapter);
 
   useEffect(() => {
     setCode(props.content);
@@ -232,23 +232,46 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     setIsDirty(true);
   }
 
+  const deleteStoryCell = (contents: StoryCell[]) => {
+    console.log(`story cell ${props.index} is deleted`);
+    for (let i = props.index + 1; i < contents.length; i++) {
+        contents[i].index--;
+    }
+    contents.splice(props.index, 1);
+  }
+
+  const editHeader = (header: string[]) => {
+    console.log("In source block: chapter is editted");
+    const index = envList.indexOf(currentEnv);
+    header[index * 3 + 3] = `    chapter: ${currentChapter}`;
+    return header;
+  }
+
   const saveButClicked = () => {
     setIsDirty(false);
-    setCode(code.trim());
-    story!.content[props.index].content = code.trim();
+    const trimmedCode = code.trim();
+    setCode(trimmedCode);
+    const contents = [...story!.content];
+    if (trimmedCode.length === 0) {
+      deleteStoryCell(contents);
+    } else {
+      contents[props.index].content = trimmedCode;
+    }
     if (currentEnv !== env) {
+      // set a new env
       console.log("In source block: env is editted");
+      console.log(currentEnv, env);
       story!.content[props.index].env = currentEnv;
     }
-    let newHeader = story!.header.split('\n');
+    const newHeader = story!.header.split('\n');
     if (currentChapter !== chapter) {
-      console.log("In source block: chapter is editted");
-      const index = envList.indexOf(env);
-      newHeader[index * 3 + 3] = `    chapter: ${currentChapter}`;
+      // set a new chapter for the corresponding env, all source block with the same env will change tgt
+      console.log(currentChapter, chapter);
+      editHeader(newHeader);
     }
     execResetEnv();
     handleHeaders(newHeader.join('\n'));
-    const newStory = {...story!, content: [...story!.content], header: newHeader.join('\n')};
+    const newStory = {...story!, content: contents, header: newHeader.join('\n')};
     dispatch(StoriesActions.setCurrentStory(newStory));
     dispatch(StoriesActions.saveStory(newStory, storyId!));
   }
@@ -269,7 +292,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   selectMode(chapter, variant, ExternalLibraryName.NONE);
 
   return (
-    <div className={Classes.DARK} onPointerDown={(e) => e.stopPropagation()}>
+    <div className={Classes.DARK}>
       <div className="workspace">
         <Card>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

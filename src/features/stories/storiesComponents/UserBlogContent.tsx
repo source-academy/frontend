@@ -227,17 +227,15 @@ const UserBlogContent: React.FC<Props> = ({
       // : <SortableContext items={contents.map((content) => {
       //   return {
       //     ...content,
-      //     id: content.id,
+      //     id: content.index,
       //   }
       // })} strategy={verticalListSortingStrategy}>
       : contents.map((_, key) => { 
-        // console.log(story);
         return <EditStoryCell 
             key={key}
             index={key}
-            // story={{...story}}
           />})}
-      {/*  </SortableContext>} */}
+        {/* </SortableContext>} */}
       {!isViewOnly && <div className='content'>
         <NewStoryCell 
           index={contents.length}

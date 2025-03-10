@@ -23,13 +23,13 @@ function EditStoryCell(props: Props) {
     const { currentStory: story, currentStoryId: storyId } = useTypedSelector(store => store.stories);
     const [ isCode, setIsCode ] = useState<boolean>(false);
     const [ env, setEnv ] = useState<string>("");
-    // const [ content, setContent ] = useState<string>("");
     const [ storyContent, setStoryContent ] = useState<string>("");
     const [ isEditMode, setEditMode ] = useState<boolean>(false);
     const [ isDirty, setIsDirty ] = useState<boolean>(false);
     const [ showButs, setShowButs ] = useState<boolean>(false);
     const [ showNewCellUp, setShowNewCellUp ] = useState<boolean>(false);
     const [ showNewCellDown, setShowNewCellDown ] = useState<boolean>(false);
+    // const id = props.index;
     // const {attributes, listeners, setNodeRef, transform, transition} = useSortable({id});
 
     // const style = {
@@ -63,11 +63,33 @@ function EditStoryCell(props: Props) {
     const saveButClicked = () => {
         setEditMode(false);
         setIsDirty(false);
-        setStoryContent(storyContent.trim());
         setShowButs(false);
         setShowNewCellUp(false);
         setShowNewCellDown(false);
-        editContent();
+        if (storyContent.trim().length > 0) {
+            setStoryContent(storyContent.trim());
+            editContent();
+        } else {
+            deleteStoryCell();
+        }
+    }
+
+    const deleteStoryCell = () => {
+        console.log(`story cell ${props.index} is deleted`);
+        const contents = story.content;
+        const newContents = [];
+        for (let i = 0; i < contents.length; i++) {
+            if (props.index === i) {
+                continue;
+            } else if (props.index < i) {
+                contents[i].index--;
+            } 
+            newContents.push(contents[i]);
+        }
+        const newStory = {...story, content: newContents};
+        console.log(newStory);
+        dispatch(StoriesActions.setCurrentStory(newStory));
+        dispatch(StoriesActions.saveStory(newStory, storyId!));
     }
 
     const onEditorValueChange = (content: string) => {
@@ -85,10 +107,10 @@ function EditStoryCell(props: Props) {
         onDoubleClick={handleDoubleClick} 
         onMouseEnter={() => setShowButs(true)}
         onMouseLeave={() => setShowButs(false)}
-        // onPointerDown={(e) => e.stopPropagation()}
+        onPointerDown={(e) => e.stopPropagation()}
         // ref={setNodeRef}
         // {...(attributes)}
-        // {...(!isTyping && listeners)}
+        // {...(listeners)}
         // style={style}
         >
         {/* <SourceBlockContext.Provider value={setIsTyping}> */}
@@ -141,6 +163,13 @@ function EditStoryCell(props: Props) {
                             // setIsTyping(false);
                             setEditMode(false);
                         }}>Cancel</Button>
+                    <Button 
+                        icon="trash" 
+                        style={{justifyContent: 'left'}}
+                        onPointerDown={(e) => {
+                            e.stopPropagation();
+                            deleteStoryCell();
+                        }}>Delete</Button>
                 </div>}
                 {isEditMode ? <AceEditor
                     className="repl-react-ace react-ace"

@@ -100,18 +100,19 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
   //   } 
   //   let highIndex: number;
   //   let lowIndex: number;
+  //   const contents = story!.content;
   //   if (active.id > over!.id) {
   //     console.log("front")
-  //     highIndex = contents.findIndex((content) => content.id === active.id);
-  //     lowIndex = contents.findIndex((content) => content.id === over!.id);
+  //     highIndex = contents.findIndex((content) => content.index === active.id);
+  //     lowIndex = contents.findIndex((content) => content.index === over!.id);
   //     for (let i = lowIndex; i < highIndex; i++) {
   //       contents[i].index += 1;
   //     }
   //     contents[highIndex].index = lowIndex;
   //   } else {
   //     console.log("back");
-  //     highIndex = contents.findIndex((content) => content.id === over!.id);
-  //     lowIndex = contents.findIndex((content) => content.id === active.id);
+  //     highIndex = contents.findIndex((content) => content.index === over!.id);
+  //     lowIndex = contents.findIndex((content) => content.index === active.id);
   //     for (let i = lowIndex + 1; i <= highIndex; i++) {
   //       contents[i].index -= 1;
   //     }
@@ -119,8 +120,9 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
   //   }
   //   contents.sort((a, b) => a.index - b.index);
   //   console.log(contents);
-  //   // setContents([...contents]);
-  //   dispatch(StoriesActions.setCurrentStory({...story, content: [...contents]})); 
+  //   const newStory = {...story, content: [...contents]};
+  //   dispatch(StoriesActions.setCurrentStory(newStory));
+  //   dispatch(StoriesActions.saveStory(newStory, storyId!)); 
   // }
 
   return (
