@@ -15,8 +15,9 @@ import {
 
 import default_avatar from '../../../assets/default-avatar.jpg';
 import leaderboard_background from '../../../assets/leaderboard_background.jpg';
-import { Role } from '../../../commons/application/ApplicationTypes';
 import LeaderboardDropdown from './LeaderboardDropdown';
+import LeaderboardExportButton from './LeaderboardExportButton';
+import LeaderboardPodium from './LeaderboardPodium';
 
 const OverallLeaderboard: React.FC = () => {
   // Retrieve XP Data from store
@@ -35,7 +36,8 @@ const OverallLeaderboard: React.FC = () => {
     .map(contest => ({
       contest_id: contest.id,
       title: contest.title,
-      published: contest.isPublished
+      published: contest.isPublished,
+      voting: contest.hasVotingFeatures
     }));
 
   // Temporary loading of leaderboard background
@@ -51,28 +53,6 @@ const OverallLeaderboard: React.FC = () => {
   // Display constants
   const visibleEntries = useTypedSelector(store => store.session.topLeaderboardDisplay);
   const topX = rankedLeaderboard.filter(x => x.rank <= Number(visibleEntries));
-
-  const role = useTypedSelector(state => state.session.role!);
-
-  const exportCSV = () => {
-    const headers = ['Rank', 'Name', 'Username', 'XP', 'Achievements'];
-    const rows = rankedLeaderboard.map(player => [
-      player.rank,
-      player.name,
-      player.username,
-      player.xp,
-      player.achievements
-    ]);
-
-    // Combine headers and rows
-    const csvContent = [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'leaderboard.csv'; // Filename for download
-    link.click();
-  };
 
   // Define column definitions for ag-Grid
   const columnDefs: ColDef<LeaderboardRow>[] = useMemo(
@@ -121,36 +101,14 @@ const OverallLeaderboard: React.FC = () => {
   return (
     <div className="leaderboard-container">
       {/* Top 3 Ranking */}
-      <div className="top-three">
-        {rankedLeaderboard
-          .filter(x => x.rank <= 3)
-          .slice(0, 3)
-          .map((player, index) => (
-            <div
-              key={player.username}
-              className={`top-player ${player.rank === 1 ? 'first' : player.rank === 2 ? 'second' : 'third'}`}
-            >
-              <p className="player-name">{player.name}</p>
-              <div className="player-bar">
-                <p className="player-rank">{player.rank}</p>
-                <p className="player-xp">{player.xp} XP</p>
-              </div>
-            </div>
-          ))}
-      </div>
+      <LeaderboardPodium type="overall" data={rankedLeaderboard} outputType={undefined}/>
 
       <div className="buttons-container">
         {/* Leaderboard Options Dropdown */}
         <LeaderboardDropdown contests={contestDetails} />
 
         {/* Export Button */}
-        {role === Role.Admin || role === Role.Staff ? (
-          <button onClick={exportCSV} className="export-button">
-            Export as .csv
-          </button>
-        ) : (
-          ''
-        )}
+        <LeaderboardExportButton type="overall" data={rankedLeaderboard} />
       </div>
 
       {/* Leaderboard Table (Replaced with ag-Grid) */}

@@ -3,15 +3,6 @@ import 'src/styles/Leaderboard.scss';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-/*
-import default_avatar from "../../../assets/Sample Profile 1.jpg";
-import leaderboard_background from "../../../assets/leaderboard_background.jpg";
-
-import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { Role } from '../../../commons/application/ApplicationTypes';
-import { useDispatch } from "react-redux";
-import LeaderboardActions from "src/features/leaderboard/LeaderboardActions";
-*/
 import { LeaderboardContestDetails } from 'src/features/leaderboard/LeaderboardTypes';
 
 type Props = {
@@ -38,7 +29,7 @@ const LeaderboardDropdown: React.FC<Props> = ({ contests }) => {
 
   const currentPath = location.pathname;
   const publishedContests = enableContestLeaderboard
-    ? contests.filter(contest => contest.published)
+    ? contests.filter(contest => contest.published && !contest.voting)
     : [];
 
   return (

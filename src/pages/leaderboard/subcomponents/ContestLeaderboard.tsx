@@ -16,8 +16,9 @@ import {
 
 import default_avatar from '../../../assets/default-avatar.jpg';
 import leaderboard_background from '../../../assets/leaderboard_background.jpg';
-import { Role } from '../../../commons/application/ApplicationTypes';
 import LeaderboardDropdown from './LeaderboardDropdown';
+import LeaderboardExportButton from './LeaderboardExportButton';
+import LeaderboardPodium from './LeaderboardPodium';
 
 type Props = {
   type: string;
@@ -25,12 +26,19 @@ type Props = {
 };
 
 const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
+
   const courseID = useTypedSelector(store => store.session.courseId);
   const dispatch = useDispatch();
+
+  // TODO: Only display rows when contest voting counterpart has voting published
+
   // Retrieve Contest Score Data from store
+  console.log(contestID);
+  console.log(useTypedSelector(store => store.session.assessmentOverviews));
   const rankedLeaderboard: ContestLeaderboardRow[] = useTypedSelector(store =>
     type === 'score' ? store.leaderboard.contestScore : store.leaderboard.contestPopularVote
   );
+
   useEffect(() => {
     if (type === 'score') {
       dispatch(LeaderboardActions.getAllContestScores(contestID));
@@ -47,7 +55,8 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
     .map(contest => ({
       contest_id: contest.id,
       title: contest.title,
-      published: contest.isPublished
+      published: contest.isPublished,
+      voting: contest.hasVotingFeatures
     }));
 
   // Temporary loading of leaderboard background
@@ -64,28 +73,6 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
   const visibleEntries = 10;
   const top3 = rankedLeaderboard.filter(x => x.rank <= 3);
   const rest = rankedLeaderboard.filter(x => x.rank <= Number(visibleEntries) && x.rank > 3);
-
-  const role = useTypedSelector(state => state.session.role!);
-
-  const exportCSV = () => {
-    const headers = ['Rank', 'Name', 'Username', 'Score', 'Submission ID'];
-    const rows = rankedLeaderboard.map(player => [
-      player.rank,
-      player.name,
-      player.username,
-      player.score,
-      player.submissionId
-    ]);
-
-    // Combine headers and rows
-    const csvContent = [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `contest ${type} leaderboard.csv`; // Filename for download
-    link.click();
-  };
 
   // const workspaceLocation = 'assessment';
   const navigate = useNavigate();
@@ -160,33 +147,14 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
   return (
     <div className="leaderboard-container">
       {/* Top 3 Ranking */}
-      <div className="top-three">
-        {top3.slice(0, 3).map((player, index) => (
-          <div
-            key={player.username}
-            className={`top-player ${player.rank === 1 ? 'first' : player.rank === 2 ? 'second' : 'third'}`}
-          >
-            <p className="player-name">{player.name}</p>
-            <div className="player-bar">
-              <p className="player-rank">{player.rank}</p>
-              <p className="player-xp">{player.score.toFixed(2)} </p>
-            </div>
-          </div>
-        ))}
-      </div>
+      <LeaderboardPodium type="contest" data={rankedLeaderboard} outputType="image" />
 
       <div className="buttons-container">
         {/* Leaderboard Options Dropdown */}
         <LeaderboardDropdown contests={contestDetails} />
 
         {/* Export Button */}
-        {role === Role.Admin || role === Role.Staff ? (
-          <button onClick={exportCSV} className="export-button">
-            Export as .csv
-          </button>
-        ) : (
-          ''
-        )}
+        <LeaderboardExportButton type="contest" data={rankedLeaderboard}/>
       </div>
 
       {/* Leaderboard Table (Top 3) */}
