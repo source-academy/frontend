@@ -4,17 +4,14 @@ import { Classes } from '@blueprintjs/core';
 import { TextInput } from '@tremor/react';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-// import AceEditor, { IEditorProps } from 'react-ace';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import ControlBar, { ControlBarProps } from 'src/commons/controlBar/ControlBar';
 import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-// import { scrollSync } from 'src/commons/utils/StoriesHelper';
 import StoriesActions from 'src/features/stories/StoriesActions';
 
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
-// import { DndContext, DragEndEvent, closestCorners } from "@dnd-kit/core";
 
 type Props = {
   isViewOnly?: boolean;
@@ -40,19 +37,6 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
     return <></>;
   }
 
-  // const onEditorScroll = (e: IEditorProps) => {
-  //   const userblogContainer = document.getElementById('userblogContainer');
-  //   if (userblogContainer) {
-  //     scrollSync(e, userblogContainer);
-  //   }
-  // };
-
-  // const onEditorValueChange = (val: string) => {
-  //   setIsDirty(true);
-  //   dispatch(StoriesActions.setCurrentStory({ ...story, content: val }));
-  // };
-
-  // const { title, content } = story;
   const { title: title } = story;
 
   const controlBarProps: ControlBarProps = {
@@ -91,68 +75,16 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
     ]
   };
 
-  // const handleDragEnd = (event: DragEndEvent) => {
-  //   const {active, over} = event;
-
-  //   // sequence does not change
-  //   if (active.id == over!.id) {
-  //     return;
-  //   } 
-  //   let highIndex: number;
-  //   let lowIndex: number;
-  //   const contents = story!.content;
-  //   if (active.id > over!.id) {
-  //     console.log("front")
-  //     highIndex = contents.findIndex((content) => content.index === active.id);
-  //     lowIndex = contents.findIndex((content) => content.index === over!.id);
-  //     for (let i = lowIndex; i < highIndex; i++) {
-  //       contents[i].index += 1;
-  //     }
-  //     contents[highIndex].index = lowIndex;
-  //   } else {
-  //     console.log("back");
-  //     highIndex = contents.findIndex((content) => content.index === over!.id);
-  //     lowIndex = contents.findIndex((content) => content.index === active.id);
-  //     for (let i = lowIndex + 1; i <= highIndex; i++) {
-  //       contents[i].index -= 1;
-  //     }
-  //     contents[lowIndex].index = highIndex;
-  //   }
-  //   contents.sort((a, b) => a.index - b.index);
-  //   console.log(contents);
-  //   const newStory = {...story, content: [...contents]};
-  //   dispatch(StoriesActions.setCurrentStory(newStory));
-  //   dispatch(StoriesActions.saveStory(newStory, storyId!)); 
-  // }
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }} className={classNames(Classes.DARK)}>
       <ControlBar {...controlBarProps} />
-      {/* <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}> */}
         <div style={{ width: '100vw', height: '100%', display: 'flex' }}>
-          {/* {!isViewOnly && (
-            <AceEditor
-              className="repl-react-ace react-ace"
-              width="100%"
-              height="100%"
-              theme="source"
-              value={content}
-              onChange={onEditorValueChange}
-              onScroll={onEditorScroll}
-              fontSize={17}
-              highlightActiveLine={false}
-              showPrintMargin={false}
-              wrapEnabled={true}
-              setOptions={{ fontFamily: "'Inconsolata', 'Consolas', monospace" }}
-            />
-          )} */}
           <div className="newUserblog" id="userblogContainer">
             <UserBlogContent 
               isViewOnly={isViewOnly} 
             />
           </div>
         </div>
-      {/* </DndContext> */}
     </div>
   );
 };

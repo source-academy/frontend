@@ -339,7 +339,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
             <ControlButton label="Reset Env" onClick={execResetEnv} icon={IconNames.RESET} />
           </div>
           <div>
-            <div className="right-parent" onPointerDown={(e) => {e.stopPropagation()}}>
+            <div className="right-parent">
               <Card>
                 <AceEditor
                   className="repl-react-ace react-ace"

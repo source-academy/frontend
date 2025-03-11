@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import debounceRender from 'react-debounce-render';
 import Constants from 'src/commons/utils/Constants';
 import { propsAreEqual } from 'src/commons/utils/MemoizeHelper';
-// import { renderStoryMarkdown } from 'src/commons/utils/StoriesHelper';
 import EditStoryCell from './EditStoryCell';
 import StoriesActions from 'src/features/stories/StoriesActions';
 
@@ -19,7 +18,8 @@ import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveBu
 import ControlBar, { ControlBarProps } from 'src/commons/controlBar/ControlBar';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-// import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import DropArea from './DropArea';
+import { DragContext } from '../DragContext';
 
 export const DEFAULT_ENV = 'default';
 
@@ -136,9 +136,9 @@ const UserBlogContent: React.FC<Props> = ({
   const { currentStory: story, currentStoryId: storyId } = useTypedSelector(store => store.stories);
   const { content: contents, header: header } = story!; 
   const [envs, setEnvs] = useState<string[]>(getEnvironments(header));
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    // const header = getYamlHeader(fileContent).header;
     store.dispatch(StoriesActions.clearStoryEnv());
     handleHeaders(header);
     setEnvs(getEnvironments(header));
@@ -224,18 +224,16 @@ const UserBlogContent: React.FC<Props> = ({
           key={key}
           story={story}
         />)
-      // : <SortableContext items={contents.map((content) => {
-      //   return {
-      //     ...content,
-      //     id: content.index,
-      //   }
-      // })} strategy={verticalListSortingStrategy}>
-      : contents.map((_, key) => { 
-        return <EditStoryCell 
-            key={key}
-            index={key}
+      : <DragContext.Provider value={{index: activeIndex, setIndex: setActiveIndex}}>
+        <div className="content" style={{paddingTop: "0px", paddingBottom: "0px"}}>
+          <DropArea dropIndex={-1}/>
+        </div>
+        {contents.map((_, key) => { 
+          return <EditStoryCell 
+              key={key}
+              index={key}
           />})}
-        {/* </SortableContext>} */}
+      </DragContext.Provider>}
       {!isViewOnly && <div className='content'>
         <NewStoryCell 
           index={contents.length}

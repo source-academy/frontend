@@ -8,8 +8,9 @@ import NewStoryCell from "./CreateStoryCell";
 import { useDispatch } from "react-redux";
 import { useTypedSelector } from "src/commons/utils/Hooks";
 import StoriesActions from "../StoriesActions";
-// import { useSortable } from "@dnd-kit/sortable";
-// import { CSS } from "@dnd-kit/utilities";
+import { showSimpleConfirmDialog } from "src/commons/utils/DialogHelper";
+import Draggable from "./Draggable";
+import DropArea from "./DropArea";
 
 type Props = {
     index: number;
@@ -29,13 +30,6 @@ function EditStoryCell(props: Props) {
     const [ showButs, setShowButs ] = useState<boolean>(false);
     const [ showNewCellUp, setShowNewCellUp ] = useState<boolean>(false);
     const [ showNewCellDown, setShowNewCellDown ] = useState<boolean>(false);
-    // const id = props.index;
-    // const {attributes, listeners, setNodeRef, transform, transition} = useSortable({id});
-
-    // const style = {
-    //     transition,
-    //     transform: CSS.Transform.toString(transform),
-    // };
 
     useEffect(() => {
         if (!story) return;
@@ -50,10 +44,9 @@ function EditStoryCell(props: Props) {
         return <div></div>;
     }
     
-    const editContent = () => {
+    const editContent = (newContent: string) => {
         console.log("content is editted");
         const contents = story.content;
-        const newContent = storyContent.trim();
         contents.filter((story: StoryCell) => story.index == props.index)[0].content = newContent;
         const newStory = {...story, content: [...contents]};
         dispatch(StoriesActions.setCurrentStory(newStory));
@@ -67,14 +60,32 @@ function EditStoryCell(props: Props) {
         setShowNewCellUp(false);
         setShowNewCellDown(false);
         if (storyContent.trim().length > 0) {
-            setStoryContent(storyContent.trim());
-            editContent();
+            const trimmedContent = storyContent.trim();
+            setStoryContent(trimmedContent);
+            editContent(trimmedContent);
         } else {
-            deleteStoryCell();
+            deleteWithoutConfirmation();
         }
     }
 
-    const deleteStoryCell = () => {
+    const deleteWithConfirmation = async () => {
+        const confirm = await showSimpleConfirmDialog({
+            contents: (
+                <>
+                <p>Delete the story cell?</p>
+                <p>Note: This action is irreversible.</p>
+                </>
+            ),
+            positiveIntent: 'danger',
+            positiveLabel: 'Delete'
+        });
+        if (!confirm) {
+        return;
+        }
+        deleteWithoutConfirmation();
+    }
+
+    const deleteWithoutConfirmation = () => {
         console.log(`story cell ${props.index} is deleted`);
         const contents = story.content;
         const newContents = [];
@@ -87,7 +98,6 @@ function EditStoryCell(props: Props) {
             newContents.push(contents[i]);
         }
         const newStory = {...story, content: newContents};
-        console.log(newStory);
         dispatch(StoriesActions.setCurrentStory(newStory));
         dispatch(StoriesActions.saveStory(newStory, storyId!));
     }
@@ -103,22 +113,36 @@ function EditStoryCell(props: Props) {
         }
     }
 
+    const moveStoryCell = (moveUp: boolean) => {
+        const swapIndex = props.index + (moveUp ? -1 : 1);
+        // check if the user is moving the story cell out of the array bound
+        if (swapIndex < 0 || swapIndex >= story.content.length) {
+            return;
+        }
+        if (moveUp) {
+            story.content[swapIndex].index++;
+            story.content[props.index].index--;
+        } else {
+            story.content[swapIndex].index--;
+            story.content[props.index].index++;
+        }
+        const temp = story.content[props.index];
+        story.content[props.index] = story.content[swapIndex];
+        story.content[swapIndex] = temp;
+        const newStory = {...story, content: [...story.content]};
+        dispatch(StoriesActions.setCurrentStory(newStory));
+        dispatch(StoriesActions.saveStory(newStory, storyId!)); 
+    }
+
     return <div className="content" 
         onDoubleClick={handleDoubleClick} 
         onMouseEnter={() => setShowButs(true)}
         onMouseLeave={() => setShowButs(false)}
-        onPointerDown={(e) => e.stopPropagation()}
-        // ref={setNodeRef}
-        // {...(attributes)}
-        // {...(listeners)}
-        // style={style}
         >
-        {/* <SourceBlockContext.Provider value={setIsTyping}> */}
             {showNewCellUp && <NewStoryCell 
                 index={props.index}
             />}
             {isEditMode && <div style={{margin: "0px", backgroundColor: "#2c3e50", padding: "5px"}}
-                onPointerDown={(e) => e.stopPropagation()}
             >
                 <ControlButtonSaveButton 
                 key="save_story"
@@ -138,37 +162,45 @@ function EditStoryCell(props: Props) {
                         opacity: 0.6,
                         }}>
                     <Button 
-                        icon="chevron-up" 
+                        icon="chevron-up"
                         style={{justifyContent: 'left'}}
-                        onPointerDown={(e) => {
-                            e.stopPropagation();
+                        onClick={() => {
+                            moveStoryCell(true);
+                        }}>Move Up</Button>
+                    <Button 
+                        icon="chevron-down"
+                        style={{justifyContent: 'left'}}
+                        onClick={() => {
+                            moveStoryCell(false);
+                        }}>Move Down</Button>
+                    <Button 
+                        icon="add-row-top"
+                        style={{justifyContent: 'left'}}
+                        onClick={() => {
                             setShowNewCellUp(true);
                             setShowNewCellDown(false);
                         }}>Insert Top</Button>
                     <Button 
-                        icon="chevron-down" 
+                        icon="add-row-bottom"
                         style={{justifyContent: 'left'}}
-                        onPointerDown={(e) => {
-                            e.stopPropagation();
+                        onClick={() => {
                             setShowNewCellUp(false);
                             setShowNewCellDown(true);
                         }}>Insert Bottom</Button>
                     <Button 
                         icon="delete" 
                         style={{justifyContent: 'left'}}
-                        onPointerDown={(e) => {
-                            e.stopPropagation();
+                        onClick={() => {
                             setShowNewCellUp(false);
                             setShowNewCellDown(false);
                             // setIsTyping(false);
                             setEditMode(false);
                         }}>Cancel</Button>
                     <Button 
-                        icon="trash" 
+                        icon="trash"
                         style={{justifyContent: 'left'}}
-                        onPointerDown={(e) => {
-                            e.stopPropagation();
-                            deleteStoryCell();
+                        onClick={() => {
+                            deleteWithConfirmation();
                         }}>Delete</Button>
                 </div>}
                 {isEditMode ? <AceEditor
@@ -178,8 +210,6 @@ function EditStoryCell(props: Props) {
                     theme="source"
                     value={storyContent}
                     onChange={onEditorValueChange}
-                    // onFocus={() => setIsTyping(true)}
-                    // onBlur={() => setIsTyping(false)}
                     minLines={5}
                     maxLines={20}
                     fontSize={17}
@@ -189,16 +219,18 @@ function EditStoryCell(props: Props) {
                     setOptions={{ fontFamily: "'Inconsolata', 'Consolas', monospace" }}
                     style={{marginTop: "0px"}}
                     />
-                : renderStoryMarkdown(
+                : <Draggable id={props.index}>
+                    {renderStoryMarkdown(
                     isCode 
                     ? ("\`\`\`{source} env:" + env + "\n" + storyContent)
-                    : storyContent, props.index, false)
+                    : storyContent, props.index, false)}
+                </Draggable>
                 }
             </div>
             {showNewCellDown && <NewStoryCell 
                 index={props.index + 1}
             />}
-        {/* </SourceBlockContext.Provider> */}
+            <DropArea dropIndex={props.index}/>
     </div>
 }
 

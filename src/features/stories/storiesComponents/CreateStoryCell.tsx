@@ -24,7 +24,6 @@ const NewStoryCell: React.FC<Props> = ({
     const [env, setEnv] = useState<string>(envs[0]);
     const [code, setCode] = useState<string>("");
     const [isDirty, setIsDirty] = useState<boolean>(false);
-    // const setIsTyping = useContext(SourceBlockContext);
 
     if (!story) {
         return  <div></div>;
@@ -48,7 +47,6 @@ const NewStoryCell: React.FC<Props> = ({
           contents[i].index += 1;
         } 
         const newContent: StoryCell = {
-          // id: index,
           index: index,
           isCode: isCode,
           env: isCode ? env : "",
@@ -79,8 +77,7 @@ const NewStoryCell: React.FC<Props> = ({
             gap: "5px",
             padding: "5px",
             backgroundColor: "#2c3e50"
-        }}
-        onPointerDown={(e) => e.stopPropagation()}>
+        }}>
             <ControlButtonSaveButton 
                 key="save_story"
                 onClickSave={saveButClicked}
@@ -112,8 +109,6 @@ const NewStoryCell: React.FC<Props> = ({
             theme="source"
             value={code}
             onChange={editorOnChange}
-            // onFocus={() => setIsTyping(true)}
-            // onBlur={() => setIsTyping(false)}
             minLines={5}
             maxLines={20}
             fontSize={17}

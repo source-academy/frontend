@@ -303,8 +303,3 @@ export const deleteUserUserGroups = async (
   const user = await resp.json();
   return user;
 };
-
-// export const updateHeader = (newHeader: string): string | null => {
-//   tempHeader = newHeader;
-//   return tempHeader;
-// }
