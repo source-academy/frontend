@@ -30,6 +30,7 @@ const defaultCourseConfig: UpdateCourseConfiguration = {
   enableSourcecast: true,
   enableStories: false,
   enableExamMode: false,
+  resumeCode: '',
   moduleHelpText: ''
 };
 
@@ -64,21 +65,11 @@ const AdminPanel: React.FC = () => {
       enableSourcecast: session.enableSourcecast,
       enableStories: session.enableStories,
       enableExamMode: session.enableExamMode,
+      resumeCode: session.resumeCode,
       moduleHelpText: session.moduleHelpText,
       isOfficialCourse: session.isOfficialCourse
     });
-  }, [
-    session.courseName,
-    session.courseShortName,
-    session.enableAchievements,
-    session.enableGame,
-    session.enableSourcecast,
-    session.enableStories,
-    session.enableExamMode,
-    session.moduleHelpText,
-    session.isOfficialCourse,
-    session.viewable
-  ]);
+  }, [session.courseName, session.courseShortName, session.enableAchievements, session.enableGame, session.enableSourcecast, session.enableStories, session.enableExamMode, session.moduleHelpText, session.isOfficialCourse, session.viewable, session.resumeCode]);
 
   const tableRef = useRef<ImperativeAssessmentConfigPanel>(null);
   useEffect(() => {
