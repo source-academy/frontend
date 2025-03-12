@@ -33,8 +33,6 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
   // TODO: Only display rows when contest voting counterpart has voting published
 
   // Retrieve Contest Score Data from store
-  console.log(contestID);
-  console.log(useTypedSelector(store => store.session.assessmentOverviews));
   const rankedLeaderboard: ContestLeaderboardRow[] = useTypedSelector(store =>
     type === 'score' ? store.leaderboard.contestScore : store.leaderboard.contestPopularVote
   );
@@ -58,6 +56,7 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
       published: contest.isPublished,
       voting: contest.hasVotingFeatures
     }));
+  const contestName = contestDetails.find(contest => contest.contest_id === contestID)?.title;
 
   // Temporary loading of leaderboard background
   useEffect(() => {
@@ -154,7 +153,7 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
         <LeaderboardDropdown contests={contestDetails} />
 
         {/* Export Button */}
-        <LeaderboardExportButton type="contest" data={rankedLeaderboard}/>
+        <LeaderboardExportButton type="contest" contest={contestName} data={rankedLeaderboard}/>
       </div>
 
       {/* Leaderboard Table (Top 3) */}

@@ -108,7 +108,7 @@ const OverallLeaderboard: React.FC = () => {
         <LeaderboardDropdown contests={contestDetails} />
 
         {/* Export Button */}
-        <LeaderboardExportButton type="overall" data={rankedLeaderboard} />
+        <LeaderboardExportButton type="overall" contest={undefined} data={rankedLeaderboard} />
       </div>
 
       {/* Leaderboard Table (Replaced with ag-Grid) */}

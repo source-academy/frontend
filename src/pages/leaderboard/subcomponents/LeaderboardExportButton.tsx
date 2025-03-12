@@ -7,19 +7,19 @@ import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/
 import { Role } from '../../../commons/application/ApplicationTypes';
 
 type Props =
-  | { type: "contest"; data: ContestLeaderboardRow[] }
-  | { type: "overall"; data: LeaderboardRow[] };
+  | { type: "contest"; contest: string | undefined; data: ContestLeaderboardRow[] }
+  | { type: "overall"; contest: string | undefined; data: LeaderboardRow[] };
 
-const LeaderboardExportButton: React.FC<Props> = ({ type, data }) => {
+const LeaderboardExportButton: React.FC<Props> = ({ type, contest, data }) => {
   const role = useTypedSelector(store => store.session.role);
   const exportCSV = () => {
-    const headers = ['Rank', 'Name', 'Username', (type == "overall" ? 'XP' : 'Score'), (type == "overall" ? 'Achievements' : 'Submission Id')];
+    const headers = ['Rank', 'Name', 'Username', (type === "overall" ? 'XP' : 'Score'), (type === "overall" ? 'Achievements' : 'Submission Id')];
     const rows = data?.map(player => [
         player.rank,
         player.name,
         player.username,
-        type == "overall" ? (player as LeaderboardRow).xp : (player as ContestLeaderboardRow).score,
-        type == "overall" ? (player as LeaderboardRow).achievements : (player as ContestLeaderboardRow).submissionId
+        type === "overall" ? (player as LeaderboardRow).xp : (player as ContestLeaderboardRow).score,
+        type === "overall" ? (player as LeaderboardRow).achievements : (player as ContestLeaderboardRow).submissionId
     ]);
 
     // Combine headers and rows
@@ -28,7 +28,7 @@ const LeaderboardExportButton: React.FC<Props> = ({ type, data }) => {
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = 'leaderboard.csv'; // Filename for download
+    link.download = type === "overall" ? 'Overall Leaderboard.csv' : `${contest} Leaderboard.csv`; // Filename for download
     link.click();
   };
 
