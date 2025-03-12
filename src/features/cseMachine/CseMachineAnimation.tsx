@@ -20,6 +20,7 @@ import { InstructionApplicationAnimation } from './animationComponents/Instructi
 import { LookupAnimation } from './animationComponents/LookupAnimation';
 import { PopAnimation } from './animationComponents/PopAnimation';
 import { UnaryOperationAnimation } from './animationComponents/UnaryOperationAnimation';
+import { ArraySpreadAnimation } from './animationComponents/ArraySpreadAnimation';
 import { isNode } from './components/ControlStack';
 import { Frame } from './components/Frame';
 import { ArrayValue } from './components/values/ArrayValue';
@@ -274,6 +275,40 @@ export class CseAnimation {
               Layout.previousStashComponent.stashItemComponents.at(-1)!,
               currStashComponent!
             )
+          );
+          break;
+        case InstrType.SPREAD:
+          const prevcontrol = Layout.previousControlComponent.stackItemComponents;
+          const control = Layout.controlComponent.stackItemComponents;
+          const array = Layout.previousStashComponent.stashItemComponents.at(-1)!.arrow!.target! as ArrayValue;
+          let currCallInstr;
+          let prevCallInstr;
+      
+          
+
+          for (let i = 0; control.at(-i) != undefined; i++) {
+            if (control.at(-i)?.text.includes("call ")) { // find call instr above 
+              currCallInstr = control.at(-i);
+              break;
+            }
+          }
+
+          for (let i = 0; prevcontrol.at(-i) != undefined; i++) {
+            if (prevcontrol.at(-i)?.text.includes("call ")) { // find call instr above 
+              prevCallInstr = prevcontrol.at(-i);
+              break;
+            }
+          }
+          
+          CseAnimation.animations.push(
+            new ArraySpreadAnimation(
+              lastControlComponent,
+              Layout.previousStashComponent.stashItemComponents.at(-1)!,
+              Layout.stashComponent.stashItemComponents.slice(-array.data.length)!,
+              currCallInstr!,
+              prevCallInstr!
+            )
+            
           );
           break;
         case InstrType.ARRAY_LENGTH:
