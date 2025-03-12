@@ -25,7 +25,7 @@ const LeaderboardPodium: React.FC<Props> = ({ type, data, outputType }) => {
             <p className="player-name">{player.name}</p>
             <div className="player-bar">
               <p className="player-rank">{player.rank}</p>
-              <p className="player-xp">{type == "overall" ? (player as LeaderboardRow).xp : (player as ContestLeaderboardRow).score} XP</p>
+              <p className="player-xp">{type === "overall" ? (player as LeaderboardRow).xp : (player as ContestLeaderboardRow).score.toFixed(2)}{type === "overall" ? ' XP' : ''}</p>
             </div>
           </div>
         ))}

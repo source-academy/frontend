@@ -29,7 +29,7 @@ const LeaderboardDropdown: React.FC<Props> = ({ contests }) => {
 
   const currentPath = location.pathname;
   const publishedContests = enableContestLeaderboard
-    ? contests.filter(contest => contest.published && !contest.voting)
+    ? contests.filter(contest => contest.published)
     : [];
 
   return (

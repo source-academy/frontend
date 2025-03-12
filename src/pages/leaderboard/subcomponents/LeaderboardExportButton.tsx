@@ -13,7 +13,7 @@ type Props =
 const LeaderboardExportButton: React.FC<Props> = ({ type, data }) => {
   const role = useTypedSelector(store => store.session.role);
   const exportCSV = () => {
-    const headers = ['Rank', 'Name', 'Username', 'XP', 'Achievements'];
+    const headers = ['Rank', 'Name', 'Username', (type == "overall" ? 'XP' : 'Score'), (type == "overall" ? 'Achievements' : 'Submission Id')];
     const rows = data?.map(player => [
         player.rank,
         player.name,
