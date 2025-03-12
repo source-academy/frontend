@@ -499,8 +499,7 @@ export function* evalCodeConductorSaga(
   const { hostPlugin, conduit }: { hostPlugin: BrowserHostPlugin; conduit: IConduit } = yield call(
     createConductor,
     url,
-    async (fileName: string) => files[fileName],
-    (pluginName: string) => {} // TODO: implement dynamic plugin loading
+    async (fileName: string) => files[fileName]
   );
   const stdoutTask = yield fork(handleStdout, hostPlugin, workspaceLocation);
   yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);

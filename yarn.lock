@@ -9563,6 +9563,7 @@ __metadata:
     path-browserify: "npm:^1.0.1"
     phaser: "npm:~3.87.0"
     phaser3spectorjs: "npm:^0.0.8"
+    plugin-directory: "https://github.com/source-academy/plugin-directory.git"
     prettier: "npm:^3.3.3"
     process: "npm:^0.11.10"
     query-string: "npm:^9.0.0"
@@ -14041,6 +14042,13 @@ __metadata:
   dependencies:
     find-up: "npm:^3.0.0"
   checksum: 10c0/ecb60e1f8e1f611c0bdf1a0b6a474d6dfb51185567dc6f29cdef37c8d480ecba5362e006606bb290519bbb6f49526c403fabea93c3090c20368d98bb90c999ab
+  languageName: node
+  linkType: hard
+
+"plugin-directory@https://github.com/source-academy/plugin-directory.git":
+  version: 0.0.1
+  resolution: "plugin-directory@https://github.com/source-academy/plugin-directory.git#commit=8fadc3a0b8f656234659b457b15a0bef223f5f88"
+  checksum: 10c0/d085195118782e35af687e20e8dc97a541ccf46bd40aae441d8b8a7e49057e7d359362ecb31056a47ab76167f835f8abadff58e555e97fe33de21b6f89fc1450
   languageName: node
   linkType: hard
 
