@@ -6,6 +6,7 @@ import React from 'react';
 
 import { ArrayAccessAnimation } from './animationComponents/ArrayAccessAnimation';
 import { ArrayAssignmentAnimation } from './animationComponents/ArrayAssignmentAnimation';
+import { ArraySpreadAnimation } from './animationComponents/ArraySpreadAnimation';
 import { AssignmentAnimation } from './animationComponents/AssignmentAnimation';
 import { Animatable } from './animationComponents/base/Animatable';
 import { lookupBinding } from './animationComponents/base/AnimationUtils';
@@ -20,7 +21,6 @@ import { InstructionApplicationAnimation } from './animationComponents/Instructi
 import { LookupAnimation } from './animationComponents/LookupAnimation';
 import { PopAnimation } from './animationComponents/PopAnimation';
 import { UnaryOperationAnimation } from './animationComponents/UnaryOperationAnimation';
-import { ArraySpreadAnimation } from './animationComponents/ArraySpreadAnimation';
 import { isNode } from './components/ControlStack';
 import { Frame } from './components/Frame';
 import { ArrayValue } from './components/values/ArrayValue';

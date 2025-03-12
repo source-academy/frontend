@@ -1,3 +1,4 @@
+import { Easings } from 'konva/lib/Tween';
 import React from 'react';
 import { Group } from 'react-konva';
 
@@ -15,7 +16,6 @@ import { Animatable, AnimationConfig } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodePosition } from './base/AnimationUtils';
-import { Easings } from 'konva/lib/Tween';
 
 /**
  * Adapted from InstructionApplicationAnimation, but changed resultAnimation to [], among others
