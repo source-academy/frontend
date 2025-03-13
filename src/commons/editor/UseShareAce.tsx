@@ -7,13 +7,16 @@ import {
 } from '@convergencelabs/ace-collab-ext';
 import * as Sentry from '@sentry/browser';
 import sharedbAce from '@sourceacademy/sharedb-ace';
-import React from 'react';
+import SharedbAceBinding from '@sourceacademy/sharedb-ace/distribution/sharedb-ace-binding';
+import React, { useCallback } from 'react';
 
+import { getLanguageConfig } from '../application/ApplicationTypes';
 import {
   CollabEditingAccess,
   getDocInfoFromSessionId,
   getSessionUrl
 } from '../collabEditing/CollabEditingHelper';
+import { parseModeString } from '../utils/AceHelper';
 import { useSession } from '../utils/Hooks';
 import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
 import { EditorHook } from './Editor';
@@ -34,9 +37,17 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
   const { editorSessionId, sessionDetails } = inProps;
   const { name, userId } = useSession();
 
-  const updateUsers = (binding:any) => {
-    inProps.setUsersArray?.([binding.user, ...Object.values(binding.usersPresence.remotePresences).map((presence) => (presence as any).user)]);
-  }
+  const updateUsers = useCallback(
+    (binding: SharedbAceBinding) => {
+      inProps.setUsersArray?.([
+        binding.user,
+        ...Object.values(binding.usersPresence.remotePresences).map(
+          presence => (presence as any).user
+        )
+      ]);
+    },
+    [inProps.setUsersArray]
+  );
 
   React.useEffect(() => {
     if (!editorSessionId || !sessionDetails) {
@@ -82,11 +93,24 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       if (!sessionDetails) {
         return;
       }
-      const binding = ShareAce.add(editor, ['contents'], {
-        cursorManager,
-        selectionManager,
-        radarManager
-      });
+      const binding = ShareAce.add(
+        editor,
+        ['contents'],
+        {
+          cursorManager,
+          selectionManager,
+          radarManager
+        },
+        {
+          languageSelectHandler: (language: string) => {
+            // TODO: Changing of language only works once right now
+            // most likely due to editor changing between renders
+            // TODO: Consider using useTypedSelector instead
+            const { chapter, variant } = parseModeString(language);
+            inProps.updateLanguageCallback?.(getLanguageConfig(chapter, variant), null);
+          }
+        }
+      );
       propsRef.current.handleSetSharedbConnected!(true);
 
       // Disables editor in a read-only session
@@ -151,7 +175,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       editor.setReadOnly(false);
 
       // Resets users Array
-      ShareAce.usersPresence.off('receive', () => updateUsers({}));
+      ShareAce.usersPresence.off('receive', () => inProps.setUsersArray?.([]));
 
       // Removes all cursors
       cursorManager.removeAll();
@@ -162,7 +186,16 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       // @ts-expect-error hotfix to remove all views in radarManager
       radarManager.removeAllViews();
     };
-  }, [editorSessionId, sessionDetails, reactAceRef, userId, name]);
+  }, [
+    editorSessionId,
+    sessionDetails,
+    reactAceRef,
+    userId,
+    name,
+    updateUsers,
+    inProps.setUsersArray,
+    inProps.updateLanguageCallback
+  ]);
 };
 
 function getColor() {

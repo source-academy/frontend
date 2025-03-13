@@ -25,6 +25,7 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import React from 'react';
 import AceEditor, { IAceEditorProps, IEditorProps } from 'react-ace';
 import { IAceEditor } from 'react-ace/lib/types';
+import { SALanguage } from '../application/ApplicationTypes';
 import { EditorBinding } from '../WorkspaceSettingsContext';
 import { getModeString, selectMode } from '../utils/AceHelper';
 import { objectEntries } from '../utils/TypeHelper';
@@ -39,6 +40,7 @@ import useNavigation from './UseNavigation';
 import useRefactor from './UseRefactor';
 import useShareAce from './UseShareAce';
 import { SharedbAceUser } from '@sourceacademy/sharedb-ace/distribution/types';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
 export type EditorHook = (
@@ -71,6 +73,8 @@ type EditorStateProps = {
   hooks?: EditorHook[];
   editorBinding?: EditorBinding;
   setUsersArray?: React.Dispatch<React.SetStateAction<SharedbAceUser[]>>;
+  // TODO: Handle changing of external library
+  updateLanguageCallback?: (sublanguage: SALanguage, e: any) => void
 };
 
 export type EditorTabStateProps = {
@@ -415,7 +419,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   const [sourceChapter, sourceVariant, externalLibraryName] = [
     props.sourceChapter || Chapter.SOURCE_1,
     props.sourceVariant || Variant.DEFAULT,
-    props.externalLibraryName || 'NONE'
+    props.externalLibraryName || ExternalLibraryName.NONE
   ];
 
   // this function defines the Ace language and highlighting mode for the

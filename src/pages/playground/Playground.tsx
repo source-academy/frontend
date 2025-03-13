@@ -500,7 +500,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
       };
 
       pushLog(input);
-      console.log('newhere', chapter, variant)
 
       handleChapterSelect(chapter, variant);
       // Hardcoded for Playground only for now, while we await workspace refactoring
@@ -900,7 +899,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     };
   }, [dispatch, workspaceLocation]);
   const editorContainerProps: NormalEditorContainerProps = {
-    setUsersArray: setUsersArray,
     editorSessionId,
     sessionDetails,
     isEditorAutorun,
@@ -924,7 +922,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
     externalLibraryName,
     sourceVariant: languageConfig.variant,
     handleEditorValueChange: onEditorValueChange,
-    handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints
+    handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
+    setUsersArray,
+    updateLanguageCallback: chapterSelectHandler
   };
 
   const replHandlers = useMemo(() => {
