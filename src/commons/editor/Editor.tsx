@@ -38,6 +38,7 @@ import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
 import useRefactor from './UseRefactor';
 import useShareAce from './UseShareAce';
+import { SharedbAceUser } from '@sourceacademy/sharedb-ace/distribution/types';
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
 export type EditorHook = (
@@ -58,7 +59,7 @@ type DispatchProps = {
   handleSendReplInputToOutput?: (newOutput: string) => void;
   handleSetSharedbConnected?: (connected: boolean) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
-  setUsersArray: React.Dispatch<React.SetStateAction<any[]>>;
+  setUsersArray: React.Dispatch<React.SetStateAction<SharedbAceUser[]>>;
 };
 
 type EditorStateProps = {
@@ -347,6 +348,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   // Refs for things that technically shouldn't change... but just in case.
   const handleEditorUpdateBreakpointsRef = React.useRef(props.handleEditorUpdateBreakpoints);
   const handlePromptAutocompleteRef = React.useRef(props.handlePromptAutocomplete);
+  // const readOnly = props.usersArray[0]?.role !== 'owner' && props.usersArray[0]?.role !== 'editor';
 
   const editor = reactAceRef.current?.editor;
   // Set edit session history when switching to another editor tab.
@@ -371,7 +373,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
 
       // @ts-ignore
       if (editor.getSession().selection._eventRegistry.changeCursor.length < 2) {
-        editor.getSession().selection.on('changeCursor', reactAceRef.current!.onCursorChange);
+        editor.getSession().selection.on('changeCursor', () => reactAceRef.current!.onCursorChange);
       }
 
       /* eslint-enable */

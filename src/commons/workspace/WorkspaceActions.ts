@@ -20,6 +20,7 @@ import {
   WorkspaceLocationsWithTools,
   WorkspaceState
 } from './WorkspaceTypes';
+import { SharedbAceUser } from '@sourceacademy/sharedb-ace/distribution/types';
 
 const newActions = createActions('workspace', {
   setTokenCount: (workspaceLocation: WorkspaceLocation, tokenCount: number) => ({
@@ -135,7 +136,7 @@ const newActions = createActions('workspace', {
     editorTabIndex: number,
     newCursorPosition: Position
   ) => ({ workspaceLocation, editorTabIndex, newCursorPosition }),
-  setUsersArray: (workspaceLocation: WorkspaceLocation, usersArray: any[]) => ({ usersArray }),
+  setUsersArray: (workspaceLocation: WorkspaceLocation, usersArray: SharedbAceUser[]) => ({ usersArray }),
   addEditorTab: (workspaceLocation: WorkspaceLocation, filePath: string, editorValue: string) => ({
     workspaceLocation,
     filePath,

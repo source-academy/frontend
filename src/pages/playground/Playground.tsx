@@ -99,6 +99,7 @@ import {
   makeSubstVisualizerTabFrom,
   mobileOnlyTabIds
 } from './PlaygroundTabs';
+import { SharedbAceUser } from '@sourceacademy/sharedb-ace/distribution/types';
 
 export type PlaygroundProps = {
   isSicpEditor?: boolean;
@@ -287,7 +288,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       chapter: playgroundSourceChapter
     })
   );
-  const [usersArray, setUsersArray] = useState<any[]>([]);
+  const [usersArray, setUsersArray] = useState<SharedbAceUser[]>([]);
 
   // Playground hotkeys
   const [isGreen, setIsGreen] = useState(false);

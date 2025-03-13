@@ -5,7 +5,6 @@
 import { Classes, HTMLTable, Switch } from '@blueprintjs/core';
 import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/distribution/types';
 import React, { useMemo, useState } from 'react';
-// import { H6 } from '@blueprintjs/core';
 
 type Props = {
   usersArray: SharedbAceUser[];
@@ -13,28 +12,31 @@ type Props = {
 };
 
 const SideContentSessionManagement: React.FC<Props> = ({ usersArray, canManage = true }) => {
-  console.log(usersArray);
 
-  const [usersAccessLevel, setUsersAccessLevel] = useState<{ id: string; accessLevel: number }[]>(
-    []
-  );
+  const [usersAccessLevel, setUsersAccessLevel] = useState<{ id: string; role: string }[]>([]);
+  const [toggling, setToggling] = useState<{ [key: string]: boolean }>({});
 
-  const handleJumpToUser = (id: any) => {
-    console.log('do stuff' + id);
-  };
-
-  const handleToggleAccess = (id: string) => {
-    setUsersAccessLevel(prevLevels =>
-      prevLevels.map(user =>
-        user.id === id ? { ...user, accessLevel: user.accessLevel === 1 ? 0 : 1 } : user
-      )
+  const handleToggleAccess = async (id: string) => {
+    if (toggling[id]) return;
+    
+    setToggling(prev => ({ ...prev, [id]: true }));
+    
+    const newLevels = usersAccessLevel.map(user =>
+      user.id === id ? { ...user, role: user.role === 'editor' ? 'viewer' : 'editor' } : user
     );
+    setUsersAccessLevel(newLevels);
+    
+    try {
+      await updateBinding(id, newLevels.find(user => user.id === id)?.role || 'viewer');
+    } finally {
+      setToggling(prev => ({ ...prev, [id]: false }));
+    }
   };
 
   useMemo(() => {
     const usersLevels = usersArray.map(user => ({
-      id: user.id,
-      accessLevel: user.accessLevel || 0
+      id: user.color,
+      role : user.role
     }));
     setUsersAccessLevel(usersLevels);
   }, [usersArray]);
@@ -45,7 +47,6 @@ const SideContentSessionManagement: React.FC<Props> = ({ usersArray, canManage =
         marginInline: '0.5em'
       }}
     >
-      {/* <H6>Manage users in the session</H6> */}
       <HTMLTable
         className="w-full"
         compact
@@ -67,50 +68,27 @@ const SideContentSessionManagement: React.FC<Props> = ({ usersArray, canManage =
             <td></td>
           </tr>
           {usersArray.map(user => {
-            const userAccess = usersAccessLevel.find(u => u.id === user.id)?.accessLevel || 0;
+            const userRole = usersAccessLevel.find(u => u.id === user.color)?.role || 'viewer';
             return (
               <tr key={user.color}>
                 <td
-                  style={{
-                    verticalAlign: 'middle',
-                    display: 'flex',
-                    gap: '1em',
-                    alignItems: 'center'
-                  }}
+                  style={{ verticalAlign: 'middle', display: 'flex', gap: '1em', alignItems: 'center' }}
                   className={Classes.INTERACTIVE}
-                  onClick={e => handleJumpToUser(user.color)}
                 >
-                  <div
-                    style={{
-                      width: '15px',
-                      height: '15px',
-                      borderRadius: '50%',
-                      backgroundColor: user.color
-                    }}
-                  />
+                  <div style={{ width: '15px', height: '15px', borderRadius: '50%', backgroundColor: user.color }} />
                   <div>{user.name}</div>
                 </td>
-                <td
-                  style={{
-                    textAlign: 'end'
-                  }}
-                >
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'flex-end'
-                    }}
-                  >
+                <td style={{ textAlign: 'end' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                    {usersArray[0].role === 'owner' && (
                     <Switch
-                      labelElement={
-                        userAccess === 2 ? 'Admin' : userAccess === 1 ? 'Editor' : 'Viewer'
-                      }
-                      disabled={!canManage}
+                      labelElement={userRole === 'owner' ? 'Admin' : userRole === 'editor' ? 'Editor' : 'Viewer'}
+                      disabled={usersArray[0].role !== 'owner' || toggling[user.name] || userRole === 'owner'}
                       alignIndicator="right"
-                      checked={userAccess >= 1}
-                      onChange={() => handleToggleAccess(user.id)}
+                      checked={userRole === 'editor' || userRole === 'owner'}
+                      onChange={() => handleToggleAccess(user.name)}
                     ></Switch>
+                  )}
                   </div>
                 </td>
               </tr>
@@ -123,3 +101,8 @@ const SideContentSessionManagement: React.FC<Props> = ({ usersArray, canManage =
 };
 
 export default SideContentSessionManagement;
+
+async function updateBinding(id: string, newRole: string) {
+  return new Promise(resolve => setTimeout(resolve, 500));
+}
+

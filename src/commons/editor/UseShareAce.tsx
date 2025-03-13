@@ -34,6 +34,11 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
   const { editorSessionId, sessionDetails } = inProps;
   const { name, userId } = useSession();
 
+  const updateUsers = (binding:any) => {
+    inProps.setUsersArray([binding.user, ...Object.values(binding.usersPresence.remotePresences).map((presence) => (presence as any).user)]);
+    console.log(...Object.values(binding.usersPresence.remotePresences));
+  }
+
   React.useEffect(() => {
     if (!editorSessionId || !sessionDetails) {
       return;
@@ -91,6 +96,8 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       showSuccessMessage(
         `You have joined a session as ${sessionDetails.readOnly ? 'a viewer' : 'an editor'}.`
       );
+      updateUsers(binding);
+      binding.usersPresence.on('receive', () => updateUsers(binding));
     };
 
     const shareAceError = (path: string, error: any) => {
@@ -143,6 +150,9 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
       // Resets editor to normal after leaving the session
       editor.setReadOnly(false);
+
+      // Resets users Array
+      ShareAce.usersPresence.off('receive', () => updateUsers({}));
 
       // Removes all cursors
       cursorManager.removeAll();

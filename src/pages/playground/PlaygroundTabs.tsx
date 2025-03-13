@@ -1,4 +1,5 @@
 import { IconNames } from '@blueprintjs/icons';
+import { SharedbAceUser } from '@sourceacademy/sharedb-ace/distribution/types';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
 import Markdown from 'src/commons/Markdown';
@@ -25,7 +26,7 @@ export const makeIntroductionTabFrom = (content: string): SideContentTab => ({
 });
 
 export const makeSessionManagementTabFrom = (
-  users: Array<any>,
+  users: Array<SharedbAceUser>,
   canManage: boolean
 ): SideContentTab => ({
   label: 'Session Management',
