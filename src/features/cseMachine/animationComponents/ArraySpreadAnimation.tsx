@@ -29,7 +29,6 @@ export class ArraySpreadAnimation extends Animatable {
   private prevCallInstrAnimation: AnimatedTextbox;
 
   private endX: number;
-  private resultItemIsFirst: boolean;
 
   constructor(
     private controlInstrItem: ControlItemComponent,
@@ -39,7 +38,10 @@ export class ArraySpreadAnimation extends Animatable {
     private prevCallInstrItem: ControlItemComponent
   ) {
     super();
-    this.resultItemIsFirst = (resultItems[0]?.index ?? stashItem.index) === 0;
+
+    console.log(stashItem);
+    console.log(resultItems);
+
     this.endX = stashItem!.x() + stashItem!.width();
     this.controlInstrAnimation = new AnimatedTextbox(
       controlInstrItem.text,
@@ -97,7 +99,7 @@ export class ArraySpreadAnimation extends Animatable {
       getTextWidth(this.controlInstrItem.text) + ControlStashConfig.ControlItemTextPadding * 2;
     const resultX = (idx: number) => this.resultItems[idx]?.x() ?? this.stashItem.x();
     const resultY = this.resultItems[0]?.y() ?? this.stashItem.y();
-    const startX = resultX(0) - (this.resultItemIsFirst ? minInstrWidth : 0);
+    const startX = resultX(0);
     const fadeDuration = ((animationConfig?.duration ?? 1) * 3) / 4;
     const fadeInDelay = (animationConfig?.delay ?? 0) + (animationConfig?.duration ?? 1) / 4;
 
@@ -121,7 +123,7 @@ export class ArraySpreadAnimation extends Animatable {
       ...this.resultAnimations.flatMap(a => [
 
       a.animateTo(
-        { x: startX + (this.endX - startX) / 2 - this.resultItems[0]!.width() / 2 },
+        { x: startX + (this.endX - startX) / 2 - this.resultItems[0]?.width() / 2 },
         { duration: 0 }
       )
     ]),
@@ -131,9 +133,7 @@ export class ArraySpreadAnimation extends Animatable {
           x: startX,
           y:
             resultY +
-            (this.resultItemIsFirst
-              ? 0
-              : (this.resultItems[0].height() ?? this.stashItem.height())),
+               (this.resultItems[0]?.height() ?? this.stashItem.height()),
           width: minInstrWidth
         },
         animationConfig

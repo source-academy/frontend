@@ -113,6 +113,11 @@ export class CseAnimation {
           );
         }
         break;
+      case 'SpreadElement':
+        CseAnimation.animations.push(
+          new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems()),
+        );
+        break;
       case 'AssignmentExpression':
       case 'ArrayExpression':
       case 'BinaryExpression':
@@ -281,6 +286,9 @@ export class CseAnimation {
           const prevcontrol = Layout.previousControlComponent.stackItemComponents;
           const control = Layout.controlComponent.stackItemComponents;
           const array = Layout.previousStashComponent.stashItemComponents.at(-1)!.arrow!.target! as ArrayValue;
+
+          console.log(array);
+
           let currCallInstr;
           let prevCallInstr;
       
@@ -299,12 +307,14 @@ export class CseAnimation {
               break;
             }
           }
+
+          const resultItems = array.data.length !== 0 ? Layout.stashComponent.stashItemComponents.slice(-array.data.length) : [];
           
           CseAnimation.animations.push(
             new ArraySpreadAnimation(
               lastControlComponent,
               Layout.previousStashComponent.stashItemComponents.at(-1)!,
-              Layout.stashComponent.stashItemComponents.slice(-array.data.length)!,
+              resultItems!,
               currCallInstr!,
               prevCallInstr!
             )
