@@ -67,7 +67,7 @@ const SideContentSessionManagement: React.FC<Props> = ({ usersArray, canManage =
             <td></td>
             <td></td>
           </tr>
-          {usersArray.map(user => {
+          {usersArray.map((user, index) => {
             const userRole = usersAccessLevel.find(u => u.id === user.color)?.role || 'viewer';
             return (
               <tr key={user.color}>
@@ -75,7 +75,7 @@ const SideContentSessionManagement: React.FC<Props> = ({ usersArray, canManage =
                   style={{ verticalAlign: 'middle', display: 'flex', gap: '1em', alignItems: 'center' }}
                   className={Classes.INTERACTIVE}
                 >
-                  <div style={{ width: '15px', height: '15px', borderRadius: '50%', backgroundColor: user.color }} />
+                  <div style={{ width: '15px', height: '15px', borderRadius: '50%', backgroundColor: index === 0 ? '#ced9e0' : user.color }} />
                   <div>{user.name}</div>
                 </td>
                 <td style={{ textAlign: 'end' }}>
@@ -87,7 +87,7 @@ const SideContentSessionManagement: React.FC<Props> = ({ usersArray, canManage =
                       alignIndicator="right"
                       checked={userRole === 'editor' || userRole === 'owner'}
                       onChange={() => handleToggleAccess(user.name)}
-                    ></Switch>
+                    />
                   )}
                   </div>
                 </td>

@@ -59,7 +59,6 @@ type DispatchProps = {
   handleSendReplInputToOutput?: (newOutput: string) => void;
   handleSetSharedbConnected?: (connected: boolean) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
-  setUsersArray: React.Dispatch<React.SetStateAction<SharedbAceUser[]>>;
 };
 
 type EditorStateProps = {
@@ -71,6 +70,7 @@ type EditorStateProps = {
   sourceVariant?: Variant;
   hooks?: EditorHook[];
   editorBinding?: EditorBinding;
+  setUsersArray?: React.Dispatch<React.SetStateAction<SharedbAceUser[]>>;
 };
 
 export type EditorTabStateProps = {

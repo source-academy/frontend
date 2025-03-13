@@ -264,7 +264,6 @@ const Sourcereel: React.FC = () => {
     editorVariant: sourcecastLocation,
     isFolderModeEnabled,
     activeEditorTabIndex,
-    setUsersArray: () => {},
     setActiveEditorTabIndex: editorContainerHandlers.setActiveEditorTabIndex,
     removeEditorTabByIndex: editorContainerHandlers.removeEditorTabByIndex,
     editorTabs: editorTabs.map(convertEditorTabStateToProps),

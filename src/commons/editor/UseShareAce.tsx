@@ -35,8 +35,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
   const { name, userId } = useSession();
 
   const updateUsers = (binding:any) => {
-    inProps.setUsersArray([binding.user, ...Object.values(binding.usersPresence.remotePresences).map((presence) => (presence as any).user)]);
-    console.log(...Object.values(binding.usersPresence.remotePresences));
+    inProps.setUsersArray?.([binding.user, ...Object.values(binding.usersPresence.remotePresences).map((presence) => (presence as any).user)]);
   }
 
   React.useEffect(() => {

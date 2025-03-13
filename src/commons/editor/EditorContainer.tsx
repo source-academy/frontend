@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 
 import SourcecastEditor, {
   SourceRecorderEditorProps
@@ -8,7 +8,6 @@ import { EditorTabState } from '../workspace/WorkspaceTypes';
 import { WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
 import Editor, { EditorProps, EditorTabStateProps } from './Editor';
 import EditorTabContainer from './tabs/EditorTabContainer';
-import { SharedbAceUser } from '@sourceacademy/sharedb-ace/distribution/types';
 
 type OwnProps = {
   baseFilePath?: string;
@@ -17,7 +16,6 @@ type OwnProps = {
   setActiveEditorTabIndex: (activeEditorTabIndex: number | null) => void;
   removeEditorTabByIndex: (editorTabIndex: number) => void;
   editorTabs: EditorTabStateProps[];
-  setUsersArray: Dispatch<SetStateAction<SharedbAceUser[]>>;
 };
 
 export type NormalEditorContainerProps = Omit<EditorProps, keyof EditorTabStateProps> &

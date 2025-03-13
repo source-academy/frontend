@@ -905,7 +905,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           editorVariant: 'normal',
           isFolderModeEnabled,
           activeEditorTabIndex,
-          setUsersArray: () => {},
           setActiveEditorTabIndex: editorContainerHandlers.setActiveEditorTabIndex,
           removeEditorTabByIndex: editorContainerHandlers.removeEditorTabByIndex,
           editorTabs: editorTabs.map(convertEditorTabStateToProps),

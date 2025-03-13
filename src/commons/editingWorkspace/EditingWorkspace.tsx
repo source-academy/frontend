@@ -653,7 +653,6 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
             editorVariant: 'normal',
             isFolderModeEnabled,
             activeEditorTabIndex,
-            setUsersArray: () => {},
             setActiveEditorTabIndex,
             removeEditorTabByIndex,
             editorTabs: editorTabs

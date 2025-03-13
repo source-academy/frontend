@@ -2,6 +2,7 @@ import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { HotkeyItem, useHotkeys } from '@mantine/hooks';
 import { AnyAction, Dispatch } from '@reduxjs/toolkit';
+import { SharedbAceUser } from '@sourceacademy/sharedb-ace/distribution/types';
 import { Ace, Range } from 'ace-builds';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
@@ -99,7 +100,6 @@ import {
   makeSubstVisualizerTabFrom,
   mobileOnlyTabIds
 } from './PlaygroundTabs';
-import { SharedbAceUser } from '@sourceacademy/sharedb-ace/distribution/types';
 
 export type PlaygroundProps = {
   isSicpEditor?: boolean;
@@ -500,6 +500,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       };
 
       pushLog(input);
+      console.log('newhere', chapter, variant)
 
       handleChapterSelect(chapter, variant);
       // Hardcoded for Playground only for now, while we await workspace refactoring
