@@ -69,7 +69,19 @@ const AdminPanel: React.FC = () => {
       moduleHelpText: session.moduleHelpText,
       isOfficialCourse: session.isOfficialCourse
     });
-  }, [session.courseName, session.courseShortName, session.enableAchievements, session.enableGame, session.enableSourcecast, session.enableStories, session.enableExamMode, session.moduleHelpText, session.isOfficialCourse, session.viewable, session.resumeCode]);
+  }, [
+    session.courseName,
+    session.courseShortName,
+    session.enableAchievements,
+    session.enableGame,
+    session.enableSourcecast,
+    session.enableStories,
+    session.enableExamMode,
+    session.moduleHelpText,
+    session.isOfficialCourse,
+    session.viewable,
+    session.resumeCode
+  ]);
 
   const tableRef = useRef<ImperativeAssessmentConfigPanel>(null);
   useEffect(() => {
@@ -96,6 +108,9 @@ const AdminPanel: React.FC = () => {
   // Handler to submit changes to Course Configration and Assessment Configuration to the backend.
   // Changes made to users are handled separately.
   const submitHandler = useCallback(() => {
+    // TODO: Implement
+    dispatch(SessionActions.validateResumeCode('123456789'));
+
     if (hasChangesCourseConfig) {
       dispatch(SessionActions.updateCourseConfig(courseConfiguration));
       setHasChangesCourseConfig(false);

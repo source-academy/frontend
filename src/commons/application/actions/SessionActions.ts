@@ -149,7 +149,8 @@ const SessionActions = createActions('session', {
   deleteUserCourseRegistration: (courseRegId: number) => ({ courseRegId }),
   updateCourseResearchAgreement: (agreedToResearch: boolean) => ({ agreedToResearch }),
   updateStoriesUserRole: (userId: number, role: StoriesRole) => ({ userId, role }),
-  deleteStoriesUserUserGroups: (userId: number) => ({ userId })
+  deleteStoriesUserUserGroups: (userId: number) => ({ userId }),
+  validateResumeCode: (resumeCode: string) => ({ resumeCode })
 });
 
 // For compatibility with existing code (actions helper)

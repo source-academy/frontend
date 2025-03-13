@@ -201,6 +201,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
               }
             />
           )}
+          {enableExamMode && (
           <FormGroup
             // helperText="Please enter the course resume code. Students who attempt to use the DevTool will be asked this code to continue their session."
             inline={true}
@@ -218,6 +219,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
               }
             />
           </FormGroup>
+          )}
         </div>
       </div>
     </div>
