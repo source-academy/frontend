@@ -115,7 +115,7 @@ export class CseAnimation {
         break;
       case 'SpreadElement':
         CseAnimation.animations.push(
-          new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems()),
+          new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())
         );
         break;
       case 'AssignmentExpression':
@@ -285,31 +285,35 @@ export class CseAnimation {
         case InstrType.SPREAD:
           const prevcontrol = Layout.previousControlComponent.stackItemComponents;
           const control = Layout.controlComponent.stackItemComponents;
-          const array = Layout.previousStashComponent.stashItemComponents.at(-1)!.arrow!.target! as ArrayValue;
+          const array = Layout.previousStashComponent.stashItemComponents.at(-1)!.arrow!
+            .target! as ArrayValue;
 
           console.log(array);
 
           let currCallInstr;
           let prevCallInstr;
-      
-          
 
           for (let i = 0; control.at(-i) != undefined; i++) {
-            if (control.at(-i)?.text.includes("call ")) { // find call instr above 
+            if (control.at(-i)?.text.includes('call ')) {
+              // find call instr above
               currCallInstr = control.at(-i);
               break;
             }
           }
 
           for (let i = 0; prevcontrol.at(-i) != undefined; i++) {
-            if (prevcontrol.at(-i)?.text.includes("call ")) { // find call instr above 
+            if (prevcontrol.at(-i)?.text.includes('call ')) {
+              // find call instr above
               prevCallInstr = prevcontrol.at(-i);
               break;
             }
           }
 
-          const resultItems = array.data.length !== 0 ? Layout.stashComponent.stashItemComponents.slice(-array.data.length) : [];
-          
+          const resultItems =
+            array.data.length !== 0
+              ? Layout.stashComponent.stashItemComponents.slice(-array.data.length)
+              : [];
+
           CseAnimation.animations.push(
             new ArraySpreadAnimation(
               lastControlComponent,
@@ -318,7 +322,6 @@ export class CseAnimation {
               currCallInstr!,
               prevCallInstr!
             )
-            
           );
           break;
         case InstrType.ARRAY_LENGTH:

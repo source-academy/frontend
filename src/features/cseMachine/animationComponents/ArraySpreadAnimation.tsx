@@ -45,35 +45,34 @@ export class ArraySpreadAnimation extends Animatable {
     this.endX = stashItem!.x() + stashItem!.width();
     this.controlInstrAnimation = new AnimatedTextbox(
       controlInstrItem.text,
-      getNodePosition(controlInstrItem), 
+      getNodePosition(controlInstrItem),
       { rectProps: { stroke: defaultActiveColor() } }
     );
     this.stashItemAnimation = new AnimatedTextbox(stashItem.text, getNodePosition(stashItem), {
-        rectProps: {
-          stroke: defaultDangerColor()
-        }
-      });
+      rectProps: {
+        stroke: defaultDangerColor()
+      }
+    });
 
     // call instr above
     this.prevCallInstrAnimation = new AnimatedTextbox(
       this.prevCallInstrItem.text,
-      { ...getNodePosition(this.prevCallInstrItem),
-        opacity: 0 },
+      { ...getNodePosition(this.prevCallInstrItem), opacity: 0 },
       { rectProps: { stroke: defaultActiveColor() } }
     );
 
     this.currCallInstrAnimation = new AnimatedTextbox(
       this.currCallInstrItem.text,
-      { ...getNodePosition(this.currCallInstrItem),
-        opacity: 0 },
+      { ...getNodePosition(this.currCallInstrItem), opacity: 0 },
       { rectProps: { stroke: defaultActiveColor() } }
     );
 
     this.resultAnimations = resultItems.map(item => {
       return new AnimatedTextbox(item.text, {
-      ...getNodePosition(item),
-      opacity: 0
-    })});
+        ...getNodePosition(item),
+        opacity: 0
+      });
+    });
     if (stashItem.arrow) {
       this.arrowAnimation = new AnimatedGenericArrow(stashItem.arrow, { opacity: 0 });
     }
@@ -103,10 +102,8 @@ export class ArraySpreadAnimation extends Animatable {
     const fadeDuration = ((animationConfig?.duration ?? 1) * 3) / 4;
     const fadeInDelay = (animationConfig?.delay ?? 0) + (animationConfig?.duration ?? 1) / 4;
 
-
     // Move spread instruction next to stash item (array pointer)
     await Promise.all([
-
       // Show change in call arity
       this.prevCallInstrAnimation.animateTo(
         { scaleX: 1.1, scaleY: 1.1, opacity: 0 },
@@ -118,34 +115,23 @@ export class ArraySpreadAnimation extends Animatable {
         { duration: 0.3, easing: Easings.StrongEaseOut }
       ),
 
-
-
       ...this.resultAnimations.flatMap(a => [
-
-      a.animateTo(
-        { x: startX + (this.endX - startX) / 2 - this.resultItems[0]?.width() / 2 },
-        { duration: 0 }
-      )
-    ]),
+        a.animateTo(
+          { x: startX + (this.endX - startX) / 2 - this.resultItems[0]?.width() / 2 },
+          { duration: 0 }
+        )
+      ]),
       this.controlInstrAnimation.animateRectTo({ stroke: defaultStrokeColor() }, animationConfig),
       this.controlInstrAnimation.animateTo(
         {
           x: startX,
-          y:
-            resultY +
-               (this.resultItems[0]?.height() ?? this.stashItem.height()),
+          y: resultY + (this.resultItems[0]?.height() ?? this.stashItem.height()),
           width: minInstrWidth
         },
         animationConfig
       ),
       this.stashItemAnimation.animateRectTo({ stroke: defaultDangerColor() }, animationConfig)
-      
     ]);
-
- 
-
-
-
 
     animationConfig = { ...animationConfig, delay: 0 };
     // Merge all elements together to form the result
@@ -156,19 +142,20 @@ export class ArraySpreadAnimation extends Animatable {
         { ...animationConfig, duration: fadeDuration }
       ),
       this.stashItemAnimation.animateTo({ x: resultX(0) }, animationConfig),
-      this.stashItemAnimation.animateTo({ opacity: 0 }, { ...animationConfig, duration: fadeDuration }),
+      this.stashItemAnimation.animateTo(
+        { opacity: 0 },
+        { ...animationConfig, duration: fadeDuration }
+      ),
 
       ...this.resultAnimations.flatMap((a, idx) => [
         a.animateTo({ x: resultX(idx) }, animationConfig),
         a.animateRectTo({ stroke: defaultDangerColor() }, animationConfig),
-      a.animateTo(
-        { opacity: 1 },
-        { ...animationConfig, duration: fadeDuration, delay: fadeInDelay }
-      ),
-      ]),
-
+        a.animateTo(
+          { opacity: 1 },
+          { ...animationConfig, duration: fadeDuration, delay: fadeInDelay }
+        )
+      ])
     ]);
-
 
     this.destroy();
   }
