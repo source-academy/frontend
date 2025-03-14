@@ -8,14 +8,11 @@ import {
 import * as Sentry from '@sentry/browser';
 import sharedbAce from '@sourceacademy/sharedb-ace';
 import SharedbAceBinding from '@sourceacademy/sharedb-ace/distribution/sharedb-ace-binding';
-import React, { useCallback } from 'react';
+import { CollabEditingAccess } from '@sourceacademy/sharedb-ace/distribution/types';
+import React from 'react';
 
 import { getLanguageConfig } from '../application/ApplicationTypes';
-import {
-  CollabEditingAccess,
-  getDocInfoFromSessionId,
-  getSessionUrl
-} from '../collabEditing/CollabEditingHelper';
+import { getDocInfoFromSessionId, getSessionUrl } from '../collabEditing/CollabEditingHelper';
 import { parseModeString } from '../utils/AceHelper';
 import { useSession } from '../utils/Hooks';
 import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
@@ -36,18 +33,6 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
   const { editorSessionId, sessionDetails } = inProps;
   const { name, userId } = useSession();
-
-  const updateUsers = useCallback(
-    (binding: SharedbAceBinding) => {
-      inProps.setUsersArray?.([
-        binding.user,
-        ...Object.values(binding.usersPresence.remotePresences).map(
-          presence => (presence as any).user
-        )
-      ]);
-    },
-    [inProps.setUsersArray]
-  );
 
   React.useEffect(() => {
     if (!editorSessionId || !sessionDetails) {
@@ -89,6 +74,10 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       namespace: 'sa'
     });
 
+    const updateUsers = (binding: SharedbAceBinding) => {
+      inProps.setUsersArray?.([binding.user, ...Object.values(binding.connectedUsers)]);
+    };
+
     const shareAceReady = () => {
       if (!sessionDetails) {
         return;
@@ -103,8 +92,6 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
         },
         {
           languageSelectHandler: (language: string) => {
-            // TODO: Changing of language only works once right now
-            // most likely due to editor changing between renders
             // TODO: Consider using useTypedSelector instead
             const { chapter, variant } = parseModeString(language);
             inProps.updateLanguageCallback?.(getLanguageConfig(chapter, variant), null);
@@ -116,6 +103,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       // Disables editor in a read-only session
       editor.setReadOnly(sessionDetails.readOnly);
 
+      // TODO: This repeatedly shows up when switching between tabs
       showSuccessMessage(
         `You have joined a session as ${sessionDetails.readOnly ? 'a viewer' : 'an editor'}.`
       );
@@ -174,9 +162,6 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       // Resets editor to normal after leaving the session
       editor.setReadOnly(false);
 
-      // Resets users Array
-      ShareAce.usersPresence.off('receive', () => inProps.setUsersArray?.([]));
-
       // Removes all cursors
       cursorManager.removeAll();
 
@@ -192,7 +177,6 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
     reactAceRef,
     userId,
     name,
-    updateUsers,
     inProps.setUsersArray,
     inProps.updateLanguageCallback
   ]);

@@ -110,7 +110,7 @@ export const parseModeString = (
       if (!matches) {
         throw new Error('Invalid modeString');
       }
-      const [chapter, variant, externalLibraryName] = matches;
+      const [_, chapter, variant, externalLibraryName] = matches;
       return {
         chapter:
           chapter === '1'

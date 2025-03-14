@@ -132,7 +132,10 @@ export class ControlBarSessionButtons extends React.PureComponent<
         inheritDarkTheme={false}
         content={inviteButtonPopoverContent}
       >
-        <ControlButton label="Invite" icon={IconNames.GRAPH} />
+        <ControlButton
+          label={this.props.editorSessionId ? 'Invite' : 'Create'}
+          icon={IconNames.GRAPH}
+        />
       </Popover>
     );
 
