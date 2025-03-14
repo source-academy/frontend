@@ -1,16 +1,6 @@
 import 'js-slang/dist/editors/ace/theme/source';
 
-import {
-  Button,
-  ButtonGroup,
-  Callout,
-  Card,
-  Classes,
-  Divider,
-  Popover,
-  Pre,
-  Slider
-} from '@blueprintjs/core';
+import { Button, ButtonGroup, Card, Classes, Divider, Pre, Slider } from '@blueprintjs/core';
 import { getHotkeyHandler, HotkeyItem } from '@mantine/hooks';
 import classNames from 'classnames';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
@@ -19,7 +9,19 @@ import { useDispatch } from 'react-redux';
 
 import { beginAlertSideContent } from '../SideContentActions';
 import { SideContentLocation, SideContentType } from '../SideContentTypes';
-import { IStepperPropContents, toStringWithMarker } from 'js-slang/dist/stepper/stepperV2';
+import { IStepperPropContents } from 'js-slang/dist/stepper/stepperV2';
+import { StepperBaseNode } from 'js-slang/dist/stepper/stepperV2/interface';
+import { StepperLiteral } from 'js-slang/dist/stepper/stepperV2/nodes/Expression/Literal';
+import { StepperUnaryExpression } from 'js-slang/dist/stepper/stepperV2/nodes/Expression/UnaryExpression';
+import { StepperBinaryExpression } from 'js-slang/dist/stepper/stepperV2/nodes/Expression/BinaryExpression';
+import { StepperProgram } from 'js-slang/dist/stepper/stepperV2/nodes/Program';
+import { StepperBlockStatement } from 'js-slang/dist/stepper/stepperV2/nodes/Statement/BlockStatement';
+import { StepperIdentifier } from 'js-slang/dist/stepper/stepperV2/nodes/Expression/Identifier';
+import { StepperExpressionStatement } from 'js-slang/dist/stepper/stepperV2/nodes/Statement/ExpressionStatement';
+import {
+  StepperVariableDeclaration,
+  StepperVariableDeclarator
+} from 'js-slang/dist/stepper/stepperV2/nodes/Statement/VariableDeclaration';
 
 const SubstDefaultText = () => {
   return (
@@ -72,6 +74,7 @@ type SubstVisualizerPropsAST = {
 };
 
 const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
+  console.log(props);
   const [stepValue, setStepValue] = useState(1);
   const lastStepValue = props.content.length;
   const hasRunCode = lastStepValue !== 0;
@@ -82,7 +85,6 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
   );
   // set source mode as 2
   useEffect(() => {
-    
     HighlightRulesSelector(2);
     ModeSelector(2);
   }, []);
@@ -119,7 +121,13 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
   const getExplanation = useCallback(
     (value: number): string => {
       const contIndex = value <= lastStepValue ? value - 1 : 0;
-      return props.content[contIndex][2];
+      // Right now, prioritize the first marker
+      const markers = props.content[contIndex].markers;
+      if (markers === undefined) {
+        return '...';
+      } else {
+        return markers[0].explanation ?? '...';
+      }
     },
     [lastStepValue, props.content]
   );
@@ -173,104 +181,109 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
 };
 
 /////////////////////////////////// Custom AST Renderer for Stepper //////////////////////////////////
-// Iterative solution: get marked position for custom markers
-// Normally, this will be handled using ACEEditor
-function CustomASTRenderer(props: IStepperPropContents) {
-  const getStringWithMarker = useCallback(() => {
-    return toStringWithMarker(props);
-  }, [props]);
-  return (
-    <div className="stepper-display">
-      {getStringWithMarker().map(content => (
-        <span className={content['className'] + "Marker"}>{content['text']}</span>
-      ))}
-    </div>
-  );
-}
-
-/*
-function StepperDisplayer(props: IStepperPropContents) {
-  const getNodeType = useCallback(
-    (node: StepperExpression): string => {
-      if (props[1] === node && props[2] === 'before') {
-        return 'beforeMarker';
+function CustomASTRenderer(props: IStepperPropContents): React.ReactNode {
+  function renderNode(node: StepperBaseNode): React.ReactNode {
+    const wrapMarkerStyle = (renderNode: React.ReactNode): React.ReactNode => {
+      if (props.markers === undefined) {
+        return renderNode;
       }
-      if (props[1] === node && props[2] === 'after') {
-        return 'afterMarker';
-      }
-      return '';
-    },
-    [props]
-  );
-
-  // TODO: Move this logic from frontend to js-slang
-  const convertNode = useCallback(
-    (node: StepperExpression): React.ReactNode => {
-      const convertors = {
-        Literal(node: StepperLiteral) {
-          return <span className="stepper-literal">{node.value}</span>;
-        },
-        UnaryExpression(node: StepperUnaryExpression) {
-          return (
-            <span>
-              <span className="stepper-operator">{` ${node.operator}`}</span>
-              {convertNode(node.argument)}
-            </span>
-          );
-        },
-        BinaryExpression(node: StepperBinaryExpression) {
-          return (
-            <span>
-              {convertNode(node.left)}
-              <span className="stepper-operator">{` ${node.operator} `}</span>
-              {convertNode(node.right)}
-            </span>
-          );
+      var returnNode = <span>{renderNode}</span>;
+      props.markers.forEach(marker => {
+        if (marker.redex === node) {
+          returnNode = <span className={marker.redexType}>{returnNode}</span>;
         }
-      };
-      const convertor = convertors[node.type];
-      // @ts-expect-error node actually has type StepperExpression
-      const converted = convertor(node);
-      if (getNodeType(node) === '') {
-        return <span>{converted}</span>;
-      } else {
+      });
+      return returnNode;
+    };
+
+    const renderers = {
+      Literal(node: StepperLiteral) {
+        return <span className="stepper-literal">{node.value}</span>;
+      },
+      Identifier(node: StepperIdentifier) {
+        return <span>{node.name}</span>;
+      },
+      UnaryExpression(node: StepperUnaryExpression) {
         return (
-          <span className={getNodeType(node)}>
-            <Popover
-              interactionKind="hover"
-              placement="bottom"
-              minimal={true}
-              content={
-                <div className=".bp5-running-text {{.modifier}}">
-                  <Callout
-                    title={node.type}
-                    icon="function"
-                    intent={getNodeType(node) === 'beforeMarker' ? 'warning' : 'success'}
-                  >
-                    <div>
-                      <span>{'Contraction rule '}</span>
-                      <code className="bp5-code">
-                        {getNodeType(node) === 'beforeMarker' ? 'E1 -> E2' : 'finished'}
-                      </code>
-                    </div>
-                  </Callout>
-                </div>
-              }
-            >
-              {converted}
-            </Popover>
+          <span>
+            <span className="stepper-operator">{` ${node.operator}`}</span>
+            {renderNode(node.argument)}
+          </span>
+        );
+      },
+      BinaryExpression(node: StepperBinaryExpression) {
+        // TODO: check precedence
+        return (
+          <span>
+            {renderNode(node.left)}
+            <span className="stepper-operator">{` ${node.operator} `}</span>
+            {renderNode(node.right)}
+          </span>
+        );
+      },
+      Program(node: StepperProgram) {
+        return (
+          <span>
+            {node.body.map(ast => (
+              <div>{renderNode(ast)}</div>
+            ))}
+          </span>
+        );
+      },
+      BlockStatement(node: StepperBlockStatement) {
+        return (
+          <span>
+            {'{'}
+            {node.body.map(ast => (
+              <div style={{marginLeft: '15px'}}>
+                {renderNode(ast)}
+              </div>
+            ))}
+            {'}'}
+          </span>
+        );
+      },
+      ExpressionStatement(node: StepperExpressionStatement) {
+        return (
+          <span>
+            {renderNode(node.expression)}
+            {';'}
+          </span>
+        );
+      },
+      VariableDeclaration(node: StepperVariableDeclaration) {
+        return (
+          <span>
+            <span className="stepper-identifier">{node.kind} </span>
+            {node.declarations.map((ast, idx) => (
+              <span>
+                {idx !== 0 && ', '}
+                {renderNode(ast)}
+              </span>
+            ))}
+            {';'}
+          </span>
+        );
+      },
+      VariableDeclarator(node: StepperVariableDeclarator) {
+        return (
+          <span>
+            {renderNode(node.id)}
+            {' = '}
+            {node.init ? renderNode(node.init) : 'undefined'}
           </span>
         );
       }
-    },
-    [props, getNodeType]
-  );
+    };
 
-  const getConvertedNode = useCallback((): React.ReactNode => {
-    return convertNode(props[0]);
-  }, [props, convertNode]);
-
-  return <div className="stepper-display">{getConvertedNode()}</div>;
+    // @ts-ignore
+    const renderer = renderers[node.type];
+    return renderer ? wrapMarkerStyle(renderer(node)) : '...';
+  }
+  const getDisplayedNode = useCallback((): React.ReactNode => {
+    return renderNode(props.ast);
+  }, [props]);
+  return <div className="stepper-display">{getDisplayedNode()}</div>;
 }
-*/
+
 export default SideContentSubstVisualizer;
