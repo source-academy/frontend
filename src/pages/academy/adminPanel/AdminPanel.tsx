@@ -109,8 +109,12 @@ const AdminPanel: React.FC = () => {
   // Changes made to users are handled separately.
   const submitHandler = useCallback(() => {
     if (hasChangesCourseConfig) {
-      dispatch(SessionActions.updateCourseConfig(courseConfiguration));
-      setHasChangesCourseConfig(false);
+      if (courseConfiguration.enableExamMode && courseConfiguration.resumeCode == '') {
+        alert('Resume code cannot be empty when exam mode is enabled');
+      } else {
+        dispatch(SessionActions.updateCourseConfig(courseConfiguration));
+        setHasChangesCourseConfig(false);
+      }
     }
     const tableState = tableRef.current?.getData() ?? [];
     const currentConfigs = session.assessmentConfigurations ?? [];
