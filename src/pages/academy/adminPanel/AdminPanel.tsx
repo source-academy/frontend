@@ -108,9 +108,6 @@ const AdminPanel: React.FC = () => {
   // Handler to submit changes to Course Configration and Assessment Configuration to the backend.
   // Changes made to users are handled separately.
   const submitHandler = useCallback(() => {
-    // TODO: Implement
-    dispatch(SessionActions.validateResumeCode('123456789'));
-
     if (hasChangesCourseConfig) {
       dispatch(SessionActions.updateCourseConfig(courseConfiguration));
       setHasChangesCourseConfig(false);
