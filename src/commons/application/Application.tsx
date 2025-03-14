@@ -172,20 +172,18 @@ const Application: React.FC = () => {
   };
 
   return (
-    <>
+    <WorkspaceSettingsContext.Provider value={[workspaceSettings, setWorkspaceSettings]}>
       {pauseAcademy ? (
         <PauseAcademyOverlay reason={pauseAcademyReason} onSubmit={resumeCodeSubmitHandler} />
       ) : (
-        <WorkspaceSettingsContext.Provider value={[workspaceSettings, setWorkspaceSettings]}>
-          <div className="Application">
-            <NavigationBar />
-            <div className="Application__main">
-              <Outlet />
-            </div>
+        <div className="Application">
+          <NavigationBar />
+          <div className="Application__main">
+            <Outlet />
           </div>
-        </WorkspaceSettingsContext.Provider>
+        </div>
       )}
-    </>
+    </WorkspaceSettingsContext.Provider>
   );
 };
 
