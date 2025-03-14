@@ -103,7 +103,6 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       // Disables editor in a read-only session
       editor.setReadOnly(sessionDetails.readOnly);
 
-      // TODO: This repeatedly shows up when switching between tabs
       showSuccessMessage(
         `You have joined a session as ${sessionDetails.readOnly ? 'a viewer' : 'an editor'}.`
       );

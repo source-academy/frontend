@@ -83,14 +83,14 @@ export const parseModeString = (
       };
     case 'python':
       return {
-        chapter: Chapter.FULL_PYTHON,
+        chapter: Chapter.PYTHON_1,
         variant: Variant.DEFAULT,
         library: ExternalLibraryName.NONE
       };
     case 'scheme':
       return {
         chapter: Chapter.FULL_SCHEME,
-        variant: Variant.DEFAULT,
+        variant: Variant.EXPLICIT_CONTROL,
         library: ExternalLibraryName.NONE
       };
     case 'java':

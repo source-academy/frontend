@@ -483,6 +483,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     usingRemoteExecution
   ]);
 
+  // TODO: This changes because selectedTab changes
+  // Figure out a way to pass this function while still keeping selectedTab
   const chapterSelectHandler = useCallback(
     (sublanguage: SALanguage, e: any) => {
       const { chapter, variant } = sublanguage;
