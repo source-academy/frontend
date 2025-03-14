@@ -164,7 +164,7 @@ const Application: React.FC = () => {
   }, [enableExamMode]);
 
   const resumeCodeSubmitHandler = (resumeCode: string) => {
-    if (resumeCode == '') {
+    if (!resumeCode || resumeCode.length === 0) {
       alert('Resume code cannot be empty');
     } else {
       dispatch(SessionActions.validateResumeCode(resumeCode, setPauseAcademy));
