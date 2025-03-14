@@ -29,6 +29,8 @@ const defaultCourseConfig: UpdateCourseConfiguration = {
   enableAchievements: true,
   enableSourcecast: true,
   enableStories: false,
+  enableExamMode: false,
+  resumeCode: '',
   moduleHelpText: ''
 };
 
@@ -62,7 +64,10 @@ const AdminPanel: React.FC = () => {
       enableAchievements: session.enableAchievements,
       enableSourcecast: session.enableSourcecast,
       enableStories: session.enableStories,
-      moduleHelpText: session.moduleHelpText
+      enableExamMode: session.enableExamMode,
+      resumeCode: session.resumeCode,
+      moduleHelpText: session.moduleHelpText,
+      isOfficialCourse: session.isOfficialCourse
     });
   }, [
     session.courseName,
@@ -71,8 +76,11 @@ const AdminPanel: React.FC = () => {
     session.enableGame,
     session.enableSourcecast,
     session.enableStories,
+    session.enableExamMode,
     session.moduleHelpText,
-    session.viewable
+    session.isOfficialCourse,
+    session.viewable,
+    session.resumeCode
   ]);
 
   const tableRef = useRef<ImperativeAssessmentConfigPanel>(null);
@@ -101,8 +109,15 @@ const AdminPanel: React.FC = () => {
   // Changes made to users are handled separately.
   const submitHandler = useCallback(() => {
     if (hasChangesCourseConfig) {
-      dispatch(SessionActions.updateCourseConfig(courseConfiguration));
-      setHasChangesCourseConfig(false);
+      if (
+        courseConfiguration.enableExamMode &&
+        (!courseConfiguration.resumeCode || courseConfiguration.resumeCode.length === 0)
+      ) {
+        alert('Resume code cannot be empty when exam mode is enabled');
+      } else {
+        dispatch(SessionActions.updateCourseConfig(courseConfiguration));
+        setHasChangesCourseConfig(false);
+      }
     }
     const tableState = tableRef.current?.getData() ?? [];
     const currentConfigs = session.assessmentConfigurations ?? [];

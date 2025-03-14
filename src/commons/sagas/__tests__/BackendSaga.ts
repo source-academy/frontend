@@ -133,10 +133,13 @@ const mockCourseConfiguration1: CourseConfiguration = {
   enableAchievements: true,
   enableSourcecast: true,
   enableStories: false,
+  enableExamMode: false,
   sourceChapter: Chapter.SOURCE_1,
   sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
-  assetsPrefix: ''
+  assetsPrefix: '',
+  isOfficialCourse: false,
+  resumeCode: ''
 };
 
 const mockCourseRegistration2: CourseRegistration = {
@@ -164,10 +167,13 @@ const mockCourseConfiguration2: CourseConfiguration = {
   enableAchievements: true,
   enableSourcecast: true,
   enableStories: false,
+  enableExamMode: false,
   sourceChapter: Chapter.SOURCE_4,
   sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
-  assetsPrefix: ''
+  assetsPrefix: '',
+  isOfficialCourse: false,
+  resumeCode: ''
 };
 
 const mockAssessmentConfigurations: AssessmentConfiguration[] = [
@@ -930,10 +936,13 @@ describe('Test UPDATE_COURSE_CONFIG action', () => {
     enableAchievements: false,
     enableSourcecast: false,
     enableStories: false,
+    enableExamMode: false,
     sourceChapter: Chapter.SOURCE_4,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help',
-    assetsPrefix: ''
+    assetsPrefix: '',
+    isOfficialCourse: false,
+    resumeCode: ''
   };
 
   test('when course config is changed', () => {
@@ -1028,9 +1037,12 @@ describe('Test CREATE_COURSE action', () => {
     enableAchievements: true,
     enableSourcecast: true,
     enableStories: false,
+    enableExamMode: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
-    moduleHelpText: 'Help Text'
+    moduleHelpText: 'Help Text',
+    isOfficialCourse: false,
+    resumeCode: ''
   };
   const user = mockUser;
   const courseConfiguration = mockCourseConfiguration1;

@@ -1397,6 +1397,20 @@ export const removeUserCourseRegistration = async (
 };
 
 /**
+ * POST /courses/{course_Id}/resume_code
+ */
+export const validateResumeCode = async (tokens: Tokens, resumeCode: string): Promise<boolean> => {
+  const resp = await request(`${courseId()}/resume_code`, 'POST', {
+    ...tokens,
+    body: {
+      resume_code: resumeCode
+    }
+  });
+
+  return resp != null && resp.ok;
+};
+
+/**
  * GET /devices
  */
 export async function fetchDevices(tokens: Tokens): Promise<Device | null> {

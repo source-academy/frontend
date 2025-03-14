@@ -373,10 +373,13 @@ export const mockCourseConfigurations: CourseConfiguration[] = [
     enableAchievements: true,
     enableSourcecast: true,
     enableStories: false,
+    enableExamMode: false,
+    resumeCode: '',
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: '',
-    assetsPrefix: ''
+    assetsPrefix: '',
+    isOfficialCourse: false
   },
   {
     courseName: `CS2040S Data Structures and Algorithms (AY20/21 Sem 2)`,
@@ -386,10 +389,13 @@ export const mockCourseConfigurations: CourseConfiguration[] = [
     enableAchievements: false,
     enableSourcecast: false,
     enableStories: false,
+    enableExamMode: false,
+    resumeCode: '',
     sourceChapter: Chapter.SOURCE_2,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help Text!',
-    assetsPrefix: ''
+    assetsPrefix: '',
+    isOfficialCourse: false
   }
 ];
 
