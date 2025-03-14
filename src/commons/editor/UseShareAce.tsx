@@ -75,7 +75,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
     });
 
     const updateUsers = (binding: SharedbAceBinding) => {
-      inProps.setUsersArray?.([binding.user, ...Object.values(binding.connectedUsers)]);
+      inProps.setUsers?.(binding.connectedUsers);
     };
 
     const shareAceReady = () => {
@@ -177,7 +177,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
     reactAceRef,
     userId,
     name,
-    inProps.setUsersArray,
+    inProps.setUsers,
     inProps.updateLanguageCallback
   ]);
 };

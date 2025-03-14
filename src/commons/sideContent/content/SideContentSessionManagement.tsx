@@ -3,44 +3,48 @@
 // import { SessionUser } from '../SideContentTypes';
 // import SideContentRoleSelector from './SideContentRoleSelector';
 import { Classes, HTMLTable, Switch } from '@blueprintjs/core';
-import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/distribution/types';
-import React, { useMemo, useState } from 'react';
+import { CollabEditingAccess, SharedbAceUser } from '@sourceacademy/sharedb-ace/distribution/types';
+import React, { useState } from 'react';
 
 type Props = {
-  usersArray: SharedbAceUser[];
-  canManage: boolean;
+  users: Record<string, SharedbAceUser>;
 };
 
-const SideContentSessionManagement: React.FC<Props> = ({ usersArray, canManage = true }) => {
+const SideContentSessionManagement: React.FC<Props> = ({ users }) => {
+  const [toggling, _setToggling] = useState<{ [key: string]: boolean }>({});
 
-  const [usersAccessLevel, setUsersAccessLevel] = useState<{ id: string; role: string }[]>([]);
-  const [toggling, setToggling] = useState<{ [key: string]: boolean }>({});
+  // TODO: KX WIP
+  // const handleToggleAccess = async (id: string) => {
+  //   if (toggling[id]) return;
 
-  const handleToggleAccess = async (id: string) => {
-    if (toggling[id]) return;
-    
-    setToggling(prev => ({ ...prev, [id]: true }));
-    
-    const newLevels = usersAccessLevel.map(user =>
-      user.id === id ? { ...user, role: user.role === 'editor' ? 'viewer' : 'editor' } : user
-    );
-    setUsersAccessLevel(newLevels);
-    
-    try {
-      await updateBinding(id, newLevels.find(user => user.id === id)?.role || 'viewer');
-    } finally {
-      setToggling(prev => ({ ...prev, [id]: false }));
-    }
-  };
+  //   setToggling(prev => ({ ...prev, [id]: true }));
 
-  useMemo(() => {
-    const usersLevels = usersArray.map(user => ({
-      id: user.color,
-      role : user.role
-    }));
-    setUsersAccessLevel(usersLevels);
-  }, [usersArray]);
+  //   const newLevels = usersAccessLevel.map(user =>
+  //     user.id === id
+  //       ? {
+  //           ...user,
+  //           role:
+  //             user.role === CollabEditingAccess.EDITOR
+  //               ? CollabEditingAccess.VIEWER
+  //               : CollabEditingAccess.EDITOR
+  //         }
+  //       : user
+  //   );
+  //   setUsersAccessLevel(newLevels);
 
+  //   try {
+  //     await updateBinding(
+  //       id,
+  //       newLevels.find(user => user.id === id)?.role || CollabEditingAccess.VIEWER
+  //     );
+  //   } finally {
+  //     setToggling(prev => ({ ...prev, [id]: false }));
+  //   }
+  // };
+
+  const myself = Object.values(users)[0];
+
+  // TODO: Split return type into admin view and normal view, based on myself
   return (
     <div
       style={{
@@ -64,31 +68,55 @@ const SideContentSessionManagement: React.FC<Props> = ({ usersArray, canManage =
         </thead>
         <tbody>
           <tr>
-            <td></td>
-            <td></td>
+            <td />
+            <td />
           </tr>
-          {usersArray.map((user, index) => {
-            const userRole = usersAccessLevel.find(u => u.id === user.color)?.role || 'viewer';
+          {Object.values(users).map((user, index) => {
             return (
               <tr key={user.color}>
                 <td
-                  style={{ verticalAlign: 'middle', display: 'flex', gap: '1em', alignItems: 'center' }}
+                  style={{
+                    verticalAlign: 'middle',
+                    display: 'flex',
+                    gap: '1em',
+                    alignItems: 'center'
+                  }}
                   className={Classes.INTERACTIVE}
                 >
-                  <div style={{ width: '15px', height: '15px', borderRadius: '50%', backgroundColor: index === 0 ? '#ced9e0' : user.color }} />
+                  <div
+                    style={{
+                      width: '15px',
+                      height: '15px',
+                      borderRadius: '50%',
+                      backgroundColor: index === 0 ? '#ced9e0' : user.color
+                    }}
+                  />
                   <div>{user.name}</div>
                 </td>
                 <td style={{ textAlign: 'end' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                    {usersArray[0].role === 'owner' && (
-                    <Switch
-                      labelElement={userRole === 'owner' ? 'Admin' : userRole === 'editor' ? 'Editor' : 'Viewer'}
-                      disabled={usersArray[0].role !== 'owner' || toggling[user.name] || userRole === 'owner'}
-                      alignIndicator="right"
-                      checked={userRole === 'editor' || userRole === 'owner'}
-                      onChange={() => handleToggleAccess(user.name)}
-                    />
-                  )}
+                  <div
+                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}
+                  >
+                    {myself.role === CollabEditingAccess.OWNER && (
+                      <Switch
+                        labelElement={
+                          user.role === CollabEditingAccess.OWNER
+                            ? 'Admin'
+                            : user.role.toUpperCase()
+                        }
+                        disabled={
+                          myself.role !== CollabEditingAccess.OWNER ||
+                          toggling[user.name] ||
+                          user.role === CollabEditingAccess.OWNER
+                        }
+                        alignIndicator="right"
+                        checked={
+                          user.role === CollabEditingAccess.EDITOR ||
+                          user.role === CollabEditingAccess.OWNER
+                        }
+                        // onChange={() => handleToggleAccess(user.name)}
+                      />
+                    )}
                   </div>
                 </td>
               </tr>
@@ -102,7 +130,6 @@ const SideContentSessionManagement: React.FC<Props> = ({ usersArray, canManage =
 
 export default SideContentSessionManagement;
 
-async function updateBinding(id: string, newRole: string) {
-  return new Promise(resolve => setTimeout(resolve, 500));
-}
-
+// async function updateBinding(id: string, newRole: string) {
+//   return new Promise(resolve => setTimeout(resolve, 500));
+// }

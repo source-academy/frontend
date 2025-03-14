@@ -288,7 +288,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       chapter: playgroundSourceChapter
     })
   );
-  const [usersArray, setUsersArray] = useState<SharedbAceUser[]>([]);
+  // TODO: Change this to use dispatch instead
+  const [users, setUsers] = useState<Record<string, SharedbAceUser>>({});
 
   // Playground hotkeys
   const [isGreen, setIsGreen] = useState(false);
@@ -304,8 +305,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
   );
 
   const sessionManagementTab: SideContentTab = useMemo(() => {
-    return makeSessionManagementTabFrom(usersArray, true);
-  }, [usersArray]);
+    return makeSessionManagementTabFrom(users);
+  }, [users]);
 
   const usingRemoteExecution =
     useTypedSelector(state => !!state.session.remoteExecutionSession) && !isSicpEditor;
@@ -778,7 +779,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     shouldShowSubstVisualizer,
     remoteExecutionTab,
     editorSessionId,
-    usersArray
+    users
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
@@ -923,7 +924,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sourceVariant: languageConfig.variant,
     handleEditorValueChange: onEditorValueChange,
     handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
-    setUsersArray,
+    setUsers,
     updateLanguageCallback: chapterSelectHandler
   };
 

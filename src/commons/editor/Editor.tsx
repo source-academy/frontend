@@ -72,7 +72,7 @@ type EditorStateProps = {
   sourceVariant?: Variant;
   hooks?: EditorHook[];
   editorBinding?: EditorBinding;
-  setUsersArray?: React.Dispatch<React.SetStateAction<SharedbAceUser[]>>;
+  setUsers?: React.Dispatch<React.SetStateAction<Record<string, SharedbAceUser>>>;
   // TODO: Handle changing of external library
   updateLanguageCallback?: (sublanguage: SALanguage, e: any) => void
 };
@@ -352,7 +352,6 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   // Refs for things that technically shouldn't change... but just in case.
   const handleEditorUpdateBreakpointsRef = React.useRef(props.handleEditorUpdateBreakpoints);
   const handlePromptAutocompleteRef = React.useRef(props.handlePromptAutocomplete);
-  // const readOnly = props.usersArray[0]?.role !== 'owner' && props.usersArray[0]?.role !== 'editor';
 
   const editor = reactAceRef.current?.editor;
   // Set edit session history when switching to another editor tab.
@@ -365,22 +364,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
       // See AceHelper#selectMode for more information.
       props.session.setMode(editor.getSession().getMode());
       editor.setSession(props.session);
-      /* eslint-disable */
 
-      // Add changeCursor event listener onto the current session.
-      // In ReactAce, this event listener is only bound on component
-      // mounting/creation, and hence changing sessions will need rebinding.
-      // See react-ace/src/ace.tsx#263,#460 for more details. We also need to
-      // ensure that event listener is only bound once to prevent memory leaks.
-      // We also need to check non-documented property _eventRegistry to
-      // see if the changeCursor listener event has been added yet.
-
-      // @ts-ignore
-      if (editor.getSession().selection._eventRegistry.changeCursor.length < 2) {
-        editor.getSession().selection.on('changeCursor', () => reactAceRef.current!.onCursorChange);
-      }
-
-      /* eslint-enable */
       // Give focus to the editor tab only after switching from another tab.
       // This is necessary to prevent 'unstable_flushDiscreteUpdates' warnings.
       if (filePath !== undefined) {

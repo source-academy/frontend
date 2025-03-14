@@ -26,12 +26,11 @@ export const makeIntroductionTabFrom = (content: string): SideContentTab => ({
 });
 
 export const makeSessionManagementTabFrom = (
-  users: Array<SharedbAceUser>,
-  canManage: boolean
+  users: Record<string, SharedbAceUser>
 ): SideContentTab => ({
   label: 'Session Management',
   iconName: IconNames.PEOPLE,
-  body: <SideContentSessionManagement usersArray={users} canManage={canManage} />,
+  body: <SideContentSessionManagement users={users} />,
   id: SideContentType.sessionManagement
 });
 

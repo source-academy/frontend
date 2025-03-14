@@ -76,6 +76,7 @@ export class ControlBarSessionButtons extends React.PureComponent<
       }
     };
 
+    // TODO: Clean up this UI
     const inviteButtonPopoverContent = (
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         {!this.props.editorSessionId ? (
