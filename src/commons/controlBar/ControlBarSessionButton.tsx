@@ -35,8 +35,8 @@ type StateProps = {
 
 type State = {
   joinElemValue: string;
-  sessionEditingId: string;
-  sessionViewingId: string;
+  sessionId: string;
+  defaultReadOnly: boolean;
 };
 
 function handleError(error: any) {
@@ -52,7 +52,7 @@ export class ControlBarSessionButtons extends React.PureComponent<
 
   constructor(props: ControlBarSessionButtonsProps) {
     super(props);
-    this.state = { joinElemValue: '', sessionEditingId: '', sessionViewingId: '' };
+    this.state = { joinElemValue: '', sessionId: '', defaultReadOnly: true };
 
     this.handleChange = this.handleChange.bind(this);
     this.sessionEditingIdInputElem = React.createRef();
@@ -66,11 +66,8 @@ export class ControlBarSessionButtons extends React.PureComponent<
       // FIXME this handler should be a Saga action or at least in a controller
       if (this.props.editorSessionId === '') {
         createNewSession(this.props.getEditorValue()).then(resp => {
-          this.setState({
-            sessionEditingId: resp.sessionEditingId,
-            sessionViewingId: resp.sessionViewingId
-          });
-          this.props.handleSetEditorSessionId!(resp.sessionEditingId);
+          this.setState({ sessionId: resp.sessionId });
+          this.props.handleSetEditorSessionId!(resp.sessionId);
           this.props.handleSetSessionDetails!({ docId: resp.docId, readOnly: false, owner: true });
         }, handleError);
       }
@@ -87,34 +84,18 @@ export class ControlBarSessionButtons extends React.PureComponent<
         ) : (
           <>
             <Text>
-              You have joined the session as{' '}
-              {this.state.sessionEditingId ? 'an editor' : 'a viewer'}.
+              You have joined the session as {this.state.defaultReadOnly ? 'a viewer' : 'an editor'}.
             </Text>
             <Divider />
-            {this.state.sessionEditingId && (
-              <FormGroup subLabel="Invite as editor">
+            {this.state.sessionId && (
+              <FormGroup subLabel="Invite">
                 <input
-                  value={this.state.sessionEditingId}
-                  readOnly={true}
-                  ref={this.sessionEditingIdInputElem}
-                />
-                <CopyToClipboard
-                  text={'' + this.state.sessionEditingId}
-                  onCopy={() => showSuccessMessage('Copied to clipboard')}
-                >
-                  <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectSessionEditingId} />
-                </CopyToClipboard>
-              </FormGroup>
-            )}
-            {this.state.sessionViewingId && (
-              <FormGroup subLabel="Invite as viewer">
-                <input
-                  value={this.state.sessionViewingId}
+                  value={this.state.sessionId}
                   readOnly={true}
                   ref={this.sessionViewingIdInputElem}
                 />
                 <CopyToClipboard
-                  text={'' + this.state.sessionViewingId}
+                  text={'' + this.state.sessionId}
                   onCopy={() => showSuccessMessage('Copied to clipboard')}
                 >
                   <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectSessionViewingId} />
@@ -146,18 +127,15 @@ export class ControlBarSessionButtons extends React.PureComponent<
         docInfo => {
           if (docInfo !== null) {
             this.props.handleSetEditorSessionId!(this.state!.joinElemValue);
-            this.props.handleSetSessionDetails!({ ...docInfo, owner: false });
-            if (docInfo.readOnly) {
-              this.setState({
-                sessionEditingId: '',
-                sessionViewingId: this.state.joinElemValue
-              });
-            } else {
-              this.setState({
-                sessionEditingId: this.state.joinElemValue,
-                sessionViewingId: ''
-              });
-            }
+            this.props.handleSetSessionDetails!({
+              docId: docInfo.docId,
+              readOnly: docInfo.defaultReadOnly,
+              owner: false
+            });
+            this.setState({
+              sessionId: this.state.joinElemValue,
+              defaultReadOnly: docInfo.defaultReadOnly
+            });
           } else {
             this.props.handleSetEditorSessionId!('');
             this.props.handleSetSessionDetails!(null);
@@ -198,7 +176,7 @@ export class ControlBarSessionButtons extends React.PureComponent<
         onClick={() => {
           // FIXME: this handler should be a Saga action or at least in a controller
           this.props.handleSetEditorSessionId!('');
-          this.setState({ joinElemValue: '', sessionEditingId: '', sessionViewingId: '' });
+          this.setState({ joinElemValue: '', sessionId: '' });
         }}
       />
     );

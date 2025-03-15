@@ -39,7 +39,7 @@ function AdminView({ users }: AdminViewProps) {
         {Object.entries(users).map(([userId, user], index) => (
           <tr key={userId}>
             <td className={Classes.INTERACTIVE}>
-              <div style={{ backgroundColor: index === 0 ? '#ced9e0' : user.color }} />
+              <div style={{ backgroundColor: user.color }} />
               <div>{user.name}</div>
             </td>
             <td>
@@ -89,7 +89,7 @@ const SideContentSessionManagement: React.FC<Props> = ({ users }) => {
               return (
                 <tr key={user.color}>
                   <td className={Classes.INTERACTIVE}>
-                    <div style={{ backgroundColor: index === 0 ? '#ced9e0' : user.color }} />
+                    <div style={{ backgroundColor: user.color }} />
                     <div>{user.name}</div>
                   </td>
                 </tr>
