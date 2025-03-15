@@ -10,8 +10,10 @@ import sharedbAce from '@sourceacademy/sharedb-ace';
 import SharedbAceBinding from '@sourceacademy/sharedb-ace/distribution/sharedb-ace-binding';
 import { CollabEditingAccess } from '@sourceacademy/sharedb-ace/distribution/types';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 
 import { getLanguageConfig } from '../application/ApplicationTypes';
+import CollabEditingActions from '../collabEditing/CollabEditingActions';
 import { getDocInfoFromSessionId, getSessionUrl } from '../collabEditing/CollabEditingHelper';
 import { parseModeString } from '../utils/AceHelper';
 import { useSession } from '../utils/Hooks';
@@ -25,14 +27,17 @@ import { EditorHook } from './Editor';
 // keyBindings allow exporting new hotkeys
 // reactAceRef is the underlying reactAce instance for hooking.
 
+const color = getColor();
+
 const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
   // use a ref to refer to any other props so that we run the effect below
-  // *only* when the editorSessionId changes
+  // *only* when the editorSessionId or sessionDetails changes
   const propsRef = React.useRef(inProps);
   propsRef.current = inProps;
 
   const { editorSessionId, sessionDetails } = inProps;
   const { name, userId } = useSession();
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     if (!editorSessionId || !sessionDetails) {
@@ -48,7 +53,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
     const user = {
       // TODO: Set meaningful name here instead of simply "undefined"
       name: name || 'undefined',
-      color: getColor(),
+      color,
       role: collabEditorAccess
     };
 
@@ -67,7 +72,6 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       }
     };
 
-    // TODO: Figure out a deterministic way to pass a consistent ID like `userId`
     const ShareAce = new sharedbAce(sessionDetails.docId, {
       user,
       WsUrl: getSessionUrl(editorSessionId, true),
@@ -75,7 +79,19 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
     });
 
     const updateUsers = (binding: SharedbAceBinding) => {
-      inProps.setUsers?.(binding.connectedUsers);
+      propsRef.current.setUsers?.(binding.connectedUsers);
+      const myUserId = Object.keys(ShareAce.usersPresence.localPresences)[0];
+      if (binding.connectedUsers[myUserId].role !== user.role) {
+        // Change in role, update readOnly status in sessionDetails
+        // TODO: Currently, this will cause a new user to be created
+        // However, relying on propsRef.current.sessionDetails will not accurately
+        // reflect the state on the frontend
+        dispatch(
+          CollabEditingActions.setSessionDetails('playground', {
+            readOnly: binding.connectedUsers[myUserId].role === CollabEditingAccess.VIEWER
+          })
+        );
+      }
     };
 
     const shareAceReady = () => {
@@ -92,13 +108,15 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
         },
         {
           languageSelectHandler: (language: string) => {
-            // TODO: Consider using useTypedSelector instead
             const { chapter, variant } = parseModeString(language);
-            inProps.updateLanguageCallback?.(getLanguageConfig(chapter, variant), null);
+            propsRef.current.updateLanguageCallback?.(getLanguageConfig(chapter, variant), null);
           }
         }
       );
       propsRef.current.handleSetSharedbConnected!(true);
+      dispatch(
+        CollabEditingActions.setUpdateUserRoleCallback('playground', binding.changeUserRole)
+      );
 
       // Disables editor in a read-only session
       editor.setReadOnly(sessionDetails.readOnly);
@@ -170,15 +188,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       // @ts-expect-error hotfix to remove all views in radarManager
       radarManager.removeAllViews();
     };
-  }, [
-    editorSessionId,
-    sessionDetails,
-    reactAceRef,
-    userId,
-    name,
-    inProps.setUsers,
-    inProps.updateLanguageCallback
-  ]);
+  }, [editorSessionId, sessionDetails, reactAceRef, userId, name, dispatch]);
 };
 
 function getColor() {

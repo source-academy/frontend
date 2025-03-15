@@ -16,7 +16,8 @@ import {
 import {
   setEditorSessionId,
   setSessionDetails,
-  setSharedbConnected
+  setSharedbConnected,
+  setUpdateUserRoleCallback
 } from '../collabEditing/CollabEditingActions';
 import { SourceActionType } from '../utils/ActionsHelper';
 import { createContext } from '../utils/JsSlangHelper';
@@ -310,7 +311,18 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     })
     .addCase(setSessionDetails, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].sessionDetails = action.payload.sessionDetails;
+      // For some reason mutating the state directly results in type
+      // errors, so we have to do it the old-fashioned way
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          sessionDetails: {
+            ...state[workspaceLocation].sessionDetails,
+            ...action.payload.sessionDetails
+          }
+        }
+      };
     })
     .addCase(WorkspaceActions.setIsEditorReadonly, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
@@ -384,6 +396,10 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     .addCase(WorkspaceActions.updateLastNonDetResult, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].lastNonDetResult = action.payload.lastNonDetResult;
+    })
+    .addCase(setUpdateUserRoleCallback, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].updateUserRoleCallback = action.payload.updateUserRoleCallback;
     });
 });
 

@@ -1,10 +1,7 @@
-// import { Switch } from '@blueprintjs/core';
-// import { Table, TableCell, TableHead, TableHeaderCell, TableRow } from '@tremor/react';
-// import { SessionUser } from '../SideContentTypes';
-// import SideContentRoleSelector from './SideContentRoleSelector';
 import { Classes, HTMLTable, Switch } from '@blueprintjs/core';
 import { CollabEditingAccess, SharedbAceUser } from '@sourceacademy/sharedb-ace/distribution/types';
 import React, { useState } from 'react';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 
 interface AdminViewProps {
   users: Record<string, SharedbAceUser>;
@@ -14,14 +11,17 @@ function AdminView({ users }: AdminViewProps) {
   const [toggling, setToggling] = useState<{ [key: string]: boolean }>(
     Object.fromEntries(Object.entries(users).map(([id]) => [id, true]))
   );
+  const updateUserRoleCallback = useTypedSelector(
+    store => store.workspaces.playground.updateUserRoleCallback
+  );
 
-  const handleToggleAccess = async (checked: boolean, id: string) => {
+  const handleToggleAccess = (checked: boolean, id: string) => {
     if (toggling[id]) return;
 
     setToggling(prev => ({ ...prev, [id]: true }));
 
     try {
-      await updateBinding(id, checked ? CollabEditingAccess.EDITOR : CollabEditingAccess.VIEWER);
+      updateUserRoleCallback(id, checked ? CollabEditingAccess.EDITOR : CollabEditingAccess.VIEWER);
     } finally {
       setToggling(prev => ({ ...prev, [id]: false }));
     }
@@ -36,8 +36,8 @@ function AdminView({ users }: AdminViewProps) {
         </tr>
       </thead>
       <tbody>
-        {Object.values(users).map((user, index) => (
-          <tr key={user.color}>
+        {Object.entries(users).map(([userId, user], index) => (
+          <tr key={userId}>
             <td className={Classes.INTERACTIVE}>
               <div style={{ backgroundColor: index === 0 ? '#ced9e0' : user.color }} />
               <div>{user.name}</div>
@@ -55,7 +55,7 @@ function AdminView({ users }: AdminViewProps) {
                   user.role === CollabEditingAccess.EDITOR
                 }
                 disabled={user.role === CollabEditingAccess.OWNER}
-                onChange={event => handleToggleAccess(event.target.checked, user.name)}
+                onChange={event => handleToggleAccess(event.target.checked, userId)}
               />
             </td>
           </tr>
@@ -79,32 +79,27 @@ const SideContentSessionManagement: React.FC<Props> = ({ users }) => {
         <AdminView users={users} />
       ) : (
         <HTMLTable compact>
-        <thead>
-          <tr>
-            <th>Name</th>
-          </tr>
-        </thead>
-        <tbody>
-          {Object.values(users).map((user, index) => {
-            return (
-              <tr key={user.color}>
+          <thead>
+            <tr>
+              <th>Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.values(users).map((user, index) => {
+              return (
+                <tr key={user.color}>
                   <td className={Classes.INTERACTIVE}>
                     <div style={{ backgroundColor: index === 0 ? '#ced9e0' : user.color }} />
-                  <div>{user.name}</div>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </HTMLTable>
+                    <div>{user.name}</div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </HTMLTable>
       )}
     </div>
   );
 };
 
 export default SideContentSessionManagement;
-
-async function updateBinding(id: string, newRole: string) {
-  // TODO: Update to real binding function
-  return new Promise(resolve => setTimeout(resolve, 500));
-}

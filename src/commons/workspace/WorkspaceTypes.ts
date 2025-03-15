@@ -1,3 +1,4 @@
+import type { CollabEditingAccess } from '@sourceacademy/sharedb-ace/distribution/types';
 import { Context, Result } from 'js-slang';
 
 import { AllColsSortStates, GradingColumnVisibility } from '../../features/grading/GradingTypes';
@@ -108,6 +109,7 @@ export type WorkspaceState = {
   readonly lastDebuggerResult: any;
   readonly lastNonDetResult: Result | null;
   readonly files: UploadResult;
+  readonly updateUserRoleCallback: (id: string, newRole: CollabEditingAccess) => void;
 };
 
 type ReplHistory = {
