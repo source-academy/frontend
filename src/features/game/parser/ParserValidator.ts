@@ -1,3 +1,5 @@
+import { SoundAsset } from '../assets/AssetsTypes';
+import SoundAssets from '../assets/SoundAssets';
 import { ItemId } from '../commons/CommonTypes';
 import { GameItemType } from '../location/GameMapTypes';
 import { GameSoundType } from '../sound/GameSoundTypes';
@@ -203,26 +205,40 @@ export default class ParserValidator {
               break;
 
             case GameEntityType.bgms:
+              // Count BGMs matching itemId
               const numberOfBgm = Parser.checkpoint.map
                 .getSoundAssets()
-                .filter(
-                  sound => sound.soundType === GameSoundType.BGM && sound.key === itemId
-                ).length;
+                .reduce((acc: number, sound: SoundAsset): number => {
+                  return (
+                    acc + (sound.soundType === GameSoundType.BGM && sound.key === itemId ? 1 : 0)
+                  );
+                }, 0);
               if (numberOfBgm === 0) {
-                throw new Error(`Cannot find bgm key "${itemId}"`);
+                // Check if itemId is a default BGM
+                const isDefaultAsset = Object.values(SoundAssets).some(
+                  sound => sound.soundType === GameSoundType.BGM && sound.key === itemId
+                );
+                if (!isDefaultAsset) throw new Error(`Cannot find bgm key "${itemId}"`);
               } else if (numberOfBgm > 1) {
                 throw new Error(`More than 1 bgm key "${itemId}"`);
               }
               break;
 
             case GameEntityType.sfxs:
+              // Count SFXs matching itemId
               const numberOfSfx = Parser.checkpoint.map
                 .getSoundAssets()
-                .filter(
-                  sound => sound.soundType === GameSoundType.SFX && sound.key === itemId
-                ).length;
+                .reduce((acc: number, sound: SoundAsset): number => {
+                  return (
+                    acc + (sound.soundType === GameSoundType.SFX && sound.key === itemId ? 1 : 0)
+                  );
+                }, 0);
               if (numberOfSfx === 0) {
-                throw new Error(`Cannot find sfx key "${itemId}"`);
+                // Check if itemId is a default SFX
+                const isDefaultAsset = Object.values(SoundAssets).some(
+                  sound => sound.soundType === GameSoundType.SFX && sound.key === itemId
+                );
+                if (!isDefaultAsset) throw new Error(`Cannot find sfx key "${itemId}"`);
               } else if (numberOfSfx > 1) {
                 throw new Error(`More than 1 sfx key "${itemId}"`);
               }

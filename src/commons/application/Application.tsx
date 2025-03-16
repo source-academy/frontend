@@ -1,12 +1,19 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom';
+import Messages, {
+  MessageType,
+  MessageTypeNames,
+  sendToWebview
+} from 'src/features/vscode/messages';
 
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
 import { useLocalStorageState, useSession } from '../utils/Hooks';
+import WorkspaceActions from '../workspace/WorkspaceActions';
 import { defaultWorkspaceSettings, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
 import SessionActions from './actions/SessionActions';
+import VscodeActions from './actions/VscodeActions';
 
 const Application: React.FC = () => {
   const dispatch = useDispatch();
@@ -69,6 +76,62 @@ const Application: React.FC = () => {
       }
     };
   }, [isPWA, isMobile]);
+
+  // Effect to handle messages from VS Code
+  React.useEffect(() => {
+    if (!window.confirm) {
+      // Polyfill confirm() to instead show as VS Code notification
+      // TODO: Pass text as a new Message to the webview
+      window.confirm = text => {
+        console.log(`Confirmation automatically accepted: ${text ?? 'No text provided'}`);
+        return true;
+      };
+    }
+
+    const message = Messages.ExtensionPing();
+    sendToWebview(message);
+
+    window.addEventListener('message', event => {
+      const message: MessageType = event.data;
+      // Only accept messages from the vscode webview
+      if (!event.origin.startsWith('vscode-webview://')) {
+        return;
+      }
+      // console.log(`FRONTEND: Message from ${event.origin}: ${JSON.stringify(message)}`);
+      switch (message.type) {
+        case MessageTypeNames.ExtensionPong:
+          console.log('Received WebviewStarted message, will set vsc');
+          dispatch(VscodeActions.setVscode());
+
+          if (message.token) {
+            const token = JSON.parse(message.token.trim());
+            console.log(`FRONTEND: WebviewStarted: ${token}`);
+            dispatch(
+              SessionActions.setTokens({
+                accessToken: token.accessToken,
+                refreshToken: token.refreshToken
+              })
+            );
+            dispatch(SessionActions.fetchUserAndCourse());
+          }
+          break;
+        case MessageTypeNames.Text:
+          const code = message.code;
+          console.log(`FRONTEND: TextMessage: ${code}`);
+          // TODO: Don't change ace editor directly
+          // const elements = document.getElementsByClassName('react-ace');
+          // if (elements.length === 0) {
+          //   return;
+          // }
+          // // @ts-expect-error: ace is not available at compile time
+          // const editor = ace.edit(elements[0]);
+          // editor.setValue(code);
+          dispatch(WorkspaceActions.updateEditorValue('assessment', 0, code));
+          break;
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <WorkspaceSettingsContext.Provider value={[workspaceSettings, setWorkspaceSettings]}>

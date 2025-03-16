@@ -380,10 +380,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     .addCase(WorkspaceActions.updateLastDebuggerResult, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].lastDebuggerResult = action.payload.lastDebuggerResult;
-    })
-    .addCase(WorkspaceActions.updateLastNonDetResult, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].lastNonDetResult = action.payload.lastNonDetResult;
     });
 });
 

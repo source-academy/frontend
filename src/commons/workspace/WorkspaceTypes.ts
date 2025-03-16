@@ -1,4 +1,4 @@
-import { Context, Result } from 'js-slang';
+import type { Context } from 'js-slang';
 
 import { AllColsSortStates, GradingColumnVisibility } from '../../features/grading/GradingTypes';
 import { SourcecastWorkspaceState } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
@@ -11,7 +11,6 @@ import { UploadResult } from '../sideContent/content/SideContentUpload';
 
 export const EVAL_SILENT = 'EVAL_SILENT';
 export const UPDATE_LAST_DEBUGGER_RESULT = 'UPDATE_LAST_DEBUGGER_RESULT';
-export const UPDATE_LAST_NON_DET_RESULT = 'UPDATE_LAST_NON_DET_RESULT';
 export const TOGGLE_USING_UPLOAD = 'TOGGLE_USING_UPLOAD';
 export const UPLOAD_FILES = 'UPLOAD_FILES';
 
@@ -106,7 +105,6 @@ export type WorkspaceState = {
   readonly globals: Array<[string, any]>;
   readonly debuggerContext: DebuggerContext;
   readonly lastDebuggerResult: any;
-  readonly lastNonDetResult: Result | null;
   readonly files: UploadResult;
 };
 
