@@ -12,7 +12,7 @@ import {
 } from './RequestsSaga';
 
 const LeaderboardSaga = combineSagaHandlers(LeaderboardActions, {
-  getAllUsersXp: function* (action) {
+  getAllUsersXp: function* () {
     const tokens: Tokens = yield selectTokens();
 
     const usersXp = yield call(getAllTotalXp, tokens);
@@ -38,7 +38,6 @@ const LeaderboardSaga = combineSagaHandlers(LeaderboardActions, {
     const assessmentId = action.payload;
 
     const contestPopularVotes = yield call(getContestPopularVoteLeaderboard, assessmentId, tokens);
-
     if (contestPopularVotes) {
       yield put(actions.saveAllContestPopularVotes(contestPopularVotes));
     }
