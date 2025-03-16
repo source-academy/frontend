@@ -284,8 +284,7 @@
 
             .dropdown-lines {
               height: $top-spacing + $card-height + $remaining-width + $line-extension;
-              margin: -#{math.div($card-height, 1.6)} -#{$line-width + $remaining-width} 0
-                $line-width;
+              margin: -#{math.div($card-height, 1.6)} -#{$line-width + $remaining-width} 0 $line-width;
               min-width: $line-width;
             }
 
@@ -591,8 +590,7 @@
 
             .dropdown-lines {
               height: $top-spacing + $card-height + $remaining-width + $line-extension;
-              margin: -#{math.div($card-height, 1.6)} -#{$line-width + $remaining-width} 0
-                $line-width;
+              margin: -#{math.div($card-height, 1.6)} -#{$line-width + $remaining-width} 0 $line-width;
               min-width: $line-width;
             }
 
@@ -629,7 +627,7 @@
         color: white;
         display: flex;
         flex-direction: column;
-        height: $view-height / 3;
+        height: calc($view-height / 3);
         justify-content: center;
         margin: 1em auto;
         width: $view-width;
