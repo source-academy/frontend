@@ -1,4 +1,4 @@
-import type { CollabEditingAccess } from '@sourceacademy/sharedb-ace/distribution/types';
+import type { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
 import { Context, Result } from 'js-slang';
 
 import { AllColsSortStates, GradingColumnVisibility } from '../../features/grading/GradingTypes';

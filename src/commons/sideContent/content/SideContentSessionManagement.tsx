@@ -1,5 +1,5 @@
 import { Classes, HTMLTable, Switch } from '@blueprintjs/core';
-import { CollabEditingAccess, SharedbAceUser } from '@sourceacademy/sharedb-ace/distribution/types';
+import { CollabEditingAccess, type SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import React, { useState } from 'react';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 

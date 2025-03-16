@@ -39,7 +39,7 @@ import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
 import useRefactor from './UseRefactor';
 import useShareAce from './UseShareAce';
-import { SharedbAceUser } from '@sourceacademy/sharedb-ace/distribution/types';
+import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
@@ -74,7 +74,7 @@ type EditorStateProps = {
   editorBinding?: EditorBinding;
   setUsers?: React.Dispatch<React.SetStateAction<Record<string, SharedbAceUser>>>;
   // TODO: Handle changing of external library
-  updateLanguageCallback?: (sublanguage: SALanguage, e: any) => void
+  updateLanguageCallback?: (sublanguage: SALanguage, e: any) => void;
 };
 
 export type EditorTabStateProps = {

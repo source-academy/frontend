@@ -1,5 +1,5 @@
 import { IconNames } from '@blueprintjs/icons';
-import { SharedbAceUser } from '@sourceacademy/sharedb-ace/distribution/types';
+import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
 import Markdown from 'src/commons/Markdown';

@@ -7,8 +7,8 @@ import {
 } from '@convergencelabs/ace-collab-ext';
 import * as Sentry from '@sentry/browser';
 import sharedbAce from '@sourceacademy/sharedb-ace';
-import SharedbAceBinding from '@sourceacademy/sharedb-ace/distribution/sharedb-ace-binding';
-import { CollabEditingAccess } from '@sourceacademy/sharedb-ace/distribution/types';
+import type SharedbAceBinding from '@sourceacademy/sharedb-ace/binding';
+import { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 

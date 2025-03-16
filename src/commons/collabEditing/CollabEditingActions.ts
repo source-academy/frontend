@@ -1,4 +1,4 @@
-import type { CollabEditingAccess } from '@sourceacademy/sharedb-ace/distribution/types';
+import type { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
 
 import { createActions } from '../redux/utils';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';

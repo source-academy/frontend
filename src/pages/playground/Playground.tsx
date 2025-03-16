@@ -2,7 +2,7 @@ import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { HotkeyItem, useHotkeys } from '@mantine/hooks';
 import { AnyAction, Dispatch } from '@reduxjs/toolkit';
-import { SharedbAceUser } from '@sourceacademy/sharedb-ace/distribution/types';
+import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import { Ace, Range } from 'ace-builds';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
