@@ -39,9 +39,6 @@ export class ArraySpreadAnimation extends Animatable {
   ) {
     super();
 
-    console.log(stashItem);
-    console.log(resultItems);
-
     this.endX = stashItem!.x() + stashItem!.width();
     this.controlInstrAnimation = new AnimatedTextbox(
       controlInstrItem.text,

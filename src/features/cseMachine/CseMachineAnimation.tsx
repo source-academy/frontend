@@ -288,8 +288,6 @@ export class CseAnimation {
           const array = Layout.previousStashComponent.stashItemComponents.at(-1)!.arrow!
             .target! as ArrayValue;
 
-          console.log(array);
-
           let currCallInstr;
           let prevCallInstr;
 
