@@ -46,17 +46,12 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
   }, [dispatch, contestID, type]);
 
   // Retrieve contests (For dropdown)
-  const contestAssessments = useTypedSelector(store => store.session.assessmentOverviews);
-
-  const contestDetails: LeaderboardContestDetails[] = (contestAssessments ?? [])
-    .filter(assessment => assessment.type === 'Contests')
-    .map(contest => ({
-      contest_id: contest.id,
-      title: contest.title,
-      published: contest.isPublished,
-      voting: contest.hasVotingFeatures
-    }));
+  const contestDetails: LeaderboardContestDetails[] = useTypedSelector(store => store.leaderboard.contests);
   const contestName = contestDetails.find(contest => contest.contest_id === contestID)?.title;
+
+  useEffect(() => {
+    dispatch(LeaderboardActions.getContests());
+  }, [dispatch]);
 
   // Temporary loading of leaderboard background
   useEffect(() => {
@@ -69,9 +64,9 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
   }, []);
 
   // Display constants
-  const visibleEntries = 10;
-  const top3 = rankedLeaderboard.filter(x => x.rank <= 3);
-  const rest = rankedLeaderboard.filter(x => x.rank <= Number(visibleEntries) && x.rank > 3);
+  const visibleEntries = useTypedSelector(store => store.session.topContestLeaderboardDisplay);
+  const top3 = rankedLeaderboard.filter(x => x.rank !== undefined && x.rank <= 3);
+  const rest = rankedLeaderboard.filter(x => x.rank !== undefined && x.rank <= Number(visibleEntries) && x.rank > 3);
 
   // const workspaceLocation = 'assessment';
   const navigate = useNavigate();
@@ -167,7 +162,7 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
       {/* Honourable Mentions */}
       <div className="ag-theme-alpine">
         <h2>Honourable Mentions</h2>
-        <AgGridReact rowData={rest} columnDefs={columnDefs} domLayout="autoHeight" rowHeight={60} />
+        <AgGridReact rowData={rest} columnDefs={columnDefs} domLayout="autoHeight" rowHeight={60} pagination={true} paginationPageSize={10} paginationPageSizeSelector={[10, 25, 50]} />
       </div>
     </div>
   );

@@ -353,7 +353,8 @@ export const defaultLeaderboard: LeaderboardState = {
   userXp: [],
   contestScore: [],
   contestPopularVote: [],
-  code: 'Initial code'
+  code: 'Initial code',
+  contests: []
 };
 
 const getDefaultLanguageConfig = (): SALanguage => {

@@ -1,6 +1,6 @@
 import { call } from 'redux-saga/effects';
 import { backendParamsToProgressStatus } from 'src/features/grading/GradingUtils';
-import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
+import { ContestLeaderboardRow, LeaderboardContestDetails, LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
 import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
 import {
@@ -490,7 +490,7 @@ export const getAllTotalXp = async (tokens: Tokens): Promise<number | null> => {
 export const getContestScoreLeaderboard = async (
   assessmentId: number,
   tokens: Tokens
-): Promise<number | null> => {
+): Promise<ContestLeaderboardRow[] | null> => {
   const resp = await request(
     `${courseId()}/leaderboard/contests/${assessmentId}/get_score_leaderboard`,
     'GET',
@@ -525,7 +525,7 @@ export const getContestScoreLeaderboard = async (
 export const getContestPopularVoteLeaderboard = async (
   assessmentId: number,
   tokens: Tokens
-): Promise<number | null> => {
+): Promise<ContestLeaderboardRow[] | null> => {
   const resp = await request(
     `${courseId()}/leaderboard/contests/${assessmentId}/get_popular_vote_leaderboard`,
     'GET',
@@ -552,6 +552,23 @@ export const getContestPopularVoteLeaderboard = async (
       votingId: rows.voting_id
     })
   );
+};
+
+/**
+ * GET /courses/{courseId}/all_contests
+ */
+export const getAllContests = async (tokens: Tokens): Promise<LeaderboardContestDetails[] | null> => {
+  const resp = await request(`${courseId()}/all_contests`, 'GET', {
+    ...tokens
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  const rows = await resp.json();
+
+  return rows;
 };
 
 /**
@@ -1257,14 +1274,15 @@ export const calculateContestScore = async (
 };
 
 /**
- * GET /courses/{courseId}/admin/assessments/{assessmentId}/scoreLeaderboard
+ * GET /courses/{courseId}/admin/assessments/{assessmentId}/{visibleEntries}/scoreLeaderboard
  */
 export const getScoreLeaderboard = async (
   assessmentId: number,
+  visibleEntries: number | undefined,
   tokens: Tokens
 ): Promise<ContestEntry[] | null> => {
   const resp = await request(
-    `${courseId()}/admin/assessments/${assessmentId}/scoreLeaderboard`,
+    `${courseId()}/admin/assessments/${assessmentId}/${visibleEntries}/scoreLeaderboard`,
     'GET',
     {
       ...tokens
@@ -1278,14 +1296,15 @@ export const getScoreLeaderboard = async (
 };
 
 /**
- * GET /courses/{courseId}/admin/assessments/{assessmentId}/popularVoteLeaderboard
+ * GET /courses/{courseId}/admin/assessments/{assessmentId}/{visibleEntries}/popularVoteLeaderboard
  */
 export const getPopularVoteLeaderboard = async (
   assessmentId: number,
+  visibleEntries: number | undefined,
   tokens: Tokens
 ): Promise<ContestEntry[] | null> => {
   const resp = await request(
-    `${courseId()}/admin/assessments/${assessmentId}/popularVoteLeaderboard`,
+    `${courseId()}/admin/assessments/${assessmentId}/${visibleEntries}/popularVoteLeaderboard`,
     'GET',
     {
       ...tokens

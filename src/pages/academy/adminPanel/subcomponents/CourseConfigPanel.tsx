@@ -39,6 +39,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
     enableOverallLeaderboard,
     enableContestLeaderboard,
     topLeaderboardDisplay,
+    topContestLeaderboardDisplay,
     enableSourcecast,
     enableStories,
     moduleHelpText
@@ -149,6 +150,23 @@ const CourseConfigPanel: React.FC<Props> = props => {
                 props.setCourseConfiguration({
                   ...props.courseConfiguration,
                   topLeaderboardDisplay: Number(e.target.value)
+                })
+              }
+            />
+          </FormGroup>
+          <FormGroup
+            helperText="Enter the Top XX students to be displayed on the Contest Leaderboard"
+            inline={true}
+            label="Top Contest Leaderboard Display"
+            labelFor="topContestLeaderboardDisplay"
+          >
+            <InputGroup
+              id="topContestLeaderboardDisplay"
+              value={String(topContestLeaderboardDisplay)}
+              onChange={e =>
+                props.setCourseConfiguration({
+                  ...props.courseConfiguration,
+                  topContestLeaderboardDisplay: Number(e.target.value)
                 })
               }
             />

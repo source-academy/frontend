@@ -23,6 +23,9 @@ export const LeaderboardReducer: Reducer<LeaderboardState, SourceActionType> = c
       })
       .addCase(LeaderboardActions.clearCode, (state, action) => {
         state.code = '';
+      })
+      .addCase(LeaderboardActions.saveContests, (state, action) => {
+        state.contests = action.payload;
       });
   }
 );

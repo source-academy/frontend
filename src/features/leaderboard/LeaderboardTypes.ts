@@ -23,6 +23,7 @@ export type LeaderboardState = {
   contestScore: ContestLeaderboardRow[];
   contestPopularVote: ContestLeaderboardRow[];
   code: string;
+  contests: LeaderboardContestDetails[];
 };
 
 export type LeaderboardContestDetails = {

@@ -29,16 +29,11 @@ const OverallLeaderboard: React.FC = () => {
   }, [dispatch]);
 
   // Retrieve contests (For dropdown)
-  const contestAssessments = useTypedSelector(store => store.session.assessmentOverviews);
+  const contestDetails: LeaderboardContestDetails[] = useTypedSelector(store => store.leaderboard.contests);
 
-  const contestDetails: LeaderboardContestDetails[] = (contestAssessments ?? [])
-    .filter(assessment => assessment.type === 'Contests')
-    .map(contest => ({
-      contest_id: contest.id,
-      title: contest.title,
-      published: contest.isPublished,
-      voting: contest.hasVotingFeatures
-    }));
+  useEffect(() => {
+    dispatch(LeaderboardActions.getContests());
+  }, [dispatch]);
 
   // Temporary loading of leaderboard background
   useEffect(() => {

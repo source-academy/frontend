@@ -43,6 +43,7 @@ const DropdownCreateCourse: React.FC<Props> = props => {
     enableOverallLeaderboard: true,
     enableContestLeaderboard: true,
     topLeaderboardDisplay: 100,
+    topContestLeaderboardDisplay: 10,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: ''
@@ -274,6 +275,24 @@ const DropdownCreateCourse: React.FC<Props> = props => {
                 setCourseConfig({
                   ...courseConfig,
                   topLeaderboardDisplay: Number(e.target.value)
+                })
+              }
+            />
+          </FormGroup>
+        </div>
+        <div>
+          <FormGroup
+            label="Contest Leaderboard Top XX Display"
+            labelInfo="(configurable later on)"
+            labelFor="contest-leaderboard-top-display"
+          >
+            <InputGroup
+              id="topContestLeaderboardDisplay"
+              value={String(courseConfig.topContestLeaderboardDisplay)}
+              onChange={e =>
+                setCourseConfig({
+                  ...courseConfig,
+                  topContestLeaderboardDisplay: Number(e.target.value)
                 })
               }
             />

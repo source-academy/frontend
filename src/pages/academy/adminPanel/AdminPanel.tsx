@@ -30,6 +30,7 @@ const defaultCourseConfig: UpdateCourseConfiguration = {
   enableOverallLeaderboard: true,
   enableContestLeaderboard: true,
   topLeaderboardDisplay: 100,
+  topContestLeaderboardDisplay: 10,
   enableSourcecast: true,
   enableStories: false,
   moduleHelpText: ''
@@ -66,6 +67,7 @@ const AdminPanel: React.FC = () => {
       enableOverallLeaderboard: session.enableOverallLeaderboard,
       enableContestLeaderboard: session.enableContestLeaderboard,
       topLeaderboardDisplay: session.topLeaderboardDisplay,
+      topContestLeaderboardDisplay: session.topContestLeaderboardDisplay,
       enableSourcecast: session.enableSourcecast,
       enableStories: session.enableStories,
       moduleHelpText: session.moduleHelpText
@@ -77,6 +79,7 @@ const AdminPanel: React.FC = () => {
     session.enableOverallLeaderboard,
     session.enableContestLeaderboard,
     session.topLeaderboardDisplay,
+    session.topContestLeaderboardDisplay,
     session.enableGame,
     session.enableSourcecast,
     session.enableStories,

@@ -1,6 +1,6 @@
 import { createActions } from 'src/commons/redux/utils';
 
-import { ContestLeaderboardRow, LeaderboardRow } from './LeaderboardTypes';
+import { ContestLeaderboardRow, LeaderboardContestDetails, LeaderboardRow } from './LeaderboardTypes';
 
 const LeaderboardActions = createActions('leaderboard', {
   getAllUsersXp: 0,
@@ -11,7 +11,9 @@ const LeaderboardActions = createActions('leaderboard', {
   saveAllContestPopularVotes: (contestPopularVote: ContestLeaderboardRow[]) => contestPopularVote,
   getCode: 0,
   saveCode: (code: string) => code,
-  clearCode: 0
+  clearCode: 0,
+  getContests: 0,
+  saveContests: (contests: LeaderboardContestDetails[]) => contests,
 });
 
 export default LeaderboardActions;

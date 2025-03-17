@@ -8,7 +8,8 @@ import { selectTokens } from './BackendSaga';
 import {
   getAllTotalXp,
   getContestPopularVoteLeaderboard,
-  getContestScoreLeaderboard
+  getContestScoreLeaderboard,
+  getAllContests
 } from './RequestsSaga';
 
 const LeaderboardSaga = combineSagaHandlers(LeaderboardActions, {
@@ -41,7 +42,18 @@ const LeaderboardSaga = combineSagaHandlers(LeaderboardActions, {
     if (contestPopularVotes) {
       yield put(actions.saveAllContestPopularVotes(contestPopularVotes));
     }
-  }
+  },
+
+  getContests: function* () {
+    const tokens: Tokens = yield selectTokens();
+
+    const contests = yield call(getAllContests, tokens);
+    console.log(contests, 'rows');
+
+    if (contests) {
+      yield put(actions.saveContests(contests));
+    }
+  },
 });
 
 export default LeaderboardSaga;
