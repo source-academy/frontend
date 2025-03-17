@@ -290,7 +290,6 @@ export class CseAnimation {
           let currCallInstr;
 
           for (let i = 1; control.at(-i) != undefined; i++) {
-            console.log(control.at(-i));
             if (control.at(-i)?.text.includes('call ')) {
               // find call instr above
               currCallInstr = control.at(-i);
