@@ -1,4 +1,4 @@
-import { Easings } from 'konva/lib/Tween';
+//import { Easings } from 'konva/lib/Tween';
 import React from 'react';
 import { Group } from 'react-konva';
 
@@ -26,7 +26,6 @@ export class ArraySpreadAnimation extends Animatable {
   private resultAnimations: AnimatedTextbox[];
   private arrowAnimation?: AnimatedGenericArrow<StashItemComponent, Visible>;
   private currCallInstrAnimation: AnimatedTextbox;
-  private prevCallInstrAnimation: AnimatedTextbox;
 
   private endX: number;
 
@@ -34,8 +33,7 @@ export class ArraySpreadAnimation extends Animatable {
     private controlInstrItem: ControlItemComponent,
     private stashItem: StashItemComponent,
     private resultItems: StashItemComponent[],
-    private currCallInstrItem: ControlItemComponent,
-    private prevCallInstrItem: ControlItemComponent
+    private currCallInstrItem: ControlItemComponent
   ) {
     super();
 
@@ -52,15 +50,9 @@ export class ArraySpreadAnimation extends Animatable {
     });
 
     // call instr above
-    this.prevCallInstrAnimation = new AnimatedTextbox(
-      this.prevCallInstrItem.text,
-      { ...getNodePosition(this.prevCallInstrItem), opacity: 0 },
-      { rectProps: { stroke: defaultActiveColor() } }
-    );
-
     this.currCallInstrAnimation = new AnimatedTextbox(
       this.currCallInstrItem.text,
-      { ...getNodePosition(this.currCallInstrItem), opacity: 0 },
+      getNodePosition(this.currCallInstrItem),
       { rectProps: { stroke: defaultActiveColor() } }
     );
 
@@ -81,7 +73,6 @@ export class ArraySpreadAnimation extends Animatable {
         {this.controlInstrAnimation.draw()}
         {this.stashItemAnimation.draw()}
         {this.currCallInstrAnimation.draw()}
-        {this.prevCallInstrAnimation.draw()}
         {this.resultAnimations.map(a => a.draw())}
         {this.arrowAnimation?.draw()}
       </Group>
@@ -101,17 +92,6 @@ export class ArraySpreadAnimation extends Animatable {
 
     // Move spread instruction next to stash item (array pointer)
     await Promise.all([
-      // Show change in call arity
-      this.prevCallInstrAnimation.animateTo(
-        { scaleX: 1.1, scaleY: 1.1, opacity: 0 },
-        { duration: 0.3, easing: Easings.StrongEaseOut }
-      ),
-
-      this.currCallInstrAnimation.animateTo(
-        { opacity: 1 },
-        { duration: 0.3, easing: Easings.StrongEaseOut }
-      ),
-
       ...this.resultAnimations.flatMap(a => [
         a.animateTo(
           { x: startX + (this.endX - startX) / 2 - this.resultItems[0]?.width() / 2 },

@@ -283,26 +283,17 @@ export class CseAnimation {
           );
           break;
         case InstrType.SPREAD:
-          const prevcontrol = Layout.previousControlComponent.stackItemComponents;
           const control = Layout.controlComponent.stackItemComponents;
           const array = Layout.previousStashComponent.stashItemComponents.at(-1)!.arrow!
             .target! as ArrayValue;
 
           let currCallInstr;
-          let prevCallInstr;
 
-          for (let i = 0; control.at(-i) != undefined; i++) {
+          for (let i = 1; control.at(-i) != undefined; i++) {
+            console.log(control.at(-i));
             if (control.at(-i)?.text.includes('call ')) {
               // find call instr above
               currCallInstr = control.at(-i);
-              break;
-            }
-          }
-
-          for (let i = 0; prevcontrol.at(-i) != undefined; i++) {
-            if (prevcontrol.at(-i)?.text.includes('call ')) {
-              // find call instr above
-              prevCallInstr = prevcontrol.at(-i);
               break;
             }
           }
@@ -317,8 +308,7 @@ export class CseAnimation {
               lastControlComponent,
               Layout.previousStashComponent.stashItemComponents.at(-1)!,
               resultItems!,
-              currCallInstr!,
-              prevCallInstr!
+              currCallInstr!
             )
           );
           break;
