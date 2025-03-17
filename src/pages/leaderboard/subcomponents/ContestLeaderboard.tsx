@@ -153,7 +153,7 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
         <LeaderboardDropdown contests={contestDetails} />
 
         {/* Export Button */}
-        <LeaderboardExportButton type="contest" contest={contestName} data={rankedLeaderboard}/>
+        <LeaderboardExportButton type={type} contest={contestName} data={rankedLeaderboard}/>
       </div>
 
       {/* Leaderboard Table (Top 3) */}

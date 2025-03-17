@@ -7,8 +7,8 @@ import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/
 import { Role } from '../../../commons/application/ApplicationTypes';
 
 type Props =
-  | { type: "contest"; contest: string | undefined; data: ContestLeaderboardRow[] }
-  | { type: "overall"; contest: string | undefined; data: LeaderboardRow[] };
+  | { type: string; contest: string | undefined; data: ContestLeaderboardRow[] }
+  | { type: string; contest: string | undefined; data: LeaderboardRow[] };
 
 const LeaderboardExportButton: React.FC<Props> = ({ type, contest, data }) => {
   const role = useTypedSelector(store => store.session.role);
@@ -28,7 +28,7 @@ const LeaderboardExportButton: React.FC<Props> = ({ type, contest, data }) => {
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = type === "overall" ? 'Overall Leaderboard.csv' : `${contest} Leaderboard.csv`; // Filename for download
+    link.download = type === "overall" ? 'Overall Leaderboard.csv' : type === "popularvote" ? `${contest} Popular Vote Leaderboard.csv` : `${contest} Score Leaderboard.csv`; // Filename for download
     link.click();
   };
 
