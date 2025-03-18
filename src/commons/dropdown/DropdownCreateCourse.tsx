@@ -42,7 +42,8 @@ const DropdownCreateCourse: React.FC<Props> = props => {
     enableStories: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
-    moduleHelpText: ''
+    moduleHelpText: '',
+    llmAPIKey: ''
   });
 
   const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
@@ -271,6 +272,23 @@ const DropdownCreateCourse: React.FC<Props> = props => {
                 });
               }}
               fill
+            />
+          </FormGroup>
+          <FormGroup
+            helperText="API Key for LLM comment generation for grading. Will not be enabled if not provided"
+            label={'LLM API Key'}
+            labelInfo="(optional)"
+            labelFor="llmAPIKey"
+          >
+            <InputGroup
+              id="llmAPIKey"
+              value={courseConfig.llmAPIKey}
+              onChange={e =>
+                setCourseConfig({
+                  ...courseConfig,
+                  llmAPIKey: e.target.value
+                })
+              }
             />
           </FormGroup>
         </div>
