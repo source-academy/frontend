@@ -119,6 +119,7 @@ export interface IProgrammingQuestion extends BaseQuestion {
   prepend: string;
   postpend: string;
   solutionTemplate: string;
+  llm_prompt?: string | null;
   testcases: Testcase[];
   testcasesPrivate?: Testcase[]; // For mission control
   type: 'programming';
@@ -277,6 +278,7 @@ export const programmingTemplate = (): IProgrammingQuestion => {
     prepend: '',
     solutionTemplate: '//This is a mock solution template',
     postpend: '',
+    llm_prompt: null,
     testcases: [],
     testcasesPrivate: [],
     type: 'programming',

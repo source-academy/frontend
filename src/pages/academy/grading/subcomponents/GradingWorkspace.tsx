@@ -304,6 +304,8 @@ const GradingWorkspace: React.FC<Props> = props => {
                 ? [grading!.answers[questionId].student.username]
                 : grading!.answers[questionId].team!.map(member => member.username)
             }
+            is_llm={grading!.answers[questionId].question.type == "programming" &&
+              !!grading!.answers[questionId].question.llm_prompt}
             comments={grading!.answers[questionId].grade.comments ?? ''}
             graderName={
               grading!.answers[questionId].grade.grader

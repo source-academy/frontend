@@ -884,6 +884,7 @@ export const getGrading = async (
         solutionTemplate: question.solutionTemplate,
         prepend: question.prepend || '',
         postpend: question.postpend || '',
+        llm_prompt: question.llm_prompt || null,
         testcases: question.testcases || [],
         type: question.type as QuestionType,
         maxXp: question.maxXp

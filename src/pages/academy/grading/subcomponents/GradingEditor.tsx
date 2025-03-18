@@ -46,6 +46,7 @@ type Props = {
   maxXp: number;
   studentNames: string[];
   studentUsernames: string[];
+  is_llm: boolean;
   comments: string;
   graderName?: string;
   gradedAt?: string;
@@ -318,18 +319,21 @@ const GradingEditor: React.FC<Props> = props => {
         </div>
       </div>
       
-      <GradingCommentSelector 
-        setEditor={setEditorValue}
-        comments={suggestions}
-      />
-      <Button
-        onClick={async ()=>{
-          const resp = await getCommentSuggestions();
-          console.log(resp!.comments)
-          setSuggestions(resp!.comments);
-        }}>
-        Get comments
-      </Button>
+      {props.is_llm && 
+      <div>
+        <GradingCommentSelector 
+          setEditor={setEditorValue}
+          comments={suggestions}
+        />
+        <Button
+          onClick={async ()=>{
+            const resp = await getCommentSuggestions();
+            console.log(resp!.comments)
+            setSuggestions(resp!.comments);
+          }}>
+          Get comments
+        </Button>
+      </div>}
 
       <div className="react-mde-parent">
         <ReactMde
