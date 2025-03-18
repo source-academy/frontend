@@ -73,6 +73,7 @@ import {
   getUser,
   getUserCourseRegistrations,
   handleResponseError,
+  pauseUser,
   postAcknowledgeNotifications,
   postAnswer,
   postAssessment,
@@ -100,7 +101,7 @@ import {
   unpublishGradingAll,
   updateAssessment,
   uploadAssessment,
-  validateResumeCode
+  validateResumeCode,
 } from './RequestsSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
@@ -609,6 +610,10 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
 
     const resumeCodeIsValid = yield call(validateResumeCode, tokens, resumeCode);
     setPauseAcademy(!resumeCodeIsValid);
+  },
+  pauseUser: function* () {
+    const tokens: Tokens = yield selectTokens();
+    yield call(pauseUser, tokens);
   }
 });
 

@@ -1,3 +1,4 @@
+import disableDevtool from 'disable-devtool';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom';
@@ -18,7 +19,7 @@ import VscodeActions from './actions/VscodeActions';
 
 const Application: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoggedIn, enableExamMode } = useSession();
+  const { isLoggedIn, isPaused, enableExamMode } = useSession();
 
   // Used in the mobile/PWA experience (e.g. separate handling of orientation changes on Andriod & iOS due to unique browser behaviours)
   const isMobile = /iPhone|iPad|Android/.test(navigator.userAgent);
@@ -140,16 +141,22 @@ const Application: React.FC = () => {
 
   // Effect for dev tools blocking/detection when exam mode enabled
   React.useEffect(() => {
-    const detectDevTools = () => {
-      const startTimestamp = Date.now();
-      debugger;
-      if (Date.now() - startTimestamp > 200) {
+    if (isPaused !== undefined && isPaused) {
+      setPauseAcademy(true);
+      setPauseAcademyReason('Developer tools was previously used.');
+    }
+
+    const options = {
+      ondevtoolopen: () => {
         setPauseAcademy(true);
-        setPauseAcademyReason('Dev tools detected');
-      }
+        setPauseAcademyReason("Developer tools has been used");
+        dispatch(SessionActions.pauseUser());
+      },
+      clearIntervalWhenDevOpenTrigger: true,
     };
 
     if (enableExamMode) {
+      disableDevtool(options);
       document.addEventListener('contextmenu', event => event.preventDefault());
       document.addEventListener('keydown', event => {
         if (
@@ -159,7 +166,6 @@ const Application: React.FC = () => {
           event.preventDefault();
         }
       });
-      setInterval(detectDevTools, 500);
     }
   }, [enableExamMode]);
 

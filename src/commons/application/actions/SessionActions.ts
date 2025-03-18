@@ -154,7 +154,8 @@ const SessionActions = createActions('session', {
   validateResumeCode: (resumeCode: string, setPauseAcademy: Dispatch<SetStateAction<boolean>>) => ({
     resumeCode,
     setPauseAcademy
-  })
+  }),
+  pauseUser: () => {}
 });
 
 // For compatibility with existing code (actions helper)

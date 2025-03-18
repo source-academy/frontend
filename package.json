@@ -50,6 +50,7 @@
     "classnames": "^2.3.2",
     "conductor": "https://github.com/source-academy/conductor.git#0.2.1",
     "dayjs": "^1.11.13",
+    "disable-devtool": "^0.3.8",
     "dompurify": "^3.2.4",
     "flexboxgrid": "^6.3.1",
     "flexboxgrid-helpers": "^1.1.3",

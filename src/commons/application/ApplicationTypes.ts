@@ -21,7 +21,7 @@ import {
 import { RouterState } from './types/CommonsTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
 import { SessionState } from './types/SessionTypes';
-import { VscodeState as VscodeState } from './types/VscodeTypes';
+import { VscodeState } from './types/VscodeTypes';
 
 export type OverallState = {
   readonly router: RouterState;
@@ -554,7 +554,8 @@ export const defaultSession: SessionState = {
   students: undefined,
   teamFormationOverviews: undefined,
   gradings: {},
-  notifications: []
+  notifications: [],
+  isPaused: undefined
 };
 
 export const defaultStories: StoriesState = {

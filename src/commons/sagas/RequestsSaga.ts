@@ -1410,6 +1410,14 @@ export const validateResumeCode = async (tokens: Tokens, resumeCode: string): Pr
   return resp != null && resp.ok;
 };
 
+export const pauseUser = async (tokens: Tokens): Promise<boolean> => {
+  const resp = await request(`${courseId()}/user/pause`, 'PUT', {
+    ...tokens,
+  });
+
+  return resp != null && resp.ok;
+}
+
 /**
  * GET /devices
  */

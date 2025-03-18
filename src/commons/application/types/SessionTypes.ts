@@ -21,6 +21,7 @@ export type SessionState = {
   readonly userId?: number;
   readonly name?: string;
   readonly courses: UserCourse[];
+  readonly isPaused?: boolean;
 
   // Course Registration
   readonly courseRegId?: number;
@@ -87,6 +88,7 @@ export type User = {
   name: string;
   username: string;
   courses: UserCourse[];
+  isPaused: boolean;
 };
 
 export type CourseRegistration = {
