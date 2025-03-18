@@ -6,11 +6,10 @@ import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';
 import { selectTokens } from './BackendSaga';
 import {
+  getAllContests,
   getAllTotalXp,
   getContestPopularVoteLeaderboard,
-  getContestScoreLeaderboard,
-  getAllContests
-} from './RequestsSaga';
+  getContestScoreLeaderboard} from './RequestsSaga';
 
 const LeaderboardSaga = combineSagaHandlers(LeaderboardActions, {
   getAllUsersXp: function* () {

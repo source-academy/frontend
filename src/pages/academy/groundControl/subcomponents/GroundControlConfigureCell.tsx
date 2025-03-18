@@ -15,10 +15,10 @@ import React, { useCallback, useState } from 'react';
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
 import CalculateContestScoreButton from '../configureControls/CalculateContestScoreButton';
+import DispatchContestXpButton from '../configureControls/DispatchContestXpButton';
 import ExportScoreLeaderboardButton from '../configureControls/ExportScoreLeaderboardButton';
 import ExportVoteLeaderboardButton from '../configureControls/ExportVoteLeaderboardButton';
 import AssignEntriesButton from './configureControls/AssignEntriesButton';
-import DispatchContestXpButton from '../configureControls/DispatchContestXpButton';
 
 type Props = {
   handleConfigureAssessment: (
