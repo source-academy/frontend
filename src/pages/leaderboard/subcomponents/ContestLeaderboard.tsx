@@ -65,8 +65,8 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
 
   // Display constants
   const visibleEntries = useTypedSelector(store => store.session.topContestLeaderboardDisplay);
-  const top3 = rankedLeaderboard.filter(x => x.rank !== undefined && x.rank <= 3);
-  const rest = rankedLeaderboard.filter(x => x.rank !== undefined && x.rank <= Number(visibleEntries) && x.rank > 3);
+  const top3 = rankedLeaderboard.slice(0, 3);
+  const rest = rankedLeaderboard.slice(3, Number(visibleEntries));
 
   // const workspaceLocation = 'assessment';
   const navigate = useNavigate();

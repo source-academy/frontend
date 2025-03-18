@@ -47,7 +47,7 @@ const OverallLeaderboard: React.FC = () => {
 
   // Display constants
   const visibleEntries = useTypedSelector(store => store.session.topLeaderboardDisplay);
-  const topX = rankedLeaderboard.filter(x => x.rank <= Number(visibleEntries));
+  const topX = rankedLeaderboard.slice(0, Number(visibleEntries));
 
   // Define column definitions for ag-Grid
   const columnDefs: ColDef<LeaderboardRow>[] = useMemo(
