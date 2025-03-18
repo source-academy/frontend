@@ -1274,6 +1274,24 @@ export const calculateContestScore = async (
 };
 
 /**
+ * POST /courses/{courseId}/admin/assessments/{assessmentId}/dispatchContestXp
+ */
+export const dispatchContestXp = async (
+  assessmentId: number,
+  tokens: Tokens
+): Promise<Response | null> => {
+  const resp = await request(
+    `${courseId()}/admin/assessments/${assessmentId}/dispatchContestXp`,
+    'POST',
+    {
+      ...tokens
+    }
+  );
+
+  return resp;
+};
+
+/**
  * GET /courses/{courseId}/admin/assessments/{assessmentId}/{visibleEntries}/scoreLeaderboard
  */
 export const getScoreLeaderboard = async (
