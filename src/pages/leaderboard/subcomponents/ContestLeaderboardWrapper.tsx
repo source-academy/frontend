@@ -1,27 +1,30 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation, useParams } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { LeaderboardContestDetails } from 'src/features/leaderboard/LeaderboardTypes';
 
 import NotFound from '../../notFound/NotFound';
 import ContestLeaderboard from './ContestLeaderboard';
+import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
+import { useDispatch } from 'react-redux';
 
 const ContestLeaderboardWrapper: React.FC = () => {
   const enableContestLeaderboard = useTypedSelector(
     store => store.session.enableContestLeaderboard
   );
-  const contestAssessments = useTypedSelector(store => store.session.assessmentOverviews);
+
+  const dispatch = useDispatch();
+  const contestAssessments: LeaderboardContestDetails[] = useTypedSelector(store => store.leaderboard.contests);
+
+  useEffect(() => {
+    dispatch(LeaderboardActions.getContests());
+  }, [dispatch]);
+  
+  console.log("CONTEST ASSESSMENTS" + contestAssessments);
   const defaultContest =
     contestAssessments?.find(
-      assessment => assessment.type == 'Contests' && assessment.isPublished
+      assessment => assessment.published
     ) ?? null;
-  const contestDetails: LeaderboardContestDetails[] = (contestAssessments ?? [])
-    .filter(assessment => assessment.type === 'Contests')
-    .map(contest => ({
-      contest_id: contest.id,
-      title: contest.title,
-      published: contest.isPublished
-    }));
 
   const courseId = useTypedSelector(store => store.session.courseId);
   const baseLink = `/courses/${courseId}/leaderboard`;
@@ -34,7 +37,7 @@ const ContestLeaderboardWrapper: React.FC = () => {
           enableContestLeaderboard ? (
             <ContestLeaderboardWrapperHelper
               baseLink={baseLink}
-              contestDetails={contestDetails}
+              contestDetails={contestAssessments}
               type="score"
             />
           ) : (
@@ -49,7 +52,7 @@ const ContestLeaderboardWrapper: React.FC = () => {
           enableContestLeaderboard ? (
             <ContestLeaderboardWrapperHelper
               baseLink={baseLink}
-              contestDetails={contestDetails}
+              contestDetails={contestAssessments}
               type="popularvote"
             />
           ) : (
@@ -62,7 +65,7 @@ const ContestLeaderboardWrapper: React.FC = () => {
         path="/"
         element={
           enableContestLeaderboard && defaultContest != null ? (
-            <Navigate to={`${baseLink}/contests/${defaultContest.id}/score`} />
+            <Navigate to={`${baseLink}/contests/${defaultContest.contest_id}/score`} />
           ) : (
             <Navigate to={baseLink} />
           )
@@ -89,13 +92,16 @@ const ContestLeaderboardWrapperHelper: React.FC<{
     }
   }
 
+  console.log("HERE" + id);
+  console.log("CONTEST DETAILS1" + contestDetails);
   if (!contestDetails.length) {
     // Wait for contestDetails to load
     return null;
   }
+  console.log("CONTEST DETAILS" + contestDetails);
   const contest = contestDetails.find(contest => contest.contest_id === parseInt(id ?? '', 10));
 
-  return contest && contest.published ? (
+  return contest !== undefined && contest.published ? (
     <ContestLeaderboard type={type} contestID={contest.contest_id} />
   ) : (
     <Navigate to={baseLink} />
