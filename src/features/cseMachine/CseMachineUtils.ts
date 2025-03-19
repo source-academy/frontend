@@ -853,6 +853,15 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
+      case InstrType.SPREAD:
+        return new ControlItemComponent(
+          'spread',
+          'Unpack array to its elements',
+          stackHeight,
+          highlightOnHover,
+          unhighlightOnHover,
+          topItem
+        );
       default:
         return new ControlItemComponent(
           'INSTRUCTION',
