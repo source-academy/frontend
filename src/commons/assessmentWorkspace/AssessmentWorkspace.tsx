@@ -700,7 +700,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         }
         questionProgress={questionProgress}
         key="next_question"
-        submitOnFinish={assessment.onFinish === 'submit' || assessment.type === 'Visions'}
+        submitOnFinish={assessment.onFinish === 'submitAndReturnToGame'}
       />
     );
 
