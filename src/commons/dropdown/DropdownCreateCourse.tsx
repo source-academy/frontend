@@ -40,6 +40,7 @@ const DropdownCreateCourse: React.FC<Props> = props => {
     enableAchievements: true,
     enableSourcecast: true,
     enableStories: false,
+    enableLlmGrading: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: '',
@@ -223,7 +224,8 @@ const DropdownCreateCourse: React.FC<Props> = props => {
                 })
               }
             />
-
+          </div>
+          <div>
             <Switch
               checked={courseConfig.enableStories}
               inline
@@ -232,6 +234,18 @@ const DropdownCreateCourse: React.FC<Props> = props => {
                 setCourseConfig({
                   ...courseConfig,
                   enableStories: (e.target as HTMLInputElement).checked
+                })
+              }
+            />
+
+            <Switch
+              checked={courseConfig.enableLlmGrading}
+              inline
+              label="Enable LLM Grading"
+              onChange={e =>
+                setCourseConfig({
+                  ...courseConfig,
+                  enableLlmGrading: (e.target as HTMLInputElement).checked
                 })
               }
             />

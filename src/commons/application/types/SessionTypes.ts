@@ -105,6 +105,7 @@ export type CourseConfiguration = {
   enableAchievements: boolean;
   enableSourcecast: boolean;
   enableStories: boolean;
+  enableLlmGrading?: boolean;
   sourceChapter: Chapter;
   sourceVariant: Variant;
   moduleHelpText: string;
