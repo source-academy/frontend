@@ -39,6 +39,7 @@ export type SessionState = {
   readonly enableAchievements?: boolean;
   readonly enableSourcecast?: boolean;
   readonly enableStories?: boolean;
+  readonly enableLlmGrading?: boolean;
   readonly sourceChapter?: Chapter;
   readonly sourceVariant?: Variant;
   readonly moduleHelpText?: string;
