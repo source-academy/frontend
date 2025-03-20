@@ -34,6 +34,7 @@ const Application: React.FC = () => {
   // Used for dev tools detection
   const [pauseAcademy, setPauseAcademy] = useState(false);
   const [pauseAcademyReason, setPauseAcademyReason] = useState('');
+  const hasSentPauseUserRequest = React.useRef<boolean>(false);
 
   // Effect to fetch the latest user info and course configurations from the backend on refresh,
   // if the user was previously logged in
@@ -150,9 +151,14 @@ const Application: React.FC = () => {
       ondevtoolopen: () => {
         setPauseAcademy(true);
         setPauseAcademyReason("Developer tools has been used");
-        dispatch(SessionActions.pauseUser());
+        if (hasSentPauseUserRequest.current === false) {
+          dispatch(SessionActions.pauseUser());
+          hasSentPauseUserRequest.current = true;
+        }
       },
-      clearIntervalWhenDevOpenTrigger: true,
+      ondevtoolclose: () => {
+        hasSentPauseUserRequest.current = false;
+      }
     };
 
     if (enableExamMode) {
@@ -167,7 +173,7 @@ const Application: React.FC = () => {
         }
       });
     }
-  }, [enableExamMode]);
+  }, [dispatch, enableExamMode, isPaused, hasSentPauseUserRequest]);
 
   const resumeCodeSubmitHandler = (resumeCode: string) => {
     if (!resumeCode || resumeCode.length === 0) {
