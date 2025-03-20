@@ -65,8 +65,10 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
 
   // Display constants
   const visibleEntries = useTypedSelector(store => store.session.topContestLeaderboardDisplay);
-  const top3 = rankedLeaderboard.slice(0, 3);
-  const rest = rankedLeaderboard.slice(3, Number(visibleEntries));
+  // const top3 = rankedLeaderboard.slice(0, 3);
+  // const rest = rankedLeaderboard.slice(3, Number(visibleEntries));
+  const top3 = rankedLeaderboard.filter(row => row.rank <= 3);
+  const rest = rankedLeaderboard.slice(top3.length, Number(visibleEntries));
 
   // const workspaceLocation = 'assessment';
   const navigate = useNavigate();
@@ -154,7 +156,7 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
       {/* Leaderboard Table (Top 3) */}
       <div className="ag-theme-alpine">
         <h2>Contest Winners</h2>
-        <AgGridReact rowData={top3} columnDefs={columnDefs} domLayout="autoHeight" rowHeight={60} />
+        <AgGridReact rowData={top3} columnDefs={columnDefs} domLayout="autoHeight" rowHeight={60} pagination={top3.length > 10} paginationPageSize={10} paginationPageSizeSelector={[10]}/>
       </div>
 
       <div className="table-gap"></div>
