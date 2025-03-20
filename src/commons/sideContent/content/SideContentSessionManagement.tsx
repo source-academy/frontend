@@ -2,7 +2,7 @@ import { Classes, HTMLTable, Icon, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { CollabEditingAccess, type SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 //import { changeDefaultEditable } from 'src/commons/collabEditing/CollabEditingHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -25,6 +25,7 @@ function AdminView({ users }: AdminViewProps) {
   );
 
   const handleToggleAccess = (checked: boolean, id: string) => {
+    // TODO: Slightly messy code, refactor later
     if (id !== 'all') {
       if (toggling[id]) return;
       setToggling(prev => ({ ...prev, [id]: true }));
@@ -111,6 +112,11 @@ type Props = {
 };
 
 const SideContentSessionManagement: React.FC<Props> = ({ users, playgroundCode, readOnly }) => {
+  useEffect(() => {
+    const icon = document.querySelector('.bp5-icon-people');
+    icon?.classList.add('side-content-tab-alert');
+    // TODO: currently blinking not working as expected
+  });
   if (Object.values(users).length === 0) return;
   const myself = Object.values(users)[0];
 
@@ -118,7 +124,7 @@ const SideContentSessionManagement: React.FC<Props> = ({ users, playgroundCode, 
     <div className={classes['table-container']}>
       <span className={classes['span']}>
         This is the session management tab. Add users by sharing the session code. If you are the
-        owner of the session, you can manage their users' access levels from the table below.
+        owner of this session, you can manage their users' access levels from the table below.
       </span>
       <br></br>
       <span className={classes['span']}>

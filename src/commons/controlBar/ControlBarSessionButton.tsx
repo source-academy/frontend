@@ -1,13 +1,4 @@
-import {
-  Classes,
-  Colors,
-  Divider,
-  FormGroup,
-  Menu,
-  Popover,
-  Text,
-  Tooltip
-} from '@blueprintjs/core';
+import { Classes, Colors, Divider, FormGroup, Popover, Text, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useRef, useState } from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
@@ -57,44 +48,6 @@ export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
     }
   };
 
-  const inviteButtonPopoverContent = (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
-      {!props.editorSessionId ? (
-        <>
-          <Text>You are not currently in any session.</Text>
-          <Divider />
-          <ControlButton label={'Create'} icon={IconNames.ADD} onClick={handleStartInvite} />
-        </>
-      ) : (
-        <>
-          <Text>You have joined the session as {defaultReadOnly ? 'a viewer' : 'an editor'}.</Text>
-          <Divider />
-          {sessionId && (
-            <FormGroup subLabel="Invite">
-              <input value={sessionId} readOnly={true} />
-              <CopyToClipboard
-                text={sessionId}
-                onCopy={() => showSuccessMessage('Copied to clipboard')}
-              >
-                <ControlButton icon={IconNames.DUPLICATE} />
-              </CopyToClipboard>
-            </FormGroup>
-          )}
-        </>
-      )}
-    </div>
-  );
-
-  const inviteButton = (
-    <Popover
-      popoverClassName="Popover-share"
-      inheritDarkTheme={false}
-      content={inviteButtonPopoverContent}
-    >
-      <ControlButton label={props.editorSessionId ? 'Invite' : 'Create'} icon={IconNames.GRAPH} />
-    </Popover>
-  );
-
   const handleStartJoining = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const joinElemValue = joinElemRef.current;
@@ -124,30 +77,20 @@ export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
     );
   };
 
-  const joinButtonPopoverContent = (
-    // TODO: this form should use Blueprint
-    <form onSubmit={handleStartJoining}>
-      <input type="text" onChange={handleChange} />
-      <span className={Classes.POPOVER_DISMISS}>
-        <ControlButton icon={IconNames.KEY_ENTER} options={{ type: 'submit' }} />
-      </span>
-    </form>
-  );
-
-  const joinButton = (
-    <Popover
-      popoverClassName="Popover-share"
-      inheritDarkTheme={false}
-      content={joinButtonPopoverContent}
-    >
-      <ControlButton label="Join" icon={IconNames.LOG_IN} />
-    </Popover>
-  );
+  // const joinButton = (
+  //   <Popover
+  //     popoverClassName="Popover-share"
+  //     inheritDarkTheme={false}
+  //     content={joinButtonPopoverContent}
+  //   >
+  //     <ControlButton label="Join" icon={IconNames.LOG_IN} />
+  //   </Popover>
+  // );
 
   const leaveButton = (
     <ControlButton
       label="Leave"
-      icon={IconNames.FEED}
+      icon={IconNames.LOG_OUT}
       onClick={() => {
         // FIXME: this handler should be a Saga action or at least in a controller
         props.handleSetEditorSessionId!('');
@@ -157,21 +100,74 @@ export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
     />
   );
 
+  const inviteButtonPopoverContent = (
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      {!props.editorSessionId ? (
+        <div
+          style={{
+            padding: '10px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center'
+          }}
+        >
+          <Text>You are not currently in any session.</Text>
+          <Divider />
+          <ControlButton
+            label={'Create a new session'}
+            icon={IconNames.ADD}
+            onClick={handleStartInvite}
+          />
+          <br></br>
+          <span>... or join an existing one</span>
+          <br></br>
+          <form
+            onSubmit={handleStartJoining}
+            style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}
+          >
+            <input type="text" onChange={handleChange} placeholder="Type your code here..." />
+            <span className={Classes.POPOVER_DISMISS}>
+              <ControlButton icon={IconNames.LOG_IN} options={{ type: 'submit' }} />
+            </span>
+          </form>
+        </div>
+      ) : (
+        <div style={{ padding: '10px', display: 'flex', flexDirection: 'column' }}>
+          <Text>You have joined the session as {defaultReadOnly ? 'a viewer' : 'an editor'}.</Text>
+          <Divider />
+          {sessionId && (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                alignItems: 'center'
+              }}
+            >
+              <FormGroup subLabel="Invite other users to this session">
+                <input value={sessionId} readOnly={true} />
+              </FormGroup>
+              <CopyToClipboard
+                text={sessionId}
+                onCopy={() => showSuccessMessage('Copied to clipboard')}
+              >
+                <ControlButton icon={IconNames.DUPLICATE} />
+              </CopyToClipboard>
+            </div>
+          )}
+          {leaveButton}
+        </div>
+      )}
+    </div>
+  );
+
   const tooltipContent = props.isFolderModeEnabled
     ? 'Currently unsupported in Folder mode'
     : undefined;
 
   return (
     <Tooltip content={tooltipContent} disabled={tooltipContent === undefined}>
-      <Popover
-        content={
-          <Menu large={true}>
-            {inviteButton}
-            {props.editorSessionId === '' ? joinButton : leaveButton}
-          </Menu>
-        }
-        disabled={props.isFolderModeEnabled}
-      >
+      <Popover content={inviteButtonPopoverContent} disabled={props.isFolderModeEnabled}>
         <ControlButton
           label="Session"
           icon={IconNames.SOCIAL_MEDIA}

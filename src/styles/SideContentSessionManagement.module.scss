@@ -48,3 +48,21 @@
 .user-icon {
     margin-right: 5px;
 }
+
+.side-content-tab-alert {
+    -webkit-animation: alert 1s infinite;
+    -moz-animation: alert 1s infinite;
+    -o-animation: alert 1s infinite;
+    animation: alert 1s infinite;
+}
+
+@keyframes alert {
+    0%,
+    50% {
+      background-color: rgba(200, 100, 50, 0.5);
+    }
+    51%,
+    100% {
+      background-image: rgba(138, 155, 168, 0.3);
+    }
+  }
