@@ -70,6 +70,21 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
   const top3 = rankedLeaderboard.filter(row => row.rank <= 3);
   const rest = rankedLeaderboard.slice(top3.length, Number(visibleEntries));
 
+  // Set sample profile pictures (Seeded random)
+    function convertToRandomNumber(id: string): number {
+      const str = id.slice(1);
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = (hash << 5) - hash + char;
+      }
+      return (Math.abs(hash) % 7) + 1;
+    }
+  
+    rankedLeaderboard.map((row: ContestLeaderboardRow) => {
+      row.avatar = `/assets/Sample Profile ${convertToRandomNumber(row.username)}.jpg`;
+    })
+
   // const workspaceLocation = 'assessment';
   const navigate = useNavigate();
   const handleLinkClick = (code: string, votingId: number) => {

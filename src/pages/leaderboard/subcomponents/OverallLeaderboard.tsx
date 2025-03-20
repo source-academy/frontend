@@ -13,11 +13,12 @@ import {
   LeaderboardRow
 } from 'src/features/leaderboard/LeaderboardTypes';
 
-import default_avatar from '../../../assets/default-avatar.jpg';
 import leaderboard_background from '../../../assets/leaderboard_background.jpg';
 import LeaderboardDropdown from './LeaderboardDropdown';
 import LeaderboardExportButton from './LeaderboardExportButton';
 import LeaderboardPodium from './LeaderboardPodium';
+
+import default_avatar from 'src/assets/default-avatar.jpg'
 
 const OverallLeaderboard: React.FC = () => {
   // Retrieve XP Data from store
@@ -49,6 +50,21 @@ const OverallLeaderboard: React.FC = () => {
   const visibleEntries = useTypedSelector(store => store.session.topLeaderboardDisplay);
   const topX = rankedLeaderboard.slice(0, Number(visibleEntries));
 
+  // Set sample profile pictures (Seeded random)
+  function convertToRandomNumber(id: string): number {
+    const str = id.slice(1);
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+    }
+    return (Math.abs(hash) % 7) + 1;
+  }
+
+  rankedLeaderboard.map((row: LeaderboardRow) => {
+    row.avatar = `/assets/Sample Profile ${convertToRandomNumber(row.username)}.jpg`;
+  })
+
   // Define column definitions for ag-Grid
   const columnDefs: ColDef<LeaderboardRow>[] = useMemo(
     () => [
@@ -57,7 +73,7 @@ const OverallLeaderboard: React.FC = () => {
         suppressMovable: true,
         headerName: 'Rank',
         width: 84,
-        sortable: true,
+        sortable: true, 
         cellRenderer: (params: any) => {
           const rank = params.value;
           const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
@@ -81,7 +97,7 @@ const OverallLeaderboard: React.FC = () => {
         )
       },
       { field: 'name', suppressMovable: true, headerName: 'Name', width: 520, sortable: true },
-      { field: 'xp', suppressMovable: true, headerName: 'XP', width: 154, sortable: true },
+      { field: 'xp', suppressMovable: true, headerName: 'XP', width: 414/*154*/, sortable: true }/*,
       {
         field: 'achievements',
         suppressMovable: true,
@@ -89,6 +105,7 @@ const OverallLeaderboard: React.FC = () => {
         headerName: 'Achievements',
         width: 260
       }
+        */
     ],
     []
   );
