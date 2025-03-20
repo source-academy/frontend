@@ -1,103 +1,170 @@
-import { Classes, HTMLTable, Switch } from '@blueprintjs/core';
+import { Classes, HTMLTable, Icon, Switch } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import { CollabEditingAccess, type SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
+import classNames from 'classnames';
 import React, { useState } from 'react';
+import CopyToClipboard from 'react-copy-to-clipboard';
+//import { changeDefaultEditable } from 'src/commons/collabEditing/CollabEditingHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { showSuccessMessage } from 'src/commons/utils/notifications/NotificationsHelper';
+import classes from 'src/styles/SideContentSessionManagement.module.scss';
 
 interface AdminViewProps {
   users: Record<string, SharedbAceUser>;
+  playgroundCode: string;
+  defaultReadOnly: boolean;
 }
 
 function AdminView({ users }: AdminViewProps) {
-  const [toggling, setToggling] = useState<{ [key: string]: boolean }>(
-    Object.fromEntries(Object.entries(users).map(([id]) => [id, true]))
-  );
+  const [toggleAll, setToggleAll] = useState<boolean>(true);
+  const [toggling, setToggling] = useState<{ [key: string]: boolean }>(() => ({
+    ...Object.fromEntries(Object.entries(users).map(([id]) => [id, true]))
+  }));
   const updateUserRoleCallback = useTypedSelector(
     store => store.workspaces.playground.updateUserRoleCallback
   );
 
   const handleToggleAccess = (checked: boolean, id: string) => {
-    if (toggling[id]) return;
-
-    setToggling(prev => ({ ...prev, [id]: true }));
+    if (id !== 'all') {
+      if (toggling[id]) return;
+      setToggling(prev => ({ ...prev, [id]: true }));
+    }
 
     try {
-      updateUserRoleCallback(id, checked ? CollabEditingAccess.EDITOR : CollabEditingAccess.VIEWER);
+      if (id !== 'all') {
+        updateUserRoleCallback(
+          id,
+          checked ? CollabEditingAccess.EDITOR : CollabEditingAccess.VIEWER
+        );
+      } else {
+        // Temporary brute force solution to update all users' roles
+        Object.keys(users).forEach(userId => {
+          if (userId !== 'all') {
+            updateUserRoleCallback(
+              userId,
+              checked ? CollabEditingAccess.EDITOR : CollabEditingAccess.VIEWER
+            );
+          }
+        });
+      }
     } finally {
-      setToggling(prev => ({ ...prev, [id]: false }));
+      if (id !== 'all') setToggling(prev => ({ ...prev, [id]: false }));
+      else setToggleAll(checked);
     }
   };
 
   return (
-    <HTMLTable compact>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Role</th>
-        </tr>
-      </thead>
-      <tbody>
-        {Object.entries(users).map(([userId, user], index) => (
-          <tr key={userId}>
-            <td className={Classes.INTERACTIVE}>
-              <div style={{ backgroundColor: user.color }} />
-              <div>{user.name}</div>
-            </td>
-            <td>
-              <Switch
-                labelElement={
-                  user.role === CollabEditingAccess.OWNER
-                    ? 'Admin'
-                    : user.role.charAt(0).toUpperCase() + user.role.slice(1)
-                }
-                alignIndicator="right"
-                checked={
-                  user.role === CollabEditingAccess.OWNER ||
-                  user.role === CollabEditingAccess.EDITOR
-                }
-                disabled={user.role === CollabEditingAccess.OWNER}
-                onChange={event => handleToggleAccess(event.target.checked, userId)}
-              />
-            </td>
+    <>
+      <span className={classes['span']}>
+        Toggle all roles:
+        <Switch
+          labelElement={toggleAll ? 'Editor' : 'Viewer'}
+          alignIndicator="left"
+          checked={toggleAll}
+          onChange={event => handleToggleAccess(event.target.checked, 'all')}
+          className={classNames(classes['switch'], classes['default-switch'])}
+        />
+      </span>
+      <HTMLTable compact className={classes['table']}>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Role</th>
           </tr>
-        ))}
-      </tbody>
-    </HTMLTable>
+        </thead>
+        <tbody>
+          {Object.entries(users).map(([userId, user], index) => (
+            <tr key={userId}>
+              <td className={classNames(Classes.INTERACTIVE, classes['left-cell'])}>
+                <div style={{ backgroundColor: user.color }} className={classes['user-icon']} />
+                <div>{user.name}</div>
+              </td>
+              <td className={classes['right-cell']}>
+                <Switch
+                  labelElement={
+                    user.role === CollabEditingAccess.OWNER
+                      ? 'Admin'
+                      : user.role.charAt(0).toUpperCase() + user.role.slice(1)
+                  }
+                  alignIndicator="right"
+                  checked={
+                    user.role === CollabEditingAccess.OWNER ||
+                    user.role === CollabEditingAccess.EDITOR
+                  }
+                  disabled={user.role === CollabEditingAccess.OWNER}
+                  onChange={event => handleToggleAccess(event.target.checked, userId)}
+                  className={classes['switch']}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </HTMLTable>
+    </>
   );
 }
 
 type Props = {
   users: Record<string, SharedbAceUser>;
+  playgroundCode: string;
+  readOnly: boolean;
 };
 
-const SideContentSessionManagement: React.FC<Props> = ({ users }) => {
+const SideContentSessionManagement: React.FC<Props> = ({ users, playgroundCode, readOnly }) => {
   if (Object.values(users).length === 0) return;
   const myself = Object.values(users)[0];
 
   return (
-    <div className="session-management-table">
-      {myself.role === CollabEditingAccess.OWNER ? (
-        <AdminView users={users} />
-      ) : (
-        <HTMLTable compact>
-          <thead>
-            <tr>
-              <th>Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.values(users).map((user, index) => {
-              return (
-                <tr key={user.color}>
-                  <td className={Classes.INTERACTIVE}>
-                    <div style={{ backgroundColor: user.color }} />
-                    <div>{user.name}</div>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </HTMLTable>
-      )}
+    <div className={classes['table-container']}>
+      <span className={classes['span']}>
+        This is the session management tab. Add users by sharing the session code. If you are the
+        owner of the session, you can manage their users' access levels from the table below.
+      </span>
+      <br></br>
+      <span className={classes['span']}>
+        Session code:
+        <CopyToClipboard
+          text={playgroundCode}
+          onCopy={() => showSuccessMessage('Session code copied!')}
+        >
+          <div className={classes['session-code']}>
+            {' '}
+            {playgroundCode} <Icon icon={IconNames.DUPLICATE} />
+          </div>
+        </CopyToClipboard>
+      </span>
+      <br></br>
+      <span className={classes['span']}>
+        Number of users in the session: {Object.entries(users).length}
+      </span>
+      <div className="session-management-table">
+        {myself.role === CollabEditingAccess.OWNER ? (
+          <AdminView users={users} defaultReadOnly={readOnly} playgroundCode={playgroundCode} />
+        ) : (
+          <HTMLTable compact className={classes['table']}>
+            <thead>
+              <tr>
+                <th>Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.values(users).map((user, index) => {
+                return (
+                  <tr key={user.color}>
+                    <td className={classNames(Classes.INTERACTIVE, classes['left-cell'])}>
+                      <div
+                        style={{ backgroundColor: user.color }}
+                        className={classes['user-icon']}
+                      />
+                      <div>{user.name}</div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </HTMLTable>
+        )}
+      </div>
     </div>
   );
 };

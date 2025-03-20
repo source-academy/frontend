@@ -79,6 +79,9 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
     });
 
     const updateUsers = (binding: SharedbAceBinding) => {
+      if (binding.connectedUsers === undefined) {
+        return;
+      }
       propsRef.current.setUsers?.(binding.connectedUsers);
       const myUserId = Object.keys(ShareAce.usersPresence.localPresences)[0];
       if (binding.connectedUsers[myUserId].role !== user.role) {

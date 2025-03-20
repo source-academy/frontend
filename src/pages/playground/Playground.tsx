@@ -305,8 +305,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
   );
 
   const sessionManagementTab: SideContentTab = useMemo(() => {
-    return makeSessionManagementTabFrom(users);
-  }, [users]);
+    const playgroundCode = editorSessionId;
+    return makeSessionManagementTabFrom(users, playgroundCode, sessionDetails?.readOnly || false);
+  }, [users, editorSessionId, sessionDetails?.readOnly]);
 
   const usingRemoteExecution =
     useTypedSelector(state => !!state.session.remoteExecutionSession) && !isSicpEditor;
