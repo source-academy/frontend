@@ -1,6 +1,16 @@
 import 'js-slang/dist/editors/ace/theme/source';
 
-import { Button, ButtonGroup, Card, Classes, Divider, Pre, Slider } from '@blueprintjs/core';
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  Classes,
+  Divider,
+  Icon,
+  Popover,
+  Pre,
+  Slider
+} from '@blueprintjs/core';
 import { getHotkeyHandler, HotkeyItem } from '@mantine/hooks';
 import classNames from 'classnames';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
@@ -22,6 +32,13 @@ import {
   StepperVariableDeclaration,
   StepperVariableDeclarator
 } from 'js-slang/dist/stepper/stepperV2/nodes/Statement/VariableDeclaration';
+import { StepperArrowFunctionExpression } from 'js-slang/dist/stepper/stepperV2/nodes/Expression/ArrowFunctionExpression';
+import { StepperConditionalExpression } from 'js-slang/dist/stepper/stepperV2/nodes/Expression/ConditionalExpression';
+import { StepperFunctionApplication } from 'js-slang/dist/stepper/stepperV2/nodes/Expression/FunctionApplication';
+import { StepperExpression } from 'js-slang/dist/stepper/stepperV2/nodes';
+import { StepperIfStatement } from 'js-slang/dist/stepper/stepperV2/nodes/Statement/IfStatement';
+import { StepperReturnStatement } from 'js-slang/dist/stepper/stepperV2/nodes/Statement/ReturnStatement';
+import { astToString } from 'js-slang/dist/utils/ast/astToString';
 
 const SubstDefaultText = () => {
   return (
@@ -181,9 +198,25 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
 };
 
 /////////////////////////////////// Custom AST Renderer for Stepper //////////////////////////////////
+function composeStyleWrapper(first: StyleWrapper | undefined, second: StyleWrapper | undefined): StyleWrapper | undefined {
+  if (first === undefined && second === undefined) {
+    return undefined;
+  } else if (first === undefined) {
+    return second;
+  } else if (second === undefined) {
+    return first;
+  }
+
+  return (node: StepperBaseNode) => (rawStyle: React.ReactNode) => {
+    const immediateStyle = first(node)(rawStyle);
+    return second(node)(immediateStyle);
+  }
+}
+
+type StyleWrapper = (node: StepperBaseNode) => (rawStyle: React.ReactNode) => React.ReactNode;
 function CustomASTRenderer(props: IStepperPropContents): React.ReactNode {
-  function renderNode(node: StepperBaseNode): React.ReactNode {
-    const wrapMarkerStyle = (renderNode: React.ReactNode): React.ReactNode => {
+  function markerStyleWrapper(node: StepperBaseNode) {
+    return (renderNode: React.ReactNode) => {
       if (props.markers === undefined) {
         return renderNode;
       }
@@ -194,11 +227,67 @@ function CustomASTRenderer(props: IStepperPropContents): React.ReactNode {
         }
       });
       return returnNode;
+    }
+  }
+  function renderNode(
+    currentNode: StepperBaseNode,
+    parentNode?: StepperBaseNode,
+    isRight?: boolean,
+    styleWrapper?: StyleWrapper
+  ): React.ReactNode {
+    const renderArguments = (nodes: StepperExpression[]) => {
+      const args: React.ReactNode[] = nodes.map(arg =>
+        renderNode(arg, undefined, undefined, styleWrapper)
+      );
+      var renderedArguments = args.slice(1).reduce(
+        (result, item) => (
+          <span>
+            {result}
+            {', '}
+            {item}
+          </span>
+        ),
+        args[0]
+      );
+      renderedArguments = (
+        <span>
+          {'('}
+          {renderedArguments}
+          {')'}
+        </span>
+      );
+      return renderedArguments;
+    };
+
+    const renderFunctionArguments = (nodes: StepperExpression[]) => {
+      const args: React.ReactNode[] = nodes.map(arg =>
+        renderNode(arg, undefined, undefined, styleWrapper)
+      );
+      var renderedArguments = args.slice(1).reduce(
+        (result, item) => (
+          <span>
+            {result}
+            {', '}
+            {item}
+          </span>
+        ),
+        args[0]
+      );
+      if (args.length !== 1) {
+        renderedArguments = (
+          <span>
+            {'('}
+            {renderedArguments}
+            {')'}
+          </span>
+        );
+      }
+      return renderedArguments;
     };
 
     const renderers = {
       Literal(node: StepperLiteral) {
-        return <span className="stepper-literal">{node.value}</span>;
+        return <span className="stepper-literal">{node.value?.toString()}</span>;
       },
       Identifier(node: StepperIdentifier) {
         return <span>{node.name}</span>;
@@ -207,17 +296,81 @@ function CustomASTRenderer(props: IStepperPropContents): React.ReactNode {
         return (
           <span>
             <span className="stepper-operator">{` ${node.operator}`}</span>
-            {renderNode(node.argument)}
+            {renderNode(node.argument, node, undefined, styleWrapper)}
           </span>
         );
       },
       BinaryExpression(node: StepperBinaryExpression) {
-        // TODO: check precedence
         return (
           <span>
-            {renderNode(node.left)}
+            {renderNode(node.left, node, false, styleWrapper)}
             <span className="stepper-operator">{` ${node.operator} `}</span>
-            {renderNode(node.right)}
+            {renderNode(node.right, node, true, styleWrapper)}
+          </span>
+        );
+      },
+      ConditionalExpression(node: StepperConditionalExpression) {
+        return (
+          <span>
+            {renderNode(node.test, node, undefined, styleWrapper)}
+            <span className="stepper-operator">{` ? `}</span>
+            {renderNode(node.consequent, node, undefined, styleWrapper)}
+            <span className="stepper-operator">{` : `}</span>
+            {renderNode(node.alternate, node, undefined, styleWrapper)}
+          </span>
+        );
+      },
+      ArrowFunctionExpression(node: StepperArrowFunctionExpression) {
+        function muTermStyleWrapper(targetNode: StepperBaseNode) {
+          if (targetNode.type === 'Identifier') {
+            if ((targetNode as StepperIdentifier).name === node.name) {
+              const reference = astToString(node);
+              return (styledNode: React.ReactNode) => (
+                <span className="stepper-mu-term">
+                  <Popover
+                    interactionKind="hover"
+                    placement="bottom"
+                    content={
+                      <div>
+                        <Icon icon="code" />
+                        <span>{' Function definition'}</span>
+                        <pre className="bp5-code-block">
+                          <code>{reference}</code>
+                        </pre>
+                      </div>
+                    }
+                  >
+                    {styledNode}
+                  </Popover>
+                </span>
+              );
+            }
+          }
+          return (styledNode: React.ReactNode) => styledNode;
+        }
+        return (
+          <span>
+            {renderFunctionArguments(node.params)}
+            <span className="stepper-identifier">{' => '}</span>
+            {renderNode(node.body, undefined, undefined, composeStyleWrapper(styleWrapper, muTermStyleWrapper))}
+          </span>
+        );
+      },
+      CallExpression(node: StepperFunctionApplication) {
+        var renderedCallee = renderNode(node.callee, undefined, undefined, styleWrapper);
+        if (node.callee.type !== 'Identifier') {
+          renderedCallee = (
+            <span>
+              {'('}
+              {renderedCallee}
+              {')'}
+            </span>
+          );
+        }
+        return (
+          <span>
+            {renderedCallee}
+            {renderArguments(node.arguments)}
           </span>
         );
       },
@@ -225,8 +378,20 @@ function CustomASTRenderer(props: IStepperPropContents): React.ReactNode {
         return (
           <span>
             {node.body.map(ast => (
-              <div>{renderNode(ast)}</div>
+              <div>{renderNode(ast, node, undefined, styleWrapper)}</div>
             ))}
+          </span>
+        );
+      },
+      IfStatement(node: StepperIfStatement) {
+        return <span>{'TO BE IMPLEMENTED'}</span>;
+      },
+      ReturnStatement(node: StepperReturnStatement) {
+        return (
+          <span>
+            <span className="stepper-operator">{'return '}</span>
+            {node.argument && renderNode(node.argument, undefined, undefined, styleWrapper)}
+            {';'}
           </span>
         );
       },
@@ -235,8 +400,8 @@ function CustomASTRenderer(props: IStepperPropContents): React.ReactNode {
           <span>
             {'{'}
             {node.body.map(ast => (
-              <div style={{marginLeft: '15px'}}>
-                {renderNode(ast)}
+              <div style={{ marginLeft: '15px' }}>
+                {renderNode(ast, undefined, undefined, styleWrapper)}
               </div>
             ))}
             {'}'}
@@ -246,7 +411,7 @@ function CustomASTRenderer(props: IStepperPropContents): React.ReactNode {
       ExpressionStatement(node: StepperExpressionStatement) {
         return (
           <span>
-            {renderNode(node.expression)}
+            {renderNode(node.expression, undefined, undefined, styleWrapper)}
             {';'}
           </span>
         );
@@ -258,7 +423,7 @@ function CustomASTRenderer(props: IStepperPropContents): React.ReactNode {
             {node.declarations.map((ast, idx) => (
               <span>
                 {idx !== 0 && ', '}
-                {renderNode(ast)}
+                {renderNode(ast, undefined, undefined, styleWrapper)}
               </span>
             ))}
             {';'}
@@ -268,22 +433,155 @@ function CustomASTRenderer(props: IStepperPropContents): React.ReactNode {
       VariableDeclarator(node: StepperVariableDeclarator) {
         return (
           <span>
-            {renderNode(node.id)}
+            {renderNode(node.id, undefined, undefined, styleWrapper)}
             {' = '}
-            {node.init ? renderNode(node.init) : 'undefined'}
+            {node.init ? renderNode(node.init, undefined, undefined, styleWrapper) : 'undefined'}
           </span>
         );
       }
     };
 
     // @ts-ignore
-    const renderer = renderers[node.type];
-    return renderer ? wrapMarkerStyle(renderer(node)) : '...';
+    const renderer = renderers[currentNode.type];
+    const isParenthesis = expressionNeedsParenthesis(currentNode, parentNode, isRight);
+    var result = renderer ? renderer(currentNode) : `<${currentNode.type}>`;
+    if (isParenthesis) {
+      result = (
+        <span>
+          {'('}
+          {result}
+          {')'}
+        </span>
+      );
+    }
+    // custom wrapper style
+    if (styleWrapper) {
+      result = styleWrapper(currentNode)(result);
+    }
+    return result;
   }
   const getDisplayedNode = useCallback((): React.ReactNode => {
-    return renderNode(props.ast);
+    return renderNode(props.ast, undefined, undefined, markerStyleWrapper);
   }, [props]);
   return <div className="stepper-display">{getDisplayedNode()}</div>;
+}
+
+/////////// Parenthesis handling ////////////
+const OPERATOR_PRECEDENCE = {
+  '||': 2,
+  '??': 3,
+  '&&': 4,
+  '|': 5,
+  '^': 6,
+  '&': 7,
+  '==': 8,
+  '!=': 8,
+  '===': 8,
+  '!==': 8,
+  '<': 9,
+  '>': 9,
+  '<=': 9,
+  '>=': 9,
+  in: 9,
+  instanceof: 9,
+  '<<': 10,
+  '>>': 10,
+  '>>>': 10,
+  '+': 11,
+  '-': 11,
+  '*': 12,
+  '%': 12,
+  '/': 12,
+  '**': 13
+};
+const NEEDS_PARENTHESES = 17;
+const EXPRESSIONS_PRECEDENCE = {
+  // Definitions
+  ArrayExpression: 20,
+  TaggedTemplateExpression: 20,
+  ThisExpression: 20,
+  Identifier: 20,
+  PrivateIdentifier: 20,
+  Literal: 18,
+  TemplateLiteral: 20,
+  Super: 20,
+  SequenceExpression: 20,
+  // Operations
+  MemberExpression: 19,
+  ChainExpression: 19,
+  CallExpression: 19,
+  NewExpression: 19,
+  // Other definitions
+  ArrowFunctionExpression: NEEDS_PARENTHESES,
+  ClassExpression: NEEDS_PARENTHESES,
+  FunctionExpression: NEEDS_PARENTHESES,
+  ObjectExpression: NEEDS_PARENTHESES,
+  // Other operations
+  UpdateExpression: 16,
+  UnaryExpression: 15,
+  AwaitExpression: 15,
+  BinaryExpression: 14,
+  LogicalExpression: 13,
+  ConditionalExpression: 4,
+  AssignmentExpression: 3,
+  YieldExpression: 2,
+  RestElement: 1
+};
+
+// Inspired by astring
+function expressionNeedsParenthesis(
+  node: StepperBaseNode,
+  parentNode?: StepperBaseNode,
+  isRightHand?: boolean
+) {
+  if (parentNode === undefined) {
+    return false;
+  }
+
+  const nodePrecedence = EXPRESSIONS_PRECEDENCE[node.type as keyof typeof EXPRESSIONS_PRECEDENCE];
+  if (nodePrecedence === NEEDS_PARENTHESES) {
+    return true;
+  }
+  const parentNodePrecedence =
+    EXPRESSIONS_PRECEDENCE[parentNode.type as keyof typeof EXPRESSIONS_PRECEDENCE];
+  if (nodePrecedence === undefined || parentNodePrecedence === undefined) {
+    return false;
+  }
+
+  if (nodePrecedence !== parentNodePrecedence) {
+    return (
+      (!isRightHand && nodePrecedence === 15 && parentNodePrecedence === 14) ||
+      nodePrecedence < parentNodePrecedence
+    );
+  }
+
+  if (!('operator' in node) || !('operator' in parentNode)) {
+    return false;
+  }
+
+  if (nodePrecedence !== 13 && nodePrecedence !== 14) {
+    // Not a `LogicalExpression` or `BinaryExpression`
+    return false;
+  }
+  if (node.operator === '**' && parentNode.operator === '**') {
+    // Exponentiation operator has right-to-left associativity
+    return !isRightHand;
+  }
+  if (
+    nodePrecedence === 13 &&
+    parentNodePrecedence === 13 &&
+    (node.operator === '??' || parentNode.operator === '??')
+  ) {
+    return true;
+  }
+
+  const nodeOperatorPrecedence =
+    OPERATOR_PRECEDENCE[node.operator as keyof typeof OPERATOR_PRECEDENCE];
+  const parentNodeOperatorPrecedence =
+    OPERATOR_PRECEDENCE[parentNode.operator as keyof typeof OPERATOR_PRECEDENCE];
+  return isRightHand
+    ? nodeOperatorPrecedence <= parentNodeOperatorPrecedence
+    : nodeOperatorPrecedence <= parentNodeOperatorPrecedence;
 }
 
 export default SideContentSubstVisualizer;

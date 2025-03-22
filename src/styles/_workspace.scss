@@ -435,6 +435,15 @@ $code-color-notification: #f9f0d7;
             color: yellow;
           }
 
+          .stepper-mu-term {
+            background: rgba(255, 83, 83, 0.35);
+            pointer-events: auto;
+            cursor: pointer;
+            z-index: 20;
+            padding: 0px 3px;
+            border-radius: 5px;
+          }
+
           .stepper-display {
             font-family: 'Inconsolata', 'Consolas', monospace;
           }
