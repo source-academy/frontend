@@ -105,7 +105,8 @@ const mockUser: User = {
       role: Role.Staff,
       viewable: true
     }
-  ]
+  ],
+  isPaused: false
 };
 
 const mockCourseRegistration1: CourseRegistration = {

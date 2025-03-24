@@ -63,7 +63,8 @@ test('SET_USER works correctly', () => {
         viewable: true,
         role: Role.Staff
       }
-    ]
+    ],
+    isPaused: false
   };
 
   const action = {
