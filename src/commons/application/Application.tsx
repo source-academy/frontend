@@ -150,7 +150,7 @@ const Application: React.FC = () => {
     const options = {
       ondevtoolopen: () => {
         setPauseAcademy(true);
-        setPauseAcademyReason("Developer tools has been used");
+        setPauseAcademyReason('Developer tools has been used');
         if (hasSentPauseUserRequest.current === false) {
           dispatch(SessionActions.pauseUser());
           hasSentPauseUserRequest.current = true;

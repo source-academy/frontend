@@ -101,7 +101,7 @@ import {
   unpublishGradingAll,
   updateAssessment,
   uploadAssessment,
-  validateResumeCode,
+  validateResumeCode
 } from './RequestsSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
