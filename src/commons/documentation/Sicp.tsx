@@ -198,7 +198,7 @@ const Sicp: React.FC = () => {
 
   return (
     <div
-      className={classNames('Sicp', Classes.RUNNING_TEXT, Classes.TEXT_LARGE, Classes.DARK)}
+      className={classNames('Sicp', Classes.TEXT_LARGE)}
       ref={parentRef}
     >
       <SicpNavigationBar handleNodeClickedString={handleNodeClickedString} handleNodeClicked={handleNodeClicked}/>
@@ -209,7 +209,7 @@ const Sicp: React.FC = () => {
           ) : section === 'index' ? (
             <SicpIndexPage handleNodeClick={handleNodeClicked}/>
           ) : (
-            <div className="sicp-content">
+            <div className="sicp-content sicp-assessment">
               <Link to="#begin" ref={ref => (refs.current['#begin'] = ref)} />
               {data}
               {navigationButtons}
