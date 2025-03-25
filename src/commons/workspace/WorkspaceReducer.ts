@@ -90,6 +90,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       const workspaceLocation = getWorkspaceLocation(action);
       // For some reason mutating the state directly results in type
       // errors, so we have to do it the old-fashioned way
+      console.log('endClearContext', action.payload.library.languageOptions);
       return {
         ...state,
         [workspaceLocation]: {
@@ -98,7 +99,8 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
             action.payload.library.chapter,
             action.payload.library.external.symbols,
             workspaceLocation,
-            action.payload.library.variant
+            action.payload.library.variant,
+            action.payload.library.languageOptions
           ),
           globals: action.payload.library.globals,
           externalLibrary: action.payload.library.external.name

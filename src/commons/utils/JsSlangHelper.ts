@@ -1,6 +1,13 @@
 /* tslint:disable: ban-types*/
 import createSlangContext, { defineBuiltin, importBuiltins } from 'js-slang/dist/createContext';
-import { Chapter, Context, CustomBuiltIns, Value, Variant } from 'js-slang/dist/types';
+import {
+  Chapter,
+  Context,
+  CustomBuiltIns,
+  LanguageOptions,
+  Value,
+  Variant
+} from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { difference, keys } from 'lodash';
 import CseMachine from 'src/features/cseMachine/CseMachine';
@@ -148,9 +155,17 @@ export function createContext<T>(
   chapter: Chapter,
   externals: string[],
   externalContext: T,
-  variant: Variant = Variant.DEFAULT
+  variant: Variant = Variant.DEFAULT,
+  languageOptions?: LanguageOptions
 ) {
-  return createSlangContext<T>(chapter, variant, externals, externalContext, externalBuiltIns);
+  return createSlangContext<T>(
+    chapter,
+    variant,
+    languageOptions,
+    externals,
+    externalContext,
+    externalBuiltIns
+  );
 }
 
 // Assumes that the grader doesn't need additional external libraries apart from the standard
@@ -166,6 +181,7 @@ function loadStandardLibraries(proxyContext: Context, customBuiltIns: CustomBuil
 // intercepts reads from the underlying Context and returns desired values
 export function makeElevatedContext(context: Context) {
   function ProxyFrame() {}
+
   ProxyFrame.prototype = context.runtime.environments[0].head;
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

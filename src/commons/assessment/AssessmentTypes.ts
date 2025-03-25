@@ -175,6 +175,7 @@ export type Library = {
     2?: string; // For mission control
   }>;
   moduleParams?: any;
+  languageOptions?: any;
 };
 
 export type Testcase = {
