@@ -25,8 +25,8 @@ import GradingSubmissionsTable from './subcomponents/GradingSubmissionsTable';
 import GradingWorkspace from './subcomponents/GradingWorkspace';
 
 const groupOptions = [
-  { value: false, label: 'my groups' },
-  { value: true, label: 'all groups' }
+  { value: true, label: 'my groups' },
+  { value: false, label: 'all groups' }
 ];
 
 const showOptions = [
@@ -46,7 +46,7 @@ const Grading: React.FC = () => {
   const params = useParams<{ submissionId: string; questionId: string }>();
 
   const isAdmin = role === Role.Admin;
-  const [showAllGroups, setShowAllGroups] = useState(isAdmin || group === null);
+  const [showUserGroups, setShowUserGroups] = useState(!isAdmin && group !== null);
 
   const [pageSize, setPageSize] = useState(10);
   const [showAllSubmissions, setShowAllSubmissions] = useState(false);
@@ -71,7 +71,7 @@ const Grading: React.FC = () => {
       dispatch(WorkspaceActions.increaseRequestCounter());
       dispatch(
         SessionActions.fetchGradingOverviews(
-          !showAllGroups,
+          showUserGroups,
           unpublishedToBackendParams(showAllSubmissions),
           paginationToBackendParams(page, pageSize),
           filterParams,
@@ -79,7 +79,7 @@ const Grading: React.FC = () => {
         )
       );
     },
-    [dispatch, showAllGroups, showAllSubmissions, pageSize, allColsSortStates]
+    [dispatch, showUserGroups, showAllSubmissions, pageSize, allColsSortStates]
   );
 
   useEffect(() => {
@@ -87,7 +87,7 @@ const Grading: React.FC = () => {
       dispatch(WorkspaceActions.increaseRequestCounter());
       dispatch(
         SessionActions.fetchGradingOverviews(
-          showAllGroups,
+          showUserGroups,
           unpublishedToBackendParams(showAllSubmissions),
           paginationToBackendParams(refreshQueryData.page, pageSize),
           refreshQueryData.filterParams,
@@ -98,7 +98,7 @@ const Grading: React.FC = () => {
     }
   }, [
     dispatch,
-    showAllGroups,
+    showUserGroups,
     showAllSubmissions,
     pageSize,
     allColsSortStates,
@@ -152,7 +152,7 @@ const Grading: React.FC = () => {
     <ContentDisplay
       loadContentDispatch={() => {
         if (!hasLoadedBefore) {
-          dispatch(SessionActions.fetchGradingOverviews(showAllGroups));
+          dispatch(SessionActions.fetchGradingOverviews(showUserGroups));
         }
       }}
       display={
@@ -196,8 +196,8 @@ const Grading: React.FC = () => {
               <GradingText>submissions from</GradingText>
               <SimpleDropdown
                 options={groupOptions}
-                selectedValue={showAllGroups}
-                onClick={setShowAllGroups}
+                selectedValue={showUserGroups}
+                onClick={setShowUserGroups}
                 popoverProps={{ position: Position.BOTTOM }}
                 buttonProps={{ minimal: true, rightIcon: 'caret-down' }}
               />
