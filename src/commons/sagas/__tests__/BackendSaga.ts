@@ -4,18 +4,18 @@ import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import { mockTeamFormationOverviews } from 'src/commons/mocks/TeamFormationMocks';
 import AcademyActions from 'src/features/academy/AcademyActions';
-import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
+import type { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
 import DashboardActions from '../../../features/dashboard/DashboardActions';
 import SessionActions from '../../application/actions/SessionActions';
 import {
-  GameState,
+  type GameState,
   Role,
-  SALanguage,
-  Story,
+  type SALanguage,
+  type Story,
   SupportedLanguage
 } from '../../application/ApplicationTypes';
-import {
+import type {
   AdminPanelCourseRegistration,
   CourseConfiguration,
   CourseRegistration,
@@ -23,10 +23,10 @@ import {
   User
 } from '../../application/types/SessionTypes';
 import {
-  Assessment,
-  AssessmentConfiguration,
+  type Assessment,
+  type AssessmentConfiguration,
   AssessmentStatuses,
-  Question
+  type Question
 } from '../../assessment/AssessmentTypes';
 import {
   mockAssessmentOverviews,
@@ -35,7 +35,7 @@ import {
 } from '../../mocks/AssessmentMocks';
 import { mockGradingSummary } from '../../mocks/GradingMocks';
 import { mockNotifications, mockStudents } from '../../mocks/UserMocks';
-import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
+import type { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { AuthProviderType, computeFrontendRedirectUri } from '../../utils/AuthHelper';
 import Constants from '../../utils/Constants';
 import {
@@ -43,7 +43,7 @@ import {
   showWarningMessage
 } from '../../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../../workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import BackendSaga from '../BackendSaga';
 import {
   getAssessment,
@@ -832,8 +832,8 @@ describe('Test CHANGE_SUBLANGUAGE action', () => {
   test('when chapter is changed', () => {
     const sublang: SALanguage = {
       chapter: Chapter.SOURCE_4,
-      variant: Variant.CONCURRENT,
-      displayName: 'Source \xa74 Concurrent',
+      variant: Variant.WASM,
+      displayName: 'Source \xa74 Web Assembly',
       mainLanguage: SupportedLanguage.JAVASCRIPT,
       supports: {}
     };
@@ -854,7 +854,7 @@ describe('Test CHANGE_SUBLANGUAGE action', () => {
         [
           call(putCourseConfig, mockTokens, {
             sourceChapter: Chapter.SOURCE_4,
-            sourceVariant: Variant.CONCURRENT
+            sourceVariant: Variant.WASM
           }),
           { ok: true }
         ]

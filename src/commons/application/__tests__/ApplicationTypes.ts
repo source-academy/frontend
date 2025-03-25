@@ -57,11 +57,6 @@ describe('available Source language configurations', () => {
       },
       {
         chapter: Chapter.SOURCE_3,
-        variant: Variant.CONCURRENT,
-        supports: { dataVisualizer: true }
-      },
-      {
-        chapter: Chapter.SOURCE_3,
         variant: Variant.NATIVE,
         supports: { dataVisualizer: true, cseMachine: true }
       },
