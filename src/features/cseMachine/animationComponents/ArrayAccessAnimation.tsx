@@ -28,6 +28,7 @@ export class ArrayAccessAnimation extends Animatable {
   private resultAnimation: AnimatedTextbox;
   private resultArrowAnimation?: AnimatedGenericArrow<StashItemComponent, Visible>;
   private arrayUnit: ArrayUnit;
+  private out: boolean;
 
   constructor(
     private accInstr: ControlItemComponent,
@@ -46,12 +47,29 @@ export class ArrayAccessAnimation extends Animatable {
       rectProps: { stroke: defaultDangerColor() }
     });
     this.arrayArrowAnimation = new AnimatedGenericArrow(arrayItem.arrow!);
+    // if index is out of range
+    this.out = false;
     // the target should always be an array value
     const array = arrayItem.arrow!.target! as ArrayValue;
-    this.arrayUnit = array.units[parseInt(indexItem.text)];
+
+    // if index access is out of range. if index access is negative, error should be thrown from js-slang at this point
+    const arraylen = array.data.length;
+
+    if (parseInt(indexItem.text) >= arraylen) {
+      this.out = true;
+      this.arrayUnit = array.units[arraylen - 1];
+    } else {
+      this.arrayUnit = array.units[parseInt(indexItem.text)];
+    }
+
     this.resultAnimation = new AnimatedTextbox(resultItem.text, {
       ...getNodeDimensions(resultItem),
-      x: this.arrayUnit.x() + this.arrayUnit.width() / 2 - this.resultItem.width() / 2,
+      // if array index out of range, animate to one unit beyond array
+      x:
+        this.arrayUnit.x() +
+        this.arrayUnit.width() / 2 -
+        this.resultItem.width() / 2 +
+        (this.out ? this.arrayUnit.width() : 0),
       y: this.arrayUnit.y() + this.arrayUnit.height() / 2 - this.resultItem.height() / 2,
       opacity: 0
     });
@@ -79,7 +97,12 @@ export class ArrayAccessAnimation extends Animatable {
     const minInstrItemWidth =
       getTextWidth(this.accInstr.text) + ControlStashConfig.ControlItemTextPadding * 2;
     const indexAboveArrayLocation = {
-      x: this.arrayUnit.x() + this.arrayUnit.width() / 2 - this.indexItem.width() / 2,
+      // if array index out of range, animate to one unit beyond array
+      x:
+        this.arrayUnit.x() +
+        this.arrayUnit.width() / 2 -
+        this.indexItem.width() / 2 +
+        (this.out ? this.arrayUnit.width() : 0),
       y: this.arrayUnit.y() - this.indexItem.height() - 8
     };
     const indexInArrayLocation = {

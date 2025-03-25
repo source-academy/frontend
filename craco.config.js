@@ -40,17 +40,17 @@ const cracoConfig = {
       // Polyfill Node.js core modules.
       // An empty implementation (false) is provided when there is no browser equivalent.
       webpackConfig.resolve.fallback = {
-        'child_process': false,
-        'constants': require.resolve('constants-browserify'),
-        'fs': false,
-        'http': require.resolve('stream-http'),
-        'https': require.resolve('https-browserify'),
-        'os': require.resolve('os-browserify/browser'),
+        child_process: false,
+        constants: require.resolve('constants-browserify'),
+        fs: false,
+        http: require.resolve('stream-http'),
+        https: require.resolve('https-browserify'),
+        os: require.resolve('os-browserify/browser'),
         'path/posix': require.resolve('path-browserify'),
         'process/browser': require.resolve('process/browser'),
-        'stream': require.resolve('stream-browserify'),
-        'timers': require.resolve('timers-browserify'),
-        'url': require.resolve('url/'),
+        stream: require.resolve('stream-browserify'),
+        timers: require.resolve('timers-browserify'),
+        url: require.resolve('url/')
       };
 
       // workaround .mjs files by Acorn
@@ -60,31 +60,34 @@ const cracoConfig = {
         type: 'javascript/auto',
         resolve: {
           fullySpecified: false
-        },
+        }
       });
 
-      webpackConfig.ignoreWarnings = [{ 
-        // Ignore warnings for dependencies that do not ship with a source map.
-        // This is because we cannot do anything about our dependencies.
-        module: /node_modules/,
-        message: /Failed to parse source map/
-      }, {
-        // Ignore the warnings that occur because js-slang uses dynamic imports
-        // to load Source modules
-        module: /js-slang\/dist\/modules\/loader\/loaders.js/,
-        message: /Critical dependency: the request of a dependency is an expression/
-      }];
+      webpackConfig.ignoreWarnings = [
+        {
+          // Ignore warnings for dependencies that do not ship with a source map.
+          // This is because we cannot do anything about our dependencies.
+          module: /node_modules/,
+          message: /Failed to parse source map/
+        },
+        {
+          // Ignore the warnings that occur because js-slang uses dynamic imports
+          // to load Source modules
+          module: /js-slang\/dist\/modules\/loader\/loaders.js/,
+          message: /Critical dependency: the request of a dependency is an expression/
+        }
+      ];
 
       webpackConfig.plugins = [
         ...webpackConfig.plugins,
         // Make environment variables available in the browser by polyfilling the 'process' Node.js module.
         new webpack.ProvidePlugin({
-          process: 'process/browser',
+          process: 'process/browser'
         }),
         // Make the 'buffer' Node.js module available in the browser.
         new webpack.ProvidePlugin({
-          Buffer: ['buffer', 'Buffer'],
-        }),
+          Buffer: ['buffer', 'Buffer']
+        })
       ];
 
       // Workaround to suppress warnings caused by ts-morph in js-slang
@@ -156,16 +159,14 @@ const cracoConfig = {
       jestConfig.setupFiles = [
         ...jestConfig.setupFiles,
         './src/i18n/i18n.ts' // Setup i18next configuration
-      ]
+      ];
       return jestConfig;
     }
   },
   babel: {
-    presets: [
-      ['@babel/preset-typescript']
-    ]
+    presets: [['@babel/preset-typescript']]
   }
-}
+};
 
 const ignoreModulePaths = (...paths) => {
   const moduleRoot = replaceSlashes('/node_modules/');
