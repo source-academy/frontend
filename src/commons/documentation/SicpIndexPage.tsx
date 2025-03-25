@@ -99,7 +99,7 @@ type IndexProps = {
   handleNodeClick: (node: TreeNodeInfo) => void;
 };
 
-const SicpIndexPage: React.FC<IndexProps> = (props) => {
+const SicpIndexPage: React.FC<IndexProps> = props => {
   return (
     <div className="sicp-index-page">
       <div className="sicp-cover">
@@ -111,7 +111,7 @@ const SicpIndexPage: React.FC<IndexProps> = (props) => {
       </div>
       <br />
       <H2>Content</H2>
-      <SicpToc handleNodeClicked={props.handleNodeClick}/>
+      <SicpToc handleNodeClicked={props.handleNodeClick} />
       <br />
       <H2>Licenses</H2>
       {licenses}

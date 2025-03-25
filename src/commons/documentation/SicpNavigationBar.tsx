@@ -30,9 +30,9 @@ type IndexSearchResult = { text: string; order: string; id: string; hasSubindex:
 type SicpNavigationBarProps = {
   handleNodeClicked: (node: TreeNodeInfo) => void;
   handleNodeClickedString: (sect: string) => void;
-}
+};
 
-const SicpNavigationBar: React.FC<SicpNavigationBarProps> = (props) => {
+const SicpNavigationBar: React.FC<SicpNavigationBarProps> = props => {
   // this section responsible for the travel and table of content
   const [isTocOpen, setIsTocOpen] = React.useState(false);
   const { section } = useParams<{ section: string }>();

@@ -1,36 +1,43 @@
 import { Button } from '@blueprintjs/core';
-import { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import Sicp from 'src/commons/documentation/Sicp';
 
 const SideContentDocumentation: React.FC = () => {
-  const pages = [
+  const pages: {
+    name: string;
+    src: string;
+    component: JSX.Element | null;
+  }[] = [
     {
       name: 'Modules',
-      src: 'https://source-academy.github.io/modules/documentation/modules/curve.html'
+      src: 'https://source-academy.github.io/modules/documentation/index.html',
+      component: null
     },
     {
       name: 'Docs',
-      src: 'https://docs.sourceacademy.org/'
+      src: 'https://docs.sourceacademy.org/',
+      component: null
     },
     {
       name: 'SICP JS',
-      src: 'https://sicp.sourceacademy.org'
+      src: 'https://sicp.sourceacademy.org',
+      component: <Sicp />
     }
   ];
 
   const [activePage, setActivePage] = useState(pages[0]);
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const activeIframeRef = useRef<HTMLIFrameElement>(null);
 
   const changeActivePage = (index: number) => {
     setActivePage(pages[index]);
   };
 
   const handleIframeBack = useCallback(() => {
-    if (iframeRef.current !== null) {
-      iframeRef.current.src = activePage.src;
-    };
+    if (activeIframeRef.current !== null) {
+      activeIframeRef.current.src = activePage.src;
+    }
   }, [activePage.src]);
-  
+
   // const handleIframeForward = useCallback(() => {
   //   iframeRef.current?.contentWindow?.history.forward();
   // }, [iframeRef]);
@@ -61,15 +68,27 @@ const SideContentDocumentation: React.FC = () => {
           />
         ))}
       </div>
-      {activePage.src === 'https://sicp.sourceacademy.org' ? (
-        <Sicp />
-      ) : (
-        <iframe
-          style={{ border: 'none', width: '100%', height: '60vh' }}
-          src={activePage.src}
-          ref={iframeRef}
-        />
-      )}
+      <div>
+        {pages.map((page, index) =>
+          page.component ? (
+            <div style={{ display: page.src === activePage.src ? 'block' : 'none' }}>
+              {page.component}
+            </div>
+          ) : (
+            <iframe
+              style={{
+                border: 'none',
+                width: '100%',
+                height: '60vh',
+                display: page.src === activePage.src ? 'block' : 'none'
+              }}
+              src={page.src}
+              ref={page.src === activePage.src ? activeIframeRef : null}
+              // sandbox='allow-scripts allow-same-origin'
+            />
+          )
+        )}
+      </div>
     </div>
   );
 };

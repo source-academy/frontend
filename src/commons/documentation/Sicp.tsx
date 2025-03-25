@@ -37,8 +37,8 @@ const Sicp: React.FC = () => {
   const [data, setData] = useState(<></>);
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState('0');
-  const [section, setSection] = useState("index");
-  const [hash, setHash] = useState("#begin");
+  const [section, setSection] = useState('index');
+  const [hash, setHash] = useState('#begin');
   const refs = useRef<Record<string, HTMLElement | null>>({});
   const navigate = useNavigate();
 
@@ -52,7 +52,7 @@ const Sicp: React.FC = () => {
 
     ref.scrollIntoView({
       behavior: 'smooth'
-    })
+    });
   };
 
   // Handle loading of latest viewed section and fetch json data
@@ -114,7 +114,7 @@ const Sicp: React.FC = () => {
     if (loading) {
       return;
     }
-    
+
     const ref = refs.current[`#${hash}`];
     console.log(`Scrolling hash: #${hash}`);
 
@@ -151,7 +151,7 @@ const Sicp: React.FC = () => {
 
   const handleNodeClicked = React.useCallback(
     (node: TreeNodeInfo) => {
-    console.log(`Navigating to section: ${String(node.nodeData)}`);
+      console.log(`Navigating to section: ${String(node.nodeData)}`);
       setSection(String(node.nodeData));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -173,16 +173,17 @@ const Sicp: React.FC = () => {
   );
 
   return (
-    <div
-      className={classNames('Sicp', Classes.TEXT_LARGE)}
-    >
-      <SicpNavigationBar handleNodeClickedString={handleNodeClickedString} handleNodeClicked={handleNodeClicked}/>
+    <div className={classNames('Sicp', Classes.TEXT_LARGE)}>
+      <SicpNavigationBar
+        handleNodeClickedString={handleNodeClickedString}
+        handleNodeClicked={handleNodeClicked}
+      />
       <SicpErrorBoundary>
         <CodeSnippetContext.Provider value={{ active: active, setActive: handleSnippetEditorOpen }}>
           {loading ? (
             <div className="sicp-content">{loadingComponent}</div>
           ) : section === 'index' ? (
-            <SicpIndexPage handleNodeClick={handleNodeClicked}/>
+            <SicpIndexPage handleNodeClick={handleNodeClicked} />
           ) : (
             <div className="sicp-content sicp-assessment">
               <Link to="#begin" ref={ref => (refs.current['#begin'] = ref)} />
