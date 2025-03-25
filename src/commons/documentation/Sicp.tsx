@@ -33,7 +33,11 @@ export const CodeSnippetContext = React.createContext({
 
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
 
-const Sicp: React.FC = () => {
+type SicpProps = {
+  setSicpHomeCallBackFn: (fn: () => void) => void;
+};
+
+const Sicp: React.FC<SicpProps> = (props) => {
   const [data, setData] = useState(<></>);
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState('0');
@@ -43,9 +47,7 @@ const Sicp: React.FC = () => {
   const navigate = useNavigate();
 
   const scrollRefIntoView = (ref: HTMLElement | null) => {
-    // const urlRef = ref as HTMLAnchorElement;
-    // urlRef.href = `/sicp/${section}#${hash}`
-    console.log(`Scrolling ${ref} into view...`);
+    // console.log(`Scrolling ${ref} into view...`);
     if (!ref) {
       return;
     }
@@ -57,6 +59,9 @@ const Sicp: React.FC = () => {
 
   // Handle loading of latest viewed section and fetch json data
   React.useEffect(() => {
+    props.setSicpHomeCallBackFn(() => {
+      setSection("index");
+    })
     if (!section) {
       /**
        * Handles rerouting to the latest viewed section when clicking from
@@ -107,7 +112,7 @@ const Sicp: React.FC = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [section, navigate]);
+  }, [section, navigate, props]);
 
   // Scroll to correct position
   React.useEffect(() => {
@@ -116,8 +121,6 @@ const Sicp: React.FC = () => {
     }
 
     const ref = refs.current[`#${hash}`];
-    console.log(`Scrolling hash: #${hash}`);
-
     scrollRefIntoView(ref);
   }, [loading, hash]);
 

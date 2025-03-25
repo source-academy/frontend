@@ -17,30 +17,35 @@ const SideContentDocumentation: React.FC = () => {
       name: 'Docs',
       src: 'https://docs.sourceacademy.org/',
       component: null
-    },
-    {
-      name: 'SICP JS',
-      src: 'https://sicp.sourceacademy.org',
-      component: <Sicp />
-    }
-  ];
+    }];
 
   const [activePage, setActivePage] = useState(pages[0]);
   const activeIframeRef = useRef<HTMLIFrameElement>(null);
+  let sicpHomeCallbackFn: () => void = () => {};
 
   const changeActivePage = (index: number) => {
     setActivePage(pages[index]);
   };
 
-  const handleIframeBack = useCallback(() => {
+  const handleDocsHome = useCallback(() => {
+    if (sicpHomeCallbackFn !== null) {
+      sicpHomeCallbackFn();
+    }
+
     if (activeIframeRef.current !== null) {
       activeIframeRef.current.src = activePage.src;
     }
   }, [activePage.src]);
 
-  // const handleIframeForward = useCallback(() => {
-  //   iframeRef.current?.contentWindow?.history.forward();
-  // }, [iframeRef]);
+  const sicpHomeCallbackSetter = (fn: () => void) => {
+    sicpHomeCallbackFn = fn;
+  }
+
+  pages.push({
+    name: 'SICP JS',
+    src: 'https://sicp.sourceacademy.org',
+    component: <Sicp setSicpHomeCallBackFn={sicpHomeCallbackSetter} />
+  });
 
   return (
     <div>
@@ -56,7 +61,7 @@ const SideContentDocumentation: React.FC = () => {
           style={{ margin: '0px 5px 0px 5px', textWrap: 'nowrap' }}
           text={'Home'}
           minimal={true}
-          onClick={() => handleIframeBack()}
+          onClick={() => handleDocsHome()}
         />
         <div style={{ width: '100%' }}></div>
         {pages.map((page, index) => (
@@ -69,7 +74,7 @@ const SideContentDocumentation: React.FC = () => {
         ))}
       </div>
       <div>
-        {pages.map((page, index) =>
+        {pages.map((page) =>
           page.component ? (
             <div style={{ display: page.src === activePage.src ? 'block' : 'none' }}>
               {page.component}
@@ -84,7 +89,6 @@ const SideContentDocumentation: React.FC = () => {
               }}
               src={page.src}
               ref={page.src === activePage.src ? activeIframeRef : null}
-              // sandbox='allow-scripts allow-same-origin'
             />
           )
         )}
