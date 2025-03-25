@@ -40,7 +40,7 @@ const SicpToc: React.FC<TocProps> = props => {
   // );
 
   return (
-    <div className="sicp-toc">
+    <div className="sicp-toc sicp-toc-assessment">
       <Tree
         className="sicp-toc-tree"
         contents={sidebarContent}

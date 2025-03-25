@@ -352,6 +352,7 @@ const SicpNavigationBar: React.FC<SicpNavigationBarProps> = (props) => {
   );
 
   const handleResultClick = (result: string) => {
+    console.log(`Clicked on result ${result}`);
     setQuery(result);
     // Safe to typecast due to logic
     setPreviousMode(omnibarMode as 'text' | 'index');

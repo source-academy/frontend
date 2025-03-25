@@ -361,7 +361,18 @@ $sicp-content-lr-padding: 6em;
   }
 }
 
+// Styling for use in assessment workspace
 .sicp-content.sicp-assessment {
   font-size: 16px;
   padding: 0 2.5em; 
+  color: #333333;
+}
+
+.sicp-content .bp5-card {
+  color: #333333 !important;
+}
+
+.sicp-toc-assessment .bp5-tree-root {
+  font-size: 16px;
+  background-color: white;
 }

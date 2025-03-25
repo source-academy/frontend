@@ -4,7 +4,7 @@ import { Button, Classes, NonIdealState, Spinner, TreeNodeInfo } from '@blueprin
 import classNames from 'classnames';
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 import Constants from 'src/commons/utils/Constants';
 import { setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
@@ -38,50 +38,21 @@ const Sicp: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState('0');
   const [section, setSection] = useState("index");
-  const parentRef = useRef<HTMLDivElement>(null);
+  const [hash, setHash] = useState("#begin");
   const refs = useRef<Record<string, HTMLElement | null>>({});
   const navigate = useNavigate();
-  const location = useLocation();
-  // const { isLoggedIn } = useSession();
-
-  // function getSection() {
-  //   // To discard the '/sicpjs/'
-  //   return location.pathname.replace('/sicpjs/', '') as SicpSection;
-  // }
-
-  // const getText = () => {
-  //   const divs = document.querySelectorAll('p.sicp-text');
-  //   let visibleParagraphs = '';
-
-  //   divs.forEach(div => {
-  //     const rect = div.getBoundingClientRect();
-
-  //     if (
-  //       rect.top <= window.innerHeight &&
-  //       rect.bottom >= 0 &&
-  //       rect.left <= window.innerWidth &&
-  //       rect.right >= 0
-  //     ) {
-  //       const text = div.textContent;
-  //       visibleParagraphs += text + '\n';
-  //     }
-  //   });
-
-  //   return visibleParagraphs;
-  // };
 
   const scrollRefIntoView = (ref: HTMLElement | null) => {
-    if (!ref || !parentRef?.current) {
+    // const urlRef = ref as HTMLAnchorElement;
+    // urlRef.href = `/sicp/${section}#${hash}`
+    console.log(`Scrolling ${ref} into view...`);
+    if (!ref) {
       return;
     }
 
-    const parent = parentRef.current!;
-    const relativeTop = window.scrollY > parent.offsetTop ? window.scrollY : parent.offsetTop;
-
-    parent.scrollTo({
-      behavior: 'smooth',
-      top: ref.offsetTop - relativeTop
-    });
+    ref.scrollIntoView({
+      behavior: 'smooth'
+    })
   };
 
   // Handle loading of latest viewed section and fetch json data
@@ -96,10 +67,10 @@ const Sicp: React.FC = () => {
       return;
     }
 
-    // if (section === SICP_INDEX) {
-    //   setSicpSectionLocalStorage(SICP_INDEX);
-    //   return;
-    // }
+    if (section === SICP_INDEX) {
+      setSicpSectionLocalStorage(SICP_INDEX);
+      return;
+    }
 
     setLoading(true);
 
@@ -143,12 +114,12 @@ const Sicp: React.FC = () => {
     if (loading) {
       return;
     }
-
-    const hash = location.hash;
-    const ref = refs.current[hash];
+    
+    const ref = refs.current[`#${hash}`];
+    console.log(`Scrolling hash: #${hash}`);
 
     scrollRefIntoView(ref);
-  }, [location.hash, loading]);
+  }, [loading, hash]);
 
   // Close all active code snippet when new page is loaded
   React.useEffect(() => {
@@ -189,8 +160,13 @@ const Sicp: React.FC = () => {
 
   const handleNodeClickedString = React.useCallback(
     (sect: string) => {
-      console.log(`Navigating to section: ${sect}`);
-      setSection(sect);
+      const urlPart = sect.split('#');
+      if (urlPart.length > 1) {
+        console.log(`URL Part: ${urlPart[1]}`);
+        setHash(urlPart[1]);
+      }
+      console.log(`Navigating to section: ${urlPart[0]}`);
+      setSection(urlPart[0]);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [section]
@@ -199,7 +175,6 @@ const Sicp: React.FC = () => {
   return (
     <div
       className={classNames('Sicp', Classes.TEXT_LARGE)}
-      ref={parentRef}
     >
       <SicpNavigationBar handleNodeClickedString={handleNodeClickedString} handleNodeClicked={handleNodeClicked}/>
       <SicpErrorBoundary>
