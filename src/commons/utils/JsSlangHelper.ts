@@ -259,3 +259,11 @@ export function getBlockExtraMethodsString(toRemove: string[]) {
     )
     .join('\n');
 }
+
+export function getBlockExtraMethodsStringTypedVariant(toRemove: string[]) {
+  return toRemove
+    .map(x =>
+      x === 'makeUndefinedErrorFunction' ? '' : `const ${x} : string = makeUndefinedErrorFunction('${x}');`
+    )
+    .join('\n');
+}

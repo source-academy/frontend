@@ -14,6 +14,7 @@ import { blockExtraMethods } from './blockExtraMethods';
 import { clearContext } from './clearContext';
 import { evalCodeSaga } from './evalCode';
 import { insertDebuggerStatements } from './insertDebuggerStatements';
+import { Variant } from 'js-slang/dist/types';
 
 export function* evalEditorSaga(
   workspaceLocation: WorkspaceLocation
@@ -93,19 +94,25 @@ export function* evalEditorSaga(
       const prependFiles = {
         [prependFilePath]: prepend
       };
-      yield call(
-        evalCodeSaga,
-        prependFiles,
-        prependFilePath,
-        elevatedContext,
-        execTime,
-        workspaceLocation,
-        EVAL_SILENT
-      );
+      if (context.variant !== Variant.TYPED) {
+        yield call(
+          evalCodeSaga,
+          prependFiles,
+          prependFilePath,
+          elevatedContext,
+          execTime,
+          workspaceLocation,
+          EVAL_SILENT,
+        );
+      }
+
       // Block use of methods from privileged context
       yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation);
     }
 
+    if (context.variant === Variant.TYPED) {
+      files[entrypointFilePath] = prepend + files[entrypointFilePath];
+    }
     yield call(
       evalCodeSaga,
       files,
