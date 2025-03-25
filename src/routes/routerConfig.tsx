@@ -25,6 +25,7 @@ import { GuardedRoute } from './routeGuard';
 const Login = () => import('../pages/login/Login');
 const LoginPage = () => import('../pages/login/LoginPage');
 const LoginCallback = () => import('../pages/login/LoginCallback');
+const LoginVscodeCallback = () => import('../pages/login/LoginVscodeCallback');
 const NusLogin = () => import('../pages/login/NusLogin');
 const Contributors = () => import('../pages/contributors/Contributors');
 const GitHubCallback = () => import('../pages/githubCallback/GitHubCallback');
@@ -128,7 +129,10 @@ export const getFullAcademyRouterConfig = ({
         {
           path: 'login',
           lazy: Login,
-          children: [{ path: 'callback', lazy: LoginCallback }]
+          children: [
+            { path: 'callback', lazy: LoginCallback },
+            { path: 'vscode_callback', lazy: LoginVscodeCallback }
+          ]
         },
         { path: 'welcome', lazy: Welcome, loader: welcomeLoader },
         { path: 'courses', element: <Navigate to="/" /> },
