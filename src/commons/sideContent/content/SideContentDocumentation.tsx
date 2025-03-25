@@ -1,5 +1,6 @@
 import { Button } from '@blueprintjs/core';
 import { useState } from 'react';
+import Sicp from 'src/commons/documentation/Sicp';
 
 const SideContentDocumentation: React.FC = () => {
   const pages = [
@@ -13,7 +14,7 @@ const SideContentDocumentation: React.FC = () => {
     },
     {
       name: 'SICP JS',
-      src: 'https://sourceacademy.org/sicpjs/'
+      src: 'https://sicp.sourceacademy.org'
     }
   ];
 
@@ -42,7 +43,11 @@ const SideContentDocumentation: React.FC = () => {
           />
         ))}
       </div>
-      <iframe style={{ border: 'none', width: '100%', height: '60vh' }} src={activePage.src} />
+      {activePage.src === 'https://sicp.sourceacademy.org' ? (
+        <Sicp />
+      ) : (
+        <iframe style={{ border: 'none', width: '100%', height: '60vh' }} src={activePage.src} />
+      )}
     </div>
   );
 };
