@@ -14,7 +14,7 @@ export default class DialogueGenerator {
    */
   public constructor(dialogueContent: DialogueObject) {
     this.dialogueContent = dialogueContent;
-    this.currPart = dialogueContent.keys().next().value;
+    this.currPart = dialogueContent.keys().next().value || '';
     this.currLineNum = 0;
   }
 
