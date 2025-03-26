@@ -29,7 +29,9 @@ const defaultCourseConfig: UpdateCourseConfiguration = {
   enableAchievements: true,
   enableSourcecast: true,
   enableStories: false,
-  moduleHelpText: ''
+  enableLlmGrading: false,
+  moduleHelpText: '',
+  llmApiKey: ''
 };
 
 const AdminPanel: React.FC = () => {
@@ -62,7 +64,9 @@ const AdminPanel: React.FC = () => {
       enableAchievements: session.enableAchievements,
       enableSourcecast: session.enableSourcecast,
       enableStories: session.enableStories,
-      moduleHelpText: session.moduleHelpText
+      enableLlmGrading: session.enableLlmGrading,
+      moduleHelpText: session.moduleHelpText,
+      llmApiKey: ''
     });
   }, [
     session.courseName,
@@ -71,6 +75,7 @@ const AdminPanel: React.FC = () => {
     session.enableGame,
     session.enableSourcecast,
     session.enableStories,
+    session.enableLlmGrading,
     session.moduleHelpText,
     session.viewable
   ]);
