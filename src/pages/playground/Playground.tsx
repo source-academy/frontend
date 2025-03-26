@@ -194,6 +194,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const { isSicpEditor } = props;
   const workspaceLocation: WorkspaceLocation = isSicpEditor ? 'sicp' : 'playground';
   const { isMobileBreakpoint } = useResponsive();
+  const isVscode = useTypedSelector(state => state.vscode.isVscode);
 
   const [deviceSecret, setDeviceSecret] = useState<string | undefined>();
   const location = useLocation();
@@ -359,7 +360,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   useEffect(() => {
     if (!selectedTab) return;
 
-    if (isMobileBreakpoint && desktopOnlyTabIds.includes(selectedTab)) {
+    if (!isVscode && isMobileBreakpoint && desktopOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.mobileEditor);
     } else if (!isMobileBreakpoint && mobileOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.introduction);
@@ -1038,7 +1039,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
   };
 
-  return isMobileBreakpoint ? (
+  // return !isVscode && isMobileBreakpoint ? (
+  return false && isMobileBreakpoint ? (
     <div className={classNames('Playground', Classes.DARK, isGreen && 'GreenScreen')}>
       <MobileWorkspace {...mobileWorkspaceProps} />
     </div>

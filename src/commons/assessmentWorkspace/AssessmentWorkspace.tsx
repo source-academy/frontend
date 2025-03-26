@@ -96,6 +96,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const [sessionId, setSessionId] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { isMobileBreakpoint } = useResponsive();
+  const isVscode = useTypedSelector(state => state.vscode.isVscode);
 
   const assessment = useTypedSelector(state => state.session.assessments[props.assessmentId]);
   const assessmentOverviews = useTypedSelector(state => state.session.assessmentOverviews);
@@ -970,7 +971,7 @@ It is safe to close this window.`}
       {submissionOverlay}
       {overlay}
       {resetTemplateOverlay}
-      {!isMobileBreakpoint ? (
+      {isVscode || !isMobileBreakpoint ? (
         <Workspace {...workspaceProps} />
       ) : (
         <MobileWorkspace {...mobileWorkspaceProps} />
