@@ -111,7 +111,7 @@ export type CourseConfiguration = {
   sourceVariant: Variant;
   moduleHelpText: string;
   assetsPrefix: string;
-  llmAPIKey?: string;
+  llmApiKey?: string;
 };
 
 export type AdminPanelCourseRegistration = {
