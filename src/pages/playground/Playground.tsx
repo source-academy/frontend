@@ -41,6 +41,7 @@ import {
   shortenURL,
   updateShortURL
 } from 'src/features/playground/PlaygroundActions';
+import Messages, { sendToWebview } from 'src/features/vscode/messages';
 
 import {
   getDefaultFilePath,
@@ -372,6 +373,14 @@ const Playground: React.FC<PlaygroundProps> = props => {
     },
     [handleEditorValueChange]
   );
+
+  useEffect(() => {
+    // Only the playground is expected to work with VSC for now
+    if (workspaceLocation === 'sicp') {
+      return;
+    }
+    sendToWebview(Messages.NewEditor(workspaceLocation, 'playground', 1, ''));
+  }, []);
 
   // const onChangeTabs = useCallback(
   //   (

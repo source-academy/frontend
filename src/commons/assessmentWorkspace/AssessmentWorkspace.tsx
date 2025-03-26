@@ -391,7 +391,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     );
     handleClearContext(question.library, true);
     handleUpdateHasUnsavedChanges(false);
-    sendToWebview(Messages.NewEditor(`assessment${assessment.id}`, props.questionId, ''));
+    sendToWebview(
+      Messages.NewEditor(workspaceLocation, `assessment${assessment.id}`, props.questionId, '')
+    );
     if (options.editorValue) {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange(0, options.editorValue);

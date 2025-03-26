@@ -116,17 +116,12 @@ const Application: React.FC = () => {
           }
           break;
         case MessageTypeNames.Text:
-          const code = message.code;
+          const { workspaceLocation, code } = message;
           console.log(`FRONTEND: TextMessage: ${code}`);
-          // TODO: Don't change ace editor directly
-          // const elements = document.getElementsByClassName('react-ace');
-          // if (elements.length === 0) {
-          //   return;
-          // }
-          // // @ts-expect-error: ace is not available at compile time
-          // const editor = ace.edit(elements[0]);
-          // editor.setValue(code);
-          dispatch(WorkspaceActions.updateEditorValue('assessment', 0, code));
+          dispatch(WorkspaceActions.updateEditorValue(workspaceLocation, 0, code));
+          break;
+        case MessageTypeNames.EvalEditor:
+          dispatch(WorkspaceActions.evalEditor(message.workspaceLocation));
           break;
       }
     });
