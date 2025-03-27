@@ -37,7 +37,7 @@ type SicpProps = {
   setSicpHomeCallBackFn: (fn: () => void) => void;
 };
 
-const Sicp: React.FC<SicpProps> = (props) => {
+const Sicp: React.FC<SicpProps> = props => {
   const [data, setData] = useState(<></>);
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState('0');
@@ -60,8 +60,8 @@ const Sicp: React.FC<SicpProps> = (props) => {
   // Handle loading of latest viewed section and fetch json data
   React.useEffect(() => {
     props.setSicpHomeCallBackFn(() => {
-      setSection("index");
-    })
+      setSection('index');
+    });
     if (!section) {
       /**
        * Handles rerouting to the latest viewed section when clicking from
@@ -144,10 +144,14 @@ const Sicp: React.FC<SicpProps> = (props) => {
   const navigationButtons = (
     <div className="sicp-navigation-buttons">
       {getPrev(section!) && (
-        <Button onClick={() => handleNavigation(getPrev(section!)!)}>Previous</Button>
+        <Button style={{ textWrap: 'nowrap' }} onClick={() => handleNavigation(getPrev(section!)!)}>
+          Previous
+        </Button>
       )}
       {getNext(section!) && (
-        <Button onClick={() => handleNavigation(getNext(section!)!)}>Next</Button>
+        <Button style={{ textWrap: 'nowrap' }} onClick={() => handleNavigation(getNext(section!)!)}>
+          Next
+        </Button>
       )}
     </div>
   );
@@ -176,7 +180,7 @@ const Sicp: React.FC<SicpProps> = (props) => {
   );
 
   return (
-    <div className={classNames('Sicp', Classes.TEXT_LARGE)}>
+    <div style={{maxHeight: '60vh'}} className={classNames('Sicp', Classes.TEXT_LARGE)}>
       <SicpNavigationBar
         handleNodeClickedString={handleNodeClickedString}
         handleNodeClicked={handleNodeClicked}

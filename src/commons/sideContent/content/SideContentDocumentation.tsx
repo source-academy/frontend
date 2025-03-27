@@ -17,7 +17,8 @@ const SideContentDocumentation: React.FC = () => {
       name: 'Docs',
       src: 'https://docs.sourceacademy.org/',
       component: null
-    }];
+    }
+  ];
 
   const [activePage, setActivePage] = useState(pages[0]);
   const activeIframeRef = useRef<HTMLIFrameElement>(null);
@@ -39,7 +40,7 @@ const SideContentDocumentation: React.FC = () => {
 
   const sicpHomeCallbackSetter = (fn: () => void) => {
     sicpHomeCallbackFn = fn;
-  }
+  };
 
   pages.push({
     name: 'SICP JS',
@@ -74,7 +75,7 @@ const SideContentDocumentation: React.FC = () => {
         ))}
       </div>
       <div>
-        {pages.map((page) =>
+        {pages.map(page =>
           page.component ? (
             <div style={{ display: page.src === activePage.src ? 'block' : 'none' }}>
               {page.component}
