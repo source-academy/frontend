@@ -136,7 +136,7 @@ const Sicp: React.FC<SicpProps> = (props) => {
     dispatch(WorkspaceActions.toggleUsingSubst(false, 'sicp'));
   };
   const handleNavigation = (sect: string) => {
-    console.log(`Navigating to section: ${sect}`);
+    // console.log(`Navigating to section: ${sect}`);
     setSection(sect);
   };
 
@@ -154,7 +154,7 @@ const Sicp: React.FC<SicpProps> = (props) => {
 
   const handleNodeClicked = React.useCallback(
     (node: TreeNodeInfo) => {
-      console.log(`Navigating to section: ${String(node.nodeData)}`);
+      // console.log(`Navigating to section: ${String(node.nodeData)}`);
       setSection(String(node.nodeData));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -168,7 +168,7 @@ const Sicp: React.FC<SicpProps> = (props) => {
         console.log(`URL Part: ${urlPart[1]}`);
         setHash(urlPart[1]);
       }
-      console.log(`Navigating to section: ${urlPart[0]}`);
+      // console.log(`Navigating to section: ${urlPart[0]}`);
       setSection(urlPart[0]);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
