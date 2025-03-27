@@ -56,5 +56,5 @@ export async function changeDefaultEditable(sessionId: string, defaultReadOnly: 
     );
   }
 
-  return resp.json();
+  return resp;
 }

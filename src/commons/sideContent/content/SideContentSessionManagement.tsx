@@ -4,6 +4,7 @@ import { CollabEditingAccess, type SharedbAceUser } from '@sourceacademy/sharedb
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import { changeDefaultEditable } from 'src/commons/collabEditing/CollabEditingHelper';
 //import { changeDefaultEditable } from 'src/commons/collabEditing/CollabEditingHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { showSuccessMessage } from 'src/commons/utils/notifications/NotificationsHelper';
@@ -15,8 +16,9 @@ interface AdminViewProps {
   defaultReadOnly: boolean;
 }
 
-function AdminView({ users }: AdminViewProps) {
+function AdminView({ users, playgroundCode }: AdminViewProps) {
   const [toggleAll, setToggleAll] = useState<boolean>(true);
+  const [defaultRole, setDefaultRole] = useState<boolean>(true);
   const [toggling, setToggling] = useState<{ [key: string]: boolean }>(() => ({
     ...Object.fromEntries(Object.entries(users).map(([id]) => [id, true]))
   }));
@@ -25,44 +27,57 @@ function AdminView({ users }: AdminViewProps) {
   );
 
   const handleToggleAccess = (checked: boolean, id: string) => {
-    // TODO: Slightly messy code, refactor later
-    if (id !== 'all') {
-      if (toggling[id]) return;
-      setToggling(prev => ({ ...prev, [id]: true }));
-    }
+    if (toggling[id]) return;
+    setToggling(prev => ({ ...prev, [id]: true }));
 
     try {
-      if (id !== 'all') {
-        updateUserRoleCallback(
-          id,
-          checked ? CollabEditingAccess.EDITOR : CollabEditingAccess.VIEWER
-        );
-      } else {
-        // Temporary brute force solution to update all users' roles
-        Object.keys(users).forEach(userId => {
-          if (userId !== 'all') {
-            updateUserRoleCallback(
-              userId,
-              checked ? CollabEditingAccess.EDITOR : CollabEditingAccess.VIEWER
-            );
-          }
-        });
-      }
+      updateUserRoleCallback(id, checked ? CollabEditingAccess.EDITOR : CollabEditingAccess.VIEWER);
     } finally {
-      if (id !== 'all') setToggling(prev => ({ ...prev, [id]: false }));
-      else setToggleAll(checked);
+      setToggling(prev => ({ ...prev, [id]: false }));
     }
+  };
+
+  const handleAllToggleAccess = (checked: boolean) => {
+    try {
+      Object.keys(users).forEach(userId => {
+        if (userId !== 'all') {
+          updateUserRoleCallback(
+            userId,
+            checked ? CollabEditingAccess.EDITOR : CollabEditingAccess.VIEWER
+          );
+        }
+      });
+    } finally {
+      setToggleAll(checked);
+    }
+  };
+
+  const handleDefaultToggleAccess = (checked: boolean) => {
+    changeDefaultEditable(playgroundCode, !checked);
+    setDefaultRole(checked);
+    return;
   };
 
   return (
     <>
       <span className={classes['span']}>
-        Toggle all roles:
+        Toggle all roles in current session:
         <Switch
           labelElement={toggleAll ? 'Editor' : 'Viewer'}
           alignIndicator="left"
           checked={toggleAll}
-          onChange={event => handleToggleAccess(event.target.checked, 'all')}
+          onChange={event => handleAllToggleAccess(event.target.checked)}
+          className={classNames(classes['switch'], classes['default-switch'])}
+        />
+      </span>
+      <br></br>
+      <span className={classes['span']}>
+        Default role on join:
+        <Switch
+          labelElement={defaultRole ? 'Editor' : 'Viewer'}
+          alignIndicator="left"
+          checked={defaultRole}
+          onChange={event => handleDefaultToggleAccess(event.target.checked)}
           className={classNames(classes['switch'], classes['default-switch'])}
         />
       </span>
@@ -124,7 +139,7 @@ const SideContentSessionManagement: React.FC<Props> = ({ users, playgroundCode, 
     <div className={classes['table-container']}>
       <span className={classes['span']}>
         This is the session management tab. Add users by sharing the session code. If you are the
-        owner of this session, you can manage their users' access levels from the table below.
+        owner of this session, you can manage users' access levels from the table below.
       </span>
       <br></br>
       <span className={classes['span']}>
