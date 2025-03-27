@@ -13,6 +13,11 @@ export function getSessionUrl(sessionId: string, ws?: boolean): string {
   return url.toString();
 }
 
+export function getPlaygroundSessionUrl(sessionId: string, ws?: boolean): string {
+  const url = window.location.href + sessionId;
+  return url.toString();
+}
+
 export async function getDocInfoFromSessionId(
   sessionId: string
 ): Promise<{ docId: string; defaultReadOnly: boolean } | null> {

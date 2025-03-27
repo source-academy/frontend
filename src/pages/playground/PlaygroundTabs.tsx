@@ -37,6 +37,7 @@ export const makeSessionManagementTabFrom = (
       users={users}
       playgroundCode={playgroundCode}
       readOnly={readOnly}
+      workspaceLocation="playground"
     />
   ),
   id: SideContentType.sessionManagement

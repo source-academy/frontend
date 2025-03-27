@@ -2,13 +2,19 @@ import { Classes, HTMLTable, Icon, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { CollabEditingAccess, type SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { changeDefaultEditable } from 'src/commons/collabEditing/CollabEditingHelper';
+import { useDispatch } from 'react-redux';
+import {
+  changeDefaultEditable,
+  getPlaygroundSessionUrl
+} from 'src/commons/collabEditing/CollabEditingHelper';
 //import { changeDefaultEditable } from 'src/commons/collabEditing/CollabEditingHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { showSuccessMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import classes from 'src/styles/SideContentSessionManagement.module.scss';
+import { beginAlertSideContent } from '../SideContentActions';
+import { SideContentLocation, SideContentType } from '../SideContentTypes';
 
 interface AdminViewProps {
   users: Record<string, SharedbAceUser>;
@@ -124,14 +130,25 @@ type Props = {
   users: Record<string, SharedbAceUser>;
   playgroundCode: string;
   readOnly: boolean;
+  workspaceLocation: SideContentLocation;
 };
 
-const SideContentSessionManagement: React.FC<Props> = ({ users, playgroundCode, readOnly }) => {
+const SideContentSessionManagement: React.FC<Props> = ({
+  users,
+  playgroundCode,
+  readOnly,
+  workspaceLocation
+}) => {
+  // TODO: FIX BLINKING
+  const dispatch = useDispatch();
+  const alertSideContent = useCallback(
+    () => dispatch(beginAlertSideContent(SideContentType.sessionManagement, workspaceLocation)),
+    [workspaceLocation, dispatch]
+  );
   useEffect(() => {
-    const icon = document.querySelector('.bp5-icon-people');
-    icon?.classList.add('side-content-tab-alert');
-    // TODO: currently blinking not working as expected
-  });
+    alertSideContent();
+  }, [users]);
+
   if (Object.values(users).length === 0) return;
   const myself = Object.values(users)[0];
 
@@ -145,12 +162,14 @@ const SideContentSessionManagement: React.FC<Props> = ({ users, playgroundCode, 
       <span className={classes['span']}>
         Session code:
         <CopyToClipboard
-          text={playgroundCode}
-          onCopy={() => showSuccessMessage('Session code copied!')}
+          text={getPlaygroundSessionUrl(playgroundCode)}
+          onCopy={() =>
+            showSuccessMessage('Session url copied: ' + getPlaygroundSessionUrl(playgroundCode))
+          }
         >
           <div className={classes['session-code']}>
             {' '}
-            {playgroundCode} <Icon icon={IconNames.DUPLICATE} />
+            {getPlaygroundSessionUrl(playgroundCode)} <Icon icon={IconNames.DUPLICATE} />
           </div>
         </CopyToClipboard>
       </span>

@@ -1,11 +1,12 @@
 import { Classes, Colors, Divider, FormGroup, Popover, Text, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 import { createNewSession, getDocInfoFromSessionId } from '../collabEditing/CollabEditingHelper';
 import ControlButton from '../ControlButton';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
+import { useParams } from 'react-router-dom';
 
 type ControlBarSessionButtonsProps = DispatchProps & StateProps;
 
@@ -149,7 +150,7 @@ export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
               </FormGroup>
               <CopyToClipboard
                 text={sessionId}
-                onCopy={() => showSuccessMessage('Copied to clipboard')}
+                onCopy={() => showSuccessMessage('Copied to clipboard: ' + sessionId)}
               >
                 <ControlButton icon={IconNames.DUPLICATE} />
               </CopyToClipboard>
@@ -164,6 +165,14 @@ export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
   const tooltipContent = props.isFolderModeEnabled
     ? 'Currently unsupported in Folder mode'
     : undefined;
+
+  const { codeFromUrl } = useParams<{ codeFromUrl: string }>();
+  useEffect(() => {
+    if (codeFromUrl) {
+      joinElemRef.current = codeFromUrl;
+      handleStartJoining({ preventDefault: () => {} } as React.FormEvent<HTMLFormElement>);
+    }
+  }, [codeFromUrl]);
 
   return (
     <Tooltip content={tooltipContent} disabled={tooltipContent === undefined}>
