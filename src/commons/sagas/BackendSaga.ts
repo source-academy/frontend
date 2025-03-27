@@ -73,6 +73,7 @@ import {
   getUser,
   getUserCourseRegistrations,
   handleResponseError,
+  pauseUser,
   postAcknowledgeNotifications,
   postAnswer,
   postAssessment,
@@ -99,7 +100,8 @@ import {
   unpublishGrading,
   unpublishGradingAll,
   updateAssessment,
-  uploadAssessment
+  uploadAssessment,
+  validateResumeCode
 } from './RequestsSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
@@ -601,7 +603,18 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
     yield put(actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews }));
   },
   submitGrading: sendGrade,
-  submitGradingAndContinue: sendGradeAndContinue
+  submitGradingAndContinue: sendGradeAndContinue,
+  validateResumeCode: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const { resumeCode, setPauseAcademy } = action.payload;
+
+    const resumeCodeIsValid = yield call(validateResumeCode, tokens, resumeCode);
+    setPauseAcademy(!resumeCodeIsValid);
+  },
+  pauseUser: function* () {
+    const tokens: Tokens = yield selectTokens();
+    yield call(pauseUser, tokens);
+  }
 });
 
 function* sendGrade(
@@ -821,6 +834,21 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
       courseConfiguration: CourseConfiguration | null;
       assessmentConfigurations: AssessmentConfiguration[] | null;
     } = yield call(getLatestCourseRegistrationAndConfiguration, tokens);
+
+    if (courseConfiguration?.enableExamMode) {
+      const {
+        user
+      }: {
+        user: User | null;
+        courseRegistration: CourseRegistration | null;
+        courseConfiguration: CourseConfiguration | null;
+        assessmentConfigurations: AssessmentConfiguration[] | null;
+      } = yield call(getUser, tokens);
+
+      if (user) {
+        yield put(actions.setUser(user));
+      }
+    }
 
     if (!courseRegistration || !courseConfiguration || !assessmentConfigurations) {
       yield call(showWarningMessage, `Failed to load course!`);

@@ -38,7 +38,10 @@ const CourseConfigPanel: React.FC<Props> = props => {
     enableAchievements,
     enableSourcecast,
     enableStories,
-    moduleHelpText
+    enableExamMode,
+    resumeCode,
+    moduleHelpText,
+    isOfficialCourse
   } = props.courseConfiguration;
 
   const writePanel = (
@@ -186,6 +189,37 @@ const CourseConfigPanel: React.FC<Props> = props => {
               })
             }
           />
+          {isOfficialCourse && (
+            <Switch
+              checked={enableExamMode}
+              label="Enable Exam Mode"
+              onChange={e =>
+                props.setCourseConfiguration({
+                  ...props.courseConfiguration,
+                  enableExamMode: (e.target as HTMLInputElement).checked
+                })
+              }
+            />
+          )}
+          {enableExamMode && (
+            <FormGroup
+              // helperText="Please enter the course resume code. Students who attempt to use the DevTool will be asked this code to continue their session."
+              inline={true}
+              label="Course Resume Code"
+              labelFor="courseResumeCode"
+            >
+              <InputGroup
+                id="courseResumeCode"
+                defaultValue={resumeCode}
+                onChange={e =>
+                  props.setCourseConfiguration({
+                    ...props.courseConfiguration,
+                    resumeCode: (e.target as HTMLInputElement).value
+                  })
+                }
+              />
+            </FormGroup>
+          )}
         </div>
       </div>
     </div>

@@ -1,4 +1,5 @@
-import React from 'react';
+import disableDevtool from 'disable-devtool';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 import Messages, {
@@ -8,6 +9,7 @@ import Messages, {
 } from 'src/features/vscode/messages';
 
 import NavigationBar from '../navigationBar/NavigationBar';
+import { PauseAcademyOverlay } from '../pauseAcademyOverlay/PauseAcademyOverlay';
 import Constants from '../utils/Constants';
 import { useLocalStorageState, useSession } from '../utils/Hooks';
 import WorkspaceActions from '../workspace/WorkspaceActions';
@@ -17,7 +19,7 @@ import VscodeActions from './actions/VscodeActions';
 
 const Application: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoggedIn } = useSession();
+  const { isLoggedIn, isPaused, enableExamMode } = useSession();
 
   // Used in the mobile/PWA experience (e.g. separate handling of orientation changes on Andriod & iOS due to unique browser behaviours)
   const isMobile = /iPhone|iPad|Android/.test(navigator.userAgent);
@@ -28,6 +30,11 @@ const Application: React.FC = () => {
     Constants.workspaceSettingsLocalStorageKey,
     defaultWorkspaceSettings
   );
+
+  // Used for dev tools detection
+  const [pauseAcademy, setPauseAcademy] = useState(false);
+  const [pauseAcademyReason, setPauseAcademyReason] = useState('');
+  const hasSentPauseUserRequest = React.useRef<boolean>(false);
 
   // Effect to fetch the latest user info and course configurations from the backend on refresh,
   // if the user was previously logged in
@@ -133,14 +140,61 @@ const Application: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Effect for dev tools blocking/detection when exam mode enabled
+  React.useEffect(() => {
+    if (isPaused !== undefined && isPaused) {
+      setPauseAcademy(true);
+      setPauseAcademyReason('Developer tools was previously used.');
+    }
+
+    const options = {
+      ondevtoolopen: () => {
+        setPauseAcademy(true);
+        setPauseAcademyReason('Developer tools has been used');
+        if (hasSentPauseUserRequest.current === false) {
+          dispatch(SessionActions.pauseUser());
+          hasSentPauseUserRequest.current = true;
+        }
+      },
+      ondevtoolclose: () => {
+        hasSentPauseUserRequest.current = false;
+      }
+    };
+
+    if (enableExamMode) {
+      disableDevtool(options);
+      document.addEventListener('contextmenu', event => event.preventDefault());
+      document.addEventListener('keydown', event => {
+        if (
+          event.key == 'F12' ||
+          ((event.key == 'I' || event.key == 'J') && event.ctrlKey && event.shiftKey)
+        ) {
+          event.preventDefault();
+        }
+      });
+    }
+  }, [dispatch, enableExamMode, isPaused, hasSentPauseUserRequest]);
+
+  const resumeCodeSubmitHandler = (resumeCode: string) => {
+    if (!resumeCode || resumeCode.length === 0) {
+      alert('Resume code cannot be empty');
+    } else {
+      dispatch(SessionActions.validateResumeCode(resumeCode, setPauseAcademy));
+    }
+  };
+
   return (
     <WorkspaceSettingsContext.Provider value={[workspaceSettings, setWorkspaceSettings]}>
-      <div className="Application">
-        <NavigationBar />
-        <div className="Application__main">
-          <Outlet />
+      {pauseAcademy ? (
+        <PauseAcademyOverlay reason={pauseAcademyReason} onSubmit={resumeCodeSubmitHandler} />
+      ) : (
+        <div className="Application">
+          <NavigationBar />
+          <div className="Application__main">
+            <Outlet />
+          </div>
         </div>
-      </div>
+      )}
     </WorkspaceSettingsContext.Provider>
   );
 };
