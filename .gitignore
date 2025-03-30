@@ -24,8 +24,6 @@ terraform*
 .env.test.local
 .env.production.local
 .idea/
-.vscode/
-cadet-frontend.iml
 
 npm-debug.log*
 .eslintcache
@@ -50,3 +48,6 @@ yarn-error.log
 
 #!.yarn/cache
 .pnp.*
+
+# We use .node-version
+/.tool-versions

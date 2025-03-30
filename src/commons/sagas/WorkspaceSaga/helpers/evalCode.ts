@@ -2,7 +2,7 @@ import { compileAndRun as compileAndRunCCode } from '@sourceacademy/c-slang/ctow
 import { tokenizer } from 'acorn';
 import { IConduit } from 'conductor/dist/conduit';
 import { Context, interrupt, Result, resume, runFilesInContext } from 'js-slang';
-import { ACORN_PARSE_OPTIONS, TRY_AGAIN } from 'js-slang/dist/constants';
+import { ACORN_PARSE_OPTIONS } from 'js-slang/dist/constants';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { Chapter, ErrorSeverity, ErrorType, SourceError, Variant } from 'js-slang/dist/types';
@@ -128,30 +128,9 @@ export function* evalCodeSaga(
   );
 
   const entrypointCode = files[entrypointFilePath];
-  const lastNonDetResult = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].lastNonDetResult
-  );
 
   function call_variant(variant: Variant) {
-    if (variant === Variant.NON_DET) {
-      return entrypointCode.trim() === TRY_AGAIN
-        ? call(resume, lastNonDetResult)
-        : call(runFilesInContext, files, entrypointFilePath, context, {
-            executionMethod: 'interpreter',
-            originalMaxExecTime: execTime,
-            stepLimit: stepLimit,
-            useSubst: substActiveAndCorrectChapter,
-            envSteps: currentStep
-          });
-    } else if (variant === Variant.LAZY) {
-      return call(runFilesInContext, files, entrypointFilePath, context, {
-        scheduler: 'preemptive',
-        originalMaxExecTime: execTime,
-        stepLimit: stepLimit,
-        useSubst: substActiveAndCorrectChapter,
-        envSteps: currentStep
-      });
-    } else if (variant === Variant.WASM) {
+    if (variant === Variant.WASM) {
       // Note: WASM does not support multiple file programs.
       return call(
         wasm_compile_and_run,
@@ -269,8 +248,6 @@ export function* evalCodeSaga(
       });
   }
 
-  const isNonDet: boolean = context.variant === Variant.NON_DET;
-  const isLazy: boolean = context.variant === Variant.LAZY;
   const isWasm: boolean = context.variant === Variant.WASM;
   const isC: boolean = context.chapter === Chapter.FULL_C;
   const isJava: boolean = context.chapter === Chapter.FULL_JAVA;
@@ -286,11 +263,19 @@ export function* evalCodeSaga(
       ? DisplayBufferService.attachConsole(workspaceLocation)
       : () => {};
 
-  const { result, interrupted, paused } = yield race({
+  const {
+    result,
+    interrupted,
+    paused
+  }: {
+    result: Result;
+    interrupted: any;
+    paused: any;
+  } = yield race({
     result:
       actionType === InterpreterActions.debuggerResume.type
         ? call(resume, lastDebuggerResult)
-        : isNonDet || isLazy || isWasm
+        : isWasm
           ? call_variant(context.variant)
           : isC
             ? call(cCompileAndRun, entrypointCode, context)
@@ -357,7 +342,6 @@ export function* evalCodeSaga(
   if (
     result.status !== 'suspended' &&
     result.status !== 'finished' &&
-    result.status !== 'suspended-non-det' &&
     result.status !== 'suspended-cse-eval'
   ) {
     yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
@@ -401,11 +385,6 @@ export function* evalCodeSaga(
     yield put(actions.endDebuggerPause(workspaceLocation));
     yield put(actions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation));
     return;
-  } else if (isNonDet) {
-    if (result.value === 'cut') {
-      result.value = undefined;
-    }
-    yield put(actions.updateLastNonDetResult(result, workspaceLocation));
   }
 
   yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
