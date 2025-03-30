@@ -580,8 +580,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
   };
 
-  console.log(assessment);
-
   /**
    * controlBarProps() will only be called when assessment is not undefined
    * (see 'Rendering Logic' below), thus it is okay to use assessment!
