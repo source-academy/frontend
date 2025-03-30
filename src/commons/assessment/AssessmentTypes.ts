@@ -92,7 +92,7 @@ export type Assessment = {
   globalDeployment?: Library; // For mission control
   graderDeployment?: Library; // For mission control
   hasTokenCounter?: boolean;
-  onFinish?: string;
+  isMinigame?: boolean;
   id: number;
   longSummary: string;
   missionPDF: string;
@@ -106,6 +106,7 @@ export type AssessmentConfiguration = {
   isManuallyGraded: boolean;
   isGradingAutoPublished: boolean;
   displayInDashboard: boolean;
+  isMinigame: boolean;
   hoursBeforeEarlyXpDecay: number;
   earlySubmissionXp: number;
   hasTokenCounter: boolean;

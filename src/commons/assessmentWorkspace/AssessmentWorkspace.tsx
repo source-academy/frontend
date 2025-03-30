@@ -602,6 +602,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
   };
 
+  console.log(assessment);
+
   /**
    * controlBarProps() will only be called when assessment is not undefined
    * (see 'Rendering Logic' below), thus it is okay to use assessment!
@@ -700,7 +702,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         }
         questionProgress={questionProgress}
         key="next_question"
-        submitOnFinish={assessment.onFinish === 'submitAndReturnToGame'}
+        submitOnFinish={assessment.isMinigame}
       />
     );
 
