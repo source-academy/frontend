@@ -25,8 +25,9 @@ const LoginVscodeCallback: React.FC = () => {
         })
       );
       dispatch(SessionActions.fetchUserAndCourse());
-      navigate(`/welcome`);
+      navigate('/welcome');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -46,6 +47,6 @@ const LoginVscodeCallback: React.FC = () => {
 // react-router lazy loading
 // https://reactrouter.com/en/main/route/lazy
 export const Component = LoginVscodeCallback;
-Component.displayName = 'Login';
+Component.displayName = 'LoginVscodeCallback';
 
 export default LoginVscodeCallback;
