@@ -152,6 +152,7 @@ export class CseAnimation {
     ) {
       return;
     }
+
     if (isNode(lastControlItem)) {
       CseAnimation.handleNode(lastControlItem);
     } else if (isInstr(lastControlItem)) {

@@ -3,7 +3,7 @@ import { Rect } from 'react-konva';
 
 import { ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
-import { defaultStrokeColor, fadedStrokeColor } from '../CseMachineUtils';
+import { defaultStrokeColor, reachedStrokeColor } from '../CseMachineUtils';
 import { ArrayValue } from './values/ArrayValue';
 import { Visible } from './Visible';
 
@@ -29,7 +29,7 @@ export class ArrayEmptyUnit extends Visible {
         y={this.y()}
         width={this.width()}
         height={this.height()}
-        stroke={this.parent.isReferenced() ? defaultStrokeColor() : fadedStrokeColor()}
+        stroke={this.parent.isReferenced() ? reachedStrokeColor() : defaultStrokeColor()}
         ref={this.ref}
       />
     );

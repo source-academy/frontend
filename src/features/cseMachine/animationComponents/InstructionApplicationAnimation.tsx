@@ -8,9 +8,9 @@ import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import {
   defaultActiveColor,
   defaultDangerColor,
-  defaultStrokeColor,
   getTextWidth,
-  isStashItemInDanger
+  isStashItemInDanger,
+  reachedStrokeColor
 } from '../CseMachineUtils';
 import { Animatable, AnimationConfig } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
@@ -47,7 +47,7 @@ export class InstructionApplicationAnimation extends Animatable {
     this.stashItemAnimations = stashItems.map(item => {
       return new AnimatedTextbox(item.text, getNodePosition(item), {
         rectProps: {
-          stroke: isStashItemInDanger(item.index) ? defaultDangerColor() : defaultStrokeColor()
+          stroke: isStashItemInDanger(item.index) ? defaultDangerColor() : reachedStrokeColor()
         }
       });
     });
@@ -87,7 +87,7 @@ export class InstructionApplicationAnimation extends Animatable {
         { x: startX + (this.endX - startX) / 2 - this.resultItem!.width() / 2 },
         { duration: 0 }
       ),
-      this.controlInstrAnimation.animateRectTo({ stroke: defaultStrokeColor() }, animationConfig),
+      this.controlInstrAnimation.animateRectTo({ stroke: reachedStrokeColor() }, animationConfig),
       this.controlInstrAnimation.animateTo(
         {
           x: startX,
@@ -101,7 +101,7 @@ export class InstructionApplicationAnimation extends Animatable {
         animationConfig
       ),
       ...this.stashItemAnimations.map(a =>
-        a.animateRectTo({ stroke: defaultStrokeColor() }, animationConfig)
+        a.animateRectTo({ stroke: reachedStrokeColor() }, animationConfig)
       )
     ]);
     animationConfig = { ...animationConfig, delay: 0 };

@@ -9,8 +9,8 @@ import { Data } from '../CseMachineTypes';
 import {
   defaultStrokeColor,
   defaultTextColor,
-  fadedStrokeColor,
-  fadedTextColor
+  reachedStrokeColor,
+  reachedTextColor
 } from '../CseMachineUtils';
 import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
 import { GenericArrow } from './arrows/GenericArrow';
@@ -53,6 +53,7 @@ export class ArrayUnit extends Visible {
     this.isLastUnit = this.idx === this.parent.data.length - 1;
     this.value = Layout.createValue(this.data, this);
     this.isMainReference = this.value.references.length > 1;
+    this.setReachable(this.parent.isReachable());
   }
 
   showIndex() {
@@ -86,7 +87,7 @@ export class ArrayUnit extends Visible {
       fontFamily: defaultOptions.fontFamily,
       fontSize: defaultOptions.fontSize,
       fontStyle: defaultOptions.fontStyle,
-      fill: this.parent.isReferenced() ? defaultTextColor() : fadedTextColor(),
+      fill: this.isReachable() ? reachedTextColor() : defaultTextColor(),
       x: this.x(),
       y: this.y() - defaultOptions.fontSize - 4,
       width: this.width(),
@@ -102,7 +103,7 @@ export class ArrayUnit extends Visible {
           y={this.y()}
           width={this.width()}
           height={this.height()}
-          stroke={this.parent.isReferenced() ? defaultStrokeColor() : fadedStrokeColor()}
+          stroke={this.isReachable() ? reachedStrokeColor() : defaultStrokeColor()}
           hitStrokeWidth={Config.DataHitStrokeWidth}
           fillEnabled={true}
           cornerRadius={cornerRadius}

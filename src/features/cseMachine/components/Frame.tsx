@@ -14,7 +14,8 @@ import {
   isClosure,
   isDataArray,
   isPrimitiveData,
-  isUnassigned
+  isUnassigned,
+  reachedStrokeColor
 } from '../CseMachineUtils';
 import { isContinuation } from '../utils/scheme';
 import { ArrowFromFrame } from './arrows/ArrowFromFrame';
@@ -168,10 +169,23 @@ export class Frame extends Visible implements IHoverable {
 
     this.totalHeight = this.height() + this.name.height() + Config.TextPaddingY / 2;
 
-    if (this.parentFrame) this.arrow = new ArrowFromFrame(this).to(this.parentFrame);
+    if (this.parentFrame) {
+      this.arrow = new ArrowFromFrame(this).to(this.parentFrame);
+    }
 
+    // mark as white recursively up to root parent
     if (CseMachine.getCurrentEnvId() === this.environment.id) {
       CseAnimation.setCurrentFrame(this);
+      this.setParentChainReachable();
+    }
+  }
+
+  private setParentChainReachable(): void {
+    this.setReachable(true);
+    this.arrow?.setReachable(true);
+
+    if (this.parentFrame) {
+      this.parentFrame.setParentChainReachable();
     }
   }
 
@@ -192,13 +206,17 @@ export class Frame extends Visible implements IHoverable {
           stroke={
             CseMachine.getCurrentEnvId() === this.environment?.id
               ? defaultActiveColor()
-              : defaultStrokeColor()
+              : this.isReachable()
+                ? reachedStrokeColor()
+                : defaultStrokeColor()
           }
           cornerRadius={Config.FrameCornerRadius}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
           key={Layout.key++}
         />
+        {this.bindings.map(binding => binding.key.setReachable(this.isReachable()))}
+        {this.bindings.map(binding => binding.value.setReachable(this.isReachable()))}
         {this.bindings.map(binding => binding.draw())}
         {this.arrow?.draw()}
       </Group>

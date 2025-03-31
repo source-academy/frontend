@@ -6,7 +6,7 @@ import { Arrow, KonvaNodeComponent, Path, Rect, Text } from 'react-konva';
 import { CseAnimation } from '../../CseMachineAnimation';
 import { Config } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
-import { defaultStrokeColor, defaultTextColor } from '../../CseMachineUtils';
+import { reachedStrokeColor, reachedTextColor } from '../../CseMachineUtils';
 import { Animatable, AnimatableTo, AnimationConfig } from './Animatable';
 import { lerp } from './AnimationUtils';
 
@@ -171,7 +171,7 @@ export class AnimationComponent<
 export class AnimatedTextComponent extends AnimationComponent<Konva.Text, Konva.TextConfig> {
   constructor(props: Konva.TextConfig & Required<Pick<Konva.TextConfig, 'text'>>) {
     const defaultProps = {
-      fill: defaultTextColor(),
+      fill: reachedTextColor(),
       fontFamily: ControlStashConfig.FontFamily,
       fontSize: ControlStashConfig.FontSize,
       fontStyle: ControlStashConfig.FontStyle,
@@ -188,7 +188,7 @@ export class AnimatedTextComponent extends AnimationComponent<Konva.Text, Konva.
 export class AnimatedRectComponent extends AnimationComponent<Konva.Rect, Konva.RectConfig> {
   constructor(props: Konva.RectConfig) {
     const defaultProps = {
-      stroke: defaultStrokeColor(),
+      stroke: reachedStrokeColor(),
       cornerRadius: ControlStashConfig.ControlItemCornerRadius
     };
     super(Rect, { ...defaultProps, ...props });
@@ -198,7 +198,7 @@ export class AnimatedRectComponent extends AnimationComponent<Konva.Rect, Konva.
 export class AnimatedPathComponent extends AnimationComponent<Konva.Path, Konva.PathConfig> {
   constructor(props: Konva.PathConfig & Required<Pick<Konva.PathConfig, 'data'>>) {
     const defaultProps = {
-      stroke: defaultStrokeColor(),
+      stroke: reachedStrokeColor(),
       strokeWidth: Config.ArrowStrokeWidth
     };
     super(Path, { ...defaultProps, ...props });
@@ -208,7 +208,7 @@ export class AnimatedPathComponent extends AnimationComponent<Konva.Path, Konva.
 export class AnimatedArrowComponent extends AnimationComponent<Konva.Arrow, Konva.ArrowConfig> {
   constructor(props: Konva.ArrowConfig) {
     const defaultProps = {
-      fill: defaultStrokeColor(),
+      fill: reachedStrokeColor(),
       strokeEnabled: false,
       pointerWidth: Config.ArrowHeadSize
     };

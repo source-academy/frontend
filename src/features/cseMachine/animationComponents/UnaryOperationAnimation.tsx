@@ -7,9 +7,9 @@ import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import {
   defaultActiveColor,
   defaultDangerColor,
-  defaultStrokeColor,
   getTextWidth,
-  isStashItemInDanger
+  isStashItemInDanger,
+  reachedStrokeColor
 } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
@@ -65,13 +65,13 @@ export class UnaryOperationAnimation extends Animatable {
         },
         { duration: 0 }
       ),
-      this.operatorAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
+      this.operatorAnimation.animateRectTo({ stroke: reachedStrokeColor() }),
       this.operatorAnimation.animateTo({
         x: this.operand.x(),
         y: this.result.y(),
         width: minOpWidth
       }),
-      this.operandAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
+      this.operandAnimation.animateRectTo({ stroke: reachedStrokeColor() }),
       this.operandAnimation.animateTo({
         x: this.operand.x() + minOpWidth
       })

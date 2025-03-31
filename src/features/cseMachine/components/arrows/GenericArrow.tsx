@@ -3,7 +3,7 @@ import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'rea
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
 import { IVisible, StepsArray } from '../../CseMachineTypes';
-import { defaultStrokeColor, fadedStrokeColor } from '../../CseMachineUtils';
+import { defaultStrokeColor, reachedStrokeColor } from '../../CseMachineUtils';
 import { Visible } from '../Visible';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
@@ -12,7 +12,6 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
   points: number[] = [];
   source: Source;
   target: Target | undefined;
-  faded: boolean = false;
 
   constructor(from: Source) {
     super();
@@ -94,7 +93,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
   }
 
   draw() {
-    const stroke = this.faded ? fadedStrokeColor() : defaultStrokeColor();
+    const stroke = this.isReachable() ? reachedStrokeColor() : defaultStrokeColor();
     return (
       <KonvaGroup key={Layout.key++} ref={this.ref} listening={false}>
         <KonvaPath

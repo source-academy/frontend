@@ -9,9 +9,9 @@ import { Layout } from '../CseMachineLayout';
 import { Data, IHoverable } from '../CseMachineTypes';
 import {
   defaultTextColor,
-  fadedTextColor,
   getTextWidth,
   isSourceObject,
+  reachedTextColor,
   setHoveredCursor,
   setUnhoveredCursor
 } from '../CseMachineUtils';
@@ -103,7 +103,7 @@ export class Text extends Visible implements IHoverable {
       fontFamily: this.options.fontFamily,
       fontSize: this.options.fontSize,
       fontStyle: this.options.fontStyle,
-      fill: this.options.faded ? fadedTextColor() : defaultTextColor(),
+      fill: this.options.faded ? defaultTextColor() : reachedTextColor(),
       visible: !this.options.hidden
     };
     return (

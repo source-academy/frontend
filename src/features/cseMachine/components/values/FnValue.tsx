@@ -16,13 +16,13 @@ import { IHoverable, NonGlobalFn, ReferenceType } from '../../CseMachineTypes';
 import {
   defaultStrokeColor,
   defaultTextColor,
-  fadedStrokeColor,
-  fadedTextColor,
   getBodyText,
   getParamsText,
   getTextWidth,
   isMainReference,
   isStreamFn,
+  reachedStrokeColor,
+  reachedTextColor,
   setHoveredCursor,
   setUnhoveredCursor
 } from '../../CseMachineUtils';
@@ -132,8 +132,8 @@ export class FnValue extends Value implements IHoverable {
     if (this.enclosingFrame) {
       this._arrow = new ArrowFromFn(this).to(this.enclosingFrame) as ArrowFromFn;
     }
-    const textColor = this.isReferenced() ? defaultTextColor() : fadedTextColor();
-    const strokeColor = this.isReferenced() ? defaultStrokeColor() : fadedStrokeColor();
+    const textColor = this.isReachable() ? reachedTextColor() : defaultTextColor();
+    const strokeColor = this.isReachable() ? reachedStrokeColor() : defaultStrokeColor();
     return (
       <React.Fragment key={Layout.key++}>
         <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} ref={this.ref}>

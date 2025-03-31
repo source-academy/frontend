@@ -9,7 +9,7 @@ import { defaultOptions, Text } from '../components/Text';
 import { PrimitiveValue } from '../components/values/PrimitiveValue';
 import { Value } from '../components/values/Value';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
-import { defaultActiveColor, defaultStrokeColor, getTextWidth } from '../CseMachineUtils';
+import { defaultActiveColor, getTextWidth, reachedStrokeColor } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
@@ -72,7 +72,7 @@ export class AssignmentAnimation extends Animatable {
     this.binding.arrow?.ref.current?.hide();
     // move asgn instruction next to stash item, while also decreasing its width
     await Promise.all([
-      this.asgnItemAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
+      this.asgnItemAnimation.animateRectTo({ stroke: reachedStrokeColor() }),
       this.asgnItemAnimation.animateTo({
         x: this.stashItem.x() - (this.stashItemIsFirst ? minAsgnItemWidth : 0),
         y: this.stashItem.y() + (this.stashItemIsFirst ? 0 : this.stashItem.height()),

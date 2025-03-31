@@ -10,9 +10,9 @@ import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import {
   defaultActiveColor,
   defaultDangerColor,
-  defaultStrokeColor,
   getTextWidth,
-  isStashItemInDanger
+  isStashItemInDanger,
+  reachedStrokeColor
 } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
@@ -65,7 +65,7 @@ export class LookupAnimation extends Animatable {
       getTextWidth(this.nameItem.text) + ControlStashConfig.ControlItemTextPadding * 2;
     // move name item next to binding
     await Promise.all([
-      this.nameItemAnimation.animateRectTo({ stroke: defaultStrokeColor() }, { duration: 1.2 }),
+      this.nameItemAnimation.animateRectTo({ stroke: reachedStrokeColor() }, { duration: 1.2 }),
       this.nameItemAnimation.animateTo(
         {
           x: this.frame.x() - minNameItemWidth,

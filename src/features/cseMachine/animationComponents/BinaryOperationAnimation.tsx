@@ -7,9 +7,9 @@ import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import {
   defaultActiveColor,
   defaultDangerColor,
-  defaultStrokeColor,
   getTextWidth,
-  isStashItemInDanger
+  isStashItemInDanger,
+  reachedStrokeColor
 } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
@@ -72,10 +72,10 @@ export class BinaryOperationAnimation extends Animatable {
     const fadeInDelay = 1 / 4;
     // Shifts the right operand to the right and move the operator in between the operands
     await Promise.all([
-      this.binaryOperatorAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
+      this.binaryOperatorAnimation.animateRectTo({ stroke: reachedStrokeColor() }),
       this.binaryOperatorAnimation.animateTo({ ...rightOpPosition, width: minBinOpWidth }),
-      this.leftOperandAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
-      this.rightOperandAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
+      this.leftOperandAnimation.animateRectTo({ stroke: reachedStrokeColor() }),
+      this.rightOperandAnimation.animateRectTo({ stroke: reachedStrokeColor() }),
       this.rightOperandAnimation.animateTo({
         ...rightOpPosition,
         x: rightOpPosition.x + minBinOpWidth

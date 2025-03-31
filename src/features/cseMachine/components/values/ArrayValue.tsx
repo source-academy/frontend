@@ -115,4 +115,12 @@ export class ArrayValue extends Value implements IHoverable {
       </Group>
     );
   }
+
+  setReachable(reachable: boolean) {
+    super.setReachable(reachable);
+    // Propagate reachability to all array units
+    this.units.forEach(unit => {
+      unit.setReachable(reachable);
+    });
+  }
 }

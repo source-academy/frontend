@@ -12,9 +12,9 @@ import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { Layout } from '../CseMachineLayout';
 import { IHoverable } from '../CseMachineTypes';
 import {
-  defaultStrokeColor,
-  defaultTextColor,
   getControlItemComponent,
+  reachedStrokeColor,
+  reachedTextColor,
   setHoveredCursor,
   setHoveredStyle,
   setUnhoveredCursor,
@@ -110,14 +110,14 @@ export class ControlStack extends Visible implements IHoverable {
             }}
           >
             <Tag
-              stroke={defaultStrokeColor()}
+              stroke={reachedStrokeColor()}
               cornerRadius={ControlStashConfig.ControlItemCornerRadius}
             />
             <Text
               {...textProps}
               text={`${Config.Ellipsis}`}
               align="center"
-              fill={defaultTextColor()}
+              fill={reachedTextColor()}
               width={ControlStashConfig.ShowMoreButtonWidth}
               height={ControlStashConfig.ShowMoreButtonHeight}
             />
