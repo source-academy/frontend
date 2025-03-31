@@ -12,6 +12,7 @@ import { WorkspaceReducer as workspaces } from '../../workspace/WorkspaceReducer
 import { OverallState } from '../ApplicationTypes';
 import { RouterReducer as router } from './CommonsReducer';
 import { SessionsReducer as session } from './SessionsReducer';
+import { VscodeReducer as vscode } from './VscodeReducer';
 
 const rootReducer: Reducer<OverallState, SourceActionType> = combineReducers({
   router,
@@ -23,7 +24,8 @@ const rootReducer: Reducer<OverallState, SourceActionType> = combineReducers({
   workspaces,
   featureFlags,
   fileSystem,
-  sideContent
+  sideContent,
+  vscode
 });
 
 export default rootReducer;

@@ -1,25 +1,25 @@
 import { compileAndRun as compileAndRunCCode } from '@sourceacademy/c-slang/ctowasm/dist/index';
 import { tokenizer } from 'acorn';
+import { IConduit } from 'conductor/dist/conduit';
 import { Context, interrupt, Result, resume, runFilesInContext } from 'js-slang';
-import { ACORN_PARSE_OPTIONS, TRY_AGAIN } from 'js-slang/dist/constants';
+import { ACORN_PARSE_OPTIONS } from 'js-slang/dist/constants';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { Chapter, ErrorSeverity, ErrorType, SourceError, Variant } from 'js-slang/dist/types';
 import { eventChannel, SagaIterator } from 'redux-saga';
 import { call, cancel, cancelled, fork, put, race, select, take } from 'redux-saga/effects';
-import { IConduit } from 'sa-conductor/dist/conduit';
 import * as Sourceror from 'sourceror';
-import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
-import { selectFeatureSaga } from 'src/commons/featureFlags/selectFeatureSaga';
-import { makeCCompilerConfig, specialCReturnObject } from 'src/commons/utils/CToWasmHelper';
-import { javaRun } from 'src/commons/utils/JavaHelper';
-import { BrowserHostPlugin } from 'src/features/conductor/BrowserHostPlugin';
-import { createConductor } from 'src/features/conductor/createConductor';
-import { flagConductorEnable } from 'src/features/conductor/flagConductorEnable';
-import { flagConductorEvaluatorUrl } from 'src/features/conductor/flagConductorEvaluatorUrl';
-import StoriesActions from 'src/features/stories/StoriesActions';
 
+import InterpreterActions from '../../../../commons/application/actions/InterpreterActions';
+import { selectFeatureSaga } from '../../../../commons/featureFlags/selectFeatureSaga';
+import { makeCCompilerConfig, specialCReturnObject } from '../../../../commons/utils/CToWasmHelper';
+import { javaRun } from '../../../../commons/utils/JavaHelper';
 import { EventType } from '../../../../features/achievement/AchievementTypes';
+import { BrowserHostPlugin } from '../../../../features/conductor/BrowserHostPlugin';
+import { createConductor } from '../../../../features/conductor/createConductor';
+import { flagConductorEnable } from '../../../../features/conductor/flagConductorEnable';
+import { flagConductorEvaluatorUrl } from '../../../../features/conductor/flagConductorEvaluatorUrl';
+import StoriesActions from '../../../../features/stories/StoriesActions';
 import { isSchemeLanguage, OverallState } from '../../../application/ApplicationTypes';
 import { SideContentType } from '../../../sideContent/SideContentTypes';
 import { actions } from '../../../utils/ActionsHelper';
@@ -128,30 +128,9 @@ export function* evalCodeSaga(
   );
 
   const entrypointCode = files[entrypointFilePath];
-  const lastNonDetResult = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].lastNonDetResult
-  );
 
   function call_variant(variant: Variant) {
-    if (variant === Variant.NON_DET) {
-      return entrypointCode.trim() === TRY_AGAIN
-        ? call(resume, lastNonDetResult)
-        : call(runFilesInContext, files, entrypointFilePath, context, {
-            executionMethod: 'interpreter',
-            originalMaxExecTime: execTime,
-            stepLimit: stepLimit,
-            useSubst: substActiveAndCorrectChapter,
-            envSteps: currentStep
-          });
-    } else if (variant === Variant.LAZY) {
-      return call(runFilesInContext, files, entrypointFilePath, context, {
-        scheduler: 'preemptive',
-        originalMaxExecTime: execTime,
-        stepLimit: stepLimit,
-        useSubst: substActiveAndCorrectChapter,
-        envSteps: currentStep
-      });
-    } else if (variant === Variant.WASM) {
+    if (variant === Variant.WASM) {
       // Note: WASM does not support multiple file programs.
       return call(
         wasm_compile_and_run,
@@ -269,8 +248,6 @@ export function* evalCodeSaga(
       });
   }
 
-  const isNonDet: boolean = context.variant === Variant.NON_DET;
-  const isLazy: boolean = context.variant === Variant.LAZY;
   const isWasm: boolean = context.variant === Variant.WASM;
   const isC: boolean = context.chapter === Chapter.FULL_C;
   const isJava: boolean = context.chapter === Chapter.FULL_JAVA;
@@ -286,11 +263,19 @@ export function* evalCodeSaga(
       ? DisplayBufferService.attachConsole(workspaceLocation)
       : () => {};
 
-  const { result, interrupted, paused } = yield race({
+  const {
+    result,
+    interrupted,
+    paused
+  }: {
+    result: Result;
+    interrupted: any;
+    paused: any;
+  } = yield race({
     result:
       actionType === InterpreterActions.debuggerResume.type
         ? call(resume, lastDebuggerResult)
-        : isNonDet || isLazy || isWasm
+        : isWasm
           ? call_variant(context.variant)
           : isC
             ? call(cCompileAndRun, entrypointCode, context)
@@ -357,7 +342,6 @@ export function* evalCodeSaga(
   if (
     result.status !== 'suspended' &&
     result.status !== 'finished' &&
-    result.status !== 'suspended-non-det' &&
     result.status !== 'suspended-cse-eval'
   ) {
     yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
@@ -401,11 +385,6 @@ export function* evalCodeSaga(
     yield put(actions.endDebuggerPause(workspaceLocation));
     yield put(actions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation));
     return;
-  } else if (isNonDet) {
-    if (result.value === 'cut') {
-      result.value = undefined;
-    }
-    yield put(actions.updateLastNonDetResult(result, workspaceLocation));
   }
 
   yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
@@ -520,7 +499,8 @@ export function* evalCodeConductorSaga(
   const { hostPlugin, conduit }: { hostPlugin: BrowserHostPlugin; conduit: IConduit } = yield call(
     createConductor,
     url,
-    async (fileName: string) => files[fileName]
+    async (fileName: string) => files[fileName],
+    (pluginName: string) => {} // TODO: implement dynamic plugin loading
   );
   const stdoutTask = yield fork(handleStdout, hostPlugin, workspaceLocation);
   yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);

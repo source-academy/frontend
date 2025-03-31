@@ -1,8 +1,8 @@
 import { Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
-import { flagConductorEnable } from 'src/features/conductor/flagConductorEnable';
 
+import { flagConductorEnable } from '../../features/conductor/flagConductorEnable';
 import ControlButton from '../ControlButton';
 import { useFeature } from '../featureFlags/useFeature';
 
