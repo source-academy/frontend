@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 
 import { Role } from '../application/ApplicationTypes';
 import { UserCourse } from '../application/types/SessionTypes';
-import { useTypedSelector } from '../utils/Hooks';
+import { useSession } from '../utils/Hooks';
 
 type Props = {
   isOpen: boolean;
@@ -16,7 +16,7 @@ type Props = {
 
 const DropdownCourses: React.FC<Props> = ({ isOpen, onClose, courses, courseId }) => {
   const navigate = useNavigate();
-  const enableExamMode = useTypedSelector(state => state.session.enableExamMode);
+  const { enableExamMode } = useSession();
 
   const options = courses.map(course => ({
     value: course.courseId,
