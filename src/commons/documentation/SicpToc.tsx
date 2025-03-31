@@ -3,9 +3,7 @@ import { cloneDeep } from 'lodash';
 import React, { useState } from 'react';
 import toc from 'src/features/sicp/data/toc.json';
 
-type TocProps = OwnProps;
-
-type OwnProps = {
+type Props = {
   handleCloseToc?: () => void;
   handleNodeClicked?: (node: TreeNodeInfo) => void;
 };
@@ -13,9 +11,8 @@ type OwnProps = {
 /**
  * Table of contents of SICP.
  */
-const SicpToc: React.FC<TocProps> = props => {
+const SicpToc: React.FC<Props> = props => {
   const [sidebarContent, setSidebarContent] = useState(toc as TreeNodeInfo[]);
-  // const navigate = useNavigate();
 
   const handleNodeExpand = (_node: TreeNodeInfo, path: integer[]) => {
     const newState = cloneDeep(sidebarContent);
@@ -28,16 +25,6 @@ const SicpToc: React.FC<TocProps> = props => {
     Tree.nodeFromPath(path, newState).isExpanded = false;
     setSidebarContent(newState);
   };
-
-  // const handleNodeClicked = React.useCallback(
-  //   (node: TreeNodeInfo) => {
-  //     if (props.handleCloseToc) {
-  //       props.handleCloseToc();
-  //     }
-  //     navigate('/sicpjs/' + String(node.nodeData));
-  //   },
-  //   [navigate, props]
-  // );
 
   return (
     <div className="sicp-toc sicp-toc-assessment">
