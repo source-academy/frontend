@@ -150,7 +150,7 @@ const SessionActions = createActions('session', {
   updateCourseResearchAgreement: (agreedToResearch: boolean) => ({ agreedToResearch }),
   updateStoriesUserRole: (userId: number, role: StoriesRole) => ({ userId, role }),
   deleteStoriesUserUserGroups: (userId: number) => ({ userId }),
-  validateResumeCode: (resumeCode: string, callback: ((isResumeCodeValid: boolean) => any)) => ({
+  validateResumeCode: (resumeCode: string, callback: (isResumeCodeValid: boolean) => any) => ({
     resumeCode,
     callback
   }),
