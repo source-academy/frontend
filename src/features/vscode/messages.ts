@@ -93,19 +93,29 @@ export const MessageTypeNames = (() =>
 // Wrapper functions
 // ================================================================================
 
-export const FRONTEND_ELEMENT_ID = 'frontend';
-
+/**
+ * API to send a Message to the VSC extension.
+ * To only be used within source-academy/frontend.
+ */
 export function sendToWebview(message: MessageType) {
+  // In reality, the message is passed to the Webview context (middleman) first.
   window.parent.postMessage(message, '*');
 }
-export function sendToFrontend(document: Document, message: MessageType) {
-  const iframe: HTMLIFrameElement = document.getElementById(
-    FRONTEND_ELEMENT_ID
-  ) as HTMLIFrameElement;
-  const contentWindow = iframe.contentWindow;
-  if (!contentWindow) {
+
+/** Stub type of vscode.WebviewPanel */
+// Would be great to figure out how this can be typed to vscode.WebviewPanel in source-academy/vscode;
+// but to never in source-academy/frontend
+type VscodeWebviewPanel = any;
+
+/**
+ * API to send a Message to the Frontend iframe.
+ * To only be used within source-academy/vscode.
+ */
+export function sendToFrontend(panel: VscodeWebviewPanel, message: MessageType) {
+  if (!panel) {
+    console.error('VSC panel does not exist! Not sending message.');
     return;
   }
-  // TODO: Don't hardcode this!
-  contentWindow.postMessage(message, 'http://localhost:8000');
+  // In reality, the message is passed to the Webview context (middleman) first.
+  panel.webview.postMessage(message);
 }
