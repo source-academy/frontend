@@ -142,27 +142,28 @@ const Application: React.FC = () => {
 
   // Effect for dev tools blocking/detection when exam mode enabled
   React.useEffect(() => {
-    if (isPaused !== undefined && isPaused) {
+    const showPauseAcademyOverlay = (reason: string) => {
       setPauseAcademy(true);
-      setPauseAcademyReason('Developer tools was previously used.');
-    }
-
-    const options = {
-      ondevtoolopen: () => {
-        setPauseAcademy(true);
-        setPauseAcademyReason('Developer tools has been used');
-        if (hasSentPauseUserRequest.current === false) {
-          dispatch(SessionActions.pauseUser());
-          hasSentPauseUserRequest.current = true;
-        }
-      },
-      ondevtoolclose: () => {
-        hasSentPauseUserRequest.current = false;
+      setPauseAcademyReason(reason);
+      if (hasSentPauseUserRequest.current === false) {
+        dispatch(SessionActions.pauseUser());
+        hasSentPauseUserRequest.current = true;
       }
     };
 
+    if (isPaused !== undefined && isPaused) {
+      showPauseAcademyOverlay('Browser was refreshed when Source Academy was paused');
+    } else {
+      hasSentPauseUserRequest.current = false;
+    }
+
     if (enableExamMode) {
-      disableDevtool(options);
+      // Disable/Detect dev tools
+      disableDevtool({
+        ondevtoolopen: () => {
+          showPauseAcademyOverlay('Developer tools detected');
+        }
+      });
       document.addEventListener('contextmenu', event => event.preventDefault());
       document.addEventListener('keydown', event => {
         if (
@@ -170,6 +171,14 @@ const Application: React.FC = () => {
           ((event.key == 'I' || event.key == 'J') && event.ctrlKey && event.shiftKey)
         ) {
           event.preventDefault();
+        }
+      });
+
+      // Detect when Source Academy tab is hidden
+      // Examples: user changes tabs, user switches to another FULLSCREEN application
+      document.addEventListener('visibilitychange', event => {
+        if (document.visibilityState === 'hidden') {
+          showPauseAcademyOverlay('Source Academy tab lost focus');
         }
       });
     }
