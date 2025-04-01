@@ -88,7 +88,7 @@ const Application: React.FC = () => {
       };
     }
 
-    const message = Messages.ExtensionPing();
+    const message = Messages.ExtensionPing(window.origin);
     sendToWebview(message);
 
     window.addEventListener('message', event => {

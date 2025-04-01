@@ -13,7 +13,7 @@ export type VscWorkspaceLocation = 'assessment' | 'playground';
 // Note to devs: Ctrl+clicking each type will not work. Use a search instead.
 const Messages = createMessages({
   /** Sent from the iframe to the extension */
-  ExtensionPing: () => ({}),
+  ExtensionPing: (frontendOrigin: string) => ({ frontendOrigin }),
   /** Sent from the extension to the iframe */
   ExtensionPong: (token: string | null) => ({ token }),
   IsVsc: () => ({}),
