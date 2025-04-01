@@ -1,4 +1,3 @@
-import { Dispatch, SetStateAction } from 'react';
 import { createActions } from 'src/commons/redux/utils';
 import {
   paginationToBackendParams,
@@ -151,9 +150,9 @@ const SessionActions = createActions('session', {
   updateCourseResearchAgreement: (agreedToResearch: boolean) => ({ agreedToResearch }),
   updateStoriesUserRole: (userId: number, role: StoriesRole) => ({ userId, role }),
   deleteStoriesUserUserGroups: (userId: number) => ({ userId }),
-  validateResumeCode: (resumeCode: string, setPauseAcademy: Dispatch<SetStateAction<boolean>>) => ({
+  validateResumeCode: (resumeCode: string, callback: ((isResumeCodeValid: boolean) => any)) => ({
     resumeCode,
-    setPauseAcademy
+    callback
   }),
   pauseUser: () => {}
 });

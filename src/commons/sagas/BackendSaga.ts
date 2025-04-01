@@ -606,10 +606,10 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
   submitGradingAndContinue: sendGradeAndContinue,
   validateResumeCode: function* (action) {
     const tokens: Tokens = yield selectTokens();
-    const { resumeCode, setPauseAcademy } = action.payload;
+    const { resumeCode, callback } = action.payload;
 
-    const resumeCodeIsValid = yield call(validateResumeCode, tokens, resumeCode);
-    setPauseAcademy(!resumeCodeIsValid);
+    const isResumeCodeValid = yield call(validateResumeCode, tokens, resumeCode);
+    callback(isResumeCodeValid);
   },
   pauseUser: function* () {
     const tokens: Tokens = yield selectTokens();

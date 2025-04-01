@@ -188,7 +188,14 @@ const Application: React.FC = () => {
     if (!resumeCode || resumeCode.length === 0) {
       alert('Resume code cannot be empty');
     } else {
-      dispatch(SessionActions.validateResumeCode(resumeCode, setPauseAcademy));
+      dispatch(SessionActions.validateResumeCode(resumeCode, (isResumeCodeValid: boolean) => {
+        if (isResumeCodeValid) {
+          setPauseAcademy(false);
+          hasSentPauseUserRequest.current = false;
+        } else {
+          alert('Resume code is invalid');
+        }
+      }));
     }
   };
 
