@@ -96,6 +96,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const [sessionId, setSessionId] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { isMobileBreakpoint } = useResponsive();
+  console.log(props);
 
   const assessment = useTypedSelector(state => state.session.assessments[props.assessmentId]);
   const assessmentOverviews = useTypedSelector(state => state.session.assessmentOverviews);
@@ -602,8 +603,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
     const onClickReturn = () => navigate(listingPath);
     const onClickSubmit = () => {
-      if (props.notAttempted) return;
-
       dispatch(SessionActions.submitAssessment(assessment.id));
       setIsSubmitted(true);
     };
