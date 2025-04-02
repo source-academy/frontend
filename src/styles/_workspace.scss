@@ -1386,3 +1386,8 @@ $code-color-notification: #f9f0d7;
     margin-bottom: 0;
   }
 }
+
+/* Styling for documentation tabs in assessment workspace */
+#bp5-tab-panel_side-content-tabs_documentation, #bp5-tab-panel_side-content-tabs_documentation > .side-content-text {
+  height: 100%;
+}

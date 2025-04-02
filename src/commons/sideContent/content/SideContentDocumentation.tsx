@@ -45,11 +45,16 @@ const SideContentDocumentation: React.FC = () => {
   pages.push({
     name: 'SICP JS',
     src: 'https://sicp.sourceacademy.org',
-    component: <Sicp setSicpHomeCallBackFn={sicpHomeCallbackSetter} />
+    component: <Sicp setSicpHomeCallBackFn={sicpHomeCallbackSetter}/>
   });
 
   return (
-    <div>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
+      flexGrow: 1
+    }}>
       <div
         style={{
           display: 'flex',
@@ -74,10 +79,15 @@ const SideContentDocumentation: React.FC = () => {
           />
         ))}
       </div>
-      <div>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        flexGrow: 1
+      }}>
         {pages.map(page =>
           page.component ? (
-            <div style={{ display: page.src === activePage.src ? 'block' : 'none' }}>
+            <div style={{ display: page.src === activePage.src ? 'block' : 'none', height: '100%' }}>
               {page.component}
             </div>
           ) : (
@@ -85,8 +95,8 @@ const SideContentDocumentation: React.FC = () => {
               style={{
                 border: 'none',
                 width: '100%',
-                height: '60vh',
-                display: page.src === activePage.src ? 'block' : 'none'
+                display: page.src === activePage.src ? 'flex' : 'none',
+                flexGrow: 1
               }}
               src={page.src}
               ref={page.src === activePage.src ? activeIframeRef : null}

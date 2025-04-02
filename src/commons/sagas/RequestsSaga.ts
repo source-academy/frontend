@@ -1418,6 +1418,22 @@ export const pauseUser = async (tokens: Tokens): Promise<boolean> => {
   return resp != null && resp.ok;
 };
 
+export const reportFocusLost = async (tokens: Tokens): Promise<boolean> => {
+  const resp = await request(`${courseId()}/user/focus/0`, 'POST', {
+    ...tokens
+  });
+
+  return resp != null && resp.ok;
+}
+
+export const reportFocusRegain = async (tokens: Tokens): Promise<boolean> => {
+  const resp = await request(`${courseId()}/user/focus/1`, 'POST', {
+    ...tokens
+  });
+
+  return resp != null && resp.ok;
+};
+
 /**
  * GET /devices
  */

@@ -176,9 +176,12 @@ const Application: React.FC = () => {
 
       // Detect when Source Academy tab is hidden
       // Examples: user changes tabs, user switches to another FULLSCREEN application
-      document.addEventListener('visibilitychange', event => {
+      document.addEventListener('visibilitychange', _ => {
         if (document.visibilityState === 'hidden') {
           showPauseAcademyOverlay('Source Academy tab lost focus');
+          dispatch(SessionActions.reportFocusLost());
+        } else {
+          dispatch(SessionActions.reportFocusRegain());
         }
       });
     }
@@ -194,7 +197,7 @@ const Application: React.FC = () => {
             setPauseAcademy(false);
             hasSentPauseUserRequest.current = false;
           } else {
-            alert('Resume code is invalid');
+            alert('Resume code is invalid.');
           }
         })
       );

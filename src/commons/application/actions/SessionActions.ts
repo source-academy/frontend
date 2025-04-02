@@ -154,7 +154,9 @@ const SessionActions = createActions('session', {
     resumeCode,
     callback
   }),
-  pauseUser: () => {}
+  pauseUser: () => {},
+  reportFocusLost: () => {},
+  reportFocusRegain: () => {}
 });
 
 // For compatibility with existing code (actions helper)

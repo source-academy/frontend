@@ -443,7 +443,7 @@ const SicpNavigationBar: React.FC<SicpNavigationBarProps> = props => {
           }
         }}
       />
-      <Navbar className="SicpNavigationBar secondary-navbar">
+      <Navbar className="SicpNavigationBar secondary-navbar" style={{top: 0, position: 'sticky'}}>
         <NavbarGroup align={Alignment.LEFT}>{tocButton}</NavbarGroup>
         <NavbarGroup align={Alignment.RIGHT}>{[prevButton, nextButton]}</NavbarGroup>
         <NavbarGroup align={Alignment.CENTER}>{searchWrapper}</NavbarGroup>

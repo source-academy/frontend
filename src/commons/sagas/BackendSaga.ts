@@ -97,6 +97,8 @@ import {
   putUserRole,
   removeAssessmentConfig,
   removeUserCourseRegistration,
+  reportFocusLost,
+  reportFocusRegain,
   unpublishGrading,
   unpublishGradingAll,
   updateAssessment,
@@ -614,6 +616,14 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
   pauseUser: function* () {
     const tokens: Tokens = yield selectTokens();
     yield call(pauseUser, tokens);
+  },
+  reportFocusLost: function* () {
+    const tokens: Tokens = yield selectTokens();
+    yield call(reportFocusLost, tokens);
+  },
+  reportFocusRegain: function* () {
+    const tokens: Tokens = yield selectTokens();
+    yield call(reportFocusRegain, tokens);
   }
 });
 

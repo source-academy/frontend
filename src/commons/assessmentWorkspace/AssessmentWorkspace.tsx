@@ -563,7 +563,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       tabs.push({
         label: `Documentation`,
         iconName: IconNames.BOOK,
-        body: <SideContentDocumentation />
+        body: <SideContentDocumentation />,
+        id: SideContentType.documentation
       });
     }
 

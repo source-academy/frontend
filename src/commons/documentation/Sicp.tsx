@@ -180,7 +180,7 @@ const Sicp: React.FC<SicpProps> = props => {
   );
 
   return (
-    <div style={{ maxHeight: '60vh' }} className={classNames('Sicp', Classes.TEXT_LARGE)}>
+    <div style={{ height: '100%' }} className={classNames('Sicp', Classes.TEXT_LARGE)}>
       <SicpNavigationBar
         handleNodeClickedString={handleNodeClickedString}
         handleNodeClicked={handleNodeClicked}
