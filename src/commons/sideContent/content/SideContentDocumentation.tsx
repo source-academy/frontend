@@ -66,7 +66,7 @@ const SideContentDocumentation: React.FC = () => {
         }}
       >
         <Button
-          style={{ margin: '0px 5px 0px 5px', textWrap: 'nowrap' }}
+          style={{ padding: '0 2ch 0 2ch', margin: '0px 5px 0px 5px', textWrap: 'nowrap' }}
           text={'Home'}
           minimal={true}
           onClick={() => handleDocsHome()}
@@ -74,7 +74,8 @@ const SideContentDocumentation: React.FC = () => {
         <div style={{ width: '100%' }}></div>
         {pages.map((page, index) => (
           <Button
-            style={{ margin: '0px 5px 0px 5px', textWrap: 'nowrap' }}
+            active={page.name === activePage.name}
+            style={{ padding: '0 2ch 0 2ch', margin: '0px 5px 0px 5px', textWrap: 'nowrap' }}
             text={page.name}
             minimal={true}
             onClick={() => changeActivePage(index)}
@@ -86,7 +87,8 @@ const SideContentDocumentation: React.FC = () => {
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
-          flexGrow: 1
+          flexGrow: 1,
+          marginBottom: '0.25em'
         }}
       >
         {pages.map(page =>
@@ -101,6 +103,7 @@ const SideContentDocumentation: React.FC = () => {
               style={{
                 border: 'none',
                 width: '100%',
+                height: '100%',
                 display: page.src === activePage.src ? 'flex' : 'none',
                 flexGrow: 1
               }}

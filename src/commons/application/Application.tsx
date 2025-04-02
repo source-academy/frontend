@@ -16,6 +16,7 @@ import WorkspaceActions from '../workspace/WorkspaceActions';
 import { defaultWorkspaceSettings, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
 import SessionActions from './actions/SessionActions';
 import VscodeActions from './actions/VscodeActions';
+import { Role } from './ApplicationTypes';
 
 const Application: React.FC = () => {
   const dispatch = useDispatch();
@@ -35,6 +36,7 @@ const Application: React.FC = () => {
   const [pauseAcademy, setPauseAcademy] = useState(false);
   const [pauseAcademyReason, setPauseAcademyReason] = useState('');
   const hasSentPauseUserRequest = React.useRef<boolean>(false);
+  const { role } = useSession();
 
   // Effect to fetch the latest user info and course configurations from the backend on refresh,
   // if the user was previously logged in
@@ -142,6 +144,10 @@ const Application: React.FC = () => {
 
   // Effect for dev tools blocking/detection when exam mode enabled
   React.useEffect(() => {
+    if (role !== Role.Student) {
+      return;
+    }
+
     const showPauseAcademyOverlay = (reason: string) => {
       setPauseAcademy(true);
       setPauseAcademyReason(reason);
@@ -164,11 +170,13 @@ const Application: React.FC = () => {
           showPauseAcademyOverlay('Developer tools detected');
         }
       });
+
       document.addEventListener('contextmenu', event => event.preventDefault());
       document.addEventListener('keydown', event => {
         if (
           event.key == 'F12' ||
-          ((event.key == 'I' || event.key == 'J') && event.ctrlKey && event.shiftKey)
+          ((event.key == 'I' || event.key == 'J' || event.key == 'C') 
+          && event.ctrlKey && event.shiftKey)
         ) {
           event.preventDefault();
         }
@@ -185,7 +193,7 @@ const Application: React.FC = () => {
         }
       });
     }
-  }, [dispatch, enableExamMode, isPaused, hasSentPauseUserRequest]);
+  }, [dispatch, enableExamMode, isPaused, hasSentPauseUserRequest, role]);
 
   const resumeCodeSubmitHandler = (resumeCode: string) => {
     if (!resumeCode || resumeCode.length === 0) {
