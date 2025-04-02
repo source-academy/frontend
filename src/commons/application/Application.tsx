@@ -175,8 +175,9 @@ const Application: React.FC = () => {
       document.addEventListener('keydown', event => {
         if (
           event.key == 'F12' ||
-          ((event.key == 'I' || event.key == 'J' || event.key == 'C') 
-          && event.ctrlKey && event.shiftKey)
+          ((event.key == 'I' || event.key == 'J' || event.key == 'C') &&
+            event.ctrlKey &&
+            event.shiftKey)
         ) {
           event.preventDefault();
         }
