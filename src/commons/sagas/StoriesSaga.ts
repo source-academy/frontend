@@ -13,7 +13,8 @@ import {
   getStory,
   postStory,
   putStoriesUserRole,
-  updateStory} from 'src/features/stories/storiesComponents/BackendAccess';
+  updateStory
+} from 'src/features/stories/storiesComponents/BackendAccess';
 import { StoryData, StoryListView, StoryView } from 'src/features/stories/StoriesTypes';
 
 import SessionActions from '../application/actions/SessionActions';
@@ -86,7 +87,7 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
   saveStory: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { story, id } = action.payload;
-    console.log("In saveStory");
+    console.log('In saveStory');
     console.log(story.header);
     const updatedStory: StoryView | null = yield call(
       updateStory,

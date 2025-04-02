@@ -104,14 +104,19 @@ export function getYamlHeader(content: string): { header: string; content: strin
 
 export function getEnvironments(header: string): string[] {
   const environments: string[] = [];
-  const temp = header.split("\n");
+  const temp = header.split('\n');
   for (let i = 2; i < temp.length - 1; i += 3) {
     environments.push(temp[i].substring(2, temp[i].length - 1));
   }
   return environments;
 }
 
-export function constructHeader(header: string, env: string, chapter: Chapter, variant: Variant): string {
+export function constructHeader(
+  header: string,
+  env: string,
+  chapter: Chapter,
+  variant: Variant
+): string {
   const newHeader: string[] = header.split('\n');
   newHeader.push(`  ${env}:`);
   newHeader.push(`    chapter: ${chapter}`);
@@ -123,18 +128,15 @@ type Props = {
   isViewOnly: boolean;
 };
 
-const UserBlogContent: React.FC<Props> = ({ 
-    isViewOnly,
-  }) => {
-
-  const [newEnv, setNewEnv] = useState<string>("");
+const UserBlogContent: React.FC<Props> = ({ isViewOnly }) => {
+  const [newEnv, setNewEnv] = useState<string>('');
   // TODO: enable different variant
   const variant: Variant = Variant.DEFAULT;
   const [currentChapter, setEnvChapter] = useState<Chapter>(Chapter.SOURCE_1);
   const [isDirty, setIsDirty] = useState<boolean>(false);
   const dispatch = useDispatch();
   const { currentStory: story, currentStoryId: storyId } = useTypedSelector(store => store.stories);
-  const { content: contents, header: header } = story!; 
+  const { content: contents, header: header } = story!;
   const [envs, setEnvs] = useState<string[]>(getEnvironments(header));
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -142,7 +144,7 @@ const UserBlogContent: React.FC<Props> = ({
     store.dispatch(StoriesActions.clearStoryEnv());
     handleHeaders(header);
     setEnvs(getEnvironments(header));
-    console.log("header resets");
+    console.log('header resets');
   }, [header]);
 
   if (!story) {
@@ -151,60 +153,72 @@ const UserBlogContent: React.FC<Props> = ({
   }
 
   const editHeader = (newHeader: string) => {
-    console.log("header is editted");
-    const newStory = {...story, header: newHeader};
+    console.log('header is editted');
+    const newStory = { ...story, header: newHeader };
     dispatch(StoriesActions.setCurrentStory(newStory));
     dispatch(StoriesActions.saveStory(newStory, storyId!));
-  }
+  };
 
   const saveButClicked = () => {
-    setNewEnv("");
+    setNewEnv('');
     setIsDirty(false);
-    if (newEnv.trim() === "") {
-      showWarningMessage("environment name cannot be empty");
+    if (newEnv.trim() === '') {
+      showWarningMessage('environment name cannot be empty');
       return;
     } else if (envs.includes(newEnv)) {
-      showWarningMessage(`${newEnv} already exists!`)
+      showWarningMessage(`${newEnv} already exists!`);
       return;
     }
     const newHeader = header.concat(`
   ${newEnv}:
     chapter: ${currentChapter}
-    variant: default`
-    );
+    variant: default`);
     editHeader(newHeader);
-  }
+  };
 
   const controlBarProps: ControlBarProps = {
     editorButtons: [
       <div
         style={{
-          display: "flex",
-          flexDirection: "row",
-          gap: "5px",
+          display: 'flex',
+          flexDirection: 'row',
+          gap: '5px',
           alignItems: 'center',
-          justifyContent: "space-between",
-          width: "100%"
-        }}>
+          justifyContent: 'space-between',
+          width: '100%'
+        }}
+      >
         <TextInput
           maxWidth="max-w-xl"
           placeholder="Enter New Environment"
           value={newEnv}
           onChange={e => {
             setNewEnv(e.target.value);
-            if (e.target.value.trim() !== "") {
+            if (e.target.value.trim() !== '') {
               setIsDirty(true);
             } else {
               setIsDirty(false);
             }
           }}
         />
-        <Menu style={{margin: "0px"}}>
+        <Menu style={{ margin: '0px' }}>
           <MenuItem text={styliseSublanguage(currentChapter, variant)}>
-            <MenuItem onClick={() => setEnvChapter(1)} text={styliseSublanguage(Chapter.SOURCE_1, variant)}/>
-            <MenuItem onClick={() => setEnvChapter(2)} text={styliseSublanguage(Chapter.SOURCE_2, variant)}/>
-            <MenuItem onClick={() => setEnvChapter(3)} text={styliseSublanguage(Chapter.SOURCE_3, variant)}/>
-            <MenuItem onClick={() => setEnvChapter(4)} text={styliseSublanguage(Chapter.SOURCE_4, variant)}/>
+            <MenuItem
+              onClick={() => setEnvChapter(1)}
+              text={styliseSublanguage(Chapter.SOURCE_1, variant)}
+            />
+            <MenuItem
+              onClick={() => setEnvChapter(2)}
+              text={styliseSublanguage(Chapter.SOURCE_2, variant)}
+            />
+            <MenuItem
+              onClick={() => setEnvChapter(3)}
+              text={styliseSublanguage(Chapter.SOURCE_3, variant)}
+            />
+            <MenuItem
+              onClick={() => setEnvChapter(4)}
+              text={styliseSublanguage(Chapter.SOURCE_4, variant)}
+            />
           </MenuItem>
         </Menu>
         <ControlButtonSaveButton
@@ -218,27 +232,24 @@ const UserBlogContent: React.FC<Props> = ({
 
   return contents.length > 0 ? (
     <div className="userblogContent">
-      {!isViewOnly && <ControlBar {...controlBarProps}/>}
-      {isViewOnly 
-      ? contents.map((story, key) => <ViewStoryCell
-          key={key}
-          story={story}
-        />)
-      : <DragContext.Provider value={{index: activeIndex, setIndex: setActiveIndex}}>
-        <div className="content" style={{paddingTop: "0px", paddingBottom: "0px"}}>
-          <DropArea dropIndex={-1}/>
+      {!isViewOnly && <ControlBar {...controlBarProps} />}
+      {isViewOnly ? (
+        contents.map((story, key) => <ViewStoryCell key={key} story={story} />)
+      ) : (
+        <DragContext.Provider value={{ index: activeIndex, setIndex: setActiveIndex }}>
+          <div className="content" style={{ paddingTop: '0px', paddingBottom: '0px' }}>
+            <DropArea dropIndex={-1} />
+          </div>
+          {contents.map((_, key) => {
+            return <EditStoryCell key={key} index={key} />;
+          })}
+        </DragContext.Provider>
+      )}
+      {!isViewOnly && (
+        <div className="content">
+          <NewStoryCell index={contents.length} />
         </div>
-        {contents.map((_, key) => { 
-          return <EditStoryCell 
-              key={key}
-              index={key}
-          />})}
-      </DragContext.Provider>}
-      {!isViewOnly && <div className='content'>
-        <NewStoryCell 
-          index={contents.length}
-        />
-      </div>}
+      )}
     </div>
   ) : (
     <div />

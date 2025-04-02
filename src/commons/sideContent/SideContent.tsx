@@ -70,7 +70,7 @@ const SideContent = ({ renderActiveTabPanelOnly, editorWidth, ...props }: SideCo
   <SideContentProvider {...props}>
     {({ tabs: allTabs, alerts: tabAlerts, changeTabsCallback, selectedTab, height }) => (
       <div className="side-content">
-        <Card style={{margin: "0px"}}>
+        <Card style={{ margin: '0px' }}>
           <div className="side-content-tabs">
             <Tabs
               id="side-content-tabs"

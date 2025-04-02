@@ -29,29 +29,27 @@ env:
     variant: default
   rune:
     chapter: 4
-    variant: default`; 
+    variant: default`;
 
 export const defaultContent: StoryCell[] = [
   {
     // id: 0,
     index: 0,
     isCode: true,
-    env: "iterFib",
-    content: 
-    `function print(message) {
+    env: 'iterFib',
+    content: `function print(message) {
   display(message);
 }
 draw_data(list(1, 2, 3, 4));
 display("hello world1");
-`,
+`
   },
   {
     // id: 1,
     index: 1,
     isCode: false,
-    env: "",
-    content: 
-    `# Hello world!
+    env: '',
+    content: `# Hello world!
 ## hello world!!
 hello world!!!
 hello world!!!
@@ -60,34 +58,31 @@ hello world!!!
 print("hello world")
 \`\`\`
 \`\`\`\`
-`,
+`
   },
   {
     // id: 2,
     index: 2,
     isCode: true,
-    env: "recuFib",
-    content: 
-    `print("source academy stories");
-`,
+    env: 'recuFib',
+    content: `print("source academy stories");
+`
   },
   {
     // id: 3,
     index: 3,
     isCode: true,
-    env: "iterFib",
-    content: 
-    `print("hello world");
-`,
+    env: 'iterFib',
+    content: `print("hello world");
+`
   },
   {
     // id: 4,
     index: 4,
     isCode: true,
-    env: "iterFib",
-    content: 
-    `print("why this cell?");
-`,
+    env: 'iterFib',
+    content: `print("why this cell?");
+`
   }
 ];
 
@@ -165,7 +160,7 @@ export const getStories = async (tokens: Tokens): Promise<StoryListView[] | null
   }
   const stories = await resp.json();
   // return stories;
-  return stories.map((story: any) => ({...story, header: tempContent, content: tempContent}));
+  return stories.map((story: any) => ({ ...story, header: tempContent, content: tempContent }));
 };
 
 export const getStory = async (tokens: Tokens, storyId: number): Promise<StoryView | null> => {
@@ -181,8 +176,8 @@ export const getStory = async (tokens: Tokens, storyId: number): Promise<StoryVi
   // return story;
 
   // changes
-  story = {...story, header: tempHeader, content: tempContent};
-  console.log("get Story");
+  story = { ...story, header: tempHeader, content: tempContent };
+  console.log('get Story');
   console.log(tempContent, tempHeader);
   return story;
 };
@@ -229,11 +224,11 @@ export const updateStory = async (
   // return updatedStory;
 
   // change
-  console.log("in updateStory");
+  console.log('in updateStory');
   tempContent = content;
   tempHeader = header;
   console.log(content, header);
-  const story = {...updatedStory, content: content, header: header};
+  const story = { ...updatedStory, content: content, header: header };
   return story;
 };
 

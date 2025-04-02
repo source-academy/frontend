@@ -83,7 +83,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     const envIndex = envs.indexOf(env);
     // number indicating the chapter start from index 13
     return parseInt(header.split(`\n`)[envIndex * 3 + 3].substring(13));
-  }
+  };
 
   useEffect(() => {
     setCode(props.content);
@@ -106,7 +106,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   // }, []);
 
   useEffect(() => {
-    console.log("selected tab is changed: ", selectedTab);
+    console.log('selected tab is changed: ', selectedTab);
   }, [selectedTab]);
 
   const onChangeTabs = React.useCallback(
@@ -121,7 +121,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
         StoriesActions.toggleStoriesUsingSubst(newTabId === SideContentType.substVisualizer, env)
       );
       console.log(selectedTab);
-      console.log("selected tab: ", newTabId);
+      console.log('selected tab: ', newTabId);
 
       setSelectedTab(newTabId);
     },
@@ -133,7 +133,6 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     env === DEFAULT_ENV
       ? styliseSublanguage(chapter, variant)
       : env + ' | ' + styliseSublanguage(chapter, variant);
-  
 
   // TODO: Add CSE machine tabs and shift to language config
 
@@ -227,7 +226,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     // is handled by the component setting.
     if (selectedTab) onChangeTabs(selectedTab, selectedTab, {} as any);
 
-    console.log("Running on ", selectedTab);
+    console.log('Running on ', selectedTab);
     dispatch(StoriesActions.evalStory(env, code));
     console.log(selectedTab);
     setOutputIndex(output.length);
@@ -244,22 +243,22 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   const editorOnChange = (code: string) => {
     setCode(code);
     setIsDirty(true);
-  }
+  };
 
   const deleteStoryCell = (contents: StoryCell[]) => {
     console.log(`story cell ${props.index} is deleted`);
     for (let i = props.index + 1; i < contents.length; i++) {
-        contents[i].index--;
+      contents[i].index--;
     }
     contents.splice(props.index, 1);
-  }
+  };
 
   const editHeader = (header: string[]) => {
-    console.log("In source block: chapter is editted");
+    console.log('In source block: chapter is editted');
     const index = envList.indexOf(currentEnv);
     header[index * 3 + 3] = `    chapter: ${currentChapter}`;
     return header;
-  }
+  };
 
   const saveButClicked = () => {
     setIsDirty(false);
@@ -273,7 +272,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     }
     if (currentEnv !== env) {
       // set a new env
-      console.log("In source block: env is editted");
+      console.log('In source block: env is editted');
       console.log(currentEnv, env);
       story!.content[props.index].env = currentEnv;
     }
@@ -285,10 +284,10 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     }
     execResetEnv();
     handleHeaders(newHeader.join('\n'));
-    const newStory = {...story!, content: contents, header: newHeader.join('\n')};
+    const newStory = { ...story!, content: contents, header: newHeader.join('\n') };
     dispatch(StoriesActions.setCurrentStory(newStory));
     dispatch(StoriesActions.saveStory(newStory, storyId!));
-  }
+  };
 
   const changeEnv = (env: string) => {
     setCurrentEnv(env);
@@ -296,12 +295,12 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     const index = envList.indexOf(env);
     setCurrentChapter(+header[3 + index * 3].substring(13));
     setIsDirty(true);
-  }
+  };
 
   const changeEnvChapter = (chapter: Chapter) => {
     setCurrentChapter(chapter);
     setIsDirty(true);
-  }
+  };
 
   selectMode(chapter, variant, ExternalLibraryName.NONE);
 
@@ -310,45 +309,52 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       <div className="workspace">
         <Card>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            {isDirty 
-            ? <ControlButtonSaveButton 
+            {isDirty ? (
+              <ControlButtonSaveButton
                 key="save_story"
                 onClickSave={saveButClicked}
                 hasUnsavedChanges={isDirty}
               />
-            : <ControlBarRunButton
+            ) : (
+              <ControlBarRunButton
                 key="runButton"
                 handleEditorEval={execEvaluate}
                 isEntrypointFileDefined
-              />}
+              />
+            )}
             <span style={{ display: 'inline-block', fontSize: '0.9rem', textAlign: 'center' }}>
-              {props.isViewOnly 
-                ? envDisplayLabel
-                : <div style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: "5px",
-                  alignItems: "center"
-                }}>
-                    <Menu>
-                      <MenuItem text={currentEnv}>
-                        {envList.map((env: string, index: number) => <MenuItem 
-                            key={index}
-                            text={env}
-                            onClick={() => changeEnv(env)}
-                          />)}
-                      </MenuItem>
-                    </Menu>
-                    <p> | </p>
-                    <Menu>
-                      <MenuItem text={styliseSublanguage(currentChapter, variant)}>
-                        {[1, 2, 3, 4].map((chapter: Chapter, index: number) => <MenuItem 
-                          key={index} 
-                          onClick={() => changeEnvChapter(chapter)} text={styliseSublanguage(chapter, variant)}/>
-                        )}
-                      </MenuItem>
-                    </Menu>
-                  </div>}
+              {props.isViewOnly ? (
+                envDisplayLabel
+              ) : (
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: '5px',
+                    alignItems: 'center'
+                  }}
+                >
+                  <Menu>
+                    <MenuItem text={currentEnv}>
+                      {envList.map((env: string, index: number) => (
+                        <MenuItem key={index} text={env} onClick={() => changeEnv(env)} />
+                      ))}
+                    </MenuItem>
+                  </Menu>
+                  <p> | </p>
+                  <Menu>
+                    <MenuItem text={styliseSublanguage(currentChapter, variant)}>
+                      {[1, 2, 3, 4].map((chapter: Chapter, index: number) => (
+                        <MenuItem
+                          key={index}
+                          onClick={() => changeEnvChapter(chapter)}
+                          text={styliseSublanguage(chapter, variant)}
+                        />
+                      ))}
+                    </MenuItem>
+                  </Menu>
+                </div>
+              )}
             </span>
             <ControlButton label="Reset Env" onClick={execResetEnv} icon={IconNames.RESET} />
           </div>

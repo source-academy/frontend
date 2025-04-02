@@ -171,7 +171,7 @@ const handleCustomComponents: HandlerType = {
       content: node.value,
       commands: node.meta ?? '',
       index: currentIndex,
-      isViewOnly: view,
+      isViewOnly: view
     };
     // Disable typecheck as "source-block" is not a standard HTML tag
     const element = h('source-block', props) as any;
@@ -179,7 +179,11 @@ const handleCustomComponents: HandlerType = {
   }
 };
 
-export const renderStoryMarkdown = (markdown: string, index: number, isViewOnly: boolean): React.ReactNode => {
+export const renderStoryMarkdown = (
+  markdown: string,
+  index: number,
+  isViewOnly: boolean
+): React.ReactNode => {
   currentIndex = index;
   view = isViewOnly;
   const mdast = fromMarkdown(markdown);

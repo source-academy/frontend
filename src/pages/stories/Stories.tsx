@@ -140,12 +140,11 @@ const Stories: React.FC = () => {
 
           <StoriesTable
             headers={columns}
-            stories={storyList
-              .filter(
-                story =>
-                  // Always show pinned stories
-                  story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
-              )}
+            stories={storyList.filter(
+              story =>
+                // Always show pinned stories
+                story.isPinned || story.authorName.toLowerCase().includes(query.toLowerCase())
+            )}
             storyActions={story => {
               const isAuthor = storiesUserId === story.authorId;
               const hasWritePermissions =

@@ -60,8 +60,8 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
         <ControlButtonSaveButton
           key="save_story"
           onClickSave={() => {
-            if (story.title.trim() === "") {
-              showWarningMessage("story name cannot be empty");
+            if (story.title.trim() === '') {
+              showWarningMessage('story name cannot be empty');
               return;
             }
             if (storyId) {
@@ -83,13 +83,11 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }} className={classNames(Classes.DARK)}>
       <ControlBar {...controlBarProps} />
-        <div style={{ width: '100vw', height: '100%', display: 'flex' }}>
-          <div className="newUserblog" id="userblogContainer">
-            <UserBlogContent 
-              isViewOnly={isViewOnly} 
-            />
-          </div>
+      <div style={{ width: '100vw', height: '100%', display: 'flex' }}>
+        <div className="newUserblog" id="userblogContainer">
+          <UserBlogContent isViewOnly={isViewOnly} />
         </div>
+      </div>
     </div>
   );
 };
