@@ -6,13 +6,13 @@ import {
   showWarningMessage
 } from 'src/commons/utils/notifications/NotificationsHelper';
 import { request } from 'src/commons/utils/RequestHelper';
+import { defaultStoryContent } from 'src/commons/utils/StoriesHelper';
 import { RemoveLast } from 'src/commons/utils/TypeHelper';
 import { store } from 'src/pages/createStore';
 
 import { Tokens } from '../../../commons/application/types/SessionTypes';
 import { NameUsernameRole } from '../../../pages/academy/adminPanel/subcomponents/AddStoriesUserPanel';
 import { AdminPanelStoriesUser, StoryListView, StoryView } from '../StoriesTypes';
-import { defaultStoryContent } from 'src/commons/utils/StoriesHelper';
 import { StoryCell } from '../StoriesTypes';
 
 // config:
@@ -22,7 +22,7 @@ import { StoryCell } from '../StoriesTypes';
 export const defaultHeader: string = `---
 env:
   iterFib:
-    chapter: 4
+    chapter: 2
     variant: default
   recuFib:
     chapter: 4

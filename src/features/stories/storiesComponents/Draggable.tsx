@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
-import { getDragItem } from '../DragContext';
+
+import { useDragItem } from '../DragContext';
 
 interface DraggableProps {
   children: React.ReactNode;
@@ -8,7 +9,7 @@ interface DraggableProps {
 
 const Draggable: React.FC<DraggableProps> = ({ children, id }) => {
   const elementRef = useRef<HTMLDivElement>(null);
-  const { setIndex } = getDragItem();
+  const { setIndex } = useDragItem();
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
 

@@ -9,6 +9,7 @@ import { useParams } from 'react-router';
 import ControlBar, { ControlBarProps } from 'src/commons/controlBar/ControlBar';
 import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import StoriesActions from 'src/features/stories/StoriesActions';
 
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
@@ -59,6 +60,10 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
         <ControlButtonSaveButton
           key="save_story"
           onClickSave={() => {
+            if (story.title.trim() === "") {
+              showWarningMessage("story name cannot be empty");
+              return;
+            }
             if (storyId) {
               // Update story
               dispatch(StoriesActions.saveStory(story, storyId));

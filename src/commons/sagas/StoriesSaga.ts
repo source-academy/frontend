@@ -2,6 +2,9 @@ import { Context } from 'js-slang';
 import { call, put, select } from 'redux-saga/effects';
 import StoriesActions from 'src/features/stories/StoriesActions';
 import {
+  defaultContent,
+  // updateHeader,
+  defaultHeader,
   deleteStory,
   deleteUserUserGroups,
   getAdminPanelStoriesUsers,
@@ -10,11 +13,7 @@ import {
   getStory,
   postStory,
   putStoriesUserRole,
-  updateStory,
-  // updateHeader,
-  defaultHeader,
-  defaultContent
-} from 'src/features/stories/storiesComponents/BackendAccess';
+  updateStory} from 'src/features/stories/storiesComponents/BackendAccess';
 import { StoryData, StoryListView, StoryView } from 'src/features/stories/StoriesTypes';
 
 import SessionActions from '../application/actions/SessionActions';

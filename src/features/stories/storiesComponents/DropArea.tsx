@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { useTypedSelector } from "src/commons/utils/Hooks";
-import { getDragItem } from "../DragContext";
 import { useDispatch } from "react-redux";
+import { useTypedSelector } from "src/commons/utils/Hooks";
+
+import { useDragItem } from "../DragContext";
 import StoriesActions from "../StoriesActions";
 
 interface DropAreaProps {
@@ -11,7 +12,7 @@ interface DropAreaProps {
 const DropArea: React.FC<DropAreaProps> = ({ dropIndex }) => {
 
     const [showDrop, setShowDrop] = useState<boolean>(false);
-    const dragItem = getDragItem();
+    const dragItem = useDragItem();
     const { currentStory: story, currentStoryId: storyId } = useTypedSelector(store => store.stories);
     const dispatch = useDispatch();
     
@@ -22,7 +23,7 @@ const DropArea: React.FC<DropAreaProps> = ({ dropIndex }) => {
 
     const onDrop = () => {
         const contents = story!.content;
-        let dragIndex = dragItem!.index!;
+        const dragIndex = dragItem!.index!;
         if (dragIndex > dropIndex) {
             console.log("front");
             for (let i = dropIndex + 1; i < dragIndex; i++) {

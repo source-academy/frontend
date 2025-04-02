@@ -7,7 +7,7 @@ type DragContextProps = {
 
 export const DragContext = createContext<DragContextProps | null>(null);
 
-export const getDragItem = () => {
+export const useDragItem = () => {
     const dragItem = useContext(DragContext);
 
     if (dragItem == null) {

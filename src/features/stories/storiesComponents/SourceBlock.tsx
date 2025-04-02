@@ -6,6 +6,7 @@ import AceEditor from 'react-ace';
 import { useDispatch } from 'react-redux';
 import { ResultOutput, styliseSublanguage } from 'src/commons/application/ApplicationTypes';
 import { ControlBarRunButton } from 'src/commons/controlBar/ControlBarRunButton';
+import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
 import ControlButton from 'src/commons/ControlButton';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
@@ -21,12 +22,8 @@ import { makeSubstVisualizerTabFrom } from 'src/pages/playground/PlaygroundTabs'
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Output } from '../../../commons/repl/Repl';
 import { getModeString, selectMode } from '../../../commons/utils/AceHelper';
-import { DEFAULT_ENV, getEnvironments, handleHeaders } from './UserBlogContent';
-import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
 import { StoryCell } from '../StoriesTypes';
-// import { SourceBlockContext } from './EditStoryCell';
-// import { useSortable } from '@dnd-kit/sortable';
-// import { CSS } from "@dnd-kit/utilities";
+import { DEFAULT_ENV, getEnvironments, handleHeaders } from './UserBlogContent';
 
 export type SourceBlockProps = {
   content: string;
@@ -94,10 +91,23 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
 
   useEffect(() => {
     setCurrentChapter(getChapter());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [story]);
 
   const output = useTypedSelector(store => store.stories.envs[env]?.output || []);
   const { selectedTab, setSelectedTab } = useSideContent(`stories.${env}`);
+
+  // useEffect(() => {
+  //   if (!selectedTab) {
+  //     console.log("hello");
+  //     console.log(setSelectedTab);
+  //     setSelectedTab(SideContentType.storiesRun);
+  //   }
+  // }, []);
+
+  useEffect(() => {
+    console.log("selected tab is changed: ", selectedTab);
+  }, [selectedTab]);
 
   const onChangeTabs = React.useCallback(
     (
@@ -110,11 +120,13 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       dispatch(
         StoriesActions.toggleStoriesUsingSubst(newTabId === SideContentType.substVisualizer, env)
       );
+      console.log(selectedTab);
+      console.log("selected tab: ", newTabId);
 
       setSelectedTab(newTabId);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [selectedTab]
   );
 
   const envDisplayLabel =
@@ -215,7 +227,9 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     // is handled by the component setting.
     if (selectedTab) onChangeTabs(selectedTab, selectedTab, {} as any);
 
+    console.log("Running on ", selectedTab);
     dispatch(StoriesActions.evalStory(env, code));
+    console.log(selectedTab);
     setOutputIndex(output.length);
   };
 
@@ -278,7 +292,7 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
 
   const changeEnv = (env: string) => {
     setCurrentEnv(env);
-    let header = story!.header.split('\n');
+    const header = story!.header.split('\n');
     const index = envList.indexOf(env);
     setCurrentChapter(+header[3 + index * 3].substring(13));
     setIsDirty(true);

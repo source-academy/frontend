@@ -1,14 +1,15 @@
-import { createContext, useEffect, useState } from "react";
-import { renderStoryMarkdown } from "src/commons/utils/StoriesHelper";
-import AceEditor from 'react-ace';
-import { StoryCell } from '../StoriesTypes';
-import { ControlButtonSaveButton } from "src/commons/controlBar/ControlBarSaveButton";
 import { Button } from "@blueprintjs/core";
-import NewStoryCell from "./CreateStoryCell";
+import { createContext, useEffect, useState } from "react";
+import AceEditor from 'react-ace';
 import { useDispatch } from "react-redux";
-import { useTypedSelector } from "src/commons/utils/Hooks";
-import StoriesActions from "../StoriesActions";
+import { ControlButtonSaveButton } from "src/commons/controlBar/ControlBarSaveButton";
 import { showSimpleConfirmDialog } from "src/commons/utils/DialogHelper";
+import { useTypedSelector } from "src/commons/utils/Hooks";
+import { renderStoryMarkdown } from "src/commons/utils/StoriesHelper";
+
+import StoriesActions from "../StoriesActions";
+import { StoryCell } from '../StoriesTypes';
+import NewStoryCell from "./CreateStoryCell";
 import Draggable from "./Draggable";
 import DropArea from "./DropArea";
 
@@ -37,6 +38,7 @@ function EditStoryCell(props: Props) {
         setEnv(story.content[props.index].env);
         setIsCode(story.content[props.index].isCode);
         console.log(story.content[props.index], props.index, isCode);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [story]);
 
     if (!story) {
