@@ -16,7 +16,7 @@ type Props = {
 
 const DropdownCourses: React.FC<Props> = ({ isOpen, onClose, courses, courseId }) => {
   const navigate = useNavigate();
-  const { enableExamMode } = useSession();
+  const { enableExamMode, role } = useSession();
 
   const options = courses.map(course => ({
     value: course.courseId,
@@ -44,7 +44,7 @@ const DropdownCourses: React.FC<Props> = ({ isOpen, onClose, courses, courseId }
           options={options}
           fill
           onChange={onChangeHandler}
-          disabled={courses.length <= 1 || enableExamMode}
+          disabled={courses.length <= 1 || (enableExamMode && role == Role.Student)}
         />
       </DialogBody>
     </Dialog>

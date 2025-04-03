@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 import { logOut } from '../application/actions/CommonsActions';
+import { Role } from '../application/ApplicationTypes';
 import ControlButton from '../ControlButton';
 import Profile from '../profile/Profile';
 import { useSession } from '../utils/Hooks';
@@ -24,7 +25,7 @@ const Dropdown: React.FC = () => {
 
   const { t } = useTranslation('commons', { keyPrefix: 'dropdown' });
 
-  const { isLoggedIn, name, courses, courseId, enableExamMode } = useSession();
+  const { isLoggedIn, name, courses, courseId, enableExamMode, role } = useSession();
   const dispatch = useDispatch();
   const handleLogOut = () => dispatch(logOut());
 
@@ -50,7 +51,7 @@ const Dropdown: React.FC = () => {
   ) : null;
 
   const createCourse =
-    isLoggedIn && !enableExamMode ? (
+    isLoggedIn && (!enableExamMode || role !== Role.Student) ? (
       <MenuItem icon={IconNames.ADD} onClick={toggleCreateCourseOpen} text={t('Create Course')} />
     ) : null;
 

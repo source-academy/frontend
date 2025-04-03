@@ -54,6 +54,7 @@ import {
   isSourceLanguage,
   OverallState,
   ResultOutput,
+  Role,
   SALanguage
 } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -234,7 +235,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sourceVariant: courseSourceVariant,
     googleUser: persistenceUser,
     githubOctokitObject,
-    enableExamMode
+    enableExamMode,
+    role
   } = useTypedSelector(state => state.session);
 
   const dispatch = useDispatch();
@@ -715,6 +717,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
     () => makeIntroductionTabFrom(generateLanguageIntroduction(languageConfig)),
     [languageConfig]
   );
+
+  // Exam mode variables
+  const applyEnableExamMode = enableExamMode && role == Role.Student;
+
   const tabs = useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
@@ -750,7 +756,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       }
     }
 
-    if (!isSicpEditor && !Constants.playgroundOnly && !enableExamMode) {
+    if (!isSicpEditor && !Constants.playgroundOnly && !applyEnableExamMode) {
       tabs.push(remoteExecutionTab);
     }
 
@@ -767,7 +773,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     shouldShowCseMachine,
     shouldShowSubstVisualizer,
     remoteExecutionTab,
-    enableExamMode
+    applyEnableExamMode
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
@@ -974,12 +980,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
     controlBarProps: {
       editorButtons: [
         autorunButtons,
-        languageConfig.chapter === Chapter.FULL_JS || enableExamMode ? null : shareButton,
+        languageConfig.chapter === Chapter.FULL_JS || applyEnableExamMode ? null : shareButton,
         chapterSelectButton,
-        isSicpEditor || enableExamMode ? null : sessionButtons,
+        isSicpEditor || applyEnableExamMode ? null : sessionButtons,
         languageConfig.supports.multiFile ? toggleFolderModeButton : null,
-        enableExamMode ? null : persistenceButtons,
-        enableExamMode ? null : githubButtons,
+        applyEnableExamMode ? null : persistenceButtons,
+        applyEnableExamMode ? null : githubButtons,
         usingSubst || usingCse || isCseVariant(languageConfig.variant)
           ? stepperStepLimit
           : isSourceLanguage(languageConfig.chapter)
