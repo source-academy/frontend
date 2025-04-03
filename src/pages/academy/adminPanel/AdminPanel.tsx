@@ -6,6 +6,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import AcademyActions from 'src/features/academy/AcademyActions';
 import StoriesActions from 'src/features/stories/StoriesActions';
 
@@ -20,7 +21,6 @@ import AssessmentConfigPanel, {
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';
 import StoriesUserConfigPanel from './subcomponents/storiesUserConfigPanel/StoriesUserConfigPanel';
 import UserConfigPanel from './subcomponents/userConfigPanel/UserConfigPanel';
-import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
 const defaultCourseConfig: UpdateCourseConfiguration = {
   courseName: '',
