@@ -20,6 +20,7 @@ import AssessmentConfigPanel, {
 import CourseConfigPanel from './subcomponents/CourseConfigPanel';
 import StoriesUserConfigPanel from './subcomponents/storiesUserConfigPanel/StoriesUserConfigPanel';
 import UserConfigPanel from './subcomponents/userConfigPanel/UserConfigPanel';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
 const defaultCourseConfig: UpdateCourseConfiguration = {
   courseName: '',
@@ -113,7 +114,7 @@ const AdminPanel: React.FC = () => {
         courseConfiguration.enableExamMode &&
         (!courseConfiguration.resumeCode || courseConfiguration.resumeCode.length === 0)
       ) {
-        alert('Resume code cannot be empty when exam mode is enabled');
+        showWarningMessage('Resume code cannot be empty when exam mode is enabled');
       } else {
         dispatch(SessionActions.updateCourseConfig(courseConfiguration));
         setHasChangesCourseConfig(false);
