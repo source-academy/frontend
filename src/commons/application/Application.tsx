@@ -187,9 +187,9 @@ const Application: React.FC = () => {
       // Examples: user changes tabs, user switches to another FULLSCREEN application
       document.addEventListener('visibilitychange', _ => {
         if (document.visibilityState === 'hidden') {
-          showPauseAcademyOverlay('Source Academy tab lost focus');
           dispatch(SessionActions.reportFocusLost());
         } else {
+          showPauseAcademyOverlay('Source Academy tab lost focus');
           dispatch(SessionActions.reportFocusRegain());
         }
       });
