@@ -12,6 +12,7 @@ import NavigationBar from '../navigationBar/NavigationBar';
 import { PauseAcademyOverlay } from '../pauseAcademyOverlay/PauseAcademyOverlay';
 import Constants from '../utils/Constants';
 import { useLocalStorageState, useSession } from '../utils/Hooks';
+import { showDangerMessage } from '../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../workspace/WorkspaceActions';
 import { defaultWorkspaceSettings, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
 import SessionActions from './actions/SessionActions';
@@ -183,13 +184,12 @@ const Application: React.FC = () => {
         }
       });
 
-      // Detect when Source Academy tab is hidden
-      // Examples: user changes tabs, user switches to another FULLSCREEN application
+      // Detect when Source Academy tab's content are hidden (e.g., user changes tab while Source Academy is active)
       document.addEventListener('visibilitychange', _ => {
         if (document.visibilityState === 'hidden') {
           dispatch(SessionActions.reportFocusLost());
         } else {
-          showPauseAcademyOverlay('Source Academy tab lost focus');
+          showDangerMessage('Source Academy was out of focus.', 5000);
           dispatch(SessionActions.reportFocusRegain());
         }
       });
