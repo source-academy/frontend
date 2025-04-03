@@ -3,9 +3,10 @@ import classNames from 'classnames';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, Outlet, useNavigate, useParams } from 'react-router';
+import { Role } from 'src/commons/application/ApplicationTypes';
 import ResearchAgreementPrompt from 'src/commons/researchAgreementPrompt/ResearchAgreementPrompt';
 import Constants from 'src/commons/utils/Constants';
-import { useSession } from 'src/commons/utils/Hooks';
+import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/Academy.module.scss';
 
 import SessionActions from '../../commons/application/actions/SessionActions';
@@ -34,7 +35,8 @@ const Academy: React.FC = () => {
 const CourseSelectingAcademy: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { courseId, enableExamMode } = useSession();
+  const { courseId, enableExamMode, role } = useTypedSelector(state => state.session);
+  const applyEnableExamMode = enableExamMode && role == Role.Student;
   const { courseId: routeCourseIdStr } = useParams<{ courseId?: string }>();
   const routeCourseId = routeCourseIdStr != null ? parseInt(routeCourseIdStr, 10) : undefined;
 
@@ -48,10 +50,10 @@ const CourseSelectingAcademy: React.FC = () => {
       dispatch(SessionActions.updateLatestViewedCourse(routeCourseId));
     }
 
-    if (enableExamMode) {
+    if (applyEnableExamMode) {
       navigate(`/courses/${courseId}`);
     }
-  }, [courseId, dispatch, routeCourseId, navigate, routeCourseIdStr, enableExamMode]);
+  }, [courseId, dispatch, routeCourseId, navigate, routeCourseIdStr, applyEnableExamMode]);
 
   return Number.isNaN(routeCourseId) ? (
     <Navigate to="/" />
