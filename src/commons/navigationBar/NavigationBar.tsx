@@ -310,7 +310,10 @@ const NavigationBar: React.FC = () => {
         <Route
           path="*"
           element={
-            !Constants.playgroundOnly && isEnrolledInACourse && !isMobileBreakpoint ? (
+            !Constants.playgroundOnly &&
+            isEnrolledInACourse &&
+            !isMobileBreakpoint &&
+            !window.location.href.includes('/playground/') ? ( //TODO: this is bad
               <AcademyNavigationBar assessmentTypes={assessmentTypes} />
             ) : null
           }

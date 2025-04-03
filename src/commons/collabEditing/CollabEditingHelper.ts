@@ -14,7 +14,10 @@ export function getSessionUrl(sessionId: string, ws?: boolean): string {
 }
 
 export function getPlaygroundSessionUrl(sessionId: string, ws?: boolean): string {
-  const url = window.location.href + sessionId;
+  let url = window.location.href;
+  if (window.location.href.endsWith('/playground')) {
+    url = window.location.href + '/' + sessionId;
+  }
   return url.toString();
 }
 
