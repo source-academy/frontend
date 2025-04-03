@@ -12,7 +12,7 @@ import NavigationBar from '../navigationBar/NavigationBar';
 import { PauseAcademyOverlay } from '../pauseAcademyOverlay/PauseAcademyOverlay';
 import Constants from '../utils/Constants';
 import { useLocalStorageState, useSession } from '../utils/Hooks';
-import { showDangerMessage } from '../utils/notifications/NotificationsHelper';
+import { showDangerMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../workspace/WorkspaceActions';
 import { defaultWorkspaceSettings, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
 import SessionActions from './actions/SessionActions';
@@ -198,7 +198,7 @@ const Application: React.FC = () => {
 
   const resumeCodeSubmitHandler = (resumeCode: string) => {
     if (!resumeCode || resumeCode.length === 0) {
-      alert('Resume code cannot be empty');
+      showWarningMessage('Resume code cannot be empty.');
     } else {
       dispatch(
         SessionActions.validateResumeCode(resumeCode, (isResumeCodeValid: boolean) => {
@@ -206,7 +206,7 @@ const Application: React.FC = () => {
             setPauseAcademy(false);
             hasSentPauseUserRequest.current = false;
           } else {
-            alert('Resume code is invalid.');
+            showWarningMessage('Resume code is invalid.');
           }
         })
       );
