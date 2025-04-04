@@ -69,6 +69,12 @@ export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
           props.handleSetEditorSessionId!('');
           props.handleSetSessionDetails!(null);
           showWarningMessage('Could not find a session with that ID.');
+          if (
+            window.location.href.includes('/playground') &&
+            !window.location.href.endsWith('/playground')
+          ) {
+            window.history.pushState({}, document.title, '/playground');
+          }
         }
       },
       error => {

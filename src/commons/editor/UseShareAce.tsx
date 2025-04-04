@@ -132,6 +132,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
       updateUsers(binding);
       binding.usersPresence.on('receive', () => updateUsers(binding));
+      window.history.pushState({}, document.title, '/playground/' + editorSessionId);
     };
 
     const shareAceError = (path: string, error: any) => {
@@ -193,6 +194,13 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
       // @ts-expect-error hotfix to remove all views in radarManager
       radarManager.removeAllViews();
+
+      if (
+        window.location.href.includes('/playground') &&
+        !window.location.href.endsWith('/playground')
+      ) {
+        window.history.pushState({}, document.title, '/playground');
+      }
     };
   }, [editorSessionId, sessionDetails, reactAceRef, userId, name, dispatch]);
 };
