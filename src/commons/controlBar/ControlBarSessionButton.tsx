@@ -2,11 +2,11 @@ import { Classes, Colors, Divider, FormGroup, Popover, Text, Tooltip } from '@bl
 import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
+import { useParams } from 'react-router-dom';
 
 import { createNewSession, getDocInfoFromSessionId } from '../collabEditing/CollabEditingHelper';
 import ControlButton from '../ControlButton';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { useParams } from 'react-router-dom';
 
 type ControlBarSessionButtonsProps = DispatchProps & StateProps;
 
@@ -33,6 +33,7 @@ export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
   const joinElemRef = useRef('');
   const [sessionId, setSessionId] = useState('');
   const [defaultReadOnly, setDefaultReadOnly] = useState(true);
+  const [isOwner, setIsOwner] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     joinElemRef.current = event.target.value;
@@ -45,6 +46,7 @@ export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
         setSessionId(resp.sessionId);
         props.handleSetEditorSessionId!(resp.sessionId);
         props.handleSetSessionDetails!({ docId: resp.docId, readOnly: false, owner: true });
+        setIsOwner(true);
       }, handleError);
     }
   };
@@ -65,6 +67,7 @@ export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
           });
           setSessionId(joinElemValue);
           setDefaultReadOnly(docInfo.defaultReadOnly);
+          setIsOwner(false);
         } else {
           props.handleSetEditorSessionId!('');
           props.handleSetSessionDetails!(null);
@@ -140,7 +143,10 @@ export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
         </div>
       ) : (
         <div style={{ padding: '10px', display: 'flex', flexDirection: 'column' }}>
-          <Text>You have joined the session as {defaultReadOnly ? 'a viewer' : 'an editor'}.</Text>
+          <Text>
+            You have joined the session as{' '}
+            {isOwner ? 'the owner' : defaultReadOnly ? 'a viewer' : 'an editor'}.
+          </Text>
           <Divider />
           {sessionId && (
             <div
