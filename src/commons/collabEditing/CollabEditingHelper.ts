@@ -13,12 +13,12 @@ export function getSessionUrl(sessionId: string, ws?: boolean): string {
   return url.toString();
 }
 
-export function getPlaygroundSessionUrl(sessionId: string, ws?: boolean): string {
+export function getPlaygroundSessionUrl(sessionId: string): string {
   let url = window.location.href;
   if (window.location.href.endsWith('/playground')) {
-    url = window.location.href + '/' + sessionId;
+    url += `/${sessionId}`;
   }
-  return url.toString();
+  return url;
 }
 
 export async function getDocInfoFromSessionId(
@@ -64,5 +64,5 @@ export async function changeDefaultEditable(sessionId: string, defaultReadOnly: 
     );
   }
 
-  return resp;
+  return resp.json();
 }

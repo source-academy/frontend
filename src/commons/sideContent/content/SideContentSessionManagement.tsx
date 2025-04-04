@@ -2,14 +2,13 @@ import { Classes, HTMLTable, Icon, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { CollabEditingAccess, type SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import classNames from 'classnames';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { useDispatch } from 'react-redux';
 import {
   changeDefaultEditable,
   getPlaygroundSessionUrl
 } from 'src/commons/collabEditing/CollabEditingHelper';
-//import { changeDefaultEditable } from 'src/commons/collabEditing/CollabEditingHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { showSuccessMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import classes from 'src/styles/SideContentSessionManagement.module.scss';
@@ -26,9 +25,9 @@ interface AdminViewProps {
 function AdminView({ users, playgroundCode }: AdminViewProps) {
   const [toggleAll, setToggleAll] = useState<boolean>(true);
   const [defaultRole, setDefaultRole] = useState<boolean>(true);
-  const [toggling, setToggling] = useState<{ [key: string]: boolean }>(() => ({
-    ...Object.fromEntries(Object.entries(users).map(([id]) => [id, true]))
-  }));
+  const [toggling, setToggling] = useState<{ [key: string]: boolean }>(
+    Object.fromEntries(Object.entries(users).map(([id]) => [id, true]))
+  );
   const updateUserRoleCallback = useTypedSelector(
     store => store.workspaces.playground.updateUserRoleCallback
   );
@@ -138,13 +137,10 @@ const SideContentSessionManagement: React.FC<Props> = ({
 }) => {
   // TODO: FIX BLINKING
   const dispatch = useDispatch();
-  const alertSideContent = useCallback(
-    () => dispatch(beginAlertSideContent(SideContentType.sessionManagement, workspaceLocation)),
-    [workspaceLocation, dispatch]
-  );
+
   useEffect(() => {
-    alertSideContent();
-  }, [users]);
+    dispatch(beginAlertSideContent(SideContentType.sessionManagement, workspaceLocation));
+  }, [dispatch, workspaceLocation, users]);
 
   if (Object.values(users).length === 0) return;
   const myself = Object.values(users)[0];
@@ -165,8 +161,8 @@ const SideContentSessionManagement: React.FC<Props> = ({
           }
         >
           <div className={classes['session-code']}>
-            {' '}
-            {getPlaygroundSessionUrl(playgroundCode)} <Icon icon={IconNames.DUPLICATE} />
+            {getPlaygroundSessionUrl(playgroundCode)}
+            <Icon icon={IconNames.DUPLICATE} />
           </div>
         </CopyToClipboard>
       </span>
