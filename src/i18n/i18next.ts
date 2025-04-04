@@ -1,8 +1,7 @@
 import 'i18next';
 
 // import all namespaces (for the default language, only)
-import commons from 'locales/en/commons.json';
-
+// import commons from 'locales/en/commons.json';
 import { defaultLanguage, i18nLanguageCode } from './locales';
 
 export type i18nDefaultLangKeys = (typeof defaultLanguage)[i18nLanguageCode.DEFAULT];

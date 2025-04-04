@@ -1,13 +1,25 @@
+import { Menu, MenuItem } from '@blueprintjs/core';
+import { TextInput } from '@tremor/react';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import yaml from 'js-yaml';
 import React, { useEffect, useState } from 'react';
 import debounceRender from 'react-debounce-render';
+import { useDispatch } from 'react-redux';
+import { styliseSublanguage } from 'src/commons/application/ApplicationTypes';
+import ControlBar, { ControlBarProps } from 'src/commons/controlBar/ControlBar';
+import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
 import Constants from 'src/commons/utils/Constants';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { propsAreEqual } from 'src/commons/utils/MemoizeHelper';
-import { renderStoryMarkdown } from 'src/commons/utils/StoriesHelper';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import StoriesActions from 'src/features/stories/StoriesActions';
 
 import { store } from '../../../pages/createStore';
+import { DragContext } from '../DragContext';
+import NewStoryCell from './CreateStoryCell';
+import DropArea from './DropArea';
+import EditStoryCell from './EditStoryCell';
+import ViewStoryCell from './ViewStoryCell';
 
 export const DEFAULT_ENV = 'default';
 
@@ -33,7 +45,7 @@ function handleEnvironment(envConfig: Record<string, any>): void {
   }
 }
 
-function handleHeaders(headers: string): void {
+export function handleHeaders(headers: string): void {
   if (headers === '') {
     store.dispatch(
       StoriesActions.addStoryEnv(
@@ -61,7 +73,6 @@ function handleHeaders(headers: string): void {
       }
     }
   } catch (err) {
-    console.warn(err);
     if (err instanceof yaml.YAMLException) {
       // default headers
       store.dispatch(
@@ -91,23 +102,154 @@ export function getYamlHeader(content: string): { header: string; content: strin
   };
 }
 
+export function getEnvironments(header: string): string[] {
+  const environments: string[] = [];
+  const temp = header.split('\n');
+  for (let i = 2; i < temp.length - 1; i += 3) {
+    environments.push(temp[i].substring(2, temp[i].length - 1));
+  }
+  return environments;
+}
+
+export function constructHeader(
+  header: string,
+  env: string,
+  chapter: Chapter,
+  variant: Variant
+): string {
+  const newHeader: string[] = header.split('\n');
+  newHeader.push(`  ${env}:`);
+  newHeader.push(`    chapter: ${chapter}`);
+  newHeader.push(`    variant: ${variant}`);
+  return newHeader.join('\n');
+}
+
 type Props = {
-  fileContent: string;
+  isViewOnly: boolean;
 };
 
-const UserBlogContent: React.FC<Props> = ({ fileContent }) => {
-  const [content, setContent] = useState('');
+const UserBlogContent: React.FC<Props> = ({ isViewOnly }) => {
+  const [newEnv, setNewEnv] = useState<string>('');
+  // TODO: enable different variant
+  const variant: Variant = Variant.DEFAULT;
+  const [currentChapter, setEnvChapter] = useState<Chapter>(Chapter.SOURCE_1);
+  const [isDirty, setIsDirty] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const { currentStory: story, currentStoryId: storyId } = useTypedSelector(store => store.stories);
+  const { content: contents, header: header } = story!;
+  const [envs, setEnvs] = useState<string[]>(getEnvironments(header));
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    const { header, content } = getYamlHeader(fileContent);
-    setContent(content);
     store.dispatch(StoriesActions.clearStoryEnv());
     handleHeaders(header);
-  }, [fileContent]);
+    setEnvs(getEnvironments(header));
+    console.log('header resets');
+  }, [header]);
 
-  return content ? (
+  if (!story) {
+    // will never reach here, as it has been check in Story.tsx
+    return <div></div>;
+  }
+
+  const editHeader = (newHeader: string) => {
+    console.log('header is editted');
+    const newStory = { ...story, header: newHeader };
+    dispatch(StoriesActions.setCurrentStory(newStory));
+    dispatch(StoriesActions.saveStory(newStory, storyId!));
+  };
+
+  const saveButClicked = () => {
+    setNewEnv('');
+    setIsDirty(false);
+    if (newEnv.trim() === '') {
+      showWarningMessage('environment name cannot be empty');
+      return;
+    } else if (envs.includes(newEnv)) {
+      showWarningMessage(`${newEnv} already exists!`);
+      return;
+    }
+    const newHeader = header.concat(`
+  ${newEnv}:
+    chapter: ${currentChapter}
+    variant: default`);
+    editHeader(newHeader);
+  };
+
+  const controlBarProps: ControlBarProps = {
+    editorButtons: [
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          gap: '5px',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: '100%'
+        }}
+      >
+        <TextInput
+          maxWidth="max-w-xl"
+          placeholder="Enter New Environment"
+          value={newEnv}
+          onChange={e => {
+            setNewEnv(e.target.value);
+            if (e.target.value.trim() !== '') {
+              setIsDirty(true);
+            } else {
+              setIsDirty(false);
+            }
+          }}
+        />
+        <Menu style={{ margin: '0px' }}>
+          <MenuItem text={styliseSublanguage(currentChapter, variant)}>
+            <MenuItem
+              onClick={() => setEnvChapter(1)}
+              text={styliseSublanguage(Chapter.SOURCE_1, variant)}
+            />
+            <MenuItem
+              onClick={() => setEnvChapter(2)}
+              text={styliseSublanguage(Chapter.SOURCE_2, variant)}
+            />
+            <MenuItem
+              onClick={() => setEnvChapter(3)}
+              text={styliseSublanguage(Chapter.SOURCE_3, variant)}
+            />
+            <MenuItem
+              onClick={() => setEnvChapter(4)}
+              text={styliseSublanguage(Chapter.SOURCE_4, variant)}
+            />
+          </MenuItem>
+        </Menu>
+        <ControlButtonSaveButton
+          key="save_story"
+          onClickSave={saveButClicked}
+          hasUnsavedChanges={isDirty}
+        />
+      </div>
+    ]
+  };
+
+  return contents.length > 0 ? (
     <div className="userblogContent">
-      <div className="content">{renderStoryMarkdown(content)}</div>
+      {!isViewOnly && <ControlBar {...controlBarProps} />}
+      {isViewOnly ? (
+        contents.map((story, key) => <ViewStoryCell key={key} story={story} />)
+      ) : (
+        <DragContext.Provider value={{ index: activeIndex, setIndex: setActiveIndex }}>
+          <div className="content" style={{ paddingTop: '0px', paddingBottom: '0px' }}>
+            <DropArea dropIndex={-1} />
+          </div>
+          {contents.map((_, key) => {
+            return <EditStoryCell key={key} index={key} />;
+          })}
+        </DragContext.Provider>
+      )}
+      {!isViewOnly && (
+        <div className="content">
+          <NewStoryCell index={contents.length} />
+        </div>
+      )}
     </div>
   ) : (
     <div />

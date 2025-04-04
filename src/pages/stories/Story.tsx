@@ -1,15 +1,15 @@
 import 'js-slang/dist/editors/ace/theme/source';
 
-import { Classes, InputGroup } from '@blueprintjs/core';
+import { Classes } from '@blueprintjs/core';
+import { TextInput } from '@tremor/react';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-import AceEditor, { IEditorProps } from 'react-ace';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import ControlBar, { ControlBarProps } from 'src/commons/controlBar/ControlBar';
 import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { scrollSync } from 'src/commons/utils/StoriesHelper';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import StoriesActions from 'src/features/stories/StoriesActions';
 
 import UserBlogContent from '../../features/stories/storiesComponents/UserBlogContent';
@@ -24,6 +24,7 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
 
   const { currentStory: story, currentStoryId: storyId } = useTypedSelector(store => store.stories);
   const { id: idToSet } = useParams<{ id: string }>();
+
   useEffect(() => {
     // Clear screen on first load
     dispatch(StoriesActions.setCurrentStory(null));
@@ -37,27 +38,15 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
     return <></>;
   }
 
-  const onEditorScroll = (e: IEditorProps) => {
-    const userblogContainer = document.getElementById('userblogContainer');
-    if (userblogContainer) {
-      scrollSync(e, userblogContainer);
-    }
-  };
-
-  const onEditorValueChange = (val: string) => {
-    setIsDirty(true);
-    dispatch(StoriesActions.setCurrentStory({ ...story, content: val }));
-  };
-
-  const { title, content } = story;
+  const { title: title } = story;
 
   const controlBarProps: ControlBarProps = {
     editorButtons: [
       isViewOnly ? (
         <>{title}</>
       ) : (
-        <InputGroup
-          className="grading-search-input"
+        <TextInput
+          maxWidth="max-w-xl"
           placeholder="Enter story title"
           value={title}
           onChange={e => {
@@ -71,6 +60,10 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
         <ControlButtonSaveButton
           key="save_story"
           onClickSave={() => {
+            if (story.title.trim() === '') {
+              showWarningMessage('story name cannot be empty');
+              return;
+            }
             if (storyId) {
               // Update story
               dispatch(StoriesActions.saveStory(story, storyId));
@@ -79,6 +72,7 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
               dispatch(StoriesActions.createStory(story));
             }
             // TODO: Set isDirty to false
+            setIsDirty(false);
           }}
           hasUnsavedChanges={isDirty}
         />
@@ -90,24 +84,8 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
     <div style={{ display: 'flex', flexDirection: 'column' }} className={classNames(Classes.DARK)}>
       <ControlBar {...controlBarProps} />
       <div style={{ width: '100vw', height: '100%', display: 'flex' }}>
-        {!isViewOnly && (
-          <AceEditor
-            className="repl-react-ace react-ace"
-            width="100%"
-            height="100%"
-            theme="source"
-            value={content}
-            onChange={onEditorValueChange}
-            onScroll={onEditorScroll}
-            fontSize={17}
-            highlightActiveLine={false}
-            showPrintMargin={false}
-            wrapEnabled={true}
-            setOptions={{ fontFamily: "'Inconsolata', 'Consolas', monospace" }}
-          />
-        )}
         <div className="newUserblog" id="userblogContainer">
-          <UserBlogContent fileContent={content} />
+          <UserBlogContent isViewOnly={isViewOnly} />
         </div>
       </div>
     </div>

@@ -1,0 +1,3 @@
+./src/i18n/i18next.ts
+./src/commons/workspace/sharedb-ace.ts
+./src/react-app-env.ts
