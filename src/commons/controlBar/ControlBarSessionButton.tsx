@@ -121,9 +121,9 @@ export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
             icon={IconNames.ADD}
             onClick={handleStartInvite}
           />
-          <br></br>
+          <br />
           <span>... or join an existing one</span>
-          <br></br>
+          <br />
           <form
             onSubmit={handleStartJoining}
             style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}

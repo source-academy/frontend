@@ -305,8 +305,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   );
 
   const sessionManagementTab: SideContentTab = useMemo(() => {
-    const playgroundCode = editorSessionId;
-    return makeSessionManagementTabFrom(users, playgroundCode, sessionDetails?.readOnly || false);
+    return makeSessionManagementTabFrom(users, editorSessionId, sessionDetails?.readOnly || false);
   }, [users, editorSessionId, sessionDetails?.readOnly]);
 
   const usingRemoteExecution =
@@ -770,17 +769,17 @@ const Playground: React.FC<PlaygroundProps> = props => {
   }, [
     playgroundIntroductionTab,
     languageConfig.chapter,
-    output,
     usingRemoteExecution,
     isSicpEditor,
-    dispatch,
+    output,
     workspaceLocation,
+    dispatch,
     shouldShowDataVisualizer,
     shouldShowCseMachine,
     shouldShowSubstVisualizer,
     remoteExecutionTab,
     editorSessionId,
-    users
+    sessionManagementTab
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile

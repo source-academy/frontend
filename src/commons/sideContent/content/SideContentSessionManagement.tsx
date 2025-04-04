@@ -76,7 +76,7 @@ function AdminView({ users, playgroundCode }: AdminViewProps) {
           className={classNames(classes['switch'], classes['default-switch'])}
         />
       </span>
-      <br></br>
+      <br />
       <span className={classes['span']}>
         Default role on join:
         <Switch
@@ -151,7 +151,7 @@ const SideContentSessionManagement: React.FC<Props> = ({
         This is the session management tab. Add users by sharing the session code. If you are the
         owner of this session, you can manage users' access levels from the table below.
       </span>
-      <br></br>
+      <br />
       <span className={classes['span']}>
         Session code:
         <CopyToClipboard
@@ -166,7 +166,7 @@ const SideContentSessionManagement: React.FC<Props> = ({
           </div>
         </CopyToClipboard>
       </span>
-      <br></br>
+      <br />
       <span className={classes['span']}>
         Number of users in the session: {Object.entries(users).length}
       </span>

@@ -2,7 +2,7 @@
 @import "@blueprintjs/core/lib/scss/variables";
 
 .span {
-    display: inline-block;
+    display: inline-flex;
     margin-block: 0.5rem;
 }
 
@@ -36,8 +36,9 @@
 
 .session-code {
     color: $blue4;
-    display: inline-block;
     margin-left: 5px;
+    display: flex;
+    column-gap: 5px;
 }
 
 .session-code:hover {
@@ -59,10 +60,10 @@
 @keyframes alert {
     0%,
     50% {
-      background-color: rgba(200, 100, 50, 0.5);
+        background-color: rgba(200, 100, 50, 0.5);
     }
     51%,
     100% {
-      background-image: rgba(138, 155, 168, 0.3);
+        background-image: rgba(138, 155, 168, 0.3);
     }
   }
