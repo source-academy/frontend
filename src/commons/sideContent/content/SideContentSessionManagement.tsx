@@ -13,6 +13,7 @@ import {
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { showSuccessMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import classes from 'src/styles/SideContentSessionManagement.module.scss';
+
 import { beginAlertSideContent } from '../SideContentActions';
 import { SideContentLocation, SideContentType } from '../SideContentTypes';
 
@@ -102,21 +103,17 @@ function AdminView({ users, playgroundCode }: AdminViewProps) {
                 <div>{user.name}</div>
               </td>
               <td className={classes['right-cell']}>
-                <Switch
-                  labelElement={
-                    user.role === CollabEditingAccess.OWNER
-                      ? 'Admin'
-                      : user.role.charAt(0).toUpperCase() + user.role.slice(1)
-                  }
-                  alignIndicator="right"
-                  checked={
-                    user.role === CollabEditingAccess.OWNER ||
-                    user.role === CollabEditingAccess.EDITOR
-                  }
-                  disabled={user.role === CollabEditingAccess.OWNER}
-                  onChange={event => handleToggleAccess(event.target.checked, userId)}
-                  className={classes['switch']}
-                />
+                {user.role === CollabEditingAccess.OWNER ? (
+                  'Admin'
+                ) : (
+                  <Switch
+                    labelElement={user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+                    alignIndicator="right"
+                    checked={user.role === CollabEditingAccess.EDITOR}
+                    onChange={event => handleToggleAccess(event.target.checked, userId)}
+                    className={classes['switch']}
+                  />
+                )}
               </td>
             </tr>
           ))}
