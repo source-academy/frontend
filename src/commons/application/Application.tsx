@@ -34,6 +34,10 @@ const Application: React.FC = () => {
   );
 
   // Used for dev tools detection
+  const [isPreviewExamMode, _] = useLocalStorageState(
+    Constants.isPreviewExamModeLocalStorageKey,
+    false
+  );
   const [pauseAcademy, setPauseAcademy] = useState(false);
   const [pauseAcademyReason, setPauseAcademyReason] = useState('');
   const hasSentPauseUserRequest = React.useRef<boolean>(false);
@@ -145,7 +149,7 @@ const Application: React.FC = () => {
 
   // Effect for dev tools blocking/detection when exam mode enabled
   React.useEffect(() => {
-    if (role !== Role.Student) {
+    if (role !== Role.Student && !isPreviewExamMode) {
       return;
     }
 
@@ -158,13 +162,13 @@ const Application: React.FC = () => {
       }
     };
 
-    if (isPaused !== undefined && isPaused) {
-      showPauseAcademyOverlay('Browser was refreshed when Source Academy was paused');
-    } else {
-      hasSentPauseUserRequest.current = false;
-    }
+    if (enableExamMode || isPreviewExamMode) {
+      if (isPaused !== undefined && isPaused) {
+        showPauseAcademyOverlay('Browser was refreshed when Source Academy was paused');
+      } else {
+        hasSentPauseUserRequest.current = false;
+      }
 
-    if (enableExamMode) {
       // Disable/Detect dev tools
       disableDevtool({
         ondevtoolopen: () => {
@@ -194,7 +198,7 @@ const Application: React.FC = () => {
         }
       });
     }
-  }, [dispatch, enableExamMode, isPaused, hasSentPauseUserRequest, role]);
+  }, [dispatch, enableExamMode, isPaused, hasSentPauseUserRequest, role, isPreviewExamMode]);
 
   const resumeCodeSubmitHandler = (resumeCode: string) => {
     if (!resumeCode || resumeCode.length === 0) {

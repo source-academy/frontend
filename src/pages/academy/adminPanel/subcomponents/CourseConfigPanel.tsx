@@ -1,4 +1,5 @@
 import {
+  Button,
   Divider,
   FormGroup,
   H2,
@@ -10,7 +11,12 @@ import {
   TextArea
 } from '@blueprintjs/core';
 import React from 'react';
-import { useResponsive } from 'src/commons/utils/Hooks';
+import Constants from 'src/commons/utils/Constants';
+import { useLocalStorageState, useResponsive } from 'src/commons/utils/Hooks';
+import {
+  showSuccessMessage,
+  showWarningMessage
+} from 'src/commons/utils/notifications/NotificationsHelper';
 
 import { UpdateCourseConfiguration } from '../../../../commons/application/types/SessionTypes';
 import Markdown from '../../../../commons/Markdown';
@@ -26,6 +32,10 @@ type Props = {
 };
 
 const CourseConfigPanel: React.FC<Props> = props => {
+  const [isPreviewExamMode, setIsPreviewExamMode] = useLocalStorageState(
+    Constants.isPreviewExamModeLocalStorageKey,
+    false
+  );
   const { isMobileBreakpoint } = useResponsive();
   const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
     React.useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);
@@ -78,6 +88,29 @@ const CourseConfigPanel: React.FC<Props> = props => {
     },
     [setCourseHelpTextSelectedTab]
   );
+
+  const previewExamModeHandler = () => {
+    if (isPreviewExamMode) {
+      // showSuccessMessage('Exam mode preview disabled.');
+      showWarningMessage(
+        <div>
+          <span>Exam mode preview has been disabled.&nbsp;</span>
+          <Button text={'Refresh Now'} onClick={() => window.location.reload()} />
+        </div>,
+        10000
+      );
+    } else {
+      // showSuccessMessage('Exam mode preview enabled.');
+      showSuccessMessage(
+        <div>
+          <span>Exam mode preview has been enabled.&nbsp;</span>
+          <Button text={'Refresh Now'} onClick={() => window.location.reload()} />
+        </div>,
+        10000
+      );
+    }
+    setIsPreviewExamMode(i => !i);
+  };
 
   return (
     <div className="course-configuration">
@@ -220,6 +253,11 @@ const CourseConfigPanel: React.FC<Props> = props => {
               />
             </FormGroup>
           )}
+          <Button
+            active={isPreviewExamMode}
+            text={'Preview Exam Mode'}
+            onClick={previewExamModeHandler}
+          />
         </div>
       </div>
     </div>

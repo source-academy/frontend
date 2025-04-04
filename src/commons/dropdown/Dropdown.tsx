@@ -8,7 +8,8 @@ import { logOut } from '../application/actions/CommonsActions';
 import { Role } from '../application/ApplicationTypes';
 import ControlButton from '../ControlButton';
 import Profile from '../profile/Profile';
-import { useSession } from '../utils/Hooks';
+import Constants from '../utils/Constants';
+import { useLocalStorageState, useSession } from '../utils/Hooks';
 import DropdownAbout from './DropdownAbout';
 import DropdownCourses from './DropdownCourses';
 import DropdownCreateCourse from './DropdownCreateCourse';
@@ -22,6 +23,10 @@ const Dropdown: React.FC = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMyCoursesOpen, setIsMyCoursesOpen] = useState(false);
   const [isCreateCourseOpen, setIsCreateCourseOpen] = useState(false);
+  const [isPreviewExamMode, _] = useLocalStorageState(
+    Constants.isPreviewExamModeLocalStorageKey,
+    false
+  );
 
   const { t } = useTranslation('commons', { keyPrefix: 'dropdown' });
 
@@ -51,7 +56,7 @@ const Dropdown: React.FC = () => {
   ) : null;
 
   const createCourse =
-    isLoggedIn && (!enableExamMode || role !== Role.Student) ? (
+    isLoggedIn && !isPreviewExamMode && (!enableExamMode || role !== Role.Student) ? (
       <MenuItem icon={IconNames.ADD} onClick={toggleCreateCourseOpen} text={t('Create Course')} />
     ) : null;
 

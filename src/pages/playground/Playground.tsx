@@ -25,7 +25,7 @@ import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentH
 import makeUploadTabFrom from 'src/commons/sideContent/content/SideContentUpload';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
-import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
+import { useLocalStorageState, useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   showFullJSWarningOnUrlLoad,
   showFulTSWarningOnUrlLoad,
@@ -719,7 +719,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
   );
 
   // Exam mode variables
-  const applyEnableExamMode = enableExamMode && role == Role.Student;
+  const [isPreviewExamMode, _] = useLocalStorageState(
+    Constants.isPreviewExamModeLocalStorageKey,
+    false
+  );
+  const applyEnableExamMode = isPreviewExamMode || (enableExamMode && role == Role.Student);
 
   const tabs = useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
