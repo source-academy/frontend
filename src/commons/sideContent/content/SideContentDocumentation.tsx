@@ -1,5 +1,5 @@
 import { Button } from '@blueprintjs/core';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Sicp from 'src/commons/documentation/Sicp';
 
 const SideContentDocumentation: React.FC = () => {
@@ -22,6 +22,40 @@ const SideContentDocumentation: React.FC = () => {
 
   const [activePage, setActivePage] = useState(pages[0]);
   const activeIframeRef = useRef<HTMLIFrameElement>(null);
+  const documentationDivRef = useRef<HTMLDivElement>(null);
+
+  // Used to resize the docs tab to an initial height only once
+  useEffect(() => {
+    const ref = documentationDivRef.current as HTMLDivElement;
+    const visibilityCallback = (
+      entries: IntersectionObserverEntry[],
+      observer: IntersectionObserver
+    ) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const resizableSideContentElement = document
+            .getElementsByClassName('resize-side-content')
+            .item(0) as HTMLDivElement;
+          if (resizableSideContentElement !== null) {
+            resizableSideContentElement.style.height = "500px";
+          }
+
+          observer.unobserve(ref)
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(visibilityCallback, {
+      root: null,
+      threshold: 0.1 
+    });
+
+    observer.observe(ref);
+    return () => {
+      observer.unobserve(ref);
+    };
+  }, []);
+
   let sicpHomeCallbackFn: () => void = () => {};
 
   const changeActivePage = (index: number) => {
@@ -48,6 +82,13 @@ const SideContentDocumentation: React.FC = () => {
     component: <Sicp setSicpHomeCallBackFn={sicpHomeCallbackSetter} />
   });
 
+  useEffect(() => {
+    const resizableSideContentElement = document.getElementsByClassName("resize-side-content").item(0);
+    if (resizableSideContentElement !== null) {
+      // (resizableSideContentElement as HTMLDivElement).style.height = "50vh";
+    }
+  });
+
   return (
     <div
       style={{
@@ -56,17 +97,19 @@ const SideContentDocumentation: React.FC = () => {
         height: '100%',
         flexGrow: 1
       }}
+      ref={documentationDivRef}
     >
       <div
         style={{
           display: 'flex',
           flexDirection: 'row',
           justifyContent: 'space-between',
-          marginBottom: '10px'
+          marginBottom: '5px'
         }}
       >
         <Button
           style={{ padding: '0 2ch 0 2ch', margin: '0px 5px 0px 5px', textWrap: 'nowrap' }}
+          small={true}
           text={'Home'}
           minimal={true}
           onClick={() => handleDocsHome()}
@@ -78,6 +121,7 @@ const SideContentDocumentation: React.FC = () => {
             style={{ padding: '0 2ch 0 2ch', margin: '0px 5px 0px 5px', textWrap: 'nowrap' }}
             text={page.name}
             minimal={true}
+            small={true}
             onClick={() => changeActivePage(index)}
           />
         ))}
@@ -109,6 +153,7 @@ const SideContentDocumentation: React.FC = () => {
               }}
               src={page.src}
               ref={page.src === activePage.src ? activeIframeRef : null}
+              sandbox="allow-scripts allow-same-origin"
             />
           )
         )}
