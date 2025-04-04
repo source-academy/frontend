@@ -37,17 +37,17 @@ const SideContentDocumentation: React.FC = () => {
             .getElementsByClassName('resize-side-content')
             .item(0) as HTMLDivElement;
           if (resizableSideContentElement !== null) {
-            resizableSideContentElement.style.height = "500px";
+            resizableSideContentElement.style.height = '500px';
           }
 
-          observer.unobserve(ref)
+          observer.unobserve(ref);
         }
       });
     };
 
     const observer = new IntersectionObserver(visibilityCallback, {
       root: null,
-      threshold: 0.1 
+      threshold: 0.1
     });
 
     observer.observe(ref);
@@ -63,7 +63,7 @@ const SideContentDocumentation: React.FC = () => {
   };
 
   const handleDocsHome = useCallback(() => {
-    if (sicpHomeCallbackFn !== null) {
+    if (sicpHomeCallbackFn !== null && activePage.src == 'https://sicp.sourceacademy.org') {
       sicpHomeCallbackFn();
     }
 
@@ -80,13 +80,6 @@ const SideContentDocumentation: React.FC = () => {
     name: 'SICP JS',
     src: 'https://sicp.sourceacademy.org',
     component: <Sicp setSicpHomeCallBackFn={sicpHomeCallbackSetter} />
-  });
-
-  useEffect(() => {
-    const resizableSideContentElement = document.getElementsByClassName("resize-side-content").item(0);
-    if (resizableSideContentElement !== null) {
-      // (resizableSideContentElement as HTMLDivElement).style.height = "50vh";
-    }
   });
 
   return (

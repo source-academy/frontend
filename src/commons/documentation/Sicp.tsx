@@ -142,7 +142,7 @@ const Sicp: React.FC<SicpProps> = props => {
 
   // `section` is defined due to the navigate logic in the useEffect above
   const navigationButtons = (
-    <div className="sicp-navigation-buttons" style={{margin: "50px 0"}}>
+    <div className="sicp-navigation-buttons" style={{ margin: '50px 0' }}>
       {getPrev(section!) && (
         <Button style={{ textWrap: 'nowrap' }} onClick={() => handleNavigation(getPrev(section!)!)}>
           Previous
