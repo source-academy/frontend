@@ -412,13 +412,13 @@ export function setUnhoveredStyle(target: Node | Group, unhoveredAttrs: any = {}
     node.setAttrs({
       stroke: node.attrs.stroke
         ? node instanceof Text
-          ? defaultTextColor()
-          : defaultStrokeColor()
+          ? reachedTextColor()
+          : reachedStrokeColor()
         : node.attrs.stroke,
       fill: node.attrs.fill
         ? node instanceof Text
-          ? defaultTextColor()
-          : defaultStrokeColor()
+          ? reachedTextColor()
+          : reachedStrokeColor()
         : node.attrs.fill,
       ...unhoveredAttrs
     });
@@ -942,16 +942,16 @@ export const isStashItemInDanger = (stashIndex: number): boolean => {
 export const defaultBackgroundColor = () =>
   CseMachine.getPrintableMode() ? Config.PrintBgColor : Config.BgColor;
 
-export const defaultTextColor = () =>
+export const reachedTextColor = () =>
   CseMachine.getPrintableMode() ? Config.PrintTextColor : Config.TextColor;
 
-export const fadedTextColor = () =>
+export const defaultTextColor = () =>
   CseMachine.getPrintableMode() ? Config.PrintTextColorFaded : Config.TextColorFaded;
 
-export const defaultStrokeColor = () =>
+export const reachedStrokeColor = () =>
   CseMachine.getPrintableMode() ? Config.PrintStrokeColor : Config.StrokeColor;
 
-export const fadedStrokeColor = () =>
+export const defaultStrokeColor = () =>
   CseMachine.getPrintableMode() ? Config.PrintStrokeColorFaded : Config.StrokeColorFaded;
 
 export const defaultActiveColor = () =>

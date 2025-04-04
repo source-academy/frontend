@@ -9,9 +9,9 @@ import { Layout } from '../CseMachineLayout';
 import { IHoverable } from '../CseMachineTypes';
 import {
   defaultActiveColor,
-  defaultStrokeColor,
-  defaultTextColor,
   getTextHeight,
+  reachedStrokeColor,
+  reachedTextColor,
   setHoveredCursor,
   setHoveredStyle,
   setUnhoveredCursor,
@@ -98,7 +98,7 @@ export class ControlItemComponent extends Visible implements IHoverable {
 
   draw(): React.ReactNode {
     const textProps = {
-      fill: defaultTextColor(),
+      fill: reachedTextColor(),
       padding: ControlStashConfig.ControlItemTextPadding,
       fontFamily: ControlStashConfig.FontFamily,
       fontSize: ControlStashConfig.FontSize,
@@ -106,7 +106,7 @@ export class ControlItemComponent extends Visible implements IHoverable {
       fontVariant: ControlStashConfig.FontVariant
     };
     const tagProps = {
-      stroke: this.topItem ? defaultActiveColor() : defaultStrokeColor(),
+      stroke: this.topItem ? defaultActiveColor() : reachedStrokeColor(),
       cornerRadius: ControlStashConfig.ControlItemCornerRadius
     };
     return (

@@ -12,6 +12,8 @@ export abstract class Visible implements IVisible {
   protected _width: number = 0;
   protected _height: number = 0;
   protected _isDrawn: boolean = false;
+  protected _isReachable: boolean = false;
+
   x(): number {
     return this._x;
   }
@@ -29,6 +31,12 @@ export abstract class Visible implements IVisible {
   }
   reset(): void {
     this._isDrawn = false;
+  }
+  isReachable(): boolean {
+    return this._isReachable;
+  }
+  setReachable(isReachable: boolean): void {
+    this._isReachable = isReachable;
   }
   public ref: RefObject<any> = React.createRef();
   abstract draw(key?: number): React.ReactNode;

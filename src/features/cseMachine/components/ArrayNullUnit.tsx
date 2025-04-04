@@ -3,7 +3,7 @@ import { Line as KonvaLine } from 'react-konva';
 
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
-import { defaultStrokeColor, fadedStrokeColor } from '../CseMachineUtils';
+import { defaultStrokeColor, reachedStrokeColor } from '../CseMachineUtils';
 import { ArrayUnit } from './ArrayUnit';
 import { Visible } from './Visible';
 
@@ -23,7 +23,7 @@ export class ArrayNullUnit extends Visible {
         {...ShapeDefaultProps}
         key={Layout.key++}
         points={[this.x(), this.y() + this.height(), this.x() + this.width(), this.y()]}
-        stroke={this.reference.parent.isReferenced() ? defaultStrokeColor() : fadedStrokeColor()}
+        stroke={this.reference.parent.isReferenced() ? reachedStrokeColor() : defaultStrokeColor()}
         hitStrokeWidth={Config.DataHitStrokeWidth}
         ref={this.ref}
         listening={false}

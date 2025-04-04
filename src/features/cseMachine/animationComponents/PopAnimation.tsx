@@ -4,7 +4,7 @@ import { Group } from 'react-konva';
 
 import { ControlItemComponent } from '../components/ControlItemComponent';
 import { StashItemComponent } from '../components/StashItemComponent';
-import { defaultActiveColor, defaultDangerColor, defaultStrokeColor } from '../CseMachineUtils';
+import { defaultActiveColor, defaultDangerColor, reachedStrokeColor } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodePosition } from './base/AnimationUtils';
@@ -57,9 +57,9 @@ export class PopAnimation extends Animatable {
   async animate() {
     this.undefinedStashItem?.ref.current?.hide();
     await Promise.all([
-      this.popItemAnimation.animateRectTo({ stroke: defaultStrokeColor() }, { duration: 0.8 }),
+      this.popItemAnimation.animateRectTo({ stroke: reachedStrokeColor() }, { duration: 0.8 }),
       this.popItemAnimation.animateTo({ ...getNodePosition(this.stashItem), opacity: 0 }),
-      this.stashItemAnimation.animateRectTo({ stroke: defaultStrokeColor() }, { delay: 0.3 }),
+      this.stashItemAnimation.animateRectTo({ stroke: reachedStrokeColor() }, { delay: 0.3 }),
       this.stashItemAnimation.animateTo({ scaleX: 0.6, scaleY: 0.6 }, { delay: 0.3 })
     ]);
     await Promise.all([
