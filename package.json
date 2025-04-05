@@ -135,7 +135,7 @@
     "@types/xml2js": "^0.4.11",
     "babel-jest": "^29.7.0",
     "buffer": "^6.0.3",
-    "canvas": "^2.11.2",
+    "canvas": "^3.1.0",
     "constants-browserify": "^1.0.0",
     "coveralls": "^3.1.1",
     "cross-env": "^7.0.3",
@@ -162,7 +162,7 @@
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "timers-browserify": "^2.0.12",
-    "typescript": "^5.5.3",
+    "typescript": "^5.8.2",
     "typescript-eslint": "^8.1.0",
     "url": "^0.11.1",
     "webpack-bundle-analyzer": "^4.9.0"
