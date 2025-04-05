@@ -1,4 +1,5 @@
 import { Chapter, Language, SourceError, Variant } from 'js-slang/dist/types';
+import { LeaderboardState } from 'src/features/leaderboard/LeaderboardTypes';
 
 import { AchievementState } from '../../features/achievement/AchievementTypes';
 import { DashboardState } from '../../features/dashboard/DashboardTypes';
@@ -26,6 +27,7 @@ import { VscodeState as VscodeState } from './types/VscodeTypes';
 export type OverallState = {
   readonly router: RouterState;
   readonly achievement: AchievementState;
+  readonly leaderboard: LeaderboardState;
   readonly playground: PlaygroundState;
   readonly session: SessionState;
   readonly stories: StoriesState;
@@ -347,6 +349,14 @@ export const defaultAchievement: AchievementState = {
   assessmentOverviews: []
 };
 
+export const defaultLeaderboard: LeaderboardState = {
+  userXp: [],
+  contestScore: [],
+  contestPopularVote: [],
+  code: 'Initial code',
+  contests: []
+};
+
 const getDefaultLanguageConfig = (): SALanguage => {
   const languageConfig = ALL_LANGUAGES.find(
     sublang =>
@@ -606,6 +616,7 @@ export const defaultVscode: VscodeState = {
 export const defaultState: OverallState = {
   router: defaultRouter,
   achievement: defaultAchievement,
+  leaderboard: defaultLeaderboard,
   dashboard: defaultDashboard,
   playground: defaultPlayground,
   session: defaultSession,
