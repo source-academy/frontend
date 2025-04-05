@@ -91,7 +91,6 @@ const CourseConfigPanel: React.FC<Props> = props => {
 
   const previewExamModeHandler = () => {
     if (isPreviewExamMode) {
-      // showSuccessMessage('Exam mode preview disabled.');
       showWarningMessage(
         <div>
           <span>Exam mode preview has been disabled.&nbsp;</span>
@@ -100,7 +99,6 @@ const CourseConfigPanel: React.FC<Props> = props => {
         10000
       );
     } else {
-      // showSuccessMessage('Exam mode preview enabled.');
       showSuccessMessage(
         <div>
           <span>Exam mode preview has been enabled.&nbsp;</span>

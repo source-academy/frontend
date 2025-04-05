@@ -163,6 +163,8 @@ const Application: React.FC = () => {
     };
 
     if (enableExamMode || isPreviewExamMode) {
+      dispatch(SessionActions.reportFocusRegain());
+
       if (isPaused !== undefined && isPaused) {
         showPauseAcademyOverlay('Browser was refreshed when Source Academy was paused');
       } else {
