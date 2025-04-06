@@ -251,11 +251,13 @@ const CourseConfigPanel: React.FC<Props> = props => {
               />
             </FormGroup>
           )}
-          {isOfficialCourse && <Button
-            active={isPreviewExamMode}
-            text={'Preview Exam Mode'}
-            onClick={previewExamModeHandler}
-          />}
+          {isOfficialCourse && (
+            <Button
+              active={isPreviewExamMode}
+              text={'Preview Exam Mode'}
+              onClick={previewExamModeHandler}
+            />
+          )}
         </div>
       </div>
     </div>
