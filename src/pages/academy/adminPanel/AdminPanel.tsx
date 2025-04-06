@@ -66,7 +66,7 @@ const AdminPanel: React.FC = () => {
       enableStories: session.enableStories,
       enableLlmGrading: session.enableLlmGrading,
       moduleHelpText: session.moduleHelpText,
-      llmApiKey: ''
+      llmApiKey: session.llmApiKey
     });
   }, [
     session.courseName,

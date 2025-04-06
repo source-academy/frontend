@@ -143,6 +143,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
           >
             <InputGroup
               id="llmApiKey"
+              type="password"
               defaultValue={llmApiKey}
               onChange={e =>
                 props.setCourseConfiguration({

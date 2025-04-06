@@ -296,6 +296,7 @@ const DropdownCreateCourse: React.FC<Props> = props => {
           >
             <InputGroup
               id="llmApiKey"
+              type="password"
               value={courseConfig.llmApiKey}
               onChange={e =>
                 setCourseConfig({
