@@ -24,7 +24,7 @@ The Source Academy (<https://sourceacademy.org/>) is an immersive online experie
 
 1. Clone this repository and navigate to it using your command line
 
-1. Install the version of `yarn` as specified in `package.json`, `packageManager`. 
+1. Install the version of `yarn` as specified in `package.json`, `packageManager`.
 
    > We recommend using `corepack` to manage the version of `yarn`, you may simply run `corepack enable` to complete this step.
 
