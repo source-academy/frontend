@@ -232,7 +232,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
               }
             />
           )}
-          {enableExamMode && (
+          {isOfficialCourse && (
             <FormGroup
               // helperText="Please enter the course resume code. Students who attempt to use the DevTool will be asked this code to continue their session."
               inline={true}
