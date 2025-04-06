@@ -140,8 +140,8 @@ const GradingEditor: React.FC<Props> = props => {
   }
 
   const [suggestions, setSuggestions] = useState<string[]>([])
-
   const [selectedSuggestions, setSelectedSuggestions] = useState<string[]>([])
+  const [hasClickedGenerate, setHasClickedGenerate] = useState<boolean>(false)
 
   const makeInitialState = () => {
     setXpAdjustmentInput(props.xpAdjustment.toString());
@@ -352,11 +352,14 @@ const GradingEditor: React.FC<Props> = props => {
       <div>
         <GradingCommentSelector 
           onSelect={onSelectGeneratedComments}
+          isLoading={hasClickedGenerate}
           comments={suggestions}
         />
         <Button
           onClick={async ()=>{
+            setHasClickedGenerate(true)
             const resp = await getCommentSuggestions();
+            setHasClickedGenerate(false)
             setSuggestions(resp!.comments);
           }}>
           Get comments
