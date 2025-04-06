@@ -2,7 +2,7 @@ import React from "react";
 
 type Props = {
     comments: string[],
-    setEditor: React.Dispatch<React.SetStateAction<string>>
+    onSelect: (comment: string) => void
 };
 
 const GradingCommentSelector : React.FC<Props> = (prop) => {
@@ -15,7 +15,7 @@ const GradingCommentSelector : React.FC<Props> = (prop) => {
             {prop.comments.map(el => {
                 return <div 
                     className="grading-comment-selector-item"
-                    onClick={() => {prop.setEditor(el)}}
+                    onClick={() => {prop.onSelect(el)}}
                 >
                     {el}
                 </div>

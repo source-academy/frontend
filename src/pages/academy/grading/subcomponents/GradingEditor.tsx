@@ -29,6 +29,8 @@ import GradingCommentSelector from './GradingCommentSelector';
 
 import { useTokens } from 'src/commons/utils/Hooks';
 import { postGenerateComments } from '../../../../commons/sagas/RequestsSaga';
+import { saveFinalComment } from '../../../../commons/sagas/RequestsSaga';
+import { saveChosenComments } from '../../../../commons/sagas/RequestsSaga';
 
 type GradingSaveFunction = (
   submissionId: number,
@@ -109,12 +111,37 @@ const GradingEditor: React.FC<Props> = props => {
 
   const getCommentSuggestions = async () => {
     const resp = await postGenerateComments(
-      tokens,props.submissionId,props.questionId
+      tokens, props.submissionId, props.questionId
     )
     return resp
   }
 
+  const onSelectGeneratedComments = (comment: string) => {
+    if (!selectedSuggestions.includes(comment)) {
+      setSelectedSuggestions([comment, ...selectedSuggestions])
+    }
+
+    setEditorValue(editorValue + comment)
+  }
+
+  const postSaveFinalComment = async (comment : string) => {
+    const resp = await saveFinalComment(
+      tokens, props.submissionId, props.questionId, comment
+    )
+    return resp
+  }
+
+  const postSaveChosenComments = async (comments : string[]) => {
+    const resp = await saveChosenComments(
+      tokens, props.submissionId, props.questionId, comments
+    )
+
+    return resp
+  }
+
   const [suggestions, setSuggestions] = useState<string[]>([])
+
+  const [selectedSuggestions, setSelectedSuggestions] = useState<string[]>([])
 
   const makeInitialState = () => {
     setXpAdjustmentInput(props.xpAdjustment.toString());
@@ -144,6 +171,8 @@ const GradingEditor: React.FC<Props> = props => {
     () => {
       const newXpAdjustmentInput = convertParamToInt(xpAdjustmentInput || undefined) || undefined;
       const xp = props.initialXp + (newXpAdjustmentInput || 0);
+      postSaveFinalComment(editorValue);
+      postSaveChosenComments(selectedSuggestions);
       if (xp < 0 || xp > props.maxXp) {
         showWarningMessage(
           `XP ${xp.toString()} is out of bounds. Maximum xp is ${props.maxXp.toString()}.`
@@ -322,13 +351,12 @@ const GradingEditor: React.FC<Props> = props => {
       {props.is_llm && 
       <div>
         <GradingCommentSelector 
-          setEditor={setEditorValue}
+          onSelect={onSelectGeneratedComments}
           comments={suggestions}
         />
         <Button
           onClick={async ()=>{
             const resp = await getCommentSuggestions();
-            console.log(resp!.comments)
             setSuggestions(resp!.comments);
           }}>
           Get comments
