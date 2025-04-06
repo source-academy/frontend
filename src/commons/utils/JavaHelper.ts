@@ -18,7 +18,7 @@ export async function javaRun(
   isUsingCse: boolean,
   options?: { uploadIsActive?: boolean; uploads?: UploadResult }
 ) {
-  let compiled = {};
+  let compiled: {[key: string]: string} = {};
 
   const stderr = (type: 'TypeCheck' | 'Compile' | 'Runtime', msg: string) => {
     context.errors.push({
@@ -110,10 +110,12 @@ export async function javaRun(
     }
 
     try {
-      const classFile = compileFromSource(javaCode);
-      compiled = {
-        'Main.class': Buffer.from(new BinaryWriter().generateBinary(classFile)).toString('base64')
-      };
+      const binaryWriter = new BinaryWriter();
+      const classes = compileFromSource(javaCode);
+      classes.forEach(c => {
+        compiled[c.className + '.class']
+          = Buffer.from(binaryWriter.generateBinary(c.classFile)).toString('base64');
+      });
     } catch (e) {
       stderr('Compile', e);
       return Promise.resolve({ status: 'error' });
