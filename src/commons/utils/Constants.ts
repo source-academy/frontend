@@ -42,6 +42,7 @@ const sicpBackendUrl =
   process.env.REACT_APP_SICPJS_BACKEND_URL || 'https://sicp.sourceacademy.org/';
 const javaPackagesUrl = 'https://source-academy.github.io/modules/java/java-packages/src/';
 const workspaceSettingsLocalStorageKey = 'workspace-settings';
+const isPreviewExamModeLocalStorageKey = 'is-preview-exam-mode';
 
 // For achievements feature (CA - Continual Assessment)
 // TODO: remove dependency of the ca levels on the env file
@@ -182,7 +183,8 @@ const Constants = {
   javaPackagesUrl,
   workspaceSettingsLocalStorageKey,
   caFulfillmentLevel,
-  featureFlags
+  featureFlags,
+  isPreviewExamModeLocalStorageKey
 };
 
 export default Constants;

@@ -25,7 +25,7 @@ import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentH
 import makeUploadTabFrom from 'src/commons/sideContent/content/SideContentUpload';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
-import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
+import { useLocalStorageState, useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
   showFullJSWarningOnUrlLoad,
   showFulTSWarningOnUrlLoad,
@@ -54,6 +54,7 @@ import {
   isSourceLanguage,
   OverallState,
   ResultOutput,
+  Role,
   SALanguage
 } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -233,7 +234,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sourceChapter: courseSourceChapter,
     sourceVariant: courseSourceVariant,
     googleUser: persistenceUser,
-    githubOctokitObject
+    githubOctokitObject,
+    enableExamMode,
+    role
   } = useTypedSelector(state => state.session);
 
   const dispatch = useDispatch();
@@ -714,6 +717,14 @@ const Playground: React.FC<PlaygroundProps> = props => {
     () => makeIntroductionTabFrom(generateLanguageIntroduction(languageConfig)),
     [languageConfig]
   );
+
+  // Exam mode variables
+  const [isPreviewExamMode, _] = useLocalStorageState(
+    Constants.isPreviewExamModeLocalStorageKey,
+    false
+  );
+  const applyEnableExamMode = isPreviewExamMode || (enableExamMode && role == Role.Student);
+
   const tabs = useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
 
@@ -749,7 +760,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       }
     }
 
-    if (!isSicpEditor && !Constants.playgroundOnly) {
+    if (!isSicpEditor && !Constants.playgroundOnly && !applyEnableExamMode) {
       tabs.push(remoteExecutionTab);
     }
 
@@ -765,7 +776,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     shouldShowDataVisualizer,
     shouldShowCseMachine,
     shouldShowSubstVisualizer,
-    remoteExecutionTab
+    remoteExecutionTab,
+    applyEnableExamMode
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
@@ -972,12 +984,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
     controlBarProps: {
       editorButtons: [
         autorunButtons,
-        languageConfig.chapter === Chapter.FULL_JS ? null : shareButton,
+        languageConfig.chapter === Chapter.FULL_JS || applyEnableExamMode ? null : shareButton,
         chapterSelectButton,
-        isSicpEditor ? null : sessionButtons,
+        isSicpEditor || applyEnableExamMode ? null : sessionButtons,
         languageConfig.supports.multiFile ? toggleFolderModeButton : null,
-        persistenceButtons,
-        githubButtons,
+        applyEnableExamMode ? null : persistenceButtons,
+        applyEnableExamMode ? null : githubButtons,
         usingSubst || usingCse || isCseVariant(languageConfig.variant)
           ? stepperStepLimit
           : isSourceLanguage(languageConfig.chapter)
