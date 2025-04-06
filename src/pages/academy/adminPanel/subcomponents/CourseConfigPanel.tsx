@@ -245,7 +245,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
                 onChange={e =>
                   props.setCourseConfiguration({
                     ...props.courseConfiguration,
-                    resumeCode: (e.target as HTMLInputElement).value
+                    resumeCode: (e.target as HTMLInputElement).value.trim()
                   })
                 }
               />
