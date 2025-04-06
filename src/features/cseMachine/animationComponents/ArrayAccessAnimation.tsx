@@ -28,7 +28,7 @@ export class ArrayAccessAnimation extends Animatable {
   private resultAnimation: AnimatedTextbox;
   private resultArrowAnimation?: AnimatedGenericArrow<StashItemComponent, Visible>;
   private arrayUnit: ArrayUnit;
-  private out: boolean;
+  private outOfRange: boolean;
 
   constructor(
     private accInstr: ControlItemComponent,
@@ -48,7 +48,7 @@ export class ArrayAccessAnimation extends Animatable {
     });
     this.arrayArrowAnimation = new AnimatedGenericArrow(arrayItem.arrow!);
     // if index is out of range
-    this.out = false;
+    this.outOfRange = false;
     // the target should always be an array value
     const array = arrayItem.arrow!.target! as ArrayValue;
 
@@ -56,7 +56,7 @@ export class ArrayAccessAnimation extends Animatable {
     const arraylen = array.data.length;
 
     if (parseInt(indexItem.text) >= arraylen) {
-      this.out = true;
+      this.outOfRange = true;
       this.arrayUnit = array.units[arraylen - 1];
     } else {
       this.arrayUnit = array.units[parseInt(indexItem.text)];
@@ -69,7 +69,7 @@ export class ArrayAccessAnimation extends Animatable {
         this.arrayUnit.x() +
         this.arrayUnit.width() / 2 -
         this.resultItem.width() / 2 +
-        (this.out ? this.arrayUnit.width() : 0),
+        (this.outOfRange ? this.arrayUnit.width() : 0),
       y: this.arrayUnit.y() + this.arrayUnit.height() / 2 - this.resultItem.height() / 2,
       opacity: 0
     });
@@ -102,7 +102,7 @@ export class ArrayAccessAnimation extends Animatable {
         this.arrayUnit.x() +
         this.arrayUnit.width() / 2 -
         this.indexItem.width() / 2 +
-        (this.out ? this.arrayUnit.width() : 0),
+        (this.outOfRange ? this.arrayUnit.width() : 0),
       y: this.arrayUnit.y() - this.indexItem.height() - 8
     };
     const indexInArrayLocation = {
