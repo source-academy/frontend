@@ -241,7 +241,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
             >
               <InputGroup
                 id="courseResumeCode"
-                defaultValue={resumeCode}
+                value={resumeCode}
                 onChange={e =>
                   props.setCourseConfiguration({
                     ...props.courseConfiguration,
