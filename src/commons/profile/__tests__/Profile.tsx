@@ -26,6 +26,7 @@ const assessmentConfigurations: AssessmentConfiguration[] = [
   isManuallyGraded: false,
   isGradingAutoPublished: false,
   displayInDashboard: false,
+  isMinigame: false,
   hasTokenCounter: false,
   hasVotingFeatures: false,
   hoursBeforeEarlyXpDecay: 0,
