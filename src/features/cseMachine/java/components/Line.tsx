@@ -5,7 +5,7 @@ import { Visible } from '../../components/Visible';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { IHoverable } from '../../CseMachineTypes';
 import {
-  defaultStrokeColor,
+  reachedStrokeColor,
   setHoveredCursor,
   setHoveredStyle,
   setUnhoveredCursor,
@@ -47,7 +47,7 @@ export class Line extends Visible implements IHoverable {
       >
         <Path
           {...ShapeDefaultProps}
-          stroke={defaultStrokeColor()}
+          stroke={reachedStrokeColor()}
           strokeWidth={Number(Config.ArrowStrokeWidth)}
           hitStrokeWidth={Number(Config.ArrowHitStrokeWidth)}
           data={path}

@@ -16,13 +16,13 @@ import { IHoverable, NonGlobalFn, ReferenceType } from '../../CseMachineTypes';
 import {
   defaultStrokeColor,
   defaultTextColor,
-  fadedStrokeColor,
-  fadedTextColor,
   getBodyText,
   getParamsText,
   getTextWidth,
   isMainReference,
   isStreamFn,
+  reachedStrokeColor,
+  reachedTextColor,
   setHoveredCursor,
   setUnhoveredCursor
 } from '../../CseMachineUtils';
@@ -126,14 +126,22 @@ export class FnValue extends Value implements IHoverable {
   };
 
   draw(): React.ReactNode {
+    if (this.isDrawn()) return;
+    this._isDrawn = true;
+    
     if (this.fnName === undefined) {
       throw new Error('Closure has no main reference and is not initialised!');
     }
     if (this.enclosingFrame) {
       this._arrow = new ArrowFromFn(this).to(this.enclosingFrame) as ArrowFromFn;
+
+      if (this.isReachable()) {
+        this._arrow.setReachable(true);
+      }
+
     }
-    const textColor = this.isReferenced() ? defaultTextColor() : fadedTextColor();
-    const strokeColor = this.isReferenced() ? defaultStrokeColor() : fadedStrokeColor();
+    const textColor = this.isReachable() ? reachedTextColor() : defaultTextColor();
+    const strokeColor = this.isReachable() ? reachedStrokeColor() : defaultStrokeColor();
     return (
       <React.Fragment key={Layout.key++}>
         <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} ref={this.ref}>

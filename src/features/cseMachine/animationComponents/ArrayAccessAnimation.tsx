@@ -10,9 +10,9 @@ import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import {
   defaultActiveColor,
   defaultDangerColor,
-  defaultStrokeColor,
   getTextWidth,
-  isStashItemInDanger
+  isStashItemInDanger,
+  reachedStrokeColor
 } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
@@ -90,7 +90,7 @@ export class ArrayAccessAnimation extends Animatable {
     await Promise.all([
       this.arrayItemAnimation.animateTo({ opacity: 0 }, { duration: 0.6 }),
       this.arrayArrowAnimation.animateTo({ opacity: 0 }, { duration: 0.6 }),
-      this.accessorAnimation.animateRectTo({ stroke: defaultStrokeColor() }, { duration: 1.2 }),
+      this.accessorAnimation.animateRectTo({ stroke: reachedStrokeColor() }, { duration: 1.2 }),
       this.accessorAnimation.animateTo(
         {
           x: indexAboveArrayLocation.x - minInstrItemWidth,
@@ -99,7 +99,7 @@ export class ArrayAccessAnimation extends Animatable {
         },
         { duration: 1.2 }
       ),
-      this.indexItemAnimation.animateRectTo({ stroke: defaultStrokeColor() }, { duration: 1.2 }),
+      this.indexItemAnimation.animateRectTo({ stroke: reachedStrokeColor() }, { duration: 1.2 }),
       this.indexItemAnimation.animateTo(indexAboveArrayLocation, { duration: 1.2 })
     ]);
     // Move arr acc instruction and result on top of array, and bring result up

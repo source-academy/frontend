@@ -3,7 +3,7 @@ import { Group } from 'react-konva';
 
 import { ControlItemComponent } from '../components/ControlItemComponent';
 import { StashItemComponent } from '../components/StashItemComponent';
-import { defaultDangerColor, defaultStrokeColor } from '../CseMachineUtils';
+import { defaultDangerColor, reachedStrokeColor } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodePosition } from './base/AnimationUtils';
@@ -44,7 +44,7 @@ export class BranchAnimation extends Animatable {
     this.resultItems.forEach(i => i.ref.current?.hide());
     // Move boolean next to branch instruction
     await Promise.all([
-      this.booleanItemAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
+      this.booleanItemAnimation.animateRectTo({ stroke: reachedStrokeColor() }),
       this.booleanItemAnimation.animateTo({
         x: this.branchItem.x() + this.branchItem.width(),
         y: this.branchItem.y()
