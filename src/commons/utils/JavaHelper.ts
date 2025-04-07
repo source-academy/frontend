@@ -112,6 +112,7 @@ export async function javaRun(
     try {
       const binaryWriter = new BinaryWriter();
       const classes = compileFromSource(javaCode);
+      console.debug(classes)
       classes.forEach(c => {
         compiled[c.className + '.class']
           = Buffer.from(binaryWriter.generateBinary(c.classFile)).toString('base64');

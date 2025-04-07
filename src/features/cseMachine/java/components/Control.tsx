@@ -128,6 +128,8 @@ export class Control extends Visible {
         return `res ${resInstr.name}`;
       case ECE.InstrType.DEREF:
         return 'deref';
+      case ECE.InstrType.COND:
+        return `cond`;
       default:
         return 'INSTRUCTION';
     }
@@ -188,6 +190,8 @@ export class Control extends Visible {
         return `Resolve field ${resInstr.name} of most recently pushed value from stash`;
       case ECE.InstrType.DEREF:
         return 'Dereference most recently pushed value from stash';
+      case ECE.InstrType.COND:
+        return 'Evaluate condition and push either consequent or alternative to stash';
       default:
         return 'INSTRUCTION';
     }
