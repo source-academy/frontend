@@ -265,7 +265,7 @@ export function isMainReference(value: Value, reference: ReferenceType) {
 export function isDummyReference(reference: ReferenceType) {
   return (
     (reference instanceof Binding && reference.isDummyBinding) ||
-    (reference instanceof ArrayUnit && !reference.parent.isReferenced())
+    (reference instanceof ArrayUnit && !reference.parent.isReachable())
   );
 }
 

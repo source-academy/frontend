@@ -178,9 +178,13 @@ export class Frame extends Visible implements IHoverable {
       CseAnimation.setCurrentFrame(this);
       this.setParentChainReachable();
     }
+
+    console.log('frame constructor');
+
+
   }
 
-  private setParentChainReachable(): void {
+  public setParentChainReachable(): void {
     this.setReachable(true);
     this.arrow?.setReachable(true);
 
@@ -194,6 +198,12 @@ export class Frame extends Visible implements IHoverable {
   onMouseLeave = () => {};
 
   draw(): React.ReactNode {
+
+    this.bindings.map(binding => binding.key.setReachable(this.isReachable()))
+    if (this.isReachable() && this.parentFrame) {
+      this.bindings.map(binding => binding.value.setReachable(true))
+    }
+
     return (
       <Group ref={this.ref} key={Layout.key++}>
         {this.name.draw()}
@@ -215,8 +225,8 @@ export class Frame extends Visible implements IHoverable {
           onMouseLeave={this.onMouseLeave}
           key={Layout.key++}
         />
-        {this.bindings.map(binding => binding.key.setReachable(this.isReachable()))}
-        {this.bindings.map(binding => binding.value.setReachable(this.isReachable()))}
+        {/* {this.bindings.map(binding => binding.key.setReachable(this.isReachable()))}
+        {this.isReachable() && this.parentFrame && this.bindings.map(binding => binding.value.setReachable(true))} */}
         {this.bindings.map(binding => binding.draw())}
         {this.arrow?.draw()}
       </Group>

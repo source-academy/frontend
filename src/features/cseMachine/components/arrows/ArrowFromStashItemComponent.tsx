@@ -21,7 +21,7 @@ export class ArrowFromStashItemComponent extends GenericArrow<
     const from = this.source;
     const to = this.target;
 
-    to?.setReachable(true);
+    //to?.setReachable(true);
     console.log(to);
 
     if (!to) return [];

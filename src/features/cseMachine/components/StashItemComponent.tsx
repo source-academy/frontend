@@ -79,7 +79,7 @@ export class StashItemComponent extends Visible implements IHoverable {
     this._x = ControlStashConfig.StashPosX + stackWidth;
     this._y = ControlStashConfig.StashPosY;
     if (arrowTo) {
-      arrowTo.markAsReferenced();
+      arrowTo.setReachable(true);
       this.arrow = new ArrowFromStashItemComponent(this).to(arrowTo) as ArrowFromStashItemComponent;
     }
   }

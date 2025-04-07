@@ -19,6 +19,18 @@ export class ArrowFromFn extends GenericArrow<FnValue | GlobalFnValue | ContValu
 
     if (!to) return [];
 
+    if (this.isReachable() && !to.isReachable()) {
+      console.log('setting to reachable...');
+
+      to.setParentChainReachable();
+    }
+
+    to.draw();
+    console.log('to', to.isReachable());
+    console.log(to);
+    
+
+
     const steps: StepsArray = [
       (x, y) =>
         this.source instanceof ContValue

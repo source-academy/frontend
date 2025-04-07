@@ -61,10 +61,10 @@ export class PrimitiveValue extends Value {
       throw new Error('Primitive values cannot have more than one reference!');
   }
 
-  markAsReferenced() {
-    if (this.isReferenced()) return;
-    super.markAsReferenced();
-    if (this.text instanceof Text) this.text.options.faded = false;
+  setReachable(reachable: boolean = true) {
+    if (this.isReachable()) return;
+    super.setReachable(reachable);
+    if (this.text instanceof Text) this.text.options.faded = !reachable;
   }
 
   draw(): React.ReactNode {

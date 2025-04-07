@@ -27,6 +27,8 @@ export class ArrayValue extends Value implements IHoverable {
     super();
     Layout.memoizeValue(data, this);
     this.addReference(firstReference);
+    console.log('arrayvalue constructor...');
+    console.log(firstReference);
   }
 
   handleNewReference(newReference: ReferenceType): void {
@@ -77,11 +79,13 @@ export class ArrayValue extends Value implements IHoverable {
     }
   }
 
-  markAsReferenced() {
-    if (this.isReferenced()) return;
-    super.markAsReferenced();
+  setReachable(reachable: boolean = true) {
+    if (this.isReachable()) return;
+    super.setReachable(reachable);
+    // Propagate reachability to all array units
     for (const unit of this.units) {
-      unit.value.markAsReferenced();
+      unit.setReachable(reachable);
+      unit.value.setReachable(reachable);
     }
   }
 
@@ -101,6 +105,8 @@ export class ArrayValue extends Value implements IHoverable {
 
   draw(): React.ReactNode {
     if (this.isDrawn()) return null;
+    console.log('drawingarray...');
+    console.log(this);
     this._isDrawn = true;
     return (
       <Group
@@ -114,13 +120,5 @@ export class ArrayValue extends Value implements IHoverable {
           : new ArrayEmptyUnit(this).draw()}
       </Group>
     );
-  }
-
-  setReachable(reachable: boolean) {
-    super.setReachable(reachable);
-    // Propagate reachability to all array units
-    this.units.forEach(unit => {
-      unit.setReachable(reachable);
-    });
   }
 }

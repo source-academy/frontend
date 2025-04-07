@@ -29,7 +29,7 @@ export class ArrayEmptyUnit extends Visible {
         y={this.y()}
         width={this.width()}
         height={this.height()}
-        stroke={this.parent.isReferenced() ? reachedStrokeColor() : defaultStrokeColor()}
+        stroke={this.parent.isReachable() ? reachedStrokeColor() : defaultStrokeColor()}
         ref={this.ref}
       />
     );

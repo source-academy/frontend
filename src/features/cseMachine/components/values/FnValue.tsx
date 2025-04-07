@@ -126,11 +126,19 @@ export class FnValue extends Value implements IHoverable {
   };
 
   draw(): React.ReactNode {
+    if (this.isDrawn()) return;
+    this._isDrawn = true;
+    
     if (this.fnName === undefined) {
       throw new Error('Closure has no main reference and is not initialised!');
     }
     if (this.enclosingFrame) {
       this._arrow = new ArrowFromFn(this).to(this.enclosingFrame) as ArrowFromFn;
+
+      if (this.isReachable()) {
+        this._arrow.setReachable(true);
+      }
+
     }
     const textColor = this.isReachable() ? reachedTextColor() : defaultTextColor();
     const strokeColor = this.isReachable() ? reachedStrokeColor() : defaultStrokeColor();
