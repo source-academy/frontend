@@ -128,8 +128,8 @@ export class Control extends Visible {
         return `res ${resInstr.name}`;
       case ECE.InstrType.DEREF:
         return 'deref';
-      case ECE.InstrType.COND:
-        return `cond`;
+      case ECE.InstrType.BRANCH:
+        return `branch`;
       case ECE.InstrType.SWITCH:
         return `switch`;
       default:
@@ -192,7 +192,7 @@ export class Control extends Visible {
         return `Resolve field ${resInstr.name} of most recently pushed value from stash`;
       case ECE.InstrType.DEREF:
         return 'Dereference most recently pushed value from stash';
-      case ECE.InstrType.COND:
+      case ECE.InstrType.BRANCH:
         return 'Evaluate condition and push either consequent or alternative to stash';
       case ECE.InstrType.SWITCH:
         const switchInstr = controlItem as ECE.SwitchInstr;
