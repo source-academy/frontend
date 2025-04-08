@@ -48,8 +48,7 @@ export const makeSubstVisualizerTabFrom = (
       editorOutput &&
       editorOutput.type === 'result' &&
       editorOutput.value instanceof Array &&
-      editorOutput.value[0] === Object(editorOutput.value[0]) 
-      // && isStepperOutput(editorOutput.value[0]) // FIX: implement isStepperOutput 
+      editorOutput.value[0] === Object(editorOutput.value[0])
     ) {
       return editorOutput.value;
     } else {

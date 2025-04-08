@@ -422,13 +422,13 @@ $code-color-notification: #f9f0d7;
             font-family: 'Inconsolata', 'Consolas', monospace;
             font-size: 16px;
           }
-          
+
           .stepper-literal {
-            color:#FF6078;
-          } 
+            color: #ff6078;
+          }
 
           .stepper-operator {
-            color: #F89210;
+            color: #f89210;
           }
 
           .stepper-identifier {
@@ -447,7 +447,7 @@ $code-color-notification: #f9f0d7;
           .stepper-display {
             font-family: 'Inconsolata', 'Consolas', monospace;
           }
-          
+
           .beforeMarker {
             display: inline-block;
             background: rgba(179, 101, 57, 0.75);
