@@ -418,16 +418,58 @@ $code-color-notification: #f9f0d7;
           margin: 15px;
           height: unset;
 
+          .stepper-display {
+            font-family: 'Inconsolata', 'Consolas', monospace;
+            font-size: 16px;
+          }
+
+          .stepper-literal {
+            color: #ff6078;
+          }
+
+          .stepper-operator {
+            color: #f89210;
+          }
+
+          .stepper-identifier {
+            color: yellow;
+          }
+
+          .stepper-mu-term {
+            background: rgba(255, 83, 83, 0.35);
+            pointer-events: auto;
+            cursor: pointer;
+            z-index: 20;
+            padding: 0px 3px;
+            border-radius: 5px;
+          }
+
+          .stepper-display {
+            font-family: 'Inconsolata', 'Consolas', monospace;
+          }
+
           .beforeMarker {
+            display: inline-block;
             background: rgba(179, 101, 57, 0.75);
-            position: absolute;
+            pointer-events: auto;
+            cursor: pointer;
             z-index: 20;
           }
 
+          .beforeMarker:hover {
+            background: rgba(100, 101, 57, 0.75);
+          }
+
           .afterMarker {
+            display: inline-block;
             background: green;
-            position: absolute;
+            pointer-events: auto;
+            cursor: pointer;
             z-index: 20;
+          }
+
+          .afterMarker:hover {
+            background: rgba(61, 101, 57, 0.75);
           }
 
           .#{$ns}-slider-label {
