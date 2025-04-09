@@ -1,86 +1,140 @@
-startingLoc: elderClefHut
+startingLoc: room
 
 objectives
-    objectiveStartedMinigame
-    finishedCheckpoint
+    finish
 
 gameStartActions
-    show_dialogue(checkMinigameProgress) if checklist.objectiveStartedMinigame
+    // replace S0 with assessment number
+    show_dialogue(welcome) if userstate.assessments.S0
+    show_dialogue(unwelcome) if !userstate.assessments.S0
 
-locations
-    elderClefHut, /locations/elderClefHut/elderClefHut_normal@x2.png, Elder Clef's Hut
-    nuclearMaze, /locations/nuclearMaze/nuclearMaze.png, Radioactive Field
+checkpointCompleteActions
+    show_dialogue(done)
 
-elderClefHut
-    modes: explore, talk 
-    talkTopics: checkMinigameProgress
+room
+    modes: explore, talk
+    talkTopics: canNowTalk, hello
     bgm
-        crashsitebgm, /bgm/nature.mp3, 0.1
-    characters
-        ershk, Ershk, excited, left, 1.5
-        beat, Beat, normal, left, 1.2
-    actions
-        show_dialogue(enterHut1)
-        preview_location(nuclearMaze)
-        show_dialogue(viewEldric)
-        preview_location(elderClefHut)
-        show_dialogue(enterHut2)
+        heavyHitter, /bgm/HeavyHitter.mp3, 0.5
+    sfx
+        card, /sfx/dialogueAdvance.mp3, 0.5
     
-dialogues
-    enterHut1
-        @ershk, happy, left
-        ...And there we go. The assembly of Robbie the robot is complete! 
-        @narrator
-        It took a while, but you guys did it. The primitive Source-powered robot model you found now sat in your lap, fully assembled. 
-        @narrator
-        Now all that's left is to test out its functionality. 
-        @ershk, serious, left
-        Well, I sure hope the robot actually works, because--
-        @narrator
-        The two of you gaze out into the distance, towards the radioactive field that surrounded the telescope.
-    
-    viewEldric
-        @narrator
-        The challenging terrain unfolds before you. Irregular cliffs and hidden hazards abound. 
-        @narrator
-        You need to customize Robbie so that it can adapt and navigate through this maze-like terrain. 
-        @narrator
-        It would definitely be a challenge, but you had to make it work so that you can contact the rescue team and bring you back to the spaceship. 
+    objects
+        + carpet, /objects/yourCarpet/normal.png, 781, 531, 318, 398
+            delay(2)
+            obtain_collectible(cookies)
+            add_popup(computerOnShelf, middle, 10, small)
+        + computerOnShelf, /objects/cmd-commentsTerminal/emergency.png, 122, 588, 124, 227
+            add_item(objects, room, classroomChair)
+        + console, /objects/cmd-console/emergency.png, 557, 906, 526, 263
+            make_object_blink*(carpet, false)
+            show_dialogue(addHallway)
+        + navigatorgGuy, /objects/cmd-navigator/emergency.png, 504, 568, 117, 277
+            show_dialogue(canNowTalk)
+            add_mode(room, talk)
+        + todaysTopic, /objects/cr-todaysTopic/emergency.png, 188, 286, 289, 128
+            preview_location(hallway)
+            move_character(scottie, room, center)
+        + bigMug, /objects/yourMug/emergency.png, 1355, 526, 136, 169
+            make_object_glow*(bigMug)
+        + bottomDoor, /objects/dc-bttm_door02/normal.png, 653, 735, 345, 68
+            play_sfx(card)
+        + sideDoor, /objects/dc-lf_door03/normal.png, 255, 533, 36, 172
+            add_popup(sideDoor)
+            complete_objective(finish)
+        + tomorrowsTopic, /objects/cr-todaysTopic/emergency.png, 400, 286, 289, 128
 
-    enterHut2
-        @ershk, serious, left
-        ...Hm, for now, why don't we try some simple tests first? 
-        @ershk, happy, left
-        We can start small, but things will only get better from here on out
-        @ershk, happy, left
-        Let's try issuing some commands to Robbie the robot. 
-            complete_objective(objectiveStartedMinigame)
-            navigate_to_assessment*(V1)
-    
-    checkMinigameProgress
-        0
-        @ershk, serious, left
-        Have you finished testing Robbie the robot?
-            prompt: Have you finished?
-                Yes -> goto 2
-                Not yet -> goto 1
+    boundingBoxes
+        + bbox1, 10, 10, 30, 30
+            show_dialogue(what)
+
+hallway
+    modes: move, explore
+    talkTopics: welcomeToHallway
+    objects
+        + sideDoorInHallway, /objects/dc-lf_door03/normal.png, 255, 533, 36, 172
+            play_bgm(heavyHitter)
+            remove_item(objects, room, computerOnShelf)
+            remove_mode(classroom, talk)
+    characters
+        + scottie, Scottie, sad, left, 1.4
+
+
+classroom
+    modes: explore, talk
+    talkTopics: what
+    objects
+        + classroomChair, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
+            complete_objective(finish)
+            play_sfx(card)
+
+emergency
+    modes: move
+    nav: classroom
+
+dialogues
+    hello, Did you know about changing backgrounds?
+        @scottie
+        You can actually change the change the background of the scene.
+            change_background(hallway)
+            show_object_layer(false)
+        Let's now pretend we're in the hallway.
+
+    canNowTalk, You can now talk!
+        @scottie
+        Thanks for clicking the navigator, you can now talk to me via the talk mode.
+        @you
+        Did I just transport to another world?
+
+    welcome
+        @scottie, happy
+        Welcome to Source Academy!
+        I'm glad you took the time to come in
+            update_character(scottie, happy)
+
+    unwelcome
         1
-        @ershk, happy, left
-        It's alright! Take your time!
+        @scottie, sad
+        You haven't finished assessment
+        Finish assessment S0 first and come back?
+            navigate_to_assessment(S0)
+        goto 2 
         2
-        @ershk, serious, left
+        @scottie
+        Have you finished the assignment?
+          prompt: Have you finished?
+              Yes -> goto 4
+              I don't want to -> goto 3
+        3
+        @scottie
+        OK
+        4
+        @scottie
         Hmmm
             update_assessment_status*()
-        @ershk, serious, left
         Let me check
-        goto 3 if !userstate.assessments.V1 else 4
-        3
-        @ershk, serious, left
-        Hmm, it looks like you haven't finished all the tasks yet. Do you want to go do it now? 
-            navigate_to_assessment*(V1)
-        4
-        @ershk, happy, left
-        Oh, it does look like everything works! 
-        @ershk, happy, left
-        Now we can move on to tackle the actual maze! 
-            complete_objective(finishedCheckpoint)
+        goto 1 if !userstate.assessments.S0 else 3
+
+    what, What should I do now, Scottie?
+        @you
+        What should I do now?
+        @scottie
+        I'm glad you asked!
+        @narrator
+        Well
+    
+    done
+        Well, what do you know, you finished the game.
+        Are you done with the game?
+    
+    welcomeToHallway
+        Welcome to the Hallway, we've got fun and games.
+
+    found
+        You found the object!
+
+    click
+        You found the hidden BBox!
+
+    addHallway
+        I'm adding a super secret mode in the hallway

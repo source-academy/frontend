@@ -1,0 +1,86 @@
+startingLoc: elderClefHut
+
+objectives
+    objectiveStartedMinigame
+    finishedCheckpoint
+
+gameStartActions
+    show_dialogue(checkMinigameProgress) if checklist.objectiveStartedMinigame
+
+locations
+    elderClefHut, /locations/elderClefHut/elderClefHut_normal@x2.png, Elder Clef's Hut
+    nuclearMaze, /locations/nuclearMaze/nuclearMaze.png, Radioactive Field
+
+elderClefHut
+    modes: explore, talk 
+    talkTopics: checkMinigameProgress
+    bgm
+        crashsitebgm, /bgm/nature.mp3, 0.1
+    characters
+        ershk, Ershk, excited, left, 1.5
+        beat, Beat, normal, left, 1.2
+    actions
+        show_dialogue(enterHut1)
+        preview_location(nuclearMaze)
+        show_dialogue(viewEldric)
+        preview_location(elderClefHut)
+        show_dialogue(enterHut2)
+    
+dialogues
+    enterHut1
+        @ershk, happy, left
+        ...And there we go. The assembly of Robbie the robot is complete! 
+        @narrator
+        It took a while, but you guys did it. The primitive Source-powered robot model you found now sat in your lap, fully assembled. 
+        @narrator
+        Now all that's left is to test out its functionality. 
+        @ershk, serious, left
+        Well, I sure hope the robot actually works, because--
+        @narrator
+        The two of you gaze out into the distance, towards the radioactive field that surrounded the telescope.
+    
+    viewEldric
+        @narrator
+        The challenging terrain unfolds before you. Irregular cliffs and hidden hazards abound. 
+        @narrator
+        You need to customize Robbie so that it can adapt and navigate through this maze-like terrain. 
+        @narrator
+        It would definitely be a challenge, but you had to make it work so that you can contact the rescue team and bring you back to the spaceship. 
+
+    enterHut2
+        @ershk, serious, left
+        ...Hm, for now, why don't we try some simple tests first? 
+        @ershk, happy, left
+        We can start small, but things will only get better from here on out
+        @ershk, happy, left
+        Let's try issuing some commands to Robbie the robot. 
+            complete_objective(objectiveStartedMinigame)
+            navigate_to_assessment*(V1)
+    
+    checkMinigameProgress
+        0
+        @ershk, serious, left
+        Have you finished testing Robbie the robot?
+            prompt: Have you finished?
+                Yes -> goto 2
+                Not yet -> goto 1
+        1
+        @ershk, happy, left
+        It's alright! Take your time!
+        2
+        @ershk, serious, left
+        Hmmm
+            update_assessment_status*()
+        @ershk, serious, left
+        Let me check
+        goto 3 if !userstate.assessments.V1 else 4
+        3
+        @ershk, serious, left
+        Hmm, it looks like you haven't finished all the tasks yet. Do you want to go do it now? 
+            navigate_to_assessment*(V1)
+        4
+        @ershk, happy, left
+        Oh, it does look like everything works! 
+        @ershk, happy, left
+        Now we can move on to tackle the actual maze! 
+            complete_objective(finishedCheckpoint)

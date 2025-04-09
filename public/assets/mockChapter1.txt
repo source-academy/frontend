@@ -1,64 +1,14 @@
-startingLoc: nuclearMaze
+startingLoc: hallway
 
 objectives
-    objectiveStartedMinigame
-    finishedCheckpoint
+    finish
 
-gameStartActions
-    show_dialogue(checkMinigameProgress) if checklist.objectiveStartedMinigame
-
-locations
-    nuclearMaze, /locations/nuclearMaze/nuclearMaze.png, Radioactive Field
-
-nuclearMaze
-    modes: explore, talk 
-    talkTopics: checkMinigameProgress
-    bgm
-        crashsitebgm, /bgm/nature.mp3, 0.1
-    characters
-        ershk, Ershk, excited, left, 1.5
+hallway
     actions
-        show_dialogue(enterHut1)
-    
+        show_dialogue(chapter1)
+        complete_objective(finish)
+
 dialogues
-    enterHut1
-        @ershk, happy, left
-        Alright, now we can tackle the challenge of this maze! 
-        @narrator
-        Far away in the distance, the silhouette of the ELDRIC loomed. It was your one hope of contacting the Source Academy crew so that you can finally go home
-        @narrator
-        You now have to transmit the correct commands to Robbie the robot so that it can navigate the maze and reach the end
-        @narrator 
-        You take a deep breath. You can do this. 
-        @ershk, happy, left
-        Are you ready? 
-            complete_objective(objectiveStartedMinigame)
-            navigate_to_assessment*(V2)
-    
-    checkMinigameProgress
-        0
-        @ershk, happy, left
-        Have you reached the ELDRIC?
-            prompt: Have you finished?
-                Yes -> goto 2
-                Not yet -> goto 1
-        1
-        @ershk, happy, left
-        It's alright! You can do this! 
-        2
-        @ershk, serious, left
-        Hmmm
-            update_assessment_status*()
-        @ershk, serious, left
-        Let's see
-        goto 3 if !userstate.assessments.V2 else 4
-        3
-        @ershk, serious, left
-        Hmm, it looks like you haven't reached the end yet. Do you want to continue? 
-            navigate_to_assessment*(V2)
-        4
-        @ershk, happy, left
-        Oh, the robot has reached the end! 
-        @ershk, happy, left
-        Now we can install the communication module into the ELDRIC! 
-            complete_objective(finishedCheckpoint)
+    chapter1, What?
+        You're now in chapter 1.
+        I'm glad you're part of it

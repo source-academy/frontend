@@ -4,12 +4,12 @@ const GameChapterMocks: GameChapter[] = [
   {
     title: 'Fixing Robbie (tutorial)',
     imageUrl: '/locations/planet-y-orbit/crashing.png',
-    filenames: ['../../assets/mockChapter0.txt']
+    filenames: ['../../assets/mock-minigame-0.txt']
   },
   {
     title: 'Fixing Robbie (challenge)',
     imageUrl: '/locations/telebay/emergency.png',
-    filenames: ['../../assets/mockChapter1.txt']
+    filenames: ['../../assets/mock-minigame-1.txt']
   }
   // {
   //   title: 'Jedi Master',
