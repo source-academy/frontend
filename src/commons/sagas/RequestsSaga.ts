@@ -884,6 +884,7 @@ export const getGrading = async (
         solutionTemplate: question.solutionTemplate,
         prepend: question.prepend || '',
         postpend: question.postpend || '',
+        llm_prompt: question.llm_prompt || null,
         testcases: question.testcases || [],
         type: question.type as QuestionType,
         maxXp: question.maxXp
@@ -1330,6 +1331,52 @@ export const removeAssessmentConfig = async (
 
   return resp;
 };
+
+/**
+ * POST /courses/{courseId}/admin/generate-comments/{submissionId}/{questionId}
+ */
+export const postGenerateComments = async (
+  tokens: Tokens,
+  submission_id: integer,
+  question_id: integer
+): Promise<{comments:string[]} | null> => {
+  const resp = await request(`${courseId()}/admin/generate-comments/${submission_id}/${question_id}`, 'POST', {
+    ...tokens
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  return await resp.json();
+};
+
+export const saveFinalComment = async (
+  tokens: Tokens,
+  submission_id: integer,
+  question_id: integer,
+  comment: string
+): Promise<Response | null> => {
+  const resp = await request(`${courseId()}/admin/save-final-comment/${submission_id}/${question_id}`, 'POST', {
+    body: {"comment": comment},
+    ...tokens
+  })
+  
+  return resp
+}
+
+export const saveChosenComments = async (
+  tokens: Tokens,
+  submission_id: integer,
+  question_id: integer,
+  comments: string[]
+): Promise<Response | null> => {
+  const resp = await request(`${courseId()}/admin/save-chosen-comments/${submission_id}/${question_id}`, 'POST', {
+    body: {"comments": comments},
+    ...tokens
+  })
+  
+  return resp
+}
 
 /**
  * GET /courses/{courseId}/admin/users

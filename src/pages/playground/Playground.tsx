@@ -1035,6 +1035,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       <MobileWorkspace {...mobileWorkspaceProps} />
     </div>
   ) : (
+    
     <div className={classNames('Playground', Classes.DARK, isGreen && 'GreenScreen')}>
       <Workspace {...workspaceProps} />
     </div>
