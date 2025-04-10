@@ -1,12 +1,17 @@
 import { useMediaQuery } from '@mantine/hooks';
-import React, { RefObject } from 'react';
+import React, { RefObject, } from 'react';
 // eslint-disable-next-line no-restricted-imports
 import { TypedUseSelectorHook, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { throttle } from 'lodash';
 
 import { OverallState } from '../application/ApplicationTypes';
 import { Tokens } from '../application/types/SessionTypes';
 import Constants from './Constants';
 import { readLocalStorage, setLocalStorage } from './LocalStorageHelper';
+import SessionActions from '../application/actions/SessionActions';
 
 /**
  * This hook sends a request to the backend to fetch the initial state of the field
@@ -167,3 +172,90 @@ export const useTokens: UseTokens = ({ throwWhenEmpty = true } = {}) => {
   }
   return { accessToken, refreshToken } as Tokens;
 };
+
+
+
+export function useTimer(
+  path: string | undefined = undefined, 
+  enableIdleTimer: boolean = true, 
+  idleTime: number = 60000, 
+  throttleTime: number = 100,
+){
+  const dispatch = useDispatch();
+  const timerPath: string = path || useLocation().pathname.slice(1);
+
+  const generateTimer = (
+    name: string | undefined,
+    idleTime: number,
+    enableIdleTimer: boolean = true
+  ) => {
+    let start = 0;
+    let timeElapsed = 0;
+    let running = false;
+    let stopWhenIdle: ReturnType<typeof setTimeout>;
+
+    const startTimer = () => {
+      if (enableIdleTimer) {
+        if (stopWhenIdle) {
+          clearTimeout(stopWhenIdle);
+        }
+        stopWhenIdle = generateIdleTimer(idleTime);
+      }
+      if (running) return;
+      running = true;
+      start = Date.now();
+    };
+
+    const stopTimer = () => {
+      if (!running) return;
+      if (stopWhenIdle) {
+        clearTimeout(stopWhenIdle);
+      }
+      running = false;
+      timeElapsed += Date.now() - start;
+      start = Date.now();
+    };
+
+    const generateIdleTimer = (time: number) => {
+      return setTimeout(() => {
+        stopTimer();
+      }, time);
+    };
+
+    return {
+      name,
+      startTimer,
+      stopTimer,
+      getTimeElapsed: () => Math.floor(timeElapsed / 1000),
+    }
+  };
+
+  const timer = generateTimer(timerPath, idleTime, enableIdleTimer);
+  const throttledStartTimer = throttle(timer.startTimer, throttleTime);
+
+  const updateGlobalTimer = () => {
+    timer.stopTimer();
+    if (timerPath !== "") {
+      dispatch(SessionActions.updateTimeSpent(timerPath, timer.getTimeElapsed()));
+    }
+  };
+
+  useEffect(() => {
+    const globalTimerUpdater = throttle(updateGlobalTimer, 100);
+    timer.startTimer();
+
+    document.addEventListener("keydown", throttledStartTimer);
+    document.addEventListener("mousedown", throttledStartTimer);
+    document.addEventListener("mousemove", throttledStartTimer);
+    document.addEventListener("beforeunload", globalTimerUpdater);
+
+    return () => {
+      globalTimerUpdater();
+
+      document.removeEventListener("keydown", throttledStartTimer);
+      document.removeEventListener("mousedown", throttledStartTimer);
+      document.removeEventListener("mousemove", throttledStartTimer);
+      document.removeEventListener("beforeunload", globalTimerUpdater);
+    };
+  }, [timerPath]);
+}

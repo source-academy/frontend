@@ -1596,3 +1596,19 @@ export const courseIdWithoutPrefix: () => string = () => {
     throw new Error(`No course selected`);
   }
 };
+
+/**
+ * POST /courses/{courseId}/user/update_time_spent
+ */
+export const postTimeSpent = async (
+  tokens: Tokens,
+  path: string,
+  time: number
+): Promise<Response | null> => {
+  const resp = await request(`${courseId()}/user/update_time_spent`, 'POST', {
+    ...tokens,
+    body: { path, time }
+  });
+
+  return resp;
+};

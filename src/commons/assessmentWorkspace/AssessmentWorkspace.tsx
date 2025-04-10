@@ -70,7 +70,7 @@ import { changeSideContentHeight } from '../sideContent/SideContentActions';
 import { useSideContent } from '../sideContent/SideContentHelper';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
-import { useResponsive, useTypedSelector } from '../utils/Hooks';
+import { useResponsive, useTypedSelector, useTimer } from '../utils/Hooks';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import { assertType } from '../utils/TypeHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
@@ -108,9 +108,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       ? SideContentType.grading
       : SideContentType.questionOverview
   );
-
+  const assessmentName: string = assessmentOverview ? assessmentOverview.type.toLowerCase() + "/" + assessmentOverview.id : "";
+  useTimer(assessmentName);
+  
   const navigate = useNavigate();
-
   const { courseId } = useTypedSelector(state => state.session);
   const {
     isFolderModeEnabled,

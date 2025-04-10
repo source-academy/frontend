@@ -93,6 +93,7 @@ import {
   putLatestViewedCourse,
   putNewUsers,
   putTeams,
+  postTimeSpent,
   putUserRole,
   removeAssessmentConfig,
   removeUserCourseRegistration,
@@ -1033,7 +1034,16 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
 
     yield put(actions.fetchAdminPanelCourseRegistrations());
     yield call(showSuccessMessage, 'User deleted!');
-  }
+  },
+  updateTimeSpent: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const { path, time } = action.payload;
+
+    const resp: Response | null = yield call(postTimeSpent, tokens, path, time);
+    if (!resp || !resp.ok) {
+      return yield handleResponseError(resp);
+    }
+  },
 });
 
 function* oldBackendSagaThree(): SagaIterator {

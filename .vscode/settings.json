@@ -4,5 +4,7 @@
   "files.insertFinalNewline": true,
   "liveServer.settings.file": "/index.html",
   "liveServer.settings.NoBrowser": true,
-  "liveServer.settings.root": "/build"
+  "liveServer.settings.root": "/build",
+  "editor.tabSize": 2,
+  "editor.stickyTabStops": false
 }

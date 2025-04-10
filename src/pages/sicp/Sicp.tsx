@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import Constants from 'src/commons/utils/Constants';
-import { useSession } from 'src/commons/utils/Hooks';
+import { useSession, useTimer } from 'src/commons/utils/Hooks';
 import { setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
@@ -46,7 +46,8 @@ const Sicp: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isLoggedIn } = useSession();
-
+  useTimer("sicpjs");
+  
   function getSection() {
     // To discard the '/sicpjs/'
     return location.pathname.replace('/sicpjs/', '') as SicpSection;

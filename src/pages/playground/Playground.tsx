@@ -25,7 +25,7 @@ import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentH
 import makeUploadTabFrom from 'src/commons/sideContent/content/SideContentUpload';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
-import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
+import { useResponsive, useTypedSelector, useTimer } from 'src/commons/utils/Hooks';
 import {
   showFullJSWarningOnUrlLoad,
   showFulTSWarningOnUrlLoad,
@@ -205,6 +205,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const store = useStore<OverallState>();
   const searchParams = new URLSearchParams(location.search);
   const shouldAddDevice = searchParams.get('add_device');
+  useTimer();
 
   // Selectors and handlers migrated over from deprecated withRouter implementation
   const {
@@ -286,6 +287,16 @@ const Playground: React.FC<PlaygroundProps> = props => {
       chapter: playgroundSourceChapter
     })
   );
+  
+  const trackedContent: (SideContentType)[] = [
+    SideContentType.cseMachine,
+    SideContentType.dataVisualizer,
+    SideContentType.substVisualizer,
+    SideContentType.remoteExecution
+  ];
+
+  const path = (selectedTab && trackedContent.includes(selectedTab)) ? ("playground/" + selectedTab) : ""
+  useTimer(path);
 
   // Playground hotkeys
   const [isGreen, setIsGreen] = useState(false);
