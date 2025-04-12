@@ -20,7 +20,6 @@ import { StepperExpression } from 'js-slang/dist/tracer/nodes';
 import { StepperArrayExpression } from 'js-slang/dist/tracer/nodes/Expression/ArrayExpression';
 import { StepperArrowFunctionExpression } from 'js-slang/dist/tracer/nodes/Expression/ArrowFunctionExpression';
 import { StepperBinaryExpression } from 'js-slang/dist/tracer/nodes/Expression/BinaryExpression';
-import { StepperBlockExpression } from 'js-slang/dist/tracer/nodes/Expression/BlockExpression';
 import { StepperConditionalExpression } from 'js-slang/dist/tracer/nodes/Expression/ConditionalExpression';
 import { StepperFunctionApplication } from 'js-slang/dist/tracer/nodes/Expression/FunctionApplication';
 import { StepperIdentifier } from 'js-slang/dist/tracer/nodes/Expression/Identifier';
@@ -378,7 +377,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
     },
     CallExpression(node: StepperFunctionApplication) {
       let renderedCallee = renderNode(node.callee, { styleWrapper: styleWrapper });
-      if (node.callee.type !== 'Identifier') {
+      if (node.callee.type === 'ArrowFunctionExpression' && node.callee.name === undefined) {
         renderedCallee = (
           <span>
             {'('}
@@ -435,27 +434,15 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
       return (
         <span>
           {'{'}
-          <div>
+            <br/>
             {node.body.map(ast => (
-              <div style={{ marginLeft: '15px' }}>
+              
+              <span style={{ marginLeft: '15px' }}>
                 {renderNode(ast, { styleWrapper: styleWrapper })}
-              </div>
+                <br/>
+              </span>
             ))}
-          </div>
           {'}'}
-        </span>
-      );
-    },
-    BlockExpression(node: StepperBlockExpression) {
-      return (
-        <span>
-          {'{'}
-          {node.body.map(ast => (
-            <div style={{ marginLeft: '15px' }}>
-              {renderNode(ast, { styleWrapper: styleWrapper })}
-            </div>
-          ))}
-          {'};'}
         </span>
       );
     },
