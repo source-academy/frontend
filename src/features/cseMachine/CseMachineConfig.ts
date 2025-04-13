@@ -11,6 +11,7 @@ export const Config = Object.freeze({
   FrameMinWidth: 100,
   FramePaddingX: 20,
   FramePaddingY: 30,
+  FrameMinGapX: 80,
   FrameMarginX: 30,
   FrameMarginY: 10,
   FrameCornerRadius: 3,
@@ -18,6 +19,7 @@ export const Config = Object.freeze({
   FnRadius: 15,
   FnInnerRadius: 3,
   FnTooltipOpacity: 0.3,
+  FnTooltipTextPadding: 5,
 
   DataMinWidth: 20,
   DataUnitWidth: 40,

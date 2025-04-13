@@ -9,7 +9,7 @@ import { isMainReference } from '../../CseMachineUtils';
 import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
 import { ArrayUnit } from '../ArrayUnit';
 import { Binding } from '../Binding';
-import { PrimitiveValue } from './PrimitiveValue';
+import { FnValue } from './FnValue';
 import { Value } from './Value';
 
 /** this class encapsulates an array value in source,
@@ -17,6 +17,10 @@ import { Value } from './Value';
 export class ArrayValue extends Value implements IHoverable {
   /** array of units this array is made of */
   units: ArrayUnit[] = [];
+  /** width of the array or the nested values inside the array. */
+  totalWidth: number = 0;
+  /** height of the array and nested values inside the array */
+  totalHeight: number = 0;
 
   constructor(
     /** underlying values this array contains */
@@ -42,38 +46,39 @@ export class ArrayValue extends Value implements IHoverable {
         this._y = newReference.y();
       } else {
         this._x = newReference.x();
-        this._y = newReference.y() + newReference.parent.height() + Config.DataUnitHeight;
+        this._y = newReference.y() + newReference.parent.totalHeight + Config.DataUnitHeight;
       }
     }
 
     this._width = Math.max(this.data.length * Config.DataUnitWidth, Config.DataMinWidth);
+    this.totalWidth = this._width;
     this._height = Config.DataUnitHeight;
+    this.totalHeight = this._height;
 
+    this.units = new Array(this.data.length);
     // initialize array units from the last index
     for (let i = this.data.length - 1; i >= 0; i--) {
       const unit = new ArrayUnit(i, this.data[i], this);
 
-      // update the dimensions, so that children array values can derive their coordinates
-      // from these intermediate dimensions
+      // Update total width and height for values that are drawn next to the array
+      if (
+        (unit.value instanceof ArrayValue || unit.value instanceof FnValue) &&
+        isMainReference(unit.value, unit)
+      ) {
+        this.totalWidth = Math.max(
+          this.totalWidth,
+          unit.value.totalWidth +
+            (i === this.data.length - 1 ? (i + 2) * Config.DataUnitWidth : i * Config.DataUnitWidth)
+        );
+        this.totalHeight = Math.max(
+          this.totalHeight,
+          unit.value.y() +
+            (unit.value instanceof ArrayValue ? unit.value.totalHeight : unit.value.height() / 2) -
+            unit.y()
+        );
+      }
 
-      // update the width
-      this._width = Math.max(
-        this.width(),
-        unit.value.width() +
-          (!(unit.value instanceof PrimitiveValue) && i === this.data.length - 1
-            ? (i + 1) * Config.DataUnitWidth + Config.DataUnitWidth
-            : i * Config.DataUnitWidth)
-      );
-
-      // update the height
-      this._height = Math.max(
-        this._height,
-        unit.value instanceof PrimitiveValue || unit.isMainReference
-          ? Config.DataUnitHeight
-          : unit.value.y() + unit.value.height() - unit.y()
-      );
-
-      this.units = [unit, ...this.units];
+      this.units[i] = unit;
     }
   }
 
