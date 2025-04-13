@@ -434,14 +434,13 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
       return (
         <span>
           {'{'}
-            <br/>
-            {node.body.map(ast => (
-              
-              <span style={{ marginLeft: '15px' }}>
-                {renderNode(ast, { styleWrapper: styleWrapper })}
-                <br/>
-              </span>
-            ))}
+          <br />
+          {node.body.map(ast => (
+            <span style={{ marginLeft: '15px' }}>
+              {renderNode(ast, { styleWrapper: styleWrapper })}
+              <br />
+            </span>
+          ))}
           {'}'}
         </span>
       );
