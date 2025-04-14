@@ -380,7 +380,17 @@ const Playground: React.FC<PlaygroundProps> = props => {
     if (workspaceLocation === 'sicp') {
       return;
     }
-    sendToWebview(Messages.NewEditor(workspaceLocation, 'playground', 1, ''));
+    const initialCode = editorTabs[0]?.value ?? '';
+    sendToWebview(
+      Messages.NewEditor(
+        workspaceLocation,
+        'playground',
+        1,
+        playgroundSourceChapter,
+        '',
+        initialCode
+      )
+    );
   }, []);
 
   // const onChangeTabs = useCallback(
