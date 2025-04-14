@@ -6,6 +6,7 @@ type ChatMessage = {
 type InitChatResponse = {
   response: ChatMessage;
   conversationId: string;
+  maxContentSize: number;
 };
 
 type ContinueChatResponse = {

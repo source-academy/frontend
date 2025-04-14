@@ -19,6 +19,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { onClickProgress } from 'src/features/assessments/AssessmentUtils';
+import Messages, { sendToWebview } from 'src/features/vscode/messages';
 import { mobileOnlyTabIds } from 'src/pages/playground/PlaygroundTabs';
 
 import { initSession, log } from '../../features/eventLogging';
@@ -93,6 +94,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const [isSaving, setIsSaving] = useState(false);
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = useState(false);
   const [sessionId, setSessionId] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const { isMobileBreakpoint } = useResponsive();
 
   const assessment = useTypedSelector(state => state.session.assessments[props.assessmentId]);
@@ -185,12 +187,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   }, [dispatch]);
 
   useEffect(() => {
-    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-    handleEditorValueChange(0, '');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     if (assessmentOverview && assessmentOverview.maxTeamSize > 1) {
       handleTeamOverviewFetch(props.assessmentId);
     }
@@ -220,26 +216,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     if (!assessment) {
       return;
     }
-    // ------------- PLEASE NOTE, EVERYTHING BELOW THIS SEEMS TO BE UNUSED -------------
-    // checkWorkspaceReset does exactly the same thing.
-    let questionId = props.questionId;
-    if (props.questionId >= assessment.questions.length) {
-      questionId = assessment.questions.length - 1;
-    }
-
-    const question = assessment.questions[questionId];
-
-    let answer = '';
-    if (question.type === QuestionTypes.programming) {
-      if (question.answer) {
-        answer = (question as IProgrammingQuestion).answer as string;
-      } else {
-        answer = (question as IProgrammingQuestion).solutionTemplate;
-      }
-    }
-
-    // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
-    handleEditorValueChange(0, answer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -415,9 +391,12 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     );
     handleClearContext(question.library, true);
     handleUpdateHasUnsavedChanges(false);
+    sendToWebview(Messages.NewEditor(`assessment${assessment.id}`, props.questionId, ''));
     if (options.editorValue) {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange(0, options.editorValue);
+    } else {
+      handleEditorValueChange(0, '');
     }
   };
 
@@ -622,6 +601,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       setSelectedTab(SideContentType.questionOverview);
     };
     const onClickReturn = () => navigate(listingPath);
+    const onClickSubmit = () => {
+      dispatch(SessionActions.submitAssessment(assessment.id));
+      setIsSubmitted(true);
+    };
 
     const onClickSave = () => {
       if (isSaving) return;
@@ -686,8 +669,14 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             ? onClickProgress(onClickReturn, question, editorTestcases, isBlocked)
             : onClickReturn
         }
+        onClickSubmit={
+          question.blocking
+            ? onClickProgress(onClickSubmit, question, editorTestcases, isBlocked)
+            : onClickSubmit
+        }
         questionProgress={questionProgress}
         key="next_question"
+        submitOnFinish={assessment.isMinigame}
       />
     );
 
@@ -856,6 +845,18 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     </Dialog>
   );
 
+  const submissionOverlay = (
+    <Dialog className="assessment-briefing" isOpen={isSubmitted}>
+      <Card>
+        <Markdown
+          content={`## ${assessment.type.substring(0, assessment.type.length - 1)} complete!
+You've successfully submitted this ${assessment.type.substring(0, assessment.type.length - 1)}!
+It is safe to close this window.`}
+        />
+      </Card>
+    </Dialog>
+  );
+
   const closeOverlay = () => setShowResetTemplateOverlay(false);
   const resetTemplateOverlay = (
     <Dialog
@@ -964,6 +965,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   };
   return (
     <div className={classNames('WorkspaceParent', Classes.DARK)}>
+      {submissionOverlay}
       {overlay}
       {resetTemplateOverlay}
       {!isMobileBreakpoint ? (

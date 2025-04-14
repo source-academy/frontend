@@ -80,6 +80,23 @@ class GameObjectManager implements StateObserver {
   }
 
   /**
+   * Apply glow effect on the object, for when it's hovered on
+   *
+   * @param objectId id of the object
+   */
+  public objectHoverGlow(objectId: ItemId, turnOn: boolean) {
+    const object = this.objects.get(objectId);
+    if (!object) {
+      return;
+    }
+    if (turnOn) {
+      (object.sprite as GlowingImage).hoverGlowStart();
+    } else {
+      (object.sprite as GlowingImage).hoverGlowEnd();
+    }
+  }
+
+  /**
    * Create the object from the given object property.
    * Because we want this sprite to be activatable
    * by Explore Mode UI, we expose its actionIds

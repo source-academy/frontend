@@ -31,6 +31,7 @@ const defaultAssessmentConfig: AssessmentConfiguration = {
   isManuallyGraded: true,
   isGradingAutoPublished: false,
   displayInDashboard: true,
+  isMinigame: false,
   hoursBeforeEarlyXpDecay: 0,
   hasTokenCounter: false,
   hasVotingFeatures: false,
@@ -131,6 +132,7 @@ const AssessmentConfigPanel: WithImperativeApi<
 
     /* eslint-disable react-hooks/exhaustive-deps */
     const setDisplayInDashboard = useCallback(valueSetter('displayInDashboard'), []);
+    const setIsMinigame = useCallback(valueSetter('isMinigame'), []);
     const setHasTokenCounter = useCallback(valueSetter('hasTokenCounter'), []);
     const setHasVotingFeatures = useCallback(valueSetter('hasVotingFeatures'), []);
     const setEarlyXp = useCallback(valueSetter('earlySubmissionXp'), []);
@@ -199,6 +201,15 @@ const AssessmentConfigPanel: WithImperativeApi<
           cellRendererParams: {
             setStateHandler: setDisplayInDashboard,
             field: 'displayInDashboard'
+          }
+        },
+        {
+          headerName: 'Is Minigame',
+          field: 'isMinigame',
+          cellRenderer: BooleanCell,
+          cellRendererParams: {
+            setStateHandler: setIsMinigame,
+            field: 'isMinigame'
           }
         },
         {
