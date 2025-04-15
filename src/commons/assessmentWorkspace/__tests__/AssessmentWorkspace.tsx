@@ -21,6 +21,7 @@ const defaultProps = assertType<AssessmentWorkspaceProps>()({
     isManuallyGraded: true,
     isGradingAutoPublished: false,
     displayInDashboard: true,
+    isMinigame: false,
     hasTokenCounter: false,
     hasVotingFeatures: false,
     hoursBeforeEarlyXpDecay: 48,
