@@ -83,7 +83,7 @@ const SideContentContestLeaderboard: React.FC<SideContentContestLeaderboardProps
               key={contestEntry.submission_id}
               handleContestEntryClick={handleContestEntryClick}
               contestEntry={contestEntry}
-              rank={index + 1}
+              rank={contestEntry.rank ?? 1}
             />
           ))
         ) : (
