@@ -957,6 +957,7 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
         isManuallyGraded: true,
         isGradingAutoPublished: false,
         displayInDashboard: true,
+        isMinigame: false,
         hoursBeforeEarlyXpDecay: 0,
         hasTokenCounter: false,
         hasVotingFeatures: false,
