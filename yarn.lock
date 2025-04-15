@@ -1609,11 +1609,11 @@ __metadata:
   linkType: hard
 
 "@babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.11.2, @babel/runtime@npm:^7.12.0, @babel/runtime@npm:^7.12.1, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.16.3, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.2.0, @babel/runtime@npm:^7.20.13, @babel/runtime@npm:^7.20.7, @babel/runtime@npm:^7.21.0, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.24.5, @babel/runtime@npm:^7.25.0, @babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.6.3, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.8.7, @babel/runtime@npm:^7.9.2":
-  version: 7.27.0
-  resolution: "@babel/runtime@npm:7.27.0"
+  version: 7.26.0
+  resolution: "@babel/runtime@npm:7.26.0"
   dependencies:
     regenerator-runtime: "npm:^0.14.0"
-  checksum: 10c0/35091ea9de48bd7fd26fb177693d64f4d195eb58ab2b142b893b7f3fa0f1d7c677604d36499ae0621a3703f35ba0c6a8f6c572cc8f7dc0317213841e493cf663
+  checksum: 10c0/12c01357e0345f89f4f7e8c0e81921f2a3e3e101f06e8eaa18a382b517376520cd2fa8c237726eb094dab25532855df28a7baaf1c26342b52782f6936b07c287
   languageName: node
   linkType: hard
 
@@ -9495,7 +9495,7 @@ __metadata:
     i18next-browser-languagedetector: "npm:^8.0.0"
     java-slang: "npm:^1.0.13"
     js-cookie: "npm:^3.0.5"
-    js-slang: "npm:^1.0.81"
+    js-slang: "npm:^1.0.82"
     js-yaml: "npm:^4.1.0"
     konva: "npm:^9.2.0"
     language-directory: "https://github.com/source-academy/language-directory.git"
@@ -11845,9 +11845,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-slang@npm:^1.0.81":
-  version: 1.0.81
-  resolution: "js-slang@npm:1.0.81"
+"js-slang@npm:^1.0.82":
+  version: 1.0.82
+  resolution: "js-slang@npm:1.0.82"
   dependencies:
     "@babel/parser": "npm:^7.19.4"
     "@commander-js/extra-typings": "npm:^12.0.1"
@@ -11865,7 +11865,7 @@ __metadata:
     source-map: "npm:0.7.3"
   bin:
     js-slang: dist/repl/index.js
-  checksum: 10c0/e02012740e3f033cd068e3f2b660d472457fda538b77073f805dc325854aeeb4db67cf2ca162fb89ca7e2b27707753aa738b64bcd359f4faf72f9265a4e619a0
+  checksum: 10c0/a89c20b58dc5fa2ded7ac8457152b59a4eb2994c4afd7c0fea07743974dd216792c47ff7b59085241772546678297b5c8ba3174b4f7fd193c8e9ef175a027d96
   languageName: node
   linkType: hard
 
