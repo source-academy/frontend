@@ -41,6 +41,7 @@ import { useDispatch } from 'react-redux';
 
 import { beginAlertSideContent } from '../SideContentActions';
 import { SideContentLocation, SideContentType } from '../SideContentTypes';
+import { StepperLogicalExpression } from 'js-slang/dist/tracer/nodes/Expression/LogicalExpression';
 
 const SubstDefaultText = () => {
   return (
@@ -264,6 +265,15 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
       );
     },
     BinaryExpression(node: StepperBinaryExpression) {
+      return (
+        <span>
+          {renderNode(node.left, { parentNode: node, isRight: false, styleWrapper: styleWrapper })}
+          <span className="stepper-operator">{` ${node.operator} `}</span>
+          {renderNode(node.right, { parentNode: node, isRight: true, styleWrapper: styleWrapper })}
+        </span>
+      );
+    },
+    LogicalExpression(node: StepperLogicalExpression) {
       return (
         <span>
           {renderNode(node.left, { parentNode: node, isRight: false, styleWrapper: styleWrapper })}
