@@ -37,6 +37,8 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
     type === 'score' ? store.leaderboard.contestScore : store.leaderboard.contestPopularVote
   );
 
+  console.log(rankedLeaderboard);
+
   useEffect(() => {
     if (type === 'score') {
       dispatch(LeaderboardActions.getAllContestScores(contestID));

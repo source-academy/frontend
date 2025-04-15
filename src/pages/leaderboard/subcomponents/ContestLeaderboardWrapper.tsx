@@ -20,7 +20,6 @@ const ContestLeaderboardWrapper: React.FC = () => {
     dispatch(LeaderboardActions.getContests());
   }, [dispatch]);
   
-  console.log("CONTEST ASSESSMENTS" + contestAssessments);
   const defaultContest =
     contestAssessments?.find(
       assessment => assessment.published
@@ -92,13 +91,10 @@ const ContestLeaderboardWrapperHelper: React.FC<{
     }
   }
 
-  console.log("HERE" + id);
-  console.log("CONTEST DETAILS1" + contestDetails);
   if (!contestDetails.length) {
     // Wait for contestDetails to load
     return null;
   }
-  console.log("CONTEST DETAILS" + contestDetails);
   const contest = contestDetails.find(contest => contest.contest_id === parseInt(id ?? '', 10));
 
   return contest !== undefined && contest.published ? (

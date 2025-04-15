@@ -47,7 +47,6 @@ const LeaderboardSaga = combineSagaHandlers(LeaderboardActions, {
     const tokens: Tokens = yield selectTokens();
 
     const contests = yield call(getAllContests, tokens);
-    console.log(contests, 'rows');
 
     if (contests) {
       yield put(actions.saveContests(contests));
