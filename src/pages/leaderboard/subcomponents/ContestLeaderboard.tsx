@@ -70,8 +70,8 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
   // const top3 = rankedLeaderboard.slice(0, 3);
   // const rest = rankedLeaderboard.slice(3, Number(visibleEntries));
   const top3 = rankedLeaderboard.filter(row => row.rank <= 3);
-  const rest = rankedLeaderboard.slice(top3.length, Number(visibleEntries));
-
+  const rest = rankedLeaderboard.filter(row => row.rank <= Number(visibleEntries)).slice(top3.length);
+  
   // Set sample profile pictures (Seeded random)
     function convertToRandomNumber(id: string): number {
       const str = id.slice(1);
