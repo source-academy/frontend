@@ -111,7 +111,10 @@ export function* evalEditorSaga(
     }
 
     if (context.variant === Variant.TYPED) {
-      files[entrypointFilePath] = prepend + files[entrypointFilePath];
+      // Prepend was multi-line, now we need to split them by \n and join them
+      // This is to avoid extra lines in the editor which affects the error message location
+      const prependSingleLine = prepend.split('\n').join('');
+      files[entrypointFilePath] = prependSingleLine + files[entrypointFilePath];
     }
     yield call(
       evalCodeSaga,
