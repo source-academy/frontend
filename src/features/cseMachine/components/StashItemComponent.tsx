@@ -11,13 +11,13 @@ import { Layout } from '../CseMachineLayout';
 import { IHoverable } from '../CseMachineTypes';
 import {
   defaultDangerColor,
-  defaultStrokeColor,
-  defaultTextColor,
   getTextWidth,
   isDataArray,
   isNonGlobalFn,
   isSourceObject,
   isStashItemInDanger,
+  reachedStrokeColor,
+  reachedTextColor,
   setHoveredCursor,
   setHoveredStyle,
   setUnhoveredCursor,
@@ -79,7 +79,7 @@ export class StashItemComponent extends Visible implements IHoverable {
     this._x = ControlStashConfig.StashPosX + stackWidth;
     this._y = ControlStashConfig.StashPosY;
     if (arrowTo) {
-      arrowTo.markAsReferenced();
+      arrowTo.setReachable(true);
       this.arrow = new ArrowFromStashItemComponent(this).to(arrowTo) as ArrowFromStashItemComponent;
     }
   }
@@ -112,7 +112,7 @@ export class StashItemComponent extends Visible implements IHoverable {
 
   draw(): React.ReactNode {
     const textProps = {
-      fill: defaultTextColor(),
+      fill: reachedTextColor(),
       padding: ControlStashConfig.StashItemTextPadding,
       fontFamily: ControlStashConfig.FontFamily,
       fontSize: ControlStashConfig.FontSize,
@@ -120,7 +120,7 @@ export class StashItemComponent extends Visible implements IHoverable {
       fontVariant: ControlStashConfig.FontVariant
     };
     const tagProps = {
-      stroke: isStashItemInDanger(this.index) ? defaultDangerColor() : defaultStrokeColor(),
+      stroke: isStashItemInDanger(this.index) ? defaultDangerColor() : reachedStrokeColor(),
       cornerRadius: ControlStashConfig.StashItemCornerRadius
     };
     return (

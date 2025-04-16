@@ -12,8 +12,8 @@ import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import {
   defaultActiveColor,
   defaultDangerColor,
-  defaultStrokeColor,
-  getTextWidth
+  getTextWidth,
+  reachedStrokeColor
 } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
@@ -120,18 +120,18 @@ export class ArrayAssignmentAnimation extends Animatable {
     await Promise.all([
       this.arrayArrowAnimation.animateTo({ opacity: 0 }, { duration: 0.5 }),
       this.valueArrowAnimation?.animateTo({ opacity: 0 }, { duration: 0.5 }),
-      this.asgnItemAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
+      this.asgnItemAnimation.animateRectTo({ stroke: reachedStrokeColor() }),
       this.asgnItemAnimation.animateTo({
         x: this.resultItem.x() - (this.resultItemIsFirst ? minAsgnItemWidth : 0),
         y: this.resultItem.y() + (this.resultItemIsFirst ? 0 : this.resultItem.height()),
         width: minAsgnItemWidth
       }),
-      this.arrayItemAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
+      this.arrayItemAnimation.animateRectTo({ stroke: reachedStrokeColor() }),
       this.arrayItemAnimation.animateTo({ opacity: 0 }, fadeConfig),
-      this.indexItemAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
+      this.indexItemAnimation.animateRectTo({ stroke: reachedStrokeColor() }),
       this.indexItemAnimation.animateTo({ x: this.resultItem.x() }),
       this.indexItemAnimation.animateTo({ opacity: 0 }, fadeConfig),
-      this.resultAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
+      this.resultAnimation.animateRectTo({ stroke: reachedStrokeColor() }),
       this.resultAnimation.animateTo({ x: this.resultItem.x() }),
       this.resultArrowAnimation?.animateTo({ opacity: 1 }, { duration: 0.5, delay: 0.75 })
     ]);
