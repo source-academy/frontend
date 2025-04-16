@@ -6,6 +6,7 @@ import { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
+import default_avatar from 'src/assets/default-avatar.jpg'
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 import {
@@ -17,8 +18,6 @@ import leaderboard_background from '../../../assets/leaderboard_background.jpg';
 import LeaderboardDropdown from './LeaderboardDropdown';
 import LeaderboardExportButton from './LeaderboardExportButton';
 import LeaderboardPodium from './LeaderboardPodium';
-
-import default_avatar from 'src/assets/default-avatar.jpg'
 
 const OverallLeaderboard: React.FC = () => {
   // Retrieve XP Data from store

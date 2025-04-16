@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Navigate, Route, Routes, useLocation, useParams } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
+import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 import { LeaderboardContestDetails } from 'src/features/leaderboard/LeaderboardTypes';
 
 import NotFound from '../../notFound/NotFound';
 import ContestLeaderboard from './ContestLeaderboard';
-import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
-import { useDispatch } from 'react-redux';
 
 const ContestLeaderboardWrapper: React.FC = () => {
   const enableContestLeaderboard = useTypedSelector(

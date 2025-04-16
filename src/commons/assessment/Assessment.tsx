@@ -262,6 +262,8 @@ const Assessment: React.FC = () => {
     [assessmentConfigToLoad.type, assessmentOverviewsUnfiltered]
   );
 
+  const fromLeaderboard: boolean = useTypedSelector(store => store.leaderboard.code) ? true : false;
+
   // If assessmentId or questionId is defined but not numeric, redirect back to the Assessment overviews page
   if (
     (params.assessmentId && !params.assessmentId?.match(numberRegExp)) ||
@@ -272,7 +274,6 @@ const Assessment: React.FC = () => {
 
   const assessmentId: number | null = convertParamToInt(params.assessmentId);
   const questionId: number = convertParamToInt(params.questionId) || Constants.defaultQuestionId;
-  const fromLeaderboard: boolean = useTypedSelector(store => store.leaderboard.code) ? true : false;
 
   // If there is an assessment to render, create a workspace. The assessment
   // overviews must still be loaded for this, to send the due date.
