@@ -178,6 +178,7 @@ const SideContentSessionManagement: React.FC<Props> = ({
             <thead>
               <tr>
                 <th>Name</th>
+                <th>Role</th>
               </tr>
             </thead>
             <tbody>
@@ -190,6 +191,11 @@ const SideContentSessionManagement: React.FC<Props> = ({
                         className={classes['user-icon']}
                       />
                       <div>{user.name}</div>
+                    </td>
+                    <td className={classNames(Classes.INTERACTIVE, classes['right-cell'])}>
+                      {user.role === CollabEditingAccess.OWNER
+                        ? 'Admin'
+                        : user.role.charAt(0).toUpperCase() + user.role.slice(1)}
                     </td>
                   </tr>
                 );
