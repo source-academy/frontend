@@ -26,6 +26,12 @@ export const LeaderboardReducer: Reducer<LeaderboardState, SourceActionType> = c
       })
       .addCase(LeaderboardActions.saveContests, (state, action) => {
         state.contests = action.payload;
-      });
+      })
+      .addCase(LeaderboardActions.setWorkspaceInitialRun, (state, action) => {
+        state.initialRun[action.payload] = true;
+      })
+      .addCase(LeaderboardActions.resetWorkspaceInitialRun, (state, action) => {
+        state.initialRun[action.payload] = false;
+      })
   }
 );

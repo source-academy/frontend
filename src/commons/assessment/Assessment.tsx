@@ -40,7 +40,7 @@ import NotificationBadge from '../notificationBadge/NotificationBadge';
 import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
 import Constants from '../utils/Constants';
 import { beforeNow, getPrettyDate, getPrettyDateAfterHours } from '../utils/DateHelper';
-import { useResponsive, useSession } from '../utils/Hooks';
+import { useResponsive, useSession, useTypedSelector } from '../utils/Hooks';
 import { assessmentTypeLink, convertParamToInt } from '../utils/ParamParseHelper';
 import AssessmentNotFound from './AssessmentNotFound';
 import {
@@ -272,6 +272,7 @@ const Assessment: React.FC = () => {
 
   const assessmentId: number | null = convertParamToInt(params.assessmentId);
   const questionId: number = convertParamToInt(params.questionId) || Constants.defaultQuestionId;
+  const fromLeaderboard: boolean = useTypedSelector(store => store.leaderboard.code) ? true : false;
 
   // If there is an assessment to render, create a workspace. The assessment
   // overviews must still be loaded for this, to send the due date.
@@ -290,7 +291,8 @@ const Assessment: React.FC = () => {
       canSave:
         role !== Role.Student ||
         (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt)),
-      assessmentConfiguration: assessmentConfigToLoad
+      assessmentConfiguration: assessmentConfigToLoad,
+      fromContestLeaderboard: fromLeaderboard
     };
     return <AssessmentWorkspace {...assessmentWorkspaceProps} />;
   }

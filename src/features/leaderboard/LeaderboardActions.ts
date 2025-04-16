@@ -14,6 +14,8 @@ const LeaderboardActions = createActions('leaderboard', {
   clearCode: 0,
   getContests: 0,
   saveContests: (contests: LeaderboardContestDetails[]) => contests,
+  setWorkspaceInitialRun: (contestID: number) => contestID,
+  resetWorkspaceInitialRun: (contestID: number) => contestID
 });
 
 export default LeaderboardActions;
