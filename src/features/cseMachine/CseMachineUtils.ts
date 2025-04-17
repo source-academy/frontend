@@ -817,6 +817,15 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
+      case InstrType.CONTINUE:
+        return new ControlItemComponent(
+          'continue',
+          'Control items until continue marker will be skipped',
+          stackHeight,
+          highlightOnHover,
+          unhighlightOnHover,
+          topItem
+        );
       case InstrType.CONTINUE_MARKER:
         return new ControlItemComponent(
           'cont mark',
@@ -848,6 +857,15 @@ export function getControlItemComponent(
         return new ControlItemComponent(
           'mark',
           'Mark return address',
+          stackHeight,
+          highlightOnHover,
+          unhighlightOnHover,
+          topItem
+        );
+      case InstrType.SPREAD:
+        return new ControlItemComponent(
+          'spread',
+          'Unpack array to its elements',
           stackHeight,
           highlightOnHover,
           unhighlightOnHover,

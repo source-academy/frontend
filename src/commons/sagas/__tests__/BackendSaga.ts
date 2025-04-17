@@ -177,6 +177,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     isManuallyGraded: true,
     isGradingAutoPublished: false,
     displayInDashboard: true,
+    isMinigame: false,
     hoursBeforeEarlyXpDecay: 48,
     hasTokenCounter: false,
     hasVotingFeatures: false,
@@ -188,6 +189,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     isManuallyGraded: true,
     isGradingAutoPublished: false,
     displayInDashboard: true,
+    isMinigame: false,
     hoursBeforeEarlyXpDecay: 48,
     hasTokenCounter: false,
     hasVotingFeatures: false,
@@ -199,6 +201,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     isManuallyGraded: false,
     isGradingAutoPublished: true,
     displayInDashboard: false,
+    isMinigame: false,
     hoursBeforeEarlyXpDecay: 48,
     hasTokenCounter: false,
     hasVotingFeatures: false,
@@ -210,6 +213,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     isManuallyGraded: false,
     isGradingAutoPublished: false,
     displayInDashboard: false,
+    isMinigame: false,
     hoursBeforeEarlyXpDecay: 48,
     hasTokenCounter: false,
     hasVotingFeatures: true,
@@ -221,6 +225,7 @@ const mockAssessmentConfigurations: AssessmentConfiguration[] = [
     isManuallyGraded: true,
     isGradingAutoPublished: false,
     displayInDashboard: false,
+    isMinigame: false,
     hoursBeforeEarlyXpDecay: 48,
     hasTokenCounter: false,
     hasVotingFeatures: false,
@@ -832,8 +837,8 @@ describe('Test CHANGE_SUBLANGUAGE action', () => {
   test('when chapter is changed', () => {
     const sublang: SALanguage = {
       chapter: Chapter.SOURCE_4,
-      variant: Variant.GPU,
-      displayName: 'Source \xa74 GPU',
+      variant: Variant.CONCURRENT,
+      displayName: 'Source \xa74 Concurrent',
       mainLanguage: SupportedLanguage.JAVASCRIPT,
       supports: {}
     };
@@ -854,7 +859,7 @@ describe('Test CHANGE_SUBLANGUAGE action', () => {
         [
           call(putCourseConfig, mockTokens, {
             sourceChapter: Chapter.SOURCE_4,
-            sourceVariant: Variant.GPU
+            sourceVariant: Variant.CONCURRENT
           }),
           { ok: true }
         ]
@@ -1042,6 +1047,7 @@ describe('Test CREATE_COURSE action', () => {
       isManuallyGraded: true,
       isGradingAutoPublished: false,
       displayInDashboard: true,
+      isMinigame: false,
       hoursBeforeEarlyXpDecay: 0,
       hasTokenCounter: false,
       hasVotingFeatures: false,

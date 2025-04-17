@@ -140,7 +140,7 @@ const cracoConfig = {
           'filter-obj',
           '@sourceacademy/c-slang',
           'java-parser',
-          'sa-conductor'
+          'conductor'
         ),
         '^.+\\.module\\.(css|sass|scss)$'
       ];

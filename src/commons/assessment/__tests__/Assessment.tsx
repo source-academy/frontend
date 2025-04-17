@@ -17,6 +17,7 @@ const mockAssessmentConfig: AssessmentConfiguration = {
   isManuallyGraded: true,
   isGradingAutoPublished: false,
   displayInDashboard: true,
+  isMinigame: false,
   hasTokenCounter: false,
   hasVotingFeatures: false,
   hoursBeforeEarlyXpDecay: 48,
