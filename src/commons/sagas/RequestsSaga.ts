@@ -1339,10 +1339,14 @@ export const postGenerateComments = async (
   tokens: Tokens,
   submission_id: integer,
   question_id: integer
-): Promise<{comments:string[]} | null> => {
-  const resp = await request(`${courseId()}/admin/generate-comments/${submission_id}/${question_id}`, 'POST', {
-    ...tokens
-  });
+): Promise<{ comments: string[] } | null> => {
+  const resp = await request(
+    `${courseId()}/admin/generate-comments/${submission_id}/${question_id}`,
+    'POST',
+    {
+      ...tokens
+    }
+  );
   if (!resp || !resp.ok) {
     return null;
   }
@@ -1356,13 +1360,17 @@ export const saveFinalComment = async (
   question_id: integer,
   comment: string
 ): Promise<Response | null> => {
-  const resp = await request(`${courseId()}/admin/save-final-comment/${submission_id}/${question_id}`, 'POST', {
-    body: {"comment": comment},
-    ...tokens
-  })
-  
-  return resp
-}
+  const resp = await request(
+    `${courseId()}/admin/save-final-comment/${submission_id}/${question_id}`,
+    'POST',
+    {
+      body: { comment: comment },
+      ...tokens
+    }
+  );
+
+  return resp;
+};
 
 export const saveChosenComments = async (
   tokens: Tokens,
@@ -1370,13 +1378,17 @@ export const saveChosenComments = async (
   question_id: integer,
   comments: string[]
 ): Promise<Response | null> => {
-  const resp = await request(`${courseId()}/admin/save-chosen-comments/${submission_id}/${question_id}`, 'POST', {
-    body: {"comments": comments},
-    ...tokens
-  })
-  
-  return resp
-}
+  const resp = await request(
+    `${courseId()}/admin/save-chosen-comments/${submission_id}/${question_id}`,
+    'POST',
+    {
+      body: { comments: comments },
+      ...tokens
+    }
+  );
+
+  return resp;
+};
 
 /**
  * GET /courses/{courseId}/admin/users

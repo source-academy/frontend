@@ -13,11 +13,15 @@ import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useMemo, useState } from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
 import { useDispatch } from 'react-redux';
+import { useTokens } from 'src/commons/utils/Hooks';
 
 import SessionActions from '../../../../commons/application/actions/SessionActions';
 import ControlButton from '../../../../commons/ControlButton';
 import Markdown from '../../../../commons/Markdown';
 import { Prompt } from '../../../../commons/ReactRouterPrompt';
+import { postGenerateComments } from '../../../../commons/sagas/RequestsSaga';
+import { saveFinalComment } from '../../../../commons/sagas/RequestsSaga';
+import { saveChosenComments } from '../../../../commons/sagas/RequestsSaga';
 import { getPrettyDate } from '../../../../commons/utils/DateHelper';
 import { showSimpleConfirmDialog } from '../../../../commons/utils/DialogHelper';
 import {
@@ -26,11 +30,6 @@ import {
 } from '../../../../commons/utils/notifications/NotificationsHelper';
 import { convertParamToInt } from '../../../../commons/utils/ParamParseHelper';
 import GradingCommentSelector from './GradingCommentSelector';
-
-import { useTokens } from 'src/commons/utils/Hooks';
-import { postGenerateComments } from '../../../../commons/sagas/RequestsSaga';
-import { saveFinalComment } from '../../../../commons/sagas/RequestsSaga';
-import { saveChosenComments } from '../../../../commons/sagas/RequestsSaga';
 
 type GradingSaveFunction = (
   submissionId: number,
@@ -110,38 +109,32 @@ const GradingEditor: React.FC<Props> = props => {
   }, [props.submissionId, props.questionId]);
 
   const getCommentSuggestions = async () => {
-    const resp = await postGenerateComments(
-      tokens, props.submissionId, props.questionId
-    )
-    return resp
-  }
+    const resp = await postGenerateComments(tokens, props.submissionId, props.questionId);
+    return resp;
+  };
 
   const onSelectGeneratedComments = (comment: string) => {
     if (!selectedSuggestions.includes(comment)) {
-      setSelectedSuggestions([comment, ...selectedSuggestions])
+      setSelectedSuggestions([comment, ...selectedSuggestions]);
     }
 
-    setEditorValue(editorValue + comment)
-  }
+    setEditorValue(editorValue + comment);
+  };
 
-  const postSaveFinalComment = async (comment : string) => {
-    const resp = await saveFinalComment(
-      tokens, props.submissionId, props.questionId, comment
-    )
-    return resp
-  }
+  const postSaveFinalComment = async (comment: string) => {
+    const resp = await saveFinalComment(tokens, props.submissionId, props.questionId, comment);
+    return resp;
+  };
 
-  const postSaveChosenComments = async (comments : string[]) => {
-    const resp = await saveChosenComments(
-      tokens, props.submissionId, props.questionId, comments
-    )
+  const postSaveChosenComments = async (comments: string[]) => {
+    const resp = await saveChosenComments(tokens, props.submissionId, props.questionId, comments);
 
-    return resp
-  }
+    return resp;
+  };
 
-  const [suggestions, setSuggestions] = useState<string[]>([])
-  const [selectedSuggestions, setSelectedSuggestions] = useState<string[]>([])
-  const [hasClickedGenerate, setHasClickedGenerate] = useState<boolean>(false)
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [selectedSuggestions, setSelectedSuggestions] = useState<string[]>([]);
+  const [hasClickedGenerate, setHasClickedGenerate] = useState<boolean>(false);
 
   const makeInitialState = () => {
     setXpAdjustmentInput(props.xpAdjustment.toString());
@@ -347,24 +340,26 @@ const GradingEditor: React.FC<Props> = props => {
           </div>
         </div>
       </div>
-      
-      {props.is_llm && 
-      <div>
-        <GradingCommentSelector 
-          onSelect={onSelectGeneratedComments}
-          isLoading={hasClickedGenerate}
-          comments={suggestions}
-        />
-        <Button
-          onClick={async ()=>{
-            setHasClickedGenerate(true)
-            const resp = await getCommentSuggestions();
-            setHasClickedGenerate(false)
-            setSuggestions(resp!.comments);
-          }}>
-          Get comments
-        </Button>
-      </div>}
+
+      {props.is_llm && (
+        <div>
+          <GradingCommentSelector
+            onSelect={onSelectGeneratedComments}
+            isLoading={hasClickedGenerate}
+            comments={suggestions}
+          />
+          <Button
+            onClick={async () => {
+              setHasClickedGenerate(true);
+              const resp = await getCommentSuggestions();
+              setHasClickedGenerate(false);
+              setSuggestions(resp!.comments);
+            }}
+          >
+            Get comments
+          </Button>
+        </div>
+      )}
 
       <div className="react-mde-parent">
         <ReactMde
