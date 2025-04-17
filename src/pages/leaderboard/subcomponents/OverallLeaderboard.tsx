@@ -63,7 +63,7 @@ const OverallLeaderboard: React.FC = () => {
   }
 
   rankedLeaderboard.map((row: LeaderboardRow) => {
-    row.avatar = `/assets/Sample Profile ${convertToRandomNumber(row.username)}.jpg`;
+    row.avatar = `/assets/Sample_Profile_${convertToRandomNumber(row.username)}.jpg`;
   });
 
   // Define column definitions for ag-Grid

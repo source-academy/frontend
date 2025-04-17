@@ -85,7 +85,7 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
   }
 
   rankedLeaderboard.map((row: ContestLeaderboardRow) => {
-    row.avatar = `/assets/Sample Profile ${convertToRandomNumber(row.username)}.jpg`;
+    row.avatar = `/assets/Sample_Profile_${convertToRandomNumber(row.username)}.jpg`;
   });
 
   // const workspaceLocation = 'assessment';
