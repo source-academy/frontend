@@ -1,4 +1,5 @@
 import {
+  Button,
   Divider,
   FormGroup,
   H2,
@@ -10,7 +11,12 @@ import {
   TextArea
 } from '@blueprintjs/core';
 import React from 'react';
-import { useResponsive } from 'src/commons/utils/Hooks';
+import Constants from 'src/commons/utils/Constants';
+import { useLocalStorageState, useResponsive } from 'src/commons/utils/Hooks';
+import {
+  showSuccessMessage,
+  showWarningMessage
+} from 'src/commons/utils/notifications/NotificationsHelper';
 
 import { UpdateCourseConfiguration } from '../../../../commons/application/types/SessionTypes';
 import Markdown from '../../../../commons/Markdown';
@@ -26,6 +32,10 @@ type Props = {
 };
 
 const CourseConfigPanel: React.FC<Props> = props => {
+  const [isPreviewExamMode, setIsPreviewExamMode] = useLocalStorageState(
+    Constants.isPreviewExamModeLocalStorageKey,
+    false
+  );
   const { isMobileBreakpoint } = useResponsive();
   const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
     React.useState<CourseHelpTextEditorTab>(CourseHelpTextEditorTab.WRITE);
@@ -38,7 +48,10 @@ const CourseConfigPanel: React.FC<Props> = props => {
     enableAchievements,
     enableSourcecast,
     enableStories,
-    moduleHelpText
+    enableExamMode,
+    resumeCode,
+    moduleHelpText,
+    isOfficialCourse
   } = props.courseConfiguration;
 
   const writePanel = (
@@ -76,6 +89,27 @@ const CourseConfigPanel: React.FC<Props> = props => {
     [setCourseHelpTextSelectedTab]
   );
 
+  const previewExamModeHandler = () => {
+    if (isPreviewExamMode) {
+      showWarningMessage(
+        <div>
+          <span>Exam mode preview has been disabled.&nbsp;</span>
+          <Button text={'Refresh Now'} onClick={() => window.location.reload()} />
+        </div>,
+        10000
+      );
+    } else {
+      showSuccessMessage(
+        <div>
+          <span>Exam mode preview has been enabled.&nbsp;</span>
+          <Button text={'Refresh Now'} onClick={() => window.location.reload()} />
+        </div>,
+        10000
+      );
+    }
+    setIsPreviewExamMode(i => !i);
+  };
+
   return (
     <div className="course-configuration">
       <H2>{courseName}</H2>
@@ -84,7 +118,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
         <div className="text">
           <FormGroup
             helperText="Please enter the course name that will be used for course selection."
-            inline={true}
+            inline
             label="Course Name"
             labelFor="courseName"
           >
@@ -101,7 +135,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
           </FormGroup>
           <FormGroup
             helperText="Please enter the course short name. This will be displayed on the top left."
-            inline={true}
+            inline
             label="Course Short Name"
             labelFor="courseShortName"
           >
@@ -118,7 +152,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
           </FormGroup>
           <FormGroup
             helperText="Please enter the module help text that will be used in the course help dialog."
-            inline={true}
+            inline
             label="Module Help Text"
             labelFor="moduleHelpText"
           >
@@ -186,6 +220,39 @@ const CourseConfigPanel: React.FC<Props> = props => {
               })
             }
           />
+          {isOfficialCourse && (
+            <Switch
+              checked={enableExamMode}
+              label="Enable Exam Mode"
+              onChange={e =>
+                props.setCourseConfiguration({
+                  ...props.courseConfiguration,
+                  enableExamMode: (e.target as HTMLInputElement).checked
+                })
+              }
+            />
+          )}
+          {isOfficialCourse && (
+            <FormGroup inline label="Course Resume Code" labelFor="courseResumeCode">
+              <InputGroup
+                id="courseResumeCode"
+                value={resumeCode}
+                onChange={e =>
+                  props.setCourseConfiguration({
+                    ...props.courseConfiguration,
+                    resumeCode: (e.target as HTMLInputElement).value.trim()
+                  })
+                }
+              />
+            </FormGroup>
+          )}
+          {isOfficialCourse && (
+            <Button
+              active={isPreviewExamMode}
+              text={'Preview Exam Mode'}
+              onClick={previewExamModeHandler}
+            />
+          )}
         </div>
       </div>
     </div>

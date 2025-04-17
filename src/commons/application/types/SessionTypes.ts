@@ -21,6 +21,7 @@ export type SessionState = {
   readonly userId?: number;
   readonly name?: string;
   readonly courses: UserCourse[];
+  readonly isPaused?: boolean;
 
   // Course Registration
   readonly courseRegId?: number;
@@ -39,10 +40,13 @@ export type SessionState = {
   readonly enableAchievements?: boolean;
   readonly enableSourcecast?: boolean;
   readonly enableStories?: boolean;
+  readonly enableExamMode?: boolean;
+  readonly resumeCode?: string;
   readonly sourceChapter?: Chapter;
   readonly sourceVariant?: Variant;
   readonly moduleHelpText?: string;
   readonly assetsPrefix?: string;
+  readonly isOfficialCourse?: boolean;
 
   readonly assessmentConfigurations?: AssessmentConfiguration[];
   readonly userCourseRegistrations?: AdminPanelCourseRegistration[];
@@ -84,6 +88,7 @@ export type User = {
   name: string;
   username: string;
   courses: UserCourse[];
+  isPaused: boolean;
 };
 
 export type CourseRegistration = {
@@ -105,10 +110,13 @@ export type CourseConfiguration = {
   enableAchievements: boolean;
   enableSourcecast: boolean;
   enableStories: boolean;
+  enableExamMode: boolean;
+  resumeCode: string;
   sourceChapter: Chapter;
   sourceVariant: Variant;
   moduleHelpText: string;
   assetsPrefix: string;
+  isOfficialCourse: boolean;
 };
 
 export type AdminPanelCourseRegistration = {
