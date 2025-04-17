@@ -269,7 +269,7 @@ const DropdownCreateCourse: React.FC<Props> = props => {
             labelFor="leaderboard-top-display"
           >
             <InputGroup
-              id="topLeaderboardDisplay"
+              id="leaderboard-top-display"
               value={String(courseConfig.topLeaderboardDisplay)}
               onChange={e =>
                 setCourseConfig({
@@ -287,7 +287,7 @@ const DropdownCreateCourse: React.FC<Props> = props => {
             labelFor="contest-leaderboard-top-display"
           >
             <InputGroup
-              id="topContestLeaderboardDisplay"
+              id="contest-leaderboard-top-display"
               value={String(courseConfig.topContestLeaderboardDisplay)}
               onChange={e =>
                 setCourseConfig({
