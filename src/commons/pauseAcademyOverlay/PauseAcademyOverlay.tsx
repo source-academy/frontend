@@ -16,12 +16,7 @@ export const PauseAcademyOverlay: React.FC<Props> = props => {
       <p className={classes['title-label']}>Source Academy Paused</p>
       {props.reason && <p className={classes['reason-label']}>Reason: {props.reason}</p>}
       <p className={classes['info-label']}>Please inform any of the invigilators</p>
-      <FormGroup
-        // helperText="Please enter the course resume code. Students who attempt to use the DevTool will be asked this code to continue their session."
-        inline={true}
-        label="Course Resume Code"
-        labelFor="courseResumeCode"
-      >
+      <FormGroup inline label="Course Resume Code" labelFor="courseResumeCode">
         <InputGroup
           id="courseResumeCode"
           defaultValue=""

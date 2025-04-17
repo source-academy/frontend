@@ -118,7 +118,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
         <div className="text">
           <FormGroup
             helperText="Please enter the course name that will be used for course selection."
-            inline={true}
+            inline
             label="Course Name"
             labelFor="courseName"
           >
@@ -135,7 +135,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
           </FormGroup>
           <FormGroup
             helperText="Please enter the course short name. This will be displayed on the top left."
-            inline={true}
+            inline
             label="Course Short Name"
             labelFor="courseShortName"
           >
@@ -152,7 +152,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
           </FormGroup>
           <FormGroup
             helperText="Please enter the module help text that will be used in the course help dialog."
-            inline={true}
+            inline
             label="Module Help Text"
             labelFor="moduleHelpText"
           >
@@ -233,12 +233,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
             />
           )}
           {isOfficialCourse && (
-            <FormGroup
-              // helperText="Please enter the course resume code. Students who attempt to use the DevTool will be asked this code to continue their session."
-              inline={true}
-              label="Course Resume Code"
-              labelFor="courseResumeCode"
-            >
+            <FormGroup inline label="Course Resume Code" labelFor="courseResumeCode">
               <InputGroup
                 id="courseResumeCode"
                 value={resumeCode}
