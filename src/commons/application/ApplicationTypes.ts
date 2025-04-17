@@ -2,6 +2,7 @@ import { Chapter, Language, SourceError, Variant } from 'js-slang/dist/types';
 
 import { AchievementState } from '../../features/achievement/AchievementTypes';
 import { DashboardState } from '../../features/dashboard/DashboardTypes';
+import { LeaderboardState } from '../../features/leaderboard/LeaderboardTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
@@ -21,11 +22,12 @@ import {
 import { RouterState } from './types/CommonsTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
 import { SessionState } from './types/SessionTypes';
-import { VscodeState as VscodeState } from './types/VscodeTypes';
+import { VscodeState } from './types/VscodeTypes';
 
 export type OverallState = {
   readonly router: RouterState;
   readonly achievement: AchievementState;
+  readonly leaderboard: LeaderboardState;
   readonly playground: PlaygroundState;
   readonly session: SessionState;
   readonly stories: StoriesState;
@@ -347,6 +349,15 @@ export const defaultAchievement: AchievementState = {
   assessmentOverviews: []
 };
 
+export const defaultLeaderboard: LeaderboardState = {
+  userXp: [],
+  contestScore: [],
+  contestPopularVote: [],
+  code: '',
+  contests: [],
+  initialRun: {}
+};
+
 const getDefaultLanguageConfig = (): SALanguage => {
   const languageConfig = ALL_LANGUAGES.find(
     sublang =>
@@ -606,6 +617,7 @@ export const defaultVscode: VscodeState = {
 export const defaultState: OverallState = {
   router: defaultRouter,
   achievement: defaultAchievement,
+  leaderboard: defaultLeaderboard,
   dashboard: defaultDashboard,
   playground: defaultPlayground,
   session: defaultSession,
