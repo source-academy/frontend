@@ -95,6 +95,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const [isSaving, setIsSaving] = useState(false);
   const [showResetTemplateOverlay, setShowResetTemplateOverlay] = useState(false);
   const [sessionId, setSessionId] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const { isMobileBreakpoint } = useResponsive();
 
   const assessment = useTypedSelector(state => state.session.assessments[props.assessmentId]);
@@ -611,6 +612,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       setSelectedTab(SideContentType.questionOverview);
     };
     const onClickReturn = () => navigate(listingPath);
+    const onClickSubmit = () => {
+      dispatch(SessionActions.submitAssessment(assessment.id));
+      setIsSubmitted(true);
+    };
 
     const onClickSave = () => {
       if (isSaving) return;
@@ -675,8 +680,14 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             ? onClickProgress(onClickReturn, question, editorTestcases, isBlocked)
             : onClickReturn
         }
+        onClickSubmit={
+          question.blocking
+            ? onClickProgress(onClickSubmit, question, editorTestcases, isBlocked)
+            : onClickSubmit
+        }
         questionProgress={questionProgress}
         key="next_question"
+        submitOnFinish={assessment.isMinigame}
       />
     );
 
@@ -845,6 +856,18 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     </Dialog>
   );
 
+  const submissionOverlay = (
+    <Dialog className="assessment-briefing" isOpen={isSubmitted}>
+      <Card>
+        <Markdown
+          content={`## ${assessment.type.substring(0, assessment.type.length - 1)} complete!
+You've successfully submitted this ${assessment.type.substring(0, assessment.type.length - 1)}!
+It is safe to close this window.`}
+        />
+      </Card>
+    </Dialog>
+  );
+
   const closeOverlay = () => setShowResetTemplateOverlay(false);
   const resetTemplateOverlay = (
     <Dialog
@@ -953,6 +976,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   };
   return (
     <div className={classNames('WorkspaceParent', Classes.DARK)}>
+      {submissionOverlay}
       {overlay}
       {resetTemplateOverlay}
       {!isMobileBreakpoint ? (
