@@ -24,6 +24,7 @@ import { StepperConditionalExpression } from 'js-slang/dist/tracer/nodes/Express
 import { StepperFunctionApplication } from 'js-slang/dist/tracer/nodes/Expression/FunctionApplication';
 import { StepperIdentifier } from 'js-slang/dist/tracer/nodes/Expression/Identifier';
 import { StepperLiteral } from 'js-slang/dist/tracer/nodes/Expression/Literal';
+import { StepperLogicalExpression } from 'js-slang/dist/tracer/nodes/Expression/LogicalExpression';
 import { StepperUnaryExpression } from 'js-slang/dist/tracer/nodes/Expression/UnaryExpression';
 import { StepperProgram } from 'js-slang/dist/tracer/nodes/Program';
 import { StepperBlockStatement } from 'js-slang/dist/tracer/nodes/Statement/BlockStatement';
@@ -41,7 +42,6 @@ import { useDispatch } from 'react-redux';
 
 import { beginAlertSideContent } from '../SideContentActions';
 import { SideContentLocation, SideContentType } from '../SideContentTypes';
-import { StepperLogicalExpression } from 'js-slang/dist/tracer/nodes/Expression/LogicalExpression';
 
 const SubstDefaultText = () => {
   return (
