@@ -34,7 +34,7 @@ const Application: React.FC = () => {
   );
 
   // Used for dev tools detection
-  const [isPreviewExamMode, _] = useLocalStorageState(
+  const [isPreviewExamMode] = useLocalStorageState(
     Constants.isPreviewExamModeLocalStorageKey,
     false
   );

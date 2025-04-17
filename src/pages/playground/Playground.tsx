@@ -719,7 +719,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   );
 
   // Exam mode variables
-  const [isPreviewExamMode, _] = useLocalStorageState(
+  const [isPreviewExamMode] = useLocalStorageState(
     Constants.isPreviewExamModeLocalStorageKey,
     false
   );

@@ -18,7 +18,7 @@ type Props = {
 const DropdownCourses: React.FC<Props> = ({ isOpen, onClose, courses, courseId }) => {
   const navigate = useNavigate();
   const { enableExamMode, role } = useSession();
-  const [isPreviewExamMode, _] = useLocalStorageState(
+  const [isPreviewExamMode] = useLocalStorageState(
     Constants.isPreviewExamModeLocalStorageKey,
     false
   );

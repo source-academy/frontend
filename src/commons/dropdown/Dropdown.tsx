@@ -23,7 +23,7 @@ const Dropdown: React.FC = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMyCoursesOpen, setIsMyCoursesOpen] = useState(false);
   const [isCreateCourseOpen, setIsCreateCourseOpen] = useState(false);
-  const [isPreviewExamMode, _] = useLocalStorageState(
+  const [isPreviewExamMode] = useLocalStorageState(
     Constants.isPreviewExamModeLocalStorageKey,
     false
   );
