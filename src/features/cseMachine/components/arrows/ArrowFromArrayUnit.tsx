@@ -2,6 +2,7 @@ import { Config } from '../../CseMachineConfig';
 import { StepsArray } from '../../CseMachineTypes';
 import { ArrayUnit } from '../ArrayUnit';
 import { ArrayValue } from '../values/ArrayValue';
+import { ContValue } from '../values/ContValue';
 import { FnValue } from '../values/FnValue';
 import { GlobalFnValue } from '../values/GlobalFnValue';
 import { Value } from '../values/Value';
@@ -23,7 +24,7 @@ export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
       (x, y) => [x + Config.DataUnitWidth / 2, y + Config.DataUnitHeight / 2]
     ];
 
-    if (to instanceof FnValue || to instanceof GlobalFnValue) {
+    if (to instanceof FnValue || to instanceof GlobalFnValue || to instanceof ContValue) {
       steps.push(() => [from.x() < to.x() ? to.x() : to.centerX, to.y()]);
     } else if (to instanceof ArrayValue) {
       if (from.y() === to.y()) {

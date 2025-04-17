@@ -103,7 +103,10 @@ class GameModeExplore implements IGameUI {
         if (!activatable.actionIds || !activatable.actionIds.length) {
           return;
         }
-        activatable.clickArea.on('pointerout', () => this.explorePointerOut());
+
+        activatable.clickArea.on('pointerout', () =>
+          this.explorePointerOut(activatable.interactionId)
+        );
         activatable.clickArea.on('pointerover', () =>
           this.explorePointerOver(activatable.interactionId)
         );
@@ -138,6 +141,8 @@ class GameModeExplore implements IGameUI {
    */
   private explorePointerOver(id: ItemId) {
     const hasTriggered = GameGlobalAPI.getInstance().hasTriggeredInteraction(id);
+    GameGlobalAPI.getInstance().objectHoverGlow(id, true);
+
     if (hasTriggered) {
       GameGlobalAPI.getInstance().setDefaultCursor(ExploreModeConstants.checked);
     } else {
@@ -149,8 +154,9 @@ class GameModeExplore implements IGameUI {
    * Function to be executed when user off hover upon interactable object/bbox.
    * It sets the cursor back to 'Explore' mode cursor.
    */
-  private explorePointerOut() {
+  private explorePointerOut(id: ItemId) {
     GameGlobalAPI.getInstance().setDefaultCursor(ExploreModeConstants.normal);
+    GameGlobalAPI.getInstance().objectHoverGlow(id, false);
   }
 
   /**
@@ -163,6 +169,7 @@ class GameModeExplore implements IGameUI {
    */
   private explorePointerUp(id: string) {
     GameGlobalAPI.getInstance().setDefaultCursor(Constants.defaultCursor);
+    GameGlobalAPI.getInstance().objectHoverGlow(id, false);
     GameGlobalAPI.getInstance().triggerInteraction(id);
     GameGlobalAPI.getInstance().setDefaultCursor(ExploreModeConstants.normal);
   }

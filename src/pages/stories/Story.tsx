@@ -1,7 +1,6 @@
 import 'js-slang/dist/editors/ace/theme/source';
 
-import { Classes } from '@blueprintjs/core';
-import { TextInput } from '@tremor/react';
+import { Classes, InputGroup } from '@blueprintjs/core';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import AceEditor, { IEditorProps } from 'react-ace';
@@ -57,8 +56,8 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
       isViewOnly ? (
         <>{title}</>
       ) : (
-        <TextInput
-          maxWidth="max-w-xl"
+        <InputGroup
+          className="grading-search-input"
           placeholder="Enter story title"
           value={title}
           onChange={e => {
