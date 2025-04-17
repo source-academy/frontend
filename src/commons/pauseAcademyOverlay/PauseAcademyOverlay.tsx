@@ -3,12 +3,12 @@ import { useState } from 'react';
 
 import classes from '../../styles/PauseAcademyOverlay.module.scss';
 
-type PauseAcademyOverlayProps = {
+type Props = {
   reason?: string;
   onSubmit: (resumeCode: string) => void;
 };
 
-export const PauseAcademyOverlay: React.FC<PauseAcademyOverlayProps> = props => {
+export const PauseAcademyOverlay: React.FC<Props> = props => {
   const [resumeCode, setResumeCode] = useState('');
 
   return (
