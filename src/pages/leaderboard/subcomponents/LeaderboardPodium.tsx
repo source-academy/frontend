@@ -1,15 +1,14 @@
 import 'src/styles/Leaderboard.scss';
 
 import React from 'react';
-import { ContestLeaderboardRow,LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
+import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
 
-type Props = 
-  | {type: "overall", data: LeaderboardRow[], outputType: undefined}
-  | {type: "contest", data: ContestLeaderboardRow[], outputType: "image"}
-  | {type: "contest", data: ContestLeaderboardRow[], outputType: "audio"};
+type Props =
+  | { type: 'overall'; data: LeaderboardRow[]; outputType: undefined }
+  | { type: 'contest'; data: ContestLeaderboardRow[]; outputType: 'image' }
+  | { type: 'contest'; data: ContestLeaderboardRow[]; outputType: 'audio' };
 
 const LeaderboardPodium: React.FC<Props> = ({ type, data, outputType }) => {
-
   // TODO: Retrieval of rune image/audio files from backend to be displayed on the podium
 
   return (
@@ -25,7 +24,12 @@ const LeaderboardPodium: React.FC<Props> = ({ type, data, outputType }) => {
             <p className="player-name">{player.name}</p>
             <div className="player-bar">
               <p className="player-rank">{player.rank}</p>
-              <p className="player-xp">{type === "overall" ? (player as LeaderboardRow).xp : (player as ContestLeaderboardRow).score.toFixed(2)}{type === "overall" ? ' XP' : ''}</p>
+              <p className="player-xp">
+                {type === 'overall'
+                  ? (player as LeaderboardRow).xp
+                  : (player as ContestLeaderboardRow).score.toFixed(2)}
+                {type === 'overall' ? ' XP' : ''}
+              </p>
             </div>
           </div>
         ))}

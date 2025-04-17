@@ -2,7 +2,7 @@ import 'src/styles/Leaderboard.scss';
 
 import React from 'react';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes'; 
+import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
 
 import { Role } from '../../../commons/application/ApplicationTypes';
 
@@ -13,13 +13,21 @@ type Props =
 const LeaderboardExportButton: React.FC<Props> = ({ type, contest, data }) => {
   const role = useTypedSelector(store => store.session.role);
   const exportCSV = () => {
-    const headers = ['Rank', 'Name', 'Username', (type === "overall" ? 'XP' : 'Score'), (type === "overall" ? 'Achievements' : 'Submission Id')];
+    const headers = [
+      'Rank',
+      'Name',
+      'Username',
+      type === 'overall' ? 'XP' : 'Score',
+      type === 'overall' ? 'Achievements' : 'Submission Id'
+    ];
     const rows = data?.map(player => [
-        player.rank,
-        player.name,
-        player.username,
-        type === "overall" ? (player as LeaderboardRow).xp : (player as ContestLeaderboardRow).score,
-        type === "overall" ? (player as LeaderboardRow).achievements : (player as ContestLeaderboardRow).submissionId
+      player.rank,
+      player.name,
+      player.username,
+      type === 'overall' ? (player as LeaderboardRow).xp : (player as ContestLeaderboardRow).score,
+      type === 'overall'
+        ? (player as LeaderboardRow).achievements
+        : (player as ContestLeaderboardRow).submissionId
     ]);
 
     // Combine headers and rows
@@ -28,7 +36,12 @@ const LeaderboardExportButton: React.FC<Props> = ({ type, contest, data }) => {
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = type === "overall" ? 'Overall Leaderboard.csv' : type === "popularvote" ? `${contest} Popular Vote Leaderboard.csv` : `${contest} Score Leaderboard.csv`; // Filename for download
+    link.download =
+      type === 'overall'
+        ? 'Overall Leaderboard.csv'
+        : type === 'popularvote'
+          ? `${contest} Popular Vote Leaderboard.csv`
+          : `${contest} Score Leaderboard.csv`; // Filename for download
     link.click();
   };
 

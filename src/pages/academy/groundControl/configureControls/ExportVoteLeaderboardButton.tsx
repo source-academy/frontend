@@ -14,7 +14,11 @@ const ExportVoteLeaderboardButton: React.FC<Props> = ({ assessmentId }) => {
 
   // onClick handler for fetching popular vote leaderboard, putting it into a grid and exporting data
   const exportPopularVoteLeaderboardToCsv = async () => {
-    const popularVoteLeaderboard = await getPopularVoteLeaderboard(assessmentId, visibleEntries, tokens);
+    const popularVoteLeaderboard = await getPopularVoteLeaderboard(
+      assessmentId,
+      visibleEntries,
+      tokens
+    );
     const gridContainer = document.createElement('div');
     const gridOptions: GridOptions = {
       rowData: popularVoteLeaderboard,

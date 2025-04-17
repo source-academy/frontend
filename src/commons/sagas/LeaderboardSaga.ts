@@ -9,7 +9,8 @@ import {
   getAllContests,
   getAllTotalXp,
   getContestPopularVoteLeaderboard,
-  getContestScoreLeaderboard} from './RequestsSaga';
+  getContestScoreLeaderboard
+} from './RequestsSaga';
 
 const LeaderboardSaga = combineSagaHandlers(LeaderboardActions, {
   getAllUsersXp: function* () {
@@ -51,7 +52,7 @@ const LeaderboardSaga = combineSagaHandlers(LeaderboardActions, {
     if (contests) {
       yield put(actions.saveContests(contests));
     }
-  },
+  }
 });
 
 export default LeaderboardSaga;

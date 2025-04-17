@@ -32,6 +32,6 @@ export const LeaderboardReducer: Reducer<LeaderboardState, SourceActionType> = c
       })
       .addCase(LeaderboardActions.resetWorkspaceInitialRun, (state, action) => {
         state.initialRun[action.payload] = false;
-      })
+      });
   }
 );

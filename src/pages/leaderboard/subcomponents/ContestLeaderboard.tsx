@@ -26,7 +26,6 @@ type Props = {
 };
 
 const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
-
   const courseID = useTypedSelector(store => store.session.courseId);
   const dispatch = useDispatch();
 
@@ -48,7 +47,9 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
   }, [dispatch, contestID, type]);
 
   // Retrieve contests (For dropdown)
-  const contestDetails: LeaderboardContestDetails[] = useTypedSelector(store => store.leaderboard.contests);
+  const contestDetails: LeaderboardContestDetails[] = useTypedSelector(
+    store => store.leaderboard.contests
+  );
   const contestName = contestDetails.find(contest => contest.contest_id === contestID)?.title;
 
   useEffect(() => {
@@ -70,22 +71,24 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
   // const top3 = rankedLeaderboard.slice(0, 3);
   // const rest = rankedLeaderboard.slice(3, Number(visibleEntries));
   const top3 = rankedLeaderboard.filter(row => row.rank <= 3);
-  const rest = rankedLeaderboard.filter(row => row.rank <= Number(visibleEntries)).slice(top3.length);
-  
+  const rest = rankedLeaderboard
+    .filter(row => row.rank <= Number(visibleEntries))
+    .slice(top3.length);
+
   // Set sample profile pictures (Seeded random)
-    function convertToRandomNumber(id: string): number {
-      const str = id.slice(1);
-      let hash = 0;
-      for (let i = 0; i < str.length; i++) {
-        const char = str.charCodeAt(i);
-        hash = (hash << 5) - hash + char;
-      }
-      return (Math.abs(hash) % 7) + 1;
+  function convertToRandomNumber(id: string): number {
+    const str = id.slice(1);
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
     }
-  
-    rankedLeaderboard.map((row: ContestLeaderboardRow) => {
-      row.avatar = `/assets/Sample Profile ${convertToRandomNumber(row.username)}.jpg`;
-    })
+    return (Math.abs(hash) % 7) + 1;
+  }
+
+  rankedLeaderboard.map((row: ContestLeaderboardRow) => {
+    row.avatar = `/assets/Sample Profile ${convertToRandomNumber(row.username)}.jpg`;
+  });
 
   // const workspaceLocation = 'assessment';
   const navigate = useNavigate();
@@ -167,13 +170,21 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
         <LeaderboardDropdown contests={contestDetails} />
 
         {/* Export Button */}
-        <LeaderboardExportButton type={type} contest={contestName} data={rankedLeaderboard}/>
+        <LeaderboardExportButton type={type} contest={contestName} data={rankedLeaderboard} />
       </div>
 
       {/* Leaderboard Table (Top 3) */}
       <div className="ag-theme-alpine">
         <h2>Contest Winners</h2>
-        <AgGridReact rowData={top3} columnDefs={columnDefs} domLayout="autoHeight" rowHeight={60} pagination={top3.length > 10} paginationPageSize={10} paginationPageSizeSelector={[10]}/>
+        <AgGridReact
+          rowData={top3}
+          columnDefs={columnDefs}
+          domLayout="autoHeight"
+          rowHeight={60}
+          pagination={top3.length > 10}
+          paginationPageSize={10}
+          paginationPageSizeSelector={[10]}
+        />
       </div>
 
       <div className="table-gap"></div>
@@ -181,7 +192,15 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
       {/* Honourable Mentions */}
       <div className="ag-theme-alpine">
         <h2>Honourable Mentions</h2>
-        <AgGridReact rowData={rest} columnDefs={columnDefs} domLayout="autoHeight" rowHeight={60} pagination={true} paginationPageSize={10} paginationPageSizeSelector={[10, 25, 50]} />
+        <AgGridReact
+          rowData={rest}
+          columnDefs={columnDefs}
+          domLayout="autoHeight"
+          rowHeight={60}
+          pagination={true}
+          paginationPageSize={10}
+          paginationPageSizeSelector={[10, 25, 50]}
+        />
       </div>
     </div>
   );

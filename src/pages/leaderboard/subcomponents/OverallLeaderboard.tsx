@@ -6,7 +6,7 @@ import { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
-import default_avatar from 'src/assets/default-avatar.jpg'
+import default_avatar from 'src/assets/default-avatar.jpg';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 import {
@@ -29,7 +29,9 @@ const OverallLeaderboard: React.FC = () => {
   }, [dispatch]);
 
   // Retrieve contests (For dropdown)
-  const contestDetails: LeaderboardContestDetails[] = useTypedSelector(store => store.leaderboard.contests);
+  const contestDetails: LeaderboardContestDetails[] = useTypedSelector(
+    store => store.leaderboard.contests
+  );
 
   useEffect(() => {
     dispatch(LeaderboardActions.getContests());
@@ -62,7 +64,7 @@ const OverallLeaderboard: React.FC = () => {
 
   rankedLeaderboard.map((row: LeaderboardRow) => {
     row.avatar = `/assets/Sample Profile ${convertToRandomNumber(row.username)}.jpg`;
-  })
+  });
 
   // Define column definitions for ag-Grid
   const columnDefs: ColDef<LeaderboardRow>[] = useMemo(
@@ -72,7 +74,7 @@ const OverallLeaderboard: React.FC = () => {
         suppressMovable: true,
         headerName: 'Rank',
         width: 84,
-        sortable: true, 
+        sortable: true,
         cellRenderer: (params: any) => {
           const rank = params.value;
           const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
@@ -96,7 +98,13 @@ const OverallLeaderboard: React.FC = () => {
         )
       },
       { field: 'name', suppressMovable: true, headerName: 'Name', width: 520, sortable: true },
-      { field: 'xp', suppressMovable: true, headerName: 'XP', width: 414/*154*/, sortable: true }/*,
+      {
+        field: 'xp',
+        suppressMovable: true,
+        headerName: 'XP',
+        width: 414 /*154*/,
+        sortable: true
+      } /*,
       {
         field: 'achievements',
         suppressMovable: true,
@@ -112,7 +120,7 @@ const OverallLeaderboard: React.FC = () => {
   return (
     <div className="leaderboard-container">
       {/* Top 3 Ranking */}
-      <LeaderboardPodium type="overall" data={rankedLeaderboard} outputType={undefined}/>
+      <LeaderboardPodium type="overall" data={rankedLeaderboard} outputType={undefined} />
 
       <div className="buttons-container">
         {/* Leaderboard Options Dropdown */}

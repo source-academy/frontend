@@ -237,7 +237,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    */
   useEffect(() => {
     checkWorkspaceReset();
-    if (assessment != undefined && question.type == "voting"){
+    if (assessment != undefined && question.type == 'voting') {
       dispatch(LeaderboardActions.setWorkspaceInitialRun(votingId));
     }
   }, [dispatch, assessment]);

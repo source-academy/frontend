@@ -1,6 +1,10 @@
 import { call } from 'redux-saga/effects';
 import { backendParamsToProgressStatus } from 'src/features/grading/GradingUtils';
-import { ContestLeaderboardRow, LeaderboardContestDetails, LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
+import {
+  ContestLeaderboardRow,
+  LeaderboardContestDetails,
+  LeaderboardRow
+} from 'src/features/leaderboard/LeaderboardTypes';
 import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
 import {
@@ -557,7 +561,9 @@ export const getContestPopularVoteLeaderboard = async (
 /**
  * GET /courses/{courseId}/all_contests
  */
-export const getAllContests = async (tokens: Tokens): Promise<LeaderboardContestDetails[] | null> => {
+export const getAllContests = async (
+  tokens: Tokens
+): Promise<LeaderboardContestDetails[] | null> => {
   const resp = await request(`${courseId()}/all_contests`, 'GET', {
     ...tokens
   });

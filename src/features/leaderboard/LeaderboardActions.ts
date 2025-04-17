@@ -1,6 +1,10 @@
 import { createActions } from 'src/commons/redux/utils';
 
-import { ContestLeaderboardRow, LeaderboardContestDetails, LeaderboardRow } from './LeaderboardTypes';
+import {
+  ContestLeaderboardRow,
+  LeaderboardContestDetails,
+  LeaderboardRow
+} from './LeaderboardTypes';
 
 const LeaderboardActions = createActions('leaderboard', {
   getAllUsersXp: 0,

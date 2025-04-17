@@ -24,7 +24,7 @@ export type LeaderboardState = {
   contestPopularVote: ContestLeaderboardRow[];
   code: string;
   contests: LeaderboardContestDetails[];
-  initialRun: {[id: number]: boolean};
+  initialRun: { [id: number]: boolean };
 };
 
 export type LeaderboardContestDetails = {

@@ -14,16 +14,15 @@ const ContestLeaderboardWrapper: React.FC = () => {
   );
 
   const dispatch = useDispatch();
-  const contestAssessments: LeaderboardContestDetails[] = useTypedSelector(store => store.leaderboard.contests);
+  const contestAssessments: LeaderboardContestDetails[] = useTypedSelector(
+    store => store.leaderboard.contests
+  );
 
   useEffect(() => {
     dispatch(LeaderboardActions.getContests());
   }, [dispatch]);
-  
-  const defaultContest =
-    contestAssessments?.find(
-      assessment => assessment.published
-    ) ?? null;
+
+  const defaultContest = contestAssessments?.find(assessment => assessment.published) ?? null;
 
   const courseId = useTypedSelector(store => store.session.courseId);
   const baseLink = `/courses/${courseId}/leaderboard`;
