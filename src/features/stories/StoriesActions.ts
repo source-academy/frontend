@@ -28,6 +28,7 @@ const StoriesActions = createActions('stories', {
   createStory: (story: StoryParams) => story,
   saveStory: (story: StoryParams, id: number) => ({ story, id }),
   deleteStory: (id: number) => id,
+  updateHeader: (newHeader: string) => newHeader,
 
   // Auth-related actions
   getStoriesUser: () => ({}),

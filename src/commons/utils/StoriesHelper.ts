@@ -156,6 +156,8 @@ type HandlerType = {
   ) => ReturnType<HandlerOption[key]>;
 };
 
+let currentIndex: number;
+let view: boolean;
 const handleCustomComponents: HandlerType = {
   code: (state, node) => {
     const rawLang = node.lang ?? '';
@@ -167,7 +169,9 @@ const handleCustomComponents: HandlerType = {
     // const lang = rawLang.substring(1, rawLang.length - 1);
     const props: SourceBlockProps = {
       content: node.value,
-      commands: node.meta ?? ''
+      commands: node.meta ?? '',
+      index: currentIndex,
+      isViewOnly: view
     };
     // Disable typecheck as "source-block" is not a standard HTML tag
     const element = h('source-block', props) as any;
@@ -175,7 +179,13 @@ const handleCustomComponents: HandlerType = {
   }
 };
 
-export const renderStoryMarkdown = (markdown: string): React.ReactNode => {
+export const renderStoryMarkdown = (
+  markdown: string,
+  index: number,
+  isViewOnly: boolean
+): React.ReactNode => {
+  currentIndex = index;
+  view = isViewOnly;
   const mdast = fromMarkdown(markdown);
   const hast = toHast(mdast, { handlers: handleCustomComponents }) ?? h();
   return (
