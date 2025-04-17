@@ -1,8 +1,8 @@
 import { Chapter, Language, SourceError, Variant } from 'js-slang/dist/types';
-import { LeaderboardState } from 'src/features/leaderboard/LeaderboardTypes';
 
 import { AchievementState } from '../../features/achievement/AchievementTypes';
 import { DashboardState } from '../../features/dashboard/DashboardTypes';
+import { LeaderboardState } from '../../features/leaderboard/LeaderboardTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
@@ -22,7 +22,7 @@ import {
 import { RouterState } from './types/CommonsTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
 import { SessionState } from './types/SessionTypes';
-import { VscodeState as VscodeState } from './types/VscodeTypes';
+import { VscodeState } from './types/VscodeTypes';
 
 export type OverallState = {
   readonly router: RouterState;
