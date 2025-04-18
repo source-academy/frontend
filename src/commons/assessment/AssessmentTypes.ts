@@ -1,4 +1,4 @@
-import { Chapter, SourceError, Variant } from 'js-slang/dist/types';
+import { Chapter, LanguageOptions, SourceError, Variant } from 'js-slang/dist/types';
 
 import { ExternalLibrary, ExternalLibraryName } from '../application/types/ExternalTypes';
 
@@ -175,7 +175,7 @@ export type Library = {
     2?: string; // For mission control
   }>;
   moduleParams?: any;
-  languageOptions?: any;
+  languageOptions?: LanguageOptions;
 };
 
 export type Testcase = {
