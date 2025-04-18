@@ -263,7 +263,9 @@ export function getBlockExtraMethodsString(toRemove: string[]) {
 export function getBlockExtraMethodsStringTypedVariant(toRemove: string[]) {
   return toRemove
     .map(x =>
-      x === 'makeUndefinedErrorFunction' ? '' : `const ${x} : string = makeUndefinedErrorFunction('${x}');`
+      x === 'makeUndefinedErrorFunction'
+        ? ''
+        : `const ${x} : string = makeUndefinedErrorFunction('${x}');`
     )
     .join('\n');
 }

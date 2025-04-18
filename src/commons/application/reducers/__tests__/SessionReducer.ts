@@ -147,6 +147,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       isManuallyGraded: false,
       isGradingAutoPublished: false,
       displayInDashboard: true,
+      isMinigame: false,
       hasTokenCounter: false,
       hasVotingFeatures: false
     },
@@ -161,6 +162,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       isManuallyGraded: false,
       isGradingAutoPublished: false,
       displayInDashboard: true,
+      isMinigame: false,
       hasTokenCounter: false,
       hasVotingFeatures: false
     },
@@ -175,6 +177,7 @@ test('SET_ASSESSMENT_CONFIGURATIONS works correctly', () => {
       isManuallyGraded: false,
       isGradingAutoPublished: false,
       displayInDashboard: true,
+      isMinigame: false,
       hasTokenCounter: false,
       hasVotingFeatures: false
     }

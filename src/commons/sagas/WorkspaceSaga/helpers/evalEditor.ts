@@ -1,4 +1,5 @@
 import { FSModule } from 'browserfs/dist/node/core/FS';
+import { Variant } from 'js-slang/dist/types';
 import { call, put, select, StrictEffect } from 'redux-saga/effects';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 
@@ -14,7 +15,6 @@ import { blockExtraMethods } from './blockExtraMethods';
 import { clearContext } from './clearContext';
 import { evalCodeSaga } from './evalCode';
 import { insertDebuggerStatements } from './insertDebuggerStatements';
-import { Variant } from 'js-slang/dist/types';
 
 export function* evalEditorSaga(
   workspaceLocation: WorkspaceLocation
@@ -102,7 +102,7 @@ export function* evalEditorSaga(
           elevatedContext,
           execTime,
           workspaceLocation,
-          EVAL_SILENT,
+          EVAL_SILENT
         );
       }
 
