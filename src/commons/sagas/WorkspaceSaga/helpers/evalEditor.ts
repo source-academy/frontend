@@ -9,7 +9,11 @@ import type { OverallState } from '../../../application/ApplicationTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../../../fileSystem/utils';
 import { actions } from '../../../utils/ActionsHelper';
 import { makeElevatedContext } from '../../../utils/JsSlangHelper';
-import { type EditorTabState, EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import {
+  type EditorTabState,
+  EVAL_SILENT,
+  type WorkspaceLocation
+} from '../../../workspace/WorkspaceTypes';
 import { blockExtraMethods } from './blockExtraMethods';
 import { clearContext } from './clearContext';
 import { evalCodeSaga } from './evalCode';

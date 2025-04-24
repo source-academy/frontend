@@ -160,7 +160,6 @@ describe('EVAL_EDITOR', () => {
             { '/prepend.js': programPrependValue },
             '/prepend.js',
             {
-              scheduler: 'preemptive',
               originalMaxExecTime: execTime,
               stepLimit: 1000,
               useSubst: false,
@@ -180,7 +179,6 @@ describe('EVAL_EDITOR', () => {
             '/playground/program.js',
             context,
             {
-              scheduler: 'preemptive',
               originalMaxExecTime: execTime,
               stepLimit: 1000,
               useSubst: false,
@@ -248,7 +246,6 @@ describe('EVAL_REPL', () => {
         .put(WorkspaceActions.sendReplInputToOutput(replValue, workspaceLocation))
         // also calls evalCode here
         .call(runFilesInContext, { '/code.js': replValue }, '/code.js', context, {
-          scheduler: 'preemptive',
           originalMaxExecTime: 1000,
           stepLimit: 1000,
           useSubst: false,
@@ -431,7 +428,7 @@ describe('EVAL_TESTCASE', () => {
           args: [
             { '/prepend.js': programPrependValue },
             '/prepend.js',
-            { scheduler: 'preemptive', originalMaxExecTime: execTime }
+            { originalMaxExecTime: execTime }
           ]
         })
         // running the prepend block should return 'boink', but silent run -> not written to REPL
@@ -445,7 +442,7 @@ describe('EVAL_TESTCASE', () => {
             { '/value.js': editorValue },
             '/value.js',
             context,
-            { scheduler: 'preemptive', originalMaxExecTime: execTime }
+            { originalMaxExecTime: execTime }
           ]
         })
         // running the student's program should return 69, which is NOT written to REPL (silent)
@@ -458,7 +455,7 @@ describe('EVAL_TESTCASE', () => {
           args: [
             { '/postpend.js': programPostpendValue },
             '/postpend.js',
-            { scheduler: 'preemptive', originalMaxExecTime: execTime }
+            { originalMaxExecTime: execTime }
           ]
         })
         // running the postpend block should return true, but silent run -> not written to REPL
@@ -838,7 +835,6 @@ describe('evalCode', () => {
           ]
         ])
         .call(runFilesInContext, files, codeFilePath, context, {
-          scheduler: 'preemptive',
           originalMaxExecTime: execTime,
           stepLimit: 1000,
           useSubst: false,
@@ -861,10 +857,12 @@ describe('evalCode', () => {
       )
         .withState(state)
         .provide([
-          [call(runFilesInContext, files, codeFilePath, context, options), { status: 'suspended' }]
+          [
+            call(runFilesInContext, files, codeFilePath, context, options),
+            { status: 'suspended-cse-eval' }
+          ]
         ])
         .call(runFilesInContext, files, codeFilePath, context, {
-          scheduler: 'preemptive',
           originalMaxExecTime: execTime,
           stepLimit: 1000,
           useSubst: false,
@@ -888,7 +886,6 @@ describe('evalCode', () => {
       )
         .withState(state)
         .call(runFilesInContext, files, codeFilePath, context, {
-          scheduler: 'preemptive',
           originalMaxExecTime: execTime,
           stepLimit: 1000,
           useSubst: false,
@@ -922,7 +919,6 @@ describe('evalCode', () => {
       )
         .withState(state)
         .call(runFilesInContext, files, codeFilePath, context, {
-          scheduler: 'preemptive',
           originalMaxExecTime: execTime,
           stepLimit: 1000,
           useSubst: false,
@@ -982,7 +978,7 @@ describe('evalCode', () => {
         actionType
       )
         .withState(state)
-        .provide([[call(resume, lastDebuggerResult), { status: 'suspended' }]])
+        .provide([[call(resume, lastDebuggerResult), { status: 'suspended-cse-eval' }]])
         .call(resume, lastDebuggerResult)
         .put(InterpreterActions.endDebuggerPause(workspaceLocation))
         .put(InterpreterActions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation))
