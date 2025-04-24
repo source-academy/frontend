@@ -5,7 +5,8 @@ import { type Context, interrupt, type Result, resume, runFilesInContext } from 
 import { ACORN_PARSE_OPTIONS } from 'js-slang/dist/constants';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { Chapter, ErrorSeverity, ErrorType, type SourceError, Variant } from 'js-slang/dist/types';
-import { eventChannel, SagaIterator } from 'redux-saga';
+import { pick } from 'lodash';
+import { eventChannel, type SagaIterator } from 'redux-saga';
 import { call, cancel, cancelled, fork, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 
@@ -28,12 +29,117 @@ import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../../../
 import WorkspaceActions from '../../../workspace/WorkspaceActions';
 import {
   EVAL_SILENT,
-  type PlaygroundWorkspaceState,
-  type SicpWorkspaceState,
   type WorkspaceLocation
 } from '../../../workspace/WorkspaceTypes';
+import { selectStoryEnv, selectWorkspace } from '../../SafeEffects';
 import { dumpDisplayBuffer } from './dumpDisplayBuffer';
 import { updateInspector } from './updateInspector';
+
+async function wasm_compile_and_run(
+  wasmCode: string,
+  context: Context,
+  isRepl: boolean
+): Promise<Result> {
+  return Sourceror.compile(wasmCode, context, isRepl)
+    .then((wasmModule: WebAssembly.Module) => {
+      const transcoder = new Sourceror.Transcoder();
+      return Sourceror.run(
+        wasmModule,
+        Sourceror.makePlatformImports(makeSourcerorExternalBuiltins(context), transcoder),
+        transcoder,
+        context,
+        isRepl
+      );
+    })
+    .then(
+      (returnedValue: any): Result => ({ status: 'finished', context, value: returnedValue }),
+      (e: any): Result => {
+        console.log(e);
+        return { status: 'error' };
+      }
+    );
+}
+
+function reportCCompilationError(errorMessage: string, context: Context) {
+  context.errors.push({
+    type: ErrorType.SYNTAX,
+    severity: ErrorSeverity.ERROR,
+    location: {
+      start: {
+        line: 0,
+        column: 0
+      },
+      end: {
+        line: 0,
+        column: 0
+      }
+    },
+    explain: () => errorMessage,
+    elaborate: () => ''
+  });
+}
+
+function reportCRuntimeError(errorMessage: string, context: Context) {
+  context.errors.push({
+    type: ErrorType.RUNTIME,
+    severity: ErrorSeverity.ERROR,
+    location: {
+      start: {
+        line: 0,
+        column: 0
+      },
+      end: {
+        line: 0,
+        column: 0
+      }
+    },
+    explain: () => errorMessage,
+    elaborate: () => ''
+  });
+}
+
+async function cCompileAndRun(cCode: string, context: Context) {
+  const cCompilerConfig = await makeCCompilerConfig(cCode, context);
+  return await compileAndRunCCode(cCode, cCompilerConfig)
+    .then(compilationResult => {
+      if (compilationResult.status === 'failure') {
+        // report any compilation failure
+        reportCCompilationError(
+          `Compilation failed with the following error(s):\n\n${compilationResult.errorMessage}`,
+          context
+        );
+        return {
+          status: 'error',
+          context
+        };
+      }
+      if (compilationResult.warnings.length > 0) {
+        return {
+          status: 'finished',
+          context,
+          value: {
+            toReplString: () =>
+              `Compilation and program execution successful with the following warning(s):\n${compilationResult.warnings.join(
+                '\n'
+              )}`
+          }
+        };
+      }
+      if (specialCReturnObject === null) {
+        return {
+          status: 'finished',
+          context,
+          value: { toReplString: () => 'Compilation and program execution successful.' }
+        };
+      }
+      return { status: 'finished', context, value: specialCReturnObject };
+    })
+    .catch((e: any): Result => {
+      console.log(e);
+      reportCRuntimeError(e.message, context);
+      return { status: 'error' };
+    });
+}
 
 export function* evalCodeSaga(
   files: Record<string, string>,
@@ -62,71 +168,71 @@ export function* evalCodeSaga(
     context.chapter > 2;
   const isStoriesBlock = actionType === actions.evalStory.type || workspaceLocation === 'stories';
 
+  function* getWorkspaceData() {
+    const workspace = yield* selectWorkspace(workspaceLocation)
+    const commons = pick(workspace, ['isFolderModeEnabled', 'stepLimit'])
+
+    if (workspaceLocation === 'sicp' || workspaceLocation === 'playground') {
+      const {
+        currentStep,
+        updateCse,
+        usingCse,
+        usingSubst,
+      } = yield* selectWorkspace(workspaceLocation)
+
+      return {
+        ...commons,
+        currentStep: updateCse ? -1: currentStep,
+        cseIsActive: usingCse,
+        needUpdateCse: updateCse,
+        substIsActive: usingSubst
+      }
+    }
+
+    if (isStoriesBlock) {
+      const { usingSubst } = yield* selectStoryEnv(storyEnv!)
+      return {
+        ...commons,
+        currentStep: -1,
+        cseIsActive: false,
+        needUpdateCse: false,
+        substIsActive: usingSubst,
+      }
+    }
+
+    return {
+      ...commons,
+      currentStep: -1,
+      cseIsActive: false,
+      needUpdateCse: false,
+      substIsActive: false
+    }
+  }
+
+  const entrypointCode = files[entrypointFilePath];
   // Logic for execution of substitution model visualizer
-  const correctWorkspace = workspaceLocation === 'playground' || workspaceLocation === 'sicp';
-  const substIsActive: boolean = correctWorkspace
-    ? yield select(
-        (state: OverallState) =>
-          (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
-            .usingSubst
-      )
-    : isStoriesBlock
-      ? // Safe to use ! as storyEnv will be defined from above when we call from EVAL_STORY
-        yield select((state: OverallState) => state.stories.envs[storyEnv!].usingSubst)
-      : false;
-  const stepLimit: number = isStoriesBlock
-    ? yield select((state: OverallState) => state.stories.envs[storyEnv!].stepLimit)
-    : yield select((state: OverallState) => state.workspaces[workspaceLocation].stepLimit);
-  const substActiveAndCorrectChapter = context.chapter <= Chapter.SOURCE_2 && substIsActive;
+  const { 
+    currentStep,
+    cseIsActive,
+    isFolderModeEnabled,
+    needUpdateCse,
+    stepLimit,
+    substIsActive
+  } = yield* getWorkspaceData()
 
-  const uploadIsActive: boolean = correctWorkspace
-    ? yield select(
-        (state: OverallState) =>
-          (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
-            .usingUpload
-      )
-    : false;
-  const uploads = yield select((state: OverallState) => state.workspaces[workspaceLocation].files);
-
-  // For the CSE machine slider
-  const cseIsActive: boolean = correctWorkspace
-    ? yield select(
-        (state: OverallState) =>
-          (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
-            .usingCse
-      )
-    : false;
-  const needUpdateCse: boolean = correctWorkspace
-    ? yield select(
-        (state: OverallState) =>
-          (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
-            .updateCse
-      )
-    : false;
-  // When currentStep is -1, the entire code is run from the start.
-  const currentStep: number = needUpdateCse
-    ? -1
-    : correctWorkspace
-      ? yield select(
-          (state: OverallState) =>
-            (state.workspaces[workspaceLocation] as PlaygroundWorkspaceState | SicpWorkspaceState)
-              .currentStep
-        )
-      : -1;
   const cseActiveAndCorrectChapter =
     (isSchemeLanguage(context.chapter) || context.chapter >= 3) && cseIsActive;
   if (cseActiveAndCorrectChapter) {
     context.executionMethod = 'cse-machine';
   }
 
-  const isFolderModeEnabled: boolean = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].isFolderModeEnabled
-  );
+  function* getEvalEffect() {
+    if (actionType === InterpreterActions.debuggerResume.type) {
+      const { lastDebuggerResult } = yield* selectWorkspace(workspaceLocation)
+      return call(resume, lastDebuggerResult)
+    }
 
-  const entrypointCode = files[entrypointFilePath];
-
-  function call_variant(variant: Variant) {
-    if (variant === Variant.WASM) {
+    if (context.variant === Variant.WASM) {
       // Note: WASM does not support multiple file programs.
       return call(
         wasm_compile_and_run,
@@ -134,130 +240,51 @@ export function* evalCodeSaga(
         context,
         actionType === WorkspaceActions.evalRepl.type
       );
-    } else {
-      throw new Error('Unknown variant: ' + variant);
     }
-  }
-  async function wasm_compile_and_run(
-    wasmCode: string,
-    wasmContext: Context,
-    isRepl: boolean
-  ): Promise<Result> {
-    return Sourceror.compile(wasmCode, wasmContext, isRepl)
-      .then((wasmModule: WebAssembly.Module) => {
-        const transcoder = new Sourceror.Transcoder();
-        return Sourceror.run(
-          wasmModule,
-          Sourceror.makePlatformImports(makeSourcerorExternalBuiltins(wasmContext), transcoder),
-          transcoder,
-          wasmContext,
-          isRepl
-        );
-      })
-      .then(
-        (returnedValue: any): Result => ({ status: 'finished', context, value: returnedValue }),
-        (e: any): Result => {
-          console.log(e);
-          return { status: 'error' };
-        }
-      );
-  }
 
-  function reportCCompilationError(errorMessage: string, context: Context) {
-    context.errors.push({
-      type: ErrorType.SYNTAX,
-      severity: ErrorSeverity.ERROR,
-      location: {
-        start: {
-          line: 0,
-          column: 0
-        },
-        end: {
-          line: 0,
-          column: 0
-        }
-      },
-      explain: () => errorMessage,
-      elaborate: () => ''
-    });
+    switch (context.chapter) {
+      case Chapter.FULL_C:
+        return call(cCompileAndRun, entrypointCode, context)
+      case Chapter.FULL_JAVA: {
+        const {
+          usingCse: isUsingCse,
+          usingUpload: uploadIsActive,
+          files: uploads
+        } = yield* selectWorkspace('playground')
+
+        return call(javaRun, entrypointCode, context, currentStep, isUsingCse, {
+          uploadIsActive,
+          uploads
+        })
+      }
+    }
+
+    const substActiveAndCorrectChapter = context.chapter <= Chapter.SOURCE_2 && substIsActive;
+
+    return call(
+      runFilesInContext,
+      isFolderModeEnabled
+        ? files
+        : {
+            [entrypointFilePath]: files[entrypointFilePath]
+          },
+      entrypointFilePath,
+      context,
+      {
+        originalMaxExecTime: execTime,
+        stepLimit: stepLimit,
+        throwInfiniteLoops: true,
+        useSubst: substActiveAndCorrectChapter,
+        envSteps: currentStep,
+        executionMethod: cseActiveAndCorrectChapter ? 'cse-machine' : 'auto'
+      }
+    )
   }
-
-  function reportCRuntimeError(errorMessage: string, context: Context) {
-    context.errors.push({
-      type: ErrorType.RUNTIME,
-      severity: ErrorSeverity.ERROR,
-      location: {
-        start: {
-          line: 0,
-          column: 0
-        },
-        end: {
-          line: 0,
-          column: 0
-        }
-      },
-      explain: () => errorMessage,
-      elaborate: () => ''
-    });
-  }
-
-  async function cCompileAndRun(cCode: string, context: Context) {
-    const cCompilerConfig = await makeCCompilerConfig(cCode, context);
-    return await compileAndRunCCode(cCode, cCompilerConfig)
-      .then(compilationResult => {
-        if (compilationResult.status === 'failure') {
-          // report any compilation failure
-          reportCCompilationError(
-            `Compilation failed with the following error(s):\n\n${compilationResult.errorMessage}`,
-            context
-          );
-          return {
-            status: 'error',
-            context
-          };
-        }
-        if (compilationResult.warnings.length > 0) {
-          return {
-            status: 'finished',
-            context,
-            value: {
-              toReplString: () =>
-                `Compilation and program execution successful with the following warning(s):\n${compilationResult.warnings.join(
-                  '\n'
-                )}`
-            }
-          };
-        }
-        if (specialCReturnObject === null) {
-          return {
-            status: 'finished',
-            context,
-            value: { toReplString: () => 'Compilation and program execution successful.' }
-          };
-        }
-        return { status: 'finished', context, value: specialCReturnObject };
-      })
-      .catch((e: any): Result => {
-        console.log(e);
-        reportCRuntimeError(e.message, context);
-        return { status: 'error' };
-      });
-  }
-
-  const isWasm: boolean = context.variant === Variant.WASM;
-  const isC: boolean = context.chapter === Chapter.FULL_C;
-  const isJava: boolean = context.chapter === Chapter.FULL_JAVA;
-
-  let lastDebuggerResult = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].lastDebuggerResult
-  );
-  const isUsingCse = yield select((state: OverallState) => state.workspaces['playground'].usingCse);
 
   // Handles `console.log` statements in fullJS
-  const detachConsole: () => void =
-    context.chapter === Chapter.FULL_JS
-      ? DisplayBufferService.attachConsole(workspaceLocation)
-      : () => {};
+  if (context.chapter === Chapter.FULL_JS || context.chapter === Chapter.FULL_TS) {
+    yield call([DisplayBufferService, DisplayBufferService.attachConsole], workspaceLocation)
+  }
 
   const {
     result,
@@ -268,37 +295,7 @@ export function* evalCodeSaga(
     interrupted: any;
     paused: any;
   } = yield race({
-    result:
-      actionType === InterpreterActions.debuggerResume.type
-        ? call(resume, lastDebuggerResult)
-        : isWasm
-          ? call_variant(context.variant)
-          : isC
-            ? call(cCompileAndRun, entrypointCode, context)
-            : isJava
-              ? call(javaRun, entrypointCode, context, currentStep, isUsingCse, {
-                  uploadIsActive,
-                  uploads
-                })
-              : call(
-                  runFilesInContext,
-                  isFolderModeEnabled
-                    ? files
-                    : {
-                        [entrypointFilePath]: files[entrypointFilePath]
-                      },
-                  entrypointFilePath,
-                  context,
-                  {
-                    originalMaxExecTime: execTime,
-                    stepLimit: stepLimit,
-                    throwInfiniteLoops: true,
-                    useSubst: substActiveAndCorrectChapter,
-                    envSteps: currentStep,
-                    executionMethod: cseActiveAndCorrectChapter ? 'cse-machine' : 'auto'
-                  }
-                ),
-
+    result: yield* getEvalEffect(),
     /**
      * A BEGIN_INTERRUPT_EXECUTION signals the beginning of an interruption,
      * i.e the trigger for the interpreter to interrupt execution.
@@ -307,7 +304,7 @@ export function* evalCodeSaga(
     paused: take(InterpreterActions.beginDebuggerPause.type)
   });
 
-  detachConsole();
+  // detachConsole();
 
   if (interrupted) {
     interrupt(context);
@@ -398,7 +395,7 @@ export function* evalCodeSaga(
     }
   }
 
-  lastDebuggerResult = yield select(
+  const lastDebuggerResult = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation].lastDebuggerResult
   );
   // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
