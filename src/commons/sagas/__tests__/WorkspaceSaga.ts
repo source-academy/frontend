@@ -250,7 +250,8 @@ describe('EVAL_REPL', () => {
           stepLimit: 1000,
           useSubst: false,
           throwInfiniteLoops: true,
-          envSteps: -1
+          envSteps: -1,
+          executionMethod: 'auto'
         })
         .dispatch({
           type: WorkspaceActions.evalRepl.type,
@@ -810,7 +811,8 @@ describe('evalCode', () => {
       stepLimit: 1000,
       useSubst: false,
       throwInfiniteLoops: true,
-      envSteps: -1
+      envSteps: -1,
+      executionMethod: 'auto'
     };
     lastDebuggerResult = { status: 'error' };
     state = generateDefaultState(workspaceLocation, { lastDebuggerResult: { status: 'error' } });
@@ -839,7 +841,8 @@ describe('evalCode', () => {
           stepLimit: 1000,
           useSubst: false,
           throwInfiniteLoops: true,
-          envSteps: -1
+          envSteps: -1,
+          executionMethod: 'auto'
         })
         .put(InterpreterActions.evalInterpreterSuccess(value, workspaceLocation))
         .silentRun();
@@ -867,7 +870,8 @@ describe('evalCode', () => {
           stepLimit: 1000,
           useSubst: false,
           throwInfiniteLoops: true,
-          envSteps: -1
+          envSteps: -1,
+          executionMethod: 'auto'
         })
         .put(InterpreterActions.endDebuggerPause(workspaceLocation))
         .put(InterpreterActions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation))
@@ -885,12 +889,16 @@ describe('evalCode', () => {
         actionType
       )
         .withState(state)
+        .provide([
+          [call(runFilesInContext, files, codeFilePath, context, options), { status: 'error' }]
+        ])
         .call(runFilesInContext, files, codeFilePath, context, {
           originalMaxExecTime: execTime,
           stepLimit: 1000,
           useSubst: false,
           throwInfiniteLoops: true,
-          envSteps: -1
+          envSteps: -1,
+          executionMethod: 'auto'
         })
         .put.like({ action: { type: InterpreterActions.evalInterpreterError.type } })
         .silentRun();
@@ -923,7 +931,8 @@ describe('evalCode', () => {
           stepLimit: 1000,
           useSubst: false,
           throwInfiniteLoops: true,
-          envSteps: -1
+          envSteps: -1,
+          executionMethod: 'auto'
         })
         .put(InterpreterActions.evalInterpreterError(context.errors, workspaceLocation))
         .silentRun();
