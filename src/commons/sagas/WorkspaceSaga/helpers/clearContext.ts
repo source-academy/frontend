@@ -1,13 +1,13 @@
-import { Context } from 'js-slang';
+import type { Context } from 'js-slang';
 import { defineSymbol } from 'js-slang/dist/createContext';
-import { Variant } from 'js-slang/dist/types';
+import type { Variant } from 'js-slang/dist/types';
 import { put, select, take } from 'redux-saga/effects';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 
-import { OverallState } from '../../../application/ApplicationTypes';
+import type { OverallState } from '../../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../../application/types/ExternalTypes';
 import { actions } from '../../../utils/ActionsHelper';
-import { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 
 export function* clearContext(workspaceLocation: WorkspaceLocation, entrypointCode: string) {
   const [chapter, symbols, externalLibraryName, globals, variant]: [

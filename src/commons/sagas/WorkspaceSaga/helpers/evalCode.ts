@@ -1,11 +1,10 @@
 import { compileAndRun as compileAndRunCCode } from '@sourceacademy/c-slang/ctowasm/dist/index';
 import { tokenizer } from 'acorn';
-import { IConduit } from 'conductor/dist/conduit';
+import type { IConduit } from 'conductor/dist/conduit';
 import { Context, interrupt, Result, resume, runFilesInContext } from 'js-slang';
 import { ACORN_PARSE_OPTIONS } from 'js-slang/dist/constants';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
-import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
-import { Chapter, ErrorSeverity, ErrorType, SourceError, Variant } from 'js-slang/dist/types';
+import { Chapter, ErrorSeverity, ErrorType, type SourceError, Variant } from 'js-slang/dist/types';
 import { eventChannel, SagaIterator } from 'redux-saga';
 import { call, cancel, cancelled, fork, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
@@ -15,12 +14,12 @@ import { selectFeatureSaga } from '../../../../commons/featureFlags/selectFeatur
 import { makeCCompilerConfig, specialCReturnObject } from '../../../../commons/utils/CToWasmHelper';
 import { javaRun } from '../../../../commons/utils/JavaHelper';
 import { EventType } from '../../../../features/achievement/AchievementTypes';
-import { BrowserHostPlugin } from '../../../../features/conductor/BrowserHostPlugin';
+import type { BrowserHostPlugin } from '../../../../features/conductor/BrowserHostPlugin';
 import { createConductor } from '../../../../features/conductor/createConductor';
 import { flagConductorEnable } from '../../../../features/conductor/flagConductorEnable';
 import { flagConductorEvaluatorUrl } from '../../../../features/conductor/flagConductorEvaluatorUrl';
 import StoriesActions from '../../../../features/stories/StoriesActions';
-import { isSchemeLanguage, OverallState } from '../../../application/ApplicationTypes';
+import { isSchemeLanguage, type OverallState } from '../../../application/ApplicationTypes';
 import { SideContentType } from '../../../sideContent/SideContentTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import DisplayBufferService from '../../../utils/DisplayBufferService';
@@ -29,9 +28,9 @@ import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../../../
 import WorkspaceActions from '../../../workspace/WorkspaceActions';
 import {
   EVAL_SILENT,
-  PlaygroundWorkspaceState,
-  SicpWorkspaceState,
-  WorkspaceLocation
+  type PlaygroundWorkspaceState,
+  type SicpWorkspaceState,
+  type WorkspaceLocation
 } from '../../../workspace/WorkspaceTypes';
 import { dumpDisplayBuffer } from './dumpDisplayBuffer';
 import { updateInspector } from './updateInspector';
@@ -78,10 +77,7 @@ export function* evalCodeSaga(
   const stepLimit: number = isStoriesBlock
     ? yield select((state: OverallState) => state.stories.envs[storyEnv!].stepLimit)
     : yield select((state: OverallState) => state.workspaces[workspaceLocation].stepLimit);
-  const substActiveAndCorrectChapter = context.chapter <= 2 && substIsActive;
-  if (substActiveAndCorrectChapter) {
-    context.executionMethod = 'interpreter';
-  }
+  const substActiveAndCorrectChapter = context.chapter <= Chapter.SOURCE_2 && substIsActive;
 
   const uploadIsActive: boolean = correctWorkspace
     ? yield select(
@@ -294,12 +290,12 @@ export function* evalCodeSaga(
                   entrypointFilePath,
                   context,
                   {
-                    scheduler: 'preemptive',
                     originalMaxExecTime: execTime,
                     stepLimit: stepLimit,
                     throwInfiniteLoops: true,
                     useSubst: substActiveAndCorrectChapter,
-                    envSteps: currentStep
+                    envSteps: currentStep,
+                    executionMethod: cseActiveAndCorrectChapter ? 'cse-machine' : 'auto'
                   }
                 ),
 
@@ -324,7 +320,7 @@ export function* evalCodeSaga(
   }
   if (paused) {
     yield put(actions.endDebuggerPause(workspaceLocation));
-    yield put(actions.updateLastDebuggerResult(manualToggleDebugger(context), workspaceLocation));
+    // yield put(actions.updateLastDebuggerResult(manualToggleDebugger(context), workspaceLocation));
     yield call(updateInspector, workspaceLocation);
     yield call(showWarningMessage, 'Execution paused', 750);
     return;
@@ -339,11 +335,11 @@ export function* evalCodeSaga(
     yield call(updateInspector, workspaceLocation);
   }
 
-  if (
-    result.status !== 'suspended' &&
-    result.status !== 'finished' &&
-    result.status !== 'suspended-cse-eval'
-  ) {
+  if (result.status === 'suspended-cse-eval') {
+    yield put(actions.endDebuggerPause(workspaceLocation));
+    yield put(actions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation));
+    return;
+  } else if (result.status !== 'finished') {
     yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
     if (!isStoriesBlock) {
       const specialError = checkSpecialError(context.errors);
@@ -380,10 +376,6 @@ export function* evalCodeSaga(
     const events = context.errors.length > 0 ? [EventType.ERROR] : [];
 
     yield put(actions.addEvent(events));
-    return;
-  } else if (result.status === 'suspended' || result.status === 'suspended-cse-eval') {
-    yield put(actions.endDebuggerPause(workspaceLocation));
-    yield put(actions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation));
     return;
   }
 
@@ -452,9 +444,14 @@ export function* evalCodeSaga(
     yield put(actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation));
   }
   // Stop the home icon from flashing for an error if it is doing so since the evaluation is successful
-  if (context.executionMethod === 'cse-machine' || context.executionMethod === 'interpreter') {
-    const introIcon = document.getElementById(SideContentType.introduction + '-icon');
-    introIcon?.classList.remove('side-content-tab-alert-error');
+  if (context.executionMethod === 'cse-machine') {
+    if (workspaceLocation !== 'stories') {
+      yield put(actions.removeSideContentAlert(SideContentType.introduction, workspaceLocation));
+    } else {
+      yield put(
+        actions.removeSideContentAlert(SideContentType.introduction, `stories.${storyEnv!}`)
+      );
+    }
   }
 }
 

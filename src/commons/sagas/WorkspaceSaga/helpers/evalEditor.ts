@@ -1,15 +1,15 @@
-import { FSModule } from 'browserfs/dist/node/core/FS';
+import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { call, put, select, StrictEffect } from 'redux-saga/effects';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
-import { DeviceSession } from '../../../../features/remoteExecution/RemoteExecutionTypes';
+import type { DeviceSession } from '../../../../features/remoteExecution/RemoteExecutionTypes';
 import { WORKSPACE_BASE_PATHS } from '../../../../pages/fileSystem/createInBrowserFileSystem';
-import { OverallState } from '../../../application/ApplicationTypes';
+import type { OverallState } from '../../../application/ApplicationTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../../../fileSystem/utils';
 import { actions } from '../../../utils/ActionsHelper';
 import { makeElevatedContext } from '../../../utils/JsSlangHelper';
-import { EditorTabState, EVAL_SILENT, WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import { type EditorTabState, EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import { blockExtraMethods } from './blockExtraMethods';
 import { clearContext } from './clearContext';
 import { evalCodeSaga } from './evalCode';

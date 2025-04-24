@@ -1,5 +1,4 @@
-import { createReducer, Reducer } from '@reduxjs/toolkit';
-import { stringify } from 'js-slang/dist/utils/stringify';
+import { createReducer, type Reducer } from '@reduxjs/toolkit';
 
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
 import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
@@ -8,24 +7,24 @@ import InterpreterActions from '../application/actions/InterpreterActions';
 import {
   createDefaultWorkspace,
   defaultWorkspaceManager,
-  ErrorOutput,
-  InterpreterOutput,
-  NotificationOutput,
-  ResultOutput
+  type ErrorOutput,
+  type InterpreterOutput,
+  type NotificationOutput,
+  type ResultOutput
 } from '../application/ApplicationTypes';
 import {
   setEditorSessionId,
   setSessionDetails,
   setSharedbConnected
 } from '../collabEditing/CollabEditingActions';
-import { SourceActionType } from '../utils/ActionsHelper';
+import type { SourceActionType } from '../utils/ActionsHelper';
 import { createContext } from '../utils/JsSlangHelper';
 import { handleCseAndStepperActions } from './reducers/cseReducer';
 import { handleDebuggerActions } from './reducers/debuggerReducer';
 import { handleEditorActions } from './reducers/editorReducer';
 import { handleReplActions } from './reducers/replReducer';
 import WorkspaceActions from './WorkspaceActions';
-import { WorkspaceLocation, WorkspaceManagerState } from './WorkspaceTypes';
+import type { WorkspaceLocation, WorkspaceManagerState } from './WorkspaceTypes';
 
 export const getWorkspaceLocation = (action: any): WorkspaceLocation => {
   return action.payload ? action.payload.workspaceLocation : 'assessment';
@@ -159,11 +158,10 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     })
     .addCase(InterpreterActions.evalInterpreterSuccess, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
-      const execType = state[workspaceLocation].context.executionMethod;
       const tokens = state[workspaceLocation].tokenCount;
       const newOutputEntry: Partial<ResultOutput> = {
         type: action.payload.type as 'result' | undefined,
-        value: execType === 'interpreter' ? action.payload.value : stringify(action.payload.value)
+        value: action.payload.value
       };
 
       const lastOutput: InterpreterOutput = state[workspaceLocation].output.slice(-1)[0];

@@ -1,5 +1,5 @@
-import { FSModule } from 'browserfs/dist/node/core/FS';
-import { Context, findDeclaration, getNames } from 'js-slang';
+import type { FSModule } from 'browserfs/dist/node/core/FS';
+import { type Context, findDeclaration, getNames } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import Phaser from 'phaser';
 import { call, put, select } from 'redux-saga/effects';
@@ -15,11 +15,11 @@ import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';
 import { WORKSPACE_BASE_PATHS } from '../../../pages/fileSystem/createInBrowserFileSystem';
 import {
   defaultEditorValue,
-  OverallState,
+  type OverallState,
   styliseSublanguage
 } from '../../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../../application/types/ExternalTypes';
-import { Library, Testcase } from '../../assessment/AssessmentTypes';
+import type { Library, Testcase } from '../../assessment/AssessmentTypes';
 import { Documentation } from '../../documentation/Documentation';
 import { writeFileRecursively } from '../../fileSystem/utils';
 import { actions } from '../../utils/ActionsHelper';
@@ -34,7 +34,7 @@ import {
   showWarningMessage
 } from '../../utils/notifications/NotificationsHelper';
 import { showFullJSDisclaimer, showFullTSDisclaimer } from '../../utils/WarningDialogHelper';
-import { EditorTabState } from '../../workspace/WorkspaceTypes';
+import type { EditorTabState } from '../../workspace/WorkspaceTypes';
 import { evalCodeSaga } from './helpers/evalCode';
 import { evalEditorSaga } from './helpers/evalEditor';
 import { runTestCase } from './helpers/runTestCase';

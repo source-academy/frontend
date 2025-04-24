@@ -1,6 +1,13 @@
-import { Context, IOptions, Result, resume, runFilesInContext, runInContext } from 'js-slang';
+import {
+  type Context,
+  type IOptions,
+  type Result,
+  resume,
+  runFilesInContext,
+  runInContext
+} from 'js-slang';
 import createContext from 'js-slang/dist/createContext';
-import { Chapter, ErrorType, Finished, SourceError, Variant } from 'js-slang/dist/types';
+import { Chapter, ErrorType, type Finished, type SourceError, Variant } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
@@ -11,10 +18,15 @@ import {
   defaultState,
   fullJSLanguage,
   fullTSLanguage,
-  OverallState
+  type OverallState
 } from '../../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../../application/types/ExternalTypes';
-import { Library, Testcase, TestcaseType, TestcaseTypes } from '../../assessment/AssessmentTypes';
+import {
+  type Library,
+  type Testcase,
+  type TestcaseType,
+  TestcaseTypes
+} from '../../assessment/AssessmentTypes';
 import { mockRuntimeContext } from '../../mocks/ContextMocks';
 import { mockTestcases } from '../../mocks/GradingMocks';
 import {
@@ -22,7 +34,7 @@ import {
   showWarningMessage
 } from '../../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../../workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceState } from '../../workspace/WorkspaceTypes';
+import type { WorkspaceLocation, WorkspaceState } from '../../workspace/WorkspaceTypes';
 import workspaceSaga from '../WorkspaceSaga';
 import { evalCodeSaga } from '../WorkspaceSaga/helpers/evalCode';
 import { evalEditorSaga } from '../WorkspaceSaga/helpers/evalEditor';
@@ -797,7 +809,6 @@ describe('evalCode', () => {
     context = createContext(); // mockRuntimeContext();
     value = 'test value';
     options = {
-      scheduler: 'preemptive',
       originalMaxExecTime: 1000,
       stepLimit: 1000,
       useSubst: false,
@@ -896,7 +907,6 @@ describe('evalCode', () => {
       });
 
       runFilesInContext(files, codeFilePath, context, {
-        scheduler: 'preemptive',
         originalMaxExecTime: 1000,
         useSubst: false
       }).then(result => (context = (result as Finished).context));
@@ -1104,7 +1114,6 @@ describe('evalTestCode', () => {
     context = mockRuntimeContext();
     value = 'another test value';
     options = {
-      scheduler: 'preemptive',
       originalMaxExecTime: 1000,
       throwInfiniteLoops: true
     };
