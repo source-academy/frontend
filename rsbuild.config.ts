@@ -1,4 +1,5 @@
 import { defineConfig, loadEnv } from '@rsbuild/core';
+import { pluginEslint } from '@rsbuild/plugin-eslint';
 import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSass } from '@rsbuild/plugin-sass';
@@ -7,7 +8,19 @@ import { pluginSvgr } from '@rsbuild/plugin-svgr';
 const { publicVars, rawPublicVars } = loadEnv({ prefixes: ['REACT_APP_'] });
 
 export default defineConfig({
-  plugins: [pluginReact(), pluginSvgr({ mixedImport: true }), pluginNodePolyfill(), pluginSass()],
+  plugins: [
+    pluginReact(),
+    pluginSvgr({ mixedImport: true }),
+    pluginNodePolyfill(),
+    pluginSass(),
+    pluginEslint({
+      enable: process.env.NODE_ENV === 'development',
+      eslintPluginOptions: {
+        cwd: __dirname,
+        configType: 'flat'
+      }
+    })
+  ],
   server: {
     port: 8000
   },
