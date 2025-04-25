@@ -5,6 +5,34 @@ import SensorGyro from 'src/assets/sGyro.svg';
 import SensorTouch from 'src/assets/sTouch.svg';
 import SensorUltrasonic from 'src/assets/sUltrasonic.svg';
 
+// (18 March 2022)
+// Problem to be fixed in the future:
+//
+// There seems to be an inconsistency between how jest and how typescript
+// behaves when encountering imports of the form `import * as x from 'x.json'`
+// jest will set x = jsonobject,
+// but typescript will instead set x = { default: jsonobject }
+//
+// This means that under typescript, we want `import x from 'x.json'`,
+// while under jest, we want `import * as x from 'x.json'`
+//
+// This problem was hidden when transpiling to CommonJS modules before, which
+// behaves similarly to jest. But now that we are transpiling to es6,
+// typescript projects that depend on js-slang may now be exposed to this
+// inconsistency.
+//
+// For now, we use brute force until the landscape changes or someone thinks of
+// a proper solution.
+function resolveImportInconsistency(json: any) {
+  // `json` doesn't inherit from `Object`?
+  // Can't use hasOwnProperty for some reason.
+  if ('default' in json) {
+    return json.default;
+  } else {
+    return json;
+  }
+}
+
 export enum Ev3MotorTypes {
   LARGE = 'lego-ev3-l-motor',
   MEDIUM = 'lego-ev3-m-motor'
@@ -159,10 +187,10 @@ export const ev3PeripheralToComponentMap: {
 } & {
   [key in Ev3MotorTypes]: string;
 } = Object.freeze({
-  [Ev3SensorTypes.COLOR_SENSOR]: SensorColor,
-  [Ev3SensorTypes.GYRO_SENSOR]: SensorGyro,
-  [Ev3SensorTypes.TOUCH_SENSOR]: SensorTouch,
-  [Ev3SensorTypes.ULTRASONIC_SENSOR]: SensorUltrasonic,
-  [Ev3MotorTypes.LARGE]: MotorL,
-  [Ev3MotorTypes.MEDIUM]: MotorM
+  [Ev3SensorTypes.COLOR_SENSOR]: resolveImportInconsistency(SensorColor),
+  [Ev3SensorTypes.GYRO_SENSOR]: resolveImportInconsistency(SensorGyro),
+  [Ev3SensorTypes.TOUCH_SENSOR]: resolveImportInconsistency(SensorTouch),
+  [Ev3SensorTypes.ULTRASONIC_SENSOR]: resolveImportInconsistency(SensorUltrasonic),
+  [Ev3MotorTypes.LARGE]: resolveImportInconsistency(MotorL),
+  [Ev3MotorTypes.MEDIUM]: resolveImportInconsistency(MotorM)
 });
