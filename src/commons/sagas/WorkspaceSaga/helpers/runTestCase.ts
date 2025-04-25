@@ -1,12 +1,12 @@
-import { Context } from 'js-slang';
+import type { Context } from 'js-slang';
 import { random } from 'lodash';
 import { call, put, select, StrictEffect } from 'redux-saga/effects';
 
-import { OverallState } from '../../../application/ApplicationTypes';
-import { TestcaseType } from '../../../assessment/AssessmentTypes';
+import type { OverallState } from '../../../application/ApplicationTypes';
+import type { TestcaseType } from '../../../assessment/AssessmentTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import { makeElevatedContext } from '../../../utils/JsSlangHelper';
-import { EVAL_SILENT, WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import { blockExtraMethods } from './blockExtraMethods';
 import { clearContext } from './clearContext';
 import { evalCodeSaga } from './evalCode';
@@ -60,8 +60,8 @@ export function* runTestCase(
     prependFilePath,
     elevatedContext,
     execTime,
-    workspaceLocation,
-    EVAL_SILENT
+    EVAL_SILENT,
+    workspaceLocation
   );
 
   // Block use of methods from privileged context using a randomly generated blocking key
@@ -78,8 +78,8 @@ export function* runTestCase(
     valueFilePath,
     context,
     execTime,
-    workspaceLocation,
-    EVAL_SILENT
+    EVAL_SILENT,
+    workspaceLocation
   );
 
   // Halt execution if the student's code in the editor results in an error
@@ -103,8 +103,8 @@ export function* runTestCase(
       postpendFilePath,
       elevatedContext,
       execTime,
-      workspaceLocation,
-      EVAL_SILENT
+      EVAL_SILENT,
+      workspaceLocation
     );
     yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
   }

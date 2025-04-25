@@ -27,10 +27,7 @@ import DisplayBufferService from '../../../utils/DisplayBufferService';
 import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../../../utils/SourcerorHelper';
 import WorkspaceActions from '../../../workspace/WorkspaceActions';
-import {
-  EVAL_SILENT,
-  type WorkspaceLocation
-} from '../../../workspace/WorkspaceTypes';
+import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import { selectStoryEnv, selectWorkspace } from '../../SafeEffects';
 import { dumpDisplayBuffer } from './dumpDisplayBuffer';
 import { updateInspector } from './updateInspector';
@@ -40,105 +37,100 @@ async function wasm_compile_and_run(
   context: Context,
   isRepl: boolean
 ): Promise<Result> {
-  return Sourceror.compile(wasmCode, context, isRepl)
-    .then((wasmModule: WebAssembly.Module) => {
-      const transcoder = new Sourceror.Transcoder();
-      return Sourceror.run(
-        wasmModule,
-        Sourceror.makePlatformImports(makeSourcerorExternalBuiltins(context), transcoder),
-        transcoder,
-        context,
-        isRepl
-      );
-    })
-    .then(
-      (returnedValue: any): Result => ({ status: 'finished', context, value: returnedValue }),
-      (e: any): Result => {
-        console.log(e);
-        return { status: 'error' };
-      }
+  try {
+    const wasmModule = await Sourceror.compile(wasmCode, context, isRepl);
+    const transcoder = new Sourceror.Transcoder();
+    const returnedValue = await Sourceror.run(
+      wasmModule,
+      Sourceror.makePlatformImports(makeSourcerorExternalBuiltins(context), transcoder),
+      transcoder,
+      context,
+      isRepl
     );
+    return { status: 'finished', context, value: returnedValue };
+  } catch (e) {
+    console.log(e);
+    return { status: 'error' };
+  }
 }
 
-function reportCCompilationError(errorMessage: string, context: Context) {
-  context.errors.push({
-    type: ErrorType.SYNTAX,
-    severity: ErrorSeverity.ERROR,
-    location: {
-      start: {
-        line: 0,
-        column: 0
+async function cCompileAndRun(cCode: string, context: Context): Promise<Result> {
+  function reportCCompilationError(errorMessage: string, context: Context) {
+    context.errors.push({
+      type: ErrorType.SYNTAX,
+      severity: ErrorSeverity.ERROR,
+      location: {
+        start: {
+          line: 0,
+          column: 0
+        },
+        end: {
+          line: 0,
+          column: 0
+        }
       },
-      end: {
-        line: 0,
-        column: 0
-      }
-    },
-    explain: () => errorMessage,
-    elaborate: () => ''
-  });
-}
-
-function reportCRuntimeError(errorMessage: string, context: Context) {
-  context.errors.push({
-    type: ErrorType.RUNTIME,
-    severity: ErrorSeverity.ERROR,
-    location: {
-      start: {
-        line: 0,
-        column: 0
-      },
-      end: {
-        line: 0,
-        column: 0
-      }
-    },
-    explain: () => errorMessage,
-    elaborate: () => ''
-  });
-}
-
-async function cCompileAndRun(cCode: string, context: Context) {
-  const cCompilerConfig = await makeCCompilerConfig(cCode, context);
-  return await compileAndRunCCode(cCode, cCompilerConfig)
-    .then(compilationResult => {
-      if (compilationResult.status === 'failure') {
-        // report any compilation failure
-        reportCCompilationError(
-          `Compilation failed with the following error(s):\n\n${compilationResult.errorMessage}`,
-          context
-        );
-        return {
-          status: 'error',
-          context
-        };
-      }
-      if (compilationResult.warnings.length > 0) {
-        return {
-          status: 'finished',
-          context,
-          value: {
-            toReplString: () =>
-              `Compilation and program execution successful with the following warning(s):\n${compilationResult.warnings.join(
-                '\n'
-              )}`
-          }
-        };
-      }
-      if (specialCReturnObject === null) {
-        return {
-          status: 'finished',
-          context,
-          value: { toReplString: () => 'Compilation and program execution successful.' }
-        };
-      }
-      return { status: 'finished', context, value: specialCReturnObject };
-    })
-    .catch((e: any): Result => {
-      console.log(e);
-      reportCRuntimeError(e.message, context);
-      return { status: 'error' };
+      explain: () => errorMessage,
+      elaborate: () => ''
     });
+  }
+
+  function reportCRuntimeError(errorMessage: string, context: Context) {
+    context.errors.push({
+      type: ErrorType.RUNTIME,
+      severity: ErrorSeverity.ERROR,
+      location: {
+        start: {
+          line: 0,
+          column: 0
+        },
+        end: {
+          line: 0,
+          column: 0
+        }
+      },
+      explain: () => errorMessage,
+      elaborate: () => ''
+    });
+  }
+  const cCompilerConfig = await makeCCompilerConfig(cCode, context);
+  try {
+    const compilationResult = await compileAndRunCCode(cCode, cCompilerConfig);
+    if (compilationResult.status === 'failure') {
+      // report any compilation failure
+      reportCCompilationError(
+        `Compilation failed with the following error(s):\n\n${compilationResult.errorMessage}`,
+        context
+      );
+      return {
+        status: 'error',
+        context
+      } as Result;
+    }
+    if (compilationResult.warnings.length > 0) {
+      return {
+        status: 'finished',
+        context,
+        value: {
+          toReplString: () =>
+            `Compilation and program execution successful with the following warning(s):\n${compilationResult.warnings.join(
+              '\n'
+            )}`
+        }
+      };
+    }
+    if (specialCReturnObject === null) {
+      return {
+        status: 'finished',
+        context,
+        value: { toReplString: () => 'Compilation and program execution successful.' }
+      };
+    }
+    return { status: 'finished', context, value: specialCReturnObject };
+  } catch (e) {
+    console.log(e);
+    reportCRuntimeError(e.message, context);
+    return { status: 'error' };
+  }
 }
 
 export function* evalCodeSaga(
@@ -146,8 +138,8 @@ export function* evalCodeSaga(
   entrypointFilePath: string,
   context: Context,
   execTime: number,
-  workspaceLocation: WorkspaceLocation,
   actionType: string,
+  workspaceLocation: WorkspaceLocation,
   storyEnv?: string
 ): SagaIterator {
   if (yield call(selectFeatureSaga, flagConductorEnable)) {
@@ -169,35 +161,31 @@ export function* evalCodeSaga(
   const isStoriesBlock = actionType === actions.evalStory.type || workspaceLocation === 'stories';
 
   function* getWorkspaceData() {
-    const workspace = yield* selectWorkspace(workspaceLocation)
-    const commons = pick(workspace, ['isFolderModeEnabled', 'stepLimit'])
+    const workspace = yield* selectWorkspace(workspaceLocation);
+    const commons = pick(workspace, ['isFolderModeEnabled', 'stepLimit']);
 
     if (workspaceLocation === 'sicp' || workspaceLocation === 'playground') {
-      const {
-        currentStep,
-        updateCse,
-        usingCse,
-        usingSubst,
-      } = yield* selectWorkspace(workspaceLocation)
+      const { currentStep, updateCse, usingCse, usingSubst } =
+        yield* selectWorkspace(workspaceLocation);
 
       return {
         ...commons,
-        currentStep: updateCse ? -1: currentStep,
+        currentStep: updateCse ? -1 : currentStep,
         cseIsActive: usingCse,
         needUpdateCse: updateCse,
         substIsActive: usingSubst
-      }
+      };
     }
 
     if (isStoriesBlock) {
-      const { usingSubst } = yield* selectStoryEnv(storyEnv!)
+      const { usingSubst } = yield* selectStoryEnv(storyEnv!);
       return {
         ...commons,
         currentStep: -1,
         cseIsActive: false,
         needUpdateCse: false,
-        substIsActive: usingSubst,
-      }
+        substIsActive: usingSubst
+      };
     }
 
     return {
@@ -206,30 +194,24 @@ export function* evalCodeSaga(
       cseIsActive: false,
       needUpdateCse: false,
       substIsActive: false
-    }
+    };
   }
 
   const entrypointCode = files[entrypointFilePath];
   // Logic for execution of substitution model visualizer
-  const { 
-    currentStep,
-    cseIsActive,
-    isFolderModeEnabled,
-    needUpdateCse,
-    stepLimit,
-    substIsActive
-  } = yield* getWorkspaceData()
+  const { currentStep, cseIsActive, isFolderModeEnabled, needUpdateCse, stepLimit, substIsActive } =
+    yield* getWorkspaceData();
 
   const cseActiveAndCorrectChapter =
-    (isSchemeLanguage(context.chapter) || context.chapter >= 3) && cseIsActive;
+    (isSchemeLanguage(context.chapter) || context.chapter >= Chapter.SOURCE_3) && cseIsActive;
   if (cseActiveAndCorrectChapter) {
     context.executionMethod = 'cse-machine';
   }
 
   function* getEvalEffect() {
     if (actionType === InterpreterActions.debuggerResume.type) {
-      const { lastDebuggerResult } = yield* selectWorkspace(workspaceLocation)
-      return call(resume, lastDebuggerResult)
+      const { lastDebuggerResult } = yield* selectWorkspace(workspaceLocation);
+      return call(resume, lastDebuggerResult);
     }
 
     if (context.variant === Variant.WASM) {
@@ -244,18 +226,18 @@ export function* evalCodeSaga(
 
     switch (context.chapter) {
       case Chapter.FULL_C:
-        return call(cCompileAndRun, entrypointCode, context)
+        return call(cCompileAndRun, entrypointCode, context);
       case Chapter.FULL_JAVA: {
         const {
           usingCse: isUsingCse,
           usingUpload: uploadIsActive,
           files: uploads
-        } = yield* selectWorkspace('playground')
+        } = yield* selectWorkspace('playground');
 
         return call(javaRun, entrypointCode, context, currentStep, isUsingCse, {
           uploadIsActive,
           uploads
-        })
+        });
       }
     }
 
@@ -278,12 +260,12 @@ export function* evalCodeSaga(
         envSteps: currentStep,
         executionMethod: cseActiveAndCorrectChapter ? 'cse-machine' : 'auto'
       }
-    )
+    );
   }
 
   // Handles `console.log` statements in fullJS
   if (context.chapter === Chapter.FULL_JS || context.chapter === Chapter.FULL_TS) {
-    yield call([DisplayBufferService, DisplayBufferService.attachConsole], workspaceLocation)
+    yield call([DisplayBufferService, DisplayBufferService.attachConsole], workspaceLocation);
   }
 
   const {
@@ -303,8 +285,6 @@ export function* evalCodeSaga(
     interrupted: take(InterpreterActions.beginInterruptExecution.type),
     paused: take(InterpreterActions.beginDebuggerPause.type)
   });
-
-  // detachConsole();
 
   if (interrupted) {
     interrupt(context);

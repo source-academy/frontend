@@ -35,6 +35,7 @@ import {
 } from '../../utils/notifications/NotificationsHelper';
 import { showFullJSDisclaimer, showFullTSDisclaimer } from '../../utils/WarningDialogHelper';
 import type { EditorTabState } from '../../workspace/WorkspaceTypes';
+import { selectWorkspace } from '../SafeEffects';
 import { evalCodeSaga } from './helpers/evalCode';
 import { evalEditorSaga } from './helpers/evalEditor';
 import { runTestCase } from './helpers/runTestCase';
@@ -148,18 +149,15 @@ const WorkspaceSaga = combineSagaHandlers(
     },
     promptAutocomplete: function* (action): any {
       const workspaceLocation = action.payload.workspaceLocation;
+      const {
+        activeEditorTabIndex,
+        editorTabs,
+        context,
+        externalLibrary: extLib,
+        programPrependValue: prepend
+      } = yield* selectWorkspace(workspaceLocation);
 
-      const context: Context = yield select(
-        (state: OverallState) => state.workspaces[workspaceLocation].context
-      );
-
-      const code: string = yield select((state: OverallState) => {
-        const prependCode = state.workspaces[workspaceLocation].programPrependValue;
-        // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-        const editorCode = state.workspaces[workspaceLocation].editorTabs[0].value;
-        return [prependCode, editorCode] as [string, string];
-      });
-      const [prepend, editorValue] = code;
+      const editorValue = editorTabs[activeEditorTabIndex ?? 0].value;
 
       // Deal with prepended code
       let autocompleteCode;
@@ -201,11 +199,6 @@ const WorkspaceSaga = combineSagaHandlers(
       }
 
       const builtinSuggestions = Documentation.builtins[chapterName] || [];
-
-      const extLib = yield select(
-        (state: OverallState) => state.workspaces[workspaceLocation].externalLibrary
-      );
-
       const extLibSuggestions = Documentation.externalLibraries[extLib] || [];
 
       yield call(
@@ -250,8 +243,8 @@ const WorkspaceSaga = combineSagaHandlers(
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        WorkspaceActions.evalRepl.type
+        WorkspaceActions.evalRepl.type,
+        workspaceLocation
       );
     },
     debuggerResume: function* (action) {
@@ -281,8 +274,8 @@ const WorkspaceSaga = combineSagaHandlers(
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        InterpreterActions.debuggerResume.type
+        InterpreterActions.debuggerResume.type,
+        workspaceLocation
       );
     },
     debuggerReset: function* (action) {
@@ -296,25 +289,24 @@ const WorkspaceSaga = combineSagaHandlers(
       context.runtime.break = false;
       yield put(actions.updateLastDebuggerResult(undefined, workspaceLocation));
     },
-    setEditorHighlightedLines: function* (action): any {
+    setEditorHighlightedLines: function* (action) {
       const newHighlightedLines = action.payload.newHighlightedLines;
       if (newHighlightedLines.length === 0) {
-        highlightClean();
+        yield call(highlightClean);
       } else {
         try {
-          newHighlightedLines.forEach(([startRow, endRow]: [number, number]) => {
+          for (const [startRow, endRow] of newHighlightedLines) {
             for (let row = startRow; row <= endRow; row++) {
-              highlightLine(row);
+              yield call(highlightLine, row);
             }
-          });
+          }
         } catch (e) {
           // Error most likely caused by trying to highlight the lines of the prelude
           // in CSE Machine. Can be ignored.
         }
       }
-      yield;
     },
-    setEditorHighlightedLinesControl: function* (action): any {
+    setEditorHighlightedLinesControl: function* (action) {
       const newHighlightedLines = action.payload.newHighlightedLines;
       if (newHighlightedLines.length === 0) {
         yield call(highlightCleanForControl);

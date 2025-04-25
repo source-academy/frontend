@@ -1,5 +1,5 @@
 import { FSModule } from 'browserfs/dist/node/core/FS';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/types';
 import { compressToEncodedURIComponent } from 'lz-string';
 import qs from 'query-string';
 import { SagaIterator } from 'redux-saga';
@@ -8,16 +8,19 @@ import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
 import PlaygroundActions from '../../features/playground/PlaygroundActions';
-import { isSchemeLanguage, isSourceLanguage, OverallState } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import {
+  isSchemeLanguage,
+  isSourceLanguage,
+  type OverallState
+} from '../application/ApplicationTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
 import { visitSideContent } from '../sideContent/SideContentActions';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../workspace/WorkspaceActions';
-import { EditorTabState, PlaygroundWorkspaceState } from '../workspace/WorkspaceTypes';
-import { safeTakeEvery as takeEvery } from './SafeEffects';
+import type { PlaygroundWorkspaceState } from '../workspace/WorkspaceTypes';
+import { safeTakeEvery as takeEvery, selectWorkspace } from './SafeEffects';
 
 export default function* PlaygroundSaga(): SagaIterator {
   yield takeEvery(PlaygroundActions.generateLzString.type, updateQueryString);
@@ -127,9 +130,6 @@ export default function* PlaygroundSaga(): SagaIterator {
 }
 
 function* updateQueryString() {
-  const isFolderModeEnabled: boolean = yield select(
-    (state: OverallState) => state.workspaces.playground.isFolderModeEnabled
-  );
   const fileSystem: FSModule = yield select(
     (state: OverallState) => state.fileSystem.inBrowserFileSystem
   );
@@ -138,27 +138,20 @@ function* updateQueryString() {
     'playground',
     fileSystem
   );
-  const editorTabs: EditorTabState[] = yield select(
-    (state: OverallState) => state.workspaces.playground.editorTabs
-  );
+
+  const {
+    activeEditorTabIndex,
+    context: { chapter, variant },
+    editorTabs,
+    execTime,
+    externalLibrary: external,
+    isFolderModeEnabled
+  } = yield* selectWorkspace('playground');
+
   const editorTabFilePaths = editorTabs
-    .map((editorTab: EditorTabState) => editorTab.filePath)
+    .map(editorTab => editorTab.filePath)
     .filter((filePath): filePath is string => filePath !== undefined);
-  const activeEditorTabIndex: number | null = yield select(
-    (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
-  );
-  const chapter: Chapter = yield select(
-    (state: OverallState) => state.workspaces.playground.context.chapter
-  );
-  const variant: Variant = yield select(
-    (state: OverallState) => state.workspaces.playground.context.variant
-  );
-  const external: ExternalLibraryName = yield select(
-    (state: OverallState) => state.workspaces.playground.externalLibrary
-  );
-  const execTime: number = yield select(
-    (state: OverallState) => state.workspaces.playground.execTime
-  );
+
   const newQueryString = qs.stringify({
     isFolder: isFolderModeEnabled,
     files: compressToEncodedURIComponent(qs.stringify(files)),

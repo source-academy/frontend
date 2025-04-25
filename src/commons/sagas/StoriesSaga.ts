@@ -12,10 +12,10 @@ import {
   putStoriesUserRole,
   updateStory
 } from 'src/features/stories/storiesComponents/BackendAccess';
-import { StoryData, StoryListView, StoryView } from 'src/features/stories/StoriesTypes';
+import type { StoryData, StoryListView, StoryView } from 'src/features/stories/StoriesTypes';
 
 import SessionActions from '../application/actions/SessionActions';
-import { OverallState, StoriesRole } from '../application/ApplicationTypes';
+import { type OverallState, StoriesRole } from '../application/ApplicationTypes';
 import { Tokens } from '../application/types/SessionTypes';
 import { combineSagaHandlers } from '../redux/utils';
 import { resetSideContent } from '../sideContent/SideContentActions';
@@ -143,8 +143,8 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
       codeFilePath,
       context,
       execTime,
-      'stories',
       action.type,
+      'stories',
       env
     );
   },

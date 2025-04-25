@@ -1,28 +1,19 @@
 import type { Context } from 'js-slang';
 import { defineSymbol } from 'js-slang/dist/createContext';
-import type { Variant } from 'js-slang/dist/types';
 import { put, select, take } from 'redux-saga/effects';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 
 import type { OverallState } from '../../../application/ApplicationTypes';
-import { ExternalLibraryName } from '../../../application/types/ExternalTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import { selectWorkspace } from '../../SafeEffects';
 
 export function* clearContext(workspaceLocation: WorkspaceLocation, entrypointCode: string) {
-  const [chapter, symbols, externalLibraryName, globals, variant]: [
-    number,
-    string[],
-    ExternalLibraryName,
-    Array<[string, any]>,
-    Variant
-  ] = yield select((state: OverallState) => [
-    state.workspaces[workspaceLocation].context.chapter,
-    state.workspaces[workspaceLocation].context.externalSymbols,
-    state.workspaces[workspaceLocation].externalLibrary,
-    state.workspaces[workspaceLocation].globals,
-    state.workspaces[workspaceLocation].context.variant
-  ]);
+  const {
+    context: { chapter, externalSymbols: symbols, variant },
+    externalLibrary: externalLibraryName,
+    globals
+  } = yield* selectWorkspace(workspaceLocation);
 
   const library = {
     chapter,

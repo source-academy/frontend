@@ -1,4 +1,4 @@
-import { Chapter, Language, type SourceError, Variant } from 'js-slang/dist/types';
+import { Chapter, Language, type SourceError, type Value, Variant } from 'js-slang/dist/types';
 
 import type { AchievementState } from '../../features/achievement/AchievementTypes';
 import type { DashboardState } from '../../features/dashboard/DashboardTypes';
@@ -74,7 +74,7 @@ export type CodeOutput = {
  */
 export type ResultOutput = {
   type: 'result';
-  value: any;
+  value: Value;
   consoleLogs: string[];
   runtime?: number;
   isProgram?: boolean;

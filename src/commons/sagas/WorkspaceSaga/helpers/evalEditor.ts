@@ -103,8 +103,8 @@ export function* evalEditorSaga(
         prependFilePath,
         elevatedContext,
         execTime,
-        workspaceLocation,
-        EVAL_SILENT
+        EVAL_SILENT,
+        workspaceLocation
       );
       // Block use of methods from privileged context
       yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation);
@@ -116,8 +116,8 @@ export function* evalEditorSaga(
       entrypointFilePath,
       context,
       execTime,
-      workspaceLocation,
-      WorkspaceActions.evalEditor.type
+      WorkspaceActions.evalEditor.type,
+      workspaceLocation
     );
   }
 }

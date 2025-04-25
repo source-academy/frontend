@@ -102,11 +102,15 @@ export function safeTakeLeading<P extends ActionPattern, Fn extends (...args: an
 }
 
 export function* selectWorkspace<T extends WorkspaceLocation>(workspaceLocation: T) {
-  const workspace: WorkspaceManagerState[T] = yield select((state: OverallState) => state.workspaces[workspaceLocation])
-  return workspace
+  const workspace: WorkspaceManagerState[T] = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation]
+  );
+  return workspace;
 }
 
 export function* selectStoryEnv(storyEnv: string) {
-  const workspace: StoriesEnvState = yield select((state: OverallState) => state.stories.envs[storyEnv])
-  return workspace
+  const workspace: StoriesEnvState = yield select(
+    (state: OverallState) => state.stories.envs[storyEnv]
+  );
+  return workspace;
 }
