@@ -87,6 +87,7 @@ export default {
     '^.+\\.module\\.(css|sass|scss)$'
   ],
   moduleNameMapper: {
+    '\\.(jpg|jpeg)$': '<rootDir>/src/fileMock.ts',
     '\\.svg$': 'identity-obj-proxy',
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
     'unist-util-visit-parents/do-not-use-color':
