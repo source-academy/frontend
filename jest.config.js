@@ -14,7 +14,7 @@ const replaceSlashes = target => {
 
 /** @type {import('jest').Config} */
 export default {
-  testEnvironment: 'jsdom',
+  testEnvironment: './jsdom-env.js',
   transform: {
     '^.+\\.(t|j)sx?$': [
       '@swc/jest',
