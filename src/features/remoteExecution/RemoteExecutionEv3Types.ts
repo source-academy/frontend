@@ -4,34 +4,7 @@ import SensorColor from 'src/assets/sColor.svg';
 import SensorGyro from 'src/assets/sGyro.svg';
 import SensorTouch from 'src/assets/sTouch.svg';
 import SensorUltrasonic from 'src/assets/sUltrasonic.svg';
-
-// (18 March 2022)
-// Problem to be fixed in the future:
-//
-// There seems to be an inconsistency between how jest and how typescript
-// behaves when encountering imports of the form `import * as x from 'x.json'`
-// jest will set x = jsonobject,
-// but typescript will instead set x = { default: jsonobject }
-//
-// This means that under typescript, we want `import x from 'x.json'`,
-// while under jest, we want `import * as x from 'x.json'`
-//
-// This problem was hidden when transpiling to CommonJS modules before, which
-// behaves similarly to jest. But now that we are transpiling to es6,
-// typescript projects that depend on js-slang may now be exposed to this
-// inconsistency.
-//
-// For now, we use brute force until the landscape changes or someone thinks of
-// a proper solution.
-function resolveImportInconsistency(json: any) {
-  // `json` doesn't inherit from `Object`?
-  // Can't use hasOwnProperty for some reason.
-  if ('default' in json) {
-    return json.default;
-  } else {
-    return json;
-  }
-}
+import { resolveImportInconsistency } from 'src/commons/utils/TestUtils';
 
 export enum Ev3MotorTypes {
   LARGE = 'lego-ev3-l-motor',
