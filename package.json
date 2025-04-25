@@ -154,7 +154,6 @@
     "prettier": "^3.3.3",
     "process": "^0.11.10",
     "react-error-overlay": "^6.0.11",
-    "react-scripts": "^5.0.1",
     "react-test-renderer": "^18.2.0",
     "redux-saga-test-plan": "^4.0.6",
     "resize-observer-polyfill": "^1.5.1",
