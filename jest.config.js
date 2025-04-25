@@ -14,6 +14,9 @@ const replaceSlashes = target => {
 
 /** @type {import('jest').Config} */
 export default {
+  transform: {
+    '^.+\\.(t|j)sx?$': '@swc/jest'
+  },
   transformIgnorePatterns: [
     // Will give something like
     // '[/\\\\]node_modules[/\\\\]
