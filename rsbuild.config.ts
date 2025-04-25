@@ -4,7 +4,7 @@ import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
 
-const { publicVars } = loadEnv({ prefixes: ['REACT_APP_'] });
+const { publicVars, rawPublicVars } = loadEnv({ prefixes: ['REACT_APP_'] });
 
 export default defineConfig({
   plugins: [pluginReact(), pluginSvgr({ mixedImport: true }), pluginNodePolyfill(), pluginSass()],
@@ -109,7 +109,10 @@ export default defineConfig({
     }
   },
   source: {
-    define: publicVars
+    define: {
+      ...publicVars,
+      'process.env': JSON.stringify(rawPublicVars)
+    }
   },
   html: {
     template: './public/index.html',
