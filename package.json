@@ -14,7 +14,7 @@
   },
   "scripts": {
     "analyze": "yarn build --stats; webpack-bundle-analyzer build/bundle-stats.json",
-    "build": "rsbuild build",
+    "build": "tsc -b && rsbuild build",
     "coverage": "./scripts/coverage-fix.sh do && yarn test --coverage && ./scripts/coverage-fix.sh undo",
     "dev": "rsbuild dev",
     "format": "eslint --fix src && prettier --write \"src/**/*.{js,jsx,ts,tsx}\" && prettier --write --parser scss \"src/**/*.scss\"",
@@ -100,6 +100,9 @@
     "sourceror": "^0.8.5",
     "unified": "^11.0.0",
     "uuid": "^11.0.2",
+    "workbox-core": "^7.3.0",
+    "workbox-precaching": "^7.3.0",
+    "workbox-routing": "^7.3.0",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz",
     "xml2js": "^0.6.0",
     "yareco": "^0.1.5"
