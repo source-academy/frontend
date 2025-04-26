@@ -94,17 +94,16 @@ const expectRefreshFlowFetchesToBeCalledWithCorrectParams = () => {
   expect(fetchMock).toHaveBeenNthCalledWith(
     1,
     fullApiUrl,
-    generateApiCallHeadersAndFetchOptions(GET_METHOD, fetchOptions)
+    expect.objectContaining(generateApiCallHeadersAndFetchOptions(GET_METHOD, fetchOptions))
   );
   expect(fetchMock).toHaveBeenNthCalledWith(
     2,
     fullApiUrl,
-    generateApiCallHeadersAndFetchOptions(GET_METHOD, refreshFetchOptions)
+    expect.objectContaining(generateApiCallHeadersAndFetchOptions(GET_METHOD, refreshFetchOptions))
   );
 };
 const expectPostRefreshToBeCalled = (called: boolean) =>
   called ? expect(postRefreshSpy).toBeCalledTimes(1) : expect(postRefreshSpy).not.toBeCalled();
-// const expectPostRefreshToBeCalled = (called: boolean) => expect(true).toBe(true);
 const expectStoreToDispatchRefreshedTokens = (dispatchOccurs: boolean) =>
   dispatchOccurs
     ? expect(storeDispatchSpy).toBeCalledWith(actions.setTokens(refreshedTokens))
@@ -157,7 +156,7 @@ describe('request', () => {
 
     expectPostRefreshToBeCalled(true);
     expectStoreToDispatchRefreshedTokens(true);
-    // expectRefreshFlowFetchesToBeCalledWithCorrectParams();
+    expectRefreshFlowFetchesToBeCalledWithCorrectParams();
     expect(showWarningMessageSpy).not.toBeCalled();
     expectStoreToDispatchLogout(false);
     expect(resp).toEqual(OK_RESP);
@@ -171,7 +170,7 @@ describe('request', () => {
 
     expectPostRefreshToBeCalled(true);
     expectStoreToDispatchRefreshedTokens(true);
-    // expectRefreshFlowFetchesToBeCalledWithCorrectParams();
+    expectRefreshFlowFetchesToBeCalledWithCorrectParams();
     expect(showWarningMessageSpy).toBeCalledWith(
       getResponseErrorMessage(NON_UNAUTHORIZED_401_ERROR_RESP)
     );
@@ -188,7 +187,7 @@ describe('request', () => {
 
     expectPostRefreshToBeCalled(true);
     expectStoreToDispatchRefreshedTokens(true);
-    // expectRefreshFlowFetchesToBeCalledWithCorrectParams();
+    expectRefreshFlowFetchesToBeCalledWithCorrectParams();
     expect(showWarningMessageSpy).toBeCalledWith(
       autoLogoutMessage,
       undefined,
@@ -207,7 +206,7 @@ describe('request', () => {
 
     expectPostRefreshToBeCalled(true);
     expectStoreToDispatchRefreshedTokens(true);
-    // expectRefreshFlowFetchesToBeCalledWithCorrectParams();
+    expectRefreshFlowFetchesToBeCalledWithCorrectParams();
     expect(showWarningMessageSpy).toBeCalledWith(
       promptReloginMessage,
       -1,
@@ -271,14 +270,16 @@ describe('request', () => {
 
     expectPostRefreshToBeCalled(true);
     expect(fetchMock).toBeCalledTimes(numRequests * 2);
-    // expect(fetchMock.mock.calls).toEqual(
-    //   [fetchOptions, refreshFetchOptions].flatMap(opts =>
-    //     (['GET', 'POST', 'DELETE'] as RequestMethod[]).map(method => [
-    //       fullApiUrl,
-    //       generateApiCallHeadersAndFetchOptions(method, opts)
-    //     ])
-    //   )
-    // );
+    expect(fetchMock.mock.calls).toEqual(
+      expect.arrayContaining(
+        [fetchOptions, refreshFetchOptions].flatMap(opts =>
+          (['GET', 'POST', 'DELETE'] as RequestMethod[]).map(method => [
+            fullApiUrl,
+            generateApiCallHeadersAndFetchOptions(method, opts)
+          ])
+        )
+      )
+    );
   });
 
   test('multiple 401 unauthorized requests -> triggers a SINGLE refresh token flow (fails) -> does not refire API requests', async () => {
