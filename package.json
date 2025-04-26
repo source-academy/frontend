@@ -110,7 +110,6 @@
     "@babel/preset-typescript": "^7.24.1",
     "@babel/runtime": "^7.24.5",
     "@convergencelabs/ace-collab-ext": "^0.6.0",
-    "@craco/craco": "^7.1.0",
     "@rsbuild/core": "^1.3.12",
     "@rsbuild/plugin-eslint": "^1.1.1",
     "@rsbuild/plugin-node-polyfill": "^1.3.0",
