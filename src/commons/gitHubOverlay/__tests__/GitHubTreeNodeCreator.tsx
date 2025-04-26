@@ -1,10 +1,17 @@
 import { Octokit } from '@octokit/rest';
+import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
+import { MockedFunction } from 'jest-mock';
+import { DeepPartial } from 'src/commons/utils/TypeHelper';
 
-import * as GitHubUtils from '../../../features/github/GitHubUtils';
+import { getGitHubOctokitInstance } from '../../../features/github/GitHubUtils';
 import { GitHubTreeNodeCreator } from '../GitHubTreeNodeCreator';
 
+jest.mock('../../../features/github/GitHubUtils');
+
 test('Test generate first level of a repo', async () => {
-  const getGitHubOctokitInstanceMock = jest.spyOn(GitHubUtils, 'getGitHubOctokitInstance');
+  const getGitHubOctokitInstanceMock = getGitHubOctokitInstance as MockedFunction<
+    typeof getGitHubOctokitInstance
+  >;
   getGitHubOctokitInstanceMock.mockImplementation(getOctokitInstanceMock);
 
   const fileNodes = await GitHubTreeNodeCreator.getFirstLayerRepoFileNodes('some-repository');
@@ -46,7 +53,9 @@ test('Test attempt to generate repo with repoName as empty string', async () => 
 });
 
 test('Test attempt to create child nodes from two different repositories', async () => {
-  const getGitHubOctokitInstanceMock = jest.spyOn(GitHubUtils, 'getGitHubOctokitInstance');
+  const getGitHubOctokitInstanceMock = getGitHubOctokitInstance as MockedFunction<
+    typeof getGitHubOctokitInstance
+  >;
   getGitHubOctokitInstanceMock.mockImplementation(getOctokitInstanceMock);
 
   const fileNodes = await GitHubTreeNodeCreator.getFirstLayerRepoFileNodes('some-repository');
@@ -80,7 +89,9 @@ test('Test attempt to create child nodes from two different repositories', async
 });
 
 test('Test attempt to create repository while octokit not yet set', async () => {
-  const getGitHubOctokitInstanceMock = jest.spyOn(GitHubUtils, 'getGitHubOctokitInstance');
+  const getGitHubOctokitInstanceMock = getGitHubOctokitInstance as MockedFunction<
+    typeof getGitHubOctokitInstance
+  >;
   getGitHubOctokitInstanceMock.mockImplementation(getOctokitInstanceReturnUndefined);
 
   const fileNodes = await GitHubTreeNodeCreator.getFirstLayerRepoFileNodes('some-repository');
@@ -99,25 +110,22 @@ function getOctokitInstanceReturnUndefined() {
 }
 
 function getOctokitInstanceMock() {
-  const octokit = new Octokit();
-
-  const getContentMock = jest.spyOn(octokit.repos, 'getContent');
-  getContentMock.mockImplementation(async () => {
-    const contentResponse = generateGetContentResponse();
-    contentResponse.data = [
-      generateGitHubSubDirectory('TestFile', 'file', 'TestFile'),
-      generateGitHubSubDirectory('TestFolder', 'dir', 'TestFolder')
-    ];
-    return contentResponse;
-  });
-
-  const getAuthenticatedMock = jest.spyOn(octokit.users, 'getAuthenticated');
-  getAuthenticatedMock.mockImplementation(async () => {
-    const authResponse = generateGetAuthenticatedResponse();
-    return authResponse;
-  });
-
-  return octokit;
+  return {
+    repos: {
+      getContent: jest.fn().mockImplementation(async () => {
+        const contentResponse = generateGetContentResponse();
+        contentResponse.data = [
+          generateGitHubSubDirectory('TestFile', 'file', 'TestFile'),
+          generateGitHubSubDirectory('TestFolder', 'dir', 'TestFolder')
+          // TODO: Remove any
+        ] as any;
+        return contentResponse;
+      }) as any
+    },
+    users: {
+      getAuthenticated: jest.fn().mockResolvedValue(generateGetAuthenticatedResponse()) as any
+    }
+  } satisfies DeepPartial<Octokit>;
 }
 
 function generateGetContentResponse() {
@@ -143,12 +151,12 @@ function generateGetContentResponse() {
         html: null
       }
     }
-  } as any;
+  } satisfies GetResponseTypeFromEndpointMethod<Octokit['repos']['getContent']>;
 }
 
-function generateGitHubSubDirectory(name: string, type: string, path: string) {
+function generateGitHubSubDirectory(name: string, type: 'file' | 'dir', path: string) {
   return {
-    type: type,
+    type: type as 'file', // TODO: Fix
     size: 0,
     name: name,
     path: path,
@@ -162,7 +170,8 @@ function generateGitHubSubDirectory(name: string, type: string, path: string) {
       git: null,
       html: null
     }
-  } as any;
+    // TODO: Remove partial
+  } satisfies Partial<GetResponseTypeFromEndpointMethod<Octokit['repos']['getContent']>['data']>;
 }
 
 function generateGetAuthenticatedResponse() {
@@ -203,5 +212,5 @@ function generateGetAuthenticatedResponse() {
     headers: {},
     status: 200,
     url: 'www.eh'
-  } as any;
+  } satisfies GetResponseTypeFromEndpointMethod<Octokit['users']['getAuthenticated']>;
 }
