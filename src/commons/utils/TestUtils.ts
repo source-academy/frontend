@@ -87,7 +87,9 @@ export function deepFilter<T>(
 export function resolveImportInconsistency(json: any) {
   // `json` doesn't inherit from `Object`?
   // Can't use hasOwnProperty for some reason.
-  if ('default' in json) {
+  const hasDefaultExport =
+    process.env.NODE_ENV === 'test' ? 'default' in json : json.hasOwnProperty('default');
+  if (hasDefaultExport) {
     return json.default;
   } else {
     return json;
