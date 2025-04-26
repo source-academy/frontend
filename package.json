@@ -14,8 +14,8 @@
   },
   "scripts": {
     "analyze": "yarn build --stats; webpack-bundle-analyzer build/bundle-stats.json",
-    "build": "cross-env DISABLE_ESLINT_PLUGIN=true NODE_OPTIONS=--max_old_space_size=8192 craco build",
-    "coverage": "./scripts/coverage-fix.sh do && craco test --coverage && ./scripts/coverage-fix.sh undo",
+    "build": "rsbuild build",
+    "coverage": "./scripts/coverage-fix.sh do && yarn test --coverage && ./scripts/coverage-fix.sh undo",
     "dev": "rsbuild dev",
     "format": "eslint --fix src && prettier --write \"src/**/*.{js,jsx,ts,tsx}\" && prettier --write --parser scss \"src/**/*.scss\"",
     "format:tsx": "prettier --list-different \"src/**/*.{js,jsx,ts,tsx}\"",
@@ -25,7 +25,8 @@
     "test-coveralls": "./scripts/test-coveralls.sh",
     "update-ui-snapshots": "jest --updateSnapshot",
     "eslint": "eslint src",
-    "prepare": "husky"
+    "prepare": "husky",
+    "preview": "rsbuild preview"
   },
   "dependencies": {
     "@blueprintjs/core": "^5.10.1",
