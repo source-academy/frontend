@@ -158,10 +158,19 @@ export function objectValues<T>(obj: Record<any, T>) {
 }
 
 /**
+ * Utility type for getting the key-value tuple types
+ * of a record
+ */
+type DeconstructRecord<T extends Record<any, any>> = Exclude<
+  {
+    [K in keyof T]: [K, T[K]];
+  }[keyof T],
+  undefined
+>[];
+
+/**
  * Type safe `Object.entries`
  */
-export function objectEntries<K extends string | number | symbol, V>(
-  obj: Partial<Record<K, V>>
-): [K, V][] {
-  return Object.entries(obj) as [K, V][];
+export function objectEntries<T extends Record<any, any>>(obj: T) {
+  return Object.entries(obj) as DeconstructRecord<T>;
 }

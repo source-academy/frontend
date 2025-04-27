@@ -1,12 +1,15 @@
 import {
-  ActionCreatorWithOptionalPayload,
-  ActionCreatorWithoutPayload,
-  ActionCreatorWithPreparedPayload,
+  type ActionCreatorWithOptionalPayload,
+  type ActionCreatorWithoutPayload,
+  type ActionCreatorWithPreparedPayload,
   createAction
 } from '@reduxjs/toolkit';
 import * as Sentry from '@sentry/browser';
-import { SagaIterator } from 'redux-saga';
-import { StrictEffect, takeEvery } from 'redux-saga/effects';
+import type { SagaIterator } from 'redux-saga';
+import { type StrictEffect, takeLatest, takeLeading } from 'redux-saga/effects';
+
+import { safeTakeEvery } from '../sagas/SafeEffects';
+import { objectEntries } from '../utils/TypeHelper';
 
 /**
  * Creates actions, given a base name and base actions
@@ -39,6 +42,20 @@ export function createActions<BaseName extends string, BaseActions extends Recor
   );
 }
 
+function wrapSaga<T extends (...args: any[]) => Generator>(saga: T) {
+  return function* (...args: Parameters<T>) {
+    try {
+      return yield* saga(...args);
+    } catch (error) {
+      handleUncaughtError(error);
+    }
+  };
+}
+
+type SagaHandler<
+  T extends ActionCreatorWithPreparedPayload<any, any> | ActionCreatorWithoutPayload<any>
+> = (action: ReturnType<T>) => Generator<StrictEffect>;
+
 export function combineSagaHandlers<
   TActions extends Record<
     string,
@@ -47,17 +64,29 @@ export function combineSagaHandlers<
 >(
   actions: TActions,
   handlers: {
-    // TODO: Maybe this can be stricter? And remove the optional type after
-    // migration is fully done
-    [K in keyof TActions]?: (action: ReturnType<TActions[K]>) => SagaIterator;
+    // TODO: Maybe this can be stricter? And remove the optional type after migration is fully done
+    [K in keyof TActions]?:
+      | SagaHandler<TActions[K]>
+      | { takeLeading: SagaHandler<TActions[K]> }
+      | { takeLatest: SagaHandler<TActions[K]> };
   },
   others?: (takeEvery: typeof saferTakeEvery) => SagaIterator
 ): () => SagaIterator {
-  const sagaHandlers = Object.entries(handlers).map(([actionName, saga]) =>
-    saferTakeEvery(actions[actionName], saga)
-  );
   return function* (): SagaIterator {
-    yield* sagaHandlers;
+    for (const [actionName, saga] of objectEntries(handlers)) {
+      if (saga === undefined) {
+        continue;
+      } else if (typeof saga === 'function') {
+        yield safeTakeEvery(actions[actionName].type, saga);
+      } else if ('takeLeading' in saga) {
+        yield takeLeading(actions[actionName].type, wrapSaga(saga.takeLeading));
+      } else if ('takeLatest' in saga) {
+        yield takeLatest(actions[actionName].type, wrapSaga(saga.takeLatest));
+      } else {
+        throw new Error(`Unknown saga handler type for ${actionName as string}`);
+      }
+    }
+
     if (others) {
       const obj = others(saferTakeEvery);
       while (true) {
@@ -74,15 +103,7 @@ export function saferTakeEvery<
     | ActionCreatorWithOptionalPayload<any>
     | ActionCreatorWithPreparedPayload<any[], any>
 >(actionPattern: Action, fn: (action: ReturnType<Action>) => Generator<StrictEffect<any>>) {
-  function* wrapper(action: ReturnType<Action>) {
-    try {
-      yield* fn(action);
-    } catch (error) {
-      handleUncaughtError(error);
-    }
-  }
-
-  return takeEvery(actionPattern.type, wrapper);
+  return safeTakeEvery(actionPattern.type, fn);
 }
 
 function handleUncaughtError(error: any) {

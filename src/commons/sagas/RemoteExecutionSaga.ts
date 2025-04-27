@@ -36,32 +36,33 @@ const dummyLocation = {
 // TODO: Refactor and combine in a future commit
 const sagaActions = { ...RemoteExecutionActions, ...InterpreterActions };
 const RemoteExecutionSaga = combineSagaHandlers(sagaActions, {
-  // TODO: Should be `takeLatest`, not `takeEvery`
-  remoteExecFetchDevices: function* () {
-    const [tokens, session]: [any, DeviceSession | undefined] = yield select(
-      (state: OverallState) => [
-        {
-          accessToken: state.session.accessToken,
-          refreshToken: state.session.refreshToken
-        },
-        state.session.remoteExecutionSession
-      ]
-    );
-    const devices: Device[] = yield call(fetchDevices, tokens);
-
-    yield put(actions.remoteExecUpdateDevices(devices));
-
-    if (!session) {
-      return;
-    }
-    const updatedDevice = devices.find(({ id }) => id === session.device.id);
-    if (updatedDevice) {
-      yield put(
-        actions.remoteExecUpdateSession({
-          ...session,
-          device: updatedDevice
-        })
+  remoteExecFetchDevices: {
+    takeLatest: function* () {
+      const [tokens, session]: [any, DeviceSession | undefined] = yield select(
+        (state: OverallState) => [
+          {
+            accessToken: state.session.accessToken,
+            refreshToken: state.session.refreshToken
+          },
+          state.session.remoteExecutionSession
+        ]
       );
+      const devices: Device[] = yield call(fetchDevices, tokens);
+
+      yield put(actions.remoteExecUpdateDevices(devices));
+
+      if (!session) {
+        return;
+      }
+      const updatedDevice = devices.find(({ id }) => id === session.device.id);
+      if (updatedDevice) {
+        yield put(
+          actions.remoteExecUpdateSession({
+            ...session,
+            device: updatedDevice
+          })
+        );
+      }
     }
   },
   remoteExecConnect: function* (action): any {

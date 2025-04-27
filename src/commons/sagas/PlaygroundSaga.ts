@@ -1,8 +1,7 @@
-import { FSModule } from 'browserfs/dist/node/core/FS';
+import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { Chapter } from 'js-slang/dist/types';
 import { compressToEncodedURIComponent } from 'lz-string';
 import qs from 'query-string';
-import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select } from 'redux-saga/effects';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
@@ -14,21 +13,20 @@ import {
   type OverallState
 } from '../application/ApplicationTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
+import { combineSagaHandlers } from '../redux/utils';
 import { visitSideContent } from '../sideContent/SideContentActions';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../workspace/WorkspaceActions';
-import { safeTakeEvery as takeEvery, selectWorkspace } from './SafeEffects';
+import { selectWorkspace } from './SafeEffects';
 
-export default function* PlaygroundSaga(): SagaIterator {
-  yield takeEvery(PlaygroundActions.generateLzString.type, updateQueryString);
-
-  yield takeEvery(
-    PlaygroundActions.shortenURL.type,
-    function* (action: ReturnType<typeof PlaygroundActions.shortenURL>): any {
+const PlaygroundSaga = combineSagaHandlers(
+  PlaygroundActions,
+  {
+    generateLzString: updateQueryString,
+    shortenURL: function* ({ payload: keyword }) {
       const queryString = yield select((state: OverallState) => state.playground.queryString);
-      const keyword = action.payload;
       const errorMsg = 'ERROR';
 
       let resp, timeout;
@@ -59,72 +57,76 @@ export default function* PlaygroundSaga(): SagaIterator {
       }
       yield put(PlaygroundActions.updateShortURL(Constants.urlShortenerBase + resp.url.keyword));
     }
-  );
+  },
+  function* (takeEvery) {
+    yield takeEvery(
+      visitSideContent,
+      function* ({ payload: { newId, prevId, workspaceLocation } }) {
+        if (workspaceLocation !== 'playground' || newId === prevId) return;
 
-  yield takeEvery(
-    visitSideContent.type,
-    function* ({
-      payload: { newId, prevId, workspaceLocation }
-    }: ReturnType<typeof visitSideContent>) {
-      if (workspaceLocation !== 'playground' || newId === prevId) return;
-
-      // Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
-      if (prevId === SideContentType.substVisualizer && newId === SideContentType.mobileEditorRun) {
-        return;
-      }
-
-      const {
-        context: { chapter: playgroundSourceChapter },
-        editorTabs
-      } = yield* selectWorkspace('playground');
-
-      if (prevId === SideContentType.substVisualizer) {
-        if (newId === SideContentType.mobileEditorRun) return;
-        const hasBreakpoints = editorTabs.find(({ breakpoints }) => breakpoints.find(x => !!x));
-
-        if (!hasBreakpoints) {
-          yield put(WorkspaceActions.toggleUsingSubst(false, workspaceLocation));
-          yield put(WorkspaceActions.clearReplOutput(workspaceLocation));
+        // Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
+        if (
+          prevId === SideContentType.substVisualizer &&
+          newId === SideContentType.mobileEditorRun
+        ) {
+          return;
         }
-      }
 
-      if (newId !== SideContentType.cseMachine) {
-        yield put(WorkspaceActions.toggleUsingCse(false, workspaceLocation));
-        yield call([CseMachine, CseMachine.clearCse]);
-        yield call([JavaCseMachine, JavaCseMachine.clearCse]);
-        yield put(WorkspaceActions.updateCurrentStep(-1, workspaceLocation));
-        yield put(WorkspaceActions.updateStepsTotal(0, workspaceLocation));
-        yield put(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
-        yield put(WorkspaceActions.setEditorHighlightedLines(workspaceLocation, 0, []));
-      }
+        const {
+          context: { chapter: playgroundSourceChapter },
+          editorTabs
+        } = yield* selectWorkspace('playground');
 
-      if (playgroundSourceChapter === Chapter.FULL_JAVA && newId === SideContentType.cseMachine) {
-        yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
-      }
+        if (prevId === SideContentType.substVisualizer) {
+          if (newId === SideContentType.mobileEditorRun) return;
+          const hasBreakpoints = editorTabs.find(({ breakpoints }) => breakpoints.find(x => !!x));
 
-      if (
-        isSourceLanguage(playgroundSourceChapter) &&
-        (newId === SideContentType.substVisualizer || newId === SideContentType.cseMachine)
-      ) {
-        if (playgroundSourceChapter <= Chapter.SOURCE_2) {
-          yield put(WorkspaceActions.toggleUsingSubst(true, workspaceLocation));
+          if (!hasBreakpoints) {
+            yield put(WorkspaceActions.toggleUsingSubst(false, workspaceLocation));
+            yield put(WorkspaceActions.clearReplOutput(workspaceLocation));
+          }
+        }
+
+        if (newId !== SideContentType.cseMachine) {
+          yield put(WorkspaceActions.toggleUsingCse(false, workspaceLocation));
+          yield call([CseMachine, CseMachine.clearCse]);
+          yield call([JavaCseMachine, JavaCseMachine.clearCse]);
+          yield put(WorkspaceActions.updateCurrentStep(-1, workspaceLocation));
+          yield put(WorkspaceActions.updateStepsTotal(0, workspaceLocation));
+          yield put(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
+          yield put(WorkspaceActions.setEditorHighlightedLines(workspaceLocation, 0, []));
+        }
+
+        if (playgroundSourceChapter === Chapter.FULL_JAVA && newId === SideContentType.cseMachine) {
+          yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
+        }
+
+        if (
+          isSourceLanguage(playgroundSourceChapter) &&
+          (newId === SideContentType.substVisualizer || newId === SideContentType.cseMachine)
+        ) {
+          if (playgroundSourceChapter <= Chapter.SOURCE_2) {
+            yield put(WorkspaceActions.toggleUsingSubst(true, workspaceLocation));
+          } else {
+            yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
+          }
+        }
+
+        if (newId === SideContentType.upload) {
+          yield put(WorkspaceActions.toggleUsingUpload(true, workspaceLocation));
         } else {
+          yield put(WorkspaceActions.toggleUsingUpload(false, workspaceLocation));
+        }
+
+        if (isSchemeLanguage(playgroundSourceChapter) && newId === SideContentType.cseMachine) {
           yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
         }
       }
+    );
+  }
+);
 
-      if (newId === SideContentType.upload) {
-        yield put(WorkspaceActions.toggleUsingUpload(true, workspaceLocation));
-      } else {
-        yield put(WorkspaceActions.toggleUsingUpload(false, workspaceLocation));
-      }
-
-      if (isSchemeLanguage(playgroundSourceChapter) && newId === SideContentType.cseMachine) {
-        yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
-      }
-    }
-  );
-}
+export default PlaygroundSaga;
 
 function* updateQueryString() {
   const fileSystem: FSModule = yield select(

@@ -28,15 +28,16 @@ import { evalCodeSaga } from './WorkspaceSaga/helpers/evalCode';
 // TODO: Refactor and combine in a future commit
 const sagaActions = { ...StoriesActions, ...SessionActions };
 const StoriesSaga = combineSagaHandlers(sagaActions, {
-  // TODO: This should be using `takeLatest`, not `takeEvery`
-  getStoriesList: function* () {
-    const tokens: Tokens = yield selectTokens();
-    const allStories: StoryListView[] = yield call(async () => {
-      const resp = await getStories(tokens);
-      return resp ?? [];
-    });
+  getStoriesList: {
+    takeLatest: function* () {
+      const tokens: Tokens = yield selectTokens();
+      const allStories: StoryListView[] = yield call(async () => {
+        const resp = await getStories(tokens);
+        return resp ?? [];
+      });
 
-    yield put(actions.updateStoriesList(allStories));
+      yield put(actions.updateStoriesList(allStories));
+    }
   },
   setCurrentStoryId: function* (action) {
     const tokens: Tokens = yield selectTokens();
