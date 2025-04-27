@@ -5,6 +5,7 @@ import {
   type ForkEffect,
   type HelperWorkerParameters,
   select,
+  SelectEffect,
   takeEvery,
   takeLatest,
   takeLeading
@@ -101,10 +102,22 @@ export function safeTakeLeading<P extends ActionPattern, Fn extends (...args: an
   return takeLeading<P, typeof wrappedWorker>(pattern, wrappedWorker, ...args);
 }
 
-export function* selectWorkspace<T extends WorkspaceLocation>(workspaceLocation: T) {
+export function selectWorkspace<T extends WorkspaceLocation, U>(
+  workspaceLocation: T,
+  func: (state: WorkspaceManagerState[T]) => U
+): Generator<SelectEffect, U>;
+export function selectWorkspace<T extends WorkspaceLocation>(
+  workspaceLocation: T
+): Generator<SelectEffect, WorkspaceManagerState[T]>;
+export function* selectWorkspace<T extends WorkspaceLocation, U>(
+  workspaceLocation: T,
+  f?: (state: WorkspaceManagerState[T]) => U
+) {
   const workspace: WorkspaceManagerState[T] = yield select(
     (state: OverallState) => state.workspaces[workspaceLocation]
   );
+
+  if (f) return f(workspace);
   return workspace;
 }
 

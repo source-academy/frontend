@@ -289,8 +289,8 @@ describe('DEBUG_RESUME', () => {
       editorValueFilePath,
       context,
       execTime,
-      workspaceLocation,
-      WorkspaceActions.evalEditor.type
+      WorkspaceActions.evalEditor.type,
+      workspaceLocation
     )
       .withState(state)
       .silentRun();
@@ -826,8 +826,8 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        actionType
+        actionType,
+        workspaceLocation
       )
         .withState(state)
         .provide([
@@ -855,8 +855,8 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        actionType
+        actionType,
+        workspaceLocation
       )
         .withState(state)
         .provide([
@@ -885,8 +885,8 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        actionType
+        actionType,
+        workspaceLocation
       )
         .withState(state)
         .provide([
@@ -922,8 +922,8 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        actionType
+        actionType,
+        workspaceLocation
       )
         .withState(state)
         .call(runFilesInContext, files, codeFilePath, context, {
@@ -948,8 +948,8 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        WorkspaceActions.evalEditor.type
+        WorkspaceActions.evalEditor.type,
+        workspaceLocation
       )
         .withState(state)
         .silentRun();
@@ -964,8 +964,8 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        actionType
+        actionType,
+        workspaceLocation
       )
         .withState(state)
         .provide([[call(resume, lastDebuggerResult), { status: 'finished', value }]])
@@ -983,8 +983,8 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        actionType
+        actionType,
+        workspaceLocation
       )
         .withState(state)
         .provide([[call(resume, lastDebuggerResult), { status: 'suspended-cse-eval' }]])
@@ -1003,8 +1003,8 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        actionType
+        actionType,
+        workspaceLocation
       )
         .withState(state)
         .call(resume, lastDebuggerResult)
@@ -1021,8 +1021,8 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        actionType
+        actionType,
+        workspaceLocation
       )
         .withState(state)
         .provide({
@@ -1051,8 +1051,8 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        actionType
+        actionType,
+        workspaceLocation
       )
         .withState(state)
         .provide({
@@ -1080,8 +1080,8 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        actionType
+        actionType,
+        workspaceLocation
       )
         .withState(state)
         .provide([

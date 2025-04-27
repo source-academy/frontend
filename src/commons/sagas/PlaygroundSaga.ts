@@ -19,7 +19,6 @@ import { SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../workspace/WorkspaceActions';
-import type { PlaygroundWorkspaceState } from '../workspace/WorkspaceTypes';
 import { safeTakeEvery as takeEvery, selectWorkspace } from './SafeEffects';
 
 export default function* PlaygroundSaga(): SagaIterator {
@@ -77,9 +76,7 @@ export default function* PlaygroundSaga(): SagaIterator {
       const {
         context: { chapter: playgroundSourceChapter },
         editorTabs
-      }: PlaygroundWorkspaceState = yield select(
-        (state: OverallState) => state.workspaces[workspaceLocation]
-      );
+      } = yield* selectWorkspace('playground');
 
       if (prevId === SideContentType.substVisualizer) {
         if (newId === SideContentType.mobileEditorRun) return;
