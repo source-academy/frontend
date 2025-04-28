@@ -9,7 +9,7 @@ import { type StrictEffect, takeEvery, takeLatest, takeLeading } from 'redux-sag
 
 import { safeTakeEvery, wrapSaga } from '../sagas/SafeEffects';
 import type { SourceActionType } from '../utils/ActionsHelper';
-import { ActionTypeToCreator, objectEntries } from '../utils/TypeHelper';
+import { type ActionTypeToCreator, objectEntries } from '../utils/TypeHelper';
 
 /**
  * Creates actions, given a base name and base actions
@@ -54,7 +54,7 @@ type SagaHandlers = {
 
 export function combineSagaHandlers(handlers: SagaHandlers) {
   return function* (): SagaIterator {
-    for (const [actionName, saga] of objectEntries(handlers as SagaHandlers)) {
+    for (const [actionName, saga] of objectEntries(handlers)) {
       if (saga === undefined) {
         continue;
       } else if (typeof saga === 'function') {
