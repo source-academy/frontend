@@ -14,7 +14,7 @@ import { type ActionTypeToCreator, objectEntries } from '../utils/TypeHelper';
 /**
  * Creates actions, given a base name and base actions
  * @param baseName The base name of the actions
- * @param baseActions The base actions. Use a falsy value to create an action without a payload.
+ * @param baseActions The base actions. Use a non function value to create an action without a payload.
  * @returns An object containing the actions
  */
 export function createActions<BaseName extends string, BaseActions extends Record<string, any>>(
@@ -24,7 +24,7 @@ export function createActions<BaseName extends string, BaseActions extends Recor
   return Object.entries(baseActions).reduce(
     (res, [name, func]) => ({
       ...res,
-      [name]: func
+      [name]: typeof func === 'function'
         ? createAction(`${baseName}/${name}`, (...args: any) => ({ payload: func(...args) }))
         : createAction(`${baseName}/${name}`)
     }),

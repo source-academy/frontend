@@ -1,7 +1,7 @@
 import { testSaga } from "redux-saga-test-plan"
 import WorkspaceActions from "src/commons/workspace/WorkspaceActions"
 
-import { combineSagaHandlers } from "../utils"
+import { combineSagaHandlers, createActions } from "../utils"
 
 // Would have used spyOn, but for some reason that doesn't work properly
 jest.mock('src/commons/sagas/SafeEffects', () => ({
@@ -26,6 +26,10 @@ test('test combineSagaHandlers', () => {
     },
     [WorkspaceActions.toggleUsingSubst.type]: {
       takeLeading: mockTakeLeadingHandler
+    },
+    [WorkspaceActions.toggleEditorAutorun.type]: {
+      takeEvery: mockTakeEveryHandler,
+      takeLeading: mockTakeLeadingHandler
     }
   })
 
@@ -39,5 +43,27 @@ test('test combineSagaHandlers', () => {
     .next()
     .takeLeading(WorkspaceActions.toggleUsingSubst.type, mockTakeLeadingHandler)
     .next()
+    .takeEvery(WorkspaceActions.toggleEditorAutorun.type, mockTakeEveryHandler)
+    .next()
+    .takeLeading(WorkspaceActions.toggleEditorAutorun.type, mockTakeLeadingHandler)
+    .next()
     .isDone()
+})
+
+test('createActions', () => {
+  const actions = createActions('workspace', {
+    act0: false,
+    act1: (value: string) => ({ value }),
+    act2: 525600
+  })
+
+  const act0 = actions.act0()
+  expect(act0.type).toEqual('workspace/act0')
+
+  const act1 = actions.act1('test')
+  expect(act1.type).toEqual('workspace/act1')
+  expect(act1.payload).toMatchObject({ value: 'test' })
+
+  const act2 = actions.act2()
+  expect(act2.type).toEqual('workspace/act2')
 })
