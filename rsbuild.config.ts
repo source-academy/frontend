@@ -86,20 +86,25 @@ export default defineConfig({
       //   }
       // });
 
-      // config.ignoreWarnings = [
-      //   {
-      //     // Ignore warnings for dependencies that do not ship with a source map.
-      //     // This is because we cannot do anything about our dependencies.
-      //     module: /node_modules/,
-      //     message: /Failed to parse source map/
-      //   },
-      //   {
-      //     // Ignore the warnings that occur because js-slang uses dynamic imports
-      //     // to load Source modules
-      //     module: /js-slang\/dist\/modules\/loader\/loaders.js/,
-      //     message: /Critical dependency: the request of a dependency is an expression/
-      //   }
-      // ];
+      config.ignoreWarnings = [
+        (warning: any) => {
+          // Ignore the warnings that occur because js-slang uses dynamic imports
+          // to load Source modules
+          const moduleName = warning.moduleDescriptor?.name
+          if (!moduleName) return false
+
+          if (!/js-slang\/dist\/modules\/loader\/loaders.js/.test(moduleName)) return false
+          return /Critical dependency: the request of a dependency is an expression/.test(warning.message)
+        }
+        
+        // {
+        //   // Ignore warnings for dependencies that do not ship with a source map.
+        //   // This is because we cannot do anything about our dependencies.
+        //   module: /node_modules/,
+        //   message: /Failed to parse source map/
+        // },
+        // [
+      ];
 
       // config.plugins = [
       //   ...config.plugins,
