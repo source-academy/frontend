@@ -28,7 +28,7 @@ export function createActions<BaseName extends string, BaseActions extends Recor
         ? createAction(`${baseName}/${name}`, (...args: any) => ({ payload: func(...args) }))
         : createAction(`${baseName}/${name}`)
     }),
-    {} as {
+    {} as Readonly<{
       [K in keyof BaseActions]: K extends string
         ? BaseActions[K] extends (...args: any) => any
           ? ActionCreatorWithPreparedPayload<
@@ -38,7 +38,7 @@ export function createActions<BaseName extends string, BaseActions extends Recor
             >
           : ActionCreatorWithoutPayload<`${BaseName}/${K}`>
         : never;
-    }
+    }>
   );
 }
 

@@ -160,7 +160,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       const workspaceLocation = getWorkspaceLocation(action);
       const tokens = state[workspaceLocation].tokenCount;
       const newOutputEntry: Partial<ResultOutput> = {
-        type: action.payload.type as 'result' | undefined,
+        type: action.payload.type as 'result',
         value: action.payload.value
       };
 

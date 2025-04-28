@@ -33,7 +33,6 @@ const dummyLocation = {
   end: { line: 0, column: 0 }
 };
 
-// TODO: Refactor and combine in a future commit
 const RemoteExecutionSaga = combineSagaHandlers({
   [RemoteExecutionActions.remoteExecFetchDevices.type]: {
     takeLatest: function* () {

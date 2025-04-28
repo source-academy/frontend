@@ -1,12 +1,9 @@
 import { createActions } from 'src/commons/redux/utils';
 
 const newActions = createActions('github', {
-  githubOpenFile: () => ({}),
-  githubSaveFile: () => ({}),
-  githubSaveFileAs: () => ({})
+  githubOpenFile: 0,
+  githubSaveFile: 0,
+  githubSaveFileAs: 0
 });
 
-// For compatibility with existing code (actions helper)
-export default {
-  ...newActions
-};
+export default newActions
