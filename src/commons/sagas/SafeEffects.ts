@@ -36,6 +36,16 @@ function isIterator(obj: any) {
   return obj && typeof obj.next === 'function' && typeof obj.throw === 'function';
 }
 
+export function wrapSaga<T extends (...args: any[]) => Generator>(saga: T) {
+  return function* (...args: Parameters<T>) {
+    try {
+      return yield* saga(...args);
+    } catch (error) {
+      handleUncaughtError(error);
+    }
+  };
+}
+
 export function safeTakeEvery<P extends ActionPattern, A extends ActionMatchingPattern<P>>(
   pattern: P,
   worker: (action: A) => any

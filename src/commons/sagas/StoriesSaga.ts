@@ -1,4 +1,4 @@
-import { Context } from 'js-slang';
+import type { Context } from 'js-slang';
 import { call, put, select } from 'redux-saga/effects';
 import StoriesActions from 'src/features/stories/StoriesActions';
 import {
@@ -25,10 +25,8 @@ import { defaultStoryContent } from '../utils/StoriesHelper';
 import { selectTokens } from './BackendSaga';
 import { evalCodeSaga } from './WorkspaceSaga/helpers/evalCode';
 
-// TODO: Refactor and combine in a future commit
-const sagaActions = { ...StoriesActions, ...SessionActions };
-const StoriesSaga = combineSagaHandlers(sagaActions, {
-  getStoriesList: {
+const StoriesSaga = combineSagaHandlers({
+  [StoriesActions.getStoriesList.type]: {
     takeLatest: function* () {
       const tokens: Tokens = yield selectTokens();
       const allStories: StoryListView[] = yield call(async () => {
@@ -39,7 +37,7 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
       yield put(actions.updateStoriesList(allStories));
     }
   },
-  setCurrentStoryId: function* (action) {
+  [StoriesActions.setCurrentStoryId.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const storyId = action.payload;
     if (storyId) {
@@ -54,7 +52,7 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
       yield put(actions.setCurrentStory(defaultStory));
     }
   },
-  createStory: function* (action) {
+  [StoriesActions.createStory.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const story = action.payload;
     const userId: number | undefined = yield select((state: OverallState) => state.stories.userId);
@@ -80,7 +78,7 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
 
     yield put(actions.getStoriesList());
   },
-  saveStory: function* (action) {
+  [StoriesActions.saveStory.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { story, id } = action.payload;
     const updatedStory: StoryView | null = yield call(
@@ -100,7 +98,7 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
     yield put(actions.getStoriesList());
   },
 
-  deleteStory: function* (action) {
+  [StoriesActions.deleteStory.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const storyId = action.payload;
     yield call(deleteStory, tokens, storyId);
@@ -108,7 +106,7 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
     yield put(actions.getStoriesList());
   },
 
-  getStoriesUser: function* () {
+  [StoriesActions.getStoriesUser.type]: function* () {
     const tokens: Tokens = yield selectTokens();
     const me: {
       id: number;
@@ -126,7 +124,7 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
     yield put(actions.setCurrentStoriesUser(me.id, me.name));
     yield put(actions.setCurrentStoriesGroup(me.groupId, me.groupName, me.role));
   },
-  evalStory: function* (action) {
+  [StoriesActions.evalStory.type]: function* (action) {
     const env = action.payload.env;
     const code = action.payload.code;
     const execTime: number = yield select(
@@ -149,7 +147,7 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
       env
     );
   },
-  fetchAdminPanelStoriesUsers: function* (action) {
+  [StoriesActions.fetchAdminPanelStoriesUsers.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     const storiesUsers = yield call(getAdminPanelStoriesUsers, tokens);
@@ -158,7 +156,7 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
       yield put(actions.setAdminPanelStoriesUsers(storiesUsers));
     }
   },
-  updateStoriesUserRole: function* (action) {
+  [SessionActions.updateStoriesUserRole.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { userId, role } = action.payload;
 
@@ -169,7 +167,7 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
       yield call(showSuccessMessage, 'Role updated!');
     }
   },
-  deleteStoriesUserUserGroups: function* (action) {
+  [SessionActions.deleteStoriesUserUserGroups.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { userId } = action.payload;
 

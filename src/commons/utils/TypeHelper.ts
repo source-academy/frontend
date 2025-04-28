@@ -1,3 +1,5 @@
+import type { actions, SourceActionType } from './ActionsHelper';
+
 export type MaybePromise<T, U = T> = T extends Promise<infer V> ? V : U;
 
 export type PromiseResolveType<T> = MaybePromise<T, never>;
@@ -174,3 +176,8 @@ type DeconstructRecord<T extends Record<any, any>> = Exclude<
 export function objectEntries<T extends Record<any, any>>(obj: T) {
   return Object.entries(obj) as DeconstructRecord<T>;
 }
+
+export type ActionTypeToCreator<T extends SourceActionType['type']> = Extract<
+  (typeof actions)[keyof typeof actions],
+  (...args: any[]) => { type: T }
+>;

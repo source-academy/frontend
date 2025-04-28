@@ -1,31 +1,31 @@
 import { SlingClient } from '@sourceacademy/sling-client';
-import { assemble, compileFiles, Context } from 'js-slang';
+import { assemble, compileFiles, type Context } from 'js-slang';
 import { ExceptionError } from 'js-slang/dist/errors/errors';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import _ from 'lodash';
 import { call, put, race, select, take } from 'redux-saga/effects';
 import RemoteExecutionActions from 'src/features/remoteExecution/RemoteExecutionActions';
 import {
-  Ev3DevicePeripherals,
-  Ev3MotorData,
+  type Ev3DevicePeripherals,
+  type Ev3MotorData,
   Ev3MotorTypes,
-  Ev3SensorData,
-  Ev3SensorTypes
+  type Ev3SensorData,
+  type Ev3SensorTypes
 } from 'src/features/remoteExecution/RemoteExecutionEv3Types';
 import {
-  Device,
-  DeviceSession,
+  type Device,
+  type DeviceSession,
   deviceTypesById,
-  WebSocketEndpointInformation
+  type WebSocketEndpointInformation
 } from 'src/features/remoteExecution/RemoteExecutionTypes';
 import { store } from 'src/pages/createStore';
 
 import InterpreterActions from '../application/actions/InterpreterActions';
-import { OverallState } from '../application/ApplicationTypes';
+import type { OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';
-import { MaybePromise } from '../utils/TypeHelper';
+import type { MaybePromise } from '../utils/TypeHelper';
 import { fetchDevices, getDeviceWSEndpoint } from './RequestsSaga';
 
 const dummyLocation = {
@@ -34,9 +34,8 @@ const dummyLocation = {
 };
 
 // TODO: Refactor and combine in a future commit
-const sagaActions = { ...RemoteExecutionActions, ...InterpreterActions };
-const RemoteExecutionSaga = combineSagaHandlers(sagaActions, {
-  remoteExecFetchDevices: {
+const RemoteExecutionSaga = combineSagaHandlers({
+  [RemoteExecutionActions.remoteExecFetchDevices.type]: {
     takeLatest: function* () {
       const [tokens, session]: [any, DeviceSession | undefined] = yield select(
         (state: OverallState) => [
@@ -65,7 +64,7 @@ const RemoteExecutionSaga = combineSagaHandlers(sagaActions, {
       }
     }
   },
-  remoteExecConnect: function* (action): any {
+  [RemoteExecutionActions.remoteExecConnect.type]: function* (action): any {
     const [tokens, session]: [any, DeviceSession | undefined] = yield select(
       (state: OverallState) => [
         {
@@ -238,7 +237,7 @@ const RemoteExecutionSaga = combineSagaHandlers(sagaActions, {
       );
     }
   },
-  remoteExecDisconnect: function* (action) {
+  [RemoteExecutionActions.remoteExecDisconnect.type]: function* (action) {
     const session: DeviceSession | undefined = yield select(
       (state: OverallState) => state.session.remoteExecutionSession
     );
@@ -252,7 +251,7 @@ const RemoteExecutionSaga = combineSagaHandlers(sagaActions, {
     yield put(actions.remoteExecUpdateSession(undefined));
     yield put(actions.externalLibrarySelect(ExternalLibraryName.NONE, session.workspace, true));
   },
-  remoteExecRun: function* (action) {
+  [RemoteExecutionActions.remoteExecRun.type]: function* (action) {
     const { files, entrypointFilePath } = action.payload;
 
     const session: DeviceSession | undefined = yield select(
@@ -294,7 +293,7 @@ const RemoteExecutionSaga = combineSagaHandlers(sagaActions, {
 
     client.sendRun(Buffer.from(assembled));
   },
-  beginInterruptExecution: function* () {
+  [InterpreterActions.beginInterruptExecution.type]: function* () {
     const session: DeviceSession | undefined = yield select(
       (state: OverallState) => state.session.remoteExecutionSession
     );

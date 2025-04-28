@@ -4,12 +4,12 @@ import {
   type ActionCreatorWithPreparedPayload,
   createAction
 } from '@reduxjs/toolkit';
-import * as Sentry from '@sentry/browser';
 import type { SagaIterator } from 'redux-saga';
-import { type StrictEffect, takeLatest, takeLeading } from 'redux-saga/effects';
+import { type StrictEffect, takeEvery, takeLatest, takeLeading } from 'redux-saga/effects';
 
-import { safeTakeEvery } from '../sagas/SafeEffects';
-import { objectEntries } from '../utils/TypeHelper';
+import { safeTakeEvery, wrapSaga } from '../sagas/SafeEffects';
+import type { SourceActionType } from '../utils/ActionsHelper';
+import { ActionTypeToCreator, objectEntries } from '../utils/TypeHelper';
 
 /**
  * Creates actions, given a base name and base actions
@@ -42,57 +42,36 @@ export function createActions<BaseName extends string, BaseActions extends Recor
   );
 }
 
-function wrapSaga<T extends (...args: any[]) => Generator>(saga: T) {
-  return function* (...args: Parameters<T>) {
-    try {
-      return yield* saga(...args);
-    } catch (error) {
-      handleUncaughtError(error);
-    }
-  };
-}
+type SagaHandler<T extends SourceActionType['type']> = (
+  action: ReturnType<ActionTypeToCreator<T>>
+) => Generator<StrictEffect>;
 
-type SagaHandler<
-  T extends ActionCreatorWithPreparedPayload<any, any> | ActionCreatorWithoutPayload<any>
-> = (action: ReturnType<T>) => Generator<StrictEffect>;
+type SagaHandlers = {
+  [K in SourceActionType['type']]?:
+    | SagaHandler<K>
+    | Partial<Record<'takeEvery' | 'takeLatest' | 'takeLeading', SagaHandler<K>>>;
+};
 
-export function combineSagaHandlers<
-  TActions extends Record<
-    string,
-    ActionCreatorWithPreparedPayload<any, any> | ActionCreatorWithoutPayload<any>
-  >
->(
-  actions: TActions,
-  handlers: {
-    // TODO: Maybe this can be stricter? And remove the optional type after migration is fully done
-    [K in keyof TActions]?:
-      | SagaHandler<TActions[K]>
-      | { takeLeading: SagaHandler<TActions[K]> }
-      | { takeLatest: SagaHandler<TActions[K]> };
-  },
-  others?: (takeEvery: typeof saferTakeEvery) => SagaIterator
-): () => SagaIterator {
+export function combineSagaHandlers(handlers: SagaHandlers) {
   return function* (): SagaIterator {
-    for (const [actionName, saga] of objectEntries(handlers)) {
+    for (const [actionName, saga] of objectEntries(handlers as SagaHandlers)) {
       if (saga === undefined) {
         continue;
       } else if (typeof saga === 'function') {
-        yield safeTakeEvery(actions[actionName].type, saga);
-      } else if ('takeLeading' in saga) {
-        yield takeLeading(actions[actionName].type, wrapSaga(saga.takeLeading));
-      } else if ('takeLatest' in saga) {
-        yield takeLatest(actions[actionName].type, wrapSaga(saga.takeLatest));
-      } else {
-        throw new Error(`Unknown saga handler type for ${actionName as string}`);
+        yield takeEvery(actionName, wrapSaga(saga));
+        continue;
       }
-    }
 
-    if (others) {
-      const obj = others(saferTakeEvery);
-      while (true) {
-        const { done, value } = obj.next();
-        if (done) break;
-        yield value;
+      if (saga.takeEvery) {
+        yield takeEvery(actionName, wrapSaga(saga.takeEvery));
+      }
+
+      if (saga.takeLeading) {
+        yield takeLeading(actionName, wrapSaga(saga.takeLeading));
+      }
+
+      if (saga.takeLatest) {
+        yield takeLatest(actionName, wrapSaga(saga.takeLatest));
       }
     }
   };
@@ -104,17 +83,4 @@ export function saferTakeEvery<
     | ActionCreatorWithPreparedPayload<any[], any>
 >(actionPattern: Action, fn: (action: ReturnType<Action>) => Generator<StrictEffect<any>>) {
   return safeTakeEvery(actionPattern.type, fn);
-}
-
-function handleUncaughtError(error: any) {
-  if (process.env.NODE_ENV === 'development') {
-    // react-error-overlay is a "special" package that's automatically included
-    // in development mode by CRA
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    import('react-error-overlay').then(reo => reo.reportRuntimeError(error));
-  }
-  Sentry.captureException(error);
-  console.error(error);
 }

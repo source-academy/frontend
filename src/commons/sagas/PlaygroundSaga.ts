@@ -14,117 +14,108 @@ import {
 } from '../application/ApplicationTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
 import { combineSagaHandlers } from '../redux/utils';
-import { visitSideContent } from '../sideContent/SideContentActions';
+import SideContentActions from '../sideContent/SideContentActions';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../workspace/WorkspaceActions';
 import { selectWorkspace } from './SafeEffects';
 
-const PlaygroundSaga = combineSagaHandlers(
-  PlaygroundActions,
-  {
-    generateLzString: updateQueryString,
-    shortenURL: function* ({ payload: keyword }) {
-      const queryString = yield select((state: OverallState) => state.playground.queryString);
-      const errorMsg = 'ERROR';
+const PlaygroundSaga = combineSagaHandlers({
+  [PlaygroundActions.changeQueryString.type]: updateQueryString,
+  [PlaygroundActions.shortenURL.type]: function* ({ payload: keyword }) {
+    const queryString = yield select((state: OverallState) => state.playground.queryString);
+    const errorMsg = 'ERROR';
 
-      let resp, timeout;
+    let resp, timeout;
 
-      //we catch and move on if there are errors (plus have a timeout in case)
-      try {
-        const { result, hasTimedOut } = yield race({
-          result: call(shortenURLRequest, queryString, keyword),
-          hasTimedOut: delay(10000)
-        });
+    //we catch and move on if there are errors (plus have a timeout in case)
+    try {
+      const { result, hasTimedOut } = yield race({
+        result: call(shortenURLRequest, queryString, keyword),
+        hasTimedOut: delay(10000)
+      });
 
-        resp = result;
-        timeout = hasTimedOut;
-      } catch (_) {}
+      resp = result;
+      timeout = hasTimedOut;
+    } catch (_) {}
 
-      if (!resp || timeout) {
-        yield put(PlaygroundActions.updateShortURL(errorMsg));
-        return yield call(showWarningMessage, 'Something went wrong trying to create the link.');
-      }
-
-      if (resp.status !== 'success' && !resp.shorturl) {
-        yield put(PlaygroundActions.updateShortURL(errorMsg));
-        return yield call(showWarningMessage, resp.message);
-      }
-
-      if (resp.status !== 'success') {
-        yield call(showSuccessMessage, resp.message);
-      }
-      yield put(PlaygroundActions.updateShortURL(Constants.urlShortenerBase + resp.url.keyword));
+    if (!resp || timeout) {
+      yield put(PlaygroundActions.updateShortURL(errorMsg));
+      return yield call(showWarningMessage, 'Something went wrong trying to create the link.');
     }
+
+    if (resp.status !== 'success' && !resp.shorturl) {
+      yield put(PlaygroundActions.updateShortURL(errorMsg));
+      return yield call(showWarningMessage, resp.message);
+    }
+
+    if (resp.status !== 'success') {
+      yield call(showSuccessMessage, resp.message);
+    }
+    yield put(PlaygroundActions.updateShortURL(Constants.urlShortenerBase + resp.url.keyword));
   },
-  function* (takeEvery) {
-    yield takeEvery(
-      visitSideContent,
-      function* ({ payload: { newId, prevId, workspaceLocation } }) {
-        if (workspaceLocation !== 'playground' || newId === prevId) return;
+  [SideContentActions.visitSideContent.type]: function* ({
+    payload: { newId, prevId, workspaceLocation }
+  }) {
+    if (workspaceLocation !== 'playground' || newId === prevId) return;
 
-        // Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
-        if (
-          prevId === SideContentType.substVisualizer &&
-          newId === SideContentType.mobileEditorRun
-        ) {
-          return;
-        }
+    // Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
+    if (prevId === SideContentType.substVisualizer && newId === SideContentType.mobileEditorRun) {
+      return;
+    }
 
-        const {
-          context: { chapter: playgroundSourceChapter },
-          editorTabs
-        } = yield* selectWorkspace('playground');
+    const {
+      context: { chapter: playgroundSourceChapter },
+      editorTabs
+    } = yield* selectWorkspace('playground');
 
-        if (prevId === SideContentType.substVisualizer) {
-          if (newId === SideContentType.mobileEditorRun) return;
-          const hasBreakpoints = editorTabs.find(({ breakpoints }) => breakpoints.find(x => !!x));
+    if (prevId === SideContentType.substVisualizer) {
+      if (newId === SideContentType.mobileEditorRun) return;
+      const hasBreakpoints = editorTabs.find(({ breakpoints }) => breakpoints.find(x => !!x));
 
-          if (!hasBreakpoints) {
-            yield put(WorkspaceActions.toggleUsingSubst(false, workspaceLocation));
-            yield put(WorkspaceActions.clearReplOutput(workspaceLocation));
-          }
-        }
-
-        if (newId !== SideContentType.cseMachine) {
-          yield put(WorkspaceActions.toggleUsingCse(false, workspaceLocation));
-          yield call([CseMachine, CseMachine.clearCse]);
-          yield call([JavaCseMachine, JavaCseMachine.clearCse]);
-          yield put(WorkspaceActions.updateCurrentStep(-1, workspaceLocation));
-          yield put(WorkspaceActions.updateStepsTotal(0, workspaceLocation));
-          yield put(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
-          yield put(WorkspaceActions.setEditorHighlightedLines(workspaceLocation, 0, []));
-        }
-
-        if (playgroundSourceChapter === Chapter.FULL_JAVA && newId === SideContentType.cseMachine) {
-          yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
-        }
-
-        if (
-          isSourceLanguage(playgroundSourceChapter) &&
-          (newId === SideContentType.substVisualizer || newId === SideContentType.cseMachine)
-        ) {
-          if (playgroundSourceChapter <= Chapter.SOURCE_2) {
-            yield put(WorkspaceActions.toggleUsingSubst(true, workspaceLocation));
-          } else {
-            yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
-          }
-        }
-
-        if (newId === SideContentType.upload) {
-          yield put(WorkspaceActions.toggleUsingUpload(true, workspaceLocation));
-        } else {
-          yield put(WorkspaceActions.toggleUsingUpload(false, workspaceLocation));
-        }
-
-        if (isSchemeLanguage(playgroundSourceChapter) && newId === SideContentType.cseMachine) {
-          yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
-        }
+      if (!hasBreakpoints) {
+        yield put(WorkspaceActions.toggleUsingSubst(false, workspaceLocation));
+        yield put(WorkspaceActions.clearReplOutput(workspaceLocation));
       }
-    );
+    }
+
+    if (newId !== SideContentType.cseMachine) {
+      yield put(WorkspaceActions.toggleUsingCse(false, workspaceLocation));
+      yield call([CseMachine, CseMachine.clearCse]);
+      yield call([JavaCseMachine, JavaCseMachine.clearCse]);
+      yield put(WorkspaceActions.updateCurrentStep(-1, workspaceLocation));
+      yield put(WorkspaceActions.updateStepsTotal(0, workspaceLocation));
+      yield put(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
+      yield put(WorkspaceActions.setEditorHighlightedLines(workspaceLocation, 0, []));
+    }
+
+    if (playgroundSourceChapter === Chapter.FULL_JAVA && newId === SideContentType.cseMachine) {
+      yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
+    }
+
+    if (
+      isSourceLanguage(playgroundSourceChapter) &&
+      (newId === SideContentType.substVisualizer || newId === SideContentType.cseMachine)
+    ) {
+      if (playgroundSourceChapter <= Chapter.SOURCE_2) {
+        yield put(WorkspaceActions.toggleUsingSubst(true, workspaceLocation));
+      } else {
+        yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
+      }
+    }
+
+    if (newId === SideContentType.upload) {
+      yield put(WorkspaceActions.toggleUsingUpload(true, workspaceLocation));
+    } else {
+      yield put(WorkspaceActions.toggleUsingUpload(false, workspaceLocation));
+    }
+
+    if (isSchemeLanguage(playgroundSourceChapter) && newId === SideContentType.cseMachine) {
+      yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
+    }
   }
-);
+});
 
 export default PlaygroundSaga;
 

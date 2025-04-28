@@ -1,6 +1,6 @@
 import { Intent } from '@blueprintjs/core';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { SagaIterator } from 'redux-saga';
+import type { SagaIterator } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 
 import {
@@ -8,11 +8,11 @@ import {
   PERSISTENCE_OPEN_PICKER,
   PERSISTENCE_SAVE_FILE,
   PERSISTENCE_SAVE_FILE_AS,
-  PersistenceFile
+  type PersistenceFile
 } from '../../features/persistence/PersistenceTypes';
 import { store } from '../../pages/createStore';
 import SessionActions from '../application/actions/SessionActions';
-import { OverallState } from '../application/ApplicationTypes';
+import type { OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
@@ -23,7 +23,7 @@ import {
   showSuccessMessage,
   showWarningMessage
 } from '../utils/notifications/NotificationsHelper';
-import { AsyncReturnType } from '../utils/TypeHelper';
+import type { AsyncReturnType } from '../utils/TypeHelper';
 import { safeTakeEvery as takeEvery, safeTakeLatest as takeLatest } from './SafeEffects';
 
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
@@ -396,7 +396,7 @@ function pickFile(
   });
 }
 
-function createFile(
+async function createFile(
   filename: string,
   parent: string,
   mimeType: string,
@@ -416,17 +416,16 @@ function createFile(
 
   const { body, headers } = createMultipartBody(meta, contents, mimeType);
 
-  return gapi.client
-    .request({
-      path: UPLOAD_PATH,
-      method: 'POST',
-      params: {
-        uploadType: 'multipart'
-      },
-      headers,
-      body
-    })
-    .then(({ result }) => ({ id: result.id, name: result.name }));
+  const { result } = await gapi.client.request({
+    path: UPLOAD_PATH,
+    method: 'POST',
+    params: {
+      uploadType: 'multipart'
+    },
+    headers,
+    body
+  });
+  return { id: result.id, name: result.name };
 }
 
 function updateFile(
