@@ -20,10 +20,25 @@ import LeaderboardExportButton from './LeaderboardExportButton';
 import LeaderboardPodium from './LeaderboardPodium';
 
 const OverallLeaderboard: React.FC = () => {
+  // FOR TESTING (To be removed)
+  const dispatch = useDispatch();
+  const paginatedLeaderboard: LeaderboardRow[] = useTypedSelector(store => store.leaderboard.paginatedUserXp);
+  let page = 2;
+  let pageSize = 25;
+  useEffect(() => {
+    dispatch(LeaderboardActions.getPaginatedLeaderboardXp(page, pageSize))
+    console.log("TEST")
+  }, [dispatch, page, pageSize]);
+
+  useEffect(() => {
+    console.log(paginatedLeaderboard);
+  }, [paginatedLeaderboard])
+
+  
+
   // Retrieve XP Data from store
   const rankedLeaderboard: LeaderboardRow[] = useTypedSelector(store => store.leaderboard.userXp);
 
-  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(LeaderboardActions.getAllUsersXp());
   }, [dispatch]);

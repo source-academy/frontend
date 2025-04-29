@@ -351,6 +351,7 @@ export const defaultAchievement: AchievementState = {
 
 export const defaultLeaderboard: LeaderboardState = {
   userXp: [],
+  paginatedUserXp: [],
   contestScore: [],
   contestPopularVote: [],
   code: '',

@@ -12,6 +12,9 @@ export const LeaderboardReducer: Reducer<LeaderboardState, SourceActionType> = c
       .addCase(LeaderboardActions.saveAllUsersXp, (state, action) => {
         state.userXp = action.payload;
       })
+      .addCase(LeaderboardActions.savePaginatedLeaderboardXp, (state, action) => {
+        state.paginatedUserXp = action.payload;
+      })
       .addCase(LeaderboardActions.saveAllContestScores, (state, action) => {
         state.contestScore = action.payload;
       })

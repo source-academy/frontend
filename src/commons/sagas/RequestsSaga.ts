@@ -489,6 +489,36 @@ export const getAllTotalXp = async (tokens: Tokens): Promise<number | null> => {
 };
 
 /**
+ * GET /courses/{courseId}/all_user_xp
+ */
+export const getPaginatedTotalXp = async (
+  page: number,
+  pageSize: number,
+  tokens: Tokens
+): Promise<number | null> => {
+  const resp = await request(`${courseId()}/get_paginated_display/${page}/${pageSize}`, 'GET', {
+    ...tokens
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  const rows = await resp.json();
+
+  return rows.users.map(
+    (row: any): LeaderboardRow => ({
+      rank: row.rank,
+      name: row.name,
+      username: row.username,
+      xp: row.total_xp,
+      avatar: '',
+      achievements: ''
+    })
+  );
+};
+
+/**
  * GET /courses/{courseId}/leaderboard/contests/{assessment_id}/get_score_leaderboard
  */
 export const getContestScoreLeaderboard = async (

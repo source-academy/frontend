@@ -8,6 +8,7 @@ import { selectTokens } from './BackendSaga';
 import {
   getAllContests,
   getAllTotalXp,
+  getPaginatedTotalXp,
   getContestPopularVoteLeaderboard,
   getContestScoreLeaderboard
 } from './RequestsSaga';
@@ -20,6 +21,17 @@ const LeaderboardSaga = combineSagaHandlers(LeaderboardActions, {
 
     if (usersXp) {
       yield put(actions.saveAllUsersXp(usersXp));
+    }
+  },
+
+  getPaginatedLeaderboardXp: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const { page, pageSize } = action.payload;
+
+    const paginatedUsersXp = yield call(getPaginatedTotalXp, page, pageSize, tokens);
+
+    if (paginatedUsersXp) {
+      yield put(actions.savePaginatedLeaderboardXp(paginatedUsersXp));
     }
   },
 
