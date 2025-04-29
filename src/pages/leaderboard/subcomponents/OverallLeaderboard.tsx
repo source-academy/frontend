@@ -2,9 +2,9 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import 'src/styles/Leaderboard.scss';
 
-import { ColDef } from 'ag-grid-community';
+import { ColDef, IDatasource } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import default_avatar from 'src/assets/default-avatar.jpg';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -20,28 +20,7 @@ import LeaderboardExportButton from './LeaderboardExportButton';
 import LeaderboardPodium from './LeaderboardPodium';
 
 const OverallLeaderboard: React.FC = () => {
-  // FOR TESTING (To be removed)
   const dispatch = useDispatch();
-  const paginatedLeaderboard: LeaderboardRow[] = useTypedSelector(store => store.leaderboard.paginatedUserXp);
-  let page = 2;
-  let pageSize = 25;
-  useEffect(() => {
-    dispatch(LeaderboardActions.getPaginatedLeaderboardXp(page, pageSize))
-    console.log("TEST")
-  }, [dispatch, page, pageSize]);
-
-  useEffect(() => {
-    console.log(paginatedLeaderboard);
-  }, [paginatedLeaderboard])
-
-  
-
-  // Retrieve XP Data from store
-  const rankedLeaderboard: LeaderboardRow[] = useTypedSelector(store => store.leaderboard.userXp);
-
-  useEffect(() => {
-    dispatch(LeaderboardActions.getAllUsersXp());
-  }, [dispatch]);
 
   // Retrieve contests (For dropdown)
   const contestDetails: LeaderboardContestDetails[] = useTypedSelector(
@@ -61,25 +40,6 @@ const OverallLeaderboard: React.FC = () => {
       document.body.style.background = originalBackground;
     };
   }, []);
-
-  // Display constants
-  const visibleEntries = useTypedSelector(store => store.session.topLeaderboardDisplay);
-  const topX = rankedLeaderboard.slice(0, Number(visibleEntries));
-
-  // Set sample profile pictures (Seeded random)
-  function convertToRandomNumber(id: string): number {
-    const str = id.slice(1);
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      const char = str.charCodeAt(i);
-      hash = (hash << 5) - hash + char;
-    }
-    return (Math.abs(hash) % 7) + 1;
-  }
-
-  rankedLeaderboard.map((row: LeaderboardRow) => {
-    row.avatar = `/assets/Sample_Profile_${convertToRandomNumber(row.username)}.jpg`;
-  });
 
   // Define column definitions for ag-Grid
   const columnDefs: ColDef<LeaderboardRow>[] = useMemo(
@@ -132,29 +92,90 @@ const OverallLeaderboard: React.FC = () => {
     []
   );
 
+  const paginatedLeaderboard: { rows: LeaderboardRow[]; userCount: number } = useTypedSelector(store => store.leaderboard.paginatedUserXp);
+  const pageSize = 25;
+  const visibleEntries = useTypedSelector(store => store.session.topLeaderboardDisplay) ?? Number.MAX_SAFE_INTEGER;
+  // const topX = rankedLeaderboard.slice(0, Number(visibleEntries));
+
+  useEffect(() => {
+    dispatch(LeaderboardActions.getPaginatedLeaderboardXp(1, pageSize))
+  }, [dispatch]);
+
+  const latestParamsRef = useRef<any>(null);
+  const dataSourceRef = useRef<IDatasource>({
+    getRows: async (params: any) => {
+      const startRow = params.startRow;
+      const endRow = params.endRow;
+
+      const pageSize = endRow - startRow;
+      const page = startRow / pageSize + 1
+
+      dispatch(LeaderboardActions.getPaginatedLeaderboardXp(page, pageSize));
+
+      // Params stored to prevent re-rendering
+      latestParamsRef.current = params;
+    },
+  });
+
+  useEffect(() => {
+    if (
+      latestParamsRef.current &&
+      paginatedLeaderboard.rows.length > 0
+    ) {
+      const { successCallback } = latestParamsRef.current;
+      successCallback(paginatedLeaderboard.rows, Math.min(paginatedLeaderboard.userCount, visibleEntries));
+      latestParamsRef.current = null;
+    }
+  }, [paginatedLeaderboard]);
+
+  // Set sample profile pictures (Seeded random)
+  function convertToRandomNumber(id: string): number {
+    const str = id.slice(1);
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+    }
+    return (Math.abs(hash) % 7) + 1;
+  }
+
+  paginatedLeaderboard.rows.map((row: LeaderboardRow) => {
+    row.avatar = `/assets/Sample_Profile_${convertToRandomNumber(row.username)}.jpg`;
+  });
+
+  const top3Leaderboard = useMemo(() => {
+    if (paginatedLeaderboard.rows.length > 0) {
+      return paginatedLeaderboard.rows.slice(0, 3); // Get the top 3 users
+    }
+    return []; // Fallback if no data
+  }, [paginatedLeaderboard.rows]);
+
   return (
     <div className="leaderboard-container">
       {/* Top 3 Ranking */}
-      <LeaderboardPodium type="overall" data={rankedLeaderboard} outputType={undefined} />
+      <LeaderboardPodium type="overall" data={top3Leaderboard} outputType={undefined} />
 
       <div className="buttons-container">
         {/* Leaderboard Options Dropdown */}
         <LeaderboardDropdown contests={contestDetails} />
 
         {/* Export Button */}
-        <LeaderboardExportButton type="overall" contest={undefined} data={rankedLeaderboard} />
+        <LeaderboardExportButton type="overall" contest={undefined} data={undefined} />
       </div>
 
       {/* Leaderboard Table (Replaced with ag-Grid) */}
       <div className="ag-theme-alpine">
         <AgGridReact
-          rowData={topX}
-          columnDefs={columnDefs}
           pagination={true}
-          paginationPageSize={25}
           paginationPageSizeSelector={[25, 50, 100]}
+          columnDefs={columnDefs}
+          rowModelType="infinite"
+          paginationPageSize={pageSize}
           domLayout="autoHeight"
           rowHeight={60}
+          cacheBlockSize={pageSize}
+          maxBlocksInCache={5}
+          datasource={dataSourceRef.current}
         />
       </div>
     </div>

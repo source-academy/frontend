@@ -7,10 +7,12 @@ import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/
 import { Role } from '../../../commons/application/ApplicationTypes';
 
 type Props =
-  | { type: string; contest: string | undefined; data: ContestLeaderboardRow[] }
+  | { type: string; contest: string | undefined; data: ContestLeaderboardRow[] | undefined }
   | { type: string; contest: string | undefined; data: LeaderboardRow[] };
 
 const LeaderboardExportButton: React.FC<Props> = ({ type, contest, data }) => {
+  // pls remove this
+  if (!data) return;
   const role = useTypedSelector(store => store.session.role);
   const exportCSV = () => {
     const headers = [

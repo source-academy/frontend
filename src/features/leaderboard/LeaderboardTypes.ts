@@ -20,7 +20,7 @@ export type ContestLeaderboardRow = {
 
 export type LeaderboardState = {
   userXp: LeaderboardRow[];
-  paginatedUserXp: LeaderboardRow[];
+  paginatedUserXp: { rows: LeaderboardRow[]; userCount: number };
   contestScore: ContestLeaderboardRow[];
   contestPopularVote: ContestLeaderboardRow[];
   code: string;

@@ -489,13 +489,13 @@ export const getAllTotalXp = async (tokens: Tokens): Promise<number | null> => {
 };
 
 /**
- * GET /courses/{courseId}/all_user_xp
+ * GET /courses/{courseId}/get_paginated_display/:page/:page_size
  */
 export const getPaginatedTotalXp = async (
   page: number,
   pageSize: number,
   tokens: Tokens
-): Promise<number | null> => {
+): Promise<{ rows: LeaderboardRow[]; userCount: number } | null> => {
   const resp = await request(`${courseId()}/get_paginated_display/${page}/${pageSize}`, 'GET', {
     ...tokens
   });
@@ -504,9 +504,9 @@ export const getPaginatedTotalXp = async (
     return null; // invalid accessToken _and_ refreshToken
   }
 
-  const rows = await resp.json();
+  const data = await resp.json();
 
-  return rows.users.map(
+  const rows = data.users.map(
     (row: any): LeaderboardRow => ({
       rank: row.rank,
       name: row.name,
@@ -516,6 +516,8 @@ export const getPaginatedTotalXp = async (
       achievements: ''
     })
   );
+
+  return { rows: rows, userCount: data.total_count };
 };
 
 /**

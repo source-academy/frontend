@@ -13,7 +13,10 @@ export const LeaderboardReducer: Reducer<LeaderboardState, SourceActionType> = c
         state.userXp = action.payload;
       })
       .addCase(LeaderboardActions.savePaginatedLeaderboardXp, (state, action) => {
-        state.paginatedUserXp = action.payload;
+        state.paginatedUserXp = {
+          rows: action.payload.rows || [],
+          userCount: action.payload.userCount || 0
+        };
       })
       .addCase(LeaderboardActions.saveAllContestScores, (state, action) => {
         state.contestScore = action.payload;

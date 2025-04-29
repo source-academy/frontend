@@ -9,8 +9,8 @@ import {
 const LeaderboardActions = createActions('leaderboard', {
   getAllUsersXp: 0,
   saveAllUsersXp: (userXp: LeaderboardRow[]) => userXp,
-  getPaginatedLeaderboardXp: (page: number, pageSize: number) => ({page, pageSize}),
-  savePaginatedLeaderboardXp: (paginatedUserXp: LeaderboardRow[]) => paginatedUserXp,
+  getPaginatedLeaderboardXp: (page: number, pageSize: number) => ({ page, pageSize }),
+  savePaginatedLeaderboardXp: (payload: { rows: LeaderboardRow[]; userCount: number }) => payload,
   getAllContestScores: (assessmentId: number) => assessmentId,
   saveAllContestScores: (contestScore: ContestLeaderboardRow[]) => contestScore,
   getAllContestPopularVotes: (assessmentId: number) => assessmentId,
