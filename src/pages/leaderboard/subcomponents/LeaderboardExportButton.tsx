@@ -25,7 +25,7 @@ const LeaderboardExportButton: React.FC<Props> = ({ type, contest, contestID }) 
                ? useTypedSelector(store => store.leaderboard.contestScore)
                : useTypedSelector(store => store.leaderboard.contestPopularVote);
 
-  const visibleEntries = useTypedSelector(store => store.session?.topContestLeaderboardDisplay ?? 10);
+  const visibleEntries = Number.MAX_SAFE_INTEGER;
 
   const onExportClick = () => {
     // Dispatch relevant request
