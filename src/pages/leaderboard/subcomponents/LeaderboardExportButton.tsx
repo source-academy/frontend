@@ -1,39 +1,49 @@
 import 'src/styles/Leaderboard.scss';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
+import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
 
 import { Role } from '../../../commons/application/ApplicationTypes';
-import { useDispatch } from 'react-redux';
-import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 
 type Props = {
-  type: string
-  contest?: string
-  contestID?: number
-}
+  type: string;
+  contest?: string;
+  contestID?: number;
+};
 
 const LeaderboardExportButton: React.FC<Props> = ({ type, contest, contestID }) => {
-  
   // Retrieve relevant leaderboard data
-  const [ exportRequested, setExportRequest ] = useState(false);
+  const [exportRequested, setExportRequest] = useState(false);
   const dispatch = useDispatch();
-  const data = (type == "overall")
-               ? useTypedSelector(store => store.leaderboard.userXp)
-               : (type == "score")
-               ? useTypedSelector(store => store.leaderboard.contestScore)
-               : useTypedSelector(store => store.leaderboard.contestPopularVote);
+  const selectData = (type: string) => {
+    switch (type) {
+      case 'overall':
+        return (store: { leaderboard: { userXp: any } }) => store.leaderboard.userXp;
+      case 'score':
+        return (store: { leaderboard: { contestScore: any } }) => store.leaderboard.contestScore;
+      default:
+        return (store: { leaderboard: { contestPopularVote: any } }) =>
+          store.leaderboard.contestPopularVote;
+    }
+  };
+
+  const selector = useMemo(() => selectData(type), [type]);
+  const data = useTypedSelector(selector);
 
   const visibleEntries = Number.MAX_SAFE_INTEGER;
 
   const onExportClick = () => {
     // Dispatch relevant request
-    if (type == "overall") dispatch(LeaderboardActions.getAllUsersXp());
-    else if (type == "score") dispatch(LeaderboardActions.getAllContestScores(contestID as number, visibleEntries));
-    else dispatch(LeaderboardActions.getAllContestPopularVotes(contestID as number, visibleEntries));
-    setExportRequest(true)
-  }
+    if (type == 'overall') dispatch(LeaderboardActions.getAllUsersXp());
+    else if (type == 'score')
+      dispatch(LeaderboardActions.getAllContestScores(contestID as number, visibleEntries));
+    else
+      dispatch(LeaderboardActions.getAllContestPopularVotes(contestID as number, visibleEntries));
+    setExportRequest(true);
+  };
 
   // Return the CSV when requested and data is loaded
   useEffect(() => {
@@ -41,7 +51,7 @@ const LeaderboardExportButton: React.FC<Props> = ({ type, contest, contestID }) 
       exportCSV();
       setExportRequest(false); // Clear request
     }
-  }, [data])
+  }, [data]);
 
   const role = useTypedSelector(store => store.session.role);
   const exportCSV = () => {
@@ -52,18 +62,33 @@ const LeaderboardExportButton: React.FC<Props> = ({ type, contest, contestID }) 
       type === 'overall' ? 'XP' : 'Score',
       type === 'overall' ? 'Achievements' : 'Submission Id'
     ];
-    const rows = data?.map(player => [
-      player.rank,
-      player.name,
-      player.username,
-      type === 'overall' ? (player as LeaderboardRow).xp : (player as ContestLeaderboardRow).score,
-      type === 'overall'
-        ? (player as LeaderboardRow).achievements
-        : (player as ContestLeaderboardRow).submissionId
-    ]);
+    const rows = data?.map(
+      (player: {
+        rank: any;
+        name: any;
+        username: any;
+        xp?: number;
+        avatar?: string;
+        achievements?: string;
+        score?: number;
+        code?: string;
+        submissionId?: number;
+        votingId?: number;
+      }) => [
+        player.rank,
+        player.name,
+        player.username,
+        type === 'overall'
+          ? (player as LeaderboardRow).xp
+          : (player as ContestLeaderboardRow).score,
+        type === 'overall'
+          ? (player as LeaderboardRow).achievements
+          : (player as ContestLeaderboardRow).submissionId
+      ]
+    );
 
     // Combine headers and rows
-    const csvContent = [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
+    const csvContent = [headers.join(','), ...rows.map((row: any[]) => row.join(','))].join('\n');
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');

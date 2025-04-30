@@ -11,9 +11,15 @@ const LeaderboardActions = createActions('leaderboard', {
   saveAllUsersXp: (userXp: LeaderboardRow[]) => userXp,
   getPaginatedLeaderboardXp: (page: number, pageSize: number) => ({ page, pageSize }),
   savePaginatedLeaderboardXp: (payload: { rows: LeaderboardRow[]; userCount: number }) => payload,
-  getAllContestScores: (assessmentId: number, visibleEntries: number) => ({ assessmentId, visibleEntries }),
+  getAllContestScores: (assessmentId: number, visibleEntries: number) => ({
+    assessmentId,
+    visibleEntries
+  }),
   saveAllContestScores: (contestScore: ContestLeaderboardRow[]) => contestScore,
-  getAllContestPopularVotes: (assessmentId: number, visibleEntries: number) => ({ assessmentId, visibleEntries }),
+  getAllContestPopularVotes: (assessmentId: number, visibleEntries: number) => ({
+    assessmentId,
+    visibleEntries
+  }),
   saveAllContestPopularVotes: (contestPopularVote: ContestLeaderboardRow[]) => contestPopularVote,
   getCode: 0,
   saveCode: (code: string) => code,

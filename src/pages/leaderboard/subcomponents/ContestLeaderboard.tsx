@@ -27,7 +27,9 @@ type Props = {
 
 const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
   const courseID = useTypedSelector(store => store.session.courseId);
-  const visibleEntries = useTypedSelector(store => store.session?.topContestLeaderboardDisplay ?? 10);
+  const visibleEntries = useTypedSelector(
+    store => store.session?.topContestLeaderboardDisplay ?? 10
+  );
   const dispatch = useDispatch();
 
   // Retrieve Contest Score Data from store
@@ -164,7 +166,7 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
         <LeaderboardDropdown contests={contestDetails} />
 
         {/* Export Button */}
-        <LeaderboardExportButton type={type} contest={contestName} contestID={contestID}/>
+        <LeaderboardExportButton type={type} contest={contestName} contestID={contestID} />
       </div>
 
       {/* Leaderboard Table (Top 3) */}

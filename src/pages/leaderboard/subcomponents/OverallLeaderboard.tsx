@@ -92,13 +92,17 @@ const OverallLeaderboard: React.FC = () => {
     []
   );
 
-  const paginatedLeaderboard: { rows: LeaderboardRow[]; userCount: number } = useTypedSelector(store => store.leaderboard.paginatedUserXp);
+  const paginatedLeaderboard: { rows: LeaderboardRow[]; userCount: number } = useTypedSelector(
+    store => store.leaderboard.paginatedUserXp
+  );
   const pageSize = 25;
-  const visibleEntries = useTypedSelector(store => store.session?.topLeaderboardDisplay ?? Number.MAX_SAFE_INTEGER);
+  const visibleEntries = useTypedSelector(
+    store => store.session?.topLeaderboardDisplay ?? Number.MAX_SAFE_INTEGER
+  );
   const [top3Leaderboard, setTop3Leaderboard] = useState<LeaderboardRow[]>([]);
 
   useEffect(() => {
-    dispatch(LeaderboardActions.getPaginatedLeaderboardXp(1, pageSize))
+    dispatch(LeaderboardActions.getPaginatedLeaderboardXp(1, pageSize));
   }, [dispatch]);
 
   const latestParamsRef = useRef<any>(null);
@@ -108,27 +112,27 @@ const OverallLeaderboard: React.FC = () => {
       const endRow = params.endRow;
 
       const pageSize = endRow - startRow;
-      const page = startRow / pageSize + 1
+      const page = startRow / pageSize + 1;
 
       dispatch(LeaderboardActions.getPaginatedLeaderboardXp(page, pageSize));
 
       // Params stored to prevent re-rendering
       latestParamsRef.current = params;
-    },
+    }
   });
 
   useEffect(() => {
-    if (
-      latestParamsRef.current &&
-      paginatedLeaderboard.rows.length > 0
-    ) {
+    if (latestParamsRef.current && paginatedLeaderboard.rows.length > 0) {
       const { successCallback } = latestParamsRef.current;
 
       if (latestParamsRef.current.startRow === 0) {
         setTop3Leaderboard(paginatedLeaderboard.rows.slice(0, 3));
       }
 
-      successCallback(paginatedLeaderboard.rows, Math.min(paginatedLeaderboard.userCount, visibleEntries));
+      successCallback(
+        paginatedLeaderboard.rows,
+        Math.min(paginatedLeaderboard.userCount, visibleEntries)
+      );
       latestParamsRef.current = null;
     }
   }, [paginatedLeaderboard]);

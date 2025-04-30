@@ -8,9 +8,9 @@ import { selectTokens } from './BackendSaga';
 import {
   getAllContests,
   getAllTotalXp,
-  getPaginatedTotalXp,
   getContestPopularVoteLeaderboard,
-  getContestScoreLeaderboard
+  getContestScoreLeaderboard,
+  getPaginatedTotalXp
 } from './RequestsSaga';
 
 const LeaderboardSaga = combineSagaHandlers(LeaderboardActions, {
@@ -39,7 +39,12 @@ const LeaderboardSaga = combineSagaHandlers(LeaderboardActions, {
     const tokens: Tokens = yield selectTokens();
     const { assessmentId, visibleEntries } = action.payload;
 
-    const contestScores = yield call(getContestScoreLeaderboard, assessmentId, visibleEntries, tokens);
+    const contestScores = yield call(
+      getContestScoreLeaderboard,
+      assessmentId,
+      visibleEntries,
+      tokens
+    );
 
     if (contestScores) {
       yield put(actions.saveAllContestScores(contestScores));
@@ -50,7 +55,12 @@ const LeaderboardSaga = combineSagaHandlers(LeaderboardActions, {
     const tokens: Tokens = yield selectTokens();
     const { assessmentId, visibleEntries } = action.payload;
 
-    const contestPopularVotes = yield call(getContestPopularVoteLeaderboard, assessmentId, visibleEntries, tokens);
+    const contestPopularVotes = yield call(
+      getContestPopularVoteLeaderboard,
+      assessmentId,
+      visibleEntries,
+      tokens
+    );
     if (contestPopularVotes) {
       yield put(actions.saveAllContestPopularVotes(contestPopularVotes));
     }
