@@ -4,7 +4,7 @@ import 'src/styles/Leaderboard.scss';
 
 import { ColDef, IDatasource } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import default_avatar from 'src/assets/default-avatar.jpg';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -95,7 +95,7 @@ const OverallLeaderboard: React.FC = () => {
   const paginatedLeaderboard: { rows: LeaderboardRow[]; userCount: number } = useTypedSelector(store => store.leaderboard.paginatedUserXp);
   const pageSize = 25;
   const visibleEntries = useTypedSelector(store => store.session.topLeaderboardDisplay) ?? Number.MAX_SAFE_INTEGER;
-  // const topX = rankedLeaderboard.slice(0, Number(visibleEntries));
+  const [top3Leaderboard, setTop3Leaderboard] = useState<LeaderboardRow[]>([]);
 
   useEffect(() => {
     dispatch(LeaderboardActions.getPaginatedLeaderboardXp(1, pageSize))
@@ -123,6 +123,11 @@ const OverallLeaderboard: React.FC = () => {
       paginatedLeaderboard.rows.length > 0
     ) {
       const { successCallback } = latestParamsRef.current;
+
+      if (latestParamsRef.current.startRow === 0) {
+        setTop3Leaderboard(paginatedLeaderboard.rows.slice(0, 3));
+      }
+
       successCallback(paginatedLeaderboard.rows, Math.min(paginatedLeaderboard.userCount, visibleEntries));
       latestParamsRef.current = null;
     }
@@ -142,13 +147,6 @@ const OverallLeaderboard: React.FC = () => {
   paginatedLeaderboard.rows.map((row: LeaderboardRow) => {
     row.avatar = `/assets/Sample_Profile_${convertToRandomNumber(row.username)}.jpg`;
   });
-
-  const top3Leaderboard = useMemo(() => {
-    if (paginatedLeaderboard.rows.length > 0) {
-      return paginatedLeaderboard.rows.slice(0, 3); // Get the top 3 users
-    }
-    return []; // Fallback if no data
-  }, [paginatedLeaderboard.rows]);
 
   return (
     <div className="leaderboard-container">
