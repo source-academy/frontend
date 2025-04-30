@@ -27,9 +27,8 @@ type Props = {
 
 const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
   const courseID = useTypedSelector(store => store.session.courseId);
+  const visibleEntries = useTypedSelector(store => store.session?.topContestLeaderboardDisplay ?? 10);
   const dispatch = useDispatch();
-
-  // TODO: Only display rows when contest voting counterpart has voting published
 
   // Retrieve Contest Score Data from store
   const rankedLeaderboard: ContestLeaderboardRow[] = useTypedSelector(store =>
@@ -38,9 +37,9 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
 
   useEffect(() => {
     if (type === 'score') {
-      dispatch(LeaderboardActions.getAllContestScores(contestID));
+      dispatch(LeaderboardActions.getAllContestScores(contestID, visibleEntries));
     } else {
-      dispatch(LeaderboardActions.getAllContestPopularVotes(contestID));
+      dispatch(LeaderboardActions.getAllContestPopularVotes(contestID, visibleEntries));
     }
   }, [dispatch, contestID, type]);
 
@@ -65,9 +64,6 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
   }, []);
 
   // Display constants
-  const visibleEntries = useTypedSelector(store => store.session.topContestLeaderboardDisplay);
-  // const top3 = rankedLeaderboard.slice(0, 3);
-  // const rest = rankedLeaderboard.slice(3, Number(visibleEntries));
   const top3 = rankedLeaderboard.filter(row => row.rank <= 3);
   const rest = rankedLeaderboard
     .filter(row => row.rank <= Number(visibleEntries))
@@ -168,7 +164,7 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
         <LeaderboardDropdown contests={contestDetails} />
 
         {/* Export Button */}
-        <LeaderboardExportButton type={type} contest={contestName} data={rankedLeaderboard} />
+        <LeaderboardExportButton type={type} contest={contestName} contestID={contestID}/>
       </div>
 
       {/* Leaderboard Table (Top 3) */}

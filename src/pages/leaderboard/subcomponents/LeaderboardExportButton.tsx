@@ -1,18 +1,48 @@
 import 'src/styles/Leaderboard.scss';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
 
 import { Role } from '../../../commons/application/ApplicationTypes';
+import { useDispatch } from 'react-redux';
+import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 
-type Props =
-  | { type: string; contest: string | undefined; data: ContestLeaderboardRow[] | undefined }
-  | { type: string; contest: string | undefined; data: LeaderboardRow[] };
+type Props = {
+  type: string
+  contest?: string
+  contestID?: number
+}
 
-const LeaderboardExportButton: React.FC<Props> = ({ type, contest, data }) => {
-  // pls remove this
-  if (!data) return;
+const LeaderboardExportButton: React.FC<Props> = ({ type, contest, contestID }) => {
+  
+  // Retrieve relevant leaderboard data
+  const [ exportRequested, setExportRequest ] = useState(false);
+  const dispatch = useDispatch();
+  const data = (type == "overall")
+               ? useTypedSelector(store => store.leaderboard.userXp)
+               : (type == "score")
+               ? useTypedSelector(store => store.leaderboard.contestScore)
+               : useTypedSelector(store => store.leaderboard.contestPopularVote);
+
+  const visibleEntries = useTypedSelector(store => store.session?.topContestLeaderboardDisplay ?? 10);
+
+  const onExportClick = () => {
+    // Dispatch relevant request
+    if (type == "overall") dispatch(LeaderboardActions.getAllUsersXp());
+    else if (type == "score") dispatch(LeaderboardActions.getAllContestScores(contestID as number, visibleEntries));
+    else dispatch(LeaderboardActions.getAllContestPopularVotes(contestID as number, visibleEntries));
+    setExportRequest(true)
+  }
+
+  // Return the CSV when requested and data is loaded
+  useEffect(() => {
+    if (exportRequested) {
+      exportCSV();
+      setExportRequest(false); // Clear request
+    }
+  }, [data])
+
   const role = useTypedSelector(store => store.session.role);
   const exportCSV = () => {
     const headers = [
@@ -48,7 +78,7 @@ const LeaderboardExportButton: React.FC<Props> = ({ type, contest, data }) => {
   };
 
   return role === Role.Admin || role === Role.Staff ? (
-    <button onClick={exportCSV} className="export-button">
+    <button onClick={onExportClick} className="export-button">
       Export as .csv
     </button>
   ) : (

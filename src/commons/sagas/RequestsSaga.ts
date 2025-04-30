@@ -521,14 +521,15 @@ export const getPaginatedTotalXp = async (
 };
 
 /**
- * GET /courses/{courseId}/leaderboard/contests/{assessment_id}/get_score_leaderboard
+ * GET /courses/{courseId}/assessments/{assessmentid}/{visibleentries}/scoreLeaderboard
  */
 export const getContestScoreLeaderboard = async (
   assessmentId: number,
+  visibleEntries: number,
   tokens: Tokens
 ): Promise<ContestLeaderboardRow[] | null> => {
   const resp = await request(
-    `${courseId()}/leaderboard/contests/${assessmentId}/get_score_leaderboard`,
+    `${courseId()}/assessments/${assessmentId}/${visibleEntries}/scoreLeaderboard`,
     'GET',
     {
       ...tokens
@@ -541,14 +542,14 @@ export const getContestScoreLeaderboard = async (
 
   const rows = await resp.json();
 
-  return rows.contest_score.map(
+  return rows.leaderboard.map(
     (row: any): ContestLeaderboardRow => ({
       rank: row.rank,
-      name: row.name,
-      username: row.username,
-      score: row.score,
+      name: row.student_name,
+      username: row.student_username,
+      score: row.final_score,
       avatar: '',
-      code: row.code,
+      code: row.answer,
       submissionId: row.submission_id,
       votingId: rows.voting_id
     })
@@ -556,14 +557,15 @@ export const getContestScoreLeaderboard = async (
 };
 
 /**
- * GET /courses/{courseId}/leaderboard/contests/{assessment_id}/get_popular_vote_leaderboard
+ * GET /courses/{courseId}/assessments/{assessmentid}/{visibleentries}/popularVoteLeaderboard
  */
 export const getContestPopularVoteLeaderboard = async (
   assessmentId: number,
+  visibleEntries: number,
   tokens: Tokens
 ): Promise<ContestLeaderboardRow[] | null> => {
   const resp = await request(
-    `${courseId()}/leaderboard/contests/${assessmentId}/get_popular_vote_leaderboard`,
+    `${courseId()}/assessments/${assessmentId}/${visibleEntries}/popularVoteLeaderboard`,
     'GET',
     {
       ...tokens
@@ -576,14 +578,14 @@ export const getContestPopularVoteLeaderboard = async (
 
   const rows = await resp.json();
 
-  return rows.contest_popular.map(
+  return rows.leaderboard.map(
     (row: any): ContestLeaderboardRow => ({
       rank: row.rank,
-      name: row.name,
-      username: row.username,
-      score: row.score,
+      name: row.student_name,
+      username: row.student_username,
+      score: row.final_score,
       avatar: '',
-      code: row.code,
+      code: row.answer,
       submissionId: row.submission_id,
       votingId: rows.voting_id
     })
@@ -1348,7 +1350,16 @@ export const getScoreLeaderboard = async (
     return null; // invalid accessToken _and_ refreshToken
   }
   const scoreLeaderboard = await resp.json();
-  return scoreLeaderboard as ContestEntry[];
+
+  return scoreLeaderboard.leaderboard.map(
+    (row: any): ContestEntry => ({
+      rank: row.rank,
+      student_name: row.student_name,
+      final_score: row.final_score,
+      answer: row.answer,
+      submission_id: row.submission_id
+    })
+  );
 };
 
 /**
@@ -1370,7 +1381,15 @@ export const getPopularVoteLeaderboard = async (
     return null; // invalid accessToken _and_ refreshToken
   }
   const popularVoteLeaderboard = await resp.json();
-  return popularVoteLeaderboard as ContestEntry[];
+  return popularVoteLeaderboard.leaderboard.map(
+    (row: any): ContestEntry => ({
+      rank: row.rank,
+      student_name: row.student_name,
+      final_score: row.final_score,
+      answer: row.answer,
+      submission_id: row.submission_id
+    })
+  );
 };
 
 /**

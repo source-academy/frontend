@@ -94,7 +94,7 @@ const OverallLeaderboard: React.FC = () => {
 
   const paginatedLeaderboard: { rows: LeaderboardRow[]; userCount: number } = useTypedSelector(store => store.leaderboard.paginatedUserXp);
   const pageSize = 25;
-  const visibleEntries = useTypedSelector(store => store.session.topLeaderboardDisplay) ?? Number.MAX_SAFE_INTEGER;
+  const visibleEntries = useTypedSelector(store => store.session?.topLeaderboardDisplay ?? Number.MAX_SAFE_INTEGER);
   const [top3Leaderboard, setTop3Leaderboard] = useState<LeaderboardRow[]>([]);
 
   useEffect(() => {
@@ -158,7 +158,7 @@ const OverallLeaderboard: React.FC = () => {
         <LeaderboardDropdown contests={contestDetails} />
 
         {/* Export Button */}
-        <LeaderboardExportButton type="overall" contest={undefined} data={undefined} />
+        <LeaderboardExportButton type="overall" />
       </div>
 
       {/* Leaderboard Table (Replaced with ag-Grid) */}

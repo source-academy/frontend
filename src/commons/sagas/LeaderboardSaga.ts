@@ -37,9 +37,9 @@ const LeaderboardSaga = combineSagaHandlers(LeaderboardActions, {
 
   getAllContestScores: function* (action) {
     const tokens: Tokens = yield selectTokens();
-    const assessmentId = action.payload;
+    const { assessmentId, visibleEntries } = action.payload;
 
-    const contestScores = yield call(getContestScoreLeaderboard, assessmentId, tokens);
+    const contestScores = yield call(getContestScoreLeaderboard, assessmentId, visibleEntries, tokens);
 
     if (contestScores) {
       yield put(actions.saveAllContestScores(contestScores));
@@ -48,9 +48,9 @@ const LeaderboardSaga = combineSagaHandlers(LeaderboardActions, {
 
   getAllContestPopularVotes: function* (action) {
     const tokens: Tokens = yield selectTokens();
-    const assessmentId = action.payload;
+    const { assessmentId, visibleEntries } = action.payload;
 
-    const contestPopularVotes = yield call(getContestPopularVoteLeaderboard, assessmentId, tokens);
+    const contestPopularVotes = yield call(getContestPopularVoteLeaderboard, assessmentId, visibleEntries, tokens);
     if (contestPopularVotes) {
       yield put(actions.saveAllContestPopularVotes(contestPopularVotes));
     }
