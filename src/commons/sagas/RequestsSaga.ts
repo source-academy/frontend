@@ -496,8 +496,8 @@ export const getPaginatedTotalXp = async (
   pageSize: number,
   tokens: Tokens
 ): Promise<{ rows: LeaderboardRow[]; userCount: number } | null> => {
-  const offset = (page - 1) * pageSize
-  const params = new URLSearchParams({'offset': `${offset}`, 'page_size': `${pageSize}`});
+  const offset = (page - 1) * pageSize;
+  const params = new URLSearchParams({ offset: `${offset}`, page_size: `${pageSize}` });
   const resp = await request(`${courseId()}/get_paginated_display?${params.toString()}`, 'GET', {
     ...tokens
   });
@@ -530,7 +530,7 @@ export const getContestScoreLeaderboard = async (
   visibleEntries: number,
   tokens: Tokens
 ): Promise<ContestLeaderboardRow[] | null> => {
-  const params = new URLSearchParams({'visible_entries': `${visibleEntries}`})
+  const params = new URLSearchParams({ visible_entries: `${visibleEntries}` });
   const resp = await request(
     `${courseId()}/assessments/${assessmentId}/scoreLeaderboard?${params.toString()}`,
     'GET',
@@ -567,7 +567,7 @@ export const getContestPopularVoteLeaderboard = async (
   visibleEntries: number,
   tokens: Tokens
 ): Promise<ContestLeaderboardRow[] | null> => {
-  const params = new URLSearchParams({'visible_entries': `${visibleEntries}`})
+  const params = new URLSearchParams({ visible_entries: `${visibleEntries}` });
   const resp = await request(
     `${courseId()}/assessments/${assessmentId}/popularVoteLeaderboard?${params.toString()}`,
     'GET',
@@ -1343,7 +1343,7 @@ export const getScoreLeaderboard = async (
   visibleEntries: number | undefined,
   tokens: Tokens
 ): Promise<ContestEntry[] | null> => {
-  const params = new URLSearchParams({'visible_entries': `${visibleEntries}`})
+  const params = new URLSearchParams({ visible_entries: `${visibleEntries}` });
   const resp = await request(
     `${courseId()}/admin/assessments/${assessmentId}/scoreLeaderboard?${params.toString()}`,
     'GET',
@@ -1375,7 +1375,7 @@ export const getPopularVoteLeaderboard = async (
   visibleEntries: number | undefined,
   tokens: Tokens
 ): Promise<ContestEntry[] | null> => {
-  const params = new URLSearchParams({'visible_entries': `${visibleEntries}`})
+  const params = new URLSearchParams({ visible_entries: `${visibleEntries}` });
   const resp = await request(
     `${courseId()}/admin/assessments/${assessmentId}/popularVoteLeaderboard?${params.toString()}`,
     'GET',

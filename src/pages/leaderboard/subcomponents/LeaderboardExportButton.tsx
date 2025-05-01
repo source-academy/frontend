@@ -53,6 +53,12 @@ const LeaderboardExportButton: React.FC<Props> = ({ type, contest, contestID }) 
     }
   }, [data]);
 
+  const escapeCodeField = (value: any) => {
+    const str = value?.toString() ?? '';
+    const escaped = str.replace(/"/g, '""');
+    return `"${escaped}"`;
+  };
+
   const role = useTypedSelector(store => store.session.role);
   const exportCSV = () => {
     const headers = [
@@ -60,7 +66,7 @@ const LeaderboardExportButton: React.FC<Props> = ({ type, contest, contestID }) 
       'Name',
       'Username',
       type === 'overall' ? 'XP' : 'Score',
-      type === 'overall' ? 'Achievements' : 'Submission Id'
+      type === 'overall' ? 'Achievements' : 'Code'
     ];
     const rows = data?.map(
       (player: {
@@ -83,7 +89,7 @@ const LeaderboardExportButton: React.FC<Props> = ({ type, contest, contestID }) 
           : (player as ContestLeaderboardRow).score,
         type === 'overall'
           ? (player as LeaderboardRow).achievements
-          : (player as ContestLeaderboardRow).submissionId
+          : escapeCodeField((player as ContestLeaderboardRow).code)
       ]
     );
 
