@@ -169,7 +169,7 @@ const OverallLeaderboard: React.FC = () => {
       <div className="ag-theme-alpine">
         <AgGridReact
           pagination={true}
-          paginationPageSizeSelector={[25, 50, 100]}
+          paginationPageSizeSelector={false}
           columnDefs={columnDefs}
           rowModelType="infinite"
           paginationPageSize={pageSize}

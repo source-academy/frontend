@@ -1332,7 +1332,7 @@ export const dispatchContestXp = async (
 };
 
 /**
- * GET /courses/{courseId}/admin/assessments/{assessmentId}/{visibleEntries}/scoreLeaderboard
+ * GET /courses/{courseId}/assessments/{assessmentId}/{visibleEntries}/scoreLeaderboard
  */
 export const getScoreLeaderboard = async (
   assessmentId: number,
@@ -1340,7 +1340,7 @@ export const getScoreLeaderboard = async (
   tokens: Tokens
 ): Promise<ContestEntry[] | null> => {
   const resp = await request(
-    `${courseId()}/admin/assessments/${assessmentId}/${visibleEntries}/scoreLeaderboard`,
+    `${courseId()}/assessments/${assessmentId}/${visibleEntries}/scoreLeaderboard`,
     'GET',
     {
       ...tokens
