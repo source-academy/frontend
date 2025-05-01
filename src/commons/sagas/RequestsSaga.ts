@@ -1336,7 +1336,7 @@ export const dispatchContestXp = async (
 };
 
 /**
- * GET /courses/{courseId}/admin/assessments/{assessmentId}/scoreLeaderboard
+ * GET /courses/{courseId}/assessments/{assessmentId}/scoreLeaderboard
  */
 export const getScoreLeaderboard = async (
   assessmentId: number,
@@ -1345,7 +1345,7 @@ export const getScoreLeaderboard = async (
 ): Promise<ContestEntry[] | null> => {
   const params = new URLSearchParams({ visible_entries: `${visibleEntries}` });
   const resp = await request(
-    `${courseId()}/admin/assessments/${assessmentId}/scoreLeaderboard?${params.toString()}`,
+    `${courseId()}/assessments/${assessmentId}/scoreLeaderboard?${params.toString()}`,
     'GET',
     {
       ...tokens
@@ -1368,7 +1368,7 @@ export const getScoreLeaderboard = async (
 };
 
 /**
- * GET /courses/{courseId}/admin/assessments/{assessmentId}/popularVoteLeaderboard
+ * GET /courses/{courseId}/assessments/{assessmentId}/popularVoteLeaderboard
  */
 export const getPopularVoteLeaderboard = async (
   assessmentId: number,
@@ -1377,7 +1377,7 @@ export const getPopularVoteLeaderboard = async (
 ): Promise<ContestEntry[] | null> => {
   const params = new URLSearchParams({ visible_entries: `${visibleEntries}` });
   const resp = await request(
-    `${courseId()}/admin/assessments/${assessmentId}/popularVoteLeaderboard?${params.toString()}`,
+    `${courseId()}/assessments/${assessmentId}/popularVoteLeaderboard?${params.toString()}`,
     'GET',
     {
       ...tokens
