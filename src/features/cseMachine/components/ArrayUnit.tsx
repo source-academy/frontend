@@ -30,29 +30,26 @@ export class ArrayUnit extends Visible {
   readonly isFirstUnit: boolean;
   /** check if this is the last unit in the array */
   readonly isLastUnit: boolean;
-  /** check if this unit is the main reference of the value */
-  readonly isMainReference: boolean;
   /** arrow that is drawn from the array unit to the value */
   arrow?: GenericArrow<ArrayUnit, Value>;
   readonly indexRef = React.createRef<Text>();
 
   constructor(
     /** index of this unit in its parent */
-    readonly idx: number,
+    readonly index: number,
     /** the value this unit contains*/
     readonly data: Data,
     /** parent of this unit */
     readonly parent: ArrayValue
   ) {
     super();
-    this._x = this.parent.x() + this.idx * Config.DataUnitWidth;
+    this._x = this.parent.x() + this.index * Config.DataUnitWidth;
     this._y = this.parent.y();
     this._height = Config.DataUnitHeight;
     this._width = Config.DataUnitWidth;
-    this.isFirstUnit = this.idx === 0;
-    this.isLastUnit = this.idx === this.parent.data.length - 1;
+    this.isFirstUnit = this.index === 0;
+    this.isLastUnit = this.index === this.parent.data.length - 1;
     this.value = Layout.createValue(this.data, this);
-    this.isMainReference = this.value.references.length > 1;
   }
 
   showIndex() {
@@ -113,7 +110,7 @@ export class ArrayUnit extends Visible {
           ref={this.indexRef}
           {...ShapeDefaultProps}
           {...indexProps}
-          text={`${this.idx}`}
+          text={`${this.index}`}
         />
         {this.value.draw()}
         {this.arrow?.draw()}
