@@ -153,4 +153,4 @@ const SessionActions = createActions('session', {
 });
 
 // For compatibility with existing code (actions helper)
-export default SessionActions
+export default SessionActions;

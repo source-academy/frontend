@@ -24,9 +24,10 @@ export function createActions<BaseName extends string, BaseActions extends Recor
   return Object.entries(baseActions).reduce(
     (res, [name, func]) => ({
       ...res,
-      [name]: typeof func === 'function'
-        ? createAction(`${baseName}/${name}`, (...args: any) => ({ payload: func(...args) }))
-        : createAction(`${baseName}/${name}`)
+      [name]:
+        typeof func === 'function'
+          ? createAction(`${baseName}/${name}`, (...args: any) => ({ payload: func(...args) }))
+          : createAction(`${baseName}/${name}`)
     }),
     {} as Readonly<{
       [K in keyof BaseActions]: K extends string

@@ -6,7 +6,7 @@ const PersistenceActions = createActions('persistence', {
   persistenceOpenPicker: true,
   persistenceSaveFile: (file: PersistenceFile) => file,
   persistenceSaveFileAs: true,
-  persistenceInitialise: true,
-})
+  persistenceInitialise: true
+});
 
-export default PersistenceActions
+export default PersistenceActions;

@@ -1,7 +1,10 @@
 import type { Context } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
 
-import type { AllColsSortStates, GradingColumnVisibility } from '../../features/grading/GradingTypes';
+import type {
+  AllColsSortStates,
+  GradingColumnVisibility
+} from '../../features/grading/GradingTypes';
 import type { SALanguage } from '../application/ApplicationTypes';
 import type { ExternalLibraryName } from '../application/types/ExternalTypes';
 import type { Library } from '../assessment/AssessmentTypes';
@@ -247,7 +250,8 @@ const newActions = createActions('workspace', {
     workspaceLocation
   }),
   toggleUsingUpload: (usingUpload: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
-    usingUpload, workspaceLocation
+    usingUpload,
+    workspaceLocation
   }),
   updateCurrentStep: (steps: number, workspaceLocation: WorkspaceLocation) => ({
     steps,
@@ -266,10 +270,12 @@ const newActions = createActions('workspace', {
     workspaceLocation
   }),
   updateLastDebuggerResult: (lastDebuggerResult: any, workspaceLocation: WorkspaceLocation) => ({
-    lastDebuggerResult, workspaceLocation
+    lastDebuggerResult,
+    workspaceLocation
   }),
   uploadFiles: (files: UploadResult, workspaceLocation: WorkspaceLocation) => ({
-    files, workspaceLocation
+    files,
+    workspaceLocation
   }),
   // For grading table
   increaseRequestCounter: 0,
@@ -279,4 +285,4 @@ const newActions = createActions('workspace', {
   updateGradingColumnVisibility: (filters: GradingColumnVisibility) => ({ filters })
 });
 
-export default newActions
+export default newActions;

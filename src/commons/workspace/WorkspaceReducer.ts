@@ -66,7 +66,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> 
       break;
   }
 
-  state = oldWorkspaceReducer(state, action);
+  // state = oldWorkspaceReducer(state, action);
   state = newWorkspaceReducer(state, action);
   return state;
 };
@@ -354,15 +354,15 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       state.playground.context.chapter = chapter;
       state.playground.context.variant = variant;
     })
-    // .addCase(notifyProgramEvaluated, (state, action) => {
-    //   const workspaceLocation = getWorkspaceLocation(action);
-    //   const debuggerContext = state[workspaceLocation].debuggerContext;
-    //   debuggerContext.result = action.payload.result;
-    //   debuggerContext.lastDebuggerResult = action.payload.lastDebuggerResult;
-    //   debuggerContext.code = action.payload.code;
-    //   debuggerContext.context = action.payload.context;
-    //   debuggerContext.workspaceLocation = action.payload.workspaceLocation;
-    // })
+    .addCase(WorkspaceActions.notifyProgramEvaluated, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      const debuggerContext = state[workspaceLocation].debuggerContext;
+      debuggerContext.result = action.payload.result;
+      debuggerContext.lastDebuggerResult = action.payload.lastDebuggerResult;
+      debuggerContext.code = action.payload.code;
+      debuggerContext.context = action.payload.context;
+      debuggerContext.workspaceLocation = action.payload.workspaceLocation;
+    })
     .addCase(WorkspaceActions.toggleUsingUpload, (state, action) => {
       const { workspaceLocation } = action.payload;
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
@@ -380,33 +380,3 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       state[workspaceLocation].lastDebuggerResult = action.payload.lastDebuggerResult;
     });
 });
-
-/** Temporarily kept to prevent conflicts */
-const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
-  state = defaultWorkspaceManager,
-  action
-) => {
-  const workspaceLocation = getWorkspaceLocation(action);
-
-  switch (action.type) {
-    case WorkspaceActions.notifyProgramEvaluated.type: {
-      const debuggerContext = {
-        ...state[workspaceLocation].debuggerContext,
-        result: action.payload.result,
-        lastDebuggerResult: action.payload.lastDebuggerResult,
-        code: action.payload.code,
-        context: action.payload.context,
-        workspaceLocation: action.payload.workspaceLocation
-      };
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          debuggerContext
-        }
-      };
-    }
-    default:
-      return state;
-  }
-};

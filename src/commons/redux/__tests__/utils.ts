@@ -1,7 +1,7 @@
-import { testSaga } from "redux-saga-test-plan"
-import WorkspaceActions from "src/commons/workspace/WorkspaceActions"
+import { testSaga } from 'redux-saga-test-plan';
+import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 
-import { combineSagaHandlers, createActions } from "../utils"
+import { combineSagaHandlers, createActions } from '../utils';
 
 // Would have used spyOn, but for some reason that doesn't work properly
 jest.mock('src/commons/sagas/SafeEffects', () => ({
@@ -9,12 +9,12 @@ jest.mock('src/commons/sagas/SafeEffects', () => ({
   // Mock wrap saga to just be a passthrough so that the identity
   // checking that testSaga uses will pass
   wrapSaga: (x: any) => x
-}))
+}));
 
 test('test combineSagaHandlers', () => {
-  const mockTakeEveryHandler = jest.fn()
-  const mockTakeLatestHandler = jest.fn()
-  const mockTakeLeadingHandler = jest.fn()
+  const mockTakeEveryHandler = jest.fn();
+  const mockTakeLatestHandler = jest.fn();
+  const mockTakeLeadingHandler = jest.fn();
 
   const saga = combineSagaHandlers({
     [WorkspaceActions.toggleUsingUpload.type]: mockTakeEveryHandler,
@@ -31,13 +31,13 @@ test('test combineSagaHandlers', () => {
       takeEvery: mockTakeEveryHandler,
       takeLeading: mockTakeLeadingHandler
     }
-  })
+  });
 
   testSaga(saga)
     .next()
     .takeEvery(WorkspaceActions.toggleUsingUpload.type, mockTakeEveryHandler)
     .next()
-    .takeEvery(WorkspaceActions.toggleFolderMode.type, mockTakeEveryHandler) 
+    .takeEvery(WorkspaceActions.toggleFolderMode.type, mockTakeEveryHandler)
     .next()
     .takeLatest(WorkspaceActions.toggleUsingCse.type, mockTakeLatestHandler)
     .next()
@@ -47,23 +47,23 @@ test('test combineSagaHandlers', () => {
     .next()
     .takeLeading(WorkspaceActions.toggleEditorAutorun.type, mockTakeLeadingHandler)
     .next()
-    .isDone()
-})
+    .isDone();
+});
 
 test('createActions', () => {
   const actions = createActions('workspace', {
     act0: false,
     act1: (value: string) => ({ value }),
     act2: 525600
-  })
+  });
 
-  const act0 = actions.act0()
-  expect(act0.type).toEqual('workspace/act0')
+  const act0 = actions.act0();
+  expect(act0.type).toEqual('workspace/act0');
 
-  const act1 = actions.act1('test')
-  expect(act1.type).toEqual('workspace/act1')
-  expect(act1.payload).toMatchObject({ value: 'test' })
+  const act1 = actions.act1('test');
+  expect(act1.type).toEqual('workspace/act1');
+  expect(act1.payload).toMatchObject({ value: 'test' });
 
-  const act2 = actions.act2()
-  expect(act2.type).toEqual('workspace/act2')
-})
+  const act2 = actions.act2();
+  expect(act2.type).toEqual('workspace/act2');
+});

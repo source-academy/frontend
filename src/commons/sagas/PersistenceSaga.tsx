@@ -232,7 +232,7 @@ const PersistenceSaga = combineSagaHandlers({
       }
     }
   },
-  [actions.persistenceSaveFile.type]: function* ({ payload: { id, name }}) {
+  [actions.persistenceSaveFile.type]: function* ({ payload: { id, name } }) {
     let toastKey: string | undefined;
     try {
       toastKey = yield call(showMessage, {
@@ -248,7 +248,7 @@ const PersistenceSaga = combineSagaHandlers({
         editorTabs,
         context: { chapter, variant },
         externalLibrary: external
-      } = yield* selectWorkspace('playground')
+      } = yield* selectWorkspace('playground');
 
       if (activeEditorTabIndex === null) {
         throw new Error('No active editor tab found.');
@@ -273,7 +273,7 @@ const PersistenceSaga = combineSagaHandlers({
     }
   },
   [actions.persistenceInitialise.type]: ensureInitialised as any
-})
+});
 
 interface IPlaygroundConfig {
   chapter: Chapter;

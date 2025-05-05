@@ -559,7 +559,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
         onClickSaveAs={() => dispatch(PersistenceActions.persistenceSaveFileAs())}
         onClickOpen={() => dispatch(PersistenceActions.persistenceOpenPicker())}
         onClickSave={
-          persistenceFile ? () => dispatch(PersistenceActions.persistenceSaveFile(persistenceFile)) : undefined
+          persistenceFile
+            ? () => dispatch(PersistenceActions.persistenceSaveFile(persistenceFile))
+            : undefined
         }
         onClickLogOut={() => dispatch(SessionActions.logoutGoogle())}
         onPopoverOpening={() => dispatch(PersistenceActions.persistenceInitialise())}
@@ -728,7 +730,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
 
     if (currentLang === Chapter.FULL_JAVA && process.env.NODE_ENV === 'development') {
-      tabs.push(makeUploadTabFrom(files => dispatch(WorkspaceActions.uploadFiles(files, workspaceLocation))));
+      tabs.push(
+        makeUploadTabFrom(files => dispatch(WorkspaceActions.uploadFiles(files, workspaceLocation)))
+      );
     }
 
     if (!usingRemoteExecution) {

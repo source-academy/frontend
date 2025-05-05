@@ -6,4 +6,4 @@ const newActions = createActions('github', {
   githubSaveFileAs: 0
 });
 
-export default newActions
+export default newActions;

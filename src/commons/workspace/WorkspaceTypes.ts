@@ -1,6 +1,9 @@
 import type { Context } from 'js-slang';
 
-import type { AllColsSortStates, GradingColumnVisibility } from '../../features/grading/GradingTypes';
+import type {
+  AllColsSortStates,
+  GradingColumnVisibility
+} from '../../features/grading/GradingTypes';
 import type { SourcecastWorkspaceState } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import type { SourcereelWorkspaceState } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
 import type { InterpreterOutput } from '../application/ApplicationTypes';
