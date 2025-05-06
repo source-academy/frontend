@@ -1,18 +1,18 @@
 import type { Context } from 'js-slang';
 
-import { AllColsSortStates, GradingColumnVisibility } from '../../features/grading/GradingTypes';
-import { SourcecastWorkspaceState } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
-import { SourcereelWorkspaceState } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
-import { InterpreterOutput } from '../application/ApplicationTypes';
+import type {
+  AllColsSortStates,
+  GradingColumnVisibility
+} from '../../features/grading/GradingTypes';
+import type { SourcecastWorkspaceState } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
+import type { SourcereelWorkspaceState } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
+import type { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
-import { HighlightedLines, Position } from '../editor/EditorTypes';
-import { UploadResult } from '../sideContent/content/SideContentUpload';
+import type { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
+import type { HighlightedLines, Position } from '../editor/EditorTypes';
+import type { UploadResult } from '../sideContent/content/SideContentUpload';
 
 export const EVAL_SILENT = 'EVAL_SILENT';
-export const UPDATE_LAST_DEBUGGER_RESULT = 'UPDATE_LAST_DEBUGGER_RESULT';
-export const TOGGLE_USING_UPLOAD = 'TOGGLE_USING_UPLOAD';
-export const UPLOAD_FILES = 'UPLOAD_FILES';
 
 export type WorkspaceLocation = keyof WorkspaceManagerState;
 export type WorkspaceLocationsWithTools = Extract<WorkspaceLocation, 'playground' | 'sicp'>;

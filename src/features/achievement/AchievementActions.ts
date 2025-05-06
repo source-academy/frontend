@@ -1,13 +1,14 @@
-import { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
+import type { AssessmentOverview } from 'src/commons/assessment/AssessmentTypes';
 import { createActions } from 'src/commons/redux/utils';
+import type { SideContentLocation } from 'src/commons/sideContent/SideContentTypes';
 
 import {
-  AchievementGoal,
-  AchievementItem,
-  AchievementUser,
+  type AchievementGoal,
+  type AchievementItem,
+  type AchievementUser,
   EventType,
-  GoalDefinition,
-  GoalProgress
+  type GoalDefinition,
+  type GoalProgress
 } from './AchievementTypes';
 
 const AchievementActions = createActions('achievement', {
@@ -21,7 +22,10 @@ const AchievementActions = createActions('achievement', {
   removeAchievement: (uuid: string) => uuid,
   removeGoal: (uuid: string) => uuid,
   updateOwnGoalProgress: (progress: GoalProgress) => progress,
-  addEvent: (eventNames: EventType[]) => eventNames,
+  addEvent: (eventNames: EventType[], workspaceLocation?: SideContentLocation) => ({
+    workspaceLocation,
+    eventNames
+  }),
   handleEvent: (loggedEvents: EventType[][]) => loggedEvents,
   updateGoalProgress: (studentCourseRegId: number, progress: GoalProgress) => ({
     studentCourseRegId,

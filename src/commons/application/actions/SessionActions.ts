@@ -4,27 +4,27 @@ import {
   unpublishedToBackendParams
 } from 'src/features/grading/GradingUtils';
 import { freshSortState } from 'src/pages/academy/grading/subcomponents/GradingSubmissionsTable';
-import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
+import type { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
-import {
+import type {
   AllColsSortStates,
   GradingOverviews,
   GradingQuery
 } from '../../../features/grading/GradingTypes';
-import { TeamFormationOverview } from '../../../features/teamFormation/TeamFormationTypes';
-import {
+import type { TeamFormationOverview } from '../../../features/teamFormation/TeamFormationTypes';
+import type {
   Assessment,
   AssessmentConfiguration,
   AssessmentOverview,
   ContestEntry
 } from '../../assessment/AssessmentTypes';
-import {
+import type {
   Notification,
   NotificationFilterFunction
 } from '../../notificationBadge/NotificationBadgeTypes';
 import { generateOctokitInstance } from '../../utils/GitHubPersistenceHelper';
 import { Role, StoriesRole } from '../ApplicationTypes';
-import {
+import type {
   AdminPanelCourseRegistration,
   CourseRegistration,
   Tokens,
@@ -153,6 +153,4 @@ const SessionActions = createActions('session', {
 });
 
 // For compatibility with existing code (actions helper)
-export default {
-  ...SessionActions
-};
+export default SessionActions;

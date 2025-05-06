@@ -190,19 +190,6 @@ Array [
   },
   Object {
     "chapter": 3,
-    "displayName": "Source §3 Concurrent",
-    "mainLanguage": "JavaScript",
-    "supports": Object {
-      "cseMachine": false,
-      "dataVisualizer": true,
-      "multiFile": true,
-      "repl": false,
-      "substVisualizer": false,
-    },
-    "variant": "concurrent",
-  },
-  Object {
-    "chapter": 3,
     "displayName": "Source §3 Native",
     "mainLanguage": "JavaScript",
     "supports": Object {

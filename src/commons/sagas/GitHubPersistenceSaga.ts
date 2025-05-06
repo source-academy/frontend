@@ -1,4 +1,4 @@
-import {
+import type {
   GetResponseDataTypeFromEndpointMethod,
   GetResponseTypeFromEndpointMethod
 } from '@octokit/types';
@@ -9,27 +9,25 @@ import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
 import SessionActions from '../application/actions/SessionActions';
-import { OverallState } from '../application/ApplicationTypes';
-import FileExplorerDialog, { FileExplorerDialogProps } from '../gitHubOverlay/FileExplorerDialog';
-import RepositoryDialog, { RepositoryDialogProps } from '../gitHubOverlay/RepositoryDialog';
+import type { OverallState } from '../application/ApplicationTypes';
+import FileExplorerDialog, {
+  type FileExplorerDialogProps
+} from '../gitHubOverlay/FileExplorerDialog';
+import RepositoryDialog, { type RepositoryDialogProps } from '../gitHubOverlay/RepositoryDialog';
 import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { promisifyDialog } from '../utils/DialogHelper';
 import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
-import { EditorTabState } from '../workspace/WorkspaceTypes';
+import type { EditorTabState } from '../workspace/WorkspaceTypes';
 
-export const GitHubPersistenceSaga = combineSagaHandlers(
-  // TODO: Refactor and combine in a future commit
-  { ...SessionActions, ...GitHubActions },
-  {
-    loginGitHub: githubLoginSaga,
-    logoutGitHub: githubLogoutSaga,
-    githubOpenFile: githubOpenFileSaga,
-    githubSaveFile: githubSaveFileSaga,
-    githubSaveFileAs: githubSaveFileAsSaga
-  }
-);
+export const GitHubPersistenceSaga = combineSagaHandlers({
+  [SessionActions.loginGitHub.type]: githubLoginSaga,
+  [SessionActions.logoutGitHub.type]: githubLogoutSaga,
+  [GitHubActions.githubOpenFile.type]: githubOpenFileSaga,
+  [GitHubActions.githubSaveFile.type]: githubSaveFileSaga,
+  [GitHubActions.githubSaveFileAs.type]: githubSaveFileAsSaga
+});
 
 function* githubLoginSaga() {
   const githubOauthLoginLink = `https://github.com/login/oauth/authorize?client_id=${Constants.githubClientId}&scope=repo`;
