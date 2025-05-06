@@ -72,8 +72,8 @@ exports[`SideContentContestLeaderboard matches snapshot 1`] = `
       </div>
       <SideContentLeaderboardCard
         contestEntry={
-          Object {
-            "answer": Object {
+          {
+            "answer": {
               "code": "display('hello world')",
             },
             "final_score": 100,
@@ -86,8 +86,8 @@ exports[`SideContentContestLeaderboard matches snapshot 1`] = `
       />
       <SideContentLeaderboardCard
         contestEntry={
-          Object {
-            "answer": Object {
+          {
+            "answer": {
               "code": "function test() { return 1; }",
             },
             "final_score": 90,
@@ -100,8 +100,8 @@ exports[`SideContentContestLeaderboard matches snapshot 1`] = `
       />
       <SideContentLeaderboardCard
         contestEntry={
-          Object {
-            "answer": Object {
+          {
+            "answer": {
               "code": "function test() { return 1; }",
             },
             "final_score": 80,

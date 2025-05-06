@@ -5,7 +5,7 @@ exports[`Navbar renders correctly 1`] = `
   <Blueprint5.Omnibar
     className="sicp-search-bar"
     inputProps={
-      Object {
+      {
         "disabled": false,
         "placeholder": "Text Search...",
       }
@@ -13,12 +13,12 @@ exports[`Navbar renders correctly 1`] = `
     isOpen={false}
     itemListRenderer={[Function]}
     itemRenderer={[Function]}
-    items={Array []}
+    items={[]}
     onClose={[Function]}
     onItemSelect={[Function]}
     onQueryChange={[Function]}
     overlayProps={
-      Object {
+      {
         "className": "bp5-overlay-scroll-container",
       }
     }
@@ -43,7 +43,7 @@ exports[`Navbar renders correctly 1`] = `
           label="Next"
           onClick={[Function]}
           options={
-            Object {
+            {
               "iconOnRight": true,
             }
           }
@@ -55,7 +55,7 @@ exports[`Navbar renders correctly 1`] = `
     >
       <div
         style={
-          Object {
+          {
             "display": "flex",
             "gap": 2,
             "justifyContent": "center",
@@ -86,7 +86,7 @@ exports[`Navbar renders correctly 1`] = `
     isOpen={false}
     onClose={[Function]}
     position="left"
-    style={Object {}}
+    style={{}}
     usePortal={false}
   >
     <SicpToc

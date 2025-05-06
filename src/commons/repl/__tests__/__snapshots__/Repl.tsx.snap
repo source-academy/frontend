@@ -61,7 +61,7 @@ exports[`Repl renders correctly 1`] = `
 <div
   className="Repl"
   style={
-    Object {
+    {
       "display": undefined,
     }
   }
@@ -72,8 +72,8 @@ exports[`Repl renders correctly 1`] = `
     <Output
       isHtml={false}
       output={
-        Object {
-          "consoleLogs": Array [],
+        {
+          "consoleLogs": [],
           "type": "result",
           "value": 42,
         }
@@ -83,7 +83,7 @@ exports[`Repl renders correctly 1`] = `
     <Output
       isHtml={false}
       output={
-        Object {
+        {
           "type": "code",
           "value": "display('');",
         }
@@ -93,19 +93,19 @@ exports[`Repl renders correctly 1`] = `
     <Output
       isHtml={false}
       output={
-        Object {
-          "consoleLogs": Array [],
-          "errors": Array [
+        {
+          "consoleLogs": [],
+          "errors": [
             TypeError {
               "chapter": 4,
               "expected": "",
               "got": "",
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": -1,
                   "line": -1,
                 },
-                "start": Object {
+                "start": {
                   "column": -1,
                   "line": -1,
                 },
@@ -123,8 +123,8 @@ exports[`Repl renders correctly 1`] = `
     <Output
       isHtml={false}
       output={
-        Object {
-          "consoleLogs": Array [
+        {
+          "consoleLogs": [
             "a",
             "bb",
             "cccccccccccccccccccccccccccccccc",
@@ -148,29 +148,29 @@ exports[`Repl renders correctly 1`] = `
         handleReplOutputClear={[Function]}
         handleReplValueChange={[Function]}
         output={
-          Array [
-            Object {
-              "consoleLogs": Array [],
+          [
+            {
+              "consoleLogs": [],
               "type": "result",
               "value": 42,
             },
-            Object {
+            {
               "type": "code",
               "value": "display('');",
             },
-            Object {
-              "consoleLogs": Array [],
-              "errors": Array [
+            {
+              "consoleLogs": [],
+              "errors": [
                 TypeError {
                   "chapter": 4,
                   "expected": "",
                   "got": "",
-                  "location": Object {
-                    "end": Object {
+                  "location": {
+                    "end": {
                       "column": -1,
                       "line": -1,
                     },
-                    "start": Object {
+                    "start": {
                       "column": -1,
                       "line": -1,
                     },
@@ -182,8 +182,8 @@ exports[`Repl renders correctly 1`] = `
               ],
               "type": "errors",
             },
-            Object {
-              "consoleLogs": Array [
+            {
+              "consoleLogs": [
                 "a",
                 "bb",
                 "cccccccccccccccccccccccccccccccc",
@@ -193,7 +193,7 @@ exports[`Repl renders correctly 1`] = `
             },
           ]
         }
-        replButtons={Array []}
+        replButtons={[]}
         replValue=""
         sourceChapter={1}
         sourceVariant="default"

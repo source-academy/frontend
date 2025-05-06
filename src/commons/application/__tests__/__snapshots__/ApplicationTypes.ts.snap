@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`available Python language configurations matches snapshot 1`] = `
-Array [
-  Object {
+[
+  {
     "chapter": -4,
     "displayName": "Python §1",
     "mainLanguage": "Python",
-    "supports": Object {
+    "supports": {
       "repl": true,
     },
     "variant": "default",
@@ -15,52 +15,52 @@ Array [
 `;
 
 exports[`available Scheme language configurations matches snapshot 1`] = `
-Array [
-  Object {
+[
+  {
     "chapter": -9,
     "displayName": "Scheme §1",
     "mainLanguage": "Scheme",
-    "supports": Object {
+    "supports": {
       "cseMachine": true,
       "repl": true,
     },
     "variant": "explicit-control",
   },
-  Object {
+  {
     "chapter": -10,
     "displayName": "Scheme §2",
     "mainLanguage": "Scheme",
-    "supports": Object {
+    "supports": {
       "cseMachine": true,
       "repl": true,
     },
     "variant": "explicit-control",
   },
-  Object {
+  {
     "chapter": -11,
     "displayName": "Scheme §3",
     "mainLanguage": "Scheme",
-    "supports": Object {
+    "supports": {
       "cseMachine": true,
       "repl": true,
     },
     "variant": "explicit-control",
   },
-  Object {
+  {
     "chapter": -12,
     "displayName": "Scheme §4",
     "mainLanguage": "Scheme",
-    "supports": Object {
+    "supports": {
       "cseMachine": true,
       "repl": true,
     },
     "variant": "explicit-control",
   },
-  Object {
+  {
     "chapter": -13,
     "displayName": "Full Scheme",
     "mainLanguage": "Scheme",
-    "supports": Object {
+    "supports": {
       "cseMachine": true,
       "repl": true,
     },
@@ -70,12 +70,12 @@ Array [
 `;
 
 exports[`available Source language configurations matches snapshot 1`] = `
-Array [
-  Object {
+[
+  {
     "chapter": 1,
     "displayName": "Source §1",
     "mainLanguage": "JavaScript",
-    "supports": Object {
+    "supports": {
       "cseMachine": false,
       "dataVisualizer": false,
       "multiFile": false,
@@ -84,11 +84,11 @@ Array [
     },
     "variant": "default",
   },
-  Object {
+  {
     "chapter": 1,
     "displayName": "Source §1 Typed",
     "mainLanguage": "JavaScript",
-    "supports": Object {
+    "supports": {
       "cseMachine": false,
       "dataVisualizer": false,
       "multiFile": false,
@@ -97,11 +97,11 @@ Array [
     },
     "variant": "typed",
   },
-  Object {
+  {
     "chapter": 1,
     "displayName": "Source §1 WebAssembly",
     "mainLanguage": "JavaScript",
-    "supports": Object {
+    "supports": {
       "cseMachine": false,
       "dataVisualizer": false,
       "multiFile": false,
@@ -110,11 +110,11 @@ Array [
     },
     "variant": "wasm",
   },
-  Object {
+  {
     "chapter": 1,
     "displayName": "Source §1 Native",
     "mainLanguage": "JavaScript",
-    "supports": Object {
+    "supports": {
       "cseMachine": false,
       "dataVisualizer": false,
       "multiFile": false,
@@ -123,11 +123,11 @@ Array [
     },
     "variant": "native",
   },
-  Object {
+  {
     "chapter": 2,
     "displayName": "Source §2",
     "mainLanguage": "JavaScript",
-    "supports": Object {
+    "supports": {
       "cseMachine": false,
       "dataVisualizer": true,
       "multiFile": true,
@@ -136,11 +136,11 @@ Array [
     },
     "variant": "default",
   },
-  Object {
+  {
     "chapter": 2,
     "displayName": "Source §2 Typed",
     "mainLanguage": "JavaScript",
-    "supports": Object {
+    "supports": {
       "cseMachine": false,
       "dataVisualizer": true,
       "multiFile": true,
@@ -149,11 +149,11 @@ Array [
     },
     "variant": "typed",
   },
-  Object {
+  {
     "chapter": 2,
     "displayName": "Source §2 Native",
     "mainLanguage": "JavaScript",
-    "supports": Object {
+    "supports": {
       "cseMachine": false,
       "dataVisualizer": true,
       "multiFile": true,
@@ -162,11 +162,11 @@ Array [
     },
     "variant": "native",
   },
-  Object {
+  {
     "chapter": 3,
     "displayName": "Source §3",
     "mainLanguage": "JavaScript",
-    "supports": Object {
+    "supports": {
       "cseMachine": true,
       "dataVisualizer": true,
       "multiFile": true,
@@ -175,11 +175,11 @@ Array [
     },
     "variant": "default",
   },
-  Object {
+  {
     "chapter": 3,
     "displayName": "Source §3 Typed",
     "mainLanguage": "JavaScript",
-    "supports": Object {
+    "supports": {
       "cseMachine": true,
       "dataVisualizer": true,
       "multiFile": true,
@@ -188,11 +188,11 @@ Array [
     },
     "variant": "typed",
   },
-  Object {
+  {
     "chapter": 3,
     "displayName": "Source §3 Concurrent",
     "mainLanguage": "JavaScript",
-    "supports": Object {
+    "supports": {
       "cseMachine": false,
       "dataVisualizer": true,
       "multiFile": true,
@@ -201,11 +201,11 @@ Array [
     },
     "variant": "concurrent",
   },
-  Object {
+  {
     "chapter": 3,
     "displayName": "Source §3 Native",
     "mainLanguage": "JavaScript",
-    "supports": Object {
+    "supports": {
       "cseMachine": true,
       "dataVisualizer": true,
       "multiFile": true,
@@ -214,11 +214,11 @@ Array [
     },
     "variant": "native",
   },
-  Object {
+  {
     "chapter": 4,
     "displayName": "Source §4",
     "mainLanguage": "JavaScript",
-    "supports": Object {
+    "supports": {
       "cseMachine": true,
       "dataVisualizer": true,
       "multiFile": true,
@@ -227,11 +227,11 @@ Array [
     },
     "variant": "default",
   },
-  Object {
+  {
     "chapter": 4,
     "displayName": "Source §4 Typed",
     "mainLanguage": "JavaScript",
-    "supports": Object {
+    "supports": {
       "cseMachine": true,
       "dataVisualizer": true,
       "multiFile": true,
@@ -240,11 +240,11 @@ Array [
     },
     "variant": "typed",
   },
-  Object {
+  {
     "chapter": 4,
     "displayName": "Source §4 Native",
     "mainLanguage": "JavaScript",
-    "supports": Object {
+    "supports": {
       "cseMachine": true,
       "dataVisualizer": true,
       "multiFile": true,
@@ -253,11 +253,11 @@ Array [
     },
     "variant": "native",
   },
-  Object {
+  {
     "chapter": 4,
     "displayName": "Source §4 Explicit-Control",
     "mainLanguage": "JavaScript",
-    "supports": Object {
+    "supports": {
       "cseMachine": true,
       "dataVisualizer": true,
       "multiFile": true,
