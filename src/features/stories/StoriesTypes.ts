@@ -3,6 +3,14 @@ import { DebuggerContext } from 'src/commons/workspace/WorkspaceTypes';
 
 import { InterpreterOutput, StoriesRole } from '../../commons/application/ApplicationTypes';
 
+export type StoryCell = {
+  // id: number;
+  index: number;
+  isCode: boolean;
+  env: string;
+  content: string;
+};
+
 export type StoryMetadata = {
   authorId: number;
   authorName: string;
@@ -10,7 +18,8 @@ export type StoryMetadata = {
 
 export type StoryData = {
   title: string;
-  content: string;
+  header: string;
+  content: StoryCell[];
   pinOrder: number | null;
 };
 

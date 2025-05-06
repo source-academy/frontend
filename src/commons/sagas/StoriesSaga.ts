@@ -2,6 +2,9 @@ import { Context } from 'js-slang';
 import { call, put, select } from 'redux-saga/effects';
 import StoriesActions from 'src/features/stories/StoriesActions';
 import {
+  defaultContent,
+  // updateHeader,
+  defaultHeader,
   deleteStory,
   deleteUserUserGroups,
   getAdminPanelStoriesUsers,
@@ -21,7 +24,7 @@ import { combineSagaHandlers } from '../redux/utils';
 import { resetSideContent } from '../sideContent/SideContentActions';
 import { actions } from '../utils/ActionsHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { defaultStoryContent } from '../utils/StoriesHelper';
+// import { defaultHeader, defaultContent } from '../utils/StoriesHelper';
 import { selectTokens } from './BackendSaga';
 import { evalCodeSaga } from './WorkspaceSaga/helpers/evalCode';
 
@@ -47,7 +50,8 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
     } else {
       const defaultStory: StoryData = {
         title: '',
-        content: defaultStoryContent,
+        header: defaultHeader,
+        content: defaultContent,
         pinOrder: null
       };
       yield put(actions.setCurrentStory(defaultStory));
@@ -68,6 +72,7 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
       tokens,
       userId,
       story.title,
+      story.header,
       story.content,
       story.pinOrder
     );
@@ -82,11 +87,14 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
   saveStory: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { story, id } = action.payload;
+    console.log('In saveStory');
+    console.log(story.header);
     const updatedStory: StoryView | null = yield call(
       updateStory,
       tokens,
       id,
       story.title,
+      story.header,
       story.content,
       story.pinOrder
     );
@@ -106,6 +114,11 @@ const StoriesSaga = combineSagaHandlers(sagaActions, {
 
     yield put(actions.getStoriesList());
   },
+
+  // updateHeader: function* (action) {
+  //   const newHeader = action.payload;
+  //   yield call(updateHeader, newHeader);
+  // },
 
   getStoriesUser: function* () {
     const tokens: Tokens = yield selectTokens();

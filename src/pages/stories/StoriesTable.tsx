@@ -50,7 +50,7 @@ const StoriesTable: React.FC<Props> = ({ headers, stories, storyActions }) => {
         flex: 6,
         field: 'content',
         headerName: 'Content',
-        valueFormatter: ({ value }) => truncate(value),
+        valueFormatter: ({ value }) => truncate(value[0].content),
         cellStyle: { textAlign: 'left' }
       },
       {

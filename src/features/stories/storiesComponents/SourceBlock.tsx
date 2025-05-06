@@ -1,4 +1,4 @@
-import { Card, Classes } from '@blueprintjs/core';
+import { Card, Classes, Menu, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React, { useEffect, useRef, useState } from 'react';
@@ -6,6 +6,7 @@ import AceEditor from 'react-ace';
 import { useDispatch } from 'react-redux';
 import { ResultOutput, styliseSublanguage } from 'src/commons/application/ApplicationTypes';
 import { ControlBarRunButton } from 'src/commons/controlBar/ControlBarRunButton';
+import { ControlButtonSaveButton } from 'src/commons/controlBar/ControlBarSaveButton';
 import ControlButton from 'src/commons/ControlButton';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
@@ -21,11 +22,14 @@ import { makeSubstVisualizerTabFrom } from 'src/pages/playground/PlaygroundTabs'
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Output } from '../../../commons/repl/Repl';
 import { getModeString, selectMode } from '../../../commons/utils/AceHelper';
-import { DEFAULT_ENV } from './UserBlogContent';
+import { StoryCell } from '../StoriesTypes';
+import { DEFAULT_ENV, getEnvironments, handleHeaders } from './UserBlogContent';
 
 export type SourceBlockProps = {
   content: string;
   commands: string; // env is in commands
+  index: number;
+  isViewOnly: boolean;
 };
 
 /**
@@ -50,8 +54,11 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
   const dispatch = useDispatch();
   const [code, setCode] = useState<string>(props.content);
   const [outputIndex, setOutputIndex] = useState(Infinity);
-
+  const [isDirty, setIsDirty] = useState<boolean>(false);
+  const { currentStory: story, currentStoryId: storyId } = useTypedSelector(store => store.stories);
   const envList = useTypedSelector(store => Object.keys(store.stories.envs));
+  const { header: header } = story!;
+  const envs = getEnvironments(header);
 
   // setting env
   const commandsEnv = parseMetadata('env', props.commands);
@@ -69,12 +76,38 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     store => store.stories.envs[env]?.context.variant || Constants.defaultSourceVariant
   );
 
+  const [currentEnv, setCurrentEnv] = useState<string>(env);
+  const [currentChapter, setCurrentChapter] = useState<Chapter>(chapter);
+
+  const getChapter = () => {
+    const envIndex = envs.indexOf(env);
+    // number indicating the chapter start from index 13
+    return parseInt(header.split(`\n`)[envIndex * 3 + 3].substring(13));
+  };
+
   useEffect(() => {
     setCode(props.content);
   }, [props.content]);
 
+  useEffect(() => {
+    setCurrentChapter(getChapter());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [story]);
+
   const output = useTypedSelector(store => store.stories.envs[env]?.output || []);
   const { selectedTab, setSelectedTab } = useSideContent(`stories.${env}`);
+
+  // useEffect(() => {
+  //   if (!selectedTab) {
+  //     console.log("hello");
+  //     console.log(setSelectedTab);
+  //     setSelectedTab(SideContentType.storiesRun);
+  //   }
+  // }, []);
+
+  useEffect(() => {
+    console.log('selected tab is changed: ', selectedTab);
+  }, [selectedTab]);
 
   const onChangeTabs = React.useCallback(
     (
@@ -87,11 +120,13 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       dispatch(
         StoriesActions.toggleStoriesUsingSubst(newTabId === SideContentType.substVisualizer, env)
       );
+      console.log(selectedTab);
+      console.log('selected tab: ', newTabId);
 
       setSelectedTab(newTabId);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    [selectedTab]
   );
 
   const envDisplayLabel =
@@ -191,7 +226,9 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     // is handled by the component setting.
     if (selectedTab) onChangeTabs(selectedTab, selectedTab, {} as any);
 
+    console.log('Running on ', selectedTab);
     dispatch(StoriesActions.evalStory(env, code));
+    console.log(selectedTab);
     setOutputIndex(output.length);
   };
 
@@ -203,6 +240,68 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
     dispatch(StoriesActions.clearStoryEnv(env));
   };
 
+  const editorOnChange = (code: string) => {
+    setCode(code);
+    setIsDirty(true);
+  };
+
+  const deleteStoryCell = (contents: StoryCell[]) => {
+    console.log(`story cell ${props.index} is deleted`);
+    for (let i = props.index + 1; i < contents.length; i++) {
+      contents[i].index--;
+    }
+    contents.splice(props.index, 1);
+  };
+
+  const editHeader = (header: string[]) => {
+    console.log('In source block: chapter is editted');
+    const index = envList.indexOf(currentEnv);
+    header[index * 3 + 3] = `    chapter: ${currentChapter}`;
+    return header;
+  };
+
+  const saveButClicked = () => {
+    setIsDirty(false);
+    const trimmedCode = code.trim();
+    setCode(trimmedCode);
+    const contents = [...story!.content];
+    if (trimmedCode.length === 0) {
+      deleteStoryCell(contents);
+    } else {
+      contents[props.index].content = trimmedCode;
+    }
+    if (currentEnv !== env) {
+      // set a new env
+      console.log('In source block: env is editted');
+      console.log(currentEnv, env);
+      story!.content[props.index].env = currentEnv;
+    }
+    const newHeader = story!.header.split('\n');
+    if (currentChapter !== chapter) {
+      // set a new chapter for the corresponding env, all source block with the same env will change tgt
+      console.log(currentChapter, chapter);
+      editHeader(newHeader);
+    }
+    execResetEnv();
+    handleHeaders(newHeader.join('\n'));
+    const newStory = { ...story!, content: contents, header: newHeader.join('\n') };
+    dispatch(StoriesActions.setCurrentStory(newStory));
+    dispatch(StoriesActions.saveStory(newStory, storyId!));
+  };
+
+  const changeEnv = (env: string) => {
+    setCurrentEnv(env);
+    const header = story!.header.split('\n');
+    const index = envList.indexOf(env);
+    setCurrentChapter(+header[3 + index * 3].substring(13));
+    setIsDirty(true);
+  };
+
+  const changeEnvChapter = (chapter: Chapter) => {
+    setCurrentChapter(chapter);
+    setIsDirty(true);
+  };
+
   selectMode(chapter, variant, ExternalLibraryName.NONE);
 
   return (
@@ -210,13 +309,52 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
       <div className="workspace">
         <Card>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <ControlBarRunButton
-              key="runButton"
-              handleEditorEval={execEvaluate}
-              isEntrypointFileDefined
-            />
+            {isDirty ? (
+              <ControlButtonSaveButton
+                key="save_story"
+                onClickSave={saveButClicked}
+                hasUnsavedChanges={isDirty}
+              />
+            ) : (
+              <ControlBarRunButton
+                key="runButton"
+                handleEditorEval={execEvaluate}
+                isEntrypointFileDefined
+              />
+            )}
             <span style={{ display: 'inline-block', fontSize: '0.9rem', textAlign: 'center' }}>
-              {envDisplayLabel}
+              {props.isViewOnly ? (
+                envDisplayLabel
+              ) : (
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: '5px',
+                    alignItems: 'center'
+                  }}
+                >
+                  <Menu>
+                    <MenuItem text={currentEnv}>
+                      {envList.map((env: string, index: number) => (
+                        <MenuItem key={index} text={env} onClick={() => changeEnv(env)} />
+                      ))}
+                    </MenuItem>
+                  </Menu>
+                  <p> | </p>
+                  <Menu>
+                    <MenuItem text={styliseSublanguage(currentChapter, variant)}>
+                      {[1, 2, 3, 4].map((chapter: Chapter, index: number) => (
+                        <MenuItem
+                          key={index}
+                          onClick={() => changeEnvChapter(chapter)}
+                          text={styliseSublanguage(chapter, variant)}
+                        />
+                      ))}
+                    </MenuItem>
+                  </Menu>
+                </div>
+              )}
             </span>
             <ControlButton label="Reset Env" onClick={execResetEnv} icon={IconNames.RESET} />
           </div>
@@ -230,7 +368,9 @@ const SourceBlock: React.FC<SourceBlockProps> = props => {
                   height="1px"
                   width="100%"
                   value={code}
-                  onChange={code => setCode(code)}
+                  onChange={editorOnChange}
+                  // onFocus={() => setIsTyping(true)}
+                  // onBlur={() => setIsTyping(false)}
                   commands={[
                     {
                       name: 'evaluate',
