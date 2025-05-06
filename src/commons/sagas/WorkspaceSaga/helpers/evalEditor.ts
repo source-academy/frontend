@@ -1,4 +1,5 @@
 import { FSModule } from 'browserfs/dist/node/core/FS';
+import { Variant } from 'js-slang/dist/types';
 import { call, put, select, StrictEffect } from 'redux-saga/effects';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 
@@ -93,19 +94,28 @@ export function* evalEditorSaga(
       const prependFiles = {
         [prependFilePath]: prepend
       };
-      yield call(
-        evalCodeSaga,
-        prependFiles,
-        prependFilePath,
-        elevatedContext,
-        execTime,
-        workspaceLocation,
-        EVAL_SILENT
-      );
+      if (context.variant !== Variant.TYPED) {
+        yield call(
+          evalCodeSaga,
+          prependFiles,
+          prependFilePath,
+          elevatedContext,
+          execTime,
+          workspaceLocation,
+          EVAL_SILENT
+        );
+      }
+
       // Block use of methods from privileged context
       yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation);
     }
 
+    if (context.variant === Variant.TYPED) {
+      // Prepend was multi-line, now we need to split them by \n and join them
+      // This is to avoid extra lines in the editor which affects the error message location
+      const prependSingleLine = prepend.split('\n').join('');
+      files[entrypointFilePath] = prependSingleLine + files[entrypointFilePath];
+    }
     yield call(
       evalCodeSaga,
       files,

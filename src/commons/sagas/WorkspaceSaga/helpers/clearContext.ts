@@ -1,6 +1,6 @@
 import { Context } from 'js-slang';
 import { defineSymbol } from 'js-slang/dist/createContext';
-import { Variant } from 'js-slang/dist/types';
+import { LanguageOptions, Variant } from 'js-slang/dist/types';
 import { put, select, take } from 'redux-saga/effects';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 
@@ -10,18 +10,20 @@ import { actions } from '../../../utils/ActionsHelper';
 import { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 
 export function* clearContext(workspaceLocation: WorkspaceLocation, entrypointCode: string) {
-  const [chapter, symbols, externalLibraryName, globals, variant]: [
+  const [chapter, symbols, externalLibraryName, globals, variant, languageOptions]: [
     number,
     string[],
     ExternalLibraryName,
     Array<[string, any]>,
-    Variant
+    Variant,
+    LanguageOptions
   ] = yield select((state: OverallState) => [
     state.workspaces[workspaceLocation].context.chapter,
     state.workspaces[workspaceLocation].context.externalSymbols,
     state.workspaces[workspaceLocation].externalLibrary,
     state.workspaces[workspaceLocation].globals,
-    state.workspaces[workspaceLocation].context.variant
+    state.workspaces[workspaceLocation].context.variant,
+    state.workspaces[workspaceLocation].context.languageOptions
   ]);
 
   const library = {
@@ -31,7 +33,8 @@ export function* clearContext(workspaceLocation: WorkspaceLocation, entrypointCo
       name: externalLibraryName,
       symbols
     },
-    globals
+    globals,
+    languageOptions
   };
 
   // Clear the context, with the same chapter and externalSymbols as before.
