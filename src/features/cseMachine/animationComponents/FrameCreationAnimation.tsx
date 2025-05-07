@@ -12,7 +12,7 @@ import { Value } from '../components/values/Value';
 import { CseAnimation } from '../CseMachineAnimation';
 import { Config } from '../CseMachineConfig';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
-import { defaultActiveColor, defaultStrokeColor, isEnvEqual } from '../CseMachineUtils';
+import { defaultActiveColor, isEnvEqual, reachedStrokeColor } from '../CseMachineUtils';
 import { Animatable, AnimationConfig } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
 import { AnimatedRectComponent, AnimatedTextComponent } from './base/AnimationComponents';
@@ -61,7 +61,7 @@ export class FrameCreationAnimation extends Animatable {
     });
     this.borderAnimation = new AnimatedRectComponent({
       ...getNodePosition(origin),
-      stroke: origin instanceof ControlItemComponent ? defaultActiveColor() : defaultStrokeColor(),
+      stroke: origin instanceof ControlItemComponent ? defaultActiveColor() : reachedStrokeColor(),
       opacity: origin instanceof ControlItemComponent ? 1 : 0
     });
     if (frame.arrow) {

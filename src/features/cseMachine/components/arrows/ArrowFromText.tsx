@@ -7,10 +7,18 @@ import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */
 export class ArrowFromText extends GenericArrow<Text, Value> {
+  constructor(from: Text) {
+    super(from);
+  }
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
+
     if (!to) return [];
+
+    // set reachable to true if both source and target are reachable
+    this.setReachable(from.isReachable() && to.isReachable());
 
     const steps: StepsArray = [(x, y) => [x + from.width(), y + from.height() / 2]];
 

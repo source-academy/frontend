@@ -2,7 +2,7 @@ import React from 'react';
 import { Group } from 'react-konva';
 
 import { ControlItemComponent } from '../components/ControlItemComponent';
-import { defaultActiveColor, defaultStrokeColor } from '../CseMachineUtils';
+import { defaultActiveColor, reachedStrokeColor } from '../CseMachineUtils';
 import { Animatable, AnimationConfig } from './base/Animatable';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodePosition } from './base/AnimationUtils';
@@ -56,7 +56,7 @@ export class ControlExpansionAnimation extends Animatable {
     await Promise.all([
       // Fade out the previous item while also changing its height for a more fluid animation
       this.initialItemAnimation.animateRectTo(
-        { height: totalHeight, stroke: defaultStrokeColor() },
+        { height: totalHeight, stroke: reachedStrokeColor() },
         animationConfig
       ),
       this.initialItemAnimation.animateTextTo({ y: textY }, animationConfig),

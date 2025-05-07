@@ -43,6 +43,7 @@ export class Binding extends Visible {
     readonly isConstant: boolean = false
   ) {
     super();
+
     this.isDummyBinding = isDummyKey(this.keyString);
 
     // derive the coordinates from the binding above it
