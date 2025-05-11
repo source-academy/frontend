@@ -22,7 +22,7 @@ export async function makeCCompilerConfig(
   };
 }
 
-const modulesAvailableForC = new Set(['pix_n_flix']);
+const modulesAvailableForC = new Set(['pix_n_flix', 'sound', 'plotly']);
 
 export let specialCReturnObject: any = null;
 
