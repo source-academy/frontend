@@ -2,7 +2,7 @@ import { Classes, HTMLTable, Icon, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { CollabEditingAccess, type SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import classNames from 'classnames';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { useDispatch } from 'react-redux';
 import {
@@ -138,8 +138,13 @@ const SideContentSessionManagement: React.FC<Props> = ({
   // TODO: FIX BLINKING
   const dispatch = useDispatch();
 
+  const alertSideContent = useCallback(
+    () => dispatch(beginAlertSideContent(SideContentType.sessionManagement, workspaceLocation)),
+    [workspaceLocation, dispatch, users]
+  );
+
   useEffect(() => {
-    dispatch(beginAlertSideContent(SideContentType.sessionManagement, workspaceLocation));
+    alertSideContent();
   }, [dispatch, workspaceLocation, users]);
 
   if (Object.values(users).length === 0) return;
