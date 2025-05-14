@@ -2,7 +2,7 @@ import { IconNames } from '@blueprintjs/icons';
 import type { MockedFunction } from 'jest-mock';
 import { Context } from 'js-slang';
 import { expectSaga } from 'redux-saga-test-plan';
-import * as sideContentHelper from 'src/commons/sideContent/SideContentHelper';
+import { getDynamicTabs } from 'src/commons/sideContent/SideContentHelper';
 import { SideContentReducer } from 'src/commons/sideContent/SideContentReducer';
 import {
   type SideContentManagerState,
@@ -14,12 +14,13 @@ import { actions } from 'src/commons/utils/ActionsHelper';
 
 import SideContentSaga from '../SideContentSaga';
 
-jest.spyOn(sideContentHelper, 'getDynamicTabs');
+jest.mock('src/commons/sideContent/SideContentHelper', () => ({
+  ...jest.requireActual('src/commons/sideContent/SideContentHelper'),
+  getDynamicTabs: jest.fn()
+}));
 
 describe('Side Content Alerts for normal side content', () => {
-  const mockedGetDynamicTabs = sideContentHelper.getDynamicTabs as MockedFunction<
-    typeof sideContentHelper.getDynamicTabs
-  >;
+  const mockedGetDynamicTabs = getDynamicTabs as MockedFunction<typeof getDynamicTabs>;
 
   const expectSagaWrapper = (initialState: SideContentState, dynamicTabs: SideContentTab[]) => {
     mockedGetDynamicTabs.mockImplementationOnce(() => dynamicTabs);

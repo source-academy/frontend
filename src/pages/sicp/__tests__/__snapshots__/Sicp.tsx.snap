@@ -3,11 +3,11 @@
 exports[`Sicp renders correctly 1`] = `
 <Context.Provider
   value={
-    Object {
+    {
       "getServerState": undefined,
       "noopCheck": "once",
       "stabilityCheck": "once",
-      "store": Object {
+      "store": {
         "clearActions": [Function],
         "dispatch": [Function],
         "getActions": [Function],
@@ -15,7 +15,7 @@ exports[`Sicp renders correctly 1`] = `
         "replaceReducer": [Function],
         "subscribe": [Function],
       },
-      "subscription": Object {
+      "subscription": {
         "addNestedSub": [Function],
         "getListeners": [Function],
         "handleChangeWrapper": [Function],

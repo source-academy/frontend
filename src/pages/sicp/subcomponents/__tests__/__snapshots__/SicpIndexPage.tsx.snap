@@ -102,7 +102,7 @@ exports[`Sicp index page 1`] = `
           <div
             className="bp5-collapse"
             style={
-              Object {
+              {
                 "height": undefined,
                 "overflowY": undefined,
                 "transition": undefined,
@@ -113,7 +113,7 @@ exports[`Sicp index page 1`] = `
               aria-hidden={true}
               className="bp5-collapse-body"
               style={
-                Object {
+                {
                   "transform": "translateY(-undefinedpx)",
                   "transition": undefined,
                 }
@@ -144,7 +144,7 @@ exports[`Sicp index page 1`] = `
           <div
             className="bp5-collapse"
             style={
-              Object {
+              {
                 "height": undefined,
                 "overflowY": undefined,
                 "transition": undefined,
@@ -155,7 +155,7 @@ exports[`Sicp index page 1`] = `
               aria-hidden={true}
               className="bp5-collapse-body"
               style={
-                Object {
+                {
                   "transform": "translateY(-undefinedpx)",
                   "transition": undefined,
                 }
@@ -186,7 +186,7 @@ exports[`Sicp index page 1`] = `
           <div
             className="bp5-collapse"
             style={
-              Object {
+              {
                 "height": undefined,
                 "overflowY": undefined,
                 "transition": undefined,
@@ -197,7 +197,7 @@ exports[`Sicp index page 1`] = `
               aria-hidden={true}
               className="bp5-collapse-body"
               style={
-                Object {
+                {
                   "transform": "translateY(-undefinedpx)",
                   "transition": undefined,
                 }
@@ -228,7 +228,7 @@ exports[`Sicp index page 1`] = `
           <div
             className="bp5-collapse"
             style={
-              Object {
+              {
                 "height": undefined,
                 "overflowY": undefined,
                 "transition": undefined,
@@ -239,7 +239,7 @@ exports[`Sicp index page 1`] = `
               aria-hidden={true}
               className="bp5-collapse-body"
               style={
-                Object {
+                {
                   "transform": "translateY(-undefinedpx)",
                   "transition": undefined,
                 }
@@ -270,7 +270,7 @@ exports[`Sicp index page 1`] = `
           <div
             className="bp5-collapse"
             style={
-              Object {
+              {
                 "height": undefined,
                 "overflowY": undefined,
                 "transition": undefined,
@@ -281,7 +281,7 @@ exports[`Sicp index page 1`] = `
               aria-hidden={true}
               className="bp5-collapse-body"
               style={
-                Object {
+                {
                   "transform": "translateY(-undefinedpx)",
                   "transition": undefined,
                 }
@@ -318,7 +318,7 @@ exports[`Sicp index page 1`] = `
                   d="M214.2 174.2L134.2 254.2C130.6 257.8 125.6 260 120 260C109 260 100 251 100 240C100 234.4 102.2 229.4 105.8 225.8L171.8 160L106 94.2C102.2 90.6 100 85.6 100 80C100 69 109 60 120 60C125.6 60 130.6 62.2 134.2 65.8L214.2 145.8C217.8 149.4 220 154.4 220 160C220 165.6 217.8 170.6 214.2 174.2z"
                   fillRule="evenodd"
                   style={
-                    Object {
+                    {
                       "transformOrigin": "center",
                     }
                   }
@@ -335,7 +335,7 @@ exports[`Sicp index page 1`] = `
           <div
             className="bp5-collapse"
             style={
-              Object {
+              {
                 "height": undefined,
                 "overflowY": undefined,
                 "transition": undefined,
@@ -346,7 +346,7 @@ exports[`Sicp index page 1`] = `
               aria-hidden={true}
               className="bp5-collapse-body"
               style={
-                Object {
+                {
                   "transform": "translateY(-undefinedpx)",
                   "transition": undefined,
                 }
@@ -383,7 +383,7 @@ exports[`Sicp index page 1`] = `
                   d="M214.2 174.2L134.2 254.2C130.6 257.8 125.6 260 120 260C109 260 100 251 100 240C100 234.4 102.2 229.4 105.8 225.8L171.8 160L106 94.2C102.2 90.6 100 85.6 100 80C100 69 109 60 120 60C125.6 60 130.6 62.2 134.2 65.8L214.2 145.8C217.8 149.4 220 154.4 220 160C220 165.6 217.8 170.6 214.2 174.2z"
                   fillRule="evenodd"
                   style={
-                    Object {
+                    {
                       "transformOrigin": "center",
                     }
                   }
@@ -400,7 +400,7 @@ exports[`Sicp index page 1`] = `
           <div
             className="bp5-collapse"
             style={
-              Object {
+              {
                 "height": undefined,
                 "overflowY": undefined,
                 "transition": undefined,
@@ -411,7 +411,7 @@ exports[`Sicp index page 1`] = `
               aria-hidden={true}
               className="bp5-collapse-body"
               style={
-                Object {
+                {
                   "transform": "translateY(-undefinedpx)",
                   "transition": undefined,
                 }
@@ -448,7 +448,7 @@ exports[`Sicp index page 1`] = `
                   d="M214.2 174.2L134.2 254.2C130.6 257.8 125.6 260 120 260C109 260 100 251 100 240C100 234.4 102.2 229.4 105.8 225.8L171.8 160L106 94.2C102.2 90.6 100 85.6 100 80C100 69 109 60 120 60C125.6 60 130.6 62.2 134.2 65.8L214.2 145.8C217.8 149.4 220 154.4 220 160C220 165.6 217.8 170.6 214.2 174.2z"
                   fillRule="evenodd"
                   style={
-                    Object {
+                    {
                       "transformOrigin": "center",
                     }
                   }
@@ -465,7 +465,7 @@ exports[`Sicp index page 1`] = `
           <div
             className="bp5-collapse"
             style={
-              Object {
+              {
                 "height": undefined,
                 "overflowY": undefined,
                 "transition": undefined,
@@ -476,7 +476,7 @@ exports[`Sicp index page 1`] = `
               aria-hidden={true}
               className="bp5-collapse-body"
               style={
-                Object {
+                {
                   "transform": "translateY(-undefinedpx)",
                   "transition": undefined,
                 }
@@ -513,7 +513,7 @@ exports[`Sicp index page 1`] = `
                   d="M214.2 174.2L134.2 254.2C130.6 257.8 125.6 260 120 260C109 260 100 251 100 240C100 234.4 102.2 229.4 105.8 225.8L171.8 160L106 94.2C102.2 90.6 100 85.6 100 80C100 69 109 60 120 60C125.6 60 130.6 62.2 134.2 65.8L214.2 145.8C217.8 149.4 220 154.4 220 160C220 165.6 217.8 170.6 214.2 174.2z"
                   fillRule="evenodd"
                   style={
-                    Object {
+                    {
                       "transformOrigin": "center",
                     }
                   }
@@ -530,7 +530,7 @@ exports[`Sicp index page 1`] = `
           <div
             className="bp5-collapse"
             style={
-              Object {
+              {
                 "height": undefined,
                 "overflowY": undefined,
                 "transition": undefined,
@@ -541,7 +541,7 @@ exports[`Sicp index page 1`] = `
               aria-hidden={true}
               className="bp5-collapse-body"
               style={
-                Object {
+                {
                   "transform": "translateY(-undefinedpx)",
                   "transition": undefined,
                 }
@@ -578,7 +578,7 @@ exports[`Sicp index page 1`] = `
                   d="M214.2 174.2L134.2 254.2C130.6 257.8 125.6 260 120 260C109 260 100 251 100 240C100 234.4 102.2 229.4 105.8 225.8L171.8 160L106 94.2C102.2 90.6 100 85.6 100 80C100 69 109 60 120 60C125.6 60 130.6 62.2 134.2 65.8L214.2 145.8C217.8 149.4 220 154.4 220 160C220 165.6 217.8 170.6 214.2 174.2z"
                   fillRule="evenodd"
                   style={
-                    Object {
+                    {
                       "transformOrigin": "center",
                     }
                   }
@@ -595,7 +595,7 @@ exports[`Sicp index page 1`] = `
           <div
             className="bp5-collapse"
             style={
-              Object {
+              {
                 "height": undefined,
                 "overflowY": undefined,
                 "transition": undefined,
@@ -606,7 +606,7 @@ exports[`Sicp index page 1`] = `
               aria-hidden={true}
               className="bp5-collapse-body"
               style={
-                Object {
+                {
                   "transform": "translateY(-undefinedpx)",
                   "transition": undefined,
                 }
@@ -637,7 +637,7 @@ exports[`Sicp index page 1`] = `
           <div
             className="bp5-collapse"
             style={
-              Object {
+              {
                 "height": undefined,
                 "overflowY": undefined,
                 "transition": undefined,
@@ -648,7 +648,7 @@ exports[`Sicp index page 1`] = `
               aria-hidden={true}
               className="bp5-collapse-body"
               style={
-                Object {
+                {
                   "transform": "translateY(-undefinedpx)",
                   "transition": undefined,
                 }
@@ -679,7 +679,7 @@ exports[`Sicp index page 1`] = `
           <div
             className="bp5-collapse"
             style={
-              Object {
+              {
                 "height": undefined,
                 "overflowY": undefined,
                 "transition": undefined,
@@ -690,7 +690,7 @@ exports[`Sicp index page 1`] = `
               aria-hidden={true}
               className="bp5-collapse-body"
               style={
-                Object {
+                {
                   "transform": "translateY(-undefinedpx)",
                   "transition": undefined,
                 }

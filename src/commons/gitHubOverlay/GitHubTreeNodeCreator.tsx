@@ -1,7 +1,8 @@
 import { TreeNodeInfo } from '@blueprintjs/core';
+import type { Octokit } from '@octokit/rest';
 import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 
-import * as GitHubUtils from '../../features/github/GitHubUtils';
+import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import { GitHubFileNodeData } from './GitHubFileNodeData';
 
 /**
@@ -44,7 +45,7 @@ export class GitHubTreeNodeCreator {
       return childNodes;
     }
 
-    const octokit = GitHubUtils.getGitHubOctokitInstance();
+    const octokit: Octokit = getGitHubOctokitInstance();
 
     if (octokit === undefined) {
       return childNodes;
