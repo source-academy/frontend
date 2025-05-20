@@ -2,6 +2,7 @@ import 'katex/dist/katex.min.css';
 
 import { Button, Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import classNames from 'classnames';
+import path from 'path';
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router';
@@ -14,9 +15,12 @@ import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 import {
+  readSicpLangLocalStorage,
   readSicpSectionLocalStorage,
+  setSicpLangLocalStorage,
   setSicpSectionLocalStorage,
   SICP_CACHE_KEY,
+  SICP_DEF_TB_LANG,
   SICP_INDEX
 } from 'src/features/sicp/utils/SicpUtils';
 
@@ -40,7 +44,8 @@ const Sicp: React.FC = () => {
   const [data, setData] = useState(<></>);
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState('0');
-  const { section } = useParams<{ section: string }>();
+  const { param_lang, section } = useParams<{ param_lang:string, section: string }>();
+  const [lang, setLang] = useState(readSicpLangLocalStorage());
   const parentRef = useRef<HTMLDivElement>(null);
   const refs = useRef<Record<string, HTMLElement | null>>({});
   const navigate = useNavigate();
@@ -89,13 +94,30 @@ const Sicp: React.FC = () => {
 
   // Handle loading of latest viewed section and fetch json data
   React.useEffect(() => {
+    const valid_langs = ['en', 'zh_CN'];
+    if (section && valid_langs.includes(section) || param_lang) {
+      const plang = param_lang ? param_lang : (section ? section : SICP_DEF_TB_LANG);
+      if (!valid_langs.includes(plang)) {
+        setLang(SICP_DEF_TB_LANG);
+        setSicpLangLocalStorage(SICP_DEF_TB_LANG);
+      } else {
+        setLang(plang);
+        setSicpLangLocalStorage(plang);
+      }
+      if (section && valid_langs.includes(section)) {
+        navigate(`/sicpjs/${SICP_INDEX}`, { replace: true });
+      } else {
+        navigate(`/sicpjs/${section}`, { replace: true });
+      }
+      return;
+    }
     if (!section) {
       /**
        * Handles rerouting to the latest viewed section when clicking from
        * the main application navbar. Navigate replace logic is used to allow the
        * user to still use the browser back button to navigate the app.
        */
-      navigate(`/sicpjs/${readSicpSectionLocalStorage()}`, { replace: true });
+      navigate(path.join('sicpjs', readSicpSectionLocalStorage()), { replace: true });
       return;
     }
 
@@ -106,7 +128,11 @@ const Sicp: React.FC = () => {
 
     setLoading(true);
 
-    fetch(baseUrl + section + extension)
+    if (!valid_langs.includes(lang)) {
+      setLang(SICP_DEF_TB_LANG);
+      setSicpLangLocalStorage(SICP_DEF_TB_LANG);
+    }
+    fetch(baseUrl + lang + '/' + section + extension)
       .then(response => {
         if (!response.ok) {
           throw Error(response.statusText);
@@ -139,7 +165,7 @@ const Sicp: React.FC = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [section, navigate]);
+  }, [param_lang, section, lang, navigate]);
 
   // Scroll to correct position
   React.useEffect(() => {
@@ -164,9 +190,32 @@ const Sicp: React.FC = () => {
     dispatch(WorkspaceActions.resetWorkspace('sicp'));
     dispatch(WorkspaceActions.toggleUsingSubst(false, 'sicp'));
   };
+
+  const handleLanguageToggle = () => {
+    const newLang = lang === 'en' ? 'zh_CN' : 'en';
+    setLang(newLang);
+    setSicpLangLocalStorage(newLang);
+  };
+
   const handleNavigation = (sect: string) => {
     navigate('/sicpjs/' + sect);
   };
+
+  // Language toggle button with fixed position
+  const languageToggle = (
+    <div
+      style={{
+        position: 'sticky',
+        top: '20px',
+        left: '20px',
+        zIndex: 1000
+      }}
+    >
+      <Button onClick={handleLanguageToggle} intent="primary" small>
+        {lang === 'en' ? '切换到中文' : 'Switch to English'}
+      </Button>
+    </div>
+  );
 
   // `section` is defined due to the navigate logic in the useEffect above
   const navigationButtons = (
@@ -187,6 +236,7 @@ const Sicp: React.FC = () => {
     >
       <SicpErrorBoundary>
         <CodeSnippetContext.Provider value={{ active: active, setActive: handleSnippetEditorOpen }}>
+          {languageToggle}
           {loading ? (
             <div className="sicp-content">{loadingComponent}</div>
           ) : section === 'index' ? (
