@@ -15,9 +15,12 @@ import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 import {
+  readSicpLangLocalStorage,
   readSicpSectionLocalStorage,
+  setSicpLangLocalStorage,
   setSicpSectionLocalStorage,
   SICP_CACHE_KEY,
+  SICP_DEF_TB_LANG,
   SICP_INDEX
 } from 'src/features/sicp/utils/SicpUtils';
 
@@ -41,7 +44,8 @@ const Sicp: React.FC = () => {
   const [data, setData] = useState(<></>);
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState('0');
-  const { lang, section } = useParams<{ lang: string; section: string }>();
+  const { param_lang, section } = useParams<{ param_lang:string, section: string }>();
+  const [lang, setLang] = useState(readSicpLangLocalStorage());
   const parentRef = useRef<HTMLDivElement>(null);
   const refs = useRef<Record<string, HTMLElement | null>>({});
   const navigate = useNavigate();
@@ -90,6 +94,23 @@ const Sicp: React.FC = () => {
 
   // Handle loading of latest viewed section and fetch json data
   React.useEffect(() => {
+    const valid_langs = ['en', 'zh_CN'];
+    if (section && valid_langs.includes(section) || param_lang) {
+      const plang = param_lang ? param_lang : (section ? section : SICP_DEF_TB_LANG);
+      if (!valid_langs.includes(plang)) {
+        setLang(SICP_DEF_TB_LANG);
+        setSicpLangLocalStorage(SICP_DEF_TB_LANG);
+      } else {
+        setLang(plang);
+        setSicpLangLocalStorage(plang);
+      }
+      if (section && valid_langs.includes(section)) {
+        navigate(`/sicpjs/${SICP_INDEX}`, { replace: true });
+      } else {
+        navigate(`/sicpjs/${section}`, { replace: true });
+      }
+      return;
+    }
     if (!section) {
       /**
        * Handles rerouting to the latest viewed section when clicking from
@@ -107,6 +128,10 @@ const Sicp: React.FC = () => {
 
     setLoading(true);
 
+    if (!valid_langs.includes(lang)) {
+      setLang(SICP_DEF_TB_LANG);
+      setSicpLangLocalStorage(SICP_DEF_TB_LANG);
+    }
     fetch(baseUrl + lang + '/' + section + extension)
       .then(response => {
         if (!response.ok) {
@@ -118,7 +143,7 @@ const Sicp: React.FC = () => {
         try {
           const newData = parseArr(myJson, refs); // Might throw error
           setData(newData);
-          setSicpSectionLocalStorage(path.join(lang || 'en', section)); // Sets local storage if valid page
+          setSicpSectionLocalStorage(section); // Sets local storage if valid page
         } catch (error) {
           throw new ParseJsonError(error.message);
         }
@@ -140,7 +165,7 @@ const Sicp: React.FC = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [lang, section, navigate]);
+  }, [param_lang, section, lang, navigate]);
 
   // Scroll to correct position
   React.useEffect(() => {
@@ -168,11 +193,12 @@ const Sicp: React.FC = () => {
 
   const handleLanguageToggle = () => {
     const newLang = lang === 'en' ? 'zh_CN' : 'en';
-    navigate(`/sicpjs/${newLang}/${section}`);
+    setLang(newLang);
+    setSicpLangLocalStorage(newLang);
   };
 
   const handleNavigation = (sect: string) => {
-    navigate('/sicpjs/' + `${lang}/` + sect);
+    navigate('/sicpjs/' + sect);
   };
 
   // Language toggle button with fixed position

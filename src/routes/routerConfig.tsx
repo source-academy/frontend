@@ -49,7 +49,8 @@ const Features = () => import('../pages/featureFlags/FeatureFlags');
 const commonChildrenRoutes: RouteObject[] = [
   { path: 'contributors', lazy: Contributors },
   { path: 'callback/github', lazy: GitHubCallback },
-  { path: 'sicpjs/:lang/:section?', lazy: Sicp },
+  { path: 'sicpjs/:section?', lazy: Sicp },
+  { path: 'sicpjs/:param_lang/:section?', lazy: Sicp },
   { path: 'features', lazy: Features }
 ];
 
