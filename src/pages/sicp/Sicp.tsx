@@ -209,7 +209,7 @@ const Sicp: React.FC = () => {
         position: 'sticky',
         top: '20px',
         left: '20px',
-        zIndex: 1000
+        zIndex: 0
       }}
     >
       <Button onClick={handleLanguageToggle} intent="primary" small>
