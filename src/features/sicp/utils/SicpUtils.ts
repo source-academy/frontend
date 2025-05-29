@@ -17,6 +17,7 @@ export const SICP_TB_LANG_KEY = 'sicp-textbook-lang';
 
 export const setSicpLangLocalStorage = (value: string) => {
   setLocalStorage(SICP_TB_LANG_KEY, value);
+  window.dispatchEvent(new Event('sicp-tb-lang-change'));
 };
 
 export const readSicpLangLocalStorage = () => {

@@ -58,37 +58,49 @@ const Toc: React.FC<{ toc: TreeNodeInfo[], props: TocProps }> = ({toc, props}) =
 };
 
 const SicpToc: React.FC<TocProps> = props => {
-  const [data, setData] = useState(<></>);
+  const [lang, setLang] = useState(readSicpLangLocalStorage());
+  const [toc, setToc] = useState([] as TreeNodeInfo[]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   React.useEffect(() => {
-    fetch(baseUrl + readSicpLangLocalStorage() + '/toc.json')
+    const handleLangChange = () => {
+      setLang(readSicpLangLocalStorage());
+    }
+    window.addEventListener('sicp-tb-lang-change', handleLangChange);
+    return () => window.removeEventListener('sicp-tb-lang-change', handleLangChange)
+  }, []);
+
+  React.useEffect(() => {
+    setLoading(true);
+    fetch(baseUrl + lang + '/toc.json')
       .then(response => {
         if (!response.ok) {
           throw Error(response.statusText);
         }
         return response.json();
       })
-      .then(toc => {
-        const newData = (
-          <Toc toc={toc as TreeNodeInfo[]} props={props} />
-        );
-        setData(newData);
+      .then(json => {
+        setToc(json as TreeNodeInfo[]);
       })
       .catch(error => {
         console.log(error);
-        setData(getSicpError(SicpErrorType.UNEXPECTED_ERROR));
+        setError(true);
       })
       .finally(() => {
         setLoading(false);
       });
-  }, [props]);
+  }, [lang]);
 
   return (
     <div className="sicp-toc">
       {loading ? (
         <div className="sicp-content">{loadingComponent}</div>
-      ): data}
+      ) : error ? (
+        getSicpError(SicpErrorType.UNEXPECTED_ERROR)
+      ) : (
+        <Toc toc={toc} props={props} />
+      )}
     </div>
   );
 };

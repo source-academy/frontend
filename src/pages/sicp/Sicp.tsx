@@ -95,6 +95,7 @@ const Sicp: React.FC = () => {
   // Handle loading of latest viewed section and fetch json data
   React.useEffect(() => {
     const valid_langs = ['en', 'zh_CN'];
+
     if (section && valid_langs.includes(section) || param_lang) {
       const plang = param_lang ? param_lang : (section ? section : SICP_DEF_TB_LANG);
       if (!valid_langs.includes(plang)) {
