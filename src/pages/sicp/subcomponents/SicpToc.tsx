@@ -7,6 +7,8 @@ import Constants from 'src/commons/utils/Constants';
 import getSicpError, { SicpErrorType } from 'src/features/sicp/errors/SicpErrors';
 import { readSicpLangLocalStorage } from 'src/features/sicp/utils/SicpUtils';
 
+import fallbackToc from '../../../features/sicp/data/toc.json';
+
 const baseUrl = Constants.sicpBackendUrl + 'json/';
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
 
@@ -97,7 +99,7 @@ const SicpToc: React.FC<TocProps> = props => {
       {loading ? (
         <div className="sicp-content">{loadingComponent}</div>
       ) : error ? (
-        getSicpError(SicpErrorType.UNEXPECTED_ERROR)
+        <Toc toc={fallbackToc as TreeNodeInfo[]} props={props} />
       ) : (
         <Toc toc={toc} props={props} />
       )}
