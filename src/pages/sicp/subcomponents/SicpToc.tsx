@@ -4,7 +4,6 @@ import { cloneDeep } from 'lodash';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
-import getSicpError, { SicpErrorType } from 'src/features/sicp/errors/SicpErrors';
 import { readSicpLangLocalStorage } from 'src/features/sicp/utils/SicpUtils';
 
 import fallbackToc from '../../../features/sicp/data/toc.json';
