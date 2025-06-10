@@ -13,8 +13,8 @@ import {
   getPaginatedTotalXp
 } from './RequestsSaga';
 
-const LeaderboardSaga = combineSagaHandlers(LeaderboardActions, {
-  getAllUsersXp: function* () {
+const LeaderboardSaga = combineSagaHandlers({
+  [LeaderboardActions.getAllUsersXp.type]: function* () {
     const tokens: Tokens = yield selectTokens();
 
     const usersXp = yield call(getAllTotalXp, tokens);
@@ -24,7 +24,7 @@ const LeaderboardSaga = combineSagaHandlers(LeaderboardActions, {
     }
   },
 
-  getPaginatedLeaderboardXp: function* (action) {
+  [LeaderboardActions.getPaginatedLeaderboardXp.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { page, pageSize } = action.payload;
 
@@ -35,7 +35,7 @@ const LeaderboardSaga = combineSagaHandlers(LeaderboardActions, {
     }
   },
 
-  getAllContestScores: function* (action) {
+  [LeaderboardActions.getAllContestScores.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { assessmentId, visibleEntries } = action.payload;
 
@@ -51,7 +51,7 @@ const LeaderboardSaga = combineSagaHandlers(LeaderboardActions, {
     }
   },
 
-  getAllContestPopularVotes: function* (action) {
+  [LeaderboardActions.getAllContestPopularVotes.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { assessmentId, visibleEntries } = action.payload;
 
@@ -66,7 +66,7 @@ const LeaderboardSaga = combineSagaHandlers(LeaderboardActions, {
     }
   },
 
-  getContests: function* () {
+  [LeaderboardActions.getContests.type]: function* () {
     const tokens: Tokens = yield selectTokens();
 
     const contests = yield call(getAllContests, tokens);

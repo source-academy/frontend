@@ -2,7 +2,7 @@ import { Chapter, Language, type SourceError, type Value, Variant } from 'js-sla
 
 import type { AchievementState } from '../../features/achievement/AchievementTypes';
 import type { DashboardState } from '../../features/dashboard/DashboardTypes';
-import { LeaderboardState } from '../../features/leaderboard/LeaderboardTypes';
+import type { LeaderboardState } from '../../features/leaderboard/LeaderboardTypes';
 import type { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import type { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
