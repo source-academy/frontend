@@ -3,12 +3,13 @@ import { Ace } from 'ace-builds';
 import classNames from 'classnames';
 import { parseError } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
+import { stringify } from 'js-slang/dist/utils/stringify';
 import React from 'react';
 
-import { InterpreterOutput } from '../application/ApplicationTypes';
+import type { InterpreterOutput, ResultOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { ReplInput } from './ReplInput';
-import { OutputProps } from './ReplTypes';
+import type { OutputProps } from './ReplTypes';
 
 export type ReplProps = DispatchProps & StateProps & OwnProps;
 
@@ -60,6 +61,26 @@ const Repl: React.FC<ReplProps> = props => {
   );
 };
 
+const ResultOutputDisplay: React.FC<{ output: ResultOutput }> = ({
+  output: { value, consoleLogs }
+}) => {
+  const stringified = React.useMemo(() => stringify(value), [value]);
+  if (consoleLogs.length === 0) {
+    return (
+      <Card>
+        <Pre className="result-output">{stringified}</Pre>
+      </Card>
+    );
+  } else {
+    return (
+      <Card>
+        <Pre className="log-output">{consoleLogs.join('\n')}</Pre>
+        <Pre className="result-output">{stringified}</Pre>
+      </Card>
+    );
+  }
+};
+
 export const Output: React.FC<OutputProps> = props => {
   switch (props.output.type) {
     case 'code':
@@ -88,19 +109,8 @@ export const Output: React.FC<OutputProps> = props => {
             <Pre className="log-output">Check out the HTML Display tab!</Pre>
           </Card>
         );
-      } else if (props.output.consoleLogs.length === 0) {
-        return (
-          <Card>
-            <Pre className="result-output">{props.output.value}</Pre>
-          </Card>
-        );
       } else {
-        return (
-          <Card>
-            <Pre className="log-output">{props.output.consoleLogs.join('\n')}</Pre>
-            <Pre className="result-output">{props.output.value}</Pre>
-          </Card>
-        );
+        return <ResultOutputDisplay output={props.output} />;
       }
     case 'errors':
       if (props.output.consoleLogs.length === 0) {

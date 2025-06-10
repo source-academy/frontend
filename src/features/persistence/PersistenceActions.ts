@@ -1,21 +1,12 @@
-import { createAction } from '@reduxjs/toolkit';
+import { createActions } from 'src/commons/redux/utils';
 
-import {
-  PERSISTENCE_INITIALISE,
-  PERSISTENCE_OPEN_PICKER,
-  PERSISTENCE_SAVE_FILE,
-  PERSISTENCE_SAVE_FILE_AS,
-  PersistenceFile
-} from './PersistenceTypes';
+import type { PersistenceFile } from './PersistenceTypes';
 
-export const persistenceOpenPicker = createAction(PERSISTENCE_OPEN_PICKER, () => ({ payload: {} }));
+const PersistenceActions = createActions('persistence', {
+  persistenceOpenPicker: true,
+  persistenceSaveFile: (file: PersistenceFile) => file,
+  persistenceSaveFileAs: true,
+  persistenceInitialise: true
+});
 
-export const persistenceSaveFile = createAction(PERSISTENCE_SAVE_FILE, (file: PersistenceFile) => ({
-  payload: file
-}));
-
-export const persistenceSaveFileAs = createAction(PERSISTENCE_SAVE_FILE_AS, () => ({
-  payload: {}
-}));
-
-export const persistenceInitialise = createAction(PERSISTENCE_INITIALISE, () => ({ payload: {} }));
+export default PersistenceActions;

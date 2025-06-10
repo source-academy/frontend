@@ -1,32 +1,27 @@
-import * as Sentry from '@sentry/browser';
-import { SagaIterator } from 'redux-saga';
+import { setUser } from '@sentry/browser';
 import { call } from 'redux-saga/effects';
 
 import CommonsActions from '../application/actions/CommonsActions';
 import SessionActions from '../application/actions/SessionActions';
-import { actions } from '../utils/ActionsHelper';
+import { combineSagaHandlers } from '../redux/utils';
 import { computeEndpointUrl } from '../utils/AuthHelper';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { safeTakeEvery as takeEvery } from './SafeEffects';
 
-export default function* LoginSaga(): SagaIterator {
-  yield takeEvery(SessionActions.login.type, updateLoginHref);
-
-  yield takeEvery(SessionActions.setUser.type, (action: ReturnType<typeof actions.setUser>) => {
-    Sentry.setUser({ id: action.payload.userId.toString() });
-  });
-
-  yield takeEvery(CommonsActions.logOut.type, () => {
-    Sentry.setUser(null);
-  });
-}
-
-function* updateLoginHref({ payload: providerId }: ReturnType<typeof actions.login>) {
-  const epUrl = computeEndpointUrl(providerId);
-  if (!epUrl) {
-    yield call(showWarningMessage, 'Could not log in; invalid provider name provided.');
-    return undefined;
+const LoginSaga = combineSagaHandlers({
+  [SessionActions.login.type]: function* ({ payload: providerId }) {
+    const epUrl = computeEndpointUrl(providerId);
+    if (!epUrl) {
+      yield call(showWarningMessage, 'Could not log in; invalid provider name provided.');
+      return;
+    }
+    window.location.href = epUrl;
+  },
+  [SessionActions.setUser.type]: function* (action) {
+    yield call(setUser, { id: action.payload.userId.toString() });
+  },
+  [CommonsActions.logOut.type]: function* () {
+    yield call(setUser, null);
   }
-  window.location.href = epUrl;
-  return undefined;
-}
+});
+
+export default LoginSaga;

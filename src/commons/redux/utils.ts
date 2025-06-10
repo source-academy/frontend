@@ -1,17 +1,20 @@
 import {
-  ActionCreatorWithOptionalPayload,
-  ActionCreatorWithoutPayload,
-  ActionCreatorWithPreparedPayload,
+  type ActionCreatorWithOptionalPayload,
+  type ActionCreatorWithoutPayload,
+  type ActionCreatorWithPreparedPayload,
   createAction
 } from '@reduxjs/toolkit';
-import * as Sentry from '@sentry/browser';
-import { SagaIterator } from 'redux-saga';
-import { StrictEffect, takeEvery } from 'redux-saga/effects';
+import type { SagaIterator } from 'redux-saga';
+import { type StrictEffect, takeEvery, takeLatest, takeLeading } from 'redux-saga/effects';
+
+import { safeTakeEvery, wrapSaga } from '../sagas/SafeEffects';
+import type { SourceActionType } from '../utils/ActionsHelper';
+import { type ActionTypeToCreator, objectEntries } from '../utils/TypeHelper';
 
 /**
  * Creates actions, given a base name and base actions
  * @param baseName The base name of the actions
- * @param baseActions The base actions. Use a falsy value to create an action without a payload.
+ * @param baseActions The base actions. Use a non function value to create an action without a payload.
  * @returns An object containing the actions
  */
 export function createActions<BaseName extends string, BaseActions extends Record<string, any>>(
@@ -21,11 +24,12 @@ export function createActions<BaseName extends string, BaseActions extends Recor
   return Object.entries(baseActions).reduce(
     (res, [name, func]) => ({
       ...res,
-      [name]: func
-        ? createAction(`${baseName}/${name}`, (...args: any) => ({ payload: func(...args) }))
-        : createAction(`${baseName}/${name}`)
+      [name]:
+        typeof func === 'function'
+          ? createAction(`${baseName}/${name}`, (...args: any) => ({ payload: func(...args) }))
+          : createAction(`${baseName}/${name}`)
     }),
-    {} as {
+    {} as Readonly<{
       [K in keyof BaseActions]: K extends string
         ? BaseActions[K] extends (...args: any) => any
           ? ActionCreatorWithPreparedPayload<
@@ -35,35 +39,40 @@ export function createActions<BaseName extends string, BaseActions extends Recor
             >
           : ActionCreatorWithoutPayload<`${BaseName}/${K}`>
         : never;
-    }
+    }>
   );
 }
 
-export function combineSagaHandlers<
-  TActions extends Record<
-    string,
-    ActionCreatorWithPreparedPayload<any, any> | ActionCreatorWithoutPayload<any>
-  >
->(
-  actions: TActions,
-  handlers: {
-    // TODO: Maybe this can be stricter? And remove the optional type after
-    // migration is fully done
-    [K in keyof TActions]?: (action: ReturnType<TActions[K]>) => SagaIterator;
-  },
-  others?: (takeEvery: typeof saferTakeEvery) => SagaIterator
-): () => SagaIterator {
-  const sagaHandlers = Object.entries(handlers).map(([actionName, saga]) =>
-    saferTakeEvery(actions[actionName], saga)
-  );
+type SagaHandler<T extends SourceActionType['type']> = (
+  action: ReturnType<ActionTypeToCreator<T>>
+) => Generator<StrictEffect>;
+
+type SagaHandlers = {
+  [K in SourceActionType['type']]?:
+    | SagaHandler<K>
+    | Partial<Record<'takeEvery' | 'takeLatest' | 'takeLeading', SagaHandler<K>>>;
+};
+
+export function combineSagaHandlers(handlers: SagaHandlers) {
   return function* (): SagaIterator {
-    yield* sagaHandlers;
-    if (others) {
-      const obj = others(saferTakeEvery);
-      while (true) {
-        const { done, value } = obj.next();
-        if (done) break;
-        yield value;
+    for (const [actionName, saga] of objectEntries(handlers)) {
+      if (saga === undefined) {
+        continue;
+      } else if (typeof saga === 'function') {
+        yield takeEvery(actionName, wrapSaga(saga));
+        continue;
+      }
+
+      if (saga.takeEvery) {
+        yield takeEvery(actionName, wrapSaga(saga.takeEvery));
+      }
+
+      if (saga.takeLeading) {
+        yield takeLeading(actionName, wrapSaga(saga.takeLeading));
+      }
+
+      if (saga.takeLatest) {
+        yield takeLatest(actionName, wrapSaga(saga.takeLatest));
       }
     }
   };
@@ -74,26 +83,5 @@ export function saferTakeEvery<
     | ActionCreatorWithOptionalPayload<any>
     | ActionCreatorWithPreparedPayload<any[], any>
 >(actionPattern: Action, fn: (action: ReturnType<Action>) => Generator<StrictEffect<any>>) {
-  function* wrapper(action: ReturnType<Action>) {
-    try {
-      yield* fn(action);
-    } catch (error) {
-      handleUncaughtError(error);
-    }
-  }
-
-  return takeEvery(actionPattern.type, wrapper);
-}
-
-function handleUncaughtError(error: any) {
-  if (process.env.NODE_ENV === 'development') {
-    // react-error-overlay is a "special" package that's automatically included
-    // in development mode by CRA
-
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    import('react-error-overlay').then(reo => reo.reportRuntimeError(error));
-  }
-  Sentry.captureException(error);
-  console.error(error);
+  return safeTakeEvery(actionPattern.type, fn);
 }

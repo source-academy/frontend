@@ -204,37 +204,32 @@ exports[`Repl renders correctly 1`] = `
 `;
 
 exports[`Result output (no consoleLogs) renders correctly 1`] = `
-<Blueprint5.Card
-  elevation={0}
-  interactive={false}
->
-  <ForwardRef
-    className="result-output"
-  >
-    42
-  </ForwardRef>
-</Blueprint5.Card>
+<ResultOutputDisplay
+  output={
+    Object {
+      "consoleLogs": Array [],
+      "type": "result",
+      "value": 42,
+    }
+  }
+/>
 `;
 
 exports[`Result output (with consoleLogs) renders correctly 1`] = `
-<Blueprint5.Card
-  elevation={0}
-  interactive={false}
->
-  <ForwardRef
-    className="log-output"
-  >
-    a
-bb
-cccccccccccccccccccccccccccccccc
-d
-  </ForwardRef>
-  <ForwardRef
-    className="result-output"
-  >
-    42
-  </ForwardRef>
-</Blueprint5.Card>
+<ResultOutputDisplay
+  output={
+    Object {
+      "consoleLogs": Array [
+        "a",
+        "bb",
+        "cccccccccccccccccccccccccccccccc",
+        "d",
+      ],
+      "type": "result",
+      "value": 42,
+    }
+  }
+/>
 `;
 
 exports[`Running output renders correctly 1`] = `
