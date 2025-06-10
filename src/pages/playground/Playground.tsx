@@ -1,9 +1,9 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { HotkeyItem, useHotkeys } from '@mantine/hooks';
-import { AnyAction, Dispatch } from '@reduxjs/toolkit';
+import { type HotkeyItem, useHotkeys } from '@mantine/hooks';
+import type { AnyAction, Dispatch } from '@reduxjs/toolkit';
 import { Ace, Range } from 'ace-builds';
-import { FSModule } from 'browserfs/dist/node/core/FS';
+import type { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
@@ -31,15 +31,10 @@ import {
   showFulTSWarningOnUrlLoad,
   showHTMLDisclaimer
 } from 'src/commons/utils/WarningDialogHelper';
-import WorkspaceActions, { uploadFiles } from 'src/commons/workspace/WorkspaceActions';
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
+import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import GithubActions from 'src/features/github/GitHubActions';
-import {
-  persistenceInitialise,
-  persistenceOpenPicker,
-  persistenceSaveFile,
-  persistenceSaveFileAs
-} from 'src/features/persistence/PersistenceActions';
+import PersistenceActions from 'src/features/persistence/PersistenceActions';
 import {
   generateLzString,
   playgroundConfigLanguage,
@@ -52,9 +47,9 @@ import {
   getLanguageConfig,
   isCseVariant,
   isSourceLanguage,
-  OverallState,
-  ResultOutput,
-  SALanguage
+  type OverallState,
+  type ResultOutput,
+  type SALanguage
 } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAutorunButtons';
@@ -69,23 +64,23 @@ import { ControlBarToggleFolderModeButton } from '../../commons/controlBar/Contr
 import { ControlBarGitHubButtons } from '../../commons/controlBar/github/ControlBarGitHubButtons';
 import {
   convertEditorTabStateToProps,
-  NormalEditorContainerProps
+  type NormalEditorContainerProps
 } from '../../commons/editor/EditorContainer';
-import { Position } from '../../commons/editor/EditorTypes';
+import type { Position } from '../../commons/editor/EditorTypes';
 import { overwriteFilesInWorkspace } from '../../commons/fileSystem/utils';
 import FileSystemView from '../../commons/fileSystemView/FileSystemView';
 import MobileWorkspace, {
-  MobileWorkspaceProps
+  type MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import { SideBarTab } from '../../commons/sideBar/SideBar';
-import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
+import { type SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import Constants, { Links } from '../../commons/utils/Constants';
 import { generateLanguageIntroduction } from '../../commons/utils/IntroductionHelper';
 import { convertParamToBoolean, convertParamToInt } from '../../commons/utils/ParamParseHelper';
-import { IParsedQuery, parseQuery } from '../../commons/utils/QueryHelper';
+import { type IParsedQuery, parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { initSession, log } from '../../features/eventLogging';
-import {
+import type {
   CodeDelta,
   Input,
   SelectionRange
@@ -561,13 +556,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
         loggedInAs={persistenceUser}
         isDirty={persistenceIsDirty}
         key="googledrive"
-        onClickSaveAs={() => dispatch(persistenceSaveFileAs())}
-        onClickOpen={() => dispatch(persistenceOpenPicker())}
+        onClickSaveAs={() => dispatch(PersistenceActions.persistenceSaveFileAs())}
+        onClickOpen={() => dispatch(PersistenceActions.persistenceOpenPicker())}
         onClickSave={
-          persistenceFile ? () => dispatch(persistenceSaveFile(persistenceFile)) : undefined
+          persistenceFile
+            ? () => dispatch(PersistenceActions.persistenceSaveFile(persistenceFile))
+            : undefined
         }
         onClickLogOut={() => dispatch(SessionActions.logoutGoogle())}
-        onPopoverOpening={() => dispatch(persistenceInitialise())}
+        onPopoverOpening={() => dispatch(PersistenceActions.persistenceInitialise())}
       />
     );
   }, [isFolderModeEnabled, persistenceFile, persistenceUser, persistenceIsDirty, dispatch]);
@@ -733,7 +730,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
 
     if (currentLang === Chapter.FULL_JAVA && process.env.NODE_ENV === 'development') {
-      tabs.push(makeUploadTabFrom(files => dispatch(uploadFiles(files, workspaceLocation))));
+      tabs.push(
+        makeUploadTabFrom(files => dispatch(WorkspaceActions.uploadFiles(files, workspaceLocation)))
+      );
     }
 
     if (!usingRemoteExecution) {

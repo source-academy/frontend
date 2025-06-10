@@ -1,4 +1,5 @@
 import {
+  Button,
   Dialog,
   DialogBody,
   FormGroup,
@@ -9,6 +10,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { EditorBinding, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
 import LocaleSelector from './LocaleSelector';
@@ -34,6 +36,8 @@ const DropdownSettings: React.FC<Props> = ({ isOpen, onClose }) => {
       editorBinding: e.target.value as EditorBinding
     });
   };
+
+  const navigate = useNavigate();
 
   return (
     <Dialog
@@ -61,6 +65,15 @@ const DropdownSettings: React.FC<Props> = ({ isOpen, onClose }) => {
           </Tooltip>
         </FormGroup>
         <LocaleSelector />
+        <Button
+          onClick={() => {
+            navigate('/features');
+            onClose();
+          }}
+          icon={IconNames.FLAG}
+        >
+          Feature Flags
+        </Button>
       </DialogBody>
     </Dialog>
   );

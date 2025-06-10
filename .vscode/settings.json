@@ -1,0 +1,8 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.useFlatConfig": true,
+  "files.insertFinalNewline": true,
+  "liveServer.settings.file": "/index.html",
+  "liveServer.settings.NoBrowser": true,
+  "liveServer.settings.root": "/build"
+}

@@ -55,7 +55,7 @@ export default class GameUserStateManager {
       (assessments || [])
         .filter(assessment => assessment.status === 'submitted')
         .sort((a, b) => (a.closeAt <= b.closeAt ? -1 : 1))
-        .map(assessment => assessment.id.toString())
+        .map(assessment => assessment.number || assessment.id.toString())
     );
   }
 

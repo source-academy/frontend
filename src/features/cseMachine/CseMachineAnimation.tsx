@@ -6,6 +6,7 @@ import React from 'react';
 
 import { ArrayAccessAnimation } from './animationComponents/ArrayAccessAnimation';
 import { ArrayAssignmentAnimation } from './animationComponents/ArrayAssignmentAnimation';
+import { ArraySpreadAnimation } from './animationComponents/ArraySpreadAnimation';
 import { AssignmentAnimation } from './animationComponents/AssignmentAnimation';
 import { Animatable } from './animationComponents/base/Animatable';
 import { lookupBinding } from './animationComponents/base/AnimationUtils';
@@ -117,6 +118,11 @@ export class CseAnimation {
             )
           );
         }
+        break;
+      case 'SpreadElement':
+        CseAnimation.animations.push(
+          new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())
+        );
         break;
       case 'AssignmentExpression':
       case 'ArrayExpression':
@@ -277,6 +283,35 @@ export class CseAnimation {
               lastControlComponent,
               Layout.previousStashComponent.stashItemComponents.at(-1)!,
               currStashComponent!
+            )
+          );
+          break;
+        case InstrType.SPREAD:
+          const control = Layout.controlComponent.stackItemComponents;
+          const array = Layout.previousStashComponent.stashItemComponents.at(-1)!.arrow!
+            .target! as ArrayValue;
+
+          let currCallInstr;
+
+          for (let i = 1; control.at(-i) != undefined; i++) {
+            if (control.at(-i)?.text.includes('call ')) {
+              // find call instr above
+              currCallInstr = control.at(-i);
+              break;
+            }
+          }
+
+          const resultItems =
+            array.data.length !== 0
+              ? Layout.stashComponent.stashItemComponents.slice(-array.data.length)
+              : [];
+
+          CseAnimation.animations.push(
+            new ArraySpreadAnimation(
+              lastControlComponent,
+              Layout.previousStashComponent.stashItemComponents.at(-1)!,
+              resultItems!,
+              currCallInstr!
             )
           );
           break;
