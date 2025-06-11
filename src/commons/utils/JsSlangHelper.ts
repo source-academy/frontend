@@ -4,6 +4,7 @@ import {
   type Chapter,
   type Context,
   type CustomBuiltIns,
+  LanguageOptions,
   type Value,
   Variant
 } from 'js-slang/dist/types';
@@ -154,9 +155,17 @@ export function createContext<T>(
   chapter: Chapter,
   externals: string[],
   externalContext: T,
-  variant: Variant = Variant.DEFAULT
+  variant: Variant = Variant.DEFAULT,
+  languageOptions?: LanguageOptions
 ) {
-  return createSlangContext<T>(chapter, variant, externals, externalContext, externalBuiltIns);
+  return createSlangContext<T>(
+    chapter,
+    variant,
+    languageOptions,
+    externals,
+    externalContext,
+    externalBuiltIns
+  );
 }
 
 // Assumes that the grader doesn't need additional external libraries apart from the standard
