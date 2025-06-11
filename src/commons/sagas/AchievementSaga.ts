@@ -1,13 +1,15 @@
 import { call, delay, put, select } from 'redux-saga/effects';
 import AchievementActions from 'src/features/achievement/AchievementActions';
 
-import { AchievementGoal, EventType } from '../../features/achievement/AchievementTypes';
+import { type AchievementGoal, EventType } from '../../features/achievement/AchievementTypes';
 import { updateGoalProcessed } from '../achievement/AchievementManualEditor';
 import AchievementInferencer from '../achievement/utils/AchievementInferencer';
 import { goalIncludesEvents, incrementCount } from '../achievement/utils/EventHandler';
-import { OverallState } from '../application/ApplicationTypes';
-import { Tokens } from '../application/types/SessionTypes';
+import type { OverallState } from '../application/ApplicationTypes';
+import type { Tokens } from '../application/types/SessionTypes';
 import { combineSagaHandlers } from '../redux/utils';
+import SideContentActions from '../sideContent/SideContentActions';
+import { getLocation } from '../sideContent/SideContentHelper';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
@@ -26,19 +28,17 @@ import {
   updateOwnGoalProgress
 } from './RequestsSaga';
 
-const AchievementSaga = combineSagaHandlers(AchievementActions, {
-  bulkUpdateAchievements: function* (action) {
+const AchievementSaga = combineSagaHandlers({
+  [AchievementActions.bulkUpdateAchievements.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
-
     const achievements = action.payload;
-
     const resp = yield call(bulkUpdateAchievements, achievements, tokens);
 
     if (!resp) {
       return;
     }
   },
-  bulkUpdateGoals: function* (action) {
+  [AchievementActions.bulkUpdateGoals.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     const goals = action.payload;
@@ -49,7 +49,7 @@ const AchievementSaga = combineSagaHandlers(AchievementActions, {
       return;
     }
   },
-  getAchievements: function* () {
+  [AchievementActions.getAchievements.type]: function* () {
     const tokens: Tokens = yield selectTokens();
 
     const achievements = yield call(getAchievements, tokens);
@@ -58,7 +58,7 @@ const AchievementSaga = combineSagaHandlers(AchievementActions, {
       yield put(actions.saveAchievements(achievements));
     }
   },
-  getGoals: function* (action) {
+  [AchievementActions.getGoals.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     const studentCourseRegId = action.payload;
@@ -69,7 +69,7 @@ const AchievementSaga = combineSagaHandlers(AchievementActions, {
       yield put(actions.saveGoals(goals));
     }
   },
-  getOwnGoals: function* (action) {
+  [AchievementActions.getOwnGoals.type]: function* () {
     const tokens: Tokens = yield selectTokens();
 
     const goals = yield call(getOwnGoals, tokens);
@@ -78,7 +78,7 @@ const AchievementSaga = combineSagaHandlers(AchievementActions, {
       yield put(actions.saveGoals(goals));
     }
   },
-  getUsers: function* (action) {
+  [AchievementActions.getUsers.type]: function* () {
     const tokens: Tokens = yield selectTokens();
 
     const users = yield call(getAllUsers, tokens);
@@ -87,7 +87,7 @@ const AchievementSaga = combineSagaHandlers(AchievementActions, {
       yield put(actions.saveUsers(users));
     }
   },
-  removeAchievement: function* (action) {
+  [AchievementActions.removeAchievement.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     const achievement = action.payload;
@@ -98,7 +98,7 @@ const AchievementSaga = combineSagaHandlers(AchievementActions, {
       return;
     }
   },
-  removeGoal: function* (action) {
+  [AchievementActions.removeGoal.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     const definition = action.payload;
@@ -109,7 +109,7 @@ const AchievementSaga = combineSagaHandlers(AchievementActions, {
       return;
     }
   },
-  updateOwnGoalProgress: function* (action) {
+  [AchievementActions.updateOwnGoalProgress.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     const progress = action.payload;
@@ -120,7 +120,7 @@ const AchievementSaga = combineSagaHandlers(AchievementActions, {
       return;
     }
   },
-  updateGoalProgress: function* (action) {
+  [AchievementActions.updateGoalProgress.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     const { studentCourseRegId, progress } = action.payload;
@@ -132,10 +132,10 @@ const AchievementSaga = combineSagaHandlers(AchievementActions, {
     }
     if (resp.ok) {
       yield put(actions.getGoals(studentCourseRegId));
-      updateGoalProcessed();
+      yield call(updateGoalProcessed);
     }
   },
-  addEvent: function* (action) {
+  [AchievementActions.addEvent.type]: function* ({ payload: { eventNames, workspaceLocation } }) {
     let loggedEvents: EventType[][] = [];
     let timeoutSet: boolean = false;
     const updateInterval = 3000;
@@ -144,25 +144,25 @@ const AchievementSaga = combineSagaHandlers(AchievementActions, {
     const enableAchievements = yield select(
       (state: OverallState) => state.session.enableAchievements
     );
-    if (action.payload.find(e => e === EventType.ERROR)) {
-      // TODO update this to work with new side content system
-      // Flash the home icon if there is an error and the user is in the CSE machine or subst viz tab
-      const introIcon = document.getElementById(SideContentType.introduction + '-icon');
-      const cseTab = document.getElementById(
-        'bp5-tab-panel_side-content-tabs_' + SideContentType.cseMachine
-      );
-      const substTab = document.getElementById(
-        'bp5-tab-panel_side-content-tabs_' + SideContentType.substVisualizer
-      );
+    if (workspaceLocation !== undefined && eventNames.find(e => e === EventType.ERROR)) {
+      const selectedTab: SideContentType | undefined = yield select((state: OverallState) => {
+        const [loc, storyEnv] = getLocation(workspaceLocation);
+        return loc === 'stories'
+          ? state.sideContent.stories[storyEnv].selectedTab
+          : state.sideContent[loc].selectedTab;
+      });
+
       if (
-        (cseTab && cseTab.ariaHidden === 'false') ||
-        (substTab && substTab.ariaHidden === 'false')
+        selectedTab === SideContentType.cseMachine ||
+        selectedTab === SideContentType.substVisualizer
       ) {
-        introIcon?.classList.add('side-content-tab-alert-error');
+        yield put(
+          SideContentActions.beginAlertSideContent(SideContentType.introduction, workspaceLocation)
+        );
       }
     }
     if (role && enableAchievements && !Constants.playgroundOnly) {
-      loggedEvents.push(action.payload);
+      loggedEvents.push(eventNames);
 
       if (!timeoutSet && role) {
         // make sure that only one action every interval will handleEvent
@@ -175,7 +175,7 @@ const AchievementSaga = combineSagaHandlers(AchievementActions, {
       }
     }
   },
-  handleEvent: function* (action) {
+  [AchievementActions.handleEvent.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     // get the most recent list of achievements
@@ -219,7 +219,7 @@ const AchievementSaga = combineSagaHandlers(AchievementActions, {
       }
     }
   },
-  getUserAssessmentOverviews: function* (action) {
+  [AchievementActions.getUserAssessmentOverviews.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     const assessmentOverviews = yield call(getUserAssessmentOverviews, action.payload, tokens);
