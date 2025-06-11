@@ -248,11 +248,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
 
   const renderers = {
     Literal(node: StepperLiteral) {
-      return (
-        <span className="stepper-literal">
-          {node.raw ? node.raw : node.value}
-        </span>
-      );
+      return <span className="stepper-literal">{node.raw ? node.raw : node.value}</span>;
     },
     Identifier(node: StepperIdentifier) {
       return <span>{node.name}</span>;
@@ -408,8 +404,8 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
     Program(node: StepperProgram) {
       return (
         <span>
-          {node.body.map(ast => (
-            <div>{renderNode(ast, { styleWrapper: styleWrapper })}</div>
+          {node.body.map((ast, index) => (
+            <div key={index}>{renderNode(ast, { styleWrapper: styleWrapper })}</div>
           ))}
         </span>
       );
@@ -446,8 +442,10 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
       return (
         <span>
           {'{'}
-          {node.body.map(ast => (
-            <div style={{ marginLeft: '15px' }}>{renderNode(ast, { styleWrapper })}</div>
+          {node.body.map((ast, index) => (
+            <div key={index} style={{ marginLeft: '15px' }}>
+              {renderNode(ast, { styleWrapper })}
+            </div>
           ))}
           {'}'}
         </span>
@@ -475,7 +473,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
         <span>
           <span className="stepper-identifier">{node.kind} </span>
           {node.declarations.map((ast, idx) => (
-            <span>
+            <span key={idx}>
               {idx !== 0 && ', '}
               {renderNode(ast, { styleWrapper: styleWrapper })}
             </span>
