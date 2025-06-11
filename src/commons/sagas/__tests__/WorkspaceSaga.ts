@@ -1,6 +1,13 @@
-import { Context, IOptions, Result, resume, runFilesInContext, runInContext } from 'js-slang';
+import {
+  type Context,
+  type IOptions,
+  type Result,
+  resume,
+  runFilesInContext,
+  runInContext
+} from 'js-slang';
 import createContext from 'js-slang/dist/createContext';
-import { Chapter, ErrorType, Finished, SourceError, Variant } from 'js-slang/dist/types';
+import { Chapter, ErrorType, type Finished, type SourceError, Variant } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
@@ -11,10 +18,15 @@ import {
   defaultState,
   fullJSLanguage,
   fullTSLanguage,
-  OverallState
+  type OverallState
 } from '../../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../../application/types/ExternalTypes';
-import { Library, Testcase, TestcaseType, TestcaseTypes } from '../../assessment/AssessmentTypes';
+import {
+  type Library,
+  type Testcase,
+  type TestcaseType,
+  TestcaseTypes
+} from '../../assessment/AssessmentTypes';
 import { mockRuntimeContext } from '../../mocks/ContextMocks';
 import { mockTestcases } from '../../mocks/GradingMocks';
 import {
@@ -22,7 +34,7 @@ import {
   showWarningMessage
 } from '../../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../../workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceState } from '../../workspace/WorkspaceTypes';
+import type { WorkspaceLocation, WorkspaceState } from '../../workspace/WorkspaceTypes';
 import workspaceSaga from '../WorkspaceSaga';
 import { evalCodeSaga } from '../WorkspaceSaga/helpers/evalCode';
 import { evalEditorSaga } from '../WorkspaceSaga/helpers/evalEditor';
@@ -148,7 +160,6 @@ describe('EVAL_EDITOR', () => {
             { '/prepend.js': programPrependValue },
             '/prepend.js',
             {
-              scheduler: 'preemptive',
               originalMaxExecTime: execTime,
               stepLimit: 1000,
               useSubst: false,
@@ -168,7 +179,6 @@ describe('EVAL_EDITOR', () => {
             '/playground/program.js',
             context,
             {
-              scheduler: 'preemptive',
               originalMaxExecTime: execTime,
               stepLimit: 1000,
               useSubst: false,
@@ -236,12 +246,12 @@ describe('EVAL_REPL', () => {
         .put(WorkspaceActions.sendReplInputToOutput(replValue, workspaceLocation))
         // also calls evalCode here
         .call(runFilesInContext, { '/code.js': replValue }, '/code.js', context, {
-          scheduler: 'preemptive',
           originalMaxExecTime: 1000,
           stepLimit: 1000,
           useSubst: false,
           throwInfiniteLoops: true,
-          envSteps: -1
+          envSteps: -1,
+          executionMethod: 'auto'
         })
         .dispatch({
           type: WorkspaceActions.evalRepl.type,
@@ -279,8 +289,8 @@ describe('DEBUG_RESUME', () => {
       editorValueFilePath,
       context,
       execTime,
-      workspaceLocation,
-      WorkspaceActions.evalEditor.type
+      WorkspaceActions.evalEditor.type,
+      workspaceLocation
     )
       .withState(state)
       .silentRun();
@@ -419,7 +429,7 @@ describe('EVAL_TESTCASE', () => {
           args: [
             { '/prepend.js': programPrependValue },
             '/prepend.js',
-            { scheduler: 'preemptive', originalMaxExecTime: execTime }
+            { originalMaxExecTime: execTime }
           ]
         })
         // running the prepend block should return 'boink', but silent run -> not written to REPL
@@ -433,7 +443,7 @@ describe('EVAL_TESTCASE', () => {
             { '/value.js': editorValue },
             '/value.js',
             context,
-            { scheduler: 'preemptive', originalMaxExecTime: execTime }
+            { originalMaxExecTime: execTime }
           ]
         })
         // running the student's program should return 69, which is NOT written to REPL (silent)
@@ -446,7 +456,7 @@ describe('EVAL_TESTCASE', () => {
           args: [
             { '/postpend.js': programPostpendValue },
             '/postpend.js',
-            { scheduler: 'preemptive', originalMaxExecTime: execTime }
+            { originalMaxExecTime: execTime }
           ]
         })
         // running the postpend block should return true, but silent run -> not written to REPL
@@ -797,12 +807,12 @@ describe('evalCode', () => {
     context = createContext(); // mockRuntimeContext();
     value = 'test value';
     options = {
-      scheduler: 'preemptive',
       originalMaxExecTime: 1000,
       stepLimit: 1000,
       useSubst: false,
       throwInfiniteLoops: true,
-      envSteps: -1
+      envSteps: -1,
+      executionMethod: 'auto'
     };
     lastDebuggerResult = { status: 'error' };
     state = generateDefaultState(workspaceLocation, { lastDebuggerResult: { status: 'error' } });
@@ -816,8 +826,8 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        actionType
+        actionType,
+        workspaceLocation
       )
         .withState(state)
         .provide([
@@ -827,12 +837,12 @@ describe('evalCode', () => {
           ]
         ])
         .call(runFilesInContext, files, codeFilePath, context, {
-          scheduler: 'preemptive',
           originalMaxExecTime: execTime,
           stepLimit: 1000,
           useSubst: false,
           throwInfiniteLoops: true,
-          envSteps: -1
+          envSteps: -1,
+          executionMethod: 'auto'
         })
         .put(InterpreterActions.evalInterpreterSuccess(value, workspaceLocation))
         .silentRun();
@@ -845,20 +855,23 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        actionType
+        actionType,
+        workspaceLocation
       )
         .withState(state)
         .provide([
-          [call(runFilesInContext, files, codeFilePath, context, options), { status: 'suspended' }]
+          [
+            call(runFilesInContext, files, codeFilePath, context, options),
+            { status: 'suspended-cse-eval' }
+          ]
         ])
         .call(runFilesInContext, files, codeFilePath, context, {
-          scheduler: 'preemptive',
           originalMaxExecTime: execTime,
           stepLimit: 1000,
           useSubst: false,
           throwInfiniteLoops: true,
-          envSteps: -1
+          envSteps: -1,
+          executionMethod: 'auto'
         })
         .put(InterpreterActions.endDebuggerPause(workspaceLocation))
         .put(InterpreterActions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation))
@@ -872,17 +885,20 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        actionType
+        actionType,
+        workspaceLocation
       )
         .withState(state)
+        .provide([
+          [call(runFilesInContext, files, codeFilePath, context, options), { status: 'error' }]
+        ])
         .call(runFilesInContext, files, codeFilePath, context, {
-          scheduler: 'preemptive',
           originalMaxExecTime: execTime,
           stepLimit: 1000,
           useSubst: false,
           throwInfiniteLoops: true,
-          envSteps: -1
+          envSteps: -1,
+          executionMethod: 'auto'
         })
         .put.like({ action: { type: InterpreterActions.evalInterpreterError.type } })
         .silentRun();
@@ -896,7 +912,6 @@ describe('evalCode', () => {
       });
 
       runFilesInContext(files, codeFilePath, context, {
-        scheduler: 'preemptive',
         originalMaxExecTime: 1000,
         useSubst: false
       }).then(result => (context = (result as Finished).context));
@@ -907,17 +922,17 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        actionType
+        actionType,
+        workspaceLocation
       )
         .withState(state)
         .call(runFilesInContext, files, codeFilePath, context, {
-          scheduler: 'preemptive',
           originalMaxExecTime: execTime,
           stepLimit: 1000,
           useSubst: false,
           throwInfiniteLoops: true,
-          envSteps: -1
+          envSteps: -1,
+          executionMethod: 'auto'
         })
         .put(InterpreterActions.evalInterpreterError(context.errors, workspaceLocation))
         .silentRun();
@@ -933,8 +948,8 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        WorkspaceActions.evalEditor.type
+        WorkspaceActions.evalEditor.type,
+        workspaceLocation
       )
         .withState(state)
         .silentRun();
@@ -949,8 +964,8 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        actionType
+        actionType,
+        workspaceLocation
       )
         .withState(state)
         .provide([[call(resume, lastDebuggerResult), { status: 'finished', value }]])
@@ -968,11 +983,11 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        actionType
+        actionType,
+        workspaceLocation
       )
         .withState(state)
-        .provide([[call(resume, lastDebuggerResult), { status: 'suspended' }]])
+        .provide([[call(resume, lastDebuggerResult), { status: 'suspended-cse-eval' }]])
         .call(resume, lastDebuggerResult)
         .put(InterpreterActions.endDebuggerPause(workspaceLocation))
         .put(InterpreterActions.evalInterpreterSuccess('Breakpoint hit!', workspaceLocation))
@@ -988,8 +1003,8 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        actionType
+        actionType,
+        workspaceLocation
       )
         .withState(state)
         .call(resume, lastDebuggerResult)
@@ -1006,8 +1021,8 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        actionType
+        actionType,
+        workspaceLocation
       )
         .withState(state)
         .provide({
@@ -1036,8 +1051,8 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        actionType
+        actionType,
+        workspaceLocation
       )
         .withState(state)
         .provide({
@@ -1065,8 +1080,8 @@ describe('evalCode', () => {
         codeFilePath,
         context,
         execTime,
-        workspaceLocation,
-        actionType
+        actionType,
+        workspaceLocation
       )
         .withState(state)
         .provide([
@@ -1104,7 +1119,6 @@ describe('evalTestCode', () => {
     context = mockRuntimeContext();
     value = 'another test value';
     options = {
-      scheduler: 'preemptive',
       originalMaxExecTime: 1000,
       throwInfiniteLoops: true
     };
