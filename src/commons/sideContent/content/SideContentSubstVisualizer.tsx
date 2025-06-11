@@ -249,7 +249,9 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
   const renderers = {
     Literal(node: StepperLiteral) {
       return (
-        <span className="stepper-literal">{node.raw ? node.raw : JSON.stringify(node.value)}</span>
+        <span className="stepper-literal">
+          {node.raw ? node.raw : node.value}
+        </span>
       );
     },
     Identifier(node: StepperIdentifier) {
@@ -444,12 +446,8 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
       return (
         <span>
           {'{'}
-          <br />
           {node.body.map(ast => (
-            <span style={{ marginLeft: '15px' }}>
-              {renderNode(ast, { styleWrapper: styleWrapper })}
-              <br />
-            </span>
+            <div style={{ marginLeft: '15px' }}>{renderNode(ast, { styleWrapper })}</div>
           ))}
           {'}'}
         </span>
