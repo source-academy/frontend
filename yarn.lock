@@ -9495,7 +9495,7 @@ __metadata:
     i18next-browser-languagedetector: "npm:^8.0.0"
     java-slang: "npm:^1.0.13"
     js-cookie: "npm:^3.0.5"
-    js-slang: "npm:^1.0.82"
+    js-slang: "npm:^1.0.83"
     js-yaml: "npm:^4.1.0"
     konva: "npm:^9.2.0"
     language-directory: "https://github.com/source-academy/language-directory.git"
@@ -11845,9 +11845,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-slang@npm:^1.0.82":
-  version: 1.0.82
-  resolution: "js-slang@npm:1.0.82"
+"js-slang@npm:^1.0.83":
+  version: 1.0.83
+  resolution: "js-slang@npm:1.0.83"
   dependencies:
     "@babel/parser": "npm:^7.19.4"
     "@commander-js/extra-typings": "npm:^12.0.1"
@@ -11865,7 +11865,7 @@ __metadata:
     source-map: "npm:0.7.3"
   bin:
     js-slang: dist/repl/index.js
-  checksum: 10c0/a89c20b58dc5fa2ded7ac8457152b59a4eb2994c4afd7c0fea07743974dd216792c47ff7b59085241772546678297b5c8ba3174b4f7fd193c8e9ef175a027d96
+  checksum: 10c0/958b7a9705e853e6edd4bd5055040be72c54f8a676286bad2a5f2f535eb4b9b34c026bb0c83ef65db9acf6d515c9b8b61019191d716715c00bef2f9ad0d0ef7a
   languageName: node
   linkType: hard
 
