@@ -2,8 +2,9 @@ import Heap from 'js-slang/dist/cse-machine/heap';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { Chapter, Frame } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
+import { Stage } from 'konva/lib/Stage';
 import React, { RefObject } from 'react';
-import { Layer, Rect, Stage } from 'react-konva';
+import { Layer as KonvaLayer, Rect as KonvaRect, Stage as KonvaStage } from 'react-konva';
 import classes from 'src/styles/Draggable.module.scss';
 
 import { Binding } from './components/Binding';
@@ -98,17 +99,19 @@ export class Layout {
   static currentStackTruncDark: React.ReactNode;
   static currentStackLight: React.ReactNode;
   static currentStackTruncLight: React.ReactNode;
-  static stageRef: RefObject<any> = React.createRef();
+  static stageRef: RefObject<Stage> = React.createRef();
 
   // buffer for faster rendering of diagram when scrolling
   static invisiblePaddingVertical: number = 300;
   static invisiblePaddingHorizontal: number = 300;
-  static scrollContainerRef: RefObject<any> = React.createRef();
+  static scrollContainerRef: RefObject<HTMLDivElement> = React.createRef();
 
   static updateDimensions(width: number, height: number) {
     // update the size of the scroll container and stage given the width and height of the sidebar content.
     Layout.visibleWidth = width;
     Layout.visibleHeight = height;
+    Layout._width = Math.max(Layout.visibleWidth, Layout.stageWidth);
+    Layout._height = Math.max(Layout.visibleHeight, Layout.stageHeight);
     if (
       Layout.stageRef.current !== null &&
       (Math.min(Layout.width(), window.innerWidth) > Layout.stageWidth ||
@@ -122,8 +125,6 @@ export class Layout {
       Layout.stageRef.current.height(Layout.stageHeight);
       CseMachine.redraw();
     }
-    if (Layout.stageHeight > Layout.visibleHeight) {
-    }
     Layout.invisiblePaddingVertical =
       Layout.stageHeight > Layout.visibleHeight
         ? (Layout.stageHeight - Layout.visibleHeight) / 2
@@ -131,7 +132,7 @@ export class Layout {
     Layout.invisiblePaddingHorizontal =
       Layout.stageWidth > Layout.visibleWidth ? (Layout.stageWidth - Layout.visibleWidth) / 2 : 0;
 
-    const container: HTMLElement | null = this.scrollContainerRef.current as HTMLDivElement;
+    const container = this.scrollContainerRef.current;
     if (container) {
       container.style.width = `${Layout.visibleWidth}px`;
       container.style.height = `${Layout.visibleHeight}px`;
@@ -183,12 +184,13 @@ export class Layout {
     // calculate height and width by considering lowest and widest level
     const lastLevel = Layout.levels[Layout.levels.length - 1];
     Layout._height = Math.max(
+      Layout.visibleHeight,
       Config.CanvasMinHeight,
       lastLevel.y() + lastLevel.height() + Config.CanvasPaddingY,
       Layout.controlStashHeight ?? 0
     );
-
     Layout._width = Math.max(
+      Layout.visibleWidth,
       Config.CanvasMinWidth,
       Layout.levels.reduce<number>((maxWidth, level) => Math.max(maxWidth, level.width()), 0) +
         Config.CanvasPaddingX * 2 +
@@ -412,10 +414,10 @@ export class Layout {
    * Scrolls diagram to top left, resets the zoom, and saves the diagram as multiple images of width < MaxExportWidth.
    */
   static exportImage = () => {
-    const container: HTMLElement | null = this.scrollContainerRef.current as HTMLDivElement;
-    container.scrollTo({ left: 0, top: 0 });
+    const container = this.scrollContainerRef.current;
+    container?.scrollTo({ left: 0, top: 0 });
     Layout.handleScrollPosition(0, 0);
-    this.stageRef.current.scale({ x: 1, y: 1 });
+    this.stageRef.current?.scale({ x: 1, y: 1 });
     const height = Layout.height();
     const width = Layout.width();
     const horizontalImages = Math.ceil(width / Config.MaxExportWidth);
@@ -429,13 +431,14 @@ export class Layout {
         const y = Math.floor(n / horizontalImages);
         const a = document.createElement('a');
         a.style.display = 'none';
-        a.href = this.stageRef.current.toDataURL({
-          x: x * Config.MaxExportWidth + Layout.invisiblePaddingHorizontal,
-          y: y * Config.MaxExportHeight + Layout.invisiblePaddingVertical,
-          width: Math.min(width - x * Config.MaxExportWidth, Config.MaxExportWidth),
-          height: Math.min(height - y * Config.MaxExportHeight, Config.MaxExportHeight),
-          mimeType: 'image/jpeg'
-        });
+        a.href =
+          this.stageRef.current?.toDataURL({
+            x: x * Config.MaxExportWidth + Layout.invisiblePaddingHorizontal,
+            y: y * Config.MaxExportHeight + Layout.invisiblePaddingVertical,
+            width: Math.min(width - x * Config.MaxExportWidth, Config.MaxExportWidth),
+            height: Math.min(height - y * Config.MaxExportHeight, Config.MaxExportHeight),
+            mimeType: 'image/jpeg'
+          }) ?? '';
 
         a.download = `diagram_${x}_${y}.jpg`;
         document.body.appendChild(a);
@@ -457,6 +460,7 @@ export class Layout {
    * @param y y position of the scroll container
    */
   private static handleScrollPosition(x: number, y: number) {
+    if (!this.stageRef.current) return;
     const dx = x - Layout.invisiblePaddingHorizontal;
     const dy = y - Layout.invisiblePaddingVertical;
     this.stageRef.current.container().style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
@@ -475,7 +479,10 @@ export class Layout {
     if (Layout.stageRef.current !== null) {
       const stage = Layout.stageRef.current;
       const oldScale = stage.scaleX();
-      const { x: pointerX, y: pointerY } = stage.getPointerPosition();
+      const { x: pointerX, y: pointerY } = stage.getPointerPosition() ?? {
+        x: Layout.visibleWidth / 2 - stage.x(),
+        y: Layout.visibleHeight / 2 - stage.y()
+      };
       const mousePointTo = {
         x: (pointerX - stage.x()) / oldScale,
         y: (pointerY - stage.y()) / oldScale
@@ -531,7 +538,7 @@ export class Layout {
                 backgroundColor: defaultBackgroundColor()
               }}
             >
-              <Stage
+              <KonvaStage
                 width={Layout.stageWidth}
                 height={Layout.stageHeight}
                 ref={Layout.stageRef}
@@ -539,8 +546,8 @@ export class Layout {
                 onWheel={Layout.zoomStage}
                 className={classes['draggable']}
               >
-                <Layer>
-                  <Rect
+                <KonvaLayer>
+                  <KonvaRect
                     {...ShapeDefaultProps}
                     x={0}
                     y={0}
@@ -553,11 +560,11 @@ export class Layout {
                   {Layout.levels.map(level => level.draw())}
                   {CseMachine.getControlStash() && Layout.controlComponent.draw()}
                   {CseMachine.getControlStash() && Layout.stashComponent.draw()}
-                </Layer>
-                <Layer ref={CseAnimation.layerRef} listening={false}>
+                </KonvaLayer>
+                <KonvaLayer ref={CseAnimation.layerRef} listening={false}>
                   {CseMachine.getControlStash() && CseAnimation.animations.map(c => c.draw())}
-                </Layer>
-              </Stage>
+                </KonvaLayer>
+              </KonvaStage>
             </div>
           </div>
         </div>

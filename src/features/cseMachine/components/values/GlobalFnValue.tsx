@@ -28,8 +28,7 @@ import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
 import { Value } from './Value';
 
-/** this encapsulates a function from the global frame
- * (which has no extra props such as environment or fnName) */
+/** this encapsulates a function from the global frame */
 export class GlobalFnValue extends Value implements IHoverable {
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
@@ -41,6 +40,7 @@ export class GlobalFnValue extends Value implements IHoverable {
   readonly tooltipWidth: number;
   readonly exportTooltip: string;
   readonly exportTooltipWidth: number;
+  readonly totalWidth: number;
   readonly labelRef: RefObject<Label> = React.createRef();
 
   centerX: number;
@@ -78,6 +78,11 @@ export class GlobalFnValue extends Value implements IHoverable {
       getTextWidth(this.paramsText),
       getTextWidth(this.exportBodyText)
     );
+    this.totalWidth =
+      this._width +
+      Config.TextPaddingX * 2 +
+      Config.FnTooltipTextPadding * 2 +
+      (CseMachine.getPrintableMode() ? this.exportTooltipWidth : this.tooltipWidth);
 
     this.addReference(mainReference);
   }
@@ -165,7 +170,7 @@ export class GlobalFnValue extends Value implements IHoverable {
             fontSize={Config.FontSize}
             fontStyle={Config.FontStyle}
             fill={textColor}
-            padding={5}
+            padding={Config.FnTooltipTextPadding}
           />
         </KonvaLabel>
         {this._arrow?.draw()}
