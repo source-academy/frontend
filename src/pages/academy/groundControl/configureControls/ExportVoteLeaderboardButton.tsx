@@ -2,7 +2,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { createGrid, GridOptions } from 'ag-grid-community';
 import ControlButton from 'src/commons/ControlButton';
 import { getPopularVoteLeaderboard } from 'src/commons/sagas/RequestsSaga';
-import { useTokens } from 'src/commons/utils/Hooks';
+import { useTokens, useTypedSelector } from 'src/commons/utils/Hooks';
 
 type Props = {
   assessmentId: number;
@@ -10,10 +10,15 @@ type Props = {
 
 const ExportVoteLeaderboardButton: React.FC<Props> = ({ assessmentId }) => {
   const tokens = useTokens({ throwWhenEmpty: true });
+  const visibleEntries = useTypedSelector(store => store.session.topContestLeaderboardDisplay);
 
   // onClick handler for fetching popular vote leaderboard, putting it into a grid and exporting data
   const exportPopularVoteLeaderboardToCsv = async () => {
-    const popularVoteLeaderboard = await getPopularVoteLeaderboard(assessmentId, tokens);
+    const popularVoteLeaderboard = await getPopularVoteLeaderboard(
+      assessmentId,
+      visibleEntries,
+      tokens
+    );
     const gridContainer = document.createElement('div');
     const gridOptions: GridOptions = {
       rowData: popularVoteLeaderboard,
