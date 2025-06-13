@@ -163,7 +163,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
                 disabled={false}
                 hasNotifications={true}
                 hiddenInBreakpoints={
-                  Array [
+                  [
                     "xs",
                     "sm",
                   ]
@@ -176,7 +176,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
                 disabled={false}
                 hasNotifications={true}
                 hiddenInBreakpoints={
-                  Array [
+                  [
                     "xs",
                     "sm",
                   ]
@@ -189,7 +189,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
                 disabled={false}
                 hasNotifications={true}
                 hiddenInBreakpoints={
-                  Array [
+                  [
                     "xs",
                     "sm",
                   ]
@@ -202,7 +202,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
                 disabled={false}
                 hasNotifications={true}
                 hiddenInBreakpoints={
-                  Array [
+                  [
                     "xs",
                     "sm",
                   ]
@@ -215,7 +215,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
                 disabled={false}
                 hasNotifications={true}
                 hiddenInBreakpoints={
-                  Array [
+                  [
                     "xs",
                     "sm",
                   ]
@@ -348,7 +348,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
       element={
         <AcademyNavigationBar
           assessmentTypes={
-            Array [
+            [
               "Missions",
               "Quests",
               "Paths",

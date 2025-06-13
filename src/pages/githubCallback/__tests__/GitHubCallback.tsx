@@ -1,10 +1,11 @@
 import { render, screen } from '@testing-library/react';
+import { MockedFunction } from 'jest-mock';
 import { act } from 'react';
 import { Route, Routes } from 'react-router';
 import { StaticRouter } from 'react-router-dom/server';
 
 import Constants from '../../../commons/utils/Constants';
-import * as GitHubUtils from '../../../features/github/GitHubUtils';
+import { exchangeAccessCode } from '../../../features/github/GitHubUtils';
 import GitHubCallback from '../GitHubCallback';
 
 function renderWithLocation(element: JSX.Element, location: string) {
@@ -17,13 +18,19 @@ function renderWithLocation(element: JSX.Element, location: string) {
   );
 }
 
+jest.mock('../../../features/github/GitHubUtils', () => ({
+  ...jest.requireActual('../../../features/github/GitHubUtils'),
+  exchangeAccessCode: jest.fn()
+}));
+
 describe('empty client ID', () => {
   beforeAll(() => {
     Constants.githubClientId = '';
+    Constants.githubOAuthProxyUrl = 'https://github.com';
   });
 
   test('Application Client ID not deployed renders correctly', async () => {
-    const exchangeAccessCodeMock = jest.spyOn(GitHubUtils, 'exchangeAccessCode');
+    const exchangeAccessCodeMock = exchangeAccessCode as MockedFunction<typeof exchangeAccessCode>;
     exchangeAccessCodeMock.mockImplementation(connectBackendSimulateSuccess);
 
     act(() => {
@@ -41,10 +48,11 @@ describe('empty client ID', () => {
 describe('nonempty client ID', () => {
   beforeAll(() => {
     Constants.githubClientId = '123';
+    Constants.githubOAuthProxyUrl = 'https://github.com';
   });
 
   test('Access code not found in return url renders correctly', async () => {
-    const exchangeAccessCodeMock = jest.spyOn(GitHubUtils, 'exchangeAccessCode');
+    const exchangeAccessCodeMock = exchangeAccessCode as MockedFunction<typeof exchangeAccessCode>;
     exchangeAccessCodeMock.mockImplementation(connectBackendSimulateSuccess);
 
     act(() => {
@@ -61,7 +69,7 @@ describe('nonempty client ID', () => {
   });
 
   test('Cannot connect to server renders correctly', async () => {
-    const exchangeAccessCodeMock = jest.spyOn(GitHubUtils, 'exchangeAccessCode');
+    const exchangeAccessCodeMock = exchangeAccessCode as MockedFunction<typeof exchangeAccessCode>;
     exchangeAccessCodeMock.mockImplementation(connectBackendSimulateFailure);
 
     act(() => {
@@ -76,7 +84,7 @@ describe('nonempty client ID', () => {
   });
 
   test('Successful retrieval of calls correctly', async () => {
-    const exchangeAccessCodeMock = jest.spyOn(GitHubUtils, 'exchangeAccessCode');
+    const exchangeAccessCodeMock = exchangeAccessCode as MockedFunction<typeof exchangeAccessCode>;
     exchangeAccessCodeMock.mockImplementation(connectBackendSimulateSuccess);
 
     const closeWindowMock = jest.spyOn(window, 'close');

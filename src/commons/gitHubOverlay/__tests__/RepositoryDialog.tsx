@@ -1,11 +1,14 @@
 import { fireEvent, render, screen } from '@testing-library/react';
+import { MockedFunction } from 'jest-mock';
 import { act } from 'react';
 
-import * as NotificationHelper from '../../utils/notifications/NotificationsHelper';
+import { showWarningMessage } from '../../utils/notifications/NotificationsHelper';
 import RepositoryDialog from '../RepositoryDialog';
 
+jest.mock('../../utils/notifications/NotificationsHelper');
+
 test('Submitting without selecting causes error message to be displayed', async () => {
-  const notificationMock = jest.spyOn(NotificationHelper, 'showWarningMessage');
+  const notificationMock = showWarningMessage as MockedFunction<typeof showWarningMessage>;
   function onSubmit(inputValue: string) {}
 
   const userRepos = [
