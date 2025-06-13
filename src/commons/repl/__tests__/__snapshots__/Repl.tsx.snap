@@ -206,8 +206,8 @@ exports[`Repl renders correctly 1`] = `
 exports[`Result output (no consoleLogs) renders correctly 1`] = `
 <ResultOutputDisplay
   output={
-    Object {
-      "consoleLogs": Array [],
+    {
+      "consoleLogs": [],
       "type": "result",
       "value": 42,
     }
@@ -218,8 +218,8 @@ exports[`Result output (no consoleLogs) renders correctly 1`] = `
 exports[`Result output (with consoleLogs) renders correctly 1`] = `
 <ResultOutputDisplay
   output={
-    Object {
-      "consoleLogs": Array [
+    {
+      "consoleLogs": [
         "a",
         "bb",
         "cccccccccccccccccccccccccccccccc",
