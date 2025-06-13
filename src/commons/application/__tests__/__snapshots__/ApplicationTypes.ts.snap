@@ -190,19 +190,6 @@ exports[`available Source language configurations matches snapshot 1`] = `
   },
   {
     "chapter": 3,
-    "displayName": "Source §3 Concurrent",
-    "mainLanguage": "JavaScript",
-    "supports": {
-      "cseMachine": false,
-      "dataVisualizer": true,
-      "multiFile": true,
-      "repl": false,
-      "substVisualizer": false,
-    },
-    "variant": "concurrent",
-  },
-  {
-    "chapter": 3,
     "displayName": "Source §3 Native",
     "mainLanguage": "JavaScript",
     "supports": {

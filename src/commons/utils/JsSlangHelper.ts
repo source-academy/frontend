@@ -1,12 +1,19 @@
 /* tslint:disable: ban-types*/
 import createSlangContext, { defineBuiltin, importBuiltins } from 'js-slang/dist/createContext';
-import { Chapter, Context, CustomBuiltIns, Value, Variant } from 'js-slang/dist/types';
+import {
+  type Chapter,
+  type Context,
+  type CustomBuiltIns,
+  LanguageOptions,
+  type Value,
+  Variant
+} from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { difference, keys } from 'lodash';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
-import { Data } from '../../features/dataVisualizer/dataVisualizerTypes';
+import type { Data } from '../../features/dataVisualizer/dataVisualizerTypes';
 import DisplayBufferService from './DisplayBufferService';
 
 /**
@@ -148,9 +155,17 @@ export function createContext<T>(
   chapter: Chapter,
   externals: string[],
   externalContext: T,
-  variant: Variant = Variant.DEFAULT
+  variant: Variant = Variant.DEFAULT,
+  languageOptions?: LanguageOptions
 ) {
-  return createSlangContext<T>(chapter, variant, externals, externalContext, externalBuiltIns);
+  return createSlangContext<T>(
+    chapter,
+    variant,
+    languageOptions,
+    externals,
+    externalContext,
+    externalBuiltIns
+  );
 }
 
 // Assumes that the grader doesn't need additional external libraries apart from the standard
