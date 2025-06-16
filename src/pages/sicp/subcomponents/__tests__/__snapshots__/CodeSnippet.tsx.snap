@@ -13,17 +13,17 @@ exports[`Sicp Code Snippet renders correctly with prepend 1`] = `
       language="javascript"
       onClick={[Function]}
       style={
-        Object {
-          ":not(pre) > code[class*=\\"language-\\"]": Object {
+        {
+          ":not(pre) > code[class*="language-"]": {
             "background": "transparent",
             "borderRadius": "0.3em",
             "padding": "0.1em",
             "whiteSpace": "normal",
           },
-          "boolean": Object {
+          "boolean": {
             "color": "#FF628C",
           },
-          "code[class*=\\"language-\\"]": Object {
+          "code[class*="language-"]": {
             "MozHyphens": "none",
             "MozTabSize": "4",
             "OTabSize": "4",
@@ -42,22 +42,22 @@ exports[`Sicp Code Snippet renders correctly with prepend 1`] = `
             "wordSpacing": "normal",
             "wordWrap": "normal",
           },
-          "comment": Object {
+          "comment": {
             "color": "#0088FF",
           },
-          "function": Object {
+          "function": {
             "color": "#ffdd00",
           },
-          "keyword": Object {
+          "keyword": {
             "color": "#FF9D00",
           },
-          "number": Object {
+          "number": {
             "color": "#FF628C",
           },
-          "operator": Object {
+          "operator": {
             "color": "#FF9D00",
           },
-          "pre[class*=\\"language-\\"]": Object {
+          "pre[class*="language-"]": {
             "MozHyphens": "none",
             "MozTabSize": "4",
             "OTabSize": "4",
@@ -79,10 +79,10 @@ exports[`Sicp Code Snippet renders correctly with prepend 1`] = `
             "wordSpacing": "normal",
             "wordWrap": "normal",
           },
-          "punctuation": Object {
+          "punctuation": {
             "color": "white",
           },
-          "string": Object {
+          "string": {
             "color": "#3AD900",
           },
         }
@@ -113,17 +113,17 @@ exports[`Sicp Code Snippet renders correctly without prepend 1`] = `
       language="javascript"
       onClick={[Function]}
       style={
-        Object {
-          ":not(pre) > code[class*=\\"language-\\"]": Object {
+        {
+          ":not(pre) > code[class*="language-"]": {
             "background": "transparent",
             "borderRadius": "0.3em",
             "padding": "0.1em",
             "whiteSpace": "normal",
           },
-          "boolean": Object {
+          "boolean": {
             "color": "#FF628C",
           },
-          "code[class*=\\"language-\\"]": Object {
+          "code[class*="language-"]": {
             "MozHyphens": "none",
             "MozTabSize": "4",
             "OTabSize": "4",
@@ -142,22 +142,22 @@ exports[`Sicp Code Snippet renders correctly without prepend 1`] = `
             "wordSpacing": "normal",
             "wordWrap": "normal",
           },
-          "comment": Object {
+          "comment": {
             "color": "#0088FF",
           },
-          "function": Object {
+          "function": {
             "color": "#ffdd00",
           },
-          "keyword": Object {
+          "keyword": {
             "color": "#FF9D00",
           },
-          "number": Object {
+          "number": {
             "color": "#FF628C",
           },
-          "operator": Object {
+          "operator": {
             "color": "#FF9D00",
           },
-          "pre[class*=\\"language-\\"]": Object {
+          "pre[class*="language-"]": {
             "MozHyphens": "none",
             "MozTabSize": "4",
             "OTabSize": "4",
@@ -179,10 +179,10 @@ exports[`Sicp Code Snippet renders correctly without prepend 1`] = `
             "wordSpacing": "normal",
             "wordWrap": "normal",
           },
-          "punctuation": Object {
+          "punctuation": {
             "color": "white",
           },
-          "string": Object {
+          "string": {
             "color": "#3AD900",
           },
         }

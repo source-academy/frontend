@@ -7,7 +7,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page "loading" content renders 
   <div
     className="bp5-non-ideal-state-visual"
     style={
-      Object {
+      {
         "fontSize": "48px",
         "lineHeight": "48px",
       }
