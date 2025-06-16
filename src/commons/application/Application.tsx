@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Messages, {
   MessageType,
   MessageTypeNames,
@@ -18,6 +18,7 @@ import VscodeActions from './actions/VscodeActions';
 const Application: React.FC = () => {
   const dispatch = useDispatch();
   const { isLoggedIn } = useSession();
+  const navigate = useNavigate();
 
   // Used in the mobile/PWA experience (e.g. separate handling of orientation changes on Andriod & iOS due to unique browser behaviours)
   const isMobile = /iPhone|iPad|Android/.test(navigator.userAgent);
@@ -123,6 +124,8 @@ const Application: React.FC = () => {
         case MessageTypeNames.EvalEditor:
           dispatch(WorkspaceActions.evalEditor(message.workspaceLocation));
           break;
+        case MessageTypeNames.Navigate:
+          navigate(message.route);
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
