@@ -394,18 +394,38 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleUpdateHasUnsavedChanges(false);
 
     const chapter = question.library.chapter;
+    const questionType = question.type;
     const prepend = 'prepend' in question ? question.prepend : '';
     const solutionTemplate = 'solutionTemplate' in question ? question.solutionTemplate : '';
-    sendToWebview(
-      Messages.NewEditor(
-        workspaceLocation,
-        `assessment${assessment.id}`,
-        props.questionId,
-        chapter,
-        prepend,
-        solutionTemplate
-      )
-    );
+
+    switch (questionType) {
+      case QuestionTypes.mcq:
+        const mcqQuestionData: IMCQQuestion = question;
+        sendToWebview(
+          Messages.MCQQuestion(
+            workspaceLocation,
+            `assessment${assessment.id}`,
+            props.questionId,
+            chapter,
+            mcqQuestionData.content,
+            mcqQuestionData.choices.map(choice => choice.content),
+            mcqQuestionData.solution || 0
+          )
+        );
+        break;
+      case QuestionTypes.programming:
+        sendToWebview(
+          Messages.NewEditor(
+            workspaceLocation,
+            `assessment${assessment.id}`,
+            props.questionId,
+            chapter,
+            prepend,
+            solutionTemplate
+          )
+        );
+        break;
+    }
     if (options.editorValue) {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange(0, options.editorValue);

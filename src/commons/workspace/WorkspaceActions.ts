@@ -240,6 +240,12 @@ const newActions = createActions('workspace', {
     workspaceLocation: WorkspaceLocation,
     storyEnv?: string
   ) => ({ errorMsg, workspaceLocation, storyEnv }),
+  showMcqPane: (
+    workspaceLocation: WorkspaceLocation,
+    question: string,
+    options: string[],
+    correctOption: number,
+  ) => ({ workspaceLocation, question, options, correctOption }),
   toggleUsingCse: (usingCse: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
     usingCse,
     workspaceLocation
