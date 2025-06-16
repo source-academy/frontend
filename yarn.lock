@@ -4195,7 +4195,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ace-builds@npm:^1.32.8, ace-builds@npm:^1.36.3, ace-builds@npm:^1.4.12":
+"ace-builds@npm:^1.36.3, ace-builds@npm:^1.4.12":
   version: 1.36.3
   resolution: "ace-builds@npm:1.36.3"
   checksum: 10c0/7d7a35f393cd70555d559afcc0521dcda7fe78585cdfd41525a7bd9d59115f8b9f40ac3ff597907faf2ac2f71e1174c6797df698df48a8041c6b6433dba316b5
@@ -7348,7 +7348,7 @@ __metadata:
     query-string: "npm:^9.0.0"
     re-resizable: "npm:^6.9.9"
     react: "npm:^18.3.1"
-    react-ace: "npm:^12.0.0"
+    react-ace: "npm:^14.0.0"
     react-copy-to-clipboard: "npm:^5.1.0"
     react-debounce-render: "npm:^8.0.2"
     react-dom: "npm:^18.3.1"
@@ -11279,19 +11279,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-ace@npm:^12.0.0":
-  version: 12.0.0
-  resolution: "react-ace@npm:12.0.0"
+"react-ace@npm:^14.0.0":
+  version: 14.0.1
+  resolution: "react-ace@npm:14.0.1"
   dependencies:
-    ace-builds: "npm:^1.32.8"
+    ace-builds: "npm:^1.36.3"
     diff-match-patch: "npm:^1.0.5"
     lodash.get: "npm:^4.4.2"
     lodash.isequal: "npm:^4.5.0"
     prop-types: "npm:^15.8.1"
   peerDependencies:
-    react: ^0.13.0 || ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^0.13.0 || ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0
-  checksum: 10c0/e7f33d4f0910f482e939f321db8f5a8bb7fe0bf40a9db0cde12ed2b368e8c77fc2683b2fb0737cd88216f732258e363705f2c6cfbbcaabced3fba8eff7fb43ad
+    react: ^0.13.0 || ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^0.13.0 || ^0.14.0 || ^15.0.1 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10c0/dbc77970836f13bad88365903d077edd68cc1955857290475bc067e0b801181c1d60a9ee08cf89b20895fe312dbb169c072c5b23338d7176f9f658db7929732f
   languageName: node
   linkType: hard
 
