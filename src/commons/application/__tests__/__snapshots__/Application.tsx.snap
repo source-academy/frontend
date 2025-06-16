@@ -3,8 +3,8 @@
 exports[`Application renders correctly 1`] = `
 <Context.Provider
   value={
-    Array [
-      Object {
+    [
+      {
         "editorBinding": "",
       },
       [Function],
