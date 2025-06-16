@@ -1,18 +1,17 @@
-import { createReducer, Reducer } from '@reduxjs/toolkit';
-import { stringify } from 'js-slang/dist/utils/stringify';
+import { createReducer, type Reducer } from '@reduxjs/toolkit';
 import { logOut } from 'src/commons/application/actions/CommonsActions';
 
 import {
   createDefaultStoriesEnv,
   defaultStories,
-  ErrorOutput,
-  InterpreterOutput,
-  ResultOutput
+  type ErrorOutput,
+  type InterpreterOutput,
+  type ResultOutput
 } from '../../commons/application/ApplicationTypes';
-import { SourceActionType } from '../../commons/utils/ActionsHelper';
+import type { SourceActionType } from '../../commons/utils/ActionsHelper';
 import StoriesActions from './StoriesActions';
 import { DEFAULT_ENV } from './storiesComponents/UserBlogContent';
-import { StoriesState } from './StoriesTypes';
+import type { StoriesState } from './StoriesTypes';
 
 export const StoriesReducer: Reducer<StoriesState, SourceActionType> = (
   state = defaultStories,
@@ -73,10 +72,9 @@ const newStoriesReducer = createReducer(defaultStories, builder => {
     })
     .addCase(StoriesActions.evalStorySuccess, (state, action) => {
       const env = getStoriesEnv(action);
-      const execType = state.envs[env].context.executionMethod;
       const newOutputEntry: Partial<ResultOutput> = {
         type: action.payload.type as 'result' | undefined,
-        value: execType === 'interpreter' ? action.payload.value : stringify(action.payload.value)
+        value: action.payload.value
       };
 
       const lastOutput: InterpreterOutput = state.envs[env].output.slice(-1)[0];

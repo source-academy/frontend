@@ -1,12 +1,12 @@
-import { Context, interrupt, runInContext } from 'js-slang';
+import { type Context, interrupt, runInContext } from 'js-slang';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { call, put, race, take } from 'redux-saga/effects';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 
-import { TestcaseType, TestcaseTypes } from '../../../assessment/AssessmentTypes';
+import { type TestcaseType, TestcaseTypes } from '../../../assessment/AssessmentTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
-import { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import { dumpDisplayBuffer } from './dumpDisplayBuffer';
 
 export function* evalTestCode(
@@ -20,7 +20,6 @@ export function* evalTestCode(
   yield put(actions.resetTestcase(workspaceLocation, index));
   const { result, interrupted } = yield race({
     result: call(runInContext, code, context, {
-      scheduler: 'preemptive',
       originalMaxExecTime: execTime,
       throwInfiniteLoops: true
     }),

@@ -69,7 +69,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
   <div
     className="bp5-collapse"
     style={
-      Object {
+      {
         "height": "auto",
         "overflowY": "visible",
         "transition": "none",
@@ -80,7 +80,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
       aria-hidden={false}
       className="bp5-collapse-body"
       style={
-        Object {
+        {
           "transform": "translateY(0)",
           "transition": "none",
         }
@@ -96,7 +96,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
         >
           <h2
             style={
-              Object {
+              {
                 "backgroundColor": "rgb(255, 127, 127)",
               }
             }
@@ -118,7 +118,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
         >
           <h2
             style={
-              Object {
+              {
                 "backgroundColor": "rgb(255, 223, 127)",
               }
             }
@@ -140,7 +140,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
         >
           <h2
             style={
-              Object {
+              {
                 "backgroundColor": "rgb(255, 255, 127)",
               }
             }
@@ -162,7 +162,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
         >
           <h2
             style={
-              Object {
+              {
                 "backgroundColor": "rgb(191, 255, 127)",
               }
             }
@@ -184,7 +184,7 @@ exports[`SideContentContestVotingContainer matches snapshot 1`] = `
         >
           <h2
             style={
-              Object {
+              {
                 "backgroundColor": "rgb(127, 191, 255)",
               }
             }
