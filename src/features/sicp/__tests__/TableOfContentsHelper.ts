@@ -1,12 +1,10 @@
 import { getNext, getPrev } from '../TableOfContentsHelper';
 
-const data = {
+jest.mock('../data/toc-navigation.json', () => ({
   '1': { next: '2' },
   '2': { next: '3', prev: '1' },
   '3': { prev: '2' }
-};
-
-jest.mock('../data/toc-navigation.json', () => data);
+}));
 
 describe('Table of contents helper', () => {
   test('generate next correctly', () => {
