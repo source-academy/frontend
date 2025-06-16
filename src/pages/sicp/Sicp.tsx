@@ -44,7 +44,7 @@ const Sicp: React.FC = () => {
   const [data, setData] = useState(<></>);
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState('0');
-  const { param_lang, section } = useParams<{ param_lang:string, section: string }>();
+  const { param_lang, section } = useParams<{ param_lang: string; section: string }>();
   const [lang, setLang] = useState(readSicpLangLocalStorage());
   const parentRef = useRef<HTMLDivElement>(null);
   const refs = useRef<Record<string, HTMLElement | null>>({});
@@ -96,8 +96,8 @@ const Sicp: React.FC = () => {
   React.useEffect(() => {
     const valid_langs = ['en', 'zh_CN'];
 
-    if (section && valid_langs.includes(section) || param_lang) {
-      const plang = param_lang ? param_lang : (section ? section : SICP_DEF_TB_LANG);
+    if ((section && valid_langs.includes(section)) || param_lang) {
+      const plang = param_lang ? param_lang : section ? section : SICP_DEF_TB_LANG;
       if (!valid_langs.includes(plang)) {
         setLang(SICP_DEF_TB_LANG);
         setSicpLangLocalStorage(SICP_DEF_TB_LANG);

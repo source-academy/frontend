@@ -21,7 +21,7 @@ type OwnProps = {
  * Table of contents of SICP.
  */
 
-const Toc: React.FC<{ toc: TreeNodeInfo[], props: TocProps }> = ({toc, props}) => {
+const Toc: React.FC<{ toc: TreeNodeInfo[]; props: TocProps }> = ({ toc, props }) => {
   const [sidebarContent, setSidebarContent] = useState(toc);
   const navigate = useNavigate();
 
@@ -67,9 +67,9 @@ const SicpToc: React.FC<TocProps> = props => {
   React.useEffect(() => {
     const handleLangChange = () => {
       setLang(readSicpLangLocalStorage());
-    }
+    };
     window.addEventListener('sicp-tb-lang-change', handleLangChange);
-    return () => window.removeEventListener('sicp-tb-lang-change', handleLangChange)
+    return () => window.removeEventListener('sicp-tb-lang-change', handleLangChange);
   }, []);
 
   React.useEffect(() => {
