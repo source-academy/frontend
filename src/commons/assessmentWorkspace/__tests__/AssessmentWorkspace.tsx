@@ -27,6 +27,7 @@ const defaultProps = assertType<AssessmentWorkspaceProps>()({
     hoursBeforeEarlyXpDecay: 48,
     earlySubmissionXp: 200
   },
+  fromContestLeaderboard: false,
   questionId: 0
 });
 
