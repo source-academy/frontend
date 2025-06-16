@@ -7,7 +7,7 @@ exports[`Sicp errors: page not found error renders correctly 1`] = `
   <div
     className="bp5-non-ideal-state-visual"
     style={
-      Object {
+      {
         "fontSize": "48px",
         "lineHeight": "48px",
       }
@@ -52,7 +52,7 @@ exports[`Sicp errors: unexpected error renders correctly 1`] = `
   <div
     className="bp5-non-ideal-state-visual"
     style={
-      Object {
+      {
         "fontSize": "48px",
         "lineHeight": "48px",
       }
@@ -97,7 +97,7 @@ exports[`Sicp errors: unexpected error renders correctly 2`] = `
   <div
     className="bp5-non-ideal-state-visual"
     style={
-      Object {
+      {
         "fontSize": "48px",
         "lineHeight": "48px",
       }
