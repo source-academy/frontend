@@ -200,7 +200,8 @@ test('setUser generates correct action object', () => {
         role: Role.Staff,
         viewable: true
       }
-    ]
+    ],
+    isPaused: false
   };
   const action = SessionActions.setUser(user);
   expect(action).toEqual({

@@ -552,7 +552,8 @@ export const defaultSession: SessionState = {
   students: undefined,
   teamFormationOverviews: undefined,
   gradings: {},
-  notifications: []
+  notifications: [],
+  isPaused: undefined
 };
 
 export const defaultStories: StoriesState = {
