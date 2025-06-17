@@ -2,7 +2,6 @@ import 'katex/dist/katex.min.css';
 
 import { Button, Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import classNames from 'classnames';
-import path from 'path';
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate, useParams } from 'react-router';
@@ -40,7 +39,7 @@ export const CodeSnippetContext = React.createContext({
 
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
 
-const AVAILABLE_SICP_TB_LANGS = ['en', 'zh_CN'] as const;
+const AVAILABLE_SICP_TB_LANGS: readonly string[] = ['en', 'zh_CN'];
 
 const loadInitialLang = () => {
   const saved = readSicpLangLocalStorage();
@@ -107,7 +106,7 @@ const Sicp: React.FC = () => {
   // Handle loading of latest viewed section and fetch json data
   React.useEffect(() => {
     if (paramLang || (section && AVAILABLE_SICP_TB_LANGS.includes(section))) {
-      const pLang = paramLang ? paramLang : section;
+      const pLang = (paramLang ? paramLang : section)!;
       if (AVAILABLE_SICP_TB_LANGS.includes(pLang)) {
         setLang(pLang);
         setSicpLangLocalStorage(pLang);
