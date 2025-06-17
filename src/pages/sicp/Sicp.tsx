@@ -40,12 +40,24 @@ export const CodeSnippetContext = React.createContext({
 
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
 
+const AVAILABLE_SICP_TB_LANGS = ['en', 'zh_CN'] as const;
+
+const loadInitialLang = () => {
+  const saved = readSicpLangLocalStorage();
+  if (AVAILABLE_SICP_TB_LANGS.includes(saved)) {
+    return saved;
+  } else {
+    setSicpLangLocalStorage(SICP_DEF_TB_LANG);
+    return SICP_DEF_TB_LANG;
+  }
+};
+
 const Sicp: React.FC = () => {
   const [data, setData] = useState(<></>);
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState('0');
-  const { param_lang, section } = useParams<{ param_lang: string; section: string }>();
-  const [lang, setLang] = useState(readSicpLangLocalStorage());
+  const { paramLang, section } = useParams<{ paramLang: string; section: string }>();
+  const [lang, setLang] = useState(loadInitialLang());
   const parentRef = useRef<HTMLDivElement>(null);
   const refs = useRef<Record<string, HTMLElement | null>>({});
   const navigate = useNavigate();
@@ -94,31 +106,30 @@ const Sicp: React.FC = () => {
 
   // Handle loading of latest viewed section and fetch json data
   React.useEffect(() => {
-    const valid_langs = ['en', 'zh_CN'];
-
-    if ((section && valid_langs.includes(section)) || param_lang) {
-      const plang = param_lang ? param_lang : section ? section : SICP_DEF_TB_LANG;
-      if (!valid_langs.includes(plang)) {
+    if (paramLang || (section && AVAILABLE_SICP_TB_LANGS.includes(section))) {
+      const pLang = paramLang ? paramLang : section;
+      if (AVAILABLE_SICP_TB_LANGS.includes(pLang)) {
+        setLang(pLang);
+        setSicpLangLocalStorage(pLang);
+      } else {
         setLang(SICP_DEF_TB_LANG);
         setSicpLangLocalStorage(SICP_DEF_TB_LANG);
-      } else {
-        setLang(plang);
-        setSicpLangLocalStorage(plang);
       }
-      if (section && valid_langs.includes(section)) {
-        navigate(`/sicpjs/${SICP_INDEX}`, { replace: true });
-      } else {
+      if (paramLang) {
         navigate(`/sicpjs/${section}`, { replace: true });
+      } else {
+        navigate(`/sicpjs/${readSicpSectionLocalStorage()}`, { replace: true });
       }
       return;
     }
+
     if (!section) {
       /**
        * Handles rerouting to the latest viewed section when clicking from
        * the main application navbar. Navigate replace logic is used to allow the
        * user to still use the browser back button to navigate the app.
        */
-      navigate(path.join('sicpjs', readSicpSectionLocalStorage()), { replace: true });
+      navigate(`/sicpjs/${readSicpSectionLocalStorage()}`, { replace: true });
       return;
     }
 
@@ -129,7 +140,7 @@ const Sicp: React.FC = () => {
 
     setLoading(true);
 
-    if (!valid_langs.includes(lang)) {
+    if (!AVAILABLE_SICP_TB_LANGS.includes(lang)) {
       setLang(SICP_DEF_TB_LANG);
       setSicpLangLocalStorage(SICP_DEF_TB_LANG);
     }
@@ -166,7 +177,7 @@ const Sicp: React.FC = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [param_lang, section, lang, navigate]);
+  }, [paramLang, section, lang, navigate]);
 
   // Scroll to correct position
   React.useEffect(() => {
