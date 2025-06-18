@@ -1,4 +1,4 @@
-import { Conduit, IConduit } from 'conductor/dist/conduit';
+import { Conduit, IConduit } from '@heyzec/conductor/dist/conduit';
 
 import { BrowserHostPlugin } from './BrowserHostPlugin';
 

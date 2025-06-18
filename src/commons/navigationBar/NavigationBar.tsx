@@ -248,6 +248,7 @@ const NavigationBar: React.FC = () => {
         {fullAcademyNavbarLeftCommonInfo.map((entry, i) => (
           <DesktopNavLink key={i} {...entry} />
         ))}
+        git-commit-here
       </NavbarGroup>
     );
   };
