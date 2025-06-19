@@ -395,12 +395,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
 
     const chapter = question.library.chapter;
     const questionType = question.type;
-    const prepend = 'prepend' in question ? question.prepend : '';
-    const solutionTemplate = 'solutionTemplate' in question ? question.solutionTemplate : '';
 
     switch (questionType) {
       case QuestionTypes.mcq:
-        const mcqQuestionData: IMCQQuestion = question;
+        const mcqQuestionData = question;
         sendToWebview(
           Messages.MCQQuestion(
             workspaceLocation,
@@ -414,6 +412,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         );
         break;
       case QuestionTypes.programming:
+        const prepend = question.prepend;
+        const code = question.answer ?? question.solutionTemplate;
         sendToWebview(
           Messages.NewEditor(
             workspaceLocation,
@@ -421,7 +421,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             props.questionId,
             chapter,
             prepend,
-            solutionTemplate
+            code
           )
         );
         break;

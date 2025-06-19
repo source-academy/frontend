@@ -129,8 +129,8 @@ const Application: React.FC = () => {
               message.workspaceLocation,
               message.question,
               message.options,
-              message.correctOption,
-            ),
+              message.correctOption
+            )
           );
           break;
       }
