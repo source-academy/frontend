@@ -12,9 +12,17 @@ export class ArrowFromControlItemComponent extends GenericArrow<
   ControlItemComponent,
   Frame | FnValue | GlobalFnValue | ContValue
 > {
+  constructor(from: ControlItemComponent) {
+    super(from);
+    this.setReachable(true);
+  }
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
+
+    to?.setReachable(true);
+
     if (!to) return [];
 
     const steps: StepsArray = [

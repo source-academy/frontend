@@ -8,8 +8,8 @@ import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import {
   defaultActiveColor,
   defaultDangerColor,
-  defaultStrokeColor,
-  isStashItemInDanger
+  isStashItemInDanger,
+  reachedStrokeColor
 } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
@@ -76,7 +76,7 @@ export class ControlToStashAnimation extends Animatable {
         ...stashPosition,
         stroke: isStashItemInDanger(this.stashItem.index)
           ? defaultDangerColor()
-          : defaultStrokeColor()
+          : reachedStrokeColor()
       }),
       this.controlTextAnimation.animateTo(stashPosition),
       // If the text is different, also fade out the old text and fade in the new text

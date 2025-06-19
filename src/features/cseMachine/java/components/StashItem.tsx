@@ -9,7 +9,7 @@ import {
 import { Visible } from '../../components/Visible';
 import { ShapeDefaultProps } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
-import { defaultTextColor, getTextWidth } from '../../CseMachineUtils';
+import { getTextWidth, reachedTextColor } from '../../CseMachineUtils';
 import { CseMachine } from '../CseMachine';
 import { Arrow } from './Arrow';
 import { Frame } from './Frame';
@@ -54,7 +54,7 @@ export class StashItem extends Visible {
 
   draw(): React.ReactNode {
     const textProps = {
-      fill: defaultTextColor(),
+      fill: reachedTextColor(),
       padding: ControlStashConfig.StashItemTextPadding,
       fontFamily: ControlStashConfig.FontFamily,
       fontSize: ControlStashConfig.FontSize,

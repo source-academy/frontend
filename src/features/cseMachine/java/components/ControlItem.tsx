@@ -8,8 +8,8 @@ import { ControlStashConfig } from '../../CseMachineControlStashConfig';
 import { IHoverable } from '../../CseMachineTypes';
 import {
   defaultActiveColor,
-  defaultTextColor,
   getTextHeight,
+  reachedTextColor,
   setHoveredCursor,
   setHoveredStyle,
   setUnhoveredCursor,
@@ -93,7 +93,7 @@ export class ControlItem extends Visible implements IHoverable {
 
   draw(): React.ReactNode {
     const textProps = {
-      fill: defaultTextColor(),
+      fill: reachedTextColor(),
       padding: ControlStashConfig.ControlItemTextPadding,
       fontFamily: ControlStashConfig.FontFamily,
       fontSize: ControlStashConfig.FontSize,
