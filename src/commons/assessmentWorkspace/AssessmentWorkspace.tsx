@@ -455,11 +455,11 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           `submission${_submissionId}`,
           questionId,
           question.library.chapter,
-          "",
+          '',
           answer
         )
       );
-      // 
+      //
     };
 
     const tabs: SideContentTab[] = [
@@ -780,9 +780,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     );
 
     return {
-      editorButtons: (!isMobileBreakpoint || isVscode)
-        ? [runButton, saveButton, resetButton, chapterSelect]
-        : [saveButton, resetButton],
+      editorButtons:
+        !isMobileBreakpoint || isVscode
+          ? [runButton, saveButton, resetButton, chapterSelect]
+          : [saveButton, resetButton],
       flowButtons: [previousButton, questionView, nextButton]
     };
   };
@@ -930,9 +931,12 @@ It is safe to close this window.`}
                 );
                 handleUpdateHasUnsavedChanges(true);
                 if (isVscode) {
-                  
-                  sendToWebview(Messages.ResetEditor(workspaceLocation, 
-                    (assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate));
+                  sendToWebview(
+                    Messages.ResetEditor(
+                      workspaceLocation,
+                      (assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate
+                    )
+                  );
                 }
               }}
               options={{ minimal: false, intent: Intent.DANGER }}

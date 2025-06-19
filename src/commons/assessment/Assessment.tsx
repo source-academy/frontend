@@ -77,7 +77,7 @@ const Assessment: React.FC = () => {
         )
       );
     }
-  }, [assessmentOverviewsUnfiltered]);
+  }, [assessmentOverviewsUnfiltered, courseId]);
 
   const toggleClosedAssessments = () => setShowClosedAssessments(!showClosedAssessments);
   const toggleOpenAssessments = () => setShowOpenedAssessments(!showOpenedAssessments);
