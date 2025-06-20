@@ -58,7 +58,14 @@ const Messages = createMessages({
     options,
     correctOption
   }),
-  ChangeChapter: (chapter: Chapter, variant: Variant) => ({
+  ChangeChapter: (
+    assessmentName: string,
+    questionId: number,
+    chapter: Chapter,
+    variant: Variant
+  ) => ({
+    assessmentName,
+    questionId,
     chapter,
     variant
   })
