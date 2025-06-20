@@ -509,6 +509,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
       pushLog(input);
 
+      sendToWebview(Messages.ChangeChapter(chapter, variant));
       handleChapterSelect(chapter, variant);
       // Hardcoded for Playground only for now, while we await workspace refactoring
       // to decouple the SicpWorkspace from the Playground.
