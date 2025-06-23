@@ -1,21 +1,19 @@
-import { createAction } from '@reduxjs/toolkit';
-import { Context, Result } from 'js-slang';
+import type { Context } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
 
-import { AllColsSortStates, GradingColumnVisibility } from '../../features/grading/GradingTypes';
-import { SALanguage } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { Library } from '../assessment/AssessmentTypes';
-import { HighlightedLines, Position } from '../editor/EditorTypes';
+import type {
+  AllColsSortStates,
+  GradingColumnVisibility
+} from '../../features/grading/GradingTypes';
+import type { SALanguage } from '../application/ApplicationTypes';
+import type { ExternalLibraryName } from '../application/types/ExternalTypes';
+import type { Library } from '../assessment/AssessmentTypes';
+import type { HighlightedLines, Position } from '../editor/EditorTypes';
 import { createActions } from '../redux/utils';
-import { UploadResult } from '../sideContent/content/SideContentUpload';
-import {
+import type { UploadResult } from '../sideContent/content/SideContentUpload';
+import type {
   EditorTabState,
   SubmissionsTableFilters,
-  TOGGLE_USING_UPLOAD,
-  UPDATE_LAST_DEBUGGER_RESULT,
-  UPDATE_LAST_NON_DET_RESULT,
-  UPLOAD_FILES,
   WorkspaceLocation,
   WorkspaceLocationsWithTools,
   WorkspaceState
@@ -113,8 +111,9 @@ const newActions = createActions('workspace', {
   updateEditorValue: (
     workspaceLocation: WorkspaceLocation,
     editorTabIndex: number,
-    newEditorValue: string
-  ) => ({ workspaceLocation, editorTabIndex, newEditorValue }),
+    newEditorValue: string,
+    isFromVscode: boolean = false
+  ) => ({ workspaceLocation, editorTabIndex, newEditorValue, isFromVscode }),
   setEditorBreakpoint: (
     workspaceLocation: WorkspaceLocation,
     editorTabIndex: number,
@@ -250,6 +249,10 @@ const newActions = createActions('workspace', {
     updateCse,
     workspaceLocation
   }),
+  toggleUsingUpload: (usingUpload: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
+    usingUpload,
+    workspaceLocation
+  }),
   updateCurrentStep: (steps: number, workspaceLocation: WorkspaceLocation) => ({
     steps,
     workspaceLocation
@@ -266,6 +269,14 @@ const newActions = createActions('workspace', {
     changepointSteps,
     workspaceLocation
   }),
+  updateLastDebuggerResult: (lastDebuggerResult: any, workspaceLocation: WorkspaceLocation) => ({
+    lastDebuggerResult,
+    workspaceLocation
+  }),
+  uploadFiles: (files: UploadResult, workspaceLocation: WorkspaceLocation) => ({
+    files,
+    workspaceLocation
+  }),
   // For grading table
   increaseRequestCounter: 0,
   decreaseRequestCounter: 0,
@@ -274,39 +285,4 @@ const newActions = createActions('workspace', {
   updateGradingColumnVisibility: (filters: GradingColumnVisibility) => ({ filters })
 });
 
-export const updateLastDebuggerResult = createAction(
-  UPDATE_LAST_DEBUGGER_RESULT,
-  (lastDebuggerResult: any, workspaceLocation: WorkspaceLocation) => ({
-    payload: { lastDebuggerResult, workspaceLocation }
-  })
-);
-
-export const updateLastNonDetResult = createAction(
-  UPDATE_LAST_NON_DET_RESULT,
-  (lastNonDetResult: Result, workspaceLocation: WorkspaceLocation) => ({
-    payload: { lastNonDetResult, workspaceLocation }
-  })
-);
-
-export const toggleUsingUpload = createAction(
-  TOGGLE_USING_UPLOAD,
-  (usingUpload: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
-    payload: { usingUpload, workspaceLocation }
-  })
-);
-
-export const uploadFiles = createAction(
-  UPLOAD_FILES,
-  (files: UploadResult, workspaceLocation: WorkspaceLocation) => ({
-    payload: { files, workspaceLocation }
-  })
-);
-
-// For compatibility with existing code (actions helper)
-export default {
-  ...newActions,
-  updateLastDebuggerResult,
-  updateLastNonDetResult,
-  toggleUsingUpload,
-  uploadFiles
-};
+export default newActions;

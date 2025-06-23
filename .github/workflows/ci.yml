@@ -15,7 +15,7 @@ env:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-  
+
 jobs:
   lint:
     if: github.event.pull_request.draft == false
@@ -36,7 +36,7 @@ jobs:
           node-version: 20
           cache: yarn
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
       - name: Run command
         run: yarn run ${{ matrix.commands }}
       - name: Coveralls - Upload test coverage report

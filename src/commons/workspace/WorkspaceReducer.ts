@@ -1,5 +1,4 @@
-import { createReducer, Reducer } from '@reduxjs/toolkit';
-import { stringify } from 'js-slang/dist/utils/stringify';
+import { createReducer, type Reducer } from '@reduxjs/toolkit';
 
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
 import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
@@ -8,10 +7,10 @@ import InterpreterActions from '../application/actions/InterpreterActions';
 import {
   createDefaultWorkspace,
   defaultWorkspaceManager,
-  ErrorOutput,
-  InterpreterOutput,
-  NotificationOutput,
-  ResultOutput
+  type ErrorOutput,
+  type InterpreterOutput,
+  type NotificationOutput,
+  type ResultOutput
 } from '../application/ApplicationTypes';
 import {
   setEditorSessionId,
@@ -19,14 +18,14 @@ import {
   setSharedbConnected,
   setUpdateUserRoleCallback
 } from '../collabEditing/CollabEditingActions';
-import { SourceActionType } from '../utils/ActionsHelper';
+import type { SourceActionType } from '../utils/ActionsHelper';
 import { createContext } from '../utils/JsSlangHelper';
 import { handleCseAndStepperActions } from './reducers/cseReducer';
 import { handleDebuggerActions } from './reducers/debuggerReducer';
 import { handleEditorActions } from './reducers/editorReducer';
 import { handleReplActions } from './reducers/replReducer';
 import WorkspaceActions from './WorkspaceActions';
-import { WorkspaceLocation, WorkspaceManagerState } from './WorkspaceTypes';
+import type { WorkspaceLocation, WorkspaceManagerState } from './WorkspaceTypes';
 
 export const getWorkspaceLocation = (action: any): WorkspaceLocation => {
   return action.payload ? action.payload.workspaceLocation : 'assessment';
@@ -68,7 +67,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> 
       break;
   }
 
-  state = oldWorkspaceReducer(state, action);
+  // state = oldWorkspaceReducer(state, action);
   state = newWorkspaceReducer(state, action);
   return state;
 };
@@ -160,11 +159,10 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     })
     .addCase(InterpreterActions.evalInterpreterSuccess, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
-      const execType = state[workspaceLocation].context.executionMethod;
       const tokens = state[workspaceLocation].tokenCount;
       const newOutputEntry: Partial<ResultOutput> = {
-        type: action.payload.type as 'result' | undefined,
-        value: execType === 'interpreter' ? action.payload.value : stringify(action.payload.value)
+        type: action.payload.type as 'result',
+        value: action.payload.value
       };
 
       const lastOutput: InterpreterOutput = state[workspaceLocation].output.slice(-1)[0];
@@ -368,15 +366,15 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       state.playground.context.chapter = chapter;
       state.playground.context.variant = variant;
     })
-    // .addCase(notifyProgramEvaluated, (state, action) => {
-    //   const workspaceLocation = getWorkspaceLocation(action);
-    //   const debuggerContext = state[workspaceLocation].debuggerContext;
-    //   debuggerContext.result = action.payload.result;
-    //   debuggerContext.lastDebuggerResult = action.payload.lastDebuggerResult;
-    //   debuggerContext.code = action.payload.code;
-    //   debuggerContext.context = action.payload.context;
-    //   debuggerContext.workspaceLocation = action.payload.workspaceLocation;
-    // })
+    .addCase(WorkspaceActions.notifyProgramEvaluated, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      const debuggerContext = state[workspaceLocation].debuggerContext;
+      debuggerContext.result = action.payload.result;
+      debuggerContext.lastDebuggerResult = action.payload.lastDebuggerResult;
+      debuggerContext.code = action.payload.code;
+      debuggerContext.context = action.payload.context;
+      debuggerContext.workspaceLocation = action.payload.workspaceLocation;
+    })
     .addCase(WorkspaceActions.toggleUsingUpload, (state, action) => {
       const { workspaceLocation } = action.payload;
       if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
@@ -393,42 +391,8 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].lastDebuggerResult = action.payload.lastDebuggerResult;
     })
-    .addCase(WorkspaceActions.updateLastNonDetResult, (state, action) => {
-      const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].lastNonDetResult = action.payload.lastNonDetResult;
-    })
     .addCase(setUpdateUserRoleCallback, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].updateUserRoleCallback = action.payload.updateUserRoleCallback;
     });
 });
-
-/** Temporarily kept to prevent conflicts */
-const oldWorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> = (
-  state = defaultWorkspaceManager,
-  action
-) => {
-  const workspaceLocation = getWorkspaceLocation(action);
-
-  switch (action.type) {
-    case WorkspaceActions.notifyProgramEvaluated.type: {
-      const debuggerContext = {
-        ...state[workspaceLocation].debuggerContext,
-        result: action.payload.result,
-        lastDebuggerResult: action.payload.lastDebuggerResult,
-        code: action.payload.code,
-        context: action.payload.context,
-        workspaceLocation: action.payload.workspaceLocation
-      };
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          debuggerContext
-        }
-      };
-    }
-    default:
-      return state;
-  }
-};

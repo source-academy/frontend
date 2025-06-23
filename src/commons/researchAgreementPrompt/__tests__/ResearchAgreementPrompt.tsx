@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
+import type { UserEvent } from '@testing-library/user-event';
 import { Provider, useDispatch } from 'react-redux';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';

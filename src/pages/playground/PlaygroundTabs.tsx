@@ -1,6 +1,5 @@
 import { IconNames } from '@blueprintjs/icons';
 import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
-import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
 import Markdown from 'src/commons/Markdown';
 import SideContentRemoteExecution from 'src/commons/sideContent/content/remoteExecution/SideContentRemoteExecution';
@@ -69,8 +68,7 @@ export const makeSubstVisualizerTabFrom = (
       editorOutput &&
       editorOutput.type === 'result' &&
       editorOutput.value instanceof Array &&
-      editorOutput.value[0] === Object(editorOutput.value[0]) &&
-      isStepperOutput(editorOutput.value[0])
+      editorOutput.value[0] === Object(editorOutput.value[0])
     ) {
       return editorOutput.value;
     } else {

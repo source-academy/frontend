@@ -1,6 +1,6 @@
 import { Classes, Colors, Divider, FormGroup, Popover, Text, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 import { useParams } from 'react-router-dom';
 
@@ -51,41 +51,44 @@ export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
     }
   };
 
-  const handleStartJoining = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const joinElemValue = joinElemRef.current;
+  const handleStartJoining = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const joinElemValue = joinElemRef.current;
 
-    // FIXME this handler should be a Saga action or at least in a controller
-    getDocInfoFromSessionId(joinElemValue).then(
-      docInfo => {
-        if (docInfo !== null) {
-          props.handleSetEditorSessionId!(joinElemValue);
-          props.handleSetSessionDetails!({
-            docId: docInfo.docId,
-            readOnly: docInfo.defaultReadOnly,
-            owner: false
-          });
-          setSessionId(joinElemValue);
-          setDefaultReadOnly(docInfo.defaultReadOnly);
-          setIsOwner(false);
-        } else {
-          props.handleSetEditorSessionId!('');
-          props.handleSetSessionDetails!(null);
-          showWarningMessage('Could not find a session with that ID.');
-          if (
-            window.location.href.includes('/playground') &&
-            !window.location.href.endsWith('/playground')
-          ) {
-            window.history.pushState({}, document.title, '/playground');
+      // FIXME this handler should be a Saga action or at least in a controller
+      getDocInfoFromSessionId(joinElemValue).then(
+        docInfo => {
+          if (docInfo !== null) {
+            props.handleSetEditorSessionId!(joinElemValue);
+            props.handleSetSessionDetails!({
+              docId: docInfo.docId,
+              readOnly: docInfo.defaultReadOnly,
+              owner: false
+            });
+            setSessionId(joinElemValue);
+            setDefaultReadOnly(docInfo.defaultReadOnly);
+            setIsOwner(false);
+          } else {
+            props.handleSetEditorSessionId!('');
+            props.handleSetSessionDetails!(null);
+            showWarningMessage('Could not find a session with that ID.');
+            if (
+              window.location.href.includes('/playground') &&
+              !window.location.href.endsWith('/playground')
+            ) {
+              window.history.pushState({}, document.title, '/playground');
+            }
           }
+        },
+        error => {
+          props.handleSetEditorSessionId!('');
+          handleError(error);
         }
-      },
-      error => {
-        props.handleSetEditorSessionId!('');
-        handleError(error);
-      }
-    );
-  };
+      );
+    },
+    [props.handleSetEditorSessionId, props.handleSetSessionDetails]
+  );
 
   const leaveButton = (
     <ControlButton
@@ -174,7 +177,7 @@ export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
       joinElemRef.current = playgroundCode;
       handleStartJoining({ preventDefault: () => {} } as React.FormEvent<HTMLFormElement>);
     }
-  }, [playgroundCode]);
+  }, [playgroundCode, handleStartJoining]);
 
   return (
     <Tooltip content={tooltipContent} disabled={tooltipContent === undefined}>

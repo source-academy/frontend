@@ -1,12 +1,12 @@
-import { Context } from 'js-slang';
+import type { Context } from 'js-slang';
 import { random } from 'lodash';
 import { call, put, select, StrictEffect } from 'redux-saga/effects';
 
-import { OverallState } from '../../../application/ApplicationTypes';
-import { TestcaseType } from '../../../assessment/AssessmentTypes';
+import type { OverallState } from '../../../application/ApplicationTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import { makeElevatedContext } from '../../../utils/JsSlangHelper';
-import { EVAL_SILENT, WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import { selectWorkspace } from '../../SafeEffects';
 import { blockExtraMethods } from './blockExtraMethods';
 import { clearContext } from './clearContext';
 import { evalCodeSaga } from './evalCode';
@@ -17,22 +17,17 @@ export function* runTestCase(
   workspaceLocation: WorkspaceLocation,
   index: number
 ): Generator<StrictEffect, boolean, any> {
-  const [prepend, value, postpend, testcase]: [string, string, string, string] = yield select(
-    (state: OverallState) => {
-      const prepend = state.workspaces[workspaceLocation].programPrependValue;
-      const postpend = state.workspaces[workspaceLocation].programPostpendValue;
-      // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
-      const value = state.workspaces[workspaceLocation].editorTabs[0].value;
-      const testcase = state.workspaces[workspaceLocation].editorTestcases[index].program;
-      return [prepend, value, postpend, testcase] as [string, string, string, string];
-    }
-  );
-  const type: TestcaseType = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].editorTestcases[index].type
-  );
-  const execTime: number = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].execTime
-  );
+  const {
+    editorTabs: {
+      [0]: { value }
+    },
+    editorTestcases: {
+      [index]: { program: testcase, type: type }
+    },
+    execTime,
+    programPrependValue: prepend,
+    programPostpendValue: postpend
+  } = yield* selectWorkspace(workspaceLocation);
 
   yield* clearContext(workspaceLocation, value);
 
@@ -60,8 +55,8 @@ export function* runTestCase(
     prependFilePath,
     elevatedContext,
     execTime,
-    workspaceLocation,
-    EVAL_SILENT
+    EVAL_SILENT,
+    workspaceLocation
   );
 
   // Block use of methods from privileged context using a randomly generated blocking key
@@ -78,8 +73,8 @@ export function* runTestCase(
     valueFilePath,
     context,
     execTime,
-    workspaceLocation,
-    EVAL_SILENT
+    EVAL_SILENT,
+    workspaceLocation
   );
 
   // Halt execution if the student's code in the editor results in an error
@@ -103,8 +98,8 @@ export function* runTestCase(
       postpendFilePath,
       elevatedContext,
       execTime,
-      workspaceLocation,
-      EVAL_SILENT
+      EVAL_SILENT,
+      workspaceLocation
     );
     yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
   }

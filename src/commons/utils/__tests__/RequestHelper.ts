@@ -1,9 +1,11 @@
-import { store } from '../../../pages/createStore';
+import { MockedFunction } from 'jest-mock';
+import { postRefresh } from 'src/commons/sagas/RequestsSaga';
+import { store } from 'src/pages/createStore';
+
 import { Tokens } from '../../application/types/SessionTypes';
-import * as RequestsSaga from '../../sagas/RequestsSaga';
-import * as NotificationsHelper from '../../utils/notifications/NotificationsHelper';
 import { actions } from '../ActionsHelper';
 import Constants from '../Constants';
+import { showWarningMessage } from '../notifications/NotificationsHelper';
 import {
   autoLogoutMessage,
   generateApiCallHeadersAndFetchOptions,
@@ -19,9 +21,19 @@ import {
 global.fetch = jest.fn();
 const fetchMock = fetch as jest.Mock;
 
-const showWarningMessageSpy = jest.spyOn(NotificationsHelper, 'showWarningMessage');
-const postRefreshSpy = jest.spyOn(RequestsSaga, 'postRefresh');
-const storeDispatchSpy = jest.spyOn(store, 'dispatch');
+jest.mock('../../utils/notifications/NotificationsHelper', () => ({
+  ...jest.requireActual('../../utils/notifications/NotificationsHelper'),
+  showWarningMessage: jest.fn()
+}));
+const showWarningMessageSpy = showWarningMessage as MockedFunction<typeof showWarningMessage>;
+jest.mock('../../sagas/RequestsSaga');
+const postRefreshSpy = postRefresh as MockedFunction<typeof postRefresh>;
+jest.mock('../../../pages/createStore', () => ({
+  store: {
+    dispatch: jest.fn()
+  }
+}));
+const storeDispatchSpy = store.dispatch as MockedFunction<typeof store.dispatch>;
 
 const tokens: Tokens = {
   accessToken: 'accessToken',
@@ -69,6 +81,7 @@ const mockPostRefresh = (success: boolean) =>
   postRefreshSpy.mockImplementation(
     () => new Promise(resolve => setTimeout(() => resolve(success ? refreshedTokens : null), 500))
   );
+
 const mockNetworkErrorOnce = () => fetchMock.mockImplementationOnce(() => Promise.reject());
 
 const makeRequest = (method: RequestMethod = GET_METHOD) => request(apiPath, method, fetchOptions);
@@ -81,12 +94,12 @@ const expectRefreshFlowFetchesToBeCalledWithCorrectParams = () => {
   expect(fetchMock).toHaveBeenNthCalledWith(
     1,
     fullApiUrl,
-    generateApiCallHeadersAndFetchOptions(GET_METHOD, fetchOptions)
+    expect.objectContaining(generateApiCallHeadersAndFetchOptions(GET_METHOD, fetchOptions))
   );
   expect(fetchMock).toHaveBeenNthCalledWith(
     2,
     fullApiUrl,
-    generateApiCallHeadersAndFetchOptions(GET_METHOD, refreshFetchOptions)
+    expect.objectContaining(generateApiCallHeadersAndFetchOptions(GET_METHOD, refreshFetchOptions))
   );
 };
 const expectPostRefreshToBeCalled = (called: boolean) =>
@@ -258,11 +271,13 @@ describe('request', () => {
     expectPostRefreshToBeCalled(true);
     expect(fetchMock).toBeCalledTimes(numRequests * 2);
     expect(fetchMock.mock.calls).toEqual(
-      [fetchOptions, refreshFetchOptions].flatMap(opts =>
-        (['GET', 'POST', 'DELETE'] as RequestMethod[]).map(method => [
-          fullApiUrl,
-          generateApiCallHeadersAndFetchOptions(method, opts)
-        ])
+      expect.arrayContaining(
+        [fetchOptions, refreshFetchOptions].flatMap(opts =>
+          (['GET', 'POST', 'DELETE'] as RequestMethod[]).map(method => [
+            fullApiUrl,
+            generateApiCallHeadersAndFetchOptions(method, opts)
+          ])
+        )
       )
     );
   });

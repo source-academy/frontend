@@ -1,4 +1,4 @@
-import { Action } from '@reduxjs/toolkit';
+import type { Action } from '@reduxjs/toolkit';
 import { put, take } from 'redux-saga/effects';
 import StoriesActions from 'src/features/stories/StoriesActions';
 
@@ -14,10 +14,10 @@ const isSpawnSideContent = (
   (action as any).payload?.id !== SideContentType.sessionManagement;
 // hotfix check here to allow for blinking during session update
 
-// TODO: Refactor and combine in a future commit
-const sagaActions = { ...SideContentActions, ...WorkspaceActions, ...StoriesActions };
-export const SideContentSaga = combineSagaHandlers(sagaActions, {
-  beginAlertSideContent: function* ({ payload: { id, workspaceLocation } }) {
+const SideContentSaga = combineSagaHandlers({
+  [SideContentActions.beginAlertSideContent.type]: function* ({
+    payload: { id, workspaceLocation }
+  }) {
     // When a program finishes evaluation, we clear all alerts,
     // So we must wait until after and all module tabs have been spawned
     // to process any kind of alerts that were raised by non-module side content
@@ -27,7 +27,7 @@ export const SideContentSaga = combineSagaHandlers(sagaActions, {
     );
     yield put(SideContentActions.endAlertSideContent(id, workspaceLocation));
   },
-  notifyProgramEvaluated: function* (action) {
+  [WorkspaceActions.notifyProgramEvaluated.type]: function* (action) {
     if (!action.payload.workspaceLocation || action.payload.workspaceLocation === 'stories') return;
 
     const debuggerContext = {
@@ -41,7 +41,7 @@ export const SideContentSaga = combineSagaHandlers(sagaActions, {
       SideContentActions.spawnSideContent(action.payload.workspaceLocation, debuggerContext)
     );
   },
-  notifyStoriesEvaluated: function* (action) {
+  [StoriesActions.notifyStoriesEvaluated.type]: function* (action) {
     yield put(SideContentActions.spawnSideContent(`stories.${action.payload.env}`, action.payload));
   }
 });

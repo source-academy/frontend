@@ -4,9 +4,9 @@ objectives
     finish
 
 gameStartActions
-    // replace 173 with assessment id
-    show_dialogue(welcome) if userstate.assessments.173
-    show_dialogue(unwelcome) if !userstate.assessments.173
+    // replace S0 with assessment number
+    show_dialogue(welcome) if userstate.assessments.S0
+    show_dialogue(unwelcome) if !userstate.assessments.S0
 
 checkpointCompleteActions
     show_dialogue(done)
@@ -96,8 +96,8 @@ dialogues
         1
         @scottie, sad
         You haven't finished assessment
-        Finish assessment 173 first and come back?
-            navigate_to_assessment(173)
+        Finish assessment S0 first and come back?
+            navigate_to_assessment(S0)
         goto 2 
         2
         @scottie
@@ -113,7 +113,7 @@ dialogues
         Hmmm
             update_assessment_status*()
         Let me check
-        goto 2 if !userstate.assessments.173 else 3
+        goto 1 if !userstate.assessments.S0 else 3
 
     what, What should I do now, Scottie?
         @you
