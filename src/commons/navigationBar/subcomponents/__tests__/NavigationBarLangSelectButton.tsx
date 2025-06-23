@@ -1,6 +1,5 @@
 import { render } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import type { UserEvent } from '@testing-library/user-event';
+import userEvent, { type UserEvent } from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 
 import { SupportedLanguage } from '../../../../commons/application/ApplicationTypes';
