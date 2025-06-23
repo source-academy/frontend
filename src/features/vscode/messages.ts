@@ -3,17 +3,11 @@
 // Ideally it is split into multiple files, but for ease of copying, it is kept as one file.
 
 /** A subset of the WorkspaceLocation type found in source-academy/frontend */
+import { Chapter, Variant } from 'js-slang/dist/types';
+
 const VscWorkspaceLocationArray = ['assessment', 'playground'];
 export const isVscWorkspaceLocation = (s: any) => VscWorkspaceLocationArray.includes(s);
 export type VscWorkspaceLocation = 'assessment' | 'playground';
-
-export type VscAssessmentOverview = {
-  type: string;
-  closeAt: string;
-  id: number;
-  isPublished?: boolean;
-  title: string;
-};
 
 // ================================================================================
 // Message type definitions
@@ -47,38 +41,43 @@ const Messages = createMessages({
   EvalEditor: (workspaceLocation: VscWorkspaceLocation) => ({
     workspaceLocation: workspaceLocation
   }),
-  NotifyAssessmentsOverview: (assessmentOverviews: VscAssessmentOverview[]) => ({
-    assessmentOverviews
-  }),
-  Navigate: (route: string) => ({
-    route
-  }),
   MCQQuestion: (
     workspaceLocation: VscWorkspaceLocation,
     assessmentName: string,
     questionId: number,
     chapter: number,
     question: string,
-    options: string[],
+    options: string[]
   ) => ({
     workspaceLocation,
     assessmentName,
     questionId,
     chapter,
     question,
-    options,
+    options
   }),
   MCQAnswer: (
     workspaceLocation: VscWorkspaceLocation,
     assessmentName: string,
     questionId: number,
-    choice: number,
+    choice: number
   ) => ({
     workspaceLocation,
     assessmentName,
     questionId,
-    choice,
+    choice
   }),
+  ChangeChapter: (
+    assessmentName: string,
+    questionId: number,
+    chapter: Chapter,
+    variant: Variant
+  ) => ({
+    assessmentName,
+    questionId,
+    chapter,
+    variant
+  })
 });
 
 export default Messages;
