@@ -41,7 +41,7 @@ const Messages = createMessages({
   EvalEditor: (workspaceLocation: VscWorkspaceLocation) => ({
     workspaceLocation: workspaceLocation
   }),
-  MCQQuestion: (
+  McqQuestion: (
     workspaceLocation: VscWorkspaceLocation,
     assessmentName: string,
     questionId: number,
@@ -56,7 +56,7 @@ const Messages = createMessages({
     question,
     options
   }),
-  MCQAnswer: (
+  McqAnswer: (
     workspaceLocation: VscWorkspaceLocation,
     assessmentName: string,
     questionId: number,

@@ -406,8 +406,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             props.questionId,
             chapter,
             mcqQuestionData.content,
-            mcqQuestionData.choices.map(choice => choice.content),
-            mcqQuestionData.solution || 0
+            mcqQuestionData.choices.map(choice => choice.content)
           )
         );
         break;

@@ -136,8 +136,6 @@ const Application: React.FC = () => {
           console.log(`FRONTEND: MCQAnswerMessage: ${message}`);
           dispatch(SessionActions.submitAnswer(message.questionId, message.choice));
           break;
-        case MessageTypeNames.Navigate:
-          navigate(message.route);
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
