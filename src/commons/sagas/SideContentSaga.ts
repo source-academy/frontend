@@ -4,15 +4,15 @@ import StoriesActions from 'src/features/stories/StoriesActions';
 
 import { combineSagaHandlers } from '../redux/utils';
 import SideContentActions from '../sideContent/SideContentActions';
-import WorkspaceActions from '../workspace/WorkspaceActions';
 import { SideContentType } from '../sideContent/SideContentTypes';
+import WorkspaceActions from '../workspace/WorkspaceActions';
 
 const isSpawnSideContent = (
   action: Action
 ): action is ReturnType<typeof SideContentActions.spawnSideContent> =>
-  action.type === SideContentActions.spawnSideContent.type 
-  || (action as any).payload?.id !== SideContentType.sessionManagement;
-  // hotfix check here to allow for blinking during session update
+  action.type === SideContentActions.spawnSideContent.type ||
+  (action as any).payload?.id !== SideContentType.sessionManagement;
+// hotfix check here to allow for blinking during session update
 
 // TODO: Refactor and combine in a future commit
 const sagaActions = { ...SideContentActions, ...WorkspaceActions, ...StoriesActions };

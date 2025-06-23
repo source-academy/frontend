@@ -761,7 +761,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
       tabs.push(remoteExecutionTab);
       if (editorSessionId !== '') {
         tabs.push(sessionManagementTab);
-        // TODO: make it do highlighty things like stepper
       }
     }
 
