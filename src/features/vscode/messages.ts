@@ -60,7 +60,6 @@ const Messages = createMessages({
     chapter: number,
     question: string,
     options: string[],
-    correctOption: number
   ) => ({
     workspaceLocation,
     assessmentName,
@@ -68,8 +67,18 @@ const Messages = createMessages({
     chapter,
     question,
     options,
-    correctOption
-  })
+  }),
+  MCQAnswer: (
+    workspaceLocation: VscWorkspaceLocation,
+    assessmentName: string,
+    questionId: number,
+    choice: number,
+  ) => ({
+    workspaceLocation,
+    assessmentName,
+    questionId,
+    choice,
+  }),
 });
 
 export default Messages;

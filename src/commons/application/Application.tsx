@@ -124,15 +124,18 @@ const Application: React.FC = () => {
         case MessageTypeNames.EvalEditor:
           dispatch(WorkspaceActions.evalEditor(message.workspaceLocation));
           break;
-        case MessageTypeNames.MCQQuestion:
+        case MessageTypeNames.McqQuestion:
           dispatch(
             WorkspaceActions.showMcqPane(
               message.workspaceLocation,
               message.question,
-              message.options,
-              message.correctOption,
-            ),
+              message.options
+            )
           );
+          break;
+        case MessageTypeNames.McqAnswer:
+          console.log(`FRONTEND: MCQAnswerMessage: ${message}`);
+          dispatch(SessionActions.submitAnswer(message.questionId, message.choice));
           break;
         case MessageTypeNames.Navigate:
           navigate(message.route);

@@ -244,8 +244,7 @@ const newActions = createActions('workspace', {
     workspaceLocation: WorkspaceLocation,
     question: string,
     options: string[],
-    correctOption: number,
-  ) => ({ workspaceLocation, question, options, correctOption }),
+  ) => ({ workspaceLocation, question, options }),
   toggleUsingCse: (usingCse: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
     usingCse,
     workspaceLocation

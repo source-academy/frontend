@@ -402,7 +402,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       case QuestionTypes.mcq:
         const mcqQuestionData: IMCQQuestion = question;
         sendToWebview(
-          Messages.MCQQuestion(
+          Messages.McqQuestion(
             workspaceLocation,
             `assessment${assessment.id}`,
             props.questionId,
