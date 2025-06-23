@@ -283,7 +283,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
       chapter: playgroundSourceChapter
     })
   );
-  // TODO: Change this to use dispatch instead
   const [users, setUsers] = useState<Record<string, SharedbAceUser>>({});
 
   // Playground hotkeys

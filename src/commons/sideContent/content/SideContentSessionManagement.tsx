@@ -135,7 +135,6 @@ const SideContentSessionManagement: React.FC<Props> = ({
   readOnly,
   workspaceLocation
 }) => {
-  // TODO: FIX BLINKING
   const dispatch = useDispatch();
 
   useEffect(() => {

@@ -19,7 +19,6 @@ const CollabEditingActions = createActions('collabEditing', {
    * @param connected whether we are connected to ShareDB
    */
   setSharedbConnected: (workspaceLocation: WorkspaceLocation, connected: boolean) => ({
-    // TODO: This looks like where to add the extra field for "orange" colour
     workspaceLocation,
     connected
   }),

@@ -309,8 +309,6 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     })
     .addCase(setSessionDetails, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
-      // For some reason mutating the state directly results in type
-      // errors, so we have to do it the old-fashioned way
       return {
         ...state,
         [workspaceLocation]: {

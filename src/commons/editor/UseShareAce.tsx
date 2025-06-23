@@ -51,8 +51,7 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
         : CollabEditingAccess.EDITOR;
 
     const user = {
-      // TODO: Set meaningful name here instead of simply "undefined"
-      name: name || 'undefined',
+      name: name || 'Unnamed user',
       color,
       role: collabEditorAccess
     };
@@ -86,9 +85,6 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       const myUserId = Object.keys(ShareAce.usersPresence.localPresences)[0];
       if (binding.connectedUsers[myUserId].role !== user.role) {
         // Change in role, update readOnly status in sessionDetails
-        // TODO: Currently, this will cause a new user to be created
-        // However, relying on propsRef.current.sessionDetails will not accurately
-        // reflect the state on the frontend
         dispatch(
           CollabEditingActions.setSessionDetails('playground', {
             readOnly: binding.connectedUsers[myUserId].role === CollabEditingAccess.VIEWER
@@ -123,7 +119,6 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
 
       // Disables editor in a read-only session
       editor.setReadOnly(sessionDetails.readOnly);
-      // Copy to clipboard
       navigator.clipboard.writeText(editorSessionId).then(() => {
         showSuccessMessage(
           `You have joined a session as ${sessionDetails.readOnly ? 'a viewer' : 'an editor'}. Copied to clipboard: ${editorSessionId}`
@@ -165,7 +160,6 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
     // Checks connection status every 5sec
     interval = setInterval(checkStatus, 5000);
 
-    // TODO: clear the following event listeners
     WS.addEventListener('open', () => {
       propsRef.current.handleSetSharedbConnected!(true);
     });
