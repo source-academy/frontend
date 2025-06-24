@@ -131,7 +131,6 @@ const Application: React.FC = () => {
           dispatch(
             WorkspaceActions.showMcqPane(
               message.workspaceLocation,
-              message.question,
               message.options
             )
           );

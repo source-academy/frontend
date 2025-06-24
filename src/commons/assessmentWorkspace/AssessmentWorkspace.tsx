@@ -405,7 +405,6 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             `assessment${assessment.id}`,
             props.questionId,
             chapter,
-            mcqQuestionData.content,
             mcqQuestionData.choices.map(choice => choice.content)
           )
         );

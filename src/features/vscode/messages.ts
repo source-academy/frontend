@@ -60,14 +60,12 @@ const Messages = createMessages({
     assessmentName: string,
     questionId: number,
     chapter: number,
-    question: string,
     options: string[]
   ) => ({
     workspaceLocation,
     assessmentName,
     questionId,
     chapter,
-    question,
     options
   }),
   McqAnswer: (
