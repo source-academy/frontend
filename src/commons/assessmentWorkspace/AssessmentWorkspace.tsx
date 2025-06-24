@@ -410,7 +410,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           )
         );
         break;
-      case QuestionTypes.programming:
+      case QuestionTypes.programming || QuestionTypes.voting:
         const prepend = question.prepend;
         const code = question.answer ?? question.solutionTemplate;
         sendToWebview(

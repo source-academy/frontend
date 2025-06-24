@@ -41,6 +41,9 @@ const Messages = createMessages({
   EvalEditor: (workspaceLocation: VscWorkspaceLocation) => ({
     workspaceLocation: workspaceLocation
   }),
+  Navigate: (route: string) => ({
+    route
+  }),
   McqQuestion: (
     workspaceLocation: VscWorkspaceLocation,
     assessmentName: string,
