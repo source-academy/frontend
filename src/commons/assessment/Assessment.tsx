@@ -20,11 +20,12 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { sortBy } from 'lodash';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useLoaderData, useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
+import Messages, { sendToWebview } from 'src/features/vscode/messages';
 import classes from 'src/styles/Academy.module.scss';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
@@ -60,6 +61,24 @@ const Assessment: React.FC = () => {
 
   const { courseId, role, assessmentOverviews: assessmentOverviewsUnfiltered } = useSession();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log('Iam in Assessment');
+    console.log(assessmentOverviewsUnfiltered);
+    if (assessmentOverviewsUnfiltered) {
+      sendToWebview(
+        Messages.NotifyAssessmentsOverview(
+          assessmentOverviewsUnfiltered.map(oa => ({
+            type: oa.type,
+            closeAt: oa.closeAt,
+            id: oa.id,
+            isPublished: oa.isPublished,
+            title: oa.title
+          }))
+        )
+      );
+    }
+  }, [assessmentOverviewsUnfiltered]);
 
   const toggleClosedAssessments = () => setShowClosedAssessments(!showClosedAssessments);
   const toggleOpenAssessments = () => setShowOpenedAssessments(!showOpenedAssessments);
