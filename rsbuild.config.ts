@@ -122,7 +122,7 @@ export default defineConfig({
       config.plugins = [
         ...config.plugins,
         new InjectManifest({
-          swSrc: './src/service-worker.js',
+          swSrc: './src/service-worker.ts',
           swDest: 'service-worker.js',
           maximumFileSizeToCacheInBytes: 20 * 1024 * 1024,
         })
