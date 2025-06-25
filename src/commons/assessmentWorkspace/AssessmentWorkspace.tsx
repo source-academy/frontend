@@ -448,6 +448,18 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const handleContestEntryClick = (_submissionId: number, answer: string) => {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange(0, answer);
+      // Hacky way to view the editor, might cause issues
+      sendToWebview(
+        Messages.NewEditor(
+          workspaceLocation,
+          `submission${_submissionId}`,
+          questionId,
+          question.library.chapter,
+          "",
+          answer
+        )
+      );
+      // 
     };
 
     const tabs: SideContentTab[] = [
