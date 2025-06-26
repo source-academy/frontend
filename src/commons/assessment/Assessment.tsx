@@ -63,9 +63,7 @@ const Assessment: React.FC = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log('Iam in Assessment');
-    console.log(assessmentOverviewsUnfiltered);
-    if (assessmentOverviewsUnfiltered) {
+    if (assessmentOverviewsUnfiltered && courseId) {
       sendToWebview(
         Messages.NotifyAssessmentsOverview(
           assessmentOverviewsUnfiltered.map(oa => ({
@@ -74,7 +72,8 @@ const Assessment: React.FC = () => {
             id: oa.id,
             isPublished: oa.isPublished,
             title: oa.title
-          }))
+          })),
+          courseId
         )
       );
     }
