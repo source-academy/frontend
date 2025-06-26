@@ -94,7 +94,6 @@ type SubstVisualizerPropsAST = {
 };
 
 const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
-  console.log(props);
   const [stepValue, setStepValue] = useState(1);
   const lastStepValue = props.content.length;
   const hasRunCode = lastStepValue !== 0;

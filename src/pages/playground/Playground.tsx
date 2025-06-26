@@ -645,25 +645,36 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [store, workspaceLocation]
   );
 
+  const handleSetEditorSessionId = useCallback(
+    (id: string) => dispatch(setEditorSessionId(workspaceLocation, id)),
+    [dispatch, workspaceLocation]
+  );
+
+  const handleSetSessionDetails = useCallback(
+    (details: { docId: string; readOnly: boolean; owner: boolean } | null) =>
+      dispatch(setSessionDetails(workspaceLocation, details)),
+    [dispatch, workspaceLocation]
+  );
+
   const sessionButtons = useMemo(
     () => (
       <ControlBarSessionButtons
         isFolderModeEnabled={isFolderModeEnabled}
         editorSessionId={editorSessionId}
         getEditorValue={getEditorValue}
-        handleSetEditorSessionId={id => dispatch(setEditorSessionId(workspaceLocation, id))}
-        handleSetSessionDetails={details => dispatch(setSessionDetails(workspaceLocation, details))}
+        handleSetEditorSessionId={handleSetEditorSessionId}
+        handleSetSessionDetails={handleSetSessionDetails}
         sharedbConnected={sharedbConnected}
         key="session"
       />
     ),
     [
-      dispatch,
-      getEditorValue,
       isFolderModeEnabled,
       editorSessionId,
-      sharedbConnected,
-      workspaceLocation
+      getEditorValue,
+      handleSetEditorSessionId,
+      handleSetSessionDetails,
+      sharedbConnected
     ]
   );
 
