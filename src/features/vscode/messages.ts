@@ -90,6 +90,13 @@ const Messages = createMessages({
     questionId,
     chapter,
     variant
+  }),
+  ResetEditor: (
+    workspaceLocation: VscWorkspaceLocation,
+    initialCode: string,
+  ) => ({
+    workspaceLocation,
+    initialCode,
   })
 });
 

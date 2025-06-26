@@ -929,6 +929,11 @@ It is safe to close this window.`}
                   (assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate
                 );
                 handleUpdateHasUnsavedChanges(true);
+                if (isVscode) {
+                  
+                  sendToWebview(Messages.ResetEditor(workspaceLocation, 
+                    (assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate));
+                }
               }}
               options={{ minimal: false, intent: Intent.DANGER }}
             />
