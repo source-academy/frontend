@@ -403,7 +403,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           Messages.McqQuestion(
             workspaceLocation,
             `assessment${assessment.id}`,
-            props.questionId,
+            mcqQuestionData.id,
             chapter,
             mcqQuestionData.choices.map(choice => choice.content)
           )
