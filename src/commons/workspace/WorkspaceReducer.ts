@@ -1,4 +1,5 @@
 import { createReducer, type Reducer } from '@reduxjs/toolkit';
+import { castDraft } from 'immer';
 
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
 import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
@@ -139,10 +140,10 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     .addCase(logOut, (state, action) => {
       // Preserve the playground workspace even after log out
       const playgroundWorkspace = state.playground;
-      return {
+      return castDraft({
         ...defaultWorkspaceManager,
         playground: playgroundWorkspace
-      };
+      });
     })
     .addCase(WorkspaceActions.enableTokenCounter, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
