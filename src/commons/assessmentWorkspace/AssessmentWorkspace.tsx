@@ -245,7 +245,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   useEffect(() => {
     if (!selectedTab) return;
 
-    if (!isMobileBreakpoint && mobileOnlyTabIds.includes(selectedTab)) {
+    if ((!isMobileBreakpoint || isVscode) && mobileOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.questionOverview);
     }
   }, [isMobileBreakpoint, props, selectedTab, setSelectedTab]);
@@ -780,7 +780,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     );
 
     return {
-      editorButtons: !isMobileBreakpoint
+      editorButtons: (!isMobileBreakpoint || isVscode)
         ? [runButton, saveButton, resetButton, chapterSelect]
         : [saveButton, resetButton],
       flowButtons: [previousButton, questionView, nextButton]
