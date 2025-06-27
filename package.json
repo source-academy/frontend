@@ -128,7 +128,7 @@
     "@testing-library/user-event": "^14.4.3",
     "@types/dompurify": "^3.0.5",
     "@types/estree": "^1.0.5",
-    "@types/gapi": "^0.0.44",
+    "@types/gapi": "^0.0.47",
     "@types/gapi.auth2": "^0.0.57",
     "@types/gapi.client": "^1.0.5",
     "@types/gapi.client.drive-v3": "^0.0.5",

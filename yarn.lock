@@ -3956,10 +3956,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/gapi@npm:*, @types/gapi@npm:^0.0.44":
+"@types/gapi@npm:*":
   version: 0.0.44
   resolution: "@types/gapi@npm:0.0.44"
   checksum: 10c0/33039ad11566e694a7f009c3de767820b6a63599c5e7907a7740c7663d0982aab35ee71fb97bba7f9f9f124466d5ea2a4662ab28612d4361cd2d5b9ee12bb81c
+  languageName: node
+  linkType: hard
+
+"@types/gapi@npm:^0.0.47":
+  version: 0.0.47
+  resolution: "@types/gapi@npm:0.0.47"
+  checksum: 10c0/014d7326b6182d260c33ae5b7317d7c0271263dde83b9d24fccd78481dce8877f0ec7a110467a626bf9e1c0b73f2b1935c31f5ef66f71f1328ae0926f6e8b0fe
   languageName: node
   linkType: hard
 
@@ -7671,7 +7678,7 @@ __metadata:
     "@tremor/react": "npm:^1.8.2"
     "@types/dompurify": "npm:^3.0.5"
     "@types/estree": "npm:^1.0.5"
-    "@types/gapi": "npm:^0.0.44"
+    "@types/gapi": "npm:^0.0.47"
     "@types/gapi.auth2": "npm:^0.0.57"
     "@types/gapi.client": "npm:^1.0.5"
     "@types/gapi.client.drive-v3": "npm:^0.0.5"
