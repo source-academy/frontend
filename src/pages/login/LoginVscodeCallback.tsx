@@ -28,7 +28,12 @@ const LoginVscodeCallback: React.FC = () => {
   const location = useLocation();
   const { t } = useTranslation('login');
   const { isLoggedIn } = useSession();
-  const { code, ticket, provider: providerId } = parseQuery(location.search);
+  const {
+    code,
+    ticket,
+    provider: providerId,
+    'client-request-id': clientRequestId
+  } = parseQuery(location.search);
   const isVscode = useTypedSelector(state => state.vscode.isVscode);
   const { access_token: accessToken, refresh_token: refreshToken } = parseQuery(location.search);
 
@@ -36,7 +41,7 @@ const LoginVscodeCallback: React.FC = () => {
   const authCode = code || ticket;
 
   const launchVscode = () => {
-    window.location.href = `vscode://source-academy.source-academy/sso?code=${authCode}&provider=${providerId}`;
+    window.location.href = `vscode://source-academy.source-academy/sso?code=${authCode}&client-request-id=${clientRequestId}`;
   };
 
   useEffect(() => {
