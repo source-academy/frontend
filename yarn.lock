@@ -7923,7 +7923,7 @@ __metadata:
     react-papaparse: "npm:^4.0.2"
     react-qr-reader: "npm:^3.0.0-beta-1"
     react-redux: "npm:^8.1.1"
-    react-router-dom: "npm:^7.0.0"
+    react-router: "npm:^7.6.2"
     react-select: "npm:^5.7.3"
     react-simple-keyboard: "npm:^3.6.27"
     react-sortable-hoc: "npm:^2.0.0"
@@ -12308,19 +12308,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:^7.0.0":
-  version: 7.6.2
-  resolution: "react-router-dom@npm:7.6.2"
-  dependencies:
-    react-router: "npm:7.6.2"
-  peerDependencies:
-    react: ">=18"
-    react-dom: ">=18"
-  checksum: 10c0/9a8370333b5c1ada5ed76a2c30a90ca5a5a8e6c8565165f147fb42b150f2b258b9e73935fe4945c459d770841abdfaf99c28f7e13da93b1f49b28e6a8e87aadb
-  languageName: node
-  linkType: hard
-
-"react-router@npm:7.6.2":
+"react-router@npm:^7.6.2":
   version: 7.6.2
   resolution: "react-router@npm:7.6.2"
   dependencies:

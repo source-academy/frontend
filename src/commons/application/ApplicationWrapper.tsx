@@ -3,8 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { RouterProvider } from 'react-router';
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router';
 import { getAcademyRoutes } from 'src/pages/academy/academyRoutes';
 
 import { getFullAcademyRouterConfig, playgroundOnlyRouterConfig } from '../../routes/routerConfig';

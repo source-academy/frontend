@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 

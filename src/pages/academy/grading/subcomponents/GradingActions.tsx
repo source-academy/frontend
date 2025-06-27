@@ -2,7 +2,7 @@ import { Button, Icon, Position, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { ProgressStatus, ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 import GradingFlex from 'src/commons/grading/GradingFlex';
