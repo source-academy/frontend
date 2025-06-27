@@ -3922,12 +3922,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/gapi.auth2@npm:^0.0.57":
-  version: 0.0.57
-  resolution: "@types/gapi.auth2@npm:0.0.57"
+"@types/gapi.auth2@npm:^0.0.61":
+  version: 0.0.61
+  resolution: "@types/gapi.auth2@npm:0.0.61"
   dependencies:
     "@types/gapi": "npm:*"
-  checksum: 10c0/5b22b9ccdd77780904237bf22fd29f536a8bcda92b36fce405e8388bb18c2bc9423339663428d86e65d3e20f0f81a8c248dfc280c600844c80b88c8fd39dcbd0
+  checksum: 10c0/4a7090a182c4b0b3d117d25ae6fe5dd3e7db3f29b44e2fd596a43d6f1e28e43281317150b987102342c9f94faf7ccc8dda892354fcdb2432a9f2841cf86f6c9a
   languageName: node
   linkType: hard
 
@@ -7679,7 +7679,7 @@ __metadata:
     "@types/dompurify": "npm:^3.0.5"
     "@types/estree": "npm:^1.0.5"
     "@types/gapi": "npm:^0.0.47"
-    "@types/gapi.auth2": "npm:^0.0.57"
+    "@types/gapi.auth2": "npm:^0.0.61"
     "@types/gapi.client": "npm:^1.0.5"
     "@types/gapi.client.drive-v3": "npm:^0.0.5"
     "@types/google.picker": "npm:^0.0.39"
