@@ -91,12 +91,13 @@ const Messages = createMessages({
     chapter,
     variant
   }),
-  ResetEditor: (
-    workspaceLocation: VscWorkspaceLocation,
-    initialCode: string,
-  ) => ({
+  ResetEditor: (workspaceLocation: VscWorkspaceLocation, initialCode: string) => ({
     workspaceLocation,
-    initialCode,
+    initialCode
+  }),
+  AssessmentAnswer: (questionId: number, answer: string) => ({
+    questionId,
+    answer
   })
 });
 

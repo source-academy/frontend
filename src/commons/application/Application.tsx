@@ -135,6 +135,9 @@ const Application: React.FC = () => {
           console.log(`FRONTEND: MCQAnswerMessage: ${message}`);
           dispatch(SessionActions.submitAnswer(message.questionId, message.choice));
           break;
+        case MessageTypeNames.AssessmentAnswer:
+          dispatch(SessionActions.submitAnswer(message.questionId, message.answer));
+          break;
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
