@@ -8434,11 +8434,11 @@ __metadata:
   linkType: hard
 
 "i18next-browser-languagedetector@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "i18next-browser-languagedetector@npm:8.0.0"
+  version: 8.2.0
+  resolution: "i18next-browser-languagedetector@npm:8.2.0"
   dependencies:
     "@babel/runtime": "npm:^7.23.2"
-  checksum: 10c0/08a7c747ec18a0743b54390a0b42836d814b15fb49c92b90c259298e6a6e7e001ff9df99d0fd308283a34fceea53b4d9053aa1695a37f696bc04160017bbb524
+  checksum: 10c0/4fcb6ec316e0fd4a10eee67a8d1e3d7e1407f14d5bed98978c50ed6f1853f5d559dc18ea7fd4b2de445ac0a4ed44df5b38f0b31b89b9ac883f99050d59ffec82
   languageName: node
   linkType: hard
 
