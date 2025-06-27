@@ -1165,7 +1165,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
       fill="#999"
       pointerWidth={10}
       points={
-        Array [
+        [
           140,
           162.5,
           170,
@@ -1291,7 +1291,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
       fill="#999"
       pointerWidth={10}
       points={
-        Array [
+        [
           140,
           232.5,
           170,
@@ -1774,7 +1774,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
       fill="#999"
       pointerWidth={10}
       points={
-        Array [
+        [
           140,
           92.5,
           170,
@@ -1949,7 +1949,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
       fill="#999"
       pointerWidth={10}
       points={
-        Array [
+        [
           181.5,
           40,
           349,
@@ -1964,8 +1964,8 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 0 1`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     ":::pre-declared names::": Symbol(),
   },
   "heap": Heap {
@@ -1978,23 +1978,23 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 0 2`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     "fn": [Function],
-    "x": Array [
+    "x": [
       "long string",
-      Array [
+      [
         [Function],
         [Function],
       ],
-      Array [
+      [
         1,
-        Array [
-          Array [
+        [
+          [
             2,
             3,
           ],
-          Array [
+          [
             [Function],
             null,
           ],
@@ -2004,39 +2004,39 @@ Object {
       5,
       6,
     ],
-    "y": Array [
-      Array [
+    "y": [
+      [
         [Function],
         [Function],
       ],
-      Array [
-        Array [
+      [
+        [
           1,
-          Array [
-            Array [
+          [
+            [
               2,
               3,
             ],
-            Array [
+            [
               [Function],
               null,
             ],
           ],
         ],
-        Array [
+        [
           [Function],
-          Array [
-            Array [
-              Array [
+          [
+            [
+              [
                 2,
                 3,
               ],
-              Array [
+              [
                 [Function],
                 null,
               ],
             ],
-            Array [
+            [
               [Function],
               null,
             ],
@@ -2050,57 +2050,57 @@ Object {
       [Function],
       [Function],
       [Function],
-      Array [
+      [
         [Function],
         [Function],
       ],
-      Array [
+      [
         2,
         3,
       ],
       [Function],
-      Array [
+      [
         [Function],
         null,
       ],
-      Array [
-        Array [
+      [
+        [
           2,
           3,
         ],
-        Array [
+        [
           [Function],
           null,
         ],
       ],
-      Array [
+      [
         1,
-        Array [
-          Array [
+        [
+          [
             2,
             3,
           ],
-          Array [
+          [
             [Function],
             null,
           ],
         ],
       ],
       [Function],
-      Array [
+      [
         "long string",
-        Array [
+        [
           [Function],
           [Function],
         ],
-        Array [
+        [
           1,
-          Array [
-            Array [
+          [
+            [
               2,
               3,
             ],
-            Array [
+            [
               [Function],
               null,
             ],
@@ -2110,112 +2110,112 @@ Object {
         5,
         6,
       ],
-      Array [
+      [
         [Function],
         null,
       ],
-      Array [
-        Array [
-          Array [
+      [
+        [
+          [
             2,
             3,
           ],
-          Array [
+          [
             [Function],
             null,
           ],
         ],
-        Array [
+        [
           [Function],
           null,
         ],
       ],
-      Array [
+      [
         [Function],
-        Array [
-          Array [
-            Array [
+        [
+          [
+            [
               2,
               3,
             ],
-            Array [
+            [
               [Function],
               null,
             ],
           ],
-          Array [
+          [
             [Function],
             null,
           ],
         ],
       ],
-      Array [
-        Array [
+      [
+        [
           1,
-          Array [
-            Array [
+          [
+            [
               2,
               3,
             ],
-            Array [
+            [
               [Function],
               null,
             ],
           ],
         ],
-        Array [
+        [
           [Function],
-          Array [
-            Array [
-              Array [
+          [
+            [
+              [
                 2,
                 3,
               ],
-              Array [
+              [
                 [Function],
                 null,
               ],
             ],
-            Array [
+            [
               [Function],
               null,
             ],
           ],
         ],
       ],
-      Array [
-        Array [
+      [
+        [
           [Function],
           [Function],
         ],
-        Array [
-          Array [
+        [
+          [
             1,
-            Array [
-              Array [
+            [
+              [
                 2,
                 3,
               ],
-              Array [
+              [
                 [Function],
                 null,
               ],
             ],
           ],
-          Array [
+          [
             [Function],
-            Array [
-              Array [
-                Array [
+            [
+              [
+                [
                   2,
                   3,
                 ],
-                Array [
+                [
                   [Function],
                   null,
                 ],
               ],
-              Array [
+              [
                 [Function],
                 null,
               ],
@@ -2227,8 +2227,8 @@ Object {
   },
   "id": "47",
   "name": "programEnvironment",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       ":::pre-declared names::": Symbol(),
     },
     "heap": Heap {
@@ -2242,26 +2242,26 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 0 3`] = `
-Array [
+[
   ":::pre-declared names::: ",
   Symbol(),
   "fn:= ",
   [Function],
   "x:= ",
-  Array [
+  [
     "long string",
-    Array [
+    [
       [Function],
       [Function],
     ],
-    Array [
+    [
       1,
-      Array [
-        Array [
+      [
+        [
           2,
           3,
         ],
-        Array [
+        [
           [Function],
           null,
         ],
@@ -2272,39 +2272,39 @@ Array [
     6,
   ],
   "y:= ",
-  Array [
-    Array [
+  [
+    [
       [Function],
       [Function],
     ],
-    Array [
-      Array [
+    [
+      [
         1,
-        Array [
-          Array [
+        [
+          [
             2,
             3,
           ],
-          Array [
+          [
             [Function],
             null,
           ],
         ],
       ],
-      Array [
+      [
         [Function],
-        Array [
-          Array [
-            Array [
+        [
+          [
+            [
               2,
               3,
             ],
-            Array [
+            [
               [Function],
               null,
             ],
           ],
-          Array [
+          [
             [Function],
             null,
           ],
@@ -2316,8 +2316,8 @@ Array [
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 1 1`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     ":::pre-declared names::": Symbol(),
   },
   "heap": Heap {
@@ -2330,38 +2330,38 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 1 2`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     "fn": [Function],
-    "l": Array [
+    "l": [
       1,
-      Array [
-        Array [
-          Array [
+      [
+        [
+          [
             1,
-            Array [
+            [
               2,
-              Array [
+              [
                 3,
-                Array [
+                [
                   [Function],
                   null,
                 ],
               ],
             ],
           ],
-          Array [
-            Array [
-              Array [
+          [
+            [
+              [
                 1,
                 2,
               ],
               3,
             ],
-            Array [
-              Array [
+            [
+              [
                 1,
-                Array [
+                [
                   1,
                   2,
                 ],
@@ -2369,20 +2369,20 @@ Object {
                 4,
                 5,
               ],
-              Array [
+              [
                 4,
                 null,
               ],
             ],
           ],
         ],
-        Array [
+        [
           [Function],
-          Array [
-            Array [
+          [
+            [
               1,
-              Array [
-                Array [
+              [
+                [
                   1,
                   2,
                 ],
@@ -2395,10 +2395,10 @@ Object {
         ],
       ],
     ],
-    "x": Array [
+    "x": [
       1,
-      Array [
-        Array [
+      [
+        [
           1,
           2,
         ],
@@ -2410,21 +2410,21 @@ Object {
   "heap": Heap {
     "storage": Set {
       [Function],
-      Array [
+      [
         1,
         2,
       ],
-      Array [
-        Array [
+      [
+        [
           1,
           2,
         ],
         3,
       ],
-      Array [
+      [
         1,
-        Array [
-          Array [
+        [
+          [
             1,
             2,
           ],
@@ -2432,47 +2432,47 @@ Object {
         ],
         4,
       ],
-      Array [
+      [
         [Function],
         null,
       ],
-      Array [
+      [
         3,
-        Array [
+        [
           [Function],
           null,
         ],
       ],
-      Array [
+      [
         2,
-        Array [
+        [
           3,
-          Array [
+          [
             [Function],
             null,
           ],
         ],
       ],
-      Array [
+      [
         1,
-        Array [
+        [
           2,
-          Array [
+          [
             3,
-            Array [
+            [
               [Function],
               null,
             ],
           ],
         ],
       ],
-      Array [
+      [
         1,
         2,
       ],
-      Array [
+      [
         1,
-        Array [
+        [
           1,
           2,
         ],
@@ -2480,14 +2480,14 @@ Object {
         4,
         5,
       ],
-      Array [
+      [
         4,
         null,
       ],
-      Array [
-        Array [
+      [
+        [
           1,
-          Array [
+          [
             1,
             2,
           ],
@@ -2495,23 +2495,23 @@ Object {
           4,
           5,
         ],
-        Array [
+        [
           4,
           null,
         ],
       ],
-      Array [
-        Array [
-          Array [
+      [
+        [
+          [
             1,
             2,
           ],
           3,
         ],
-        Array [
-          Array [
+        [
+          [
             1,
-            Array [
+            [
               1,
               2,
             ],
@@ -2519,38 +2519,38 @@ Object {
             4,
             5,
           ],
-          Array [
+          [
             4,
             null,
           ],
         ],
       ],
-      Array [
-        Array [
+      [
+        [
           1,
-          Array [
+          [
             2,
-            Array [
+            [
               3,
-              Array [
+              [
                 [Function],
                 null,
               ],
             ],
           ],
         ],
-        Array [
-          Array [
-            Array [
+        [
+          [
+            [
               1,
               2,
             ],
             3,
           ],
-          Array [
-            Array [
+          [
+            [
               1,
-              Array [
+              [
                 1,
                 2,
               ],
@@ -2558,7 +2558,7 @@ Object {
               4,
               5,
             ],
-            Array [
+            [
               4,
               null,
             ],
@@ -2566,11 +2566,11 @@ Object {
         ],
       ],
       [Function],
-      Array [
-        Array [
+      [
+        [
           1,
-          Array [
-            Array [
+          [
+            [
               1,
               2,
             ],
@@ -2580,13 +2580,13 @@ Object {
         ],
         null,
       ],
-      Array [
+      [
         [Function],
-        Array [
-          Array [
+        [
+          [
             1,
-            Array [
-              Array [
+            [
+              [
                 1,
                 2,
               ],
@@ -2597,33 +2597,33 @@ Object {
           null,
         ],
       ],
-      Array [
-        Array [
-          Array [
+      [
+        [
+          [
             1,
-            Array [
+            [
               2,
-              Array [
+              [
                 3,
-                Array [
+                [
                   [Function],
                   null,
                 ],
               ],
             ],
           ],
-          Array [
-            Array [
-              Array [
+          [
+            [
+              [
                 1,
                 2,
               ],
               3,
             ],
-            Array [
-              Array [
+            [
+              [
                 1,
-                Array [
+                [
                   1,
                   2,
                 ],
@@ -2631,20 +2631,20 @@ Object {
                 4,
                 5,
               ],
-              Array [
+              [
                 4,
                 null,
               ],
             ],
           ],
         ],
-        Array [
+        [
           [Function],
-          Array [
-            Array [
+          [
+            [
               1,
-              Array [
-                Array [
+              [
+                [
                   1,
                   2,
                 ],
@@ -2656,35 +2656,35 @@ Object {
           ],
         ],
       ],
-      Array [
+      [
         1,
-        Array [
-          Array [
-            Array [
+        [
+          [
+            [
               1,
-              Array [
+              [
                 2,
-                Array [
+                [
                   3,
-                  Array [
+                  [
                     [Function],
                     null,
                   ],
                 ],
               ],
             ],
-            Array [
-              Array [
-                Array [
+            [
+              [
+                [
                   1,
                   2,
                 ],
                 3,
               ],
-              Array [
-                Array [
+              [
+                [
                   1,
-                  Array [
+                  [
                     1,
                     2,
                   ],
@@ -2692,20 +2692,20 @@ Object {
                   4,
                   5,
                 ],
-                Array [
+                [
                   4,
                   null,
                 ],
               ],
             ],
           ],
-          Array [
+          [
             [Function],
-            Array [
-              Array [
+            [
+              [
                 1,
-                Array [
-                  Array [
+                [
+                  [
                     1,
                     2,
                   ],
@@ -2722,8 +2722,8 @@ Object {
   },
   "id": "47",
   "name": "programEnvironment",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       ":::pre-declared names::": Symbol(),
     },
     "heap": Heap {
@@ -2737,16 +2737,16 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 1 3`] = `
-Array [
+[
   ":::pre-declared names::: ",
   Symbol(),
   "fn:= ",
   [Function],
   "x:= ",
-  Array [
+  [
     1,
-    Array [
-      Array [
+    [
+      [
         1,
         2,
       ],
@@ -2755,35 +2755,35 @@ Array [
     4,
   ],
   "l:= ",
-  Array [
+  [
     1,
-    Array [
-      Array [
-        Array [
+    [
+      [
+        [
           1,
-          Array [
+          [
             2,
-            Array [
+            [
               3,
-              Array [
+              [
                 [Function],
                 null,
               ],
             ],
           ],
         ],
-        Array [
-          Array [
-            Array [
+        [
+          [
+            [
               1,
               2,
             ],
             3,
           ],
-          Array [
-            Array [
+          [
+            [
               1,
-              Array [
+              [
                 1,
                 2,
               ],
@@ -2791,20 +2791,20 @@ Array [
               4,
               5,
             ],
-            Array [
+            [
               4,
               null,
             ],
           ],
         ],
       ],
-      Array [
+      [
         [Function],
-        Array [
-          Array [
+        [
+          [
             1,
-            Array [
-              Array [
+            [
+              [
                 1,
                 2,
               ],
@@ -2821,8 +2821,8 @@ Array [
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 2 1`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     ":::pre-declared names::": Symbol(),
   },
   "heap": Heap {
@@ -2835,27 +2835,27 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 2 2`] = `
-Object {
-  "head": Object {
-    "x1": Array [
+{
+  "head": {
+    "x1": [
       1,
-      Array [
+      [
         2,
-        Array [
+        [
           3,
-          Array [
+          [
             [Circular],
             null,
           ],
         ],
       ],
     ],
-    "x2": Array [
+    "x2": [
       3,
-      Array [
-        Array [
+      [
+        [
           1,
-          Array [
+          [
             2,
             [Circular],
           ],
@@ -2866,12 +2866,12 @@ Object {
   },
   "heap": Heap {
     "storage": Set {
-      Array [
+      [
         2,
-        Array [
+        [
           3,
-          Array [
-            Array [
+          [
+            [
               1,
               [Circular],
             ],
@@ -2879,25 +2879,25 @@ Object {
           ],
         ],
       ],
-      Array [
+      [
         1,
-        Array [
+        [
           2,
-          Array [
+          [
             3,
-            Array [
+            [
               [Circular],
               null,
             ],
           ],
         ],
       ],
-      Array [
-        Array [
+      [
+        [
           1,
-          Array [
+          [
             2,
-            Array [
+            [
               3,
               [Circular],
             ],
@@ -2905,12 +2905,12 @@ Object {
         ],
         null,
       ],
-      Array [
+      [
         3,
-        Array [
-          Array [
+        [
+          [
             1,
-            Array [
+            [
               2,
               [Circular],
             ],
@@ -2922,8 +2922,8 @@ Object {
   },
   "id": "47",
   "name": "programEnvironment",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       ":::pre-declared names::": Symbol(),
     },
     "heap": Heap {
@@ -2937,17 +2937,17 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 2 3`] = `
-Array [
+[
   ":::pre-declared names::: ",
   Symbol(),
   "x1:= ",
-  Array [
+  [
     1,
-    Array [
+    [
       2,
-      Array [
+      [
         3,
-        Array [
+        [
           [Circular],
           null,
         ],
@@ -2955,12 +2955,12 @@ Array [
     ],
   ],
   "x2:= ",
-  Array [
+  [
     3,
-    Array [
-      Array [
+    [
+      [
         1,
-        Array [
+        [
           2,
           [Circular],
         ],
@@ -2972,8 +2972,8 @@ Array [
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 3 1`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     ":::pre-declared names::": Symbol(),
   },
   "heap": Heap {
@@ -2986,27 +2986,27 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 3 2`] = `
-Object {
-  "head": Object {
-    "e": Array [
-      Array [
+{
+  "head": {
+    "e": [
+      [
         3,
-        Array [
+        [
           4,
-          Array [
+          [
             5,
             null,
           ],
         ],
       ],
-      Array [
+      [
         2,
-        Array [
-          Array [
+        [
+          [
             3,
-            Array [
+            [
               4,
-              Array [
+              [
                 5,
                 null,
               ],
@@ -3016,29 +3016,29 @@ Object {
         ],
       ],
     ],
-    "f": Array [
+    "f": [
       1,
       2,
     ],
-    "g": Array [
-      Array [
+    "g": [
+      [
         [Function],
-        Array [
+        [
           4,
-          Array [
+          [
             5,
             null,
           ],
         ],
       ],
-      Array [
+      [
         2,
-        Array [
-          Array [
+        [
+          [
             [Function],
-            Array [
+            [
               4,
-              Array [
+              [
                 5,
                 null,
               ],
@@ -3048,14 +3048,14 @@ Object {
         ],
       ],
     ],
-    "y": Array [
-      Array [
+    "y": [
+      [
         1,
         2,
       ],
-      Array [
+      [
         [Function],
-        Array [
+        [
           1,
           2,
         ],
@@ -3064,33 +3064,33 @@ Object {
   },
   "heap": Heap {
     "storage": Set {
-      Array [
+      [
         5,
         null,
       ],
-      Array [
+      [
         4,
-        Array [
+        [
           5,
           null,
         ],
       ],
-      Array [
+      [
         3,
-        Array [
+        [
           4,
-          Array [
+          [
             5,
             null,
           ],
         ],
       ],
-      Array [
-        Array [
+      [
+        [
           3,
-          Array [
+          [
             4,
-            Array [
+            [
               5,
               null,
             ],
@@ -3098,14 +3098,14 @@ Object {
         ],
         null,
       ],
-      Array [
+      [
         2,
-        Array [
-          Array [
+        [
+          [
             3,
-            Array [
+            [
               4,
-              Array [
+              [
                 5,
                 null,
               ],
@@ -3114,25 +3114,25 @@ Object {
           null,
         ],
       ],
-      Array [
-        Array [
+      [
+        [
           3,
-          Array [
+          [
             4,
-            Array [
+            [
               5,
               null,
             ],
           ],
         ],
-        Array [
+        [
           2,
-          Array [
-            Array [
+          [
+            [
               3,
-              Array [
+              [
                 4,
-                Array [
+                [
                   5,
                   null,
                 ],
@@ -3142,38 +3142,38 @@ Object {
           ],
         ],
       ],
-      Array [
+      [
         1,
         2,
       ],
       [Function],
-      Array [
+      [
         5,
         null,
       ],
-      Array [
+      [
         4,
-        Array [
+        [
           5,
           null,
         ],
       ],
-      Array [
+      [
         [Function],
-        Array [
+        [
           4,
-          Array [
+          [
             5,
             null,
           ],
         ],
       ],
-      Array [
-        Array [
+      [
+        [
           [Function],
-          Array [
+          [
             4,
-            Array [
+            [
               5,
               null,
             ],
@@ -3181,14 +3181,14 @@ Object {
         ],
         null,
       ],
-      Array [
+      [
         2,
-        Array [
-          Array [
+        [
+          [
             [Function],
-            Array [
+            [
               4,
-              Array [
+              [
                 5,
                 null,
               ],
@@ -3197,25 +3197,25 @@ Object {
           null,
         ],
       ],
-      Array [
-        Array [
+      [
+        [
           [Function],
-          Array [
+          [
             4,
-            Array [
+            [
               5,
               null,
             ],
           ],
         ],
-        Array [
+        [
           2,
-          Array [
-            Array [
+          [
+            [
               [Function],
-              Array [
+              [
                 4,
-                Array [
+                [
                   5,
                   null,
                 ],
@@ -3226,25 +3226,25 @@ Object {
         ],
       ],
       [Function],
-      Array [
+      [
         1,
         2,
       ],
-      Array [
+      [
         [Function],
-        Array [
+        [
           1,
           2,
         ],
       ],
-      Array [
-        Array [
+      [
+        [
           1,
           2,
         ],
-        Array [
+        [
           [Function],
-          Array [
+          [
             1,
             2,
           ],
@@ -3254,8 +3254,8 @@ Object {
   },
   "id": "47",
   "name": "programEnvironment",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       ":::pre-declared names::": Symbol(),
     },
     "heap": Heap {
@@ -3269,29 +3269,29 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 3 3`] = `
-Array [
+[
   ":::pre-declared names::: ",
   Symbol(),
   "e:= ",
-  Array [
-    Array [
+  [
+    [
       3,
-      Array [
+      [
         4,
-        Array [
+        [
           5,
           null,
         ],
       ],
     ],
-    Array [
+    [
       2,
-      Array [
-        Array [
+      [
+        [
           3,
-          Array [
+          [
             4,
-            Array [
+            [
               5,
               null,
             ],
@@ -3302,30 +3302,30 @@ Array [
     ],
   ],
   "f:= ",
-  Array [
+  [
     1,
     2,
   ],
   "g:= ",
-  Array [
-    Array [
+  [
+    [
       [Function],
-      Array [
+      [
         4,
-        Array [
+        [
           5,
           null,
         ],
       ],
     ],
-    Array [
+    [
       2,
-      Array [
-        Array [
+      [
+        [
           [Function],
-          Array [
+          [
             4,
-            Array [
+            [
               5,
               null,
             ],
@@ -3336,14 +3336,14 @@ Array [
     ],
   ],
   "y:= ",
-  Array [
-    Array [
+  [
+    [
       1,
       2,
     ],
-    Array [
+    [
       [Function],
-      Array [
+      [
         1,
         2,
       ],
@@ -3353,8 +3353,8 @@ Array [
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 4 1`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     ":::pre-declared names::": Symbol(),
   },
   "heap": Heap {
@@ -3367,8 +3367,8 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 4 2`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     "f": [Function],
     "x": 0,
     "y": 10,
@@ -3381,8 +3381,8 @@ Object {
   },
   "id": "47",
   "name": "programEnvironment",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       ":::pre-declared names::": Symbol(),
     },
     "heap": Heap {
@@ -3396,10 +3396,10 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 4 3`] = `
-Object {
-  "callExpression": Object {
-    "arguments": Array [
-      Object {
+{
+  "callExpression": {
+    "arguments": [
+      {
         "loc": undefined,
         "type": "Literal",
         "value": 11,
@@ -3437,7 +3437,7 @@ Object {
     "start": 96,
     "type": "CallExpression",
   },
-  "head": Object {
+  "head": {
     "x": 11,
   },
   "heap": Heap {
@@ -3447,8 +3447,8 @@ Object {
   },
   "id": "49",
   "name": "f",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       "f": [Function],
       "x": 0,
       "y": 10,
@@ -3461,8 +3461,8 @@ Object {
     },
     "id": "47",
     "name": "programEnvironment",
-    "tail": Object {
-      "head": Object {
+    "tail": {
+      "head": {
         ":::pre-declared names::": Symbol(),
       },
       "heap": Heap {
@@ -3477,7 +3477,7 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 4 4`] = `
-Array [
+[
   ":::pre-declared names::: ",
   Symbol(),
   "x: ",
@@ -3496,8 +3496,8 @@ Array [
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 5 1`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     ":::pre-declared names::": Symbol(),
     "accumulate": [Function],
     "pair": [Function],
@@ -3514,13 +3514,13 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 5 2`] = `
-Object {
-  "head": Object {
-    "x": Array [
+{
+  "head": {
+    "x": [
       1,
-      Array [
+      [
         [Function],
-        Array [
+        [
           [Function],
           null,
         ],
@@ -3529,22 +3529,22 @@ Object {
   },
   "heap": Heap {
     "storage": Set {
-      Array [
+      [
         [Function],
         null,
       ],
-      Array [
+      [
         [Function],
-        Array [
+        [
           [Function],
           null,
         ],
       ],
-      Array [
+      [
         1,
-        Array [
+        [
           [Function],
-          Array [
+          [
             [Function],
             null,
           ],
@@ -3554,8 +3554,8 @@ Object {
   },
   "id": "47",
   "name": "programEnvironment",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       ":::pre-declared names::": Symbol(),
       "accumulate": [Function],
       "pair": [Function],
@@ -3573,7 +3573,7 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 5 3`] = `
-Array [
+[
   ":::pre-declared names::: ",
   Symbol(),
   "pair: ",
@@ -3581,11 +3581,11 @@ Array [
   "accumulate: ",
   [Function],
   "x:= ",
-  Array [
+  [
     1,
-    Array [
+    [
       [Function],
-      Array [
+      [
         [Function],
         null,
       ],
@@ -3595,8 +3595,8 @@ Array [
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 6 1`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     ":::pre-declared names::": Symbol(),
   },
   "heap": Heap {
@@ -3609,19 +3609,19 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 6 2`] = `
-Object {
-  "head": Object {
-    "x": Array [],
+{
+  "head": {
+    "x": [],
   },
   "heap": Heap {
     "storage": Set {
-      Array [],
+      [],
     },
   },
   "id": "47",
   "name": "programEnvironment",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       ":::pre-declared names::": Symbol(),
     },
     "heap": Heap {
@@ -3635,17 +3635,17 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 6 3`] = `
-Array [
+[
   ":::pre-declared names::: ",
   Symbol(),
   "x:= ",
-  Array [],
+  [],
 ]
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 1`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     ":::pre-declared names::": Symbol(),
   },
   "heap": Heap {
@@ -3658,13 +3658,13 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 2`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     "eval_stream": [Function],
     "x": 1,
-    "y": Array [
+    "y": [
       [Circular],
-      Array [
+      [
         1,
         [Circular],
         [Circular],
@@ -3673,18 +3673,18 @@ Object {
   },
   "heap": Heap {
     "storage": Set {
-      Array [],
-      Array [
+      [],
+      [
         1,
-        Array [
+        [
           [Circular],
           [Circular],
         ],
         [Circular],
       ],
-      Array [
+      [
         [Circular],
-        Array [
+        [
           1,
           [Circular],
           [Circular],
@@ -3695,8 +3695,8 @@ Object {
   },
   "id": "47",
   "name": "programEnvironment",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       ":::pre-declared names::": Symbol(),
     },
     "heap": Heap {
@@ -3710,10 +3710,10 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 3`] = `
-Object {
-  "callExpression": Object {
-    "arguments": Array [
-      Object {
+{
+  "callExpression": {
+    "arguments": [
+      {
         "loc": undefined,
         "type": "Literal",
         "value": 1,
@@ -3751,13 +3751,13 @@ Object {
     "start": 405,
     "type": "CallExpression",
   },
-  "head": Object {
+  "head": {
     "n": 1,
   },
   "heap": Heap {
     "storage": Set {
       [Function],
-      Array [
+      [
         1,
         [Function],
       ],
@@ -3765,8 +3765,8 @@ Object {
   },
   "id": "69",
   "name": "integers_from",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       ":::pre-declared names::": Symbol(),
     },
     "heap": Heap {
@@ -3780,13 +3780,13 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 4`] = `
-Object {
-  "callExpression": Object {
-    "arguments": Array [
-      Object {
+{
+  "callExpression": {
+    "arguments": [
+      {
         "loc": undefined,
         "type": "Literal",
-        "value": Array [
+        "value": [
           1,
           [Function],
         ],
@@ -3824,8 +3824,8 @@ Object {
     "start": 306,
     "type": "CallExpression",
   },
-  "head": Object {
-    "xs": Array [
+  "head": {
+    "xs": [
       1,
       [Function],
     ],
@@ -3835,8 +3835,8 @@ Object {
   },
   "id": "78",
   "name": "stream_tail",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       ":::pre-declared names::": Symbol(),
     },
     "heap": Heap {
@@ -3850,10 +3850,10 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 5`] = `
-Object {
-  "callExpression": Object {
-    "arguments": Array [
-      Object {
+{
+  "callExpression": {
+    "arguments": [
+      {
         "loc": undefined,
         "type": "Literal",
         "value": 2,
@@ -3891,13 +3891,13 @@ Object {
     "start": 13836,
     "type": "CallExpression",
   },
-  "head": Object {
+  "head": {
     "n": 2,
   },
   "heap": Heap {
     "storage": Set {
       [Function],
-      Array [
+      [
         2,
         [Function],
       ],
@@ -3905,8 +3905,8 @@ Object {
   },
   "id": "80",
   "name": "integers_from",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       ":::pre-declared names::": Symbol(),
     },
     "heap": Heap {
@@ -3920,8 +3920,8 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 6`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     "i": 5,
   },
   "heap": Heap {
@@ -3929,13 +3929,13 @@ Object {
   },
   "id": "49",
   "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       "eval_stream": [Function],
       "x": 1,
-      "y": Array [
+      "y": [
         [Circular],
-        Array [
+        [
           1,
           [Circular],
           [Circular],
@@ -3944,18 +3944,18 @@ Object {
     },
     "heap": Heap {
       "storage": Set {
-        Array [],
-        Array [
+        [],
+        [
           1,
-          Array [
+          [
             [Circular],
             [Circular],
           ],
           [Circular],
         ],
-        Array [
+        [
           [Circular],
-          Array [
+          [
             1,
             [Circular],
             [Circular],
@@ -3966,8 +3966,8 @@ Object {
     },
     "id": "47",
     "name": "programEnvironment",
-    "tail": Object {
-      "head": Object {
+    "tail": {
+      "head": {
         ":::pre-declared names::": Symbol(),
       },
       "heap": Heap {
@@ -3982,18 +3982,18 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 7`] = `
-Object {
-  "callExpression": Object {
-    "arguments": Array [
-      Object {
+{
+  "callExpression": {
+    "arguments": [
+      {
         "loc": undefined,
         "type": "Literal",
-        "value": Array [
+        "value": [
           1,
           [Function],
         ],
       },
-      Object {
+      {
         "loc": undefined,
         "type": "Literal",
         "value": 2,
@@ -4031,9 +4031,9 @@ Object {
     "start": 393,
     "type": "CallExpression",
   },
-  "head": Object {
+  "head": {
     "n": 2,
-    "s": Array [
+    "s": [
       1,
       [Function],
     ],
@@ -4043,13 +4043,13 @@ Object {
   },
   "id": "72",
   "name": "eval_stream",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       "eval_stream": [Function],
       "x": 1,
-      "y": Array [
+      "y": [
         [Circular],
-        Array [
+        [
           1,
           [Circular],
           [Circular],
@@ -4058,18 +4058,18 @@ Object {
     },
     "heap": Heap {
       "storage": Set {
-        Array [],
-        Array [
+        [],
+        [
           1,
-          Array [
+          [
             [Circular],
             [Circular],
           ],
           [Circular],
         ],
-        Array [
+        [
           [Circular],
-          Array [
+          [
             1,
             [Circular],
             [Circular],
@@ -4080,8 +4080,8 @@ Object {
     },
     "id": "47",
     "name": "programEnvironment",
-    "tail": Object {
-      "head": Object {
+    "tail": {
+      "head": {
         ":::pre-declared names::": Symbol(),
       },
       "heap": Heap {
@@ -4096,8 +4096,8 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 8`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     "the_tail": [Function],
   },
   "heap": Heap {
@@ -4105,13 +4105,13 @@ Object {
   },
   "id": "79",
   "name": "blockEnvironment",
-  "tail": Object {
-    "callExpression": Object {
-      "arguments": Array [
-        Object {
+  "tail": {
+    "callExpression": {
+      "arguments": [
+        {
           "loc": undefined,
           "type": "Literal",
-          "value": Array [
+          "value": [
             1,
             [Function],
           ],
@@ -4149,8 +4149,8 @@ Object {
       "start": 306,
       "type": "CallExpression",
     },
-    "head": Object {
-      "xs": Array [
+    "head": {
+      "xs": [
         1,
         [Function],
       ],
@@ -4160,8 +4160,8 @@ Object {
     },
     "id": "78",
     "name": "stream_tail",
-    "tail": Object {
-      "head": Object {
+    "tail": {
+      "head": {
         ":::pre-declared names::": Symbol(),
       },
       "heap": Heap {
@@ -4176,8 +4176,8 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 9`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     "_copy_of_i": 1,
   },
   "heap": Heap {
@@ -4185,8 +4185,8 @@ Object {
   },
   "id": "50",
   "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       "i": 5,
     },
     "heap": Heap {
@@ -4194,13 +4194,13 @@ Object {
     },
     "id": "49",
     "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
+    "tail": {
+      "head": {
         "eval_stream": [Function],
         "x": 1,
-        "y": Array [
+        "y": [
           [Circular],
-          Array [
+          [
             1,
             [Circular],
             [Circular],
@@ -4209,18 +4209,18 @@ Object {
       },
       "heap": Heap {
         "storage": Set {
-          Array [],
-          Array [
+          [],
+          [
             1,
-            Array [
+            [
               [Circular],
               [Circular],
             ],
             [Circular],
           ],
-          Array [
+          [
             [Circular],
-            Array [
+            [
               1,
               [Circular],
               [Circular],
@@ -4231,8 +4231,8 @@ Object {
       },
       "id": "47",
       "name": "programEnvironment",
-      "tail": Object {
-        "head": Object {
+      "tail": {
+        "head": {
           ":::pre-declared names::": Symbol(),
         },
         "heap": Heap {
@@ -4248,8 +4248,8 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 10`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     "_copy_of_i": 2,
   },
   "heap": Heap {
@@ -4257,8 +4257,8 @@ Object {
   },
   "id": "54",
   "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       "i": 5,
     },
     "heap": Heap {
@@ -4266,13 +4266,13 @@ Object {
     },
     "id": "49",
     "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
+    "tail": {
+      "head": {
         "eval_stream": [Function],
         "x": 1,
-        "y": Array [
+        "y": [
           [Circular],
-          Array [
+          [
             1,
             [Circular],
             [Circular],
@@ -4281,18 +4281,18 @@ Object {
       },
       "heap": Heap {
         "storage": Set {
-          Array [],
-          Array [
+          [],
+          [
             1,
-            Array [
+            [
               [Circular],
               [Circular],
             ],
             [Circular],
           ],
-          Array [
+          [
             [Circular],
-            Array [
+            [
               1,
               [Circular],
               [Circular],
@@ -4303,8 +4303,8 @@ Object {
       },
       "id": "47",
       "name": "programEnvironment",
-      "tail": Object {
-        "head": Object {
+      "tail": {
+        "head": {
           ":::pre-declared names::": Symbol(),
         },
         "heap": Heap {
@@ -4320,8 +4320,8 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 11`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     "_copy_of_i": 3,
   },
   "heap": Heap {
@@ -4329,8 +4329,8 @@ Object {
   },
   "id": "58",
   "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       "i": 5,
     },
     "heap": Heap {
@@ -4338,13 +4338,13 @@ Object {
     },
     "id": "49",
     "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
+    "tail": {
+      "head": {
         "eval_stream": [Function],
         "x": 1,
-        "y": Array [
+        "y": [
           [Circular],
-          Array [
+          [
             1,
             [Circular],
             [Circular],
@@ -4353,18 +4353,18 @@ Object {
       },
       "heap": Heap {
         "storage": Set {
-          Array [],
-          Array [
+          [],
+          [
             1,
-            Array [
+            [
               [Circular],
               [Circular],
             ],
             [Circular],
           ],
-          Array [
+          [
             [Circular],
-            Array [
+            [
               1,
               [Circular],
               [Circular],
@@ -4375,8 +4375,8 @@ Object {
       },
       "id": "47",
       "name": "programEnvironment",
-      "tail": Object {
-        "head": Object {
+      "tail": {
+        "head": {
           ":::pre-declared names::": Symbol(),
         },
         "heap": Heap {
@@ -4392,8 +4392,8 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 12`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     "_copy_of_i": 4,
   },
   "heap": Heap {
@@ -4401,8 +4401,8 @@ Object {
   },
   "id": "62",
   "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       "i": 5,
     },
     "heap": Heap {
@@ -4410,13 +4410,13 @@ Object {
     },
     "id": "49",
     "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
+    "tail": {
+      "head": {
         "eval_stream": [Function],
         "x": 1,
-        "y": Array [
+        "y": [
           [Circular],
-          Array [
+          [
             1,
             [Circular],
             [Circular],
@@ -4425,18 +4425,18 @@ Object {
       },
       "heap": Heap {
         "storage": Set {
-          Array [],
-          Array [
+          [],
+          [
             1,
-            Array [
+            [
               [Circular],
               [Circular],
             ],
             [Circular],
           ],
-          Array [
+          [
             [Circular],
-            Array [
+            [
               1,
               [Circular],
               [Circular],
@@ -4447,8 +4447,8 @@ Object {
       },
       "id": "47",
       "name": "programEnvironment",
-      "tail": Object {
-        "head": Object {
+      "tail": {
+        "head": {
           ":::pre-declared names::": Symbol(),
         },
         "heap": Heap {
@@ -4464,8 +4464,8 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 13`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     "es": [Function],
   },
   "heap": Heap {
@@ -4475,18 +4475,18 @@ Object {
   },
   "id": "73",
   "name": "blockEnvironment",
-  "tail": Object {
-    "callExpression": Object {
-      "arguments": Array [
-        Object {
+  "tail": {
+    "callExpression": {
+      "arguments": [
+        {
           "loc": undefined,
           "type": "Literal",
-          "value": Array [
+          "value": [
             1,
             [Function],
           ],
         },
-        Object {
+        {
           "loc": undefined,
           "type": "Literal",
           "value": 2,
@@ -4524,9 +4524,9 @@ Object {
       "start": 393,
       "type": "CallExpression",
     },
-    "head": Object {
+    "head": {
       "n": 2,
-      "s": Array [
+      "s": [
         1,
         [Function],
       ],
@@ -4536,13 +4536,13 @@ Object {
     },
     "id": "72",
     "name": "eval_stream",
-    "tail": Object {
-      "head": Object {
+    "tail": {
+      "head": {
         "eval_stream": [Function],
         "x": 1,
-        "y": Array [
+        "y": [
           [Circular],
-          Array [
+          [
             1,
             [Circular],
             [Circular],
@@ -4551,18 +4551,18 @@ Object {
       },
       "heap": Heap {
         "storage": Set {
-          Array [],
-          Array [
+          [],
+          [
             1,
-            Array [
+            [
               [Circular],
               [Circular],
             ],
             [Circular],
           ],
-          Array [
+          [
             [Circular],
-            Array [
+            [
               1,
               [Circular],
               [Circular],
@@ -4573,8 +4573,8 @@ Object {
       },
       "id": "47",
       "name": "programEnvironment",
-      "tail": Object {
-        "head": Object {
+      "tail": {
+        "head": {
           ":::pre-declared names::": Symbol(),
         },
         "heap": Heap {
@@ -4590,8 +4590,8 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 14`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     "i": 1,
   },
   "heap": Heap {
@@ -4599,8 +4599,8 @@ Object {
   },
   "id": "51",
   "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       "_copy_of_i": 1,
     },
     "heap": Heap {
@@ -4608,8 +4608,8 @@ Object {
     },
     "id": "50",
     "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
+    "tail": {
+      "head": {
         "i": 5,
       },
       "heap": Heap {
@@ -4617,13 +4617,13 @@ Object {
       },
       "id": "49",
       "name": "blockEnvironment",
-      "tail": Object {
-        "head": Object {
+      "tail": {
+        "head": {
           "eval_stream": [Function],
           "x": 1,
-          "y": Array [
+          "y": [
             [Circular],
-            Array [
+            [
               1,
               [Circular],
               [Circular],
@@ -4632,18 +4632,18 @@ Object {
         },
         "heap": Heap {
           "storage": Set {
-            Array [],
-            Array [
+            [],
+            [
               1,
-              Array [
+              [
                 [Circular],
                 [Circular],
               ],
               [Circular],
             ],
-            Array [
+            [
               [Circular],
-              Array [
+              [
                 1,
                 [Circular],
                 [Circular],
@@ -4654,8 +4654,8 @@ Object {
         },
         "id": "47",
         "name": "programEnvironment",
-        "tail": Object {
-          "head": Object {
+        "tail": {
+          "head": {
             ":::pre-declared names::": Symbol(),
           },
           "heap": Heap {
@@ -4672,8 +4672,8 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 15`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     "i": 2,
   },
   "heap": Heap {
@@ -4681,8 +4681,8 @@ Object {
   },
   "id": "55",
   "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       "_copy_of_i": 2,
     },
     "heap": Heap {
@@ -4690,8 +4690,8 @@ Object {
     },
     "id": "54",
     "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
+    "tail": {
+      "head": {
         "i": 5,
       },
       "heap": Heap {
@@ -4699,13 +4699,13 @@ Object {
       },
       "id": "49",
       "name": "blockEnvironment",
-      "tail": Object {
-        "head": Object {
+      "tail": {
+        "head": {
           "eval_stream": [Function],
           "x": 1,
-          "y": Array [
+          "y": [
             [Circular],
-            Array [
+            [
               1,
               [Circular],
               [Circular],
@@ -4714,18 +4714,18 @@ Object {
         },
         "heap": Heap {
           "storage": Set {
-            Array [],
-            Array [
+            [],
+            [
               1,
-              Array [
+              [
                 [Circular],
                 [Circular],
               ],
               [Circular],
             ],
-            Array [
+            [
               [Circular],
-              Array [
+              [
                 1,
                 [Circular],
                 [Circular],
@@ -4736,8 +4736,8 @@ Object {
         },
         "id": "47",
         "name": "programEnvironment",
-        "tail": Object {
-          "head": Object {
+        "tail": {
+          "head": {
             ":::pre-declared names::": Symbol(),
           },
           "heap": Heap {
@@ -4754,8 +4754,8 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 16`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     "i": 3,
   },
   "heap": Heap {
@@ -4763,8 +4763,8 @@ Object {
   },
   "id": "59",
   "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       "_copy_of_i": 3,
     },
     "heap": Heap {
@@ -4772,8 +4772,8 @@ Object {
     },
     "id": "58",
     "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
+    "tail": {
+      "head": {
         "i": 5,
       },
       "heap": Heap {
@@ -4781,13 +4781,13 @@ Object {
       },
       "id": "49",
       "name": "blockEnvironment",
-      "tail": Object {
-        "head": Object {
+      "tail": {
+        "head": {
           "eval_stream": [Function],
           "x": 1,
-          "y": Array [
+          "y": [
             [Circular],
-            Array [
+            [
               1,
               [Circular],
               [Circular],
@@ -4796,18 +4796,18 @@ Object {
         },
         "heap": Heap {
           "storage": Set {
-            Array [],
-            Array [
+            [],
+            [
               1,
-              Array [
+              [
                 [Circular],
                 [Circular],
               ],
               [Circular],
             ],
-            Array [
+            [
               [Circular],
-              Array [
+              [
                 1,
                 [Circular],
                 [Circular],
@@ -4818,8 +4818,8 @@ Object {
         },
         "id": "47",
         "name": "programEnvironment",
-        "tail": Object {
-          "head": Object {
+        "tail": {
+          "head": {
             ":::pre-declared names::": Symbol(),
           },
           "heap": Heap {
@@ -4836,8 +4836,8 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 17`] = `
-Object {
-  "head": Object {
+{
+  "head": {
     "i": 4,
   },
   "heap": Heap {
@@ -4845,8 +4845,8 @@ Object {
   },
   "id": "63",
   "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       "_copy_of_i": 4,
     },
     "heap": Heap {
@@ -4854,8 +4854,8 @@ Object {
     },
     "id": "62",
     "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
+    "tail": {
+      "head": {
         "i": 5,
       },
       "heap": Heap {
@@ -4863,13 +4863,13 @@ Object {
       },
       "id": "49",
       "name": "blockEnvironment",
-      "tail": Object {
-        "head": Object {
+      "tail": {
+        "head": {
           "eval_stream": [Function],
           "x": 1,
-          "y": Array [
+          "y": [
             [Circular],
-            Array [
+            [
               1,
               [Circular],
               [Circular],
@@ -4878,18 +4878,18 @@ Object {
         },
         "heap": Heap {
           "storage": Set {
-            Array [],
-            Array [
+            [],
+            [
               1,
-              Array [
+              [
                 [Circular],
                 [Circular],
               ],
               [Circular],
             ],
-            Array [
+            [
               [Circular],
-              Array [
+              [
                 1,
                 [Circular],
                 [Circular],
@@ -4900,8 +4900,8 @@ Object {
         },
         "id": "47",
         "name": "programEnvironment",
-        "tail": Object {
-          "head": Object {
+        "tail": {
+          "head": {
             ":::pre-declared names::": Symbol(),
           },
           "heap": Heap {
@@ -4918,18 +4918,18 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 18`] = `
-Object {
-  "callExpression": Object {
-    "arguments": Array [
-      Object {
+{
+  "callExpression": {
+    "arguments": [
+      {
         "loc": undefined,
         "type": "Literal",
-        "value": Array [
+        "value": [
           1,
           [Function],
         ],
       },
-      Object {
+      {
         "loc": undefined,
         "type": "Literal",
         "value": 2,
@@ -4967,9 +4967,9 @@ Object {
     "start": 373,
     "type": "CallExpression",
   },
-  "head": Object {
+  "head": {
     "n": 2,
-    "s": Array [
+    "s": [
       1,
       [Function],
     ],
@@ -4979,8 +4979,8 @@ Object {
   },
   "id": "75",
   "name": "es",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       "es": [Function],
     },
     "heap": Heap {
@@ -4990,18 +4990,18 @@ Object {
     },
     "id": "73",
     "name": "blockEnvironment",
-    "tail": Object {
-      "callExpression": Object {
-        "arguments": Array [
-          Object {
+    "tail": {
+      "callExpression": {
+        "arguments": [
+          {
             "loc": undefined,
             "type": "Literal",
-            "value": Array [
+            "value": [
               1,
               [Function],
             ],
           },
-          Object {
+          {
             "loc": undefined,
             "type": "Literal",
             "value": 2,
@@ -5039,9 +5039,9 @@ Object {
         "start": 393,
         "type": "CallExpression",
       },
-      "head": Object {
+      "head": {
         "n": 2,
-        "s": Array [
+        "s": [
           1,
           [Function],
         ],
@@ -5051,13 +5051,13 @@ Object {
       },
       "id": "72",
       "name": "eval_stream",
-      "tail": Object {
-        "head": Object {
+      "tail": {
+        "head": {
           "eval_stream": [Function],
           "x": 1,
-          "y": Array [
+          "y": [
             [Circular],
-            Array [
+            [
               1,
               [Circular],
               [Circular],
@@ -5066,18 +5066,18 @@ Object {
         },
         "heap": Heap {
           "storage": Set {
-            Array [],
-            Array [
+            [],
+            [
               1,
-              Array [
+              [
                 [Circular],
                 [Circular],
               ],
               [Circular],
             ],
-            Array [
+            [
               [Circular],
-              Array [
+              [
                 1,
                 [Circular],
                 [Circular],
@@ -5088,8 +5088,8 @@ Object {
         },
         "id": "47",
         "name": "programEnvironment",
-        "tail": Object {
-          "head": Object {
+        "tail": {
+          "head": {
             ":::pre-declared names::": Symbol(),
           },
           "heap": Heap {
@@ -5106,18 +5106,18 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 19`] = `
-Object {
-  "callExpression": Object {
-    "arguments": Array [
-      Object {
+{
+  "callExpression": {
+    "arguments": [
+      {
         "loc": undefined,
         "type": "Literal",
-        "value": Array [
+        "value": [
           2,
           [Function],
         ],
       },
-      Object {
+      {
         "loc": undefined,
         "type": "Literal",
         "value": 1,
@@ -5155,9 +5155,9 @@ Object {
     "start": 303,
     "type": "CallExpression",
   },
-  "head": Object {
+  "head": {
     "n": 1,
-    "s": Array [
+    "s": [
       2,
       [Function],
     ],
@@ -5167,8 +5167,8 @@ Object {
   },
   "id": "83",
   "name": "es",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       "es": [Function],
     },
     "heap": Heap {
@@ -5178,18 +5178,18 @@ Object {
     },
     "id": "73",
     "name": "blockEnvironment",
-    "tail": Object {
-      "callExpression": Object {
-        "arguments": Array [
-          Object {
+    "tail": {
+      "callExpression": {
+        "arguments": [
+          {
             "loc": undefined,
             "type": "Literal",
-            "value": Array [
+            "value": [
               1,
               [Function],
             ],
           },
-          Object {
+          {
             "loc": undefined,
             "type": "Literal",
             "value": 2,
@@ -5227,9 +5227,9 @@ Object {
         "start": 393,
         "type": "CallExpression",
       },
-      "head": Object {
+      "head": {
         "n": 2,
-        "s": Array [
+        "s": [
           1,
           [Function],
         ],
@@ -5239,13 +5239,13 @@ Object {
       },
       "id": "72",
       "name": "eval_stream",
-      "tail": Object {
-        "head": Object {
+      "tail": {
+        "head": {
           "eval_stream": [Function],
           "x": 1,
-          "y": Array [
+          "y": [
             [Circular],
-            Array [
+            [
               1,
               [Circular],
               [Circular],
@@ -5254,18 +5254,18 @@ Object {
         },
         "heap": Heap {
           "storage": Set {
-            Array [],
-            Array [
+            [],
+            [
               1,
-              Array [
+              [
                 [Circular],
                 [Circular],
               ],
               [Circular],
             ],
-            Array [
+            [
               [Circular],
-              Array [
+              [
                 1,
                 [Circular],
                 [Circular],
@@ -5276,8 +5276,8 @@ Object {
         },
         "id": "47",
         "name": "programEnvironment",
-        "tail": Object {
-          "head": Object {
+        "tail": {
+          "head": {
             ":::pre-declared names::": Symbol(),
           },
           "heap": Heap {
@@ -5294,23 +5294,23 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 20`] = `
-Object {
-  "head": Object {
-    "x": Array [
-      Array [],
+{
+  "head": {
+    "x": [
+      [],
     ],
   },
   "heap": Heap {
     "storage": Set {
-      Array [
-        Array [],
+      [
+        [],
       ],
     },
   },
   "id": "52",
   "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       "i": 1,
     },
     "heap": Heap {
@@ -5318,8 +5318,8 @@ Object {
     },
     "id": "51",
     "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
+    "tail": {
+      "head": {
         "_copy_of_i": 1,
       },
       "heap": Heap {
@@ -5327,8 +5327,8 @@ Object {
       },
       "id": "50",
       "name": "blockEnvironment",
-      "tail": Object {
-        "head": Object {
+      "tail": {
+        "head": {
           "i": 5,
         },
         "heap": Heap {
@@ -5336,13 +5336,13 @@ Object {
         },
         "id": "49",
         "name": "blockEnvironment",
-        "tail": Object {
-          "head": Object {
+        "tail": {
+          "head": {
             "eval_stream": [Function],
             "x": 1,
-            "y": Array [
+            "y": [
               [Circular],
-              Array [
+              [
                 1,
                 [Circular],
                 [Circular],
@@ -5351,18 +5351,18 @@ Object {
           },
           "heap": Heap {
             "storage": Set {
-              Array [],
-              Array [
+              [],
+              [
                 1,
-                Array [
+                [
                   [Circular],
                   [Circular],
                 ],
                 [Circular],
               ],
-              Array [
+              [
                 [Circular],
-                Array [
+                [
                   1,
                   [Circular],
                   [Circular],
@@ -5373,8 +5373,8 @@ Object {
           },
           "id": "47",
           "name": "programEnvironment",
-          "tail": Object {
-            "head": Object {
+          "tail": {
+            "head": {
               ":::pre-declared names::": Symbol(),
             },
             "heap": Heap {
@@ -5392,23 +5392,23 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 21`] = `
-Object {
-  "head": Object {
-    "x": Array [
-      Array [],
+{
+  "head": {
+    "x": [
+      [],
     ],
   },
   "heap": Heap {
     "storage": Set {
-      Array [
-        Array [],
+      [
+        [],
       ],
     },
   },
   "id": "56",
   "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       "i": 2,
     },
     "heap": Heap {
@@ -5416,8 +5416,8 @@ Object {
     },
     "id": "55",
     "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
+    "tail": {
+      "head": {
         "_copy_of_i": 2,
       },
       "heap": Heap {
@@ -5425,8 +5425,8 @@ Object {
       },
       "id": "54",
       "name": "blockEnvironment",
-      "tail": Object {
-        "head": Object {
+      "tail": {
+        "head": {
           "i": 5,
         },
         "heap": Heap {
@@ -5434,13 +5434,13 @@ Object {
         },
         "id": "49",
         "name": "blockEnvironment",
-        "tail": Object {
-          "head": Object {
+        "tail": {
+          "head": {
             "eval_stream": [Function],
             "x": 1,
-            "y": Array [
+            "y": [
               [Circular],
-              Array [
+              [
                 1,
                 [Circular],
                 [Circular],
@@ -5449,18 +5449,18 @@ Object {
           },
           "heap": Heap {
             "storage": Set {
-              Array [],
-              Array [
+              [],
+              [
                 1,
-                Array [
+                [
                   [Circular],
                   [Circular],
                 ],
                 [Circular],
               ],
-              Array [
+              [
                 [Circular],
-                Array [
+                [
                   1,
                   [Circular],
                   [Circular],
@@ -5471,8 +5471,8 @@ Object {
           },
           "id": "47",
           "name": "programEnvironment",
-          "tail": Object {
-            "head": Object {
+          "tail": {
+            "head": {
               ":::pre-declared names::": Symbol(),
             },
             "heap": Heap {
@@ -5490,23 +5490,23 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 22`] = `
-Object {
-  "head": Object {
-    "x": Array [
-      Array [],
+{
+  "head": {
+    "x": [
+      [],
     ],
   },
   "heap": Heap {
     "storage": Set {
-      Array [
-        Array [],
+      [
+        [],
       ],
     },
   },
   "id": "60",
   "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       "i": 3,
     },
     "heap": Heap {
@@ -5514,8 +5514,8 @@ Object {
     },
     "id": "59",
     "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
+    "tail": {
+      "head": {
         "_copy_of_i": 3,
       },
       "heap": Heap {
@@ -5523,8 +5523,8 @@ Object {
       },
       "id": "58",
       "name": "blockEnvironment",
-      "tail": Object {
-        "head": Object {
+      "tail": {
+        "head": {
           "i": 5,
         },
         "heap": Heap {
@@ -5532,13 +5532,13 @@ Object {
         },
         "id": "49",
         "name": "blockEnvironment",
-        "tail": Object {
-          "head": Object {
+        "tail": {
+          "head": {
             "eval_stream": [Function],
             "x": 1,
-            "y": Array [
+            "y": [
               [Circular],
-              Array [
+              [
                 1,
                 [Circular],
                 [Circular],
@@ -5547,18 +5547,18 @@ Object {
           },
           "heap": Heap {
             "storage": Set {
-              Array [],
-              Array [
+              [],
+              [
                 1,
-                Array [
+                [
                   [Circular],
                   [Circular],
                 ],
                 [Circular],
               ],
-              Array [
+              [
                 [Circular],
-                Array [
+                [
                   1,
                   [Circular],
                   [Circular],
@@ -5569,8 +5569,8 @@ Object {
           },
           "id": "47",
           "name": "programEnvironment",
-          "tail": Object {
-            "head": Object {
+          "tail": {
+            "head": {
               ":::pre-declared names::": Symbol(),
             },
             "heap": Heap {
@@ -5588,23 +5588,23 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 23`] = `
-Object {
-  "head": Object {
-    "x": Array [
-      Array [],
+{
+  "head": {
+    "x": [
+      [],
     ],
   },
   "heap": Heap {
     "storage": Set {
-      Array [
-        Array [],
+      [
+        [],
       ],
     },
   },
   "id": "64",
   "name": "blockEnvironment",
-  "tail": Object {
-    "head": Object {
+  "tail": {
+    "head": {
       "i": 4,
     },
     "heap": Heap {
@@ -5612,8 +5612,8 @@ Object {
     },
     "id": "63",
     "name": "blockEnvironment",
-    "tail": Object {
-      "head": Object {
+    "tail": {
+      "head": {
         "_copy_of_i": 4,
       },
       "heap": Heap {
@@ -5621,8 +5621,8 @@ Object {
       },
       "id": "62",
       "name": "blockEnvironment",
-      "tail": Object {
-        "head": Object {
+      "tail": {
+        "head": {
           "i": 5,
         },
         "heap": Heap {
@@ -5630,13 +5630,13 @@ Object {
         },
         "id": "49",
         "name": "blockEnvironment",
-        "tail": Object {
-          "head": Object {
+        "tail": {
+          "head": {
             "eval_stream": [Function],
             "x": 1,
-            "y": Array [
+            "y": [
               [Circular],
-              Array [
+              [
                 1,
                 [Circular],
                 [Circular],
@@ -5645,18 +5645,18 @@ Object {
           },
           "heap": Heap {
             "storage": Set {
-              Array [],
-              Array [
+              [],
+              [
                 1,
-                Array [
+                [
                   [Circular],
                   [Circular],
                 ],
                 [Circular],
               ],
-              Array [
+              [
                 [Circular],
-                Array [
+                [
                   1,
                   [Circular],
                   [Circular],
@@ -5667,8 +5667,8 @@ Object {
           },
           "id": "47",
           "name": "programEnvironment",
-          "tail": Object {
-            "head": Object {
+          "tail": {
+            "head": {
               ":::pre-declared names::": Symbol(),
             },
             "heap": Heap {
@@ -5686,12 +5686,12 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 24`] = `
-Object {
-  "head": Object {
-    "z": Array [
-      Array [
+{
+  "head": {
+    "z": [
+      [
         [Circular],
-        Array [
+        [
           1,
           [Circular],
           [Circular],
@@ -5701,19 +5701,19 @@ Object {
   },
   "heap": Heap {
     "storage": Set {
-      Array [
-        Array [
+      [
+        [
           [Circular],
-          Array [
+          [
             1,
             [Circular],
             [Circular],
           ],
         ],
       ],
-      Array [
+      [
         1,
-        Array [
+        [
           2,
           null,
         ],
@@ -5722,18 +5722,18 @@ Object {
   },
   "id": "76",
   "name": "blockEnvironment",
-  "tail": Object {
-    "callExpression": Object {
-      "arguments": Array [
-        Object {
+  "tail": {
+    "callExpression": {
+      "arguments": [
+        {
           "loc": undefined,
           "type": "Literal",
-          "value": Array [
+          "value": [
             1,
             [Function],
           ],
         },
-        Object {
+        {
           "loc": undefined,
           "type": "Literal",
           "value": 2,
@@ -5771,9 +5771,9 @@ Object {
       "start": 373,
       "type": "CallExpression",
     },
-    "head": Object {
+    "head": {
       "n": 2,
-      "s": Array [
+      "s": [
         1,
         [Function],
       ],
@@ -5783,8 +5783,8 @@ Object {
     },
     "id": "75",
     "name": "es",
-    "tail": Object {
-      "head": Object {
+    "tail": {
+      "head": {
         "es": [Function],
       },
       "heap": Heap {
@@ -5794,18 +5794,18 @@ Object {
       },
       "id": "73",
       "name": "blockEnvironment",
-      "tail": Object {
-        "callExpression": Object {
-          "arguments": Array [
-            Object {
+      "tail": {
+        "callExpression": {
+          "arguments": [
+            {
               "loc": undefined,
               "type": "Literal",
-              "value": Array [
+              "value": [
                 1,
                 [Function],
               ],
             },
-            Object {
+            {
               "loc": undefined,
               "type": "Literal",
               "value": 2,
@@ -5843,9 +5843,9 @@ Object {
           "start": 393,
           "type": "CallExpression",
         },
-        "head": Object {
+        "head": {
           "n": 2,
-          "s": Array [
+          "s": [
             1,
             [Function],
           ],
@@ -5855,13 +5855,13 @@ Object {
         },
         "id": "72",
         "name": "eval_stream",
-        "tail": Object {
-          "head": Object {
+        "tail": {
+          "head": {
             "eval_stream": [Function],
             "x": 1,
-            "y": Array [
+            "y": [
               [Circular],
-              Array [
+              [
                 1,
                 [Circular],
                 [Circular],
@@ -5870,18 +5870,18 @@ Object {
           },
           "heap": Heap {
             "storage": Set {
-              Array [],
-              Array [
+              [],
+              [
                 1,
-                Array [
+                [
                   [Circular],
                   [Circular],
                 ],
                 [Circular],
               ],
-              Array [
+              [
                 [Circular],
-                Array [
+                [
                   1,
                   [Circular],
                   [Circular],
@@ -5892,8 +5892,8 @@ Object {
           },
           "id": "47",
           "name": "programEnvironment",
-          "tail": Object {
-            "head": Object {
+          "tail": {
+            "head": {
               ":::pre-declared names::": Symbol(),
             },
             "heap": Heap {
@@ -5911,12 +5911,12 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 25`] = `
-Object {
-  "head": Object {
-    "z": Array [
-      Array [
+{
+  "head": {
+    "z": [
+      [
         [Circular],
-        Array [
+        [
           1,
           [Circular],
           [Circular],
@@ -5926,17 +5926,17 @@ Object {
   },
   "heap": Heap {
     "storage": Set {
-      Array [
-        Array [
+      [
+        [
           [Circular],
-          Array [
+          [
             1,
             [Circular],
             [Circular],
           ],
         ],
       ],
-      Array [
+      [
         2,
         null,
       ],
@@ -5944,18 +5944,18 @@ Object {
   },
   "id": "84",
   "name": "blockEnvironment",
-  "tail": Object {
-    "callExpression": Object {
-      "arguments": Array [
-        Object {
+  "tail": {
+    "callExpression": {
+      "arguments": [
+        {
           "loc": undefined,
           "type": "Literal",
-          "value": Array [
+          "value": [
             2,
             [Function],
           ],
         },
-        Object {
+        {
           "loc": undefined,
           "type": "Literal",
           "value": 1,
@@ -5993,9 +5993,9 @@ Object {
       "start": 303,
       "type": "CallExpression",
     },
-    "head": Object {
+    "head": {
       "n": 1,
-      "s": Array [
+      "s": [
         2,
         [Function],
       ],
@@ -6005,8 +6005,8 @@ Object {
     },
     "id": "83",
     "name": "es",
-    "tail": Object {
-      "head": Object {
+    "tail": {
+      "head": {
         "es": [Function],
       },
       "heap": Heap {
@@ -6016,18 +6016,18 @@ Object {
       },
       "id": "73",
       "name": "blockEnvironment",
-      "tail": Object {
-        "callExpression": Object {
-          "arguments": Array [
-            Object {
+      "tail": {
+        "callExpression": {
+          "arguments": [
+            {
               "loc": undefined,
               "type": "Literal",
-              "value": Array [
+              "value": [
                 1,
                 [Function],
               ],
             },
-            Object {
+            {
               "loc": undefined,
               "type": "Literal",
               "value": 2,
@@ -6065,9 +6065,9 @@ Object {
           "start": 393,
           "type": "CallExpression",
         },
-        "head": Object {
+        "head": {
           "n": 2,
-          "s": Array [
+          "s": [
             1,
             [Function],
           ],
@@ -6077,13 +6077,13 @@ Object {
         },
         "id": "72",
         "name": "eval_stream",
-        "tail": Object {
-          "head": Object {
+        "tail": {
+          "head": {
             "eval_stream": [Function],
             "x": 1,
-            "y": Array [
+            "y": [
               [Circular],
-              Array [
+              [
                 1,
                 [Circular],
                 [Circular],
@@ -6092,18 +6092,18 @@ Object {
           },
           "heap": Heap {
             "storage": Set {
-              Array [],
-              Array [
+              [],
+              [
                 1,
-                Array [
+                [
                   [Circular],
                   [Circular],
                 ],
                 [Circular],
               ],
-              Array [
+              [
                 [Circular],
-                Array [
+                [
                   1,
                   [Circular],
                   [Circular],
@@ -6114,8 +6114,8 @@ Object {
           },
           "id": "47",
           "name": "programEnvironment",
-          "tail": Object {
-            "head": Object {
+          "tail": {
+            "head": {
               ":::pre-declared names::": Symbol(),
             },
             "heap": Heap {
@@ -6133,13 +6133,13 @@ Object {
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 7 26`] = `
-Array [
+[
   ":::pre-declared names::: ",
   Symbol(),
   "y: ",
-  Array [
+  [
     [Circular],
-    Array [
+    [
       1,
       [Circular],
       [Circular],
@@ -6150,30 +6150,30 @@ Array [
   "x: ",
   1,
   "1:= ",
-  Array [],
+  [],
   "n: ",
   1,
   "1:= ",
-  Array [
+  [
     1,
     [Function],
   ],
   "xs: ",
-  Array [
+  [
     1,
     [Function],
   ],
   "n: ",
   2,
   "1:= ",
-  Array [
+  [
     2,
     [Function],
   ],
   "i: ",
   5,
   "s: ",
-  Array [
+  [
     1,
     [Function],
   ],
@@ -6200,40 +6200,40 @@ Array [
   "i:= ",
   4,
   "s: ",
-  Array [
+  [
     1,
     [Function],
   ],
   "n: ",
   2,
   "s: ",
-  Array [
+  [
     2,
     [Function],
   ],
   "n: ",
   1,
   "x:= ",
-  Array [
-    Array [],
+  [
+    [],
   ],
   "x:= ",
-  Array [
-    Array [],
+  [
+    [],
   ],
   "x:= ",
-  Array [
-    Array [],
+  [
+    [],
   ],
   "x:= ",
-  Array [
-    Array [],
+  [
+    [],
   ],
   "z:= ",
-  Array [
-    Array [
+  [
+    [
       [Circular],
-      Array [
+      [
         1,
         [Circular],
         [Circular],
@@ -6241,18 +6241,18 @@ Array [
     ],
   ],
   "1:= ",
-  Array [
+  [
     1,
-    Array [
+    [
       2,
       null,
     ],
   ],
   "z:= ",
-  Array [
-    Array [
+  [
+    [
       [Circular],
-      Array [
+      [
         1,
         [Circular],
         [Circular],
@@ -6260,7 +6260,7 @@ Array [
     ],
   ],
   "1:= ",
-  Array [
+  [
     2,
     null,
   ],
