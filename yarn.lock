@@ -7874,7 +7874,7 @@ __metadata:
     react-copy-to-clipboard: "npm:^5.1.0"
     react-debounce-render: "npm:^8.0.2"
     react-dom: "npm:^18.3.1"
-    react-drag-drop-files: "npm:^2.3.10"
+    react-drag-drop-files: "npm:^3.0.0"
     react-draggable: "npm:^4.4.5"
     react-dropzone: "npm:^14.2.3"
     react-error-overlay: "npm:^6.0.11"
@@ -12019,16 +12019,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-drag-drop-files@npm:^2.3.10":
-  version: 2.4.0
-  resolution: "react-drag-drop-files@npm:2.4.0"
+"react-drag-drop-files@npm:^3.0.0":
+  version: 3.0.1
+  resolution: "react-drag-drop-files@npm:3.0.1"
   dependencies:
     prop-types: "npm:^15.7.2"
     styled-components: "npm:^6.1.11"
   peerDependencies:
     react: ^18.0.0
     react-dom: ^18.0.0
-  checksum: 10c0/cfe076c2f336bc7329daf403b16b78f32f1389a3f8e24492a3ab802021c11263bb610b52f67365336181fd46b1646368b9e10904c09f54e1755bfe6cc1924cf4
+  checksum: 10c0/07ed13e0c4330f8a7a5003ce4dffd5ba82c1a1bf4fc6562790fcb8944a8b006d4a7db0671a20dfeeb888fe221e04126840e65a8499863bdaf678f9267f405c58
   languageName: node
   linkType: hard
 
