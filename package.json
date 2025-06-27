@@ -86,7 +86,7 @@
     "react-mde": "^11.5.0",
     "react-papaparse": "^4.0.2",
     "react-qr-reader": "^3.0.0-beta-1",
-    "react-redux": "^8.1.1",
+    "react-redux": "^9.0.0",
     "react-router-dom": "^6.14.1",
     "react-select": "^5.7.3",
     "react-simple-keyboard": "^3.6.27",
