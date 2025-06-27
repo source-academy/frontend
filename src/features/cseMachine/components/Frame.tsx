@@ -1,4 +1,3 @@
-import { isPrimitive } from '@sentry/utils';
 import React from 'react';
 import { Group, Rect } from 'react-konva';
 
@@ -15,6 +14,7 @@ import {
   isClosure,
   isDataArray,
   isDummyKey,
+  isPrimitiveData,
   isSourceObject,
   isUnassigned
 } from '../CseMachineUtils';
@@ -140,7 +140,7 @@ export class Frame extends Visible implements IHoverable {
       );
       if (isUnassigned(data.value)) {
         bindingTextWidth += Config.TextPaddingX + getTextWidth(Config.UnassignedData);
-      } else if (isPrimitive(data.value)) {
+      } else if (isPrimitiveData(data.value)) {
         bindingTextWidth +=
           Config.TextPaddingX +
           getTextWidth(
