@@ -1,5 +1,3 @@
-import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
-
 import CommonsActions from '../../commons/application/actions/CommonsActions';
 import InterpreterActions from '../../commons/application/actions/InterpreterActions';
 import SessionActions from '../../commons/application/actions/SessionActions';
@@ -12,6 +10,7 @@ import AchievementActions from '../../features/achievement/AchievementActions';
 import DashboardActions from '../../features/dashboard/DashboardActions';
 import GitHubActions from '../../features/github/GitHubActions';
 import GroundControlActions from '../../features/groundControl/GroundControlActions';
+import LeaderboardActions from '../../features/leaderboard/LeaderboardActions';
 import PersistenceActions from '../../features/persistence/PersistenceActions';
 import PlaygroundActions from '../../features/playground/PlaygroundActions';
 import RemoteExecutionActions from '../../features/remoteExecution/RemoteExecutionActions';
