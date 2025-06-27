@@ -22,7 +22,7 @@ import WorkspaceActions from '../workspace/WorkspaceActions';
 import { selectWorkspace } from './SafeEffects';
 
 const PlaygroundSaga = combineSagaHandlers({
-  [PlaygroundActions.changeQueryString.type]: updateQueryString,
+  [PlaygroundActions.generateLzString.type]: updateQueryString,
   [PlaygroundActions.shortenURL.type]: function* ({ payload: keyword }) {
     const queryString = yield select((state: OverallState) => state.playground.queryString);
     const errorMsg = 'ERROR';

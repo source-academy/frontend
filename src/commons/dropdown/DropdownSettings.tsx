@@ -10,7 +10,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 
 import { EditorBinding, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
 import LocaleSelector from './LocaleSelector';

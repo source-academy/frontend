@@ -197,6 +197,7 @@ exports[`Parse figures FIGURE with image and scale successful 1`] = `
 >
   <a
     className="sicp-anchor-link"
+    data-discover="true"
     href="/id"
     onClick={[Function]}
     style={
@@ -247,6 +248,7 @@ exports[`Parse figures FIGURE with image successful 1`] = `
 >
   <a
     className="sicp-anchor-link"
+    data-discover="true"
     href="/id"
     onClick={[Function]}
     style={
@@ -297,6 +299,7 @@ exports[`Parse figures FIGURE with snippet successful 1`] = `
 >
   <a
     className="sicp-anchor-link"
+    data-discover="true"
     href="/id"
     onClick={[Function]}
     style={
@@ -345,6 +348,7 @@ exports[`Parse figures FIGURE with table successful 1`] = `
 >
   <a
     className="sicp-anchor-link"
+    data-discover="true"
     href="/id"
     onClick={[Function]}
     style={
@@ -485,6 +489,7 @@ exports[`Parse latex LATEX inline successful 1`] = `
 exports[`Parse links FOOTNOTE_REF  successful 1`] = `
 <sup>
   <a
+    data-discover="true"
     href="/bad-link"
     onClick={[Function]}
   >
@@ -503,6 +508,7 @@ exports[`Parse links LINK  successful 1`] = `
 
 exports[`Parse links REF  successful 1`] = `
 <a
+  data-discover="true"
   href="/bad-link"
   onClick={[Function]}
 >

@@ -41,9 +41,7 @@ exports[`Autograder renders autograder results with different statuses correctly
       transitionDuration={100}
     >
       <Blueprint5.Icon
-        autoLoad={true}
         icon="help"
-        tagName="span"
       />
     </Blueprint5.Tooltip>
   </Blueprint5.Button>
@@ -90,9 +88,7 @@ exports[`Autograder renders autograder results with different statuses correctly
           >
             S/N
             <Blueprint5.Icon
-              autoLoad={true}
               icon="caret-down"
-              tagName="span"
             />
           </div>
           <div
@@ -100,9 +96,7 @@ exports[`Autograder renders autograder results with different statuses correctly
           >
             Testcase status
             <Blueprint5.Icon
-              autoLoad={true}
               icon="caret-down"
-              tagName="span"
             />
           </div>
         </div>
@@ -111,9 +105,7 @@ exports[`Autograder renders autograder results with different statuses correctly
         >
           Expected result
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
         <div
@@ -121,9 +113,7 @@ exports[`Autograder renders autograder results with different statuses correctly
         >
           Actual result
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
       </div>
@@ -238,9 +228,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
       transitionDuration={100}
     >
       <Blueprint5.Icon
-        autoLoad={true}
         icon="help"
-        tagName="span"
       />
     </Blueprint5.Tooltip>
   </Blueprint5.Button>
@@ -262,9 +250,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         >
           Testcase
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
         <div
@@ -272,9 +258,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         >
           Expected result
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
         <div
@@ -282,9 +266,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         >
           Actual result
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
       </div>
@@ -430,9 +412,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
       transitionDuration={100}
     >
       <Blueprint5.Icon
-        autoLoad={true}
         icon="help"
-        tagName="span"
       />
     </Blueprint5.Tooltip>
   </Blueprint5.Button>
@@ -454,9 +434,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         >
           Testcase
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
         <div
@@ -464,9 +442,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         >
           Expected result
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
         <div
@@ -474,9 +450,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         >
           Actual result
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
       </div>
@@ -622,9 +596,7 @@ exports[`Autograder renders placeholders correctly when testcases and results ar
       transitionDuration={100}
     >
       <Blueprint5.Icon
-        autoLoad={true}
         icon="help"
-        tagName="span"
       />
     </Blueprint5.Tooltip>
   </Blueprint5.Button>
@@ -709,9 +681,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
       transitionDuration={100}
     >
       <Blueprint5.Icon
-        autoLoad={true}
         icon="help"
-        tagName="span"
       />
     </Blueprint5.Tooltip>
   </Blueprint5.Button>
@@ -733,9 +703,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
         >
           Testcase
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
         <div
@@ -743,9 +711,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
         >
           Expected result
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
         <div
@@ -753,9 +719,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
         >
           Actual result
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
       </div>
@@ -915,9 +879,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
       transitionDuration={100}
     >
       <Blueprint5.Icon
-        autoLoad={true}
         icon="help"
-        tagName="span"
       />
     </Blueprint5.Tooltip>
   </Blueprint5.Button>
@@ -939,9 +901,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
         >
           Testcase
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
         <div
@@ -949,9 +909,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
         >
           Expected result
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
         <div
@@ -959,9 +917,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
         >
           Actual result
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
       </div>

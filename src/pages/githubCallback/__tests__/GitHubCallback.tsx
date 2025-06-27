@@ -1,8 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { MockedFunction } from 'jest-mock';
 import { act } from 'react';
-import { Route, Routes } from 'react-router';
-import { StaticRouter } from 'react-router-dom/server';
+import { Route, Routes, StaticRouter } from 'react-router';
 
 import Constants from '../../../commons/utils/Constants';
 import { exchangeAccessCode } from '../../../features/github/GitHubUtils';
