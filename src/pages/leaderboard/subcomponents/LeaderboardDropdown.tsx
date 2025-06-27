@@ -1,7 +1,7 @@
 import 'src/styles/Leaderboard.scss';
 
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { LeaderboardContestDetails } from 'src/features/leaderboard/LeaderboardTypes';
 

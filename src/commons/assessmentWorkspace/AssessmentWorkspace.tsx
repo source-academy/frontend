@@ -229,6 +229,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     if (!assessment) {
       return;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /**
