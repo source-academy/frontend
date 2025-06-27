@@ -23,7 +23,7 @@ exports[`CSE Machine component renders correctly 1`] = `
         className="bp5-slider-track"
       >
         <div
-          className="bp5-slider-progress bp5-intent-primary"
+          className="bp5-slider-progress"
           style={
             {
               "left": "0.00%",
@@ -107,7 +107,6 @@ exports[`CSE Machine component renders correctly 1`] = `
         >
           <a
             aria-disabled={true}
-            aria-expanded={false}
             className="bp5-button bp5-disabled"
             disabled={true}
             onBlur={[Function]}
@@ -168,7 +167,6 @@ exports[`CSE Machine component renders correctly 1`] = `
         >
           <a
             aria-disabled={true}
-            aria-expanded={false}
             className="bp5-button bp5-disabled"
             disabled={true}
             onBlur={[Function]}
@@ -345,7 +343,6 @@ exports[`CSE Machine component renders correctly 1`] = `
         >
           <a
             aria-disabled={true}
-            aria-expanded={false}
             className="bp5-button bp5-disabled"
             disabled={true}
             onBlur={[Function]}
@@ -406,7 +403,6 @@ exports[`CSE Machine component renders correctly 1`] = `
         >
           <a
             aria-disabled={true}
-            aria-expanded={false}
             className="bp5-button bp5-disabled"
             disabled={true}
             onBlur={[Function]}

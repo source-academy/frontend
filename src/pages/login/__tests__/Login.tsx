@@ -1,7 +1,6 @@
 import { Store } from '@reduxjs/toolkit';
 import { render } from '@testing-library/react';
 import { Provider, useDispatch } from 'react-redux';
-import * as ReactRouter from 'react-router';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
@@ -28,6 +27,13 @@ jest.mock('../../../commons/utils/Constants', () => {
     }
   };
 });
+
+// https://stackoverflow.com/a/74525026
+const navigateSpy = jest.fn();
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
+  useNavigate: () => navigateSpy
+}));
 
 const createTestComponent = (mockStore: Store<OverallState>, location: string) => {
   const router = createMemoryRouter(
@@ -96,9 +102,6 @@ describe('Login', () => {
 
   describe('When isLoggedIn and no course', () => {
     test('/login redirects to /welcome', () => {
-      const navigateSpy = jest.fn();
-      jest.spyOn(ReactRouter, 'useNavigate').mockReturnValue(navigateSpy);
-
       const store = mockInitialStore({
         session: {
           name: 'Bob'
@@ -111,9 +114,6 @@ describe('Login', () => {
     });
 
     test('/login/callback redirects to /welcome', () => {
-      const navigateSpy = jest.fn();
-      jest.spyOn(ReactRouter, 'useNavigate').mockReturnValue(navigateSpy);
-
       const store = mockInitialStore({
         session: {
           name: 'Bob'
@@ -128,9 +128,6 @@ describe('Login', () => {
 
   describe('When isLoggedIn and has course', () => {
     test('/login redirects to /courses/<courseId>', () => {
-      const navigateSpy = jest.fn();
-      jest.spyOn(ReactRouter, 'useNavigate').mockReturnValue(navigateSpy);
-
       const courseId = 2;
       const store = mockInitialStore({
         session: {
@@ -145,9 +142,6 @@ describe('Login', () => {
     });
 
     test('/login/callback redirects to /courses/<courseId>', () => {
-      const navigateSpy = jest.fn();
-      jest.spyOn(ReactRouter, 'useNavigate').mockReturnValue(navigateSpy);
-
       const courseId = 2;
       const store = mockInitialStore({
         session: {
@@ -163,9 +157,6 @@ describe('Login', () => {
   });
 
   test('/login/callback redirects to /login when not isLoggedIn, nor code/ticket nor SAML redirect', () => {
-    const navigateSpy = jest.fn();
-    jest.spyOn(ReactRouter, 'useNavigate').mockReturnValue(navigateSpy);
-
     const store = mockInitialStore();
     const app = createTestComponent(store, '/login/callback');
     render(app);
