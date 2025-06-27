@@ -121,7 +121,7 @@ export function* routerNavigate(path: string) {
 const newBackendSagaOne = combineSagaHandlers({
   [SessionActions.fetchAuth.type]: function* (action): any {
     const { code, providerId: payloadProviderId } = action.payload;
-    const isVscode = yield select(state => state.vscode.isVscode);
+    const isVscode: boolean = yield select((state: OverallState) => state.vscode.isVscode);
 
     const providerId = payloadProviderId || (getDefaultProvider() || [null])[0];
     if (!providerId) {
