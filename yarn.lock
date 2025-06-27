@@ -3969,10 +3969,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/google.picker@npm:^0.0.39":
-  version: 0.0.39
-  resolution: "@types/google.picker@npm:0.0.39"
-  checksum: 10c0/8bb9a4e838e0ab431a1115b418d2f8458d58ce0f888c838686c39d0d0cbbc3aafb5e6f9f56ca161028cab94410380319195edfce8ab3be11c046e255322d5b3c
+"@types/google.picker@npm:^0.0.51":
+  version: 0.0.51
+  resolution: "@types/google.picker@npm:0.0.51"
+  checksum: 10c0/2dde89d735a5e4d353685ec21b4e08c3331f88bf4a5707086b1103b6b08f1d3f7fc93400ef8807a842baa1a514f6d0afd6a5939d99f59ea4e4ac0252b14cf73c
   languageName: node
   linkType: hard
 
@@ -7681,7 +7681,7 @@ __metadata:
     "@types/gapi.auth2": "npm:^0.0.61"
     "@types/gapi.client": "npm:^1.0.5"
     "@types/gapi.client.drive-v3": "npm:^0.0.5"
-    "@types/google.picker": "npm:^0.0.39"
+    "@types/google.picker": "npm:^0.0.51"
     "@types/identity-obj-proxy": "npm:^3"
     "@types/jest": "npm:^29.0.0"
     "@types/js-cookie": "npm:^3.0.6"
