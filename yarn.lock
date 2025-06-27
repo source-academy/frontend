@@ -4471,32 +4471,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ag-charts-types@npm:10.3.1":
-  version: 10.3.1
-  resolution: "ag-charts-types@npm:10.3.1"
-  checksum: 10c0/b81f60a83c3f023596102b65d83c28567f17117e5d653d4d4a00e0bd0269c9d4a7b41d9d98c6138e082c045a46f24d4ca1a24a61bad0efe659b818c557701768
+"ag-charts-types@npm:10.3.8":
+  version: 10.3.8
+  resolution: "ag-charts-types@npm:10.3.8"
+  checksum: 10c0/89b6cf77367bd0877674f966a4ba96c226150ae375565b14dfd64297be5685636f57a90864c49e9462bc139b28102da165eff74f8abcace152b9228981efb0f6
   languageName: node
   linkType: hard
 
-"ag-grid-community@npm:32.3.1, ag-grid-community@npm:^32.3.1":
-  version: 32.3.1
-  resolution: "ag-grid-community@npm:32.3.1"
+"ag-grid-community@npm:32.3.8, ag-grid-community@npm:^32.3.1":
+  version: 32.3.8
+  resolution: "ag-grid-community@npm:32.3.8"
   dependencies:
-    ag-charts-types: "npm:10.3.1"
-  checksum: 10c0/7dfa250d38762599dec623d3be4bfbcbff5aa0564ec34d4c8a8af09f184d4f71b939a8afbe2f44a0755c23f6020afb8571f4a9d01c5dcf1ebc5ee7861dbfb920
+    ag-charts-types: "npm:10.3.8"
+  checksum: 10c0/6b084374412195fab34fe311483d2c19b789f034b643514e88cd4639cdaa7bd2077d937e167af490af3c0be46449a7a52b37ccb253f1c92fa22d8f1e22abb134
   languageName: node
   linkType: hard
 
 "ag-grid-react@npm:^32.3.1":
-  version: 32.3.1
-  resolution: "ag-grid-react@npm:32.3.1"
+  version: 32.3.8
+  resolution: "ag-grid-react@npm:32.3.8"
   dependencies:
-    ag-grid-community: "npm:32.3.1"
+    ag-grid-community: "npm:32.3.8"
     prop-types: "npm:^15.8.1"
   peerDependencies:
-    react: ^16.3.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.3.0 || ^17.0.0 || ^18.0.0
-  checksum: 10c0/75f403ba7a037bfc04ba552d7f00a3c7179c7f48d92c8538799a8dd7d6c1daad4aa07ca2ca0c1cdc4f2355bb912d95aea6680c36cdc39785ba083cba2d3ec516
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10c0/0eb194da84a43a78c3c1b2aa571ac5e5a58053830824a682baede7cac846b9db1d9f12868309fb5da0bec2ba73dcf9d8d4a6a58b7ca5a0c232764e7b48946e3a
   languageName: node
   linkType: hard
 
