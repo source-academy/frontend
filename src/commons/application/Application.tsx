@@ -124,7 +124,7 @@ const Application: React.FC = () => {
           dispatch(WorkspaceActions.evalEditor(message.workspaceLocation));
           break;
         case MessageTypeNames.Navigate:
-          window.location.replace(message.route);
+          window.location.pathname = message.route;
           // TODO: Figure out why this doesn't work, this is faster in theory
           // navigate(message.route);
           break;
