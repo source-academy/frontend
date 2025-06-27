@@ -4395,11 +4395,11 @@ __metadata:
   linkType: hard
 
 "@types/redux-mock-store@npm:^1.0.3":
-  version: 1.0.6
-  resolution: "@types/redux-mock-store@npm:1.0.6"
+  version: 1.5.0
+  resolution: "@types/redux-mock-store@npm:1.5.0"
   dependencies:
     redux: "npm:^4.0.5"
-  checksum: 10c0/26f3b5091f131e0bcd150e3a621f21dc1ba059352729ee4d5154812042ea0cf8d1ae2880263367e55222130db14ec912bfda0b7ca184413f4989959fd5a2a70b
+  checksum: 10c0/d23bc4fce2f504f8e42c650b8b0b798c833471078fe6513aeb7cba16ced22798464f2a2b997e8fa54afb574de8186090c749fdf61cf47fdcd7bb245aebe9113d
   languageName: node
   linkType: hard
 
@@ -12630,11 +12630,13 @@ __metadata:
   linkType: hard
 
 "redux-mock-store@npm:^1.5.4":
-  version: 1.5.4
-  resolution: "redux-mock-store@npm:1.5.4"
+  version: 1.5.5
+  resolution: "redux-mock-store@npm:1.5.5"
   dependencies:
     lodash.isplainobject: "npm:^4.0.6"
-  checksum: 10c0/674fc7a68ffdb9a9ad50c9f987a2711387b1fc348a8ed3d07b7abd4d2560762347a9565cf9080e786d9f66012ff47f90bef244623c62136511d9b4f2411fb658
+  peerDependencies:
+    redux: "*"
+  checksum: 10c0/99cdb89b4b8db9046c2fe1eae82072bb77fba079606cbde87c47c7a2dcc8c3c51c4c553fcce80b935a61bbc2eeb10c6f5e32077c997a35715a4c8bf867499856
   languageName: node
   linkType: hard
 
