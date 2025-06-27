@@ -13,9 +13,7 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
         captureDismiss={false}
         content={
           <Blueprint5.Navbar>
-            <Blueprint5.NavbarGroup
-              align="left"
-            />
+            <Blueprint5.NavbarGroup />
           </Blueprint5.Navbar>
         }
         defaultIsOpen={false}
@@ -92,9 +90,7 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
         to="/contributors"
       >
         <Blueprint5.Icon
-          autoLoad={true}
           icon="heart"
-          tagName="span"
         />
       </NavLink>
       <div
@@ -156,9 +152,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
         captureDismiss={false}
         content={
           <Blueprint5.Navbar>
-            <Blueprint5.NavbarGroup
-              align="left"
-            >
+            <Blueprint5.NavbarGroup>
               <DesktopNavLink
                 disabled={false}
                 hasNotifications={true}
@@ -301,9 +295,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
         to="/contributors"
       >
         <Blueprint5.Icon
-          autoLoad={true}
           icon="heart"
-          tagName="span"
         />
       </NavLink>
       <div
@@ -377,9 +369,7 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
         captureDismiss={false}
         content={
           <Blueprint5.Navbar>
-            <Blueprint5.NavbarGroup
-              align="left"
-            />
+            <Blueprint5.NavbarGroup />
           </Blueprint5.Navbar>
         }
         defaultIsOpen={false}
@@ -456,9 +446,7 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
         to="/contributors"
       >
         <Blueprint5.Icon
-          autoLoad={true}
           icon="heart"
-          tagName="span"
         />
       </NavLink>
       <div
