@@ -1,8 +1,8 @@
 /**
  * Intermediate implementation of deprecated <Prompt /> component
- * from react-router-dom's v5 to v6 upgrade.
+ * from react-router's v5 to v6 upgrade.
  *
- * react-router-dom plans to bring <Prompt /> back in the future. Until then,
+ * react-router plans to bring <Prompt /> back in the future. Until then,
  * we can use this suggested implementation.
  *
  * See: https://github.com/remix-run/react-router/issues/8139#issuecomment-1382428200

@@ -5,8 +5,8 @@ import { shallowRender } from 'src/commons/utils/TestUtils';
 import { Role } from '../../application/ApplicationTypes';
 import NavigationBar from '../NavigationBar';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
   useLocation: jest.fn()
 }));
 jest.mock('react-redux', () => ({
