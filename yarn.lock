@@ -11930,12 +11930,12 @@ __metadata:
   linkType: hard
 
 "re-resizable@npm:^6.9.9":
-  version: 6.9.11
-  resolution: "re-resizable@npm:6.9.11"
+  version: 6.11.2
+  resolution: "re-resizable@npm:6.11.2"
   peerDependencies:
-    react: ^16.13.1 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0
-  checksum: 10c0/d7361b63e8f819f821b34bb3234a8606f086155b739737243d3f0f7ad82fd66642aff6f90fbc5b2df2f81f8572ab3289b9c17a5142c39b98cd14194e391932f2
+    react: ^16.13.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10c0/964c37b02b03ba9103fd67e4a486cf8cb57856eb92508677d8e2a350ec2b2a978014ed7dd4e2531c90ba89eedb0982b613590311471bfd66b14fdec709a09f17
   languageName: node
   linkType: hard
 

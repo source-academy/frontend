@@ -324,7 +324,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
             </div>
             <div>
               <div
-                class=""
                 style="position: absolute; user-select: none; width: 10px; height: 100%; top: 0px; cursor: col-resize; right: -5px;"
               />
             </div>
@@ -1222,7 +1221,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
               />
               <div>
                 <div
-                  class=""
                   style="position: absolute; user-select: none; width: 100%; height: 10px; left: 0px; cursor: row-resize; bottom: -5px;"
                 />
               </div>
@@ -1649,7 +1647,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
             </div>
             <div>
               <div
-                class=""
                 style="position: absolute; user-select: none; width: 10px; height: 100%; top: 0px; cursor: col-resize; right: -5px;"
               />
             </div>
@@ -2006,7 +2003,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
               />
               <div>
                 <div
-                  class=""
                   style="position: absolute; user-select: none; width: 100%; height: 10px; left: 0px; cursor: row-resize; bottom: -5px;"
                 />
               </div>
@@ -2455,7 +2451,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
             </div>
             <div>
               <div
-                class=""
                 style="position: absolute; user-select: none; width: 10px; height: 100%; top: 0px; cursor: col-resize; right: -5px;"
               />
             </div>
@@ -2824,7 +2819,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
               />
               <div>
                 <div
-                  class=""
                   style="position: absolute; user-select: none; width: 100%; height: 10px; left: 0px; cursor: row-resize; bottom: -5px;"
                 />
               </div>
@@ -3303,7 +3297,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
             </div>
             <div>
               <div
-                class=""
                 style="position: absolute; user-select: none; width: 10px; height: 100%; top: 0px; cursor: col-resize; right: -5px;"
               />
             </div>
@@ -3672,7 +3665,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
               />
               <div>
                 <div
-                  class=""
                   style="position: absolute; user-select: none; width: 100%; height: 10px; left: 0px; cursor: row-resize; bottom: -5px;"
                 />
               </div>
@@ -4151,7 +4143,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
             </div>
             <div>
               <div
-                class=""
                 style="position: absolute; user-select: none; width: 10px; height: 100%; top: 0px; cursor: col-resize; right: -5px;"
               />
             </div>
@@ -4738,7 +4729,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
               />
               <div>
                 <div
-                  class=""
                   style="position: absolute; user-select: none; width: 100%; height: 10px; left: 0px; cursor: row-resize; bottom: -5px;"
                 />
               </div>
