@@ -1690,6 +1690,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@emnapi/core@npm:^1.4.3":
+  version: 1.4.3
+  resolution: "@emnapi/core@npm:1.4.3"
+  dependencies:
+    "@emnapi/wasi-threads": "npm:1.0.2"
+    tslib: "npm:^2.4.0"
+  checksum: 10c0/e30101d16d37ef3283538a35cad60e22095aff2403fb9226a35330b932eb6740b81364d525537a94eb4fb51355e48ae9b10d779c0dd1cdcd55d71461fe4b45c7
+  languageName: node
+  linkType: hard
+
+"@emnapi/runtime@npm:^1.4.3":
+  version: 1.4.3
+  resolution: "@emnapi/runtime@npm:1.4.3"
+  dependencies:
+    tslib: "npm:^2.4.0"
+  checksum: 10c0/3b7ab72d21cb4e034f07df80165265f85f445ef3f581d1bc87b67e5239428baa00200b68a7d5e37a0425c3a78320b541b07f76c5530f6f6f95336a6294ebf30b
+  languageName: node
+  linkType: hard
+
+"@emnapi/wasi-threads@npm:1.0.2":
+  version: 1.0.2
+  resolution: "@emnapi/wasi-threads@npm:1.0.2"
+  dependencies:
+    tslib: "npm:^2.4.0"
+  checksum: 10c0/f0621b1fc715221bd2d8332c0ca922617bcd77cdb3050eae50a124eb8923c54fa425d23982dc8f29d505c8798a62d1049bace8b0686098ff9dd82270e06d772e
+  languageName: node
+  linkType: hard
+
 "@emotion/babel-plugin@npm:^11.11.0":
   version: 11.11.0
   resolution: "@emotion/babel-plugin@npm:11.11.0"
@@ -2310,58 +2338,69 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@module-federation/error-codes@npm:0.13.0":
-  version: 0.13.0
-  resolution: "@module-federation/error-codes@npm:0.13.0"
-  checksum: 10c0/a8aec3037dbc2b093266a5861d1ac8fb6b766d2d4167cb9bbd31165cbd26c89ee34d39536c6c39ae37198ae51761867e585fc530f63ea66b16841ad281975857
+"@module-federation/error-codes@npm:0.15.0":
+  version: 0.15.0
+  resolution: "@module-federation/error-codes@npm:0.15.0"
+  checksum: 10c0/93379d5e3afc31588e7923434d570a4663529f1853c1617f73109913035258b029caa16c810004e6870087185110d81ce8179ba85185006264a48ac32f8d7735
   languageName: node
   linkType: hard
 
-"@module-federation/runtime-core@npm:0.13.0":
-  version: 0.13.0
-  resolution: "@module-federation/runtime-core@npm:0.13.0"
+"@module-federation/runtime-core@npm:0.15.0":
+  version: 0.15.0
+  resolution: "@module-federation/runtime-core@npm:0.15.0"
   dependencies:
-    "@module-federation/error-codes": "npm:0.13.0"
-    "@module-federation/sdk": "npm:0.13.0"
-  checksum: 10c0/36aeeb616115213d5be731c81c42f8982a8d0bd1a523b4a46804f2eb6e215f25c071764c85a9435a7680d86ae047149cc52d8bd6def79a48184b6397679dc4ad
+    "@module-federation/error-codes": "npm:0.15.0"
+    "@module-federation/sdk": "npm:0.15.0"
+  checksum: 10c0/f3da5fd29f7f2bf1593a33ccaf8bf76cec6bb24272d8b4794152ab6c4eb7d01f648ad7fafd5ca6de65bfb8dbef610ac844a5583bd1f4111b3914a90801f2efd1
   languageName: node
   linkType: hard
 
-"@module-federation/runtime-tools@npm:0.13.0":
-  version: 0.13.0
-  resolution: "@module-federation/runtime-tools@npm:0.13.0"
+"@module-federation/runtime-tools@npm:0.15.0":
+  version: 0.15.0
+  resolution: "@module-federation/runtime-tools@npm:0.15.0"
   dependencies:
-    "@module-federation/runtime": "npm:0.13.0"
-    "@module-federation/webpack-bundler-runtime": "npm:0.13.0"
-  checksum: 10c0/bcd17af41e70be71fa481dc2432e55e6ed92b1c55431ea73f40bb31027e603777de1e85e6eea1af11606834201c78f43b31c18f9045c2b5cd6bb29eb4d23b696
+    "@module-federation/runtime": "npm:0.15.0"
+    "@module-federation/webpack-bundler-runtime": "npm:0.15.0"
+  checksum: 10c0/53e4376a6a7146063bfae447951c74e74a051c0fb43dbb6024c7b541a81d6f2e9127f7d4588117430644ee594a774f996359c282733072a989791e656206ada7
   languageName: node
   linkType: hard
 
-"@module-federation/runtime@npm:0.13.0":
-  version: 0.13.0
-  resolution: "@module-federation/runtime@npm:0.13.0"
+"@module-federation/runtime@npm:0.15.0":
+  version: 0.15.0
+  resolution: "@module-federation/runtime@npm:0.15.0"
   dependencies:
-    "@module-federation/error-codes": "npm:0.13.0"
-    "@module-federation/runtime-core": "npm:0.13.0"
-    "@module-federation/sdk": "npm:0.13.0"
-  checksum: 10c0/d7690ecc498c81638b23c75d512051edb0de4d3a004e0c6915d0fe9497a1f3d204856f15fbf91be3044e0d5752dfdf332d611cc32ae9c84a89815be17e4b3440
+    "@module-federation/error-codes": "npm:0.15.0"
+    "@module-federation/runtime-core": "npm:0.15.0"
+    "@module-federation/sdk": "npm:0.15.0"
+  checksum: 10c0/c77489abe56dd1402244fa4e75488676f272a5b53c3954e18f0be3ea74745b7a627a89d76d2cf827a48a74fe486712c6b0e0390fd1df25b7efeb3c23bdcafc9b
   languageName: node
   linkType: hard
 
-"@module-federation/sdk@npm:0.13.0":
-  version: 0.13.0
-  resolution: "@module-federation/sdk@npm:0.13.0"
-  checksum: 10c0/45c05b28caf8fdbd052d43e63b5df85f71fea83dfa7b6631cdbad6dc60a53de2cc145a8ecc9770db9701f115f2d1de9bce58fe23f41eb6c3da5f81c23dc1eefb
+"@module-federation/sdk@npm:0.15.0":
+  version: 0.15.0
+  resolution: "@module-federation/sdk@npm:0.15.0"
+  checksum: 10c0/9f15db3c4213d3d4699edd89ab898bec0c3ab29872537a60cd21a6c75dce63e9af865aea6fa47dac34a485309c028d29a88cffc397caa721c1add6a5aa273186
   languageName: node
   linkType: hard
 
-"@module-federation/webpack-bundler-runtime@npm:0.13.0":
-  version: 0.13.0
-  resolution: "@module-federation/webpack-bundler-runtime@npm:0.13.0"
+"@module-federation/webpack-bundler-runtime@npm:0.15.0":
+  version: 0.15.0
+  resolution: "@module-federation/webpack-bundler-runtime@npm:0.15.0"
   dependencies:
-    "@module-federation/runtime": "npm:0.13.0"
-    "@module-federation/sdk": "npm:0.13.0"
-  checksum: 10c0/db08e586930f307c5258bc4233f4dfe95981d9518dcd546d57adc0bb97ada991e1f1696e6a3dfa372db37df08dfe6d1c603aa6d13615b6a46867f2e7638243e7
+    "@module-federation/runtime": "npm:0.15.0"
+    "@module-federation/sdk": "npm:0.15.0"
+  checksum: 10c0/63d09e4cbe2238ce3ca8b69c23d12fce69f2e6f189a1cb7bd830d280ec77201b3a9dc5c90ecb0e58ad533c43a7c957f0d0089ce34abfb8b517afcddd4cf503e8
+  languageName: node
+  linkType: hard
+
+"@napi-rs/wasm-runtime@npm:^0.2.11":
+  version: 0.2.11
+  resolution: "@napi-rs/wasm-runtime@npm:0.2.11"
+  dependencies:
+    "@emnapi/core": "npm:^1.4.3"
+    "@emnapi/runtime": "npm:^1.4.3"
+    "@tybys/wasm-util": "npm:^0.9.0"
+  checksum: 10c0/049bd14c58b99fbe0967b95e9921c5503df196b59be22948d2155f17652eb305cff6728efd8685338b855da7e476dd2551fbe3a313fc2d810938f0717478441e
   languageName: node
   linkType: hard
 
@@ -2744,17 +2783,17 @@ __metadata:
   linkType: hard
 
 "@rsbuild/core@npm:^1.3.12":
-  version: 1.3.12
-  resolution: "@rsbuild/core@npm:1.3.12"
+  version: 1.4.1
+  resolution: "@rsbuild/core@npm:1.4.1"
   dependencies:
-    "@rspack/core": "npm:1.3.7"
+    "@rspack/core": "npm:1.4.1"
     "@rspack/lite-tapable": "npm:~1.0.1"
     "@swc/helpers": "npm:^0.5.17"
-    core-js: "npm:~3.41.0"
+    core-js: "npm:~3.43.0"
     jiti: "npm:^2.4.2"
   bin:
     rsbuild: bin/rsbuild.js
-  checksum: 10c0/fdf17f22eeddaaf62db342d574461c52e67543d31ea157d350e3c0ea798bb9c9b1c12cc8c1361b282790c8e9b64ddb42823ba4994f45f99b6edb923654cbbf11
+  checksum: 10c0/24d096c915558e266112b20180daf34065cf5223c65c7c4e1de40548a188b2fa7567effa4311633de8f6c9a0696b0253709316d82d076b31c69a4ffcc4cd6f9b
   languageName: node
   linkType: hard
 
@@ -2852,82 +2891,92 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rspack/binding-darwin-arm64@npm:1.3.7":
-  version: 1.3.7
-  resolution: "@rspack/binding-darwin-arm64@npm:1.3.7"
+"@rspack/binding-darwin-arm64@npm:1.4.1":
+  version: 1.4.1
+  resolution: "@rspack/binding-darwin-arm64@npm:1.4.1"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@rspack/binding-darwin-x64@npm:1.3.7":
-  version: 1.3.7
-  resolution: "@rspack/binding-darwin-x64@npm:1.3.7"
+"@rspack/binding-darwin-x64@npm:1.4.1":
+  version: 1.4.1
+  resolution: "@rspack/binding-darwin-x64@npm:1.4.1"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@rspack/binding-linux-arm64-gnu@npm:1.3.7":
-  version: 1.3.7
-  resolution: "@rspack/binding-linux-arm64-gnu@npm:1.3.7"
+"@rspack/binding-linux-arm64-gnu@npm:1.4.1":
+  version: 1.4.1
+  resolution: "@rspack/binding-linux-arm64-gnu@npm:1.4.1"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@rspack/binding-linux-arm64-musl@npm:1.3.7":
-  version: 1.3.7
-  resolution: "@rspack/binding-linux-arm64-musl@npm:1.3.7"
+"@rspack/binding-linux-arm64-musl@npm:1.4.1":
+  version: 1.4.1
+  resolution: "@rspack/binding-linux-arm64-musl@npm:1.4.1"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@rspack/binding-linux-x64-gnu@npm:1.3.7":
-  version: 1.3.7
-  resolution: "@rspack/binding-linux-x64-gnu@npm:1.3.7"
+"@rspack/binding-linux-x64-gnu@npm:1.4.1":
+  version: 1.4.1
+  resolution: "@rspack/binding-linux-x64-gnu@npm:1.4.1"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@rspack/binding-linux-x64-musl@npm:1.3.7":
-  version: 1.3.7
-  resolution: "@rspack/binding-linux-x64-musl@npm:1.3.7"
+"@rspack/binding-linux-x64-musl@npm:1.4.1":
+  version: 1.4.1
+  resolution: "@rspack/binding-linux-x64-musl@npm:1.4.1"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@rspack/binding-win32-arm64-msvc@npm:1.3.7":
-  version: 1.3.7
-  resolution: "@rspack/binding-win32-arm64-msvc@npm:1.3.7"
+"@rspack/binding-wasm32-wasi@npm:1.4.1":
+  version: 1.4.1
+  resolution: "@rspack/binding-wasm32-wasi@npm:1.4.1"
+  dependencies:
+    "@napi-rs/wasm-runtime": "npm:^0.2.11"
+  conditions: cpu=wasm32
+  languageName: node
+  linkType: hard
+
+"@rspack/binding-win32-arm64-msvc@npm:1.4.1":
+  version: 1.4.1
+  resolution: "@rspack/binding-win32-arm64-msvc@npm:1.4.1"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@rspack/binding-win32-ia32-msvc@npm:1.3.7":
-  version: 1.3.7
-  resolution: "@rspack/binding-win32-ia32-msvc@npm:1.3.7"
+"@rspack/binding-win32-ia32-msvc@npm:1.4.1":
+  version: 1.4.1
+  resolution: "@rspack/binding-win32-ia32-msvc@npm:1.4.1"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
 
-"@rspack/binding-win32-x64-msvc@npm:1.3.7":
-  version: 1.3.7
-  resolution: "@rspack/binding-win32-x64-msvc@npm:1.3.7"
+"@rspack/binding-win32-x64-msvc@npm:1.4.1":
+  version: 1.4.1
+  resolution: "@rspack/binding-win32-x64-msvc@npm:1.4.1"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@rspack/binding@npm:1.3.7":
-  version: 1.3.7
-  resolution: "@rspack/binding@npm:1.3.7"
+"@rspack/binding@npm:1.4.1":
+  version: 1.4.1
+  resolution: "@rspack/binding@npm:1.4.1"
   dependencies:
-    "@rspack/binding-darwin-arm64": "npm:1.3.7"
-    "@rspack/binding-darwin-x64": "npm:1.3.7"
-    "@rspack/binding-linux-arm64-gnu": "npm:1.3.7"
-    "@rspack/binding-linux-arm64-musl": "npm:1.3.7"
-    "@rspack/binding-linux-x64-gnu": "npm:1.3.7"
-    "@rspack/binding-linux-x64-musl": "npm:1.3.7"
-    "@rspack/binding-win32-arm64-msvc": "npm:1.3.7"
-    "@rspack/binding-win32-ia32-msvc": "npm:1.3.7"
-    "@rspack/binding-win32-x64-msvc": "npm:1.3.7"
+    "@rspack/binding-darwin-arm64": "npm:1.4.1"
+    "@rspack/binding-darwin-x64": "npm:1.4.1"
+    "@rspack/binding-linux-arm64-gnu": "npm:1.4.1"
+    "@rspack/binding-linux-arm64-musl": "npm:1.4.1"
+    "@rspack/binding-linux-x64-gnu": "npm:1.4.1"
+    "@rspack/binding-linux-x64-musl": "npm:1.4.1"
+    "@rspack/binding-wasm32-wasi": "npm:1.4.1"
+    "@rspack/binding-win32-arm64-msvc": "npm:1.4.1"
+    "@rspack/binding-win32-ia32-msvc": "npm:1.4.1"
+    "@rspack/binding-win32-x64-msvc": "npm:1.4.1"
   dependenciesMeta:
     "@rspack/binding-darwin-arm64":
       optional: true
@@ -2941,30 +2990,31 @@ __metadata:
       optional: true
     "@rspack/binding-linux-x64-musl":
       optional: true
+    "@rspack/binding-wasm32-wasi":
+      optional: true
     "@rspack/binding-win32-arm64-msvc":
       optional: true
     "@rspack/binding-win32-ia32-msvc":
       optional: true
     "@rspack/binding-win32-x64-msvc":
       optional: true
-  checksum: 10c0/25815036e126de8c8101cf4de83287906bfeb47d8e8332687ed770ab36450cda93b52293be840f8fd7fca50bde29dbc4dd50917b1ef156708183183f79966edc
+  checksum: 10c0/e5febb27982c43b736e6b9dd6f68bdfccd20671b18ddd4c6fbdfcf0e3667c18fcc818539da2c003f596efcc8d12926b1e1e2381c862c95a036666a6650fb2692
   languageName: node
   linkType: hard
 
-"@rspack/core@npm:1.3.7":
-  version: 1.3.7
-  resolution: "@rspack/core@npm:1.3.7"
+"@rspack/core@npm:1.4.1":
+  version: 1.4.1
+  resolution: "@rspack/core@npm:1.4.1"
   dependencies:
-    "@module-federation/runtime-tools": "npm:0.13.0"
-    "@rspack/binding": "npm:1.3.7"
+    "@module-federation/runtime-tools": "npm:0.15.0"
+    "@rspack/binding": "npm:1.4.1"
     "@rspack/lite-tapable": "npm:1.0.1"
-    caniuse-lite: "npm:^1.0.30001715"
   peerDependencies:
     "@swc/helpers": ">=0.5.1"
   peerDependenciesMeta:
     "@swc/helpers":
       optional: true
-  checksum: 10c0/ef68a54638dc7349bec52b48fbdc4ac9b8d2cfd1be20dfacf2cfdd2760c6a6aba80aa790207782a22c7960d225294d5b16b6e652fe7ad8495d16e51cd507ec5f
+  checksum: 10c0/35b9a75aa961263a2856eef21e1001d96789bd2319207ac3e4ca9c10293882c1d5bcd9304210fc14b2dc90ec2c340156ce50e19e42200138203ee10f4ff18dae
   languageName: node
   linkType: hard
 
@@ -3624,6 +3674,15 @@ __metadata:
     mkdirp: "npm:^1.0.4"
     path-browserify: "npm:^1.0.1"
   checksum: 10c0/7922a3e7e183090e2c326578d1ead07427b6cf316d0b390efa25f06e8d7b09085ffb23446b2cc7655dbee48a1b9330370862c1a411313eb1991a0daa9ac5e3da
+  languageName: node
+  linkType: hard
+
+"@tybys/wasm-util@npm:^0.9.0":
+  version: 0.9.0
+  resolution: "@tybys/wasm-util@npm:0.9.0"
+  dependencies:
+    tslib: "npm:^2.4.0"
+  checksum: 10c0/f9fde5c554455019f33af6c8215f1a1435028803dc2a2825b077d812bed4209a1a64444a4ca0ce2ea7e1175c8d88e2f9173a36a33c199e8a5c671aa31de8242d
   languageName: node
   linkType: hard
 
@@ -5317,7 +5376,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:^1.0.30001715, caniuse-lite@npm:^1.0.30001718":
+"caniuse-lite@npm:^1.0.30001718":
   version: 1.0.30001724
   resolution: "caniuse-lite@npm:1.0.30001724"
   checksum: 10c0/ed9ec0bcf619f0e7ef2d33aac74d2346d1faf52060dfded1fb9c32d87854de5c2988b3ba338c281034c88bf797d6b55468a804ce8396a7e16a48cb0d481d4bfe
@@ -5764,10 +5823,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:~3.41.0":
-  version: 3.41.0
-  resolution: "core-js@npm:3.41.0"
-  checksum: 10c0/a29ed0b7fe81acf49d04ce5c17a1947166b1c15197327a5d12f95bbe84b46d60c3c13de701d808f41da06fa316285f3f55ce5903abc8d5642afc1eac4457afc8
+"core-js@npm:~3.43.0":
+  version: 3.43.0
+  resolution: "core-js@npm:3.43.0"
+  checksum: 10c0/9d4ad66296e60380777de51d019b5c3e6cce023b7999750a5094f9a4b0ea53bf3600beb4ef11c56548f2c8791d43d4056e270d1cf55ba87273011aa7d4597871
   languageName: node
   linkType: hard
 
