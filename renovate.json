@@ -5,9 +5,6 @@
     ":dependencyDashboard",
     ":label(dependencies)"
   ],
-  "major": {
-    "dependencyDashboardApproval": true
-  },
   "packageRules": [
     {
       "rangeStrategy": "update-lockfile",
