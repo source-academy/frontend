@@ -174,7 +174,6 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         onMouseLeave={[Function]}
                       >
                         <button
-                          aria-expanded={false}
                           className="bp5-button bp5-disabled bp5-minimal"
                           disabled={true}
                           onBlur={[Function]}
@@ -371,7 +370,6 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         onMouseLeave={[Function]}
                       >
                         <button
-                          aria-expanded={false}
                           className="bp5-button bp5-disabled bp5-minimal"
                           disabled={true}
                           onBlur={[Function]}
@@ -585,14 +583,12 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         onMouseLeave={[Function]}
                       >
                         <button
-                          aria-expanded={false}
-                          className="bp5-button bp5-minimal bp5-intent-danger"
+                          className="bp5-button bp5-intent-danger bp5-minimal"
                           disabled={false}
                           onBlur={[Function]}
                           onClick={[Function]}
                           onKeyDown={[Function]}
                           onKeyUp={[Function]}
-                          tabIndex={0}
                           type="button"
                         >
                           <span
@@ -993,7 +989,6 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         onMouseLeave={[Function]}
                       >
                         <button
-                          aria-expanded={false}
                           className="bp5-button bp5-disabled bp5-minimal"
                           disabled={true}
                           onBlur={[Function]}
@@ -1236,7 +1231,6 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         onMouseLeave={[Function]}
                       >
                         <button
-                          aria-expanded={false}
                           className="bp5-button bp5-disabled bp5-minimal"
                           disabled={true}
                           onBlur={[Function]}
@@ -1450,14 +1444,12 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         onMouseLeave={[Function]}
                       >
                         <button
-                          aria-expanded={false}
-                          className="bp5-button bp5-minimal bp5-intent-danger"
+                          className="bp5-button bp5-intent-danger bp5-minimal"
                           disabled={false}
                           onBlur={[Function]}
                           onClick={[Function]}
                           onKeyDown={[Function]}
                           onKeyUp={[Function]}
-                          tabIndex={0}
                           type="button"
                         >
                           <span
