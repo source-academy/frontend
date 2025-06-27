@@ -38,9 +38,7 @@ const ApplicationWrapper: React.FC = () => {
       ? playgroundOnlyRouterConfig
       : getFullAcademyRouterConfig({ name, isLoggedIn, courseId, academyRoutes });
 
-    const r = createBrowserRouter(routerConfig, {
-      future: { v7_relativeSplatPath: true }
-    });
+    const r = createBrowserRouter(routerConfig);
     dispatch(updateReactRouter(r));
 
     return r;
