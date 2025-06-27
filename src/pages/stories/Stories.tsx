@@ -2,7 +2,7 @@ import { Button, InputGroup, NonIdealState } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import ContentDisplay from 'src/commons/ContentDisplay';
 import GradingFlex from 'src/commons/grading/GradingFlex';

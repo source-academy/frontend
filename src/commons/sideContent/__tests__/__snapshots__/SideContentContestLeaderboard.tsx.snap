@@ -23,9 +23,7 @@ exports[`SideContentContestLeaderboard matches snapshot 1`] = `
       transitionDuration={100}
     >
       <Blueprint5.Icon
-        autoLoad={true}
         icon="help"
-        tagName="span"
       />
     </Blueprint5.Tooltip>
   </Blueprint5.Button>
@@ -44,9 +42,7 @@ exports[`SideContentContestLeaderboard matches snapshot 1`] = `
         >
           Student Name
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
         <div
@@ -54,9 +50,7 @@ exports[`SideContentContestLeaderboard matches snapshot 1`] = `
         >
           Rank
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
         <div
@@ -64,9 +58,7 @@ exports[`SideContentContestLeaderboard matches snapshot 1`] = `
         >
           Calculated Score
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
       </div>

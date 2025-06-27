@@ -3,12 +3,8 @@
   "extends": [
     "config:recommended",
     ":dependencyDashboard",
-    "group:allNonMajor",
     ":label(dependencies)"
   ],
-  "major": {
-    "dependencyDashboardApproval": true
-  },
   "packageRules": [
     {
       "rangeStrategy": "update-lockfile",
