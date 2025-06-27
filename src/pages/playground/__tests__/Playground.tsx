@@ -1,5 +1,4 @@
 import { Dispatch, Store } from '@reduxjs/toolkit';
-import { Router } from '@remix-run/router';
 import { render } from '@testing-library/react';
 import { FSModule } from 'browserfs/dist/node/core/FS';
 import { Chapter } from 'js-slang/dist/types';
@@ -11,6 +10,7 @@ import {
   defaultPlayground,
   OverallState
 } from 'src/commons/application/ApplicationTypes';
+import { Router } from 'src/commons/application/types/CommonsTypes';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
 import { createStore } from 'src/pages/createStore';
 

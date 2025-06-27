@@ -493,6 +493,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                     >
                       <a
                         className=""
+                        data-discover="true"
                         href="/courses/undefined/missions/3/0"
                         onClick={[Function]}
                       >
@@ -715,6 +716,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                     >
                       <a
                         className=""
+                        data-discover="true"
                         href="/courses/undefined/missions/2/0"
                         onClick={[Function]}
                       >
@@ -1090,6 +1092,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     >
                       <a
                         className=""
+                        data-discover="true"
                         href="/courses/undefined/missions/1/0"
                         onClick={[Function]}
                       >
@@ -1354,6 +1357,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     >
                       <a
                         className=""
+                        data-discover="true"
                         href="/courses/undefined/missions/3/0"
                         onClick={[Function]}
                       >
@@ -1576,6 +1580,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     >
                       <a
                         className=""
+                        data-discover="true"
                         href="/courses/undefined/missions/2/0"
                         onClick={[Function]}
                       >
