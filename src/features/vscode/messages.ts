@@ -17,9 +17,7 @@ const Messages = createMessages({
     code
   }),
   Text: (code: string) => ({ code }),
-  LoginWithBrowser: (route: string) => ({
-    route
-  })
+  LoginWithBrowser: (route: string) => ({ route })
 });
 
 export default Messages;
