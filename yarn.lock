@@ -3615,21 +3615,21 @@ __metadata:
   linkType: hard
 
 "@tanstack/react-table@npm:^8.9.3":
-  version: 8.12.0
-  resolution: "@tanstack/react-table@npm:8.12.0"
+  version: 8.21.3
+  resolution: "@tanstack/react-table@npm:8.21.3"
   dependencies:
-    "@tanstack/table-core": "npm:8.12.0"
+    "@tanstack/table-core": "npm:8.21.3"
   peerDependencies:
-    react: ">=16"
-    react-dom: ">=16"
-  checksum: 10c0/9692fcb23779cc457f74c395b1f79dc700eae246315014879c3a312275a11c8e49fd14a16a122843b8eb14f6f1b71c8fb648ba7fec300806be6d589d7c902c21
+    react: ">=16.8"
+    react-dom: ">=16.8"
+  checksum: 10c0/85d1d0fcb690ecc011f68a5a61c96f82142e31a0270dcf9cbc699a6f36715b1653fe6ff1518302a6d08b7093351fc4cabefd055a7db3cd8ac01e068956b0f944
   languageName: node
   linkType: hard
 
-"@tanstack/table-core@npm:8.12.0":
-  version: 8.12.0
-  resolution: "@tanstack/table-core@npm:8.12.0"
-  checksum: 10c0/3300b37dc73e8959718d73ad7a981c5c8e1561c7b1f4ee6c86f056be49d2d20571808cacfc281801b2eb8fb9ead93165a71f933bc209e939d2ca4bd6556bc0a5
+"@tanstack/table-core@npm:8.21.3":
+  version: 8.21.3
+  resolution: "@tanstack/table-core@npm:8.21.3"
+  checksum: 10c0/40e3560e6d55e07cc047024aa7f83bd47a9323d21920d4adabba8071fd2d21230c48460b26cedf392588f8265b9edc133abb1b0d6d0adf4dae0970032900a8c9
   languageName: node
   linkType: hard
 
