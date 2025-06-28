@@ -1050,7 +1050,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
   };
 
-  return !isVscode && isMobileBreakpoint ? (
+  // return !isVscode && isMobileBreakpoint ? (
+  return false && isMobileBreakpoint ? (
     <div className={classNames('Playground', Classes.DARK, isGreen && 'GreenScreen')}>
       <MobileWorkspace {...mobileWorkspaceProps} />
     </div>
