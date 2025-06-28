@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
+import { Links } from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { parseQuery } from 'src/commons/utils/QueryHelper';
@@ -37,7 +38,7 @@ const LoginVscodeCallback: React.FC = () => {
   const { access_token: accessToken, refresh_token: refreshToken } = parseQuery(location.search);
 
   const launchVscode = () => {
-    window.location.href = `vscode://source-academy.source-academy/sso?code=${code}&client-request-id=${clientRequestId}`;
+    window.location.href = `${Links.vscode}/sso?code=${code}&client-request-id=${clientRequestId}`;
   };
 
   useEffect(() => {
