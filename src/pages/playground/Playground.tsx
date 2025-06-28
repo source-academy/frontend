@@ -365,7 +365,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     } else if (!isMobileBreakpoint && mobileOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.introduction);
     }
-  }, [isMobileBreakpoint, selectedTab, setSelectedTab]);
+  }, [isMobileBreakpoint, isVscode, selectedTab, setSelectedTab]);
 
   const onEditorValueChange = React.useCallback(
     (editorTabIndex: number, newEditorValue: string) => {

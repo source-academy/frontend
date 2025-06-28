@@ -248,7 +248,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     if ((!isMobileBreakpoint || isVscode) && mobileOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.questionOverview);
     }
-  }, [isMobileBreakpoint, props, selectedTab, setSelectedTab]);
+  }, [isMobileBreakpoint, isVscode, props, selectedTab, setSelectedTab]);
 
   /* ==================
      onChange handlers
