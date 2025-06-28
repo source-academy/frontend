@@ -63,6 +63,8 @@ const LoginVscodeCallback: React.FC = () => {
       dispatch(SessionActions.fetchUserAndCourse());
       navigate('/welcome');
     }
+    // Only isVscode is expected to change in the lifecycle
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVscode]);
 
   return isVscode ? (
