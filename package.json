@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^5.10.1",
-    "@blueprintjs/datetime2": "^2.3.3",
+    "@blueprintjs/datetime2": "^3.0.0",
     "@blueprintjs/icons": "^5.9.0",
     "@blueprintjs/select": "^5.1.3",
     "@mantine/hooks": "^7.11.2",
