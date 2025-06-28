@@ -69,7 +69,7 @@
     "mdast-util-from-markdown": "^2.0.0",
     "mdast-util-to-hast": "^13.0.0",
     "normalize.css": "^8.0.1",
-    "phaser": "~3.87.0",
+    "phaser": "~3.90.0",
     "query-string": "^9.0.0",
     "re-resizable": "^6.9.9",
     "react": "^18.3.1",

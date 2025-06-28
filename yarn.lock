@@ -7687,7 +7687,7 @@ __metadata:
     os-browserify: "npm:^0.3.0"
     path: "npm:^0.12.7"
     path-browserify: "npm:^1.0.1"
-    phaser: "npm:~3.87.0"
+    phaser: "npm:~3.90.0"
     phaser3spectorjs: "npm:^0.0.8"
     prettier: "npm:^3.3.3"
     process: "npm:^0.11.10"
@@ -11364,12 +11364,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"phaser@npm:~3.87.0":
-  version: 3.87.0
-  resolution: "phaser@npm:3.87.0"
+"phaser@npm:~3.90.0":
+  version: 3.90.0
+  resolution: "phaser@npm:3.90.0"
   dependencies:
     eventemitter3: "npm:^5.0.1"
-  checksum: 10c0/39f5baef2cbd3c30ae65efb7f1b4a034f5fd87f51f74547574602a6bada014999a900561cb0efa17e086a6a06f886525d0832b1d465af382db8674c1ed42ef67
+  checksum: 10c0/43d405832fc84c8641e22842fe8d4ca954950ffde364bfb60e4d07b05a29f33eb0c9d4a64acda088122ee6649b7b3ed6d9b3b99bbb67671a528c6ceb10d71689
   languageName: node
   linkType: hard
 
