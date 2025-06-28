@@ -4,6 +4,7 @@ import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
+import { InjectManifest } from '@aaroon/workbox-rspack-plugin';
 
 const { publicVars, rawPublicVars } = loadEnv({ prefixes: ['REACT_APP_'] });
 
@@ -117,6 +118,15 @@ export default defineConfig({
       //     Buffer: ['buffer', 'Buffer']
       //   })
       // ];
+
+      config.plugins = [
+        ...config.plugins,
+        new InjectManifest({
+          swSrc: './src/service-worker.ts',
+          swDest: 'service-worker.js',
+          maximumFileSizeToCacheInBytes: 20 * 1024 * 1024,
+        })
+      ];
 
       // Workaround to suppress warnings caused by ts-morph in js-slang
       // if (config.module) {
