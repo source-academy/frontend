@@ -391,6 +391,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
         initialCode
       )
     );
+    // We don't want to re-send this message even when the variables change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // const onChangeTabs = useCallback(
