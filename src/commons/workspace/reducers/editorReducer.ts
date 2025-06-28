@@ -1,5 +1,4 @@
 import { ActionReducerMapBuilder } from '@reduxjs/toolkit';
-import Messages, { sendToWebview } from 'src/features/vscode/messages';
 
 import WorkspaceActions from '../WorkspaceActions';
 import { getWorkspaceLocation } from '../WorkspaceReducer';
@@ -53,9 +52,6 @@ export const handleEditorActions = (builder: ActionReducerMapBuilder<WorkspaceMa
       }
 
       state[workspaceLocation].editorTabs[editorTabIndex].value = newEditorValue;
-      if (!action.payload.isFromVscode) {
-        sendToWebview(Messages.Text(newEditorValue));
-      }
     })
     .addCase(WorkspaceActions.setEditorBreakpoint, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
