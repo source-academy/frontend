@@ -4584,32 +4584,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ag-charts-types@npm:10.3.8":
-  version: 10.3.8
-  resolution: "ag-charts-types@npm:10.3.8"
-  checksum: 10c0/89b6cf77367bd0877674f966a4ba96c226150ae375565b14dfd64297be5685636f57a90864c49e9462bc139b28102da165eff74f8abcace152b9228981efb0f6
+"ag-charts-types@npm:12.0.0":
+  version: 12.0.0
+  resolution: "ag-charts-types@npm:12.0.0"
+  checksum: 10c0/4bdafa4744a2c42e9c0f9c3cd56ddd13b6221085685736d98e468b86824de2e3b831a3564d45a7194f6e836c46bd6388364a085a8dbbbf7ed91530f3c1df71a7
   languageName: node
   linkType: hard
 
-"ag-grid-community@npm:32.3.8, ag-grid-community@npm:^32.3.1":
-  version: 32.3.8
-  resolution: "ag-grid-community@npm:32.3.8"
+"ag-grid-community@npm:34.0.0, ag-grid-community@npm:^34.0.0":
+  version: 34.0.0
+  resolution: "ag-grid-community@npm:34.0.0"
   dependencies:
-    ag-charts-types: "npm:10.3.8"
-  checksum: 10c0/6b084374412195fab34fe311483d2c19b789f034b643514e88cd4639cdaa7bd2077d937e167af490af3c0be46449a7a52b37ccb253f1c92fa22d8f1e22abb134
+    ag-charts-types: "npm:12.0.0"
+  checksum: 10c0/0854ef822b77ac8c0bd2838197994c3ee7e8b0ca542c852df09439e2aef24538c9dc160a51b956a3d2ae11f44ab566c6e7e79c1258cd1feeca3af0bf4aad0b78
   languageName: node
   linkType: hard
 
-"ag-grid-react@npm:^32.3.1":
-  version: 32.3.8
-  resolution: "ag-grid-react@npm:32.3.8"
+"ag-grid-react@npm:^34.0.0":
+  version: 34.0.0
+  resolution: "ag-grid-react@npm:34.0.0"
   dependencies:
-    ag-grid-community: "npm:32.3.8"
+    ag-grid-community: "npm:34.0.0"
     prop-types: "npm:^15.8.1"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/0eb194da84a43a78c3c1b2aa571ac5e5a58053830824a682baede7cac846b9db1d9f12868309fb5da0bec2ba73dcf9d8d4a6a58b7ca5a0c232764e7b48946e3a
+  checksum: 10c0/59ad8fd694495eb0e063cc7c9935c8d99e54d4d565b67e9969162fe360b50d1297453e25094841d099ac4d22e8054ab0d3d52675c6c45e40a84d96c1362a6931
   languageName: node
   linkType: hard
 
@@ -7661,8 +7661,8 @@ __metadata:
     "@types/xml2js": "npm:^0.4.11"
     ace-builds: "npm:^1.36.3"
     acorn: "npm:^8.9.0"
-    ag-grid-community: "npm:^32.3.1"
-    ag-grid-react: "npm:^32.3.1"
+    ag-grid-community: "npm:^34.0.0"
+    ag-grid-react: "npm:^34.0.0"
     array-move: "npm:^4.0.0"
     babel-jest: "npm:^29.7.0"
     browserfs: "npm:^1.4.3"
