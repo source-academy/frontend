@@ -98,7 +98,8 @@ const Messages = createMessages({
   AssessmentAnswer: (questionId: number, answer: string) => ({
     questionId,
     answer
-  })
+  }),
+  LoginWithBrowser: (route: string) => ({ route })
 });
 
 export default Messages;
