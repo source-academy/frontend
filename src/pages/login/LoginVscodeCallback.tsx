@@ -28,7 +28,7 @@ const LoginVscodeCallback: React.FC = () => {
   const dispatch = useDispatch();
   const location = useLocation();
   const { t } = useTranslation('login');
-  const { isLoggedIn } = useSession();
+  const { isLoggedIn, courseId } = useSession();
   const {
     code,
     provider: providerId,
@@ -46,8 +46,13 @@ const LoginVscodeCallback: React.FC = () => {
       if (!isVscode) {
         launchVscode();
       } else {
+        // If already logged in, navigate to relevant course page
         if (isLoggedIn) {
-          return;
+          if (courseId !== undefined) {
+            navigate(`/courses/${courseId}`);
+          } else {
+            navigate('/welcome');
+          }
         }
         // Fetch JWT tokens and user info from backend when auth provider code is present
         dispatch(SessionActions.fetchAuth(code, providerId));
