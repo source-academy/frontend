@@ -12,7 +12,7 @@ import Messages, {
 /**
  * To handle messages from VS Code.
  */
-export const useIsVscode = () => {
+export const useVscodeIntegration = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
