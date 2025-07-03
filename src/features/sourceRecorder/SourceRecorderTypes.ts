@@ -1,4 +1,4 @@
-import { Ace } from 'ace-builds/ace';
+import { Ace } from 'ace-builds';
 import { Chapter } from 'js-slang/dist/types';
 
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';

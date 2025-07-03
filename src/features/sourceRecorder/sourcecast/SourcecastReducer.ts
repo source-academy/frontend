@@ -1,4 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
+import { castDraft } from 'immer';
 import { defaultWorkspaceManager } from 'src/commons/application/ApplicationTypes';
 
 import * as SourceRecorderActions from '../SourceRecorderActions';
@@ -11,23 +12,23 @@ export const SourcecastReducer = createReducer(defaultWorkspaceManager.sourcecas
       state.description = action.payload.description;
       state.uid = action.payload.uid;
       state.audioUrl = action.payload.audioUrl;
-      state.playbackData = action.payload.playbackData;
+      state.playbackData = castDraft(action.payload.playbackData);
     })
     .addCase(SourceRecorderActions.setCurrentPlayerTime, (state, action) => {
       state.currentPlayerTime = action.payload.playerTime;
     })
     .addCase(SourceRecorderActions.setCodeDeltasToApply, (state, action) => {
-      state.codeDeltasToApply = action.payload.deltas;
+      state.codeDeltasToApply = castDraft(action.payload.deltas);
     })
     .addCase(SourceRecorderActions.setInputToApply, (state, action) => {
-      state.inputToApply = action.payload.inputToApply;
+      state.inputToApply = castDraft(action.payload.inputToApply);
     })
     .addCase(SourceRecorderActions.setSourcecastData, (state, action) => {
       state.title = action.payload.title;
       state.description = action.payload.description;
       state.uid = action.payload.uid;
       state.audioUrl = action.payload.audioUrl;
-      state.playbackData = action.payload.playbackData;
+      state.playbackData = castDraft(action.payload.playbackData);
     })
     .addCase(SourceRecorderActions.setSourcecastDuration, (state, action) => {
       state.playbackDuration = action.payload.duration;
