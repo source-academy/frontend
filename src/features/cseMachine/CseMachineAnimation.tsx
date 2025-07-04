@@ -26,7 +26,7 @@ import { Frame } from './components/Frame';
 import { ArrayValue } from './components/values/ArrayValue';
 import CseMachine from './CseMachine';
 import { Layout } from './CseMachineLayout';
-import { isBuiltInFn, isInstr, isStreamFn } from './CseMachineUtils';
+import { isBuiltInFn, isEnvEqual, isInstr, isStreamFn } from './CseMachineUtils';
 import { isList, isSymbol } from './utils/scheme';
 
 export class CseAnimation {
@@ -51,11 +51,12 @@ export class CseAnimation {
   }
 
   static setCurrentFrame(frame: Frame) {
-    CseAnimation.previousFrame = CseAnimation.currentFrame;
+    CseAnimation.previousFrame = CseAnimation.currentFrame ?? frame;
     CseAnimation.currentFrame = frame;
   }
 
   private static clearAnimationComponents(): void {
+    CseAnimation.animations.forEach(a => a.destroy());
     CseAnimation.animations.length = 0;
   }
 
@@ -72,20 +73,25 @@ export class CseAnimation {
     const currStashComponent = Layout.stashComponent.stashItemComponents.at(-1)!;
     switch (node.type) {
       case 'Program':
-        CseAnimation.animations.push(
-          new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())
-        );
-        if (CseMachine.getCurrentEnvId() !== '-1') {
-          CseAnimation.animations.push(
-            new FrameCreationAnimation(lastControlComponent, CseAnimation.currentFrame)
-          );
-        }
-        break;
       case 'BlockStatement':
-        CseAnimation.animations.push(
-          new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems()),
-          new FrameCreationAnimation(lastControlComponent, CseAnimation.currentFrame)
-        );
+      case 'StatementSequence':
+        if (node.body.length === 1) {
+          CseAnimation.handleNode(node.body[0]);
+        } else {
+          CseAnimation.animations.push(
+            new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())
+          );
+          if (
+            !isEnvEqual(
+              CseAnimation.currentFrame.environment,
+              CseAnimation.previousFrame.environment
+            )
+          ) {
+            CseAnimation.animations.push(
+              new FrameCreationAnimation(lastControlComponent, CseAnimation.currentFrame)
+            );
+          }
+        }
         break;
       case 'Literal':
         CseAnimation.animations.push(
@@ -127,7 +133,6 @@ export class CseAnimation {
       case 'IfStatement':
       case 'MemberExpression':
       case 'ReturnStatement':
-      case 'StatementSequence':
       case 'UnaryExpression':
       case 'VariableDeclaration':
       case 'FunctionDeclaration':
@@ -143,7 +148,6 @@ export class CseAnimation {
   }
 
   static updateAnimation() {
-    CseAnimation.animations.forEach(a => a.destroy());
     CseAnimation.clearAnimationComponents();
 
     if (!Layout.previousControlComponent) return;
@@ -393,16 +397,15 @@ export class CseAnimation {
 
   static async playAnimation() {
     if (!CseAnimation.animationEnabled) {
-      CseAnimation.animations.forEach(a => a.destroy());
       CseAnimation.clearAnimationComponents();
       return;
     }
     CseAnimation.disableAnimations();
     // Get the actual HTML <canvas> element and set the pointer events to none, to allow for
-    // mouse events to pass through the animation layer, and be handled by the actual CSE Machine.
+    // mouse events to pass through the animation layer and be handled by the actual CSE Machine.
     // Setting the listening property to false on the Konva Layer does not seem to work, so
     // this a workaround.
-    const canvasElement = CseAnimation.getLayer()?.getCanvas()._canvas;
+    const canvasElement = CseAnimation.getLayer()?.getNativeCanvasElement();
     if (canvasElement) canvasElement.style.pointerEvents = 'none';
     // Play all the animations
     await Promise.all(this.animations.map(a => a.animate()));
