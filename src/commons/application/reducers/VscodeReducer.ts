@@ -15,6 +15,7 @@ export const VscodeReducer: Reducer<VscodeState, SourceActionType> = (
 
 const newVscodeReducer = createReducer(defaultVscode, builder => {
   builder.addCase(VscodeActions.setVscode, state => {
-    return { ...state, ...{ isVscode: true } };
+    // Quirky way to determine if the application is running in VSCode or not
+    state.isVscode = window.parent !== parent;
   });
 });

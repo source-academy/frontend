@@ -1,19 +1,13 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet } from 'react-router';
-import Messages, {
-  MessageType,
-  MessageTypeNames,
-  sendToWebview
-} from 'src/features/vscode/messages';
 
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
 import { useLocalStorageState, useSession } from '../utils/Hooks';
-import WorkspaceActions from '../workspace/WorkspaceActions';
+import { useVscodeIntegration } from '../utils/hooks/useVscodeIntegration';
 import { defaultWorkspaceSettings, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
 import SessionActions from './actions/SessionActions';
-import VscodeActions from './actions/VscodeActions';
 
 const Application: React.FC = () => {
   const dispatch = useDispatch();
@@ -77,71 +71,7 @@ const Application: React.FC = () => {
     };
   }, [isPWA, isMobile]);
 
-  // Effect to handle messages from VS Code
-  React.useEffect(() => {
-    if (!window.confirm) {
-      // Polyfill confirm() to instead show as VS Code notification
-      // TODO: Pass text as a new Message to the webview
-      window.confirm = text => {
-        console.log(`Confirmation automatically accepted: ${text ?? 'No text provided'}`);
-        return true;
-      };
-    }
-
-    const message = Messages.ExtensionPing(window.origin);
-    sendToWebview(message);
-
-    window.addEventListener('message', event => {
-      const message: MessageType = event.data;
-      // Only accept messages from the vscode webview
-      if (!event.origin.startsWith('vscode-webview://')) {
-        return;
-      }
-      // console.log(`FRONTEND: Message from ${event.origin}: ${JSON.stringify(message)}`);
-      switch (message.type) {
-        case MessageTypeNames.ExtensionPong:
-          console.log('Received WebviewStarted message, will set vsc');
-          dispatch(VscodeActions.setVscode());
-
-          if (message.token) {
-            const token = JSON.parse(message.token.trim());
-            console.log(`FRONTEND: WebviewStarted: ${token}`);
-            dispatch(
-              SessionActions.setTokens({
-                accessToken: token.accessToken,
-                refreshToken: token.refreshToken
-              })
-            );
-            dispatch(SessionActions.fetchUserAndCourse());
-          }
-          break;
-        case MessageTypeNames.Text:
-          const { workspaceLocation, code } = message;
-          console.log(`FRONTEND: TextMessage: ${code}`);
-          dispatch(WorkspaceActions.updateEditorValue(workspaceLocation, 0, code));
-          break;
-        case MessageTypeNames.EvalEditor:
-          dispatch(WorkspaceActions.evalEditor(message.workspaceLocation));
-          break;
-        case MessageTypeNames.Navigate:
-          window.location.pathname = message.route;
-          // TODO: Figure out why this doesn't work, this is faster in theory
-          // navigate(message.route);
-          break;
-        case MessageTypeNames.McqQuestion:
-          dispatch(WorkspaceActions.showMcqPane(message.workspaceLocation, message.options));
-          break;
-        case MessageTypeNames.McqAnswer:
-          console.log(`FRONTEND: MCQAnswerMessage: ${message}`);
-          dispatch(SessionActions.submitAnswer(message.questionId, message.choice));
-          break;
-        case MessageTypeNames.AssessmentAnswer:
-          dispatch(SessionActions.submitAnswer(message.questionId, message.answer));
-          break;
-      }
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useVscodeIntegration();
 
   return (
     <WorkspaceSettingsContext.Provider value={[workspaceSettings, setWorkspaceSettings]}>
