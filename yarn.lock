@@ -2990,14 +2990,14 @@ __metadata:
   linkType: hard
 
 "@rsbuild/plugin-react@npm:^1.1.0, @rsbuild/plugin-react@npm:^1.3.0":
-  version: 1.3.2
-  resolution: "@rsbuild/plugin-react@npm:1.3.2"
+  version: 1.3.4
+  resolution: "@rsbuild/plugin-react@npm:1.3.4"
   dependencies:
     "@rspack/plugin-react-refresh": "npm:~1.4.3"
     react-refresh: "npm:^0.17.0"
   peerDependencies:
     "@rsbuild/core": 1.x
-  checksum: 10c0/5dd13706f7ca958d783d000dce2387dbcca0613a5c9a48f5aa0c86bed3769fe5ef6cdb0fab55dd1bfc7bf56925d1aff7e55529fc0b10dfa4e1267fe9b77cdd73
+  checksum: 10c0/fbd7f5df275e5c4c2f0941e687333d757cbe7951074b5e801e91f528f5b14e9409c23cfb2dd1405efe5d0777f095f6670ab2cbdd8f90810980a8511eee3d8901
   languageName: node
   linkType: hard
 
