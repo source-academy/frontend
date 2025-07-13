@@ -11974,8 +11974,8 @@ __metadata:
   linkType: hard
 
 "react-konva@npm:^18.2.10":
-  version: 18.2.10
-  resolution: "react-konva@npm:18.2.10"
+  version: 18.2.12
+  resolution: "react-konva@npm:18.2.12"
   dependencies:
     "@types/react-reconciler": "npm:^0.28.2"
     its-fine: "npm:^1.1.1"
@@ -11985,7 +11985,7 @@ __metadata:
     konva: ^8.0.1 || ^7.2.5 || ^9.0.0
     react: ">=18.0.0"
     react-dom: ">=18.0.0"
-  checksum: 10c0/4eb2e961829f25ac6e396fc29cacd54344f0a1df598ccdbe2ceec0e3a465a9b0115daa8700dd630e7aeaf0568580d7a6d798d97f91f14f6970c9fd2e765289bd
+  checksum: 10c0/cc0d57496651c361addcb8acf3e92fec1d67555a44ecab52c3d1a8df4c4923b02059ad266869f3868b44e0faed5585fe31770a2978c312726a2634f9db3b9a73
   languageName: node
   linkType: hard
 
