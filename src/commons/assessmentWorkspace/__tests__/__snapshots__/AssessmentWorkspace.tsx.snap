@@ -1,57 +1,54 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AssessmentWorkspace AssessmentWorkspace page "loading" content renders correctly 1`] = `
-<div
-  className="bp5-non-ideal-state bp5-non-ideal-state-vertical WorkspaceParent bp5-dark"
->
+<DocumentFragment>
   <div
-    className="bp5-non-ideal-state-visual"
-    style={
-      {
-        "fontSize": "48px",
-        "lineHeight": "48px",
-      }
-    }
+    class="bp5-non-ideal-state bp5-non-ideal-state-vertical WorkspaceParent bp5-dark"
   >
     <div
-      aria-label="loading"
-      aria-valuemax={100}
-      aria-valuemin={0}
-      className="bp5-spinner"
-      role="progressbar"
+      class="bp5-non-ideal-state-visual"
+      style="font-size: 48px; line-height: 48px;"
     >
       <div
-        className="bp5-spinner-animation"
+        aria-label="loading"
+        aria-valuemax="100"
+        aria-valuemin="0"
+        class="bp5-spinner"
+        role="progressbar"
       >
-        <svg
-          height={100}
-          strokeWidth="4.00"
-          viewBox="3.00 3.00 94.00 94.00"
-          width={100}
+        <div
+          class="bp5-spinner-animation"
         >
-          <path
-            className="bp5-spinner-track"
-            d="M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90"
-          />
-          <path
-            className="bp5-spinner-head"
-            d="M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90"
-            pathLength={280}
-            strokeDasharray="280 280"
-            strokeDashoffset={210}
-          />
-        </svg>
+          <svg
+            height="100"
+            stroke-width="4.00"
+            viewBox="3.00 3.00 94.00 94.00"
+            width="100"
+          >
+            <path
+              class="bp5-spinner-track"
+              d="M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90"
+            />
+            <path
+              class="bp5-spinner-head"
+              d="M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90"
+              pathLength="280"
+              stroke-dasharray="280 280"
+              stroke-dashoffset="210"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div
+      class="bp5-non-ideal-state-text"
+    >
+      <div>
+        Getting mission ready...
       </div>
     </div>
   </div>
-  <div
-    className="bp5-non-ideal-state-text"
-  >
-    <div>
-      Getting mission ready...
-    </div>
-  </div>
-</div>
+</DocumentFragment>
 `;
 
 exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting question renders correctly 1`] = `
@@ -387,7 +384,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                         </div>
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_question_overview"
-                          aria-disabled="false"
                           aria-expanded="true"
                           aria-selected="true"
                           class="bp5-tab side-content-tab"
@@ -425,7 +421,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                         </div>
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_briefing"
-                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp5-tab side-content-tab"
@@ -463,7 +458,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                         </div>
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_contest_voting"
-                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp5-tab side-content-tab"
@@ -501,7 +495,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                         </div>
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_score_leaderboard"
-                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp5-tab side-content-tab"
@@ -539,7 +532,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                         </div>
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_popular_vote_leaderboard"
-                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp5-tab side-content-tab"
@@ -1701,7 +1693,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                         </div>
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_question_overview"
-                          aria-disabled="false"
                           aria-expanded="true"
                           aria-selected="true"
                           class="bp5-tab side-content-tab"
@@ -1739,7 +1730,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                         </div>
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_briefing"
-                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp5-tab side-content-tab"
@@ -1777,7 +1767,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                         </div>
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_autograder"
-                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp5-tab side-content-tab"
@@ -2500,7 +2489,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                         </div>
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_question_overview"
-                          aria-disabled="false"
                           aria-expanded="true"
                           aria-selected="true"
                           class="bp5-tab side-content-tab"
@@ -2538,7 +2526,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                         </div>
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_briefing"
-                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp5-tab side-content-tab"
@@ -2576,7 +2563,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                         </div>
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_autograder"
-                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp5-tab side-content-tab"
@@ -3341,7 +3327,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
                         </div>
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_question_overview"
-                          aria-disabled="false"
                           aria-expanded="true"
                           aria-selected="true"
                           class="bp5-tab side-content-tab"
@@ -3379,7 +3364,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
                         </div>
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_briefing"
-                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp5-tab side-content-tab"
@@ -3417,7 +3401,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
                         </div>
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_autograder"
-                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp5-tab side-content-tab"
@@ -4182,7 +4165,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                         </div>
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_question_overview"
-                          aria-disabled="false"
                           aria-expanded="true"
                           aria-selected="true"
                           class="bp5-tab side-content-tab"
@@ -4220,7 +4202,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                         </div>
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_briefing"
-                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp5-tab side-content-tab"
@@ -4258,7 +4239,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                         </div>
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_autograder"
-                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp5-tab side-content-tab"
@@ -4296,7 +4276,6 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                         </div>
                         <div
                           aria-controls="bp5-tab-panel_side-content-tabs_grading"
-                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp5-tab side-content-tab"
