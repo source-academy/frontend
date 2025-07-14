@@ -9,7 +9,9 @@ export const shallowRender = (element: React.ReactElement) => {
 };
 
 export const renderTree = async (element: React.ReactElement) => {
-  const app = renderer.create(element);
+  // Safe to do this since we don't have any async components
+  // In React 19, components can return `ReactNode | Promise<ReactNode>`
+  const app = renderer.create(element as any);
   await act(() => app);
   return app;
 };
