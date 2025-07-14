@@ -55,7 +55,9 @@ const AnchorLink: React.FC<AnchorLinkType> = ({ refs, id, children, top }) => {
         <Link
           className="sicp-anchor-link"
           style={{ top: top }}
-          ref={ref => (refs.current[id] = ref)}
+          ref={ref => {
+            refs.current[id] = ref;
+          }}
           to={id}
         >
           <Icon icon={IconNames.LINK} />
@@ -71,7 +73,11 @@ const handleFootnote = (obj: JsonType, refs: RefType) => {
     <>
       {obj.count === 1 && <hr />}
       <div className="sicp-footnote">
-        <div ref={ref => (refs.current[obj.id!] = ref)} />
+        <div
+          ref={ref => {
+            refs.current[obj.id!] = ref;
+          }}
+        />
         <a href={obj.href}>{'[' + obj.count + '] '}</a>
         {parseArr(obj.child!, refs)}
       </div>
@@ -81,7 +87,12 @@ const handleFootnote = (obj: JsonType, refs: RefType) => {
 
 const handleRef = (obj: JsonType, refs: RefType) => {
   return (
-    <Link ref={ref => (refs.current[obj.id!] = ref)} to={obj.href!}>
+    <Link
+      ref={ref => {
+        refs.current[obj.id!] = ref;
+      }}
+      to={obj.href!}
+    >
       {obj.body}
     </Link>
   );
@@ -227,7 +238,13 @@ export const processingFunctions: Record<string, (obj: JsonType, refs: RefType) 
   FIGURE: handleFigure,
 
   FOOTNOTE_REF: (obj, refs) => (
-    <sup ref={ref => (refs.current[obj.id!] = ref)}>{handleRef(obj, refs)}</sup>
+    <sup
+      ref={ref => {
+        refs.current[obj.id!] = ref;
+      }}
+    >
+      {handleRef(obj, refs)}
+    </sup>
   ),
 
   JAVASCRIPTINLINE: (obj, _refs) => <Code>{obj.body}</Code>,

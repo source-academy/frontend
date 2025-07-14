@@ -22,7 +22,7 @@ const BOT_ERROR_MESSAGE: Readonly<ChatMessage> = {
   role: 'assistant'
 };
 
-const scrollToBottom = (ref: React.RefObject<HTMLDivElement>) => {
+const scrollToBottom = (ref: React.RefObject<HTMLDivElement | null>) => {
   ref.current?.scrollTo({ top: ref.current?.scrollHeight });
 };
 

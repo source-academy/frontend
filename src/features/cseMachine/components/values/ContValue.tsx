@@ -37,7 +37,7 @@ import { Value } from './Value';
 export class ContValue extends Value implements IHoverable {
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
-  readonly labelRef: RefObject<Label> = React.createRef();
+  readonly labelRef: RefObject<Label | null> = React.createRef();
 
   readonly tooltip: string = 'continuation';
   readonly tooltipWidth: number = getTextWidth(this.tooltip);

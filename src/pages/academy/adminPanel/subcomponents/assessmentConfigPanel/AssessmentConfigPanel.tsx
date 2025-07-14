@@ -61,7 +61,7 @@ const AssessmentConfigPanel: WithImperativeApi<
   React.FC<Props>
 > = forwardRef<ImperativeAssessmentConfigPanel, Props>(
   ({ setHasChangesAssessmentConfig, initialConfigs }, imperativeRef) => {
-    const gridApi = React.useRef<GridApi<AssessmentConfiguration>>();
+    const gridApi = React.useRef<GridApi<AssessmentConfiguration>>(null);
     // Create a mutable copy of the initialConfigs to track changes
     // to prevent UI flicker during state changes.
     const tableState = useRef(cloneDeep(initialConfigs));

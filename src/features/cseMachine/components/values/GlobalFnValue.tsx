@@ -41,7 +41,7 @@ export class GlobalFnValue extends Value implements IHoverable {
   readonly tooltipWidth: number;
   readonly exportTooltip: string;
   readonly exportTooltipWidth: number;
-  readonly labelRef: RefObject<Label> = React.createRef();
+  readonly labelRef: RefObject<Label | null> = React.createRef();
 
   centerX: number;
   private _arrow: ArrowFromFn | undefined;
