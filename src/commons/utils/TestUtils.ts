@@ -1,24 +1,22 @@
+import { render } from '@testing-library/react';
 import React, { act } from 'react';
-import renderer from 'react-test-renderer';
-import { createRenderer } from 'react-test-renderer/shallow';
+import { shallow } from 'shallow-react-snapshot';
 
 export const shallowRender = (element: React.ReactElement) => {
-  const renderer = createRenderer();
-  renderer.render(element);
-  return renderer.getRenderOutput();
+  const app = render(element);
+  return shallow(app.container, element);
 };
 
 export const renderTree = async (element: React.ReactElement) => {
-  // Safe to do this since we don't have any async components
-  // In React 19, components can return `ReactNode | Promise<ReactNode>`
-  const app = renderer.create(element as any);
+  const app = render(element);
   await act(() => app);
-  return app;
+  return app.asFragment();
 };
 
+// TODO: Remove and replace with renderTree directly
 export const renderTreeJson = async (element: React.ReactElement) => {
   const app = await renderTree(element);
-  return app.toJSON();
+  return app;
 };
 
 /**
