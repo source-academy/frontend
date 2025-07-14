@@ -29,7 +29,7 @@ export const renderTreeJson = async (element: React.ReactElement) => {
 export function deepFilter<T>(
   nestedObject: T,
   matchFn: (e: T) => boolean,
-  getChildren: (e: T) => T[]
+  getChildren: (e: T) => T[] | undefined
 ) {
   const matches: any[] = [];
 
