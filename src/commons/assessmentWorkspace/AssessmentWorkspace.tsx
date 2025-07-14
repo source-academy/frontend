@@ -412,6 +412,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       case QuestionTypes.programming || QuestionTypes.voting:
         const prepend = question.prepend;
         const code = question.answer ?? question.solutionTemplate;
+        const breakpoints = editorTabs[0]?.breakpoints ?? [];
         sendToWebview(
           Messages.NewEditor(
             workspaceLocation,
@@ -419,7 +420,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             props.questionId,
             chapter,
             prepend,
-            code
+            code,
+            breakpoints
           )
         );
         break;
@@ -449,6 +451,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange(0, answer);
       // Hacky way to view the editor, might cause issues
+      const breakpoints = editorTabs[0]?.breakpoints ?? [];
       sendToWebview(
         Messages.NewEditor(
           workspaceLocation,
@@ -456,7 +459,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           questionId,
           question.library.chapter,
           '',
-          answer
+          answer,
+          breakpoints
         )
       );
       //

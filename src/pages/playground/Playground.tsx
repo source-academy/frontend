@@ -381,6 +381,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       return;
     }
     const initialCode = editorTabs[0]?.value ?? '';
+    const breakpoints = editorTabs[0]?.breakpoints ?? [];
     sendToWebview(
       Messages.NewEditor(
         workspaceLocation,
@@ -388,7 +389,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
         1,
         playgroundSourceChapter,
         '',
-        initialCode
+        initialCode,
+        breakpoints
       )
     );
     // We don't want to re-send this message even when the variables change

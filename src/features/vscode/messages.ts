@@ -33,14 +33,16 @@ const Messages = createMessages({
     questionId: number,
     chapter: number,
     prepend: string,
-    initialCode: string
+    initialCode: string,
+    breakpoints: string[]
   ) => ({
     workspaceLocation,
     assessmentName,
     questionId,
     chapter,
     prepend,
-    initialCode
+    initialCode,
+    breakpoints
   }),
   Text: (workspaceLocation: VscWorkspaceLocation, code: string) => ({
     workspaceLocation,
@@ -99,7 +101,11 @@ const Messages = createMessages({
     questionId,
     answer
   }),
-  LoginWithBrowser: (route: string) => ({ route })
+  LoginWithBrowser: (route: string) => ({ route }),
+  SetEditorBreakpoints: (workspaceLocation: VscWorkspaceLocation, newBreakpoints: string[]) => ({
+    workspaceLocation,
+    newBreakpoints
+  })
 });
 
 export default Messages;
