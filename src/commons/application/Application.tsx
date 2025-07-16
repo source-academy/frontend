@@ -88,7 +88,7 @@ const Application: React.FC = () => {
       };
     }
 
-    const message = Messages.ExtensionPing();
+    const message = Messages.ExtensionPing(window.origin);
     sendToWebview(message);
 
     window.addEventListener('message', event => {
@@ -116,17 +116,36 @@ const Application: React.FC = () => {
           }
           break;
         case MessageTypeNames.Text:
-          const code = message.code;
+          const { workspaceLocation, code } = message;
           console.log(`FRONTEND: TextMessage: ${code}`);
-          // TODO: Don't change ace editor directly
-          // const elements = document.getElementsByClassName('react-ace');
-          // if (elements.length === 0) {
-          //   return;
-          // }
-          // // @ts-expect-error: ace is not available at compile time
-          // const editor = ace.edit(elements[0]);
-          // editor.setValue(code);
-          dispatch(WorkspaceActions.updateEditorValue('assessment', 0, code));
+          dispatch(WorkspaceActions.updateEditorValue(workspaceLocation, 0, code));
+          break;
+        case MessageTypeNames.EvalEditor:
+          dispatch(WorkspaceActions.evalEditor(message.workspaceLocation));
+          break;
+        case MessageTypeNames.Navigate:
+          window.location.pathname = message.route;
+          // TODO: Figure out why this doesn't work, this is faster in theory
+          // navigate(message.route);
+          break;
+        case MessageTypeNames.McqQuestion:
+          dispatch(WorkspaceActions.showMcqPane(message.workspaceLocation, message.options));
+          break;
+        case MessageTypeNames.McqAnswer:
+          console.log(`FRONTEND: MCQAnswerMessage: ${message}`);
+          dispatch(SessionActions.submitAnswer(message.questionId, message.choice));
+          break;
+        case MessageTypeNames.AssessmentAnswer:
+          dispatch(SessionActions.submitAnswer(message.questionId, message.answer));
+          break;
+        case MessageTypeNames.SetEditorBreakpoints:
+          dispatch(
+            WorkspaceActions.setEditorBreakpoint(
+              message.workspaceLocation,
+              0,
+              message.newBreakpoints
+            )
+          );
           break;
       }
     });

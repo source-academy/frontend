@@ -6,7 +6,7 @@ export enum AuthProviderType {
   SAML_SSO = 'SAML'
 }
 
-export function computeEndpointUrl(providerId: string): string | undefined {
+export function computeEndpointUrl(providerId: string, forVscode?: boolean): string | undefined {
   const ep = Constants.authProviders.get(providerId);
   if (!ep) {
     return undefined;
@@ -15,10 +15,10 @@ export function computeEndpointUrl(providerId: string): string | undefined {
     const epUrl = new URL(ep.endpoint);
     switch (ep.type) {
       case AuthProviderType.OAUTH2:
-        epUrl.searchParams.set('redirect_uri', computeFrontendRedirectUri(providerId)!);
+        epUrl.searchParams.set('redirect_uri', computeFrontendRedirectUri(providerId, forVscode)!);
         break;
       case AuthProviderType.CAS:
-        epUrl.searchParams.set('service', computeFrontendRedirectUri(providerId)!);
+        epUrl.searchParams.set('service', computeFrontendRedirectUri(providerId, forVscode)!);
         break;
       case AuthProviderType.SAML_SSO:
         epUrl.searchParams.set('target_url', computeSamlRedirectUri(providerId)!);
@@ -31,13 +31,17 @@ export function computeEndpointUrl(providerId: string): string | undefined {
   }
 }
 
-export function computeFrontendRedirectUri(providerId: string): string | undefined {
+export function computeFrontendRedirectUri(
+  providerId: string,
+  forVscode?: boolean
+): string | undefined {
   const ep = Constants.authProviders.get(providerId);
   if (!ep) {
     return undefined;
   }
   const port = window.location.port === '' ? '' : `:${window.location.port}`;
-  const callback = `${window.location.protocol}//${window.location.hostname}${port}/login/callback${
+  const path = !forVscode ? '/login/callback' : '/login/vscode_callback';
+  const callback = `${window.location.protocol}//${window.location.hostname}${port}${path}${
     ep.isDefault ? '' : '?provider=' + encodeURIComponent(providerId)
   }`;
   return callback;
