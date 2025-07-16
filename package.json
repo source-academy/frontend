@@ -39,7 +39,7 @@
     "@reduxjs/toolkit": "^1.9.7",
     "@sentry/browser": "^8.33.0",
     "@sourceacademy/c-slang": "^1.0.21",
-    "@sourceacademy/sharedb-ace": "^2.0.3",
+    "@sourceacademy/sharedb-ace": "^2.1.0",
     "@sourceacademy/sling-client": "^0.1.0",
     "@szhsin/react-menu": "^4.0.0",
     "@tanstack/react-table": "^8.9.3",
