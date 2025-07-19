@@ -5,7 +5,7 @@ import { Visible } from '../../components/Visible';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { IHoverable } from '../../CseMachineTypes';
 import {
-  defaultStrokeColor,
+  reachedStrokeColor,
   setHoveredCursor,
   setHoveredStyle,
   setUnhoveredCursor,
@@ -47,7 +47,7 @@ export class Arrow extends Visible implements IHoverable {
       >
         <KonvaPath
           {...ShapeDefaultProps}
-          stroke={defaultStrokeColor()}
+          stroke={reachedStrokeColor()}
           strokeWidth={Config.ArrowStrokeWidth}
           hitStrokeWidth={Config.ArrowHitStrokeWidth}
           data={path}
@@ -56,7 +56,7 @@ export class Arrow extends Visible implements IHoverable {
         <KonvaArrow
           {...ShapeDefaultProps}
           points={this._points.slice(this._points.length - 4)}
-          fill={defaultStrokeColor()}
+          fill={reachedStrokeColor()}
           strokeEnabled={false}
           pointerWidth={Config.ArrowHeadSize}
           pointerLength={Config.ArrowHeadSize}

@@ -4,7 +4,7 @@ import { Group } from 'react-konva';
 import { Visible } from '../../components/Visible';
 import { Config } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
-import { defaultActiveColor, defaultStrokeColor } from '../../CseMachineUtils';
+import { defaultActiveColor, reachedStrokeColor } from '../../CseMachineUtils';
 import { CseMachine } from '../CseMachine';
 import { Arrow } from './Arrow';
 import { Frame } from './Frame';
@@ -39,7 +39,7 @@ export class Environment extends Visible {
         let parentFrame;
         while (currEnv) {
           const stroke =
-            currEnv === environment.current ? defaultActiveColor() : defaultStrokeColor();
+            currEnv === environment.current ? defaultActiveColor() : reachedStrokeColor();
           const frame = new Frame(currEnv, methodFramesX, methodFramesY, stroke);
           this._methodFrames.push(frame);
           methodFramesY += frame.height() + Config.FramePaddingY;
@@ -70,7 +70,7 @@ export class Environment extends Visible {
 
       // Create frame top-down.
       while (env) {
-        const stroke = env === environment.current ? defaultActiveColor() : defaultStrokeColor();
+        const stroke = env === environment.current ? defaultActiveColor() : reachedStrokeColor();
         const frame = new Frame(env, objectFramesX, objectFramesY, stroke);
         // No padding btwn obj frames thus no arrows required.
         objectFramesY += frame.height();
@@ -97,7 +97,7 @@ export class Environment extends Visible {
     for (const c of environment.global.frame.values()) {
       const classEnv = (c as ECE.Class).frame;
       const classFrameStroke =
-        classEnv === environment.current ? defaultActiveColor() : defaultStrokeColor();
+        classEnv === environment.current ? defaultActiveColor() : reachedStrokeColor();
       const highlightOnHover = () => {
         const node = (c as ECE.Class).classDecl;
         let start = -1;

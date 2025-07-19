@@ -3,7 +3,7 @@ import { Group } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
-import { defaultActiveColor, defaultStrokeColor } from '../../CseMachineUtils';
+import { defaultActiveColor, reachedStrokeColor } from '../../CseMachineUtils';
 import { CseMachine } from '../CseMachine';
 import { ControlItem } from './ControlItem';
 
@@ -26,7 +26,7 @@ export class Control extends Visible {
       const controlItemText = this.getControlItemString(controlItem);
 
       const controlItemStroke =
-        index === control.getStack().length - 1 ? defaultActiveColor() : defaultStrokeColor();
+        index === control.getStack().length - 1 ? defaultActiveColor() : reachedStrokeColor();
 
       // TODO reference draw ltr?
       const controlItemReference =

@@ -10,13 +10,26 @@ import { GenericArrow } from './GenericArrow';
 export class ArrowFromFn extends GenericArrow<FnValue | GlobalFnValue | ContValue, Frame> {
   constructor(from: FnValue | GlobalFnValue | ContValue) {
     super(from);
-    this.faded = !from.isReferenced();
+    this.setReachable(from.isReachable());
   }
 
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
+
     if (!to) return [];
+
+    if (this.isReachable() && !to.isReachable()) {
+      console.log('setting to reachable...');
+
+      to.setParentChainReachable();
+    }
+
+    to.draw();
+    console.log('to', to.isReachable());
+    console.log(to);
+    
+
 
     const steps: StepsArray = [
       (x, y) =>
