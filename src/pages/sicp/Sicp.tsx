@@ -13,9 +13,12 @@ import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
 import {
+  readSicpLangLocalStorage,
   readSicpSectionLocalStorage,
+  setSicpLangLocalStorage,
   setSicpSectionLocalStorage,
   SICP_CACHE_KEY,
+  SICP_DEF_TB_LANG,
   SICP_INDEX
 } from 'src/features/sicp/utils/SicpUtils';
 
@@ -35,11 +38,24 @@ export const CodeSnippetContext = React.createContext({
 
 const loadingComponent = <NonIdealState title="Loading Content" icon={<Spinner />} />;
 
+const AVAILABLE_SICP_TB_LANGS: readonly string[] = ['en', 'zh_CN'];
+
+const loadInitialLang = () => {
+  const saved = readSicpLangLocalStorage();
+  if (AVAILABLE_SICP_TB_LANGS.includes(saved)) {
+    return saved;
+  } else {
+    setSicpLangLocalStorage(SICP_DEF_TB_LANG);
+    return SICP_DEF_TB_LANG;
+  }
+};
+
 const Sicp: React.FC = () => {
   const [data, setData] = useState(<></>);
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState('0');
-  const { section } = useParams<{ section: string }>();
+  const { paramLang, section } = useParams<{ paramLang: string; section: string }>();
+  const [lang, setLang] = useState(loadInitialLang());
   const parentRef = useRef<HTMLDivElement>(null);
   const refs = useRef<Record<string, HTMLElement | null>>({});
   const navigate = useNavigate();
@@ -88,6 +104,23 @@ const Sicp: React.FC = () => {
 
   // Handle loading of latest viewed section and fetch json data
   React.useEffect(() => {
+    if (paramLang || (section && AVAILABLE_SICP_TB_LANGS.includes(section))) {
+      const pLang = (paramLang ? paramLang : section)!;
+      if (AVAILABLE_SICP_TB_LANGS.includes(pLang)) {
+        setLang(pLang);
+        setSicpLangLocalStorage(pLang);
+      } else {
+        setLang(SICP_DEF_TB_LANG);
+        setSicpLangLocalStorage(SICP_DEF_TB_LANG);
+      }
+      if (paramLang) {
+        navigate(`/sicpjs/${section}`, { replace: true });
+      } else {
+        navigate(`/sicpjs/${readSicpSectionLocalStorage()}`, { replace: true });
+      }
+      return;
+    }
+
     if (!section) {
       /**
        * Handles rerouting to the latest viewed section when clicking from
@@ -105,7 +138,11 @@ const Sicp: React.FC = () => {
 
     setLoading(true);
 
-    fetch(baseUrl + section + extension)
+    if (!AVAILABLE_SICP_TB_LANGS.includes(lang)) {
+      setLang(SICP_DEF_TB_LANG);
+      setSicpLangLocalStorage(SICP_DEF_TB_LANG);
+    }
+    fetch(baseUrl + lang + '/' + section + extension)
       .then(response => {
         if (!response.ok) {
           throw Error(response.statusText);
@@ -138,7 +175,7 @@ const Sicp: React.FC = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [section, navigate]);
+  }, [paramLang, section, lang, navigate]);
 
   // Scroll to correct position
   React.useEffect(() => {
@@ -163,9 +200,32 @@ const Sicp: React.FC = () => {
     dispatch(WorkspaceActions.resetWorkspace('sicp'));
     dispatch(WorkspaceActions.toggleUsingSubst(false, 'sicp'));
   };
+
+  const handleLanguageToggle = () => {
+    const newLang = lang === 'en' ? 'zh_CN' : 'en';
+    setLang(newLang);
+    setSicpLangLocalStorage(newLang);
+  };
+
   const handleNavigation = (sect: string) => {
     navigate('/sicpjs/' + sect);
   };
+
+  // Language toggle button with fixed position
+  const languageToggle = (
+    <div
+      style={{
+        position: 'sticky',
+        top: '20px',
+        left: '20px',
+        zIndex: 0
+      }}
+    >
+      <Button onClick={handleLanguageToggle} intent="primary" small>
+        {lang === 'en' ? '切换到中文' : 'Switch to English'}
+      </Button>
+    </div>
+  );
 
   // `section` is defined due to the navigate logic in the useEffect above
   const navigationButtons = (
@@ -186,6 +246,7 @@ const Sicp: React.FC = () => {
     >
       <SicpErrorBoundary>
         <CodeSnippetContext.Provider value={{ active: active, setActive: handleSnippetEditorOpen }}>
+          {languageToggle}
           {loading ? (
             <div className="sicp-content">{loadingComponent}</div>
           ) : section === 'index' ? (
