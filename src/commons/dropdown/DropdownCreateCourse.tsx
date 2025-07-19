@@ -29,7 +29,7 @@ type Props = {
   onClose: () => void;
 };
 
-const DropdownCreateCourse: React.FC<Props> = props => {
+const DropdownCreateCourse = (props => {
   const dispatch = useDispatch();
 
   const [courseConfig, setCourseConfig] = React.useState<UpdateCourseConfiguration>({
@@ -280,6 +280,6 @@ const DropdownCreateCourse: React.FC<Props> = props => {
       </DialogBody>
     </Dialog>
   );
-};
+}) satisfies React.FC<Props>;
 
 export default DropdownCreateCourse;

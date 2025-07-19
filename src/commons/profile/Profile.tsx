@@ -16,7 +16,7 @@ type OwnProps = {
   onClose: () => void;
 };
 
-const Profile: React.FC<ProfileProps> = props => {
+const Profile = (props => {
   // FIXME: `xp` is actually of type number | undefined here!
   // Fix the session type, then remove the typecast below
   const {
@@ -188,6 +188,6 @@ const Profile: React.FC<ProfileProps> = props => {
       {content}
     </Drawer>
   );
-};
+}) satisfies React.FC<ProfileProps>;
 
 export default Profile;

@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import type { Location } from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
-import { shallowRender } from 'src/commons/utils/TestUtils';
+import { renderTree } from 'src/commons/utils/TestUtils';
 
 import Sicp from '../Sicp';
 
@@ -14,13 +14,13 @@ jest.mock('react-router', () => ({
 }));
 
 describe('Sicp renders', () => {
-  test('correctly', () => {
+  test('correctly', async () => {
     const sicp = (
       <Provider store={mockInitialStore()}>
         <Sicp />
       </Provider>
     );
-    const tree = shallowRender(sicp);
+    const tree = await renderTree(sicp);
     expect(tree).toMatchSnapshot();
   });
 
