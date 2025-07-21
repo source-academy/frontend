@@ -3314,16 +3314,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/sharedb-ace@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "@sourceacademy/sharedb-ace@npm:2.1.0"
+"@sourceacademy/sharedb-ace@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "@sourceacademy/sharedb-ace@npm:2.1.1"
   dependencies:
     "@convergencelabs/ace-collab-ext": "npm:^0.6.0"
-    event-emitter-es6: "npm:^1.1.5"
     logdown: "npm:^3.3.1"
     partysocket: "npm:^1.0.3"
     sharedb: "npm:^5.1.1"
-  checksum: 10c0/c66efa6085f9ec8639164a5a291dd929cb84bf4d44dd72fe534099fadd68aa126b59e95d451585c35d33c14d55c3297649f3720522d4d35f1fe29bbeb03758ae
+  checksum: 10c0/2ae74468001f77a3e019d5d19e165916cc00a440b69b1aeb9f6a0fa4d253570772102fa2016421a5ae893713fa5c860739588ab3060b34e642082b7a926ab322
   languageName: node
   linkType: hard
 
@@ -7285,13 +7284,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"event-emitter-es6@npm:^1.1.5":
-  version: 1.1.5
-  resolution: "event-emitter-es6@npm:1.1.5"
-  checksum: 10c0/056c1b5e4a55fcf9d686808c85ea896dc0dfd0304f2bfb1de111bf3acf8b6e88261fb49a0a69281fd24def5646134bf1daf372bf00ed667971195f526cb8a9f6
-  languageName: node
-  linkType: hard
-
 "event-target-polyfill@npm:^0.0.4":
   version: 0.0.4
   resolution: "event-target-polyfill@npm:0.0.4"
@@ -7667,7 +7659,7 @@ __metadata:
     "@rsbuild/plugin-svgr": "npm:^1.2.0"
     "@sentry/browser": "npm:^8.33.0"
     "@sourceacademy/c-slang": "npm:^1.0.21"
-    "@sourceacademy/sharedb-ace": "npm:^2.1.0"
+    "@sourceacademy/sharedb-ace": "npm:^2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
     "@svgr/webpack": "npm:^8.0.0"
     "@swc/core": "npm:^1.11.22"
