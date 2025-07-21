@@ -1,22 +1,22 @@
+import { render } from '@testing-library/react';
 import React, { act } from 'react';
-import renderer from 'react-test-renderer';
-import { createRenderer } from 'react-test-renderer/shallow';
+import { shallow } from 'shallow-react-snapshot';
 
 export const shallowRender = (element: React.ReactElement) => {
-  const renderer = createRenderer();
-  renderer.render(element);
-  return renderer.getRenderOutput();
+  const app = render(element);
+  return shallow(app.container, element);
 };
 
 export const renderTree = async (element: React.ReactElement) => {
-  const app = renderer.create(element);
+  const app = render(element);
   await act(() => app);
-  return app;
+  return app.asFragment();
 };
 
+// TODO: Remove and replace with renderTree directly
 export const renderTreeJson = async (element: React.ReactElement) => {
   const app = await renderTree(element);
-  return app.toJSON();
+  return app;
 };
 
 /**
@@ -27,7 +27,7 @@ export const renderTreeJson = async (element: React.ReactElement) => {
 export function deepFilter<T>(
   nestedObject: T,
   matchFn: (e: T) => boolean,
-  getChildren: (e: T) => T[]
+  getChildren: (e: T) => T[] | undefined
 ) {
   const matches: any[] = [];
 

@@ -12,7 +12,7 @@ type Props = {
 const SideContentMarkdownEditor: React.FC<Props> = ({ allowEdits, content, setContent }) => {
   const [editorModeOn, setEditorModeOn] = React.useState(false);
 
-  const node = React.useRef() as any;
+  const node = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClick(event: any) {

@@ -45,8 +45,8 @@ export class ControlBarSessionButtons extends React.PureComponent<
   ControlBarSessionButtonsProps,
   State
 > {
-  private sessionEditingIdInputElem: React.RefObject<HTMLInputElement>;
-  private sessionViewingIdInputElem: React.RefObject<HTMLInputElement>;
+  private sessionEditingIdInputElem: React.RefObject<HTMLInputElement | null>;
+  private sessionViewingIdInputElem: React.RefObject<HTMLInputElement | null>;
 
   constructor(props: ControlBarSessionButtonsProps) {
     super(props);
