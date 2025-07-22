@@ -85,6 +85,7 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
     <Blueprint5.NavbarGroup
       align="right"
     >
+      <NavigationBarLangSelectButton />
       <NavLink
         className={[Function]}
         to="/contributors"
@@ -113,7 +114,7 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
   <Routes>
     <Route
       element={null}
-      path="/playground"
+      path="/playground/*"
     />
     <Route
       element={null}
@@ -290,6 +291,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
     <Blueprint5.NavbarGroup
       align="right"
     >
+      <NavigationBarLangSelectButton />
       <NavLink
         className={[Function]}
         to="/contributors"
@@ -318,7 +320,7 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
   <Routes>
     <Route
       element={null}
-      path="/playground"
+      path="/playground/*"
     />
     <Route
       element={null}
@@ -441,6 +443,7 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
     <Blueprint5.NavbarGroup
       align="right"
     >
+      <NavigationBarLangSelectButton />
       <NavLink
         className={[Function]}
         to="/contributors"
@@ -469,7 +472,7 @@ exports[`NavigationBar Renders correctly for student without course 1`] = `
   <Routes>
     <Route
       element={null}
-      path="/playground"
+      path="/playground/*"
     />
     <Route
       element={null}
