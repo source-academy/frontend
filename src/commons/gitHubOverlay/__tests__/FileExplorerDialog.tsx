@@ -1,10 +1,24 @@
 import { Octokit } from '@octokit/rest';
+import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
+import { DeepPartial } from '@reduxjs/toolkit';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { MockedFunction } from 'jest-mock';
 import { act } from 'react';
 
-import * as GitHubUtils from '../../../features/github/GitHubUtils';
+import {
+  checkIfFileCanBeOpened,
+  checkIfFileCanBeSavedAndGetSaveType,
+  checkIfUserAgreesToOverwriteEditorData,
+  checkIfUserAgreesToPerformOverwritingSave,
+  getGitHubOctokitInstance,
+  openFileInEditor,
+  performCreatingSave,
+  performOverwritingSave
+} from '../../../features/github/GitHubUtils';
 import FileExplorerDialog from '../FileExplorerDialog';
 import { GitHubTreeNodeCreator } from '../GitHubTreeNodeCreator';
+
+jest.mock('../../../features/github/GitHubUtils');
 
 test('Selecting close causes onSubmit to be called with empty string', async () => {
   const octokit = getOctokitInstanceMock();
@@ -36,7 +50,9 @@ test('Selecting close causes onSubmit to be called with empty string', async () 
 });
 
 test('Opening folder for first time causes child files to be loaded', async () => {
-  const getGitHubOctokitInstanceMock = jest.spyOn(GitHubUtils, 'getGitHubOctokitInstance');
+  const getGitHubOctokitInstanceMock = getGitHubOctokitInstance as MockedFunction<
+    typeof getGitHubOctokitInstance
+  >;
   getGitHubOctokitInstanceMock.mockImplementation(getOctokitInstanceMock);
 
   const octokit = getOctokitInstanceMock();
@@ -67,7 +83,9 @@ test('Opening folder for first time causes child files to be loaded', async () =
 });
 
 test('Closing folder hides child files', async () => {
-  const getGitHubOctokitInstanceMock = jest.spyOn(GitHubUtils, 'getGitHubOctokitInstance');
+  const getGitHubOctokitInstanceMock = getGitHubOctokitInstance as MockedFunction<
+    typeof getGitHubOctokitInstance
+  >;
   getGitHubOctokitInstanceMock.mockImplementation(getOctokitInstanceMock);
 
   const octokit = getOctokitInstanceMock();
@@ -107,7 +125,9 @@ test('Closing folder hides child files', async () => {
 });
 
 test('Opening folder for second time does not cause child files to be loaded', async () => {
-  const getGitHubOctokitInstanceMock = jest.spyOn(GitHubUtils, 'getGitHubOctokitInstance');
+  const getGitHubOctokitInstanceMock = getGitHubOctokitInstance as MockedFunction<
+    typeof getGitHubOctokitInstance
+  >;
   getGitHubOctokitInstanceMock.mockImplementation(getOctokitInstanceMock);
 
   const getChildNodesSpy = jest.spyOn(GitHubTreeNodeCreator, 'getChildNodes');
@@ -161,18 +181,20 @@ test('Opening folder for second time does not cause child files to be loaded', a
 });
 
 test('Opening folder in editor leads to appropriate function being called', async () => {
-  const checkIfFileCanBeOpenedMock = jest.spyOn(GitHubUtils, 'checkIfFileCanBeOpened');
+  const checkIfFileCanBeOpenedMock = checkIfFileCanBeOpened as MockedFunction<
+    typeof checkIfFileCanBeOpened
+  >;
   checkIfFileCanBeOpenedMock.mockImplementation(
     async (octokit: Octokit, loginID: string, repoName: string, filePath: string) => true
   );
 
-  const checkIfUserAgreesToOverwriteEditorDataMock = jest.spyOn(
-    GitHubUtils,
-    'checkIfUserAgreesToOverwriteEditorData'
-  );
+  const checkIfUserAgreesToOverwriteEditorDataMock =
+    checkIfUserAgreesToOverwriteEditorData as MockedFunction<
+      typeof checkIfUserAgreesToOverwriteEditorData
+    >;
   checkIfUserAgreesToOverwriteEditorDataMock.mockImplementation(async () => true);
 
-  const openFileInEditorMock = jest.spyOn(GitHubUtils, 'openFileInEditor');
+  const openFileInEditorMock = openFileInEditor as MockedFunction<typeof openFileInEditor>;
   openFileInEditorMock.mockImplementation(
     async (octokit: Octokit, loginID: string, repoName: string, filePath: string) => {}
   );
@@ -202,10 +224,10 @@ test('Opening folder in editor leads to appropriate function being called', asyn
 });
 
 test('Performing creating save leads to appropriate function being called', async () => {
-  const checkIfFileCanBeSavedAndGetSaveTypeMock = jest.spyOn(
-    GitHubUtils,
-    'checkIfFileCanBeSavedAndGetSaveType'
-  );
+  const checkIfFileCanBeSavedAndGetSaveTypeMock =
+    checkIfFileCanBeSavedAndGetSaveType as MockedFunction<
+      typeof checkIfFileCanBeSavedAndGetSaveType
+    >;
 
   checkIfFileCanBeSavedAndGetSaveTypeMock.mockImplementation(
     async (octokit: Octokit, loginID: string, repoName: string, filePath: string) => {
@@ -213,7 +235,7 @@ test('Performing creating save leads to appropriate function being called', asyn
     }
   );
 
-  const performCreatingSaveMock = jest.spyOn(GitHubUtils, 'performCreatingSave');
+  const performCreatingSaveMock = performCreatingSave as MockedFunction<typeof performCreatingSave>;
   performCreatingSaveMock.mockImplementation(
     async (
       octokit: Octokit,
@@ -254,10 +276,10 @@ test('Performing creating save leads to appropriate function being called', asyn
 });
 
 test('Performing ovewriting save leads to appropriate function being called', async () => {
-  const checkIfFileCanBeSavedAndGetSaveTypeMock = jest.spyOn(
-    GitHubUtils,
-    'checkIfFileCanBeSavedAndGetSaveType'
-  );
+  const checkIfFileCanBeSavedAndGetSaveTypeMock =
+    checkIfFileCanBeSavedAndGetSaveType as MockedFunction<
+      typeof checkIfFileCanBeSavedAndGetSaveType
+    >;
 
   checkIfFileCanBeSavedAndGetSaveTypeMock.mockImplementation(
     async (octokit: Octokit, loginID: string, repoName: string, filePath: string) => {
@@ -265,13 +287,15 @@ test('Performing ovewriting save leads to appropriate function being called', as
     }
   );
 
-  const checkIfUserAgreesToPerformOverwritingSaveMock = jest.spyOn(
-    GitHubUtils,
-    'checkIfUserAgreesToPerformOverwritingSave'
-  );
+  const checkIfUserAgreesToPerformOverwritingSaveMock =
+    checkIfUserAgreesToPerformOverwritingSave as MockedFunction<
+      typeof checkIfUserAgreesToPerformOverwritingSave
+    >;
   checkIfUserAgreesToPerformOverwritingSaveMock.mockImplementation(async () => true);
 
-  const performOverwritingSaveMock = jest.spyOn(GitHubUtils, 'performOverwritingSave');
+  const performOverwritingSaveMock = performOverwritingSave as MockedFunction<
+    typeof performOverwritingSave
+  >;
   performOverwritingSaveMock.mockImplementation(
     async (
       octokit: Octokit,
@@ -312,25 +336,22 @@ test('Performing ovewriting save leads to appropriate function being called', as
 });
 
 function getOctokitInstanceMock() {
-  const octokit = new Octokit();
-
-  const getContentMock = jest.spyOn(octokit.repos, 'getContent');
-  getContentMock.mockImplementation(async () => {
-    const contentResponse = generateGetContentResponse();
-    contentResponse.data = [
-      generateGitHubSubDirectory('TestFile', 'file', 'TestFile'),
-      generateGitHubSubDirectory('TestFolder', 'dir', 'TestFolder')
-    ];
-    return contentResponse;
-  });
-
-  const getAuthenticatedMock = jest.spyOn(octokit.users, 'getAuthenticated');
-  getAuthenticatedMock.mockImplementation(async () => {
-    const authResponse = generateGetAuthenticatedResponse();
-    return authResponse;
-  });
-
-  return octokit;
+  return {
+    repos: {
+      getContent: jest.fn().mockImplementation(async () => {
+        const contentResponse = generateGetContentResponse();
+        contentResponse.data = [
+          generateGitHubSubDirectory('TestFile', 'file', 'TestFile'),
+          generateGitHubSubDirectory('TestFolder', 'dir', 'TestFolder')
+          // TODO: Remove any
+        ] as any;
+        return contentResponse;
+      }) as any
+    },
+    users: {
+      getAuthenticated: jest.fn().mockResolvedValue(generateGetAuthenticatedResponse()) as any
+    }
+  } satisfies DeepPartial<Octokit> as Octokit;
 }
 
 function generateGetContentResponse() {
@@ -356,12 +377,12 @@ function generateGetContentResponse() {
         html: null
       }
     }
-  } as any;
+  } satisfies GetResponseTypeFromEndpointMethod<Octokit['repos']['getContent']>;
 }
 
-function generateGitHubSubDirectory(name: string, type: string, path: string) {
+function generateGitHubSubDirectory(name: string, type: 'file' | 'dir', path: string) {
   return {
-    type: type,
+    type: type as 'file', // TODO: Fix
     size: 0,
     name: name,
     path: path,
@@ -375,7 +396,8 @@ function generateGitHubSubDirectory(name: string, type: string, path: string) {
       git: null,
       html: null
     }
-  };
+    // TODO: Remove partial
+  } satisfies Partial<GetResponseTypeFromEndpointMethod<Octokit['repos']['getContent']>['data']>;
 }
 
 function generateGetAuthenticatedResponse() {
@@ -416,5 +438,5 @@ function generateGetAuthenticatedResponse() {
     headers: {},
     status: 200,
     url: 'www.eh'
-  } as any;
+  } satisfies GetResponseTypeFromEndpointMethod<Octokit['users']['getAuthenticated']>;
 }

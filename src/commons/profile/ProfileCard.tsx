@@ -1,7 +1,7 @@
 import { Callout, ProgressBar } from '@blueprintjs/core';
 import { IconName } from '@blueprintjs/icons';
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router';
 
 import { AssessmentOverview, AssessmentType } from '../assessment/AssessmentTypes';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';

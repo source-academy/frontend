@@ -289,7 +289,6 @@ exports[`Playground tests Playground renders correctly 1`] = `
                   </svg>
                 </span>
                 <input
-                  aria-expanded="false"
                   aria-valuemin="1000"
                   aria-valuenow="1000"
                   autocomplete="off"
@@ -498,7 +497,6 @@ exports[`Playground tests Playground renders correctly 1`] = `
             </div>
             <div>
               <div
-                class=""
                 style="position: absolute; user-select: none; width: 10px; height: 100%; top: 0px; cursor: col-resize; right: -5px;"
               />
             </div>
@@ -510,7 +508,6 @@ exports[`Playground tests Playground renders correctly 1`] = `
               class="fullscreen-button bp5-popover-target"
             >
               <button
-                aria-expanded="false"
                 class="bp5-button bp5-minimal"
                 tabindex="0"
                 type="button"
@@ -577,7 +574,6 @@ exports[`Playground tests Playground renders correctly 1`] = `
                             class="bp5-popover-target"
                           >
                             <div
-                              aria-expanded="false"
                               class="side-content-tooltip"
                               tabindex="0"
                             >
@@ -616,7 +612,6 @@ exports[`Playground tests Playground renders correctly 1`] = `
                             class="bp5-popover-target"
                           >
                             <div
-                              aria-expanded="false"
                               class="side-content-tooltip"
                               tabindex="0"
                             >
@@ -655,7 +650,6 @@ exports[`Playground tests Playground renders correctly 1`] = `
                             class="bp5-popover-target"
                           >
                             <div
-                              aria-expanded="false"
                               class="side-content-tooltip"
                               tabindex="0"
                             >
@@ -694,7 +688,6 @@ exports[`Playground tests Playground renders correctly 1`] = `
                             class="bp5-popover-target"
                           >
                             <div
-                              aria-expanded="false"
                               class="side-content-tooltip"
                               tabindex="0"
                             >
@@ -906,7 +899,7 @@ and also the
                                   class="bp5-slider-track"
                                 >
                                   <div
-                                    class="bp5-slider-progress bp5-intent-primary"
+                                    class="bp5-slider-progress"
                                     style="left: 0.00%; right: 100.00%; top: 0px;"
                                   />
                                   <div
@@ -956,7 +949,6 @@ and also the
                                   >
                                     <a
                                       aria-disabled="true"
-                                      aria-expanded="false"
                                       class="bp5-button bp5-disabled"
                                       disabled=""
                                       role="button"
@@ -1002,7 +994,6 @@ and also the
                                   >
                                     <a
                                       aria-disabled="true"
-                                      aria-expanded="false"
                                       class="bp5-button bp5-disabled"
                                       disabled=""
                                       role="button"
@@ -1152,7 +1143,6 @@ and also the
                                   >
                                     <a
                                       aria-disabled="true"
-                                      aria-expanded="false"
                                       class="bp5-button bp5-disabled"
                                       disabled=""
                                       role="button"
@@ -1198,7 +1188,6 @@ and also the
                                   >
                                     <a
                                       aria-disabled="true"
-                                      aria-expanded="false"
                                       class="bp5-button bp5-disabled"
                                       disabled=""
                                       role="button"
@@ -1363,6 +1352,7 @@ and also the
                             Please 
                             <a
                               class=""
+                              data-discover="true"
                               href="/login"
                             >
                               log in
@@ -1380,7 +1370,6 @@ and also the
               />
               <div>
                 <div
-                  class=""
                   style="position: absolute; user-select: none; width: 100%; height: 10px; left: 0px; cursor: row-resize; bottom: -5px;"
                 />
               </div>
@@ -1849,7 +1838,6 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
                   </svg>
                 </span>
                 <input
-                  aria-expanded="false"
                   aria-valuemin="1000"
                   aria-valuenow="1000"
                   autocomplete="off"
@@ -2058,7 +2046,6 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
             </div>
             <div>
               <div
-                class=""
                 style="position: absolute; user-select: none; width: 10px; height: 100%; top: 0px; cursor: col-resize; right: -5px;"
               />
             </div>
@@ -2070,7 +2057,6 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
               class="fullscreen-button bp5-popover-target"
             >
               <button
-                aria-expanded="false"
                 class="bp5-button bp5-minimal"
                 tabindex="0"
                 type="button"
@@ -2137,7 +2123,6 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
                             class="bp5-popover-target"
                           >
                             <div
-                              aria-expanded="false"
                               class="side-content-tooltip"
                               tabindex="0"
                             >
@@ -2176,7 +2161,6 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
                             class="bp5-popover-target"
                           >
                             <div
-                              aria-expanded="false"
                               class="side-content-tooltip"
                               tabindex="0"
                             >
@@ -2215,7 +2199,6 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
                             class="bp5-popover-target"
                           >
                             <div
-                              aria-expanded="false"
                               class="side-content-tooltip"
                               tabindex="0"
                             >
@@ -2254,7 +2237,6 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
                             class="bp5-popover-target"
                           >
                             <div
-                              aria-expanded="false"
                               class="side-content-tooltip"
                               tabindex="0"
                             >
@@ -2673,6 +2655,7 @@ and also the
                             Please 
                             <a
                               class=""
+                              data-discover="true"
                               href="/login"
                             >
                               log in
@@ -2690,7 +2673,6 @@ and also the
               />
               <div>
                 <div
-                  class=""
                   style="position: absolute; user-select: none; width: 100%; height: 10px; left: 0px; cursor: row-resize; bottom: -5px;"
                 />
               </div>

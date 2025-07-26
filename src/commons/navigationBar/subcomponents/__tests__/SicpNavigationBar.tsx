@@ -1,12 +1,14 @@
-import * as ReactRouter from 'react-router';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import SicpNavigationBar from '../SicpNavigationBar';
 
-test('Navbar renders correctly', () => {
-  jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ section: 'index' });
-  jest.spyOn(ReactRouter, 'useNavigate').mockReturnValue(jest.fn());
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
+  useParams: jest.fn().mockReturnValue({ section: 'index' }),
+  useNavigate: jest.fn().mockReturnValue(jest.fn())
+}));
 
+test('Navbar renders correctly', () => {
   const navbar = <SicpNavigationBar />;
   const tree = shallowRender(navbar);
   expect(tree).toMatchSnapshot();

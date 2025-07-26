@@ -5,7 +5,7 @@ exports[`Parse array no child successful 1`] = `null`;
 exports[`Parse array one child successful 1`] = `"Mock Text"`;
 
 exports[`Parse array two child successful 1`] = `
-Array [
+[
   "Mock Text",
   "Mock Text",
 ]
@@ -112,7 +112,7 @@ exports[`Parse exercise EXERCISE with solution successful 1`] = `
     <div
       className="bp5-collapse sicp-solution"
       style={
-        Object {
+        {
           "height": undefined,
           "overflowY": undefined,
           "transition": undefined,
@@ -123,7 +123,7 @@ exports[`Parse exercise EXERCISE with solution successful 1`] = `
         aria-hidden={true}
         className="bp5-collapse-body"
         style={
-          Object {
+          {
             "transform": "translateY(-undefinedpx)",
             "transition": undefined,
           }
@@ -169,7 +169,7 @@ exports[`Parse exercise EXERCISE without solution successful 1`] = `
     <div
       className="bp5-collapse sicp-solution"
       style={
-        Object {
+        {
           "height": undefined,
           "overflowY": undefined,
           "transition": undefined,
@@ -180,7 +180,7 @@ exports[`Parse exercise EXERCISE without solution successful 1`] = `
         aria-hidden={true}
         className="bp5-collapse-body"
         style={
-          Object {
+          {
             "transform": "translateY(-undefinedpx)",
             "transition": undefined,
           }
@@ -197,10 +197,11 @@ exports[`Parse figures FIGURE with image and scale successful 1`] = `
 >
   <a
     className="sicp-anchor-link"
+    data-discover="true"
     href="/id"
     onClick={[Function]}
     style={
-      Object {
+      {
         "top": 36,
       }
     }
@@ -247,10 +248,11 @@ exports[`Parse figures FIGURE with image successful 1`] = `
 >
   <a
     className="sicp-anchor-link"
+    data-discover="true"
     href="/id"
     onClick={[Function]}
     style={
-      Object {
+      {
         "top": 36,
       }
     }
@@ -297,10 +299,11 @@ exports[`Parse figures FIGURE with snippet successful 1`] = `
 >
   <a
     className="sicp-anchor-link"
+    data-discover="true"
     href="/id"
     onClick={[Function]}
     style={
-      Object {
+      {
         "top": 36,
       }
     }
@@ -345,10 +348,11 @@ exports[`Parse figures FIGURE with table successful 1`] = `
 >
   <a
     className="sicp-anchor-link"
+    data-discover="true"
     href="/id"
     onClick={[Function]}
     style={
-      Object {
+      {
         "top": 36,
       }
     }
@@ -405,7 +409,7 @@ exports[`Parse figures FIGURE with table successful 1`] = `
 `;
 
 exports[`Parse footnote DISPLAYFOOTNOTE count is 1 successful 1`] = `
-Array [
+[
   <hr />,
   <div
     className="sicp-footnote"
@@ -464,8 +468,8 @@ exports[`Parse latex LATEX block successful 1`] = `
 <span
   className="__Latex__"
   dangerouslySetInnerHTML={
-    Object {
-      "__html": "<span class=\\"katex-display\\"><span class=\\"katex\\"><span class=\\"katex-mathml\\"><math xmlns=\\"http://www.w3.org/1998/Math/MathML\\" display=\\"block\\"><semantics><mrow><mi>t</mi><mi>e</mi><mi>s</mi><mi>t</mi></mrow><annotation encoding=\\"application/x-tex\\">test</annotation></semantics></math></span><span class=\\"katex-html\\" aria-hidden=\\"true\\"><span class=\\"base\\"><span class=\\"strut\\" style=\\"height:0.6151em;\\"></span><span class=\\"mord mathnormal\\">t</span><span class=\\"mord mathnormal\\">es</span><span class=\\"mord mathnormal\\">t</span></span></span></span></span>",
+    {
+      "__html": "<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>t</mi><mi>e</mi><mi>s</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">test</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6151em;"></span><span class="mord mathnormal">t</span><span class="mord mathnormal">es</span><span class="mord mathnormal">t</span></span></span></span></span>",
     }
   }
 />
@@ -475,8 +479,8 @@ exports[`Parse latex LATEX inline successful 1`] = `
 <span
   className="__Latex__"
   dangerouslySetInnerHTML={
-    Object {
-      "__html": "<span class=\\"katex\\"><span class=\\"katex-mathml\\"><math xmlns=\\"http://www.w3.org/1998/Math/MathML\\"><semantics><mrow><mi>t</mi><mi>e</mi><mi>s</mi><mi>t</mi></mrow><annotation encoding=\\"application/x-tex\\">test</annotation></semantics></math></span><span class=\\"katex-html\\" aria-hidden=\\"true\\"><span class=\\"base\\"><span class=\\"strut\\" style=\\"height:0.6151em;\\"></span><span class=\\"mord mathnormal\\">t</span><span class=\\"mord mathnormal\\">es</span><span class=\\"mord mathnormal\\">t</span></span></span></span>",
+    {
+      "__html": "<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mi>e</mi><mi>s</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">test</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6151em;"></span><span class="mord mathnormal">t</span><span class="mord mathnormal">es</span><span class="mord mathnormal">t</span></span></span></span>",
     }
   }
 />
@@ -485,6 +489,7 @@ exports[`Parse latex LATEX inline successful 1`] = `
 exports[`Parse links FOOTNOTE_REF  successful 1`] = `
 <sup>
   <a
+    data-discover="true"
     href="/bad-link"
     onClick={[Function]}
   >
@@ -503,6 +508,7 @@ exports[`Parse links LINK  successful 1`] = `
 
 exports[`Parse links REF  successful 1`] = `
 <a
+  data-discover="true"
   href="/bad-link"
   onClick={[Function]}
 >
@@ -558,7 +564,7 @@ exports[`Parse snippet SNIPPET with latex successful 1`] = `
   <span
     className="__Latex__"
     dangerouslySetInnerHTML={
-      Object {
+      {
         "__html": "const a = 1;
 a+1;",
       }

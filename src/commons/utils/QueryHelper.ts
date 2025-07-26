@@ -1,5 +1,4 @@
 import qs from 'query-string';
-import { isArray } from 'util';
 
 export interface IParsedQuery {
   [key: string]: string;
@@ -14,7 +13,7 @@ export interface IParsedQuery {
 export function parseQuery(query: string): IParsedQuery {
   const parsed = qs.parse(query);
   for (const [key, val] of Object.entries(parsed)) {
-    if (isArray(val)) {
+    if (Array.isArray(val)) {
       parsed[key] = val.join(',');
     } else if (val === null) {
       delete parsed[key];

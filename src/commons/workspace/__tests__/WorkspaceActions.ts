@@ -258,8 +258,7 @@ test('updateEditorValue generates correct action object', () => {
     payload: {
       workspaceLocation: assessmentWorkspace,
       editorTabIndex,
-      newEditorValue,
-      isFromVscode: false
+      newEditorValue
     }
   });
 });

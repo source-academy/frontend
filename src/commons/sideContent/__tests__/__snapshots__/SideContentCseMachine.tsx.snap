@@ -4,7 +4,7 @@ exports[`CSE Machine component renders correctly 1`] = `
 <div
   onKeyDown={[Function]}
   style={
-    Object {
+    {
       "maxHeight": "100%",
       "overflow": "auto",
     }
@@ -23,9 +23,9 @@ exports[`CSE Machine component renders correctly 1`] = `
         className="bp5-slider-track"
       >
         <div
-          className="bp5-slider-progress bp5-intent-primary"
+          className="bp5-slider-progress"
           style={
-            Object {
+            {
               "left": "0.00%",
               "right": "100.00%",
               "top": 0,
@@ -35,7 +35,7 @@ exports[`CSE Machine component renders correctly 1`] = `
         <div
           className="bp5-slider-progress"
           style={
-            Object {
+            {
               "left": "0.00%",
               "right": "100.00%",
               "top": 0,
@@ -45,7 +45,7 @@ exports[`CSE Machine component renders correctly 1`] = `
         <div
           className="bp5-slider-progress"
           style={
-            Object {
+            {
               "left": "0.00%",
               "right": "100.00%",
               "top": 0,
@@ -59,7 +59,7 @@ exports[`CSE Machine component renders correctly 1`] = `
         <div
           className="bp5-slider-label"
           style={
-            Object {
+            {
               "left": "NaN%",
             }
           }
@@ -75,7 +75,7 @@ exports[`CSE Machine component renders correctly 1`] = `
         aria-valuenow={0}
         className="bp5-slider-handle"
         role="slider"
-        style={Object {}}
+        style={{}}
         tabIndex={0}
       >
         <span
@@ -87,7 +87,7 @@ exports[`CSE Machine component renders correctly 1`] = `
     </div>
     <div
       style={
-        Object {
+        {
           "alignItems": "center",
           "display": "flex",
           "justifyContent": "space-between",
@@ -107,7 +107,6 @@ exports[`CSE Machine component renders correctly 1`] = `
         >
           <a
             aria-disabled={true}
-            aria-expanded={false}
             className="bp5-button bp5-disabled"
             disabled={true}
             onBlur={[Function]}
@@ -140,7 +139,7 @@ exports[`CSE Machine component renders correctly 1`] = `
               <label
                 className="bp5-control bp5-checkbox bp5-disabled"
                 style={
-                  Object {
+                  {
                     "margin": 0,
                   }
                 }
@@ -168,7 +167,6 @@ exports[`CSE Machine component renders correctly 1`] = `
         >
           <a
             aria-disabled={true}
-            aria-expanded={false}
             className="bp5-button bp5-disabled"
             disabled={true}
             onBlur={[Function]}
@@ -201,7 +199,7 @@ exports[`CSE Machine component renders correctly 1`] = `
               <label
                 className="bp5-control bp5-checkbox bp5-disabled"
                 style={
-                  Object {
+                  {
                     "margin": 0,
                   }
                 }
@@ -345,7 +343,6 @@ exports[`CSE Machine component renders correctly 1`] = `
         >
           <a
             aria-disabled={true}
-            aria-expanded={false}
             className="bp5-button bp5-disabled"
             disabled={true}
             onBlur={[Function]}
@@ -378,7 +375,7 @@ exports[`CSE Machine component renders correctly 1`] = `
               <label
                 className="bp5-control bp5-checkbox bp5-disabled"
                 style={
-                  Object {
+                  {
                     "margin": 0,
                   }
                 }
@@ -406,7 +403,6 @@ exports[`CSE Machine component renders correctly 1`] = `
         >
           <a
             aria-disabled={true}
-            aria-expanded={false}
             className="bp5-button bp5-disabled"
             disabled={true}
             onBlur={[Function]}
@@ -483,7 +479,7 @@ exports[`CSE Machine component renders correctly 1`] = `
   <div
     className="bp5-button-group bp5-vertical"
     style={
-      Object {
+      {
         "bottom": "20px",
         "position": "absolute",
         "right": "20px",
@@ -497,7 +493,7 @@ exports[`CSE Machine component renders correctly 1`] = `
       onKeyDown={[Function]}
       onKeyUp={[Function]}
       style={
-        Object {
+        {
           "borderRadius": "3px",
           "marginBottom": "5px",
         }
@@ -530,7 +526,7 @@ exports[`CSE Machine component renders correctly 1`] = `
       onKeyDown={[Function]}
       onKeyUp={[Function]}
       style={
-        Object {
+        {
           "borderRadius": "3px",
         }
       }

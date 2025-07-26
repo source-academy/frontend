@@ -1,5 +1,5 @@
 import lzString from 'lz-string';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import { CodeSnippetProps } from 'src/pages/sicp/subcomponents/CodeSnippet';
 

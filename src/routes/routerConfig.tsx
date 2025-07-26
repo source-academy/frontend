@@ -129,10 +129,11 @@ export const getFullAcademyRouterConfig = ({
         {
           path: 'login',
           lazy: Login,
-          children: [
-            { path: 'callback', lazy: LoginCallback },
-            { path: 'vscode_callback', lazy: LoginVscodeCallback }
-          ]
+          children: [{ path: 'callback', lazy: LoginCallback }]
+        },
+        {
+          path: 'login',
+          children: [{ path: 'vscode_callback', lazy: LoginVscodeCallback }]
         },
         { path: 'welcome', lazy: Welcome, loader: welcomeLoader },
         { path: 'courses', element: <Navigate to="/" /> },

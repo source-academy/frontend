@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { Flex, Icon } from '@tremor/react';
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { useSession } from 'src/commons/utils/Hooks';

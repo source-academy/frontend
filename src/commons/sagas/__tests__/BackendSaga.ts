@@ -240,6 +240,12 @@ const mockRouter = createMemoryRouter([
   }
 ]);
 
+const mockVscodeSlice = {
+  vscode: {
+    isVscode: false
+  }
+};
+
 const mockStates = {
   router: mockRouter,
   session: {
@@ -255,7 +261,8 @@ const mockStates = {
   },
   workspaces: {
     assessment: { currentAssessment: mockAssessment.id }
-  }
+  },
+  ...mockVscodeSlice
 };
 
 const okResp = { ok: true };
@@ -362,7 +369,7 @@ describe('Test FETCH_AUTH action', () => {
           }
         ]
       ])
-      .withState({ session: mockTokens }) // need to mock tokens for updateLatestViewedCourse call
+      .withState({ session: mockTokens, ...mockVscodeSlice }) // need to mock tokens for updateLatestViewedCourse call
       .call(postAuth, code, providerId, clientId, redirectUrl)
       .put(SessionActions.setTokens(mockTokens))
       .call(getUser, mockTokens)
@@ -377,7 +384,7 @@ describe('Test FETCH_AUTH action', () => {
 
   test('when user is null', () => {
     return expectSaga(BackendSaga)
-      .withState({ session: mockTokens }) // need to mock tokens for the selectTokens() call
+      .withState({ session: mockTokens, ...mockVscodeSlice }) // need to mock tokens for the selectTokens() call
       .provide([
         [call(postAuth, code, providerId, clientId, redirectUrl), mockTokens],
         [

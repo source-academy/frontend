@@ -41,9 +41,7 @@ exports[`Autograder renders autograder results with different statuses correctly
       transitionDuration={100}
     >
       <Blueprint5.Icon
-        autoLoad={true}
         icon="help"
-        tagName="span"
       />
     </Blueprint5.Tooltip>
   </Blueprint5.Button>
@@ -65,7 +63,7 @@ exports[`Autograder renders autograder results with different statuses correctly
     label="Autograder Results"
     onClick={[Function]}
     options={
-      Object {
+      {
         "className": "collapse-button",
         "minimal": true,
       }
@@ -90,9 +88,7 @@ exports[`Autograder renders autograder results with different statuses correctly
           >
             S/N
             <Blueprint5.Icon
-              autoLoad={true}
               icon="caret-down"
-              tagName="span"
             />
           </div>
           <div
@@ -100,9 +96,7 @@ exports[`Autograder renders autograder results with different statuses correctly
           >
             Testcase status
             <Blueprint5.Icon
-              autoLoad={true}
               icon="caret-down"
-              tagName="span"
             />
           </div>
         </div>
@@ -111,9 +105,7 @@ exports[`Autograder renders autograder results with different statuses correctly
         >
           Expected result
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
         <div
@@ -121,16 +113,14 @@ exports[`Autograder renders autograder results with different statuses correctly
         >
           Actual result
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
       </div>
       <SideContentResultCard
         index={0}
         result={
-          Object {
+          {
             "resultType": "pass",
           }
         }
@@ -138,7 +128,7 @@ exports[`Autograder renders autograder results with different statuses correctly
       <SideContentResultCard
         index={1}
         result={
-          Object {
+          {
             "actual": "5",
             "expected": "8",
             "resultType": "fail",
@@ -148,9 +138,9 @@ exports[`Autograder renders autograder results with different statuses correctly
       <SideContentResultCard
         index={2}
         result={
-          Object {
-            "errors": Array [
-              Object {
+          {
+            "errors": [
+              {
                 "errorType": "dummyErrorType",
               },
             ],
@@ -161,9 +151,9 @@ exports[`Autograder renders autograder results with different statuses correctly
       <SideContentResultCard
         index={3}
         result={
-          Object {
-            "errors": Array [
-              Object {
+          {
+            "errors": [
+              {
                 "errorMessage": "Cannot read property 'getUniformLocation' of null",
                 "errorType": "systemError",
               },
@@ -175,12 +165,12 @@ exports[`Autograder renders autograder results with different statuses correctly
       <SideContentResultCard
         index={4}
         result={
-          Object {
-            "errors": Array [
-              Object {
+          {
+            "errors": [
+              {
                 "errorType": "timeout",
               },
-              Object {
+              {
                 "errorExplanation": "Missing semicolon at the end of statement",
                 "errorLine": "return (n - d) < 0 ? n : remainder(n - d, d)",
                 "errorType": "syntax",
@@ -238,9 +228,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
       transitionDuration={100}
     >
       <Blueprint5.Icon
-        autoLoad={true}
         icon="help"
-        tagName="span"
       />
     </Blueprint5.Tooltip>
   </Blueprint5.Button>
@@ -262,9 +250,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         >
           Testcase
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
         <div
@@ -272,9 +258,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         >
           Expected result
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
         <div
@@ -282,9 +266,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         >
           Actual result
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
       </div>
@@ -292,7 +274,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         handleTestcaseEval={[Function]}
         index={0}
         testcase={
-          Object {
+          {
             "answer": "3",
             "program": "add(3, 0);",
             "score": 1,
@@ -305,7 +287,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         handleTestcaseEval={[Function]}
         index={1}
         testcase={
-          Object {
+          {
             "answer": "7",
             "program": "add(5, 2);",
             "result": 7,
@@ -319,7 +301,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         handleTestcaseEval={[Function]}
         index={2}
         testcase={
-          Object {
+          {
             "answer": "0",
             "program": "add(-6, 6);",
             "result": 12,
@@ -333,18 +315,18 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         handleTestcaseEval={[Function]}
         index={3}
         testcase={
-          Object {
+          {
             "answer": "-11",
-            "errors": Array [
-              Object {
+            "errors": [
+              {
                 "elaborate": [Function],
                 "explain": [Function],
-                "location": Object {
-                  "end": Object {
+                "location": {
+                  "end": {
                     "column": 11,
                     "line": 3,
                   },
-                  "start": Object {
+                  "start": {
                     "column": 11,
                     "line": 3,
                   },
@@ -367,7 +349,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
     label="Autograder Results"
     onClick={[Function]}
     options={
-      Object {
+      {
         "className": "collapse-button",
         "minimal": true,
       }
@@ -430,9 +412,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
       transitionDuration={100}
     >
       <Blueprint5.Icon
-        autoLoad={true}
         icon="help"
-        tagName="span"
       />
     </Blueprint5.Tooltip>
   </Blueprint5.Button>
@@ -454,9 +434,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         >
           Testcase
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
         <div
@@ -464,9 +442,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         >
           Expected result
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
         <div
@@ -474,9 +450,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         >
           Actual result
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
       </div>
@@ -484,7 +458,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         handleTestcaseEval={[Function]}
         index={0}
         testcase={
-          Object {
+          {
             "answer": "3",
             "program": "add(3, 0);",
             "score": 1,
@@ -497,7 +471,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         handleTestcaseEval={[Function]}
         index={1}
         testcase={
-          Object {
+          {
             "answer": "7",
             "program": "add(5, 2);",
             "result": 7,
@@ -511,7 +485,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         handleTestcaseEval={[Function]}
         index={2}
         testcase={
-          Object {
+          {
             "answer": "0",
             "program": "add(-6, 6);",
             "result": 12,
@@ -525,18 +499,18 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         handleTestcaseEval={[Function]}
         index={3}
         testcase={
-          Object {
+          {
             "answer": "-11",
-            "errors": Array [
-              Object {
+            "errors": [
+              {
                 "elaborate": [Function],
                 "explain": [Function],
-                "location": Object {
-                  "end": Object {
+                "location": {
+                  "end": {
                     "column": 11,
                     "line": 3,
                   },
-                  "start": Object {
+                  "start": {
                     "column": 11,
                     "line": 3,
                   },
@@ -559,7 +533,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
     label="Autograder Results"
     onClick={[Function]}
     options={
-      Object {
+      {
         "className": "collapse-button",
         "minimal": true,
       }
@@ -622,9 +596,7 @@ exports[`Autograder renders placeholders correctly when testcases and results ar
       transitionDuration={100}
     >
       <Blueprint5.Icon
-        autoLoad={true}
         icon="help"
-        tagName="span"
       />
     </Blueprint5.Tooltip>
   </Blueprint5.Button>
@@ -646,7 +618,7 @@ exports[`Autograder renders placeholders correctly when testcases and results ar
     label="Autograder Results"
     onClick={[Function]}
     options={
-      Object {
+      {
         "className": "collapse-button",
         "minimal": true,
       }
@@ -709,9 +681,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
       transitionDuration={100}
     >
       <Blueprint5.Icon
-        autoLoad={true}
         icon="help"
-        tagName="span"
       />
     </Blueprint5.Tooltip>
   </Blueprint5.Button>
@@ -733,9 +703,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
         >
           Testcase
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
         <div
@@ -743,9 +711,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
         >
           Expected result
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
         <div
@@ -753,9 +719,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
         >
           Actual result
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
       </div>
@@ -763,9 +727,9 @@ exports[`Autograder renders public testcases with different statuses correctly 1
         handleTestcaseEval={[Function]}
         index={0}
         testcase={
-          Object {
-            "answer": "\\"string\\"",
-            "program": "\\"string\\";",
+          {
+            "answer": ""string"",
+            "program": ""string";",
             "result": "string",
             "score": 0,
             "type": "public",
@@ -777,7 +741,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
         handleTestcaseEval={[Function]}
         index={1}
         testcase={
-          Object {
+          {
             "answer": "2",
             "program": "fibonacci(2);",
             "score": 1,
@@ -790,7 +754,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
         handleTestcaseEval={[Function]}
         index={2}
         testcase={
-          Object {
+          {
             "answer": "2",
             "program": "fibonacci(3);",
             "result": 2,
@@ -804,7 +768,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
         handleTestcaseEval={[Function]}
         index={3}
         testcase={
-          Object {
+          {
             "answer": "3",
             "program": "fibonacci(4);",
             "result": 4,
@@ -818,18 +782,18 @@ exports[`Autograder renders public testcases with different statuses correctly 1
         handleTestcaseEval={[Function]}
         index={4}
         testcase={
-          Object {
+          {
             "answer": "5",
-            "errors": Array [
-              Object {
+            "errors": [
+              {
                 "elaborate": [Function],
                 "explain": [Function],
-                "location": Object {
-                  "end": Object {
+                "location": {
+                  "end": {
                     "column": 11,
                     "line": 3,
                   },
-                  "start": Object {
+                  "start": {
                     "column": 11,
                     "line": 3,
                   },
@@ -852,7 +816,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
     label="Autograder Results"
     onClick={[Function]}
     options={
-      Object {
+      {
         "className": "collapse-button",
         "minimal": true,
       }
@@ -915,9 +879,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
       transitionDuration={100}
     >
       <Blueprint5.Icon
-        autoLoad={true}
         icon="help"
-        tagName="span"
       />
     </Blueprint5.Tooltip>
   </Blueprint5.Button>
@@ -939,9 +901,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
         >
           Testcase
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
         <div
@@ -949,9 +909,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
         >
           Expected result
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
         <div
@@ -959,9 +917,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
         >
           Actual result
           <Blueprint5.Icon
-            autoLoad={true}
             icon="caret-down"
-            tagName="span"
           />
         </div>
       </div>
@@ -969,9 +925,9 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
         handleTestcaseEval={[Function]}
         index={0}
         testcase={
-          Object {
-            "answer": "\\"lorem\\"",
-            "program": "\\"lorem\\";",
+          {
+            "answer": ""lorem"",
+            "program": ""lorem";",
             "result": "lorem",
             "score": 0,
             "type": "secret",
@@ -983,7 +939,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
         handleTestcaseEval={[Function]}
         index={1}
         testcase={
-          Object {
+          {
             "answer": "true",
             "program": "is_prime(2);",
             "score": 1,
@@ -996,7 +952,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
         handleTestcaseEval={[Function]}
         index={2}
         testcase={
-          Object {
+          {
             "answer": "true",
             "program": "is_prime(3);",
             "result": true,
@@ -1010,7 +966,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
         handleTestcaseEval={[Function]}
         index={3}
         testcase={
-          Object {
+          {
             "answer": "false",
             "program": "is_prime(4);",
             "result": true,
@@ -1024,18 +980,18 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
         handleTestcaseEval={[Function]}
         index={4}
         testcase={
-          Object {
+          {
             "answer": "true",
-            "errors": Array [
-              Object {
+            "errors": [
+              {
                 "elaborate": [Function],
                 "explain": [Function],
-                "location": Object {
-                  "end": Object {
+                "location": {
+                  "end": {
                     "column": 11,
                     "line": 3,
                   },
-                  "start": Object {
+                  "start": {
                     "column": 11,
                     "line": 3,
                   },
@@ -1058,7 +1014,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
     label="Autograder Results"
     onClick={[Function]}
     options={
-      Object {
+      {
         "className": "collapse-button",
         "minimal": true,
       }

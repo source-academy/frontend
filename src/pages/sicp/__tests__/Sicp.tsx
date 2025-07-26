@@ -1,15 +1,20 @@
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import * as ReactRouter from 'react-router';
+import type { Location } from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import Sicp from '../Sicp';
 
+jest.mock('react-router', () => ({
+  ...jest.requireActual('react-router'),
+  useParams: jest.fn().mockReturnValue({ section: 'index' }),
+  useNavigate: jest.fn().mockReturnValue(jest.fn()),
+  useLocation: jest.fn().mockReturnValue({} as Location)
+}));
+
 describe('Sicp renders', () => {
   test('correctly', () => {
-    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ section: 'index' });
-
     const sicp = (
       <Provider store={mockInitialStore()}>
         <Sicp />
@@ -20,9 +25,6 @@ describe('Sicp renders', () => {
   });
 
   test('index section correctly', () => {
-    jest.spyOn(ReactRouter, 'useParams').mockReturnValue({ section: 'index' });
-    jest.spyOn(ReactRouter, 'useNavigate').mockReturnValue(jest.fn());
-    jest.spyOn(ReactRouter, 'useLocation').mockReturnValue({} as ReactRouter.Location);
     window.HTMLElement.prototype.scrollIntoView = function () {};
 
     const sicp = (

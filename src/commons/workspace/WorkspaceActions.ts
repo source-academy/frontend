@@ -111,9 +111,8 @@ const newActions = createActions('workspace', {
   updateEditorValue: (
     workspaceLocation: WorkspaceLocation,
     editorTabIndex: number,
-    newEditorValue: string,
-    isFromVscode: boolean = false
-  ) => ({ workspaceLocation, editorTabIndex, newEditorValue, isFromVscode }),
+    newEditorValue: string
+  ) => ({ workspaceLocation, editorTabIndex, newEditorValue }),
   setEditorBreakpoint: (
     workspaceLocation: WorkspaceLocation,
     editorTabIndex: number,
@@ -241,6 +240,10 @@ const newActions = createActions('workspace', {
     workspaceLocation: WorkspaceLocation,
     storyEnv?: string
   ) => ({ errorMsg, workspaceLocation, storyEnv }),
+  showMcqPane: (workspaceLocation: WorkspaceLocation, options: string[]) => ({
+    workspaceLocation,
+    options
+  }),
   toggleUsingCse: (usingCse: boolean, workspaceLocation: WorkspaceLocationsWithTools) => ({
     usingCse,
     workspaceLocation

@@ -1,10 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Code output renders correctly 1`] = `
-<Blueprint5.Card
-  elevation={0}
-  interactive={false}
->
+<Blueprint5.Card>
   <ForwardRef
     className="code-output"
   >
@@ -14,19 +11,13 @@ exports[`Code output renders correctly 1`] = `
 `;
 
 exports[`Empty output renders an empty card 1`] = `
-<Blueprint5.Card
-  elevation={0}
-  interactive={false}
->
+<Blueprint5.Card>
   ''
 </Blueprint5.Card>
 `;
 
 exports[`Error output (no consoleLogs) renders correctly 1`] = `
-<Blueprint5.Card
-  elevation={0}
-  interactive={false}
->
+<Blueprint5.Card>
   <ForwardRef
     className="error-output"
   >
@@ -36,10 +27,7 @@ exports[`Error output (no consoleLogs) renders correctly 1`] = `
 `;
 
 exports[`Error output (with consoleLogs) renders correctly 1`] = `
-<Blueprint5.Card
-  elevation={0}
-  interactive={false}
->
+<Blueprint5.Card>
   <ForwardRef
     className="log-output"
   >
@@ -61,7 +49,7 @@ exports[`Repl renders correctly 1`] = `
 <div
   className="Repl"
   style={
-    Object {
+    {
       "display": undefined,
     }
   }
@@ -72,8 +60,8 @@ exports[`Repl renders correctly 1`] = `
     <Output
       isHtml={false}
       output={
-        Object {
-          "consoleLogs": Array [],
+        {
+          "consoleLogs": [],
           "type": "result",
           "value": 42,
         }
@@ -83,7 +71,7 @@ exports[`Repl renders correctly 1`] = `
     <Output
       isHtml={false}
       output={
-        Object {
+        {
           "type": "code",
           "value": "display('');",
         }
@@ -93,19 +81,19 @@ exports[`Repl renders correctly 1`] = `
     <Output
       isHtml={false}
       output={
-        Object {
-          "consoleLogs": Array [],
-          "errors": Array [
+        {
+          "consoleLogs": [],
+          "errors": [
             TypeError {
               "chapter": 4,
               "expected": "",
               "got": "",
-              "location": Object {
-                "end": Object {
+              "location": {
+                "end": {
                   "column": -1,
                   "line": -1,
                 },
-                "start": Object {
+                "start": {
                   "column": -1,
                   "line": -1,
                 },
@@ -123,8 +111,8 @@ exports[`Repl renders correctly 1`] = `
     <Output
       isHtml={false}
       output={
-        Object {
-          "consoleLogs": Array [
+        {
+          "consoleLogs": [
             "a",
             "bb",
             "cccccccccccccccccccccccccccccccc",
@@ -137,8 +125,6 @@ exports[`Repl renders correctly 1`] = `
     />
     <Blueprint5.Card
       className="repl-input-parent row"
-      elevation={0}
-      interactive={false}
     >
       <ReplInput
         externalLibrary="NONE"
@@ -148,29 +134,29 @@ exports[`Repl renders correctly 1`] = `
         handleReplOutputClear={[Function]}
         handleReplValueChange={[Function]}
         output={
-          Array [
-            Object {
-              "consoleLogs": Array [],
+          [
+            {
+              "consoleLogs": [],
               "type": "result",
               "value": 42,
             },
-            Object {
+            {
               "type": "code",
               "value": "display('');",
             },
-            Object {
-              "consoleLogs": Array [],
-              "errors": Array [
+            {
+              "consoleLogs": [],
+              "errors": [
                 TypeError {
                   "chapter": 4,
                   "expected": "",
                   "got": "",
-                  "location": Object {
-                    "end": Object {
+                  "location": {
+                    "end": {
                       "column": -1,
                       "line": -1,
                     },
-                    "start": Object {
+                    "start": {
                       "column": -1,
                       "line": -1,
                     },
@@ -182,8 +168,8 @@ exports[`Repl renders correctly 1`] = `
               ],
               "type": "errors",
             },
-            Object {
-              "consoleLogs": Array [
+            {
+              "consoleLogs": [
                 "a",
                 "bb",
                 "cccccccccccccccccccccccccccccccc",
@@ -193,7 +179,7 @@ exports[`Repl renders correctly 1`] = `
             },
           ]
         }
-        replButtons={Array []}
+        replButtons={[]}
         replValue=""
         sourceChapter={1}
         sourceVariant="default"
@@ -206,8 +192,8 @@ exports[`Repl renders correctly 1`] = `
 exports[`Result output (no consoleLogs) renders correctly 1`] = `
 <ResultOutputDisplay
   output={
-    Object {
-      "consoleLogs": Array [],
+    {
+      "consoleLogs": [],
       "type": "result",
       "value": 42,
     }
@@ -218,8 +204,8 @@ exports[`Result output (no consoleLogs) renders correctly 1`] = `
 exports[`Result output (with consoleLogs) renders correctly 1`] = `
 <ResultOutputDisplay
   output={
-    Object {
-      "consoleLogs": Array [
+    {
+      "consoleLogs": [
         "a",
         "bb",
         "cccccccccccccccccccccccccccccccc",
@@ -233,10 +219,7 @@ exports[`Result output (with consoleLogs) renders correctly 1`] = `
 `;
 
 exports[`Running output renders correctly 1`] = `
-<Blueprint5.Card
-  elevation={0}
-  interactive={false}
->
+<Blueprint5.Card>
   <ForwardRef
     className="log-output"
   >

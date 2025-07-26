@@ -143,7 +143,9 @@ export enum Links {
   aceHotkeys = 'https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts',
   sourceHotkeys = 'https://github.com/source-academy/frontend/wiki/Source-Academy-Keyboard-Shortcuts',
 
-  ecmaScript_2021 = 'https://262.ecma-international.org/12.0/'
+  ecmaScript_2021 = 'https://262.ecma-international.org/12.0/',
+
+  vscode = 'vscode://source-academy.source-academy/sso'
 }
 
 const Constants = {
