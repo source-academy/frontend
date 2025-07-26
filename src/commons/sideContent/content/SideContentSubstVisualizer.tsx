@@ -246,13 +246,13 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
   const styleWrapper = renderContext.styleWrapper;
   const renderers = {
     Literal(node: StepperLiteral) {
-      const stringifyLiteralValue = (value: any) => 
-          typeof value === 'string' 
-              ? '"' + value + '"' 
-              : value !== null 
-                ? value.toString() 
-                : 'null';
-      return <span className="stepper-literal">{node.raw ? node.raw : stringifyLiteralValue(node.value)}</span>;
+      const stringifyLiteralValue = (value: any) =>
+        typeof value === 'string' ? '"' + value + '"' : value !== null ? value.toString() : 'null';
+      return (
+        <span className="stepper-literal">
+          {node.raw ? node.raw : stringifyLiteralValue(node.value)}
+        </span>
+      );
     },
     Identifier(node: StepperIdentifier) {
       return <span>{node.name}</span>;
