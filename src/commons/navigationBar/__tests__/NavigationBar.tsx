@@ -1,22 +1,20 @@
 import { useLocation } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { shallowRender } from 'src/commons/utils/TestUtils';
-import { vi } from 'vitest';
+import { Mock, vi } from 'vitest';
 
 import { Role } from '../../application/ApplicationTypes';
 import NavigationBar from '../NavigationBar';
 
 vi.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
   useLocation: vi.fn()
 }));
 vi.mock('react-redux', () => ({
-  ...jest.requireActual('react-redux'),
   useSelector: vi.fn()
 }));
 
-const useSelectorMock = useTypedSelector as jest.Mock;
-const useLocationMock = useLocation as jest.Mock;
+const useSelectorMock = useTypedSelector as Mock;
+const useLocationMock = useLocation as Mock;
 
 describe('NavigationBar', () => {
   beforeEach(() => {

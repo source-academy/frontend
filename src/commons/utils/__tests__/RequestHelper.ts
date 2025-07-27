@@ -1,7 +1,6 @@
-import { MockedFunction } from 'jest-mock';
 import { postRefresh } from 'src/commons/sagas/RequestsSaga';
 import { store } from 'src/pages/createStore';
-import { vi } from 'vitest';
+import { Mock, vi } from 'vitest';
 
 import { Tokens } from '../../application/types/SessionTypes';
 import { actions } from '../ActionsHelper';
@@ -20,21 +19,21 @@ import {
 } from '../RequestHelper';
 
 global.fetch = vi.fn();
-const fetchMock = fetch as jest.Mock;
+const fetchMock = fetch as Mock;
 
 vi.mock('../../utils/notifications/NotificationsHelper', () => ({
-  ...jest.requireActual('../../utils/notifications/NotificationsHelper'),
   showWarningMessage: vi.fn()
 }));
-const showWarningMessageSpy = showWarningMessage as MockedFunction<typeof showWarningMessage>;
+const showWarningMessageSpy = showWarningMessage as Mock<typeof showWarningMessage>;
 vi.mock('../../sagas/RequestsSaga');
-const postRefreshSpy = postRefresh as MockedFunction<typeof postRefresh>;
+const postRefreshSpy = postRefresh as Mock<typeof postRefresh>;
 vi.mock('../../../pages/createStore', () => ({
   store: {
     dispatch: vi.fn()
   }
 }));
-const storeDispatchSpy = store.dispatch as MockedFunction<typeof store.dispatch>;
+// vi.spyOn(store, 'dispatch');
+const storeDispatchSpy = store.dispatch as unknown as Mock<typeof store.dispatch>;
 
 const tokens: Tokens = {
   accessToken: 'accessToken',

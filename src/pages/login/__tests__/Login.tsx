@@ -4,7 +4,7 @@ import { Provider, useDispatch } from 'react-redux';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
-import { vi } from 'vitest';
+import { Mock, vi } from 'vitest';
 
 import { mockInitialStore } from '../../../commons/mocks/StoreMocks';
 import Login from '../Login';
@@ -12,10 +12,9 @@ import LoginCallback from '../LoginCallback';
 import LoginPage from '../LoginPage';
 
 vi.mock('react-redux', () => ({
-  ...jest.requireActual('react-redux'),
   useDispatch: vi.fn()
 }));
-const useDispatchMock = useDispatch as jest.Mock;
+const useDispatchMock = useDispatch as Mock;
 const dispatchMock = vi.fn();
 
 vi.mock('../../../commons/utils/Constants', () => {
@@ -32,7 +31,6 @@ vi.mock('../../../commons/utils/Constants', () => {
 // https://stackoverflow.com/a/74525026
 const navigateSpy = vi.fn();
 vi.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
   useNavigate: () => navigateSpy
 }));
 

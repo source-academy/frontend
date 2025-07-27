@@ -1,5 +1,4 @@
 import { IconNames } from '@blueprintjs/icons';
-import type { MockedFunction } from 'jest-mock';
 import { Context } from 'js-slang';
 import { expectSaga } from 'redux-saga-test-plan';
 import { getDynamicTabs } from 'src/commons/sideContent/SideContentHelper';
@@ -11,17 +10,16 @@ import {
   SideContentType
 } from 'src/commons/sideContent/SideContentTypes';
 import { actions } from 'src/commons/utils/ActionsHelper';
-import { vi } from 'vitest';
+import { Mock, vi } from 'vitest';
 
 import SideContentSaga from '../SideContentSaga';
 
 vi.mock('src/commons/sideContent/SideContentHelper', () => ({
-  ...jest.requireActual('src/commons/sideContent/SideContentHelper'),
   getDynamicTabs: vi.fn()
 }));
 
 describe('Side Content Alerts for normal side content', () => {
-  const mockedGetDynamicTabs = getDynamicTabs as MockedFunction<typeof getDynamicTabs>;
+  const mockedGetDynamicTabs = getDynamicTabs as Mock<typeof getDynamicTabs>;
 
   const expectSagaWrapper = (initialState: SideContentState, dynamicTabs: SideContentTab[]) => {
     mockedGetDynamicTabs.mockImplementationOnce(() => dynamicTabs);

@@ -4,7 +4,6 @@ import { vi } from 'vitest';
 import SicpNavigationBar from '../SicpNavigationBar';
 
 vi.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
   useParams: vi.fn().mockReturnValue({ section: 'index' }),
   useNavigate: vi.fn().mockReturnValue(vi.fn())
 }));

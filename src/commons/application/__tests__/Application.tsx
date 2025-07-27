@@ -16,7 +16,6 @@ window.matchMedia =
   };
 
 vi.mock('react-redux', () => ({
-  ...jest.requireActual('react-redux'),
   useDispatch: vi.fn(),
   useSelector: vi.fn()
 }));

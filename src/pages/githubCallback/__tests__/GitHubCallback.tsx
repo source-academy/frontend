@@ -1,8 +1,7 @@
 import { render, screen } from '@testing-library/react';
-import { MockedFunction } from 'jest-mock';
 import { act } from 'react';
 import { Route, Routes, StaticRouter } from 'react-router';
-import { vi } from 'vitest';
+import { Mock, vi } from 'vitest';
 
 import Constants from '../../../commons/utils/Constants';
 import { exchangeAccessCode } from '../../../features/github/GitHubUtils';
@@ -19,7 +18,6 @@ function renderWithLocation(element: JSX.Element, location: string) {
 }
 
 vi.mock('../../../features/github/GitHubUtils', () => ({
-  ...jest.requireActual('../../../features/github/GitHubUtils'),
   exchangeAccessCode: vi.fn()
 }));
 
@@ -30,7 +28,7 @@ describe('empty client ID', () => {
   });
 
   test('Application Client ID not deployed renders correctly', async () => {
-    const exchangeAccessCodeMock = exchangeAccessCode as MockedFunction<typeof exchangeAccessCode>;
+    const exchangeAccessCodeMock = exchangeAccessCode as Mock<typeof exchangeAccessCode>;
     exchangeAccessCodeMock.mockImplementation(connectBackendSimulateSuccess);
 
     act(() => {
@@ -52,7 +50,7 @@ describe('nonempty client ID', () => {
   });
 
   test('Access code not found in return url renders correctly', async () => {
-    const exchangeAccessCodeMock = exchangeAccessCode as MockedFunction<typeof exchangeAccessCode>;
+    const exchangeAccessCodeMock = exchangeAccessCode as Mock<typeof exchangeAccessCode>;
     exchangeAccessCodeMock.mockImplementation(connectBackendSimulateSuccess);
 
     act(() => {
@@ -69,7 +67,7 @@ describe('nonempty client ID', () => {
   });
 
   test('Cannot connect to server renders correctly', async () => {
-    const exchangeAccessCodeMock = exchangeAccessCode as MockedFunction<typeof exchangeAccessCode>;
+    const exchangeAccessCodeMock = exchangeAccessCode as Mock<typeof exchangeAccessCode>;
     exchangeAccessCodeMock.mockImplementation(connectBackendSimulateFailure);
 
     act(() => {
@@ -84,7 +82,7 @@ describe('nonempty client ID', () => {
   });
 
   test('Successful retrieval of calls correctly', async () => {
-    const exchangeAccessCodeMock = exchangeAccessCode as MockedFunction<typeof exchangeAccessCode>;
+    const exchangeAccessCodeMock = exchangeAccessCode as Mock<typeof exchangeAccessCode>;
     exchangeAccessCodeMock.mockImplementation(connectBackendSimulateSuccess);
 
     const closeWindowMock = vi.spyOn(window, 'close');

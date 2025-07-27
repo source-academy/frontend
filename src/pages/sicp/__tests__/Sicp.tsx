@@ -8,7 +8,6 @@ import { vi } from 'vitest';
 import Sicp from '../Sicp';
 
 vi.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
   useParams: vi.fn().mockReturnValue({ section: 'index' }),
   useNavigate: vi.fn().mockReturnValue(vi.fn()),
   useLocation: vi.fn().mockReturnValue({} as Location)

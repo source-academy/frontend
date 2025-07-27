@@ -6,7 +6,6 @@ import { combineSagaHandlers, createActions } from '../utils';
 
 // Would have used spyOn, but for some reason that doesn't work properly
 vi.mock('src/commons/sagas/SafeEffects', () => ({
-  ...jest.requireActual('src/commons/sagas/SafeEffects'),
   // Mock wrap saga to just be a passthrough so that the identity
   // checking that testSaga uses will pass
   wrapSaga: (x: any) => x
