@@ -1,6 +1,4 @@
-import '@testing-library/jest-dom';
-
-import { TextDecoder, TextEncoder } from 'node:util';
+import '@testing-library/jest-dom/vitest';
 
 import { vi } from 'vitest';
 
@@ -31,3 +29,17 @@ if (!global.TextEncoder) {
 if (!global.TextDecoder) {
   global.TextDecoder = TextDecoder as any;
 }
+
+// JSDOM does not implement window.matchMedia, so we have to mock it.
+window.matchMedia =
+  window.matchMedia ||
+  function () {
+    return {
+      matches: false,
+      addListener: function () {},
+      removeListener: function () {}
+    };
+  };
+
+// JSDOM does not implement scrollIntoView, so we have to mock it.
+window.HTMLElement.prototype.scrollIntoView = function () {};

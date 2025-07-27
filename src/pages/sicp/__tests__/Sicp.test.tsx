@@ -25,8 +25,6 @@ describe('Sicp renders', () => {
   });
 
   test('index section correctly', () => {
-    window.HTMLElement.prototype.scrollIntoView = function () {};
-
     const sicp = (
       <Provider store={mockInitialStore()}>
         <Sicp />
