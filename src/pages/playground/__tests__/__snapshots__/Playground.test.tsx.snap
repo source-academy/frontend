@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Playground tests Playground renders correctly 1`] = `
+exports[`Playground tests > Playground renders correctly 1`] = `
 <div>
   <div
     class="Playground bp5-dark"
@@ -401,7 +401,7 @@ exports[`Playground tests Playground renders correctly 1`] = `
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark react-ace"
                     id="ace-editor"
-                    style="width: 100%; height: 100%; font-size: 17px; font-family: 'Inconsolata', 'Consolas', monospace;"
+                    style="width: 100%; height: 100%; font-size: 17px; font-family: "Inconsolata", "Consolas", monospace;"
                   >
                     <textarea
                       aria-autocomplete="both"
@@ -900,15 +900,15 @@ and also the
                                 >
                                   <div
                                     class="bp5-slider-progress"
-                                    style="left: 0.00%; right: 100.00%; top: 0px;"
+                                    style="left: 0%; right: 100%; top: 0px;"
                                   />
                                   <div
                                     class="bp5-slider-progress"
-                                    style="left: 0.00%; right: 100.00%; top: 0px;"
+                                    style="left: 0%; right: 100%; top: 0px;"
                                   />
                                   <div
                                     class="bp5-slider-progress"
-                                    style="left: 0.00%; right: 100.00%; top: 0px;"
+                                    style="left: 0%; right: 100%; top: 0px;"
                                   />
                                 </div>
                                 <div
@@ -928,7 +928,7 @@ and also the
                                   aria-valuenow="0"
                                   class="bp5-slider-handle"
                                   role="slider"
-                                  style="left: calc(NaN% - 0px);"
+                                  style="left: calc(-0px + (% * nan));"
                                   tabindex="0"
                                 >
                                   <span
@@ -1386,7 +1386,7 @@ and also the
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark repl-react-ace react-ace"
                     id="ace-editor"
-                    style="width: 100%; height: 1px; font-size: 17px; font-family: 'Inconsolata', 'Consolas', monospace;"
+                    style="width: 100%; height: 1px; font-size: 17px; font-family: "Inconsolata", "Consolas", monospace;"
                   >
                     <textarea
                       aria-autocomplete="both"
@@ -1538,6 +1538,7 @@ and also the
                       </span>
                     </button>
                   </div>
+                  <div />
                 </div>
               </div>
             </div>
@@ -1549,7 +1550,7 @@ and also the
 </div>
 `;
 
-exports[`Playground tests Playground with link renders correctly 1`] = `
+exports[`Playground tests > Playground with link renders correctly 1`] = `
 <div>
   <div
     class="Playground bp5-dark"
@@ -1950,7 +1951,7 @@ exports[`Playground tests Playground with link renders correctly 1`] = `
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark react-ace"
                     id="ace-editor"
-                    style="width: 100%; height: 100%; font-size: 17px; font-family: 'Inconsolata', 'Consolas', monospace;"
+                    style="width: 100%; height: 100%; font-size: 17px; font-family: "Inconsolata", "Consolas", monospace;"
                   >
                     <textarea
                       aria-autocomplete="both"
@@ -2446,15 +2447,15 @@ and also the
                               >
                                 <div
                                   class="bp5-slider-progress"
-                                  style="left: 0.00%; right: 0.00%; top: 0px;"
+                                  style="left: 0%; right: 0%; top: 0px;"
                                 />
                                 <div
                                   class="bp5-slider-progress bp5-intent-primary"
-                                  style="left: 0.00%; right: 0.00%; top: 0px;"
+                                  style="left: 0%; right: 0%; top: 0px;"
                                 />
                                 <div
                                   class="bp5-slider-progress"
-                                  style="left: 0.00%; right: 0.00%; top: 0px;"
+                                  style="left: 0%; right: 0%; top: 0px;"
                                 />
                               </div>
                               <div
@@ -2468,7 +2469,7 @@ and also the
                                 aria-valuenow="1"
                                 class="bp5-slider-handle"
                                 role="slider"
-                                style="left: calc(0.00% - 0px);"
+                                style="left: calc(0% - 0px);"
                                 tabindex="0"
                               >
                                 <span
@@ -2689,7 +2690,7 @@ and also the
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark repl-react-ace react-ace"
                     id="ace-editor"
-                    style="width: 100%; height: 1px; font-size: 17px; font-family: 'Inconsolata', 'Consolas', monospace;"
+                    style="width: 100%; height: 1px; font-size: 17px; font-family: "Inconsolata", "Consolas", monospace;"
                   >
                     <textarea
                       aria-autocomplete="both"
@@ -2841,6 +2842,7 @@ and also the
                       </span>
                     </button>
                   </div>
+                  <div />
                 </div>
               </div>
             </div>

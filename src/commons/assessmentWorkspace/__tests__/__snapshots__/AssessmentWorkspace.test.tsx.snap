@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`AssessmentWorkspace AssessmentWorkspace page "loading" content renders correctly 1`] = `
+exports[`AssessmentWorkspace > AssessmentWorkspace page "loading" content renders correctly 1`] = `
 <div
   className="bp5-non-ideal-state bp5-non-ideal-state-vertical WorkspaceParent bp5-dark"
 >
@@ -54,7 +54,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page "loading" content renders 
 </div>
 `;
 
-exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting question renders correctly 1`] = `
+exports[`AssessmentWorkspace > AssessmentWorkspace page with ContestVoting question renders correctly 1`] = `
 <div>
   <div
     class="WorkspaceParent bp5-dark"
@@ -227,7 +227,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark react-ace"
                     id="ace-editor"
-                    style="width: 100%; height: 100%; font-size: 17px; font-family: 'Inconsolata', 'Consolas', monospace;"
+                    style="width: 100%; height: 100%; font-size: 17px; font-family: "Inconsolata", "Consolas", monospace;"
                   >
                     <textarea
                       aria-autocomplete="both"
@@ -1227,7 +1227,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark repl-react-ace react-ace"
                     id="ace-editor"
-                    style="width: 100%; height: 1px; font-size: 17px; font-family: 'Inconsolata', 'Consolas', monospace;"
+                    style="width: 100%; height: 1px; font-size: 17px; font-family: "Inconsolata", "Consolas", monospace;"
                   >
                     <textarea
                       aria-autocomplete="both"
@@ -1379,6 +1379,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
                       </span>
                     </button>
                   </div>
+                  <div />
                 </div>
               </div>
             </div>
@@ -1390,7 +1391,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with ContestVoting questio
 </div>
 `;
 
-exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders correctly 1`] = `
+exports[`AssessmentWorkspace > AssessmentWorkspace page with MCQ question renders correctly 1`] = `
 <div>
   <div
     class="WorkspaceParent bp5-dark"
@@ -1693,7 +1694,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                       >
                         <div
                           class="bp5-tab-indicator-wrapper"
-                          style="height: 0px; transform: translateX(0px) translateY(0px); width: 0px; transition: none;"
+                          style="height: 0px; transform: translateX(0px) translateY(0px); width: 0px;"
                         >
                           <div
                             class="bp5-tab-indicator"
@@ -2004,7 +2005,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark repl-react-ace react-ace"
                     id="ace-editor"
-                    style="width: 100%; height: 1px; font-size: 17px; font-family: 'Inconsolata', 'Consolas', monospace;"
+                    style="width: 100%; height: 1px; font-size: 17px; font-family: "Inconsolata", "Consolas", monospace;"
                   >
                     <textarea
                       aria-autocomplete="both"
@@ -2156,6 +2157,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
                       </span>
                     </button>
                   </div>
+                  <div />
                 </div>
               </div>
             </div>
@@ -2167,7 +2169,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with MCQ question renders 
 </div>
 `;
 
-exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment renders correctly 1`] = `
+exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment renders correctly 1`] = `
 <div>
   <div
     class="WorkspaceParent bp5-dark"
@@ -2340,7 +2342,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark react-ace"
                     id="ace-editor"
-                    style="width: 100%; height: 100%; font-size: 17px; font-family: 'Inconsolata', 'Consolas', monospace;"
+                    style="width: 100%; height: 100%; font-size: 17px; font-family: "Inconsolata", "Consolas", monospace;"
                   >
                     <textarea
                       aria-autocomplete="both"
@@ -2815,7 +2817,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark repl-react-ace react-ace"
                     id="ace-editor"
-                    style="width: 100%; height: 1px; font-size: 17px; font-family: 'Inconsolata', 'Consolas', monospace;"
+                    style="width: 100%; height: 1px; font-size: 17px; font-family: "Inconsolata", "Consolas", monospace;"
                   >
                     <textarea
                       aria-autocomplete="both"
@@ -2967,6 +2969,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
                       </span>
                     </button>
                   </div>
+                  <div />
                 </div>
               </div>
             </div>
@@ -2978,7 +2981,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with overdue assessment re
 </div>
 `;
 
-exports[`AssessmentWorkspace AssessmentWorkspace page with programming question renders correctly 1`] = `
+exports[`AssessmentWorkspace > AssessmentWorkspace page with programming question renders correctly 1`] = `
 <div>
   <div
     class="WorkspaceParent bp5-dark"
@@ -3181,7 +3184,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark react-ace"
                     id="ace-editor"
-                    style="width: 100%; height: 100%; font-size: 17px; font-family: 'Inconsolata', 'Consolas', monospace;"
+                    style="width: 100%; height: 100%; font-size: 17px; font-family: "Inconsolata", "Consolas", monospace;"
                   >
                     <textarea
                       aria-autocomplete="both"
@@ -3656,7 +3659,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark repl-react-ace react-ace"
                     id="ace-editor"
-                    style="width: 100%; height: 1px; font-size: 17px; font-family: 'Inconsolata', 'Consolas', monospace;"
+                    style="width: 100%; height: 1px; font-size: 17px; font-family: "Inconsolata", "Consolas", monospace;"
                   >
                     <textarea
                       aria-autocomplete="both"
@@ -3808,6 +3811,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
                       </span>
                     </button>
                   </div>
+                  <div />
                 </div>
               </div>
             </div>
@@ -3819,7 +3823,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace page with programming question 
 </div>
 `;
 
-exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly if the question has been graded 1`] = `
+exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly if the question has been graded 1`] = `
 <div>
   <div
     class="WorkspaceParent bp5-dark"
@@ -4022,7 +4026,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark react-ace"
                     id="ace-editor"
-                    style="width: 100%; height: 100%; font-size: 17px; font-family: 'Inconsolata', 'Consolas', monospace;"
+                    style="width: 100%; height: 100%; font-size: 17px; font-family: "Inconsolata", "Consolas", monospace;"
                   >
                     <textarea
                       aria-autocomplete="both"
@@ -4714,7 +4718,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark repl-react-ace react-ace"
                     id="ace-editor"
-                    style="width: 100%; height: 1px; font-size: 17px; font-family: 'Inconsolata', 'Consolas', monospace;"
+                    style="width: 100%; height: 1px; font-size: 17px; font-family: "Inconsolata", "Consolas", monospace;"
                   >
                     <textarea
                       aria-autocomplete="both"
@@ -4866,6 +4870,7 @@ exports[`AssessmentWorkspace AssessmentWorkspace renders Grading tab correctly i
                       </span>
                     </button>
                   </div>
+                  <div />
                 </div>
               </div>
             </div>
