@@ -25,7 +25,7 @@
     "test:watch": "cross-env TZ=Asia/Singapore vitest",
     "test:ui": "cross-env TZ=Asia/Singapore vitest --ui",
     "test-coveralls": "./scripts/test-coveralls.sh",
-    "update-ui-snapshots": "vitest run --update-snapshots",
+    "update-ui-snapshots": "vitest run --update",
     "eslint": "eslint src",
     "prepare": "husky",
     "preview": "rsbuild preview"

@@ -19,7 +19,7 @@ The frontend comes with an extensive test suite. To run the tests after you made
 The regression tests are generated using `vitest` and stored as snapshots in `src/\_\_tests\_\_`. After modifying the frontend, carefully inspect any failing regression tests reported in red in the command line. If you are convinced that the regression tests and not your changes are at fault, you can update the regression tests by running:
 
 ```bash
-yarn test --updateSnapshot
+yarn test --update
 ```
 
 ## Manually testing the frontend
