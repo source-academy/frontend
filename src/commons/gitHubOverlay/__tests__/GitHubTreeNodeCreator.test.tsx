@@ -1,8 +1,7 @@
 import { Octokit } from '@octokit/rest';
 import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
-import { MockedFunction } from 'jest-mock';
 import { DeepPartial } from 'src/commons/utils/TypeHelper';
-import { vi } from 'vitest';
+import { Mock, vi } from 'vitest';
 
 import { getGitHubOctokitInstance } from '../../../features/github/GitHubUtils';
 import { GitHubTreeNodeCreator } from '../GitHubTreeNodeCreator';
@@ -10,7 +9,7 @@ import { GitHubTreeNodeCreator } from '../GitHubTreeNodeCreator';
 vi.mock('../../../features/github/GitHubUtils');
 
 test('Test generate first level of a repo', async () => {
-  const getGitHubOctokitInstanceMock = getGitHubOctokitInstance as MockedFunction<
+  const getGitHubOctokitInstanceMock = getGitHubOctokitInstance as Mock<
     typeof getGitHubOctokitInstance
   >;
   getGitHubOctokitInstanceMock.mockImplementation(getOctokitInstanceMock);
@@ -54,7 +53,7 @@ test('Test attempt to generate repo with repoName as empty string', async () => 
 });
 
 test('Test attempt to create child nodes from two different repositories', async () => {
-  const getGitHubOctokitInstanceMock = getGitHubOctokitInstance as MockedFunction<
+  const getGitHubOctokitInstanceMock = getGitHubOctokitInstance as Mock<
     typeof getGitHubOctokitInstance
   >;
   getGitHubOctokitInstanceMock.mockImplementation(getOctokitInstanceMock);
@@ -90,7 +89,7 @@ test('Test attempt to create child nodes from two different repositories', async
 });
 
 test('Test attempt to create repository while octokit not yet set', async () => {
-  const getGitHubOctokitInstanceMock = getGitHubOctokitInstance as MockedFunction<
+  const getGitHubOctokitInstanceMock = getGitHubOctokitInstance as Mock<
     typeof getGitHubOctokitInstance
   >;
   getGitHubOctokitInstanceMock.mockImplementation(getOctokitInstanceReturnUndefined);
