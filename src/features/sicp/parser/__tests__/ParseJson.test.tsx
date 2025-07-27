@@ -26,15 +26,18 @@ const latexTag = 'LATEX';
 const unknownTag = 'unknown';
 
 vi.mock('src/commons/utils/Constants', () => ({
+  default: {},
   Links: {
     sourceDocs: ''
   },
   sicpBackendUrl: 'https://source-academy.github.io/sicp/'
 }));
 
-vi.mock('src/pages/sicp/subcomponents/CodeSnippet', () => (props: CodeSnippetProps) => {
-  return <div>Code Snippet</div>;
-});
+vi.mock('src/pages/sicp/subcomponents/CodeSnippet', () => ({
+  default: (props: CodeSnippetProps) => {
+    return <div>Code Snippet</div>;
+  }
+}));
 
 const mockData = {
   text: {
