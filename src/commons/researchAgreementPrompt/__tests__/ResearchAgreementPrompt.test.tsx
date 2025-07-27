@@ -8,7 +8,8 @@ import { Mock, vi } from 'vitest';
 
 import ResearchAgreementPrompt from '../ResearchAgreementPrompt';
 
-vi.mock('react-redux', () => ({
+vi.mock('react-redux', async () => ({
+  ...(await vi.importActual('react-redux')),
   useDispatch: vi.fn()
 }));
 const useDispatchMock = useDispatch as Mock;

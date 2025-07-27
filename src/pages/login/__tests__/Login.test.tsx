@@ -11,7 +11,8 @@ import Login from '../Login';
 import LoginCallback from '../LoginCallback';
 import LoginPage from '../LoginPage';
 
-vi.mock('react-redux', () => ({
+vi.mock('react-redux', async () => ({
+  ...(await vi.importActual('react-redux')),
   useDispatch: vi.fn()
 }));
 const useDispatchMock = useDispatch as Mock;
@@ -30,7 +31,8 @@ vi.mock('../../../commons/utils/Constants', () => {
 
 // https://stackoverflow.com/a/74525026
 const navigateSpy = vi.fn();
-vi.mock('react-router', () => ({
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useNavigate: () => navigateSpy
 }));
 

@@ -13,8 +13,7 @@ import { actions } from '../../utils/ActionsHelper';
 // store import is mocked
 vi.mock('../../../pages/createStore');
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const PersistenceSaga = require('../PersistenceSaga').default;
+const PersistenceSaga = (await import('../PersistenceSaga')).default;
 
 const USER_EMAIL = 'test@email.com';
 const FILE_ID = '123';

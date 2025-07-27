@@ -14,7 +14,8 @@ import { Mock, vi } from 'vitest';
 
 import SideContentSaga from '../SideContentSaga';
 
-vi.mock('src/commons/sideContent/SideContentHelper', () => ({
+vi.mock('src/commons/sideContent/SideContentHelper', async () => ({
+  ...(await vi.importActual('src/commons/sideContent/SideContentHelper')),
   getDynamicTabs: vi.fn()
 }));
 
