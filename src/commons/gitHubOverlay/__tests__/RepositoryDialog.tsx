@@ -1,7 +1,7 @@
-import { vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MockedFunction } from 'jest-mock';
 import { act } from 'react';
+import { vi } from 'vitest';
 
 import { showWarningMessage } from '../../utils/notifications/NotificationsHelper';
 import RepositoryDialog from '../RepositoryDialog';

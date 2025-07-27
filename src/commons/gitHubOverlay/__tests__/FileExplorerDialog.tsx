@@ -1,10 +1,10 @@
-import { vi } from 'vitest';
 import { Octokit } from '@octokit/rest';
 import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 import { DeepPartial } from '@reduxjs/toolkit';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedFunction } from 'jest-mock';
 import { act } from 'react';
+import { vi } from 'vitest';
 
 import {
   checkIfFileCanBeOpened,

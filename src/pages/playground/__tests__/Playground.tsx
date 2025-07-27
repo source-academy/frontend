@@ -1,4 +1,3 @@
-import { vi } from 'vitest';
 import { Dispatch, Store } from '@reduxjs/toolkit';
 import { render } from '@testing-library/react';
 import { FSModule } from 'browserfs/dist/node/core/FS';
@@ -14,6 +13,7 @@ import {
 import { Router } from 'src/commons/application/types/CommonsTypes';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
 import { createStore } from 'src/pages/createStore';
+import { vi } from 'vitest';
 
 import Playground, { handleHash } from '../Playground';
 

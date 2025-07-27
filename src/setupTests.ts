@@ -1,7 +1,8 @@
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
 
 import { TextDecoder, TextEncoder } from 'node:util';
+
+import { vi } from 'vitest';
 
 // Mock ResizeObserver in tests
 // eslint-disable-next-line @typescript-eslint/no-require-imports

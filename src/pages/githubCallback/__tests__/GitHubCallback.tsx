@@ -1,8 +1,8 @@
-import { vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MockedFunction } from 'jest-mock';
 import { act } from 'react';
 import { Route, Routes, StaticRouter } from 'react-router';
+import { vi } from 'vitest';
 
 import Constants from '../../../commons/utils/Constants';
 import { exchangeAccessCode } from '../../../features/github/GitHubUtils';

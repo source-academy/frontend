@@ -1,11 +1,11 @@
-import { vi } from 'vitest';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { createMemoryRouter } from 'react-router';
-import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
+import { call } from 'redux-saga/effects';
 import { mockTeamFormationOverviews } from 'src/commons/mocks/TeamFormationMocks';
 import AcademyActions from 'src/features/academy/AcademyActions';
 import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
+import { vi } from 'vitest';
 
 import DashboardActions from '../../../features/dashboard/DashboardActions';
 import SessionActions from '../../application/actions/SessionActions';

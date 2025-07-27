@@ -1,6 +1,6 @@
-import { vi } from 'vitest';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { deepFilter, shallowRender } from 'src/commons/utils/TestUtils';
+import { vi } from 'vitest';
 
 import { Role } from '../../../application/ApplicationTypes';
 import AcademyNavigationBar from '../AcademyNavigationBar';

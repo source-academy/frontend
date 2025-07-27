@@ -1,5 +1,5 @@
-import { vi } from 'vitest';
 import { shallowRender } from 'src/commons/utils/TestUtils';
+import { vi } from 'vitest';
 
 import SicpNavigationBar from '../SicpNavigationBar';
 

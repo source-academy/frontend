@@ -1,4 +1,3 @@
-import { vi } from 'vitest';
 import { IconNames } from '@blueprintjs/icons';
 import type { MockedFunction } from 'jest-mock';
 import { Context } from 'js-slang';
@@ -12,6 +11,7 @@ import {
   SideContentType
 } from 'src/commons/sideContent/SideContentTypes';
 import { actions } from 'src/commons/utils/ActionsHelper';
+import { vi } from 'vitest';
 
 import SideContentSaga from '../SideContentSaga';
 

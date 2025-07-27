@@ -1,9 +1,9 @@
-import { vi } from 'vitest';
 import { fireEvent, render } from '@testing-library/react';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { Provider } from 'react-redux';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
+import { vi } from 'vitest';
 
 import {
   SideContentHtmlDisplay,

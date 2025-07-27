@@ -1,7 +1,7 @@
-import { vi } from 'vitest';
 import { MockedFunction } from 'jest-mock';
 import { postRefresh } from 'src/commons/sagas/RequestsSaga';
 import { store } from 'src/pages/createStore';
+import { vi } from 'vitest';
 
 import { Tokens } from '../../application/types/SessionTypes';
 import { actions } from '../ActionsHelper';

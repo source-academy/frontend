@@ -1,8 +1,8 @@
-import { vi } from 'vitest';
 import { Octokit } from '@octokit/rest';
 import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 import { MockedFunction } from 'jest-mock';
 import { DeepPartial } from 'src/commons/utils/TypeHelper';
+import { vi } from 'vitest';
 
 import { getGitHubOctokitInstance } from '../../../features/github/GitHubUtils';
 import { GitHubTreeNodeCreator } from '../GitHubTreeNodeCreator';

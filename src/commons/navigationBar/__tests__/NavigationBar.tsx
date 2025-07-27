@@ -1,7 +1,7 @@
-import { vi } from 'vitest';
 import { useLocation } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { shallowRender } from 'src/commons/utils/TestUtils';
+import { vi } from 'vitest';
 
 import { Role } from '../../application/ApplicationTypes';
 import NavigationBar from '../NavigationBar';

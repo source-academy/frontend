@@ -1,7 +1,7 @@
-import { vi } from 'vitest';
 import * as Sentry from '@sentry/browser';
-import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
+import { call } from 'redux-saga/effects';
+import { vi } from 'vitest';
 
 import { wrapSaga } from '../SafeEffects';
 

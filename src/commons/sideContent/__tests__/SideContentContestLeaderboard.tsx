@@ -1,8 +1,8 @@
-import { vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react';
 import { shallowRender } from 'src/commons/utils/TestUtils';
+import { vi } from 'vitest';
 
 import SideContentContestLeaderboard from '../content/SideContentContestLeaderboard';
 import { SideContentType } from '../SideContentTypes';

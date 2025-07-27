@@ -1,7 +1,7 @@
-import { vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { act } from 'react';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
+import { vi } from 'vitest';
 
 import SideContentContestVotingContainer from '../content/SideContentContestVotingContainer';
 

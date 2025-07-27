@@ -1,10 +1,10 @@
-import { vi } from 'vitest';
 import { Store } from '@reduxjs/toolkit';
 import { render } from '@testing-library/react';
 import { Provider, useDispatch } from 'react-redux';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
+import { vi } from 'vitest';
 
 import { mockInitialStore } from '../../../commons/mocks/StoreMocks';
 import Login from '../Login';

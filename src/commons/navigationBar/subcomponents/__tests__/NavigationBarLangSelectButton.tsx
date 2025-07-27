@@ -1,8 +1,8 @@
-import { vi } from 'vitest';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 import { Provider } from 'react-redux';
+import { vi } from 'vitest';
 
 import { SupportedLanguage } from '../../../../commons/application/ApplicationTypes';
 import { renderTreeJson } from '../../../../commons/utils/TestUtils';

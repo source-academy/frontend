@@ -1,4 +1,3 @@
-import { vi } from 'vitest';
 import {
   type Context,
   type IOptions,
@@ -9,10 +8,11 @@ import {
 } from 'js-slang';
 import createContext from 'js-slang/dist/createContext';
 import { Chapter, ErrorType, type Finished, type SourceError, Variant } from 'js-slang/dist/types';
-import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
+import { call } from 'redux-saga/effects';
 import { showFullJSDisclaimer, showFullTSDisclaimer } from 'src/commons/utils/WarningDialogHelper';
+import { vi } from 'vitest';
 
 import InterpreterActions from '../../application/actions/InterpreterActions';
 import {

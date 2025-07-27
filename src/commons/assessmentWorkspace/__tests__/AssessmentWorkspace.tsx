@@ -1,4 +1,3 @@
-import { vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { act } from 'react';
 import { Provider } from 'react-redux';
@@ -7,6 +6,7 @@ import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import { assertType } from 'src/commons/utils/TypeHelper';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
+import { vi } from 'vitest';
 
 import { mockAssessments } from '../../mocks/AssessmentMocks';
 import AssessmentWorkspace, { AssessmentWorkspaceProps } from '../AssessmentWorkspace';
