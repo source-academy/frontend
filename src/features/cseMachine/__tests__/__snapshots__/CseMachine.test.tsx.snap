@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 1`] = `
 <React.Fragment>
