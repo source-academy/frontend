@@ -148,7 +148,7 @@
     "@types/showdown": "^2.0.1",
     "@types/xml2js": "^0.4.11",
     "@vitejs/plugin-react-swc": "^3.11.0",
-    "@vitest/ui": "^2.1.8",
+    "@vitest/ui": "^3.2.4",
     "buffer": "^6.0.3",
     "canvas": "^3.1.0",
     "constants-browserify": "^1.0.0",
