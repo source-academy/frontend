@@ -113,7 +113,7 @@ describe('PERSISTENCE_OPEN_PICKER', () => {
             case 'showSuccessMessage':
               return;
           }
-          fail(`unexpected function called: ${effect.fn.name}`);
+          assert.fail(`unexpected function called: ${effect.fn.name}`);
         }
       })
       .put.like({
@@ -139,7 +139,7 @@ describe('PERSISTENCE_OPEN_PICKER', () => {
             case 'ensureInitialised':
               return;
           }
-          fail(`unexpected function called: ${effect.fn.name}`);
+          assert.fail(`unexpected function called: ${effect.fn.name}`);
         }
       })
       .not.put.like({ action: { type: PlaygroundActions.playgroundUpdatePersistenceFile.type } })
@@ -161,7 +161,7 @@ describe('PERSISTENCE_OPEN_PICKER', () => {
             case 'ensureInitialised':
               return;
           }
-          fail(`unexpected function called: ${effect.fn.name}`);
+          assert.fail(`unexpected function called: ${effect.fn.name}`);
         }
       })
       .not.put.like({ action: { type: PlaygroundActions.playgroundUpdatePersistenceFile.type } })
@@ -209,7 +209,7 @@ test('PERSISTENCE_SAVE_FILE saves', () => {
           case 'showSuccessMessage':
             return;
         }
-        fail(`unexpected function called: ${effect.fn.name}`);
+        assert.fail(`unexpected function called: ${effect.fn.name}`);
       }
     })
     .put.like({
@@ -269,7 +269,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
             case 'showSuccessMessage':
               return;
           }
-          fail(`unexpected function called: ${effect.fn.name}`);
+          assert.fail(`unexpected function called: ${effect.fn.name}`);
         }
       })
       .put.like({
@@ -327,7 +327,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
             case 'showSuccessMessage':
               return;
           }
-          fail(`unexpected function called: ${effect.fn.name}`);
+          assert.fail(`unexpected function called: ${effect.fn.name}`);
         }
       })
       .put.like({
@@ -387,7 +387,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
             default:
               console.log(effect);
           }
-          fail(`unexpected function called: ${effect.fn.name}`);
+          assert.fail(`unexpected function called: ${effect.fn.name}`);
         }
       })
       .put.like({
@@ -447,7 +447,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
             default:
               console.log(effect);
           }
-          fail(`unexpected function called: ${effect.fn.name}`);
+          assert.fail(`unexpected function called: ${effect.fn.name}`);
         }
       })
       .put.like({
@@ -493,7 +493,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
             case 'showSuccessMessage':
               return;
           }
-          fail(`unexpected function called: ${effect.fn.name}`);
+          assert.fail(`unexpected function called: ${effect.fn.name}`);
         }
       })
       .not.put.like({ action: { type: PlaygroundActions.playgroundUpdatePersistenceFile.type } })
@@ -537,7 +537,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
             default:
               console.log(effect);
           }
-          fail(`unexpected function called: ${effect.fn.name}`);
+          assert.fail(`unexpected function called: ${effect.fn.name}`);
         }
       })
       .not.put.like({ action: { type: PlaygroundActions.playgroundUpdatePersistenceFile.type } })

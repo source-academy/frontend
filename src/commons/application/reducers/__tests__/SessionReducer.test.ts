@@ -404,7 +404,7 @@ test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in updating assessment overvie
 const gradingTest1: GradingQuery = {
   answers: [
     {
-      question: jest.genMockFromModule('../../../../features/grading/GradingTypes'),
+      question: await vi.importMock('../../../../features/grading/GradingTypes'),
       student: {
         name: 'test student',
         username: 'E0123456',
@@ -432,7 +432,7 @@ const gradingTest1: GradingQuery = {
 const gradingTest2: GradingQuery = {
   answers: [
     {
-      question: jest.genMockFromModule('../../../../features/grading/GradingTypes'),
+      question: await vi.importMock('../../../../features/grading/GradingTypes'),
       student: {
         name: 'another test student',
         username: 'E0000000',
