@@ -23,7 +23,7 @@
     "start": "rsbuild dev",
     "test": "cross-env TZ=Asia/Singapore vitest run",
     "test:watch": "cross-env TZ=Asia/Singapore vitest",
-    "test:ui": "cross-env TZ=Asia/Singapore vitest --ui",
+    "test:ui": "cross-env TZ=Asia/Singapore vitest --ui --no-open",
     "test-coveralls": "./scripts/test-coveralls.sh",
     "update-ui-snapshots": "vitest run --update",
     "eslint": "eslint src",
