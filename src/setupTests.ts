@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom';
+import { vi } from 'vitest';
 
 import { TextDecoder, TextEncoder } from 'node:util';
 
@@ -6,20 +7,20 @@ import { TextDecoder, TextEncoder } from 'node:util';
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 global.ResizeObserver = require('resize-observer-polyfill');
 
-jest.mock('./commons/utils/notifications/createNotification', () => ({
+vi.mock('./commons/utils/notifications/createNotification', () => ({
   notification: {
-    show: jest.fn()
+    show: vi.fn()
   }
 }));
 
-jest.mock('java-slang', () => {
+vi.mock('java-slang', () => {
   return {
     compileFromSource: () => '',
     typeCheck: () => ({ hasTypeErrors: false, errorMsgs: [] })
   };
 });
 
-// Fix for react-router v7 and jest
+// Fix for react-router v7 and vitest
 // https://stackoverflow.com/a/79332264
 
 if (!global.TextEncoder) {
