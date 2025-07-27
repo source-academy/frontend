@@ -1,10 +1,10 @@
+import { InjectManifest } from '@aaroon/workbox-rspack-plugin';
 import { defineConfig, loadEnv } from '@rsbuild/core';
 import { pluginEslint } from '@rsbuild/plugin-eslint';
 import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
-import { InjectManifest } from '@aaroon/workbox-rspack-plugin';
 
 const { publicVars, rawPublicVars } = loadEnv({ prefixes: ['REACT_APP_'] });
 
@@ -91,13 +91,15 @@ export default defineConfig({
         (warning: any) => {
           // Ignore the warnings that occur because js-slang uses dynamic imports
           // to load Source modules
-          const moduleName = warning.moduleDescriptor?.name
-          if (!moduleName) return false
+          const moduleName = warning.moduleDescriptor?.name;
+          if (!moduleName) return false;
 
-          if (!/js-slang\/dist\/modules\/loader\/loaders.js/.test(moduleName)) return false
-          return /Critical dependency: the request of a dependency is an expression/.test(warning.message)
+          if (!/js-slang\/dist\/modules\/loader\/loaders.js/.test(moduleName)) return false;
+          return /Critical dependency: the request of a dependency is an expression/.test(
+            warning.message
+          );
         }
-        
+
         // {
         //   // Ignore warnings for dependencies that do not ship with a source map.
         //   // This is because we cannot do anything about our dependencies.
@@ -124,7 +126,7 @@ export default defineConfig({
         new InjectManifest({
           swSrc: './src/service-worker.ts',
           swDest: 'service-worker.js',
-          maximumFileSizeToCacheInBytes: 20 * 1024 * 1024,
+          maximumFileSizeToCacheInBytes: 20 * 1024 * 1024
         })
       ];
 
