@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Sicp errors: page not found error renders correctly 1`] = `
+exports[`Sicp errors: > page not found error renders correctly 1`] = `
 <div
   className="bp5-non-ideal-state bp5-non-ideal-state-vertical"
 >
@@ -43,7 +43,7 @@ exports[`Sicp errors: page not found error renders correctly 1`] = `
 </div>
 `;
 
-exports[`Sicp errors: unexpected error renders correctly 1`] = `
+exports[`Sicp errors: > unexpected error renders correctly 1`] = `
 <div
   className="bp5-non-ideal-state bp5-non-ideal-state-vertical"
 >
@@ -86,7 +86,7 @@ exports[`Sicp errors: unexpected error renders correctly 1`] = `
 </div>
 `;
 
-exports[`Sicp errors: unexpected error renders correctly 2`] = `
+exports[`Sicp errors: > unexpected error renders correctly 2`] = `
 <div
   className="bp5-non-ideal-state bp5-non-ideal-state-vertical"
 >

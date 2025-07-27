@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`available Python language configurations matches snapshot 1`] = `
+exports[`available Python language configurations > matches snapshot 1`] = `
 [
   {
     "chapter": -4,
@@ -14,7 +14,7 @@ exports[`available Python language configurations matches snapshot 1`] = `
 ]
 `;
 
-exports[`available Scheme language configurations matches snapshot 1`] = `
+exports[`available Scheme language configurations > matches snapshot 1`] = `
 [
   {
     "chapter": -9,
@@ -69,7 +69,7 @@ exports[`available Scheme language configurations matches snapshot 1`] = `
 ]
 `;
 
-exports[`available Source language configurations matches snapshot 1`] = `
+exports[`available Source language configurations > matches snapshot 1`] = `
 [
   {
     "chapter": 1,
@@ -256,4 +256,4 @@ exports[`available Source language configurations matches snapshot 1`] = `
 ]
 `;
 
-exports[`getLanguageConfig throws an error for an invalid chapter/variant combination 1`] = `"Language config not found for chapter 5 variant default"`;
+exports[`getLanguageConfig > throws an error for an invalid chapter/variant combination 1`] = `[Error: Language config not found for chapter 5 variant default]`;

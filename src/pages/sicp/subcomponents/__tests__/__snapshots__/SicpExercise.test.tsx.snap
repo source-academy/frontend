@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Sicp exercise renders correctly 1`] = `
+exports[`Sicp exercise renders > correctly 1`] = `
 <div
   className="sicp-exercise bp5-card bp5-elevation-1"
 >

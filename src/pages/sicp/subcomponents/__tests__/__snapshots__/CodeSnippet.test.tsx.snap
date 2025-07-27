@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Sicp Code Snippet renders correctly with prepend 1`] = `
+exports[`Sicp Code Snippet > renders correctly with prepend 1`] = `
 <div
   className="sicp-code-snippet"
 >
@@ -100,7 +100,7 @@ a+1;
 </div>
 `;
 
-exports[`Sicp Code Snippet renders correctly without prepend 1`] = `
+exports[`Sicp Code Snippet > renders correctly without prepend 1`] = `
 <div
   className="sicp-code-snippet"
 >

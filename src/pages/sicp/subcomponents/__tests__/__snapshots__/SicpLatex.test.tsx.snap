@@ -1,12 +1,12 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Sicp latex renders correctly block 1`] = `
+exports[`Sicp latex renders > correctly block 1`] = `
 <Latex$1>
   1+1
 </Latex$1>
 `;
 
-exports[`Sicp latex renders correctly inline 1`] = `
+exports[`Sicp latex renders > correctly inline 1`] = `
 <Latex$1>
   1+1
 </Latex$1>
