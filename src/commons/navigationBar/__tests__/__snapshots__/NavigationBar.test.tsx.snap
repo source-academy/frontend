@@ -1,9 +1,9 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
+exports[`NavigationBar > Renders "Not logged in" correctly 1`] = `
 <React.Fragment>
   <Blueprint5.Navbar
-    className="NavigationBar primary-navbar primary-navbar bp5-dark"
+    className="NavigationBar primary-navbar _primary-navbar_d292d6 bp5-dark"
   >
     <Blueprint5.NavbarGroup
       align="left"
@@ -139,10 +139,10 @@ exports[`NavigationBar Renders "Not logged in" correctly 1`] = `
 </React.Fragment>
 `;
 
-exports[`NavigationBar Renders correctly for student with course 1`] = `
+exports[`NavigationBar > Renders correctly for student with course 1`] = `
 <React.Fragment>
   <Blueprint5.Navbar
-    className="NavigationBar primary-navbar primary-navbar bp5-dark"
+    className="NavigationBar primary-navbar _primary-navbar_d292d6 bp5-dark"
   >
     <Blueprint5.NavbarGroup
       align="left"
@@ -356,10 +356,10 @@ exports[`NavigationBar Renders correctly for student with course 1`] = `
 </React.Fragment>
 `;
 
-exports[`NavigationBar Renders correctly for student without course 1`] = `
+exports[`NavigationBar > Renders correctly for student without course 1`] = `
 <React.Fragment>
   <Blueprint5.Navbar
-    className="NavigationBar primary-navbar primary-navbar bp5-dark"
+    className="NavigationBar primary-navbar _primary-navbar_d292d6 bp5-dark"
   >
     <Blueprint5.NavbarGroup
       align="left"

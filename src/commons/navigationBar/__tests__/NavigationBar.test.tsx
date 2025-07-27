@@ -6,10 +6,12 @@ import { Mock, vi } from 'vitest';
 import { Role } from '../../application/ApplicationTypes';
 import NavigationBar from '../NavigationBar';
 
-vi.mock('react-router', () => ({
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useLocation: vi.fn()
 }));
-vi.mock('react-redux', () => ({
+vi.mock('react-redux', async () => ({
+  ...(await vi.importActual('react-redux')),
   useSelector: vi.fn()
 }));
 
