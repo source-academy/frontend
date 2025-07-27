@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { fireEvent, render } from '@testing-library/react';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { Provider } from 'react-redux';
@@ -30,7 +31,7 @@ test('HTML Display renders correctly', async () => {
 });
 
 describe('HTML Display postMessage Listener', () => {
-  const mockHandleAddHtmlConsoleError = jest.fn((errorMsg: string) => {});
+  const mockHandleAddHtmlConsoleError = vi.fn((errorMsg: string) => {});
 
   const mockProps = {
     content: stringify('<p>Hello World!</p>'),

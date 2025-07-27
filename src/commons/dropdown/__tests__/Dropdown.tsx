@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { Store } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
@@ -31,7 +32,7 @@ const getMockedStore = ({
 
 const getElement = (mockStore: Store<OverallState>) => (
   <Provider store={mockStore}>
-    <WorkspaceSettingsContext.Provider value={[{ editorBinding: EditorBinding.NONE }, jest.fn()]}>
+    <WorkspaceSettingsContext.Provider value={[{ editorBinding: EditorBinding.NONE }, vi.fn()]}>
       <MemoryRouter>
         <Dropdown />
       </MemoryRouter>

@@ -1,12 +1,13 @@
+import { vi } from 'vitest';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { deepFilter, shallowRender } from 'src/commons/utils/TestUtils';
 
 import { Role } from '../../../application/ApplicationTypes';
 import AcademyNavigationBar from '../AcademyNavigationBar';
 
-jest.mock('react-redux', () => ({
+vi.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
-  useSelector: jest.fn()
+  useSelector: vi.fn()
 }));
 const useSelectorMock = useTypedSelector as jest.Mock;
 

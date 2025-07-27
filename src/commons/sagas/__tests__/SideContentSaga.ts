@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { IconNames } from '@blueprintjs/icons';
 import type { MockedFunction } from 'jest-mock';
 import { Context } from 'js-slang';
@@ -14,9 +15,9 @@ import { actions } from 'src/commons/utils/ActionsHelper';
 
 import SideContentSaga from '../SideContentSaga';
 
-jest.mock('src/commons/sideContent/SideContentHelper', () => ({
+vi.mock('src/commons/sideContent/SideContentHelper', () => ({
   ...jest.requireActual('src/commons/sideContent/SideContentHelper'),
-  getDynamicTabs: jest.fn()
+  getDynamicTabs: vi.fn()
 }));
 
 describe('Side Content Alerts for normal side content', () => {

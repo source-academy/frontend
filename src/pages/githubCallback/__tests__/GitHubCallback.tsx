@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MockedFunction } from 'jest-mock';
 import { act } from 'react';
@@ -17,9 +18,9 @@ function renderWithLocation(element: JSX.Element, location: string) {
   );
 }
 
-jest.mock('../../../features/github/GitHubUtils', () => ({
+vi.mock('../../../features/github/GitHubUtils', () => ({
   ...jest.requireActual('../../../features/github/GitHubUtils'),
-  exchangeAccessCode: jest.fn()
+  exchangeAccessCode: vi.fn()
 }));
 
 describe('empty client ID', () => {
@@ -86,7 +87,7 @@ describe('nonempty client ID', () => {
     const exchangeAccessCodeMock = exchangeAccessCode as MockedFunction<typeof exchangeAccessCode>;
     exchangeAccessCodeMock.mockImplementation(connectBackendSimulateSuccess);
 
-    const closeWindowMock = jest.spyOn(window, 'close');
+    const closeWindowMock = vi.spyOn(window, 'close');
     closeWindowMock.mockImplementation(() => {});
 
     act(() => {

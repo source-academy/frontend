@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { useLocation } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { shallowRender } from 'src/commons/utils/TestUtils';
@@ -5,13 +6,13 @@ import { shallowRender } from 'src/commons/utils/TestUtils';
 import { Role } from '../../application/ApplicationTypes';
 import NavigationBar from '../NavigationBar';
 
-jest.mock('react-router', () => ({
+vi.mock('react-router', () => ({
   ...jest.requireActual('react-router'),
-  useLocation: jest.fn()
+  useLocation: vi.fn()
 }));
-jest.mock('react-redux', () => ({
+vi.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
-  useSelector: jest.fn()
+  useSelector: vi.fn()
 }));
 
 const useSelectorMock = useTypedSelector as jest.Mock;

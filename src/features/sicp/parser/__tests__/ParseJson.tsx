@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import lzString from 'lz-string';
 import { BrowserRouter } from 'react-router';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
@@ -24,14 +25,14 @@ const textTag = '#text';
 const latexTag = 'LATEX';
 const unknownTag = 'unknown';
 
-jest.mock('src/commons/utils/Constants', () => ({
+vi.mock('src/commons/utils/Constants', () => ({
   Links: {
     sourceDocs: ''
   },
   sicpBackendUrl: 'https://source-academy.github.io/sicp/'
 }));
 
-jest.mock('src/pages/sicp/subcomponents/CodeSnippet', () => (props: CodeSnippetProps) => {
+vi.mock('src/pages/sicp/subcomponents/CodeSnippet', () => (props: CodeSnippetProps) => {
   return <div>Code Snippet</div>;
 });
 

@@ -1,10 +1,11 @@
+import { vi } from 'vitest';
 import { expectSaga } from 'redux-saga-test-plan';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 
 import { actions } from '../../utils/ActionsHelper';
 
 // mock away the store
-jest.mock('../../../pages/createStore');
+vi.mock('../../../pages/createStore');
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const GitHubPersistenceSaga = require('../GitHubPersistenceSaga').default;

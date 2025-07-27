@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { createMemoryRouter } from 'react-router';
 import { call } from 'redux-saga/effects';
@@ -287,7 +288,7 @@ describe('Test FETCH_AUTH action', () => {
   const assessmentConfigurations = mockAssessmentConfigurations;
 
   // API call is made when dispatching subsequent action, causing console warning
-  jest.spyOn(global, 'fetch').mockReturnValue(Promise.resolve({} as Response));
+  vi.spyOn(global, 'fetch').mockReturnValue(Promise.resolve({} as Response));
 
   test('when tokens, user, course registration and course configuration are obtained', () => {
     return expectSaga(BackendSaga)

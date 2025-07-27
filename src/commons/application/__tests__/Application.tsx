@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 
@@ -14,10 +15,10 @@ window.matchMedia =
     };
   };
 
-jest.mock('react-redux', () => ({
+vi.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
-  useDispatch: jest.fn(),
-  useSelector: jest.fn()
+  useDispatch: vi.fn(),
+  useSelector: vi.fn()
 }));
 const useSelectorMock = useTypedSelector as jest.Mock;
 

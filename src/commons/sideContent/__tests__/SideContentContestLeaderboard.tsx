@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react';
@@ -59,7 +60,7 @@ test('SideContentContestLeaderboard orders entry in the same order as orderedCon
 
 test('Clicking the contest entry updates the editor for score leaderboard.', async () => {
   const user = userEvent.setup();
-  const mockedHandleContestEntryClick = jest.fn();
+  const mockedHandleContestEntryClick = vi.fn();
 
   const mockProps = {
     handleContestEntryClick: mockedHandleContestEntryClick,

@@ -1,17 +1,18 @@
+import { vi } from 'vitest';
 import * as Sentry from '@sentry/browser';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 
 import { wrapSaga } from '../SafeEffects';
 
-jest.spyOn(Sentry, 'captureException');
+vi.spyOn(Sentry, 'captureException');
 
 // Silence console error
-jest.spyOn(console, 'error').mockImplementation(x => {});
+vi.spyOn(console, 'error').mockImplementation(x => {});
 
 describe('Test wrapSaga', () => {
   test('wrapSaga is transparent', async () => {
-    const mockFn = jest.fn();
+    const mockFn = vi.fn();
     const wrappedSaga = wrapSaga(function* () {
       yield call(mockFn);
     });

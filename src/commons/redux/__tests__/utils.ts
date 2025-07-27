@@ -1,10 +1,11 @@
+import { vi } from 'vitest';
 import { testSaga } from 'redux-saga-test-plan';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 
 import { combineSagaHandlers, createActions } from '../utils';
 
 // Would have used spyOn, but for some reason that doesn't work properly
-jest.mock('src/commons/sagas/SafeEffects', () => ({
+vi.mock('src/commons/sagas/SafeEffects', () => ({
   ...jest.requireActual('src/commons/sagas/SafeEffects'),
   // Mock wrap saga to just be a passthrough so that the identity
   // checking that testSaga uses will pass
@@ -12,9 +13,9 @@ jest.mock('src/commons/sagas/SafeEffects', () => ({
 }));
 
 test('test combineSagaHandlers', () => {
-  const mockTakeEveryHandler = jest.fn();
-  const mockTakeLatestHandler = jest.fn();
-  const mockTakeLeadingHandler = jest.fn();
+  const mockTakeEveryHandler = vi.fn();
+  const mockTakeLatestHandler = vi.fn();
+  const mockTakeLeadingHandler = vi.fn();
 
   const saga = combineSagaHandlers({
     [WorkspaceActions.toggleUsingUpload.type]: mockTakeEveryHandler,

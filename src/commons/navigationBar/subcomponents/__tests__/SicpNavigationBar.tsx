@@ -1,11 +1,12 @@
+import { vi } from 'vitest';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import SicpNavigationBar from '../SicpNavigationBar';
 
-jest.mock('react-router', () => ({
+vi.mock('react-router', () => ({
   ...jest.requireActual('react-router'),
-  useParams: jest.fn().mockReturnValue({ section: 'index' }),
-  useNavigate: jest.fn().mockReturnValue(jest.fn())
+  useParams: vi.fn().mockReturnValue({ section: 'index' }),
+  useNavigate: vi.fn().mockReturnValue(vi.fn())
 }));
 
 test('Navbar renders correctly', () => {

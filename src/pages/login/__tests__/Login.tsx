@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { Store } from '@reduxjs/toolkit';
 import { render } from '@testing-library/react';
 import { Provider, useDispatch } from 'react-redux';
@@ -10,14 +11,14 @@ import Login from '../Login';
 import LoginCallback from '../LoginCallback';
 import LoginPage from '../LoginPage';
 
-jest.mock('react-redux', () => ({
+vi.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
-  useDispatch: jest.fn()
+  useDispatch: vi.fn()
 }));
 const useDispatchMock = useDispatch as jest.Mock;
-const dispatchMock = jest.fn();
+const dispatchMock = vi.fn();
 
-jest.mock('../../../commons/utils/Constants', () => {
+vi.mock('../../../commons/utils/Constants', () => {
   return {
     __esModule: true,
     default: {
@@ -29,8 +30,8 @@ jest.mock('../../../commons/utils/Constants', () => {
 });
 
 // https://stackoverflow.com/a/74525026
-const navigateSpy = jest.fn();
-jest.mock('react-router', () => ({
+const navigateSpy = vi.fn();
+vi.mock('react-router', () => ({
   ...jest.requireActual('react-router'),
   useNavigate: () => navigateSpy
 }));

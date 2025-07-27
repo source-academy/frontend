@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { expectSaga } from 'redux-saga-test-plan';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
@@ -10,7 +11,7 @@ import { actions } from '../../utils/ActionsHelper';
 // import cycles
 // this is before the import below because we need to ensure PersistenceSaga's
 // store import is mocked
-jest.mock('../../../pages/createStore');
+vi.mock('../../../pages/createStore');
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const PersistenceSaga = require('../PersistenceSaga').default;
@@ -60,7 +61,7 @@ beforeAll(() => {
 });
 
 test('LOGOUT_GOOGLE causes logout', async () => {
-  const signOut = jest.spyOn(window.gapi.auth2.getAuthInstance(), 'signOut');
+  const signOut = vi.spyOn(window.gapi.auth2.getAuthInstance(), 'signOut');
 
   await expectSaga(PersistenceSaga).dispatch(actions.logoutGoogle()).silentRun();
   expect(signOut).toBeCalled();

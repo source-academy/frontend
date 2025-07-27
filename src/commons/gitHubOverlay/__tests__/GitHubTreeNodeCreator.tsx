@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { Octokit } from '@octokit/rest';
 import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 import { MockedFunction } from 'jest-mock';
@@ -6,7 +7,7 @@ import { DeepPartial } from 'src/commons/utils/TypeHelper';
 import { getGitHubOctokitInstance } from '../../../features/github/GitHubUtils';
 import { GitHubTreeNodeCreator } from '../GitHubTreeNodeCreator';
 
-jest.mock('../../../features/github/GitHubUtils');
+vi.mock('../../../features/github/GitHubUtils');
 
 test('Test generate first level of a repo', async () => {
   const getGitHubOctokitInstanceMock = getGitHubOctokitInstance as MockedFunction<
@@ -112,7 +113,7 @@ function getOctokitInstanceReturnUndefined() {
 function getOctokitInstanceMock() {
   return {
     repos: {
-      getContent: jest.fn().mockImplementation(async () => {
+      getContent: vi.fn().mockImplementation(async () => {
         const contentResponse = generateGetContentResponse();
         contentResponse.data = [
           generateGitHubSubDirectory('TestFile', 'file', 'TestFile'),
@@ -123,7 +124,7 @@ function getOctokitInstanceMock() {
       }) as any
     },
     users: {
-      getAuthenticated: jest.fn().mockResolvedValue(generateGetAuthenticatedResponse()) as any
+      getAuthenticated: vi.fn().mockResolvedValue(generateGetAuthenticatedResponse()) as any
     }
   } satisfies DeepPartial<Octokit>;
 }

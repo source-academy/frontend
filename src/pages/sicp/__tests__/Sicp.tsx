@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import type { Location } from 'react-router';
@@ -6,11 +7,11 @@ import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import Sicp from '../Sicp';
 
-jest.mock('react-router', () => ({
+vi.mock('react-router', () => ({
   ...jest.requireActual('react-router'),
-  useParams: jest.fn().mockReturnValue({ section: 'index' }),
-  useNavigate: jest.fn().mockReturnValue(jest.fn()),
-  useLocation: jest.fn().mockReturnValue({} as Location)
+  useParams: vi.fn().mockReturnValue({ section: 'index' }),
+  useNavigate: vi.fn().mockReturnValue(vi.fn()),
+  useLocation: vi.fn().mockReturnValue({} as Location)
 }));
 
 describe('Sicp renders', () => {

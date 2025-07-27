@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { Dispatch, Store } from '@reduxjs/toolkit';
 import { render } from '@testing-library/react';
 import { FSModule } from 'browserfs/dist/node/core/FS';
@@ -17,8 +18,8 @@ import { createStore } from 'src/pages/createStore';
 import Playground, { handleHash } from '../Playground';
 
 // Mock inspector
-(window as any).Inspector = jest.fn();
-(window as any).Inspector.highlightClean = jest.fn();
+(window as any).Inspector = vi.fn();
+(window as any).Inspector.highlightClean = vi.fn();
 
 // Using @testing-library/react to render snapshot instead of react-test-renderer
 // as the useRefs require the notion of React DOM
@@ -45,7 +46,7 @@ describe('Playground tests', () => {
         element: (
           <Provider store={mockStore}>
             <WorkspaceSettingsContext.Provider
-              value={[{ editorBinding: EditorBinding.NONE }, jest.fn()]}
+              value={[{ editorBinding: EditorBinding.NONE }, vi.fn()]}
             >
               <Playground />
             </WorkspaceSettingsContext.Provider>
@@ -85,9 +86,9 @@ describe('Playground tests', () => {
     test('disables loading hash with fullJS chapter in URL params', () => {
       const testHash = '#chap=-1&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA';
 
-      const mockHandleEditorValueChanged = jest.fn();
-      const mockHandleChapterSelect = jest.fn();
-      const mockHandleChangeExecTime = jest.fn();
+      const mockHandleEditorValueChanged = vi.fn();
+      const mockHandleChapterSelect = vi.fn();
+      const mockHandleChangeExecTime = vi.fn();
 
       handleHash(
         testHash,

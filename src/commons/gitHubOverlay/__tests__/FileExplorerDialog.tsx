@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { Octokit } from '@octokit/rest';
 import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
 import { DeepPartial } from '@reduxjs/toolkit';
@@ -18,7 +19,7 @@ import {
 import FileExplorerDialog from '../FileExplorerDialog';
 import { GitHubTreeNodeCreator } from '../GitHubTreeNodeCreator';
 
-jest.mock('../../../features/github/GitHubUtils');
+vi.mock('../../../features/github/GitHubUtils');
 
 test('Selecting close causes onSubmit to be called with empty string', async () => {
   const octokit = getOctokitInstanceMock();
@@ -130,7 +131,7 @@ test('Opening folder for second time does not cause child files to be loaded', a
   >;
   getGitHubOctokitInstanceMock.mockImplementation(getOctokitInstanceMock);
 
-  const getChildNodesSpy = jest.spyOn(GitHubTreeNodeCreator, 'getChildNodes');
+  const getChildNodesSpy = vi.spyOn(GitHubTreeNodeCreator, 'getChildNodes');
 
   const octokit = getOctokitInstanceMock();
   function onSubmit(insideValue: string) {}
@@ -338,7 +339,7 @@ test('Performing ovewriting save leads to appropriate function being called', as
 function getOctokitInstanceMock() {
   return {
     repos: {
-      getContent: jest.fn().mockImplementation(async () => {
+      getContent: vi.fn().mockImplementation(async () => {
         const contentResponse = generateGetContentResponse();
         contentResponse.data = [
           generateGitHubSubDirectory('TestFile', 'file', 'TestFile'),
@@ -349,7 +350,7 @@ function getOctokitInstanceMock() {
       }) as any
     },
     users: {
-      getAuthenticated: jest.fn().mockResolvedValue(generateGetAuthenticatedResponse()) as any
+      getAuthenticated: vi.fn().mockResolvedValue(generateGetAuthenticatedResponse()) as any
     }
   } satisfies DeepPartial<Octokit> as Octokit;
 }

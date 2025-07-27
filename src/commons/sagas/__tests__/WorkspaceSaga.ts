@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import {
   type Context,
   type IOptions,
@@ -64,9 +65,9 @@ function generateDefaultState(
 
 beforeEach(() => {
   // Mock the inspector
-  (window as any).Inspector = jest.fn();
-  (window as any).Inspector.highlightClean = jest.fn();
-  (window as any).Inspector.highlightLine = jest.fn();
+  (window as any).Inspector = vi.fn();
+  (window as any).Inspector.highlightClean = vi.fn();
+  (window as any).Inspector.highlightLine = vi.fn();
 });
 
 describe('TOGGLE_FOLDER_MODE', () => {
@@ -742,9 +743,9 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
   let workspaceLocation: WorkspaceLocation;
 
   beforeEach(() => {
-    loadLib = jest.fn();
-    getReadyWebGLForCanvas = jest.fn();
-    getReadyStringifyForRunes = jest.fn();
+    loadLib = vi.fn();
+    getReadyWebGLForCanvas = vi.fn();
+    getReadyStringifyForRunes = vi.fn();
 
     (window as any).loadLib = loadLib;
     (window as any).getReadyWebGLForCanvas = getReadyWebGLForCanvas;

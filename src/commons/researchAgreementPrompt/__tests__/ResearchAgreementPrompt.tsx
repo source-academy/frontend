@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
@@ -7,12 +8,12 @@ import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 
 import ResearchAgreementPrompt from '../ResearchAgreementPrompt';
 
-jest.mock('react-redux', () => ({
+vi.mock('react-redux', () => ({
   ...jest.requireActual('react-redux'),
-  useDispatch: jest.fn()
+  useDispatch: vi.fn()
 }));
 const useDispatchMock = useDispatch as jest.Mock;
-const dispatchMock = jest.fn();
+const dispatchMock = vi.fn();
 
 const createElement = () => {
   const mockStore = mockInitialStore();

@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
@@ -9,8 +10,8 @@ import { createStore } from '../../../../pages/createStore';
 import NavigationBarLangSelectButton from '../NavigationBarLangSelectButton';
 
 // Mock inspector
-(window as any).Inspector = jest.fn();
-(window as any).Inspector.highlightClean = jest.fn();
+(window as any).Inspector = vi.fn();
+(window as any).Inspector.highlightClean = vi.fn();
 
 const createAppWithStore = () => {
   const store = createStore();

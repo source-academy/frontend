@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { MockedFunction } from 'jest-mock';
 import { postRefresh } from 'src/commons/sagas/RequestsSaga';
 import { store } from 'src/pages/createStore';
@@ -18,19 +19,19 @@ import {
   userSessionExpiredNotificationKey
 } from '../RequestHelper';
 
-global.fetch = jest.fn();
+global.fetch = vi.fn();
 const fetchMock = fetch as jest.Mock;
 
-jest.mock('../../utils/notifications/NotificationsHelper', () => ({
+vi.mock('../../utils/notifications/NotificationsHelper', () => ({
   ...jest.requireActual('../../utils/notifications/NotificationsHelper'),
-  showWarningMessage: jest.fn()
+  showWarningMessage: vi.fn()
 }));
 const showWarningMessageSpy = showWarningMessage as MockedFunction<typeof showWarningMessage>;
-jest.mock('../../sagas/RequestsSaga');
+vi.mock('../../sagas/RequestsSaga');
 const postRefreshSpy = postRefresh as MockedFunction<typeof postRefresh>;
-jest.mock('../../../pages/createStore', () => ({
+vi.mock('../../../pages/createStore', () => ({
   store: {
-    dispatch: jest.fn()
+    dispatch: vi.fn()
   }
 }));
 const storeDispatchSpy = store.dispatch as MockedFunction<typeof store.dispatch>;

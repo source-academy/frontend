@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { act } from 'react';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
@@ -19,8 +20,8 @@ const mockContestEntries = [
   }
 ];
 
-const mockedHandleContestEntryClick = jest.fn();
-const mockedHandleSave = jest.fn();
+const mockedHandleContestEntryClick = vi.fn();
+const mockedHandleSave = vi.fn();
 
 const mockProps = {
   handleContestEntryClick: mockedHandleContestEntryClick,

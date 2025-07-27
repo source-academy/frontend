@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MockedFunction } from 'jest-mock';
 import { act } from 'react';
@@ -5,7 +6,7 @@ import { act } from 'react';
 import { showWarningMessage } from '../../utils/notifications/NotificationsHelper';
 import RepositoryDialog from '../RepositoryDialog';
 
-jest.mock('../../utils/notifications/NotificationsHelper');
+vi.mock('../../utils/notifications/NotificationsHelper');
 
 test('Submitting without selecting causes error message to be displayed', async () => {
   const notificationMock = showWarningMessage as MockedFunction<typeof showWarningMessage>;

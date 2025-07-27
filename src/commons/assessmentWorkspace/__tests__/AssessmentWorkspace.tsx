@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { act } from 'react';
 import { Provider } from 'react-redux';
@@ -77,7 +78,7 @@ const createMemoryRouterWithRoutes = (props: AssessmentWorkspaceProps) => {
       element: (
         <Provider store={mockStore}>
           <WorkspaceSettingsContext.Provider
-            value={[{ editorBinding: EditorBinding.NONE }, jest.fn()]}
+            value={[{ editorBinding: EditorBinding.NONE }, vi.fn()]}
           >
             <AssessmentWorkspace {...props} />
           </WorkspaceSettingsContext.Provider>
