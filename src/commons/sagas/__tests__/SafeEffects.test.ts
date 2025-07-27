@@ -1,11 +1,14 @@
 import * as Sentry from '@sentry/browser';
-import { expectSaga } from 'redux-saga-test-plan';
 import { call } from 'redux-saga/effects';
+import { expectSaga } from 'redux-saga-test-plan';
 import { vi } from 'vitest';
 
 import { wrapSaga } from '../SafeEffects';
 
-vi.spyOn(Sentry, 'captureException');
+vi.mock('@sentry/browser', async () => ({
+  ...(await import('../../../../node_modules/@sentry/browser')),
+  captureException: vi.fn()
+}));
 
 // Silence console error
 vi.spyOn(console, 'error').mockImplementation(x => {});
