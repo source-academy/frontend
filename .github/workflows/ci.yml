@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        commands: [tsc, 'format:ci', eslint, build, test, test-coveralls]
+        commands: [tsc, 'format:ci', eslint, build, 'test --bail=1', test-coveralls]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
