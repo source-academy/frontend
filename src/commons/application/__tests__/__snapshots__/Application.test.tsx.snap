@@ -1,0 +1,25 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Application renders correctly 1`] = `
+<Context.Provider
+  value={
+    [
+      {
+        "editorBinding": "",
+      },
+      [Function],
+    ]
+  }
+>
+  <div
+    className="Application"
+  >
+    <NavigationBar />
+    <div
+      className="Application__main"
+    >
+      <Outlet />
+    </div>
+  </div>
+</Context.Provider>
+`;
