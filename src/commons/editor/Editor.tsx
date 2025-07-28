@@ -25,6 +25,7 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import React from 'react';
 import AceEditor, { IAceEditorProps, IEditorProps } from 'react-ace';
 import { IAceEditor } from 'react-ace/lib/types';
+import { SALanguage } from '../application/ApplicationTypes';
 import { EditorBinding } from '../WorkspaceSettingsContext';
 import { getModeString, selectMode } from '../utils/AceHelper';
 import { objectEntries } from '../utils/TypeHelper';
@@ -38,6 +39,8 @@ import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
 import useRefactor from './UseRefactor';
 import useShareAce from './UseShareAce';
+import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
 export type EditorHook = (
@@ -62,13 +65,16 @@ type DispatchProps = {
 
 type EditorStateProps = {
   editorSessionId: string;
-  sessionDetails: { docId: string; readOnly: boolean } | null;
+  sessionDetails: { docId: string; readOnly: boolean; owner: boolean } | null;
   isEditorAutorun: boolean;
   sourceChapter?: Chapter;
   externalLibraryName?: string;
   sourceVariant?: Variant;
   hooks?: EditorHook[];
   editorBinding?: EditorBinding;
+  setUsers?: React.Dispatch<React.SetStateAction<Record<string, SharedbAceUser>>>;
+  // TODO: Handle changing of external library
+  updateLanguageCallback?: (sublanguage: SALanguage, e: any) => void;
 };
 
 export type EditorTabStateProps = {
@@ -358,22 +364,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
       // See AceHelper#selectMode for more information.
       props.session.setMode(editor.getSession().getMode());
       editor.setSession(props.session);
-      /* eslint-disable */
 
-      // Add changeCursor event listener onto the current session.
-      // In ReactAce, this event listener is only bound on component
-      // mounting/creation, and hence changing sessions will need rebinding.
-      // See react-ace/src/ace.tsx#263,#460 for more details. We also need to
-      // ensure that event listener is only bound once to prevent memory leaks.
-      // We also need to check non-documented property _eventRegistry to
-      // see if the changeCursor listener event has been added yet.
-
-      // @ts-ignore
-      if (editor.getSession().selection._eventRegistry.changeCursor.length < 2) {
-        editor.getSession().selection.on('changeCursor', reactAceRef.current!.onCursorChange);
-      }
-
-      /* eslint-enable */
       // Give focus to the editor tab only after switching from another tab.
       // This is necessary to prevent 'unstable_flushDiscreteUpdates' warnings.
       if (filePath !== undefined) {
@@ -412,7 +403,7 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
   const [sourceChapter, sourceVariant, externalLibraryName] = [
     props.sourceChapter || Chapter.SOURCE_1,
     props.sourceVariant || Variant.DEFAULT,
-    props.externalLibraryName || 'NONE'
+    props.externalLibraryName || ExternalLibraryName.NONE
   ];
 
   // this function defines the Ace language and highlighting mode for the
@@ -660,8 +651,9 @@ const EditorBase = React.memo((props: EditorProps & LocalStateProps) => {
 
   return (
     <Card className="Editor">
-      <div className="row editor-react-ace" data-testid="Editor">
+      <div className="row editor-react-ace" data-testid="Editor" id="editor-react-ace">
         <AceEditor {...aceEditorProps} ref={reactAceRef} />
+        <div id="ace-radar-view" />
       </div>
     </Card>
   );

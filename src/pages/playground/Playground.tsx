@@ -2,6 +2,7 @@ import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { type HotkeyItem, useHotkeys } from '@mantine/hooks';
 import type { AnyAction, Dispatch } from '@reduxjs/toolkit';
+import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import { Ace, Range } from 'ace-builds';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
@@ -91,6 +92,7 @@ import {
   desktopOnlyTabIds,
   makeIntroductionTabFrom,
   makeRemoteExecutionTabFrom,
+  makeSessionManagementTabFrom,
   makeSubstVisualizerTabFrom,
   mobileOnlyTabIds
 } from './PlaygroundTabs';
@@ -283,6 +285,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       chapter: playgroundSourceChapter
     })
   );
+  const [users, setUsers] = useState<Record<string, SharedbAceUser>>({});
 
   // Playground hotkeys
   const [isGreen, setIsGreen] = useState(false);
@@ -296,6 +299,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
     () => makeRemoteExecutionTabFrom(deviceSecret, setDeviceSecret),
     [deviceSecret]
   );
+
+  const sessionManagementTab: SideContentTab = useMemo(() => {
+    return makeSessionManagementTabFrom(users, editorSessionId, sessionDetails?.readOnly || false);
+  }, [users, editorSessionId, sessionDetails?.readOnly]);
 
   const usingRemoteExecution =
     useTypedSelector(state => !!state.session.remoteExecutionSession) && !isSicpEditor;
@@ -663,25 +670,36 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [store, workspaceLocation]
   );
 
+  const handleSetEditorSessionId = useCallback(
+    (id: string) => dispatch(setEditorSessionId(workspaceLocation, id)),
+    [dispatch, workspaceLocation]
+  );
+
+  const handleSetSessionDetails = useCallback(
+    (details: { docId: string; readOnly: boolean; owner: boolean } | null) =>
+      dispatch(setSessionDetails(workspaceLocation, details)),
+    [dispatch, workspaceLocation]
+  );
+
   const sessionButtons = useMemo(
     () => (
       <ControlBarSessionButtons
         isFolderModeEnabled={isFolderModeEnabled}
         editorSessionId={editorSessionId}
         getEditorValue={getEditorValue}
-        handleSetEditorSessionId={id => dispatch(setEditorSessionId(workspaceLocation, id))}
-        handleSetSessionDetails={details => dispatch(setSessionDetails(workspaceLocation, details))}
+        handleSetEditorSessionId={handleSetEditorSessionId}
+        handleSetSessionDetails={handleSetSessionDetails}
         sharedbConnected={sharedbConnected}
         key="session"
       />
     ),
     [
-      dispatch,
-      getEditorValue,
       isFolderModeEnabled,
       editorSessionId,
-      sharedbConnected,
-      workspaceLocation
+      getEditorValue,
+      handleSetEditorSessionId,
+      handleSetSessionDetails,
+      sharedbConnected
     ]
   );
 
@@ -775,21 +793,26 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
     if (!isSicpEditor && !Constants.playgroundOnly) {
       tabs.push(remoteExecutionTab);
+      if (editorSessionId !== '') {
+        tabs.push(sessionManagementTab);
+      }
     }
 
     return tabs;
   }, [
     playgroundIntroductionTab,
     languageConfig.chapter,
-    output,
     usingRemoteExecution,
     isSicpEditor,
-    dispatch,
+    output,
     workspaceLocation,
+    dispatch,
     shouldShowDataVisualizer,
     shouldShowCseMachine,
     shouldShowSubstVisualizer,
-    remoteExecutionTab
+    remoteExecutionTab,
+    editorSessionId,
+    sessionManagementTab
   ]);
 
   // Remove Intro and Remote Execution tabs for mobile
@@ -933,7 +956,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
     externalLibraryName,
     sourceVariant: languageConfig.variant,
     handleEditorValueChange: onEditorValueChange,
-    handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints
+    handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
+    setUsers,
+    updateLanguageCallback: chapterSelectHandler
   };
 
   const replHandlers = useMemo(() => {

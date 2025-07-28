@@ -1,26 +1,20 @@
-import {
-  Classes,
-  Colors,
-  Divider,
-  FormGroup,
-  Menu,
-  Popover,
-  Text,
-  Tooltip
-} from '@blueprintjs/core';
+import { Classes, Colors, Divider, FormGroup, Popover, Text, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
+import { useParams } from 'react-router';
 
 import { createNewSession, getDocInfoFromSessionId } from '../collabEditing/CollabEditingHelper';
 import ControlButton from '../ControlButton';
-import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
 type ControlBarSessionButtonsProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleSetEditorSessionId?: (editorSessionId: string) => void;
-  handleSetSessionDetails?: (sessionDetails: { docId: string; readOnly: boolean } | null) => void;
+  handleSetSessionDetails?: (
+    sessionDetails: { docId: string; readOnly: boolean; owner: boolean } | null
+  ) => void;
 };
 
 type StateProps = {
@@ -31,215 +25,177 @@ type StateProps = {
   key: string;
 };
 
-type State = {
-  joinElemValue: string;
-  sessionEditingId: string;
-  sessionViewingId: string;
-};
-
 function handleError(error: any) {
   showWarningMessage(`Could not connect: ${(error && error.message) || error || 'Unknown error'}`);
 }
 
-export class ControlBarSessionButtons extends React.PureComponent<
-  ControlBarSessionButtonsProps,
-  State
-> {
-  private sessionEditingIdInputElem: React.RefObject<HTMLInputElement>;
-  private sessionViewingIdInputElem: React.RefObject<HTMLInputElement>;
+export function ControlBarSessionButtons(props: ControlBarSessionButtonsProps) {
+  const joinElemRef = useRef('');
+  const [sessionId, setSessionId] = useState('');
+  const [defaultReadOnly, setDefaultReadOnly] = useState(true);
+  const [isOwner, setIsOwner] = useState(false);
 
-  constructor(props: ControlBarSessionButtonsProps) {
-    super(props);
-    this.state = { joinElemValue: '', sessionEditingId: '', sessionViewingId: '' };
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    joinElemRef.current = event.target.value;
+  };
 
-    this.handleChange = this.handleChange.bind(this);
-    this.sessionEditingIdInputElem = React.createRef();
-    this.sessionViewingIdInputElem = React.createRef();
-    this.selectSessionEditingId = this.selectSessionEditingId.bind(this);
-    this.selectSessionViewingId = this.selectSessionViewingId.bind(this);
-  }
+  const handleStartInvite = () => {
+    // FIXME this handler should be a Saga action or at least in a controller
+    if (props.editorSessionId === '') {
+      createNewSession(props.getEditorValue()).then(resp => {
+        setSessionId(resp.sessionId);
+        props.handleSetEditorSessionId!(resp.sessionId);
+        props.handleSetSessionDetails!({ docId: resp.docId, readOnly: false, owner: true });
+        setIsOwner(true);
+      }, handleError);
+    }
+  };
 
-  public render() {
-    const handleStartInvite = () => {
-      // FIXME this handler should be a Saga action or at least in a controller
-      if (this.props.editorSessionId === '') {
-        createNewSession(this.props.getEditorValue()).then(resp => {
-          this.setState({
-            sessionEditingId: resp.sessionEditingId,
-            sessionViewingId: resp.sessionViewingId
-          });
-          this.props.handleSetEditorSessionId!(resp.sessionEditingId);
-          this.props.handleSetSessionDetails!({ docId: resp.docId, readOnly: false });
-        }, handleError);
-      }
-    };
-
-    const inviteButtonPopoverContent = (
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        {!this.props.editorSessionId ? (
-          <>
-            <Text>You are not currently in any session.</Text>
-            <Divider />
-            <ControlButton label={'Create'} icon={IconNames.ADD} onClick={handleStartInvite} />
-          </>
-        ) : (
-          <>
-            <Text>
-              You have joined the session as{' '}
-              {this.state.sessionEditingId ? 'an editor' : 'a viewer'}.
-            </Text>
-            <Divider />
-            {this.state.sessionEditingId && (
-              <FormGroup subLabel="Invite as editor">
-                <input
-                  value={this.state.sessionEditingId}
-                  readOnly={true}
-                  ref={this.sessionEditingIdInputElem}
-                />
-                <CopyToClipboard text={'' + this.state.sessionEditingId}>
-                  <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectSessionEditingId} />
-                </CopyToClipboard>
-              </FormGroup>
-            )}
-            {this.state.sessionViewingId && (
-              <FormGroup subLabel="Invite as viewer">
-                <input
-                  value={this.state.sessionViewingId}
-                  readOnly={true}
-                  ref={this.sessionViewingIdInputElem}
-                />
-                <CopyToClipboard text={'' + this.state.sessionViewingId}>
-                  <ControlButton icon={IconNames.DUPLICATE} onClick={this.selectSessionViewingId} />
-                </CopyToClipboard>
-              </FormGroup>
-            )}
-          </>
-        )}
-      </div>
-    );
-
-    const inviteButton = (
-      <Popover
-        popoverClassName="Popover-share"
-        inheritDarkTheme={false}
-        content={inviteButtonPopoverContent}
-      >
-        <ControlButton label="Invite" icon={IconNames.GRAPH} />
-      </Popover>
-    );
-
-    const handleStartJoining = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleStartJoining = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
+      const joinElemValue = joinElemRef.current;
+
       // FIXME this handler should be a Saga action or at least in a controller
-      getDocInfoFromSessionId(this.state.joinElemValue).then(
+      getDocInfoFromSessionId(joinElemValue).then(
         docInfo => {
           if (docInfo !== null) {
-            this.props.handleSetEditorSessionId!(this.state!.joinElemValue);
-            this.props.handleSetSessionDetails!(docInfo);
-            if (docInfo.readOnly) {
-              this.setState({
-                sessionEditingId: '',
-                sessionViewingId: this.state.joinElemValue
-              });
-            } else {
-              this.setState({
-                sessionEditingId: this.state.joinElemValue,
-                sessionViewingId: ''
-              });
-            }
+            props.handleSetEditorSessionId!(joinElemValue);
+            props.handleSetSessionDetails!({
+              docId: docInfo.docId,
+              readOnly: docInfo.defaultReadOnly,
+              owner: false
+            });
+            setSessionId(joinElemValue);
+            setDefaultReadOnly(docInfo.defaultReadOnly);
+            setIsOwner(false);
           } else {
-            this.props.handleSetEditorSessionId!('');
-            this.props.handleSetSessionDetails!(null);
+            props.handleSetEditorSessionId!('');
+            props.handleSetSessionDetails!(null);
             showWarningMessage('Could not find a session with that ID.');
+            if (
+              window.location.href.includes('/playground') &&
+              !window.location.href.endsWith('/playground')
+            ) {
+              window.history.pushState({}, document.title, '/playground');
+            }
           }
         },
         error => {
-          this.props.handleSetEditorSessionId!('');
+          props.handleSetEditorSessionId!('');
           handleError(error);
         }
       );
-    };
+    },
+    [props.handleSetEditorSessionId, props.handleSetSessionDetails]
+  );
 
-    const joinButtonPopoverContent = (
-      // TODO: this form should use Blueprint
-      <form onSubmit={handleStartJoining}>
-        <input type="text" value={this.state.joinElemValue} onChange={this.handleChange} />
-        <span className={Classes.POPOVER_DISMISS}>
-          <ControlButton icon={IconNames.KEY_ENTER} options={{ type: 'submit' }} />
-        </span>
-      </form>
-    );
+  const leaveButton = (
+    <ControlButton
+      label="Leave"
+      icon={IconNames.LOG_OUT}
+      onClick={() => {
+        // FIXME: this handler should be a Saga action or at least in a controller
+        props.handleSetEditorSessionId!('');
+        joinElemRef.current = '';
+        setSessionId('');
+      }}
+    />
+  );
 
-    const joinButton = (
-      <Popover
-        popoverClassName="Popover-share"
-        inheritDarkTheme={false}
-        content={joinButtonPopoverContent}
-      >
-        <ControlButton label="Join" icon={IconNames.LOG_IN} />
-      </Popover>
-    );
-
-    const leaveButton = (
-      <ControlButton
-        label="Leave"
-        icon={IconNames.FEED}
-        onClick={() => {
-          // FIXME: this handler should be a Saga action or at least in a controller
-          this.props.handleSetEditorSessionId!('');
-          this.setState({ joinElemValue: '', sessionEditingId: '', sessionViewingId: '' });
-        }}
-      />
-    );
-
-    const tooltipContent = this.props.isFolderModeEnabled
-      ? 'Currently unsupported in Folder mode'
-      : undefined;
-
-    return (
-      <Tooltip content={tooltipContent} disabled={tooltipContent === undefined}>
-        <Popover
-          content={
-            <Menu large={true}>
-              {inviteButton}
-              {this.props.editorSessionId === '' ? joinButton : leaveButton}
-            </Menu>
-          }
-          disabled={this.props.isFolderModeEnabled}
+  const inviteButtonPopoverContent = (
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      {!props.editorSessionId ? (
+        <div
+          style={{
+            padding: '10px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center'
+          }}
         >
+          <Text>You are not currently in any session.</Text>
+          <Divider />
           <ControlButton
-            label="Session"
-            icon={IconNames.SOCIAL_MEDIA}
-            options={{
-              iconColor:
-                this.props.editorSessionId === ''
-                  ? undefined
-                  : this.props.sharedbConnected
-                    ? Colors.GREEN3
-                    : Colors.RED3
-            }}
-            isDisabled={this.props.isFolderModeEnabled}
+            label={'Create a new session'}
+            icon={IconNames.ADD}
+            onClick={handleStartInvite}
           />
-        </Popover>
-      </Tooltip>
-    );
-  }
+          <br />
+          <span>... or join an existing one</span>
+          <br />
+          <form
+            onSubmit={handleStartJoining}
+            style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}
+          >
+            <input type="text" onChange={handleChange} placeholder="Type your code here..." />
+            <span className={Classes.POPOVER_DISMISS}>
+              <ControlButton icon={IconNames.LOG_IN} options={{ type: 'submit' }} />
+            </span>
+          </form>
+        </div>
+      ) : (
+        <div style={{ padding: '10px', display: 'flex', flexDirection: 'column' }}>
+          <Text>
+            You have joined the session as{' '}
+            {isOwner ? 'the owner' : defaultReadOnly ? 'a viewer' : 'an editor'}.
+          </Text>
+          <Divider />
+          {sessionId && (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-evenly',
+                alignItems: 'center'
+              }}
+            >
+              <FormGroup subLabel="Invite other users to this session">
+                <input value={sessionId} readOnly={true} />
+              </FormGroup>
+              <CopyToClipboard
+                text={sessionId}
+                onCopy={() => showSuccessMessage('Copied to clipboard: ' + sessionId)}
+              >
+                <ControlButton icon={IconNames.DUPLICATE} />
+              </CopyToClipboard>
+            </div>
+          )}
+          {leaveButton}
+        </div>
+      )}
+    </div>
+  );
 
-  private selectSessionEditingId() {
-    if (this.sessionEditingIdInputElem.current !== null) {
-      this.sessionEditingIdInputElem.current.focus();
-      this.sessionEditingIdInputElem.current.select();
+  const tooltipContent = props.isFolderModeEnabled
+    ? 'Currently unsupported in Folder mode'
+    : undefined;
+
+  const { playgroundCode } = useParams<{ playgroundCode: string }>();
+  useEffect(() => {
+    if (playgroundCode) {
+      joinElemRef.current = playgroundCode;
+      handleStartJoining({ preventDefault: () => {} } as React.FormEvent<HTMLFormElement>);
     }
-  }
+  }, [playgroundCode, handleStartJoining]);
 
-  private selectSessionViewingId() {
-    if (this.sessionViewingIdInputElem.current !== null) {
-      this.sessionViewingIdInputElem.current.focus();
-      this.sessionViewingIdInputElem.current.select();
-    }
-  }
-
-  private handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({ joinElemValue: event.target.value });
-  }
+  return (
+    <Tooltip content={tooltipContent} disabled={tooltipContent === undefined}>
+      <Popover content={inviteButtonPopoverContent} disabled={props.isFolderModeEnabled}>
+        <ControlButton
+          label="Session"
+          icon={IconNames.SOCIAL_MEDIA}
+          options={{
+            iconColor:
+              props.editorSessionId === ''
+                ? undefined
+                : props.sharedbConnected
+                  ? Colors.GREEN3
+                  : Colors.RED3
+          }}
+          isDisabled={props.isFolderModeEnabled}
+        />
+      </Popover>
+    </Tooltip>
+  );
 }

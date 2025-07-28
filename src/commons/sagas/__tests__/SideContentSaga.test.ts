@@ -48,7 +48,7 @@ describe('Side Content Alerts for normal side content', () => {
     expect(storeState).toMatchObject({
       playground: {
         dynamicTabs: [mockTab],
-        alerts: ['tab2', SideContentType.cseMachine, SideContentType.dataVisualizer]
+        alerts: ['tab2', SideContentType.dataVisualizer]
       }
     });
   });

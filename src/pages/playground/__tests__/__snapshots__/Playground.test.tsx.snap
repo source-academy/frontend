@@ -397,6 +397,7 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                 <div
                   class="row editor-react-ace"
                   data-testid="Editor"
+                  id="editor-react-ace"
                 >
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark react-ace"
@@ -406,6 +407,7 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                     <textarea
                       aria-autocomplete="both"
                       aria-haspopup="false"
+                      aria-label="Cursor at row 1"
                       autocapitalize="off"
                       autocorrect="off"
                       class="ace_text-input"
@@ -491,7 +493,15 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                         XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                       </div>
                     </div>
+                    <div
+                      class="ace_tooltip"
+                      role="tooltip"
+                      style="display: none; pointer-events: auto;"
+                    />
                   </div>
+                  <div
+                    id="ace-radar-view"
+                  />
                 </div>
               </div>
             </div>
@@ -1391,6 +1401,7 @@ and also the
                     <textarea
                       aria-autocomplete="both"
                       aria-haspopup="false"
+                      aria-label="Cursor at row 1"
                       autocapitalize="off"
                       autocorrect="off"
                       class="ace_text-input"
@@ -1477,6 +1488,11 @@ and also the
                         XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                       </div>
                     </div>
+                    <div
+                      class="ace_tooltip"
+                      role="tooltip"
+                      style="display: none; pointer-events: auto;"
+                    />
                   </div>
                   <div
                     class="bp5-button-group bp5-dark"
@@ -1947,6 +1963,7 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                 <div
                   class="row editor-react-ace"
                   data-testid="Editor"
+                  id="editor-react-ace"
                 >
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark react-ace"
@@ -1956,6 +1973,7 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                     <textarea
                       aria-autocomplete="both"
                       aria-haspopup="false"
+                      aria-label="Cursor at row 1"
                       autocapitalize="off"
                       autocorrect="off"
                       class="ace_text-input"
@@ -2041,7 +2059,15 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                         XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                       </div>
                     </div>
+                    <div
+                      class="ace_tooltip"
+                      role="tooltip"
+                      style="display: none; pointer-events: auto;"
+                    />
                   </div>
+                  <div
+                    id="ace-radar-view"
+                  />
                 </div>
               </div>
             </div>
@@ -2695,6 +2721,7 @@ and also the
                     <textarea
                       aria-autocomplete="both"
                       aria-haspopup="false"
+                      aria-label="Cursor at row 1"
                       autocapitalize="off"
                       autocorrect="off"
                       class="ace_text-input"
@@ -2781,6 +2808,11 @@ and also the
                         XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                       </div>
                     </div>
+                    <div
+                      class="ace_tooltip"
+                      role="tooltip"
+                      style="display: none; pointer-events: auto;"
+                    />
                   </div>
                   <div
                     class="bp5-button-group bp5-dark"
