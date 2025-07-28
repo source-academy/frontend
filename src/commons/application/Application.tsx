@@ -138,6 +138,15 @@ const Application: React.FC = () => {
         case MessageTypeNames.AssessmentAnswer:
           dispatch(SessionActions.submitAnswer(message.questionId, message.answer));
           break;
+        case MessageTypeNames.SetEditorBreakpoints:
+          dispatch(
+            WorkspaceActions.setEditorBreakpoint(
+              message.workspaceLocation,
+              0,
+              message.newBreakpoints
+            )
+          );
+          break;
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

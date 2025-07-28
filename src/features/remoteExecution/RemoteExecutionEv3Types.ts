@@ -4,7 +4,6 @@ import SensorColor from 'src/assets/sColor.svg';
 import SensorGyro from 'src/assets/sGyro.svg';
 import SensorTouch from 'src/assets/sTouch.svg';
 import SensorUltrasonic from 'src/assets/sUltrasonic.svg';
-import { resolveImportInconsistency } from 'src/commons/utils/TestUtils';
 
 export enum Ev3MotorTypes {
   LARGE = 'lego-ev3-l-motor',
@@ -160,10 +159,10 @@ export const ev3PeripheralToComponentMap: {
 } & {
   [key in Ev3MotorTypes]: string;
 } = Object.freeze({
-  [Ev3SensorTypes.COLOR_SENSOR]: resolveImportInconsistency(SensorColor),
-  [Ev3SensorTypes.GYRO_SENSOR]: resolveImportInconsistency(SensorGyro),
-  [Ev3SensorTypes.TOUCH_SENSOR]: resolveImportInconsistency(SensorTouch),
-  [Ev3SensorTypes.ULTRASONIC_SENSOR]: resolveImportInconsistency(SensorUltrasonic),
-  [Ev3MotorTypes.LARGE]: resolveImportInconsistency(MotorL),
-  [Ev3MotorTypes.MEDIUM]: resolveImportInconsistency(MotorM)
+  [Ev3SensorTypes.COLOR_SENSOR]: SensorColor,
+  [Ev3SensorTypes.GYRO_SENSOR]: SensorGyro,
+  [Ev3SensorTypes.TOUCH_SENSOR]: SensorTouch,
+  [Ev3SensorTypes.ULTRASONIC_SENSOR]: SensorUltrasonic,
+  [Ev3MotorTypes.LARGE]: MotorL,
+  [Ev3MotorTypes.MEDIUM]: MotorM
 });
