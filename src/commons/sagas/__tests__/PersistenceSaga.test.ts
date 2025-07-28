@@ -7,14 +7,13 @@ import { vi } from 'vitest';
 
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import { actions } from '../../utils/ActionsHelper';
+import PersistenceSaga from '../PersistenceSaga';
 
 // mock away the store - the store can't be created in a test, it leads to
 // import cycles
 // this is before the import below because we need to ensure PersistenceSaga's
 // store import is mocked
 vi.mock('../../../pages/createStore');
-
-const PersistenceSaga = (await import('../PersistenceSaga')).default;
 
 const USER_EMAIL = 'test@email.com';
 const FILE_ID = '123';

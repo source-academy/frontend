@@ -6,7 +6,7 @@ import { vi } from 'vitest';
 import { wrapSaga } from '../SafeEffects';
 
 vi.mock('@sentry/browser', async () => ({
-  ...(await import('../../../../node_modules/@sentry/browser')),
+  ...(await vi.importActual('../../../../node_modules/@sentry/browser')),
   captureException: vi.fn()
 }));
 
