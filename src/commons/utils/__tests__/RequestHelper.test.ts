@@ -32,7 +32,6 @@ vi.mock('../../../pages/createStore', () => ({
     dispatch: vi.fn()
   }
 }));
-// vi.spyOn(store, 'dispatch');
 const storeDispatchSpy = store.dispatch as unknown as Mock<typeof store.dispatch>;
 
 const tokens: Tokens = {
