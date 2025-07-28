@@ -1,25 +1,26 @@
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
+import 'src/i18n/i18n';
 
-import { TextDecoder, TextEncoder } from 'node:util';
+import { vi } from 'vitest';
 
 // Mock ResizeObserver in tests
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 global.ResizeObserver = require('resize-observer-polyfill');
 
-jest.mock('./commons/utils/notifications/createNotification', () => ({
+vi.mock('./commons/utils/notifications/createNotification', () => ({
   notification: {
-    show: jest.fn()
+    show: vi.fn()
   }
 }));
 
-jest.mock('java-slang', () => {
+vi.mock('java-slang', () => {
   return {
     compileFromSource: () => '',
     typeCheck: () => ({ hasTypeErrors: false, errorMsgs: [] })
   };
 });
 
-// Fix for react-router v7 and jest
+// Fix for react-router v7 and vitest
 // https://stackoverflow.com/a/79332264
 
 if (!global.TextEncoder) {
@@ -29,3 +30,17 @@ if (!global.TextEncoder) {
 if (!global.TextDecoder) {
   global.TextDecoder = TextDecoder as any;
 }
+
+// JSDOM does not implement window.matchMedia, so we have to mock it.
+window.matchMedia =
+  window.matchMedia ||
+  function () {
+    return {
+      matches: false,
+      addListener: function () {},
+      removeListener: function () {}
+    };
+  };
+
+// JSDOM does not implement scrollIntoView, so we have to mock it.
+window.HTMLElement.prototype.scrollIntoView = function () {};
