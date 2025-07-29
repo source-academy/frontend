@@ -38,7 +38,9 @@ const CourseConfigPanel: React.FC<Props> = props => {
     enableAchievements,
     enableSourcecast,
     enableStories,
-    moduleHelpText
+    enableLlmGrading,
+    moduleHelpText,
+    llmApiKey
   } = props.courseConfiguration;
 
   const writePanel = (
@@ -133,6 +135,24 @@ const CourseConfigPanel: React.FC<Props> = props => {
             {courseHelpTextSelectedTab === CourseHelpTextEditorTab.WRITE && writePanel}
             {courseHelpTextSelectedTab === CourseHelpTextEditorTab.PREVIEW && previewPanel}
           </FormGroup>
+          <FormGroup
+            helperText="Please enter the LLM API Key. This will be used for LLM Grading if enabled."
+            inline={true}
+            label="LLM API Key"
+            labelFor="llmApiKey"
+          >
+            <InputGroup
+              id="llmApiKey"
+              type="password"
+              defaultValue={llmApiKey}
+              onChange={e =>
+                props.setCourseConfiguration({
+                  ...props.courseConfiguration,
+                  llmApiKey: e.target.value
+                })
+              }
+            />
+          </FormGroup>
         </div>
         {!isMobileBreakpoint && <Divider />}
         <div className="booleans">
@@ -183,6 +203,16 @@ const CourseConfigPanel: React.FC<Props> = props => {
               props.setCourseConfiguration({
                 ...props.courseConfiguration,
                 enableStories: (e.target as HTMLInputElement).checked
+              })
+            }
+          />
+          <Switch
+            checked={enableLlmGrading}
+            label="Enable LLM Grading"
+            onChange={e =>
+              props.setCourseConfiguration({
+                ...props.courseConfiguration,
+                enableLlmGrading: (e.target as HTMLInputElement).checked
               })
             }
           />
