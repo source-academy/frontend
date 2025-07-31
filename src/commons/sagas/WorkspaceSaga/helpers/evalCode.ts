@@ -1,4 +1,3 @@
-import { compileAndRun as compileAndRunCCode } from '@sourceacademy/c-slang/ctowasm/dist/index';
 import { tokenizer } from 'acorn';
 import type { IConduit } from 'conductor/dist/conduit';
 import { type Context, interrupt, type Result, resume, runFilesInContext } from 'js-slang';
@@ -9,6 +8,12 @@ import { pick } from 'lodash';
 import { eventChannel, type SagaIterator } from 'redux-saga';
 import { call, cancel, cancelled, fork, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
+import { 
+  CContext,
+  compileAndRun as compileAndRunCCode,
+  evaluate as evaluateCCode,
+} from 'src/ctowasm/dist/index';
+import { CseMachine as CCseMachine } from 'src/features/cseMachine/c/CseMachine'
 
 import InterpreterActions from '../../../../commons/application/actions/InterpreterActions';
 import { selectFeatureSaga } from '../../../../commons/featureFlags/selectFeatureSaga';
@@ -54,7 +59,12 @@ async function wasm_compile_and_run(
   }
 }
 
-async function cCompileAndRun(cCode: string, context: Context): Promise<Result> {
+async function cCompileAndRun(
+  cCode: string, 
+  context: Context,
+  currentStep: number,
+  isUsingCse: boolean
+): Promise<Result> {
   function reportCCompilationError(errorMessage: string, context: Context) {
     context.errors.push({
       type: ErrorType.SYNTAX,
@@ -93,6 +103,32 @@ async function cCompileAndRun(cCode: string, context: Context): Promise<Result> 
     });
   }
   const cCompilerConfig = await makeCCompilerConfig(cCode, context);
+
+  if (isUsingCse) {
+    context.executionMethod = 'cse-machine';
+    
+    const evaluationResult = await evaluateCCode(cCode, cCompilerConfig, currentStep);
+
+    if (evaluationResult.status === 'failure') {
+      reportCCompilationError(
+        `Compilation failed with the following error(s):\n\n${evaluationResult.errorMessage}`,
+        context
+      );
+      return {
+        status: 'error',
+        context
+      } as Result;
+    }
+
+    context.runtime.envStepsTotal = evaluationResult.context.step;
+
+    return {
+      status: 'finished',
+      context,
+      value: { toReplString: () => 'Compilation and program execution successful.' }
+    };
+  }
+
   try {
     const compilationResult = await compileAndRunCCode(cCode, cCompilerConfig);
     if (compilationResult.status === 'failure') {
@@ -130,6 +166,14 @@ async function cCompileAndRun(cCode: string, context: Context): Promise<Result> 
     console.log(e);
     reportCRuntimeError(e.message, context);
     return { status: 'error' };
+  }
+}
+
+export function visualizeCCseMachine({ context }: { context: CContext }) {
+  try {
+    CCseMachine.drawCse(context);
+  } catch (err) {
+    throw new Error('C CSE machine is not enabled')
   }
 }
 
@@ -226,7 +270,11 @@ export function* evalCodeSaga(
 
     switch (context.chapter) {
       case Chapter.FULL_C:
-        return call(cCompileAndRun, entrypointCode, context);
+        const {
+          usingCse: isUsingCse
+        } = yield* selectWorkspace('playground');
+
+        return call(cCompileAndRun, entrypointCode, context, currentStep, isUsingCse);
       case Chapter.FULL_JAVA: {
         const {
           usingCse: isUsingCse,

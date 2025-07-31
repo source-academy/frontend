@@ -84,6 +84,7 @@ const PlaygroundSaga = combineSagaHandlers({
       yield put(WorkspaceActions.toggleUsingCse(false, workspaceLocation));
       yield call([CseMachine, CseMachine.clearCse]);
       yield call([JavaCseMachine, JavaCseMachine.clearCse]);
+      // yield call([Cse])
       yield put(WorkspaceActions.updateCurrentStep(-1, workspaceLocation));
       yield put(WorkspaceActions.updateStepsTotal(0, workspaceLocation));
       yield put(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
@@ -91,6 +92,10 @@ const PlaygroundSaga = combineSagaHandlers({
     }
 
     if (playgroundSourceChapter === Chapter.FULL_JAVA && newId === SideContentType.cseMachine) {
+      yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
+    }
+
+    if (playgroundSourceChapter === Chapter.FULL_C && newId === SideContentType.cseMachine) {
       yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
     }
 

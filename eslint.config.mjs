@@ -21,6 +21,15 @@ export default config(
   //   }
   // },
   {
+    files: ['**/*.js'],
+    rules: {
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': 'off'
+      , '@typescript-eslint/no-unused-expressions': 'off'
+      , '@typescript-eslint/no-this-alias': 'off'
+    }
+  },
+  {
     files: ['**/*.ts*'],
     plugins: {
       'react-hooks': reactHooksPlugin,

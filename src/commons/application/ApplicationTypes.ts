@@ -245,7 +245,7 @@ export const cLanguages: SALanguage[] = [
     variant: Variant.DEFAULT,
     displayName: 'C',
     mainLanguage: SupportedLanguage.C,
-    supports: {}
+    supports: { cseMachine: true }
   }
 ];
 

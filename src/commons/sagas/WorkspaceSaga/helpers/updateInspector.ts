@@ -26,6 +26,8 @@ export function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIter
       yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
       yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, [[start, end]]));
       visualizeJavaCseMachine(lastDebuggerResult);
+    } else if (chapter === Chapter.FULL_C) {
+      console.log(lastDebuggerResult);
     } else {
       const row = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
