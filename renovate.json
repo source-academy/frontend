@@ -8,7 +8,8 @@
   "packageRules": [
     {
       "rangeStrategy": "update-lockfile",
-      "matchPackageNames": ["*"]
+      "matchPackageNames": ["*"],
+      "minimumReleaseAge": "5 days"
     }
   ],
   "enabledManagers": ["npm"]

@@ -94,7 +94,6 @@ type SubstVisualizerPropsAST = {
 };
 
 const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
-  console.log(props);
   const [stepValue, setStepValue] = useState(1);
   const lastStepValue = props.content.length;
   const hasRunCode = lastStepValue !== 0;
@@ -245,10 +244,15 @@ function composeStyleWrapper(
  */
 function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext): React.ReactNode {
   const styleWrapper = renderContext.styleWrapper;
-
   const renderers = {
     Literal(node: StepperLiteral) {
-      return <span className="stepper-literal">{node.raw ? node.raw : node.value}</span>;
+      const stringifyLiteralValue = (value: any) =>
+        typeof value === 'string' ? '"' + value + '"' : value !== null ? value.toString() : 'null';
+      return (
+        <span className="stepper-literal">
+          {node.raw ? node.raw : stringifyLiteralValue(node.value)}
+        </span>
+      );
     },
     Identifier(node: StepperIdentifier) {
       return <span>{node.name}</span>;

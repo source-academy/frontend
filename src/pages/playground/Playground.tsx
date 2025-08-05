@@ -41,6 +41,7 @@ import {
   shortenURL,
   updateShortURL
 } from 'src/features/playground/PlaygroundActions';
+import Messages, { sendToWebview } from 'src/features/vscode/messages';
 
 import {
   getDefaultFilePath,
@@ -193,6 +194,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const { isSicpEditor } = props;
   const workspaceLocation: WorkspaceLocation = isSicpEditor ? 'sicp' : 'playground';
   const { isMobileBreakpoint } = useResponsive();
+  const isVscode = useTypedSelector(state => state.vscode.isVscode);
 
   const [deviceSecret, setDeviceSecret] = useState<string | undefined>();
   const location = useLocation();
@@ -358,12 +360,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
   useEffect(() => {
     if (!selectedTab) return;
 
-    if (isMobileBreakpoint && desktopOnlyTabIds.includes(selectedTab)) {
+    if (!isVscode && isMobileBreakpoint && desktopOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.mobileEditor);
     } else if (!isMobileBreakpoint && mobileOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.introduction);
     }
-  }, [isMobileBreakpoint, selectedTab, setSelectedTab]);
+  }, [isMobileBreakpoint, isVscode, selectedTab, setSelectedTab]);
 
   const onEditorValueChange = React.useCallback(
     (editorTabIndex: number, newEditorValue: string) => {
@@ -372,6 +374,28 @@ const Playground: React.FC<PlaygroundProps> = props => {
     },
     [handleEditorValueChange]
   );
+
+  useEffect(() => {
+    // Only the playground is expected to work with VSC for now
+    if (workspaceLocation === 'sicp') {
+      return;
+    }
+    const initialCode = editorTabs[0]?.value ?? '';
+    const breakpoints = editorTabs[0]?.breakpoints ?? [];
+    sendToWebview(
+      Messages.NewEditor(
+        workspaceLocation,
+        'playground',
+        1,
+        playgroundSourceChapter,
+        '',
+        initialCode,
+        breakpoints
+      )
+    );
+    // We don't want to re-send this message even when the variables change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // const onChangeTabs = useCallback(
   //   (
@@ -489,6 +513,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
       pushLog(input);
 
+      sendToWebview(Messages.ChangeChapter('playground', 1, chapter, variant));
       handleChapterSelect(chapter, variant);
       // Hardcoded for Playground only for now, while we await workspace refactoring
       // to decouple the SicpWorkspace from the Playground.
@@ -1029,7 +1054,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
   };
 
-  return isMobileBreakpoint ? (
+  return !isVscode && isMobileBreakpoint ? (
     <div className={classNames('Playground', Classes.DARK, isGreen && 'GreenScreen')}>
       <MobileWorkspace {...mobileWorkspaceProps} />
     </div>
