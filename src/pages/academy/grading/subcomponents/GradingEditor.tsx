@@ -13,11 +13,15 @@ import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useMemo, useState } from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
 import { useDispatch } from 'react-redux';
+import { useTokens } from 'src/commons/utils/Hooks';
 
 import SessionActions from '../../../../commons/application/actions/SessionActions';
 import ControlButton from '../../../../commons/ControlButton';
 import Markdown from '../../../../commons/Markdown';
 import { Prompt } from '../../../../commons/ReactRouterPrompt';
+import { postGenerateComments } from '../../../../commons/sagas/RequestsSaga';
+import { saveFinalComment } from '../../../../commons/sagas/RequestsSaga';
+import { saveChosenComments } from '../../../../commons/sagas/RequestsSaga';
 import { getPrettyDate } from '../../../../commons/utils/DateHelper';
 import { showSimpleConfirmDialog } from '../../../../commons/utils/DialogHelper';
 import {
@@ -25,6 +29,7 @@ import {
   showWarningMessage
 } from '../../../../commons/utils/notifications/NotificationsHelper';
 import { convertParamToInt } from '../../../../commons/utils/ParamParseHelper';
+import GradingCommentSelector from './GradingCommentSelector';
 
 type GradingSaveFunction = (
   submissionId: number,
@@ -42,6 +47,7 @@ type Props = {
   maxXp: number;
   studentNames: string[];
   studentUsernames: string[];
+  is_llm: boolean;
   comments: string;
   graderName?: string;
   gradedAt?: string;
@@ -51,6 +57,7 @@ const gradingEditorButtonClass = 'grading-editor-button';
 
 const GradingEditor: React.FC<Props> = props => {
   const dispatch = useDispatch();
+  const tokens = useTokens();
   const { handleGradingSave, handleGradingSaveAndContinue, handleReautogradeAnswer } = useMemo(
     () =>
       ({
@@ -101,6 +108,34 @@ const GradingEditor: React.FC<Props> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.submissionId, props.questionId]);
 
+  const getCommentSuggestions = async () => {
+    const resp = await postGenerateComments(tokens, props.submissionId, props.questionId);
+    return resp;
+  };
+
+  const onSelectGeneratedComments = (comment: string) => {
+    if (!selectedSuggestions.includes(comment)) {
+      setSelectedSuggestions([comment, ...selectedSuggestions]);
+    }
+
+    setEditorValue(editorValue + comment);
+  };
+
+  const postSaveFinalComment = async (comment: string) => {
+    const resp = await saveFinalComment(tokens, props.submissionId, props.questionId, comment);
+    return resp;
+  };
+
+  const postSaveChosenComments = async (comments: string[]) => {
+    const resp = await saveChosenComments(tokens, props.submissionId, props.questionId, comments);
+
+    return resp;
+  };
+
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [selectedSuggestions, setSelectedSuggestions] = useState<string[]>([]);
+  const [hasClickedGenerate, setHasClickedGenerate] = useState<boolean>(false);
+
   const makeInitialState = () => {
     setXpAdjustmentInput(props.xpAdjustment.toString());
     setEditorValue(props.comments);
@@ -129,6 +164,8 @@ const GradingEditor: React.FC<Props> = props => {
     () => {
       const newXpAdjustmentInput = convertParamToInt(xpAdjustmentInput || undefined) || undefined;
       const xp = props.initialXp + (newXpAdjustmentInput || 0);
+      postSaveFinalComment(editorValue);
+      postSaveChosenComments(selectedSuggestions);
       if (xp < 0 || xp > props.maxXp) {
         showWarningMessage(
           `XP ${xp.toString()} is out of bounds. Maximum xp is ${props.maxXp.toString()}.`
@@ -303,6 +340,26 @@ const GradingEditor: React.FC<Props> = props => {
           </div>
         </div>
       </div>
+
+      {props.is_llm && (
+        <div>
+          <GradingCommentSelector
+            onSelect={onSelectGeneratedComments}
+            isLoading={hasClickedGenerate}
+            comments={suggestions}
+          />
+          <Button
+            onClick={async () => {
+              setHasClickedGenerate(true);
+              const resp = await getCommentSuggestions();
+              setHasClickedGenerate(false);
+              setSuggestions(resp!.comments);
+            }}
+          >
+            Get comments
+          </Button>
+        </div>
+      )}
 
       <div className="react-mde-parent">
         <ReactMde

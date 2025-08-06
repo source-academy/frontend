@@ -39,6 +39,8 @@ export type SessionState = {
   readonly enableAchievements?: boolean;
   readonly enableSourcecast?: boolean;
   readonly enableStories?: boolean;
+  readonly enableLlmGrading?: boolean;
+  readonly llmApiKey?: string;
   readonly sourceChapter?: Chapter;
   readonly sourceVariant?: Variant;
   readonly moduleHelpText?: string;
@@ -105,10 +107,12 @@ export type CourseConfiguration = {
   enableAchievements: boolean;
   enableSourcecast: boolean;
   enableStories: boolean;
+  enableLlmGrading?: boolean;
   sourceChapter: Chapter;
   sourceVariant: Variant;
   moduleHelpText: string;
   assetsPrefix: string;
+  llmApiKey?: string;
 };
 
 export type AdminPanelCourseRegistration = {
