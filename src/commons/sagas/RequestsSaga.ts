@@ -1302,14 +1302,14 @@ export const deleteSourcecastEntry = async (
 };
 
 /**
- * POST /courses/{courseId}/admin/assessments/{assessmentId}/calculateContestScore
+ * POST /courses/{courseId}/admin/assessments/{assessmentId}/contest_calculate_score
  */
 export const calculateContestScore = async (
   assessmentId: number,
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(
-    `${courseId()}/admin/assessments/${assessmentId}/calculateContestScore`,
+    `${courseId()}/admin/assessments/${assessmentId}/contest_calculate_score`,
     'POST',
     {
       ...tokens
@@ -1320,14 +1320,14 @@ export const calculateContestScore = async (
 };
 
 /**
- * POST /courses/{courseId}/admin/assessments/{assessmentId}/dispatchContestXp
+ * POST /courses/{courseId}/admin/assessments/{assessmentId}/contest_dispatch_xp
  */
 export const dispatchContestXp = async (
   assessmentId: number,
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(
-    `${courseId()}/admin/assessments/${assessmentId}/dispatchContestXp`,
+    `${courseId()}/admin/assessments/${assessmentId}/contest_dispatch_xp`,
     'POST',
     {
       ...tokens
@@ -1338,7 +1338,7 @@ export const dispatchContestXp = async (
 };
 
 /**
- * GET /courses/{courseId}/assessments/{assessmentId}/scoreLeaderboard
+ * GET /courses/{courseId}/assessments/{assessmentId}/contest_score_leaderboard
  */
 export const getScoreLeaderboard = async (
   assessmentId: number,
@@ -1347,7 +1347,7 @@ export const getScoreLeaderboard = async (
 ): Promise<ContestEntry[] | null> => {
   const params = new URLSearchParams({ visible_entries: `${visibleEntries}` });
   const resp = await request(
-    `${courseId()}/assessments/${assessmentId}/scoreLeaderboard?${params.toString()}`,
+    `${courseId()}/assessments/${assessmentId}/contest_score_leaderboard?${params.toString()}`,
     'GET',
     {
       ...tokens
@@ -1370,7 +1370,7 @@ export const getScoreLeaderboard = async (
 };
 
 /**
- * GET /courses/{courseId}/assessments/{assessmentId}/popularVoteLeaderboard
+ * GET /courses/{courseId}/assessments/{assessmentId}/contest_popular_leaderboard
  */
 export const getPopularVoteLeaderboard = async (
   assessmentId: number,
@@ -1379,7 +1379,7 @@ export const getPopularVoteLeaderboard = async (
 ): Promise<ContestEntry[] | null> => {
   const params = new URLSearchParams({ visible_entries: `${visibleEntries}` });
   const resp = await request(
-    `${courseId()}/assessments/${assessmentId}/popularVoteLeaderboard?${params.toString()}`,
+    `${courseId()}/assessments/${assessmentId}/contest_popular_leaderboard?${params.toString()}`,
     'GET',
     {
       ...tokens
