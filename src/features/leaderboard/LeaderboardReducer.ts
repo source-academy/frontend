@@ -9,9 +9,6 @@ export const LeaderboardReducer: Reducer<LeaderboardState, SourceActionType> = c
   defaultLeaderboard,
   builder => {
     builder
-      .addCase(LeaderboardActions.saveAllUsersXp, (state, action) => {
-        state.userXp = action.payload;
-      })
       .addCase(LeaderboardActions.savePaginatedLeaderboardXp, (state, action) => {
         state.paginatedUserXp = {
           rows: action.payload.rows || [],

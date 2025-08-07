@@ -463,10 +463,12 @@ export const getTotalXp = async (tokens: Tokens, courseRegId?: number): Promise<
 };
 
 /**
- * GET /courses/{courseId}/all_user_xp
+ * GET /courses/{courseId}/leaderboards/xp_all
  */
-export const getAllTotalXp = async (tokens: Tokens): Promise<number | null> => {
-  const resp = await request(`${courseId()}/all_users_xp`, 'GET', {
+export const getAllOverallLeaderboardXP = async (
+  tokens: Tokens
+): Promise<LeaderboardRow[] | null> => {
+  const resp = await request(`${courseId()}/leaderboards/xp_all`, 'GET', {
     ...tokens
   });
 
