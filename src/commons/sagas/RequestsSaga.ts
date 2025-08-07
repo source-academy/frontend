@@ -529,10 +529,10 @@ export const getOverallLeaderboardXP = async (
  */
 export const getContestScoreLeaderboard = async (
   assessmentId: number,
-  visibleEntries: number,
+  count: number,
   tokens: Tokens
 ): Promise<ContestLeaderboardRow[] | null> => {
-  const params = new URLSearchParams({ visible_entries: `${visibleEntries}` });
+  const params = new URLSearchParams({ count: `${count}` });
   const resp = await request(
     `${courseId()}/assessments/${assessmentId}/contest_score_leaderboard?${params.toString()}`,
     'GET',
@@ -566,10 +566,10 @@ export const getContestScoreLeaderboard = async (
  */
 export const getContestPopularVoteLeaderboard = async (
   assessmentId: number,
-  visibleEntries: number,
+  count: number,
   tokens: Tokens
 ): Promise<ContestLeaderboardRow[] | null> => {
-  const params = new URLSearchParams({ visible_entries: `${visibleEntries}` });
+  const params = new URLSearchParams({ count: `${count}` });
   const resp = await request(
     `${courseId()}/assessments/${assessmentId}/contest_popular_leaderboard?${params.toString()}`,
     'GET',
@@ -1342,10 +1342,10 @@ export const dispatchContestXp = async (
  */
 export const getScoreLeaderboard = async (
   assessmentId: number,
-  visibleEntries: number | undefined,
+  count: number | undefined,
   tokens: Tokens
 ): Promise<ContestEntry[] | null> => {
-  const params = new URLSearchParams({ visible_entries: `${visibleEntries}` });
+  const params = new URLSearchParams({ count: `${count}` });
   const resp = await request(
     `${courseId()}/assessments/${assessmentId}/contest_score_leaderboard?${params.toString()}`,
     'GET',
@@ -1374,10 +1374,10 @@ export const getScoreLeaderboard = async (
  */
 export const getPopularVoteLeaderboard = async (
   assessmentId: number,
-  visibleEntries: number | undefined,
+  count: number | undefined,
   tokens: Tokens
 ): Promise<ContestEntry[] | null> => {
-  const params = new URLSearchParams({ visible_entries: `${visibleEntries}` });
+  const params = new URLSearchParams({ count: `${count}` });
   const resp = await request(
     `${courseId()}/assessments/${assessmentId}/contest_popular_leaderboard?${params.toString()}`,
     'GET',
