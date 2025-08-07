@@ -81,6 +81,12 @@ exports[`NavigationBar > Renders "Not logged in" correctly 1`] = `
         text="Stories"
         to="/courses/undefined/stories"
       />
+      <DesktopNavLink
+        disabled={true}
+        icon="timeline-bar-chart"
+        text="Leaderboard"
+        to="/courses/undefined/leaderboard"
+      />
     </Blueprint5.NavbarGroup>
     <Blueprint5.NavbarGroup
       align="right"
@@ -126,6 +132,10 @@ exports[`NavigationBar > Renders "Not logged in" correctly 1`] = `
     <Route
       element={null}
       path="/courses/:courseId/achievements"
+    />
+    <Route
+      element={null}
+      path="/courses/:courseId/leaderboard/*"
     />
     <Route
       element={<SicpNavigationBar />}
@@ -286,6 +296,12 @@ exports[`NavigationBar > Renders correctly for student with course 1`] = `
         text="Stories"
         to="/courses/1/stories"
       />
+      <DesktopNavLink
+        disabled={true}
+        icon="timeline-bar-chart"
+        text="Leaderboard"
+        to="/courses/1/leaderboard"
+      />
     </Blueprint5.NavbarGroup>
     <Blueprint5.NavbarGroup
       align="right"
@@ -331,6 +347,10 @@ exports[`NavigationBar > Renders correctly for student with course 1`] = `
     <Route
       element={null}
       path="/courses/:courseId/achievements"
+    />
+    <Route
+      element={null}
+      path="/courses/:courseId/leaderboard/*"
     />
     <Route
       element={<SicpNavigationBar />}
@@ -437,6 +457,12 @@ exports[`NavigationBar > Renders correctly for student without course 1`] = `
         text="Stories"
         to="/courses/undefined/stories"
       />
+      <DesktopNavLink
+        disabled={true}
+        icon="timeline-bar-chart"
+        text="Leaderboard"
+        to="/courses/undefined/leaderboard"
+      />
     </Blueprint5.NavbarGroup>
     <Blueprint5.NavbarGroup
       align="right"
@@ -482,6 +508,10 @@ exports[`NavigationBar > Renders correctly for student without course 1`] = `
     <Route
       element={null}
       path="/courses/:courseId/achievements"
+    />
+    <Route
+      element={null}
+      path="/courses/:courseId/leaderboard/*"
     />
     <Route
       element={<SicpNavigationBar />}

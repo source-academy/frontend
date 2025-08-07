@@ -19,6 +19,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { onClickProgress } from 'src/features/assessments/AssessmentUtils';
+import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 import Messages, { sendToWebview } from 'src/features/vscode/messages';
 import { mobileOnlyTabIds } from 'src/pages/playground/PlaygroundTabs';
 
@@ -85,6 +86,7 @@ export type AssessmentWorkspaceProps = {
   notAttempted: boolean;
   canSave: boolean;
   assessmentConfiguration: AssessmentConfiguration;
+  fromContestLeaderboard: boolean;
 };
 
 const workspaceLocation: WorkspaceLocation = 'assessment';
@@ -187,6 +189,17 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
   }, [dispatch]);
 
+  const code = useTypedSelector(store => store.leaderboard.code);
+  const initialRunCompleted = useTypedSelector(store => store.leaderboard.initialRun);
+  const votingId = props.assessmentId;
+
+  useEffect(() => {
+    if (initialRunCompleted[votingId] && props.fromContestLeaderboard && code != '') {
+      dispatch(WorkspaceActions.updateEditorValue(workspaceLocation, 0, code));
+      dispatch(LeaderboardActions.clearCode());
+    }
+  }, [dispatch]);
+
   useEffect(() => {
     if (assessmentOverview && assessmentOverview.maxTeamSize > 1) {
       handleTeamOverviewFetch(props.assessmentId);
@@ -226,7 +239,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    */
   useEffect(() => {
     checkWorkspaceReset();
-  });
+    if (assessment != undefined && question.type == 'voting') {
+      dispatch(LeaderboardActions.setWorkspaceInitialRun(votingId));
+    }
+  }, [dispatch, assessment]);
 
   /**
    * Handles toggling enabling and disabling token counter depending on assessment properties
@@ -368,6 +384,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       case QuestionTypes.voting:
         const votingQuestionData: IContestVotingQuestion = question;
         options.programPrependValue = votingQuestionData.prepend;
+        if (props.fromContestLeaderboard) options.editorValue = code;
         options.programPostpendValue = votingQuestionData.postpend;
         break;
       case QuestionTypes.mcq:
