@@ -491,16 +491,16 @@ export const getAllOverallLeaderboardXP = async (
 };
 
 /**
- * GET /courses/{courseId}/get_paginated_display
+ * GET /courses/{courseId}/leaderboards/xp
  */
-export const getPaginatedTotalXp = async (
+export const getOverallLeaderboardXP = async (
   page: number,
   pageSize: number,
   tokens: Tokens
 ): Promise<{ rows: LeaderboardRow[]; userCount: number } | null> => {
   const offset = (page - 1) * pageSize;
   const params = new URLSearchParams({ offset: `${offset}`, page_size: `${pageSize}` });
-  const resp = await request(`${courseId()}/get_paginated_display?${params.toString()}`, 'GET', {
+  const resp = await request(`${courseId()}/leaderboards/xp?${params.toString()}`, 'GET', {
     ...tokens
   });
 

@@ -9,7 +9,7 @@ export const LeaderboardReducer: Reducer<LeaderboardState, SourceActionType> = c
   defaultLeaderboard,
   builder => {
     builder
-      .addCase(LeaderboardActions.savePaginatedLeaderboardXp, (state, action) => {
+      .addCase(LeaderboardActions.saveOverallLeaderboardXP, (state, action) => {
         state.paginatedUserXp = {
           rows: action.payload.rows || [],
           userCount: action.payload.userCount || 0
