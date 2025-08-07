@@ -155,7 +155,6 @@ const NavigationBar: React.FC = () => {
       },
       {
         to: `/courses/${courseId}/leaderboard`,
-        // icon: IconNames.TIMELINE_BAR_CHART,
         icon: IconNames.TIMELINE_BAR_CHART,
         text: 'Leaderboard',
         disabled: !(isEnrolledInACourse && (enableContestLeaderboard || enableOverallLeaderboard))
