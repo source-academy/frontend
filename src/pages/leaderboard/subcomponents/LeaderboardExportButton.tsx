@@ -7,9 +7,8 @@ import {
   getContestPopularVoteLeaderboard,
   getContestScoreLeaderboard
 } from 'src/commons/sagas/RequestsSaga';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession } from 'src/commons/utils/Hooks';
 import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
-import { store } from 'src/pages/createStore';
 
 type Props = {
   type: string;
@@ -18,12 +17,10 @@ type Props = {
 };
 
 const LeaderboardExportButton: React.FC<Props> = ({ type, contest, contestID }) => {
-  const role = useTypedSelector(store => store.session.role);
+  const { role, accessToken, refreshToken } = useSession();
 
   const onExportClick = async () => {
-    const accessToken = store.getState().session.accessToken!;
-    const refreshToken = store.getState().session.refreshToken!;
-    const tokens = { accessToken, refreshToken };
+    const tokens = { accessToken: accessToken!, refreshToken: refreshToken! };
 
     if (type === 'overall') {
       const resp = await getAllOverallLeaderboardXP(tokens);
