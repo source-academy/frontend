@@ -40,10 +40,6 @@ const DropdownCreateCourse: React.FC<Props> = props => {
     enableAchievements: true,
     enableSourcecast: true,
     enableStories: false,
-    enableOverallLeaderboard: true,
-    enableContestLeaderboard: true,
-    topLeaderboardDisplay: 100,
-    topContestLeaderboardDisplay: 10,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: ''
@@ -201,28 +197,6 @@ const DropdownCreateCourse: React.FC<Props> = props => {
                 })
               }
             />
-            <Switch
-              checked={courseConfig.enableOverallLeaderboard}
-              inline
-              label="Enable Overall Leaderboard"
-              onChange={e =>
-                setCourseConfig({
-                  ...courseConfig,
-                  enableOverallLeaderboard: (e.target as HTMLInputElement).checked
-                })
-              }
-            />
-            <Switch
-              checked={courseConfig.enableContestLeaderboard}
-              inline
-              label="Enable Contest Leaderboard"
-              onChange={e =>
-                setCourseConfig({
-                  ...courseConfig,
-                  enableContestLeaderboard: (e.target as HTMLInputElement).checked
-                })
-              }
-            />
           </div>
           <div>
             <Switch
@@ -261,42 +235,6 @@ const DropdownCreateCourse: React.FC<Props> = props => {
               }
             />
           </div>
-        </div>
-        <div>
-          <FormGroup
-            label="Leaderboard Top XX Display"
-            labelInfo="(configurable later on)"
-            labelFor="leaderboard-top-display"
-          >
-            <InputGroup
-              id="leaderboard-top-display"
-              value={String(courseConfig.topLeaderboardDisplay)}
-              onChange={e =>
-                setCourseConfig({
-                  ...courseConfig,
-                  topLeaderboardDisplay: Number(e.target.value)
-                })
-              }
-            />
-          </FormGroup>
-        </div>
-        <div>
-          <FormGroup
-            label="Contest Leaderboard Top XX Display"
-            labelInfo="(configurable later on)"
-            labelFor="contest-leaderboard-top-display"
-          >
-            <InputGroup
-              id="contest-leaderboard-top-display"
-              value={String(courseConfig.topContestLeaderboardDisplay)}
-              onChange={e =>
-                setCourseConfig({
-                  ...courseConfig,
-                  topContestLeaderboardDisplay: Number(e.target.value)
-                })
-              }
-            />
-          </FormGroup>
         </div>
         <div>
           <FormGroup

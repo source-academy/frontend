@@ -1,12 +1,14 @@
 import 'src/styles/Leaderboard.scss';
 
-import React, { useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useTypedSelector } from 'src/commons/utils/Hooks';
-import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
+import React from 'react';
+import { Role } from 'src/commons/application/ApplicationTypes';
+import {
+  getAllOverallLeaderboardXP,
+  getContestPopularVoteLeaderboard,
+  getContestScoreLeaderboard
+} from 'src/commons/sagas/RequestsSaga';
+import { useSession } from 'src/commons/utils/Hooks';
 import { ContestLeaderboardRow, LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
-
-import { Role } from '../../../commons/application/ApplicationTypes';
 
 type Props = {
   type: string;
@@ -15,43 +17,32 @@ type Props = {
 };
 
 const LeaderboardExportButton: React.FC<Props> = ({ type, contest, contestID }) => {
-  // Retrieve relevant leaderboard data
-  const [exportRequested, setExportRequest] = useState(false);
-  const dispatch = useDispatch();
-  const selectData = (type: string) => {
-    switch (type) {
-      case 'overall':
-        return (store: { leaderboard: { userXp: any } }) => store.leaderboard.userXp;
-      case 'score':
-        return (store: { leaderboard: { contestScore: any } }) => store.leaderboard.contestScore;
-      default:
-        return (store: { leaderboard: { contestPopularVote: any } }) =>
-          store.leaderboard.contestPopularVote;
+  const { role, accessToken, refreshToken } = useSession();
+
+  const onExportClick = async () => {
+    const tokens = { accessToken: accessToken!, refreshToken: refreshToken! };
+
+    if (type === 'overall') {
+      const resp = await getAllOverallLeaderboardXP(tokens);
+      if (resp) {
+        exportCSV(resp);
+      }
+    } else if (type === 'score') {
+      const resp = await getContestScoreLeaderboard(contestID!, Number.MAX_SAFE_INTEGER, tokens);
+      if (resp) {
+        exportCSV(resp);
+      }
+    } else if (type === 'popularvote') {
+      const resp = await getContestPopularVoteLeaderboard(
+        contestID!,
+        Number.MAX_SAFE_INTEGER,
+        tokens
+      );
+      if (resp) {
+        exportCSV(resp);
+      }
     }
   };
-
-  const selector = useMemo(() => selectData(type), [type]);
-  const data = useTypedSelector(selector);
-
-  const visibleEntries = Number.MAX_SAFE_INTEGER;
-
-  const onExportClick = () => {
-    // Dispatch relevant request
-    if (type == 'overall') dispatch(LeaderboardActions.getAllUsersXp());
-    else if (type == 'score')
-      dispatch(LeaderboardActions.getAllContestScores(contestID as number, visibleEntries));
-    else
-      dispatch(LeaderboardActions.getAllContestPopularVotes(contestID as number, visibleEntries));
-    setExportRequest(true);
-  };
-
-  // Return the CSV when requested and data is loaded
-  useEffect(() => {
-    if (exportRequested) {
-      exportCSV();
-      setExportRequest(false); // Clear request
-    }
-  }, [data]);
 
   const escapeCodeField = (value: any) => {
     const str = value?.toString() ?? '';
@@ -59,8 +50,7 @@ const LeaderboardExportButton: React.FC<Props> = ({ type, contest, contestID }) 
     return `"${escaped}"`;
   };
 
-  const role = useTypedSelector(store => store.session.role);
-  const exportCSV = () => {
+  const exportCSV = (data: any[]) => {
     const headers = [
       'Rank',
       'Name',
@@ -68,7 +58,7 @@ const LeaderboardExportButton: React.FC<Props> = ({ type, contest, contestID }) 
       type === 'overall' ? 'XP' : 'Score',
       type === 'overall' ? 'Achievements' : 'Code'
     ];
-    const rows = data?.map(
+    const rows = data.map(
       (player: {
         rank: any;
         name: any;
@@ -110,7 +100,7 @@ const LeaderboardExportButton: React.FC<Props> = ({ type, contest, contestID }) 
 
   return role === Role.Admin || role === Role.Staff ? (
     <button onClick={onExportClick} className="export-button">
-      Export as .csv
+      Export as CSV
     </button>
   ) : (
     ''

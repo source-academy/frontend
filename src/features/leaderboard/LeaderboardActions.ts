@@ -7,10 +7,8 @@ import {
 } from './LeaderboardTypes';
 
 const LeaderboardActions = createActions('leaderboard', {
-  getAllUsersXp: 0,
-  saveAllUsersXp: (userXp: LeaderboardRow[]) => userXp,
-  getPaginatedLeaderboardXp: (page: number, pageSize: number) => ({ page, pageSize }),
-  savePaginatedLeaderboardXp: (payload: { rows: LeaderboardRow[]; userCount: number }) => payload,
+  getOverallLeaderboardXP: (page: number, pageSize: number) => ({ page, pageSize }),
+  saveOverallLeaderboardXP: (payload: { rows: LeaderboardRow[]; userCount: number }) => payload,
   getAllContestScores: (assessmentId: number, visibleEntries: number) => ({
     assessmentId,
     visibleEntries
