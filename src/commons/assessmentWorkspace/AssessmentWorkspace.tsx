@@ -19,6 +19,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { onClickProgress } from 'src/features/assessments/AssessmentUtils';
+import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 import Messages, { sendToWebview } from 'src/features/vscode/messages';
 import { mobileOnlyTabIds } from 'src/pages/playground/PlaygroundTabs';
 
@@ -85,6 +86,7 @@ export type AssessmentWorkspaceProps = {
   notAttempted: boolean;
   canSave: boolean;
   assessmentConfiguration: AssessmentConfiguration;
+  fromContestLeaderboard: boolean;
 };
 
 const workspaceLocation: WorkspaceLocation = 'assessment';
@@ -96,6 +98,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const [sessionId, setSessionId] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { isMobileBreakpoint } = useResponsive();
+  const isVscode = useTypedSelector(state => state.vscode.isVscode);
 
   const assessment = useTypedSelector(state => state.session.assessments[props.assessmentId]);
   const assessmentOverviews = useTypedSelector(state => state.session.assessmentOverviews);
@@ -186,6 +189,17 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
   }, [dispatch]);
 
+  const code = useTypedSelector(store => store.leaderboard.code);
+  const initialRunCompleted = useTypedSelector(store => store.leaderboard.initialRun);
+  const votingId = props.assessmentId;
+
+  useEffect(() => {
+    if (initialRunCompleted[votingId] && props.fromContestLeaderboard && code != '') {
+      dispatch(WorkspaceActions.updateEditorValue(workspaceLocation, 0, code));
+      dispatch(LeaderboardActions.clearCode());
+    }
+  }, [dispatch]);
+
   useEffect(() => {
     if (assessmentOverview && assessmentOverview.maxTeamSize > 1) {
       handleTeamOverviewFetch(props.assessmentId);
@@ -225,7 +239,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    */
   useEffect(() => {
     checkWorkspaceReset();
-  });
+    if (assessment != undefined && question.type == 'voting') {
+      dispatch(LeaderboardActions.setWorkspaceInitialRun(votingId));
+    }
+  }, [dispatch, assessment]);
 
   /**
    * Handles toggling enabling and disabling token counter depending on assessment properties
@@ -244,10 +261,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   useEffect(() => {
     if (!selectedTab) return;
 
-    if (!isMobileBreakpoint && mobileOnlyTabIds.includes(selectedTab)) {
+    if ((!isMobileBreakpoint || isVscode) && mobileOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.questionOverview);
     }
-  }, [isMobileBreakpoint, props, selectedTab, setSelectedTab]);
+  }, [isMobileBreakpoint, isVscode, props, selectedTab, setSelectedTab]);
 
   /* ==================
      onChange handlers
@@ -367,6 +384,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       case QuestionTypes.voting:
         const votingQuestionData: IContestVotingQuestion = question;
         options.programPrependValue = votingQuestionData.prepend;
+        if (props.fromContestLeaderboard) options.editorValue = code;
         options.programPostpendValue = votingQuestionData.postpend;
         break;
       case QuestionTypes.mcq:
@@ -391,7 +409,40 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     );
     handleClearContext(question.library, true);
     handleUpdateHasUnsavedChanges(false);
-    sendToWebview(Messages.NewEditor(`assessment${assessment.id}`, props.questionId, ''));
+
+    const chapter = question.library.chapter;
+    const questionType = question.type;
+
+    switch (questionType) {
+      case QuestionTypes.mcq:
+        const mcqQuestionData = question;
+        sendToWebview(
+          Messages.McqQuestion(
+            workspaceLocation,
+            `assessment${assessment.id}`,
+            mcqQuestionData.id,
+            chapter,
+            mcqQuestionData.choices.map(choice => choice.content)
+          )
+        );
+        break;
+      case QuestionTypes.programming || QuestionTypes.voting:
+        const prepend = question.prepend;
+        const code = question.answer ?? question.solutionTemplate;
+        const breakpoints = editorTabs[0]?.breakpoints ?? [];
+        sendToWebview(
+          Messages.NewEditor(
+            workspaceLocation,
+            `assessment${assessment.id}`,
+            props.questionId,
+            chapter,
+            prepend,
+            code,
+            breakpoints
+          )
+        );
+        break;
+    }
     if (options.editorValue) {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange(0, options.editorValue);
@@ -416,6 +467,20 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const handleContestEntryClick = (_submissionId: number, answer: string) => {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange(0, answer);
+      // Hacky way to view the editor, might cause issues
+      const breakpoints = editorTabs[0]?.breakpoints ?? [];
+      sendToWebview(
+        Messages.NewEditor(
+          workspaceLocation,
+          `submission${_submissionId}`,
+          questionId,
+          question.library.chapter,
+          '',
+          answer,
+          breakpoints
+        )
+      );
+      //
     };
 
     const tabs: SideContentTab[] = [
@@ -736,9 +801,10 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     );
 
     return {
-      editorButtons: !isMobileBreakpoint
-        ? [runButton, saveButton, resetButton, chapterSelect]
-        : [saveButton, resetButton],
+      editorButtons:
+        !isMobileBreakpoint || isVscode
+          ? [runButton, saveButton, resetButton, chapterSelect]
+          : [saveButton, resetButton],
       flowButtons: [previousButton, questionView, nextButton]
     };
   };
@@ -885,6 +951,14 @@ It is safe to close this window.`}
                   (assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate
                 );
                 handleUpdateHasUnsavedChanges(true);
+                if (isVscode) {
+                  sendToWebview(
+                    Messages.ResetEditor(
+                      workspaceLocation,
+                      (assessment!.questions[questionId] as IProgrammingQuestion).solutionTemplate
+                    )
+                  );
+                }
               }}
               options={{ minimal: false, intent: Intent.DANGER }}
             />
@@ -968,7 +1042,7 @@ It is safe to close this window.`}
       {submissionOverlay}
       {overlay}
       {resetTemplateOverlay}
-      {!isMobileBreakpoint ? (
+      {isVscode || !isMobileBreakpoint ? (
         <Workspace {...workspaceProps} />
       ) : (
         <MobileWorkspace {...mobileWorkspaceProps} />

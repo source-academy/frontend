@@ -16,7 +16,7 @@ import { IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import React, { useMemo, useState } from 'react';
 import { Translation } from 'react-i18next';
-import { Location, NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import { Location, NavLink, Route, Routes, useLocation } from 'react-router';
 import { i18nDefaultLangKeys } from 'src/i18n/i18next';
 import classes from 'src/styles/NavigationBar.module.scss';
 
@@ -97,6 +97,8 @@ const NavigationBar: React.FC = () => {
     courseId,
     courseShortName,
     enableAchievements,
+    enableOverallLeaderboard,
+    enableContestLeaderboard,
     enableSourcecast,
     enableStories,
     assessmentConfigurations
@@ -150,6 +152,12 @@ const NavigationBar: React.FC = () => {
         text: 'Stories',
         // TODO: Enable for public deployment
         disabled: !(isEnrolledInACourse && enableStories)
+      },
+      {
+        to: `/courses/${courseId}/leaderboard`,
+        icon: IconNames.TIMELINE_BAR_CHART,
+        text: 'Leaderboard',
+        disabled: !(isEnrolledInACourse && (enableContestLeaderboard || enableOverallLeaderboard))
       }
     ];
   }, [
@@ -158,7 +166,9 @@ const NavigationBar: React.FC = () => {
     enableSourcecast,
     enableStories,
     isLoggedIn,
-    enableAchievements
+    enableAchievements,
+    enableContestLeaderboard,
+    enableOverallLeaderboard
   ]);
 
   const fullAcademyMobileNavbarLeftAdditionalInfo = useMemo(
@@ -211,7 +221,8 @@ const NavigationBar: React.FC = () => {
       '/sicpjs',
       '/contributors',
       `/courses/${courseId}/sourcecast`,
-      `/courses/${courseId}/achievements`
+      `/courses/${courseId}/achievements`,
+      `/courses/${courseId}/leaderboard`
     ];
     const enableDesktopPopover =
       courseId != null && !!topNavbarNavlinks.find(x => location.pathname.startsWith(x));
@@ -306,6 +317,7 @@ const NavigationBar: React.FC = () => {
         <Route path="/contributors" element={null} />
         <Route path="/courses/:courseId/sourcecast" element={null} />
         <Route path="/courses/:courseId/achievements" element={null} />
+        <Route path="/courses/:courseId/leaderboard/*" element={null} />
         <Route path="/sicpjs/:section?" element={<SicpNavigationBar />} />
         <Route
           path="*"

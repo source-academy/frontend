@@ -1,7 +1,7 @@
 import { Button, Position, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 
 type Props = {

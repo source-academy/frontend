@@ -20,11 +20,11 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { sortBy } from 'lodash';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Navigate, useLoaderData, useParams } from 'react-router';
-import { NavLink } from 'react-router-dom';
+import { Navigate, NavLink, useLoaderData, useParams } from 'react-router';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
+import Messages, { sendToWebview } from 'src/features/vscode/messages';
 import classes from 'src/styles/Academy.module.scss';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
@@ -40,7 +40,7 @@ import NotificationBadge from '../notificationBadge/NotificationBadge';
 import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
 import Constants from '../utils/Constants';
 import { beforeNow, getPrettyDate, getPrettyDateAfterHours } from '../utils/DateHelper';
-import { useResponsive, useSession } from '../utils/Hooks';
+import { useResponsive, useSession, useTypedSelector } from '../utils/Hooks';
 import { assessmentTypeLink, convertParamToInt } from '../utils/ParamParseHelper';
 import AssessmentNotFound from './AssessmentNotFound';
 import {
@@ -60,6 +60,23 @@ const Assessment: React.FC = () => {
 
   const { courseId, role, assessmentOverviews: assessmentOverviewsUnfiltered } = useSession();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (assessmentOverviewsUnfiltered && courseId) {
+      sendToWebview(
+        Messages.NotifyAssessmentsOverview(
+          assessmentOverviewsUnfiltered.map(oa => ({
+            type: oa.type,
+            closeAt: oa.closeAt,
+            id: oa.id,
+            isPublished: oa.isPublished,
+            title: oa.title
+          })),
+          courseId
+        )
+      );
+    }
+  }, [assessmentOverviewsUnfiltered, courseId]);
 
   const toggleClosedAssessments = () => setShowClosedAssessments(!showClosedAssessments);
   const toggleOpenAssessments = () => setShowOpenedAssessments(!showOpenedAssessments);
@@ -262,6 +279,8 @@ const Assessment: React.FC = () => {
     [assessmentConfigToLoad.type, assessmentOverviewsUnfiltered]
   );
 
+  const fromLeaderboard: boolean = useTypedSelector(store => store.leaderboard.code) ? true : false;
+
   // If assessmentId or questionId is defined but not numeric, redirect back to the Assessment overviews page
   if (
     (params.assessmentId && !params.assessmentId?.match(numberRegExp)) ||
@@ -290,7 +309,8 @@ const Assessment: React.FC = () => {
       canSave:
         role !== Role.Student ||
         (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt)),
-      assessmentConfiguration: assessmentConfigToLoad
+      assessmentConfiguration: assessmentConfigToLoad,
+      fromContestLeaderboard: fromLeaderboard
     };
     return <AssessmentWorkspace {...assessmentWorkspaceProps} />;
   }

@@ -10,7 +10,7 @@ import {
 import classNames from 'classnames';
 import React, { SetStateAction, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router';
 import BrickSvg from 'src/assets/BrickSvg';
 import PortSvg from 'src/assets/PortSvg';
 import { deleteDevice } from 'src/commons/sagas/RequestsSaga';
