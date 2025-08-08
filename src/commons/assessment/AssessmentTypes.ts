@@ -194,6 +194,7 @@ export type ContestEntry = {
   score?: number;
   final_score?: number;
   student_name?: string;
+  rank?: number;
 };
 
 export type ContestEntryCodeAnswer = {

@@ -2,6 +2,7 @@ import { Chapter, Language, type SourceError, type Value, Variant } from 'js-sla
 
 import type { AchievementState } from '../../features/achievement/AchievementTypes';
 import type { DashboardState } from '../../features/dashboard/DashboardTypes';
+import type { LeaderboardState } from '../../features/leaderboard/LeaderboardTypes';
 import type { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import type { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
@@ -26,6 +27,7 @@ import type { VscodeState as VscodeState } from './types/VscodeTypes';
 export type OverallState = {
   readonly router: RouterState;
   readonly achievement: AchievementState;
+  readonly leaderboard: LeaderboardState;
   readonly playground: PlaygroundState;
   readonly session: SessionState;
   readonly stories: StoriesState;
@@ -345,6 +347,15 @@ export const defaultAchievement: AchievementState = {
   assessmentOverviews: []
 };
 
+export const defaultLeaderboard: LeaderboardState = {
+  paginatedUserXp: { rows: [], userCount: 0 },
+  contestScore: [],
+  contestPopularVote: [],
+  code: '',
+  contests: [],
+  initialRun: {}
+};
+
 const getDefaultLanguageConfig = (): SALanguage => {
   const languageConfig = ALL_LANGUAGES.find(
     sublang =>
@@ -605,6 +616,7 @@ export const defaultVscode: VscodeState = {
 export const defaultState: OverallState = {
   router: defaultRouter,
   achievement: defaultAchievement,
+  leaderboard: defaultLeaderboard,
   dashboard: defaultDashboard,
   playground: defaultPlayground,
   session: defaultSession,

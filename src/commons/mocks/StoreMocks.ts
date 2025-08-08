@@ -6,6 +6,7 @@ import {
   defaultAchievement,
   defaultDashboard,
   defaultFileSystem,
+  defaultLeaderboard,
   defaultPlayground,
   defaultRouter,
   defaultSession,
@@ -26,6 +27,7 @@ export function mockInitialStore(
   const state: OverallState = {
     router: defaultRouter,
     achievement: defaultAchievement,
+    leaderboard: defaultLeaderboard,
     dashboard: defaultDashboard,
     playground: defaultPlayground,
     workspaces: defaultWorkspaceManager,

@@ -14,6 +14,11 @@ const notFoundPath = 'not_found';
 const Game = () => import('./game/Game');
 const Sourcecast = () => import('../sourcecast/Sourcecast');
 const Achievement = () => import('../achievement/Achievement');
+const Leaderboard = () => import('../leaderboard/Leaderboard');
+const OverallLeaderboardWrapper = () =>
+  import('../leaderboard/subcomponents/OverallLeaderboardWrapper');
+const ContestLeaderboardWrapper = () =>
+  import('../leaderboard/subcomponents/ContestLeaderboardWrapper');
 const NotFound = () => import('../notFound/NotFound');
 
 // Memoized for efficiency. Relies on immutability of Redux store to ensure
@@ -73,6 +78,9 @@ const getCommonAcademyRoutes = (): RouteObject[] => {
     },
     { path: 'sourcecast/:sourcecastId?', lazy: Sourcecast },
     { path: 'achievements/*', lazy: Achievement },
+    { path: 'leaderboard/overall', lazy: OverallLeaderboardWrapper },
+    { path: 'leaderboard/contests/*', lazy: ContestLeaderboardWrapper },
+    { path: 'leaderboard/*', lazy: Leaderboard },
     { path: '*', lazy: NotFound }
   ];
 };

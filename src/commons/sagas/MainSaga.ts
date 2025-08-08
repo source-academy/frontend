@@ -6,6 +6,7 @@ import Constants from '../utils/Constants';
 import AchievementSaga from './AchievementSaga';
 import BackendSaga from './BackendSaga';
 import GitHubPersistenceSaga from './GitHubPersistenceSaga';
+import LeaderboardSaga from './LeaderboardSaga';
 import LoginSaga from './LoginSaga';
 import PersistenceSaga from './PersistenceSaga';
 import PlaygroundSaga from './PlaygroundSaga';
@@ -21,6 +22,7 @@ export default function* MainSaga(): SagaIterator {
     fork(LoginSaga),
     fork(PlaygroundSaga),
     fork(AchievementSaga),
+    fork(LeaderboardSaga),
     fork(PersistenceSaga),
     fork(GitHubPersistenceSaga),
     fork(RemoteExecutionSaga),
