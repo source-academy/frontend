@@ -79,15 +79,7 @@ const OverallLeaderboard: React.FC = () => {
         headerName: 'XP',
         width: 414 /*154*/,
         sortable: true
-      } /*,
-      {
-        field: 'achievements',
-        suppressMovable: true,
-        sortable: false,
-        headerName: 'Achievements',
-        width: 260
       }
-        */
     ],
     []
   );
@@ -102,7 +94,7 @@ const OverallLeaderboard: React.FC = () => {
   const [top3Leaderboard, setTop3Leaderboard] = useState<LeaderboardRow[]>([]);
 
   useEffect(() => {
-    dispatch(LeaderboardActions.getPaginatedLeaderboardXp(1, pageSize));
+    dispatch(LeaderboardActions.getOverallLeaderboardXP(1, pageSize));
   }, [dispatch]);
 
   const latestParamsRef = useRef<any>(null);
@@ -114,7 +106,7 @@ const OverallLeaderboard: React.FC = () => {
       const pageSize = endRow - startRow;
       const page = startRow / pageSize + 1;
 
-      dispatch(LeaderboardActions.getPaginatedLeaderboardXp(page, pageSize));
+      dispatch(LeaderboardActions.getOverallLeaderboardXP(page, pageSize));
 
       // Params stored to prevent re-rendering
       latestParamsRef.current = params;
