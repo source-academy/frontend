@@ -7,60 +7,75 @@ The Source Academy Frontend is a React.js TypeScript web application for an imme
 ## Working Effectively
 
 ### Environment Setup
+
 - Node.js version: 20.9.0+ (as specified in `.node-version`)
 - Package manager: Yarn 4.6.0 (managed via corepack)
 - Enable corepack: `corepack enable`
 
 ### Bootstrap and Build Process
+
 1. **Install dependencies** (25 seconds):
+
    ```bash
    corepack enable
    yarn install
    ```
+
    **NOTE**: Installation may fail due to network restrictions accessing `cdn.sheetjs.com` for the xlsx package. If this occurs, temporarily modify `package.json` to use `"xlsx": "^0.18.5"` instead of the CDN URL, run `yarn install --mode update-lockfile`, then `yarn install`.
 
 2. **TypeScript compilation** (20 seconds):
+
    ```bash
    yarn run tsc --noEmit
    ```
 
 3. **Linting** (7 seconds):
+
    ```bash
    yarn run eslint
    ```
 
 4. **Format checks** (10 seconds):
+
    ```bash
    yarn run format:ci
    ```
 
 5. **Production build** (40 seconds, **NEVER CANCEL**):
+
    ```bash
    yarn run build
    ```
+
    **CRITICAL**: Set timeout to 60+ minutes. Build completes in ~40 seconds but may take longer on slower systems.
 
 6. **Test suite** (1 minute 45 seconds, **NEVER CANCEL**):
+
    ```bash
    yarn run test
    ```
+
    **CRITICAL**: Set timeout to 30+ minutes. One test may fail due to network restrictions accessing `sicp.sourceacademy.org`.
 
 ### Development Server
+
 - **Start development server** (16 seconds build + server startup):
+
   ```bash
   yarn run start
   ```
-- **Access**: http://localhost:8000
+
+- **Access**: <http://localhost:8000>
 - **Hot reload**: Enabled with live updates
 
 ## Validation
 
 ### Manual Testing Requirements
+
 **ALWAYS run through at least one complete end-to-end scenario after making changes:**
 
 1. **Basic Playground Functionality**:
-   - Navigate to http://localhost:8000 (redirects to /playground)
+   - Navigate to <http://localhost:8000> (redirects to /playground)
    - Verify the editor loads with syntax highlighting
    - Write test code: `function factorial(n) { return n <= 1 ? 1 : n * factorial(n - 1); } factorial(5);`
    - Click "Run" button
@@ -80,6 +95,7 @@ The Source Academy Frontend is a React.js TypeScript web application for an imme
 ## Network Limitations
 
 **Important**: Several external services are not accessible in sandboxed environments:
+
 - `cdn.sheetjs.com` - xlsx package installation fails
 - `sicp.sourceacademy.org` - SICP JS content fails to load
 - `fonts.googleapis.com`, `apis.google.com` - Google services blocked
@@ -88,6 +104,7 @@ The Source Academy Frontend is a React.js TypeScript web application for an imme
 ## Common Tasks
 
 ### Repository Structure
+
 ```
 /home/runner/work/frontend/frontend/
 ├── .github/workflows/        # CI/CD pipelines
@@ -107,7 +124,8 @@ The Source Academy Frontend is a React.js TypeScript web application for an imme
 ```
 
 ### Key npm Scripts
-- `yarn start` - Development server (http://localhost:8000)
+
+- `yarn start` - Development server (<http://localhost:8000>)
 - `yarn build` - Production build (40s, outputs to `build/`)
 - `yarn test` - Test suite (1m45s, may have 1 network-related failure)
 - `yarn format` - Auto-fix code formatting (ESLint + Prettier)
@@ -116,18 +134,23 @@ The Source Academy Frontend is a React.js TypeScript web application for an imme
 - `yarn tsc` - TypeScript compilation check
 
 ### Environment Configuration
+
 Copy `.env.example` to `.env` and configure:
+
 - `REACT_APP_BACKEND_URL` - Backend API endpoint
 - `REACT_APP_USE_BACKEND` - Enable/disable backend integration
 - `REACT_APP_PLAYGROUND_ONLY` - Playground-only mode for GitHub Pages
 - Authentication providers, Google Drive, GitHub integration settings
 
 ### Memory Requirements
+
 The build process requires significant memory:
+
 - Set `NODE_OPTIONS=--max_old_space_size=8192` for CI/CD
 - Local development typically works with default Node.js memory limits
 
 ### Technology Stack
+
 - **Frontend**: React 18.3.1 with TypeScript 5.8.2
 - **State Management**: Redux Toolkit with Redux Saga
 - **Build Tool**: rsbuild (modern webpack replacement)
@@ -137,6 +160,7 @@ The build process requires significant memory:
 - **Code Editor**: ACE editor with Source language support
 
 ### Debugging Tips
+
 - Check browser console for React DevTools and HMR connection messages
 - Build warnings about missing Node.js modules (perf_hooks) are expected in browser builds
 - ESLint warnings about React hooks dependencies are common and generally safe
