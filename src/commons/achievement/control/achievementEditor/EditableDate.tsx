@@ -33,7 +33,7 @@ const EditableDate: React.FC<Props> = ({ type, date, changeDate }) => {
         title={`${type}`}
       >
         <DatePicker
-          onChange={(selectedDate, isUserChange) => changeDate(selectedDate || undefined)}
+          onChange={selectedDate => changeDate(selectedDate || undefined)}
           timePickerProps={{ showArrowButtons: true }}
           value={date}
         />
