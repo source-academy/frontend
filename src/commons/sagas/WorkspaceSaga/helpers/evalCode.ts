@@ -1,10 +1,6 @@
 import { compileAndRun as compileAndRunCCode } from '@sourceacademy/c-slang/ctowasm/dist/index';
 import { tokenizer } from 'acorn';
-// NOTE: Conductor dependency removed, providing stub type
-// import type { IConduit } from 'conductor/dist/conduit';
-interface IConduit {
-  terminate: () => void;
-}
+import type { IConduit } from 'conductor/dist/conduit';
 import { type Context, interrupt, type Result, resume, runFilesInContext } from 'js-slang';
 import { ACORN_PARSE_OPTIONS } from 'js-slang/dist/constants';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
