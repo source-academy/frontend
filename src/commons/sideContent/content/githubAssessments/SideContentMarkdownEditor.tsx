@@ -41,7 +41,7 @@ const SideContentMarkdownEditor: React.FC<Props> = ({ allowEdits, content, setCo
         <TextArea
           onChange={onEditorChange}
           fill={true}
-          growVertically={true}
+          autoResize={true}
           defaultValue={content}
         />
       ) : (
