@@ -1,6 +1,6 @@
 import { Drawer, DrawerSize, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
-import React, { useEffect, useState } from 'react';
+import React, { type JSX, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import SessionActions from '../application/actions/SessionActions';
