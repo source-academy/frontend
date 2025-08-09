@@ -31,7 +31,7 @@
     "preview": "rsbuild preview"
   },
   "dependencies": {
-    "@blueprintjs/core": "^5.10.1",
+    "@blueprintjs/core": "^6.0.0",
     "@blueprintjs/datetime2": "^2.3.3",
     "@blueprintjs/icons": "^6.0.0",
     "@blueprintjs/select": "^5.1.3",
