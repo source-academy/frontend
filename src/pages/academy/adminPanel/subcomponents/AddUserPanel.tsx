@@ -15,7 +15,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { uniqBy } from 'lodash';
-import React from 'react';
+import React, { type JSX } from 'react';
 import { useCSVReader } from 'react-papaparse';
 import { Role } from 'src/commons/application/ApplicationTypes';
 

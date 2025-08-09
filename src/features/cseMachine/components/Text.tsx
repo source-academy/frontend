@@ -49,7 +49,7 @@ export class Text extends Visible implements IHoverable {
   readonly fullStr: string; // full string representation of data
 
   readonly options: TextOptions = defaultOptions;
-  readonly labelRef: React.RefObject<Label> = React.createRef();
+  readonly labelRef: React.RefObject<Label | null> = React.createRef();
 
   constructor(
     readonly data: Data,
