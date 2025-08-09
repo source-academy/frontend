@@ -464,6 +464,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const isTeamAssessment =
       assessmentOverview !== undefined ? assessmentOverview.maxTeamSize > 1 : false;
     const isContestVoting = question?.type === QuestionTypes.voting;
+    const isPublished = assessmentOverview?.isPublished;
     const handleContestEntryClick = (_submissionId: number, answer: string) => {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange(0, answer);
@@ -538,34 +539,38 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             />
           ),
           id: SideContentType.contestVoting
-        },
-        {
-          label: 'Score Leaderboard',
-          iconName: IconNames.CROWN,
-          body: (
-            <SideContentContestLeaderboard
-              handleContestEntryClick={handleContestEntryClick}
-              orderedContestEntries={(question as IContestVotingQuestion)?.scoreLeaderboard ?? []}
-              leaderboardType={SideContentType.scoreLeaderboard}
-            />
-          ),
-          id: SideContentType.scoreLeaderboard
-        },
-        {
-          label: 'Popular Vote Leaderboard',
-          iconName: IconNames.PEOPLE,
-          body: (
-            <SideContentContestLeaderboard
-              handleContestEntryClick={handleContestEntryClick}
-              orderedContestEntries={
-                (question as IContestVotingQuestion)?.popularVoteLeaderboard ?? []
-              }
-              leaderboardType={SideContentType.popularVoteLeaderboard}
-            />
-          ),
-          id: SideContentType.popularVoteLeaderboard
         }
       );
+      if (isPublished) {
+        tabs.push(
+          {
+            label: 'Score Leaderboard',
+            iconName: IconNames.CROWN,
+            body: (
+              <SideContentContestLeaderboard
+                handleContestEntryClick={handleContestEntryClick}
+                orderedContestEntries={(question as IContestVotingQuestion)?.scoreLeaderboard ?? []}
+                leaderboardType={SideContentType.scoreLeaderboard}
+              />
+            ),
+            id: SideContentType.scoreLeaderboard
+          },
+          {
+            label: 'Popular Vote Leaderboard',
+            iconName: IconNames.PEOPLE,
+            body: (
+              <SideContentContestLeaderboard
+                handleContestEntryClick={handleContestEntryClick}
+                orderedContestEntries={
+                  (question as IContestVotingQuestion)?.popularVoteLeaderboard ?? []
+                }
+                leaderboardType={SideContentType.popularVoteLeaderboard}
+              />
+            ),
+            id: SideContentType.popularVoteLeaderboard
+          }
+        );
+      }
     } else {
       tabs.push(
         {

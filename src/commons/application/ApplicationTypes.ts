@@ -348,7 +348,6 @@ export const defaultAchievement: AchievementState = {
 };
 
 export const defaultLeaderboard: LeaderboardState = {
-  userXp: [],
   paginatedUserXp: { rows: [], userCount: 0 },
   contestScore: [],
   contestPopularVote: [],
@@ -430,7 +429,8 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   enableDebugging: true,
   debuggerContext: {} as DebuggerContext,
   lastDebuggerResult: undefined,
-  files: {}
+  files: {},
+  updateUserRoleCallback: () => {}
 });
 
 const defaultFileName = 'program.js';
