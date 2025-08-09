@@ -4,12 +4,15 @@ import StoriesActions from 'src/features/stories/StoriesActions';
 
 import { combineSagaHandlers } from '../redux/utils';
 import SideContentActions from '../sideContent/SideContentActions';
+import { SideContentType } from '../sideContent/SideContentTypes';
 import WorkspaceActions from '../workspace/WorkspaceActions';
 
 const isSpawnSideContent = (
   action: Action
 ): action is ReturnType<typeof SideContentActions.spawnSideContent> =>
-  action.type === SideContentActions.spawnSideContent.type;
+  action.type === SideContentActions.spawnSideContent.type ||
+  (action as any).payload?.id !== SideContentType.sessionManagement;
+// hotfix check here to allow for blinking during session update
 
 const SideContentSaga = combineSagaHandlers({
   [SideContentActions.beginAlertSideContent.type]: function* ({

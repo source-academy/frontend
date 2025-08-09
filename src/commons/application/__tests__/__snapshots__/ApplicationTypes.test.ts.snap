@@ -1,0 +1,259 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`available Python language configurations > matches snapshot 1`] = `
+[
+  {
+    "chapter": -4,
+    "displayName": "Python §1",
+    "mainLanguage": "Python",
+    "supports": {
+      "repl": true,
+    },
+    "variant": "default",
+  },
+]
+`;
+
+exports[`available Scheme language configurations > matches snapshot 1`] = `
+[
+  {
+    "chapter": -9,
+    "displayName": "Scheme §1",
+    "mainLanguage": "Scheme",
+    "supports": {
+      "cseMachine": true,
+      "repl": true,
+    },
+    "variant": "explicit-control",
+  },
+  {
+    "chapter": -10,
+    "displayName": "Scheme §2",
+    "mainLanguage": "Scheme",
+    "supports": {
+      "cseMachine": true,
+      "repl": true,
+    },
+    "variant": "explicit-control",
+  },
+  {
+    "chapter": -11,
+    "displayName": "Scheme §3",
+    "mainLanguage": "Scheme",
+    "supports": {
+      "cseMachine": true,
+      "repl": true,
+    },
+    "variant": "explicit-control",
+  },
+  {
+    "chapter": -12,
+    "displayName": "Scheme §4",
+    "mainLanguage": "Scheme",
+    "supports": {
+      "cseMachine": true,
+      "repl": true,
+    },
+    "variant": "explicit-control",
+  },
+  {
+    "chapter": -13,
+    "displayName": "Full Scheme",
+    "mainLanguage": "Scheme",
+    "supports": {
+      "cseMachine": true,
+      "repl": true,
+    },
+    "variant": "explicit-control",
+  },
+]
+`;
+
+exports[`available Source language configurations > matches snapshot 1`] = `
+[
+  {
+    "chapter": 1,
+    "displayName": "Source §1",
+    "mainLanguage": "JavaScript",
+    "supports": {
+      "cseMachine": false,
+      "dataVisualizer": false,
+      "multiFile": false,
+      "repl": true,
+      "substVisualizer": true,
+    },
+    "variant": "default",
+  },
+  {
+    "chapter": 1,
+    "displayName": "Source §1 Typed",
+    "mainLanguage": "JavaScript",
+    "supports": {
+      "cseMachine": false,
+      "dataVisualizer": false,
+      "multiFile": false,
+      "repl": true,
+      "substVisualizer": true,
+    },
+    "variant": "typed",
+  },
+  {
+    "chapter": 1,
+    "displayName": "Source §1 WebAssembly",
+    "mainLanguage": "JavaScript",
+    "supports": {
+      "cseMachine": false,
+      "dataVisualizer": false,
+      "multiFile": false,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "wasm",
+  },
+  {
+    "chapter": 1,
+    "displayName": "Source §1 Native",
+    "mainLanguage": "JavaScript",
+    "supports": {
+      "cseMachine": false,
+      "dataVisualizer": false,
+      "multiFile": false,
+      "repl": true,
+      "substVisualizer": true,
+    },
+    "variant": "native",
+  },
+  {
+    "chapter": 2,
+    "displayName": "Source §2",
+    "mainLanguage": "JavaScript",
+    "supports": {
+      "cseMachine": false,
+      "dataVisualizer": true,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": true,
+    },
+    "variant": "default",
+  },
+  {
+    "chapter": 2,
+    "displayName": "Source §2 Typed",
+    "mainLanguage": "JavaScript",
+    "supports": {
+      "cseMachine": false,
+      "dataVisualizer": true,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": true,
+    },
+    "variant": "typed",
+  },
+  {
+    "chapter": 2,
+    "displayName": "Source §2 Native",
+    "mainLanguage": "JavaScript",
+    "supports": {
+      "cseMachine": false,
+      "dataVisualizer": true,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": true,
+    },
+    "variant": "native",
+  },
+  {
+    "chapter": 3,
+    "displayName": "Source §3",
+    "mainLanguage": "JavaScript",
+    "supports": {
+      "cseMachine": true,
+      "dataVisualizer": true,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "default",
+  },
+  {
+    "chapter": 3,
+    "displayName": "Source §3 Typed",
+    "mainLanguage": "JavaScript",
+    "supports": {
+      "cseMachine": true,
+      "dataVisualizer": true,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "typed",
+  },
+  {
+    "chapter": 3,
+    "displayName": "Source §3 Native",
+    "mainLanguage": "JavaScript",
+    "supports": {
+      "cseMachine": true,
+      "dataVisualizer": true,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "native",
+  },
+  {
+    "chapter": 4,
+    "displayName": "Source §4",
+    "mainLanguage": "JavaScript",
+    "supports": {
+      "cseMachine": true,
+      "dataVisualizer": true,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "default",
+  },
+  {
+    "chapter": 4,
+    "displayName": "Source §4 Typed",
+    "mainLanguage": "JavaScript",
+    "supports": {
+      "cseMachine": true,
+      "dataVisualizer": true,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "typed",
+  },
+  {
+    "chapter": 4,
+    "displayName": "Source §4 Native",
+    "mainLanguage": "JavaScript",
+    "supports": {
+      "cseMachine": true,
+      "dataVisualizer": true,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "native",
+  },
+  {
+    "chapter": 4,
+    "displayName": "Source §4 Explicit-Control",
+    "mainLanguage": "JavaScript",
+    "supports": {
+      "cseMachine": true,
+      "dataVisualizer": true,
+      "multiFile": true,
+      "repl": true,
+      "substVisualizer": false,
+    },
+    "variant": "explicit-control",
+  },
+]
+`;
+
+exports[`getLanguageConfig > throws an error for an invalid chapter/variant combination 1`] = `[Error: Language config not found for chapter 5 variant default]`;
