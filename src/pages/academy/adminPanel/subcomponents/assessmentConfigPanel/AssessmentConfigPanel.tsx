@@ -267,7 +267,8 @@ const AssessmentConfigPanel: WithImperativeApi<
         setHasVotingFeatures,
         setHoursBeforeDecay,
         setIsGradingAutoPublished,
-        setIsManuallyGraded
+        setIsManuallyGraded,
+        setIsMinigame
       ]
     );
 
