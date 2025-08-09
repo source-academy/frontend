@@ -4,8 +4,9 @@ import { TeamFormationOverview } from '../../features/teamFormation/TeamFormatio
 import { Role } from '../application/ApplicationTypes';
 import { mockFetchRole, mockFetchStudents } from './UserMocks';
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const XLSX = require('xlsx');
+// NOTE: xlsx dependency removed
+// // eslint-disable-next-line @typescript-eslint/no-require-imports
+// const XLSX = require('xlsx');
 
 export const mockTeamFormationOverviews: TeamFormationOverview[] = [
   {
@@ -133,58 +134,9 @@ export const mockBulkUploadTeam = async (
   if (role === null || !permittedRoles.includes(role)) {
     return null;
   } else {
-    const teamsArrayBuffer = await readFileAsArrayBuffer(teamsFile);
-    const workbook = XLSX.read(teamsArrayBuffer, { type: 'array' });
-    const sheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[sheetName];
-    const csvData: CsvData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-
-    const newTeams: TeamFormationOverview[] = [];
-    let teamId =
-      mockTeamFormationOverviews.length > 0
-        ? mockTeamFormationOverviews[mockTeamFormationOverviews.length - 1].teamId + 1
-        : 1;
-    const students = mockFetchStudents(accessToken);
-
-    for (let i = 0; i < csvData.length; i++) {
-      const row = csvData[i];
-      const team: OptionType[] = [];
-      row.forEach((username: string) => {
-        const student = students?.find((s: any) => s.username.trim() === username.trim());
-        if (student) {
-          team.push({
-            label: student.name,
-            value: student
-          });
-        }
-      });
-
-      const studentNames: string[] = [];
-      const studentIds: number[] = [];
-
-      team.forEach((option: OptionType | undefined) => {
-        if (option && option.value && typeof option.value.userId === 'number') {
-          studentNames.push(option.value.name);
-          studentIds.push(option.value.userId);
-        }
-      });
-
-      newTeams.push({
-        teamId: teamId++,
-        assessmentId: assessmentId,
-        assessmentName: assessmentName,
-        assessmentType: assessmentType,
-        studentIds: studentIds,
-        studentNames: studentNames
-      });
-    }
-
-    mockTeamFormationOverviews.push(...newTeams);
-
-    return mockTeamFormationOverviews.sort(
-      (subX: TeamFormationOverview, subY: TeamFormationOverview) =>
-        subY.assessmentId - subX.assessmentId
-    );
+    // NOTE: xlsx dependency removed, providing stub implementation
+    console.warn('mockBulkUploadTeam: xlsx functionality disabled');
+    return [];
   }
 };
 
