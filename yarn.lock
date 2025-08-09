@@ -3265,14 +3265,14 @@ __metadata:
   linkType: hard
 
 "@sourceacademy/sharedb-ace@npm:^2.1.1":
-  version: 2.1.1
-  resolution: "@sourceacademy/sharedb-ace@npm:2.1.1"
+  version: 2.1.2
+  resolution: "@sourceacademy/sharedb-ace@npm:2.1.2"
   dependencies:
     "@convergencelabs/ace-collab-ext": "npm:^0.6.0"
     logdown: "npm:^3.3.1"
     partysocket: "npm:^1.0.3"
     sharedb: "npm:^5.1.1"
-  checksum: 10c0/2ae74468001f77a3e019d5d19e165916cc00a440b69b1aeb9f6a0fa4d253570772102fa2016421a5ae893713fa5c860739588ab3060b34e642082b7a926ab322
+  checksum: 10c0/2729f2d88d0bc77b4f3b27ded138ea4dcb4bb1910ca7fcc4f817121e4075abcd928436441e1559d46009c62999e29dc71b9aaf789d03d64edffdec647bab951d
   languageName: node
   linkType: hard
 
