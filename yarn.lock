@@ -3259,7 +3259,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/sharedb-ace@npm:^2.1.1":
+"@sourceacademy/sharedb-ace@npm:2.1.1":
   version: 2.1.1
   resolution: "@sourceacademy/sharedb-ace@npm:2.1.1"
   dependencies:
@@ -7494,7 +7494,7 @@ __metadata:
     "@rsbuild/plugin-svgr": "npm:^1.2.0"
     "@sentry/browser": "npm:^8.33.0"
     "@sourceacademy/c-slang": "npm:^1.0.21"
-    "@sourceacademy/sharedb-ace": "npm:^2.1.1"
+    "@sourceacademy/sharedb-ace": "npm:2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
     "@svgr/webpack": "npm:^8.0.0"
     "@swc/core": "npm:^1.11.22"
