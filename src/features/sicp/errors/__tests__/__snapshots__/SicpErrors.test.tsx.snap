@@ -2,10 +2,10 @@
 
 exports[`Sicp errors: > page not found error renders correctly 1`] = `
 <div
-  className="bp5-non-ideal-state bp5-non-ideal-state-vertical"
+  className="bp6-non-ideal-state bp6-non-ideal-state-vertical"
 >
   <div
-    className="bp5-non-ideal-state-visual"
+    className="bp6-non-ideal-state-visual"
     style={
       {
         "fontSize": "48px",
@@ -13,16 +13,16 @@ exports[`Sicp errors: > page not found error renders correctly 1`] = `
       }
     }
   >
-    <Blueprint5.Icon
+    <Blueprint6.Icon
       aria-hidden={true}
-      className="bp5-icon-muted"
+      className="bp6-icon-muted"
       icon="error"
       size={48}
       tabIndex={-1}
     />
   </div>
   <div
-    className="bp5-non-ideal-state-text"
+    className="bp6-non-ideal-state-text"
   >
     <ForwardRef>
       Something went wrong :(
@@ -45,10 +45,10 @@ exports[`Sicp errors: > page not found error renders correctly 1`] = `
 
 exports[`Sicp errors: > unexpected error renders correctly 1`] = `
 <div
-  className="bp5-non-ideal-state bp5-non-ideal-state-vertical"
+  className="bp6-non-ideal-state bp6-non-ideal-state-vertical"
 >
   <div
-    className="bp5-non-ideal-state-visual"
+    className="bp6-non-ideal-state-visual"
     style={
       {
         "fontSize": "48px",
@@ -56,16 +56,16 @@ exports[`Sicp errors: > unexpected error renders correctly 1`] = `
       }
     }
   >
-    <Blueprint5.Icon
+    <Blueprint6.Icon
       aria-hidden={true}
-      className="bp5-icon-muted"
+      className="bp6-icon-muted"
       icon="error"
       size={48}
       tabIndex={-1}
     />
   </div>
   <div
-    className="bp5-non-ideal-state-text"
+    className="bp6-non-ideal-state-text"
   >
     <ForwardRef>
       Something went wrong :(
@@ -88,10 +88,10 @@ exports[`Sicp errors: > unexpected error renders correctly 1`] = `
 
 exports[`Sicp errors: > unexpected error renders correctly 2`] = `
 <div
-  className="bp5-non-ideal-state bp5-non-ideal-state-vertical"
+  className="bp6-non-ideal-state bp6-non-ideal-state-vertical"
 >
   <div
-    className="bp5-non-ideal-state-visual"
+    className="bp6-non-ideal-state-visual"
     style={
       {
         "fontSize": "48px",
@@ -99,16 +99,16 @@ exports[`Sicp errors: > unexpected error renders correctly 2`] = `
       }
     }
   >
-    <Blueprint5.Icon
+    <Blueprint6.Icon
       aria-hidden={true}
-      className="bp5-icon-muted"
+      className="bp6-icon-muted"
       icon="error"
       size={48}
       tabIndex={-1}
     />
   </div>
   <div
-    className="bp5-non-ideal-state-text"
+    className="bp6-non-ideal-state-text"
   >
     <ForwardRef>
       Something went wrong :(

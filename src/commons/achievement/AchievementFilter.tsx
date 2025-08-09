@@ -19,7 +19,7 @@ const AchievementFilter: React.FC<Props> = ({ filterState, icon, ownStatus }) =>
       onClick={() => setGlobalStatus(ownStatus)}
       style={{ color: getFilterColor(globalStatus, ownStatus) }}
     >
-      <Icon icon={icon} iconSize={30} />
+      <Icon icon={icon} size={30} />
       <p>{ownStatus}</p>
     </div>
   );

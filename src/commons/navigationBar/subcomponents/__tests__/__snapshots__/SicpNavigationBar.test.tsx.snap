@@ -2,7 +2,7 @@
 
 exports[`Navbar renders correctly 1`] = `
 <React.Fragment>
-  <Blueprint5.Omnibar
+  <Blueprint6.Omnibar
     className="sicp-search-bar"
     inputProps={
       {
@@ -19,22 +19,22 @@ exports[`Navbar renders correctly 1`] = `
     onQueryChange={[Function]}
     overlayProps={
       {
-        "className": "bp5-overlay-scroll-container",
+        "className": "bp6-overlay-scroll-container",
       }
     }
     query=""
   />
-  <Blueprint5.Navbar
+  <Blueprint6.Navbar
     className="SicpNavigationBar secondary-navbar"
   >
-    <Blueprint5.NavbarGroup
+    <Blueprint6.NavbarGroup
       align="left"
     >
       <TableOfContentsButton
         handleOpenToc={[Function]}
       />
-    </Blueprint5.NavbarGroup>
-    <Blueprint5.NavbarGroup
+    </Blueprint6.NavbarGroup>
+    <Blueprint6.NavbarGroup
       align="right"
     >
       <div>
@@ -49,8 +49,8 @@ exports[`Navbar renders correctly 1`] = `
           }
         />
       </div>
-    </Blueprint5.NavbarGroup>
-    <Blueprint5.NavbarGroup
+    </Blueprint6.NavbarGroup>
+    <Blueprint6.NavbarGroup
       align="center"
     >
       <div
@@ -74,9 +74,9 @@ exports[`Navbar renders correctly 1`] = `
           onClick={[Function]}
         />
       </div>
-    </Blueprint5.NavbarGroup>
-  </Blueprint5.Navbar>
-  <Blueprint5.Drawer
+    </Blueprint6.NavbarGroup>
+  </Blueprint6.Navbar>
+  <Blueprint6.Drawer
     autoFocus={true}
     canEscapeKeyClose={true}
     canOutsideClickClose={true}
@@ -92,6 +92,6 @@ exports[`Navbar renders correctly 1`] = `
     <SicpToc
       handleCloseToc={[Function]}
     />
-  </Blueprint5.Drawer>
+  </Blueprint6.Drawer>
 </React.Fragment>
 `;

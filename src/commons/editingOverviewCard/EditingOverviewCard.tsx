@@ -113,7 +113,7 @@ export const EditingOverviewCard: React.FC<EditingOverviewCardProps> = props => 
           </div>
           <div className="listing-controls">
             <Text className="listing-due-date">
-              <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
+              <Icon className="listing-due-icon" size={12} icon={IconNames.TIME} />
               <div className="date-container">Opens at:&nbsp;</div>
               <div className="date-container" onClick={toggleEditField('openAt')}>
                 {editingOverviewField === 'openAt'

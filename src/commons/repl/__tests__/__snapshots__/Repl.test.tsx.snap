@@ -1,33 +1,33 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Code output renders correctly 1`] = `
-<Blueprint5.Card>
+<Blueprint6.Card>
   <ForwardRef
     className="code-output"
   >
     display('');
   </ForwardRef>
-</Blueprint5.Card>
+</Blueprint6.Card>
 `;
 
 exports[`Empty output renders an empty card 1`] = `
-<Blueprint5.Card>
+<Blueprint6.Card>
   ''
-</Blueprint5.Card>
+</Blueprint6.Card>
 `;
 
 exports[`Error output (no consoleLogs) renders correctly 1`] = `
-<Blueprint5.Card>
+<Blueprint6.Card>
   <ForwardRef
     className="error-output"
   >
     Expected , got .
   </ForwardRef>
-</Blueprint5.Card>
+</Blueprint6.Card>
 `;
 
 exports[`Error output (with consoleLogs) renders correctly 1`] = `
-<Blueprint5.Card>
+<Blueprint6.Card>
   <ForwardRef
     className="log-output"
   >
@@ -42,7 +42,7 @@ d
   >
     Expected , got .
   </ForwardRef>
-</Blueprint5.Card>
+</Blueprint6.Card>
 `;
 
 exports[`Repl renders correctly 1`] = `
@@ -123,7 +123,7 @@ exports[`Repl renders correctly 1`] = `
       }
       usingSubst={false}
     />
-    <Blueprint5.Card
+    <Blueprint6.Card
       className="repl-input-parent row"
     >
       <ReplInput
@@ -184,7 +184,7 @@ exports[`Repl renders correctly 1`] = `
         sourceChapter={1}
         sourceVariant="default"
       />
-    </Blueprint5.Card>
+    </Blueprint6.Card>
   </div>
 </div>
 `;
@@ -219,7 +219,7 @@ exports[`Result output (with consoleLogs) renders correctly 1`] = `
 `;
 
 exports[`Running output renders correctly 1`] = `
-<Blueprint5.Card>
+<Blueprint6.Card>
   <ForwardRef
     className="log-output"
   >
@@ -228,5 +228,5 @@ bb
 cccccccccccccccccccccccccccccccc
 d
   </ForwardRef>
-</Blueprint5.Card>
+</Blueprint6.Card>
 `;

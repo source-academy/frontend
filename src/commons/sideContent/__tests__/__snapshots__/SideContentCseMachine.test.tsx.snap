@@ -12,18 +12,18 @@ exports[`CSE Machine component renders correctly 1`] = `
   tabIndex={-1}
 >
   <div
-    className="sa-substituter bp5-dark"
+    className="sa-substituter bp6-dark"
   >
     <div
-      className="bp5-slider bp5-disabled"
+      className="bp6-slider bp6-disabled"
       onMouseDown={[Function]}
       onTouchStart={[Function]}
     >
       <div
-        className="bp5-slider-track"
+        className="bp6-slider-track"
       >
         <div
-          className="bp5-slider-progress"
+          className="bp6-slider-progress"
           style={
             {
               "left": "0.00%",
@@ -33,7 +33,7 @@ exports[`CSE Machine component renders correctly 1`] = `
           }
         />
         <div
-          className="bp5-slider-progress"
+          className="bp6-slider-progress"
           style={
             {
               "left": "0.00%",
@@ -43,7 +43,7 @@ exports[`CSE Machine component renders correctly 1`] = `
           }
         />
         <div
-          className="bp5-slider-progress"
+          className="bp6-slider-progress"
           style={
             {
               "left": "0.00%",
@@ -54,10 +54,10 @@ exports[`CSE Machine component renders correctly 1`] = `
         />
       </div>
       <div
-        className="bp5-slider-axis"
+        className="bp6-slider-axis"
       >
         <div
-          className="bp5-slider-label"
+          className="bp6-slider-label"
           style={
             {
               "left": "NaN%",
@@ -73,13 +73,13 @@ exports[`CSE Machine component renders correctly 1`] = `
         aria-valuemax={0}
         aria-valuemin={0}
         aria-valuenow={0}
-        className="bp5-slider-handle"
+        className="bp6-slider-handle"
         role="slider"
         style={{}}
         tabIndex={0}
       >
         <span
-          className="bp5-slider-label"
+          className="bp6-slider-label"
         >
           0
         </span>
@@ -95,10 +95,10 @@ exports[`CSE Machine component renders correctly 1`] = `
       }
     >
       <div
-        className="bp5-button-group"
+        className="bp6-button-group"
       >
         <span
-          className="bp5-popover-target"
+          className="bp6-popover-target"
           onBlur={[Function]}
           onContextMenu={[Function]}
           onFocus={[Function]}
@@ -107,7 +107,7 @@ exports[`CSE Machine component renders correctly 1`] = `
         >
           <a
             aria-disabled={true}
-            className="bp5-button bp5-disabled"
+            className="bp6-button bp6-disabled"
             disabled={true}
             onBlur={[Function]}
             onKeyDown={[Function]}
@@ -118,7 +118,7 @@ exports[`CSE Machine component renders correctly 1`] = `
           >
             <span
               aria-hidden={true}
-              className="bp5-icon bp5-icon-layers"
+              className="bp6-icon bp6-icon-layers"
             >
               <svg
                 data-icon="layers"
@@ -134,10 +134,10 @@ exports[`CSE Machine component renders correctly 1`] = `
               </svg>
             </span>
             <span
-              className="bp5-button-text"
+              className="bp6-button-text"
             >
               <label
-                className="bp5-control bp5-checkbox bp5-disabled"
+                className="bp6-control bp6-checkbox bp6-disabled"
                 style={
                   {
                     "margin": 0,
@@ -146,19 +146,20 @@ exports[`CSE Machine component renders correctly 1`] = `
               >
                 <input
                   checked={false}
+                  className="bp6-control-input"
                   disabled={true}
                   onChange={[Function]}
                   type="checkbox"
                 />
                 <span
-                  className="bp5-control-indicator"
+                  className="bp6-control-indicator"
                 />
               </label>
             </span>
           </a>
         </span>
         <span
-          className="bp5-popover-target"
+          className="bp6-popover-target"
           onBlur={[Function]}
           onContextMenu={[Function]}
           onFocus={[Function]}
@@ -167,7 +168,7 @@ exports[`CSE Machine component renders correctly 1`] = `
         >
           <a
             aria-disabled={true}
-            className="bp5-button bp5-disabled"
+            className="bp6-button bp6-disabled"
             disabled={true}
             onBlur={[Function]}
             onKeyDown={[Function]}
@@ -178,7 +179,7 @@ exports[`CSE Machine component renders correctly 1`] = `
           >
             <span
               aria-hidden={true}
-              className="bp5-icon bp5-icon-minimize"
+              className="bp6-icon bp6-icon-minimize"
             >
               <svg
                 data-icon="minimize"
@@ -194,10 +195,10 @@ exports[`CSE Machine component renders correctly 1`] = `
               </svg>
             </span>
             <span
-              className="bp5-button-text"
+              className="bp6-button-text"
             >
               <label
-                className="bp5-control bp5-checkbox bp5-disabled"
+                className="bp6-control bp6-checkbox bp6-disabled"
                 style={
                   {
                     "margin": 0,
@@ -206,12 +207,13 @@ exports[`CSE Machine component renders correctly 1`] = `
               >
                 <input
                   checked={false}
+                  className="bp6-control-input"
                   disabled={true}
                   onChange={[Function]}
                   type="checkbox"
                 />
                 <span
-                  className="bp5-control-indicator"
+                  className="bp6-control-indicator"
                 />
               </label>
             </span>
@@ -219,10 +221,10 @@ exports[`CSE Machine component renders correctly 1`] = `
         </span>
       </div>
       <div
-        className="bp5-button-group"
+        className="bp6-button-group"
       >
         <button
-          className="bp5-button bp5-disabled"
+          className="bp6-button bp6-disabled"
           disabled={true}
           onBlur={[Function]}
           onKeyDown={[Function]}
@@ -232,7 +234,7 @@ exports[`CSE Machine component renders correctly 1`] = `
         >
           <span
             aria-hidden={true}
-            className="bp5-icon bp5-icon-double-chevron-left"
+            className="bp6-icon bp6-icon-double-chevron-left"
           >
             <svg
               data-icon="double-chevron-left"
@@ -249,7 +251,7 @@ exports[`CSE Machine component renders correctly 1`] = `
           </span>
         </button>
         <button
-          className="bp5-button bp5-disabled"
+          className="bp6-button bp6-disabled"
           disabled={true}
           onBlur={[Function]}
           onKeyDown={[Function]}
@@ -259,7 +261,7 @@ exports[`CSE Machine component renders correctly 1`] = `
         >
           <span
             aria-hidden={true}
-            className="bp5-icon bp5-icon-chevron-left"
+            className="bp6-icon bp6-icon-chevron-left"
           >
             <svg
               data-icon="chevron-left"
@@ -276,7 +278,7 @@ exports[`CSE Machine component renders correctly 1`] = `
           </span>
         </button>
         <button
-          className="bp5-button bp5-disabled"
+          className="bp6-button bp6-disabled"
           disabled={true}
           onBlur={[Function]}
           onKeyDown={[Function]}
@@ -286,7 +288,7 @@ exports[`CSE Machine component renders correctly 1`] = `
         >
           <span
             aria-hidden={true}
-            className="bp5-icon bp5-icon-chevron-right"
+            className="bp6-icon bp6-icon-chevron-right"
           >
             <svg
               data-icon="chevron-right"
@@ -303,7 +305,7 @@ exports[`CSE Machine component renders correctly 1`] = `
           </span>
         </button>
         <button
-          className="bp5-button bp5-disabled"
+          className="bp6-button bp6-disabled"
           disabled={true}
           onBlur={[Function]}
           onKeyDown={[Function]}
@@ -313,7 +315,7 @@ exports[`CSE Machine component renders correctly 1`] = `
         >
           <span
             aria-hidden={true}
-            className="bp5-icon bp5-icon-double-chevron-right"
+            className="bp6-icon bp6-icon-double-chevron-right"
           >
             <svg
               data-icon="double-chevron-right"
@@ -331,10 +333,10 @@ exports[`CSE Machine component renders correctly 1`] = `
         </button>
       </div>
       <div
-        className="bp5-button-group"
+        className="bp6-button-group"
       >
         <span
-          className="bp5-popover-target"
+          className="bp6-popover-target"
           onBlur={[Function]}
           onContextMenu={[Function]}
           onFocus={[Function]}
@@ -343,7 +345,7 @@ exports[`CSE Machine component renders correctly 1`] = `
         >
           <a
             aria-disabled={true}
-            className="bp5-button bp5-disabled"
+            className="bp6-button bp6-disabled"
             disabled={true}
             onBlur={[Function]}
             onKeyDown={[Function]}
@@ -354,7 +356,7 @@ exports[`CSE Machine component renders correctly 1`] = `
           >
             <span
               aria-hidden={true}
-              className="bp5-icon bp5-icon-print"
+              className="bp6-icon bp6-icon-print"
             >
               <svg
                 data-icon="print"
@@ -370,10 +372,10 @@ exports[`CSE Machine component renders correctly 1`] = `
               </svg>
             </span>
             <span
-              className="bp5-button-text"
+              className="bp6-button-text"
             >
               <label
-                className="bp5-control bp5-checkbox bp5-disabled"
+                className="bp6-control bp6-checkbox bp6-disabled"
                 style={
                   {
                     "margin": 0,
@@ -382,19 +384,20 @@ exports[`CSE Machine component renders correctly 1`] = `
               >
                 <input
                   checked={false}
+                  className="bp6-control-input"
                   disabled={true}
                   onChange={[Function]}
                   type="checkbox"
                 />
                 <span
-                  className="bp5-control-indicator"
+                  className="bp6-control-indicator"
                 />
               </label>
             </span>
           </a>
         </span>
         <span
-          className="bp5-popover-target"
+          className="bp6-popover-target"
           onBlur={[Function]}
           onContextMenu={[Function]}
           onFocus={[Function]}
@@ -403,7 +406,7 @@ exports[`CSE Machine component renders correctly 1`] = `
         >
           <a
             aria-disabled={true}
-            className="bp5-button bp5-disabled"
+            className="bp6-button bp6-disabled"
             disabled={true}
             onBlur={[Function]}
             onKeyDown={[Function]}
@@ -413,7 +416,7 @@ exports[`CSE Machine component renders correctly 1`] = `
           >
             <span
               aria-hidden={true}
-              className="bp5-icon bp5-icon-floppy-disk"
+              className="bp6-icon bp6-icon-floppy-disk"
             >
               <svg
                 data-icon="floppy-disk"
@@ -436,7 +439,7 @@ exports[`CSE Machine component renders correctly 1`] = `
    
   <div />
   <div
-    className="bp5-running-text"
+    className="bp6-running-text"
     data-testid="cse-machine-default-text"
     id="cse-machine-default-text"
   >
@@ -460,7 +463,7 @@ exports[`CSE Machine component renders correctly 1`] = `
     <br />
     <br />
     <div
-      className="bp5-divider"
+      className="bp6-divider"
     />
     Some useful keyboard shortcuts:
     <br />
@@ -477,7 +480,7 @@ exports[`CSE Machine component renders correctly 1`] = `
     Note that these shortcuts are only active when the browser focus is on this tab.
   </div>
   <div
-    className="bp5-button-group bp5-vertical"
+    className="bp6-button-group bp6-vertical"
     style={
       {
         "bottom": "20px",
@@ -487,7 +490,7 @@ exports[`CSE Machine component renders correctly 1`] = `
     }
   >
     <button
-      className="bp5-button bp5-disabled"
+      className="bp6-button bp6-disabled"
       disabled={true}
       onBlur={[Function]}
       onKeyDown={[Function]}
@@ -503,7 +506,7 @@ exports[`CSE Machine component renders correctly 1`] = `
     >
       <span
         aria-hidden={true}
-        className="bp5-icon bp5-icon-plus"
+        className="bp6-icon bp6-icon-plus"
       >
         <svg
           data-icon="plus"
@@ -520,7 +523,7 @@ exports[`CSE Machine component renders correctly 1`] = `
       </span>
     </button>
     <button
-      className="bp5-button bp5-disabled"
+      className="bp6-button bp6-disabled"
       disabled={true}
       onBlur={[Function]}
       onKeyDown={[Function]}
@@ -535,7 +538,7 @@ exports[`CSE Machine component renders correctly 1`] = `
     >
       <span
         aria-hidden={true}
-        className="bp5-icon bp5-icon-minus"
+        className="bp6-icon bp6-icon-minus"
       >
         <svg
           data-icon="minus"

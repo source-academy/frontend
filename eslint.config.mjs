@@ -1,10 +1,10 @@
 // @ts-check
 
 // import eslint from '@eslint/js';
-import { config, configs } from 'typescript-eslint';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import { config, configs } from 'typescript-eslint';
 // import reactRefresh from 'eslint-plugin-react-refresh';
 
 export default config(
