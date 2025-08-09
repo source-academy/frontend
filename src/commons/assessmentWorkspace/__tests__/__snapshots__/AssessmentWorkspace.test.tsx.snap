@@ -223,6 +223,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with ContestVoting quest
                 <div
                   class="row editor-react-ace"
                   data-testid="Editor"
+                  id="editor-react-ace"
                 >
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark react-ace"
@@ -232,6 +233,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with ContestVoting quest
                     <textarea
                       aria-autocomplete="both"
                       aria-haspopup="false"
+                      aria-label="Cursor at row 1"
                       autocapitalize="off"
                       autocorrect="off"
                       class="ace_text-input"
@@ -317,7 +319,16 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with ContestVoting quest
                         XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                       </div>
                     </div>
+                    <div
+                      class="ace_tooltip"
+                      id="gt6"
+                      role="tooltip"
+                      style="display: none; pointer-events: auto;"
+                    />
                   </div>
+                  <div
+                    id="ace-radar-view"
+                  />
                 </div>
               </div>
             </div>
@@ -764,6 +775,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with ContestVoting quest
                     <textarea
                       aria-autocomplete="both"
                       aria-haspopup="false"
+                      aria-label="Cursor at row 1"
                       autocapitalize="off"
                       autocorrect="off"
                       class="ace_text-input"
@@ -850,6 +862,12 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with ContestVoting quest
                         XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                       </div>
                     </div>
+                    <div
+                      class="ace_tooltip"
+                      id="gt7"
+                      role="tooltip"
+                      style="display: none; pointer-events: auto;"
+                    />
                   </div>
                   <div
                     class="bp5-button-group bp5-dark"
@@ -1542,6 +1560,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with MCQ question render
                     <textarea
                       aria-autocomplete="both"
                       aria-haspopup="false"
+                      aria-label="Cursor at row 1"
                       autocapitalize="off"
                       autocorrect="off"
                       class="ace_text-input"
@@ -1628,6 +1647,12 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with MCQ question render
                         XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                       </div>
                     </div>
+                    <div
+                      class="ace_tooltip"
+                      id="gt5"
+                      role="tooltip"
+                      style="display: none; pointer-events: auto;"
+                    />
                   </div>
                   <div
                     class="bp5-button-group bp5-dark"
@@ -1870,6 +1895,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
                 <div
                   class="row editor-react-ace"
                   data-testid="Editor"
+                  id="editor-react-ace"
                 >
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark react-ace"
@@ -1879,6 +1905,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
                     <textarea
                       aria-autocomplete="both"
                       aria-haspopup="false"
+                      aria-label="Cursor at row 1"
                       autocapitalize="off"
                       autocorrect="off"
                       class="ace_text-input"
@@ -1964,7 +1991,16 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
                         XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                       </div>
                     </div>
+                    <div
+                      class="ace_tooltip"
+                      id="gt3"
+                      role="tooltip"
+                      style="display: none; pointer-events: auto;"
+                    />
                   </div>
+                  <div
+                    id="ace-radar-view"
+                  />
                 </div>
               </div>
             </div>
@@ -2354,6 +2390,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
                     <textarea
                       aria-autocomplete="both"
                       aria-haspopup="false"
+                      aria-label="Cursor at row 1"
                       autocapitalize="off"
                       autocorrect="off"
                       class="ace_text-input"
@@ -2440,6 +2477,12 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
                         XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                       </div>
                     </div>
+                    <div
+                      class="ace_tooltip"
+                      id="gt4"
+                      role="tooltip"
+                      style="display: none; pointer-events: auto;"
+                    />
                   </div>
                   <div
                     class="bp5-button-group bp5-dark"
@@ -2712,6 +2755,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
                 <div
                   class="row editor-react-ace"
                   data-testid="Editor"
+                  id="editor-react-ace"
                 >
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark react-ace"
@@ -2721,6 +2765,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
                     <textarea
                       aria-autocomplete="both"
                       aria-haspopup="false"
+                      aria-label="Cursor at row 1"
                       autocapitalize="off"
                       autocorrect="off"
                       class="ace_text-input"
@@ -2806,7 +2851,16 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
                         XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                       </div>
                     </div>
+                    <div
+                      class="ace_tooltip"
+                      id="gt1"
+                      role="tooltip"
+                      style="display: none; pointer-events: auto;"
+                    />
                   </div>
+                  <div
+                    id="ace-radar-view"
+                  />
                 </div>
               </div>
             </div>
@@ -3196,6 +3250,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
                     <textarea
                       aria-autocomplete="both"
                       aria-haspopup="false"
+                      aria-label="Cursor at row 1"
                       autocapitalize="off"
                       autocorrect="off"
                       class="ace_text-input"
@@ -3282,6 +3337,12 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
                         XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                       </div>
                     </div>
+                    <div
+                      class="ace_tooltip"
+                      id="gt2"
+                      role="tooltip"
+                      style="display: none; pointer-events: auto;"
+                    />
                   </div>
                   <div
                     class="bp5-button-group bp5-dark"
@@ -3554,6 +3615,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                 <div
                   class="row editor-react-ace"
                   data-testid="Editor"
+                  id="editor-react-ace"
                 >
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark react-ace"
@@ -3563,6 +3625,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                     <textarea
                       aria-autocomplete="both"
                       aria-haspopup="false"
+                      aria-label="Cursor at row 1"
                       autocapitalize="off"
                       autocorrect="off"
                       class="ace_text-input"
@@ -3648,7 +3711,16 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                         XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                       </div>
                     </div>
+                    <div
+                      class="ace_tooltip"
+                      id="gt8"
+                      role="tooltip"
+                      style="display: none; pointer-events: auto;"
+                    />
                   </div>
+                  <div
+                    id="ace-radar-view"
+                  />
                 </div>
               </div>
             </div>
@@ -4255,6 +4327,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                     <textarea
                       aria-autocomplete="both"
                       aria-haspopup="false"
+                      aria-label="Cursor at row 1"
                       autocapitalize="off"
                       autocorrect="off"
                       class="ace_text-input"
@@ -4341,6 +4414,12 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                         XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                       </div>
                     </div>
+                    <div
+                      class="ace_tooltip"
+                      id="gt9"
+                      role="tooltip"
+                      style="display: none; pointer-events: auto;"
+                    />
                   </div>
                   <div
                     class="bp5-button-group bp5-dark"

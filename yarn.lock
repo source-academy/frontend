@@ -3264,15 +3264,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/sharedb-ace@npm:^2.0.3":
-  version: 2.0.3
-  resolution: "@sourceacademy/sharedb-ace@npm:2.0.3"
+"@sourceacademy/sharedb-ace@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "@sourceacademy/sharedb-ace@npm:2.1.1"
   dependencies:
-    event-emitter-es6: "npm:^1.1.5"
+    "@convergencelabs/ace-collab-ext": "npm:^0.6.0"
     logdown: "npm:^3.3.1"
-    reconnecting-websocket: "npm:^4.4.0"
-    sharedb: "npm:^1.4.1"
-  checksum: 10c0/68c829c0f63a3d902390183906bbd67b3646dde7a6cb46bd3cc4f6e9f78ff5ae8990460bd9f9da45ee714c033f647c56602b1c9bf1e717af121297f3ec873278
+    partysocket: "npm:^1.0.3"
+    sharedb: "npm:^5.1.1"
+  checksum: 10c0/2ae74468001f77a3e019d5d19e165916cc00a440b69b1aeb9f6a0fa4d253570772102fa2016421a5ae893713fa5c860739588ab3060b34e642082b7a926ab322
   languageName: node
   linkType: hard
 
@@ -3677,7 +3677,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@testing-library/user-event@npm:^14.4.3":
+"@testing-library/user-event@npm:^14.6.0":
   version: 14.6.1
   resolution: "@testing-library/user-event@npm:14.6.1"
   peerDependencies:
@@ -4543,10 +4543,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ace-builds@npm:^1.36.3, ace-builds@npm:^1.4.12":
-  version: 1.36.3
-  resolution: "ace-builds@npm:1.36.3"
-  checksum: 10c0/7d7a35f393cd70555d559afcc0521dcda7fe78585cdfd41525a7bd9d59115f8b9f40ac3ff597907faf2ac2f71e1174c6797df698df48a8041c6b6433dba316b5
+"ace-builds@npm:^1.36.3, ace-builds@npm:^1.4.12, ace-builds@npm:^1.42.1":
+  version: 1.43.2
+  resolution: "ace-builds@npm:1.43.2"
+  checksum: 10c0/03603b969b4995a3de5d73f9a3ef8b76d35b9367069ab17da8b69449b924cfa8f0c87929acc062abfeb022a2c39fbb3cd7c311c489d202dc2447c13d52fc7226
   languageName: node
   linkType: hard
 
@@ -4847,7 +4847,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"arraydiff@npm:^0.1.1":
+"arraydiff@npm:^0.1.3":
   version: 0.1.3
   resolution: "arraydiff@npm:0.1.3"
   checksum: 10c0/a376b8f6c22cd502b810a265c6043888ddbe55f367d28d42e5b1e10adf98290cd0308e4930429a30624715589d6801764b2933cf34af4aba333982b89f7e1f9c
@@ -4921,7 +4921,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"async@npm:^2.1.4, async@npm:^2.6.3":
+"async@npm:^2.1.4":
   version: 2.6.4
   resolution: "async@npm:2.6.4"
   dependencies:
@@ -4930,7 +4930,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"async@npm:^3.2.3":
+"async@npm:^3.2.3, async@npm:^3.2.4":
   version: 3.2.6
   resolution: "async@npm:3.2.6"
   checksum: 10c0/36484bb15ceddf07078688d95e27076379cc2f87b10c03b6dd8a83e89475a3c8df5848859dd06a4c95af1e4c16fc973de0171a77f18ea00be899aca2a4f85e70
@@ -7148,10 +7148,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"event-emitter-es6@npm:^1.1.5":
-  version: 1.1.5
-  resolution: "event-emitter-es6@npm:1.1.5"
-  checksum: 10c0/056c1b5e4a55fcf9d686808c85ea896dc0dfd0304f2bfb1de111bf3acf8b6e88261fb49a0a69281fd24def5646134bf1daf372bf00ed667971195f526cb8a9f6
+"event-target-polyfill@npm:^0.0.4":
+  version: 0.0.4
+  resolution: "event-target-polyfill@npm:0.0.4"
+  checksum: 10c0/7052b838df6509e8290f110daf94604dd05828834db4ad6fe4a12abc693da1a3274100cfd4ff3e47a941d5aa3fb7cdb8164d85402b93d85340bb3adc596d8732
   languageName: node
   linkType: hard
 
@@ -7240,13 +7240,6 @@ __metadata:
   version: 3.0.0
   resolution: "fast-content-type-parse@npm:3.0.0"
   checksum: 10c0/06251880c83b7118af3a5e66e8bcee60d44f48b39396fc60acc2b4630bd5f3e77552b999b5c8e943d45a818854360e5e97164c374ec4b562b4df96a2cdf2e188
-  languageName: node
-  linkType: hard
-
-"fast-deep-equal@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "fast-deep-equal@npm:2.0.1"
-  checksum: 10c0/1602e0d6ed63493c865cc6b03f9070d6d3926e8cd086a123060b58f80a295f3f08b1ecfb479ae7c45b7fd45535202aea7cf5b49bc31bffb81c20b1502300be84
   languageName: node
   linkType: hard
 
@@ -7507,7 +7500,7 @@ __metadata:
     "@rsbuild/plugin-svgr": "npm:^1.2.0"
     "@sentry/browser": "npm:^8.33.0"
     "@sourceacademy/c-slang": "npm:^1.0.21"
-    "@sourceacademy/sharedb-ace": "npm:^2.0.3"
+    "@sourceacademy/sharedb-ace": "npm:^2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
     "@svgr/webpack": "npm:^8.0.0"
     "@swc/core": "npm:^1.11.22"
@@ -7516,7 +7509,7 @@ __metadata:
     "@testing-library/dom": "npm:^10.4.0"
     "@testing-library/jest-dom": "npm:^6.0.0"
     "@testing-library/react": "npm:^16.0.0"
-    "@testing-library/user-event": "npm:^14.4.3"
+    "@testing-library/user-event": "npm:^14.6.0"
     "@tremor/react": "npm:^1.8.2"
     "@types/estree": "npm:^1.0.5"
     "@types/gapi": "npm:^0.0.47"
@@ -7540,7 +7533,7 @@ __metadata:
     "@vitejs/plugin-react-swc": "npm:^3.11.0"
     "@vitest/coverage-v8": "npm:3.2.4"
     "@vitest/ui": "npm:^3.2.4"
-    ace-builds: "npm:^1.36.3"
+    ace-builds: "npm:^1.42.1"
     acorn: "npm:^8.9.0"
     ag-grid-community: "npm:^32.3.1"
     ag-grid-react: "npm:^32.3.1"
@@ -7568,6 +7561,7 @@ __metadata:
     i18next: "npm:^25.0.0"
     i18next-browser-languagedetector: "npm:^8.0.0"
     identity-obj-proxy: "npm:^3.0.0"
+    immer: "npm:^10.1.1"
     java-slang: "npm:^1.0.13"
     js-cookie: "npm:^3.0.5"
     js-slang: "npm:^1.0.84"
@@ -8300,6 +8294,13 @@ __metadata:
   version: 7.0.5
   resolution: "ignore@npm:7.0.5"
   checksum: 10c0/ae00db89fe873064a093b8999fe4cc284b13ef2a178636211842cceb650b9c3e390d3339191acb145d81ed5379d2074840cf0c33a20bdbd6f32821f79eb4ad5d
+  languageName: node
+  linkType: hard
+
+"immer@npm:^10.1.1":
+  version: 10.1.1
+  resolution: "immer@npm:10.1.1"
+  checksum: 10c0/b749e10d137ccae91788f41bd57e9387f32ea6d6ea8fd7eb47b23fd7766681575efc7f86ceef7fe24c3bc9d61e38ff5d2f49c2663b2b0c056e280a4510923653
   languageName: node
   linkType: hard
 
@@ -10401,7 +10402,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ot-json0@npm:^1.0.1":
+"ot-json0@npm:^1.1.0":
   version: 1.1.0
   resolution: "ot-json0@npm:1.1.0"
   checksum: 10c0/b553940a90fc0b46f246a832b18cecb37089edd44dd6f6eec84a0753c54c1cf739fe19ef550efa2c0f15f7245eadb3226d7587416315413819512d4c1f7c02b4
@@ -10530,6 +10531,15 @@ __metadata:
   dependencies:
     entities: "npm:^6.0.0"
   checksum: 10c0/7fd2e4e247e85241d6f2a464d0085eed599a26d7b0a5233790c49f53473232eb85350e8133344d9b3fd58b89339e7ad7270fe1f89d28abe50674ec97b87f80b5
+  languageName: node
+  linkType: hard
+
+"partysocket@npm:^1.0.3":
+  version: 1.1.4
+  resolution: "partysocket@npm:1.1.4"
+  dependencies:
+    event-target-polyfill: "npm:^0.0.4"
+  checksum: 10c0/d859bcaef5f5e8be0f383140a896a41e78c95fc2166002d2a60f09168c720d78864e8f8e3251ed5146d46bf9487102dd9c81d34893c811bfc8ea64f7236f2fed
   languageName: node
   linkType: hard
 
@@ -11646,13 +11656,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"reconnecting-websocket@npm:^4.4.0":
-  version: 4.4.0
-  resolution: "reconnecting-websocket@npm:4.4.0"
-  checksum: 10c0/0155223200882e123bc884eb5935bdff7ee4d2998eee578c23bba6a6fec63b68c22ccaf9ff4bdcd05284568d89f02e6a664cc40daf108872f820197848b09579
-  languageName: node
-  linkType: hard
-
 "redent@npm:^3.0.0":
   version: 3.0.0
   resolution: "redent@npm:3.0.0"
@@ -12518,16 +12521,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sharedb@npm:^1.4.1":
-  version: 1.9.2
-  resolution: "sharedb@npm:1.9.2"
+"sharedb@npm:^5.1.1":
+  version: 5.2.2
+  resolution: "sharedb@npm:5.2.2"
   dependencies:
-    arraydiff: "npm:^0.1.1"
-    async: "npm:^2.6.3"
-    fast-deep-equal: "npm:^2.0.1"
+    arraydiff: "npm:^0.1.3"
+    async: "npm:^3.2.4"
+    fast-deep-equal: "npm:^3.1.3"
     hat: "npm:0.0.3"
-    ot-json0: "npm:^1.0.1"
-  checksum: 10c0/e9075b66f95175330bcb0753544ed3a23820a4b52f76994266fe56d5d137827207af6e8fb3dcfc86b3becf3ed7bf8d52dbe6485f95f3879e16d193bf27011612
+    ot-json0: "npm:^1.1.0"
+  checksum: 10c0/9e8f6726a4f31fa1df3dd4b7019de088247e1584692f61c7ca20fc198c1b8d2540eff57810bfef6ba7c879ce99a9cbc483318262cf591b5e2c651481f9991fdc
   languageName: node
   linkType: hard
 
