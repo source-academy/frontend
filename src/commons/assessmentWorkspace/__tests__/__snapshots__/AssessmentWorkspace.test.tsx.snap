@@ -321,6 +321,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with ContestVoting quest
                     </div>
                     <div
                       class="ace_tooltip"
+                      id="gt6"
                       role="tooltip"
                       style="display: none; pointer-events: auto;"
                     />
@@ -863,6 +864,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with ContestVoting quest
                     </div>
                     <div
                       class="ace_tooltip"
+                      id="gt7"
                       role="tooltip"
                       style="display: none; pointer-events: auto;"
                     />
@@ -1647,6 +1649,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with MCQ question render
                     </div>
                     <div
                       class="ace_tooltip"
+                      id="gt5"
                       role="tooltip"
                       style="display: none; pointer-events: auto;"
                     />
@@ -1990,6 +1993,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
                     </div>
                     <div
                       class="ace_tooltip"
+                      id="gt3"
                       role="tooltip"
                       style="display: none; pointer-events: auto;"
                     />
@@ -2475,6 +2479,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
                     </div>
                     <div
                       class="ace_tooltip"
+                      id="gt4"
                       role="tooltip"
                       style="display: none; pointer-events: auto;"
                     />
@@ -2848,6 +2853,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
                     </div>
                     <div
                       class="ace_tooltip"
+                      id="gt1"
                       role="tooltip"
                       style="display: none; pointer-events: auto;"
                     />
@@ -3333,6 +3339,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
                     </div>
                     <div
                       class="ace_tooltip"
+                      id="gt2"
                       role="tooltip"
                       style="display: none; pointer-events: auto;"
                     />
@@ -3706,6 +3713,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                     </div>
                     <div
                       class="ace_tooltip"
+                      id="gt8"
                       role="tooltip"
                       style="display: none; pointer-events: auto;"
                     />
@@ -4408,6 +4416,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                     </div>
                     <div
                       class="ace_tooltip"
+                      id="gt9"
                       role="tooltip"
                       style="display: none; pointer-events: auto;"
                     />

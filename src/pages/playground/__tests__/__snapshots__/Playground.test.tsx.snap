@@ -495,6 +495,7 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                     </div>
                     <div
                       class="ace_tooltip"
+                      id="gt1"
                       role="tooltip"
                       style="display: none; pointer-events: auto;"
                     />
@@ -1490,6 +1491,7 @@ and also the
                     </div>
                     <div
                       class="ace_tooltip"
+                      id="gt2"
                       role="tooltip"
                       style="display: none; pointer-events: auto;"
                     />
@@ -2061,6 +2063,7 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                     </div>
                     <div
                       class="ace_tooltip"
+                      id="gt3"
                       role="tooltip"
                       style="display: none; pointer-events: auto;"
                     />
@@ -2810,6 +2813,7 @@ and also the
                     </div>
                     <div
                       class="ace_tooltip"
+                      id="gt4"
                       role="tooltip"
                       style="display: none; pointer-events: auto;"
                     />
