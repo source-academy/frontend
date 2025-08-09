@@ -2,14 +2,14 @@
 
 exports[`NavigationBarLangSelectButton > should render correctly 1`] = `
 <span
-  className="bp5-popover-target"
+  className="bp6-popover-target"
   onClick={[Function]}
   onKeyDown={[Function]}
 >
   <button
     aria-expanded={false}
     aria-haspopup="menu"
-    className="bp5-button"
+    className="bp6-button"
     data-testid="NavigationBarLangSelectButton"
     disabled={false}
     onBlur={[Function]}
@@ -19,13 +19,13 @@ exports[`NavigationBarLangSelectButton > should render correctly 1`] = `
     type="button"
   >
     <span
-      className="bp5-button-text"
+      className="bp6-button-text"
     >
       JavaScript
     </span>
     <span
       aria-hidden={true}
-      className="bp5-icon bp5-icon-caret-down"
+      className="bp6-icon bp6-icon-caret-down"
     >
       <svg
         data-icon="caret-down"
