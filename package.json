@@ -154,7 +154,7 @@
     "canvas": "^3.1.0",
     "constants-browserify": "^1.0.0",
     "coveralls": "^3.1.1",
-    "cross-env": "^7.0.3",
+    "cross-env": "^10.0.0",
     "eslint": "^9.9.0",
     "eslint-plugin-react": "^7.35.0",
     "eslint-plugin-react-hooks": "^5.2.0",
