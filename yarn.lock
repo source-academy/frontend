@@ -2945,8 +2945,8 @@ __metadata:
   linkType: hard
 
 "@rsbuild/plugin-eslint@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "@rsbuild/plugin-eslint@npm:1.1.1"
+  version: 1.1.2
+  resolution: "@rsbuild/plugin-eslint@npm:1.1.2"
   dependencies:
     eslint-rspack-plugin: "npm:^4.2.1"
   peerDependencies:
@@ -2955,7 +2955,7 @@ __metadata:
   peerDependenciesMeta:
     "@rsbuild/core":
       optional: true
-  checksum: 10c0/379e587512e859e1f02d852fface814967bf65d755b31af82a1ca52ae093c5c5a397da4e31fc8f9a2bdc5223b1a0a1fd749f20b3d73105250f353484d5723a4b
+  checksum: 10c0/eddf7b40ae1eb5f1e55e9c42bccf39255e8c7ab825e9873561c63ba98bcbe5a0d732190bd864d3f9b46af8269eae9a819c6c3a9a39a7f9d8503b18c2ecf61f3b
   languageName: node
   linkType: hard
 
