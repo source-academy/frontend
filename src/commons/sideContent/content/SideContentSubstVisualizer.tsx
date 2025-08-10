@@ -340,7 +340,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
                     <div>
                       <Icon icon="code" />
                       <span>{' Function definition'}</span>
-                      <pre className="bp5-code-block">
+                      <pre className="bp6-code-block">
                         <code>{functionDefinition}</code>
                       </pre>
                     </div>
@@ -368,7 +368,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
               <div>
                 <Icon icon="code" />
                 <span>{' Function definition'}</span>
-                <pre className="bp5-code-block">
+                <pre className="bp6-code-block">
                   <code>{astToString(node)}</code>
                 </pre>
               </div>
