@@ -11,13 +11,13 @@ import { Animatable, AnimatableTo, AnimationConfig } from './Animatable';
 import { lerp } from './AnimationUtils';
 
 type AnimationData<KonvaConfig extends Konva.NodeConfig> = {
-  startTime: number;
-  endTime: number;
-  from: Readonly<Partial<KonvaConfig>>;
-  current: Partial<KonvaConfig>;
-  to: Readonly<Partial<KonvaConfig>>;
-  easing: NonNullable<AnimationConfig['easing']>;
-  resolve: (value: void | PromiseLike<void>) => void;
+  readonly startTime: number;
+  readonly endTime: number;
+  from?: Readonly<Partial<KonvaConfig>>; // This is set only once
+  current?: Partial<KonvaConfig>; // This is mutated on every frame of the animation
+  readonly to: Readonly<Partial<KonvaConfig>>;
+  readonly easing: NonNullable<AnimationConfig['easing']>;
+  readonly resolve: (value: void | PromiseLike<void>) => void;
 };
 
 abstract class BaseAnimationComponent<
@@ -42,15 +42,27 @@ abstract class BaseAnimationComponent<
     let i = 0;
     while (i < this.animationData.length) {
       const data = this.animationData[i];
+      // Don't run animation yet if current time is less than animation start time.
+      // This is true for animations that have a delay.
       if (frame.time <= data.startTime) {
         animationComplete = false;
         i++;
         continue;
       }
+      // Set starting values when animation first starts
+      if (!data.from || !data.current) {
+        const node: Konva.Node = this.ref.current;
+        const from: Partial<KonvaConfig> = {};
+        for (const attr in data.to) {
+          from[attr] = attrs[attr] ?? node.getAttr(attr);
+        }
+        data.from = from;
+        data.current = {};
+      }
       // Calculate animation progress from 0 to 1
       const delta = Math.min((frame.time - data.startTime) / (data.endTime - data.startTime), 1);
       // Interpolate each attribute between the starting and ending values
-      for (const attr in data.current) {
+      for (const attr in data.to) {
         const value = lerp(delta, attr, data.from[attr], data.to[attr], data.easing);
         data.current[attr] = value;
         if (attr === 'x') this._x = value;
@@ -60,8 +72,8 @@ abstract class BaseAnimationComponent<
       }
       // Add the new attributes and values into the main attrs object
       Object.assign(attrs, data.current);
-      // Resolve the animation's promise later if the animation is done, and also
-      // remove the animation data from the list
+      // If animation is donw, remove the animation data from the list, and resolve
+      // the animation's promise later
       if (delta === 1) {
         resolveList.push(data.resolve);
         this.animationData.splice(i, 1);
@@ -76,6 +88,7 @@ abstract class BaseAnimationComponent<
       this.listeners.forEach(f => f({ ...attrs }));
     }
     if (animationComplete) this.animation.stop();
+    // Promises are only resolved after attributes have been fully set on the Konva node
     resolveList.forEach(r => r());
     return;
   };
@@ -103,19 +116,13 @@ abstract class BaseAnimationComponent<
         resolve();
         return;
       }
-      const node: Konva.Node = this.ref.current;
-      // Get current node values first
-      const from: Partial<KonvaConfig> = {};
-      for (const attr in to) {
-        from[attr] = node.getAttr(attr);
-      }
       // Calculate timings based on values given in animationConfig
       const startTime =
         this.animation.frame.time + (animationConfig?.delay ?? 0) * CseAnimation.defaultDuration;
       const endTime = startTime + (animationConfig?.duration ?? 1) * CseAnimation.defaultDuration;
       const easing = animationConfig?.easing ?? CseAnimation.defaultEasing;
       // Add animation data
-      const data = { startTime, endTime, from, current: { ...from }, to, easing, resolve };
+      const data = { startTime, endTime, to, easing, resolve };
       this.animationData.push(data);
       // Play animation
       if (!this.animation.isRunning()) this.animation.start();
