@@ -4,7 +4,7 @@ exports[`SideContentContestLeaderboard matches snapshot 1`] = `
 <div
   className="ContestLeaderboard"
 >
-  <Blueprint5.Button
+  <Blueprint6.Button
     className="collapse-button"
     icon="caret-down"
     minimal={true}
@@ -13,7 +13,7 @@ exports[`SideContentContestLeaderboard matches snapshot 1`] = `
     <span>
       Score Leaderboard
     </span>
-    <Blueprint5.Tooltip
+    <Blueprint6.Tooltip
       compact={false}
       content="View the highest scoring contest entries!"
       hoverCloseDelay={0}
@@ -22,12 +22,12 @@ exports[`SideContentContestLeaderboard matches snapshot 1`] = `
       minimal={false}
       transitionDuration={100}
     >
-      <Blueprint5.Icon
+      <Blueprint6.Icon
         icon="help"
       />
-    </Blueprint5.Tooltip>
-  </Blueprint5.Button>
-  <Blueprint5.Collapse
+    </Blueprint6.Tooltip>
+  </Blueprint6.Button>
+  <Blueprint6.Collapse
     component="div"
     isOpen={true}
     keepChildrenMounted={true}
@@ -41,7 +41,7 @@ exports[`SideContentContestLeaderboard matches snapshot 1`] = `
           className="header-entryid"
         >
           Student Name
-          <Blueprint5.Icon
+          <Blueprint6.Icon
             icon="caret-down"
           />
         </div>
@@ -49,7 +49,7 @@ exports[`SideContentContestLeaderboard matches snapshot 1`] = `
           className="header-entryrank"
         >
           Rank
-          <Blueprint5.Icon
+          <Blueprint6.Icon
             icon="caret-down"
           />
         </div>
@@ -57,7 +57,7 @@ exports[`SideContentContestLeaderboard matches snapshot 1`] = `
           className="header-score"
         >
           Calculated Score
-          <Blueprint5.Icon
+          <Blueprint6.Icon
             icon="caret-down"
           />
         </div>
@@ -105,6 +105,6 @@ exports[`SideContentContestLeaderboard matches snapshot 1`] = `
         rank={3}
       />
     </div>
-  </Blueprint5.Collapse>
+  </Blueprint6.Collapse>
 </div>
 `;

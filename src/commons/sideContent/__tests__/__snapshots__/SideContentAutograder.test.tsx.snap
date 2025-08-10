@@ -4,7 +4,7 @@ exports[`Autograder renders autograder results with different statuses correctly
 <div
   className="Autograder"
 >
-  <Blueprint5.Button
+  <Blueprint6.Button
     className="collapse-button"
     icon="caret-down"
     minimal={true}
@@ -13,7 +13,7 @@ exports[`Autograder renders autograder results with different statuses correctly
     <span>
       Testcases
     </span>
-    <Blueprint5.Tooltip
+    <Blueprint6.Tooltip
       compact={false}
       content={
         <div
@@ -40,12 +40,12 @@ exports[`Autograder renders autograder results with different statuses correctly
       placement="left"
       transitionDuration={100}
     >
-      <Blueprint5.Icon
+      <Blueprint6.Icon
         icon="help"
       />
-    </Blueprint5.Tooltip>
-  </Blueprint5.Button>
-  <Blueprint5.Collapse
+    </Blueprint6.Tooltip>
+  </Blueprint6.Button>
+  <Blueprint6.Collapse
     component="div"
     isOpen={true}
     keepChildrenMounted={true}
@@ -57,7 +57,7 @@ exports[`Autograder renders autograder results with different statuses correctly
     >
       There are no testcases provided for this question.
     </div>
-  </Blueprint5.Collapse>
+  </Blueprint6.Collapse>
   <ControlButton
     icon="caret-down"
     label="Autograder Results"
@@ -69,7 +69,7 @@ exports[`Autograder renders autograder results with different statuses correctly
       }
     }
   />
-  <Blueprint5.Collapse
+  <Blueprint6.Collapse
     component="div"
     isOpen={true}
     keepChildrenMounted={true}
@@ -87,7 +87,7 @@ exports[`Autograder renders autograder results with different statuses correctly
             className="header-sn"
           >
             S/N
-            <Blueprint5.Icon
+            <Blueprint6.Icon
               icon="caret-down"
             />
           </div>
@@ -95,7 +95,7 @@ exports[`Autograder renders autograder results with different statuses correctly
             className="header-status"
           >
             Testcase status
-            <Blueprint5.Icon
+            <Blueprint6.Icon
               icon="caret-down"
             />
           </div>
@@ -104,7 +104,7 @@ exports[`Autograder renders autograder results with different statuses correctly
           className="header-expected"
         >
           Expected result
-          <Blueprint5.Icon
+          <Blueprint6.Icon
             icon="caret-down"
           />
         </div>
@@ -112,7 +112,7 @@ exports[`Autograder renders autograder results with different statuses correctly
           className="header-actual"
         >
           Actual result
-          <Blueprint5.Icon
+          <Blueprint6.Icon
             icon="caret-down"
           />
         </div>
@@ -183,7 +183,7 @@ exports[`Autograder renders autograder results with different statuses correctly
         }
       />
     </div>
-  </Blueprint5.Collapse>
+  </Blueprint6.Collapse>
 </div>
 `;
 
@@ -191,7 +191,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
 <div
   className="Autograder"
 >
-  <Blueprint5.Button
+  <Blueprint6.Button
     className="collapse-button"
     icon="caret-down"
     minimal={true}
@@ -200,7 +200,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
     <span>
       Testcases
     </span>
-    <Blueprint5.Tooltip
+    <Blueprint6.Tooltip
       compact={false}
       content={
         <div
@@ -227,12 +227,12 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
       placement="left"
       transitionDuration={100}
     >
-      <Blueprint5.Icon
+      <Blueprint6.Icon
         icon="help"
       />
-    </Blueprint5.Tooltip>
-  </Blueprint5.Button>
-  <Blueprint5.Collapse
+    </Blueprint6.Tooltip>
+  </Blueprint6.Button>
+  <Blueprint6.Collapse
     component="div"
     isOpen={true}
     keepChildrenMounted={true}
@@ -249,7 +249,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
           className="header-fn"
         >
           Testcase
-          <Blueprint5.Icon
+          <Blueprint6.Icon
             icon="caret-down"
           />
         </div>
@@ -257,7 +257,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
           className="header-expected"
         >
           Expected result
-          <Blueprint5.Icon
+          <Blueprint6.Icon
             icon="caret-down"
           />
         </div>
@@ -265,7 +265,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
           className="header-actual"
         >
           Actual result
-          <Blueprint5.Icon
+          <Blueprint6.Icon
             icon="caret-down"
           />
         </div>
@@ -343,7 +343,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         workspaceLocation="assessment"
       />
     </div>
-  </Blueprint5.Collapse>
+  </Blueprint6.Collapse>
   <ControlButton
     icon="caret-down"
     label="Autograder Results"
@@ -355,7 +355,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
       }
     }
   />
-  <Blueprint5.Collapse
+  <Blueprint6.Collapse
     component="div"
     isOpen={true}
     keepChildrenMounted={true}
@@ -367,7 +367,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
     >
       There are no results to show.
     </div>
-  </Blueprint5.Collapse>
+  </Blueprint6.Collapse>
 </div>
 `;
 
@@ -375,7 +375,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
 <div
   className="Autograder"
 >
-  <Blueprint5.Button
+  <Blueprint6.Button
     className="collapse-button"
     icon="caret-down"
     minimal={true}
@@ -384,7 +384,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
     <span>
       Testcases
     </span>
-    <Blueprint5.Tooltip
+    <Blueprint6.Tooltip
       compact={false}
       content={
         <div
@@ -411,12 +411,12 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
       placement="left"
       transitionDuration={100}
     >
-      <Blueprint5.Icon
+      <Blueprint6.Icon
         icon="help"
       />
-    </Blueprint5.Tooltip>
-  </Blueprint5.Button>
-  <Blueprint5.Collapse
+    </Blueprint6.Tooltip>
+  </Blueprint6.Button>
+  <Blueprint6.Collapse
     component="div"
     isOpen={true}
     keepChildrenMounted={true}
@@ -433,7 +433,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
           className="header-fn"
         >
           Testcase
-          <Blueprint5.Icon
+          <Blueprint6.Icon
             icon="caret-down"
           />
         </div>
@@ -441,7 +441,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
           className="header-expected"
         >
           Expected result
-          <Blueprint5.Icon
+          <Blueprint6.Icon
             icon="caret-down"
           />
         </div>
@@ -449,7 +449,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
           className="header-actual"
         >
           Actual result
-          <Blueprint5.Icon
+          <Blueprint6.Icon
             icon="caret-down"
           />
         </div>
@@ -527,7 +527,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
         workspaceLocation="grading"
       />
     </div>
-  </Blueprint5.Collapse>
+  </Blueprint6.Collapse>
   <ControlButton
     icon="caret-down"
     label="Autograder Results"
@@ -539,7 +539,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
       }
     }
   />
-  <Blueprint5.Collapse
+  <Blueprint6.Collapse
     component="div"
     isOpen={true}
     keepChildrenMounted={true}
@@ -551,7 +551,7 @@ exports[`Autograder renders opaque testcases with different statuses correctly i
     >
       There are no results to show.
     </div>
-  </Blueprint5.Collapse>
+  </Blueprint6.Collapse>
 </div>
 `;
 
@@ -559,7 +559,7 @@ exports[`Autograder renders placeholders correctly when testcases and results ar
 <div
   className="Autograder"
 >
-  <Blueprint5.Button
+  <Blueprint6.Button
     className="collapse-button"
     icon="caret-down"
     minimal={true}
@@ -568,7 +568,7 @@ exports[`Autograder renders placeholders correctly when testcases and results ar
     <span>
       Testcases
     </span>
-    <Blueprint5.Tooltip
+    <Blueprint6.Tooltip
       compact={false}
       content={
         <div
@@ -595,12 +595,12 @@ exports[`Autograder renders placeholders correctly when testcases and results ar
       placement="left"
       transitionDuration={100}
     >
-      <Blueprint5.Icon
+      <Blueprint6.Icon
         icon="help"
       />
-    </Blueprint5.Tooltip>
-  </Blueprint5.Button>
-  <Blueprint5.Collapse
+    </Blueprint6.Tooltip>
+  </Blueprint6.Button>
+  <Blueprint6.Collapse
     component="div"
     isOpen={true}
     keepChildrenMounted={true}
@@ -612,7 +612,7 @@ exports[`Autograder renders placeholders correctly when testcases and results ar
     >
       There are no testcases provided for this question.
     </div>
-  </Blueprint5.Collapse>
+  </Blueprint6.Collapse>
   <ControlButton
     icon="caret-down"
     label="Autograder Results"
@@ -624,7 +624,7 @@ exports[`Autograder renders placeholders correctly when testcases and results ar
       }
     }
   />
-  <Blueprint5.Collapse
+  <Blueprint6.Collapse
     component="div"
     isOpen={true}
     keepChildrenMounted={true}
@@ -636,7 +636,7 @@ exports[`Autograder renders placeholders correctly when testcases and results ar
     >
       There are no results to show.
     </div>
-  </Blueprint5.Collapse>
+  </Blueprint6.Collapse>
 </div>
 `;
 
@@ -644,7 +644,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
 <div
   className="Autograder"
 >
-  <Blueprint5.Button
+  <Blueprint6.Button
     className="collapse-button"
     icon="caret-down"
     minimal={true}
@@ -653,7 +653,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
     <span>
       Testcases
     </span>
-    <Blueprint5.Tooltip
+    <Blueprint6.Tooltip
       compact={false}
       content={
         <div
@@ -680,12 +680,12 @@ exports[`Autograder renders public testcases with different statuses correctly 1
       placement="left"
       transitionDuration={100}
     >
-      <Blueprint5.Icon
+      <Blueprint6.Icon
         icon="help"
       />
-    </Blueprint5.Tooltip>
-  </Blueprint5.Button>
-  <Blueprint5.Collapse
+    </Blueprint6.Tooltip>
+  </Blueprint6.Button>
+  <Blueprint6.Collapse
     component="div"
     isOpen={true}
     keepChildrenMounted={true}
@@ -702,7 +702,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
           className="header-fn"
         >
           Testcase
-          <Blueprint5.Icon
+          <Blueprint6.Icon
             icon="caret-down"
           />
         </div>
@@ -710,7 +710,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
           className="header-expected"
         >
           Expected result
-          <Blueprint5.Icon
+          <Blueprint6.Icon
             icon="caret-down"
           />
         </div>
@@ -718,7 +718,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
           className="header-actual"
         >
           Actual result
-          <Blueprint5.Icon
+          <Blueprint6.Icon
             icon="caret-down"
           />
         </div>
@@ -810,7 +810,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
         workspaceLocation="assessment"
       />
     </div>
-  </Blueprint5.Collapse>
+  </Blueprint6.Collapse>
   <ControlButton
     icon="caret-down"
     label="Autograder Results"
@@ -822,7 +822,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
       }
     }
   />
-  <Blueprint5.Collapse
+  <Blueprint6.Collapse
     component="div"
     isOpen={true}
     keepChildrenMounted={true}
@@ -834,7 +834,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
     >
       There are no results to show.
     </div>
-  </Blueprint5.Collapse>
+  </Blueprint6.Collapse>
 </div>
 `;
 
@@ -842,7 +842,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
 <div
   className="Autograder"
 >
-  <Blueprint5.Button
+  <Blueprint6.Button
     className="collapse-button"
     icon="caret-down"
     minimal={true}
@@ -851,7 +851,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
     <span>
       Testcases
     </span>
-    <Blueprint5.Tooltip
+    <Blueprint6.Tooltip
       compact={false}
       content={
         <div
@@ -878,12 +878,12 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
       placement="left"
       transitionDuration={100}
     >
-      <Blueprint5.Icon
+      <Blueprint6.Icon
         icon="help"
       />
-    </Blueprint5.Tooltip>
-  </Blueprint5.Button>
-  <Blueprint5.Collapse
+    </Blueprint6.Tooltip>
+  </Blueprint6.Button>
+  <Blueprint6.Collapse
     component="div"
     isOpen={true}
     keepChildrenMounted={true}
@@ -900,7 +900,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
           className="header-fn"
         >
           Testcase
-          <Blueprint5.Icon
+          <Blueprint6.Icon
             icon="caret-down"
           />
         </div>
@@ -908,7 +908,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
           className="header-expected"
         >
           Expected result
-          <Blueprint5.Icon
+          <Blueprint6.Icon
             icon="caret-down"
           />
         </div>
@@ -916,7 +916,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
           className="header-actual"
         >
           Actual result
-          <Blueprint5.Icon
+          <Blueprint6.Icon
             icon="caret-down"
           />
         </div>
@@ -1008,7 +1008,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
         workspaceLocation="grading"
       />
     </div>
-  </Blueprint5.Collapse>
+  </Blueprint6.Collapse>
   <ControlButton
     icon="caret-down"
     label="Autograder Results"
@@ -1020,7 +1020,7 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
       }
     }
   />
-  <Blueprint5.Collapse
+  <Blueprint6.Collapse
     component="div"
     isOpen={true}
     keepChildrenMounted={true}
@@ -1032,6 +1032,6 @@ exports[`Autograder renders secret testcases with different statuses correctly 1
     >
       There are no results to show.
     </div>
-  </Blueprint5.Collapse>
+  </Blueprint6.Collapse>
 </div>
 `;
