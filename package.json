@@ -53,7 +53,6 @@
     "array-move": "^4.0.0",
     "browserfs": "^1.4.3",
     "classnames": "^2.3.2",
-    "conductor": "https://github.com/source-academy/conductor.git#0.2.1",
     "dayjs": "^1.11.13",
     "dompurify": "^3.2.4",
     "flexboxgrid": "^6.3.1",
@@ -67,7 +66,6 @@
     "js-slang": "^1.0.84",
     "js-yaml": "^4.1.0",
     "konva": "^9.2.0",
-    "language-directory": "https://github.com/source-academy/language-directory.git",
     "lodash": "^4.17.21",
     "lz-string": "^1.4.4",
     "mdast-util-from-markdown": "^2.0.0",
@@ -107,7 +105,6 @@
     "workbox-core": "^7.3.0",
     "workbox-precaching": "^7.3.0",
     "workbox-routing": "^7.3.0",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz",
     "xml2js": "^0.6.0",
     "yareco": "^0.1.5"
   },
