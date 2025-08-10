@@ -1,2732 +1,1514 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 1`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "208",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#999",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "height": 35,
-                "padding": 10,
-                "preventDefault": false,
-                "text": "*",
-                "width": 120,
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 20,
-          "y": 40,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={20}
+    y={40}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "Perform * on top 2 stash values",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 145,
-          "y": 45,
-        },
-        "type": "Label",
-      },
-      undefined,
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 2`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "209",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#030fff",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "height": 35,
-                "padding": 10,
-                "preventDefault": false,
-                "text": "*",
-                "width": 120,
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 20,
-          "y": 75,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={20}
+    y={75}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#030fff"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "Perform * on top 2 stash values",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 145,
-          "y": 80,
-        },
-        "type": "Label",
-      },
-      undefined,
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+    visible={false}
+    x={145}
+    y={80}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 3`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "210",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#999",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 10,
-                "preventDefault": false,
-                "text": "10",
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 140,
-          "y": 5,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={140}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="10"
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "10",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 145,
-          "y": 45,
-        },
-        "type": "Label",
-      },
-      undefined,
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="10"
+    />
+  </Label>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 4`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "211",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#ff1744",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 10,
-                "preventDefault": false,
-                "text": "9",
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 178,
-          "y": 5,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={178}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#ff1744"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="9"
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "9",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 183,
-          "y": 45,
-        },
-        "type": "Label",
-      },
-      undefined,
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+    visible={false}
+    x={183}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="9"
+    />
+  </Label>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 5`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "212",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#ff1744",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 10,
-                "preventDefault": false,
-                "text": "40320",
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 207,
-          "y": 5,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={207}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#ff1744"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="40320"
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "40320",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 212,
-          "y": 45,
-        },
-        "type": "Label",
-      },
-      undefined,
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+    visible={false}
+    x={212}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="40320"
+    />
+  </Label>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 1`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "105",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#999",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "height": 35,
-                "padding": 10,
-                "preventDefault": false,
-                "text": "call 0",
-                "width": 120,
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 20,
-          "y": 40,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={20}
+    y={40}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="call 0"
+      width={120}
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "Call function with 0 arguments",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 145,
-          "y": 45,
-        },
-        "type": "Label",
-      },
-      undefined,
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Call function with 0 arguments"
+    />
+  </Label>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 2`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "106",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#999",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "height": 35,
-                "padding": 10,
-                "preventDefault": false,
-                "text": "arr acc",
-                "width": 120,
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 20,
-          "y": 75,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={20}
+    y={75}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="arr acc"
+      width={120}
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "Access array at given index",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 145,
-          "y": 80,
-        },
-        "type": "Label",
-      },
-      undefined,
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+    visible={false}
+    x={145}
+    y={80}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Access array at given index"
+    />
+  </Label>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 3`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "107",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#999",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "height": 35,
-                "padding": 10,
-                "preventDefault": false,
-                "text": "1",
-                "width": 120,
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 20,
-          "y": 110,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={20}
+    y={110}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="1"
+      width={120}
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "1",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 145,
-          "y": 115,
-        },
-        "type": "Label",
-      },
-      undefined,
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+    visible={false}
+    x={145}
+    y={115}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="1"
+    />
+  </Label>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 4`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "111",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#999",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "height": 35,
-                "padding": 10,
-                "preventDefault": false,
-                "text": "env",
-                "width": 120,
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 20,
-          "y": 145,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={20}
+    y={145}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="env"
+      width={120}
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "Set current environment to this environment",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 145,
-          "y": 150,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    visible={false}
+    x={145}
+    y={150}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    listening={false}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": "110",
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": "108",
-              "props": {
-                "data": "M 140 162.5 L 170 240 L 170 240 ",
-                "preventDefault": false,
-                "stroke": "#999",
-                "strokeWidth": 1,
-              },
-              "type": "Path",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": "109",
-              "props": {
-                "fill": "#999",
-                "pointerWidth": 10,
-                "points": [
-                  140,
-                  162.5,
-                  170,
-                  240,
-                ],
-                "preventDefault": false,
-                "strokeEnabled": false,
-              },
-              "type": "Arrow",
-            },
-          ],
-          "listening": false,
-          "ref": {
-            "current": null,
-          },
-        },
-        "type": "Group",
-      },
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+  >
+    <Path
+      data="M 140 162.5 L 170 240 L 170 240 "
+      preventDefault={false}
+      stroke="#999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999"
+      pointerWidth={10}
+      points={
+        [
+          140,
+          162.5,
+          170,
+          240,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 5`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "112",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#999",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "height": 35,
-                "padding": 10,
-                "preventDefault": false,
-                "text": "mark",
-                "width": 120,
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 20,
-          "y": 180,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={20}
+    y={180}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="mark"
+      width={120}
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "Mark return address",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 145,
-          "y": 185,
-        },
-        "type": "Label",
-      },
-      undefined,
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+    visible={false}
+    x={145}
+    y={185}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Mark return address"
+    />
+  </Label>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 6`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "116",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#999",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "height": 35,
-                "padding": 10,
-                "preventDefault": false,
-                "text": "env",
-                "width": 120,
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 20,
-          "y": 215,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={20}
+    y={215}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="env"
+      width={120}
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "Set current environment to this environment",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 145,
-          "y": 220,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    visible={false}
+    x={145}
+    y={220}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    listening={false}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": "115",
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": "113",
-              "props": {
-                "data": "M 140 232.5 L 170 390 L 170 390 ",
-                "preventDefault": false,
-                "stroke": "#999",
-                "strokeWidth": 1,
-              },
-              "type": "Path",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": "114",
-              "props": {
-                "fill": "#999",
-                "pointerWidth": 10,
-                "points": [
-                  140,
-                  232.5,
-                  170,
-                  390,
-                ],
-                "preventDefault": false,
-                "strokeEnabled": false,
-              },
-              "type": "Arrow",
-            },
-          ],
-          "listening": false,
-          "ref": {
-            "current": null,
-          },
-        },
-        "type": "Group",
-      },
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+  >
+    <Path
+      data="M 140 232.5 L 170 390 L 170 390 "
+      preventDefault={false}
+      stroke="#999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999"
+      pointerWidth={10}
+      points={
+        [
+          140,
+          232.5,
+          170,
+          390,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 7`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "117",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#999",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "height": 35,
-                "padding": 10,
-                "preventDefault": false,
-                "text": "return ar…",
-                "width": 120,
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 20,
-          "y": 250,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={20}
+    y={250}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="return ar…"
+      width={120}
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "return arr;",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 145,
-          "y": 255,
-        },
-        "type": "Label",
-      },
-      undefined,
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+    visible={false}
+    x={145}
+    y={255}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="return arr;"
+    />
+  </Label>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 8`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "118",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#999",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "height": 35,
-                "padding": 10,
-                "preventDefault": false,
-                "text": "pop",
-                "width": 120,
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 20,
-          "y": 285,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={20}
+    y={285}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="pop"
+      width={120}
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "Pop most recently pushed value from stash",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 145,
-          "y": 290,
-        },
-        "type": "Label",
-      },
-      undefined,
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+    visible={false}
+    x={145}
+    y={290}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Pop most recently pushed value from stash"
+    />
+  </Label>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 9`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "119",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#999",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "height": 35,
-                "padding": 10,
-                "preventDefault": false,
-                "text": "while",
-                "width": 120,
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 20,
-          "y": 320,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={20}
+    y={320}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="while"
+      width={120}
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "Keep executing while loop body if predicate holds",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 145,
-          "y": 325,
-        },
-        "type": "Label",
-      },
-      undefined,
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+    visible={false}
+    x={145}
+    y={325}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Keep executing while loop body if predicate holds"
+    />
+  </Label>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 10`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "120",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#999",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "height": 35,
-                "padding": 10,
-                "preventDefault": false,
-                "text": "x < n",
-                "width": 120,
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 20,
-          "y": 355,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={20}
+    y={355}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="x < n"
+      width={120}
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "x < n",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 145,
-          "y": 360,
-        },
-        "type": "Label",
-      },
-      undefined,
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+    visible={false}
+    x={145}
+    y={360}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="x < n"
+    />
+  </Label>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 11`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "121",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#999",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "height": 35,
-                "padding": 10,
-                "preventDefault": false,
-                "text": "x = x + 1;",
-                "width": 120,
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 20,
-          "y": 390,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={20}
+    y={390}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="x = x + 1;"
+      width={120}
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "x = x + 1;",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 145,
-          "y": 395,
-        },
-        "type": "Label",
-      },
-      undefined,
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+    visible={false}
+    x={145}
+    y={395}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="x = x + 1;"
+    />
+  </Label>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 12`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "122",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#999",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "height": 35,
-                "padding": 10,
-                "preventDefault": false,
-                "text": "pop",
-                "width": 120,
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 20,
-          "y": 425,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={20}
+    y={425}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="pop"
+      width={120}
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "Pop most recently pushed value from stash",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 145,
-          "y": 430,
-        },
-        "type": "Label",
-      },
-      undefined,
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+    visible={false}
+    x={145}
+    y={430}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Pop most recently pushed value from stash"
+    />
+  </Label>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 13`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "123",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#030fff",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "height": 35,
-                "padding": 10,
-                "preventDefault": false,
-                "text": "arr[x] = …",
-                "width": 120,
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 20,
-          "y": 460,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={20}
+    y={460}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#030fff"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="arr[x] = …"
+      width={120}
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "arr[x] = () => x;",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 145,
-          "y": 465,
-        },
-        "type": "Label",
-      },
-      undefined,
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+    visible={false}
+    x={145}
+    y={465}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="arr[x] = () => x;"
+    />
+  </Label>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: global environments are treated correctly 1`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "54",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#999",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "height": 35,
-                "padding": 10,
-                "preventDefault": false,
-                "text": "math_sin(…",
-                "width": 120,
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 20,
-          "y": 40,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={20}
+    y={40}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="math_sin(…"
+      width={120}
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "math_sin(math_PI / 2);",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 145,
-          "y": 45,
-        },
-        "type": "Label",
-      },
-      undefined,
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="math_sin(math_PI / 2);"
+    />
+  </Label>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: global environments are treated correctly 2`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "58",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#999",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "height": 35,
-                "padding": 10,
-                "preventDefault": false,
-                "text": "env",
-                "width": 120,
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 20,
-          "y": 75,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={20}
+    y={75}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="env"
+      width={120}
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "Set current environment to this environment",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 145,
-          "y": 80,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    visible={false}
+    x={145}
+    y={80}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    listening={false}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": "57",
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": "55",
-              "props": {
-                "data": "M 140 92.5 L 170 105 L 170 105 ",
-                "preventDefault": false,
-                "stroke": "#999",
-                "strokeWidth": 1,
-              },
-              "type": "Path",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": "56",
-              "props": {
-                "fill": "#999",
-                "pointerWidth": 10,
-                "points": [
-                  140,
-                  92.5,
-                  170,
-                  105,
-                ],
-                "preventDefault": false,
-                "strokeEnabled": false,
-              },
-              "type": "Arrow",
-            },
-          ],
-          "listening": false,
-          "ref": {
-            "current": null,
-          },
-        },
-        "type": "Group",
-      },
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+  >
+    <Path
+      data="M 140 92.5 L 170 105 L 170 105 "
+      preventDefault={false}
+      stroke="#999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999"
+      pointerWidth={10}
+      points={
+        [
+          140,
+          92.5,
+          170,
+          105,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: global environments are treated correctly 3`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "59",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#999",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "height": 35,
-                "padding": 10,
-                "preventDefault": false,
-                "text": "pop",
-                "width": 120,
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 20,
-          "y": 110,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={20}
+    y={110}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="pop"
+      width={120}
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "Pop most recently pushed value from stash",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 145,
-          "y": 115,
-        },
-        "type": "Label",
-      },
-      undefined,
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+    visible={false}
+    x={145}
+    y={115}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Pop most recently pushed value from stash"
+    />
+  </Label>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: global environments are treated correctly 4`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "60",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#030fff",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "height": 35,
-                "padding": 10,
-                "preventDefault": false,
-                "text": "asgn math…",
-                "width": 120,
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 20,
-          "y": 145,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={20}
+    y={145}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#030fff"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="asgn math…"
+      width={120}
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "Assign value on top of stash to math_sin",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 145,
-          "y": 150,
-        },
-        "type": "Label",
-      },
-      undefined,
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+    visible={false}
+    x={145}
+    y={150}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Assign value on top of stash to math_sin"
+    />
+  </Label>
+</React.Fragment>
 `;
 
 exports[`CSE Machine Control Stash correctly renders: global environments are treated correctly 5`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": "64",
-  "props": {
-    "children": [
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "cornerRadius": 5,
-                "preventDefault": false,
-                "stroke": "#999",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 10,
-                "preventDefault": false,
-                "text": "closure",
-              },
-              "type": "Text",
-            },
-          ],
-          "onMouseEnter": [Function],
-          "onMouseLeave": [Function],
-          "ref": {
-            "current": null,
-          },
-          "x": 140,
-          "y": 5,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    x={140}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="closure"
+    />
+  </Label>
+  <Label
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": null,
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#000",
-                "opacity": 0.7,
-                "preventDefault": false,
-                "stroke": "#000",
-              },
-              "type": "Tag",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": null,
-              "props": {
-                "fill": "#999",
-                "fontFamily": "monospace, monospace",
-                "fontSize": 15,
-                "fontStyle": "normal",
-                "fontVariant": "normal",
-                "padding": 5,
-                "preventDefault": false,
-                "text": "closure",
-              },
-              "type": "Text",
-            },
-          ],
-          "ref": {
-            "current": null,
-          },
-          "visible": false,
-          "x": 145,
-          "y": 45,
-        },
-        "type": "Label",
-      },
+        "current": null,
+      }
+    }
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="closure"
+    />
+  </Label>
+  <Group
+    listening={false}
+    ref={
       {
-        "$$typeof": Symbol(react.transitional.element),
-        "_owner": null,
-        "_store": {},
-        "key": "63",
-        "props": {
-          "children": [
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": "61",
-              "props": {
-                "data": "M 181.5 40 L 379 330 L 379 330 ",
-                "preventDefault": false,
-                "stroke": "#999",
-                "strokeWidth": 1,
-              },
-              "type": "Path",
-            },
-            {
-              "$$typeof": Symbol(react.transitional.element),
-              "_owner": null,
-              "_store": {},
-              "key": "62",
-              "props": {
-                "fill": "#999",
-                "pointerWidth": 10,
-                "points": [
-                  181.5,
-                  40,
-                  379,
-                  330,
-                ],
-                "preventDefault": false,
-                "strokeEnabled": false,
-              },
-              "type": "Arrow",
-            },
-          ],
-          "listening": false,
-          "ref": {
-            "current": null,
-          },
-        },
-        "type": "Group",
-      },
-    ],
-  },
-  "type": Symbol(react.fragment),
-}
+        "current": null,
+      }
+    }
+  >
+    <Path
+      data="M 181.5 40 L 379 330 L 379 330 "
+      preventDefault={false}
+      stroke="#999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999"
+      pointerWidth={10}
+      points={
+        [
+          181.5,
+          40,
+          379,
+          330,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
 `;
 
 exports[`CSE Machine calculates correct layout for code sample 0 1`] = `

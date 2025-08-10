@@ -3,20 +3,22 @@
 exports[`Editor renders correctly 1`] = `
 <DocumentFragment>
   <div
-    class="Editor bp5-card bp5-elevation-0"
+    class="Editor bp6-card bp6-elevation-0"
   >
     <div
       class="row editor-react-ace"
       data-testid="Editor"
+      id="editor-react-ace"
     >
       <div
         class=" ace_editor ace_hidpi ace-source ace_dark react-ace"
         id="ace-editor"
-        style="width: 100%; height: 100%; font-size: 17px; font-family: 'Inconsolata', 'Consolas', monospace;"
+        style="width: 100%; height: 100%; font-size: 17px; font-family: "Inconsolata", "Consolas", monospace;"
       >
         <textarea
           aria-autocomplete="both"
           aria-haspopup="false"
+          aria-label="Cursor at row 1"
           autocapitalize="off"
           autocorrect="off"
           class="ace_text-input"
@@ -102,7 +104,16 @@ exports[`Editor renders correctly 1`] = `
             XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
           </div>
         </div>
+        <div
+          class="ace_tooltip"
+          id="gt1"
+          role="tooltip"
+          style="display: none; pointer-events: auto;"
+        />
       </div>
+      <div
+        id="ace-radar-view"
+      />
     </div>
   </div>
 </DocumentFragment>
