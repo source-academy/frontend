@@ -29,6 +29,7 @@ import {
   highlightLine,
   highlightLineForControl
 } from '../../utils/JsSlangHelper';
+import { getJsSlangContext } from '../../utils/JsSlangContextStore';
 import {
   showSuccessMessage,
   showWarningMessage
@@ -139,10 +140,15 @@ const WorkspaceSaga = combineSagaHandlers({
     const {
       activeEditorTabIndex,
       editorTabs,
-      context,
+      contextId,
       externalLibrary: extLib,
       programPrependValue: prepend
     } = yield* selectWorkspace(workspaceLocation);
+    
+    const context = getJsSlangContext(contextId);
+    if (!context) {
+      throw new Error(`Context not found for workspace ${workspaceLocation}`);
+    }
 
     const editorValue = editorTabs[activeEditorTabIndex ?? 0].value;
 
@@ -211,9 +217,13 @@ const WorkspaceSaga = combineSagaHandlers({
     yield put(actions.beginInterruptExecution(workspaceLocation));
     yield put(actions.clearReplInput(workspaceLocation));
     yield put(actions.sendReplInputToOutput(code, workspaceLocation));
-    const context: Context = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context
+    const contextId: string = yield select(
+      (state: OverallState) => state.workspaces[workspaceLocation].contextId
     );
+    const context = getJsSlangContext(contextId);
+    if (!context) {
+      throw new Error(`Context not found for workspace ${workspaceLocation}`);
+    }
     // Reset old context.errors
     context.errors = [];
     const codeFilePath = '/code.js';
@@ -242,9 +252,13 @@ const WorkspaceSaga = combineSagaHandlers({
     yield put(actions.beginInterruptExecution(workspaceLocation));
     /** Clear the context, with the same chapter and externalSymbols as before. */
     yield put(actions.clearReplOutput(workspaceLocation));
-    const context: Context = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context
+    const contextId: string = yield select(
+      (state: OverallState) => state.workspaces[workspaceLocation].contextId
     );
+    const context = getJsSlangContext(contextId);
+    if (!context) {
+      throw new Error(`Context not found for workspace ${workspaceLocation}`);
+    }
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
     const codeFilePath = '/code.js';
@@ -263,9 +277,13 @@ const WorkspaceSaga = combineSagaHandlers({
   },
   [InterpreterActions.debuggerReset.type]: function* (action) {
     const workspaceLocation = action.payload.workspaceLocation;
-    const context: Context = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context
+    const contextId: string = yield select(
+      (state: OverallState) => state.workspaces[workspaceLocation].contextId
     );
+    const context = getJsSlangContext(contextId);
+    if (!context) {
+      throw new Error(`Context not found for workspace ${workspaceLocation}`);
+    }
     yield put(actions.clearReplOutput(workspaceLocation));
     // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
     yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
@@ -318,19 +336,20 @@ const WorkspaceSaga = combineSagaHandlers({
   },
   [WorkspaceActions.chapterSelect.type]: function* (action) {
     const { workspaceLocation, chapter: newChapter, variant: newVariant } = action.payload;
-    const [oldVariant, oldChapter, symbols, globals, externalLibraryName]: [
-      Variant,
-      Chapter,
-      string[],
+    const [contextId, globals, externalLibraryName]: [
+      string,
       Array<[string, any]>,
       ExternalLibraryName
     ] = yield select((state: OverallState) => [
-      state.workspaces[workspaceLocation].context.variant,
-      state.workspaces[workspaceLocation].context.chapter,
-      state.workspaces[workspaceLocation].context.externalSymbols,
+      state.workspaces[workspaceLocation].contextId,
       state.workspaces[workspaceLocation].globals,
       state.workspaces[workspaceLocation].externalLibrary
     ]);
+    
+    const context = getJsSlangContext(contextId);
+    const oldVariant = context?.variant || Variant.DEFAULT;
+    const oldChapter = context?.chapter || Chapter.SOURCE_1;
+    const oldExternalSymbols = context?.externalSymbols || [];
 
     const chapterChanged: boolean = newChapter !== oldChapter || newVariant !== oldVariant;
     const toChangeChapter: boolean =
@@ -346,7 +365,7 @@ const WorkspaceSaga = combineSagaHandlers({
         variant: newVariant,
         external: {
           name: externalLibraryName,
-          symbols
+          symbols: oldExternalSymbols
         },
         globals
       };
@@ -374,15 +393,18 @@ const WorkspaceSaga = combineSagaHandlers({
    */
   [WorkspaceActions.externalLibrarySelect.type]: function* (action) {
     const { workspaceLocation, externalLibraryName: newExternalLibraryName } = action.payload;
-    const [chapter, globals, oldExternalLibraryName]: [
-      Chapter,
+    const [contextId, globals, oldExternalLibraryName]: [
+      string,
       Array<[string, any]>,
       ExternalLibraryName
     ] = yield select((state: OverallState) => [
-      state.workspaces[workspaceLocation].context.chapter,
+      state.workspaces[workspaceLocation].contextId,
       state.workspaces[workspaceLocation].globals,
       state.workspaces[workspaceLocation].externalLibrary
     ]);
+    
+    const context = getJsSlangContext(contextId);
+    const chapter = context?.chapter || Chapter.SOURCE_1;
     const symbols = externalLibraries.get(newExternalLibraryName)!;
     const library: Library = {
       chapter,
@@ -434,9 +456,13 @@ const WorkspaceSaga = combineSagaHandlers({
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       (state: OverallState) => state.workspaces[workspaceLocation].editorTabs[0].value
     );
-    const context: Context = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context
+    const contextId: string = yield select(
+      (state: OverallState) => state.workspaces[workspaceLocation].contextId
     );
+    const context = getJsSlangContext(contextId);
+    if (!context) {
+      throw new Error(`Context not found for workspace ${workspaceLocation}`);
+    }
 
     const result = findDeclaration(code, context, {
       line: action.payload.cursorPosition.row + 1,

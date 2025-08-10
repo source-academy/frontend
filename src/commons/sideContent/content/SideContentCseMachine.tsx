@@ -27,6 +27,7 @@ import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMa
 import { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
 import { HighlightedLines } from '../../editor/EditorTypes';
 import Constants, { Links } from '../../utils/Constants';
+import { getJsSlangContext } from '../../utils/JsSlangContextStore';
 import WorkspaceActions from '../../workspace/WorkspaceActions';
 import { beginAlertSideContent } from '../SideContentActions';
 import { getLocation } from '../SideContentHelper';
@@ -557,6 +558,9 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
     }
   }
 
+  const context = getJsSlangContext(workspace.contextId);
+  const chapter = context?.chapter || Chapter.SOURCE_1;
+  
   return {
     ...ownProps,
     stepsTotal: workspace.stepsTotal,
@@ -565,7 +569,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
     changepointSteps: workspace.changepointSteps,
     needCseUpdate: workspace.updateCse,
     machineOutput: workspace.output,
-    chapter: workspace.context.chapter
+    chapter
   };
 };
 

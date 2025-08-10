@@ -48,8 +48,8 @@ const SideContentSaga = combineSagaHandlers({
       contextId: putJsSlangContext(action.payload.context)
     };
     // Remove the original context property to avoid type conflicts
-    delete storiesDebuggerContext.context;
-    yield put(SideContentActions.spawnSideContent(`stories.${action.payload.env}`, storiesDebuggerContext));
+    const { context, ...cleanContext } = storiesDebuggerContext;
+    yield put(SideContentActions.spawnSideContent(`stories.${action.payload.env}`, cleanContext));
   }
 });
 

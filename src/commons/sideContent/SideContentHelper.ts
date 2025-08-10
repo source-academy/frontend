@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 
 import { defaultSideContent } from '../application/ApplicationTypes';
 import { useTypedSelector } from '../utils/Hooks';
+import { getJsSlangContext } from '../utils/JsSlangContextStore';
 import type { DebuggerContext } from '../workspace/WorkspaceTypes';
 import { visitSideContent } from './SideContentActions';
 import {
@@ -50,7 +51,8 @@ type RawTab = (provider: ReturnType<typeof requireProvider>) => { default: Modul
  * @param debuggerContext - DebuggerContext object from redux store
  */
 export function getDynamicTabs(debuggerContext: DebuggerContext): SideContentTab[] {
-  const moduleContexts = debuggerContext?.context?.moduleContexts;
+  const context = getJsSlangContext(debuggerContext?.contextId || '');
+  const moduleContexts = context?.moduleContexts;
 
   if (!moduleContexts) return [];
 

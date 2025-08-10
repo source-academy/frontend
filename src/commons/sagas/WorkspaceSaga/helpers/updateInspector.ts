@@ -6,14 +6,18 @@ import { OverallState } from '../../../application/ApplicationTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import { visualizeJavaCseMachine } from '../../../utils/JavaHelper';
 import { visualizeCseMachine } from '../../../utils/JsSlangHelper';
+import { getJsSlangContext } from '../../../utils/JsSlangContextStore';
 import { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 
 export function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIterator {
   try {
-    const [lastDebuggerResult, chapter] = yield select((state: OverallState) => [
+    const [lastDebuggerResult, contextId] = yield select((state: OverallState) => [
       state.workspaces[workspaceLocation].lastDebuggerResult,
-      state.workspaces[workspaceLocation].context.chapter
+      state.workspaces[workspaceLocation].contextId
     ]);
+    
+    const context = getJsSlangContext(contextId);
+    const chapter = context?.chapter || Chapter.SOURCE_1;
     if (chapter === Chapter.FULL_JAVA) {
       const controlItem = lastDebuggerResult.context.control.peek();
       let start = -1;
