@@ -6,8 +6,6 @@ import { AnimatableTo, AnimationConfig } from '../animationComponents/base/Anima
 import { AnimationComponent } from '../animationComponents/base/AnimationComponents';
 import { CseAnimation } from '../CseMachineAnimation';
 
-jest.setTimeout(10000);
-
 const mockStage = new Konva.Stage({
   container: document.createElement('div'),
   width: 500,
