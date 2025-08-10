@@ -3,7 +3,7 @@ import { Group as KonvaGroup, Label as KonvaLabel, Text as KonvaText } from 'rea
 
 import { Visible } from '../../components/Visible';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
-import { defaultTextColor, getTextWidth } from '../../CseMachineUtils';
+import { getTextWidth, reachedTextColor } from '../../CseMachineUtils';
 import { CseMachine } from '../CseMachine';
 
 /** this class encapsulates a string to be drawn onto the canvas */
@@ -37,7 +37,7 @@ export class Text extends Visible {
       fontFamily: Config.FontFamily,
       fontSize: Config.FontSize,
       fontStyle: Config.FontStyle,
-      fill: defaultTextColor()
+      fill: reachedTextColor()
     };
 
     return (

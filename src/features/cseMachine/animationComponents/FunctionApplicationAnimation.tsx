@@ -9,8 +9,8 @@ import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import {
   defaultActiveColor,
   defaultDangerColor,
-  defaultStrokeColor,
-  getTextWidth
+  getTextWidth,
+  reachedStrokeColor
 } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
@@ -99,13 +99,13 @@ export class FunctionApplicationAnimation extends Animatable {
       getTextWidth(this.callInstrItem.text) + ControlStashConfig.ControlItemTextPadding * 2;
     // Move call instruction next to stash items
     await Promise.all([
-      this.callInstrAnimation.animateRectTo({ stroke: defaultStrokeColor() }),
+      this.callInstrAnimation.animateRectTo({ stroke: reachedStrokeColor() }),
       this.callInstrAnimation.animateTo({
         x: this.closureStashItem.x() - (this.isFirstStashItem ? minInstrWidth : 0),
         y: this.closureStashItem.y() + (this.isFirstStashItem ? 0 : this.closureStashItem.height()),
         width: minInstrWidth
       }),
-      ...this.stashItemAnimations.map(a => a.animateRectTo({ stroke: defaultStrokeColor() }))
+      ...this.stashItemAnimations.map(a => a.animateRectTo({ stroke: reachedStrokeColor() }))
     ]);
     const targetLocation = {
       x: this.functionFrame?.x() ?? this.newControlItems[0].x(),
