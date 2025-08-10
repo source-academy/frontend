@@ -37,7 +37,7 @@ const renderTab = (tab: SideContentTab, isIOS: boolean) => {
       }}
     >
       <div className="side-content-tooltip" id={generateIconId(tabId)}>
-        <Icon icon={tab.iconName} iconSize={iconSize} />
+        <Icon icon={tab.iconName} size={iconSize} />
       </div>
     </Tooltip>
   );

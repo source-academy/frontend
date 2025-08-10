@@ -226,14 +226,14 @@ const Assessment: React.FC = () => {
             <div className="listing-footer">
               <div>
                 <Text className="listing-due-date">
-                  <Icon className="listing-due-icon" iconSize={12} icon={IconNames.CALENDAR} />
+                  <Icon className="listing-due-icon" size={12} icon={IconNames.CALENDAR} />
                   {`${beforeNow(overview.openAt) ? 'Opened' : 'Opens'}: ${getPrettyDate(
                     overview.openAt
                   )}`}
                 </Text>
                 {beforeNow(overview.openAt) && (
                   <Text className="listing-due-date">
-                    <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
+                    <Icon className="listing-due-icon" size={12} icon={IconNames.TIME} />
                     {`Due: ${getPrettyDate(overview.closeAt)}`}
                   </Text>
                 )}

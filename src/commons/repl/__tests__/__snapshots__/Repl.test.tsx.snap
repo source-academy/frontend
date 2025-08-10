@@ -1,202 +1,210 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Code output renders correctly 1`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": null,
-  "props": {
-    "output": {
-      "type": "code",
-      "value": "display('');",
-    },
-  },
-  "type": [Function],
-}
+<Blueprint6.Card>
+  <ForwardRef
+    className="code-output"
+  >
+    display('');
+  </ForwardRef>
+</Blueprint6.Card>
 `;
 
 exports[`Empty output renders an empty card 1`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": null,
-  "props": {
-    "output": {},
-  },
-  "type": [Function],
-}
+<Blueprint6.Card>
+  ''
+</Blueprint6.Card>
 `;
 
 exports[`Error output (no consoleLogs) renders correctly 1`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": null,
-  "props": {
-    "output": {
-      "consoleLogs": [],
-      "errors": [
-        TypeError {
-          "chapter": 4,
-          "expected": "",
-          "got": "",
-          "location": {
-            "end": {
-              "column": -1,
-              "line": -1,
-            },
-            "start": {
-              "column": -1,
-              "line": -1,
-            },
-          },
-          "severity": "Error",
-          "side": "",
-          "type": "Runtime",
-        },
-      ],
-      "type": "errors",
-    },
-  },
-  "type": [Function],
-}
+<Blueprint6.Card>
+  <ForwardRef
+    className="error-output"
+  >
+    Expected , got .
+  </ForwardRef>
+</Blueprint6.Card>
 `;
 
 exports[`Error output (with consoleLogs) renders correctly 1`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": null,
-  "props": {
-    "output": {
-      "consoleLogs": [
-        "a",
-        "bb",
-        "cccccccccccccccccccccccccccccccc",
-        "d",
-      ],
-      "errors": [
-        TypeError {
-          "chapter": 4,
-          "expected": "",
-          "got": "",
-          "location": {
-            "end": {
-              "column": -1,
-              "line": -1,
-            },
-            "start": {
-              "column": -1,
-              "line": -1,
-            },
-          },
-          "severity": "Error",
-          "side": "",
-          "type": "Runtime",
-        },
-      ],
-      "type": "errors",
-    },
-  },
-  "type": [Function],
-}
+<Blueprint6.Card>
+  <ForwardRef
+    className="log-output"
+  >
+    a
+bb
+cccccccccccccccccccccccccccccccc
+d
+  </ForwardRef>
+  <br />
+  <ForwardRef
+    className="error-output"
+  >
+    Expected , got .
+  </ForwardRef>
+</Blueprint6.Card>
 `;
 
 exports[`Repl renders correctly 1`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": null,
-  "props": {
-    "externalLibrary": "NONE",
-    "handleBrowseHistoryDown": [Function],
-    "handleBrowseHistoryUp": [Function],
-    "handleReplEval": [Function],
-    "handleReplOutputClear": [Function],
-    "handleReplValueChange": [Function],
-    "output": [
-      {
-        "consoleLogs": [],
-        "type": "result",
-        "value": 42,
-      },
-      {
-        "type": "code",
-        "value": "display('');",
-      },
-      {
-        "consoleLogs": [],
-        "errors": [
-          TypeError {
-            "chapter": 4,
-            "expected": "",
-            "got": "",
-            "location": {
-              "end": {
-                "column": -1,
-                "line": -1,
+<div
+  className="Repl"
+  style={
+    {
+      "display": undefined,
+    }
+  }
+>
+  <div
+    className="repl-output-parent"
+  >
+    <Output
+      isHtml={false}
+      output={
+        {
+          "consoleLogs": [],
+          "type": "result",
+          "value": 42,
+        }
+      }
+      usingSubst={false}
+    />
+    <Output
+      isHtml={false}
+      output={
+        {
+          "type": "code",
+          "value": "display('');",
+        }
+      }
+      usingSubst={false}
+    />
+    <Output
+      isHtml={false}
+      output={
+        {
+          "consoleLogs": [],
+          "errors": [
+            TypeError {
+              "chapter": 4,
+              "expected": "",
+              "got": "",
+              "location": {
+                "end": {
+                  "column": -1,
+                  "line": -1,
+                },
+                "start": {
+                  "column": -1,
+                  "line": -1,
+                },
               },
-              "start": {
-                "column": -1,
-                "line": -1,
-              },
+              "severity": "Error",
+              "side": "",
+              "type": "Runtime",
             },
-            "severity": "Error",
-            "side": "",
-            "type": "Runtime",
-          },
-        ],
-        "type": "errors",
-      },
-      {
-        "consoleLogs": [
-          "a",
-          "bb",
-          "cccccccccccccccccccccccccccccccc",
-          "d",
-        ],
-        "type": "running",
-      },
-    ],
-    "replButtons": [],
-    "replValue": "",
-    "sourceChapter": 1,
-    "sourceVariant": "default",
-  },
-  "type": [Function],
-}
+          ],
+          "type": "errors",
+        }
+      }
+      usingSubst={false}
+    />
+    <Output
+      isHtml={false}
+      output={
+        {
+          "consoleLogs": [
+            "a",
+            "bb",
+            "cccccccccccccccccccccccccccccccc",
+            "d",
+          ],
+          "type": "running",
+        }
+      }
+      usingSubst={false}
+    />
+    <Blueprint6.Card
+      className="repl-input-parent row"
+    >
+      <ReplInput
+        externalLibrary="NONE"
+        handleBrowseHistoryDown={[Function]}
+        handleBrowseHistoryUp={[Function]}
+        handleReplEval={[Function]}
+        handleReplOutputClear={[Function]}
+        handleReplValueChange={[Function]}
+        output={
+          [
+            {
+              "consoleLogs": [],
+              "type": "result",
+              "value": 42,
+            },
+            {
+              "type": "code",
+              "value": "display('');",
+            },
+            {
+              "consoleLogs": [],
+              "errors": [
+                TypeError {
+                  "chapter": 4,
+                  "expected": "",
+                  "got": "",
+                  "location": {
+                    "end": {
+                      "column": -1,
+                      "line": -1,
+                    },
+                    "start": {
+                      "column": -1,
+                      "line": -1,
+                    },
+                  },
+                  "severity": "Error",
+                  "side": "",
+                  "type": "Runtime",
+                },
+              ],
+              "type": "errors",
+            },
+            {
+              "consoleLogs": [
+                "a",
+                "bb",
+                "cccccccccccccccccccccccccccccccc",
+                "d",
+              ],
+              "type": "running",
+            },
+          ]
+        }
+        replButtons={[]}
+        replValue=""
+        sourceChapter={1}
+        sourceVariant="default"
+      />
+    </Blueprint6.Card>
+  </div>
+</div>
 `;
 
 exports[`Result output (no consoleLogs) renders correctly 1`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": null,
-  "props": {
-    "output": {
+<ResultOutputDisplay
+  output={
+    {
       "consoleLogs": [],
       "type": "result",
       "value": 42,
-    },
-  },
-  "type": [Function],
-}
+    }
+  }
+/>
 `;
 
 exports[`Result output (with consoleLogs) renders correctly 1`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": null,
-  "props": {
-    "output": {
+<ResultOutputDisplay
+  output={
+    {
       "consoleLogs": [
         "a",
         "bb",
@@ -205,29 +213,20 @@ exports[`Result output (with consoleLogs) renders correctly 1`] = `
       ],
       "type": "result",
       "value": 42,
-    },
-  },
-  "type": [Function],
-}
+    }
+  }
+/>
 `;
 
 exports[`Running output renders correctly 1`] = `
-{
-  "$$typeof": Symbol(react.transitional.element),
-  "_owner": null,
-  "_store": {},
-  "key": null,
-  "props": {
-    "output": {
-      "consoleLogs": [
-        "a",
-        "bb",
-        "cccccccccccccccccccccccccccccccc",
-        "d",
-      ],
-      "type": "running",
-    },
-  },
-  "type": [Function],
-}
+<Blueprint6.Card>
+  <ForwardRef
+    className="log-output"
+  >
+    a
+bb
+cccccccccccccccccccccccccccccccc
+d
+  </ForwardRef>
+</Blueprint6.Card>
 `;
