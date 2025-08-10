@@ -13,6 +13,7 @@ import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { showSimpleConfirmDialog, showSimplePromptDialog } from '../utils/DialogHelper';
+import { getJsSlangContext } from '../utils/JsSlangContextStore';
 import {
   dismiss,
   showMessage,
@@ -118,15 +119,18 @@ const PersistenceSaga = combineSagaHandlers({
       try {
         yield call(ensureInitialisedAndAuthorised);
 
-        const [activeEditorTabIndex, editorTabs, chapter, variant, external] = yield select(
+        const [activeEditorTabIndex, editorTabs, contextId, external] = yield select(
           (state: OverallState) => [
             state.workspaces.playground.activeEditorTabIndex,
             state.workspaces.playground.editorTabs,
-            state.workspaces.playground.context.chapter,
-            state.workspaces.playground.context.variant,
+            state.workspaces.playground.contextId,
             state.workspaces.playground.externalLibrary
           ]
         );
+        
+        const context = getJsSlangContext(contextId);
+        const chapter = context?.chapter || Constants.defaultSourceChapter;
+        const variant = context?.variant || Constants.defaultSourceVariant;
 
         if (activeEditorTabIndex === null) {
           throw new Error('No active editor tab found.');
@@ -249,9 +253,13 @@ const PersistenceSaga = combineSagaHandlers({
       const {
         activeEditorTabIndex,
         editorTabs,
-        context: { chapter, variant },
+        contextId,
         externalLibrary: external
       } = yield* selectWorkspace('playground');
+      
+      const context = getJsSlangContext(contextId);
+      const chapter = context?.chapter || Constants.defaultSourceChapter;
+      const variant = context?.variant || Constants.defaultSourceVariant;
 
       if (activeEditorTabIndex === null) {
         throw new Error('No active editor tab found.');

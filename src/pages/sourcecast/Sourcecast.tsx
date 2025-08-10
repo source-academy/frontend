@@ -10,6 +10,8 @@ import { Position } from 'src/commons/editor/EditorTypes';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
+import { useJsSlangContext } from 'src/commons/workspace/hooks/useJsSlangContext';
+import Constants from 'src/commons/utils/Constants';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import { fetchSourcecastIndex } from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
@@ -74,12 +76,15 @@ const Sourcecast: React.FC = () => {
     playbackStatus,
     replValue,
     sourcecastIndex,
-    context: { chapter: sourceChapter, variant: sourceVariant },
     uid,
     isFolderModeEnabled,
     activeEditorTabIndex,
     editorTabs
   } = useTypedSelector(store => store.workspaces[workspaceLocation]);
+  
+  const context = useJsSlangContext(workspaceLocation);
+  const sourceChapter = context?.chapter || Constants.defaultSourceChapter;
+  const sourceVariant = context?.variant || Constants.defaultSourceVariant;
   const courseId = useTypedSelector(store => store.session.courseId);
 
   const dispatch = useDispatch();

@@ -37,6 +37,8 @@ import SourceRecorderControlBar, {
 } from '../../../commons/sourceRecorder/SourceRecorderControlBar';
 import SourcecastTable from '../../../commons/sourceRecorder/SourceRecorderTable';
 import { useTypedSelector } from '../../../commons/utils/Hooks';
+import { useJsSlangContext } from '../../../commons/workspace/hooks/useJsSlangContext';
+import Constants from '../../../commons/utils/Constants';
 import Workspace, { WorkspaceProps } from '../../../commons/workspace/Workspace';
 import WorkspaceActions from '../../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
@@ -60,9 +62,9 @@ const Sourcereel: React.FC = () => {
   );
 
   const courseId = useTypedSelector(state => state.session.courseId);
-  const { chapter: sourceChapter, variant: sourceVariant } = useTypedSelector(
-    state => state.workspaces[workspaceLocation].context
-  );
+  const context = useJsSlangContext(workspaceLocation);
+  const sourceChapter = context?.chapter || Constants.defaultSourceChapter;
+  const sourceVariant = context?.variant || Constants.defaultSourceVariant;
   const {
     audioUrl,
     currentPlayerTime,

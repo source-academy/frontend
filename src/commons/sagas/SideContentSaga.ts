@@ -5,6 +5,7 @@ import StoriesActions from 'src/features/stories/StoriesActions';
 import { combineSagaHandlers } from '../redux/utils';
 import SideContentActions from '../sideContent/SideContentActions';
 import { SideContentType } from '../sideContent/SideContentTypes';
+import { putJsSlangContext } from '../utils/JsSlangContextStore';
 import WorkspaceActions from '../workspace/WorkspaceActions';
 
 const isSpawnSideContent = (
@@ -34,7 +35,7 @@ const SideContentSaga = combineSagaHandlers({
       result: action.payload.result,
       lastDebuggerResult: action.payload.lastDebuggerResult,
       code: action.payload.code,
-      context: action.payload.context,
+      contextId: putJsSlangContext(action.payload.context),
       workspaceLocation: action.payload.workspaceLocation
     };
     yield put(
@@ -42,7 +43,13 @@ const SideContentSaga = combineSagaHandlers({
     );
   },
   [StoriesActions.notifyStoriesEvaluated.type]: function* (action) {
-    yield put(SideContentActions.spawnSideContent(`stories.${action.payload.env}`, action.payload));
+    const storiesDebuggerContext = {
+      ...action.payload,
+      contextId: putJsSlangContext(action.payload.context)
+    };
+    // Remove the original context property to avoid type conflicts
+    delete storiesDebuggerContext.context;
+    yield put(SideContentActions.spawnSideContent(`stories.${action.payload.env}`, storiesDebuggerContext));
   }
 });
 

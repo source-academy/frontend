@@ -1,5 +1,4 @@
 import type { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
-import type { Context } from 'js-slang';
 
 import type {
   AllColsSortStates,
@@ -79,7 +78,7 @@ export type EditorTabState = {
 
 export type WorkspaceState = {
   readonly autogradingResults: AutogradingResult[];
-  readonly context: Context;
+  readonly contextId: string;
   readonly isFolderModeEnabled: boolean;
   readonly activeEditorTabIndex: number | null;
   readonly editorTabs: EditorTabState[];
@@ -120,7 +119,7 @@ export type DebuggerContext = {
   result: any;
   lastDebuggerResult: any;
   code: string;
-  context: Context;
+  contextId: string;
   workspaceLocation?: WorkspaceLocation;
 };
 

@@ -27,6 +27,8 @@ import makeUploadTabFrom from 'src/commons/sideContent/content/SideContentUpload
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
+import { useJsSlangContext } from 'src/commons/workspace/hooks/useJsSlangContext';
+import Constants from 'src/commons/utils/Constants';
 import {
   showFullJSWarningOnUrlLoad,
   showFulTSWarningOnUrlLoad,
@@ -221,9 +223,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
     usingSubst,
     usingCse,
     isFolderModeEnabled,
-    activeEditorTabIndex,
-    context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant }
+    activeEditorTabIndex
   } = useTypedSelector(state => state.workspaces[workspaceLocation]);
+  
+  const context = useJsSlangContext(workspaceLocation);
+  const playgroundSourceChapter = context?.chapter || Constants.defaultSourceChapter;
+  const playgroundSourceVariant = context?.variant || Constants.defaultSourceVariant;
   const fileSystem = useTypedSelector(state => state.fileSystem.inBrowserFileSystem);
   const { queryString, shortURL, persistenceFile, githubSaveInfo } = useTypedSelector(
     state => state.playground
