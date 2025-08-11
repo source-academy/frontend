@@ -4,7 +4,7 @@ import {
   ReposInApi
 } from '../../../features/contributors/ContributorsTypes';
 
-const apiRepoDetails: string = 'https://api.github.com/orgs/source-academy/repos?per_page=100';
+const apiRepoDetails: string = 'https://api.github.com/orgs/source-academy/repos?per_page=59';
 const ignoreRepos: string[] = ['assessments', 'tools', 'source-academy2'];
 const ignoreContributors: string[] = [
   'dependabot[bot]',
