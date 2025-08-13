@@ -239,10 +239,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    */
   useEffect(() => {
     checkWorkspaceReset();
-    if (assessment != undefined && question.type == 'voting') {
-      dispatch(LeaderboardActions.setWorkspaceInitialRun(votingId));
-    }
-  }, [dispatch, assessment]);
+  });
 
   /**
    * Handles toggling enabling and disabling token counter depending on assessment properties
@@ -386,6 +383,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         options.programPrependValue = votingQuestionData.prepend;
         if (props.fromContestLeaderboard) options.editorValue = code;
         options.programPostpendValue = votingQuestionData.postpend;
+        // maybe the following dispatch can be placed in a better location
+        dispatch(LeaderboardActions.setWorkspaceInitialRun(votingId));
         break;
       case QuestionTypes.mcq:
         // Do nothing
