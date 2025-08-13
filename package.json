@@ -145,7 +145,7 @@
     "@types/redux-mock-store": "^1.0.3",
     "@types/showdown": "^2.0.1",
     "@types/xml2js": "^0.4.11",
-    "@vitejs/plugin-react-swc": "^3.11.0",
+    "@vitejs/plugin-react-swc": "^4.0.0",
     "@vitest/coverage-v8": "3.2.4",
     "@vitest/ui": "^3.2.4",
     "buffer": "^6.0.3",
