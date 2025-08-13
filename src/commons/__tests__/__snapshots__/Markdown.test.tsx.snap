@@ -2,7 +2,7 @@
 
 exports[`Markdown page renders correctly 1`] = `
 <div
-  className="md bp5-running-text"
+  className="md bp6-running-text"
   dangerouslySetInnerHTML={
     {
       "__html": "<p>Welcome to the Source Academy playground!</p>

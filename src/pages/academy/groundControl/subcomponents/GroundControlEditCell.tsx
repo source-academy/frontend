@@ -1,5 +1,5 @@
 import { Dialog, DialogBody, DialogFooter, Intent } from '@blueprintjs/core';
-import { DateInput3 } from '@blueprintjs/datetime2';
+import { DateInput } from '@blueprintjs/datetime';
 import { IconNames } from '@blueprintjs/icons';
 import dayjs from 'dayjs';
 import React, { useCallback, useState } from 'react';
@@ -62,7 +62,7 @@ const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDa
   }, [currentDate]);
 
   const dateInput = (
-    <DateInput3
+    <DateInput
       formatDate={handleFormatDate}
       onChange={handleDateChange}
       onError={handleDateError}

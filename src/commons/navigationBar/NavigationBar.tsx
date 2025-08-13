@@ -269,7 +269,7 @@ const NavigationBar: React.FC = () => {
 
   const commonNavbarRight = (
     <NavbarGroup align={Alignment.RIGHT}>
-      {location.pathname.startsWith('/playground') && <NavigationBarLangSelectButton />}
+      <NavigationBarLangSelectButton />
       <NavLink
         className={({ isActive }) =>
           classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
@@ -313,7 +313,7 @@ const NavigationBar: React.FC = () => {
       </Navbar>
 
       <Routes>
-        <Route path="/playground" element={null} />
+        <Route path="/playground/*" element={null} />
         <Route path="/contributors" element={null} />
         <Route path="/courses/:courseId/sourcecast" element={null} />
         <Route path="/courses/:courseId/achievements" element={null} />
