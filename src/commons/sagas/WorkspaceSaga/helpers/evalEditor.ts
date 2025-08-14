@@ -9,6 +9,7 @@ import type { OverallState } from '../../../application/ApplicationTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../../../fileSystem/utils';
 import { actions } from '../../../utils/ActionsHelper';
 import { makeElevatedContext } from '../../../utils/JsSlangHelper';
+import { getJsSlangContext } from '../../../utils/JsSlangContextStore';
 import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import { selectWorkspace } from '../../SafeEffects';
 import { blockExtraMethods } from './blockExtraMethods';
@@ -58,9 +59,13 @@ export function* evalEditorSaga(
     const entrypointCode = files[entrypointFilePath];
     yield* clearContext(workspaceLocation, entrypointCode);
     yield put(actions.clearReplOutput(workspaceLocation));
-    const context = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context
+    const contextId = yield select(
+      (state: OverallState) => state.workspaces[workspaceLocation].contextId
     );
+    const context = getJsSlangContext(contextId);
+    if (!context) {
+      throw new Error(`Context not found for workspace ${workspaceLocation}`);
+    }
 
     // Insert debugger statements at the lines of the program with a breakpoint.
     for (const editorTab of editorTabs) {

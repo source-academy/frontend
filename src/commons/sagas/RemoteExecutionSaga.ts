@@ -26,6 +26,7 @@ import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';
 import type { MaybePromise } from '../utils/TypeHelper';
+import { getJsSlangContext } from '../utils/JsSlangContextStore';
 import { fetchDevices, getDeviceWSEndpoint } from './RequestsSaga';
 
 const dummyLocation = {
@@ -271,9 +272,13 @@ const RemoteExecutionSaga = combineSagaHandlers({
     yield put(actions.clearReplOutput(session.workspace));
 
     const client = session.connection.client;
-    const context: Context = yield select(
-      (state: OverallState) => state.workspaces[session.workspace].context
+    const contextId: string = yield select(
+      (state: OverallState) => state.workspaces[session.workspace].contextId
     );
+    const context = getJsSlangContext(contextId);
+    if (!context) {
+      throw new Error('Context not found');
+    }
     // clear the context of errors (note: the way this works is that the context
     // is mutated by js-slang anyway, so it's ok to do it like this)
     context.errors.length = 0;

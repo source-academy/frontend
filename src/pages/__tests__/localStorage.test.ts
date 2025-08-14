@@ -1,6 +1,8 @@
 import { compressToUTF16 } from 'lz-string';
 
 import { defaultState } from '../../commons/application/ApplicationTypes';
+import { getJsSlangContext } from '../../commons/utils/JsSlangContextStore';
+import Constants from '../../commons/utils/Constants';
 import { loadStoredState, SavedState, saveState } from '../localStorage';
 
 const mockShortDefaultState: SavedState = {
@@ -34,8 +36,14 @@ const mockShortDefaultState: SavedState = {
   },
   playgroundEditorTabs: defaultState.workspaces.playground.editorTabs,
   playgroundIsEditorAutorun: defaultState.workspaces.playground.isEditorAutorun,
-  playgroundSourceChapter: defaultState.workspaces.playground.context.chapter,
-  playgroundSourceVariant: defaultState.workspaces.playground.context.variant,
+  playgroundSourceChapter: (() => {
+    const context = getJsSlangContext(defaultState.workspaces.playground.contextId);
+    return context?.chapter || Constants.defaultSourceChapter;
+  })(),
+  playgroundSourceVariant: (() => {
+    const context = getJsSlangContext(defaultState.workspaces.playground.contextId);
+    return context?.variant || Constants.defaultSourceVariant;
+  })(),
   playgroundLanguage: defaultState.playground.languageConfig,
   playgroundExternalLibrary: defaultState.workspaces.playground.externalLibrary,
   stories: {

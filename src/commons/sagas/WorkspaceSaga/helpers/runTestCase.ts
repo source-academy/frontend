@@ -5,6 +5,7 @@ import { call, put, select, StrictEffect } from 'redux-saga/effects';
 import type { OverallState } from '../../../application/ApplicationTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import { makeElevatedContext } from '../../../utils/JsSlangHelper';
+import { getJsSlangContext } from '../../../utils/JsSlangContextStore';
 import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import { selectWorkspace } from '../../SafeEffects';
 import { blockExtraMethods } from './blockExtraMethods';
@@ -39,9 +40,13 @@ export function* runTestCase(
    *  But, do not persist this context to the workspace state - this prevent students from using
    *  this elevated context to run dis-allowed code beyond the current chapter from the REPL
    */
-  const context: Context<any> = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].context
+  const contextId: string = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].contextId
   );
+  const context = getJsSlangContext(contextId);
+  if (!context) {
+    throw new Error(`Context not found for workspace ${workspaceLocation}`);
+  }
 
   // Execute prepend silently in privileged context
   const elevatedContext = makeElevatedContext(context);

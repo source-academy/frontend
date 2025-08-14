@@ -6,6 +6,8 @@ import { OverallState, SALanguage } from '../commons/application/ApplicationType
 import { ExternalLibraryName } from '../commons/application/types/ExternalTypes';
 import { SessionState } from '../commons/application/types/SessionTypes';
 import { showWarningMessage } from '../commons/utils/notifications/NotificationsHelper';
+import { getJsSlangContext } from '../commons/utils/JsSlangContextStore';
+import Constants from '../commons/utils/Constants';
 import { EditorTabState } from '../commons/workspace/WorkspaceTypes';
 import { AchievementItem } from '../features/achievement/AchievementTypes';
 
@@ -85,8 +87,14 @@ export const saveState = (state: OverallState) => {
       },
       playgroundEditorTabs: state.workspaces.playground.editorTabs,
       playgroundIsEditorAutorun: state.workspaces.playground.isEditorAutorun,
-      playgroundSourceChapter: state.workspaces.playground.context.chapter,
-      playgroundSourceVariant: state.workspaces.playground.context.variant,
+      playgroundSourceChapter: (() => {
+        const context = getJsSlangContext(state.workspaces.playground.contextId);
+        return context?.chapter || Constants.defaultSourceChapter;
+      })(),
+      playgroundSourceVariant: (() => {
+        const context = getJsSlangContext(state.workspaces.playground.contextId);
+        return context?.variant || Constants.defaultSourceVariant;
+      })(),
       playgroundLanguage: state.playground.languageConfig,
       playgroundExternalLibrary: state.workspaces.playground.externalLibrary,
       stories: {

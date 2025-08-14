@@ -21,6 +21,7 @@ import {
 } from '../collabEditing/CollabEditingActions';
 import type { SourceActionType } from '../utils/ActionsHelper';
 import { createContext } from '../utils/JsSlangHelper';
+import { putJsSlangContext } from '../utils/JsSlangContextStore';
 import { handleCseAndStepperActions } from './reducers/cseReducer';
 import { handleDebuggerActions } from './reducers/debuggerReducer';
 import { handleEditorActions } from './reducers/editorReducer';
@@ -95,12 +96,12 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          context: createContext<WorkspaceLocation>(
+          contextId: putJsSlangContext(createContext<WorkspaceLocation>(
             action.payload.library.chapter,
             action.payload.library.external.symbols,
             workspaceLocation,
             action.payload.library.variant
-          ),
+          )),
           globals: action.payload.library.globals,
           externalLibrary: action.payload.library.external.name
         }
@@ -360,10 +361,11 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       };
     })
     .addCase(WorkspaceActions.updateSublanguage, (state, action) => {
-      // TODO: Mark for removal
-      const { chapter, variant } = action.payload.sublang;
-      state.playground.context.chapter = chapter;
-      state.playground.context.variant = variant;
+      // TODO: Mark for removal - this functionality needs to be updated
+      // to work with the new context store or removed entirely
+      // const { chapter, variant } = action.payload.sublang;
+      // state.playground.context.chapter = chapter;
+      // state.playground.context.variant = variant;
     })
     .addCase(WorkspaceActions.notifyProgramEvaluated, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
@@ -371,7 +373,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       debuggerContext.result = action.payload.result;
       debuggerContext.lastDebuggerResult = action.payload.lastDebuggerResult;
       debuggerContext.code = action.payload.code;
-      debuggerContext.context = action.payload.context;
+      debuggerContext.contextId = putJsSlangContext(action.payload.context);
       debuggerContext.workspaceLocation = action.payload.workspaceLocation;
     })
     .addCase(WorkspaceActions.toggleUsingUpload, (state, action) => {

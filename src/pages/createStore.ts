@@ -8,6 +8,9 @@ import { defaultState, OverallState } from '../commons/application/ApplicationTy
 import rootReducer from '../commons/application/reducers/RootReducer';
 import MainSaga from '../commons/sagas/MainSaga';
 import { generateOctokitInstance } from '../commons/utils/GitHubPersistenceHelper';
+import { createContext } from '../commons/utils/JsSlangHelper';
+import { putJsSlangContext } from '../commons/utils/JsSlangContextStore';
+import Constants from '../commons/utils/Constants';
 import { loadStoredState, SavedState, saveState } from './localStorage';
 
 // FIXME: Hotfix: Disable auto freezing of states for RTK as this breaks the code evaluation sagas
@@ -75,15 +78,12 @@ function loadStore(loadedStore: SavedState | undefined) {
         externalLibrary: loadedStore.playgroundExternalLibrary
           ? loadedStore.playgroundExternalLibrary
           : defaultState.workspaces.playground.externalLibrary,
-        context: {
-          ...defaultState.workspaces.playground.context,
-          chapter: loadedStore.playgroundSourceChapter
-            ? loadedStore.playgroundSourceChapter
-            : defaultState.workspaces.playground.context.chapter,
-          variant: loadedStore.playgroundSourceVariant
-            ? loadedStore.playgroundSourceVariant
-            : defaultState.workspaces.playground.context.variant
-        }
+        contextId: putJsSlangContext(createContext(
+          loadedStore.playgroundSourceChapter || Constants.defaultSourceChapter,
+          [],
+          'playground',
+          loadedStore.playgroundSourceVariant || Constants.defaultSourceVariant
+        ))
       }
     },
     stories: {

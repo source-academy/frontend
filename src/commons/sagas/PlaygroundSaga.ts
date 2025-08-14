@@ -1,4 +1,3 @@
-import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { Chapter } from 'js-slang/dist/types';
 import { compressToEncodedURIComponent } from 'lz-string';
 import qs from 'query-string';
@@ -13,6 +12,8 @@ import {
   type OverallState
 } from '../application/ApplicationTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
+import Constants from '../utils/Constants';
+import { getJsSlangContext } from '../utils/JsSlangContextStore';
 import { combineSagaHandlers } from '../redux/utils';
 import SideContentActions from '../sideContent/SideContentActions';
 import { SideContentType } from '../sideContent/SideContentTypes';
@@ -66,9 +67,12 @@ const PlaygroundSaga = combineSagaHandlers({
     }
 
     const {
-      context: { chapter: playgroundSourceChapter },
+      contextId,
       editorTabs
     } = yield* selectWorkspace('playground');
+    
+    const context = getJsSlangContext(contextId);
+    const playgroundSourceChapter = context?.chapter || Constants.defaultSourceChapter;
 
     if (prevId === SideContentType.substVisualizer) {
       if (newId === SideContentType.mobileEditorRun) return;
@@ -131,12 +135,16 @@ function* updateQueryString() {
 
   const {
     activeEditorTabIndex,
-    context: { chapter, variant },
+    contextId,
     editorTabs,
     execTime,
     externalLibrary: external,
     isFolderModeEnabled
   } = yield* selectWorkspace('playground');
+  
+  const context = getJsSlangContext(contextId);
+  const chapter = context?.chapter || Constants.defaultSourceChapter;
+  const variant = context?.variant || Constants.defaultSourceVariant;
 
   const editorTabFilePaths = editorTabs
     .map(editorTab => editorTab.filePath)

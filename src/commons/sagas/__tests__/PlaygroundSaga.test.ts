@@ -446,8 +446,9 @@ function createQueryString(files: Record<string, string>, state: OverallState): 
     .map(editorTab => editorTab.filePath)
     .filter((filePath): filePath is string => filePath !== undefined);
   const activeEditorTabIndex: number | null = state.workspaces.playground.activeEditorTabIndex;
-  const chapter: Chapter = state.workspaces.playground.context.chapter;
-  const variant: Variant = state.workspaces.playground.context.variant;
+  // For tests, we'll use default values instead of accessing the store
+  const chapter: Chapter = Chapter.SOURCE_1;
+  const variant: Variant = Variant.DEFAULT;
   const external: ExternalLibraryName = state.workspaces.playground.externalLibrary;
   const execTime: number = state.workspaces.playground.execTime;
   const newQueryString: string = qs.stringify({

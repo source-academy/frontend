@@ -13,6 +13,7 @@ import type { FileSystemState } from '../fileSystem/FileSystemTypes';
 import type { SideContentManagerState, SideContentState } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
+import { putJsSlangContext } from '../utils/JsSlangContextStore';
 import type {
   DebuggerContext,
   WorkspaceLocation,
@@ -384,12 +385,12 @@ export const defaultEditorValue = '// Type your program in here!';
  */
 export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): WorkspaceState => ({
   autogradingResults: [],
-  context: createContext<WorkspaceLocation>(
+  contextId: putJsSlangContext(createContext<WorkspaceLocation>(
     Constants.defaultSourceChapter,
     [],
     workspaceLocation,
     Constants.defaultSourceVariant
-  ),
+  )),
   isFolderModeEnabled: false,
   activeEditorTabIndex: 0,
   editorTabs: [
@@ -427,7 +428,18 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   isRunning: false,
   isDebugging: false,
   enableDebugging: true,
-  debuggerContext: {} as DebuggerContext,
+  debuggerContext: {
+    result: undefined,
+    lastDebuggerResult: undefined,
+    code: '',
+    contextId: putJsSlangContext(createContext<string>(
+      Constants.defaultSourceChapter,
+      [],
+      'debugger',
+      Constants.defaultSourceVariant
+    )),
+    workspaceLocation: workspaceLocation
+  },
   lastDebuggerResult: undefined,
   files: {},
   updateUserRoleCallback: () => {}

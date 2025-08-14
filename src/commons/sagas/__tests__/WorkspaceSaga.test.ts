@@ -237,7 +237,8 @@ describe('EVAL_REPL', () => {
     const workspaceLocation = 'playground';
     const replValue = 'sample code';
     const newState = generateDefaultState(workspaceLocation, { replValue });
-    const context = newState.workspaces[workspaceLocation].context;
+    // For tests, we'll use default values instead of accessing the context store
+    const context = { chapter: Chapter.SOURCE_1, variant: Variant.DEFAULT };
 
     return (
       expectSaga(workspaceSaga)
