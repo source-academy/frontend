@@ -154,10 +154,10 @@ const Assessment: React.FC = () => {
     const isOverviewUpcoming = (overview: AssessmentOverview) =>
       !beforeNow(overview.closeAt) && !beforeNow(overview.openAt);
     const upcomingCards = sortAssessments(assessmentOverviews.filter(isOverviewUpcoming)).map(
-      (overview, index) => (
+      overview => (
         <AssessmentOverviewCard
+          key={overview.id}
           overview={overview}
-          index={index}
           renderAttemptButton={role !== Role.Student}
           renderGradingTooltip={false}
           makeSubmissionButton={makeSubmissionButton}
@@ -172,10 +172,10 @@ const Assessment: React.FC = () => {
       overview.status !== AssessmentStatuses.submitted;
     const openedCards = sortAssessments(
       assessmentOverviews.filter(overview => isOverviewOpened(overview))
-    ).map((overview, index) => (
+    ).map(overview => (
       <AssessmentOverviewCard
+        key={overview.id}
         overview={overview}
-        index={index}
         renderAttemptButton
         renderGradingTooltip={false}
         makeSubmissionButton={makeSubmissionButton}
@@ -187,10 +187,10 @@ const Assessment: React.FC = () => {
       assessmentOverviews.filter(
         overview => !isOverviewOpened(overview) && !isOverviewUpcoming(overview)
       )
-    ).map((overview, index) => (
+    ).map(overview => (
       <AssessmentOverviewCard
+        key={overview.id}
         overview={overview}
-        index={index}
         renderAttemptButton
         renderGradingTooltip
         makeSubmissionButton={makeSubmissionButton}

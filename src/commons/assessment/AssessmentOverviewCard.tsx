@@ -15,11 +15,6 @@ import { AssessmentOverview } from './AssessmentTypes';
 type AssessmentOverviewCardProps = {
   /** The assessment overview to display */
   overview: AssessmentOverview;
-  /**
-   * A unique number for this card (required for sequential rendering).
-   * See {@link https://reactjs.org/docs/lists-and-keys.html#keys}
-   */
-  index: number;
   /** Will only render the attempt button if true, regardless of attempt status. */
   renderAttemptButton: boolean;
   renderGradingTooltip: boolean;
@@ -29,14 +24,13 @@ type AssessmentOverviewCardProps = {
 /** A card to display `AssessmentOverview`s. */
 const AssessmentOverviewCard: React.FC<AssessmentOverviewCardProps> = ({
   overview,
-  index,
   renderAttemptButton,
   renderGradingTooltip,
   makeSubmissionButton
 }) => {
   const { isMobileBreakpoint } = useResponsive();
   return (
-    <div key={index}>
+    <div>
       <Card className="row listing" elevation={Elevation.ONE}>
         <div className={classNames('listing-picture', !isMobileBreakpoint && 'col-xs-3')}>
           <NotificationBadge
@@ -53,7 +47,6 @@ const AssessmentOverviewCard: React.FC<AssessmentOverviewCardProps> = ({
         <div className={classNames('listing-text', !isMobileBreakpoint && 'col-xs-9')}>
           <AssessmentOverviewCardTitle
             overview={overview}
-            index={index}
             renderProgressStatus={renderGradingTooltip}
             makeSubmissionButton={makeSubmissionButton}
           />
@@ -110,14 +103,12 @@ const AssessmentOverviewCard: React.FC<AssessmentOverviewCardProps> = ({
 
 type AssessmentOverviewCardTitleProps = {
   overview: AssessmentOverview;
-  index: number;
   renderProgressStatus: boolean;
   makeSubmissionButton: (overview: AssessmentOverview) => JSX.Element;
 };
 
 const AssessmentOverviewCardTitle: React.FC<AssessmentOverviewCardTitleProps> = ({
   overview,
-  index,
   renderProgressStatus,
   makeSubmissionButton
 }) => (
