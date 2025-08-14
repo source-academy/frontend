@@ -89,7 +89,7 @@ const Assessment: React.FC = () => {
         disabled={overview.status !== AssessmentStatuses.attempted}
         icon={IconNames.CONFIRM}
         intent={overview.status === AssessmentStatuses.attempted ? Intent.DANGER : Intent.NONE}
-        minimal={true}
+        variant="minimal"
         // intentional: each listing renders its own version of onClick
         // tslint:disable-next-line:jsx-no-lambda
         onClick={() => setBetchaAssessment(overview)}
