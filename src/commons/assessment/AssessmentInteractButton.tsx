@@ -27,7 +27,7 @@ const AssessmentInteractButton: React.FC<Props> = ({ overview }) => {
     >
       <Button
         icon={icon}
-        minimal={true}
+        variant="minimal"
         onClick={() =>
           dispatch(
             SessionActions.acknowledgeNotifications(filterNotificationsByAssessment(overview.id))
