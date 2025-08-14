@@ -79,7 +79,7 @@ const Assessment: React.FC = () => {
 
   const sortAssessments = (assessments: AssessmentOverview[]) => sortBy(assessments, [a => -a.id]);
 
-  const makeSubmissionButton = (overview: AssessmentOverview, index: number) => (
+  const makeSubmissionButton = (overview: AssessmentOverview) => (
     <Tooltip
       disabled={overview.status === AssessmentStatuses.attempted}
       content={'You can finalize after saving an answer for each question!'}

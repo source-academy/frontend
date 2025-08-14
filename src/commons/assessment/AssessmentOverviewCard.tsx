@@ -23,7 +23,7 @@ type AssessmentOverviewCardProps = {
   /** Will only render the attempt button if true, regardless of attempt status. */
   renderAttemptButton: boolean;
   renderGradingTooltip: boolean;
-  makeSubmissionButton: (overview: AssessmentOverview, index: number) => JSX.Element;
+  makeSubmissionButton: (overview: AssessmentOverview) => JSX.Element;
 };
 
 /** A card to display `AssessmentOverview`s. */
@@ -112,7 +112,7 @@ type AssessmentOverviewCardTitleProps = {
   overview: AssessmentOverview;
   index: number;
   renderProgressStatus: boolean;
-  makeSubmissionButton: (overview: AssessmentOverview, index: number) => JSX.Element;
+  makeSubmissionButton: (overview: AssessmentOverview) => JSX.Element;
 };
 
 const AssessmentOverviewCardTitle: React.FC<AssessmentOverviewCardTitleProps> = ({
@@ -136,7 +136,7 @@ const AssessmentOverviewCardTitle: React.FC<AssessmentOverviewCardTitleProps> = 
         {renderProgressStatus ? showGradingTooltip(overview.isGradingPublished) : null}
       </H4>
     </Text>
-    <div className="listing-button">{makeSubmissionButton(overview, index)}</div>
+    <div className="listing-button">{makeSubmissionButton(overview)}</div>
   </div>
 );
 
