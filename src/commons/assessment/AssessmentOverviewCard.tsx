@@ -1,31 +1,16 @@
-import {
-  Button,
-  Card,
-  Elevation,
-  H4,
-  H6,
-  Icon,
-  Intent,
-  Position,
-  Text,
-  Tooltip
-} from '@blueprintjs/core';
+import { Card, Elevation, H4, H6, Icon, Intent, Position, Text, Tooltip } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { useDispatch } from 'react-redux';
-import { NavLink } from 'react-router';
 import classes from 'src/styles/Academy.module.scss';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
-import SessionActions from '../application/actions/SessionActions';
 import Markdown from '../Markdown';
 import NotificationBadge from '../notificationBadge/NotificationBadge';
 import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
-import Constants from '../utils/Constants';
 import { beforeNow, getPrettyDate, getPrettyDateAfterHours } from '../utils/DateHelper';
-import { useResponsive, useTypedSelector } from '../utils/Hooks';
-import { assessmentTypeLink } from '../utils/ParamParseHelper';
-import { AssessmentOverview, AssessmentStatuses } from './AssessmentTypes';
+import { useResponsive } from '../utils/Hooks';
+import AssessmentInteractButton from './AssessmentInteractButton';
+import { AssessmentOverview } from './AssessmentTypes';
 
 type AssessmentOverviewCardProps = {
   /** The assessment overview to display */
@@ -41,9 +26,7 @@ type AssessmentOverviewCardProps = {
   makeSubmissionButton: (overview: AssessmentOverview, index: number) => JSX.Element;
 };
 
-/**
- * A card to display `AssessmentOverview`s.
- */
+/** A card to display `AssessmentOverview`s. */
 const AssessmentOverviewCard: React.FC<AssessmentOverviewCardProps> = ({
   overview,
   index,
@@ -156,67 +139,6 @@ const AssessmentOverviewCardTitle: React.FC<AssessmentOverviewCardTitleProps> = 
     <div className="listing-button">{makeSubmissionButton(overview, index)}</div>
   </div>
 );
-
-type AssessmentInteractButtonProps = {
-  overview: AssessmentOverview;
-};
-
-const AssessmentInteractButton: React.FC<AssessmentInteractButtonProps> = ({ overview }) => {
-  let icon: IconName;
-  let label: string;
-  let optionalLabel: string = '';
-
-  switch (overview.status) {
-    case AssessmentStatuses.not_attempted:
-      icon = IconNames.PLAY;
-      label = 'Attempt';
-      break;
-    case AssessmentStatuses.attempting:
-      icon = IconNames.PLAY;
-      label = 'Continue';
-      optionalLabel = ' Attempt';
-      break;
-    case AssessmentStatuses.attempted:
-      icon = IconNames.EDIT;
-      label = 'Review';
-      optionalLabel = ' Attempt';
-      break;
-    case AssessmentStatuses.submitted:
-      icon = IconNames.EYE_OPEN;
-      label = 'Review';
-      optionalLabel = ' Submission';
-      break;
-    default:
-      // If we reach this case, backend data did not fit IAssessmentOverview
-      icon = IconNames.PLAY;
-      label = 'Review';
-      break;
-  }
-
-  const courseId = useTypedSelector(state => state.session.courseId);
-  const dispatch = useDispatch();
-
-  return (
-    <NavLink
-      to={`/courses/${courseId}/${assessmentTypeLink(overview.type)}/${overview.id.toString()}/${
-        Constants.defaultQuestionId
-      }`}
-    >
-      <Button
-        icon={icon}
-        minimal={true}
-        onClick={() =>
-          dispatch(
-            SessionActions.acknowledgeNotifications(filterNotificationsByAssessment(overview.id))
-          )
-        }
-      >
-        <span data-testid="Assessment-Attempt-Button">{label}</span>
-        <span className="custom-hidden-xxxs">{optionalLabel}</span>
-      </Button>
-    </NavLink>
-  );
-};
 
 const showGradingTooltip = (isGradingPublished: boolean) => {
   let iconName: IconName;
