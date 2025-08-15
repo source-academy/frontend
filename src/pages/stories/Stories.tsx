@@ -1,6 +1,7 @@
 import { Button, InputGroup, NonIdealState } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
@@ -23,6 +24,7 @@ const columns = [
 ];
 
 const Stories: React.FC = () => {
+  const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -35,16 +37,16 @@ const Stories: React.FC = () => {
   const handleDeleteStory = useCallback(
     async (id: number) => {
       const confirm = await showSimpleConfirmDialog({
-        contents: <p>Are you sure you want to delete this story?</p>,
+        contents: <p>{t('stories.deleteConfirmation')}</p>,
         positiveIntent: 'danger',
-        positiveLabel: 'Delete'
+        positiveLabel: t('stories.delete')
       });
       if (confirm) {
         dispatch(StoriesActions.deleteStory(id));
         // deleteStory will auto-refresh the list of stories after
       }
     },
-    [dispatch]
+    [dispatch, t]
   );
 
   const storyList = useTypedSelector(state => state.stories.storyList);
