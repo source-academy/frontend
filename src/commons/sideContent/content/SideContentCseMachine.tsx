@@ -124,8 +124,6 @@ const SideContentCseMachineBase: React.FC<Props> = props => {
     };
   }, [handleResize]);
 
-  // TODO: STOPPED CHECKING HERE
-
   useEffect(() => {
     if (isJava()) {
       JavaCseMachine.init(setVisualization, (segments: [number, number][]) => {
