@@ -3259,6 +3259,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git":
+  version: 0.0.2
+  resolution: "@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#commit=e2cef7eac0ba31d9f7ceaff4a9d20ed7738f52f2"
+  checksum: 10c0/cac2185b3d78330de190ac58d786093940982f194991a6088c41b83dfbffbe37191d1746db104542902ce5128e00892ae4051b292df312f40997c8720b88c1d8
+  languageName: node
+  linkType: hard
+
 "@sourceacademy/sharedb-ace@npm:2.1.1":
   version: 2.1.1
   resolution: "@sourceacademy/sharedb-ace@npm:2.1.1"
@@ -7545,6 +7552,7 @@ __metadata:
     "@rsbuild/plugin-svgr": "npm:^1.2.0"
     "@sentry/browser": "npm:^8.33.0"
     "@sourceacademy/c-slang": "npm:^1.0.21"
+    "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git"
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
     "@svgr/webpack": "npm:^8.0.0"
