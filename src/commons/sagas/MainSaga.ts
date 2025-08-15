@@ -6,6 +6,7 @@ import Constants from '../utils/Constants';
 import AchievementSaga from './AchievementSaga';
 import BackendSaga from './BackendSaga';
 import GitHubPersistenceSaga from './GitHubPersistenceSaga';
+import LanguageDirectorySaga from './LanguageDirectorySaga';
 import LeaderboardSaga from './LeaderboardSaga';
 import LoginSaga from './LoginSaga';
 import PersistenceSaga from './PersistenceSaga';
@@ -16,17 +17,18 @@ import StoriesSaga from './StoriesSaga';
 import WorkspaceSaga from './WorkspaceSaga';
 
 export default function* MainSaga(): SagaIterator {
-  yield all([
-    fork(Constants.useBackend ? BackendSaga : mockBackendSaga),
-    fork(WorkspaceSaga),
-    fork(LoginSaga),
-    fork(PlaygroundSaga),
-    fork(AchievementSaga),
-    fork(LeaderboardSaga),
-    fork(PersistenceSaga),
-    fork(GitHubPersistenceSaga),
-    fork(RemoteExecutionSaga),
-    fork(StoriesSaga),
-    fork(SideContentSaga)
-  ]);
+	yield all([
+		fork(Constants.useBackend ? BackendSaga : mockBackendSaga),
+		fork(WorkspaceSaga),
+		fork(LoginSaga),
+		fork(PlaygroundSaga),
+		fork(AchievementSaga),
+		fork(LeaderboardSaga),
+		fork(PersistenceSaga),
+		fork(GitHubPersistenceSaga),
+		fork(RemoteExecutionSaga),
+		fork(StoriesSaga),
+		fork(SideContentSaga),
+		fork(LanguageDirectorySaga)
+	]);
 }
