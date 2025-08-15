@@ -353,63 +353,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
             this.state.visualization
           )
         ) : (
-          <div
-            id="cse-machine-default-text"
-            className={Classes.RUNNING_TEXT}
-            data-testid="cse-machine-default-text"
-          >
-            {this.isJava() ? (
-              <span>
-                The CSEC machine generates control, stash, environment and class model diagrams
-                adapted from the notation introduced in{' '}
-                <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
-                  <i>
-                    Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter
-                    3, Section 2
-                  </i>
-                </a>
-                {'. '}
-                You have chosen the sublanguage{' '}
-                <a href={`${Links.sourceDocs}java_csec/`} rel="noopener noreferrer" target="_blank">
-                  <i>Java CSEC</i>
-                </a>
-              </span>
-            ) : (
-              <span>
-                The CSE machine generates control, stash and environment model diagrams following a
-                notation introduced in{' '}
-                <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
-                  <i>
-                    Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter
-                    3, Section 2
-                  </i>
-                </a>
-              </span>
-            )}
-            .
-            <br />
-            <br /> On this tab, the REPL will be hidden from view, so do check that your code has no
-            errors before running the stepper. You may use this tool by running your program and
-            then dragging the slider above to see the state of the control, stash and environment at
-            different stages in the evaluation of your program. Clicking on the fast-forward button
-            (double chevron) will take you to the next breakpoint in your program
-            <br />
-            <br />
-            <Divider />
-            Some useful keyboard shortcuts:
-            <br />
-            <br />
-            a: Move to the first step
-            <br />
-            e: Move to the last step
-            <br />
-            f: Move to the next step
-            <br />
-            b: Move to the previous step
-            <br />
-            <br />
-            Note that these shortcuts are only active when the browser focus is on this tab.
-          </div>
+          <CseMachineDefaultText isJava={this.isJava()} />
         )}
         <ButtonGroup
           vertical={true}
@@ -601,5 +545,67 @@ const makeCseMachineTabFrom = (location: NonStoryWorkspaceLocation): SideContent
   body: <SideContentCseMachine workspaceLocation={location} />,
   id: SideContentType.cseMachine
 });
+
+const CseMachineDefaultText: React.FC<{ isJava: boolean }> = ({ isJava }) => {
+  return (
+    <div
+      id="cse-machine-default-text"
+      className={Classes.RUNNING_TEXT}
+      data-testid="cse-machine-default-text"
+    >
+      {isJava ? (
+        <span>
+          The CSEC machine generates control, stash, environment and class model diagrams adapted
+          from the notation introduced in{' '}
+          <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
+            <i>
+              Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3,
+              Section 2
+            </i>
+          </a>
+          {'. '}
+          You have chosen the sublanguage{' '}
+          <a href={`${Links.sourceDocs}java_csec/`} rel="noopener noreferrer" target="_blank">
+            <i>Java CSEC</i>
+          </a>
+        </span>
+      ) : (
+        <span>
+          The CSE machine generates control, stash and environment model diagrams following a
+          notation introduced in{' '}
+          <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
+            <i>
+              Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3,
+              Section 2
+            </i>
+          </a>
+        </span>
+      )}
+      .
+      <br />
+      <br /> On this tab, the REPL will be hidden from view, so do check that your code has no
+      errors before running the stepper. You may use this tool by running your program and then
+      dragging the slider above to see the state of the control, stash and environment at different
+      stages in the evaluation of your program. Clicking on the fast-forward button (double chevron)
+      will take you to the next breakpoint in your program
+      <br />
+      <br />
+      <Divider />
+      Some useful keyboard shortcuts:
+      <br />
+      <br />
+      a: Move to the first step
+      <br />
+      e: Move to the last step
+      <br />
+      f: Move to the next step
+      <br />
+      b: Move to the previous step
+      <br />
+      <br />
+      Note that these shortcuts are only active when the browser focus is on this tab.
+    </div>
+  );
+};
 
 export default makeCseMachineTabFrom;
