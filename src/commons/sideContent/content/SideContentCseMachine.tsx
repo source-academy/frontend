@@ -95,7 +95,7 @@ const SideContentCseMachineBase: React.FC<Props> = props => {
   const [value, setValue] = useState(-1);
   const [width, setWidth] = useState(calculateWidth(props.editorWidth));
   const [height, setHeight] = useState(calculateHeight(props.sideContentHeight));
-  const [lastStep, setLastStep] = useState(false);
+  const [, setLastStep] = useState(false);
   const [stepLimitExceeded, setStepLimitExceeded] = useState(false);
 
   const isJava = useCallback(() => props.chapter === Chapter.FULL_JAVA, [props.chapter]);
