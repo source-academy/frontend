@@ -1,0 +1,8 @@
+{
+  "welcome": {
+    "title": "欢迎来到 {{sourceAcademyDeploymentName}}",
+    "loggedInMessage": "您已登录为 <strong>{{name}}</strong>。{{sourceAcademyDeploymentName}}",
+    "resourcesForLearners": "点击 <a href='{{resourcesForLearners}}'>此处</a> 查找适合您的课程。",
+    "resourcesForEducators": "点击 <a href='{{resourcesForEducators}}'>此处</a> 获取资源列表以开始。"
+  }
+}

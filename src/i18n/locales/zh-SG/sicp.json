@@ -1,0 +1,12 @@
+{
+  "sicp": {
+    "originalAuthors": "{{originalAuthors}}",
+    "originalAuthorsNote": "— 原作者",
+    "adaptedAuthors": "{{adaptedAuthors}}",
+    "adaptedAuthorsNote": "— JavaScript 适配者",
+    "developers": "{{developers}}",
+    "developersNote": "— 此交互式 SICP JS 版本的设计者和开发者",
+    "title": "计算机程序的构造和解释",
+    "javascriptEdition": "— JavaScript 版"
+  }
+}
