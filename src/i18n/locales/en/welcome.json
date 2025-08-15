@@ -1,0 +1,9 @@
+{
+  "welcome": {
+    "title": "Welcome to {{sourceAcademyDeploymentName}}",
+    "loggedInMessage": "You have logged in as <strong>{{name}}</strong>. {{sourceAcademyDeploymentName}}",
+    "resourcesForLearners": "Click <a href='{{resourcesForLearners}}'>here</a> to find a course that suits your needs.",
+    "resourcesForEducators": "Click <a href='{{resourcesForEducators}}'>here</a> for a list of resources to get started.",
+    "missingTranslation": "Sorry, translation is not available for this content."
+  }
+}
