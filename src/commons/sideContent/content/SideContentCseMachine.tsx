@@ -144,17 +144,6 @@ const SideContentCseMachineBase: React.FC<Props> = ({
     }
   }, [isJava, handleAlertSideContent, width, height, setEditorHighlightedLines]);
 
-  useEffect(() => {
-    if (props.needCseUpdate) {
-      stepFirst();
-      if (isJava()) {
-        JavaCseMachine.clearCse();
-      } else {
-        CseMachine.clearCse();
-      }
-    }
-  }, [props.needCseUpdate, isJava]);
-
   const sliderRelease = useCallback(
     (newValue: number) => {
       handleEditorEval();
@@ -250,6 +239,17 @@ const SideContentCseMachineBase: React.FC<Props> = ({
     sliderShift(0);
     sliderRelease(0);
   }, [props.changepointSteps, value, sliderShift, sliderRelease]);
+
+  useEffect(() => {
+    if (props.needCseUpdate) {
+      stepFirst();
+      if (isJava()) {
+        JavaCseMachine.clearCse();
+      } else {
+        CseMachine.clearCse();
+      }
+    }
+  }, [props.needCseUpdate, isJava, stepFirst]);
 
   const zoomStage = useCallback(
     (isZoomIn: boolean, multiplier: number) => {
