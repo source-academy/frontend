@@ -1,0 +1,8 @@
+{
+  "defaultText": "The data visualizer helps you to visualize data structures.",
+  "instructions": "It is activated by calling the function draw_data(x₁, x₂, ... xₙ), where xₖ would be the kᵗʰ data structure that you want to visualize and n is the number of structures.",
+  "reference": "The data visualizer uses box-and-pointer diagrams, as introduced in Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 2, Section 2.",
+  "label": "Data Visualizer",
+  "previous": "Previous",
+  "next": "Next"
+}

@@ -3,7 +3,15 @@ import grading from './grading.json';
 import login from './login.json';
 import sessionManagement from './sessionManagement.json';
 import sicp from './sicp.json';
+import autograder from './sideContent/autograder.json';
+import contestLeaderboard from './sideContent/contestLeaderboard.json';
+import contestVoting from './sideContent/contestVoting.json';
+import cseMachine from './sideContent/cseMachine.json';
+import dataVisualizer from './sideContent/dataVisualizer.json';
+import faceapiDisplay from './sideContent/faceapiDisplay.json';
+import htmlDisplay from './sideContent/htmlDisplay.json';
 import substVisualizer from './sideContent/substVisualizer.json';
+import upload from './sideContent/upload.json';
 import sourcecast from './sourcecast.json';
 import sourceRecorder from './sourceRecorder.json';
 import stories from './stories.json';
@@ -22,6 +30,14 @@ export default {
     ...welcome
   },
   sideContent: {
-    substVisualizer
+    autograder,
+    contestLeaderboard,
+    contestVoting,
+    cseMachine,
+    dataVisualizer,
+    faceapiDisplay,
+    htmlDisplay,
+    substVisualizer,
+    upload
   }
 };
