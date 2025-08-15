@@ -45,7 +45,7 @@ import { beginAlertSideContent } from '../SideContentActions';
 import { SideContentLocation, SideContentType } from '../SideContentTypes';
 
 const SubstDefaultText = () => {
-  const { t } = useTranslation('translation', { keyPrefix: 'substVisualizer' });
+  const { t } = useTranslation('sideContent', { keyPrefix: 'substVisualizer' });
   return (
     <div>
       <div id="substituter-default-text" className={Classes.RUNNING_TEXT}>

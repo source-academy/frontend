@@ -3,10 +3,10 @@ import grading from './grading.json';
 import login from './login.json';
 import sessionManagement from './sessionManagement.json';
 import sicp from './sicp.json';
+import substVisualizer from './sideContent/substVisualizer.json';
 import sourcecast from './sourcecast.json';
 import sourceRecorder from './sourceRecorder.json';
 import stories from './stories.json';
-import substVisualizer from './substVisualizer.json';
 import welcome from './welcome.json';
 
 export default {
@@ -19,7 +19,9 @@ export default {
     ...sourcecast,
     ...sourceRecorder,
     ...stories,
-    ...substVisualizer,
     ...welcome
+  },
+  sideContent: {
+    substVisualizer
   }
 };
