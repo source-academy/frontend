@@ -93,7 +93,6 @@ const SideContentCseMachineBase: React.FC<Props> = ({
   const [value, setValue] = useState(-1);
   const [width, setWidth] = useState(calculateWidth());
   const [height, setHeight] = useState(calculateHeight(props.sideContentHeight));
-  const [, setLastStep] = useState(false);
   const [stepLimitExceeded, setStepLimitExceeded] = useState(false);
 
   const isJava = useCallback(() => props.chapter === Chapter.FULL_JAVA, [props.chapter]);
@@ -158,10 +157,9 @@ const SideContentCseMachineBase: React.FC<Props> = ({
 
   const sliderRelease = useCallback(
     (newValue: number) => {
-      setLastStep(newValue === props.stepsTotal);
       handleEditorEval();
     },
-    [handleEditorEval, props.stepsTotal]
+    [handleEditorEval]
   );
 
   const sliderShift = useCallback(
