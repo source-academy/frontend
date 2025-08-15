@@ -10,6 +10,7 @@ import cseMachine from './sideContent/cseMachine.json';
 import dataVisualizer from './sideContent/dataVisualizer.json';
 import faceapiDisplay from './sideContent/faceapiDisplay.json';
 import htmlDisplay from './sideContent/htmlDisplay.json';
+import resultCard from './sideContent/resultCard.json';
 import substVisualizer from './sideContent/substVisualizer.json';
 import upload from './sideContent/upload.json';
 import sourcecast from './sourcecast.json';
@@ -37,6 +38,7 @@ export default {
     dataVisualizer,
     faceapiDisplay,
     htmlDisplay,
+    resultCard,
     substVisualizer,
     upload
   }
