@@ -33,7 +33,6 @@ import { getLocation } from '../SideContentHelper';
 import { NonStoryWorkspaceLocation, SideContentTab, SideContentType } from '../SideContentTypes';
 
 type StateProps = {
-  editorWidth?: string;
   sideContentHeight?: number;
   stepsTotal: number;
   currentStep: number;
@@ -61,15 +60,7 @@ type DispatchProps = {
 const calculateWidth = (editorWidth?: string) => {
   const horizontalPadding = 50;
   const maxWidth = 5000; // limit for visible diagram width for huge screens
-  let width;
-  if (editorWidth === undefined) {
-    width = window.innerWidth - horizontalPadding;
-  } else {
-    width = Math.min(
-      maxWidth,
-      (window.innerWidth * (100 - parseFloat(editorWidth))) / 100 - horizontalPadding
-    );
-  }
+  const width = window.innerWidth - horizontalPadding;
   return Math.min(width, maxWidth);
 };
 
@@ -91,6 +82,7 @@ const calculateHeight = (sideContentHeight?: number) => {
 type Props = OwnProps & StateProps & DispatchProps;
 
 const SideContentCseMachineBase: React.FC<Props> = ({
+  // DispatchProps
   handleStepUpdate,
   handleEditorEval,
   setEditorHighlightedLines,
@@ -99,7 +91,7 @@ const SideContentCseMachineBase: React.FC<Props> = ({
 }) => {
   const [visualization, setVisualization] = useState<React.ReactNode>(null);
   const [value, setValue] = useState(-1);
-  const [width, setWidth] = useState(calculateWidth(props.editorWidth));
+  const [width, setWidth] = useState(calculateWidth());
   const [height, setHeight] = useState(calculateHeight(props.sideContentHeight));
   const [, setLastStep] = useState(false);
   const [stepLimitExceeded, setStepLimitExceeded] = useState(false);
@@ -109,7 +101,7 @@ const SideContentCseMachineBase: React.FC<Props> = ({
   const handleResize = useMemo(
     () =>
       debounce(() => {
-        const newWidth = calculateWidth(props.editorWidth);
+        const newWidth = calculateWidth();
         const newHeight = calculateHeight(props.sideContentHeight);
         if (newWidth !== width || newHeight !== height) {
           setWidth(newWidth);
@@ -117,7 +109,7 @@ const SideContentCseMachineBase: React.FC<Props> = ({
           CseMachine.updateDimensions(newWidth, newHeight);
         }
       }, 300),
-    [props.editorWidth, props.sideContentHeight, width, height]
+    [props.sideContentHeight, width, height]
   );
 
   useEffect(() => {
