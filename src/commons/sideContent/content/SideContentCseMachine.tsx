@@ -12,9 +12,11 @@ import { IconNames } from '@blueprintjs/icons';
 import { HotkeyItem } from '@mantine/hooks';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import classNames from 'classnames';
+import { t } from 'i18next';
 import { Chapter } from 'js-slang/dist/types';
 import { debounce } from 'lodash';
 import React from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
 import { Output } from 'src/commons/repl/Repl';
@@ -540,13 +542,22 @@ export const SideContentCseMachine = connect(
 )(SideContentCseMachineBase);
 
 const makeCseMachineTabFrom = (location: NonStoryWorkspaceLocation): SideContentTab => ({
-  label: 'CSE Machine',
+  label: t('sideContent:cseMachine.label'),
   iconName: IconNames.GLOBE,
   body: <SideContentCseMachine workspaceLocation={location} />,
   id: SideContentType.cseMachine
 });
 
+const ItalicLink: React.FC<{ href: string; children?: React.ReactNode }> = ({ href, children }) => {
+  return (
+    <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
+      <i>{children}</i>
+    </a>
+  );
+};
+
 const CseMachineDefaultText: React.FC<{ isJava: boolean }> = ({ isJava }) => {
+  const { t } = useTranslation('sideContent', { keyPrefix: 'cseMachine' });
   return (
     <div
       id="cse-machine-default-text"
@@ -555,55 +566,45 @@ const CseMachineDefaultText: React.FC<{ isJava: boolean }> = ({ isJava }) => {
     >
       {isJava ? (
         <span>
-          The CSEC machine generates control, stash, environment and class model diagrams adapted
-          from the notation introduced in{' '}
-          <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
-            <i>
-              Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3,
-              Section 2
-            </i>
-          </a>
-          {'. '}
-          You have chosen the sublanguage{' '}
-          <a href={`${Links.sourceDocs}java_csec/`} rel="noopener noreferrer" target="_blank">
-            <i>Java CSEC</i>
-          </a>
+          <Trans
+            ns="sideContent"
+            i18nKey="cseMachine.csecDescription"
+            components={[<ItalicLink href={Links.textbookChapter3_2} />]}
+          />{' '}
+          <Trans
+            ns="sideContent"
+            i18nKey="cseMachine.javaCsec"
+            components={[<ItalicLink href={`${Links.sourceDocs}java_csec/`} />]}
+          />
         </span>
       ) : (
         <span>
-          The CSE machine generates control, stash and environment model diagrams following a
-          notation introduced in{' '}
-          <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
-            <i>
-              Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3,
-              Section 2
-            </i>
-          </a>
+          <Trans
+            ns="sideContent"
+            i18nKey="cseMachine.cseDescription"
+            components={[<ItalicLink href={Links.textbookChapter3_2} />]}
+          />
         </span>
       )}
-      .
       <br />
-      <br /> On this tab, the REPL will be hidden from view, so do check that your code has no
-      errors before running the stepper. You may use this tool by running your program and then
-      dragging the slider above to see the state of the control, stash and environment at different
-      stages in the evaluation of your program. Clicking on the fast-forward button (double chevron)
-      will take you to the next breakpoint in your program
+      <br />
+      {t('instructions')}
       <br />
       <br />
       <Divider />
-      Some useful keyboard shortcuts:
+      {t('shortcutsTitle')}
       <br />
       <br />
-      a: Move to the first step
+      {t('shortcuts.a')}
       <br />
-      e: Move to the last step
+      {t('shortcuts.e')}
       <br />
-      f: Move to the next step
+      {t('shortcuts.f')}
       <br />
-      b: Move to the previous step
+      {t('shortcuts.b')}
       <br />
       <br />
-      Note that these shortcuts are only active when the browser focus is on this tab.
+      {t('shortcutsNote')}
     </div>
   );
 };

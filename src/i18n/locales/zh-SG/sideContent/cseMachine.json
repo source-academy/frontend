@@ -1,9 +1,9 @@
 {
   "maxStepsExceeded": "超出最大步骤数。",
   "increaseStepLimit": "如果您希望查看进一步的评估，请增加步骤限制。",
-  "csecDescription": "CSEC 机器生成控制、存储、环境和类模型图，这些图基于《计算机程序的构造和解释，JavaScript 版》第 3 章第 2 节中介绍的符号。",
-  "javaCsec": "您已选择子语言 Java CSEC。",
-  "cseDescription": "CSE 机器生成控制、存储和环境模型图，这些图基于《计算机程序的构造和解释，JavaScript 版》第 3 章第 2 节中介绍的符号。",
+  "csecDescription": "CSEC 机器生成控制、存储、环境和类模型图，这些图基于<0>《计算机程序的构造和解释，JavaScript 版》第 3 章第 2 节</0>中介绍的符号。",
+  "javaCsec": "您已选择子语言 <0>Java CSEC</0>。",
+  "cseDescription": "CSE 机器生成控制、存储和环境模型图，这些图基于<0>《计算机程序的构造和解释，JavaScript 版》第 3 章第 2 节</0>中介绍的符号。",
   "instructions": "在此选项卡上，REPL 将被隐藏，因此请确保您的代码在运行前没有错误。您可以通过运行程序，然后拖动上方的滑块来查看程序评估过程中不同阶段的控制、存储和环境状态。点击快进按钮（双箭头）将跳到程序中的下一个断点。",
   "shortcutsTitle": "一些有用的键盘快捷键：",
   "shortcuts": {
