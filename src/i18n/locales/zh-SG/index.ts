@@ -6,6 +6,7 @@ import sicp from './sicp.json';
 import sourcecast from './sourcecast.json';
 import sourceRecorder from './sourceRecorder.json';
 import stories from './stories.json';
+import substVisualizer from './substVisualizer.json';
 import welcome from './welcome.json';
 
 export default {
@@ -18,6 +19,7 @@ export default {
     ...sourcecast,
     ...sourceRecorder,
     ...stories,
+    ...substVisualizer,
     ...welcome
   }
 };
