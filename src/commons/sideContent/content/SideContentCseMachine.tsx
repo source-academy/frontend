@@ -14,7 +14,7 @@ import { bindActionCreators } from '@reduxjs/toolkit';
 import classNames from 'classnames';
 import { Chapter } from 'js-slang/dist/types';
 import { debounce } from 'lodash';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
 import { Output } from 'src/commons/repl/Repl';
@@ -159,45 +159,54 @@ const SideContentCseMachineBase: React.FC<Props> = props => {
     }
   }, [props.needCseUpdate, isJava]);
 
-  const sliderRelease = (newValue: number) => {
-    setLastStep(newValue === props.stepsTotal);
-    props.handleEditorEval();
-  };
+  const sliderRelease = useCallback(
+    (newValue: number) => {
+      setLastStep(newValue === props.stepsTotal);
+      props.handleEditorEval();
+    },
+    [props]
+  );
 
-  const sliderShift = (newValue: number) => {
-    props.handleStepUpdate(newValue);
-    setValue(newValue);
-  };
+  const sliderShift = useCallback(
+    (newValue: number) => {
+      props.handleStepUpdate(newValue);
+      setValue(newValue);
+    },
+    [props]
+  );
 
-  const stepPrevious = () => {
+  const stepPrevious = useCallback(() => {
     if (value !== 0) {
       sliderShift(value - 1);
       sliderRelease(value - 1);
     }
-  };
+  }, [value, sliderShift, sliderRelease]);
 
-  const stepNext = () => {
+  const stepNext = useCallback(() => {
     const lastStepValue = props.stepsTotal;
     if (value !== lastStepValue) {
       sliderShift(value + 1);
       sliderRelease(value + 1);
       CseAnimation.enableAnimations();
     }
-  };
+  }, [value, props.stepsTotal, sliderShift, sliderRelease]);
 
-  const stepFirst = () => {
+  const stepFirst = useCallback(() => {
     // Move to the first step
     sliderShift(0);
     sliderRelease(0);
-  };
+  }, [sliderShift, sliderRelease]);
 
-  const stepLast = (lastStepValue: number) => {
-    // Move to the last step
-    sliderShift(lastStepValue);
-    sliderRelease(lastStepValue);
-  };
+  const stepLast = useCallback(
+    (lastStepValue: number) => {
+      // Move to the last step
+      sliderShift(lastStepValue);
+      sliderRelease(lastStepValue);
+    },
+    [sliderShift, sliderRelease]
+  );
 
-  const stepNextBreakpoint = () => {
+  const stepNextBreakpoint = useCallback(() => {
     for (const step of props.breakpointSteps) {
       if (step > value) {
         sliderShift(step);
@@ -207,9 +216,9 @@ const SideContentCseMachineBase: React.FC<Props> = props => {
     }
     sliderShift(props.stepsTotal);
     sliderRelease(props.stepsTotal);
-  };
+  }, [props.breakpointSteps, props.stepsTotal, value, sliderShift, sliderRelease]);
 
-  const stepPrevBreakpoint = () => {
+  const stepPrevBreakpoint = useCallback(() => {
     for (let i = props.breakpointSteps.length - 1; i >= 0; i--) {
       const step = props.breakpointSteps[i];
       if (step < value) {
@@ -220,9 +229,9 @@ const SideContentCseMachineBase: React.FC<Props> = props => {
     }
     sliderShift(0);
     sliderRelease(0);
-  };
+  }, [props.breakpointSteps, value, sliderShift, sliderRelease]);
 
-  const stepNextChangepoint = () => {
+  const stepNextChangepoint = useCallback(() => {
     for (const step of props.changepointSteps) {
       if (step > value) {
         sliderShift(step);
@@ -232,9 +241,9 @@ const SideContentCseMachineBase: React.FC<Props> = props => {
     }
     sliderShift(props.stepsTotal);
     sliderRelease(props.stepsTotal);
-  };
+  }, [props.changepointSteps, props.stepsTotal, value, sliderShift, sliderRelease]);
 
-  const stepPrevChangepoint = () => {
+  const stepPrevChangepoint = useCallback(() => {
     for (let i = props.changepointSteps.length - 1; i >= 0; i--) {
       const step = props.changepointSteps[i];
       if (step < value) {
@@ -245,29 +254,36 @@ const SideContentCseMachineBase: React.FC<Props> = props => {
     }
     sliderShift(0);
     sliderRelease(0);
-  };
+  }, [props.changepointSteps, value, sliderShift, sliderRelease]);
 
-  const zoomStage = (isZoomIn: boolean, multiplier: number) => {
-    if (isJava()) {
-      JavaCseMachine.zoomStage(isZoomIn, multiplier);
-    } else {
-      Layout.zoomStage(isZoomIn, multiplier);
-    }
-  };
+  const zoomStage = useCallback(
+    (isZoomIn: boolean, multiplier: number) => {
+      if (isJava()) {
+        JavaCseMachine.zoomStage(isZoomIn, multiplier);
+      } else {
+        Layout.zoomStage(isZoomIn, multiplier);
+      }
+    },
+    [isJava]
+  );
 
-  const hotkeyBindings: HotkeyItem[] = visualization
-    ? [
-        ['a', stepFirst],
-        ['f', stepNext],
-        ['b', stepPrevious],
-        ['e', () => stepLast(props.stepsTotal)]
-      ]
-    : [
-        ['a', () => {}],
-        ['f', () => {}],
-        ['b', () => {}],
-        ['e', () => {}]
-      ];
+  const hotkeyBindings: HotkeyItem[] = useMemo(
+    () =>
+      visualization
+        ? [
+            ['a', stepFirst],
+            ['f', stepNext],
+            ['b', stepPrevious],
+            ['e', () => stepLast(props.stepsTotal)]
+          ]
+        : [
+            ['a', () => {}],
+            ['f', () => {}],
+            ['b', () => {}],
+            ['e', () => {}]
+          ],
+    [visualization, stepFirst, stepNext, stepPrevious, props.stepsTotal, stepLast]
+  );
 
   return (
     <HotKeys
