@@ -90,7 +90,13 @@ const calculateHeight = (sideContentHeight?: number) => {
 
 type Props = OwnProps & StateProps & DispatchProps;
 
-const SideContentCseMachineBase: React.FC<Props> = props => {
+const SideContentCseMachineBase: React.FC<Props> = ({
+  handleStepUpdate,
+  handleEditorEval,
+  setEditorHighlightedLines,
+  handleAlertSideContent,
+  ...props
+}) => {
   const [visualization, setVisualization] = useState<React.ReactNode>(null);
   const [value, setValue] = useState(-1);
   const [width, setWidth] = useState(calculateWidth(props.editorWidth));
@@ -100,16 +106,17 @@ const SideContentCseMachineBase: React.FC<Props> = props => {
 
   const isJava = useCallback(() => props.chapter === Chapter.FULL_JAVA, [props.chapter]);
 
-  const handleResize = useCallback(
-    debounce(() => {
-      const newWidth = calculateWidth(props.editorWidth);
-      const newHeight = calculateHeight(props.sideContentHeight);
-      if (newWidth !== width || newHeight !== height) {
-        setWidth(newWidth);
-        setHeight(newHeight);
-        CseMachine.updateDimensions(newWidth, newHeight);
-      }
-    }, 300),
+  const handleResize = useMemo(
+    () =>
+      debounce(() => {
+        const newWidth = calculateWidth(props.editorWidth);
+        const newHeight = calculateHeight(props.sideContentHeight);
+        if (newWidth !== width || newHeight !== height) {
+          setWidth(newWidth);
+          setHeight(newHeight);
+          CseMachine.updateDimensions(newWidth, newHeight);
+        }
+      }, 300),
     [props.editorWidth, props.sideContentHeight, width, height]
   );
 
@@ -127,24 +134,24 @@ const SideContentCseMachineBase: React.FC<Props> = props => {
   useEffect(() => {
     if (isJava()) {
       JavaCseMachine.init(setVisualization, (segments: [number, number][]) => {
-        props.setEditorHighlightedLines(0, segments);
+        setEditorHighlightedLines(0, segments);
       });
     } else {
       CseMachine.init(
         visualization => {
           setVisualization(visualization);
           CseAnimation.playAnimation();
-          if (visualization) props.handleAlertSideContent();
+          if (visualization) handleAlertSideContent();
         },
         width,
         height,
         (segments: [number, number][]) => {
-          props.setEditorHighlightedLines(0, segments);
+          setEditorHighlightedLines(0, segments);
         },
         () => setStepLimitExceeded(false)
       );
     }
-  }, [isJava, props, width, height]);
+  }, [isJava, handleAlertSideContent, width, height, setEditorHighlightedLines]);
 
   useEffect(() => {
     if (props.needCseUpdate) {
@@ -160,17 +167,17 @@ const SideContentCseMachineBase: React.FC<Props> = props => {
   const sliderRelease = useCallback(
     (newValue: number) => {
       setLastStep(newValue === props.stepsTotal);
-      props.handleEditorEval();
+      handleEditorEval();
     },
-    [props]
+    [handleEditorEval, props.stepsTotal]
   );
 
   const sliderShift = useCallback(
     (newValue: number) => {
-      props.handleStepUpdate(newValue);
+      handleStepUpdate(newValue);
       setValue(newValue);
     },
-    [props]
+    [handleStepUpdate]
   );
 
   const stepPrevious = useCallback(() => {
