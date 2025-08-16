@@ -29,6 +29,7 @@ export default tseslint.config(
     },
     rules: {
       ...reactHooksPlugin.configs['recommended-latest'].rules,
+      'no-empty': 'warn',
       'no-restricted-imports': [
         'error',
         {
