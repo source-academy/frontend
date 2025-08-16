@@ -429,8 +429,6 @@ const Sourcecast: React.FC = () => {
   );
 };
 
-const INTRODUCTION = 'Welcome to Sourcecast!';
-
 // react-router lazy loading
 // https://reactrouter.com/en/main/route/lazy
 export const Component = Sourcecast;
