@@ -1,14 +1,22 @@
 import { createReducer, type Reducer } from '@reduxjs/toolkit';
-// Note: resolver handled in saga; reducer remains synchronous
+import { defaultLanguageDirectory } from 'src/commons/application/ApplicationTypes';
 import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
 import Actions from './LanguageDirectoryActions';
 import type { LanguageDirectoryState } from './LanguageDirectoryTypes';
-import { defaultLanguageDirectoryState } from './LanguageDirectoryTypes';
 
 export const LanguageDirectoryReducer: Reducer<LanguageDirectoryState, SourceActionType> =
-	createReducer(defaultLanguageDirectoryState, builder => {
+	createReducer(defaultLanguageDirectory, builder => {
 		builder
+			.addCase(Actions.setLanguages, (state, action) => {
+				state.languages = action.payload.languages as any;
+				if (state.selectedLanguageId === null && state.languages.length > 0) {
+					state.selectedLanguageId = state.languages[0].id;
+				}
+				if (state.selectedEvaluatorId === null && state.languages.length > 0) {
+					state.selectedEvaluatorId = state.languages[0].evaluators[0].id;
+				}
+			})
 			.addCase(Actions.setSelectedLanguage, (state, action) => {
 				const { languageId, evaluatorId } = action.payload;
 				state.selectedLanguageId = languageId;
@@ -18,5 +26,3 @@ export const LanguageDirectoryReducer: Reducer<LanguageDirectoryState, SourceAct
 				state.selectedEvaluatorId = action.payload.evaluatorId;
 			});
 	});
-
-

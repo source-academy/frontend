@@ -1,17 +1,22 @@
-import type { SagaIterator } from 'redux-saga';
-import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { call, put, select } from 'redux-saga/effects';
 import type { OverallState } from 'src/commons/application/ApplicationTypes';
-import { staticLanguageDirectoryProvider } from 'src/commons/languageDirectory/provider';
+import { staticLanguageDirectoryProvider } from 'src/features/languageDirectory/LanguageDirectoryTypes';
 
-import Actions from '../../features/languageDirectory/LanguageDirectoryActions';
+import LanguageDirectoryActions from '../../features/languageDirectory/LanguageDirectoryActions';
+import { combineSagaHandlers } from '../redux/utils';
+import { actions } from '../utils/ActionsHelper';
 
-function* resolveDefaultEvaluatorSaga(action: ReturnType<typeof Actions.setSelectedLanguage>): SagaIterator {
-  try {
+const LanguageDirectorySaga = combineSagaHandlers({
+  [LanguageDirectoryActions.fetchLanguages.type]: function* () {
+    const langs = yield call(staticLanguageDirectoryProvider.getLanguages.bind(staticLanguageDirectoryProvider));
+    yield put(actions.setLanguages(langs));
+  },
+  [LanguageDirectoryActions.setSelectedLanguage.type]: function* (action) {
     const {
       payload: { languageId, evaluatorId }
     } = action;
     if (evaluatorId) return; // already explicitly set
-    const language = yield call(staticLanguageDirectoryProvider.getLanguageById, languageId);
+    const language = yield call(staticLanguageDirectoryProvider.getLanguageById.bind(staticLanguageDirectoryProvider), languageId);
     if (!language) return;
     const defaultEvaluatorId: string | null = language.evaluators.length > 0 ? language.evaluators[0].id : null;
     if (!defaultEvaluatorId) return;
@@ -20,14 +25,10 @@ function* resolveDefaultEvaluatorSaga(action: ReturnType<typeof Actions.setSelec
       (s: OverallState) => s.languageDirectory.selectedLanguageId
     );
     if (currentLanguageId !== languageId) return;
-    yield put(Actions.setSelectedEvaluator(defaultEvaluatorId));
-  } catch {
-    // swallow
+    yield put(actions.setSelectedEvaluator(defaultEvaluatorId));
   }
-}
+});
 
-export default function* LanguageDirectorySaga(): SagaIterator {
-  yield takeEvery(Actions.setSelectedLanguage.type, resolveDefaultEvaluatorSaga);
-}
+export default LanguageDirectorySaga;
 
 
