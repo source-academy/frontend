@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/react';
-import { Navigate, redirect, Routes, type RouteObject } from 'react-router';
+import { Navigate, redirect, type RouteObject, Routes } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
 
 import Application from '../commons/application/Application';
