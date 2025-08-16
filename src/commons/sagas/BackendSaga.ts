@@ -1,6 +1,7 @@
 /*eslint no-eval: "error"*/
 /*eslint-env browser*/
-import _ from 'lodash';
+import { camelCase } from 'es-toolkit';
+import { mapKeys } from 'es-toolkit/compat';
 import type { SagaIterator } from 'redux-saga';
 import { all, call, fork, put, select } from 'redux-saga/effects';
 import AcademyActions from 'src/features/academy/AcademyActions';
