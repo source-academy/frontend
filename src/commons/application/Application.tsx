@@ -115,11 +115,12 @@ const Application: React.FC = () => {
             dispatch(SessionActions.fetchUserAndCourse());
           }
           break;
-        case MessageTypeNames.Text:
+        case MessageTypeNames.Text: {
           const { workspaceLocation, code } = message;
           console.log(`FRONTEND: TextMessage: ${code}`);
           dispatch(WorkspaceActions.updateEditorValue(workspaceLocation, 0, code));
           break;
+        }
         case MessageTypeNames.EvalEditor:
           dispatch(WorkspaceActions.evalEditor(message.workspaceLocation));
           break;
