@@ -106,7 +106,7 @@ export const parseModeString = (
         library: ExternalLibraryName.NONE
       };
     default: {
-      const matches = modeString.match(/source(-?\d+)([a-z\-]+)([A-Z]+)/);
+      const matches = modeString.match(/source(-?\d+)([a-z-]+)([A-Z]+)/);
       if (!matches) {
         throw new Error('Invalid modeString');
       }
