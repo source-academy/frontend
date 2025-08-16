@@ -548,9 +548,12 @@ const makeCseMachineTabFrom = (location: NonStoryWorkspaceLocation): SideContent
   id: SideContentType.cseMachine
 });
 
-const ItalicLink: React.FC<{ href: string; children?: React.ReactNode }> = ({ href, children }) => {
+export const ItalicLink: React.FC<{ href: string; children?: React.ReactNode }> = ({
+  href,
+  children
+}) => {
   return (
-    <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
+    <a href={href} rel="noopener noreferrer" target="_blank">
       <i>{children}</i>
     </a>
   );

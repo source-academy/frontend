@@ -4,6 +4,7 @@ import { HotkeyItem } from '@mantine/hooks';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import classNames from 'classnames';
 import React from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { connect, MapDispatchToProps } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
 
@@ -12,6 +13,7 @@ import { Step } from '../../../features/dataVisualizer/dataVisualizerTypes';
 import { Links } from '../../utils/Constants';
 import { beginAlertSideContent } from '../SideContentActions';
 import { SideContentLocation, SideContentTab, SideContentType } from '../SideContentTypes';
+import { ItalicLink } from './SideContentCseMachine';
 
 type State = {
   steps: Step[];
@@ -127,36 +129,7 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
               ))}
             </div>
           ) : (
-            <p id="data-visualizer-default-text" className={Classes.RUNNING_TEXT}>
-              The data visualizer helps you to visualize data structures.
-              {this.state.steps}
-              <br />
-              <br />
-              It is activated by calling the function{' '}
-              <code>
-                draw_data(x<sub>1</sub>, x<sub>2</sub>, ... x<sub>n</sub>)
-              </code>
-              , where{' '}
-              <code>
-                x<sub>k</sub>
-              </code>{' '}
-              would be the{' '}
-              <code>
-                k<sup>th</sup>
-              </code>{' '}
-              data structure that you want to visualize and <code>n</code> is the number of
-              structures.
-              <br />
-              <br />
-              The data visualizer uses box-and-pointer diagrams, as introduced in{' '}
-              <a href={Links.textbookChapter2_2} rel="noopener noreferrer" target="_blank">
-                <i>
-                  Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 2,
-                  Section 2
-                </i>
-              </a>
-              .
-            </p>
+            <DataVisualizerDefaultText />
           )}
         </div>
       </HotKeys>
@@ -198,5 +171,39 @@ const makeDataVisualizerTabFrom = (location: SideContentLocation): SideContentTa
   body: <SideContentDataVisualizer workspaceLocation={location} />,
   id: SideContentType.dataVisualizer
 });
+
+const DataVisualizerDefaultText: React.FC = () => {
+  const { t } = useTranslation('sideContent', { keyPrefix: 'dataVisualizer' });
+  return (
+    <p id="data-visualizer-default-text" className={Classes.RUNNING_TEXT}>
+      {t('defaultText')}
+      <br />
+      <br />
+      <Trans
+        ns="sideContent"
+        i18nKey="dataVisualizer.instructions"
+        components={[
+          <code>
+            draw_data(x<sub>1</sub>, x<sub>2</sub>, ... x<sub>n</sub>)
+          </code>,
+          <code>
+            x<sub>k</sub>
+          </code>,
+          <code>
+            k<sup>th</sup>
+          </code>,
+          <code>n</code>
+        ]}
+      />
+      <br />
+      <br />
+      <Trans
+        ns="sideContent"
+        i18nKey="dataVisualizer.reference"
+        components={[<ItalicLink href={Links.textbookChapter2_2} />]}
+      />
+    </p>
+  );
+};
 
 export default makeDataVisualizerTabFrom;
