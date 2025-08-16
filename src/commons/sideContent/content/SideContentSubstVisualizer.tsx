@@ -12,7 +12,7 @@ import {
   Slider
 } from '@blueprintjs/core';
 import { getHotkeyHandler, HotkeyItem } from '@mantine/hooks';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import { IStepperPropContents } from 'js-slang/dist/tracer';
 import { StepperBaseNode } from 'js-slang/dist/tracer/interface';
@@ -161,7 +161,7 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
 
   return (
     <div
-      className={classNames('sa-substituter', Classes.DARK)}
+      className={clsx('sa-substituter', Classes.DARK)}
       onKeyDown={hotkeyHandler}
       tabIndex={-1} // tab index necessary to fire keydown events on div element
     >
