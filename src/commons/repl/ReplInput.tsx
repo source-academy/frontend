@@ -1,6 +1,6 @@
 import { Classes } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React from 'react';
 import AceEditor from 'react-ace';
@@ -139,7 +139,7 @@ export const ReplInput: React.FC<ReplInputProps> = props => {
         }}
         ref={replInput}
       />
-      <div className={classNames(Classes.BUTTON_GROUP, Classes.DARK)}>{replButtons()}</div>
+      <div className={clsx(Classes.BUTTON_GROUP, Classes.DARK)}>{replButtons()}</div>
       {isDesktopBreakpoint && <div ref={replInputBottom} />}
     </>
   );

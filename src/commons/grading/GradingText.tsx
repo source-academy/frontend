@@ -1,5 +1,5 @@
 import { Classes, Text } from '@blueprintjs/core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React from 'react';
 
 const defaultStyles: React.CSSProperties = {
@@ -17,7 +17,7 @@ type Props = {
 const GradingText: React.FC<Props> = ({ children, style, isSecondaryText, className }) => {
   return (
     <Text
-      className={classNames(Classes.UI_TEXT, className, isSecondaryText && Classes.TEXT_MUTED)}
+      className={clsx(Classes.UI_TEXT, className, isSecondaryText && Classes.TEXT_MUTED)}
       style={{ ...defaultStyles, ...style }}
     >
       {children}

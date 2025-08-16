@@ -5,7 +5,7 @@ import type { AnyAction, Dispatch } from '@reduxjs/toolkit';
 import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import { Ace, Range } from 'ace-builds';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
@@ -1080,11 +1080,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
   };
 
   return !isVscode && isMobileBreakpoint ? (
-    <div className={classNames('Playground', Classes.DARK, isGreen && 'GreenScreen')}>
+    <div className={clsx('Playground', Classes.DARK, isGreen && 'GreenScreen')}>
       <MobileWorkspace {...mobileWorkspaceProps} />
     </div>
   ) : (
-    <div className={classNames('Playground', Classes.DARK, isGreen && 'GreenScreen')}>
+    <div className={clsx('Playground', Classes.DARK, isGreen && 'GreenScreen')}>
       <Workspace {...workspaceProps} />
     </div>
   );

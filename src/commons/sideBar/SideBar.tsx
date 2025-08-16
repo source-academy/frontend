@@ -1,5 +1,5 @@
 import { Card, Icon, IconName } from '@blueprintjs/core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React from 'react';
 
 import { SideContentType } from '../sideContent/SideContentTypes';
@@ -52,7 +52,7 @@ const SideBar: React.FC<Props> = ({ tabs, isExpanded, expandSideBar, collapseSid
         {tabs.map((tab, index) => (
           <Card
             key={index}
-            className={classNames('sidebar-tab', {
+            className={clsx('sidebar-tab', {
               selected: isExpanded && selectedTabIndex === index
             })}
             onClick={() => handleTabSelection(index)}

@@ -1,6 +1,6 @@
 import { Card, Pre } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { parseError } from 'js-slang';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
@@ -52,7 +52,7 @@ const Repl: React.FC<ReplProps> = props => {
       <div className="repl-output-parent">
         {cards}
         {!props.inputHidden && (
-          <Card className={classNames('repl-input-parent', 'row')}>
+          <Card className={clsx('repl-input-parent', 'row')}>
             <ReplInput {...props} />
           </Card>
         )}

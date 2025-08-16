@@ -1,6 +1,6 @@
 import { Button, Card, Classes, Collapse, Elevation, Icon, Pre, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { ContestEntry } from '../../assessment/AssessmentTypes';
@@ -103,7 +103,7 @@ const SideContentContestVoting: React.FC<SideContentContestVotingProps> = ({
   const tierBoard = useMemo(() => {
     return TIERS.map((tier, index) => (
       <div
-        className={classNames('tier', {
+        className={clsx('tier', {
           'hovered-tier': hoveredTier === `tier-${tier.name.toLowerCase()}`
         })}
         key={`tier-${tier.name.toLowerCase()}`}
@@ -140,7 +140,7 @@ const SideContentContestVoting: React.FC<SideContentContestVotingProps> = ({
             >
               {sortedContestEntries.map((contestEntry: ContestEntry, index) => (
                 <div
-                  className={classNames('item', { wrong: !isValid })}
+                  className={clsx('item', { wrong: !isValid })}
                   draggable={canSave}
                   key={`item-${index + 1}`}
                   id={`item-${index + 1}`}

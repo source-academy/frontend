@@ -9,7 +9,7 @@ import {
   Radio,
   RadioGroup
 } from '@blueprintjs/core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React, { useState } from 'react';
 
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
@@ -24,7 +24,7 @@ const RepositoryDialog: React.FC<RepositoryDialogProps> = props => {
 
   return (
     <Dialog className="githubDialog" isOpen={true} onClose={handleClose}>
-      <div className={classNames('githubDialogHeader', Classes.DIALOG_HEADER)}>
+      <div className={clsx('githubDialogHeader', Classes.DIALOG_HEADER)}>
         <h3>Select a Repository</h3>
       </div>
       <DialogBody>

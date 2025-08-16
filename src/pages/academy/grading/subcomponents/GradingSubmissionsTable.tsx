@@ -5,7 +5,7 @@ import { Button, H6, Icon, InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { CellClickedEvent, ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -141,7 +141,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
       "Hmm... we didn't find any submissions, you might want to debug your filter() function.",
     pageSize: pageSize,
     pagination: true,
-    rowClass: classNames(classes['grading-left-align'], classes['grading-table-rows']),
+    rowClass: clsx(classes['grading-left-align'], classes['grading-table-rows']),
     rowHeight: ROW_HEIGHT,
     suppressMenuHide: true,
     suppressPaginationPanel: true,
@@ -374,7 +374,7 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
 
         <Button
           minimal={true}
-          className={classNames(
+          className={clsx(
             classes['grading-filter-btn'],
             filterMode && classes['grading-filter-btn-on']
           )}

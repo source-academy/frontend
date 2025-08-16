@@ -1,6 +1,6 @@
 import { Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
@@ -456,7 +456,7 @@ const GradingWorkspace: React.FC<Props> = props => {
   if (grading === undefined) {
     return (
       <NonIdealState
-        className={classNames('WorkspaceParent', Classes.DARK)}
+        className={clsx('WorkspaceParent', Classes.DARK)}
         description="Getting assessment ready..."
         icon={<Spinner size={SpinnerSize.LARGE} />}
       />
@@ -515,7 +515,7 @@ const GradingWorkspace: React.FC<Props> = props => {
     }
   };
   return (
-    <div className={classNames('WorkspaceParent', Classes.DARK)}>
+    <div className={clsx('WorkspaceParent', Classes.DARK)}>
       <Workspace {...workspaceProps} />
     </div>
   );

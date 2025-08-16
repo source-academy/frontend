@@ -9,7 +9,7 @@ import {
   SpinnerSize
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -186,7 +186,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
   if (assessment === null || assessment!.questions.length === 0) {
     return (
       <NonIdealState
-        className={classNames('WorkspaceParent', Classes.DARK)}
+        className={clsx('WorkspaceParent', Classes.DARK)}
         description="Getting mission ready..."
         icon={<Spinner size={SpinnerSize.LARGE} />}
       />
@@ -707,7 +707,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
     }
   };
   return (
-    <div className={classNames('WorkspaceParent', Classes.DARK)}>
+    <div className={clsx('WorkspaceParent', Classes.DARK)}>
       {resetTemplateOverlay()}
       <Workspace {...workspaceProps} />
     </div>

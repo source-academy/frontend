@@ -1,5 +1,5 @@
 import { Button, Classes } from '@blueprintjs/core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
 
 const SideContentToneMatrix: React.FC = () => {
@@ -22,7 +22,7 @@ const SideContentToneMatrix: React.FC = () => {
   return (
     <div className="sa-tone-matrix">
       <div className="row">
-        <div className={classNames('controls', 'col-xs-12', Classes.DARK, Classes.BUTTON_GROUP)}>
+        <div className={clsx('controls', 'col-xs-12', Classes.DARK, Classes.BUTTON_GROUP)}>
           <Button id="clear-matrix" onClick={handleClear}>
             Clear
           </Button>

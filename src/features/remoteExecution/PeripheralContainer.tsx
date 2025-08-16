@@ -1,5 +1,5 @@
 import { Classes } from '@blueprintjs/core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 type PeripheralContainerProps = {
   src: string | React.ReactElement;
@@ -11,7 +11,7 @@ const PeripheralContainer: React.FC<PeripheralContainerProps> = ({ src, alt = 'I
   return (
     <div className="col-xs-3">
       <div
-        className={classNames(Classes.ELEVATION_0)}
+        className={clsx(Classes.ELEVATION_0)}
         style={{ textAlign: 'center', padding: 12, backgroundColor: '#2f343c' }}
       >
         {typeof src == 'string' ? <img style={{ maxWidth: 72 }} src={src} alt={alt} /> : src}

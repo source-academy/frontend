@@ -1,6 +1,6 @@
 import { Classes } from '@blueprintjs/core';
 import { ControlledMenu, MenuItem, useMenuState } from '@szhsin/react-menu';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React from 'react';
 import classes from 'src/styles/ContextMenu.module.scss';
 
@@ -36,7 +36,7 @@ const FileSystemViewContextMenu: React.FC<Props> = ({
     <div className={className} onContextMenu={onContextMenu}>
       {children}
       <ControlledMenu
-        menuClassName={classNames(Classes.CARD, Classes.DARK, classes['context-menu'])}
+        menuClassName={clsx(Classes.CARD, Classes.DARK, classes['context-menu'])}
         {...menuProps}
         anchorPoint={anchorPoint}
         onClose={() => toggleMenu(false)}
