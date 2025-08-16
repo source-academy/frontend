@@ -10,7 +10,7 @@ import { getNodePosition } from './base/AnimationUtils';
 import { ControlExpansionAnimation } from './ControlExpansionAnimation';
 
 /**
- * Animation for the `branch` instruction.
+ * Animation for the `branch` instruction. Also used for `for` and `while` instructions.
  */
 export class BranchAnimation extends Animatable {
   private booleanItemAnimation: AnimatedTextbox;

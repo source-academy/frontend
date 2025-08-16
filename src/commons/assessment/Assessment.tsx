@@ -1,15 +1,9 @@
 import {
   Button,
-  Card,
   Collapse,
   Dialog,
   DialogBody,
   DialogFooter,
-  Elevation,
-  H4,
-  H6,
-  Icon,
-  IconName,
   Intent,
   NonIdealState,
   Position,
@@ -18,16 +12,13 @@ import {
   Tooltip
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
 import { sortBy } from 'lodash';
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Navigate, NavLink, useLoaderData, useParams } from 'react-router';
+import { Navigate, useLoaderData, useParams } from 'react-router';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import Messages, { sendToWebview } from 'src/features/vscode/messages';
-import classes from 'src/styles/Academy.module.scss';
 
-import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import SessionActions from '../application/actions/SessionActions';
 import { Role } from '../application/ApplicationTypes';
 import AssessmentWorkspace, {
@@ -35,14 +26,12 @@ import AssessmentWorkspace, {
 } from '../assessmentWorkspace/AssessmentWorkspace';
 import ContentDisplay from '../ContentDisplay';
 import ControlButton from '../ControlButton';
-import Markdown from '../Markdown';
-import NotificationBadge from '../notificationBadge/NotificationBadge';
-import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
 import Constants from '../utils/Constants';
-import { beforeNow, getPrettyDate, getPrettyDateAfterHours } from '../utils/DateHelper';
-import { useResponsive, useSession, useTypedSelector } from '../utils/Hooks';
-import { assessmentTypeLink, convertParamToInt } from '../utils/ParamParseHelper';
+import { beforeNow } from '../utils/DateHelper';
+import { useSession, useTypedSelector } from '../utils/Hooks';
+import { convertParamToInt } from '../utils/ParamParseHelper';
 import AssessmentNotFound from './AssessmentNotFound';
+import AssessmentOverviewCard from './AssessmentOverviewCard';
 import {
   AssessmentConfiguration,
   AssessmentOverview,
@@ -52,7 +41,6 @@ import {
 
 const Assessment: React.FC = () => {
   const params = useParams<AssessmentWorkspaceParams>();
-  const { isMobileBreakpoint } = useResponsive();
   const [betchaAssessment, setBetchaAssessment] = useState<AssessmentOverview | null>(null);
   const [showClosedAssessments, setShowClosedAssessments] = useState(false);
   const [showOpenedAssessments, setShowOpenedAssessments] = useState(true);
@@ -91,7 +79,7 @@ const Assessment: React.FC = () => {
 
   const sortAssessments = (assessments: AssessmentOverview[]) => sortBy(assessments, [a => -a.id]);
 
-  const makeSubmissionButton = (overview: AssessmentOverview, index: number) => (
+  const makeSubmissionButton = (overview: AssessmentOverview) => (
     <Tooltip
       disabled={overview.status === AssessmentStatuses.attempted}
       content={'You can finalize after saving an answer for each question!'}
@@ -101,7 +89,7 @@ const Assessment: React.FC = () => {
         disabled={overview.status !== AssessmentStatuses.attempted}
         icon={IconNames.CONFIRM}
         intent={overview.status === AssessmentStatuses.attempted ? Intent.DANGER : Intent.NONE}
-        minimal={true}
+        variant="minimal"
         // intentional: each listing renders its own version of onClick
         // tslint:disable-next-line:jsx-no-lambda
         onClick={() => setBetchaAssessment(overview)}
@@ -110,166 +98,6 @@ const Assessment: React.FC = () => {
         <span className="custom-hidden-xxs"> Submission</span>
       </Button>
     </Tooltip>
-  );
-
-  const makeAssessmentInteractButton = (overview: AssessmentOverview) => {
-    let icon: IconName;
-    let label: string;
-    let optionalLabel: string = '';
-
-    switch (overview.status) {
-      case AssessmentStatuses.not_attempted:
-        icon = IconNames.PLAY;
-        label = 'Attempt';
-        break;
-      case AssessmentStatuses.attempting:
-        icon = IconNames.PLAY;
-        label = 'Continue';
-        optionalLabel = ' Attempt';
-        break;
-      case AssessmentStatuses.attempted:
-        icon = IconNames.EDIT;
-        label = 'Review';
-        optionalLabel = ' Attempt';
-        break;
-      case AssessmentStatuses.submitted:
-        icon = IconNames.EYE_OPEN;
-        label = 'Review';
-        optionalLabel = ' Submission';
-        break;
-      default:
-        // If we reach this case, backend data did not fit IAssessmentOverview
-        icon = IconNames.PLAY;
-        label = 'Review';
-        break;
-    }
-    return (
-      <NavLink
-        to={`/courses/${courseId}/${assessmentTypeLink(overview.type)}/${overview.id.toString()}/${
-          Constants.defaultQuestionId
-        }`}
-      >
-        <Button
-          icon={icon}
-          minimal={true}
-          onClick={() =>
-            dispatch(
-              SessionActions.acknowledgeNotifications(filterNotificationsByAssessment(overview.id))
-            )
-          }
-        >
-          <span data-testid="Assessment-Attempt-Button">{label}</span>
-          <span className="custom-hidden-xxxs">{optionalLabel}</span>
-        </Button>
-      </NavLink>
-    );
-  };
-
-  /**
-   * Create a series of cards to display IAssessmentOverviews.
-   * @param {AssessmentOverview} overview the assessment overview to display
-   * @param {number} index a unique number for this card (required for sequential rendering).
-   *   See {@link https://reactjs.org/docs/lists-and-keys.html#keys}
-   * @param renderAttemptButton will only render the attempt button if true, regardless
-   *   of attempt status.
-   * @param notifications the notifications to be passed in.
-   */
-  const makeOverviewCard = (
-    overview: AssessmentOverview,
-    index: number,
-    renderAttemptButton: boolean,
-    renderGradingTooltip: boolean
-  ) => {
-    return (
-      <div key={index}>
-        <Card className="row listing" elevation={Elevation.ONE}>
-          <div className={classNames('listing-picture', !isMobileBreakpoint && 'col-xs-3')}>
-            <NotificationBadge
-              className="badge"
-              notificationFilter={filterNotificationsByAssessment(overview.id)}
-              large={true}
-            />
-            <img
-              alt="Assessment"
-              className={`cover-image-${overview.status}`}
-              src={overview.coverImage ? overview.coverImage : defaultCoverImage}
-            />
-          </div>
-          <div className={classNames('listing-text', !isMobileBreakpoint && 'col-xs-9')}>
-            {makeOverviewCardTitle(overview, index, renderGradingTooltip)}
-            <div className={classes['listing-xp']}>
-              <H6>
-                {overview.isGradingPublished
-                  ? `XP: ${overview.xp} / ${overview.maxXp}`
-                  : `Max XP: ${overview.maxXp}`}
-              </H6>
-              {overview.earlySubmissionXp > 0 && (
-                <Tooltip
-                  content={`Max XP ends on ${getPrettyDateAfterHours(overview.openAt, overview.hoursBeforeEarlyXpDecay)}`}
-                >
-                  <Icon icon={IconNames.InfoSign} />
-                </Tooltip>
-              )}
-            </div>
-            <div className="listing-description">
-              <Markdown content={overview.shortSummary} />
-            </div>
-            {overview.maxTeamSize > 1 ? (
-              <div className="listing-team_information">
-                <H6> This is a team assessment. </H6>
-              </div>
-            ) : (
-              <div>
-                <H6> This is an individual assessment. </H6>
-              </div>
-            )}
-            <div className="listing-footer">
-              <div>
-                <Text className="listing-due-date">
-                  <Icon className="listing-due-icon" size={12} icon={IconNames.CALENDAR} />
-                  {`${beforeNow(overview.openAt) ? 'Opened' : 'Opens'}: ${getPrettyDate(
-                    overview.openAt
-                  )}`}
-                </Text>
-                {beforeNow(overview.openAt) && (
-                  <Text className="listing-due-date">
-                    <Icon className="listing-due-icon" size={12} icon={IconNames.TIME} />
-                    {`Due: ${getPrettyDate(overview.closeAt)}`}
-                  </Text>
-                )}
-              </div>
-              <div className="listing-button">
-                {renderAttemptButton ? makeAssessmentInteractButton(overview) : null}
-              </div>
-            </div>
-          </div>
-        </Card>
-      </div>
-    );
-  };
-
-  const makeOverviewCardTitle = (
-    overview: AssessmentOverview,
-    index: number,
-    renderProgressStatus: boolean
-  ) => (
-    <div className="listing-header">
-      <Text ellipsize={true}>
-        <H4 className="listing-title">
-          {overview.title}
-          {overview.private ? (
-            <Tooltip
-              className="listing-title-tooltip"
-              content="This assessment is password-protected."
-            >
-              <Icon icon="lock" />
-            </Tooltip>
-          ) : null}
-          {renderProgressStatus ? showGradingTooltip(overview.isGradingPublished) : null}
-        </H4>
-      </Text>
-      <div className="listing-button">{makeSubmissionButton(overview, index)}</div>
-    </div>
   );
 
   // Rendering Logic
@@ -326,7 +154,15 @@ const Assessment: React.FC = () => {
     const isOverviewUpcoming = (overview: AssessmentOverview) =>
       !beforeNow(overview.closeAt) && !beforeNow(overview.openAt);
     const upcomingCards = sortAssessments(assessmentOverviews.filter(isOverviewUpcoming)).map(
-      (overview, index) => makeOverviewCard(overview, index, role !== Role.Student, false)
+      overview => (
+        <AssessmentOverviewCard
+          key={overview.id}
+          overview={overview}
+          renderAttemptButton={role !== Role.Student}
+          renderGradingTooltip={false}
+          makeSubmissionButton={makeSubmissionButton}
+        />
+      )
     );
 
     /** Opened assessments, that are released and can be attempted. */
@@ -336,14 +172,30 @@ const Assessment: React.FC = () => {
       overview.status !== AssessmentStatuses.submitted;
     const openedCards = sortAssessments(
       assessmentOverviews.filter(overview => isOverviewOpened(overview))
-    ).map((overview, index) => makeOverviewCard(overview, index, true, false));
+    ).map(overview => (
+      <AssessmentOverviewCard
+        key={overview.id}
+        overview={overview}
+        renderAttemptButton
+        renderGradingTooltip={false}
+        makeSubmissionButton={makeSubmissionButton}
+      />
+    ));
 
     /** Closed assessments, that are past the due date or cannot be attempted further. */
     const closedCards = sortAssessments(
       assessmentOverviews.filter(
         overview => !isOverviewOpened(overview) && !isOverviewUpcoming(overview)
       )
-    ).map((overview, index) => makeOverviewCard(overview, index, true, true));
+    ).map(overview => (
+      <AssessmentOverviewCard
+        key={overview.id}
+        overview={overview}
+        renderAttemptButton
+        renderGradingTooltip
+        makeSubmissionButton={makeSubmissionButton}
+      />
+    ));
 
     /** Render cards */
     const upcomingCardsCollapsible = (
@@ -445,29 +297,6 @@ const Assessment: React.FC = () => {
       />
       {betchaDialog}
     </div>
-  );
-};
-
-const showGradingTooltip = (isGradingPublished: boolean) => {
-  let iconName: IconName;
-  let intent: Intent;
-  let tooltip: string;
-
-  if (isGradingPublished) {
-    iconName = IconNames.TICK;
-    intent = Intent.SUCCESS;
-    tooltip = 'Fully graded';
-  } else {
-    // shh, hide actual grading progress from users even if graded
-    iconName = IconNames.TIME;
-    intent = Intent.WARNING;
-    tooltip = 'Grading in progress';
-  }
-
-  return (
-    <Tooltip className="listing-title-tooltip" content={tooltip} placement={Position.RIGHT}>
-      <Icon icon={iconName} intent={intent} />
-    </Tooltip>
   );
 };
 

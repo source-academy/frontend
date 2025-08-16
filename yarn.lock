@@ -2685,10 +2685,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rolldown/pluginutils@npm:1.0.0-beta.27":
-  version: 1.0.0-beta.27
-  resolution: "@rolldown/pluginutils@npm:1.0.0-beta.27"
-  checksum: 10c0/9658f235b345201d4f6bfb1f32da9754ca164f892d1cb68154fe5f53c1df42bd675ecd409836dff46884a7847d6c00bdc38af870f7c81e05bba5c2645eb4ab9c
+"@rolldown/pluginutils@npm:1.0.0-beta.30":
+  version: 1.0.0-beta.30
+  resolution: "@rolldown/pluginutils@npm:1.0.0-beta.30"
+  checksum: 10c0/aff8b532cb9d82d94c9a4101fa12ecb10620ad47d52dbb9135a5c65bde1ad19895b41026b821f4d607083699239a5d0010198401b6a6a54ab6a10d0015302768
   languageName: node
   linkType: hard
 
@@ -3519,7 +3519,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/core@npm:^1.11.22, @swc/core@npm:^1.12.11":
+"@swc/core@npm:^1.11.22, @swc/core@npm:^1.13.2":
   version: 1.13.3
   resolution: "@swc/core@npm:1.13.3"
   dependencies:
@@ -4358,15 +4358,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react-swc@npm:^3.11.0":
-  version: 3.11.0
-  resolution: "@vitejs/plugin-react-swc@npm:3.11.0"
+"@vitejs/plugin-react-swc@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@vitejs/plugin-react-swc@npm:4.0.0"
   dependencies:
-    "@rolldown/pluginutils": "npm:1.0.0-beta.27"
-    "@swc/core": "npm:^1.12.11"
+    "@rolldown/pluginutils": "npm:1.0.0-beta.30"
+    "@swc/core": "npm:^1.13.2"
   peerDependencies:
     vite: ^4 || ^5 || ^6 || ^7
-  checksum: 10c0/0d12ee81f8c8acb74b35e7acfc45d23ecc2714ab3a0f6060e4bd900a6a739dd5a9be9c6bc842388f3c406f475f2a83e7ff3ade04ec6df9172faa1242e4faa424
+  checksum: 10c0/f9253956669dad67c028051a01767960b62e5ca234c20ba1ebf1fc453923c07ee730eda0fffa754b6b83fa96fd21eb2f087ad77f686252d9470fb96982e7c1b2
   languageName: node
   linkType: hard
 
@@ -7566,7 +7566,7 @@ __metadata:
     "@types/redux-mock-store": "npm:^1.0.3"
     "@types/showdown": "npm:^2.0.1"
     "@types/xml2js": "npm:^0.4.11"
-    "@vitejs/plugin-react-swc": "npm:^3.11.0"
+    "@vitejs/plugin-react-swc": "npm:^4.0.0"
     "@vitest/coverage-v8": "npm:3.2.4"
     "@vitest/ui": "npm:^3.2.4"
     ace-builds: "npm:^1.42.1"
@@ -7600,7 +7600,7 @@ __metadata:
     immer: "npm:^9.0.21"
     java-slang: "npm:^1.0.13"
     js-cookie: "npm:^3.0.5"
-    js-slang: "npm:^1.0.84"
+    js-slang: "npm:^1.0.85"
     js-yaml: "npm:^4.1.0"
     jsdom: "npm:^26.0.0"
     konva: "npm:^9.2.0"
@@ -8273,8 +8273,8 @@ __metadata:
   linkType: hard
 
 "i18next@npm:^25.0.0":
-  version: 25.3.2
-  resolution: "i18next@npm:25.3.2"
+  version: 25.3.6
+  resolution: "i18next@npm:25.3.6"
   dependencies:
     "@babel/runtime": "npm:^7.27.6"
   peerDependencies:
@@ -8282,7 +8282,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/2ac3eaaf7eb0f713094265733f2371fd2631e8a0247049f2c5608d5f5b0a33720d90179de8bd4fb23e00e9b037fd548aa36e2f234bea9753061c51d87a0895bc
+  checksum: 10c0/97d3f35ecab0158d70435b5dcbdfd2845a42092e132bdb8d239b2dfedaa2f61f91955b962e85ff01cc349489ab88a1e0621b9db4c071ecff175ae7c6403b059f
   languageName: node
   linkType: hard
 
@@ -9023,9 +9023,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-slang@npm:^1.0.84":
-  version: 1.0.84
-  resolution: "js-slang@npm:1.0.84"
+"js-slang@npm:^1.0.85":
+  version: 1.0.85
+  resolution: "js-slang@npm:1.0.85"
   dependencies:
     "@babel/parser": "npm:^7.19.4"
     "@commander-js/extra-typings": "npm:^12.0.1"
@@ -9040,10 +9040,10 @@ __metadata:
     commander: "npm:^12.0.0"
     js-base64: "npm:^3.7.5"
     lodash: "npm:^4.17.21"
-    source-map: "npm:0.7.3"
+    source-map: "npm:0.7.6"
   bin:
     js-slang: dist/repl/index.js
-  checksum: 10c0/bc01cfddb02be7e4d69510bb6d9aef5147d4d2a3da9fd00cd16a45e1a2fcd70e44abaa71c81bfa5c8f336825015070aec50d32dbc37e60767fdaf604a5ca45a2
+  checksum: 10c0/8a206d6052e5b23a27bda4aef66675b4b7f9bebde936c789a182948478e26fa7aee6289effd0d867725a939e14674ee59fd218e1bec1fd1dc597b6bf7cbbaf42
   languageName: node
   linkType: hard
 
@@ -11549,12 +11549,12 @@ __metadata:
   linkType: hard
 
 "react-simple-keyboard@npm:^3.6.27":
-  version: 3.8.105
-  resolution: "react-simple-keyboard@npm:3.8.105"
+  version: 3.8.107
+  resolution: "react-simple-keyboard@npm:3.8.107"
   peerDependencies:
     react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/bef207f4448b787a26cb47dff2e56984124aaf75548ce9307e2b93a435597c1eb7d48b1dcc320b07547474fabd158c80c7edfe5f9daa9ea2e1f82bae78cd6ab1
+  checksum: 10c0/afbf5fe7617e707008eefebaf3a7810112430b3911200e8e08fe1ef5fd210b55451397f82f05939e10ba8dc09f739c63f37f94b417b8ad2f3f2295747621207c
   languageName: node
   linkType: hard
 
@@ -12854,10 +12854,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map@npm:0.7.3":
-  version: 0.7.3
-  resolution: "source-map@npm:0.7.3"
-  checksum: 10c0/7d2ddb51f3d2451847692a9ac7808da2b2b3bf7aef92ece33128919040a7e74d9a5edfde7a781f035c974deff876afaf83f2e30484faffffb86484e7408f5d7c
+"source-map@npm:0.7.6":
+  version: 0.7.6
+  resolution: "source-map@npm:0.7.6"
+  checksum: 10c0/59f6f05538539b274ba771d2e9e32f6c65451982510564438e048bc1352f019c6efcdc6dd07909b1968144941c14015c2c7d4369fb7c4d7d53ae769716dcc16c
   languageName: node
   linkType: hard
 

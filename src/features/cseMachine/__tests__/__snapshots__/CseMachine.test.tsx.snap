@@ -5,11 +5,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={40}
   >
@@ -32,11 +27,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={45}
@@ -66,18 +56,13 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={75}
   >
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#030fff"
+      stroke="#999"
     />
     <Text
       fill="#999"
@@ -93,11 +78,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={80}
@@ -127,11 +107,414 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
+    x={20}
+    y={110}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={115}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 4`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={145}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={150}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 5`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={180}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={185}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 6`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={215}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={220}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 7`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={250}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={255}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 8`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={285}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="call 1"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={290}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Call function with 1 argument"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 9`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={320}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="n - 1"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={325}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="n - 1"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 10`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={355}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#030fff"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="fact"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={360}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="fact"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 11`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
     x={140}
     y={5}
   >
@@ -152,11 +535,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={45}
@@ -181,23 +559,18 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
 </React.Fragment>
 `;
 
-exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 4`] = `
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 12`] = `
 <React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={178}
     y={5}
   >
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#ff1744"
+      stroke="#999"
     />
     <Text
       fill="#999"
@@ -211,11 +584,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={183}
     y={45}
@@ -240,23 +608,18 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
 </React.Fragment>
 `;
 
-exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 5`] = `
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 13`] = `
 <React.Fragment>
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={207}
     y={5}
   >
     <Tag
       cornerRadius={5}
       preventDefault={false}
-      stroke="#ff1744"
+      stroke="#999"
     />
     <Text
       fill="#999"
@@ -266,15 +629,10 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
       fontVariant="normal"
       padding={10}
       preventDefault={false}
-      text="40320"
+      text="8"
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={212}
     y={45}
@@ -293,7 +651,301 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
       fontVariant="normal"
       padding={5}
       preventDefault={false}
-      text="40320"
+      text="8"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 14`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={236}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="7"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={241}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="7"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 15`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={265}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="6"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={270}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="6"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 16`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={294}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="5"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={299}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="5"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 17`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={323}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="4"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={328}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="4"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 18`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={352}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="3"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={357}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="3"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 19`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={381}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="2"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={386}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="2"
     />
   </Label>
 </React.Fragment>
@@ -304,11 +956,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={40}
   >
@@ -331,11 +978,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={45}
@@ -365,11 +1007,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={75}
   >
@@ -392,11 +1029,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={80}
@@ -426,11 +1058,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={110}
   >
@@ -453,11 +1080,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={115}
@@ -487,11 +1109,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={145}
   >
@@ -514,11 +1131,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={150}
@@ -542,11 +1154,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   </Label>
   <Group
     listening={false}
-    ref={
-      {
-        "current": null,
-      }
-    }
   >
     <Path
       data="M 140 162.5 L 170 240 L 170 240 "
@@ -577,11 +1184,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={180}
   >
@@ -604,11 +1206,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={185}
@@ -638,11 +1235,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={215}
   >
@@ -665,11 +1257,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={220}
@@ -693,11 +1280,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   </Label>
   <Group
     listening={false}
-    ref={
-      {
-        "current": null,
-      }
-    }
   >
     <Path
       data="M 140 232.5 L 170 390 L 170 390 "
@@ -728,11 +1310,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={250}
   >
@@ -755,11 +1332,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={255}
@@ -789,11 +1361,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={285}
   >
@@ -816,11 +1383,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={290}
@@ -850,11 +1412,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={320}
   >
@@ -877,11 +1434,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={325}
@@ -911,11 +1463,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={355}
   >
@@ -938,11 +1485,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={360}
@@ -972,11 +1514,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={390}
   >
@@ -999,11 +1536,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={395}
@@ -1033,11 +1565,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={425}
   >
@@ -1060,11 +1587,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={430}
@@ -1094,11 +1616,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={460}
   >
@@ -1121,11 +1638,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={465}
@@ -1155,11 +1667,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={40}
   >
@@ -1182,11 +1689,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={45}
@@ -1216,11 +1718,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={75}
   >
@@ -1243,11 +1740,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={80}
@@ -1271,11 +1763,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
   </Label>
   <Group
     listening={false}
-    ref={
-      {
-        "current": null,
-      }
-    }
   >
     <Path
       data="M 140 92.5 L 170 105 L 170 105 "
@@ -1306,11 +1793,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={110}
   >
@@ -1333,11 +1815,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={115}
@@ -1367,11 +1844,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={145}
   >
@@ -1394,11 +1866,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={150}
@@ -1428,11 +1895,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={140}
     y={5}
   >
@@ -1453,11 +1915,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={45}
@@ -1481,14 +1938,9 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
   </Label>
   <Group
     listening={false}
-    ref={
-      {
-        "current": null,
-      }
-    }
   >
     <Path
-      data="M 181.5 40 L 379 330 L 379 330 "
+      data="M 181.5 40 L 349 330 L 349 330 "
       preventDefault={false}
       stroke="#999"
       strokeWidth={1}
@@ -1500,7 +1952,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
         [
           181.5,
           40,
-          379,
+          349,
           330,
         ]
       }
