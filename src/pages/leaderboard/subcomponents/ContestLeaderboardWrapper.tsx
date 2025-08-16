@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Navigate, Route, Routes, useLocation, useParams } from 'react-router';
+import { Navigate, Route, useLocation, useParams } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
-import { LeaderboardContestDetails } from 'src/features/leaderboard/LeaderboardTypes';
+import type { LeaderboardContestDetails } from 'src/features/leaderboard/LeaderboardTypes';
+import { SentryRoutes } from 'src/routes/routerConfig';
 
 import NotFound from '../../notFound/NotFound';
 import ContestLeaderboard from './ContestLeaderboard';
@@ -28,7 +29,7 @@ const ContestLeaderboardWrapper: React.FC = () => {
   const baseLink = `/courses/${courseId}/leaderboard`;
 
   return (
-    <Routes>
+    <SentryRoutes>
       <Route
         path="/:id/score"
         element={
@@ -71,7 +72,7 @@ const ContestLeaderboardWrapper: React.FC = () => {
       ></Route>
 
       <Route path="*" element={<Navigate to={baseLink} />}></Route>
-    </Routes>
+    </SentryRoutes>
   );
 };
 

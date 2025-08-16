@@ -1,6 +1,7 @@
 import React from 'react';
-import { Navigate, Route, Routes } from 'react-router';
+import { Navigate, Route } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { SentryRoutes } from 'src/routes/routerConfig';
 
 import NotFound from '../notFound/NotFound';
 import OverallLeaderboardWrapper from './subcomponents/OverallLeaderboardWrapper';
@@ -22,7 +23,7 @@ const Leaderboard: React.FC = () => {
   const baseLink = `/courses/${courseId}/leaderboard`;
 
   return (
-    <Routes>
+    <SentryRoutes>
       <Route
         path="/"
         element={
@@ -46,7 +47,7 @@ const Leaderboard: React.FC = () => {
           )
         }
       ></Route>
-    </Routes>
+    </SentryRoutes>
   );
 };
 
