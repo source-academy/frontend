@@ -7627,7 +7627,6 @@ __metadata:
     jsdom: "npm:^26.0.0"
     konva: "npm:^9.2.0"
     language-directory: "https://github.com/source-academy/language-directory.git"
-    lodash: "npm:^4.17.21"
     lz-string: "npm:^1.4.4"
     mdast-util-from-markdown: "npm:^2.0.0"
     mdast-util-to-hast: "npm:^13.0.0"
