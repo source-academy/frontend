@@ -24,7 +24,7 @@ const columns = [
 ];
 
 const Stories: React.FC = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('translation', { keyPrefix: 'stories' });
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -37,9 +37,9 @@ const Stories: React.FC = () => {
   const handleDeleteStory = useCallback(
     async (id: number) => {
       const confirm = await showSimpleConfirmDialog({
-        contents: <p>{t('stories.deleteConfirmation')}</p>,
+        contents: <p>{t('deleteConfirmation')}</p>,
         positiveIntent: 'danger',
-        positiveLabel: t('stories.delete')
+        positiveLabel: t('delete')
       });
       if (confirm) {
         dispatch(StoriesActions.deleteStory(id));
@@ -124,7 +124,9 @@ const Stories: React.FC = () => {
         <>
           <GradingFlex justifyContent="space-between">
             <GradingFlex justifyContent="flex-start" alignItems="center" style={{ columnGap: 16 }}>
-              <GradingText style={{ fontSize: '1.125rem', opacity: 0.9 }}>All Stories</GradingText>
+              <GradingText style={{ fontSize: '1.125rem', opacity: 0.9 }}>
+                {t('allStories')}
+              </GradingText>
               {isLoggedIn && (
                 <Button onClick={handleNewStory} icon={IconNames.PLUS}>
                   Add Story
