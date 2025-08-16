@@ -309,4 +309,9 @@ const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) 
   />
 );
 
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = Assessment;
+Component.displayName = 'Assessment';
+
 export default Assessment;

@@ -165,4 +165,9 @@ const Application: React.FC = () => {
   );
 };
 
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = Application;
+Component.displayName = 'Application';
+
 export default Application;
