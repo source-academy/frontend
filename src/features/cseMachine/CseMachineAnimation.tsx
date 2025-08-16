@@ -379,6 +379,8 @@ export class CseAnimation {
               break;
             case 'syntax-rules':
             // nothing.
+            // TODO: Check if this fallthrough behavior is intentional
+            // eslint-disable-next-line no-fallthrough
             default:
               // it's probably an application, or a macro expansion.
               // either way, it's a control -> control expansion.
