@@ -52,7 +52,6 @@
     "ag-grid-react": "^32.3.1",
     "array-move": "^4.0.0",
     "browserfs": "^1.4.3",
-    "classnames": "^2.3.2",
     "clsx": "^2.1.1",
     "conductor": "https://github.com/source-academy/conductor.git#0.2.1",
     "dayjs": "^1.11.13",
