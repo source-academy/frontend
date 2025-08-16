@@ -5,8 +5,8 @@ import { vi } from 'vitest';
 
 import { wrapSaga } from '../SafeEffects';
 
-vi.mock('@sentry/react', async () => ({
-  ...(await vi.importActual('../../../../node_modules/@sentry/react')),
+vi.mock('@sentry/react', async importOriginal => ({
+  ...(await importOriginal()),
   captureException: vi.fn()
 }));
 
