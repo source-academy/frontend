@@ -7609,7 +7609,7 @@ __metadata:
     immer: "npm:^9.0.21"
     java-slang: "npm:^1.0.13"
     js-cookie: "npm:^3.0.5"
-    js-slang: "npm:^1.0.84"
+    js-slang: "npm:^1.0.85"
     js-yaml: "npm:^4.1.0"
     jsdom: "npm:^26.0.0"
     konva: "npm:^9.2.0"
@@ -8282,8 +8282,8 @@ __metadata:
   linkType: hard
 
 "i18next@npm:^25.0.0":
-  version: 25.3.2
-  resolution: "i18next@npm:25.3.2"
+  version: 25.3.6
+  resolution: "i18next@npm:25.3.6"
   dependencies:
     "@babel/runtime": "npm:^7.27.6"
   peerDependencies:
@@ -8291,7 +8291,7 @@ __metadata:
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/2ac3eaaf7eb0f713094265733f2371fd2631e8a0247049f2c5608d5f5b0a33720d90179de8bd4fb23e00e9b037fd548aa36e2f234bea9753061c51d87a0895bc
+  checksum: 10c0/97d3f35ecab0158d70435b5dcbdfd2845a42092e132bdb8d239b2dfedaa2f61f91955b962e85ff01cc349489ab88a1e0621b9db4c071ecff175ae7c6403b059f
   languageName: node
   linkType: hard
 
@@ -9032,9 +9032,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-slang@npm:^1.0.84":
-  version: 1.0.84
-  resolution: "js-slang@npm:1.0.84"
+"js-slang@npm:^1.0.85":
+  version: 1.0.85
+  resolution: "js-slang@npm:1.0.85"
   dependencies:
     "@babel/parser": "npm:^7.19.4"
     "@commander-js/extra-typings": "npm:^12.0.1"
@@ -9049,10 +9049,10 @@ __metadata:
     commander: "npm:^12.0.0"
     js-base64: "npm:^3.7.5"
     lodash: "npm:^4.17.21"
-    source-map: "npm:0.7.3"
+    source-map: "npm:0.7.6"
   bin:
     js-slang: dist/repl/index.js
-  checksum: 10c0/bc01cfddb02be7e4d69510bb6d9aef5147d4d2a3da9fd00cd16a45e1a2fcd70e44abaa71c81bfa5c8f336825015070aec50d32dbc37e60767fdaf604a5ca45a2
+  checksum: 10c0/8a206d6052e5b23a27bda4aef66675b4b7f9bebde936c789a182948478e26fa7aee6289effd0d867725a939e14674ee59fd218e1bec1fd1dc597b6bf7cbbaf42
   languageName: node
   linkType: hard
 
@@ -12887,10 +12887,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map@npm:0.7.3":
-  version: 0.7.3
-  resolution: "source-map@npm:0.7.3"
-  checksum: 10c0/7d2ddb51f3d2451847692a9ac7808da2b2b3bf7aef92ece33128919040a7e74d9a5edfde7a781f035c974deff876afaf83f2e30484faffffb86484e7408f5d7c
+"source-map@npm:0.7.6":
+  version: 0.7.6
+  resolution: "source-map@npm:0.7.6"
+  checksum: 10c0/59f6f05538539b274ba771d2e9e32f6c65451982510564438e048bc1352f019c6efcdc6dd07909b1968144941c14015c2c7d4369fb7c4d7d53ae769716dcc16c
   languageName: node
   linkType: hard
 
