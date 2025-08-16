@@ -1,6 +1,6 @@
 import { Card, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React from 'react';
 
 type Props = {
@@ -19,7 +19,7 @@ const EditorTab: React.FC<Props> = ({ filePath, isActive, setActive, remove }) =
 
   return (
     <Card
-      className={classNames('editor-tab', {
+      className={clsx('editor-tab', {
         selected: isActive
       })}
       onClick={setActive}

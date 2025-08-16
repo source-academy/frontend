@@ -1,5 +1,5 @@
 import { Card, Elevation, Pre } from '@blueprintjs/core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React from 'react';
 
 import { AutogradingError, AutogradingResult } from '../../assessment/AssessmentTypes';
@@ -30,7 +30,7 @@ type Props = {
 const SideContentResultCard: React.FC<Props> = ({ index, result }) => {
   return (
     <div
-      className={classNames('ResultCard', result.resultType === 'pass' ? 'correct' : 'wrong')}
+      className={clsx('ResultCard', result.resultType === 'pass' ? 'correct' : 'wrong')}
       data-testid="ResultCard"
     >
       <Card elevation={Elevation.ONE}>

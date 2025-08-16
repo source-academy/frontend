@@ -3,7 +3,7 @@ import 'ag-grid-community/styles/ag-theme-balham.css';
 
 import { ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { startCase } from 'lodash';
+import { startCase } from 'es-toolkit';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';

@@ -5624,7 +5624,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:^2.2.5, classnames@npm:^2.3.1, classnames@npm:^2.3.2":
+"classnames@npm:^2.2.5, classnames@npm:^2.3.1":
   version: 2.5.1
   resolution: "classnames@npm:2.5.1"
   checksum: 10c0/afff4f77e62cea2d79c39962980bf316bacb0d7c49e13a21adaadb9221e1c6b9d3cdb829d8bb1b23c406f4e740507f37e1dcf506f7e3b7113d17c5bab787aa69
@@ -6868,6 +6868,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"es-toolkit@npm:^1.39.9":
+  version: 1.39.9
+  resolution: "es-toolkit@npm:1.39.9"
+  dependenciesMeta:
+    "@trivago/prettier-plugin-sort-imports@4.3.0":
+      unplugged: true
+    prettier-plugin-sort-re-exports@0.0.1:
+      unplugged: true
+  checksum: 10c0/98921f79dc8f24982ed3265e10267dc64b0e9384925005d645b0a893848eacef3b1646a91e19fd962e8c0527361dbe9aa1dddf01fbc6b816f2345201624d2474
+  languageName: node
+  linkType: hard
+
 "esbuild@npm:^0.25.0":
   version: 0.25.8
   resolution: "esbuild@npm:0.25.8"
@@ -7586,13 +7598,14 @@ __metadata:
     browserfs: "npm:^1.4.3"
     buffer: "npm:^6.0.3"
     canvas: "npm:^3.1.0"
-    classnames: "npm:^2.3.2"
+    clsx: "npm:^2.1.1"
     conductor: "https://github.com/source-academy/conductor.git#0.2.1"
     constants-browserify: "npm:^1.0.0"
     coveralls: "npm:^3.1.1"
     cross-env: "npm:^10.0.0"
     dayjs: "npm:^1.11.13"
     dompurify: "npm:^3.2.4"
+    es-toolkit: "npm:^1.39.9"
     eslint: "npm:^9.9.0"
     eslint-plugin-react: "npm:^7.35.0"
     eslint-plugin-react-hooks: "npm:^5.2.0"
@@ -7614,7 +7627,6 @@ __metadata:
     jsdom: "npm:^26.0.0"
     konva: "npm:^9.2.0"
     language-directory: "https://github.com/source-academy/language-directory.git"
-    lodash: "npm:^4.17.21"
     lz-string: "npm:^1.4.4"
     mdast-util-from-markdown: "npm:^2.0.0"
     mdast-util-to-hast: "npm:^13.0.0"

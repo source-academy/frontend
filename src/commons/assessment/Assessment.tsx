@@ -12,7 +12,7 @@ import {
   Tooltip
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { sortBy } from 'lodash';
+import { sortBy } from 'es-toolkit';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useLoaderData, useParams } from 'react-router';

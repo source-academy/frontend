@@ -1,5 +1,5 @@
 import { Classes, Icon, Tab, Tabs, Tooltip } from '@blueprintjs/core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React from 'react';
 import { SideContentProps } from 'src/commons/sideContent/SideContent';
 import { generateIconId } from 'src/commons/sideContent/SideContentHelper';
@@ -106,7 +106,7 @@ const MobileSideContent: React.FC<MobileSideContentProps> = ({
               onChange={onChange}
               renderActiveTabPanelOnly={renderActiveTabPanelOnly}
               selectedTabId={selectedTab}
-              className={classNames(Classes.DARK, 'mobile-side-content')}
+              className={clsx(Classes.DARK, 'mobile-side-content')}
             >
               {allTabs.map(tab => renderTab(tab, isIOS))}
 

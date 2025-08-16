@@ -1,4 +1,5 @@
-import _ from 'lodash';
+import { mapValues } from 'es-toolkit';
+import { times } from 'es-toolkit/compat';
 
 import { screenSize } from '../commons/CommonConstants';
 
@@ -21,7 +22,7 @@ export const Color = {
 };
 
 const hex = (str: string) => parseInt(str.slice(1), 16);
-export const HexColor = _.mapValues(Color, hex);
+export const HexColor = mapValues(Color, hex);
 
 type TableFormatPosConfig = {
   direction?: Direction;
@@ -64,7 +65,7 @@ export function calcTableFormatPos({
   let itemsPerList = numItemLimit || numOfItems;
   const numOfLists = Math.ceil(numOfItems / itemsPerList);
 
-  return _.times(numOfItems, itemNumber => {
+  return times(numOfItems, itemNumber => {
     const itemIndexInList = itemNumber % itemsPerList;
     const listIndex = Math.floor(itemNumber / itemsPerList);
 

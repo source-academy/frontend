@@ -1,5 +1,5 @@
 import { Card, Classes, Elevation, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import Cookies from 'js-cookie';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -47,7 +47,7 @@ const LoginCallback: React.FC = () => {
   }, [authCode, isLoggedIn, dispatch, jwtCookie, navigate, providerId]);
 
   return (
-    <div className={classNames(classes['Login'], Classes.DARK)}>
+    <div className={clsx(classes['Login'], Classes.DARK)}>
       <Card elevation={Elevation.FOUR}>
         <div>
           <NonIdealState

@@ -11,7 +11,7 @@ import {
   SpinnerSize
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -74,7 +74,7 @@ const LoginVscodeCallback: React.FC = () => {
   }, [isVscode]);
 
   return isVscode ? (
-    <div className={classNames(classes['Login'], Classes.DARK)}>
+    <div className={clsx(classes['Login'], Classes.DARK)}>
       <Card elevation={Elevation.FOUR}>
         <div>
           <NonIdealState
@@ -85,7 +85,7 @@ const LoginVscodeCallback: React.FC = () => {
       </Card>
     </div>
   ) : (
-    <div className={classNames(classes['Login'], Classes.DARK)}>
+    <div className={clsx(classes['Login'], Classes.DARK)}>
       <Card elevation={Elevation.FOUR}>
         <div>
           <div className={classes['login-header']}>

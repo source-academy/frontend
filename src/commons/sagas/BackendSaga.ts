@@ -1,6 +1,7 @@
 /*eslint no-eval: "error"*/
 /*eslint-env browser*/
-import _ from 'lodash';
+import { camelCase } from 'es-toolkit';
+import { mapKeys } from 'es-toolkit/compat';
 import type { SagaIterator } from 'redux-saga';
 import { all, call, fork, put, select } from 'redux-saga/effects';
 import AcademyActions from 'src/features/academy/AcademyActions';
@@ -151,7 +152,7 @@ const newBackendSagaOne = combineSagaHandlers({
   },
   [SessionActions.handleSamlRedirect.type]: function* (action) {
     const { jwtCookie } = action.payload;
-    const tokens = _.mapKeys(JSON.parse(jwtCookie), (v, k) => _.camelCase(k)) as Tokens;
+    const tokens = mapKeys(JSON.parse(jwtCookie), (v, k) => camelCase(k)) as Tokens;
 
     yield put(actions.setTokens(tokens));
     yield put(actions.fetchUserAndCourse());

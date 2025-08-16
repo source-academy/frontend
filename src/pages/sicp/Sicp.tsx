@@ -1,7 +1,7 @@
 import 'katex/dist/katex.min.css';
 
 import { Button, Classes, NonIdealState, Spinner } from '@blueprintjs/core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate, useParams } from 'react-router';
@@ -181,7 +181,7 @@ const Sicp: React.FC = () => {
 
   return (
     <div
-      className={classNames('Sicp', Classes.RUNNING_TEXT, Classes.TEXT_LARGE, Classes.DARK)}
+      className={clsx('Sicp', Classes.RUNNING_TEXT, Classes.TEXT_LARGE, Classes.DARK)}
       ref={parentRef}
     >
       <SicpErrorBoundary>

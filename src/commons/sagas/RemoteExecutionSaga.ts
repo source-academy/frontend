@@ -1,8 +1,8 @@
 import { SlingClient } from '@sourceacademy/sling-client';
+import { pickBy } from 'es-toolkit/compat';
 import { assemble, compileFiles, type Context } from 'js-slang';
 import { ExceptionError } from 'js-slang/dist/errors/errors';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import _ from 'lodash';
 import { call, put, race, select, take } from 'redux-saga/effects';
 import RemoteExecutionActions from 'src/features/remoteExecution/RemoteExecutionActions';
 import {
@@ -126,7 +126,7 @@ const RemoteExecutionSaga = combineSagaHandlers({
             device: {
               ...currentSession.device,
               peripherals: {
-                ..._.pickBy(
+                ...pickBy(
                   currentSession.device.peripherals,
                   p => Date.now() - p.lastUpdated < 3000
                 ),

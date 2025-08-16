@@ -1,6 +1,6 @@
 import { Card, Elevation, H4, H6, Icon, Intent, Position, Text, Tooltip } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import classes from 'src/styles/Academy.module.scss';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
@@ -32,7 +32,7 @@ const AssessmentOverviewCard: React.FC<AssessmentOverviewCardProps> = ({
   return (
     <div>
       <Card className="row listing" elevation={Elevation.ONE}>
-        <div className={classNames('listing-picture', !isMobileBreakpoint && 'col-xs-3')}>
+        <div className={clsx('listing-picture', !isMobileBreakpoint && 'col-xs-3')}>
           <NotificationBadge
             className="badge"
             notificationFilter={filterNotificationsByAssessment(overview.id)}
@@ -44,7 +44,7 @@ const AssessmentOverviewCard: React.FC<AssessmentOverviewCardProps> = ({
             src={overview.coverImage ? overview.coverImage : defaultCoverImage}
           />
         </div>
-        <div className={classNames('listing-text', !isMobileBreakpoint && 'col-xs-9')}>
+        <div className={clsx('listing-text', !isMobileBreakpoint && 'col-xs-9')}>
           <AssessmentOverviewCardTitle
             overview={overview}
             renderProgressStatus={renderGradingTooltip}

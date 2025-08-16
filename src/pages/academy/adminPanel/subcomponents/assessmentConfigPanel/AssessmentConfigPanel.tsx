@@ -7,7 +7,7 @@ import {
   RowDragEvent
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { cloneDeep, isEqual } from 'lodash';
+import { cloneDeep, isEqual } from 'es-toolkit';
 import React, {
   forwardRef,
   useCallback,

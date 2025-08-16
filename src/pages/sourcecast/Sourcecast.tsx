@@ -1,6 +1,6 @@
 import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
@@ -412,7 +412,7 @@ const Sourcecast: React.FC = () => {
   };
 
   return (
-    <div className={classNames('Sourcecast', Classes.DARK)}>
+    <div className={clsx('Sourcecast', Classes.DARK)}>
       <SourceRecorderControlBar {...sourcecastControlbarProps} />
       {isMobileBreakpoint ? (
         <MobileWorkspace {...mobileWorkspaceProps} />

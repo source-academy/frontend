@@ -1,6 +1,6 @@
 import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
@@ -451,7 +451,7 @@ const Sourcereel: React.FC = () => {
     duration: playbackDuration
   };
   return (
-    <div className={classNames('Sourcereel', Classes.DARK)}>
+    <div className={clsx('Sourcereel', Classes.DARK)}>
       {recordingStatus === RecordingStatus.paused ? (
         <SourceRecorderControlBar {...sourcecastControlbarProps} />
       ) : undefined}

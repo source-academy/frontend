@@ -11,9 +11,9 @@ import {
   SpinnerSize
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
+import { isEqual } from 'es-toolkit';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { isEqual } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -895,7 +895,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   if (!assessment?.questions.length) {
     return (
       <NonIdealState
-        className={classNames('WorkspaceParent', Classes.DARK)}
+        className={clsx('WorkspaceParent', Classes.DARK)}
         description="Getting mission ready..."
         icon={<Spinner size={SpinnerSize.LARGE} />}
       />
@@ -1042,7 +1042,7 @@ It is safe to close this window.`}
     mobileSideContentProps: mobileSideContentProps(questionId)
   };
   return (
-    <div className={classNames('WorkspaceParent', Classes.DARK)}>
+    <div className={clsx('WorkspaceParent', Classes.DARK)}>
       {submissionOverlay}
       {overlay}
       {resetTemplateOverlay}

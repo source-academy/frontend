@@ -13,7 +13,7 @@ import {
   Position
 } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React, { useMemo, useState } from 'react';
 import { Translation } from 'react-i18next';
 import { Location, NavLink, Route, Routes, useLocation } from 'react-router';
@@ -272,7 +272,7 @@ const NavigationBar: React.FC = () => {
       <NavigationBarLangSelectButton />
       <NavLink
         className={({ isActive }) =>
-          classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
+          clsx('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL, {
             [Classes.ACTIVE]: isActive
           })
         }
@@ -295,12 +295,7 @@ const NavigationBar: React.FC = () => {
   return (
     <>
       <Navbar
-        className={classNames(
-          'NavigationBar',
-          'primary-navbar',
-          classes['primary-navbar'],
-          Classes.DARK
-        )}
+        className={clsx('NavigationBar', 'primary-navbar', classes['primary-navbar'], Classes.DARK)}
       >
         {Constants.playgroundOnly
           ? isMobileBreakpoint
@@ -357,7 +352,7 @@ export const DesktopNavLink: React.FC<NavbarEntryInfo> = props => {
   const shouldHide = props.hiddenInBreakpoints?.some(bp => responsive[bp]);
   return props.disabled ? null : (
     <NavLink
-      className={({ isActive }) => classNames(isActive && Classes.ACTIVE)}
+      className={({ isActive }) => clsx(isActive && Classes.ACTIVE)}
       to={props.to}
       key={props.text}
       title={props.text}
@@ -389,7 +384,7 @@ const MobileNavLink: React.FC<
   props.disabled ? null : (
     <NavLink
       to={props.to}
-      className={({ isActive }) => classNames(isActive && Classes.ACTIVE)}
+      className={({ isActive }) => clsx(isActive && Classes.ACTIVE)}
       onClick={props.handleClick}
       key={props.text}
     >
