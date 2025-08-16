@@ -1,7 +1,6 @@
 import commons from './commons.json';
 import grading from './grading.json';
 import login from './login.json';
-import sicp from './sicp.json';
 import autograder from './sideContent/autograder.json';
 import contestLeaderboard from './sideContent/contestLeaderboard.json';
 import contestVoting from './sideContent/contestVoting.json';
@@ -23,7 +22,6 @@ export default {
   login,
   translation: {
     ...grading,
-    ...sicp,
     ...sourcecast,
     ...sourceRecorder,
     ...stories,
