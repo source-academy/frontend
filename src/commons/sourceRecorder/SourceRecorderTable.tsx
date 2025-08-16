@@ -10,7 +10,7 @@ import {
 } from '@blueprintjs/core';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { sortBy } from 'lodash';
+import { sortBy } from 'es-toolkit/compat';
 import React from 'react';
 
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';

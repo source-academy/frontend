@@ -1,5 +1,5 @@
+import { cloneDeep } from 'es-toolkit';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import { cloneDeep } from 'lodash';
 import CommonsActions from 'src/commons/application/actions/CommonsActions';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 import {

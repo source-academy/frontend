@@ -1,5 +1,5 @@
 import { TreeNodeInfo } from '@blueprintjs/core';
-import { set } from 'lodash';
+import { set } from 'es-toolkit/compat';
 
 type Tree = Record<any, any> | string[] | any;
 

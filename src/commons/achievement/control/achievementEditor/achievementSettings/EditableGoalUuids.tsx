@@ -1,6 +1,6 @@
 import { MenuItem } from '@blueprintjs/core';
 import { ItemPredicate, ItemRenderer, MultiSelect } from '@blueprintjs/select';
-import { without } from 'lodash';
+import { without } from 'es-toolkit';
 import React, { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 import { AchievementGoal } from 'src/features/achievement/AchievementTypes';

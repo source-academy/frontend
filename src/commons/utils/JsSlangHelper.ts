@@ -1,4 +1,6 @@
 /* tslint:disable: ban-types*/
+import { difference } from 'es-toolkit';
+import { keys } from 'es-toolkit/compat';
 import createSlangContext, { defineBuiltin, importBuiltins } from 'js-slang/dist/createContext';
 import {
   type Chapter,
@@ -9,7 +11,6 @@ import {
   Variant
 } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
-import { difference, keys } from 'lodash';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';

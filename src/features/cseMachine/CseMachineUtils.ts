@@ -1,3 +1,5 @@
+import { cloneDeep } from 'es-toolkit';
+import { isObject } from 'es-toolkit/compat';
 import { estreeDecode } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/encoder-visitor';
 import { unparse } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/reverse_parser';
 import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
@@ -18,7 +20,6 @@ import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
 import { Text } from 'konva/lib/shapes/Text';
-import { cloneDeep, isObject } from 'lodash';
 import { isSchemeLanguage } from 'src/commons/application/ApplicationTypes';
 import classes from 'src/styles/Draggable.module.scss';
 
