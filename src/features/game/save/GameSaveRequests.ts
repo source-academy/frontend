@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { isEmpty } from 'es-toolkit/compat';
 import Constants from 'src/commons/utils/Constants';
 
 import SourceAcademyGame from '../SourceAcademyGame';
@@ -44,7 +44,7 @@ export async function loadData(): Promise<FullSaveState> {
   const message = await resp.text();
 
   const json = JSON.parse(message).courseRegistration?.gameStates;
-  return _.isEmpty(json) ? createEmptySaveState() : json;
+  return isEmpty(json) ? createEmptySaveState() : json;
 }
 
 /**

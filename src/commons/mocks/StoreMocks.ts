@@ -1,5 +1,5 @@
 import { Store } from '@reduxjs/toolkit';
-import _ from 'lodash';
+import { isObject, mergeWith } from 'es-toolkit/compat';
 import mockStore from 'redux-mock-store';
 
 import {
@@ -40,7 +40,7 @@ export function mockInitialStore(
   };
 
   const lodashMergeCustomizer = (objValue: any, srcValue: any) => {
-    if (_.isObject(objValue)) {
+    if (isObject(objValue)) {
       return {
         ...objValue, // destination object
         ...srcValue // overrides
@@ -48,5 +48,5 @@ export function mockInitialStore(
     }
   };
 
-  return createStore(_.mergeWith(state, overrides, lodashMergeCustomizer));
+  return createStore(mergeWith(state, overrides, lodashMergeCustomizer));
 }

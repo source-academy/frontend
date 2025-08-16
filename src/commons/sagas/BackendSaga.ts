@@ -151,7 +151,7 @@ const newBackendSagaOne = combineSagaHandlers({
   },
   [SessionActions.handleSamlRedirect.type]: function* (action) {
     const { jwtCookie } = action.payload;
-    const tokens = _.mapKeys(JSON.parse(jwtCookie), (v, k) => _.camelCase(k)) as Tokens;
+    const tokens = mapKeys(JSON.parse(jwtCookie), (v, k) => camelCase(k)) as Tokens;
 
     yield put(actions.setTokens(tokens));
     yield put(actions.fetchUserAndCourse());

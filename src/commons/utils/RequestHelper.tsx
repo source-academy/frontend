@@ -1,5 +1,5 @@
 import { Button } from '@blueprintjs/core';
-import _ from 'lodash';
+import { cloneDeep } from 'es-toolkit';
 import { assessmentFullPathRegex } from 'src/features/academy/AcademyTypes';
 import { store } from 'src/pages/createStore';
 
@@ -87,7 +87,7 @@ export const request = async (
       }
 
       store.dispatch(actions.setTokens(newTokens));
-      const updatedFetchOptions = _.cloneDeep(fetchOptions);
+      const updatedFetchOptions = cloneDeep(fetchOptions);
       updatedFetchOptions.headers.set('Authorization', `Bearer ${newTokens.accessToken}`);
 
       const retriedResp = await fetch(`${Constants.backendUrl}/v2/${path}`, updatedFetchOptions);
