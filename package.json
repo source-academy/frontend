@@ -64,7 +64,7 @@
     "immer": "^9.0.21",
     "java-slang": "^1.0.13",
     "js-cookie": "^3.0.5",
-    "js-slang": "^1.0.84",
+    "js-slang": "^1.0.85",
     "js-yaml": "^4.1.0",
     "konva": "^9.2.0",
     "language-directory": "https://github.com/source-academy/language-directory.git",
