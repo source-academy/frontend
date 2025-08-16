@@ -24,7 +24,7 @@ interface AdminViewProps {
 }
 
 function AdminView({ users, playgroundCode }: AdminViewProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation('sideContent', { keyPrefix: 'sessionManagement' });
   const [toggleAll, setToggleAll] = useState<boolean>(true);
   const [defaultRole, setDefaultRole] = useState<boolean>(true);
   const [toggling, setToggling] = useState<{ [key: string]: boolean }>(
@@ -92,8 +92,8 @@ function AdminView({ users, playgroundCode }: AdminViewProps) {
       <HTMLTable compact className={classes['table']}>
         <thead>
           <tr>
-            <th>{t('sessionManagement.name')}</th>
-            <th>{t('sessionManagement.role')}</th>
+            <th>{t('name')}</th>
+            <th>{t('role')}</th>
           </tr>
         </thead>
         <tbody>
@@ -137,7 +137,7 @@ const SideContentSessionManagement: React.FC<Props> = ({
   readOnly,
   workspaceLocation
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('sideContent', { keyPrefix: 'sessionManagement' });
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -179,8 +179,8 @@ const SideContentSessionManagement: React.FC<Props> = ({
           <HTMLTable compact className={classes['table']}>
             <thead>
               <tr>
-                <th>{t('sessionManagement.name')}</th>
-                <th>{t('sessionManagement.role')}</th>
+                <th>{t('name')}</th>
+                <th>{t('role')}</th>
               </tr>
             </thead>
             <tbody>

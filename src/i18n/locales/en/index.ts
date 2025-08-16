@@ -1,7 +1,6 @@
 import commons from './commons.json';
 import grading from './grading.json';
 import login from './login.json';
-import sessionManagement from './sessionManagement.json';
 import sicp from './sicp.json';
 import autograder from './sideContent/autograder.json';
 import contestLeaderboard from './sideContent/contestLeaderboard.json';
@@ -11,6 +10,7 @@ import dataVisualizer from './sideContent/dataVisualizer.json';
 import faceapiDisplay from './sideContent/faceapiDisplay.json';
 import htmlDisplay from './sideContent/htmlDisplay.json';
 import resultCard from './sideContent/resultCard.json';
+import sessionManagement from './sideContent/sessionManagement.json';
 import substVisualizer from './sideContent/substVisualizer.json';
 import upload from './sideContent/upload.json';
 import sourcecast from './sourcecast.json';
@@ -23,7 +23,6 @@ export default {
   login,
   translation: {
     ...grading,
-    ...sessionManagement,
     ...sicp,
     ...sourcecast,
     ...sourceRecorder,
@@ -39,6 +38,7 @@ export default {
     faceapiDisplay,
     htmlDisplay,
     resultCard,
+    sessionManagement,
     substVisualizer,
     upload
   }
