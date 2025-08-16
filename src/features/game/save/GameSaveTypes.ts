@@ -1,7 +1,6 @@
 /**
- * @typedef {FullSaveState} - this type encapsulates the the entire json object
- * that is being saved in the backend
- * @prop {Object<number, GameSaveState>} gameSaveStates - the object that stores game state of player at every last played checkpoint of the chapter
+ * Encapsulates the entire JSON object that is being saved in the backend.
+ * @prop {Object<number, GameSaveState>} gameSaveStates - the object that stores game state of player at every last played checkpoint of the chapter
  * @prop {UserSaveState} userSaveState - the object that stores settings and information about the player, available regardless of which chapter they are at
  */
 export type FullSaveState = {
@@ -10,7 +9,7 @@ export type FullSaveState = {
 };
 
 /**
- * @typedef {GameSaveState} - this encapsulates data of students' progress in the game in one checkpoint
+ * Encapsulates data of students' progress in the game in one checkpoint.
  * @prop {number} lastCheckpointPlayed - the last checkpoint played in the chapter
  * @prop {string} currentLocation - location of student during save
  * @prop {string} currentPhase - phase student is in during last save
@@ -37,7 +36,7 @@ export type GameSaveState = {
 };
 
 /**
- * @typedef {UserSaveState} - this encapsulates data about students player account throughout the game
+ * Encapsulates data about students player account throughout the game.
  * @prop {SettingsJson} settings - settings json object that contains user settings
  * @prop {[number, number]} recentlyPlayedCheckpoint - the chapter and checkpoint where the student left off (can be used for continue game)
  * @prop {string[]} collectibles - the ItemIds of all collectibles that students have completed
@@ -51,7 +50,7 @@ export type UserSaveState = {
 };
 
 /**
- * @typedef {SettingsJson} - this encapsulates data about students settings
+ * Encapsulates data about students settings.
  * @prop {number} volume - volume that students play the game with
  */
 export type SettingsJson = {
