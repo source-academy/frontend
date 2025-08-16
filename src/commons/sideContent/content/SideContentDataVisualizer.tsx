@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { HotkeyItem } from '@mantine/hooks';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import classNames from 'classnames';
+import { t } from 'i18next';
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { connect, MapDispatchToProps } from 'react-redux';
@@ -14,7 +15,6 @@ import { Links } from '../../utils/Constants';
 import { beginAlertSideContent } from '../SideContentActions';
 import { SideContentLocation, SideContentTab, SideContentType } from '../SideContentTypes';
 import { ItalicLink } from './SideContentCseMachine';
-import { t } from 'i18next';
 
 type State = {
   steps: Step[];
