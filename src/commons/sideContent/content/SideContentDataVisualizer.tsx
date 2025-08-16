@@ -14,6 +14,7 @@ import { Links } from '../../utils/Constants';
 import { beginAlertSideContent } from '../SideContentActions';
 import { SideContentLocation, SideContentTab, SideContentType } from '../SideContentTypes';
 import { ItalicLink } from './SideContentCseMachine';
+import { t } from 'i18next';
 
 type State = {
   steps: Step[];
@@ -81,6 +82,7 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
                 onClick={this.onPrevButtonClick}
                 disabled={firstStep()}
               >
+                {/* TODO: i18n */}
                 Previous
               </Button>
               <h3 className={Classes.TEXT_LARGE}>
@@ -97,6 +99,7 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
                 onClick={this.onNextButtonClick}
                 disabled={finalStep()}
               >
+                {/* TODO: i18n */}
                 Next
               </Button>
             </div>
@@ -166,7 +169,7 @@ export const SideContentDataVisualizer = connect(
 )(SideContentDataVisualizerBase);
 
 const makeDataVisualizerTabFrom = (location: SideContentLocation): SideContentTab => ({
-  label: 'Data Visualizer',
+  label: t('sideContent:dataVisualizer.label'),
   iconName: IconNames.EYE_OPEN,
   body: <SideContentDataVisualizer workspaceLocation={location} />,
   id: SideContentType.dataVisualizer
