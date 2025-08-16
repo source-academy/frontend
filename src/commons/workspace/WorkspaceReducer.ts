@@ -46,7 +46,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> 
 ) => {
   const workspaceLocation = getWorkspaceLocation(action);
   switch (workspaceLocation) {
-    case 'sourcecast':
+    case 'sourcecast': {
       const sourcecastState = SourcecastReducer(state.sourcecast, action);
       if (sourcecastState === state.sourcecast) {
         break;
@@ -55,7 +55,8 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> 
         ...state,
         sourcecast: sourcecastState
       };
-    case 'sourcereel':
+    }
+    case 'sourcereel': {
       const sourcereelState = SourcereelReducer(state.sourcereel, action);
       if (sourcereelState === state.sourcereel) {
         break;
@@ -64,6 +65,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> 
         ...state,
         sourcereel: sourcereelState
       };
+    }
     default:
       break;
   }

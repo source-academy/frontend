@@ -166,7 +166,7 @@ export class CseAnimation {
       CseAnimation.handleNode(lastControlItem);
     } else if (isInstr(lastControlItem)) {
       switch (lastControlItem.instrType) {
-        case InstrType.APPLICATION:
+        case InstrType.APPLICATION: {
           const appInstr = lastControlItem as AppInstr;
           const fnStashItem = Layout.previousStashComponent.stashItemComponents.at(
             -appInstr.numOfArgs - 1
@@ -194,6 +194,7 @@ export class CseAnimation {
             )
           );
           break;
+        }
         case InstrType.ARRAY_ACCESS:
           CseAnimation.animations.push(
             new ArrayAccessAnimation(
@@ -204,7 +205,7 @@ export class CseAnimation {
             )
           );
           break;
-        case InstrType.ARRAY_ASSIGNMENT:
+        case InstrType.ARRAY_ASSIGNMENT: {
           const arrayItem = Layout.previousStashComponent.stashItemComponents.at(-3)!;
           CseAnimation.animations.push(
             new ArrayAssignmentAnimation(
@@ -217,7 +218,8 @@ export class CseAnimation {
             )
           );
           break;
-        case InstrType.ARRAY_LITERAL:
+        }
+        case InstrType.ARRAY_LITERAL: {
           const arrSize = (lastControlItem as ArrLitInstr).arity;
           CseAnimation.animations.push(
             new InstructionApplicationAnimation(
@@ -227,6 +229,7 @@ export class CseAnimation {
             )
           );
           break;
+        }
         case InstrType.ASSIGNMENT:
           CseAnimation.animations.push(
             new AssignmentAnimation(
@@ -263,19 +266,21 @@ export class CseAnimation {
           );
           break;
         case InstrType.POP:
-          const currentStashSize = Layout.stashComponent.stash.size();
-          const previousStashSize = Layout.previousStashComponent.stash.size();
-          const lastStashIsUndefined =
-            currentStashSize === 1 &&
-            currStashComponent!.text === 'undefined' &&
-            currentStashSize === previousStashSize;
-          CseAnimation.animations.push(
-            new PopAnimation(
-              lastControlComponent,
-              Layout.previousStashComponent.stashItemComponents.at(-1)!,
-              lastStashIsUndefined ? currStashComponent : undefined
-            )
-          );
+          {
+            const currentStashSize = Layout.stashComponent.stash.size();
+            const previousStashSize = Layout.previousStashComponent.stash.size();
+            const lastStashIsUndefined =
+              currentStashSize === 1 &&
+              currStashComponent!.text === 'undefined' &&
+              currentStashSize === previousStashSize;
+            CseAnimation.animations.push(
+              new PopAnimation(
+                lastControlComponent,
+                Layout.previousStashComponent.stashItemComponents.at(-1)!,
+                lastStashIsUndefined ? currStashComponent : undefined
+              )
+            );
+          }
           break;
         case InstrType.UNARY_OP:
           CseAnimation.animations.push(
@@ -286,7 +291,7 @@ export class CseAnimation {
             )
           );
           break;
-        case InstrType.SPREAD:
+        case InstrType.SPREAD: {
           const control = Layout.controlComponent.stackItemComponents;
           const array = Layout.previousStashComponent.stashItemComponents.at(-1)!.arrow!
             .target! as ArrayValue;
@@ -315,6 +320,7 @@ export class CseAnimation {
             )
           );
           break;
+        }
         case InstrType.ARRAY_LENGTH:
         case InstrType.BREAK:
         case InstrType.BREAK_MARKER:
@@ -373,6 +379,8 @@ export class CseAnimation {
               break;
             case 'syntax-rules':
             // nothing.
+            // TODO: Check if this fallthrough behavior is intentional
+            // eslint-disable-next-line no-fallthrough
             default:
               // it's probably an application, or a macro expansion.
               // either way, it's a control -> control expansion.

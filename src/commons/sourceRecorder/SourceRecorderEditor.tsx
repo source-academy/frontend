@@ -137,11 +137,12 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
       case 'cursorPositionChange':
         this.moveCursor(inputToApply.data);
         break;
-      case 'selectionRangeData':
+      case 'selectionRangeData': {
         const { range, isBackwards } = inputToApply.data;
         this.AceEditor.current!.editor.selection.setRange(range, isBackwards);
         break;
-      case 'keyboardCommand':
+      }
+      case 'keyboardCommand': {
         const keyboardCommand = inputToApply.data;
         switch (keyboardCommand) {
           case 'run':
@@ -153,6 +154,7 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
             break;
         }
         break;
+      }
     }
   }
 

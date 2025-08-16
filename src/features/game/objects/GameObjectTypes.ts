@@ -3,7 +3,7 @@ import { AssetKey, ItemId, TrackInteraction } from '../commons/CommonTypes';
 import GlowingImage from '../effects/GlowingObject';
 
 /**
- * @typedef {ObjectProperty} - encapsulates data about an object in a location
+ * Encapsulates data about an object in a location.
  * @prop {boolean} isInteractive - whether or not this object is clickable
  * @prop {ItemId} interactionId - the object id that identifies the object so we can keep track of its interactions
  * @prop {ItemId[]} actionIds - ids of all actions that play when this object is clicked
@@ -27,7 +27,7 @@ export type ObjectLayerProps = {
 };
 
 /**
- * @typedef {ActivatableSprite} - data that represents the object on screen
+ * Data that represents the object on screen.
  * @prop {GlowingImage| Phaser.GameObjects.Rectangle} sprite - The clickable object sprite which can be made to glow and blink
  * @prop {Phaser.GameObjects.Image| Phaser.GameObjects.Rectangle} sprite - The area which can be clicked
  * @prop {ItemId[]} actionIds - The action ids

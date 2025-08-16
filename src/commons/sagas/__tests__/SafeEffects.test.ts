@@ -27,6 +27,7 @@ describe('Test wrapSaga', () => {
 
   test('wrapSaga handles errors appropriately', async () => {
     const errorToThrow = new Error();
+    // eslint-disable-next-line require-yield
     const wrappedSaga = wrapSaga(function* () {
       throw errorToThrow;
     });

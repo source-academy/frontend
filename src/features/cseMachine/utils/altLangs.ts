@@ -37,7 +37,7 @@ export function getAlternateControlItemComponent(
     case Chapter.SCHEME_2:
     case Chapter.SCHEME_3:
     case Chapter.SCHEME_4:
-    case Chapter.FULL_SCHEME:
+    case Chapter.FULL_SCHEME: {
       const text = convertNodeToScheme(node);
       return new ControlItemComponent(
         text,
@@ -47,6 +47,7 @@ export function getAlternateControlItemComponent(
         unhighlightOnHover,
         topItem
       );
+    }
     default:
       // this only happens if
       // a chapter needing an alternate representation

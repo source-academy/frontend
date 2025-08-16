@@ -48,10 +48,11 @@ function handleHeaders(headers: string): void {
     const headerObject = yaml.load(headers) as Record<string, any>;
     for (const [key, value] of Object.entries(headerObject)) {
       switch (key) {
-        case CONFIG_STRING:
+        case CONFIG_STRING: {
           const { chapter, variant } = value;
           handleEnvironment({ [DEFAULT_ENV]: { chapter, variant } });
           break;
+        }
         case ENV_STRING:
           handleEnvironment(value);
           break;

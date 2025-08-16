@@ -1,7 +1,6 @@
 import { memoize } from 'lodash';
-import { LoaderFunction, Navigate, redirect, RouteObject } from 'react-router';
+import { type LoaderFunction, redirect, replace, type RouteObject } from 'react-router';
 import { Role } from 'src/commons/application/ApplicationTypes';
-import Assessment from 'src/commons/assessment/Assessment';
 import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 import { assessmentRegExp, gradingRegExp, teamRegExp } from 'src/features/academy/AcademyTypes';
@@ -11,6 +10,7 @@ import { store } from '../createStore';
 
 const notFoundPath = 'not_found';
 
+const Assessment = () => import('../../commons/assessment/Assessment');
 const Game = () => import('./game/Game');
 const Sourcecast = () => import('../sourcecast/Sourcecast');
 const Achievement = () => import('../achievement/Achievement');
@@ -70,10 +70,10 @@ const getCommonAcademyRoutes = (): RouteObject[] => {
 
   return [
     gameRoute,
-    { path: '', element: <Navigate replace to={notFoundPath} />, loader: homePageRedirect },
+    { path: '', loader: () => homePageRedirect() || replace(notFoundPath) },
     {
       path: `:assessmentConfigType/${assessmentRegExp}`,
-      element: <Assessment />,
+      lazy: Assessment,
       loader: assessmentLoader
     },
     { path: 'sourcecast/:sourcecastId?', lazy: Sourcecast },

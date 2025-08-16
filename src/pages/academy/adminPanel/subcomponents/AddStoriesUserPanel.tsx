@@ -71,7 +71,7 @@ const AddStoriesUserPanel: React.FC<Props> = props => {
     const { data, errors }: { data: string[][]; errors: any[] } = results;
 
     // react-papaparse upload errors
-    if (!!errors.length) {
+    if (errors.length) {
       setInvalidCsvMsg(
         'Error detected while uploading the CSV file! Please recheck the file and try again.'
       );

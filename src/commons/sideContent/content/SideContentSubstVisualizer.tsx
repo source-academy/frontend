@@ -199,7 +199,7 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
   Custom AST renderer for Stepper (Inspired by astring library)
   This custom AST renderer utilizing the recursive approach of handling rendering of various StepperNodes by
   using nested <div> and <span>. Unlike React-ace, using our own renderer make our stepper more customizable. For example,
-  we can add a code component that is hoverable by using with blueprint tooltip.   
+  we can add a code component that is hoverable by using with blueprint tooltip.
 */
 
 /** RenderContext holds relevant information to handle rendering. This will be carried along the recursive renderNode function
@@ -212,11 +212,12 @@ interface RenderContext {
   styleWrapper: StyleWrapper;
 }
 
-/* 
-  StyleWrapper is a function that returns a styling function based on the node. For example, 
-  const wrapLiteral: StyleWrapper = (node) 
-  => (preformatted) => node.type === "Literal" ? <div className="stepper-literal">preformatted</div> : preformatted;
-  makes the default result from renderNode(node) wrapped with className stepper-literal for literal AST.
+/**
+  StyleWrapper is a function that returns a styling function based on the node. For example,
+  ```tsx
+  const wrapLiteral: StyleWrapper = (node) => (preformatted) => node.type === "Literal" ? <div className="stepper-literal">preformatted</div> : preformatted;
+  ```
+  makes the default result from `renderNode(node)` wrapped with className `stepper-literal` for literal AST.
 */
 type StyleWrapper = (node: StepperBaseNode) => (preformatted: React.ReactNode) => React.ReactNode;
 
