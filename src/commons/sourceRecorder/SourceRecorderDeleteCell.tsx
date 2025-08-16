@@ -1,6 +1,7 @@
 import { Dialog, DialogBody, DialogFooter } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import ControlButton from '../ControlButton';
@@ -16,6 +17,7 @@ type StateProps = {
 };
 
 const SourceRecorderDeleteCell: React.FC<SourceRecorderDeleteCellProps> = props => {
+  const { t } = useTranslation();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleCloseDialog = () => setIsDialogOpen(false);
@@ -32,11 +34,11 @@ const SourceRecorderDeleteCell: React.FC<SourceRecorderDeleteCellProps> = props 
         icon="info-sign"
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
-        title="Delete Sourcecast"
+        title={t('sourceRecorder.deleteTitle')}
         canOutsideClickClose={true}
       >
         <DialogBody>
-          <p>Are you sure to delete this sourcecast entry?</p>
+          <p>{t('sourceRecorder.deleteConfirmation')}</p>
         </DialogBody>
         <DialogFooter
           actions={

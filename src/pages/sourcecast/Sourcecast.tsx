@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import { useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
@@ -52,6 +53,7 @@ import {
 const workspaceLocation: WorkspaceLocation = 'sourcecast';
 
 const Sourcecast: React.FC = () => {
+  const { t } = useTranslation();
   const { isMobileBreakpoint } = useResponsive();
   const params = useParams<{ sourcecastId: string }>();
 
@@ -253,7 +255,11 @@ const Sourcecast: React.FC = () => {
       body: (
         <div>
           <span className="Multi-line">
-            <Pre>{title ? 'Title: ' + title + '\nDescription: ' + description : INTRODUCTION}</Pre>
+            <Pre>
+              {title
+                ? t('sourcecast.titleDescription', { title, description })
+                : t('sourcecast.introduction')}
+            </Pre>
           </span>
           <SourceRecorderTable
             handleSetSourcecastData={handleSetSourcecastData}
@@ -422,8 +428,6 @@ const Sourcecast: React.FC = () => {
     </div>
   );
 };
-
-const INTRODUCTION = 'Welcome to Sourcecast!';
 
 // react-router lazy loading
 // https://reactrouter.com/en/main/route/lazy

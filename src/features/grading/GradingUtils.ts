@@ -1,4 +1,5 @@
 import { ColumnFilter } from '@tanstack/react-table';
+import { t } from 'i18next';
 import {
   AssessmentStatus,
   AssessmentStatuses,
@@ -17,9 +18,25 @@ export const exportGradingCSV = (gradingOverviews: GradingOverview[] | undefined
     return;
   }
 
+  const headers = [
+    t('gradingCsv.assessmentNumber'),
+    t('gradingCsv.assessmentName'),
+    t('gradingCsv.studentName'),
+    t('gradingCsv.studentUsername'),
+    t('gradingCsv.group'),
+    t('gradingCsv.progress'),
+    t('gradingCsv.questionCount'),
+    t('gradingCsv.questionsGraded'),
+    t('gradingCsv.initialXp'),
+    t('gradingCsv.xpAdjustment'),
+    t('gradingCsv.currentXpExclBonus'),
+    t('gradingCsv.maxXp'),
+    t('gradingCsv.bonusXp')
+  ];
+
   const content = new Blob(
     [
-      '"Assessment Number","Assessment Name","Student Name","Student Username","Group","Progress","Question Count","Questions Graded","Initial XP","XP Adjustment","Current XP (excl. bonus)","Max XP","Bonus XP"\n',
+      headers.map(header => `"${header}"`).join(',') + '\n',
       ...gradingOverviews.map(
         e =>
           [

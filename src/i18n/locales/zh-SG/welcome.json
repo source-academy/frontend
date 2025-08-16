@@ -1,0 +1,9 @@
+{
+  "welcome": {
+    "title": "欢迎来到 {{sourceAcademyDeploymentName}}",
+    "loggedInMessage": "您已登录为 <0>{{name}}</0>。{{sourceAcademyDeploymentName}} 没有此账户的课程信息",
+    "enrollmentMessage": "如果您已注册课程，请联系课程团队，确保您的账户已加入课程。",
+    "resourcesForLearners": "点击<0>这里</0>寻找适合您的课程。",
+    "resourcesForEducators": "点击<0>这里</0>查看入门资源列表。"
+  }
+}

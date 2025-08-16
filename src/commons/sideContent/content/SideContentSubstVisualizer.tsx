@@ -38,43 +38,40 @@ import {
 } from 'js-slang/dist/tracer/nodes/Statement/VariableDeclaration';
 import { astToString } from 'js-slang/dist/utils/ast/astToString';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 import { beginAlertSideContent } from '../SideContentActions';
 import { SideContentLocation, SideContentType } from '../SideContentTypes';
 
 const SubstDefaultText = () => {
+  const { t } = useTranslation('sideContent', { keyPrefix: 'substVisualizer' });
   return (
     <div>
       <div id="substituter-default-text" className={Classes.RUNNING_TEXT}>
-        Welcome to the Stepper!
+        {t('welcome')}
         <br />
         <br />
-        On this tab, the REPL will be hidden from view, so do check that your code has no errors
-        before running the stepper. You may use this tool by writing your program on the left, then
-        dragging the slider above to see its evaluation.
+        {t('instructions')}
         <br />
         <br />
-        On even-numbered steps, the part of the program that will be evaluated next is highlighted
-        in yellow. On odd-numbered steps, the result of the evaluation is highlighted in green. You
-        can change the maximum steps limit (500-5000, default 1000) in the control bar.
+        {t('evaluationSteps')}
         <br />
         <br />
         <Divider />
-        Some useful keyboard shortcuts:
+        {t('shortcutsTitle')}
         <br />
         <br />
-        a: Move to the first step
+        {t('shortcuts.a')}
         <br />
-        e: Move to the last step
+        {t('shortcuts.e')}
         <br />
-        f: Move to the next step
+        {t('shortcuts.f')}
         <br />
-        b: Move to the previous step
+        {t('shortcuts.b')}
         <br />
         <br />
-        Note that these shortcuts are only active when the browser focus is on this tab (click on or
-        above the explanation text).
+        {t('shortcutsNote')}
       </div>
     </div>
   );

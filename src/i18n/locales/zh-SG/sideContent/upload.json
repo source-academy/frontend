@@ -1,0 +1,11 @@
+{
+  "description": "通过上传类文件绕过编译器和类型检查器，在 JVM 中运行。",
+  "acceptedFiles": "仅接受 .class 文件。当此选项卡处于活动状态时，编辑器中的代码将被忽略。",
+  "compileCommand": "使用以下命令编译文件：",
+  "javacCommand": "javac *.java -target 8 -source 8",
+  "warning": "避免运行从未知来源下载的类文件。",
+  "mainClass": "主类必须命名为 Main 并作为 Main.class 上传。",
+  "chooseFiles": "选择文件...",
+  "filesUploaded": "文件已上传。",
+  "label": "上传文件"
+}

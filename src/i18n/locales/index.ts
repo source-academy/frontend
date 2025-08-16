@@ -1,8 +1,10 @@
 import translationEN from './en';
 import translationPSEUDO from './pseudo';
+import translationZH from './zh-SG';
 
 export enum i18nLanguageCode {
   ENGLISH = 'en',
+  CHINESE = 'zh',
   PSEUDO = 'pseudo',
   DEFAULT = ENGLISH
 }
@@ -24,6 +26,10 @@ const developmentOnlyLanguages = {
   [i18nLanguageCode.PSEUDO]: {
     name: 'Pseudo',
     ...translationPSEUDO
+  },
+  [i18nLanguageCode.CHINESE]: {
+    name: '中文',
+    ...translationZH
   }
 };
 
