@@ -2,7 +2,7 @@ import 'src/i18n/i18n';
 import 'src/styles/index.scss';
 
 import { Button, OverlaysProvider } from '@blueprintjs/core';
-import * as Sentry from '@sentry/browser';
+import * as Sentry from '@sentry/react';
 import { setModulesStaticURL } from 'js-slang/dist/modules/loader';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
