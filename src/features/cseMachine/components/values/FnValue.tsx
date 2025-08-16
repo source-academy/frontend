@@ -49,7 +49,7 @@ export class FnValue extends Value implements IHoverable {
 
   /** width of the closure circles + label */
   readonly totalWidth: number;
-  readonly labelRef: RefObject<Label> = React.createRef();
+  readonly labelRef: RefObject<Label | null> = React.createRef();
 
   centerX: number;
   enclosingFrame?: Frame;

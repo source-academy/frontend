@@ -1,6 +1,6 @@
 import { Classes } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React from 'react';
+import React, { type JSX } from 'react';
 
 export type ControlBarProps = {
   editorButtons: Array<JSX.Element | null>;

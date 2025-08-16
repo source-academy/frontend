@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 import { Stage } from 'react-konva';
 
 import { Config } from './Config';

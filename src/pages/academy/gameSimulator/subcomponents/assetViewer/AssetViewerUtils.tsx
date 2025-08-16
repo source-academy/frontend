@@ -1,5 +1,6 @@
 import { TreeNodeInfo } from '@blueprintjs/core';
 import { set } from 'lodash';
+import type { JSX } from 'react';
 
 type Tree = Record<any, any> | string[] | any;
 
