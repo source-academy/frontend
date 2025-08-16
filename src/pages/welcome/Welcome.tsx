@@ -1,5 +1,6 @@
 import { Card, H2, UL } from '@blueprintjs/core';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
+import { ItalicLink } from 'src/commons/sideContent/content/SideContentCseMachine';
 import Constants, { Links } from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
 
@@ -9,33 +10,34 @@ const Welcome: React.FC = () => {
   const { t } = useTranslation();
   const { name } = useSession();
 
+  const { sourceAcademyDeploymentName } = Constants;
   return (
     <div className="fullpage">
       <Card className="fullpage-content">
         <div className={styles.fullpage}>
           <div>
-            <H2>
-              {t('welcome.title', {
-                sourceAcademyDeploymentName: Constants.sourceAcademyDeploymentName
-              })}
-            </H2>
+            <H2>{t('welcome.title', { sourceAcademyDeploymentName })}</H2>
             <div>
-              {t('welcome.loggedInMessage', {
-                name,
-                sourceAcademyDeploymentName: Constants.sourceAcademyDeploymentName
-              })}
+              <Trans
+                i18nKey="welcome.loggedInMessage"
+                components={[<strong />]}
+                tOptions={{ name, sourceAcademyDeploymentName }}
+              />
             </div>
             <div className={styles['fullpage-content']}>
               <UL className={styles['text-left']}>
+                <li>{t('welcome.enrollmentMessage')}</li>
                 <li>
-                  {t('welcome.resourcesForLearners', {
-                    resourcesForLearners: Links.resourcesForLearners
-                  })}
+                  <Trans
+                    i18nKey="welcome.resourcesForLearners"
+                    components={[<ItalicLink href={Links.resourcesForLearners} />]}
+                  />
                 </li>
                 <li>
-                  {t('welcome.resourcesForEducators', {
-                    resourcesForEducators: Links.resourcesForEducators
-                  })}
+                  <Trans
+                    i18nKey="welcome.resourcesForEducators"
+                    components={[<ItalicLink href={Links.resourcesForEducators} />]}
+                  />
                 </li>
               </UL>
             </div>
