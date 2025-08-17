@@ -5,7 +5,7 @@ exports[`HTML Display renders correctly 1`] = `
   className="sa-html-display"
   sandbox="allow-scripts"
   src="about:blank"
-  srcDoc="<p>Hello World!</p>"
+  srcDoc=""<p>Hello World!</p>""
   title="HTML Display"
 />
 `;
