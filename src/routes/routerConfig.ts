@@ -1,4 +1,5 @@
-import { redirect, replace, type RouteObject } from 'react-router';
+import * as Sentry from '@sentry/react';
+import { redirect, replace, type RouteObject, Routes } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
 
 import { GuardedRoute } from './routeGuard';
@@ -149,3 +150,5 @@ export const getFullAcademyRouterConfig = ({
     }
   ];
 };
+
+export const SentryRoutes = Sentry.withSentryReactRouterV7Routing(Routes);
