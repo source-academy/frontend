@@ -16,8 +16,9 @@ import { IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import React, { useMemo, useState } from 'react';
 import { Translation } from 'react-i18next';
-import { Location, NavLink, Route, Routes, useLocation } from 'react-router';
+import { type Location, NavLink, Route, useLocation } from 'react-router';
 import { i18nDefaultLangKeys } from 'src/i18n/i18next';
+import { SentryRoutes } from 'src/routes/routerConfig';
 import classes from 'src/styles/NavigationBar.module.scss';
 
 import Dropdown from '../dropdown/Dropdown';
@@ -312,7 +313,7 @@ const NavigationBar: React.FC = () => {
         {commonNavbarRight}
       </Navbar>
 
-      <Routes>
+      <SentryRoutes>
         <Route path="/playground/*" element={null} />
         <Route path="/contributors" element={null} />
         <Route path="/courses/:courseId/sourcecast" element={null} />
@@ -327,7 +328,7 @@ const NavigationBar: React.FC = () => {
             ) : null
           }
         />
-      </Routes>
+      </SentryRoutes>
     </>
   );
 };

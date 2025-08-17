@@ -1,6 +1,7 @@
 import React from 'react';
-import { Route, Routes } from 'react-router';
+import { Route } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { SentryRoutes } from 'src/routes/routerConfig';
 
 import { Role } from '../../commons/application/ApplicationTypes';
 import NotFound from '../notFound/NotFound';
@@ -14,11 +15,11 @@ const Achievement: React.FC = () => {
     role === Role.Admin || role === Role.Staff ? <AchievementControl /> : <NotFound />;
 
   return (
-    <Routes>
+    <SentryRoutes>
       <Route path="/" element={<AchievementDashboard />}></Route>
       <Route path="control" element={toAchievementControl}></Route>
       <Route path="*" element={<NotFound />} />
-    </Routes>
+    </SentryRoutes>
   );
 };
 
