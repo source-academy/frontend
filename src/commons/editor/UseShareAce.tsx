@@ -5,7 +5,7 @@ import {
   AceMultiSelectionManager,
   AceRadarView
 } from '@convergencelabs/ace-collab-ext';
-import * as Sentry from '@sentry/browser';
+import * as Sentry from '@sentry/react';
 import sharedbAce from '@sourceacademy/sharedb-ace';
 import type SharedbAceBinding from '@sourceacademy/sharedb-ace/binding';
 import { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
