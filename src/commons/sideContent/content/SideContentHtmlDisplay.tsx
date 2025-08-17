@@ -50,7 +50,7 @@ const SideContentHtmlDisplayBase: React.FC<OwnProps & DispatchProps> = props => 
       className="sa-html-display"
       title={t('title')}
       sandbox="allow-scripts"
-      srcDoc={JSON.parse(content)}
+      srcDoc={content}
       src="about:blank"
     />
   );
