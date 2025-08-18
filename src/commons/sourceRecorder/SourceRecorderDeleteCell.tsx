@@ -17,7 +17,7 @@ type StateProps = {
 };
 
 const SourceRecorderDeleteCell: React.FC<SourceRecorderDeleteCellProps> = props => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('translation', { keyPrefix: 'sourceRecorder' });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleCloseDialog = () => setIsDialogOpen(false);
@@ -34,17 +34,25 @@ const SourceRecorderDeleteCell: React.FC<SourceRecorderDeleteCellProps> = props 
         icon="info-sign"
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
-        title={t('sourceRecorder.deleteTitle')}
+        title={t('deleteTitle')}
         canOutsideClickClose={true}
       >
         <DialogBody>
-          <p>{t('sourceRecorder.deleteConfirmation')}</p>
+          <p>{t('deleteConfirmation')}</p>
         </DialogBody>
         <DialogFooter
           actions={
             <>
-              <ControlButton label="Confirm Delete" icon={IconNames.TRASH} onClick={handleDelete} />
-              <ControlButton label="Cancel" icon={IconNames.CROSS} onClick={handleCloseDialog} />
+              <ControlButton
+                label={t('confirmDelete')}
+                icon={IconNames.TRASH}
+                onClick={handleDelete}
+              />
+              <ControlButton
+                label={t('cancel')}
+                icon={IconNames.CROSS}
+                onClick={handleCloseDialog}
+              />
             </>
           }
         />
