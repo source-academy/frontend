@@ -4,7 +4,8 @@ import { Mock, vi } from 'vitest';
 
 import Application from '../Application';
 
-vi.mock('react-redux', () => ({
+vi.mock('react-redux', async importOriginal => ({
+  ...(await importOriginal()),
   useDispatch: vi.fn(),
   useSelector: vi.fn()
 }));

@@ -2,10 +2,17 @@ import 'src/i18n/i18n';
 import 'src/styles/index.scss';
 
 import { Button, OverlaysProvider } from '@blueprintjs/core';
-import * as Sentry from '@sentry/browser';
+import * as Sentry from '@sentry/react';
 import { setModulesStaticURL } from 'js-slang/dist/modules/loader';
+import { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
+import {
+  createRoutesFromChildren,
+  matchRoutes,
+  useLocation,
+  useNavigationType
+} from 'react-router';
 import Constants, { Links } from 'src/commons/utils/Constants';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import { register as registerServiceWorker } from 'src/commons/utils/RegisterServiceWorker';
@@ -19,7 +26,17 @@ if (Constants.sentryDsn) {
   Sentry.init({
     dsn: Constants.sentryDsn,
     environment: Constants.sourceAcademyEnvironment,
-    release: `cadet-frontend@${Constants.sourceAcademyVersion}`
+    release: `cadet-frontend@${Constants.sourceAcademyVersion}`,
+    integrations: [
+      Sentry.reactRouterV7BrowserTracingIntegration({
+        useEffect,
+        useLocation,
+        useNavigationType,
+        createRoutesFromChildren,
+        matchRoutes
+      }),
+      Sentry.replayIntegration()
+    ]
   });
   const userId = store.getState().session.userId;
   Sentry.setUser(typeof userId !== 'undefined' ? { id: userId.toString() } : null);
