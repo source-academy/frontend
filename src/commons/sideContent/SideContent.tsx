@@ -12,7 +12,6 @@ import type {
 
 export type SideContentProps = {
   renderActiveTabPanelOnly?: boolean;
-  editorWidth?: string;
   tabs?: {
     beforeDynamicTabs: SideContentTab[];
     afterDynamicTabs: SideContentTab[];
@@ -27,7 +26,6 @@ const renderTab = (
   tab: SideContentTab,
   shouldAlert: boolean,
   workspaceLocation?: SideContentLocation,
-  editorWidth?: string,
   sideContentHeight?: number
 ) => {
   const iconSize = 20;
@@ -56,7 +54,6 @@ const renderTab = (
         props: {
           ...tab.body.props,
           workspaceLocation,
-          editorWidth,
           sideContentHeight
         }
       }
@@ -66,7 +63,7 @@ const renderTab = (
   return <Tab key={tabId} {...tabProps} panel={tabPanel} />;
 };
 
-const SideContent = ({ renderActiveTabPanelOnly, editorWidth, ...props }: SideContentProps) => (
+const SideContent = ({ renderActiveTabPanelOnly, ...props }: SideContentProps) => (
   <SideContentProvider {...props}>
     {({ tabs: allTabs, alerts: tabAlerts, changeTabsCallback, selectedTab, height }) => (
       <div className="side-content">
@@ -80,13 +77,7 @@ const SideContent = ({ renderActiveTabPanelOnly, editorWidth, ...props }: SideCo
             >
               {allTabs.map(tab => {
                 const tabId = getTabId(tab);
-                return renderTab(
-                  tab,
-                  tabAlerts.includes(tabId),
-                  props.workspaceLocation,
-                  editorWidth,
-                  height
-                );
+                return renderTab(tab, tabAlerts.includes(tabId), props.workspaceLocation, height);
               })}
             </Tabs>
           </div>
