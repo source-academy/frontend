@@ -46,13 +46,15 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
   }, [directoryEnabled, dirLanguages.length, dispatch]);
 
   if (!directoryEnabled) {
-    return <LegacyControlBarChapterSelect
-      isFolderModeEnabled={isFolderModeEnabled}
-      sourceChapter={sourceChapter}
-      sourceVariant={sourceVariant}
-      handleChapterSelect={handleChapterSelect}
-      disabled={disabled}
-    />;
+    return (
+      <LegacyControlBarChapterSelect
+        isFolderModeEnabled={isFolderModeEnabled}
+        sourceChapter={sourceChapter}
+        sourceVariant={sourceVariant}
+        handleChapterSelect={handleChapterSelect}
+        disabled={disabled}
+      />
+    );
   }
 
   const EvaluatorSelectComponent = Select.ofType<IEvaluatorDefinition>();

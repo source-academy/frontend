@@ -6,17 +6,17 @@ import Actions from './LanguageDirectoryActions';
 import type { LanguageDirectoryState } from './LanguageDirectoryTypes';
 
 export const LanguageDirectoryReducer: Reducer<LanguageDirectoryState, SourceActionType> =
-	createReducer(defaultLanguageDirectory, builder => {
-		builder
-			.addCase(Actions.setLanguages, (state, action) => {
-				state.languages = action.payload.languages as any;
-			})
-			.addCase(Actions.setSelectedLanguage, (state, action) => {
-				const { languageId, evaluatorId } = action.payload;
-				state.selectedLanguageId = languageId;
-				state.selectedEvaluatorId = evaluatorId ?? null;
-			})
-			.addCase(Actions.setSelectedEvaluator, (state, action) => {
-				state.selectedEvaluatorId = action.payload.evaluatorId;
-			});
-	});
+  createReducer(defaultLanguageDirectory, builder => {
+    builder
+      .addCase(Actions.setLanguages, (state, action) => {
+        state.languages = action.payload.languages as any;
+      })
+      .addCase(Actions.setSelectedLanguage, (state, action) => {
+        const { languageId, evaluatorId } = action.payload;
+        state.selectedLanguageId = languageId;
+        state.selectedEvaluatorId = evaluatorId ?? null;
+      })
+      .addCase(Actions.setSelectedEvaluator, (state, action) => {
+        state.selectedEvaluatorId = action.payload.evaluatorId;
+      });
+  });

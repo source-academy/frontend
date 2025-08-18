@@ -28,7 +28,7 @@ const NavigationBarLangSelectButton = () => {
       dispatch(LanguageDirectoryActions.fetchLanguages());
     }
   }, [languagesLoaded, dispatch]);
-  
+
   const directoryEnabled = useFeature(flagLanguageDirectoryEnable);
   if (!directoryEnabled) {
     return <LegacyNavigationBarLangSelectButton />;

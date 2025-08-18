@@ -10,7 +10,8 @@ import {
   schemeLanguages,
   sourceLanguages,
   SUPPORTED_LANGUAGES,
-  SupportedLanguage} from 'src/commons/application/ApplicationTypes';
+  SupportedLanguage
+} from 'src/commons/application/ApplicationTypes';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
@@ -20,7 +21,7 @@ const LegacyNavigationBarLangSelectButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const lang = useTypedSelector(store => store.playground.languageConfig.mainLanguage);
   const dispatch = useDispatch();
-  
+
   // Legacy default sublanguage mapping
   const defaultSublanguages: { [lang in SupportedLanguage]: SALanguage } = {
     [SupportedLanguage.JAVASCRIPT]: sourceLanguages[0],

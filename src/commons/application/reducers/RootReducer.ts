@@ -17,19 +17,19 @@ import { SessionsReducer as session } from './SessionsReducer';
 import { VscodeReducer as vscode } from './VscodeReducer';
 
 const rootReducer: Reducer<OverallState, SourceActionType> = combineReducers({
-	router,
-	achievement,
-	leaderboard,
-	dashboard,
-	playground,
-	session,
-	stories,
-	workspaces,
-	featureFlags,
-	fileSystem,
-	sideContent,
-	vscode,
-	languageDirectory
+  router,
+  achievement,
+  leaderboard,
+  dashboard,
+  playground,
+  session,
+  stories,
+  workspaces,
+  featureFlags,
+  fileSystem,
+  sideContent,
+  vscode,
+  languageDirectory
 });
 
 export default rootReducer;

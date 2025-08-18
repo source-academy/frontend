@@ -1,4 +1,10 @@
-import { getEvaluatorDefinition, IEvaluatorDefinition, ILanguageDefinition, languageMap, languages } from '@sourceacademy/language-directory';
+import {
+  getEvaluatorDefinition,
+  IEvaluatorDefinition,
+  ILanguageDefinition,
+  languageMap,
+  languages
+} from '@sourceacademy/language-directory';
 
 export type LanguageDirectoryState = {
   readonly selectedLanguageId: string | null;
@@ -26,7 +32,7 @@ export class StaticLanguageDirectoryProvider implements LanguageDirectoryProvide
 
   async getEvaluatorDefinition(
     languageId: string,
-    evaluatorId: string 
+    evaluatorId: string
   ): Promise<IEvaluatorDefinition | undefined> {
     const language = languageMap.get(languageId);
     if (!language) return undefined;
