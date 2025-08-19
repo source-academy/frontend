@@ -1,0 +1,17 @@
+{
+  "gradingCsv": {
+    "assessmentNumber": "评估编号",
+    "assessmentName": "评估名称",
+    "studentName": "学生姓名",
+    "studentUsername": "学生用户名",
+    "group": "组别",
+    "progress": "进度",
+    "questionCount": "问题数量",
+    "questionsGraded": "已评分问题",
+    "initialXp": "初始经验值",
+    "xpAdjustment": "经验值调整",
+    "currentXpExclBonus": "当前经验值（不含奖励）",
+    "maxXp": "最大经验值",
+    "bonusXp": "奖励经验值"
+  }
+}

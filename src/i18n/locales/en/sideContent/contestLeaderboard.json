@@ -1,0 +1,22 @@
+{
+  "noEntries": "There are no eligible contest leaderboard entries found.",
+  "titles": {
+    "score": "Score Leaderboard",
+    "popularVote": "Popular Vote Leaderboard",
+    "default": "Contest Leaderboard"
+  },
+  "tooltips": {
+    "score": "View the highest scoring contest entries!",
+    "popularVote": "View the most popular contest entries!",
+    "default": "View the top-rated contest entries!"
+  },
+  "headers": {
+    "studentName": "Student Name",
+    "rank": "Rank",
+    "score": {
+      "calculated": "Calculated Score",
+      "popularity": "Popularity Score",
+      "default": "Metric"
+    }
+  }
+}
