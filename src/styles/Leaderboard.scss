@@ -173,6 +173,8 @@ $xp-color: rgb(31, 147, 255);
 }
 
 .leaderboard-table-container {
+  width: min(1200px, 100%);
+
   /* General ag-Grid customization */
   .ag-header-cell[col-id='name'] .ag-header-cell-label {
     text-align: left !important;
@@ -186,7 +188,6 @@ $xp-color: rgb(31, 147, 255);
   }
 
   .ag-root-wrapper {
-    width: 1200px;
     background-color: transparent;
     border-radius: 3px;
     overflow: hidden;

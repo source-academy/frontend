@@ -2,7 +2,7 @@ import 'src/styles/Leaderboard.scss';
 
 import { ColDef, IDatasource, themeAlpine } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import default_avatar from 'src/assets/default-avatar.jpg';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -13,6 +13,45 @@ import leaderboard_background from '../../../assets/leaderboard_background.jpg';
 import LeaderboardDropdown from './LeaderboardDropdown';
 import LeaderboardExportButton from './LeaderboardExportButton';
 import LeaderboardPodium from './LeaderboardPodium';
+
+const columnDefs: ColDef<LeaderboardRow>[] = [
+  {
+    field: 'rank',
+    suppressMovable: true,
+    headerName: 'Rank',
+    flex: 84,
+    sortable: true,
+    cellRenderer: (params: any) => {
+      const rank = params.value;
+      const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
+      return `${rank} ${medal}`;
+    }
+  },
+  {
+    field: 'avatar',
+    suppressMovable: true,
+    headerName: 'Avatar',
+    flex: 180,
+    sortable: false,
+    cellRenderer: (params: any) => (
+      <img
+        src={params.value}
+        alt="avatar"
+        className="avatar"
+        onError={e => (e.currentTarget.src = default_avatar)}
+        style={{ flex: '40px', height: '40px', borderRadius: '50%' }}
+      />
+    )
+  },
+  { field: 'name', suppressMovable: true, headerName: 'Name', flex: 520, sortable: true },
+  {
+    field: 'xp',
+    suppressMovable: true,
+    headerName: 'XP',
+    flex: 414 /*154*/,
+    sortable: true
+  }
+];
 
 const OverallLeaderboard: React.FC = () => {
   const dispatch = useDispatch();
@@ -30,49 +69,6 @@ const OverallLeaderboard: React.FC = () => {
       document.body.style.background = originalBackground;
     };
   }, []);
-
-  // Define column definitions for ag-Grid
-  const columnDefs: ColDef<LeaderboardRow>[] = useMemo(
-    () => [
-      {
-        field: 'rank',
-        suppressMovable: true,
-        headerName: 'Rank',
-        width: 84,
-        sortable: true,
-        cellRenderer: (params: any) => {
-          const rank = params.value;
-          const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
-          return `${rank} ${medal}`;
-        }
-      },
-      {
-        field: 'avatar',
-        suppressMovable: true,
-        headerName: 'Avatar',
-        width: 180,
-        sortable: false,
-        cellRenderer: (params: any) => (
-          <img
-            src={params.value}
-            alt="avatar"
-            className="avatar"
-            onError={e => (e.currentTarget.src = default_avatar)}
-            style={{ width: '40px', height: '40px', borderRadius: '50%' }}
-          />
-        )
-      },
-      { field: 'name', suppressMovable: true, headerName: 'Name', width: 520, sortable: true },
-      {
-        field: 'xp',
-        suppressMovable: true,
-        headerName: 'XP',
-        width: 414 /*154*/,
-        sortable: true
-      }
-    ],
-    []
-  );
 
   const paginatedLeaderboard: { rows: LeaderboardRow[]; userCount: number } = useTypedSelector(
     store => store.leaderboard.paginatedUserXp
