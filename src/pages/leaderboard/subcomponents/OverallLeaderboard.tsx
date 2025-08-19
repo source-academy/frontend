@@ -28,7 +28,6 @@ function convertToRandomNumber(id: string): number {
 const columnDefs: ColDef<LeaderboardRow>[] = [
   {
     field: 'rank',
-    suppressMovable: true,
     headerName: 'Rank',
     flex: 84,
     sortable: true,
@@ -40,7 +39,6 @@ const columnDefs: ColDef<LeaderboardRow>[] = [
   },
   {
     field: 'avatar',
-    suppressMovable: true,
     headerName: 'Avatar',
     flex: 180,
     sortable: false,
@@ -54,14 +52,8 @@ const columnDefs: ColDef<LeaderboardRow>[] = [
       />
     )
   },
-  { field: 'name', suppressMovable: true, headerName: 'Name', flex: 520, sortable: true },
-  {
-    field: 'xp',
-    suppressMovable: true,
-    headerName: 'XP',
-    flex: 414,
-    sortable: true
-  }
+  { field: 'name', headerName: 'Name', flex: 520, sortable: true },
+  { field: 'xp', headerName: 'XP', flex: 414, sortable: true }
 ];
 
 const OverallLeaderboard: React.FC = () => {
@@ -148,6 +140,8 @@ const OverallLeaderboard: React.FC = () => {
         <AgGridReact
           theme={themeAlpine}
           pagination={true}
+          suppressCellFocus
+          suppressMovableColumns
           paginationPageSizeSelector={false}
           columnDefs={columnDefs}
           rowModelType="infinite"
