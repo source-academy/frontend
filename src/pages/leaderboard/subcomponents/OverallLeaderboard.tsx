@@ -9,7 +9,7 @@ import { useTypedSelector } from 'src/commons/utils/Hooks';
 import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 import { LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
 
-import leaderboard_background from '../../../assets/leaderboard_background.jpg';
+import leaderboardBackground from '../../../assets/leaderboard_background.jpg';
 import LeaderboardDropdown from './LeaderboardDropdown';
 import LeaderboardExportButton from './LeaderboardExportButton';
 import LeaderboardPodium from './LeaderboardPodium';
@@ -74,7 +74,7 @@ const OverallLeaderboard: React.FC = () => {
   // Temporary loading of leaderboard background
   useEffect(() => {
     const originalBackground = document.body.style.background;
-    document.body.style.background = `url(${leaderboard_background}) center/cover no-repeat fixed`;
+    document.body.style.background = `url(${leaderboardBackground}) center/cover no-repeat fixed`;
     return () => {
       // Cleanup
       document.body.style.background = originalBackground;
