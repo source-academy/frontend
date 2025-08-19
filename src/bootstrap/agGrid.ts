@@ -1,6 +1,39 @@
-import { ModuleRegistry } from 'ag-grid-community';
+import {
+  CellStyleModule,
+  ClientSideRowModelModule,
+  ColumnApiModule,
+  ColumnAutoSizeModule,
+  CsvExportModule,
+  DateFilterModule,
+  type Module,
+  ModuleRegistry,
+  PaginationModule,
+  RowDragModule,
+  TextEditorModule,
+  TextFilterModule,
+  ValidationModule
+} from 'ag-grid-community';
+
+const productionModules: readonly Module[] = [
+  CellStyleModule,
+  ClientSideRowModelModule,
+  ColumnApiModule,
+  ColumnAutoSizeModule,
+  CsvExportModule,
+  DateFilterModule,
+  PaginationModule,
+  RowDragModule,
+  TextEditorModule,
+  TextFilterModule,
+  ValidationModule
+];
 
 export const initializeAgGridModules = () => {
-  // TODO: Register modules
-  ModuleRegistry.registerModules([]);
+  const modulesToLoad = [...productionModules];
+
+  // Load helpful warnings in development mode
+  if (process.env.NODE_ENV === 'development') {
+    modulesToLoad.push(ValidationModule);
+  }
+  ModuleRegistry.registerModules(modulesToLoad);
 };
