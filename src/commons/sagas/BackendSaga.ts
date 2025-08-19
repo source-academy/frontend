@@ -1,5 +1,3 @@
-/*eslint no-eval: "error"*/
-/*eslint-env browser*/
 import _ from 'lodash';
 import type { SagaIterator } from 'redux-saga';
 import { all, call, fork, put, select } from 'redux-saga/effects';
