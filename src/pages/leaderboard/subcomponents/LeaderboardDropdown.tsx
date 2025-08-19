@@ -1,6 +1,6 @@
 import 'src/styles/Leaderboard.scss';
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
@@ -12,7 +12,7 @@ const LeaderboardDropdown: React.FC = () => {
     store => store.session.enableContestLeaderboard
   );
   const crid = useTypedSelector(store => store.session.courseId);
-  const baseLink = `/courses/${crid}/leaderboard`;
+  const baseLink = `/courses/${crid}/leaderboard/contests`;
 
   // Handle Navigation to other contest leaderboards
   const navigate = useNavigate();
@@ -29,37 +29,16 @@ const LeaderboardDropdown: React.FC = () => {
     : [];
 
   return (
-    <>
-      {/* Leaderboard Options Dropdown */}
-      <select className="dropdown" onChange={handleChange} value={currentPath}>
-        {
-          // Overall Leaderboard Option
-          enableOverallLeaderboard ? (
-            <option key="overall" value={`${baseLink}`}>
-              Overall XP
-            </option>
-          ) : null
-        }
-
-        {enableContestLeaderboard &&
-          publishedContests.map(contest => (
-            <>
-              <option
-                key={`${contest.contest_id}-score`}
-                value={`${baseLink}/contests/${contest.contest_id}/score`}
-              >
-                {contest.title} (Score)
-              </option>
-              <option
-                key={`${contest.contest_id}-popularvote`}
-                value={`${baseLink}/contests/${contest.contest_id}/popularvote`}
-              >
-                {contest.title} (Popular Vote)
-              </option>
-            </>
-          ))}
-      </select>
-    </>
+    <select className="dropdown" onChange={handleChange} value={currentPath}>
+      {enableOverallLeaderboard && <option value={`${baseLink}`}>Overall XP</option>}
+      {enableContestLeaderboard &&
+        publishedContests.map(({ title, contest_id: id }) => (
+          <Fragment key={id}>
+            <option value={`${baseLink}/${id}/score`}>{title} (Score)</option>
+            <option value={`${baseLink}/${id}/popularvote`}>{title} (Popular Vote)</option>
+          </Fragment>
+        ))}
+    </select>
   );
 };
 
