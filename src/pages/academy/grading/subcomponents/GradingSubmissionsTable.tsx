@@ -409,7 +409,10 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           rowHeight={tableProperties.rowHeight}
           suppressMenuHide={tableProperties.suppressMenuHide}
           suppressPaginationPanel={tableProperties.suppressPaginationPanel}
-          suppressRowClickSelection={tableProperties.suppressRowClickSelection}
+          rowSelection={{
+            mode: 'singleRow',
+            enableClickSelection: !tableProperties.suppressRowClickSelection
+          }}
           domLayout="autoHeight"
           onFilterChanged={e => {
             if (!e.afterFloatingFilter) {
