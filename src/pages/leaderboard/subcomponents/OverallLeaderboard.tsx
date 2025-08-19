@@ -14,6 +14,17 @@ import LeaderboardDropdown from './LeaderboardDropdown';
 import LeaderboardExportButton from './LeaderboardExportButton';
 import LeaderboardPodium from './LeaderboardPodium';
 
+// Set sample profile pictures (Seeded random)
+function convertToRandomNumber(id: string): number {
+  const str = id.slice(1);
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+  }
+  return (Math.abs(hash) % 7) + 1;
+}
+
 const columnDefs: ColDef<LeaderboardRow>[] = [
   {
     field: 'rank',
@@ -114,17 +125,6 @@ const OverallLeaderboard: React.FC = () => {
       latestParamsRef.current = null;
     }
   }, [paginatedLeaderboard]);
-
-  // Set sample profile pictures (Seeded random)
-  function convertToRandomNumber(id: string): number {
-    const str = id.slice(1);
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      const char = str.charCodeAt(i);
-      hash = (hash << 5) - hash + char;
-    }
-    return (Math.abs(hash) % 7) + 1;
-  }
 
   paginatedLeaderboard.rows.map((row: LeaderboardRow) => {
     row.avatar = `/assets/Sample_Profile_${convertToRandomNumber(row.username)}.jpg`;
