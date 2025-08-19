@@ -1,8 +1,6 @@
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
 import 'src/styles/Leaderboard.scss';
 
-import { ColDef } from 'ag-grid-community';
+import { type ColDef, themeAlpine } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
@@ -170,9 +168,10 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
       </div>
 
       {/* Leaderboard Table (Top 3) */}
-      <div className="ag-theme-alpine">
+      <div>
         <h2>Contest Winners</h2>
         <AgGridReact
+          theme={themeAlpine}
           rowData={top3}
           columnDefs={columnDefs}
           domLayout="autoHeight"
@@ -186,9 +185,10 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
       <div className="table-gap"></div>
 
       {/* Honourable Mentions */}
-      <div className="ag-theme-alpine">
+      <div>
         <h2>Honourable Mentions</h2>
         <AgGridReact
+          theme={themeAlpine}
           rowData={rest}
           columnDefs={columnDefs}
           domLayout="autoHeight"

@@ -1,8 +1,6 @@
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
 import 'src/styles/Leaderboard.scss';
 
-import { ColDef, IDatasource } from 'ag-grid-community';
+import { ColDef, IDatasource, themeAlpine } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -158,8 +156,9 @@ const OverallLeaderboard: React.FC = () => {
       </div>
 
       {/* Leaderboard Table (Replaced with ag-Grid) */}
-      <div className="ag-theme-alpine">
+      <div>
         <AgGridReact
+          theme={themeAlpine}
           pagination={true}
           paginationPageSizeSelector={false}
           columnDefs={columnDefs}

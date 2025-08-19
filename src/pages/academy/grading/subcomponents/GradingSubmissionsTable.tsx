@@ -1,9 +1,6 @@
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-quartz.css';
-
 import { Button, H6, Icon, InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { CellClickedEvent, ColDef } from 'ag-grid-community';
+import { CellClickedEvent, ColDef, themeQuartz } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
@@ -393,8 +390,9 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         />
       </GradingFlex>
 
-      <div className="ag-theme-quartz" style={{ margin: tableProperties.tableMargins }}>
+      <div style={{ margin: tableProperties.tableMargins }}>
         <AgGridReact
+          theme={themeQuartz}
           columnDefs={colDefs}
           onCellClicked={cellClickedEvent}
           ref={gridRef}

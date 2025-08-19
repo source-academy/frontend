@@ -1,5 +1,3 @@
-import 'ag-grid-community/styles/ag-grid.css';
-
 import {
   Divider,
   FormGroup,
@@ -9,6 +7,7 @@ import {
   SpinnerSize
 } from '@blueprintjs/core';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
+import { themeBalham } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { sortBy } from 'lodash';
 import React from 'react';
@@ -169,6 +168,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
         <div className="SourcecastTable">
           <div className="ag-grid-parent">
             <AgGridReact
+              theme={themeBalham}
               domLayout="autoHeight"
               columnDefs={this.state.columnDefs}
               defaultColDef={this.defaultColumnDefs}
