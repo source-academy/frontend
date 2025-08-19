@@ -51,7 +51,6 @@ const commonChildrenRoutes: RouteObject[] = [
   { path: 'contributors', lazy: Contributors },
   { path: 'callback/github', lazy: GitHubCallback },
   { path: 'sicpjs/:section?', lazy: Sicp },
-  { path: 'sicpjs/:param_lang/:section?', lazy: Sicp },
   { path: 'features', lazy: Features }
 ];
 
