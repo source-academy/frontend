@@ -19,6 +19,7 @@ import { register as registerServiceWorker } from 'src/commons/utils/RegisterSer
 import { triggerSyncLogs } from 'src/features/eventLogging/client';
 import { store } from 'src/pages/createStore';
 
+import { initializeAgGridModules } from './bootstrap/agGrid';
 import ApplicationWrapper from './commons/application/ApplicationWrapper';
 import { createInBrowserFileSystem } from './pages/fileSystem/createInBrowserFileSystem';
 
@@ -41,6 +42,8 @@ if (Constants.sentryDsn) {
   const userId = store.getState().session.userId;
   Sentry.setUser(typeof userId !== 'undefined' ? { id: userId.toString() } : null);
 }
+
+initializeAgGridModules();
 
 const rootContainer = document.getElementById('root') as HTMLElement;
 const root = createRoot(rootContainer);
