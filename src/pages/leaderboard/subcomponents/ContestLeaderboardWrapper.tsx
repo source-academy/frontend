@@ -6,7 +6,10 @@ import NotFound from '../../notFound/NotFound';
 import ContestLeaderboard from './ContestLeaderboard';
 
 const ContestLeaderboardWrapper: React.FC = () => {
-  const { contestId, type } = useParams<{ contestId: string; type: 'score' | 'popularvote' }>();
+  const { contestId, leaderboardType: type } = useParams<{
+    contestId: string;
+    leaderboardType: 'score' | 'popularvote';
+  }>();
   const contests = useTypedSelector(state => state.leaderboard.contests);
   const contest = contests.find(d => d.contest_id === parseInt(contestId!, 10));
   return contest ? <ContestLeaderboard type={type!} contest={contest} /> : <NotFound />;

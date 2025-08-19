@@ -37,7 +37,7 @@ export const contestLeaderboardLoader: LoaderFunction = ({ request, params }) =>
     // Prefer score leaderboard
     return replace(`${baseUrl}/leaderboard/contests/${fallback.contest_id}/score`);
   }
-  const leaderboardType = params.type!;
+  const leaderboardType = params.leaderboardType!;
   if (!['score', 'popularvote'].includes(leaderboardType)) {
     return redirect(baseUrl + '/not_found');
   }
