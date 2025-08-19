@@ -156,7 +156,7 @@ const OverallLeaderboard: React.FC = () => {
       </div>
 
       {/* Leaderboard Table (Replaced with ag-Grid) */}
-      <div>
+      <div className="leaderboard-table-container">
         <AgGridReact
           theme={themeAlpine}
           pagination={true}

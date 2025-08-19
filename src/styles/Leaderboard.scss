@@ -172,6 +172,115 @@ $xp-color: rgb(31, 147, 255);
   outline: none;
 }
 
+.leaderboard-table-container {
+  /* General ag-Grid customization */
+  .ag-header-cell[col-id='name'] .ag-header-cell-label {
+    text-align: left !important;
+    border-left: none !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+  }
+
+  .ag-header-cell:last-child .ag-header-cell-resize {
+    display: none; /* Hide the resize handle after the last column */
+  }
+
+  .ag-root-wrapper {
+    width: 1200px;
+    background-color: transparent;
+    border-radius: 3px;
+    overflow: hidden;
+    color: white;
+  }
+
+  .ag-header {
+    background-color: $highlight-color;
+    border-bottom: 1px solid $border-color;
+    font-size: 15px;
+  }
+
+  .ag-header-cell {
+    padding: 10px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+  }
+
+  .ag-header-cell-label {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .ag-row {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-size: 15px;
+    text-shadow: 1px 1px #000000;
+  }
+
+  .ag-cell {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid $border-color;
+    background-color: rgba(0, 0, 0, 0.55);
+
+    &:nth-child(2) {
+      border-right: none;
+    }
+
+    &:nth-child(3) {
+      text-align: left;
+      border-left: none;
+    }
+  }
+
+  /* Avatar styling */
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  /* Pagination styling */
+  .ag-paging-panel {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    color: white;
+    background-color: rgba(255, 255, 255, 0.05);
+
+    .ag-picker-field-display {
+      color: black;
+    }
+
+    .ag-paging-button {
+      padding: 8px 12px;
+      border: none;
+      background: rgba(255, 255, 255, 1);
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .ag-paging-button:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .ag-paging-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .ag-paging-button.ag-active {
+      background: white;
+      color: black;
+      font-weight: bold;
+    }
+  }
+}
+
 .table-gap {
   margin: 50px 0;
 }
