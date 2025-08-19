@@ -12,15 +12,21 @@ export const readSicpSectionLocalStorage = () => {
   return data;
 };
 
-export const SICP_DEF_TB_LANG = 'en';
-export const SICP_TB_LANG_KEY = 'sicp-textbook-lang';
+const SICP_SUPPORTED_LANGUAGES = ['en', 'zh_CN'] as const satisfies readonly string[];
+export type SicpSupportedLanguage = (typeof SICP_SUPPORTED_LANGUAGES)[number];
+export const SICP_DEFAULT_LANGUAGE: SicpSupportedLanguage = 'en';
 
-export const setSicpLangLocalStorage = (value: string) => {
-  setLocalStorage(SICP_TB_LANG_KEY, value);
+const sicplanguageKey = 'sicp-textbook-lang';
+
+export const persistSicpLanguageToLocalStorage = (value: string) => {
+  setLocalStorage(sicplanguageKey, value);
   window.dispatchEvent(new Event('sicp-tb-lang-change'));
 };
 
-export const readSicpLangLocalStorage = () => {
-  const data = readLocalStorage(SICP_TB_LANG_KEY, SICP_DEF_TB_LANG);
-  return data;
+export const getSicpLanguageFromLocalStorage = (): SicpSupportedLanguage | null => {
+  const value = readLocalStorage(sicplanguageKey, null);
+  if (!SICP_SUPPORTED_LANGUAGES.includes(value)) {
+    return null;
+  }
+  return value as SicpSupportedLanguage;
 };
