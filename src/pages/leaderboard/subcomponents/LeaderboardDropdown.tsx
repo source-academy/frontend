@@ -3,13 +3,8 @@ import 'src/styles/Leaderboard.scss';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { LeaderboardContestDetails } from 'src/features/leaderboard/LeaderboardTypes';
 
-type Props = {
-  contests: LeaderboardContestDetails[];
-};
-
-const LeaderboardDropdown: React.FC<Props> = ({ contests }) => {
+const LeaderboardDropdown: React.FC = () => {
   const enableOverallLeaderboard = useTypedSelector(
     store => store.session.enableOverallLeaderboard
   );
@@ -28,6 +23,7 @@ const LeaderboardDropdown: React.FC<Props> = ({ contests }) => {
   };
 
   const currentPath = location.pathname;
+  const contests = useTypedSelector(state => state.leaderboard.contests);
   const publishedContests = enableContestLeaderboard
     ? contests.filter(contest => contest.published)
     : [];
@@ -45,24 +41,23 @@ const LeaderboardDropdown: React.FC<Props> = ({ contests }) => {
           ) : null
         }
 
-        {enableContestLeaderboard
-          ? publishedContests.map(contest => (
-              <>
-                <option
-                  key={`${contest.contest_id}-score`}
-                  value={`${baseLink}/contests/${contest.contest_id}/score`}
-                >
-                  {contest.title} (Score)
-                </option>
-                <option
-                  key={`${contest.contest_id}-popularvote`}
-                  value={`${baseLink}/contests/${contest.contest_id}/popularvote`}
-                >
-                  {contest.title} (Popular Vote)
-                </option>
-              </>
-            ))
-          : null}
+        {enableContestLeaderboard &&
+          publishedContests.map(contest => (
+            <>
+              <option
+                key={`${contest.contest_id}-score`}
+                value={`${baseLink}/contests/${contest.contest_id}/score`}
+              >
+                {contest.title} (Score)
+              </option>
+              <option
+                key={`${contest.contest_id}-popularvote`}
+                value={`${baseLink}/contests/${contest.contest_id}/popularvote`}
+              >
+                {contest.title} (Popular Vote)
+              </option>
+            </>
+          ))}
       </select>
     </>
   );

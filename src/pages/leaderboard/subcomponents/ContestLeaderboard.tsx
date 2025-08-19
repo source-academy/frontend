@@ -19,11 +19,14 @@ import LeaderboardExportButton from './LeaderboardExportButton';
 import LeaderboardPodium from './LeaderboardPodium';
 
 type Props = {
-  type: string;
-  contestID: number;
+  type: 'score' | 'popularvote';
+  contest: LeaderboardContestDetails;
 };
 
-const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
+const ContestLeaderboard: React.FC<Props> = ({
+  type,
+  contest: { contest_id: contestId, title: contestName }
+}) => {
   const courseID = useTypedSelector(store => store.session.courseId);
   const visibleEntries = useTypedSelector(
     store => store.session?.topContestLeaderboardDisplay ?? 10
@@ -37,17 +40,11 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
 
   useEffect(() => {
     if (type === 'score') {
-      dispatch(LeaderboardActions.getAllContestScores(contestID, visibleEntries));
+      dispatch(LeaderboardActions.getAllContestScores(contestId, visibleEntries));
     } else {
-      dispatch(LeaderboardActions.getAllContestPopularVotes(contestID, visibleEntries));
+      dispatch(LeaderboardActions.getAllContestPopularVotes(contestId, visibleEntries));
     }
-  }, [dispatch, contestID, type]);
-
-  // Retrieve contests (For dropdown)
-  const contestDetails: LeaderboardContestDetails[] = useTypedSelector(
-    store => store.leaderboard.contests
-  );
-  const contestName = contestDetails.find(contest => contest.contest_id === contestID)?.title;
+  }, [dispatch, contestId, type]);
 
   useEffect(() => {
     dispatch(LeaderboardActions.getContests());
@@ -161,10 +158,9 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
 
       <div className="buttons-container">
         {/* Leaderboard Options Dropdown */}
-        <LeaderboardDropdown contests={contestDetails} />
-
+        <LeaderboardDropdown />
         {/* Export Button */}
-        <LeaderboardExportButton type={type} contest={contestName} contestID={contestID} />
+        <LeaderboardExportButton type={type} contest={contestName} contestID={contestId} />
       </div>
 
       {/* Leaderboard Table (Top 3) */}

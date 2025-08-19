@@ -7,6 +7,10 @@ import { assessmentRegExp, gradingRegExp, teamRegExp } from 'src/features/academ
 import { GuardedRoute } from 'src/routes/routeGuard';
 
 import { store } from '../createStore';
+import {
+  contestLeaderboardLoader,
+  leaderboardLoader
+} from '../leaderboard/subcomponents/leaderboardUtils';
 
 const notFoundPath = 'not_found';
 
@@ -14,9 +18,7 @@ const Assessment = () => import('../../commons/assessment/Assessment');
 const Game = () => import('./game/Game');
 const Sourcecast = () => import('../sourcecast/Sourcecast');
 const Achievement = () => import('../achievement/Achievement');
-const Leaderboard = () => import('../leaderboard/Leaderboard');
-const OverallLeaderboardWrapper = () =>
-  import('../leaderboard/subcomponents/OverallLeaderboardWrapper');
+const OverallLeaderboard = () => import('../leaderboard/subcomponents/OverallLeaderboard');
 const ContestLeaderboardWrapper = () =>
   import('../leaderboard/subcomponents/ContestLeaderboardWrapper');
 const NotFound = () => import('../notFound/NotFound');
@@ -78,9 +80,18 @@ const getCommonAcademyRoutes = (): RouteObject[] => {
     },
     { path: 'sourcecast/:sourcecastId?', lazy: Sourcecast },
     { path: 'achievements/*', lazy: Achievement },
-    { path: 'leaderboard/overall', lazy: OverallLeaderboardWrapper },
-    { path: 'leaderboard/contests/*', lazy: ContestLeaderboardWrapper },
-    { path: 'leaderboard/*', lazy: Leaderboard },
+    {
+      path: 'leaderboard',
+      loader: leaderboardLoader,
+      children: [
+        { path: 'overall', lazy: OverallLeaderboard },
+        {
+          path: 'contests/:contestId?/:leaderboardType',
+          loader: contestLeaderboardLoader,
+          lazy: ContestLeaderboardWrapper
+        }
+      ]
+    },
     { path: '*', lazy: NotFound }
   ];
 };
