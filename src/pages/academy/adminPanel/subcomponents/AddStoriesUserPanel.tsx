@@ -12,7 +12,7 @@ import {
   Position
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ColDef } from 'ag-grid-community';
+import { type ColDef, themeBalham } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { uniqBy } from 'lodash';
 import React from 'react';
@@ -50,8 +50,9 @@ const AddStoriesUserPanel: React.FC<Props> = props => {
   const { CSVReader } = useCSVReader();
 
   const grid = (
-    <div className="Grid ag-grid-parent ag-theme-balham">
+    <div className="Grid">
       <AgGridReact
+        theme={themeBalham}
         domLayout="autoHeight"
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}

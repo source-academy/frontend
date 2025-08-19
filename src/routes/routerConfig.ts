@@ -97,7 +97,7 @@ export const getFullAcademyRouterConfig = ({
 
   const homePageRedirect = () => {
     if (!isLoggedIn) {
-      return redirect('/login', { status: 401 });
+      return redirect('/login');
     }
     if (courseId === null) {
       return redirect('/welcome');
