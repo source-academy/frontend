@@ -634,7 +634,7 @@ export function getControlItemComponent(
 
     // at this point, the control item is a node.
     switch ((controlItem as any).type) {
-      case 'Program':
+      case 'Program': {
         // If the control item is the whole program
         // add {} to represent the implicit block
         const originalText = astToString(controlItem as any)
@@ -651,7 +651,8 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
-      case 'Literal':
+      }
+      case 'Literal': {
         const textL =
           typeof (controlItem as any).value === 'string'
             ? `"${(controlItem as any).value}"`
@@ -664,7 +665,8 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
-      default:
+      }
+      default: {
         const text = astToString(controlItem as any).trim();
         return new ControlItemComponent(
           text,
@@ -674,6 +676,7 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
+      }
     }
   } else {
     switch (controlItem.instrType) {
@@ -704,7 +707,7 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
-      case InstrType.ASSIGNMENT:
+      case InstrType.ASSIGNMENT: {
         const assmtInstr = controlItem as AssmtInstr;
         return new ControlItemComponent(
           `asgn ${assmtInstr.symbol}`,
@@ -714,7 +717,8 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
-      case InstrType.UNARY_OP:
+      }
+      case InstrType.UNARY_OP: {
         const unOpInstr = controlItem as UnOpInstr;
         return new ControlItemComponent(
           unOpInstr.symbol,
@@ -724,7 +728,8 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
-      case InstrType.BINARY_OP:
+      }
+      case InstrType.BINARY_OP: {
         const binOpInstr = controlItem as BinOpInstr;
         return new ControlItemComponent(
           binOpInstr.symbol,
@@ -734,6 +739,7 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
+      }
       case InstrType.POP:
         return new ControlItemComponent(
           'pop',
@@ -743,7 +749,7 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
-      case InstrType.APPLICATION:
+      case InstrType.APPLICATION: {
         const appInstr = controlItem as AppInstr;
         return new ControlItemComponent(
           `call ${appInstr.numOfArgs}`,
@@ -753,6 +759,7 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
+      }
       case InstrType.BRANCH:
         return new ControlItemComponent(
           'branch',
@@ -762,7 +769,7 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
-      case InstrType.ENVIRONMENT:
+      case InstrType.ENVIRONMENT: {
         const envInstr = controlItem as EnvInstr;
         return new ControlItemComponent(
           'env',
@@ -779,7 +786,8 @@ export function getControlItemComponent(
             undefined
           )
         );
-      case InstrType.ARRAY_LITERAL:
+      }
+      case InstrType.ARRAY_LITERAL: {
         const arrayLiteralInstr = controlItem as ArrLitInstr;
         const arity = arrayLiteralInstr.arity;
         return new ControlItemComponent(
@@ -790,6 +798,7 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
+      }
       case InstrType.ARRAY_ACCESS:
         return new ControlItemComponent(
           'arr acc',

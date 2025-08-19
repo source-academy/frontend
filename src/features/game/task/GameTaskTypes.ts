@@ -1,5 +1,5 @@
 /**
- * @typedef TaskDetail - Type that encapsulates all the details of a task.
+ * Type that encapsulates all the details of a task.
  * @param taskId - the id of the task
  * @param title - the title of the task
  * @param description - the description of the task

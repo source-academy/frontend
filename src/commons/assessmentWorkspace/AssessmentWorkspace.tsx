@@ -357,7 +357,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     } = {};
 
     switch (question.type) {
-      case QuestionTypes.programming:
+      case QuestionTypes.programming: {
         const programmingQuestionData: IProgrammingQuestion = question;
         options.autogradingResults = programmingQuestionData.autogradingResults;
         options.programPrependValue = programmingQuestionData.prepend;
@@ -378,7 +378,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           );
         }
         break;
-      case QuestionTypes.voting:
+      }
+      case QuestionTypes.voting: {
         const votingQuestionData: IContestVotingQuestion = question;
         options.programPrependValue = votingQuestionData.prepend;
         if (props.fromContestLeaderboard) options.editorValue = code;
@@ -386,6 +387,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         // maybe the following dispatch can be placed in a better location
         dispatch(LeaderboardActions.setWorkspaceInitialRun(votingId));
         break;
+      }
       case QuestionTypes.mcq:
         // Do nothing
         break;
@@ -413,7 +415,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const questionType = question.type;
 
     switch (questionType) {
-      case QuestionTypes.mcq:
+      case QuestionTypes.mcq: {
         const mcqQuestionData = question;
         sendToWebview(
           Messages.McqQuestion(
@@ -425,7 +427,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           )
         );
         break;
-      case QuestionTypes.programming || QuestionTypes.voting:
+      }
+      case QuestionTypes.programming || QuestionTypes.voting: {
         const prepend = question.prepend;
         const code = question.answer ?? question.solutionTemplate;
         const breakpoints = editorTabs[0]?.breakpoints ?? [];
@@ -441,6 +444,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           )
         );
         break;
+      }
     }
     if (options.editorValue) {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
