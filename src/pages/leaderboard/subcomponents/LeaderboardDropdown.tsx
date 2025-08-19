@@ -63,9 +63,4 @@ const LeaderboardDropdown: React.FC = () => {
   );
 };
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
-export const Component = LeaderboardDropdown;
-Component.displayName = 'LeaderboardDropdown';
-
 export default LeaderboardDropdown;

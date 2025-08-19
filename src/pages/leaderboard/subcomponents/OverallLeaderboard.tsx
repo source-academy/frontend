@@ -7,10 +7,7 @@ import { useDispatch } from 'react-redux';
 import default_avatar from 'src/assets/default-avatar.jpg';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
-import {
-  LeaderboardContestDetails,
-  LeaderboardRow
-} from 'src/features/leaderboard/LeaderboardTypes';
+import { LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
 
 import leaderboard_background from '../../../assets/leaderboard_background.jpg';
 import LeaderboardDropdown from './LeaderboardDropdown';
@@ -19,11 +16,6 @@ import LeaderboardPodium from './LeaderboardPodium';
 
 const OverallLeaderboard: React.FC = () => {
   const dispatch = useDispatch();
-
-  // Retrieve contests (For dropdown)
-  const contestDetails: LeaderboardContestDetails[] = useTypedSelector(
-    store => store.leaderboard.contests
-  );
 
   useEffect(() => {
     dispatch(LeaderboardActions.getContests());
@@ -149,7 +141,7 @@ const OverallLeaderboard: React.FC = () => {
 
       <div className="buttons-container">
         {/* Leaderboard Options Dropdown */}
-        <LeaderboardDropdown contests={contestDetails} />
+        <LeaderboardDropdown />
 
         {/* Export Button */}
         <LeaderboardExportButton type="overall" />

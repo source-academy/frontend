@@ -198,9 +198,4 @@ const ContestLeaderboard: React.FC<Props> = ({
   );
 };
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
-export const Component = ContestLeaderboard;
-Component.displayName = 'ContestLeaderboard';
-
 export default ContestLeaderboard;
