@@ -172,110 +172,114 @@ $xp-color: rgb(31, 147, 255);
   outline: none;
 }
 
-/* General ag-Grid customization */
-.ag-theme-alpine .ag-header-cell[col-id='name'] .ag-header-cell-label {
-  text-align: left !important;
-  border-left: none !important;
-  justify-content: flex-start !important;
-  align-items: flex-start !important;
-}
+.leaderboard-table-container {
+  width: min(1200px, 100%);
 
-.ag-theme-alpine .ag-header-cell:last-child .ag-header-cell-resize {
-  display: none; /* Hide the resize handle after the last column */
-}
+  /* General ag-Grid customization */
+  .ag-header-cell[col-id='name'] .ag-header-cell-label {
+    text-align: left !important;
+    border-left: none !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+  }
 
-.ag-theme-alpine .ag-root-wrapper {
-  width: 1200px;
-  background-color: transparent;
-  border-radius: 3px;
-  overflow: hidden;
-  color: white;
-}
+  .ag-header-cell:last-child .ag-header-cell-resize {
+    display: none; /* Hide the resize handle after the last column */
+  }
 
-.ag-theme-alpine .ag-header {
-  background-color: $highlight-color;
-  border-bottom: 1px solid $border-color;
-  font-size: 15px;
-}
+  .ag-root-wrapper {
+    background-color: transparent;
+    border-radius: 3px;
+    overflow: hidden;
+    color: white;
+  }
 
-.ag-theme-alpine .ag-header-cell {
-  padding: 10px;
-  font-weight: bold;
-  color: white;
-  text-align: center;
-}
+  .ag-header {
+    background-color: $highlight-color;
+    border-bottom: 1px solid $border-color;
+    font-size: 15px;
+  }
 
-.ag-theme-alpine .ag-header-cell-label {
-  text-align: center;
-  justify-content: center;
-}
+  .ag-header-cell {
+    padding: 10px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+  }
 
-.ag-theme-alpine .ag-row {
-  background-color: rgba(255, 255, 255, 0.05);
-  color: white;
-  font-size: 15px;
-  text-shadow: 1px 1px #000000;
-}
+  .ag-header-cell-label {
+    text-align: center;
+    justify-content: center;
+  }
 
-.ag-theme-alpine .ag-cell {
-  padding: 10px;
-  text-align: center;
-  border: 1px solid $border-color;
-  background-color: rgba(0, 0, 0, 0.55);
-}
+  .ag-row {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+    font-size: 15px;
+    text-shadow: 1px 1px #000000;
+  }
 
-.ag-theme-alpine .ag-cell:nth-child(2) {
-  border-right: none;
-}
+  .ag-cell {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid $border-color;
+    background-color: rgba(0, 0, 0, 0.55);
 
-.ag-theme-alpine .ag-cell:nth-child(3) {
-  text-align: left;
-  border-left: none;
-}
+    &:nth-child(2) {
+      border-right: none;
+    }
 
-/* Avatar styling */
-.avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-}
+    &:nth-child(3) {
+      text-align: left;
+      border-left: none;
+    }
+  }
 
-/* Pagination styling */
-.ag-theme-alpine .ag-paging-panel .ag-picker-field-display {
-  color: black;
-}
-.ag-theme-alpine .ag-paging-panel {
-  display: flex;
-  gap: 10px;
-  margin-top: 20px;
-  color: white;
-  background-color: rgba(255, 255, 255, 0.05);
-}
+  /* Avatar styling */
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
 
-.ag-theme-alpine .ag-paging-panel .ag-paging-button {
-  padding: 8px 12px;
-  border: none;
-  background: rgba(255, 255, 255, 1);
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.3s;
-}
+  /* Pagination styling */
+  .ag-paging-panel {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    color: white;
+    background-color: rgba(255, 255, 255, 0.05);
 
-.ag-theme-alpine .ag-paging-panel .ag-paging-button:hover {
-  background: rgba(255, 255, 255, 0.4);
-}
+    .ag-picker-field-display {
+      color: black;
+    }
 
-.ag-theme-alpine .ag-paging-panel .ag-paging-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+    .ag-paging-button {
+      padding: 8px 12px;
+      border: none;
+      background: rgba(255, 255, 255, 1);
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
 
-.ag-theme-alpine .ag-paging-panel .ag-paging-button.ag-active {
-  background: white;
-  color: black;
-  font-weight: bold;
+    .ag-paging-button:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .ag-paging-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .ag-paging-button.ag-active {
+      background: white;
+      color: black;
+      font-weight: bold;
+    }
+  }
 }
 
 .table-gap {
@@ -304,9 +308,5 @@ h2 {
   .dropdown {
     width: 80%;
     max-width: 300px;
-  }
-
-  .leaderboard-table {
-    width: 100%;
   }
 }
