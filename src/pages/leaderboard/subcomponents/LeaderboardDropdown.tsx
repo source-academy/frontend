@@ -12,7 +12,7 @@ const LeaderboardDropdown: React.FC = () => {
     store => store.session.enableContestLeaderboard
   );
   const crid = useTypedSelector(store => store.session.courseId);
-  const baseLink = `/courses/${crid}/leaderboard/contests`;
+  const baseLink = `/courses/${crid}/leaderboard`;
 
   // Handle Navigation to other contest leaderboards
   const navigate = useNavigate();
@@ -30,12 +30,12 @@ const LeaderboardDropdown: React.FC = () => {
 
   return (
     <select className="dropdown" onChange={handleChange} value={currentPath}>
-      {enableOverallLeaderboard && <option value={`${baseLink}`}>Overall XP</option>}
+      {enableOverallLeaderboard && <option value={`${baseLink}/overall`}>Overall XP</option>}
       {enableContestLeaderboard &&
         publishedContests.map(({ title, contest_id: id }) => (
           <Fragment key={id}>
-            <option value={`${baseLink}/${id}/score`}>{title} (Score)</option>
-            <option value={`${baseLink}/${id}/popularvote`}>{title} (Popular Vote)</option>
+            <option value={`${baseLink}/contests/${id}/score`}>{title} (Score)</option>
+            <option value={`${baseLink}/contests/${id}/popularvote`}>{title} (Popular Vote)</option>
           </Fragment>
         ))}
     </select>
