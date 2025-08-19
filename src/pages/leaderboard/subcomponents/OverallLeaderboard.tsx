@@ -15,7 +15,7 @@ import LeaderboardExportButton from './LeaderboardExportButton';
 import LeaderboardPodium from './LeaderboardPodium';
 
 // Set sample profile pictures (Seeded random)
-function convertToRandomNumber(id: string): number {
+export function convertToRandomNumber(id: string): number {
   const str = id.slice(1);
   let hash = 0;
   for (let i = 0; i < str.length; i++) {

@@ -17,6 +17,7 @@ import leaderboard_background from '../../../assets/leaderboard_background.jpg';
 import LeaderboardDropdown from './LeaderboardDropdown';
 import LeaderboardExportButton from './LeaderboardExportButton';
 import LeaderboardPodium from './LeaderboardPodium';
+import { convertToRandomNumber } from './OverallLeaderboard';
 
 type Props = {
   type: 'score' | 'popularvote';
@@ -66,17 +67,6 @@ const ContestLeaderboard: React.FC<Props> = ({
     .filter(row => row.rank <= Number(visibleEntries))
     .slice(top3.length);
 
-  // Set sample profile pictures (Seeded random)
-  function convertToRandomNumber(id: string): number {
-    const str = id.slice(1);
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      const char = str.charCodeAt(i);
-      hash = (hash << 5) - hash + char;
-    }
-    return (Math.abs(hash) % 7) + 1;
-  }
-
   rankedLeaderboard.map((row: ContestLeaderboardRow) => {
     row.avatar = `/assets/Sample_Profile_${convertToRandomNumber(row.username)}.jpg`;
   });
@@ -93,9 +83,8 @@ const ContestLeaderboard: React.FC<Props> = ({
     () => [
       {
         field: 'rank',
-        suppressMovable: true,
         headerName: 'Rank',
-        width: 84,
+        flex: 84,
         sortable: true,
         cellRenderer: (params: any) => {
           const rank = params.value;
@@ -105,9 +94,8 @@ const ContestLeaderboard: React.FC<Props> = ({
       },
       {
         field: 'avatar',
-        suppressMovable: true,
         headerName: 'Avatar',
-        width: 180,
+        flex: 180,
         sortable: false,
         cellRenderer: (params: any) => (
           <img
@@ -119,20 +107,18 @@ const ContestLeaderboard: React.FC<Props> = ({
           />
         )
       },
-      { field: 'name', suppressMovable: true, headerName: 'Name', width: 520, sortable: true },
+      { field: 'name', headerName: 'Name', flex: 520, sortable: true },
       {
         field: 'score',
-        suppressMovable: true,
         headerName: 'Score',
-        width: 154,
+        flex: 154,
         sortable: true,
         valueFormatter: params => params.value?.toFixed(2)
       },
       {
         field: 'code',
-        suppressMovable: true,
         headerName: 'Code',
-        width: 260,
+        flex: 260,
         sortable: false,
         cellRenderer: (params: any) => (
           <a
@@ -148,6 +134,7 @@ const ContestLeaderboard: React.FC<Props> = ({
         )
       }
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -164,7 +151,7 @@ const ContestLeaderboard: React.FC<Props> = ({
       </div>
 
       {/* Leaderboard Table (Top 3) */}
-      <div>
+      <div className="leaderboard-table-container">
         <h2>Contest Winners</h2>
         <AgGridReact
           theme={themeAlpine}
@@ -181,7 +168,7 @@ const ContestLeaderboard: React.FC<Props> = ({
       <div className="table-gap"></div>
 
       {/* Honourable Mentions */}
-      <div>
+      <div className="leaderboard-table-container">
         <h2>Honourable Mentions</h2>
         <AgGridReact
           theme={themeAlpine}
