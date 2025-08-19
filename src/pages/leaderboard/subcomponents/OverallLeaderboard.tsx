@@ -59,7 +59,7 @@ const columnDefs: ColDef<LeaderboardRow>[] = [
     field: 'xp',
     suppressMovable: true,
     headerName: 'XP',
-    flex: 414 /*154*/,
+    flex: 414,
     sortable: true
   }
 ];
