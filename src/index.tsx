@@ -21,6 +21,7 @@ import { store } from 'src/pages/createStore';
 
 import ApplicationWrapper from './commons/application/ApplicationWrapper';
 import { createInBrowserFileSystem } from './pages/fileSystem/createInBrowserFileSystem';
+import { SicpLanguageContextProvider } from './pages/sicp/subcomponents/SicpLanguageProvider';
 
 if (Constants.sentryDsn) {
   Sentry.init({
@@ -61,7 +62,9 @@ createInBrowserFileSystem(store)
     root.render(
       <Provider store={store}>
         <OverlaysProvider>
-          <ApplicationWrapper />
+          <SicpLanguageContextProvider>
+            <ApplicationWrapper />
+          </SicpLanguageContextProvider>
         </OverlaysProvider>
       </Provider>
     );
