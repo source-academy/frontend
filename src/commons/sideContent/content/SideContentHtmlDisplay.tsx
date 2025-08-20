@@ -1,6 +1,8 @@
 import { IconNames } from '@blueprintjs/icons';
 import { bindActionCreators } from '@reduxjs/toolkit';
+import { t } from 'i18next';
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { connect, MapDispatchToProps } from 'react-redux';
 import { ResultOutput } from 'src/commons/application/ApplicationTypes';
 
@@ -20,6 +22,7 @@ type DispatchProps = {
 const ERROR_MESSAGE_REGEX = /^Line \d+: /i;
 
 const SideContentHtmlDisplayBase: React.FC<OwnProps & DispatchProps> = props => {
+  const { t } = useTranslation('sideContent', { keyPrefix: 'htmlDisplay' });
   const { content, handleAddHtmlConsoleError, alertSideContent } = props;
 
   useEffect(() => {
@@ -45,7 +48,7 @@ const SideContentHtmlDisplayBase: React.FC<OwnProps & DispatchProps> = props => 
   return (
     <iframe
       className="sa-html-display"
-      title="HTML Display"
+      title={t('title')}
       sandbox="allow-scripts"
       srcDoc={content}
       src="about:blank"
@@ -69,7 +72,7 @@ const makeHtmlDisplayTabFrom = (
   handleError: (errorMsg: string) => void,
   workspaceLocation: SideContentLocation
 ): SideContentTab => ({
-  label: 'HTML Display',
+  label: t('sideContent:htmlDisplay.label'),
   iconName: IconNames.MODAL,
   body: (
     <SideContentHtmlDisplay

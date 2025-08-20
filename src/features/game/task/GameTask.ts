@@ -2,7 +2,7 @@ import { TaskDetail } from './GameTaskTypes';
 
 /**
  * The class encapsulates data on all the task ids
- * that players can optionally complete, and keeps track of
+ * that players can optionally complete, and keeps track of
  * which tasks have already been completed.
  *
  * One of the components of game checkpoint.

@@ -1,8 +1,7 @@
 import * as Sentry from '@sentry/react';
-import { Navigate, redirect, type RouteObject, Routes } from 'react-router';
+import { redirect, replace, type RouteObject, Routes } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
 
-import Application from '../commons/application/Application';
 import { GuardedRoute } from './routeGuard';
 
 /**
@@ -23,6 +22,7 @@ import { GuardedRoute } from './routeGuard';
 //   return returnValue ?? null;
 // };
 
+const Application = () => import('../commons/application/Application');
 const Login = () => import('../pages/login/Login');
 const LoginPage = () => import('../pages/login/LoginPage');
 const LoginCallback = () => import('../pages/login/LoginCallback');
@@ -57,9 +57,9 @@ const commonChildrenRoutes: RouteObject[] = [
 export const playgroundOnlyRouterConfig: RouteObject[] = [
   {
     path: '*',
-    element: <Application />,
+    lazy: Application,
     children: [
-      { path: '', element: <Navigate to="/playground" replace /> },
+      { path: '', loader: () => replace('/playground') },
       { path: 'playground', lazy: Playground },
       ...commonChildrenRoutes,
       { path: '*', lazy: NotFound }
@@ -97,7 +97,7 @@ export const getFullAcademyRouterConfig = ({
 
   const homePageRedirect = () => {
     if (!isLoggedIn) {
-      return redirect('/login', { status: 401 });
+      return redirect('/login');
     }
     if (courseId === null) {
       return redirect('/welcome');
@@ -114,12 +114,11 @@ export const getFullAcademyRouterConfig = ({
     },
     {
       path: '*',
-      element: <Application />,
+      lazy: Application,
       children: [
         {
           path: '',
-          element: <Navigate to={`/courses/${courseId}`} replace />,
-          loader: homePageRedirect
+          loader: () => homePageRedirect() || replace(`/courses/${courseId}`)
         },
         {
           path: 'login',
@@ -137,7 +136,7 @@ export const getFullAcademyRouterConfig = ({
           children: [{ path: 'vscode_callback', lazy: LoginVscodeCallback }]
         },
         { path: 'welcome', lazy: Welcome, loader: welcomeLoader },
-        { path: 'courses', element: <Navigate to="/" /> },
+        { path: 'courses', loader: () => redirect('/') },
         ensureUserAndRole({ path: 'courses/:courseId/*', lazy: Academy, children: academyRoutes }),
         ensureUserAndRole({ path: 'playground/:playgroundCode?', lazy: Playground }),
         { path: 'mission-control/:assessmentId?/:questionId?', lazy: MissionControl },

@@ -112,7 +112,7 @@ export default class ActionParser {
         break;
 
       case GameActionType.AddItem:
-      case GameActionType.RemoveItem:
+      case GameActionType.RemoveItem: {
         const gameItemType = ParserConverter.stringToGameItemType(actionParams[0]);
         actionParamObj.gameItemType = gameItemType;
 
@@ -122,7 +122,7 @@ export default class ActionParser {
         actionParamObj.id = actionParams[2];
         Parser.validator.assertItemType(gameItemType, actionParams[2], actionType);
         break;
-
+      }
       case GameActionType.AddLocationMode:
       case GameActionType.RemoveLocationMode:
         Parser.validator.assertEntityType(GameEntityType.locations, actionParams[0], actionType);

@@ -1,10 +1,11 @@
 import { Button, H2 } from '@blueprintjs/core';
 import {
-  CellValueChangedEvent,
-  ColDef,
-  GridApi,
-  GridReadyEvent,
-  RowDragEvent
+  type CellValueChangedEvent,
+  type ColDef,
+  type GridApi,
+  type GridReadyEvent,
+  type RowDragEvent,
+  themeBalham
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { cloneDeep, isEqual } from 'lodash';
@@ -316,8 +317,9 @@ const AssessmentConfigPanel: WithImperativeApi<
     };
 
     const grid = (
-      <div className="Grid ag-grid-parent ag-theme-balham">
+      <div className="Grid">
         <AgGridReact
+          theme={themeBalham}
           domLayout="autoHeight"
           columnDefs={columnDefs}
           defaultColDef={defaultColumnDefs}

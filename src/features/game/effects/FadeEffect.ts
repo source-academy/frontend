@@ -40,7 +40,7 @@ export const fadeIn = (
 });
 
 /**
- * @typedef {FadeProps} - props to specify additional properties/configuration for a fade animation
+ * Props to specify additional properties/configuration for a fade animation
  * @prop fadeDuration - how long to fade in and out
  */
 type FadeProps = {

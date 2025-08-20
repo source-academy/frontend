@@ -1,6 +1,5 @@
 /**
- * @typedef {TypewriterProps} - properties describing a typewriter
- *
+ * Properties describing a typewriter.
  * @prop {number} x - x coordinate of the left edge of the typewriter
  * @prop {number} y - y coordinate of the top edge of the typewriter
  * @prop {Phaser.Types.GameObjects.Text.TextStyle} textStyle

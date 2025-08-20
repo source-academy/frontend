@@ -1,6 +1,8 @@
 import { FileInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { t } from 'i18next';
 import React, { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { SideContentTab, SideContentType } from '../SideContentTypes';
 
@@ -28,6 +30,7 @@ type Props = {
  * This component is responsible for uploading Java class files to bypass the compiler.
  */
 const SideContentUpload: React.FC<Props> = ({ onUpload }) => {
+  const { t } = useTranslation('sideContent', { keyPrefix: 'upload' });
   const [count, setCount] = React.useState(0);
 
   const handleFileUpload: React.ChangeEventHandler<HTMLInputElement> = useCallback(
@@ -53,30 +56,27 @@ const SideContentUpload: React.FC<Props> = ({ onUpload }) => {
 
   return (
     <div>
-      <p>Bypass the compiler and type checker by uploading class files to run in the JVM.</p>
-      <p>
-        Only .class files are accepted. Code in the editor will be ignored when running while this
-        tab is active.
-      </p>
-      <p>Compile the files with the following command:</p>
+      <p>{t('description')}</p>
+      <p>{t('acceptedFiles')}</p>
+      <p>{t('compileCommand')}</p>
       <pre>
-        <code>javac *.java -target 8 -source 8</code>
+        <code>{t('javacCommand')}</code>
       </pre>
-      <p>Avoid running class files downloaded from unknown sources.</p>
+      <p>{t('warning')}</p>
       <p>
-        <strong>Main class must be named Main and uploaded as Main.class.</strong>
+        <strong>{t('mainClass')}</strong>
       </p>
       <FileInput
         inputProps={{ multiple: true, accept: '.class' }}
         onInputChange={handleFileUpload}
-        text={count === 0 ? 'Choose files...' : `${count} file(s) uploaded.`}
+        text={count === 0 ? t('chooseFiles') : `${count} ${t('filesUploaded')}`}
       />
     </div>
   );
 };
 
 const makeUploadTabFrom = (onUpload: (files: UploadResult) => void): SideContentTab => ({
-  label: 'Upload files',
+  label: t('sideContent:upload.label'),
   iconName: IconNames.Upload,
   body: <SideContentUpload onUpload={onUpload} />,
   id: SideContentType.upload
