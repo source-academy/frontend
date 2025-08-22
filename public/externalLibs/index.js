@@ -8,6 +8,15 @@ function dynamicallyLoadScript(url) {
   /** Forces scripts to be loaded in order. */
   script.async = false;
   script.defer = true;
+  
+  // Add load/error handlers for debugging
+  script.onload = function() {
+    console.log('[EXTERNAL-LIBS] Loaded:', url);
+  };
+  script.onerror = function() {
+    console.error('[EXTERNAL-LIBS] Failed to load:', url);
+  };
+  
   // make sure document.body exists, since the scripts we load
   // assume that it does
   if (document.body) {
@@ -27,15 +36,24 @@ function dynamicallyLoadScript(url) {
  * Loads all libraries, including sound and graphics.
  */
 function loadAllLibs() {
+  const v = 'prefix-stepper-5-' + Date.now()
   const files = [
     // sound
     '/externalLibs/sound/soundToneMatrix.js',
     // inspector
-    '/externalLibs/inspector/inspector.js'
+    '/externalLibs/inspector/inspector.js',
+    // scm-slang tracer UMD bundle (optional; ignore if missing)
+    `/externalLibs/scm-slang/index.js?v=${v}`
   ];
 
+  console.log('[EXTERNAL-LIBS] Loading libraries with version:', v);
   for (var i = 0; i < files.length; i++) {
-    dynamicallyLoadScript(files[i]);
+    try {
+      console.log('[EXTERNAL-LIBS] Loading:', files[i]);
+      dynamicallyLoadScript(files[i]);
+    } catch (e) {
+      console.error('[EXTERNAL-LIBS] Error loading:', files[i], e);
+    }
   }
 }
 

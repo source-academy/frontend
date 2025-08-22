@@ -105,6 +105,16 @@ const PlaygroundSaga = combineSagaHandlers({
       }
     }
 
+    // Enable Scheme tracer when opening Stepper tab
+    if (isSchemeLanguage(playgroundSourceChapter) && newId === SideContentType.substVisualizer) {
+      yield put(WorkspaceActions.toggleUsingSubst(true, workspaceLocation));
+    }
+
+    // Disable Scheme tracer when leaving Stepper tab
+    if (isSchemeLanguage(playgroundSourceChapter) && prevId === SideContentType.substVisualizer && newId !== SideContentType.substVisualizer) {
+      yield put(WorkspaceActions.toggleUsingSubst(false, workspaceLocation));
+    }
+
     if (newId === SideContentType.upload) {
       yield put(WorkspaceActions.toggleUsingUpload(true, workspaceLocation));
     } else {

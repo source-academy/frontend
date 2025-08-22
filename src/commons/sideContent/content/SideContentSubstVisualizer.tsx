@@ -275,6 +275,34 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
         </span>
       );
     },
+    // Scheme: prefix function application e.g. (+ 1 2)
+    FunctionApplication(node: any) {
+      const renderedOperator = renderNode(node.operator, { styleWrapper: styleWrapper });
+      const args: React.ReactNode[] = (node.operands || []).map((arg: any) =>
+        renderNode(arg, { styleWrapper: styleWrapper })
+      );
+      const renderedArgs =
+        args.length > 0
+          ? args.slice(1).reduce(
+              (result, item) => (
+                <span>
+                  {result}
+                  {' '}
+                  {item}
+                </span>
+              ),
+              args[0]
+            )
+          : undefined;
+      return (
+        <span>
+          {'('}
+          {renderedOperator}
+          {args.length > 0 ? <span>{' '}{renderedArgs}</span> : null}
+          {')'}
+        </span>
+      );
+    },
     LogicalExpression(node: StepperLogicalExpression) {
       return (
         <span>
@@ -387,6 +415,23 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
         </span>
       );
     },
+    // Scheme: lambda expression e.g. (lambda (x y) body)
+    LambdaExpression(node: any) {
+      const params = (node.params || [])
+        .map((p: any) => (typeof p === 'string' ? p : p?.name ?? ''))
+        .join(' ');
+      return (
+        <span>
+          {'('}
+          <span className="stepper-identifier">{'lambda '}</span>
+          {'('}
+          {params}
+          {')'}{' '}
+          {renderNode(node.body, { styleWrapper: styleWrapper })}
+          {')'}
+        </span>
+      );
+    },
     CallExpression(node: StepperFunctionApplication) {
       let renderedCallee = renderNode(node.callee, { styleWrapper: styleWrapper });
       if (node.callee.type === 'ArrowFunctionExpression' && node.callee.name === undefined) {
@@ -464,11 +509,34 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
       );
     },
     FunctionDeclaration(node: StepperFunctionDeclaration) {
+      // Handle both JS-slang and Scheme FunctionDeclaration
+      const funcName = (node as any).id?.name || (node as any).name || 'anonymous';
+      const params = node.params || [];
+      const body = node.body;
+      
+      // For Scheme, if body is a LambdaExpression, extract its body
+      let displayBody = body;
+      if (body && (body as any).type === 'LambdaExpression') {
+        displayBody = (body as any).body;
+      }
+      
       return (
         <span>
-          <span className="stepper-identifier">{`function ${node.id.name}`}</span>
-          <span>{renderArguments(node.params)}</span>
-          <span> {renderNode(node.body, { styleWrapper: styleWrapper })}</span>
+          <span className="stepper-identifier">{`(define (${funcName}`}</span>
+          {params.length > 0 && (
+            <span>
+              {' '}
+              {params.map((param: any, idx: number) => (
+                <span key={idx}>
+                  {idx > 0 && ' '}
+                  {param.name || param}
+                </span>
+              ))}
+            </span>
+          )}
+          <span>{') '}</span>
+          {renderNode(displayBody, { styleWrapper: styleWrapper })}
+          <span>{')'}</span>
         </span>
       );
     },
@@ -588,7 +656,7 @@ function CustomASTRenderer(props: IStepperPropContents): React.ReactNode {
         }
         let returnNode = <span>{renderNode}</span>;
         props.markers.forEach(marker => {
-          if (marker.redex === node) {
+          if (marker.redex === node || JSON.stringify(marker.redex) === JSON.stringify(node)) {
             returnNode = <span className={marker.redexType}>{returnNode}</span>;
           }
         });

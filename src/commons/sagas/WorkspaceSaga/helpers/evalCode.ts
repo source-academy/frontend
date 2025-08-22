@@ -243,7 +243,36 @@ export function* evalCodeSaga(
 
     const substActiveAndCorrectChapter = context.chapter <= Chapter.SOURCE_2 && substIsActive;
 
-    return call(
+    // If Scheme stepper tab is active, generate tracer output via scm-slang
+    if (isSchemeLanguage(context.chapter) && substIsActive) {
+      const codeToTrace = entrypointCode;
+      console.log('[FRONTEND] Scheme stepper active, code:', codeToTrace);
+      // window.ScmSlangRunner is provided by scm-slang UMD bundle loaded in index.html (externalLibs)
+      const stepper = (window as any).ScmSlangRunner;
+      console.log('[FRONTEND] ScmSlangRunner available:', !!stepper);
+      console.log('[FRONTEND] Bundle version check - should be prefix-stepper-5');
+      if (stepper && typeof stepper.stepExpression === 'function') {
+        try {
+          console.log('[FRONTEND] Calling stepExpression...');
+          const steps = stepper.stepExpression(codeToTrace, stepLimit);
+          console.log('[FRONTEND] stepExpression returned:', steps);
+          console.log('[FRONTEND] First step details:', JSON.stringify(steps[0], null, 2));
+          console.log('[FRONTEND] All steps markers:', steps.map((s, i) => `Step ${i}: ${JSON.stringify(s.markers)}`));
+          console.log('[FRONTEND] All steps ASTs:', steps.map((s, i) => `Step ${i}: ${JSON.stringify(s.ast, null, 2)}`));
+          console.log('[FRONTEND] Redex objects:', steps.map((s, i) => `Step ${i}: ${JSON.stringify(s.markers?.[0]?.redex, null, 2)}`));
+          const formatted = (steps as any[]).map(s => ({ ast: s.ast, markers: s.markers }));
+          console.log('[FRONTEND] Formatted steps:', formatted);
+          return { status: 'finished', context, value: formatted } as Result;
+        } catch (e) {
+          console.error('[FRONTEND] stepExpression error:', e);
+          // fall through to normal execution on tracer error
+        }
+      } else {
+        console.log('[FRONTEND] ScmSlangRunner or stepExpression not available');
+      }
+    }
+
+    const normal = yield call(
       runFilesInContext,
       isFolderModeEnabled
         ? files
@@ -261,6 +290,15 @@ export function* evalCodeSaga(
         executionMethod: cseActiveAndCorrectChapter ? 'cse-machine' : 'auto'
       }
     );
+
+    // If Scheme (non-stepper), ensure REPL shows primitive value when possible
+    if (isSchemeLanguage(context.chapter) && !substIsActive && normal?.status === 'finished') {
+      const v = (normal as any).value;
+      if (v && typeof v === 'object' && 'type' in v && v.type === 'Literal' && 'value' in v) {
+        return { status: 'finished', context, value: (v as any).value } as Result;
+      }
+    }
+    return normal;
   }
 
   // Handles `console.log` statements in fullJS
@@ -297,8 +335,11 @@ export function* evalCodeSaga(
   }
   if (paused) {
     yield put(actions.endDebuggerPause(workspaceLocation));
-    // yield put(actions.updateLastDebuggerResult(manualToggleDebugger(context), workspaceLocation));
-    yield call(updateInspector, workspaceLocation);
+    // Skip inspector when using Scheme Stepper
+    if (!(isSchemeLanguage(context.chapter) && (yield* selectWorkspace(workspaceLocation)).usingSubst)) {
+      // yield put(actions.updateLastDebuggerResult(manualToggleDebugger(context), workspaceLocation));
+      yield call(updateInspector, workspaceLocation);
+    }
     yield call(showWarningMessage, 'Execution paused', 750);
     return;
   }
@@ -309,7 +350,10 @@ export function* evalCodeSaga(
 
   // do not highlight for stories
   if (!isStoriesBlock) {
-    yield call(updateInspector, workspaceLocation);
+    // Skip inspector when using Scheme Stepper
+    if (!(isSchemeLanguage(context.chapter) && (yield* selectWorkspace(workspaceLocation)).usingSubst)) {
+      yield call(updateInspector, workspaceLocation);
+    }
   }
 
   if (result.status === 'suspended-cse-eval') {

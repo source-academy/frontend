@@ -202,7 +202,7 @@ export const schemeLanguages: SALanguage[] = schemeSubLanguages.map(sublang => {
   return {
     ...sublang,
     mainLanguage: SupportedLanguage.SCHEME,
-    supports: { repl: true, cseMachine: true }
+    supports: { repl: true, cseMachine: true, substVisualizer: true }
   };
 });
 
