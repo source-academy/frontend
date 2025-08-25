@@ -7,7 +7,7 @@ import { Control } from 'src/features/cseMachine/c/components/Control';
 import { defaultBackgroundColor } from '../CseMachineUtils';
 import { Config, ShapeDefaultProps } from './../CseMachineConfig';
 // import { Environment } from './components/Environment';
-// import { Stash } from './components/Stash';
+import { Stash } from './components/Stash';
 
 type SetVis = (vis: React.ReactNode) => void;
 type SetEditorHighlightedLines = (segments: [number, number][]) => void;
@@ -27,7 +27,7 @@ export class CseMachine {
 
   // static environment: Environment | undefined;
   static control: Control | undefined;
-  // static stash: Stash | undefined;
+  static stash: Stash | undefined;
 
   static init(setVis: SetVis, setEditorHighlightedLines: (segments: [number, number][]) => void) {
     this.setVis = setVis;
@@ -36,7 +36,7 @@ export class CseMachine {
 
   /** updates the visualization state in the SideContentCseMachine component based on
    * the Java Slang context passed in */
-  static drawCse(context: CContext) {
+  static drawCse(context: any) {
     // if (!this.setVis || !context.environment || !context.control || !context.stash) {
     //   throw new Error('Java CSE Machine not initialized');
     // }
@@ -46,7 +46,7 @@ export class CseMachine {
 
     // CseMachine.environment = new Environment(context.environment);
     CseMachine.control = new Control(context.control);
-    // CseMachine.stash = new Stash(context.stash);
+    CseMachine.stash = new Stash(context.stash);
 
     this.setVis(this.draw());
 
@@ -144,7 +144,7 @@ export class CseMachine {
                   listening={false}
                 />
                 {this.control?.draw()}
-                {/* {this.stash?.draw()} */}
+                {this.stash?.draw()}
                 {/* {this.environment?.draw()} */}
               </Layer>
             </Stage>

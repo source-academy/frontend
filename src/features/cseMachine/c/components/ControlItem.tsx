@@ -32,11 +32,11 @@ export class ControlItem extends Visible implements IHoverable {
 
     // reference: Frame | undefined,
 
-    reference: undefined,
+    // reference: undefined,
 
     private readonly _tooltip: string,
-    private readonly highlightOnHover: () => void,
-    private readonly unhighlightOnHover: () => void
+    // private readonly highlightOnHover: () => void,
+    // private readonly unhighlightOnHover: () => void
   ) {
     super();
 
@@ -76,7 +76,7 @@ export class ControlItem extends Visible implements IHoverable {
   };
 
   onMouseEnter = (e: KonvaEventObject<MouseEvent>): void => {
-    this.highlightOnHover();
+    // this.highlightOnHover();
     if (!this.isCurrentItem()) {
       setHoveredStyle(e.currentTarget);
     }
@@ -85,7 +85,7 @@ export class ControlItem extends Visible implements IHoverable {
   };
 
   onMouseLeave = (e: KonvaEventObject<MouseEvent>): void => {
-    this.unhighlightOnHover();
+    // this.unhighlightOnHover();
     if (!this.isCurrentItem()) {
       setUnhoveredStyle(e.currentTarget);
     }

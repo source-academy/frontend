@@ -19,6 +19,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
 import { Output } from 'src/commons/repl/Repl';
 import type { PlaygroundWorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
+import { CseMachine as CCseMachine } from 'src/features/cseMachine/c/CseMachine';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
 import { Layout } from 'src/features/cseMachine/CseMachineLayout';
@@ -89,6 +90,13 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
           props.setEditorHighlightedLines(0, segments);
         }
       );
+    } else if(this.isC()) {
+      CCseMachine.init(
+        visualization => this.setState({ visualization }),
+        (segments: [number, number][]) => {
+          props.setEditorHighlightedLines(0, segments);
+        }
+      )
     } else {
       CseMachine.init(
         visualization => {
@@ -112,6 +120,10 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
 
   private isJava(): boolean {
     return this.props.chapter === Chapter.FULL_JAVA;
+  }
+
+  private isC(): boolean {
+    return this.props.chapter == Chapter.FULL_C;
   }
 
   private calculateWidth(editorWidth?: string) {
@@ -183,6 +195,8 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
       this.stepFirst();
       if (this.isJava()) {
         JavaCseMachine.clearCse();
+      } else if(this.isC()) {
+        CCseMachine.clearCse();
       } else {
         CseMachine.clearCse();
       }
@@ -278,7 +292,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                 disabled={!this.state.visualization}
                 icon="chevron-left"
                 onClick={
-                  this.isJava() || CseMachine.getControlStash()
+                  this.isJava() || this.isC() || CseMachine.getControlStash()
                     ? this.stepPrevious
                     : this.stepPrevChangepoint
                 }
@@ -287,7 +301,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                 disabled={!this.state.visualization}
                 icon="chevron-right"
                 onClick={
-                  this.isJava() || CseMachine.getControlStash()
+                  this.isJava() || this.isC() || CseMachine.getControlStash()
                     ? this.stepNext
                     : this.stepNextChangepoint
                 }
