@@ -64,7 +64,7 @@ async function cCompileAndRun(
   context: Context,
   currentStep: number,
   isUsingCse: boolean
-): Promise<Result> {
+) {
   function reportCCompilationError(errorMessage: string, context: Context) {
     context.errors.push({
       type: ErrorType.SYNTAX,
@@ -122,11 +122,7 @@ async function cCompileAndRun(
 
     context.runtime.envStepsTotal = evaluationResult.context.step;
 
-    return {
-      status: 'finished',
-      context,
-      value: { toReplString: () => 'Compilation and program execution successful.' }
-    };
+    return evaluationResult;
   }
 
   try {
