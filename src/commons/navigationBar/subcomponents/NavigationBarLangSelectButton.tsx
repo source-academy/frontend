@@ -6,13 +6,12 @@ import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { flagLanguageDirectoryEnable } from 'src/features/languageDirectory/flagLanguageDirectory';
 import LanguageDirectoryActions from 'src/features/languageDirectory/LanguageDirectoryActions';
-import type { ILanguageDefinition } from 'src/features/languageDirectory/LanguageDirectoryTypes';
 
-// Remove when conductors.languageDirectory is default behaviour
+//TODO <remove legacy>: Remove when conductors.languageDirectory is default behaviour
 import LegacyNavigationBarLangSelectButton from './LegacyNavigationBarLangSelectButton';
 
 function useDirectoryOptions() {
-  const langs = useTypedSelector(s => s.languageDirectory.languages) as ILanguageDefinition[];
+  const langs = useTypedSelector(s => s.languageDirectory.languages);
   return langs.map(l => ({ value: l.id, label: l.name }));
 }
 
