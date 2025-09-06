@@ -1,9 +1,11 @@
-import { ILanguageDefinition } from 'language-directory/dist/types';
-export type { IEvaluatorDefinition, ILanguageDefinition } from 'language-directory/dist/types';
-import { generateLanguageMap, getLanguageDefinition } from 'language-directory/dist/util';
-export { getEvaluatorDefinition } from 'language-directory/dist/util';
+import {
+  generateLanguageMap,
+  getLanguageDefinition,
+  ILanguageDefinition,
+  languages as staticLanguages
+} from 'language-directory';
 
-let languages: ILanguageDefinition[] = [];
+let languages: ILanguageDefinition[] = staticLanguages;
 let languageMap = generateLanguageMap(languages);
 
 export async function updateSupportedLanguages(url: string) {
