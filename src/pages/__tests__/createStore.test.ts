@@ -14,6 +14,7 @@ import { SavedState } from '../localStorage';
 
 const mockChangedStoredState: SavedState = {
   achievements: [],
+  featureFlags: [],
   session: {
     accessToken: 'yep',
     refreshToken: 'refresherOrb',

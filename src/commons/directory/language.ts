@@ -25,3 +25,5 @@ export function getSupportedLanguages() {
 export function getSupportedLanguageDefinition(languageId: string) {
   return getLanguageDefinition(languageMap, languageId);
 }
+
+export type { IEvaluatorDefinition, ILanguageDefinition } from 'language-directory';
