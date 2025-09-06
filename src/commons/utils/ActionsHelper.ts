@@ -10,6 +10,7 @@ import AchievementActions from '../../features/achievement/AchievementActions';
 import DashboardActions from '../../features/dashboard/DashboardActions';
 import GitHubActions from '../../features/github/GitHubActions';
 import GroundControlActions from '../../features/groundControl/GroundControlActions';
+import LanguageDirectoryActions from '../../features/languageDirectory/LanguageDirectoryActions';
 import LeaderboardActions from '../../features/leaderboard/LeaderboardActions';
 import PersistenceActions from '../../features/persistence/PersistenceActions';
 import PlaygroundActions from '../../features/playground/PlaygroundActions';
@@ -45,7 +46,8 @@ export const actions = {
   ...SideContentActions,
   ...VscodeActions,
   ...SideContentActions,
-  ...FeatureFlagsActions
+  ...FeatureFlagsActions,
+  ...LanguageDirectoryActions
 };
 
 export type SourceActionType = ActionType<typeof actions>;

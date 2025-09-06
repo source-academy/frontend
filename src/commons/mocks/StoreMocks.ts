@@ -6,6 +6,7 @@ import {
   defaultAchievement,
   defaultDashboard,
   defaultFileSystem,
+  defaultLanguageDirectory,
   defaultLeaderboard,
   defaultPlayground,
   defaultRouter,
@@ -36,7 +37,8 @@ export function mockInitialStore(
     featureFlags: defaultFeatureFlags,
     fileSystem: defaultFileSystem,
     sideContent: defaultSideContentManager,
-    vscode: defaultVscode
+    vscode: defaultVscode,
+    languageDirectory: defaultLanguageDirectory
   };
 
   const lodashMergeCustomizer = (objValue: any, srcValue: any) => {
