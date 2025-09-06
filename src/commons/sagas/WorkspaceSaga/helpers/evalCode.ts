@@ -11,6 +11,7 @@ import { call, cancel, cancelled, fork, put, race, select, take } from 'redux-sa
 import * as Sourceror from 'sourceror';
 
 import InterpreterActions from '../../../../commons/application/actions/InterpreterActions';
+import { IEvaluatorDefinition } from '../../../../commons/directory/language';
 import { selectFeatureSaga } from '../../../../commons/featureFlags/selectFeatureSaga';
 import { makeCCompilerConfig, specialCReturnObject } from '../../../../commons/utils/CToWasmHelper';
 import { javaRun } from '../../../../commons/utils/JavaHelper';
@@ -463,9 +464,13 @@ export function* evalCodeConductorSaga(
   actionType: string,
   storyEnv?: string
 ): SagaIterator {
+  const evaluator: IEvaluatorDefinition | undefined = yield select(
+    (state: OverallState) => state.playground.conductorEvaluator
+  );
+  if (!evaluator?.path) throw Error('no evaluator');
   const evaluatorResponse: Response = yield call(
     fetch,
-    yield call(selectFeatureSaga, flagConductorEvaluatorUrl) // temporary evaluator
+    evaluator.path // temporary evaluator
   );
   if (!evaluatorResponse.ok) throw Error("can't get evaluator");
   const evaluatorBlob: Blob = yield call([evaluatorResponse, 'blob']);

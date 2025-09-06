@@ -3,7 +3,10 @@ import { IconNames } from '@blueprintjs/icons';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/types';
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { playgroundConductorEvaluator } from 'src/features/playground/PlaygroundActions';
 
+import { flagConductorEnable } from '../../features/conductor/flagConductorEnable';
 import {
   fullJSLanguage,
   fullTSLanguage,
@@ -15,6 +18,8 @@ import {
   sourceLanguages,
   styliseSublanguage
 } from '../application/ApplicationTypes';
+import { IEvaluatorDefinition } from '../directory/language';
+import { useFeature } from '../featureFlags/useFeature';
 import Constants from '../utils/Constants';
 import { useTypedSelector } from '../utils/Hooks';
 
@@ -69,7 +74,24 @@ const chapterRenderer: (isFolderModeEnabled: boolean) => ItemRenderer<SALanguage
     );
   };
 
+const evaluatorListRenderer: ItemListRenderer<IEvaluatorDefinition> = ({
+  itemsParentRef,
+  renderItem,
+  items
+}) => {
+  return (
+    <Menu ulRef={itemsParentRef} style={{ display: 'flex', flexDirection: 'column' }}>
+      {items.map(renderItem)}
+    </Menu>
+  );
+};
+
+const evaluatorRenderer: ItemRenderer<IEvaluatorDefinition> = (evaluator, { handleClick }) => {
+  return <MenuItem onClick={handleClick} text={evaluator.name} />;
+};
+
 const ChapterSelectComponent = Select.ofType<SALanguage>();
+const EvaluatorSelectComponent = Select<IEvaluatorDefinition>;
 
 export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = ({
   isFolderModeEnabled,
@@ -79,6 +101,34 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
   disabled = false
 }) => {
   const selectedLang = useTypedSelector(store => store.playground.languageConfig.mainLanguage);
+
+  const currentLang = useTypedSelector(store => store.playground.conductorLanguage);
+  const currentEval = useTypedSelector(store => store.playground.conductorEvaluator);
+  const dispatch = useDispatch();
+
+  const conductorEnabled = useFeature(flagConductorEnable);
+  if (conductorEnabled) {
+    const handleChapterSelect = (evaluator: IEvaluatorDefinition) => {
+      dispatch(playgroundConductorEvaluator(evaluator));
+    };
+    return (
+      <EvaluatorSelectComponent
+        items={currentLang.evaluators}
+        onItemSelect={handleChapterSelect}
+        itemRenderer={evaluatorRenderer}
+        itemListRenderer={evaluatorListRenderer}
+        filterable={false}
+        disabled={disabled}
+      >
+        <Button
+          minimal
+          text={currentEval?.name}
+          rightIcon={disabled ? null : IconNames.DOUBLE_CARET_VERTICAL}
+          disabled={disabled}
+        />
+      </EvaluatorSelectComponent>
+    );
+  }
 
   const choices = [
     ...sourceLanguages,
