@@ -7677,7 +7677,7 @@ __metadata:
     js-yaml: "npm:^4.1.0"
     jsdom: "npm:^26.0.0"
     konva: "npm:^9.2.0"
-    language-directory: "https://github.com/source-academy/language-directory.git"
+    language-directory: "https://github.com/source-academy/language-directory.git#0.0.4"
     lodash: "npm:^4.17.21"
     lz-string: "npm:^1.4.4"
     mdast-util-from-markdown: "npm:^2.0.0"
@@ -9356,10 +9356,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"language-directory@https://github.com/source-academy/language-directory.git":
-  version: 0.0.1
-  resolution: "language-directory@https://github.com/source-academy/language-directory.git#commit=8e406e4b28a7df5e3e66fdf3005092d0cf861143"
-  checksum: 10c0/2db1dd6a94497232e2a183f10769f9e98658636ad3c0c56ae2d54abd5a414dcfbaa994e651ac94507d129147da523254d81103a75f5e0ad2cbaf2274ee3f146d
+"language-directory@https://github.com/source-academy/language-directory.git#0.0.4":
+  version: 0.0.4
+  resolution: "language-directory@https://github.com/source-academy/language-directory.git#commit=b0e045f61ed43203b623b0177b0db8d2c66afa69"
+  checksum: 10c0/ac20121c232125c44097ecec183c47fe9fb6b749ded151124e49a333d006a027fd61eb9447aaefa9ab354f0feecffc361d2cb4bf6caef363101e8fea54a4eca2
   languageName: node
   linkType: hard
 

@@ -67,7 +67,7 @@
     "js-slang": "^1.0.85",
     "js-yaml": "^4.1.0",
     "konva": "^9.2.0",
-    "language-directory": "https://github.com/source-academy/language-directory.git",
+    "language-directory": "https://github.com/source-academy/language-directory.git#0.0.4",
     "lodash": "^4.17.21",
     "lz-string": "^1.4.4",
     "mdast-util-from-markdown": "^2.0.0",
