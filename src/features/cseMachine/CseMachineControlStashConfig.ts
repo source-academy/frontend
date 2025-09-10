@@ -1,12 +1,12 @@
 export const ControlStashConfig = Object.freeze({
   ControlPosX: 20,
   ControlPosY: 5,
-  StashPosX: 140,
+  StashPosX: 310,
   StashPosY: 5,
 
-  ControlItemWidth: 120,
+  ControlItemWidth: 290,
   ControlItemTextPadding: 10,
-  ControlMaxTextWidth: 95,
+  ControlMaxTextWidth: 300,
   ControlMaxTextHeight: 125,
   ControlItemCornerRadius: 5,
 

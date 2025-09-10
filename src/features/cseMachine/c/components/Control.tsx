@@ -1,5 +1,11 @@
 import { Group } from 'react-konva';
-import { Control as CControl, ControlItem as CControlItem } from 'src/ctowasm/dist'
+import {
+  Control as CControl,
+  ControlItem as CControlItem,
+  controlItemToString,
+  Instruction as CInstrucion,
+  InstructionType as CInstructionType
+} from 'src/ctowasm/dist';
 
 import { Visible } from '../../components/Visible';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
@@ -9,6 +15,10 @@ import { ControlItem } from './ControlItem';
 
 export class Control extends Visible {
   private readonly _controlItems: ControlItem[] = [];
+
+  isEmpty(): boolean {
+    return this._controlItems.length == 0;
+  }
 
   constructor(control: CControl) {
     super();
@@ -22,8 +32,10 @@ export class Control extends Visible {
 
     // Create each ControlItem.
     let controlItemY: number = this._y;
-    control.getStack().forEach((controlItem, index) => {
-      const controlItemText = this.getControlItemString(controlItem);
+    control.getStack().forEach((controlItem: CControlItem, index: number) => {
+      let controlItemText = '';
+
+      controlItemText = controlItemToString(controlItem);
 
       const controlItemStroke =
         index === control.getStack().length - 1 ? defaultActiveColor() : defaultStrokeColor();
@@ -37,17 +49,18 @@ export class Control extends Visible {
       const controlItemTooltip = this.getControlItemTooltip(controlItem);
       this.getControlItemTooltip(controlItem);
 
-      // const node = !control.isInstruction(controlItem) ? controlItem : controlItem.srcNode;
-      // const highlightOnHover = () => {
-      //   let start = -1;
-      //   let end = -1;
-      //   if (node.location) {
-      //     start = node.location.startLine - 1;
-      //     end = node.location.endLine ? node.location.endLine - 1 : start;
-      //   }
-      //   CseMachine.setEditorHighlightedLines([[start, end]]);
-      // };
-      // const unhighlightOnHover = () => CseMachine.setEditorHighlightedLines([]);
+      const node = !control.isInstruction(controlItem) ? controlItem : controlItem;
+      const highlightOnHover = () => {
+        let start = -1;
+        let end = -1;
+        console.log("HERE BRO: ", controlItem)
+        if (node.position) {
+          start = node.position.start.line - 1;
+          end = node.position.end.line - 1;
+        }
+        CseMachine.setEditorHighlightedLines([[start, end]]);
+      };
+      const unhighlightOnHover = () => CseMachine.setEditorHighlightedLines([]);
 
       const currControlItem = new ControlItem(
         controlItemY,
@@ -55,11 +68,12 @@ export class Control extends Visible {
         controlItemStroke,
         // controlItemReference,
         controlItemTooltip,
-        // highlightOnHover,
-        // unhighlightOnHover
+        highlightOnHover,
+        unhighlightOnHover
       );
 
       this._controlItems.push(currControlItem);
+      console.log('SIZE HERE MF: ', this._controlItems, this._controlItems.length);
       controlItemY += currControlItem.height();
     });
 
@@ -77,67 +91,128 @@ export class Control extends Visible {
     );
   }
 
-  private getControlItemString = (controlItem: CControlItem): string => {
-    // if (ECE.isNode(controlItem)) {
-    //   return astToString(controlItem);
-    // }
+  // private getControlItemString(controlItem: CControlItem): String {
+  //   const res = controlItem.type;
+  //   const extractedCode = controlItemToString(controlItem).trim();
 
-    // switch (controlItem.type) {
-    //   case ""
-    // }
+  //   if(controlItem.type == CInstructionType.BINARY_OP) {
+  //     return controlItem.operator;
+  //   } else if(controlItem.type === CInstructionType.BRANCH) {
+  //     return "Branch";
+  //   } else if(controlItem.type === CInstructionType.BREAK_MARK) {
+  //     return "Break Mark";
+  //   } else if(controlItem.type === CInstructionType.CALLINSTRUCTION) {
+  //     return "Call instruction: " + extractedCode;
+  //   } else if(controlItem.type === CInstructionType.CASE_JUMP) {
+  //     return "Case Jump";
+  //   } else if(controlItem.type === CInstructionType.CASE_MARK) {
+  //     return "Case Mark";
+  //   } else if(controlItem.type === CInstructionType.CONTINUE_MARK) {
+  //     return "Continue Mark";
+  //   }
 
-    return controlItem.type;
+  //   // if (controlItem.type === CInstructionType.BINARY_OP) {
+  //   //   return controlItem.operator;
+  //   // } else if (controlItem.type === CInstructionType.BRANCH) {
+  //   //   return 'Branch Instruction';
+  //   // } else if (controlItem.type === CInstructionType.BREAK_MARK) {
+  //   //   return 'Break Mark';
+  //   // } else if (controlItem.type === CInstructionType.CALLINSTRUCTION) {
+  //   //   return 'Call Instruction';
+  //   // } else if (controlItem.type === CInstructionType.CASE_JUMP) {
+  //   //   return 'Case Jump';
+  //   // } else if (controlItem.type === CInstructionType.CASE_MARK) {
+  //   //   return 'Case Mark';
+  //   // } else if (controlItem.type === CInstructionType.CONTINUE_MARK) {
+  //   //   return 'Continue Mark';
+  //   // } else if (controlItem.type === CInstructionType.FORLOOP) {
+  //   //   return 'For Loop: ' + extractedCode;
+  //   // } else if (controlItem.type === CInstructionType.FUNCTIONINDEXWRAPPER) {
+  //   //   return 'Function Index Wrapper';
+  //   // } else if (controlItem.type === CInstructionType.MEMORY_LOAD) {
+  //   //   return 'Memory Load: ' + extractedCode;
+  //   // } else if (controlItem.type === CInstructionType.MEMORY_STORE) {
+  //   //   return 'Memory Store: ' + controlItem.dataType;
+  //   // } else if (controlItem.type === CInstructionType.POP) {
+  //   //   return 'Pop';
+  //   // } else if (controlItem.type === CInstructionType.STACKFRAMETEARDOWNINSTRUCTION) {
+  //   //   return 'Stack Frame Tear Down';
+  //   // } else if (controlItem.type === CInstructionType.UNARY_OP) {
+  //   //   return 'Unary operation: ' + controlItem.operator;
+  //   // } else if (controlItem.type === CInstructionType.WHILE) {
+  //   //   return 'While: ' + extractedCode;
+  //   // } else if (controlItem.type === 'FunctionDefinition') {
+  //   //   return 'Function Definition: ' + extractedCode;
+  //   // } else if (controlItem.type === 'MemoryStore') {
+  //   //   return 'Memory Store: ' + extractedCode;
+  //   // } else if (controlItem.type === 'SelectionStatement') {
+  //   //   return 'Selection Statement: ' + extractedCode;
+  //   // } else if (controlItem.type === 'DoWhileLoop') {
+  //   //   return 'Do While Loop: ' + extractedCode;
+  //   // } else if (controlItem.type === 'WhileLoop') {
+  //   //   return 'While Loop: ' + extractedCode;
+  //   // } else if (controlItem.type === 'ForLoop') {
+  //   //   return 'For Loop: ' + extractedCode;
+  //   // } else if (controlItem.type === 'FunctionCall') {
+  //   //   if (controlItem.calledFunction.type == 'DirectlyCalledFunction') {
+  //   //     if (controlItem.calledFunction.functionName == "main") {
+  //   //       return "main()";
+  //   //     } else {
+  //   //       return extractedCode;
+  //   //     }
+  //   //   } else {
+  //   //     return "Indirect Function call\n" + extractedCode;
+  //   //   }
+  //   // } else if (controlItem.type === 'ReturnStatement') {
+  //   //   return 'Return Statement: ' + extractedCode;
+  //   // } else if (controlItem.type === 'BreakStatement') {
+  //   //   return 'Break Statement';
+  //   // } else if (controlItem.type === 'ContinueStatement') {
+  //   //   return 'Continue Statement';
+  //   // } else if (controlItem.type === 'SwitchStatement') {
+  //   //   return 'Switch Statement';
+  //   // } else if (controlItem.type === 'ExpressionStatement') {
+  //   //   return 'Expression Statement: ' + extractedCode;
+  //   // } else if (controlItem.type === 'BinaryExpression') {
+  //   //   return 'Binary Expression: ' + extractedCode;
+  //   // } else if (controlItem.type === 'IntegerConstant') {
+  //   //   return 'Integer Constant: ' + controlItem.value.toString();
+  //   // } else if (controlItem.type === 'FloatConstant') {
+  //   //   return 'Float Constant: ' + controlItem.value.toString();
+  //   // } else if (controlItem.type === 'PreStatementExpression') {
+  //   //   return "PreStatementExpresion: " + extractedCode;
+  //   // } else if (controlItem.type === 'PostStatementExpression') {
+  //   //   return 'Post Statement Expression: ' + extractedCode;
+  //   // } else if (controlItem.type === 'UnaryExpression') {
+  //   //   return 'Unary Expression: ' + extractedCode;
+  //   // } else if (controlItem.type === 'LocalAddress') {
+  //   //   return 'Local Address: ' + controlItem.offset.value;
+  //   // } else if (controlItem.type === 'DataSegmentAddress') {
+  //   //   return 'Data Segment Address: ' + controlItem.offset;
+  //   // } else if (controlItem.type === 'DynamicAddress') {
+  //   //   return 'Dynamic Address: ' + controlItem.address;
+  //   // } else if (controlItem.type === 'ReturnObjectAddress') {
+  //   //   return 'Return Object Address: ' + controlItem.offset;
+  //   // } else if (controlItem.type === 'FunctionTableIndex') {
+  //   //   const funcIndex = controlItem.index.value;
 
-    // switch (controlItem.type) {
-    //   case "":
-    //     return 'return'; 
-    //   case ECE.InstrType.ASSIGNMENT:
-    //     return 'asgn';
-    //   case ECE.InstrType.BINARY_OP:
-    //     const binOpInstr = controlItem as ECE.BinOpInstr;
-    //     return binOpInstr.symbol;
-    //   case ECE.InstrType.POP:
-    //     return 'pop';
-    //   case ECE.InstrType.INVOCATION:
-    //     const appInstr = controlItem as ECE.InvInstr;
-    //     return `invoke ${appInstr.arity}`;
-    //   case ECE.InstrType.ENV:
-    //     return 'env';
-    //   case ECE.InstrType.MARKER:
-    //     return 'mark';
-    //   case ECE.InstrType.EVAL_VAR:
-    //     const evalVarInstr = controlItem as ECE.EvalVarInstr;
-    //     return `name ${evalVarInstr.symbol}`;
-    //   case ECE.InstrType.NEW:
-    //     const newInstr = controlItem as ECE.NewInstr;
-    //     return `new ${newInstr.c.frame.name}`;
-    //   case ECE.InstrType.RES_TYPE:
-    //     const resTypeInstr = controlItem as ECE.ResTypeInstr;
-    //     return `res_type ${
-    //       resTypeInstr.value.kind === 'Class'
-    //         ? resTypeInstr.value.frame.name
-    //         : astToString(resTypeInstr.value)
-    //     }`;
-    //   case ECE.InstrType.RES_TYPE_CONT:
-    //     const resTypeContInstr = controlItem as ECE.ResTypeContInstr;
-    //     return `res_type_cont ${resTypeContInstr.name}`;
-    //   case ECE.InstrType.RES_OVERLOAD:
-    //     const resOverloadInstr = controlItem as ECE.ResOverloadInstr;
-    //     return `res_overload ${resOverloadInstr.name} ${resOverloadInstr.arity}`;
-    //   case ECE.InstrType.RES_OVERRIDE:
-    //     return `res_override`;
-    //   case ECE.InstrType.RES_CON_OVERLOAD:
-    //     const resConOverloadInstr = controlItem as ECE.ResConOverloadInstr;
-    //     return `res_con_overload ${resConOverloadInstr.arity}`;
-    //   case ECE.InstrType.RES:
-    //     const resInstr = controlItem as ECE.ResInstr;
-    //     return `res ${resInstr.name}`;
-    //   case ECE.InstrType.DEREF:
-    //     return 'deref';
-    //   default:
-    //     return 'INSTRUCTION';
-    // }
-  };
+  //   //   if (funcIndex < 0 || funcIndex >= CseMachine.functions.length) {
+  //   //     throw new Error('Index of desired function is out of bounds');
+  //   //   }
+  //   //   const func = CseMachine.functions[Number(funcIndex)];
+  //   //   return func.functionName;
+  //   // } else if (controlItem.type === 'MemoryLoad') {
+  //   //   console.log("LONMEMAY: ", controlItem.address.type)
+  //   //   const res = 'Memory Load: ' + controlItem.address.type;
+  //   //   return res;
+  //   // } else if (controlItem.type === 'ConditionalExpression') {
+  //   //   return 'Conditional Expression: ' + extractedCode;
+  //   // } else {
+  //   //   throw new Error('Unknown instruction type');
+  //   // }
+
+  //   return res;
+  // }
 
   private getControlItemTooltip = (controlItem: CControlItem): string => {
     // if (ECE.isNode(controlItem)) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Group } from 'react-konva';
-import { Stash as CStash, StashItem as CStashItem } from 'src/ctowasm/dist'
+import { Stash as CStash, StashItem as CStashItem } from 'src/ctowasm/dist';
 
 import { Visible } from '../../components/Visible';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
@@ -25,11 +25,11 @@ export class Stash extends Visible {
     for (const stashItem of stash.getStack()) {
       const stashItemText = this.getStashItemString(stashItem);
       const stashItemStroke = defaultTextColor();
-    //   const stashItemReference = this.getStashItemRef(stashItem);
+      //   const stashItemReference = this.getStashItemRef(stashItem);
       const currStashItem = new StashItem(
         stashItemX,
         stashItemText,
-        stashItemStroke,
+        stashItemStroke
         // stashItemReference
       );
 
@@ -48,51 +48,50 @@ export class Stash extends Visible {
 
   private getStashItemString = (stashItem: CStashItem): string => {
     switch (stashItem.type) {
-        case "IntegerConstant":
-            return stashItem.value.toString();
-        case "FloatConstant":
-            return stashItem.value.toString();
-        case "FunctionTableIndex":
-            return stashItem.index.value.toString();
-        case "MemoryAddress":
-            return stashItem.value.toString();
-        // case 'Literal':
-        //     return stashItem.literalType.value;
-        // case ECE.StructType.VARIABLE:
-        //     return 'location';
-        // case ECE.StructType.TYPE:
-        //     return stashItem.type;
-        // default:
-        //     return stashItem.kind.toLowerCase();
+      case 'IntegerConstant':
+        return stashItem.value.toString();
+      case 'FloatConstant':
+        return stashItem.value.toString();
+      case 'FunctionTableIndex': {
+        const index = stashItem.index;
+        if (index.value < 0 || index.value > CseMachine.functions.length) {
+          throw new Error('Index of desired function is out of bounds');
+        }
+
+        const functionName = CseMachine.functions[Number(index.value)];
+        return functionName.functionName;
+      }
+      case 'MemoryAddress':
+        return stashItem.value.toString();
     }
   };
 
-//   private getStashItemRef = (stashItem: ECE.StashItem) => {
-//     return stashItem.kind === ECE.StructType.CLOSURE
-//       ? CseMachine.environment &&
-//           (CseMachine.environment.classes
-//             .flatMap(c => c.bindings)
-//             .find(b => b.value instanceof Method && b.value.method === stashItem)?.value as Method)
-//       : stashItem.kind === ECE.StructType.VARIABLE
-//         ? CseMachine.environment &&
-//           ((CseMachine.environment.frames
-//             .flatMap(c => c.bindings)
-//             .find(b => b.value instanceof Variable && b.value.variable === stashItem)
-//             ?.value as Variable) ||
-//             (CseMachine.environment.classes
-//               .flatMap(c => c.bindings)
-//               .find(b => b.value instanceof Variable && b.value.variable === stashItem)
-//               ?.value as Variable) ||
-//             (CseMachine.environment.objects
-//               .flatMap(o => o.bindings)
-//               .find(b => b.value instanceof Variable && b.value.variable === stashItem)
-//               ?.value as Variable))
-//         : stashItem.kind === ECE.StructType.CLASS
-//           ? CseMachine.environment &&
-//             CseMachine.environment.classes.find(c => c.frame === stashItem.frame)
-//           : stashItem.kind === ECE.StructType.OBJECT
-//             ? CseMachine.environment &&
-//               CseMachine.environment.objects.find(o => o.frame === stashItem.frame)
-//             : undefined;
-//   };
+  //   private getStashItemRef = (stashItem: ECE.StashItem) => {
+  //     return stashItem.kind === ECE.StructType.CLOSURE
+  //       ? CseMachine.environment &&
+  //           (CseMachine.environment.classes
+  //             .flatMap(c => c.bindings)
+  //             .find(b => b.value instanceof Method && b.value.method === stashItem)?.value as Method)
+  //       : stashItem.kind === ECE.StructType.VARIABLE
+  //         ? CseMachine.environment &&
+  //           ((CseMachine.environment.frames
+  //             .flatMap(c => c.bindings)
+  //             .find(b => b.value instanceof Variable && b.value.variable === stashItem)
+  //             ?.value as Variable) ||
+  //             (CseMachine.environment.classes
+  //               .flatMap(c => c.bindings)
+  //               .find(b => b.value instanceof Variable && b.value.variable === stashItem)
+  //               ?.value as Variable) ||
+  //             (CseMachine.environment.objects
+  //               .flatMap(o => o.bindings)
+  //               .find(b => b.value instanceof Variable && b.value.variable === stashItem)
+  //               ?.value as Variable))
+  //         : stashItem.kind === ECE.StructType.CLASS
+  //           ? CseMachine.environment &&
+  //             CseMachine.environment.classes.find(c => c.frame === stashItem.frame)
+  //           : stashItem.kind === ECE.StructType.OBJECT
+  //             ? CseMachine.environment &&
+  //               CseMachine.environment.objects.find(o => o.frame === stashItem.frame)
+  //             : undefined;
+  //   };
 }

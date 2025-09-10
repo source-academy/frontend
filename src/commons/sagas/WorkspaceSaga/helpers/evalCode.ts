@@ -8,12 +8,12 @@ import { pick } from 'lodash';
 import { eventChannel, type SagaIterator } from 'redux-saga';
 import { call, cancel, cancelled, fork, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
-import { 
+import {
   CContext,
   compileAndRun as compileAndRunCCode,
-  evaluate as evaluateCCode,
+  evaluate as evaluateCCode
 } from 'src/ctowasm/dist/index';
-import { CseMachine as CCseMachine } from 'src/features/cseMachine/c/CseMachine'
+import { CseMachine as CCseMachine } from 'src/features/cseMachine/c/CseMachine';
 
 import InterpreterActions from '../../../../commons/application/actions/InterpreterActions';
 import { selectFeatureSaga } from '../../../../commons/featureFlags/selectFeatureSaga';
@@ -60,7 +60,7 @@ async function wasm_compile_and_run(
 }
 
 async function cCompileAndRun(
-  cCode: string, 
+  cCode: string,
   context: Context,
   currentStep: number,
   isUsingCse: boolean
@@ -106,7 +106,7 @@ async function cCompileAndRun(
 
   if (isUsingCse) {
     context.executionMethod = 'cse-machine';
-    
+
     const evaluationResult = await evaluateCCode(cCode, cCompilerConfig, currentStep);
 
     if (evaluationResult.status === 'failure') {
@@ -169,7 +169,7 @@ export function visualizeCCseMachine({ context }: { context: CContext }) {
   try {
     CCseMachine.drawCse(context);
   } catch (err) {
-    throw new Error('C CSE machine is not enabled')
+    throw new Error('C CSE machine is not enabled');
   }
 }
 
@@ -266,9 +266,7 @@ export function* evalCodeSaga(
 
     switch (context.chapter) {
       case Chapter.FULL_C:
-        const {
-          usingCse: isUsingCse
-        } = yield* selectWorkspace('playground');
+        const { usingCse: isUsingCse } = yield* selectWorkspace('playground');
 
         return call(cCompileAndRun, entrypointCode, context, currentStep, isUsingCse);
       case Chapter.FULL_JAVA: {

@@ -17,12 +17,12 @@ import { CseMachine } from '../CseMachine';
 // import { Variable } from './Variable';
 
 export class StashItem extends Visible {
-//   private readonly _arrow: Arrow | undefined;
+  //   private readonly _arrow: Arrow | undefined;
 
   constructor(
     x: number,
     private readonly _text: string,
-    private readonly _stroke: string,
+    private readonly _stroke: string
     // reference?: Method | Frame | Variable
   ) {
     super();

@@ -90,13 +90,13 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
           props.setEditorHighlightedLines(0, segments);
         }
       );
-    } else if(this.isC()) {
+    } else if (this.isC()) {
       CCseMachine.init(
         visualization => this.setState({ visualization }),
         (segments: [number, number][]) => {
           props.setEditorHighlightedLines(0, segments);
         }
-      )
+      );
     } else {
       CseMachine.init(
         visualization => {
@@ -195,7 +195,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
       this.stepFirst();
       if (this.isJava()) {
         JavaCseMachine.clearCse();
-      } else if(this.isC()) {
+      } else if (this.isC()) {
         CCseMachine.clearCse();
       } else {
         CseMachine.clearCse();

@@ -1,7 +1,7 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
-import { CContext } from 'src/ctowasm/dist';
+import { FunctionTable } from 'src/ctowasm/dist';
 import { Control } from 'src/features/cseMachine/c/components/Control';
 
 import { defaultBackgroundColor } from '../CseMachineUtils';
@@ -28,6 +28,7 @@ export class CseMachine {
   // static environment: Environment | undefined;
   static control: Control | undefined;
   static stash: Stash | undefined;
+  static functions: FunctionTable;
 
   static init(setVis: SetVis, setEditorHighlightedLines: (segments: [number, number][]) => void) {
     this.setVis = setVis;
@@ -40,19 +41,27 @@ export class CseMachine {
     // if (!this.setVis || !context.environment || !context.control || !context.stash) {
     //   throw new Error('Java CSE Machine not initialized');
     // }
+
     if (!this.setVis || !context.control) {
       throw new Error('C CSE Machine not initialised');
     }
 
     // CseMachine.environment = new Environment(context.environment);
+    console.log('HERE');
+    // console.log(context.stash);
+    // console.log(context.control);
+    console.log(context.stackFrames);
     CseMachine.control = new Control(context.control);
     CseMachine.stash = new Stash(context.stash);
+    CseMachine.functions = context.astRoot.functionTable;
 
     this.setVis(this.draw());
 
     // Set icon to blink.
     const icon = document.getElementById('env_visualizer-icon');
-    icon?.classList.add('side-content-tab-alert');
+    if (icon) {
+      icon.classList.add('side-content-tab-alert');
+    }
   }
 
   static clearCse() {
