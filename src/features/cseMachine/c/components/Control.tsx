@@ -3,8 +3,6 @@ import {
   Control as CControl,
   ControlItem as CControlItem,
   controlItemToString,
-  Instruction as CInstrucion,
-  InstructionType as CInstructionType
 } from 'src/ctowasm/dist';
 
 import { Visible } from '../../components/Visible';

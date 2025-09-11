@@ -6,6 +6,7 @@ import { Control } from 'src/features/cseMachine/c/components/Control';
 
 import { defaultBackgroundColor } from '../CseMachineUtils';
 import { Config, ShapeDefaultProps } from './../CseMachineConfig';
+import { Environment } from './components/Environment';
 // import { Environment } from './components/Environment';
 import { Stash } from './components/Stash';
 
@@ -28,6 +29,7 @@ export class CseMachine {
   // static environment: Environment | undefined;
   static control: Control | undefined;
   static stash: Stash | undefined;
+  static environment: Environment;
   static functions: FunctionTable;
 
   static init(setVis: SetVis, setEditorHighlightedLines: (segments: [number, number][]) => void) {
@@ -54,6 +56,7 @@ export class CseMachine {
     CseMachine.control = new Control(context.control);
     CseMachine.stash = new Stash(context.stash);
     CseMachine.functions = context.astRoot.functionTable;
+    CseMachine.environment = new Environment(context.stackFrames);
 
     this.setVis(this.draw());
 
@@ -154,7 +157,7 @@ export class CseMachine {
                 />
                 {this.control?.draw()}
                 {this.stash?.draw()}
-                {/* {this.environment?.draw()} */}
+                {this.environment?.draw()}
               </Layer>
             </Stage>
           </div>
