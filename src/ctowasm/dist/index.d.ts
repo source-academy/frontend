@@ -183,6 +183,15 @@ interface ConditionalExpressionP extends ExpressionPBase {
     trueExpression: ExpressionP;
     falseExpression: ExpressionP;
 }
+interface MemoryAddressEntry {
+    name: string;
+    offset: number;
+    isGlobal: boolean;
+    size: number;
+    dataType: DataType;
+    value?: number;
+    absoluteAddress?: number;
+}
 type Address = LocalAddress | DataSegmentAddress | DynamicAddress | ReturnObjectAddress | FunctionTableIndex;
 interface AddressBase extends ExpressionPBase {
     dataType: "pointer";
@@ -566,6 +575,8 @@ declare class Memory {
     getFormattedMemoryView(start?: number, end?: number): string;
 }
 declare class StackFrame {
+    functionName: string;
+    variablesMap: Map<string, MemoryAddressEntry>;
     constructor(functionName: string, basePointer: number, memory: Memory);
 }
 interface CContext {

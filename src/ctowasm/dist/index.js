@@ -25228,7 +25228,6 @@ class $0e3dcdadceadf815$export$29d4d7bc03c348a5 {
     static #_ = this.cnt = 0;
     // Constructor to initiate the first runtime object
     constructor(dataSegmentByteStr, dataSegmentSizeInBytes, heapBuffer, stackBuffer){
-        console.log($0e3dcdadceadf815$export$29d4d7bc03c348a5.cnt + 1);
         $0e3dcdadceadf815$export$29d4d7bc03c348a5.cnt++;
         this.dataSegmentSizeInBytes = dataSegmentSizeInBytes;
         this.dataSegmentByteStr = dataSegmentByteStr;
@@ -25603,7 +25602,6 @@ class $ab578cd88f2696dc$export$8949fddf10447898 {
         this.functionName = functionName;
         const addressMap = (0, $8c698c0438819abb$export$8f5345d7eb869598).getAddressMap();
         const map = addressMap.getAddressMap();
-        console.log("LON ME MAY", map);
         map.forEach((entry, name)=>{
             const parts = name.split("::");
             const varName = parts[1];
@@ -25694,7 +25692,6 @@ class $8c91e30fbe002c74$export$e5b52c46a548ff03 {
         const stackFrames = [];
         for(let i = 0; i < tearDowns.length; i++){
             if (tearDowns[i].type !== (0, $6267764a9e4139a0$export$c11d6cfb99c9fdfb).STACKFRAMETEARDOWNINSTRUCTION) throw new Error("Expected a StackFrameTearDown Instruction");
-            console.log("TEAR DOWN GOT HERE: ", stackFrames[i]);
             stackFrames.push(new (0, $ab578cd88f2696dc$export$8949fddf10447898)(tearDowns[i].functionName, lastBasePointer, currentRuntime.getMemory()));
             lastBasePointer = tearDowns[i].basePointer;
         }

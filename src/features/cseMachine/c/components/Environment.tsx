@@ -4,11 +4,8 @@ import { StackFrame } from 'src/ctowasm/dist';
 import { Visible } from '../../components/Visible';
 import { Config } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
-import { defaultActiveColor, defaultStrokeColor } from '../../CseMachineUtils';
-import { Arrow } from '../../java/components/Arrow';
 import { Line } from '../../java/components/Line';
 import { Obj } from '../../java/components/Object';
-import { Variable } from '../../java/components/Variable';
 import { CseMachine } from '../CseMachine';
 import { Frame } from './Frame';
 
@@ -35,7 +32,7 @@ export class Environment extends Visible {
     let methodFramesWidth = Number(Config.FrameMinWidth);
 
     let parentFrame: Frame | undefined = undefined;
-    stackFrames.forEach((frame) => {
+    stackFrames.forEach(frame => {
       const stroke = '#999';
       const newFrame = new Frame(frame, methodFramesX, methodFramesY, stroke);
       this._methodFrames.push(newFrame);
@@ -46,7 +43,7 @@ export class Environment extends Visible {
         newFrame.setParent(parentFrame);
       }
       parentFrame = newFrame;
-    })
+    });
 
     // environment.global.children.forEach(env => {
     //   if (env.name.includes('(')) {
