@@ -11390,13 +11390,13 @@ __metadata:
   linkType: hard
 
 "react-i18next@npm:^15.0.0":
-  version: 15.6.1
-  resolution: "react-i18next@npm:15.6.1"
+  version: 15.7.3
+  resolution: "react-i18next@npm:15.7.3"
   dependencies:
     "@babel/runtime": "npm:^7.27.6"
     html-parse-stringify: "npm:^3.0.1"
   peerDependencies:
-    i18next: ">= 23.2.3"
+    i18next: ">= 25.4.1"
     react: ">= 16.8.0"
     typescript: ^5
   peerDependenciesMeta:
@@ -11406,7 +11406,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10c0/10cd131005a70a493e307f4f710ea9921d5a955a5281064cad79162e5051e2bcfc119f50c7bee0fad06e33a1795308a006089d5b67969d52b66afbe149514305
+  checksum: 10c0/dc3ca1da9accb47f63b2049c94ff7a94ba92d76bad586aca7c2aa3b7a01c2d4e69d4363ff0cfa898cef22b109f2dd49864d6ac94cd9afbac485d44e70ed5a4d6
   languageName: node
   linkType: hard
 
@@ -11636,12 +11636,12 @@ __metadata:
   linkType: hard
 
 "react-simple-keyboard@npm:^3.6.27":
-  version: 3.8.118
-  resolution: "react-simple-keyboard@npm:3.8.118"
+  version: 3.8.122
+  resolution: "react-simple-keyboard@npm:3.8.122"
   peerDependencies:
     react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/c2fe82a3b960fddfa7931b276db0a61007687a2a102dfbc7e6d55767e43c3e942947bacbb7637ee0d363fef2cd10609d6a7f188cc4ae3fbc3188fb9f3889d38e
+  checksum: 10c0/f3661e93753ec934ec6baae4ad3aa6e706e752f88abef701d5c45f5c0057e1d5279771dd68828fa117db872d4152d94794070c8f241fbfd65a55fbb560a27b48
   languageName: node
   linkType: hard
 
@@ -12560,7 +12560,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:1.90.0, sass@npm:^1.63.6":
+"sass@npm:1.90.0":
   version: 1.90.0
   resolution: "sass@npm:1.90.0"
   dependencies:
@@ -12574,6 +12574,23 @@ __metadata:
   bin:
     sass: sass.js
   checksum: 10c0/cd882a61811447c079cdc78b41f3be8164f2a2ced56e0b256b33da2de383a5f10e11ed15f8080bd832e6df302238e11649b07eb5f6e7d257d9b6982a8325d269
+  languageName: node
+  linkType: hard
+
+"sass@npm:^1.63.6":
+  version: 1.92.1
+  resolution: "sass@npm:1.92.1"
+  dependencies:
+    "@parcel/watcher": "npm:^2.4.1"
+    chokidar: "npm:^4.0.0"
+    immutable: "npm:^5.0.2"
+    source-map-js: "npm:>=0.6.2 <2.0.0"
+  dependenciesMeta:
+    "@parcel/watcher":
+      optional: true
+  bin:
+    sass: sass.js
+  checksum: 10c0/4c43975580f6bd5511bb140ec8445d936663ffacc7d0513aae65b95e2a46a954268177406b2dd4ac32494e868520ac5ea929c3521f04bc10293fb16dc25b2935
   languageName: node
   linkType: hard
 
