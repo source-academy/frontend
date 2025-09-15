@@ -103,7 +103,7 @@
     "showdown": "^2.1.0",
     "sourceror": "^0.8.5",
     "unified": "^11.0.0",
-    "uuid": "^11.0.2",
+    "uuid": "^13.0.0",
     "workbox-core": "^7.3.0",
     "workbox-precaching": "^7.3.0",
     "workbox-routing": "^7.3.0",
