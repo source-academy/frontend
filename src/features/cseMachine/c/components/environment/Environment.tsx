@@ -1,12 +1,12 @@
 import { Group } from 'react-konva';
 import { StackFrame } from 'src/ctowasm/dist';
 
-import { Visible } from '../../components/Visible';
-import { Line } from '../../java/components/Line';
-import { Obj } from '../../java/components/Object';
-import { CControlStashMemoryConfig } from '../config/CControlStashMemoryConfig';
-import { CConfig } from '../config/CCSEMachineConfig'; 
-import { CseMachine } from '../CseMachine';
+import { Visible } from '../../../components/Visible';
+import { Line } from '../../../java/components/Line';
+import { Obj } from '../../../java/components/Object';
+import { CControlStashMemoryConfig } from '../../config/CControlStashMemoryConfig';
+import { CConfig } from '../../config/CCSEMachineConfig';
+import { CseMachine } from '../../CseMachine';
 import { Frame } from './Frame';
 
 export class Environment extends Visible {
@@ -24,7 +24,9 @@ export class Environment extends Visible {
       CControlStashMemoryConfig.ControlItemWidth +
       2 * CConfig.CanvasPaddingX;
     this._y =
-      CControlStashMemoryConfig.StashPosY + CControlStashMemoryConfig.StashItemHeight + 2 * CConfig.CanvasPaddingY;
+      CControlStashMemoryConfig.StashPosY +
+      CControlStashMemoryConfig.StashItemHeight +
+      2 * CConfig.CanvasPaddingY;
 
     // Create method frames.
     const methodFramesX = this._x;

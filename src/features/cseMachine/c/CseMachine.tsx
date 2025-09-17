@@ -2,13 +2,13 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Layer, Rect, Stage } from 'react-konva';
 import { FunctionTable } from 'src/ctowasm/dist';
-import { Control } from 'src/features/cseMachine/c/components/Control';
+import { Control } from 'src/features/cseMachine/c/components/control/Control';
 
 import { defaultBackgroundColor } from '../CseMachineUtils';
-import { Environment } from './components/Environment';
-import { Memory } from './components/Memory';
+import { Environment } from './components/environment/Environment';
 // import { Environment } from './components/Environment';
-import { Stash } from './components/Stash';
+import { Stash } from './components/stash/Stash';
+import { Memory } from './components/ui/Memory';
 import { CConfig, ShapeDefaultProps } from './config/CCSEMachineConfig';
 
 type SetVis = (vis: React.ReactNode) => void;

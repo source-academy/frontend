@@ -6,11 +6,11 @@ import {
   Text as KonvaText
 } from 'react-konva';
 
-import { Visible } from '../../components/Visible';
-import { defaultTextColor, getTextWidth } from '../../CseMachineUtils';
-import { CControlStashMemoryConfig } from '../config/CControlStashMemoryConfig';
-import { ShapeDefaultProps } from '../config/CCSEMachineConfig';
-import { CseMachine } from '../CseMachine';
+import { Visible } from '../../../components/Visible';
+import { defaultTextColor, getTextWidth } from '../../../CseMachineUtils';
+import { CControlStashMemoryConfig } from '../../config/CControlStashMemoryConfig';
+import { ShapeDefaultProps } from '../../config/CCSEMachineConfig';
+import { CseMachine } from '../../CseMachine';
 // import { Arrow } from './Arrow';
 // import { Frame } from './Frame';
 // import { Method } from './Method';

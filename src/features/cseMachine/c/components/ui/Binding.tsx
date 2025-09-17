@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Visible } from '../../components/Visible';
-import { Arrow } from '../../java/components/Arrow';
-import { Method } from '../../java/components/Method';
-import { CConfig } from '../config/CCSEMachineConfig';
-import { CseMachine } from '../CseMachine';
+import { Visible } from '../../../components/Visible';
+import { Arrow } from '../../../java/components/Arrow';
+import { Method } from '../../../java/components/Method';
+import { CConfig } from '../../config/CCSEMachineConfig';
+import { CseMachine } from '../../CseMachine';
 import { Text } from './Text';
 import { Variable } from './Variable';
 
@@ -23,7 +23,7 @@ export class Binding extends Visible {
     this._x = x;
     this._y = y;
 
-      // Name.
+    // Name.
     this._name = new Text(
       name + CConfig.VariableColon, // := is part of name
       this.x(),

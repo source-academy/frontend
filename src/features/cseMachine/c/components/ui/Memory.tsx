@@ -3,11 +3,11 @@ import { Group } from 'react-konva';
 import { Text } from 'react-konva';
 import { Memory as CMemory } from 'src/ctowasm/dist';
 
-import { Visible } from '../../components/Visible';
-import { defaultTextColor } from '../../CseMachineUtils';
-import { CControlStashMemoryConfig } from '../config/CControlStashMemoryConfig';
-import { ShapeDefaultProps } from '../config/CCSEMachineConfig';
-import { CseMachine } from '../CseMachine';
+import { Visible } from '../../../components/Visible';
+import { defaultTextColor } from '../../../CseMachineUtils';
+import { CControlStashMemoryConfig } from '../../config/CControlStashMemoryConfig';
+import { ShapeDefaultProps } from '../../config/CCSEMachineConfig';
+import { CseMachine } from '../../CseMachine';
 
 export class Memory extends Visible {
   textProps = {

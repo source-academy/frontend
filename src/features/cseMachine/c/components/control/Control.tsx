@@ -2,13 +2,13 @@ import { Group } from 'react-konva';
 import {
   Control as CControl,
   ControlItem as CControlItem,
-  controlItemToString,
+  controlItemToString
 } from 'src/ctowasm/dist';
 
-import { Visible } from '../../components/Visible';
-import { defaultActiveColor, defaultStrokeColor } from '../../CseMachineUtils';
-import { CControlStashMemoryConfig } from '../config/CControlStashMemoryConfig';
-import { CseMachine } from '../CseMachine';
+import { Visible } from '../../../components/Visible';
+import { defaultActiveColor, defaultStrokeColor } from '../../../CseMachineUtils';
+import { CControlStashMemoryConfig } from '../../config/CControlStashMemoryConfig';
+import { CseMachine } from '../../CseMachine';
 import { ControlItem } from './ControlItem';
 
 export class Control extends Visible {
@@ -51,7 +51,7 @@ export class Control extends Visible {
       const highlightOnHover = () => {
         let start = -1;
         let end = -1;
-        console.log("HERE BRO: ", controlItem)
+        console.log('HERE BRO: ', controlItem);
         if (node.position) {
           start = node.position.start.line - 1;
           end = node.position.end.line - 1;
