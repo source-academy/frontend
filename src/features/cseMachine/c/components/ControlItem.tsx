@@ -4,7 +4,6 @@ import { Label, Tag, Text } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
 import { ShapeDefaultProps } from '../../CseMachineConfig';
-import { ControlStashConfig } from '../../CseMachineControlStashConfig';
 import { IHoverable } from '../../CseMachineTypes';
 import {
   defaultActiveColor,
@@ -16,6 +15,7 @@ import {
   setUnhoveredStyle,
   truncateText
 } from '../../CseMachineUtils';
+import { CControlStashMemoryConfig } from '../config/CControlStashMemoryConfig';
 import { CseMachine } from '../CseMachine';
 // import { Arrow } from './Arrow';
 // import { Frame } from './Frame';
@@ -41,14 +41,14 @@ export class ControlItem extends Visible implements IHoverable {
     super();
 
     // Position.
-    this._x = ControlStashConfig.ControlPosX;
+    this._x = CControlStashMemoryConfig.ControlPosX;
     this._y = y;
 
     // Text.
     this._text = truncateText(
       this._text,
-      ControlStashConfig.ControlMaxTextWidth,
-      ControlStashConfig.ControlMaxTextHeight
+      CControlStashMemoryConfig.ControlMaxTextWidth,
+      CControlStashMemoryConfig.ControlMaxTextHeight
     );
 
     // Tooltip.
@@ -56,9 +56,9 @@ export class ControlItem extends Visible implements IHoverable {
 
     // Height and width.
     this._height =
-      getTextHeight(this._text, ControlStashConfig.ControlMaxTextWidth) +
-      ControlStashConfig.ControlItemTextPadding * 2;
-    this._width = ControlStashConfig.ControlItemWidth;
+      getTextHeight(this._text, CControlStashMemoryConfig.ControlMaxTextWidth) +
+      CControlStashMemoryConfig.ControlItemTextPadding * 2;
+    this._width = CControlStashMemoryConfig.ControlItemWidth;
 
     // Arrow
     // if (reference) {
@@ -96,15 +96,15 @@ export class ControlItem extends Visible implements IHoverable {
   draw(): React.ReactNode {
     const textProps = {
       fill: defaultTextColor(),
-      padding: ControlStashConfig.ControlItemTextPadding,
-      fontFamily: ControlStashConfig.FontFamily,
-      fontSize: ControlStashConfig.FontSize,
-      fontStyle: ControlStashConfig.FontStyle,
-      fontVariant: ControlStashConfig.FontVariant
+      padding: CControlStashMemoryConfig.ControlItemTextPadding,
+      fontFamily: CControlStashMemoryConfig.FontFamily,
+      fontSize: CControlStashMemoryConfig.FontSize,
+      fontStyle: CControlStashMemoryConfig.FontStyle,
+      fontVariant: CControlStashMemoryConfig.FontVariant
     };
     const tagProps = {
       stroke: this._stroke,
-      cornerRadius: ControlStashConfig.ControlItemCornerRadius
+      cornerRadius: CControlStashMemoryConfig.ControlItemCornerRadius
     };
     return (
       <React.Fragment key={CseMachine.key++}>
@@ -129,8 +129,8 @@ export class ControlItem extends Visible implements IHoverable {
 
         {/* Tooltip */}
         <Label
-          x={this.x() + this.width() + ControlStashConfig.TooltipMargin}
-          y={this.y() + ControlStashConfig.TooltipMargin}
+          x={this.x() + this.width() + CControlStashMemoryConfig.TooltipMargin}
+          y={this.y() + CControlStashMemoryConfig.TooltipMargin}
           visible={false}
           ref={this._tooltipRef}
           key={CseMachine.key++}
@@ -139,14 +139,14 @@ export class ControlItem extends Visible implements IHoverable {
             {...ShapeDefaultProps}
             stroke="black"
             fill={'black'}
-            opacity={ControlStashConfig.TooltipOpacity}
+            opacity={CControlStashMemoryConfig.TooltipOpacity}
             key={CseMachine.key++}
           />
           <Text
             {...ShapeDefaultProps}
             {...textProps}
             text={this._tooltip}
-            padding={ControlStashConfig.TooltipPadding}
+            padding={CControlStashMemoryConfig.TooltipPadding}
             key={CseMachine.key++}
           />
         </Label>

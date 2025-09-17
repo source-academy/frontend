@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { Visible } from '../../components/Visible';
-import { Config } from '../../CseMachineConfig';
 import { Arrow } from '../../java/components/Arrow';
 import { Method } from '../../java/components/Method';
+import { CConfig } from '../config/CCSEMachineConfig';
 import { CseMachine } from '../CseMachine';
 import { Text } from './Text';
 import { Variable } from './Variable';
@@ -25,9 +25,9 @@ export class Binding extends Visible {
 
       // Name.
     this._name = new Text(
-      name + Config.VariableColon, // := is part of name
+      name + CConfig.VariableColon, // := is part of name
       this.x(),
-      this.y() + Config.FontSize + Config.TextPaddingX
+      this.y() + CConfig.FontSize + CConfig.TextPaddingX
     );
     // Value.
     this._value = new Variable(this._name.x() + this._name.width(), this.y(), value);

@@ -2,8 +2,8 @@ import React from 'react';
 import { Group as KonvaGroup, Label as KonvaLabel, Text as KonvaText } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
-import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { defaultTextColor, getTextWidth } from '../../CseMachineUtils';
+import { CConfig, ShapeDefaultProps } from '../config/CCSEMachineConfig';
 import { CseMachine } from '../CseMachine';
 
 /** this class encapsulates a string to be drawn onto the canvas */
@@ -20,7 +20,7 @@ export class Text extends Visible {
     this._y = y;
 
     // Height and width
-    this._height = Config.FontSize;
+    this._height = CConfig.FontSize;
     this._width = getTextWidth(this._text);
   }
 
@@ -34,9 +34,9 @@ export class Text extends Visible {
 
   draw(): React.ReactNode {
     const props = {
-      fontFamily: Config.FontFamily,
-      fontSize: Config.FontSize,
-      fontStyle: Config.FontStyle,
+      fontFamily: CConfig.FontFamily,
+      fontSize: CConfig.FontSize,
+      fontStyle: CConfig.FontStyle,
       fill: defaultTextColor()
     };
 

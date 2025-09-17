@@ -2,10 +2,10 @@ import { Group } from 'react-konva';
 import { StackFrame } from 'src/ctowasm/dist';
 
 import { Visible } from '../../components/Visible';
-import { Config } from '../../CseMachineConfig';
-import { ControlStashConfig } from '../../CseMachineControlStashConfig';
 import { Line } from '../../java/components/Line';
 import { Obj } from '../../java/components/Object';
+import { CControlStashMemoryConfig } from '../config/CControlStashMemoryConfig';
+import { CConfig } from '../config/CCSEMachineConfig'; 
 import { CseMachine } from '../CseMachine';
 import { Frame } from './Frame';
 
@@ -20,23 +20,23 @@ export class Environment extends Visible {
 
     // Position.
     this._x =
-      ControlStashConfig.ControlPosX +
-      ControlStashConfig.ControlItemWidth +
-      2 * Config.CanvasPaddingX;
+      CControlStashMemoryConfig.ControlPosX +
+      CControlStashMemoryConfig.ControlItemWidth +
+      2 * CConfig.CanvasPaddingX;
     this._y =
-      ControlStashConfig.StashPosY + ControlStashConfig.StashItemHeight + 2 * Config.CanvasPaddingY;
+      CControlStashMemoryConfig.StashPosY + CControlStashMemoryConfig.StashItemHeight + 2 * CConfig.CanvasPaddingY;
 
     // Create method frames.
     const methodFramesX = this._x;
     let methodFramesY: number = this._y;
-    let methodFramesWidth = Number(Config.FrameMinWidth);
+    let methodFramesWidth = Number(CConfig.FrameMinWidth);
 
     let parentFrame: Frame | undefined = undefined;
     stackFrames.forEach(frame => {
       const stroke = '#999';
       const newFrame = new Frame(frame, methodFramesX, methodFramesY, stroke);
       this._methodFrames.push(newFrame);
-      methodFramesY += newFrame.height() + Config.FramePaddingY;
+      methodFramesY += newFrame.height() + CConfig.FramePaddingY;
       methodFramesWidth = Math.max(methodFramesWidth, newFrame.width());
 
       if (parentFrame) {

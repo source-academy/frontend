@@ -3,8 +3,8 @@ import { Group } from 'react-konva';
 import { Stash as CStash, StashItem as CStashItem } from 'src/ctowasm/dist';
 
 import { Visible } from '../../components/Visible';
-import { ControlStashConfig } from '../../CseMachineControlStashConfig';
 import { defaultTextColor } from '../../CseMachineUtils';
+import { CControlStashMemoryConfig } from '../config/CControlStashMemoryConfig';
 import { CseMachine } from '../CseMachine';
 // import { Method } from './Method';
 import { StashItem } from './StashItem';
@@ -17,8 +17,8 @@ export class Stash extends Visible {
     super();
 
     // Position.
-    this._x = ControlStashConfig.StashPosX;
-    this._y = ControlStashConfig.StashPosY;
+    this._x = CControlStashMemoryConfig.StashPosX;
+    this._y = CControlStashMemoryConfig.StashPosY;
 
     // Create each StashItem.
     let stashItemX: number = this._x;
@@ -38,7 +38,7 @@ export class Stash extends Visible {
     }
 
     // Height and width.
-    this._height = ControlStashConfig.StashItemHeight;
+    this._height = CControlStashMemoryConfig.StashItemHeight;
     this._width = stashItemX - this._x;
   }
 

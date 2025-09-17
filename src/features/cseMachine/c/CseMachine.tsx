@@ -5,10 +5,11 @@ import { FunctionTable } from 'src/ctowasm/dist';
 import { Control } from 'src/features/cseMachine/c/components/Control';
 
 import { defaultBackgroundColor } from '../CseMachineUtils';
-import { Config, ShapeDefaultProps } from './../CseMachineConfig';
 import { Environment } from './components/Environment';
+import { Memory } from './components/Memory';
 // import { Environment } from './components/Environment';
 import { Stash } from './components/Stash';
+import { CConfig, ShapeDefaultProps } from './config/CCSEMachineConfig';
 
 type SetVis = (vis: React.ReactNode) => void;
 type SetEditorHighlightedLines = (segments: [number, number][]) => void;
@@ -29,6 +30,7 @@ export class CseMachine {
   // static environment: Environment | undefined;
   static control: Control | undefined;
   static stash: Stash | undefined;
+  static memory: Memory | undefined;
   static environment: Environment;
   static functions: FunctionTable;
 
@@ -57,6 +59,7 @@ export class CseMachine {
     CseMachine.stash = new Stash(context.stash);
     CseMachine.functions = context.astRoot.functionTable;
     CseMachine.environment = new Environment(context.stackFrames);
+    CseMachine.memory = new Memory(context.memory);
 
     this.setVis(this.draw());
 
@@ -130,15 +133,15 @@ export class CseMachine {
           <div
             id="large-container"
             style={{
-              width: Config.CanvasMinWidth,
-              height: Config.CanvasMinHeight,
+              width: CConfig.CanvasMinWidth,
+              height: CConfig.CanvasMinHeight,
               overflow: 'hidden',
               backgroundColor: defaultBackgroundColor()
             }}
           >
             <Stage
-              width={+Config.CanvasMinWidth}
-              height={+Config.CanvasMinHeight}
+              width={+CConfig.CanvasMinWidth}
+              height={+CConfig.CanvasMinHeight}
               ref={this.stageRef}
               draggable
               onWheel={CseMachine.zoomStage}
@@ -149,8 +152,8 @@ export class CseMachine {
                   {...ShapeDefaultProps}
                   x={0}
                   y={0}
-                  width={Config.CanvasMinWidth}
-                  height={Config.CanvasMinHeight}
+                  width={CConfig.CanvasMinWidth}
+                  height={CConfig.CanvasMinHeight}
                   fill={defaultBackgroundColor()}
                   key={CseMachine.key++}
                   listening={false}
@@ -158,6 +161,7 @@ export class CseMachine {
                 {this.control?.draw()}
                 {this.stash?.draw()}
                 {this.environment?.draw()}
+                {this.memory?.draw()}
               </Layer>
             </Stage>
           </div>

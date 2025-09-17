@@ -4,12 +4,12 @@ import { Group, Label, Rect, Tag, Text as KonvaText } from 'react-konva';
 import { StackFrame } from 'src/ctowasm/dist';
 
 import { Visible } from '../../components/Visible';
-import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
-import { ControlStashConfig } from '../../CseMachineControlStashConfig';
 import { IHoverable } from '../../CseMachineTypes';
 import { defaultTextColor, setHoveredCursor, setUnhoveredCursor } from '../../CseMachineUtils';
 import { Arrow } from '../../java/components/Arrow';
 import { Method } from '../../java/components/Method';
+import { CControlStashMemoryConfig } from '../config/CControlStashMemoryConfig';
+import { CConfig, ShapeDefaultProps } from '../config/CCSEMachineConfig';
 import { CseMachine } from '../CseMachine';
 import { Binding } from './Binding';
 import { Text } from './Text';
@@ -36,32 +36,32 @@ export class Frame extends Visible implements IHoverable {
     this._x = x;
     this._y = y;
 
-    this.name = new Text(frame.functionName, this._x + Config.FramePaddingX, this._y);
+    this.name = new Text(frame.functionName, this._x + CConfig.FramePaddingX, this._y);
 
-    this._width = Math.max(Config.FrameMinWidth, this.name.width() + 2 * Config.FramePaddingX);
-    this._height = Config.FramePaddingY + this.name.height();
+    this._width = Math.max(CConfig.FrameMinWidth, this.name.width() + 2 * CConfig.FramePaddingX);
+    this._height = CConfig.FramePaddingY + this.name.height();
 
     // Create binding for each key-value pair
-    let bindingY: number = this._y + this.name.height() + Config.FramePaddingY;
+    let bindingY: number = this._y + this.name.height() + CConfig.FramePaddingY;
     for (const [key, data] of frame.variablesMap) {
       const currBinding: Binding = new Binding(
         key,
         data.value || 0,
-        this._x + Config.FramePaddingX,
+        this._x + CConfig.FramePaddingX,
         bindingY
       );
       this.bindings.push(currBinding);
-      bindingY += currBinding.height() + Config.FramePaddingY;
-      this._width = Math.max(this._width, currBinding.width() + 2 * Config.FramePaddingX);
-      this._height += currBinding.height() + Config.FramePaddingY;
+      bindingY += currBinding.height() + CConfig.FramePaddingY;
+      this._width = Math.max(this._width, currBinding.width() + 2 * CConfig.FramePaddingX);
+      this._height += currBinding.height() + CConfig.FramePaddingY;
     }
 
     // Set x of Method aft knowing frame width.
     this.bindings
       .filter(b => b.value instanceof Method)
       .forEach(b => {
-        (b.value as Method).setX(this._x + this._width + Config.FramePaddingX);
-        b.setArrowToX(this._x + this._width + Config.FramePaddingX);
+        (b.value as Method).setX(this._x + this._width + CConfig.FramePaddingX);
+        b.setArrowToX(this._x + this._width + CConfig.FramePaddingX);
       });
 
     this.tooltipRef = React.createRef();
@@ -98,11 +98,11 @@ export class Frame extends Visible implements IHoverable {
   draw(): React.ReactNode {
     const textProps = {
       fill: defaultTextColor(),
-      padding: Number(ControlStashConfig.ControlItemTextPadding),
-      fontFamily: ControlStashConfig.FontFamily.toString(),
-      fontSize: Number(ControlStashConfig.FontSize),
-      fontStyle: ControlStashConfig.FontStyle.toString(),
-      fontVariant: ControlStashConfig.FontVariant.toString()
+      padding: Number(CControlStashMemoryConfig.ControlItemTextPadding),
+      fontFamily: CControlStashMemoryConfig.FontFamily.toString(),
+      fontSize: Number(CControlStashMemoryConfig.FontSize),
+      fontStyle: CControlStashMemoryConfig.FontStyle.toString(),
+      fontVariant: CControlStashMemoryConfig.FontVariant.toString()
     };
 
     return (
@@ -114,7 +114,7 @@ export class Frame extends Visible implements IHoverable {
           width={this.width()}
           height={this.height()}
           stroke={this.stroke}
-          cornerRadius={Number(Config.FrameCornerRadius)}
+          cornerRadius={Number(CConfig.FrameCornerRadius)}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
           key={CseMachine.key++}
@@ -128,9 +128,9 @@ export class Frame extends Visible implements IHoverable {
         {/* Frame parent */}
         {this.parent &&
           new Arrow(
-            this._x + Config.FramePaddingX / 2,
+            this._x + CConfig.FramePaddingX / 2,
             this._y + this.name.height(),
-            this.parent.x() + Config.FramePaddingX / 2,
+            this.parent.x() + CConfig.FramePaddingX / 2,
             // TODO WHY NEED TO ADD NAME HEIGHT?
             this.parent.y() + this.parent.height() + this.name?.height()
           ).draw()}
@@ -138,8 +138,8 @@ export class Frame extends Visible implements IHoverable {
         {/* Frame tooltip */}
         {this.tooltip && (
           <Label
-            x={this.x() + this.width() + ControlStashConfig.TooltipMargin}
-            y={this.y() + ControlStashConfig.TooltipMargin}
+            x={this.x() + this.width() + CControlStashMemoryConfig.TooltipMargin}
+            y={this.y() + CControlStashMemoryConfig.TooltipMargin}
             visible={false}
             ref={this.tooltipRef}
             key={CseMachine.key++}
@@ -148,14 +148,14 @@ export class Frame extends Visible implements IHoverable {
               {...ShapeDefaultProps}
               stroke="black"
               fill={'black'}
-              opacity={Number(ControlStashConfig.TooltipOpacity)}
+              opacity={Number(CControlStashMemoryConfig.TooltipOpacity)}
               key={CseMachine.key++}
             />
             <KonvaText
               {...ShapeDefaultProps}
               {...textProps}
               text={this.tooltip}
-              padding={Number(ControlStashConfig.TooltipPadding)}
+              padding={Number(CControlStashMemoryConfig.TooltipPadding)}
               key={CseMachine.key++}
             />
           </Label>

@@ -7,9 +7,9 @@ import {
 } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
-import { ShapeDefaultProps } from '../../CseMachineConfig';
-import { ControlStashConfig } from '../../CseMachineControlStashConfig';
 import { defaultTextColor, getTextWidth } from '../../CseMachineUtils';
+import { CControlStashMemoryConfig } from '../config/CControlStashMemoryConfig';
+import { ShapeDefaultProps } from '../config/CCSEMachineConfig';
 import { CseMachine } from '../CseMachine';
 // import { Arrow } from './Arrow';
 // import { Frame } from './Frame';
@@ -29,11 +29,12 @@ export class StashItem extends Visible {
 
     // Position.
     this._x = x;
-    this._y = ControlStashConfig.StashPosY;
+    this._y = CControlStashMemoryConfig.StashPosY;
 
     // Height and width.
-    this._height = ControlStashConfig.StashItemHeight + ControlStashConfig.StashItemTextPadding * 2;
-    this._width = ControlStashConfig.StashItemTextPadding * 2 + getTextWidth(this._text);
+    this._height =
+      CControlStashMemoryConfig.StashItemHeight + CControlStashMemoryConfig.StashItemTextPadding * 2;
+    this._width = CControlStashMemoryConfig.StashItemTextPadding * 2 + getTextWidth(this._text);
 
     // Arrow
     // if (reference) {
@@ -55,16 +56,16 @@ export class StashItem extends Visible {
   draw(): React.ReactNode {
     const textProps = {
       fill: defaultTextColor(),
-      padding: ControlStashConfig.StashItemTextPadding,
-      fontFamily: ControlStashConfig.FontFamily,
-      fontSize: ControlStashConfig.FontSize,
-      fontStyle: ControlStashConfig.FontStyle,
-      fontVariant: ControlStashConfig.FontVariant
+      padding: CControlStashMemoryConfig.StashItemTextPadding,
+      fontFamily: CControlStashMemoryConfig.FontFamily,
+      fontSize: CControlStashMemoryConfig.FontSize,
+      fontStyle: CControlStashMemoryConfig.FontStyle,
+      fontVariant: CControlStashMemoryConfig.FontVariant
     };
 
     const tagProps = {
       stroke: this._stroke,
-      cornerRadius: ControlStashConfig.StashItemCornerRadius
+      cornerRadius: CControlStashMemoryConfig.StashItemCornerRadius
     };
 
     return (

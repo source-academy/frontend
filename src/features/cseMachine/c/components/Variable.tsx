@@ -2,9 +2,9 @@ import React from 'react';
 import { Group, Rect } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
-import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { defaultTextColor } from '../../CseMachineUtils';
 import { Arrow } from '../../java/components/Arrow';
+import { CConfig, ShapeDefaultProps } from '../config/CCSEMachineConfig';
 import { CseMachine } from '../CseMachine';
 import { Text } from './Text';
 
@@ -19,10 +19,10 @@ export interface TextOptions {
 
 export const defaultOptions: TextOptions = {
   maxWidth: Number.MAX_VALUE, // maximum width this text should be
-  fontFamily: Config.FontFamily.toString(), // default is Arial
-  fontSize: Number(Config.FontSize), // in pixels. Default is 12
-  fontStyle: Config.FontStyle.toString(), // can be normal, bold, or italic. Default is normal
-  fontVariant: Config.FontVariant.toString(), // can be normal or small-caps. Default is normal
+  fontFamily: CConfig.FontFamily.toString(), // default is Arial
+  fontSize: Number(CConfig.FontSize), // in pixels. Default is 12
+  fontStyle: CConfig.FontStyle.toString(), // can be normal, bold, or italic. Default is normal
+  fontVariant: CConfig.FontVariant.toString(), // can be normal or small-caps. Default is normal
   isStringIdentifiable: false // if true, contain strings within double quotation marks "". Default is false
 };
 
@@ -47,8 +47,8 @@ export class Variable extends Visible {
     // Value.
     this._value = new Text(
       this.variable.toString(),
-      this._x + Config.TextPaddingX,
-      this._y + this._type.height() + Config.TextPaddingX
+      this._x + CConfig.TextPaddingX,
+      this._y + this._type.height() + CConfig.TextPaddingX
     );
     // if (this.variable.value.kind === 'Literal') {
     //   this._value = new Text(
@@ -71,8 +71,8 @@ export class Variable extends Visible {
     // }
 
     // Height and width.
-    this._height = this._type.height() + this._value.height() + 2 * Config.TextPaddingX;
-    this._width = Math.max(this._type.width(), this._value.width() + 2 * Config.TextPaddingX);
+    this._height = this._type.height() + this._value.height() + 2 * CConfig.TextPaddingX;
+    this._width = Math.max(this._type.width(), this._value.width() + 2 * CConfig.TextPaddingX);
   }
 
   get variable() {
@@ -81,8 +81,8 @@ export class Variable extends Visible {
 
   set value(value: Arrow) {
     this._value = value;
-    this._height = this._type.height() + Config.FontSize + 2 * Config.TextPaddingX;
-    this._width = Math.max(this._type.width(), Config.TextMinWidth);
+    this._height = this._type.height() + CConfig.FontSize + 2 * CConfig.TextPaddingX;
+    this._width = Math.max(this._type.width(), CConfig.TextMinWidth);
   }
 
   get type() {
