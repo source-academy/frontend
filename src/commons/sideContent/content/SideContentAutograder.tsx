@@ -1,6 +1,7 @@
 import { Button, Collapse, Icon, PopoverPosition, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { AutogradingResult, Testcase } from '../../assessment/AssessmentTypes';
 import ControlButton from '../../ControlButton';
@@ -28,12 +29,50 @@ type OwnProps = {
 };
 
 const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
-  const [showsTestcases, setTestcasesShown] = React.useState(true);
-  const [showsResults, setResultsShown] = React.useState(true);
+  const { t } = useTranslation('sideContent', { keyPrefix: 'autograder' });
+  const [showsTestcases, setTestcasesShown] = useState(true);
+  const [showsResults, setResultsShown] = useState(true);
 
   const { testcases, autogradingResults, handleTestcaseEval, workspaceLocation } = props;
 
-  const testcaseCards = React.useMemo(
+  const autograderTooltip = useMemo(
+    () => (
+      <div className="autograder-help-tooltip">
+        <p>{t('tooltip.clickTestcase')}</p>
+        <p>{t('tooltip.executeAll')}</p>
+        <p>{t('tooltip.backgroundInfo')}</p>
+        <p>{t('tooltip.privateTestcases')}</p>
+      </div>
+    ),
+    [t]
+  );
+
+  const testcasesHeader = useMemo(
+    () => (
+      <div className="testcases-header" data-testid="testcases-header">
+        {columnHeader('header-fn', t('headers.testcase'))}
+        {columnHeader('header-expected', t('headers.expected'))}
+        {columnHeader('header-actual', t('headers.actual'))}
+      </div>
+    ),
+    [t]
+  );
+
+  const resultsHeader = useMemo(
+    () => (
+      <div className="results-header" data-testid="results-header">
+        <div className="header-data">
+          {columnHeader('header-sn', t('headers.sn'))}
+          {columnHeader('header-status', t('headers.status'))}
+        </div>
+        {columnHeader('header-expected', t('headers.expected'))}
+        {columnHeader('header-actual', t('headers.actual'))}
+      </div>
+    ),
+    [t]
+  );
+
+  const testcaseCards = useMemo(
     () =>
       testcases.length > 0 ? (
         <div className="testcaseCards">
@@ -50,13 +89,13 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
         </div>
       ) : (
         <div className="noResults" data-testid="noResults">
-          There are no testcases provided for this question.
+          {t('noTestcases')}
         </div>
       ),
-    [testcases, handleTestcaseEval, workspaceLocation]
+    [testcases, testcasesHeader, t, handleTestcaseEval, workspaceLocation]
   );
 
-  const resultCards = React.useMemo(
+  const resultCards = useMemo(
     () =>
       autogradingResults.length > 0 ? (
         <div>
@@ -67,17 +106,17 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
         </div>
       ) : (
         <div className="noResults" data-testid="noResults">
-          There are no results to show.
+          {t('noResults')}
         </div>
       ),
-    [autogradingResults]
+    [autogradingResults, resultsHeader, t]
   );
 
-  const toggleTestcases = React.useCallback(() => {
+  const toggleTestcases = useCallback(() => {
     setTestcasesShown(!showsTestcases);
   }, [showsTestcases]);
 
-  const toggleResults = React.useCallback(() => setResultsShown(!showsResults), [showsResults]);
+  const toggleResults = useCallback(() => setResultsShown(!showsResults), [showsResults]);
 
   return (
     <div className="Autograder">
@@ -87,7 +126,7 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
         minimal={true}
         onClick={toggleTestcases}
       >
-        <span>Testcases</span>
+        <span>{t('testcases')}</span>
         <Tooltip content={autograderTooltip} placement={PopoverPosition.LEFT}>
           <Icon icon={IconNames.HELP} />
         </Tooltip>
@@ -95,7 +134,7 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
       <Collapse isOpen={showsTestcases} keepChildrenMounted={true}>
         {testcaseCards}
       </Collapse>
-      {collapseButton('Autograder Results', showsResults, toggleResults)}
+      {collapseButton(t('results'), showsResults, toggleResults)}
       <Collapse isOpen={showsResults} keepChildrenMounted={true}>
         {resultCards}
       </Collapse>
@@ -103,40 +142,10 @@ const SideContentAutograder: React.FC<SideContentAutograderProps> = props => {
   );
 };
 
-const autograderTooltip = (
-  <div className="autograder-help-tooltip">
-    <p>Click on each testcase below to execute it with the program in the editor.</p>
-    <p>
-      To execute all testcases at once, evaluate the program in the editor with this tab active.
-    </p>
-    <p>A green or red background indicates a passed or failed testcase respectively.</p>
-    <p>Private testcases (only visible to staff when grading) have a grey background.</p>
-  </div>
-);
-
 const columnHeader = (colClass: string, colTitle: string) => (
   <div className={colClass}>
     {colTitle}
     <Icon icon={IconNames.CARET_DOWN} />
-  </div>
-);
-
-const testcasesHeader = (
-  <div className="testcases-header" data-testid="testcases-header">
-    {columnHeader('header-fn', 'Testcase')}
-    {columnHeader('header-expected', 'Expected result')}
-    {columnHeader('header-actual', 'Actual result')}
-  </div>
-);
-
-const resultsHeader = (
-  <div className="results-header" data-testid="results-header">
-    <div className="header-data">
-      {columnHeader('header-sn', 'S/N')}
-      {columnHeader('header-status', 'Testcase status')}
-    </div>
-    {columnHeader('header-expected', 'Expected result')}
-    {columnHeader('header-actual', 'Actual result')}
   </div>
 );
 

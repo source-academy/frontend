@@ -5,7 +5,8 @@ import { Mock, vi } from 'vitest';
 import { Role } from '../../../application/ApplicationTypes';
 import AcademyNavigationBar from '../AcademyNavigationBar';
 
-vi.mock('react-redux', () => ({
+vi.mock('react-redux', async importOriginal => ({
+  ...(await importOriginal()),
   useSelector: vi.fn()
 }));
 const useSelectorMock = useTypedSelector as Mock;

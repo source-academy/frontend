@@ -1,6 +1,7 @@
 import { Button, InputGroup, NonIdealState } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
@@ -23,6 +24,7 @@ const columns = [
 ];
 
 const Stories: React.FC = () => {
+  const { t } = useTranslation('translation', { keyPrefix: 'stories' });
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -35,16 +37,16 @@ const Stories: React.FC = () => {
   const handleDeleteStory = useCallback(
     async (id: number) => {
       const confirm = await showSimpleConfirmDialog({
-        contents: <p>Are you sure you want to delete this story?</p>,
+        contents: <p>{t('deleteConfirmation')}</p>,
         positiveIntent: 'danger',
-        positiveLabel: 'Delete'
+        positiveLabel: t('delete')
       });
       if (confirm) {
         dispatch(StoriesActions.deleteStory(id));
         // deleteStory will auto-refresh the list of stories after
       }
     },
-    [dispatch]
+    [dispatch, t]
   );
 
   const storyList = useTypedSelector(state => state.stories.storyList);
@@ -122,7 +124,9 @@ const Stories: React.FC = () => {
         <>
           <GradingFlex justifyContent="space-between">
             <GradingFlex justifyContent="flex-start" alignItems="center" style={{ columnGap: 16 }}>
-              <GradingText style={{ fontSize: '1.125rem', opacity: 0.9 }}>All Stories</GradingText>
+              <GradingText style={{ fontSize: '1.125rem', opacity: 0.9 }}>
+                {t('allStories')}
+              </GradingText>
               {isLoggedIn && (
                 <Button onClick={handleNewStory} icon={IconNames.PLUS}>
                   Add Story

@@ -1,4 +1,4 @@
-import { setUser } from '@sentry/browser';
+import { setUser } from '@sentry/react';
 import { call, select } from 'redux-saga/effects';
 import Messages, { sendToWebview } from 'src/features/vscode/messages';
 
