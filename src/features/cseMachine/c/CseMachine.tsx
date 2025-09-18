@@ -6,9 +6,10 @@ import { Control } from 'src/features/cseMachine/c/components/control/Control';
 
 import { defaultBackgroundColor } from '../CseMachineUtils';
 import { Environment } from './components/environment/Environment';
+import { Memory } from './components/memory/Memory';
+// import { Memory } from './components/memory/Memory';
 // import { Environment } from './components/Environment';
 import { Stash } from './components/stash/Stash';
-import { Memory } from './components/ui/Memory';
 import { CConfig, ShapeDefaultProps } from './config/CCSEMachineConfig';
 
 type SetVis = (vis: React.ReactNode) => void;
@@ -27,12 +28,11 @@ export class CseMachine {
   /** scale factor for zooming and out of canvas */
   public static scaleFactor = 1.02;
 
-  // static environment: Environment | undefined;
   static control: Control | undefined;
   static stash: Stash | undefined;
   static memory: Memory | undefined;
   static environment: Environment;
-  static functions: FunctionTable;
+  static functions: FunctionTable | undefined;
 
   static init(setVis: SetVis, setEditorHighlightedLines: (segments: [number, number][]) => void) {
     this.setVis = setVis;
@@ -50,11 +50,6 @@ export class CseMachine {
       throw new Error('C CSE Machine not initialised');
     }
 
-    // CseMachine.environment = new Environment(context.environment);
-    console.log('HERE');
-    // console.log(context.stash);
-    // console.log(context.control);
-    console.log(context.stackFrames);
     CseMachine.control = new Control(context.control);
     CseMachine.stash = new Stash(context.stash);
     CseMachine.functions = context.astRoot.functionTable;

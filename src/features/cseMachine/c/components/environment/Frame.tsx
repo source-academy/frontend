@@ -38,7 +38,10 @@ export class Frame extends Visible implements IHoverable {
 
     this.name = new Text(frame.functionName, this._x + CConfig.FramePaddingX, this._y);
 
-    this._width = Math.max(CConfig.FrameMinWidth, this.name.width() + 2 * CConfig.FramePaddingX);
+    this._width = Math.max(
+      CConfig.FrameMinWidth,
+      Math.min(CConfig.FrameMaxWidth, this.name.width() + 2 * CConfig.FramePaddingX)
+    );
     this._height = CConfig.FramePaddingY + this.name.height();
 
     // Create binding for each key-value pair
@@ -47,6 +50,7 @@ export class Frame extends Visible implements IHoverable {
       const currBinding: Binding = new Binding(
         key,
         data.value || 0,
+        data.dataType,
         this._x + CConfig.FramePaddingX,
         bindingY
       );

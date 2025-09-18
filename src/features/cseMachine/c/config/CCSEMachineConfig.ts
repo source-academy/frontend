@@ -9,11 +9,14 @@ export const CConfig = Object.freeze({
   LevelPaddingY: 10,
 
   FrameMinWidth: 100,
+  FrameMaxWidth: 300,
   FramePaddingX: 20,
   FramePaddingY: 30,
   FrameMarginX: 30,
   FrameMarginY: 10,
   FrameCornerRadius: 3,
+
+  MemoryMinWidth: 300,
 
   FnRadius: 15,
   FnInnerRadius: 3,

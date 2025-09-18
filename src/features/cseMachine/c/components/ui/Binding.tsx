@@ -1,4 +1,5 @@
 import React from 'react';
+import { DataType } from 'src/ctowasm/dist';
 
 import { Visible } from '../../../components/Visible';
 import { Arrow } from '../../../java/components/Arrow';
@@ -16,7 +17,7 @@ export class Binding extends Visible {
   // Only Method has arrow.
   private readonly _arrow: Arrow | undefined;
 
-  constructor(name: string, value: number, x: number, y: number) {
+  constructor(name: string, value: number, dataType: DataType, x: number, y: number) {
     super();
 
     // Position.
@@ -29,8 +30,17 @@ export class Binding extends Visible {
       this.x(),
       this.y() + CConfig.FontSize + CConfig.TextPaddingX
     );
+
+    const targetDataType: string =
+      dataType.type == 'primary' ? dataType.primaryDataType : dataType.type;
+
     // Value.
-    this._value = new Variable(this._name.x() + this._name.width(), this.y(), value);
+    this._value = new Variable(
+      this._name.x() + this._name.width(),
+      this.y(),
+      value,
+      targetDataType
+    );
 
     // Height and width.
     this._height = Math.max(this._name.height(), this._value.height());

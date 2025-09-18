@@ -33,7 +33,8 @@ export class Variable extends Visible {
   constructor(
     x: number,
     y: number,
-    private readonly _variable: number
+    private readonly _variable: number,
+    dataType: string,
   ) {
     super();
 
@@ -42,7 +43,7 @@ export class Variable extends Visible {
     this._y = y;
 
     // Type.
-    this._type = new Text('INT', this._x, this._y);
+    this._type = new Text(dataType, this._x, this._y);
 
     // Value.
     this._value = new Text(
@@ -50,25 +51,6 @@ export class Variable extends Visible {
       this._x + CConfig.TextPaddingX,
       this._y + this._type.height() + CConfig.TextPaddingX
     );
-    // if (this.variable.value.kind === 'Literal') {
-    //   this._value = new Text(
-    //     this.variable.value.literalType.value,
-    //     this._x + Config.TextPaddingX,
-    //     this._y + this._type.height() + Config.TextPaddingX
-    //   );
-    // } else if (this.variable.value.kind === ECE.StructType.SYMBOL) {
-    //   this._value = new Text(
-    //     '',
-    //     this._x + Config.TextPaddingX,
-    //     this._y + this._type.height() + Config.TextPaddingX
-    //   );
-    // } else {
-    //   this._value = new Text(
-    //     '',
-    //     this._x + Config.TextPaddingX,
-    //     this._y + this._type.height() + Config.TextPaddingX
-    //   );
-    // }
 
     // Height and width.
     this._height = this._type.height() + this._value.height() + 2 * CConfig.TextPaddingX;
