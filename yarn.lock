@@ -3335,6 +3335,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sourceacademy/language-directory@https://github.com/loyaltypollution/language-directory.git#866cc934372a19e514af0025947ce7f1f5a6e1fc":
+  version: 0.0.2
+  resolution: "@sourceacademy/language-directory@https://github.com/loyaltypollution/language-directory.git#commit=866cc934372a19e514af0025947ce7f1f5a6e1fc"
+  checksum: 10c0/a6267cc71585f2cd09b53d416477e18fd2172eb42ca208350cb6aa4cec20fee56580a40cf29a40acd03c8321d6171694473cceb0d1e1b2c7e32dc62569104752
+  languageName: node
+  linkType: hard
+
 "@sourceacademy/sharedb-ace@npm:2.1.1":
   version: 2.1.1
   resolution: "@sourceacademy/sharedb-ace@npm:2.1.1"
@@ -7620,6 +7627,7 @@ __metadata:
     "@rsbuild/plugin-svgr": "npm:^1.2.0"
     "@sentry/react": "npm:^10.5.0"
     "@sourceacademy/c-slang": "npm:^1.0.21"
+    "@sourceacademy/language-directory": "https://github.com/loyaltypollution/language-directory.git#866cc934372a19e514af0025947ce7f1f5a6e1fc"
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
     "@svgr/webpack": "npm:^8.0.0"
@@ -7688,7 +7696,6 @@ __metadata:
     js-yaml: "npm:^4.1.0"
     jsdom: "npm:^26.0.0"
     konva: "npm:^9.2.0"
-    language-directory: "https://github.com/source-academy/language-directory.git"
     lodash: "npm:^4.17.21"
     lz-string: "npm:^1.4.4"
     mdast-util-from-markdown: "npm:^2.0.0"
@@ -9364,13 +9371,6 @@ __metadata:
   version: 9.3.22
   resolution: "konva@npm:9.3.22"
   checksum: 10c0/d9bdaaffec95381e5f4225485a102b14971a3a8f6fd691a78ac55bf88104654cca876714265999eceb3bbb4fc50d1f34b0385e5876d6b918739456c2d7de37fa
-  languageName: node
-  linkType: hard
-
-"language-directory@https://github.com/source-academy/language-directory.git":
-  version: 0.0.1
-  resolution: "language-directory@https://github.com/source-academy/language-directory.git#commit=8e406e4b28a7df5e3e66fdf3005092d0cf861143"
-  checksum: 10c0/2db1dd6a94497232e2a183f10769f9e98658636ad3c0c56ae2d54abd5a414dcfbaa994e651ac94507d129147da523254d81103a75f5e0ad2cbaf2274ee3f146d
   languageName: node
   linkType: hard
 
