@@ -3335,10 +3335,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/language-directory@https://github.com/loyaltypollution/language-directory.git#866cc934372a19e514af0025947ce7f1f5a6e1fc":
+"@sourceacademy/language-directory@https://github.com/loyaltypollution/language-directory.git#9272fcdbf0f6a9c6693e42961cd4b90b3ea86267":
   version: 0.0.2
-  resolution: "@sourceacademy/language-directory@https://github.com/loyaltypollution/language-directory.git#commit=866cc934372a19e514af0025947ce7f1f5a6e1fc"
-  checksum: 10c0/a6267cc71585f2cd09b53d416477e18fd2172eb42ca208350cb6aa4cec20fee56580a40cf29a40acd03c8321d6171694473cceb0d1e1b2c7e32dc62569104752
+  resolution: "@sourceacademy/language-directory@https://github.com/loyaltypollution/language-directory.git#commit=9272fcdbf0f6a9c6693e42961cd4b90b3ea86267"
+  checksum: 10c0/97429c90f7276dc2c09b07e1df387923516553033208419231e6cf30bfb048b4f961d7b721b768053d81c6416c6e313161fdf7cf85fd30026a3ba391c13560b3
   languageName: node
   linkType: hard
 
@@ -7627,7 +7627,7 @@ __metadata:
     "@rsbuild/plugin-svgr": "npm:^1.2.0"
     "@sentry/react": "npm:^10.5.0"
     "@sourceacademy/c-slang": "npm:^1.0.21"
-    "@sourceacademy/language-directory": "https://github.com/loyaltypollution/language-directory.git#866cc934372a19e514af0025947ce7f1f5a6e1fc"
+    "@sourceacademy/language-directory": "https://github.com/loyaltypollution/language-directory.git#9272fcdbf0f6a9c6693e42961cd4b90b3ea86267"
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
     "@svgr/webpack": "npm:^8.0.0"
