@@ -4,6 +4,7 @@ import { FeatureFlagsReducer as featureFlags } from '../../..//commons/featureFl
 import { AchievementReducer as achievement } from '../../../features/achievement/AchievementReducer';
 import { DashboardReducer as dashboard } from '../../../features/dashboard/DashboardReducer';
 import { LanguageDirectoryReducer as languageDirectory } from '../../../features/directory/LanguageDirectoryReducer';
+import { PluginDirectoryReducer as pluginDirectory } from '../../../features/directory/PluginDirectoryReducer';
 import { LeaderboardReducer as leaderboard } from '../../../features/leaderboard/LeaderboardReducer';
 import { PlaygroundReducer as playground } from '../../../features/playground/PlaygroundReducer';
 import { StoriesReducer as stories } from '../../../features/stories/StoriesReducer';
@@ -29,7 +30,8 @@ const rootReducer: Reducer<OverallState, SourceActionType> = combineReducers({
   fileSystem,
   sideContent,
   vscode,
-  languageDirectory
+  languageDirectory,
+  pluginDirectory
 });
 
 export default rootReducer;
