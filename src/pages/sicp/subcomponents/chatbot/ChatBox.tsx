@@ -57,7 +57,7 @@ const ChatBox: React.FC<Props> = ({ getSection, getText }) => {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [chatId, tokens, userInput]);
+  }, [chatId, tokens, userInput, maxContentSize]);
 
   const keyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
     e => {
