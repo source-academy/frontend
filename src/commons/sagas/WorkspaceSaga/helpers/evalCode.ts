@@ -487,8 +487,8 @@ export function* evalCodeConductorSaga(
   yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);
   while (true) {
     const { stop } = yield race({
-      repl: take(actions.evalRepl),
-      stop: take(actions.beginInterruptExecution)
+      repl: take(actions.evalRepl.type),
+      stop: take(actions.beginInterruptExecution.type)
     });
     if (stop) break;
     const code: string = yield select(
