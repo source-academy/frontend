@@ -2,9 +2,9 @@ import { call, put, select } from 'redux-saga/effects';
 import type { OverallState } from 'src/commons/application/ApplicationTypes';
 import { flagConductorEnable } from 'src/features/conductor/flagConductorEnable';
 import { flagConductorEvaluatorUrl } from 'src/features/conductor/flagConductorEvaluatorUrl';
-import { staticLanguageDirectoryProvider } from 'src/features/languageDirectory/LanguageDirectoryTypes';
+import { staticLanguageDirectoryProvider } from 'src/features/directory/LanguageDirectoryTypes';
 
-import LanguageDirectoryActions from '../../features/languageDirectory/LanguageDirectoryActions';
+import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
 import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';
 

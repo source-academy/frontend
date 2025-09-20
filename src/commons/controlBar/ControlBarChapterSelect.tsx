@@ -5,9 +5,9 @@ import { Chapter, Variant } from 'js-slang/dist/types';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { flagLanguageDirectoryEnable } from '../../features/languageDirectory/flagLanguageDirectory';
-import LanguageDirectoryActions from '../../features/languageDirectory/LanguageDirectoryActions';
-import type { IEvaluatorDefinition } from '../../features/languageDirectory/LanguageDirectoryTypes';
+import { flagDirectoryLanguageEnable } from '../../features/directory/flagDirectoryLanguageEnable';
+import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
+import type { IEvaluatorDefinition } from '../../features/directory/LanguageDirectoryTypes';
 import { SALanguage } from '../application/ApplicationTypes';
 import { useFeature } from '../featureFlags/useFeature';
 import { useTypedSelector } from '../utils/Hooks';
@@ -34,7 +34,7 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
   disabled = false
 }) => {
   const dispatch = useDispatch();
-  const directoryEnabled = useFeature(flagLanguageDirectoryEnable);
+  const directoryEnabled = useFeature(flagDirectoryLanguageEnable);
   const selectedLanguageId = useTypedSelector(s => s.languageDirectory.selectedLanguageId);
   const selectedEvaluatorId = useTypedSelector(s => s.languageDirectory.selectedEvaluatorId);
   const dirLanguages = useTypedSelector(s => s.languageDirectory.languages);

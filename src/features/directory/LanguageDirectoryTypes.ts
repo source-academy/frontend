@@ -4,7 +4,7 @@ import {
   ILanguageDefinition,
   languageMap,
   languages
-} from '@sourceacademy/language-directory';
+} from 'language-directory';
 
 export type LanguageDirectoryState = {
   readonly selectedLanguageId: string | null;

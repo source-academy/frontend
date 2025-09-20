@@ -3,7 +3,7 @@ import { combineReducers, type Reducer } from '@reduxjs/toolkit';
 import { FeatureFlagsReducer as featureFlags } from '../../..//commons/featureFlags';
 import { AchievementReducer as achievement } from '../../../features/achievement/AchievementReducer';
 import { DashboardReducer as dashboard } from '../../../features/dashboard/DashboardReducer';
-import { LanguageDirectoryReducer as languageDirectory } from '../../../features/languageDirectory/LanguageDirectoryReducer';
+import { LanguageDirectoryReducer as languageDirectory } from '../../../features/directory/LanguageDirectoryReducer';
 import { LeaderboardReducer as leaderboard } from '../../../features/leaderboard/LeaderboardReducer';
 import { PlaygroundReducer as playground } from '../../../features/playground/PlaygroundReducer';
 import { StoriesReducer as stories } from '../../../features/stories/StoriesReducer';

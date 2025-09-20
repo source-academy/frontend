@@ -4,8 +4,8 @@ import { useDispatch } from 'react-redux';
 import { useFeature } from 'src/commons/featureFlags/useFeature';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { flagLanguageDirectoryEnable } from 'src/features/languageDirectory/flagLanguageDirectory';
-import LanguageDirectoryActions from 'src/features/languageDirectory/LanguageDirectoryActions';
+import { flagDirectoryLanguageEnable } from 'src/features/directory/flagDirectoryLanguageEnable';
+import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
 
 //TODO <remove legacy>: Remove when conductors.languageDirectory is default behaviour
 import LegacyNavigationBarLangSelectButton from './LegacyNavigationBarLangSelectButton';
@@ -28,7 +28,7 @@ const NavigationBarLangSelectButton = () => {
     }
   }, [languagesLoaded, dispatch]);
 
-  const directoryEnabled = useFeature(flagLanguageDirectoryEnable);
+  const directoryEnabled = useFeature(flagDirectoryLanguageEnable);
   if (!directoryEnabled) {
     return <LegacyNavigationBarLangSelectButton />;
   }
