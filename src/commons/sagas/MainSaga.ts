@@ -5,6 +5,7 @@ import { mockBackendSaga } from '../mocks/BackendMocks';
 import Constants from '../utils/Constants';
 import AchievementSaga from './AchievementSaga';
 import BackendSaga from './BackendSaga';
+import FeatureFlagSaga from './FeatureFlagSaga';
 import GitHubPersistenceSaga from './GitHubPersistenceSaga';
 import LanguageDirectorySaga from './LanguageDirectorySaga';
 import LeaderboardSaga from './LeaderboardSaga';
@@ -29,6 +30,7 @@ export default function* MainSaga(): SagaIterator {
     fork(RemoteExecutionSaga),
     fork(StoriesSaga),
     fork(SideContentSaga),
+    fork(FeatureFlagSaga),
     fork(LanguageDirectorySaga)
   ]);
 }

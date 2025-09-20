@@ -1,4 +1,5 @@
 import { createReducer, type Reducer } from '@reduxjs/toolkit';
+import { generateLanguageMap } from 'language-directory/dist/util';
 import { defaultLanguageDirectory } from 'src/commons/application/ApplicationTypes';
 import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
@@ -9,12 +10,11 @@ export const LanguageDirectoryReducer: Reducer<LanguageDirectoryState, SourceAct
   createReducer(defaultLanguageDirectory, builder => {
     builder
       .addCase(Actions.setLanguages, (state, action) => {
-        state.languages = action.payload.languages as any;
+        state.languages = action.payload.languages;
+        state.languageMap = Object.fromEntries(generateLanguageMap(action.payload.languages));
       })
       .addCase(Actions.setSelectedLanguage, (state, action) => {
-        const { languageId, evaluatorId } = action.payload;
-        state.selectedLanguageId = languageId;
-        state.selectedEvaluatorId = evaluatorId ?? null;
+        state.selectedLanguageId = action.payload.languageId;
       })
       .addCase(Actions.setSelectedEvaluator, (state, action) => {
         state.selectedEvaluatorId = action.payload.evaluatorId;

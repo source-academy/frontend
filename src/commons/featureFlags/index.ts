@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { SagaIterator } from 'redux-saga';
 
 import { FeatureFlag } from './FeatureFlag';
 
@@ -19,11 +20,9 @@ const featureFlagsSlice = createSlice({
       action: { payload: { featureFlag: FeatureFlag<T>; value: T } }
     ) {
       state.modifiedFlags[action.payload.featureFlag.flagName] = action.payload.value;
-      action.payload.featureFlag.onChange(action.payload.value);
     },
     resetFlag<T>(state: FeatureFlagsState, action: { payload: { featureFlag: FeatureFlag<T> } }) {
       delete state.modifiedFlags[action.payload.featureFlag.flagName];
-      action.payload.featureFlag.onChange(action.payload.featureFlag.defaultValue);
     }
   }
 });
@@ -36,7 +35,7 @@ export function createFeatureFlag<T>(
   flagName: string,
   defaultValue: T,
   flagDesc?: string,
-  callback?: (newValue: T) => void
+  callback?: (newValue: T) => SagaIterator
 ): FeatureFlag<T> {
   return new FeatureFlag<T>(flagName, defaultValue, flagDesc, callback);
 }

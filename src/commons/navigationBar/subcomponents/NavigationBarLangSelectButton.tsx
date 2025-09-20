@@ -1,5 +1,5 @@
 import { Position } from '@blueprintjs/core';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFeature } from 'src/commons/featureFlags/useFeature';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
@@ -21,12 +21,6 @@ const NavigationBarLangSelectButton = () => {
 
   const dispatch = useDispatch();
   const dirOptions = useDirectoryOptions();
-  const languagesLoaded = useTypedSelector(s => s.languageDirectory.languages.length > 0);
-  useEffect(() => {
-    if (!languagesLoaded) {
-      dispatch(LanguageDirectoryActions.fetchLanguages());
-    }
-  }, [languagesLoaded, dispatch]);
 
   const directoryEnabled = useFeature(flagDirectoryLanguageEnable);
   if (!directoryEnabled) {

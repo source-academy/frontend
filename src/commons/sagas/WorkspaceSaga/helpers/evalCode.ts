@@ -5,20 +5,19 @@ import { type Context, interrupt, type Result, resume, runFilesInContext } from 
 import { ACORN_PARSE_OPTIONS } from 'js-slang/dist/constants';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { Chapter, ErrorSeverity, ErrorType, type SourceError, Variant } from 'js-slang/dist/types';
+import { IEvaluatorDefinition } from 'language-directory/dist/types';
 import { pick } from 'lodash';
 import { eventChannel, type SagaIterator } from 'redux-saga';
 import { call, cancel, cancelled, fork, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 
 import InterpreterActions from '../../../../commons/application/actions/InterpreterActions';
-import { IEvaluatorDefinition } from '../../../../commons/directory/language';
-import { selectFeatureSaga } from '../../../../commons/featureFlags/selectFeatureSaga';
 import { makeCCompilerConfig, specialCReturnObject } from '../../../../commons/utils/CToWasmHelper';
 import { javaRun } from '../../../../commons/utils/JavaHelper';
 import { EventType } from '../../../../features/achievement/AchievementTypes';
 import type { BrowserHostPlugin } from '../../../../features/conductor/BrowserHostPlugin';
 import { createConductor } from '../../../../features/conductor/createConductor';
-import { flagConductorEnable } from '../../../../features/conductor/flagConductorEnable';
+import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
 import StoriesActions from '../../../../features/stories/StoriesActions';
 import { isSchemeLanguage, type OverallState } from '../../../application/ApplicationTypes';
 import { SideContentType } from '../../../sideContent/SideContentTypes';
@@ -28,6 +27,7 @@ import { showWarningMessage } from '../../../utils/notifications/NotificationsHe
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../../../utils/SourcerorHelper';
 import WorkspaceActions from '../../../workspace/WorkspaceActions';
 import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import { getEvaluatorDefinitionSaga } from '../../LanguageDirectorySaga';
 import { selectStoryEnv, selectWorkspace } from '../../SafeEffects';
 import { dumpDisplayBuffer } from './dumpDisplayBuffer';
 import { updateInspector } from './updateInspector';
@@ -142,7 +142,7 @@ export function* evalCodeSaga(
   workspaceLocation: WorkspaceLocation,
   storyEnv?: string
 ): SagaIterator {
-  if (yield call(selectFeatureSaga, flagConductorEnable)) {
+  if (yield select(selectConductorEnable)) {
     return yield call(
       evalCodeConductorSaga,
       files,
@@ -463,9 +463,7 @@ export function* evalCodeConductorSaga(
   actionType: string,
   storyEnv?: string
 ): SagaIterator {
-  const evaluator: IEvaluatorDefinition | undefined = yield select(
-    (state: OverallState) => state.playground.conductorEvaluator
-  );
+  const evaluator: IEvaluatorDefinition | undefined = yield call(getEvaluatorDefinitionSaga);
   if (!evaluator?.path) throw Error('no evaluator');
   const evaluatorResponse: Response = yield call(
     fetch,

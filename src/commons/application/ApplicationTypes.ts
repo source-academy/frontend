@@ -9,7 +9,6 @@ import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/S
 import type { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
 import { freshSortState } from '../../pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
-import { getSupportedLanguages, ILanguageDefinition } from '../directory/language';
 import { defaultFeatureFlags, FeatureFlagsState } from '../featureFlags';
 import type { FileSystemState } from '../fileSystem/FileSystemTypes';
 import type { SideContentManagerState, SideContentState } from '../sideContent/SideContentTypes';
@@ -372,16 +371,9 @@ const getDefaultLanguageConfig = (): SALanguage => {
 };
 export const defaultLanguageConfig: SALanguage = getDefaultLanguageConfig();
 
-export const defaultConductorLanguage: ILanguageDefinition = getSupportedLanguages()[0] || {
-  id: '',
-  name: '',
-  evaluators: []
-};
-
 export const defaultPlayground: PlaygroundState = {
   githubSaveInfo: { repoName: '', filePath: '' },
-  languageConfig: defaultLanguageConfig,
-  conductorLanguage: defaultConductorLanguage
+  languageConfig: defaultLanguageConfig
 };
 
 export const defaultEditorValue = '// Type your program in here!';
@@ -626,7 +618,8 @@ export const defaultVscode: VscodeState = {
 export const defaultLanguageDirectory: LanguageDirectoryState = {
   selectedLanguageId: null,
   selectedEvaluatorId: null,
-  languages: []
+  languages: [],
+  languageMap: {}
 };
 
 export const defaultState: OverallState = {

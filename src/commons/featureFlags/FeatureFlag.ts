@@ -1,8 +1,10 @@
+import { SagaIterator } from 'redux-saga';
+
 export class FeatureFlag<T> {
   private readonly _flagName: string;
   private readonly _defaultValue: T;
   private readonly _flagDesc?: string;
-  private readonly _callback?: Function;
+  private readonly _callback?: (newValue: any) => SagaIterator; // using any as the action wipes out type-param
 
   get flagName(): string {
     return this._flagName;
@@ -21,12 +23,11 @@ export class FeatureFlag<T> {
     flagName: string,
     defaultValue: T,
     flagDesc?: string,
-    callback?: (newValue: T) => void
+    callback?: (newValue: T) => SagaIterator
   ) {
     this._flagName = flagName;
     this._defaultValue = defaultValue;
     this._flagDesc = flagDesc;
     this._callback = callback;
-    this.onChange(defaultValue);
   }
 }

@@ -1,66 +1,59 @@
-import { call, put, select } from 'redux-saga/effects';
-import type { OverallState } from 'src/commons/application/ApplicationTypes';
-import { flagConductorEnable } from 'src/features/conductor/flagConductorEnable';
-import { flagConductorEvaluatorUrl } from 'src/features/conductor/flagConductorEvaluatorUrl';
-import { staticLanguageDirectoryProvider } from 'src/features/directory/LanguageDirectoryTypes';
+import { ILanguageDefinition } from 'language-directory/dist/types';
+import { getEvaluatorDefinition } from 'language-directory/dist/util';
+import { call, fork, put, select } from 'redux-saga/effects';
+import { selectDirectoryLanguageUrl } from 'src/features/directory/flagDirectoryLanguageUrl';
 
 import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
+import { LanguageDirectoryState } from '../../features/directory/LanguageDirectoryTypes';
+import type { OverallState } from '../application/ApplicationTypes';
 import { combineSagaHandlers } from '../redux/utils';
-import { actions } from '../utils/ActionsHelper';
 
-const LanguageDirectorySaga = combineSagaHandlers({
+export function* getLanguageDefinitionSaga() {
+  const directory: LanguageDirectoryState = yield select(
+    (state: OverallState) => state.languageDirectory
+  );
+  if (!directory.selectedLanguageId) return undefined;
+  return directory.languageMap[directory.selectedLanguageId];
+}
+
+export function* getEvaluatorDefinitionSaga() {
+  const directory: LanguageDirectoryState = yield select(
+    (state: OverallState) => state.languageDirectory
+  );
+  if (!directory.selectedEvaluatorId) return undefined;
+  const language: ILanguageDefinition = yield call(getLanguageDefinitionSaga);
+  if (!language) return undefined;
+  return getEvaluatorDefinition(language, directory.selectedEvaluatorId);
+}
+
+const languageDirectoryHandlers = combineSagaHandlers({
   [LanguageDirectoryActions.setLanguages.type]: function* () {
-    const state = yield select((s: OverallState) => s.languageDirectory);
-    if (state.selectedLanguageId === null && state.languages.length > 0) {
-      yield put(actions.setSelectedLanguage(state.languages[0].id));
-    }
-    if (state.selectedEvaluatorId === null && state.languages.length > 0) {
-      yield put(actions.setSelectedEvaluator(state.languages[0].evaluators[0].id));
+    const directory = yield select((state: OverallState) => state.languageDirectory);
+    if (directory.languages.length > 0) {
+      yield put(LanguageDirectoryActions.setSelectedLanguage(directory.languages[0].id));
     }
   },
   [LanguageDirectoryActions.fetchLanguages.type]: function* () {
-    const langs = yield call(
-      staticLanguageDirectoryProvider.getLanguages.bind(staticLanguageDirectoryProvider)
-    );
-    yield put(actions.setLanguages(langs));
+    const url = yield select(selectDirectoryLanguageUrl);
+    const response = yield call(fetch, url);
+    if (!response.ok) {
+      throw new Error(`Can't retrieve language directory: ${response.status}`);
+    }
+    const result: ILanguageDefinition[] = yield call([response, 'json']);
+    yield put(LanguageDirectoryActions.setLanguages(result));
   },
-  [LanguageDirectoryActions.setSelectedLanguage.type]: function* (action) {
-    const {
-      payload: { languageId, evaluatorId }
-    } = action;
-    if (evaluatorId) return; // already explicitly set
-    const language = yield call(
-      staticLanguageDirectoryProvider.getLanguageById.bind(staticLanguageDirectoryProvider),
-      languageId
-    );
+  [LanguageDirectoryActions.setSelectedLanguage.type]: function* () {
+    const language = yield call(getLanguageDefinitionSaga);
     if (!language) return;
-    const defaultEvaluatorId: string | null =
-      language.evaluators.length > 0 ? language.evaluators[0].id : null;
-    if (!defaultEvaluatorId) return;
-    // If state still matches the same language, set evaluator
-    const currentLanguageId: string | null = yield select(
-      (s: OverallState) => s.languageDirectory.selectedLanguageId
-    );
-    if (currentLanguageId !== languageId) return;
-    yield put(actions.setSelectedEvaluator(defaultEvaluatorId));
-  },
-  [LanguageDirectoryActions.setSelectedEvaluator.type]: function* (action) {
-    const {
-      payload: { evaluatorId }
-    } = action;
-    const selectedLanguageId: string | null = yield select(
-      (s: OverallState) => s.languageDirectory.selectedLanguageId
-    );
-    if (!selectedLanguageId) return;
-    const evaluator = yield call(
-      staticLanguageDirectoryProvider.getEvaluatorDefinition.bind(staticLanguageDirectoryProvider),
-      selectedLanguageId,
-      evaluatorId
-    );
-    if (!evaluator) return;
-    yield put(actions.setFlag({ featureFlag: flagConductorEnable, value: true }));
-    yield put(actions.setFlag({ featureFlag: flagConductorEvaluatorUrl, value: evaluator.path }));
+    if (language.evaluators.length > 0) {
+      yield put(LanguageDirectoryActions.setSelectedEvaluator(language.evaluators[0].id));
+    }
   }
 });
+
+function* LanguageDirectorySaga() {
+  yield fork(languageDirectoryHandlers);
+  yield put(LanguageDirectoryActions.fetchLanguages());
+}
 
 export default LanguageDirectorySaga;

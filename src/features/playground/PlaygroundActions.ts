@@ -1,7 +1,6 @@
 import { SALanguage } from 'src/commons/application/ApplicationTypes';
 import { createActions } from 'src/commons/redux/utils';
 
-import { IEvaluatorDefinition, ILanguageDefinition } from '../../commons/directory/language';
 import { PersistenceFile } from '../persistence/PersistenceTypes';
 
 const PlaygroundActions = createActions('playground', {
@@ -15,9 +14,7 @@ const PlaygroundActions = createActions('playground', {
     filePath,
     lastSaved
   }),
-  playgroundConfigLanguage: (languageConfig: SALanguage) => languageConfig,
-  playgroundConductorLanguage: (language: ILanguageDefinition) => language,
-  playgroundConductorEvaluator: (evaluator: IEvaluatorDefinition | undefined) => evaluator
+  playgroundConfigLanguage: (languageConfig: SALanguage) => languageConfig
 });
 
 // For compatibility with existing code (reducer)
@@ -28,9 +25,7 @@ export const {
   changeQueryString,
   playgroundUpdatePersistenceFile,
   playgroundUpdateGitHubSaveInfo,
-  playgroundConfigLanguage,
-  playgroundConductorLanguage,
-  playgroundConductorEvaluator
+  playgroundConfigLanguage
 } = PlaygroundActions;
 
 // For compatibility with existing code (actions helper)

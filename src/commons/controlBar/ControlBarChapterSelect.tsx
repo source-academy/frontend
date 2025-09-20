@@ -2,12 +2,12 @@ import { Button, Menu, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/types';
+import { IEvaluatorDefinition } from 'language-directory/dist/types';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { flagDirectoryLanguageEnable } from '../../features/directory/flagDirectoryLanguageEnable';
 import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
-import type { IEvaluatorDefinition } from '../../features/directory/LanguageDirectoryTypes';
 import { SALanguage } from '../application/ApplicationTypes';
 import { useFeature } from '../featureFlags/useFeature';
 import { useTypedSelector } from '../utils/Hooks';

@@ -4,8 +4,6 @@ import { defaultPlayground } from '../../commons/application/ApplicationTypes';
 import { SourceActionType } from '../../commons/utils/ActionsHelper';
 import {
   changeQueryString,
-  playgroundConductorEvaluator,
-  playgroundConductorLanguage,
   playgroundConfigLanguage,
   playgroundUpdateGitHubSaveInfo,
   playgroundUpdatePersistenceFile,
@@ -31,12 +29,6 @@ export const PlaygroundReducer: Reducer<PlaygroundState, SourceActionType> = cre
       })
       .addCase(playgroundConfigLanguage, (state, action) => {
         state.languageConfig = action.payload;
-      })
-      .addCase(playgroundConductorLanguage, (state, action) => {
-        state.conductorLanguage = action.payload;
-      })
-      .addCase(playgroundConductorEvaluator, (state, action) => {
-        state.conductorEvaluator = action.payload;
       });
   }
 );
