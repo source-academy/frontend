@@ -12,6 +12,7 @@ import LeaderboardSaga from './LeaderboardSaga';
 import LoginSaga from './LoginSaga';
 import PersistenceSaga from './PersistenceSaga';
 import PlaygroundSaga from './PlaygroundSaga';
+import PluginDirectorySaga from './PluginDirectorySaga';
 import RemoteExecutionSaga from './RemoteExecutionSaga';
 import SideContentSaga from './SideContentSaga';
 import StoriesSaga from './StoriesSaga';
@@ -31,6 +32,7 @@ export default function* MainSaga(): SagaIterator {
     fork(StoriesSaga),
     fork(SideContentSaga),
     fork(FeatureFlagSaga),
-    fork(LanguageDirectorySaga)
+    fork(LanguageDirectorySaga),
+    fork(PluginDirectorySaga)
   ]);
 }

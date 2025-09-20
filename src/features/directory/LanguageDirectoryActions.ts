@@ -1,7 +1,8 @@
 import { ILanguageDefinition } from 'language-directory/dist/types';
-import { createActions } from 'src/commons/redux/utils';
 
-const LanguageDirectoryActions = createActions('conductor/languageDirectory', {
+import { createActions } from '../../commons/redux/utils';
+
+const LanguageDirectoryActions = createActions('directory/languages', {
   /** Fetch languages (saga) */
   fetchLanguages: null,
   /** Set languages list */

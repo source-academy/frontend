@@ -7700,6 +7700,7 @@ __metadata:
     path-browserify: "npm:^1.0.1"
     phaser: "npm:~3.90.0"
     phaser3spectorjs: "npm:^0.0.8"
+    plugin-directory: "https://github.com/source-academy/plugin-directory.git#0.0.2"
     prettier: "npm:^3.3.3"
     process: "npm:^0.11.10"
     query-string: "npm:^9.0.0"
@@ -10973,6 +10974,13 @@ __metadata:
   bin:
     pidtree: bin/pidtree.js
   checksum: 10c0/0829ec4e9209e230f74ebf4265f5ccc9ebfb488334b525cb13f86ff801dca44b362c41252cd43ae4d7653a10a5c6ab3be39d2c79064d6895e0d78dc50a5ed6e9
+  languageName: node
+  linkType: hard
+
+"plugin-directory@https://github.com/source-academy/plugin-directory.git#0.0.2":
+  version: 0.0.2
+  resolution: "plugin-directory@https://github.com/source-academy/plugin-directory.git#commit=8b31c1a2abea6b42d52267c8ea343ee49ec5d857"
+  checksum: 10c0/d0bca6b755589937a25a3e65894be299708f00377c1773365e3f1b2a193d85937ca6c0edc6f58dbafc81425acc16435a6df56e61e3917cddbce7e34bbfd9c567
   languageName: node
   linkType: hard
 

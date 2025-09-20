@@ -1,8 +1,8 @@
 import { createReducer, type Reducer } from '@reduxjs/toolkit';
 import { generateLanguageMap } from 'language-directory/dist/util';
-import { defaultLanguageDirectory } from 'src/commons/application/ApplicationTypes';
-import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
+import { defaultLanguageDirectory } from '../../commons/application/ApplicationTypes';
+import type { SourceActionType } from '../../commons/utils/ActionsHelper';
 import Actions from './LanguageDirectoryActions';
 import type { LanguageDirectoryState } from './LanguageDirectoryTypes';
 

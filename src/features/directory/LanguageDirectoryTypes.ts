@@ -1,4 +1,4 @@
-import { ILanguageDefinition } from 'language-directory';
+import { ILanguageDefinition } from 'language-directory/dist/types';
 
 export type LanguageDirectoryState = {
   readonly selectedLanguageId: string | null;
