@@ -18,6 +18,8 @@ import { EventType } from '../../../../features/achievement/AchievementTypes';
 import type { BrowserHostPlugin } from '../../../../features/conductor/BrowserHostPlugin';
 import { createConductor } from '../../../../features/conductor/createConductor';
 import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
+import { selectConductorEvaluatorUrl } from '../../../../features/conductor/flagConductorEvaluatorUrl';
+import { selectDirectoryLanguageEnable } from '../../../../features/directory/flagDirectoryLanguageEnable';
 import StoriesActions from '../../../../features/stories/StoriesActions';
 import { isSchemeLanguage, type OverallState } from '../../../application/ApplicationTypes';
 import { SideContentType } from '../../../sideContent/SideContentTypes';
@@ -463,12 +465,15 @@ export function* evalCodeConductorSaga(
   actionType: string,
   storyEnv?: string
 ): SagaIterator {
-  const evaluator: IEvaluatorDefinition | undefined = yield call(getEvaluatorDefinitionSaga);
-  if (!evaluator?.path) throw Error('no evaluator');
-  const evaluatorResponse: Response = yield call(
-    fetch,
-    evaluator.path // temporary evaluator
-  );
+  let path: string;
+  if (yield select(selectDirectoryLanguageEnable)) {
+    const evaluator: IEvaluatorDefinition | undefined = yield call(getEvaluatorDefinitionSaga);
+    if (!evaluator?.path) throw Error('no evaluator');
+    path = evaluator.path;
+  } else {
+    path = yield select(selectConductorEvaluatorUrl);
+  }
+  const evaluatorResponse: Response = yield call(fetch, path);
   if (!evaluatorResponse.ok) throw Error("can't get evaluator");
   const evaluatorBlob: Blob = yield call([evaluatorResponse, 'blob']);
   const url: string = yield call(URL.createObjectURL, evaluatorBlob);
