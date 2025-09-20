@@ -2,7 +2,8 @@ import { Chapter, Language, type SourceError, type Value, Variant } from 'js-sla
 
 import type { AchievementState } from '../../features/achievement/AchievementTypes';
 import type { DashboardState } from '../../features/dashboard/DashboardTypes';
-import type { LanguageDirectoryState } from '../../features/languageDirectory/LanguageDirectoryTypes';
+import type { LanguageDirectoryState } from '../../features/directory/LanguageDirectoryTypes';
+import type { PluginDirectoryState } from '../../features/directory/PluginDirectoryTypes';
 import type { LeaderboardState } from '../../features/leaderboard/LeaderboardTypes';
 import type { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
@@ -39,6 +40,7 @@ export type OverallState = {
   readonly sideContent: SideContentManagerState;
   readonly vscode: VscodeState;
   readonly languageDirectory: LanguageDirectoryState;
+  readonly pluginDirectory: PluginDirectoryState;
 };
 
 export type Story = {
@@ -618,7 +620,13 @@ export const defaultVscode: VscodeState = {
 export const defaultLanguageDirectory: LanguageDirectoryState = {
   selectedLanguageId: null,
   selectedEvaluatorId: null,
-  languages: []
+  languages: [],
+  languageMap: {}
+};
+
+export const defaultPluginDirectory: PluginDirectoryState = {
+  plugins: [],
+  pluginMap: {}
 };
 
 export const defaultState: OverallState = {
@@ -634,5 +642,6 @@ export const defaultState: OverallState = {
   fileSystem: defaultFileSystem,
   sideContent: defaultSideContentManager,
   vscode: defaultVscode,
-  languageDirectory: defaultLanguageDirectory
+  languageDirectory: defaultLanguageDirectory,
+  pluginDirectory: defaultPluginDirectory
 };

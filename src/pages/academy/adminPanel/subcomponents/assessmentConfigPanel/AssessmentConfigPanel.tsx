@@ -263,6 +263,7 @@ const AssessmentConfigPanel: WithImperativeApi<
       [
         deleteRowHandler,
         setDisplayInDashboard,
+        setIsMinigame,
         setEarlyXp,
         setHasTokenCounter,
         setHasVotingFeatures,
