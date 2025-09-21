@@ -10,7 +10,6 @@ import LanguageDirectoryActions from '../../features/languageDirectory/LanguageD
 import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';
 
-
 const LanguageDirectorySaga = combineSagaHandlers({
   [LanguageDirectoryActions.setLanguages.type]: function* () {
     const state = yield select((s: OverallState) => s.languageDirectory);
@@ -42,11 +41,11 @@ const LanguageDirectorySaga = combineSagaHandlers({
     if (!language) return;
     console.log('A LanguageDirectorySaga: language', language);
     // If evaluatorId is explicitly provided, use it; otherwise use the first available
-    const targetEvaluatorId = evaluatorId || 
-      (language.evaluators.length > 0 ? language.evaluators[0].id : null);
+    const targetEvaluatorId =
+      evaluatorId || (language.evaluators.length > 0 ? language.evaluators[0].id : null);
     console.log('B LanguageDirectorySaga: targetEvaluatorId', targetEvaluatorId);
     if (!targetEvaluatorId) return;
-    
+
     yield put(actions.setSelectedEvaluator(targetEvaluatorId));
   },
   [LanguageDirectoryActions.setSelectedEvaluator.type]: function* (action) {
@@ -72,14 +71,16 @@ const LanguageDirectorySaga = combineSagaHandlers({
   },
   [LanguageDirectoryActions.resetConductor.type]: function* () {
     // Reset languageDirectory in state
-    
+
     // Reset conductor flags to their default values
     yield put(actions.resetFlag({ featureFlag: flagConductorEnable }));
     yield put(actions.resetFlag({ featureFlag: flagConductorEvaluatorUrl }));
   },
   [actions.setFlag.type]: {
     takeEvery: function* (action) {
-      const { payload: { featureFlag, value } } = action as any;
+      const {
+        payload: { featureFlag, value }
+      } = action as any;
       if (featureFlag.flagName !== flagLanguageDirectoryEnable.flagName) return;
       if (value) {
         // Auto-fetch languages when enabling the language directory
