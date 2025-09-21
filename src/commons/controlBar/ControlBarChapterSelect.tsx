@@ -2,7 +2,7 @@ import { Button, Menu, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 
 import { flagLanguageDirectoryEnable } from '../../features/languageDirectory/flagLanguageDirectory';
@@ -38,12 +38,6 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
   const selectedLanguageId = useTypedSelector(s => s.languageDirectory.selectedLanguageId);
   const selectedEvaluatorId = useTypedSelector(s => s.languageDirectory.selectedEvaluatorId);
   const dirLanguages = useTypedSelector(s => s.languageDirectory.languages);
-
-  useEffect(() => {
-    if (directoryEnabled && dirLanguages.length === 0) {
-      dispatch(LanguageDirectoryActions.fetchLanguages());
-    }
-  }, [directoryEnabled, dirLanguages.length, dispatch]);
 
   if (!directoryEnabled) {
     return (

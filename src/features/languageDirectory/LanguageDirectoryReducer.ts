@@ -18,5 +18,10 @@ export const LanguageDirectoryReducer: Reducer<LanguageDirectoryState, SourceAct
       })
       .addCase(Actions.setSelectedEvaluator, (state, action) => {
         state.selectedEvaluatorId = action.payload.evaluatorId;
+      })
+      .addCase(Actions.resetConductor, (state, action) => {
+        state.languages = [];
+        state.selectedLanguageId = null;
+        state.selectedEvaluatorId = null;
       });
   });

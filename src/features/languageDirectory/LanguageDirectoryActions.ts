@@ -8,7 +8,9 @@ const LanguageDirectoryActions = createActions('conductor/languageDirectory', {
   /** Set selected language; evaluatorId optional (defaults to first available) */
   setSelectedLanguage: (languageId: string, evaluatorId?: string) => ({ languageId, evaluatorId }),
   /** Set selected evaluator explicitly */
-  setSelectedEvaluator: (evaluatorId: string) => ({ evaluatorId })
+  setSelectedEvaluator: (evaluatorId: string) => ({ evaluatorId }),
+  /** Reset conductor enable and evaluator url */
+  resetConductor: null
 });
 
 export default LanguageDirectoryActions;
