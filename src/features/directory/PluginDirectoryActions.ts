@@ -1,4 +1,4 @@
-import { IPluginDefinition } from 'plugin-directory/dist/types';
+import { IPluginDefinition } from '@sourceacademy/plugin-directory/dist/types';
 
 import { createActions } from '../../commons/redux/utils';
 

@@ -1,5 +1,5 @@
 import { createReducer, type Reducer } from '@reduxjs/toolkit';
-import { generateLanguageMap } from 'language-directory/dist/util';
+import { generateLanguageMap } from '@sourceacademy/language-directory/dist/util';
 
 import { defaultLanguageDirectory } from '../../commons/application/ApplicationTypes';
 import type { SourceActionType } from '../../commons/utils/ActionsHelper';

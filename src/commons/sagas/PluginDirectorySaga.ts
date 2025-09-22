@@ -1,4 +1,4 @@
-import { IPluginDefinition, PluginType } from 'plugin-directory'; // importing from /dist/types fails for some reason
+import { IPluginDefinition, PluginType } from '@sourceacademy/plugin-directory'; // importing from /dist/types fails for some reason
 import { call, fork, put, select } from 'redux-saga/effects';
 
 import { selectDirectoryPluginUrl } from '../../features/directory/flagDirectoryPluginUrl';

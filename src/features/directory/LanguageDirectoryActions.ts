@@ -1,4 +1,4 @@
-import { ILanguageDefinition } from 'language-directory/dist/types';
+import { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
 
 import { createActions } from '../../commons/redux/utils';
 

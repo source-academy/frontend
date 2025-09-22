@@ -1,5 +1,5 @@
-import { ILanguageDefinition } from 'language-directory/dist/types';
-import { getEvaluatorDefinition } from 'language-directory/dist/util';
+import { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
+import { getEvaluatorDefinition } from '@sourceacademy/language-directory/dist/util';
 import { call, fork, put, select } from 'redux-saga/effects';
 import { selectDirectoryLanguageUrl } from 'src/features/directory/flagDirectoryLanguageUrl';
 

@@ -1,5 +1,5 @@
 import { createReducer, type Reducer } from '@reduxjs/toolkit';
-import { generatePluginMap } from 'plugin-directory/dist/util';
+import { generatePluginMap } from '@sourceacademy/plugin-directory/dist/util';
 
 import { defaultPluginDirectory } from '../../commons/application/ApplicationTypes';
 import type { SourceActionType } from '../../commons/utils/ActionsHelper';
