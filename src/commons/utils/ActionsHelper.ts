@@ -8,9 +8,10 @@ import WorkspaceActions from '../../commons/workspace/WorkspaceActions';
 import AcademyActions from '../../features/academy/AcademyActions';
 import AchievementActions from '../../features/achievement/AchievementActions';
 import DashboardActions from '../../features/dashboard/DashboardActions';
+import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
+import PluginDirectoryActions from '../../features/directory/PluginDirectoryActions';
 import GitHubActions from '../../features/github/GitHubActions';
 import GroundControlActions from '../../features/groundControl/GroundControlActions';
-import LanguageDirectoryActions from '../../features/languageDirectory/LanguageDirectoryActions';
 import LeaderboardActions from '../../features/leaderboard/LeaderboardActions';
 import PersistenceActions from '../../features/persistence/PersistenceActions';
 import PlaygroundActions from '../../features/playground/PlaygroundActions';
@@ -47,7 +48,8 @@ export const actions = {
   ...VscodeActions,
   ...SideContentActions,
   ...FeatureFlagsActions,
-  ...LanguageDirectoryActions
+  ...LanguageDirectoryActions,
+  ...PluginDirectoryActions
 };
 
 export type SourceActionType = ActionType<typeof actions>;

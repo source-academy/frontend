@@ -57,6 +57,12 @@ function loadStore(loadedStore: SavedState | undefined) {
           : undefined
       }
     },
+    featureFlags: {
+      modifiedFlags: {
+        ...defaultState.featureFlags.modifiedFlags,
+        ...loadedStore.featureFlags
+      }
+    },
     workspaces: {
       ...defaultState.workspaces,
       playground: {

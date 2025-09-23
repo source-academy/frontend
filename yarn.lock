@@ -3335,10 +3335,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sourceacademy/language-directory@https://github.com/loyaltypollution/language-directory.git#866cc934372a19e514af0025947ce7f1f5a6e1fc":
+"@sourceacademy/conductor@https://github.com/source-academy/conductor.git#0.2.1":
+  version: 0.2.1
+  resolution: "@sourceacademy/conductor@https://github.com/source-academy/conductor.git#commit=d933713f5ae5b822e4f521872a5d9cb46d79b5df"
+  checksum: 10c0/25dc10930f15010dc6bf6f01d622de0c4bde707892c3bd9d5e221efa9f2d03aac5e8cf27036c4c57ac628b9d140fb6a3d5da3f6ed946faca0fef65d2af8ba514
+  languageName: node
+  linkType: hard
+
+"@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#0.0.4":
+  version: 0.0.4
+  resolution: "@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#commit=b0e045f61ed43203b623b0177b0db8d2c66afa69"
+  checksum: 10c0/453205f5225171eaab6a1726fd2d714bc1900e6f2e4414105098046de334dde28839c12fdc48664879f653f775b9d5e10c3d7f1683db66a0d4c51208792bd08f
+  languageName: node
+  linkType: hard
+
+"@sourceacademy/plugin-directory@https://github.com/source-academy/plugin-directory.git#0.0.2":
   version: 0.0.2
-  resolution: "@sourceacademy/language-directory@https://github.com/loyaltypollution/language-directory.git#commit=866cc934372a19e514af0025947ce7f1f5a6e1fc"
-  checksum: 10c0/a6267cc71585f2cd09b53d416477e18fd2172eb42ca208350cb6aa4cec20fee56580a40cf29a40acd03c8321d6171694473cceb0d1e1b2c7e32dc62569104752
+  resolution: "@sourceacademy/plugin-directory@https://github.com/source-academy/plugin-directory.git#commit=8b31c1a2abea6b42d52267c8ea343ee49ec5d857"
+  checksum: 10c0/29dbaddeda6efbacaacbeaf8d82816cba4f0ff080a1cdc451f6ae5c71de4c4519890d8a17a10161af0903f894f8b67ee2ae9044e6d1ca003522a05a15af42882
   languageName: node
   linkType: hard
 
@@ -5860,13 +5874,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"conductor@https://github.com/source-academy/conductor.git#0.2.1":
-  version: 0.2.1
-  resolution: "conductor@https://github.com/source-academy/conductor.git#commit=d933713f5ae5b822e4f521872a5d9cb46d79b5df"
-  checksum: 10c0/b09c2913f97e62a54ae45f61cd905bfec07d62d14393e7e7476fc4afe474b4a19594cd394ab9df6147849dba9353de4dfbe996eaeb3d151066ac8930d588c5d7
-  languageName: node
-  linkType: hard
-
 "console-browserify@npm:^1.2.0":
   version: 1.2.0
   resolution: "console-browserify@npm:1.2.0"
@@ -7627,7 +7634,9 @@ __metadata:
     "@rsbuild/plugin-svgr": "npm:^1.2.0"
     "@sentry/react": "npm:^10.5.0"
     "@sourceacademy/c-slang": "npm:^1.0.21"
-    "@sourceacademy/language-directory": "https://github.com/loyaltypollution/language-directory.git#866cc934372a19e514af0025947ce7f1f5a6e1fc"
+    "@sourceacademy/conductor": "https://github.com/source-academy/conductor.git#0.2.1"
+    "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.4"
+    "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.2"
     "@sourceacademy/sharedb-ace": "npm:2.1.1"
     "@sourceacademy/sling-client": "npm:^0.1.0"
     "@svgr/webpack": "npm:^8.0.0"
@@ -7670,7 +7679,6 @@ __metadata:
     buffer: "npm:^6.0.3"
     canvas: "npm:^3.1.0"
     classnames: "npm:^2.3.2"
-    conductor: "https://github.com/source-academy/conductor.git#0.2.1"
     constants-browserify: "npm:^1.0.0"
     coveralls: "npm:^3.1.1"
     cross-env: "npm:^10.0.0"

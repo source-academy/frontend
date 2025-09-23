@@ -5,12 +5,14 @@ import { mockBackendSaga } from '../mocks/BackendMocks';
 import Constants from '../utils/Constants';
 import AchievementSaga from './AchievementSaga';
 import BackendSaga from './BackendSaga';
+import FeatureFlagSaga from './FeatureFlagSaga';
 import GitHubPersistenceSaga from './GitHubPersistenceSaga';
 import LanguageDirectorySaga from './LanguageDirectorySaga';
 import LeaderboardSaga from './LeaderboardSaga';
 import LoginSaga from './LoginSaga';
 import PersistenceSaga from './PersistenceSaga';
 import PlaygroundSaga from './PlaygroundSaga';
+import PluginDirectorySaga from './PluginDirectorySaga';
 import RemoteExecutionSaga from './RemoteExecutionSaga';
 import SideContentSaga from './SideContentSaga';
 import StoriesSaga from './StoriesSaga';
@@ -29,6 +31,8 @@ export default function* MainSaga(): SagaIterator {
     fork(RemoteExecutionSaga),
     fork(StoriesSaga),
     fork(SideContentSaga),
-    fork(LanguageDirectorySaga)
+    fork(FeatureFlagSaga),
+    fork(LanguageDirectorySaga),
+    fork(PluginDirectorySaga)
   ]);
 }

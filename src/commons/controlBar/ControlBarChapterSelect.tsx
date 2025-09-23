@@ -1,13 +1,13 @@
 import { Button, Menu, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
+import { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
 import { Chapter, Variant } from 'js-slang/dist/types';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import { flagLanguageDirectoryEnable } from '../../features/languageDirectory/flagLanguageDirectory';
-import LanguageDirectoryActions from '../../features/languageDirectory/LanguageDirectoryActions';
-import type { IEvaluatorDefinition } from '../../features/languageDirectory/LanguageDirectoryTypes';
+import { flagDirectoryLanguageEnable } from '../../features/directory/flagDirectoryLanguageEnable';
+import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
 import { SALanguage } from '../application/ApplicationTypes';
 import { useFeature } from '../featureFlags/useFeature';
 import { useTypedSelector } from '../utils/Hooks';
@@ -34,16 +34,10 @@ export const ControlBarChapterSelect: React.FC<ControlBarChapterSelectProps> = (
   disabled = false
 }) => {
   const dispatch = useDispatch();
-  const directoryEnabled = useFeature(flagLanguageDirectoryEnable);
+  const directoryEnabled = useFeature(flagDirectoryLanguageEnable);
   const selectedLanguageId = useTypedSelector(s => s.languageDirectory.selectedLanguageId);
   const selectedEvaluatorId = useTypedSelector(s => s.languageDirectory.selectedEvaluatorId);
   const dirLanguages = useTypedSelector(s => s.languageDirectory.languages);
-
-  useEffect(() => {
-    if (directoryEnabled && dirLanguages.length === 0) {
-      dispatch(LanguageDirectoryActions.fetchLanguages());
-    }
-  }, [directoryEnabled, dirLanguages.length, dispatch]);
 
   if (!directoryEnabled) {
     return (
