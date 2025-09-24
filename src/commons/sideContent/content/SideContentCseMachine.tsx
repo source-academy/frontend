@@ -13,7 +13,7 @@ import { HotkeyItem } from '@mantine/hooks';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import classNames from 'classnames';
 import { t } from 'i18next';
-import { Chapter } from 'js-slang/dist/types';
+import { Chapter } from '@sourceacademy/js-slang/dist/types';
 import { debounce } from 'lodash';
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';

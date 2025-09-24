@@ -1,4 +1,4 @@
-import { Chapter } from 'js-slang/dist/types';
+import { Chapter } from '@sourceacademy/js-slang/dist/types';
 import { Builder } from 'xml2js';
 
 import { ExternalLibraryName } from '../application/types/ExternalTypes';

@@ -1,4 +1,4 @@
-import type { Context } from 'js-slang';
+import type { Context } from '@sourceacademy/js-slang';
 import { call, put, select } from 'redux-saga/effects';
 import StoriesActions from 'src/features/stories/StoriesActions';
 import {

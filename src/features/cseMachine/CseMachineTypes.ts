@@ -1,11 +1,11 @@
-import { _Symbol } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/base';
-import { SchemeNumber } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/core';
+import { _Symbol } from '@sourceacademy/js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/base';
+import { SchemeNumber } from '@sourceacademy/js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/core';
 import {
   EnvTree as EnvironmentTree,
   EnvTreeNode as EnvironmentTreeNode
-} from 'js-slang/dist/createContext';
-import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
-import { Environment } from 'js-slang/dist/types';
+} from '@sourceacademy/js-slang/dist/createContext';
+import JsSlangClosure from '@sourceacademy/js-slang/dist/cse-machine/closure';
+import { Environment } from '@sourceacademy/js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 

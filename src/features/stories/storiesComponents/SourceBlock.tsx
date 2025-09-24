@@ -1,6 +1,6 @@
 import { Card, Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from '@sourceacademy/js-slang/dist/types';
 import React, { useEffect, useRef, useState } from 'react';
 import AceEditor from 'react-ace';
 import { useDispatch } from 'react-redux';

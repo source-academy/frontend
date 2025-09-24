@@ -6,7 +6,7 @@ import 'ace-builds/src-noconflict/ace';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import 'ace-builds/src-noconflict/ext-settings_menu';
-import 'js-slang/dist/editors/ace/theme/source';
+import '@sourceacademy/js-slang/dist/editors/ace/theme/source';
 
 /**
  * ace-builds/webpack-resolver is causing some issues in the testing environment.
@@ -21,7 +21,7 @@ import 'ace-builds/src-noconflict/keybinding-vim';
 import { Card } from '@blueprintjs/core';
 import * as AceBuilds from 'ace-builds';
 import { Ace, require as acequire, createEditSession } from 'ace-builds';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from '@sourceacademy/js-slang/dist/types';
 import React from 'react';
 import AceEditor, { IAceEditorProps, IEditorProps } from 'react-ace';
 import { IAceEditor } from 'react-ace/lib/types';

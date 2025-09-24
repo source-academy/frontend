@@ -1,6 +1,6 @@
 import 'ace-builds/src-noconflict/ext-searchbox';
 import 'ace-builds/src-noconflict/mode-javascript';
-import 'js-slang/dist/editors/ace/theme/source';
+import '@sourceacademy/js-slang/dist/editors/ace/theme/source';
 
 import { Card } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';

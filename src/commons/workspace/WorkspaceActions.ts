@@ -1,5 +1,5 @@
-import type { Context } from 'js-slang';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import type { Context } from '@sourceacademy/js-slang';
+import { Chapter, Variant } from '@sourceacademy/js-slang/dist/types';
 
 import type {
   AllColsSortStates,
@@ -50,7 +50,7 @@ const newActions = createActions('workspace', {
   ) => ({ externalLibraryName, workspaceLocation, initialise: initialise || false }),
   toggleEditorAutorun: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   /**
-   * Starts the process to clear the js-slang Context
+   * Starts the process to clear the @sourceacademy/js-slang Context
    * at a specified workspace location.
    *
    * This action is to be handled by saga, in order to
@@ -71,7 +71,7 @@ const newActions = createActions('workspace', {
   clearReplOutput: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   clearReplOutputLast: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   /**
-   * Finishes the process to clear the js-slang Context
+   * Finishes the process to clear the @sourceacademy/js-slang Context
    * at a specified workspace location.
    *
    * This action is to be handled in the reducer, to call the reset on the

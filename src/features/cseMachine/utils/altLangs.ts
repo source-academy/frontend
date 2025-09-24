@@ -1,7 +1,7 @@
 // alternate representations of data types
 
-import { ControlItem } from 'js-slang/dist/cse-machine/types';
-import { Chapter, Node } from 'js-slang/dist/types';
+import { ControlItem } from '@sourceacademy/js-slang/dist/cse-machine/types';
+import { Chapter, Node } from '@sourceacademy/js-slang/dist/types';
 import { isSchemeLanguage } from 'src/commons/application/ApplicationTypes';
 
 import { ControlItemComponent } from '../components/ControlItemComponent';

@@ -5,9 +5,9 @@ import {
   resume,
   runFilesInContext,
   runInContext
-} from 'js-slang';
-import createContext from 'js-slang/dist/createContext';
-import { Chapter, ErrorType, type Finished, type SourceError, Variant } from 'js-slang/dist/types';
+} from '@sourceacademy/js-slang';
+import createContext from '@sourceacademy/js-slang/dist/createContext';
+import { Chapter, ErrorType, type Finished, type SourceError, Variant } from '@sourceacademy/js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';

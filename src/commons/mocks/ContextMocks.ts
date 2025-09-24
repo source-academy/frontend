@@ -1,9 +1,9 @@
 import { parse } from 'acorn';
 import type { Node } from 'estree';
-import { ACORN_PARSE_OPTIONS } from 'js-slang/dist/constants';
-import createContext, { EnvTree } from 'js-slang/dist/createContext';
-import type { Context } from 'js-slang/dist/types';
-import { TypeError } from 'js-slang/dist/utils/rttc';
+import { ACORN_PARSE_OPTIONS } from '@sourceacademy/js-slang/dist/constants';
+import createContext, { EnvTree } from '@sourceacademy/js-slang/dist/createContext';
+import type { Context } from '@sourceacademy/js-slang/dist/types';
+import { TypeError } from '@sourceacademy/js-slang/dist/utils/rttc';
 
 export function mockContext(chapter = 1): Context {
   return createContext(chapter);

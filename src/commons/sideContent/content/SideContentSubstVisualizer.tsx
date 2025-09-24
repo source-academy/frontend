@@ -1,4 +1,4 @@
-import 'js-slang/dist/editors/ace/theme/source';
+import '@sourceacademy/js-slang/dist/editors/ace/theme/source';
 
 import {
   Button,
@@ -13,30 +13,30 @@ import {
 } from '@blueprintjs/core';
 import { getHotkeyHandler, HotkeyItem } from '@mantine/hooks';
 import classNames from 'classnames';
-import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
-import { IStepperPropContents } from 'js-slang/dist/tracer';
-import { StepperBaseNode } from 'js-slang/dist/tracer/interface';
-import { StepperExpression } from 'js-slang/dist/tracer/nodes';
-import { StepperArrayExpression } from 'js-slang/dist/tracer/nodes/Expression/ArrayExpression';
-import { StepperArrowFunctionExpression } from 'js-slang/dist/tracer/nodes/Expression/ArrowFunctionExpression';
-import { StepperBinaryExpression } from 'js-slang/dist/tracer/nodes/Expression/BinaryExpression';
-import { StepperConditionalExpression } from 'js-slang/dist/tracer/nodes/Expression/ConditionalExpression';
-import { StepperFunctionApplication } from 'js-slang/dist/tracer/nodes/Expression/FunctionApplication';
-import { StepperIdentifier } from 'js-slang/dist/tracer/nodes/Expression/Identifier';
-import { StepperLiteral } from 'js-slang/dist/tracer/nodes/Expression/Literal';
-import { StepperLogicalExpression } from 'js-slang/dist/tracer/nodes/Expression/LogicalExpression';
-import { StepperUnaryExpression } from 'js-slang/dist/tracer/nodes/Expression/UnaryExpression';
-import { StepperProgram } from 'js-slang/dist/tracer/nodes/Program';
-import { StepperBlockStatement } from 'js-slang/dist/tracer/nodes/Statement/BlockStatement';
-import { StepperExpressionStatement } from 'js-slang/dist/tracer/nodes/Statement/ExpressionStatement';
-import { StepperFunctionDeclaration } from 'js-slang/dist/tracer/nodes/Statement/FunctionDeclaration';
-import { StepperIfStatement } from 'js-slang/dist/tracer/nodes/Statement/IfStatement';
-import { StepperReturnStatement } from 'js-slang/dist/tracer/nodes/Statement/ReturnStatement';
+import { HighlightRulesSelector, ModeSelector } from '@sourceacademy/js-slang/dist/editors/ace/modes/source';
+import { IStepperPropContents } from '@sourceacademy/js-slang/dist/tracer';
+import { StepperBaseNode } from '@sourceacademy/js-slang/dist/tracer/interface';
+import { StepperExpression } from '@sourceacademy/js-slang/dist/tracer/nodes';
+import { StepperArrayExpression } from '@sourceacademy/js-slang/dist/tracer/nodes/Expression/ArrayExpression';
+import { StepperArrowFunctionExpression } from '@sourceacademy/js-slang/dist/tracer/nodes/Expression/ArrowFunctionExpression';
+import { StepperBinaryExpression } from '@sourceacademy/js-slang/dist/tracer/nodes/Expression/BinaryExpression';
+import { StepperConditionalExpression } from '@sourceacademy/js-slang/dist/tracer/nodes/Expression/ConditionalExpression';
+import { StepperFunctionApplication } from '@sourceacademy/js-slang/dist/tracer/nodes/Expression/FunctionApplication';
+import { StepperIdentifier } from '@sourceacademy/js-slang/dist/tracer/nodes/Expression/Identifier';
+import { StepperLiteral } from '@sourceacademy/js-slang/dist/tracer/nodes/Expression/Literal';
+import { StepperLogicalExpression } from '@sourceacademy/js-slang/dist/tracer/nodes/Expression/LogicalExpression';
+import { StepperUnaryExpression } from '@sourceacademy/js-slang/dist/tracer/nodes/Expression/UnaryExpression';
+import { StepperProgram } from '@sourceacademy/js-slang/dist/tracer/nodes/Program';
+import { StepperBlockStatement } from '@sourceacademy/js-slang/dist/tracer/nodes/Statement/BlockStatement';
+import { StepperExpressionStatement } from '@sourceacademy/js-slang/dist/tracer/nodes/Statement/ExpressionStatement';
+import { StepperFunctionDeclaration } from '@sourceacademy/js-slang/dist/tracer/nodes/Statement/FunctionDeclaration';
+import { StepperIfStatement } from '@sourceacademy/js-slang/dist/tracer/nodes/Statement/IfStatement';
+import { StepperReturnStatement } from '@sourceacademy/js-slang/dist/tracer/nodes/Statement/ReturnStatement';
 import {
   StepperVariableDeclaration,
   StepperVariableDeclarator
-} from 'js-slang/dist/tracer/nodes/Statement/VariableDeclaration';
-import { astToString } from 'js-slang/dist/utils/ast/astToString';
+} from '@sourceacademy/js-slang/dist/tracer/nodes/Statement/VariableDeclaration';
+import { astToString } from '@sourceacademy/js-slang/dist/utils/ast/astToString';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';

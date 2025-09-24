@@ -2,7 +2,7 @@ import 'src/i18n/i18n';
 import 'src/styles/index.scss';
 
 import { Button, OverlaysProvider } from '@blueprintjs/core';
-import { setModulesStaticURL } from 'js-slang/dist/modules/loader';
+import { setModulesStaticURL } from '@sourceacademy/js-slang/dist/modules/loader';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import Constants, { Links } from 'src/commons/utils/Constants';

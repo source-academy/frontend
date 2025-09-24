@@ -1,4 +1,4 @@
-import type { Context } from 'js-slang';
+import type { Context } from '@sourceacademy/js-slang';
 import { random } from 'lodash';
 import { call, put, select, StrictEffect } from 'redux-saga/effects';
 

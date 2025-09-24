@@ -72,7 +72,7 @@ config:
 ---
 \`\`\`
 
-The current valid CHAPTER/VARIANT combinations can be found [here](https://github.com/source-academy/js-slang#usage).
+The current valid CHAPTER/VARIANT combinations can be found [here](https://github.com/source-academy/@sourceacademy/js-slang#usage).
 
 ## Adding New Environments
 

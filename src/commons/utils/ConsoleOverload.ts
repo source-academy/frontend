@@ -1,4 +1,4 @@
-import { stringify } from 'js-slang/dist/utils/stringify';
+import { stringify } from '@sourceacademy/js-slang/dist/utils/stringify';
 
 type DisplayBufferCallback = (log: string) => void;
 

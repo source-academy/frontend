@@ -1,7 +1,7 @@
 import type { ModulesGlobalConfig as CCompilerConfig } from '@sourceacademy/c-slang/ctowasm/dist';
-import loadSourceModules from 'js-slang/dist/modules/loader';
-import type { ModuleFunctions } from 'js-slang/dist/modules/moduleTypes';
-import type { Context } from 'js-slang/dist/types';
+import loadSourceModules from '@sourceacademy/js-slang/dist/modules/loader';
+import type { ModuleFunctions } from '@sourceacademy/js-slang/dist/modules/moduleTypes';
+import type { Context } from '@sourceacademy/js-slang/dist/types';
 
 import InterpreterActions from '../application/actions/InterpreterActions';
 

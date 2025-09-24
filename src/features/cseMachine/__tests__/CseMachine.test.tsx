@@ -1,5 +1,5 @@
-import { runInContext } from 'js-slang/dist/';
-import createContext from 'js-slang/dist/createContext';
+import { runInContext } from '@sourceacademy/js-slang/dist/';
+import createContext from '@sourceacademy/js-slang/dist/createContext';
 
 import { Binding } from '../components/Binding';
 import { ControlItemComponent } from '../components/ControlItemComponent';

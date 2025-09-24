@@ -52,7 +52,7 @@ export class ArrayAccessAnimation extends Animatable {
     // the target should always be an array value
     const array = arrayItem.arrow!.target! as ArrayValue;
 
-    // if index access is out of range. if index access is negative, error should be thrown from js-slang at this point
+    // if index access is out of range. if index access is negative, error should be thrown from @sourceacademy/js-slang at this point
     const arraylen = array.data.length;
 
     if (parseInt(indexItem.text) >= arraylen) {

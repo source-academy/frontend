@@ -1,7 +1,7 @@
 import { SlingClient } from '@sourceacademy/sling-client';
-import { assemble, compileFiles, type Context } from 'js-slang';
-import { ExceptionError } from 'js-slang/dist/errors/errors';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { assemble, compileFiles, type Context } from '@sourceacademy/js-slang';
+import { ExceptionError } from '@sourceacademy/js-slang/dist/errors/errors';
+import { Chapter, Variant } from '@sourceacademy/js-slang/dist/types';
 import _ from 'lodash';
 import { call, put, race, select, take } from 'redux-saga/effects';
 import RemoteExecutionActions from 'src/features/remoteExecution/RemoteExecutionActions';
@@ -275,7 +275,7 @@ const RemoteExecutionSaga = combineSagaHandlers({
       (state: OverallState) => state.workspaces[session.workspace].context
     );
     // clear the context of errors (note: the way this works is that the context
-    // is mutated by js-slang anyway, so it's ok to do it like this)
+    // is mutated by @sourceacademy/js-slang anyway, so it's ok to do it like this)
     context.errors.length = 0;
     const compiled: MaybePromise<ReturnType<typeof compileFiles>> = yield call(
       compileFiles,

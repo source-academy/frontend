@@ -1,5 +1,5 @@
 import { IconNames } from '@blueprintjs/icons';
-import { Context } from 'js-slang';
+import { Context } from '@sourceacademy/js-slang';
 import { expectSaga } from 'redux-saga-test-plan';
 import { getDynamicTabs } from 'src/commons/sideContent/SideContentHelper';
 import { SideContentReducer } from 'src/commons/sideContent/SideContentReducer';

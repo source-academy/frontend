@@ -1,4 +1,4 @@
-import type { Context } from 'js-slang';
+import type { Context } from '@sourceacademy/js-slang';
 import { call } from 'redux-saga/effects';
 
 import { getDifferenceInMethods, getRestoreExtraMethodsString } from '../../../utils/JsSlangHelper';

@@ -1,4 +1,4 @@
-import { Chapter, SourceError, Variant } from 'js-slang/dist/types';
+import { Chapter, SourceError, Variant } from '@sourceacademy/js-slang/dist/types';
 
 import { ExternalLibrary, ExternalLibraryName } from '../application/types/ExternalTypes';
 

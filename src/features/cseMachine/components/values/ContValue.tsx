@@ -1,5 +1,5 @@
-import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
-import { Environment } from 'js-slang/dist/types';
+import { Control, Stash } from '@sourceacademy/js-slang/dist/cse-machine/interpreter';
+import { Environment } from '@sourceacademy/js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Label } from 'konva/lib/shapes/Label';
 import React, { RefObject } from 'react';

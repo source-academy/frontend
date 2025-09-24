@@ -9,7 +9,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
-import { Variant } from 'js-slang/dist/types';
+import { Variant } from '@sourceacademy/js-slang/dist/types';
 import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Constants from 'src/commons/utils/Constants';

@@ -1,5 +1,5 @@
-import { type Context, interrupt, runInContext } from 'js-slang';
-import { InterruptedError } from 'js-slang/dist/errors/errors';
+import { type Context, interrupt, runInContext } from '@sourceacademy/js-slang';
+import { InterruptedError } from '@sourceacademy/js-slang/dist/errors/errors';
 import { call, put, race, take } from 'redux-saga/effects';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 

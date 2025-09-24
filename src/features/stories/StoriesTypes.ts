@@ -1,4 +1,4 @@
-import { Context } from 'js-slang';
+import { Context } from '@sourceacademy/js-slang';
 import { DebuggerContext } from 'src/commons/workspace/WorkspaceTypes';
 
 import { InterpreterOutput, StoriesRole } from '../../commons/application/ApplicationTypes';

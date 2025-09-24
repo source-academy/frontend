@@ -1,4 +1,4 @@
-import 'js-slang/dist/editors/ace/theme/source';
+import '@sourceacademy/js-slang/dist/editors/ace/theme/source';
 
 import { Classes, InputGroup } from '@blueprintjs/core';
 import classNames from 'classnames';

@@ -1,5 +1,5 @@
-import { Stash } from 'js-slang/dist/cse-machine/interpreter';
-import { Chapter, Value } from 'js-slang/dist/types';
+import { Stash } from '@sourceacademy/js-slang/dist/cse-machine/interpreter';
+import { Chapter, Value } from '@sourceacademy/js-slang/dist/types';
 import React from 'react';
 
 import CseMachine from '../CseMachine';

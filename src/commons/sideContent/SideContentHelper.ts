@@ -1,8 +1,8 @@
 import * as bpcore from '@blueprintjs/core';
 import { TabId } from '@blueprintjs/core';
 import * as bpicons from '@blueprintjs/icons';
-import * as jsslang from 'js-slang';
-import * as jsslangDist from 'js-slang/dist';
+import * as jsslang from '@sourceacademy/js-slang';
+import * as jsslangDist from '@sourceacademy/js-slang/dist';
 import lodash from 'lodash';
 import phaser from 'phaser';
 import React, { useCallback } from 'react';
@@ -33,8 +33,8 @@ const requireProvider = (x: string) => {
     'react-dom': ReactDOM,
     '@blueprintjs/core': bpcore,
     '@blueprintjs/icons': bpicons,
-    'js-slang': jsslang,
-    'js-slang/dist': jsslangDist,
+    '@sourceacademy/js-slang': jsslang,
+    '@sourceacademy/js-slang/dist': jsslangDist,
     lodash,
     phaser
   };

@@ -250,7 +250,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       /**
        * Set the isRunning property of the
        * context to false, to ensure a re-render.
-       * Also in case the async js-slang interrupt()
+       * Also in case the async @sourceacademy/js-slang interrupt()
        * function does not finish interrupting before
        * this action is called.
        */
@@ -265,7 +265,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     })
     /**
      * Resets the workspace to default settings,
-     * including the js-slang Context. Apply
+     * including the @sourceacademy/js-slang Context. Apply
      * any specified settings (workspaceOptions)
      */
     .addCase(WorkspaceActions.resetWorkspace, (state, action) => {

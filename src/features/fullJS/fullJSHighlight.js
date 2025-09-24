@@ -1,6 +1,6 @@
 /* eslint-disable */
 import * as ace from 'ace-builds/src-noconflict/ace';
-import { Variant } from 'js-slang/dist/types';
+import { Variant } from '@sourceacademy/js-slang/dist/types';
 
 export function HighlightRulesSelector_native(
   id,

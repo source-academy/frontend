@@ -1,6 +1,6 @@
 import type { FSModule } from 'browserfs/dist/node/core/FS';
-import { type Context, findDeclaration, getNames } from 'js-slang';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { type Context, findDeclaration, getNames } from '@sourceacademy/js-slang';
+import { Chapter, Variant } from '@sourceacademy/js-slang/dist/types';
 import Phaser from 'phaser';
 import { call, put, select } from 'redux-saga/effects';
 

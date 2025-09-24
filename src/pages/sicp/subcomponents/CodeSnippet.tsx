@@ -1,5 +1,5 @@
 import { Card, Elevation, Pre } from '@blueprintjs/core';
-import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
+import { HighlightRulesSelector, ModeSelector } from '@sourceacademy/js-slang/dist/editors/ace/modes/source';
 import { Resizable } from 're-resizable';
 import React from 'react';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
