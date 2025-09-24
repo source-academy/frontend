@@ -1,5 +1,5 @@
 import type { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
-import type { Context } from 'js-slang';
+import type { Context } from '@sourceacademy/js-slang';
 
 import type {
   AllColsSortStates,

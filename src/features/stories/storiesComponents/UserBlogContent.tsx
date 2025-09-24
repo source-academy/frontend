@@ -1,4 +1,4 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from '@sourceacademy/js-slang/dist/types';
 import yaml from 'js-yaml';
 import React, { useEffect, useState } from 'react';
 import debounceRender from 'react-debounce-render';

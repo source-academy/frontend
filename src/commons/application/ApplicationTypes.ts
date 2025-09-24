@@ -1,4 +1,4 @@
-import { Chapter, Language, type SourceError, type Value, Variant } from 'js-slang/dist/types';
+import { Chapter, Language, type SourceError, type Value, Variant } from '@sourceacademy/js-slang/dist/types';
 
 import type { AchievementState } from '../../features/achievement/AchievementTypes';
 import type { DashboardState } from '../../features/dashboard/DashboardTypes';
@@ -382,7 +382,7 @@ export const defaultEditorValue = '// Type your program in here!';
 
 /**
  * Create a default IWorkspaceState for 'resetting' a workspace.
- * Takes in parameters to set the js-slang library and chapter.
+ * Takes in parameters to set the @sourceacademy/js-slang library and chapter.
  *
  * @param workspaceLocation the location of the workspace, used for context
  */

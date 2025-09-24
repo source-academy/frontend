@@ -1,5 +1,5 @@
-import type { Context } from 'js-slang';
-import { defineSymbol } from 'js-slang/dist/createContext';
+import type { Context } from '@sourceacademy/js-slang';
+import { defineSymbol } from '@sourceacademy/js-slang/dist/createContext';
 import { put, select, take } from 'redux-saga/effects';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 

@@ -1,5 +1,5 @@
-import { _Symbol } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/base';
-import { SchemeNumber } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/core-math';
+import { _Symbol } from '@sourceacademy/js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/base';
+import { SchemeNumber } from '@sourceacademy/js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/core-math';
 import React from 'react';
 
 import { Config } from '../../CseMachineConfig';

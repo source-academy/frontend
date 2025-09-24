@@ -1,9 +1,9 @@
 import { Card, Pre } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';
 import classNames from 'classnames';
-import { parseError } from 'js-slang';
-import { Chapter, Variant } from 'js-slang/dist/types';
-import { stringify } from 'js-slang/dist/utils/stringify';
+import { parseError } from '@sourceacademy/js-slang';
+import { Chapter, Variant } from '@sourceacademy/js-slang/dist/types';
+import { stringify } from '@sourceacademy/js-slang/dist/utils/stringify';
 import React from 'react';
 
 import type { InterpreterOutput, ResultOutput } from '../application/ApplicationTypes';

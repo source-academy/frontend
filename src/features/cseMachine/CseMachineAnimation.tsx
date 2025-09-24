@@ -1,5 +1,5 @@
-import { AppInstr, ArrLitInstr, AssmtInstr, InstrType } from 'js-slang/dist/cse-machine/types';
-import { Node } from 'js-slang/dist/types';
+import { AppInstr, ArrLitInstr, AssmtInstr, InstrType } from '@sourceacademy/js-slang/dist/cse-machine/types';
+import { Node } from '@sourceacademy/js-slang/dist/types';
 import { Layer } from 'konva/lib/Layer';
 import { Easings } from 'konva/lib/Tween';
 import React from 'react';

@@ -1,4 +1,4 @@
-import { SourceError, Value } from 'js-slang/dist/types';
+import { SourceError, Value } from '@sourceacademy/js-slang/dist/types';
 import { createActions } from 'src/commons/redux/utils';
 
 import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';

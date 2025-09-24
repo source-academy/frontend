@@ -1,6 +1,6 @@
-import { estreeDecode } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/encoder-visitor';
-import { unparse } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/reverse_parser';
-import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
+import { estreeDecode } from '@sourceacademy/js-slang/dist/alt-langs/scheme/scm-slang/src/utils/encoder-visitor';
+import { unparse } from '@sourceacademy/js-slang/dist/alt-langs/scheme/scm-slang/src/utils/reverse_parser';
+import JsSlangClosure from '@sourceacademy/js-slang/dist/cse-machine/closure';
 import {
   AppInstr,
   ArrLitInstr,
@@ -11,9 +11,9 @@ import {
   Instr,
   InstrType,
   UnOpInstr
-} from 'js-slang/dist/cse-machine/types';
-import { Chapter, Environment, Value as StashValue } from 'js-slang/dist/types';
-import { astToString } from 'js-slang/dist/utils/ast/astToString';
+} from '@sourceacademy/js-slang/dist/cse-machine/types';
+import { Chapter, Environment, Value as StashValue } from '@sourceacademy/js-slang/dist/types';
+import { astToString } from '@sourceacademy/js-slang/dist/utils/ast/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
@@ -570,7 +570,7 @@ export const truncateText = (programStr: string, maxWidth: number, maxHeight: nu
 
 /**
  * Typeguard for Instr to distinguish between program statements and instructions.
- * The typeguard from js-slang cannot be used due to Typescript raising some weird errors
+ * The typeguard from @sourceacademy/js-slang cannot be used due to Typescript raising some weird errors
  * with circular dependencies so it is redefined here.
  *
  * @param command A ControlItem
@@ -619,7 +619,7 @@ export function getControlItemComponent(
     }
 
     if (isSchemeLanguage(chapter)) {
-      // use the js-slang decoder on the control item
+      // use the @sourceacademy/js-slang decoder on the control item
       controlItem = estreeDecode(controlItem as any);
       const text = unparse(controlItem as any);
       return new ControlItemComponent(

@@ -1,7 +1,7 @@
-import { Control } from 'js-slang/dist/cse-machine/interpreter';
-import { ControlItem, Instr } from 'js-slang/dist/cse-machine/types';
-import { Chapter, StatementSequence } from 'js-slang/dist/types';
-import { Node } from 'js-slang/dist/types';
+import { Control } from '@sourceacademy/js-slang/dist/cse-machine/interpreter';
+import { ControlItem, Instr } from '@sourceacademy/js-slang/dist/cse-machine/types';
+import { Chapter, StatementSequence } from '@sourceacademy/js-slang/dist/types';
+import { Node } from '@sourceacademy/js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Label, Tag, Text } from 'react-konva';
@@ -131,7 +131,7 @@ export class ControlStack extends Visible implements IHoverable {
 
 /**
  * Typeguard for Instr to distinguish between program statements and instructions.
- * The typeguard from js-slang cannot be used due to Typescript raising some weird errors
+ * The typeguard from @sourceacademy/js-slang cannot be used due to Typescript raising some weird errors
  * with circular dependencies so it is redefined here.
  *
  * @param command A ControlItem
@@ -143,7 +143,7 @@ export const isInstr = (command: ControlItem): command is Instr => {
 
 /**
  * Typeguard for esNode to distinguish between program statements and instructions.
- * The typeguard from js-slang cannot be used due to Typescript raising some weird errors
+ * The typeguard from @sourceacademy/js-slang cannot be used due to Typescript raising some weird errors
  * with circular dependencies so it is redefined here.
  *
  * @param command A ControlItem

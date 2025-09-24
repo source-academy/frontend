@@ -1,4 +1,4 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from '@sourceacademy/js-slang/dist/types';
 
 import { getLanguageConfig } from '../application/ApplicationTypes';
 import Markdown from '../Markdown';

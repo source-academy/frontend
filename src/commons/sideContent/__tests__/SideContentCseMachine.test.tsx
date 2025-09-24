@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { runInContext } from 'js-slang/dist/';
+import { runInContext } from '@sourceacademy/js-slang/dist/';
 import { act } from 'react';
 import { Provider } from 'react-redux';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';

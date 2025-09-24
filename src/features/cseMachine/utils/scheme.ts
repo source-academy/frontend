@@ -1,13 +1,13 @@
-import { schemeVisualise } from 'js-slang/dist/alt-langs/scheme/scheme-mapper';
-import { _Symbol } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/base';
-import { SchemeNumber } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/core-math';
-import { estreeDecode } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/encoder-visitor';
-import { unparse } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/reverse_parser';
-import { List, Pair } from 'js-slang/dist/stdlib/list';
-import { Node } from 'js-slang/dist/types';
+import { schemeVisualise } from '@sourceacademy/js-slang/dist/alt-langs/scheme/scheme-mapper';
+import { _Symbol } from '@sourceacademy/js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/base';
+import { SchemeNumber } from '@sourceacademy/js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/core-math';
+import { estreeDecode } from '@sourceacademy/js-slang/dist/alt-langs/scheme/scm-slang/src/utils/encoder-visitor';
+import { unparse } from '@sourceacademy/js-slang/dist/alt-langs/scheme/scm-slang/src/utils/reverse_parser';
+import { List, Pair } from '@sourceacademy/js-slang/dist/stdlib/list';
+import { Node } from '@sourceacademy/js-slang/dist/types';
 
 import { Continuation } from './scheme';
-export { Continuation } from 'js-slang/dist/cse-machine/continuations';
+export { Continuation } from '@sourceacademy/js-slang/dist/cse-machine/continuations';
 
 export function isPair(data: any): data is Pair<any, any> {
   return data instanceof Array && data.length === 2;

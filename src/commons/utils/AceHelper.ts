@@ -1,5 +1,5 @@
-import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { HighlightRulesSelector, ModeSelector } from '@sourceacademy/js-slang/dist/editors/ace/modes/source';
+import { Chapter, Variant } from '@sourceacademy/js-slang/dist/types';
 
 import { HighlightRulesSelector_native } from '../../features/fullJS/fullJSHighlight';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
@@ -39,7 +39,7 @@ import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/mode-scheme';
 import 'ace-builds/src-noconflict/mode-typescript';
-import 'js-slang/dist/editors/ace/theme/source';
+import '@sourceacademy/js-slang/dist/editors/ace/theme/source';
 
 export const getModeString = (chapter: Chapter, variant: Variant, library: string) => {
   // TODO: Create our own highlighting rules for the different sublanguages

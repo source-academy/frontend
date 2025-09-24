@@ -1,5 +1,5 @@
-import { Context, runInContext } from 'js-slang';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Context, runInContext } from '@sourceacademy/js-slang';
+import { Chapter, Variant } from '@sourceacademy/js-slang/dist/types';
 import { createContext } from 'src/commons/utils/JsSlangHelper';
 
 import ImageAssets from '../../assets/ImageAssets';
