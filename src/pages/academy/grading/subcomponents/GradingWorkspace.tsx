@@ -289,6 +289,7 @@ const GradingWorkspace: React.FC<Props> = props => {
         /* Render an editor with the xp given to the current question. */
         body: (
           <GradingEditor
+            ai_comments={grading!.answers[questionId].ai_comments || []}
             solution={grading!.answers[questionId].question.solution}
             questionId={grading!.answers[questionId].question.id}
             submissionId={props.submissionId}

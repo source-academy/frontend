@@ -895,7 +895,8 @@ export const getGrading = async (
         xp: grade.xp,
         xpAdjustment: grade.xpAdjustment,
         comments: grade.comments
-      }
+      },
+      ai_comments: gradingQuestion.ai_comments?.response.split('|||') || []
     } as GradingQuestion;
 
     if (gradingQuestion.grade.grader !== null) {

@@ -51,6 +51,7 @@ type Props = {
   comments: string;
   graderName?: string;
   gradedAt?: string;
+  ai_comments?: string[];
 };
 
 const gradingEditorButtonClass = 'grading-editor-button';
@@ -141,6 +142,7 @@ const GradingEditor: React.FC<Props> = props => {
     setEditorValue(props.comments);
     setSelectedTab('write');
     setCurrentlySaving(false);
+    setSuggestions(props.ai_comments || []);
   };
 
   /**

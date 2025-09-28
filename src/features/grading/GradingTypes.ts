@@ -189,6 +189,7 @@ export type GradingQuestion = {
     };
     gradedAt?: string;
   };
+  ai_comments?: string[];
 };
 
 /**
