@@ -364,6 +364,20 @@
       }
     }
 
+    .llm-grading-config {
+      .bp5-form-group {
+        display: flex;
+        justify-content: space-between;
+        .bp5-label {
+          margin-right: 10px;
+          width: 180px;
+        }
+        .bp5-form-content {
+          width: 100%;
+        }
+      }
+    }
+
     .booleans {
       display: flex;
       flex-direction: column;

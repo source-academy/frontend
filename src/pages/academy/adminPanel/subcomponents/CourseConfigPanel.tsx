@@ -40,7 +40,10 @@ const CourseConfigPanel: React.FC<Props> = props => {
     enableStories,
     enableLlmGrading,
     moduleHelpText,
-    llmApiKey
+    llmApiKey,
+    llmModel,
+    llmApiUrl,
+    llmCourseLevelPrompt
   } = props.courseConfiguration;
 
   const writePanel = (
@@ -135,24 +138,91 @@ const CourseConfigPanel: React.FC<Props> = props => {
             {courseHelpTextSelectedTab === CourseHelpTextEditorTab.WRITE && writePanel}
             {courseHelpTextSelectedTab === CourseHelpTextEditorTab.PREVIEW && previewPanel}
           </FormGroup>
-          <FormGroup
-            helperText="Please enter the LLM API Key. This will be used for LLM Grading if enabled."
-            inline={true}
-            label="LLM API Key"
-            labelFor="llmApiKey"
-          >
-            <InputGroup
-              id="llmApiKey"
-              type="password"
-              defaultValue={llmApiKey}
-              onChange={e =>
-                props.setCourseConfiguration({
-                  ...props.courseConfiguration,
-                  llmApiKey: e.target.value
-                })
-              }
-            />
-          </FormGroup>
+          {enableLlmGrading && (
+            <div className="llm-grading-config">
+              <Divider style={{ marginTop: '20px', marginBottom: '20px' }} />
+              <h3>LLM Grading Configuration</h3>
+              <FormGroup
+                helperText="Please enter the LLM Model Name."
+                inline={true}
+                label="LLM Model Name"
+                labelFor="llmModel"
+              >
+                <InputGroup
+                  id="llmModel"
+                  defaultValue={llmModel}
+                  placeholder="e.g gpt-5-mini, gpt-4o"
+                  onChange={e =>
+                    props.setCourseConfiguration({
+                      ...props.courseConfiguration,
+                      llmModel: e.target.value
+                    })
+                  }
+                />
+              </FormGroup>
+              <FormGroup
+                helperText="Please enter the LLM API's Provider URL."
+                inline={true}
+                label="LLM Provider URL"
+                labelFor="llmApiUrl"
+              >
+                <InputGroup
+                  id="llmApiUrl"
+                  defaultValue={llmApiUrl}
+                  placeholder="e.g https://api.openai.com/v1/chat/completions"
+                  onChange={e =>
+                    props.setCourseConfiguration({
+                      ...props.courseConfiguration,
+                      llmApiUrl: e.target.value
+                    })
+                  }
+                />
+              </FormGroup>
+              <FormGroup
+                helperText="Please enter the LLM API Key."
+                inline={true}
+                label="LLM API Key"
+                labelFor="llmApiKey"
+              >
+                <InputGroup
+                  id="llmApiKey"
+                  type="password"
+                  defaultValue={llmApiKey}
+                  onChange={e =>
+                    props.setCourseConfiguration({
+                      ...props.courseConfiguration,
+                      llmApiKey: e.target.value
+                    })
+                  }
+                />
+              </FormGroup>
+              <FormGroup
+                helperText={
+                  <span>
+                    Please enter the LLM prompt for this course. This is treated as the System
+                    Prompt.
+                  </span>
+                }
+                inline={true}
+                label="LLM Course Prompt"
+                labelFor="llmCoursePrompt"
+              >
+                <TextArea
+                  id="llmCourseLevelPrompt"
+                  className="input-textarea"
+                  fill={true}
+                  placeholder="You are looking at a modified version of Javascript"
+                  value={llmCourseLevelPrompt}
+                  onChange={e =>
+                    props.setCourseConfiguration({
+                      ...props.courseConfiguration,
+                      llmCourseLevelPrompt: e.target.value
+                    })
+                  }
+                />
+              </FormGroup>
+            </div>
+          )}
         </div>
         {!isMobileBreakpoint && <Divider />}
         <div className="booleans">

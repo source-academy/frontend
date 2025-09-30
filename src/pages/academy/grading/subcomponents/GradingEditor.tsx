@@ -355,7 +355,7 @@ const GradingEditor: React.FC<Props> = props => {
               setHasClickedGenerate(true);
               const resp = await getCommentSuggestions();
               setHasClickedGenerate(false);
-              setSuggestions(resp!.comments);
+              setSuggestions(resp ? resp.comments : []);
             }}
           >
             Get comments

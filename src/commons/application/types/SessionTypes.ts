@@ -41,6 +41,9 @@ export type SessionState = {
   readonly enableStories?: boolean;
   readonly enableLlmGrading?: boolean;
   readonly llmApiKey?: string;
+  readonly llmModel?: string;
+  readonly llmApiUrl?: string;
+  readonly llmCourseLevelPrompt?: string;
   readonly sourceChapter?: Chapter;
   readonly sourceVariant?: Variant;
   readonly moduleHelpText?: string;
@@ -113,6 +116,9 @@ export type CourseConfiguration = {
   moduleHelpText: string;
   assetsPrefix: string;
   llmApiKey?: string;
+  llmModel?: string;
+  llmApiUrl?: string;
+  llmCourseLevelPrompt?: string;
 };
 
 export type AdminPanelCourseRegistration = {

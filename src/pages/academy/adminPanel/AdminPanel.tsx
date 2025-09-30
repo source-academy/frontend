@@ -31,7 +31,10 @@ const defaultCourseConfig: UpdateCourseConfiguration = {
   enableStories: false,
   enableLlmGrading: false,
   moduleHelpText: '',
-  llmApiKey: ''
+  llmApiKey: '',
+  llmModel: '',
+  llmApiUrl: '',
+  llmCourseLevelPrompt: ''
 };
 
 const AdminPanel: React.FC = () => {
@@ -66,7 +69,10 @@ const AdminPanel: React.FC = () => {
       enableStories: session.enableStories,
       enableLlmGrading: session.enableLlmGrading,
       moduleHelpText: session.moduleHelpText,
-      llmApiKey: session.llmApiKey
+      llmApiKey: session.llmApiKey,
+      llmModel: session.llmModel,
+      llmApiUrl: session.llmApiUrl,
+      llmCourseLevelPrompt: session.llmCourseLevelPrompt
     });
   }, [
     session.courseName,
@@ -77,7 +83,11 @@ const AdminPanel: React.FC = () => {
     session.enableStories,
     session.enableLlmGrading,
     session.moduleHelpText,
-    session.viewable
+    session.viewable,
+    session.llmApiKey,
+    session.llmModel,
+    session.llmApiUrl,
+    session.llmCourseLevelPrompt
   ]);
 
   const tableRef = useRef<ImperativeAssessmentConfigPanel>(null);
