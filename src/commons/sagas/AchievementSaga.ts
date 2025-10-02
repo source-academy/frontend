@@ -1,7 +1,7 @@
 import { call, delay, put, select } from 'redux-saga/effects';
 import AchievementActions from 'src/features/achievement/AchievementActions';
 
-import { type AchievementGoal, EventType } from '../../features/achievement/AchievementTypes';
+import { EventType, type AchievementGoal } from '../../features/achievement/AchievementTypes';
 import { updateGoalProcessed } from '../achievement/AchievementManualEditor';
 import AchievementInferencer from '../achievement/utils/AchievementInferencer';
 import { goalIncludesEvents, incrementCount } from '../achievement/utils/EventHandler';

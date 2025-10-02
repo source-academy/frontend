@@ -1,15 +1,15 @@
 import { IconNames } from '@blueprintjs/icons';
 import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
-import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
 import Markdown from 'src/commons/Markdown';
-import SideContentRemoteExecution from 'src/commons/sideContent/content/remoteExecution/SideContentRemoteExecution';
-import SideContentSessionManagement from 'src/commons/sideContent/content/SideContentSessionManagement';
-import SideContentSubstVisualizer from 'src/commons/sideContent/content/SideContentSubstVisualizer';
+import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
 import {
   SideContentLocation,
   SideContentTab,
   SideContentType
 } from 'src/commons/sideContent/SideContentTypes';
+import SideContentSessionManagement from 'src/commons/sideContent/content/SideContentSessionManagement';
+import SideContentSubstVisualizer from 'src/commons/sideContent/content/SideContentSubstVisualizer';
+import SideContentRemoteExecution from 'src/commons/sideContent/content/remoteExecution/SideContentRemoteExecution';
 
 export const mobileOnlyTabIds: readonly SideContentType[] = [
   SideContentType.mobileEditor,

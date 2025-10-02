@@ -1,4 +1,4 @@
-import { put, StrictEffect } from 'redux-saga/effects';
+import { StrictEffect, put } from 'redux-saga/effects';
 
 import { actions } from '../../../utils/ActionsHelper';
 import DisplayBufferService from '../../../utils/DisplayBufferService';

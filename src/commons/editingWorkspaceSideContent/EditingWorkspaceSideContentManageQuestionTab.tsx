@@ -3,9 +3,9 @@ import { IconNames } from '@blueprintjs/icons';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import { Assessment, mcqTemplate, programmingTemplate } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
 import Markdown from '../Markdown';
+import { Assessment, mcqTemplate, programmingTemplate } from '../assessment/AssessmentTypes';
 
 type ManageQuestionTabProps = DispatchProps & StateProps;
 

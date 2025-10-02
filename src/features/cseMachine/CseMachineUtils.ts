@@ -2,17 +2,18 @@ import { estreeDecode } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils
 import { unparse } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/reverse_parser';
 import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
 import {
-  AppInstr,
-  ArrLitInstr,
-  AssmtInstr,
-  BinOpInstr,
-  ControlItem,
-  EnvInstr,
-  Instr,
   InstrType,
-  UnOpInstr
+  type AppInstr,
+  type ArrLitInstr,
+  type AssmtInstr,
+  type BinOpInstr,
+  type ControlItem,
+  type EnvInstr,
+  type Instr,
+  type UnOpInstr
 } from 'js-slang/dist/cse-machine/types';
-import { Chapter, Environment, Value as StashValue } from 'js-slang/dist/types';
+import type { Chapter } from 'js-slang/dist/langs';
+import type { Environment, Value as StashValue } from 'js-slang/dist/types';
 import { astToString } from 'js-slang/dist/utils/ast/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
@@ -22,21 +23,10 @@ import { cloneDeep, isObject } from 'lodash';
 import { isSchemeLanguage } from 'src/commons/application/ApplicationTypes';
 import classes from 'src/styles/Draggable.module.scss';
 
-import { ArrayUnit } from './components/ArrayUnit';
-import { Binding } from './components/Binding';
-import { ControlItemComponent } from './components/ControlItemComponent';
-import { isNode } from './components/ControlStack';
-import { Frame } from './components/Frame';
-import { StashItemComponent } from './components/StashItemComponent';
-import { ArrayValue } from './components/values/ArrayValue';
-import { ContValue } from './components/values/ContValue';
-import { FnValue } from './components/values/FnValue';
-import { GlobalFnValue } from './components/values/GlobalFnValue';
-import { Value } from './components/values/Value';
 import CseMachine from './CseMachine';
 import { Config } from './CseMachineConfig';
 import { Layout } from './CseMachineLayout';
-import {
+import type {
   BuiltInFn,
   Closure,
   Data,
@@ -54,12 +44,24 @@ import {
   StreamFn,
   Unassigned
 } from './CseMachineTypes';
+import { ArrayUnit } from './components/ArrayUnit';
+import { Binding } from './components/Binding';
+import { ControlItemComponent } from './components/ControlItemComponent';
+import { isNode } from './components/ControlStack';
+import { Frame } from './components/Frame';
+import { StashItemComponent } from './components/StashItemComponent';
+import { ArrayValue } from './components/values/ArrayValue';
+import { ContValue } from './components/values/ContValue';
+import { FnValue } from './components/values/FnValue';
+import { GlobalFnValue } from './components/values/GlobalFnValue';
+import { Value } from './components/values/Value';
 import {
   getAlternateControlItemComponent,
   isCustomPrimitive,
   needsNewRepresentation
 } from './utils/altLangs';
 import { isContinuation, schemeToString } from './utils/scheme';
+
 class AssertionError extends Error {
   constructor(msg?: string) {
     super(msg);

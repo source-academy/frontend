@@ -1,5 +1,5 @@
-import { FSModule } from 'browserfs/dist/node/core/FS';
 import path from 'path';
+import { FSModule } from 'browserfs/dist/node/core/FS';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import classes from 'src/styles/FileSystemView.module.scss';

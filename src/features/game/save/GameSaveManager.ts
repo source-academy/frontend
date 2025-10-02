@@ -1,5 +1,5 @@
-import GameManager from '../scenes/gameManager/GameManager';
 import SourceAcademyGame from '../SourceAcademyGame';
+import GameManager from '../scenes/gameManager/GameManager';
 import { mandatory } from '../utils/GameUtils';
 import { createEmptyGameSaveState, createEmptySaveState, gameStateToJson } from './GameSaveHelper';
 import { loadData, saveData } from './GameSaveRequests';

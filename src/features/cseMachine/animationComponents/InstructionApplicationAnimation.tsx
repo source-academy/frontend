@@ -1,9 +1,6 @@
 import React from 'react';
 import { Group } from 'react-konva';
 
-import { ControlItemComponent } from '../components/ControlItemComponent';
-import { StashItemComponent } from '../components/StashItemComponent';
-import { Visible } from '../components/Visible';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import {
   defaultActiveColor,
@@ -12,6 +9,9 @@ import {
   getTextWidth,
   isStashItemInDanger
 } from '../CseMachineUtils';
+import { ControlItemComponent } from '../components/ControlItemComponent';
+import { StashItemComponent } from '../components/StashItemComponent';
+import { Visible } from '../components/Visible';
 import { Animatable, AnimationConfig } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
 import { AnimatedTextbox } from './base/AnimatedTextbox';

@@ -20,7 +20,7 @@ test('shallowRender renders correctly', () => {
   ]);
 });
 
-describe('deepFilter', () => {
+describe(deepFilter, () => {
   const createObjectWithProps = (props: any) => ({
     props
   });

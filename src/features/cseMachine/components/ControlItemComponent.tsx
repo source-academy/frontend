@@ -18,9 +18,9 @@ import {
   setUnhoveredStyle,
   truncateText
 } from '../CseMachineUtils';
-import { ArrowFromControlItemComponent } from './arrows/ArrowFromControlItemComponent';
 import { Frame } from './Frame';
 import { Visible } from './Visible';
+import { ArrowFromControlItemComponent } from './arrows/ArrowFromControlItemComponent';
 
 export class ControlItemComponent extends Visible implements IHoverable {
   /** text to display */

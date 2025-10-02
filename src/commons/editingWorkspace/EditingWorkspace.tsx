@@ -10,21 +10,28 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
+import ControlButton from '../ControlButton';
+import Markdown from '../Markdown';
+import {
+  retrieveLocalAssessment,
+  storeLocalAssessment,
+  storeLocalAssessmentOverview
+} from '../XMLParser/XMLParserHelper';
 import SessionActions from '../application/actions/SessionActions';
 import {
-  Assessment,
-  AssessmentOverview,
-  IMCQQuestion,
-  IProgrammingQuestion,
-  Library,
-  Question,
   QuestionTypes,
-  Testcase
+  type Assessment,
+  type AssessmentOverview,
+  type IMCQQuestion,
+  type IProgrammingQuestion,
+  type Library,
+  type Question,
+  type Testcase
 } from '../assessment/AssessmentTypes';
 import { ControlBarProps } from '../controlBar/ControlBar';
 import { ControlBarClearButton } from '../controlBar/ControlBarClearButton';
@@ -36,7 +43,6 @@ import { ControlBarResetButton } from '../controlBar/ControlBarResetButton';
 import { ControlBarRunButton } from '../controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
 import { ControlBarToggleEditModeButton } from '../controlBar/ControlBarToggleEditModeButton';
-import ControlButton from '../ControlButton';
 import { AutograderTab } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentAutograderTab';
 import DeploymentTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentDeploymentTab';
 import GradingTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentGradingTab';
@@ -45,21 +51,15 @@ import MCQQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorksp
 import ProgrammingQuestionTemplateTab from '../editingWorkspaceSideContent/EditingWorkspaceSideContentProgrammingQuestionTemplateTab';
 import { TextAreaContent } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentTextAreaContent';
 import { convertEditorTabStateToProps } from '../editor/EditorContainer';
-import { Position } from '../editor/EditorTypes';
-import Markdown from '../Markdown';
-import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
-import { SideContentProps } from '../sideContent/SideContent';
+import type { Position } from '../editor/EditorTypes';
+import type { SideContentProps } from '../sideContent/SideContent';
 import { changeSideContentHeight } from '../sideContent/SideContentActions';
-import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import { SideContentType, type SideContentTab } from '../sideContent/SideContentTypes';
+import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
 import { useTypedSelector } from '../utils/Hooks';
-import Workspace, { WorkspaceProps } from '../workspace/Workspace';
+import Workspace, { type WorkspaceProps } from '../workspace/Workspace';
 import WorkspaceActions from '../workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
-import {
-  retrieveLocalAssessment,
-  storeLocalAssessment,
-  storeLocalAssessmentOverview
-} from '../XMLParser/XMLParserHelper';
+import type { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 
 export type EditingWorkspaceProps = {
   assessmentId: number;

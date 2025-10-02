@@ -1,6 +1,6 @@
+import { Mock, vi } from 'vitest';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { shallowRender } from 'src/commons/utils/TestUtils';
-import { Mock, vi } from 'vitest';
 
 import Application from '../Application';
 

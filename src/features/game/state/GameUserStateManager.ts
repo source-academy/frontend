@@ -1,10 +1,10 @@
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
 import { AchievementGoal } from 'src/features/achievement/AchievementTypes';
 
+import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
 import { ItemId } from '../commons/CommonTypes';
 import { promptWithChoices } from '../effects/Prompt';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
 import StringUtils from '../utils/StringUtils';
 import { UserStateType } from './GameStateTypes';
 

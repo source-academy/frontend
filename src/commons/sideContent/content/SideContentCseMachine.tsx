@@ -13,11 +13,11 @@ import { HotkeyItem } from '@mantine/hooks';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import classNames from 'classnames';
 import { t } from 'i18next';
-import { Chapter } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
 import { debounce } from 'lodash';
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
+import { MapDispatchToProps, MapStateToProps, connect } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
 import { Output } from 'src/commons/repl/Repl';
 import type { PlaygroundWorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
@@ -26,13 +26,13 @@ import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
 import { Layout } from 'src/features/cseMachine/CseMachineLayout';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
-import { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
-import { HighlightedLines } from '../../editor/EditorTypes';
+import type { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
+import type { HighlightedLines } from '../../editor/EditorTypes';
 import Constants, { Links } from '../../utils/Constants';
 import WorkspaceActions from '../../workspace/WorkspaceActions';
 import { beginAlertSideContent } from '../SideContentActions';
 import { getLocation } from '../SideContentHelper';
-import { NonStoryWorkspaceLocation, SideContentTab, SideContentType } from '../SideContentTypes';
+import { SideContentType, type NonStoryWorkspaceLocation, type SideContentTab } from '../SideContentTypes';
 
 type State = {
   visualization: React.ReactNode;

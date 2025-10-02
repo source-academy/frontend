@@ -1,7 +1,7 @@
 import { compressToUTF16 } from 'lz-string';
 
 import { defaultState } from '../../commons/application/ApplicationTypes';
-import { loadStoredState, SavedState, saveState } from '../localStorage';
+import { SavedState, loadStoredState, saveState } from '../localStorage';
 
 const mockShortDefaultState: SavedState = {
   session: {

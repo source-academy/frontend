@@ -1,10 +1,10 @@
 import lzString from 'lz-string';
 import { BrowserRouter } from 'react-router';
+import { vi } from 'vitest';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import { CodeSnippetProps } from 'src/pages/sicp/subcomponents/CodeSnippet';
-import { vi } from 'vitest';
 
-import { JsonType, parseArr, ParseJsonError, parseObj, processingFunctions } from '../ParseJson';
+import { JsonType, ParseJsonError, parseArr, parseObj, processingFunctions } from '../ParseJson';
 
 // Tags to process
 const headingTags = ['SUBHEADING', 'SUBSUBHEADING'];

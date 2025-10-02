@@ -4,24 +4,24 @@ import { all, call, fork, put, select } from 'redux-saga/effects';
 import AcademyActions from 'src/features/academy/AcademyActions';
 import DashboardActions from 'src/features/dashboard/DashboardActions';
 import GroundControlActions from 'src/features/groundControl/GroundControlActions';
-import SourcecastActions from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
 import SourceRecorderActions from 'src/features/sourceRecorder/SourceRecorderActions';
+import SourcecastActions from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
 import { postNewStoriesUsers } from 'src/features/stories/storiesComponents/BackendAccess';
 import type { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
 import type { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import {
+  SortStates,
   type GradingOverview,
   type GradingOverviews,
   type GradingQuery,
-  type GradingQuestion,
-  SortStates
+  type GradingQuestion
 } from '../../features/grading/GradingTypes';
 import type { SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
 import type { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
+import { Role, type OverallState } from '../application/ApplicationTypes';
 import SessionActions from '../application/actions/SessionActions';
-import { type OverallState, Role } from '../application/ApplicationTypes';
 import type { RouterState } from '../application/types/CommonsTypes';
 import type {
   AdminPanelCourseRegistration,
@@ -32,11 +32,11 @@ import type {
   User
 } from '../application/types/SessionTypes';
 import {
+  AssessmentStatuses,
+  ProgressStatuses,
   type Assessment,
   type AssessmentConfiguration,
   type AssessmentOverview,
-  AssessmentStatuses,
-  ProgressStatuses,
   type Question
 } from '../assessment/AssessmentTypes';
 import type {

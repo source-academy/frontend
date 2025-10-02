@@ -1,6 +1,6 @@
+import path from 'path';
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import path from 'path';
 import React from 'react';
 import classes from 'src/styles/FileSystemView.module.scss';
 

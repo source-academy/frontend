@@ -6,12 +6,12 @@ import {
   Column,
   ColumnFilter,
   ColumnFiltersState,
+  Row,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-  Row,
   useReactTable
 } from '@tanstack/react-table';
 import {

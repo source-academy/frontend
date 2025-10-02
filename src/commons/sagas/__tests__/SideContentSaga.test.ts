@@ -1,16 +1,16 @@
 import { IconNames } from '@blueprintjs/icons';
 import { Context } from 'js-slang';
 import { expectSaga } from 'redux-saga-test-plan';
+import { Mock, vi } from 'vitest';
 import { getDynamicTabs } from 'src/commons/sideContent/SideContentHelper';
 import { SideContentReducer } from 'src/commons/sideContent/SideContentReducer';
 import {
-  type SideContentManagerState,
   SideContentState,
   SideContentTab,
-  SideContentType
+  SideContentType,
+  type SideContentManagerState
 } from 'src/commons/sideContent/SideContentTypes';
 import { actions } from 'src/commons/utils/ActionsHelper';
-import { Mock, vi } from 'vitest';
 
 import SideContentSaga from '../SideContentSaga';
 

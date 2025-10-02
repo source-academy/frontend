@@ -1,11 +1,11 @@
 import { Position } from '@blueprintjs/core';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useFeature } from 'src/commons/featureFlags/useFeature';
 import SimpleDropdown from 'src/commons/SimpleDropdown';
+import { useFeature } from 'src/commons/featureFlags/useFeature';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
-import { flagDirectoryLanguageEnable } from 'src/features/directory/flagDirectoryLanguageEnable';
 import LanguageDirectoryActions from 'src/features/directory/LanguageDirectoryActions';
+import { flagDirectoryLanguageEnable } from 'src/features/directory/flagDirectoryLanguageEnable';
 
 //TODO <remove legacy>: Remove when conductors.languageDirectory is default behaviour
 import LegacyNavigationBarLangSelectButton from './LegacyNavigationBarLangSelectButton';

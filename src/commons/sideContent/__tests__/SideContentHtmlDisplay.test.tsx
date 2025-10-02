@@ -1,15 +1,15 @@
 import { fireEvent, render } from '@testing-library/react';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { Provider } from 'react-redux';
+import { vi } from 'vitest';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
-import { vi } from 'vitest';
 
+import { SideContentLocation } from '../SideContentTypes';
 import {
   SideContentHtmlDisplay,
   SideContentHtmlDisplayProps
 } from '../content/SideContentHtmlDisplay';
-import { SideContentLocation } from '../SideContentTypes';
 
 const Component = (props: SideContentHtmlDisplayProps) => {
   const store = mockInitialStore();
@@ -59,6 +59,6 @@ describe('HTML Display postMessage Listener', () => {
     };
     fireEvent(window, new MessageEvent('message', mockMessage));
     expect(mockHandleAddHtmlConsoleError).toHaveBeenCalledTimes(1);
-    expect(mockHandleAddHtmlConsoleError).toHaveBeenCalledWith(mockMessage.data);
+    expect(mockHandleAddHtmlConsoleError).toHaveBeenCalledWithExactlyOnceWith(mockMessage.data);
   });
 });

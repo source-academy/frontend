@@ -12,8 +12,8 @@ import {
 import { IconNames, Team } from '@blueprintjs/icons';
 import React, { useCallback, useState } from 'react';
 
-import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
+import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import CalculateContestScoreButton from '../configureControls/CalculateContestScoreButton';
 import DispatchContestXpButton from '../configureControls/DispatchContestXpButton';
 import ExportScoreLeaderboardButton from '../configureControls/ExportScoreLeaderboardButton';

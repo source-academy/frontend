@@ -1,10 +1,10 @@
 import { Store } from '@reduxjs/toolkit';
 import { render } from '@testing-library/react';
 import { Provider, useDispatch } from 'react-redux';
-import { createMemoryRouter, RouterProvider } from 'react-router';
-import SessionActions from 'src/commons/application/actions/SessionActions';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
+import { RouterProvider, createMemoryRouter } from 'react-router';
 import { Mock, vi } from 'vitest';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
+import SessionActions from 'src/commons/application/actions/SessionActions';
 
 import { mockInitialStore } from '../../../commons/mocks/StoreMocks';
 import Login from '../Login';
@@ -57,7 +57,7 @@ const createTestComponent = (mockStore: Store<OverallState>, location: string) =
   );
 };
 
-describe('Login', () => {
+describe(Login, () => {
   beforeEach(() => {
     useDispatchMock.mockReturnValue(dispatchMock);
     dispatchMock.mockClear();
@@ -84,7 +84,7 @@ describe('Login', () => {
     const app = createTestComponent(store, `/login/callback?code=${code}&provider=${providerId}`);
     render(app);
 
-    expect(dispatchMock).toHaveBeenCalledWith(SessionActions.fetchAuth(code, providerId));
+    expect(dispatchMock).toHaveBeenCalledWithExactlyOnceWith(SessionActions.fetchAuth(code, providerId));
   });
 
   test('Dispatches handleSamlRedirect when JWT cookies is present (from SAML redirect), and NOT logged in', () => {
@@ -98,7 +98,7 @@ describe('Login', () => {
     const app = createTestComponent(store, `/login/callback`);
     render(app);
 
-    expect(dispatchMock).toHaveBeenCalledWith(SessionActions.handleSamlRedirect(jwtCookie));
+    expect(dispatchMock).toHaveBeenCalledWithExactlyOnceWith(SessionActions.handleSamlRedirect(jwtCookie));
   });
 
   describe('When isLoggedIn and no course', () => {
@@ -111,7 +111,7 @@ describe('Login', () => {
       const app = createTestComponent(store, '/login');
       render(app);
 
-      expect(navigateSpy).toHaveBeenCalledWith('/welcome');
+      expect(navigateSpy).toHaveBeenCalledWithExactlyOnceWith('/welcome');
     });
 
     test('/login/callback redirects to /welcome', () => {
@@ -123,7 +123,7 @@ describe('Login', () => {
       const app = createTestComponent(store, '/login/callback?code=abc');
       render(app);
 
-      expect(navigateSpy).toHaveBeenCalledWith('/welcome');
+      expect(navigateSpy).toHaveBeenCalledWithExactlyOnceWith('/welcome');
     });
   });
 
@@ -139,7 +139,7 @@ describe('Login', () => {
       const app = createTestComponent(store, '/login');
       render(app);
 
-      expect(navigateSpy).toHaveBeenCalledWith(`/courses/${courseId}`);
+      expect(navigateSpy).toHaveBeenCalledWithExactlyOnceWith(`/courses/${courseId}`);
     });
 
     test('/login/callback redirects to /courses/<courseId>', () => {
@@ -153,7 +153,7 @@ describe('Login', () => {
       const app = createTestComponent(store, '/login/callback');
       render(app);
 
-      expect(navigateSpy).toHaveBeenCalledWith(`/courses/${courseId}`);
+      expect(navigateSpy).toHaveBeenCalledWithExactlyOnceWith(`/courses/${courseId}`);
     });
   });
 
@@ -162,6 +162,6 @@ describe('Login', () => {
     const app = createTestComponent(store, '/login/callback');
     render(app);
 
-    expect(navigateSpy).toHaveBeenCalledWith('/login');
+    expect(navigateSpy).toHaveBeenCalledWithExactlyOnceWith('/login');
   });
 });

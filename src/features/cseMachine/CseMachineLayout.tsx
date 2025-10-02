@@ -1,27 +1,17 @@
 import Heap from 'js-slang/dist/cse-machine/heap';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
-import { Chapter, Frame } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
+import type { Frame } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Stage } from 'konva/lib/Stage';
 import React, { RefObject } from 'react';
 import { Layer as KonvaLayer, Rect as KonvaRect, Stage as KonvaStage } from 'react-konva';
 import classes from 'src/styles/Draggable.module.scss';
 
-import { Binding } from './components/Binding';
-import { ControlStack } from './components/ControlStack';
-import { Level } from './components/Level';
-import { StashStack } from './components/StashStack';
-import { ArrayValue } from './components/values/ArrayValue';
-import { ContValue } from './components/values/ContValue';
-import { FnValue } from './components/values/FnValue';
-import { GlobalFnValue } from './components/values/GlobalFnValue';
-import { PrimitiveValue } from './components/values/PrimitiveValue';
-import { UnassignedValue } from './components/values/UnassignedValue';
-import { Value } from './components/values/Value';
 import CseMachine from './CseMachine';
 import { CseAnimation } from './CseMachineAnimation';
 import { Config, ShapeDefaultProps } from './CseMachineConfig';
-import {
+import type {
   Data,
   DataArray,
   EnvTree,
@@ -47,6 +37,17 @@ import {
   isUnassigned,
   setDifference
 } from './CseMachineUtils';
+import { Binding } from './components/Binding';
+import { ControlStack } from './components/ControlStack';
+import { Level } from './components/Level';
+import { StashStack } from './components/StashStack';
+import { ArrayValue } from './components/values/ArrayValue';
+import { ContValue } from './components/values/ContValue';
+import { FnValue } from './components/values/FnValue';
+import { GlobalFnValue } from './components/values/GlobalFnValue';
+import { PrimitiveValue } from './components/values/PrimitiveValue';
+import { UnassignedValue } from './components/values/UnassignedValue';
+import { Value } from './components/values/Value';
 import { Continuation, isContinuation, isSchemeNumber, isSymbol } from './utils/scheme';
 
 /** this class encapsulates the logic for calculating the layout */

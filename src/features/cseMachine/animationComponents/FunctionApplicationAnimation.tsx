@@ -1,10 +1,6 @@
 import React from 'react';
 import { Group } from 'react-konva';
 
-import { ControlItemComponent } from '../components/ControlItemComponent';
-import { Frame } from '../components/Frame';
-import { StashItemComponent } from '../components/StashItemComponent';
-import { Visible } from '../components/Visible';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import {
   defaultActiveColor,
@@ -12,11 +8,15 @@ import {
   defaultStrokeColor,
   getTextWidth
 } from '../CseMachineUtils';
+import { ControlItemComponent } from '../components/ControlItemComponent';
+import { Frame } from '../components/Frame';
+import { StashItemComponent } from '../components/StashItemComponent';
+import { Visible } from '../components/Visible';
+import { FrameCreationAnimation } from './FrameCreationAnimation';
 import { Animatable } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodeLocation, getNodePosition } from './base/AnimationUtils';
-import { FrameCreationAnimation } from './FrameCreationAnimation';
 
 /**
  * Animation for function application. Visually moves the resultant items out of the stash

@@ -5,10 +5,10 @@ import { Enable, NumberSize, Resizable, ResizableProps, ResizeCallback } from 'r
 import { Direction } from 're-resizable/lib/resizer';
 import React, { useEffect, useRef, useState } from 'react';
 
+import { Prompt } from '../ReactRouterPrompt';
 import ControlBar, { ControlBarProps } from '../controlBar/ControlBar';
 import EditorContainer, { EditorContainerProps } from '../editor/EditorContainer';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
-import { Prompt } from '../ReactRouterPrompt';
 import Repl, { ReplProps } from '../repl/Repl';
 import SideBar, { SideBarTab } from '../sideBar/SideBar';
 import SideContent, { SideContentProps } from '../sideContent/SideContent';

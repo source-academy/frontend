@@ -4,8 +4,8 @@ import { IconNames } from '@blueprintjs/icons';
 import dayjs from 'dayjs';
 import React, { useCallback, useState } from 'react';
 
-import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import ControlButton from '../../../../commons/ControlButton';
+import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import { showWarningMessage } from '../../../../commons/utils/notifications/NotificationsHelper';
 
 type Props = {

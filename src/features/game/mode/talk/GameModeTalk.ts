@@ -12,7 +12,7 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import GameGlobalAPI from '../../scenes/gameManager/GameGlobalAPI';
 import { createButton, createButtonText } from '../../utils/ButtonUtils';
 import { mandatory, sleep } from '../../utils/GameUtils';
-import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
+import { Direction, calcTableFormatPos } from '../../utils/StyleUtils';
 import TalkModeConstants, { talkButtonStyle } from './GameModeTalkConstants';
 
 /**

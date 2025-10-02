@@ -2,8 +2,8 @@ import _ from 'lodash';
 import { request } from 'src/commons/utils/RequestHelper';
 
 import { store } from '../../../pages/createStore';
-import { toTxtPath } from '../assets/TextAssets';
 import SourceAcademyGame from '../SourceAcademyGame';
+import { toTxtPath } from '../assets/TextAssets';
 import { GameChapter } from './GameChapterTypes';
 
 /**

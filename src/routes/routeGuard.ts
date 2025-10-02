@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs, redirect, RouteObject } from 'react-router';
+import { LoaderFunctionArgs, RouteObject, redirect } from 'react-router';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
 import { store } from 'src/pages/createStore';
 

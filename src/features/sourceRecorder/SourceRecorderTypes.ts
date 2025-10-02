@@ -1,8 +1,8 @@
 import { Ace } from 'ace-builds';
-import { Chapter } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
 
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import { Position } from '../../commons/editor/EditorTypes';
+import type { Position } from '../../commons/editor/EditorTypes';
 import { SideContentType } from '../../commons/sideContent/SideContentTypes';
 
 export type InputTypeShape = {

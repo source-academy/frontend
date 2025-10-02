@@ -1,8 +1,8 @@
-import { createReducer, Reducer } from '@reduxjs/toolkit';
+import { Reducer, createReducer } from '@reduxjs/toolkit';
 
 import { SourceActionType } from '../../utils/ActionsHelper';
-import VscodeActions from '../actions/VscodeActions';
 import { defaultVscode } from '../ApplicationTypes';
+import VscodeActions from '../actions/VscodeActions';
 import { VscodeState } from '../types/VscodeTypes';
 
 export const VscodeReducer: Reducer<VscodeState, SourceActionType> = (

@@ -1,9 +1,19 @@
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 
 import { HighlightRulesSelector_native } from '../../features/fullJS/fullJSHighlight';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { Documentation } from '../documentation/Documentation';
+
+import 'ace-builds/src-noconflict/mode-c_cpp';
+import 'ace-builds/src-noconflict/mode-html';
+import 'ace-builds/src-noconflict/mode-java';
+import 'ace-builds/src-noconflict/mode-javascript';
+import 'ace-builds/src-noconflict/mode-python';
+import 'ace-builds/src-noconflict/mode-scheme';
+import 'ace-builds/src-noconflict/mode-typescript';
+import 'js-slang/dist/editors/ace/theme/source';
+
 /**
  * This _modifies global state_ and defines a new Ace mode globally, if it does not already exist.
  *
@@ -31,15 +41,6 @@ export const selectMode = (chapter: Chapter, variant: Variant, library: string) 
   }
   ModeSelector(chapter, variant, library);
 };
-
-import 'ace-builds/src-noconflict/mode-c_cpp';
-import 'ace-builds/src-noconflict/mode-html';
-import 'ace-builds/src-noconflict/mode-java';
-import 'ace-builds/src-noconflict/mode-javascript';
-import 'ace-builds/src-noconflict/mode-python';
-import 'ace-builds/src-noconflict/mode-scheme';
-import 'ace-builds/src-noconflict/mode-typescript';
-import 'js-slang/dist/editors/ace/theme/source';
 
 export const getModeString = (chapter: Chapter, variant: Variant, library: string) => {
   // TODO: Create our own highlighting rules for the different sublanguages

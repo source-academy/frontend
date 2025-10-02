@@ -2,9 +2,9 @@ import { ECE } from 'java-slang';
 import React from 'react';
 import { Group } from 'react-konva';
 
-import { Visible } from '../../components/Visible';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
 import { defaultTextColor } from '../../CseMachineUtils';
+import { Visible } from '../../components/Visible';
 import { CseMachine } from '../CseMachine';
 import { Method } from './Method';
 import { StashItem } from './StashItem';

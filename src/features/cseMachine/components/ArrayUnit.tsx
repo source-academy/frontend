@@ -12,14 +12,14 @@ import {
   fadedStrokeColor,
   fadedTextColor
 } from '../CseMachineUtils';
+import { defaultOptions } from './Text';
+import { Visible } from './Visible';
 import { ArrowFromArrayUnit } from './arrows/ArrowFromArrayUnit';
 import { GenericArrow } from './arrows/GenericArrow';
 import { RoundedRect } from './shapes/RoundedRect';
-import { defaultOptions } from './Text';
 import { ArrayValue } from './values/ArrayValue';
 import { PrimitiveValue } from './values/PrimitiveValue';
 import { Value } from './values/Value';
-import { Visible } from './Visible';
 
 /** this class encapsulates a single unit (box) of array to be rendered.
  *  this unit is part of an ArrayValue */

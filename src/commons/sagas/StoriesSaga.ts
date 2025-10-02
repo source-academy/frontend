@@ -1,6 +1,7 @@
 import type { Context } from 'js-slang';
 import { call, put, select } from 'redux-saga/effects';
 import StoriesActions from 'src/features/stories/StoriesActions';
+import type { StoryData, StoryListView, StoryView } from 'src/features/stories/StoriesTypes';
 import {
   deleteStory,
   deleteUserUserGroups,
@@ -12,16 +13,15 @@ import {
   putStoriesUserRole,
   updateStory
 } from 'src/features/stories/storiesComponents/BackendAccess';
-import type { StoryData, StoryListView, StoryView } from 'src/features/stories/StoriesTypes';
 
+import { StoriesRole, type OverallState } from '../application/ApplicationTypes';
 import SessionActions from '../application/actions/SessionActions';
-import { type OverallState, StoriesRole } from '../application/ApplicationTypes';
 import { Tokens } from '../application/types/SessionTypes';
 import { combineSagaHandlers } from '../redux/utils';
 import { resetSideContent } from '../sideContent/SideContentActions';
 import { actions } from '../utils/ActionsHelper';
-import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { defaultStoryContent } from '../utils/StoriesHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { selectTokens } from './BackendSaga';
 import { evalCodeSaga } from './WorkspaceSaga/helpers/evalCode';
 

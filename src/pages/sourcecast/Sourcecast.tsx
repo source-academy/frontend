@@ -1,19 +1,18 @@
 import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
-import { Position } from 'src/commons/editor/EditorTypes';
+import type { Position } from 'src/commons/editor/EditorTypes';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
-import { fetchSourcecastIndex } from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
+import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import {
   setCodeDeltasToApply,
   setCurrentPlayerTime,
@@ -22,6 +21,7 @@ import {
   setSourcecastDuration,
   setSourcecastStatus
 } from 'src/features/sourceRecorder/SourceRecorderActions';
+import { fetchSourcecastIndex } from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
 
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAutorunButtons';
@@ -30,24 +30,24 @@ import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearB
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
 import {
   convertEditorTabStateToProps,
-  SourcecastEditorContainerProps
+  type SourcecastEditorContainerProps
 } from '../../commons/editor/EditorContainer';
 import MobileWorkspace, {
   MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
+import { SideContentType, type SideContentTab } from '../../commons/sideContent/SideContentTypes';
 import makeCseMachineTabFrom from '../../commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from '../../commons/sideContent/content/SideContentDataVisualizer';
-import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import SourceRecorderControlBar, {
-  SourceRecorderControlBarProps
+  type SourceRecorderControlBarProps
 } from '../../commons/sourceRecorder/SourceRecorderControlBar';
 import SourceRecorderTable from '../../commons/sourceRecorder/SourceRecorderTable';
-import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
+import Workspace, { type WorkspaceProps } from '../../commons/workspace/Workspace';
 import {
-  CodeDelta,
-  Input,
-  PlaybackData,
-  PlaybackStatus
+  PlaybackStatus,
+  type CodeDelta,
+  type Input,
+  type PlaybackData
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 
 const workspaceLocation: WorkspaceLocation = 'sourcecast';

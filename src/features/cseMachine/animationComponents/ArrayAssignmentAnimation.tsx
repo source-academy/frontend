@@ -1,13 +1,6 @@
 import React from 'react';
 import { Group } from 'react-konva';
 
-import { ArrayUnit } from '../components/ArrayUnit';
-import { ControlItemComponent } from '../components/ControlItemComponent';
-import { StashItemComponent } from '../components/StashItemComponent';
-import { Text } from '../components/Text';
-import { ArrayValue } from '../components/values/ArrayValue';
-import { PrimitiveValue } from '../components/values/PrimitiveValue';
-import { Visible } from '../components/Visible';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import {
   defaultActiveColor,
@@ -15,6 +8,13 @@ import {
   defaultStrokeColor,
   getTextWidth
 } from '../CseMachineUtils';
+import { ArrayUnit } from '../components/ArrayUnit';
+import { ControlItemComponent } from '../components/ControlItemComponent';
+import { StashItemComponent } from '../components/StashItemComponent';
+import { Text } from '../components/Text';
+import { Visible } from '../components/Visible';
+import { ArrayValue } from '../components/values/ArrayValue';
+import { PrimitiveValue } from '../components/values/PrimitiveValue';
 import { Animatable } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
 import { AnimatedTextbox } from './base/AnimatedTextbox';

@@ -1,5 +1,5 @@
 import { Button, H2 } from '@blueprintjs/core';
-import { type ColDef, type GridApi, type GridReadyEvent, themeBalham } from 'ag-grid-community';
+import { themeBalham, type ColDef, type GridApi, type GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import React from 'react';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';

@@ -1,6 +1,6 @@
-import SoundAssets from '../assets/SoundAssets';
 import SourceAcademyGame from '../SourceAcademyGame';
-import { calcTableFormatPos, HexColor } from '../utils/StyleUtils';
+import SoundAssets from '../assets/SoundAssets';
+import { HexColor, calcTableFormatPos } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import { Constants, screenSize } from './CommonConstants';
 import { AssetKey, BitmapFontStyle, TextConfig } from './CommonTypes';

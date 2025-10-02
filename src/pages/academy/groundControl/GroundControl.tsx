@@ -8,13 +8,13 @@ import {
   SpinnerSize
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { type ColDef, type GridApi, type GridReadyEvent, themeBalham } from 'ag-grid-community';
+import { themeBalham, type ColDef, type GridApi, type GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import React, { useState } from 'react';
 import { useSession } from 'src/commons/utils/Hooks';
 
-import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
+import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
 import DefaultChapterSelect from './subcomponents/DefaultChapterSelect';
 import ConfigureCell from './subcomponents/GroundControlConfigureCell';
 import DeleteCell from './subcomponents/GroundControlDeleteCell';

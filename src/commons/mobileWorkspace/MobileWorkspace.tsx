@@ -5,10 +5,10 @@ import { Ace } from 'ace-builds';
 import React, { useCallback, useEffect, useState } from 'react';
 import { DraggableEvent } from 'react-draggable';
 
+import { Prompt } from '../ReactRouterPrompt';
 import ControlBar from '../controlBar/ControlBar';
 import EditorContainer, { EditorContainerProps } from '../editor/EditorContainer';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
-import { Prompt } from '../ReactRouterPrompt';
 import { ReplProps } from '../repl/Repl';
 import { SideBarTab } from '../sideBar/SideBar';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';

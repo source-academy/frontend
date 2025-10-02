@@ -1,7 +1,7 @@
+import SourceAcademyGame from '../SourceAcademyGame';
 import { Layer } from '../layer/GameLayerTypes';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import SourceAcademyGame from '../SourceAcademyGame';
 import { sleep } from '../utils/GameUtils';
 import { GameActionType } from './GameActionTypes';
 

@@ -3,7 +3,7 @@ import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 import { Constants } from '../commons/CommonConstants';
 import { fadeIn, fadeOut } from '../effects/FadeEffect';
 import { sleep } from '../utils/GameUtils';
-import { defaultLayerSequence, Layer } from './GameLayerTypes';
+import { Layer, defaultLayerSequence } from './GameLayerTypes';
 
 /**
  * Manager in charge of placing ordering the layers

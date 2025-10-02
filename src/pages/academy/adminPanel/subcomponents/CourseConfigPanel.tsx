@@ -12,8 +12,8 @@ import {
 import React from 'react';
 import { useResponsive } from 'src/commons/utils/Hooks';
 
-import { UpdateCourseConfiguration } from '../../../../commons/application/types/SessionTypes';
 import Markdown from '../../../../commons/Markdown';
+import { UpdateCourseConfiguration } from '../../../../commons/application/types/SessionTypes';
 
 export enum CourseHelpTextEditorTab {
   WRITE = 'WRITE',

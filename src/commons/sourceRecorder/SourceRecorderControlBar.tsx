@@ -1,17 +1,17 @@
 import { ButtonGroup, Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Chapter } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
 import React from 'react';
 
 import {
-  CodeDelta,
-  Input,
-  PlaybackData,
   PlaybackStatus,
-  SourcecastData
+  type CodeDelta,
+  type Input,
+  type PlaybackData,
+  type SourcecastData
 } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import ControlButton from '../ControlButton';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { SideContentType } from '../sideContent/SideContentTypes';
 
 export type SourceRecorderControlBarProps = DispatchProps & StateProps & OwnProps;

@@ -1,5 +1,5 @@
 import type { FSModule } from 'browserfs/dist/node/core/FS';
-import { call, put, select, StrictEffect } from 'redux-saga/effects';
+import { StrictEffect, call, put, select } from 'redux-saga/effects';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';

@@ -1,12 +1,11 @@
 import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
-import { fetchSourcecastIndex } from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
 import {
   saveSourcecastData,
   setCodeDeltasToApply,
@@ -16,6 +15,7 @@ import {
   setSourcecastDuration,
   setSourcecastStatus
 } from 'src/features/sourceRecorder/SourceRecorderActions';
+import { fetchSourcecastIndex } from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
 import SourcereelActions from 'src/features/sourceRecorder/sourcereel/SourcereelActions';
 
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
@@ -25,28 +25,28 @@ import { ControlBarClearButton } from '../../../commons/controlBar/ControlBarCle
 import { ControlBarEvalButton } from '../../../commons/controlBar/ControlBarEvalButton';
 import {
   convertEditorTabStateToProps,
-  SourcecastEditorContainerProps
+  type SourcecastEditorContainerProps
 } from '../../../commons/editor/EditorContainer';
-import { Position } from '../../../commons/editor/EditorTypes';
-import makeCseMachineTabFrom from '../../../commons/sideContent/content/SideContentCseMachine';
-import makeDataVisualizerTabFrom from '../../../commons/sideContent/content/SideContentDataVisualizer';
+import type { Position } from '../../../commons/editor/EditorTypes';
 import { useSideContent } from '../../../commons/sideContent/SideContentHelper';
 import { SideContentType } from '../../../commons/sideContent/SideContentTypes';
+import makeCseMachineTabFrom from '../../../commons/sideContent/content/SideContentCseMachine';
+import makeDataVisualizerTabFrom from '../../../commons/sideContent/content/SideContentDataVisualizer';
 import SourceRecorderControlBar, {
-  SourceRecorderControlBarProps
+  type SourceRecorderControlBarProps
 } from '../../../commons/sourceRecorder/SourceRecorderControlBar';
 import SourcecastTable from '../../../commons/sourceRecorder/SourceRecorderTable';
 import { useTypedSelector } from '../../../commons/utils/Hooks';
-import Workspace, { WorkspaceProps } from '../../../commons/workspace/Workspace';
+import Workspace, { type WorkspaceProps } from '../../../commons/workspace/Workspace';
 import WorkspaceActions from '../../../commons/workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
 import {
-  CodeDelta,
-  Input,
   KeyboardCommand,
-  PlaybackData,
   PlaybackStatus,
-  RecordingStatus
+  RecordingStatus,
+  type CodeDelta,
+  type Input,
+  type PlaybackData
 } from '../../../features/sourceRecorder/SourceRecorderTypes';
 import SourcereelControlbar from './subcomponents/SourcereelControlbar';
 

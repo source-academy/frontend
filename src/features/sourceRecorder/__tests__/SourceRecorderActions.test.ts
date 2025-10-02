@@ -1,7 +1,7 @@
-import { Chapter } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
 
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
-import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
 import {
   saveSourcecastData,
   setCodeDeltasToApply,
@@ -10,7 +10,7 @@ import {
   setSourcecastDuration,
   setSourcecastStatus
 } from '../SourceRecorderActions';
-import { CodeDelta, Input, PlaybackData, PlaybackStatus } from '../SourceRecorderTypes';
+import { PlaybackStatus, type CodeDelta, type Input, type PlaybackData } from '../SourceRecorderTypes';
 
 const sourcecastWorkspace: WorkspaceLocation = 'sourcecast';
 const sourcereelWorkspace: WorkspaceLocation = 'sourcereel';

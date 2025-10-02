@@ -1,8 +1,8 @@
+import SourceAcademyGame from '../SourceAcademyGame';
 import SoundAssets from '../assets/SoundAssets';
 import { Constants, screenCenter } from '../commons/CommonConstants';
 import { ILayeredScene } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
-import SourceAcademyGame from '../SourceAcademyGame';
 import { sleep } from '../utils/GameUtils';
 import { calcListFormatPos } from '../utils/StyleUtils';
 import { blackScreen, fadeAndDestroy, fadeIn } from './FadeEffect';

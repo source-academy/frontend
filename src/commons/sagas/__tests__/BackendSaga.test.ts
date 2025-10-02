@@ -1,21 +1,21 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { createMemoryRouter } from 'react-router';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
+import { vi } from 'vitest';
 import { mockTeamFormationOverviews } from 'src/commons/mocks/TeamFormationMocks';
 import AcademyActions from 'src/features/academy/AcademyActions';
-import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
-import { vi } from 'vitest';
+import type { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
 import DashboardActions from '../../../features/dashboard/DashboardActions';
-import SessionActions from '../../application/actions/SessionActions';
 import {
-  type GameState,
   Role,
+  SupportedLanguage,
+  type GameState,
   type SALanguage,
-  type Story,
-  SupportedLanguage
+  type Story
 } from '../../application/ApplicationTypes';
+import SessionActions from '../../application/actions/SessionActions';
 import type {
   AdminPanelCourseRegistration,
   CourseConfiguration,
@@ -24,9 +24,9 @@ import type {
   User
 } from '../../application/types/SessionTypes';
 import {
+  AssessmentStatuses,
   type Assessment,
   type AssessmentConfiguration,
-  AssessmentStatuses,
   type Question
 } from '../../assessment/AssessmentTypes';
 import {

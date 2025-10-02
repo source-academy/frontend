@@ -1,5 +1,5 @@
-import { GameChapter } from '../../chapter/GameChapterTypes';
 import SourceAcademyGame, { GameType } from '../../SourceAcademyGame';
+import { GameChapter } from '../../chapter/GameChapterTypes';
 import { sleep } from '../../utils/GameUtils';
 import { createBitmapText } from '../../utils/TextUtils';
 import { callGameManagerForSim, callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';

@@ -4,11 +4,11 @@ import { throttle } from 'lodash';
 import createSagaMiddleware from 'redux-saga';
 import { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
-import { defaultState, OverallState } from '../commons/application/ApplicationTypes';
+import { OverallState, defaultState } from '../commons/application/ApplicationTypes';
 import rootReducer from '../commons/application/reducers/RootReducer';
 import MainSaga from '../commons/sagas/MainSaga';
 import { generateOctokitInstance } from '../commons/utils/GitHubPersistenceHelper';
-import { loadStoredState, SavedState, saveState } from './localStorage';
+import { SavedState, loadStoredState, saveState } from './localStorage';
 
 // FIXME: Hotfix: Disable auto freezing of states for RTK as this breaks the code evaluation sagas
 setAutoFreeze(false);

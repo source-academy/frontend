@@ -12,9 +12,9 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { isEqual } from 'lodash';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
@@ -25,13 +25,15 @@ import { mobileOnlyTabIds } from 'src/pages/playground/PlaygroundTabs';
 
 import { initSession, log } from '../../features/eventLogging';
 import {
-  CodeDelta,
-  Input,
   KeyboardCommand,
-  SelectionRange
+  type CodeDelta,
+  type Input,
+  type SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
-import SessionActions from '../application/actions/SessionActions';
+import ControlButton from '../ControlButton';
+import Markdown from '../Markdown';
 import { defaultWorkspaceManager } from '../application/ApplicationTypes';
+import SessionActions from '../application/actions/SessionActions';
 import {
   AssessmentConfiguration,
   AutogradingResult,
@@ -53,30 +55,28 @@ import { ControlBarQuestionViewButton } from '../controlBar/ControlBarQuestionVi
 import { ControlBarResetButton } from '../controlBar/ControlBarResetButton';
 import { ControlBarRunButton } from '../controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
-import ControlButton from '../ControlButton';
 import {
   convertEditorTabStateToProps,
-  NormalEditorContainerProps
+  type NormalEditorContainerProps
 } from '../editor/EditorContainer';
-import { Position } from '../editor/EditorTypes';
-import Markdown from '../Markdown';
-import { MobileSideContentProps } from '../mobileWorkspace/mobileSideContent/MobileSideContent';
-import MobileWorkspace, { MobileWorkspaceProps } from '../mobileWorkspace/MobileWorkspace';
+import type { Position } from '../editor/EditorTypes';
+import MobileWorkspace, { type MobileWorkspaceProps } from '../mobileWorkspace/MobileWorkspace';
+import type { MobileSideContentProps } from '../mobileWorkspace/mobileSideContent/MobileSideContent';
+import type { SideContentProps } from '../sideContent/SideContent';
+import { changeSideContentHeight } from '../sideContent/SideContentActions';
+import { useSideContent } from '../sideContent/SideContentHelper';
+import { SideContentType, type SideContentTab } from '../sideContent/SideContentTypes';
 import SideContentAutograder from '../sideContent/content/SideContentAutograder';
 import SideContentContestLeaderboard from '../sideContent/content/SideContentContestLeaderboard';
 import SideContentContestVotingContainer from '../sideContent/content/SideContentContestVotingContainer';
 import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
-import { SideContentProps } from '../sideContent/SideContent';
-import { changeSideContentHeight } from '../sideContent/SideContentActions';
-import { useSideContent } from '../sideContent/SideContentHelper';
-import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { useResponsive, useTypedSelector } from '../utils/Hooks';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
 import { assertType } from '../utils/TypeHelper';
-import Workspace, { WorkspaceProps } from '../workspace/Workspace';
+import Workspace, { type WorkspaceProps } from '../workspace/Workspace';
 import WorkspaceActions from '../workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
+import type { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 
 export type AssessmentWorkspaceProps = {
@@ -92,11 +92,11 @@ export type AssessmentWorkspaceProps = {
 const workspaceLocation: WorkspaceLocation = 'assessment';
 
 const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
-  const [showOverlay, setShowOverlay] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [showResetTemplateOverlay, setShowResetTemplateOverlay] = useState(false);
-  const [sessionId, setSessionId] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showOverlay, setShowOverlay] = React.useState(false);
+  const [isSaving, setIsSaving] = React.useState(false);
+  const [showResetTemplateOverlay, setShowResetTemplateOverlay] = React.useState(false);
+  const [sessionId, setSessionId] = React.useState('');
+  const [isSubmitted, setIsSubmitted] = React.useState(false);
   const { isMobileBreakpoint } = useResponsive();
   const isVscode = useTypedSelector(state => state.vscode.isVscode);
 
@@ -149,7 +149,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     handleUpdateHasUnsavedChanges,
     handleEnableTokenCounter,
     handleDisableTokenCounter
-  } = useMemo(() => {
+  } = React.useMemo(() => {
     return {
       handleTeamOverviewFetch: (assessmentId: number) =>
         dispatch(SessionActions.fetchTeamFormationOverview(assessmentId)),
@@ -193,14 +193,14 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   const initialRunCompleted = useTypedSelector(store => store.leaderboard.initialRun);
   const votingId = props.assessmentId;
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (initialRunCompleted[votingId] && props.fromContestLeaderboard && code != '') {
       dispatch(WorkspaceActions.updateEditorValue(workspaceLocation, 0, code));
       dispatch(LeaderboardActions.clearCode());
     }
   }, [dispatch]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (assessmentOverview && assessmentOverview.maxTeamSize > 1) {
       handleTeamOverviewFetch(props.assessmentId);
     }
@@ -211,7 +211,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    * or a loading screen), try to fetch a newer assessment,
    * and show the briefing.
    */
-  useEffect(() => {
+  React.useEffect(() => {
     let assessmentPassword: string | null = null;
     if (props.needsPassword) {
       // Only need to prompt for password the first time
@@ -237,14 +237,14 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    * Once there is an update (due to the assessment being fetched), check
    * if a workspace reset is needed.
    */
-  useEffect(() => {
+  React.useEffect(() => {
     checkWorkspaceReset();
   });
 
   /**
    * Handles toggling enabling and disabling token counter depending on assessment properties
    */
-  useEffect(() => {
+  React.useEffect(() => {
     if (assessment?.hasTokenCounter) {
       handleEnableTokenCounter();
     } else {
@@ -255,7 +255,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
-  useEffect(() => {
+  React.useEffect(() => {
     if (!selectedTab) return;
 
     if ((!isMobileBreakpoint || isVscode) && mobileOnlyTabIds.includes(selectedTab)) {
@@ -266,7 +266,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
   /* ==================
      onChange handlers
      ================== */
-  const pushLog = useCallback((newInput: Input) => log(sessionId, newInput), [sessionId]);
+  const pushLog = React.useCallback((newInput: Input) => log(sessionId, newInput), [sessionId]);
 
   const onChangeMethod = (newCode: string, delta: CodeDelta) => {
     handleUpdateHasUnsavedChanges?.(true);
@@ -309,9 +309,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
    * However, AceEditor only binds commands on mount (https://github.com/securingsincity/react-ace/issues/684)
    * Thus, we use a mutable ref to overcome the stale closure problem
    */
-  const activeTab = useRef(selectedTab);
+  const activeTab = React.useRef(selectedTab);
   activeTab.current = selectedTab;
-  const handleEval = useCallback(() => {
+  const handleEval = React.useCallback(() => {
     // Run testcases when the autograder tab is selected
     if (activeTab.current === SideContentType.autograder) {
       handleRunAllTestcases();
@@ -846,7 +846,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
   };
 
-  const replButtons = useMemo(() => {
+  const replButtons = React.useMemo(() => {
     const clearButton = (
       <ControlBarClearButton
         handleReplOutputClear={() => dispatch(WorkspaceActions.clearReplOutput(workspaceLocation))}
@@ -860,7 +860,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     return [evalButton, clearButton];
   }, [dispatch, isRunning, handleReplEval]);
 
-  const editorContainerHandlers = useMemo(() => {
+  const editorContainerHandlers = React.useMemo(() => {
     return {
       setActiveEditorTabIndex: (activeEditorTabIndex: number | null) =>
         dispatch(
@@ -875,7 +875,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
   }, [dispatch]);
 
-  const replHandlers = useMemo(() => {
+  const replHandlers = React.useMemo(() => {
     return {
       handleBrowseHistoryDown: () =>
         dispatch(WorkspaceActions.browseReplHistoryDown(workspaceLocation)),
@@ -886,7 +886,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
   }, [dispatch]);
 
-  const workspaceHandlers = useMemo(() => {
+  const workspaceHandlers = React.useMemo(() => {
     return {
       handleSideContentHeightChange: (heightChange: number) =>
         dispatch(changeSideContentHeight(heightChange, workspaceLocation))

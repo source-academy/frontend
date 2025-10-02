@@ -1,6 +1,6 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 
-import { SALanguage, styliseSublanguage } from '../application/ApplicationTypes';
+import { styliseSublanguage, type SALanguage } from '../application/ApplicationTypes';
 import { Links } from './Constants';
 
 const MAIN_INTRODUCTION = `

@@ -1,4 +1,4 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { compressToEncodedURIComponent } from 'lz-string';
 import qs from 'query-string';
 import { call } from 'redux-saga/effects';
@@ -10,7 +10,7 @@ import {
   defaultState,
   defaultWorkspaceManager,
   getDefaultFilePath,
-  OverallState
+  type OverallState
 } from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import Constants from '../../utils/Constants';

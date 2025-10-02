@@ -1,3 +1,4 @@
+import SourceAcademyGame from '../../SourceAcademyGame';
 import ImageAssets from '../../assets/ImageAssets';
 import SoundAssets from '../../assets/SoundAssets';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
@@ -5,10 +6,9 @@ import { blackScreen } from '../../effects/FadeEffect';
 import { putWorkerMessage } from '../../effects/WorkerMessage';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
-import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
 import { mandatory } from '../../utils/GameUtils';
-import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
+import { Direction, calcTableFormatPos } from '../../utils/StyleUtils';
 import MainMenuConstants, { mainMenuStyle } from './MainMenuConstants';
 
 /**

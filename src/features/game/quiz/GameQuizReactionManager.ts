@@ -1,3 +1,4 @@
+import SourceAcademyGame from '../SourceAcademyGame';
 import SoundAssets from '../assets/SoundAssets';
 import DialogueGenerator from '../dialogue/GameDialogueGenerator';
 import DialogueRenderer from '../dialogue/GameDialogueRenderer';
@@ -5,7 +6,6 @@ import { DialogueObject } from '../dialogue/GameDialogueTypes';
 import { promptWithChoices } from '../effects/Prompt';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import SourceAcademyGame from '../SourceAcademyGame';
 import { questionTextStyle } from './GameQuizConstants';
 import { QuizSpeakerRenderer } from './GameQuizSpeakerRenderer';
 

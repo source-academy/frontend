@@ -4,12 +4,13 @@ import { Layer } from 'konva/lib/Layer';
 import { Easings } from 'konva/lib/Tween';
 import React from 'react';
 
+import CseMachine from './CseMachine';
+import { Layout } from './CseMachineLayout';
+import { isBuiltInFn, isEnvEqual, isInstr, isStreamFn } from './CseMachineUtils';
 import { ArrayAccessAnimation } from './animationComponents/ArrayAccessAnimation';
 import { ArrayAssignmentAnimation } from './animationComponents/ArrayAssignmentAnimation';
 import { ArraySpreadAnimation } from './animationComponents/ArraySpreadAnimation';
 import { AssignmentAnimation } from './animationComponents/AssignmentAnimation';
-import { Animatable } from './animationComponents/base/Animatable';
-import { lookupBinding } from './animationComponents/base/AnimationUtils';
 import { BinaryOperationAnimation } from './animationComponents/BinaryOperationAnimation';
 import { BranchAnimation } from './animationComponents/BranchAnimation';
 import { ControlExpansionAnimation } from './animationComponents/ControlExpansionAnimation';
@@ -21,12 +22,11 @@ import { InstructionApplicationAnimation } from './animationComponents/Instructi
 import { LookupAnimation } from './animationComponents/LookupAnimation';
 import { PopAnimation } from './animationComponents/PopAnimation';
 import { UnaryOperationAnimation } from './animationComponents/UnaryOperationAnimation';
+import { Animatable } from './animationComponents/base/Animatable';
+import { lookupBinding } from './animationComponents/base/AnimationUtils';
 import { isNode } from './components/ControlStack';
 import { Frame } from './components/Frame';
 import { ArrayValue } from './components/values/ArrayValue';
-import CseMachine from './CseMachine';
-import { Layout } from './CseMachineLayout';
-import { isBuiltInFn, isEnvEqual, isInstr, isStreamFn } from './CseMachineUtils';
 import { isList, isSymbol } from './utils/scheme';
 
 export class CseAnimation {

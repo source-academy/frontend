@@ -4,10 +4,11 @@ import { Config } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Data } from '../CseMachineTypes';
 import { isDummyKey, isMainReference } from '../CseMachineUtils';
-import { ArrowFromText } from './arrows/ArrowFromText';
-import { GenericArrow } from './arrows/GenericArrow';
 import { Frame } from './Frame';
 import { Text } from './Text';
+import { Visible } from './Visible';
+import { ArrowFromText } from './arrows/ArrowFromText';
+import { GenericArrow } from './arrows/GenericArrow';
 import { ArrayValue } from './values/ArrayValue';
 import { ContValue } from './values/ContValue';
 import { FnValue } from './values/FnValue';
@@ -15,7 +16,6 @@ import { GlobalFnValue } from './values/GlobalFnValue';
 import { PrimitiveValue } from './values/PrimitiveValue';
 import { UnassignedValue } from './values/UnassignedValue';
 import { Value } from './values/Value';
-import { Visible } from './Visible';
 
 /** a `binding` is a key-value pair in a frame */
 export class Binding extends Visible {

@@ -1,19 +1,19 @@
-import { Dispatch, Store } from '@reduxjs/toolkit';
+import type { Dispatch, Store } from '@reduxjs/toolkit';
 import { render } from '@testing-library/react';
-import { FSModule } from 'browserfs/dist/node/core/FS';
-import { Chapter } from 'js-slang/dist/types';
+import type { FSModule } from 'browserfs/dist/node/core/FS';
+import { Chapter } from 'js-slang/dist/langs';
 import { act } from 'react';
 import { Provider } from 'react-redux';
-import { createMemoryRouter, RouteObject, RouterProvider } from 'react-router';
-import {
-  defaultEditorValue,
-  defaultPlayground,
-  OverallState
-} from 'src/commons/application/ApplicationTypes';
-import { Router } from 'src/commons/application/types/CommonsTypes';
-import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
-import { createStore } from 'src/pages/createStore';
+import { RouteObject, RouterProvider, createMemoryRouter } from 'react-router';
 import { vi } from 'vitest';
+import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
+import {
+  OverallState,
+  defaultEditorValue,
+  defaultPlayground
+} from 'src/commons/application/ApplicationTypes';
+import type { Router } from 'src/commons/application/types/CommonsTypes';
+import { createStore } from 'src/pages/createStore';
 
 import Playground, { handleHash } from '../Playground';
 
@@ -82,7 +82,7 @@ describe('Playground tests', () => {
     expect(getEditorValueFromStore(mockStore)).toBe("display('hello!');");
   });
 
-  describe('handleHash', () => {
+  describe(handleHash, () => {
     test('disables loading hash with fullJS chapter in URL params', () => {
       const testHash = '#chap=-1&prgrm=CYSwzgDgNghgngCgOQAsCmUoHsCESCUA3EA';
 

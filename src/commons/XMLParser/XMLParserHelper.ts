@@ -1,32 +1,32 @@
-import { Chapter } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
 import { Builder } from 'xml2js';
 
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
-  Assessment,
-  AssessmentOverview,
   AssessmentStatuses,
-  AssessmentType,
-  BaseQuestion,
+  TestcaseTypes,
   emptyLibrary,
-  IMCQQuestion,
-  IProgrammingQuestion,
-  Library,
-  MCQChoice,
-  Question,
-  Testcase,
-  TestcaseTypes
+  type Assessment,
+  type AssessmentOverview,
+  type AssessmentType,
+  type BaseQuestion,
+  type IMCQQuestion,
+  type IProgrammingQuestion,
+  type Library,
+  type MCQChoice,
+  type Question,
+  type Testcase
 } from '../assessment/AssessmentTypes';
 import {
   EDITING_ID,
-  XmlParseStrCProblem,
-  XmlParseStrDeployment,
-  XmlParseStrOverview,
-  XmlParseStrPProblem,
-  XmlParseStrProblem,
-  XmlParseStrProblemChoice,
-  XmlParseStrTask,
-  XmlParseStrTestcase
+  type XmlParseStrCProblem,
+  type XmlParseStrDeployment,
+  type XmlParseStrOverview,
+  type XmlParseStrPProblem,
+  type XmlParseStrProblem,
+  type XmlParseStrProblemChoice,
+  type XmlParseStrTask,
+  type XmlParseStrTestcase
 } from './XMLParserTypes';
 
 const capitalizeFirstLetter = (str: string) => {

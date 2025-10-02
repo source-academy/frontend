@@ -4,13 +4,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { parseString } from 'xml2js';
 
-import SessionActions from '../application/actions/SessionActions';
-import {
-  Assessment,
-  AssessmentOverview,
-  assessmentTemplate,
-  overviewTemplate
-} from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
 import {
   makeEntireAssessment,
@@ -18,6 +11,13 @@ import {
   storeLocalAssessment,
   storeLocalAssessmentOverview
 } from '../XMLParser/XMLParserHelper';
+import SessionActions from '../application/actions/SessionActions';
+import {
+  Assessment,
+  AssessmentOverview,
+  assessmentTemplate,
+  overviewTemplate
+} from '../assessment/AssessmentTypes';
 
 type Props = {
   updateEditingOverview: (overview: AssessmentOverview) => void;

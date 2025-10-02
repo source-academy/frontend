@@ -1,9 +1,9 @@
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import type { Location } from 'react-router';
+import { vi } from 'vitest';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { shallowRender } from 'src/commons/utils/TestUtils';
-import { vi } from 'vitest';
 
 import Sicp from '../Sicp';
 

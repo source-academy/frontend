@@ -1,3 +1,4 @@
+import SourceAcademyGame from '../SourceAcademyGame';
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
@@ -6,7 +7,6 @@ import { fadeAndDestroy } from '../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../effects/FlyEffect';
 import { Layer } from '../layer/GameLayerTypes';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
-import SourceAcademyGame from '../SourceAcademyGame';
 import { createButton } from '../utils/ButtonUtils';
 import { sleep } from '../utils/GameUtils';
 import { calcListFormatPos } from '../utils/StyleUtils';

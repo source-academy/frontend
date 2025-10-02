@@ -4,7 +4,7 @@ import * as Sentry from '@sentry/react';
 import classNames from 'classnames';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { createBrowserRouter, RouterProvider } from 'react-router';
+import { RouterProvider, createBrowserRouter } from 'react-router';
 import { getAcademyRoutes } from 'src/pages/academy/academyRoutes';
 
 import { getFullAcademyRouterConfig, playgroundOnlyRouterConfig } from '../../routes/routerConfig';

@@ -1,5 +1,6 @@
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
 
+import SourceAcademyGame from '../../SourceAcademyGame';
 import { GameAction } from '../../action/GameActionTypes';
 import { SoundAsset } from '../../assets/AssetsTypes';
 import { getAwardProp } from '../../awards/GameAwardsHelper';
@@ -17,7 +18,6 @@ import { ObjectProperty } from '../../objects/GameObjectTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { Quiz } from '../../quiz/GameQuizType';
 import { SettingsJson } from '../../save/GameSaveTypes';
-import SourceAcademyGame from '../../SourceAcademyGame';
 import { StateObserver, UserStateType } from '../../state/GameStateTypes';
 import { TaskDetail } from '../../task/GameTaskTypes';
 import { courseId, mandatory } from '../../utils/GameUtils';

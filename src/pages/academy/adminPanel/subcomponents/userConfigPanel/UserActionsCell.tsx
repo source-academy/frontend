@@ -9,9 +9,9 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useCallback, useState } from 'react';
+import ControlButton from 'src/commons/ControlButton';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { AdminPanelCourseRegistration } from 'src/commons/application/types/SessionTypes';
-import ControlButton from 'src/commons/ControlButton';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
 type Props = {

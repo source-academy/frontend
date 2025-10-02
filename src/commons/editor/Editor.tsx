@@ -1,5 +1,4 @@
-/* eslint-disable simple-import-sort/imports */
-
+/* eslint-disable import/no-duplicates */
 // Next line necessary to prevent "ReferenceError: ace is not defined" error.
 // See https://github.com/securingsincity/react-ace/issues/1233 (although there is no explanation).
 import 'ace-builds/src-noconflict/ace';
@@ -19,18 +18,20 @@ import 'ace-builds/src-noconflict/keybinding-emacs';
 import 'ace-builds/src-noconflict/keybinding-vim';
 
 import { Card } from '@blueprintjs/core';
+import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import * as AceBuilds from 'ace-builds';
-import { Ace, require as acequire, createEditSession } from 'ace-builds';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Ace, createEditSession, require as acequire } from 'ace-builds';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import React from 'react';
-import AceEditor, { IAceEditorProps, IEditorProps } from 'react-ace';
-import { IAceEditor } from 'react-ace/lib/types';
-import { SALanguage } from '../application/ApplicationTypes';
+import AceEditor, { type IAceEditorProps, type IEditorProps } from 'react-ace';
+import type { IAceEditor } from 'react-ace/lib/types';
 import { EditorBinding } from '../WorkspaceSettingsContext';
+import type { SALanguage } from '../application/ApplicationTypes';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { getModeString, selectMode } from '../utils/AceHelper';
 import { objectEntries } from '../utils/TypeHelper';
-import { KeyFunction, keyBindings } from './EditorHotkeys';
-import { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
+import { keyBindings, type KeyFunction } from './EditorHotkeys';
+import type { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
 
 // =============== Hooks ===============
 // TODO: Should further refactor into EditorBase + different variants.
@@ -39,8 +40,6 @@ import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
 import useRefactor from './UseRefactor';
 import useShareAce from './UseShareAce';
-import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
 export type EditorHook = (

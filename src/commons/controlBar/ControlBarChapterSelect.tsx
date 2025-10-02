@@ -1,14 +1,14 @@
 import { Button, Menu, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
-import { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Select, type ItemListRenderer, type ItemRenderer } from '@blueprintjs/select';
+import type { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 
-import { flagDirectoryLanguageEnable } from '../../features/directory/flagDirectoryLanguageEnable';
 import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
-import { SALanguage } from '../application/ApplicationTypes';
+import { flagDirectoryLanguageEnable } from '../../features/directory/flagDirectoryLanguageEnable';
+import type { SALanguage } from '../application/ApplicationTypes';
 import { useFeature } from '../featureFlags/useFeature';
 import { useTypedSelector } from '../utils/Hooks';
 import { LegacyControlBarChapterSelect } from './LegacyControlBarChapterSelect';

@@ -2,9 +2,9 @@ import { ECE } from 'java-slang';
 import React from 'react';
 import { Group, Rect } from 'react-konva';
 
-import { Visible } from '../../components/Visible';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { defaultTextColor } from '../../CseMachineUtils';
+import { Visible } from '../../components/Visible';
 import { CseMachine } from '../CseMachine';
 import { Arrow } from './Arrow';
 import { Text } from './Text';

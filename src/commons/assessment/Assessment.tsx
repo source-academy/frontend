@@ -19,13 +19,13 @@ import { Navigate, useLoaderData, useParams } from 'react-router';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import Messages, { sendToWebview } from 'src/features/vscode/messages';
 
-import SessionActions from '../application/actions/SessionActions';
+import ContentDisplay from '../ContentDisplay';
+import ControlButton from '../ControlButton';
 import { Role } from '../application/ApplicationTypes';
+import SessionActions from '../application/actions/SessionActions';
 import AssessmentWorkspace, {
   AssessmentWorkspaceProps
 } from '../assessmentWorkspace/AssessmentWorkspace';
-import ContentDisplay from '../ContentDisplay';
-import ControlButton from '../ControlButton';
 import Constants from '../utils/Constants';
 import { beforeNow } from '../utils/DateHelper';
 import { useSession, useTypedSelector } from '../utils/Hooks';

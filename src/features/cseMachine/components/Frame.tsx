@@ -19,12 +19,12 @@ import {
   isUnassigned
 } from '../CseMachineUtils';
 import { isContinuation } from '../utils/scheme';
-import { ArrowFromFrame } from './arrows/ArrowFromFrame';
-import { GenericArrow } from './arrows/GenericArrow';
 import { Binding } from './Binding';
 import { Level } from './Level';
 import { Text } from './Text';
 import { Visible } from './Visible';
+import { ArrowFromFrame } from './arrows/ArrowFromFrame';
+import { GenericArrow } from './arrows/GenericArrow';
 
 const frameNames = new Map([
   ['global', 'Global'],

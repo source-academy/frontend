@@ -1,8 +1,10 @@
-import { Chapter, Context, SourceError, Value, Variant } from 'js-slang/dist/types';
+import type { SourceError } from 'js-slang/dist/errors/base';
+import { Chapter, Variant } from 'js-slang/dist/langs';
+import type { Context, Value } from 'js-slang/dist/types';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { createActions } from 'src/commons/redux/utils';
 
-import { AdminPanelStoriesUser, StoryData, StoryListView, StoryParams } from './StoriesTypes';
+import type { AdminPanelStoriesUser, StoryData, StoryListView, StoryParams } from './StoriesTypes';
 
 const StoriesActions = createActions('stories', {
   addStoryEnv: (env: string, chapter: Chapter, variant: Variant) => ({ env, chapter, variant }),

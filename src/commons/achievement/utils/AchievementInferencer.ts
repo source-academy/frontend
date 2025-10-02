@@ -5,10 +5,10 @@ import {
   AchievementGoal,
   AchievementItem,
   AchievementStatus,
-  defaultGoalProgress,
   GoalDefinition,
   GoalProgress,
-  GoalType
+  GoalType,
+  defaultGoalProgress
 } from '../../../features/achievement/AchievementTypes';
 import { showDangerMessage } from '../../utils/notifications/NotificationsHelper';
 import { isExpired, isReleased } from './DateHelper';

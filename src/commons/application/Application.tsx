@@ -7,11 +7,11 @@ import Messages, {
   sendToWebview
 } from 'src/features/vscode/messages';
 
+import { WorkspaceSettingsContext, defaultWorkspaceSettings } from '../WorkspaceSettingsContext';
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
 import { useLocalStorageState, useSession } from '../utils/Hooks';
 import WorkspaceActions from '../workspace/WorkspaceActions';
-import { defaultWorkspaceSettings, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
 import SessionActions from './actions/SessionActions';
 import VscodeActions from './actions/VscodeActions';
 

@@ -1,12 +1,12 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { type HotkeyItem, useHotkeys } from '@mantine/hooks';
+import { useHotkeys, type HotkeyItem } from '@mantine/hooks';
 import type { AnyAction, Dispatch } from '@reduxjs/toolkit';
 import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import { Ace, Range } from 'ace-builds';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -20,16 +20,16 @@ import {
   setSharedbConnected
 } from 'src/commons/collabEditing/CollabEditingActions';
 import { ControlBarExecutionTime } from 'src/commons/controlBar/ControlBarExecutionTime';
+import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
+import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import makeCseMachineTabFrom from 'src/commons/sideContent/content/SideContentCseMachine';
 import makeDataVisualizerTabFrom from 'src/commons/sideContent/content/SideContentDataVisualizer';
 import makeHtmlDisplayTabFrom from 'src/commons/sideContent/content/SideContentHtmlDisplay';
 import makeUploadTabFrom from 'src/commons/sideContent/content/SideContentUpload';
-import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
-import { useSideContent } from 'src/commons/sideContent/SideContentHelper';
 import { useResponsive, useTypedSelector } from 'src/commons/utils/Hooks';
 import {
-  showFullJSWarningOnUrlLoad,
   showFulTSWarningOnUrlLoad,
+  showFullJSWarningOnUrlLoad,
   showHTMLDisclaimer
 } from 'src/commons/utils/WarningDialogHelper';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
@@ -75,11 +75,11 @@ import MobileWorkspace, {
   type MobileWorkspaceProps
 } from '../../commons/mobileWorkspace/MobileWorkspace';
 import { SideBarTab } from '../../commons/sideBar/SideBar';
-import { type SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
+import { SideContentType, type SideContentTab } from '../../commons/sideContent/SideContentTypes';
 import Constants, { Links } from '../../commons/utils/Constants';
 import { generateLanguageIntroduction } from '../../commons/utils/IntroductionHelper';
 import { convertParamToBoolean, convertParamToInt } from '../../commons/utils/ParamParseHelper';
-import { type IParsedQuery, parseQuery } from '../../commons/utils/QueryHelper';
+import { parseQuery, type IParsedQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { initSession, log } from '../../features/eventLogging';
 import type {

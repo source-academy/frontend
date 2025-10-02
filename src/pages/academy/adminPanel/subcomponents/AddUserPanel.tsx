@@ -12,7 +12,7 @@ import {
   Position
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { type ColDef, themeBalham } from 'ag-grid-community';
+import { themeBalham, type ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { uniqBy } from 'lodash';
 import React from 'react';

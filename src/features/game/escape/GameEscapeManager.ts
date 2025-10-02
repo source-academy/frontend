@@ -1,3 +1,4 @@
+import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
@@ -6,9 +7,8 @@ import { IBaseScene, IGameUI } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 import SettingsConstants from '../scenes/settings/SettingsConstants';
-import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
 import { createButton } from '../utils/ButtonUtils';
-import { calcTableFormatPos, Direction } from '../utils/StyleUtils';
+import { Direction, calcTableFormatPos } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import EscapeConstants, {
   escapeOptButtonStyle,

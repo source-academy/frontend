@@ -6,15 +6,15 @@ import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 import AcademyActions from 'src/features/academy/AcademyActions';
 import StoriesActions from 'src/features/stories/StoriesActions';
 
+import ContentDisplay from '../../../commons/ContentDisplay';
 import SessionActions from '../../../commons/application/actions/SessionActions';
 import { UpdateCourseConfiguration } from '../../../commons/application/types/SessionTypes';
-import ContentDisplay from '../../../commons/ContentDisplay';
 import AddStoriesUserPanel from './subcomponents/AddStoriesUserPanel';
 import AddUserPanel from './subcomponents/AddUserPanel';
+import CourseConfigPanel from './subcomponents/CourseConfigPanel';
 import AssessmentConfigPanel, {
   ImperativeAssessmentConfigPanel
 } from './subcomponents/assessmentConfigPanel/AssessmentConfigPanel';
-import CourseConfigPanel from './subcomponents/CourseConfigPanel';
 import StoriesUserConfigPanel from './subcomponents/storiesUserConfigPanel/StoriesUserConfigPanel';
 import UserConfigPanel from './subcomponents/userConfigPanel/UserConfigPanel';
 

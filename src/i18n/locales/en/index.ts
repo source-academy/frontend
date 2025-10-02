@@ -12,8 +12,8 @@ import resultCard from './sideContent/resultCard.json';
 import sessionManagement from './sideContent/sessionManagement.json';
 import substVisualizer from './sideContent/substVisualizer.json';
 import upload from './sideContent/upload.json';
-import sourcecast from './sourcecast.json';
 import sourceRecorder from './sourceRecorder.json';
+import sourcecast from './sourcecast.json';
 import stories from './stories.json';
 import welcome from './welcome.json';
 

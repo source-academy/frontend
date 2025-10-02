@@ -1,5 +1,5 @@
 import { IconNames } from '@blueprintjs/icons';
-import { createGrid, GridOptions } from 'ag-grid-community';
+import { GridOptions, createGrid } from 'ag-grid-community';
 import ControlButton from 'src/commons/ControlButton';
 import { getPopularVoteLeaderboard } from 'src/commons/sagas/RequestsSaga';
 import { useTokens, useTypedSelector } from 'src/commons/utils/Hooks';

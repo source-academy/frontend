@@ -1,4 +1,6 @@
-import { Chapter, Language, type SourceError, type Value, Variant } from 'js-slang/dist/types';
+import type { SourceError } from 'js-slang/dist/errors/base';
+import { Chapter, Variant, type Language } from 'js-slang/dist/langs';
+import type { Value } from 'js-slang/dist/types';
 
 import type { AchievementState } from '../../features/achievement/AchievementTypes';
 import type { DashboardState } from '../../features/dashboard/DashboardTypes';
@@ -10,7 +12,7 @@ import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/S
 import type { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
 import { freshSortState } from '../../pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
-import { defaultFeatureFlags, FeatureFlagsState } from '../featureFlags';
+import { defaultFeatureFlags, type FeatureFlagsState } from '../featureFlags';
 import type { FileSystemState } from '../fileSystem/FileSystemTypes';
 import type { SideContentManagerState, SideContentState } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';

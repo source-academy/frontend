@@ -34,7 +34,7 @@ describe('Test wrapSaga', () => {
 
     await expectSaga(wrappedSaga).silentRun();
 
-    expect(Sentry.captureException).toHaveBeenCalledWith(errorToThrow);
+    expect(Sentry.captureException).toHaveBeenCalledWithExactlyOnceWith(errorToThrow);
     expect(console.error).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,12 +1,12 @@
 import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
 import { mandatory, toS3Path } from 'src/features/game/utils/GameUtils';
 
+import SourceAcademyGame from '../../SourceAcademyGame';
 import ImageAssets from '../../assets/ImageAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
-import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
 import { loadImage } from '../../utils/LoaderUtils';
 import { createBitmapText } from '../../utils/TextUtils';

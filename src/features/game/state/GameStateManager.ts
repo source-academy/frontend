@@ -1,3 +1,4 @@
+import SourceAcademyGame from '../SourceAcademyGame';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { GameCheckpoint } from '../chapter/GameChapterTypes';
 import { GamePosition, ItemId } from '../commons/CommonTypes';
@@ -8,7 +9,6 @@ import GameObjective from '../objective/GameObjective';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { convertMapToArray } from '../save/GameSaveHelper';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import SourceAcademyGame from '../SourceAcademyGame';
 import GameTask from '../task/GameTask';
 import { TaskDetail } from '../task/GameTaskTypes';
 import { mandatory } from '../utils/GameUtils';

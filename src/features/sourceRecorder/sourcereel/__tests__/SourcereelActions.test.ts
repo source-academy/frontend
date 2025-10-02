@@ -1,8 +1,8 @@
-import { Chapter } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
 
 import { ExternalLibraryName } from '../../../../commons/application/types/ExternalTypes';
-import { WorkspaceLocation } from '../../../../commons/workspace/WorkspaceTypes';
-import { CodeDelta, Input, PlaybackData } from '../../SourceRecorderTypes';
+import type { WorkspaceLocation } from '../../../../commons/workspace/WorkspaceTypes';
+import type { CodeDelta, Input, PlaybackData } from '../../SourceRecorderTypes';
 import SourcereelActions from '../SourcereelActions';
 
 const sourcereelWorkspace: WorkspaceLocation = 'sourcereel';

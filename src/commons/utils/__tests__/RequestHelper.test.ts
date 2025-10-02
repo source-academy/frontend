@@ -1,12 +1,12 @@
+import { Mock, vi } from 'vitest';
 import { postRefresh } from 'src/commons/sagas/RequestsSaga';
 import { store } from 'src/pages/createStore';
-import { Mock, vi } from 'vitest';
 
 import { Tokens } from '../../application/types/SessionTypes';
 import { actions } from '../ActionsHelper';
 import Constants from '../Constants';
-import { showWarningMessage } from '../notifications/NotificationsHelper';
 import {
+  RequestMethod,
   autoLogoutMessage,
   generateApiCallHeadersAndFetchOptions,
   getResponseErrorMessage,
@@ -14,9 +14,9 @@ import {
   networkErrorNotificationKey,
   promptReloginMessage,
   request,
-  RequestMethod,
   userSessionExpiredNotificationKey
 } from '../RequestHelper';
+import { showWarningMessage } from '../notifications/NotificationsHelper';
 
 global.fetch = vi.fn();
 const fetchMock = fetch as Mock;
@@ -112,7 +112,7 @@ const expectStoreToDispatchLogout = (dispatchOccurs: boolean) =>
     ? expect(storeDispatchSpy).toBeCalledWith(actions.logOut())
     : expect(storeDispatchSpy).not.toBeCalledWith(actions.logOut());
 
-describe('request', () => {
+describe(request, () => {
   // Mock location object as jsdom can't navigate
   Object.defineProperty(window, 'location', {
     value: new URL('http://sourceacademy.nus.edu.sg')

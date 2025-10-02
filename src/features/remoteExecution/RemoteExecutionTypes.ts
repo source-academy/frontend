@@ -1,9 +1,9 @@
 import { SlingClient } from '@sourceacademy/sling-client';
-import { Chapter } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 
-import { Ev3DevicePeripherals } from './RemoteExecutionEv3Types';
+import type { Ev3DevicePeripherals } from './RemoteExecutionEv3Types';
 
 export interface Device {
   id: number;

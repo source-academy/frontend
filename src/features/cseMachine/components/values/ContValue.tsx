@@ -27,9 +27,9 @@ import {
   setUnhoveredCursor
 } from '../../CseMachineUtils';
 import { Continuation } from '../../utils/scheme';
-import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
 import { Frame } from '../Frame';
+import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Value } from './Value';
 
 /** this class encapsulates a Scheme Continuation that

@@ -1,3 +1,4 @@
+import SourceAcademyGame from '../SourceAcademyGame';
 import SoundAssets from '../assets/SoundAssets';
 import { ItemId } from '../commons/CommonTypes';
 import { promptWithChoices } from '../effects/Prompt';
@@ -5,7 +6,6 @@ import { keyboardShortcuts } from '../input/GameInputConstants';
 import GameInputManager from '../input/GameInputManager';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import SourceAcademyGame from '../SourceAcademyGame';
 import { textTypeWriterStyle } from './GameDialogueConstants';
 import DialogueGenerator from './GameDialogueGenerator';
 import DialogueRenderer from './GameDialogueRenderer';

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import Textarea from 'react-textarea-autosize';
 
-import { Assessment } from '../assessment/AssessmentTypes';
 import Markdown from '../Markdown';
+import { Assessment } from '../assessment/AssessmentTypes';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 
 type TextAreaContentProps = DispatchProps & StateProps;

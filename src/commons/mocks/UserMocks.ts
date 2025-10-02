@@ -1,13 +1,13 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 
-import { GameState, Role } from '../application/ApplicationTypes';
-import {
+import { Role, type GameState } from '../application/ApplicationTypes';
+import type {
   AdminPanelCourseRegistration,
   CourseConfiguration,
   CourseRegistration,
   User
 } from '../application/types/SessionTypes';
-import { Notification, NotificationTypes } from '../notificationBadge/NotificationBadgeTypes';
+import { NotificationTypes, type Notification } from '../notificationBadge/NotificationBadgeTypes';
 
 /**
  * Mock for fetching a role, given an access token. A null

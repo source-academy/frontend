@@ -2,10 +2,10 @@ import ImageAssets from '../../assets/ImageAssets';
 import { AwardProperty } from '../../awards/GameAwardsTypes';
 import { HexColor } from '../../utils/StyleUtils';
 import {
+  AwardsHallConstants,
   awardHoverDescStyle,
   awardHoverKeyStyle,
-  awardHoverTitleStyle,
-  AwardsHallConstants
+  awardHoverTitleStyle
 } from './AwardsHallConstants';
 
 /**

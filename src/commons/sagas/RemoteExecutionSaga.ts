@@ -1,27 +1,27 @@
 import { SlingClient } from '@sourceacademy/sling-client';
 import { assemble, compileFiles, type Context } from 'js-slang';
 import { ExceptionError } from 'js-slang/dist/errors/errors';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import _ from 'lodash';
 import { call, put, race, select, take } from 'redux-saga/effects';
 import RemoteExecutionActions from 'src/features/remoteExecution/RemoteExecutionActions';
 import {
+  Ev3MotorTypes,
   type Ev3DevicePeripherals,
   type Ev3MotorData,
-  Ev3MotorTypes,
   type Ev3SensorData,
   type Ev3SensorTypes
 } from 'src/features/remoteExecution/RemoteExecutionEv3Types';
 import {
+  deviceTypesById,
   type Device,
   type DeviceSession,
-  deviceTypesById,
   type WebSocketEndpointInformation
 } from 'src/features/remoteExecution/RemoteExecutionTypes';
 import { store } from 'src/pages/createStore';
 
-import InterpreterActions from '../application/actions/InterpreterActions';
 import type { OverallState } from '../application/ApplicationTypes';
+import InterpreterActions from '../application/actions/InterpreterActions';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';

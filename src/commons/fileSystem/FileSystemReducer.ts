@@ -1,4 +1,4 @@
-import { createReducer, Reducer } from '@reduxjs/toolkit';
+import { Reducer, createReducer } from '@reduxjs/toolkit';
 
 import { defaultFileSystem } from '../application/ApplicationTypes';
 import { SourceActionType } from '../utils/ActionsHelper';

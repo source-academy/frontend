@@ -10,8 +10,8 @@ import {
 } from '../../commons/application/ApplicationTypes';
 import type { SourceActionType } from '../../commons/utils/ActionsHelper';
 import StoriesActions from './StoriesActions';
-import { DEFAULT_ENV } from './storiesComponents/UserBlogContent';
 import type { StoriesState } from './StoriesTypes';
+import { DEFAULT_ENV } from './storiesComponents/UserBlogContent';
 
 export const StoriesReducer: Reducer<StoriesState, SourceActionType> = (
   state = defaultStories,

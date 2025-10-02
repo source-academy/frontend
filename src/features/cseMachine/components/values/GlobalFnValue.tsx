@@ -24,8 +24,8 @@ import {
   setHoveredCursor,
   setUnhoveredCursor
 } from '../../CseMachineUtils';
-import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
+import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Value } from './Value';
 
 /** this encapsulates a function from the global frame */

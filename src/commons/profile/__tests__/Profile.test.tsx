@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
 import { OverallState, Role } from 'src/commons/application/ApplicationTypes';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
-import { assertType, DeepPartial } from 'src/commons/utils/TypeHelper';
+import { DeepPartial, assertType } from 'src/commons/utils/TypeHelper';
 
 import { AssessmentConfiguration, AssessmentStatuses } from '../../assessment/AssessmentTypes';
 import { mockAssessmentOverviews } from '../../mocks/AssessmentMocks';

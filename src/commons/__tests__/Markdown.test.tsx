@@ -1,7 +1,7 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 
-import { getLanguageConfig } from '../application/ApplicationTypes';
 import Markdown from '../Markdown';
+import { getLanguageConfig } from '../application/ApplicationTypes';
 import { generateLanguageIntroduction } from '../utils/IntroductionHelper';
 import { renderTreeJson } from '../utils/TestUtils';
 

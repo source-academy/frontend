@@ -1,6 +1,6 @@
 import { Context } from 'js-slang';
 import { parse } from 'js-slang/dist/parser/parser';
-import { put, StrictEffect } from 'redux-saga/effects';
+import { StrictEffect, put } from 'redux-saga/effects';
 
 import { isSourceLanguage } from '../../../application/ApplicationTypes';
 import { actions } from '../../../utils/ActionsHelper';

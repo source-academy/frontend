@@ -1,3 +1,4 @@
+import SourceAcademyGame from '../../SourceAcademyGame';
 import FontAssets from '../../assets/FontAssets';
 import ImageAssets from '../../assets/ImageAssets';
 import SoundAssets from '../../assets/SoundAssets';
@@ -5,7 +6,6 @@ import TextAssets from '../../assets/TextAssets';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import AwardParser from '../../parser/AwardParser';
 import RoomPreviewParser from '../../parser/RoomPreviewParser';
-import SourceAcademyGame from '../../SourceAcademyGame';
 import { toS3Path } from '../../utils/GameUtils';
 import { loadImage } from '../../utils/LoaderUtils';
 

@@ -1,5 +1,4 @@
-import React from 'react';
-import { RefObject } from 'react';
+import React, { RefObject } from 'react';
 
 import { IVisible } from '../CseMachineTypes';
 

@@ -2,8 +2,8 @@ import { Card } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 
-import { Assessment, IMCQQuestion } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
+import { Assessment, IMCQQuestion } from '../assessment/AssessmentTypes';
 import { limitNumberRange } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';
 

@@ -1,4 +1,4 @@
-import type { actions, SourceActionType } from './ActionsHelper';
+import type { SourceActionType, actions } from './ActionsHelper';
 
 export type MaybePromise<T, U = T> = T extends Promise<infer V> ? V : U;
 

@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router';
+import { Mock, vi } from 'vitest';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { shallowRender } from 'src/commons/utils/TestUtils';
-import { Mock, vi } from 'vitest';
 
 import { Role } from '../../application/ApplicationTypes';
 import NavigationBar from '../NavigationBar';
@@ -18,7 +18,7 @@ vi.mock('react-redux', async () => ({
 const useSelectorMock = useTypedSelector as Mock;
 const useLocationMock = useLocation as Mock;
 
-describe('NavigationBar', () => {
+describe(NavigationBar, () => {
   beforeEach(() => {
     useLocationMock.mockReturnValue({
       pathname: 'localhost:8000/courses/1/game'

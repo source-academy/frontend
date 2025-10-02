@@ -1,7 +1,6 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
-import { Visible } from '../../components/Visible';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { IHoverable } from '../../CseMachineTypes';
 import {
@@ -11,6 +10,7 @@ import {
   setUnhoveredCursor,
   setUnhoveredStyle
 } from '../../CseMachineUtils';
+import { Visible } from '../../components/Visible';
 import { CseMachine } from '../CseMachine';
 
 /** this class encapsulates an Arrow to be drawn between 2 points */

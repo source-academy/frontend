@@ -1,13 +1,13 @@
 import React from 'react';
 import { Group } from 'react-konva';
 
+import { defaultDangerColor, defaultStrokeColor } from '../CseMachineUtils';
 import { ControlItemComponent } from '../components/ControlItemComponent';
 import { StashItemComponent } from '../components/StashItemComponent';
-import { defaultDangerColor, defaultStrokeColor } from '../CseMachineUtils';
+import { ControlExpansionAnimation } from './ControlExpansionAnimation';
 import { Animatable } from './base/Animatable';
 import { AnimatedTextbox } from './base/AnimatedTextbox';
 import { getNodePosition } from './base/AnimationUtils';
-import { ControlExpansionAnimation } from './ControlExpansionAnimation';
 
 /**
  * Animation for the `branch` instruction. Also used for `for` and `while` instructions.

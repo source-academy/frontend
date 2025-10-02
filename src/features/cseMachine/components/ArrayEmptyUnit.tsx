@@ -4,8 +4,8 @@ import { Rect } from 'react-konva';
 import { ShapeDefaultProps } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { defaultStrokeColor, fadedStrokeColor } from '../CseMachineUtils';
-import { ArrayValue } from './values/ArrayValue';
 import { Visible } from './Visible';
+import { ArrayValue } from './values/ArrayValue';
 
 /** this classes encapsulates an empty array */
 export class ArrayEmptyUnit extends Visible {

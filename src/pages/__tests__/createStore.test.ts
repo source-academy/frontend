@@ -1,16 +1,16 @@
-import { Variant } from 'js-slang/dist/types';
+import { Variant } from 'js-slang/dist/langs';
 import { compressToUTF16 } from 'lz-string';
 
 import {
   defaultLanguageConfig,
   defaultState,
   defaultStories,
-  OverallState
+  type OverallState
 } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import Constants from '../../commons/utils/Constants';
 import { createStore } from '../createStore';
-import { SavedState } from '../localStorage';
+import type { SavedState } from '../localStorage';
 
 const mockChangedStoredState: SavedState = {
   achievements: [],

@@ -1,4 +1,4 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 
 import {
   ALL_LANGUAGES,
@@ -8,7 +8,7 @@ import {
   sourceLanguages
 } from '../ApplicationTypes';
 
-describe('getLanguageConfig', () => {
+describe(getLanguageConfig, () => {
   test('works for existing variants', () => {
     for (const language of ALL_LANGUAGES) {
       expect(getLanguageConfig(language.chapter, language.variant)).toEqual(language);

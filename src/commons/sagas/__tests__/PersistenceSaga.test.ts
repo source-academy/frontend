@@ -1,9 +1,9 @@
 /// <reference types="gapi.auth2" />
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { expectSaga } from 'redux-saga-test-plan';
+import { vi } from 'vitest';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import PlaygroundActions from 'src/features/playground/PlaygroundActions';
-import { vi } from 'vitest';
 
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import { actions } from '../../utils/ActionsHelper';

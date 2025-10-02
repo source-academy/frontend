@@ -1,9 +1,9 @@
 import React from 'react';
 import { Group } from 'react-konva';
 
-import { Frame } from '../components/Frame';
 import { Config } from '../CseMachineConfig';
 import { defaultActiveColor } from '../CseMachineUtils';
+import { Frame } from '../components/Frame';
 import { Animatable } from './base/Animatable';
 import { AnimatedRectComponent } from './base/AnimationComponents';
 import { getNodePosition } from './base/AnimationUtils';

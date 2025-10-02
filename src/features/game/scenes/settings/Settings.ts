@@ -1,13 +1,13 @@
+import SourceAcademyGame from '../../SourceAcademyGame';
 import ImageAssets from '../../assets/ImageAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import CommonRadioButton from '../../commons/CommonRadioButton';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
-import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
 import { mandatory } from '../../utils/GameUtils';
-import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
+import { Direction, calcTableFormatPos } from '../../utils/StyleUtils';
 import { createBitmapText } from '../../utils/TextUtils';
 import SettingsConstants, {
   applySettingsTextStyle,

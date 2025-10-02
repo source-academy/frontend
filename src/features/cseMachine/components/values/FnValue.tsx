@@ -26,9 +26,9 @@ import {
   setHoveredCursor,
   setUnhoveredCursor
 } from '../../CseMachineUtils';
-import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
 import { Frame } from '../Frame';
+import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Value } from './Value';
 
 /** this class encapsulates a JS Slang function (not from the global frame) that

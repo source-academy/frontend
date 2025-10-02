@@ -1,3 +1,4 @@
+import SourceAcademyGame from '../SourceAcademyGame';
 import FontAssets from '../assets/FontAssets';
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
@@ -5,10 +6,9 @@ import { Constants, screenSize } from '../commons/CommonConstants';
 import { BitmapFontStyle } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import SourceAcademyGame from '../SourceAcademyGame';
 import { createButton } from '../utils/ButtonUtils';
 import { sleep } from '../utils/GameUtils';
-import { calcListFormatPos, Color, HexColor } from '../utils/StyleUtils';
+import { Color, HexColor, calcListFormatPos } from '../utils/StyleUtils';
 import { fadeAndDestroy } from './FadeEffect';
 import { rightSideEntryTweenProps, rightSideExitTweenProps } from './FlyEffect';
 

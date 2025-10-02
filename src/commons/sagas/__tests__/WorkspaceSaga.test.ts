@@ -1,32 +1,34 @@
 import {
-  type Context,
-  type IOptions,
-  type Result,
   resume,
   runFilesInContext,
-  runInContext
+  runInContext,
+  type Context,
+  type IOptions,
+  type Result
 } from 'js-slang';
 import createContext from 'js-slang/dist/createContext';
-import { Chapter, ErrorType, type Finished, type SourceError, Variant } from 'js-slang/dist/types';
+import { ErrorType, type SourceError } from 'js-slang/dist/errors/base';
+import { Chapter, Variant } from 'js-slang/dist/langs';
+import { Finished } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
-import { showFullJSDisclaimer, showFullTSDisclaimer } from 'src/commons/utils/WarningDialogHelper';
 import { vi } from 'vitest';
+import { showFullJSDisclaimer, showFullTSDisclaimer } from 'src/commons/utils/WarningDialogHelper';
 
-import InterpreterActions from '../../application/actions/InterpreterActions';
 import {
   defaultState,
   fullJSLanguage,
   fullTSLanguage,
   type OverallState
 } from '../../application/ApplicationTypes';
-import { externalLibraries, ExternalLibraryName } from '../../application/types/ExternalTypes';
+import InterpreterActions from '../../application/actions/InterpreterActions';
+import { ExternalLibraryName, externalLibraries } from '../../application/types/ExternalTypes';
 import {
+  TestcaseTypes,
   type Library,
   type Testcase,
-  type TestcaseType,
-  TestcaseTypes
+  type TestcaseType
 } from '../../assessment/AssessmentTypes';
 import { mockRuntimeContext } from '../../mocks/ContextMocks';
 import { mockTestcases } from '../../mocks/GradingMocks';
@@ -815,7 +817,7 @@ describe('evalCode', () => {
       envSteps: -1,
       executionMethod: 'auto'
     };
-    lastDebuggerResult = { status: 'error' };
+    lastDebuggerResult = { status: 'error', context };
     state = generateDefaultState(workspaceLocation, { lastDebuggerResult: { status: 'error' } });
   });
 
@@ -1102,7 +1104,7 @@ describe('evalCode', () => {
   });
 });
 
-describe('evalTestCode', () => {
+describe(evalTestCode, () => {
   let workspaceLocation: WorkspaceLocation;
   let code: string;
   let execTime: number;

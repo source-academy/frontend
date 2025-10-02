@@ -1,9 +1,9 @@
-import { astToString, ECE } from 'java-slang';
+import { ECE, astToString } from 'java-slang';
 import { Group } from 'react-konva';
 
-import { Visible } from '../../components/Visible';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
 import { defaultActiveColor, defaultStrokeColor } from '../../CseMachineUtils';
+import { Visible } from '../../components/Visible';
 import { CseMachine } from '../CseMachine';
 import { ControlItem } from './ControlItem';
 

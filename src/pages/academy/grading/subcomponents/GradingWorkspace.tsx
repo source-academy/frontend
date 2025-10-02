@@ -1,7 +1,7 @@
 import { Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -11,16 +11,17 @@ import { showSimpleErrorDialog } from 'src/commons/utils/DialogHelper';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 
+import Markdown from '../../../../commons/Markdown';
 import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
 import {
-  AutogradingResult,
-  IMCQQuestion,
-  Library,
-  Question,
   QuestionTypes,
-  Testcase
+  type AutogradingResult,
+  type IMCQQuestion,
+  type Library,
+  type Question,
+  type Testcase
 } from '../../../../commons/assessment/AssessmentTypes';
-import { ControlBarProps } from '../../../../commons/controlBar/ControlBar';
+import type { ControlBarProps } from '../../../../commons/controlBar/ControlBar';
 import { ControlBarClearButton } from '../../../../commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../../../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarNextButton } from '../../../../commons/controlBar/ControlBarNextButton';
@@ -28,16 +29,15 @@ import { ControlBarPreviousButton } from '../../../../commons/controlBar/Control
 import { ControlBarQuestionViewButton } from '../../../../commons/controlBar/ControlBarQuestionViewButton';
 import { ControlBarRunButton } from '../../../../commons/controlBar/ControlBarRunButton';
 import { convertEditorTabStateToProps } from '../../../../commons/editor/EditorContainer';
-import { Position } from '../../../../commons/editor/EditorTypes';
-import Markdown from '../../../../commons/Markdown';
+import type { Position } from '../../../../commons/editor/EditorTypes';
+import type { SideContentProps } from '../../../../commons/sideContent/SideContent';
+import { useSideContent } from '../../../../commons/sideContent/SideContentHelper';
+import { SideContentType, type SideContentTab } from '../../../../commons/sideContent/SideContentTypes';
 import SideContentAutograder from '../../../../commons/sideContent/content/SideContentAutograder';
 import SideContentToneMatrix from '../../../../commons/sideContent/content/SideContentToneMatrix';
-import { SideContentProps } from '../../../../commons/sideContent/SideContent';
-import { useSideContent } from '../../../../commons/sideContent/SideContentHelper';
-import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
-import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
-import { WorkspaceLocation, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
-import { AnsweredQuestion } from '../../../../features/grading/GradingTypes';
+import Workspace, { type WorkspaceProps } from '../../../../commons/workspace/Workspace';
+import type { WorkspaceLocation, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
+import type { AnsweredQuestion } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditor';
 
 const workspaceLocation: WorkspaceLocation = 'grading';

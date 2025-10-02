@@ -1,6 +1,11 @@
 import { runInContext } from 'js-slang/dist/';
 import createContext from 'js-slang/dist/createContext';
 
+import CseMachine from '../CseMachine';
+import { Config } from '../CseMachineConfig';
+import { Layout } from '../CseMachineLayout';
+import { Env, EnvTree } from '../CseMachineTypes';
+import { isMainReference } from '../CseMachineUtils';
 import { Binding } from '../components/Binding';
 import { ControlItemComponent } from '../components/ControlItemComponent';
 import { Frame } from '../components/Frame';
@@ -8,11 +13,6 @@ import { StashItemComponent } from '../components/StashItemComponent';
 import { ArrayValue } from '../components/values/ArrayValue';
 import { FnValue } from '../components/values/FnValue';
 import { GlobalFnValue } from '../components/values/GlobalFnValue';
-import CseMachine from '../CseMachine';
-import { Config } from '../CseMachineConfig';
-import { Layout } from '../CseMachineLayout';
-import { Env, EnvTree } from '../CseMachineTypes';
-import { isMainReference } from '../CseMachineUtils';
 
 function isArray(x: any): x is any[] {
   return Array.isArray(x);

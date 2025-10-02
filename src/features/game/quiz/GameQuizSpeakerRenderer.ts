@@ -1,10 +1,10 @@
+import SourceAcademyGame from '../SourceAcademyGame';
 import ImageAssets from '../assets/ImageAssets';
 import { SpeakerDetail } from '../character/GameCharacterTypes';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
 import { GamePosition, ItemId } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import SourceAcademyGame from '../SourceAcademyGame';
 import StringUtils from '../utils/StringUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import { QuizConstants, speakerTextStyle } from './GameQuizConstants';

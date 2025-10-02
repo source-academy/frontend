@@ -3,8 +3,6 @@ import { castDraft } from 'immer';
 
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
 import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
-import { logOut } from '../application/actions/CommonsActions';
-import InterpreterActions from '../application/actions/InterpreterActions';
 import {
   createDefaultWorkspace,
   defaultWorkspaceManager,
@@ -13,6 +11,8 @@ import {
   type NotificationOutput,
   type ResultOutput
 } from '../application/ApplicationTypes';
+import { logOut } from '../application/actions/CommonsActions';
+import InterpreterActions from '../application/actions/InterpreterActions';
 import {
   setEditorSessionId,
   setSessionDetails,
@@ -21,12 +21,12 @@ import {
 } from '../collabEditing/CollabEditingActions';
 import type { SourceActionType } from '../utils/ActionsHelper';
 import { createContext } from '../utils/JsSlangHelper';
+import WorkspaceActions from './WorkspaceActions';
+import type { WorkspaceLocation, WorkspaceManagerState } from './WorkspaceTypes';
 import { handleCseAndStepperActions } from './reducers/cseReducer';
 import { handleDebuggerActions } from './reducers/debuggerReducer';
 import { handleEditorActions } from './reducers/editorReducer';
 import { handleReplActions } from './reducers/replReducer';
-import WorkspaceActions from './WorkspaceActions';
-import type { WorkspaceLocation, WorkspaceManagerState } from './WorkspaceTypes';
 
 export const getWorkspaceLocation = (action: any): WorkspaceLocation => {
   return action.payload ? action.payload.workspaceLocation : 'assessment';

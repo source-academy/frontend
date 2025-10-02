@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
-import { logOut } from '../application/actions/CommonsActions';
 import ControlButton from '../ControlButton';
+import { logOut } from '../application/actions/CommonsActions';
 import Profile from '../profile/Profile';
 import { useSession } from '../utils/Hooks';
 import DropdownAbout from './DropdownAbout';

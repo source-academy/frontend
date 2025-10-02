@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
-import type { UserEvent } from '@testing-library/user-event';
-import userEvent from '@testing-library/user-event';
+import userEvent, { type UserEvent } from '@testing-library/user-event';
+
 import { Provider, useDispatch } from 'react-redux';
+import { type Mock, vi } from 'vitest';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
-import { Mock, vi } from 'vitest';
 
 import ResearchAgreementPrompt from '../ResearchAgreementPrompt';
 
@@ -26,7 +26,7 @@ const createElement = () => {
   return element;
 };
 
-describe('ResearchAgreementPrompt', () => {
+describe(ResearchAgreementPrompt, () => {
   let user: UserEvent;
 
   beforeEach(() => {

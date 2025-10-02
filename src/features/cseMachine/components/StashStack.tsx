@@ -1,5 +1,6 @@
 import { Stash } from 'js-slang/dist/cse-machine/interpreter';
-import { Chapter, Value } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
+import type { Value } from 'js-slang/dist/types';
 import React from 'react';
 
 import CseMachine from '../CseMachine';

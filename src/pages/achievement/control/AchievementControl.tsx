@@ -2,11 +2,11 @@ import React, { useEffect, useMemo, useReducer, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 
+import { Prompt } from '../../../commons/ReactRouterPrompt';
 import AchievementEditor from '../../../commons/achievement/control/AchievementEditor';
 import AchievementPreview from '../../../commons/achievement/control/AchievementPreview';
 import GoalEditor from '../../../commons/achievement/control/GoalEditor';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
-import { Prompt } from '../../../commons/ReactRouterPrompt';
 import AchievementActions from '../../../features/achievement/AchievementActions';
 import { AchievementContext } from '../../../features/achievement/AchievementConstants';
 import { AchievementItem, GoalDefinition } from '../../../features/achievement/AchievementTypes';

@@ -1,12 +1,12 @@
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { courseIdWithoutPrefix } from 'src/commons/sagas/RequestsSaga';
 import Constants from 'src/commons/utils/Constants';
+import { request } from 'src/commons/utils/RequestHelper';
+import { RemoveLast } from 'src/commons/utils/TypeHelper';
 import {
   showSuccessMessage,
   showWarningMessage
 } from 'src/commons/utils/notifications/NotificationsHelper';
-import { request } from 'src/commons/utils/RequestHelper';
-import { RemoveLast } from 'src/commons/utils/TypeHelper';
 import { store } from 'src/pages/createStore';
 
 import { Tokens } from '../../../commons/application/types/SessionTypes';

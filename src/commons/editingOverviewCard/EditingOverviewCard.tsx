@@ -20,12 +20,12 @@ import { NavLink } from 'react-router';
 import Textarea from 'react-textarea-autosize';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
-import { AssessmentOverview, AssessmentType } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
 import Markdown from '../Markdown';
+import { exportXml, storeLocalAssessmentOverview } from '../XMLParser/XMLParserHelper';
+import { AssessmentOverview, AssessmentType } from '../assessment/AssessmentTypes';
 import Constants from '../utils/Constants';
 import { getPrettyDate } from '../utils/DateHelper';
-import { exportXml, storeLocalAssessmentOverview } from '../XMLParser/XMLParserHelper';
 
 type EditingOverviewCardProps = DispatchProps & StateProps;
 

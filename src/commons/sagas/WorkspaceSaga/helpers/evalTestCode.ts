@@ -1,9 +1,9 @@
-import { type Context, interrupt, runInContext } from 'js-slang';
+import { interrupt, runInContext, type Context } from 'js-slang';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
 import { call, put, race, take } from 'redux-saga/effects';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 
-import { type TestcaseType, TestcaseTypes } from '../../../assessment/AssessmentTypes';
+import { TestcaseTypes, type TestcaseType } from '../../../assessment/AssessmentTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
 import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';

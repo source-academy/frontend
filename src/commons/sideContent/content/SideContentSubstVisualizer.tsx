@@ -11,7 +11,7 @@ import {
   Pre,
   Slider
 } from '@blueprintjs/core';
-import { getHotkeyHandler, HotkeyItem } from '@mantine/hooks';
+import { HotkeyItem, getHotkeyHandler } from '@mantine/hooks';
 import classNames from 'classnames';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import { IStepperPropContents } from 'js-slang/dist/tracer';

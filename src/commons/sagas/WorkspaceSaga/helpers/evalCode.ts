@@ -1,32 +1,34 @@
 import { compileAndRun as compileAndRunCCode } from '@sourceacademy/c-slang/ctowasm/dist/index';
 import type { IConduit } from '@sourceacademy/conductor/dist/conduit';
-import { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
+import type { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
 import { tokenizer } from 'acorn';
-import { type Context, interrupt, type Result, resume, runFilesInContext } from 'js-slang';
+import { interrupt, resume, runFilesInContext, type Context, type Result } from 'js-slang';
 import { ACORN_PARSE_OPTIONS } from 'js-slang/dist/constants';
+import { ErrorSeverity, ErrorType, type SourceError } from 'js-slang/dist/errors/base';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
-import { Chapter, ErrorSeverity, ErrorType, type SourceError, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { pick } from 'lodash';
 import { eventChannel, type SagaIterator } from 'redux-saga';
 import { call, cancel, cancelled, fork, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 
-import InterpreterActions from '../../../../commons/application/actions/InterpreterActions';
-import { makeCCompilerConfig, specialCReturnObject } from '../../../../commons/utils/CToWasmHelper';
-import { javaRun } from '../../../../commons/utils/JavaHelper';
-import { EventType } from '../../../../features/achievement/AchievementTypes';
-import type { BrowserHostPlugin } from '../../../../features/conductor/BrowserHostPlugin';
-import { createConductor } from '../../../../features/conductor/createConductor';
-import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
-import { selectConductorEvaluatorUrl } from '../../../../features/conductor/flagConductorEvaluatorUrl';
-import { selectDirectoryLanguageEnable } from '../../../../features/directory/flagDirectoryLanguageEnable';
-import StoriesActions from '../../../../features/stories/StoriesActions';
+import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
+import { makeCCompilerConfig, specialCReturnObject } from 'src/commons/utils/CToWasmHelper';
+import { javaRun } from 'src/commons/utils/JavaHelper';
+import { EventType } from 'src/features/achievement/AchievementTypes';
+import type { BrowserHostPlugin } from 'src/features/conductor/BrowserHostPlugin';
+import { createConductor } from 'src/features/conductor/createConductor';
+import { selectConductorEnable } from 'src/features/conductor/flagConductorEnable';
+import { selectConductorEvaluatorUrl } from 'src/features/conductor/flagConductorEvaluatorUrl';
+import { selectDirectoryLanguageEnable } from 'src/features/directory/flagDirectoryLanguageEnable';
+import StoriesActions from 'src/features/stories/StoriesActions';
+
 import { isSchemeLanguage, type OverallState } from '../../../application/ApplicationTypes';
 import { SideContentType } from '../../../sideContent/SideContentTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import DisplayBufferService from '../../../utils/DisplayBufferService';
-import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../../../utils/SourcerorHelper';
+import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../../../workspace/WorkspaceActions';
 import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import { getEvaluatorDefinitionSaga } from '../../LanguageDirectorySaga';
@@ -52,7 +54,7 @@ async function wasm_compile_and_run(
     return { status: 'finished', context, value: returnedValue };
   } catch (e) {
     console.log(e);
-    return { status: 'error' };
+    return { status: 'error', context };
   }
 }
 
@@ -131,7 +133,7 @@ async function cCompileAndRun(cCode: string, context: Context): Promise<Result> 
   } catch (e) {
     console.log(e);
     reportCRuntimeError(e.message, context);
-    return { status: 'error' };
+    return { status: 'error', context };
   }
 }
 

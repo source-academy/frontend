@@ -2,7 +2,7 @@
 /// <reference types="gapi.client.drive-v3" />
 /// <reference types="google.picker" />
 import { Intent } from '@blueprintjs/core';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { call, put, select } from 'redux-saga/effects';
 
 import type { PersistenceFile } from '../../features/persistence/PersistenceTypes';
@@ -13,13 +13,13 @@ import { combineSagaHandlers } from '../redux/utils';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { showSimpleConfirmDialog, showSimplePromptDialog } from '../utils/DialogHelper';
+import type { AsyncReturnType } from '../utils/TypeHelper';
 import {
   dismiss,
   showMessage,
   showSuccessMessage,
   showWarningMessage
 } from '../utils/notifications/NotificationsHelper';
-import type { AsyncReturnType } from '../utils/TypeHelper';
 import { selectWorkspace } from './SafeEffects';
 
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];

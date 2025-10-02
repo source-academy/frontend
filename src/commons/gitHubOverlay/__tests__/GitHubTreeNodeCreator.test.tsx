@@ -1,7 +1,7 @@
 import { Octokit } from '@octokit/rest';
 import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
-import { DeepPartial } from 'src/commons/utils/TypeHelper';
 import { Mock, vi } from 'vitest';
+import { DeepPartial } from 'src/commons/utils/TypeHelper';
 
 import { getGitHubOctokitInstance } from '../../../features/github/GitHubUtils';
 import { GitHubTreeNodeCreator } from '../GitHubTreeNodeCreator';

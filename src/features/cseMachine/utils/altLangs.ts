@@ -1,11 +1,12 @@
 // alternate representations of data types
 
-import { ControlItem } from 'js-slang/dist/cse-machine/types';
-import { Chapter, Node } from 'js-slang/dist/types';
+import type { ControlItem } from 'js-slang/dist/cse-machine/types';
+import { Chapter } from 'js-slang/dist/langs';
+import type { Node } from 'js-slang/dist/types';
 import { isSchemeLanguage } from 'src/commons/application/ApplicationTypes';
 
+import type { Data } from '../CseMachineTypes';
 import { ControlItemComponent } from '../components/ControlItemComponent';
-import { Data } from '../CseMachineTypes';
 import { convertNodeToScheme, isSchemeNumber, isSymbol } from './scheme';
 
 // used to define custom primitives from alternate languages.

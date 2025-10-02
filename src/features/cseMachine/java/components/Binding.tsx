@@ -1,8 +1,8 @@
 import { ECE } from 'java-slang';
 import React from 'react';
 
-import { Visible } from '../../components/Visible';
 import { Config } from '../../CseMachineConfig';
+import { Visible } from '../../components/Visible';
 import { CseMachine } from '../CseMachine';
 import { Arrow } from './Arrow';
 import { Method } from './Method';

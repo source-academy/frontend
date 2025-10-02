@@ -6,13 +6,13 @@ import {
   CsvExportModule,
   DateFilterModule,
   InfiniteRowModelModule,
-  type Module,
   ModuleRegistry,
   PaginationModule,
   RowDragModule,
   TextEditorModule,
   TextFilterModule,
-  ValidationModule
+  ValidationModule,
+  type Module
 } from 'ag-grid-community';
 
 const productionModules: readonly Module[] = [

@@ -1,3 +1,4 @@
+import SourceAcademyGame from '../SourceAcademyGame';
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { Constants, screenSize } from '../commons/CommonConstants';
@@ -9,14 +10,13 @@ import { rightSideEntryTweenProps, rightSideExitTweenProps } from '../effects/Fl
 import { promptWithChoices } from '../effects/Prompt';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import SourceAcademyGame from '../SourceAcademyGame';
 import { createButton } from '../utils/ButtonUtils';
 import { sleep } from '../utils/GameUtils';
-import { calcListFormatPos, HexColor } from '../utils/StyleUtils';
+import { HexColor, calcListFormatPos } from '../utils/StyleUtils';
 import {
+  QuizConstants,
   questionPrompt,
   questionTextStyle,
-  QuizConstants,
   quizOptStyle,
   quizTextStyle,
   startPrompt

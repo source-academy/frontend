@@ -6,10 +6,10 @@ import {
   Text as KonvaText
 } from 'react-konva';
 
-import { Visible } from '../../components/Visible';
 import { ShapeDefaultProps } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
 import { defaultTextColor, getTextWidth } from '../../CseMachineUtils';
+import { Visible } from '../../components/Visible';
 import { CseMachine } from '../CseMachine';
 import { Arrow } from './Arrow';
 import { Frame } from './Frame';

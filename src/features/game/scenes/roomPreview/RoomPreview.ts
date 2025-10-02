@@ -1,13 +1,14 @@
-import { Context, runInContext } from 'js-slang';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { runInContext, type Context } from 'js-slang';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { createContext } from 'src/commons/utils/JsSlangHelper';
 
+import SourceAcademyGame from '../../SourceAcademyGame';
 import ImageAssets from '../../assets/ImageAssets';
 import { getAwardProp } from '../../awards/GameAwardsHelper';
 import GameAwardsManager from '../../awards/GameAwardsManager';
 import { Constants, screenCenter, screenSize } from '../../commons/CommonConstants';
 import CommonTextHover from '../../commons/CommonTextHover';
-import { ItemId } from '../../commons/CommonTypes';
+import type { ItemId } from '../../commons/CommonTypes';
 import GameDashboardManager from '../../dashboard/GameDashboardManager';
 import { DashboardPage } from '../../dashboard/GameDashboardTypes';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
@@ -17,7 +18,6 @@ import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
-import SourceAcademyGame from '../../SourceAcademyGame';
 import GameToolbarManager from '../../toolbar/GameToolbarManager';
 import { createButton } from '../../utils/ButtonUtils';
 import { mandatory, toS3Path } from '../../utils/GameUtils';

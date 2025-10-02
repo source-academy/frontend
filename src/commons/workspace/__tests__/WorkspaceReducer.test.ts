@@ -1,4 +1,4 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { cloneDeep } from 'lodash';
 import CommonsActions from 'src/commons/application/actions/CommonsActions';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
@@ -8,15 +8,15 @@ import {
 } from 'src/commons/collabEditing/CollabEditingActions';
 
 import {
-  type CodeOutput,
   createDefaultWorkspace,
   defaultWorkspaceManager,
+  type CodeOutput,
   type InterpreterOutput,
   type ResultOutput,
   type RunningOutput
 } from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
-import { type Library, type Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
+import { TestcaseTypes, type Library, type Testcase } from '../../assessment/AssessmentTypes';
 import type { HighlightedLines, Position } from '../../editor/EditorTypes';
 import Constants from '../../utils/Constants';
 import { createContext } from '../../utils/JsSlangHelper';

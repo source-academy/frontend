@@ -5,8 +5,9 @@ import { useSession } from 'src/commons/utils/Hooks';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
 import academyClasses from 'src/styles/Academy.module.scss';
 
-import { AssessmentStatuses } from '../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../commons/ContentDisplay';
+import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLParserHelper';
+import { AssessmentStatuses } from '../../commons/assessment/AssessmentTypes';
 import { EditingOverviewCard } from '../../commons/editingOverviewCard/EditingOverviewCard';
 import EditingWorkspace, {
   EditingWorkspaceProps
@@ -14,7 +15,6 @@ import EditingWorkspace, {
 import MissionCreator from '../../commons/missionCreator/MissionCreator';
 import Constants from '../../commons/utils/Constants';
 import { convertParamToInt } from '../../commons/utils/ParamParseHelper';
-import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLParserHelper';
 
 const MissionControl: React.FC = () => {
   const { assessmentConfigurations } = useSession();

@@ -1,6 +1,6 @@
 import { testSaga } from 'redux-saga-test-plan';
-import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { vi } from 'vitest';
+import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 
 import { combineSagaHandlers, createActions } from '../utils';
 

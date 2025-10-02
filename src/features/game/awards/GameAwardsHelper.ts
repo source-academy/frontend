@@ -1,6 +1,6 @@
+import SourceAcademyGame from '../SourceAcademyGame';
 import CommonTextHover from '../commons/CommonTextHover';
 import { ItemId } from '../commons/CommonTypes';
-import SourceAcademyGame from '../SourceAcademyGame';
 import { HexColor } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import AwardsConstants, {

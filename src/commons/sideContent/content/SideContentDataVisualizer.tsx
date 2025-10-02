@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import { t } from 'i18next';
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { connect, MapDispatchToProps } from 'react-redux';
+import { MapDispatchToProps, connect } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
 
 import DataVisualizer from '../../../features/dataVisualizer/dataVisualizer';

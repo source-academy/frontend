@@ -2,8 +2,6 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Label, Tag, Text } from 'react-konva';
 
-import { FnValue } from '../components/values/FnValue';
-import { GlobalFnValue } from '../components/values/GlobalFnValue';
 import CseMachine from '../CseMachine';
 import { Config, ShapeDefaultProps } from '../CseMachineConfig';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
@@ -24,11 +22,13 @@ import {
   setUnhoveredStyle,
   truncateText
 } from '../CseMachineUtils';
+import { FnValue } from '../components/values/FnValue';
+import { GlobalFnValue } from '../components/values/GlobalFnValue';
 import { isContinuation } from '../utils/scheme';
+import { Visible } from './Visible';
 import { ArrowFromStashItemComponent } from './arrows/ArrowFromStashItemComponent';
 import { ArrayValue } from './values/ArrayValue';
 import { ContValue } from './values/ContValue';
-import { Visible } from './Visible';
 
 export class StashItemComponent extends Visible implements IHoverable {
   /** text to display */

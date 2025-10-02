@@ -1,6 +1,6 @@
 import { expectSaga } from 'redux-saga-test-plan';
-import SessionActions from 'src/commons/application/actions/SessionActions';
 import { vi } from 'vitest';
+import SessionActions from 'src/commons/application/actions/SessionActions';
 
 import { actions } from '../../utils/ActionsHelper';
 import GitHubPersistenceSaga from '../GitHubPersistenceSaga';

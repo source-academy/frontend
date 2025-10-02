@@ -9,18 +9,18 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
-import { Variant } from 'js-slang/dist/types';
+import { Variant } from 'js-slang/dist/langs';
 import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Constants from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
 
-import {
-  SALanguage,
-  sourceLanguages,
-  styliseSublanguage
-} from '../../../../commons/application/ApplicationTypes';
 import ControlButton from '../../../../commons/ControlButton';
+import {
+  sourceLanguages,
+  styliseSublanguage,
+  type SALanguage
+} from '../../../../commons/application/ApplicationTypes';
 import WorkspaceActions from '../../../../commons/workspace/WorkspaceActions';
 
 const DefaultChapterSelect: React.FC = () => {

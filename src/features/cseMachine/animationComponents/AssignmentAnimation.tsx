@@ -1,15 +1,15 @@
 import React from 'react';
 import { Group } from 'react-konva';
 
+import { ControlStashConfig } from '../CseMachineControlStashConfig';
+import { defaultActiveColor, defaultStrokeColor, getTextWidth } from '../CseMachineUtils';
 import { Binding } from '../components/Binding';
 import { ControlItemComponent } from '../components/ControlItemComponent';
 import { Frame } from '../components/Frame';
 import { StashItemComponent } from '../components/StashItemComponent';
-import { defaultOptions, Text } from '../components/Text';
+import { Text, defaultOptions } from '../components/Text';
 import { PrimitiveValue } from '../components/values/PrimitiveValue';
 import { Value } from '../components/values/Value';
-import { ControlStashConfig } from '../CseMachineControlStashConfig';
-import { defaultActiveColor, defaultStrokeColor, getTextWidth } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
 import { AnimatedTextbox } from './base/AnimatedTextbox';

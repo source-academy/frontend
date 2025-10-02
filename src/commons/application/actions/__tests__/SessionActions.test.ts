@@ -1,4 +1,4 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { mockStudents } from 'src/commons/mocks/UserMocks';
 import {
   paginationToBackendParams,
@@ -8,20 +8,20 @@ import { freshSortState } from 'src/pages/academy/grading/subcomponents/GradingS
 
 import {
   ColumnFields,
-  GradingOverviews,
-  GradingQuery
+  type GradingOverviews,
+  type GradingQuery
 } from '../../../../features/grading/GradingTypes';
 import { TeamFormationOverview } from '../../../../features/teamFormation/TeamFormationTypes';
 import {
-  Assessment,
-  AssessmentConfiguration,
-  AssessmentOverview,
   AssessmentStatuses,
-  ProgressStatuses
+  ProgressStatuses,
+  type Assessment,
+  type AssessmentConfiguration,
+  type AssessmentOverview
 } from '../../../assessment/AssessmentTypes';
-import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
-import { GameState, Role, Story } from '../../ApplicationTypes';
-import { User } from '../../types/SessionTypes';
+import type { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
+import { Role, type GameState, type Story } from '../../ApplicationTypes';
+import type { User } from '../../types/SessionTypes';
 import SessionActions from '../SessionActions';
 
 test('acknowledgeNotifications generates correct action object', () => {

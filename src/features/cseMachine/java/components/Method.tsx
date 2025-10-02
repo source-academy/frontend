@@ -1,9 +1,8 @@
-import { astToString, ECE } from 'java-slang';
+import { ECE, astToString } from 'java-slang';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Circle, Group, Label, Tag, Text } from 'react-konva';
 
-import { Visible } from '../../components/Visible';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
 import { IHoverable } from '../../CseMachineTypes';
@@ -15,6 +14,7 @@ import {
   setHoveredCursor,
   setUnhoveredCursor
 } from '../../CseMachineUtils';
+import { Visible } from '../../components/Visible';
 import { CseMachine } from '../CseMachine';
 
 export class Method extends Visible implements IHoverable {

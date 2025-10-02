@@ -3,8 +3,8 @@ import { IconNames } from '@blueprintjs/icons';
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AutogradingResult, Testcase } from '../../assessment/AssessmentTypes';
 import ControlButton from '../../ControlButton';
+import { AutogradingResult, Testcase } from '../../assessment/AssessmentTypes';
 import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import SideContentResultCard from './SideContentResultCard';
 import SideContentTestcaseCard from './SideContentTestcaseCard';

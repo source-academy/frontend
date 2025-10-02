@@ -1,7 +1,8 @@
-import { SourceError, Value } from 'js-slang/dist/types';
+import type { SourceError } from 'js-slang/dist/errors/base';
+import type { Value } from 'js-slang/dist/types';
 import { createActions } from 'src/commons/redux/utils';
 
-import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 
 const InterpreterActions = createActions('interpreter', {
   handleConsoleLog: (workspaceLocation: WorkspaceLocation, ...logString: string[]) => ({

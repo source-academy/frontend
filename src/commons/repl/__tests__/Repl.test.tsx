@@ -1,8 +1,8 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 
-import {
+import type {
   CodeOutput,
   ErrorOutput,
   InterpreterOutput,

@@ -1,10 +1,10 @@
 import { createAction } from '@reduxjs/toolkit';
-import { Chapter } from 'js-slang/dist/types';
-import { SourceActionType } from 'src/commons/utils/ActionsHelper';
+import { Chapter } from 'js-slang/dist/langs';
+import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
 import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../../../commons/application/types/ExternalTypes';
-import { CodeDelta, Input, PlaybackData, RecordingStatus } from '../../SourceRecorderTypes';
+import { RecordingStatus, type CodeDelta, type Input, type PlaybackData } from '../../SourceRecorderTypes';
 import SourcereelActions from '../SourcereelActions';
 import { SourcereelReducer } from '../SourcereelReducer';
 

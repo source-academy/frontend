@@ -4,8 +4,8 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 import { useParams } from 'react-router';
 
-import { createNewSession, getDocInfoFromSessionId } from '../collabEditing/CollabEditingHelper';
 import ControlButton from '../ControlButton';
+import { createNewSession, getDocInfoFromSessionId } from '../collabEditing/CollabEditingHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
 type ControlBarSessionButtonsProps = DispatchProps & StateProps;

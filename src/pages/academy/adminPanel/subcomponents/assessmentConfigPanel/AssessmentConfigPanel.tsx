@@ -1,11 +1,11 @@
 import { Button, H2 } from '@blueprintjs/core';
 import {
+  themeBalham,
   type CellValueChangedEvent,
   type ColDef,
   type GridApi,
   type GridReadyEvent,
-  type RowDragEvent,
-  themeBalham
+  type RowDragEvent
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { cloneDeep, isEqual } from 'lodash';
@@ -19,8 +19,8 @@ import React, {
   useState
 } from 'react';
 import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
-import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import { WithImperativeApi } from 'src/commons/utils/TypeHelper';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 
 import BooleanCell from './BooleanCell';
 import DeleteRowCell from './DeleteRowCell';

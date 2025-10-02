@@ -3,6 +3,7 @@ import _ from 'lodash';
 import mockStore from 'redux-mock-store';
 
 import {
+  OverallState,
   defaultAchievement,
   defaultDashboard,
   defaultFileSystem,
@@ -15,8 +16,7 @@ import {
   defaultSideContentManager,
   defaultStories,
   defaultVscode,
-  defaultWorkspaceManager,
-  OverallState
+  defaultWorkspaceManager
 } from '../application/ApplicationTypes';
 import { defaultFeatureFlags } from '../featureFlags';
 import { SourceActionType } from '../utils/ActionsHelper';

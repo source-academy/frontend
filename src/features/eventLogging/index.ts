@@ -1,8 +1,8 @@
-import { Chapter } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
 import { v4 as uuid } from 'uuid';
 
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import { Input as RecorderInput } from '../sourceRecorder/SourceRecorderTypes';
+import type { Input as RecorderInput } from '../sourceRecorder/SourceRecorderTypes';
 
 type PlaybackInitial = {
   chapter: Chapter;

@@ -1,3 +1,4 @@
+import SourceAcademyGame from '../../SourceAcademyGame';
 import ImageAssets from '../../assets/ImageAssets';
 import { getAwardProps } from '../../awards/GameAwardsHelper';
 import { AwardProperty } from '../../awards/GameAwardsTypes';
@@ -8,16 +9,15 @@ import { putWorkerMessage } from '../../effects/WorkerMessage';
 import GameInputManager from '../../input/GameInputManager';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
-import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
 import { limitNumber, mandatory } from '../../utils/GameUtils';
 import { resizeUnderflow } from '../../utils/SpriteUtils';
-import { calcTableFormatPos, Direction, HexColor } from '../../utils/StyleUtils';
+import { Direction, HexColor, calcTableFormatPos } from '../../utils/StyleUtils';
 import { createBitmapText } from '../../utils/TextUtils';
 import {
+  AwardsHallConstants,
   awardBannerTextStyle,
-  awardNoAssetTitleStyle,
-  AwardsHallConstants
+  awardNoAssetTitleStyle
 } from './AwardsHallConstants';
 import { createAwardsHoverContainer } from './AwardsHallHelper';
 

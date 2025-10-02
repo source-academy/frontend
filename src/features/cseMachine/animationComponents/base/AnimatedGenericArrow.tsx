@@ -3,9 +3,9 @@ import { PathConfig } from 'konva/lib/shapes/Path';
 import { Group } from 'react-konva';
 import { SharedProperties } from 'src/commons/utils/TypeHelper';
 
-import { GenericArrow } from '../../components/arrows/GenericArrow';
-import { Visible } from '../../components/Visible';
 import { defaultStrokeColor, fadedStrokeColor } from '../../CseMachineUtils';
+import { Visible } from '../../components/Visible';
+import { GenericArrow } from '../../components/arrows/GenericArrow';
 import { Animatable, AnimatableTo, AnimationConfig } from './Animatable';
 import { AnimatedArrowComponent, AnimatedPathComponent } from './AnimationComponents';
 

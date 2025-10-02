@@ -1,7 +1,7 @@
+import SourceAcademyGame from '../SourceAcademyGame';
 import SoundAssets from '../assets/SoundAssets';
 import { Constants } from '../commons/CommonConstants';
 import { AssetKey, BitmapFontStyle, TextConfig } from '../commons/CommonTypes';
-import SourceAcademyGame from '../SourceAcademyGame';
 import { createBitmapText } from './TextUtils';
 
 type ButtonConfig = {

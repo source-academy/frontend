@@ -1,6 +1,6 @@
+import { StepsArray } from '../../CseMachineTypes';
 import { FnValue } from '../../components/values/FnValue';
 import { GlobalFnValue } from '../../components/values/GlobalFnValue';
-import { StepsArray } from '../../CseMachineTypes';
 import { Frame } from '../Frame';
 import { StashItemComponent } from '../StashItemComponent';
 import { ArrayValue } from '../values/ArrayValue';

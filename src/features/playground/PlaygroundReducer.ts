@@ -1,4 +1,4 @@
-import { createReducer, Reducer } from '@reduxjs/toolkit';
+import { Reducer, createReducer } from '@reduxjs/toolkit';
 
 import { defaultPlayground } from '../../commons/application/ApplicationTypes';
 import { SourceActionType } from '../../commons/utils/ActionsHelper';

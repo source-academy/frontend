@@ -1,6 +1,6 @@
-import { Chapter, SourceError, Variant } from 'js-slang/dist/types';
-
-import { ExternalLibrary, ExternalLibraryName } from '../application/types/ExternalTypes';
+import type { SourceError } from 'js-slang/dist/errors/base';
+import { Chapter, Variant } from 'js-slang/dist/langs';
+import { ExternalLibraryName, type ExternalLibrary } from '../application/types/ExternalTypes';
 
 export enum AssessmentStatuses {
   attempting = 'attempting',

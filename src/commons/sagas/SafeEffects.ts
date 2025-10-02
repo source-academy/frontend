@@ -1,14 +1,14 @@
 import type { ActionMatchingPattern } from '@redux-saga/types';
 import * as Sentry from '@sentry/react';
 import {
-  type ActionPattern,
-  type ForkEffect,
-  type HelperWorkerParameters,
-  select,
   SelectEffect,
+  select,
   takeEvery,
   takeLatest,
-  takeLeading
+  takeLeading,
+  type ActionPattern,
+  type ForkEffect,
+  type HelperWorkerParameters
 } from 'redux-saga/effects';
 import type { StoriesEnvState } from 'src/features/stories/StoriesTypes';
 

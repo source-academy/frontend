@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 
-import { updateReactRouter } from '../actions/CommonsActions';
 import { defaultRouter } from '../ApplicationTypes';
+import { updateReactRouter } from '../actions/CommonsActions';
 
 export const RouterReducer = createReducer(defaultRouter, builder => {
   builder.addCase(updateReactRouter, (state, action) => {

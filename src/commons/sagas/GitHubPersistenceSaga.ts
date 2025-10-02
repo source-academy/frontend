@@ -8,8 +8,8 @@ import GitHubActions from 'src/features/github/GitHubActions';
 import * as GitHubUtils from '../../features/github/GitHubUtils';
 import { getGitHubOctokitInstance } from '../../features/github/GitHubUtils';
 import { store } from '../../pages/createStore';
-import SessionActions from '../application/actions/SessionActions';
 import type { OverallState } from '../application/ApplicationTypes';
+import SessionActions from '../application/actions/SessionActions';
 import FileExplorerDialog, {
   type FileExplorerDialogProps
 } from '../gitHubOverlay/FileExplorerDialog';

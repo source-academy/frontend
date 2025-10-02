@@ -1,16 +1,16 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { changeSideContentHeight } from 'src/commons/sideContent/SideContentActions';
 
 import {
+  SupportedLanguage,
   createDefaultWorkspace,
-  SALanguage,
-  SupportedLanguage
+  type SALanguage
 } from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
-import { Library } from '../../assessment/AssessmentTypes';
-import { HighlightedLines } from '../../editor/EditorTypes';
+import type { Library } from '../../assessment/AssessmentTypes';
+import type { HighlightedLines } from '../../editor/EditorTypes';
 import WorkspaceActions from '../WorkspaceActions';
-import { EditorTabState, WorkspaceLocation } from '../WorkspaceTypes';
+import type { EditorTabState, WorkspaceLocation } from '../WorkspaceTypes';
 
 const assessmentWorkspace: WorkspaceLocation = 'assessment';
 const gradingWorkspace: WorkspaceLocation = 'grading';

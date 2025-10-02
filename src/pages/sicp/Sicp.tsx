@@ -9,20 +9,20 @@ import Constants from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
 import { setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
-import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
-import { parseArr, ParseJsonError } from 'src/features/sicp/parser/ParseJson';
 import { getNext, getPrev } from 'src/features/sicp/TableOfContentsHelper';
+import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
+import { ParseJsonError, parseArr } from 'src/features/sicp/parser/ParseJson';
 import {
-  readSicpSectionLocalStorage,
-  setSicpSectionLocalStorage,
   SICP_CACHE_KEY,
-  SICP_INDEX
+  SICP_INDEX,
+  readSicpSectionLocalStorage,
+  setSicpSectionLocalStorage
 } from 'src/features/sicp/utils/SicpUtils';
 
 import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
 import getSicpError, { SicpErrorType } from '../../features/sicp/errors/SicpErrors';
-import Chatbot from './subcomponents/chatbot/Chatbot';
 import SicpIndexPage from './subcomponents/SicpIndexPage';
+import Chatbot from './subcomponents/chatbot/Chatbot';
 
 const baseUrl = Constants.sicpBackendUrl + 'json/';
 const extension = '.json';

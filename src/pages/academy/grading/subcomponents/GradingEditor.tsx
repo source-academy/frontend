@@ -14,17 +14,17 @@ import React, { useEffect, useMemo, useState } from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
 import { useDispatch } from 'react-redux';
 
-import SessionActions from '../../../../commons/application/actions/SessionActions';
 import ControlButton from '../../../../commons/ControlButton';
 import Markdown from '../../../../commons/Markdown';
 import { Prompt } from '../../../../commons/ReactRouterPrompt';
+import SessionActions from '../../../../commons/application/actions/SessionActions';
 import { getPrettyDate } from '../../../../commons/utils/DateHelper';
 import { showSimpleConfirmDialog } from '../../../../commons/utils/DialogHelper';
+import { convertParamToInt } from '../../../../commons/utils/ParamParseHelper';
 import {
   showSuccessMessage,
   showWarningMessage
 } from '../../../../commons/utils/notifications/NotificationsHelper';
-import { convertParamToInt } from '../../../../commons/utils/ParamParseHelper';
 
 type GradingSaveFunction = (
   submissionId: number,

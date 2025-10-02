@@ -1,16 +1,16 @@
-import { Octokit } from '@octokit/rest';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import type { Octokit } from '@octokit/rest';
+import type { Chapter, Variant } from 'js-slang/dist/langs';
 
-import { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';
-import { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
-import { TeamFormationOverview } from '../../../features/teamFormation/TeamFormationTypes';
-import {
+import type { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';
+import type { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
+import type { TeamFormationOverview } from '../../../features/teamFormation/TeamFormationTypes';
+import type {
   Assessment,
   AssessmentConfiguration,
   AssessmentOverview
 } from '../../assessment/AssessmentTypes';
-import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
-import { GameState, Role, Story } from '../ApplicationTypes';
+import type { Notification } from '../../notificationBadge/NotificationBadgeTypes';
+import type { GameState, Role, Story } from '../ApplicationTypes';
 
 export type SessionState = {
   // Tokens

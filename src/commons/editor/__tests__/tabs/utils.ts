@@ -1,6 +1,6 @@
 import { getShortestUniqueFilePaths } from '../../tabs/utils';
 
-describe('getShortestUniqueFilePaths', () => {
+describe(getShortestUniqueFilePaths, () => {
   it('returns the shortest unique file paths', () => {
     const filePaths = ['/dir/dir1/a.js', '/dir/dir2/a.js', '/dir/dir1/b.js'];
     const shortenedFilePaths = getShortestUniqueFilePaths(filePaths);

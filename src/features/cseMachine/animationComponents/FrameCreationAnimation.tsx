@@ -1,18 +1,18 @@
 import React from 'react';
 import { Group } from 'react-konva';
 
-import { GenericArrow } from '../components/arrows/GenericArrow';
-import { ControlItemComponent } from '../components/ControlItemComponent';
-import { Frame } from '../components/Frame';
-import { StashItemComponent } from '../components/StashItemComponent';
-import { Text } from '../components/Text';
-import { ArrayValue } from '../components/values/ArrayValue';
-import { PrimitiveValue } from '../components/values/PrimitiveValue';
-import { Value } from '../components/values/Value';
 import { CseAnimation } from '../CseMachineAnimation';
 import { Config } from '../CseMachineConfig';
 import { ControlStashConfig } from '../CseMachineControlStashConfig';
 import { defaultActiveColor, defaultStrokeColor, isEnvEqual } from '../CseMachineUtils';
+import { ControlItemComponent } from '../components/ControlItemComponent';
+import { Frame } from '../components/Frame';
+import { StashItemComponent } from '../components/StashItemComponent';
+import { Text } from '../components/Text';
+import { GenericArrow } from '../components/arrows/GenericArrow';
+import { ArrayValue } from '../components/values/ArrayValue';
+import { PrimitiveValue } from '../components/values/PrimitiveValue';
+import { Value } from '../components/values/Value';
 import { Animatable, AnimationConfig } from './base/Animatable';
 import { AnimatedGenericArrow } from './base/AnimatedGenericArrow';
 import { AnimatedRectComponent, AnimatedTextComponent } from './base/AnimationComponents';

@@ -16,7 +16,7 @@ import { IconName, IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import React, { useMemo, useState } from 'react';
 import { Translation } from 'react-i18next';
-import { type Location, NavLink, Route, useLocation } from 'react-router';
+import { NavLink, Route, useLocation, type Location } from 'react-router';
 import { i18nDefaultLangKeys } from 'src/i18n/i18next';
 import { SentryRoutes } from 'src/routes/routerConfig';
 import classes from 'src/styles/NavigationBar.module.scss';

@@ -2,16 +2,16 @@ import { h } from 'hastscript';
 import { Nodes as MdastNodes } from 'mdast';
 import { fromMarkdown } from 'mdast-util-from-markdown';
 import {
-  defaultHandlers,
   Options as MdastToHastConverterOptions,
+  defaultHandlers,
   toHast
 } from 'mdast-util-to-hast';
 import React from 'react';
 import * as runtime from 'react/jsx-runtime';
 import { IEditorProps } from 'react-ace';
 import rehypeReact from 'rehype-react';
-import SourceBlock, { SourceBlockProps } from 'src/features/stories/storiesComponents/SourceBlock';
 import { unified } from 'unified';
+import SourceBlock, { SourceBlockProps } from 'src/features/stories/storiesComponents/SourceBlock';
 
 import { ReplaceTypeAtIndex } from './TypeHelper';
 

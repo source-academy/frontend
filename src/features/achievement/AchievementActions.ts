@@ -3,10 +3,10 @@ import { createActions } from 'src/commons/redux/utils';
 import type { SideContentLocation } from 'src/commons/sideContent/SideContentTypes';
 
 import {
+  EventType,
   type AchievementGoal,
   type AchievementItem,
   type AchievementUser,
-  EventType,
   type GoalDefinition,
   type GoalProgress
 } from './AchievementTypes';

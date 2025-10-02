@@ -13,15 +13,15 @@ import {
   TextArea
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import AcademyActions from 'src/features/academy/AcademyActions';
 
 import { CourseHelpTextEditorTab } from '../../pages/academy/adminPanel/subcomponents/CourseConfigPanel';
+import Markdown from '../Markdown';
 import { sourceLanguages } from '../application/ApplicationTypes';
 import { UpdateCourseConfiguration } from '../application/types/SessionTypes';
-import Markdown from '../Markdown';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
 type Props = {

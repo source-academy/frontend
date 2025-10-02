@@ -4,8 +4,8 @@ import { ItemRenderer, Select } from '@blueprintjs/select';
 import React, { useState } from 'react';
 import AceEditor from 'react-ace';
 
-import { Assessment } from '../assessment/AssessmentTypes';
 import ControlButton from '../ControlButton';
+import { Assessment } from '../assessment/AssessmentTypes';
 import { WorkspaceState } from '../workspace/WorkspaceTypes';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 

@@ -1,36 +1,36 @@
-import { SagaIterator } from 'redux-saga';
+import type { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 import DashboardActions from 'src/features/dashboard/DashboardActions';
 
 import {
-  GradingOverviews,
-  GradingQuery,
-  GradingQuestion,
-  SortStates
+  SortStates,
+  type GradingOverviews,
+  type GradingQuery,
+  type GradingQuestion
 } from '../../features/grading/GradingTypes';
-import SessionActions from '../application/actions/SessionActions';
 import {
-  OverallState,
   Role,
-  SALanguage,
+  SupportedLanguage,
   styliseSublanguage,
-  SupportedLanguage
+  type OverallState,
+  type SALanguage
 } from '../application/ApplicationTypes';
+import SessionActions from '../application/actions/SessionActions';
 import { AdminPanelCourseRegistration, Tokens } from '../application/types/SessionTypes';
 import {
-  AssessmentOverview,
   AssessmentStatuses,
   ProgressStatuses,
-  Question
+  type AssessmentOverview,
+  type Question
 } from '../assessment/AssessmentTypes';
-import {
+import type {
   Notification,
   NotificationFilterFunction
 } from '../notificationBadge/NotificationBadgeTypes';
 import { routerNavigate } from '../sagas/BackendSaga';
 import { actions } from '../utils/ActionsHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
   mockAssessmentConfigurations,
   mockAssessmentOverviews,

@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import React from 'react';
 
+import { WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
 import SourcecastEditor, {
   SourceRecorderEditorProps
 } from '../sourceRecorder/SourceRecorderEditor';
 import { EditorTabState } from '../workspace/WorkspaceTypes';
-import { WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
 import Editor, { EditorProps, EditorTabStateProps } from './Editor';
 import EditorTabContainer from './tabs/EditorTabContainer';
 

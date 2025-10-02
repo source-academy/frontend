@@ -1,5 +1,5 @@
 import { memoize } from 'lodash';
-import { type LoaderFunction, redirect, replace, type RouteObject } from 'react-router';
+import { redirect, replace, type LoaderFunction, type RouteObject } from 'react-router';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';

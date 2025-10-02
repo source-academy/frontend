@@ -6,8 +6,8 @@ import {
   Spinner,
   SpinnerSize
 } from '@blueprintjs/core';
-import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
-import { themeBalham } from 'ag-grid-community';
+import { ColDef, GridApi, GridReadyEvent , themeBalham } from 'ag-grid-community';
+
 import { AgGridReact } from 'ag-grid-react';
 import { sortBy } from 'lodash';
 import React from 'react';

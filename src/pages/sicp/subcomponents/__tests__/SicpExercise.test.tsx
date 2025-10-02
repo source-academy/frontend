@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import type { UserEvent } from '@testing-library/user-event';
-import userEvent from '@testing-library/user-event';
+import userEvent, { type UserEvent } from '@testing-library/user-event';
+
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 
 import SicpExercise, { noSolutionPlaceholder } from '../SicpExercise';

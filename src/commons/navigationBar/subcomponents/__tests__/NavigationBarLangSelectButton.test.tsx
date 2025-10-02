@@ -22,7 +22,7 @@ const createAppWithStore = () => {
   return { app, store };
 };
 
-describe('NavigationBarLangSelectButton', () => {
+describe(NavigationBarLangSelectButton, () => {
   let user: UserEvent;
   beforeEach(() => {
     user = userEvent.setup();

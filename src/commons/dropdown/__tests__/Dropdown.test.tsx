@@ -1,12 +1,12 @@
 import { Store } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
+import { vi } from 'vitest';
+import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
 import { UserCourse } from 'src/commons/application/types/SessionTypes';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTree, renderTreeJson } from 'src/commons/utils/TestUtils';
-import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
-import { vi } from 'vitest';
 
 import Profile from '../../profile/Profile';
 import Dropdown from '../Dropdown';

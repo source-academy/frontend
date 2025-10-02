@@ -1,10 +1,10 @@
 import { ECE } from 'java-slang';
 import { Group } from 'react-konva';
 
-import { Visible } from '../../components/Visible';
 import { Config } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
 import { defaultActiveColor, defaultStrokeColor } from '../../CseMachineUtils';
+import { Visible } from '../../components/Visible';
 import { CseMachine } from '../CseMachine';
 import { Arrow } from './Arrow';
 import { Frame } from './Frame';

@@ -1,18 +1,18 @@
 import { Position } from '@blueprintjs/core';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import SimpleDropdown from 'src/commons/SimpleDropdown';
 import {
+  SUPPORTED_LANGUAGES,
+  SupportedLanguage,
   cLanguages,
   getLanguageConfig,
   javaLanguages,
   pyLanguages,
-  SALanguage,
   schemeLanguages,
   sourceLanguages,
-  SUPPORTED_LANGUAGES,
-  SupportedLanguage
+  type SALanguage
 } from 'src/commons/application/ApplicationTypes';
-import SimpleDropdown from 'src/commons/SimpleDropdown';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { playgroundConfigLanguage } from 'src/features/playground/PlaygroundActions';

@@ -14,9 +14,9 @@ import {
   KeyboardCommand,
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { EditorBinding } from '../WorkspaceSettingsContext';
 import { EditorTabStateProps } from '../editor/Editor';
 import { Position } from '../editor/EditorTypes';
-import { EditorBinding } from '../WorkspaceSettingsContext';
 
 /**
  * @property editorValue - The string content of the react-ace editor

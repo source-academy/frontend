@@ -1,12 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import { act } from 'react';
 import { Provider } from 'react-redux';
-import { createMemoryRouter, RouterProvider } from 'react-router';
+import { RouterProvider, createMemoryRouter } from 'react-router';
+import { vi } from 'vitest';
+import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import { assertType } from 'src/commons/utils/TypeHelper';
-import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
-import { vi } from 'vitest';
 
 import { mockAssessments } from '../../mocks/AssessmentMocks';
 import AssessmentWorkspace, { AssessmentWorkspaceProps } from '../AssessmentWorkspace';
@@ -110,7 +110,7 @@ const getQuestionNumberText = (curr: number, end: number) =>
 const getGradingResultTab = (tree: HTMLElement) => tree.querySelector('.GradingResult');
 const getContestVotingTab = (tree: HTMLElement) => tree.querySelector('.ContestEntryVoting');
 
-describe('AssessmentWorkspace', () => {
+describe(AssessmentWorkspace, () => {
   test('AssessmentWorkspace page "loading" content renders correctly', async () => {
     const app = createMemoryRouterWithRoutes(mockUndefinedAssessmentWorkspaceProps);
     const tree = await renderTreeJson(app);

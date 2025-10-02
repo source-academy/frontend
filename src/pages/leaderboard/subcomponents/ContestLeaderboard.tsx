@@ -1,6 +1,6 @@
 import 'src/styles/Leaderboard.scss';
 
-import { type ColDef, themeAlpine } from 'ag-grid-community';
+import { themeAlpine, type ColDef } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';

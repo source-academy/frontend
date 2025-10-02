@@ -1,4 +1,4 @@
-import { getHotkeyHandler, HotkeyItem } from '@mantine/hooks';
+import { HotkeyItem, getHotkeyHandler } from '@mantine/hooks';
 import React, { PropsWithChildren } from 'react';
 
 type HotKeysProps = {

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Group as KonvaGroup, Label as KonvaLabel, Text as KonvaText } from 'react-konva';
 
-import { Visible } from '../../components/Visible';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { defaultTextColor, getTextWidth } from '../../CseMachineUtils';
+import { Visible } from '../../components/Visible';
 import { CseMachine } from '../CseMachine';
 
 /** this class encapsulates a string to be drawn onto the canvas */

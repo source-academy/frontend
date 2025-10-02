@@ -4,8 +4,8 @@ import classes from 'src/styles/AchievementCommentCard.module.scss';
 
 import { Assessment } from '../assessment/AssessmentTypes';
 import { useTypedSelector } from '../utils/Hooks';
-import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import { assessmentTypeLink } from '../utils/ParamParseHelper';
+import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
 
 type Props = {
   assessment: Assessment;
