@@ -1,9 +1,9 @@
-import { Store } from '@reduxjs/toolkit';
+import type { Store } from '@reduxjs/toolkit';
 import { render } from '@testing-library/react';
 import { Provider, useDispatch } from 'react-redux';
 import { RouterProvider, createMemoryRouter } from 'react-router';
-import { Mock, vi } from 'vitest';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
+import { describe, expect, test, vi } from 'vitest';
+import type { OverallState } from 'src/commons/application/ApplicationTypes';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 
 import { mockInitialStore } from '../../../commons/mocks/StoreMocks';
@@ -11,28 +11,28 @@ import Login from '../Login';
 import LoginCallback from '../LoginCallback';
 import LoginPage from '../LoginPage';
 
-vi.mock('react-redux', async () => ({
-  ...(await vi.importActual('react-redux')),
+vi.mock(import('react-redux'), async importActual => ({
+  ...await importActual(),
   useDispatch: vi.fn()
 }));
-const useDispatchMock = useDispatch as Mock;
+const useDispatchMock = vi.mocked(useDispatch);
 const dispatchMock = vi.fn();
 
-vi.mock('../../../commons/utils/Constants', () => {
+vi.mock(import('../../../commons/utils/Constants'), () => {
   return {
-    __esModule: true,
+    // __esModule: true,
     default: {
       otherAuthProviders: new Map([['luminus', { name: 'LumiNUS' }]]),
       defaultSourceChapter: 4,
       defaultSourceVariant: 'default'
-    }
+    } as any
   };
 });
 
 // https://stackoverflow.com/a/74525026
 const navigateSpy = vi.fn();
-vi.mock('react-router', async () => ({
-  ...(await vi.importActual('react-router')),
+vi.mock(import('react-router'), async importActual => ({
+  ...(await importActual()),
   useNavigate: () => navigateSpy
 }));
 
@@ -59,6 +59,7 @@ const createTestComponent = (mockStore: Store<OverallState>, location: string) =
 
 describe(Login, () => {
   beforeEach(() => {
+    navigateSpy.mockClear();
     useDispatchMock.mockReturnValue(dispatchMock);
     dispatchMock.mockClear();
   });
@@ -84,7 +85,9 @@ describe(Login, () => {
     const app = createTestComponent(store, `/login/callback?code=${code}&provider=${providerId}`);
     render(app);
 
-    expect(dispatchMock).toHaveBeenCalledWithExactlyOnceWith(SessionActions.fetchAuth(code, providerId));
+    expect(dispatchMock).toHaveBeenCalledExactlyOnceWith(
+      SessionActions.fetchAuth(code, providerId)
+    );
   });
 
   test('Dispatches handleSamlRedirect when JWT cookies is present (from SAML redirect), and NOT logged in', () => {
@@ -98,7 +101,9 @@ describe(Login, () => {
     const app = createTestComponent(store, `/login/callback`);
     render(app);
 
-    expect(dispatchMock).toHaveBeenCalledWithExactlyOnceWith(SessionActions.handleSamlRedirect(jwtCookie));
+    expect(dispatchMock).toHaveBeenCalledExactlyOnceWith(
+      SessionActions.handleSamlRedirect(jwtCookie)
+    );
   });
 
   describe('When isLoggedIn and no course', () => {
@@ -111,7 +116,7 @@ describe(Login, () => {
       const app = createTestComponent(store, '/login');
       render(app);
 
-      expect(navigateSpy).toHaveBeenCalledWithExactlyOnceWith('/welcome');
+      expect(navigateSpy).toHaveBeenCalledExactlyOnceWith('/welcome');
     });
 
     test('/login/callback redirects to /welcome', () => {
@@ -123,7 +128,7 @@ describe(Login, () => {
       const app = createTestComponent(store, '/login/callback?code=abc');
       render(app);
 
-      expect(navigateSpy).toHaveBeenCalledWithExactlyOnceWith('/welcome');
+      expect(navigateSpy).toHaveBeenCalledExactlyOnceWith('/welcome');
     });
   });
 
@@ -139,7 +144,7 @@ describe(Login, () => {
       const app = createTestComponent(store, '/login');
       render(app);
 
-      expect(navigateSpy).toHaveBeenCalledWithExactlyOnceWith(`/courses/${courseId}`);
+      expect(navigateSpy).toHaveBeenCalledExactlyOnceWith(`/courses/${courseId}`);
     });
 
     test('/login/callback redirects to /courses/<courseId>', () => {
@@ -153,7 +158,7 @@ describe(Login, () => {
       const app = createTestComponent(store, '/login/callback');
       render(app);
 
-      expect(navigateSpy).toHaveBeenCalledWithExactlyOnceWith(`/courses/${courseId}`);
+      expect(navigateSpy).toHaveBeenCalledExactlyOnceWith(`/courses/${courseId}`);
     });
   });
 
@@ -162,6 +167,6 @@ describe(Login, () => {
     const app = createTestComponent(store, '/login/callback');
     render(app);
 
-    expect(navigateSpy).toHaveBeenCalledWithExactlyOnceWith('/login');
+    expect(navigateSpy).toHaveBeenCalledExactlyOnceWith('/login');
   });
 });
