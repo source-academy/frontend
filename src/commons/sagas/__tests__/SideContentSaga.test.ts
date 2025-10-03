@@ -1,26 +1,26 @@
 import { IconNames } from '@blueprintjs/icons';
-import { Context } from 'js-slang';
+import type { Context } from 'js-slang';
 import { expectSaga } from 'redux-saga-test-plan';
-import { Mock, vi } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { getDynamicTabs } from 'src/commons/sideContent/SideContentHelper';
 import { SideContentReducer } from 'src/commons/sideContent/SideContentReducer';
 import {
-  SideContentState,
-  SideContentTab,
   SideContentType,
-  type SideContentManagerState
+  type SideContentManagerState,
+  type SideContentState,
+  type SideContentTab
 } from 'src/commons/sideContent/SideContentTypes';
 import { actions } from 'src/commons/utils/ActionsHelper';
 
 import SideContentSaga from '../SideContentSaga';
 
-vi.mock('src/commons/sideContent/SideContentHelper', async () => ({
-  ...(await vi.importActual('src/commons/sideContent/SideContentHelper')),
+vi.mock(import('src/commons/sideContent/SideContentHelper'), async importOriginal => ({
+  ...(await importOriginal()),
   getDynamicTabs: vi.fn()
 }));
 
 describe('Side Content Alerts for normal side content', () => {
-  const mockedGetDynamicTabs = getDynamicTabs as Mock<typeof getDynamicTabs>;
+  const mockedGetDynamicTabs = vi.mocked(getDynamicTabs);
 
   const expectSagaWrapper = (initialState: SideContentState, dynamicTabs: SideContentTab[]) => {
     mockedGetDynamicTabs.mockImplementationOnce(() => dynamicTabs);
