@@ -1,11 +1,13 @@
-import { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import { describe, expect, it } from 'vitest';
+import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import InterpreterActions from '../InterpreterActions';
 
 const assessmentWorkspace: WorkspaceLocation = 'assessment';
 const gradingWorkspace: WorkspaceLocation = 'grading';
 const playgroundWorkspace: WorkspaceLocation = 'playground';
 
-test('handleConsoleLog generates correct action object', () => {
+describe(InterpreterActions.handleConsoleLog.type, () => {
+it('generates correct action object', () => {
   const logString = 'test-log-string';
   const action = InterpreterActions.handleConsoleLog(assessmentWorkspace, logString);
   expect(action).toEqual({
@@ -17,7 +19,9 @@ test('handleConsoleLog generates correct action object', () => {
   });
 });
 
-test('evalInterpreterSuccess generates correct action object', () => {
+})
+describe(InterpreterActions.evalInterpreterSuccess.type, () => {
+it('generates correct action object', () => {
   const value = 'value';
   const action = InterpreterActions.evalInterpreterSuccess(value, gradingWorkspace);
   expect(action).toEqual({
@@ -30,7 +34,9 @@ test('evalInterpreterSuccess generates correct action object', () => {
   });
 });
 
-test('evalTestcaseSuccess generates correct action object', () => {
+})
+describe(InterpreterActions.evalTestcaseSuccess.type, () => {
+it('generates correct action object', () => {
   const value = 'another value';
   const index = 3;
   const action = InterpreterActions.evalTestcaseSuccess(value, playgroundWorkspace, index);
@@ -45,7 +51,9 @@ test('evalTestcaseSuccess generates correct action object', () => {
   });
 });
 
-test('evalInterpreterError generates correct action object', () => {
+})
+describe(InterpreterActions.evalInterpreterError.type, () => {
+it('generates correct action object', () => {
   const errors: any = [];
   const action = InterpreterActions.evalInterpreterError(errors, assessmentWorkspace);
   expect(action).toEqual({
@@ -58,7 +66,9 @@ test('evalInterpreterError generates correct action object', () => {
   });
 });
 
-test('beginInterruptExecution generates correct action object', () => {
+})
+describe(InterpreterActions.beginInterruptExecution.type, () => {
+it('generates correct action object', () => {
   const action = InterpreterActions.beginInterruptExecution(gradingWorkspace);
   expect(action).toEqual({
     type: InterpreterActions.beginInterruptExecution.type,
@@ -68,7 +78,9 @@ test('beginInterruptExecution generates correct action object', () => {
   });
 });
 
-test('endInterruptExecution generates correct action object', () => {
+})
+describe(InterpreterActions.endInterruptExecution.type, () => {
+it('generates correct action object', () => {
   const action = InterpreterActions.endInterruptExecution(playgroundWorkspace);
   expect(action).toEqual({
     type: InterpreterActions.endInterruptExecution.type,
@@ -78,7 +90,9 @@ test('endInterruptExecution generates correct action object', () => {
   });
 });
 
-test('beginDebuggerPause generates correct action object', () => {
+})
+describe(InterpreterActions.beginDebuggerPause.type, () => {
+it('generates correct action object', () => {
   const action = InterpreterActions.beginDebuggerPause(assessmentWorkspace);
   expect(action).toEqual({
     type: InterpreterActions.beginDebuggerPause.type,
@@ -88,7 +102,9 @@ test('beginDebuggerPause generates correct action object', () => {
   });
 });
 
-test('endDebuggerPause generates correct action object', () => {
+})
+describe(InterpreterActions.endDebuggerPause.type, () => {
+it('generates correct action object', () => {
   const action = InterpreterActions.endDebuggerPause(gradingWorkspace);
   expect(action).toEqual({
     type: InterpreterActions.endDebuggerPause.type,
@@ -98,7 +114,9 @@ test('endDebuggerPause generates correct action object', () => {
   });
 });
 
-test('debuggerResume generates correct action object', () => {
+})
+describe(InterpreterActions.debuggerResume.type, () => {
+it('generates correct action object', () => {
   const action = InterpreterActions.debuggerResume(playgroundWorkspace);
   expect(action).toEqual({
     type: InterpreterActions.debuggerResume.type,
@@ -108,7 +126,9 @@ test('debuggerResume generates correct action object', () => {
   });
 });
 
-test('debuggerReset generates correct action object', () => {
+})
+describe(InterpreterActions.debuggerReset.type, () => {
+it('generates correct action object', () => {
   const action = InterpreterActions.debuggerReset(assessmentWorkspace);
   expect(action).toEqual({
     type: InterpreterActions.debuggerReset.type,
@@ -117,3 +137,5 @@ test('debuggerReset generates correct action object', () => {
     }
   });
 });
+
+})
