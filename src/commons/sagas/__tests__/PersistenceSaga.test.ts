@@ -1,7 +1,7 @@
 /// <reference types="gapi.auth2" />
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { expectSaga } from 'redux-saga-test-plan';
-import { vi } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import PlaygroundActions from 'src/features/playground/PlaygroundActions';
 
@@ -13,7 +13,7 @@ import PersistenceSaga from '../PersistenceSaga';
 // import cycles
 // this is before the import below because we need to ensure PersistenceSaga's
 // store import is mocked
-vi.mock('../../../pages/createStore');
+vi.mock(import('../../../pages/createStore'));
 
 const USER_EMAIL = 'test@email.com';
 const FILE_ID = '123';
@@ -59,15 +59,18 @@ beforeAll(() => {
   } as any;
 });
 
-test('LOGOUT_GOOGLE causes logout', async () => {
-  const signOut = vi.spyOn(window.gapi.auth2.getAuthInstance(), 'signOut');
+describe(actions.logoutGoogle.type, () => {
+  it('causes logout', async () => {
+    const signOut = vi.spyOn(window.gapi.auth2.getAuthInstance(), 'signOut');
 
-  await expectSaga(PersistenceSaga).dispatch(actions.logoutGoogle()).silentRun();
-  expect(signOut).toBeCalled();
-});
+    await expectSaga(PersistenceSaga).dispatch(actions.logoutGoogle()).silentRun();
+    expect(signOut).toBeCalled();
+  });
+})
 
-describe('PERSISTENCE_OPEN_PICKER', () => {
-  test('opens a file on success path', () => {
+
+describe(actions.persistenceOpenPicker.type, () => {
+  it('opens a file on success path', () => {
     return expectSaga(PersistenceSaga)
       .withState({
         workspaces: {
@@ -124,7 +127,7 @@ describe('PERSISTENCE_OPEN_PICKER', () => {
       .silentRun();
   });
 
-  test('does not open if picker cancelled', () => {
+  it('does not open if picker cancelled', () => {
     return expectSaga(PersistenceSaga)
       .dispatch(actions.persistenceOpenPicker())
       .provide({
@@ -148,7 +151,7 @@ describe('PERSISTENCE_OPEN_PICKER', () => {
       .silentRun();
   });
 
-  test('does not open if confirm cancelled', () => {
+  it('does not open if confirm cancelled', () => {
     return expectSaga(PersistenceSaga)
       .dispatch(actions.persistenceOpenPicker())
       .provide({
@@ -171,7 +174,8 @@ describe('PERSISTENCE_OPEN_PICKER', () => {
   });
 });
 
-test('PERSISTENCE_SAVE_FILE saves', () => {
+describe(actions.persistenceSaveFile.type, () => {
+it('saves', () => {
   let updateFileCalled = false;
   return expectSaga(PersistenceSaga)
     .withState({
@@ -219,11 +223,12 @@ test('PERSISTENCE_SAVE_FILE saves', () => {
     .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
     .silentRun();
 });
+})
 
-describe('PERSISTENCE_SAVE_FILE_AS', () => {
+describe(actions.persistenceSaveFileAs, () => {
   const DIR = { id: '456', name: 'Directory', picked: true };
 
-  test('overwrites a file in root', async () => {
+  it('overwrites a file in root', async () => {
     let updateFileCalled = false;
     await expectSaga(PersistenceSaga)
       .withState({
@@ -281,7 +286,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
     expect(updateFileCalled).toBe(true);
   });
 
-  test('overwrites a file in a directory', async () => {
+  it('overwrites a file in a directory', async () => {
     let updateFileCalled = false;
     await expectSaga(PersistenceSaga)
       .withState({
@@ -339,7 +344,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
     expect(updateFileCalled).toBe(true);
   });
 
-  test('creates a new file in root', async () => {
+  it('creates a new file in root', async () => {
     let createFileCalled = false;
     await expectSaga(PersistenceSaga)
       .withState({
@@ -399,7 +404,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
     expect(createFileCalled).toBe(true);
   });
 
-  test('creates a new file in a directory', async () => {
+  it('creates a new file in a directory', async () => {
     let createFileCalled = false;
     await expectSaga(PersistenceSaga)
       .withState({
@@ -459,7 +464,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
     expect(createFileCalled).toBe(true);
   });
 
-  test('does not overwrite if cancelled', () =>
+  it('does not overwrite if cancelled', () =>
     expectSaga(PersistenceSaga)
       .withState({
         workspaces: {
@@ -501,7 +506,7 @@ describe('PERSISTENCE_SAVE_FILE_AS', () => {
       .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
       .silentRun());
 
-  test('does not create a new file if cancelled', () =>
+  it('does not create a new file if cancelled', () =>
     expectSaga(PersistenceSaga)
       .withState({
         workspaces: {
