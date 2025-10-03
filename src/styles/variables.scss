@@ -9,3 +9,15 @@ $cadet-color-5: #ffffff;
 
 $images-path: '../assets';
 $achievement-assets: 'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement';
+
+// For greenscreen
+$pure-green: #00ff00;
+$dark-green: #00e000;
+
+// Mixins
+
+@mixin mQ($arg) {
+  @media screen and (max-width: $arg) {
+    @content;
+  }
+}
