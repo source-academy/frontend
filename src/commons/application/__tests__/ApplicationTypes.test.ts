@@ -1,4 +1,5 @@
 import { Chapter, Variant } from 'js-slang/dist/langs';
+import { describe, expect, it } from 'vitest';
 
 import {
   ALL_LANGUAGES,
@@ -9,19 +10,19 @@ import {
 } from '../ApplicationTypes';
 
 describe(getLanguageConfig, () => {
-  test('works for existing variants', () => {
+  it('works for existing variants', () => {
     for (const language of ALL_LANGUAGES) {
       expect(getLanguageConfig(language.chapter, language.variant)).toEqual(language);
     }
   });
 
-  test('throws an error for an invalid chapter/variant combination', () => {
+  it('throws an error for an invalid chapter/variant combination', () => {
     expect(() => getLanguageConfig(5 as Chapter, Variant.DEFAULT)).toThrowErrorMatchingSnapshot();
   });
 });
 
 describe('available Source language configurations', () => {
-  test('matches expected configurations', () => {
+  it('matches expected configurations', () => {
     const expectedSourceConfigs = [
       // Source 1
       { chapter: Chapter.SOURCE_1, variant: Variant.DEFAULT, supports: { substVisualizer: true } },
@@ -86,19 +87,19 @@ describe('available Source language configurations', () => {
     expect(sourceLanguages).toMatchObject(expectedSourceConfigs);
   });
 
-  test('matches snapshot', () => {
+  it('matches snapshot', () => {
     expect(sourceLanguages).toMatchSnapshot();
   });
 });
 
 describe('available Python language configurations', () => {
-  test('matches snapshot', () => {
+  it('matches snapshot', () => {
     expect(pyLanguages).toMatchSnapshot();
   });
 });
 
 describe('available Scheme language configurations', () => {
-  test('matches snapshot', () => {
+  it('matches snapshot', () => {
     expect(schemeLanguages).toMatchSnapshot();
   });
 });

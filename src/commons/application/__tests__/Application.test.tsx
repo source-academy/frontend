@@ -1,15 +1,15 @@
-import { Mock, vi } from 'vitest';
+import { expect, test, vi } from 'vitest';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import Application from '../Application';
 
-vi.mock('react-redux', async importOriginal => ({
+vi.mock(import('react-redux'), async importOriginal => ({
   ...(await importOriginal()),
   useDispatch: vi.fn(),
   useSelector: vi.fn()
 }));
-const useSelectorMock = useTypedSelector as Mock;
+const useSelectorMock = vi.mocked(useTypedSelector);
 
 test('Application renders correctly', () => {
   useSelectorMock.mockReturnValue({ name: 'Bob' });

@@ -1,6 +1,7 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { RouterProvider, createMemoryRouter } from 'react-router';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { createStore } from 'src/pages/createStore';
 import { getFullAcademyRouterConfig, playgroundOnlyRouterConfig } from 'src/routes/routerConfig';
 
@@ -21,7 +22,11 @@ describe('ApplicationWrapper', () => {
     store = createStore();
   });
 
-  test('ApplicationWrapper renders NotFound on unknown routes (Full Academy)', async () => {
+  afterEach(() => {
+    cleanup();
+  })
+
+  it('ApplicationWrapper renders NotFound on unknown routes (Full Academy)', async () => {
     const routerConfig = getFullAcademyRouterConfig({
       name: 'Bob',
       isLoggedIn: false,
@@ -40,7 +45,7 @@ describe('ApplicationWrapper', () => {
     expect(element).toBeTruthy();
   });
 
-  test('ApplicationWrapper renders NotFound on unknown routes (Playground Only)', async () => {
+  it('ApplicationWrapper renders NotFound on unknown routes (Playground Only)', async () => {
     const routerConfig = playgroundOnlyRouterConfig;
 
     const app = (

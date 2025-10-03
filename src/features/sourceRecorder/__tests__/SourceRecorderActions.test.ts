@@ -1,7 +1,8 @@
 import { Chapter } from 'js-slang/dist/langs';
+import { describe, expect, it } from 'vitest';
 
-import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
-import type { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import {
   saveSourcecastData,
   setCodeDeltasToApply,
@@ -10,12 +11,18 @@ import {
   setSourcecastDuration,
   setSourcecastStatus
 } from '../SourceRecorderActions';
-import { PlaybackStatus, type CodeDelta, type Input, type PlaybackData } from '../SourceRecorderTypes';
+import {
+  PlaybackStatus,
+  type CodeDelta,
+  type Input,
+  type PlaybackData
+} from '../SourceRecorderTypes';
 
 const sourcecastWorkspace: WorkspaceLocation = 'sourcecast';
 const sourcereelWorkspace: WorkspaceLocation = 'sourcereel';
 
-test('saveSourcecastData generates correct action object', () => {
+describe(saveSourcecastData.type, () => {
+it('generates correct action object', () => {
   const fakeUrl = 'someFakeAudioUrl.com';
   const noOp = () => fakeUrl;
   window.URL.createObjectURL = noOp;
@@ -52,8 +59,10 @@ test('saveSourcecastData generates correct action object', () => {
     }
   });
 });
+})
 
-test('setCodeDeltasToApply generates correct action object', () => {
+describe(setCodeDeltasToApply.type, () => {
+it('generates correct action object', () => {
   const codeDeltas: CodeDelta[] = [
     {
       start: {
@@ -77,8 +86,10 @@ test('setCodeDeltasToApply generates correct action object', () => {
     }
   });
 });
+})
 
-test('setInputToApply generates correct action object', () => {
+describe(setInputToApply.type, () => {
+it('generates correct action object', () => {
   const codeDelta: CodeDelta = {
     start: {
       row: 0,
@@ -105,8 +116,10 @@ test('setInputToApply generates correct action object', () => {
     }
   });
 });
+})
 
-test('setSourcecastData generates correct action object', () => {
+describe(setSourcecastData.type, () => {
+it('generates correct action object', () => {
   const codeDelta: CodeDelta = {
     start: {
       row: 0,
@@ -152,8 +165,10 @@ test('setSourcecastData generates correct action object', () => {
     }
   });
 });
+})
 
-test('setSourcecastDuration generates correct action object', () => {
+describe(setSourcecastDuration.type, () => {
+it('generates correct action object', () => {
   const duration = 5;
   const action = setSourcecastDuration(duration, sourcecastWorkspace);
   expect(action).toEqual({
@@ -161,8 +176,10 @@ test('setSourcecastDuration generates correct action object', () => {
     payload: { duration, workspaceLocation: sourcecastWorkspace }
   });
 });
+})
 
-test('setSourcecastStatus generates correct action object', () => {
+describe(setSourcecastStatus.type, () => {
+it('generates correct action object', () => {
   const status = PlaybackStatus.paused;
   const action = setSourcecastStatus(status, sourcecastWorkspace);
   expect(action).toEqual({
@@ -170,3 +187,4 @@ test('setSourcecastStatus generates correct action object', () => {
     payload: { playbackStatus: status, workspaceLocation: sourcecastWorkspace }
   });
 });
+})
