@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 /**
  * Background is repeated here instead of Application, so that
  * - The background is repeated regardless of content overextending the page

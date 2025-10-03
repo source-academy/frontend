@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 .GroundControl {
   .#{$ns}-collapse .#{$ns}-card {
     margin-top: 4px;

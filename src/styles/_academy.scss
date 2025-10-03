@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 @media only screen and (max-width: 512px) {
   .custom-hidden-xxxs {
     display: none;

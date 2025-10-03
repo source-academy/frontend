@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 .workspace {
   .#{$ns}-card {
     background-color: $cadet-color-2;
