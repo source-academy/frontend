@@ -4,5 +4,20 @@
   "files.insertFinalNewline": true,
   "liveServer.settings.file": "/index.html",
   "liveServer.settings.NoBrowser": true,
-  "liveServer.settings.root": "/build"
+  "liveServer.settings.root": "/build",
+  "[scss]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  // Collapse generated files into their sources
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": true,
+  "explorer.fileNesting.patterns": {
+    "*.module.css": "${capture}.module.css.d.ts",
+    "*.module.scss": "${capture}.module.scss.d.ts"
+  },
+  // Mark generated files as read-only
+  "files.readonlyInclude": {
+    "src/**/*.module.css.d.ts": true,
+    "src/**/*.module.scss.d.ts": true
+  }
 }
