@@ -1,9 +1,10 @@
 import { createAction } from '@reduxjs/toolkit';
-import { Chapter } from 'js-slang/dist/types';
-import { SourceActionType } from 'src/commons/utils/ActionsHelper';
+import { Chapter } from 'js-slang/dist/langs';
+import { describe, expect, it } from 'vitest';
 
-import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
-import { ExternalLibraryName } from '../../../../commons/application/types/ExternalTypes';
+import { defaultWorkspaceManager } from 'src/commons/application/ApplicationTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
 import {
   saveSourcecastData,
   setCodeDeltasToApply,
@@ -13,11 +14,11 @@ import {
   setSourcecastStatus
 } from '../../SourceRecorderActions';
 import {
-  CodeDelta,
-  Input,
-  PlaybackData,
   PlaybackStatus,
-  SourcecastData
+  type CodeDelta,
+  type Input,
+  type PlaybackData,
+  type SourcecastData
 } from '../../SourceRecorderTypes';
 import { updateSourcecastIndex } from '../SourcecastActions';
 import { SourcecastReducer } from '../SourcecastReducer';
@@ -25,8 +26,8 @@ import { SourcecastReducer } from '../SourcecastReducer';
 const generateAction = <T, S extends SourceActionType['type']>(type: S, payload: T) =>
   createAction(type, (payload: T) => ({ payload }))(payload);
 
-describe('SAVE_SOURCECAST_DATA', () => {
-  test('saves sourcecastData correctly', () => {
+describe(saveSourcecastData.type, () => {
+  it('saves sourcecastData correctly', () => {
     const codeDelta: CodeDelta = {
       start: {
         row: 0,
@@ -72,8 +73,8 @@ describe('SAVE_SOURCECAST_DATA', () => {
   });
 });
 
-describe('SET_CODE_DELTAS_TO_APPLY', () => {
-  test('sets codeDeltasToApply correctly', () => {
+describe(setCodeDeltasToApply.type, () => {
+  it('sets codeDeltasToApply correctly', () => {
     const deltas: CodeDelta[] = [
       {
         start: {
@@ -112,8 +113,8 @@ describe('SET_CODE_DELTAS_TO_APPLY', () => {
   });
 });
 
-describe('SET_INPUT_TO_APPLY', () => {
-  test('sets inputToApply correctly', () => {
+describe(setInputToApply.type, () => {
+  it('sets inputToApply correctly', () => {
     const delta: CodeDelta = {
       start: {
         row: 0,
@@ -145,8 +146,8 @@ describe('SET_INPUT_TO_APPLY', () => {
   });
 });
 
-describe('SET_SOURCECAST_DATA', () => {
-  test('sets sourcecastData correctly', () => {
+describe(setSourcecastData.type, () => {
+  it('sets sourcecastData correctly', () => {
     const codeDelta: CodeDelta = {
       start: {
         row: 0,
@@ -192,8 +193,8 @@ describe('SET_SOURCECAST_DATA', () => {
   });
 });
 
-describe('SET_SOURCECAST_PLAYBACK_DURATION', () => {
-  test('sets sourcecastPlaybackDuration correctly', () => {
+describe(setSourcecastDuration.type, () => {
+  it('sets sourcecastPlaybackDuration correctly', () => {
     const duration = 5;
     const action = generateAction(setSourcecastDuration.type, {
       duration,
@@ -208,8 +209,8 @@ describe('SET_SOURCECAST_PLAYBACK_DURATION', () => {
   });
 });
 
-describe('SET_SOURCECAST_PLAYBACK_STATUS', () => {
-  test('sets sourcecastPlaybackStatus correctly', () => {
+describe(setSourcecastStatus.type, () => {
+  it('sets sourcecastPlaybackStatus correctly', () => {
     const playbackStatus = PlaybackStatus.paused;
     const action = generateAction(setSourcecastStatus.type, {
       playbackStatus,
@@ -224,8 +225,8 @@ describe('SET_SOURCECAST_PLAYBACK_STATUS', () => {
   });
 });
 
-describe('UPDATE_SOURCECAST_INDEX', () => {
-  test('updates sourcecastIndex correctly', () => {
+describe(updateSourcecastIndex.type, () => {
+  it('updates sourcecastIndex correctly', () => {
     const sourcecastData: SourcecastData[] = [
       {
         title: 'Test Title',

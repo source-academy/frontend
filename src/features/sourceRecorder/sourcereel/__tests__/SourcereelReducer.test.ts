@@ -1,18 +1,24 @@
 import { createAction } from '@reduxjs/toolkit';
 import { Chapter } from 'js-slang/dist/langs';
-import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
+import { describe, expect, it } from 'vitest';
 
-import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
-import { ExternalLibraryName } from '../../../../commons/application/types/ExternalTypes';
-import { RecordingStatus, type CodeDelta, type Input, type PlaybackData } from '../../SourceRecorderTypes';
+import { defaultWorkspaceManager } from 'src/commons/application/ApplicationTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import type { SourceActionType } from 'src/commons/utils/ActionsHelper';
+import {
+  RecordingStatus,
+  type CodeDelta,
+  type Input,
+  type PlaybackData
+} from '../../SourceRecorderTypes';
 import SourcereelActions from '../SourcereelActions';
 import { SourcereelReducer } from '../SourcereelReducer';
 
 const generateAction = <T, S extends SourceActionType['type']>(type: S, payload: T) =>
   createAction(type, (payload: T) => ({ payload }))(payload);
 
-describe('RECORD_INIT', () => {
-  test('records editorInitValue correctly', () => {
+describe(SourcereelActions.recordInit.type, () => {
+  it('records editorInitValue correctly', () => {
     const initData: PlaybackData['init'] = {
       editorValue: 'test init value',
       chapter: Chapter.SOURCE_1,
@@ -33,8 +39,8 @@ describe('RECORD_INIT', () => {
   });
 });
 
-describe('RECORD_INPUT', () => {
-  test('records input correctly', () => {
+describe(SourcereelActions.recordInput.type, () => {
+  it('records input correctly', () => {
     const delta: CodeDelta = {
       start: {
         row: 0,
@@ -69,8 +75,8 @@ describe('RECORD_INPUT', () => {
   });
 });
 
-describe('TIMER_PAUSE', () => {
-  test('pauses timer correctly', () => {
+describe(SourcereelActions.timerPause.type, () => {
+  it('pauses timer correctly', () => {
     const timeNow = 123456;
     const action = generateAction(SourcereelActions.timerPause.type, {
       timeNow,
@@ -88,8 +94,8 @@ describe('TIMER_PAUSE', () => {
   });
 });
 
-describe('TIMER_RESET', () => {
-  test('pauses timer correctly', () => {
+describe(SourcereelActions.timerReset.type, () => {
+  it('pauses timer correctly', () => {
     const action = generateAction(SourcereelActions.timerReset.type, {
       workspaceLocation: undefined!
     });
@@ -103,8 +109,8 @@ describe('TIMER_RESET', () => {
   });
 });
 
-describe('TIMER_RESUME', () => {
-  test('pauses timer correctly', () => {
+describe(SourcereelActions.timerResume.type, () => {
+  it('resumes timer correctly', () => {
     const timeNow = 123456;
     const action = generateAction(SourcereelActions.timerResume.type, {
       timeNow,
@@ -120,8 +126,8 @@ describe('TIMER_RESUME', () => {
   });
 });
 
-describe('TIMER_START', () => {
-  test('pauses timer correctly', () => {
+describe(SourcereelActions.timerStart.type, () => {
+  it('starts timer correctly', () => {
     const timeNow = 123456;
     const action = generateAction(SourcereelActions.timerStart.type, {
       timeNow,
@@ -137,8 +143,8 @@ describe('TIMER_START', () => {
   });
 });
 
-describe('TIMER_STOP', () => {
-  test('pauses timer correctly', () => {
+describe(SourcereelActions.timerStop.type, () => {
+  it('stops timer correctly', () => {
     const timeNow = 123456;
     const action = generateAction(SourcereelActions.timerStop.type, {
       timeNow,

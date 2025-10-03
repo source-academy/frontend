@@ -1,7 +1,8 @@
 import { Chapter } from 'js-slang/dist/langs';
+import { describe, expect, it } from 'vitest';
 
-import { ExternalLibraryName } from '../../../../commons/application/types/ExternalTypes';
-import type { WorkspaceLocation } from '../../../../commons/workspace/WorkspaceTypes';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
 import type { CodeDelta, Input, PlaybackData } from '../../SourceRecorderTypes';
 import SourcereelActions from '../SourcereelActions';
 
@@ -11,7 +12,8 @@ function dateIsCloseEnough(dateA: number, dateB: number) {
   return Math.abs(dateA - dateB) <= 1000;
 }
 
-test('recordInit generates correct action object', () => {
+describe(SourcereelActions.recordInit.type, () => {
+it('generates correct action object', () => {
   const initData: PlaybackData['init'] = {
     editorValue: 'Init Value',
     chapter: Chapter.SOURCE_1,
@@ -26,8 +28,10 @@ test('recordInit generates correct action object', () => {
     }
   });
 });
+})
 
-test('recordInput generates correct action object', () => {
+describe(SourcereelActions.recordInput.type, () => {
+it('generates correct action object', () => {
   const codeDelta: CodeDelta = {
     start: {
       row: 0,
@@ -54,43 +58,54 @@ test('recordInput generates correct action object', () => {
     }
   });
 });
+})
 
-test('timerPause generates correct action object', () => {
+describe(SourcereelActions.timerPause.type, () => {
+it('generates correct action object', () => {
   const currentTime = Date.now();
   const action = SourcereelActions.timerPause(sourcereelWorkspace);
   expect(action.type).toEqual(SourcereelActions.timerPause.type);
   expect(action.payload.workspaceLocation).toEqual(sourcereelWorkspace);
   expect(dateIsCloseEnough(currentTime, action.payload.timeNow)).toBeTruthy();
 });
+})
 
-test('timerReset generates correct action object', () => {
+describe(SourcereelActions.timerReset.type, () => {
+it('generates correct action object', () => {
   const action = SourcereelActions.timerReset(sourcereelWorkspace);
   expect(action).toEqual({
     type: SourcereelActions.timerReset.type,
     payload: { workspaceLocation: sourcereelWorkspace }
   });
 });
+})
 
-test('timerResume generates correct action object', () => {
+describe(SourcereelActions.timerResume.type, () => {
+it('generates correct action object', () => {
   const currentTime = Date.now();
   const action = SourcereelActions.timerResume(1000, sourcereelWorkspace);
   expect(action.type).toEqual(SourcereelActions.timerResume.type);
   expect(action.payload.workspaceLocation).toEqual(sourcereelWorkspace);
   expect(dateIsCloseEnough(currentTime, action.payload.timeNow)).toBeTruthy();
 });
+})
 
-test('timerStart generates correct action object', () => {
-  const currentTime = Date.now();
+describe(SourcereelActions.timerStart.type, () => {
+  it('generates correct action object', () => {
+    const currentTime = Date.now();
   const action = SourcereelActions.timerStart(sourcereelWorkspace);
   expect(action.type).toEqual(SourcereelActions.timerStart.type);
   expect(action.payload.workspaceLocation).toEqual(sourcereelWorkspace);
   expect(dateIsCloseEnough(currentTime, action.payload.timeNow)).toBeTruthy();
 });
+  })
 
-test('timerStop generates correct action object', () => {
+describe(SourcereelActions.timerStop.type, () => {
+it('generates correct action object', () => {
   const currentTime = Date.now();
   const action = SourcereelActions.timerStop(sourcereelWorkspace);
   expect(action.type).toEqual(SourcereelActions.timerStop.type);
   expect(action.payload.workspaceLocation).toEqual(sourcereelWorkspace);
   expect(dateIsCloseEnough(currentTime, action.payload.timeNow)).toBeTruthy();
 });
+})

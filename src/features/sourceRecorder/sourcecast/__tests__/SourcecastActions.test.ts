@@ -1,10 +1,12 @@
-import { WorkspaceLocation } from '../../../../commons/workspace/WorkspaceTypes';
-import { SourcecastData } from '../../SourceRecorderTypes';
+import { describe, expect, it } from 'vitest';
+import type { WorkspaceLocation } from '../../../../commons/workspace/WorkspaceTypes';
+import type { SourcecastData } from '../../SourceRecorderTypes';
 import { fetchSourcecastIndex, updateSourcecastIndex } from '../SourcecastActions';
 
 const sourcecastWorkspace: WorkspaceLocation = 'sourcecast';
 
-test('fetchSourcecastIndex generates correct action object', () => {
+describe(fetchSourcecastIndex.type, () => {
+it('generates correct action object', () => {
   const action = fetchSourcecastIndex(sourcecastWorkspace);
   expect(action).toEqual({
     type: fetchSourcecastIndex.type,
@@ -13,8 +15,10 @@ test('fetchSourcecastIndex generates correct action object', () => {
     }
   });
 });
+})
 
-test('updateSourcecastIndex generates correct action object', () => {
+describe(updateSourcecastIndex.type, () => {
+it('generates correct action object', () => {
   const sourcecastData: SourcecastData = {
     title: 'Test Title',
     description: 'Test Description',
@@ -35,3 +39,4 @@ test('updateSourcecastIndex generates correct action object', () => {
     payload: { index: [sourcecastData], workspaceLocation: sourcecastWorkspace }
   });
 });
+})

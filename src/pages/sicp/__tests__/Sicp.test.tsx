@@ -1,13 +1,13 @@
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import type { Location } from 'react-router';
-import { vi } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import Sicp from '../Sicp';
 
-vi.mock('react-router', () => ({
+vi.mock(import('react-router'), () => ({
   useParams: vi.fn().mockReturnValue({ section: 'index' }),
   useNavigate: vi.fn().mockReturnValue(vi.fn()),
   useLocation: vi.fn().mockReturnValue({} as Location)
