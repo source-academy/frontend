@@ -1,21 +1,5 @@
 @use 'sass:math';
 
-@use '~normalize.css/normalize.css' as *;
-@use '~@blueprintjs/core/lib/css/blueprint.css' as *;
-@use '~@blueprintjs/datetime/lib/css/blueprint-datetime.css' as *;
-@use '~@blueprintjs/select/lib/css/blueprint-select.css' as *;
-@use '~flexboxgrid/dist/flexboxgrid.css' as *;
-@use '~flexboxgrid-helpers/dist/flexboxgrid-helpers.min.css' as *;
-
-// CSS styles for react-mde Markdown editor
-// (currently this editor is only used for grading comments)
-// react-mde-preview.css is excluded to avoid conflict with blueprintjs
-// styles in the preview tab of the editor, providing a more accurate
-// depiction of what the actual comment will look like
-@use '~react-mde/lib/styles/css/react-mde-toolbar.css' as *;
-@use '~react-mde/lib/styles/css/react-mde-editor.css' as *;
-@use '~react-mde/lib/styles/css/react-mde.css' as *;
-
 @use '../../node_modules/@blueprintjs/core/lib/scss/variables' as *;
 @use 'global' as *;
 
