@@ -1,5 +1,5 @@
-@import '_global';
-@import '@blueprintjs/core/lib/scss/variables';
+@use '_global' as *;
+@use '@blueprintjs/core/lib/scss/variables' as *;
 
 .span {
   display: inline-flex;

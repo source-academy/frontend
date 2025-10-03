@@ -1,4 +1,4 @@
-@import '_global';
+@use '_global' as *;
 
 .grading-badge {
   border-radius: 9999px;

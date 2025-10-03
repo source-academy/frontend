@@ -1,44 +1,44 @@
 @use 'sass:math';
 
-@import '~normalize.css/normalize.css';
-@import '~@blueprintjs/core/lib/css/blueprint.css';
-@import '~@blueprintjs/datetime/lib/css/blueprint-datetime.css';
-@import '~@blueprintjs/select/lib/css/blueprint-select.css';
-@import '~flexboxgrid/dist/flexboxgrid.css';
-@import '~flexboxgrid-helpers/dist/flexboxgrid-helpers.min.css';
+@use '~normalize.css/normalize.css' as *;
+@use '~@blueprintjs/core/lib/css/blueprint.css' as *;
+@use '~@blueprintjs/datetime/lib/css/blueprint-datetime.css' as *;
+@use '~@blueprintjs/select/lib/css/blueprint-select.css' as *;
+@use '~flexboxgrid/dist/flexboxgrid.css' as *;
+@use '~flexboxgrid-helpers/dist/flexboxgrid-helpers.min.css' as *;
 
 // CSS styles for react-mde Markdown editor
 // (currently this editor is only used for grading comments)
 // react-mde-preview.css is excluded to avoid conflict with blueprintjs
 // styles in the preview tab of the editor, providing a more accurate
 // depiction of what the actual comment will look like
-@import '~react-mde/lib/styles/css/react-mde-toolbar.css';
-@import '~react-mde/lib/styles/css/react-mde-editor.css';
-@import '~react-mde/lib/styles/css/react-mde.css';
+@use '~react-mde/lib/styles/css/react-mde-toolbar.css' as *;
+@use '~react-mde/lib/styles/css/react-mde-editor.css' as *;
+@use '~react-mde/lib/styles/css/react-mde.css' as *;
 
-@import '../../node_modules/@blueprintjs/core/lib/scss/variables';
-@import 'global';
+@use '../../node_modules/@blueprintjs/core/lib/scss/variables' as *;
+@use 'global' as *;
 
-@import 'academy';
-@import 'achievementcontrol';
-@import 'achievementdashboard';
-@import 'application';
-@import 'commons';
-@import 'contributors';
-@import 'dropdown';
-@import 'editorTabs';
-@import 'game';
-@import 'github';
-@import 'gamesimulator';
-@import 'groundcontrol';
-@import 'mobileworkspace';
-@import 'navigationBar';
-@import 'playground';
-@import 'sicp';
-@import 'sideBar';
-@import 'sourcereel';
-@import 'sourcecast';
-@import 'stories';
-@import 'variableHighlighting';
-@import 'workspaceGreen';
-@import 'workspace';
+@use 'academy' as *;
+@use 'achievementcontrol' as *;
+@use 'achievementdashboard' as *;
+@use 'application' as *;
+@use 'commons' as *;
+@use 'contributors' as *;
+@use 'dropdown' as *;
+@use 'editorTabs' as *;
+@use 'game' as *;
+@use 'github' as *;
+@use 'gamesimulator' as *;
+@use 'groundcontrol' as *;
+@use 'mobileworkspace' as *;
+@use 'navigationBar' as *;
+@use 'playground' as *;
+@use 'sicp' as *;
+@use 'sideBar' as *;
+@use 'sourcereel' as *;
+@use 'sourcecast' as *;
+@use 'stories' as *;
+@use 'variableHighlighting' as *;
+@use 'workspaceGreen' as *;
+@use 'workspace' as *;

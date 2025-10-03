@@ -1,4 +1,4 @@
-@import '_global';
+@use '_global' as *;
 
 .context-menu {
   background-color: $cadet-color-1;
