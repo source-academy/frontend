@@ -2,7 +2,11 @@ import { Icon, Tab, Tabs, Tooltip, Tree, TreeNodeInfo } from '@blueprintjs/core'
 import { cloneDeep } from 'lodash';
 import React from 'react';
 import { useRequest } from 'src/commons/utils/Hooks';
-import { deleteS3File, fetchAssetPaths, s3AssetFolders  } from 'src/features/gameSimulator/GameSimulatorService';
+import {
+  deleteS3File,
+  fetchAssetPaths,
+  s3AssetFolders
+} from 'src/features/gameSimulator/GameSimulatorService';
 
 import AssetViewerPreview from './AssetViewerPreview';
 import AssetViewerUpload from './AssetViewerUpload';

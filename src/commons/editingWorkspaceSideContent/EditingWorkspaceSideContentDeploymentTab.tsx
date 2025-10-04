@@ -5,7 +5,11 @@ import { Chapter, Variant } from 'js-slang/dist/langs';
 import React from 'react';
 
 import ControlButton from '../ControlButton';
-import { sourceLanguages, styliseSublanguage, type SALanguage } from '../application/ApplicationTypes';
+import {
+  sourceLanguages,
+  styliseSublanguage,
+  type SALanguage
+} from '../application/ApplicationTypes';
 import {
   externalLibraries,
   type External,

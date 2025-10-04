@@ -18,7 +18,7 @@ import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { Links } from 'src/commons/utils/Constants';
-import { useSession , useTypedSelector } from 'src/commons/utils/Hooks';
+import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
 
 import { parseQuery } from 'src/commons/utils/QueryHelper';
 import classes from 'src/styles/Login.module.scss';

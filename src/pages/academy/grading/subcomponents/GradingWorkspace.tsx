@@ -32,11 +32,17 @@ import { convertEditorTabStateToProps } from '../../../../commons/editor/EditorC
 import type { Position } from '../../../../commons/editor/EditorTypes';
 import type { SideContentProps } from '../../../../commons/sideContent/SideContent';
 import { useSideContent } from '../../../../commons/sideContent/SideContentHelper';
-import { SideContentType, type SideContentTab } from '../../../../commons/sideContent/SideContentTypes';
+import {
+  SideContentType,
+  type SideContentTab
+} from '../../../../commons/sideContent/SideContentTypes';
 import SideContentAutograder from '../../../../commons/sideContent/content/SideContentAutograder';
 import SideContentToneMatrix from '../../../../commons/sideContent/content/SideContentToneMatrix';
 import Workspace, { type WorkspaceProps } from '../../../../commons/workspace/Workspace';
-import type { WorkspaceLocation, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
+import type {
+  WorkspaceLocation,
+  WorkspaceState
+} from '../../../../commons/workspace/WorkspaceTypes';
 import type { AnsweredQuestion } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditor';
 

@@ -32,7 +32,11 @@ import Constants, { Links } from '../../utils/Constants';
 import WorkspaceActions from '../../workspace/WorkspaceActions';
 import { beginAlertSideContent } from '../SideContentActions';
 import { getLocation } from '../SideContentHelper';
-import { SideContentType, type NonStoryWorkspaceLocation, type SideContentTab } from '../SideContentTypes';
+import {
+  SideContentType,
+  type NonStoryWorkspaceLocation,
+  type SideContentTab
+} from '../SideContentTypes';
 
 type State = {
   visualization: React.ReactNode;
