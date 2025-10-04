@@ -35,17 +35,17 @@ import Markdown from '../Markdown';
 import { defaultWorkspaceManager } from '../application/ApplicationTypes';
 import SessionActions from '../application/actions/SessionActions';
 import {
-  AssessmentConfiguration,
-  AutogradingResult,
-  ContestEntry,
-  IContestVotingQuestion,
-  IMCQQuestion,
-  IProgrammingQuestion,
-  Library,
   QuestionTypes,
-  Testcase
+  type AssessmentConfiguration,
+  type AutogradingResult,
+  type ContestEntry,
+  type IContestVotingQuestion,
+  type IMCQQuestion,
+  type IProgrammingQuestion,
+  type Library,
+  type Testcase
 } from '../assessment/AssessmentTypes';
-import { ControlBarProps } from '../controlBar/ControlBar';
+import type { ControlBarProps } from '../controlBar/ControlBar';
 import { ControlBarChapterSelect } from '../controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../controlBar/ControlBarEvalButton';

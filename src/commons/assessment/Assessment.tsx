@@ -24,7 +24,7 @@ import ControlButton from '../ControlButton';
 import { Role } from '../application/ApplicationTypes';
 import SessionActions from '../application/actions/SessionActions';
 import AssessmentWorkspace, {
-  AssessmentWorkspaceProps
+  type AssessmentWorkspaceProps
 } from '../assessmentWorkspace/AssessmentWorkspace';
 import Constants from '../utils/Constants';
 import { beforeNow } from '../utils/DateHelper';
@@ -33,10 +33,10 @@ import { convertParamToInt } from '../utils/ParamParseHelper';
 import AssessmentNotFound from './AssessmentNotFound';
 import AssessmentOverviewCard from './AssessmentOverviewCard';
 import {
-  AssessmentConfiguration,
-  AssessmentOverview,
   AssessmentStatuses,
-  AssessmentWorkspaceParams
+  type AssessmentConfiguration,
+  type AssessmentOverview,
+  type AssessmentWorkspaceParams
 } from './AssessmentTypes';
 
 const Assessment: React.FC = () => {

@@ -197,17 +197,18 @@ export async function runJavaCseMachine(code: string, targetStep: number, contex
     elaborate: () => e.explain()
   });
   context.executionMethod = 'cse-machine';
-  return ECE.runECEvaluator(code, targetStep)
-    .then(result => {
-      context.runtime.envStepsTotal = result.context.totalSteps;
-      if (result.status === 'error') {
-        context.errors = result.context.errors.map(e => convertJavaErrorToJsError(e));
-      }
-      return result;
-    })
-    .catch(e => {
-      console.error(e);
-      const errorResult: Result = { status: 'error', context };
-      return errorResult;
-    });
+  try {
+
+  const result = await ECE.runECEvaluator(code, targetStep);
+  context.runtime.envStepsTotal = result.context.totalSteps;
+  if (result.status === 'error') {
+    context.errors = result.context.errors.map(e => convertJavaErrorToJsError(e));
+  }
+  return result;
+
+  } catch (e) {
+    console.error(e);
+    const errorResult: Result = { status: 'error', context };
+    return errorResult;
+  }
 }

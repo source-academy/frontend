@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest';
 import ContentDisplay, { type ContentDisplayProps } from '../ContentDisplay';
 import { renderTreeJson } from '../utils/TestUtils';
 
