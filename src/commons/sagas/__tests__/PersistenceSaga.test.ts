@@ -66,8 +66,7 @@ describe(actions.logoutGoogle.type, () => {
     await expectSaga(PersistenceSaga).dispatch(actions.logoutGoogle()).silentRun();
     expect(signOut).toBeCalled();
   });
-})
-
+});
 
 describe(actions.persistenceOpenPicker.type, () => {
   it('opens a file on success path', () => {
@@ -175,55 +174,55 @@ describe(actions.persistenceOpenPicker.type, () => {
 });
 
 describe(actions.persistenceSaveFile.type, () => {
-it('saves', () => {
-  let updateFileCalled = false;
-  return expectSaga(PersistenceSaga)
-    .withState({
-      workspaces: {
-        playground: {
-          activeEditorTabIndex: 0,
-          editorTabs: [{ value: FILE_DATA }],
-          externalLibrary: SOURCE_LIBRARY,
-          context: {
-            chapter: SOURCE_CHAPTER,
-            variant: SOURCE_VARIANT
+  it('saves', () => {
+    let updateFileCalled = false;
+    return expectSaga(PersistenceSaga)
+      .withState({
+        workspaces: {
+          playground: {
+            activeEditorTabIndex: 0,
+            editorTabs: [{ value: FILE_DATA }],
+            externalLibrary: SOURCE_LIBRARY,
+            context: {
+              chapter: SOURCE_CHAPTER,
+              variant: SOURCE_VARIANT
+            }
           }
         }
-      }
-    })
-    .dispatch(actions.persistenceSaveFile({ id: FILE_ID, name: FILE_NAME }))
-    .provide({
-      call(effect, next) {
-        switch (effect.fn.name) {
-          case 'updateFile':
-            expect(updateFileCalled).toBe(false);
-            expect(effect.args).toEqual([
-              FILE_ID,
-              FILE_NAME,
-              'text/plain',
-              FILE_DATA,
-              { chapter: SOURCE_CHAPTER, variant: SOURCE_VARIANT, external: SOURCE_LIBRARY }
-            ]);
-            updateFileCalled = true;
-            return;
-          case 'ensureInitialisedAndAuthorised':
-          case 'ensureInitialised':
-          case 'showMessage':
-          case 'showSuccessMessage':
-            return;
+      })
+      .dispatch(actions.persistenceSaveFile({ id: FILE_ID, name: FILE_NAME }))
+      .provide({
+        call(effect, next) {
+          switch (effect.fn.name) {
+            case 'updateFile':
+              expect(updateFileCalled).toBe(false);
+              expect(effect.args).toEqual([
+                FILE_ID,
+                FILE_NAME,
+                'text/plain',
+                FILE_DATA,
+                { chapter: SOURCE_CHAPTER, variant: SOURCE_VARIANT, external: SOURCE_LIBRARY }
+              ]);
+              updateFileCalled = true;
+              return;
+            case 'ensureInitialisedAndAuthorised':
+            case 'ensureInitialised':
+            case 'showMessage':
+            case 'showSuccessMessage':
+              return;
+          }
+          assert.fail(`unexpected function called: ${effect.fn.name}`);
         }
-        assert.fail(`unexpected function called: ${effect.fn.name}`);
-      }
-    })
-    .put.like({
-      action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME })
-    })
-    .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
-    .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
-    .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
-    .silentRun();
+      })
+      .put.like({
+        action: actions.playgroundUpdatePersistenceFile({ id: FILE_ID, name: FILE_NAME })
+      })
+      .not.put.like({ action: { type: WorkspaceActions.updateEditorValue.type } })
+      .not.put.like({ action: { type: WorkspaceActions.chapterSelect.type } })
+      .not.put.like({ action: { type: WorkspaceActions.changeExternalLibrary.type } })
+      .silentRun();
+  });
 });
-})
 
 describe(actions.persistenceSaveFileAs, () => {
   const DIR = { id: '456', name: 'Directory', picked: true };

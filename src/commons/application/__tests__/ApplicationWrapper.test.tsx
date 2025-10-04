@@ -24,7 +24,7 @@ describe('ApplicationWrapper', () => {
 
   afterEach(() => {
     cleanup();
-  })
+  });
 
   it('ApplicationWrapper renders NotFound on unknown routes (Full Academy)', async () => {
     const routerConfig = getFullAcademyRouterConfig({

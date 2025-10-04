@@ -9,7 +9,7 @@ import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import ResearchAgreementPrompt from '../ResearchAgreementPrompt';
 
 vi.mock(import('react-redux'), async importOriginal => ({
-  ...await importOriginal(),
+  ...(await importOriginal()),
   useDispatch: vi.fn()
 }));
 

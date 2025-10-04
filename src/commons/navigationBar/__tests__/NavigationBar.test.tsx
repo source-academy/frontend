@@ -1,28 +1,29 @@
 import { useLocation } from 'react-router';
-import { Mock, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import { Role } from '../../application/ApplicationTypes';
 import NavigationBar from '../NavigationBar';
 
-vi.mock('react-router', async () => ({
-  ...(await vi.importActual('react-router')),
+vi.mock(import('react-router'), async importOriginal => ({
+  ...(await importOriginal()),
   useLocation: vi.fn()
 }));
-vi.mock('react-redux', async () => ({
-  ...(await vi.importActual('react-redux')),
+
+vi.mock(import('react-redux'), async importOriginal => ({
+  ...(await importOriginal()),
   useSelector: vi.fn()
 }));
 
-const useSelectorMock = useTypedSelector as Mock;
-const useLocationMock = useLocation as Mock;
+const useSelectorMock = vi.mocked(useTypedSelector)
+const useLocationMock = vi.mocked(useLocation);
 
 describe(NavigationBar, () => {
   beforeEach(() => {
     useLocationMock.mockReturnValue({
       pathname: 'localhost:8000/courses/1/game'
-    });
+    } as any);
   });
 
   it('Renders "Not logged in" correctly', () => {
@@ -64,7 +65,7 @@ describe(NavigationBar, () => {
     expect(tree).toMatchSnapshot();
   });
 
-  test('Renders correctly for student without course', () => {
+  it('Renders correctly for student without course', () => {
     useSelectorMock.mockReturnValueOnce({
       name: 'Bob'
     });

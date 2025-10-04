@@ -13,99 +13,99 @@ function dateIsCloseEnough(dateA: number, dateB: number) {
 }
 
 describe(SourcereelActions.recordInit.type, () => {
-it('generates correct action object', () => {
-  const initData: PlaybackData['init'] = {
-    editorValue: 'Init Value',
-    chapter: Chapter.SOURCE_1,
-    externalLibrary: ExternalLibraryName.NONE
-  };
-  const action = SourcereelActions.recordInit(initData, sourcereelWorkspace);
-  expect(action).toEqual({
-    type: SourcereelActions.recordInit.type,
-    payload: {
-      initData,
-      workspaceLocation: sourcereelWorkspace
-    }
+  it('generates correct action object', () => {
+    const initData: PlaybackData['init'] = {
+      editorValue: 'Init Value',
+      chapter: Chapter.SOURCE_1,
+      externalLibrary: ExternalLibraryName.NONE
+    };
+    const action = SourcereelActions.recordInit(initData, sourcereelWorkspace);
+    expect(action).toEqual({
+      type: SourcereelActions.recordInit.type,
+      payload: {
+        initData,
+        workspaceLocation: sourcereelWorkspace
+      }
+    });
   });
 });
-})
 
 describe(SourcereelActions.recordInput.type, () => {
-it('generates correct action object', () => {
-  const codeDelta: CodeDelta = {
-    start: {
-      row: 0,
-      column: 1
-    },
-    end: {
-      row: 0,
-      column: 2
-    },
-    action: 'insert',
-    lines: ['a']
-  };
-  const input: Input = {
-    time: 1,
-    type: 'codeDelta',
-    data: codeDelta
-  };
-  const action = SourcereelActions.recordInput(input, sourcereelWorkspace);
-  expect(action).toEqual({
-    type: SourcereelActions.recordInput.type,
-    payload: {
-      input,
-      workspaceLocation: sourcereelWorkspace
-    }
+  it('generates correct action object', () => {
+    const codeDelta: CodeDelta = {
+      start: {
+        row: 0,
+        column: 1
+      },
+      end: {
+        row: 0,
+        column: 2
+      },
+      action: 'insert',
+      lines: ['a']
+    };
+    const input: Input = {
+      time: 1,
+      type: 'codeDelta',
+      data: codeDelta
+    };
+    const action = SourcereelActions.recordInput(input, sourcereelWorkspace);
+    expect(action).toEqual({
+      type: SourcereelActions.recordInput.type,
+      payload: {
+        input,
+        workspaceLocation: sourcereelWorkspace
+      }
+    });
   });
 });
-})
 
 describe(SourcereelActions.timerPause.type, () => {
-it('generates correct action object', () => {
-  const currentTime = Date.now();
-  const action = SourcereelActions.timerPause(sourcereelWorkspace);
-  expect(action.type).toEqual(SourcereelActions.timerPause.type);
-  expect(action.payload.workspaceLocation).toEqual(sourcereelWorkspace);
-  expect(dateIsCloseEnough(currentTime, action.payload.timeNow)).toBeTruthy();
-});
-})
-
-describe(SourcereelActions.timerReset.type, () => {
-it('generates correct action object', () => {
-  const action = SourcereelActions.timerReset(sourcereelWorkspace);
-  expect(action).toEqual({
-    type: SourcereelActions.timerReset.type,
-    payload: { workspaceLocation: sourcereelWorkspace }
+  it('generates correct action object', () => {
+    const currentTime = Date.now();
+    const action = SourcereelActions.timerPause(sourcereelWorkspace);
+    expect(action.type).toEqual(SourcereelActions.timerPause.type);
+    expect(action.payload.workspaceLocation).toEqual(sourcereelWorkspace);
+    expect(dateIsCloseEnough(currentTime, action.payload.timeNow)).toBeTruthy();
   });
 });
-})
+
+describe(SourcereelActions.timerReset.type, () => {
+  it('generates correct action object', () => {
+    const action = SourcereelActions.timerReset(sourcereelWorkspace);
+    expect(action).toEqual({
+      type: SourcereelActions.timerReset.type,
+      payload: { workspaceLocation: sourcereelWorkspace }
+    });
+  });
+});
 
 describe(SourcereelActions.timerResume.type, () => {
-it('generates correct action object', () => {
-  const currentTime = Date.now();
-  const action = SourcereelActions.timerResume(1000, sourcereelWorkspace);
-  expect(action.type).toEqual(SourcereelActions.timerResume.type);
-  expect(action.payload.workspaceLocation).toEqual(sourcereelWorkspace);
-  expect(dateIsCloseEnough(currentTime, action.payload.timeNow)).toBeTruthy();
+  it('generates correct action object', () => {
+    const currentTime = Date.now();
+    const action = SourcereelActions.timerResume(1000, sourcereelWorkspace);
+    expect(action.type).toEqual(SourcereelActions.timerResume.type);
+    expect(action.payload.workspaceLocation).toEqual(sourcereelWorkspace);
+    expect(dateIsCloseEnough(currentTime, action.payload.timeNow)).toBeTruthy();
+  });
 });
-})
 
 describe(SourcereelActions.timerStart.type, () => {
   it('generates correct action object', () => {
     const currentTime = Date.now();
-  const action = SourcereelActions.timerStart(sourcereelWorkspace);
-  expect(action.type).toEqual(SourcereelActions.timerStart.type);
-  expect(action.payload.workspaceLocation).toEqual(sourcereelWorkspace);
-  expect(dateIsCloseEnough(currentTime, action.payload.timeNow)).toBeTruthy();
+    const action = SourcereelActions.timerStart(sourcereelWorkspace);
+    expect(action.type).toEqual(SourcereelActions.timerStart.type);
+    expect(action.payload.workspaceLocation).toEqual(sourcereelWorkspace);
+    expect(dateIsCloseEnough(currentTime, action.payload.timeNow)).toBeTruthy();
+  });
 });
-  })
 
 describe(SourcereelActions.timerStop.type, () => {
-it('generates correct action object', () => {
-  const currentTime = Date.now();
-  const action = SourcereelActions.timerStop(sourcereelWorkspace);
-  expect(action.type).toEqual(SourcereelActions.timerStop.type);
-  expect(action.payload.workspaceLocation).toEqual(sourcereelWorkspace);
-  expect(dateIsCloseEnough(currentTime, action.payload.timeNow)).toBeTruthy();
+  it('generates correct action object', () => {
+    const currentTime = Date.now();
+    const action = SourcereelActions.timerStop(sourcereelWorkspace);
+    expect(action.type).toEqual(SourcereelActions.timerStop.type);
+    expect(action.payload.workspaceLocation).toEqual(sourcereelWorkspace);
+    expect(dateIsCloseEnough(currentTime, action.payload.timeNow)).toBeTruthy();
+  });
 });
-})

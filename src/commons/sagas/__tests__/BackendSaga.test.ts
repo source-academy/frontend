@@ -286,9 +286,9 @@ function describe<T extends string>(
   suite: (type: T) => void
 ) {
   if (!this) {
-    baseDescribe(creator.type, () => suite(creator.type))
+    baseDescribe(creator.type, () => suite(creator.type));
   } else {
-    baseDescribe.skip(creator.type, () => suite(creator.type))
+    baseDescribe.skip(creator.type, () => suite(creator.type));
   }
 }
 
@@ -296,8 +296,8 @@ describe.skip = function <T extends string>(
   creator: BaseActionCreator<any, T>,
   suite: (type: T) => void
 ) {
-  this.call(true, creator, suite as any)
-}
+  this.call(true, creator, suite as any);
+};
 
 describe(SessionActions.fetchAuth, actionType => {
   const code = 'luminusCode';
@@ -451,7 +451,7 @@ describe(SessionActions.handleSamlRedirect, actionType => {
       .dispatch({ type: actionType, payload: { jwtCookie } })
       .silentRun();
   });
-})
+});
 
 describe(SessionActions.fetchUserAndCourse, actionType => {
   const user = mockUser;

@@ -12,7 +12,7 @@ import LoginCallback from '../LoginCallback';
 import LoginPage from '../LoginPage';
 
 vi.mock(import('react-redux'), async importActual => ({
-  ...await importActual(),
+  ...(await importActual()),
   useDispatch: vi.fn()
 }));
 const useDispatchMock = vi.mocked(useDispatch);

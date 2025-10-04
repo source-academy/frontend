@@ -21,7 +21,7 @@ describe('Sicp errors:', () => {
     screen.getByTestId('sicp-page-not-found-error');
   });
 
-  test('unexpected error renders correctly', async () => {
+  test('parsing error renders correctly', async () => {
     const element = getSicpError(SicpErrorType.PARSING_ERROR);
     expect(shallowRender(element)).toMatchSnapshot();
 
