@@ -1,5 +1,6 @@
+import { describe, expect, test } from 'vitest';
 import * as NotificationHelpers from '../NotificationBadgeHelper';
-import { Notification } from '../NotificationBadgeTypes';
+import type { Notification } from '../NotificationBadgeTypes';
 
 const notificationMission: Notification = {
   id: 1,

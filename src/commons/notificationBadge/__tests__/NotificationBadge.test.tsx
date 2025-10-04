@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import { describe, expect, test } from 'vitest';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 
 import NotificationBadge from '../NotificationBadge';
@@ -8,7 +9,7 @@ import {
   filterNotificationsBySubmission,
   filterNotificationsByType
 } from '../NotificationBadgeHelper';
-import { Notification } from '../NotificationBadgeTypes';
+import type { Notification } from '../NotificationBadgeTypes';
 
 const notifications: Notification[] = [
   {

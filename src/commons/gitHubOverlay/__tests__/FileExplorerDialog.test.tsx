@@ -1,9 +1,9 @@
-import { Octokit } from '@octokit/rest';
-import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
-import { DeepPartial } from '@reduxjs/toolkit';
+import type { Octokit } from '@octokit/rest';
+import type { GetResponseTypeFromEndpointMethod } from '@octokit/types';
+import type { DeepPartial } from '@reduxjs/toolkit';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react';
-import { Mock, vi } from 'vitest';
+import { expect, test, vi } from 'vitest';
 
 import {
   checkIfFileCanBeOpened,
@@ -18,7 +18,7 @@ import {
 import FileExplorerDialog from '../FileExplorerDialog';
 import { GitHubTreeNodeCreator } from '../GitHubTreeNodeCreator';
 
-vi.mock('../../../features/github/GitHubUtils');
+vi.mock(import('../../../features/github/GitHubUtils'));
 
 test('Selecting close causes onSubmit to be called with empty string', async () => {
   const octokit = getOctokitInstanceMock();
@@ -50,9 +50,7 @@ test('Selecting close causes onSubmit to be called with empty string', async () 
 });
 
 test('Opening folder for first time causes child files to be loaded', async () => {
-  const getGitHubOctokitInstanceMock = getGitHubOctokitInstance as Mock<
-    typeof getGitHubOctokitInstance
-  >;
+  const getGitHubOctokitInstanceMock = vi.mocked(getGitHubOctokitInstance);
   getGitHubOctokitInstanceMock.mockImplementation(getOctokitInstanceMock);
 
   const octokit = getOctokitInstanceMock();
@@ -83,9 +81,7 @@ test('Opening folder for first time causes child files to be loaded', async () =
 });
 
 test('Closing folder hides child files', async () => {
-  const getGitHubOctokitInstanceMock = getGitHubOctokitInstance as Mock<
-    typeof getGitHubOctokitInstance
-  >;
+  const getGitHubOctokitInstanceMock = vi.mocked(getGitHubOctokitInstance);
   getGitHubOctokitInstanceMock.mockImplementation(getOctokitInstanceMock);
 
   const octokit = getOctokitInstanceMock();
@@ -125,9 +121,7 @@ test('Closing folder hides child files', async () => {
 });
 
 test('Opening folder for second time does not cause child files to be loaded', async () => {
-  const getGitHubOctokitInstanceMock = getGitHubOctokitInstance as Mock<
-    typeof getGitHubOctokitInstance
-  >;
+  const getGitHubOctokitInstanceMock = vi.mocked(getGitHubOctokitInstance);
   getGitHubOctokitInstanceMock.mockImplementation(getOctokitInstanceMock);
 
   const getChildNodesSpy = vi.spyOn(GitHubTreeNodeCreator, 'getChildNodes');
@@ -181,17 +175,15 @@ test('Opening folder for second time does not cause child files to be loaded', a
 });
 
 test('Opening folder in editor leads to appropriate function being called', async () => {
-  const checkIfFileCanBeOpenedMock = checkIfFileCanBeOpened as Mock<typeof checkIfFileCanBeOpened>;
+  const checkIfFileCanBeOpenedMock = vi.mocked(checkIfFileCanBeOpened);
   checkIfFileCanBeOpenedMock.mockImplementation(
     async (octokit: Octokit, loginID: string, repoName: string, filePath: string) => true
   );
 
-  const checkIfUserAgreesToOverwriteEditorDataMock = checkIfUserAgreesToOverwriteEditorData as Mock<
-    typeof checkIfUserAgreesToOverwriteEditorData
-  >;
+  const checkIfUserAgreesToOverwriteEditorDataMock = vi.mocked(checkIfUserAgreesToOverwriteEditorData);
   checkIfUserAgreesToOverwriteEditorDataMock.mockImplementation(async () => true);
 
-  const openFileInEditorMock = openFileInEditor as Mock<typeof openFileInEditor>;
+  const openFileInEditorMock = vi.mocked(openFileInEditor);
   openFileInEditorMock.mockImplementation(
     async (octokit: Octokit, loginID: string, repoName: string, filePath: string) => {}
   );
@@ -221,17 +213,14 @@ test('Opening folder in editor leads to appropriate function being called', asyn
 });
 
 test('Performing creating save leads to appropriate function being called', async () => {
-  const checkIfFileCanBeSavedAndGetSaveTypeMock = checkIfFileCanBeSavedAndGetSaveType as Mock<
-    typeof checkIfFileCanBeSavedAndGetSaveType
-  >;
-
+  const checkIfFileCanBeSavedAndGetSaveTypeMock = vi.mocked(checkIfFileCanBeSavedAndGetSaveType);
   checkIfFileCanBeSavedAndGetSaveTypeMock.mockImplementation(
     async (octokit: Octokit, loginID: string, repoName: string, filePath: string) => {
       return { canBeSaved: true, saveType: 'Create' };
     }
   );
 
-  const performCreatingSaveMock = performCreatingSave as Mock<typeof performCreatingSave>;
+  const performCreatingSaveMock = vi.mocked(performCreatingSave);
   performCreatingSaveMock.mockImplementation(
     async (
       octokit: Octokit,
@@ -272,10 +261,7 @@ test('Performing creating save leads to appropriate function being called', asyn
 });
 
 test('Performing ovewriting save leads to appropriate function being called', async () => {
-  const checkIfFileCanBeSavedAndGetSaveTypeMock = checkIfFileCanBeSavedAndGetSaveType as Mock<
-    typeof checkIfFileCanBeSavedAndGetSaveType
-  >;
-
+  const checkIfFileCanBeSavedAndGetSaveTypeMock = vi.mocked(checkIfFileCanBeSavedAndGetSaveType);
   checkIfFileCanBeSavedAndGetSaveTypeMock.mockImplementation(
     async (octokit: Octokit, loginID: string, repoName: string, filePath: string) => {
       return { canBeSaved: true, saveType: 'Overwrite' };
@@ -283,12 +269,10 @@ test('Performing ovewriting save leads to appropriate function being called', as
   );
 
   const checkIfUserAgreesToPerformOverwritingSaveMock =
-    checkIfUserAgreesToPerformOverwritingSave as Mock<
-      typeof checkIfUserAgreesToPerformOverwritingSave
-    >;
+    vi.mocked(checkIfUserAgreesToPerformOverwritingSave);
   checkIfUserAgreesToPerformOverwritingSaveMock.mockImplementation(async () => true);
 
-  const performOverwritingSaveMock = performOverwritingSave as Mock<typeof performOverwritingSave>;
+  const performOverwritingSaveMock = vi.mocked(performOverwritingSave);
   performOverwritingSaveMock.mockImplementation(
     async (
       octokit: Octokit,

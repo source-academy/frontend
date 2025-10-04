@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { ErrorSeverity, ErrorType, type SourceError } from 'js-slang/dist/errors/base';
 import { act } from 'react';
+import { expect, test } from 'vitest';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import {

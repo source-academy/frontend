@@ -1,17 +1,15 @@
-import { Octokit } from '@octokit/rest';
-import { GetResponseTypeFromEndpointMethod } from '@octokit/types';
-import { Mock, vi } from 'vitest';
-import { DeepPartial } from 'src/commons/utils/TypeHelper';
+import type { Octokit } from '@octokit/rest';
+import type { GetResponseTypeFromEndpointMethod } from '@octokit/types';
+import { expect, test, vi } from 'vitest';
+import type { DeepPartial } from 'src/commons/utils/TypeHelper';
 
 import { getGitHubOctokitInstance } from '../../../features/github/GitHubUtils';
 import { GitHubTreeNodeCreator } from '../GitHubTreeNodeCreator';
 
-vi.mock('../../../features/github/GitHubUtils');
+vi.mock(import('../../../features/github/GitHubUtils'));
 
 test('Test generate first level of a repo', async () => {
-  const getGitHubOctokitInstanceMock = getGitHubOctokitInstance as Mock<
-    typeof getGitHubOctokitInstance
-  >;
+  const getGitHubOctokitInstanceMock = vi.mocked(getGitHubOctokitInstance);
   getGitHubOctokitInstanceMock.mockImplementation(getOctokitInstanceMock);
 
   const fileNodes = await GitHubTreeNodeCreator.getFirstLayerRepoFileNodes('some-repository');
@@ -53,9 +51,7 @@ test('Test attempt to generate repo with repoName as empty string', async () => 
 });
 
 test('Test attempt to create child nodes from two different repositories', async () => {
-  const getGitHubOctokitInstanceMock = getGitHubOctokitInstance as Mock<
-    typeof getGitHubOctokitInstance
-  >;
+  const getGitHubOctokitInstanceMock = vi.mocked(getGitHubOctokitInstance);
   getGitHubOctokitInstanceMock.mockImplementation(getOctokitInstanceMock);
 
   const fileNodes = await GitHubTreeNodeCreator.getFirstLayerRepoFileNodes('some-repository');
@@ -89,9 +85,7 @@ test('Test attempt to create child nodes from two different repositories', async
 });
 
 test('Test attempt to create repository while octokit not yet set', async () => {
-  const getGitHubOctokitInstanceMock = getGitHubOctokitInstance as Mock<
-    typeof getGitHubOctokitInstance
-  >;
+  const getGitHubOctokitInstanceMock = vi.mocked(getGitHubOctokitInstance);
   getGitHubOctokitInstanceMock.mockImplementation(getOctokitInstanceReturnUndefined);
 
   const fileNodes = await GitHubTreeNodeCreator.getFirstLayerRepoFileNodes('some-repository');

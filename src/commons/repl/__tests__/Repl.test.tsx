@@ -1,4 +1,5 @@
 import { Chapter, Variant } from 'js-slang/dist/langs';
+import { expect, test } from 'vitest';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 

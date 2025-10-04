@@ -1,8 +1,8 @@
 import { Intent } from '@blueprintjs/core';
-import { RenderResult, fireEvent, render, screen } from '@testing-library/react';
-import { vi } from 'vitest';
+import { fireEvent, render, screen, type RenderResult } from '@testing-library/react';
+import { expect, test, vi } from 'vitest';
 
-import { PromptDialog, PromptDialogProps } from '../PromptDialog';
+import { PromptDialog, type PromptDialogProps } from '../PromptDialog';
 
 const TEXT1 = 'Random';
 const TEXT2 = 'content';

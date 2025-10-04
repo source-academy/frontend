@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react';
-import { vi } from 'vitest';
+import { expect, test, vi } from 'vitest';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import { SideContentType } from '../SideContentTypes';

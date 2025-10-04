@@ -1,7 +1,8 @@
+import { expect, test } from 'vitest';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 
-import Editor, { EditorProps } from '../Editor';
-import { Position } from '../EditorTypes';
+import Editor, { type EditorProps } from '../Editor';
+import type { Position } from '../EditorTypes';
 
 test('Editor renders correctly', () => {
   const props: EditorProps = {

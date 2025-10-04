@@ -9,11 +9,11 @@ import {
 import createContext from 'js-slang/dist/createContext';
 import { ErrorType, type SourceError } from 'js-slang/dist/errors/base';
 import { Chapter, Variant } from 'js-slang/dist/langs';
-import { Finished } from 'js-slang/dist/types';
+import type { Finished } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
-import { vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { showFullJSDisclaimer, showFullTSDisclaimer } from 'src/commons/utils/WarningDialogHelper';
 
 import {
@@ -72,8 +72,8 @@ beforeEach(() => {
   (window as any).Inspector.highlightLine = vi.fn();
 });
 
-describe('TOGGLE_FOLDER_MODE', () => {
-  test('enables Folder mode & calls showWarningMessage correctly when isFolderMode is false', () => {
+describe(WorkspaceActions.toggleFolderMode.type, () => {
+  it('enables Folder mode & calls showWarningMessage correctly when isFolderMode is false', () => {
     const workspaceLocation = 'assessment';
     const currentWorkspaceFields: Partial<WorkspaceState> = {
       isFolderModeEnabled: false
@@ -91,7 +91,7 @@ describe('TOGGLE_FOLDER_MODE', () => {
       .silentRun();
   });
 
-  test('disables Folder mode & calls showWarningMessage correctly when isFolderMode is true', () => {
+  it('disables Folder mode & calls showWarningMessage correctly when isFolderMode is true', () => {
     const workspaceLocation = 'grading';
     const currentWorkspaceFields: Partial<WorkspaceState> = {
       isFolderModeEnabled: true
@@ -110,8 +110,8 @@ describe('TOGGLE_FOLDER_MODE', () => {
   });
 });
 
-describe('EVAL_EDITOR', () => {
-  test('puts beginClearContext and correctly executes prepend and value in sequence (calls evalCode)', () => {
+describe(WorkspaceActions.evalEditor.type, () => {
+  it('puts beginClearContext and correctly executes prepend and value in sequence (calls evalCode)', () => {
     const workspaceLocation = 'playground';
     const programPrependValue = 'const foo = (x) => -1;\n"reeee";';
     const editorValue = 'foo(2);';
@@ -205,8 +205,8 @@ describe('EVAL_EDITOR', () => {
   });
 });
 
-describe('TOGGLE_EDITOR_AUTORUN', () => {
-  test('calls showWarningMessage correctly when isEditorAutorun set to false', () => {
+describe(WorkspaceActions.toggleEditorAutorun.type, () => {
+  it('calls showWarningMessage correctly when isEditorAutorun set to false', () => {
     const workspaceLocation = 'assessment';
     return expectSaga(workspaceSaga)
       .withState(defaultState)
@@ -218,7 +218,7 @@ describe('TOGGLE_EDITOR_AUTORUN', () => {
       .silentRun();
   });
 
-  test('calls showWarningMessage correctly when isEditorAutorun set to true', () => {
+  it('calls showWarningMessage correctly when isEditorAutorun set to true', () => {
     const workspaceLocation = 'grading';
     const isEditorAutorun = true;
     const newDefaultState = generateDefaultState(workspaceLocation, { isEditorAutorun });
@@ -234,8 +234,8 @@ describe('TOGGLE_EDITOR_AUTORUN', () => {
   });
 });
 
-describe('EVAL_REPL', () => {
-  test('puts beginInterruptExecution, clearReplInput, sendReplInputToOutput and calls evalCode correctly', () => {
+describe(WorkspaceActions.evalRepl.type, () => {
+  it('puts beginInterruptExecution, clearReplInput, sendReplInputToOutput and calls evalCode correctly', () => {
     const workspaceLocation = 'playground';
     const replValue = 'sample code';
     const newState = generateDefaultState(workspaceLocation, { replValue });
@@ -265,7 +265,7 @@ describe('EVAL_REPL', () => {
   });
 });
 
-describe('DEBUG_RESUME', () => {
+describe(InterpreterActions.debuggerResume.type, () => {
   let workspaceLocation: WorkspaceLocation;
   let editorValue: string;
   let editorValueFilePath: string;
@@ -299,7 +299,7 @@ describe('DEBUG_RESUME', () => {
       .silentRun();
   });
 
-  test('puts beginInterruptExecution, clearReplOutput, setEditorHighlightedLines and calls evalCode correctly', () => {
+  it('puts beginInterruptExecution, clearReplOutput, setEditorHighlightedLines and calls evalCode correctly', () => {
     const newDefaultState = generateDefaultState(workspaceLocation, {
       editorTabs: [{ value: editorValue }],
       context
@@ -342,8 +342,8 @@ describe('DEBUG_RESUME', () => {
   });
 });
 
-describe('DEBUG_RESET', () => {
-  test('puts clearReplOutput and highlightHighlightedLine correctly', () => {
+describe(InterpreterActions.debuggerReset.type, () => {
+  it('puts clearReplOutput and highlightHighlightedLine correctly', () => {
     const workspaceLocation = 'assessment';
     const newDefaultState = generateDefaultState(workspaceLocation, {
       editorTabs: [{ value: 'test-value' }]
@@ -367,8 +367,8 @@ describe('DEBUG_RESET', () => {
   });
 });
 
-describe('EVAL_TESTCASE', () => {
-  test('correctly executes prepend, value, postpend, testcase in sequence (calls evalTestCode)', () => {
+describe(WorkspaceActions.evalTestcase.type, () => {
+  it('correctly executes prepend, value, postpend, testcase in sequence (calls evalTestCode)', () => {
     const workspaceLocation = 'grading';
     const programPrependValue = 'let z = 2;\nconst bar = (x, y) => 10 * x + y;\n"boink";';
     const editorValue = 'bar(6, 9);';
@@ -486,7 +486,7 @@ describe('EVAL_TESTCASE', () => {
   });
 });
 
-describe('CHAPTER_SELECT', () => {
+describe(WorkspaceActions.chapterSelect.type, () => {
   let workspaceLocation: WorkspaceLocation;
   let globals: Array<[string, any]>;
   let context: Context;
@@ -504,7 +504,7 @@ describe('CHAPTER_SELECT', () => {
     };
   });
 
-  test('puts beginClearContext, clearReplOutput and calls showSuccessMessage correctly', () => {
+  it('puts beginClearContext, clearReplOutput and calls showSuccessMessage correctly', () => {
     const newChapter = Chapter.SOURCE_3;
     const library: Library = {
       chapter: newChapter,
@@ -530,7 +530,7 @@ describe('CHAPTER_SELECT', () => {
       .silentRun();
   });
 
-  test('does not call beginClearContext, clearReplOutput and showSuccessMessage when oldChapter === newChapter and oldVariant === newVariant', () => {
+  it('does not call beginClearContext, clearReplOutput and showSuccessMessage when oldChapter === newChapter and oldVariant === newVariant', () => {
     const newChapter = Chapter.SOURCE_4;
     const newVariant = Variant.DEFAULT;
     const newDefaultState = generateDefaultState(workspaceLocation, { context, globals });
@@ -654,7 +654,7 @@ describe('CHAPTER_SELECT', () => {
   });
 });
 
-describe('PLAYGROUND_EXTERNAL_SELECT', () => {
+describe(WorkspaceActions.changeExternalLibrary.type, () => {
   let workspaceLocation: WorkspaceLocation;
   let globals: Array<[string, any]>;
   let chapter: Chapter;
@@ -674,7 +674,7 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
     };
   });
 
-  test('puts changeExternalLibrary, beginClearContext, clearReplOutput and calls showSuccessMessage correctly', () => {
+  it('puts changeExternalLibrary, beginClearContext, clearReplOutput and calls showSuccessMessage correctly', () => {
     const oldExternalLibraryName = ExternalLibraryName.NONE;
     const newExternalLibraryName = ExternalLibraryName.SOUNDS;
 
@@ -710,7 +710,7 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
       .silentRun();
   });
 
-  test('does not call the above when oldExternalLibraryName === newExternalLibraryName', () => {
+  it('does not call the above when oldExternalLibraryName === newExternalLibraryName', () => {
     const oldExternalLibraryName = ExternalLibraryName.SOUNDS;
     const newExternalLibraryName = ExternalLibraryName.SOUNDS;
     const newDefaultState = generateDefaultState(workspaceLocation, {
@@ -736,7 +736,7 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
   });
 });
 
-describe('BEGIN_CLEAR_CONTEXT', () => {
+describe(WorkspaceActions.beginClearContext.type, () => {
   let loadLib: any;
   let getReadyWebGLForCanvas: any;
   let getReadyStringifyForRunes: any;
@@ -762,7 +762,7 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
     ];
   });
 
-  test('loads SOUNDS library correctly', () => {
+  it('loads SOUNDS library correctly', () => {
     const newExternalLibraryName = ExternalLibraryName.SOUNDS;
 
     const symbols = externalLibraries.get(newExternalLibraryName)!;
@@ -821,8 +821,8 @@ describe('evalCode', () => {
     state = generateDefaultState(workspaceLocation, { lastDebuggerResult: { status: 'error' } });
   });
 
-  describe('on EVAL_EDITOR action without interruptions or pausing', () => {
-    test('calls runInContext, puts evalInterpreterSuccess when runInContext returns finished', () => {
+  describe(`on ${WorkspaceActions.evalEditor.type} action without interruptions or pausing`, () => {
+    it('calls runInContext, puts evalInterpreterSuccess when runInContext returns finished', () => {
       return expectSaga(
         evalCodeSaga,
         files,
@@ -851,7 +851,7 @@ describe('evalCode', () => {
         .silentRun();
     });
 
-    test('calls runInContext, puts endDebuggerPause and evalInterpreterSuccess when runInContext returns suspended', () => {
+    it('calls runInContext, puts endDebuggerPause and evalInterpreterSuccess when runInContext returns suspended', () => {
       return expectSaga(
         evalCodeSaga,
         files,
@@ -881,7 +881,7 @@ describe('evalCode', () => {
         .silentRun();
     });
 
-    test('calls runInContext, puts evalInterpreterError when runInContext returns error', () => {
+    it('calls runInContext, puts evalInterpreterError when runInContext returns error', () => {
       return expectSaga(
         evalCodeSaga,
         files,
@@ -908,7 +908,7 @@ describe('evalCode', () => {
     });
 
     // TODO: rewrite tests in a way that actually reflects known information.
-    test('with error in the code, should return correct line number in error', () => {
+    it('with error in the code, should return correct line number in error', () => {
       code = '// Prepend\n error';
       state = generateDefaultState(workspaceLocation, {
         programPrependValue: '// Prepend'
@@ -942,7 +942,7 @@ describe('evalCode', () => {
     });
   });
 
-  describe('on DEBUG_RESUME action without interruptions or pausing', () => {
+  describe(`on ${InterpreterActions.debuggerResume.type} action without interruptions or pausing`, () => {
     // Ensure that lastDebuggerResult is set correctly before running each of the tests below
     beforeEach(() => {
       return expectSaga(
@@ -958,7 +958,7 @@ describe('evalCode', () => {
         .silentRun();
     });
 
-    test('calls resume, puts evalInterpreterSuccess when resume returns finished', () => {
+    it('calls resume, puts evalInterpreterSuccess when resume returns finished', () => {
       actionType = InterpreterActions.debuggerResume.type;
 
       return expectSaga(
@@ -977,7 +977,7 @@ describe('evalCode', () => {
         .silentRun();
     });
 
-    test('calls resume, puts endDebuggerPause and evalInterpreterSuccess when resume returns suspended', () => {
+    it('calls resume, puts endDebuggerPause and evalInterpreterSuccess when resume returns suspended', () => {
       actionType = InterpreterActions.debuggerResume.type;
 
       return expectSaga(
@@ -997,7 +997,7 @@ describe('evalCode', () => {
         .silentRun();
     });
 
-    test('calls resume, puts evalInterpreterError when resume returns error', () => {
+    it('calls resume, puts evalInterpreterError when resume returns error', () => {
       actionType = InterpreterActions.debuggerResume.type;
 
       return expectSaga(
@@ -1017,7 +1017,7 @@ describe('evalCode', () => {
   });
 
   describe('on interrupt', () => {
-    test('puts debuggerReset, endInterruptExecution and calls showWarningMessage', () => {
+    it('puts debuggerReset, endInterruptExecution and calls showWarningMessage', () => {
       return expectSaga(
         evalCodeSaga,
         files,
@@ -1047,7 +1047,7 @@ describe('evalCode', () => {
   });
 
   describe('on paused', () => {
-    test('puts endDebuggerPause and calls showWarningMessage', () => {
+    it('puts endDebuggerPause and calls showWarningMessage', () => {
       return expectSaga(
         evalCodeSaga,
         files,
@@ -1131,7 +1131,7 @@ describe(evalTestCode, () => {
   });
 
   describe('without interrupt', () => {
-    test('puts evalInterpreterSuccess and evalTestcaseSuccess on finished status', () => {
+    it('puts evalInterpreterSuccess and evalTestcaseSuccess on finished status', () => {
       return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
         .withState(state)
         .provide([[call(runInContext, code, context, options), { status: 'finished', value }]])
@@ -1141,7 +1141,7 @@ describe(evalTestCode, () => {
         .silentRun();
     });
 
-    test('puts additional clearReplOutputLast for opaque testcases after finished status', () => {
+    it('puts additional clearReplOutputLast for opaque testcases after finished status', () => {
       type = TestcaseTypes.opaque;
 
       return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
@@ -1153,7 +1153,7 @@ describe(evalTestCode, () => {
         .silentRun();
     });
 
-    test('puts evalInterpreterError and evalTestcaseFailure on error status', () => {
+    it('puts evalInterpreterError and evalTestcaseFailure on error status', () => {
       return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
         .withState(state)
         .provide([[call(runInContext, code, context, options), { status: 'error' }]])
@@ -1163,7 +1163,7 @@ describe(evalTestCode, () => {
         .silentRun();
     });
 
-    test('puts additional clearReplOutputLast for opaque testcases after error status', () => {
+    it('puts additional clearReplOutputLast for opaque testcases after error status', () => {
       type = TestcaseTypes.opaque;
 
       return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index, type)
@@ -1177,7 +1177,7 @@ describe(evalTestCode, () => {
   });
 
   describe('on interrupt', () => {
-    test('puts endInterruptExecution and calls showWarningMessage', () => {
+    it('puts endInterruptExecution and calls showWarningMessage', () => {
       return expectSaga(
         evalTestCode,
         code,
@@ -1206,7 +1206,7 @@ describe(evalTestCode, () => {
   });
 });
 
-describe('NAV_DECLARATION', () => {
+describe(WorkspaceActions.navigateToDeclaration.type, () => {
   let workspaceLocation: WorkspaceLocation;
   let context: Context;
   let editorValue: string;
@@ -1225,7 +1225,7 @@ describe('NAV_DECLARATION', () => {
     });
   });
 
-  test('moves cursor to declaration correctly', () => {
+  it('moves cursor to declaration correctly', () => {
     const loc = { row: 0, column: 24 };
     const resultLoc = { row: 0, column: 6 };
     return (
@@ -1241,7 +1241,7 @@ describe('NAV_DECLARATION', () => {
     );
   });
 
-  test('does not move cursor if node is not an identifier', () => {
+  it('does not move cursor if node is not an identifier', () => {
     const pos = { row: 0, column: 27 };
     const resultPos = { row: 0, column: 6 };
     return (
@@ -1257,7 +1257,7 @@ describe('NAV_DECLARATION', () => {
     );
   });
 
-  test('does not move cursor if node is same as declaration', () => {
+  it('does not move cursor if node is same as declaration', () => {
     const pos = { row: 0, column: 7 };
     const resultPos = { row: 0, column: 6 };
     return (
@@ -1274,7 +1274,7 @@ describe('NAV_DECLARATION', () => {
   });
 });
 
-describe('EVAL_EDITOR_AND_TESTCASES', () => {
+describe(WorkspaceActions.runAllTestcases.type, () => {
   let workspaceLocation: WorkspaceLocation;
   let state: OverallState;
 
@@ -1283,7 +1283,7 @@ describe('EVAL_EDITOR_AND_TESTCASES', () => {
     state = generateDefaultState(workspaceLocation);
   });
 
-  test('does not call runTestCase when there are no testcases', () => {
+  it('does not call runTestCase when there are no testcases', () => {
     state = generateDefaultState(workspaceLocation, {
       editorTestcases: []
     });
@@ -1300,7 +1300,7 @@ describe('EVAL_EDITOR_AND_TESTCASES', () => {
       .silentRun();
   });
 
-  test('calls runTestCase when there are testcases', () => {
+  it('calls runTestCase when there are testcases', () => {
     state = generateDefaultState(workspaceLocation, {
       editorTestcases: mockTestcases
     });
@@ -1326,7 +1326,7 @@ describe('EVAL_EDITOR_AND_TESTCASES', () => {
       .silentRun(2000);
   });
 
-  test('prematurely terminates if execution of one testcase results in an error', () => {
+  it('prematurely terminates if execution of one testcase results in an error', () => {
     state = generateDefaultState(workspaceLocation, {
       editorTestcases: mockTestcases.slice(0, 2)
     });

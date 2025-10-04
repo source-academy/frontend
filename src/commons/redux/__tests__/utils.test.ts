@@ -1,11 +1,11 @@
 import { testSaga } from 'redux-saga-test-plan';
-import { vi } from 'vitest';
+import { expect, test, vi } from 'vitest';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 
 import { combineSagaHandlers, createActions } from '../utils';
 
 // Would have used spyOn, but for some reason that doesn't work properly
-vi.mock('src/commons/sagas/SafeEffects', () => ({
+vi.mock(import('src/commons/sagas/SafeEffects'), () => ({
   // Mock wrap saga to just be a passthrough so that the identity
   // checking that testSaga uses will pass
   wrapSaga: (x: any) => x
