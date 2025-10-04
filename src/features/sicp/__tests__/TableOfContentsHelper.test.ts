@@ -1,5 +1,4 @@
 import { describe, expect, test, vi } from 'vitest';
-
 import { getNext, getPrev } from '../TableOfContentsHelper';
 
 vi.mock('../data/toc-navigation.json', () => ({

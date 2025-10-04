@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest';
 import { deepFilter, shallowRender } from '../TestUtils';
 
 const Component: React.FC = () => (

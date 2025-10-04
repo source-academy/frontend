@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { act } from 'react';
 import { Provider } from 'react-redux';
 import { RouterProvider, createMemoryRouter } from 'react-router';
+import { expect, test } from 'vitest';
 import { Role, type OverallState } from 'src/commons/application/ApplicationTypes';
 import { mockAssessmentOverviews } from 'src/commons/mocks/AssessmentMocks';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';

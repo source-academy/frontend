@@ -1,6 +1,7 @@
 import Konva from 'konva';
-import { RefObject } from 'react';
+import type { RefObject } from 'react';
 import * as ReactKonva from 'react-konva';
+import { expect, test } from 'vitest';
 
 import { CseAnimation } from '../CseMachineAnimation';
 import { AnimatableTo, AnimationConfig } from '../animationComponents/base/Animatable';

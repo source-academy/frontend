@@ -1,3 +1,4 @@
+import { expect, test } from 'vitest';
 import DashboardActions from '../DashboardActions';
 import { GradingSummary } from '../DashboardTypes';
 

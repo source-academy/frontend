@@ -1,12 +1,11 @@
-import { Mock, vi } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { postRefresh } from 'src/commons/sagas/RequestsSaga';
 import { store } from 'src/pages/createStore';
 
-import { Tokens } from '../../application/types/SessionTypes';
+import type { Tokens } from '../../application/types/SessionTypes';
 import { actions } from '../ActionsHelper';
 import Constants from '../Constants';
 import {
-  RequestMethod,
   autoLogoutMessage,
   generateApiCallHeadersAndFetchOptions,
   getResponseErrorMessage,
@@ -14,25 +13,27 @@ import {
   networkErrorNotificationKey,
   promptReloginMessage,
   request,
-  userSessionExpiredNotificationKey
+  userSessionExpiredNotificationKey,
+  type RequestMethod
 } from '../RequestHelper';
 import { showWarningMessage } from '../notifications/NotificationsHelper';
 
-global.fetch = vi.fn();
-const fetchMock = fetch as Mock;
+const fetchMock = vi.spyOn(global, 'fetch')
 
-vi.mock('../../utils/notifications/NotificationsHelper', () => ({
+vi.mock(import('../../utils/notifications/NotificationsHelper'), () => ({
   showWarningMessage: vi.fn()
 }));
-const showWarningMessageSpy = showWarningMessage as Mock<typeof showWarningMessage>;
-vi.mock('../../sagas/RequestsSaga');
-const postRefreshSpy = postRefresh as Mock<typeof postRefresh>;
-vi.mock('../../../pages/createStore', () => ({
+
+const showWarningMessageSpy = vi.mocked(showWarningMessage);
+vi.mock(import('../../sagas/RequestsSaga'));
+
+const postRefreshSpy = vi.mocked(postRefresh);
+vi.mock(import('../../../pages/createStore'), () => ({
   store: {
     dispatch: vi.fn()
   }
-}));
-const storeDispatchSpy = store.dispatch as unknown as Mock<typeof store.dispatch>;
+} as any));
+const storeDispatchSpy = vi.mocked(store.dispatch);
 
 const tokens: Tokens = {
   accessToken: 'accessToken',
@@ -71,11 +72,11 @@ const GET_METHOD = 'GET';
 const fetchOptions = { ...tokens };
 const refreshFetchOptions = { ...refreshedTokens };
 
-const mockOkResponseOnce = () => fetchMock.mockImplementationOnce(() => Promise.resolve(OK_RESP));
+const mockOkResponseOnce = () => fetchMock.mockImplementationOnce(() => Promise.resolve(OK_RESP as any));
 const mockNon401ErrorResponseOnce = () =>
-  fetchMock.mockImplementationOnce(() => Promise.resolve(NON_UNAUTHORIZED_401_ERROR_RESP));
+  fetchMock.mockImplementationOnce(() => Promise.resolve(NON_UNAUTHORIZED_401_ERROR_RESP as any));
 const mock401ErrorResponseOnce = () =>
-  fetchMock.mockImplementationOnce(() => Promise.resolve(UNAUTHORIZED_401_ERROR_RESP));
+  fetchMock.mockImplementationOnce(() => Promise.resolve(UNAUTHORIZED_401_ERROR_RESP as any));
 const mockPostRefresh = (success: boolean) =>
   postRefreshSpy.mockImplementation(
     () => new Promise(resolve => setTimeout(() => resolve(success ? refreshedTokens : null), 500))
