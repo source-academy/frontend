@@ -81,7 +81,7 @@ describe('Badge with filter,', () => {
     expect(notificationBadge.textContent).toBe('2');
   });
 
-  test('filterNotificationsByAssessment renders properly', () => {
+  test('filterNotificationsByMissions renders properly', () => {
     render(createAppWithMockedNotifications(notifications, filterNotificationsByType('Missions')));
     const notificationBadge = screen.getByTestId('NotificationBadge');
     expect(notificationBadge.textContent).toBe('2');

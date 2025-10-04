@@ -1,15 +1,15 @@
-import { Store } from '@reduxjs/toolkit';
+import type { Store } from '@reduxjs/toolkit';
 import { render, screen } from '@testing-library/react';
 import { act } from 'react';
 import { Provider } from 'react-redux';
 import { RouterProvider, createMemoryRouter } from 'react-router';
-import { OverallState, Role } from 'src/commons/application/ApplicationTypes';
+import { Role, type OverallState } from 'src/commons/application/ApplicationTypes';
 import { mockAssessmentOverviews } from 'src/commons/mocks/AssessmentMocks';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 import { renderTreeJson } from 'src/commons/utils/TestUtils';
 
 import Assessment from '../Assessment';
-import { AssessmentConfiguration, AssessmentOverview } from '../AssessmentTypes';
+import type { AssessmentConfiguration, AssessmentOverview } from '../AssessmentTypes';
 
 const mockAssessmentConfig: AssessmentConfiguration = {
   assessmentConfigId: 1,

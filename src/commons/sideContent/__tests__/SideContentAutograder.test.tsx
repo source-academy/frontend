@@ -3,7 +3,11 @@ import { ErrorSeverity, ErrorType, type SourceError } from 'js-slang/dist/errors
 import { act } from 'react';
 import { shallowRender } from 'src/commons/utils/TestUtils';
 
-import { TestcaseTypes, type AutogradingResult, type Testcase } from '../../assessment/AssessmentTypes';
+import {
+  TestcaseTypes,
+  type AutogradingResult,
+  type Testcase
+} from '../../assessment/AssessmentTypes';
 import { mockGradingAnswer } from '../../mocks/GradingMocks';
 import SideContentAutograder, {
   type SideContentAutograderProps

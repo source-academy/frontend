@@ -1,5 +1,6 @@
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { cloneDeep } from 'lodash';
+import { describe, expect, it } from 'vitest';
 import CommonsActions from 'src/commons/application/actions/CommonsActions';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';
 import {
@@ -81,8 +82,8 @@ function generateDefaultWorkspace(payload: any = {}): WorkspaceManagerState {
   };
 }
 
-describe('BROWSE_REPL_HISTORY_DOWN', () => {
-  test('works on non-null browseIndex and returns replValue to last value on no further records', () => {
+describe(WorkspaceActions.browseReplHistoryDown.type, () => {
+  it('works on non-null browseIndex and returns replValue to last value on no further records', () => {
     const originalValue = 'browsing history';
     const records = ['first history', 'second history'];
 
@@ -127,7 +128,7 @@ describe('BROWSE_REPL_HISTORY_DOWN', () => {
     });
   });
 
-  test('returns unchanged state on null browseIndex', () => {
+  it('returns unchanged state on null browseIndex', () => {
     const originalValue = 'history';
     const records = ['first history', 'second history'];
     const replHistory = {
@@ -146,8 +147,8 @@ describe('BROWSE_REPL_HISTORY_DOWN', () => {
   });
 });
 
-describe('BROWSE_REPL_HISTORY_UP', () => {
-  test('works on non-null browseIndex and returns unchanged state when there is no more history', () => {
+describe(WorkspaceActions.browseReplHistoryDown.type, () => {
+  it('works on non-null browseIndex and returns unchanged state when there is no more history', () => {
     const replValue = 'repl history';
     const records = ['first history', 'second history'];
 
@@ -211,8 +212,8 @@ describe('BROWSE_REPL_HISTORY_UP', () => {
   });
 });
 
-describe('CHANGE_EXTERNAL_LIBRARY', () => {
-  test('sets externalLibrary correctly', () => {
+describe(WorkspaceActions.changeExternalLibrary.type, () => {
+  it('sets externalLibrary correctly', () => {
     const newExternal = 'new_external_test' as ExternalLibraryName;
     const playgroundAction = {
       type: WorkspaceActions.changeExternalLibrary.type,
@@ -233,8 +234,8 @@ describe('CHANGE_EXTERNAL_LIBRARY', () => {
   });
 });
 
-describe('CLEAR_REPL_INPUT', () => {
-  test('clears replValue', () => {
+describe(WorkspaceActions.clearReplInput.type, () => {
+  it('clears replValue', () => {
     const replValue = 'test repl value';
     const clearReplDefaultState: WorkspaceManagerState = generateDefaultWorkspace({ replValue });
     const actions = generateActions(WorkspaceActions.clearReplInput);
@@ -253,8 +254,8 @@ describe('CLEAR_REPL_INPUT', () => {
   });
 });
 
-describe('CLEAR_REPL_OUTPUT', () => {
-  test('clears output', () => {
+describe(WorkspaceActions.clearReplOutput.type, () => {
+  it('clears output', () => {
     const output: InterpreterOutput[] = [{ type: 'code', value: 'test repl input' }];
     const clearReplDefaultState: WorkspaceManagerState = generateDefaultWorkspace({ output });
     const actions = generateActions(WorkspaceActions.clearReplOutput);
@@ -273,8 +274,8 @@ describe('CLEAR_REPL_OUTPUT', () => {
   });
 });
 
-describe('CLEAR_REPL_OUTPUT_LAST', () => {
-  test('removes the last entry from the REPL', () => {
+describe(WorkspaceActions.clearReplOutputLast.type, () => {
+  it('removes the last entry from the REPL', () => {
     const output: InterpreterOutput[] = [
       {
         type: 'result',
@@ -304,8 +305,8 @@ describe('CLEAR_REPL_OUTPUT_LAST', () => {
   });
 });
 
-describe('DEBUG_RESET', () => {
-  test('sets isRunning and isDebugging to false', () => {
+describe(InterpreterActions.debuggerReset.type, () => {
+  it('sets isRunning and isDebugging to false', () => {
     const isRunning = true;
     const isDebugging = true;
     const debugResetDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
@@ -329,8 +330,8 @@ describe('DEBUG_RESET', () => {
   });
 });
 
-describe('DEBUG_RESUME', () => {
-  test('sets isRunning to true and isDebugging to false', () => {
+describe(InterpreterActions.debuggerResume.type, () => {
+  it('sets isRunning to true and isDebugging to false', () => {
     const isDebugging = true;
     const debugResumeDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       isDebugging
@@ -352,8 +353,8 @@ describe('DEBUG_RESUME', () => {
   });
 });
 
-describe('END_CLEAR_CONTEXT', () => {
-  test('sets context and globals correctly', () => {
+describe(WorkspaceActions.endClearContext.type, () => {
+  it('sets context and globals correctly', () => {
     const mockGlobals: Array<[string, any]> = [
       ['testNumber', 3.141592653589793],
       ['testString', 'who dat boi'],
@@ -402,8 +403,8 @@ describe('END_CLEAR_CONTEXT', () => {
   });
 });
 
-describe('END_DEBUG_PAUSE', () => {
-  test('sets isRunning to false and isDebugging to true', () => {
+describe(InterpreterActions.endDebuggerPause.type, () => {
+  it('sets isRunning to false and isDebugging to true', () => {
     const isRunning = true;
     const debugPauseDefaultState: WorkspaceManagerState = generateDefaultWorkspace({ isRunning });
     const actions = generateActions(InterpreterActions.endDebuggerPause);
@@ -423,8 +424,8 @@ describe('END_DEBUG_PAUSE', () => {
   });
 });
 
-describe('END_INTERRUPT_EXECUTION', () => {
-  test('sets isRunning and isDebugging to false', () => {
+describe(InterpreterActions.endInterruptExecution.type, () => {
+  it('sets isRunning and isDebugging to false', () => {
     const isRunning = true;
     const isDebugging = true;
     const interruptExecutionDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
@@ -448,8 +449,8 @@ describe('END_INTERRUPT_EXECUTION', () => {
   });
 });
 
-describe('EVAL_EDITOR', () => {
-  test('sets isRunning to true and isDebugging to false', () => {
+describe(WorkspaceActions.evalEditor.type, () => {
+  it('sets isRunning to true and isDebugging to false', () => {
     const isDebugging = true;
     const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       isDebugging
@@ -482,8 +483,8 @@ const outputWithRunningAndCodeOutput: InterpreterOutput[] = [
   { type: 'code', value: 'sample code' }
 ];
 
-describe('EVAL_INTERPRETER_ERROR', () => {
-  test('works correctly with RunningOutput', () => {
+describe(InterpreterActions.evalInterpreterError.type, () => {
+  it('works correctly with RunningOutput', () => {
     const isRunning = true;
     const isDebugging = true;
 
@@ -512,7 +513,7 @@ describe('EVAL_INTERPRETER_ERROR', () => {
     });
   });
 
-  test('works correctly with other outputs', () => {
+  it('works correctly with other outputs', () => {
     const isRunning = true;
     const isDebugging = true;
     const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
@@ -543,8 +544,8 @@ describe('EVAL_INTERPRETER_ERROR', () => {
   });
 });
 
-describe('EVAL_INTERPRETER_SUCCESS', () => {
-  test('works correctly with RunningOutput', () => {
+describe(InterpreterActions.evalInterpreterSuccess.type, () => {
+  it('works correctly with RunningOutput', () => {
     const isRunning = true;
     const breakpoints = ['1', '2'];
     const highlightedLines = [[3], [5]];
@@ -574,7 +575,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
     });
   });
 
-  test('works correctly with other outputs', () => {
+  it('works correctly with other outputs', () => {
     const isRunning = true;
     const breakpoints = ['1', '2'];
     const highlightedLines = [[3], [5]];
@@ -612,8 +613,8 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
   });
 });
 
-describe('EVAL_REPL', () => {
-  test('sets isRunning to true', () => {
+describe(WorkspaceActions.evalEditor.type, () => {
+  it('sets isRunning to true', () => {
     const actions = generateActions(WorkspaceActions.evalRepl);
 
     actions.forEach(action => {
@@ -656,8 +657,8 @@ const editorTestcases: Testcase[] = [
   }
 ];
 
-describe('EVAL_TESTCASE_FAILURE', () => {
-  test('sets editorTestcases correctly', () => {
+describe(InterpreterActions.evalTestcaseFailure.type, () => {
+  it('sets editorTestcases correctly', () => {
     const value = 'test-value-failure';
     const evalFailureDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       editorTestcases
@@ -681,8 +682,8 @@ describe('EVAL_TESTCASE_FAILURE', () => {
   });
 });
 
-describe('EVAL_TESTCASE_SUCCESS', () => {
-  test('works correctly on RunningOutput and CodeOutput', () => {
+describe(InterpreterActions.evalTestcaseSuccess.type, () => {
+  it('works correctly on RunningOutput and CodeOutput', () => {
     const isRunning = true;
     const value = (outputWithCodeAndRunningOutput[0] as CodeOutput).value;
     const testcaseSuccessDefaultState = generateDefaultWorkspace({
@@ -711,7 +712,7 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
     });
   });
 
-  test('works correctly on other output', () => {
+  it('works correctly on other output', () => {
     const isRunning = true;
     const value = (outputWithCodeAndRunningOutput[0] as CodeOutput).value;
     const testcaseSuccessDefaultState = generateDefaultWorkspace({
@@ -741,8 +742,8 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
   });
 });
 
-describe('HANDLE_CONSOLE_LOG', () => {
-  test('works correctly with RunningOutput', () => {
+describe(InterpreterActions.handleConsoleLog.type, () => {
+  it('works correctly with RunningOutput', () => {
     const logString = 'test-log-string';
     const consoleLogDefaultState = generateDefaultWorkspace({ output: outputWithRunningOutput });
     const actions = generateActions(l => InterpreterActions.handleConsoleLog(l, logString));
@@ -767,7 +768,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
     });
   });
 
-  test('works correctly with other output', () => {
+  it('works correctly with other output', () => {
     const logString = 'test-log-string-2';
     const consoleLogDefaultState = generateDefaultWorkspace({
       output: outputWithRunningAndCodeOutput
@@ -790,7 +791,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
     });
   });
 
-  test('works correctly with empty output', () => {
+  it('works correctly with empty output', () => {
     const logString = 'test-log-string-3';
     const consoleLogDefaultState = generateDefaultWorkspace({ output: [] });
 
@@ -810,7 +811,7 @@ describe('HANDLE_CONSOLE_LOG', () => {
   });
 });
 
-describe('LOG_OUT', () => {
+describe(CommonsActions.logOut.type, () => {
   test('preserves playground workspace after logout', () => {
     const defaultPlaygroundState = createDefaultWorkspace('playground');
     const newPlayground: PlaygroundWorkspaceState = {
@@ -855,8 +856,8 @@ describe('LOG_OUT', () => {
   });
 });
 
-describe('RESET_TESTCASE', () => {
-  test('correctly resets the targeted testcase to its default state', () => {
+describe(WorkspaceActions.resetTestcase.type, () => {
+  it('correctly resets the targeted testcase to its default state', () => {
     const resetTestcaseDefaultState = generateDefaultWorkspace({
       editorTestcases
     });
@@ -879,8 +880,8 @@ describe('RESET_TESTCASE', () => {
   });
 });
 
-describe('RESET_WORKSPACE', () => {
-  test('works correctly', () => {
+describe(WorkspaceActions.resetWorkspace.type, () => {
+  it('works correctly', () => {
     const resetWorkspaceDefaultState: WorkspaceManagerState = generateDefaultWorkspace({});
 
     const workspaceOptions = {
@@ -918,8 +919,8 @@ describe('RESET_WORKSPACE', () => {
   });
 });
 
-describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
-  test('works correctly and pops replHistory when exceeding MAX_BROWSE_INDEX', () => {
+describe(WorkspaceActions.sendReplInputToOutput.type, () => {
+  it('works correctly and pops replHistory when exceeding MAX_BROWSE_INDEX', () => {
     const replHistory = {
       browseIndex: null,
       records: Array.from(Array(Constants.maxBrowseIndex), (x, index) => index + '') // Create an array with size MAX_BROWSE_INDEX
@@ -958,7 +959,7 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
     });
   });
 
-  test('works correctly with empty newOutput value', () => {
+  it('works correctly with empty newOutput value', () => {
     const replHistory = {
       browseIndex: null,
       records: ['record-1', 'record-2']
@@ -985,8 +986,8 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
   });
 });
 
-describe('SET_EDITOR_SESSION_ID', () => {
-  test('sets editorSessionId correctly', () => {
+describe(setEditorSessionId.type, () => {
+  it('sets editorSessionId correctly', () => {
     const editorSessionId = 'test_editor_session_id';
     const actions = generateActions(l => setEditorSessionId(l, editorSessionId));
 
@@ -1004,8 +1005,8 @@ describe('SET_EDITOR_SESSION_ID', () => {
   });
 });
 
-describe('SET_SHAREDB_CONNECTED', () => {
-  test('sets sharedbConnected correctly', () => {
+describe(setSharedbConnected.type, () => {
+  it('sets sharedbConnected correctly', () => {
     const connected = true;
     const actions = generateActions(l => setSharedbConnected(l, connected));
 
@@ -1023,8 +1024,8 @@ describe('SET_SHAREDB_CONNECTED', () => {
   });
 });
 
-describe('TOGGLE_EDITOR_AUTORUN', () => {
-  test('toggles isEditorAutorun correctly', () => {
+describe(WorkspaceActions.toggleEditorAutorun.type, () => {
+  it('toggles isEditorAutorun correctly', () => {
     const actions = generateActions(WorkspaceActions.toggleEditorAutorun);
 
     actions.forEach(action => {
@@ -1050,8 +1051,8 @@ describe('TOGGLE_EDITOR_AUTORUN', () => {
   });
 });
 
-describe('UPDATE_CURRENT_ASSESSMENT_ID', () => {
-  test('sets currentAssessment and currentQuestion correctly', () => {
+describe(WorkspaceActions.updateCurrentAssessmentId.type, () => {
+  it('sets currentAssessment and currentQuestion correctly', () => {
     const assessmentId = 3;
     const questionId = 7;
     const assessmentAction = {
@@ -1071,8 +1072,8 @@ describe('UPDATE_CURRENT_ASSESSMENT_ID', () => {
   });
 });
 
-describe('UPDATE_CURRENT_SUBMISSION_ID', () => {
-  test('sets currentSubmission and currentQuestion correctly', () => {
+describe(WorkspaceActions.updateCurrentSubmissionId.type, () => {
+  it('sets currentSubmission and currentQuestion correctly', () => {
     const submissionId = 5;
     const questionId = 8;
     const assessmentAction = {
@@ -1092,8 +1093,8 @@ describe('UPDATE_CURRENT_SUBMISSION_ID', () => {
   });
 });
 
-describe('SET_FOLDER_MODE', () => {
-  test('sets isFolderModeEnabled correctly', () => {
+describe(WorkspaceActions.setFolderMode.type, () => {
+  it('sets isFolderModeEnabled correctly', () => {
     const isFolderModeEnabled = true;
     const actions = generateActions(l => WorkspaceActions.setFolderMode(l, isFolderModeEnabled));
 
@@ -1111,7 +1112,7 @@ describe('SET_FOLDER_MODE', () => {
   });
 });
 
-describe('UPDATE_ACTIVE_EDITOR_TAB_INDEX', () => {
+describe(WorkspaceActions.updateActiveEditorTabIndex.type, () => {
   const editorTabs: EditorTabState[] = [
     {
       value: 'Hello World!',
@@ -1125,7 +1126,7 @@ describe('UPDATE_ACTIVE_EDITOR_TAB_INDEX', () => {
     }
   ];
 
-  test('throws an error if the active editor tab index is negative', () => {
+  it('throws an error if the active editor tab index is negative', () => {
     const activeEditorTabIndex = -1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
@@ -1142,7 +1143,7 @@ describe('UPDATE_ACTIVE_EDITOR_TAB_INDEX', () => {
     });
   });
 
-  test('sets the active editor tab index if it is within bounds', () => {
+  it('sets the active editor tab index if it is within bounds', () => {
     const activeEditorTabIndex = 1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
@@ -1171,7 +1172,7 @@ describe('UPDATE_ACTIVE_EDITOR_TAB_INDEX', () => {
     });
   });
 
-  test('throws an error if the active editor tab index is non-negative but does not have a corresponding editor tab', () => {
+  it('throws an error if the active editor tab index is non-negative but does not have a corresponding editor tab', () => {
     const activeEditorTabIndex = 2;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
@@ -1189,12 +1190,12 @@ describe('UPDATE_ACTIVE_EDITOR_TAB_INDEX', () => {
   });
 });
 
-describe('UPDATE_ACTIVE_EDITOR_TAB', () => {
+describe(WorkspaceActions.updateActiveEditorTab.type, () => {
   const activeEditorTabOptions: Partial<EditorTabState> = {
     value: 'Goodbye World!'
   };
 
-  test('overrides the active editor tab correctly', () => {
+  it('overrides the active editor tab correctly', () => {
     // function testAction<T extends SourceActionType>(
     //   func: (l: WorkspaceLocation) => T,
     //   payload?: any
@@ -1255,7 +1256,7 @@ describe('UPDATE_ACTIVE_EDITOR_TAB', () => {
     });
   });
 
-  test('does nothing when there is no active editor tab', () => {
+  it('does nothing when there is no active editor tab', () => {
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: null,
       editorTabs: []
@@ -1272,7 +1273,7 @@ describe('UPDATE_ACTIVE_EDITOR_TAB', () => {
   });
 });
 
-describe('UPDATE_EDITOR_VALUE', () => {
+describe(WorkspaceActions.updateEditorValue.type, () => {
   const zerothEditorTab: EditorTabState = {
     value: 'Hello World!',
     highlightedLines: [],
@@ -1286,7 +1287,7 @@ describe('UPDATE_EDITOR_VALUE', () => {
   const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
   const newEditorValue = 'The quick brown fox jumps over the lazy dog.';
 
-  test('throws an error if the editor tab index is negative', () => {
+  it('throws an error if the editor tab index is negative', () => {
     const editorTabIndex = -1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
@@ -1303,7 +1304,7 @@ describe('UPDATE_EDITOR_VALUE', () => {
     });
   });
 
-  test('throws an error if the editor tab index is non-negative but does not have a corresponding editor tab', () => {
+  it('throws an error if the editor tab index is non-negative but does not have a corresponding editor tab', () => {
     const editorTabIndex = 2;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
@@ -1320,7 +1321,7 @@ describe('UPDATE_EDITOR_VALUE', () => {
     });
   });
 
-  test('updates the value of the specified editor tab if the editor tab index is valid', () => {
+  it('updates the value of the specified editor tab if the editor tab index is valid', () => {
     const editorTabIndex = 1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
@@ -1345,7 +1346,7 @@ describe('UPDATE_EDITOR_VALUE', () => {
   });
 });
 
-describe('UPDATE_EDITOR_BREAKPOINTS', () => {
+describe(WorkspaceActions.setEditorBreakpoint.type, () => {
   const zerothEditorTab: EditorTabState = {
     value: 'Hello World!',
     highlightedLines: [],
@@ -1418,7 +1419,7 @@ describe('UPDATE_EDITOR_BREAKPOINTS', () => {
   });
 });
 
-describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
+describe(WorkspaceActions.setEditorHighlightedLines.type, () => {
   const zerothEditorTab: EditorTabState = {
     value: 'Hello World!',
     highlightedLines: [],
@@ -1435,7 +1436,7 @@ describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
     [6, 9]
   ];
 
-  test('throws an error if the editor tab index is negative', () => {
+  it('throws an error if the editor tab index is negative', () => {
     const editorTabIndex = -1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
@@ -1452,7 +1453,7 @@ describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
     });
   });
 
-  test('throws an error if the editor tab index is non-negative but does not have a corresponding editor tab', () => {
+  it('throws an error if the editor tab index is non-negative but does not have a corresponding editor tab', () => {
     const editorTabIndex = 2;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
@@ -1469,7 +1470,7 @@ describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
     });
   });
 
-  test('updates the highlighted lines of the specified editor tab if the editor tab index is valid', () => {
+  it('updates the highlighted lines of the specified editor tab if the editor tab index is valid', () => {
     const editorTabIndex = 1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
@@ -1497,7 +1498,7 @@ describe('UPDATE_EDITOR_HIGHLIGHTED_LINES', () => {
   });
 });
 
-describe('MOVE_CURSOR', () => {
+describe(WorkspaceActions.moveCursor.type, () => {
   const zerothEditorTab: EditorTabState = {
     value: 'Hello World!',
     highlightedLines: [],
@@ -1514,7 +1515,7 @@ describe('MOVE_CURSOR', () => {
     column: 5
   };
 
-  test('throws an error if the editor tab index is negative', () => {
+  it('throws an error if the editor tab index is negative', () => {
     const editorTabIndex = -1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
@@ -1531,7 +1532,7 @@ describe('MOVE_CURSOR', () => {
     });
   });
 
-  test('throws an error if the editor tab index is non-negative but does not have a corresponding editor tab', () => {
+  it('throws an error if the editor tab index is non-negative but does not have a corresponding editor tab', () => {
     const editorTabIndex = 2;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
@@ -1547,7 +1548,7 @@ describe('MOVE_CURSOR', () => {
     });
   });
 
-  test('updates the cursor position of the specified editor tab if the editor tab index is valid', () => {
+  it('updates the cursor position of the specified editor tab if the editor tab index is valid', () => {
     const editorTabIndex = 1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
@@ -1571,7 +1572,7 @@ describe('MOVE_CURSOR', () => {
   });
 });
 
-describe('ADD_EDITOR_TAB', () => {
+describe(WorkspaceActions.addEditorTab.type, () => {
   const zerothEditorTab: EditorTabState = {
     filePath: '/helloworld.js',
     value: 'Hello World!',
@@ -1586,7 +1587,7 @@ describe('ADD_EDITOR_TAB', () => {
   };
   const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
 
-  test('adds a new editor tab to the back & sets it as the active editor tab', () => {
+  it('adds a new editor tab to the back & sets it as the active editor tab', () => {
     const filePath = '/playground/interpreter.js';
     const editorValue = 'The quick brown fox jumped over the lazy pomeranian.';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
@@ -1618,7 +1619,7 @@ describe('ADD_EDITOR_TAB', () => {
     });
   });
 
-  test('sets the active editor tab index if the file is already open as an editor tab', () => {
+  it('sets the active editor tab index if the file is already open as an editor tab', () => {
     const filePath = '/goodbyeworld.js';
     const editorValue = 'The quick brown fox jumped over the lazy pomeranian.';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
@@ -1646,7 +1647,7 @@ describe('ADD_EDITOR_TAB', () => {
   });
 });
 
-describe('SHIFT_EDITOR_TAB', () => {
+describe(WorkspaceActions.shiftEditorTab.type, () => {
   const zerothEditorTab: EditorTabState = {
     value: 'Hello World!',
     highlightedLines: [],
@@ -1674,7 +1675,7 @@ describe('SHIFT_EDITOR_TAB', () => {
     thirdEditorTab
   ];
 
-  test('throws an error if the previous editor tab index is negative', () => {
+  it('throws an error if the previous editor tab index is negative', () => {
     const previousEditorTabIndex = -1;
     const newEditorTabIndex = 1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
@@ -1691,7 +1692,7 @@ describe('SHIFT_EDITOR_TAB', () => {
     });
   });
 
-  test('throws an error if the previous editor tab index is non-negative but does not have a corresponding editor tab', () => {
+  it('throws an error if the previous editor tab index is non-negative but does not have a corresponding editor tab', () => {
     const previousEditorTabIndex = 4;
     const newEditorTabIndex = 1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
@@ -1710,7 +1711,7 @@ describe('SHIFT_EDITOR_TAB', () => {
     });
   });
 
-  test('throws an error if the new editor tab index is negative', () => {
+  it('throws an error if the new editor tab index is negative', () => {
     const previousEditorTabIndex = 2;
     const newEditorTabIndex = -1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
@@ -1727,7 +1728,7 @@ describe('SHIFT_EDITOR_TAB', () => {
     });
   });
 
-  test('throws an error if the new editor tab index is non-negative but does not have a corresponding editor tab', () => {
+  it('throws an error if the new editor tab index is non-negative but does not have a corresponding editor tab', () => {
     const previousEditorTabIndex = 2;
     const newEditorTabIndex = 4;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
@@ -1744,7 +1745,7 @@ describe('SHIFT_EDITOR_TAB', () => {
     });
   });
 
-  test('shifts the (inactive) editor tab at the old index to the new index without changing the active editor tab index', () => {
+  it('shifts the (inactive) editor tab at the old index to the new index without changing the active editor tab index', () => {
     const previousEditorTabIndex = 2;
     const newEditorTabIndex = 1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
@@ -1772,7 +1773,7 @@ describe('SHIFT_EDITOR_TAB', () => {
     });
   });
 
-  test('shifts the (active) editor tab at the old index to the new index without changing the active editor tab index', () => {
+  it('shifts the (active) editor tab at the old index to the new index without changing the active editor tab index', () => {
     const previousEditorTabIndex = 2;
     const newEditorTabIndex = 1;
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
@@ -1803,7 +1804,7 @@ describe('SHIFT_EDITOR_TAB', () => {
   });
 });
 
-describe('REMOVE_EDITOR_TAB', () => {
+describe(WorkspaceActions.removeEditorTab.type, () => {
   const zerothEditorTab: EditorTabState = {
     value: 'Hello World!',
     highlightedLines: [],
@@ -1975,7 +1976,7 @@ describe('REMOVE_EDITOR_TAB', () => {
   });
 });
 
-describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
+describe(WorkspaceActions.removeEditorTabForFile.type, () => {
   const zerothEditorTab: EditorTabState = {
     filePath: '/a.js',
     value: 'Hello World!',
@@ -1990,7 +1991,7 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
   };
   const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
 
-  test('does nothing if there are no editor tabs that correspond to the removed file path', () => {
+  it('does nothing if there are no editor tabs that correspond to the removed file path', () => {
     const removedFilePath = '/c.js';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
@@ -2009,7 +2010,7 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
     });
   });
 
-  test('removes the editor tab corresponding to the removed file path & sets the active editor tab index to null if there is only one editor tab', () => {
+  it('removes the editor tab corresponding to the removed file path & sets the active editor tab index to null if there is only one editor tab', () => {
     const removedFilePath = '/a.js';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
@@ -2037,7 +2038,7 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
     });
   });
 
-  test('removes the editor tab corresponding to the removed file path & leaves the active editor tab index unchanged if it is not the removed editor tab and has a smaller index', () => {
+  it('removes the editor tab corresponding to the removed file path & leaves the active editor tab index unchanged if it is not the removed editor tab and has a smaller index', () => {
     const removedFilePath = '/b.js';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
@@ -2065,7 +2066,7 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
     });
   });
 
-  test('removes the editor tab corresponding to the removed file path & decrements the active editor tab index by 1 if it is not the removed editor tab and has a larger index', () => {
+  it('removes the editor tab corresponding to the removed file path & decrements the active editor tab index by 1 if it is not the removed editor tab and has a larger index', () => {
     const removedFilePath = '/a.js';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 1,
@@ -2093,7 +2094,7 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
     });
   });
 
-  test('removes the editor tab corresponding to the removed file path & sets the active editor tab index to 0 if the removed editor tab index is 0 if the removed tab is the active tab', () => {
+  it('removes the editor tab corresponding to the removed file path & sets the active editor tab index to 0 if the removed editor tab index is 0 if the removed tab is the active tab', () => {
     const removedFilePath = '/a.js';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
@@ -2121,7 +2122,7 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
     });
   });
 
-  test('removes the editor tab corresponding to the removed file path & sets the active editor tab index to 1 lower than the removed editor tab index if the removed editor tab index is not 0 if the removed tab is the active tab', () => {
+  it('removes the editor tab corresponding to the removed file path & sets the active editor tab index to 1 lower than the removed editor tab index if the removed editor tab index is not 0 if the removed tab is the active tab', () => {
     const removedFilePath = '/b.js';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 1,
@@ -2150,7 +2151,7 @@ describe('REMOVE_EDITOR_TAB_FOR_FILE', () => {
   });
 });
 
-describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
+describe(WorkspaceActions.removeEditorTabsForDirectory.type, () => {
   const zerothEditorTab: EditorTabState = {
     filePath: '/dir1/dir3/a.js',
     value: 'Hello World!',
@@ -2182,7 +2183,7 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
     thirdEditorTab
   ];
 
-  test('does nothing if there are no editor tabs that correspond to the removed directory path', () => {
+  it('does nothing if there are no editor tabs that correspond to the removed directory path', () => {
     const removedDirectoryPath = '/dir3';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
@@ -2200,7 +2201,7 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
     });
   });
 
-  test('removes the editor tabs corresponding to the removed directory path & sets the active editor tab index to null if there are none left', () => {
+  it('removes the editor tabs corresponding to the removed directory path & sets the active editor tab index to null if there are none left', () => {
     const removedDirectoryPath = '/dir1';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
@@ -2228,7 +2229,7 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
     });
   });
 
-  test('removes the editor tabs corresponding to the removed directory path & leaves the active editor tab index unchanged if it is not one of the removed editor tabs and has a smaller index', () => {
+  it('removes the editor tabs corresponding to the removed directory path & leaves the active editor tab index unchanged if it is not one of the removed editor tabs and has a smaller index', () => {
     const removedDirectoryPath = '/dir1/dir2';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 0,
@@ -2256,7 +2257,7 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
     });
   });
 
-  test('removes the editor tabs corresponding to the removed directory path & decrements the active editor tab index if it is not one of the removed editor tabs and has a larger index', () => {
+  it('removes the editor tabs corresponding to the removed directory path & decrements the active editor tab index if it is not one of the removed editor tabs and has a larger index', () => {
     const removedDirectoryPath = '/dir1/dir2';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 2,
@@ -2284,7 +2285,7 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
     });
   });
 
-  test('removes the editor tabs corresponding to the removed directory path & sets the active editor tab index to 0 if one of the removed editor tab indices is 0 and is the active tab', () => {
+  it('removes the editor tabs corresponding to the removed directory path & sets the active editor tab index to 0 if one of the removed editor tab indices is 0 and is the active tab', () => {
     const removedDirectoryPath = '/dir1/dir3';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 1,
@@ -2312,7 +2313,7 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
     });
   });
 
-  test('removes the editor tabs corresponding to the removed directory path & sets the active editor tab index to 1 lower than the removed editor tab index if the removed editor tab index is not 0 and is the active tab', () => {
+  it('removes the editor tabs corresponding to the removed directory path & sets the active editor tab index to 1 lower than the removed editor tab index if the removed editor tab index is not 0 and is the active tab', () => {
     const removedDirectoryPath = '/dir1/dir2';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
       activeEditorTabIndex: 1,
@@ -2341,7 +2342,7 @@ describe('REMOVE_EDITOR_TABS_FOR_DIRECTORY', () => {
   });
 });
 
-describe('RENAME_EDITOR_TAB_FOR_FILE', () => {
+describe(WorkspaceActions.renameEditorTabForFile.type, () => {
   const zerothEditorTab: EditorTabState = {
     filePath: '/a.js',
     value: 'Hello World!',
@@ -2356,7 +2357,7 @@ describe('RENAME_EDITOR_TAB_FOR_FILE', () => {
   };
   const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab];
 
-  test('does nothing if there are no editor tabs that correspond to the old file path', () => {
+  it('does nothing if there are no editor tabs that correspond to the old file path', () => {
     const oldFilePath = '/c.js';
     const newFilePath = '/d.js';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
@@ -2374,7 +2375,7 @@ describe('RENAME_EDITOR_TAB_FOR_FILE', () => {
     });
   });
 
-  test('renames the file path of the editor tab corresponding to the old file path to the new file path', () => {
+  it('renames the file path of the editor tab corresponding to the old file path to the new file path', () => {
     const oldFilePath = '/b.js';
     const newFilePath = '/d.js';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
@@ -2403,7 +2404,7 @@ describe('RENAME_EDITOR_TAB_FOR_FILE', () => {
   });
 });
 
-describe('RENAME_EDITOR_TABS_FOR_DIRECTORY', () => {
+describe(WorkspaceActions.renameEditorTabsForDirectory.type, () => {
   const zerothEditorTab: EditorTabState = {
     filePath: '/dir1/a.js',
     value: 'Hello World!',
@@ -2423,7 +2424,7 @@ describe('RENAME_EDITOR_TABS_FOR_DIRECTORY', () => {
   };
   const editorTabs: EditorTabState[] = [zerothEditorTab, firstEditorTab, secondEditorTab];
 
-  test('does nothing if there are no editor tabs that correspond to the old directory path', () => {
+  it('does nothing if there are no editor tabs that correspond to the old directory path', () => {
     const oldDirectoryPath = '/dir3';
     const newDirectoryPath = '/dir4';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
@@ -2441,7 +2442,7 @@ describe('RENAME_EDITOR_TABS_FOR_DIRECTORY', () => {
     });
   });
 
-  test('renames the file path of editor tabs that start with the old directory path by replacing with the new directory path', () => {
+  it('renames the file path of editor tabs that start with the old directory path by replacing with the new directory path', () => {
     const oldDirectoryPath = '/dir2';
     const newDirectoryPath = '/dir4';
     const defaultWorkspaceState: WorkspaceManagerState = generateDefaultWorkspace({
@@ -2476,8 +2477,8 @@ describe('RENAME_EDITOR_TABS_FOR_DIRECTORY', () => {
   });
 });
 
-describe('UPDATE_HAS_UNSAVED_CHANGES', () => {
-  test('sets hasUnsavedChanges correctly', () => {
+describe(WorkspaceActions.updateHasUnsavedChanges.type, () => {
+  it('sets hasUnsavedChanges correctly', () => {
     const hasUnsavedChanges = true;
     const actions = generateActions(l =>
       WorkspaceActions.updateHasUnsavedChanges(l, hasUnsavedChanges)
@@ -2496,8 +2497,8 @@ describe('UPDATE_HAS_UNSAVED_CHANGES', () => {
   });
 });
 
-describe('UPDATE_REPL_VALUE', () => {
-  test('sets replValue correctly', () => {
+describe(WorkspaceActions.updateReplValue.type, () => {
+  it('sets replValue correctly', () => {
     const newReplValue = 'test new repl value';
     const actions = generateActions(l => WorkspaceActions.updateReplValue(newReplValue, l));
 
@@ -2515,8 +2516,8 @@ describe('UPDATE_REPL_VALUE', () => {
   });
 });
 
-describe('TOGGLE_USING_SUBST', () => {
-  test('sets usingSubst correctly', () => {
+describe(WorkspaceActions.toggleUsingSubst.type, () => {
+  it('sets usingSubst correctly', () => {
     const usingSubst = true;
     const actions = generateActions(l =>
       WorkspaceActions.toggleUsingSubst(usingSubst, l as WorkspaceLocationsWithTools)
@@ -2543,3 +2544,4 @@ describe('TOGGLE_USING_SUBST', () => {
 });
 
 // TODO: Add toggleusingcse
+describe.todo(WorkspaceActions.toggleUsingCse.type);

@@ -2,17 +2,18 @@ import { render, screen } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 
 import { Provider, useDispatch } from 'react-redux';
-import { type Mock, vi } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 import SessionActions from 'src/commons/application/actions/SessionActions';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 
 import ResearchAgreementPrompt from '../ResearchAgreementPrompt';
 
-vi.mock('react-redux', async () => ({
-  ...(await vi.importActual('react-redux')),
+vi.mock(import('react-redux'), async importOriginal => ({
+  ...await importOriginal(),
   useDispatch: vi.fn()
 }));
-const useDispatchMock = useDispatch as Mock;
+
+const useDispatchMock = vi.mocked(useDispatch);
 const dispatchMock = vi.fn();
 
 const createElement = () => {
