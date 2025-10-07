@@ -376,13 +376,21 @@
           width: 100%;
         }
       }
+
+      .llm-course-prompt-icon {
+        margin-left: 5px;
+        vertical-align: text-bottom;
+        cursor: help;
+      }
     }
 
     .booleans {
       display: flex;
       flex-direction: column;
-      justify-content: space-evenly;
       align-items: flex-start;
+      label {
+        margin-top: 1.5rem;
+      }
     }
   }
 }

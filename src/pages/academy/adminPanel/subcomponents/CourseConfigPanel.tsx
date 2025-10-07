@@ -3,12 +3,16 @@ import {
   FormGroup,
   H2,
   H3,
+  Icon,
   InputGroup,
+  Popover,
+  Position,
   Switch,
   Tab,
   Tabs,
   TextArea
 } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 import { useResponsive } from 'src/commons/utils/Hooks';
 
@@ -201,6 +205,36 @@ const CourseConfigPanel: React.FC<Props> = props => {
                   <span>
                     Please enter the LLM prompt for this course. This is treated as the System
                     Prompt.
+                    <Popover
+                      content={
+                        <div style={{ maxWidth: '48rem' }}>
+                          <p>
+                            This prompt is prepended to every single LLM Grading prompt as part of
+                            the System Prompt
+                          </p>
+
+                          <p>
+                            <b>Note: </b> You must specify the return format of the comments so that
+                            comments can be parsed correctly. An example is given below:
+                          </p>
+
+                          <code>
+                            Your output must include only the comment suggestions, separated
+                            exclusively by triple pipes ("|||") with no spaces before or after the
+                            pipes, and without any additional formatting, bullet points, or extra
+                            text.
+                            <br />
+                            <br />
+                            For example: "This is a good answer.|||This is a bad answer.|||This is a
+                            great.
+                          </code>
+                        </div>
+                      }
+                      interactionKind="hover"
+                      position={Position.TOP}
+                    >
+                      <Icon icon={IconNames.HELP} className="llm-course-prompt-icon" />
+                    </Popover>
                   </span>
                 }
                 inline={true}
