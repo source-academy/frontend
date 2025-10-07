@@ -219,8 +219,8 @@ const CourseConfigPanel: React.FC<Props> = props => {
                           </p>
 
                           <code>
-                            Your output must include only the comment suggestions, separated
-                            exclusively by triple pipes ("|||") with no spaces before or after the
+                            Your output must include only the comment suggestions, separated exc
+                            lusively by triple pipes ("|||") with no spaces before or after the
                             pipes, and without any additional formatting, bullet points, or extra
                             text.
                             <br />
