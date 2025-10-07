@@ -1,7 +1,9 @@
 import {
   Button,
+  Dialog,
   Divider,
   H3,
+  H4,
   Icon,
   IconName,
   Intent,
@@ -13,6 +15,7 @@ import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useMemo, useState } from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
 import { useDispatch } from 'react-redux';
+import { AutogradingResult } from 'src/commons/assessment/AssessmentTypes';
 import { useTokens } from 'src/commons/utils/Hooks';
 
 import SessionActions from '../../../../commons/application/actions/SessionActions';
@@ -49,6 +52,12 @@ type Props = {
   studentUsernames: string[];
   is_llm: boolean;
   comments: string;
+  llm_course_level_prompt: string | null;
+  llm_assessment_prompt: string | null;
+  llm_question_prompt: string | null;
+  autoGradingStatus: string;
+  autoGradingResults: AutogradingResult[];
+  questionContent: string;
   graderName?: string;
   gradedAt?: string;
   ai_comments?: string[];
@@ -136,6 +145,7 @@ const GradingEditor: React.FC<Props> = props => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [selectedSuggestions, setSelectedSuggestions] = useState<string[]>([]);
   const [hasClickedGenerate, setHasClickedGenerate] = useState<boolean>(false);
+  const [isViewLLMPromptOpen, setIsViewLLMPromptOpen] = useState<boolean>(false);
 
   const makeInitialState = () => {
     setXpAdjustmentInput(props.xpAdjustment.toString());
@@ -344,23 +354,77 @@ const GradingEditor: React.FC<Props> = props => {
       </div>
 
       {props.is_llm && (
-        <div>
-          <GradingCommentSelector
-            onSelect={onSelectGeneratedComments}
-            isLoading={hasClickedGenerate}
-            comments={suggestions}
-          />
-          <Button
-            onClick={async () => {
-              setHasClickedGenerate(true);
-              const resp = await getCommentSuggestions();
-              setHasClickedGenerate(false);
-              setSuggestions(resp ? resp.comments : []);
-            }}
+        <>
+          <Dialog
+            title="Full Composed LLM Prompt"
+            icon={IconNames.WRENCH}
+            isOpen={isViewLLMPromptOpen}
+            onClose={() => setIsViewLLMPromptOpen(false)}
           >
-            Get comments
-          </Button>
-        </div>
+            <div className="llm-prompt-dialog">
+              <span className="forenote">
+                <b>Note:</b> The titles here are provided merely to distinguish the different
+                sections. They are not include in the final prompt.
+              </span>
+              <H4>Course Level Prompt</H4>
+              {props.llm_course_level_prompt || ''}
+              <br />
+              <H4>Assessment Level Prompt</H4>
+              {props.llm_assessment_prompt || ''}
+              <br />
+              <H4>Question Level Prompt</H4>
+              {props.llm_question_prompt || ''}
+              <H4>Generic Info From Question</H4>
+              **Question:** <br />
+              ```
+              <br />
+              {props.questionContent}
+              <br />
+              ```
+              <br />
+              <br />
+              **Model Solution:** <br />
+              ``` <br />
+              {props.solution || 'N/A'}
+              <br />
+              ```
+              <br />
+              <br />
+              **Autograding Status:** {props.autoGradingStatus} <br />
+              **Autograding Results:**{' '}
+              {props.autoGradingResults ? JSON.stringify(props.autoGradingResults) : 'N/A'}
+            </div>
+          </Dialog>
+          <div style={{ marginBottom: '10px' }}>
+            <GradingCommentSelector
+              onSelect={onSelectGeneratedComments}
+              isLoading={hasClickedGenerate}
+              comments={suggestions}
+            />
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <Button
+                style={{ marginRight: '1rem' }}
+                onClick={async () => {
+                  setIsViewLLMPromptOpen(true);
+                }}
+              >
+                View Prompt
+              </Button>
+
+              <Button
+                intent="primary"
+                onClick={async () => {
+                  setHasClickedGenerate(true);
+                  const resp = await getCommentSuggestions();
+                  setHasClickedGenerate(false);
+                  setSuggestions(resp ? resp.comments : []);
+                }}
+              >
+                Generate Comments
+              </Button>
+            </div>
+          </div>
+        </>
       )}
 
       <div className="react-mde-parent">

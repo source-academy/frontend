@@ -94,6 +94,7 @@ export type GradingAssessment = {
   summaryLong: string;
   summaryShort: string;
   title: string;
+  llm_assessment_prompt: string | null;
 };
 
 export type GradingQuery = {
@@ -189,6 +190,8 @@ export type GradingQuestion = {
     };
     gradedAt?: string;
   };
+  autogradingResults: AutogradingResult[];
+  autoGradingStatus: string;
   ai_comments?: string[];
 };
 

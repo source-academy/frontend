@@ -243,7 +243,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
               >
                 <TextArea
                   id="llmCourseLevelPrompt"
-                  className="input-textarea"
+                  className="llm-prompt-input-textarea"
                   fill={true}
                   placeholder="You are looking at a modified version of Javascript"
                   value={llmCourseLevelPrompt}

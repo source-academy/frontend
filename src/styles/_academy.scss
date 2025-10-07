@@ -258,6 +258,20 @@
   }
 }
 
+.llm-prompt-dialog {
+  white-space: pre-wrap; // To allow for "\n" newlines
+  padding: 1rem;
+  h4 {
+    margin-top: 0.5rem;
+  }
+  .forenote {
+    display: block;
+    font-size: small;
+    color: gray;
+    margin-bottom: 1rem;
+  }
+}
+
 .betcha-dialog,
 .assessment-reset {
   span.warning {
@@ -343,6 +357,10 @@
 
       .input-textarea {
         height: 100px;
+      }
+
+      .llm-prompt-input-textarea {
+        height: 300px;
       }
 
       .input-markdown {
