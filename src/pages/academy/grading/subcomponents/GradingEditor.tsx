@@ -24,7 +24,6 @@ import Markdown from '../../../../commons/Markdown';
 import { Prompt } from '../../../../commons/ReactRouterPrompt';
 import { postGenerateComments } from '../../../../commons/sagas/RequestsSaga';
 import { saveFinalComment } from '../../../../commons/sagas/RequestsSaga';
-import { saveChosenComments } from '../../../../commons/sagas/RequestsSaga';
 import { getPrettyDate } from '../../../../commons/utils/DateHelper';
 import { showSimpleConfirmDialog } from '../../../../commons/utils/DialogHelper';
 import {
@@ -136,12 +135,6 @@ const GradingEditor: React.FC<Props> = props => {
     return resp;
   };
 
-  const postSaveChosenComments = async (comments: string[]) => {
-    const resp = await saveChosenComments(tokens, props.submissionId, props.questionId, comments);
-
-    return resp;
-  };
-
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [selectedSuggestions, setSelectedSuggestions] = useState<string[]>([]);
   const [hasClickedGenerate, setHasClickedGenerate] = useState<boolean>(false);
@@ -177,7 +170,6 @@ const GradingEditor: React.FC<Props> = props => {
       const newXpAdjustmentInput = convertParamToInt(xpAdjustmentInput || undefined) || undefined;
       const xp = props.initialXp + (newXpAdjustmentInput || 0);
       postSaveFinalComment(editorValue);
-      postSaveChosenComments(selectedSuggestions);
       if (xp < 0 || xp > props.maxXp) {
         showWarningMessage(
           `XP ${xp.toString()} is out of bounds. Maximum xp is ${props.maxXp.toString()}.`
