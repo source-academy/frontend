@@ -42,19 +42,14 @@ export class CseMachine {
   /** updates the visualization state in the SideContentCseMachine component based on
    * the Java Slang context passed in */
   static drawCse(context: any) {
-    // if (!this.setVis || !context.environment || !context.control || !context.stash) {
-    //   throw new Error('Java CSE Machine not initialized');
-    // }
-
     if (!this.setVis || !context.control) {
       throw new Error('C CSE Machine not initialised');
     }
-
     CseMachine.control = new Control(context.control);
     CseMachine.stash = new Stash(context.stash);
     CseMachine.functions = context.astRoot.functionTable;
     CseMachine.environment = new Environment(context.stackFrames);
-    CseMachine.memory = new Memory(context.memory);
+    CseMachine.memory = new Memory(context.memory, context.stackFrames);
 
     this.setVis(this.draw());
 
@@ -153,10 +148,10 @@ export class CseMachine {
                   key={CseMachine.key++}
                   listening={false}
                 />
-                {this.control?.draw()}
-                {this.stash?.draw()}
-                {this.environment?.draw()}
-                {this.memory?.draw()}
+                {CseMachine.control?.draw()}
+                {CseMachine.stash?.draw()}
+                {CseMachine.environment?.draw()}
+                {CseMachine.memory?.draw()}
               </Layer>
             </Stage>
           </div>

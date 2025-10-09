@@ -1,13 +1,13 @@
 import React from 'react';
-import { Group, Rect, Text } from 'react-konva';
-import { Memory as CMemory } from 'src/ctowasm/dist';
+import { Group, Rect } from 'react-konva';
+import { Memory as CMemory, StackFrame } from 'src/ctowasm/dist';
 
 import { Visible } from '../../../components/Visible';
 import { defaultTextColor } from '../../../CseMachineUtils';
 import { CControlStashMemoryConfig } from '../../config/CControlStashMemoryConfig';
 import { CConfig, ShapeDefaultProps } from '../../config/CCSEMachineConfig';
 import { CseMachine } from '../../CseMachine';
-import { MemorySegment } from './MemorySegment';
+import { MemoryStackFrame } from './MemoryStackFrame';
 
 export class Memory extends Visible {
   textProps = {
@@ -19,14 +19,14 @@ export class Memory extends Visible {
     fontVariant: CControlStashMemoryConfig.FontVariant
   };
 
-  static memory: CMemory;
-  static dataSegment: MemorySegment;
-  static heapSegment: MemorySegment;
-  static stackSegment: MemorySegment;
+  memory: CMemory;
+  frames: MemoryStackFrame[] = [];
 
-  constructor(memory: CMemory) {
+  constructor(memory: CMemory, frames: StackFrame[]) {
     super();
-    Memory.memory = memory;
+    this.memory = memory;
+    this.frames = [];
+
     this._x =
       CControlStashMemoryConfig.ControlPosX +
       CControlStashMemoryConfig.ControlItemWidth +
@@ -38,12 +38,16 @@ export class Memory extends Visible {
       CControlStashMemoryConfig.StashItemHeight +
       2 * CConfig.CanvasPaddingY;
 
-    this._width = Math.max(
-      CConfig.FrameMinWidth,
-      Math.min(CConfig.MemoryMinWidth, 100 + 2 * CConfig.FramePaddingX)
-    );
+    this._width = CControlStashMemoryConfig.memoryRowWidth;
+    let currentY = this._y;
 
-    this._height = 1000
+    this.frames = [...frames].reverse().map(frame => {
+      const newMemoryStackFrame = new MemoryStackFrame(this._x, currentY, this.memory, frame);
+      currentY += newMemoryStackFrame.height();
+      return newMemoryStackFrame;
+    });
+
+    this._height = 1000;
   }
 
   draw(): React.ReactNode {
@@ -60,7 +64,7 @@ export class Memory extends Visible {
           fill="transparent"
           cornerRadius={Number(CConfig.FrameCornerRadius)}
         />
-        <Text {...this.textProps} x={this.x()} y={this.y()} text="Memory" />
+        {this.frames.map(frame => frame.draw())}
       </Group>
     );
   }

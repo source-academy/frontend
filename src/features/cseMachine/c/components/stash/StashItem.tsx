@@ -33,7 +33,8 @@ export class StashItem extends Visible {
 
     // Height and width.
     this._height =
-      CControlStashMemoryConfig.StashItemHeight + CControlStashMemoryConfig.StashItemTextPadding * 2;
+      CControlStashMemoryConfig.StashItemHeight +
+      CControlStashMemoryConfig.StashItemTextPadding * 2;
     this._width = CControlStashMemoryConfig.StashItemTextPadding * 2 + getTextWidth(this._text);
 
     // Arrow

@@ -54,15 +54,19 @@ export class Stash extends Visible {
         return stashItem.value.toString();
       case 'FunctionTableIndex': {
         const index = stashItem.index;
-        if (index.value < 0 || index.value > CseMachine.functions.length) {
-          throw new Error('Index of desired function is out of bounds');
+        if (
+          !CseMachine.functions ||
+          index.value < 0 ||
+          index.value > CseMachine.functions.length - 1
+        ) {
+          throw new Error('Index of desired function is out of bounds or functions are undefined');
         }
 
         const functionName = CseMachine.functions[Number(index.value)];
         return functionName.functionName;
       }
       case 'MemoryAddress':
-        return stashItem.value.toString();
+        return `0x${stashItem.value.toString(16).padStart(2, '0').toUpperCase()}`;
     }
   };
 

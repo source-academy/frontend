@@ -4,6 +4,14 @@ export const CControlStashMemoryConfig = Object.freeze({
   StashPosX: 310,
   StashPosY: 5,
 
+  memoryRowHeight: 30,
+  memoryRowWidth: 200,
+  memoryRowPadding: 4,
+
+  byteBoxWidth: 25,
+  byteBoxHeight: 25,
+  byteBoxPadding: 4,
+
   ControlItemWidth: 290,
   ControlItemTextPadding: 10,
   ControlMaxTextWidth: 300,

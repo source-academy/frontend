@@ -34,7 +34,7 @@ export class Variable extends Visible {
     x: number,
     y: number,
     private readonly _variable: number,
-    dataType: string,
+    dataType: string
   ) {
     super();
 

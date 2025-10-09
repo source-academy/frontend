@@ -8,7 +8,7 @@ import simpleImportSort from 'eslint-plugin-simple-import-sort';
 // import reactRefresh from 'eslint-plugin-react-refresh';
 
 export default config(
-  { ignores: ['eslint.config.mjs', 'node_modules', '**/*.js'] },
+  { ignores: ['eslint.config.mjs', 'node_modules', '**/*.js', '**/*.map'] },
   // eslint.configs.recommended,
   ...configs.recommended,
   // TODO: Enable when ready

@@ -1,7 +1,7 @@
 /** configs for dimensions */
 export const CConfig = Object.freeze({
   CanvasMinHeight: 800,
-  CanvasMinWidth: 800,
+  CanvasMinWidth: 10000,
   CanvasPaddingX: 30,
   CanvasPaddingY: 30,
 
