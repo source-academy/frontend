@@ -3,7 +3,7 @@
 exports[`Playground tests > Playground renders correctly 1`] = `
 <div>
   <div
-    class="Playground bp5-dark"
+    class="Playground bp6-dark"
   >
     <div
       class="workspace"
@@ -12,31 +12,32 @@ exports[`Playground tests > Playground renders correctly 1`] = `
         class="ControlBar"
       >
         <div
-          class="ControlBar_editor bp5-button-group"
+          class="ControlBar_editor bp6-button-group"
         >
           <div
             class="Switch"
           >
             <label
-              class="bp5-control bp5-switch"
+              class="bp6-control bp6-switch"
             >
               <input
+                class="bp6-control-input"
                 type="checkbox"
               />
               <span
-                class="bp5-control-indicator"
+                class="bp6-control-indicator"
               />
             </label>
           </div>
           <span
-            class="bp5-popover-target"
+            class="bp6-popover-target"
           >
             <button
-              class="bp5-button bp5-minimal"
+              class="bp6-button bp6-minimal"
             >
               <span
                 aria-hidden="true"
-                class="bp5-icon bp5-icon-play"
+                class="bp6-icon bp6-icon-play"
               >
                 <svg
                   data-icon="play"
@@ -52,24 +53,24 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                 </svg>
               </span>
               <span
-                class="bp5-button-text"
+                class="bp6-button-text"
               >
                 Run
               </span>
             </button>
           </span>
           <span
-            class="bp5-popover-target"
+            class="bp6-popover-target"
           >
             <span
-              class="bp5-popover-target"
+              class="bp6-popover-target"
             >
               <button
-                class="bp5-button bp5-minimal"
+                class="bp6-button bp6-minimal"
               >
                 <span
                   aria-hidden="true"
-                  class="bp5-icon bp5-icon-share"
+                  class="bp6-icon bp6-icon-share"
                 >
                   <svg
                     data-icon="share"
@@ -85,7 +86,7 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                   </svg>
                 </span>
                 <span
-                  class="bp5-button-text"
+                  class="bp6-button-text"
                 >
                   Share
                 </span>
@@ -97,21 +98,21 @@ exports[`Playground tests > Playground renders correctly 1`] = `
             aria-disabled="false"
             aria-expanded="false"
             aria-haspopup="listbox"
-            class="bp5-popover-target"
+            class="bp6-popover-target"
             role="combobox"
           >
             <button
-              class="bp5-button bp5-minimal"
+              class="bp6-button bp6-minimal"
               type="button"
             >
               <span
-                class="bp5-button-text"
+                class="bp6-button-text"
               >
                 Source §4
               </span>
               <span
                 aria-hidden="true"
-                class="bp5-icon bp5-icon-double-caret-vertical"
+                class="bp6-icon bp6-icon-double-caret-vertical"
               >
                 <svg
                   data-icon="double-caret-vertical"
@@ -129,17 +130,17 @@ exports[`Playground tests > Playground renders correctly 1`] = `
             </button>
           </div>
           <span
-            class="bp5-popover-target"
+            class="bp6-popover-target"
           >
             <span
-              class="bp5-popover-target"
+              class="bp6-popover-target"
             >
               <button
-                class="bp5-button bp5-minimal"
+                class="bp6-button bp6-minimal"
               >
                 <span
                   aria-hidden="true"
-                  class="bp5-icon bp5-icon-social-media"
+                  class="bp6-icon bp6-icon-social-media"
                 >
                   <svg
                     data-icon="social-media"
@@ -155,7 +156,7 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                   </svg>
                 </span>
                 <span
-                  class="bp5-button-text"
+                  class="bp6-button-text"
                 >
                   Session
                 </span>
@@ -163,14 +164,14 @@ exports[`Playground tests > Playground renders correctly 1`] = `
             </span>
           </span>
           <span
-            class="bp5-popover-target"
+            class="bp6-popover-target"
           >
             <button
-              class="bp5-button bp5-minimal"
+              class="bp6-button bp6-minimal"
             >
               <span
                 aria-hidden="true"
-                class="bp5-icon bp5-icon-folder-close"
+                class="bp6-icon bp6-icon-folder-close"
               >
                 <svg
                   data-icon="folder-close"
@@ -186,24 +187,24 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                 </svg>
               </span>
               <span
-                class="bp5-button-text"
+                class="bp6-button-text"
               >
                 Folder
               </span>
             </button>
           </span>
           <span
-            class="bp5-popover-target"
+            class="bp6-popover-target"
           >
             <span
-              class="bp5-popover-target"
+              class="bp6-popover-target"
             >
               <button
-                class="bp5-button bp5-minimal"
+                class="bp6-button bp6-minimal"
               >
                 <span
                   aria-hidden="true"
-                  class="bp5-icon bp5-icon-cloud"
+                  class="bp6-icon bp6-icon-cloud"
                 >
                   <svg
                     data-icon="cloud"
@@ -219,7 +220,7 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                   </svg>
                 </span>
                 <span
-                  class="bp5-button-text"
+                  class="bp6-button-text"
                 >
                   Google Drive
                 </span>
@@ -227,17 +228,17 @@ exports[`Playground tests > Playground renders correctly 1`] = `
             </span>
           </span>
           <span
-            class="bp5-popover-target"
+            class="bp6-popover-target"
           >
             <span
-              class="bp5-popover-target"
+              class="bp6-popover-target"
             >
               <button
-                class="bp5-button bp5-minimal"
+                class="bp6-button bp6-minimal"
               >
                 <span
                   aria-hidden="true"
-                  class="bp5-icon bp5-icon-git-branch"
+                  class="bp6-icon bp6-icon-git-branch"
                 >
                   <svg
                     data-icon="git-branch"
@@ -253,7 +254,7 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                   </svg>
                 </span>
                 <span
-                  class="bp5-button-text"
+                  class="bp6-button-text"
                 >
                   GitHub
                 </span>
@@ -261,18 +262,18 @@ exports[`Playground tests > Playground renders correctly 1`] = `
             </span>
           </span>
           <span
-            class="bp5-popover-target"
+            class="bp6-popover-target"
           >
             <div
-              class="bp5-control-group bp5-numeric-input"
+              class="bp6-control-group bp6-numeric-input"
               role="group"
             >
               <div
-                class="bp5-input-group"
+                class="bp6-input-group"
               >
                 <span
                   aria-hidden="true"
-                  class="bp5-icon bp5-icon-time"
+                  class="bp6-icon bp6-icon-time"
                   tabindex="-1"
                 >
                   <svg
@@ -292,7 +293,7 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                   aria-valuemin="1000"
                   aria-valuenow="1000"
                   autocomplete="off"
-                  class="bp5-input"
+                  class="bp6-input"
                   id="numericInput-0"
                   min="1000"
                   role="spinbutton"
@@ -303,17 +304,17 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                 />
               </div>
               <div
-                class="bp5-button-group bp5-vertical bp5-fixed"
+                class="bp6-button-group bp6-vertical bp6-fixed"
               >
                 <button
                   aria-controls="numericInput-0"
                   aria-label="increment"
-                  class="bp5-button"
+                  class="bp6-button"
                   type="button"
                 >
                   <span
                     aria-hidden="true"
-                    class="bp5-icon bp5-icon-chevron-up"
+                    class="bp6-icon bp6-icon-chevron-up"
                   >
                     <svg
                       data-icon="chevron-up"
@@ -334,14 +335,14 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                 <button
                   aria-controls="numericInput-0"
                   aria-label="decrement"
-                  class="bp5-button bp5-disabled"
+                  class="bp6-button bp6-disabled"
                   disabled=""
                   tabindex="-1"
                   type="button"
                 >
                   <span
                     aria-hidden="true"
-                    class="bp5-icon bp5-icon-chevron-down"
+                    class="bp6-icon bp6-icon-chevron-down"
                   >
                     <svg
                       data-icon="chevron-down"
@@ -364,7 +365,7 @@ exports[`Playground tests > Playground renders correctly 1`] = `
           </span>
         </div>
         <div
-          class="ControlBar_editingWorkspace bp5-button-group"
+          class="ControlBar_editingWorkspace bp6-button-group"
         />
       </div>
       <div
@@ -392,11 +393,12 @@ exports[`Playground tests > Playground renders correctly 1`] = `
               class="editor-container"
             >
               <div
-                class="Editor bp5-card bp5-elevation-0"
+                class="Editor bp6-card bp6-elevation-0"
               >
                 <div
                   class="row editor-react-ace"
                   data-testid="Editor"
+                  id="editor-react-ace"
                 >
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark react-ace"
@@ -406,6 +408,7 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                     <textarea
                       aria-autocomplete="both"
                       aria-haspopup="false"
+                      aria-label="Cursor at row 1"
                       autocapitalize="off"
                       autocorrect="off"
                       class="ace_text-input"
@@ -491,7 +494,16 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                         XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                       </div>
                     </div>
+                    <div
+                      class="ace_tooltip"
+                      id="gt1"
+                      role="tooltip"
+                      style="display: none; pointer-events: auto;"
+                    />
                   </div>
+                  <div
+                    id="ace-radar-view"
+                  />
                 </div>
               </div>
             </div>
@@ -505,16 +517,16 @@ exports[`Playground tests > Playground renders correctly 1`] = `
             class="right-parent"
           >
             <span
-              class="fullscreen-button bp5-popover-target"
+              class="fullscreen-button bp6-popover-target"
             >
               <button
-                class="bp5-button bp5-minimal"
+                class="bp6-button bp6-minimal"
                 tabindex="0"
                 type="button"
               >
                 <span
                   aria-hidden="true"
-                  class="bp5-icon bp5-icon-maximize"
+                  class="bp6-icon bp6-icon-maximize"
                 >
                   <svg
                     data-icon="maximize"
@@ -539,39 +551,39 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                 class="side-content"
               >
                 <div
-                  class="bp5-card bp5-elevation-0"
+                  class="bp6-card bp6-elevation-0"
                 >
                   <div
                     class="side-content-tabs"
                   >
                     <div
-                      class="bp5-tabs"
+                      class="bp6-tabs"
                     >
                       <div
-                        class="bp5-tab-list"
+                        class="bp6-tab-list"
                         role="tablist"
                       >
                         <div
-                          class="bp5-tab-indicator-wrapper"
+                          class="bp6-tab-indicator-wrapper"
                           style="height: 0px; transform: translateX(0px) translateY(0px); width: 0px;"
                         >
                           <div
-                            class="bp5-tab-indicator"
+                            class="bp6-tab-indicator"
                           />
                         </div>
                         <div
-                          aria-controls="bp5-tab-panel_side-content-tabs_introduction"
+                          aria-controls="bp6-tab-panel_side-content-tabs_introduction"
                           aria-disabled="false"
                           aria-expanded="true"
                           aria-selected="true"
-                          class="bp5-tab side-content-tab"
+                          class="bp6-tab side-content-tab"
                           data-tab-id="introduction"
-                          id="bp5-tab-title_side-content-tabs_introduction"
+                          id="bp6-tab-title_side-content-tabs_introduction"
                           role="tab"
                           tabindex="0"
                         >
                           <span
-                            class="bp5-popover-target"
+                            class="bp6-popover-target"
                           >
                             <div
                               class="side-content-tooltip"
@@ -579,7 +591,7 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp5-icon bp5-icon-home"
+                                class="bp6-icon bp6-icon-home"
                               >
                                 <svg
                                   data-icon="home"
@@ -598,18 +610,18 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                           </span>
                         </div>
                         <div
-                          aria-controls="bp5-tab-panel_side-content-tabs_data_visualizer"
+                          aria-controls="bp6-tab-panel_side-content-tabs_data_visualizer"
                           aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
-                          class="bp5-tab side-content-tab"
+                          class="bp6-tab side-content-tab"
                           data-tab-id="data_visualizer"
-                          id="bp5-tab-title_side-content-tabs_data_visualizer"
+                          id="bp6-tab-title_side-content-tabs_data_visualizer"
                           role="tab"
                           tabindex="-1"
                         >
                           <span
-                            class="bp5-popover-target"
+                            class="bp6-popover-target"
                           >
                             <div
                               class="side-content-tooltip"
@@ -617,7 +629,7 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp5-icon bp5-icon-eye-open"
+                                class="bp6-icon bp6-icon-eye-open"
                               >
                                 <svg
                                   data-icon="eye-open"
@@ -636,18 +648,18 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                           </span>
                         </div>
                         <div
-                          aria-controls="bp5-tab-panel_side-content-tabs_cse_machine"
+                          aria-controls="bp6-tab-panel_side-content-tabs_cse_machine"
                           aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
-                          class="bp5-tab side-content-tab"
+                          class="bp6-tab side-content-tab"
                           data-tab-id="cse_machine"
-                          id="bp5-tab-title_side-content-tabs_cse_machine"
+                          id="bp6-tab-title_side-content-tabs_cse_machine"
                           role="tab"
                           tabindex="-1"
                         >
                           <span
-                            class="bp5-popover-target"
+                            class="bp6-popover-target"
                           >
                             <div
                               class="side-content-tooltip"
@@ -655,7 +667,7 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp5-icon bp5-icon-globe"
+                                class="bp6-icon bp6-icon-globe"
                               >
                                 <svg
                                   data-icon="globe"
@@ -674,18 +686,18 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                           </span>
                         </div>
                         <div
-                          aria-controls="bp5-tab-panel_side-content-tabs_remote_execution"
+                          aria-controls="bp6-tab-panel_side-content-tabs_remote_execution"
                           aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
-                          class="bp5-tab side-content-tab"
+                          class="bp6-tab side-content-tab"
                           data-tab-id="remote_execution"
-                          id="bp5-tab-title_side-content-tabs_remote_execution"
+                          id="bp6-tab-title_side-content-tabs_remote_execution"
                           role="tab"
                           tabindex="-1"
                         >
                           <span
-                            class="bp5-popover-target"
+                            class="bp6-popover-target"
                           >
                             <div
                               class="side-content-tooltip"
@@ -693,7 +705,7 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp5-icon bp5-icon-satellite"
+                                class="bp6-icon bp6-icon-satellite"
                               >
                                 <svg
                                   data-icon="satellite"
@@ -714,16 +726,16 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                       </div>
                       <div
                         aria-hidden="false"
-                        aria-labelledby="bp5-tab-title_side-content-tabs_introduction"
-                        class="bp5-tab-panel side-content-tab"
-                        id="bp5-tab-panel_side-content-tabs_introduction"
+                        aria-labelledby="bp6-tab-title_side-content-tabs_introduction"
+                        class="bp6-tab-panel side-content-tab"
+                        id="bp6-tab-panel_side-content-tabs_introduction"
                         role="tabpanel"
                       >
                         <div
                           class="side-content-text"
                         >
                           <div
-                            class="md bp5-running-text"
+                            class="md bp6-running-text"
                           >
                             <p>
                               Welcome to the Source Academy playground!
@@ -795,9 +807,9 @@ and also the
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp5-tab-title_side-content-tabs_data_visualizer"
-                        class="bp5-tab-panel side-content-tab"
-                        id="bp5-tab-panel_side-content-tabs_data_visualizer"
+                        aria-labelledby="bp6-tab-title_side-content-tabs_data_visualizer"
+                        class="bp6-tab-panel side-content-tab"
+                        id="bp6-tab-panel_side-content-tabs_data_visualizer"
                         role="tabpanel"
                       >
                         <div
@@ -807,17 +819,16 @@ and also the
                             tabindex="-1"
                           >
                             <div
-                              class="sa-data-visualizer bp5-dark"
+                              class="sa-data-visualizer bp6-dark"
                             >
                               <p
-                                class="bp5-running-text"
+                                class="bp6-running-text"
                                 id="data-visualizer-default-text"
                               >
                                 The data visualizer helps you to visualize data structures.
                                 <br />
                                 <br />
-                                It is activated by calling the function
-                                 
+                                It is activated by calling the function 
                                 <code>
                                   draw_data(x
                                   <sub>
@@ -833,33 +844,28 @@ and also the
                                   </sub>
                                   )
                                 </code>
-                                , where
-                                 
+                                , where 
                                 <code>
                                   x
                                   <sub>
                                     k
                                   </sub>
                                 </code>
-                                 
-                                would be the
-                                 
+                                 would be the 
                                 <code>
                                   k
                                   <sup>
                                     th
                                   </sup>
                                 </code>
-                                 
-                                data structure that you want to visualize and 
+                                 data structure that you want to visualize and 
                                 <code>
                                   n
                                 </code>
                                  is the number of structures.
                                 <br />
                                 <br />
-                                The data visualizer uses box-and-pointer diagrams, as introduced in
-                                 
+                                The data visualizer uses box-and-pointer diagrams, as introduced in 
                                 <a
                                   href="https://sourceacademy.org/sicpjs/2.2"
                                   rel="noopener noreferrer"
@@ -877,9 +883,9 @@ and also the
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp5-tab-title_side-content-tabs_cse_machine"
-                        class="bp5-tab-panel side-content-tab"
-                        id="bp5-tab-panel_side-content-tabs_cse_machine"
+                        aria-labelledby="bp6-tab-title_side-content-tabs_cse_machine"
+                        class="bp6-tab-panel side-content-tab"
+                        id="bp6-tab-panel_side-content-tabs_cse_machine"
                         role="tabpanel"
                       >
                         <div
@@ -890,32 +896,32 @@ and also the
                             tabindex="-1"
                           >
                             <div
-                              class="sa-substituter bp5-dark"
+                              class="sa-substituter bp6-dark"
                             >
                               <div
-                                class="bp5-slider bp5-disabled"
+                                class="bp6-slider bp6-disabled"
                               >
                                 <div
-                                  class="bp5-slider-track"
+                                  class="bp6-slider-track"
                                 >
                                   <div
-                                    class="bp5-slider-progress"
+                                    class="bp6-slider-progress"
                                     style="left: 0%; right: 100%; top: 0px;"
                                   />
                                   <div
-                                    class="bp5-slider-progress"
+                                    class="bp6-slider-progress"
                                     style="left: 0%; right: 100%; top: 0px;"
                                   />
                                   <div
-                                    class="bp5-slider-progress"
+                                    class="bp6-slider-progress"
                                     style="left: 0%; right: 100%; top: 0px;"
                                   />
                                 </div>
                                 <div
-                                  class="bp5-slider-axis"
+                                  class="bp6-slider-axis"
                                 >
                                   <div
-                                    class="bp5-slider-label"
+                                    class="bp6-slider-label"
                                   >
                                     0
                                   </div>
@@ -926,13 +932,13 @@ and also the
                                   aria-valuemax="0"
                                   aria-valuemin="0"
                                   aria-valuenow="0"
-                                  class="bp5-slider-handle"
+                                  class="bp6-slider-handle"
                                   role="slider"
                                   style="left: calc(-0px + (% * nan));"
                                   tabindex="0"
                                 >
                                   <span
-                                    class="bp5-slider-label"
+                                    class="bp6-slider-label"
                                   >
                                     0
                                   </span>
@@ -942,21 +948,21 @@ and also the
                                 style="display: flex; justify-content: space-between; align-items: center;"
                               >
                                 <div
-                                  class="bp5-button-group"
+                                  class="bp6-button-group"
                                 >
                                   <span
-                                    class="bp5-popover-target"
+                                    class="bp6-popover-target"
                                   >
                                     <a
                                       aria-disabled="true"
-                                      class="bp5-button bp5-disabled"
+                                      class="bp6-button bp6-disabled"
                                       disabled=""
                                       role="button"
                                       tabindex="-1"
                                     >
                                       <span
                                         aria-hidden="true"
-                                        class="bp5-icon bp5-icon-layers"
+                                        class="bp6-icon bp6-icon-layers"
                                       >
                                         <svg
                                           data-icon="layers"
@@ -972,36 +978,37 @@ and also the
                                         </svg>
                                       </span>
                                       <span
-                                        class="bp5-button-text"
+                                        class="bp6-button-text"
                                       >
                                         <label
-                                          class="bp5-control bp5-checkbox bp5-disabled"
+                                          class="bp6-control bp6-checkbox bp6-disabled"
                                           style="margin: 0px;"
                                         >
                                           <input
+                                            class="bp6-control-input"
                                             disabled=""
                                             type="checkbox"
                                           />
                                           <span
-                                            class="bp5-control-indicator"
+                                            class="bp6-control-indicator"
                                           />
                                         </label>
                                       </span>
                                     </a>
                                   </span>
                                   <span
-                                    class="bp5-popover-target"
+                                    class="bp6-popover-target"
                                   >
                                     <a
                                       aria-disabled="true"
-                                      class="bp5-button bp5-disabled"
+                                      class="bp6-button bp6-disabled"
                                       disabled=""
                                       role="button"
                                       tabindex="-1"
                                     >
                                       <span
                                         aria-hidden="true"
-                                        class="bp5-icon bp5-icon-minimize"
+                                        class="bp6-icon bp6-icon-minimize"
                                       >
                                         <svg
                                           data-icon="minimize"
@@ -1017,18 +1024,19 @@ and also the
                                         </svg>
                                       </span>
                                       <span
-                                        class="bp5-button-text"
+                                        class="bp6-button-text"
                                       >
                                         <label
-                                          class="bp5-control bp5-checkbox bp5-disabled"
+                                          class="bp6-control bp6-checkbox bp6-disabled"
                                           style="margin: 0px;"
                                         >
                                           <input
+                                            class="bp6-control-input"
                                             disabled=""
                                             type="checkbox"
                                           />
                                           <span
-                                            class="bp5-control-indicator"
+                                            class="bp6-control-indicator"
                                           />
                                         </label>
                                       </span>
@@ -1036,17 +1044,17 @@ and also the
                                   </span>
                                 </div>
                                 <div
-                                  class="bp5-button-group"
+                                  class="bp6-button-group"
                                 >
                                   <button
-                                    class="bp5-button bp5-disabled"
+                                    class="bp6-button bp6-disabled"
                                     disabled=""
                                     tabindex="-1"
                                     type="button"
                                   >
                                     <span
                                       aria-hidden="true"
-                                      class="bp5-icon bp5-icon-double-chevron-left"
+                                      class="bp6-icon bp6-icon-double-chevron-left"
                                     >
                                       <svg
                                         data-icon="double-chevron-left"
@@ -1063,14 +1071,14 @@ and also the
                                     </span>
                                   </button>
                                   <button
-                                    class="bp5-button bp5-disabled"
+                                    class="bp6-button bp6-disabled"
                                     disabled=""
                                     tabindex="-1"
                                     type="button"
                                   >
                                     <span
                                       aria-hidden="true"
-                                      class="bp5-icon bp5-icon-chevron-left"
+                                      class="bp6-icon bp6-icon-chevron-left"
                                     >
                                       <svg
                                         data-icon="chevron-left"
@@ -1087,14 +1095,14 @@ and also the
                                     </span>
                                   </button>
                                   <button
-                                    class="bp5-button bp5-disabled"
+                                    class="bp6-button bp6-disabled"
                                     disabled=""
                                     tabindex="-1"
                                     type="button"
                                   >
                                     <span
                                       aria-hidden="true"
-                                      class="bp5-icon bp5-icon-chevron-right"
+                                      class="bp6-icon bp6-icon-chevron-right"
                                     >
                                       <svg
                                         data-icon="chevron-right"
@@ -1111,14 +1119,14 @@ and also the
                                     </span>
                                   </button>
                                   <button
-                                    class="bp5-button bp5-disabled"
+                                    class="bp6-button bp6-disabled"
                                     disabled=""
                                     tabindex="-1"
                                     type="button"
                                   >
                                     <span
                                       aria-hidden="true"
-                                      class="bp5-icon bp5-icon-double-chevron-right"
+                                      class="bp6-icon bp6-icon-double-chevron-right"
                                     >
                                       <svg
                                         data-icon="double-chevron-right"
@@ -1136,21 +1144,21 @@ and also the
                                   </button>
                                 </div>
                                 <div
-                                  class="bp5-button-group"
+                                  class="bp6-button-group"
                                 >
                                   <span
-                                    class="bp5-popover-target"
+                                    class="bp6-popover-target"
                                   >
                                     <a
                                       aria-disabled="true"
-                                      class="bp5-button bp5-disabled"
+                                      class="bp6-button bp6-disabled"
                                       disabled=""
                                       role="button"
                                       tabindex="-1"
                                     >
                                       <span
                                         aria-hidden="true"
-                                        class="bp5-icon bp5-icon-print"
+                                        class="bp6-icon bp6-icon-print"
                                       >
                                         <svg
                                           data-icon="print"
@@ -1166,36 +1174,37 @@ and also the
                                         </svg>
                                       </span>
                                       <span
-                                        class="bp5-button-text"
+                                        class="bp6-button-text"
                                       >
                                         <label
-                                          class="bp5-control bp5-checkbox bp5-disabled"
+                                          class="bp6-control bp6-checkbox bp6-disabled"
                                           style="margin: 0px;"
                                         >
                                           <input
+                                            class="bp6-control-input"
                                             disabled=""
                                             type="checkbox"
                                           />
                                           <span
-                                            class="bp5-control-indicator"
+                                            class="bp6-control-indicator"
                                           />
                                         </label>
                                       </span>
                                     </a>
                                   </span>
                                   <span
-                                    class="bp5-popover-target"
+                                    class="bp6-popover-target"
                                   >
                                     <a
                                       aria-disabled="true"
-                                      class="bp5-button bp5-disabled"
+                                      class="bp6-button bp6-disabled"
                                       disabled=""
                                       role="button"
                                       tabindex="-1"
                                     >
                                       <span
                                         aria-hidden="true"
-                                        class="bp5-icon bp5-icon-floppy-disk"
+                                        class="bp6-icon bp6-icon-floppy-disk"
                                       >
                                         <svg
                                           data-icon="floppy-disk"
@@ -1218,13 +1227,12 @@ and also the
                              
                             <div />
                             <div
-                              class="bp5-running-text"
+                              class="bp6-running-text"
                               data-testid="cse-machine-default-text"
                               id="cse-machine-default-text"
                             >
                               <span>
-                                The CSE machine generates control, stash and environment model diagrams following a notation introduced in
-                                 
+                                The CSE machine generates control, stash and environment model diagrams following a notation introduced in 
                                 <a
                                   href="https://sourceacademy.org/sicpjs/3.2"
                                   rel="noopener noreferrer"
@@ -1234,15 +1242,15 @@ and also the
                                     Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3, Section 2
                                   </i>
                                 </a>
+                                .
                               </span>
-                              .
                               <br />
                               <br />
-                               On this tab, the REPL will be hidden from view, so do check that your code has no errors before running the stepper. You may use this tool by running your program and then dragging the slider above to see the state of the control, stash and environment at different stages in the evaluation of your program. Clicking on the fast-forward button (double chevron) will take you to the next breakpoint in your program
+                              On this tab, the REPL will be hidden from view, so do check that your code has no errors before running the stepper. You may use this tool by running your program and then dragging the slider above to see the state of the control, stash and environment at different stages in the evaluation of your program. Clicking on the fast-forward button (double chevron) will take you to the next breakpoint in your program.
                               <br />
                               <br />
                               <div
-                                class="bp5-divider"
+                                class="bp6-divider"
                               />
                               Some useful keyboard shortcuts:
                               <br />
@@ -1259,11 +1267,11 @@ and also the
                               Note that these shortcuts are only active when the browser focus is on this tab.
                             </div>
                             <div
-                              class="bp5-button-group bp5-vertical"
+                              class="bp6-button-group bp6-vertical"
                               style="position: absolute; bottom: 20px; right: 20px;"
                             >
                               <button
-                                class="bp5-button bp5-disabled"
+                                class="bp6-button bp6-disabled"
                                 disabled=""
                                 style="margin-bottom: 5px; border-radius: 3px;"
                                 tabindex="-1"
@@ -1271,7 +1279,7 @@ and also the
                               >
                                 <span
                                   aria-hidden="true"
-                                  class="bp5-icon bp5-icon-plus"
+                                  class="bp6-icon bp6-icon-plus"
                                 >
                                   <svg
                                     data-icon="plus"
@@ -1288,7 +1296,7 @@ and also the
                                 </span>
                               </button>
                               <button
-                                class="bp5-button bp5-disabled"
+                                class="bp6-button bp6-disabled"
                                 disabled=""
                                 style="border-radius: 3px;"
                                 tabindex="-1"
@@ -1296,7 +1304,7 @@ and also the
                               >
                                 <span
                                   aria-hidden="true"
-                                  class="bp5-icon bp5-icon-minus"
+                                  class="bp6-icon bp6-icon-minus"
                                 >
                                   <svg
                                     data-icon="minus"
@@ -1318,20 +1326,20 @@ and also the
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp5-tab-title_side-content-tabs_remote_execution"
-                        class="bp5-tab-panel side-content-tab"
-                        id="bp5-tab-panel_side-content-tabs_remote_execution"
+                        aria-labelledby="bp6-tab-title_side-content-tabs_remote_execution"
+                        class="bp6-tab-panel side-content-tab"
+                        id="bp6-tab-panel_side-content-tabs_remote_execution"
                         role="tabpanel"
                       >
                         <div
                           class="side-content-text"
                         >
                           <div
-                            class="bp5-callout bp5-intent-danger bp5-callout-has-body-content bp5-callout-icon"
+                            class="bp6-callout bp6-intent-danger bp6-callout-has-body-content bp6-callout-icon"
                           >
                             <span
                               aria-hidden="true"
-                              class="bp5-icon bp5-icon-error"
+                              class="bp6-icon bp6-icon-error"
                               tabindex="-1"
                             >
                               <svg
@@ -1381,7 +1389,7 @@ and also the
                 class="repl-output-parent"
               >
                 <div
-                  class="repl-input-parent row bp5-card bp5-elevation-0"
+                  class="repl-input-parent row bp6-card bp6-elevation-0"
                 >
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark repl-react-ace react-ace"
@@ -1391,6 +1399,7 @@ and also the
                     <textarea
                       aria-autocomplete="both"
                       aria-haspopup="false"
+                      aria-label="Cursor at row 1"
                       autocapitalize="off"
                       autocorrect="off"
                       class="ace_text-input"
@@ -1477,19 +1486,25 @@ and also the
                         XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                       </div>
                     </div>
+                    <div
+                      class="ace_tooltip"
+                      id="gt2"
+                      role="tooltip"
+                      style="display: none; pointer-events: auto;"
+                    />
                   </div>
                   <div
-                    class="bp5-button-group bp5-dark"
+                    class="bp6-button-group bp6-dark"
                   >
                     <span
-                      class="bp5-popover-target"
+                      class="bp6-popover-target"
                     >
                       <button
-                        class="bp5-button bp5-minimal"
+                        class="bp6-button bp6-minimal"
                       >
                         <span
                           aria-hidden="true"
-                          class="bp5-icon bp5-icon-code"
+                          class="bp6-icon bp6-icon-code"
                         >
                           <svg
                             data-icon="code"
@@ -1505,18 +1520,18 @@ and also the
                           </svg>
                         </span>
                         <span
-                          class="bp5-button-text"
+                          class="bp6-button-text"
                         >
                           Eval
                         </span>
                       </button>
                     </span>
                     <button
-                      class="bp5-button bp5-minimal"
+                      class="bp6-button bp6-minimal"
                     >
                       <span
                         aria-hidden="true"
-                        class="bp5-icon bp5-icon-remove"
+                        class="bp6-icon bp6-icon-remove"
                       >
                         <svg
                           data-icon="remove"
@@ -1532,7 +1547,7 @@ and also the
                         </svg>
                       </span>
                       <span
-                        class="bp5-button-text"
+                        class="bp6-button-text"
                       >
                         Clear
                       </span>
@@ -1553,7 +1568,7 @@ and also the
 exports[`Playground tests > Playground with link renders correctly 1`] = `
 <div>
   <div
-    class="Playground bp5-dark"
+    class="Playground bp6-dark"
   >
     <div
       class="workspace"
@@ -1562,31 +1577,32 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
         class="ControlBar"
       >
         <div
-          class="ControlBar_editor bp5-button-group"
+          class="ControlBar_editor bp6-button-group"
         >
           <div
             class="Switch"
           >
             <label
-              class="bp5-control bp5-switch"
+              class="bp6-control bp6-switch"
             >
               <input
+                class="bp6-control-input"
                 type="checkbox"
               />
               <span
-                class="bp5-control-indicator"
+                class="bp6-control-indicator"
               />
             </label>
           </div>
           <span
-            class="bp5-popover-target"
+            class="bp6-popover-target"
           >
             <button
-              class="bp5-button bp5-minimal"
+              class="bp6-button bp6-minimal"
             >
               <span
                 aria-hidden="true"
-                class="bp5-icon bp5-icon-play"
+                class="bp6-icon bp6-icon-play"
               >
                 <svg
                   data-icon="play"
@@ -1602,24 +1618,24 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                 </svg>
               </span>
               <span
-                class="bp5-button-text"
+                class="bp6-button-text"
               >
                 Run
               </span>
             </button>
           </span>
           <span
-            class="bp5-popover-target"
+            class="bp6-popover-target"
           >
             <span
-              class="bp5-popover-target"
+              class="bp6-popover-target"
             >
               <button
-                class="bp5-button bp5-minimal"
+                class="bp6-button bp6-minimal"
               >
                 <span
                   aria-hidden="true"
-                  class="bp5-icon bp5-icon-share"
+                  class="bp6-icon bp6-icon-share"
                 >
                   <svg
                     data-icon="share"
@@ -1635,7 +1651,7 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                   </svg>
                 </span>
                 <span
-                  class="bp5-button-text"
+                  class="bp6-button-text"
                 >
                   Share
                 </span>
@@ -1647,21 +1663,21 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
             aria-disabled="false"
             aria-expanded="false"
             aria-haspopup="listbox"
-            class="bp5-popover-target"
+            class="bp6-popover-target"
             role="combobox"
           >
             <button
-              class="bp5-button bp5-minimal"
+              class="bp6-button bp6-minimal"
               type="button"
             >
               <span
-                class="bp5-button-text"
+                class="bp6-button-text"
               >
                 Source §2
               </span>
               <span
                 aria-hidden="true"
-                class="bp5-icon bp5-icon-double-caret-vertical"
+                class="bp6-icon bp6-icon-double-caret-vertical"
               >
                 <svg
                   data-icon="double-caret-vertical"
@@ -1679,17 +1695,17 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
             </button>
           </div>
           <span
-            class="bp5-popover-target"
+            class="bp6-popover-target"
           >
             <span
-              class="bp5-popover-target"
+              class="bp6-popover-target"
             >
               <button
-                class="bp5-button bp5-minimal"
+                class="bp6-button bp6-minimal"
               >
                 <span
                   aria-hidden="true"
-                  class="bp5-icon bp5-icon-social-media"
+                  class="bp6-icon bp6-icon-social-media"
                 >
                   <svg
                     data-icon="social-media"
@@ -1705,7 +1721,7 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                   </svg>
                 </span>
                 <span
-                  class="bp5-button-text"
+                  class="bp6-button-text"
                 >
                   Session
                 </span>
@@ -1713,14 +1729,14 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
             </span>
           </span>
           <span
-            class="bp5-popover-target"
+            class="bp6-popover-target"
           >
             <button
-              class="bp5-button bp5-minimal"
+              class="bp6-button bp6-minimal"
             >
               <span
                 aria-hidden="true"
-                class="bp5-icon bp5-icon-folder-close"
+                class="bp6-icon bp6-icon-folder-close"
               >
                 <svg
                   data-icon="folder-close"
@@ -1736,24 +1752,24 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                 </svg>
               </span>
               <span
-                class="bp5-button-text"
+                class="bp6-button-text"
               >
                 Folder
               </span>
             </button>
           </span>
           <span
-            class="bp5-popover-target"
+            class="bp6-popover-target"
           >
             <span
-              class="bp5-popover-target"
+              class="bp6-popover-target"
             >
               <button
-                class="bp5-button bp5-minimal"
+                class="bp6-button bp6-minimal"
               >
                 <span
                   aria-hidden="true"
-                  class="bp5-icon bp5-icon-cloud"
+                  class="bp6-icon bp6-icon-cloud"
                 >
                   <svg
                     data-icon="cloud"
@@ -1769,7 +1785,7 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                   </svg>
                 </span>
                 <span
-                  class="bp5-button-text"
+                  class="bp6-button-text"
                 >
                   Google Drive
                 </span>
@@ -1777,17 +1793,17 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
             </span>
           </span>
           <span
-            class="bp5-popover-target"
+            class="bp6-popover-target"
           >
             <span
-              class="bp5-popover-target"
+              class="bp6-popover-target"
             >
               <button
-                class="bp5-button bp5-minimal"
+                class="bp6-button bp6-minimal"
               >
                 <span
                   aria-hidden="true"
-                  class="bp5-icon bp5-icon-git-branch"
+                  class="bp6-icon bp6-icon-git-branch"
                 >
                   <svg
                     data-icon="git-branch"
@@ -1803,7 +1819,7 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                   </svg>
                 </span>
                 <span
-                  class="bp5-button-text"
+                  class="bp6-button-text"
                 >
                   GitHub
                 </span>
@@ -1811,18 +1827,18 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
             </span>
           </span>
           <span
-            class="bp5-popover-target"
+            class="bp6-popover-target"
           >
             <div
-              class="bp5-control-group bp5-numeric-input"
+              class="bp6-control-group bp6-numeric-input"
               role="group"
             >
               <div
-                class="bp5-input-group"
+                class="bp6-input-group"
               >
                 <span
                   aria-hidden="true"
-                  class="bp5-icon bp5-icon-time"
+                  class="bp6-icon bp6-icon-time"
                   tabindex="-1"
                 >
                   <svg
@@ -1842,7 +1858,7 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                   aria-valuemin="1000"
                   aria-valuenow="1000"
                   autocomplete="off"
-                  class="bp5-input"
+                  class="bp6-input"
                   id="numericInput-1"
                   min="1000"
                   role="spinbutton"
@@ -1853,17 +1869,17 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                 />
               </div>
               <div
-                class="bp5-button-group bp5-vertical bp5-fixed"
+                class="bp6-button-group bp6-vertical bp6-fixed"
               >
                 <button
                   aria-controls="numericInput-1"
                   aria-label="increment"
-                  class="bp5-button"
+                  class="bp6-button"
                   type="button"
                 >
                   <span
                     aria-hidden="true"
-                    class="bp5-icon bp5-icon-chevron-up"
+                    class="bp6-icon bp6-icon-chevron-up"
                   >
                     <svg
                       data-icon="chevron-up"
@@ -1884,14 +1900,14 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                 <button
                   aria-controls="numericInput-1"
                   aria-label="decrement"
-                  class="bp5-button bp5-disabled"
+                  class="bp6-button bp6-disabled"
                   disabled=""
                   tabindex="-1"
                   type="button"
                 >
                   <span
                     aria-hidden="true"
-                    class="bp5-icon bp5-icon-chevron-down"
+                    class="bp6-icon bp6-icon-chevron-down"
                   >
                     <svg
                       data-icon="chevron-down"
@@ -1914,7 +1930,7 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
           </span>
         </div>
         <div
-          class="ControlBar_editingWorkspace bp5-button-group"
+          class="ControlBar_editingWorkspace bp6-button-group"
         />
       </div>
       <div
@@ -1942,11 +1958,12 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
               class="editor-container"
             >
               <div
-                class="Editor bp5-card bp5-elevation-0"
+                class="Editor bp6-card bp6-elevation-0"
               >
                 <div
                   class="row editor-react-ace"
                   data-testid="Editor"
+                  id="editor-react-ace"
                 >
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark react-ace"
@@ -1956,6 +1973,7 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                     <textarea
                       aria-autocomplete="both"
                       aria-haspopup="false"
+                      aria-label="Cursor at row 1"
                       autocapitalize="off"
                       autocorrect="off"
                       class="ace_text-input"
@@ -2041,7 +2059,16 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                         XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                       </div>
                     </div>
+                    <div
+                      class="ace_tooltip"
+                      id="gt3"
+                      role="tooltip"
+                      style="display: none; pointer-events: auto;"
+                    />
                   </div>
+                  <div
+                    id="ace-radar-view"
+                  />
                 </div>
               </div>
             </div>
@@ -2055,16 +2082,16 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
             class="right-parent"
           >
             <span
-              class="fullscreen-button bp5-popover-target"
+              class="fullscreen-button bp6-popover-target"
             >
               <button
-                class="bp5-button bp5-minimal"
+                class="bp6-button bp6-minimal"
                 tabindex="0"
                 type="button"
               >
                 <span
                   aria-hidden="true"
-                  class="bp5-icon bp5-icon-maximize"
+                  class="bp6-icon bp6-icon-maximize"
                 >
                   <svg
                     data-icon="maximize"
@@ -2089,39 +2116,39 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                 class="side-content"
               >
                 <div
-                  class="bp5-card bp5-elevation-0"
+                  class="bp6-card bp6-elevation-0"
                 >
                   <div
                     class="side-content-tabs"
                   >
                     <div
-                      class="bp5-tabs"
+                      class="bp6-tabs"
                     >
                       <div
-                        class="bp5-tab-list"
+                        class="bp6-tab-list"
                         role="tablist"
                       >
                         <div
-                          class="bp5-tab-indicator-wrapper"
+                          class="bp6-tab-indicator-wrapper"
                           style="height: 0px; transform: translateX(0px) translateY(0px); width: 0px;"
                         >
                           <div
-                            class="bp5-tab-indicator"
+                            class="bp6-tab-indicator"
                           />
                         </div>
                         <div
-                          aria-controls="bp5-tab-panel_side-content-tabs_introduction"
+                          aria-controls="bp6-tab-panel_side-content-tabs_introduction"
                           aria-disabled="false"
                           aria-expanded="true"
                           aria-selected="true"
-                          class="bp5-tab side-content-tab"
+                          class="bp6-tab side-content-tab"
                           data-tab-id="introduction"
-                          id="bp5-tab-title_side-content-tabs_introduction"
+                          id="bp6-tab-title_side-content-tabs_introduction"
                           role="tab"
                           tabindex="0"
                         >
                           <span
-                            class="bp5-popover-target"
+                            class="bp6-popover-target"
                           >
                             <div
                               class="side-content-tooltip"
@@ -2129,7 +2156,7 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp5-icon bp5-icon-home"
+                                class="bp6-icon bp6-icon-home"
                               >
                                 <svg
                                   data-icon="home"
@@ -2148,18 +2175,18 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                           </span>
                         </div>
                         <div
-                          aria-controls="bp5-tab-panel_side-content-tabs_data_visualizer"
+                          aria-controls="bp6-tab-panel_side-content-tabs_data_visualizer"
                           aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
-                          class="bp5-tab side-content-tab"
+                          class="bp6-tab side-content-tab"
                           data-tab-id="data_visualizer"
-                          id="bp5-tab-title_side-content-tabs_data_visualizer"
+                          id="bp6-tab-title_side-content-tabs_data_visualizer"
                           role="tab"
                           tabindex="-1"
                         >
                           <span
-                            class="bp5-popover-target"
+                            class="bp6-popover-target"
                           >
                             <div
                               class="side-content-tooltip"
@@ -2167,7 +2194,7 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp5-icon bp5-icon-eye-open"
+                                class="bp6-icon bp6-icon-eye-open"
                               >
                                 <svg
                                   data-icon="eye-open"
@@ -2186,18 +2213,18 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                           </span>
                         </div>
                         <div
-                          aria-controls="bp5-tab-panel_side-content-tabs_subst_visualiser"
+                          aria-controls="bp6-tab-panel_side-content-tabs_subst_visualiser"
                           aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
-                          class="bp5-tab side-content-tab"
+                          class="bp6-tab side-content-tab"
                           data-tab-id="subst_visualiser"
-                          id="bp5-tab-title_side-content-tabs_subst_visualiser"
+                          id="bp6-tab-title_side-content-tabs_subst_visualiser"
                           role="tab"
                           tabindex="-1"
                         >
                           <span
-                            class="bp5-popover-target"
+                            class="bp6-popover-target"
                           >
                             <div
                               class="side-content-tooltip"
@@ -2205,7 +2232,7 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp5-icon bp5-icon-flow-review"
+                                class="bp6-icon bp6-icon-flow-review"
                               >
                                 <svg
                                   data-icon="flow-review"
@@ -2224,18 +2251,18 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                           </span>
                         </div>
                         <div
-                          aria-controls="bp5-tab-panel_side-content-tabs_remote_execution"
+                          aria-controls="bp6-tab-panel_side-content-tabs_remote_execution"
                           aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
-                          class="bp5-tab side-content-tab"
+                          class="bp6-tab side-content-tab"
                           data-tab-id="remote_execution"
-                          id="bp5-tab-title_side-content-tabs_remote_execution"
+                          id="bp6-tab-title_side-content-tabs_remote_execution"
                           role="tab"
                           tabindex="-1"
                         >
                           <span
-                            class="bp5-popover-target"
+                            class="bp6-popover-target"
                           >
                             <div
                               class="side-content-tooltip"
@@ -2243,7 +2270,7 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                             >
                               <span
                                 aria-hidden="true"
-                                class="bp5-icon bp5-icon-satellite"
+                                class="bp6-icon bp6-icon-satellite"
                               >
                                 <svg
                                   data-icon="satellite"
@@ -2264,16 +2291,16 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                       </div>
                       <div
                         aria-hidden="false"
-                        aria-labelledby="bp5-tab-title_side-content-tabs_introduction"
-                        class="bp5-tab-panel side-content-tab"
-                        id="bp5-tab-panel_side-content-tabs_introduction"
+                        aria-labelledby="bp6-tab-title_side-content-tabs_introduction"
+                        class="bp6-tab-panel side-content-tab"
+                        id="bp6-tab-panel_side-content-tabs_introduction"
                         role="tabpanel"
                       >
                         <div
                           class="side-content-text"
                         >
                           <div
-                            class="md bp5-running-text"
+                            class="md bp6-running-text"
                           >
                             <p>
                               Welcome to the Source Academy playground!
@@ -2345,9 +2372,9 @@ and also the
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp5-tab-title_side-content-tabs_data_visualizer"
-                        class="bp5-tab-panel side-content-tab"
-                        id="bp5-tab-panel_side-content-tabs_data_visualizer"
+                        aria-labelledby="bp6-tab-title_side-content-tabs_data_visualizer"
+                        class="bp6-tab-panel side-content-tab"
+                        id="bp6-tab-panel_side-content-tabs_data_visualizer"
                         role="tabpanel"
                       >
                         <div
@@ -2357,17 +2384,16 @@ and also the
                             tabindex="-1"
                           >
                             <div
-                              class="sa-data-visualizer bp5-dark"
+                              class="sa-data-visualizer bp6-dark"
                             >
                               <p
-                                class="bp5-running-text"
+                                class="bp6-running-text"
                                 id="data-visualizer-default-text"
                               >
                                 The data visualizer helps you to visualize data structures.
                                 <br />
                                 <br />
-                                It is activated by calling the function
-                                 
+                                It is activated by calling the function 
                                 <code>
                                   draw_data(x
                                   <sub>
@@ -2383,33 +2409,28 @@ and also the
                                   </sub>
                                   )
                                 </code>
-                                , where
-                                 
+                                , where 
                                 <code>
                                   x
                                   <sub>
                                     k
                                   </sub>
                                 </code>
-                                 
-                                would be the
-                                 
+                                 would be the 
                                 <code>
                                   k
                                   <sup>
                                     th
                                   </sup>
                                 </code>
-                                 
-                                data structure that you want to visualize and 
+                                 data structure that you want to visualize and 
                                 <code>
                                   n
                                 </code>
                                  is the number of structures.
                                 <br />
                                 <br />
-                                The data visualizer uses box-and-pointer diagrams, as introduced in
-                                 
+                                The data visualizer uses box-and-pointer diagrams, as introduced in 
                                 <a
                                   href="https://sourceacademy.org/sicpjs/2.2"
                                   rel="noopener noreferrer"
@@ -2427,39 +2448,39 @@ and also the
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp5-tab-title_side-content-tabs_subst_visualiser"
-                        class="bp5-tab-panel side-content-tab"
-                        id="bp5-tab-panel_side-content-tabs_subst_visualiser"
+                        aria-labelledby="bp6-tab-title_side-content-tabs_subst_visualiser"
+                        class="bp6-tab-panel side-content-tab"
+                        id="bp6-tab-panel_side-content-tabs_subst_visualiser"
                         role="tabpanel"
                       >
                         <div
                           class="side-content-text"
                         >
                           <div
-                            class="sa-substituter bp5-dark"
+                            class="sa-substituter bp6-dark"
                             tabindex="-1"
                           >
                             <div
-                              class="bp5-slider bp5-disabled"
+                              class="bp6-slider bp6-disabled"
                             >
                               <div
-                                class="bp5-slider-track"
+                                class="bp6-slider-track"
                               >
                                 <div
-                                  class="bp5-slider-progress"
+                                  class="bp6-slider-progress"
                                   style="left: 0%; right: 0%; top: 0px;"
                                 />
                                 <div
-                                  class="bp5-slider-progress bp5-intent-primary"
+                                  class="bp6-slider-progress bp6-intent-primary"
                                   style="left: 0%; right: 0%; top: 0px;"
                                 />
                                 <div
-                                  class="bp5-slider-progress"
+                                  class="bp6-slider-progress"
                                   style="left: 0%; right: 0%; top: 0px;"
                                 />
                               </div>
                               <div
-                                class="bp5-slider-axis"
+                                class="bp6-slider-axis"
                               />
                               <span
                                 aria-disabled="true"
@@ -2467,13 +2488,13 @@ and also the
                                 aria-valuemax="0"
                                 aria-valuemin="1"
                                 aria-valuenow="1"
-                                class="bp5-slider-handle"
+                                class="bp6-slider-handle"
                                 role="slider"
                                 style="left: calc(0% - 0px);"
                                 tabindex="0"
                               >
                                 <span
-                                  class="bp5-slider-label"
+                                  class="bp6-slider-label"
                                 >
                                   1
                                 </span>
@@ -2483,17 +2504,17 @@ and also the
                               style="display: flex; justify-content: center; align-items: center;"
                             >
                               <div
-                                class="bp5-button-group"
+                                class="bp6-button-group"
                               >
                                 <button
-                                  class="bp5-button bp5-disabled"
+                                  class="bp6-button bp6-disabled"
                                   disabled=""
                                   tabindex="-1"
                                   type="button"
                                 >
                                   <span
                                     aria-hidden="true"
-                                    class="bp5-icon bp5-icon-double-chevron-left"
+                                    class="bp6-icon bp6-icon-double-chevron-left"
                                   >
                                     <svg
                                       data-icon="double-chevron-left"
@@ -2510,14 +2531,14 @@ and also the
                                   </span>
                                 </button>
                                 <button
-                                  class="bp5-button bp5-disabled"
+                                  class="bp6-button bp6-disabled"
                                   disabled=""
                                   tabindex="-1"
                                   type="button"
                                 >
                                   <span
                                     aria-hidden="true"
-                                    class="bp5-icon bp5-icon-chevron-left"
+                                    class="bp6-icon bp6-icon-chevron-left"
                                   >
                                     <svg
                                       data-icon="chevron-left"
@@ -2534,14 +2555,14 @@ and also the
                                   </span>
                                 </button>
                                 <button
-                                  class="bp5-button bp5-disabled"
+                                  class="bp6-button bp6-disabled"
                                   disabled=""
                                   tabindex="-1"
                                   type="button"
                                 >
                                   <span
                                     aria-hidden="true"
-                                    class="bp5-icon bp5-icon-chevron-right"
+                                    class="bp6-icon bp6-icon-chevron-right"
                                   >
                                     <svg
                                       data-icon="chevron-right"
@@ -2558,14 +2579,14 @@ and also the
                                   </span>
                                 </button>
                                 <button
-                                  class="bp5-button bp5-disabled"
+                                  class="bp6-button bp6-disabled"
                                   disabled=""
                                   tabindex="-1"
                                   type="button"
                                 >
                                   <span
                                     aria-hidden="true"
-                                    class="bp5-icon bp5-icon-double-chevron-right"
+                                    class="bp6-icon bp6-icon-double-chevron-right"
                                   >
                                     <svg
                                       data-icon="double-chevron-right"
@@ -2587,7 +2608,7 @@ and also the
                             <br />
                             <div>
                               <div
-                                class="bp5-running-text"
+                                class="bp6-running-text"
                                 id="substituter-default-text"
                               >
                                 Welcome to the Stepper!
@@ -2600,7 +2621,7 @@ and also the
                                 <br />
                                 <br />
                                 <div
-                                  class="bp5-divider"
+                                  class="bp6-divider"
                                 />
                                 Some useful keyboard shortcuts:
                                 <br />
@@ -2622,20 +2643,20 @@ and also the
                       </div>
                       <div
                         aria-hidden="true"
-                        aria-labelledby="bp5-tab-title_side-content-tabs_remote_execution"
-                        class="bp5-tab-panel side-content-tab"
-                        id="bp5-tab-panel_side-content-tabs_remote_execution"
+                        aria-labelledby="bp6-tab-title_side-content-tabs_remote_execution"
+                        class="bp6-tab-panel side-content-tab"
+                        id="bp6-tab-panel_side-content-tabs_remote_execution"
                         role="tabpanel"
                       >
                         <div
                           class="side-content-text"
                         >
                           <div
-                            class="bp5-callout bp5-intent-danger bp5-callout-has-body-content bp5-callout-icon"
+                            class="bp6-callout bp6-intent-danger bp6-callout-has-body-content bp6-callout-icon"
                           >
                             <span
                               aria-hidden="true"
-                              class="bp5-icon bp5-icon-error"
+                              class="bp6-icon bp6-icon-error"
                               tabindex="-1"
                             >
                               <svg
@@ -2685,7 +2706,7 @@ and also the
                 class="repl-output-parent"
               >
                 <div
-                  class="repl-input-parent row bp5-card bp5-elevation-0"
+                  class="repl-input-parent row bp6-card bp6-elevation-0"
                 >
                   <div
                     class=" ace_editor ace_hidpi ace-source ace_dark repl-react-ace react-ace"
@@ -2695,6 +2716,7 @@ and also the
                     <textarea
                       aria-autocomplete="both"
                       aria-haspopup="false"
+                      aria-label="Cursor at row 1"
                       autocapitalize="off"
                       autocorrect="off"
                       class="ace_text-input"
@@ -2781,19 +2803,25 @@ and also the
                         XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
                       </div>
                     </div>
+                    <div
+                      class="ace_tooltip"
+                      id="gt4"
+                      role="tooltip"
+                      style="display: none; pointer-events: auto;"
+                    />
                   </div>
                   <div
-                    class="bp5-button-group bp5-dark"
+                    class="bp6-button-group bp6-dark"
                   >
                     <span
-                      class="bp5-popover-target"
+                      class="bp6-popover-target"
                     >
                       <button
-                        class="bp5-button bp5-minimal"
+                        class="bp6-button bp6-minimal"
                       >
                         <span
                           aria-hidden="true"
-                          class="bp5-icon bp5-icon-code"
+                          class="bp6-icon bp6-icon-code"
                         >
                           <svg
                             data-icon="code"
@@ -2809,18 +2837,18 @@ and also the
                           </svg>
                         </span>
                         <span
-                          class="bp5-button-text"
+                          class="bp6-button-text"
                         >
                           Eval
                         </span>
                       </button>
                     </span>
                     <button
-                      class="bp5-button bp5-minimal"
+                      class="bp6-button bp6-minimal"
                     >
                       <span
                         aria-hidden="true"
-                        class="bp5-icon bp5-icon-remove"
+                        class="bp6-icon bp6-icon-remove"
                       >
                         <svg
                           data-icon="remove"
@@ -2836,7 +2864,7 @@ and also the
                         </svg>
                       </span>
                       <span
-                        class="bp5-button-text"
+                        class="bp6-button-text"
                       >
                         Clear
                       </span>

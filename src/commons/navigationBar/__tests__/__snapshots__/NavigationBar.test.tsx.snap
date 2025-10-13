@@ -2,19 +2,19 @@
 
 exports[`NavigationBar > Renders "Not logged in" correctly 1`] = `
 <React.Fragment>
-  <Blueprint5.Navbar
-    className="NavigationBar primary-navbar _primary-navbar_d292d6 bp5-dark"
+  <Blueprint6.Navbar
+    className="NavigationBar primary-navbar _primary-navbar_d292d6 bp6-dark"
   >
-    <Blueprint5.NavbarGroup
+    <Blueprint6.NavbarGroup
       align="left"
     >
-      <Blueprint5.Popover
+      <Blueprint6.Popover
         boundary="clippingParents"
         captureDismiss={false}
         content={
-          <Blueprint5.Navbar>
-            <Blueprint5.NavbarGroup />
-          </Blueprint5.Navbar>
+          <Blueprint6.Navbar>
+            <Blueprint6.NavbarGroup />
+          </Blueprint6.Navbar>
         }
         defaultIsOpen={false}
         disabled={true}
@@ -39,18 +39,18 @@ exports[`NavigationBar > Renders "Not logged in" correctly 1`] = `
           className="NavigationBar__link"
           to="/welcome"
         >
-          <Blueprint5.NavbarHeading>
-            <Blueprint5.Button
+          <Blueprint6.NavbarHeading>
+            <Blueprint6.Button
               active={true}
               className="app-title"
               icon="symbol-diamond"
               minimal={true}
             >
               Source Academy @ NUS
-            </Blueprint5.Button>
-          </Blueprint5.NavbarHeading>
+            </Blueprint6.Button>
+          </Blueprint6.NavbarHeading>
         </NavLink>
-      </Blueprint5.Popover>
+      </Blueprint6.Popover>
       <DesktopNavLink
         disabled={true}
         icon="music"
@@ -81,39 +81,46 @@ exports[`NavigationBar > Renders "Not logged in" correctly 1`] = `
         text="Stories"
         to="/courses/undefined/stories"
       />
-    </Blueprint5.NavbarGroup>
-    <Blueprint5.NavbarGroup
+      <DesktopNavLink
+        disabled={true}
+        icon="timeline-bar-chart"
+        text="Leaderboard"
+        to="/courses/undefined/leaderboard"
+      />
+    </Blueprint6.NavbarGroup>
+    <Blueprint6.NavbarGroup
       align="right"
     >
+      <NavigationBarLangSelectButton />
       <NavLink
         className={[Function]}
         to="/contributors"
       >
-        <Blueprint5.Icon
+        <Blueprint6.Icon
           icon="heart"
         />
       </NavLink>
       <div
         className="visible-xs"
       >
-        <Blueprint5.NavbarDivider
+        <Blueprint6.NavbarDivider
           className="thin-divider"
         />
       </div>
       <div
         className="hidden-xs"
       >
-        <Blueprint5.NavbarDivider
+        <Blueprint6.NavbarDivider
           className="default-divider"
         />
       </div>
       <Dropdown />
-    </Blueprint5.NavbarGroup>
-  </Blueprint5.Navbar>
+    </Blueprint6.NavbarGroup>
+  </Blueprint6.Navbar>
   <Routes>
     <Route
       element={null}
-      path="/playground"
+      path="/playground/*"
     />
     <Route
       element={null}
@@ -126,6 +133,10 @@ exports[`NavigationBar > Renders "Not logged in" correctly 1`] = `
     <Route
       element={null}
       path="/courses/:courseId/achievements"
+    />
+    <Route
+      element={null}
+      path="/courses/:courseId/leaderboard/*"
     />
     <Route
       element={<SicpNavigationBar />}
@@ -141,18 +152,18 @@ exports[`NavigationBar > Renders "Not logged in" correctly 1`] = `
 
 exports[`NavigationBar > Renders correctly for student with course 1`] = `
 <React.Fragment>
-  <Blueprint5.Navbar
-    className="NavigationBar primary-navbar _primary-navbar_d292d6 bp5-dark"
+  <Blueprint6.Navbar
+    className="NavigationBar primary-navbar _primary-navbar_d292d6 bp6-dark"
   >
-    <Blueprint5.NavbarGroup
+    <Blueprint6.NavbarGroup
       align="left"
     >
-      <Blueprint5.Popover
+      <Blueprint6.Popover
         boundary="clippingParents"
         captureDismiss={false}
         content={
-          <Blueprint5.Navbar>
-            <Blueprint5.NavbarGroup>
+          <Blueprint6.Navbar>
+            <Blueprint6.NavbarGroup>
               <DesktopNavLink
                 disabled={false}
                 hasNotifications={true}
@@ -218,8 +229,8 @@ exports[`NavigationBar > Renders correctly for student with course 1`] = `
                 text="Missions"
                 to="/courses/1/missions"
               />
-            </Blueprint5.NavbarGroup>
-          </Blueprint5.Navbar>
+            </Blueprint6.NavbarGroup>
+          </Blueprint6.Navbar>
         }
         defaultIsOpen={false}
         disabled={true}
@@ -244,18 +255,18 @@ exports[`NavigationBar > Renders correctly for student with course 1`] = `
           className="NavigationBar__link"
           to="/courses/1"
         >
-          <Blueprint5.NavbarHeading>
-            <Blueprint5.Button
+          <Blueprint6.NavbarHeading>
+            <Blueprint6.Button
               active={true}
               className="app-title"
               icon="symbol-diamond"
               minimal={true}
             >
               CS1101S
-            </Blueprint5.Button>
-          </Blueprint5.NavbarHeading>
+            </Blueprint6.Button>
+          </Blueprint6.NavbarHeading>
         </NavLink>
-      </Blueprint5.Popover>
+      </Blueprint6.Popover>
       <DesktopNavLink
         disabled={false}
         icon="music"
@@ -286,39 +297,46 @@ exports[`NavigationBar > Renders correctly for student with course 1`] = `
         text="Stories"
         to="/courses/1/stories"
       />
-    </Blueprint5.NavbarGroup>
-    <Blueprint5.NavbarGroup
+      <DesktopNavLink
+        disabled={true}
+        icon="timeline-bar-chart"
+        text="Leaderboard"
+        to="/courses/1/leaderboard"
+      />
+    </Blueprint6.NavbarGroup>
+    <Blueprint6.NavbarGroup
       align="right"
     >
+      <NavigationBarLangSelectButton />
       <NavLink
         className={[Function]}
         to="/contributors"
       >
-        <Blueprint5.Icon
+        <Blueprint6.Icon
           icon="heart"
         />
       </NavLink>
       <div
         className="visible-xs"
       >
-        <Blueprint5.NavbarDivider
+        <Blueprint6.NavbarDivider
           className="thin-divider"
         />
       </div>
       <div
         className="hidden-xs"
       >
-        <Blueprint5.NavbarDivider
+        <Blueprint6.NavbarDivider
           className="default-divider"
         />
       </div>
       <Dropdown />
-    </Blueprint5.NavbarGroup>
-  </Blueprint5.Navbar>
+    </Blueprint6.NavbarGroup>
+  </Blueprint6.Navbar>
   <Routes>
     <Route
       element={null}
-      path="/playground"
+      path="/playground/*"
     />
     <Route
       element={null}
@@ -331,6 +349,10 @@ exports[`NavigationBar > Renders correctly for student with course 1`] = `
     <Route
       element={null}
       path="/courses/:courseId/achievements"
+    />
+    <Route
+      element={null}
+      path="/courses/:courseId/leaderboard/*"
     />
     <Route
       element={<SicpNavigationBar />}
@@ -358,19 +380,19 @@ exports[`NavigationBar > Renders correctly for student with course 1`] = `
 
 exports[`NavigationBar > Renders correctly for student without course 1`] = `
 <React.Fragment>
-  <Blueprint5.Navbar
-    className="NavigationBar primary-navbar _primary-navbar_d292d6 bp5-dark"
+  <Blueprint6.Navbar
+    className="NavigationBar primary-navbar _primary-navbar_d292d6 bp6-dark"
   >
-    <Blueprint5.NavbarGroup
+    <Blueprint6.NavbarGroup
       align="left"
     >
-      <Blueprint5.Popover
+      <Blueprint6.Popover
         boundary="clippingParents"
         captureDismiss={false}
         content={
-          <Blueprint5.Navbar>
-            <Blueprint5.NavbarGroup />
-          </Blueprint5.Navbar>
+          <Blueprint6.Navbar>
+            <Blueprint6.NavbarGroup />
+          </Blueprint6.Navbar>
         }
         defaultIsOpen={false}
         disabled={true}
@@ -395,18 +417,18 @@ exports[`NavigationBar > Renders correctly for student without course 1`] = `
           className="NavigationBar__link"
           to="/welcome"
         >
-          <Blueprint5.NavbarHeading>
-            <Blueprint5.Button
+          <Blueprint6.NavbarHeading>
+            <Blueprint6.Button
               active={true}
               className="app-title"
               icon="symbol-diamond"
               minimal={true}
             >
               Source Academy @ NUS
-            </Blueprint5.Button>
-          </Blueprint5.NavbarHeading>
+            </Blueprint6.Button>
+          </Blueprint6.NavbarHeading>
         </NavLink>
-      </Blueprint5.Popover>
+      </Blueprint6.Popover>
       <DesktopNavLink
         disabled={true}
         icon="music"
@@ -437,39 +459,46 @@ exports[`NavigationBar > Renders correctly for student without course 1`] = `
         text="Stories"
         to="/courses/undefined/stories"
       />
-    </Blueprint5.NavbarGroup>
-    <Blueprint5.NavbarGroup
+      <DesktopNavLink
+        disabled={true}
+        icon="timeline-bar-chart"
+        text="Leaderboard"
+        to="/courses/undefined/leaderboard"
+      />
+    </Blueprint6.NavbarGroup>
+    <Blueprint6.NavbarGroup
       align="right"
     >
+      <NavigationBarLangSelectButton />
       <NavLink
         className={[Function]}
         to="/contributors"
       >
-        <Blueprint5.Icon
+        <Blueprint6.Icon
           icon="heart"
         />
       </NavLink>
       <div
         className="visible-xs"
       >
-        <Blueprint5.NavbarDivider
+        <Blueprint6.NavbarDivider
           className="thin-divider"
         />
       </div>
       <div
         className="hidden-xs"
       >
-        <Blueprint5.NavbarDivider
+        <Blueprint6.NavbarDivider
           className="default-divider"
         />
       </div>
       <Dropdown />
-    </Blueprint5.NavbarGroup>
-  </Blueprint5.Navbar>
+    </Blueprint6.NavbarGroup>
+  </Blueprint6.Navbar>
   <Routes>
     <Route
       element={null}
-      path="/playground"
+      path="/playground/*"
     />
     <Route
       element={null}
@@ -482,6 +511,10 @@ exports[`NavigationBar > Renders correctly for student without course 1`] = `
     <Route
       element={null}
       path="/courses/:courseId/achievements"
+    />
+    <Route
+      element={null}
+      path="/courses/:courseId/leaderboard/*"
     />
     <Route
       element={<SicpNavigationBar />}

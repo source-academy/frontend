@@ -1,0 +1,19 @@
+{
+  "noTestcases": "There are no testcases provided for this question.",
+  "noResults": "There are no results to show.",
+  "testcases": "Testcases",
+  "results": "Autograder Results",
+  "tooltip": {
+    "clickTestcase": "Click on each testcase below to execute it with the program in the editor.",
+    "executeAll": "To execute all testcases at once, evaluate the program in the editor with this tab active.",
+    "backgroundInfo": "A green or red background indicates a passed or failed testcase respectively.",
+    "privateTestcases": "Private testcases (only visible to staff when grading) have a grey background."
+  },
+  "headers": {
+    "testcase": "Testcase",
+    "expected": "Expected result",
+    "actual": "Actual result",
+    "sn": "S/N",
+    "status": "Testcase status"
+  }
+}

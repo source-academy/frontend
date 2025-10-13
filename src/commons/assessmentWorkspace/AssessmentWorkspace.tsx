@@ -19,6 +19,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 import { onClickProgress } from 'src/features/assessments/AssessmentUtils';
+import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
 import Messages, { sendToWebview } from 'src/features/vscode/messages';
 import { mobileOnlyTabIds } from 'src/pages/playground/PlaygroundTabs';
 
@@ -85,6 +86,7 @@ export type AssessmentWorkspaceProps = {
   notAttempted: boolean;
   canSave: boolean;
   assessmentConfiguration: AssessmentConfiguration;
+  fromContestLeaderboard: boolean;
 };
 
 const workspaceLocation: WorkspaceLocation = 'assessment';
@@ -185,6 +187,17 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       handleDisableTokenCounter: () =>
         dispatch(WorkspaceActions.disableTokenCounter(workspaceLocation))
     };
+  }, [dispatch]);
+
+  const code = useTypedSelector(store => store.leaderboard.code);
+  const initialRunCompleted = useTypedSelector(store => store.leaderboard.initialRun);
+  const votingId = props.assessmentId;
+
+  useEffect(() => {
+    if (initialRunCompleted[votingId] && props.fromContestLeaderboard && code != '') {
+      dispatch(WorkspaceActions.updateEditorValue(workspaceLocation, 0, code));
+      dispatch(LeaderboardActions.clearCode());
+    }
   }, [dispatch]);
 
   useEffect(() => {
@@ -344,7 +357,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     } = {};
 
     switch (question.type) {
-      case QuestionTypes.programming:
+      case QuestionTypes.programming: {
         const programmingQuestionData: IProgrammingQuestion = question;
         options.autogradingResults = programmingQuestionData.autogradingResults;
         options.programPrependValue = programmingQuestionData.prepend;
@@ -365,11 +378,16 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           );
         }
         break;
-      case QuestionTypes.voting:
+      }
+      case QuestionTypes.voting: {
         const votingQuestionData: IContestVotingQuestion = question;
         options.programPrependValue = votingQuestionData.prepend;
+        if (props.fromContestLeaderboard) options.editorValue = code;
         options.programPostpendValue = votingQuestionData.postpend;
+        // maybe the following dispatch can be placed in a better location
+        dispatch(LeaderboardActions.setWorkspaceInitialRun(votingId));
         break;
+      }
       case QuestionTypes.mcq:
         // Do nothing
         break;
@@ -397,7 +415,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const questionType = question.type;
 
     switch (questionType) {
-      case QuestionTypes.mcq:
+      case QuestionTypes.mcq: {
         const mcqQuestionData = question;
         sendToWebview(
           Messages.McqQuestion(
@@ -409,7 +427,8 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           )
         );
         break;
-      case QuestionTypes.programming || QuestionTypes.voting:
+      }
+      case QuestionTypes.programming || QuestionTypes.voting: {
         const prepend = question.prepend;
         const code = question.answer ?? question.solutionTemplate;
         const breakpoints = editorTabs[0]?.breakpoints ?? [];
@@ -425,6 +444,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           )
         );
         break;
+      }
     }
     if (options.editorValue) {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
@@ -447,6 +467,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     const isTeamAssessment =
       assessmentOverview !== undefined ? assessmentOverview.maxTeamSize > 1 : false;
     const isContestVoting = question?.type === QuestionTypes.voting;
+    const isPublished = assessmentOverview?.isPublished;
     const handleContestEntryClick = (_submissionId: number, answer: string) => {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange(0, answer);
@@ -521,34 +542,38 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
             />
           ),
           id: SideContentType.contestVoting
-        },
-        {
-          label: 'Score Leaderboard',
-          iconName: IconNames.CROWN,
-          body: (
-            <SideContentContestLeaderboard
-              handleContestEntryClick={handleContestEntryClick}
-              orderedContestEntries={(question as IContestVotingQuestion)?.scoreLeaderboard ?? []}
-              leaderboardType={SideContentType.scoreLeaderboard}
-            />
-          ),
-          id: SideContentType.scoreLeaderboard
-        },
-        {
-          label: 'Popular Vote Leaderboard',
-          iconName: IconNames.PEOPLE,
-          body: (
-            <SideContentContestLeaderboard
-              handleContestEntryClick={handleContestEntryClick}
-              orderedContestEntries={
-                (question as IContestVotingQuestion)?.popularVoteLeaderboard ?? []
-              }
-              leaderboardType={SideContentType.popularVoteLeaderboard}
-            />
-          ),
-          id: SideContentType.popularVoteLeaderboard
         }
       );
+      if (isPublished) {
+        tabs.push(
+          {
+            label: 'Score Leaderboard',
+            iconName: IconNames.CROWN,
+            body: (
+              <SideContentContestLeaderboard
+                handleContestEntryClick={handleContestEntryClick}
+                orderedContestEntries={(question as IContestVotingQuestion)?.scoreLeaderboard ?? []}
+                leaderboardType={SideContentType.scoreLeaderboard}
+              />
+            ),
+            id: SideContentType.scoreLeaderboard
+          },
+          {
+            label: 'Popular Vote Leaderboard',
+            iconName: IconNames.PEOPLE,
+            body: (
+              <SideContentContestLeaderboard
+                handleContestEntryClick={handleContestEntryClick}
+                orderedContestEntries={
+                  (question as IContestVotingQuestion)?.popularVoteLeaderboard ?? []
+                }
+                leaderboardType={SideContentType.popularVoteLeaderboard}
+              />
+            ),
+            id: SideContentType.popularVoteLeaderboard
+          }
+        );
+      }
     } else {
       tabs.push(
         {

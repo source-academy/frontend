@@ -92,7 +92,7 @@ export default class DialogueParser {
     while (currIndex !== lines.length) {
       const rawStr = lines[currIndex];
       switch (true) {
-        case isGotoLabel(rawStr):
+        case isGotoLabel(rawStr): {
           const [gotoString, postpend] = StringUtils.splitByChar(rawStr, 'if');
           const [conditionalsString, altPart] = postpend
             ? StringUtils.splitByChar(postpend, 'else')
@@ -108,7 +108,8 @@ export default class DialogueParser {
             altPart: altPart
           };
           break;
-        case isPrompt(rawStr):
+        }
+        case isPrompt(rawStr): {
           const rawTitle = rawStr;
           const rawChoices: string[] = [];
           while (lines[currIndex + 1] && isPromptChoice(lines[currIndex + 1])) {
@@ -118,14 +119,16 @@ export default class DialogueParser {
           const prompt = PromptParser.parsePrompt(rawTitle, rawChoices);
           dialogueLines[dialogueLines.length - 1].prompt = prompt;
           break;
-        case isActionLabel(rawStr):
+        }
+        case isActionLabel(rawStr): {
           const lastLine = dialogueLines[dialogueLines.length - 1];
           if (!lastLine.actionIds) {
             lastLine.actionIds = [];
           }
           lastLine.actionIds.push(ActionParser.parseAction(rawStr));
           break;
-        case isSpeaker(rawStr):
+        }
+        case isSpeaker(rawStr): {
           currIndex++;
           const nextLine = lines[currIndex];
           if (!nextLine) {
@@ -134,6 +137,7 @@ export default class DialogueParser {
           dialogueLines.push({ line: nextLine });
           dialogueLines[dialogueLines.length - 1].speakerDetail = SpeakerParser.parse(rawStr);
           break;
+        }
         default:
           // Dialogue lines without speaker are by default treated as lines by narrator
           // This also ensures that lines without speaker are displayed on the dialogue log

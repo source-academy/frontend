@@ -1,4 +1,5 @@
 import { createReducer, type Reducer } from '@reduxjs/toolkit';
+import { castDraft } from 'immer';
 
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
 import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
@@ -15,7 +16,8 @@ import {
 import {
   setEditorSessionId,
   setSessionDetails,
-  setSharedbConnected
+  setSharedbConnected,
+  setUpdateUserRoleCallback
 } from '../collabEditing/CollabEditingActions';
 import type { SourceActionType } from '../utils/ActionsHelper';
 import { createContext } from '../utils/JsSlangHelper';
@@ -44,7 +46,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> 
 ) => {
   const workspaceLocation = getWorkspaceLocation(action);
   switch (workspaceLocation) {
-    case 'sourcecast':
+    case 'sourcecast': {
       const sourcecastState = SourcecastReducer(state.sourcecast, action);
       if (sourcecastState === state.sourcecast) {
         break;
@@ -53,7 +55,8 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> 
         ...state,
         sourcecast: sourcecastState
       };
-    case 'sourcereel':
+    }
+    case 'sourcereel': {
       const sourcereelState = SourcereelReducer(state.sourcereel, action);
       if (sourcereelState === state.sourcereel) {
         break;
@@ -62,6 +65,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> 
         ...state,
         sourcereel: sourcereelState
       };
+    }
     default:
       break;
   }
@@ -138,10 +142,10 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     .addCase(logOut, (state, action) => {
       // Preserve the playground workspace even after log out
       const playgroundWorkspace = state.playground;
-      return {
+      return castDraft({
         ...defaultWorkspaceManager,
         playground: playgroundWorkspace
-      };
+      });
     })
     .addCase(WorkspaceActions.enableTokenCounter, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
@@ -308,7 +312,16 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     })
     .addCase(setSessionDetails, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
-      state[workspaceLocation].sessionDetails = action.payload.sessionDetails;
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          sessionDetails: {
+            ...state[workspaceLocation].sessionDetails,
+            ...action.payload.sessionDetails
+          }
+        }
+      };
     })
     .addCase(WorkspaceActions.setIsEditorReadonly, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
@@ -378,5 +391,9 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     .addCase(WorkspaceActions.updateLastDebuggerResult, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].lastDebuggerResult = action.payload.lastDebuggerResult;
+    })
+    .addCase(setUpdateUserRoleCallback, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].updateUserRoleCallback = action.payload.updateUserRoleCallback;
     });
 });

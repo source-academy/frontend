@@ -2,6 +2,9 @@ import { Chapter, Language, type SourceError, type Value, Variant } from 'js-sla
 
 import type { AchievementState } from '../../features/achievement/AchievementTypes';
 import type { DashboardState } from '../../features/dashboard/DashboardTypes';
+import type { LanguageDirectoryState } from '../../features/directory/LanguageDirectoryTypes';
+import type { PluginDirectoryState } from '../../features/directory/PluginDirectoryTypes';
+import type { LeaderboardState } from '../../features/leaderboard/LeaderboardTypes';
 import type { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import type { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
@@ -26,6 +29,7 @@ import type { VscodeState as VscodeState } from './types/VscodeTypes';
 export type OverallState = {
   readonly router: RouterState;
   readonly achievement: AchievementState;
+  readonly leaderboard: LeaderboardState;
   readonly playground: PlaygroundState;
   readonly session: SessionState;
   readonly stories: StoriesState;
@@ -35,6 +39,8 @@ export type OverallState = {
   readonly fileSystem: FileSystemState;
   readonly sideContent: SideContentManagerState;
   readonly vscode: VscodeState;
+  readonly languageDirectory: LanguageDirectoryState;
+  readonly pluginDirectory: PluginDirectoryState;
 };
 
 export type Story = {
@@ -345,6 +351,15 @@ export const defaultAchievement: AchievementState = {
   assessmentOverviews: []
 };
 
+export const defaultLeaderboard: LeaderboardState = {
+  paginatedUserXp: { rows: [], userCount: 0 },
+  contestScore: [],
+  contestPopularVote: [],
+  code: '',
+  contests: [],
+  initialRun: {}
+};
+
 const getDefaultLanguageConfig = (): SALanguage => {
   const languageConfig = ALL_LANGUAGES.find(
     sublang =>
@@ -418,7 +433,8 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   enableDebugging: true,
   debuggerContext: {} as DebuggerContext,
   lastDebuggerResult: undefined,
-  files: {}
+  files: {},
+  updateUserRoleCallback: () => {}
 });
 
 const defaultFileName = 'program.js';
@@ -601,9 +617,22 @@ export const defaultVscode: VscodeState = {
   isVscode: false
 };
 
+export const defaultLanguageDirectory: LanguageDirectoryState = {
+  selectedLanguageId: null,
+  selectedEvaluatorId: null,
+  languages: [],
+  languageMap: {}
+};
+
+export const defaultPluginDirectory: PluginDirectoryState = {
+  plugins: [],
+  pluginMap: {}
+};
+
 export const defaultState: OverallState = {
   router: defaultRouter,
   achievement: defaultAchievement,
+  leaderboard: defaultLeaderboard,
   dashboard: defaultDashboard,
   playground: defaultPlayground,
   session: defaultSession,
@@ -612,5 +641,7 @@ export const defaultState: OverallState = {
   featureFlags: defaultFeatureFlags,
   fileSystem: defaultFileSystem,
   sideContent: defaultSideContentManager,
-  vscode: defaultVscode
+  vscode: defaultVscode,
+  languageDirectory: defaultLanguageDirectory,
+  pluginDirectory: defaultPluginDirectory
 };

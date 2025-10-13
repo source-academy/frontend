@@ -394,9 +394,10 @@ const mdeToBlueprintIconMapping = (name: string): { iconName: IconName; title?: 
     case 'image':
     case 'unordered-list':
     case 'ordered-list':
-    case 'checked-list':
+    case 'checked-list': {
       const [iconName, title] = mdeToBlueprintIconMap[name];
       return { iconName, title };
+    }
     default:
       // For unknown icons, a question mark icon is returned
       return {

@@ -11,7 +11,7 @@ import { Binding } from '../Binding';
 import { Text } from '../Text';
 import { Value } from './Value';
 
-/** this classes encapsulates a primitive value in Source: number, string or null */
+/** this classes encapsulates a primitive value in Source: number, string, null, Runes, etc. */
 export class PrimitiveValue extends Value {
   /** the text to be rendered */
   readonly text: Text | ArrayNullUnit;

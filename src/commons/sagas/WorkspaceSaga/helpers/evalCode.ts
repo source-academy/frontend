@@ -1,5 +1,4 @@
 import { tokenizer } from 'acorn';
-import type { IConduit } from 'conductor/dist/conduit';
 import { type Context, interrupt, type Result, resume, runFilesInContext } from 'js-slang';
 import { ACORN_PARSE_OPTIONS } from 'js-slang/dist/constants';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
@@ -16,14 +15,14 @@ import {
 import { CseMachine as CCseMachine } from 'src/features/cseMachine/c/CseMachine';
 
 import InterpreterActions from '../../../../commons/application/actions/InterpreterActions';
-import { selectFeatureSaga } from '../../../../commons/featureFlags/selectFeatureSaga';
 import { makeCCompilerConfig, specialCReturnObject } from '../../../../commons/utils/CToWasmHelper';
 import { javaRun } from '../../../../commons/utils/JavaHelper';
 import { EventType } from '../../../../features/achievement/AchievementTypes';
 import type { BrowserHostPlugin } from '../../../../features/conductor/BrowserHostPlugin';
 import { createConductor } from '../../../../features/conductor/createConductor';
-import { flagConductorEnable } from '../../../../features/conductor/flagConductorEnable';
-import { flagConductorEvaluatorUrl } from '../../../../features/conductor/flagConductorEvaluatorUrl';
+import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
+import { selectConductorEvaluatorUrl } from '../../../../features/conductor/flagConductorEvaluatorUrl';
+import { selectDirectoryLanguageEnable } from '../../../../features/directory/flagDirectoryLanguageEnable';
 import StoriesActions from '../../../../features/stories/StoriesActions';
 import { isSchemeLanguage, type OverallState } from '../../../application/ApplicationTypes';
 import { SideContentType } from '../../../sideContent/SideContentTypes';
@@ -33,6 +32,7 @@ import { showWarningMessage } from '../../../utils/notifications/NotificationsHe
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../../../utils/SourcerorHelper';
 import WorkspaceActions from '../../../workspace/WorkspaceActions';
 import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import { getEvaluatorDefinitionSaga } from '../../LanguageDirectorySaga';
 import { selectStoryEnv, selectWorkspace } from '../../SafeEffects';
 import { dumpDisplayBuffer } from './dumpDisplayBuffer';
 import { updateInspector } from './updateInspector';
@@ -182,7 +182,7 @@ export function* evalCodeSaga(
   workspaceLocation: WorkspaceLocation,
   storyEnv?: string
 ): SagaIterator {
-  if (yield call(selectFeatureSaga, flagConductorEnable)) {
+  if (yield select(selectConductorEnable)) {
     return yield call(
       evalCodeConductorSaga,
       files,
@@ -505,10 +505,15 @@ export function* evalCodeConductorSaga(
   actionType: string,
   storyEnv?: string
 ): SagaIterator {
-  const evaluatorResponse: Response = yield call(
-    fetch,
-    yield call(selectFeatureSaga, flagConductorEvaluatorUrl) // temporary evaluator
-  );
+  let path: string;
+  if (yield select(selectDirectoryLanguageEnable)) {
+    const evaluator: IEvaluatorDefinition | undefined = yield call(getEvaluatorDefinitionSaga);
+    if (!evaluator?.path) throw Error('no evaluator');
+    path = evaluator.path;
+  } else {
+    path = yield select(selectConductorEvaluatorUrl);
+  }
+  const evaluatorResponse: Response = yield call(fetch, path);
   if (!evaluatorResponse.ok) throw Error("can't get evaluator");
   const evaluatorBlob: Blob = yield call([evaluatorResponse, 'blob']);
   const url: string = yield call(URL.createObjectURL, evaluatorBlob);
@@ -522,8 +527,8 @@ export function* evalCodeConductorSaga(
   yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);
   while (true) {
     const { stop } = yield race({
-      repl: take(actions.evalRepl),
-      stop: take(actions.beginInterruptExecution)
+      repl: take(actions.evalRepl.type),
+      stop: take(actions.beginInterruptExecution.type)
     });
     if (stop) break;
     const code: string = yield select(

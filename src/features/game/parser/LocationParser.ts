@@ -59,12 +59,13 @@ export default class LocationParser {
           location.navigation.add(otherLocationId);
         });
         break;
-      case 'talkTopics':
+      case 'talkTopics': {
         const talkTopics = configValues;
         Parser.validator.assertItemTypes(GameItemType.dialogues, talkTopics);
         location.talkTopics = new Set(talkTopics);
         break;
-      case 'preview':
+      }
+      case 'preview': {
         const [previewPath] = configValues;
         if (previewPath) {
           const previewKey = '/preview' + previewPath;
@@ -76,6 +77,7 @@ export default class LocationParser {
           location.previewKey = previewKey;
         }
         break;
+      }
       default:
         throw new Error(`Invalid config key "${key}" specified under location "${location.id}"`);
     }

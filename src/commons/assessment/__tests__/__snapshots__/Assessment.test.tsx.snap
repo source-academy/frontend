@@ -11,13 +11,13 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
       className="col-md-10 col-xs-11 contentdisplay-content-parent"
     >
       <div
-        className="contentdisplay-content bp5-card bp5-elevation-3"
+        className="contentdisplay-content bp6-card bp6-elevation-3"
       >
         <div
-          className="bp5-non-ideal-state bp5-non-ideal-state-vertical"
+          className="bp6-non-ideal-state bp6-non-ideal-state-vertical"
         >
           <div
-            className="bp5-non-ideal-state-visual"
+            className="bp6-non-ideal-state-visual"
             style={
               {
                 "fontSize": "48px",
@@ -29,11 +29,11 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
               aria-label="loading"
               aria-valuemax={100}
               aria-valuemin={0}
-              className="bp5-spinner"
+              className="bp6-spinner"
               role="progressbar"
             >
               <div
-                className="bp5-spinner-animation"
+                className="bp6-spinner-animation"
               >
                 <svg
                   height={50}
@@ -42,11 +42,11 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
                   width={50}
                 >
                   <path
-                    className="bp5-spinner-track"
+                    className="bp6-spinner-track"
                     d="M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90"
                   />
                   <path
-                    className="bp5-spinner-head"
+                    className="bp6-spinner-head"
                     d="M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90"
                     pathLength={280}
                     strokeDasharray="280 280"
@@ -57,7 +57,7 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
             </div>
           </div>
           <div
-            className="bp5-non-ideal-state-text"
+            className="bp6-non-ideal-state-text"
           >
             <div>
               Fetching assessment...
@@ -81,10 +81,10 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
       className="col-md-10 col-xs-11 contentdisplay-content-parent"
     >
       <div
-        className="contentdisplay-content bp5-card bp5-elevation-3"
+        className="contentdisplay-content bp6-card bp6-elevation-3"
       >
         <button
-          className="bp5-button bp5-minimal collapse-button"
+          className="bp6-button bp6-minimal collapse-button"
           disabled={false}
           onBlur={[Function]}
           onClick={[Function]}
@@ -93,7 +93,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
         >
           <span
             aria-hidden={true}
-            className="bp5-icon bp5-icon-caret-down"
+            className="bp6-icon bp6-icon-caret-down"
           >
             <svg
               data-icon="caret-down"
@@ -109,13 +109,13 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
             </svg>
           </span>
           <span
-            className="bp5-button-text"
+            className="bp6-button-text"
           >
             Upcoming
           </span>
         </button>
         <div
-          className="bp5-collapse"
+          className="bp6-collapse"
           style={
             {
               "height": "auto",
@@ -126,7 +126,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
         >
           <div
             aria-hidden={false}
-            className="bp5-collapse-body"
+            className="bp6-collapse-body"
             style={
               {
                 "transform": "translateY(0)",
@@ -136,7 +136,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
           >
             <div>
               <div
-                className="row listing bp5-card bp5-elevation-1"
+                className="row listing bp6-card bp6-elevation-1"
               >
                 <div
                   className="listing-picture col-xs-3"
@@ -154,10 +154,10 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                     className="listing-header"
                   >
                     <div
-                      className="bp5-text-overflow-ellipsis"
+                      className="bp6-text-overflow-ellipsis"
                     >
                       <h4
-                        className="bp5-heading listing-title"
+                        className="bp6-heading listing-title"
                       >
                         An Odessey to Runes (Duplicate)
                       </h4>
@@ -166,7 +166,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                       className="listing-button"
                     >
                       <span
-                        className="bp5-popover-target"
+                        className="bp6-popover-target"
                         onBlur={[Function]}
                         onContextMenu={[Function]}
                         onFocus={[Function]}
@@ -174,7 +174,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         onMouseLeave={[Function]}
                       >
                         <button
-                          className="bp5-button bp5-disabled bp5-minimal"
+                          className="bp6-button bp6-disabled bp6-minimal"
                           disabled={true}
                           onBlur={[Function]}
                           onKeyDown={[Function]}
@@ -184,7 +184,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         >
                           <span
                             aria-hidden={true}
-                            className="bp5-icon bp5-icon-confirm"
+                            className="bp6-icon bp6-icon-confirm"
                           >
                             <svg
                               data-icon="confirm"
@@ -200,7 +200,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             </svg>
                           </span>
                           <span
-                            className="bp5-button-text"
+                            className="bp6-button-text"
                           >
                             <span>
                               Finalize
@@ -219,7 +219,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                     className="_listing-xp_6fa7d2"
                   >
                     <h6
-                      className="bp5-heading"
+                      className="bp6-heading"
                     >
                       Max XP: 1000
                     </h6>
@@ -228,7 +228,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                     className="listing-description"
                   >
                     <div
-                      className="md bp5-running-text"
+                      className="md bp6-running-text"
                       dangerouslySetInnerHTML={
                         {
                           "__html": "<p>This is a test for the UI of the unopened assessment overview. It links to the mock Mission 0</p>",
@@ -238,7 +238,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                   </div>
                   <div>
                     <h6
-                      className="bp5-heading"
+                      className="bp6-heading"
                     >
                        This is an individual assessment. 
                     </h6>
@@ -252,7 +252,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                       >
                         <span
                           aria-hidden={true}
-                          className="bp5-icon bp5-icon-calendar listing-due-icon"
+                          className="bp6-icon bp6-icon-calendar listing-due-icon"
                         >
                           <svg
                             data-icon="calendar"
@@ -280,7 +280,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
           </div>
         </div>
         <button
-          className="bp5-button bp5-minimal collapse-button"
+          className="bp6-button bp6-minimal collapse-button"
           disabled={false}
           onBlur={[Function]}
           onClick={[Function]}
@@ -289,7 +289,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
         >
           <span
             aria-hidden={true}
-            className="bp5-icon bp5-icon-caret-down"
+            className="bp6-icon bp6-icon-caret-down"
           >
             <svg
               data-icon="caret-down"
@@ -305,13 +305,13 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
             </svg>
           </span>
           <span
-            className="bp5-button-text"
+            className="bp6-button-text"
           >
             Open
           </span>
         </button>
         <div
-          className="bp5-collapse"
+          className="bp6-collapse"
           style={
             {
               "height": "auto",
@@ -322,7 +322,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
         >
           <div
             aria-hidden={false}
-            className="bp5-collapse-body"
+            className="bp6-collapse-body"
             style={
               {
                 "transform": "translateY(0)",
@@ -332,7 +332,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
           >
             <div>
               <div
-                className="row listing bp5-card bp5-elevation-1"
+                className="row listing bp6-card bp6-elevation-1"
               >
                 <div
                   className="listing-picture col-xs-3"
@@ -350,10 +350,10 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                     className="listing-header"
                   >
                     <div
-                      className="bp5-text-overflow-ellipsis"
+                      className="bp6-text-overflow-ellipsis"
                     >
                       <h4
-                        className="bp5-heading listing-title"
+                        className="bp6-heading listing-title"
                       >
                         The Secret to Streams
                       </h4>
@@ -362,7 +362,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                       className="listing-button"
                     >
                       <span
-                        className="bp5-popover-target"
+                        className="bp6-popover-target"
                         onBlur={[Function]}
                         onContextMenu={[Function]}
                         onFocus={[Function]}
@@ -370,7 +370,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         onMouseLeave={[Function]}
                       >
                         <button
-                          className="bp5-button bp5-disabled bp5-minimal"
+                          className="bp6-button bp6-disabled bp6-minimal"
                           disabled={true}
                           onBlur={[Function]}
                           onKeyDown={[Function]}
@@ -380,7 +380,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         >
                           <span
                             aria-hidden={true}
-                            className="bp5-icon bp5-icon-confirm"
+                            className="bp6-icon bp6-icon-confirm"
                           >
                             <svg
                               data-icon="confirm"
@@ -396,7 +396,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             </svg>
                           </span>
                           <span
-                            className="bp5-button-text"
+                            className="bp6-button-text"
                           >
                             <span>
                               Finalize
@@ -415,7 +415,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                     className="_listing-xp_6fa7d2"
                   >
                     <h6
-                      className="bp5-heading"
+                      className="bp6-heading"
                     >
                       Max XP: 1000
                     </h6>
@@ -424,7 +424,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                     className="listing-description"
                   >
                     <div
-                      className="md bp5-running-text"
+                      className="md bp6-running-text"
                       dangerouslySetInnerHTML={
                         {
                           "__html": "<p>Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.</p>",
@@ -434,7 +434,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                   </div>
                   <div>
                     <h6
-                      className="bp5-heading"
+                      className="bp6-heading"
                     >
                        This is an individual assessment. 
                     </h6>
@@ -448,7 +448,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                       >
                         <span
                           aria-hidden={true}
-                          className="bp5-icon bp5-icon-calendar listing-due-icon"
+                          className="bp6-icon bp6-icon-calendar listing-due-icon"
                         >
                           <svg
                             data-icon="calendar"
@@ -470,7 +470,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                       >
                         <span
                           aria-hidden={true}
-                          className="bp5-icon bp5-icon-time listing-due-icon"
+                          className="bp6-icon bp6-icon-time listing-due-icon"
                         >
                           <svg
                             data-icon="time"
@@ -498,7 +498,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         onClick={[Function]}
                       >
                         <button
-                          className="bp5-button bp5-minimal"
+                          className="bp6-button bp6-minimal"
                           disabled={false}
                           onBlur={[Function]}
                           onClick={[Function]}
@@ -508,7 +508,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         >
                           <span
                             aria-hidden={true}
-                            className="bp5-icon bp5-icon-play"
+                            className="bp6-icon bp6-icon-play"
                           >
                             <svg
                               data-icon="play"
@@ -524,7 +524,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             </svg>
                           </span>
                           <span
-                            className="bp5-button-text"
+                            className="bp6-button-text"
                           >
                             <span
                               data-testid="Assessment-Attempt-Button"
@@ -546,7 +546,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
             </div>
             <div>
               <div
-                className="row listing bp5-card bp5-elevation-1"
+                className="row listing bp6-card bp6-elevation-1"
               >
                 <div
                   className="listing-picture col-xs-3"
@@ -564,10 +564,10 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                     className="listing-header"
                   >
                     <div
-                      className="bp5-text-overflow-ellipsis"
+                      className="bp6-text-overflow-ellipsis"
                     >
                       <h4
-                        className="bp5-heading listing-title"
+                        className="bp6-heading listing-title"
                       >
                         An Odessey to Runes
                       </h4>
@@ -576,7 +576,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                       className="listing-button"
                     >
                       <span
-                        className="bp5-popover-target"
+                        className="bp6-popover-target"
                         onBlur={[Function]}
                         onContextMenu={[Function]}
                         onFocus={[Function]}
@@ -584,7 +584,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         onMouseLeave={[Function]}
                       >
                         <button
-                          className="bp5-button bp5-intent-danger bp5-minimal"
+                          className="bp6-button bp6-intent-danger bp6-minimal"
                           disabled={false}
                           onBlur={[Function]}
                           onClick={[Function]}
@@ -594,7 +594,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         >
                           <span
                             aria-hidden={true}
-                            className="bp5-icon bp5-icon-confirm"
+                            className="bp6-icon bp6-icon-confirm"
                           >
                             <svg
                               data-icon="confirm"
@@ -610,7 +610,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             </svg>
                           </span>
                           <span
-                            className="bp5-button-text"
+                            className="bp6-button-text"
                           >
                             <span>
                               Finalize
@@ -629,7 +629,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                     className="_listing-xp_6fa7d2"
                   >
                     <h6
-                      className="bp5-heading"
+                      className="bp6-heading"
                     >
                       Max XP: 1000
                     </h6>
@@ -638,7 +638,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                     className="listing-description"
                   >
                     <div
-                      className="md bp5-running-text"
+                      className="md bp6-running-text"
                       dangerouslySetInnerHTML={
                         {
                           "__html": "<p><em>Lorem ipsum</em> dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
@@ -657,7 +657,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                     className="listing-team_information"
                   >
                     <h6
-                      className="bp5-heading"
+                      className="bp6-heading"
                     >
                        This is a team assessment. 
                     </h6>
@@ -671,7 +671,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                       >
                         <span
                           aria-hidden={true}
-                          className="bp5-icon bp5-icon-calendar listing-due-icon"
+                          className="bp6-icon bp6-icon-calendar listing-due-icon"
                         >
                           <svg
                             data-icon="calendar"
@@ -693,7 +693,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                       >
                         <span
                           aria-hidden={true}
-                          className="bp5-icon bp5-icon-time listing-due-icon"
+                          className="bp6-icon bp6-icon-time listing-due-icon"
                         >
                           <svg
                             data-icon="time"
@@ -721,7 +721,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         onClick={[Function]}
                       >
                         <button
-                          className="bp5-button bp5-minimal"
+                          className="bp6-button bp6-minimal"
                           disabled={false}
                           onBlur={[Function]}
                           onClick={[Function]}
@@ -731,7 +731,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                         >
                           <span
                             aria-hidden={true}
-                            className="bp5-icon bp5-icon-edit"
+                            className="bp6-icon bp6-icon-edit"
                           >
                             <svg
                               data-icon="edit"
@@ -747,7 +747,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                             </svg>
                           </span>
                           <span
-                            className="bp5-button-text"
+                            className="bp6-button-text"
                           >
                             <span
                               data-testid="Assessment-Attempt-Button"
@@ -770,7 +770,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
           </div>
         </div>
         <button
-          className="bp5-button bp5-minimal collapse-button"
+          className="bp6-button bp6-minimal collapse-button"
           disabled={false}
           onBlur={[Function]}
           onClick={[Function]}
@@ -779,7 +779,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
         >
           <span
             aria-hidden={true}
-            className="bp5-icon bp5-icon-caret-right"
+            className="bp6-icon bp6-icon-caret-right"
           >
             <svg
               data-icon="caret-right"
@@ -795,13 +795,13 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
             </svg>
           </span>
           <span
-            className="bp5-button-text"
+            className="bp6-button-text"
           >
             Closed
           </span>
         </button>
         <div
-          className="bp5-collapse"
+          className="bp6-collapse"
           style={
             {
               "height": undefined,
@@ -812,7 +812,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
         >
           <div
             aria-hidden={true}
-            className="bp5-collapse-body"
+            className="bp6-collapse-body"
             style={
               {
                 "transform": "translateY(-undefinedpx)",
@@ -838,13 +838,13 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
       className="col-md-10 col-xs-11 contentdisplay-content-parent"
     >
       <div
-        className="contentdisplay-content bp5-card bp5-elevation-3"
+        className="contentdisplay-content bp6-card bp6-elevation-3"
       >
         <div
-          className="bp5-non-ideal-state bp5-non-ideal-state-vertical"
+          className="bp6-non-ideal-state bp6-non-ideal-state-vertical"
         >
           <div
-            className="bp5-non-ideal-state-visual"
+            className="bp6-non-ideal-state-visual"
             style={
               {
                 "fontSize": "48px",
@@ -854,7 +854,7 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
           >
             <span
               aria-hidden={true}
-              className="bp5-icon bp5-icon-flame bp5-icon-muted"
+              className="bp6-icon bp6-icon-flame bp6-icon-muted"
               tabIndex={-1}
             >
               <svg
@@ -872,10 +872,10 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
             </span>
           </div>
           <div
-            className="bp5-non-ideal-state-text"
+            className="bp6-non-ideal-state-text"
           >
             <h4
-              className="bp5-heading"
+              className="bp6-heading"
             >
               There are no assessments.
             </h4>
@@ -898,10 +898,10 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
       className="col-md-10 col-xs-11 contentdisplay-content-parent"
     >
       <div
-        className="contentdisplay-content bp5-card bp5-elevation-3"
+        className="contentdisplay-content bp6-card bp6-elevation-3"
       >
         <button
-          className="bp5-button bp5-minimal collapse-button"
+          className="bp6-button bp6-minimal collapse-button"
           disabled={false}
           onBlur={[Function]}
           onClick={[Function]}
@@ -910,7 +910,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
         >
           <span
             aria-hidden={true}
-            className="bp5-icon bp5-icon-caret-down"
+            className="bp6-icon bp6-icon-caret-down"
           >
             <svg
               data-icon="caret-down"
@@ -926,13 +926,13 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
             </svg>
           </span>
           <span
-            className="bp5-button-text"
+            className="bp6-button-text"
           >
             Upcoming
           </span>
         </button>
         <div
-          className="bp5-collapse"
+          className="bp6-collapse"
           style={
             {
               "height": "auto",
@@ -943,7 +943,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
         >
           <div
             aria-hidden={false}
-            className="bp5-collapse-body"
+            className="bp6-collapse-body"
             style={
               {
                 "transform": "translateY(0)",
@@ -953,7 +953,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
           >
             <div>
               <div
-                className="row listing bp5-card bp5-elevation-1"
+                className="row listing bp6-card bp6-elevation-1"
               >
                 <div
                   className="listing-picture col-xs-3"
@@ -971,10 +971,10 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     className="listing-header"
                   >
                     <div
-                      className="bp5-text-overflow-ellipsis"
+                      className="bp6-text-overflow-ellipsis"
                     >
                       <h4
-                        className="bp5-heading listing-title"
+                        className="bp6-heading listing-title"
                       >
                         An Odessey to Runes (Duplicate)
                       </h4>
@@ -983,7 +983,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       className="listing-button"
                     >
                       <span
-                        className="bp5-popover-target"
+                        className="bp6-popover-target"
                         onBlur={[Function]}
                         onContextMenu={[Function]}
                         onFocus={[Function]}
@@ -991,7 +991,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         onMouseLeave={[Function]}
                       >
                         <button
-                          className="bp5-button bp5-disabled bp5-minimal"
+                          className="bp6-button bp6-disabled bp6-minimal"
                           disabled={true}
                           onBlur={[Function]}
                           onKeyDown={[Function]}
@@ -1001,7 +1001,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         >
                           <span
                             aria-hidden={true}
-                            className="bp5-icon bp5-icon-confirm"
+                            className="bp6-icon bp6-icon-confirm"
                           >
                             <svg
                               data-icon="confirm"
@@ -1017,7 +1017,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             </svg>
                           </span>
                           <span
-                            className="bp5-button-text"
+                            className="bp6-button-text"
                           >
                             <span>
                               Finalize
@@ -1036,7 +1036,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     className="_listing-xp_6fa7d2"
                   >
                     <h6
-                      className="bp5-heading"
+                      className="bp6-heading"
                     >
                       Max XP: 1000
                     </h6>
@@ -1045,7 +1045,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     className="listing-description"
                   >
                     <div
-                      className="md bp5-running-text"
+                      className="md bp6-running-text"
                       dangerouslySetInnerHTML={
                         {
                           "__html": "<p>This is a test for the UI of the unopened assessment overview. It links to the mock Mission 0</p>",
@@ -1055,7 +1055,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                   </div>
                   <div>
                     <h6
-                      className="bp5-heading"
+                      className="bp6-heading"
                     >
                        This is an individual assessment. 
                     </h6>
@@ -1069,7 +1069,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       >
                         <span
                           aria-hidden={true}
-                          className="bp5-icon bp5-icon-calendar listing-due-icon"
+                          className="bp6-icon bp6-icon-calendar listing-due-icon"
                         >
                           <svg
                             data-icon="calendar"
@@ -1097,7 +1097,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         onClick={[Function]}
                       >
                         <button
-                          className="bp5-button bp5-minimal"
+                          className="bp6-button bp6-minimal"
                           disabled={false}
                           onBlur={[Function]}
                           onClick={[Function]}
@@ -1107,7 +1107,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         >
                           <span
                             aria-hidden={true}
-                            className="bp5-icon bp5-icon-play"
+                            className="bp6-icon bp6-icon-play"
                           >
                             <svg
                               data-icon="play"
@@ -1123,16 +1123,13 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             </svg>
                           </span>
                           <span
-                            className="bp5-button-text"
+                            className="bp6-button-text"
                           >
                             <span
                               data-testid="Assessment-Attempt-Button"
                             >
                               Attempt
                             </span>
-                            <span
-                              className="custom-hidden-xxxs"
-                            />
                           </span>
                         </button>
                       </a>
@@ -1144,7 +1141,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
           </div>
         </div>
         <button
-          className="bp5-button bp5-minimal collapse-button"
+          className="bp6-button bp6-minimal collapse-button"
           disabled={false}
           onBlur={[Function]}
           onClick={[Function]}
@@ -1153,7 +1150,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
         >
           <span
             aria-hidden={true}
-            className="bp5-icon bp5-icon-caret-down"
+            className="bp6-icon bp6-icon-caret-down"
           >
             <svg
               data-icon="caret-down"
@@ -1169,13 +1166,13 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
             </svg>
           </span>
           <span
-            className="bp5-button-text"
+            className="bp6-button-text"
           >
             Open
           </span>
         </button>
         <div
-          className="bp5-collapse"
+          className="bp6-collapse"
           style={
             {
               "height": "auto",
@@ -1186,7 +1183,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
         >
           <div
             aria-hidden={false}
-            className="bp5-collapse-body"
+            className="bp6-collapse-body"
             style={
               {
                 "transform": "translateY(0)",
@@ -1196,7 +1193,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
           >
             <div>
               <div
-                className="row listing bp5-card bp5-elevation-1"
+                className="row listing bp6-card bp6-elevation-1"
               >
                 <div
                   className="listing-picture col-xs-3"
@@ -1214,10 +1211,10 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     className="listing-header"
                   >
                     <div
-                      className="bp5-text-overflow-ellipsis"
+                      className="bp6-text-overflow-ellipsis"
                     >
                       <h4
-                        className="bp5-heading listing-title"
+                        className="bp6-heading listing-title"
                       >
                         The Secret to Streams
                       </h4>
@@ -1226,7 +1223,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       className="listing-button"
                     >
                       <span
-                        className="bp5-popover-target"
+                        className="bp6-popover-target"
                         onBlur={[Function]}
                         onContextMenu={[Function]}
                         onFocus={[Function]}
@@ -1234,7 +1231,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         onMouseLeave={[Function]}
                       >
                         <button
-                          className="bp5-button bp5-disabled bp5-minimal"
+                          className="bp6-button bp6-disabled bp6-minimal"
                           disabled={true}
                           onBlur={[Function]}
                           onKeyDown={[Function]}
@@ -1244,7 +1241,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         >
                           <span
                             aria-hidden={true}
-                            className="bp5-icon bp5-icon-confirm"
+                            className="bp6-icon bp6-icon-confirm"
                           >
                             <svg
                               data-icon="confirm"
@@ -1260,7 +1257,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             </svg>
                           </span>
                           <span
-                            className="bp5-button-text"
+                            className="bp6-button-text"
                           >
                             <span>
                               Finalize
@@ -1279,7 +1276,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     className="_listing-xp_6fa7d2"
                   >
                     <h6
-                      className="bp5-heading"
+                      className="bp6-heading"
                     >
                       Max XP: 1000
                     </h6>
@@ -1288,7 +1285,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     className="listing-description"
                   >
                     <div
-                      className="md bp5-running-text"
+                      className="md bp6-running-text"
                       dangerouslySetInnerHTML={
                         {
                           "__html": "<p>Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.</p>",
@@ -1298,7 +1295,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                   </div>
                   <div>
                     <h6
-                      className="bp5-heading"
+                      className="bp6-heading"
                     >
                        This is an individual assessment. 
                     </h6>
@@ -1312,7 +1309,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       >
                         <span
                           aria-hidden={true}
-                          className="bp5-icon bp5-icon-calendar listing-due-icon"
+                          className="bp6-icon bp6-icon-calendar listing-due-icon"
                         >
                           <svg
                             data-icon="calendar"
@@ -1334,7 +1331,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       >
                         <span
                           aria-hidden={true}
-                          className="bp5-icon bp5-icon-time listing-due-icon"
+                          className="bp6-icon bp6-icon-time listing-due-icon"
                         >
                           <svg
                             data-icon="time"
@@ -1362,7 +1359,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         onClick={[Function]}
                       >
                         <button
-                          className="bp5-button bp5-minimal"
+                          className="bp6-button bp6-minimal"
                           disabled={false}
                           onBlur={[Function]}
                           onClick={[Function]}
@@ -1372,7 +1369,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         >
                           <span
                             aria-hidden={true}
-                            className="bp5-icon bp5-icon-play"
+                            className="bp6-icon bp6-icon-play"
                           >
                             <svg
                               data-icon="play"
@@ -1388,7 +1385,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             </svg>
                           </span>
                           <span
-                            className="bp5-button-text"
+                            className="bp6-button-text"
                           >
                             <span
                               data-testid="Assessment-Attempt-Button"
@@ -1410,7 +1407,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
             </div>
             <div>
               <div
-                className="row listing bp5-card bp5-elevation-1"
+                className="row listing bp6-card bp6-elevation-1"
               >
                 <div
                   className="listing-picture col-xs-3"
@@ -1428,10 +1425,10 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     className="listing-header"
                   >
                     <div
-                      className="bp5-text-overflow-ellipsis"
+                      className="bp6-text-overflow-ellipsis"
                     >
                       <h4
-                        className="bp5-heading listing-title"
+                        className="bp6-heading listing-title"
                       >
                         An Odessey to Runes
                       </h4>
@@ -1440,7 +1437,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       className="listing-button"
                     >
                       <span
-                        className="bp5-popover-target"
+                        className="bp6-popover-target"
                         onBlur={[Function]}
                         onContextMenu={[Function]}
                         onFocus={[Function]}
@@ -1448,7 +1445,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         onMouseLeave={[Function]}
                       >
                         <button
-                          className="bp5-button bp5-intent-danger bp5-minimal"
+                          className="bp6-button bp6-intent-danger bp6-minimal"
                           disabled={false}
                           onBlur={[Function]}
                           onClick={[Function]}
@@ -1458,7 +1455,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         >
                           <span
                             aria-hidden={true}
-                            className="bp5-icon bp5-icon-confirm"
+                            className="bp6-icon bp6-icon-confirm"
                           >
                             <svg
                               data-icon="confirm"
@@ -1474,7 +1471,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             </svg>
                           </span>
                           <span
-                            className="bp5-button-text"
+                            className="bp6-button-text"
                           >
                             <span>
                               Finalize
@@ -1493,7 +1490,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     className="_listing-xp_6fa7d2"
                   >
                     <h6
-                      className="bp5-heading"
+                      className="bp6-heading"
                     >
                       Max XP: 1000
                     </h6>
@@ -1502,7 +1499,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     className="listing-description"
                   >
                     <div
-                      className="md bp5-running-text"
+                      className="md bp6-running-text"
                       dangerouslySetInnerHTML={
                         {
                           "__html": "<p><em>Lorem ipsum</em> dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
@@ -1521,7 +1518,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                     className="listing-team_information"
                   >
                     <h6
-                      className="bp5-heading"
+                      className="bp6-heading"
                     >
                        This is a team assessment. 
                     </h6>
@@ -1535,7 +1532,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       >
                         <span
                           aria-hidden={true}
-                          className="bp5-icon bp5-icon-calendar listing-due-icon"
+                          className="bp6-icon bp6-icon-calendar listing-due-icon"
                         >
                           <svg
                             data-icon="calendar"
@@ -1557,7 +1554,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                       >
                         <span
                           aria-hidden={true}
-                          className="bp5-icon bp5-icon-time listing-due-icon"
+                          className="bp6-icon bp6-icon-time listing-due-icon"
                         >
                           <svg
                             data-icon="time"
@@ -1585,7 +1582,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         onClick={[Function]}
                       >
                         <button
-                          className="bp5-button bp5-minimal"
+                          className="bp6-button bp6-minimal"
                           disabled={false}
                           onBlur={[Function]}
                           onClick={[Function]}
@@ -1595,7 +1592,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                         >
                           <span
                             aria-hidden={true}
-                            className="bp5-icon bp5-icon-edit"
+                            className="bp6-icon bp6-icon-edit"
                           >
                             <svg
                               data-icon="edit"
@@ -1611,7 +1608,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                             </svg>
                           </span>
                           <span
-                            className="bp5-button-text"
+                            className="bp6-button-text"
                           >
                             <span
                               data-testid="Assessment-Attempt-Button"
@@ -1634,7 +1631,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
           </div>
         </div>
         <button
-          className="bp5-button bp5-minimal collapse-button"
+          className="bp6-button bp6-minimal collapse-button"
           disabled={false}
           onBlur={[Function]}
           onClick={[Function]}
@@ -1643,7 +1640,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
         >
           <span
             aria-hidden={true}
-            className="bp5-icon bp5-icon-caret-right"
+            className="bp6-icon bp6-icon-caret-right"
           >
             <svg
               data-icon="caret-right"
@@ -1659,13 +1656,13 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
             </svg>
           </span>
           <span
-            className="bp5-button-text"
+            className="bp6-button-text"
           >
             Closed
           </span>
         </button>
         <div
-          className="bp5-collapse"
+          className="bp6-collapse"
           style={
             {
               "height": undefined,
@@ -1676,7 +1673,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
         >
           <div
             aria-hidden={true}
-            className="bp5-collapse-body"
+            className="bp6-collapse-body"
             style={
               {
                 "transform": "translateY(-undefinedpx)",

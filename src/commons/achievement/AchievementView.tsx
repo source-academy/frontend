@@ -59,7 +59,7 @@ const AchievementView: React.FC<Props> = ({ focusUuid, userState }) => {
   if (focusUuid === '') {
     return (
       <div className="no-view">
-        <Icon icon={IconNames.MOUNTAIN} iconSize={60} />
+        <Icon icon={IconNames.MOUNTAIN} size={60} />
         <h2>Select an achievement</h2>
       </div>
     );
