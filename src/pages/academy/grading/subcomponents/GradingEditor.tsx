@@ -3,7 +3,7 @@ import {
   Dialog,
   Divider,
   H3,
-  H4,
+  H5,
   Icon,
   IconName,
   Intent,
@@ -57,6 +57,7 @@ type Props = {
   autoGradingStatus: string;
   autoGradingResults: AutogradingResult[];
   questionContent: string;
+  studentAnswer: string | null;
   graderName?: string;
   gradedAt?: string;
   ai_comments?: string[];
@@ -257,6 +258,30 @@ const GradingEditor: React.FC<Props> = props => {
       />
     );
 
+  const copyComposedPromptToClipboard = () => {
+    navigator.clipboard.writeText(
+      `${props.llm_course_level_prompt || ''}\n
+${props.llm_assessment_prompt || ''}\n
+${props.llm_question_prompt || ''}\n
+**Question:** \n
+\`\`\`\n
+${props.questionContent}\n
+\`\`\`\n\n
+**Model Solution:** \n
+\`\`\`\n
+${props.solution || 'N/A'}\n
+\`\`\`\n\n
+**Autograding Status:** ${props.autoGradingStatus}\n
+**Autograding Results:** ${props.autoGradingResults ? JSON.stringify(props.autoGradingResults) : 'N/A'}\n
+The student answer will be given below as part of the User Prompt.\n
+**Student Answer:** \n
+\`\`\`\n
+${props.studentAnswer}\n
+\`\`\``
+    );
+    showSuccessMessage('Composed prompt copied to clipboard!', 2000);
+  };
+
   // Render
   const hasUnsavedChanges = checkHasUnsavedChanges();
   const isNewQuestion = checkIsNewQuestion();
@@ -354,19 +379,30 @@ const GradingEditor: React.FC<Props> = props => {
             onClose={() => setIsViewLLMPromptOpen(false)}
           >
             <div className="llm-prompt-dialog">
-              <span className="forenote">
-                <b>Note:</b> The titles here are provided merely to distinguish the different
-                sections. They are not include in the final prompt.
-              </span>
-              <H4>Course Level Prompt</H4>
+              <div className="forenote-section">
+                <span className="forenote">
+                  <b>Note:</b> The titles here are provided merely to distinguish the different
+                  sections. They are not include in the final prompt.
+                </span>
+                <Button
+                  onClick={() => {
+                    copyComposedPromptToClipboard();
+                  }}
+                >
+                  <Icon icon={IconNames.Clipboard} />
+                </Button>
+              </div>
+              <H3>System Prompt</H3>
+              <Divider />
+              <H5>Course Level Prompt</H5>
               {props.llm_course_level_prompt || ''}
               <br />
-              <H4>Assessment Level Prompt</H4>
+              <H5>Assessment Level Prompt</H5>
               {props.llm_assessment_prompt || ''}
               <br />
-              <H4>Question Level Prompt</H4>
+              <H5>Question Level Prompt</H5>
               {props.llm_question_prompt || ''}
-              <H4>Generic Info From Question</H4>
+              <H5>Generic Info From Question</H5>
               **Question:** <br />
               ```
               <br />
@@ -385,6 +421,14 @@ const GradingEditor: React.FC<Props> = props => {
               **Autograding Status:** {props.autoGradingStatus} <br />
               **Autograding Results:**{' '}
               {props.autoGradingResults ? JSON.stringify(props.autoGradingResults) : 'N/A'}
+              The student answer will be given below as part of the User Prompt.
+              <H3>User Prompt</H3>
+              <Divider />
+              **Student Answer:** <br />
+              ``` <br />
+              {props.studentAnswer}
+              <br />
+              ``` <br />
             </div>
           </Dialog>
           <div style={{ marginBottom: '10px' }}>

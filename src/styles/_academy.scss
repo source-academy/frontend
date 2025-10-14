@@ -261,14 +261,22 @@
 .llm-prompt-dialog {
   white-space: pre-wrap; // To allow for "\n" newlines
   padding: 1rem;
-  h4 {
+  h3 {
+    margin-top: 1rem;
+  }
+  h5 {
     margin-top: 0.5rem;
   }
   .forenote {
     display: block;
     font-size: small;
     color: gray;
-    margin-bottom: 1rem;
+  }
+
+  .forenote-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 
