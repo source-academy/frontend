@@ -906,7 +906,11 @@ export const getGrading = async (
     return result;
   });
 
-  return { answers: grading, assessment: gradingResult.assessment };
+  return {
+    enable_llm_grading: gradingResult.enable_llm_grading,
+    answers: grading,
+    assessment: gradingResult.assessment
+  };
 };
 
 /**

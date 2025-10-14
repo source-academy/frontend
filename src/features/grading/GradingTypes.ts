@@ -100,6 +100,7 @@ export type GradingAssessment = {
 export type GradingQuery = {
   answers: GradingAnswer;
   assessment: GradingAssessment;
+  enable_llm_grading: boolean | null;
 };
 
 export type GradingSubmissionTableProps = {
