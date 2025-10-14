@@ -1,15 +1,12 @@
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-quartz.css';
-
 import { Button, H6, Icon, InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { CellClickedEvent, ColDef } from 'ag-grid-community';
+import { CellClickedEvent, ColDef, themeQuartz } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { ProgressStatuses } from 'src/commons/assessment/AssessmentTypes';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import GradingText from 'src/commons/grading/GradingText';
@@ -393,8 +390,9 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
         />
       </GradingFlex>
 
-      <div className="ag-theme-quartz" style={{ margin: tableProperties.tableMargins }}>
+      <div style={{ margin: tableProperties.tableMargins }}>
         <AgGridReact
+          theme={themeQuartz}
           columnDefs={colDefs}
           onCellClicked={cellClickedEvent}
           ref={gridRef}
@@ -411,7 +409,10 @@ const GradingSubmissionTable: React.FC<GradingSubmissionTableProps> = ({
           rowHeight={tableProperties.rowHeight}
           suppressMenuHide={tableProperties.suppressMenuHide}
           suppressPaginationPanel={tableProperties.suppressPaginationPanel}
-          suppressRowClickSelection={tableProperties.suppressRowClickSelection}
+          rowSelection={{
+            mode: 'singleRow',
+            enableClickSelection: !tableProperties.suppressRowClickSelection
+          }}
           domLayout="autoHeight"
           onFilterChanged={e => {
             if (!e.afterFloatingFilter) {

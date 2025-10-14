@@ -1,0 +1,11 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`HTML Display renders correctly 1`] = `
+<iframe
+  className="sa-html-display"
+  sandbox="allow-scripts"
+  src="about:blank"
+  srcDoc=""<p>Hello World!</p>""
+  title="HTML Display"
+/>
+`;

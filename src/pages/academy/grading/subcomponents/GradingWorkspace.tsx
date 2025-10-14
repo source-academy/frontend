@@ -53,6 +53,20 @@ type Props = {
   questionId: number;
 };
 
+const getDisplayName = (
+  studentName?: string | null,
+  team?: {
+    username: any;
+    name: string;
+    id: number;
+  }[]
+): string[] => {
+  if (studentName) return [studentName];
+  if (team != null) return team.map(member => member.name);
+
+  return [''];
+};
+
 const GradingWorkspace: React.FC<Props> = props => {
   const navigate = useNavigate();
   const { selectedTab, setSelectedTab } = useSideContent(
@@ -298,11 +312,10 @@ const GradingWorkspace: React.FC<Props> = props => {
             initialXp={grading!.answers[questionId].grade.xp}
             xpAdjustment={grading!.answers[questionId].grade.xpAdjustment}
             maxXp={grading!.answers[questionId].question.maxXp}
-            studentNames={
-              grading!.answers[questionId].student.name
-                ? [grading!.answers[questionId].student.name]
-                : grading!.answers[questionId].team!.map(member => member.name)
-            }
+            studentNames={getDisplayName(
+              grading!.answers[questionId].student.name,
+              grading!.answers[questionId].team
+            )}
             studentAnswer={
               grading!.answers[questionId].question.type === 'programming'
                 ? grading!.answers[questionId].question.answer

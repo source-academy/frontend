@@ -1,5 +1,10 @@
 import { call } from 'redux-saga/effects';
 import { backendParamsToProgressStatus } from 'src/features/grading/GradingUtils';
+import {
+  ContestLeaderboardRow,
+  LeaderboardContestDetails,
+  LeaderboardRow
+} from 'src/features/leaderboard/LeaderboardTypes';
 import { OptionType } from 'src/pages/academy/teamFormation/subcomponents/TeamFormationForm';
 
 import {
@@ -455,6 +460,161 @@ export const getTotalXp = async (tokens: Tokens, courseRegId?: number): Promise<
   }
   const totalXp = await resp.json();
   return totalXp;
+};
+
+/**
+ * GET /courses/{courseId}/leaderboards/xp_all
+ */
+export const getAllOverallLeaderboardXP = async (
+  tokens: Tokens
+): Promise<LeaderboardRow[] | null> => {
+  const resp = await request(`${courseId()}/leaderboards/xp_all`, 'GET', {
+    ...tokens
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  const rows = await resp.json();
+
+  return rows.users.map(
+    (row: any): LeaderboardRow => ({
+      rank: row.rank,
+      name: row.name,
+      username: row.username,
+      xp: row.total_xp,
+      avatar: '',
+      achievements: ''
+    })
+  );
+};
+
+/**
+ * GET /courses/{courseId}/leaderboards/xp
+ */
+export const getOverallLeaderboardXP = async (
+  page: number,
+  pageSize: number,
+  tokens: Tokens
+): Promise<{ rows: LeaderboardRow[]; userCount: number } | null> => {
+  const offset = (page - 1) * pageSize;
+  const params = new URLSearchParams({ offset: `${offset}`, page_size: `${pageSize}` });
+  const resp = await request(`${courseId()}/leaderboards/xp?${params.toString()}`, 'GET', {
+    ...tokens
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  const data = await resp.json();
+
+  const rows = data.users.map(
+    (row: any): LeaderboardRow => ({
+      rank: row.rank,
+      name: row.name,
+      username: row.username,
+      xp: row.total_xp,
+      avatar: '',
+      achievements: ''
+    })
+  );
+
+  return { rows: rows, userCount: data.total_count };
+};
+
+/**
+ * GET /courses/{courseId}/assessments/{assessmentid}/contest_score_leaderboard
+ */
+export const getContestScoreLeaderboard = async (
+  assessmentId: number,
+  count: number,
+  tokens: Tokens
+): Promise<ContestLeaderboardRow[] | null> => {
+  const params = new URLSearchParams({ count: `${count}` });
+  const resp = await request(
+    `${courseId()}/assessments/${assessmentId}/contest_score_leaderboard?${params.toString()}`,
+    'GET',
+    {
+      ...tokens
+    }
+  );
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  const rows = await resp.json();
+
+  return rows.leaderboard.map(
+    (row: any): ContestLeaderboardRow => ({
+      rank: row.rank,
+      name: row.student_name,
+      username: row.student_username,
+      score: row.final_score,
+      avatar: '',
+      code: row.answer,
+      submissionId: row.submission_id,
+      votingId: rows.voting_id
+    })
+  );
+};
+
+/**
+ * GET /courses/{courseId}/assessments/{assessmentid}/contest_popular_leaderboard
+ */
+export const getContestPopularVoteLeaderboard = async (
+  assessmentId: number,
+  count: number,
+  tokens: Tokens
+): Promise<ContestLeaderboardRow[] | null> => {
+  const params = new URLSearchParams({ count: `${count}` });
+  const resp = await request(
+    `${courseId()}/assessments/${assessmentId}/contest_popular_leaderboard?${params.toString()}`,
+    'GET',
+    {
+      ...tokens
+    }
+  );
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  const rows = await resp.json();
+
+  return rows.leaderboard.map(
+    (row: any): ContestLeaderboardRow => ({
+      rank: row.rank,
+      name: row.student_name,
+      username: row.student_username,
+      score: row.final_score,
+      avatar: '',
+      code: row.answer,
+      submissionId: row.submission_id,
+      votingId: rows.voting_id
+    })
+  );
+};
+
+/**
+ * GET /courses/{courseId}/all_contests
+ */
+export const getAllContests = async (
+  tokens: Tokens
+): Promise<LeaderboardContestDetails[] | null> => {
+  const resp = await request(`${courseId()}/all_contests`, 'GET', {
+    ...tokens
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  const rows = await resp.json();
+
+  return rows;
 };
 
 /**
@@ -1148,14 +1308,52 @@ export const deleteSourcecastEntry = async (
 };
 
 /**
- * GET /courses/{courseId}/admin/assessments/{assessmentId}/scoreLeaderboard
+ * POST /courses/{courseId}/admin/assessments/{assessmentId}/contest_calculate_score
+ */
+export const calculateContestScore = async (
+  assessmentId: number,
+  tokens: Tokens
+): Promise<Response | null> => {
+  const resp = await request(
+    `${courseId()}/admin/assessments/${assessmentId}/contest_calculate_score`,
+    'POST',
+    {
+      ...tokens
+    }
+  );
+
+  return resp;
+};
+
+/**
+ * POST /courses/{courseId}/admin/assessments/{assessmentId}/contest_dispatch_xp
+ */
+export const dispatchContestXp = async (
+  assessmentId: number,
+  tokens: Tokens
+): Promise<Response | null> => {
+  const resp = await request(
+    `${courseId()}/admin/assessments/${assessmentId}/contest_dispatch_xp`,
+    'POST',
+    {
+      ...tokens
+    }
+  );
+
+  return resp;
+};
+
+/**
+ * GET /courses/{courseId}/assessments/{assessmentId}/contest_score_leaderboard
  */
 export const getScoreLeaderboard = async (
   assessmentId: number,
+  count: number | undefined,
   tokens: Tokens
 ): Promise<ContestEntry[] | null> => {
+  const params = new URLSearchParams({ count: `${count}` });
   const resp = await request(
-    `${courseId()}/admin/assessments/${assessmentId}/scoreLeaderboard`,
+    `${courseId()}/assessments/${assessmentId}/contest_score_leaderboard?${params.toString()}`,
     'GET',
     {
       ...tokens
@@ -1165,18 +1363,29 @@ export const getScoreLeaderboard = async (
     return null; // invalid accessToken _and_ refreshToken
   }
   const scoreLeaderboard = await resp.json();
-  return scoreLeaderboard as ContestEntry[];
+
+  return scoreLeaderboard.leaderboard.map(
+    (row: any): ContestEntry => ({
+      rank: row.rank,
+      student_name: row.student_name,
+      final_score: row.final_score,
+      answer: row.answer,
+      submission_id: row.submission_id
+    })
+  );
 };
 
 /**
- * GET /courses/{courseId}/admin/assessments/{assessmentId}/popularVoteLeaderboard
+ * GET /courses/{courseId}/assessments/{assessmentId}/contest_popular_leaderboard
  */
 export const getPopularVoteLeaderboard = async (
   assessmentId: number,
+  count: number | undefined,
   tokens: Tokens
 ): Promise<ContestEntry[] | null> => {
+  const params = new URLSearchParams({ count: `${count}` });
   const resp = await request(
-    `${courseId()}/admin/assessments/${assessmentId}/popularVoteLeaderboard`,
+    `${courseId()}/assessments/${assessmentId}/contest_popular_leaderboard?${params.toString()}`,
     'GET',
     {
       ...tokens
@@ -1186,7 +1395,15 @@ export const getPopularVoteLeaderboard = async (
     return null; // invalid accessToken _and_ refreshToken
   }
   const popularVoteLeaderboard = await resp.json();
-  return popularVoteLeaderboard as ContestEntry[];
+  return popularVoteLeaderboard.leaderboard.map(
+    (row: any): ContestEntry => ({
+      rank: row.rank,
+      student_name: row.student_name,
+      final_score: row.final_score,
+      answer: row.answer,
+      submission_id: row.submission_id
+    })
+  );
 };
 
 /**

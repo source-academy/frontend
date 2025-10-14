@@ -1,0 +1,278 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SideContentContestVotingContainer matches snapshot 1`] = `
+<div
+  className="ContestEntryVoting"
+>
+  <button
+    className="bp6-button bp6-minimal collapse-button"
+    disabled={false}
+    onBlur={[Function]}
+    onClick={[Function]}
+    onKeyDown={[Function]}
+    onKeyUp={[Function]}
+    type="button"
+  >
+    <span
+      aria-hidden={true}
+      className="bp6-icon bp6-icon-caret-down"
+    >
+      <svg
+        data-icon="caret-down"
+        height={16}
+        role="img"
+        viewBox="0 0 16 16"
+        width={16}
+      >
+        <path
+          d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z"
+          fillRule="evenodd"
+        />
+      </svg>
+    </span>
+    <span
+      className="bp6-button-text"
+    >
+      <span>
+        Contest Voting
+      </span>
+      <span
+        className="bp6-popover-target"
+        onBlur={[Function]}
+        onContextMenu={[Function]}
+        onFocus={[Function]}
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+      >
+        <span
+          aria-hidden={true}
+          className="bp6-icon bp6-icon-help"
+          tabIndex={0}
+        >
+          <svg
+            data-icon="help"
+            height={16}
+            role="img"
+            viewBox="0 0 16 16"
+            width={16}
+          >
+            <path
+              d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm1 13H7v-2h2v2zm1.93-6.52c-.14.32-.35.64-.62.97L9.25 8.83c-.12.15-.24.29-.28.42-.04.13-.09.3-.09.52V10H7.12V8.88s.05-.51.21-.71L8.4 6.73c.22-.26.35-.49.44-.68.09-.19.12-.38.12-.58 0-.3-.1-.55-.28-.75-.18-.19-.44-.28-.76-.28-.33 0-.59.1-.78.29-.19.19-.33.46-.4.81-.03.11-.1.15-.2.14l-1.7-.25c-.12-.01-.16-.08-.14-.19.12-.82.46-1.47 1.03-1.94.57-.48 1.32-.72 2.25-.72.47 0 .9.07 1.29.22s.72.34 1 .59c.28.25.49.55.65.89.15.35.22.72.22 1.12s-.07.75-.21 1.08z"
+              fillRule="evenodd"
+            />
+          </svg>
+        </span>
+      </span>
+    </span>
+  </button>
+  <div
+    className="bp6-collapse"
+    style={
+      {
+        "height": "auto",
+        "overflowY": "visible",
+        "transition": "none",
+      }
+    }
+  >
+    <div
+      aria-hidden={false}
+      className="bp6-collapse-body"
+      style={
+        {
+          "transform": "translateY(0)",
+          "transition": "none",
+        }
+      }
+    >
+      <div
+        className="tier-list"
+      >
+        <div
+          className="tier"
+          data-testid="tier"
+          id="tier-s"
+        >
+          <h2
+            style={
+              {
+                "backgroundColor": "rgb(255, 127, 127)",
+              }
+            }
+          >
+            S
+          </h2>
+          <div
+            className="item-container"
+            onDragEnter={[Function]}
+            onDragLeave={[Function]}
+            onDragOver={[Function]}
+            onDrop={[Function]}
+          />
+        </div>
+        <div
+          className="tier"
+          data-testid="tier"
+          id="tier-a"
+        >
+          <h2
+            style={
+              {
+                "backgroundColor": "rgb(255, 223, 127)",
+              }
+            }
+          >
+            A
+          </h2>
+          <div
+            className="item-container"
+            onDragEnter={[Function]}
+            onDragLeave={[Function]}
+            onDragOver={[Function]}
+            onDrop={[Function]}
+          />
+        </div>
+        <div
+          className="tier"
+          data-testid="tier"
+          id="tier-b"
+        >
+          <h2
+            style={
+              {
+                "backgroundColor": "rgb(255, 255, 127)",
+              }
+            }
+          >
+            B
+          </h2>
+          <div
+            className="item-container"
+            onDragEnter={[Function]}
+            onDragLeave={[Function]}
+            onDragOver={[Function]}
+            onDrop={[Function]}
+          />
+        </div>
+        <div
+          className="tier"
+          data-testid="tier"
+          id="tier-c"
+        >
+          <h2
+            style={
+              {
+                "backgroundColor": "rgb(191, 255, 127)",
+              }
+            }
+          >
+            C
+          </h2>
+          <div
+            className="item-container"
+            onDragEnter={[Function]}
+            onDragLeave={[Function]}
+            onDragOver={[Function]}
+            onDrop={[Function]}
+          />
+        </div>
+        <div
+          className="tier"
+          data-testid="tier"
+          id="tier-d"
+        >
+          <h2
+            style={
+              {
+                "backgroundColor": "rgb(127, 191, 255)",
+              }
+            }
+          >
+            D
+          </h2>
+          <div
+            className="item-container"
+            onDragEnter={[Function]}
+            onDragLeave={[Function]}
+            onDragOver={[Function]}
+            onDrop={[Function]}
+          />
+        </div>
+        <div
+          className="tier"
+          data-testid="tier"
+          id="bank"
+        >
+          <div
+            className="item-container"
+            data-testid="voting-item-container"
+            id="items"
+            onDragEnter={[Function]}
+            onDragLeave={[Function]}
+            onDragOver={[Function]}
+            onDrop={[Function]}
+          >
+            <div
+              className="item"
+              data-testid="voting-item"
+              draggable={true}
+              id="item-1"
+              onDragEnd={[Function]}
+              onDragStart={[Function]}
+            >
+              <div
+                className="bp6-interactive bp6-card bp6-elevation-1"
+                onClick={[Function]}
+              >
+                <pre
+                  className="bp6-code-block contestentry-entryid"
+                >
+                  1
+                </pre>
+              </div>
+            </div>
+            <div
+              className="item"
+              data-testid="voting-item"
+              draggable={true}
+              id="item-2"
+              onDragEnd={[Function]}
+              onDragStart={[Function]}
+            >
+              <div
+                className="bp6-interactive bp6-card bp6-elevation-1"
+                onClick={[Function]}
+              >
+                <pre
+                  className="bp6-code-block contestentry-entryid"
+                >
+                  2
+                </pre>
+              </div>
+            </div>
+            <div
+              className="item"
+              data-testid="voting-item"
+              draggable={true}
+              id="item-3"
+              onDragEnd={[Function]}
+              onDragStart={[Function]}
+            >
+              <div
+                className="bp6-interactive bp6-card bp6-elevation-1"
+                onClick={[Function]}
+              >
+                <pre
+                  className="bp6-code-block contestentry-entryid"
+                >
+                  3
+                </pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

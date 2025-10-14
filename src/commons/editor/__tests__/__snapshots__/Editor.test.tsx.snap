@@ -1,0 +1,20 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Editor renders correctly 1`] = `
+<Editor
+  breakpoints={[]}
+  editorSessionId=""
+  editorTabIndex={0}
+  editorValue=""
+  handleDeclarationNavigate={[Function]}
+  handleEditorEval={[Function]}
+  handleEditorUpdateBreakpoints={[Function]}
+  handleEditorValueChange={[Function]}
+  handlePromptAutocomplete={[Function]}
+  handleSetSharedbConnected={[Function]}
+  handleUpdateHasUnsavedChanges={[Function]}
+  highlightedLines={[]}
+  isEditorAutorun={false}
+  sessionDetails={null}
+/>
+`;

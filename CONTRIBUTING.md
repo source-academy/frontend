@@ -16,10 +16,10 @@ To start contributing, create a fork from our repo and send a PR. Refer to [this
 
 The frontend comes with an extensive test suite. To run the tests after you made your modifications, run
 `yarn test`. Regression tests are run automatically when you want to push changes to this repository.
-The regression tests are generated using `jest` and stored as snapshots in `src/\_\_tests\_\_`. After modifying the frontend, carefully inspect any failing regression tests reported in red in the command line. If you are convinced that the regression tests and not your changes are at fault, you can update the regression tests by running:
+The regression tests are generated using `vitest` and stored as snapshots in `src/\_\_tests\_\_`. After modifying the frontend, carefully inspect any failing regression tests reported in red in the command line. If you are convinced that the regression tests and not your changes are at fault, you can update the regression tests by running:
 
 ```bash
-yarn test --updateSnapshot
+yarn test --update
 ```
 
 ## Manually testing the frontend

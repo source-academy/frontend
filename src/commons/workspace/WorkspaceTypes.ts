@@ -1,3 +1,4 @@
+import type { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
 import type { Context } from 'js-slang';
 
 import type {
@@ -85,7 +86,7 @@ export type WorkspaceState = {
   readonly programPrependValue: string;
   readonly programPostpendValue: string;
   readonly editorSessionId: string;
-  readonly sessionDetails: { docId: string; readOnly: boolean } | null;
+  readonly sessionDetails: { docId: string; readOnly: boolean; owner: boolean } | null;
   readonly editorTestcases: Testcase[];
   readonly execTime: number;
   readonly isRunning: boolean;
@@ -106,6 +107,7 @@ export type WorkspaceState = {
   readonly debuggerContext: DebuggerContext;
   readonly lastDebuggerResult: any;
   readonly files: UploadResult;
+  readonly updateUserRoleCallback: (id: string, newRole: CollabEditingAccess) => void;
 };
 
 type ReplHistory = {

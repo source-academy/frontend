@@ -1,11 +1,21 @@
 import '@convergencelabs/ace-collab-ext/dist/css/ace-collab-ext.css';
 
-import { AceMultiCursorManager } from '@convergencelabs/ace-collab-ext';
-import * as Sentry from '@sentry/browser';
+import {
+  AceMultiCursorManager,
+  AceMultiSelectionManager,
+  AceRadarView
+} from '@convergencelabs/ace-collab-ext';
+import * as Sentry from '@sentry/react';
 import sharedbAce from '@sourceacademy/sharedb-ace';
-import React, { useMemo } from 'react';
+import type SharedbAceBinding from '@sourceacademy/sharedb-ace/binding';
+import { CollabEditingAccess } from '@sourceacademy/sharedb-ace/types';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 
+import { getLanguageConfig } from '../application/ApplicationTypes';
+import CollabEditingActions from '../collabEditing/CollabEditingActions';
 import { getDocInfoFromSessionId, getSessionUrl } from '../collabEditing/CollabEditingHelper';
+import { parseModeString } from '../utils/AceHelper';
 import { useSession } from '../utils/Hooks';
 import { showSuccessMessage } from '../utils/notifications/NotificationsHelper';
 import { EditorHook } from './Editor';
@@ -17,48 +27,116 @@ import { EditorHook } from './Editor';
 // keyBindings allow exporting new hotkeys
 // reactAceRef is the underlying reactAce instance for hooking.
 
+const color = getColor();
+
 const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
   // use a ref to refer to any other props so that we run the effect below
-  // *only* when the editorSessionId changes
+  // *only* when the editorSessionId or sessionDetails changes
   const propsRef = React.useRef(inProps);
   propsRef.current = inProps;
 
   const { editorSessionId, sessionDetails } = inProps;
-
-  const { name } = useSession();
-
-  const user = useMemo(() => ({ name, color: getColor() }), [name]);
+  const { name, userId } = useSession();
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     if (!editorSessionId || !sessionDetails) {
       return;
     }
 
+    const collabEditorAccess = sessionDetails.owner
+      ? CollabEditingAccess.OWNER
+      : sessionDetails.readOnly
+        ? CollabEditingAccess.VIEWER
+        : CollabEditingAccess.EDITOR;
+
+    const user = {
+      name: name || 'Unnamed user',
+      color,
+      role: collabEditorAccess
+    };
+
     const editor = reactAceRef.current!.editor;
-    const cursorManager = new AceMultiCursorManager(editor.getSession());
+    const session = editor.getSession();
+    // TODO: Hover over the indicator to show the username as well
+    const cursorManager = new AceMultiCursorManager(session);
+    const selectionManager = new AceMultiSelectionManager(session);
+    const radarManager = new AceRadarView('ace-radar-view', editor);
+
+    // @ts-expect-error hotfix to remove all views in radarManager
+    radarManager.removeAllViews = () => {
+      // @ts-expect-error hotfix to remove all views in radarManager
+      for (const id in radarManager._views) {
+        radarManager.removeView(id);
+      }
+    };
+
     const ShareAce = new sharedbAce(sessionDetails.docId, {
       user,
-      cursorManager,
       WsUrl: getSessionUrl(editorSessionId, true),
-      pluginWsUrl: null,
       namespace: 'sa'
     });
 
-    ShareAce.on('ready', () => {
-      ShareAce.add(editor, cursorManager, ['contents'], []);
+    const updateUsers = (binding: SharedbAceBinding) => {
+      if (binding.connectedUsers === undefined) {
+        return;
+      }
+      propsRef.current.setUsers?.(binding.connectedUsers);
+      const myUserId = Object.keys(ShareAce.usersPresence.localPresences)[0];
+      if (binding.connectedUsers[myUserId].role !== user.role) {
+        // Change in role, update readOnly status in sessionDetails
+        dispatch(
+          CollabEditingActions.setSessionDetails('playground', {
+            readOnly: binding.connectedUsers[myUserId].role === CollabEditingAccess.VIEWER
+          })
+        );
+      }
+    };
+
+    const shareAceReady = () => {
+      if (!sessionDetails) {
+        return;
+      }
+      const binding = ShareAce.add(
+        editor,
+        ['contents'],
+        {
+          cursorManager,
+          selectionManager,
+          radarManager
+        },
+        {
+          languageSelectHandler: (language: string) => {
+            const { chapter, variant } = parseModeString(language);
+            propsRef.current.updateLanguageCallback?.(getLanguageConfig(chapter, variant), null);
+          }
+        }
+      );
       propsRef.current.handleSetSharedbConnected!(true);
+      dispatch(
+        CollabEditingActions.setUpdateUserRoleCallback('playground', binding.changeUserRole)
+      );
 
       // Disables editor in a read-only session
       editor.setReadOnly(sessionDetails.readOnly);
+      navigator.clipboard.writeText(editorSessionId).then(() => {
+        showSuccessMessage(
+          `You have joined a session as ${sessionDetails.readOnly ? 'a viewer' : 'an editor'}. Copied to clipboard: ${editorSessionId}`
+        );
+      });
 
-      showSuccessMessage(
-        'You have joined a session as ' + (sessionDetails.readOnly ? 'a viewer.' : 'an editor.')
-      );
-    });
-    ShareAce.on('error', (path: string, error: any) => {
+      updateUsers(binding);
+      binding.usersPresence.on('receive', () => updateUsers(binding));
+      window.history.pushState({}, document.title, '/playground/' + editorSessionId);
+    };
+
+    const shareAceError = (path: string, error: any) => {
       console.error('ShareAce error', error);
       Sentry.captureException(error);
-    });
+    };
+
+    ShareAce.on('ready', shareAceReady);
+    ShareAce.on('error', shareAceError);
 
     // WebSocket connection status detection logic
     const WS = ShareAce.WS;
@@ -96,13 +174,29 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       }
       ShareAce.WS.close();
 
+      ShareAce.off('ready', shareAceReady);
+      ShareAce.off('error', shareAceError);
+
       // Resets editor to normal after leaving the session
       editor.setReadOnly(false);
 
       // Removes all cursors
       cursorManager.removeAll();
+
+      // Removes all selections
+      selectionManager.removeAll();
+
+      // @ts-expect-error hotfix to remove all views in radarManager
+      radarManager.removeAllViews();
+
+      if (
+        window.location.href.includes('/playground') &&
+        !window.location.href.endsWith('/playground')
+      ) {
+        window.history.pushState({}, document.title, '/playground');
+      }
     };
-  }, [editorSessionId, sessionDetails, reactAceRef, user]);
+  }, [editorSessionId, sessionDetails, reactAceRef, userId, name, dispatch]);
 };
 
 function getColor() {

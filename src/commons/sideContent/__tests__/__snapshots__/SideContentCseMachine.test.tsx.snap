@@ -1,0 +1,558 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CSE Machine component renders correctly 1`] = `
+<div
+  onKeyDown={[Function]}
+  style={
+    {
+      "maxHeight": "100%",
+      "overflow": "auto",
+    }
+  }
+  tabIndex={-1}
+>
+  <div
+    className="sa-substituter bp6-dark"
+  >
+    <div
+      className="bp6-slider bp6-disabled"
+      onMouseDown={[Function]}
+      onTouchStart={[Function]}
+    >
+      <div
+        className="bp6-slider-track"
+      >
+        <div
+          className="bp6-slider-progress"
+          style={
+            {
+              "left": "0.00%",
+              "right": "100.00%",
+              "top": 0,
+            }
+          }
+        />
+        <div
+          className="bp6-slider-progress"
+          style={
+            {
+              "left": "0.00%",
+              "right": "100.00%",
+              "top": 0,
+            }
+          }
+        />
+        <div
+          className="bp6-slider-progress"
+          style={
+            {
+              "left": "0.00%",
+              "right": "100.00%",
+              "top": 0,
+            }
+          }
+        />
+      </div>
+      <div
+        className="bp6-slider-axis"
+      >
+        <div
+          className="bp6-slider-label"
+          style={
+            {
+              "left": "NaN%",
+            }
+          }
+        >
+          0
+        </div>
+      </div>
+      <span
+        aria-disabled={true}
+        aria-orientation="horizontal"
+        aria-valuemax={0}
+        aria-valuemin={0}
+        aria-valuenow={0}
+        className="bp6-slider-handle"
+        role="slider"
+        style={{}}
+        tabIndex={0}
+      >
+        <span
+          className="bp6-slider-label"
+        >
+          0
+        </span>
+      </span>
+    </div>
+    <div
+      style={
+        {
+          "alignItems": "center",
+          "display": "flex",
+          "justifyContent": "space-between",
+        }
+      }
+    >
+      <div
+        className="bp6-button-group"
+      >
+        <span
+          className="bp6-popover-target"
+          onBlur={[Function]}
+          onContextMenu={[Function]}
+          onFocus={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <a
+            aria-disabled={true}
+            className="bp6-button bp6-disabled"
+            disabled={true}
+            onBlur={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseUp={[Function]}
+            role="button"
+            tabIndex={-1}
+          >
+            <span
+              aria-hidden={true}
+              className="bp6-icon bp6-icon-layers"
+            >
+              <svg
+                data-icon="layers"
+                height={16}
+                role="img"
+                viewBox="0 0 16 16"
+                width={16}
+              >
+                <path
+                  d="M.55 4.89l7 3c.14.07.29.11.45.11.16 0 .31-.04.45-.11l7-3a.998.998 0 00-.06-1.81L8.4.08a1.006 1.006 0 00-.79 0l-6.99 3a.992.992 0 00-.07 1.81zM15 11c-.16 0-.31.04-.45.11L8 14l-6.55-2.9c-.14-.06-.29-.1-.45-.1-.55 0-1 .45-1 1 0 .39.23.73.55.89l7 3c.14.07.29.11.45.11.16 0 .31-.04.45-.11l7-3c.32-.16.55-.5.55-.89 0-.55-.45-1-1-1zm0-4c-.16 0-.31.04-.45.11L8 10 1.45 7.11A.997.997 0 001 7c-.55 0-1 .45-1 1 0 .39.23.73.55.89l7 3c.14.07.29.11.45.11.16 0 .31-.04.45-.11l7-3c.32-.16.55-.5.55-.89 0-.55-.45-1-1-1z"
+                  fillRule="evenodd"
+                />
+              </svg>
+            </span>
+            <span
+              className="bp6-button-text"
+            >
+              <label
+                className="bp6-control bp6-checkbox bp6-disabled"
+                style={
+                  {
+                    "margin": 0,
+                  }
+                }
+              >
+                <input
+                  checked={false}
+                  className="bp6-control-input"
+                  disabled={true}
+                  onChange={[Function]}
+                  type="checkbox"
+                />
+                <span
+                  className="bp6-control-indicator"
+                />
+              </label>
+            </span>
+          </a>
+        </span>
+        <span
+          className="bp6-popover-target"
+          onBlur={[Function]}
+          onContextMenu={[Function]}
+          onFocus={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <a
+            aria-disabled={true}
+            className="bp6-button bp6-disabled"
+            disabled={true}
+            onBlur={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseUp={[Function]}
+            role="button"
+            tabIndex={-1}
+          >
+            <span
+              aria-hidden={true}
+              className="bp6-icon bp6-icon-minimize"
+            >
+              <svg
+                data-icon="minimize"
+                height={16}
+                role="img"
+                viewBox="0 0 16 16"
+                width={16}
+              >
+                <path
+                  d="M15.99.99a1.003 1.003 0 00-1.71-.71l-3.29 3.29V1.99c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .55.45 1 1 1h4c.55 0 1-.45 1-1s-.45-1-1-1H12.4l3.3-3.29c.18-.18.29-.43.29-.71zm-10 8h-4c-.55 0-1 .45-1 1s.45 1 1 1h1.59L.29 14.28a1.003 1.003 0 001.42 1.42L5 12.41V14c0 .55.45 1 1 1s1-.45 1-1v-4a1.02 1.02 0 00-1.01-1.01z"
+                  fillRule="evenodd"
+                />
+              </svg>
+            </span>
+            <span
+              className="bp6-button-text"
+            >
+              <label
+                className="bp6-control bp6-checkbox bp6-disabled"
+                style={
+                  {
+                    "margin": 0,
+                  }
+                }
+              >
+                <input
+                  checked={false}
+                  className="bp6-control-input"
+                  disabled={true}
+                  onChange={[Function]}
+                  type="checkbox"
+                />
+                <span
+                  className="bp6-control-indicator"
+                />
+              </label>
+            </span>
+          </a>
+        </span>
+      </div>
+      <div
+        className="bp6-button-group"
+      >
+        <button
+          className="bp6-button bp6-disabled"
+          disabled={true}
+          onBlur={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          tabIndex={-1}
+          type="button"
+        >
+          <span
+            aria-hidden={true}
+            className="bp6-icon bp6-icon-double-chevron-left"
+          >
+            <svg
+              data-icon="double-chevron-left"
+              height={16}
+              role="img"
+              viewBox="0 0 16 16"
+              width={16}
+            >
+              <path
+                d="M4.41 8L7.7 4.71c.19-.18.3-.43.3-.71a1.003 1.003 0 00-1.71-.71l-4 4C2.11 7.47 2 7.72 2 8c0 .28.11.53.29.71l4 4a1.003 1.003 0 001.42-1.42L4.41 8zm5 0l3.29-3.29c.19-.18.3-.43.3-.71a1.003 1.003 0 00-1.71-.71l-4 4C7.11 7.47 7 7.72 7 8c0 .28.11.53.29.71l4 4a1.003 1.003 0 001.42-1.42L9.41 8z"
+                fillRule="evenodd"
+              />
+            </svg>
+          </span>
+        </button>
+        <button
+          className="bp6-button bp6-disabled"
+          disabled={true}
+          onBlur={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          tabIndex={-1}
+          type="button"
+        >
+          <span
+            aria-hidden={true}
+            className="bp6-icon bp6-icon-chevron-left"
+          >
+            <svg
+              data-icon="chevron-left"
+              height={16}
+              role="img"
+              viewBox="0 0 16 16"
+              width={16}
+            >
+              <path
+                d="M7.41 8l3.29-3.29c.19-.18.3-.43.3-.71a1.003 1.003 0 00-1.71-.71l-4 4C5.11 7.47 5 7.72 5 8c0 .28.11.53.29.71l4 4a1.003 1.003 0 001.42-1.42L7.41 8z"
+                fillRule="evenodd"
+              />
+            </svg>
+          </span>
+        </button>
+        <button
+          className="bp6-button bp6-disabled"
+          disabled={true}
+          onBlur={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          tabIndex={-1}
+          type="button"
+        >
+          <span
+            aria-hidden={true}
+            className="bp6-icon bp6-icon-chevron-right"
+          >
+            <svg
+              data-icon="chevron-right"
+              height={16}
+              role="img"
+              viewBox="0 0 16 16"
+              width={16}
+            >
+              <path
+                d="M10.71 7.29l-4-4a1.003 1.003 0 00-1.42 1.42L8.59 8 5.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z"
+                fillRule="evenodd"
+              />
+            </svg>
+          </span>
+        </button>
+        <button
+          className="bp6-button bp6-disabled"
+          disabled={true}
+          onBlur={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+          tabIndex={-1}
+          type="button"
+        >
+          <span
+            aria-hidden={true}
+            className="bp6-icon bp6-icon-double-chevron-right"
+          >
+            <svg
+              data-icon="double-chevron-right"
+              height={16}
+              role="img"
+              viewBox="0 0 16 16"
+              width={16}
+            >
+              <path
+                d="M9 8c0-.28-.11-.53-.29-.71l-4-4a1.003 1.003 0 00-1.42 1.42L6.59 8 3.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4C8.89 8.53 9 8.28 9 8zm4.71-.71l-4-4a1.003 1.003 0 00-1.42 1.42L11.59 8 8.3 11.29c-.19.18-.3.43-.3.71a1.003 1.003 0 001.71.71l4-4c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z"
+                fillRule="evenodd"
+              />
+            </svg>
+          </span>
+        </button>
+      </div>
+      <div
+        className="bp6-button-group"
+      >
+        <span
+          className="bp6-popover-target"
+          onBlur={[Function]}
+          onContextMenu={[Function]}
+          onFocus={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <a
+            aria-disabled={true}
+            className="bp6-button bp6-disabled"
+            disabled={true}
+            onBlur={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseUp={[Function]}
+            role="button"
+            tabIndex={-1}
+          >
+            <span
+              aria-hidden={true}
+              className="bp6-icon bp6-icon-print"
+            >
+              <svg
+                data-icon="print"
+                height={16}
+                role="img"
+                viewBox="0 0 16 16"
+                width={16}
+              >
+                <path
+                  d="M12 2.02c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1v1h8v-1zm3 2H1c-.55 0-1 .45-1 1v6c0 .55.45 1 1 1h1v-3h12v3h1c.55 0 1-.45 1-1v-6c0-.56-.45-1-1-1zm-1 3h-2v-1h2v1zm-3 6H5v-3H3v4c0 .55.45 1 1 1h8c.55 0 1-.45 1-1v-4h-2v3z"
+                  fillRule="evenodd"
+                />
+              </svg>
+            </span>
+            <span
+              className="bp6-button-text"
+            >
+              <label
+                className="bp6-control bp6-checkbox bp6-disabled"
+                style={
+                  {
+                    "margin": 0,
+                  }
+                }
+              >
+                <input
+                  checked={false}
+                  className="bp6-control-input"
+                  disabled={true}
+                  onChange={[Function]}
+                  type="checkbox"
+                />
+                <span
+                  className="bp6-control-indicator"
+                />
+              </label>
+            </span>
+          </a>
+        </span>
+        <span
+          className="bp6-popover-target"
+          onBlur={[Function]}
+          onContextMenu={[Function]}
+          onFocus={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <a
+            aria-disabled={true}
+            className="bp6-button bp6-disabled"
+            disabled={true}
+            onBlur={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            role="button"
+            tabIndex={-1}
+          >
+            <span
+              aria-hidden={true}
+              className="bp6-icon bp6-icon-floppy-disk"
+            >
+              <svg
+                data-icon="floppy-disk"
+                height={16}
+                role="img"
+                viewBox="0 0 16 16"
+                width={16}
+              >
+                <path
+                  d="M15.71 2.29l-2-2A.997.997 0 0013 0h-1v6H4V0H1C.45 0 0 .45 0 1v14c0 .55.45 1 1 1h14c.55 0 1-.45 1-1V3c0-.28-.11-.53-.29-.71zM14 15H2V9c0-.55.45-1 1-1h10c.55 0 1 .45 1 1v6zM11 1H9v4h2V1z"
+                  fillRule="evenodd"
+                />
+              </svg>
+            </span>
+          </a>
+        </span>
+      </div>
+    </div>
+  </div>
+   
+  <div />
+  <div
+    className="bp6-running-text"
+    data-testid="cse-machine-default-text"
+    id="cse-machine-default-text"
+  >
+    <span>
+      The CSE machine generates control, stash and environment model diagrams following a notation introduced in 
+      <a
+        href="https://sourceacademy.org/sicpjs/3.2"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        <i>
+          Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3, Section 2
+        </i>
+      </a>
+      .
+    </span>
+    <br />
+    <br />
+    On this tab, the REPL will be hidden from view, so do check that your code has no errors before running the stepper. You may use this tool by running your program and then dragging the slider above to see the state of the control, stash and environment at different stages in the evaluation of your program. Clicking on the fast-forward button (double chevron) will take you to the next breakpoint in your program.
+    <br />
+    <br />
+    <div
+      className="bp6-divider"
+    />
+    Some useful keyboard shortcuts:
+    <br />
+    <br />
+    a: Move to the first step
+    <br />
+    e: Move to the last step
+    <br />
+    f: Move to the next step
+    <br />
+    b: Move to the previous step
+    <br />
+    <br />
+    Note that these shortcuts are only active when the browser focus is on this tab.
+  </div>
+  <div
+    className="bp6-button-group bp6-vertical"
+    style={
+      {
+        "bottom": "20px",
+        "position": "absolute",
+        "right": "20px",
+      }
+    }
+  >
+    <button
+      className="bp6-button bp6-disabled"
+      disabled={true}
+      onBlur={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      style={
+        {
+          "borderRadius": "3px",
+          "marginBottom": "5px",
+        }
+      }
+      tabIndex={-1}
+      type="button"
+    >
+      <span
+        aria-hidden={true}
+        className="bp6-icon bp6-icon-plus"
+      >
+        <svg
+          data-icon="plus"
+          height={16}
+          role="img"
+          viewBox="0 0 16 16"
+          width={16}
+        >
+          <path
+            d="M13 7H9V3c0-.55-.45-1-1-1s-1 .45-1 1v4H3c-.55 0-1 .45-1 1s.45 1 1 1h4v4c0 .55.45 1 1 1s1-.45 1-1V9h4c.55 0 1-.45 1-1s-.45-1-1-1z"
+            fillRule="evenodd"
+          />
+        </svg>
+      </span>
+    </button>
+    <button
+      className="bp6-button bp6-disabled"
+      disabled={true}
+      onBlur={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      style={
+        {
+          "borderRadius": "3px",
+        }
+      }
+      tabIndex={-1}
+      type="button"
+    >
+      <span
+        aria-hidden={true}
+        className="bp6-icon bp6-icon-minus"
+      >
+        <svg
+          data-icon="minus"
+          height={16}
+          role="img"
+          viewBox="0 0 16 16"
+          width={16}
+        >
+          <path
+            d="M13 7H3c-.55 0-1 .45-1 1s.45 1 1 1h10c.55 0 1-.45 1-1s-.45-1-1-1z"
+            fillRule="evenodd"
+          />
+        </svg>
+      </span>
+    </button>
+  </div>
+</div>
+`;

@@ -1,5 +1,3 @@
-/*eslint no-eval: "error"*/
-/*eslint-env browser*/
 import _ from 'lodash';
 import type { SagaIterator } from 'redux-saga';
 import { all, call, fork, put, select } from 'redux-saga/effects';
@@ -121,6 +119,7 @@ export function* routerNavigate(path: string) {
 const newBackendSagaOne = combineSagaHandlers({
   [SessionActions.fetchAuth.type]: function* (action): any {
     const { code, providerId: payloadProviderId } = action.payload;
+    const isVscode: boolean = yield select((state: OverallState) => state.vscode.isVscode);
 
     const providerId = payloadProviderId || (getDefaultProvider() || [null])[0];
     if (!providerId) {
@@ -132,7 +131,7 @@ const newBackendSagaOne = combineSagaHandlers({
     }
 
     const clientId = getClientId(providerId);
-    const redirectUrl = computeFrontendRedirectUri(providerId);
+    const redirectUrl = computeFrontendRedirectUri(providerId, isVscode);
 
     const tokens: Tokens | null = yield call(postAuth, code, providerId, clientId, redirectUrl);
     if (!tokens) {

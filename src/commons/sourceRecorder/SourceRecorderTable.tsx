@@ -1,5 +1,3 @@
-import 'ag-grid-community/styles/ag-grid.css';
-
 import {
   Divider,
   FormGroup,
@@ -9,6 +7,7 @@ import {
   SpinnerSize
 } from '@blueprintjs/core';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
+import { themeBalham } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { sortBy } from 'lodash';
 import React from 'react';
@@ -62,7 +61,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
           },
           minWidth: 200,
           suppressMovable: true,
-          suppressMenu: true,
+          suppressHeaderMenuButton: true,
           cellStyle: {
             'text-align': 'left'
           },
@@ -73,7 +72,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
           field: 'title',
           minWidth: 100,
           suppressMovable: true,
-          suppressMenu: true,
+          suppressHeaderMenuButton: true,
           hide: !!this.props.handleSetSourcecastData
         },
         {
@@ -81,7 +80,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
           field: 'uploader.name',
           minWidth: 150,
           suppressMovable: true,
-          suppressMenu: true,
+          suppressHeaderMenuButton: true,
           cellStyle: {
             'text-align': 'center'
           }
@@ -91,7 +90,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
           valueGetter: params => getStandardDate(params.data.inserted_at),
           minWidth: 150,
           suppressMovable: true,
-          suppressMenu: true
+          suppressHeaderMenuButton: true
         },
         {
           headerName: 'Share',
@@ -102,7 +101,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
           },
           minWidth: 80,
           suppressMovable: true,
-          suppressMenu: true
+          suppressHeaderMenuButton: true
         },
         {
           headerName: 'Delete',
@@ -115,7 +114,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
           maxWidth: 100,
           sortable: false,
           suppressMovable: true,
-          suppressMenu: true,
+          suppressHeaderMenuButton: true,
           cellStyle: {
             'text-align': 'center'
           },
@@ -169,6 +168,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
         <div className="SourcecastTable">
           <div className="ag-grid-parent">
             <AgGridReact
+              theme={themeBalham}
               domLayout="autoHeight"
               columnDefs={this.state.columnDefs}
               defaultColDef={this.defaultColumnDefs}

@@ -774,6 +774,34 @@ $code-color-notification: #f9f0d7;
     }
   }
 
+  .session-management-table {
+    table {
+      width: 100%;
+      padding-inline: 0.5em;
+      border-spacing: 0 0.5em;
+
+      th:last-child,
+      td:last-child {
+        width: auto;
+      }
+
+      td:first-child {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+        width: 100%;
+      }
+
+      td {
+        div:first-child {
+          width: 15px;
+          height: 15px;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+
   .react-mde {
     /* Colour the borders */
     border-color: #1b2530;
@@ -942,6 +970,8 @@ $code-color-notification: #f9f0d7;
       background: $cadet-color-3;
       color: rgb(128, 145, 160);
     }
+    display: inline-block;
+    flex: 1;
   }
 
   .react-ace-green {
@@ -951,6 +981,22 @@ $code-color-notification: #f9f0d7;
       background: $dark-green;
       color: rgb(128, 145, 160);
     }
+    display: inline-block;
+    flex: 1;
+  }
+
+  #ace-radar-view {
+    display: inline-block;
+    max-width: 2%;
+    background: #2f3129;
+  }
+
+  .ace-radar-view-cursor-indicator {
+    display: none;
+  }
+
+  .ace-radar-view-wrapper {
+    width: 1px;
   }
 
   .Autograder,
