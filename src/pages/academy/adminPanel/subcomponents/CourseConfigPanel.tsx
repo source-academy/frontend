@@ -146,6 +146,41 @@ const CourseConfigPanel: React.FC<Props> = props => {
             {courseHelpTextSelectedTab === CourseHelpTextEditorTab.WRITE && writePanel}
             {courseHelpTextSelectedTab === CourseHelpTextEditorTab.PREVIEW && previewPanel}
           </FormGroup>
+          <FormGroup
+            helperText="Enter the Top XX students to be displayed on the Overall Leaderboard"
+            inline={true}
+            label="Top Leaderboard Display"
+            labelFor="topLeaderboardDisplay"
+          >
+            <InputGroup
+              id="topLeaderboardDisplay"
+              value={String(topLeaderboardDisplay)}
+              onChange={e =>
+                props.setCourseConfiguration({
+                  ...props.courseConfiguration,
+                  topLeaderboardDisplay: Number(e.target.value)
+                })
+              }
+            />
+          </FormGroup>
+          <FormGroup
+            helperText="Enter the Top XX students to be displayed on the Contest Leaderboard"
+            inline={true}
+            label="Top Contest Leaderboard Display"
+            labelFor="topContestLeaderboardDisplay"
+          >
+            <InputGroup
+              id="topContestLeaderboardDisplay"
+              value={String(topContestLeaderboardDisplay)}
+              onChange={e =>
+                props.setCourseConfiguration({
+                  ...props.courseConfiguration,
+                  topContestLeaderboardDisplay: Number(e.target.value)
+                })
+              }
+            />
+          </FormGroup>
+
           {enableLlmGrading && (
             <div className="llm-grading-config">
               <Divider style={{ marginTop: '20px', marginBottom: '20px' }} />
@@ -261,40 +296,6 @@ const CourseConfigPanel: React.FC<Props> = props => {
               </FormGroup>
             </div>
           )}
-          <FormGroup
-            helperText="Enter the Top XX students to be displayed on the Overall Leaderboard"
-            inline={true}
-            label="Top Leaderboard Display"
-            labelFor="topLeaderboardDisplay"
-          >
-            <InputGroup
-              id="topLeaderboardDisplay"
-              value={String(topLeaderboardDisplay)}
-              onChange={e =>
-                props.setCourseConfiguration({
-                  ...props.courseConfiguration,
-                  topLeaderboardDisplay: Number(e.target.value)
-                })
-              }
-            />
-          </FormGroup>
-          <FormGroup
-            helperText="Enter the Top XX students to be displayed on the Contest Leaderboard"
-            inline={true}
-            label="Top Contest Leaderboard Display"
-            labelFor="topContestLeaderboardDisplay"
-          >
-            <InputGroup
-              id="topContestLeaderboardDisplay"
-              value={String(topContestLeaderboardDisplay)}
-              onChange={e =>
-                props.setCourseConfiguration({
-                  ...props.courseConfiguration,
-                  topContestLeaderboardDisplay: Number(e.target.value)
-                })
-              }
-            />
-          </FormGroup>
         </div>
         {!isMobileBreakpoint && <Divider />}
         <div className="booleans">
