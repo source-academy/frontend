@@ -420,7 +420,7 @@ ${props.studentAnswer}\n
               <br />
               **Autograding Status:** {props.autoGradingStatus} <br />
               **Autograding Results:**{' '}
-              {props.autoGradingResults ? JSON.stringify(props.autoGradingResults) : 'N/A'}
+              {props.autoGradingResults ? JSON.stringify(props.autoGradingResults) : 'N/A'} <br />
               The student answer will be given below as part of the User Prompt.
               <H3>User Prompt</H3>
               <Divider />
