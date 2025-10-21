@@ -7749,7 +7749,7 @@ __metadata:
     js-slang: "npm:^1.0.85"
     js-yaml: "npm:^4.1.0"
     jsdom: "npm:^26.0.0"
-    konva: "npm:^9.2.0"
+    konva: "npm:^10.0.0"
     lodash: "npm:^4.17.21"
     lz-string: "npm:^1.4.4"
     mdast-util-from-markdown: "npm:^2.0.0"
@@ -9421,10 +9421,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"konva@npm:^9.2.0":
-  version: 9.3.22
-  resolution: "konva@npm:9.3.22"
-  checksum: 10c0/d9bdaaffec95381e5f4225485a102b14971a3a8f6fd691a78ac55bf88104654cca876714265999eceb3bbb4fc50d1f34b0385e5876d6b918739456c2d7de37fa
+"konva@npm:^10.0.0":
+  version: 10.0.2
+  resolution: "konva@npm:10.0.2"
+  checksum: 10c0/2c8ca3cded72a220cc39272f56174940a8a502ca75edff4f7743bb36e241a0e64e0bc0d0f8ee8e52bbd5e22924bb86cccfc395f48e6dbb983b37c2c30f02f555
   languageName: node
   linkType: hard
 
