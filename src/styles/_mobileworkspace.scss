@@ -1,4 +1,5 @@
-@import 'react-simple-keyboard/build/css/index.css';
+@use 'variables' as *;
+@use 'react-simple-keyboard/build/css/index.css' as *;
 
 $shadow-dark: rgba(0, 0, 0, 0.5);
 $shadow-light: rgba(0, 0, 0, 0.2);
