@@ -620,10 +620,14 @@ test('updateGrading generates correct action object', async () => {
             id: 100
           },
           gradedAt: '2019-08-16T13:26:32+00:00'
-        }
+        },
+        autogradingResults: [],
+        autoGradingStatus: 'N/A'
       }
     ],
+    enable_llm_grading: false,
     assessment: {
+      llm_assessment_prompt: null,
       coverPicture: 'https://i.imgur.com/dR7zBPI.jpeg',
       id: 1,
       number: '5',

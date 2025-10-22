@@ -258,6 +258,28 @@
   }
 }
 
+.llm-prompt-dialog {
+  white-space: pre-wrap; // To allow for "\n" newlines
+  padding: 1rem;
+  h3 {
+    margin-top: 1rem;
+  }
+  h5 {
+    margin-top: 0.5rem;
+  }
+  .forenote {
+    display: block;
+    font-size: small;
+    color: gray;
+  }
+
+  .forenote-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
 .betcha-dialog,
 .assessment-reset {
   span.warning {
@@ -345,6 +367,10 @@
         height: 100px;
       }
 
+      .llm-prompt-input-textarea {
+        height: 300px;
+      }
+
       .input-markdown {
         padding: 10px;
         height: 100px;
@@ -364,11 +390,33 @@
       }
     }
 
+    .llm-grading-config {
+      .bp6-form-group {
+        display: flex;
+        justify-content: space-between;
+        .bp6-label {
+          margin-right: 10px;
+          width: 180px;
+        }
+        .bp6-form-content {
+          width: 100%;
+        }
+      }
+
+      .llm-course-prompt-icon {
+        margin-left: 5px;
+        vertical-align: text-bottom;
+        cursor: help;
+      }
+    }
+
     .booleans {
       display: flex;
       flex-direction: column;
-      justify-content: space-evenly;
       align-items: flex-start;
+      label {
+        margin-top: 1.5rem;
+      }
     }
   }
 }

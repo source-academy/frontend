@@ -637,7 +637,11 @@ function* sendGrade(
   });
 
   yield put(
-    actions.updateGrading(submissionId, { answers: newGrading, assessment: grading.assessment })
+    actions.updateGrading(submissionId, {
+      answers: newGrading,
+      assessment: grading.assessment,
+      enable_llm_grading: false
+    })
   );
 }
 

@@ -76,6 +76,8 @@ const GradingWorkspace: React.FC<Props> = props => {
 
   const grading = useTypedSelector(state => state.session.gradings[props.submissionId]);
   const courseId = useTypedSelector(state => state.session.courseId);
+  const llm_grading = useTypedSelector(state => state.session.enableLlmGrading);
+  const llm_course_level_prompt = useTypedSelector(state => state.session.llmCourseLevelPrompt);
   const {
     autogradingResults,
     isFolderModeEnabled,
@@ -302,8 +304,10 @@ const GradingWorkspace: React.FC<Props> = props => {
         /* Render an editor with the xp given to the current question. */
         body: (
           <GradingEditor
+            ai_comments={grading!.answers[questionId].ai_comments || []}
             solution={grading!.answers[questionId].question.solution}
             questionId={grading!.answers[questionId].question.id}
+            questionContent={grading!.answers[questionId].question.content}
             submissionId={props.submissionId}
             initialXp={grading!.answers[questionId].grade.xp}
             xpAdjustment={grading!.answers[questionId].grade.xpAdjustment}
@@ -312,10 +316,23 @@ const GradingWorkspace: React.FC<Props> = props => {
               grading!.answers[questionId].student.name,
               grading!.answers[questionId].team
             )}
+            studentAnswer={
+              grading!.answers[questionId].question.type === 'programming'
+                ? grading!.answers[questionId].question.answer
+                : 'N/A'
+            }
             studentUsernames={
               grading!.answers[questionId].student.username
                 ? [grading!.answers[questionId].student.username]
                 : grading!.answers[questionId].team!.map(member => member.username)
+            }
+            is_llm={!!llm_grading && grading!.answers[questionId].question.type == 'programming'}
+            llm_course_level_prompt={llm_course_level_prompt || ''}
+            llm_assessment_prompt={grading!.assessment.llm_assessment_prompt}
+            llm_question_prompt={
+              (grading!.answers[questionId].question.type === 'programming' &&
+                grading!.answers[questionId].question.llm_prompt) ||
+              ''
             }
             comments={grading!.answers[questionId].grade.comments ?? ''}
             graderName={
@@ -323,6 +340,8 @@ const GradingWorkspace: React.FC<Props> = props => {
                 ? grading!.answers[questionId].grade.grader!.name
                 : undefined
             }
+            autoGradingStatus={grading!.answers[questionId].autoGradingStatus || 'N/A'}
+            autoGradingResults={grading!.answers[questionId].autogradingResults}
             gradedAt={
               grading!.answers[questionId].grade.gradedAt
                 ? grading!.answers[questionId].grade.gradedAt!

@@ -39,6 +39,11 @@ export type SessionState = {
   readonly enableAchievements?: boolean;
   readonly enableSourcecast?: boolean;
   readonly enableStories?: boolean;
+  readonly enableLlmGrading?: boolean;
+  readonly llmApiKey?: string;
+  readonly llmModel?: string;
+  readonly llmApiUrl?: string;
+  readonly llmCourseLevelPrompt?: string;
   readonly enableOverallLeaderboard?: boolean;
   readonly enableContestLeaderboard?: boolean;
   readonly topLeaderboardDisplay?: number;
@@ -109,6 +114,7 @@ export type CourseConfiguration = {
   enableAchievements: boolean;
   enableSourcecast: boolean;
   enableStories: boolean;
+  enableLlmGrading?: boolean;
   enableOverallLeaderboard: boolean;
   enableContestLeaderboard: boolean;
   topLeaderboardDisplay: number;
@@ -117,6 +123,10 @@ export type CourseConfiguration = {
   sourceVariant: Variant;
   moduleHelpText: string;
   assetsPrefix: string;
+  llmApiKey?: string;
+  llmModel?: string;
+  llmApiUrl?: string;
+  llmCourseLevelPrompt?: string;
 };
 
 export type AdminPanelCourseRegistration = {

@@ -1,7 +1,9 @@
 import {
   Button,
+  Dialog,
   Divider,
   H3,
+  H5,
   Icon,
   IconName,
   Intent,
@@ -13,11 +15,15 @@ import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useMemo, useState } from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
 import { useDispatch } from 'react-redux';
+import { AutogradingResult } from 'src/commons/assessment/AssessmentTypes';
+import { useTokens } from 'src/commons/utils/Hooks';
 
 import SessionActions from '../../../../commons/application/actions/SessionActions';
 import ControlButton from '../../../../commons/ControlButton';
 import Markdown from '../../../../commons/Markdown';
 import { Prompt } from '../../../../commons/ReactRouterPrompt';
+import { postGenerateComments } from '../../../../commons/sagas/RequestsSaga';
+import { saveFinalComment } from '../../../../commons/sagas/RequestsSaga';
 import { getPrettyDate } from '../../../../commons/utils/DateHelper';
 import { showSimpleConfirmDialog } from '../../../../commons/utils/DialogHelper';
 import {
@@ -25,6 +31,7 @@ import {
   showWarningMessage
 } from '../../../../commons/utils/notifications/NotificationsHelper';
 import { convertParamToInt } from '../../../../commons/utils/ParamParseHelper';
+import GradingCommentSelector from './GradingCommentSelector';
 
 type GradingSaveFunction = (
   submissionId: number,
@@ -42,15 +49,25 @@ type Props = {
   maxXp: number;
   studentNames: string[];
   studentUsernames: string[];
+  is_llm: boolean;
   comments: string;
+  llm_course_level_prompt: string | null;
+  llm_assessment_prompt: string | null;
+  llm_question_prompt: string | null;
+  autoGradingStatus: string;
+  autoGradingResults: AutogradingResult[];
+  questionContent: string;
+  studentAnswer: string | null;
   graderName?: string;
   gradedAt?: string;
+  ai_comments?: string[];
 };
 
 const gradingEditorButtonClass = 'grading-editor-button';
 
 const GradingEditor: React.FC<Props> = props => {
   const dispatch = useDispatch();
+  const tokens = useTokens();
   const { handleGradingSave, handleGradingSaveAndContinue, handleReautogradeAnswer } = useMemo(
     () =>
       ({
@@ -101,11 +118,35 @@ const GradingEditor: React.FC<Props> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.submissionId, props.questionId]);
 
+  const getCommentSuggestions = async () => {
+    const resp = await postGenerateComments(tokens, props.submissionId, props.questionId);
+    return resp;
+  };
+
+  const onSelectGeneratedComments = (comment: string) => {
+    if (!selectedSuggestions.includes(comment)) {
+      setSelectedSuggestions([comment, ...selectedSuggestions]);
+    }
+
+    setEditorValue(editorValue + comment);
+  };
+
+  const postSaveFinalComment = async (comment: string) => {
+    const resp = await saveFinalComment(tokens, props.submissionId, props.questionId, comment);
+    return resp;
+  };
+
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [selectedSuggestions, setSelectedSuggestions] = useState<string[]>([]);
+  const [hasClickedGenerate, setHasClickedGenerate] = useState<boolean>(false);
+  const [isViewLLMPromptOpen, setIsViewLLMPromptOpen] = useState<boolean>(false);
+
   const makeInitialState = () => {
     setXpAdjustmentInput(props.xpAdjustment.toString());
     setEditorValue(props.comments);
     setSelectedTab('write');
     setCurrentlySaving(false);
+    setSuggestions(props.ai_comments || []);
   };
 
   /**
@@ -129,6 +170,7 @@ const GradingEditor: React.FC<Props> = props => {
     () => {
       const newXpAdjustmentInput = convertParamToInt(xpAdjustmentInput || undefined) || undefined;
       const xp = props.initialXp + (newXpAdjustmentInput || 0);
+      postSaveFinalComment(editorValue);
       if (xp < 0 || xp > props.maxXp) {
         showWarningMessage(
           `XP ${xp.toString()} is out of bounds. Maximum xp is ${props.maxXp.toString()}.`
@@ -215,6 +257,30 @@ const GradingEditor: React.FC<Props> = props => {
         openLinksInNewWindow
       />
     );
+
+  const copyComposedPromptToClipboard = () => {
+    navigator.clipboard.writeText(
+      `${props.llm_course_level_prompt || ''}\n
+${props.llm_assessment_prompt || ''}\n
+${props.llm_question_prompt || ''}\n
+**Question:** \n
+\`\`\`\n
+${props.questionContent}\n
+\`\`\`\n\n
+**Model Solution:** \n
+\`\`\`\n
+${props.solution || 'N/A'}\n
+\`\`\`\n\n
+**Autograding Status:** ${props.autoGradingStatus}\n
+**Autograding Results:** ${props.autoGradingResults ? JSON.stringify(props.autoGradingResults) : 'N/A'}\n
+The student answer will be given below as part of the User Prompt.\n
+**Student Answer:** \n
+\`\`\`\n
+${props.studentAnswer}\n
+\`\`\``
+    );
+    showSuccessMessage('Composed prompt copied to clipboard!', 2000);
+  };
 
   // Render
   const hasUnsavedChanges = checkHasUnsavedChanges();
@@ -303,6 +369,99 @@ const GradingEditor: React.FC<Props> = props => {
           </div>
         </div>
       </div>
+
+      {props.is_llm && (
+        <>
+          <Dialog
+            title="Full Composed LLM Prompt"
+            icon={IconNames.WRENCH}
+            isOpen={isViewLLMPromptOpen}
+            onClose={() => setIsViewLLMPromptOpen(false)}
+          >
+            <div className="llm-prompt-dialog">
+              <div className="forenote-section">
+                <span className="forenote">
+                  <b>Note:</b> The titles here are provided merely to distinguish the different
+                  sections. They are not include in the final prompt.
+                </span>
+                <Button
+                  onClick={() => {
+                    copyComposedPromptToClipboard();
+                  }}
+                >
+                  <Icon icon={IconNames.Clipboard} />
+                </Button>
+              </div>
+              <H3>System Prompt</H3>
+              <Divider />
+              <H5>Course Level Prompt</H5>
+              {props.llm_course_level_prompt || ''}
+              <br />
+              <H5>Assessment Level Prompt</H5>
+              {props.llm_assessment_prompt || ''}
+              <br />
+              <H5>Question Level Prompt</H5>
+              {props.llm_question_prompt || ''}
+              <H5>Generic Info From Question</H5>
+              **Question:** <br />
+              ```
+              <br />
+              {props.questionContent}
+              <br />
+              ```
+              <br />
+              <br />
+              **Model Solution:** <br />
+              ``` <br />
+              {props.solution || 'N/A'}
+              <br />
+              ```
+              <br />
+              <br />
+              **Autograding Status:** {props.autoGradingStatus} <br />
+              **Autograding Results:**{' '}
+              {props.autoGradingResults ? JSON.stringify(props.autoGradingResults) : 'N/A'} <br />
+              The student answer will be given below as part of the User Prompt.
+              <H3>User Prompt</H3>
+              <Divider />
+              **Student Answer:** <br />
+              ``` <br />
+              {props.studentAnswer}
+              <br />
+              ``` <br />
+            </div>
+          </Dialog>
+          <div style={{ marginBottom: '10px' }}>
+            <GradingCommentSelector
+              onSelect={onSelectGeneratedComments}
+              isLoading={hasClickedGenerate}
+              comments={suggestions}
+            />
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <Button
+                style={{ marginRight: '1rem' }}
+                onClick={async () => {
+                  setIsViewLLMPromptOpen(true);
+                }}
+              >
+                View Prompt
+              </Button>
+
+              <Button
+                intent="primary"
+                onClick={async () => {
+                  setHasClickedGenerate(true);
+                  const resp = await getCommentSuggestions();
+                  setHasClickedGenerate(false);
+                  setSuggestions(resp ? resp.comments : []);
+                }}
+              >
+                Generate Comments
+              </Button>
+            </div>
+          </div>
+        </>
+      )}
 
       <div className="react-mde-parent">
         <ReactMde
