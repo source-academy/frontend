@@ -13,9 +13,17 @@ export function getSessionUrl(sessionId: string, ws?: boolean): string {
   return url.toString();
 }
 
+export function getPlaygroundSessionUrl(sessionId: string): string {
+  let url = window.location.href;
+  if (window.location.href.endsWith('/playground')) {
+    url += `/${sessionId}`;
+  }
+  return url;
+}
+
 export async function getDocInfoFromSessionId(
   sessionId: string
-): Promise<{ docId: string; readOnly: boolean } | null> {
+): Promise<{ docId: string; defaultReadOnly: boolean } | null> {
   const resp = await fetch(getSessionUrl(sessionId));
 
   if (resp && resp.ok) {
@@ -27,7 +35,7 @@ export async function getDocInfoFromSessionId(
 
 export async function createNewSession(
   contents: string
-): Promise<{ docId: string; sessionEditingId: string; sessionViewingId: string }> {
+): Promise<{ docId: string; sessionId: string }> {
   const resp = await fetch(Constants.sharedbBackendUrl, {
     method: 'POST',
     body: JSON.stringify({ contents }),
@@ -37,6 +45,22 @@ export async function createNewSession(
   if (!resp || !resp.ok) {
     throw new Error(
       resp ? `Could not create new session: ${await resp.text()}` : 'Unknown error creating session'
+    );
+  }
+
+  return resp.json();
+}
+
+export async function changeDefaultEditable(sessionId: string, defaultReadOnly: boolean) {
+  const resp = await fetch(getSessionUrl(sessionId), {
+    method: 'PATCH',
+    body: JSON.stringify({ defaultReadOnly }),
+    headers: { 'Content-Type': 'application/json' }
+  });
+
+  if (!resp || !resp.ok) {
+    throw new Error(
+      resp ? `Could not update session: ${await resp.text()}` : 'Unknown error updating session'
     );
   }
 

@@ -46,6 +46,10 @@ const CourseConfigPanel: React.FC<Props> = props => {
     viewable,
     enableGame,
     enableAchievements,
+    enableOverallLeaderboard,
+    enableContestLeaderboard,
+    topLeaderboardDisplay,
+    topContestLeaderboardDisplay,
     enableSourcecast,
     enableStories,
     enableExamMode,
@@ -167,6 +171,40 @@ const CourseConfigPanel: React.FC<Props> = props => {
             {courseHelpTextSelectedTab === CourseHelpTextEditorTab.WRITE && writePanel}
             {courseHelpTextSelectedTab === CourseHelpTextEditorTab.PREVIEW && previewPanel}
           </FormGroup>
+          <FormGroup
+            helperText="Enter the Top XX students to be displayed on the Overall Leaderboard"
+            inline={true}
+            label="Top Leaderboard Display"
+            labelFor="topLeaderboardDisplay"
+          >
+            <InputGroup
+              id="topLeaderboardDisplay"
+              value={String(topLeaderboardDisplay)}
+              onChange={e =>
+                props.setCourseConfiguration({
+                  ...props.courseConfiguration,
+                  topLeaderboardDisplay: Number(e.target.value)
+                })
+              }
+            />
+          </FormGroup>
+          <FormGroup
+            helperText="Enter the Top XX students to be displayed on the Contest Leaderboard"
+            inline={true}
+            label="Top Contest Leaderboard Display"
+            labelFor="topContestLeaderboardDisplay"
+          >
+            <InputGroup
+              id="topContestLeaderboardDisplay"
+              value={String(topContestLeaderboardDisplay)}
+              onChange={e =>
+                props.setCourseConfiguration({
+                  ...props.courseConfiguration,
+                  topContestLeaderboardDisplay: Number(e.target.value)
+                })
+              }
+            />
+          </FormGroup>
         </div>
         {!isMobileBreakpoint && <Divider />}
         <div className="booleans">
@@ -217,6 +255,26 @@ const CourseConfigPanel: React.FC<Props> = props => {
               props.setCourseConfiguration({
                 ...props.courseConfiguration,
                 enableStories: (e.target as HTMLInputElement).checked
+              })
+            }
+          />
+          <Switch
+            checked={enableOverallLeaderboard}
+            label="Enable Overall Leaderboard"
+            onChange={e =>
+              props.setCourseConfiguration({
+                ...props.courseConfiguration,
+                enableOverallLeaderboard: (e.target as HTMLInputElement).checked
+              })
+            }
+          />
+          <Switch
+            checked={enableContestLeaderboard}
+            label="Enable Contest Leaderboard"
+            onChange={e =>
+              props.setCourseConfiguration({
+                ...props.courseConfiguration,
+                enableContestLeaderboard: (e.target as HTMLInputElement).checked
               })
             }
           />

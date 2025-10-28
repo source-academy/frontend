@@ -1,6 +1,3 @@
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-balham.css';
-
 import { Button, Divider, H1, Intent, Tab, Tabs } from '@blueprintjs/core';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -28,6 +25,10 @@ const defaultCourseConfig: UpdateCourseConfiguration = {
   viewable: true,
   enableGame: true,
   enableAchievements: true,
+  enableOverallLeaderboard: true,
+  enableContestLeaderboard: true,
+  topLeaderboardDisplay: 100,
+  topContestLeaderboardDisplay: 10,
   enableSourcecast: true,
   enableStories: false,
   enableExamMode: false,
@@ -63,6 +64,10 @@ const AdminPanel: React.FC = () => {
       viewable: session.viewable,
       enableGame: session.enableGame,
       enableAchievements: session.enableAchievements,
+      enableOverallLeaderboard: session.enableOverallLeaderboard,
+      enableContestLeaderboard: session.enableContestLeaderboard,
+      topLeaderboardDisplay: session.topLeaderboardDisplay,
+      topContestLeaderboardDisplay: session.topContestLeaderboardDisplay,
       enableSourcecast: session.enableSourcecast,
       enableStories: session.enableStories,
       enableExamMode: session.enableExamMode,
@@ -74,6 +79,10 @@ const AdminPanel: React.FC = () => {
     session.courseName,
     session.courseShortName,
     session.enableAchievements,
+    session.enableOverallLeaderboard,
+    session.enableContestLeaderboard,
+    session.topLeaderboardDisplay,
+    session.topContestLeaderboardDisplay,
     session.enableGame,
     session.enableSourcecast,
     session.enableStories,

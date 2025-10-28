@@ -1,5 +1,5 @@
 import type { ActionMatchingPattern } from '@redux-saga/types';
-import * as Sentry from '@sentry/browser';
+import * as Sentry from '@sentry/react';
 import {
   type ActionPattern,
   type ForkEffect,

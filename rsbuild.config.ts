@@ -1,3 +1,4 @@
+import { InjectManifest } from '@aaroon/workbox-rspack-plugin';
 import { defineConfig, loadEnv } from '@rsbuild/core';
 import { pluginEslint } from '@rsbuild/plugin-eslint';
 import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
@@ -90,13 +91,15 @@ export default defineConfig({
         (warning: any) => {
           // Ignore the warnings that occur because js-slang uses dynamic imports
           // to load Source modules
-          const moduleName = warning.moduleDescriptor?.name
-          if (!moduleName) return false
+          const moduleName = warning.moduleDescriptor?.name;
+          if (!moduleName) return false;
 
-          if (!/js-slang\/dist\/modules\/loader\/loaders.js/.test(moduleName)) return false
-          return /Critical dependency: the request of a dependency is an expression/.test(warning.message)
+          if (!/js-slang\/dist\/modules\/loader\/loaders.js/.test(moduleName)) return false;
+          return /Critical dependency: the request of a dependency is an expression/.test(
+            warning.message
+          );
         }
-        
+
         // {
         //   // Ignore warnings for dependencies that do not ship with a source map.
         //   // This is because we cannot do anything about our dependencies.
@@ -117,6 +120,15 @@ export default defineConfig({
       //     Buffer: ['buffer', 'Buffer']
       //   })
       // ];
+
+      config.plugins = [
+        ...config.plugins,
+        new InjectManifest({
+          swSrc: './src/service-worker.ts',
+          swDest: 'service-worker.js',
+          maximumFileSizeToCacheInBytes: 20 * 1024 * 1024
+        })
+      ];
 
       // Workaround to suppress warnings caused by ts-morph in js-slang
       // if (config.module) {
@@ -139,6 +151,7 @@ export default defineConfig({
   output: {
     distPath: {
       root: './build'
-    }
+    },
+    sourceMap: true
   }
 });

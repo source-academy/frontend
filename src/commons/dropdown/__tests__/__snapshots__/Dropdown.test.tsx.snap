@@ -1,0 +1,69 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Dropdown correctly mounts Profile, DropdownCourses, and DropdownCreateCourses components when a user is logged in 1`] = `
+<span
+  className="bp6-popover-target"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+>
+  <button
+    className="bp6-button bp6-minimal"
+    disabled={false}
+    onBlur={[Function]}
+    onKeyDown={[Function]}
+    onKeyUp={[Function]}
+  >
+    <span
+      aria-hidden={true}
+      className="bp6-icon bp6-icon-caret-down"
+    >
+      <svg
+        data-icon="caret-down"
+        height={16}
+        role="img"
+        viewBox="0 0 16 16"
+        width={16}
+      >
+        <path
+          d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z"
+          fillRule="evenodd"
+        />
+      </svg>
+    </span>
+  </button>
+</span>
+`;
+
+exports[`Dropdown does not mount Profile, DropdownCourses and DropdownCreateCourses components when a user is not logged in 1`] = `
+<span
+  className="bp6-popover-target"
+  onClick={[Function]}
+  onKeyDown={[Function]}
+>
+  <button
+    className="bp6-button bp6-minimal"
+    disabled={false}
+    onBlur={[Function]}
+    onKeyDown={[Function]}
+    onKeyUp={[Function]}
+  >
+    <span
+      aria-hidden={true}
+      className="bp6-icon bp6-icon-caret-down"
+    >
+      <svg
+        data-icon="caret-down"
+        height={16}
+        role="img"
+        viewBox="0 0 16 16"
+        width={16}
+      >
+        <path
+          d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z"
+          fillRule="evenodd"
+        />
+      </svg>
+    </span>
+  </button>
+</span>
+`;

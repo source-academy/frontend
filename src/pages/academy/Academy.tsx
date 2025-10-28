@@ -43,7 +43,8 @@ const CourseSelectingAcademy: React.FC = () => {
   React.useEffect(() => {
     // Regex to handle case where routeCourseIdStr is not a number
     if (!routeCourseIdStr?.match(numberRegExp)) {
-      return navigate('/');
+      navigate('/');
+      return;
     }
 
     if (routeCourseId !== undefined && !Number.isNaN(routeCourseId) && courseId !== routeCourseId) {

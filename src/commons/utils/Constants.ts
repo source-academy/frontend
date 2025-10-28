@@ -42,6 +42,7 @@ const sicpBackendUrl =
   process.env.REACT_APP_SICPJS_BACKEND_URL || 'https://sicp.sourceacademy.org/';
 const javaPackagesUrl = 'https://source-academy.github.io/modules/java/java-packages/src/';
 const workspaceSettingsLocalStorageKey = 'workspace-settings';
+const collabSessionIdLocalStorageKey = 'playground-session-id';
 const isPreviewExamModeLocalStorageKey = 'is-preview-exam-mode';
 
 // For achievements feature (CA - Continual Assessment)
@@ -144,7 +145,9 @@ export enum Links {
   aceHotkeys = 'https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts',
   sourceHotkeys = 'https://github.com/source-academy/frontend/wiki/Source-Academy-Keyboard-Shortcuts',
 
-  ecmaScript_2021 = 'https://262.ecma-international.org/12.0/'
+  ecmaScript_2021 = 'https://262.ecma-international.org/12.0/',
+
+  vscode = 'vscode://source-academy.source-academy/sso'
 }
 
 const Constants = {
@@ -182,6 +185,7 @@ const Constants = {
   sicpBackendUrl,
   javaPackagesUrl,
   workspaceSettingsLocalStorageKey,
+  collabSessionIdLocalStorageKey,
   caFulfillmentLevel,
   featureFlags,
   isPreviewExamModeLocalStorageKey

@@ -2,6 +2,7 @@ import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { type HotkeyItem, useHotkeys } from '@mantine/hooks';
 import type { AnyAction, Dispatch } from '@reduxjs/toolkit';
+import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import { Ace, Range } from 'ace-builds';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
@@ -41,6 +42,7 @@ import {
   shortenURL,
   updateShortURL
 } from 'src/features/playground/PlaygroundActions';
+import Messages, { sendToWebview } from 'src/features/vscode/messages';
 
 import {
   getDefaultFilePath,
@@ -91,6 +93,7 @@ import {
   desktopOnlyTabIds,
   makeIntroductionTabFrom,
   makeRemoteExecutionTabFrom,
+  makeSessionManagementTabFrom,
   makeSubstVisualizerTabFrom,
   mobileOnlyTabIds
 } from './PlaygroundTabs';
@@ -194,6 +197,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const { isSicpEditor } = props;
   const workspaceLocation: WorkspaceLocation = isSicpEditor ? 'sicp' : 'playground';
   const { isMobileBreakpoint } = useResponsive();
+  const isVscode = useTypedSelector(state => state.vscode.isVscode);
 
   const [deviceSecret, setDeviceSecret] = useState<string | undefined>();
   const location = useLocation();
@@ -284,6 +288,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       chapter: playgroundSourceChapter
     })
   );
+  const [users, setUsers] = useState<Record<string, SharedbAceUser>>({});
 
   // Playground hotkeys
   const [isGreen, setIsGreen] = useState(false);
@@ -297,6 +302,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
     () => makeRemoteExecutionTabFrom(deviceSecret, setDeviceSecret),
     [deviceSecret]
   );
+
+  const sessionManagementTab: SideContentTab = useMemo(() => {
+    return makeSessionManagementTabFrom(users, editorSessionId, sessionDetails?.readOnly || false);
+  }, [users, editorSessionId, sessionDetails?.readOnly]);
 
   const usingRemoteExecution =
     useTypedSelector(state => !!state.session.remoteExecutionSession) && !isSicpEditor;
@@ -361,12 +370,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
   useEffect(() => {
     if (!selectedTab) return;
 
-    if (isMobileBreakpoint && desktopOnlyTabIds.includes(selectedTab)) {
+    if (!isVscode && isMobileBreakpoint && desktopOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.mobileEditor);
     } else if (!isMobileBreakpoint && mobileOnlyTabIds.includes(selectedTab)) {
       setSelectedTab(SideContentType.introduction);
     }
-  }, [isMobileBreakpoint, selectedTab, setSelectedTab]);
+  }, [isMobileBreakpoint, isVscode, selectedTab, setSelectedTab]);
 
   const onEditorValueChange = React.useCallback(
     (editorTabIndex: number, newEditorValue: string) => {
@@ -375,6 +384,28 @@ const Playground: React.FC<PlaygroundProps> = props => {
     },
     [handleEditorValueChange]
   );
+
+  useEffect(() => {
+    // Only the playground is expected to work with VSC for now
+    if (workspaceLocation === 'sicp') {
+      return;
+    }
+    const initialCode = editorTabs[0]?.value ?? '';
+    const breakpoints = editorTabs[0]?.breakpoints ?? [];
+    sendToWebview(
+      Messages.NewEditor(
+        workspaceLocation,
+        'playground',
+        1,
+        playgroundSourceChapter,
+        '',
+        initialCode,
+        breakpoints
+      )
+    );
+    // We don't want to re-send this message even when the variables change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // const onChangeTabs = useCallback(
   //   (
@@ -492,6 +523,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
       pushLog(input);
 
+      sendToWebview(Messages.ChangeChapter('playground', 1, chapter, variant));
       handleChapterSelect(chapter, variant);
       // Hardcoded for Playground only for now, while we await workspace refactoring
       // to decouple the SicpWorkspace from the Playground.
@@ -641,25 +673,36 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [store, workspaceLocation]
   );
 
+  const handleSetEditorSessionId = useCallback(
+    (id: string) => dispatch(setEditorSessionId(workspaceLocation, id)),
+    [dispatch, workspaceLocation]
+  );
+
+  const handleSetSessionDetails = useCallback(
+    (details: { docId: string; readOnly: boolean; owner: boolean } | null) =>
+      dispatch(setSessionDetails(workspaceLocation, details)),
+    [dispatch, workspaceLocation]
+  );
+
   const sessionButtons = useMemo(
     () => (
       <ControlBarSessionButtons
         isFolderModeEnabled={isFolderModeEnabled}
         editorSessionId={editorSessionId}
         getEditorValue={getEditorValue}
-        handleSetEditorSessionId={id => dispatch(setEditorSessionId(workspaceLocation, id))}
-        handleSetSessionDetails={details => dispatch(setSessionDetails(workspaceLocation, details))}
+        handleSetEditorSessionId={handleSetEditorSessionId}
+        handleSetSessionDetails={handleSetSessionDetails}
         sharedbConnected={sharedbConnected}
         key="session"
       />
     ),
     [
-      dispatch,
-      getEditorValue,
       isFolderModeEnabled,
       editorSessionId,
-      sharedbConnected,
-      workspaceLocation
+      getEditorValue,
+      handleSetEditorSessionId,
+      handleSetSessionDetails,
+      sharedbConnected
     ]
   );
 
@@ -761,21 +804,26 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
     if (!isSicpEditor && !Constants.playgroundOnly && !applyEnableExamMode) {
       tabs.push(remoteExecutionTab);
+      if (editorSessionId !== '') {
+        tabs.push(sessionManagementTab);
+      }
     }
 
     return tabs;
   }, [
     playgroundIntroductionTab,
     languageConfig.chapter,
-    output,
     usingRemoteExecution,
     isSicpEditor,
-    dispatch,
+    output,
     workspaceLocation,
+    dispatch,
     shouldShowDataVisualizer,
     shouldShowCseMachine,
     shouldShowSubstVisualizer,
     remoteExecutionTab,
+    editorSessionId,
+    sessionManagementTab,
     applyEnableExamMode
   ]);
 
@@ -920,7 +968,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
     externalLibraryName,
     sourceVariant: languageConfig.variant,
     handleEditorValueChange: onEditorValueChange,
-    handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints
+    handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
+    setUsers,
+    updateLanguageCallback: chapterSelectHandler
   };
 
   const replHandlers = useMemo(() => {
@@ -1041,7 +1091,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
   };
 
-  return isMobileBreakpoint ? (
+  return !isVscode && isMobileBreakpoint ? (
     <div className={classNames('Playground', Classes.DARK, isGreen && 'GreenScreen')}>
       <MobileWorkspace {...mobileWorkspaceProps} />
     </div>

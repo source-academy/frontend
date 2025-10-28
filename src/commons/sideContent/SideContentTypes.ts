@@ -27,6 +27,7 @@ export enum SideContentType {
   questionOverview = 'question_overview',
   remoteExecution = 'remote_execution',
   scoreLeaderboard = 'score_leaderboard',
+  sessionManagement = 'session_management',
   missionMetadata = 'mission_metadata',
   mobileEditor = 'mobile_editor',
   mobileEditorRun = 'mobile_editor_run',

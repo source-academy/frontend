@@ -1,25 +1,25 @@
 // @ts-check
 
-// import eslint from '@eslint/js';
-import { config, configs } from 'typescript-eslint';
+import eslint from '@eslint/js';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
-// import reactRefresh from 'eslint-plugin-react-refresh';
+import tseslint from 'typescript-eslint';
+import reactRefresh from 'eslint-plugin-react-refresh';
 
-export default config(
-  { ignores: ['eslint.config.mjs'] },
-  // eslint.configs.recommended,
-  ...configs.recommended,
+export default tseslint.config(
+  { ignores: ['eslint.config.mjs', '**/*.snap'] },
+  eslint.configs.recommended,
+  tseslint.configs.recommended,
   // TODO: Enable when ready
-  // {
-  //   plugins: {
-  //     'react-refresh': reactRefresh
-  //   },
-  //   rules: {
-  //     'react-refresh/only-export-components': 'warn'
-  //   }
-  // },
+  {
+    plugins: {
+      'react-refresh': reactRefresh
+    },
+    rules: {
+      'react-refresh/only-export-components': 'warn'
+    }
+  },
   {
     files: ['**/*.ts*'],
     plugins: {
@@ -29,6 +29,7 @@ export default config(
     },
     rules: {
       ...reactHooksPlugin.configs['recommended-latest'].rules,
+      'no-empty': 'warn',
       'no-restricted-imports': [
         'error',
         {

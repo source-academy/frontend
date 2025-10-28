@@ -62,10 +62,11 @@ export default class GameAnimationManager {
     }
 
     switch (img.config?.animType) {
-      case AnimType.Object:
+      case AnimType.Object: {
         const currLoc = GameGlobalAPI.getInstance().getCurrLocId();
         GameGlobalAPI.getInstance().addItem(GameItemType.objects, currLoc, image.key);
         break;
+      }
       case AnimType.Background:
         GameGlobalAPI.getInstance().renderBackgroundLayerContainer(image.key);
         break;

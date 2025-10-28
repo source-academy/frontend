@@ -23,7 +23,7 @@ const routeGuard = (
           return redirect(fallbackRoute);
         }
       }
-      if (!route.loader) {
+      if (!route.loader || typeof route.loader !== 'function') {
         return null;
       }
       return route.loader(args);

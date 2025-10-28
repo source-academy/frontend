@@ -2,7 +2,6 @@ import 'src/i18n/i18n';
 import 'src/styles/index.scss';
 
 import { Button, OverlaysProvider } from '@blueprintjs/core';
-import * as Sentry from '@sentry/browser';
 import { setModulesStaticURL } from 'js-slang/dist/modules/loader';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
@@ -12,18 +11,13 @@ import { register as registerServiceWorker } from 'src/commons/utils/RegisterSer
 import { triggerSyncLogs } from 'src/features/eventLogging/client';
 import { store } from 'src/pages/createStore';
 
+import { initializeAgGridModules } from './bootstrap/agGrid';
+import { initializeSentryLogging } from './bootstrap/sentry';
 import ApplicationWrapper from './commons/application/ApplicationWrapper';
 import { createInBrowserFileSystem } from './pages/fileSystem/createInBrowserFileSystem';
 
-if (Constants.sentryDsn) {
-  Sentry.init({
-    dsn: Constants.sentryDsn,
-    environment: Constants.sourceAcademyEnvironment,
-    release: `cadet-frontend@${Constants.sourceAcademyVersion}`
-  });
-  const userId = store.getState().session.userId;
-  Sentry.setUser(typeof userId !== 'undefined' ? { id: userId.toString() } : null);
-}
+initializeSentryLogging();
+initializeAgGridModules();
 
 const rootContainer = document.getElementById('root') as HTMLElement;
 const root = createRoot(rootContainer);

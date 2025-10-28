@@ -1,0 +1,56 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Sicp exercise renders > correctly 1`] = `
+<div
+  className="sicp-exercise bp6-card bp6-elevation-1"
+>
+  <b>
+    Title
+  </b>
+  <div>
+    <div>
+      body
+    </div>
+  </div>
+  <div
+    className="sicp-button-container"
+  >
+    <button
+      className="bp6-button bp6-large sicp-show-solution-button"
+      disabled={false}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      type="button"
+    >
+      <span
+        className="bp6-button-text"
+      >
+        Show Solution
+      </span>
+    </button>
+  </div>
+  <div
+    className="bp6-collapse sicp-solution"
+    style={
+      {
+        "height": undefined,
+        "overflowY": undefined,
+        "transition": undefined,
+      }
+    }
+  >
+    <div
+      aria-hidden={true}
+      className="bp6-collapse-body"
+      style={
+        {
+          "transform": "translateY(-undefinedpx)",
+          "transition": undefined,
+        }
+      }
+    />
+  </div>
+</div>
+`;

@@ -1,6 +1,3 @@
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-balham.css';
-
 import {
   Button,
   Collapse,
@@ -11,7 +8,7 @@ import {
   SpinnerSize
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
+import { type ColDef, type GridApi, type GridReadyEvent, themeBalham } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import React, { useState } from 'react';
 import { useSession } from 'src/commons/utils/Hooks';
@@ -199,8 +196,9 @@ const GroundControl: React.FC<Props> = props => {
   );
 
   const grid = (
-    <div className="Grid ag-grid-parent ag-theme-balham">
+    <div className="Grid">
       <AgGridReact
+        theme={themeBalham}
         alwaysShowHorizontalScroll={true}
         domLayout="autoHeight"
         columnDefs={columnDefs}

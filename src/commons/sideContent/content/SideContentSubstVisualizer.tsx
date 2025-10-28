@@ -38,43 +38,40 @@ import {
 } from 'js-slang/dist/tracer/nodes/Statement/VariableDeclaration';
 import { astToString } from 'js-slang/dist/utils/ast/astToString';
 import React, { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 import { beginAlertSideContent } from '../SideContentActions';
 import { SideContentLocation, SideContentType } from '../SideContentTypes';
 
 const SubstDefaultText = () => {
+  const { t } = useTranslation('sideContent', { keyPrefix: 'substVisualizer' });
   return (
     <div>
       <div id="substituter-default-text" className={Classes.RUNNING_TEXT}>
-        Welcome to the Stepper!
+        {t('welcome')}
         <br />
         <br />
-        On this tab, the REPL will be hidden from view, so do check that your code has no errors
-        before running the stepper. You may use this tool by writing your program on the left, then
-        dragging the slider above to see its evaluation.
+        {t('instructions')}
         <br />
         <br />
-        On even-numbered steps, the part of the program that will be evaluated next is highlighted
-        in yellow. On odd-numbered steps, the result of the evaluation is highlighted in green. You
-        can change the maximum steps limit (500-5000, default 1000) in the control bar.
+        {t('evaluationSteps')}
         <br />
         <br />
         <Divider />
-        Some useful keyboard shortcuts:
+        {t('shortcutsTitle')}
         <br />
         <br />
-        a: Move to the first step
+        {t('shortcuts.a')}
         <br />
-        e: Move to the last step
+        {t('shortcuts.e')}
         <br />
-        f: Move to the next step
+        {t('shortcuts.f')}
         <br />
-        b: Move to the previous step
+        {t('shortcuts.b')}
         <br />
         <br />
-        Note that these shortcuts are only active when the browser focus is on this tab (click on or
-        above the explanation text).
+        {t('shortcutsNote')}
       </div>
     </div>
   );
@@ -94,7 +91,6 @@ type SubstVisualizerPropsAST = {
 };
 
 const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
-  console.log(props);
   const [stepValue, setStepValue] = useState(1);
   const lastStepValue = props.content.length;
   const hasRunCode = lastStepValue !== 0;
@@ -200,7 +196,7 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
   Custom AST renderer for Stepper (Inspired by astring library)
   This custom AST renderer utilizing the recursive approach of handling rendering of various StepperNodes by
   using nested <div> and <span>. Unlike React-ace, using our own renderer make our stepper more customizable. For example,
-  we can add a code component that is hoverable by using with blueprint tooltip.   
+  we can add a code component that is hoverable by using with blueprint tooltip.
 */
 
 /** RenderContext holds relevant information to handle rendering. This will be carried along the recursive renderNode function
@@ -213,11 +209,12 @@ interface RenderContext {
   styleWrapper: StyleWrapper;
 }
 
-/* 
-  StyleWrapper is a function that returns a styling function based on the node. For example, 
-  const wrapLiteral: StyleWrapper = (node) 
-  => (preformatted) => node.type === "Literal" ? <div className="stepper-literal">preformatted</div> : preformatted;
-  makes the default result from renderNode(node) wrapped with className stepper-literal for literal AST.
+/**
+  StyleWrapper is a function that returns a styling function based on the node. For example,
+  ```tsx
+  const wrapLiteral: StyleWrapper = (node) => (preformatted) => node.type === "Literal" ? <div className="stepper-literal">preformatted</div> : preformatted;
+  ```
+  makes the default result from `renderNode(node)` wrapped with className `stepper-literal` for literal AST.
 */
 type StyleWrapper = (node: StepperBaseNode) => (preformatted: React.ReactNode) => React.ReactNode;
 
@@ -245,10 +242,15 @@ function composeStyleWrapper(
  */
 function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext): React.ReactNode {
   const styleWrapper = renderContext.styleWrapper;
-
   const renderers = {
     Literal(node: StepperLiteral) {
-      return <span className="stepper-literal">{node.raw ? node.raw : node.value}</span>;
+      const stringifyLiteralValue = (value: any) =>
+        typeof value === 'string' ? '"' + value + '"' : value !== null ? value.toString() : 'null';
+      return (
+        <span className="stepper-literal">
+          {node.raw ? node.raw : stringifyLiteralValue(node.value)}
+        </span>
+      );
     },
     Identifier(node: StepperIdentifier) {
       return <span>{node.name}</span>;
@@ -336,7 +338,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
                     <div>
                       <Icon icon="code" />
                       <span>{' Function definition'}</span>
-                      <pre className="bp5-code-block">
+                      <pre className={Classes.CODE_BLOCK}>
                         <code>{functionDefinition}</code>
                       </pre>
                     </div>
@@ -364,7 +366,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
               <div>
                 <Icon icon="code" />
                 <span>{' Function definition'}</span>
-                <pre className="bp5-code-block">
+                <pre className={Classes.CODE_BLOCK}>
                   <code>{astToString(node)}</code>
                 </pre>
               </div>
