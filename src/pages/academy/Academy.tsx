@@ -36,7 +36,7 @@ const CourseSelectingAcademy: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { courseId, enableExamMode, role } = useTypedSelector(state => state.session);
-  const applyEnableExamMode = enableExamMode && role == Role.Student;
+  const applyEnableExamMode = enableExamMode && role === Role.Student;
   const { courseId: routeCourseIdStr } = useParams<{ courseId?: string }>();
   const routeCourseId = routeCourseIdStr != null ? parseInt(routeCourseIdStr, 10) : undefined;
 
