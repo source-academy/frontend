@@ -1614,7 +1614,7 @@ export const removeUserCourseRegistration = async (
 };
 
 /**
- * POST /courses/{course_Id}/resume_code
+ * POST /courses/{courseId}/resume_code
  */
 export const validateResumeCode = async (tokens: Tokens, resumeCode: string): Promise<boolean> => {
   const resp = await request(`${courseId()}/resume_code`, 'POST', {
