@@ -4,8 +4,7 @@ import { Button, Classes, NonIdealState, Spinner, TreeNodeInfo } from '@blueprin
 import classNames from 'classnames';
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
 import { setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
