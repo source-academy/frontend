@@ -167,10 +167,10 @@ const GradingEditor: React.FC<Props> = props => {
    */
   const validateXpBeforeSave =
     (handleSaving: GradingSaveFunction): (() => void) =>
-    () => {
+    async () => {
       const newXpAdjustmentInput = convertParamToInt(xpAdjustmentInput || undefined) || undefined;
       const xp = props.initialXp + (newXpAdjustmentInput || 0);
-      postSaveFinalComment(editorValue);
+      await postSaveFinalComment(editorValue);
       if (xp < 0 || xp > props.maxXp) {
         showWarningMessage(
           `XP ${xp.toString()} is out of bounds. Maximum xp is ${props.maxXp.toString()}.`

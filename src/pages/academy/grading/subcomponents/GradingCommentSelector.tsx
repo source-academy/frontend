@@ -18,16 +18,17 @@ const GradingCommentSelector: React.FC<Props> = props => {
         <div>
           {' '}
           {props.comments.length > 0 ? (
-            props.comments.map(el => {
+            props.comments.map((el, index) => {
               return (
-                <div
+                <button
+                  key={index}
                   className="grading-comment-selector-item"
                   onClick={() => {
                     props.onSelect(el);
                   }}
                 >
                   {el}
-                </div>
+                </button>
               );
             })
           ) : (

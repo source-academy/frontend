@@ -1056,7 +1056,7 @@ export const getGrading = async (
         xpAdjustment: grade.xpAdjustment,
         comments: grade.comments
       },
-      ai_comments: gradingQuestion.ai_comments?.response.split('|||') || []
+      ai_comments: gradingQuestion.ai_comments?.response?.split('|||') || []
     } as GradingQuestion;
 
     if (gradingQuestion.grade.grader !== null) {
@@ -1559,8 +1559,8 @@ export const removeAssessmentConfig = async (
  */
 export const postGenerateComments = async (
   tokens: Tokens,
-  submission_id: integer,
-  question_id: integer
+  submission_id: number,
+  question_id: number
 ): Promise<{ comments: string[] } | null> => {
   const resp = await request(
     `${courseId()}/admin/generate-comments/${submission_id}/${question_id}`,
@@ -1578,8 +1578,8 @@ export const postGenerateComments = async (
 
 export const saveFinalComment = async (
   tokens: Tokens,
-  submission_id: integer,
-  question_id: integer,
+  submission_id: number,
+  question_id: number,
   comment: string
 ): Promise<Response | null> => {
   const resp = await request(
