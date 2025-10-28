@@ -25,15 +25,15 @@ jobs:
         commands: [tsc, 'format:ci', eslint, build, 'test --bail=1', test-coveralls]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       # Has to be run before actions/setup-node.
       # See: https://github.com/actions/setup-node/issues/480
       - name: Enable corepack for Yarn
         run: corepack enable
       - name: Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 22
           cache: yarn
       - name: Install dependencies
         run: yarn install --immutable
