@@ -63,7 +63,7 @@ const SideContentDocumentation: React.FC = () => {
   };
 
   const handleDocsHome = useCallback(() => {
-    if (sicpHomeCallbackFn !== null && activePage.src == 'https://sicp.sourceacademy.org') {
+    if (sicpHomeCallbackFn !== null && activePage.src === 'https://sicp.sourceacademy.org') {
       sicpHomeCallbackFn();
     }
 
