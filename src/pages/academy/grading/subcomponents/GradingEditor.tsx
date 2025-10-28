@@ -382,7 +382,7 @@ ${props.studentAnswer}\n
               <div className="forenote-section">
                 <span className="forenote">
                   <b>Note:</b> The titles here are provided merely to distinguish the different
-                  sections. They are not include in the final prompt.
+                  sections. They are not included in the final prompt.
                 </span>
                 <Button
                   onClick={() => {
