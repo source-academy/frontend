@@ -50,7 +50,7 @@ const DropdownCourses: React.FC<Props> = ({ isOpen, onClose, courses, courseId }
           fill
           onChange={onChangeHandler}
           disabled={
-            courses.length <= 1 || isPreviewExamMode || (enableExamMode && role == Role.Student)
+            courses.length <= 1 || isPreviewExamMode || (enableExamMode && role === Role.Student)
           }
         />
       </DialogBody>
