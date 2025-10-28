@@ -763,7 +763,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     Constants.isPreviewExamModeLocalStorageKey,
     false
   );
-  const applyEnableExamMode = isPreviewExamMode || (enableExamMode && role == Role.Student);
+  const applyEnableExamMode = isPreviewExamMode || (enableExamMode && role === Role.Student);
 
   const tabs = useMemo(() => {
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
