@@ -39,7 +39,7 @@ export class Method extends Visible implements IHoverable {
 
     // Tooltip.
     this._tooltipRef = React.createRef();
-    this._tooltip = astToString(this._method.mtdOrCon);
+    this._tooltip = astToString(this._method.decl);
   }
 
   get method() {
