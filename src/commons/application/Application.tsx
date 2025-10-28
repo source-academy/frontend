@@ -1,4 +1,5 @@
-import React from 'react';
+import disableDevtool from 'disable-devtool';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Outlet } from 'react-router';
 import Messages, {
@@ -8,16 +9,19 @@ import Messages, {
 } from 'src/features/vscode/messages';
 
 import NavigationBar from '../navigationBar/NavigationBar';
+import { PauseAcademyOverlay } from '../pauseAcademyOverlay/PauseAcademyOverlay';
 import Constants from '../utils/Constants';
 import { useLocalStorageState, useSession } from '../utils/Hooks';
+import { showDangerMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../workspace/WorkspaceActions';
 import { defaultWorkspaceSettings, WorkspaceSettingsContext } from '../WorkspaceSettingsContext';
 import SessionActions from './actions/SessionActions';
 import VscodeActions from './actions/VscodeActions';
+import { Role } from './ApplicationTypes';
 
 const Application: React.FC = () => {
   const dispatch = useDispatch();
-  const { isLoggedIn } = useSession();
+  const { isLoggedIn, isPaused, enableExamMode } = useSession();
 
   // Used in the mobile/PWA experience (e.g. separate handling of orientation changes on Andriod & iOS due to unique browser behaviours)
   const isMobile = /iPhone|iPad|Android/.test(navigator.userAgent);
@@ -28,6 +32,16 @@ const Application: React.FC = () => {
     Constants.workspaceSettingsLocalStorageKey,
     defaultWorkspaceSettings
   );
+
+  // Used for dev tools detection
+  const [isPreviewExamMode] = useLocalStorageState(
+    Constants.isPreviewExamModeLocalStorageKey,
+    false
+  );
+  const [pauseAcademy, setPauseAcademy] = useState(false);
+  const [pauseAcademyReason, setPauseAcademyReason] = useState('');
+  const hasSentPauseUserRequest = React.useRef<boolean>(false);
+  const { role } = useSession();
 
   // Effect to fetch the latest user info and course configurations from the backend on refresh,
   // if the user was previously logged in
@@ -153,14 +167,90 @@ const Application: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Effect for dev tools blocking/detection when exam mode enabled
+  React.useEffect(() => {
+    if (role !== Role.Student && !isPreviewExamMode) {
+      return;
+    }
+
+    const showPauseAcademyOverlay = (reason: string) => {
+      setPauseAcademy(true);
+      setPauseAcademyReason(reason);
+      if (hasSentPauseUserRequest.current === false) {
+        dispatch(SessionActions.pauseUser());
+        hasSentPauseUserRequest.current = true;
+      }
+    };
+
+    if (enableExamMode || isPreviewExamMode) {
+      dispatch(SessionActions.reportFocusRegain());
+
+      if (isPaused !== undefined && isPaused) {
+        showPauseAcademyOverlay('Browser was refreshed when Source Academy was paused');
+      } else {
+        hasSentPauseUserRequest.current = false;
+      }
+
+      // Disable/Detect dev tools
+      disableDevtool({
+        ondevtoolopen: () => {
+          showPauseAcademyOverlay('Developer tools detected');
+        }
+      });
+
+      document.addEventListener('contextmenu', event => event.preventDefault());
+      document.addEventListener('keydown', event => {
+        if (
+          event.key === 'F12' ||
+          ((event.key === 'I' || event.key === 'J' || event.key === 'C') &&
+            event.ctrlKey &&
+            event.shiftKey)
+        ) {
+          event.preventDefault();
+        }
+      });
+
+      // Detect when Source Academy tab's content are hidden (e.g., user changes tab while Source Academy is active)
+      document.addEventListener('visibilitychange', _ => {
+        if (document.visibilityState === 'hidden') {
+          dispatch(SessionActions.reportFocusLost());
+        } else {
+          showDangerMessage('Source Academy was out of focus.', 5000);
+          dispatch(SessionActions.reportFocusRegain());
+        }
+      });
+    }
+  }, [dispatch, enableExamMode, isPaused, hasSentPauseUserRequest, role, isPreviewExamMode]);
+
+  const resumeCodeSubmitHandler = (resumeCode: string) => {
+    if (!resumeCode || resumeCode.length === 0) {
+      showWarningMessage('Resume code cannot be empty.');
+    } else {
+      dispatch(
+        SessionActions.validateResumeCode(resumeCode, (isResumeCodeValid: boolean) => {
+          if (isResumeCodeValid) {
+            setPauseAcademy(false);
+            hasSentPauseUserRequest.current = false;
+          } else {
+            showWarningMessage('Resume code is invalid.');
+          }
+        })
+      );
+    }
+  };
+
   return (
     <WorkspaceSettingsContext.Provider value={[workspaceSettings, setWorkspaceSettings]}>
-      <div className="Application">
-        <NavigationBar />
-        <div className="Application__main">
-          <Outlet />
+      {pauseAcademy ? (
+        <PauseAcademyOverlay reason={pauseAcademyReason} onSubmit={resumeCodeSubmitHandler} />
+      ) : (
+        <div className="Application">
+          <NavigationBar />
+          <div className="Application__main">
+            <Outlet />
+          </div>
         </div>
-      </div>
+      )}
     </WorkspaceSettingsContext.Provider>
   );
 };

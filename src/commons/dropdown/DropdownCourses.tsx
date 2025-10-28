@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router';
 
 import { Role } from '../application/ApplicationTypes';
 import { UserCourse } from '../application/types/SessionTypes';
+import Constants from '../utils/Constants';
+import { useLocalStorageState, useSession } from '../utils/Hooks';
 
 type Props = {
   isOpen: boolean;
@@ -15,6 +17,11 @@ type Props = {
 
 const DropdownCourses: React.FC<Props> = ({ isOpen, onClose, courses, courseId }) => {
   const navigate = useNavigate();
+  const { enableExamMode, role } = useSession();
+  const [isPreviewExamMode] = useLocalStorageState(
+    Constants.isPreviewExamModeLocalStorageKey,
+    false
+  );
 
   const options = courses.map(course => ({
     value: course.courseId,
@@ -42,7 +49,9 @@ const DropdownCourses: React.FC<Props> = ({ isOpen, onClose, courses, courseId }
           options={options}
           fill
           onChange={onChangeHandler}
-          disabled={courses.length <= 1}
+          disabled={
+            courses.length <= 1 || isPreviewExamMode || (enableExamMode && role === Role.Student)
+          }
         />
       </DialogBody>
     </Dialog>
