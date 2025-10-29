@@ -15,6 +15,7 @@ import { initializeAgGridModules } from './bootstrap/agGrid';
 import { initializeSentryLogging } from './bootstrap/sentry';
 import ApplicationWrapper from './commons/application/ApplicationWrapper';
 import { createInBrowserFileSystem } from './pages/fileSystem/createInBrowserFileSystem';
+import { SicpLanguageContextProvider } from './pages/sicp/subcomponents/SicpLanguageProvider';
 
 initializeSentryLogging();
 initializeAgGridModules();
@@ -38,7 +39,9 @@ createInBrowserFileSystem(store)
     root.render(
       <Provider store={store}>
         <OverlaysProvider>
-          <ApplicationWrapper />
+          <SicpLanguageContextProvider>
+            <ApplicationWrapper />
+          </SicpLanguageContextProvider>
         </OverlaysProvider>
       </Provider>
     );
