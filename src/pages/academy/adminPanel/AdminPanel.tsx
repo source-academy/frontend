@@ -74,7 +74,6 @@ const AdminPanel: React.FC = () => {
       enableStories: session.enableStories,
       enableLlmGrading: session.enableLlmGrading,
       moduleHelpText: session.moduleHelpText,
-      llmApiKey: session.llmApiKey,
       llmModel: session.llmModel,
       llmApiUrl: session.llmApiUrl,
       llmCourseLevelPrompt: session.llmCourseLevelPrompt
@@ -93,7 +92,6 @@ const AdminPanel: React.FC = () => {
     session.enableLlmGrading,
     session.moduleHelpText,
     session.viewable,
-    session.llmApiKey,
     session.llmModel,
     session.llmApiUrl,
     session.llmCourseLevelPrompt

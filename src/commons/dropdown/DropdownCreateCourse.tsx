@@ -289,7 +289,7 @@ const DropdownCreateCourse: React.FC<Props> = props => {
             />
           </FormGroup>
           <FormGroup
-            helperText="To enable LLM grading, both the 'Enable LLM Grading' switch and a valid API key must be provided."
+            helperText="API Key for LLM endpoint. This key will be encrypted and will not be retrievable on the frontend after."
             label={'LLM API Key'}
             labelInfo="(optional)"
             labelFor="llmApiKey"

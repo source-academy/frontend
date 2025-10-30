@@ -40,7 +40,6 @@ export type SessionState = {
   readonly enableSourcecast?: boolean;
   readonly enableStories?: boolean;
   readonly enableLlmGrading?: boolean;
-  readonly llmApiKey?: string;
   readonly llmModel?: string;
   readonly llmApiUrl?: string;
   readonly llmCourseLevelPrompt?: string;
@@ -123,7 +122,6 @@ export type CourseConfiguration = {
   sourceVariant: Variant;
   moduleHelpText: string;
   assetsPrefix: string;
-  llmApiKey?: string;
   llmModel?: string;
   llmApiUrl?: string;
   llmCourseLevelPrompt?: string;
@@ -138,4 +136,4 @@ export type AdminPanelCourseRegistration = {
   group?: string;
 };
 
-export type UpdateCourseConfiguration = Partial<CourseConfiguration>;
+export type UpdateCourseConfiguration = Partial<CourseConfiguration & { llmApiKey: string }>;
