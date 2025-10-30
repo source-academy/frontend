@@ -170,6 +170,7 @@ export type IGradingTableProperties = {
  * particular question in a submission.
  */
 export type GradingQuestion = {
+  id: number;
   question: AnsweredQuestion;
   team?: Array<{
     username: any;

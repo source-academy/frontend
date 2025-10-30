@@ -1030,8 +1030,9 @@ export const getGrading = async (
 
   const gradingResult = await resp.json();
   const grading: GradingAnswer = gradingResult.answers.map((gradingQuestion: any) => {
-    const { student, question, grade, team } = gradingQuestion;
+    const { id, student, question, grade, team } = gradingQuestion;
     const result = {
+      id,
       question: {
         answer: question.answer,
         lastModifiedAt: question.lastModifiedAt,
@@ -1555,20 +1556,15 @@ export const removeAssessmentConfig = async (
 };
 
 /**
- * POST /courses/{courseId}/admin/generate-comments/{submissionId}/{questionId}
+ * POST /courses/{courseId}/admin/generate-comments/{answer_id}/
  */
 export const postGenerateComments = async (
   tokens: Tokens,
-  submission_id: number,
-  question_id: number
+  answer_id: number
 ): Promise<{ comments: string[] } | null> => {
-  const resp = await request(
-    `${courseId()}/admin/generate-comments/${submission_id}/${question_id}`,
-    'POST',
-    {
-      ...tokens
-    }
-  );
+  const resp = await request(`${courseId()}/admin/generate-comments/${answer_id}`, 'POST', {
+    ...tokens
+  });
   if (!resp || !resp.ok) {
     return null;
   }
@@ -1578,18 +1574,13 @@ export const postGenerateComments = async (
 
 export const saveFinalComment = async (
   tokens: Tokens,
-  submission_id: number,
-  question_id: number,
+  answer_id: number,
   comment: string
 ): Promise<Response | null> => {
-  const resp = await request(
-    `${courseId()}/admin/save-final-comment/${submission_id}/${question_id}`,
-    'POST',
-    {
-      body: { comment: comment },
-      ...tokens
-    }
-  );
+  const resp = await request(`${courseId()}/admin/save-final-comment/${answer_id}`, 'POST', {
+    body: { comment: comment },
+    ...tokens
+  });
 
   return resp;
 };

@@ -41,6 +41,7 @@ type GradingSaveFunction = (
 ) => void;
 
 type Props = {
+  answer_id: number;
   solution: number | string | null;
   questionId: number;
   submissionId: number;
@@ -119,7 +120,7 @@ const GradingEditor: React.FC<Props> = props => {
   }, [props.submissionId, props.questionId]);
 
   const getCommentSuggestions = async () => {
-    const resp = await postGenerateComments(tokens, props.submissionId, props.questionId);
+    const resp = await postGenerateComments(tokens, props.answer_id);
     return resp;
   };
 
@@ -132,7 +133,7 @@ const GradingEditor: React.FC<Props> = props => {
   };
 
   const postSaveFinalComment = async (comment: string) => {
-    const resp = await saveFinalComment(tokens, props.submissionId, props.questionId, comment);
+    const resp = await saveFinalComment(tokens, props.answer_id, comment);
     return resp;
   };
 
