@@ -1,5 +1,6 @@
 import { H5, NonIdealState, Spinner } from '@blueprintjs/core';
 import React from 'react';
+import styles from 'src/styles/GradingCommentSelector.module.scss';
 
 type Props = {
   comments: string[];
@@ -9,8 +10,8 @@ type Props = {
 
 const GradingCommentSelector: React.FC<Props> = props => {
   return (
-    <div className="grading-comment-selector">
-      <H5 className="grading-comment-selector-title">LLM Comment Suggestions:</H5>
+    <div className={styles['grading-comment-selector']}>
+      <H5 className={styles['grading-comment-selector-title']}>LLM Comment Suggestions:</H5>
 
       {props.isLoading ? (
         <NonIdealState icon={<Spinner />} />
@@ -22,7 +23,7 @@ const GradingCommentSelector: React.FC<Props> = props => {
               return (
                 <button
                   key={index}
-                  className="grading-comment-selector-item"
+                  className={styles['grading-comment-selector-item']}
                   onClick={() => {
                     props.onSelect(el);
                   }}

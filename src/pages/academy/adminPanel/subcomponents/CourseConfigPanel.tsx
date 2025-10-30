@@ -15,6 +15,7 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 import { useResponsive } from 'src/commons/utils/Hooks';
+import classes from 'src/styles/CourseConfig.module.scss';
 
 import { UpdateCourseConfiguration } from '../../../../commons/application/types/SessionTypes';
 import Markdown from '../../../../commons/Markdown';
@@ -57,7 +58,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
   const writePanel = (
     <TextArea
       id="moduleHelpText"
-      className="input-textarea"
+      className={classes['input-textarea']}
       fill={true}
       value={moduleHelpText || ''}
       onChange={e =>
@@ -70,7 +71,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
   );
 
   const previewPanel = (
-    <div className="input-markdown">
+    <div className={classes['input-markdown']}>
       <Markdown content={moduleHelpText || ''} openLinksInNewWindow />
     </div>
   );
@@ -90,11 +91,11 @@ const CourseConfigPanel: React.FC<Props> = props => {
   );
 
   return (
-    <div className="course-configuration">
+    <div className={classes['course-configuration']}>
       <H2>{courseName}</H2>
       <H3>{courseShortName}</H3>
-      <div className="inputs">
-        <div className="text">
+      <div className={classes.inputs}>
+        <div className={classes.text}>
           <FormGroup
             helperText="Please enter the course name that will be used for course selection."
             inline={true}
@@ -135,11 +136,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
             label="Module Help Text"
             labelFor="moduleHelpText"
           >
-            <Tabs
-              selectedTabId={courseHelpTextSelectedTab}
-              onChange={onChangeTabs}
-              className="module-help-text-tabs"
-            >
+            <Tabs selectedTabId={courseHelpTextSelectedTab} onChange={onChangeTabs}>
               <Tab id={CourseHelpTextEditorTab.WRITE} title="Write" />
               <Tab id={CourseHelpTextEditorTab.PREVIEW} title="Preview" />
             </Tabs>
@@ -182,7 +179,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
           </FormGroup>
 
           {enableLlmGrading && (
-            <div className="llm-grading-config">
+            <div className={classes['llm-grading-config']}>
               <Divider style={{ marginTop: '20px', marginBottom: '20px' }} />
               <h3>LLM Grading Configuration</h3>
               <FormGroup
@@ -272,7 +269,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
                       interactionKind="hover"
                       position={Position.TOP}
                     >
-                      <Icon icon={IconNames.HELP} className="llm-course-prompt-icon" />
+                      <Icon icon={IconNames.HELP} className={classes['llm-course-prompt-icon']} />
                     </Popover>
                   </span>
                 }
@@ -282,7 +279,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
               >
                 <TextArea
                   id="llmCourseLevelPrompt"
-                  className="llm-prompt-input-textarea"
+                  className={classes['llm-prompt-input-textarea']}
                   fill={true}
                   placeholder="You are looking at a modified version of Javascript"
                   value={llmCourseLevelPrompt}
@@ -298,7 +295,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
           )}
         </div>
         {!isMobileBreakpoint && <Divider />}
-        <div className="booleans">
+        <div className={classes.booleans}>
           <Switch
             checked={viewable}
             label="Viewable"
