@@ -30,7 +30,12 @@ const defaultCourseConfig: UpdateCourseConfiguration = {
   topContestLeaderboardDisplay: 10,
   enableSourcecast: true,
   enableStories: false,
-  moduleHelpText: ''
+  enableLlmGrading: false,
+  moduleHelpText: '',
+  llmApiKey: '',
+  llmModel: '',
+  llmApiUrl: '',
+  llmCourseLevelPrompt: ''
 };
 
 const AdminPanel: React.FC = () => {
@@ -67,7 +72,11 @@ const AdminPanel: React.FC = () => {
       topContestLeaderboardDisplay: session.topContestLeaderboardDisplay,
       enableSourcecast: session.enableSourcecast,
       enableStories: session.enableStories,
-      moduleHelpText: session.moduleHelpText
+      enableLlmGrading: session.enableLlmGrading,
+      moduleHelpText: session.moduleHelpText,
+      llmModel: session.llmModel,
+      llmApiUrl: session.llmApiUrl,
+      llmCourseLevelPrompt: session.llmCourseLevelPrompt
     });
   }, [
     session.courseName,
@@ -80,8 +89,12 @@ const AdminPanel: React.FC = () => {
     session.enableGame,
     session.enableSourcecast,
     session.enableStories,
+    session.enableLlmGrading,
     session.moduleHelpText,
-    session.viewable
+    session.viewable,
+    session.llmModel,
+    session.llmApiUrl,
+    session.llmCourseLevelPrompt
   ]);
 
   const tableRef = useRef<ImperativeAssessmentConfigPanel>(null);
