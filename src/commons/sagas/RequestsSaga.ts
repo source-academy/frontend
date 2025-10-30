@@ -1045,7 +1045,6 @@ export const getGrading = async (
         solutionTemplate: question.solutionTemplate,
         prepend: question.prepend || '',
         postpend: question.postpend || '',
-        llm_prompt: question.llm_prompt || null,
         testcases: question.testcases || [],
         type: question.type as QuestionType,
         maxXp: question.maxXp
@@ -1057,7 +1056,8 @@ export const getGrading = async (
         xpAdjustment: grade.xpAdjustment,
         comments: grade.comments
       },
-      ai_comments: gradingQuestion.ai_comments?.response?.split('|||') || []
+      ai_comments: gradingQuestion.ai_comments?.response?.split('|||') || [],
+      prompts: gradingQuestion.prompts
     } as GradingQuestion;
 
     if (gradingQuestion.grade.grader !== null) {

@@ -128,6 +128,8 @@ export const mockTestcases: Testcase[] = [
 
 export const mockGradingAnswer: GradingAnswer = [
   {
+    id: 0,
+    prompts: [],
     autogradingResults: [],
     autoGradingStatus: 'N/A',
     question: {
@@ -246,6 +248,8 @@ _italics_
     }
   },
   {
+    id: 1,
+    prompts: [],
     autogradingResults: [],
     autoGradingStatus: 'N/A',
     question: {
@@ -340,6 +344,8 @@ New message from **Avenger**!
     }
   },
   {
+    id: 2,
+    prompts: [],
     autogradingResults: [],
     autoGradingStatus: 'N/A',
     question: {
@@ -421,7 +427,6 @@ New message from **Avenger**!
 
 export const mockGradingAssessment: GradingAssessment = {
   coverPicture: 'https://i.imgur.com/dR7zBPI.jpeg',
-  llm_assessment_prompt: null,
   id: 1,
   number: '10',
   reading:

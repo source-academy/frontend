@@ -605,6 +605,8 @@ test('updateGrading generates correct action object', async () => {
   const grading: GradingQuery = {
     answers: [
       {
+        id: 0,
+        prompts: [],
         question: await vi.importMock('../../../../features/grading/GradingTypes'),
         student: {
           name: 'test student',
@@ -627,7 +629,6 @@ test('updateGrading generates correct action object', async () => {
     ],
     enable_llm_grading: false,
     assessment: {
-      llm_assessment_prompt: null,
       coverPicture: 'https://i.imgur.com/dR7zBPI.jpeg',
       id: 1,
       number: '5',

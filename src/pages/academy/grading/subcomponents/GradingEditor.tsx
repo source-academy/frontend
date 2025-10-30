@@ -3,7 +3,6 @@ import {
   Dialog,
   Divider,
   H3,
-  H5,
   Icon,
   IconName,
   Intent,
@@ -15,7 +14,7 @@ import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useMemo, useState } from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
 import { useDispatch } from 'react-redux';
-import { AutogradingResult } from 'src/commons/assessment/AssessmentTypes';
+import { AutogradingResult, LLMPrompt } from 'src/commons/assessment/AssessmentTypes';
 import { useTokens } from 'src/commons/utils/Hooks';
 
 import SessionActions from '../../../../commons/application/actions/SessionActions';
@@ -41,6 +40,7 @@ type GradingSaveFunction = (
 ) => void;
 
 type Props = {
+  prompts: LLMPrompt[];
   answer_id: number;
   solution: number | string | null;
   questionId: number;
@@ -52,12 +52,8 @@ type Props = {
   studentUsernames: string[];
   is_llm: boolean;
   comments: string;
-  llm_course_level_prompt: string | null;
-  llm_assessment_prompt: string | null;
-  llm_question_prompt: string | null;
   autoGradingStatus: string;
   autoGradingResults: AutogradingResult[];
-  questionContent: string;
   studentAnswer: string | null;
   graderName?: string;
   gradedAt?: string;
@@ -261,24 +257,11 @@ const GradingEditor: React.FC<Props> = props => {
 
   const copyComposedPromptToClipboard = () => {
     navigator.clipboard.writeText(
-      `${props.llm_course_level_prompt || ''}\n
-${props.llm_assessment_prompt || ''}\n
-${props.llm_question_prompt || ''}\n
-**Question:** \n
-\`\`\`\n
-${props.questionContent}\n
-\`\`\`\n\n
-**Model Solution:** \n
-\`\`\`\n
-${props.solution || 'N/A'}\n
-\`\`\`\n\n
-**Autograding Status:** ${props.autoGradingStatus}\n
-**Autograding Results:** ${props.autoGradingResults ? JSON.stringify(props.autoGradingResults) : 'N/A'}\n
-The student answer will be given below as part of the User Prompt.\n
-**Student Answer:** \n
-\`\`\`\n
-${props.studentAnswer}\n
-\`\`\``
+      props.prompts
+        .map(prompt => {
+          return `**${prompt.role} Prompt**\n\n${prompt.content}`;
+        })
+        .join('\n\n')
     );
     showSuccessMessage('Composed prompt copied to clipboard!', 2000);
   };
@@ -393,43 +376,15 @@ ${props.studentAnswer}\n
                   <Icon icon={IconNames.Clipboard} />
                 </Button>
               </div>
-              <H3>System Prompt</H3>
-              <Divider />
-              <H5>Course Level Prompt</H5>
-              {props.llm_course_level_prompt || ''}
-              <br />
-              <H5>Assessment Level Prompt</H5>
-              {props.llm_assessment_prompt || ''}
-              <br />
-              <H5>Question Level Prompt</H5>
-              {props.llm_question_prompt || ''}
-              <H5>Generic Info From Question</H5>
-              **Question:** <br />
-              ```
-              <br />
-              {props.questionContent}
-              <br />
-              ```
-              <br />
-              <br />
-              **Model Solution:** <br />
-              ``` <br />
-              {props.solution || 'N/A'}
-              <br />
-              ```
-              <br />
-              <br />
-              **Autograding Status:** {props.autoGradingStatus} <br />
-              **Autograding Results:**{' '}
-              {props.autoGradingResults ? JSON.stringify(props.autoGradingResults) : 'N/A'} <br />
-              The student answer will be given below as part of the User Prompt.
-              <H3>User Prompt</H3>
-              <Divider />
-              **Student Answer:** <br />
-              ``` <br />
-              {props.studentAnswer}
-              <br />
-              ``` <br />
+              {props.prompts.map(prompt => {
+                return (
+                  <>
+                    <H3>{prompt.role} Level Prompt</H3>
+                    <Divider />
+                    {prompt.content}
+                  </>
+                );
+              })}
             </div>
           </Dialog>
           <div style={{ marginBottom: '10px' }}>

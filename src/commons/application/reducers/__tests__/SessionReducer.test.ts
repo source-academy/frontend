@@ -405,6 +405,8 @@ const gradingTest1: GradingQuery = {
   enable_llm_grading: false,
   answers: [
     {
+      id: 0,
+      prompts: [],
       autogradingResults: [],
       autoGradingStatus: 'N/A',
       question: await vi.importMock('../../../../features/grading/GradingTypes'),
@@ -421,7 +423,6 @@ const gradingTest1: GradingQuery = {
     }
   ],
   assessment: {
-    llm_assessment_prompt: null,
     coverPicture: 'test string',
     id: 1,
     number: 'M1A',
@@ -437,6 +438,8 @@ const gradingTest2: GradingQuery = {
   enable_llm_grading: false,
   answers: [
     {
+      id: 0,
+      prompts: [],
       autogradingResults: [],
       autoGradingStatus: 'N/A',
       question: await vi.importMock('../../../../features/grading/GradingTypes'),
@@ -453,7 +456,6 @@ const gradingTest2: GradingQuery = {
     }
   ],
   assessment: {
-    llm_assessment_prompt: null,
     coverPicture: 'another test string',
     id: 2,
     number: 'P2',

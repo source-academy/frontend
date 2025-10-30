@@ -121,7 +121,6 @@ export interface IProgrammingQuestion extends BaseQuestion {
   prepend: string;
   postpend: string;
   solutionTemplate: string;
-  llm_prompt?: string | null;
   testcases: Testcase[];
   testcasesPrivate?: Testcase[]; // For mission control
   type: 'programming';
@@ -143,6 +142,11 @@ export interface IContestVotingQuestion extends BaseQuestion {
   popularVoteLeaderboard: ContestEntry[];
   type: 'voting';
 }
+
+export type LLMPrompt = {
+  role: string;
+  content: string;
+};
 
 export type BaseQuestion = {
   answer: string | number | ContestEntry[] | null;
@@ -281,7 +285,6 @@ export const programmingTemplate = (): IProgrammingQuestion => {
     prepend: '',
     solutionTemplate: '//This is a mock solution template',
     postpend: '',
-    llm_prompt: null,
     testcases: [],
     testcasesPrivate: [],
     type: 'programming',
