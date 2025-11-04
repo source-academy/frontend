@@ -2,12 +2,12 @@ import type { Context } from 'js-slang';
 import { defineSymbol } from 'js-slang/dist/createContext';
 import { LanguageOptions, Variant } from 'js-slang/dist/types';
 import { put, select, take } from 'redux-saga/effects';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 
 import type { OverallState } from '../../../application/ApplicationTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
-import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 
 export function* clearContext(workspaceLocation: WorkspaceLocation, entrypointCode: string) {
   const [chapter, symbols, externalLibraryName, globals, variant, languageOptions]: [
