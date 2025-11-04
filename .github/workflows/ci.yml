@@ -15,25 +15,25 @@ env:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-  
+
 jobs:
   lint:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        commands: [tsc, 'format:ci', eslint, build, test, test-coveralls]
+        commands: [tsc, 'format:ci', eslint, build, 'test --bail=1', test-coveralls]
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       # Has to be run before actions/setup-node.
       # See: https://github.com/actions/setup-node/issues/480
       - name: Enable corepack for Yarn
         run: corepack enable
       - name: Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 22
           cache: yarn
       - name: Install dependencies
         run: yarn install --immutable
@@ -43,5 +43,5 @@ jobs:
         if: matrix.commands == 'test-coveralls'
         uses: coverallsapp/github-action@master
         with:
-          path-to-lcov: lcov.info
+          path-to-lcov: coverage/lcov.info
           github-token: ${{ secrets.GITHUB_TOKEN }}

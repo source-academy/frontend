@@ -1,4 +1,4 @@
-import { Router } from '@remix-run/router';
+import { Router } from 'src/commons/application/types/CommonsTypes';
 import { createActions } from 'src/commons/redux/utils';
 
 const CommonsActions = createActions('commons', {

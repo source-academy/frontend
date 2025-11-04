@@ -8,7 +8,7 @@ import {
   getDifferenceInMethods,
   getStoreExtraMethodsString
 } from '../../../utils/JsSlangHelper';
-import { EVAL_SILENT, WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import { evalCodeSaga } from './evalCode';
 
 export function* blockExtraMethods(
@@ -32,8 +32,8 @@ export function* blockExtraMethods(
       storeValuesFilePath,
       elevatedContext,
       execTime,
-      workspaceLocation,
-      EVAL_SILENT
+      EVAL_SILENT,
+      workspaceLocation
     );
   }
 
@@ -51,7 +51,7 @@ export function* blockExtraMethods(
     nullifierFilePath,
     elevatedContext,
     execTime,
-    workspaceLocation,
-    EVAL_SILENT
+    EVAL_SILENT,
+    workspaceLocation
   );
 }

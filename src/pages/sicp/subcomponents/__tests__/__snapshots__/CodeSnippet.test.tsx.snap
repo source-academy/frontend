@@ -1,0 +1,201 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Sicp Code Snippet > renders correctly with prepend 1`] = `
+<div
+  className="sicp-code-snippet"
+>
+  <Blueprint6.Card
+    className="sicp-code-snippet-closed"
+    elevation={2}
+    interactive={true}
+  >
+    <SyntaxHighlighter
+      language="javascript"
+      onClick={[Function]}
+      style={
+        {
+          ":not(pre) > code[class*="language-"]": {
+            "background": "transparent",
+            "borderRadius": "0.3em",
+            "padding": "0.1em",
+            "whiteSpace": "normal",
+          },
+          "boolean": {
+            "color": "#FF628C",
+          },
+          "code[class*="language-"]": {
+            "MozHyphens": "none",
+            "MozTabSize": "4",
+            "OTabSize": "4",
+            "WebkitHyphens": "none",
+            "background": "transparent",
+            "color": "white",
+            "fontFamily": "'Inconsolata', 'Consolas', monospace",
+            "fontSize": "1rem",
+            "hyphens": "none",
+            "lineHeight": "1.5",
+            "msHyphens": "none",
+            "tabSize": "4",
+            "textAlign": "left",
+            "whiteSpace": "pre",
+            "wordBreak": "normal",
+            "wordSpacing": "normal",
+            "wordWrap": "normal",
+          },
+          "comment": {
+            "color": "#0088FF",
+          },
+          "function": {
+            "color": "#ffdd00",
+          },
+          "keyword": {
+            "color": "#FF9D00",
+          },
+          "number": {
+            "color": "#FF628C",
+          },
+          "operator": {
+            "color": "#FF9D00",
+          },
+          "pre[class*="language-"]": {
+            "MozHyphens": "none",
+            "MozTabSize": "4",
+            "OTabSize": "4",
+            "WebkitHyphens": "none",
+            "background": "#2c3e50",
+            "borderRadius": "0.3em",
+            "color": "white",
+            "fontFamily": "'Inconsolata', 'Consolas', monospace",
+            "hyphens": "none",
+            "lineHeight": "1.5",
+            "margin": "0.5em 0",
+            "msHyphens": "none",
+            "overflow": "auto",
+            "padding": "1em",
+            "tabSize": "4",
+            "textAlign": "left",
+            "whiteSpace": "pre",
+            "wordBreak": "normal",
+            "wordSpacing": "normal",
+            "wordWrap": "normal",
+          },
+          "punctuation": {
+            "color": "white",
+          },
+          "string": {
+            "color": "#3AD900",
+          },
+        }
+      }
+    >
+      const a = 1;
+a+1;
+    </SyntaxHighlighter>
+  </Blueprint6.Card>
+  <ForwardRef>
+    <em>
+      2
+    </em>
+  </ForwardRef>
+</div>
+`;
+
+exports[`Sicp Code Snippet > renders correctly without prepend 1`] = `
+<div
+  className="sicp-code-snippet"
+>
+  <Blueprint6.Card
+    className="sicp-code-snippet-closed"
+    elevation={2}
+    interactive={true}
+  >
+    <SyntaxHighlighter
+      language="javascript"
+      onClick={[Function]}
+      style={
+        {
+          ":not(pre) > code[class*="language-"]": {
+            "background": "transparent",
+            "borderRadius": "0.3em",
+            "padding": "0.1em",
+            "whiteSpace": "normal",
+          },
+          "boolean": {
+            "color": "#FF628C",
+          },
+          "code[class*="language-"]": {
+            "MozHyphens": "none",
+            "MozTabSize": "4",
+            "OTabSize": "4",
+            "WebkitHyphens": "none",
+            "background": "transparent",
+            "color": "white",
+            "fontFamily": "'Inconsolata', 'Consolas', monospace",
+            "fontSize": "1rem",
+            "hyphens": "none",
+            "lineHeight": "1.5",
+            "msHyphens": "none",
+            "tabSize": "4",
+            "textAlign": "left",
+            "whiteSpace": "pre",
+            "wordBreak": "normal",
+            "wordSpacing": "normal",
+            "wordWrap": "normal",
+          },
+          "comment": {
+            "color": "#0088FF",
+          },
+          "function": {
+            "color": "#ffdd00",
+          },
+          "keyword": {
+            "color": "#FF9D00",
+          },
+          "number": {
+            "color": "#FF628C",
+          },
+          "operator": {
+            "color": "#FF9D00",
+          },
+          "pre[class*="language-"]": {
+            "MozHyphens": "none",
+            "MozTabSize": "4",
+            "OTabSize": "4",
+            "WebkitHyphens": "none",
+            "background": "#2c3e50",
+            "borderRadius": "0.3em",
+            "color": "white",
+            "fontFamily": "'Inconsolata', 'Consolas', monospace",
+            "hyphens": "none",
+            "lineHeight": "1.5",
+            "margin": "0.5em 0",
+            "msHyphens": "none",
+            "overflow": "auto",
+            "padding": "1em",
+            "tabSize": "4",
+            "textAlign": "left",
+            "whiteSpace": "pre",
+            "wordBreak": "normal",
+            "wordSpacing": "normal",
+            "wordWrap": "normal",
+          },
+          "punctuation": {
+            "color": "white",
+          },
+          "string": {
+            "color": "#3AD900",
+          },
+        }
+      }
+    >
+      const a = 1;
+a+1;
+    </SyntaxHighlighter>
+  </Blueprint6.Card>
+  <ForwardRef>
+    <em>
+      2
+    </em>
+  </ForwardRef>
+</div>
+`;

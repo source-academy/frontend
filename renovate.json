@@ -3,16 +3,13 @@
   "extends": [
     "config:recommended",
     ":dependencyDashboard",
-    "group:allNonMajor",
     ":label(dependencies)"
   ],
-  "major": {
-    "dependencyDashboardApproval": true
-  },
   "packageRules": [
     {
       "rangeStrategy": "update-lockfile",
-      "matchPackageNames": ["*"]
+      "matchPackageNames": ["*"],
+      "minimumReleaseAge": "5 days"
     }
   ],
   "enabledManagers": ["npm"]

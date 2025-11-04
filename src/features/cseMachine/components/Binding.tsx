@@ -66,8 +66,7 @@ export class Binding extends Visible {
 
     // derive the width from the right bound of the value
     this._width = isMainReference(this.value, this)
-      ? this.value.x() +
-        this.value.width() -
+      ? this.value.x() -
         this.x() +
         (this.value instanceof FnValue ||
         this.value instanceof GlobalFnValue ||
@@ -76,7 +75,10 @@ export class Binding extends Visible {
           : 0)
       : this.key.width();
 
-    this._height = Math.max(this.key.height(), this.value.height());
+    this._height = Math.max(
+      this.key.height(),
+      this.value instanceof ArrayValue ? this.value.totalHeight : this.value.height()
+    );
 
     if (this.isDummyBinding && !isMainReference(this.value, this)) {
       if (this.prevBinding) {

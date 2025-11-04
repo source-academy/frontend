@@ -1,11 +1,11 @@
 /* tslint:disable: ban-types*/
 import createSlangContext, { defineBuiltin, importBuiltins } from 'js-slang/dist/createContext';
 import {
-  Chapter,
-  Context,
-  CustomBuiltIns,
+  type Chapter,
+  type Context,
+  type CustomBuiltIns,
   LanguageOptions,
-  Value,
+  type Value,
   Variant
 } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
@@ -13,7 +13,7 @@ import { difference, keys } from 'lodash';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 
 import DataVisualizer from '../../features/dataVisualizer/dataVisualizer';
-import { Data } from '../../features/dataVisualizer/dataVisualizerTypes';
+import type { Data } from '../../features/dataVisualizer/dataVisualizerTypes';
 import DisplayBufferService from './DisplayBufferService';
 
 /**

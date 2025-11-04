@@ -1,0 +1,11 @@
+{
+  "description": "Bypass the compiler and type checker by uploading class files to run in the JVM.",
+  "acceptedFiles": "Only .class files are accepted. Code in the editor will be ignored when running while this tab is active.",
+  "compileCommand": "Compile the files with the following command:",
+  "javacCommand": "javac *.java -target 8 -source 8",
+  "warning": "Avoid running class files downloaded from unknown sources.",
+  "mainClass": "Main class must be named Main and uploaded as Main.class.",
+  "chooseFiles": "Choose files...",
+  "filesUploaded": "file(s) uploaded.",
+  "label": "Upload files"
+}

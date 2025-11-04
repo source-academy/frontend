@@ -1,0 +1,110 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SideContentContestLeaderboard matches snapshot 1`] = `
+<div
+  className="ContestLeaderboard"
+>
+  <Blueprint6.Button
+    className="collapse-button"
+    icon="caret-down"
+    minimal={true}
+    onClick={[Function]}
+  >
+    <span>
+      Score Leaderboard
+    </span>
+    <Blueprint6.Tooltip
+      compact={false}
+      content="View the highest scoring contest entries!"
+      hoverCloseDelay={0}
+      hoverOpenDelay={100}
+      interactionKind="hover-target"
+      minimal={false}
+      transitionDuration={100}
+    >
+      <Blueprint6.Icon
+        icon="help"
+      />
+    </Blueprint6.Tooltip>
+  </Blueprint6.Button>
+  <Blueprint6.Collapse
+    component="div"
+    isOpen={true}
+    keepChildrenMounted={true}
+    transitionDuration={200}
+  >
+    <div>
+      <div
+        className="leaderboard-header"
+      >
+        <div
+          className="header-entryid"
+        >
+          Student Name
+          <Blueprint6.Icon
+            icon="caret-down"
+          />
+        </div>
+        <div
+          className="header-entryrank"
+        >
+          Rank
+          <Blueprint6.Icon
+            icon="caret-down"
+          />
+        </div>
+        <div
+          className="header-score"
+        >
+          Calculated Score
+          <Blueprint6.Icon
+            icon="caret-down"
+          />
+        </div>
+      </div>
+      <SideContentLeaderboardCard
+        contestEntry={
+          {
+            "answer": {
+              "code": "display('hello world')",
+            },
+            "final_score": 100,
+            "student_name": "student_1",
+            "submission_id": 1,
+          }
+        }
+        handleContestEntryClick={[Function]}
+        rank={1}
+      />
+      <SideContentLeaderboardCard
+        contestEntry={
+          {
+            "answer": {
+              "code": "function test() { return 1; }",
+            },
+            "final_score": 90,
+            "student_name": "student_2",
+            "submission_id": 2,
+          }
+        }
+        handleContestEntryClick={[Function]}
+        rank={2}
+      />
+      <SideContentLeaderboardCard
+        contestEntry={
+          {
+            "answer": {
+              "code": "function test() { return 1; }",
+            },
+            "final_score": 80,
+            "student_name": "student_3",
+            "submission_id": 3,
+          }
+        }
+        handleContestEntryClick={[Function]}
+        rank={3}
+      />
+    </div>
+  </Blueprint6.Collapse>
+</div>
+`;

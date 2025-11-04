@@ -1,0 +1,635 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Sicp toc renders correctly 1`] = `
+<div
+  className="sicp-toc"
+>
+  <div
+    className="bp6-tree sicp-toc-tree"
+  >
+    <ul
+      className="bp6-tree-node-list bp6-tree-root"
+    >
+      <li
+        className="bp6-tree-node"
+      >
+        <div
+          className="bp6-tree-node-content bp6-tree-node-content-0"
+          onClick={[Function]}
+          onContextMenu={[Function]}
+          onDoubleClick={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <span
+            className="bp6-tree-node-caret-none"
+          />
+          <span
+            className="bp6-tree-node-label"
+          >
+            Foreword
+          </span>
+        </div>
+        <div
+          className="bp6-collapse"
+          style={
+            {
+              "height": undefined,
+              "overflowY": undefined,
+              "transition": undefined,
+            }
+          }
+        >
+          <div
+            aria-hidden={true}
+            className="bp6-collapse-body"
+            style={
+              {
+                "transform": "translateY(-undefinedpx)",
+                "transition": undefined,
+              }
+            }
+          />
+        </div>
+      </li>
+      <li
+        className="bp6-tree-node"
+      >
+        <div
+          className="bp6-tree-node-content bp6-tree-node-content-0"
+          onClick={[Function]}
+          onContextMenu={[Function]}
+          onDoubleClick={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <span
+            className="bp6-tree-node-caret-none"
+          />
+          <span
+            className="bp6-tree-node-label"
+          >
+            Foreword to Structure and Interpretation of Computer Programs, 1984
+          </span>
+        </div>
+        <div
+          className="bp6-collapse"
+          style={
+            {
+              "height": undefined,
+              "overflowY": undefined,
+              "transition": undefined,
+            }
+          }
+        >
+          <div
+            aria-hidden={true}
+            className="bp6-collapse-body"
+            style={
+              {
+                "transform": "translateY(-undefinedpx)",
+                "transition": undefined,
+              }
+            }
+          />
+        </div>
+      </li>
+      <li
+        className="bp6-tree-node"
+      >
+        <div
+          className="bp6-tree-node-content bp6-tree-node-content-0"
+          onClick={[Function]}
+          onContextMenu={[Function]}
+          onDoubleClick={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <span
+            className="bp6-tree-node-caret-none"
+          />
+          <span
+            className="bp6-tree-node-label"
+          >
+            Preface
+          </span>
+        </div>
+        <div
+          className="bp6-collapse"
+          style={
+            {
+              "height": undefined,
+              "overflowY": undefined,
+              "transition": undefined,
+            }
+          }
+        >
+          <div
+            aria-hidden={true}
+            className="bp6-collapse-body"
+            style={
+              {
+                "transform": "translateY(-undefinedpx)",
+                "transition": undefined,
+              }
+            }
+          />
+        </div>
+      </li>
+      <li
+        className="bp6-tree-node"
+      >
+        <div
+          className="bp6-tree-node-content bp6-tree-node-content-0"
+          onClick={[Function]}
+          onContextMenu={[Function]}
+          onDoubleClick={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <span
+            className="bp6-tree-node-caret-none"
+          />
+          <span
+            className="bp6-tree-node-label"
+          >
+            Prefaces to Structure and Interpretation of Computer Programs, 1996 & 1984
+          </span>
+        </div>
+        <div
+          className="bp6-collapse"
+          style={
+            {
+              "height": undefined,
+              "overflowY": undefined,
+              "transition": undefined,
+            }
+          }
+        >
+          <div
+            aria-hidden={true}
+            className="bp6-collapse-body"
+            style={
+              {
+                "transform": "translateY(-undefinedpx)",
+                "transition": undefined,
+              }
+            }
+          />
+        </div>
+      </li>
+      <li
+        className="bp6-tree-node"
+      >
+        <div
+          className="bp6-tree-node-content bp6-tree-node-content-0"
+          onClick={[Function]}
+          onContextMenu={[Function]}
+          onDoubleClick={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <span
+            className="bp6-tree-node-caret-none"
+          />
+          <span
+            className="bp6-tree-node-label"
+          >
+            Acknowledgments
+          </span>
+        </div>
+        <div
+          className="bp6-collapse"
+          style={
+            {
+              "height": undefined,
+              "overflowY": undefined,
+              "transition": undefined,
+            }
+          }
+        >
+          <div
+            aria-hidden={true}
+            className="bp6-collapse-body"
+            style={
+              {
+                "transform": "translateY(-undefinedpx)",
+                "transition": undefined,
+              }
+            }
+          />
+        </div>
+      </li>
+      <li
+        className="bp6-tree-node"
+      >
+        <div
+          className="bp6-tree-node-content bp6-tree-node-content-0"
+          onClick={[Function]}
+          onContextMenu={[Function]}
+          onDoubleClick={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <span
+            className="bp6-icon bp6-icon-chevron-right bp6-tree-node-caret bp6-tree-node-caret-closed"
+            onClick={[Function]}
+          >
+            <svg
+              data-icon="chevron-right"
+              height={16}
+              role="img"
+              viewBox="0 0 16 16"
+              width={16}
+            >
+              <title>
+                Expand group
+              </title>
+              <path
+                d="M214.2 174.2L134.2 254.2C130.6 257.8 125.6 260 120 260C109 260 100 251 100 240C100 234.4 102.2 229.4 105.8 225.8L171.8 160L106 94.2C102.2 90.6 100 85.6 100 80C100 69 109 60 120 60C125.6 60 130.6 62.2 134.2 65.8L214.2 145.8C217.8 149.4 220 154.4 220 160C220 165.6 217.8 170.6 214.2 174.2z"
+                fillRule="evenodd"
+                style={
+                  {
+                    "transformOrigin": "center",
+                  }
+                }
+                transform="scale(0.05, -0.05) translate(-160, -160)"
+              />
+            </svg>
+          </span>
+          <span
+            className="bp6-tree-node-label"
+          >
+            1 Building Abstractions with Functions
+          </span>
+        </div>
+        <div
+          className="bp6-collapse"
+          style={
+            {
+              "height": undefined,
+              "overflowY": undefined,
+              "transition": undefined,
+            }
+          }
+        >
+          <div
+            aria-hidden={true}
+            className="bp6-collapse-body"
+            style={
+              {
+                "transform": "translateY(-undefinedpx)",
+                "transition": undefined,
+              }
+            }
+          />
+        </div>
+      </li>
+      <li
+        className="bp6-tree-node"
+      >
+        <div
+          className="bp6-tree-node-content bp6-tree-node-content-0"
+          onClick={[Function]}
+          onContextMenu={[Function]}
+          onDoubleClick={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <span
+            className="bp6-icon bp6-icon-chevron-right bp6-tree-node-caret bp6-tree-node-caret-closed"
+            onClick={[Function]}
+          >
+            <svg
+              data-icon="chevron-right"
+              height={16}
+              role="img"
+              viewBox="0 0 16 16"
+              width={16}
+            >
+              <title>
+                Expand group
+              </title>
+              <path
+                d="M214.2 174.2L134.2 254.2C130.6 257.8 125.6 260 120 260C109 260 100 251 100 240C100 234.4 102.2 229.4 105.8 225.8L171.8 160L106 94.2C102.2 90.6 100 85.6 100 80C100 69 109 60 120 60C125.6 60 130.6 62.2 134.2 65.8L214.2 145.8C217.8 149.4 220 154.4 220 160C220 165.6 217.8 170.6 214.2 174.2z"
+                fillRule="evenodd"
+                style={
+                  {
+                    "transformOrigin": "center",
+                  }
+                }
+                transform="scale(0.05, -0.05) translate(-160, -160)"
+              />
+            </svg>
+          </span>
+          <span
+            className="bp6-tree-node-label"
+          >
+            2 Building Abstractions with Data
+          </span>
+        </div>
+        <div
+          className="bp6-collapse"
+          style={
+            {
+              "height": undefined,
+              "overflowY": undefined,
+              "transition": undefined,
+            }
+          }
+        >
+          <div
+            aria-hidden={true}
+            className="bp6-collapse-body"
+            style={
+              {
+                "transform": "translateY(-undefinedpx)",
+                "transition": undefined,
+              }
+            }
+          />
+        </div>
+      </li>
+      <li
+        className="bp6-tree-node"
+      >
+        <div
+          className="bp6-tree-node-content bp6-tree-node-content-0"
+          onClick={[Function]}
+          onContextMenu={[Function]}
+          onDoubleClick={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <span
+            className="bp6-icon bp6-icon-chevron-right bp6-tree-node-caret bp6-tree-node-caret-closed"
+            onClick={[Function]}
+          >
+            <svg
+              data-icon="chevron-right"
+              height={16}
+              role="img"
+              viewBox="0 0 16 16"
+              width={16}
+            >
+              <title>
+                Expand group
+              </title>
+              <path
+                d="M214.2 174.2L134.2 254.2C130.6 257.8 125.6 260 120 260C109 260 100 251 100 240C100 234.4 102.2 229.4 105.8 225.8L171.8 160L106 94.2C102.2 90.6 100 85.6 100 80C100 69 109 60 120 60C125.6 60 130.6 62.2 134.2 65.8L214.2 145.8C217.8 149.4 220 154.4 220 160C220 165.6 217.8 170.6 214.2 174.2z"
+                fillRule="evenodd"
+                style={
+                  {
+                    "transformOrigin": "center",
+                  }
+                }
+                transform="scale(0.05, -0.05) translate(-160, -160)"
+              />
+            </svg>
+          </span>
+          <span
+            className="bp6-tree-node-label"
+          >
+            3 Modularity, Objects, and State
+          </span>
+        </div>
+        <div
+          className="bp6-collapse"
+          style={
+            {
+              "height": undefined,
+              "overflowY": undefined,
+              "transition": undefined,
+            }
+          }
+        >
+          <div
+            aria-hidden={true}
+            className="bp6-collapse-body"
+            style={
+              {
+                "transform": "translateY(-undefinedpx)",
+                "transition": undefined,
+              }
+            }
+          />
+        </div>
+      </li>
+      <li
+        className="bp6-tree-node"
+      >
+        <div
+          className="bp6-tree-node-content bp6-tree-node-content-0"
+          onClick={[Function]}
+          onContextMenu={[Function]}
+          onDoubleClick={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <span
+            className="bp6-icon bp6-icon-chevron-right bp6-tree-node-caret bp6-tree-node-caret-closed"
+            onClick={[Function]}
+          >
+            <svg
+              data-icon="chevron-right"
+              height={16}
+              role="img"
+              viewBox="0 0 16 16"
+              width={16}
+            >
+              <title>
+                Expand group
+              </title>
+              <path
+                d="M214.2 174.2L134.2 254.2C130.6 257.8 125.6 260 120 260C109 260 100 251 100 240C100 234.4 102.2 229.4 105.8 225.8L171.8 160L106 94.2C102.2 90.6 100 85.6 100 80C100 69 109 60 120 60C125.6 60 130.6 62.2 134.2 65.8L214.2 145.8C217.8 149.4 220 154.4 220 160C220 165.6 217.8 170.6 214.2 174.2z"
+                fillRule="evenodd"
+                style={
+                  {
+                    "transformOrigin": "center",
+                  }
+                }
+                transform="scale(0.05, -0.05) translate(-160, -160)"
+              />
+            </svg>
+          </span>
+          <span
+            className="bp6-tree-node-label"
+          >
+            4 Metalinguistic Abstraction
+          </span>
+        </div>
+        <div
+          className="bp6-collapse"
+          style={
+            {
+              "height": undefined,
+              "overflowY": undefined,
+              "transition": undefined,
+            }
+          }
+        >
+          <div
+            aria-hidden={true}
+            className="bp6-collapse-body"
+            style={
+              {
+                "transform": "translateY(-undefinedpx)",
+                "transition": undefined,
+              }
+            }
+          />
+        </div>
+      </li>
+      <li
+        className="bp6-tree-node"
+      >
+        <div
+          className="bp6-tree-node-content bp6-tree-node-content-0"
+          onClick={[Function]}
+          onContextMenu={[Function]}
+          onDoubleClick={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <span
+            className="bp6-icon bp6-icon-chevron-right bp6-tree-node-caret bp6-tree-node-caret-closed"
+            onClick={[Function]}
+          >
+            <svg
+              data-icon="chevron-right"
+              height={16}
+              role="img"
+              viewBox="0 0 16 16"
+              width={16}
+            >
+              <title>
+                Expand group
+              </title>
+              <path
+                d="M214.2 174.2L134.2 254.2C130.6 257.8 125.6 260 120 260C109 260 100 251 100 240C100 234.4 102.2 229.4 105.8 225.8L171.8 160L106 94.2C102.2 90.6 100 85.6 100 80C100 69 109 60 120 60C125.6 60 130.6 62.2 134.2 65.8L214.2 145.8C217.8 149.4 220 154.4 220 160C220 165.6 217.8 170.6 214.2 174.2z"
+                fillRule="evenodd"
+                style={
+                  {
+                    "transformOrigin": "center",
+                  }
+                }
+                transform="scale(0.05, -0.05) translate(-160, -160)"
+              />
+            </svg>
+          </span>
+          <span
+            className="bp6-tree-node-label"
+          >
+            5 Computing with Register Machines
+          </span>
+        </div>
+        <div
+          className="bp6-collapse"
+          style={
+            {
+              "height": undefined,
+              "overflowY": undefined,
+              "transition": undefined,
+            }
+          }
+        >
+          <div
+            aria-hidden={true}
+            className="bp6-collapse-body"
+            style={
+              {
+                "transform": "translateY(-undefinedpx)",
+                "transition": undefined,
+              }
+            }
+          />
+        </div>
+      </li>
+      <li
+        className="bp6-tree-node"
+      >
+        <div
+          className="bp6-tree-node-content bp6-tree-node-content-0"
+          onClick={[Function]}
+          onContextMenu={[Function]}
+          onDoubleClick={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <span
+            className="bp6-tree-node-caret-none"
+          />
+          <span
+            className="bp6-tree-node-label"
+          >
+            References
+          </span>
+        </div>
+        <div
+          className="bp6-collapse"
+          style={
+            {
+              "height": undefined,
+              "overflowY": undefined,
+              "transition": undefined,
+            }
+          }
+        >
+          <div
+            aria-hidden={true}
+            className="bp6-collapse-body"
+            style={
+              {
+                "transform": "translateY(-undefinedpx)",
+                "transition": undefined,
+              }
+            }
+          />
+        </div>
+      </li>
+      <li
+        className="bp6-tree-node"
+      >
+        <div
+          className="bp6-tree-node-content bp6-tree-node-content-0"
+          onClick={[Function]}
+          onContextMenu={[Function]}
+          onDoubleClick={[Function]}
+          onMouseEnter={[Function]}
+          onMouseLeave={[Function]}
+        >
+          <span
+            className="bp6-tree-node-caret-none"
+          />
+          <span
+            className="bp6-tree-node-label"
+          >
+            About the SICP JS Project
+          </span>
+        </div>
+        <div
+          className="bp6-collapse"
+          style={
+            {
+              "height": undefined,
+              "overflowY": undefined,
+              "transition": undefined,
+            }
+          }
+        >
+          <div
+            aria-hidden={true}
+            className="bp6-collapse-body"
+            style={
+              {
+                "transform": "translateY(-undefinedpx)",
+                "transition": undefined,
+              }
+            }
+          />
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+`;

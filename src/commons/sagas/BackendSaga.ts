@@ -1,7 +1,5 @@
-/*eslint no-eval: "error"*/
-/*eslint-env browser*/
 import _ from 'lodash';
-import { SagaIterator } from 'redux-saga';
+import type { SagaIterator } from 'redux-saga';
 import { all, call, fork, put, select } from 'redux-saga/effects';
 import AcademyActions from 'src/features/academy/AcademyActions';
 import DashboardActions from 'src/features/dashboard/DashboardActions';
@@ -9,23 +7,23 @@ import GroundControlActions from 'src/features/groundControl/GroundControlAction
 import SourcecastActions from 'src/features/sourceRecorder/sourcecast/SourcecastActions';
 import SourceRecorderActions from 'src/features/sourceRecorder/SourceRecorderActions';
 import { postNewStoriesUsers } from 'src/features/stories/storiesComponents/BackendAccess';
-import { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
+import type { UsernameRoleGroup } from 'src/pages/academy/adminPanel/subcomponents/AddUserPanel';
 
-import { GradingSummary } from '../../features/dashboard/DashboardTypes';
+import type { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import {
-  GradingOverview,
-  GradingOverviews,
-  GradingQuery,
-  GradingQuestion,
+  type GradingOverview,
+  type GradingOverviews,
+  type GradingQuery,
+  type GradingQuestion,
   SortStates
 } from '../../features/grading/GradingTypes';
-import { SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
+import type { SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
-import { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
+import type { TeamFormationOverview } from '../../features/teamFormation/TeamFormationTypes';
 import SessionActions from '../application/actions/SessionActions';
-import { OverallState, Role } from '../application/ApplicationTypes';
-import { RouterState } from '../application/types/CommonsTypes';
-import {
+import { type OverallState, Role } from '../application/ApplicationTypes';
+import type { RouterState } from '../application/types/CommonsTypes';
+import type {
   AdminPanelCourseRegistration,
   CourseConfiguration,
   CourseRegistration,
@@ -34,14 +32,14 @@ import {
   User
 } from '../application/types/SessionTypes';
 import {
-  Assessment,
-  AssessmentConfiguration,
-  AssessmentOverview,
+  type Assessment,
+  type AssessmentConfiguration,
+  type AssessmentOverview,
   AssessmentStatuses,
   ProgressStatuses,
-  Question
+  type Question
 } from '../assessment/AssessmentTypes';
-import {
+import type {
   Notification,
   NotificationFilterFunction
 } from '../notificationBadge/NotificationBadgeTypes';
@@ -50,7 +48,7 @@ import { actions } from '../utils/ActionsHelper';
 import { computeFrontendRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../workspace/WorkspaceActions';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
+import type { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import {
   checkAnswerLastModifiedAt,
   deleteAssessment,
@@ -118,18 +116,10 @@ export function* routerNavigate(path: string) {
   return router?.navigate(path);
 }
 
-// TODO: Refactor and combine in a future commit
-const sagaActions = {
-  ...SessionActions,
-  ...SourcereelActions,
-  ...AcademyActions,
-  ...SourcecastActions,
-  ...SourceRecorderActions,
-  ...WorkspaceActions
-};
-const newBackendSagaOne = combineSagaHandlers(sagaActions, {
-  fetchAuth: function* (action): any {
+const newBackendSagaOne = combineSagaHandlers({
+  [SessionActions.fetchAuth.type]: function* (action): any {
     const { code, providerId: payloadProviderId } = action.payload;
+    const isVscode: boolean = yield select((state: OverallState) => state.vscode.isVscode);
 
     const providerId = payloadProviderId || (getDefaultProvider() || [null])[0];
     if (!providerId) {
@@ -141,7 +131,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
     }
 
     const clientId = getClientId(providerId);
-    const redirectUrl = computeFrontendRedirectUri(providerId);
+    const redirectUrl = computeFrontendRedirectUri(providerId, isVscode);
 
     const tokens: Tokens | null = yield call(postAuth, code, providerId, clientId, redirectUrl);
     if (!tokens) {
@@ -157,14 +147,14 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
      * - Thus handling navigation in <Login /> allows us to directly access the latest router via `useNavigate`.
      */
   },
-  handleSamlRedirect: function* (action) {
+  [SessionActions.handleSamlRedirect.type]: function* (action) {
     const { jwtCookie } = action.payload;
     const tokens = _.mapKeys(JSON.parse(jwtCookie), (v, k) => _.camelCase(k)) as Tokens;
 
     yield put(actions.setTokens(tokens));
     yield put(actions.fetchUserAndCourse());
   },
-  fetchUserAndCourse: function* (action) {
+  [SessionActions.fetchUserAndCourse.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     // Note: courseRegistration, courseConfiguration and assessmentConfigurations
@@ -206,7 +196,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
       }
     }
   },
-  fetchCourseConfig: function* () {
+  [SessionActions.fetchCourseConfig.type]: function* () {
     const tokens: Tokens = yield selectTokens();
     const { config }: { config: CourseConfiguration | null } = yield call(getCourseConfig, tokens);
     if (config) {
@@ -220,7 +210,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
       }
     }
   },
-  fetchAssessmentOverviews: function* () {
+  [SessionActions.fetchAssessmentOverviews.type]: function* () {
     const tokens: Tokens = yield selectTokens();
 
     const assessmentOverviews: AssessmentOverview[] | null = yield call(
@@ -231,7 +221,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
       yield put(actions.updateAssessmentOverviews(assessmentOverviews));
     }
   },
-  fetchTotalXp: function* () {
+  [SessionActions.fetchTotalXp.type]: function* () {
     const tokens: Tokens = yield selectTokens();
 
     const res: { totalXp: number } = yield call(getTotalXp, tokens);
@@ -239,7 +229,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
       yield put(actions.updateTotalXp(res.totalXp));
     }
   },
-  fetchTotalXpAdmin: function* (action) {
+  [SessionActions.fetchTotalXpAdmin.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     const courseRegId = action.payload;
@@ -249,7 +239,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
       yield put(actions.updateTotalXp(res.totalXp));
     }
   },
-  fetchAssessment: function* (action) {
+  [SessionActions.fetchAssessment.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     const { assessmentId, assessmentPassword } = action.payload;
@@ -265,7 +255,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
       yield put(actions.updateAssessment(assessment));
     }
   },
-  fetchAssessmentAdmin: function* (action) {
+  [SessionActions.fetchAssessmentAdmin.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     const { assessmentId, courseRegId } = action.payload;
@@ -280,7 +270,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
       yield put(actions.updateAssessment(assessment));
     }
   },
-  submitAnswer: function* (action) {
+  [SessionActions.submitAnswer.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const questionId = action.payload.id;
     const answer = action.payload.answer;
@@ -313,7 +303,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
     yield put(actions.updateAssessment(newAssessment));
     return yield put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false));
   },
-  checkAnswerLastModifiedAt: function* (action) {
+  [SessionActions.checkAnswerLastModifiedAt.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const questionId = action.payload.id;
     const lastModifiedAt = action.payload.lastModifiedAt;
@@ -327,7 +317,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
     );
     saveAnswer(resp);
   },
-  submitAssessment: function* (action) {
+  [SessionActions.submitAssessment.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const assessmentId = action.payload;
 
@@ -351,7 +341,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
 
     return yield put(actions.updateAssessmentOverviews(newOverviews));
   },
-  fetchGradingOverviews: function* (action) {
+  [SessionActions.fetchGradingOverviews.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     const role: Role = yield select((state: OverallState) => state.session.role!);
@@ -391,7 +381,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
       yield put(actions.updateGradingOverviews(gradingOverviews));
     }
   },
-  fetchTeamFormationOverview: function* (action) {
+  [SessionActions.fetchTeamFormationOverview.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { assessmentId } = action.payload;
 
@@ -404,7 +394,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
       yield put(actions.updateTeamFormationOverview(teamFormationOverview));
     }
   },
-  fetchTeamFormationOverviews: function* () {
+  [SessionActions.fetchTeamFormationOverviews.type]: function* () {
     const tokens: Tokens = yield selectTokens();
 
     const role: Role = yield select((state: OverallState) => state.session.role!);
@@ -420,7 +410,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
       yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
     }
   },
-  fetchStudents: function* () {
+  [SessionActions.fetchStudents.type]: function* () {
     const tokens: Tokens = yield selectTokens();
     const role: Role = yield select((state: OverallState) => state.session.role!);
     if (role === Role.Student) {
@@ -431,7 +421,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
       yield put(actions.updateStudents(students));
     }
   },
-  createTeam: function* (action) {
+  [SessionActions.createTeam.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { assessment, teams } = action.payload;
 
@@ -451,7 +441,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
       return yield call(showWarningMessage, resp.statusText);
     }
   },
-  bulkUploadTeam: function* (action) {
+  [SessionActions.bulkUploadTeam.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { assessment, file, students } = action.payload;
 
@@ -475,7 +465,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
       yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
     }
   },
-  updateTeam: function* (action) {
+  [SessionActions.updateTeam.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { teamId, assessment, teams } = action.payload;
     const resp: Response | null = yield call(putTeams, assessment.id, teamId, teams, tokens);
@@ -492,7 +482,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
       yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
     }
   },
-  deleteTeam: function* (action) {
+  [SessionActions.deleteTeam.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { teamId } = action.payload;
 
@@ -510,7 +500,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
       yield put(actions.updateTeamFormationOverviews(teamFormationOverviews));
     }
   },
-  fetchGrading: function* (action) {
+  [SessionActions.fetchGrading.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const id = action.payload;
 
@@ -522,7 +512,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
   /**
    * Unsubmits the submission and updates the grading overviews of the new status.
    */
-  unsubmitSubmission: function* (action) {
+  [SessionActions.unsubmitSubmission.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { submissionId } = action.payload;
 
@@ -548,7 +538,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
     yield call(showSuccessMessage, 'Unsubmit successful', 1000);
     yield put(actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews }));
   },
-  publishGrading: function* (action) {
+  [SessionActions.publishGrading.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { submissionId } = action.payload;
 
@@ -574,7 +564,7 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
     yield call(showSuccessMessage, 'Publish grading successful', 1000);
     yield put(actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews }));
   },
-  unpublishGrading: function* (action) {
+  [SessionActions.unpublishGrading.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { submissionId } = action.payload;
 
@@ -600,8 +590,8 @@ const newBackendSagaOne = combineSagaHandlers(sagaActions, {
     yield call(showSuccessMessage, 'Unpublish grading successful', 1000);
     yield put(actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews }));
   },
-  submitGrading: sendGrade,
-  submitGradingAndContinue: sendGradeAndContinue
+  [SessionActions.submitGrading.type]: sendGrade,
+  [SessionActions.submitGradingAndContinue.type]: sendGradeAndContinue
 });
 
 function* sendGrade(
@@ -672,15 +662,15 @@ function* sendGradeAndContinue(action: ReturnType<typeof actions.submitGradingAn
   );
 }
 
-const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
-  reautogradeSubmission: function* (action) {
+const newBackendSagaTwo = combineSagaHandlers({
+  [SessionActions.reautogradeSubmission.type]: function* (action) {
     const submissionId = action.payload;
     const tokens: Tokens = yield selectTokens();
     const resp: Response | null = yield call(postReautogradeSubmission, submissionId, tokens);
 
     yield call(handleReautogradeResponse, resp);
   },
-  reautogradeAnswer: function* (action) {
+  [SessionActions.reautogradeAnswer.type]: function* (action) {
     const { submissionId, questionId } = action.payload;
     const tokens: Tokens = yield selectTokens();
     const resp: Response | null = yield call(
@@ -692,13 +682,13 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
 
     yield call(handleReautogradeResponse, resp);
   },
-  fetchNotifications: function* (action) {
+  [SessionActions.fetchNotifications.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const notifications: Notification[] = yield call(getNotifications, tokens);
 
     yield put(actions.updateNotifications(notifications));
   },
-  acknowledgeNotifications: function* (action) {
+  [SessionActions.acknowledgeNotifications.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const notificationFilter: NotificationFilterFunction | undefined = action.payload.withFilter;
     const notifications: Notification[] = yield select(
@@ -727,7 +717,7 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
       return yield handleResponseError(resp);
     }
   },
-  deleteSourcecastEntry: function* (action) {
+  [SourcereelActions.deleteSourcecastEntry.type]: function* (action) {
     const role: Role = yield select((state: OverallState) => state.session.role!);
     if (role === Role.Student) {
       return yield call(showWarningMessage, 'Only staff can delete sourcecasts.');
@@ -748,7 +738,7 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
 
     yield call(showSuccessMessage, 'Deleted successfully!', 1000);
   },
-  fetchSourcecastIndex: function* (action) {
+  [SourcecastActions.fetchSourcecastIndex.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     const sourcecastIndex: SourcecastData[] | null = yield call(getSourcecastIndex, tokens);
@@ -756,7 +746,7 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
       yield put(actions.updateSourcecastIndex(sourcecastIndex, action.payload.workspaceLocation));
     }
   },
-  saveSourcecastData: function* (action) {
+  [SourceRecorderActions.saveSourcecastData.type]: function* (action) {
     const [role, courseId]: [Role, number | undefined] = yield select((state: OverallState) => [
       state.session.role!,
       state.session.courseId
@@ -783,7 +773,7 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
     yield call(showSuccessMessage, 'Saved successfully!', 1000);
     yield routerNavigate(`/courses/${courseId}/sourcecast`);
   },
-  changeSublanguage: function* (action) {
+  [WorkspaceActions.changeSublanguage.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { sublang } = action.payload;
 
@@ -803,7 +793,7 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
     );
     yield call(showSuccessMessage, 'Updated successfully!', 1000);
   },
-  updateLatestViewedCourse: function* (action) {
+  [SessionActions.updateLatestViewedCourse.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { courseId } = action.payload;
 
@@ -840,7 +830,7 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
 
     yield call(showSuccessMessage, `Switched to ${courseConfiguration.courseName}!`, 5000);
   },
-  updateCourseConfig: function* (action) {
+  [SessionActions.updateCourseConfig.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const courseConfig: UpdateCourseConfiguration = action.payload;
 
@@ -859,7 +849,7 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
     yield put(actions.setCourseConfiguration(courseConfig));
     yield call(showSuccessMessage, 'Updated successfully!', 1000);
   },
-  fetchAssessmentConfigs: function* () {
+  [SessionActions.fetchAssessmentConfigs.type]: function* () {
     const tokens: Tokens = yield selectTokens();
 
     const assessmentConfigs: AssessmentConfiguration[] | null = yield call(
@@ -870,7 +860,7 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
       yield put(actions.setAssessmentConfigurations(assessmentConfigs));
     }
   },
-  updateAssessmentConfigs: function* (action) {
+  [SessionActions.updateAssessmentConfigs.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const assessmentConfigs: AssessmentConfiguration[] = action.payload;
 
@@ -889,7 +879,7 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
     }
     yield call(showSuccessMessage, 'Updated successfully!', 1000);
   },
-  deleteAssessmentConfig: function* (action) {
+  [SessionActions.deleteAssessmentConfig.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const assessmentConfig: AssessmentConfiguration = action.payload;
 
@@ -898,7 +888,7 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
       return yield handleResponseError(resp);
     }
   },
-  fetchAdminPanelCourseRegistrations: function* (action) {
+  [SessionActions.fetchAdminPanelCourseRegistrations.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
 
     const courseRegistrations: AdminPanelCourseRegistration[] | null = yield call(
@@ -909,7 +899,7 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
       yield put(actions.setAdminPanelCourseRegistrations(courseRegistrations));
     }
   },
-  createCourse: function* (action) {
+  [AcademyActions.createCourse.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const courseConfig: UpdateCourseConfiguration = action.payload;
 
@@ -978,7 +968,7 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
     yield call(showSuccessMessage, 'Successfully created your new course!');
     yield routerNavigate(`/courses/${courseRegistration.courseId}`);
   },
-  addNewUsersToCourse: function* (action) {
+  [AcademyActions.addNewUsersToCourse.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { users, provider }: { users: UsernameRoleGroup[]; provider: string } = action.payload;
 
@@ -990,7 +980,7 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
     yield put(actions.fetchAdminPanelCourseRegistrations());
     yield call(showSuccessMessage, 'Users added!');
   },
-  addNewStoriesUsersToCourse: function* (action) {
+  [AcademyActions.addNewStoriesUsersToCourse.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { users, provider } = action.payload;
 
@@ -999,7 +989,7 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
     // TODO: Refresh the list of story users
     //       once that page is implemented
   },
-  updateCourseResearchAgreement: function* (action) {
+  [SessionActions.updateCourseResearchAgreement.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { agreedToResearch } = action.payload;
 
@@ -1011,7 +1001,7 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
     yield put(actions.setCourseRegistration({ agreedToResearch }));
     yield call(showSuccessMessage, 'Research preference saved!');
   },
-  updateUserRole: function* (action) {
+  [SessionActions.updateUserRole.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { courseRegId, role }: { courseRegId: number; role: Role } = action.payload;
 
@@ -1023,7 +1013,7 @@ const newBackendSagaTwo = combineSagaHandlers(sagaActions, {
     yield put(actions.fetchAdminPanelCourseRegistrations());
     yield call(showSuccessMessage, 'Role updated!');
   },
-  deleteUserCourseRegistration: function* (action) {
+  [SessionActions.deleteUserCourseRegistration.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();
     const { courseRegId }: { courseRegId: number } = action.payload;
 

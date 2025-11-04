@@ -1,0 +1,97 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Navbar renders correctly 1`] = `
+<React.Fragment>
+  <Blueprint6.Omnibar
+    className="sicp-search-bar"
+    inputProps={
+      {
+        "disabled": false,
+        "placeholder": "Text Search...",
+      }
+    }
+    isOpen={false}
+    itemListRenderer={[Function]}
+    itemRenderer={[Function]}
+    items={[]}
+    onClose={[Function]}
+    onItemSelect={[Function]}
+    onQueryChange={[Function]}
+    overlayProps={
+      {
+        "className": "bp6-overlay-scroll-container",
+      }
+    }
+    query=""
+  />
+  <Blueprint6.Navbar
+    className="SicpNavigationBar secondary-navbar"
+  >
+    <Blueprint6.NavbarGroup
+      align="left"
+    >
+      <TableOfContentsButton
+        handleOpenToc={[Function]}
+      />
+    </Blueprint6.NavbarGroup>
+    <Blueprint6.NavbarGroup
+      align="right"
+    >
+      <div>
+        <ControlButton
+          icon="arrow-right"
+          label="Next"
+          onClick={[Function]}
+          options={
+            {
+              "iconOnRight": true,
+            }
+          }
+        />
+      </div>
+    </Blueprint6.NavbarGroup>
+    <Blueprint6.NavbarGroup
+      align="center"
+    >
+      <div
+        style={
+          {
+            "display": "flex",
+            "gap": 2,
+            "justifyContent": "center",
+            "width": "100%",
+          }
+        }
+      >
+        <ControlButton
+          icon="search"
+          label="Text Search"
+          onClick={[Function]}
+        />
+        <ControlButton
+          icon="search"
+          label="Index Search"
+          onClick={[Function]}
+        />
+      </div>
+    </Blueprint6.NavbarGroup>
+  </Blueprint6.Navbar>
+  <Blueprint6.Drawer
+    autoFocus={true}
+    canEscapeKeyClose={true}
+    canOutsideClickClose={true}
+    className="sicp-toc-drawer"
+    enforceFocus={true}
+    hasBackdrop={true}
+    isOpen={false}
+    onClose={[Function]}
+    position="left"
+    style={{}}
+    usePortal={false}
+  >
+    <SicpToc
+      handleCloseToc={[Function]}
+    />
+  </Blueprint6.Drawer>
+</React.Fragment>
+`;

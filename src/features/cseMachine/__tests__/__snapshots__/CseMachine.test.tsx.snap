@@ -1,0 +1,6268 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 1`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={40}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 2`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={75}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={80}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 3`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={110}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={115}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 4`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={145}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={150}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 5`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={180}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={185}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 6`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={215}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={220}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 7`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={250}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="*"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={255}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Perform * on top 2 stash values"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 8`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={285}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="call 1"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={290}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Call function with 1 argument"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 9`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={320}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="n - 1"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={325}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="n - 1"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 10`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={355}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#030fff"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="fact"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={360}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="fact"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 11`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={140}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="10"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="10"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 12`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={178}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="9"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={183}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="9"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 13`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={207}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="8"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={212}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="8"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 14`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={236}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="7"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={241}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="7"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 15`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={265}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="6"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={270}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="6"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 16`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={294}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="5"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={299}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="5"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 17`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={323}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="4"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={328}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="4"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 18`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={352}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="3"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={357}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="3"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: Control is truncated properly 19`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={381}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="2"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={386}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="2"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 1`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={40}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="call 0"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Call function with 0 arguments"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 2`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={75}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="arr acc"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={80}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Access array at given index"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 3`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={110}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="1"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={115}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="1"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 4`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={145}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="env"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={150}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    listening={false}
+  >
+    <Path
+      data="M 140 162.5 L 170 240 L 170 240 "
+      preventDefault={false}
+      stroke="#999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999"
+      pointerWidth={10}
+      points={
+        [
+          140,
+          162.5,
+          170,
+          240,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 5`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={180}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="mark"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={185}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Mark return address"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 6`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={215}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="env"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={220}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    listening={false}
+  >
+    <Path
+      data="M 140 232.5 L 170 390 L 170 390 "
+      preventDefault={false}
+      stroke="#999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999"
+      pointerWidth={10}
+      points={
+        [
+          140,
+          232.5,
+          170,
+          390,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 7`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={250}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="return ar…"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={255}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="return arr;"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 8`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={285}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="pop"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={290}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Pop most recently pushed value from stash"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 9`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={320}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="while"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={325}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Keep executing while loop body if predicate holds"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 10`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={355}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="x < n"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={360}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="x < n"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 11`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={390}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="x = x + 1;"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={395}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="x = x + 1;"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 12`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={425}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="pop"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={430}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Pop most recently pushed value from stash"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: arrows from the environment instruction to the frame and arrows from the stash to closures 13`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={460}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#030fff"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="arr[x] = …"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={465}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="arr[x] = () => x;"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: global environments are treated correctly 1`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={40}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="math_sin(…"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="math_sin(math_PI / 2);"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: global environments are treated correctly 2`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={75}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="env"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={80}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Set current environment to this environment"
+    />
+  </Label>
+  <Group
+    listening={false}
+  >
+    <Path
+      data="M 140 92.5 L 170 105 L 170 105 "
+      preventDefault={false}
+      stroke="#999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999"
+      pointerWidth={10}
+      points={
+        [
+          140,
+          92.5,
+          170,
+          105,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: global environments are treated correctly 3`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={110}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="pop"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={115}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Pop most recently pushed value from stash"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: global environments are treated correctly 4`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={20}
+    y={145}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#030fff"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      height={35}
+      padding={10}
+      preventDefault={false}
+      text="asgn math…"
+      width={120}
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={150}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="Assign value on top of stash to math_sin"
+    />
+  </Label>
+</React.Fragment>
+`;
+
+exports[`CSE Machine Control Stash correctly renders: global environments are treated correctly 5`] = `
+<React.Fragment>
+  <Label
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
+    x={140}
+    y={5}
+  >
+    <Tag
+      cornerRadius={5}
+      preventDefault={false}
+      stroke="#999"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={10}
+      preventDefault={false}
+      text="closure"
+    />
+  </Label>
+  <Label
+    visible={false}
+    x={145}
+    y={45}
+  >
+    <Tag
+      fill="#000"
+      opacity={0.7}
+      preventDefault={false}
+      stroke="#000"
+    />
+    <Text
+      fill="#999"
+      fontFamily="monospace, monospace"
+      fontSize={15}
+      fontStyle="normal"
+      fontVariant="normal"
+      padding={5}
+      preventDefault={false}
+      text="closure"
+    />
+  </Label>
+  <Group
+    listening={false}
+  >
+    <Path
+      data="M 181.5 40 L 349 330 L 349 330 "
+      preventDefault={false}
+      stroke="#999"
+      strokeWidth={1}
+    />
+    <Arrow
+      fill="#999"
+      pointerWidth={10}
+      points={
+        [
+          181.5,
+          40,
+          349,
+          330,
+        ]
+      }
+      preventDefault={false}
+      strokeEnabled={false}
+    />
+  </Group>
+</React.Fragment>
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 0 1`] = `
+{
+  "head": {
+    ":::pre-declared names::": Symbol(),
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "-1",
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 0 2`] = `
+{
+  "head": {
+    "fn": [Function],
+    "x": [
+      "long string",
+      [
+        [Function],
+        [Function],
+      ],
+      [
+        1,
+        [
+          [
+            2,
+            3,
+          ],
+          [
+            [Function],
+            null,
+          ],
+        ],
+      ],
+      [Function],
+      5,
+      6,
+    ],
+    "y": [
+      [
+        [Function],
+        [Function],
+      ],
+      [
+        [
+          1,
+          [
+            [
+              2,
+              3,
+            ],
+            [
+              [Function],
+              null,
+            ],
+          ],
+        ],
+        [
+          [Function],
+          [
+            [
+              [
+                2,
+                3,
+              ],
+              [
+                [Function],
+                null,
+              ],
+            ],
+            [
+              [Function],
+              null,
+            ],
+          ],
+        ],
+      ],
+    ],
+  },
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+      [Function],
+      [Function],
+      [
+        [Function],
+        [Function],
+      ],
+      [
+        2,
+        3,
+      ],
+      [Function],
+      [
+        [Function],
+        null,
+      ],
+      [
+        [
+          2,
+          3,
+        ],
+        [
+          [Function],
+          null,
+        ],
+      ],
+      [
+        1,
+        [
+          [
+            2,
+            3,
+          ],
+          [
+            [Function],
+            null,
+          ],
+        ],
+      ],
+      [Function],
+      [
+        "long string",
+        [
+          [Function],
+          [Function],
+        ],
+        [
+          1,
+          [
+            [
+              2,
+              3,
+            ],
+            [
+              [Function],
+              null,
+            ],
+          ],
+        ],
+        [Function],
+        5,
+        6,
+      ],
+      [
+        [Function],
+        null,
+      ],
+      [
+        [
+          [
+            2,
+            3,
+          ],
+          [
+            [Function],
+            null,
+          ],
+        ],
+        [
+          [Function],
+          null,
+        ],
+      ],
+      [
+        [Function],
+        [
+          [
+            [
+              2,
+              3,
+            ],
+            [
+              [Function],
+              null,
+            ],
+          ],
+          [
+            [Function],
+            null,
+          ],
+        ],
+      ],
+      [
+        [
+          1,
+          [
+            [
+              2,
+              3,
+            ],
+            [
+              [Function],
+              null,
+            ],
+          ],
+        ],
+        [
+          [Function],
+          [
+            [
+              [
+                2,
+                3,
+              ],
+              [
+                [Function],
+                null,
+              ],
+            ],
+            [
+              [Function],
+              null,
+            ],
+          ],
+        ],
+      ],
+      [
+        [
+          [Function],
+          [Function],
+        ],
+        [
+          [
+            1,
+            [
+              [
+                2,
+                3,
+              ],
+              [
+                [Function],
+                null,
+              ],
+            ],
+          ],
+          [
+            [Function],
+            [
+              [
+                [
+                  2,
+                  3,
+                ],
+                [
+                  [Function],
+                  null,
+                ],
+              ],
+              [
+                [Function],
+                null,
+              ],
+            ],
+          ],
+        ],
+      ],
+    },
+  },
+  "id": "47",
+  "name": "programEnvironment",
+  "tail": {
+    "head": {
+      ":::pre-declared names::": Symbol(),
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 0 3`] = `
+[
+  ":::pre-declared names::: ",
+  Symbol(),
+  "fn:= ",
+  [Function],
+  "x:= ",
+  [
+    "long string",
+    [
+      [Function],
+      [Function],
+    ],
+    [
+      1,
+      [
+        [
+          2,
+          3,
+        ],
+        [
+          [Function],
+          null,
+        ],
+      ],
+    ],
+    [Function],
+    5,
+    6,
+  ],
+  "y:= ",
+  [
+    [
+      [Function],
+      [Function],
+    ],
+    [
+      [
+        1,
+        [
+          [
+            2,
+            3,
+          ],
+          [
+            [Function],
+            null,
+          ],
+        ],
+      ],
+      [
+        [Function],
+        [
+          [
+            [
+              2,
+              3,
+            ],
+            [
+              [Function],
+              null,
+            ],
+          ],
+          [
+            [Function],
+            null,
+          ],
+        ],
+      ],
+    ],
+  ],
+]
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 1 1`] = `
+{
+  "head": {
+    ":::pre-declared names::": Symbol(),
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "-1",
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 1 2`] = `
+{
+  "head": {
+    "fn": [Function],
+    "l": [
+      1,
+      [
+        [
+          [
+            1,
+            [
+              2,
+              [
+                3,
+                [
+                  [Function],
+                  null,
+                ],
+              ],
+            ],
+          ],
+          [
+            [
+              [
+                1,
+                2,
+              ],
+              3,
+            ],
+            [
+              [
+                1,
+                [
+                  1,
+                  2,
+                ],
+                [Function],
+                4,
+                5,
+              ],
+              [
+                4,
+                null,
+              ],
+            ],
+          ],
+        ],
+        [
+          [Function],
+          [
+            [
+              1,
+              [
+                [
+                  1,
+                  2,
+                ],
+                3,
+              ],
+              4,
+            ],
+            null,
+          ],
+        ],
+      ],
+    ],
+    "x": [
+      1,
+      [
+        [
+          1,
+          2,
+        ],
+        3,
+      ],
+      4,
+    ],
+  },
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+      [
+        1,
+        2,
+      ],
+      [
+        [
+          1,
+          2,
+        ],
+        3,
+      ],
+      [
+        1,
+        [
+          [
+            1,
+            2,
+          ],
+          3,
+        ],
+        4,
+      ],
+      [
+        [Function],
+        null,
+      ],
+      [
+        3,
+        [
+          [Function],
+          null,
+        ],
+      ],
+      [
+        2,
+        [
+          3,
+          [
+            [Function],
+            null,
+          ],
+        ],
+      ],
+      [
+        1,
+        [
+          2,
+          [
+            3,
+            [
+              [Function],
+              null,
+            ],
+          ],
+        ],
+      ],
+      [
+        1,
+        2,
+      ],
+      [
+        1,
+        [
+          1,
+          2,
+        ],
+        [Function],
+        4,
+        5,
+      ],
+      [
+        4,
+        null,
+      ],
+      [
+        [
+          1,
+          [
+            1,
+            2,
+          ],
+          [Function],
+          4,
+          5,
+        ],
+        [
+          4,
+          null,
+        ],
+      ],
+      [
+        [
+          [
+            1,
+            2,
+          ],
+          3,
+        ],
+        [
+          [
+            1,
+            [
+              1,
+              2,
+            ],
+            [Function],
+            4,
+            5,
+          ],
+          [
+            4,
+            null,
+          ],
+        ],
+      ],
+      [
+        [
+          1,
+          [
+            2,
+            [
+              3,
+              [
+                [Function],
+                null,
+              ],
+            ],
+          ],
+        ],
+        [
+          [
+            [
+              1,
+              2,
+            ],
+            3,
+          ],
+          [
+            [
+              1,
+              [
+                1,
+                2,
+              ],
+              [Function],
+              4,
+              5,
+            ],
+            [
+              4,
+              null,
+            ],
+          ],
+        ],
+      ],
+      [Function],
+      [
+        [
+          1,
+          [
+            [
+              1,
+              2,
+            ],
+            3,
+          ],
+          4,
+        ],
+        null,
+      ],
+      [
+        [Function],
+        [
+          [
+            1,
+            [
+              [
+                1,
+                2,
+              ],
+              3,
+            ],
+            4,
+          ],
+          null,
+        ],
+      ],
+      [
+        [
+          [
+            1,
+            [
+              2,
+              [
+                3,
+                [
+                  [Function],
+                  null,
+                ],
+              ],
+            ],
+          ],
+          [
+            [
+              [
+                1,
+                2,
+              ],
+              3,
+            ],
+            [
+              [
+                1,
+                [
+                  1,
+                  2,
+                ],
+                [Function],
+                4,
+                5,
+              ],
+              [
+                4,
+                null,
+              ],
+            ],
+          ],
+        ],
+        [
+          [Function],
+          [
+            [
+              1,
+              [
+                [
+                  1,
+                  2,
+                ],
+                3,
+              ],
+              4,
+            ],
+            null,
+          ],
+        ],
+      ],
+      [
+        1,
+        [
+          [
+            [
+              1,
+              [
+                2,
+                [
+                  3,
+                  [
+                    [Function],
+                    null,
+                  ],
+                ],
+              ],
+            ],
+            [
+              [
+                [
+                  1,
+                  2,
+                ],
+                3,
+              ],
+              [
+                [
+                  1,
+                  [
+                    1,
+                    2,
+                  ],
+                  [Function],
+                  4,
+                  5,
+                ],
+                [
+                  4,
+                  null,
+                ],
+              ],
+            ],
+          ],
+          [
+            [Function],
+            [
+              [
+                1,
+                [
+                  [
+                    1,
+                    2,
+                  ],
+                  3,
+                ],
+                4,
+              ],
+              null,
+            ],
+          ],
+        ],
+      ],
+    },
+  },
+  "id": "47",
+  "name": "programEnvironment",
+  "tail": {
+    "head": {
+      ":::pre-declared names::": Symbol(),
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 1 3`] = `
+[
+  ":::pre-declared names::: ",
+  Symbol(),
+  "fn:= ",
+  [Function],
+  "x:= ",
+  [
+    1,
+    [
+      [
+        1,
+        2,
+      ],
+      3,
+    ],
+    4,
+  ],
+  "l:= ",
+  [
+    1,
+    [
+      [
+        [
+          1,
+          [
+            2,
+            [
+              3,
+              [
+                [Function],
+                null,
+              ],
+            ],
+          ],
+        ],
+        [
+          [
+            [
+              1,
+              2,
+            ],
+            3,
+          ],
+          [
+            [
+              1,
+              [
+                1,
+                2,
+              ],
+              [Function],
+              4,
+              5,
+            ],
+            [
+              4,
+              null,
+            ],
+          ],
+        ],
+      ],
+      [
+        [Function],
+        [
+          [
+            1,
+            [
+              [
+                1,
+                2,
+              ],
+              3,
+            ],
+            4,
+          ],
+          null,
+        ],
+      ],
+    ],
+  ],
+]
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 2 1`] = `
+{
+  "head": {
+    ":::pre-declared names::": Symbol(),
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "-1",
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 2 2`] = `
+{
+  "head": {
+    "x1": [
+      1,
+      [
+        2,
+        [
+          3,
+          [
+            [Circular],
+            null,
+          ],
+        ],
+      ],
+    ],
+    "x2": [
+      3,
+      [
+        [
+          1,
+          [
+            2,
+            [Circular],
+          ],
+        ],
+        null,
+      ],
+    ],
+  },
+  "heap": Heap {
+    "storage": Set {
+      [
+        2,
+        [
+          3,
+          [
+            [
+              1,
+              [Circular],
+            ],
+            null,
+          ],
+        ],
+      ],
+      [
+        1,
+        [
+          2,
+          [
+            3,
+            [
+              [Circular],
+              null,
+            ],
+          ],
+        ],
+      ],
+      [
+        [
+          1,
+          [
+            2,
+            [
+              3,
+              [Circular],
+            ],
+          ],
+        ],
+        null,
+      ],
+      [
+        3,
+        [
+          [
+            1,
+            [
+              2,
+              [Circular],
+            ],
+          ],
+          null,
+        ],
+      ],
+    },
+  },
+  "id": "47",
+  "name": "programEnvironment",
+  "tail": {
+    "head": {
+      ":::pre-declared names::": Symbol(),
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 2 3`] = `
+[
+  ":::pre-declared names::: ",
+  Symbol(),
+  "x1:= ",
+  [
+    1,
+    [
+      2,
+      [
+        3,
+        [
+          [Circular],
+          null,
+        ],
+      ],
+    ],
+  ],
+  "x2:= ",
+  [
+    3,
+    [
+      [
+        1,
+        [
+          2,
+          [Circular],
+        ],
+      ],
+      null,
+    ],
+  ],
+]
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 3 1`] = `
+{
+  "head": {
+    ":::pre-declared names::": Symbol(),
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "-1",
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 3 2`] = `
+{
+  "head": {
+    "e": [
+      [
+        3,
+        [
+          4,
+          [
+            5,
+            null,
+          ],
+        ],
+      ],
+      [
+        2,
+        [
+          [
+            3,
+            [
+              4,
+              [
+                5,
+                null,
+              ],
+            ],
+          ],
+          null,
+        ],
+      ],
+    ],
+    "f": [
+      1,
+      2,
+    ],
+    "g": [
+      [
+        [Function],
+        [
+          4,
+          [
+            5,
+            null,
+          ],
+        ],
+      ],
+      [
+        2,
+        [
+          [
+            [Function],
+            [
+              4,
+              [
+                5,
+                null,
+              ],
+            ],
+          ],
+          null,
+        ],
+      ],
+    ],
+    "y": [
+      [
+        1,
+        2,
+      ],
+      [
+        [Function],
+        [
+          1,
+          2,
+        ],
+      ],
+    ],
+  },
+  "heap": Heap {
+    "storage": Set {
+      [
+        5,
+        null,
+      ],
+      [
+        4,
+        [
+          5,
+          null,
+        ],
+      ],
+      [
+        3,
+        [
+          4,
+          [
+            5,
+            null,
+          ],
+        ],
+      ],
+      [
+        [
+          3,
+          [
+            4,
+            [
+              5,
+              null,
+            ],
+          ],
+        ],
+        null,
+      ],
+      [
+        2,
+        [
+          [
+            3,
+            [
+              4,
+              [
+                5,
+                null,
+              ],
+            ],
+          ],
+          null,
+        ],
+      ],
+      [
+        [
+          3,
+          [
+            4,
+            [
+              5,
+              null,
+            ],
+          ],
+        ],
+        [
+          2,
+          [
+            [
+              3,
+              [
+                4,
+                [
+                  5,
+                  null,
+                ],
+              ],
+            ],
+            null,
+          ],
+        ],
+      ],
+      [
+        1,
+        2,
+      ],
+      [Function],
+      [
+        5,
+        null,
+      ],
+      [
+        4,
+        [
+          5,
+          null,
+        ],
+      ],
+      [
+        [Function],
+        [
+          4,
+          [
+            5,
+            null,
+          ],
+        ],
+      ],
+      [
+        [
+          [Function],
+          [
+            4,
+            [
+              5,
+              null,
+            ],
+          ],
+        ],
+        null,
+      ],
+      [
+        2,
+        [
+          [
+            [Function],
+            [
+              4,
+              [
+                5,
+                null,
+              ],
+            ],
+          ],
+          null,
+        ],
+      ],
+      [
+        [
+          [Function],
+          [
+            4,
+            [
+              5,
+              null,
+            ],
+          ],
+        ],
+        [
+          2,
+          [
+            [
+              [Function],
+              [
+                4,
+                [
+                  5,
+                  null,
+                ],
+              ],
+            ],
+            null,
+          ],
+        ],
+      ],
+      [Function],
+      [
+        1,
+        2,
+      ],
+      [
+        [Function],
+        [
+          1,
+          2,
+        ],
+      ],
+      [
+        [
+          1,
+          2,
+        ],
+        [
+          [Function],
+          [
+            1,
+            2,
+          ],
+        ],
+      ],
+    },
+  },
+  "id": "47",
+  "name": "programEnvironment",
+  "tail": {
+    "head": {
+      ":::pre-declared names::": Symbol(),
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 3 3`] = `
+[
+  ":::pre-declared names::: ",
+  Symbol(),
+  "e:= ",
+  [
+    [
+      3,
+      [
+        4,
+        [
+          5,
+          null,
+        ],
+      ],
+    ],
+    [
+      2,
+      [
+        [
+          3,
+          [
+            4,
+            [
+              5,
+              null,
+            ],
+          ],
+        ],
+        null,
+      ],
+    ],
+  ],
+  "f:= ",
+  [
+    1,
+    2,
+  ],
+  "g:= ",
+  [
+    [
+      [Function],
+      [
+        4,
+        [
+          5,
+          null,
+        ],
+      ],
+    ],
+    [
+      2,
+      [
+        [
+          [Function],
+          [
+            4,
+            [
+              5,
+              null,
+            ],
+          ],
+        ],
+        null,
+      ],
+    ],
+  ],
+  "y:= ",
+  [
+    [
+      1,
+      2,
+    ],
+    [
+      [Function],
+      [
+        1,
+        2,
+      ],
+    ],
+  ],
+]
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 4 1`] = `
+{
+  "head": {
+    ":::pre-declared names::": Symbol(),
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "-1",
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 4 2`] = `
+{
+  "head": {
+    "f": [Function],
+    "x": 0,
+    "y": 10,
+    "z": [Function],
+  },
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+    },
+  },
+  "id": "47",
+  "name": "programEnvironment",
+  "tail": {
+    "head": {
+      ":::pre-declared names::": Symbol(),
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 4 3`] = `
+{
+  "callExpression": {
+    "arguments": [
+      {
+        "loc": undefined,
+        "type": "Literal",
+        "value": 11,
+      },
+    ],
+    "callee": Node {
+      "end": 97,
+      "isEnvDependent": true,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 15,
+          "line": 7,
+        },
+        "start": Position {
+          "column": 14,
+          "line": 7,
+        },
+      },
+      "name": "f",
+      "start": 96,
+      "type": "Identifier",
+    },
+    "end": 101,
+    "isEnvDependent": true,
+    "loc": SourceLocation {
+      "end": Position {
+        "column": 19,
+        "line": 7,
+      },
+      "start": Position {
+        "column": 14,
+        "line": 7,
+      },
+    },
+    "start": 96,
+    "type": "CallExpression",
+  },
+  "head": {
+    "x": 11,
+  },
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+    },
+  },
+  "id": "49",
+  "name": "f",
+  "tail": {
+    "head": {
+      "f": [Function],
+      "x": 0,
+      "y": 10,
+      "z": [Function],
+    },
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+      },
+    },
+    "id": "47",
+    "name": "programEnvironment",
+    "tail": {
+      "head": {
+        ":::pre-declared names::": Symbol(),
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 4 4`] = `
+[
+  ":::pre-declared names::: ",
+  Symbol(),
+  "x: ",
+  0,
+  "y: ",
+  10,
+  "f:= ",
+  [Function],
+  "z:= ",
+  [Function],
+  "x: ",
+  11,
+  "1:= ",
+  [Function],
+]
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 5 1`] = `
+{
+  "head": {
+    ":::pre-declared names::": Symbol(),
+    "accumulate": [Function],
+    "pair": [Function],
+  },
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+    },
+  },
+  "id": "-1",
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 5 2`] = `
+{
+  "head": {
+    "x": [
+      1,
+      [
+        [Function],
+        [
+          [Function],
+          null,
+        ],
+      ],
+    ],
+  },
+  "heap": Heap {
+    "storage": Set {
+      [
+        [Function],
+        null,
+      ],
+      [
+        [Function],
+        [
+          [Function],
+          null,
+        ],
+      ],
+      [
+        1,
+        [
+          [Function],
+          [
+            [Function],
+            null,
+          ],
+        ],
+      ],
+    },
+  },
+  "id": "47",
+  "name": "programEnvironment",
+  "tail": {
+    "head": {
+      ":::pre-declared names::": Symbol(),
+      "accumulate": [Function],
+      "pair": [Function],
+    },
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+      },
+    },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 5 3`] = `
+[
+  ":::pre-declared names::: ",
+  Symbol(),
+  "pair: ",
+  [Function],
+  "accumulate: ",
+  [Function],
+  "x:= ",
+  [
+    1,
+    [
+      [Function],
+      [
+        [Function],
+        null,
+      ],
+    ],
+  ],
+]
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 6 1`] = `
+{
+  "head": {
+    ":::pre-declared names::": Symbol(),
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "-1",
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 6 2`] = `
+{
+  "head": {
+    "x": [],
+  },
+  "heap": Heap {
+    "storage": Set {
+      [],
+    },
+  },
+  "id": "47",
+  "name": "programEnvironment",
+  "tail": {
+    "head": {
+      ":::pre-declared names::": Symbol(),
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 6 3`] = `
+[
+  ":::pre-declared names::: ",
+  Symbol(),
+  "x:= ",
+  [],
+]
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 1`] = `
+{
+  "head": {
+    ":::pre-declared names::": Symbol(),
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "-1",
+  "name": "global",
+  "tail": null,
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 2`] = `
+{
+  "head": {
+    "eval_stream": [Function],
+    "x": 1,
+    "y": [
+      [Circular],
+      [
+        1,
+        [Circular],
+        [Circular],
+      ],
+    ],
+  },
+  "heap": Heap {
+    "storage": Set {
+      [],
+      [
+        1,
+        [
+          [Circular],
+          [Circular],
+        ],
+        [Circular],
+      ],
+      [
+        [Circular],
+        [
+          1,
+          [Circular],
+          [Circular],
+        ],
+      ],
+      [Function],
+    },
+  },
+  "id": "47",
+  "name": "programEnvironment",
+  "tail": {
+    "head": {
+      ":::pre-declared names::": Symbol(),
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 3`] = `
+{
+  "callExpression": {
+    "arguments": [
+      {
+        "loc": undefined,
+        "type": "Literal",
+        "value": 1,
+      },
+    ],
+    "callee": Node {
+      "end": 418,
+      "isEnvDependent": true,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 29,
+          "line": 16,
+        },
+        "start": Position {
+          "column": 16,
+          "line": 16,
+        },
+      },
+      "name": "integers_from",
+      "start": 405,
+      "type": "Identifier",
+    },
+    "end": 421,
+    "isEnvDependent": true,
+    "loc": SourceLocation {
+      "end": Position {
+        "column": 32,
+        "line": 16,
+      },
+      "start": Position {
+        "column": 16,
+        "line": 16,
+      },
+    },
+    "start": 405,
+    "type": "CallExpression",
+  },
+  "head": {
+    "n": 1,
+  },
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+      [
+        1,
+        [Function],
+      ],
+    },
+  },
+  "id": "69",
+  "name": "integers_from",
+  "tail": {
+    "head": {
+      ":::pre-declared names::": Symbol(),
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 4`] = `
+{
+  "callExpression": {
+    "arguments": [
+      {
+        "loc": undefined,
+        "type": "Literal",
+        "value": [
+          1,
+          [Function],
+        ],
+      },
+    ],
+    "callee": Node {
+      "end": 317,
+      "isEnvDependent": true,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 73,
+          "line": 12,
+        },
+        "start": Position {
+          "column": 62,
+          "line": 12,
+        },
+      },
+      "name": "stream_tail",
+      "start": 306,
+      "type": "Identifier",
+    },
+    "end": 320,
+    "isEnvDependent": true,
+    "loc": SourceLocation {
+      "end": Position {
+        "column": 76,
+        "line": 12,
+      },
+      "start": Position {
+        "column": 62,
+        "line": 12,
+      },
+    },
+    "start": 306,
+    "type": "CallExpression",
+  },
+  "head": {
+    "xs": [
+      1,
+      [Function],
+    ],
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "78",
+  "name": "stream_tail",
+  "tail": {
+    "head": {
+      ":::pre-declared names::": Symbol(),
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 5`] = `
+{
+  "callExpression": {
+    "arguments": [
+      {
+        "loc": undefined,
+        "type": "Literal",
+        "value": 2,
+      },
+    ],
+    "callee": Node {
+      "end": 13849,
+      "isEnvDependent": true,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 23,
+          "line": 470,
+        },
+        "start": Position {
+          "column": 10,
+          "line": 470,
+        },
+      },
+      "name": "integers_from",
+      "start": 13836,
+      "type": "Identifier",
+    },
+    "end": 13856,
+    "isEnvDependent": true,
+    "loc": SourceLocation {
+      "end": Position {
+        "column": 30,
+        "line": 470,
+      },
+      "start": Position {
+        "column": 10,
+        "line": 470,
+      },
+    },
+    "start": 13836,
+    "type": "CallExpression",
+  },
+  "head": {
+    "n": 2,
+  },
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+      [
+        2,
+        [Function],
+      ],
+    },
+  },
+  "id": "80",
+  "name": "integers_from",
+  "tail": {
+    "head": {
+      ":::pre-declared names::": Symbol(),
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "-1",
+    "name": "global",
+    "tail": null,
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 6`] = `
+{
+  "head": {
+    "i": 5,
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "49",
+  "name": "blockEnvironment",
+  "tail": {
+    "head": {
+      "eval_stream": [Function],
+      "x": 1,
+      "y": [
+        [Circular],
+        [
+          1,
+          [Circular],
+          [Circular],
+        ],
+      ],
+    },
+    "heap": Heap {
+      "storage": Set {
+        [],
+        [
+          1,
+          [
+            [Circular],
+            [Circular],
+          ],
+          [Circular],
+        ],
+        [
+          [Circular],
+          [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+        [Function],
+      },
+    },
+    "id": "47",
+    "name": "programEnvironment",
+    "tail": {
+      "head": {
+        ":::pre-declared names::": Symbol(),
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 7`] = `
+{
+  "callExpression": {
+    "arguments": [
+      {
+        "loc": undefined,
+        "type": "Literal",
+        "value": [
+          1,
+          [Function],
+        ],
+      },
+      {
+        "loc": undefined,
+        "type": "Literal",
+        "value": 2,
+      },
+    ],
+    "callee": Node {
+      "end": 404,
+      "isEnvDependent": true,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 15,
+          "line": 16,
+        },
+        "start": Position {
+          "column": 4,
+          "line": 16,
+        },
+      },
+      "name": "eval_stream",
+      "start": 393,
+      "type": "Identifier",
+    },
+    "end": 425,
+    "isEnvDependent": true,
+    "loc": SourceLocation {
+      "end": Position {
+        "column": 36,
+        "line": 16,
+      },
+      "start": Position {
+        "column": 4,
+        "line": 16,
+      },
+    },
+    "start": 393,
+    "type": "CallExpression",
+  },
+  "head": {
+    "n": 2,
+    "s": [
+      1,
+      [Function],
+    ],
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "72",
+  "name": "eval_stream",
+  "tail": {
+    "head": {
+      "eval_stream": [Function],
+      "x": 1,
+      "y": [
+        [Circular],
+        [
+          1,
+          [Circular],
+          [Circular],
+        ],
+      ],
+    },
+    "heap": Heap {
+      "storage": Set {
+        [],
+        [
+          1,
+          [
+            [Circular],
+            [Circular],
+          ],
+          [Circular],
+        ],
+        [
+          [Circular],
+          [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+        [Function],
+      },
+    },
+    "id": "47",
+    "name": "programEnvironment",
+    "tail": {
+      "head": {
+        ":::pre-declared names::": Symbol(),
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 8`] = `
+{
+  "head": {
+    "the_tail": [Function],
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "79",
+  "name": "blockEnvironment",
+  "tail": {
+    "callExpression": {
+      "arguments": [
+        {
+          "loc": undefined,
+          "type": "Literal",
+          "value": [
+            1,
+            [Function],
+          ],
+        },
+      ],
+      "callee": Node {
+        "end": 317,
+        "isEnvDependent": true,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 73,
+            "line": 12,
+          },
+          "start": Position {
+            "column": 62,
+            "line": 12,
+          },
+        },
+        "name": "stream_tail",
+        "start": 306,
+        "type": "Identifier",
+      },
+      "end": 320,
+      "isEnvDependent": true,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 76,
+          "line": 12,
+        },
+        "start": Position {
+          "column": 62,
+          "line": 12,
+        },
+      },
+      "start": 306,
+      "type": "CallExpression",
+    },
+    "head": {
+      "xs": [
+        1,
+        [Function],
+      ],
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "78",
+    "name": "stream_tail",
+    "tail": {
+      "head": {
+        ":::pre-declared names::": Symbol(),
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "-1",
+      "name": "global",
+      "tail": null,
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 9`] = `
+{
+  "head": {
+    "_copy_of_i": 1,
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "50",
+  "name": "blockEnvironment",
+  "tail": {
+    "head": {
+      "i": 5,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "49",
+    "name": "blockEnvironment",
+    "tail": {
+      "head": {
+        "eval_stream": [Function],
+        "x": 1,
+        "y": [
+          [Circular],
+          [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+      },
+      "heap": Heap {
+        "storage": Set {
+          [],
+          [
+            1,
+            [
+              [Circular],
+              [Circular],
+            ],
+            [Circular],
+          ],
+          [
+            [Circular],
+            [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+          [Function],
+        },
+      },
+      "id": "47",
+      "name": "programEnvironment",
+      "tail": {
+        "head": {
+          ":::pre-declared names::": Symbol(),
+        },
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "-1",
+        "name": "global",
+        "tail": null,
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 10`] = `
+{
+  "head": {
+    "_copy_of_i": 2,
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "54",
+  "name": "blockEnvironment",
+  "tail": {
+    "head": {
+      "i": 5,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "49",
+    "name": "blockEnvironment",
+    "tail": {
+      "head": {
+        "eval_stream": [Function],
+        "x": 1,
+        "y": [
+          [Circular],
+          [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+      },
+      "heap": Heap {
+        "storage": Set {
+          [],
+          [
+            1,
+            [
+              [Circular],
+              [Circular],
+            ],
+            [Circular],
+          ],
+          [
+            [Circular],
+            [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+          [Function],
+        },
+      },
+      "id": "47",
+      "name": "programEnvironment",
+      "tail": {
+        "head": {
+          ":::pre-declared names::": Symbol(),
+        },
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "-1",
+        "name": "global",
+        "tail": null,
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 11`] = `
+{
+  "head": {
+    "_copy_of_i": 3,
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "58",
+  "name": "blockEnvironment",
+  "tail": {
+    "head": {
+      "i": 5,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "49",
+    "name": "blockEnvironment",
+    "tail": {
+      "head": {
+        "eval_stream": [Function],
+        "x": 1,
+        "y": [
+          [Circular],
+          [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+      },
+      "heap": Heap {
+        "storage": Set {
+          [],
+          [
+            1,
+            [
+              [Circular],
+              [Circular],
+            ],
+            [Circular],
+          ],
+          [
+            [Circular],
+            [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+          [Function],
+        },
+      },
+      "id": "47",
+      "name": "programEnvironment",
+      "tail": {
+        "head": {
+          ":::pre-declared names::": Symbol(),
+        },
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "-1",
+        "name": "global",
+        "tail": null,
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 12`] = `
+{
+  "head": {
+    "_copy_of_i": 4,
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "62",
+  "name": "blockEnvironment",
+  "tail": {
+    "head": {
+      "i": 5,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "49",
+    "name": "blockEnvironment",
+    "tail": {
+      "head": {
+        "eval_stream": [Function],
+        "x": 1,
+        "y": [
+          [Circular],
+          [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+      },
+      "heap": Heap {
+        "storage": Set {
+          [],
+          [
+            1,
+            [
+              [Circular],
+              [Circular],
+            ],
+            [Circular],
+          ],
+          [
+            [Circular],
+            [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+          [Function],
+        },
+      },
+      "id": "47",
+      "name": "programEnvironment",
+      "tail": {
+        "head": {
+          ":::pre-declared names::": Symbol(),
+        },
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "-1",
+        "name": "global",
+        "tail": null,
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 13`] = `
+{
+  "head": {
+    "es": [Function],
+  },
+  "heap": Heap {
+    "storage": Set {
+      [Function],
+    },
+  },
+  "id": "73",
+  "name": "blockEnvironment",
+  "tail": {
+    "callExpression": {
+      "arguments": [
+        {
+          "loc": undefined,
+          "type": "Literal",
+          "value": [
+            1,
+            [Function],
+          ],
+        },
+        {
+          "loc": undefined,
+          "type": "Literal",
+          "value": 2,
+        },
+      ],
+      "callee": Node {
+        "end": 404,
+        "isEnvDependent": true,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 15,
+            "line": 16,
+          },
+          "start": Position {
+            "column": 4,
+            "line": 16,
+          },
+        },
+        "name": "eval_stream",
+        "start": 393,
+        "type": "Identifier",
+      },
+      "end": 425,
+      "isEnvDependent": true,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 36,
+          "line": 16,
+        },
+        "start": Position {
+          "column": 4,
+          "line": 16,
+        },
+      },
+      "start": 393,
+      "type": "CallExpression",
+    },
+    "head": {
+      "n": 2,
+      "s": [
+        1,
+        [Function],
+      ],
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "72",
+    "name": "eval_stream",
+    "tail": {
+      "head": {
+        "eval_stream": [Function],
+        "x": 1,
+        "y": [
+          [Circular],
+          [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+      },
+      "heap": Heap {
+        "storage": Set {
+          [],
+          [
+            1,
+            [
+              [Circular],
+              [Circular],
+            ],
+            [Circular],
+          ],
+          [
+            [Circular],
+            [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+          [Function],
+        },
+      },
+      "id": "47",
+      "name": "programEnvironment",
+      "tail": {
+        "head": {
+          ":::pre-declared names::": Symbol(),
+        },
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "-1",
+        "name": "global",
+        "tail": null,
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 14`] = `
+{
+  "head": {
+    "i": 1,
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "51",
+  "name": "blockEnvironment",
+  "tail": {
+    "head": {
+      "_copy_of_i": 1,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "50",
+    "name": "blockEnvironment",
+    "tail": {
+      "head": {
+        "i": 5,
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "49",
+      "name": "blockEnvironment",
+      "tail": {
+        "head": {
+          "eval_stream": [Function],
+          "x": 1,
+          "y": [
+            [Circular],
+            [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+        },
+        "heap": Heap {
+          "storage": Set {
+            [],
+            [
+              1,
+              [
+                [Circular],
+                [Circular],
+              ],
+              [Circular],
+            ],
+            [
+              [Circular],
+              [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+            [Function],
+          },
+        },
+        "id": "47",
+        "name": "programEnvironment",
+        "tail": {
+          "head": {
+            ":::pre-declared names::": Symbol(),
+          },
+          "heap": Heap {
+            "storage": null,
+          },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 15`] = `
+{
+  "head": {
+    "i": 2,
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "55",
+  "name": "blockEnvironment",
+  "tail": {
+    "head": {
+      "_copy_of_i": 2,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "54",
+    "name": "blockEnvironment",
+    "tail": {
+      "head": {
+        "i": 5,
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "49",
+      "name": "blockEnvironment",
+      "tail": {
+        "head": {
+          "eval_stream": [Function],
+          "x": 1,
+          "y": [
+            [Circular],
+            [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+        },
+        "heap": Heap {
+          "storage": Set {
+            [],
+            [
+              1,
+              [
+                [Circular],
+                [Circular],
+              ],
+              [Circular],
+            ],
+            [
+              [Circular],
+              [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+            [Function],
+          },
+        },
+        "id": "47",
+        "name": "programEnvironment",
+        "tail": {
+          "head": {
+            ":::pre-declared names::": Symbol(),
+          },
+          "heap": Heap {
+            "storage": null,
+          },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 16`] = `
+{
+  "head": {
+    "i": 3,
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "59",
+  "name": "blockEnvironment",
+  "tail": {
+    "head": {
+      "_copy_of_i": 3,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "58",
+    "name": "blockEnvironment",
+    "tail": {
+      "head": {
+        "i": 5,
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "49",
+      "name": "blockEnvironment",
+      "tail": {
+        "head": {
+          "eval_stream": [Function],
+          "x": 1,
+          "y": [
+            [Circular],
+            [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+        },
+        "heap": Heap {
+          "storage": Set {
+            [],
+            [
+              1,
+              [
+                [Circular],
+                [Circular],
+              ],
+              [Circular],
+            ],
+            [
+              [Circular],
+              [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+            [Function],
+          },
+        },
+        "id": "47",
+        "name": "programEnvironment",
+        "tail": {
+          "head": {
+            ":::pre-declared names::": Symbol(),
+          },
+          "heap": Heap {
+            "storage": null,
+          },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 17`] = `
+{
+  "head": {
+    "i": 4,
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "63",
+  "name": "blockEnvironment",
+  "tail": {
+    "head": {
+      "_copy_of_i": 4,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "62",
+    "name": "blockEnvironment",
+    "tail": {
+      "head": {
+        "i": 5,
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "49",
+      "name": "blockEnvironment",
+      "tail": {
+        "head": {
+          "eval_stream": [Function],
+          "x": 1,
+          "y": [
+            [Circular],
+            [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+        },
+        "heap": Heap {
+          "storage": Set {
+            [],
+            [
+              1,
+              [
+                [Circular],
+                [Circular],
+              ],
+              [Circular],
+            ],
+            [
+              [Circular],
+              [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+            [Function],
+          },
+        },
+        "id": "47",
+        "name": "programEnvironment",
+        "tail": {
+          "head": {
+            ":::pre-declared names::": Symbol(),
+          },
+          "heap": Heap {
+            "storage": null,
+          },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 18`] = `
+{
+  "callExpression": {
+    "arguments": [
+      {
+        "loc": undefined,
+        "type": "Literal",
+        "value": [
+          1,
+          [Function],
+        ],
+      },
+      {
+        "loc": undefined,
+        "type": "Literal",
+        "value": 2,
+      },
+    ],
+    "callee": Node {
+      "end": 375,
+      "isEnvDependent": true,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 34,
+          "line": 14,
+        },
+        "start": Position {
+          "column": 32,
+          "line": 14,
+        },
+      },
+      "name": "es",
+      "start": 373,
+      "type": "Identifier",
+    },
+    "end": 381,
+    "isEnvDependent": true,
+    "loc": SourceLocation {
+      "end": Position {
+        "column": 40,
+        "line": 14,
+      },
+      "start": Position {
+        "column": 32,
+        "line": 14,
+      },
+    },
+    "start": 373,
+    "type": "CallExpression",
+  },
+  "head": {
+    "n": 2,
+    "s": [
+      1,
+      [Function],
+    ],
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "75",
+  "name": "es",
+  "tail": {
+    "head": {
+      "es": [Function],
+    },
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+      },
+    },
+    "id": "73",
+    "name": "blockEnvironment",
+    "tail": {
+      "callExpression": {
+        "arguments": [
+          {
+            "loc": undefined,
+            "type": "Literal",
+            "value": [
+              1,
+              [Function],
+            ],
+          },
+          {
+            "loc": undefined,
+            "type": "Literal",
+            "value": 2,
+          },
+        ],
+        "callee": Node {
+          "end": 404,
+          "isEnvDependent": true,
+          "loc": SourceLocation {
+            "end": Position {
+              "column": 15,
+              "line": 16,
+            },
+            "start": Position {
+              "column": 4,
+              "line": 16,
+            },
+          },
+          "name": "eval_stream",
+          "start": 393,
+          "type": "Identifier",
+        },
+        "end": 425,
+        "isEnvDependent": true,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 36,
+            "line": 16,
+          },
+          "start": Position {
+            "column": 4,
+            "line": 16,
+          },
+        },
+        "start": 393,
+        "type": "CallExpression",
+      },
+      "head": {
+        "n": 2,
+        "s": [
+          1,
+          [Function],
+        ],
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "72",
+      "name": "eval_stream",
+      "tail": {
+        "head": {
+          "eval_stream": [Function],
+          "x": 1,
+          "y": [
+            [Circular],
+            [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+        },
+        "heap": Heap {
+          "storage": Set {
+            [],
+            [
+              1,
+              [
+                [Circular],
+                [Circular],
+              ],
+              [Circular],
+            ],
+            [
+              [Circular],
+              [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+            [Function],
+          },
+        },
+        "id": "47",
+        "name": "programEnvironment",
+        "tail": {
+          "head": {
+            ":::pre-declared names::": Symbol(),
+          },
+          "heap": Heap {
+            "storage": null,
+          },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 19`] = `
+{
+  "callExpression": {
+    "arguments": [
+      {
+        "loc": undefined,
+        "type": "Literal",
+        "value": [
+          2,
+          [Function],
+        ],
+      },
+      {
+        "loc": undefined,
+        "type": "Literal",
+        "value": 1,
+      },
+    ],
+    "callee": Node {
+      "end": 305,
+      "isEnvDependent": true,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 61,
+          "line": 12,
+        },
+        "start": Position {
+          "column": 59,
+          "line": 12,
+        },
+      },
+      "name": "es",
+      "start": 303,
+      "type": "Identifier",
+    },
+    "end": 328,
+    "isEnvDependent": true,
+    "loc": SourceLocation {
+      "end": Position {
+        "column": 84,
+        "line": 12,
+      },
+      "start": Position {
+        "column": 59,
+        "line": 12,
+      },
+    },
+    "start": 303,
+    "type": "CallExpression",
+  },
+  "head": {
+    "n": 1,
+    "s": [
+      2,
+      [Function],
+    ],
+  },
+  "heap": Heap {
+    "storage": null,
+  },
+  "id": "83",
+  "name": "es",
+  "tail": {
+    "head": {
+      "es": [Function],
+    },
+    "heap": Heap {
+      "storage": Set {
+        [Function],
+      },
+    },
+    "id": "73",
+    "name": "blockEnvironment",
+    "tail": {
+      "callExpression": {
+        "arguments": [
+          {
+            "loc": undefined,
+            "type": "Literal",
+            "value": [
+              1,
+              [Function],
+            ],
+          },
+          {
+            "loc": undefined,
+            "type": "Literal",
+            "value": 2,
+          },
+        ],
+        "callee": Node {
+          "end": 404,
+          "isEnvDependent": true,
+          "loc": SourceLocation {
+            "end": Position {
+              "column": 15,
+              "line": 16,
+            },
+            "start": Position {
+              "column": 4,
+              "line": 16,
+            },
+          },
+          "name": "eval_stream",
+          "start": 393,
+          "type": "Identifier",
+        },
+        "end": 425,
+        "isEnvDependent": true,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 36,
+            "line": 16,
+          },
+          "start": Position {
+            "column": 4,
+            "line": 16,
+          },
+        },
+        "start": 393,
+        "type": "CallExpression",
+      },
+      "head": {
+        "n": 2,
+        "s": [
+          1,
+          [Function],
+        ],
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "72",
+      "name": "eval_stream",
+      "tail": {
+        "head": {
+          "eval_stream": [Function],
+          "x": 1,
+          "y": [
+            [Circular],
+            [
+              1,
+              [Circular],
+              [Circular],
+            ],
+          ],
+        },
+        "heap": Heap {
+          "storage": Set {
+            [],
+            [
+              1,
+              [
+                [Circular],
+                [Circular],
+              ],
+              [Circular],
+            ],
+            [
+              [Circular],
+              [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+            [Function],
+          },
+        },
+        "id": "47",
+        "name": "programEnvironment",
+        "tail": {
+          "head": {
+            ":::pre-declared names::": Symbol(),
+          },
+          "heap": Heap {
+            "storage": null,
+          },
+          "id": "-1",
+          "name": "global",
+          "tail": null,
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 20`] = `
+{
+  "head": {
+    "x": [
+      [],
+    ],
+  },
+  "heap": Heap {
+    "storage": Set {
+      [
+        [],
+      ],
+    },
+  },
+  "id": "52",
+  "name": "blockEnvironment",
+  "tail": {
+    "head": {
+      "i": 1,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "51",
+    "name": "blockEnvironment",
+    "tail": {
+      "head": {
+        "_copy_of_i": 1,
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "50",
+      "name": "blockEnvironment",
+      "tail": {
+        "head": {
+          "i": 5,
+        },
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "49",
+        "name": "blockEnvironment",
+        "tail": {
+          "head": {
+            "eval_stream": [Function],
+            "x": 1,
+            "y": [
+              [Circular],
+              [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+          },
+          "heap": Heap {
+            "storage": Set {
+              [],
+              [
+                1,
+                [
+                  [Circular],
+                  [Circular],
+                ],
+                [Circular],
+              ],
+              [
+                [Circular],
+                [
+                  1,
+                  [Circular],
+                  [Circular],
+                ],
+              ],
+              [Function],
+            },
+          },
+          "id": "47",
+          "name": "programEnvironment",
+          "tail": {
+            "head": {
+              ":::pre-declared names::": Symbol(),
+            },
+            "heap": Heap {
+              "storage": null,
+            },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 21`] = `
+{
+  "head": {
+    "x": [
+      [],
+    ],
+  },
+  "heap": Heap {
+    "storage": Set {
+      [
+        [],
+      ],
+    },
+  },
+  "id": "56",
+  "name": "blockEnvironment",
+  "tail": {
+    "head": {
+      "i": 2,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "55",
+    "name": "blockEnvironment",
+    "tail": {
+      "head": {
+        "_copy_of_i": 2,
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "54",
+      "name": "blockEnvironment",
+      "tail": {
+        "head": {
+          "i": 5,
+        },
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "49",
+        "name": "blockEnvironment",
+        "tail": {
+          "head": {
+            "eval_stream": [Function],
+            "x": 1,
+            "y": [
+              [Circular],
+              [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+          },
+          "heap": Heap {
+            "storage": Set {
+              [],
+              [
+                1,
+                [
+                  [Circular],
+                  [Circular],
+                ],
+                [Circular],
+              ],
+              [
+                [Circular],
+                [
+                  1,
+                  [Circular],
+                  [Circular],
+                ],
+              ],
+              [Function],
+            },
+          },
+          "id": "47",
+          "name": "programEnvironment",
+          "tail": {
+            "head": {
+              ":::pre-declared names::": Symbol(),
+            },
+            "heap": Heap {
+              "storage": null,
+            },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 22`] = `
+{
+  "head": {
+    "x": [
+      [],
+    ],
+  },
+  "heap": Heap {
+    "storage": Set {
+      [
+        [],
+      ],
+    },
+  },
+  "id": "60",
+  "name": "blockEnvironment",
+  "tail": {
+    "head": {
+      "i": 3,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "59",
+    "name": "blockEnvironment",
+    "tail": {
+      "head": {
+        "_copy_of_i": 3,
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "58",
+      "name": "blockEnvironment",
+      "tail": {
+        "head": {
+          "i": 5,
+        },
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "49",
+        "name": "blockEnvironment",
+        "tail": {
+          "head": {
+            "eval_stream": [Function],
+            "x": 1,
+            "y": [
+              [Circular],
+              [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+          },
+          "heap": Heap {
+            "storage": Set {
+              [],
+              [
+                1,
+                [
+                  [Circular],
+                  [Circular],
+                ],
+                [Circular],
+              ],
+              [
+                [Circular],
+                [
+                  1,
+                  [Circular],
+                  [Circular],
+                ],
+              ],
+              [Function],
+            },
+          },
+          "id": "47",
+          "name": "programEnvironment",
+          "tail": {
+            "head": {
+              ":::pre-declared names::": Symbol(),
+            },
+            "heap": Heap {
+              "storage": null,
+            },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 23`] = `
+{
+  "head": {
+    "x": [
+      [],
+    ],
+  },
+  "heap": Heap {
+    "storage": Set {
+      [
+        [],
+      ],
+    },
+  },
+  "id": "64",
+  "name": "blockEnvironment",
+  "tail": {
+    "head": {
+      "i": 4,
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "63",
+    "name": "blockEnvironment",
+    "tail": {
+      "head": {
+        "_copy_of_i": 4,
+      },
+      "heap": Heap {
+        "storage": null,
+      },
+      "id": "62",
+      "name": "blockEnvironment",
+      "tail": {
+        "head": {
+          "i": 5,
+        },
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "49",
+        "name": "blockEnvironment",
+        "tail": {
+          "head": {
+            "eval_stream": [Function],
+            "x": 1,
+            "y": [
+              [Circular],
+              [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+          },
+          "heap": Heap {
+            "storage": Set {
+              [],
+              [
+                1,
+                [
+                  [Circular],
+                  [Circular],
+                ],
+                [Circular],
+              ],
+              [
+                [Circular],
+                [
+                  1,
+                  [Circular],
+                  [Circular],
+                ],
+              ],
+              [Function],
+            },
+          },
+          "id": "47",
+          "name": "programEnvironment",
+          "tail": {
+            "head": {
+              ":::pre-declared names::": Symbol(),
+            },
+            "heap": Heap {
+              "storage": null,
+            },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 24`] = `
+{
+  "head": {
+    "z": [
+      [
+        [Circular],
+        [
+          1,
+          [Circular],
+          [Circular],
+        ],
+      ],
+    ],
+  },
+  "heap": Heap {
+    "storage": Set {
+      [
+        [
+          [Circular],
+          [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+      ],
+      [
+        1,
+        [
+          2,
+          null,
+        ],
+      ],
+    },
+  },
+  "id": "76",
+  "name": "blockEnvironment",
+  "tail": {
+    "callExpression": {
+      "arguments": [
+        {
+          "loc": undefined,
+          "type": "Literal",
+          "value": [
+            1,
+            [Function],
+          ],
+        },
+        {
+          "loc": undefined,
+          "type": "Literal",
+          "value": 2,
+        },
+      ],
+      "callee": Node {
+        "end": 375,
+        "isEnvDependent": true,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 34,
+            "line": 14,
+          },
+          "start": Position {
+            "column": 32,
+            "line": 14,
+          },
+        },
+        "name": "es",
+        "start": 373,
+        "type": "Identifier",
+      },
+      "end": 381,
+      "isEnvDependent": true,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 40,
+          "line": 14,
+        },
+        "start": Position {
+          "column": 32,
+          "line": 14,
+        },
+      },
+      "start": 373,
+      "type": "CallExpression",
+    },
+    "head": {
+      "n": 2,
+      "s": [
+        1,
+        [Function],
+      ],
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "75",
+    "name": "es",
+    "tail": {
+      "head": {
+        "es": [Function],
+      },
+      "heap": Heap {
+        "storage": Set {
+          [Function],
+        },
+      },
+      "id": "73",
+      "name": "blockEnvironment",
+      "tail": {
+        "callExpression": {
+          "arguments": [
+            {
+              "loc": undefined,
+              "type": "Literal",
+              "value": [
+                1,
+                [Function],
+              ],
+            },
+            {
+              "loc": undefined,
+              "type": "Literal",
+              "value": 2,
+            },
+          ],
+          "callee": Node {
+            "end": 404,
+            "isEnvDependent": true,
+            "loc": SourceLocation {
+              "end": Position {
+                "column": 15,
+                "line": 16,
+              },
+              "start": Position {
+                "column": 4,
+                "line": 16,
+              },
+            },
+            "name": "eval_stream",
+            "start": 393,
+            "type": "Identifier",
+          },
+          "end": 425,
+          "isEnvDependent": true,
+          "loc": SourceLocation {
+            "end": Position {
+              "column": 36,
+              "line": 16,
+            },
+            "start": Position {
+              "column": 4,
+              "line": 16,
+            },
+          },
+          "start": 393,
+          "type": "CallExpression",
+        },
+        "head": {
+          "n": 2,
+          "s": [
+            1,
+            [Function],
+          ],
+        },
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "72",
+        "name": "eval_stream",
+        "tail": {
+          "head": {
+            "eval_stream": [Function],
+            "x": 1,
+            "y": [
+              [Circular],
+              [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+          },
+          "heap": Heap {
+            "storage": Set {
+              [],
+              [
+                1,
+                [
+                  [Circular],
+                  [Circular],
+                ],
+                [Circular],
+              ],
+              [
+                [Circular],
+                [
+                  1,
+                  [Circular],
+                  [Circular],
+                ],
+              ],
+              [Function],
+            },
+          },
+          "id": "47",
+          "name": "programEnvironment",
+          "tail": {
+            "head": {
+              ":::pre-declared names::": Symbol(),
+            },
+            "heap": Heap {
+              "storage": null,
+            },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 25`] = `
+{
+  "head": {
+    "z": [
+      [
+        [Circular],
+        [
+          1,
+          [Circular],
+          [Circular],
+        ],
+      ],
+    ],
+  },
+  "heap": Heap {
+    "storage": Set {
+      [
+        [
+          [Circular],
+          [
+            1,
+            [Circular],
+            [Circular],
+          ],
+        ],
+      ],
+      [
+        2,
+        null,
+      ],
+    },
+  },
+  "id": "84",
+  "name": "blockEnvironment",
+  "tail": {
+    "callExpression": {
+      "arguments": [
+        {
+          "loc": undefined,
+          "type": "Literal",
+          "value": [
+            2,
+            [Function],
+          ],
+        },
+        {
+          "loc": undefined,
+          "type": "Literal",
+          "value": 1,
+        },
+      ],
+      "callee": Node {
+        "end": 305,
+        "isEnvDependent": true,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 61,
+            "line": 12,
+          },
+          "start": Position {
+            "column": 59,
+            "line": 12,
+          },
+        },
+        "name": "es",
+        "start": 303,
+        "type": "Identifier",
+      },
+      "end": 328,
+      "isEnvDependent": true,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 84,
+          "line": 12,
+        },
+        "start": Position {
+          "column": 59,
+          "line": 12,
+        },
+      },
+      "start": 303,
+      "type": "CallExpression",
+    },
+    "head": {
+      "n": 1,
+      "s": [
+        2,
+        [Function],
+      ],
+    },
+    "heap": Heap {
+      "storage": null,
+    },
+    "id": "83",
+    "name": "es",
+    "tail": {
+      "head": {
+        "es": [Function],
+      },
+      "heap": Heap {
+        "storage": Set {
+          [Function],
+        },
+      },
+      "id": "73",
+      "name": "blockEnvironment",
+      "tail": {
+        "callExpression": {
+          "arguments": [
+            {
+              "loc": undefined,
+              "type": "Literal",
+              "value": [
+                1,
+                [Function],
+              ],
+            },
+            {
+              "loc": undefined,
+              "type": "Literal",
+              "value": 2,
+            },
+          ],
+          "callee": Node {
+            "end": 404,
+            "isEnvDependent": true,
+            "loc": SourceLocation {
+              "end": Position {
+                "column": 15,
+                "line": 16,
+              },
+              "start": Position {
+                "column": 4,
+                "line": 16,
+              },
+            },
+            "name": "eval_stream",
+            "start": 393,
+            "type": "Identifier",
+          },
+          "end": 425,
+          "isEnvDependent": true,
+          "loc": SourceLocation {
+            "end": Position {
+              "column": 36,
+              "line": 16,
+            },
+            "start": Position {
+              "column": 4,
+              "line": 16,
+            },
+          },
+          "start": 393,
+          "type": "CallExpression",
+        },
+        "head": {
+          "n": 2,
+          "s": [
+            1,
+            [Function],
+          ],
+        },
+        "heap": Heap {
+          "storage": null,
+        },
+        "id": "72",
+        "name": "eval_stream",
+        "tail": {
+          "head": {
+            "eval_stream": [Function],
+            "x": 1,
+            "y": [
+              [Circular],
+              [
+                1,
+                [Circular],
+                [Circular],
+              ],
+            ],
+          },
+          "heap": Heap {
+            "storage": Set {
+              [],
+              [
+                1,
+                [
+                  [Circular],
+                  [Circular],
+                ],
+                [Circular],
+              ],
+              [
+                [Circular],
+                [
+                  1,
+                  [Circular],
+                  [Circular],
+                ],
+              ],
+              [Function],
+            },
+          },
+          "id": "47",
+          "name": "programEnvironment",
+          "tail": {
+            "head": {
+              ":::pre-declared names::": Symbol(),
+            },
+            "heap": Heap {
+              "storage": null,
+            },
+            "id": "-1",
+            "name": "global",
+            "tail": null,
+          },
+        },
+      },
+    },
+  },
+}
+`;
+
+exports[`CSE Machine calculates correct layout for code sample 7 26`] = `
+[
+  ":::pre-declared names::: ",
+  Symbol(),
+  "y: ",
+  [
+    [Circular],
+    [
+      1,
+      [Circular],
+      [Circular],
+    ],
+  ],
+  "eval_stream:= ",
+  [Function],
+  "x: ",
+  1,
+  "1:= ",
+  [],
+  "n: ",
+  1,
+  "1:= ",
+  [
+    1,
+    [Function],
+  ],
+  "xs: ",
+  [
+    1,
+    [Function],
+  ],
+  "n: ",
+  2,
+  "1:= ",
+  [
+    2,
+    [Function],
+  ],
+  "i: ",
+  5,
+  "s: ",
+  [
+    1,
+    [Function],
+  ],
+  "n: ",
+  2,
+  "the_tail:= ",
+  [Function],
+  "_copy_of_i:= ",
+  1,
+  "_copy_of_i:= ",
+  2,
+  "_copy_of_i:= ",
+  3,
+  "_copy_of_i:= ",
+  4,
+  "es:= ",
+  [Function],
+  "i:= ",
+  1,
+  "i:= ",
+  2,
+  "i:= ",
+  3,
+  "i:= ",
+  4,
+  "s: ",
+  [
+    1,
+    [Function],
+  ],
+  "n: ",
+  2,
+  "s: ",
+  [
+    2,
+    [Function],
+  ],
+  "n: ",
+  1,
+  "x:= ",
+  [
+    [],
+  ],
+  "x:= ",
+  [
+    [],
+  ],
+  "x:= ",
+  [
+    [],
+  ],
+  "x:= ",
+  [
+    [],
+  ],
+  "z:= ",
+  [
+    [
+      [Circular],
+      [
+        1,
+        [Circular],
+        [Circular],
+      ],
+    ],
+  ],
+  "1:= ",
+  [
+    1,
+    [
+      2,
+      null,
+    ],
+  ],
+  "z:= ",
+  [
+    [
+      [Circular],
+      [
+        1,
+        [Circular],
+        [Circular],
+      ],
+    ],
+  ],
+  "1:= ",
+  [
+    2,
+    null,
+  ],
+]
+`;

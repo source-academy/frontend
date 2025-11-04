@@ -418,16 +418,64 @@ $code-color-notification: #f9f0d7;
           margin: 15px;
           height: unset;
 
+          .stepper-display {
+            font:
+              16px / normal 'Inconsolata',
+              'Consolas',
+              monospace;
+          }
+
+          .stepper-literal {
+            color: #ff6078;
+          }
+
+          .stepper-operator {
+            color: #f89210;
+          }
+
+          .stepper-identifier {
+            color: #f8d871;
+          }
+
+          .stepper-mu-term {
+            pointer-events: auto;
+            cursor: pointer;
+            z-index: 20;
+            padding: 0px 3px;
+            border-radius: 5px;
+            background: rgba(255, 83, 83, 0.2);
+          }
+
+          .stepper-mu-term:hover {
+            background: rgba(255, 83, 83, 0.5);
+          }
+
           .beforeMarker {
+            position: relative;
+            -webkit-box-decoration-break: slice;
+            box-decoration-break: slice;
             background: rgba(179, 101, 57, 0.75);
-            position: absolute;
+            pointer-events: auto;
+            cursor: pointer;
             z-index: 20;
           }
 
+          .beforeMarker:hover {
+            background: rgba(100, 101, 57, 0.75);
+          }
+
           .afterMarker {
+            position: relative;
+            -webkit-box-decoration-break: clone;
+            box-decoration-break: clone;
             background: green;
-            position: absolute;
+            pointer-events: auto;
+            cursor: pointer;
             z-index: 20;
+          }
+
+          .afterMarker:hover {
+            background: rgba(61, 101, 57, 0.75);
           }
 
           .#{$ns}-slider-label {
@@ -697,6 +745,34 @@ $code-color-notification: #f9f0d7;
     }
   }
 
+  .session-management-table {
+    table {
+      width: 100%;
+      padding-inline: 0.5em;
+      border-spacing: 0 0.5em;
+
+      th:last-child,
+      td:last-child {
+        width: auto;
+      }
+
+      td:first-child {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+        width: 100%;
+      }
+
+      td {
+        div:first-child {
+          width: 15px;
+          height: 15px;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+
   .react-mde {
     /* Colour the borders */
     border-color: #1b2530;
@@ -865,6 +941,8 @@ $code-color-notification: #f9f0d7;
       background: $cadet-color-3;
       color: rgb(128, 145, 160);
     }
+    display: inline-block;
+    flex: 1;
   }
 
   .react-ace-green {
@@ -874,6 +952,22 @@ $code-color-notification: #f9f0d7;
       background: $dark-green;
       color: rgb(128, 145, 160);
     }
+    display: inline-block;
+    flex: 1;
+  }
+
+  #ace-radar-view {
+    display: inline-block;
+    max-width: 2%;
+    background: #2f3129;
+  }
+
+  .ace-radar-view-cursor-indicator {
+    display: none;
+  }
+
+  .ace-radar-view-wrapper {
+    width: 1px;
   }
 
   .Autograder,

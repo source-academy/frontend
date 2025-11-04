@@ -1,0 +1,131 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Sicp errors: > page not found error renders correctly 1`] = `
+<div
+  className="bp6-non-ideal-state bp6-non-ideal-state-vertical"
+>
+  <div
+    className="bp6-non-ideal-state-visual"
+    style={
+      {
+        "fontSize": "48px",
+        "lineHeight": "48px",
+      }
+    }
+  >
+    <Blueprint6.Icon
+      aria-hidden={true}
+      className="bp6-icon-muted"
+      icon="error"
+      size={48}
+      tabIndex={-1}
+    />
+  </div>
+  <div
+    className="bp6-non-ideal-state-text"
+  >
+    <ForwardRef>
+      Something went wrong :(
+    </ForwardRef>
+    <div
+      data-testid="sicp-page-not-found-error"
+    >
+      We could not find the page you were looking for. Please check the URL again. If you believe the URL is correct, kindly let us know by filing an issue at
+       
+      <a
+        href="https://github.com/source-academy/frontend"
+      >
+        https://github.com/source-academy/frontend
+      </a>
+      .
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Sicp errors: > unexpected error renders correctly 1`] = `
+<div
+  className="bp6-non-ideal-state bp6-non-ideal-state-vertical"
+>
+  <div
+    className="bp6-non-ideal-state-visual"
+    style={
+      {
+        "fontSize": "48px",
+        "lineHeight": "48px",
+      }
+    }
+  >
+    <Blueprint6.Icon
+      aria-hidden={true}
+      className="bp6-icon-muted"
+      icon="error"
+      size={48}
+      tabIndex={-1}
+    />
+  </div>
+  <div
+    className="bp6-non-ideal-state-text"
+  >
+    <ForwardRef>
+      Something went wrong :(
+    </ForwardRef>
+    <div
+      data-testid="sicp-unexpected-error"
+    >
+      Something unexpected went wrong trying to load this page. Please try refreshing the page. If the issue persists, kindly let us know by filing an issue at
+       
+      <a
+        href="https://github.com/source-academy/frontend"
+      >
+        https://github.com/source-academy/frontend
+      </a>
+      .
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Sicp errors: > unexpected error renders correctly 2`] = `
+<div
+  className="bp6-non-ideal-state bp6-non-ideal-state-vertical"
+>
+  <div
+    className="bp6-non-ideal-state-visual"
+    style={
+      {
+        "fontSize": "48px",
+        "lineHeight": "48px",
+      }
+    }
+  >
+    <Blueprint6.Icon
+      aria-hidden={true}
+      className="bp6-icon-muted"
+      icon="error"
+      size={48}
+      tabIndex={-1}
+    />
+  </div>
+  <div
+    className="bp6-non-ideal-state-text"
+  >
+    <ForwardRef>
+      Something went wrong :(
+    </ForwardRef>
+    <div
+      data-testid="sicp-parsing-error"
+    >
+      An error occured while loading the page. Kindly let us know by filing an issue at
+       
+      <a
+        href="https://github.com/source-academy/frontend"
+      >
+        https://github.com/source-academy/frontend
+      </a>
+       
+      and we will get it fixed as soon as possible.
+    </div>
+  </div>
+</div>
+`;

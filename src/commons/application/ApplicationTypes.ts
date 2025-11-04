@@ -1,31 +1,35 @@
-import { Chapter, Language, SourceError, Variant } from 'js-slang/dist/types';
+import { Chapter, Language, type SourceError, type Value, Variant } from 'js-slang/dist/types';
 
-import { AchievementState } from '../../features/achievement/AchievementTypes';
-import { DashboardState } from '../../features/dashboard/DashboardTypes';
-import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
+import type { AchievementState } from '../../features/achievement/AchievementTypes';
+import type { DashboardState } from '../../features/dashboard/DashboardTypes';
+import type { LanguageDirectoryState } from '../../features/directory/LanguageDirectoryTypes';
+import type { PluginDirectoryState } from '../../features/directory/PluginDirectoryTypes';
+import type { LeaderboardState } from '../../features/leaderboard/LeaderboardTypes';
+import type { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
+import type { StoriesEnvState, StoriesState } from '../../features/stories/StoriesTypes';
 import { freshSortState } from '../../pages/academy/grading/subcomponents/GradingSubmissionsTable';
 import { WORKSPACE_BASE_PATHS } from '../../pages/fileSystem/createInBrowserFileSystem';
 import { defaultFeatureFlags, FeatureFlagsState } from '../featureFlags';
-import { FileSystemState } from '../fileSystem/FileSystemTypes';
-import { SideContentManagerState, SideContentState } from '../sideContent/SideContentTypes';
+import type { FileSystemState } from '../fileSystem/FileSystemTypes';
+import type { SideContentManagerState, SideContentState } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
-import {
+import type {
   DebuggerContext,
   WorkspaceLocation,
   WorkspaceManagerState,
   WorkspaceState
 } from '../workspace/WorkspaceTypes';
-import { RouterState } from './types/CommonsTypes';
+import type { RouterState } from './types/CommonsTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
-import { SessionState } from './types/SessionTypes';
-import { VscodeState as VscodeState } from './types/VscodeTypes';
+import type { SessionState } from './types/SessionTypes';
+import type { VscodeState as VscodeState } from './types/VscodeTypes';
 
 export type OverallState = {
   readonly router: RouterState;
   readonly achievement: AchievementState;
+  readonly leaderboard: LeaderboardState;
   readonly playground: PlaygroundState;
   readonly session: SessionState;
   readonly stories: StoriesState;
@@ -35,6 +39,8 @@ export type OverallState = {
   readonly fileSystem: FileSystemState;
   readonly sideContent: SideContentManagerState;
   readonly vscode: VscodeState;
+  readonly languageDirectory: LanguageDirectoryState;
+  readonly pluginDirectory: PluginDirectoryState;
 };
 
 export type Story = {
@@ -74,7 +80,7 @@ export type CodeOutput = {
  */
 export type ResultOutput = {
   type: 'result';
-  value: any;
+  value: Value;
   consoleLogs: string[];
   runtime?: number;
   isProgram?: boolean;
@@ -160,7 +166,6 @@ type LanguageFeatures = Partial<{
 const variantDisplay: Map<Variant, string> = new Map([
   [Variant.TYPED, 'Typed'],
   [Variant.WASM, 'WebAssembly'],
-  [Variant.CONCURRENT, 'Concurrent'],
   [Variant.NATIVE, 'Native'],
   [Variant.EXPLICIT_CONTROL, 'Explicit-Control']
 ]);
@@ -266,7 +271,6 @@ const sourceSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant'>> = [
 
   { chapter: Chapter.SOURCE_3, variant: Variant.DEFAULT },
   { chapter: Chapter.SOURCE_3, variant: Variant.TYPED },
-  { chapter: Chapter.SOURCE_3, variant: Variant.CONCURRENT },
   { chapter: Chapter.SOURCE_3, variant: Variant.NATIVE },
 
   { chapter: Chapter.SOURCE_4, variant: Variant.DEFAULT },
@@ -288,13 +292,13 @@ export const sourceLanguages: SALanguage[] = sourceSubLanguages.map(sublang => {
     (variant === Variant.DEFAULT || variant === Variant.NATIVE || variant === Variant.TYPED);
 
   // Enable CSE Machine for Source Chapter 3 and above
-  supportedFeatures.cseMachine = chapter >= Chapter.SOURCE_3 && variant !== Variant.CONCURRENT;
+  supportedFeatures.cseMachine = chapter >= Chapter.SOURCE_3;
 
   // Local imports/exports require Source 2+ as Source 1 does not have lists.
   supportedFeatures.multiFile = chapter >= Chapter.SOURCE_2;
 
   // Disable REPL for concurrent variants
-  supportedFeatures.repl = variant !== Variant.CONCURRENT;
+  supportedFeatures.repl = true;
 
   return {
     ...sublang,
@@ -345,6 +349,15 @@ export const defaultAchievement: AchievementState = {
   goals: [],
   users: [],
   assessmentOverviews: []
+};
+
+export const defaultLeaderboard: LeaderboardState = {
+  paginatedUserXp: { rows: [], userCount: 0 },
+  contestScore: [],
+  contestPopularVote: [],
+  code: '',
+  contests: [],
+  initialRun: {}
 };
 
 const getDefaultLanguageConfig = (): SALanguage => {
@@ -420,7 +433,8 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   enableDebugging: true,
   debuggerContext: {} as DebuggerContext,
   lastDebuggerResult: undefined,
-  files: {}
+  files: {},
+  updateUserRoleCallback: () => {}
 });
 
 const defaultFileName = 'program.js';
@@ -603,9 +617,22 @@ export const defaultVscode: VscodeState = {
   isVscode: false
 };
 
+export const defaultLanguageDirectory: LanguageDirectoryState = {
+  selectedLanguageId: null,
+  selectedEvaluatorId: null,
+  languages: [],
+  languageMap: {}
+};
+
+export const defaultPluginDirectory: PluginDirectoryState = {
+  plugins: [],
+  pluginMap: {}
+};
+
 export const defaultState: OverallState = {
   router: defaultRouter,
   achievement: defaultAchievement,
+  leaderboard: defaultLeaderboard,
   dashboard: defaultDashboard,
   playground: defaultPlayground,
   session: defaultSession,
@@ -614,5 +641,7 @@ export const defaultState: OverallState = {
   featureFlags: defaultFeatureFlags,
   fileSystem: defaultFileSystem,
   sideContent: defaultSideContentManager,
-  vscode: defaultVscode
+  vscode: defaultVscode,
+  languageDirectory: defaultLanguageDirectory,
+  pluginDirectory: defaultPluginDirectory
 };

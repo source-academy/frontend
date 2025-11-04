@@ -3,5 +3,5 @@
 set -euo pipefail
 
 ./scripts/coverage-fix.sh do && \
-  craco test --coverage --coverageReporters=text-lcov \
-    --collectCoverageFrom='!**/src/features/game/**' > lcov.info
+  yarn test --coverage --coverage.reporter=lcov \
+    --coverage.exclude='**/src/features/game/**'

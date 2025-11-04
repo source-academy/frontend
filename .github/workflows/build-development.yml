@@ -3,6 +3,12 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Branch/Tag/SHA to checkout
+        required: true
+        default: master
 
 jobs:
   deploy:
@@ -10,15 +16,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.inputs.ref }}
       # Has to be run before actions/setup-node.
       # See: https://github.com/actions/setup-node/issues/480
       - name: Enable corepack for Yarn
         run: corepack enable
       - name: Setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 22
           cache: yarn
       - name: Setup Sentry CLI
         run: |

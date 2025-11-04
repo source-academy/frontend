@@ -1,0 +1,19 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ContentDisplay page renders correctly 1`] = `
+<div
+  className="ContentDisplay row center-xs"
+>
+  <div
+    className="col-md-10 col-xs-11 contentdisplay-content-parent"
+  >
+    <div
+      className="contentdisplay-content bp6-card bp6-elevation-3"
+    >
+      <div>
+         Test Content 
+      </div>
+    </div>
+  </div>
+</div>
+`;

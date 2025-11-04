@@ -1,135 +1,125 @@
-import { FSModule } from 'browserfs/dist/node/core/FS';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import type { FSModule } from 'browserfs/dist/node/core/FS';
+import { Chapter } from 'js-slang/dist/types';
 import { compressToEncodedURIComponent } from 'lz-string';
 import qs from 'query-string';
-import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select } from 'redux-saga/effects';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
 import PlaygroundActions from '../../features/playground/PlaygroundActions';
-import { isSchemeLanguage, isSourceLanguage, OverallState } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import {
+  isSchemeLanguage,
+  isSourceLanguage,
+  type OverallState
+} from '../application/ApplicationTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
-import { visitSideContent } from '../sideContent/SideContentActions';
+import { combineSagaHandlers } from '../redux/utils';
+import SideContentActions from '../sideContent/SideContentActions';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../workspace/WorkspaceActions';
-import { EditorTabState, PlaygroundWorkspaceState } from '../workspace/WorkspaceTypes';
-import { safeTakeEvery as takeEvery } from './SafeEffects';
+import { selectWorkspace } from './SafeEffects';
 
-export default function* PlaygroundSaga(): SagaIterator {
-  yield takeEvery(PlaygroundActions.generateLzString.type, updateQueryString);
+const PlaygroundSaga = combineSagaHandlers({
+  [PlaygroundActions.generateLzString.type]: updateQueryString,
+  [PlaygroundActions.shortenURL.type]: function* ({ payload: keyword }) {
+    const queryString = yield select((state: OverallState) => state.playground.queryString);
+    const errorMsg = 'ERROR';
 
-  yield takeEvery(
-    PlaygroundActions.shortenURL.type,
-    function* (action: ReturnType<typeof PlaygroundActions.shortenURL>): any {
-      const queryString = yield select((state: OverallState) => state.playground.queryString);
-      const keyword = action.payload;
-      const errorMsg = 'ERROR';
+    let resp, timeout;
 
-      let resp, timeout;
+    //we catch and move on if there are errors (plus have a timeout in case)
+    try {
+      const { result, hasTimedOut } = yield race({
+        result: call(shortenURLRequest, queryString, keyword),
+        hasTimedOut: delay(10000)
+      });
 
-      //we catch and move on if there are errors (plus have a timeout in case)
-      try {
-        const { result, hasTimedOut } = yield race({
-          result: call(shortenURLRequest, queryString, keyword),
-          hasTimedOut: delay(10000)
-        });
+      resp = result;
+      timeout = hasTimedOut;
+    } catch (_) {}
 
-        resp = result;
-        timeout = hasTimedOut;
-      } catch (_) {}
-
-      if (!resp || timeout) {
-        yield put(PlaygroundActions.updateShortURL(errorMsg));
-        return yield call(showWarningMessage, 'Something went wrong trying to create the link.');
-      }
-
-      if (resp.status !== 'success' && !resp.shorturl) {
-        yield put(PlaygroundActions.updateShortURL(errorMsg));
-        return yield call(showWarningMessage, resp.message);
-      }
-
-      if (resp.status !== 'success') {
-        yield call(showSuccessMessage, resp.message);
-      }
-      yield put(PlaygroundActions.updateShortURL(Constants.urlShortenerBase + resp.url.keyword));
+    if (!resp || timeout) {
+      yield put(PlaygroundActions.updateShortURL(errorMsg));
+      return yield call(showWarningMessage, 'Something went wrong trying to create the link.');
     }
-  );
 
-  yield takeEvery(
-    visitSideContent.type,
-    function* ({
-      payload: { newId, prevId, workspaceLocation }
-    }: ReturnType<typeof visitSideContent>) {
-      if (workspaceLocation !== 'playground' || newId === prevId) return;
+    if (resp.status !== 'success' && !resp.shorturl) {
+      yield put(PlaygroundActions.updateShortURL(errorMsg));
+      return yield call(showWarningMessage, resp.message);
+    }
 
-      // Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
-      if (prevId === SideContentType.substVisualizer && newId === SideContentType.mobileEditorRun) {
-        return;
+    if (resp.status !== 'success') {
+      yield call(showSuccessMessage, resp.message);
+    }
+    yield put(PlaygroundActions.updateShortURL(Constants.urlShortenerBase + resp.url.keyword));
+  },
+  [SideContentActions.visitSideContent.type]: function* ({
+    payload: { newId, prevId, workspaceLocation }
+  }) {
+    if (workspaceLocation !== 'playground' || newId === prevId) return;
+
+    // Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
+    if (prevId === SideContentType.substVisualizer && newId === SideContentType.mobileEditorRun) {
+      return;
+    }
+
+    const {
+      context: { chapter: playgroundSourceChapter },
+      editorTabs
+    } = yield* selectWorkspace('playground');
+
+    if (prevId === SideContentType.substVisualizer) {
+      if (newId === SideContentType.mobileEditorRun) return;
+      const hasBreakpoints = editorTabs.find(({ breakpoints }) => breakpoints.find(x => !!x));
+
+      if (!hasBreakpoints) {
+        yield put(WorkspaceActions.toggleUsingSubst(false, workspaceLocation));
+        yield put(WorkspaceActions.clearReplOutput(workspaceLocation));
       }
+    }
 
-      const {
-        context: { chapter: playgroundSourceChapter },
-        editorTabs
-      }: PlaygroundWorkspaceState = yield select(
-        (state: OverallState) => state.workspaces[workspaceLocation]
-      );
+    if (newId !== SideContentType.cseMachine) {
+      yield put(WorkspaceActions.toggleUsingCse(false, workspaceLocation));
+      yield call([CseMachine, CseMachine.clearCse]);
+      yield call([JavaCseMachine, JavaCseMachine.clearCse]);
+      yield put(WorkspaceActions.updateCurrentStep(-1, workspaceLocation));
+      yield put(WorkspaceActions.updateStepsTotal(0, workspaceLocation));
+      yield put(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
+      yield put(WorkspaceActions.setEditorHighlightedLines(workspaceLocation, 0, []));
+    }
 
-      if (prevId === SideContentType.substVisualizer) {
-        if (newId === SideContentType.mobileEditorRun) return;
-        const hasBreakpoints = editorTabs.find(({ breakpoints }) => breakpoints.find(x => !!x));
+    if (playgroundSourceChapter === Chapter.FULL_JAVA && newId === SideContentType.cseMachine) {
+      yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
+    }
 
-        if (!hasBreakpoints) {
-          yield put(WorkspaceActions.toggleUsingSubst(false, workspaceLocation));
-          yield put(WorkspaceActions.clearReplOutput(workspaceLocation));
-        }
-      }
-
-      if (newId !== SideContentType.cseMachine) {
-        yield put(WorkspaceActions.toggleUsingCse(false, workspaceLocation));
-        yield call([CseMachine, CseMachine.clearCse]);
-        yield call([JavaCseMachine, JavaCseMachine.clearCse]);
-        yield put(WorkspaceActions.updateCurrentStep(-1, workspaceLocation));
-        yield put(WorkspaceActions.updateStepsTotal(0, workspaceLocation));
-        yield put(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
-        yield put(WorkspaceActions.setEditorHighlightedLines(workspaceLocation, 0, []));
-      }
-
-      if (playgroundSourceChapter === Chapter.FULL_JAVA && newId === SideContentType.cseMachine) {
-        yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
-      }
-
-      if (
-        isSourceLanguage(playgroundSourceChapter) &&
-        (newId === SideContentType.substVisualizer || newId === SideContentType.cseMachine)
-      ) {
-        if (playgroundSourceChapter <= Chapter.SOURCE_2) {
-          yield put(WorkspaceActions.toggleUsingSubst(true, workspaceLocation));
-        } else {
-          yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
-        }
-      }
-
-      if (newId === SideContentType.upload) {
-        yield put(WorkspaceActions.toggleUsingUpload(true, workspaceLocation));
+    if (
+      isSourceLanguage(playgroundSourceChapter) &&
+      (newId === SideContentType.substVisualizer || newId === SideContentType.cseMachine)
+    ) {
+      if (playgroundSourceChapter <= Chapter.SOURCE_2) {
+        yield put(WorkspaceActions.toggleUsingSubst(true, workspaceLocation));
       } else {
-        yield put(WorkspaceActions.toggleUsingUpload(false, workspaceLocation));
-      }
-
-      if (isSchemeLanguage(playgroundSourceChapter) && newId === SideContentType.cseMachine) {
         yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
       }
     }
-  );
-}
+
+    if (newId === SideContentType.upload) {
+      yield put(WorkspaceActions.toggleUsingUpload(true, workspaceLocation));
+    } else {
+      yield put(WorkspaceActions.toggleUsingUpload(false, workspaceLocation));
+    }
+
+    if (isSchemeLanguage(playgroundSourceChapter) && newId === SideContentType.cseMachine) {
+      yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
+    }
+  }
+});
+
+export default PlaygroundSaga;
 
 function* updateQueryString() {
-  const isFolderModeEnabled: boolean = yield select(
-    (state: OverallState) => state.workspaces.playground.isFolderModeEnabled
-  );
   const fileSystem: FSModule = yield select(
     (state: OverallState) => state.fileSystem.inBrowserFileSystem
   );
@@ -138,27 +128,20 @@ function* updateQueryString() {
     'playground',
     fileSystem
   );
-  const editorTabs: EditorTabState[] = yield select(
-    (state: OverallState) => state.workspaces.playground.editorTabs
-  );
+
+  const {
+    activeEditorTabIndex,
+    context: { chapter, variant },
+    editorTabs,
+    execTime,
+    externalLibrary: external,
+    isFolderModeEnabled
+  } = yield* selectWorkspace('playground');
+
   const editorTabFilePaths = editorTabs
-    .map((editorTab: EditorTabState) => editorTab.filePath)
+    .map(editorTab => editorTab.filePath)
     .filter((filePath): filePath is string => filePath !== undefined);
-  const activeEditorTabIndex: number | null = yield select(
-    (state: OverallState) => state.workspaces.playground.activeEditorTabIndex
-  );
-  const chapter: Chapter = yield select(
-    (state: OverallState) => state.workspaces.playground.context.chapter
-  );
-  const variant: Variant = yield select(
-    (state: OverallState) => state.workspaces.playground.context.variant
-  );
-  const external: ExternalLibraryName = yield select(
-    (state: OverallState) => state.workspaces.playground.externalLibrary
-  );
-  const execTime: number = yield select(
-    (state: OverallState) => state.workspaces.playground.execTime
-  );
+
   const newQueryString = qs.stringify({
     isFolder: isFolderModeEnabled,
     files: compressToEncodedURIComponent(qs.stringify(files)),

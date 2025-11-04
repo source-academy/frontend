@@ -4,13 +4,14 @@ import { call, put, select, StrictEffect } from 'redux-saga/effects';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 
 import { EventType } from '../../../../features/achievement/AchievementTypes';
-import { DeviceSession } from '../../../../features/remoteExecution/RemoteExecutionTypes';
+import type { DeviceSession } from '../../../../features/remoteExecution/RemoteExecutionTypes';
 import { WORKSPACE_BASE_PATHS } from '../../../../pages/fileSystem/createInBrowserFileSystem';
-import { OverallState } from '../../../application/ApplicationTypes';
+import type { OverallState } from '../../../application/ApplicationTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../../../fileSystem/utils';
 import { actions } from '../../../utils/ActionsHelper';
 import { makeElevatedContext } from '../../../utils/JsSlangHelper';
-import { EditorTabState, EVAL_SILENT, WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import { selectWorkspace } from '../../SafeEffects';
 import { blockExtraMethods } from './blockExtraMethods';
 import { clearContext } from './clearContext';
 import { evalCodeSaga } from './evalCode';
@@ -19,31 +20,20 @@ import { insertDebuggerStatements } from './insertDebuggerStatements';
 export function* evalEditorSaga(
   workspaceLocation: WorkspaceLocation
 ): Generator<StrictEffect, void, any> {
-  const [
-    prepend,
+  const {
     activeEditorTabIndex,
+    programPrependValue: prepend,
     editorTabs,
     execTime,
-    isFolderModeEnabled,
-    fileSystem,
-    remoteExecutionSession
-  ]: [
-    string,
-    number | null,
-    EditorTabState[],
-    number,
-    boolean,
-    FSModule,
-    DeviceSession | undefined
-  ] = yield select((state: OverallState) => [
-    state.workspaces[workspaceLocation].programPrependValue,
-    state.workspaces[workspaceLocation].activeEditorTabIndex,
-    state.workspaces[workspaceLocation].editorTabs,
-    state.workspaces[workspaceLocation].execTime,
-    state.workspaces[workspaceLocation].isFolderModeEnabled,
-    state.fileSystem.inBrowserFileSystem,
-    state.session.remoteExecutionSession
-  ]);
+    isFolderModeEnabled
+  } = yield* selectWorkspace(workspaceLocation);
+
+  const [fileSystem, remoteExecutionSession]: [FSModule, DeviceSession | undefined] = yield select(
+    (state: OverallState) => [
+      state.fileSystem.inBrowserFileSystem,
+      state.session.remoteExecutionSession
+    ]
+  );
 
   if (activeEditorTabIndex === null) {
     throw new Error('Cannot evaluate program without an entrypoint file.');
@@ -59,7 +49,6 @@ export function* evalEditorSaga(
     };
   }
   const entrypointFilePath = editorTabs[activeEditorTabIndex].filePath ?? defaultFilePath;
-
   yield put(actions.addEvent([EventType.RUN_CODE]));
 
   if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
@@ -122,8 +111,8 @@ export function* evalEditorSaga(
       entrypointFilePath,
       context,
       execTime,
-      workspaceLocation,
-      WorkspaceActions.evalEditor.type
+      WorkspaceActions.evalEditor.type,
+      workspaceLocation
     );
   }
 }

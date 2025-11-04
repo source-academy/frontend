@@ -1,32 +1,33 @@
-import * as Sentry from '@sentry/browser';
-import { SagaIterator } from 'redux-saga';
-import { call } from 'redux-saga/effects';
+import { setUser } from '@sentry/react';
+import { call, select } from 'redux-saga/effects';
+import Messages, { sendToWebview } from 'src/features/vscode/messages';
 
 import CommonsActions from '../application/actions/CommonsActions';
 import SessionActions from '../application/actions/SessionActions';
-import { actions } from '../utils/ActionsHelper';
+import { combineSagaHandlers } from '../redux/utils';
 import { computeEndpointUrl } from '../utils/AuthHelper';
 import { showWarningMessage } from '../utils/notifications/NotificationsHelper';
-import { safeTakeEvery as takeEvery } from './SafeEffects';
 
-export default function* LoginSaga(): SagaIterator {
-  yield takeEvery(SessionActions.login.type, updateLoginHref);
-
-  yield takeEvery(SessionActions.setUser.type, (action: ReturnType<typeof actions.setUser>) => {
-    Sentry.setUser({ id: action.payload.userId.toString() });
-  });
-
-  yield takeEvery(CommonsActions.logOut.type, () => {
-    Sentry.setUser(null);
-  });
-}
-
-function* updateLoginHref({ payload: providerId }: ReturnType<typeof actions.login>) {
-  const epUrl = computeEndpointUrl(providerId);
-  if (!epUrl) {
-    yield call(showWarningMessage, 'Could not log in; invalid provider name provided.');
-    return undefined;
+const LoginSaga = combineSagaHandlers({
+  [SessionActions.login.type]: function* ({ payload: providerId }) {
+    const isVscode = yield select(state => state.vscode.isVscode);
+    const epUrl = computeEndpointUrl(providerId, isVscode);
+    if (!epUrl) {
+      yield call(showWarningMessage, 'Could not log in; invalid provider name provided.');
+      return;
+    }
+    if (!isVscode) {
+      window.location.href = epUrl;
+    } else {
+      sendToWebview(Messages.LoginWithBrowser(epUrl));
+    }
+  },
+  [SessionActions.setUser.type]: function* (action) {
+    yield call(setUser, { id: action.payload.userId.toString() });
+  },
+  [CommonsActions.logOut.type]: function* () {
+    yield call(setUser, null);
   }
-  window.location.href = epUrl;
-  return undefined;
-}
+});
+
+export default LoginSaga;

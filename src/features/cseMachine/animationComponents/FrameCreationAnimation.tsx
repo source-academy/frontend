@@ -44,7 +44,7 @@ export class FrameCreationAnimation extends Animatable {
   private variadicArray?: ArrayValue;
 
   constructor(
-    origin: ControlItemComponent | StashItemComponent,
+    private origin: ControlItemComponent | StashItemComponent,
     private frame: Frame
   ) {
     super();
@@ -95,7 +95,14 @@ export class FrameCreationAnimation extends Animatable {
         opacity: 0
       });
     });
-    this.frameArrows = frame.bindings.flatMap(binding => {
+    this.frameArrows = this.frameArrowAnimations = [];
+  }
+
+  draw(): React.ReactNode {
+    // Bindings arrows only gets created when drawn, so `frameArrows` is initialised here instead
+    const xDiff = this.frame.x() - this.origin.x();
+    const yDiff = this.frame.y() - this.origin.y();
+    this.frameArrows = this.frame.bindings.flatMap(binding => {
       if (
         binding.value instanceof ArrayValue &&
         isEnvEqual(binding.value.data.environment, this.frame.environment)
@@ -111,9 +118,6 @@ export class FrameCreationAnimation extends Animatable {
         opacity: 0
       });
     });
-  }
-
-  draw(): React.ReactNode {
     return (
       <Group key={Animatable.key--} ref={this.ref}>
         {this.controlTextAnimation.draw()}

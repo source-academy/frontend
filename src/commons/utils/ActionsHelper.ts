@@ -8,9 +8,12 @@ import WorkspaceActions from '../../commons/workspace/WorkspaceActions';
 import AcademyActions from '../../features/academy/AcademyActions';
 import AchievementActions from '../../features/achievement/AchievementActions';
 import DashboardActions from '../../features/dashboard/DashboardActions';
+import LanguageDirectoryActions from '../../features/directory/LanguageDirectoryActions';
+import PluginDirectoryActions from '../../features/directory/PluginDirectoryActions';
 import GitHubActions from '../../features/github/GitHubActions';
 import GroundControlActions from '../../features/groundControl/GroundControlActions';
-import * as PersistenceActions from '../../features/persistence/PersistenceActions';
+import LeaderboardActions from '../../features/leaderboard/LeaderboardActions';
+import PersistenceActions from '../../features/persistence/PersistenceActions';
 import PlaygroundActions from '../../features/playground/PlaygroundActions';
 import RemoteExecutionActions from '../../features/remoteExecution/RemoteExecutionActions';
 import SourcecastActions from '../../features/sourceRecorder/sourcecast/SourcecastActions';
@@ -19,10 +22,11 @@ import SourcereelActions from '../../features/sourceRecorder/sourcereel/Sourcere
 import StoriesActions from '../../features/stories/StoriesActions';
 import VscodeActions from '../application/actions/VscodeActions';
 import { FeatureFlagsActions } from '../featureFlags';
-import { ActionType } from './TypeHelper';
+import type { ActionType } from './TypeHelper';
 
 export const actions = {
   ...AchievementActions,
+  ...LeaderboardActions,
   ...CommonsActions,
   ...CollabEditingActions,
   ...DashboardActions,
@@ -43,7 +47,9 @@ export const actions = {
   ...SideContentActions,
   ...VscodeActions,
   ...SideContentActions,
-  ...FeatureFlagsActions
+  ...FeatureFlagsActions,
+  ...LanguageDirectoryActions,
+  ...PluginDirectoryActions
 };
 
 export type SourceActionType = ActionType<typeof actions>;
