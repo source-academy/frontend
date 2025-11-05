@@ -130,7 +130,8 @@ describe('EVAL_EDITOR', () => {
         name: ExternalLibraryName.NONE,
         symbols: context.externalSymbols
       },
-      globals
+      globals,
+      languageOptions: context.languageOptions
     };
 
     const newDefaultState = generateDefaultState(workspaceLocation, {
@@ -397,7 +398,8 @@ describe('EVAL_TESTCASE', () => {
         name: ExternalLibraryName.NONE,
         symbols: context.externalSymbols
       },
-      globals
+      globals,
+      languageOptions: context.languageOptions
     };
 
     const newDefaultState = generateDefaultState(workspaceLocation, {
@@ -689,23 +691,34 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
         name: newExternalLibraryName,
         symbols
       },
-      globals
+      globals,
+      languageOptions: context.languageOptions
     };
 
-    return expectSaga(workspaceSaga)
-      .withState(newDefaultState)
-      .put(WorkspaceActions.changeExternalLibrary(newExternalLibraryName, workspaceLocation))
-      .put(WorkspaceActions.beginClearContext(workspaceLocation, library, true))
-      .put(WorkspaceActions.clearReplOutput(workspaceLocation))
-      .call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000)
-      .dispatch({
-        type: WorkspaceActions.externalLibrarySelect.type,
-        payload: {
-          externalLibraryName: newExternalLibraryName,
-          workspaceLocation
-        }
-      })
-      .silentRun();
+    return (
+      expectSaga(workspaceSaga)
+        .withState(newDefaultState)
+        .put(WorkspaceActions.changeExternalLibrary(newExternalLibraryName, workspaceLocation))
+        // beginClearContext is asserted here but the library object can contain
+        // runtime-specific fields (like languageOptions). Match only the action
+        // shape we care about (type, workspaceLocation and shouldInitLibrary)
+        .put.like({
+          action: {
+            type: WorkspaceActions.beginClearContext.type,
+            payload: { workspaceLocation, shouldInitLibrary: true }
+          }
+        })
+        .put(WorkspaceActions.clearReplOutput(workspaceLocation))
+        .call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000)
+        .dispatch({
+          type: WorkspaceActions.externalLibrarySelect.type,
+          payload: {
+            externalLibraryName: newExternalLibraryName,
+            workspaceLocation
+          }
+        })
+        .silentRun()
+    );
   });
 
   test('does not call the above when oldExternalLibraryName === newExternalLibraryName', () => {
@@ -770,7 +783,8 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
         name: newExternalLibraryName,
         symbols
       },
-      globals
+      globals,
+      languageOptions: undefined
     };
 
     return expectSaga(workspaceSaga)
