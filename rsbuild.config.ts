@@ -5,6 +5,7 @@ import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
+import pluginTypedCssModules from 'unplugin-typed-css-modules/rspack';
 
 const { publicVars, rawPublicVars } = loadEnv({ prefixes: ['REACT_APP_'] });
 
@@ -123,6 +124,7 @@ export default defineConfig({
 
       config.plugins = [
         ...config.plugins,
+        pluginTypedCssModules({ scss: true }),
         new InjectManifest({
           swSrc: './src/service-worker.ts',
           swDest: 'service-worker.js',
