@@ -1,8 +1,10 @@
-import type { Context } from 'js-slang';
+import { Context } from 'js-slang';
+import { Variant } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 
 import {
   getBlockExtraMethodsString,
+  getBlockExtraMethodsStringTypedVariant,
   getDifferenceInMethods,
   getStoreExtraMethodsString
 } from '../../../utils/JsSlangHelper';
@@ -35,7 +37,10 @@ export function* blockExtraMethods(
     );
   }
 
-  const nullifier = getBlockExtraMethodsString(toBeBlocked);
+  const nullifier =
+    context.variant === Variant.TYPED
+      ? getBlockExtraMethodsStringTypedVariant(toBeBlocked)
+      : getBlockExtraMethodsString(toBeBlocked);
   const nullifierFilePath = '/nullifier.js';
   const nullifierFiles = {
     [nullifierFilePath]: nullifier
