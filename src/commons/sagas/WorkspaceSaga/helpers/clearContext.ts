@@ -12,7 +12,7 @@ export function* clearContext(workspaceLocation: WorkspaceLocation, entrypointCo
   const {
     context: { chapter, externalSymbols: symbols, variant, languageOptions },
     externalLibrary: externalLibraryName,
-    globals,
+    globals
   } = yield* selectWorkspace(workspaceLocation);
 
   const library = {
