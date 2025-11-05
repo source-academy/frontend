@@ -684,17 +684,6 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
       externalLibrary: oldExternalLibraryName
     });
 
-    const symbols = externalLibraries.get(newExternalLibraryName)!;
-    const library: Library = {
-      chapter,
-      external: {
-        name: newExternalLibraryName,
-        symbols
-      },
-      globals,
-      languageOptions: context.languageOptions
-    };
-
     return (
       expectSaga(workspaceSaga)
         .withState(newDefaultState)
