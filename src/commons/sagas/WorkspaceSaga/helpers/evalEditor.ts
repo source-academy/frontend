@@ -1,4 +1,4 @@
-import { FSModule } from 'browserfs/dist/node/core/FS';
+import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { Variant } from 'js-slang/dist/types';
 import { call, put, select, StrictEffect } from 'redux-saga/effects';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
@@ -90,8 +90,8 @@ export function* evalEditorSaga(
           prependFilePath,
           elevatedContext,
           execTime,
-          workspaceLocation,
-          EVAL_SILENT
+          EVAL_SILENT,
+          workspaceLocation
         );
       }
 
