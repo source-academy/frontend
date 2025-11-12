@@ -83,6 +83,13 @@ const mockPostRefresh = (success: boolean) =>
 
 const mockNetworkErrorOnce = () => fetchMock.mockImplementationOnce(() => Promise.reject());
 
+// Make `Headers` return a singleton for easier comparison in tests
+const originalHeaders = global.Headers;
+const singleton = new originalHeaders();
+vi.spyOn(global, 'Headers').mockImplementation(function (init?: HeadersInit) {
+  return singleton;
+});
+
 const makeRequest = (method: RequestMethod = GET_METHOD) => request(apiPath, method, fetchOptions);
 const expectFetchToBeCalledWithCorrectParams = () =>
   expect(fetchMock).toBeCalledWith(
@@ -90,6 +97,7 @@ const expectFetchToBeCalledWithCorrectParams = () =>
     generateApiCallHeadersAndFetchOptions(GET_METHOD, fetchOptions)
   );
 const expectRefreshFlowFetchesToBeCalledWithCorrectParams = () => {
+  expect(fetchMock).toBeCalledTimes(2);
   expect(fetchMock).toHaveBeenNthCalledWith(
     1,
     fullApiUrl,
@@ -100,6 +108,16 @@ const expectRefreshFlowFetchesToBeCalledWithCorrectParams = () => {
     fullApiUrl,
     expect.objectContaining(generateApiCallHeadersAndFetchOptions(GET_METHOD, refreshFetchOptions))
   );
+  // expect(fetchMock).toHaveBeenNthCalledWith(
+  //   1,
+  //   fullApiUrl,
+  //   expect.objectContaining(generateApiCallHeadersAndFetchOptions(GET_METHOD, fetchOptions))
+  // );
+  // expect(fetchMock).toHaveBeenNthCalledWith(
+  //   2,
+  //   fullApiUrl,
+  //   expect.objectContaining(generateApiCallHeadersAndFetchOptions(GET_METHOD, refreshFetchOptions))
+  // );
 };
 const expectPostRefreshToBeCalled = (called: boolean) =>
   called ? expect(postRefreshSpy).toBeCalledTimes(1) : expect(postRefreshSpy).not.toBeCalled();

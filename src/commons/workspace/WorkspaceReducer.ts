@@ -101,7 +101,8 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
             action.payload.library.chapter,
             action.payload.library.external.symbols,
             workspaceLocation,
-            action.payload.library.variant
+            action.payload.library.variant,
+            action.payload.library.languageOptions
           ),
           globals: action.payload.library.globals,
           externalLibrary: action.payload.library.external.name
