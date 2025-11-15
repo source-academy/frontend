@@ -150,7 +150,7 @@
     "@types/showdown": "^2.0.1",
     "@types/xml2js": "^0.4.11",
     "@vitejs/plugin-react-swc": "^4.0.0",
-    "@vitest/coverage-v8": "4.0.7",
+    "@vitest/coverage-v8": "4.0.8",
     "@vitest/ui": "^4.0.0",
     "buffer": "^6.0.3",
     "canvas": "^3.1.0",
