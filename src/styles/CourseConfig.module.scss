@@ -1,0 +1,83 @@
+@import '_global';
+
+.course-configuration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .inputs {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    max-width: 900px;
+    width: 100%;
+
+    .text {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+
+      :global(.#{$ns}-tab-list) {
+        margin-left: 8px;
+      }
+
+      .input-textarea {
+        height: 100px;
+      }
+
+      .llm-prompt-input-textarea {
+        height: 300px;
+      }
+
+      .input-markdown {
+        padding: 10px;
+        height: 100px;
+        background-color: #f5f5f5;
+        border-radius: 3px;
+        box-shadow:
+          0 0 0 0 rgb(19 124 189 / 0%),
+          0 0 0 0 rgb(19 124 189 / 0%),
+          inset 0 0 0 1px rgb(16 22 26 / 15%),
+          inset 0 1px 1px rgb(16 22 26 / 20%);
+        overflow: auto;
+        text-align: left;
+      }
+
+      div.input-markdown > div > * {
+        margin: 0;
+      }
+    }
+
+    .llm-grading-config {
+      :global(.#{$ns}-form-group) {
+        display: flex;
+        justify-content: space-between;
+
+        :global(.#{$ns}-label) {
+          margin-right: 10px;
+          width: 180px;
+        }
+
+        :global(.#{$ns}-form-content) {
+          width: 100%;
+        }
+      }
+
+      .llm-course-prompt-icon {
+        margin-left: 5px;
+        vertical-align: text-bottom;
+        cursor: help;
+      }
+    }
+
+    .booleans {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      label {
+        margin-top: 1.5rem;
+      }
+    }
+  }
+}
