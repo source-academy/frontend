@@ -48,6 +48,7 @@ const sicpBackendUrl =
 const javaPackagesUrl = 'https://source-academy.github.io/modules/java/java-packages/src/';
 const workspaceSettingsLocalStorageKey = 'workspace-settings';
 const collabSessionIdLocalStorageKey = 'playground-session-id';
+const isPreviewExamModeLocalStorageKey = 'is-preview-exam-mode';
 
 // For achievements feature (CA - Continual Assessment)
 // TODO: remove dependency of the ca levels on the env file
@@ -192,7 +193,8 @@ const Constants = {
   workspaceSettingsLocalStorageKey,
   collabSessionIdLocalStorageKey,
   caFulfillmentLevel,
-  featureFlags
+  featureFlags,
+  isPreviewExamModeLocalStorageKey
 };
 
 export default Constants;

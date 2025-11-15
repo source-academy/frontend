@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { useSession, useTypedSelector } from 'src/commons/utils/Hooks';
+import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import AcademyActions from 'src/features/academy/AcademyActions';
 import StoriesActions from 'src/features/stories/StoriesActions';
 
@@ -30,6 +31,8 @@ const defaultCourseConfig: UpdateCourseConfiguration = {
   topContestLeaderboardDisplay: 10,
   enableSourcecast: true,
   enableStories: false,
+  enableExamMode: false,
+  resumeCode: '',
   moduleHelpText: ''
 };
 
@@ -67,7 +70,10 @@ const AdminPanel: React.FC = () => {
       topContestLeaderboardDisplay: session.topContestLeaderboardDisplay,
       enableSourcecast: session.enableSourcecast,
       enableStories: session.enableStories,
-      moduleHelpText: session.moduleHelpText
+      enableExamMode: session.enableExamMode,
+      resumeCode: session.resumeCode,
+      moduleHelpText: session.moduleHelpText,
+      isOfficialCourse: session.isOfficialCourse
     });
   }, [
     session.courseName,
@@ -80,8 +86,11 @@ const AdminPanel: React.FC = () => {
     session.enableGame,
     session.enableSourcecast,
     session.enableStories,
+    session.enableExamMode,
     session.moduleHelpText,
-    session.viewable
+    session.isOfficialCourse,
+    session.viewable,
+    session.resumeCode
   ]);
 
   const tableRef = useRef<ImperativeAssessmentConfigPanel>(null);
@@ -110,8 +119,12 @@ const AdminPanel: React.FC = () => {
   // Changes made to users are handled separately.
   const submitHandler = useCallback(() => {
     if (hasChangesCourseConfig) {
-      dispatch(SessionActions.updateCourseConfig(courseConfiguration));
-      setHasChangesCourseConfig(false);
+      if (!courseConfiguration.resumeCode || courseConfiguration.resumeCode.length === 0) {
+        showWarningMessage('Resume code cannot be empty.');
+      } else {
+        dispatch(SessionActions.updateCourseConfig(courseConfiguration));
+        setHasChangesCourseConfig(false);
+      }
     }
     const tableState = tableRef.current?.getData() ?? [];
     const currentConfigs = session.assessmentConfigurations ?? [];

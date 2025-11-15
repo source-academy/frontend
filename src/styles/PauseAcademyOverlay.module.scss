@@ -1,0 +1,28 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: gray;
+  opacity: 90%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.title-label {
+  font-size: 5vh;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.reason-label {
+  font-size: 3vh;
+  font-weight: bold;
+}
+
+.info-label {
+  font-size: 3vh;
+}
