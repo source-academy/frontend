@@ -185,7 +185,7 @@
     "typescript-eslint": "^8.1.0",
     "url": "^0.11.1",
     "vitest": "^4.0.0",
-    "webpack-bundle-analyzer": "^4.9.0"
+    "webpack-bundle-analyzer": "^5.0.0"
   },
   "browserslist": {
     "production": [
