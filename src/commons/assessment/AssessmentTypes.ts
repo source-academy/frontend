@@ -143,6 +143,11 @@ export interface IContestVotingQuestion extends BaseQuestion {
   type: 'voting';
 }
 
+export type LLMPrompt = {
+  role: string;
+  content: string;
+};
+
 export type BaseQuestion = {
   answer: string | number | ContestEntry[] | null;
   comments?: string;

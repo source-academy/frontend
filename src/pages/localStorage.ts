@@ -75,6 +75,8 @@ export const saveState = (state: OverallState) => {
         topContestLeaderboardDisplay: state.session.topContestLeaderboardDisplay,
         enableSourcecast: state.session.enableSourcecast,
         enableStories: state.session.enableStories,
+        enableLlmGrading: state.session.enableLlmGrading,
+        llmCourseLevelPrompt: state.session.llmCourseLevelPrompt,
         moduleHelpText: state.session.moduleHelpText,
         assetsPrefix: state.session.assetsPrefix,
         assessmentConfigurations: state.session.assessmentConfigurations,

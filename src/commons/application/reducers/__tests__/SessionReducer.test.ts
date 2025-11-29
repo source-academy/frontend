@@ -402,8 +402,13 @@ test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in updating assessment overvie
 
 // Test data for UPDATE_GRADING
 const gradingTest1: GradingQuery = {
+  enable_llm_grading: false,
   answers: [
     {
+      id: 0,
+      prompts: [],
+      autogradingResults: [],
+      autoGradingStatus: 'N/A',
       question: await vi.importMock('../../../../features/grading/GradingTypes'),
       student: {
         name: 'test student',
@@ -430,8 +435,13 @@ const gradingTest1: GradingQuery = {
 };
 
 const gradingTest2: GradingQuery = {
+  enable_llm_grading: false,
   answers: [
     {
+      id: 0,
+      prompts: [],
+      autogradingResults: [],
+      autoGradingStatus: 'N/A',
       question: await vi.importMock('../../../../features/grading/GradingTypes'),
       student: {
         name: 'another test student',
