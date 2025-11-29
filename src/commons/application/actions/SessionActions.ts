@@ -149,7 +149,14 @@ const SessionActions = createActions('session', {
   deleteUserCourseRegistration: (courseRegId: number) => ({ courseRegId }),
   updateCourseResearchAgreement: (agreedToResearch: boolean) => ({ agreedToResearch }),
   updateStoriesUserRole: (userId: number, role: StoriesRole) => ({ userId, role }),
-  deleteStoriesUserUserGroups: (userId: number) => ({ userId })
+  deleteStoriesUserUserGroups: (userId: number) => ({ userId }),
+  validateResumeCode: (resumeCode: string, callback: (isResumeCodeValid: boolean) => any) => ({
+    resumeCode,
+    callback
+  }),
+  pauseUser: () => ({}),
+  reportFocusLost: () => ({}),
+  reportFocusRegain: () => ({})
 });
 
 // For compatibility with existing code (actions helper)
