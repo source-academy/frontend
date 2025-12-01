@@ -71,6 +71,7 @@ import {
   getUser,
   getUserCourseRegistrations,
   handleResponseError,
+  pauseUser,
   postAcknowledgeNotifications,
   postAnswer,
   postAssessment,
@@ -94,10 +95,13 @@ import {
   putUserRole,
   removeAssessmentConfig,
   removeUserCourseRegistration,
+  reportFocusLost,
+  reportFocusRegain,
   unpublishGrading,
   unpublishGradingAll,
   updateAssessment,
-  uploadAssessment
+  uploadAssessment,
+  validateResumeCode
 } from './RequestsSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
@@ -590,6 +594,25 @@ const newBackendSagaOne = combineSagaHandlers({
     yield call(showSuccessMessage, 'Unpublish grading successful', 1000);
     yield put(actions.updateGradingOverviews({ count: totalPossibleEntries, data: newOverviews }));
   },
+  [SessionActions.validateResumeCode.type]: function* (action) {
+    const tokens: Tokens = yield selectTokens();
+    const { resumeCode, callback } = action.payload;
+
+    const isResumeCodeValid = yield call(validateResumeCode, tokens, resumeCode);
+    callback(isResumeCodeValid);
+  },
+  [SessionActions.pauseUser.type]: function* () {
+    const tokens: Tokens = yield selectTokens();
+    yield call(pauseUser, tokens);
+  },
+  [SessionActions.reportFocusLost.type]: function* () {
+    const tokens: Tokens = yield selectTokens();
+    yield call(reportFocusLost, tokens);
+  },
+  [SessionActions.reportFocusRegain.type]: function* () {
+    const tokens: Tokens = yield selectTokens();
+    yield call(reportFocusRegain, tokens);
+  },
   [SessionActions.submitGrading.type]: sendGrade,
   [SessionActions.submitGradingAndContinue.type]: sendGradeAndContinue
 });
@@ -811,6 +834,21 @@ const newBackendSagaTwo = combineSagaHandlers({
       courseConfiguration: CourseConfiguration | null;
       assessmentConfigurations: AssessmentConfiguration[] | null;
     } = yield call(getLatestCourseRegistrationAndConfiguration, tokens);
+
+    if (courseConfiguration?.enableExamMode) {
+      const {
+        user
+      }: {
+        user: User | null;
+        courseRegistration: CourseRegistration | null;
+        courseConfiguration: CourseConfiguration | null;
+        assessmentConfigurations: AssessmentConfiguration[] | null;
+      } = yield call(getUser, tokens);
+
+      if (user) {
+        yield put(actions.setUser(user));
+      }
+    }
 
     if (!courseRegistration || !courseConfiguration || !assessmentConfigurations) {
       yield call(showWarningMessage, `Failed to load course!`);

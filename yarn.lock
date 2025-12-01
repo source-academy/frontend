@@ -6578,6 +6578,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"disable-devtool@npm:^0.3.8":
+  version: 0.3.9
+  resolution: "disable-devtool@npm:0.3.9"
+  checksum: 10c0/a66c11704a3e7d255410b86e0f646430c04b7f71ee3eddfabcebe22941de1554fd0d51a8072905b68fc3e39cff5846e86e2e299a2dc8ee3a1b9ba09ee9d5d0d4
+  languageName: node
+  linkType: hard
+
 "doctrine@npm:^2.1.0":
   version: 2.1.0
   resolution: "doctrine@npm:2.1.0"
@@ -7718,6 +7725,7 @@ __metadata:
     coveralls: "npm:^3.1.1"
     cross-env: "npm:^10.0.0"
     dayjs: "npm:^1.11.13"
+    disable-devtool: "npm:^0.3.8"
     dompurify: "npm:^3.2.4"
     eslint: "npm:^9.9.0"
     eslint-plugin-react: "npm:^7.35.0"

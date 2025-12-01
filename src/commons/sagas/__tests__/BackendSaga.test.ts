@@ -106,7 +106,8 @@ const mockUser: User = {
       role: Role.Staff,
       viewable: true
     }
-  ]
+  ],
+  isPaused: false
 };
 
 const mockCourseRegistration1: CourseRegistration = {
@@ -136,12 +137,15 @@ const mockCourseConfiguration1: CourseConfiguration = {
   enableContestLeaderboard: true,
   enableSourcecast: true,
   enableStories: false,
+  enableExamMode: false,
   topLeaderboardDisplay: 100,
   topContestLeaderboardDisplay: 10,
   sourceChapter: Chapter.SOURCE_1,
   sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
-  assetsPrefix: ''
+  assetsPrefix: '',
+  isOfficialCourse: false,
+  resumeCode: ''
 };
 
 const mockCourseRegistration2: CourseRegistration = {
@@ -173,10 +177,13 @@ const mockCourseConfiguration2: CourseConfiguration = {
   topContestLeaderboardDisplay: 10,
   enableSourcecast: true,
   enableStories: false,
+  enableExamMode: false,
   sourceChapter: Chapter.SOURCE_4,
   sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
-  assetsPrefix: ''
+  assetsPrefix: '',
+  isOfficialCourse: false,
+  resumeCode: ''
 };
 
 const mockAssessmentConfigurations: AssessmentConfiguration[] = [
@@ -955,10 +962,13 @@ describe('Test UPDATE_COURSE_CONFIG action', () => {
     topContestLeaderboardDisplay: 10,
     enableSourcecast: false,
     enableStories: false,
+    enableExamMode: false,
     sourceChapter: Chapter.SOURCE_4,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help',
-    assetsPrefix: ''
+    assetsPrefix: '',
+    isOfficialCourse: false,
+    resumeCode: ''
   };
 
   test('when course config is changed', () => {
@@ -1055,9 +1065,12 @@ describe('Test CREATE_COURSE action', () => {
     enableContestLeaderboard: true,
     enableSourcecast: true,
     enableStories: false,
+    enableExamMode: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
-    moduleHelpText: 'Help Text'
+    moduleHelpText: 'Help Text',
+    isOfficialCourse: false,
+    resumeCode: ''
   };
   const user = mockUser;
   const courseConfiguration = mockCourseConfiguration1;

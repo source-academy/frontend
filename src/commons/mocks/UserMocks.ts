@@ -45,6 +45,7 @@ export const mockUser: User = {
   userId: 123,
   name: 'DevAdmin',
   username: 'DevAdmin',
+  isPaused: false,
   courses: [
     {
       courseId: 1,
@@ -75,6 +76,7 @@ export const mockStudents: User[] = [
     userId: 101,
     name: 'Papito Sakolomoto',
     username: 'Papito Sakolomoto',
+    isPaused: false,
     courses: [
       {
         courseId: 1,
@@ -89,6 +91,7 @@ export const mockStudents: User[] = [
     userId: 102,
     name: 'Carina Heng Xin Ting',
     username: 'Carina Heng Xin Ting',
+    isPaused: false,
     courses: [
       {
         courseId: 2,
@@ -103,6 +106,7 @@ export const mockStudents: User[] = [
     userId: 103,
     name: 'Valentino Gusion',
     username: 'Valentino Gusion',
+    isPaused: false,
     courses: [
       {
         courseId: 3,
@@ -117,6 +121,7 @@ export const mockStudents: User[] = [
     userId: 104,
     name: 'Ixia Arlot Rambutan',
     username: 'Ixia Arlot Rambutan',
+    isPaused: false,
     courses: [
       {
         courseId: 4,
@@ -131,6 +136,7 @@ export const mockStudents: User[] = [
     userId: 105,
     name: 'Ariel Shockatia Ligament',
     username: 'Ariel Shockatia Ligament',
+    isPaused: false,
     courses: [
       {
         courseId: 5,
@@ -145,6 +151,7 @@ export const mockStudents: User[] = [
     userId: 106,
     name: 'Lolita Sim',
     username: 'Lolita Sim',
+    isPaused: false,
     courses: [
       {
         courseId: 5,
@@ -159,6 +166,7 @@ export const mockStudents: User[] = [
     userId: 107,
     name: 'Lim Jun Ming',
     username: 'Lim Jun Ming',
+    isPaused: false,
     courses: [
       {
         courseId: 5,
@@ -173,6 +181,7 @@ export const mockStudents: User[] = [
     userId: 108,
     name: 'Tobias Gray',
     username: 'Tobias Gray',
+    isPaused: false,
     courses: [
       {
         courseId: 5,
@@ -187,6 +196,7 @@ export const mockStudents: User[] = [
     userId: 109,
     name: 'Lenard Toh See Ming',
     username: 'Lenard Toh See Ming',
+    isPaused: false,
     courses: [
       {
         courseId: 5,
@@ -201,6 +211,7 @@ export const mockStudents: User[] = [
     userId: 110,
     name: 'Richard Gray',
     username: 'Richard Gray',
+    isPaused: false,
     courses: [
       {
         courseId: 5,
@@ -215,6 +226,7 @@ export const mockStudents: User[] = [
     userId: 111,
     name: 'Benedict Lim',
     username: 'Benedict Lim',
+    isPaused: false,
     courses: [
       {
         courseId: 5,
@@ -229,6 +241,7 @@ export const mockStudents: User[] = [
     userId: 112,
     name: 'Harshvathini Tharman',
     username: 'Harshvathini Tharman',
+    isPaused: false,
     courses: [
       {
         courseId: 5,
@@ -243,6 +256,7 @@ export const mockStudents: User[] = [
     userId: 113,
     name: 'James Cook',
     username: 'James Cook',
+    isPaused: false,
     courses: [
       {
         courseId: 5,
@@ -257,6 +271,7 @@ export const mockStudents: User[] = [
     userId: 114,
     name: 'Mike Chang',
     username: 'Mike Chang',
+    isPaused: false,
     courses: [
       {
         courseId: 5,
@@ -271,6 +286,7 @@ export const mockStudents: User[] = [
     userId: 115,
     name: 'Giyu Tomioka',
     username: 'Giyu Tomioka',
+    isPaused: false,
     courses: [
       {
         courseId: 5,
@@ -285,6 +301,7 @@ export const mockStudents: User[] = [
     userId: 116,
     name: 'Oliver Sandy',
     username: 'Oliver Sandy',
+    isPaused: false,
     courses: [
       {
         courseId: 5,
@@ -299,6 +316,7 @@ export const mockStudents: User[] = [
     userId: 117,
     name: 'Muthu Valakrishnan',
     username: 'Muthu Valakrishnan',
+    isPaused: false,
     courses: [
       {
         courseId: 5,
@@ -377,10 +395,13 @@ export const mockCourseConfigurations: CourseConfiguration[] = [
     enableContestLeaderboard: true,
     topLeaderboardDisplay: 100,
     topContestLeaderboardDisplay: 10,
+    enableExamMode: false,
+    resumeCode: '',
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: '',
-    assetsPrefix: ''
+    assetsPrefix: '',
+    isOfficialCourse: false
   },
   {
     courseName: `CS2040S Data Structures and Algorithms (AY20/21 Sem 2)`,
@@ -394,10 +415,13 @@ export const mockCourseConfigurations: CourseConfiguration[] = [
     enableContestLeaderboard: true,
     topLeaderboardDisplay: 100,
     topContestLeaderboardDisplay: 10,
+    enableExamMode: false,
+    resumeCode: '',
     sourceChapter: Chapter.SOURCE_2,
     sourceVariant: Variant.DEFAULT,
     moduleHelpText: 'Help Text!',
-    assetsPrefix: ''
+    assetsPrefix: '',
+    isOfficialCourse: false
   }
 ];
 

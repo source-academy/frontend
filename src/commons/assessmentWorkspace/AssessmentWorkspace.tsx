@@ -65,6 +65,7 @@ import MobileWorkspace, { MobileWorkspaceProps } from '../mobileWorkspace/Mobile
 import SideContentAutograder from '../sideContent/content/SideContentAutograder';
 import SideContentContestLeaderboard from '../sideContent/content/SideContentContestLeaderboard';
 import SideContentContestVotingContainer from '../sideContent/content/SideContentContestVotingContainer';
+import SideContentDocumentation from '../sideContent/content/SideContentDocumentation';
 import SideContentToneMatrix from '../sideContent/content/SideContentToneMatrix';
 import { SideContentProps } from '../sideContent/SideContent';
 import { changeSideContentHeight } from '../sideContent/SideContentActions';
@@ -468,6 +469,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       assessmentOverview !== undefined ? assessmentOverview.maxTeamSize > 1 : false;
     const isContestVoting = question?.type === QuestionTypes.voting;
     const isPublished = assessmentOverview?.isPublished;
+    const isPrivate = assessmentOverview?.private ?? false;
     const handleContestEntryClick = (_submissionId: number, answer: string) => {
       // TODO: Hardcoded to make use of the first editor tab. Refactoring is needed for this workspace to enable Folder mode.
       handleEditorValueChange(0, answer);
@@ -628,6 +630,15 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
         id: SideContentType.toneMatrix
+      });
+    }
+
+    if (isPrivate) {
+      tabs.push({
+        label: `Documentation`,
+        iconName: IconNames.BOOK,
+        body: <SideContentDocumentation />,
+        id: SideContentType.documentation
       });
     }
 
