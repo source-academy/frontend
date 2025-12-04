@@ -219,7 +219,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
                 />
               </FormGroup>
               <FormGroup
-                helperText="Please enter the LLM API Key. This key is encrypted and not editable later."
+                helperText="Please enter the LLM API Key. This key is encrypted and will not be viewable after."
                 inline={true}
                 label="LLM API Key"
                 labelFor="llmApiKey"
