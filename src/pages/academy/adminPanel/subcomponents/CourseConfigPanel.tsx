@@ -209,7 +209,7 @@ const CourseConfigPanel: React.FC<Props> = props => {
                 <InputGroup
                   id="llmApiUrl"
                   defaultValue={llmApiUrl}
-                  placeholder="e.g https://api.openai.com/v1/chat/completions"
+                  placeholder="e.g https://api.openai.com/v1"
                   onChange={e =>
                     props.setCourseConfiguration({
                       ...props.courseConfiguration,
