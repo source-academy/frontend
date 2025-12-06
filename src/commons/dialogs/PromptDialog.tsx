@@ -3,8 +3,10 @@ import React from 'react';
 
 import { ConfirmDialog, ConfirmDialogProps } from './ConfirmDialog';
 
-export interface PromptDialogProps<T>
-  extends Omit<ConfirmDialogProps<T>, 'onResponse' | 'choices'> {
+export interface PromptDialogProps<T> extends Omit<
+  ConfirmDialogProps<T>,
+  'onResponse' | 'choices'
+> {
   defaultValue?: string;
   enterResponse?: T;
   onResponse: (buttonResponse: T, value: string) => void;
