@@ -181,6 +181,7 @@ function loadStandardLibraries(proxyContext: Context, customBuiltIns: CustomBuil
 // intercepts reads from the underlying Context and returns desired values
 export function makeElevatedContext(context: Context) {
   function ProxyFrame() {}
+
   ProxyFrame.prototype = context.runtime.environments[0].head;
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -255,6 +256,16 @@ export function getBlockExtraMethodsString(toRemove: string[]) {
   return toRemove
     .map(x =>
       x === 'makeUndefinedErrorFunction' ? '' : `const ${x} = makeUndefinedErrorFunction('${x}');`
+    )
+    .join('\n');
+}
+
+export function getBlockExtraMethodsStringTypedVariant(toRemove: string[]) {
+  return toRemove
+    .map(x =>
+      x === 'makeUndefinedErrorFunction'
+        ? ''
+        : `const ${x} : string = makeUndefinedErrorFunction('${x}');`
     )
     .join('\n');
 }

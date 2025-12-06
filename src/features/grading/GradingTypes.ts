@@ -4,6 +4,7 @@ import {
   AssessmentStatus,
   AssessmentType,
   AutogradingResult,
+  LLMPrompt,
   MCQChoice,
   ProgressStatus,
   Question,
@@ -99,6 +100,7 @@ export type GradingAssessment = {
 export type GradingQuery = {
   answers: GradingAnswer;
   assessment: GradingAssessment;
+  enable_llm_grading: boolean | null;
 };
 
 export type GradingSubmissionTableProps = {
@@ -168,6 +170,7 @@ export type IGradingTableProperties = {
  * particular question in a submission.
  */
 export type GradingQuestion = {
+  id: number;
   question: AnsweredQuestion;
   team?: Array<{
     username: any;
@@ -189,6 +192,10 @@ export type GradingQuestion = {
     };
     gradedAt?: string;
   };
+  autogradingResults: AutogradingResult[];
+  autoGradingStatus: string;
+  ai_comments?: string[];
+  prompts: LLMPrompt[];
 };
 
 /**

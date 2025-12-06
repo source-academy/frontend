@@ -96,7 +96,7 @@
     "react-select": "^5.7.3",
     "react-simple-keyboard": "^3.6.27",
     "react-sortable-hoc": "^2.0.0",
-    "react-syntax-highlighter": "^15.5.0",
+    "react-syntax-highlighter": "^16.0.0",
     "react-textarea-autosize": "^8.5.2",
     "redux-mock-store": "^1.5.4",
     "redux-saga": "^1.2.3",
@@ -150,8 +150,8 @@
     "@types/showdown": "^2.0.1",
     "@types/xml2js": "^0.4.11",
     "@vitejs/plugin-react-swc": "^4.0.0",
-    "@vitest/coverage-v8": "3.2.4",
-    "@vitest/ui": "^3.2.4",
+    "@vitest/coverage-v8": "4.0.14",
+    "@vitest/ui": "^4.0.0",
     "buffer": "^6.0.3",
     "canvas": "^3.1.0",
     "constants-browserify": "^1.0.0",
@@ -185,8 +185,8 @@
     "typescript-eslint": "^8.1.0",
     "unplugin-typed-css-modules": "^1.1.0",
     "url": "^0.11.1",
-    "vitest": "^3.2.4",
-    "webpack-bundle-analyzer": "^4.9.0"
+    "vitest": "^4.0.0",
+    "webpack-bundle-analyzer": "^5.0.0"
   },
   "browserslist": {
     "production": [

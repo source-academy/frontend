@@ -128,6 +128,10 @@ export const mockTestcases: Testcase[] = [
 
 export const mockGradingAnswer: GradingAnswer = [
   {
+    id: 0,
+    prompts: [],
+    autogradingResults: [],
+    autoGradingStatus: 'N/A',
     question: {
       answer: `function remainder(n, d) {
   return (n - d) < 0 ? n : remainder(n - d, d);
@@ -244,6 +248,10 @@ _italics_
     }
   },
   {
+    id: 1,
+    prompts: [],
+    autogradingResults: [],
+    autoGradingStatus: 'N/A',
     question: {
       prepend: '',
       postpend: '',
@@ -336,6 +344,10 @@ New message from **Avenger**!
     }
   },
   {
+    id: 2,
+    prompts: [],
+    autogradingResults: [],
+    autoGradingStatus: 'N/A',
     question: {
       // C is the answer
       prepend: '',
@@ -434,7 +446,8 @@ Starring: Source Academy`,
 
 export const mockGradingQuery: GradingQuery = {
   answers: mockGradingAnswer,
-  assessment: mockGradingAssessment
+  assessment: mockGradingAssessment,
+  enable_llm_grading: false
 };
 
 /**
