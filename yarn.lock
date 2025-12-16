@@ -1484,12 +1484,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@blueprintjs/core@npm:^6.0.0, @blueprintjs/core@npm:^6.3.4":
-  version: 6.3.4
-  resolution: "@blueprintjs/core@npm:6.3.4"
+"@blueprintjs/colors@npm:^5.1.12":
+  version: 5.1.12
+  resolution: "@blueprintjs/colors@npm:5.1.12"
   dependencies:
-    "@blueprintjs/colors": "npm:^5.1.11"
-    "@blueprintjs/icons": "npm:^6.3.1"
+    tslib: "npm:~2.6.2"
+  checksum: 10c0/749a59646082c5605f12b095595e9662587dafcb2fdb253ba57131faa9ce829630bd1cb1709a53ef430ba5fc1159b375523a5a578c9f8ff644d7a0a2e5911a55
+  languageName: node
+  linkType: hard
+
+"@blueprintjs/core@npm:^6.0.0, @blueprintjs/core@npm:^6.3.4":
+  version: 6.4.1
+  resolution: "@blueprintjs/core@npm:6.4.1"
+  dependencies:
+    "@blueprintjs/colors": "npm:^5.1.12"
+    "@blueprintjs/icons": "npm:^6.3.2"
     "@popperjs/core": "npm:^2.11.8"
     classnames: "npm:^2.3.1"
     normalize.css: "npm:^8.0.1"
@@ -1507,7 +1516,7 @@ __metadata:
   bin:
     upgrade-blueprint-2.0.0-rename: scripts/upgrade-blueprint-2.0.0-rename.sh
     upgrade-blueprint-3.0.0-rename: scripts/upgrade-blueprint-3.0.0-rename.sh
-  checksum: 10c0/fa60c3a91a283cda67d7ae9d09e04c9077a9b1b687c4d6f323d6bdd11adec707889de3632bf2e1fa082db5d11acfc261abf9d5d540a3f4819e7be56b75d7e0b1
+  checksum: 10c0/71574ff9b3bbe3e12bf193370ad6bac1a4d8b1d0f18698b1351ee87629df4237d9f3fe028df454167b75e78f6e33f9da1e582c5485496814a38f79a5354c2de2
   languageName: node
   linkType: hard
 
@@ -1535,7 +1544,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@blueprintjs/icons@npm:^6.0.0, @blueprintjs/icons@npm:^6.3.1":
+"@blueprintjs/icons@npm:^6.0.0, @blueprintjs/icons@npm:^6.3.1, @blueprintjs/icons@npm:^6.3.2":
   version: 6.3.2
   resolution: "@blueprintjs/icons@npm:6.3.2"
   dependencies:
