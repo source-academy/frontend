@@ -135,7 +135,7 @@
     "@types/gapi.auth2": "^0.0.61",
     "@types/gapi.client": "^1.0.5",
     "@types/gapi.client.drive-v3": "^0.0.5",
-    "@types/google.picker": "^0.0.51",
+    "@types/google.picker": "^0.0.52",
     "@types/identity-obj-proxy": "^3",
     "@types/js-cookie": "^3.0.6",
     "@types/js-yaml": "^4.0.5",
