@@ -3109,17 +3109,17 @@ __metadata:
   linkType: hard
 
 "@rsbuild/plugin-eslint@npm:^1.1.1":
-  version: 1.1.2
-  resolution: "@rsbuild/plugin-eslint@npm:1.1.2"
+  version: 1.2.0
+  resolution: "@rsbuild/plugin-eslint@npm:1.2.0"
   dependencies:
-    eslint-rspack-plugin: "npm:^4.2.1"
+    eslint-rspack-plugin: "npm:^4.3.0"
   peerDependencies:
     "@rsbuild/core": 1.x
     eslint: ^8.0.0 || ^9.0.0
   peerDependenciesMeta:
     "@rsbuild/core":
       optional: true
-  checksum: 10c0/eddf7b40ae1eb5f1e55e9c42bccf39255e8c7ab825e9873561c63ba98bcbe5a0d732190bd864d3f9b46af8269eae9a819c6c3a9a39a7f9d8503b18c2ecf61f3b
+  checksum: 10c0/e0c95431d9c50ca385e7eebc0f61434efaf056c40744c9381250b0238eba3dce760c5f9ff60212225dc7b5046c008e14e1c91fe3c83c142c143e2fd07edb853b
   languageName: node
   linkType: hard
 
@@ -7177,18 +7177,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-rspack-plugin@npm:^4.2.1":
-  version: 4.2.1
-  resolution: "eslint-rspack-plugin@npm:4.2.1"
+"eslint-rspack-plugin@npm:^4.3.0":
+  version: 4.3.0
+  resolution: "eslint-rspack-plugin@npm:4.3.0"
   dependencies:
     "@types/eslint": "npm:^8.56.10"
     jest-worker: "npm:^29.7.0"
     micromatch: "npm:^4.0.8"
     normalize-path: "npm:^3.0.0"
     schema-utils: "npm:^4.2.0"
+    tinyglobby: "npm:^0.2.15"
   peerDependencies:
     eslint: ^8.0.0 || ^9.0.0
-  checksum: 10c0/27505ee997b175aa1d169b475c8547f5017a08adaae07c9b1f05bb37d2e74d11c281f4aebebeaa7619fca9013abad57a28b3a23e413fcf6bafab78793678fcef
+  checksum: 10c0/4c952956bd970c6a80591e355c7450ba068bbdf0538e5764b528b0cccef02067d46b8ff08c02b47c6366768cd5b99d95531f725c7b4cb84946a7054d71612c70
   languageName: node
   linkType: hard
 
