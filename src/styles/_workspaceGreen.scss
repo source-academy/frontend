@@ -1,5 +1,5 @@
-$pure-green: #00ff00;
-$dark-green: #00e000;
+@use 'variables' as *;
+
 .GreenScreen {
   // Hide NavigationBar
   position: absolute;

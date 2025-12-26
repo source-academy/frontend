@@ -1,10 +1,4 @@
-// Mixins
-
-@mixin mQ($arg) {
-  @media screen and (max-width: $arg) {
-    @content;
-  }
-}
+@use 'variables' as *;
 
 // Overall fullpage
 
