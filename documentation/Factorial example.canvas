@@ -1,0 +1,14 @@
+{
+	"nodes":[
+		{"id":"16b1e9d1c67f23b5","type":"file","file":"normal factorial deferred.png","x":-460,"y":-220,"width":399,"height":171},
+		{"id":"dcf549b509e110cf","type":"file","file":"CSE (no environment link).png","x":80,"y":-256,"width":400,"height":243},
+		{"id":"e4ad9819048ea95d","type":"text","text":"## Ordinary factorial recursive ","x":-461,"y":-336,"width":341,"height":56},
+		{"id":"aa88ee4404578e7a","type":"text","text":"## Ordinary factorial recursive but with additional math floor function","x":-491,"y":92,"width":461,"height":80},
+		{"id":"f5eb87dcb4b79f2c","type":"file","file":"factorial with additional math floor code.png","x":-460,"y":220,"width":400,"height":144},
+		{"id":"84898cb406a54037","type":"file","file":"CSE (with environment link).png","x":80,"y":113,"width":500,"height":358}
+	],
+	"edges":[
+		{"id":"07bb69855840a66d","fromNode":"16b1e9d1c67f23b5","fromSide":"right","toNode":"dcf549b509e110cf","toSide":"left"},
+		{"id":"0acbbdf9aa5f0d3f","fromNode":"f5eb87dcb4b79f2c","fromSide":"right","toNode":"84898cb406a54037","toSide":"left"}
+	]
+}
