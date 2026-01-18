@@ -1,5 +1,6 @@
 import 'src/i18n/i18n';
 import 'src/styles/index.scss';
+import 'src/styles/main.css';
 
 import { Button, OverlaysProvider } from '@blueprintjs/core';
 import { setModulesStaticURL } from 'js-slang/dist/modules/loader';
