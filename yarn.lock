@@ -3213,17 +3213,17 @@ __metadata:
   linkType: hard
 
 "@rsbuild/plugin-eslint@npm:^1.1.1":
-  version: 1.2.0
-  resolution: "@rsbuild/plugin-eslint@npm:1.2.0"
+  version: 1.2.1
+  resolution: "@rsbuild/plugin-eslint@npm:1.2.1"
   dependencies:
     eslint-rspack-plugin: "npm:^4.3.0"
   peerDependencies:
-    "@rsbuild/core": 1.x
+    "@rsbuild/core": ^1.0.0 || ^2.0.0-0
     eslint: ^8.0.0 || ^9.0.0
   peerDependenciesMeta:
     "@rsbuild/core":
       optional: true
-  checksum: 10c0/e0c95431d9c50ca385e7eebc0f61434efaf056c40744c9381250b0238eba3dce760c5f9ff60212225dc7b5046c008e14e1c91fe3c83c142c143e2fd07edb853b
+  checksum: 10c0/e97c64f85f148471cf7289563f64231a684bbb37b330b30a2d031c93a843d80b236dbeb802b20666d4ce7928e5056e17375c474ddf846c08b4962432ab76f32d
   languageName: node
   linkType: hard
 
