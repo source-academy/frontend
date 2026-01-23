@@ -1,14 +1,4 @@
-$ns: 'bp6';
-
-// Global variables
-$cadet-color-1: #1a2530;
-$cadet-color-2: #2c3e50;
-$cadet-color-3: #34495e;
-$cadet-color-4: #ced9e0;
-$cadet-color-5: #ffffff;
-
-$images-path: '../assets';
-$achievement-assets: 'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement';
+@use 'variables' as *;
 
 /*
   Fixes height behaviour of nested flexboxes in the code editor and REPL,
