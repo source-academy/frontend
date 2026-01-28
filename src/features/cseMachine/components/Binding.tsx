@@ -40,7 +40,8 @@ export class Binding extends Visible {
     readonly frame: Frame,
     /** previous binding (the binding above it) */
     readonly prevBinding: Binding | null,
-    readonly isConstant: boolean = false
+    readonly isConstant: boolean = false,
+    readonly isLive: boolean = true //EDITEDDDDDDDDDD
   ) {
     super();
     this.isDummyBinding = isDummyKey(this.keyString);
@@ -97,7 +98,7 @@ export class Binding extends Visible {
     ) {
       this.arrow = new ArrowFromText(this.key).to(this.value);
     }
-
+  
     return (
       <React.Fragment key={Layout.key++}>
         {this.isDummyBinding

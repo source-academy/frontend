@@ -215,6 +215,154 @@ type ExtendedSet<T> = Set<T> & {
   difference(other: Set<T>): Set<T>;
 };
 
+//EDITEDDDDDDDDDD
+export function findEnvById(node : EnvTreeNode, id : string): Env | null {
+  if (node.environment && node.environment.id === id) {
+    return node.environment as Env;
+  }
+  for (const child of node.children as EnvTreeNode[]) {
+    const res = findEnvById(child, id);
+    if (res) return res;
+  }
+  return null;
+}
+
+function addEnvFromValue(value: any, roots: Set<string>) {
+  // closures / stream functions created by Source
+  if (isClosure(value) || isStreamFn(value)) {
+    if (value.environment) {
+      roots.add(value.environment.id);
+    }
+  }
+
+  // JS Slang arrays (have id + environment)
+  if (isDataArray(value)) {
+    if (value.environment) {
+      roots.add(value.environment.id);
+    }
+  }
+
+  //(MAY NEED LATER ON) DOWN BELOW
+
+  // continuations capture an environment too (MAY NEED LATER ON)
+  // if (isContinuation(value)) {
+  //   const env = value.getEnv?.();
+  //   if (env && env.id) {
+  //     roots.add(env.id);
+  //   }
+  // }
+}
+
+export function collectRootEnvIds(): Set<string> {
+  const roots = new Set<string>();
+
+  // Root 1: global env and current env
+  if (Layout.globalEnvNode?.environment) {
+    roots.add(Layout.globalEnvNode.environment.id);
+  }
+  const currentEnvId = CseMachine.getCurrentEnvId();
+  if (currentEnvId) {
+    roots.add(currentEnvId);
+  }
+
+  // Root 2: stash values that refer to environments
+  // interpreter.js shows stash is just an array of values; Layout.stash mirrors that. [file:11][file:7]
+  Layout.stash.getStack().forEach((item: any) => {
+    addEnvFromValue(item, roots); //if primitives are passed, nothing happens
+  });
+
+  // Root 3: control stack items that refer to environments
+  // interpreter.js uses ControlItem union, including EnvInstr, AppInstr etc. [file:11]
+  Layout.control.getStack().forEach((item: ControlItem) => {
+    // ENVIRONMENT instruction explicitly contains an env
+    if (isInstr(item) && item.instrType === InstrType.ENVIRONMENT) {
+      const envInstr = item as EnvInstr;
+      const envId = getEnvId(envInstr.env); // your existing helper
+      roots.add(envId);
+    }
+
+    //This BELOW refers to any possible function "foo()" calls on the control stack
+    //Most likely wont matter for LIVENESS analysis, but good to keep for correctness
+    // APPLICATION instruction: function value may be a closure/stream on stash
+    // (We already handle this via stash scan, but this is a safe extra.)
+    // if (isInstr(item) && item.instrType === InstrType.APPLICATION) {
+    //   const appInstr = item as AppInstr;
+    //   // no direct env here; args and fn are on stash
+    // }
+
+    // If any control item is literally a closure/array/continuation value (for Scheme),
+    // treat it as a root as well.
+    addEnvFromValue(item as any, roots); //FOR EXTRA SAFETY; most likely wont happen
+  });
+
+  return roots;
+}
+
+export function pushEnvFromData(value: any, pushEnv: (e: Env | null | undefined) => void) {
+  if (!value) return;
+
+  // closures / streamFns
+  if (isClosure(value) || isStreamFn(value)) {
+    pushEnv((value as any).environment as Env);
+  }
+
+  // arrays
+  if (isDataArray(value)) {
+    const arr = value as any[];
+    // env of the array object itself
+    pushEnv((value as any).environment as Env);
+    // recursively inspect elements
+    for (const elem of arr) {
+      pushEnvFromData(elem, pushEnv);
+    } 
+  }
+  // continuations (MAY NEED LATER ON)
+  if (isContinuation(value)) pushEnv((value as any).getEnv());
+}
+
+export function markReachableEnvs(envTree: EnvTree, rootIds: Set<string>): Set<string> {
+  const visited = new Set<string>();
+  const worklist: Env[] = [];
+
+  const pushEnv = (env: Env | null | undefined) => {
+    if (!env) return;
+    if (visited.has(env.id)) return;
+    visited.add(env.id);
+    worklist.push(env);
+  };
+
+  // seed with roots
+  rootIds.forEach(id => {
+    const env = findEnvById(envTree.root, id);
+    if (env) pushEnv(env);
+  });
+
+  while (worklist.length > 0) {
+    const env = worklist.pop()!;
+
+    // 1. parent via tail
+    pushEnv(env.tail as Env);
+
+    // 2. bindings in head
+    Object.values(env.head).forEach(v => {
+      pushEnvFromData(v, pushEnv);
+    });
+
+    // 3. heap objects
+    env.heap.getHeap().forEach((obj: any) => {
+      pushEnvFromData(obj, pushEnv);
+    });
+  }
+
+  return visited;
+}
+
+export function computeLiveEnvironments(envTree: EnvTree): Set<string> {
+  const roots = collectRootEnvIds(); 
+  return markReachableEnvs(envTree, roots);
+}
+//EDITEDDDDDDDDDD
+
 /** Returns a set with the elements in `set1` that are not in `set2` */
 export function setDifference<T>(set1: Set<T>, set2: Set<T>) {
   if ('difference' in Set.prototype) {

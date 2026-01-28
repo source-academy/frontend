@@ -57,9 +57,9 @@ export const Config = Object.freeze({
 
   // Colors of arrows and borders
   StrokeColor: '#999',
-  StrokeColorFaded: '#5b6773',
+  StrokeColorFaded: '#d7da17',
   PrintStrokeColor: '#777',
-  PrintStrokeColorFaded: '#ccc',
+  PrintStrokeColorFaded: '#cccccc',
 
   // Colors of different states
   ActiveColor: '#030fff',

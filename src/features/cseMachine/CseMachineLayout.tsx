@@ -45,7 +45,8 @@ import {
   isPrimitiveData,
   isStreamFn,
   isUnassigned,
-  setDifference
+  setDifference,
+  computeLiveEnvironments //EDITEDDDDDDDDDD
 } from './CseMachineUtils';
 import { Continuation, isContinuation, isSchemeNumber, isSymbol } from './utils/scheme';
 
@@ -85,6 +86,12 @@ export class Layout {
   static previousControlComponent: ControlStack;
   static previousStashComponent: StashStack;
 
+  //EDITEDDDDDDDDDD
+  /*
+  * This contains all the env IDs that are live in the current context.
+  */
+  static liveEnvIDs: Set<string> = new Set();
+  
   /**
    * memoized values, where keys are either ids for arrays and closures,
    * or the function objects themselves for built-in functions and stream functions
@@ -160,6 +167,11 @@ export class Layout {
     Layout.globalEnvNode = deepCopyTree(envTree).root;
     Layout.control = control;
     Layout.stash = stash;
+
+    //EDITEDDDDDDDDDD
+    // NEW: very simple “live” definition – mark global env as live
+    Layout.liveEnvIDs = computeLiveEnvironments(envTree);
+    //EDITEDDDDDDDDDD ends
 
     // remove prelude environment and merge bindings into global env
     Layout.removePreludeEnv();
