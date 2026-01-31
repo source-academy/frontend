@@ -21,6 +21,7 @@ export default class CseMachine {
   private static printableMode: boolean = false;
   private static controlStash: boolean = false; // TODO: discuss if the default should be true
   private static stackTruncated: boolean = false;
+  private static pairCreationMode: boolean = false;
   private static environmentTree: EnvTree | undefined;
   private static currentEnvId: string;
   private static control: Control | undefined;
@@ -34,6 +35,9 @@ export default class CseMachine {
   public static toggleStackTruncated(): void {
     CseMachine.stackTruncated = !CseMachine.stackTruncated;
   }
+  public static togglePairCreationMode(): void {
+    CseMachine.pairCreationMode = !CseMachine.pairCreationMode;
+  }
   public static getCurrentEnvId(): string {
     return CseMachine.currentEnvId;
   }
@@ -46,7 +50,9 @@ export default class CseMachine {
   public static getStackTruncated(): boolean {
     return CseMachine.stackTruncated;
   }
-
+  public static getPairCreationMode(): boolean {
+    return CseMachine.pairCreationMode;
+  }
   public static isControl(): boolean {
     return this.control ? !this.control.isEmpty() : false;
   }

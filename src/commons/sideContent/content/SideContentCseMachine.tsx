@@ -268,6 +268,24 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                     />
                   </AnchorButton>
                 </Tooltip>
+                <Tooltip content="Pair Visualisation" compact>
+                  <AnchorButton
+                    onMouseUp={() => {
+                      if (this.state.visualization) {
+                        CseMachine.togglePairCreationMode();
+                        CseMachine.redraw();
+                      }
+                    }}
+                    icon="array"
+                    disabled={!this.state.visualization}
+                  >
+                    <Checkbox
+                      checked={CseMachine.getPairCreationMode()}
+                      disabled={!this.state.visualization}
+                      style={{ margin: 0 }}
+                    />
+                  </AnchorButton>
+                </Tooltip>
               </ButtonGroup>
             )}
             <ButtonGroup>
