@@ -101,7 +101,9 @@ export default class CseMachine {
   static redraw() {
     if (CseMachine.environmentTree && CseMachine.control && CseMachine.stash) {
       // checks if the required diagram exists, and updates the dom node using setVis
-      if (
+      if (CseMachine.getPairCreationMode()) {
+        this.setVis(Layout.draw());
+      } else if (
         CseMachine.getPrintableMode() &&
         CseMachine.getControlStash() &&
         CseMachine.getStackTruncated() &&
