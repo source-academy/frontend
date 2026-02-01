@@ -512,6 +512,15 @@ export class Layout {
   }
 
   static draw(): React.ReactNode {
+    const pairValues: Value[] = Array.from(Layout.values.values()).filter(v => {
+      try {
+        const data = (v as any).data;
+        return Array.isArray(data) && data.length === 2;
+      } catch {
+        return false;
+      }
+    });
+
     if (Layout.key !== 0) {
       return Layout.prevLayout;
     } else {
@@ -557,7 +566,11 @@ export class Layout {
                     key={Layout.key++}
                     listening={false}
                   />
-                  {Layout.levels.map(level => level.draw())}
+                  {CseMachine.getPairCreationMode() 
+                    ? pairValues.map(v => v.draw())
+                    : Layout.levels.map(level => level.draw())
+                  }
+
                   {CseMachine.getControlStash() && Layout.controlComponent.draw()}
                   {CseMachine.getControlStash() && Layout.stashComponent.draw()}
                 </KonvaLayer>
