@@ -3247,17 +3247,17 @@ __metadata:
   linkType: hard
 
 "@rsbuild/plugin-sass@npm:^1.3.1":
-  version: 1.4.1
-  resolution: "@rsbuild/plugin-sass@npm:1.4.1"
+  version: 1.5.0
+  resolution: "@rsbuild/plugin-sass@npm:1.5.0"
   dependencies:
     deepmerge: "npm:^4.3.1"
     loader-utils: "npm:^2.0.4"
     postcss: "npm:^8.5.6"
     reduce-configs: "npm:^1.1.1"
-    sass-embedded: "npm:^1.97.1"
+    sass-embedded: "npm:^1.97.3"
   peerDependencies:
-    "@rsbuild/core": ^1.0.0 || ^2.0.0-0
-  checksum: 10c0/02309d53c2fbab01b37dae67e7d1fee0445f0ad46f0a0e2ce2641cc5040a7130eecfb448de4e009ffbd6950f55a82316db8e3d24d1d2625a415d3fa21f3f7631
+    "@rsbuild/core": ^1.3.0 || ^2.0.0-0
+  checksum: 10c0/09bb573c93d1f6a642160060c7bef989772d5e137cde3c00119aff634288741f0f9fb1f9dc803e8bafecb06b41fb623d7c4549eb17b874424b2cb292b49a079d
   languageName: node
   linkType: hard
 
@@ -12564,7 +12564,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass-embedded@npm:^1.97.1":
+"sass-embedded@npm:^1.97.3":
   version: 1.97.3
   resolution: "sass-embedded@npm:1.97.3"
   dependencies:
