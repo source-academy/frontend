@@ -2,7 +2,7 @@ import { Context } from 'js-slang';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import React from 'react';
 
-import { Layout } from './CseMachineLayout';
+import { Layout, LayoutCache } from './CseMachineLayout';
 import { EnvTree } from './CseMachineTypes';
 import { deepCopyTree, getEnvId } from './CseMachineUtils';
 
@@ -18,6 +18,8 @@ export default class CseMachine {
   public static setEditorHighlightedLines: SetEditorHighlightedLines;
   /** callback function to update the step limit exceeded state in the SideContentCseMachine component */
   private static setIsStepLimitExceeded: SetisStepLimitExceeded;
+  // This stores the "Ghost Run" snapshot
+  public static masterLayout: LayoutCache | null = null;
   private static printableMode: boolean = false;
   private static controlStash: boolean = false; // TODO: discuss if the default should be true
   private static stackTruncated: boolean = false;
@@ -87,6 +89,17 @@ export default class CseMachine {
       context.runtime.stash,
       context.chapter
     );
+
+    if (!CseMachine.masterLayout) {
+       console.log(`⚡ Ghost initialised! `);
+       
+       CseMachine.masterLayout = Layout.getLayoutPositions();
+    }
+
+    // Apply Fixed Positions
+    if (CseMachine.masterLayout) {
+      Layout.applyFixedPositions(CseMachine.masterLayout);
+    }
     this.setVis(Layout.draw());
     this.setIsStepLimitExceeded(context.runtime.control.isEmpty());
     Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
@@ -157,5 +170,23 @@ export default class CseMachine {
       CseMachine.stash = undefined;
     }
     this.clear();
+  }
+
+  // === GHOST RUN: Captures the layout ===
+  public static initializeGhostLayout(context: Context) {
+    if (!context.runtime.control || !context.runtime.stash) return;
+
+    Layout.setContext(
+      context.runtime.environmentTree as EnvTree,
+      context.runtime.control,
+      context.runtime.stash,
+      context.chapter
+    );
+
+    // CRITICAL: Dry-run draw to populate Arrays/Values
+    Layout.draw(); 
+
+    CseMachine.masterLayout = Layout.getLayoutPositions();
+    console.log("👻 Ghost Run Complete! Cache Size:", CseMachine.masterLayout.values.size);
   }
 }
