@@ -50,9 +50,8 @@ import {
 import { Continuation, isContinuation, isSchemeNumber, isSymbol } from './utils/scheme';
 
 export type LayoutCache = {
-  values: Map<string, { x: number; y: number }>;
-  frames: Map<string, { x: number; y: number }>;
-};
+  frames: Map<string, number>;
+}
 
 /** this class encapsulates the logic for calculating the layout */
 export class Layout {
@@ -556,7 +555,7 @@ export class Layout {
                     {...ShapeDefaultProps}
                     x={0}
                     y={0}
-                    width={Layout.width()}
+                    width={Layout.width()}  
                     height={Layout.height()}
                     fill={defaultBackgroundColor()}
                     key={Layout.key++}
@@ -601,80 +600,40 @@ export class Layout {
     }
   }
 
-  private static getCacheKey(key: any): string | null {
-    if (key === null || key === undefined) return null;
-
-    if (typeof key === 'string') return key;
-    if (typeof key === 'number') return String(key);
-
-    // Handle Objects (The tricky part)
-    if (typeof key === 'object' || typeof key === 'function') {
-        // Priority 1: Explicit ID (Arrays & Closures)
-        if ('id' in key) return String(key.id);
-        // Priority 2: Function Name (Built-ins)
-        if (key.name) return "fn_" + key.name;
-        if (key.functionName) return "fn_" + key.functionName;
-        // Priority 3: Stream Functions
-        if (key.fun && key.fun.name) return "fn_" + key.fun.name;
-    }
-    return null;
-  }
-
-  static getLayoutPositions(): LayoutCache {
+static getLayoutPositions(): LayoutCache {
     const cache: LayoutCache = { 
-        values: new Map(), 
-        frames: new Map()
+        frames: new Map() 
     };
-    
-    // Save Values (Using Helper)
-    for (const [key, valueComponent] of Layout.values.entries()) {
-       if (valueComponent && typeof valueComponent.x === 'function') {
-         const cacheKey = Layout.getCacheKey(key); 
-         if (cacheKey) {
-             cache.values.set(cacheKey, { x: valueComponent.x(), y: valueComponent.y() });
-         }
-       }
-    }
-    
-    // Save Frames
+
     Layout.levels.forEach(level => {
-      if ((level as any).frames) {
-        (level as any).frames.forEach((frame: any) => {
-           const id = frame.environment?.id || frame.id;
-           if (id) cache.frames.set(id, { x: frame.x(), y: frame.y() });
+        level.frames.forEach(frame => {
+            cache.frames.set(frame.environment.id, frame.x());
         });
-      }
     });
 
     return cache;
+}
+
+// for components to get frames x coorindates
+static getGhostFrameX(envId: string): number | undefined {
+    if (CseMachine.masterLayout && CseMachine.masterLayout.frames.has(envId)) {
+      
+      return CseMachine.masterLayout.frames.get(envId);
+    }
+    return undefined; 
   }
 
-  // === READER: Forces components to stay in place ===
-  static applyFixedPositions(cache: LayoutCache) {
-    // Fix Values (Using Helper)
-    for (const [key, valueComponent] of Layout.values.entries()) {
-      const cacheKey = Layout.getCacheKey(key); 
 
-      if (cacheKey && cache.values.has(cacheKey)) {
-        const pos = cache.values.get(cacheKey)!;
-        // Nuclear Fix: Overwrite the method to return fixed value
-        (valueComponent as any).x = () => pos.x;
-        (valueComponent as any).y = () => pos.y;
-      }
-    }
+static applyFixedPositions(cache: LayoutCache) {
+  Layout.levels.forEach(level => {
+    level.frames.forEach(frame => {
+      const id = frame.environment.id;
 
-    // Fix Frames
-    Layout.levels.forEach(level => {
-      if ((level as any).frames) {
-        (level as any).frames.forEach((frame: any) => {
-           const id = frame.environment?.id || frame.id;
-           if (id && cache.frames.has(id)) {
-             const pos = cache.frames.get(id)!;
-             frame.x = () => pos.x;
-             frame.y = () => pos.y;
-           }
-        });
+      if (cache.frames.has(id)) {
+        const fixedX = cache.frames.get(id)!;
+        frame.x = () => fixedX;
       }
     });
-  }
+  });
+}
 }

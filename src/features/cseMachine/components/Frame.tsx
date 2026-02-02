@@ -46,7 +46,8 @@ export class Frame extends Visible implements IHoverable {
   readonly totalHeight: number;
   /** width of this frame + max width of the bound values */
   readonly totalWidth: number;
-
+  /** width of data beside frame */
+  readonly totalDataWidth: number;
   /** the bindings this frame contains */
   readonly bindings: Binding[] = [];
   /** name of this frame to display */
@@ -68,13 +69,14 @@ export class Frame extends Visible implements IHoverable {
   ) {
     super();
 
+    this.totalDataWidth = 0;
     this.level = envTreeNode.level as Level;
     this.parentFrame = envTreeNode.parent?.frame;
     this.environment = envTreeNode.environment;
     Frame.envFrameMap.set(this.environment.id, this);
 
     this._x = this.leftSiblingFrame
-      ? this.leftSiblingFrame.x() + this.leftSiblingFrame.totalWidth + Config.FrameMarginX
+      ? this.leftSiblingFrame.x() + this.leftSiblingFrame.totalWidth + this.leftSiblingFrame.totalDataWidth + Config.FrameMarginX
       : this.level.x();
     // ensure x coordinate cannot be less than that of parent frame
     if (this.parentFrame) this._x = Math.max(this._x, this.parentFrame.x());
@@ -150,6 +152,65 @@ export class Frame extends Visible implements IHoverable {
           );
       }
       this._width = Math.max(this._width, bindingTextWidth + Config.FramePaddingX * 2);
+
+      // calculate width needed for data spacing to avoid collision
+      if (isDataArray(data.value)) {
+        // helper function to calculate an array width
+        const getChainWidth = (startNode: any[]): number => {
+            let w = 0;
+            let curr = startNode;
+            const seen = new Set();
+            
+            while (isDataArray(curr)) {
+              // escape from circular lists
+                if (seen.has(curr)) break;
+                seen.add(curr);
+                w += curr.length * Config.DataUnitWidth;
+                const lastIndex = curr.length - 1;
+                const lastElement = curr[lastIndex];
+
+                if (isDataArray(lastElement)) {
+                    w += Config.DataUnitWidth; 
+                    curr = lastElement;
+                } else {
+                    break;
+                }
+            }
+            return w;
+        };
+
+        let maxWidth = 0;
+        let currentSpineX = 0;
+        let curr = data.value;
+        const seenSpine = new Set();
+
+        while (isDataArray(curr)) {
+             if (seenSpine.has(curr)) break;
+             seenSpine.add(curr);
+             const blockWidth = curr.length * Config.DataUnitWidth;
+             const head = curr[0];
+
+             if (isDataArray(head)) {
+                 const branchWidth = getChainWidth(head);
+                 maxWidth = Math.max(maxWidth, currentSpineX + branchWidth);
+             }
+
+             currentSpineX += blockWidth;
+          
+             const lastIndex = curr.length - 1;
+             const lastElement = curr[lastIndex];
+
+             if (isDataArray(lastElement)) {
+                 currentSpineX += Config.DataUnitWidth; 
+                 curr = lastElement;
+             } else {
+                 maxWidth = Math.max(maxWidth, currentSpineX);
+                 break;
+             }
+        }
+
+        this.totalDataWidth = Math.max(this.totalDataWidth, maxWidth);
+      }
       totalWidth = Math.max(totalWidth, this._width + Config.FrameMinGapX);
     }
 

@@ -68,6 +68,22 @@ export class PrimitiveValue extends Value {
   }
 
   draw(): React.ReactNode {
+   //Recomputing x and y coordinates due to change in variables/arrays coordinates after preassigning them
+    const reference = this.references[0];
+    if (reference) {
+      if (reference instanceof Binding) {
+        // If attached to a variable name (x: 10)
+        this._x = reference.x() + getTextWidth(reference.keyString) + Config.TextPaddingX;
+        this._y = reference.y();
+      } else {
+        const textWidth = this.text.width(); 
+        this._x = reference.x() + (reference.width() - textWidth) / 2;
+        this._y = reference.y() + (reference.height() - Config.FontSize) / 2;
+      }
+
+      (this.text as any)._x = this.x();
+      (this.text as any)._y = this.y();
+    }
     return <React.Fragment key={Layout.key++}>{this.text.draw()}</React.Fragment>;
   }
 }

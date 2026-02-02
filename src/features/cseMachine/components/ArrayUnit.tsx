@@ -63,7 +63,7 @@ export class ArrayUnit extends Visible {
   draw(): React.ReactNode {
     if (this.isDrawn()) return null;
     this._isDrawn = true;
-
+ 
     if (!(this.value instanceof PrimitiveValue)) {
       this.arrow = new ArrowFromArrayUnit(this).to(this.value);
     }

@@ -18,7 +18,7 @@ export default class CseMachine {
   public static setEditorHighlightedLines: SetEditorHighlightedLines;
   /** callback function to update the step limit exceeded state in the SideContentCseMachine component */
   private static setIsStepLimitExceeded: SetisStepLimitExceeded;
-  // This stores the "Ghost Run" snapshot
+  // This stores the "Ghost Run (last step x coordinates)" snapshot
   public static masterLayout: LayoutCache | null = null;
   private static printableMode: boolean = false;
   private static controlStash: boolean = false; // TODO: discuss if the default should be true
@@ -89,17 +89,28 @@ export default class CseMachine {
       context.runtime.stash,
       context.chapter
     );
-
+    // get ghost layout on first run (when user press run and code changes)
     if (!CseMachine.masterLayout) {
-       console.log(`⚡ Ghost initialised! `);
-       
+       const originalStash = CseMachine.controlStash;
+       // force stash on for the layout
+       CseMachine.controlStash = true;
+       Layout.setContext(
+          context.runtime.environmentTree as EnvTree,
+          context.runtime.control,
+          context.runtime.stash,
+          context.chapter
+       );
+
        CseMachine.masterLayout = Layout.getLayoutPositions();
+       CseMachine.controlStash = originalStash;
     }
 
     // Apply Fixed Positions
     if (CseMachine.masterLayout) {
       Layout.applyFixedPositions(CseMachine.masterLayout);
     }
+
+  
     this.setVis(Layout.draw());
     this.setIsStepLimitExceeded(context.runtime.control.isEmpty());
     Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
@@ -150,6 +161,9 @@ export default class CseMachine {
         this.setVis(Layout.currentDark);
       } else {
         Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
+        if (CseMachine.masterLayout) {
+            Layout.applyFixedPositions(CseMachine.masterLayout);
+        }
         this.setVis(Layout.draw());
       }
       Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
@@ -170,23 +184,5 @@ export default class CseMachine {
       CseMachine.stash = undefined;
     }
     this.clear();
-  }
-
-  // === GHOST RUN: Captures the layout ===
-  public static initializeGhostLayout(context: Context) {
-    if (!context.runtime.control || !context.runtime.stash) return;
-
-    Layout.setContext(
-      context.runtime.environmentTree as EnvTree,
-      context.runtime.control,
-      context.runtime.stash,
-      context.chapter
-    );
-
-    // CRITICAL: Dry-run draw to populate Arrays/Values
-    Layout.draw(); 
-
-    CseMachine.masterLayout = Layout.getLayoutPositions();
-    console.log("👻 Ghost Run Complete! Cache Size:", CseMachine.masterLayout.values.size);
   }
 }
