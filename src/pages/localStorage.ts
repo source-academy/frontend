@@ -1,4 +1,4 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 import { StoriesAuthState } from 'src/features/stories/StoriesTypes';
 
