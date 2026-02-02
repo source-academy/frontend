@@ -5,6 +5,7 @@ import { Layout } from '../../CseMachineLayout';
 import { IVisible, StepsArray } from '../../CseMachineTypes';
 import { defaultStrokeColor, fadedStrokeColor } from '../../CseMachineUtils';
 import { Visible } from '../Visible';
+import { Frame } from '../Frame';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
 export class GenericArrow<Source extends IVisible, Target extends IVisible> extends Visible {
@@ -12,7 +13,6 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
   points: number[] = [];
   source: Source;
   target: Target | undefined;
-  faded: boolean = false;
 
   constructor(from: Source) {
     super();
@@ -94,7 +94,12 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
   }
 
   draw() {
-    const stroke = this.faded ? fadedStrokeColor() : defaultStrokeColor();
+    let isLive : boolean = false;
+    if (this.source instanceof Frame) {
+      isLive = this.source.environment && Layout.liveEnvIDs.has(this.source.environment.id);
+    }
+    const stroke = isLive ? defaultStrokeColor() : fadedStrokeColor();
+
     return (
       <KonvaGroup key={Layout.key++} ref={this.ref} listening={false}>
         <KonvaPath
