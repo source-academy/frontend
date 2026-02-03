@@ -1,9 +1,10 @@
+import { cons } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/base';
 import React from 'react';
 
 import { Config } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Data } from '../CseMachineTypes';
-import { isDummyKey, isMainReference } from '../CseMachineUtils';
+import { defaultTextColor, fadedTextColor,isDummyKey, isMainReference } from '../CseMachineUtils';
 import { ArrowFromText } from './arrows/ArrowFromText';
 import { GenericArrow } from './arrows/GenericArrow';
 import { Frame } from './Frame';
@@ -63,7 +64,7 @@ export class Binding extends Visible {
         ? (Config.DataUnitHeight - Config.FontSize) / 2
         : (this.value.height() - Config.FontSize) / 2;
 
-    this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset);
+    this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, {faded: !this.isLive}); //EDITEDDDDDDDDDD
 
     // derive the width from the right bound of the value
     this._width = isMainReference(this.value, this)
@@ -98,7 +99,12 @@ export class Binding extends Visible {
     ) {
       this.arrow = new ArrowFromText(this.key).to(this.value);
     }
-  
+    const isLive : boolean = this.isLive; //EDITEDDDDDDDDDD
+    const textColor = isLive ? defaultTextColor : fadedTextColor; //EDITEDDDDDDDDDD
+    if (this.value instanceof PrimitiveValue || this.value instanceof UnassignedValue) {
+      this.value.setFaded(!isLive); //EDITEDDDDDDDDDD 
+    }
+
     return (
       <React.Fragment key={Layout.key++}>
         {this.isDummyBinding

@@ -12,7 +12,7 @@ import { GenericArrow } from './GenericArrow';
 export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
   constructor(from: ArrayUnit) {
     super(from);
-    this.faded = !from.parent.isReferenced();
+    this.isLive = from.parent.isEnclosingFrameLive();
   }
 
   protected calculateSteps() {

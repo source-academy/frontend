@@ -5,16 +5,19 @@ import { Group } from 'react-konva';
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
 import { DataArray, IHoverable, ReferenceType } from '../../CseMachineTypes';
-import { isMainReference } from '../../CseMachineUtils';
+import { isMainReference} from '../../CseMachineUtils';
 import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
 import { ArrayUnit } from '../ArrayUnit';
 import { Binding } from '../Binding';
+import { Frame } from '../Frame';
 import { FnValue } from './FnValue';
 import { Value } from './Value';
 
 /** this class encapsulates an array value in source,
  *  defined as a JS array with not 2 elements */
 export class ArrayValue extends Value implements IHoverable {
+  /** frame that encloses this array, if any */
+  enclosingFrame?: Frame;
   /** array of units this array is made of */
   units: ArrayUnit[] = [];
   /** width of the array or the nested values inside the array. */
@@ -38,6 +41,7 @@ export class ArrayValue extends Value implements IHoverable {
 
     // derive the coordinates from the main reference (binding / array unit)
     if (newReference instanceof Binding) {
+      this.enclosingFrame = newReference.frame;
       this._x = newReference.frame.x() + newReference.frame.width() + Config.FrameMarginX;
       this._y = newReference.y();
     } else {
@@ -82,6 +86,14 @@ export class ArrayValue extends Value implements IHoverable {
     }
   }
 
+  isEnclosingFrameLive(): boolean {
+    if (this.enclosingFrame instanceof Frame) { 
+      return this.enclosingFrame.environment && Layout.liveEnvIDs.has(this.enclosingFrame.environment.id)
+            && this.isReferenced();
+    }
+    return false;
+  }
+
   markAsReferenced() {
     if (this.isReferenced()) return;
     super.markAsReferenced();
@@ -116,7 +128,8 @@ export class ArrayValue extends Value implements IHoverable {
       >
         {this.units.length > 0
           ? this.units.map(unit => unit.draw())
-          : new ArrayEmptyUnit(this).draw()}
+          : new ArrayEmptyUnit(this).draw()
+        }
       </Group>
     );
   }

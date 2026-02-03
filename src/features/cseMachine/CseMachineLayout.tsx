@@ -33,6 +33,7 @@ import {
 } from './CseMachineTypes';
 import {
   assert,
+  computeLiveEnvironments, //EDITEDDDDDDDDDD
   deepCopyTree,
   defaultBackgroundColor,
   getNextChildren,
@@ -45,9 +46,7 @@ import {
   isPrimitiveData,
   isStreamFn,
   isUnassigned,
-  setDifference,
-  computeLiveEnvironments //EDITEDDDDDDDDDD
-} from './CseMachineUtils';
+  setDifference} from './CseMachineUtils';
 import { Continuation, isContinuation, isSchemeNumber, isSymbol } from './utils/scheme';
 
 /** this class encapsulates the logic for calculating the layout */

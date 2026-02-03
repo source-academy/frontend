@@ -1,3 +1,4 @@
+import { is } from 'immer/dist/internal.js';
 import React from 'react';
 import { Group, Rect } from 'react-konva';
 
@@ -26,7 +27,6 @@ import { Binding } from './Binding';
 import { Level } from './Level';
 import { Text } from './Text';
 import { Visible } from './Visible';
-import { is } from 'immer/dist/internal.js';
 
 const frameNames = new Map([
   ['global', 'Global'],
@@ -61,6 +61,8 @@ export class Frame extends Visible implements IHoverable {
   readonly parentFrame: Frame | undefined;
   /** arrow that is drawn from this frame to the parent frame */
   readonly arrow: GenericArrow<Frame, Frame> | undefined;
+  /** check if this frame is live */
+  readonly isLive: boolean;
 
   constructor(
     /** environment tree node that contains this frame */
@@ -158,14 +160,14 @@ export class Frame extends Visible implements IHoverable {
     // Create all the bindings and values
     let prevBinding: Binding | null = null;
 
-    const isLive = this.environment
+    this.isLive = this.environment
     ? Layout.liveEnvIDs.has(this.environment.id)
     : false; //EDITEDDDDDDDDDD
     
     for (const [key, data] of entries) {
       const constant =
         this.environment.head[key]?.description === 'const declaration' || !data.writable;
-      const currBinding: Binding = new Binding(key, data.value, this, prevBinding, constant, isLive);//EDITEDDDDDDDDDD
+      const currBinding: Binding = new Binding(key, data.value, this, prevBinding, constant, this.isLive);//EDITEDDDDDDDDDD
       prevBinding = currBinding;
       this.bindings.push(currBinding);
       totalWidth = Math.max(totalWidth, currBinding.width() + Config.FramePaddingX);
@@ -181,7 +183,8 @@ export class Frame extends Visible implements IHoverable {
       frameNames.get(this.environment.name) ?? this.environment.name,
       this.x(),
       this.level.y(),
-      { maxWidth: this.width() }
+      { maxWidth: this.width(), faded: !this.isLive } //EDITEDDDDDDDDDD
+      
     );
     this.totalHeight = this.height() + this.name.height() + Config.TextPaddingY / 2;
 
@@ -197,11 +200,6 @@ export class Frame extends Visible implements IHoverable {
   onMouseLeave = () => {};
 
   draw(): React.ReactNode {
-    //EDITEDDDDDDDDDD
-    const isLive = this.environment
-    ? Layout.liveEnvIDs.has(this.environment.id)
-    : false;
-
     return (
       <Group ref={this.ref} key={Layout.key++}>
         {this.name.draw()}
@@ -215,7 +213,7 @@ export class Frame extends Visible implements IHoverable {
           stroke={
             CseMachine.getCurrentEnvId() === this.environment?.id
               ? defaultActiveColor()
-              : isLive
+              : this.isLive
               ? defaultStrokeColor()
               : fadedStrokeColor()
           }

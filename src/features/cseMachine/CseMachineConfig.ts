@@ -51,13 +51,13 @@ export const Config = Object.freeze({
 
   // Colors of all text
   TextColor: '#999',
-  TextColorFaded: '#5b6773',
+  TextColorFaded: '#d7da17', //for testing purposes ONLY
   PrintTextColor: '#333',
   PrintTextColorFaded: '#ccc',
 
   // Colors of arrows and borders
   StrokeColor: '#999',
-  StrokeColorFaded: '#d7da17',
+  StrokeColorFaded: '#d7da17', //for testing purposes ONLY
   PrintStrokeColor: '#777',
   PrintStrokeColorFaded: '#cccccc',
 
