@@ -820,8 +820,10 @@ describe('evalCode', () => {
       envSteps: -1,
       executionMethod: 'auto'
     };
-    lastDebuggerResult = { status: 'error' };
-    state = generateDefaultState(workspaceLocation, { lastDebuggerResult: { status: 'error' } });
+    lastDebuggerResult = { status: 'error', context };
+    state = generateDefaultState(workspaceLocation, {
+      lastDebuggerResult: { status: 'error', context }
+    });
   });
 
   describe('on EVAL_EDITOR action without interruptions or pausing', () => {

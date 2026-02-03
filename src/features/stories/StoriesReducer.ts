@@ -32,18 +32,18 @@ const newStoriesReducer = createReducer(defaultStories, builder => {
         action.payload.env,
         action.payload.chapter,
         action.payload.variant
-      );
+      ) as any;
     })
     .addCase(StoriesActions.clearStoryEnv, (state, action) => {
       if (!action.payload.env) {
-        state.envs = {};
+        state.envs = {} as any;
       } else {
         const { chapter, variant } = state.envs[action.payload.env].context;
         state.envs[action.payload.env] = createDefaultStoriesEnv(
           action.payload.env,
           chapter,
           variant
-        );
+        ) as any;
       }
     })
     .addCase(StoriesActions.evalStory, (state, action) => {
@@ -126,7 +126,7 @@ const newStoriesReducer = createReducer(defaultStories, builder => {
       debuggerContext.result = action.payload.result;
       debuggerContext.lastDebuggerResult = action.payload.lastDebuggerResult;
       debuggerContext.code = action.payload.code;
-      debuggerContext.context = action.payload.context;
+      debuggerContext.context = action.payload.context as any;
       debuggerContext.workspaceLocation = 'stories';
     })
     .addCase(StoriesActions.toggleStoriesUsingSubst, (state, action) => {
