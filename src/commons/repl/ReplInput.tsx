@@ -1,7 +1,7 @@
 import { Classes } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';
 import classNames from 'classnames';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import React from 'react';
 import AceEditor from 'react-ace';
 import ReactAce from 'react-ace/lib/ace';
