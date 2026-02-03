@@ -198,5 +198,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "resolutions": {
+    "js-slang": "portal:/Users/terenceteo/code/js-slang"
   }
 }
