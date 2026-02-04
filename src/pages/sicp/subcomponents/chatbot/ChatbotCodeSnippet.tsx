@@ -1,6 +1,6 @@
 import { Card, Elevation } from '@blueprintjs/core';
 import { compressToEncodedURIComponent } from 'lz-string';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { createPortal } from 'react-dom';
 import { useDispatch } from 'react-redux';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
@@ -9,6 +9,7 @@ import { ControlBarCloseButton } from 'src/commons/controlBar/ControlBarCloseBut
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
 import Playground from 'src/pages/playground/Playground';
+import classes from 'src/styles/ChatbotCodeSnippet.module.scss';
 
 export type ChatbotCodeSnippetProps = {
   /** The code to display and run */
@@ -39,12 +40,8 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
 
   const isActive = activeSnippetId === id;
 
-  // Generate the hash for the Playground (memoized to avoid recomputation)
-  const initialEditorValueHash = useMemo(() => {
-    // The hash format expected by Playground is based on parseQuery
-    // We need to create a query string with 'prgrm' containing the compressed code
-    return `prgrm=${compressToEncodedURIComponent(code)}`;
-  }, [code]);
+  // Generate the hash for the Playground
+  const initialEditorValueHash = `prgrm=${compressToEncodedURIComponent(code)}`;
 
   const handleOpen = () => {
     dispatch(WorkspaceActions.resetWorkspace('sicp'));
@@ -63,10 +60,7 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
     handleCloseEditor: handleClose
   };
 
-  const closeButton = useMemo(
-    () => <ControlBarCloseButton key="close" handleClose={handleClose} />,
-    [handleClose]
-  );
+  const closeButton = <ControlBarCloseButton key="close" handleClose={handleClose} />;
 
   const controlBarProps = {
     editorButtons: [],
@@ -74,28 +68,30 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
     editingWorkspaceButtons: [closeButton]
   };
 
-  // Render the open editor as a portal to document.body so it's outside the chat container
-  const editorOverlay = isActive
-    ? createPortal(
-        <div className="chatbot-snippet-overlay">
-          <div className="chatbot-code-snippet-open">
-            <ControlBar {...controlBarProps} />
-            <div className="chatbot-code-snippet-desktop-open">
-              <div className="chatbot-workspace-container">
-                <Playground {...WorkspaceProps} />
+  // Render the open editor as a portal to root React container to preserve React context
+  const rootContainer = document.getElementById('root');
+  const editorOverlay =
+    isActive && rootContainer
+      ? createPortal(
+          <div className={classes['snippet-overlay']}>
+            <div className={classes['snippet-open']}>
+              <ControlBar {...controlBarProps} />
+              <div className={classes['desktop-open']}>
+                <div className={classes['workspace-container']}>
+                  <Playground {...workspaceProps} />
+                </div>
               </div>
             </div>
-          </div>
-        </div>,
-        document.body
-      )
-    : null;
+          </div>,
+          rootContainer
+        )
+      : null;
 
   return (
     <>
       {editorOverlay}
       <Card
-        className="chatbot-code-snippet-closed"
+        className={classes['snippet-closed']}
         interactive={true}
         elevation={Elevation.TWO}
         onClick={handleOpen}

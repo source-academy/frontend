@@ -14,15 +14,17 @@ type Props = {
   setActiveSnippetId: (id: string) => void;
 };
 
-const INITIAL_MESSAGE: Readonly<ChatMessage> = {
+const createInitialMessage = (): ChatMessage => ({
+  id: crypto.randomUUID(),
   content: 'Ask me something about this paragraph!',
   role: 'assistant'
-};
+});
 
-const BOT_ERROR_MESSAGE: Readonly<ChatMessage> = {
+const createErrorMessage = (): ChatMessage => ({
+  id: crypto.randomUUID(),
   content: 'Sorry, I am down with a cold, please try again later.',
   role: 'assistant'
-};
+});
 
 const scrollToBottom = (ref: React.RefObject<HTMLDivElement>) => {
   ref.current?.scrollTo({ top: ref.current?.scrollHeight });
@@ -31,7 +33,7 @@ const scrollToBottom = (ref: React.RefObject<HTMLDivElement>) => {
 const ChatBox: React.FC<Props> = ({ getSection, getText, activeSnippetId, setActiveSnippetId }) => {
   const chatRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([INITIAL_MESSAGE]);
+  const [messages, setMessages] = useState<ChatMessage[]>(() => [createInitialMessage()]);
   const [userInput, setUserInput] = useState('');
   const [maxContentSize, setMaxContentSize] = useState(1000);
   const tokens = useTokens();
@@ -45,7 +47,7 @@ const ChatBox: React.FC<Props> = ({ getSection, getText, activeSnippetId, setAct
     if (userInput.trim() === '') return;
 
     setUserInput('');
-    setMessages(prev => [...prev, { role: 'user', content: userInput }]);
+    setMessages(prev => [...prev, { id: crypto.randomUUID(), role: 'user', content: userInput }]);
     setIsLoading(true);
 
     // Get FRESH section and text at send time!
@@ -55,10 +57,10 @@ const ChatBox: React.FC<Props> = ({ getSection, getText, activeSnippetId, setAct
     // No chatId needed - backend identifies conversation by user
     continueChat(tokens, userInput, currentSection, currentText)
       .then(resp => {
-        setMessages(prev => [...prev, { role: 'assistant', content: resp.response }]);
+        setMessages(prev => [...prev, { id: crypto.randomUUID(), role: 'assistant', content: resp.response }]);
       })
       .catch(() => {
-        setMessages(prev => [...prev, BOT_ERROR_MESSAGE]);
+        setMessages(prev => [...prev, createErrorMessage()]);
       })
       .finally(() => setIsLoading(false));
   }, [tokens, userInput, getSection, getText]);
@@ -74,14 +76,18 @@ const ChatBox: React.FC<Props> = ({ getSection, getText, activeSnippetId, setAct
 
   const resetChat = useCallback(() => {
     initChat(tokens).then(resp => {
-      console.log(resp);
       const conversationMessages = resp.messages;
       const maxMessageSize = resp.maxContentSize;
       // Load all previous messages from the conversation, or use initial if empty
       if (conversationMessages && conversationMessages.length > 0) {
-        setMessages(conversationMessages);
+        // Ensure all messages have IDs (backend may not provide them)
+        const messagesWithIds = conversationMessages.map(msg => ({
+          ...msg,
+          id: msg.id || crypto.randomUUID()
+        }));
+        setMessages(messagesWithIds);
       } else {
-        setMessages([INITIAL_MESSAGE]);
+        setMessages([createInitialMessage()]);
       }
       setMaxContentSize(maxMessageSize);
       setUserInput('');
@@ -101,15 +107,14 @@ const ChatBox: React.FC<Props> = ({ getSection, getText, activeSnippetId, setAct
   return (
     <div className={classes['chat-container']}>
       <div className={classes['chat-message']} ref={chatRef}>
-        {messages.map((message, index) => (
+        {messages.map(message => (
           <div
-            key={index}
+            key={message.id}
             className={classes[`${message.role}`]}
             style={{ whiteSpace: 'pre-line' }}
           >
             <MessageRenderer
               message={message}
-              messageIndex={index}
               activeSnippetId={activeSnippetId}
               setActiveSnippetId={setActiveSnippetId}
             />
@@ -148,18 +153,17 @@ const ChatBox: React.FC<Props> = ({ getSection, getText, activeSnippetId, setAct
 // Message renderer component that can render code blocks with interactive snippets
 type MessageRendererProps = {
   message: ChatMessage;
-  messageIndex: number;
   activeSnippetId: string;
   setActiveSnippetId: (id: string) => void;
 };
 
 const MessageRenderer: React.FC<MessageRendererProps> = ({
   message,
-  messageIndex,
   activeSnippetId,
   setActiveSnippetId
 }) => {
   const content = message.content;
+  const messageId = message.id;
 
   // Matches code blocks: ```lang ... ```
   const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
@@ -173,9 +177,9 @@ const MessageRenderer: React.FC<MessageRendererProps> = ({
     if (match.index > lastIndex) {
       const text = content.slice(lastIndex, match.index);
       parts.push(
-        <div key={`text-${lastIndex}`} style={{ marginBottom: '0.5em' }}>
+        <div key={`${messageId}-text-${lastIndex}`} style={{ marginBottom: '0.5em' }}>
           {text.split('\n').map((line, i) => (
-            <div key={i}>{line}</div>
+            <React.Fragment key={i}>{line}<br /></React.Fragment>
           ))}
         </div>
       );
@@ -184,7 +188,7 @@ const MessageRenderer: React.FC<MessageRendererProps> = ({
     const lang = match[1] || 'javascript';
     const code = match[2];
     // Create a unique ID for this code snippet
-    const snippetId = `msg-${messageIndex}-code-${codeBlockIndex}`;
+    const snippetId = `${messageId}-code-${codeBlockIndex}`;
     codeBlockIndex++;
 
     // Only use ChatbotCodeSnippet for javascript/js code blocks
@@ -229,15 +233,15 @@ const MessageRenderer: React.FC<MessageRendererProps> = ({
   if (lastIndex < content.length) {
     const text = content.slice(lastIndex);
     parts.push(
-      <div key={`text-end-${lastIndex}`} style={{ marginBottom: '0.5em' }}>
+      <div key={`${messageId}-text-end`} style={{ marginBottom: '0.5em' }}>
         {text.split('\n').map((line, i) => (
-          <div key={i}>{line}</div>
+          <React.Fragment key={i}>{line}<br /></React.Fragment>
         ))}
       </div>
     );
   }
 
-  return <>{parts}</>;
+  return parts;
 };
 
 export default ChatBox;
