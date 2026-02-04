@@ -1,0 +1,5 @@
+405
+    /locations/yourRoom-dim/normal.png
+
+404
+    /locations/deathCube_ext/shields-down.png

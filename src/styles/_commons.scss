@@ -1,0 +1,79 @@
+.ContentDisplay {
+  height: fit-content;
+  width: 100%;
+
+  &.row {
+    margin-right: 0px;
+    margin-left: 0px;
+  }
+
+  .#{$ns}-non-ideal-state {
+    padding-bottom: 0.7rem;
+
+    > .#{$ns}-non-ideal-state-visual .#{$ns}-icon {
+      display: flex;
+    }
+  }
+
+  .contentdisplay-content-parent {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 0px;
+
+    .contentdisplay-content {
+      background-color: white;
+      > * {
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+.#{$ns}-running-text.md {
+  pre > code {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background: transparent;
+  }
+}
+
+/*
+  Breaks IE11 compatability to address inaccessible scrollbar issue
+  of the BlueprintJS Dialog component at:
+  https://github.com/palantir/blueprint/issues/1008
+
+  Follows a working recommendation proposed by a PR in that thread at:
+  https://github.com/palantir/blueprint/pull/3403
+*/
+.#{$ns}-overlay {
+  /* breaks context menu :( */
+  .#{$ns}-overlay-backdrop {
+    position: sticky;
+    height: 100%;
+    width: 100%;
+  }
+
+  .#{$ns}-dialog-container {
+    position: absolute;
+    top: 0;
+  }
+}
+
+.Horizontal {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.Vertical {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.WaitingCursor {
+  cursor: wait;
+}

@@ -1,0 +1,28 @@
+startingLoc: room
+
+locations
+    crashsite, /locations/crashSite/normal.png, Crash Site
+    classroom, /locations/classroom/classOn.png, Class Room
+    emergency, /locations/classroom/emergency.png, Emergency
+    hallway, /locations/hallway/normal.png, Hallway
+    room, /locations/yourRoom-dim/normal.png, Student Room
+
+room
+    modes: move
+    nav: hallway
+
+hallway
+    modes: move
+    nav: room, emergency, classroom
+
+classroom
+    modes: move
+    nav: hallway, crashsite
+
+crashsite
+    modes: move
+    nav: classroom
+
+emergency
+    modes: move
+    nav: hallway

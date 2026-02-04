@@ -1,0 +1,80 @@
+/*
+ * Style for all navigation bars.
+ */
+.NavigationBar {
+  width: 100%;
+  display: flex; /* Establish flex container */
+  justify-content: space-between; /* Align children to both ends */
+  flex-wrap: nowrap; /* Prevent wrapping */
+  padding: 0px 10px;
+
+  .thin-divider {
+    /* Used to lessen the space between icon-only buttons (on small displays). */
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+}
+
+a.NavigationBar__link {
+  color: inherit;
+  text-decoration: none;
+
+  > :first-child {
+    /*
+     * Keep an even margin around the icon (instead of a larger right margin) to
+     * allow for even spacing when viewed on smaller viewports.
+     */
+    margin-left: 0.1rem;
+    margin-right: 0.1rem;
+  }
+}
+
+/*
+ * Style for the navigation bar of the entire site (used in Application)
+ */
+.primary-navbar {
+  .#{$ns}-button {
+    font-weight: 600;
+  }
+
+  .app-title {
+    text-transform: uppercase;
+  }
+}
+
+/*
+ * Style for the navigation bar of particular sections (e.g Academy). This is the
+ * "nested" navigation bar under the primary one.
+ */
+.secondary-navbar {
+  height: 40px;
+
+  .#{$ns}-navbar-group {
+    height: 40px;
+  }
+
+  .#{$ns}-button {
+    /* Reduce emphasis on secondary navbar buttons */
+    font-weight: 250;
+  }
+}
+
+.desktop-navbar-popover {
+  .#{$ns}-popover-arrow-fill {
+    fill: $cadet-color-5 !important;
+  }
+
+  .#{$ns}-popover-content {
+    background: $cadet-color-5 !important;
+    padding: 0;
+
+    .#{$ns}-navbar {
+      background: $cadet-color-5;
+      box-shadow: none;
+
+      .#{$ns}-button {
+        color: $cadet-color-1;
+      }
+    }
+  }
+}

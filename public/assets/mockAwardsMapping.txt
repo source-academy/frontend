@@ -1,0 +1,12 @@
+collectibles
+    cookies
+        cookies-award, /images/cookies.png, Cookies, Cookies are delicious!
+    computer
+        computer-award, /objects/cmd-monitor03/normal.png, Computer, Computer is advanced technology
+
+achievements
+    1
+        place-award, /images/2d-2018-1st-place.png, Rune Master, This is an award you get for obtaining rune master
+    2
+        popular-award, /images/2d-2018-1st-popular.png, Popular, Wow, Mr. Popular! :)
+

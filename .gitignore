@@ -1,0 +1,53 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+
+# testing
+/coverage
+
+# production
+/build
+src/styles/*.css
+/.env
+
+# deployment
+terraform*
+
+# sourceror bundle
+/public/externalLibs/sourceror
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.idea/
+
+npm-debug.log*
+.eslintcache
+yarn-error.log
+
+# emacs backup files
+
+*~
+
+# yarn files
+
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Swap the comments on the following lines if you wish to use zero-installs
+# In that case, don't forget to run `yarn config set enableGlobalCache false`!
+# Documentation here: https://yarnpkg.com/features/caching#zero-installs
+
+#!.yarn/cache
+.pnp.*
+
+# We use .node-version
+/.tool-versions

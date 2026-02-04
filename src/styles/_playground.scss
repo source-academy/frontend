@@ -1,0 +1,14 @@
+.Playground {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 100%;
+
+  .workspace {
+    .ControlBar {
+      .ControlBar_editingWorkspace {
+        width: 0;
+      }
+    }
+  }
+}

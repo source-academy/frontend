@@ -1,0 +1,798 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Sicp index page 1`] = `
+<div
+  className="sicp-index-page"
+>
+  <div
+    className="sicp-cover"
+  >
+    <img
+      alt="SICP"
+      src="http://source-academy.github.io/sicp/sicpjs.png"
+    />
+    <div
+      className="sicp-cover-text"
+    >
+      <div>
+        <h1
+          className="bp6-heading"
+        >
+          Structure and Interpretation of Computer Programs
+        </h1>
+        <h2
+          className="bp6-heading"
+        >
+          — JavaScript Edition
+        </h2>
+      </div>
+      <div
+        className="sicp-authors"
+      >
+        <h4
+          className="bp6-heading"
+        >
+          Harold Abelson and Gerald Jay Sussman
+        </h4>
+        <p>
+          with Julie Sussman
+          <i>
+            — original authors
+          </i>
+        </p>
+        <h4
+          className="bp6-heading"
+        >
+          Martin Henz and Tobias Wrigstad
+        </h4>
+        <p>
+          with Julie Sussman
+          <i>
+            — adapters to JavaScript
+          </i>
+        </p>
+        <h4
+          className="bp6-heading"
+        >
+          Samuel Fang
+        </h4>
+        <p>
+          <i>
+            — designer and developer of this Interactive SICP JS edition
+          </i>
+        </p>
+      </div>
+    </div>
+  </div>
+  <br />
+  <h2
+    className="bp6-heading"
+  >
+    Content
+  </h2>
+  <div
+    className="sicp-toc"
+  >
+    <div
+      className="bp6-tree sicp-toc-tree"
+    >
+      <ul
+        className="bp6-tree-node-list bp6-tree-root"
+      >
+        <li
+          className="bp6-tree-node"
+        >
+          <div
+            className="bp6-tree-node-content bp6-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp6-tree-node-caret-none"
+            />
+            <span
+              className="bp6-tree-node-label"
+            >
+              Foreword
+            </span>
+          </div>
+          <div
+            className="bp6-collapse"
+            style={
+              {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp6-collapse-body"
+              style={
+                {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp6-tree-node"
+        >
+          <div
+            className="bp6-tree-node-content bp6-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp6-tree-node-caret-none"
+            />
+            <span
+              className="bp6-tree-node-label"
+            >
+              Foreword to Structure and Interpretation of Computer Programs, 1984
+            </span>
+          </div>
+          <div
+            className="bp6-collapse"
+            style={
+              {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp6-collapse-body"
+              style={
+                {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp6-tree-node"
+        >
+          <div
+            className="bp6-tree-node-content bp6-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp6-tree-node-caret-none"
+            />
+            <span
+              className="bp6-tree-node-label"
+            >
+              Preface
+            </span>
+          </div>
+          <div
+            className="bp6-collapse"
+            style={
+              {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp6-collapse-body"
+              style={
+                {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp6-tree-node"
+        >
+          <div
+            className="bp6-tree-node-content bp6-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp6-tree-node-caret-none"
+            />
+            <span
+              className="bp6-tree-node-label"
+            >
+              Prefaces to Structure and Interpretation of Computer Programs, 1996 & 1984
+            </span>
+          </div>
+          <div
+            className="bp6-collapse"
+            style={
+              {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp6-collapse-body"
+              style={
+                {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp6-tree-node"
+        >
+          <div
+            className="bp6-tree-node-content bp6-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp6-tree-node-caret-none"
+            />
+            <span
+              className="bp6-tree-node-label"
+            >
+              Acknowledgments
+            </span>
+          </div>
+          <div
+            className="bp6-collapse"
+            style={
+              {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp6-collapse-body"
+              style={
+                {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp6-tree-node"
+        >
+          <div
+            className="bp6-tree-node-content bp6-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp6-icon bp6-icon-chevron-right bp6-tree-node-caret bp6-tree-node-caret-closed"
+              onClick={[Function]}
+            >
+              <svg
+                data-icon="chevron-right"
+                height={16}
+                role="img"
+                viewBox="0 0 16 16"
+                width={16}
+              >
+                <title>
+                  Expand group
+                </title>
+                <path
+                  d="M214.2 174.2L134.2 254.2C130.6 257.8 125.6 260 120 260C109 260 100 251 100 240C100 234.4 102.2 229.4 105.8 225.8L171.8 160L106 94.2C102.2 90.6 100 85.6 100 80C100 69 109 60 120 60C125.6 60 130.6 62.2 134.2 65.8L214.2 145.8C217.8 149.4 220 154.4 220 160C220 165.6 217.8 170.6 214.2 174.2z"
+                  fillRule="evenodd"
+                  style={
+                    {
+                      "transformOrigin": "center",
+                    }
+                  }
+                  transform="scale(0.05, -0.05) translate(-160, -160)"
+                />
+              </svg>
+            </span>
+            <span
+              className="bp6-tree-node-label"
+            >
+              1 Building Abstractions with Functions
+            </span>
+          </div>
+          <div
+            className="bp6-collapse"
+            style={
+              {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp6-collapse-body"
+              style={
+                {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp6-tree-node"
+        >
+          <div
+            className="bp6-tree-node-content bp6-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp6-icon bp6-icon-chevron-right bp6-tree-node-caret bp6-tree-node-caret-closed"
+              onClick={[Function]}
+            >
+              <svg
+                data-icon="chevron-right"
+                height={16}
+                role="img"
+                viewBox="0 0 16 16"
+                width={16}
+              >
+                <title>
+                  Expand group
+                </title>
+                <path
+                  d="M214.2 174.2L134.2 254.2C130.6 257.8 125.6 260 120 260C109 260 100 251 100 240C100 234.4 102.2 229.4 105.8 225.8L171.8 160L106 94.2C102.2 90.6 100 85.6 100 80C100 69 109 60 120 60C125.6 60 130.6 62.2 134.2 65.8L214.2 145.8C217.8 149.4 220 154.4 220 160C220 165.6 217.8 170.6 214.2 174.2z"
+                  fillRule="evenodd"
+                  style={
+                    {
+                      "transformOrigin": "center",
+                    }
+                  }
+                  transform="scale(0.05, -0.05) translate(-160, -160)"
+                />
+              </svg>
+            </span>
+            <span
+              className="bp6-tree-node-label"
+            >
+              2 Building Abstractions with Data
+            </span>
+          </div>
+          <div
+            className="bp6-collapse"
+            style={
+              {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp6-collapse-body"
+              style={
+                {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp6-tree-node"
+        >
+          <div
+            className="bp6-tree-node-content bp6-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp6-icon bp6-icon-chevron-right bp6-tree-node-caret bp6-tree-node-caret-closed"
+              onClick={[Function]}
+            >
+              <svg
+                data-icon="chevron-right"
+                height={16}
+                role="img"
+                viewBox="0 0 16 16"
+                width={16}
+              >
+                <title>
+                  Expand group
+                </title>
+                <path
+                  d="M214.2 174.2L134.2 254.2C130.6 257.8 125.6 260 120 260C109 260 100 251 100 240C100 234.4 102.2 229.4 105.8 225.8L171.8 160L106 94.2C102.2 90.6 100 85.6 100 80C100 69 109 60 120 60C125.6 60 130.6 62.2 134.2 65.8L214.2 145.8C217.8 149.4 220 154.4 220 160C220 165.6 217.8 170.6 214.2 174.2z"
+                  fillRule="evenodd"
+                  style={
+                    {
+                      "transformOrigin": "center",
+                    }
+                  }
+                  transform="scale(0.05, -0.05) translate(-160, -160)"
+                />
+              </svg>
+            </span>
+            <span
+              className="bp6-tree-node-label"
+            >
+              3 Modularity, Objects, and State
+            </span>
+          </div>
+          <div
+            className="bp6-collapse"
+            style={
+              {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp6-collapse-body"
+              style={
+                {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp6-tree-node"
+        >
+          <div
+            className="bp6-tree-node-content bp6-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp6-icon bp6-icon-chevron-right bp6-tree-node-caret bp6-tree-node-caret-closed"
+              onClick={[Function]}
+            >
+              <svg
+                data-icon="chevron-right"
+                height={16}
+                role="img"
+                viewBox="0 0 16 16"
+                width={16}
+              >
+                <title>
+                  Expand group
+                </title>
+                <path
+                  d="M214.2 174.2L134.2 254.2C130.6 257.8 125.6 260 120 260C109 260 100 251 100 240C100 234.4 102.2 229.4 105.8 225.8L171.8 160L106 94.2C102.2 90.6 100 85.6 100 80C100 69 109 60 120 60C125.6 60 130.6 62.2 134.2 65.8L214.2 145.8C217.8 149.4 220 154.4 220 160C220 165.6 217.8 170.6 214.2 174.2z"
+                  fillRule="evenodd"
+                  style={
+                    {
+                      "transformOrigin": "center",
+                    }
+                  }
+                  transform="scale(0.05, -0.05) translate(-160, -160)"
+                />
+              </svg>
+            </span>
+            <span
+              className="bp6-tree-node-label"
+            >
+              4 Metalinguistic Abstraction
+            </span>
+          </div>
+          <div
+            className="bp6-collapse"
+            style={
+              {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp6-collapse-body"
+              style={
+                {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp6-tree-node"
+        >
+          <div
+            className="bp6-tree-node-content bp6-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp6-icon bp6-icon-chevron-right bp6-tree-node-caret bp6-tree-node-caret-closed"
+              onClick={[Function]}
+            >
+              <svg
+                data-icon="chevron-right"
+                height={16}
+                role="img"
+                viewBox="0 0 16 16"
+                width={16}
+              >
+                <title>
+                  Expand group
+                </title>
+                <path
+                  d="M214.2 174.2L134.2 254.2C130.6 257.8 125.6 260 120 260C109 260 100 251 100 240C100 234.4 102.2 229.4 105.8 225.8L171.8 160L106 94.2C102.2 90.6 100 85.6 100 80C100 69 109 60 120 60C125.6 60 130.6 62.2 134.2 65.8L214.2 145.8C217.8 149.4 220 154.4 220 160C220 165.6 217.8 170.6 214.2 174.2z"
+                  fillRule="evenodd"
+                  style={
+                    {
+                      "transformOrigin": "center",
+                    }
+                  }
+                  transform="scale(0.05, -0.05) translate(-160, -160)"
+                />
+              </svg>
+            </span>
+            <span
+              className="bp6-tree-node-label"
+            >
+              5 Computing with Register Machines
+            </span>
+          </div>
+          <div
+            className="bp6-collapse"
+            style={
+              {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp6-collapse-body"
+              style={
+                {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp6-tree-node"
+        >
+          <div
+            className="bp6-tree-node-content bp6-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp6-tree-node-caret-none"
+            />
+            <span
+              className="bp6-tree-node-label"
+            >
+              References
+            </span>
+          </div>
+          <div
+            className="bp6-collapse"
+            style={
+              {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp6-collapse-body"
+              style={
+                {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+        <li
+          className="bp6-tree-node"
+        >
+          <div
+            className="bp6-tree-node-content bp6-tree-node-content-0"
+            onClick={[Function]}
+            onContextMenu={[Function]}
+            onDoubleClick={[Function]}
+            onMouseEnter={[Function]}
+            onMouseLeave={[Function]}
+          >
+            <span
+              className="bp6-tree-node-caret-none"
+            />
+            <span
+              className="bp6-tree-node-label"
+            >
+              About the SICP JS Project
+            </span>
+          </div>
+          <div
+            className="bp6-collapse"
+            style={
+              {
+                "height": undefined,
+                "overflowY": undefined,
+                "transition": undefined,
+              }
+            }
+          >
+            <div
+              aria-hidden={true}
+              className="bp6-collapse-body"
+              style={
+                {
+                  "transform": "translateY(-undefinedpx)",
+                  "transition": undefined,
+                }
+              }
+            />
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <br />
+  <h2
+    className="bp6-heading"
+  >
+    Licenses
+  </h2>
+  <div
+    className="sicp-licenses"
+  >
+    <div>
+      <a
+        href="http://creativecommons.org/licenses/by-sa/4.0/"
+        rel="nofollow"
+      >
+        <img
+          alt="CC BY-SA 4.0"
+          src="https://licensebuttons.net/l/by-sa/4.0/88x31.png"
+        />
+      </a>
+    </div>
+    <div>
+      <p>
+        This work is licensed under a
+         
+        <a
+          href="http://creativecommons.org/licenses/by-sa/4.0/"
+          rel="nofollow"
+        >
+          Creative Commons Attribution-ShareAlike 4.0 International License
+        </a>
+        .
+      </p>
+    </div>
+    <br />
+    <div>
+      <a
+        href="https://www.gnu.org/licenses/gpl-3.0.en.html"
+        rel="nofollow"
+      >
+        <img
+          alt="GPL 3"
+          data-canonical-src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/License_icon-gpl.svg/50px-License_icon-gpl.svg.png"
+          src="https://camo.githubusercontent.com/46d38fe6087a9b9bdf7e45458901b818765b8391/68747470733a2f2f75706c6f61642e77696b696d656469612e6f72672f77696b6970656469612f636f6d6d6f6e732f7468756d622f372f37392f4c6963656e73655f69636f6e2d67706c2e7376672f353070782d4c6963656e73655f69636f6e2d67706c2e7376672e706e67"
+        />
+      </a>
+    </div>
+    <div>
+      <p>
+        All JavaScript programs in this work are licensed under the
+         
+        <a
+          href="https://www.gnu.org/licenses/gpl-3.0.en.html"
+          rel="nofollow"
+        >
+          GNU General Public License Version 3
+        </a>
+        .
+      </p>
+    </div>
+    <br />
+    <div>
+      <a
+        href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+        rel="nofollow"
+      >
+        <img
+          alt="CC BY-NC-SA 4.0"
+          src="https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png"
+        />
+      </a>
+    </div>
+    <div>
+      <p>
+        <a
+          href="https://mitpress.mit.edu/books/structure-and-interpretation-computer-programs-1"
+          rel="nofollow"
+        >
+          Print and Kindle versions of this work
+           
+        </a>
+        are published by The MIT Press under a
+         
+        <a
+          href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+          rel="nofollow"
+        >
+          Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License
+        </a>
+        .
+      </p>
+    </div>
+    <br />
+  </div>
+</div>
+`;

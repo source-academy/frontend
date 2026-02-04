@@ -1,0 +1,26 @@
+// Mixins
+
+@mixin mQ($arg) {
+  @media screen and (max-width: $arg) {
+    @content;
+  }
+}
+
+// Overall fullpage
+
+.fullpage {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+  width: 100%;
+
+  .fullpage-content {
+    padding: 10px 20px 10px 20px;
+    display: inline-block;
+    margin: 0 0 10px 0;
+    width: 80%;
+    @include mQ(750px) {
+      width: 90%;
+    }
+  }
+}

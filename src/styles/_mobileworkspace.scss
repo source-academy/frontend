@@ -1,0 +1,346 @@
+@import 'react-simple-keyboard/build/css/index.css';
+
+$shadow-dark: rgba(0, 0, 0, 0.5);
+$shadow-light: rgba(0, 0, 0, 0.2);
+
+.mobile-workspace {
+  position: relative;
+  overflow-y: hidden;
+
+  .ControlBar {
+    // for assesment workspace top control bar
+    .#{$ns}-button:not(.#{$ns}-disabled) {
+      padding: 5px;
+
+      .#{$ns}-icon {
+        margin: 0;
+      }
+
+      .#{$ns}-button-text {
+        display: none;
+      }
+    }
+
+    .ControlBar_editor {
+      // Rounded 'Save' and 'Reset' buttons for mobile missions workspace
+      .#{$ns}-button {
+        border-radius: 5px;
+      }
+    }
+
+    .ControlBar_flow {
+      .#{$ns}-disabled {
+        padding: 5px;
+        font-size: 12px !important;
+      }
+
+      :last-child {
+        .#{$ns}-button-text {
+          display: flex;
+          font-size: 12px !important;
+        }
+      }
+    }
+  }
+
+  .Autograder {
+    min-width: 0 !important;
+    width: 100vw;
+    position: relative;
+    left: -15px;
+
+    .collapse-button {
+      margin: 0 20px;
+      width: calc(100% - 40px) !important;
+    }
+
+    .#{$ns}-collapse-body {
+      width: 100%;
+      padding: 0 15px 10px 15px;
+      overflow-x: auto;
+
+      .testcaseCards {
+        width: 640px;
+      }
+    }
+  }
+
+  .mobile-floating-keyboard {
+    width: 42px; // default value, toggled by floating-toggle to 99vw
+    height: 50px;
+    max-width: 600px;
+    z-index: 4;
+    position: absolute;
+    top: 30vh;
+    right: 0;
+    background: $cadet-color-1;
+    border-radius: 25px 0 0 25px;
+    display: flex;
+    overflow: hidden;
+    opacity: 0.8; // initial value, toggled by floating-toggle to 1 or 0.6
+    transition:
+      width 0.8s,
+      opacity 1.2s;
+
+    button {
+      height: 50px;
+      border: transparent;
+      background: transparent;
+      color: $cadet-color-4;
+      display: inline-block;
+      opacity: 0.5;
+    }
+    button:active {
+      background: $cadet-color-2;
+      color: $cadet-color-1;
+    }
+
+    .mobile-floating-toggle {
+      width: 30px;
+      font-size: 18px;
+      padding: 0 2px 0 10px;
+    }
+
+    .mobile-keyboard-toggle-container {
+      width: 100%;
+      height: 46px;
+      display: none; // default value, toggled by floating-toggle to flex
+
+      .mobile-keyboard-container {
+        width: 100%;
+        overflow-y: hidden;
+        position: relative;
+
+        .simple-keyboard-shortcut {
+          width: 100%;
+          position: absolute;
+          top: 0; // default value, toggled by row-toggle to -45 -90
+          color: $cadet-color-4;
+          background: $cadet-color-1;
+          transition: top 0.6s;
+
+          .hg-row {
+            height: 40px;
+            overflow-x: auto;
+
+            .hg-button {
+              background: $cadet-color-2;
+              min-width: 24px;
+            }
+
+            .mobile-navigation {
+              background: $cadet-color-3;
+              color: $cadet-color-1;
+              padding: 2px 0 4px 0;
+              font-size: 28px;
+            }
+
+            .big-buttons {
+              padding: 5px 0;
+            }
+
+            .hg-activeButton {
+              background: $cadet-color-1;
+              color: $cadet-color-4;
+            }
+          }
+        }
+      }
+    }
+
+    #floating-dragHandle {
+      padding: 0 0 0 8px;
+      height: 50px;
+      width: 22px;
+      min-width: 22px;
+      border-radius: 10px 0 0 10px;
+      background: $cadet-color-2;
+      opacity: 0.3;
+      color: $cadet-color-4;
+      font-size: 34px;
+    }
+  }
+
+  .mobile-selected-panel {
+    position: absolute;
+    height: var(--mobile-panel-height, calc(100% - 70px));
+    width: 100vw;
+    z-index: 1;
+    padding: 20px 15px 20px 15px;
+    background-color: $cadet-color-2;
+    white-space: pre-wrap;
+    overflow: auto;
+
+    .sa-substituter {
+      overflow-x: visible;
+      padding: 0 5px;
+
+      .#{$ns}-slider-label {
+        width: auto;
+        display: none;
+
+        &:first-child,
+        &:last-child {
+          display: inline;
+        }
+      }
+
+      .#{$ns}-card {
+        background-color: $cadet-color-1;
+        padding: 0.4rem 0.6rem 0.4rem 0.6rem;
+        margin: 2rem 0 0.5rem 0;
+
+        .result-output {
+          background-color: transparent;
+          -webkit-box-shadow: none;
+          box-shadow: none;
+          color: white;
+          padding: 0px;
+          margin: 0px;
+          text-align: left;
+
+          white-space: pre-wrap;
+          word-wrap: break-word;
+          word-break: break-word;
+
+          font:
+            16px / normal 'Inconsolata',
+            'Consolas',
+            monospace;
+        }
+      }
+    }
+
+    .SourcecastContainer {
+      white-space: normal;
+    }
+
+    .sa-html-display {
+      background-color: white;
+      width: 100%;
+      height: calc(100% - 4px);
+    }
+  }
+
+  .mobile-unselected-panel {
+    display: none;
+  }
+
+  .mobile-editor-panel {
+    position: absolute;
+    width: 100vw;
+    height: var(--mobile-panel-height, calc(100% - 70px));
+    z-index: 1;
+
+    .MCQChooser {
+      margin: 0;
+      height: 100%;
+    }
+  }
+
+  .mobile-tabs-container {
+    height: 50px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 3;
+    background-color: $cadet-color-1;
+    position: absolute;
+    bottom: 0;
+    box-shadow:
+      0 -4px 8px $shadow-dark,
+      0 -6px 16px $shadow-light,
+      inset 0 14px 14px -16px rgba(206, 217, 224, 0.1);
+
+    .mobile-side-content {
+      overflow-x: auto;
+    }
+
+    .mobile-control-bar-button {
+      margin-bottom: 5px;
+      // padding for button to match Blueprint's default tab size
+      padding: 2.5px 19px 2.5px 19px;
+    }
+  }
+
+  .mobile-draggable {
+    width: 100%;
+    height: calc(var(--mobile-repl-height, 0px) + 70px);
+    z-index: 2;
+    position: absolute;
+    bottom: calc(var(--mobile-repl-height, 0px) * -1);
+    background-color: $cadet-color-3;
+    border-radius: 5px;
+    box-shadow:
+      0 0px 8px $shadow-dark,
+      0 0 16px $shadow-light;
+    transition: 0.3s cubic-bezier(0.3, 0.9, 0.68, 1);
+
+    .handle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 10px;
+      height: 14px;
+      width: 100%;
+      background-color: $cadet-color-1;
+      box-shadow:
+        inset 0 8px 6px -8px rgba(206, 217, 224, 0.1),
+        inset 0 -8px 6px -8px rgba(206, 217, 224, 0.2);
+
+      .circle {
+        height: 6px;
+        width: 6px;
+        margin: 0 8px;
+        border-radius: 50%;
+        background-color: grey;
+      }
+    }
+
+    .enabled {
+      cursor: grab;
+    }
+    .disabled {
+      cursor: not-allowed;
+    }
+
+    .REPL-content {
+      width: 100%;
+      height: calc(var(--mobile-repl-height, 0px) - 10px);
+      padding: 0 10px 10px 10px;
+      overflow: auto;
+
+      // showing top shadow only when scroll down
+      background:
+        linear-gradient($cadet-color-3 100%, rgba(44, 62, 80, 0)),
+        // cover up initial shadow
+        radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 1) 10%, rgba(44, 62, 80, 0));
+      background-repeat: no-repeat;
+      background-color: $cadet-color-3;
+      background-size:
+        100% 20px,
+        100% 20px;
+      background-attachment: local, scroll;
+
+      .#{$ns}-card {
+        opacity: 0.8; // for background shadow to pass through
+      }
+
+      .Repl {
+        margin: 0;
+      }
+
+      canvas {
+        // only rune shown in repl so this override will not affect others
+        width: 100% !important;
+        height: 100% !important;
+      }
+    }
+  }
+}
+
+.mobile-control-bar {
+  width: 215px;
+  text-align: center;
+}

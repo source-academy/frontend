@@ -1,0 +1,1482 @@
+$code-color-code: #ced9e0;
+$code-color-log: #dd8c60;
+$code-color-result: #ffffff;
+$code-color-error: #ff4444;
+$code-background-color-notification: #f1b80f;
+$code-color-notification: #f9f0d7;
+
+.workspace {
+  height: 100%;
+  background-color: $cadet-color-1;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+
+  // Hides scrollbar in mobile workspace
+  @media screen and (max-width: 768px) {
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .row {
+    margin-right: 0px;
+    margin-left: 0px;
+  }
+
+  .Switch {
+    position: relative;
+    width: 3rem;
+    height: 1rem;
+    left: 1rem;
+    right: 1rem;
+    top: 0.5rem;
+  }
+
+  .ControlBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.6rem;
+
+    @media screen and (max-width: 768px) {
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    @media screen and (min-width: 769px) {
+      .ControlBar_editingWorkspace {
+        width: 10%;
+      }
+    }
+  }
+
+  .workspace-parent {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+  }
+
+  .content-parent {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex: 1 1 100%;
+    flex-direction: row;
+
+    > div {
+      height: inherit; // Fix for Firefox not autoscrolling when repl overflows
+    }
+  }
+
+  .right-parent {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1;
+    height: 100%;
+    padding-bottom: 0.6rem;
+    overflow: auto;
+
+    .fullscreen-button {
+      position: absolute;
+      right: 8px;
+      padding: 5px;
+      z-index: 10;
+    }
+  }
+
+  .left-parent {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    padding-bottom: 0.6rem;
+  }
+
+  .editor-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .editor-divider {
+    flex: initial;
+  }
+
+  .resize-editor-prepend {
+    padding-bottom: 0.2rem;
+  }
+
+  .Editor {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    background-color: $cadet-color-2;
+
+    .editor-react-ace {
+      flex: 1;
+      height: 100%;
+      margin: 2px;
+
+      #brace-editor {
+        height: 100%;
+      }
+    }
+
+    .editor-prepend-react-ace {
+      flex: 1;
+
+      #brace-editor {
+        height: 100%;
+      }
+    }
+
+    .ace_gutter-cell_hi {
+      background-color: blue;
+    }
+
+    .ace_line_hi {
+      background-color: blue;
+    }
+
+    .ace_gutter-cell_hi_control {
+      background-color: #32cd32;
+    }
+
+    .ace_line_hi_control {
+      background-color: #32cd32;
+    }
+
+    .ace_breakpoint:before {
+      content: ' \25CF';
+      margin-left: -10px;
+      color: red;
+    }
+  }
+
+  .MCQChooser {
+    flex: 1 1;
+    margin: 0 0.5rem 0 0.5rem;
+    overflow: hidden;
+
+    .mcq-content-parent {
+      height: 100%;
+      overflow: auto;
+      padding: 20px;
+
+      .mcq-options-parent {
+        height: 100%;
+
+        .mcq-option {
+          padding: 20px;
+        }
+
+        .mcq-option:focus {
+          outline: 0;
+        }
+      }
+    }
+
+    .#{$ns}-card {
+      background-color: $cadet-color-2;
+    }
+
+    .Text {
+      word-break: break-word;
+      word-wrap: break-word;
+    }
+  }
+
+  .resize-side-content {
+    display: flex;
+    flex-direction: column;
+    /* Prevents side-content from overflowing right-parent container on initial load */
+    max-height: 100%;
+  }
+
+  .resize-editor-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .side-content-header {
+    align-items: center;
+    display: flex;
+    flex: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-bottom: 0.2rem;
+    .side-content-header-button:focus {
+      outline: 0;
+    }
+
+    .side-content-header-button-alert {
+      -webkit-animation: alert 1s infinite;
+      -moz-animation: alert 1s infinite;
+      -o-animation: alert 1s infinite;
+      animation: alert 1s infinite;
+    }
+
+    @keyframes alert {
+      0%,
+      50% {
+        background-color: rgba(200, 100, 50, 0.5);
+      }
+      51%,
+      100% {
+        background-image: rgba(138, 155, 168, 0.3);
+      }
+    }
+  }
+
+  .side-content-divider {
+    height: 0.6rem;
+    flex: initial;
+  }
+
+  .side-content {
+    flex: 1 1 auto;
+    height: 100%;
+    overflow-y: auto;
+
+    .#{$ns}-card {
+      background-color: $cadet-color-2;
+      color: $code-color-result;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      margin: 0 0.5rem 0 0;
+      /* Fix card not wrapping content on OSX, Chrome */
+      overflow-y: auto;
+      padding: 0.4rem 0.6rem 0.4rem 0.6rem;
+
+      .#{$ns}-tabs {
+        width: 100%;
+      }
+    }
+  }
+
+  .side-content-text {
+    height: fit-content;
+    /* word-wrap and word-break are added to make text wrap. */
+    word-wrap: break-word;
+    word-break: break-word;
+    color: $code-color-result;
+    text-align: justify;
+    overflow-x: auto;
+    /* Respect padding of containing bp3 Card when scrollable */
+    margin-bottom: 0.4rem;
+
+    /* If the assessment briefing begins with a header, remove its top margin */
+    & > div > *:first-child {
+      margin-top: 0;
+    }
+
+    & > div > p:last-child {
+      margin-bottom: 1px;
+    }
+
+    .GradingEditor {
+      min-width: 192px;
+
+      .grading-editor-header {
+        text-align: center;
+      }
+
+      .grading-editor-marking-scheme {
+        pre {
+          white-space: pre-wrap;
+          word-wrap: break-word;
+          word-break: break-word;
+        }
+      }
+
+      .grading-editor-container {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+
+        & > div {
+          padding: 8px 8px 0 8px;
+          flex: 1 1;
+
+          & > div {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            align-content: center;
+            align-items: baseline;
+
+            & > div {
+              text-align: center;
+              width: 150px;
+              padding: 0 0 16px 0;
+            }
+
+            & > div:first-of-type {
+              padding: 0 0 8px 0;
+              flex-grow: 0;
+              flex-shrink: 0;
+              font-weight: 600;
+            }
+          }
+
+          .adjustment-input {
+            padding: 0 8px 0 8px;
+            width: 150px;
+          }
+
+          .adjustment-input .#{$ns}-intent-danger {
+            background-color: rgba(219, 55, 55, 0.25);
+          }
+        }
+      }
+
+      .react-mde-parent {
+        margin-bottom: 12px;
+      }
+
+      .grading-editor-draft-buttons {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+
+        & > div {
+          width: 50%;
+        }
+      }
+
+      .grading-editor-save-button,
+      .grading-editor-discard-button,
+      .grading-editor-save-continue-button {
+        min-width: 192px;
+        padding: 0 2px;
+        margin-bottom: 6px;
+
+        .grading-editor-button {
+          width: 100%;
+        }
+      }
+
+      .grading-editor-save-continue-button {
+        width: 100%;
+      }
+
+      .grading-editor-last-graded-details {
+        padding: 0 2px;
+      }
+    }
+  }
+
+  .#{$ns}-tab-indicator-wrapper {
+    margin-top: 8px;
+  }
+
+  .side-content-tabs {
+    flex: 1 1 auto;
+    height: 100%;
+    justify-content: center;
+    display: flex;
+
+    /*
+      Fixes an innate issue with bp3's Tabs component where the active tab underline
+      fails to re-compute its position when the browser window changes size
+
+      Also fixes an innate issue where the position of the active tab underline
+      decouples when the central divider is resized
+    */
+    .#{$ns}-tabs {
+      display: flex;
+      flex-direction: column;
+      flex-basis: center;
+
+      .#{$ns}-tab-list {
+        align-self: center;
+      }
+    }
+
+    // Specific CSS for the Stepper and CSE Machine tab, since REPL is hidden
+    ##{$ns}-tab-panel_side-content-tabs_subst_visualiser,
+    ##{$ns}-tab-panel_side-content-tabs_cse_machine {
+      height: calc(100% - 60px);
+      margin-top: -45px;
+
+      .side-content-text {
+        height: 100%;
+        margin-top: 70px;
+
+        .sa-substituter {
+          margin: 15px;
+          height: unset;
+
+          .stepper-display {
+            font:
+              16px / normal 'Inconsolata',
+              'Consolas',
+              monospace;
+          }
+
+          .stepper-literal {
+            color: #ff6078;
+          }
+
+          .stepper-operator {
+            color: #f89210;
+          }
+
+          .stepper-identifier {
+            color: #f8d871;
+          }
+
+          .stepper-mu-term {
+            pointer-events: auto;
+            cursor: pointer;
+            z-index: 20;
+            padding: 0px 3px;
+            border-radius: 5px;
+            background: rgba(255, 83, 83, 0.2);
+          }
+
+          .stepper-mu-term:hover {
+            background: rgba(255, 83, 83, 0.5);
+          }
+
+          .beforeMarker {
+            position: relative;
+            -webkit-box-decoration-break: slice;
+            box-decoration-break: slice;
+            background: rgba(179, 101, 57, 0.75);
+            pointer-events: auto;
+            cursor: pointer;
+            z-index: 20;
+          }
+
+          .beforeMarker:hover {
+            background: rgba(100, 101, 57, 0.75);
+          }
+
+          .afterMarker {
+            position: relative;
+            -webkit-box-decoration-break: clone;
+            box-decoration-break: clone;
+            background: green;
+            pointer-events: auto;
+            cursor: pointer;
+            z-index: 20;
+          }
+
+          .afterMarker:hover {
+            background: rgba(61, 101, 57, 0.75);
+          }
+
+          .#{$ns}-slider-label {
+            width: -webkit-max-content;
+            width: -moz-max-content;
+            width: max-content;
+            display: none;
+
+            &:first-child,
+            &:last-child {
+              display: inline;
+            }
+          }
+
+          .#{$ns}-card {
+            background-color: $cadet-color-1;
+            padding: 0.4rem 0.6rem 0.4rem 0.6rem;
+            margin: 2rem 0 0.5rem 0;
+
+            pre {
+              background-color: transparent;
+              -webkit-box-shadow: none;
+              box-shadow: none;
+              color: $code-color-result;
+              padding: 0px;
+              margin: 0px;
+              text-align: left;
+              /**
+                * white-space, word-wrap and word-break
+                * are specified to allow all output to wrap.
+                */
+              white-space: pre-wrap;
+              word-wrap: break-word;
+              word-break: break-word;
+              /**
+                * Use same fonts as ace-editor for
+                * output. Taken from react-ace
+                * sourcecode, font size modified.
+                */
+              font:
+                16px / normal 'Inconsolata',
+                'Consolas',
+                monospace;
+
+              .canvas-container {
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                padding: 0.5rem 0 0.5rem 0;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                align-items: center;
+                -webkit-box-pack: center;
+                -ms-flex-pack: center;
+                justify-content: center;
+              }
+
+              canvas {
+                height: 20rem;
+                width: 20rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .side-content-tab {
+    // Set colour of icons in blueprintjs tabs
+    color: #a7b6c2;
+
+    &[aria-selected='true'] {
+      .side-content-tooltip {
+        background-color: #495a6b;
+
+        // Hide alert animation when the tab is currently selected
+        // (the alert will be cleared by the code if any tab change occurs)
+        -webkit-animation: none;
+        -moz-animation: none;
+        -o-animation: none;
+        animation: none;
+      }
+    }
+
+    &[aria-disabled='true'] {
+      .side-content-tooltip {
+        // Set tooltip colour to always be the same as the background
+        background-color: inherit;
+        // Set colour of icons to be more faded
+        color: #3b4d5e;
+
+        // Prevent alert animation for disabled tabs
+        -webkit-animation: none;
+        -moz-animation: none;
+        -o-animation: none;
+        animation: none;
+      }
+    }
+
+    .sa-video {
+      min-width: min-content;
+
+      .sa-video-header {
+        justify-content: space-around;
+        display: flex;
+        background: rgba(26, 37, 48, 0.5);
+        border-radius: 3px 3px 0 0;
+
+        .sa-video-header-element {
+          display: inherit;
+          padding: 5px 0px;
+
+          .#{$ns}-button-group {
+            width: max-content;
+
+            .#{$ns}-button.sa-live-video-button.#{$ns}-active {
+              pointer-events: none;
+            }
+          }
+
+          .sa-video-header-numeric-input {
+            margin-left: 5px;
+            margin-right: 5px;
+          }
+        }
+
+        .#{$ns}-divider {
+          margin: 0;
+        }
+      }
+
+      .sa-video-element {
+        width: 100%;
+        text-align: center;
+        padding: 10px;
+        background: $cadet-color-1;
+        border-radius: 0 0 3px 3px;
+      }
+    }
+
+    .sa-remote-execution {
+      margin: 6px;
+
+      .devices-menu-container {
+        max-height: 60vh;
+        overflow-y: auto;
+        .#{$ns}-menu {
+          margin: 1px;
+          box-sizing: border-box;
+
+          .edit-buttons {
+            display: inline-block;
+            margin-left: 4px;
+
+            .#{$ns}-button.#{$ns}-small {
+              margin-top: -7px;
+              margin-bottom: -3px;
+            }
+          }
+        }
+      }
+    }
+
+    .sa-html-display {
+      background-color: white;
+      width: 100%;
+      height: 60vh;
+    }
+  }
+
+  .sidecontent-overview {
+    // fix overflow for assessment sidecontent
+
+    pre {
+      // for code block in pre
+      overflow-x: auto;
+    }
+
+    p {
+      // for image in p
+      img {
+        max-width: 100%;
+        object-fit: contain;
+      }
+    }
+  }
+
+  .side-content-tooltip {
+    border-radius: 3px;
+    // size of rounded box under tab icon
+    height: 25px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &:hover {
+      background-color: #3a4c5d;
+    }
+
+    &.side-content-tab-alert {
+      -webkit-animation: alert 1s infinite;
+      -moz-animation: alert 1s infinite;
+      -o-animation: alert 1s infinite;
+      animation: alert 1s infinite;
+    }
+
+    @keyframes alert {
+      0%,
+      50% {
+        background-color: rgba(200, 100, 50, 0.5);
+      }
+      51%,
+      100% {
+        background-image: rgba(138, 155, 168, 0.3);
+      }
+    }
+
+    &.side-content-tab-alert-error {
+      -webkit-animation: error 1s infinite;
+      -moz-animation: error 1s infinite;
+      -o-animation: error 1s infinite;
+      animation: error 1s infinite;
+    }
+
+    @keyframes error {
+      0%,
+      50% {
+        background-color: rgb(255, 68, 68);
+      }
+      51%,
+      100% {
+        background-image: rgba(102, 42, 50, 0.3);
+      }
+    }
+    .side-content-text .slider {
+      $a: 100%;
+      $b: 140px;
+      width: calc(#{$a} - #{$b});
+    }
+  }
+
+  .grading-editor-input-parent {
+    /* Position the editor away from the buttons */
+    /* Cause the 'save' button shift down when size is small. */
+    margin-bottom: 0.5rem;
+
+    .#{$ns}-button-group {
+      flex-wrap: wrap;
+    }
+
+    .#{$ns}-numeric-input {
+      .#{$ns}-button {
+        background-color: $cadet-color-2;
+      }
+    }
+  }
+
+  .grading-result-table {
+    // Hide grey line appearing in grading result tables
+    table.#{$ns}-html-table tbody tr:first-child {
+      td,
+      th {
+        -webkit-box-shadow: inset 0 0 1px 0 $cadet-color-2;
+        box-shadow: inset 0 0 1px 0 $cadet-color-2;
+      }
+    }
+  }
+
+  .session-management-table {
+    table {
+      width: 100%;
+      padding-inline: 0.5em;
+      border-spacing: 0 0.5em;
+
+      th:last-child,
+      td:last-child {
+        width: auto;
+      }
+
+      td:first-child {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+        width: 100%;
+      }
+
+      td {
+        div:first-child {
+          width: 15px;
+          height: 15px;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+
+  .react-mde {
+    /* Colour the borders */
+    border-color: #1b2530;
+    border-radius: 3px;
+    /* Override side-content's default text justify*/
+    text-align: initial;
+
+    .mde-header {
+      /* Colour the toolbar */
+      background-color: rgba(16, 22, 26, 0.3);
+
+      /* Colour the editor button text */
+      .mde-tabs button {
+        color: $cadet-color-5;
+      }
+
+      /* Colour the selected button */
+      .mde-tabs button.selected {
+        background: rgba(138, 155, 168, 0.3);
+      }
+
+      /* Colour the editor icons */
+      .#{$ns}-icon {
+        color: #a7b6c2;
+      }
+    }
+
+    /* Add padding to editor preview */
+    .mde-preview {
+      padding: 11px;
+    }
+
+    /* Set colour of editor text box */
+    textarea.mde-text {
+      background-color: rgba(16, 22, 26, 0.3);
+      color: $cadet-color-5;
+    }
+
+    /* Set colour of editor resize drag bar */
+    .grip {
+      background: rgba(138, 155, 168, 0.3);
+      color: #a7b6c2;
+
+      /* Fix ellipsis icon not aligned with drag bar */
+      .icon {
+        vertical-align: top;
+      }
+    }
+  }
+
+  .resize-editor {
+    display: flex;
+    flex-direction: row;
+
+    .Editor {
+      flex: 1 1 auto;
+      margin: 0 0.5rem 0 0;
+      padding: 0;
+    }
+
+    .editor-content {
+      flex: 1 1 auto;
+      padding: 0;
+    }
+  }
+
+  .#{$ns}-divider {
+    margin: 0 0 0.5rem 0;
+  }
+
+  .Repl {
+    display: flex;
+    flex: 1 1;
+    flex-direction: column;
+    overflow-x: visible;
+    overflow-y: auto;
+    margin: 0 0.5rem 0 0;
+
+    .#{$ns}-card {
+      background-color: $cadet-color-2;
+      padding: 0.4rem 0.6rem 0.4rem 0.6rem;
+      margin: 0 0 0.5rem 0;
+
+      pre {
+        background-color: transparent;
+        box-shadow: none;
+        color: inherit;
+        padding: 0px;
+        margin: 0px;
+        /**
+          * white-space, word-wrap and word-break
+          * are specified to allow all output to wrap.
+          */
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        word-break: break-word;
+        /**
+          * Use same fonts as ace-editor for
+          * output. Taken from react-ace
+          * sourcecode, font size modified.
+          */
+        font:
+          16px / normal 'Inconsolata',
+          'Consolas',
+          monospace;
+      }
+
+      .code-output {
+        color: $code-color-code;
+      }
+
+      .log-output {
+        color: $code-color-log;
+      }
+
+      .result-output {
+        color: $code-color-result;
+
+        .canvas-container {
+          display: flex;
+          padding: 0.5rem 0 0.5rem 0;
+          align-items: center;
+          justify-content: center;
+        }
+
+        canvas {
+          height: 20rem;
+          width: 20rem;
+        }
+      }
+
+      .error-output {
+        color: $code-color-error;
+      }
+
+      .notification-output {
+        color: $code-color-notification;
+      }
+    }
+
+    .notification-output-container {
+      background-color: $code-background-color-notification;
+    }
+
+    /* flush to align with editor bottom */
+    .repl-input-parent {
+      padding: 0;
+      margin-bottom: 0rem;
+      flex-wrap: nowrap;
+    }
+
+    .repl-react-ace {
+      margin: 0.4rem 0.6rem 0.4rem 0.6rem;
+    }
+
+    .repl-react-ace-green {
+      background: $pure-green !important;
+      margin: 0.4rem 0.6rem 0.4rem 0.6rem;
+    }
+  }
+
+  .react-ace {
+    background-color: $cadet-color-2;
+    border-radius: 3px;
+    .ace_gutter {
+      background: $cadet-color-3;
+      color: rgb(128, 145, 160);
+    }
+    display: inline-block;
+    flex: 1;
+  }
+
+  .react-ace-green {
+    background-color: $pure-green !important;
+    border-radius: 3px;
+    .ace_gutter {
+      background: $dark-green;
+      color: rgb(128, 145, 160);
+    }
+    display: inline-block;
+    flex: 1;
+  }
+
+  #ace-radar-view {
+    display: inline-block;
+    max-width: 2%;
+    background: #2f3129;
+  }
+
+  .ace-radar-view-cursor-indicator {
+    display: none;
+  }
+
+  .ace-radar-view-wrapper {
+    width: 1px;
+  }
+
+  .Autograder,
+  .ContestEntryVoting,
+  .ContestLeaderboard {
+    min-width: 640px;
+
+    *:focus {
+      /* Disable blue border when an Autograder sub-element is in focus */
+      outline: none;
+    }
+
+    .collapse-button {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.2);
+
+      > .#{$ns}-button-text {
+        > span:not(:last-child) {
+          margin-right: 7px;
+        }
+
+        > span:not(:first-child) {
+          margin-left: 7px;
+        }
+      }
+    }
+
+    .testcaseeditor-subcomponent {
+      padding: 0.5rem;
+    }
+
+    .testcases-header,
+    .results-header,
+    .contestentries-header,
+    .leaderboard-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      text-align: center;
+      padding: 0.4rem 0.6rem;
+
+      .#{$ns}-icon {
+        margin-left: 4px;
+      }
+    }
+
+    .testcases-header {
+      .header-fn,
+      .header-actual {
+        width: 37.5%;
+      }
+
+      .header-expected {
+        width: 24%;
+      }
+    }
+
+    .results-header {
+      .header-data {
+        width: 37.5%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: stretch;
+
+        .header-sn {
+          width: 20%;
+        }
+
+        .header-status {
+          width: 78.5%;
+        }
+      }
+
+      .header-expected {
+        width: 24%;
+      }
+
+      .header-actual {
+        width: 37.5%;
+      }
+    }
+
+    #tier-list {
+      width: 80%;
+      padding: 10px;
+      background-color: rgb(30, 30, 30);
+    }
+
+    .tier {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      background-color: $cadet-color-1;
+    }
+
+    .hovered-tier {
+      border: 2px solid $cadet-color-5;
+    }
+
+    .tier h2 {
+      margin: 0;
+      padding: 0;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #000000;
+      font-size: 1rem;
+      font-weight: normal;
+    }
+
+    .item-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      min-height: 60px;
+      width: calc(100% - 60px);
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    #bank .item-container {
+      min-height: auto;
+      width: 100%;
+    }
+
+    .item {
+      padding: 0;
+      margin-left: 20px;
+      min-width: 55px;
+      height: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #ffffff;
+      cursor: move;
+      color: #000000;
+    }
+
+    .item-over {
+      border: 2px dashed #ccc;
+    }
+
+    .placeholder {
+      min-width: 55px;
+      height: 60px;
+      margin-left: 20px;
+      background-color: #999999;
+    }
+
+    .leaderboard-header {
+      .header-entryid {
+        width: 40%;
+      }
+
+      .header-entryrank {
+        width: 20%;
+      }
+
+      .header-score {
+        width: 40%;
+      }
+    }
+
+    pre {
+      color: $code-color-code;
+    }
+
+    .noResults {
+      padding-top: 0.4rem;
+      padding-bottom: 0.4rem;
+      text-align: center;
+    }
+  }
+
+  .AutograderCard,
+  .EditableAutograderCard,
+  .ResultCard,
+  .ContestEntryCard,
+  .LeaderboardCard {
+    /* Wrapper container (Blueprint Card) for each testcase and autograder result */
+    /* Wrapper container for each Contest Entry Voting cards */
+    .#{$ns}-card {
+      border-color: rgb(26, 37, 48);
+      border-style: solid;
+      border-width: 1px;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: stretch;
+
+      /* HTML Pre component for rendering code blocks */
+      pre {
+        padding: 8px;
+        margin: 0;
+        overflow: visible;
+        overflow-wrap: break-word;
+        word-break: normal;
+        white-space: pre-line;
+        flex-grow: 0;
+        flex-shrink: 0;
+        /* Override justify applied to side-content (intended for text blocks) */
+        text-align: initial;
+      }
+    }
+
+    &.secret > .#{$ns}-card {
+      background-color: rgba(192, 192, 192, 0.2);
+    }
+
+    &.correct > .#{$ns}-card {
+      background-color: rgba(125, 255, 125, 0.2);
+    }
+
+    &.wrong {
+      > .#{$ns}-card {
+        background-color: rgba(255, 55, 55, 0.2);
+      }
+
+      pre.testcase-actual,
+      pre.result-actual {
+        color: $code-color-error;
+      }
+    }
+
+    &:not(:first-child) {
+      border-top-style: solid;
+      border-top-width: 1px;
+      border-color: #1a2530;
+    }
+  }
+
+  .item {
+    /* Nested Blueprint Card component for Contest Entry Card */
+    margin: 0;
+    .#{$ns}-card {
+      margin: 0;
+      border-radius: 0;
+      .contestentry-entryid {
+        margin: 0;
+        text-align: center;
+      }
+    }
+  }
+
+  .LeaderboardCard {
+    /* Nested Blueprint Card component for Contest Entry Card */
+    .#{$ns}-card {
+      .contestentry-entryid {
+        width: 40%;
+        text-align: center;
+      }
+
+      .contestentry-rank {
+        width: 20%;
+        text-align: center;
+      }
+
+      .contestentry-score {
+        width: 40%;
+        text-align: center;
+      }
+    }
+  }
+
+  .AutograderCard {
+    /* Nested Blueprint Card component (with onClick attached) */
+    .#{$ns}-card {
+      .testcase-placeholder {
+        width: 100%;
+        text-align: center;
+      }
+
+      .testcase-program,
+      .testcase-actual {
+        width: 37.5%;
+      }
+
+      .testcase-expected {
+        width: 24%;
+      }
+
+      /* Following two are styles for rendered WebGL elements (runes, curves) */
+      .canvas-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Override canvas inline height and width */
+      canvas {
+        height: 12rem !important;
+        width: 12rem !important;
+      }
+    }
+
+    /* CSS animation styling for testcases when run */
+    @keyframes correct {
+      from {
+        background: rgba(125, 255, 125, 0.5);
+      }
+
+      to {
+        background: rgba(125, 255, 125, 0.2);
+      }
+    }
+
+    @keyframes wrong {
+      from {
+        background: rgba(255, 55, 55, 0.5);
+      }
+
+      to {
+        background: rgba(255, 55, 55, 0.2);
+      }
+    }
+
+    @keyframes private-revert {
+      to {
+        background: rgba(192, 192, 192, 0.2);
+      }
+    }
+
+    &.correct > .#{$ns}-card {
+      animation: 4s correct;
+    }
+
+    &.wrong > .#{$ns}-card {
+      animation: 4s wrong;
+    }
+
+    &.correct.secret > .#{$ns}-card {
+      animation:
+        4s correct,
+        4s private-revert 4s forwards;
+    }
+
+    &.wrong.secret > .#{$ns}-card {
+      animation:
+        4s wrong,
+        4s private-revert 4s forwards;
+    }
+  }
+
+  .EditableAutograderCard {
+    /* Nested Blueprint Card component (with onClick attached) */
+    .#{$ns}-card {
+      .testcase-placeholder {
+        width: 100%;
+        text-align: center;
+      }
+
+      .testcase-program,
+      .testcase-expected {
+        width: 37%;
+      }
+
+      .testcase-actual {
+        width: 26%;
+      }
+
+      .testcase-button {
+        width: 0.1%;
+      }
+
+      /* Following two are styles for rendered WebGL elements (runes, curves) */
+      .canvas-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* Override canvas inline height and width */
+      canvas {
+        height: 12rem !important;
+        width: 12rem !important;
+      }
+    }
+
+    /* CSS animation styling for testcases when run */
+    @keyframes correct {
+      from {
+        background: rgba(125, 255, 125, 0.5);
+      }
+
+      to {
+        background: rgba(125, 255, 125, 0.2);
+      }
+    }
+
+    @keyframes wrong {
+      from {
+        background: rgba(255, 55, 55, 0.5);
+      }
+
+      to {
+        background: rgba(255, 55, 55, 0.2);
+      }
+    }
+
+    @keyframes private-revert {
+      to {
+        background: rgba(192, 192, 192, 0.2);
+      }
+    }
+
+    &.correct > .#{$ns}-card {
+      animation: 4s correct;
+    }
+
+    &.wrong > .#{$ns}-card {
+      animation: 4s wrong;
+    }
+
+    &.correct.secret > .#{$ns}-card {
+      animation:
+        4s correct,
+        4s private-revert 4s forwards;
+    }
+
+    &.wrong.secret > .#{$ns}-card {
+      animation:
+        4s wrong,
+        4s private-revert 4s forwards;
+    }
+  }
+
+  .ResultCard {
+    .#{$ns}-card {
+      .result-data {
+        width: 37.5%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: stretch;
+
+        div {
+          /* Maintain style consistency with other Pre elements */
+          background: rgba(16, 22, 26, 0.3);
+          border-radius: 3px;
+          box-shadow: inset 0 0 0 1px rgba(16, 22, 26, 0.4);
+          box-sizing: border-box;
+          padding: 8px;
+          font-weight: bold;
+          text-align: center;
+          vertical-align: baseline;
+        }
+
+        .result-idx {
+          width: 20%;
+        }
+
+        .result-status {
+          width: 78.5%;
+        }
+      }
+
+      .result-expected {
+        width: 24%;
+      }
+
+      .result-actual {
+        width: 37.5%;
+      }
+    }
+  }
+}
+
+.Popover-share {
+  .#{$ns}-popover-arrow-fill {
+    fill: $cadet-color-4;
+  }
+
+  .#{$ns}-popover-content {
+    background: $cadet-color-4;
+    display: flex;
+    padding: 0.4rem 0.8rem 0.4rem 0.8rem;
+
+    input {
+      width: 15rem;
+      margin-right: 0.58em;
+      &:focus {
+        outline: none;
+      }
+    }
+
+    button {
+      padding: 5px 5px 5px 10px;
+    }
+  }
+}
+
+/* otherwise, a thick outline will show on click due to react-hotkeys */
+.workspace:focus {
+  outline: 0;
+}
+
+/* Tooltip content is rendered in a Blueprint Portal outside the main body */
+.autograder-help-tooltip {
+  max-width: 275px;
+
+  > p {
+    margin-bottom: 6px;
+  }
+
+  > p:last-child {
+    margin-bottom: 0;
+  }
+}

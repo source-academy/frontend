@@ -1,0 +1,1689 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Assessment page "loading" content renders correctly 1`] = `
+<div
+  className="Assessment"
+>
+  <div
+    className="ContentDisplay row center-xs"
+  >
+    <div
+      className="col-md-10 col-xs-11 contentdisplay-content-parent"
+    >
+      <div
+        className="contentdisplay-content bp6-card bp6-elevation-3"
+      >
+        <div
+          className="bp6-non-ideal-state bp6-non-ideal-state-vertical"
+        >
+          <div
+            className="bp6-non-ideal-state-visual"
+            style={
+              {
+                "fontSize": "48px",
+                "lineHeight": "48px",
+              }
+            }
+          >
+            <div
+              aria-label="loading"
+              aria-valuemax={100}
+              aria-valuemin={0}
+              className="bp6-spinner"
+              role="progressbar"
+            >
+              <div
+                className="bp6-spinner-animation"
+              >
+                <svg
+                  height={50}
+                  strokeWidth="8.00"
+                  viewBox="1.00 1.00 98.00 98.00"
+                  width={50}
+                >
+                  <path
+                    className="bp6-spinner-track"
+                    d="M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90"
+                  />
+                  <path
+                    className="bp6-spinner-head"
+                    d="M 50,50 m 0,-45 a 45,45 0 1 1 0,90 a 45,45 0 1 1 0,-90"
+                    pathLength={280}
+                    strokeDasharray="280 280"
+                    strokeDashoffset={210}
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div
+            className="bp6-non-ideal-state-text"
+          >
+            <div>
+              Fetching assessment...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Assessment page does not show attempt Button for upcoming assessments for student user 1`] = `
+<div
+  className="Assessment"
+>
+  <div
+    className="ContentDisplay row center-xs"
+  >
+    <div
+      className="col-md-10 col-xs-11 contentdisplay-content-parent"
+    >
+      <div
+        className="contentdisplay-content bp6-card bp6-elevation-3"
+      >
+        <button
+          className="bp6-button bp6-minimal collapse-button"
+          disabled={false}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+        >
+          <span
+            aria-hidden={true}
+            className="bp6-icon bp6-icon-caret-down"
+          >
+            <svg
+              data-icon="caret-down"
+              height={16}
+              role="img"
+              viewBox="0 0 16 16"
+              width={16}
+            >
+              <path
+                d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z"
+                fillRule="evenodd"
+              />
+            </svg>
+          </span>
+          <span
+            className="bp6-button-text"
+          >
+            Upcoming
+          </span>
+        </button>
+        <div
+          className="bp6-collapse"
+          style={
+            {
+              "height": "auto",
+              "overflowY": "visible",
+              "transition": "none",
+            }
+          }
+        >
+          <div
+            aria-hidden={false}
+            className="bp6-collapse-body"
+            style={
+              {
+                "transform": "translateY(0)",
+                "transition": "none",
+              }
+            }
+          >
+            <div>
+              <div
+                className="row listing bp6-card bp6-elevation-1"
+              >
+                <div
+                  className="listing-picture col-xs-3"
+                >
+                  <img
+                    alt="Assessment"
+                    className="cover-image-not_attempted"
+                    src="https://fakeimg.pl/300/"
+                  />
+                </div>
+                <div
+                  className="listing-text col-xs-9"
+                >
+                  <div
+                    className="listing-header"
+                  >
+                    <div
+                      className="bp6-text-overflow-ellipsis"
+                    >
+                      <h4
+                        className="bp6-heading listing-title"
+                      >
+                        An Odessey to Runes (Duplicate)
+                      </h4>
+                    </div>
+                    <div
+                      className="listing-button"
+                    >
+                      <span
+                        className="bp6-popover-target"
+                        onBlur={[Function]}
+                        onContextMenu={[Function]}
+                        onFocus={[Function]}
+                        onMouseEnter={[Function]}
+                        onMouseLeave={[Function]}
+                      >
+                        <button
+                          className="bp6-button bp6-disabled bp6-minimal"
+                          disabled={true}
+                          onBlur={[Function]}
+                          onKeyDown={[Function]}
+                          onKeyUp={[Function]}
+                          tabIndex={-1}
+                          type="button"
+                        >
+                          <span
+                            aria-hidden={true}
+                            className="bp6-icon bp6-icon-confirm"
+                          >
+                            <svg
+                              data-icon="confirm"
+                              height={16}
+                              role="img"
+                              viewBox="0 0 16 16"
+                              width={16}
+                            >
+                              <path
+                                d="M8.7 4.29a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l2 2c.18.18.43.29.71.29s.53-.11.71-.29l5-5a1.003 1.003 0 00-1.42-1.42l-4.29 4.3L8.7 4.29zm5.22 3.01c.03.23.07.45.07.69 0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6c.81 0 1.59.17 2.3.46l1.5-1.5A7.998 7.998 0 00-.01 7.99c0 4.42 3.58 8 8 8s8-3.58 8-8c0-.83-.13-1.64-.36-2.39l-1.71 1.7z"
+                                fillRule="evenodd"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            className="bp6-button-text"
+                          >
+                            <span>
+                              Finalize
+                            </span>
+                            <span
+                              className="custom-hidden-xxs"
+                            >
+                               Submission
+                            </span>
+                          </span>
+                        </button>
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    className="_listing-xp_6fa7d2"
+                  >
+                    <h6
+                      className="bp6-heading"
+                    >
+                      Max XP: 1000
+                    </h6>
+                  </div>
+                  <div
+                    className="listing-description"
+                  >
+                    <div
+                      className="md bp6-running-text"
+                      dangerouslySetInnerHTML={
+                        {
+                          "__html": "<p>This is a test for the UI of the unopened assessment overview. It links to the mock Mission 0</p>",
+                        }
+                      }
+                    />
+                  </div>
+                  <div>
+                    <h6
+                      className="bp6-heading"
+                    >
+                       This is an individual assessment. 
+                    </h6>
+                  </div>
+                  <div
+                    className="listing-footer"
+                  >
+                    <div>
+                      <div
+                        className="listing-due-date"
+                      >
+                        <span
+                          aria-hidden={true}
+                          className="bp6-icon bp6-icon-calendar listing-due-icon"
+                        >
+                          <svg
+                            data-icon="calendar"
+                            height={12}
+                            role="img"
+                            viewBox="0 0 16 16"
+                            width={12}
+                          >
+                            <path
+                              d="M11 3c.6 0 1-.5 1-1V1c0-.6-.4-1-1-1s-1 .4-1 1v1c0 .5.4 1 1 1zm3-2h-1v1c0 1.1-.9 2-2 2s-2-.9-2-2V1H6v1c0 1.1-.9 2-2 2s-2-.9-2-2V1H1c-.6 0-1 .5-1 1v12c0 .6.4 1 1 1h13c.6 0 1-.4 1-1V2c0-.6-.5-1-1-1zM5 13H2v-3h3v3zm0-4H2V6h3v3zm4 4H6v-3h3v3zm0-4H6V6h3v3zm4 4h-3v-3h3v3zm0-4h-3V6h3v3zM4 3c.6 0 1-.5 1-1V1c0-.6-.4-1-1-1S3 .4 3 1v1c0 .5.4 1 1 1z"
+                              fillRule="evenodd"
+                            />
+                          </svg>
+                        </span>
+                        Opens: 18th June, 13:24
+                      </div>
+                    </div>
+                    <div
+                      className="listing-button"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button
+          className="bp6-button bp6-minimal collapse-button"
+          disabled={false}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+        >
+          <span
+            aria-hidden={true}
+            className="bp6-icon bp6-icon-caret-down"
+          >
+            <svg
+              data-icon="caret-down"
+              height={16}
+              role="img"
+              viewBox="0 0 16 16"
+              width={16}
+            >
+              <path
+                d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z"
+                fillRule="evenodd"
+              />
+            </svg>
+          </span>
+          <span
+            className="bp6-button-text"
+          >
+            Open
+          </span>
+        </button>
+        <div
+          className="bp6-collapse"
+          style={
+            {
+              "height": "auto",
+              "overflowY": "visible",
+              "transition": "none",
+            }
+          }
+        >
+          <div
+            aria-hidden={false}
+            className="bp6-collapse-body"
+            style={
+              {
+                "transform": "translateY(0)",
+                "transition": "none",
+              }
+            }
+          >
+            <div>
+              <div
+                className="row listing bp6-card bp6-elevation-1"
+              >
+                <div
+                  className="listing-picture col-xs-3"
+                >
+                  <img
+                    alt="Assessment"
+                    className="cover-image-attempting"
+                    src="https://fakeimg.pl/350x200/?text=World&font=lobster"
+                  />
+                </div>
+                <div
+                  className="listing-text col-xs-9"
+                >
+                  <div
+                    className="listing-header"
+                  >
+                    <div
+                      className="bp6-text-overflow-ellipsis"
+                    >
+                      <h4
+                        className="bp6-heading listing-title"
+                      >
+                        The Secret to Streams
+                      </h4>
+                    </div>
+                    <div
+                      className="listing-button"
+                    >
+                      <span
+                        className="bp6-popover-target"
+                        onBlur={[Function]}
+                        onContextMenu={[Function]}
+                        onFocus={[Function]}
+                        onMouseEnter={[Function]}
+                        onMouseLeave={[Function]}
+                      >
+                        <button
+                          className="bp6-button bp6-disabled bp6-minimal"
+                          disabled={true}
+                          onBlur={[Function]}
+                          onKeyDown={[Function]}
+                          onKeyUp={[Function]}
+                          tabIndex={-1}
+                          type="button"
+                        >
+                          <span
+                            aria-hidden={true}
+                            className="bp6-icon bp6-icon-confirm"
+                          >
+                            <svg
+                              data-icon="confirm"
+                              height={16}
+                              role="img"
+                              viewBox="0 0 16 16"
+                              width={16}
+                            >
+                              <path
+                                d="M8.7 4.29a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l2 2c.18.18.43.29.71.29s.53-.11.71-.29l5-5a1.003 1.003 0 00-1.42-1.42l-4.29 4.3L8.7 4.29zm5.22 3.01c.03.23.07.45.07.69 0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6c.81 0 1.59.17 2.3.46l1.5-1.5A7.998 7.998 0 00-.01 7.99c0 4.42 3.58 8 8 8s8-3.58 8-8c0-.83-.13-1.64-.36-2.39l-1.71 1.7z"
+                                fillRule="evenodd"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            className="bp6-button-text"
+                          >
+                            <span>
+                              Finalize
+                            </span>
+                            <span
+                              className="custom-hidden-xxs"
+                            >
+                               Submission
+                            </span>
+                          </span>
+                        </button>
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    className="_listing-xp_6fa7d2"
+                  >
+                    <h6
+                      className="bp6-heading"
+                    >
+                      Max XP: 1000
+                    </h6>
+                  </div>
+                  <div
+                    className="listing-description"
+                  >
+                    <div
+                      className="md bp6-running-text"
+                      dangerouslySetInnerHTML={
+                        {
+                          "__html": "<p>Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.</p>",
+                        }
+                      }
+                    />
+                  </div>
+                  <div>
+                    <h6
+                      className="bp6-heading"
+                    >
+                       This is an individual assessment. 
+                    </h6>
+                  </div>
+                  <div
+                    className="listing-footer"
+                  >
+                    <div>
+                      <div
+                        className="listing-due-date"
+                      >
+                        <span
+                          aria-hidden={true}
+                          className="bp6-icon bp6-icon-calendar listing-due-icon"
+                        >
+                          <svg
+                            data-icon="calendar"
+                            height={12}
+                            role="img"
+                            viewBox="0 0 16 16"
+                            width={12}
+                          >
+                            <path
+                              d="M11 3c.6 0 1-.5 1-1V1c0-.6-.4-1-1-1s-1 .4-1 1v1c0 .5.4 1 1 1zm3-2h-1v1c0 1.1-.9 2-2 2s-2-.9-2-2V1H6v1c0 1.1-.9 2-2 2s-2-.9-2-2V1H1c-.6 0-1 .5-1 1v12c0 .6.4 1 1 1h13c.6 0 1-.4 1-1V2c0-.6-.5-1-1-1zM5 13H2v-3h3v3zm0-4H2V6h3v3zm4 4H6v-3h3v3zm0-4H6V6h3v3zm4 4h-3v-3h3v3zm0-4h-3V6h3v3zM4 3c.6 0 1-.5 1-1V1c0-.6-.4-1-1-1S3 .4 3 1v1c0 .5.4 1 1 1z"
+                              fillRule="evenodd"
+                            />
+                          </svg>
+                        </span>
+                        Opened: 18th July, 13:24
+                      </div>
+                      <div
+                        className="listing-due-date"
+                      >
+                        <span
+                          aria-hidden={true}
+                          className="bp6-icon bp6-icon-time listing-due-icon"
+                        >
+                          <svg
+                            data-icon="time"
+                            height={12}
+                            role="img"
+                            viewBox="0 0 16 16"
+                            width={12}
+                          >
+                            <path
+                              d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 001.42-1.42L9 7.59z"
+                              fillRule="evenodd"
+                            />
+                          </svg>
+                        </span>
+                        Due: 18th June, 13:24
+                      </div>
+                    </div>
+                    <div
+                      className="listing-button"
+                    >
+                      <a
+                        className=""
+                        data-discover="true"
+                        href="/courses/undefined/missions/3/0"
+                        onClick={[Function]}
+                      >
+                        <button
+                          className="bp6-button bp6-minimal"
+                          disabled={false}
+                          onBlur={[Function]}
+                          onClick={[Function]}
+                          onKeyDown={[Function]}
+                          onKeyUp={[Function]}
+                          type="button"
+                        >
+                          <span
+                            aria-hidden={true}
+                            className="bp6-icon bp6-icon-play"
+                          >
+                            <svg
+                              data-icon="play"
+                              height={16}
+                              role="img"
+                              viewBox="0 0 16 16"
+                              width={16}
+                            >
+                              <path
+                                d="M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z"
+                                fillRule="evenodd"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            className="bp6-button-text"
+                          >
+                            <span
+                              data-testid="Assessment-Attempt-Button"
+                            >
+                              Continue
+                            </span>
+                            <span
+                              className="custom-hidden-xxxs"
+                            >
+                               Attempt
+                            </span>
+                          </span>
+                        </button>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div
+                className="row listing bp6-card bp6-elevation-1"
+              >
+                <div
+                  className="listing-picture col-xs-3"
+                >
+                  <img
+                    alt="Assessment"
+                    className="cover-image-attempted"
+                    src="https://fakeimg.pl/300/"
+                  />
+                </div>
+                <div
+                  className="listing-text col-xs-9"
+                >
+                  <div
+                    className="listing-header"
+                  >
+                    <div
+                      className="bp6-text-overflow-ellipsis"
+                    >
+                      <h4
+                        className="bp6-heading listing-title"
+                      >
+                        An Odessey to Runes
+                      </h4>
+                    </div>
+                    <div
+                      className="listing-button"
+                    >
+                      <span
+                        className="bp6-popover-target"
+                        onBlur={[Function]}
+                        onContextMenu={[Function]}
+                        onFocus={[Function]}
+                        onMouseEnter={[Function]}
+                        onMouseLeave={[Function]}
+                      >
+                        <button
+                          className="bp6-button bp6-intent-danger bp6-minimal"
+                          disabled={false}
+                          onBlur={[Function]}
+                          onClick={[Function]}
+                          onKeyDown={[Function]}
+                          onKeyUp={[Function]}
+                          type="button"
+                        >
+                          <span
+                            aria-hidden={true}
+                            className="bp6-icon bp6-icon-confirm"
+                          >
+                            <svg
+                              data-icon="confirm"
+                              height={16}
+                              role="img"
+                              viewBox="0 0 16 16"
+                              width={16}
+                            >
+                              <path
+                                d="M8.7 4.29a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l2 2c.18.18.43.29.71.29s.53-.11.71-.29l5-5a1.003 1.003 0 00-1.42-1.42l-4.29 4.3L8.7 4.29zm5.22 3.01c.03.23.07.45.07.69 0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6c.81 0 1.59.17 2.3.46l1.5-1.5A7.998 7.998 0 00-.01 7.99c0 4.42 3.58 8 8 8s8-3.58 8-8c0-.83-.13-1.64-.36-2.39l-1.71 1.7z"
+                                fillRule="evenodd"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            className="bp6-button-text"
+                          >
+                            <span>
+                              Finalize
+                            </span>
+                            <span
+                              className="custom-hidden-xxs"
+                            >
+                               Submission
+                            </span>
+                          </span>
+                        </button>
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    className="_listing-xp_6fa7d2"
+                  >
+                    <h6
+                      className="bp6-heading"
+                    >
+                      Max XP: 1000
+                    </h6>
+                  </div>
+                  <div
+                    className="listing-description"
+                  >
+                    <div
+                      className="md bp6-running-text"
+                      dangerouslySetInnerHTML={
+                        {
+                          "__html": "<p><em>Lorem ipsum</em> dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+  incididunt ut labore et dolore magna aliqua.</p>
+<pre><code>  const a = 5;
+</code></pre>
+<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
+  <em>doloremque laudantium</em>, totam rem aperiam, eaque ipsa quae ab illo inventore
+  <a href="google.com">veritatis et quasi architecto</a> beatae vitae dicta sunt
+  <code>explicabo</code>.</p>",
+                        }
+                      }
+                    />
+                  </div>
+                  <div
+                    className="listing-team_information"
+                  >
+                    <h6
+                      className="bp6-heading"
+                    >
+                       This is a team assessment. 
+                    </h6>
+                  </div>
+                  <div
+                    className="listing-footer"
+                  >
+                    <div>
+                      <div
+                        className="listing-due-date"
+                      >
+                        <span
+                          aria-hidden={true}
+                          className="bp6-icon bp6-icon-calendar listing-due-icon"
+                        >
+                          <svg
+                            data-icon="calendar"
+                            height={12}
+                            role="img"
+                            viewBox="0 0 16 16"
+                            width={12}
+                          >
+                            <path
+                              d="M11 3c.6 0 1-.5 1-1V1c0-.6-.4-1-1-1s-1 .4-1 1v1c0 .5.4 1 1 1zm3-2h-1v1c0 1.1-.9 2-2 2s-2-.9-2-2V1H6v1c0 1.1-.9 2-2 2s-2-.9-2-2V1H1c-.6 0-1 .5-1 1v12c0 .6.4 1 1 1h13c.6 0 1-.4 1-1V2c0-.6-.5-1-1-1zM5 13H2v-3h3v3zm0-4H2V6h3v3zm4 4H6v-3h3v3zm0-4H6V6h3v3zm4 4h-3v-3h3v3zm0-4h-3V6h3v3zM4 3c.6 0 1-.5 1-1V1c0-.6-.4-1-1-1S3 .4 3 1v1c0 .5.4 1 1 1z"
+                              fillRule="evenodd"
+                            />
+                          </svg>
+                        </span>
+                        Opened: 18th June, 13:24
+                      </div>
+                      <div
+                        className="listing-due-date"
+                      >
+                        <span
+                          aria-hidden={true}
+                          className="bp6-icon bp6-icon-time listing-due-icon"
+                        >
+                          <svg
+                            data-icon="time"
+                            height={12}
+                            role="img"
+                            viewBox="0 0 16 16"
+                            width={12}
+                          >
+                            <path
+                              d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 001.42-1.42L9 7.59z"
+                              fillRule="evenodd"
+                            />
+                          </svg>
+                        </span>
+                        Due: 18th June, 13:24
+                      </div>
+                    </div>
+                    <div
+                      className="listing-button"
+                    >
+                      <a
+                        className=""
+                        data-discover="true"
+                        href="/courses/undefined/missions/2/0"
+                        onClick={[Function]}
+                      >
+                        <button
+                          className="bp6-button bp6-minimal"
+                          disabled={false}
+                          onBlur={[Function]}
+                          onClick={[Function]}
+                          onKeyDown={[Function]}
+                          onKeyUp={[Function]}
+                          type="button"
+                        >
+                          <span
+                            aria-hidden={true}
+                            className="bp6-icon bp6-icon-edit"
+                          >
+                            <svg
+                              data-icon="edit"
+                              height={16}
+                              role="img"
+                              viewBox="0 0 16 16"
+                              width={16}
+                            >
+                              <path
+                                d="M3.25 10.26l2.47 2.47 6.69-6.69-2.46-2.48-6.7 6.7zM.99 14.99l3.86-1.39-2.46-2.44-1.4 3.83zm12.25-14c-.48 0-.92.2-1.24.51l-1.44 1.44 2.47 2.47 1.44-1.44c.32-.32.51-.75.51-1.24.01-.95-.77-1.74-1.74-1.74z"
+                                fillRule="evenodd"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            className="bp6-button-text"
+                          >
+                            <span
+                              data-testid="Assessment-Attempt-Button"
+                            >
+                              Review
+                            </span>
+                            <span
+                              className="custom-hidden-xxxs"
+                            >
+                               Attempt
+                            </span>
+                          </span>
+                        </button>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button
+          className="bp6-button bp6-minimal collapse-button"
+          disabled={false}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+        >
+          <span
+            aria-hidden={true}
+            className="bp6-icon bp6-icon-caret-right"
+          >
+            <svg
+              data-icon="caret-right"
+              height={16}
+              role="img"
+              viewBox="0 0 16 16"
+              width={16}
+            >
+              <path
+                d="M11 8c0-.15-.07-.28-.17-.37l-4-3.5A.495.495 0 006 4.5v7a.495.495 0 00.83.37l4-3.5c.1-.09.17-.22.17-.37z"
+                fillRule="evenodd"
+              />
+            </svg>
+          </span>
+          <span
+            className="bp6-button-text"
+          >
+            Closed
+          </span>
+        </button>
+        <div
+          className="bp6-collapse"
+          style={
+            {
+              "height": undefined,
+              "overflowY": undefined,
+              "transition": undefined,
+            }
+          }
+        >
+          <div
+            aria-hidden={true}
+            className="bp6-collapse-body"
+            style={
+              {
+                "transform": "translateY(-undefinedpx)",
+                "transition": undefined,
+              }
+            }
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Assessment page with 0 missions renders correctly 1`] = `
+<div
+  className="Assessment"
+>
+  <div
+    className="ContentDisplay row center-xs"
+  >
+    <div
+      className="col-md-10 col-xs-11 contentdisplay-content-parent"
+    >
+      <div
+        className="contentdisplay-content bp6-card bp6-elevation-3"
+      >
+        <div
+          className="bp6-non-ideal-state bp6-non-ideal-state-vertical"
+        >
+          <div
+            className="bp6-non-ideal-state-visual"
+            style={
+              {
+                "fontSize": "48px",
+                "lineHeight": "48px",
+              }
+            }
+          >
+            <span
+              aria-hidden={true}
+              className="bp6-icon bp6-icon-flame bp6-icon-muted"
+              tabIndex={-1}
+            >
+              <svg
+                data-icon="flame"
+                height={48}
+                role="img"
+                viewBox="0 0 20 20"
+                width={48}
+              >
+                <path
+                  d="M11.622 0c0 1.71.49 3.077 1.472 4.103C16.364 6.496 18 9.23 18 12.308c0 3.418-1.962 5.983-5.887 7.692 2.887-3 2.453-4.23-.49-8C8.5 13.5 9 14.5 9.5 16.5c-1.048 0-2 0-2.5-.5 0 .684 1.197 2.5 1.952 4-3.924-1.026-8.123-7.18-6.651-7.692.981-.342 2.126-.171 3.434.513C4.1 6.667 6.062 2.393 11.622 0z"
+                  fillRule="evenodd"
+                />
+              </svg>
+            </span>
+          </div>
+          <div
+            className="bp6-non-ideal-state-text"
+          >
+            <h4
+              className="bp6-heading"
+            >
+              There are no assessments.
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
+<div
+  className="Assessment"
+>
+  <div
+    className="ContentDisplay row center-xs"
+  >
+    <div
+      className="col-md-10 col-xs-11 contentdisplay-content-parent"
+    >
+      <div
+        className="contentdisplay-content bp6-card bp6-elevation-3"
+      >
+        <button
+          className="bp6-button bp6-minimal collapse-button"
+          disabled={false}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+        >
+          <span
+            aria-hidden={true}
+            className="bp6-icon bp6-icon-caret-down"
+          >
+            <svg
+              data-icon="caret-down"
+              height={16}
+              role="img"
+              viewBox="0 0 16 16"
+              width={16}
+            >
+              <path
+                d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z"
+                fillRule="evenodd"
+              />
+            </svg>
+          </span>
+          <span
+            className="bp6-button-text"
+          >
+            Upcoming
+          </span>
+        </button>
+        <div
+          className="bp6-collapse"
+          style={
+            {
+              "height": "auto",
+              "overflowY": "visible",
+              "transition": "none",
+            }
+          }
+        >
+          <div
+            aria-hidden={false}
+            className="bp6-collapse-body"
+            style={
+              {
+                "transform": "translateY(0)",
+                "transition": "none",
+              }
+            }
+          >
+            <div>
+              <div
+                className="row listing bp6-card bp6-elevation-1"
+              >
+                <div
+                  className="listing-picture col-xs-3"
+                >
+                  <img
+                    alt="Assessment"
+                    className="cover-image-not_attempted"
+                    src="https://fakeimg.pl/300/"
+                  />
+                </div>
+                <div
+                  className="listing-text col-xs-9"
+                >
+                  <div
+                    className="listing-header"
+                  >
+                    <div
+                      className="bp6-text-overflow-ellipsis"
+                    >
+                      <h4
+                        className="bp6-heading listing-title"
+                      >
+                        An Odessey to Runes (Duplicate)
+                      </h4>
+                    </div>
+                    <div
+                      className="listing-button"
+                    >
+                      <span
+                        className="bp6-popover-target"
+                        onBlur={[Function]}
+                        onContextMenu={[Function]}
+                        onFocus={[Function]}
+                        onMouseEnter={[Function]}
+                        onMouseLeave={[Function]}
+                      >
+                        <button
+                          className="bp6-button bp6-disabled bp6-minimal"
+                          disabled={true}
+                          onBlur={[Function]}
+                          onKeyDown={[Function]}
+                          onKeyUp={[Function]}
+                          tabIndex={-1}
+                          type="button"
+                        >
+                          <span
+                            aria-hidden={true}
+                            className="bp6-icon bp6-icon-confirm"
+                          >
+                            <svg
+                              data-icon="confirm"
+                              height={16}
+                              role="img"
+                              viewBox="0 0 16 16"
+                              width={16}
+                            >
+                              <path
+                                d="M8.7 4.29a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l2 2c.18.18.43.29.71.29s.53-.11.71-.29l5-5a1.003 1.003 0 00-1.42-1.42l-4.29 4.3L8.7 4.29zm5.22 3.01c.03.23.07.45.07.69 0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6c.81 0 1.59.17 2.3.46l1.5-1.5A7.998 7.998 0 00-.01 7.99c0 4.42 3.58 8 8 8s8-3.58 8-8c0-.83-.13-1.64-.36-2.39l-1.71 1.7z"
+                                fillRule="evenodd"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            className="bp6-button-text"
+                          >
+                            <span>
+                              Finalize
+                            </span>
+                            <span
+                              className="custom-hidden-xxs"
+                            >
+                               Submission
+                            </span>
+                          </span>
+                        </button>
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    className="_listing-xp_6fa7d2"
+                  >
+                    <h6
+                      className="bp6-heading"
+                    >
+                      Max XP: 1000
+                    </h6>
+                  </div>
+                  <div
+                    className="listing-description"
+                  >
+                    <div
+                      className="md bp6-running-text"
+                      dangerouslySetInnerHTML={
+                        {
+                          "__html": "<p>This is a test for the UI of the unopened assessment overview. It links to the mock Mission 0</p>",
+                        }
+                      }
+                    />
+                  </div>
+                  <div>
+                    <h6
+                      className="bp6-heading"
+                    >
+                       This is an individual assessment. 
+                    </h6>
+                  </div>
+                  <div
+                    className="listing-footer"
+                  >
+                    <div>
+                      <div
+                        className="listing-due-date"
+                      >
+                        <span
+                          aria-hidden={true}
+                          className="bp6-icon bp6-icon-calendar listing-due-icon"
+                        >
+                          <svg
+                            data-icon="calendar"
+                            height={12}
+                            role="img"
+                            viewBox="0 0 16 16"
+                            width={12}
+                          >
+                            <path
+                              d="M11 3c.6 0 1-.5 1-1V1c0-.6-.4-1-1-1s-1 .4-1 1v1c0 .5.4 1 1 1zm3-2h-1v1c0 1.1-.9 2-2 2s-2-.9-2-2V1H6v1c0 1.1-.9 2-2 2s-2-.9-2-2V1H1c-.6 0-1 .5-1 1v12c0 .6.4 1 1 1h13c.6 0 1-.4 1-1V2c0-.6-.5-1-1-1zM5 13H2v-3h3v3zm0-4H2V6h3v3zm4 4H6v-3h3v3zm0-4H6V6h3v3zm4 4h-3v-3h3v3zm0-4h-3V6h3v3zM4 3c.6 0 1-.5 1-1V1c0-.6-.4-1-1-1S3 .4 3 1v1c0 .5.4 1 1 1z"
+                              fillRule="evenodd"
+                            />
+                          </svg>
+                        </span>
+                        Opens: 18th June, 13:24
+                      </div>
+                    </div>
+                    <div
+                      className="listing-button"
+                    >
+                      <a
+                        className=""
+                        data-discover="true"
+                        href="/courses/undefined/missions/1/0"
+                        onClick={[Function]}
+                      >
+                        <button
+                          className="bp6-button bp6-minimal"
+                          disabled={false}
+                          onBlur={[Function]}
+                          onClick={[Function]}
+                          onKeyDown={[Function]}
+                          onKeyUp={[Function]}
+                          type="button"
+                        >
+                          <span
+                            aria-hidden={true}
+                            className="bp6-icon bp6-icon-play"
+                          >
+                            <svg
+                              data-icon="play"
+                              height={16}
+                              role="img"
+                              viewBox="0 0 16 16"
+                              width={16}
+                            >
+                              <path
+                                d="M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z"
+                                fillRule="evenodd"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            className="bp6-button-text"
+                          >
+                            <span
+                              data-testid="Assessment-Attempt-Button"
+                            >
+                              Attempt
+                            </span>
+                          </span>
+                        </button>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button
+          className="bp6-button bp6-minimal collapse-button"
+          disabled={false}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+        >
+          <span
+            aria-hidden={true}
+            className="bp6-icon bp6-icon-caret-down"
+          >
+            <svg
+              data-icon="caret-down"
+              height={16}
+              role="img"
+              viewBox="0 0 16 16"
+              width={16}
+            >
+              <path
+                d="M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z"
+                fillRule="evenodd"
+              />
+            </svg>
+          </span>
+          <span
+            className="bp6-button-text"
+          >
+            Open
+          </span>
+        </button>
+        <div
+          className="bp6-collapse"
+          style={
+            {
+              "height": "auto",
+              "overflowY": "visible",
+              "transition": "none",
+            }
+          }
+        >
+          <div
+            aria-hidden={false}
+            className="bp6-collapse-body"
+            style={
+              {
+                "transform": "translateY(0)",
+                "transition": "none",
+              }
+            }
+          >
+            <div>
+              <div
+                className="row listing bp6-card bp6-elevation-1"
+              >
+                <div
+                  className="listing-picture col-xs-3"
+                >
+                  <img
+                    alt="Assessment"
+                    className="cover-image-attempting"
+                    src="https://fakeimg.pl/350x200/?text=World&font=lobster"
+                  />
+                </div>
+                <div
+                  className="listing-text col-xs-9"
+                >
+                  <div
+                    className="listing-header"
+                  >
+                    <div
+                      className="bp6-text-overflow-ellipsis"
+                    >
+                      <h4
+                        className="bp6-heading listing-title"
+                      >
+                        The Secret to Streams
+                      </h4>
+                    </div>
+                    <div
+                      className="listing-button"
+                    >
+                      <span
+                        className="bp6-popover-target"
+                        onBlur={[Function]}
+                        onContextMenu={[Function]}
+                        onFocus={[Function]}
+                        onMouseEnter={[Function]}
+                        onMouseLeave={[Function]}
+                      >
+                        <button
+                          className="bp6-button bp6-disabled bp6-minimal"
+                          disabled={true}
+                          onBlur={[Function]}
+                          onKeyDown={[Function]}
+                          onKeyUp={[Function]}
+                          tabIndex={-1}
+                          type="button"
+                        >
+                          <span
+                            aria-hidden={true}
+                            className="bp6-icon bp6-icon-confirm"
+                          >
+                            <svg
+                              data-icon="confirm"
+                              height={16}
+                              role="img"
+                              viewBox="0 0 16 16"
+                              width={16}
+                            >
+                              <path
+                                d="M8.7 4.29a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l2 2c.18.18.43.29.71.29s.53-.11.71-.29l5-5a1.003 1.003 0 00-1.42-1.42l-4.29 4.3L8.7 4.29zm5.22 3.01c.03.23.07.45.07.69 0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6c.81 0 1.59.17 2.3.46l1.5-1.5A7.998 7.998 0 00-.01 7.99c0 4.42 3.58 8 8 8s8-3.58 8-8c0-.83-.13-1.64-.36-2.39l-1.71 1.7z"
+                                fillRule="evenodd"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            className="bp6-button-text"
+                          >
+                            <span>
+                              Finalize
+                            </span>
+                            <span
+                              className="custom-hidden-xxs"
+                            >
+                               Submission
+                            </span>
+                          </span>
+                        </button>
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    className="_listing-xp_6fa7d2"
+                  >
+                    <h6
+                      className="bp6-heading"
+                    >
+                      Max XP: 1000
+                    </h6>
+                  </div>
+                  <div
+                    className="listing-description"
+                  >
+                    <div
+                      className="md bp6-running-text"
+                      dangerouslySetInnerHTML={
+                        {
+                          "__html": "<p>Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.</p>",
+                        }
+                      }
+                    />
+                  </div>
+                  <div>
+                    <h6
+                      className="bp6-heading"
+                    >
+                       This is an individual assessment. 
+                    </h6>
+                  </div>
+                  <div
+                    className="listing-footer"
+                  >
+                    <div>
+                      <div
+                        className="listing-due-date"
+                      >
+                        <span
+                          aria-hidden={true}
+                          className="bp6-icon bp6-icon-calendar listing-due-icon"
+                        >
+                          <svg
+                            data-icon="calendar"
+                            height={12}
+                            role="img"
+                            viewBox="0 0 16 16"
+                            width={12}
+                          >
+                            <path
+                              d="M11 3c.6 0 1-.5 1-1V1c0-.6-.4-1-1-1s-1 .4-1 1v1c0 .5.4 1 1 1zm3-2h-1v1c0 1.1-.9 2-2 2s-2-.9-2-2V1H6v1c0 1.1-.9 2-2 2s-2-.9-2-2V1H1c-.6 0-1 .5-1 1v12c0 .6.4 1 1 1h13c.6 0 1-.4 1-1V2c0-.6-.5-1-1-1zM5 13H2v-3h3v3zm0-4H2V6h3v3zm4 4H6v-3h3v3zm0-4H6V6h3v3zm4 4h-3v-3h3v3zm0-4h-3V6h3v3zM4 3c.6 0 1-.5 1-1V1c0-.6-.4-1-1-1S3 .4 3 1v1c0 .5.4 1 1 1z"
+                              fillRule="evenodd"
+                            />
+                          </svg>
+                        </span>
+                        Opened: 18th July, 13:24
+                      </div>
+                      <div
+                        className="listing-due-date"
+                      >
+                        <span
+                          aria-hidden={true}
+                          className="bp6-icon bp6-icon-time listing-due-icon"
+                        >
+                          <svg
+                            data-icon="time"
+                            height={12}
+                            role="img"
+                            viewBox="0 0 16 16"
+                            width={12}
+                          >
+                            <path
+                              d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 001.42-1.42L9 7.59z"
+                              fillRule="evenodd"
+                            />
+                          </svg>
+                        </span>
+                        Due: 18th June, 13:24
+                      </div>
+                    </div>
+                    <div
+                      className="listing-button"
+                    >
+                      <a
+                        className=""
+                        data-discover="true"
+                        href="/courses/undefined/missions/3/0"
+                        onClick={[Function]}
+                      >
+                        <button
+                          className="bp6-button bp6-minimal"
+                          disabled={false}
+                          onBlur={[Function]}
+                          onClick={[Function]}
+                          onKeyDown={[Function]}
+                          onKeyUp={[Function]}
+                          type="button"
+                        >
+                          <span
+                            aria-hidden={true}
+                            className="bp6-icon bp6-icon-play"
+                          >
+                            <svg
+                              data-icon="play"
+                              height={16}
+                              role="img"
+                              viewBox="0 0 16 16"
+                              width={16}
+                            >
+                              <path
+                                d="M12 8c0-.35-.19-.64-.46-.82l.01-.02-6-4-.01.02A.969.969 0 005 3c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1 .21 0 .39-.08.54-.18l.01.02 6-4-.01-.02c.27-.18.46-.47.46-.82z"
+                                fillRule="evenodd"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            className="bp6-button-text"
+                          >
+                            <span
+                              data-testid="Assessment-Attempt-Button"
+                            >
+                              Continue
+                            </span>
+                            <span
+                              className="custom-hidden-xxxs"
+                            >
+                               Attempt
+                            </span>
+                          </span>
+                        </button>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div
+                className="row listing bp6-card bp6-elevation-1"
+              >
+                <div
+                  className="listing-picture col-xs-3"
+                >
+                  <img
+                    alt="Assessment"
+                    className="cover-image-attempted"
+                    src="https://fakeimg.pl/300/"
+                  />
+                </div>
+                <div
+                  className="listing-text col-xs-9"
+                >
+                  <div
+                    className="listing-header"
+                  >
+                    <div
+                      className="bp6-text-overflow-ellipsis"
+                    >
+                      <h4
+                        className="bp6-heading listing-title"
+                      >
+                        An Odessey to Runes
+                      </h4>
+                    </div>
+                    <div
+                      className="listing-button"
+                    >
+                      <span
+                        className="bp6-popover-target"
+                        onBlur={[Function]}
+                        onContextMenu={[Function]}
+                        onFocus={[Function]}
+                        onMouseEnter={[Function]}
+                        onMouseLeave={[Function]}
+                      >
+                        <button
+                          className="bp6-button bp6-intent-danger bp6-minimal"
+                          disabled={false}
+                          onBlur={[Function]}
+                          onClick={[Function]}
+                          onKeyDown={[Function]}
+                          onKeyUp={[Function]}
+                          type="button"
+                        >
+                          <span
+                            aria-hidden={true}
+                            className="bp6-icon bp6-icon-confirm"
+                          >
+                            <svg
+                              data-icon="confirm"
+                              height={16}
+                              role="img"
+                              viewBox="0 0 16 16"
+                              width={16}
+                            >
+                              <path
+                                d="M8.7 4.29a.965.965 0 00-.71-.3 1.003 1.003 0 00-.71 1.71l2 2c.18.18.43.29.71.29s.53-.11.71-.29l5-5a1.003 1.003 0 00-1.42-1.42l-4.29 4.3L8.7 4.29zm5.22 3.01c.03.23.07.45.07.69 0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6c.81 0 1.59.17 2.3.46l1.5-1.5A7.998 7.998 0 00-.01 7.99c0 4.42 3.58 8 8 8s8-3.58 8-8c0-.83-.13-1.64-.36-2.39l-1.71 1.7z"
+                                fillRule="evenodd"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            className="bp6-button-text"
+                          >
+                            <span>
+                              Finalize
+                            </span>
+                            <span
+                              className="custom-hidden-xxs"
+                            >
+                               Submission
+                            </span>
+                          </span>
+                        </button>
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    className="_listing-xp_6fa7d2"
+                  >
+                    <h6
+                      className="bp6-heading"
+                    >
+                      Max XP: 1000
+                    </h6>
+                  </div>
+                  <div
+                    className="listing-description"
+                  >
+                    <div
+                      className="md bp6-running-text"
+                      dangerouslySetInnerHTML={
+                        {
+                          "__html": "<p><em>Lorem ipsum</em> dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+  incididunt ut labore et dolore magna aliqua.</p>
+<pre><code>  const a = 5;
+</code></pre>
+<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
+  <em>doloremque laudantium</em>, totam rem aperiam, eaque ipsa quae ab illo inventore
+  <a href="google.com">veritatis et quasi architecto</a> beatae vitae dicta sunt
+  <code>explicabo</code>.</p>",
+                        }
+                      }
+                    />
+                  </div>
+                  <div
+                    className="listing-team_information"
+                  >
+                    <h6
+                      className="bp6-heading"
+                    >
+                       This is a team assessment. 
+                    </h6>
+                  </div>
+                  <div
+                    className="listing-footer"
+                  >
+                    <div>
+                      <div
+                        className="listing-due-date"
+                      >
+                        <span
+                          aria-hidden={true}
+                          className="bp6-icon bp6-icon-calendar listing-due-icon"
+                        >
+                          <svg
+                            data-icon="calendar"
+                            height={12}
+                            role="img"
+                            viewBox="0 0 16 16"
+                            width={12}
+                          >
+                            <path
+                              d="M11 3c.6 0 1-.5 1-1V1c0-.6-.4-1-1-1s-1 .4-1 1v1c0 .5.4 1 1 1zm3-2h-1v1c0 1.1-.9 2-2 2s-2-.9-2-2V1H6v1c0 1.1-.9 2-2 2s-2-.9-2-2V1H1c-.6 0-1 .5-1 1v12c0 .6.4 1 1 1h13c.6 0 1-.4 1-1V2c0-.6-.5-1-1-1zM5 13H2v-3h3v3zm0-4H2V6h3v3zm4 4H6v-3h3v3zm0-4H6V6h3v3zm4 4h-3v-3h3v3zm0-4h-3V6h3v3zM4 3c.6 0 1-.5 1-1V1c0-.6-.4-1-1-1S3 .4 3 1v1c0 .5.4 1 1 1z"
+                              fillRule="evenodd"
+                            />
+                          </svg>
+                        </span>
+                        Opened: 18th June, 13:24
+                      </div>
+                      <div
+                        className="listing-due-date"
+                      >
+                        <span
+                          aria-hidden={true}
+                          className="bp6-icon bp6-icon-time listing-due-icon"
+                        >
+                          <svg
+                            data-icon="time"
+                            height={12}
+                            role="img"
+                            viewBox="0 0 16 16"
+                            width={12}
+                          >
+                            <path
+                              d="M8 0C3.58 0 0 3.58 0 8s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-6.41V4c0-.55-.45-1-1-1s-1 .45-1 1v4c0 .28.11.53.29.71l2 2a1.003 1.003 0 001.42-1.42L9 7.59z"
+                              fillRule="evenodd"
+                            />
+                          </svg>
+                        </span>
+                        Due: 18th June, 13:24
+                      </div>
+                    </div>
+                    <div
+                      className="listing-button"
+                    >
+                      <a
+                        className=""
+                        data-discover="true"
+                        href="/courses/undefined/missions/2/0"
+                        onClick={[Function]}
+                      >
+                        <button
+                          className="bp6-button bp6-minimal"
+                          disabled={false}
+                          onBlur={[Function]}
+                          onClick={[Function]}
+                          onKeyDown={[Function]}
+                          onKeyUp={[Function]}
+                          type="button"
+                        >
+                          <span
+                            aria-hidden={true}
+                            className="bp6-icon bp6-icon-edit"
+                          >
+                            <svg
+                              data-icon="edit"
+                              height={16}
+                              role="img"
+                              viewBox="0 0 16 16"
+                              width={16}
+                            >
+                              <path
+                                d="M3.25 10.26l2.47 2.47 6.69-6.69-2.46-2.48-6.7 6.7zM.99 14.99l3.86-1.39-2.46-2.44-1.4 3.83zm12.25-14c-.48 0-.92.2-1.24.51l-1.44 1.44 2.47 2.47 1.44-1.44c.32-.32.51-.75.51-1.24.01-.95-.77-1.74-1.74-1.74z"
+                                fillRule="evenodd"
+                              />
+                            </svg>
+                          </span>
+                          <span
+                            className="bp6-button-text"
+                          >
+                            <span
+                              data-testid="Assessment-Attempt-Button"
+                            >
+                              Review
+                            </span>
+                            <span
+                              className="custom-hidden-xxxs"
+                            >
+                               Attempt
+                            </span>
+                          </span>
+                        </button>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button
+          className="bp6-button bp6-minimal collapse-button"
+          disabled={false}
+          onBlur={[Function]}
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          onKeyUp={[Function]}
+        >
+          <span
+            aria-hidden={true}
+            className="bp6-icon bp6-icon-caret-right"
+          >
+            <svg
+              data-icon="caret-right"
+              height={16}
+              role="img"
+              viewBox="0 0 16 16"
+              width={16}
+            >
+              <path
+                d="M11 8c0-.15-.07-.28-.17-.37l-4-3.5A.495.495 0 006 4.5v7a.495.495 0 00.83.37l4-3.5c.1-.09.17-.22.17-.37z"
+                fillRule="evenodd"
+              />
+            </svg>
+          </span>
+          <span
+            className="bp6-button-text"
+          >
+            Closed
+          </span>
+        </button>
+        <div
+          className="bp6-collapse"
+          style={
+            {
+              "height": undefined,
+              "overflowY": undefined,
+              "transition": undefined,
+            }
+          }
+        >
+          <div
+            aria-hidden={true}
+            className="bp6-collapse-body"
+            style={
+              {
+                "transform": "translateY(-undefinedpx)",
+                "transition": undefined,
+              }
+            }
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

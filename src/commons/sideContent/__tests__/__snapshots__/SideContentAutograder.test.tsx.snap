@@ -1,0 +1,1037 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Autograder renders autograder results with different statuses correctly 1`] = `
+<div
+  className="Autograder"
+>
+  <Blueprint6.Button
+    className="collapse-button"
+    icon="caret-down"
+    minimal={true}
+    onClick={[Function]}
+  >
+    <span>
+      Testcases
+    </span>
+    <Blueprint6.Tooltip
+      compact={false}
+      content={
+        <div
+          className="autograder-help-tooltip"
+        >
+          <p>
+            Click on each testcase below to execute it with the program in the editor.
+          </p>
+          <p>
+            To execute all testcases at once, evaluate the program in the editor with this tab active.
+          </p>
+          <p>
+            A green or red background indicates a passed or failed testcase respectively.
+          </p>
+          <p>
+            Private testcases (only visible to staff when grading) have a grey background.
+          </p>
+        </div>
+      }
+      hoverCloseDelay={0}
+      hoverOpenDelay={100}
+      interactionKind="hover-target"
+      minimal={false}
+      placement="left"
+      transitionDuration={100}
+    >
+      <Blueprint6.Icon
+        icon="help"
+      />
+    </Blueprint6.Tooltip>
+  </Blueprint6.Button>
+  <Blueprint6.Collapse
+    component="div"
+    isOpen={true}
+    keepChildrenMounted={true}
+    transitionDuration={200}
+  >
+    <div
+      className="noResults"
+      data-testid="noResults"
+    >
+      There are no testcases provided for this question.
+    </div>
+  </Blueprint6.Collapse>
+  <ControlButton
+    icon="caret-down"
+    label="Autograder Results"
+    onClick={[Function]}
+    options={
+      {
+        "className": "collapse-button",
+        "minimal": true,
+      }
+    }
+  />
+  <Blueprint6.Collapse
+    component="div"
+    isOpen={true}
+    keepChildrenMounted={true}
+    transitionDuration={200}
+  >
+    <div>
+      <div
+        className="results-header"
+        data-testid="results-header"
+      >
+        <div
+          className="header-data"
+        >
+          <div
+            className="header-sn"
+          >
+            S/N
+            <Blueprint6.Icon
+              icon="caret-down"
+            />
+          </div>
+          <div
+            className="header-status"
+          >
+            Testcase status
+            <Blueprint6.Icon
+              icon="caret-down"
+            />
+          </div>
+        </div>
+        <div
+          className="header-expected"
+        >
+          Expected result
+          <Blueprint6.Icon
+            icon="caret-down"
+          />
+        </div>
+        <div
+          className="header-actual"
+        >
+          Actual result
+          <Blueprint6.Icon
+            icon="caret-down"
+          />
+        </div>
+      </div>
+      <SideContentResultCard
+        index={0}
+        result={
+          {
+            "resultType": "pass",
+          }
+        }
+      />
+      <SideContentResultCard
+        index={1}
+        result={
+          {
+            "actual": "5",
+            "expected": "8",
+            "resultType": "fail",
+          }
+        }
+      />
+      <SideContentResultCard
+        index={2}
+        result={
+          {
+            "errors": [
+              {
+                "errorType": "dummyErrorType",
+              },
+            ],
+            "resultType": "error",
+          }
+        }
+      />
+      <SideContentResultCard
+        index={3}
+        result={
+          {
+            "errors": [
+              {
+                "errorMessage": "Cannot read property 'getUniformLocation' of null",
+                "errorType": "systemError",
+              },
+            ],
+            "resultType": "error",
+          }
+        }
+      />
+      <SideContentResultCard
+        index={4}
+        result={
+          {
+            "errors": [
+              {
+                "errorType": "timeout",
+              },
+              {
+                "errorExplanation": "Missing semicolon at the end of statement",
+                "errorLine": "return (n - d) < 0 ? n : remainder(n - d, d)",
+                "errorType": "syntax",
+                "line": 2,
+                "location": "student",
+              },
+            ],
+            "resultType": "error",
+          }
+        }
+      />
+    </div>
+  </Blueprint6.Collapse>
+</div>
+`;
+
+exports[`Autograder renders opaque testcases with different statuses correctly in AssessmentWorkspace 1`] = `
+<div
+  className="Autograder"
+>
+  <Blueprint6.Button
+    className="collapse-button"
+    icon="caret-down"
+    minimal={true}
+    onClick={[Function]}
+  >
+    <span>
+      Testcases
+    </span>
+    <Blueprint6.Tooltip
+      compact={false}
+      content={
+        <div
+          className="autograder-help-tooltip"
+        >
+          <p>
+            Click on each testcase below to execute it with the program in the editor.
+          </p>
+          <p>
+            To execute all testcases at once, evaluate the program in the editor with this tab active.
+          </p>
+          <p>
+            A green or red background indicates a passed or failed testcase respectively.
+          </p>
+          <p>
+            Private testcases (only visible to staff when grading) have a grey background.
+          </p>
+        </div>
+      }
+      hoverCloseDelay={0}
+      hoverOpenDelay={100}
+      interactionKind="hover-target"
+      minimal={false}
+      placement="left"
+      transitionDuration={100}
+    >
+      <Blueprint6.Icon
+        icon="help"
+      />
+    </Blueprint6.Tooltip>
+  </Blueprint6.Button>
+  <Blueprint6.Collapse
+    component="div"
+    isOpen={true}
+    keepChildrenMounted={true}
+    transitionDuration={200}
+  >
+    <div
+      className="testcaseCards"
+    >
+      <div
+        className="testcases-header"
+        data-testid="testcases-header"
+      >
+        <div
+          className="header-fn"
+        >
+          Testcase
+          <Blueprint6.Icon
+            icon="caret-down"
+          />
+        </div>
+        <div
+          className="header-expected"
+        >
+          Expected result
+          <Blueprint6.Icon
+            icon="caret-down"
+          />
+        </div>
+        <div
+          className="header-actual"
+        >
+          Actual result
+          <Blueprint6.Icon
+            icon="caret-down"
+          />
+        </div>
+      </div>
+      <SideContentTestcaseCard
+        handleTestcaseEval={[Function]}
+        index={0}
+        testcase={
+          {
+            "answer": "3",
+            "program": "add(3, 0);",
+            "score": 1,
+            "type": "opaque",
+          }
+        }
+        workspaceLocation="assessment"
+      />
+      <SideContentTestcaseCard
+        handleTestcaseEval={[Function]}
+        index={1}
+        testcase={
+          {
+            "answer": "7",
+            "program": "add(5, 2);",
+            "result": 7,
+            "score": 1,
+            "type": "opaque",
+          }
+        }
+        workspaceLocation="assessment"
+      />
+      <SideContentTestcaseCard
+        handleTestcaseEval={[Function]}
+        index={2}
+        testcase={
+          {
+            "answer": "0",
+            "program": "add(-6, 6);",
+            "result": 12,
+            "score": 2,
+            "type": "opaque",
+          }
+        }
+        workspaceLocation="assessment"
+      />
+      <SideContentTestcaseCard
+        handleTestcaseEval={[Function]}
+        index={3}
+        testcase={
+          {
+            "answer": "-11",
+            "errors": [
+              {
+                "elaborate": [Function],
+                "explain": [Function],
+                "location": {
+                  "end": {
+                    "column": 11,
+                    "line": 3,
+                  },
+                  "start": {
+                    "column": 11,
+                    "line": 3,
+                  },
+                },
+                "severity": "Error",
+                "type": "Runtime",
+              },
+            ],
+            "program": "add(-4, -7);",
+            "score": 3,
+            "type": "opaque",
+          }
+        }
+        workspaceLocation="assessment"
+      />
+    </div>
+  </Blueprint6.Collapse>
+  <ControlButton
+    icon="caret-down"
+    label="Autograder Results"
+    onClick={[Function]}
+    options={
+      {
+        "className": "collapse-button",
+        "minimal": true,
+      }
+    }
+  />
+  <Blueprint6.Collapse
+    component="div"
+    isOpen={true}
+    keepChildrenMounted={true}
+    transitionDuration={200}
+  >
+    <div
+      className="noResults"
+      data-testid="noResults"
+    >
+      There are no results to show.
+    </div>
+  </Blueprint6.Collapse>
+</div>
+`;
+
+exports[`Autograder renders opaque testcases with different statuses correctly in GradingWorkspace 1`] = `
+<div
+  className="Autograder"
+>
+  <Blueprint6.Button
+    className="collapse-button"
+    icon="caret-down"
+    minimal={true}
+    onClick={[Function]}
+  >
+    <span>
+      Testcases
+    </span>
+    <Blueprint6.Tooltip
+      compact={false}
+      content={
+        <div
+          className="autograder-help-tooltip"
+        >
+          <p>
+            Click on each testcase below to execute it with the program in the editor.
+          </p>
+          <p>
+            To execute all testcases at once, evaluate the program in the editor with this tab active.
+          </p>
+          <p>
+            A green or red background indicates a passed or failed testcase respectively.
+          </p>
+          <p>
+            Private testcases (only visible to staff when grading) have a grey background.
+          </p>
+        </div>
+      }
+      hoverCloseDelay={0}
+      hoverOpenDelay={100}
+      interactionKind="hover-target"
+      minimal={false}
+      placement="left"
+      transitionDuration={100}
+    >
+      <Blueprint6.Icon
+        icon="help"
+      />
+    </Blueprint6.Tooltip>
+  </Blueprint6.Button>
+  <Blueprint6.Collapse
+    component="div"
+    isOpen={true}
+    keepChildrenMounted={true}
+    transitionDuration={200}
+  >
+    <div
+      className="testcaseCards"
+    >
+      <div
+        className="testcases-header"
+        data-testid="testcases-header"
+      >
+        <div
+          className="header-fn"
+        >
+          Testcase
+          <Blueprint6.Icon
+            icon="caret-down"
+          />
+        </div>
+        <div
+          className="header-expected"
+        >
+          Expected result
+          <Blueprint6.Icon
+            icon="caret-down"
+          />
+        </div>
+        <div
+          className="header-actual"
+        >
+          Actual result
+          <Blueprint6.Icon
+            icon="caret-down"
+          />
+        </div>
+      </div>
+      <SideContentTestcaseCard
+        handleTestcaseEval={[Function]}
+        index={0}
+        testcase={
+          {
+            "answer": "3",
+            "program": "add(3, 0);",
+            "score": 1,
+            "type": "opaque",
+          }
+        }
+        workspaceLocation="grading"
+      />
+      <SideContentTestcaseCard
+        handleTestcaseEval={[Function]}
+        index={1}
+        testcase={
+          {
+            "answer": "7",
+            "program": "add(5, 2);",
+            "result": 7,
+            "score": 1,
+            "type": "opaque",
+          }
+        }
+        workspaceLocation="grading"
+      />
+      <SideContentTestcaseCard
+        handleTestcaseEval={[Function]}
+        index={2}
+        testcase={
+          {
+            "answer": "0",
+            "program": "add(-6, 6);",
+            "result": 12,
+            "score": 2,
+            "type": "opaque",
+          }
+        }
+        workspaceLocation="grading"
+      />
+      <SideContentTestcaseCard
+        handleTestcaseEval={[Function]}
+        index={3}
+        testcase={
+          {
+            "answer": "-11",
+            "errors": [
+              {
+                "elaborate": [Function],
+                "explain": [Function],
+                "location": {
+                  "end": {
+                    "column": 11,
+                    "line": 3,
+                  },
+                  "start": {
+                    "column": 11,
+                    "line": 3,
+                  },
+                },
+                "severity": "Error",
+                "type": "Runtime",
+              },
+            ],
+            "program": "add(-4, -7);",
+            "score": 3,
+            "type": "opaque",
+          }
+        }
+        workspaceLocation="grading"
+      />
+    </div>
+  </Blueprint6.Collapse>
+  <ControlButton
+    icon="caret-down"
+    label="Autograder Results"
+    onClick={[Function]}
+    options={
+      {
+        "className": "collapse-button",
+        "minimal": true,
+      }
+    }
+  />
+  <Blueprint6.Collapse
+    component="div"
+    isOpen={true}
+    keepChildrenMounted={true}
+    transitionDuration={200}
+  >
+    <div
+      className="noResults"
+      data-testid="noResults"
+    >
+      There are no results to show.
+    </div>
+  </Blueprint6.Collapse>
+</div>
+`;
+
+exports[`Autograder renders placeholders correctly when testcases and results are empty 1`] = `
+<div
+  className="Autograder"
+>
+  <Blueprint6.Button
+    className="collapse-button"
+    icon="caret-down"
+    minimal={true}
+    onClick={[Function]}
+  >
+    <span>
+      Testcases
+    </span>
+    <Blueprint6.Tooltip
+      compact={false}
+      content={
+        <div
+          className="autograder-help-tooltip"
+        >
+          <p>
+            Click on each testcase below to execute it with the program in the editor.
+          </p>
+          <p>
+            To execute all testcases at once, evaluate the program in the editor with this tab active.
+          </p>
+          <p>
+            A green or red background indicates a passed or failed testcase respectively.
+          </p>
+          <p>
+            Private testcases (only visible to staff when grading) have a grey background.
+          </p>
+        </div>
+      }
+      hoverCloseDelay={0}
+      hoverOpenDelay={100}
+      interactionKind="hover-target"
+      minimal={false}
+      placement="left"
+      transitionDuration={100}
+    >
+      <Blueprint6.Icon
+        icon="help"
+      />
+    </Blueprint6.Tooltip>
+  </Blueprint6.Button>
+  <Blueprint6.Collapse
+    component="div"
+    isOpen={true}
+    keepChildrenMounted={true}
+    transitionDuration={200}
+  >
+    <div
+      className="noResults"
+      data-testid="noResults"
+    >
+      There are no testcases provided for this question.
+    </div>
+  </Blueprint6.Collapse>
+  <ControlButton
+    icon="caret-down"
+    label="Autograder Results"
+    onClick={[Function]}
+    options={
+      {
+        "className": "collapse-button",
+        "minimal": true,
+      }
+    }
+  />
+  <Blueprint6.Collapse
+    component="div"
+    isOpen={true}
+    keepChildrenMounted={true}
+    transitionDuration={200}
+  >
+    <div
+      className="noResults"
+      data-testid="noResults"
+    >
+      There are no results to show.
+    </div>
+  </Blueprint6.Collapse>
+</div>
+`;
+
+exports[`Autograder renders public testcases with different statuses correctly 1`] = `
+<div
+  className="Autograder"
+>
+  <Blueprint6.Button
+    className="collapse-button"
+    icon="caret-down"
+    minimal={true}
+    onClick={[Function]}
+  >
+    <span>
+      Testcases
+    </span>
+    <Blueprint6.Tooltip
+      compact={false}
+      content={
+        <div
+          className="autograder-help-tooltip"
+        >
+          <p>
+            Click on each testcase below to execute it with the program in the editor.
+          </p>
+          <p>
+            To execute all testcases at once, evaluate the program in the editor with this tab active.
+          </p>
+          <p>
+            A green or red background indicates a passed or failed testcase respectively.
+          </p>
+          <p>
+            Private testcases (only visible to staff when grading) have a grey background.
+          </p>
+        </div>
+      }
+      hoverCloseDelay={0}
+      hoverOpenDelay={100}
+      interactionKind="hover-target"
+      minimal={false}
+      placement="left"
+      transitionDuration={100}
+    >
+      <Blueprint6.Icon
+        icon="help"
+      />
+    </Blueprint6.Tooltip>
+  </Blueprint6.Button>
+  <Blueprint6.Collapse
+    component="div"
+    isOpen={true}
+    keepChildrenMounted={true}
+    transitionDuration={200}
+  >
+    <div
+      className="testcaseCards"
+    >
+      <div
+        className="testcases-header"
+        data-testid="testcases-header"
+      >
+        <div
+          className="header-fn"
+        >
+          Testcase
+          <Blueprint6.Icon
+            icon="caret-down"
+          />
+        </div>
+        <div
+          className="header-expected"
+        >
+          Expected result
+          <Blueprint6.Icon
+            icon="caret-down"
+          />
+        </div>
+        <div
+          className="header-actual"
+        >
+          Actual result
+          <Blueprint6.Icon
+            icon="caret-down"
+          />
+        </div>
+      </div>
+      <SideContentTestcaseCard
+        handleTestcaseEval={[Function]}
+        index={0}
+        testcase={
+          {
+            "answer": ""string"",
+            "program": ""string";",
+            "result": "string",
+            "score": 0,
+            "type": "public",
+          }
+        }
+        workspaceLocation="assessment"
+      />
+      <SideContentTestcaseCard
+        handleTestcaseEval={[Function]}
+        index={1}
+        testcase={
+          {
+            "answer": "2",
+            "program": "fibonacci(2);",
+            "score": 1,
+            "type": "public",
+          }
+        }
+        workspaceLocation="assessment"
+      />
+      <SideContentTestcaseCard
+        handleTestcaseEval={[Function]}
+        index={2}
+        testcase={
+          {
+            "answer": "2",
+            "program": "fibonacci(3);",
+            "result": 2,
+            "score": 1,
+            "type": "public",
+          }
+        }
+        workspaceLocation="assessment"
+      />
+      <SideContentTestcaseCard
+        handleTestcaseEval={[Function]}
+        index={3}
+        testcase={
+          {
+            "answer": "3",
+            "program": "fibonacci(4);",
+            "result": 4,
+            "score": 2,
+            "type": "public",
+          }
+        }
+        workspaceLocation="assessment"
+      />
+      <SideContentTestcaseCard
+        handleTestcaseEval={[Function]}
+        index={4}
+        testcase={
+          {
+            "answer": "5",
+            "errors": [
+              {
+                "elaborate": [Function],
+                "explain": [Function],
+                "location": {
+                  "end": {
+                    "column": 11,
+                    "line": 3,
+                  },
+                  "start": {
+                    "column": 11,
+                    "line": 3,
+                  },
+                },
+                "severity": "Error",
+                "type": "Runtime",
+              },
+            ],
+            "program": "fibonacci(5);",
+            "score": 3,
+            "type": "public",
+          }
+        }
+        workspaceLocation="assessment"
+      />
+    </div>
+  </Blueprint6.Collapse>
+  <ControlButton
+    icon="caret-down"
+    label="Autograder Results"
+    onClick={[Function]}
+    options={
+      {
+        "className": "collapse-button",
+        "minimal": true,
+      }
+    }
+  />
+  <Blueprint6.Collapse
+    component="div"
+    isOpen={true}
+    keepChildrenMounted={true}
+    transitionDuration={200}
+  >
+    <div
+      className="noResults"
+      data-testid="noResults"
+    >
+      There are no results to show.
+    </div>
+  </Blueprint6.Collapse>
+</div>
+`;
+
+exports[`Autograder renders secret testcases with different statuses correctly 1`] = `
+<div
+  className="Autograder"
+>
+  <Blueprint6.Button
+    className="collapse-button"
+    icon="caret-down"
+    minimal={true}
+    onClick={[Function]}
+  >
+    <span>
+      Testcases
+    </span>
+    <Blueprint6.Tooltip
+      compact={false}
+      content={
+        <div
+          className="autograder-help-tooltip"
+        >
+          <p>
+            Click on each testcase below to execute it with the program in the editor.
+          </p>
+          <p>
+            To execute all testcases at once, evaluate the program in the editor with this tab active.
+          </p>
+          <p>
+            A green or red background indicates a passed or failed testcase respectively.
+          </p>
+          <p>
+            Private testcases (only visible to staff when grading) have a grey background.
+          </p>
+        </div>
+      }
+      hoverCloseDelay={0}
+      hoverOpenDelay={100}
+      interactionKind="hover-target"
+      minimal={false}
+      placement="left"
+      transitionDuration={100}
+    >
+      <Blueprint6.Icon
+        icon="help"
+      />
+    </Blueprint6.Tooltip>
+  </Blueprint6.Button>
+  <Blueprint6.Collapse
+    component="div"
+    isOpen={true}
+    keepChildrenMounted={true}
+    transitionDuration={200}
+  >
+    <div
+      className="testcaseCards"
+    >
+      <div
+        className="testcases-header"
+        data-testid="testcases-header"
+      >
+        <div
+          className="header-fn"
+        >
+          Testcase
+          <Blueprint6.Icon
+            icon="caret-down"
+          />
+        </div>
+        <div
+          className="header-expected"
+        >
+          Expected result
+          <Blueprint6.Icon
+            icon="caret-down"
+          />
+        </div>
+        <div
+          className="header-actual"
+        >
+          Actual result
+          <Blueprint6.Icon
+            icon="caret-down"
+          />
+        </div>
+      </div>
+      <SideContentTestcaseCard
+        handleTestcaseEval={[Function]}
+        index={0}
+        testcase={
+          {
+            "answer": ""lorem"",
+            "program": ""lorem";",
+            "result": "lorem",
+            "score": 0,
+            "type": "secret",
+          }
+        }
+        workspaceLocation="grading"
+      />
+      <SideContentTestcaseCard
+        handleTestcaseEval={[Function]}
+        index={1}
+        testcase={
+          {
+            "answer": "true",
+            "program": "is_prime(2);",
+            "score": 1,
+            "type": "secret",
+          }
+        }
+        workspaceLocation="grading"
+      />
+      <SideContentTestcaseCard
+        handleTestcaseEval={[Function]}
+        index={2}
+        testcase={
+          {
+            "answer": "true",
+            "program": "is_prime(3);",
+            "result": true,
+            "score": 1,
+            "type": "secret",
+          }
+        }
+        workspaceLocation="grading"
+      />
+      <SideContentTestcaseCard
+        handleTestcaseEval={[Function]}
+        index={3}
+        testcase={
+          {
+            "answer": "false",
+            "program": "is_prime(4);",
+            "result": true,
+            "score": 2,
+            "type": "secret",
+          }
+        }
+        workspaceLocation="grading"
+      />
+      <SideContentTestcaseCard
+        handleTestcaseEval={[Function]}
+        index={4}
+        testcase={
+          {
+            "answer": "true",
+            "errors": [
+              {
+                "elaborate": [Function],
+                "explain": [Function],
+                "location": {
+                  "end": {
+                    "column": 11,
+                    "line": 3,
+                  },
+                  "start": {
+                    "column": 11,
+                    "line": 3,
+                  },
+                },
+                "severity": "Error",
+                "type": "Runtime",
+              },
+            ],
+            "program": "is_prime(5);",
+            "score": 3,
+            "type": "secret",
+          }
+        }
+        workspaceLocation="grading"
+      />
+    </div>
+  </Blueprint6.Collapse>
+  <ControlButton
+    icon="caret-down"
+    label="Autograder Results"
+    onClick={[Function]}
+    options={
+      {
+        "className": "collapse-button",
+        "minimal": true,
+      }
+    }
+  />
+  <Blueprint6.Collapse
+    component="div"
+    isOpen={true}
+    keepChildrenMounted={true}
+    transitionDuration={200}
+  >
+    <div
+      className="noResults"
+      data-testid="noResults"
+    >
+      There are no results to show.
+    </div>
+  </Blueprint6.Collapse>
+</div>
+`;

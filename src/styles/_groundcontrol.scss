@@ -1,0 +1,96 @@
+.GroundControl {
+  .#{$ns}-collapse .#{$ns}-card {
+    margin-top: 4px;
+  }
+
+  .dropzone-base {
+    height: 30vh;
+    padding: 20px;
+    background-color: #fafafa;
+    color: #bdbdbd;
+    border-width: 2px;
+    border-radius: 2px;
+    border-color: #eeeeee;
+    border-style: dashed;
+    outline: none;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center;
+    transition: border 0.24s ease-in-out;
+
+    &.dropzone-active {
+      border-color: #2196f3;
+    }
+
+    &.dropzone-accept {
+      border-color: #00e676;
+    }
+
+    &.dropzone-reject {
+      border-color: #ff1744;
+    }
+  }
+
+  .dropzone-prompt {
+    & > * {
+      margin-top: 12px;
+    }
+  }
+
+  .dropzone-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & > * {
+      margin-left: 4px;
+      margin-right: 4px;
+    }
+
+    .#{$ns}-switch {
+      margin-bottom: 7px;
+    }
+  }
+
+  .date-cell-text {
+    margin-right: 4px;
+  }
+
+  .publish-cell.publish-cell {
+    padding-top: 2px;
+    padding-left: 48px;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 28px;
+  }
+}
+
+.voting-related-configs,
+.general-configs,
+.team-related-configs {
+  margin-top: 20px;
+
+  .voting-related-controls {
+    display: flex;
+    flex-direction: column;
+
+    .control-button-container {
+      display: flex;
+      margin-left: 5px;
+    }
+  }
+
+  .numeric-input-container {
+    display: flex;
+    margin-left: 14px;
+    gap: 8px;
+    align-items: center;
+
+    .max-team-size {
+      margin-top: 10px;
+    }
+  }
+}

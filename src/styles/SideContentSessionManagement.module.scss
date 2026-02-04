@@ -1,0 +1,69 @@
+@import '_global';
+@import '@blueprintjs/core/lib/scss/variables';
+
+.span {
+  display: inline-flex;
+  margin-block: 0.5rem;
+}
+
+.left-cell {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.right-cell {
+  vertical-align: middle !important;
+}
+
+.switch {
+  margin-bottom: 0px;
+}
+
+.default-switch {
+  display: inline-block;
+  margin-left: 5px;
+}
+
+.table {
+  padding-inline: 0px !important;
+}
+
+.table-container {
+  padding-top: 1rem;
+  padding-inline: 1rem;
+}
+
+.session-code {
+  color: $blue4;
+  margin-left: 5px;
+  display: flex;
+  column-gap: 5px;
+}
+
+.session-code:hover {
+  cursor: pointer;
+  color: $blue5;
+}
+
+.user-icon {
+  margin-right: 5px;
+}
+
+.side-content-tab-alert {
+  -webkit-animation: alert 1s infinite;
+  -moz-animation: alert 1s infinite;
+  -o-animation: alert 1s infinite;
+  animation: alert 1s infinite;
+}
+
+@keyframes alert {
+  0%,
+  50% {
+    background-color: rgba(200, 100, 50, 0.5);
+  }
+  51%,
+  100% {
+    background-image: rgba(138, 155, 168, 0.3);
+  }
+}

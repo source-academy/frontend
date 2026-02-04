@@ -1,0 +1,26 @@
+.Sourcereel {
+  height: 100%;
+  display: flex;
+  background-color: $cadet-color-1;
+  flex-direction: column;
+  flex: 1 1 100%;
+}
+
+.Timer {
+  display: flex;
+  width: 80%;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.RecorderControl {
+  display: flex;
+  width: 95%;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.Multi-line {
+  white-space: 'pre-line';
+  overflow-wrap: 'break-word';
+}

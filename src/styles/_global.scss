@@ -1,0 +1,45 @@
+$ns: 'bp6';
+
+// Global variables
+$cadet-color-1: #1a2530;
+$cadet-color-2: #2c3e50;
+$cadet-color-3: #34495e;
+$cadet-color-4: #ced9e0;
+$cadet-color-5: #ffffff;
+
+$images-path: '../assets';
+$achievement-assets: 'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement';
+
+/*
+  Fixes height behaviour of nested flexboxes in the code editor and REPL,
+  specifically:
+  - On Firefox, fixes the REPL's height exceeding that of its parent container
+    (https://github.com/source-academy/frontend/issues/987)
+  - On Chrome, fixes dead space at the bottom of the code editor when the REPL
+    flexbox overflows
+*/
+.Application__main,
+.WorkspaceParent {
+  min-height: 0;
+}
+
+.#{$ns}-tag {
+  text-align: center;
+}
+
+.badge {
+  left: -15px;
+  position: absolute;
+  top: -15px;
+  z-index: 3;
+}
+
+.#{$ns}-overlay {
+  .#{$ns}-popover-content {
+    .badge-tag {
+      background-color: transparent;
+      margin-left: 0.4rem;
+      margin-right: 0.4rem;
+    }
+  }
+}

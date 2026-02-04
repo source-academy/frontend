@@ -1,0 +1,78 @@
+$pure-green: #00ff00;
+$dark-green: #00e000;
+.GreenScreen {
+  // Hide NavigationBar
+  position: absolute;
+  height: 100vh;
+  width: 100vw;
+  margin-top: -50px;
+  z-index: 15;
+  background: $pure-green !important;
+
+  .workspace {
+    background: $pure-green !important;
+  }
+
+  #ace-editor {
+    background: $pure-green !important;
+  }
+
+  .side-content-tooltip {
+    background: $pure-green !important;
+  }
+
+  #brace-editor {
+    background: $pure-green !important;
+  }
+
+  .ace_print-margin {
+    background: $dark-green !important;
+  }
+
+  /* individual components */
+  .#{$ns}-button {
+    background: $pure-green !important;
+    box-shadow: none !important;
+  }
+
+  .#{$ns}-input {
+    background: $pure-green !important;
+    box-shadow: none !important;
+  }
+
+  .#{$ns}-control-indicator {
+    background: $pure-green !important;
+    border: 0.1rem solid $dark-green !important;
+  }
+
+  .#{$ns}-control-indicator::before {
+    background: $pure-green !important;
+    border: 0.1rem solid $dark-green !important;
+    box-shadow: none !important;
+  }
+
+  .ace_gutter-active-line {
+    background: $pure-green !important;
+  }
+
+  /* editor specific */
+  .editor-react-ace {
+    color: #222222;
+    border: 0.1rem solid $dark-green !important;
+  }
+
+  .ace_gutter {
+    background: $pure-green !important;
+  }
+
+  .ace_gutter-layer {
+    background: $pure-green !important;
+  }
+
+  /* repl specific */
+  .#{$ns}-card {
+    background: $pure-green !important;
+    box-shadow: none !important;
+    border: 0.1rem solid $dark-green !important;
+  }
+}

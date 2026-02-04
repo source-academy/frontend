@@ -1,0 +1,40 @@
+/**
+ * Background is repeated here instead of Application, so that
+ * - The background is repeated regardless of content overextending the page
+ * - Application is kept at 100% to prevent things from stetching infinitely
+ *   e.g a resizable workspace
+ */
+html {
+  background-size: cover;
+  background-image: url('#{$images-path}/academy_background.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  ::-webkit-scrollbar {
+    height: 5px;
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: $cadet-color-4;
+    border-radius: 3px;
+  }
+}
+
+body {
+  overflow: hidden;
+}
+
+.Application {
+  height: var(--application-height, 100vh);
+  display: flex;
+  flex-direction: column;
+}
+
+.Application__main {
+  height: 100%;
+  display: flex;
+  flex: 1 1 100%;
+  overflow: auto;
+}

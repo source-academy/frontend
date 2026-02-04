@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "build/dist",
+    "module": "esnext",
+    "target": "es2020",
+    "lib": ["dom", "dom.iterable", "esnext", "es6", "es2015", "es2017"],
+    "types": ["vitest/globals"],
+    "sourceMap": true,
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "strict": true,
+    "useUnknownInCatchVariables": false,
+    "moduleResolution": "bundler",
+    "rootDir": "src",
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "skipLibCheck": true,
+    "noUnusedLocals": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"],
+  "exclude": ["src/setupTests.ts"]
+}

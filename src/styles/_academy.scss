@@ -1,0 +1,567 @@
+@media only screen and (max-width: 512px) {
+  .custom-hidden-xxxs {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .custom-hidden-xxs {
+    display: none;
+  }
+}
+
+// Fixes excessive margins in hint notifications that contain <Markdown> elements
+.markdown-notification {
+  *:first-child {
+    margin-top: 0;
+  }
+
+  *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Following two CSS declarations are intended to override the default monospace
+// font selected by Firefox on Windows
+.#{$ns}-code-block {
+  font-family: 'Consolas', monospace;
+}
+
+.#{$ns}-running-text {
+  pre,
+  code {
+    font-family: 'Consolas', monospace;
+  }
+}
+
+// Fix excessive margins applied by bp3-running-text style
+.md,
+.markdown-notification {
+  // Union selector on all header elements
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+}
+
+.#{$ns}-popover-content {
+  padding: 0.4rem;
+}
+
+.#{$ns}-non-ideal-state {
+  padding-top: 0.7rem;
+
+  .#{$ns}-non-ideal-state-visual {
+    margin-bottom: 0.5rem;
+  }
+
+  .#{$ns}-non-ideal-state-title {
+    padding: 0.5rem 0 0 0;
+  }
+}
+
+.assessment-briefing {
+  padding-bottom: 0;
+
+  & .md {
+    margin-bottom: 1rem;
+
+    /* If the assessment briefing begins with a header, remove its top margin */
+    & > *:first-child {
+      margin-top: 0;
+    }
+
+    /* Remove bottom margins of the last element in the assessment briefing */
+    & > *:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.Assessment {
+  color: $cadet-color-3;
+
+  @media only screen and (max-width: 768px) {
+    // for mobile display
+    .ContentDisplay {
+      .contentdisplay-content.#{$ns}-card {
+        padding: 10px;
+      }
+
+      .listing {
+        height: 300px;
+      }
+
+      .listing-picture {
+        height: 50%;
+        width: 100%;
+        padding: 0;
+      }
+
+      .listing-text {
+        padding: 0 0 0 0.5rem;
+        justify-content: space-between;
+        height: 50%;
+        width: 100%;
+
+        .#{$ns}-heading {
+          margin: 0;
+        }
+        .listing-header {
+          margin-bottom: 0;
+        }
+
+        .listing-description {
+          max-height: 52px;
+          overflow-y: auto;
+          font-size: 12px;
+          margin: 0.5rem 0;
+          .#{$ns}-running-text {
+            font-size: 12px;
+          }
+        }
+
+        .listing-footer {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+
+  .contentdisplay-content.#{$ns}-card {
+    padding: 10px 20px 10px 20px;
+
+    button.collapse-button {
+      /* To override the center-xs center alignment */
+      display: block;
+      margin: 0 0 10px 0;
+    }
+  }
+
+  .listing.#{$ns}-card {
+    margin: 0 0 1rem 0;
+  }
+
+  .listing {
+    background-color: $cadet-color-5;
+    margin: 0px;
+    padding: 0;
+    text-align: justify;
+
+    & > * {
+      overflow-wrap: break-word;
+    }
+  }
+
+  .listing-picture {
+    padding: 0;
+    position: relative;
+
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      border-radius: 3px 0 0 3px;
+    }
+
+    img.cover-image-submitted {
+      filter: gray; /* IE6-9 */
+      -webkit-filter: grayscale(1); /* Google Chrome, Safari 6+ & Opera 15+ */
+      filter: grayscale(1); /* Microsoft Edge and Firefox 35+ */
+    }
+
+    /* Disable grayscale on hover */
+    img.cover-image-submitted:hover {
+      -webkit-filter: grayscale(0);
+      filter: none;
+    }
+  }
+
+  .listing-text {
+    padding: 0.5rem 0.5rem 0.5rem 1rem;
+    border: 1rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .listing-header {
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .listing-title {
+      margin-bottom: 0;
+
+      h4 {
+        margin-top: 4px;
+      }
+    }
+
+    .listing-title-tooltip {
+      /* Space out icon tooltips */
+      margin-left: 2px;
+
+      /* Visually separate first icon tooltip from assessment title */
+      &:first-of-type {
+        margin-left: 6px;
+      }
+
+      .#{$ns}-icon {
+        vertical-align: baseline;
+      }
+    }
+  }
+
+  .listing-description {
+    flex-grow: 1;
+    flex-shrink: 0;
+    /* Creates space between the description text, buttons and title */
+    margin: 0.5rem 0rem 0.5rem 0.5rem;
+
+    & > * {
+      /* Limit height of description on smaller screens */
+      max-height: 30vh;
+      /* Add padding to visually separate scrollbar from content */
+      padding-right: 0.5rem;
+      overflow-y: auto;
+    }
+  }
+
+  .listing-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .listing-due-date {
+      display: flex;
+      overflow-x: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      align-items: center;
+    }
+
+    .listing-due-icon {
+      margin-right: 0.4rem;
+    }
+  }
+
+  .listing-button {
+    /* Prevent <div> container collapsing and forcing button text to two lines */
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+}
+
+.llm-prompt-dialog {
+  white-space: pre-wrap; // To allow for "\n" newlines
+  padding: 1rem;
+  h3 {
+    margin-top: 1rem;
+    text-transform: capitalize;
+  }
+  h5 {
+    margin-top: 0.5rem;
+  }
+  .forenote {
+    display: block;
+    font-size: small;
+    color: gray;
+  }
+
+  .forenote-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.betcha-dialog,
+.assessment-reset {
+  span.warning {
+    font-weight: bold;
+    color: firebrick;
+  }
+}
+
+.WorkspaceParent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+/* Increase default margin of Blueprint's Divider for greater vertical spacing */
+.#{$ns}-divider {
+  margin: 12px 0 12px 0;
+}
+
+.Grid {
+  :focus {
+    /* Disable rendering blue border when a sub-component in grid is in focus */
+    outline: none;
+  }
+}
+
+.GridControls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .#{$ns}-button {
+    & > :first-child.#{$ns}-icon {
+      /* Remove unnecessary right margin when button text is hidden */
+      margin: 0;
+    }
+
+    & > span:not(:first-child) > span {
+      margin-left: 7px;
+    }
+  }
+}
+
+.md th,
+.md td {
+  text-align: left;
+  padding: 8px;
+}
+
+.md tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.editing-textarea {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  resize: none;
+}
+
+.assessment-configuration {
+  .#{$ns}-numeric-input {
+    .#{$ns}-input-group {
+      width: calc(100% - 30px);
+    }
+  }
+
+  .assessment-configuration-header-container {
+    position: relative;
+
+    .add-row-button {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+
+  .footer-text {
+    margin-top: 12px;
+    text-align: left;
+  }
+}
+
+.users-configuration {
+  .users-header-container {
+    position: relative;
+
+    .export-csv-button {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+}
+
+.add-users {
+  h4 {
+    margin: 20px 0 10px 0;
+  }
+
+  .upload-container {
+    display: flex;
+    justify-content: center;
+
+    .upload-settings {
+      display: flex;
+      flex-flow: wrap;
+      justify-content: center;
+      // margin-top: 10px;
+
+      .file-input {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        margin: 10px;
+        border: 1px solid #bdc3c7;
+
+        .file-input-icon {
+          margin-left: 6px;
+        }
+      }
+
+      .html-select {
+        margin: 10px;
+        padding: 18px 10px 12px 10px;
+        border: 1px solid #bdc3c7;
+
+        .html-select-label {
+          display: flex;
+          justify-content: center;
+
+          .html-select-label-icon {
+            position: relative;
+            top: -5px;
+            margin-left: 5px;
+          }
+        }
+      }
+    }
+  }
+  .add-button {
+    margin-top: 10px;
+  }
+}
+
+.html-select-popover,
+.file-input-popover {
+  .#{$ns}-popover2-arrow {
+    margin-left: 3px;
+  }
+}
+
+// Grading Section
+.contentdisplay-content-parent:has(div.grading-table-wrapper) {
+  max-width: 100%;
+
+  .contentdisplay-content {
+    min-width: 1200px;
+  }
+}
+
+.ag-header-cell.hide-cols-btn {
+  width: 32px;
+  height: 32px;
+}
+
+.grading-table-footer {
+  padding-top: 15px;
+  margin-bottom: 15px;
+}
+
+.grading-search-input {
+  max-width: 24rem;
+  width: 100%;
+  margin-left: 0.75rem;
+
+  > input {
+    height: 40px;
+    border-radius: 6px;
+    box-shadow: none;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    font-size: 0.875rem !important;
+
+    &::placeholder {
+      color: #b3b3b3;
+    }
+  }
+}
+
+.grading-loading-icon {
+  animation: spin 1s linear infinite;
+  margin: 4px;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 48px;
+  height: 48px;
+  border: 4px solid #b3b3b3 !important;
+  border-bottom-color: transparent !important;
+  border-radius: 50%;
+  z-index: 10;
+  color: #374151;
+}
+
+.grading-actions-btn-wrappers {
+  > a {
+    display: flex;
+  }
+}
+
+.grading-action-icons {
+  color: #3b82f6;
+  border-radius: 10px;
+  margin: auto 0;
+  background-color: #7dbcff00;
+  transition: 0.1s ease;
+
+  svg {
+    fill: #3b82f6 !important;
+  }
+
+  &.grading-action-icons-bg {
+    background-color: #7dbcff80;
+
+    &:hover {
+      background-color: #7dbcffb3;
+    }
+  }
+
+  .#{$ns}-icon {
+    margin: 6px;
+  }
+
+  .#{$ns}-popover-target {
+    max-height: 32px;
+  }
+}
+
+.grading-table-wrapper {
+  padding: 1rem 1.5rem 0 1.5rem;
+
+  * {
+    border: none;
+    outline: none;
+    text-decoration: none;
+    background-color: transparent;
+  }
+
+  button {
+    cursor: pointer;
+  }
+}
+
+.export-csv-btn {
+  color: #3b82f6 !important;
+
+  svg {
+    fill: #3b82f6 !important;
+  }
+
+  &:hover {
+    text-decoration: underline !important;
+    background-color: transparent !important;
+  }
+}
+
+.grading-refresh-loop {
+  svg {
+    animation: 0.2s ease rotateHalf;
+  }
+  cursor: not-allowed !important;
+  pointer-events: none;
+}
+
+@keyframes rotateHalf {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
+}
