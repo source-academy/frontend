@@ -4,12 +4,12 @@ type ChatMessage = {
 };
 
 type InitChatResponse = {
-  response: ChatMessage;
-  conversationId: string;
+  messages: ChatMessage[];
+  conversationId: number;
   maxContentSize: number;
 };
 
 type ContinueChatResponse = {
   response: string;
-  conversationId: string;
+  conversationId: number;
 };
