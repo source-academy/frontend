@@ -56,7 +56,7 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
     setActiveSnippet('');
   }, [setActiveSnippet]);
 
-  const WorkspaceProps = {
+  const workspaceProps = {
     initialEditorValueHash,
     prependLength: undefined,
     isSicpEditor: true,
