@@ -4,6 +4,7 @@ import { useTokens } from 'src/commons/utils/Hooks';
 import { continueChat, initChat } from 'src/features/sicp/chatCompletion/api';
 import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import classes from 'src/styles/Chatbot.module.scss';
+import { v4 as uuid } from 'uuid';
 
 import ChatbotCodeSnippet from './ChatbotCodeSnippet';
 
@@ -15,13 +16,13 @@ type Props = {
 };
 
 const createInitialMessage = (): ChatMessage => ({
-  id: crypto.randomUUID(),
+  id: uuid(),
   content: 'Ask me something about this paragraph!',
   role: 'assistant'
 });
 
 const createErrorMessage = (): ChatMessage => ({
-  id: crypto.randomUUID(),
+  id: uuid(),
   content: 'Sorry, I am down with a cold, please try again later.',
   role: 'assistant'
 });
@@ -47,7 +48,7 @@ const ChatBox: React.FC<Props> = ({ getSection, getText, activeSnippetId, setAct
     if (userInput.trim() === '') return;
 
     setUserInput('');
-    setMessages(prev => [...prev, { id: crypto.randomUUID(), role: 'user', content: userInput }]);
+    setMessages(prev => [...prev, { id: uuid(), role: 'user', content: userInput }]);
     setIsLoading(true);
 
     // Get FRESH section and text at send time!
@@ -57,7 +58,7 @@ const ChatBox: React.FC<Props> = ({ getSection, getText, activeSnippetId, setAct
     // No chatId needed - backend identifies conversation by user
     continueChat(tokens, userInput, currentSection, currentText)
       .then(resp => {
-        setMessages(prev => [...prev, { id: crypto.randomUUID(), role: 'assistant', content: resp.response }]);
+        setMessages(prev => [...prev, { id: uuid(), role: 'assistant', content: resp.response }]);
       })
       .catch(() => {
         setMessages(prev => [...prev, createErrorMessage()]);
@@ -83,7 +84,7 @@ const ChatBox: React.FC<Props> = ({ getSection, getText, activeSnippetId, setAct
         // Ensure all messages have IDs (backend may not provide them)
         const messagesWithIds = conversationMessages.map(msg => ({
           ...msg,
-          id: msg.id || crypto.randomUUID()
+          id: msg.id || uuid()
         }));
         setMessages(messagesWithIds);
       } else {
