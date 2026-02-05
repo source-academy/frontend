@@ -10,6 +10,10 @@ export class ArrowFromFrame extends GenericArrow<Frame, Frame> {
     super(from);
     this.isLive = from.environment && Layout.liveEnvIDs.has(from.environment.id);
   }
+
+  protected updateIsLive(): void {
+    this.isLive = this.source.environment && Layout.liveEnvIDs.has(this.source.environment.id);
+  }
   
   protected calculateSteps() {
     const to = this.target;

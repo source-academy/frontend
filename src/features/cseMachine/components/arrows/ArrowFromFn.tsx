@@ -15,6 +15,14 @@ export class ArrowFromFn extends GenericArrow<FnValue | GlobalFnValue | ContValu
       this.isLive = true; // Global functions are always live
     else this.isLive = from.isLive()  
   }
+
+  protected updateIsLive(): void {
+    if (this.source instanceof GlobalFnValue) {
+      this.isLive = true;
+    } else {
+      this.isLive = this.source.isLive();
+    }
+  }
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;

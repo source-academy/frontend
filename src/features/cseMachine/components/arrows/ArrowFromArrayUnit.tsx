@@ -15,6 +15,10 @@ export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
     this.isLive = from.parent.isEnclosingFrameLive();
   }
 
+  protected updateIsLive(): void {
+    this.isLive = this.source.parent.isEnclosingFrameLive();
+  }
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;

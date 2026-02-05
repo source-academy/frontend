@@ -92,17 +92,22 @@ export class Binding extends Visible {
   }
 
   draw(): React.ReactNode {
+    const isLive = this.isDummyBinding //check if binding is an unreferenced heap object
+      ? (this.value as any).isLive?.() ?? false
+      : this.frame.isLive;
+
+    this.key.options.faded = !isLive;
+
+    if (this.value instanceof PrimitiveValue || this.value instanceof UnassignedValue) {
+      this.value.setFaded(!isLive);
+    }
+
     if (
       !this.isDummyBinding && // value is unreferenced in dummy binding
       !(this.value instanceof PrimitiveValue) &&
       !(this.value instanceof UnassignedValue)
     ) {
       this.arrow = new ArrowFromText(this.key).to(this.value);
-    }
-    const isLive : boolean = this.isLive; //EDITEDDDDDDDDDD
-    const textColor = isLive ? defaultTextColor : fadedTextColor; //EDITEDDDDDDDDDD
-    if (this.value instanceof PrimitiveValue || this.value instanceof UnassignedValue) {
-      this.value.setFaded(!isLive); //EDITEDDDDDDDDDD 
     }
 
     return (

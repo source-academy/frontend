@@ -86,12 +86,17 @@ export class ArrayValue extends Value implements IHoverable {
     }
   }
 
+  // isEnclosingFrameLive(): boolean {
+  //   if (this.enclosingFrame instanceof Frame) { 
+  //     return this.enclosingFrame.environment && Layout.liveEnvIDs.has(this.enclosingFrame.environment.id)
+  //           && this.isReferenced();
+  //   }
+  //   return false;
+  // }
+
   isEnclosingFrameLive(): boolean {
-    if (this.enclosingFrame instanceof Frame) { 
-      return this.enclosingFrame.environment && Layout.liveEnvIDs.has(this.enclosingFrame.environment.id)
-            && this.isReferenced();
-    }
-    return false;
+    const id = (this.data as any).id;
+    return id ? Layout.liveObjectIDs.has(id) : false;
   }
 
   markAsReferenced() {

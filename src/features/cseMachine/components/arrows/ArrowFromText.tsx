@@ -12,6 +12,10 @@ export class ArrowFromText extends GenericArrow<Text, Value> {
     this.isLive = from.options.faded === undefined ? true : !from.options.faded; // Text items are always live
   }
 
+  protected updateIsLive(): void {
+    this.isLive = this.source.options.faded === undefined ? true : !this.source.options.faded;
+  }
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;

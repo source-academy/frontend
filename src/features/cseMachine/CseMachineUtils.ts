@@ -227,6 +227,17 @@ export function findEnvById(node : EnvTreeNode, id : string): Env | null {
   return null;
 }
 
+// Track live objects (closures/arrays/continuations) independently of frames
+export type LiveObjectId = string;
+
+export function getObjectId(value: any): LiveObjectId | null {
+  if (!value) return null;
+  if (isClosure(value) || isDataArray(value) || isContinuation(value) || isStreamFn(value)) {
+    return (value as any).id ?? null;
+  }
+  return null;
+}
+
 function addEnvFromValue(value: any, roots: Set<string>) {
   // closures / stream functions created by Source
   if (isClosure(value) || isStreamFn(value)) {
@@ -245,18 +256,18 @@ function addEnvFromValue(value: any, roots: Set<string>) {
   //(MAY NEED LATER ON) DOWN BELOW
 
   // continuations capture an environment too (MAY NEED LATER ON)
-  // if (isContinuation(value)) {
-  //   const env = value.getEnv?.();
-  //   if (env && env.id) {
-  //     roots.add(env.id);
-  //   }
-  // }
+  if (isContinuation(value)) {
+    const env = value.getEnv?.();
+    if (env && env.id) {
+      roots.add(env.id);
+    }
+  }
 }
 
 export function collectRootEnvIds(): Set<string> {
   const roots = new Set<string>();
 
-  // Root 1: global env and current env
+  // Root 1: global env + current env
   if (Layout.globalEnvNode?.environment) {
     roots.add(Layout.globalEnvNode.environment.id);
   }
@@ -265,63 +276,66 @@ export function collectRootEnvIds(): Set<string> {
     roots.add(currentEnvId);
   }
 
-  // Root 2: stash values that refer to environments
-  // interpreter.js shows stash is just an array of values; Layout.stash mirrors that. [file:11][file:7]
+  // Root 2: stash values
   Layout.stash.getStack().forEach((item: any) => {
-    addEnvFromValue(item, roots); //if primitives are passed, nothing happens
+    addEnvFromValue(item, roots);
   });
 
-  // Root 3: control stack items that refer to environments
-  // interpreter.js uses ControlItem union, including EnvInstr, AppInstr etc. [file:11]
+  // Root 3: control stack items
   Layout.control.getStack().forEach((item: ControlItem) => {
-    // ENVIRONMENT instruction explicitly contains an env
     if (isInstr(item) && item.instrType === InstrType.ENVIRONMENT) {
       const envInstr = item as EnvInstr;
-      const envId = getEnvId(envInstr.env); // your existing helper
-      roots.add(envId);
+      roots.add(getEnvId(envInstr.env));
     }
-
-    //This BELOW refers to any possible function "foo()" calls on the control stack
-    //Most likely wont matter for LIVENESS analysis, but good to keep for correctness
-    // APPLICATION instruction: function value may be a closure/stream on stash
-    // (We already handle this via stash scan, but this is a safe extra.)
-    // if (isInstr(item) && item.instrType === InstrType.APPLICATION) {
-    //   const appInstr = item as AppInstr;
-    //   // no direct env here; args and fn are on stash
-    // }
-
-    // If any control item is literally a closure/array/continuation value (for Scheme),
-    // treat it as a root as well.
-    addEnvFromValue(item as any, roots); //FOR EXTRA SAFETY; most likely wont happen
+    // If control contains literal values(may ALSO be direct unreferenced bindings to frames which have enclosing envs)
+    addEnvFromValue(item as any, roots);
   });
 
   return roots;
 }
 
-export function pushEnvFromData(value: any, pushEnv: (e: Env | null | undefined) => void) {
+export function pushEnvFromData(
+  value: any,
+  pushEnv: (e: Env | null | undefined) => void,
+  markLiveObject?: (id: string) => void
+) {
   if (!value) return;
 
-  // closures / streamFns
+  const id = getObjectId(value); //directly add as a live object first since anything is an OBJECT
+  if (id && markLiveObject) markLiveObject(id);
+
+  // closures / stream functions' envs added to liveness
   if (isClosure(value) || isStreamFn(value)) {
-    pushEnv((value as any).environment as Env);
+    if (value.environment) {
+      pushEnv((value as any).environment as Env);
+    }
+    return;
   }
 
-  // arrays
-  if (isDataArray(value)) {
-    const arr = value as any[];
-    // env of the array object itself
-    pushEnv((value as any).environment as Env);
-    // recursively inspect elements
+  if (isDataArray(value)) { //for arrays
+    if ((value as any).environment) {
+      pushEnv((value as any).environment as Env);
+    }
+    const arr = value as any[]; //going through each element of the array for any references
     for (const elem of arr) {
-      pushEnvFromData(elem, pushEnv);
-    } 
+      pushEnvFromData(elem, pushEnv, markLiveObject); //recursive call
+    }
+    return;
   }
-  // continuations (MAY NEED LATER ON)
-  if (isContinuation(value)) pushEnv((value as any).getEnv());
+
+  if (isContinuation(value)) { //for continuations
+    const env = (value as any).getEnv?.();
+    if (env) pushEnv(env);
+    return;
+  }
 }
 
-export function markReachableEnvs(envTree: EnvTree, rootIds: Set<string>): Set<string> {
+export function markReachableEnvs(
+  envTree: EnvTree,
+  rootIds: Set<string>
+): { liveEnvIds: Set<string>; liveObjectIds: Set<string> } {
   const visited = new Set<string>();
+  const liveObjectIds = new Set<string>();
   const worklist: Env[] = [];
 
   const pushEnv = (env: Env | null | undefined) => {
@@ -331,35 +345,48 @@ export function markReachableEnvs(envTree: EnvTree, rootIds: Set<string>): Set<s
     worklist.push(env);
   };
 
-  // seed with roots
+  const markLiveObject = (id: string) => liveObjectIds.add(id);
+
   rootIds.forEach(id => {
     const env = findEnvById(envTree.root, id);
-    if (env) pushEnv(env);
+    if (env) pushEnv(env); //to add the root envs to the worklist for DFS later on
   });
 
   while (worklist.length > 0) {
     const env = worklist.pop()!;
+    pushEnv(env.tail as Env); //add tail env to worklist since we only go through the head in one iteration
 
-    // 1. parent via tail
-    pushEnv(env.tail as Env);
-
-    // 2. bindings in head
     Object.values(env.head).forEach(v => {
-      pushEnvFromData(v, pushEnv);
-    });
-
-    // 3. heap objects
-    env.heap.getHeap().forEach((obj: any) => {
-      pushEnvFromData(obj, pushEnv);
+      pushEnvFromData(v, pushEnv, markLiveObject);  //adds envs and objects referenced by this env's head
     });
   }
 
-  return visited;
+  return { liveEnvIds: visited, liveObjectIds };
 }
 
-export function computeLiveEnvironments(envTree: EnvTree): Set<string> {
+export function computeLiveState(envTree: EnvTree): { liveEnvIds: Set<string>; liveObjectIds: Set<string> } {
   const roots = collectRootEnvIds(); 
-  return markReachableEnvs(envTree, roots);
+  const liveState = markReachableEnvs(envTree, roots);
+
+  // Mark objects that are live due to being on control/stash
+  const noopPushEnv = (_env: Env | null | undefined) => {}; //A function that does nothing since we dont want to add envs at this point
+  const markLiveObject = (id: string) => liveState.liveObjectIds.add(id);
+
+  /**
+   * Earlier in markReachableEnvs, we only marked live objects that were reachable from live environments.
+   * But now, objects may be on the control/stash that are not necessarily reachable from any live environment.
+   * But these may be live and hence we need to mark them as well.
+   */
+
+  Layout.stash.getStack().forEach((item: any) => {
+    pushEnvFromData(item, noopPushEnv, markLiveObject);
+  });
+
+  Layout.control.getStack().forEach((item: ControlItem) => {
+    pushEnvFromData(item as any, noopPushEnv, markLiveObject);
+  });
+
+  return liveState;
 }
 //EDITEDDDDDDDDDD
 

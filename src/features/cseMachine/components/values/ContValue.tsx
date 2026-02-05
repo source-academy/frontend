@@ -73,16 +73,22 @@ export class ContValue extends Value implements IHoverable {
     this.addReference(firstReference);
   }
 
+  // isLive(): boolean {
+  //   if (this.enclosingFrame) {
+  //     return (
+  //       (this.enclosingFrame.environment &&
+  //         Layout.liveEnvIDs.has(this.enclosingFrame.environment.id)) ||
+  //       CseMachine.getCurrentEnvId() === this.enclosingFrame.environment?.id
+  //     );
+  //   }
+  //   return false;
+  // }
+
   isLive(): boolean {
-    if (this.enclosingFrame) {
-      return (
-        (this.enclosingFrame.environment &&
-          Layout.liveEnvIDs.has(this.enclosingFrame.environment.id)) ||
-        CseMachine.getCurrentEnvId() === this.enclosingFrame.environment?.id
-      );
-    }
-    return false;
+    const id = (this.data as any).id;
+    return id ? Layout.liveObjectIDs.has(id) : false;
   }
+
 
   handleNewReference(newReference: ReferenceType): void {
     if (!isMainReference(this, newReference)) return;

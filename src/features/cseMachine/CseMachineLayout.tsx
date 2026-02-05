@@ -33,7 +33,7 @@ import {
 } from './CseMachineTypes';
 import {
   assert,
-  computeLiveEnvironments, //EDITEDDDDDDDDDD
+  computeLiveState, //EDITEDDDDDDDDDD
   deepCopyTree,
   defaultBackgroundColor,
   getNextChildren,
@@ -90,6 +90,8 @@ export class Layout {
   * This contains all the env IDs that are live in the current context.
   */
   static liveEnvIDs: Set<string> = new Set();
+  static liveObjectIDs: Set<string> = new Set();
+  //EDITEDDDDDDDDDD ends
   
   /**
    * memoized values, where keys are either ids for arrays and closures,
@@ -169,13 +171,17 @@ export class Layout {
 
     //EDITEDDDDDDDDDD
     // NEW: very simple “live” definition – mark global env as live
-    Layout.liveEnvIDs = computeLiveEnvironments(envTree);
-    //EDITEDDDDDDDDDD ends
-
+    // Layout.liveEnvIDs = computeLiveEnvironments(Layout.globalEnvNode);
     // remove prelude environment and merge bindings into global env
     Layout.removePreludeEnv();
     // remove global functions that are not referenced in the program
     Layout.removeUnreferencedGlobalFns();
+    //EDITEDDDDDDDDDD
+    // compute liveness on the same tree we render
+    const liveState = computeLiveState({ root: Layout.globalEnvNode } as EnvTree);
+    Layout.liveEnvIDs = liveState.liveEnvIds;
+    Layout.liveObjectIDs = liveState.liveObjectIds;
+    //EDITEDDDDDDDDDD ends
     // initialize levels and frames
     Layout.initializeGrid();
     // initialize control and stash
