@@ -16,7 +16,11 @@ const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
   const [isPop, setPop] = React.useState(false);
   const [isDivVisible, setIsDivVisible] = React.useState(false);
   const [tipsMessage, setTipsMessage] = React.useState('You can click me for a chat');
+  const [activeSnippetId, setActiveSnippetId] = React.useState('');
   const { isLoggedIn } = useSession();
+
+  // Check if a code snippet is currently open
+  const isSnippetOpen = activeSnippetId !== '';
   // const tipsBoxRef = React.useRef<HTMLDivElement | null>(null);
 
   // To Show reminder words
@@ -32,28 +36,40 @@ const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
   return (
     <div>
       {isLoggedIn && (
-        <div className={classes['bot-container']}>
-          <div className={classes['bot-area']}>
-            {isDivVisible && (
-              // <div className="tips-box">
-              <div className={classes['tips-box']}>
-                <p className={classes['tips-message']}>
-                  I am Louis, your SICP bot
-                  <br />
-                  {tipsMessage}
-                </p>
-              </div>
+        <>
+          {/* Chatbot UI - hidden when snippet is open */}
+          <div
+            className={classes['bot-container']}
+            style={{ display: isSnippetOpen ? 'none' : 'block' }}
+          >
+            <div className={classes['bot-area']}>
+              {isDivVisible && (
+                <div className={classes['tips-box']}>
+                  <p className={classes['tips-message']}>
+                    I am Louis, your SICP bot
+                    <br />
+                    {tipsMessage}
+                  </p>
+                </div>
+              )}
+              <AnchorButton
+                className={classes['bot-button']}
+                onMouseEnter={() => setIsDivVisible(true)}
+                onMouseLeave={() => setIsDivVisible(false)}
+                onClick={togglePop}
+                icon={<Icon icon={<img src={logo} className={classes['iSA']} alt="SA Logo" />} />}
+              ></AnchorButton>
+            </div>
+            {isPop && (
+              <ChatBox
+                getSection={getSection}
+                getText={getText}
+                activeSnippetId={activeSnippetId}
+                setActiveSnippetId={setActiveSnippetId}
+              />
             )}
-            <AnchorButton
-              className={classes['bot-button']}
-              onMouseEnter={() => setIsDivVisible(true)}
-              onMouseLeave={() => setIsDivVisible(false)}
-              onClick={togglePop}
-              icon={<Icon icon={<img src={logo} className={classes['iSA']} alt="SA Logo" />} />}
-            ></AnchorButton>
           </div>
-          {isPop && <ChatBox getSection={getSection} getText={getText} />}
-        </div>
+        </>
       )}
     </div>
   );
