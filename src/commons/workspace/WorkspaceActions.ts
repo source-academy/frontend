@@ -1,5 +1,5 @@
 import type { Context } from 'js-slang';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 
 import type {
   AllColsSortStates,

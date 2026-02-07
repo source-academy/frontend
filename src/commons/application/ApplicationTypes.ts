@@ -1,4 +1,6 @@
-import { Chapter, Language, type SourceError, type Value, Variant } from 'js-slang/dist/types';
+import { type SourceError } from 'js-slang/dist/errors/base';
+import { Chapter, Language, Variant } from 'js-slang/dist/langs';
+import { type Value } from 'js-slang/dist/types';
 
 import type { AchievementState } from '../../features/achievement/AchievementTypes';
 import type { DashboardState } from '../../features/dashboard/DashboardTypes';

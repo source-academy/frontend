@@ -1,6 +1,7 @@
 import Heap from 'js-slang/dist/cse-machine/heap';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
-import { Chapter, Frame } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
+import { Frame } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Stage } from 'konva/lib/Stage';
 import React, { RefObject } from 'react';

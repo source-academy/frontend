@@ -12,7 +12,8 @@ import {
   InstrType,
   UnOpInstr
 } from 'js-slang/dist/cse-machine/types';
-import { Chapter, Environment, Value as StashValue } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
+import { Environment, Value as StashValue } from 'js-slang/dist/types';
 import { astToString } from 'js-slang/dist/utils/ast/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';

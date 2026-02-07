@@ -1,4 +1,4 @@
-import { Chapter } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
 import { SagaIterator } from 'redux-saga';
 import { put, select } from 'redux-saga/effects';
 

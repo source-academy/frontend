@@ -1,4 +1,4 @@
-import { Variant } from 'js-slang/dist/types';
+import { Variant } from 'js-slang/dist/langs';
 import { compressToUTF16 } from 'lz-string';
 
 import {

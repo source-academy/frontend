@@ -4,8 +4,9 @@ import { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/typ
 import { tokenizer } from 'acorn';
 import { type Context, interrupt, type Result, resume, runFilesInContext } from 'js-slang';
 import { ACORN_PARSE_OPTIONS } from 'js-slang/dist/constants';
+import { ErrorSeverity, ErrorType, type SourceError } from 'js-slang/dist/errors/base';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
-import { Chapter, ErrorSeverity, ErrorType, type SourceError, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { pick } from 'lodash';
 import { eventChannel, type SagaIterator } from 'redux-saga';
 import { call, cancel, cancelled, fork, put, race, select, take } from 'redux-saga/effects';
@@ -52,7 +53,7 @@ async function wasm_compile_and_run(
     return { status: 'finished', context, value: returnedValue };
   } catch (e) {
     console.log(e);
-    return { status: 'error' };
+    return { status: 'error', context };
   }
 }
 
@@ -131,7 +132,7 @@ async function cCompileAndRun(cCode: string, context: Context): Promise<Result> 
   } catch (e) {
     console.log(e);
     reportCRuntimeError(e.message, context);
-    return { status: 'error' };
+    return { status: 'error', context };
   }
 }
 

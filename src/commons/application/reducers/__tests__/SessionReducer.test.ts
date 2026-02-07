@@ -1,4 +1,4 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 
 import { GradingOverview, GradingQuery } from '../../../../features/grading/GradingTypes';
 import {
