@@ -3,13 +3,13 @@ import { IconNames } from '@blueprintjs/icons';
 import { CollabEditingAccess, type SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import classNames from 'classnames';
 import React, { useEffect, useState } from 'react';
-import CopyToClipboard from 'react-copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import {
   changeDefaultEditable,
   getPlaygroundSessionUrl
 } from 'src/commons/collabEditing/CollabEditingHelper';
+import CopyToClipboard from 'src/commons/utils/CopyToClipboard';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import { showSuccessMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import classes from 'src/styles/SideContentSessionManagement.module.scss';
