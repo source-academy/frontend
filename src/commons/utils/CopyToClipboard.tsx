@@ -11,16 +11,21 @@ type Props = {
  *  modern Clipboard/React APIs.
  */
 function CopyToClipboard({ children, text, onCopy }: Props) {
-  const handleClick = useCallback(async () => {
-    let success = false;
-    try {
-      await navigator.clipboard.writeText(text);
-      success = true;
-    } catch (err) {
-      success = false;
-    }
-    onCopy?.(text, success);
-  }, [text, onCopy]);
+  const handleClick: React.MouseEventHandler = useCallback(
+    async e => {
+      let success = false;
+      try {
+        await navigator.clipboard.writeText(text);
+        success = true;
+      } catch (err) {
+        success = false;
+      }
+      onCopy?.(text, success);
+      // Get original onClick handler if any
+      children?.props.onClick?.(e);
+    },
+    [onCopy, text, children?.props]
+  );
 
   return children ? cloneElement(children, { onClick: handleClick }) : null;
 }
