@@ -164,7 +164,7 @@
     "https-browserify": "^1.0.0",
     "husky": "^9.0.0",
     "identity-obj-proxy": "^3.0.0",
-    "jsdom": "^26.0.0",
+    "jsdom": "^28.0.0",
     "npm-run-all2": "^8.0.0",
     "os-browserify": "^0.3.0",
     "path": "^0.12.7",
@@ -197,5 +197,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "resolutions": {
+    "cssstyle": "^4.6.0"
   }
 }
