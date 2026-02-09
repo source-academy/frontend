@@ -820,7 +820,7 @@ describe('evalCode', () => {
       envSteps: -1,
       executionMethod: 'auto'
     };
-    lastDebuggerResult = { status: 'error' };
+    lastDebuggerResult = { status: 'error', context };
     state = generateDefaultState(workspaceLocation, { lastDebuggerResult: { status: 'error' } });
   });
 
