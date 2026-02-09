@@ -255,7 +255,7 @@ function addEnvFromValue(value: any, roots: Set<string>) {
 
   //(MAY NEED LATER ON) DOWN BELOW
 
-  // continuations capture an environment too (MAY NEED LATER ON)
+  // continuations capture environments too (MAY NEED LATER ON)
   if (isContinuation(value)) {
     const env = value.getEnv?.();
     if (env && env.id) {
@@ -365,25 +365,30 @@ export function markReachableEnvs(
 }
 
 export function computeLiveState(envTree: EnvTree): { liveEnvIds: Set<string>; liveObjectIds: Set<string> } {
-  const roots = collectRootEnvIds(); 
-  const liveState = markReachableEnvs(envTree, roots);
+  const roots = collectRootEnvIds();
 
-  // Mark objects that are live due to being on control/stash
-  const noopPushEnv = (_env: Env | null | undefined) => {}; //A function that does nothing since we dont want to add envs at this point
-  const markLiveObject = (id: string) => liveState.liveObjectIds.add(id);
-
-  /**
-   * Earlier in markReachableEnvs, we only marked live objects that were reachable from live environments.
-   * But now, objects may be on the control/stash that are not necessarily reachable from any live environment.
-   * But these may be live and hence we need to mark them as well.
-   */
-
+  // Add envs reachable from objects on control/stash as extra roots
+  const extraRootIds = new Set<string>();
+  const pushEnv = (env: Env | null | undefined) => { //specially made ONLY for stack/control dummy bindings
+    if (env && env.id) extraRootIds.add(env.id);
+  };
   Layout.stash.getStack().forEach((item: any) => {
-    pushEnvFromData(item, noopPushEnv, markLiveObject);
+    pushEnvFromData(item, pushEnv);
+  });
+  Layout.control.getStack().forEach((item: ControlItem) => {
+    pushEnvFromData(item as any, pushEnv);
   });
 
+  const allRoots = new Set<string>([...roots, ...extraRootIds]); //combine both roots
+  const liveState = markReachableEnvs(envTree, allRoots);
+
+  // Mark objects that are live due to being on control/stash
+  const markLiveObject = (id: string) => liveState.liveObjectIds.add(id);
+  Layout.stash.getStack().forEach((item: any) => {
+    pushEnvFromData(item, () => {}, markLiveObject);
+  });
   Layout.control.getStack().forEach((item: ControlItem) => {
-    pushEnvFromData(item as any, noopPushEnv, markLiveObject);
+    pushEnvFromData(item as any, () => {}, markLiveObject);
   });
 
   return liveState;
