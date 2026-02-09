@@ -458,14 +458,6 @@ function* handleStdout(
  * Invoked when the conductor.enable feature flag is enabled.
  * Fetches the evaluator from the URL specified in the language directory and creates a Conductor instance
  * to load the evaluator and run the code in a web worker.
- * 
- * @param files 
- * @param entrypointFilePath 
- * @param context 
- * @param execTime 
- * @param workspaceLocation 
- * @param actionType 
- * @param storyEnv 
  */
 export function* evalCodeConductorSaga(
   files: Record<string, string>,
