@@ -7,7 +7,9 @@ import {
   runInContext
 } from 'js-slang';
 import createContext from 'js-slang/dist/createContext';
-import { Chapter, ErrorType, type Finished, type SourceError, Variant } from 'js-slang/dist/types';
+import { ErrorType, type SourceError } from 'js-slang/dist/errors/base';
+import { Chapter, Variant } from 'js-slang/dist/langs';
+import { type Finished } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
@@ -818,8 +820,10 @@ describe('evalCode', () => {
       envSteps: -1,
       executionMethod: 'auto'
     };
-    lastDebuggerResult = { status: 'error' };
-    state = generateDefaultState(workspaceLocation, { lastDebuggerResult: { status: 'error' } });
+    lastDebuggerResult = { status: 'error', context };
+    state = generateDefaultState(workspaceLocation, {
+      lastDebuggerResult: { status: 'error', context }
+    });
   });
 
   describe('on EVAL_EDITOR action without interruptions or pausing', () => {
