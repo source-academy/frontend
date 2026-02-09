@@ -18,8 +18,6 @@ import { EventType } from '../../../../features/achievement/AchievementTypes';
 import type { BrowserHostPlugin } from '../../../../features/conductor/BrowserHostPlugin';
 import { createConductor } from '../../../../features/conductor/createConductor';
 import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
-import { selectConductorEvaluatorUrl } from '../../../../features/conductor/flagConductorEvaluatorUrl';
-import { selectDirectoryLanguageEnable } from '../../../../features/directory/flagDirectoryLanguageEnable';
 import StoriesActions from '../../../../features/stories/StoriesActions';
 import { isSchemeLanguage, type OverallState } from '../../../application/ApplicationTypes';
 import { SideContentType } from '../../../sideContent/SideContentTypes';
@@ -455,7 +453,20 @@ function* handleStdout(
     }
   }
 }
-
+/**
+ * Runs code using the evaluators in the Language Directory using the Conductor framework.
+ * Invoked when the conductor.enable feature flag is enabled.
+ * Fetches the evaluator from the URL specified in the language directory and creates a Conductor instance
+ * to load the evaluator and run the code in a web worker.
+ * 
+ * @param files 
+ * @param entrypointFilePath 
+ * @param context 
+ * @param execTime 
+ * @param workspaceLocation 
+ * @param actionType 
+ * @param storyEnv 
+ */
 export function* evalCodeConductorSaga(
   files: Record<string, string>,
   entrypointFilePath: string,
@@ -465,26 +476,30 @@ export function* evalCodeConductorSaga(
   actionType: string,
   storyEnv?: string
 ): SagaIterator {
-  let path: string;
-  if (yield select(selectDirectoryLanguageEnable)) {
-    const evaluator: IEvaluatorDefinition | undefined = yield call(getEvaluatorDefinitionSaga);
-    if (!evaluator?.path) throw Error('no evaluator');
-    path = evaluator.path;
-  } else {
-    path = yield select(selectConductorEvaluatorUrl);
-  }
+  // Fetch evaluator from language directory
+  const evaluator: IEvaluatorDefinition | undefined = yield call(getEvaluatorDefinitionSaga);
+  if (!evaluator?.path) throw Error('no evaluator');
+  const path: string = evaluator.path;
+
+  // Download evaluator code
   const evaluatorResponse: Response = yield call(fetch, path);
   if (!evaluatorResponse.ok) throw Error("can't get evaluator");
   const evaluatorBlob: Blob = yield call([evaluatorResponse, 'blob']);
   const url: string = yield call(URL.createObjectURL, evaluatorBlob);
+
+  // Create Conductor instance ith the evaluator
   const { hostPlugin, conduit }: { hostPlugin: BrowserHostPlugin; conduit: IConduit } = yield call(
     createConductor,
     url,
     async (fileName: string) => files[fileName],
     (pluginName: string) => {} // TODO: implement dynamic plugin loading
   );
+
+  // Begin evaluation
   const stdoutTask = yield fork(handleStdout, hostPlugin, workspaceLocation);
   yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);
+
+  // This exit logic of this while loop might be causing an unintended infinite loop in the REPL
   while (true) {
     const { stop } = yield race({
       repl: take(actions.evalRepl.type),
