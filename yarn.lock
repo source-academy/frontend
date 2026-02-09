@@ -11513,15 +11513,15 @@ __metadata:
   linkType: hard
 
 "react-drag-drop-files@npm:^3.0.0":
-  version: 3.0.1
-  resolution: "react-drag-drop-files@npm:3.0.1"
+  version: 3.1.0
+  resolution: "react-drag-drop-files@npm:3.1.0"
   dependencies:
     prop-types: "npm:^15.7.2"
     styled-components: "npm:^6.1.11"
   peerDependencies:
-    react: ^18.0.0
-    react-dom: ^18.0.0
-  checksum: 10c0/07ed13e0c4330f8a7a5003ce4dffd5ba82c1a1bf4fc6562790fcb8944a8b006d4a7db0671a20dfeeb888fe221e04126840e65a8499863bdaf678f9267f405c58
+    react: ">=18.0.0"
+    react-dom: ">=18.0.0"
+  checksum: 10c0/4dd7c603c7e08c1df30455773b9e05e61a9f84f02cfc8db3be43adffc3b8fffb3b491eba174f816a54e60af7e71356062e4fd1a10cea36d169397767ab7d0416
   languageName: node
   linkType: hard
 
