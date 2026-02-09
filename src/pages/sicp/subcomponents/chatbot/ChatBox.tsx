@@ -180,7 +180,10 @@ const MessageRenderer: React.FC<MessageRendererProps> = ({
       parts.push(
         <div key={`${messageId}-text-${lastIndex}`} style={{ marginBottom: '0.5em' }}>
           {text.split('\n').map((line, i) => (
-            <React.Fragment key={i}>{line}<br /></React.Fragment>
+            <React.Fragment key={i}>
+              {line}
+              <br />
+            </React.Fragment>
           ))}
         </div>
       );
@@ -236,7 +239,10 @@ const MessageRenderer: React.FC<MessageRendererProps> = ({
     parts.push(
       <div key={`${messageId}-text-end`} style={{ marginBottom: '0.5em' }}>
         {text.split('\n').map((line, i) => (
-          <React.Fragment key={i}>{line}<br /></React.Fragment>
+          <React.Fragment key={i}>
+            {line}
+            <br />
+          </React.Fragment>
         ))}
       </div>
     );
