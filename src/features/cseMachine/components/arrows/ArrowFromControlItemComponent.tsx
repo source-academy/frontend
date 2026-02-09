@@ -12,7 +12,6 @@ export class ArrowFromControlItemComponent extends GenericArrow<
   ControlItemComponent,
   Frame | FnValue | GlobalFnValue | ContValue
 > {
-
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;

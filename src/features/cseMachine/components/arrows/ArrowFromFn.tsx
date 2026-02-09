@@ -12,7 +12,7 @@ export class ArrowFromFn extends GenericArrow<FnValue | GlobalFnValue | ContValu
     super(from);
     this.faded = !from.isReferenced();
   }
-  
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;

@@ -12,7 +12,6 @@ export class ArrowFromStashItemComponent extends GenericArrow<
   StashItemComponent,
   Frame | FnValue | GlobalFnValue | ArrayValue | ContValue
 > {
-  
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;

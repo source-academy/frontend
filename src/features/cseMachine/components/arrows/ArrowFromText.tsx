@@ -7,7 +7,6 @@ import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */
 export class ArrowFromText extends GenericArrow<Text, Value> {
-  
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
