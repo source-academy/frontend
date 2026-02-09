@@ -61,15 +61,7 @@ export const Config = Object.freeze({
   StrokeColorFaded: '#5b6773',
   PrintStrokeColor: '#777',
   PrintStrokeColorFaded: '#ccc',
-  ArrowHoveredColor: '#ffffff',
-
-  // Arrow hover colors by type
-  ArrowFromFnHoveredColor: '#ff0000', // Red for function arrows
-  ArrowFromFrameHoveredColor: '#0000ff', // Blue for frame arrows
-  ArrowFromTextHoveredColor: '#ffff00', // Yellow for text/binding arrows
-  ArrowFromArrayUnitHoveredColor: '#00ff00', // Green for array arrows
-  ArrowFromControlItemHoveredColor: '#00bfff', // Light Blue for control arrows
-  ArrowFromStashItemHoveredColor: '#ff8c00', // Dark Orange for stash arrows
+  ArrowHighlightedColor: '#ffffff',
 
   // Colors of different states
   ActiveColor: '#030fff',

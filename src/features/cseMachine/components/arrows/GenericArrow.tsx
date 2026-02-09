@@ -9,6 +9,7 @@ import { Layout } from '../../CseMachineLayout';
 import { IHoverable, IVisible, StepsArray } from '../../CseMachineTypes';
 import { defaultStrokeColor, fadedStrokeColor } from '../../CseMachineUtils';
 import { Visible } from '../Visible';
+import { arrowSelection } from './ArrowSelection';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
 export class GenericArrow<Source extends IVisible, Target extends IVisible> extends Visible implements IHoverable {
@@ -19,6 +20,21 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
   faded: boolean = false;
   private pathRef: RefObject<Konva.Path> = React.createRef();
   private arrowHeadRef: RefObject<Konva.Arrow> = React.createRef();
+
+  // Check if this arrow is selected
+  protected isSelected(): boolean {
+    return arrowSelection.isSelected(this);
+  }
+
+  // Select this arrow
+  protected select(): void {
+    arrowSelection.setSelected(this);
+  }
+
+  // Deselect (static, can be called from anywhere)
+  public static clearSelection(): GenericArrow<IVisible, IVisible> | null {
+    return arrowSelection.clearSelection();
+  }
 
   constructor(from: Source) {
     super();
@@ -103,23 +119,14 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
    * Returns the hover color for this arrow type.
    * Subclasses can override this to provide custom hover colors.
    */
-  protected getHoverColor(): string {
-    return Config.ArrowHoveredColor;
+  protected getHighlightColour(): string {
+    return Config.ArrowHighlightedColor;
   }
 
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
     e.cancelBubble = true;
-    const hoverColor = this.getHoverColor();
-    if (this.pathRef.current) {
-      this.pathRef.current.stroke(hoverColor);
-      this.pathRef.current.strokeWidth(Config.ArrowHoveredStrokeWidth);
-    }
-    if (this.arrowHeadRef.current) {
-      this.arrowHeadRef.current.fill(hoverColor);
-      this.arrowHeadRef.current.pointerWidth(Config.ArrowHoveredHeadSize);
-      this.arrowHeadRef.current.pointerLength(Config.ArrowHoveredHeadSize);
-    }
+    this.setHighlightedStyle();
     // Move entire arrow group to top
     if (this.ref.current && this.ref.current.moveToTop) {
       // Move the arrow's parent container to top first, then move arrow within that
@@ -135,21 +142,81 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
   onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
     e.cancelBubble = true;
-    const normalColor = this.faded ? fadedStrokeColor() : defaultStrokeColor();
-    if (this.pathRef.current) {
-      this.pathRef.current.stroke(normalColor);
-      this.pathRef.current.strokeWidth(Config.ArrowStrokeWidth);
+
+    // Don't change color if selected
+    if (this.isSelected()) {
+      return;
     }
-    if (this.arrowHeadRef.current) {
-      this.arrowHeadRef.current.fill(normalColor);
-      this.arrowHeadRef.current.pointerWidth(Config.ArrowHeadSize);
-      this.arrowHeadRef.current.pointerLength(Config.ArrowHeadSize);
-    }
+
+    this.setNormalStyle();
     this.ref.current?.getLayer()?.batchDraw();
   }
 
+  public setHighlightedStyle() {
+    const highlightColor = this.getHighlightColour();
+    if (this.pathRef.current) {
+      this.pathRef.current.stroke(highlightColor);
+      this.pathRef.current.strokeWidth(Config.ArrowHoveredStrokeWidth);
+    }
+    if (this.arrowHeadRef.current) {
+      this.arrowHeadRef.current.fill(highlightColor);
+      this.arrowHeadRef.current.pointerWidth(Config.ArrowHoveredHeadSize);
+      this.arrowHeadRef.current.pointerLength(Config.ArrowHoveredHeadSize);
+    }
+  }
+
+  public setNormalStyle() {
+    const color = this.faded ? fadedStrokeColor() : defaultStrokeColor();
+    if (this.pathRef.current) {
+      this.pathRef.current.stroke(color);
+      this.pathRef.current.strokeWidth(Config.ArrowStrokeWidth);
+    }
+    if (this.arrowHeadRef.current) {
+      this.arrowHeadRef.current.fill(color);
+      this.arrowHeadRef.current.pointerWidth(Config.ArrowHeadSize);
+      this.arrowHeadRef.current.pointerLength(Config.ArrowHeadSize);
+    }
+  }
+
+  onClick = (e: KonvaEventObject<MouseEvent>) => {
+    e.cancelBubble = true;
+
+    // Toggle selection - clear first, then select if it wasn't already selected
+    const wasSelected = this.isSelected();
+    const oldArrow = GenericArrow.clearSelection();
+
+    // Update old arrow's visual state
+    if (oldArrow && oldArrow !== this) {
+      oldArrow.setNormalStyle();
+    }
+
+    if (!wasSelected) {
+      this.select();
+    }
+
+    // Update this arrow's visual state
+    this.setHighlightedStyle();
+
+    // Force redraw entire layer to update all arrows
+    this.ref.current?.getLayer()?.batchDraw();
+  }
+
+  onContextMenu = (e: KonvaEventObject<MouseEvent>) => {
+    e.evt.preventDefault(); // Prevent browser context menu
+    this.onClick(e);
+  }
+
+  protected getCurrentColor(): string {
+    if (this.isSelected()) {
+      return this.getHighlightColour(); // Selected uses hover color
+    }
+    return this.faded ? fadedStrokeColor() : defaultStrokeColor();
+  }
+
   draw() {
-    const stroke = this.faded ? fadedStrokeColor() : defaultStrokeColor();
+
+    const stroke = this.getCurrentColor();
+
     return (
       <KonvaGroup
         key={Layout.key++}
@@ -157,13 +224,15 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
         listening={true}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
+        onClick={this.onClick}
+        onContextMenu={this.onContextMenu}
         onMouseDown={(e) => e.cancelBubble = true}
       >
         <KonvaPath
           {...ShapeDefaultProps}
           ref={this.pathRef}
           stroke={stroke}
-          strokeWidth={Config.ArrowStrokeWidth}
+          strokeWidth={this.isSelected() ? Config.ArrowHoveredStrokeWidth : Config.ArrowStrokeWidth}
           data={this.path()}
           key={Layout.key++}
           hitStrokeWidth={10}
@@ -174,7 +243,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
           points={this.points.slice(this.points.length - 4)}
           fill={stroke}
           strokeEnabled={false}
-          pointerWidth={Config.ArrowHeadSize}
+          pointerWidth={this.isSelected() ? Config.ArrowHoveredHeadSize : Config.ArrowHeadSize}
           key={Layout.key++}
         />
       </KonvaGroup>
