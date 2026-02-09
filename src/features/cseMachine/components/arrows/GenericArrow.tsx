@@ -1,18 +1,24 @@
+import Konva from 'konva';
+import { KonvaEventObject } from 'konva/lib/Node';
+import React, { RefObject } from 'react';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
+import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { IVisible, StepsArray } from '../../CseMachineTypes';
+import { IHoverable, IVisible, StepsArray } from '../../CseMachineTypes';
 import { defaultStrokeColor, fadedStrokeColor } from '../../CseMachineUtils';
 import { Visible } from '../Visible';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
-export class GenericArrow<Source extends IVisible, Target extends IVisible> extends Visible {
+export class GenericArrow<Source extends IVisible, Target extends IVisible> extends Visible implements IHoverable {
   private _path: string = '';
   points: number[] = [];
   source: Source;
   target: Target | undefined;
   faded: boolean = false;
+  private pathRef: RefObject<Konva.Path> = React.createRef();
+  private arrowHeadRef: RefObject<Konva.Arrow> = React.createRef();
 
   constructor(from: Source) {
     super();
@@ -93,19 +99,78 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
     return [() => [to.x(), to.y()]];
   }
 
+  /**
+   * Returns the hover color for this arrow type.
+   * Subclasses can override this to provide custom hover colors.
+   */
+  protected getHoverColor(): string {
+    return Config.ArrowHoveredColor;
+  }
+
+  onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
+    if (CseMachine.getPrintableMode()) return;
+    e.cancelBubble = true;
+    const hoverColor = this.getHoverColor();
+    if (this.pathRef.current) {
+      this.pathRef.current.stroke(hoverColor);
+      this.pathRef.current.strokeWidth(Config.ArrowHoveredStrokeWidth);
+    }
+    if (this.arrowHeadRef.current) {
+      this.arrowHeadRef.current.fill(hoverColor);
+      this.arrowHeadRef.current.pointerWidth(Config.ArrowHoveredHeadSize);
+      this.arrowHeadRef.current.pointerLength(Config.ArrowHoveredHeadSize);
+    }
+    // Move entire arrow group to top
+    if (this.ref.current && this.ref.current.moveToTop) {
+      // Move the arrow's parent container to top first, then move arrow within that
+      const parent = this.ref.current.getParent();
+      if (parent && parent.moveToTop) {
+        parent.moveToTop();
+      }
+      this.ref.current.moveToTop();
+    }
+    this.ref.current?.getLayer()?.batchDraw();
+  }
+
+  onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
+    if (CseMachine.getPrintableMode()) return;
+    e.cancelBubble = true;
+    const normalColor = this.faded ? fadedStrokeColor() : defaultStrokeColor();
+    if (this.pathRef.current) {
+      this.pathRef.current.stroke(normalColor);
+      this.pathRef.current.strokeWidth(Config.ArrowStrokeWidth);
+    }
+    if (this.arrowHeadRef.current) {
+      this.arrowHeadRef.current.fill(normalColor);
+      this.arrowHeadRef.current.pointerWidth(Config.ArrowHeadSize);
+      this.arrowHeadRef.current.pointerLength(Config.ArrowHeadSize);
+    }
+    this.ref.current?.getLayer()?.batchDraw();
+  }
+
   draw() {
     const stroke = this.faded ? fadedStrokeColor() : defaultStrokeColor();
     return (
-      <KonvaGroup key={Layout.key++} ref={this.ref} listening={false}>
+      <KonvaGroup
+        key={Layout.key++}
+        ref={this.ref}
+        listening={true}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        onMouseDown={(e) => e.cancelBubble = true}
+      >
         <KonvaPath
           {...ShapeDefaultProps}
+          ref={this.pathRef}
           stroke={stroke}
           strokeWidth={Config.ArrowStrokeWidth}
           data={this.path()}
           key={Layout.key++}
+          hitStrokeWidth={10}
         />
         <KonvaArrow
           {...ShapeDefaultProps}
+          ref={this.arrowHeadRef}
           points={this.points.slice(this.points.length - 4)}
           fill={stroke}
           strokeEnabled={false}

@@ -15,6 +15,10 @@ export class ArrowFromArrayUnit extends GenericArrow<ArrayUnit, Value> {
     this.faded = !from.parent.isReferenced();
   }
 
+  protected getHoverColor(): string {
+    return Config.ArrowFromArrayUnitHoveredColor;
+  }
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;

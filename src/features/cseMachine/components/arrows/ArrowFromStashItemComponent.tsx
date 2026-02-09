@@ -1,5 +1,6 @@
 import { FnValue } from '../../components/values/FnValue';
 import { GlobalFnValue } from '../../components/values/GlobalFnValue';
+import { Config } from '../../CseMachineConfig';
 import { StepsArray } from '../../CseMachineTypes';
 import { Frame } from '../Frame';
 import { StashItemComponent } from '../StashItemComponent';
@@ -12,6 +13,11 @@ export class ArrowFromStashItemComponent extends GenericArrow<
   StashItemComponent,
   Frame | FnValue | GlobalFnValue | ArrayValue | ContValue
 > {
+
+  protected getHoverColor(): string {
+    return Config.ArrowFromTextHoveredColor;
+  }
+  
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;

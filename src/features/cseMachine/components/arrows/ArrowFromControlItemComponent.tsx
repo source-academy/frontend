@@ -1,5 +1,6 @@
 import { FnValue } from '../../components/values/FnValue';
 import { GlobalFnValue } from '../../components/values/GlobalFnValue';
+import { Config } from '../../CseMachineConfig';
 import { ControlStashConfig } from '../../CseMachineControlStashConfig';
 import { StepsArray } from '../../CseMachineTypes';
 import { ControlItemComponent } from '../ControlItemComponent';
@@ -12,6 +13,11 @@ export class ArrowFromControlItemComponent extends GenericArrow<
   ControlItemComponent,
   Frame | FnValue | GlobalFnValue | ContValue
 > {
+
+  protected getHoverColor(): string {
+    return Config.ArrowFromControlItemHoveredColor;
+  }
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
