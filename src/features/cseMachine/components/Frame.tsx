@@ -185,9 +185,9 @@ export class Frame extends Visible implements IHoverable {
     }
   }
 
-  onMouseEnter = () => {};
+  onMouseEnter = () => { };
 
-  onMouseLeave = () => {};
+  onMouseLeave = () => { };
 
   draw(): React.ReactNode {
     return (
@@ -207,6 +207,7 @@ export class Frame extends Visible implements IHoverable {
           cornerRadius={Config.FrameCornerRadius}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
+          listening={false}
           key={Layout.key++}
         />
         {this.bindings.map(binding => binding.draw())}
