@@ -215,8 +215,8 @@ type ExtendedSet<T> = Set<T> & {
   difference(other: Set<T>): Set<T>;
 };
 
-//EDITEDDDDDDDDDD
-export function findEnvById(node : EnvTreeNode, id : string): Env | null {
+/** Returns environment given its `id`, recursively searching starting from `node` */
+function findEnvById(node : EnvTreeNode, id : string): Env | null {
   if (node.environment && node.environment.id === id) {
     return node.environment as Env;
   }
@@ -227,10 +227,8 @@ export function findEnvById(node : EnvTreeNode, id : string): Env | null {
   return null;
 }
 
-// Track live objects (closures/arrays/continuations) independently of frames
-export type LiveObjectId = string;
-
-export function getObjectId(value: any): LiveObjectId | null {
+/** Returns id of specific values */
+function getObjectId(value: any): string | null {
   if (!value) return null;
   if (isClosure(value) || isDataArray(value) || isContinuation(value) || isStreamFn(value)) {
     return (value as any).id ?? null;
@@ -238,6 +236,7 @@ export function getObjectId(value: any): LiveObjectId | null {
   return null;
 }
 
+/** Adds the id of environments (that are reachable from `value`) into `roots` */
 function addEnvFromValue(value: any, roots: Set<string>) {
   // closures / stream functions created by Source
   if (isClosure(value) || isStreamFn(value)) {
@@ -252,19 +251,10 @@ function addEnvFromValue(value: any, roots: Set<string>) {
       roots.add(value.environment.id);
     }
   }
-
-  //(MAY NEED LATER ON) DOWN BELOW
-
-  // continuations capture environments too (MAY NEED LATER ON)
-  if (isContinuation(value)) {
-    const env = value.getEnv?.();
-    if (env && env.id) {
-      roots.add(env.id);
-    }
-  }
 }
 
-export function collectRootEnvIds(): Set<string> {
+/** Returns a set of id of root environments */
+function collectRootEnvIds(): Set<string> {
   const roots = new Set<string>();
 
   // Root 1: global env + current env
@@ -294,7 +284,7 @@ export function collectRootEnvIds(): Set<string> {
   return roots;
 }
 
-export function pushEnvFromData(
+function pushEnvFromData(
   value: any,
   pushEnv: (e: Env | null | undefined) => void,
   markLiveObject?: (id: string) => void
@@ -320,12 +310,6 @@ export function pushEnvFromData(
     for (const elem of arr) {
       pushEnvFromData(elem, pushEnv, markLiveObject); //recursive call
     }
-    return;
-  }
-
-  if (isContinuation(value)) { //for continuations
-    const env = (value as any).getEnv?.();
-    if (env) pushEnv(env);
     return;
   }
 }
