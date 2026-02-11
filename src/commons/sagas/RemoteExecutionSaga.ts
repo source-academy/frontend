@@ -1,7 +1,7 @@
 import { SlingClient } from '@sourceacademy/sling-client';
 import { assemble, compileFiles, type Context } from 'js-slang';
 import { ExceptionError } from 'js-slang/dist/errors/errors';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import _ from 'lodash';
 import { call, put, race, select, take } from 'redux-saga/effects';
 import RemoteExecutionActions from 'src/features/remoteExecution/RemoteExecutionActions';

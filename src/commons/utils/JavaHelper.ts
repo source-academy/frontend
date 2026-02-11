@@ -4,8 +4,8 @@ import { IOCallbacks } from 'java-slang/dist/ec-evaluator';
 import setupJVM, { parseBin } from 'java-slang/dist/jvm';
 import { createModuleProxy, loadCachedFiles } from 'java-slang/dist/jvm/utils/integration';
 import { Context, Result } from 'js-slang';
+import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/errors/base';
 import loadSourceModules from 'js-slang/dist/modules/loader';
-import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/types';
 
 import { CseMachine } from '../../features/cseMachine/java/CseMachine';
 import { UploadResult } from '../sideContent/content/SideContentUpload';
@@ -215,7 +215,7 @@ export async function runJavaCseMachine(
     })
     .catch(e => {
       console.error(e);
-      const errorResult: Result = { status: 'error' };
+      const errorResult: Result = { status: 'error', context };
       return errorResult;
     });
 }

@@ -1,4 +1,5 @@
-import { Chapter, SourceError, Variant } from 'js-slang/dist/types';
+import { SourceError } from 'js-slang/dist/errors/base';
+import { Chapter, LanguageOptions, Variant } from 'js-slang/dist/langs';
 
 import { ExternalLibrary, ExternalLibraryName } from '../application/types/ExternalTypes';
 
@@ -143,6 +144,11 @@ export interface IContestVotingQuestion extends BaseQuestion {
   type: 'voting';
 }
 
+export type LLMPrompt = {
+  role: string;
+  content: string;
+};
+
 export type BaseQuestion = {
   answer: string | number | ContestEntry[] | null;
   comments?: string;
@@ -177,6 +183,7 @@ export type Library = {
     2?: string; // For mission control
   }>;
   moduleParams?: any;
+  languageOptions?: LanguageOptions;
 };
 
 export type Testcase = {

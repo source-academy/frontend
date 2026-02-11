@@ -1,4 +1,4 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 import { StoriesAuthState } from 'src/features/stories/StoriesTypes';
 
@@ -75,6 +75,8 @@ export const saveState = (state: OverallState) => {
         topContestLeaderboardDisplay: state.session.topContestLeaderboardDisplay,
         enableSourcecast: state.session.enableSourcecast,
         enableStories: state.session.enableStories,
+        enableLlmGrading: state.session.enableLlmGrading,
+        llmCourseLevelPrompt: state.session.llmCourseLevelPrompt,
         moduleHelpText: state.session.moduleHelpText,
         assetsPrefix: state.session.assetsPrefix,
         assessmentConfigurations: state.session.assessmentConfigurations,

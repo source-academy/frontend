@@ -7,7 +7,9 @@ import {
   runInContext
 } from 'js-slang';
 import createContext from 'js-slang/dist/createContext';
-import { Chapter, ErrorType, type Finished, type SourceError, Variant } from 'js-slang/dist/types';
+import { ErrorType, type SourceError } from 'js-slang/dist/errors/base';
+import { Chapter, Variant } from 'js-slang/dist/langs';
+import { type Finished } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
@@ -130,7 +132,8 @@ describe('EVAL_EDITOR', () => {
         name: ExternalLibraryName.NONE,
         symbols: context.externalSymbols
       },
-      globals
+      globals,
+      languageOptions: context.languageOptions
     };
 
     const newDefaultState = generateDefaultState(workspaceLocation, {
@@ -397,7 +400,8 @@ describe('EVAL_TESTCASE', () => {
         name: ExternalLibraryName.NONE,
         symbols: context.externalSymbols
       },
-      globals
+      globals,
+      languageOptions: context.languageOptions
     };
 
     const newDefaultState = generateDefaultState(workspaceLocation, {
@@ -682,30 +686,30 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
       externalLibrary: oldExternalLibraryName
     });
 
-    const symbols = externalLibraries.get(newExternalLibraryName)!;
-    const library: Library = {
-      chapter,
-      external: {
-        name: newExternalLibraryName,
-        symbols
-      },
-      globals
-    };
-
-    return expectSaga(workspaceSaga)
-      .withState(newDefaultState)
-      .put(WorkspaceActions.changeExternalLibrary(newExternalLibraryName, workspaceLocation))
-      .put(WorkspaceActions.beginClearContext(workspaceLocation, library, true))
-      .put(WorkspaceActions.clearReplOutput(workspaceLocation))
-      .call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000)
-      .dispatch({
-        type: WorkspaceActions.externalLibrarySelect.type,
-        payload: {
-          externalLibraryName: newExternalLibraryName,
-          workspaceLocation
-        }
-      })
-      .silentRun();
+    return (
+      expectSaga(workspaceSaga)
+        .withState(newDefaultState)
+        .put(WorkspaceActions.changeExternalLibrary(newExternalLibraryName, workspaceLocation))
+        // beginClearContext is asserted here but the library object can contain
+        // runtime-specific fields (like languageOptions). Match only the action
+        // shape we care about (type, workspaceLocation and shouldInitLibrary)
+        .put.like({
+          action: {
+            type: WorkspaceActions.beginClearContext.type,
+            payload: { workspaceLocation, shouldInitLibrary: true }
+          }
+        })
+        .put(WorkspaceActions.clearReplOutput(workspaceLocation))
+        .call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000)
+        .dispatch({
+          type: WorkspaceActions.externalLibrarySelect.type,
+          payload: {
+            externalLibraryName: newExternalLibraryName,
+            workspaceLocation
+          }
+        })
+        .silentRun()
+    );
   });
 
   test('does not call the above when oldExternalLibraryName === newExternalLibraryName', () => {
@@ -770,7 +774,8 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
         name: newExternalLibraryName,
         symbols
       },
-      globals
+      globals,
+      languageOptions: undefined
     };
 
     return expectSaga(workspaceSaga)
@@ -815,8 +820,10 @@ describe('evalCode', () => {
       envSteps: -1,
       executionMethod: 'auto'
     };
-    lastDebuggerResult = { status: 'error' };
-    state = generateDefaultState(workspaceLocation, { lastDebuggerResult: { status: 'error' } });
+    lastDebuggerResult = { status: 'error', context };
+    state = generateDefaultState(workspaceLocation, {
+      lastDebuggerResult: { status: 'error', context }
+    });
   });
 
   describe('on EVAL_EDITOR action without interruptions or pausing', () => {
