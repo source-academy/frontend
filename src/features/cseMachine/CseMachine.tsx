@@ -37,6 +37,7 @@ export default class CseMachine {
   }
   public static togglePairCreationMode(): void {
     CseMachine.pairCreationMode = !CseMachine.pairCreationMode;
+    CseMachine.redraw();
   }
   public static getCurrentEnvId(): string {
     return CseMachine.currentEnvId;

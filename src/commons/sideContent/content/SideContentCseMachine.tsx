@@ -33,6 +33,7 @@ import WorkspaceActions from '../../workspace/WorkspaceActions';
 import { beginAlertSideContent } from '../SideContentActions';
 import { getLocation } from '../SideContentHelper';
 import { NonStoryWorkspaceLocation, SideContentTab, SideContentType } from '../SideContentTypes';
+import { wait } from '@testing-library/user-event/dist/cjs/utils/index.js';
 
 type State = {
   visualization: React.ReactNode;
@@ -273,7 +274,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                     onMouseUp={() => {
                       if (this.state.visualization) {
                         CseMachine.togglePairCreationMode();
-                        CseMachine.redraw();
+                        this.stepNext(); //Temporary fix for demonstration purposes
                       }
                     }}
                     icon="array"
