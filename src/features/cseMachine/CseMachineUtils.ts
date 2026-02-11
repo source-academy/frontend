@@ -284,6 +284,7 @@ function collectRootEnvIds(): Set<string> {
   return roots;
 }
 
+/** Adds values into liveObjectIds and pushes the values' environments for `markReachableEnvs` */
 function pushEnvFromData(
   value: any,
   pushEnv: (e: Env | null | undefined) => void,
@@ -291,10 +292,9 @@ function pushEnvFromData(
 ) {
   if (!value) return;
 
-  const id = getObjectId(value); //directly add as a live object first since anything is an OBJECT
+  const id = getObjectId(value); // directly add as a live object first since anything is an OBJECT
   if (id && markLiveObject) markLiveObject(id);
 
-  // closures / stream functions' envs added to liveness
   if (isClosure(value) || isStreamFn(value)) {
     if (value.environment) {
       pushEnv((value as any).environment as Env);
@@ -302,19 +302,20 @@ function pushEnvFromData(
     return;
   }
 
-  if (isDataArray(value)) { //for arrays
+  if (isDataArray(value)) {
     if ((value as any).environment) {
       pushEnv((value as any).environment as Env);
     }
-    const arr = value as any[]; //going through each element of the array for any references
+    const arr = value as any[]; // going through each element of the array for any references
     for (const elem of arr) {
-      pushEnvFromData(elem, pushEnv, markLiveObject); //recursive call
+      pushEnvFromData(elem, pushEnv, markLiveObject);
     }
     return;
   }
 }
 
-export function markReachableEnvs(
+/** Returns environment id and object id that are reachable from root environments */
+function markReachableEnvs(
   envTree: EnvTree,
   rootIds: Set<string>
 ): { liveEnvIds: Set<string>; liveObjectIds: Set<string> } {
@@ -348,6 +349,7 @@ export function markReachableEnvs(
   return { liveEnvIds: visited, liveObjectIds };
 }
 
+/** Returns environment id and object id that are reachable from root environments and control/stash */
 export function computeLiveState(envTree: EnvTree): { liveEnvIds: Set<string>; liveObjectIds: Set<string> } {
   const roots = collectRootEnvIds();
 
@@ -377,7 +379,6 @@ export function computeLiveState(envTree: EnvTree): { liveEnvIds: Set<string>; l
 
   return liveState;
 }
-//EDITEDDDDDDDDDD
 
 /** Returns a set with the elements in `set1` that are not in `set2` */
 export function setDifference<T>(set1: Set<T>, set2: Set<T>) {
