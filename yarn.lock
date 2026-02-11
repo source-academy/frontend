@@ -9182,9 +9182,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-slang@portal:/Users/terenceteo/code/js-slang::locator=frontend%40workspace%3A.":
+"js-slang@portal:/C:/Users/triss/shared-source-academy-frontend-repo/js-slang::locator=frontend%40workspace%3A.":
   version: 0.0.0-use.local
-  resolution: "js-slang@portal:/Users/terenceteo/code/js-slang::locator=frontend%40workspace%3A."
+  resolution: "js-slang@portal:/C:/Users/triss/shared-source-academy-frontend-repo/js-slang::locator=frontend%40workspace%3A."
   dependencies:
     "@babel/parser": "npm:^7.19.4"
     "@commander-js/extra-typings": "npm:^14.0.0"

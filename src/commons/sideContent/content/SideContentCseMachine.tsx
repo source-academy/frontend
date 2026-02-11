@@ -274,6 +274,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                       if (this.state.visualization) {
                         CseMachine.togglePairCreationMode();
                         CseMachine.redraw();
+                        this.stepNext();
                       }
                     }}
                     icon="array"

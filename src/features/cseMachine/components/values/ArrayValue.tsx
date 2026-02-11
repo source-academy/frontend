@@ -2,15 +2,17 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group } from 'react-konva';
 
+import CseMachine from '../../CseMachine';
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
 import { DataArray, IHoverable, ReferenceType } from '../../CseMachineTypes';
-import { isMainReference } from '../../CseMachineUtils';
+import { isDataArray, isMainReference } from '../../CseMachineUtils';
 import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
 import { ArrayUnit } from '../ArrayUnit';
 import { Binding } from '../Binding';
 import { FnValue } from './FnValue';
 import { Value } from './Value';
+import Closure from 'js-slang/dist/cse-machine/closure';
 
 /** this class encapsulates an array value in source,
  *  defined as a JS array with not 2 elements */
@@ -22,6 +24,8 @@ export class ArrayValue extends Value implements IHoverable {
   /** height of the array and nested values inside the array */
   totalHeight: number = 0;
 
+  private arrayId: number = 0;
+
   constructor(
     /** underlying values this array contains */
     readonly data: DataArray,
@@ -30,6 +34,20 @@ export class ArrayValue extends Value implements IHoverable {
   ) {
     super();
     Layout.memoizeValue(data, this);
+
+    /** handling pairs for stream visualisation */
+    if (data[1] instanceof Closure || data[1] == null || isDataArray(data[1])) {
+      this.arrayId = Layout.arrayCount;
+      Layout.streamPairArray[Layout.arrayCount] = this;
+      console.log(Layout.streamPairArray);
+      Layout.arrayCount++;
+    }
+
+    // if (this.arrayId > 0 && Layout.streamPairArray[this.arrayId - 1].data[1] instanceof Closure) {
+    //   let prevFn: FnValue = Layout.streamPairArray[this.arrayId - 1].data[1];
+    //   prevFn.arrow = new
+    // }
+    
     this.addReference(firstReference);
   }
 
@@ -38,8 +56,13 @@ export class ArrayValue extends Value implements IHoverable {
 
     // derive the coordinates from the main reference (binding / array unit)
     if (newReference instanceof Binding) {
-      this._x = newReference.frame.x() + newReference.frame.width() + Config.FrameMarginX;
-      this._y = newReference.y();
+      if (!CseMachine.getPairCreationMode()) {
+        this._x = newReference.frame.x() + newReference.frame.width() + Config.FrameMarginX;
+        this._y = newReference.y();
+      } else {
+        this._x = Config.CanvasPaddingX + this.arrayId * (Config.DataUnitWidth * 5);
+        this._y = 0;
+      }
     } else {
       if (newReference.isLastUnit) {
         this._x = newReference.x() + Config.DataUnitWidth * 2;
