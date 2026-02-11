@@ -215,7 +215,6 @@ type ExtendedSet<T> = Set<T> & {
   difference(other: Set<T>): Set<T>;
 };
 
-//EDITEDDDDDDDDDD
 export function findEnvById(node : EnvTreeNode, id : string): Env | null {
   if (node.environment && node.environment.id === id) {
     return node.environment as Env;
@@ -250,16 +249,6 @@ function addEnvFromValue(value: any, roots: Set<string>) {
   if (isDataArray(value)) {
     if (value.environment) {
       roots.add(value.environment.id);
-    }
-  }
-
-  //(MAY NEED LATER ON) DOWN BELOW
-
-  // continuations capture environments too (MAY NEED LATER ON)
-  if (isContinuation(value)) {
-    const env = value.getEnv?.();
-    if (env && env.id) {
-      roots.add(env.id);
     }
   }
 }
@@ -393,7 +382,6 @@ export function computeLiveState(envTree: EnvTree): { liveEnvIds: Set<string>; l
 
   return liveState;
 }
-//EDITEDDDDDDDDDD
 
 /** Returns a set with the elements in `set1` that are not in `set2` */
 export function setDifference<T>(set1: Set<T>, set2: Set<T>) {
