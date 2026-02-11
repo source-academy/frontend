@@ -470,14 +470,15 @@ export function* evalCodeConductorSaga(
   actionType: string,
   storyEnv?: string
 ): SagaIterator {
+
   // Wait 5 seconds for language directory to initialise before continuing evaluation
   let evaluator: IEvaluatorDefinition | undefined = yield call(getEvaluatorDefinitionSaga);
   if (!evaluator?.path) {
-    const { evaluatorSelected } = yield race({
+    const { timeout } = yield race({
       evaluatorSelected: take(LanguageDirectoryActions.setSelectedEvaluator.type),
-      timeout: call(() => new Promise(resolve => setTimeout(resolve, 5000)))
+      timeout: call(() => new Promise(resolve => setTimeout(() => resolve(true), 5000)))
     });
-    if (!evaluatorSelected) {
+    if (timeout) {
       throw Error('language directory could not be loaded in time');
     }
     evaluator = yield call(getEvaluatorDefinitionSaga);
