@@ -137,7 +137,7 @@ export class FnValue extends Value implements IHoverable {
       throw new Error('Closure has no main reference and is not initialised!');
     }
     this.enclosingFrame = Frame.getFrom(this.data.environment);
-    if (this.enclosingFrame) {
+    if (this.enclosingFrame && !CseMachine.getPairCreationMode()) {
       this._arrow = new ArrowFromFn(this).to(this.enclosingFrame) as ArrowFromFn;
     }
     const textColor = this.isReferenced() ? defaultTextColor() : fadedTextColor();

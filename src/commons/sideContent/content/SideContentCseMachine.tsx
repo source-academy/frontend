@@ -274,7 +274,8 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                     onMouseUp={() => {
                       if (this.state.visualization) {
                         CseMachine.togglePairCreationMode();
-                        this.stepNext(); //Temporary fix for demonstration purposes
+                        CseMachine.redraw();
+                        this.stepNext();
                       }
                     }}
                     icon="array"

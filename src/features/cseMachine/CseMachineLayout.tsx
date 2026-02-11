@@ -107,6 +107,13 @@ export class Layout {
   static invisiblePaddingHorizontal: number = 300;
   static scrollContainerRef: RefObject<HTMLDivElement> = React.createRef();
 
+  /**
+   * Pair creation mode stuff
+   *
+   */
+  static arrayCount: number = 0;
+  static streamPairArray: ArrayValue[] = [];
+
   static updateDimensions(width: number, height: number) {
     // update the size of the scroll container and stage given the width and height of the sidebar content.
     Layout.visibleWidth = width;
@@ -513,6 +520,8 @@ export class Layout {
   }
 
   static draw(): React.ReactNode {
+    Layout.arrayCount = 0;
+
     const pairValues: Value[] = Array.from(Layout.values.values()).filter(v => {
       try {
         const data = (v as any).data;
