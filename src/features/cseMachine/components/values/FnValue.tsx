@@ -132,12 +132,6 @@ export class FnValue extends Value implements IHoverable {
     this.labelRef.current?.hide();
   };
 
-  // isLive(): boolean {
-  //   if (this.enclosingFrame instanceof Frame) {
-  //     return this.enclosingFrame.environment && Layout.liveEnvIDs.has(this.enclosingFrame.environment.id);
-  //   }
-  //   return false;
-  // }
   isLive(): boolean {
     const id = (this.data as any).id;
     return id ? Layout.liveObjectIDs.has(id) : false;

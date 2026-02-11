@@ -42,7 +42,7 @@ export class Binding extends Visible {
     /** previous binding (the binding above it) */
     readonly prevBinding: Binding | null,
     readonly isConstant: boolean = false,
-    readonly isLive: boolean = true //EDITEDDDDDDDDDD
+    readonly isLive: boolean = true 
   ) {
     super();
     this.isDummyBinding = isDummyKey(this.keyString);
@@ -64,7 +64,7 @@ export class Binding extends Visible {
         ? (Config.DataUnitHeight - Config.FontSize) / 2
         : (this.value.height() - Config.FontSize) / 2;
 
-    this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, {faded: !this.isLive}); //EDITEDDDDDDDDDD
+    this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, {faded: !this.isLive});
 
     // derive the width from the right bound of the value
     this._width = isMainReference(this.value, this)

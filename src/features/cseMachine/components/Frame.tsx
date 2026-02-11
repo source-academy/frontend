@@ -10,7 +10,7 @@ import { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
 import {
   defaultActiveColor,
   defaultStrokeColor,
-  fadedStrokeColor, //EDITEDDDDDDDDDD (added)
+  fadedStrokeColor, 
   getTextWidth,
   getUnreferencedObjects,
   isClosure,
@@ -162,12 +162,12 @@ export class Frame extends Visible implements IHoverable {
 
     this.isLive = this.environment
     ? Layout.liveEnvIDs.has(this.environment.id)
-    : false; //EDITEDDDDDDDDDD
+    : false; 
     
     for (const [key, data] of entries) {
       const constant =
         this.environment.head[key]?.description === 'const declaration' || !data.writable;
-      const currBinding: Binding = new Binding(key, data.value, this, prevBinding, constant, this.isLive);//EDITEDDDDDDDDDD
+      const currBinding: Binding = new Binding(key, data.value, this, prevBinding, constant, this.isLive);
       prevBinding = currBinding;
       this.bindings.push(currBinding);
       totalWidth = Math.max(totalWidth, currBinding.width() + Config.FramePaddingX);
@@ -183,7 +183,7 @@ export class Frame extends Visible implements IHoverable {
       frameNames.get(this.environment.name) ?? this.environment.name,
       this.x(),
       this.level.y(),
-      { maxWidth: this.width(), faded: !this.isLive } //EDITEDDDDDDDDDD
+      { maxWidth: this.width(), faded: !this.isLive } 
       
     );
     this.totalHeight = this.height() + this.name.height() + Config.TextPaddingY / 2;
