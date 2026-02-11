@@ -32,9 +32,8 @@ export async function initChat(tokens: Tokens): Promise<InitChatResponse> {
     const message = await response.text();
     throw new Error(`Failed to chat to louis: ${message}`);
   }
-  const res = response.json();
-  console.log(res);
-  return await res;
+  const res = await response.json();
+  return res;
 }
 
 export async function continueChat(
