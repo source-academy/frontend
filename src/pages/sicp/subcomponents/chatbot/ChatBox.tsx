@@ -45,8 +45,9 @@ const ChatBox: React.FC<Props> = ({ getSection, getText, activeSnippetId, setAct
 
   // sendMessage sends section + text with every message
   const sendMessage = useCallback(() => {
-    if (userInput.trim() === '') return;
-
+    if (userInput.trim() === '') {
+      return;
+    }
     setUserInput('');
     setMessages(prev => [...prev, { id: uuid(), role: 'user', content: userInput }]);
     setIsLoading(true);
