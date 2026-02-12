@@ -3,10 +3,7 @@ import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/
 import { Resizable } from 're-resizable';
 import React from 'react';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
-import javascript from 'react-syntax-highlighter/dist/esm/languages/prism/javascript';
 import ControlBar from 'src/commons/controlBar/ControlBar';
-
-SyntaxHighlighter.registerLanguage('javascript', javascript);
 import { ControlBarCloseButton } from 'src/commons/controlBar/ControlBarCloseButton';
 import { useResponsive } from 'src/commons/utils/Hooks';
 import { SourceTheme } from 'src/features/sicp/SourceTheme';
