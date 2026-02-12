@@ -192,10 +192,9 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
 
     if (!wasSelected) {
       this.select();
+      // Update this arrow's visual state
+      this.setHighlightedStyle();
     }
-
-    // Update this arrow's visual state
-    this.setHighlightedStyle();
 
     // Force redraw entire layer to update all arrows
     this.ref.current?.getLayer()?.batchDraw();
