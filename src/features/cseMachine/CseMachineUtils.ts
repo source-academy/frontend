@@ -1,3 +1,4 @@
+import { cons } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/base';
 import { estreeDecode } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/encoder-visitor';
 import { unparse } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/reverse_parser';
 import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
@@ -289,9 +290,11 @@ function collectRootEnvIds(): Set<string> {
 function pushEnvFromData(
   value: any,
   pushEnv: (e: Env | null | undefined) => void,
-  markLiveObject?: (id: string) => void
+  markLiveObject?: (id: string) => void,
+  visitedObjects = new Set<any>()
 ) {
-  if (!value) return;
+  if (!value || visitedObjects.has(value)) return;
+  visitedObjects.add(value);
 
   const id = getObjectId(value); // directly add as a live object first since anything is an OBJECT
   if (id && markLiveObject) markLiveObject(id);
@@ -309,7 +312,7 @@ function pushEnvFromData(
     }
     const arr = value as any[]; // going through each element of the array for any references
     for (const elem of arr) {
-      pushEnvFromData(elem, pushEnv, markLiveObject);
+      pushEnvFromData(elem, pushEnv, markLiveObject, visitedObjects);
     }
     return;
   }
@@ -332,6 +335,7 @@ function markReachableEnvs(
   };
 
   const markLiveObject = (id: string) => liveObjectIds.add(id);
+  const visitedObjects = new Set<any>();
 
   rootIds.forEach(id => {
     const env = findEnvById(envTree.root, id);
@@ -343,7 +347,7 @@ function markReachableEnvs(
     pushEnv(env.tail as Env); //add tail env to worklist since we only go through the head in one iteration
 
     Object.values(env.head).forEach(v => {
-      pushEnvFromData(v, pushEnv, markLiveObject);  //adds envs and objects referenced by this env's head
+      pushEnvFromData(v, pushEnv, markLiveObject, visitedObjects);  //adds envs and objects referenced by this env's head
     });
   }
 
@@ -359,11 +363,14 @@ export function computeLiveState(envTree: EnvTree): { liveEnvIds: Set<string>; l
   const pushEnv = (env: Env | null | undefined) => { //specially made ONLY for stack/control dummy bindings
     if (env && env.id) extraRootIds.add(env.id);
   };
+
+  // const visitedObjects = new Set<any>();
+
   Layout.stash.getStack().forEach((item: any) => {
-    pushEnvFromData(item, pushEnv);
+    pushEnvFromData(item, pushEnv, undefined, new Set<any>());
   });
   Layout.control.getStack().forEach((item: ControlItem) => {
-    pushEnvFromData(item as any, pushEnv);
+    pushEnvFromData(item as any, pushEnv, undefined, new Set<any>());
   });
 
   const allRoots = new Set<string>([...roots, ...extraRootIds]); //combine both roots
@@ -372,10 +379,10 @@ export function computeLiveState(envTree: EnvTree): { liveEnvIds: Set<string>; l
   // Mark objects that are live due to being on control/stash
   const markLiveObject = (id: string) => liveState.liveObjectIds.add(id);
   Layout.stash.getStack().forEach((item: any) => {
-    pushEnvFromData(item, () => {}, markLiveObject);
+    pushEnvFromData(item, () => {}, markLiveObject, new Set<any>());
   });
   Layout.control.getStack().forEach((item: ControlItem) => {
-    pushEnvFromData(item as any, () => {}, markLiveObject);
+    pushEnvFromData(item as any, () => {}, markLiveObject, new Set<any>());
   });
 
   return liveState;
