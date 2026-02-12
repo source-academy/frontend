@@ -73,6 +73,22 @@ export class ContValue extends Value implements IHoverable {
     this.addReference(firstReference);
   }
 
+  // isLive(): boolean {
+  //   if (this.enclosingFrame) {
+  //     return (
+  //       (this.enclosingFrame.environment &&
+  //         Layout.liveEnvIDs.has(this.enclosingFrame.environment.id)) ||
+  //       CseMachine.getCurrentEnvId() === this.enclosingFrame.environment?.id
+  //     );
+  //   }
+  //   return false;
+  // }
+
+  isLive(): boolean {
+    const id = (this.data as any).id;
+    return id ? Layout.liveObjectIDs.has(id) : false;
+  }
+
   handleNewReference(newReference: ReferenceType): void {
     if (!isMainReference(this, newReference)) return;
 
@@ -116,8 +132,10 @@ export class ContValue extends Value implements IHoverable {
     if (this.enclosingFrame) {
       this._arrow = new ArrowFromFn(this).to(this.enclosingFrame) as ArrowFromFn;
     }
-    const textColor = this.isReferenced() ? defaultTextColor() : fadedTextColor();
-    const strokeColor = this.isReferenced() ? defaultStrokeColor() : fadedStrokeColor();
+    const textColor = this.isLive() ? defaultTextColor() : fadedTextColor();
+    const strokeColor = this.isLive() ? defaultStrokeColor() : fadedStrokeColor();
+    //dont need to check isReferenced here since live is ALL we need to know
+
     return (
       <React.Fragment key={Layout.key++}>
         <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} ref={this.ref}>
