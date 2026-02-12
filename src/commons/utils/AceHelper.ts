@@ -1,5 +1,5 @@
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 
 import { HighlightRulesSelector_native } from '../../features/fullJS/fullJSHighlight';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';

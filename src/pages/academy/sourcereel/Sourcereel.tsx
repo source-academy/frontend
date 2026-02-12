@@ -1,7 +1,7 @@
 import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';

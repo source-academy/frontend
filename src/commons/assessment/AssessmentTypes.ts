@@ -1,4 +1,5 @@
-import { Chapter, LanguageOptions, SourceError, Variant } from 'js-slang/dist/types';
+import { SourceError } from 'js-slang/dist/errors/base';
+import { Chapter, LanguageOptions, Variant } from 'js-slang/dist/langs';
 
 import { ExternalLibrary, ExternalLibraryName } from '../application/types/ExternalTypes';
 

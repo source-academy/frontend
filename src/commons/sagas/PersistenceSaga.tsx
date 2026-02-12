@@ -2,7 +2,7 @@
 /// <reference types="gapi.client.drive-v3" />
 /// <reference types="google.picker" />
 import { Intent } from '@blueprintjs/core';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { call, put, select } from 'redux-saga/effects';
 
 import type { PersistenceFile } from '../../features/persistence/PersistenceTypes';
