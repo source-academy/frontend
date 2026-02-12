@@ -1,4 +1,3 @@
-import { cons } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/base';
 import { estreeDecode } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/encoder-visitor';
 import { unparse } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/reverse_parser';
 import JsSlangClosure from 'js-slang/dist/cse-machine/closure';

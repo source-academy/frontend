@@ -73,6 +73,7 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
     flowButtons: [],
     editingWorkspaceButtons: [closeButton]
   };
+  const SyntaxHighlighterComponent = SyntaxHighlighter as unknown as React.ComponentType<any>;
 
   return (
     <div className="sicp-code-snippet">
@@ -95,9 +96,9 @@ const CodeSnippet: React.FC<CodeSnippetProps> = props => {
         </div>
       ) : (
         <Card className="sicp-code-snippet-closed" interactive={true} elevation={Elevation.TWO}>
-          <SyntaxHighlighter language="javascript" style={SourceTheme} onClick={handleOpen}>
+          <SyntaxHighlighterComponent language="javascript" style={SourceTheme} onClick={handleOpen}>
             {body}
-          </SyntaxHighlighter>
+          </SyntaxHighlighterComponent>
         </Card>
       )}
       {output && (

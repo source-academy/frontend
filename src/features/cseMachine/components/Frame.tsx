@@ -1,4 +1,3 @@
-import { is } from 'immer/dist/internal.js';
 import React from 'react';
 import { Group, Rect } from 'react-konva';
 
