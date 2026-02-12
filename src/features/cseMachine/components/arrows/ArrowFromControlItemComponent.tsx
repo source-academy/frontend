@@ -12,6 +12,11 @@ export class ArrowFromControlItemComponent extends GenericArrow<
   ControlItemComponent,
   Frame | FnValue | GlobalFnValue | ContValue
 > {
+  constructor(from: ControlItemComponent) {
+    super(from);
+    this.isLive = true; // Control items are always live
+  }
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;

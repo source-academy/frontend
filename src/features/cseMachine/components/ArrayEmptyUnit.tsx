@@ -21,6 +21,10 @@ export class ArrayEmptyUnit extends Visible {
   }
 
   draw(): React.ReactNode {
+    const strokeColor =
+      this.parent.isReferenced() && this.parent.isEnclosingFrameLive()
+        ? defaultStrokeColor()
+        : fadedStrokeColor();
     return (
       <Rect
         {...ShapeDefaultProps}
@@ -29,7 +33,7 @@ export class ArrayEmptyUnit extends Visible {
         y={this.y()}
         width={this.width()}
         height={this.height()}
-        stroke={this.parent.isReferenced() ? defaultStrokeColor() : fadedStrokeColor()}
+        stroke={strokeColor}
         ref={this.ref}
       />
     );
