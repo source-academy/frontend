@@ -218,7 +218,7 @@ type ExtendedSet<T> = Set<T> & {
 };
 
 /** Returns environment given its `id`, recursively searching starting from `node` */
-function findEnvById(node : EnvTreeNode, id : string): Env | null {
+function findEnvById(node: EnvTreeNode, id: string): Env | null {
   if (node.environment && node.environment.id === id) {
     return node.environment as Env;
   }
@@ -347,7 +347,7 @@ function markReachableEnvs(
     pushEnv(env.tail as Env); //add tail env to worklist since we only go through the head in one iteration
 
     Object.values(env.head).forEach(v => {
-      pushEnvFromData(v, pushEnv, markLiveObject, visitedObjects);  //adds envs and objects referenced by this env's head
+      pushEnvFromData(v, pushEnv, markLiveObject, visitedObjects); //adds envs and objects referenced by this env's head
     });
   }
 
@@ -355,12 +355,16 @@ function markReachableEnvs(
 }
 
 /** Returns environment id and object id that are reachable from root environments and control/stash */
-export function computeLiveState(envTree: EnvTree): { liveEnvIds: Set<string>; liveObjectIds: Set<string> } {
+export function computeLiveState(envTree: EnvTree): {
+  liveEnvIds: Set<string>;
+  liveObjectIds: Set<string>;
+} {
   const roots = collectRootEnvIds();
 
   // Add envs reachable from objects on control/stash as extra roots
   const extraRootIds = new Set<string>();
-  const pushEnv = (env: Env | null | undefined) => { //specially made ONLY for stack/control dummy bindings
+  const pushEnv = (env: Env | null | undefined) => {
+    //specially made ONLY for stack/control dummy bindings
     if (env && env.id) extraRootIds.add(env.id);
   };
 

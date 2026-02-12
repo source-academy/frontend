@@ -10,7 +10,7 @@ import { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
 import {
   defaultActiveColor,
   defaultStrokeColor,
-  fadedStrokeColor, 
+  fadedStrokeColor,
   getTextWidth,
   getUnreferencedObjects,
   isClosure,
@@ -160,14 +160,19 @@ export class Frame extends Visible implements IHoverable {
     // Create all the bindings and values
     let prevBinding: Binding | null = null;
 
-    this.isLive = this.environment
-    ? Layout.liveEnvIDs.has(this.environment.id)
-    : false; 
-    
+    this.isLive = this.environment ? Layout.liveEnvIDs.has(this.environment.id) : false;
+
     for (const [key, data] of entries) {
       const constant =
         this.environment.head[key]?.description === 'const declaration' || !data.writable;
-      const currBinding: Binding = new Binding(key, data.value, this, prevBinding, constant, this.isLive);
+      const currBinding: Binding = new Binding(
+        key,
+        data.value,
+        this,
+        prevBinding,
+        constant,
+        this.isLive
+      );
       prevBinding = currBinding;
       this.bindings.push(currBinding);
       totalWidth = Math.max(totalWidth, currBinding.width() + Config.FramePaddingX);
@@ -183,8 +188,7 @@ export class Frame extends Visible implements IHoverable {
       frameNames.get(this.environment.name) ?? this.environment.name,
       this.x(),
       this.level.y(),
-      { maxWidth: this.width(), faded: !this.isLive } 
-      
+      { maxWidth: this.width(), faded: !this.isLive }
     );
     this.totalHeight = this.height() + this.name.height() + Config.TextPaddingY / 2;
 
@@ -203,7 +207,7 @@ export class Frame extends Visible implements IHoverable {
     return (
       <Group ref={this.ref} key={Layout.key++}>
         {this.name.draw()}
-        
+
         <Rect
           {...ShapeDefaultProps}
           x={this.x()}
@@ -214,8 +218,8 @@ export class Frame extends Visible implements IHoverable {
             CseMachine.getCurrentEnvId() === this.environment?.id
               ? defaultActiveColor()
               : this.isLive
-              ? defaultStrokeColor()
-              : fadedStrokeColor()
+                ? defaultStrokeColor()
+                : fadedStrokeColor()
           }
           cornerRadius={Config.FrameCornerRadius}
           onMouseEnter={this.onMouseEnter}

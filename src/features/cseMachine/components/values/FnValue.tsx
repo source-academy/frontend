@@ -137,9 +137,7 @@ export class FnValue extends Value implements IHoverable {
     return id ? Layout.liveObjectIDs.has(id) : false;
   }
 
-
   draw(): React.ReactNode {
-    
     if (this.fnName === undefined) {
       throw new Error('Closure has no main reference and is not initialised!');
     }
@@ -147,12 +145,12 @@ export class FnValue extends Value implements IHoverable {
     if (this.enclosingFrame) {
       this._arrow = new ArrowFromFn(this).to(this.enclosingFrame) as ArrowFromFn;
     }
-    
-    const isLive : boolean = this.isLive();
+
+    const isLive: boolean = this.isLive();
     const textColor = isLive ? defaultTextColor() : fadedTextColor();
     const strokeColor = isLive ? defaultStrokeColor() : fadedStrokeColor();
     //dont need to check isReferenced here since live is ALL we need to know
-    
+
     return (
       <React.Fragment key={Layout.key++}>
         <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} ref={this.ref}>

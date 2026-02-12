@@ -11,9 +11,9 @@ export class ArrowFromFn extends GenericArrow<FnValue | GlobalFnValue | ContValu
   //Removed the constructor as it is identical to the parent class as now 'faded' property is removed
   constructor(from: FnValue | GlobalFnValue | ContValue) {
     super(from);
-    if(from instanceof GlobalFnValue)
+    if (from instanceof GlobalFnValue)
       this.isLive = true; // Global functions are always live
-    else this.isLive = from.isLive()  
+    else this.isLive = from.isLive();
   }
 
   protected updateIsLive(): void {

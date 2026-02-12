@@ -89,7 +89,6 @@ export class ContValue extends Value implements IHoverable {
     return id ? Layout.liveObjectIDs.has(id) : false;
   }
 
-
   handleNewReference(newReference: ReferenceType): void {
     if (!isMainReference(this, newReference)) return;
 
@@ -136,7 +135,7 @@ export class ContValue extends Value implements IHoverable {
     const textColor = this.isLive() ? defaultTextColor() : fadedTextColor();
     const strokeColor = this.isLive() ? defaultStrokeColor() : fadedStrokeColor();
     //dont need to check isReferenced here since live is ALL we need to know
-    
+
     return (
       <React.Fragment key={Layout.key++}>
         <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} ref={this.ref}>

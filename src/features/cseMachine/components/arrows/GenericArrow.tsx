@@ -14,11 +14,11 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
   target: Target | undefined;
   isLive: boolean = false; // Added to track if the arrow is live (an inherent property of the arrow)
   /*
-  * The above is added since an arrow can in general be drawn between two points
-  * that may or may not be a Frame. Hence, we cannot determine if the arrow is live
-  * based on whether the source or target is a live Frame. Thus, we set this property
-  * when we create the arrow 
-  */
+   * The above is added since an arrow can in general be drawn between two points
+   * that may or may not be a Frame. Hence, we cannot determine if the arrow is live
+   * based on whether the source or target is a live Frame. Thus, we set this property
+   * when we create the arrow
+   */
 
   constructor(from: Source) {
     super();

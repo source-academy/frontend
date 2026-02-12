@@ -29,7 +29,8 @@ export class PrimitiveValue extends Value {
       this._x = reference.x() + getTextWidth(reference.keyString) + Config.TextPaddingX;
       this._y = reference.y();
       this.text = new Text(this.data, this.x(), this.y(), {
-        isStringIdentifiable: !isSourceObject(data), faded: true
+        isStringIdentifiable: !isSourceObject(data),
+        faded: true
       });
     } else {
       const maxWidth = reference.width();

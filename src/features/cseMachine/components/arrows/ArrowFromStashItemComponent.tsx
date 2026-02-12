@@ -16,7 +16,7 @@ export class ArrowFromStashItemComponent extends GenericArrow<
     super(from);
     this.isLive = true; // Stash items are always live
   }
-  
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;

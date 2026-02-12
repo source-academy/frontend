@@ -5,7 +5,7 @@ import { Group } from 'react-konva';
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
 import { DataArray, IHoverable, ReferenceType } from '../../CseMachineTypes';
-import { isMainReference} from '../../CseMachineUtils';
+import { isMainReference } from '../../CseMachineUtils';
 import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
 import { ArrayUnit } from '../ArrayUnit';
 import { Binding } from '../Binding';
@@ -129,8 +129,7 @@ export class ArrayValue extends Value implements IHoverable {
       >
         {this.units.length > 0
           ? this.units.map(unit => unit.draw())
-          : new ArrayEmptyUnit(this).draw()
-        }
+          : new ArrayEmptyUnit(this).draw()}
       </Group>
     );
   }

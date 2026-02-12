@@ -96,8 +96,11 @@ export class ArrayUnit extends Visible {
       visible: CseMachine.getPrintableMode()
     };
 
-    const strokeColor = this.parent.isReferenced() && this.parent.isEnclosingFrameLive() ? defaultStrokeColor() : fadedStrokeColor();
-    
+    const strokeColor =
+      this.parent.isReferenced() && this.parent.isEnclosingFrameLive()
+        ? defaultStrokeColor()
+        : fadedStrokeColor();
+
     return (
       <React.Fragment key={Layout.key++}>
         <RoundedRect
@@ -120,7 +123,7 @@ export class ArrayUnit extends Visible {
           text={`${this.index}`}
           stroke={strokeColor}
         />
-        {this.value.draw()} 
+        {this.value.draw()}
         {this.arrow?.draw()}
       </React.Fragment>
     );

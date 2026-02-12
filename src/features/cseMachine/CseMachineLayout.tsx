@@ -47,7 +47,8 @@ import {
   isPrimitiveData,
   isStreamFn,
   isUnassigned,
-  setDifference} from './CseMachineUtils';
+  setDifference
+} from './CseMachineUtils';
 import { Continuation, isContinuation, isSchemeNumber, isSymbol } from './utils/scheme';
 
 /** this class encapsulates the logic for calculating the layout */
@@ -89,7 +90,7 @@ export class Layout {
   /** all environment and value IDs that are live in the current context */
   static liveEnvIDs: Set<string> = new Set();
   static liveObjectIDs: Set<string> = new Set();
-  
+
   /**
    * memoized values, where keys are either ids for arrays and closures,
    * or the function objects themselves for built-in functions and stream functions
@@ -175,7 +176,7 @@ export class Layout {
     const liveState = computeLiveState({ root: Layout.globalEnvNode } as EnvTree);
     Layout.liveEnvIDs = liveState.liveEnvIds;
     Layout.liveObjectIDs = liveState.liveObjectIds;
-    
+
     // initialize levels and frames
     Layout.initializeGrid();
     // initialize control and stash

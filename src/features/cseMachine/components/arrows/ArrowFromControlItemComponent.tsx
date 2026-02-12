@@ -16,7 +16,7 @@ export class ArrowFromControlItemComponent extends GenericArrow<
     super(from);
     this.isLive = true; // Control items are always live
   }
-  
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
