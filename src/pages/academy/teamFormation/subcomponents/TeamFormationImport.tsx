@@ -23,8 +23,9 @@ const TeamFormationImport: React.FC = () => {
   );
   let maxNoOfStudents: number | undefined = selectedAssessment ? selectedAssessment.maxTeamSize : 0;
 
-  const handleChange = (file: File | null) => {
-    setFile(file);
+  const handleChange = (uploaded: File | File[]) => {
+    const selectedFile = Array.isArray(uploaded) ? (uploaded[0] ?? null) : uploaded;
+    setFile(selectedFile);
   };
 
   const backToTeamDashboard = () => {

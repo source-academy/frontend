@@ -40,7 +40,8 @@ export class Binding extends Visible {
     readonly frame: Frame,
     /** previous binding (the binding above it) */
     readonly prevBinding: Binding | null,
-    readonly isConstant: boolean = false
+    readonly isConstant: boolean = false,
+    readonly isLive: boolean = true
   ) {
     super();
     this.isDummyBinding = isDummyKey(this.keyString);
@@ -62,7 +63,7 @@ export class Binding extends Visible {
         ? (Config.DataUnitHeight - Config.FontSize) / 2
         : (this.value.height() - Config.FontSize) / 2;
 
-    this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset);
+    this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, { faded: !this.isLive });
 
     // derive the width from the right bound of the value
     this._width = isMainReference(this.value, this)
@@ -90,6 +91,16 @@ export class Binding extends Visible {
   }
 
   draw(): React.ReactNode {
+    const isLive = this.isDummyBinding //check if binding is an unreferenced heap object
+      ? ((this.value as any).isLive?.() ?? false)
+      : this.frame.isLive;
+
+    this.key.options.faded = !isLive;
+
+    if (this.value instanceof PrimitiveValue || this.value instanceof UnassignedValue) {
+      this.value.setFaded(!isLive);
+    }
+
     if (
       !this.isDummyBinding && // value is unreferenced in dummy binding
       !(this.value instanceof PrimitiveValue) &&
