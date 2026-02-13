@@ -4,6 +4,10 @@ import ActionConditionChecker from './GameActionConditionChecker';
 import GameActionExecuter from './GameActionExecuter';
 import { ActionCondition } from './GameActionTypes';
 
+
+
+
+
 /**
  * This class manages all game actions, and is called whenever
  * entities need to perform actions.
@@ -36,6 +40,9 @@ export default class GameActionManager {
       await this.processGameAction(actionId);
     }
     await GameGlobalAPI.getInstance().saveGame();
+
+    // Notify the GameManager that we just saved
+    GameGlobalAPI.getInstance().getGameManager().notifyActionJustSaved();
   }
 
   /**
