@@ -65,6 +65,7 @@ export class Binding extends Visible {
         ? (Config.DataUnitHeight - Config.FontSize) / 2
         : (this.value.height() - Config.FontSize) / 2;
 
+
     this.keyYOffset = keyYOffset;
      this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, { faded: !this.isLive });
 
@@ -118,6 +119,7 @@ export class Binding extends Visible {
     // Update Text to new position
     (this.key as any)._x = this.x();
     (this.key as any)._y = this.y() + this.keyYOffset;
+
     if (
       !this.isDummyBinding && // value is unreferenced in dummy binding
       !(this.value instanceof PrimitiveValue) &&

@@ -8,11 +8,21 @@ import { GenericArrow } from './GenericArrow';
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */
 export class ArrowFromFn extends GenericArrow<FnValue | GlobalFnValue | ContValue, Frame> {
+  //Removed the constructor as it is identical to the parent class as now 'faded' property is removed
   constructor(from: FnValue | GlobalFnValue | ContValue) {
     super(from);
-    this.faded = !from.isReferenced();
+    if (from instanceof GlobalFnValue)
+      this.isLive = true; // Global functions are always live
+    else this.isLive = from.isLive();
   }
 
+  protected updateIsLive(): void {
+    if (this.source instanceof GlobalFnValue) {
+      this.isLive = true;
+    } else {
+      this.isLive = this.source.isLive();
+    }
+  }
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;

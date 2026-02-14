@@ -222,11 +222,13 @@ export class Frame extends Visible implements IHoverable {
     let prevBinding: Binding | null = null;
 
     this.isLive = this.environment ? Layout.liveEnvIDs.has(this.environment.id) : false;
-    
+
+
     for (const [key, data] of entries) {
       const constant =
         this.environment.head[key]?.description === 'const declaration' || !data.writable;
-       const currBinding: Binding = new Binding(
+      const currBinding: Binding = new Binding(
+
         key,
         data.value,
         this,
