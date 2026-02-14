@@ -19,6 +19,7 @@ import { EventType } from '../../../../features/achievement/AchievementTypes';
 import type { BrowserHostPlugin } from '../../../../features/conductor/BrowserHostPlugin';
 import { createConductor } from '../../../../features/conductor/createConductor';
 import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
+import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
 import StoriesActions from '../../../../features/stories/StoriesActions';
 import { isSchemeLanguage, type OverallState } from '../../../application/ApplicationTypes';
 import { SideContentType } from '../../../sideContent/SideContentTypes';
@@ -469,9 +470,19 @@ export function* evalCodeConductorSaga(
   actionType: string,
   storyEnv?: string
 ): SagaIterator {
-  // Fetch evaluator from language directory
-  const evaluator: IEvaluatorDefinition | undefined = yield call(getEvaluatorDefinitionSaga);
-  if (!evaluator?.path) throw Error('no evaluator');
+  // Wait 5 seconds for language directory to initialise before continuing evaluation
+  let evaluator: IEvaluatorDefinition | undefined = yield call(getEvaluatorDefinitionSaga);
+  if (!evaluator?.path) {
+    const { timeout } = yield race({
+      evaluatorSelected: take(LanguageDirectoryActions.setSelectedEvaluator.type),
+      timeout: call(() => new Promise(resolve => setTimeout(() => resolve(true), 5000)))
+    });
+    if (timeout) {
+      throw Error('language directory could not be loaded in time');
+    }
+    evaluator = yield call(getEvaluatorDefinitionSaga);
+    if (!evaluator?.path) throw Error('no evaluator');
+  }
   const path: string = evaluator.path;
 
   // Download evaluator code
