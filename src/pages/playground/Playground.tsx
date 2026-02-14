@@ -33,8 +33,8 @@ import {
   showHTMLDisclaimer
 } from 'src/commons/utils/WarningDialogHelper';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
-import CseMachine from 'src/features/cseMachine/CseMachine';
 import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import CseMachine from 'src/features/cseMachine/CseMachine';
 import GithubActions from 'src/features/github/GitHubActions';
 import PersistenceActions from 'src/features/persistence/PersistenceActions';
 import {
