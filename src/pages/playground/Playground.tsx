@@ -6,7 +6,7 @@ import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import { Ace, Range } from 'ace-builds';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';

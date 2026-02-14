@@ -29,7 +29,8 @@ export class PrimitiveValue extends Value {
       this._x = reference.x() + getTextWidth(reference.keyString) + Config.TextPaddingX;
       this._y = reference.y();
       this.text = new Text(this.data, this.x(), this.y(), {
-        isStringIdentifiable: !isSourceObject(data)
+        isStringIdentifiable: !isSourceObject(data),
+        faded: true
       });
     } else {
       const maxWidth = reference.width();
@@ -65,6 +66,10 @@ export class PrimitiveValue extends Value {
     if (this.isReferenced()) return;
     super.markAsReferenced();
     if (this.text instanceof Text) this.text.options.faded = false;
+  }
+
+  setFaded(faded: boolean) {
+    if (this.text instanceof Text) this.text.options.faded = faded;
   }
 
   draw(): React.ReactNode {

@@ -53,7 +53,7 @@ export class GlobalFnValue extends Value implements IHoverable {
     mainReference: Binding
   ) {
     super();
-    Layout.memoizeValue(data, this);
+    Layout.memoizeValue(data, this); 
      // check for frame x cooridnate in cache
     const ghostX = Layout.getGhostFrameX(mainReference.frame.environment.id);
     const frameX = ghostX !== undefined ? ghostX : mainReference.frame.x();                        

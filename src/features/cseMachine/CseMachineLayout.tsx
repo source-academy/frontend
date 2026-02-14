@@ -1,6 +1,7 @@
 import Heap from 'js-slang/dist/cse-machine/heap';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
-import { Chapter, Frame } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
+import { Frame } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Stage } from 'konva/lib/Stage';
 import React, { RefObject } from 'react';
@@ -33,6 +34,7 @@ import {
 } from './CseMachineTypes';
 import {
   assert,
+  computeLiveState,
   deepCopyTree,
   defaultBackgroundColor,
   getNextChildren,
@@ -88,6 +90,10 @@ export class Layout {
 
   static previousControlComponent: ControlStack;
   static previousStashComponent: StashStack;
+
+ /** all environment and value IDs that are live in the current context */
+  static liveEnvIDs: Set<string> = new Set();
+  static liveObjectIDs: Set<string> = new Set();
 
   /**
    * memoized values, where keys are either ids for arrays and closures,
@@ -169,6 +175,12 @@ export class Layout {
     Layout.removePreludeEnv();
     // remove global functions that are not referenced in the program
     Layout.removeUnreferencedGlobalFns();
+
+    // compute liveness on the same tree we render
+    const liveState = computeLiveState({ root: Layout.globalEnvNode } as EnvTree);
+    Layout.liveEnvIDs = liveState.liveEnvIds;
+    Layout.liveObjectIDs = liveState.liveObjectIds;
+
     // initialize levels and frames
     Layout.initializeGrid();
     // initialize control and stash
