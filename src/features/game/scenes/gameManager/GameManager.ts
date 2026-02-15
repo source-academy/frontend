@@ -277,10 +277,6 @@ class GameManager extends Phaser.Scene {
     // except for locations specified in json file with noSave flag,
     // or if we have saved from running Location Actions
     const gameLocation = GameGlobalAPI.getInstance().getLocationAtId(locationId);
-    if (gameLocation.noSave) {
-      return;
-    }
-
     if (this.actionJustSaved) {
       return;
     }
