@@ -36,7 +36,6 @@ export type GameLocation = IGameActionable & {
   boundingBoxes: Set<ItemId>;
   bgmKey: AssetKey;
   characters: Set<ItemId>;
-  noSave?: boolean;
 };
 
 export enum GameItemType {
