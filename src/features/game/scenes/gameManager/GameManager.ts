@@ -79,7 +79,6 @@ class GameManager extends Phaser.Scene {
   private quizManager?: GameQuizManager;
   private actionJustSaved: boolean = false;
 
-
   constructor() {
     super('GameManager');
     this.currentLocationId = Constants.nullInteractionId;
@@ -277,17 +276,16 @@ class GameManager extends Phaser.Scene {
     // Triggers a location Save at the end of every location change,
     // except for locations specified in json file with noSave flag,
     // or if we have saved from running Location Actions
-    const gameLocation = GameGlobalAPI.getInstance().getLocationAtId(locationId); 
+    const gameLocation = GameGlobalAPI.getInstance().getLocationAtId(locationId);
     if (gameLocation.noSave) {
-      return; 
-    } 
+      return;
+    }
 
     if (this.actionJustSaved) {
       return;
     }
 
     await GameGlobalAPI.getInstance().saveGame();
-    
   }
 
   /**

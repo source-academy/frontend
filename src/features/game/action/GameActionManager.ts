@@ -4,10 +4,6 @@ import ActionConditionChecker from './GameActionConditionChecker';
 import GameActionExecuter from './GameActionExecuter';
 import { ActionCondition } from './GameActionTypes';
 
-
-
-
-
 /**
  * This class manages all game actions, and is called whenever
  * entities need to perform actions.
