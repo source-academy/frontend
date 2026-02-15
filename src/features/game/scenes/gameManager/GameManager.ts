@@ -275,7 +275,6 @@ class GameManager extends Phaser.Scene {
 
     // Triggers a location Save at the end of every location change,
     // except for locations where we have saved from running Location Actions
-    const gameLocation = GameGlobalAPI.getInstance().getLocationAtId(locationId);
     if (this.actionJustSaved) {
       return;
     }
