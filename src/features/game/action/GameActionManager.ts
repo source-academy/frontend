@@ -36,6 +36,9 @@ export default class GameActionManager {
       await this.processGameAction(actionId);
     }
     await GameGlobalAPI.getInstance().saveGame();
+
+    // Notify the GameManager that we just saved
+    GameGlobalAPI.getInstance().getGameManager().notifyActionJustSaved();
   }
 
   /**
