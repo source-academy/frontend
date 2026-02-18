@@ -14,6 +14,10 @@ export function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIter
       state.workspaces[workspaceLocation].lastDebuggerResult,
       state.workspaces[workspaceLocation].context.chapter
     ]);
+    if (!lastDebuggerResult) {
+      yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
+      return;
+    }
     if (chapter === Chapter.FULL_JAVA) {
       const controlItem = lastDebuggerResult.context.control.peek();
       let start = -1;
