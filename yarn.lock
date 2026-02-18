@@ -1614,15 +1614,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@blueprintjs/colors@npm:^5.1.13":
-  version: 5.1.13
-  resolution: "@blueprintjs/colors@npm:5.1.13"
-  dependencies:
-    tslib: "npm:~2.6.2"
-  checksum: 10c0/28c65109ba16e60907b64def9aee380261e960fa1be4c3c7a82745a2f44cca32d5daae75c376528c481c0c54f907b0d47a7c66a2318a70382adeaca9ca2da2ff
-  languageName: node
-  linkType: hard
-
 "@blueprintjs/colors@npm:^5.1.14":
   version: 5.1.14
   resolution: "@blueprintjs/colors@npm:5.1.14"
@@ -1632,7 +1623,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@blueprintjs/core@npm:^6.0.0, @blueprintjs/core@npm:^6.7.0, @blueprintjs/core@npm:^6.8.0":
+"@blueprintjs/core@npm:^6.0.0, @blueprintjs/core@npm:^6.8.0":
   version: 6.8.0
   resolution: "@blueprintjs/core@npm:6.8.0"
   dependencies:
@@ -1684,7 +1675,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@blueprintjs/icons@npm:^6.0.0, @blueprintjs/icons@npm:^6.5.1, @blueprintjs/icons@npm:^6.5.2":
+"@blueprintjs/icons@npm:^6.0.0, @blueprintjs/icons@npm:^6.5.2":
   version: 6.5.2
   resolution: "@blueprintjs/icons@npm:6.5.2"
   dependencies:
@@ -1702,27 +1693,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@blueprintjs/select@npm:^6.0.0":
-  version: 6.0.14
-  resolution: "@blueprintjs/select@npm:6.0.14"
-  dependencies:
-    "@blueprintjs/colors": "npm:^5.1.13"
-    "@blueprintjs/core": "npm:^6.7.0"
-    "@blueprintjs/icons": "npm:^6.5.1"
-    classnames: "npm:^2.3.1"
-    tslib: "npm:~2.6.2"
-  peerDependencies:
-    "@types/react": 18
-    react: 18
-    react-dom: 18
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-  checksum: 10c0/342d838d04a96aeb4cff624a1cc3fbe71d41a4adcc55e0378e7871f266e2e51aa6dd375b2c9c6d618182e9881975a47c950f30946e66b822c837f4751ee1171e
-  languageName: node
-  linkType: hard
-
-"@blueprintjs/select@npm:^6.1.0":
+"@blueprintjs/select@npm:^6.0.0, @blueprintjs/select@npm:^6.1.0":
   version: 6.1.0
   resolution: "@blueprintjs/select@npm:6.1.0"
   dependencies:
