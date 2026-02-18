@@ -36,13 +36,14 @@ import {
   StepperVariableDeclaration,
   StepperVariableDeclarator
 } from 'js-slang/dist/tracer/nodes/Statement/VariableDeclaration';
-import { astToString } from 'js-slang/dist/utils/ast/astToString';
+// import { astToString } from 'js-slang/dist/utils/ast/astToString';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
 import { beginAlertSideContent } from '../SideContentActions';
 import { SideContentLocation, SideContentType } from '../SideContentTypes';
+// import { cons } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/base';
 
 const SubstDefaultText = () => {
   const { t } = useTranslation('sideContent', { keyPrefix: 'substVisualizer' });
@@ -207,6 +208,7 @@ interface RenderContext {
   parentNode?: StepperBaseNode;
   isRight?: boolean; // specified for binary expression
   styleWrapper: StyleWrapper;
+  popoverDepth?: number;
 }
 
 /**
@@ -242,6 +244,7 @@ function composeStyleWrapper(
  */
 function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext): React.ReactNode {
   const styleWrapper = renderContext.styleWrapper;
+  const popoverDepth = renderContext.popoverDepth ?? 0;
   const renderers = {
     Literal(node: StepperLiteral) {
       const stringifyLiteralValue = (value: any) =>
@@ -286,9 +289,9 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
       return (
         <span>
           {renderNode(node.test, { styleWrapper: styleWrapper })}
-          <span className="stepper-operator">{` ? `}</span>
+          <span className="stepper-conditional-operator">{` ? `}</span>
           {renderNode(node.consequent, { styleWrapper: styleWrapper })}
-          <span className="stepper-operator">{` : `}</span>
+          <span className="stepper-conditional-operator">{` : `}</span>
           {renderNode(node.alternate, { styleWrapper: styleWrapper })}
         </span>
       );
@@ -318,6 +321,30 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
       );
     },
     ArrowFunctionExpression(node: StepperArrowFunctionExpression) {
+
+      /** 
+       * Recursive Hoverover feature
+       * muTermStyleWrapper wraps identifiers in the code body with popover
+       */
+      const FunctionDefinitionPopoverContent = () => (
+        <div className={classNames('stepper-popover', Classes.DARK)}>
+          <div className="stepper-display">
+            <Icon icon="code" />
+            <span>{' Function definition'}</span>
+            <pre className={Classes.CODE_BLOCK}>
+              <code>
+                {renderFunctionArguments(node.params)}
+                <span className="stepper-identifier">{' => '}</span>
+                {renderNode(node.body, {
+                  styleWrapper: composeStyleWrapper(styleWrapper, muTermStyleWrapper)!,
+                  popoverDepth: popoverDepth + 1
+                })}
+              </code>
+            </pre>
+          </div>
+        </div>
+      );
+
       /**
        * Add hovering effect to children nodes only if it is an identifier with the name
        * corresponding to the name of lambda expression
@@ -328,25 +355,20 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
           (targetNode as StepperIdentifier).name === node.name
         ) {
           function addHovering(preprocessed: React.ReactNode): React.ReactNode {
-            const functionDefinition = astToString(node);
+            // const functionDefinition = astToString(node);
             return (
               <span className="stepper-mu-term">
                 <Popover
                   interactionKind="hover"
                   placement="bottom"
-                  content={
-                    <div>
-                      <Icon icon="code" />
-                      <span>{' Function definition'}</span>
-                      <pre className={Classes.CODE_BLOCK}>
-                        <code>{functionDefinition}</code>
-                      </pre>
-                    </div>
-                  }
+                  usePortal={popoverDepth === 0}
+                  lazy={true}
+                  popoverClassName='stepper-popover'
+                  content={<FunctionDefinitionPopoverContent/>}
                 >
                   {preprocessed}
                 </Popover>
-              </span>
+              </span >
             );
           }
           return addHovering;
@@ -362,15 +384,9 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
           <Popover
             interactionKind="hover"
             placement="bottom"
-            content={
-              <div>
-                <Icon icon="code" />
-                <span>{' Function definition'}</span>
-                <pre className={Classes.CODE_BLOCK}>
-                  <code>{astToString(node)}</code>
-                </pre>
-              </div>
-            }
+            usePortal={popoverDepth === 0}
+            lazy={true}
+            content={<FunctionDefinitionPopoverContent/>}
           >
             {node.name}
           </Popover>
@@ -584,10 +600,15 @@ function CustomASTRenderer(props: IStepperPropContents): React.ReactNode {
         if (props.markers === undefined) {
           return renderNode;
         }
+        /**highlight the entire function declaration body
+         * if its a function declaration, highlight the entire body
+         * else just highlight that line
+        */
         let returnNode = <span>{renderNode}</span>;
         props.markers.forEach(marker => {
           if (marker.redex === node) {
-            returnNode = <span className={marker.redexType}>{returnNode}</span>;
+            const Wrapper = node.type === 'FunctionDeclaration' ? 'div' : 'span';
+            returnNode = <Wrapper className={marker.redexType}>{returnNode}</Wrapper>;
           }
         });
         return returnNode;

@@ -1683,6 +1683,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@commander-js/extra-typings@npm:^14.0.0":
+  version: 14.0.0
+  resolution: "@commander-js/extra-typings@npm:14.0.0"
+  peerDependencies:
+    commander: ~14.0.0
+  checksum: 10c0/b064889e254e1c895886ec8148ac6e0d9bfa3c0336b9ee58124178308819dcf008f15e2a7abdc89b6c1ac3bdbd8003d8cfdaf363971d41dcce64b28c9714af12
+  languageName: node
+  linkType: hard
+
 "@convergencelabs/ace-collab-ext@npm:^0.6.0":
   version: 0.6.0
   resolution: "@convergencelabs/ace-collab-ext@npm:0.6.0"
@@ -3521,6 +3530,27 @@ __metadata:
   checksum: 10c0/25dc10930f15010dc6bf6f01d622de0c4bde707892c3bd9d5e221efa9f2d03aac5e8cf27036c4c57ac628b9d140fb6a3d5da3f6ed946faca0fef65d2af8ba514
   languageName: node
   linkType: hard
+
+"@sourceacademy/js-slang@portal:../js-slang::locator=frontend%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@sourceacademy/js-slang@portal:../js-slang::locator=frontend%40workspace%3A."
+  dependencies:
+    "@babel/parser": "npm:^7.19.4"
+    "@commander-js/extra-typings": "npm:^14.0.0"
+    "@ts-morph/bootstrap": "npm:^0.18.0"
+    acorn: "npm:^8.8.2"
+    acorn-class-fields: "npm:^1.0.0"
+    acorn-loose: "npm:^8.0.0"
+    acorn-walk: "npm:^8.0.0"
+    astring: "npm:^1.4.3"
+    commander: "npm:^14.0.0"
+    js-base64: "npm:^3.7.5"
+    lodash: "npm:^4.17.21"
+    source-map: "npm:0.7.6"
+  bin:
+    js-slang: dist/repl/index.js
+  languageName: node
+  linkType: soft
 
 "@sourceacademy/language-directory@https://github.com/source-academy/language-directory.git#0.0.6":
   version: 0.0.6
@@ -5925,6 +5955,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"commander@npm:^14.0.0":
+  version: 14.0.3
+  resolution: "commander@npm:14.0.3"
+  checksum: 10c0/755652564bbf56ff2ff083313912b326450d3f8d8c85f4b71416539c9a05c3c67dbd206821ca72635bf6b160e2afdefcb458e86b317827d5cb333b69ce7f1a24
+  languageName: node
+  linkType: hard
+
 "commander@npm:^2.20.0":
   version: 2.20.3
   resolution: "commander@npm:2.20.3"
@@ -7748,6 +7785,7 @@ __metadata:
     "@sentry/react": "npm:^10.5.0"
     "@sourceacademy/c-slang": "npm:^1.0.21"
     "@sourceacademy/conductor": "https://github.com/source-academy/conductor.git#0.2.1"
+    "@sourceacademy/js-slang": "portal:../js-slang"
     "@sourceacademy/language-directory": "https://github.com/source-academy/language-directory.git#0.0.6"
     "@sourceacademy/plugin-directory": "https://github.com/source-academy/plugin-directory.git#0.0.2"
     "@sourceacademy/sharedb-ace": "npm:2.1.1"

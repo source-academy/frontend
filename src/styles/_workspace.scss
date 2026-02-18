@@ -424,6 +424,10 @@ $code-color-notification: #f9f0d7;
               'Consolas',
               monospace;
           }
+          // for ? : 
+          .stepper-conditional-operator {
+            color: #ffffff;
+          }
 
           .stepper-literal {
             color: #ff6078;
@@ -437,24 +441,29 @@ $code-color-notification: #f9f0d7;
             color: #f8d871;
           }
 
+          // this is used for hoverable
+          // add bold font 
+          // removed background since it clashes with the after/bef sub bg
           .stepper-mu-term {
+            font-weight: bold;
             pointer-events: auto;
             cursor: pointer;
             z-index: 20;
             padding: 0px 3px;
             border-radius: 5px;
-            background: rgba(255, 83, 83, 0.2);
+            background: transparent;
           }
-
+          // removed background since it clashes with the after/bef sub bg
+          // maybe not neccessary to exist anymore
           .stepper-mu-term:hover {
-            background: rgba(255, 83, 83, 0.5);
+            background: transparent;
           }
 
           .beforeMarker {
             position: relative;
             -webkit-box-decoration-break: slice;
             box-decoration-break: slice;
-            background: rgba(179, 101, 57, 0.75);
+            background: rgba(172, 0, 0, 0.75);
             pointer-events: auto;
             cursor: pointer;
             z-index: 20;
@@ -1478,5 +1487,51 @@ $code-color-notification: #f9f0d7;
 
   > p:last-child {
     margin-bottom: 0;
+  }
+}
+
+// CSS for stepper popover box
+.stepper-popover {
+  .stepper-display {
+    font: 16px / normal 'Inconsolata', 'Consolas', monospace;
+  }
+
+  .stepper-literal {
+    color: #ff6078;
+  }
+
+  .stepper-operator {
+    color: #f89210;
+  }
+
+  .stepper-identifier {
+    color: #f8d871;
+  }
+
+  .stepper-conditional-operator {
+    color: #ffffff;
+  }
+
+  .#{$ns}-code-block {
+    .stepper-literal {
+      color: #ff6078;
+    }
+
+    .stepper-operator {
+      color: #f89210;
+    }
+
+    .stepper-identifier {
+      color: #f8d871;
+    }
+
+    .stepper-conditional-operator {
+      color: #ffffff;
+    }
+    
+    .stepper-mu-term {
+      font-weight: bold;
+      cursor: pointer;
+    }
   }
 }
