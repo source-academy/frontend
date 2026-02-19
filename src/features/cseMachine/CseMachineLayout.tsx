@@ -41,6 +41,7 @@ import {
   isBuiltInFn,
   isClosure,
   isDataArray,
+  isEmptyEnvironment,
   isEnvEqual,
   isGlobalFn,
   isNonGlobalFn,
@@ -360,7 +361,9 @@ export class Layout {
   /** initializes grid */
   private static initializeGrid(): void {
     this.levels = [];
-    let frontier: EnvTreeNode[] = [Layout.globalEnvNode];
+    let frontier: EnvTreeNode[] = Layout.hideDeadFrames
+      ? Layout.getVisibleChildren([Layout.globalEnvNode])
+      : [Layout.globalEnvNode];
     let prevLevel: Level | null = null;
     let currLevel: Level;
 
@@ -371,7 +374,9 @@ export class Layout {
 
       frontier.forEach(e => {
         e.children.forEach(c => {
-          const nextChildren = getNextChildren(c as EnvTreeNode);
+          const nextChildren = Layout.hideDeadFrames
+            ? Layout.getVisibleChildren([c as EnvTreeNode])
+            : getNextChildren(c as EnvTreeNode);
           nextChildren.forEach(c => (c.parent = e));
           nextFrontier.push(...nextChildren);
         });
@@ -380,6 +385,33 @@ export class Layout {
       prevLevel = currLevel;
       frontier = nextFrontier;
     }
+  }
+
+  /**
+   * Returns the next environment nodes that should be rendered.
+   * When broom mode is on, dead environments are skipped and their children are promoted.
+   * Empty environments are also skipped to preserve existing behavior.
+   *
+   * @param nodes candidate nodes
+   */
+  private static getVisibleChildren(nodes: EnvTreeNode[]): EnvTreeNode[] {
+    const result: EnvTreeNode[] = [];
+
+    const visit = (node: EnvTreeNode) => {
+      const isLive = Layout.liveEnvIDs.has(node.environment.id);
+      const isEmpty = isEmptyEnvironment(node.environment);
+      const shouldSkip = isEmpty || !isLive;
+
+      if (!shouldSkip) {
+        result.push(node);
+        return;
+      }
+
+      node.children.forEach(child => visit(child as EnvTreeNode));
+    };
+
+    nodes.forEach(node => visit(node));
+    return result;
   }
 
   /** Creates an instance of the corresponding `Value` if it doesn't already exists,
