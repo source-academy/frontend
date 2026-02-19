@@ -35,6 +35,13 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
   public static clearSelection(): GenericArrow<IVisible, IVisible> | null {
     return arrowSelection.clearSelection();
   }
+  isLive: boolean = false; // Added to track if the arrow is live (an inherent property of the arrow)
+  /*
+   * The above is added since an arrow can in general be drawn between two points
+   * that may or may not be a Frame. Hence, we cannot determine if the arrow is live
+   * based on whether the source or target is a live Frame. Thus, we set this property
+   * when we create the arrow
+   */
 
   constructor(from: Source) {
     super();
@@ -42,6 +49,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
     this.target = undefined;
     this._x = from.x();
     this._y = from.y();
+    this.isLive = false; // default to false
   }
 
   path(): string {
@@ -215,6 +223,12 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
   draw() {
 
     const stroke = this.getCurrentColor();
+  // Subclasses can override to recompute liveness before drawing
+  protected updateIsLive(): void {} //kind of an abstract method
+
+  draw() {
+    this.updateIsLive(); //just before drawijng, update liveness for the arrows (since this was causing erroes earlier  )
+    const stroke = this.isLive ? defaultStrokeColor() : fadedStrokeColor();
 
     return (
       <KonvaGroup

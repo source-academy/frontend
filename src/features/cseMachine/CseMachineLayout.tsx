@@ -35,6 +35,7 @@ import {
 } from './CseMachineTypes';
 import {
   assert,
+  computeLiveState,
   deepCopyTree,
   defaultBackgroundColor,
   getNextChildren,
@@ -86,6 +87,10 @@ export class Layout {
 
   static previousControlComponent: ControlStack;
   static previousStashComponent: StashStack;
+
+  /** all environment and value IDs that are live in the current context */
+  static liveEnvIDs: Set<string> = new Set();
+  static liveObjectIDs: Set<string> = new Set();
 
   /**
    * memoized values, where keys are either ids for arrays and closures,
@@ -168,6 +173,12 @@ export class Layout {
     Layout.removePreludeEnv();
     // remove global functions that are not referenced in the program
     Layout.removeUnreferencedGlobalFns();
+
+    // compute liveness on the same tree we render
+    const liveState = computeLiveState({ root: Layout.globalEnvNode } as EnvTree);
+    Layout.liveEnvIDs = liveState.liveEnvIds;
+    Layout.liveObjectIDs = liveState.liveObjectIds;
+
     // initialize levels and frames
     Layout.initializeGrid();
     // initialize control and stash

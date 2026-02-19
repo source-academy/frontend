@@ -12,6 +12,11 @@ export class ArrowFromStashItemComponent extends GenericArrow<
   StashItemComponent,
   Frame | FnValue | GlobalFnValue | ArrayValue | ContValue
 > {
+  constructor(from: StashItemComponent) {
+    super(from);
+    this.isLive = true; // Stash items are always live
+  }
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
