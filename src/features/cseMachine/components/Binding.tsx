@@ -95,6 +95,10 @@ export class Binding extends Visible {
       ? ((this.value as any).isLive?.() ?? false)
       : this.frame.isLive;
 
+    if (Layout.hideDeadFrames && !isLive) {
+      return null;
+    }
+
     this.key.options.faded = !isLive;
 
     if (this.value instanceof PrimitiveValue || this.value instanceof UnassignedValue) {
