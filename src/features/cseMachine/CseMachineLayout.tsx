@@ -207,10 +207,10 @@ export class Layout {
       Layout.visibleWidth,
       Config.CanvasMinWidth,
       Layout.levels.reduce<number>((maxWidth, level) => Math.max(maxWidth, level.width()), 0) +
-      Config.CanvasPaddingX * 2 +
-      (CseMachine.getControlStash()
-        ? Layout.controlComponent.width() + Config.CanvasPaddingX * 2
-        : 0)
+        Config.CanvasPaddingX * 2 +
+        (CseMachine.getControlStash()
+          ? Layout.controlComponent.width() + Config.CanvasPaddingX * 2
+          : 0)
     );
     // initialise animations
     CseAnimation.updateAnimation();
