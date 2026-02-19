@@ -8,8 +8,8 @@ import React, { RefObject } from 'react';
 import { Layer as KonvaLayer, Rect as KonvaRect, Stage as KonvaStage } from 'react-konva';
 import classes from 'src/styles/Draggable.module.scss';
 
+import { arrowSelection } from './components/arrows/ArrowSelection';
 import { Binding } from './components/Binding';
-import { GenericArrow } from './components/arrows/GenericArrow';
 import { ControlStack } from './components/ControlStack';
 import { Level } from './components/Level';
 import { StashStack } from './components/StashStack';
@@ -161,7 +161,7 @@ export class Layout {
     Layout.currentStackTruncLight = undefined;
     // clear/initialize data and value arrays
     Layout.values.clear();
-    GenericArrow.clearSelection();
+    arrowSelection.clearSelection();
     Layout.key = 0;
 
     // deep copy so we don't mutate the context

@@ -2,10 +2,10 @@ import { Context } from 'js-slang';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import React from 'react';
 
+import { arrowSelection } from './components/arrows/ArrowSelection';
 import { Layout } from './CseMachineLayout';
 import { EnvTree } from './CseMachineTypes';
 import { deepCopyTree, getEnvId } from './CseMachineUtils';
-import { GenericArrow } from './components/arrows/GenericArrow';
 
 type SetVis = (vis: React.ReactNode) => void;
 type SetEditorHighlightedLines = (segments: [number, number][]) => void;
@@ -69,7 +69,7 @@ export default class CseMachine {
 
   static clear() {
     Layout.values.clear();
-    GenericArrow.clearSelection();
+    arrowSelection.clearSelection();
   }
 
   /** updates the visualization state in the SideContentCseMachine component based on

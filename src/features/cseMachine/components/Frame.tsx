@@ -198,9 +198,9 @@ export class Frame extends Visible implements IHoverable {
     }
   }
 
-  onMouseEnter = () => { };
+  onMouseEnter = () => {};
 
-  onMouseLeave = () => { };
+  onMouseLeave = () => {};
 
   draw(): React.ReactNode {
     return (

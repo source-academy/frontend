@@ -12,7 +12,9 @@ import { Visible } from '../Visible';
 import { arrowSelection } from './ArrowSelection';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
-export class GenericArrow<Source extends IVisible, Target extends IVisible> extends Visible implements IHoverable {
+export class GenericArrow<Source extends IVisible, Target extends IVisible>
+  extends Visible
+  implements IHoverable {
   private _path: string = '';
   points: number[] = [];
   source: Source;
@@ -31,10 +33,6 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
     arrowSelection.setSelected(this);
   }
 
-  // Deselect (static, can be called from anywhere)
-  public static clearSelection(): GenericArrow<IVisible, IVisible> | null {
-    return arrowSelection.clearSelection();
-  }
   isLive: boolean = false; // Added to track if the arrow is live (an inherent property of the arrow)
   /*
    * The above is added since an arrow can in general be drawn between two points
@@ -145,7 +143,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
       this.ref.current.moveToTop();
     }
     this.ref.current?.getLayer()?.batchDraw();
-  }
+  };
 
   onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
@@ -158,7 +156,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
 
     this.setNormalStyle();
     this.ref.current?.getLayer()?.batchDraw();
-  }
+  };
 
   public setHighlightedStyle() {
     const highlightColor = this.getHighlightColour();
@@ -191,7 +189,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
 
     // Toggle selection - clear first, then select if it wasn't already selected
     const wasSelected = this.isSelected();
-    const oldArrow = GenericArrow.clearSelection();
+    const oldArrow = arrowSelection.clearSelection();
 
     // Update old arrow's visual state
     if (oldArrow && oldArrow !== this) {
@@ -206,12 +204,12 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
 
     // Force redraw entire layer to update all arrows
     this.ref.current?.getLayer()?.batchDraw();
-  }
+  };
 
   onContextMenu = (e: KonvaEventObject<MouseEvent>) => {
     e.evt.preventDefault(); // Prevent browser context menu
     this.onClick(e);
-  }
+  };
 
   protected getCurrentColor(): string {
     if (this.isSelected()) {
@@ -220,14 +218,10 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
     return this.faded ? fadedStrokeColor() : defaultStrokeColor();
   }
 
-  
-
-    
   // Subclasses can override to recompute liveness before drawing
-  protected updateIsLive(): void {} //kind of an abstract method
+  protected updateIsLive(): void { } //kind of an abstract method
 
   draw() {
-    
     this.updateIsLive(); //just before drawijng, update liveness for the arrows (since this was causing erroes earlier  )
     const stroke = this.isLive ? defaultStrokeColor() : fadedStrokeColor();
 
@@ -240,7 +234,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
         onMouseLeave={this.onMouseLeave}
         onClick={this.onClick}
         onContextMenu={this.onContextMenu}
-        onMouseDown={(e) => e.cancelBubble = true}
+        onMouseDown={e => (e.cancelBubble = true)}
       >
         <KonvaPath
           {...ShapeDefaultProps}
