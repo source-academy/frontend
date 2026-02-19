@@ -39,7 +39,7 @@ export class ArrayValue extends Value implements IHoverable {
     if (data[1] instanceof Closure || data[1] == null || isDataArray(data[1])) {
       this.arrayId = Layout.arrayCount;
       Layout.streamPairArray[Layout.arrayCount] = this;
-      console.log(Layout.streamPairArray);
+      // console.log(Layout.streamPairArray);
       Layout.arrayCount++;
     }
 

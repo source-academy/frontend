@@ -78,5 +78,16 @@ export const handleCseAndStepperActions = (
           changepointSteps: action.payload.changepointSteps
         }
       };
+    })
+    .addCase(WorkspaceActions.updateStreamsPointSteps, (state, action) => {
+      // Keep streams change-points in sync for stream visualiser navigation
+      const workspaceLocation = getWorkspaceLocation(action);
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          streamsPointSteps: action.payload.streamsPointSteps
+        }
+      };
     });
 };
