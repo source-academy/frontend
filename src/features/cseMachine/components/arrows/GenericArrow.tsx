@@ -126,7 +126,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
    * Returns the hover color for this arrow type.
    * Subclasses can override this to provide custom hover colors.
    */
-  protected getHighlightColour(): string {
+  protected getHighlightedColor(): string {
     return Config.ArrowHighlightedColor;
   }
 
@@ -160,7 +160,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   };
 
   public setHighlightedStyle() {
-    const highlightColor = this.getHighlightColour();
+    const highlightColor = this.getHighlightedColor();
     if (this.pathRef.current) {
       this.pathRef.current.stroke(highlightColor);
       this.pathRef.current.strokeWidth(Config.ArrowHoveredStrokeWidth);
@@ -214,7 +214,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
 
   protected getCurrentColor(): string {
     if (this.isSelected()) {
-      return this.getHighlightColour(); // Selected uses hover color
+      return this.getHighlightedColor(); // Selected uses hover color
     }
     return this.faded ? fadedStrokeColor() : defaultStrokeColor();
   }
