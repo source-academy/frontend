@@ -90,6 +90,8 @@ export class Layout {
   /** all environment and value IDs that are live in the current context */
   static liveEnvIDs: Set<string> = new Set();
   static liveObjectIDs: Set<string> = new Set();
+  /** hide non-live frames temporarily for the current step */
+  static hideDeadFrames: boolean = false;
 
   /**
    * memoized values, where keys are either ids for arrays and closures,
