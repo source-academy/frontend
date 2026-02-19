@@ -220,13 +220,14 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
     return this.faded ? fadedStrokeColor() : defaultStrokeColor();
   }
 
-  draw() {
+  
 
-    const stroke = this.getCurrentColor();
+    
   // Subclasses can override to recompute liveness before drawing
   protected updateIsLive(): void {} //kind of an abstract method
 
   draw() {
+    
     this.updateIsLive(); //just before drawijng, update liveness for the arrows (since this was causing erroes earlier  )
     const stroke = this.isLive ? defaultStrokeColor() : fadedStrokeColor();
 
