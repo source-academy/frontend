@@ -311,7 +311,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                       if (this.state.visualization) {
                         this.setState(
                           prevState => ({
-                            hideDeadFrames: !prevState.hideDeadFrames
+                            hideDeadFrames: true
                           }),
                           () => {
                             CseMachine.setHideDeadFrames(this.state.hideDeadFrames);
