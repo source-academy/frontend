@@ -323,13 +323,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                     }}
                     icon="eye-off"
                     disabled={!this.state.visualization}
-                  >
-                    <Checkbox
-                      checked={this.state.hideDeadFrames}
-                      disabled={!this.state.visualization}
-                      style={{ margin: 0 }}
-                    />
-                  </AnchorButton>
+                  ></AnchorButton>
                 </Tooltip>
                 <Tooltip content="Print" compact>
                   <AnchorButton

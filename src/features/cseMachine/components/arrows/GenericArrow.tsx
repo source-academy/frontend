@@ -108,7 +108,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
     if (Layout.hideDeadFrames && !this.isLive) {
       return null;
     }
-    
+
     const stroke = this.isLive ? defaultStrokeColor() : fadedStrokeColor();
 
     return (
