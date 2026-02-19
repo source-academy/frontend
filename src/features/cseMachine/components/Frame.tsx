@@ -203,6 +203,10 @@ export class Frame extends Visible implements IHoverable {
   onMouseLeave = () => {};
 
   draw(): React.ReactNode {
+    if (Layout.hideDeadFrames && !this.isLive) {
+      return null;
+    }
+
     return (
       <Group ref={this.ref} key={Layout.key++}>
         {this.name.draw()}
