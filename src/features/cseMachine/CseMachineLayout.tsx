@@ -51,7 +51,7 @@ import {
   setDifference
 } from './CseMachineUtils';
 import { Continuation, isContinuation, isSchemeNumber, isSymbol } from './utils/scheme';
-import { number$45$$62$string } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/base';
+
 
 export type LayoutCache = {
   frames: Map<string, number>;
@@ -92,6 +92,7 @@ export class Layout {
   static controlComponent: ControlStack;
   static stashComponent: StashStack;
 
+  
   static previousControlComponent: ControlStack;
   static previousStashComponent: StashStack;
 
