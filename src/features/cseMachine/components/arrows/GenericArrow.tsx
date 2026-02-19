@@ -173,7 +173,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   }
 
   public setNormalStyle() {
-    const color = this.faded ? fadedStrokeColor() : defaultStrokeColor();
+    const color = this.isLive ? defaultStrokeColor() : fadedStrokeColor();
     if (this.pathRef.current) {
       this.pathRef.current.stroke(color);
       this.pathRef.current.strokeWidth(Config.ArrowStrokeWidth);
