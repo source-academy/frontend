@@ -83,7 +83,7 @@ export class Frame extends Visible implements IHoverable {
       ? this.leftSiblingFrame.x() + this.leftSiblingFrame.totalWidth + this.leftSiblingFrame.totalDataWidth + Config.FrameMarginX
       : this.level.x();
     // ensure x coordinate cannot be less than that of parent frame
-    if (this.parentFrame) this._x = Math.max(this._x, this.parentFrame.x());
+    if (!CseMachine.getCenterAlignment() && this.parentFrame) this._x = Math.max(this._x, this.parentFrame.x()); // added condition for center alignment
     this._y = this.level.y() + Config.FontSize + Config.TextPaddingY / 2;
 
     // get all keys and object descriptors of each value inside the head

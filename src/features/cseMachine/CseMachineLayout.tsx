@@ -22,6 +22,7 @@ import { Value } from './components/values/Value';
 import CseMachine from './CseMachine';
 import { CseAnimation } from './CseMachineAnimation';
 import { Config, ShapeDefaultProps } from './CseMachineConfig';
+import { ControlStashConfig } from './CseMachineControlStashConfig'; // Added for offset
 import {
   Data,
   DataArray,
@@ -50,9 +51,12 @@ import {
   setDifference
 } from './CseMachineUtils';
 import { Continuation, isContinuation, isSchemeNumber, isSymbol } from './utils/scheme';
+import { number$45$$62$string } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/base';
 
 export type LayoutCache = {
   frames: Map<string, number>;
+  levels: Map<string, Level>; // added to store frame's level
+  largestWidth: number; // added to store largest level width
 }
 
 /** this class encapsulates the logic for calculating the layout */
@@ -612,40 +616,67 @@ export class Layout {
     }
   }
 
-static getLayoutPositions(): LayoutCache {
+  static getLayoutPositions(): LayoutCache {
     const cache: LayoutCache = { 
-        frames: new Map() 
+        frames: new Map(), 
+        levels: new Map(),
+        largestWidth: 0
     };
 
     Layout.levels.forEach(level => {
-        level.frames.forEach(frame => {
-            cache.frames.set(frame.environment.id, frame.x());
-        });
+      level.frames.forEach(frame => {
+          cache.frames.set(frame.environment.id, frame.x());
+
+          // added to store frame's level and largest width
+          cache.levels.set(frame.environment.id, level);
+          if (cache.largestWidth < level.width()) {
+            cache.largestWidth = level.width();
+          }
+      });
     });
 
     return cache;
-}
+  }
 
-// for components to get frames x coorindates
-static getGhostFrameX(envId: string): number | undefined {
-    if (CseMachine.masterLayout && CseMachine.masterLayout.frames.has(envId)) {
-      
-      return CseMachine.masterLayout.frames.get(envId);
+  // for components to get frames x coorindates
+  static getGhostFrameX(envId: string): number | undefined {
+    const cache = CseMachine.masterLayout!;
+
+    // added for offset
+    let offset: number = 0;
+
+    // if control stash is on, add offset to account for the width of the control stash and its padding
+    if (CseMachine.getControlStash()) {
+      offset += ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth;
+    }
+
+    if (cache && cache.frames.has(envId)) {
+      const fixedX = cache.frames.get(envId)!;
+
+      // added to add offset for center alignment
+      if (CseMachine.getCenterAlignment()) {
+        offset += Math.floor((cache.largestWidth - cache.levels.get(envId)!.width()) / 2);
+      }
+      return fixedX + offset;
     }
     return undefined; 
   }
 
 
-static applyFixedPositions(cache: LayoutCache) {
-  Layout.levels.forEach(level => {
-    level.frames.forEach(frame => {
-      const id = frame.environment.id;
+  static applyFixedPositions() {
+    // static applyFixedPositions(cache: LayoutCache) {
+    const cache = CseMachine.masterLayout!;
+  
+    Layout.levels.forEach(level => {
+      level.frames.forEach(frame => {
+        const id = frame.environment.id;
 
-      if (cache.frames.has(id)) {
-        const fixedX = cache.frames.get(id)!;
-        frame.x = () => fixedX;
-      }
+        if (cache && cache.frames.has(id)) {
+        // if (cache.frames.has(id)) {  
+          const fixedX = Layout.getGhostFrameX(id)!;
+          frame.x = () => fixedX;
+        }
+      });
     });
-  });
-}
+  }
 }

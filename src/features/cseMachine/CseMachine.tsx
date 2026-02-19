@@ -23,6 +23,7 @@ export default class CseMachine {
   private static printableMode: boolean = false;
   private static controlStash: boolean = false; // TODO: discuss if the default should be true
   private static stackTruncated: boolean = false;
+  private static centerAlignment: boolean = false; // added for center alignment
   private static environmentTree: EnvTree | undefined;
   private static currentEnvId: string;
   private static control: Control | undefined;
@@ -36,6 +37,12 @@ export default class CseMachine {
   public static toggleStackTruncated(): void {
     CseMachine.stackTruncated = !CseMachine.stackTruncated;
   }
+  // added for center alignment
+  public static toggleCenterAlignment(): void {
+    CseMachine.centerAlignment = !CseMachine.centerAlignment;
+    CseMachine.redraw();
+  }
+
   public static getCurrentEnvId(): string {
     return CseMachine.currentEnvId;
   }
@@ -47,6 +54,10 @@ export default class CseMachine {
   }
   public static getStackTruncated(): boolean {
     return CseMachine.stackTruncated;
+  }
+  // added for center alignment
+  public static getCenterAlignment(): boolean {
+    return CseMachine.centerAlignment;
   }
 
   public static isControl(): boolean {
@@ -91,9 +102,6 @@ export default class CseMachine {
     );
     // get ghost layout on first run (when user press run and code changes)
     if (!CseMachine.masterLayout) {
-       const originalStash = CseMachine.controlStash;
-       // force stash on for the layout
-       CseMachine.controlStash = true;
        Layout.setContext(
           context.runtime.environmentTree as EnvTree,
           context.runtime.control,
@@ -102,12 +110,12 @@ export default class CseMachine {
        );
 
        CseMachine.masterLayout = Layout.getLayoutPositions();
-       CseMachine.controlStash = originalStash;
     }
 
     // Apply Fixed Positions
     if (CseMachine.masterLayout) {
-      Layout.applyFixedPositions(CseMachine.masterLayout);
+      Layout.applyFixedPositions();
+      // Layout.applyFixedPositions(CseMachine.masterLayout);
     }
 
   
@@ -119,10 +127,20 @@ export default class CseMachine {
   static redraw() {
     if (CseMachine.environmentTree && CseMachine.control && CseMachine.stash) {
       // checks if the required diagram exists, and updates the dom node using setVis
+
+      if (CseMachine.getCenterAlignment() || !CseMachine.getCenterAlignment()) {
+        Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
+        if (CseMachine.masterLayout) {
+            Layout.applyFixedPositions();
+        }
+        this.setVis(Layout.draw());
+      }
+
       if (
         CseMachine.getPrintableMode() &&
         CseMachine.getControlStash() &&
         CseMachine.getStackTruncated() &&
+        // !CseMachine.getCenterAlignment() && // added for center alignment
         Layout.currentStackTruncLight !== undefined
       ) {
         this.setVis(Layout.currentStackTruncLight);
@@ -130,6 +148,7 @@ export default class CseMachine {
         CseMachine.getPrintableMode() &&
         CseMachine.getControlStash() &&
         !CseMachine.getStackTruncated() &&
+        // !CseMachine.getCenterAlignment() && // added for center alignment
         Layout.currentStackLight !== undefined
       ) {
         this.setVis(Layout.currentStackLight);
@@ -137,6 +156,7 @@ export default class CseMachine {
         !CseMachine.getPrintableMode() &&
         CseMachine.getControlStash() &&
         CseMachine.getStackTruncated() &&
+        // !CseMachine.getCenterAlignment() && // added for center alignment
         Layout.currentStackTruncDark !== undefined
       ) {
         this.setVis(Layout.currentStackTruncDark);
@@ -144,25 +164,29 @@ export default class CseMachine {
         !CseMachine.getPrintableMode() &&
         CseMachine.getControlStash() &&
         !CseMachine.getStackTruncated() &&
+        // !CseMachine.getCenterAlignment() && // added for center alignment
         Layout.currentStackDark !== undefined
       ) {
         this.setVis(Layout.currentStackDark);
       } else if (
         CseMachine.getPrintableMode() &&
         !CseMachine.getControlStash() &&
+        // !CseMachine.getCenterAlignment() && // added for center alignment
         Layout.currentLight !== undefined
       ) {
         this.setVis(Layout.currentLight);
       } else if (
         !CseMachine.getPrintableMode() &&
         !CseMachine.getControlStash() &&
+        // !CseMachine.getCenterAlignment() && // added for center alignment
         Layout.currentDark !== undefined
       ) {
         this.setVis(Layout.currentDark);
       } else {
         Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
         if (CseMachine.masterLayout) {
-            Layout.applyFixedPositions(CseMachine.masterLayout);
+            Layout.applyFixedPositions();
+            // Layout.applyFixedPositions(CseMachine.masterLayout);
         }
         this.setVis(Layout.draw());
       }

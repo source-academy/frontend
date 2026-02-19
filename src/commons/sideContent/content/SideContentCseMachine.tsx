@@ -272,6 +272,25 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                     />
                   </AnchorButton>
                 </Tooltip>
+
+                <Tooltip content="Alignment" compact>
+                  <AnchorButton
+                    onMouseUp={() => {
+                      if (this.state.visualization) {
+                        CseMachine.toggleCenterAlignment();
+                        CseMachine.redraw();
+                      }
+                    }}
+                    icon="eye-open"
+                    disabled={!this.state.visualization}
+                  >
+                    <Checkbox
+                      checked={CseMachine.getCenterAlignment()}
+                      disabled={!this.state.visualization}
+                      style={{ margin: 0 }}
+                    />
+                  </AnchorButton>
+                </Tooltip>
               </ButtonGroup>
             )}
             <ButtonGroup>
