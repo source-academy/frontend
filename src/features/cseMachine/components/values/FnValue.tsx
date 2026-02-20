@@ -1,3 +1,4 @@
+import { Context } from 'js-slang';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Label } from 'konva/lib/shapes/Label';
 import React, { RefObject } from 'react';
@@ -54,6 +55,7 @@ export class FnValue extends Value implements IHoverable {
   centerX: number;
   enclosingFrame?: Frame;
   private _arrow: ArrowFromFn | undefined;
+  private _streamArrows: ArrowFromFn[] = [];
 
   constructor(
     /** underlying JS Slang function (contains extra props) */
@@ -63,13 +65,10 @@ export class FnValue extends Value implements IHoverable {
   ) {
     super();
     Layout.memoizeValue(data, this);
-
     this.centerX = 0;
     this._width = this.radius * 4;
     this._height = this.radius * 2;
-
     this.fnName = isStreamFn(this.data) ? '' : this.data.functionName;
-
     this.paramsText = `params: ${getParamsText(this.data)}`;
     this.bodyText = `body: ${getBodyText(this.data)}`;
     this.exportBodyText =
@@ -117,6 +116,10 @@ export class FnValue extends Value implements IHoverable {
 
   arrow(): ArrowFromFn | undefined {
     return this._arrow;
+  }
+
+  addArrow(target: any): void {
+    this._streamArrows?.push(new ArrowFromFn(this).to(target) as ArrowFromFn)
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
@@ -203,6 +206,7 @@ export class FnValue extends Value implements IHoverable {
           />
         </KonvaLabel>
         {this._arrow?.draw()}
+        {this._streamArrows.map((arrow, index) => arrow.draw())}
       </React.Fragment>
     );
   }
