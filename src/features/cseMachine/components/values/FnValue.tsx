@@ -101,7 +101,7 @@ export class FnValue extends Value implements IHoverable {
       // check for frame x cooridnate in cache
       const ghostX = Layout.getGhostFrameX(newReference.frame.environment.id);
       // if frame x coordinate exitst use it, if not use live value
-      const frameX = ghostX !== undefined ? ghostX : newReference.frame.x()
+      const frameX = ghostX !== undefined ? ghostX : newReference.frame.x();
       this._x = frameX + newReference.frame.width() + Config.FrameMarginX;
       this._y = newReference.y();
       this.centerX = this._x + this.radius * 2;
@@ -145,7 +145,7 @@ export class FnValue extends Value implements IHoverable {
     if (this.fnName === undefined) {
       throw new Error('Closure has no main reference and is not initialised!');
     }
-    //update center x accourding to the same id from cache 
+    //update center x accourding to the same id from cache
     this.centerX = this.x() + this.radius * 2;
     this.enclosingFrame = Frame.getFrom(this.data.environment);
     if (this.enclosingFrame) {

@@ -102,14 +102,14 @@ export default class CseMachine {
     );
     // get ghost layout on first run (when user press run and code changes)
     if (!CseMachine.masterLayout) {
-       Layout.setContext(
-          context.runtime.environmentTree as EnvTree,
-          context.runtime.control,
-          context.runtime.stash,
-          context.chapter
-       );
+      Layout.setContext(
+        context.runtime.environmentTree as EnvTree,
+        context.runtime.control,
+        context.runtime.stash,
+        context.chapter
+      );
 
-       CseMachine.masterLayout = Layout.getLayoutPositions();
+      CseMachine.masterLayout = Layout.getLayoutPositions();
     }
 
     // Apply Fixed Positions
@@ -118,7 +118,6 @@ export default class CseMachine {
       // Layout.applyFixedPositions(CseMachine.masterLayout);
     }
 
-  
     this.setVis(Layout.draw());
     this.setIsStepLimitExceeded(context.runtime.control.isEmpty());
     Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
@@ -131,7 +130,7 @@ export default class CseMachine {
       if (CseMachine.getCenterAlignment() || !CseMachine.getCenterAlignment()) {
         Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
         if (CseMachine.masterLayout) {
-            Layout.applyFixedPositions();
+          Layout.applyFixedPositions();
         }
         this.setVis(Layout.draw());
       }
@@ -185,8 +184,8 @@ export default class CseMachine {
       } else {
         Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
         if (CseMachine.masterLayout) {
-            Layout.applyFixedPositions();
-            // Layout.applyFixedPositions(CseMachine.masterLayout);
+          Layout.applyFixedPositions();
+          // Layout.applyFixedPositions(CseMachine.masterLayout);
         }
         this.setVis(Layout.draw());
       }

@@ -73,7 +73,7 @@ export class PrimitiveValue extends Value {
   }
 
   draw(): React.ReactNode {
-   //Recomputing x and y coordinates due to change in variables/arrays coordinates after preassigning them
+    //Recomputing x and y coordinates due to change in variables/arrays coordinates after preassigning them
     const reference = this.references[0];
     if (reference) {
       if (reference instanceof Binding) {
@@ -81,7 +81,7 @@ export class PrimitiveValue extends Value {
         this._x = reference.x() + getTextWidth(reference.keyString) + Config.TextPaddingX;
         this._y = reference.y();
       } else {
-        const textWidth = this.text.width(); 
+        const textWidth = this.text.width();
         this._x = reference.x() + (reference.width() - textWidth) / 2;
         this._y = reference.y() + (reference.height() - Config.FontSize) / 2;
       }

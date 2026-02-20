@@ -107,9 +107,9 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
         // We shouldn't be able to move slider to a step number beyond the step limit
         isControlEmpty => {
           const isAtLastStep = this.state.value === this.props.stepsTotal;
-    
-          this.setState({ 
-            stepLimitExceeded: !isControlEmpty && isAtLastStep 
+
+          this.setState({
+            stepLimitExceeded: !isControlEmpty && isAtLastStep
           });
         }
       );

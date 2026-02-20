@@ -65,9 +65,8 @@ export class Binding extends Visible {
         ? (Config.DataUnitHeight - Config.FontSize) / 2
         : (this.value.height() - Config.FontSize) / 2;
 
-
     this.keyYOffset = keyYOffset;
-     this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, { faded: !this.isLive });
+    this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, { faded: !this.isLive });
 
     // derive the width from the right bound of the value
     this._width = isMainReference(this.value, this)
@@ -104,16 +103,16 @@ export class Binding extends Visible {
     if (this.value instanceof PrimitiveValue || this.value instanceof UnassignedValue) {
       this.value.setFaded(!isLive);
     }
-    
-   //Recomputing x and y coordinates due to change in frame coordinates after preassigning them
-   if (this.prevBinding) {
-       this._x = this.prevBinding.x();
-       this._y = this.prevBinding.y() + this.prevBinding.height() + Config.TextPaddingY;
+
+    //Recomputing x and y coordinates due to change in frame coordinates after preassigning them
+    if (this.prevBinding) {
+      this._x = this.prevBinding.x();
+      this._y = this.prevBinding.y() + this.prevBinding.height() + Config.TextPaddingY;
     } else {
-       const ghostX = Layout.getGhostFrameX(this.frame.environment.id);
-       const frameX = ghostX !== undefined ? ghostX : this.frame.x();
-       this._x = frameX + Config.FramePaddingX;
-       this._y = this.frame.y() + Config.FramePaddingY;
+      const ghostX = Layout.getGhostFrameX(this.frame.environment.id);
+      const frameX = ghostX !== undefined ? ghostX : this.frame.x();
+      this._x = frameX + Config.FramePaddingX;
+      this._y = this.frame.y() + Config.FramePaddingY;
     }
 
     // Update Text to new position

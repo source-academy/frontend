@@ -53,10 +53,10 @@ export class GlobalFnValue extends Value implements IHoverable {
     mainReference: Binding
   ) {
     super();
-    Layout.memoizeValue(data, this); 
-     // check for frame x cooridnate in cache
+    Layout.memoizeValue(data, this);
+    // check for frame x cooridnate in cache
     const ghostX = Layout.getGhostFrameX(mainReference.frame.environment.id);
-    const frameX = ghostX !== undefined ? ghostX : mainReference.frame.x();                        
+    const frameX = ghostX !== undefined ? ghostX : mainReference.frame.x();
     // derive the coordinates from the main reference (binding)
     // if frame x coordinate exitst use it, if not use live value
     this._x = frameX + mainReference.frame.width() + Config.FrameMarginX;
