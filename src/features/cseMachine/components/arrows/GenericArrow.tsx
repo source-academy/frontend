@@ -4,7 +4,6 @@ import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
 import { IVisible, StepsArray } from '../../CseMachineTypes';
 import { defaultStrokeColor, fadedStrokeColor } from '../../CseMachineUtils';
-import CseMachine from '../../CseMachine';
 import { Visible } from '../Visible';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
@@ -104,8 +103,6 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
           strokeWidth={Config.ArrowStrokeWidth}
           data={this.path()}
           key={Layout.key++}
-          dash={[10, 5]}
-          dashEnabled={CseMachine.getPairCreationMode()}
         />
         <KonvaArrow
           {...ShapeDefaultProps}
