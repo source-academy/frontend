@@ -8,6 +8,7 @@ import React, { RefObject } from 'react';
 import { Layer as KonvaLayer, Rect as KonvaRect, Stage as KonvaStage } from 'react-konva';
 import classes from 'src/styles/Draggable.module.scss';
 
+import { arrowSelection } from './components/arrows/ArrowSelection';
 import { Binding } from './components/Binding';
 import { ControlStack } from './components/ControlStack';
 import { Level } from './components/Level';
@@ -51,7 +52,6 @@ import {
   setDifference
 } from './CseMachineUtils';
 import { Continuation, isContinuation, isSchemeNumber, isSymbol } from './utils/scheme';
-
 export type LayoutCache = {
   frames: Map<string, number>;
   levels: Map<string, Level>; // added to store frame's level
@@ -167,6 +167,7 @@ export class Layout {
     Layout.currentStackTruncLight = undefined;
     // clear/initialize data and value arrays
     Layout.values.clear();
+    arrowSelection.clearSelection();
     Layout.key = 0;
 
     // deep copy so we don't mutate the context

@@ -2,6 +2,7 @@ import { Context } from 'js-slang';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import React from 'react';
 
+import { arrowSelection } from './components/arrows/ArrowSelection';
 import { Layout, LayoutCache } from './CseMachineLayout';
 import { EnvTree } from './CseMachineTypes';
 import { deepCopyTree, getEnvId } from './CseMachineUtils';
@@ -23,7 +24,7 @@ export default class CseMachine {
   private static printableMode: boolean = false;
   private static controlStash: boolean = false; // TODO: discuss if the default should be true
   private static stackTruncated: boolean = false;
-  private static centerAlignment: boolean = false; // added for center alignment
+    private static centerAlignment: boolean = false; // added for center alignment
   private static environmentTree: EnvTree | undefined;
   private static currentEnvId: string;
   private static control: Control | undefined;
@@ -81,6 +82,7 @@ export default class CseMachine {
 
   static clear() {
     Layout.values.clear();
+    arrowSelection.clearSelection();
   }
 
   /** updates the visualization state in the SideContentCseMachine component based on
@@ -139,7 +141,6 @@ export default class CseMachine {
         CseMachine.getPrintableMode() &&
         CseMachine.getControlStash() &&
         CseMachine.getStackTruncated() &&
-        // !CseMachine.getCenterAlignment() && // added for center alignment
         Layout.currentStackTruncLight !== undefined
       ) {
         this.setVis(Layout.currentStackTruncLight);
@@ -147,7 +148,6 @@ export default class CseMachine {
         CseMachine.getPrintableMode() &&
         CseMachine.getControlStash() &&
         !CseMachine.getStackTruncated() &&
-        // !CseMachine.getCenterAlignment() && // added for center alignment
         Layout.currentStackLight !== undefined
       ) {
         this.setVis(Layout.currentStackLight);
@@ -155,7 +155,6 @@ export default class CseMachine {
         !CseMachine.getPrintableMode() &&
         CseMachine.getControlStash() &&
         CseMachine.getStackTruncated() &&
-        // !CseMachine.getCenterAlignment() && // added for center alignment
         Layout.currentStackTruncDark !== undefined
       ) {
         this.setVis(Layout.currentStackTruncDark);
@@ -163,21 +162,18 @@ export default class CseMachine {
         !CseMachine.getPrintableMode() &&
         CseMachine.getControlStash() &&
         !CseMachine.getStackTruncated() &&
-        // !CseMachine.getCenterAlignment() && // added for center alignment
         Layout.currentStackDark !== undefined
       ) {
         this.setVis(Layout.currentStackDark);
       } else if (
         CseMachine.getPrintableMode() &&
         !CseMachine.getControlStash() &&
-        // !CseMachine.getCenterAlignment() && // added for center alignment
         Layout.currentLight !== undefined
       ) {
         this.setVis(Layout.currentLight);
       } else if (
         !CseMachine.getPrintableMode() &&
         !CseMachine.getControlStash() &&
-        // !CseMachine.getCenterAlignment() && // added for center alignment
         Layout.currentDark !== undefined
       ) {
         this.setVis(Layout.currentDark);
@@ -209,3 +205,4 @@ export default class CseMachine {
     this.clear();
   }
 }
+

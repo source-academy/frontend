@@ -289,6 +289,7 @@ export class Frame extends Visible implements IHoverable {
           cornerRadius={Config.FrameCornerRadius}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
+          listening={false}
           key={Layout.key++}
         />
         {this.bindings.map(binding => binding.draw())}
