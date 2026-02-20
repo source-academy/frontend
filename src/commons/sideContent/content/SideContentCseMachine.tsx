@@ -274,8 +274,9 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                     onMouseUp={() => {
                       if (this.state.visualization) {
                         CseMachine.togglePairCreationMode();
+                        Layout.draw();
                         CseMachine.redraw();
-                        this.stepNext();
+                        // this.stepNext();
                       }
                     }}
                     icon="array"
@@ -503,6 +504,8 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   };
 
   private getActiveChangeSteps = () => {
+    console.log(this.props.streamsPointSteps);
+    console.log(this.props.changepointSteps);
     return CseMachine.getPairCreationMode()
       ? this.props.streamsPointSteps
       : this.props.changepointSteps;
