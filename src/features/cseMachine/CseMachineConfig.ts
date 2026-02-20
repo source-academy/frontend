@@ -40,6 +40,7 @@ export const Config = Object.freeze({
   ArrowStrokeWidth: 1,
   ArrowHitStrokeWidth: 5,
   ArrowHoveredStrokeWidth: 2,
+  ArrowHoveredHeadSize: 15,
   ArrowCornerRadius: 40,
 
   MaxExportWidth: 20000,
@@ -59,7 +60,8 @@ export const Config = Object.freeze({
   StrokeColor: '#999',
   StrokeColorFaded: '#455',
   PrintStrokeColor: '#777',
-  PrintStrokeColorFaded: '#cccccc',
+  PrintStrokeColorFaded: '#ccc',
+  ArrowHighlightedColor: '#ffffff',
 
   // Colors of different states
   ActiveColor: '#030fff',
