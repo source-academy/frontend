@@ -1129,23 +1129,48 @@ export const isStashItemInDanger = (stashIndex: number): boolean => {
   return false;
 };
 
+const isHulkModeEnabled = () =>
+  typeof document !== 'undefined' &&
+  document.querySelector('.Playground.GreenScreen') !== null;
+
 export const defaultBackgroundColor = () =>
-  CseMachine.getPrintableMode() ? Config.PrintBgColor : Config.BgColor;
+  isHulkModeEnabled()
+    ? '#00ff00'
+    : CseMachine.getPrintableMode()
+      ? Config.PrintBgColor
+      : Config.BgColor;
 
 export const defaultTextColor = () =>
-  CseMachine.getPrintableMode() ? Config.PrintTextColor : Config.TextColor;
+  isHulkModeEnabled()
+    ? Config.TextColorFaded // When the Hulk mode is on, due to the contrast, the faded text color is used as the default text color to improve readability
+    : CseMachine.getPrintableMode() 
+      ? Config.PrintTextColor
+      : Config.TextColor;
 
 export const fadedTextColor = () =>
-  CseMachine.getPrintableMode() ? Config.PrintTextColorFaded : Config.TextColorFaded;
+  isHulkModeEnabled() 
+    ? Config.TextColor // When the Hulk mode is on, due to the contrast, the normal text color is used instead of faded text color to improve readability
+    : CseMachine.getPrintableMode()
+      ? Config.PrintTextColorFaded
+      : Config.TextColorFaded;
 
 export const defaultStrokeColor = () =>
-  CseMachine.getPrintableMode() ? Config.PrintStrokeColor : Config.StrokeColor;
+  isHulkModeEnabled()
+    ? Config.StrokeColorFaded // When the Hulk mode is on, due to the contrast, the faded stroke color is used as the default stroke color to improve readability
+    : CseMachine.getPrintableMode()
+      ? Config.PrintStrokeColor
+      : Config.StrokeColor;
 
 export const fadedStrokeColor = () =>
-  CseMachine.getPrintableMode() ? Config.PrintStrokeColorFaded : Config.StrokeColorFaded;
+  isHulkModeEnabled()
+    ? Config.StrokeColor // When the Hulk mode is on, due to the contrast, the normal stroke color is used instead of faded stroke color to improve readability
+    : CseMachine.getPrintableMode()
+      ? Config.PrintStrokeColorFaded
+      : Config.StrokeColorFaded;
 
 export const defaultActiveColor = () =>
   CseMachine.getPrintableMode() ? Config.PrintActiveColor : Config.ActiveColor;
 
 export const defaultDangerColor = () =>
   CseMachine.getPrintableMode() ? Config.PrintDangerColor : Config.DangerColor;
+
