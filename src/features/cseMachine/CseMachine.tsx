@@ -33,11 +33,13 @@ export default class CseMachine {
   }
   public static toggleControlStash(): void {
     CseMachine.controlStash = !CseMachine.controlStash;
+    CseMachine.pairCreationMode = false;
   }
   public static toggleStackTruncated(): void {
     CseMachine.stackTruncated = !CseMachine.stackTruncated;
   }
   public static togglePairCreationMode(): void {
+    CseMachine.controlStash = false;
     CseMachine.pairCreationMode = !CseMachine.pairCreationMode;
   }
   public static getCurrentEnvId(): string {
@@ -119,8 +121,13 @@ export default class CseMachine {
   static redraw() {
     if (CseMachine.environmentTree && CseMachine.control && CseMachine.stash) {
       // checks if the required diagram exists, and updates the dom node using setVis
+      // TODO: This is bad, temp fix; does not memoize
       if (CseMachine.getPairCreationMode()) {
+        Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
         this.setVis(Layout.draw());
+        // this.setVis(Layout.draw());
+        // console.log(Layout.currentDarkPairs);
+        // this.setVis(Layout.currentDarkPairs);
       } else if (
         CseMachine.getPrintableMode() &&
         CseMachine.getControlStash() &&
