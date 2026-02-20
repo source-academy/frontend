@@ -13,6 +13,8 @@ type Props = {
   getText: () => string;
   activeSnippetId: string;
   setActiveSnippetId: (id: string) => void;
+  isExpanded: boolean;
+  toggleExpanded: () => void;
 };
 
 const createInitialMessage = (): ChatMessage => ({
@@ -31,7 +33,14 @@ const scrollToBottom = (ref: React.RefObject<HTMLDivElement>) => {
   ref.current?.scrollTo({ top: ref.current?.scrollHeight });
 };
 
-const ChatBox: React.FC<Props> = ({ getSection, getText, activeSnippetId, setActiveSnippetId }) => {
+const ChatBox: React.FC<Props> = ({
+  getSection,
+  getText,
+  activeSnippetId,
+  setActiveSnippetId,
+  isExpanded,
+  toggleExpanded
+}) => {
   const chatRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(() => [createInitialMessage()]);
@@ -107,7 +116,19 @@ const ChatBox: React.FC<Props> = ({ getSection, getText, activeSnippetId, setAct
   }, [messages, isLoading]);
 
   return (
-    <div className={classes['chat-container']}>
+    <div
+      className={`${classes['chat-container']} ${isExpanded ? classes['chat-container-expanded'] : ''}`}
+    >
+      <div className={classes['chat-header']}>
+        <Button
+          size="small"
+          variant="minimal"
+          icon={isExpanded ? 'minimize' : 'maximize'}
+          onClick={toggleExpanded}
+          title={isExpanded ? 'Shrink chat' : 'Expand chat'}
+          className={classes['expand-button']}
+        />
+      </div>
       <div className={classes['chat-message']} ref={chatRef}>
         {messages.map(message => (
           <div

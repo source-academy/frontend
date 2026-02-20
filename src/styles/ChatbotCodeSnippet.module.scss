@@ -1,5 +1,11 @@
 @import './_global';
 
+:global {
+  body > .bp6-portal {
+    z-index: 2100;
+  }
+}
+
 // Overlay that covers the entire screen with a dark backdrop
 .snippet-overlay {
   position: fixed;
