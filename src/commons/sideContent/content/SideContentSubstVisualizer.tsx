@@ -247,7 +247,8 @@ interface FunctionDefinitionPopoverContentProps {
   renderFunctionArguments: (
     nodes: StepperExpression[],
     renderNodeFn: (node: StepperBaseNode, context: RenderContext) => React.ReactNode,
-    styleWrapper: StyleWrapper | undefined
+    styleWrapper: StyleWrapper | undefined,
+    popoverDepth: number
   ) => React.ReactNode;
 }
 
@@ -265,7 +266,7 @@ const FunctionDefinitionPopoverContent: React.FC<FunctionDefinitionPopoverConten
         <span>{' Function definition'}</span>
         <pre className={Classes.CODE_BLOCK}>
           <code>
-            {renderFunctionArguments(node.params, renderNode, styleWrapper)}
+            {renderFunctionArguments(node.params, renderNode, styleWrapper, popoverDepth)}
             <span className="stepper-identifier">{' => '}</span>
             {renderNode(node.body, {
               styleWrapper: styleWrapper ?? (_node => p => p),
@@ -365,7 +366,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
       // Render all arguments inside an array
       const args: React.ReactNode[] = node.elements
         .filter(arg => arg !== null)
-        .map(arg => renderNode(arg, { styleWrapper: styleWrapper }));
+        .map(arg => renderNode(arg, { styleWrapper: styleWrapper, popoverDepth: popoverDepth }));
 
       const renderedArguments = args.slice(1).reduce(
         (result, item) => (
@@ -449,7 +450,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
         </span>
       ) : (
         <span>
-          {renderFunctionArguments(node.params, renderNode, styleWrapper)}
+          {renderFunctionArguments(node.params, renderNode, styleWrapper, popoverDepth)}
           <span className="stepper-identifier">{' => '}</span>
           {renderNode(node.body, {
             styleWrapper: composeStyleWrapper(styleWrapper, muTermStyleWrapper)!,
@@ -535,7 +536,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
           {'{'}
           {node.body.map((ast, index) => (
             <div key={index} style={{ marginLeft: '15px' }}>
-              {renderNode(ast, { styleWrapper })}
+              {renderNode(ast, { styleWrapper, popoverDepth: popoverDepth })}
             </div>
           ))}
           {'}'}
@@ -569,7 +570,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
           {node.declarations.map((ast, idx) => (
             <span key={idx}>
               {idx !== 0 && ', '}
-              {renderNode(ast, { styleWrapper: styleWrapper })}
+              {renderNode(ast, { styleWrapper: styleWrapper, popoverDepth: popoverDepth })}
             </span>
           ))}
           {';'}
@@ -593,10 +594,14 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
   const renderFunctionArguments = (
     nodes: StepperExpression[],
     renderNodeFn: typeof renderNode,
-    styleWrapper: StyleWrapper | undefined
+    styleWrapper: StyleWrapper | undefined,
+    popoverDepth: number
   ) => {
     const args: React.ReactNode[] = nodes.map(arg =>
-      renderNode(arg, { styleWrapper: styleWrapper ?? (_node => p => p) })
+      renderNodeFn(arg, {
+        styleWrapper: styleWrapper ?? (_node => p => p),
+        popoverDepth: popoverDepth
+      })
     );
     let renderedArguments = args.slice(1).reduce(
       (result, item) => (
@@ -622,7 +627,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
 
   const renderArguments = (nodes: StepperExpression[]) => {
     const args: React.ReactNode[] = nodes.map(arg =>
-      renderNode(arg, { styleWrapper: styleWrapper })
+      renderNode(arg, { styleWrapper: styleWrapper, popoverDepth: popoverDepth })
     );
     let renderedArguments = args.slice(1).reduce(
       (result, item) => (
@@ -697,7 +702,8 @@ function CustomASTRenderer(props: IStepperPropContents): React.ReactNode {
       };
     }
     return renderNode(props.ast, {
-      styleWrapper: markerStyleWrapper
+      styleWrapper: markerStyleWrapper,
+      popoverDepth: 0
     });
   }, [props]);
   return <div className="stepper-display">{getDisplayedNode()}</div>;
