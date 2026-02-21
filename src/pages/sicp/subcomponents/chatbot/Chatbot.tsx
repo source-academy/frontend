@@ -31,9 +31,7 @@ const clampPosition = (
 
   const containerW = chatOpen ? (expanded ? CHAT_EXPANDED_WIDTH : CHAT_WIDTH) : ICON_SIZE;
   const expandedH = Math.min(vh * CHAT_EXPANDED_HEIGHT_VH, CHAT_EXPANDED_MAX_HEIGHT);
-  const containerH = chatOpen
-    ? (expanded ? expandedH : CHAT_HEIGHT) + ICON_SIZE
-    : ICON_SIZE;
+  const containerH = chatOpen ? (expanded ? expandedH : CHAT_HEIGHT) + ICON_SIZE : ICON_SIZE;
 
   const minX = containerW - vw;
   const maxX = 0;
@@ -56,7 +54,6 @@ const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
   const [isDragging, setIsDragging] = React.useState(false);
   const { isLoggedIn } = useSession();
   const nodeRef = React.useRef<HTMLDivElement>(null);
-
 
   const isSnippetOpen = activeSnippetId !== '';
 
@@ -139,12 +136,7 @@ const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
                 icon={
                   <Icon
                     icon={
-                      <img
-                        src={logo}
-                        className={classes['iSA']}
-                        alt="SA Logo"
-                        draggable={false}
-                      />
+                      <img src={logo} className={classes['iSA']} alt="SA Logo" draggable={false} />
                     }
                   />
                 }
