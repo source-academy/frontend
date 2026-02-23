@@ -305,7 +305,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
 
             {!this.isJava() && (
               <ButtonGroup>
-                <Tooltip content="Hide Dead Frames" compact>
+                <Tooltip content="Clear Dead Frames" compact>
                   <AnchorButton
                     onMouseUp={() => {
                       if (this.state.visualization) {
@@ -321,7 +321,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                         );
                       }
                     }}
-                    icon="eye-off"
+                    icon="eraser"
                     disabled={!this.state.visualization}
                   ></AnchorButton>
                 </Tooltip>
