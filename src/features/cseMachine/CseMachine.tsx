@@ -170,4 +170,3 @@ export default class CseMachine {
     this.clear();
   }
 }
-

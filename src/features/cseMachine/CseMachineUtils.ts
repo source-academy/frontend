@@ -1130,8 +1130,7 @@ export const isStashItemInDanger = (stashIndex: number): boolean => {
 };
 
 const isHulkModeEnabled = () =>
-  typeof document !== 'undefined' &&
-  document.querySelector('.Playground.GreenScreen') !== null;
+  typeof document !== 'undefined' && document.querySelector('.Playground.GreenScreen') !== null;
 
 export const defaultBackgroundColor = () =>
   isHulkModeEnabled()
@@ -1143,12 +1142,12 @@ export const defaultBackgroundColor = () =>
 export const defaultTextColor = () =>
   isHulkModeEnabled()
     ? Config.TextColorFaded // When the Hulk mode is on, due to the contrast, the faded text color is used as the default text color to improve readability
-    : CseMachine.getPrintableMode() 
+    : CseMachine.getPrintableMode()
       ? Config.PrintTextColor
       : Config.TextColor;
 
 export const fadedTextColor = () =>
-  isHulkModeEnabled() 
+  isHulkModeEnabled()
     ? '#2cdf2c' // When the Hulk mode is on, due to the contrast, the normal text color is used instead of faded text color to improve readability
     : CseMachine.getPrintableMode()
       ? Config.PrintTextColorFaded
@@ -1173,4 +1172,3 @@ export const defaultActiveColor = () =>
 
 export const defaultDangerColor = () =>
   CseMachine.getPrintableMode() ? Config.PrintDangerColor : Config.DangerColor;
-

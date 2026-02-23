@@ -1102,6 +1102,3 @@ export const Component = Playground;
 Component.displayName = 'Playground';
 
 export default Playground;
-
-
-
