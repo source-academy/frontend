@@ -1,4 +1,3 @@
-import { Context } from 'js-slang';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Label } from 'konva/lib/shapes/Label';
 import React, { RefObject } from 'react';
@@ -27,10 +26,11 @@ import {
   setHoveredCursor,
   setUnhoveredCursor
 } from '../../CseMachineUtils';
-import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
 import { Frame } from '../Frame';
 import { Value } from './Value';
+import { ArrowFromStreamNullaryFn } from '../arrows/ArrowFromStreamNullaryFn';
+import { ArrowFromFn } from '../arrows/ArrowFromFn';
 
 /** this class encapsulates a JS Slang function (not from the global frame) that
  *  contains extra props such as environment and fnName */
@@ -55,7 +55,7 @@ export class FnValue extends Value implements IHoverable {
   centerX: number;
   enclosingFrame?: Frame;
   private _arrow: ArrowFromFn | undefined;
-  private _streamArrows: ArrowFromFn[] = [];
+  private _streamArrows: ArrowFromStreamNullaryFn[] = [];
 
   constructor(
     /** underlying JS Slang function (contains extra props) */
@@ -119,7 +119,7 @@ export class FnValue extends Value implements IHoverable {
   }
 
   addArrow(target: any): void {
-    this._streamArrows?.push(new ArrowFromFn(this).to(target) as ArrowFromFn)
+    this._streamArrows?.push(new ArrowFromStreamNullaryFn(this).to(target) as ArrowFromStreamNullaryFn)
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {

@@ -7,7 +7,7 @@ import CseMachine from '../../CseMachine';
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
 import { DataArray, IHoverable, ReferenceType } from '../../CseMachineTypes';
-import { isDataArray, isMainReference } from '../../CseMachineUtils';
+import { isMainReference } from '../../CseMachineUtils';
 import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
 import { ArrayUnit } from '../ArrayUnit';
 import { Binding } from '../Binding';
@@ -50,7 +50,7 @@ export class ArrayValue extends Value implements IHoverable {
     if (data[1] instanceof Closure) {
       console.log("array with nullary func id: " + data[1].id);
       console.log("array is created from fn with id: " + CseMachine.findKeyByValueInMap(data.id));
-      CseMachine.viewStreamLineage;
+      // CseMachine.viewStreamLineage;
       const originFnId = CseMachine.findKeyByValueInMap(data.id);
       if (originFnId != undefined) {
         console.log("result of finding fn that created this array: " + Layout.values.get(originFnId));
