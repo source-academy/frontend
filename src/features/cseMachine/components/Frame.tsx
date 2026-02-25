@@ -268,7 +268,7 @@ export class Frame extends Visible implements IHoverable {
    * Reassigns the coordinates according to the final position of this frame
    * @param newX taken from cached layout
    */
-  reassignCoordinates(newX : number): void {
+  reassignCoordinates(newX: number): void {
     this._x = newX;
 
     let textOffset = 0;

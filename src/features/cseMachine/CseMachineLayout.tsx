@@ -54,8 +54,8 @@ import {
 import { Continuation, isContinuation, isSchemeNumber, isSymbol } from './utils/scheme';
 export type LayoutCache = {
   frames: Map<string, number>;
-  levelWidth: Map<string,  number>;
-  largestWidth: number; 
+  levelWidth: Map<string, number>;
+  largestWidth: number;
 };
 
 /** this class encapsulates the logic for calculating the layout */
@@ -617,10 +617,10 @@ export class Layout {
   }
 
   /**
-   * Populate cache with final x coordinates of each frame, width of each level, and largest level width, 
+   * Populate cache with final x coordinates of each frame, width of each level, and largest level width,
    * to be used for fixed positioning of frames and center alignment.
    */
-  static getLayoutPositions(controlStash : boolean): LayoutCache {
+  static getLayoutPositions(controlStash: boolean): LayoutCache {
     const cache: LayoutCache = {
       frames: new Map(),
       levelWidth: new Map(),
@@ -629,7 +629,8 @@ export class Layout {
 
     Layout.levels.forEach(level => {
       const frames = level.frames;
-      const controlStashOffset = ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth;
+      const controlStashOffset =
+        ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth;
       const offset = controlStash ? controlStashOffset : 0;
       const currWidth = level.width() + frames[frames.length - 1].totalDataWidth;
       cache.largestWidth = Math.max(cache.largestWidth, currWidth);
@@ -651,9 +652,13 @@ export class Layout {
     if (cache && cache.frames.has(envId)) {
       const fixedX = cache.frames.get(envId)!;
       // add offset for control stash and center alignment
-      let offset: number = 0; 
-      offset += CseMachine.getControlStash() ? ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth : 0;
-      offset += CseMachine.getCenterAlignment() ? Math.floor((cache.largestWidth - cache.levelWidth.get(envId)!) / 2) : 0;
+      let offset: number = 0;
+      offset += CseMachine.getControlStash()
+        ? ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth
+        : 0;
+      offset += CseMachine.getCenterAlignment()
+        ? Math.floor((cache.largestWidth - cache.levelWidth.get(envId)!) / 2)
+        : 0;
       return fixedX + offset;
     }
     return undefined;

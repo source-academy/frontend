@@ -97,13 +97,13 @@ export class Binding extends Visible {
    * Reassigns the coordinates according to the final position of this frame
    * @param newX taken from cached layout
    */
-  reassignCoordinates(newX : number): void {
+  reassignCoordinates(newX: number): void {
     if (this.prevBinding) {
-       this._x = this.prevBinding.x();
-       this._y = this.prevBinding.y() + this.prevBinding.height() + Config.TextPaddingY;
+      this._x = this.prevBinding.x();
+      this._y = this.prevBinding.y() + this.prevBinding.height() + Config.TextPaddingY;
     } else {
-       this._x = newX + Config.FramePaddingX;
-       this._y = this.frame.y() + Config.FramePaddingY;
+      this._x = newX + Config.FramePaddingX;
+      this._y = this.frame.y() + Config.FramePaddingY;
     }
   }
 
