@@ -111,16 +111,13 @@ export default class CseMachine {
         context.runtime.stash,
         context.chapter
       );
-
-      CseMachine.masterLayout = Layout.getLayoutPositions();
+      CseMachine.masterLayout = Layout.getLayoutPositions(this.controlStash);
     }
 
     // Apply Fixed Positions
     if (CseMachine.masterLayout) {
       Layout.applyFixedPositions();
-      // Layout.applyFixedPositions(CseMachine.masterLayout);
     }
-
     this.setVis(Layout.draw());
     this.setIsStepLimitExceeded(context.runtime.control.isEmpty());
     Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);

@@ -93,6 +93,20 @@ export class Binding extends Visible {
     }
   }
 
+  /**
+   * Reassigns the coordinates according to the final position of this frame
+   * @param newX taken from cached layout
+   */
+  reassignCoordinates(newX : number): void {
+    if (this.prevBinding) {
+       this._x = this.prevBinding.x();
+       this._y = this.prevBinding.y() + this.prevBinding.height() + Config.TextPaddingY;
+    } else {
+       this._x = newX + Config.FramePaddingX;
+       this._y = this.frame.y() + Config.FramePaddingY;
+    }
+  }
+
   draw(): React.ReactNode {
     const isLive = this.isDummyBinding //check if binding is an unreferenced heap object
       ? ((this.value as any).isLive?.() ?? false)
@@ -102,17 +116,6 @@ export class Binding extends Visible {
 
     if (this.value instanceof PrimitiveValue || this.value instanceof UnassignedValue) {
       this.value.setFaded(!isLive);
-    }
-
-    //Recomputing x and y coordinates due to change in frame coordinates after preassigning them
-    if (this.prevBinding) {
-      this._x = this.prevBinding.x();
-      this._y = this.prevBinding.y() + this.prevBinding.height() + Config.TextPaddingY;
-    } else {
-      const ghostX = Layout.getGhostFrameX(this.frame.environment.id);
-      const frameX = ghostX !== undefined ? ghostX : this.frame.x();
-      this._x = frameX + Config.FramePaddingX;
-      this._y = this.frame.y() + Config.FramePaddingY;
     }
 
     // Update Text to new position
