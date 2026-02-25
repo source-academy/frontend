@@ -2,7 +2,6 @@ import { AnchorButton, Icon } from '@blueprintjs/core';
 import * as React from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 import logo from 'src/assets/SA.jpg';
-import { useSession } from 'src/commons/utils/Hooks';
 import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import classes from 'src/styles/Chatbot.module.scss';
 
@@ -52,7 +51,6 @@ const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
   const [position, setPosition] = React.useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = React.useState(false);
-  const { isLoggedIn } = useSession();
   const nodeRef = React.useRef<HTMLDivElement>(null);
 
   const isSnippetOpen = activeSnippetId !== '';
@@ -105,20 +103,19 @@ const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
 
   return (
     <div>
-      {isLoggedIn && (
-        <Draggable
-          nodeRef={nodeRef}
-          handle={`.${classes['bot-button']}`}
-          position={position}
-          onStart={handleDragStart}
-          onDrag={handleDrag}
-          onStop={handleDragStop}
+      <Draggable
+        nodeRef={nodeRef}
+        handle={`.${classes['bot-button']}`}
+        position={position}
+        onStart={handleDragStart}
+        onDrag={handleDrag}
+        onStop={handleDragStop}
+      >
+        <div
+          ref={nodeRef}
+          className={classes['bot-container']}
+          style={{ display: isSnippetOpen ? 'none' : 'block' }}
         >
-          <div
-            ref={nodeRef}
-            className={classes['bot-container']}
-            style={{ display: isSnippetOpen ? 'none' : 'block' }}
-          >
             <div className={classes['bot-area']}>
               {isDivVisible && (
                 <div className={classes['tips-box']}>
@@ -153,9 +150,8 @@ const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
                 toggleExpanded={toggleExpanded}
               />
             )}
-          </div>
-        </Draggable>
-      )}
+        </div>
+      </Draggable>
     </div>
   );
 };

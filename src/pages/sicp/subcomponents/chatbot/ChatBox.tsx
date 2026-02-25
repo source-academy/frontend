@@ -1,7 +1,13 @@
 import { Button } from '@blueprintjs/core';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useTokens } from 'src/commons/utils/Hooks';
-import { continueChat, initChat } from 'src/features/sicp/chatCompletion/api';
+import { Tokens } from 'src/commons/application/types/SessionTypes';
+import { useSession, useTokens } from 'src/commons/utils/Hooks';
+import {
+  continueChat,
+  continueGuestChat,
+  initChat,
+  initGuestChat
+} from 'src/features/sicp/chatCompletion/api';
 import { SicpSection } from 'src/features/sicp/chatCompletion/chatCompletion';
 import classes from 'src/styles/Chatbot.module.scss';
 import { v4 as uuid } from 'uuid';
@@ -46,7 +52,8 @@ const ChatBox: React.FC<Props> = ({
   const [messages, setMessages] = useState<ChatMessage[]>(() => [createInitialMessage()]);
   const [userInput, setUserInput] = useState('');
   const [maxContentSize, setMaxContentSize] = useState(1000);
-  const tokens = useTokens();
+  const { isLoggedIn } = useSession();
+  const tokens = useTokens({ throwWhenEmpty: false });
 
   const handleUserInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserInput(event.target.value);
@@ -65,8 +72,12 @@ const ChatBox: React.FC<Props> = ({
     const currentSection = getSection();
     const currentText = getText();
 
-    // No chatId needed - backend identifies conversation by user
-    continueChat(tokens, userInput, currentSection, currentText)
+    const chatPromise =
+      isLoggedIn && tokens
+        ? continueChat(tokens as Tokens, userInput, currentSection, currentText)
+        : continueGuestChat(userInput, currentSection, currentText);
+
+    chatPromise
       .then(resp => {
         setMessages(prev => [...prev, { id: uuid(), role: 'assistant', content: resp.response }]);
       })
@@ -74,7 +85,7 @@ const ChatBox: React.FC<Props> = ({
         setMessages(prev => [...prev, createErrorMessage()]);
       })
       .finally(() => setIsLoading(false));
-  }, [tokens, userInput, getSection, getText]);
+  }, [isLoggedIn, tokens, userInput, getSection, getText]);
 
   const keyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
     e => {
@@ -86,26 +97,29 @@ const ChatBox: React.FC<Props> = ({
   );
 
   const resetChat = useCallback(() => {
-    initChat(tokens).then(resp => {
-      const conversationMessages = resp.messages;
-      const maxMessageSize = resp.maxContentSize;
-      // Load all previous messages from the conversation, or use initial if empty
-      if (conversationMessages && conversationMessages.length > 0) {
-        // Ensure all messages have IDs (backend may not provide them)
-        const messagesWithIds = conversationMessages.map(msg => ({
-          ...msg,
-          id: msg.id || uuid()
-        }));
-        setMessages(messagesWithIds);
-      } else {
-        setMessages([createInitialMessage()]);
-      }
-      setMaxContentSize(maxMessageSize);
-      setUserInput('');
-    });
-  }, [tokens]);
+    const initPromise = isLoggedIn && tokens ? initChat(tokens as Tokens) : initGuestChat();
 
-  // Run once when component is mounted
+    initPromise
+      .then(resp => {
+        const conversationMessages = resp.messages;
+        const maxMessageSize = resp.maxContentSize;
+        if (conversationMessages && conversationMessages.length > 0) {
+          const messagesWithIds = conversationMessages.map(msg => ({
+            ...msg,
+            id: msg.id || uuid()
+          }));
+          setMessages(messagesWithIds);
+        } else {
+          setMessages([createInitialMessage()]);
+        }
+        setMaxContentSize(maxMessageSize);
+        setUserInput('');
+      })
+      .catch(() => {
+        setMessages([createInitialMessage()]);
+      });
+  }, [isLoggedIn, tokens]);
+
   useEffect(() => {
     resetChat();
     // eslint-disable-next-line react-hooks/exhaustive-deps
