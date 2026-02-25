@@ -8,6 +8,7 @@ import React, { RefObject } from 'react';
 import { Layer as KonvaLayer, Rect as KonvaRect, Stage as KonvaStage } from 'react-konva';
 import classes from 'src/styles/Draggable.module.scss';
 
+import { arrowSelection } from './components/arrows/ArrowSelection';
 import { Binding } from './components/Binding';
 import { ControlStack } from './components/ControlStack';
 import { Level } from './components/Level';
@@ -34,6 +35,7 @@ import {
 } from './CseMachineTypes';
 import {
   assert,
+  computeLiveState,
   deepCopyTree,
   defaultBackgroundColor,
   getNextChildren,
@@ -85,6 +87,10 @@ export class Layout {
 
   static previousControlComponent: ControlStack;
   static previousStashComponent: StashStack;
+
+  /** all environment and value IDs that are live in the current context */
+  static liveEnvIDs: Set<string> = new Set();
+  static liveObjectIDs: Set<string> = new Set();
 
   /**
    * memoized values, where keys are either ids for arrays and closures,
@@ -155,6 +161,7 @@ export class Layout {
     Layout.currentStackTruncLight = undefined;
     // clear/initialize data and value arrays
     Layout.values.clear();
+    arrowSelection.clearSelection();
     Layout.key = 0;
 
     // deep copy so we don't mutate the context
@@ -166,6 +173,12 @@ export class Layout {
     Layout.removePreludeEnv();
     // remove global functions that are not referenced in the program
     Layout.removeUnreferencedGlobalFns();
+
+    // compute liveness on the same tree we render
+    const liveState = computeLiveState({ root: Layout.globalEnvNode } as EnvTree);
+    Layout.liveEnvIDs = liveState.liveEnvIds;
+    Layout.liveObjectIDs = liveState.liveObjectIds;
+
     // initialize levels and frames
     Layout.initializeGrid();
     // initialize control and stash
