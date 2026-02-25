@@ -13,7 +13,7 @@ type Props = {
   getText: () => string;
 };
 
-const ICON_SIZE = 70;
+const ICON_SIZE = 50;
 const CHAT_WIDTH = 400;
 const CHAT_HEIGHT = 450;
 const CHAT_EXPANDED_WIDTH = 700;
@@ -91,9 +91,10 @@ const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
     setIsDragging(false);
   };
 
-  const handleDrag = (_e: DraggableEvent, _data: DraggableData) => {
+  const handleDrag = (_e: DraggableEvent, data: DraggableData) => {
     setIsDragging(true);
     setIsDivVisible(false);
+    setPosition({ x: data.x, y: data.y });
   };
 
   const handleDragStop = (_e: DraggableEvent, data: DraggableData) => {
