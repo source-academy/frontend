@@ -21,8 +21,11 @@ import SessionActions from '../../../../commons/application/actions/SessionActio
 import ControlButton from '../../../../commons/ControlButton';
 import Markdown from '../../../../commons/Markdown';
 import { Prompt } from '../../../../commons/ReactRouterPrompt';
-import { postGenerateComments } from '../../../../commons/sagas/RequestsSaga';
-import { saveFinalComment } from '../../../../commons/sagas/RequestsSaga';
+import {
+  postGenerateComments,
+  saveChosenComments,
+  saveFinalComment
+} from '../../../../commons/sagas/RequestsSaga';
 import { getPrettyDate } from '../../../../commons/utils/DateHelper';
 import { showSimpleConfirmDialog } from '../../../../commons/utils/DialogHelper';
 import {
@@ -120,12 +123,47 @@ const GradingEditor: React.FC<Props> = props => {
     return resp;
   };
 
-  const onSelectGeneratedComments = (comment: string) => {
-    if (!selectedSuggestions.includes(comment)) {
-      setSelectedSuggestions([comment, ...selectedSuggestions]);
+  const onToggleComment = (index: number) => {
+    setSelectedIndices(prev =>
+      prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
+    );
+  };
+
+  const onEditChange = (index: number, text: string) => {
+    setCommentEdits(prev => ({ ...prev, [index]: text }));
+  };
+
+  const applySelectedComments = () => {
+    const parts = selectedIndices
+      .sort((a, b) => a - b)
+      .map(i => commentEdits[i] ?? suggestions[i])
+      .filter(Boolean);
+    setEditorValue(parts.join('\n\n'));
+  };
+
+  const handleSaveChosenComments = async () => {
+    // Only send edits for comments that were actually changed
+    const changedEdits: Record<number, string> = {};
+    for (const idx of selectedIndices) {
+      if (commentEdits[idx] !== undefined && commentEdits[idx] !== suggestions[idx]) {
+        changedEdits[idx] = commentEdits[idx];
+      }
     }
 
-    setEditorValue(editorValue + comment);
+    const resp = await saveChosenComments(
+      tokens,
+      props.submissionId,
+      props.questionId,
+      props.answer_id,
+      selectedIndices,
+      changedEdits
+    );
+
+    if (resp && resp.ok) {
+      showSuccessMessage('Chosen comments saved!', 2000);
+    } else {
+      showWarningMessage('Failed to save chosen comments');
+    }
   };
 
   const postSaveFinalComment = async (comment: string) => {
@@ -134,7 +172,8 @@ const GradingEditor: React.FC<Props> = props => {
   };
 
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [selectedSuggestions, setSelectedSuggestions] = useState<string[]>([]);
+  const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
+  const [commentEdits, setCommentEdits] = useState<Record<number, string>>({});
   const [hasClickedGenerate, setHasClickedGenerate] = useState<boolean>(false);
   const [isViewLLMPromptOpen, setIsViewLLMPromptOpen] = useState<boolean>(false);
 
@@ -389,13 +428,15 @@ const GradingEditor: React.FC<Props> = props => {
           </Dialog>
           <div style={{ marginBottom: '10px' }}>
             <GradingCommentSelector
-              onSelect={onSelectGeneratedComments}
+              onToggle={onToggleComment}
+              onEditChange={onEditChange}
               isLoading={hasClickedGenerate}
               comments={suggestions}
+              selectedIndices={selectedIndices}
+              edits={commentEdits}
             />
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
               <Button
-                style={{ marginRight: '1rem' }}
                 onClick={async () => {
                   setIsViewLLMPromptOpen(true);
                 }}
@@ -410,10 +451,23 @@ const GradingEditor: React.FC<Props> = props => {
                   const resp = await getCommentSuggestions();
                   setHasClickedGenerate(false);
                   setSuggestions(resp ? resp.comments : []);
+                  setSelectedIndices([]);
+                  setCommentEdits({});
                 }}
               >
                 Generate Comments
               </Button>
+
+              {selectedIndices.length > 0 && (
+                <>
+                  <Button intent="success" onClick={applySelectedComments}>
+                    Apply Selected
+                  </Button>
+                  <Button intent="warning" onClick={handleSaveChosenComments}>
+                    Save Selections
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </>

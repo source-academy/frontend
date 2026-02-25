@@ -1585,6 +1585,30 @@ export const saveFinalComment = async (
   return resp;
 };
 
+export const saveChosenComments = async (
+  tokens: Tokens,
+  submissionId: number,
+  questionId: number,
+  answerId: number,
+  selectedIndices: number[],
+  edits: Record<number, string>
+): Promise<Response | null> => {
+  const resp = await request(
+    `${courseId()}/admin/save-chosen-comments/${submissionId}/${questionId}`,
+    'POST',
+    {
+      body: {
+        answer_id: answerId,
+        selected_indices: selectedIndices,
+        edits: edits
+      },
+      ...tokens
+    }
+  );
+
+  return resp;
+};
+
 /**
  * GET /courses/{courseId}/admin/users
  */
