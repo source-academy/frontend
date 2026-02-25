@@ -54,7 +54,7 @@ import {
 import { Continuation, isContinuation, isSchemeNumber, isSymbol } from './utils/scheme';
 export type LayoutCache = {
   frames: Map<string, number>;
-  levels: Map<string, Level>; // added to store frame's level
+  levels: Map<string,  number>; // added to store frame's level
   largestWidth: number; // added to store largest level width
 };
 
@@ -616,6 +616,10 @@ export class Layout {
     }
   }
 
+  /**
+   * Populate cache with final x coordinates of each frame, width of each level, and largest level width, 
+   * to be used for fixed positioning of frames and center alignment.
+   */
   static getLayoutPositions(): LayoutCache {
     const cache: LayoutCache = {
       frames: new Map(),
@@ -624,54 +628,45 @@ export class Layout {
     };
 
     Layout.levels.forEach(level => {
-      level.frames.forEach(frame => {
+      const frames = level.frames;
+      const currWidth = level.width() + frames[frames.length - 1].totalDataWidth;
+      cache.largestWidth = Math.max(cache.largestWidth, currWidth);
+      frames.forEach(frame => {
         cache.frames.set(frame.environment.id, frame.x());
-
-        // added to store frame's level and largest width
-        cache.levels.set(frame.environment.id, level);
-        if (cache.largestWidth < level.width()) {
-          cache.largestWidth = level.width();
-        }
+        cache.levels.set(frame.environment.id, currWidth);
       });
     });
 
     return cache;
   }
 
-  // for components to get frames x coorindates
+  /**
+   * Get the cached x coordinate corresponding to the given environment id, and add offset.
+   * @param envId id of current component in the environment
+   * @returns coordinate of cached position, or undefined if it doesn't exist
+   */
   static getGhostFrameX(envId: string): number | undefined {
-    const cache = CseMachine.masterLayout!;
-
-    // added for offset
-    let offset: number = 0;
-
-    // if control stash is on, add offset to account for the width of the control stash and its padding
-    if (CseMachine.getControlStash()) {
-      offset += ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth;
-    }
-
+    const cache = CseMachine.masterLayout;
     if (cache && cache.frames.has(envId)) {
       const fixedX = cache.frames.get(envId)!;
-
-      // added to add offset for center alignment
-      if (CseMachine.getCenterAlignment()) {
-        offset += Math.floor((cache.largestWidth - cache.levels.get(envId)!.width()) / 2);
-      }
+      // add offset for control stash and center alignment
+      let offset: number = 0; 
+      offset += CseMachine.getControlStash() ? ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth : 0;
+      offset += CseMachine.getCenterAlignment() ? Math.floor((cache.largestWidth - cache.levels.get(envId)!) / 2) : 0;
       return fixedX + offset;
     }
     return undefined;
   }
 
+  /**
+   * Reassign x coordinate of every frame to their predetermined position by calling getGhostFrameX.
+   */
   static applyFixedPositions() {
-    // static applyFixedPositions(cache: LayoutCache) {
     const cache = CseMachine.masterLayout!;
-
     Layout.levels.forEach(level => {
       level.frames.forEach(frame => {
         const id = frame.environment.id;
-
-        if (cache && cache.frames.has(id)) {
-          // if (cache.frames.has(id)) {
+        if (cache.frames.has(id)) {
           const fixedX = Layout.getGhostFrameX(id)!;
           frame.x = () => fixedX;
         }

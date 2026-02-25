@@ -25,6 +25,7 @@ export default class CseMachine {
   private static controlStash: boolean = false; // TODO: discuss if the default should be true
   private static stackTruncated: boolean = false;
   private static centerAlignment: boolean = false; // added for center alignment
+  private static centerAlignmentToggled: boolean = false; 
   private static environmentTree: EnvTree | undefined;
   private static currentEnvId: string;
   private static control: Control | undefined;
@@ -41,7 +42,7 @@ export default class CseMachine {
   // added for center alignment
   public static toggleCenterAlignment(): void {
     CseMachine.centerAlignment = !CseMachine.centerAlignment;
-    CseMachine.redraw();
+    CseMachine.centerAlignmentToggled = true;
   }
 
   public static getCurrentEnvId(): string {
@@ -129,12 +130,14 @@ export default class CseMachine {
     if (CseMachine.environmentTree && CseMachine.control && CseMachine.stash) {
       // checks if the required diagram exists, and updates the dom node using setVis
 
-      if (CseMachine.getCenterAlignment() || !CseMachine.getCenterAlignment()) {
+      // if center alignment is toggled, change the alignment and redraw the diagram with new coordinates
+      if (this.centerAlignmentToggled) {
         Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
         if (CseMachine.masterLayout) {
           Layout.applyFixedPositions();
         }
         this.setVis(Layout.draw());
+        this.centerAlignmentToggled = false;
       }
 
       if (
@@ -181,7 +184,6 @@ export default class CseMachine {
         Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
         if (CseMachine.masterLayout) {
           Layout.applyFixedPositions();
-          // Layout.applyFixedPositions(CseMachine.masterLayout);
         }
         this.setVis(Layout.draw());
       }
