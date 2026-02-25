@@ -74,7 +74,7 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
         isOpen={isActive}
         transitionDuration={0}
         backdropProps={{
-          style: { position: 'fixed'}
+          style: { position: 'fixed' }
         }}
       >
         <div className={classes['snippet-open']}>
