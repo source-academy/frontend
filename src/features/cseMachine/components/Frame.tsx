@@ -264,7 +264,7 @@ export class Frame extends Visible implements IHoverable {
     }
   }
 
-public get name(): Text {
+  public get name(): Text {
     return this._name;
   }
 
