@@ -2,6 +2,7 @@ import { Context } from 'js-slang';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import React from 'react';
 
+import { arrowSelection } from './components/arrows/ArrowSelection';
 import { Layout } from './CseMachineLayout';
 import { EnvTree } from './CseMachineTypes';
 import { deepCopyTree, getEnvId } from './CseMachineUtils';
@@ -81,6 +82,7 @@ export default class CseMachine {
 
   static clear() {
     Layout.values.clear();
+    arrowSelection.clearSelection();
   }
 
   /** updates the visualization state in the SideContentCseMachine component based on
