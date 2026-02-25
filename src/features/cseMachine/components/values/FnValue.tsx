@@ -31,6 +31,7 @@ import { Frame } from '../Frame';
 import { Value } from './Value';
 import { ArrowFromStreamNullaryFn } from '../arrows/ArrowFromStreamNullaryFn';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
+import { DottedArrow } from '../arrows/DottedArrow';
 
 /** this class encapsulates a JS Slang function (not from the global frame) that
  *  contains extra props such as environment and fnName */
