@@ -9,12 +9,15 @@ import { isMainReference } from '../../CseMachineUtils';
 import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
 import { ArrayUnit } from '../ArrayUnit';
 import { Binding } from '../Binding';
+import { Frame } from '../Frame';
 import { FnValue } from './FnValue';
 import { Value } from './Value';
 
 /** this class encapsulates an array value in source,
  *  defined as a JS array with not 2 elements */
 export class ArrayValue extends Value implements IHoverable {
+  /** frame that encloses this array, if any */
+  enclosingFrame?: Frame;
   /** array of units this array is made of */
   units: ArrayUnit[] = [];
   /** width of the array or the nested values inside the array. */
@@ -38,6 +41,7 @@ export class ArrayValue extends Value implements IHoverable {
 
     // derive the coordinates from the main reference (binding / array unit)
     if (newReference instanceof Binding) {
+      this.enclosingFrame = newReference.frame;
       this._x = newReference.frame.x() + newReference.frame.width() + Config.FrameMarginX;
       this._y = newReference.y();
     } else {
@@ -80,6 +84,15 @@ export class ArrayValue extends Value implements IHoverable {
 
       this.units[i] = unit;
     }
+  }
+
+  isEnclosingFrameLive(): boolean {
+    const id = (this.data as any).id;
+    return id ? Layout.liveObjectIDs.has(id) : false;
+  }
+
+  isLive(): boolean {
+    return this.isEnclosingFrameLive();
   }
 
   markAsReferenced() {

@@ -9,6 +9,7 @@ import { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
 import {
   defaultActiveColor,
   defaultStrokeColor,
+  fadedStrokeColor,
   getTextWidth,
   getUnreferencedObjects,
   isClosure,
@@ -59,6 +60,8 @@ export class Frame extends Visible implements IHoverable {
   readonly parentFrame: Frame | undefined;
   /** arrow that is drawn from this frame to the parent frame */
   readonly arrow: GenericArrow<Frame, Frame> | undefined;
+  /** check if this frame is live */
+  readonly isLive: boolean;
 
   constructor(
     /** environment tree node that contains this frame */
@@ -155,10 +158,20 @@ export class Frame extends Visible implements IHoverable {
 
     // Create all the bindings and values
     let prevBinding: Binding | null = null;
+
+    this.isLive = this.environment ? Layout.liveEnvIDs.has(this.environment.id) : false;
+
     for (const [key, data] of entries) {
       const constant =
         this.environment.head[key]?.description === 'const declaration' || !data.writable;
-      const currBinding: Binding = new Binding(key, data.value, this, prevBinding, constant);
+      const currBinding: Binding = new Binding(
+        key,
+        data.value,
+        this,
+        prevBinding,
+        constant,
+        this.isLive
+      );
       prevBinding = currBinding;
       this.bindings.push(currBinding);
       totalWidth = Math.max(totalWidth, currBinding.width() + Config.FramePaddingX);
@@ -174,7 +187,7 @@ export class Frame extends Visible implements IHoverable {
       frameNames.get(this.environment.name) ?? this.environment.name,
       this.x(),
       this.level.y(),
-      { maxWidth: this.width() }
+      { maxWidth: this.width(), faded: !this.isLive }
     );
     this.totalHeight = this.height() + this.name.height() + Config.TextPaddingY / 2;
 
@@ -193,6 +206,7 @@ export class Frame extends Visible implements IHoverable {
     return (
       <Group ref={this.ref} key={Layout.key++}>
         {this.name.draw()}
+
         <Rect
           {...ShapeDefaultProps}
           x={this.x()}
@@ -202,11 +216,14 @@ export class Frame extends Visible implements IHoverable {
           stroke={
             CseMachine.getCurrentEnvId() === this.environment?.id
               ? defaultActiveColor()
-              : defaultStrokeColor()
+              : this.isLive
+                ? defaultStrokeColor()
+                : fadedStrokeColor()
           }
           cornerRadius={Config.FrameCornerRadius}
           onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
+          listening={false}
           key={Layout.key++}
         />
         {this.bindings.map(binding => binding.draw())}

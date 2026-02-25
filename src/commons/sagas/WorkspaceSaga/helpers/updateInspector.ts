@@ -1,4 +1,4 @@
-import { Chapter } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
 import { SagaIterator } from 'redux-saga';
 import { put, select } from 'redux-saga/effects';
 
@@ -14,6 +14,10 @@ export function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIter
       state.workspaces[workspaceLocation].lastDebuggerResult,
       state.workspaces[workspaceLocation].context.chapter
     ]);
+    if (!lastDebuggerResult) {
+      yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
+      return;
+    }
     if (chapter === Chapter.FULL_JAVA) {
       const controlItem = lastDebuggerResult.context.control.peek();
       let start = -1;
@@ -27,7 +31,11 @@ export function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIter
       yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, [[start, end]]));
       visualizeJavaCseMachine(lastDebuggerResult);
     } else {
-      const row = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
+      // When the nodes[0] was null earlier, the final CSE visualisation was not shown.
+      // Right now, if it was null, since the expected value of node.loc.start.line is '0' or its equivalent, we set the row to '-1' to avoid highlighting any line and showing the final CSE visualisation.
+      const node = lastDebuggerResult?.context?.runtime?.nodes?.[0];
+      const row = node?.loc?.start?.line !== undefined ? node.loc.start.line - 1 : -1;
+      // The 'node' variable is only for the scope of this else block (used for the redefinition of 'row')
       // TODO: Hardcoded to make use of the first editor tab. Rewrite after editor tabs are added.
       yield put(actions.setEditorHighlightedLines(workspaceLocation, 0, []));
       // We highlight only one row to show the current line
