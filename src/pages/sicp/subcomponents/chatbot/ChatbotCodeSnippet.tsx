@@ -1,7 +1,6 @@
-import { Card, Elevation } from '@blueprintjs/core';
+import { Card, Elevation, Overlay2 } from '@blueprintjs/core';
 import { compressToEncodedURIComponent } from 'lz-string';
 import React from 'react';
-import { createPortal } from 'react-dom';
 import { useDispatch } from 'react-redux';
 import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
 import ControlBar from 'src/commons/controlBar/ControlBar';
@@ -68,28 +67,25 @@ const ChatbotCodeSnippet: React.FC<ChatbotCodeSnippetProps> = ({
     editingWorkspaceButtons: [closeButton]
   };
 
-  // Render the open editor as a portal to root React container to preserve React context
-  const rootContainer = document.getElementById('root');
-  const editorOverlay =
-    isActive && rootContainer
-      ? createPortal(
-          <div className={classes['snippet-overlay']}>
-            <div className={classes['snippet-open']}>
-              <ControlBar {...controlBarProps} />
-              <div className={classes['desktop-open']}>
-                <div className={classes['workspace-container']}>
-                  <Playground {...workspaceProps} />
-                </div>
-              </div>
-            </div>
-          </div>,
-          rootContainer
-        )
-      : null;
-
   return (
     <>
-      {editorOverlay}
+      <Overlay2
+        hasBackdrop={true}
+        isOpen={isActive}
+        transitionDuration={0}
+        backdropProps={{
+          style: { position: 'fixed'}
+        }}
+      >
+        <div className={classes['snippet-open']}>
+          <ControlBar {...controlBarProps} />
+          <div className={classes['desktop-open']}>
+            <div className={classes['workspace-container']}>
+              <Playground {...workspaceProps} />
+            </div>
+          </div>
+        </div>
+      </Overlay2>
       <Card
         className={classes['snippet-closed']}
         interactive={true}

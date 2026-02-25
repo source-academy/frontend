@@ -1,27 +1,8 @@
 @import './_global';
 
-:global {
-  body > .bp6-portal {
-    z-index: 2100;
-  }
-}
-
-// Overlay that covers the entire screen with a dark backdrop
-.snippet-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 2000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.7);
-}
-
 .snippet-open {
-  position: relative;
+  inset: 0;
+  margin: auto;
   width: 80vw;
   max-width: 1200px;
   height: 80vh;
