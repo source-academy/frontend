@@ -669,9 +669,9 @@ export class Layout {
         const id = frame.environment.id;
         if (cache.frames.has(id)) {
           const fixedX = Layout.getGhostFrameX(id)!;
-          frame.x = () => fixedX;
+          frame.reassignCoordinates(fixedX);
           frame.bindings.forEach(binding => {
-             binding.reassignCoordinates(fixedX);
+            binding.reassignCoordinates(fixedX);
           });
         }
       });
