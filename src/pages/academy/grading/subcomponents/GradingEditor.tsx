@@ -137,13 +137,18 @@ const GradingEditor: React.FC<Props> = props => {
   const [selectedSuggestions, setSelectedSuggestions] = useState<string[]>([]);
   const [hasClickedGenerate, setHasClickedGenerate] = useState<boolean>(false);
   const [isViewLLMPromptOpen, setIsViewLLMPromptOpen] = useState<boolean>(false);
+  const [hasGenerated, setHasGenerated] = useState<boolean>(false); //If generate comments button has been pressed
 
   const makeInitialState = () => {
     setXpAdjustmentInput(props.xpAdjustment.toString());
     setEditorValue(props.comments);
     setSelectedTab('write');
     setCurrentlySaving(false);
-    setSuggestions(props.ai_comments || []);
+    //Load existing comments from props (the database)
+    const existingComments = props.ai_comments || [];
+    setSuggestions(existingComments);
+    //Lock the button if we already have comments for this submission
+    setHasGenerated(existingComments.length > 0);
   };
 
   /**
@@ -354,7 +359,7 @@ const GradingEditor: React.FC<Props> = props => {
         </div>
       </div>
 
-      {props.is_llm && (
+      {props.is_llm && props.prompts && props.prompts.length > 0 && (
         <>
           <Dialog
             title="Full Composed LLM Prompt"
@@ -405,14 +410,22 @@ const GradingEditor: React.FC<Props> = props => {
 
               <Button
                 intent="primary"
+                //Disable if currently fetching OR if we already have comments
+                disabled={hasClickedGenerate || hasGenerated}
                 onClick={async () => {
                   setHasClickedGenerate(true);
                   const resp = await getCommentSuggestions();
                   setHasClickedGenerate(false);
-                  setSuggestions(resp ? resp.comments : []);
+
+                  if (resp && resp.comments) {
+                    setSuggestions(resp.comments);
+                    //Lock the button locally once successful
+                    setHasGenerated(true);
+                    showSuccessMessage('Comments generated and saved!');
+                  }
                 }}
               >
-                Generate Comments
+                {hasGenerated ? 'Comments Generated' : 'Generate Comments'}
               </Button>
             </div>
           </div>
