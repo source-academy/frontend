@@ -53,7 +53,7 @@ export class Frame extends Visible implements IHoverable {
   /** the bindings this frame contains */
   readonly bindings: Binding[] = [];
   /** name of this frame to display */
-  private name: Text; // removed readonly to allow reassignment for fixed layout
+  private _name!: Text; // removed readonly to allow reassignment for fixed layout
   /** the level in which this frame resides */
   readonly level: Level | undefined;
   /** environment associated with this frame */
@@ -249,7 +249,7 @@ export class Frame extends Visible implements IHoverable {
       ? prevBinding.y() - this.y() + prevBinding.height() + Config.FramePaddingY
       : Config.FramePaddingY * 2;
 
-    this.name = new Text(
+    this._name = new Text(
       frameNames.get(this.environment.name) ?? this.environment.name,
       this.x(),
       this.level.y(),
@@ -264,6 +264,10 @@ export class Frame extends Visible implements IHoverable {
     }
   }
 
+public get name(): Text {
+    return this._name;
+  }
+
   /**
    * Reassigns the coordinates according to the final position of this frame
    * @param newX taken from cached layout
@@ -275,7 +279,7 @@ export class Frame extends Visible implements IHoverable {
     if (CseMachine.getCenterAlignment()) {
       textOffset += Math.floor(this.width() / 2) - Math.floor(this.name.width() / 2);
     }
-    this.name = new Text(
+    this._name = new Text(
       frameNames.get(this.environment.name) ?? this.environment.name,
       this.x() + textOffset,
       this.level!.y(), // this method is only called after the frame is drawn
