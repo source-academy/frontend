@@ -1,5 +1,6 @@
 import { compileFromSource, ECE, typeCheck } from 'java-slang';
 import { BinaryWriter } from 'java-slang/dist/compiler/binary-writer';
+import { IOCallbacks } from 'java-slang/dist/ec-evaluator';
 import setupJVM, { parseBin } from 'java-slang/dist/jvm';
 import { createModuleProxy, loadCachedFiles } from 'java-slang/dist/jvm/utils/integration';
 import { Context, Result } from 'js-slang';
@@ -98,15 +99,17 @@ export async function javaRun(
       return Promise.resolve({ status: 'error' });
     }
   } else {
+    if (isUsingCse) {
+      const result = await runJavaCseMachine(javaCode, targetStep, context, { stdout, stderr });
+
+      return result;
+    }
+
     const typeCheckResult = typeCheck(javaCode);
     if (typeCheckResult.hasTypeErrors) {
       const typeErrMsg = typeCheckResult.errorMsgs.join('\n');
       stderr('TypeCheck', typeErrMsg);
       return Promise.resolve({ status: 'error' });
-    }
-
-    if (isUsingCse) {
-      return await runJavaCseMachine(javaCode, targetStep, context);
     }
 
     try {
@@ -178,7 +181,12 @@ export function visualizeJavaCseMachine({ context }: { context: ECE.Context }) {
   }
 }
 
-export async function runJavaCseMachine(code: string, targetStep: number, context: Context) {
+export async function runJavaCseMachine(
+  code: string,
+  targetStep: number,
+  context: Context,
+  ioCallbacks: IOCallbacks
+) {
   const convertJavaErrorToJsError = (e: ECE.SourceError): SourceError => ({
     type: ErrorType.RUNTIME,
     severity: ErrorSeverity.ERROR,
@@ -197,7 +205,7 @@ export async function runJavaCseMachine(code: string, targetStep: number, contex
     elaborate: () => e.explain()
   });
   context.executionMethod = 'cse-machine';
-  return ECE.runECEvaluator(code, targetStep)
+  return ECE.runECEvaluator(code, targetStep, ioCallbacks)
     .then(result => {
       context.runtime.envStepsTotal = result.context.totalSteps;
       if (result.status === 'error') {
