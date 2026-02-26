@@ -687,7 +687,8 @@ function CustomASTRenderer(props: IStepperPropContents): React.ReactNode {
         if (props.markers === undefined) {
           return renderNode;
         }
-        /**highlight the entire function declaration body
+        /**
+         * highlight the entire function declaration body
          * if its a function declaration, highlight the entire body
          * else just highlight that line
          */
