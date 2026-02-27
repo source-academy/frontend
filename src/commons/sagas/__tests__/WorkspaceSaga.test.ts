@@ -44,13 +44,13 @@ import { evalEditorSaga } from '../WorkspaceSaga/helpers/evalEditor';
 import { evalTestCode } from '../WorkspaceSaga/helpers/evalTestCode';
 import { runTestCase } from '../WorkspaceSaga/helpers/runTestCase';
 
-vi.mock('src/features/cseMachine/CseMachine', async (importOriginal) => {
+vi.mock('src/features/cseMachine/CseMachine', async importOriginal => {
   const actual: any = await importOriginal();
   return {
     ...actual, // Keep all original exports (like the default export)
     CseMachine: {
       ...actual.CseMachine, // Keep any other CseMachine properties
-      drawCse: vi.fn(),     // Mock just the UI methods that crash the test
+      drawCse: vi.fn(), // Mock just the UI methods that crash the test
       init: vi.fn(),
       clearCse: vi.fn()
     }
