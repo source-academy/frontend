@@ -24,7 +24,9 @@ export class ArrayValue extends Value implements IHoverable {
   /** height of the array and nested values inside the array */
   totalHeight: number = 0;
 
-  private arrayId: number = 0;
+  private arrayIdWithinStream: number = 0;
+
+  private streamId: number = 0;
 
   constructor(
     /** underlying values this array contains */
@@ -34,11 +36,20 @@ export class ArrayValue extends Value implements IHoverable {
   ) {
     super();
     Layout.memoizeValue(data, this);
+    
+    const streamIdString = CseMachine.getStreamPairIdToStreamId(data.id);
 
-    this.arrayId = Layout.arrayCount;
-    Layout.streamPairArray[Layout.arrayCount] = this;
-    Layout.arrayCount++;
-
+    if (streamIdString != undefined) {
+      this.streamId = parseInt(streamIdString);
+      const streamPairCount = Layout.streamLengthMap.get(streamIdString);
+      if (streamPairCount != undefined) {
+        Layout.streamLengthMap.set(streamIdString, streamPairCount + 1);
+        this.arrayIdWithinStream = streamPairCount;
+      } else {
+        Layout.streamLengthMap.set(streamIdString, 1);
+        this.arrayIdWithinStream = 0;
+      }
+    }
 
     // if (this.arrayId > 0 && Layout.streamPairArray[this.arrayId - 1].data[1] instanceof Closure) {
     //   let prevFn: FnValue = Layout.streamPairArray[this.arrayId - 1].data[1];
@@ -52,6 +63,8 @@ export class ArrayValue extends Value implements IHoverable {
       // console.log("array is created from fn with id: " + CseMachine.findKeyByValueInMap(data.id));
       // CseMachine.viewStreamLineage;
       const originFnId = CseMachine.findKeyByValueInMap(data.id);
+
+
       if (originFnId != undefined) {
         // console.log("result of finding fn that created this array: " + Layout.values.get(originFnId));
         (Layout.values.get(originFnId) as FnValue).addArrow(this);
@@ -68,8 +81,8 @@ export class ArrayValue extends Value implements IHoverable {
         this._x = newReference.frame.x() + newReference.frame.width() + Config.FrameMarginX;
         this._y = newReference.y();
       } else {
-        this._x = Config.CanvasPaddingX + this.arrayId * (Config.DataUnitWidth * 5);
-        this._y = 0;
+        this._x = Config.CanvasPaddingX + this.arrayIdWithinStream * (Config.DataUnitWidth * 5);
+        this._y = (Config.DataUnitHeight * 2) * this.streamId;
       }
     } else {
       if (newReference.isLastUnit) {
