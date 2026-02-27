@@ -45,3 +45,4 @@ jobs:
         with:
           path-to-lcov: coverage/lcov.info
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          fail-on-error: false
