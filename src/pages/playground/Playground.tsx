@@ -34,6 +34,7 @@ import {
 } from 'src/commons/utils/WarningDialogHelper';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import CseMachine from 'src/features/cseMachine/CseMachine';
 import GithubActions from 'src/features/github/GitHubActions';
 import PersistenceActions from 'src/features/persistence/PersistenceActions';
 import {
@@ -294,6 +295,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [setIsGreen]
   );
   useHotkeys(playgroundHotkeyBindings);
+
+  useEffect(() => {
+    CseMachine.clearCachedLayouts();
+    window.requestAnimationFrame(() => CseMachine.redraw());
+  }, [isGreen]);
 
   const remoteExecutionTab: SideContentTab = useMemo(
     () => makeRemoteExecutionTabFrom(deviceSecret, setDeviceSecret),

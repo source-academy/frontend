@@ -151,6 +151,15 @@ export default class CseMachine {
     }
   }
 
+  static clearCachedLayouts() {
+    Layout.currentDark = undefined;
+    Layout.currentLight = undefined;
+    Layout.currentStackDark = undefined;
+    Layout.currentStackTruncDark = undefined;
+    Layout.currentStackLight = undefined;
+    Layout.currentStackTruncLight = undefined;
+  }
+
   static clearCse() {
     if (this.setVis) {
       this.setVis(undefined);
