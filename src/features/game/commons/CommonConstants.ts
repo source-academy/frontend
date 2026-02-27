@@ -5,6 +5,7 @@ import FontAssets from '../assets/FontAssets';
 export const Constants = {
   assetsFolder: Links.sourceAcademyAssets,
   useEmptyAssetPrefix: UtilConstants.useEmptyAssetPrefix,
+  developPrefix: Links.developPrefix,
   fadeDuration: 600,
   nullFunction: () => {},
   nullInteractionId: '',
