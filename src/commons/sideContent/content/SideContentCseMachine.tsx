@@ -42,6 +42,7 @@ type State = {
   lastStep: boolean;
   stepLimitExceeded: boolean;
   chapter: Chapter;
+  hideDeadFrames: boolean;
 };
 
 type CseMachineProps = OwnProps & StateProps & DispatchProps;
@@ -82,7 +83,8 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
       height: this.calculateHeight(props.sideContentHeight),
       lastStep: false,
       stepLimitExceeded: false,
-      chapter: props.chapter
+      chapter: props.chapter,
+      hideDeadFrames: false
     };
     if (this.isJava()) {
       JavaCseMachine.init(
@@ -300,8 +302,29 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                 onClick={this.stepNextBreakpoint}
               />
             </ButtonGroup>
+
             {!this.isJava() && (
               <ButtonGroup>
+                <Tooltip content="Clear Dead Frames" compact>
+                  <AnchorButton
+                    onMouseUp={() => {
+                      if (this.state.visualization) {
+                        this.setState(
+                          prevState => ({
+                            hideDeadFrames: true
+                          }),
+                          () => {
+                            CseMachine.setHideDeadFrames(this.state.hideDeadFrames);
+                            CseMachine.clearCachedLayouts();
+                            CseMachine.redraw();
+                          }
+                        );
+                      }
+                    }}
+                    icon="eraser"
+                    disabled={!this.state.visualization}
+                  ></AnchorButton>
+                </Tooltip>
                 <Tooltip content="Print" compact>
                   <AnchorButton
                     onMouseUp={() => {
@@ -396,9 +419,14 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   };
 
   private sliderShift = (newValue: number) => {
+    if (this.state.hideDeadFrames) {
+      CseMachine.setHideDeadFrames(false);
+      CseMachine.clearCachedLayouts();
+      CseMachine.redraw();
+    }
     this.props.handleStepUpdate(newValue);
     this.setState((state: State) => {
-      return { value: newValue };
+      return { value: newValue, hideDeadFrames: false };
     });
   };
 

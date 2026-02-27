@@ -150,7 +150,9 @@ export class FnValue extends Value implements IHoverable {
     const textColor = isLive ? defaultTextColor() : fadedTextColor();
     const strokeColor = isLive ? defaultStrokeColor() : fadedStrokeColor();
     //dont need to check isReferenced here since live is ALL we need to know
-
+    if (Layout.hideDeadFrames && !isLive) {
+      return null;
+    }
     return (
       <React.Fragment key={Layout.key++}>
         <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} ref={this.ref}>
