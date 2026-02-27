@@ -5,11 +5,10 @@ import { Layout } from '../../CseMachineLayout';
 import { IVisible, StepsArray } from '../../CseMachineTypes';
 import { defaultStrokeColor, fadedStrokeColor } from '../../CseMachineUtils';
 import { GenericArrow } from './GenericArrow';
-import { ContValue } from '../values/ContValue';
 
 export class DottedArrow extends GenericArrow<IVisible, IVisible> {
     draw() {
-    const stroke = this.faded ? fadedStrokeColor() : defaultStrokeColor();
+    const stroke = defaultStrokeColor();
     return (
       <KonvaGroup key={Layout.key++} ref={this.ref} listening={false}>
         <KonvaPath

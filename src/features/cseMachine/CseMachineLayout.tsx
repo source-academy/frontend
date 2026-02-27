@@ -121,8 +121,7 @@ export class Layout {
    * Pair creation mode stuff
    *
    */
-  static arrayCount: number = 0;
-  static streamPairArray: ArrayValue[] = [];
+  static streamLengthMap: Map<string, number> = new Map();
 
   static updateDimensions(width: number, height: number) {
     // update the size of the scroll container and stage given the width and height of the sidebar content.
@@ -541,7 +540,7 @@ export class Layout {
   }
 
   static draw(): React.ReactNode {
-    Layout.arrayCount = 0;
+    Layout.streamLengthMap.clear();
 
     const pairValues: Value[] = Array.from(Layout.values.values()).filter(v => {
       try {

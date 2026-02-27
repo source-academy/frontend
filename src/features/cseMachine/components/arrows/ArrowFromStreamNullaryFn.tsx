@@ -4,7 +4,6 @@ import { ContValue } from '../values/ContValue';
 import { FnValue } from '../values/FnValue';
 import { GlobalFnValue } from '../values/GlobalFnValue';
 import { DottedArrow } from './DottedArrow';
-import { ArrayValue } from '../values/ArrayValue';
 
 
 /** this class encapsulates an GenericArrow to be drawn between 2 points */
