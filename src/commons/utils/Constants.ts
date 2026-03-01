@@ -151,7 +151,9 @@ export enum Links {
 
   ecmaScript_2021 = 'https://262.ecma-international.org/12.0/',
 
-  vscode = 'vscode://source-academy.source-academy/sso'
+  vscode = 'vscode://source-academy.source-academy/sso',
+
+  developPrefix = 'courses-dev/2/'
 }
 
 const Constants = {
