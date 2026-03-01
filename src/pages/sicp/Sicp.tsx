@@ -23,6 +23,7 @@ import SicpErrorBoundary from '../../features/sicp/errors/SicpErrorBoundary';
 import getSicpError, { SicpErrorType } from '../../features/sicp/errors/SicpErrors';
 import Chatbot from './subcomponents/chatbot/Chatbot';
 import SicpIndexPage from './subcomponents/SicpIndexPage';
+import { useSicpLanguageContext } from './subcomponents/SicpLanguageProvider';
 
 const baseUrl = Constants.sicpBackendUrl + 'json/';
 const extension = '.json';
@@ -40,6 +41,7 @@ const Sicp: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState('0');
   const { section } = useParams<{ section: string }>();
+  const { sicpLanguage, setSicpLanguage } = useSicpLanguageContext();
   const parentRef = useRef<HTMLDivElement>(null);
   const refs = useRef<Record<string, HTMLElement | null>>({});
   const navigate = useNavigate();
@@ -105,7 +107,7 @@ const Sicp: React.FC = () => {
 
     setLoading(true);
 
-    fetch(baseUrl + section + extension)
+    fetch(`${baseUrl}${sicpLanguage}/${section}${extension}`)
       .then(response => {
         if (!response.ok) {
           throw Error(response.statusText);
@@ -121,6 +123,7 @@ const Sicp: React.FC = () => {
           throw new ParseJsonError(error.message);
         }
       })
+
       .catch(error => {
         console.error(error);
 
@@ -138,7 +141,7 @@ const Sicp: React.FC = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [section, navigate]);
+  }, [section, sicpLanguage, navigate]);
 
   // Scroll to correct position
   React.useEffect(() => {
@@ -163,9 +166,30 @@ const Sicp: React.FC = () => {
     dispatch(WorkspaceActions.resetWorkspace('sicp'));
     dispatch(WorkspaceActions.toggleUsingSubst(false, 'sicp'));
   };
+
+  const toggleSicpLanguage = () => {
+    setSicpLanguage(sicpLanguage === 'en' ? 'zh_CN' : 'en');
+  };
+
   const handleNavigation = (sect: string) => {
     navigate('/sicpjs/' + sect);
   };
+
+  // Language toggle button with fixed position
+  const languageToggle = (
+    <div
+      style={{
+        position: 'sticky',
+        top: '20px',
+        left: '20px',
+        zIndex: 0
+      }}
+    >
+      <Button onClick={toggleSicpLanguage} intent="primary" small>
+        {sicpLanguage === 'en' ? '切换到中文' : 'Switch to English'}
+      </Button>
+    </div>
+  );
 
   // `section` is defined due to the navigate logic in the useEffect above
   const navigationButtons = (
@@ -186,6 +210,7 @@ const Sicp: React.FC = () => {
     >
       <SicpErrorBoundary>
         <CodeSnippetContext.Provider value={{ active: active, setActive: handleSnippetEditorOpen }}>
+          {languageToggle}
           {loading ? (
             <div className="sicp-content">{loadingComponent}</div>
           ) : section === 'index' ? (
