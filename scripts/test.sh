@@ -3,9 +3,19 @@
 export CI=true
 
 main() {
-    run_cmd "git stash push --keep-index --message precommit"
-    echo "  If you cancel this pre-push hook, use \`git stash pop\` to retrieve your"
-    echo "  unstaged changes."
+    stash_output=$(git stash push --keep-index --message precommit 2>&1)
+    echo_cyan "> git stash push --keep-index --message precommit"
+    if [[ ! -z "${stash_output}" ]]; then
+        echo "${stash_output}" | sed 's/^/  /'
+    fi
+    
+    # Check if a stash was actually created
+    stash_created=false
+    if [[ "${stash_output}" == *"Saved working directory"* ]]; then
+        stash_created=true
+        echo "  If you cancel this pre-push hook, use \`git stash pop\` to retrieve your"
+        echo "  unstaged changes."
+    fi
 
     tsc="yarn run tsc"
     eslint="yarn run eslint"
@@ -19,7 +29,10 @@ main() {
     run_cmd "${prettier_scss}"; prettier_scss_exit=$?
     run_cmd_jest "${jest_ts}"; jest_ts_exit=$?
 
-    run_cmd "git stash pop"
+    # Only pop the stash if we actually created one
+    if [[ "${stash_created}" == true ]]; then
+        run_cmd "git stash pop"
+    fi
 
     ( >&2
         echo -ne "\033[0;31m"
