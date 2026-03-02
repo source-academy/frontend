@@ -42,7 +42,12 @@ export class ArrayValue extends Value implements IHoverable {
     // derive the coordinates from the main reference (binding / array unit)
     if (newReference instanceof Binding) {
       this.enclosingFrame = newReference.frame;
-      this._x = newReference.frame.x() + newReference.frame.width() + Config.FrameMarginX;
+      // check for whether cache already has x cooridnates
+      const ghostX = Layout.getGhostFrameX(newReference.frame.environment.id);
+      // If frame x cooridnates exists in cache, use it. Otherwise, fallback to current (live) X.
+      const frameX = ghostX !== undefined ? ghostX : newReference.frame.x();
+      this._x = frameX + newReference.frame.width() + Config.FrameMarginX;
+
       this._y = newReference.y();
     } else {
       if (newReference.isLastUnit) {

@@ -28,6 +28,8 @@ export class Binding extends Visible {
    * i.e. the value is anonymous
    */
   readonly isDummyBinding: boolean = false;
+  readonly keyYOffset: number;
+
   /** arrow that is drawn from the key to the value */
   arrow?: GenericArrow<Text, Value>;
 
@@ -63,6 +65,7 @@ export class Binding extends Visible {
         ? (Config.DataUnitHeight - Config.FontSize) / 2
         : (this.value.height() - Config.FontSize) / 2;
 
+    this.keyYOffset = keyYOffset;
     this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, { faded: !this.isLive });
 
     // derive the width from the right bound of the value
@@ -90,6 +93,20 @@ export class Binding extends Visible {
     }
   }
 
+  /**
+   * Reassigns the coordinates according to the final position of this frame
+   * @param newX taken from cached layout
+   */
+  reassignCoordinates(newX: number): void {
+    if (this.prevBinding) {
+      this._x = this.prevBinding.x();
+      this._y = this.prevBinding.y() + this.prevBinding.height() + Config.TextPaddingY;
+    } else {
+      this._x = newX + Config.FramePaddingX;
+      this._y = this.frame.y() + Config.FramePaddingY;
+    }
+  }
+
   draw(): React.ReactNode {
     const isLive = this.isDummyBinding //check if binding is an unreferenced heap object
       ? ((this.value as any).isLive?.() ?? false)
@@ -100,6 +117,10 @@ export class Binding extends Visible {
     if (this.value instanceof PrimitiveValue || this.value instanceof UnassignedValue) {
       this.value.setFaded(!isLive);
     }
+
+    // Update Text to new position
+    (this.key as any)._x = this.x();
+    (this.key as any)._y = this.y() + this.keyYOffset;
 
     if (
       !this.isDummyBinding && // value is unreferenced in dummy binding
