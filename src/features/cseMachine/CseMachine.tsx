@@ -129,7 +129,7 @@ export default class CseMachine {
     }
 
     // Apply Fixed Positions
-    if (CseMachine.masterLayout) {
+    if (CseMachine.masterLayout && !CseMachine.getPrintableMode()) {
       Layout.applyFixedPositions();
     }
     this.setVis(Layout.draw());
@@ -144,7 +144,7 @@ export default class CseMachine {
       // if center alignment is toggled, change the alignment and redraw the diagram with new coordinates
       if (this.centerAlignmentToggled) {
         Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
-        if (CseMachine.masterLayout) {
+        if (CseMachine.masterLayout && !CseMachine.getPrintableMode()) {
           Layout.applyFixedPositions();
         }
         this.setVis(Layout.draw());
@@ -193,7 +193,7 @@ export default class CseMachine {
         this.setVis(Layout.currentDark);
       } else {
         Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
-        if (CseMachine.masterLayout) {
+        if (CseMachine.masterLayout && !CseMachine.getPrintableMode()) {
           Layout.applyFixedPositions();
         }
         this.setVis(Layout.draw());

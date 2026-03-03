@@ -200,11 +200,13 @@ export class FnValue extends Value implements IHoverable {
         </Group>
         <KonvaLabel
           x={
-            CseMachine.getPrintableMode() ? this.centerX - this.radius : this.x() + this.width() + Config.TextPaddingX * 2
+            CseMachine.getPrintableMode()
+              ? this.x() + Config.TextMargin
+              : this.x() + this.width() + Config.TextPaddingX * 2
           }
           y={
             CseMachine.getPrintableMode()
-              ? this.y() + this.radius + Config.TextPaddingY / 3
+              ? this.y() + this.radius + Config.TextMargin
               : this.y() - Config.TextPaddingY
           }
           visible={CseMachine.getPrintableMode()}
