@@ -21,7 +21,7 @@ export class ArrayEmptyUnit extends Visible {
   }
 
   draw(): React.ReactNode {
-    if (Layout.clearDeadFrames && !this.parent.isLive) {
+    if (Layout.clearDeadFrames && !this.parent.isLive()) {
       return null;
     }
     const strokeColor =
