@@ -15,6 +15,7 @@ import {
   isClosure,
   isDataArray,
   isDummyKey,
+  isMainReference,
   isPrimitiveData,
   isSourceObject,
   isUnassigned
@@ -25,6 +26,10 @@ import { GenericArrow } from './arrows/GenericArrow';
 import { Binding } from './Binding';
 import { Level } from './Level';
 import { Text } from './Text';
+import { ArrayValue } from './values/ArrayValue';
+import { ContValue } from './values/ContValue';
+import { FnValue } from './values/FnValue';
+import { GlobalFnValue } from './values/GlobalFnValue';
 import { Visible } from './Visible';
 
 const frameNames = new Map([
@@ -242,6 +247,28 @@ export class Frame extends Visible implements IHoverable {
       this.bindings.push(currBinding);
       totalWidth = Math.max(totalWidth, currBinding.width() + Config.FramePaddingX);
     }
+
+    // Post-process using actual created values to get robust spacing for nested arrays/functions.
+    const frameRightX = this.x() + this.width();
+    for (const binding of this.bindings) {
+      const value = binding.value;
+      if (!isMainReference(value, binding)) continue;
+
+      let valueRightX: number | undefined;
+      if (value instanceof ArrayValue) {
+        valueRightX = value.x() + value.totalWidth;
+      } else if (value instanceof FnValue || value instanceof GlobalFnValue) {
+        valueRightX = value.x() + value.totalWidth;
+      } else if (value instanceof ContValue) {
+        valueRightX = value.x() + value.width() + value.tooltipWidth;
+      }
+
+      if (valueRightX !== undefined) {
+        const overflow = Math.max(0, valueRightX - frameRightX);
+        this.totalDataWidth = Math.max(this.totalDataWidth, overflow);
+      }
+    }
+
     this.totalWidth = totalWidth;
 
     // derive the height of the frame from the the position of the last binding

@@ -2,6 +2,7 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group } from 'react-konva';
 
+import CseMachine from '../../CseMachine';
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
 import { DataArray, IHoverable, ReferenceType } from '../../CseMachineTypes';
@@ -11,6 +12,7 @@ import { ArrayUnit } from '../ArrayUnit';
 import { Binding } from '../Binding';
 import { Frame } from '../Frame';
 import { FnValue } from './FnValue';
+import { GlobalFnValue } from './GlobalFnValue';
 import { Value } from './Value';
 
 /** this class encapsulates an array value in source,
@@ -71,9 +73,21 @@ export class ArrayValue extends Value implements IHoverable {
 
       // Update total width and height for values that are drawn next to the array
       if (
-        (unit.value instanceof ArrayValue || unit.value instanceof FnValue) &&
+        (unit.value instanceof ArrayValue ||
+          unit.value instanceof FnValue ||
+          unit.value instanceof GlobalFnValue) &&
         isMainReference(unit.value, unit)
       ) {
+        const bottomY =
+          unit.value instanceof ArrayValue
+            ? unit.value.y() + unit.value.totalHeight
+            : CseMachine.getPrintableMode()
+              ? unit.value.y() +
+                Config.FnRadius +
+                Config.TextMargin +
+                unit.value.printDescriptionHeight
+              : unit.value.y() + unit.value.height() / 2;
+
         this.totalWidth = Math.max(
           this.totalWidth,
           unit.value.totalWidth +
@@ -81,9 +95,7 @@ export class ArrayValue extends Value implements IHoverable {
         );
         this.totalHeight = Math.max(
           this.totalHeight,
-          unit.value.y() +
-            (unit.value instanceof ArrayValue ? unit.value.totalHeight : unit.value.height() / 2) -
-            unit.y()
+          bottomY - unit.y()
         );
       }
 
