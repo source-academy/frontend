@@ -34,6 +34,7 @@ import {
 } from '../../../../commons/utils/notifications/NotificationsHelper';
 import { convertParamToInt } from '../../../../commons/utils/ParamParseHelper';
 import GradingCommentSelector from './GradingCommentSelector';
+import LLMFeedbackButton from './LLMFeedbackButton';
 
 type GradingSaveFunction = (
   submissionId: number,
@@ -46,6 +47,7 @@ type Props = {
   prompts: LLMPrompt[];
   answer_id: number;
   solution: number | string | null;
+  assessmentId: number;
   questionId: number;
   submissionId: number;
   initialXp: number;
@@ -481,6 +483,12 @@ const GradingEditor: React.FC<Props> = props => {
                   </Button>
                 </>
               )}
+
+              <LLMFeedbackButton
+                tokens={tokens}
+                assessmentId={props.assessmentId}
+                questionId={props.questionId}
+              />
             </div>
           </div>
         </>

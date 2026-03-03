@@ -306,6 +306,7 @@ const GradingWorkspace: React.FC<Props> = props => {
             answer_id={grading!.answers[questionId].id}
             ai_comments={grading!.answers[questionId].ai_comments || []}
             solution={grading!.answers[questionId].question.solution}
+            assessmentId={grading!.assessment.id}
             questionId={grading!.answers[questionId].question.id}
             prompts={grading!.answers[questionId].prompts}
             submissionId={props.submissionId}
