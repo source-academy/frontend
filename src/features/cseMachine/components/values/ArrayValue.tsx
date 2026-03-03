@@ -118,7 +118,7 @@ export class ArrayValue extends Value implements IHoverable {
   };
 
   draw(): React.ReactNode {
-    if (Layout.hideDeadFrames && !this.isLive) {
+    if (Layout.clearDeadFrames && !this.isLive()) {
       return null;
     }
     if (this.isDrawn()) return null;

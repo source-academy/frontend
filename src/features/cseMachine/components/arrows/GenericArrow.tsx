@@ -224,7 +224,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
 
   draw() {
     this.updateIsLive(); //just before drawijng, update liveness for the arrows (since this was causing erroes earlier  )
-    if (Layout.hideDeadFrames && !this.isLive) {
+    if (Layout.clearDeadFrames && !this.isLive) {
       return null;
     }
 

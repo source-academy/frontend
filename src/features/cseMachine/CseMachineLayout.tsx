@@ -93,7 +93,7 @@ export class Layout {
   static liveEnvIDs: Set<string> = new Set();
   static liveObjectIDs: Set<string> = new Set();
   /** hide non-live frames temporarily for the current step */
-  static hideDeadFrames: boolean = false;
+  static clearDeadFrames: boolean = false;
 
   /**
    * memoized values, where keys are either ids for arrays and closures,
@@ -363,7 +363,7 @@ export class Layout {
   /** initializes grid */
   private static initializeGrid(): void {
     this.levels = [];
-    let frontier: EnvTreeNode[] = Layout.hideDeadFrames
+    let frontier: EnvTreeNode[] = Layout.clearDeadFrames
       ? Layout.getVisibleChildren([Layout.globalEnvNode])
       : [Layout.globalEnvNode];
     let prevLevel: Level | null = null;
@@ -376,7 +376,7 @@ export class Layout {
 
       frontier.forEach(e => {
         e.children.forEach(c => {
-          const nextChildren = Layout.hideDeadFrames
+          const nextChildren = Layout.clearDeadFrames
             ? Layout.getVisibleChildren([c as EnvTreeNode])
             : getNextChildren(c as EnvTreeNode);
           nextChildren.forEach(c => (c.parent = e));

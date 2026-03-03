@@ -35,8 +35,8 @@ export default class CseMachine {
   public static toggleStackTruncated(): void {
     CseMachine.stackTruncated = !CseMachine.stackTruncated;
   }
-  public static setHideDeadFrames(enabled: boolean): void {
-    Layout.hideDeadFrames = enabled;
+  public static setClearDeadFrames(enabled: boolean): void {
+    Layout.clearDeadFrames = enabled;
   }
   public static clearCachedLayouts(): void {
     Layout.currentLight = undefined;
@@ -95,7 +95,7 @@ export default class CseMachine {
       throw new Error('CSE machine not initialized');
     CseMachine.control = context.runtime.control;
     CseMachine.stash = context.runtime.stash;
-    CseMachine.setHideDeadFrames(false);
+    CseMachine.setClearDeadFrames(false);
 
     Layout.setContext(
       context.runtime.environmentTree as EnvTree,
@@ -172,7 +172,7 @@ export default class CseMachine {
       CseMachine.control = undefined;
       CseMachine.stash = undefined;
     }
-    CseMachine.setHideDeadFrames(false);
+    CseMachine.setClearDeadFrames(false);
     CseMachine.clearCachedLayouts();
     this.clear();
   }

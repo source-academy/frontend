@@ -150,7 +150,7 @@ export class FnValue extends Value implements IHoverable {
     const textColor = isLive ? defaultTextColor() : fadedTextColor();
     const strokeColor = isLive ? defaultStrokeColor() : fadedStrokeColor();
     //dont need to check isReferenced here since live is ALL we need to know
-    if (Layout.hideDeadFrames && !isLive) {
+    if (Layout.clearDeadFrames && !isLive) {
       return null;
     }
     return (
