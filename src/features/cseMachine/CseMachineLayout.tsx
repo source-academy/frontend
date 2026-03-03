@@ -682,7 +682,7 @@ export class Layout {
    * @returns coordinate of cached position, or undefined if it doesn't exist
    */
   static getGhostFrameX(envId: string): number | undefined {
-    if (Layout.clearDeadFrames || CseMachine.getPrintableMode()) {
+    if (Layout.clearDeadFrames) {
       return undefined;
     }
     const cache = CseMachine.masterLayout;

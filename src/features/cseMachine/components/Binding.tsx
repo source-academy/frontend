@@ -69,11 +69,10 @@ export class Binding extends Visible {
     this.keyYOffset = keyYOffset;
     this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, { faded: !this.isLive });
 
-    const printFnDescriptionWidth =
-      CseMachine.getPrintableMode() &&
+    const fnDescriptionReservedWidth =
       isMainReference(this.value, this) &&
       (this.value instanceof FnValue || this.value instanceof GlobalFnValue)
-        ? this.value.exportTooltipWidth + Config.FnTooltipTextPadding * 2 + Config.TextMargin
+        ? Config.FnDescriptionMaxWidth + Config.FnTooltipTextPadding * 2 + Config.TextMargin
         : 0;
 
     const printFnDescriptionHeight =
@@ -90,9 +89,8 @@ export class Binding extends Visible {
         (this.value instanceof FnValue ||
         this.value instanceof GlobalFnValue ||
         this.value instanceof ContValue
-          ? CseMachine.getPrintableMode() &&
-            (this.value instanceof FnValue || this.value instanceof GlobalFnValue)
-            ? printFnDescriptionWidth
+          ? this.value instanceof FnValue || this.value instanceof GlobalFnValue
+            ? fnDescriptionReservedWidth
             : this.value.tooltipWidth
           : 0)
       : this.key.width();

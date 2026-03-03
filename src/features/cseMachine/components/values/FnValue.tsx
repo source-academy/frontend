@@ -20,11 +20,13 @@ import {
   fadedTextColor,
   getBodyText,
   getParamsText,
+  getTextHeight,
   getTextWidth,
   isMainReference,
   isStreamFn,
   setHoveredCursor,
-  setUnhoveredCursor
+  setUnhoveredCursor,
+  truncateText
 } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
@@ -46,14 +48,17 @@ export class FnValue extends Value implements IHoverable {
   readonly tooltipWidth: number;
   readonly exportTooltip: string;
   readonly exportTooltipWidth: number;
+  readonly isTooltipTruncated: boolean;
   readonly printDescriptionHeight: number;
 
   /** width of the closure circles + label */
   readonly totalWidth: number;
   readonly labelRef: RefObject<Label> = React.createRef();
+  readonly revealLabelRef: RefObject<Label> = React.createRef();
 
   centerX: number;
   enclosingFrame?: Frame;
+  private isExpandedDescription: boolean = false;
   private _arrow: ArrowFromFn | undefined;
 
   constructor(
@@ -79,19 +84,25 @@ export class FnValue extends Value implements IHoverable {
         .slice(0, 2)
         .join('\n') + ' ...';
     this.tooltip = `${this.paramsText}\n${this.bodyText}`;
-    this.exportTooltip = `${this.paramsText}\n${this.exportBodyText}`;
+    this.exportTooltip = truncateText(
+      this.tooltip,
+      Config.FnDescriptionMaxWidth,
+      Config.FnDescriptionMaxHeight
+    );
+    this.isTooltipTruncated = this.exportTooltip !== this.tooltip;
     this.tooltipWidth = Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText));
-    this.exportTooltipWidth = Math.max(
-      getTextWidth(this.paramsText),
-      getTextWidth(this.exportBodyText)
+    this.exportTooltipWidth = Math.min(
+      Config.FnDescriptionMaxWidth,
+      getTextWidth(this.exportTooltip)
     );
     this.printDescriptionHeight =
-      this.exportTooltip.split('\n').length * Config.FontSize + Config.FnTooltipTextPadding * 2;
+      getTextHeight(this.exportTooltip, Config.FnDescriptionMaxWidth) +
+      Config.FnTooltipTextPadding * 2;
     this.totalWidth =
       this._width +
-      Config.TextPaddingX * 2 +
-      10 +
-      (CseMachine.getPrintableMode() ? 0 : this.tooltipWidth);
+      Config.TextMargin +
+      Config.FnDescriptionMaxWidth +
+      Config.FnTooltipTextPadding * 2;
 
     this.addReference(firstReference);
   }
@@ -129,14 +140,32 @@ export class FnValue extends Value implements IHoverable {
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
     setHoveredCursor(currentTarget);
-    this.labelRef.current?.moveToTop();
-    this.labelRef.current?.show();
+    if (this.isExpandedDescription && this.isTooltipTruncated) {
+      this.labelRef.current?.hide();
+      this.revealLabelRef.current?.moveToTop();
+      this.revealLabelRef.current?.show();
+    } else {
+      this.revealLabelRef.current?.hide();
+      this.labelRef.current?.moveToTop();
+      this.labelRef.current?.show();
+    }
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
     setUnhoveredCursor(currentTarget);
+    this.isExpandedDescription = false;
     this.labelRef.current?.hide();
+    this.revealLabelRef.current?.hide();
+  };
+
+  onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    if (CseMachine.getPrintableMode() || !this.isTooltipTruncated) return;
+    this.isExpandedDescription = true;
+    this.labelRef.current?.hide();
+    this.revealLabelRef.current?.moveToTop();
+    this.revealLabelRef.current?.show();
+    currentTarget.getLayer()?.batchDraw();
   };
 
   isLive(): boolean {
@@ -164,7 +193,12 @@ export class FnValue extends Value implements IHoverable {
     }
     return (
       <React.Fragment key={Layout.key++}>
-        <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} ref={this.ref}>
+        <Group
+          onMouseEnter={this.onMouseEnter}
+          onMouseLeave={this.onMouseLeave}
+          onClick={this.onClick}
+          ref={this.ref}
+        >
           <Circle
             {...ShapeDefaultProps}
             key={Layout.key++}
@@ -199,16 +233,8 @@ export class FnValue extends Value implements IHoverable {
           />
         </Group>
         <KonvaLabel
-          x={
-            CseMachine.getPrintableMode()
-              ? this.x() + Config.TextMargin
-              : this.x() + this.width() + Config.TextPaddingX * 2
-          }
-          y={
-            CseMachine.getPrintableMode()
-              ? this.y() + this.radius + Config.TextMargin
-              : this.y() - Config.TextPaddingY
-          }
+          x={this.x() + Config.TextMargin}
+          y={this.y() + this.radius + Config.TextMargin}
           visible={CseMachine.getPrintableMode()}
           ref={this.labelRef}
         >
@@ -222,14 +248,41 @@ export class FnValue extends Value implements IHoverable {
             />
           )}
           <KonvaText
-            text={CseMachine.getPrintableMode() ? this.exportTooltip : this.tooltip}
+            text={
+              !CseMachine.getPrintableMode() && this.isTooltipTruncated
+                ? `${this.exportTooltip}\n(click for full)`
+                : this.exportTooltip
+            }
             fontFamily={Config.FontFamily}
             fontSize={Config.FontSize}
             fontStyle={Config.FontStyle}
             fill={textColor} //even the text that appears on hover is faded if unreferenced
             padding={Config.FnTooltipTextPadding}
+            width={Config.FnDescriptionMaxWidth}
           />
         </KonvaLabel>
+        {!CseMachine.getPrintableMode() && this.isTooltipTruncated && (
+          <KonvaLabel
+            x={this.x() + Config.TextMargin}
+            y={this.y() + this.radius + Config.TextMargin}
+            visible={false}
+            ref={this.revealLabelRef}
+          >
+            <KonvaTag
+              stroke={Config.HoverBgColor}
+              fill={Config.HoverBgColor}
+              opacity={Config.FnTooltipOpacity}
+            />
+            <KonvaText
+              text={this.tooltip}
+              fontFamily={Config.FontFamily}
+              fontSize={Config.FontSize}
+              fontStyle={Config.FontStyle}
+              fill={textColor}
+              padding={Config.FnTooltipTextPadding}
+            />
+          </KonvaLabel>
+        )}
         {this._arrow?.draw()}
       </React.Fragment>
     );
