@@ -29,6 +29,7 @@ import { ControlItemComponent } from './components/ControlItemComponent';
 import { isNode } from './components/ControlStack';
 import { Frame } from './components/Frame';
 import { StashItemComponent } from './components/StashItemComponent';
+import { Level } from './components/Level'; // CHANGEDD
 import { ArrayValue } from './components/values/ArrayValue';
 import { ContValue } from './components/values/ContValue';
 import { FnValue } from './components/values/FnValue';
@@ -390,6 +391,63 @@ export function computeLiveState(envTree: EnvTree): {
 
   return liveState;
 }
+
+// CHANGEDD
+/** Returns an array of pairs of frames. 
+ * The two frames in each pair represent the same frame in concept, but the frame's position has 
+ * shifted between steps, creating two distinct Frame objects.
+ * The first frame in each pair represents the frame before it shifted. The second frame represents
+ * the frame after it shifted.
+ */
+export function computeFramesCoordChange(oldLevels: Level[], newLevels: Level[]): Frame[][] {
+  const result: Frame[][] = [];
+
+  // Match levels such that oldLevels.length == newLevels.length
+  // in case Clear Dead Frames causes an entire Level to be cleared
+  if (oldLevels.length != newLevels.length) {
+    const tempOldLevels: Level[] = []; // Stores levels that are not cleared
+
+    // Find the levels that are not cleared (has at least one live frame)
+    for (let levelIdx = 0; levelIdx < oldLevels.length; levelIdx++) {
+      const framesOfLevel: Frame[] = oldLevels[levelIdx].frames;
+      for (const frame of framesOfLevel) {
+        if (frame.isLive) { 
+          tempOldLevels.push(oldLevels[levelIdx]);
+          break;
+        }
+      }
+    }
+    oldLevels = tempOldLevels;
+  }
+
+  // Match each frame that is live
+  // Matched frames conceptually represent the same frame, but on different steps (prev vs curr)
+  for (let levelIdx = 0; levelIdx < oldLevels.length; levelIdx++) {
+    const oldLevelFrames = oldLevels[levelIdx].frames;
+    const newLevelFrames = newLevels[levelIdx].frames;
+    let oldFrameIdx = 0; // Will always >= newFrameIdx
+    let newFrameIdx = 0; // Will always increment one-by-one such that each frame is appended to result
+
+    while (newFrameIdx < newLevelFrames.length) {
+      if (!oldLevelFrames[oldFrameIdx].isLive) { 
+        oldFrameIdx++;
+      } else {
+        const oldFrame = oldLevelFrames[oldFrameIdx];
+        const newFrame = newLevelFrames[newFrameIdx];
+
+        // If oldFrame and newFrame are NOT in the same position, push to result array
+        if (oldFrame.x() != newFrame.x() || oldLevels[levelIdx].y() != newLevels[levelIdx].y()) {
+          result.push([oldLevelFrames[oldFrameIdx], newLevelFrames[newFrameIdx]]);
+        }
+        oldFrameIdx++;
+        newFrameIdx++;
+      }
+    }
+  }
+
+  return result;
+}
+// END CHANGEDD
 
 /** Returns a set with the elements in `set1` that are not in `set2` */
 export function setDifference<T>(set1: Set<T>, set2: Set<T>) {

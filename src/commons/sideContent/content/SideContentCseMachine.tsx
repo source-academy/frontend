@@ -25,6 +25,7 @@ import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
 import { Layout } from 'src/features/cseMachine/CseMachineLayout';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
+import { computeFramesCoordChange } from 'src/features/cseMachine/CseMachineUtils'; // CHANGEDD
 
 import { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
 import { HighlightedLines } from '../../editor/EditorTypes';
@@ -314,9 +315,19 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                             hideDeadFrames: true
                           }),
                           () => {
+                            // CHANGEDD
+                            const prevLevels = Layout.levels;
                             CseMachine.setHideDeadFrames(this.state.hideDeadFrames);
                             CseMachine.clearCachedLayouts();
                             CseMachine.redraw();
+                            const currLevels = Layout.levels;
+
+                            console.log(prevLevels);
+                            console.log(currLevels);
+                            console.log(computeFramesCoordChange(prevLevels, currLevels));
+
+                            CseAnimation.playClearDeadFramesAnim(computeFramesCoordChange(prevLevels, currLevels)); 
+                            // END CHANGEDD
                           }
                         );
                       }

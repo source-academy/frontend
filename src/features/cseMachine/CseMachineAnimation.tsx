@@ -12,6 +12,7 @@ import { Animatable } from './animationComponents/base/Animatable';
 import { lookupBinding } from './animationComponents/base/AnimationUtils';
 import { BinaryOperationAnimation } from './animationComponents/BinaryOperationAnimation';
 import { BranchAnimation } from './animationComponents/BranchAnimation';
+import { ClearDeadFramesAnimation } from './animationComponents/ClearDeadFramesAnimation'; // CHANGEDD
 import { ControlExpansionAnimation } from './animationComponents/ControlExpansionAnimation';
 import { ControlToStashAnimation } from './animationComponents/ControlToStashAnimation';
 import { EnvironmentAnimation } from './animationComponents/EnvironmentAnimation';
@@ -418,4 +419,25 @@ export class CseAnimation {
     // Play all the animations
     await Promise.all(this.animations.map(a => a.animate()));
   }
+
+  // CHANGEDD
+  static async playClearDeadFramesAnim(changedFramePairs: Frame[][]) { // Called when Clear Dead Frames button is pressed
+    const clearDeadFramesAnim = new ClearDeadFramesAnimation(changedFramePairs);
+    CseAnimation.clearAnimationComponents();
+    CseAnimation.animations.push(clearDeadFramesAnim);
+    CseMachine.clearCachedLayouts();
+    CseMachine.redraw();
+    Layout.draw();
+
+    // Copied from CseAnimation.playAnimation()
+    // Get the actual HTML <canvas> element and set the pointer events to none, to allow for
+    // mouse events to pass through the animation layer and be handled by the actual CSE Machine.
+    // Setting the listening property to false on the Konva Layer does not seem to work, so
+    // this a workaround.
+    const canvasElement = CseAnimation.getLayer()?.getNativeCanvasElement();
+    if (canvasElement) canvasElement.style.pointerEvents = 'none';
+    
+    await Promise.all([clearDeadFramesAnim.animate()]);
+  }
+  // END CHANGEDD
 }
