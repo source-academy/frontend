@@ -12,6 +12,7 @@ const isTest = process.env.NODE_ENV === 'test';
 
 const sourceAcademyVersion = process.env.REACT_APP_VERSION || 'local';
 const sourceAcademyEnvironment = process.env.REACT_APP_ENVIRONMENT || 'dev';
+const isDev = sourceAcademyEnvironment === 'dev';
 const sourceAcademyDeploymentName = isTest
   ? 'Source Academy @ NUS'
   : process.env.REACT_APP_DEPLOYMENT_NAME || 'Source Academy';
@@ -151,12 +152,11 @@ export enum Links {
 
   ecmaScript_2021 = 'https://262.ecma-international.org/12.0/',
 
-  vscode = 'vscode://source-academy.source-academy/sso',
-
-  developPrefix = 'courses-dev/2/'
+  vscode = 'vscode://source-academy.source-academy/sso'
 }
 
 const Constants = {
+  isDev,
   sourceAcademyVersion,
   sourceAcademyEnvironment,
   sourceAcademyDeploymentName,

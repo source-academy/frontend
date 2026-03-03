@@ -3,9 +3,9 @@ import UtilConstants, { Links } from 'src/commons/utils/Constants';
 import FontAssets from '../assets/FontAssets';
 
 export const Constants = {
+  isDev : UtilConstants.isDev,
   assetsFolder: Links.sourceAcademyAssets,
   useEmptyAssetPrefix: UtilConstants.useEmptyAssetPrefix,
-  developPrefix: Links.developPrefix,
   fadeDuration: 600,
   nullFunction: () => {},
   nullInteractionId: '',
