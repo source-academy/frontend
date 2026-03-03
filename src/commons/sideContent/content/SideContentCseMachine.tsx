@@ -109,7 +109,11 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
         },
         // We shouldn't be able to move slider to a step number beyond the step limit
         isControlEmpty => {
-          this.setState({ stepLimitExceeded: false });
+          const isAtLastStep = this.state.value === this.props.stepsTotal;
+
+          this.setState({
+            stepLimitExceeded: !isControlEmpty && isAtLastStep
+          });
         }
       );
     }
@@ -266,6 +270,25 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                   >
                     <Checkbox
                       checked={CseMachine.getStackTruncated()}
+                      disabled={!this.state.visualization}
+                      style={{ margin: 0 }}
+                    />
+                  </AnchorButton>
+                </Tooltip>
+
+                <Tooltip content="Alignment" compact>
+                  <AnchorButton
+                    onMouseUp={() => {
+                      if (this.state.visualization) {
+                        CseMachine.toggleCenterAlignment();
+                        CseMachine.redraw();
+                      }
+                    }}
+                    icon="eye-open"
+                    disabled={!this.state.visualization}
+                  >
+                    <Checkbox
+                      checked={CseMachine.getCenterAlignment()}
                       disabled={!this.state.visualization}
                       style={{ margin: 0 }}
                     />

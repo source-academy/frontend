@@ -18,6 +18,9 @@ export class ArrayNullUnit extends Visible {
   }
 
   draw(): React.ReactNode {
+    // needs to be recalculated here unlike arrayunit, as primitive value treat it as a text
+    this._x = this.reference.x();
+    this._y = this.reference.y();
     return (
       <KonvaLine
         {...ShapeDefaultProps}
