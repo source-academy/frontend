@@ -26,6 +26,7 @@ import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
 import { Layout } from 'src/features/cseMachine/CseMachineLayout';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 import { computeFramesCoordChange } from 'src/features/cseMachine/CseMachineUtils'; // CHANGEDD
+import { ClearDeadFramesAnimation } from 'src/features/cseMachine/animationComponents/ClearDeadFramesAnimation'; // CHANGEDD
 
 import { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
 import { HighlightedLines } from '../../editor/EditorTypes';
@@ -310,23 +311,28 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                   <AnchorButton
                     onMouseUp={() => {
                       if (this.state.visualization) {
+                        // CHANGEDD
+                        const prevLevels = Layout.levels;
                         this.setState(
                           prevState => ({
                             hideDeadFrames: true
                           }),
                           () => {
-                            // CHANGEDD
-                            const prevLevels = Layout.levels;
                             CseMachine.setHideDeadFrames(this.state.hideDeadFrames);
                             CseMachine.clearCachedLayouts();
                             CseMachine.redraw();
                             const currLevels = Layout.levels;
-
+                            const changedFramePairs = computeFramesCoordChange(prevLevels, currLevels);
                             console.log(prevLevels);
                             console.log(currLevels);
-                            console.log(computeFramesCoordChange(prevLevels, currLevels));
-
-                            CseAnimation.playClearDeadFramesAnim(computeFramesCoordChange(prevLevels, currLevels)); 
+                            console.log(changedFramePairs);
+                            if (changedFramePairs.length > 0) {
+                              CseAnimation.animations.push(new ClearDeadFramesAnimation(changedFramePairs));
+                              CseAnimation.enableAnimations();
+                              Layout.key = 0;
+                              Layout.prevLayout = undefined;
+                              this.setState({ visualization: Layout.draw() });
+                            }
                             // END CHANGEDD
                           }
                         );
