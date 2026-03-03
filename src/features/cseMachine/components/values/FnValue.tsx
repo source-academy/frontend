@@ -46,6 +46,7 @@ export class FnValue extends Value implements IHoverable {
   readonly tooltipWidth: number;
   readonly exportTooltip: string;
   readonly exportTooltipWidth: number;
+  readonly printDescriptionHeight: number;
 
   /** width of the closure circles + label */
   readonly totalWidth: number;
@@ -84,11 +85,13 @@ export class FnValue extends Value implements IHoverable {
       getTextWidth(this.paramsText),
       getTextWidth(this.exportBodyText)
     );
+    this.printDescriptionHeight =
+      this.exportTooltip.split('\n').length * Config.FontSize + Config.FnTooltipTextPadding * 2;
     this.totalWidth =
       this._width +
       Config.TextPaddingX * 2 +
       10 +
-      (CseMachine.getPrintableMode() ? this.exportTooltipWidth : this.tooltipWidth);
+      (CseMachine.getPrintableMode() ? 0 : this.tooltipWidth);
 
     this.addReference(firstReference);
   }
@@ -196,8 +199,14 @@ export class FnValue extends Value implements IHoverable {
           />
         </Group>
         <KonvaLabel
-          x={this.x() + this.width() + Config.TextPaddingX * 2}
-          y={this.y() - Config.TextPaddingY}
+          x={
+            CseMachine.getPrintableMode() ? this.centerX - this.radius : this.x() + this.width() + Config.TextPaddingX * 2
+          }
+          y={
+            CseMachine.getPrintableMode()
+              ? this.y() + this.radius + Config.TextPaddingY / 3
+              : this.y() - Config.TextPaddingY
+          }
           visible={CseMachine.getPrintableMode()}
           ref={this.labelRef}
         >
@@ -216,7 +225,7 @@ export class FnValue extends Value implements IHoverable {
             fontSize={Config.FontSize}
             fontStyle={Config.FontStyle}
             fill={textColor} //even the text that appears on hover is faded if unreferenced
-            padding={5}
+            padding={Config.FnTooltipTextPadding}
           />
         </KonvaLabel>
         {this._arrow?.draw()}
