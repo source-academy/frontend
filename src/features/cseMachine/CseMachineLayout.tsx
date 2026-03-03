@@ -682,6 +682,9 @@ export class Layout {
    * @returns coordinate of cached position, or undefined if it doesn't exist
    */
   static getGhostFrameX(envId: string): number | undefined {
+    if (Layout.clearDeadFrames) {
+      return undefined;
+    }
     const cache = CseMachine.masterLayout;
     if (cache && cache.frames.has(envId)) {
       const fixedX = cache.frames.get(envId)!;
@@ -702,6 +705,9 @@ export class Layout {
    * Reassign x coordinate of every frame to their predetermined position by calling getGhostFrameX.
    */
   static applyFixedPositions() {
+    if (Layout.clearDeadFrames || !CseMachine.masterLayout) {
+      return;
+    }
     const cache = CseMachine.masterLayout!; // getLayoutPositions() must have been called before
     Layout.levels.forEach(level => {
       level.frames.forEach(frame => {
