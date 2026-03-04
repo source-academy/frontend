@@ -93,10 +93,7 @@ export class ArrayValue extends Value implements IHoverable {
           unit.value.totalWidth +
             (i === this.data.length - 1 ? (i + 2) * Config.DataUnitWidth : i * Config.DataUnitWidth)
         );
-        this.totalHeight = Math.max(
-          this.totalHeight,
-          bottomY - unit.y()
-        );
+        this.totalHeight = Math.max(this.totalHeight, bottomY - unit.y());
       }
 
       this.units[i] = unit;
