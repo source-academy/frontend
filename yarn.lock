@@ -3333,17 +3333,17 @@ __metadata:
   linkType: hard
 
 "@rsbuild/plugin-eslint@npm:^1.1.1":
-  version: 1.2.1
-  resolution: "@rsbuild/plugin-eslint@npm:1.2.1"
+  version: 1.3.0
+  resolution: "@rsbuild/plugin-eslint@npm:1.3.0"
   dependencies:
-    eslint-rspack-plugin: "npm:^4.3.0"
+    eslint-rspack-plugin: "npm:^4.4.1"
   peerDependencies:
     "@rsbuild/core": ^1.0.0 || ^2.0.0-0
-    eslint: ^8.0.0 || ^9.0.0
+    eslint: ^8.0.0 || ^9.0.0 || ^10.0.0
   peerDependenciesMeta:
     "@rsbuild/core":
       optional: true
-  checksum: 10c0/e97c64f85f148471cf7289563f64231a684bbb37b330b30a2d031c93a843d80b236dbeb802b20666d4ce7928e5056e17375c474ddf846c08b4962432ab76f32d
+  checksum: 10c0/1e935fdf630f72e0b24fbf6cfd1fec6c5af96c3f4047676010a910f7f092d1480d1a585a9a74714e45541ba852a055063d2fcaa49866cf9b56c8d7ea10dde59e
   languageName: node
   linkType: hard
 
@@ -4424,7 +4424,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/json-schema@npm:*, @types/json-schema@npm:^7.0.15, @types/json-schema@npm:^7.0.9":
+"@types/json-schema@npm:*, @types/json-schema@npm:^7.0.15":
   version: 7.0.15
   resolution: "@types/json-schema@npm:7.0.15"
   checksum: 10c0/a996a745e6c5d60292f36731dd41341339d4eeed8180bb09226e5c8d23759067692b1d88e5d91d72ee83dfc00d3aca8e7bd43ea120516c17922cbcb7c3e252db
@@ -5076,31 +5076,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv-formats@npm:^2.1.1":
-  version: 2.1.1
-  resolution: "ajv-formats@npm:2.1.1"
-  dependencies:
-    ajv: "npm:^8.0.0"
-  peerDependencies:
-    ajv: ^8.0.0
-  peerDependenciesMeta:
-    ajv:
-      optional: true
-  checksum: 10c0/e43ba22e91b6a48d96224b83d260d3a3a561b42d391f8d3c6d2c1559f9aa5b253bfb306bc94bbeca1d967c014e15a6efe9a207309e95b3eaae07fcbcdc2af662
-  languageName: node
-  linkType: hard
-
-"ajv-keywords@npm:^5.1.0":
-  version: 5.1.0
-  resolution: "ajv-keywords@npm:5.1.0"
-  dependencies:
-    fast-deep-equal: "npm:^3.1.3"
-  peerDependencies:
-    ajv: ^8.8.2
-  checksum: 10c0/18bec51f0171b83123ba1d8883c126e60c6f420cef885250898bf77a8d3e65e3bfb9e8564f497e30bdbe762a83e0d144a36931328616a973ee669dc74d4a9590
-  languageName: node
-  linkType: hard
-
 "ajv@npm:^6.12.3, ajv@npm:^6.12.4":
   version: 6.12.6
   resolution: "ajv@npm:6.12.6"
@@ -5113,7 +5088,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:^8.0.0, ajv@npm:^8.6.0, ajv@npm:^8.9.0":
+"ajv@npm:^8.6.0":
   version: 8.17.1
   resolution: "ajv@npm:8.17.1"
   dependencies:
@@ -7424,19 +7399,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-rspack-plugin@npm:^4.3.0":
-  version: 4.3.0
-  resolution: "eslint-rspack-plugin@npm:4.3.0"
+"eslint-rspack-plugin@npm:^4.4.1":
+  version: 4.4.1
+  resolution: "eslint-rspack-plugin@npm:4.4.1"
   dependencies:
     "@types/eslint": "npm:^8.56.10"
     jest-worker: "npm:^29.7.0"
     micromatch: "npm:^4.0.8"
     normalize-path: "npm:^3.0.0"
-    schema-utils: "npm:^4.2.0"
     tinyglobby: "npm:^0.2.15"
   peerDependencies:
-    eslint: ^8.0.0 || ^9.0.0
-  checksum: 10c0/4c952956bd970c6a80591e355c7450ba068bbdf0538e5764b528b0cccef02067d46b8ff08c02b47c6366768cd5b99d95531f725c7b4cb84946a7054d71612c70
+    eslint: ^8.0.0 || ^9.0.0 || ^10.0.0
+  checksum: 10c0/797e27b9762c4471a55ee5739f122676c8ad06ceed2195927e7bd131a88f141470a71cc8aa40a42413a83b8bb687311cf9191b08646134447bf5ae0a688524ad
   languageName: node
   linkType: hard
 
@@ -11949,8 +11923,8 @@ __metadata:
   linkType: hard
 
 "react-syntax-highlighter@npm:^16.0.0":
-  version: 16.1.0
-  resolution: "react-syntax-highlighter@npm:16.1.0"
+  version: 16.1.1
+  resolution: "react-syntax-highlighter@npm:16.1.1"
   dependencies:
     "@babel/runtime": "npm:^7.28.4"
     highlight.js: "npm:^10.4.1"
@@ -11960,7 +11934,7 @@ __metadata:
     refractor: "npm:^5.0.0"
   peerDependencies:
     react: ">= 0.14.0"
-  checksum: 10c0/0c07a569a3390c6bf5fd383bf4b6eca03cd4421623859f7b776547128550534b91ad3d767e3f21f2f0e1ff17b380804e3f3af5aff42b2cd646af9b0c26c6d758
+  checksum: 10c0/5f3d7361f3db68dc1ec38aaf2b347d4fe15398b21aa3b4c69593d4d146ee1db15289c8c3bcd491e6bf73a656afd490d3cd8a6189c7dd180a8aae81ec035bffa4
   languageName: node
   linkType: hard
 
@@ -12873,18 +12847,6 @@ __metadata:
   dependencies:
     loose-envify: "npm:^1.1.0"
   checksum: 10c0/26383305e249651d4c58e6705d5f8425f153211aef95f15161c151f7b8de885f24751b377e4a0b3dd42cce09aad3f87a61dab7636859c0d89b7daf1a1e2a5c78
-  languageName: node
-  linkType: hard
-
-"schema-utils@npm:^4.2.0":
-  version: 4.3.2
-  resolution: "schema-utils@npm:4.3.2"
-  dependencies:
-    "@types/json-schema": "npm:^7.0.9"
-    ajv: "npm:^8.9.0"
-    ajv-formats: "npm:^2.1.1"
-    ajv-keywords: "npm:^5.1.0"
-  checksum: 10c0/981632f9bf59f35b15a9bcdac671dd183f4946fe4b055ae71a301e66a9797b95e5dd450de581eb6cca56fb6583ce8f24d67b2d9f8e1b2936612209697f6c277e
   languageName: node
   linkType: hard
 
