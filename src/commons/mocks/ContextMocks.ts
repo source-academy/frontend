@@ -1,7 +1,7 @@
 import { parse } from 'acorn';
-import type { Node } from 'js-slang/dist/types';
 import { ACORN_PARSE_OPTIONS } from 'js-slang/dist/constants';
 import createContext, { EnvTree } from 'js-slang/dist/createContext';
+import type { Node } from 'js-slang/dist/types';
 import type { Context } from 'js-slang/dist/types';
 import { TypeError } from 'js-slang/dist/utils/rttc';
 
@@ -38,7 +38,8 @@ export function mockRuntimeContext(): Context {
     objectCount: 0,
     envStepsTotal: 0,
     breakpointSteps: [],
-    changepointSteps: []
+    changepointSteps: [],
+    streamsPointSteps: []
   };
   return context;
 }

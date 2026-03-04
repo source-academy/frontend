@@ -54,6 +54,7 @@ type StateProps = {
   currentStep: number;
   breakpointSteps: number[];
   changepointSteps: number[];
+  streamsPointSteps: number[];
   needCseUpdate: boolean;
   machineOutput: InterpreterOutput[];
   chapter: Chapter;
@@ -274,8 +275,9 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                     onMouseUp={() => {
                       if (this.state.visualization) {
                         CseMachine.togglePairCreationMode();
+                        Layout.draw();
                         CseMachine.redraw();
-                        this.stepNext();
+                        // this.stepNext();
                       }
                     }}
                     icon="array"
@@ -476,7 +478,8 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   };
 
   private stepNextChangepoint = () => {
-    for (const step of this.props.changepointSteps) {
+    const changeSteps = this.getActiveChangeSteps();
+    for (const step of changeSteps) {
       if (step > this.state.value) {
         this.sliderShift(step);
         this.sliderRelease(step);
@@ -488,8 +491,9 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   };
 
   private stepPrevChangepoint = () => {
-    for (let i = this.props.changepointSteps.length - 1; i >= 0; i--) {
-      const step = this.props.changepointSteps[i];
+    const changeSteps = this.getActiveChangeSteps();
+    for (let i = changeSteps.length - 1; i >= 0; i--) {
+      const step = changeSteps[i];
       if (step < this.state.value) {
         this.sliderShift(step);
         this.sliderRelease(step);
@@ -498,6 +502,14 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
     }
     this.sliderShift(0);
     this.sliderRelease(0);
+  };
+
+  private getActiveChangeSteps = () => {
+    console.log(this.props.streamsPointSteps);
+    console.log(this.props.changepointSteps);
+    return CseMachine.getPairCreationMode()
+      ? this.props.streamsPointSteps
+      : this.props.changepointSteps;
   };
 }
 
@@ -529,6 +541,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (
     currentStep: workspace.currentStep,
     breakpointSteps: workspace.breakpointSteps,
     changepointSteps: workspace.changepointSteps,
+    streamsPointSteps: workspace.streamsPointSteps,
     needCseUpdate: workspace.updateCse,
     machineOutput: workspace.output,
     chapter: workspace.context.chapter

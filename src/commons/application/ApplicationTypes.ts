@@ -478,6 +478,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     stepsTotal: 0,
     breakpointSteps: [],
     changepointSteps: [],
+    streamsPointSteps: [],
     activeEditorTabIndex: 0,
     editorTabs: [
       {
@@ -533,6 +534,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     stepsTotal: 0,
     breakpointSteps: [],
     changepointSteps: [],
+    streamsPointSteps: [],
     activeEditorTabIndex: 0,
     editorTabs: [
       {

@@ -94,12 +94,22 @@ export class Layout {
 
   /** memoized layout */
   static prevLayout: React.ReactNode;
+
   static currentDark: React.ReactNode;
   static currentLight: React.ReactNode;
   static currentStackDark: React.ReactNode;
   static currentStackTruncDark: React.ReactNode;
   static currentStackLight: React.ReactNode;
   static currentStackTruncLight: React.ReactNode;
+
+  // For pair creation layouts:
+  static currentDarkPairs: React.ReactNode;
+  static currentLightPairs: React.ReactNode;
+  static currentStackDarkPairs: React.ReactNode;
+  static currentStackTruncDarkPairs: React.ReactNode;
+  static currentStackLightPairs: React.ReactNode;
+  static currentStackTruncLightPairs: React.ReactNode;
+
   static stageRef: RefObject<Stage> = React.createRef();
 
   // buffer for faster rendering of diagram when scrolling
@@ -111,8 +121,8 @@ export class Layout {
    * Pair creation mode stuff
    *
    */
-  static arrayCount: number = 0;
-  static streamPairArray: ArrayValue[] = [];
+  static streamLengthMap: Map<string, number> = new Map();
+  static pendingFnLink: boolean = false;
 
   static updateDimensions(width: number, height: number) {
     // update the size of the scroll container and stage given the width and height of the sidebar content.
@@ -160,6 +170,17 @@ export class Layout {
     Layout.currentStackTruncDark = undefined;
     Layout.currentStackLight = undefined;
     Layout.currentStackTruncLight = undefined;
+   
+    // TODO: is there a better way to represent these various modes? 
+    // This representation is not extensible
+    // Adding 6 more pairs to accomadate for pair creation mode: 
+    Layout.currentLightPairs = undefined;
+    Layout.currentDarkPairs = undefined;
+    Layout.currentStackDarkPairs = undefined;
+    Layout.currentStackTruncDarkPairs = undefined;
+    Layout.currentStackLightPairs = undefined;
+    Layout.currentStackTruncLightPairs = undefined;
+
     // clear/initialize data and value arrays
     Layout.values.clear();
     Layout.key = 0;
@@ -520,7 +541,7 @@ export class Layout {
   }
 
   static draw(): React.ReactNode {
-    Layout.arrayCount = 0;
+    Layout.streamLengthMap.clear();
 
     const pairValues: Value[] = Array.from(Layout.values.values()).filter(v => {
       try {
@@ -593,27 +614,53 @@ export class Layout {
         </div>
       );
       Layout.prevLayout = layout;
-      if (CseMachine.getPrintableMode()) {
-        if (CseMachine.getControlStash()) {
-          if (CseMachine.getStackTruncated()) {
-            Layout.currentStackTruncLight = layout;
+      if(CseMachine.getPairCreationMode()) {
+        if (CseMachine.getPrintableMode()) {
+          if (CseMachine.getControlStash()) {
+            if (CseMachine.getStackTruncated()) {
+              Layout.currentStackTruncLightPairs = layout;
+            } else {
+              Layout.currentStackLightPairs = layout;
+            }
           } else {
-            Layout.currentStackLight = layout;
+            Layout.currentLightPairs = layout;
           }
         } else {
-          Layout.currentLight = layout;
+          if (CseMachine.getControlStash()) {
+            if (CseMachine.getStackTruncated()) {
+              Layout.currentStackTruncDarkPairs = layout;
+            } else {
+              Layout.currentStackDarkPairs = layout;
+            }
+          } else {
+            Layout.currentDarkPairs = layout;
+          }
         }
       } else {
-        if (CseMachine.getControlStash()) {
-          if (CseMachine.getStackTruncated()) {
-            Layout.currentStackTruncDark = layout;
+        if (CseMachine.getPrintableMode()) {
+          if (CseMachine.getControlStash()) {
+            if (CseMachine.getStackTruncated()) {
+              Layout.currentStackTruncLight = layout;
+            } else {
+              Layout.currentStackLight = layout;
+            }
           } else {
-            Layout.currentStackDark = layout;
+            Layout.currentLight = layout;
           }
         } else {
-          Layout.currentDark = layout;
+          if (CseMachine.getControlStash()) {
+            if (CseMachine.getStackTruncated()) {
+              Layout.currentStackTruncDark = layout;
+            } else {
+              Layout.currentStackDark = layout;
+            }
+          } else {
+            Layout.currentDark = layout;
+          }
         }
       }
+
+      
 
       return layout;
     }

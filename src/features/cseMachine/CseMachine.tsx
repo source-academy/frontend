@@ -2,6 +2,7 @@ import { Context } from 'js-slang';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import React from 'react';
 
+import { FnValue } from './components/values/FnValue';
 import { Layout } from './CseMachineLayout';
 import { EnvTree } from './CseMachineTypes';
 import { deepCopyTree, getEnvId } from './CseMachineUtils';
@@ -26,16 +27,20 @@ export default class CseMachine {
   private static currentEnvId: string;
   private static control: Control | undefined;
   private static stash: Stash | undefined;
+  private static streamLineage: Map<string, string[]>;
+  private static streamPairIdToStreamId: Map<string, string>;
   public static togglePrintableMode(): void {
     CseMachine.printableMode = !CseMachine.printableMode;
   }
   public static toggleControlStash(): void {
     CseMachine.controlStash = !CseMachine.controlStash;
+    CseMachine.pairCreationMode = false;
   }
   public static toggleStackTruncated(): void {
     CseMachine.stackTruncated = !CseMachine.stackTruncated;
   }
   public static togglePairCreationMode(): void {
+    CseMachine.controlStash = false;
     CseMachine.pairCreationMode = !CseMachine.pairCreationMode;
     CseMachine.redraw();
   }
@@ -53,6 +58,25 @@ export default class CseMachine {
   }
   public static getPairCreationMode(): boolean {
     return CseMachine.pairCreationMode;
+  }
+  public static getStreamLineage(key: string): string[] | undefined {
+    return CseMachine.streamLineage.get(key);
+  }
+  public static getStreamPairIdToStreamId(key: string): string | undefined {
+    return CseMachine.streamPairIdToStreamId.get(key);
+  }
+  public static viewStreamLineage(): void {
+    console.log(CseMachine.streamLineage);
+  }
+  public static findKeyByValueInMap(value: any) {
+    for (const [key, array] of CseMachine.streamLineage.entries()) { 
+      console.log(key + array);
+      if (array.includes(value)) {
+        return key; 
+      }
+    }
+
+    return undefined;
   }
   public static isControl(): boolean {
     return this.control ? !this.control.isEmpty() : false;
@@ -87,6 +111,9 @@ export default class CseMachine {
       throw new Error('CSE machine not initialized');
     CseMachine.control = context.runtime.control;
     CseMachine.stash = context.runtime.stash;
+    CseMachine.streamLineage = context.streamLineage;
+    CseMachine.streamPairIdToStreamId = context.streamPairIdToStreamId;
+    console.log(context.streamPairIdToStreamId);
 
     Layout.setContext(
       context.runtime.environmentTree as EnvTree,
@@ -102,8 +129,13 @@ export default class CseMachine {
   static redraw() {
     if (CseMachine.environmentTree && CseMachine.control && CseMachine.stash) {
       // checks if the required diagram exists, and updates the dom node using setVis
+      // TODO: This is bad, temp fix; does not memoize
       if (CseMachine.getPairCreationMode()) {
+        Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
         this.setVis(Layout.draw());
+        // this.setVis(Layout.draw());
+        // console.log(Layout.currentDarkPairs);
+        // this.setVis(Layout.currentDarkPairs);
       } else if (
         CseMachine.getPrintableMode() &&
         CseMachine.getControlStash() &&

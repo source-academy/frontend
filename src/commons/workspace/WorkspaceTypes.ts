@@ -49,6 +49,7 @@ type PlaygroundWorkspaceAttr = {
   readonly stepsTotal: number;
   readonly breakpointSteps: number[];
   readonly changepointSteps: number[];
+  readonly streamsPointSteps: number[];
 };
 export type PlaygroundWorkspaceState = PlaygroundWorkspaceAttr & WorkspaceState;
 

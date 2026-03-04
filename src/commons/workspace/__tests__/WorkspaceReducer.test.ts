@@ -834,7 +834,8 @@ describe('LOG_OUT', () => {
       currentStep: -1,
       stepsTotal: 0,
       breakpointSteps: [],
-      changepointSteps: []
+      changepointSteps: [],
+      streamsPointSteps: []
     };
 
     const logoutDefaultState: WorkspaceManagerState = {

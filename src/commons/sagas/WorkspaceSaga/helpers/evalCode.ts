@@ -346,6 +346,8 @@ export function* evalCodeSaga(
           yield put(
             actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation)
           );
+          const streamsPointSteps = (context.runtime as any).streamsPointSteps ?? [];
+          yield put(actions.updateStreamsPointSteps(streamsPointSteps, workspaceLocation));
         }
       }
     } else {
@@ -422,6 +424,8 @@ export function* evalCodeSaga(
     yield put(actions.toggleUpdateCse(false, workspaceLocation as any));
     yield put(actions.updateBreakpointSteps(context.runtime.breakpointSteps, workspaceLocation));
     yield put(actions.updateChangePointSteps(context.runtime.changepointSteps, workspaceLocation));
+    const streamsPointSteps = (context.runtime as any).streamsPointSteps ?? [];
+    yield put(actions.updateStreamsPointSteps(streamsPointSteps, workspaceLocation));
   }
   // Stop the home icon from flashing for an error if it is doing so since the evaluation is successful
   if (context.executionMethod === 'cse-machine') {

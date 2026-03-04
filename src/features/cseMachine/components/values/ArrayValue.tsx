@@ -1,3 +1,4 @@
+import Closure from 'js-slang/dist/cse-machine/closure';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group } from 'react-konva';
@@ -6,13 +7,12 @@ import CseMachine from '../../CseMachine';
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
 import { DataArray, IHoverable, ReferenceType } from '../../CseMachineTypes';
-import { isDataArray, isMainReference } from '../../CseMachineUtils';
+import { isMainReference } from '../../CseMachineUtils';
 import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
 import { ArrayUnit } from '../ArrayUnit';
 import { Binding } from '../Binding';
 import { FnValue } from './FnValue';
 import { Value } from './Value';
-import Closure from 'js-slang/dist/cse-machine/closure';
 
 /** this class encapsulates an array value in source,
  *  defined as a JS array with not 2 elements */
@@ -24,7 +24,9 @@ export class ArrayValue extends Value implements IHoverable {
   /** height of the array and nested values inside the array */
   totalHeight: number = 0;
 
-  private arrayId: number = 0;
+  private arrayIdWithinStream: number = 0;
+
+  private streamId: number = 0;
 
   constructor(
     /** underlying values this array contains */
@@ -34,13 +36,19 @@ export class ArrayValue extends Value implements IHoverable {
   ) {
     super();
     Layout.memoizeValue(data, this);
+    
+    const streamIdString = CseMachine.getStreamPairIdToStreamId(data.id);
 
-    /** handling pairs for stream visualisation */
-    if (data[1] instanceof Closure || data[1] == null || isDataArray(data[1])) {
-      this.arrayId = Layout.arrayCount;
-      Layout.streamPairArray[Layout.arrayCount] = this;
-      console.log(Layout.streamPairArray);
-      Layout.arrayCount++;
+    if (streamIdString != undefined) {
+      this.streamId = parseInt(streamIdString);
+      const streamPairCount = Layout.streamLengthMap.get(streamIdString);
+      if (streamPairCount != undefined) {
+        Layout.streamLengthMap.set(streamIdString, streamPairCount + 1);
+        this.arrayIdWithinStream = streamPairCount;
+      } else {
+        Layout.streamLengthMap.set(streamIdString, 1);
+        this.arrayIdWithinStream = 0;
+      }
     }
 
     // if (this.arrayId > 0 && Layout.streamPairArray[this.arrayId - 1].data[1] instanceof Closure) {
@@ -49,6 +57,25 @@ export class ArrayValue extends Value implements IHoverable {
     // }
     
     this.addReference(firstReference);
+    /** handling pairs for stream visualisation */
+    if (data[1] instanceof Closure) {
+      // console.log("array with nullary func id: " + data[1].id);
+      // console.log("array is created from fn with id: " + CseMachine.findKeyByValueInMap(data.id));
+      // CseMachine.viewStreamLineage;
+      const originFnId = CseMachine.findKeyByValueInMap(data.id);
+
+      console.log("origin fn: " + originFnId)
+      console.log(Layout.values);
+      if (originFnId != undefined) {
+        // console.log("result of finding fn that created this array: " + Layout.values.get(originFnId));
+        const originFnValue = Layout.values.get(originFnId);
+        if (originFnValue instanceof FnValue) {
+          originFnValue.addArrow(this);
+        } else {
+          Layout.pendingFnLink = true;
+        }
+      }
+    }
   }
 
   handleNewReference(newReference: ReferenceType): void {
@@ -60,8 +87,8 @@ export class ArrayValue extends Value implements IHoverable {
         this._x = newReference.frame.x() + newReference.frame.width() + Config.FrameMarginX;
         this._y = newReference.y();
       } else {
-        this._x = Config.CanvasPaddingX + this.arrayId * (Config.DataUnitWidth * 5);
-        this._y = 0;
+        this._x = Config.CanvasPaddingX + this.arrayIdWithinStream * (Config.DataUnitWidth * 5);
+        this._y = (Config.DataUnitHeight * 2) * this.streamId;
       }
     } else {
       if (newReference.isLastUnit) {
