@@ -64,10 +64,16 @@ export class ArrayValue extends Value implements IHoverable {
       // CseMachine.viewStreamLineage;
       const originFnId = CseMachine.findKeyByValueInMap(data.id);
 
-
+      console.log("origin fn: " + originFnId)
+      console.log(Layout.values);
       if (originFnId != undefined) {
         // console.log("result of finding fn that created this array: " + Layout.values.get(originFnId));
-        (Layout.values.get(originFnId) as FnValue).addArrow(this);
+        const originFnValue = Layout.values.get(originFnId);
+        if (originFnValue instanceof FnValue) {
+          originFnValue.addArrow(this);
+        } else {
+          Layout.pendingFnLink = true;
+        }
       }
     }
   }

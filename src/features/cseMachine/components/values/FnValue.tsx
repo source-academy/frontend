@@ -31,6 +31,8 @@ import { ArrowFromStreamNullaryFn } from '../arrows/ArrowFromStreamNullaryFn';
 import { Binding } from '../Binding';
 import { Frame } from '../Frame';
 import { Value } from './Value';
+import { ArrayValue } from './ArrayValue';
+import { _isEventFromThisInstance } from 'node_modules/ag-grid-community/dist/types/src/agStack/utils/event';
 
 /** this class encapsulates a JS Slang function (not from the global frame) that
  *  contains extra props such as environment and fnName */
@@ -88,7 +90,30 @@ export class FnValue extends Value implements IHoverable {
       Config.TextPaddingX * 2 +
       10 +
       (CseMachine.getPrintableMode() ? this.exportTooltipWidth : this.tooltipWidth);
+    
+    // remember to delete this if its fixed
+    if (Layout.pendingFnLink) {
+      const thisId = (data as any).id
+      const linkedPairs = CseMachine.getStreamLineage(thisId);
 
+      
+      if (linkedPairs != undefined && CseMachine.getStreamLineage(thisId) != undefined) {
+        for (const pair of linkedPairs) {
+          const pairObject = (Layout.values.get(pair) as ArrayValue);
+          // The pair might not be in Layout.values if it's not reachable in the current step, so we check.
+          if (pairObject instanceof ArrayValue) {
+            this._streamArrows.push(new ArrowFromStreamNullaryFn(this).to(pairObject) as ArrowFromStreamNullaryFn);
+            this._streamArrows[this._streamArrows.length - 1].draw();
+          }
+        }
+
+        for (const arrow of this._streamArrows) {
+          arrow.draw();
+        }
+      }
+
+      Layout.pendingFnLink = false;
+    }
     this.addReference(firstReference);
   }
 

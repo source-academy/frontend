@@ -2,13 +2,12 @@ import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'rea
 
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { IVisible, StepsArray } from '../../CseMachineTypes';
-import { defaultStrokeColor, fadedStrokeColor } from '../../CseMachineUtils';
+import { IVisible } from '../../CseMachineTypes';
 import { GenericArrow } from './GenericArrow';
 
 export class DottedArrow extends GenericArrow<IVisible, IVisible> {
     draw() {
-    const stroke = defaultStrokeColor();
+    const stroke = "#ded74e";
     return (
       <KonvaGroup key={Layout.key++} ref={this.ref} listening={false}>
         <KonvaPath
