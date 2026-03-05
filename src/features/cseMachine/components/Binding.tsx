@@ -10,7 +10,6 @@ import { GenericArrow } from './arrows/GenericArrow';
 import { Frame } from './Frame';
 import { Text } from './Text';
 import { ArrayValue } from './values/ArrayValue';
-import { ContValue } from './values/ContValue';
 import { FnValue } from './values/FnValue';
 import { GlobalFnValue } from './values/GlobalFnValue';
 import { PrimitiveValue } from './values/PrimitiveValue';
@@ -80,10 +79,7 @@ export class Binding extends Visible {
         : 0;
 
     // derive the width from the right bound of the value
-    this._width = isMainReference(this.value, this)
-      ? this.value.x() -
-        this.x() 
-      : this.key.width();
+    this._width = isMainReference(this.value, this) ? this.value.x() - this.x() : this.key.width();
 
     this._height = Math.max(
       this.key.height(),

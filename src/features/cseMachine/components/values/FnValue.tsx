@@ -103,10 +103,7 @@ export class FnValue extends Value implements IHoverable {
     this.printDescriptionOffsetY = Math.ceil(Config.TextPaddingY / 2);
     this.printDescriptionBottomGap = Math.ceil(Config.TextPaddingY / 2);
     this.totalWidth =
-      this._width +
-      Config.TextMargin +
-      this.exportTooltipWidth +
-      Config.FnTooltipTextPadding * 2;
+      this._width + Config.TextMargin + this.exportTooltipWidth + Config.FnTooltipTextPadding * 2;
 
     this.addReference(firstReference);
   }

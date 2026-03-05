@@ -165,7 +165,6 @@ export class Frame extends Visible implements IHoverable {
           );
       }
       this._width = Math.max(this._width, bindingTextWidth + Config.FramePaddingX * 2);
-
     }
 
     // Create all the bindings and values
@@ -199,7 +198,9 @@ export class Frame extends Visible implements IHoverable {
       if (value instanceof ArrayValue) {
         valueRightX = value.x() + value.totalWidth;
       } else if (value instanceof FnValue || value instanceof GlobalFnValue) {
-        valueRightX = CseMachine.getPrintableMode() ? value.x() + value.totalWidth : value.x() + value.width();
+        valueRightX = CseMachine.getPrintableMode()
+          ? value.x() + value.totalWidth
+          : value.x() + value.width();
       } else if (value instanceof ContValue) {
         valueRightX = value.x() + value.width() + value.tooltipWidth;
       }

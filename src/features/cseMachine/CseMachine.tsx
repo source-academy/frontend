@@ -78,7 +78,9 @@ export default class CseMachine {
     return CseMachine.centerAlignment;
   }
   public static getMasterLayout(): LayoutCache | null {
-    return CseMachine.getPrintableMode() ? CseMachine.printLayoutCache : CseMachine.normalLayoutCache;
+    return CseMachine.getPrintableMode()
+      ? CseMachine.printLayoutCache
+      : CseMachine.normalLayoutCache;
   }
   public static setMasterLayout(cache: LayoutCache): void {
     if (CseMachine.getPrintableMode()) {
