@@ -43,6 +43,7 @@ import {
   isBuiltInFn,
   isClosure,
   isDataArray,
+  isEmptyEnvironment,
   isEnvEqual,
   isGlobalFn,
   isNonGlobalFn,
@@ -97,6 +98,8 @@ export class Layout {
   /** all environment and value IDs that are live in the current context */
   static liveEnvIDs: Set<string> = new Set();
   static liveObjectIDs: Set<string> = new Set();
+  /** hide non-live frames temporarily for the current step */
+  static clearDeadFrames: boolean = false;
 
   /**
    * memoized values, where keys are either ids for arrays and closures,
@@ -366,7 +369,9 @@ export class Layout {
   /** initializes grid */
   private static initializeGrid(): void {
     this.levels = [];
-    let frontier: EnvTreeNode[] = [Layout.globalEnvNode];
+    let frontier: EnvTreeNode[] = Layout.clearDeadFrames
+      ? Layout.getVisibleChildren([Layout.globalEnvNode])
+      : [Layout.globalEnvNode];
     let prevLevel: Level | null = null;
     let currLevel: Level;
 
@@ -377,7 +382,9 @@ export class Layout {
 
       frontier.forEach(e => {
         e.children.forEach(c => {
-          const nextChildren = getNextChildren(c as EnvTreeNode);
+          const nextChildren = Layout.clearDeadFrames
+            ? Layout.getVisibleChildren([c as EnvTreeNode])
+            : getNextChildren(c as EnvTreeNode);
           nextChildren.forEach(c => (c.parent = e));
           nextFrontier.push(...nextChildren);
         });
@@ -386,6 +393,33 @@ export class Layout {
       prevLevel = currLevel;
       frontier = nextFrontier;
     }
+  }
+
+  /**
+   * Returns the next environment nodes that should be rendered.
+   * When broom mode is on, dead environments are skipped and their children are promoted.
+   * Empty environments are also skipped to preserve existing behavior.
+   *
+   * @param nodes candidate nodes
+   */
+  private static getVisibleChildren(nodes: EnvTreeNode[]): EnvTreeNode[] {
+    const result: EnvTreeNode[] = [];
+
+    const visit = (node: EnvTreeNode) => {
+      const isLive = Layout.liveEnvIDs.has(node.environment.id);
+      const isEmpty = isEmptyEnvironment(node.environment);
+      const shouldSkip = isEmpty || !isLive;
+
+      if (!shouldSkip) {
+        result.push(node);
+        return;
+      }
+
+      node.children.forEach(child => visit(child as EnvTreeNode));
+    };
+
+    nodes.forEach(node => visit(node));
+    return result;
   }
 
   /** Creates an instance of the corresponding `Value` if it doesn't already exists,
@@ -646,6 +680,9 @@ export class Layout {
    * @returns coordinate of cached position, or undefined if it doesn't exist
    */
   static getGhostFrameX(envId: string): number | undefined {
+    if (Layout.clearDeadFrames) {
+      return undefined;
+    }
     const cache = CseMachine.masterLayout;
     if (cache && cache.frames.has(envId)) {
       const fixedX = cache.frames.get(envId)!;
@@ -666,6 +703,9 @@ export class Layout {
    * Reassign x coordinate of every frame to their predetermined position by calling getGhostFrameX.
    */
   static applyFixedPositions() {
+    if (Layout.clearDeadFrames || !CseMachine.masterLayout) {
+      return;
+    }
     const cache = CseMachine.masterLayout!; // getLayoutPositions() must have been called before
     Layout.levels.forEach(level => {
       level.frames.forEach(frame => {
