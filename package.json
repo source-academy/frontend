@@ -200,7 +200,6 @@
   },
   "resolutions": {
     "cssstyle": "^4.6.0",
-    "js-slang": "portal:/Users/henz/Repos/SourceAcademy/js-slang",
     "@types/estree": "1.0.8"
   }
 }
