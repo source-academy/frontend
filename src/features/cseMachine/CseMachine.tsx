@@ -39,6 +39,19 @@ export default class CseMachine {
   public static toggleStackTruncated(): void {
     CseMachine.stackTruncated = !CseMachine.stackTruncated;
   }
+  public static setClearDeadFrames(enabled: boolean): void {
+    Layout.clearDeadFrames = enabled;
+  }
+  public static clearCachedLayouts(): void {
+    Layout.currentLight = undefined;
+    Layout.currentDark = undefined;
+    Layout.currentStackDark = undefined;
+    Layout.currentStackTruncDark = undefined;
+    Layout.currentStackLight = undefined;
+    Layout.currentStackTruncLight = undefined;
+    Layout.prevLayout = undefined;
+    Layout.key = 0;
+  }
   // added for center alignment
   public static toggleCenterAlignment(): void {
     CseMachine.centerAlignment = !CseMachine.centerAlignment;
@@ -96,6 +109,7 @@ export default class CseMachine {
       throw new Error('CSE machine not initialized');
     CseMachine.control = context.runtime.control;
     CseMachine.stash = context.runtime.stash;
+    CseMachine.setClearDeadFrames(false);
 
     Layout.setContext(
       context.runtime.environmentTree as EnvTree,
@@ -201,6 +215,8 @@ export default class CseMachine {
       CseMachine.control = undefined;
       CseMachine.stash = undefined;
     }
+    CseMachine.setClearDeadFrames(false);
+    CseMachine.clearCachedLayouts();
     this.clear();
   }
 }
