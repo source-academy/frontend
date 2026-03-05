@@ -44,7 +44,7 @@ type State = {
   lastStep: boolean;
   stepLimitExceeded: boolean;
   chapter: Chapter;
-  hideDeadFrames: boolean;
+  clearDeadFrames: boolean;
 };
 
 type CseMachineProps = OwnProps & StateProps & DispatchProps;
@@ -86,7 +86,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
       lastStep: false,
       stepLimitExceeded: false,
       chapter: props.chapter,
-      hideDeadFrames: false
+      clearDeadFrames: false
     };
     if (this.isJava()) {
       JavaCseMachine.init(
@@ -110,7 +110,11 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
         },
         // We shouldn't be able to move slider to a step number beyond the step limit
         isControlEmpty => {
-          this.setState({ stepLimitExceeded: false });
+          const isAtLastStep = this.state.value === this.props.stepsTotal;
+
+          this.setState({
+            stepLimitExceeded: !isControlEmpty && isAtLastStep
+          });
         }
       );
     }
@@ -272,6 +276,25 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                     />
                   </AnchorButton>
                 </Tooltip>
+
+                <Tooltip content="Alignment" compact>
+                  <AnchorButton
+                    onMouseUp={() => {
+                      if (this.state.visualization) {
+                        CseMachine.toggleCenterAlignment();
+                        CseMachine.redraw();
+                      }
+                    }}
+                    icon="eye-open"
+                    disabled={!this.state.visualization}
+                  >
+                    <Checkbox
+                      checked={CseMachine.getCenterAlignment()}
+                      disabled={!this.state.visualization}
+                      style={{ margin: 0 }}
+                    />
+                  </AnchorButton>
+                </Tooltip>
               </ButtonGroup>
             )}
             <ButtonGroup>
@@ -315,10 +338,10 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                         const prevLevels = Layout.levels;
                         this.setState(
                           prevState => ({
-                            hideDeadFrames: true
+                            clearDeadFrames: true
                           }),
                           () => {
-                            CseMachine.setHideDeadFrames(this.state.hideDeadFrames);
+                            CseMachine.setClearDeadFrames(this.state.clearDeadFrames);
                             CseMachine.clearCachedLayouts();
                             CseMachine.redraw();
                             const currLevels = Layout.levels;
@@ -339,7 +362,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                       }
                     }}
                     icon="eraser"
-                    disabled={!this.state.visualization}
+                    disabled={this.state.clearDeadFrames || !this.state.visualization}
                   ></AnchorButton>
                 </Tooltip>
                 <Tooltip content="Print" compact>
@@ -436,14 +459,14 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   };
 
   private sliderShift = (newValue: number) => {
-    if (this.state.hideDeadFrames) {
-      CseMachine.setHideDeadFrames(false);
+    if (this.state.clearDeadFrames) {
+      CseMachine.setClearDeadFrames(false);
       CseMachine.clearCachedLayouts();
       CseMachine.redraw();
     }
     this.props.handleStepUpdate(newValue);
     this.setState((state: State) => {
-      return { value: newValue, hideDeadFrames: false };
+      return { value: newValue, clearDeadFrames: false };
     });
   };
 

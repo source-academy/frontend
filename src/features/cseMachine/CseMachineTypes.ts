@@ -1,5 +1,3 @@
-import { _Symbol } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/base';
-import { SchemeNumber } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/core';
 import {
   EnvTree as EnvironmentTree,
   EnvTreeNode as EnvironmentTreeNode
@@ -13,7 +11,7 @@ import { ArrayUnit } from './components/ArrayUnit';
 import { Binding } from './components/Binding';
 import { Frame } from './components/Frame';
 import { Level } from './components/Level';
-import { Continuation } from './utils/scheme';
+import { Continuation } from './utils/continuation';
 
 /** this interface defines a drawing function */
 export interface Drawable {
@@ -87,15 +85,7 @@ export type DataArray = Data[] & {
 };
 
 /** the types of data in the JS Slang context */
-export type Data =
-  | Primitive
-  | NonGlobalFn
-  | GlobalFn
-  | Unassigned
-  | DataArray
-  | SchemeNumber
-  | _Symbol
-  | Continuation;
+export type Data = Primitive | NonGlobalFn | GlobalFn | Unassigned | DataArray | Continuation;
 
 /** modified `Environment` to store children and associated frame */
 export type Env = Environment;

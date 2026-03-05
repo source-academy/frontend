@@ -3,7 +3,7 @@ import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import React from 'react';
 
 import { arrowSelection } from './components/arrows/ArrowSelection';
-import { Layout } from './CseMachineLayout';
+import { Layout, LayoutCache } from './CseMachineLayout';
 import { EnvTree } from './CseMachineTypes';
 import { deepCopyTree, getEnvId } from './CseMachineUtils';
 
@@ -19,9 +19,13 @@ export default class CseMachine {
   public static setEditorHighlightedLines: SetEditorHighlightedLines;
   /** callback function to update the step limit exceeded state in the SideContentCseMachine component */
   private static setIsStepLimitExceeded: SetisStepLimitExceeded;
+  // This stores the "Ghost Run (last step x coordinates)" snapshot
+  public static masterLayout: LayoutCache | null = null;
   private static printableMode: boolean = false;
   private static controlStash: boolean = false; // TODO: discuss if the default should be true
   private static stackTruncated: boolean = false;
+  private static centerAlignment: boolean = false; // added for center alignment
+  private static centerAlignmentToggled: boolean = false;
   private static environmentTree: EnvTree | undefined;
   private static currentEnvId: string;
   private static control: Control | undefined;
@@ -35,8 +39,8 @@ export default class CseMachine {
   public static toggleStackTruncated(): void {
     CseMachine.stackTruncated = !CseMachine.stackTruncated;
   }
-  public static setHideDeadFrames(enabled: boolean): void {
-    Layout.hideDeadFrames = enabled;
+  public static setClearDeadFrames(enabled: boolean): void {
+    Layout.clearDeadFrames = enabled;
   }
   public static clearCachedLayouts(): void {
     Layout.currentLight = undefined;
@@ -48,6 +52,12 @@ export default class CseMachine {
     Layout.prevLayout = undefined;
     Layout.key = 0;
   }
+  // added for center alignment
+  public static toggleCenterAlignment(): void {
+    CseMachine.centerAlignment = !CseMachine.centerAlignment;
+    CseMachine.centerAlignmentToggled = true;
+  }
+
   public static getCurrentEnvId(): string {
     return CseMachine.currentEnvId;
   }
@@ -59,6 +69,10 @@ export default class CseMachine {
   }
   public static getStackTruncated(): boolean {
     return CseMachine.stackTruncated;
+  }
+  // added for center alignment
+  public static getCenterAlignment(): boolean {
+    return CseMachine.centerAlignment;
   }
 
   public static isControl(): boolean {
@@ -95,7 +109,7 @@ export default class CseMachine {
       throw new Error('CSE machine not initialized');
     CseMachine.control = context.runtime.control;
     CseMachine.stash = context.runtime.stash;
-    CseMachine.setHideDeadFrames(false);
+    CseMachine.setClearDeadFrames(false);
 
     Layout.setContext(
       context.runtime.environmentTree as EnvTree,
@@ -103,6 +117,21 @@ export default class CseMachine {
       context.runtime.stash,
       context.chapter
     );
+    // get ghost layout on first run (when user press run and code changes)
+    if (!CseMachine.masterLayout) {
+      Layout.setContext(
+        context.runtime.environmentTree as EnvTree,
+        context.runtime.control,
+        context.runtime.stash,
+        context.chapter
+      );
+      CseMachine.masterLayout = Layout.getLayoutPositions(this.controlStash);
+    }
+
+    // Apply Fixed Positions
+    if (CseMachine.masterLayout) {
+      Layout.applyFixedPositions();
+    }
     this.setVis(Layout.draw());
     this.setIsStepLimitExceeded(context.runtime.control.isEmpty());
     Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
@@ -111,6 +140,17 @@ export default class CseMachine {
   static redraw() {
     if (CseMachine.environmentTree && CseMachine.control && CseMachine.stash) {
       // checks if the required diagram exists, and updates the dom node using setVis
+
+      // if center alignment is toggled, change the alignment and redraw the diagram with new coordinates
+      if (this.centerAlignmentToggled) {
+        Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
+        if (CseMachine.masterLayout) {
+          Layout.applyFixedPositions();
+        }
+        this.setVis(Layout.draw());
+        this.centerAlignmentToggled = false;
+      }
+
       if (
         CseMachine.getPrintableMode() &&
         CseMachine.getControlStash() &&
@@ -153,6 +193,9 @@ export default class CseMachine {
         this.setVis(Layout.currentDark);
       } else {
         Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
+        if (CseMachine.masterLayout) {
+          Layout.applyFixedPositions();
+        }
         this.setVis(Layout.draw());
       }
       Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
@@ -172,7 +215,7 @@ export default class CseMachine {
       CseMachine.control = undefined;
       CseMachine.stash = undefined;
     }
-    CseMachine.setHideDeadFrames(false);
+    CseMachine.setClearDeadFrames(false);
     CseMachine.clearCachedLayouts();
     this.clear();
   }

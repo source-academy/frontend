@@ -14,61 +14,6 @@ exports[`available Python language configurations > matches snapshot 1`] = `
 ]
 `;
 
-exports[`available Scheme language configurations > matches snapshot 1`] = `
-[
-  {
-    "chapter": -9,
-    "displayName": "Scheme §1",
-    "mainLanguage": "Scheme",
-    "supports": {
-      "cseMachine": true,
-      "repl": true,
-    },
-    "variant": "explicit-control",
-  },
-  {
-    "chapter": -10,
-    "displayName": "Scheme §2",
-    "mainLanguage": "Scheme",
-    "supports": {
-      "cseMachine": true,
-      "repl": true,
-    },
-    "variant": "explicit-control",
-  },
-  {
-    "chapter": -11,
-    "displayName": "Scheme §3",
-    "mainLanguage": "Scheme",
-    "supports": {
-      "cseMachine": true,
-      "repl": true,
-    },
-    "variant": "explicit-control",
-  },
-  {
-    "chapter": -12,
-    "displayName": "Scheme §4",
-    "mainLanguage": "Scheme",
-    "supports": {
-      "cseMachine": true,
-      "repl": true,
-    },
-    "variant": "explicit-control",
-  },
-  {
-    "chapter": -13,
-    "displayName": "Full Scheme",
-    "mainLanguage": "Scheme",
-    "supports": {
-      "cseMachine": true,
-      "repl": true,
-    },
-    "variant": "explicit-control",
-  },
-]
-`;
-
 exports[`available Source language configurations > matches snapshot 1`] = `
 [
   {

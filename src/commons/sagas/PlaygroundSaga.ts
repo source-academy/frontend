@@ -7,11 +7,7 @@ import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
 import PlaygroundActions from '../../features/playground/PlaygroundActions';
-import {
-  isSchemeLanguage,
-  isSourceLanguage,
-  type OverallState
-} from '../application/ApplicationTypes';
+import { isSourceLanguage, type OverallState } from '../application/ApplicationTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
 import { combineSagaHandlers } from '../redux/utils';
 import SideContentActions from '../sideContent/SideContentActions';
@@ -109,10 +105,6 @@ const PlaygroundSaga = combineSagaHandlers({
       yield put(WorkspaceActions.toggleUsingUpload(true, workspaceLocation));
     } else {
       yield put(WorkspaceActions.toggleUsingUpload(false, workspaceLocation));
-    }
-
-    if (isSchemeLanguage(playgroundSourceChapter) && newId === SideContentType.cseMachine) {
-      yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
     }
   }
 });
