@@ -194,7 +194,6 @@ export const htmlLanguage: SALanguage = {
   supports: {}
 };
 
-
 export function isCseVariant(variant: Variant): boolean {
   return variant == Variant.EXPLICIT_CONTROL;
 }

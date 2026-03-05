@@ -85,13 +85,7 @@ export type DataArray = Data[] & {
 };
 
 /** the types of data in the JS Slang context */
-export type Data =
-  | Primitive
-  | NonGlobalFn
-  | GlobalFn
-  | Unassigned
-  | DataArray
-  | Continuation;
+export type Data = Primitive | NonGlobalFn | GlobalFn | Unassigned | DataArray | Continuation;
 
 /** modified `Environment` to store children and associated frame */
 export type Env = Environment;

@@ -34,7 +34,6 @@ describe('NavigationBarLangSelectButton', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-
   it('should call selectLang with "Python" when "Python" menu item is clicked', async () => {
     const { app, store } = createAppWithStore();
     const container = render(app);

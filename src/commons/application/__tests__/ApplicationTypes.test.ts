@@ -95,4 +95,3 @@ describe('available Python language configurations', () => {
     expect(pyLanguages).toMatchSnapshot();
   });
 });
-
