@@ -212,10 +212,10 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
           ['e', () => {}]
         ];
 
-      const currentStep = Math.max(0, this.state.value);
-      const isAtFirstStep = currentStep <= 1;
-      const isAtLastStep = currentStep >= this.props.stepsTotal;
-      const isNavDisabled = !this.state.visualization;
+    const currentStep = Math.max(0, this.state.value);
+    const isAtFirstStep = currentStep <= 1;
+    const isAtLastStep = currentStep >= this.props.stepsTotal;
+    const isNavDisabled = !this.state.visualization;
 
     return (
       <HotKeys
