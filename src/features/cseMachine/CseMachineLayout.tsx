@@ -666,7 +666,8 @@ export class Layout {
       const controlStashOffset =
         ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth;
       const offset = controlStash ? controlStashOffset : 0;
-      const currWidth = level.width() + frames[frames.length - 1].totalDataWidth;
+      // `level.width()` already includes the last frame's right-side overflow.
+      const currWidth = level.width();
       cache.largestWidth = Math.max(cache.largestWidth, currWidth);
       frames.forEach(frame => {
         cache.frames.set(frame.environment.id, frame.x() - offset);
