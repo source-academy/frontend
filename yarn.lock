@@ -4296,17 +4296,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/estree@npm:*, @types/estree@npm:1.0.8, @types/estree@npm:^1.0.0, @types/estree@npm:^1.0.5, @types/estree@npm:^1.0.6":
+"@types/estree@npm:1.0.8":
   version: 1.0.8
   resolution: "@types/estree@npm:1.0.8"
   checksum: 10c0/39d34d1afaa338ab9763f37ad6066e3f349444f9052b9676a7cc0252ef9485a41c6d81c9c4e0d26e9077993354edf25efc853f3224dd4b447175ef62bdcc86a5
-  languageName: node
-  linkType: hard
-
-"@types/estree@npm:0.0.39":
-  version: 0.0.39
-  resolution: "@types/estree@npm:0.0.39"
-  checksum: 10c0/f0af6c95ac1988c4827964bd9d3b51d24da442e2188943f6dfcb1e1559103d5d024d564b2e9d3f84c53714a02a0a7435c7441138eb63d9af5de4dfc66cdc0d92
   languageName: node
   linkType: hard
 
@@ -4978,9 +4971,9 @@ __metadata:
   linkType: hard
 
 "ace-builds@npm:^1.36.3, ace-builds@npm:^1.4.12, ace-builds@npm:^1.42.1":
-  version: 1.43.6
-  resolution: "ace-builds@npm:1.43.6"
-  checksum: 10c0/33d0159a99650602de83b95766643b8f4f6029fc1ab582e47f7678288cae8e1c89b91747d23be42ec153a88d784fb9488935973f7a100b9093f837ac988f5c96
+  version: 1.43.2
+  resolution: "ace-builds@npm:1.43.2"
+  checksum: 10c0/03603b969b4995a3de5d73f9a3ef8b76d35b9367069ab17da8b69449b924cfa8f0c87929acc062abfeb022a2c39fbb3cd7c311c489d202dc2447c13d52fc7226
   languageName: node
   linkType: hard
 
@@ -7983,7 +7976,7 @@ __metadata:
     immer: "npm:^9.0.21"
     java-slang: "npm:^1.0.13"
     js-cookie: "npm:^3.0.5"
-    js-slang: "npm:^1.0.86"
+    js-slang: "npm:^1.0.88"
     js-yaml: "npm:^4.1.0"
     jsdom: "npm:^28.0.0"
     konva: "npm:^10.0.0"
@@ -9351,9 +9344,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-slang@npm:^1.0.86":
-  version: 1.0.86
-  resolution: "js-slang@npm:1.0.86"
+"js-slang@npm:^1.0.88":
+  version: 1.0.88
+  resolution: "js-slang@npm:1.0.88"
   dependencies:
     "@babel/parser": "npm:^7.19.4"
     "@commander-js/extra-typings": "npm:^14.0.0"
@@ -9369,7 +9362,7 @@ __metadata:
     source-map: "npm:0.7.6"
   bin:
     js-slang: dist/repl/index.js
-  checksum: 10c0/ddf17e8df6748e3e6267f780b97db2135104e6b3987ba5633c8dfa94c1ce6524ec88ef48b180473bb30fb43739532d8063d4c6d6212b6b4715d3783e8fce1f8c
+  checksum: 10c0/15709988bb4a8d1cd4d6d6d9d4e116e42aee235270a514eb8c826b2f2894d0b328c35ccfa6e641e180b37123ecfec76d1f9453829066e3fc484aca9605b0121c
   languageName: node
   linkType: hard
 
@@ -11884,12 +11877,12 @@ __metadata:
   linkType: hard
 
 "react-simple-keyboard@npm:^3.6.27":
-  version: 3.8.167
-  resolution: "react-simple-keyboard@npm:3.8.167"
+  version: 3.8.162
+  resolution: "react-simple-keyboard@npm:3.8.162"
   peerDependencies:
     react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/0e41a516cc73f2986f95804fd5e3c72e14e0d11885b559a8585cd45dac100d462e7017bdd7c43122593c6e84d55623f62bb8d1b76380e2eebbc011dcefc5d7b8
+  checksum: 10c0/7d05eed5246afc25f960eb84d8ee139bc8392ade0416eeca4a3561b876ce92ccd1b0f023036790a4ead523809aa7ce6a1e5a8d1494e28802ad04217237c0be0c
   languageName: node
   linkType: hard
 

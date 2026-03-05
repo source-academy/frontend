@@ -15,7 +15,6 @@ import {
   setHoveredCursor,
   setUnhoveredCursor
 } from '../CseMachineUtils';
-import { isCustomPrimitive } from '../utils/altLangs';
 import { Visible } from './Visible';
 
 export interface TextOptions {
@@ -65,11 +64,9 @@ export class Text extends Visible implements IHoverable {
 
     this.fullStr = this.partialStr = isSourceObject(data)
       ? data.toReplString()
-      : isCustomPrimitive(data)
-        ? String(data)
-        : isStringIdentifiable
-          ? JSON.stringify(data) || String(data)
-          : String(data);
+      : isStringIdentifiable
+        ? JSON.stringify(data) || String(data)
+        : String(data);
     this._height = fontSize;
     const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
     if (widthOf(this.partialStr) > maxWidth) {
