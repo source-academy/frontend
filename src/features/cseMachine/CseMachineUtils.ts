@@ -52,7 +52,7 @@ import {
   StreamFn,
   Unassigned
 } from './CseMachineTypes';
-import { isContinuation } from './utils/scheme';
+import { isContinuation } from './utils/continuation';
 class AssertionError extends Error {
   constructor(msg?: string) {
     super(msg);

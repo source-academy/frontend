@@ -11,7 +11,7 @@ import { ArrayUnit } from './components/ArrayUnit';
 import { Binding } from './components/Binding';
 import { Frame } from './components/Frame';
 import { Level } from './components/Level';
-import { Continuation } from './utils/scheme';
+import { Continuation } from './utils/continuation';
 
 /** this interface defines a drawing function */
 export interface Drawable {

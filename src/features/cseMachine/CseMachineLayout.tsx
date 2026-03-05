@@ -52,7 +52,7 @@ import {
   isUnassigned,
   setDifference
 } from './CseMachineUtils';
-import { Continuation, isContinuation } from './utils/scheme';
+import { Continuation, isContinuation } from './utils/continuation';
 export type LayoutCache = {
   frames: Map<string, number>;
   levelWidth: Map<string, number>;
