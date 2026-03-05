@@ -4296,17 +4296,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/estree@npm:*, @types/estree@npm:1.0.8, @types/estree@npm:^1.0.0, @types/estree@npm:^1.0.5, @types/estree@npm:^1.0.6":
+"@types/estree@npm:1.0.8":
   version: 1.0.8
   resolution: "@types/estree@npm:1.0.8"
   checksum: 10c0/39d34d1afaa338ab9763f37ad6066e3f349444f9052b9676a7cc0252ef9485a41c6d81c9c4e0d26e9077993354edf25efc853f3224dd4b447175ef62bdcc86a5
-  languageName: node
-  linkType: hard
-
-"@types/estree@npm:0.0.39":
-  version: 0.0.39
-  resolution: "@types/estree@npm:0.0.39"
-  checksum: 10c0/f0af6c95ac1988c4827964bd9d3b51d24da442e2188943f6dfcb1e1559103d5d024d564b2e9d3f84c53714a02a0a7435c7441138eb63d9af5de4dfc66cdc0d92
   languageName: node
   linkType: hard
 
@@ -9351,9 +9344,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-slang@npm:^1.0.86":
-  version: 1.0.86
-  resolution: "js-slang@npm:1.0.86"
+"js-slang@portal:/Users/henz/Repos/SourceAcademy/js-slang::locator=frontend%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "js-slang@portal:/Users/henz/Repos/SourceAcademy/js-slang::locator=frontend%40workspace%3A."
   dependencies:
     "@babel/parser": "npm:^7.19.4"
     "@commander-js/extra-typings": "npm:^14.0.0"
@@ -9369,9 +9362,8 @@ __metadata:
     source-map: "npm:0.7.6"
   bin:
     js-slang: dist/repl/index.js
-  checksum: 10c0/ddf17e8df6748e3e6267f780b97db2135104e6b3987ba5633c8dfa94c1ce6524ec88ef48b180473bb30fb43739532d8063d4c6d6212b6b4715d3783e8fce1f8c
   languageName: node
-  linkType: hard
+  linkType: soft
 
 "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0

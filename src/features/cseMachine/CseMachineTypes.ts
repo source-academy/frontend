@@ -1,5 +1,3 @@
-import { _Symbol } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/base';
-import { SchemeNumber } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/core';
 import {
   EnvTree as EnvironmentTree,
   EnvTreeNode as EnvironmentTreeNode
@@ -93,8 +91,6 @@ export type Data =
   | GlobalFn
   | Unassigned
   | DataArray
-  | SchemeNumber
-  | _Symbol
   | Continuation;
 
 /** modified `Environment` to store children and associated frame */

@@ -4,7 +4,6 @@ import {
   ALL_LANGUAGES,
   getLanguageConfig,
   pyLanguages,
-  schemeLanguages,
   sourceLanguages
 } from '../ApplicationTypes';
 
@@ -97,8 +96,3 @@ describe('available Python language configurations', () => {
   });
 });
 
-describe('available Scheme language configurations', () => {
-  test('matches snapshot', () => {
-    expect(schemeLanguages).toMatchSnapshot();
-  });
-});

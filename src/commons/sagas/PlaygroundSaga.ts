@@ -8,7 +8,6 @@ import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMa
 
 import PlaygroundActions from '../../features/playground/PlaygroundActions';
 import {
-  isSchemeLanguage,
   isSourceLanguage,
   type OverallState
 } from '../application/ApplicationTypes';
@@ -111,9 +110,7 @@ const PlaygroundSaga = combineSagaHandlers({
       yield put(WorkspaceActions.toggleUsingUpload(false, workspaceLocation));
     }
 
-    if (isSchemeLanguage(playgroundSourceChapter) && newId === SideContentType.cseMachine) {
-      yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
-    }
+
   }
 });
 
