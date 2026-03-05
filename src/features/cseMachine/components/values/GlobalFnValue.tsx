@@ -44,6 +44,8 @@ export class GlobalFnValue extends Value implements IHoverable {
   readonly exportTooltipWidth: number;
   readonly isTooltipTruncated: boolean;
   readonly printDescriptionHeight: number;
+  readonly printDescriptionOffsetY: number;
+  readonly printDescriptionBottomGap: number;
   readonly totalWidth: number;
   readonly labelRef: RefObject<Label> = React.createRef();
   readonly revealLabelRef: RefObject<Label> = React.createRef();
@@ -95,10 +97,12 @@ export class GlobalFnValue extends Value implements IHoverable {
     this.printDescriptionHeight =
       getTextHeight(this.exportTooltip, Config.FnDescriptionMaxWidth) +
       Config.FnTooltipTextPadding * 2;
+    this.printDescriptionOffsetY = Math.ceil(Config.TextPaddingY / 2);
+    this.printDescriptionBottomGap = Math.ceil(Config.TextPaddingY / 2);
     this.totalWidth =
       this._width +
       Config.TextMargin +
-      Config.FnDescriptionMaxWidth +
+      this.exportTooltipWidth +
       Config.FnTooltipTextPadding * 2;
 
     this.addReference(mainReference);
@@ -191,7 +195,7 @@ export class GlobalFnValue extends Value implements IHoverable {
         </Group>
         <KonvaLabel
           x={this.x() + Config.TextMargin}
-          y={this.y() + this.radius + Config.TextMargin}
+          y={this.y() + this.radius + Config.TextMargin + this.printDescriptionOffsetY}
           visible={CseMachine.getPrintableMode()}
           ref={this.labelRef}
         >

@@ -50,6 +50,8 @@ export class FnValue extends Value implements IHoverable {
   readonly exportTooltipWidth: number;
   readonly isTooltipTruncated: boolean;
   readonly printDescriptionHeight: number;
+  readonly printDescriptionOffsetY: number;
+  readonly printDescriptionBottomGap: number;
 
   /** width of the closure circles + label */
   readonly totalWidth: number;
@@ -98,10 +100,12 @@ export class FnValue extends Value implements IHoverable {
     this.printDescriptionHeight =
       getTextHeight(this.exportTooltip, Config.FnDescriptionMaxWidth) +
       Config.FnTooltipTextPadding * 2;
+    this.printDescriptionOffsetY = Math.ceil(Config.TextPaddingY / 2);
+    this.printDescriptionBottomGap = Math.ceil(Config.TextPaddingY / 2);
     this.totalWidth =
       this._width +
       Config.TextMargin +
-      Config.FnDescriptionMaxWidth +
+      this.exportTooltipWidth +
       Config.FnTooltipTextPadding * 2;
 
     this.addReference(firstReference);
@@ -234,7 +238,7 @@ export class FnValue extends Value implements IHoverable {
         </Group>
         <KonvaLabel
           x={this.x() + Config.TextMargin}
-          y={this.y() + this.radius + Config.TextMargin}
+          y={this.y() + this.radius + Config.TextMargin + this.printDescriptionOffsetY}
           visible={CseMachine.getPrintableMode()}
           ref={this.labelRef}
         >

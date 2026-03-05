@@ -685,7 +685,7 @@ export class Layout {
     if (Layout.clearDeadFrames) {
       return undefined;
     }
-    const cache = CseMachine.masterLayout;
+    const cache = CseMachine.getMasterLayout();
     if (cache && cache.frames.has(envId)) {
       const fixedX = cache.frames.get(envId)!;
       // add offset for control stash and center alignment
@@ -705,10 +705,10 @@ export class Layout {
    * Reassign x coordinate of every frame to their predetermined position by calling getGhostFrameX.
    */
   static applyFixedPositions() {
-    if (Layout.clearDeadFrames || !CseMachine.masterLayout) {
+    if (Layout.clearDeadFrames || !CseMachine.getMasterLayout()) {
       return;
     }
-    const cache = CseMachine.masterLayout!; // getLayoutPositions() must have been called before
+    const cache = CseMachine.getMasterLayout()!; // getLayoutPositions() must have been called before
     Layout.levels.forEach(level => {
       level.frames.forEach(frame => {
         const id = frame.environment.id;

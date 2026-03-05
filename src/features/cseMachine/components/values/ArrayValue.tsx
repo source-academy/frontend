@@ -78,6 +78,13 @@ export class ArrayValue extends Value implements IHoverable {
           unit.value instanceof GlobalFnValue) &&
         isMainReference(unit.value, unit)
       ) {
+        const childWidth =
+          unit.value instanceof ArrayValue
+            ? unit.value.totalWidth
+            : CseMachine.getPrintableMode()
+              ? unit.value.totalWidth
+              : unit.value.width();
+
         const bottomY =
           unit.value instanceof ArrayValue
             ? unit.value.y() + unit.value.totalHeight
@@ -85,12 +92,14 @@ export class ArrayValue extends Value implements IHoverable {
               ? unit.value.y() +
                 Config.FnRadius +
                 Config.TextMargin +
-                unit.value.printDescriptionHeight
+                unit.value.printDescriptionOffsetY +
+                unit.value.printDescriptionHeight +
+                unit.value.printDescriptionBottomGap
               : unit.value.y() + unit.value.height() / 2;
 
         this.totalWidth = Math.max(
           this.totalWidth,
-          unit.value.totalWidth +
+          childWidth +
             (i === this.data.length - 1 ? (i + 2) * Config.DataUnitWidth : i * Config.DataUnitWidth)
         );
         this.totalHeight = Math.max(this.totalHeight, bottomY - unit.y());

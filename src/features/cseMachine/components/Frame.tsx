@@ -50,7 +50,7 @@ export class Frame extends Visible implements IHoverable {
 
   /** total height = frame height + frame title height */
   readonly totalHeight: number;
-  /** width of this frame + max width of the bound values */
+  /** width budget of this frame block (excluding right-side data overflow) */
   readonly totalWidth: number;
 
   /** width of data beside frame */
@@ -143,9 +143,9 @@ export class Frame extends Visible implements IHoverable {
       entries.push([`${i++}`, descriptor]);
     }
 
-    // Find the correct width of the frame before creating the bindings
+    // Find the correct width of the frame before creating the bindings.
+    // This pass sizes only the frame body (text and primitive values inside the frame).
     this._width = Config.FrameMinWidth;
-    let totalWidth = this._width + Config.FrameMinGapX;
     for (const [key, data] of entries) {
       if (isDummyKey(key)) continue;
       const constant =
@@ -166,65 +166,6 @@ export class Frame extends Visible implements IHoverable {
       }
       this._width = Math.max(this._width, bindingTextWidth + Config.FramePaddingX * 2);
 
-      // calculate width needed for data spacing to avoid collision
-      if (isDataArray(data.value)) {
-        // helper function to calculate an array width
-        const getChainWidth = (startNode: any[]): number => {
-          let w = 0;
-          let curr = startNode;
-          const seen = new Set();
-
-          while (isDataArray(curr)) {
-            // escape from circular lists
-            if (seen.has(curr)) break;
-            seen.add(curr);
-            w += curr.length * Config.DataUnitWidth;
-            const lastIndex = curr.length - 1;
-            const lastElement = curr[lastIndex];
-
-            if (isDataArray(lastElement)) {
-              w += Config.DataUnitWidth;
-              curr = lastElement;
-            } else {
-              break;
-            }
-          }
-          return w;
-        };
-
-        let maxWidth = 0;
-        let currentSpineX = 0;
-        let curr = data.value;
-        const seenSpine = new Set();
-
-        while (isDataArray(curr)) {
-          if (seenSpine.has(curr)) break;
-          seenSpine.add(curr);
-          const blockWidth = curr.length * Config.DataUnitWidth;
-          const head = curr[0];
-
-          if (isDataArray(head)) {
-            const branchWidth = getChainWidth(head);
-            maxWidth = Math.max(maxWidth, currentSpineX + branchWidth);
-          }
-
-          currentSpineX += blockWidth;
-
-          const lastIndex = curr.length - 1;
-          const lastElement = curr[lastIndex];
-
-          if (isDataArray(lastElement)) {
-            currentSpineX += Config.DataUnitWidth;
-            curr = lastElement;
-          } else {
-            maxWidth = Math.max(maxWidth, currentSpineX);
-            break;
-          }
-        }
-
-        this.totalDataWidth = Math.max(this.totalDataWidth, maxWidth);
-      }
-      totalWidth = Math.max(totalWidth, this._width + Config.FrameMinGapX);
     }
 
     // Create all the bindings and values
@@ -245,10 +186,10 @@ export class Frame extends Visible implements IHoverable {
       );
       prevBinding = currBinding;
       this.bindings.push(currBinding);
-      totalWidth = Math.max(totalWidth, currBinding.width() + Config.FramePaddingX);
     }
 
     // Post-process using actual created values to get robust spacing for nested arrays/functions.
+    // `totalDataWidth` is measured strictly as overflow beyond the frame's right edge.
     const frameRightX = this.x() + this.width();
     for (const binding of this.bindings) {
       const value = binding.value;
@@ -258,7 +199,7 @@ export class Frame extends Visible implements IHoverable {
       if (value instanceof ArrayValue) {
         valueRightX = value.x() + value.totalWidth;
       } else if (value instanceof FnValue || value instanceof GlobalFnValue) {
-        valueRightX = value.x() + value.totalWidth;
+        valueRightX = CseMachine.getPrintableMode() ? value.x() + value.totalWidth : value.x() + value.width();
       } else if (value instanceof ContValue) {
         valueRightX = value.x() + value.width() + value.tooltipWidth;
       }
@@ -269,7 +210,7 @@ export class Frame extends Visible implements IHoverable {
       }
     }
 
-    this.totalWidth = totalWidth;
+    this.totalWidth = this.width();
 
     // derive the height of the frame from the the position of the last binding
     this._height = prevBinding
