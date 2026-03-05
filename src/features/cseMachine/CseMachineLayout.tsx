@@ -52,7 +52,7 @@ import {
   isUnassigned,
   setDifference
 } from './CseMachineUtils';
-import { Continuation, isContinuation, isSchemeNumber, isSymbol } from './utils/scheme';
+import { Continuation, isContinuation } from './utils/continuation';
 export type LayoutCache = {
   frames: Map<string, number>;
   levelWidth: Map<string, number>;
@@ -429,8 +429,6 @@ export class Layout {
       assert(reference instanceof Binding);
       return new UnassignedValue(reference);
     } else if (isPrimitiveData(data)) {
-      return new PrimitiveValue(data, reference);
-    } else if (isSymbol(data) || isSchemeNumber(data)) {
       return new PrimitiveValue(data, reference);
     } else {
       const existingValue = Layout.values.get(

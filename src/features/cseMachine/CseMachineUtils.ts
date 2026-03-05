@@ -1,5 +1,3 @@
-import { estreeDecode } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/encoder-visitor';
-import { unparse } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/reverse_parser';
 import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
 import {
   AppInstr,
@@ -20,7 +18,6 @@ import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
 import { Text } from 'konva/lib/shapes/Text';
 import { cloneDeep, isObject } from 'lodash';
-import { isSchemeLanguage } from 'src/commons/application/ApplicationTypes';
 import classes from 'src/styles/Draggable.module.scss';
 
 import { ArrayUnit } from './components/ArrayUnit';
@@ -55,12 +52,7 @@ import {
   StreamFn,
   Unassigned
 } from './CseMachineTypes';
-import {
-  getAlternateControlItemComponent,
-  isCustomPrimitive,
-  needsNewRepresentation
-} from './utils/altLangs';
-import { isContinuation, schemeToString } from './utils/scheme';
+import { isContinuation } from './utils/continuation';
 class AssertionError extends Error {
   constructor(msg?: string) {
     super(msg);
@@ -206,8 +198,7 @@ export function isPrimitiveData(data: Data): data is Primitive {
     isString(data) ||
     isNumber(data) ||
     isBoolean(data) ||
-    isSourceObject(data) ||
-    isCustomPrimitive(data)
+    isSourceObject(data)
   );
 }
 
@@ -769,43 +760,8 @@ export function getControlItemComponent(
     : index === Layout.control.size() - 1;
   if (!isInstr(controlItem)) {
     if (!isNode(controlItem)) {
-      // at the moment, the only non-node and non-instruction control items are
-      // literals from scheme.
-      const representation = schemeToString(controlItem as any);
-      return new ControlItemComponent(
-        representation,
-        representation,
-        stackHeight,
-        highlightOnHover,
-        unhighlightOnHover,
-        topItem
-      );
-    }
-    // there's no reason to provide an alternate representation
-    // for a instruction.
-    if (needsNewRepresentation(chapter)) {
-      return getAlternateControlItemComponent(
-        controlItem,
-        stackHeight,
-        highlightOnHover,
-        unhighlightOnHover,
-        topItem,
-        chapter
-      );
-    }
-
-    if (isSchemeLanguage(chapter)) {
-      // use the js-slang decoder on the control item
-      controlItem = estreeDecode(controlItem as any);
-      const text = unparse(controlItem as any);
-      return new ControlItemComponent(
-        text,
-        text,
-        stackHeight,
-        highlightOnHover,
-        unhighlightOnHover,
-        topItem
-      );
+      // should not happen
+      throw new Error('Unknown control item type');
     }
 
     // at this point, the control item is a node.

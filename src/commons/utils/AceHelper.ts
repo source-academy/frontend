@@ -37,7 +37,6 @@ import 'ace-builds/src-noconflict/mode-html';
 import 'ace-builds/src-noconflict/mode-java';
 import 'ace-builds/src-noconflict/mode-javascript';
 import 'ace-builds/src-noconflict/mode-python';
-import 'ace-builds/src-noconflict/mode-scheme';
 import 'ace-builds/src-noconflict/mode-typescript';
 import 'js-slang/dist/editors/ace/theme/source';
 
@@ -54,12 +53,6 @@ export const getModeString = (chapter: Chapter, variant: Variant, library: strin
     case Chapter.PYTHON_4:
     case Chapter.FULL_PYTHON:
       return 'python';
-    case Chapter.SCHEME_1:
-    case Chapter.SCHEME_2:
-    case Chapter.SCHEME_3:
-    case Chapter.SCHEME_4:
-    case Chapter.FULL_SCHEME:
-      return 'scheme';
     case Chapter.FULL_JAVA:
       return 'java';
     case Chapter.FULL_C:
@@ -85,12 +78,6 @@ export const parseModeString = (
       return {
         chapter: Chapter.PYTHON_1,
         variant: Variant.DEFAULT,
-        library: ExternalLibraryName.NONE
-      };
-    case 'scheme':
-      return {
-        chapter: Chapter.FULL_SCHEME,
-        variant: Variant.EXPLICIT_CONTROL,
         library: ExternalLibraryName.NONE
       };
     case 'java':
