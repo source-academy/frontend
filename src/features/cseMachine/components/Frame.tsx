@@ -19,7 +19,7 @@ import {
   isSourceObject,
   isUnassigned
 } from '../CseMachineUtils';
-import { isContinuation } from '../utils/scheme';
+import { isContinuation } from '../utils/continuation';
 import { ArrowFromFrame } from './arrows/ArrowFromFrame';
 import { GenericArrow } from './arrows/GenericArrow';
 import { Binding } from './Binding';
