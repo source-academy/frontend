@@ -10,11 +10,14 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { type ColDef, type GridApi, type GridReadyEvent, themeBalham } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useSession } from 'src/commons/utils/Hooks';
 
+import SessionActions from '../../../commons/application/actions/SessionActions';
 import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
+import GroundControlActions from '../../../features/groundControl/GroundControlActions';
 import DefaultChapterSelect from './subcomponents/DefaultChapterSelect';
 import ConfigureCell from './subcomponents/GroundControlConfigureCell';
 import DeleteCell from './subcomponents/GroundControlDeleteCell';
@@ -24,26 +27,6 @@ import EditTeamSizeCell from './subcomponents/GroundControlEditTeamSizeCell';
 import PublishCell from './subcomponents/GroundControlPublishCell';
 import ReleaseGradingCell from './subcomponents/GroundControlReleaseGradingCell';
 
-type Props = DispatchProps;
-
-export type DispatchProps = {
-  handleAssessmentOverviewFetch: () => void;
-  handleDeleteAssessment: (id: number) => void;
-  handleUploadAssessment: (file: File, forceUpdate: boolean, assessmentConfigId: number) => void;
-  handlePublishAssessment: (togglePublishAssessmentTo: boolean, id: number) => void;
-  handlePublishGradingAll: (id: number) => void;
-  handleUnpublishGradingAll: (id: number) => void;
-  handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) => void;
-  handleAssessmentChangeTeamSize: (id: number, maxTeamSize: number) => void;
-  handleConfigureAssessment: (
-    id: number,
-    hasVotingFeatures: boolean,
-    hasTokenCounter: boolean
-  ) => void;
-  handleAssignEntriesForVoting: (id: number) => void;
-  handleFetchCourseConfigs: () => void;
-};
-
 const defaultColumnDefs: ColDef = {
   flex: 2,
   minWidth: 70,
@@ -52,18 +35,19 @@ const defaultColumnDefs: ColDef = {
   sortable: true
 };
 
-const GroundControl: React.FC<Props> = props => {
+const GroundControl: React.FC = () => {
   const [showDropzone, setShowDropzone] = useState(false);
   const { assessmentOverviews, assessmentConfigurations } = useSession();
+  const dispatch = useDispatch();
 
-  let gridApi: GridApi | undefined;
+  const gridApi = useRef<GridApi>();
 
   const onGridReady = (params: GridReadyEvent) => {
-    gridApi = params.api;
-    gridApi.sizeColumnsToFit();
+    gridApi.current = params.api;
+    params.api.sizeColumnsToFit();
 
     // Sort assessments by opening date, breaking ties by later of closing dates
-    gridApi.applyColumnState({
+    params.api.applyColumnState({
       state: [
         { colId: 'openAt', sort: 'desc' },
         { colId: 'closeAt', sort: 'desc' }
@@ -71,8 +55,8 @@ const GroundControl: React.FC<Props> = props => {
     });
   };
 
-  const toggleDropzone = () => {
-    setShowDropzone(!showDropzone);
+  const resizeGrid = () => {
+    gridApi.current?.sizeColumnsToFit();
   };
 
   const columnDefs: ColDef<AssessmentOverview>[] = [
@@ -90,7 +74,8 @@ const GroundControl: React.FC<Props> = props => {
       sortingOrder: ['desc', 'asc', null],
       cellRenderer: EditCell,
       cellRendererParams: {
-        handleAssessmentChangeDate: props.handleAssessmentChangeDate,
+        handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) =>
+          dispatch(GroundControlActions.changeDateAssessment(id, openAt, closeAt)),
         forOpenDate: true
       },
       flex: 3
@@ -106,7 +91,8 @@ const GroundControl: React.FC<Props> = props => {
       sortingOrder: ['desc', 'asc', null],
       cellRenderer: EditCell,
       cellRendererParams: {
-        handleAssessmentChangeDate: props.handleAssessmentChangeDate,
+        handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) =>
+          dispatch(GroundControlActions.changeDateAssessment(id, openAt, closeAt)),
         forOpenDate: false
       },
       flex: 3
@@ -116,7 +102,8 @@ const GroundControl: React.FC<Props> = props => {
       field: 'maxTeamSize',
       cellRenderer: EditTeamSizeCell,
       cellRendererParams: {
-        onTeamSizeChange: props.handleAssessmentChangeTeamSize
+        onTeamSizeChange: (id: number, maxTeamSize: number) =>
+          dispatch(GroundControlActions.changeTeamSizeAssessment(id, maxTeamSize))
       }
     },
     {
@@ -124,7 +111,8 @@ const GroundControl: React.FC<Props> = props => {
       field: 'placeholderPublish' as any,
       cellRenderer: PublishCell,
       cellRendererParams: {
-        handlePublishAssessment: props.handlePublishAssessment
+        handlePublishAssessment: (togglePublishAssessmentTo: boolean, id: number) =>
+          dispatch(GroundControlActions.publishAssessment(togglePublishAssessmentTo, id))
       },
       filter: false,
       resizable: false,
@@ -136,8 +124,10 @@ const GroundControl: React.FC<Props> = props => {
       field: 'placeholderReleaseGrading' as any,
       cellRenderer: ReleaseGradingCell,
       cellRendererParams: {
-        handlePublishGradingAll: props.handlePublishGradingAll,
-        handleUnpublishGradingAll: props.handleUnpublishGradingAll
+        handlePublishGradingAll: (id: number) =>
+          dispatch(GroundControlActions.publishGradingAll(id)),
+        handleUnpublishGradingAll: (id: number) =>
+          dispatch(GroundControlActions.unpublishGradingAll(id))
       },
       filter: false,
       resizable: false,
@@ -150,17 +140,29 @@ const GroundControl: React.FC<Props> = props => {
       cellRenderer: ({ data }: { data: AssessmentOverview }) => {
         return (
           <>
-            <DeleteCell data={data} handleDeleteAssessment={props.handleDeleteAssessment} />
+            <DeleteCell
+              data={data}
+              handleDeleteAssessment={(id: number) =>
+                dispatch(GroundControlActions.deleteAssessment(id))
+              }
+            />
             <ConfigureCell
               data={data}
-              handleConfigureAssessment={props.handleConfigureAssessment}
-              handleAssignEntriesForVoting={props.handleAssignEntriesForVoting}
+              handleConfigureAssessment={(
+                id: number,
+                hasVotingFeatures: boolean,
+                hasTokenCounter: boolean
+              ) =>
+                dispatch(
+                  GroundControlActions.configureAssessment(id, hasVotingFeatures, hasTokenCounter)
+                )
+              }
+              handleAssignEntriesForVoting={(id: number) =>
+                dispatch(GroundControlActions.assignEntriesForVoting(id))
+              }
             />
           </>
         );
-      },
-      cellRendererParams: {
-        handleDeleteAssessment: props.handleDeleteAssessment
       },
       filter: false,
       resizable: false,
@@ -175,12 +177,15 @@ const GroundControl: React.FC<Props> = props => {
         active={showDropzone}
         icon={IconNames.CLOUD_UPLOAD}
         intent={showDropzone ? Intent.PRIMARY : Intent.NONE}
-        onClick={toggleDropzone}
+        onClick={() => setShowDropzone(prev => !prev)}
       >
         <span className="hidden-xs">Upload assessment</span>
       </Button>
       <DefaultChapterSelect />
-      <Button icon={IconNames.REFRESH} onClick={props.handleAssessmentOverviewFetch}>
+      <Button
+        icon={IconNames.REFRESH}
+        onClick={() => dispatch(SessionActions.fetchAssessmentOverviews())}
+      >
         <span className="hidden-xs">Refresh assessments</span>
       </Button>
     </div>
@@ -189,7 +194,9 @@ const GroundControl: React.FC<Props> = props => {
   const dropzone = (
     <Collapse isOpen={showDropzone} keepChildrenMounted={true}>
       <Dropzone
-        handleUploadAssessment={props.handleUploadAssessment}
+        handleUploadAssessment={(file: File, forceUpdate: boolean, assessmentConfigId: number) =>
+          dispatch(GroundControlActions.uploadAssessment(file, forceUpdate, assessmentConfigId))
+        }
         assessmentConfigurations={assessmentConfigurations}
       />
     </Collapse>
@@ -204,6 +211,7 @@ const GroundControl: React.FC<Props> = props => {
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
+        onGridSizeChanged={resizeGrid}
         rowData={assessmentOverviews}
         rowHeight={35}
         suppressCellFocus={true}
@@ -233,8 +241,8 @@ const GroundControl: React.FC<Props> = props => {
 
   const loadContent = () => {
     // Always load AssessmentOverviews and CourseConfigs to get the latest values (just in case)
-    props.handleAssessmentOverviewFetch();
-    props.handleFetchCourseConfigs();
+    dispatch(SessionActions.fetchAssessmentOverviews());
+    dispatch(SessionActions.fetchCourseConfig());
   };
 
   return (
@@ -251,5 +259,10 @@ const dateFilterComparator = (filterDate: Date, cellValue: string) => {
   const cellDate = new Date(cellValue);
   return cellDate < filterDate ? -1 : cellDate > filterDate ? 1 : 0;
 };
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = GroundControl;
+Component.displayName = 'GroundControl';
 
 export default GroundControl;
