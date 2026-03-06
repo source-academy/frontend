@@ -55,117 +55,120 @@ const GroundControl: React.FC = () => {
     });
   };
 
-  const columnDefs = useMemo<ColDef<AssessmentOverview>[]>(() => [
-    { field: 'number', headerName: 'ID', flex: 1 },
-    { headerName: 'Title', field: 'title' },
-    { headerName: 'Category', field: 'type' },
-    {
-      headerName: 'Open Date',
-      field: 'openAt',
-      filter: 'agDateColumnFilter',
-      filterParams: {
-        comparator: dateFilterComparator,
-        inRangeInclusive: true
+  const columnDefs = useMemo<ColDef<AssessmentOverview>[]>(
+    () => [
+      { field: 'number', headerName: 'ID', flex: 1 },
+      { headerName: 'Title', field: 'title' },
+      { headerName: 'Category', field: 'type' },
+      {
+        headerName: 'Open Date',
+        field: 'openAt',
+        filter: 'agDateColumnFilter',
+        filterParams: {
+          comparator: dateFilterComparator,
+          inRangeInclusive: true
+        },
+        sortingOrder: ['desc', 'asc', null],
+        cellRenderer: EditCell,
+        cellRendererParams: {
+          handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) =>
+            dispatch(GroundControlActions.changeDateAssessment(id, openAt, closeAt)),
+          forOpenDate: true
+        },
+        flex: 3
       },
-      sortingOrder: ['desc', 'asc', null],
-      cellRenderer: EditCell,
-      cellRendererParams: {
-        handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) =>
-          dispatch(GroundControlActions.changeDateAssessment(id, openAt, closeAt)),
-        forOpenDate: true
+      {
+        headerName: 'Close Date',
+        field: 'closeAt',
+        filter: 'agDateColumnFilter',
+        filterParams: {
+          comparator: dateFilterComparator,
+          inRangeInclusive: true
+        },
+        sortingOrder: ['desc', 'asc', null],
+        cellRenderer: EditCell,
+        cellRendererParams: {
+          handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) =>
+            dispatch(GroundControlActions.changeDateAssessment(id, openAt, closeAt)),
+          forOpenDate: false
+        },
+        flex: 3
       },
-      flex: 3
-    },
-    {
-      headerName: 'Close Date',
-      field: 'closeAt',
-      filter: 'agDateColumnFilter',
-      filterParams: {
-        comparator: dateFilterComparator,
-        inRangeInclusive: true
+      {
+        headerName: 'Max Team Size',
+        field: 'maxTeamSize',
+        cellRenderer: EditTeamSizeCell,
+        cellRendererParams: {
+          onTeamSizeChange: (id: number, maxTeamSize: number) =>
+            dispatch(GroundControlActions.changeTeamSizeAssessment(id, maxTeamSize))
+        }
       },
-      sortingOrder: ['desc', 'asc', null],
-      cellRenderer: EditCell,
-      cellRendererParams: {
-        handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) =>
-          dispatch(GroundControlActions.changeDateAssessment(id, openAt, closeAt)),
-        forOpenDate: false
+      {
+        headerName: 'Published',
+        field: 'placeholderPublish' as any,
+        cellRenderer: PublishCell,
+        cellRendererParams: {
+          handlePublishAssessment: (togglePublishAssessmentTo: boolean, id: number) =>
+            dispatch(GroundControlActions.publishAssessment(togglePublishAssessmentTo, id))
+        },
+        filter: false,
+        resizable: false,
+        sortable: false,
+        cellStyle: { padding: 0 }
       },
-      flex: 3
-    },
-    {
-      headerName: 'Max Team Size',
-      field: 'maxTeamSize',
-      cellRenderer: EditTeamSizeCell,
-      cellRendererParams: {
-        onTeamSizeChange: (id: number, maxTeamSize: number) =>
-          dispatch(GroundControlActions.changeTeamSizeAssessment(id, maxTeamSize))
+      {
+        headerName: 'Grading',
+        field: 'placeholderReleaseGrading' as any,
+        cellRenderer: ReleaseGradingCell,
+        cellRendererParams: {
+          handlePublishGradingAll: (id: number) =>
+            dispatch(GroundControlActions.publishGradingAll(id)),
+          handleUnpublishGradingAll: (id: number) =>
+            dispatch(GroundControlActions.unpublishGradingAll(id))
+        },
+        filter: false,
+        resizable: false,
+        sortable: false,
+        cellStyle: { padding: 0 }
+      },
+      {
+        headerName: 'Actions',
+        field: 'placeholderDelete' as any,
+        cellRenderer: ({ data }: { data: AssessmentOverview }) => {
+          return (
+            <>
+              <DeleteCell
+                data={data}
+                handleDeleteAssessment={(id: number) =>
+                  dispatch(GroundControlActions.deleteAssessment(id))
+                }
+              />
+              <ConfigureCell
+                data={data}
+                handleConfigureAssessment={(
+                  id: number,
+                  hasVotingFeatures: boolean,
+                  hasTokenCounter: boolean
+                ) =>
+                  dispatch(
+                    GroundControlActions.configureAssessment(id, hasVotingFeatures, hasTokenCounter)
+                  )
+                }
+                handleAssignEntriesForVoting={(id: number) =>
+                  dispatch(GroundControlActions.assignEntriesForVoting(id))
+                }
+              />
+            </>
+          );
+        },
+        filter: false,
+        resizable: false,
+        sortable: false,
+        cellStyle: { padding: 0 }
       }
-    },
-    {
-      headerName: 'Published',
-      field: 'placeholderPublish' as any,
-      cellRenderer: PublishCell,
-      cellRendererParams: {
-        handlePublishAssessment: (togglePublishAssessmentTo: boolean, id: number) =>
-          dispatch(GroundControlActions.publishAssessment(togglePublishAssessmentTo, id))
-      },
-      filter: false,
-      resizable: false,
-      sortable: false,
-      cellStyle: { padding: 0 }
-    },
-    {
-      headerName: 'Grading',
-      field: 'placeholderReleaseGrading' as any,
-      cellRenderer: ReleaseGradingCell,
-      cellRendererParams: {
-        handlePublishGradingAll: (id: number) =>
-          dispatch(GroundControlActions.publishGradingAll(id)),
-        handleUnpublishGradingAll: (id: number) =>
-          dispatch(GroundControlActions.unpublishGradingAll(id))
-      },
-      filter: false,
-      resizable: false,
-      sortable: false,
-      cellStyle: { padding: 0 }
-    },
-    {
-      headerName: 'Actions',
-      field: 'placeholderDelete' as any,
-      cellRenderer: ({ data }: { data: AssessmentOverview }) => {
-        return (
-          <>
-            <DeleteCell
-              data={data}
-              handleDeleteAssessment={(id: number) =>
-                dispatch(GroundControlActions.deleteAssessment(id))
-              }
-            />
-            <ConfigureCell
-              data={data}
-              handleConfigureAssessment={(
-                id: number,
-                hasVotingFeatures: boolean,
-                hasTokenCounter: boolean
-              ) =>
-                dispatch(
-                  GroundControlActions.configureAssessment(id, hasVotingFeatures, hasTokenCounter)
-                )
-              }
-              handleAssignEntriesForVoting={(id: number) =>
-                dispatch(GroundControlActions.assignEntriesForVoting(id))
-              }
-            />
-          </>
-        );
-      },
-      filter: false,
-      resizable: false,
-      sortable: false,
-      cellStyle: { padding: 0 }
-    }
-  ], [dispatch]);
+    ],
+    [dispatch]
+  );
 
   const controls = (
     <div className="GridControls ground-control-controls">
