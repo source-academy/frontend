@@ -10,7 +10,7 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { type ColDef, type GridApi, type GridReadyEvent, themeBalham } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSession } from 'src/commons/utils/Hooks';
 
@@ -55,11 +55,7 @@ const GroundControl: React.FC = () => {
     });
   };
 
-  const resizeGrid = () => {
-    gridApi.current?.sizeColumnsToFit();
-  };
-
-  const columnDefs: ColDef<AssessmentOverview>[] = [
+  const columnDefs = useMemo<ColDef<AssessmentOverview>[]>(() => [
     { field: 'number', headerName: 'ID', flex: 1 },
     { headerName: 'Title', field: 'title' },
     { headerName: 'Category', field: 'type' },
@@ -169,7 +165,7 @@ const GroundControl: React.FC = () => {
       sortable: false,
       cellStyle: { padding: 0 }
     }
-  ];
+  ], [dispatch]);
 
   const controls = (
     <div className="GridControls ground-control-controls">
@@ -211,7 +207,6 @@ const GroundControl: React.FC = () => {
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
         onGridReady={onGridReady}
-        onGridSizeChanged={resizeGrid}
         rowData={assessmentOverviews}
         rowHeight={35}
         suppressCellFocus={true}
