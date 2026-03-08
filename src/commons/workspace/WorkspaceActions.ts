@@ -12,12 +12,13 @@ import type { HighlightedLines, Position } from '../editor/EditorTypes';
 import { createActions } from '../redux/utils';
 import type { UploadResult } from '../sideContent/content/SideContentUpload';
 import type {
+  CodeVersion,
   EditorTabState,
+  SaveStatus,
   SubmissionsTableFilters,
   WorkspaceLocation,
   WorkspaceLocationsWithTools,
-  WorkspaceState
-} from './WorkspaceTypes';
+  WorkspaceState} from './WorkspaceTypes';
 
 const newActions = createActions('workspace', {
   setTokenCount: (workspaceLocation: WorkspaceLocation, tokenCount: number) => ({
@@ -285,7 +286,26 @@ const newActions = createActions('workspace', {
   decreaseRequestCounter: 0,
   setGradingHasLoadedBefore: () => true,
   updateAllColsSortStates: (sortStates: AllColsSortStates) => ({ sortStates }),
-  updateGradingColumnVisibility: (filters: GradingColumnVisibility) => ({ filters })
+  updateGradingColumnVisibility: (filters: GradingColumnVisibility) => ({ filters }),
+  fetchVersionHistory: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
+  receiveVersionHistory: (workspaceLocation: WorkspaceLocation, versions: CodeVersion[]) => ({
+    workspaceLocation,
+    versions
+  }),
+  restoreVersion: (workspaceLocation: WorkspaceLocation, versionId: string) => ({
+    workspaceLocation,
+    versionId
+  }),
+  nameVersion: (workspaceLocation: WorkspaceLocation, versionId: string, name: string) => ({
+    workspaceLocation,
+    versionId,
+    name
+  }),
+  toggleHistoryPanel: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
+  updateSaveStatus: (workspaceLocation: WorkspaceLocation, saveStatus: SaveStatus) => ({
+    workspaceLocation,
+    saveStatus
+  })
 });
 
 export default newActions;

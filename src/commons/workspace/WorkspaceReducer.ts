@@ -396,5 +396,43 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
     .addCase(setUpdateUserRoleCallback, (state, action) => {
       const workspaceLocation = getWorkspaceLocation(action);
       state[workspaceLocation].updateUserRoleCallback = action.payload.updateUserRoleCallback;
+    })
+    .addCase(WorkspaceActions.fetchVersionHistory, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].versionHistory.isLoading = true;
+    })
+    .addCase(WorkspaceActions.receiveVersionHistory, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].versionHistory.versions = action.payload.versions;
+      state[workspaceLocation].versionHistory.isLoading = false;
+    })
+    .addCase(WorkspaceActions.restoreVersion, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      const workspace = state[workspaceLocation];
+      const version = workspace.versionHistory.versions.find(
+        v => v.id === action.payload.versionId
+      );
+      if (!version) return;
+      if (workspace.activeEditorTabIndex !== null) {
+        workspace.editorTabs[workspace.activeEditorTabIndex].value = version.code;
+      }
+    })
+    .addCase(WorkspaceActions.toggleHistoryPanel, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].versionHistory.isHistoryPanelOpen =
+        !state[workspaceLocation].versionHistory.isHistoryPanelOpen;
+    })
+    .addCase(WorkspaceActions.nameVersion, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      const version = state[workspaceLocation].versionHistory.versions.find(
+        v => v.id === action.payload.versionId
+      );
+      if (version) {
+        version.name = action.payload.name;
+      }
+    })
+    .addCase(WorkspaceActions.updateSaveStatus, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].saveStatus = action.payload.saveStatus;
     });
 });

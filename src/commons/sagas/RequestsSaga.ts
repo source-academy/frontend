@@ -1850,3 +1850,82 @@ export const courseIdWithoutPrefix: () => string = () => {
     throw new Error(`No course selected`);
   }
 };
+
+/**
+ * POST /courses/:course_id/assessments/question/:question_id/version/save
+ * Save a new version
+ */
+export const saveCodeVersion = async (
+  questionId: number,
+  workspaceLocation: string,
+  code: string,
+  tokens: Tokens
+): Promise<Response | null> => {
+  const resp = await request(
+    `${courseId()}/assessments/question/${questionId}/version/save`,
+    'POST',
+    {
+      accessToken: tokens.accessToken,
+      body: {
+        workspaceLocation,
+        code
+      },
+      errorMessage: 'Could not save code version.',
+      refreshToken: tokens.refreshToken
+    }
+  );
+  return resp;
+};
+
+/**
+ * GET /courses/:courseId/assessments/question/:questionId/version/history
+ * Fetch version history for a workspace
+ */
+export const getVersionHistory = async (
+  questionId: number,
+  tokens: Tokens
+): Promise<any[] | null> => {
+  const resp = await request(
+    `${courseId()}/assessments/question/${questionId}/version/history`,
+    'GET',
+    {
+      accessToken: tokens.accessToken,
+      errorMessage: 'Could not fetch version history.',
+      refreshToken: tokens.refreshToken
+    }
+  );
+  if (!resp || !resp.ok) {
+    return null;
+  }
+  const versions = await resp.json();
+  return versions.map((v: any) => ({
+    ...v,
+    timestamp: new Date(v.timestamp + 'Z').getTime()
+  }));
+};
+
+/**
+ * PUT courses/:course_id/assessments/question/:questionid/version/name
+ * Update the name of a version
+ */
+export const updateVersionName = async (
+  questionId: number,
+  versionId: string,
+  name: string,
+  tokens: Tokens
+): Promise<Response | null> => {
+  const resp = await request(
+    `${courseId()}/assessments/question/${questionId}/version/name`,
+    'PUT',
+    {
+      accessToken: tokens.accessToken,
+      body: {
+        versionId,
+        name
+      },
+      errorMessage: 'Could not update version name.',
+      refreshToken: tokens.refreshToken
+    }
+  );
+  return resp;
+};
