@@ -1560,10 +1560,12 @@ export const removeAssessmentConfig = async (
  */
 export const postGenerateComments = async (
   tokens: Tokens,
-  answer_id: number
+  answer_id: number,
+  forceRefresh: boolean = false
 ): Promise<{ comments: string[] } | null> => {
   const resp = await request(`${courseId()}/admin/generate-comments/${answer_id}`, 'POST', {
-    ...tokens
+    ...tokens,
+    body: { force_refresh: forceRefresh }
   });
   if (!resp || !resp.ok) {
     return null;

@@ -118,11 +118,6 @@ const GradingEditor: React.FC<Props> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.submissionId, props.questionId]);
 
-  const getCommentSuggestions = async () => {
-    const resp = await postGenerateComments(tokens, props.answer_id);
-    return resp;
-  };
-
   const onToggleComment = (index: number) => {
     setSelectedIndices(prev =>
       prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
@@ -336,6 +331,31 @@ const GradingEditor: React.FC<Props> = props => {
     props.maxXp - props.initialXp
   }`;
 
+  const handleGenerate = async (force: boolean = false) => {
+    // If we are re-generating, ask for confirmation first
+    if (force) {
+      const confirm = await showSimpleConfirmDialog({
+        contents: (
+          <p>Are you sure? Doing so will result in the previous prompt results being lost.</p>
+        ),
+        positiveLabel: 'Re-generate',
+        positiveIntent: 'danger'
+      });
+      if (!confirm) return;
+    }
+
+    setHasClickedGenerate(true);
+    // Pass a flag to the backend to tell it to ignore the cache
+    const resp = await postGenerateComments(tokens, props.answer_id, force);
+    setHasClickedGenerate(false);
+
+    if (resp && resp.comments) {
+      setSuggestions(resp.comments);
+      setHasGenerated(true);
+      showSuccessMessage(force ? 'Comments re-generated!' : 'Comments generated!');
+    }
+  };
+
   return (
     <div className="GradingEditor">
       <Prompt
@@ -450,25 +470,11 @@ const GradingEditor: React.FC<Props> = props => {
               </Button>
 
               <Button
-                intent="primary"
-                //Disable if currently fetching OR if we already have comments
-                disabled={hasClickedGenerate || hasGenerated}
-                onClick={async () => {
-                  setHasClickedGenerate(true);
-                  const resp = await getCommentSuggestions();
-                  setHasClickedGenerate(false);
-
-                  if (resp && resp.comments) {
-                    setSuggestions(resp.comments);
-                    //Lock the button locally once successful
-                    setHasGenerated(true);
-                    showSuccessMessage('Comments generated and saved!');
-                  }
-                  setSelectedIndices([]);
-                  setCommentEdits({});
-                }}
+                intent={hasGenerated ? 'none' : 'primary'}
+                loading={hasClickedGenerate}
+                onClick={() => handleGenerate(hasGenerated)}
               >
-                {hasGenerated ? 'Comments Generated' : 'Generate Comments'}
+                {hasGenerated ? 'Re-generate Comments' : 'Generate Comments'}
               </Button>
 
               {selectedIndices.length > 0 && (
