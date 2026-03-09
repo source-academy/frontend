@@ -21,7 +21,7 @@ export class ArrayNullUnit extends Visible {
     // needs to be recalculated here unlike arrayunit, as primitive value treat it as a text
     this._x = this.reference.x();
     this._y = this.reference.y();
-    const strokeColor = 
+    const strokeColor =
       this.reference.parent.isReferenced() && this.reference.parent.isEnclosingFrameLive()
         ? defaultStrokeColor()
         : fadedStrokeColor();
