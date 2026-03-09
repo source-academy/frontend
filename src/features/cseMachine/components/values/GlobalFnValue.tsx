@@ -24,7 +24,7 @@ import {
   getTextWidth,
   setHoveredCursor,
   setUnhoveredCursor,
-  truncateText
+  truncateFunctionTooltip
 } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
@@ -83,7 +83,7 @@ export class GlobalFnValue extends Value implements IHoverable {
         .slice(0, 2)
         .join('\n') + ' ...';
     this.tooltip = `${this.paramsText}\n${this.bodyText}`;
-    this.exportTooltip = truncateText(
+    this.exportTooltip = truncateFunctionTooltip(
       this.tooltip,
       Config.FnDescriptionMaxWidth,
       Config.FnDescriptionMaxHeight
