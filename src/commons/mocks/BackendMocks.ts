@@ -137,7 +137,6 @@ export function* mockBackendSaga(): SagaIterator {
         questions: newQuestions
       };
       yield put(actions.updateAssessment(newAssessment));
-      yield call(showSuccessMessage, 'Saved!', 1000);
       return yield put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false));
     }
   );

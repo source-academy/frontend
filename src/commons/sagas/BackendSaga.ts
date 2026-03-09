@@ -280,8 +280,6 @@ const newBackendSagaOne = combineSagaHandlers({
       return yield handleResponseError(resp);
     }
 
-    yield call(showSuccessMessage, 'Saved!', 1000);
-
     // Now, update the answer for the question in the assessment in the store
     const assessmentId: number = yield select(
       (state: OverallState) => state.workspaces.assessment.currentAssessment!
