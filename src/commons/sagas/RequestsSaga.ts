@@ -1899,13 +1899,15 @@ export const getVersionHistory = async (
   }
   const versions = await resp.json();
   return versions.map((v: any) => ({
-    ...v,
-    timestamp: new Date(v.timestamp + 'Z').getTime()
+    id: String(v.id),
+    name: v.name,
+    code: v.version?.code,
+    timestamp: new Date(v.updated_at + 'Z').getTime()
   }));
 };
 
 /**
- * PUT courses/:course_id/assessments/question/:questionid/version/name
+ * PUT courses/:course_id/assessments/question/:questionid/version/:versionid/name
  * Update the name of a version
  */
 export const updateVersionName = async (
@@ -1915,12 +1917,11 @@ export const updateVersionName = async (
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(
-    `${courseId()}/assessments/question/${questionId}/version/name`,
+    `${courseId()}/assessments/question/${questionId}/version/${versionId}/name`,
     'PUT',
     {
       accessToken: tokens.accessToken,
       body: {
-        versionId,
         name
       },
       errorMessage: 'Could not update version name.',
