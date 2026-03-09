@@ -128,17 +128,21 @@ export function* restoreVersionSaga(
     return;
   }
 
-  // Find the restored version's code from state
-  const code: string | undefined = yield select((state: OverallState) => {
-    const version = state.workspaces[workspaceLocation].versionHistory.versions.find(
-      v => v.id === versionId
-    );
-    return version?.code;
-  });
+  // Find the restored version's code and name from state
+  const restoredVersion: { code: string; name: string | null | undefined; timestamp: number } | undefined =
+    yield select((state: OverallState) => {
+      const version = state.workspaces[workspaceLocation].versionHistory.versions.find(
+        v => v.id === versionId
+      );
+      if (!version) return undefined;
+      return { code: version.code, name: version.name, timestamp: version.timestamp };
+    });
 
-  if (code === undefined) {
+  if (restoredVersion === undefined) {
     return;
   }
+
+  const { code, name: restoredVersionName, timestamp: restoredVersionTimestamp } = restoredVersion;
 
   const questionId: number | undefined = yield call(getCurrentQuestionId, workspaceLocation);
   if (questionId === undefined) {
@@ -161,7 +165,7 @@ export function* restoreVersionSaga(
       type: WorkspaceActions.fetchVersionHistory.type
     });
 
-    // Name the newest version (first in the sorted list) as "timestamp-restored"
+    // Name the restored as "(name)-restored"
     const newestVersion: { id: string; timestamp: number } | undefined = yield select(
       (state: OverallState) => {
         const versions = state.workspaces[workspaceLocation].versionHistory.versions;
@@ -171,15 +175,9 @@ export function* restoreVersionSaga(
     );
 
     if (newestVersion) {
-      const date = new Date(newestVersion.timestamp);
-      const formattedTimestamp = date.toLocaleString(undefined, {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      });
-      const restoredName = `${formattedTimestamp}-restored`;
+      const restoredLabel =
+        restoredVersionName || new Date(restoredVersionTimestamp).toLocaleString();
+      const restoredName = `${restoredLabel}-restored`;
 
       // Optimistically update the name in state
       yield put(WorkspaceActions.nameVersion(workspaceLocation, newestVersion.id, restoredName));
