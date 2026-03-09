@@ -82,7 +82,7 @@ export default class CseMachine {
       ? CseMachine.printLayoutCache
       : CseMachine.normalLayoutCache;
   }
-public static setMasterLayout(cache: LayoutCache): void {
+  public static setMasterLayout(cache: LayoutCache): void {
     if (CseMachine.getPrintableMode()) {
       CseMachine.printLayoutCache = cache;
     } else {
@@ -134,19 +134,19 @@ public static setMasterLayout(cache: LayoutCache): void {
     );
 
     // Build ghost layout cache lazily per mode.
-   if (!CseMachine.normalLayoutCache || !CseMachine.printLayoutCache) {
-         // fill up both lookup table of normal mode and printable mode
-        const originalMode = CseMachine.getPrintableMode();
+    if (!CseMachine.normalLayoutCache || !CseMachine.printLayoutCache) {
+      // fill up both lookup table of normal mode and printable mode
+      const originalMode = CseMachine.getPrintableMode();
 
-        CseMachine.printableMode = true;
-         CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
+      CseMachine.printableMode = true;
+      CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
 
-        CseMachine.printableMode = false;
-         CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
+      CseMachine.printableMode = false;
+      CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
 
-        // 3. Restore the user's actual mode setting
-        CseMachine.printableMode = originalMode;
-       } 
+      // 3. Restore the user's actual mode setting
+      CseMachine.printableMode = originalMode;
+    }
 
     // Apply Fixed Positions
     if (CseMachine.getMasterLayout()) {
@@ -163,16 +163,16 @@ public static setMasterLayout(cache: LayoutCache): void {
 
       // if center alignment is toggled, change the alignment and redraw the diagram with new coordinates
       if (this.centerAlignmentToggled) {
-             Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
-             if (!CseMachine.getMasterLayout()) {
-               CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
-             }
-             if (CseMachine.getMasterLayout()) {
-               Layout.applyFixedPositions();
-             }
-             this.setVis(Layout.draw());
-             this.centerAlignmentToggled = false;
-           }
+        Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
+        if (!CseMachine.getMasterLayout()) {
+          CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
+        }
+        if (CseMachine.getMasterLayout()) {
+          Layout.applyFixedPositions();
+        }
+        this.setVis(Layout.draw());
+        this.centerAlignmentToggled = false;
+      }
 
       if (
         CseMachine.getPrintableMode() &&
