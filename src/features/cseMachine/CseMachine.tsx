@@ -82,12 +82,22 @@ export default class CseMachine {
       ? CseMachine.printLayoutCache
       : CseMachine.normalLayoutCache;
   }
-  public static setMasterLayout(cache: LayoutCache): void {
+public static setMasterLayout(cache: LayoutCache): void {
+    console.log("==== SETTING MASTER LAYOUT ====");
+    console.log("Current Mode:", CseMachine.getPrintableMode() ? "PRINTABLE" : "NORMAL");
+    console.log("[BEFORE] normalLayoutCache:", CseMachine.normalLayoutCache);
+    console.log("[BEFORE] printLayoutCache:", CseMachine.printLayoutCache);
+    console.log("[PAYLOAD] Cache to be saved:", cache);
+
     if (CseMachine.getPrintableMode()) {
       CseMachine.printLayoutCache = cache;
     } else {
       CseMachine.normalLayoutCache = cache;
     }
+
+    console.log("[AFTER] normalLayoutCache:", CseMachine.normalLayoutCache);
+    console.log("[AFTER] printLayoutCache:", CseMachine.printLayoutCache);
+    console.log("===============================");
   }
 
   public static isControl(): boolean {
@@ -117,6 +127,7 @@ export default class CseMachine {
   /** updates the visualization state in the SideContentCseMachine component based on
    * the JS Slang context passed in */
   static drawCse(context: Context) {
+    console.log("Draw");
     // store environmentTree at last breakpoint.
     CseMachine.environmentTree = deepCopyTree(context.runtime.environmentTree as EnvTree);
     CseMachine.currentEnvId = getEnvId(context.runtime.environments[0]);
@@ -132,10 +143,21 @@ export default class CseMachine {
       context.runtime.stash,
       context.chapter
     );
+
     // Build ghost layout cache lazily per mode.
-    if (!CseMachine.getMasterLayout()) {
-      CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
-    }
+   if (!CseMachine.normalLayoutCache || !CseMachine.printLayoutCache) {
+         // fill up both lookup table of normal mode and printable mode
+        const originalMode = CseMachine.getPrintableMode();
+
+        CseMachine.printableMode = true;
+         CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
+
+        CseMachine.printableMode = false;
+         CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
+
+        // 3. Restore the user's actual mode setting
+        CseMachine.printableMode = originalMode;
+       } 
 
     // Apply Fixed Positions
     if (CseMachine.getMasterLayout()) {
@@ -147,21 +169,22 @@ export default class CseMachine {
   }
 
   static redraw() {
+    console.log("Redraw");
     if (CseMachine.environmentTree && CseMachine.control && CseMachine.stash) {
       // checks if the required diagram exists, and updates the dom node using setVis
 
       // if center alignment is toggled, change the alignment and redraw the diagram with new coordinates
       if (this.centerAlignmentToggled) {
-        Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
-        if (!CseMachine.getMasterLayout()) {
-          CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
-        }
-        if (CseMachine.getMasterLayout()) {
-          Layout.applyFixedPositions();
-        }
-        this.setVis(Layout.draw());
-        this.centerAlignmentToggled = false;
-      }
+             Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
+             if (!CseMachine.getMasterLayout()) {
+               CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
+             }
+             if (CseMachine.getMasterLayout()) {
+               Layout.applyFixedPositions();
+             }
+             this.setVis(Layout.draw());
+             this.centerAlignmentToggled = false;
+           }
 
       if (
         CseMachine.getPrintableMode() &&
@@ -205,9 +228,9 @@ export default class CseMachine {
         this.setVis(Layout.currentDark);
       } else {
         Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
-        if (!CseMachine.getMasterLayout()) {
-          CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
-        }
+        // if (!CseMachine.getMasterLayout()) {
+        //   CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
+        // }
         if (CseMachine.getMasterLayout()) {
           Layout.applyFixedPositions();
         }
@@ -224,6 +247,7 @@ export default class CseMachine {
   }
 
   static clearCse() {
+    console.log("clear");
     if (this.setVis) {
       this.setVis(undefined);
       CseMachine.environmentTree = undefined;
@@ -231,7 +255,7 @@ export default class CseMachine {
       CseMachine.stash = undefined;
     }
     CseMachine.setClearDeadFrames(false);
-    CseMachine.clearCachedLayouts();
+    //CseMachine.clearCachedLayouts();
     this.clear();
   }
 }
