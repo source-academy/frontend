@@ -606,3 +606,75 @@ test('toggleUsingSubst generates correct action object', () => {
 });
 
 // TODO: Add toggleusingcse
+
+// Version History Actions Tests
+
+test('fetchVersionHistory generates correct action object', () => {
+  const action = WorkspaceActions.fetchVersionHistory(gradingWorkspace);
+  expect(action).toEqual({
+    type: WorkspaceActions.fetchVersionHistory.type,
+    payload: {
+      workspaceLocation: gradingWorkspace
+    }
+  });
+});
+
+test('receiveVersionHistory generates correct action object', () => {
+  const versions = [
+    {
+      id: 'v1',
+      code: 'const x = 1;',
+      timestamp: 1234567890,
+      name: 'Version 1'
+    },
+    {
+      id: 'v2',
+      code: 'const x = 2;',
+      timestamp: 1234567900
+    }
+  ];
+  const action = WorkspaceActions.receiveVersionHistory(playgroundWorkspace, versions);
+  expect(action).toEqual({
+    type: WorkspaceActions.receiveVersionHistory.type,
+    payload: {
+      workspaceLocation: playgroundWorkspace,
+      versions
+    }
+  });
+});
+
+test('restoreVersion generates correct action object', () => {
+  const versionId = 'v123';
+  const action = WorkspaceActions.restoreVersion(assessmentWorkspace, versionId);
+  expect(action).toEqual({
+    type: WorkspaceActions.restoreVersion.type,
+    payload: {
+      workspaceLocation: assessmentWorkspace,
+      versionId
+    }
+  });
+});
+
+test('nameVersion generates correct action object', () => {
+  const versionId = 'v123';
+  const name = 'Final Version';
+  const action = WorkspaceActions.nameVersion(gradingWorkspace, versionId, name);
+  expect(action).toEqual({
+    type: WorkspaceActions.nameVersion.type,
+    payload: {
+      workspaceLocation: gradingWorkspace,
+      versionId,
+      name
+    }
+  });
+});
+
+test('toggleHistoryPanel generates correct action object', () => {
+  const action = WorkspaceActions.toggleHistoryPanel(playgroundWorkspace);
+  expect(action).toEqual({
+    type: WorkspaceActions.toggleHistoryPanel.type,
+    payload: {
+      workspaceLocation: playgroundWorkspace
+    }
+  });
+});
