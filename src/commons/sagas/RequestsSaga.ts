@@ -1852,32 +1852,6 @@ export const courseIdWithoutPrefix: () => string = () => {
 };
 
 /**
- * POST /courses/:course_id/assessments/question/:question_id/version/save
- * Save a new version
- */
-export const saveCodeVersion = async (
-  questionId: number,
-  workspaceLocation: string,
-  code: string,
-  tokens: Tokens
-): Promise<Response | null> => {
-  const resp = await request(
-    `${courseId()}/assessments/question/${questionId}/version/save`,
-    'POST',
-    {
-      accessToken: tokens.accessToken,
-      body: {
-        workspaceLocation,
-        code
-      },
-      errorMessage: 'Could not save code version.',
-      refreshToken: tokens.refreshToken
-    }
-  );
-  return resp;
-};
-
-/**
  * GET /courses/:courseId/assessments/question/:questionId/version/history
  * Fetch version history for a workspace
  */

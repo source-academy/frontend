@@ -6,7 +6,7 @@ import type { Tokens } from '../../../application/types/SessionTypes';
 import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../../../workspace/WorkspaceActions';
 import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
-import { getVersionHistory, saveCodeVersion, updateVersionName } from '../../RequestsSaga';
+import { getVersionHistory, postAnswer, updateVersionName } from '../../RequestsSaga';
 
 /**
  * Helper to get the current question ID for assessment or grading workspace.
@@ -152,15 +152,7 @@ export function* restoreVersionSaga(
   }));
 
   // Submit the restored code as the answer
-  yield put(SessionActions.submitAnswer(questionId, code));
-
-  const resp: Response | null = yield call(
-    saveCodeVersion,
-    questionId,
-    workspaceLocation,
-    code,
-    tokens
-  );
+  const resp: Response | null = yield call(postAnswer, questionId, code, tokens);
 
   if (resp && resp.ok) {
     // Fetch updated version history to get the new version's ID
@@ -198,13 +190,12 @@ export function* restoreVersionSaga(
 }
 
 /**
- * Performs auto-save by calling APIs directly to coordinate save status.
- * For assessment workspaces, saves both version history and submits the answer.
- * Sets the save status indicator based on the combined result.
+ * Performs auto-save by submitting the answer to the backend.
+ * The backend handles saving as a version on submission.
  */
 function* performAutoSave(workspaceLocation: WorkspaceLocation): any {
-  // Grading workspaces only allow viewing and restoring version history, not saving
-  if (workspaceLocation === 'grading') {
+  // Only assessment workspaces auto-save
+  if (workspaceLocation !== 'assessment') {
     return;
   }
 
@@ -225,48 +216,19 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): any {
     return;
   }
 
-  // Get authentication tokens
-  const tokens: Tokens = yield select((state: OverallState) => ({
-    accessToken: state.session.accessToken,
-    refreshToken: state.session.refreshToken
-  }));
-
-  // Save version history (skip if code is unchanged from the latest version)
+  // Skip if code is unchanged from the latest saved version
   const latestVersion: string | undefined = yield select((state: OverallState) => {
     const versions = state.workspaces[workspaceLocation].versionHistory.versions;
     return versions.length > 0 ? versions[0].code : undefined;
   });
 
-  if (code == latestVersion) {
+  if (code === latestVersion) {
     return;
   }
 
-  const versionResp: Response | null = yield call(
-    saveCodeVersion,
-    questionId,
-    workspaceLocation,
-    code,
-    tokens
-  );
-
-  const versionSaved = versionResp && versionResp.ok;
-
-  if (versionSaved) {
-    // Fetch updated version history
-    yield call(fetchVersionHistorySaga, {
-      payload: { workspaceLocation },
-      type: WorkspaceActions.fetchVersionHistory.type
-    });
-  }
-
-  // For assessment workspaces, also submit the answer to the backend
-  if (workspaceLocation === 'assessment') {
-    yield put(SessionActions.submitAnswer(questionId, code));
-  }
-
-  yield put(
-    WorkspaceActions.updateSaveStatus(workspaceLocation, versionSaved ? 'saved' : 'saveFailed')
-  );
+  // Submit the answer; the backend handles saving as a version
+  yield put(SessionActions.submitAnswer(questionId, code));
+  yield put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'));
 }
 
 /**
