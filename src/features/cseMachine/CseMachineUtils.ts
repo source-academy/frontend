@@ -1132,8 +1132,15 @@ export const isStashItemInDanger = (stashIndex: number): boolean => {
   return false;
 };
 
+const isHulkModeEnabled = () =>
+  typeof document !== 'undefined' && document.querySelector('.Playground.GreenScreen') !== null;
+
 export const defaultBackgroundColor = () =>
-  CseMachine.getPrintableMode() ? Config.PrintBgColor : Config.BgColor;
+  isHulkModeEnabled()
+    ? '#00ff00'
+    : CseMachine.getPrintableMode()
+      ? Config.PrintBgColor
+      : Config.BgColor;
 
 export const defaultTextColor = () =>
   CseMachine.getPrintableMode() ? Config.PrintTextColor : Config.TextColor;

@@ -297,6 +297,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
   );
   useHotkeys(playgroundHotkeyBindings);
 
+  useEffect(() => {
+    CseMachine.clearCachedLayouts();
+    window.requestAnimationFrame(() => CseMachine.redraw());
+  }, [isGreen]);
+
   const remoteExecutionTab: SideContentTab = useMemo(
     () => makeRemoteExecutionTabFrom(deviceSecret, setDeviceSecret),
     [deviceSecret]
