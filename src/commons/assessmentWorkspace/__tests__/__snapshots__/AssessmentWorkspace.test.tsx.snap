@@ -235,6 +235,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with ContestVoting quest
                       aria-haspopup="false"
                       aria-label="Cursor at row 1"
                       autocapitalize="off"
+                      autocomplete="off"
                       autocorrect="off"
                       class="ace_text-input"
                       role="textbox"
@@ -320,10 +321,11 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with ContestVoting quest
                       </div>
                     </div>
                     <div
-                      class="ace_tooltip"
+                      class="ace_tooltip ace_gutter-tooltip"
                       id="gt6"
                       role="tooltip"
-                      style="display: none; pointer-events: auto;"
+                      style="display: none; white-space: pre-wrap; pointer-events: auto;"
+                      tabindex="-1"
                     />
                   </div>
                   <div
@@ -777,6 +779,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with ContestVoting quest
                       aria-haspopup="false"
                       aria-label="Cursor at row 1"
                       autocapitalize="off"
+                      autocomplete="off"
                       autocorrect="off"
                       class="ace_text-input"
                       role="textbox"
@@ -863,10 +866,11 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with ContestVoting quest
                       </div>
                     </div>
                     <div
-                      class="ace_tooltip"
+                      class="ace_tooltip ace_gutter-tooltip"
                       id="gt7"
                       role="tooltip"
-                      style="display: none; pointer-events: auto;"
+                      style="display: none; white-space: pre-wrap; pointer-events: auto;"
+                      tabindex="-1"
                     />
                   </div>
                   <div
@@ -1562,6 +1566,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with MCQ question render
                       aria-haspopup="false"
                       aria-label="Cursor at row 1"
                       autocapitalize="off"
+                      autocomplete="off"
                       autocorrect="off"
                       class="ace_text-input"
                       role="textbox"
@@ -1648,10 +1653,11 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with MCQ question render
                       </div>
                     </div>
                     <div
-                      class="ace_tooltip"
+                      class="ace_tooltip ace_gutter-tooltip"
                       id="gt5"
                       role="tooltip"
-                      style="display: none; pointer-events: auto;"
+                      style="display: none; white-space: pre-wrap; pointer-events: auto;"
+                      tabindex="-1"
                     />
                   </div>
                   <div
@@ -1907,6 +1913,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
                       aria-haspopup="false"
                       aria-label="Cursor at row 1"
                       autocapitalize="off"
+                      autocomplete="off"
                       autocorrect="off"
                       class="ace_text-input"
                       role="textbox"
@@ -1992,10 +1999,11 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
                       </div>
                     </div>
                     <div
-                      class="ace_tooltip"
+                      class="ace_tooltip ace_gutter-tooltip"
                       id="gt3"
                       role="tooltip"
-                      style="display: none; pointer-events: auto;"
+                      style="display: none; white-space: pre-wrap; pointer-events: auto;"
+                      tabindex="-1"
                     />
                   </div>
                   <div
@@ -2392,6 +2400,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
                       aria-haspopup="false"
                       aria-label="Cursor at row 1"
                       autocapitalize="off"
+                      autocomplete="off"
                       autocorrect="off"
                       class="ace_text-input"
                       role="textbox"
@@ -2478,10 +2487,11 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with overdue assessment 
                       </div>
                     </div>
                     <div
-                      class="ace_tooltip"
+                      class="ace_tooltip ace_gutter-tooltip"
                       id="gt4"
                       role="tooltip"
-                      style="display: none; pointer-events: auto;"
+                      style="display: none; white-space: pre-wrap; pointer-events: auto;"
+                      tabindex="-1"
                     />
                   </div>
                   <div
@@ -2767,6 +2777,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
                       aria-haspopup="false"
                       aria-label="Cursor at row 1"
                       autocapitalize="off"
+                      autocomplete="off"
                       autocorrect="off"
                       class="ace_text-input"
                       role="textbox"
@@ -2852,10 +2863,11 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
                       </div>
                     </div>
                     <div
-                      class="ace_tooltip"
+                      class="ace_tooltip ace_gutter-tooltip"
                       id="gt1"
                       role="tooltip"
-                      style="display: none; pointer-events: auto;"
+                      style="display: none; white-space: pre-wrap; pointer-events: auto;"
+                      tabindex="-1"
                     />
                   </div>
                   <div
@@ -3252,6 +3264,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
                       aria-haspopup="false"
                       aria-label="Cursor at row 1"
                       autocapitalize="off"
+                      autocomplete="off"
                       autocorrect="off"
                       class="ace_text-input"
                       role="textbox"
@@ -3338,10 +3351,11 @@ exports[`AssessmentWorkspace > AssessmentWorkspace page with programming questio
                       </div>
                     </div>
                     <div
-                      class="ace_tooltip"
+                      class="ace_tooltip ace_gutter-tooltip"
                       id="gt2"
                       role="tooltip"
-                      style="display: none; pointer-events: auto;"
+                      style="display: none; white-space: pre-wrap; pointer-events: auto;"
+                      tabindex="-1"
                     />
                   </div>
                   <div
@@ -3627,6 +3641,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                       aria-haspopup="false"
                       aria-label="Cursor at row 1"
                       autocapitalize="off"
+                      autocomplete="off"
                       autocorrect="off"
                       class="ace_text-input"
                       role="textbox"
@@ -3712,10 +3727,11 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                       </div>
                     </div>
                     <div
-                      class="ace_tooltip"
+                      class="ace_tooltip ace_gutter-tooltip"
                       id="gt8"
                       role="tooltip"
-                      style="display: none; pointer-events: auto;"
+                      style="display: none; white-space: pre-wrap; pointer-events: auto;"
+                      tabindex="-1"
                     />
                   </div>
                   <div
@@ -4329,6 +4345,7 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                       aria-haspopup="false"
                       aria-label="Cursor at row 1"
                       autocapitalize="off"
+                      autocomplete="off"
                       autocorrect="off"
                       class="ace_text-input"
                       role="textbox"
@@ -4415,10 +4432,11 @@ exports[`AssessmentWorkspace > AssessmentWorkspace renders Grading tab correctly
                       </div>
                     </div>
                     <div
-                      class="ace_tooltip"
+                      class="ace_tooltip ace_gutter-tooltip"
                       id="gt9"
                       role="tooltip"
-                      style="display: none; pointer-events: auto;"
+                      style="display: none; white-space: pre-wrap; pointer-events: auto;"
+                      tabindex="-1"
                     />
                   </div>
                   <div
