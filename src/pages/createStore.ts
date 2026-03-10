@@ -4,7 +4,7 @@ import { throttle } from 'lodash';
 import createSagaMiddleware from 'redux-saga';
 import { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
-import { defaultState, OverallState } from '../commons/application/ApplicationTypes';
+import { ALL_LANGUAGES, defaultState, OverallState } from '../commons/application/ApplicationTypes';
 import rootReducer from '../commons/application/reducers/RootReducer';
 import MainSaga from '../commons/sagas/MainSaga';
 import { generateOctokitInstance } from '../commons/utils/GitHubPersistenceHelper';
@@ -82,15 +82,24 @@ function loadStore(loadedStore: SavedState | undefined) {
         externalLibrary: loadedStore.playgroundExternalLibrary
           ? loadedStore.playgroundExternalLibrary
           : defaultState.workspaces.playground.externalLibrary,
-        context: {
-          ...defaultState.workspaces.playground.context,
-          chapter: loadedStore.playgroundSourceChapter
+        context: (() => {
+          const chapter = loadedStore.playgroundSourceChapter
             ? loadedStore.playgroundSourceChapter
-            : defaultState.workspaces.playground.context.chapter,
-          variant: loadedStore.playgroundSourceVariant
+            : defaultState.workspaces.playground.context.chapter;
+          const variant = loadedStore.playgroundSourceVariant
             ? loadedStore.playgroundSourceVariant
-            : defaultState.workspaces.playground.context.variant
-        }
+            : defaultState.workspaces.playground.context.variant;
+          const validCombination = ALL_LANGUAGES.some(
+            lang => lang.chapter === chapter && lang.variant === variant
+          );
+          return {
+            ...defaultState.workspaces.playground.context,
+            chapter: validCombination
+              ? chapter
+              : defaultState.workspaces.playground.context.chapter,
+            variant: validCombination ? variant : defaultState.workspaces.playground.context.variant
+          };
+        })()
       }
     },
     stories: {
