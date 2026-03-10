@@ -54,7 +54,8 @@ import {
 } from './CseMachineUtils';
 import { Continuation, isContinuation } from './utils/continuation';
 export type LayoutCache = {
-  frames: Map<string, number>;
+  framesX: Map<string, number>;
+  framesY: Map<string, number>;
   levelWidth: Map<string, number>;
   largestWidth: number;
 };
@@ -654,7 +655,8 @@ export class Layout {
    */
   static getLayoutPositions(controlStash: boolean): LayoutCache {
     const cache: LayoutCache = {
-      frames: new Map(),
+      framesX: new Map(),
+      framesY: new Map(), // added template
       levelWidth: new Map(),
       largestWidth: 0
     };
@@ -668,7 +670,8 @@ export class Layout {
       const currWidth = level.width();
       cache.largestWidth = Math.max(cache.largestWidth, currWidth);
       frames.forEach(frame => {
-        cache.frames.set(frame.environment.id, frame.x() - offset);
+        cache.framesX.set(frame.environment.id, frame.x() - offset);
+        cache.framesY.set(frame.environment.id, frame.y()); // added template
         cache.levelWidth.set(frame.environment.id, currWidth);
       });
     });
@@ -685,8 +688,8 @@ export class Layout {
       return undefined;
     }
     const cache = CseMachine.getMasterLayout();
-    if (cache && cache.frames.has(envId)) {
-      const fixedX = cache.frames.get(envId)!;
+    if (cache && cache.framesX.has(envId)) {
+      const fixedX = cache.framesX.get(envId)!;
       // add offset for control stash and center alignment
       let offset: number = 0;
       offset += CseMachine.getControlStash()
@@ -696,6 +699,23 @@ export class Layout {
         ? Math.floor((cache.largestWidth - cache.levelWidth.get(envId)!) / 2)
         : 0;
       return fixedX + offset;
+    }
+    return undefined;
+  }
+
+    /**
+   * Get the cached y coordinate corresponding to the given environment id, and add offset.
+   * @param envId id of current component in the environment
+   * @returns coordinate of cached position, or undefined if it doesn't exist
+   */
+  static getGhostFrameY(envId: string): number | undefined { // added template
+    if (Layout.clearDeadFrames) {
+      return undefined;
+    }
+    const cache = CseMachine.getMasterLayout();
+    if (cache && cache.framesY.has(envId)) {
+      const fixedY = cache.framesY.get(envId)!;
+      return fixedY;
     }
     return undefined;
   }
@@ -711,12 +731,20 @@ export class Layout {
     Layout.levels.forEach(level => {
       level.frames.forEach(frame => {
         const id = frame.environment.id;
-        if (cache.frames.has(id)) {
+
+        // get predetermined x coordinate
+        if (cache.framesX.has(id)) {
           const fixedX = Layout.getGhostFrameX(id)!;
-          frame.reassignCoordinates(fixedX);
+          frame.reassignCoordinatesX(fixedX);
           frame.bindings.forEach(binding => {
             binding.reassignCoordinates(fixedX);
           });
+        }
+
+        // get predetermined y coordinate
+        if (cache.framesY.has(id)) {
+          const fixedY = Layout.getGhostFrameY(id)!;
+          frame.reassignCoordinatesY(fixedY);
         }
       });
     });

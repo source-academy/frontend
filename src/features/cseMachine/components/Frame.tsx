@@ -241,7 +241,7 @@ export class Frame extends Visible implements IHoverable {
    * Reassigns the coordinates according to the final position of this frame
    * @param newX taken from cached layout
    */
-  reassignCoordinates(newX: number): void {
+  reassignCoordinatesX(newX: number): void {
     this._x = newX;
 
     let textOffset = 0;
@@ -254,6 +254,14 @@ export class Frame extends Visible implements IHoverable {
       this.level!.y(), // this method is only called after the frame is drawn
       { maxWidth: this.width(), faded: !this.isLive }
     );
+  }
+
+  /**
+   * Reassigns the coordinates according to the final position of this frame
+   * @param newY taken from cached layout
+   */
+  reassignCoordinatesY(newY: number): void {
+    this._y = newY;
   }
 
   onMouseEnter = () => {};
