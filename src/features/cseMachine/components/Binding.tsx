@@ -1,5 +1,6 @@
 import React from 'react';
 
+import CseMachine from '../CseMachine';
 import { Config } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Data } from '../CseMachineTypes';
@@ -9,7 +10,6 @@ import { GenericArrow } from './arrows/GenericArrow';
 import { Frame } from './Frame';
 import { Text } from './Text';
 import { ArrayValue } from './values/ArrayValue';
-import { ContValue } from './values/ContValue';
 import { FnValue } from './values/FnValue';
 import { GlobalFnValue } from './values/GlobalFnValue';
 import { PrimitiveValue } from './values/PrimitiveValue';
@@ -68,20 +68,24 @@ export class Binding extends Visible {
     this.keyYOffset = keyYOffset;
     this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, { faded: !this.isLive });
 
+    const printFnDescriptionHeight =
+      CseMachine.getPrintableMode() &&
+      isMainReference(this.value, this) &&
+      (this.value instanceof FnValue || this.value instanceof GlobalFnValue)
+        ? this.value.printDescriptionHeight +
+          this.value.printDescriptionOffsetY +
+          this.value.printDescriptionBottomGap +
+          Config.TextPaddingY / 2
+        : 0;
+
     // derive the width from the right bound of the value
-    this._width = isMainReference(this.value, this)
-      ? this.value.x() -
-        this.x() +
-        (this.value instanceof FnValue ||
-        this.value instanceof GlobalFnValue ||
-        this.value instanceof ContValue
-          ? this.value.tooltipWidth
-          : 0)
-      : this.key.width();
+    this._width = isMainReference(this.value, this) ? this.value.x() - this.x() : this.key.width();
 
     this._height = Math.max(
       this.key.height(),
-      this.value instanceof ArrayValue ? this.value.totalHeight : this.value.height()
+      this.value instanceof ArrayValue
+        ? this.value.totalHeight
+        : this.value.height() + printFnDescriptionHeight
     );
 
     if (this.isDummyBinding && !isMainReference(this.value, this)) {
