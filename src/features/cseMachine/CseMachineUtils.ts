@@ -1140,32 +1140,24 @@ export const defaultBackgroundColor = () =>
       : Config.BgColor;
 
 export const defaultTextColor = () =>
-  isHulkModeEnabled()
-    ? Config.TextColorFaded // When the Hulk mode is on, due to the contrast, the faded text color is used as the default text color to improve readability
-    : CseMachine.getPrintableMode()
-      ? Config.PrintTextColor
-      : Config.TextColor;
+  CseMachine.getPrintableMode()
+    ? Config.PrintTextColor
+    : Config.TextColor;
 
 export const fadedTextColor = () =>
-  isHulkModeEnabled()
-    ? '#2cdf2c' // When the Hulk mode is on, due to the contrast, the normal text color is used instead of faded text color to improve readability
-    : CseMachine.getPrintableMode()
-      ? Config.PrintTextColorFaded
-      : Config.TextColorFaded;
+  CseMachine.getPrintableMode()
+    ? Config.PrintTextColorFaded
+    : Config.TextColorFaded;
 
 export const defaultStrokeColor = () =>
-  isHulkModeEnabled()
-    ? Config.StrokeColorFaded // When the Hulk mode is on, due to the contrast, the faded stroke color is used as the default stroke color to improve readability
-    : CseMachine.getPrintableMode()
-      ? Config.PrintStrokeColor
-      : Config.StrokeColor;
+  CseMachine.getPrintableMode()
+    ? Config.PrintStrokeColor
+    : Config.StrokeColor;
 
 export const fadedStrokeColor = () =>
-  isHulkModeEnabled()
-    ? '#2cdf2c' // When the Hulk mode is on, due to the contrast, the normal stroke color is used instead of faded stroke color to improve readability
-    : CseMachine.getPrintableMode()
-      ? Config.PrintStrokeColorFaded
-      : Config.StrokeColorFaded;
+  CseMachine.getPrintableMode()
+    ? Config.PrintStrokeColorFaded
+    : Config.StrokeColorFaded;
 
 export const defaultActiveColor = () =>
   CseMachine.getPrintableMode() ? Config.PrintActiveColor : Config.ActiveColor;
