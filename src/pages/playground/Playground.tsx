@@ -467,7 +467,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     return {
       handleEditorEval: () => {
         if (updateCse) {
-          CseMachine.masterLayout = null;
+          CseMachine.clearCachedLayouts();
         }
         dispatch(WorkspaceActions.evalEditor(workspaceLocation));
       },
