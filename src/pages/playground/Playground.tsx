@@ -221,6 +221,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sharedbConnected,
     usingSubst,
     usingCse,
+    updateCse,
     isFolderModeEnabled,
     activeEditorTabIndex,
     context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant }
@@ -469,7 +470,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const autorunButtonHandlers = useMemo(() => {
     return {
-      handleEditorEval: () => dispatch(WorkspaceActions.evalEditor(workspaceLocation)),
+      handleEditorEval: () => {
+        if (updateCse) {
+          CseMachine.masterLayout = null;
+        }
+        dispatch(WorkspaceActions.evalEditor(workspaceLocation));
+      },
       handleInterruptEval: () =>
         dispatch(InterpreterActions.beginInterruptExecution(workspaceLocation)),
       handleToggleEditorAutorun: () =>
@@ -478,7 +484,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       handleDebuggerReset: () => dispatch(InterpreterActions.debuggerReset(workspaceLocation)),
       handleDebuggerResume: () => dispatch(InterpreterActions.debuggerResume(workspaceLocation))
     };
-  }, [dispatch, workspaceLocation]);
+  }, [dispatch, workspaceLocation, updateCse]);
 
   const languageConfig: SALanguage = useTypedSelector(state => state.playground.languageConfig);
 
