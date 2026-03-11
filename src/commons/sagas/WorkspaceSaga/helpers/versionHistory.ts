@@ -129,14 +129,15 @@ export function* restoreVersionSaga(
   }
 
   // Find the restored version's code and name from state
-  const restoredVersion: { code: string; name: string | null | undefined; timestamp: number } | undefined =
-    yield select((state: OverallState) => {
-      const version = state.workspaces[workspaceLocation].versionHistory.versions.find(
-        v => v.id === versionId
-      );
-      if (!version) return undefined;
-      return { code: version.code, name: version.name, timestamp: version.timestamp };
-    });
+  const restoredVersion:
+    | { code: string; name: string | null | undefined; timestamp: number }
+    | undefined = yield select((state: OverallState) => {
+    const version = state.workspaces[workspaceLocation].versionHistory.versions.find(
+      v => v.id === versionId
+    );
+    if (!version) return undefined;
+    return { code: version.code, name: version.name, timestamp: version.timestamp };
+  });
 
   if (restoredVersion === undefined) {
     return;
@@ -194,6 +195,18 @@ export function* restoreVersionSaga(
 function* performAutoSave(workspaceLocation: WorkspaceLocation): any {
   // Only assessment workspaces auto-save
   if (workspaceLocation !== 'assessment') {
+    return;
+  }
+
+  // Skip auto-save for team assessments
+  const isTeamAssessment: boolean = yield select((state: OverallState) => {
+    const assessmentId = state.workspaces.assessment.currentAssessment;
+    if (assessmentId === undefined) return false;
+    const overview = state.session.assessmentOverviews?.find(o => o.id === assessmentId);
+    return overview ? overview.maxTeamSize !== 1 : false;
+  });
+
+  if (isTeamAssessment) {
     return;
   }
 
