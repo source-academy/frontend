@@ -289,30 +289,48 @@
   }
 }
 
-.version-history-dialog {
-  width: 500px;
+.version-history-drawer {
+  .version-history-body {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    overflow: hidden;
+  }
 
   .version-history-list {
-    max-height: 50vh;
+    width: 280px;
+    flex-shrink: 0;
     overflow-y: auto;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 4px 0;
   }
 
   .version-history-item {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-direction: column;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    transition: background-color 0.1s ease;
 
     &:last-child {
       border-bottom: none;
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.06);
+    }
+
+    &.version-history-item--selected {
+      background-color: rgba(255, 255, 255, 0.12);
+      border-left: 3px solid #137cbd;
+      padding-left: 9px;
     }
   }
 
   .version-history-item-info {
     display: flex;
     flex-direction: column;
-    flex: 1;
     min-width: 0;
   }
 
@@ -324,6 +342,49 @@
   .version-history-item-timestamp {
     font-size: 12px;
     opacity: 0.6;
+  }
+
+  .version-history-preview {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .version-history-preview-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .version-history-preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+  }
+
+  .version-history-preview-title {
+    font-weight: 600;
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 220px;
+  }
+
+  .version-history-preview-code {
+    flex: 1;
+    overflow: auto;
+    margin: 0;
+    padding: 12px;
+    font-family: 'Consolas', monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    white-space: pre;
+    word-break: normal;
   }
 }
 
