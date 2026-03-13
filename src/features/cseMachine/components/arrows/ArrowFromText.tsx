@@ -5,8 +5,6 @@ import { ArrayValue } from '../values/ArrayValue';
 import { Value } from '../values/Value';
 import { GenericArrow } from './GenericArrow';
 
-const MIN_TERMINAL_SEGMENT_LENGTH = 30;
-
 /** this class encapsulates an GenericArrow to be drawn between 2 points */
 export class ArrowFromText extends GenericArrow<Text, Value> {
   constructor(from: Text) {
@@ -23,7 +21,7 @@ export class ArrowFromText extends GenericArrow<Text, Value> {
     const to = this.target;
     if (!to) return [];
 
-    const terminalSegmentLength = Math.max(Config.ArrowHeadSize, MIN_TERMINAL_SEGMENT_LENGTH);
+    const terminalSegmentLength = Math.max(Config.ArrowHeadSize, Config.MinTerminalSegmentLength);
     const verticalTerminalOffset = Math.max(Config.DataUnitHeight / 3, terminalSegmentLength);
 
     const steps: StepsArray = [(x, y) => [x + from.width(), y + from.height() / 2]];
