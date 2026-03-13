@@ -28,7 +28,11 @@ import DisplayBufferService from '../../../utils/DisplayBufferService';
 import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../../../utils/SourcerorHelper';
 import WorkspaceActions from '../../../workspace/WorkspaceActions';
-import { type EditorTabState, EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import {
+  type EditorTabState,
+  EVAL_SILENT,
+  type WorkspaceLocation
+} from '../../../workspace/WorkspaceTypes';
 import { getEvaluatorDefinitionSaga } from '../../LanguageDirectorySaga';
 import { selectStoryEnv, selectWorkspace } from '../../SafeEffects';
 import { dumpDisplayBuffer } from './dumpDisplayBuffer';
@@ -193,29 +197,29 @@ const deriveStepperBreakpointSteps = (
   const breakpointSteps: number[] = [];
 
   for (let stepIndex = 0; stepIndex < stepperSteps.length; stepIndex++) {
-  const isBreakpointStep =
-    stepperSteps[stepIndex].markers?.some(marker => {
-      if (marker.redexType !== 'beforeMarker') {
-        return false;
-      }
+    const isBreakpointStep =
+      stepperSteps[stepIndex].markers?.some(marker => {
+        if (marker.redexType !== 'beforeMarker') {
+          return false;
+        }
 
-      const line = marker.redex?.loc?.start?.line;
-      if (typeof line !== 'number') {
-        return false;
-      }
+        const line = marker.redex?.loc?.start?.line;
+        if (typeof line !== 'number') {
+          return false;
+        }
 
-      const source =
-        typeof marker.redex?.loc?.source === 'string'
-          ? marker.redex.loc.source
-          : entrypointFilePath;
-      const lines = breakpointLinesByFile.get(source) ?? entrypointLines;
-      return lines.has(line);
-    }) ?? false;
+        const source =
+          typeof marker.redex?.loc?.source === 'string'
+            ? marker.redex.loc.source
+            : entrypointFilePath;
+        const lines = breakpointLinesByFile.get(source) ?? entrypointLines;
+        return lines.has(line);
+      }) ?? false;
 
-  if (isBreakpointStep) {
-    breakpointSteps.push(stepIndex);
+    if (isBreakpointStep) {
+      breakpointSteps.push(stepIndex);
+    }
   }
-}
 
   return breakpointSteps;
 };
@@ -447,10 +451,7 @@ export function* evalCodeSaga(
   // Unlike CSE (which records breakpoint hits during execution),
   // the stepper requires us to match step source locations against
   // editor breakpoint lines and compute them manually.
-    if (
-    workspaceLocation === 'playground' ||
-    workspaceLocation === 'sicp'
-  ) {
+  if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
     if (context.chapter <= Chapter.SOURCE_2 && substIsActive) {
       let stepperBreakpointSteps: number[] = [];
       if (isStepperOutput(result.value)) {
