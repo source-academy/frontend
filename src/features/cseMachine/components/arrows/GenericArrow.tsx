@@ -34,10 +34,6 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     arrowSelection.setSelected(this);
   }
 
-  // Deselect (static, can be called from anywhere)
-  public static clearSelection(): GenericArrow<IVisible, IVisible> | null {
-    return arrowSelection.clearSelection();
-  }
   isLive: boolean = false; // Added to track if the arrow is live (an inherent property of the arrow)
   /*
    * The above is added since an arrow can in general be drawn between two points
@@ -130,7 +126,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
    * Returns the hover color for this arrow type.
    * Subclasses can override this to provide custom hover colors.
    */
-  protected getHighlightColour(): string {
+  protected getHighlightedColor(): string {
     return Config.ArrowHighlightedColor;
   }
 
@@ -164,7 +160,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   };
 
   public setHighlightedStyle() {
-    const highlightColor = this.getHighlightColour();
+    const highlightColor = this.getHighlightedColor();
     if (this.pathRef.current) {
       this.pathRef.current.stroke(highlightColor);
       this.pathRef.current.strokeWidth(Config.ArrowHoveredStrokeWidth);
@@ -177,7 +173,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   }
 
   public setNormalStyle() {
-    const color = this.faded ? fadedStrokeColor() : defaultStrokeColor();
+    const color = this.isLive ? defaultStrokeColor() : fadedStrokeColor();
     if (this.pathRef.current) {
       this.pathRef.current.stroke(color);
       this.pathRef.current.strokeWidth(Config.ArrowStrokeWidth);
@@ -194,7 +190,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
 
     // Toggle selection - clear first, then select if it wasn't already selected
     const wasSelected = this.isSelected();
-    const oldArrow = GenericArrow.clearSelection();
+    const oldArrow = arrowSelection.clearSelection();
 
     // Update old arrow's visual state
     if (oldArrow && oldArrow !== this) {
@@ -218,7 +214,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
 
   protected getCurrentColor(): string {
     if (this.isSelected()) {
-      return this.getHighlightColour(); // Selected uses hover color
+      return this.getHighlightedColor(); // Selected uses hover color
     }
     return this.faded ? fadedStrokeColor() : defaultStrokeColor();
   }
@@ -228,6 +224,10 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
 
   draw() {
     this.updateIsLive(); //just before drawijng, update liveness for the arrows (since this was causing erroes earlier  )
+    if (Layout.clearDeadFrames && !this.isLive) {
+      return null;
+    }
+
     const stroke = this.isLive ? defaultStrokeColor() : fadedStrokeColor();
 
     return (
