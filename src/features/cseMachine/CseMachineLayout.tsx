@@ -8,8 +8,8 @@ import React, { RefObject } from 'react';
 import { Layer as KonvaLayer, Rect as KonvaRect, Stage as KonvaStage } from 'react-konva';
 import classes from 'src/styles/Draggable.module.scss';
 
-import { Binding } from './components/Binding';
 import { GenericArrow } from './components/arrows/GenericArrow';
+import { Binding } from './components/Binding';
 import { ControlStack } from './components/ControlStack';
 import { Level } from './components/Level';
 import { StashStack } from './components/StashStack';
@@ -207,10 +207,10 @@ export class Layout {
       Layout.visibleWidth,
       Config.CanvasMinWidth,
       Layout.levels.reduce<number>((maxWidth, level) => Math.max(maxWidth, level.width()), 0) +
-      Config.CanvasPaddingX * 2 +
-      (CseMachine.getControlStash()
-        ? Layout.controlComponent.width() + Config.CanvasPaddingX * 2
-        : 0)
+        Config.CanvasPaddingX * 2 +
+        (CseMachine.getControlStash()
+          ? Layout.controlComponent.width() + Config.CanvasPaddingX * 2
+          : 0)
     );
     // initialise animations
     CseAnimation.updateAnimation();
