@@ -41,7 +41,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
+import { useTypedSelector } from '../../utils/Hooks';
 import { beginAlertSideContent } from '../SideContentActions';
+import { getLocation } from '../SideContentHelper';
 import { SideContentLocation, SideContentType } from '../SideContentTypes';
 
 const SubstDefaultText = () => {
@@ -99,24 +101,71 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
     () => dispatch(beginAlertSideContent(SideContentType.substVisualizer, props.workspaceLocation)),
     [props.workspaceLocation, dispatch]
   );
-  // set source mode as 2
+
+  // Read precomputed breakpoint step indices from Redux (playground/sicp only).
+  // Stepper steps are 1-based in the UI (stepValue), but internally we compare
+  // against 0-based step indices. `stepNextBreakpoint` finds the first
+  // breakpoint step strictly after the current step and jumps to it.
+  // If none exists, it falls back to the last step.
+  const breakpointSteps = useTypedSelector(state => {
+    const [workspaceLocation] = getLocation(props.workspaceLocation);
+    if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
+      return state.workspaces[workspaceLocation].breakpointSteps;
+    }
+    return [];
+  });
+
+  // Indexing:
+  // - breakpointSteps entries are 0-based step indices
+  // - stepValue is 1-based (UI slider)
+  const stepFirst = () => setStepValue(1);
+  const stepLast = () => setStepValue(lastStepValue);
+  const stepPrevious = () => setStepValue(Math.max(1, stepValue - 1));
+  const stepNext = () => setStepValue(Math.min(lastStepValue, stepValue + 1));
+
+  const stepNextBreakpoint = () => {
+    const currentStepIndex = stepValue - 1;
+    let nextBreakpointStep: number | undefined;
+
+    for (const breakpointStep of breakpointSteps) {
+      if (
+        breakpointStep > currentStepIndex &&
+        (nextBreakpointStep === undefined || breakpointStep < nextBreakpointStep)
+      ) {
+        nextBreakpointStep = breakpointStep;
+      }
+    }
+
+    setStepValue(nextBreakpointStep === undefined ? lastStepValue : nextBreakpointStep + 1);
+  };
+
+  const stepPrevBreakpoint = () => {
+    const currentStepIndex = stepValue - 1;
+    let prevBreakpointStep: number | undefined;
+
+    for (const breakpointStep of breakpointSteps) {
+      if (
+        breakpointStep < currentStepIndex &&
+        (prevBreakpointStep === undefined || breakpointStep > prevBreakpointStep)
+      ) {
+        prevBreakpointStep = breakpointStep;
+      }
+    }
+
+    setStepValue(prevBreakpointStep === undefined ? 1 : prevBreakpointStep + 1);
+  };
+
   useEffect(() => {
     HighlightRulesSelector(2);
     ModeSelector(2);
   }, []);
 
-  // reset stepValue when content changes
   useEffect(() => {
     setStepValue(1);
     if (props.content.length > 0) {
       alertSideContent();
     }
-  }, [props.content, setStepValue, alertSideContent]);
-
-  const stepFirst = () => setStepValue(1);
-  const stepLast = () => setStepValue(lastStepValue);
-  const stepPrevious = () => setStepValue(Math.max(1, stepValue - 1));
-  const stepNext = () => setStepValue(Math.min(props.content.length, stepValue + 1));
+  }, [props.content, alertSideContent]);
 
   // Setup hotkey bindings
   const hotkeyBindings: HotkeyItem[] = hasRunCode
@@ -133,6 +182,7 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
         ['e', () => {}]
       ];
   const hotkeyHandler = getHotkeyHandler(hotkeyBindings);
+
 
   const getExplanation = useCallback(
     (value: number): string => {
@@ -171,7 +221,7 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
       />
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <ButtonGroup>
-          <Button disabled={!hasRunCode} icon="double-chevron-left" onClick={stepFirst} />
+          <Button disabled={!hasRunCode} icon="double-chevron-left" onClick={stepPrevBreakpoint} />
           <Button
             disabled={!hasRunCode || stepValue === 1}
             icon="chevron-left"
@@ -182,7 +232,7 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
             icon="chevron-right"
             onClick={stepNext}
           />
-          <Button disabled={!hasRunCode} icon="double-chevron-right" onClick={stepLast} />
+          <Button disabled={!hasRunCode} icon="double-chevron-right" onClick={stepNextBreakpoint} />
         </ButtonGroup>
       </div>{' '}
       <br />
