@@ -8,11 +8,7 @@ import React, { RefObject } from 'react';
 import { Layer as KonvaLayer, Rect as KonvaRect, Stage as KonvaStage } from 'react-konva';
 import classes from 'src/styles/Draggable.module.scss';
 
-<<<<<<< HEAD
-import { GenericArrow } from './components/arrows/GenericArrow';
-=======
 import { arrowSelection } from './components/arrows/ArrowSelection';
->>>>>>> 0fccc0c51069df32b4d194d914f5156be0977c5a
 import { Binding } from './components/Binding';
 import { ControlStack } from './components/ControlStack';
 import { Level } from './components/Level';

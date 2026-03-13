@@ -233,10 +233,6 @@ export class Frame extends Visible implements IHoverable {
     }
   }
 
-<<<<<<< HEAD
-  onMouseEnter = () => {};
-
-=======
   public get name(): Text {
     return this._name;
   }
@@ -262,7 +258,6 @@ export class Frame extends Visible implements IHoverable {
 
   onMouseEnter = () => {};
 
->>>>>>> 0fccc0c51069df32b4d194d914f5156be0977c5a
   onMouseLeave = () => {};
 
   draw(): React.ReactNode {
