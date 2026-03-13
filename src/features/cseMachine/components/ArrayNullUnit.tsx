@@ -18,12 +18,20 @@ export class ArrayNullUnit extends Visible {
   }
 
   draw(): React.ReactNode {
+    // needs to be recalculated here unlike arrayunit, as primitive value treat it as a text
+    this._x = this.reference.x();
+    this._y = this.reference.y();
+    const strokeColor =
+      this.reference.parent.isReferenced() && this.reference.parent.isEnclosingFrameLive()
+        ? defaultStrokeColor()
+        : fadedStrokeColor();
+
     return (
       <KonvaLine
         {...ShapeDefaultProps}
         key={Layout.key++}
         points={[this.x(), this.y() + this.height(), this.x() + this.width(), this.y()]}
-        stroke={this.reference.parent.isReferenced() ? defaultStrokeColor() : fadedStrokeColor()}
+        stroke={strokeColor}
         hitStrokeWidth={Config.DataHitStrokeWidth}
         ref={this.ref}
         listening={false}

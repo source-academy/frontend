@@ -21,7 +21,7 @@ import { createConductor } from '../../../../features/conductor/createConductor'
 import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
 import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
 import StoriesActions from '../../../../features/stories/StoriesActions';
-import { isSchemeLanguage, type OverallState } from '../../../application/ApplicationTypes';
+import { type OverallState } from '../../../application/ApplicationTypes';
 import { SideContentType } from '../../../sideContent/SideContentTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import DisplayBufferService from '../../../utils/DisplayBufferService';
@@ -204,8 +204,7 @@ export function* evalCodeSaga(
   const { currentStep, cseIsActive, isFolderModeEnabled, needUpdateCse, stepLimit, substIsActive } =
     yield* getWorkspaceData();
 
-  const cseActiveAndCorrectChapter =
-    (isSchemeLanguage(context.chapter) || context.chapter >= Chapter.SOURCE_3) && cseIsActive;
+  const cseActiveAndCorrectChapter = context.chapter >= Chapter.SOURCE_3 && cseIsActive;
   if (cseActiveAndCorrectChapter) {
     context.executionMethod = 'cse-machine';
   }
