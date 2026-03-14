@@ -735,6 +735,53 @@ export const truncateText = (programStr: string, maxWidth: number, maxHeight: nu
   return [...lines, Config.Ellipsis].join('\n');
 };
 
+const appendSuffixWithinWidth = (line: string, suffix: string, maxWidth: number): string => {
+  const ellipsis = Config.Ellipsis;
+  const ellipsisIndex = line.lastIndexOf(ellipsis);
+
+  if (ellipsisIndex === -1) {
+    return line;
+  }
+
+  let prefix = line.slice(0, ellipsisIndex);
+  let candidate = `${prefix} ${ellipsis + suffix}`;
+
+  while (prefix && getTextWidth(candidate) > maxWidth) {
+    prefix = prefix.slice(0, -1);
+    candidate = `${prefix} ${ellipsis + suffix}`;
+  }
+
+  return candidate;
+};
+
+export const truncateFunctionTooltip = (
+  tooltip: string,
+  maxWidth: number,
+  maxHeight: number
+): string => {
+  const truncatedTooltip = truncateText(tooltip, maxWidth, maxHeight);
+
+  if (truncatedTooltip === tooltip) {
+    return truncatedTooltip;
+  }
+
+  const lines = truncatedTooltip.split('\n');
+  const originalLines = tooltip.split('\n');
+
+  const paramsLineIndex = originalLines.findIndex(line => line.startsWith('params:'));
+  if (paramsLineIndex !== -1 && lines[paramsLineIndex]?.endsWith(Config.Ellipsis)) {
+    lines[paramsLineIndex] = appendSuffixWithinWidth(lines[paramsLineIndex], ')', maxWidth);
+  }
+
+  const bodyClosingLineIndex = originalLines.findLastIndex(line => line.trim() === '}');
+  if (bodyClosingLineIndex !== -1 && bodyClosingLineIndex >= lines.length) {
+    const lastLineIndex = lines.length - 1;
+    lines[lastLineIndex] = appendSuffixWithinWidth(lines[lastLineIndex], ' }', maxWidth);
+  }
+
+  return lines.join('\n');
+};
+
 /**
  * Typeguard for Instr to distinguish between program statements and instructions.
  * The typeguard from js-slang cannot be used due to Typescript raising some weird errors
@@ -1085,8 +1132,15 @@ export const isStashItemInDanger = (stashIndex: number): boolean => {
   return false;
 };
 
+const isHulkModeEnabled = () =>
+  typeof document !== 'undefined' && document.querySelector('.Playground.GreenScreen') !== null;
+
 export const defaultBackgroundColor = () =>
-  CseMachine.getPrintableMode() ? Config.PrintBgColor : Config.BgColor;
+  isHulkModeEnabled()
+    ? '#00ff00'
+    : CseMachine.getPrintableMode()
+      ? Config.PrintBgColor
+      : Config.BgColor;
 
 export const defaultTextColor = () =>
   CseMachine.getPrintableMode() ? Config.PrintTextColor : Config.TextColor;
