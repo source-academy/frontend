@@ -15,6 +15,10 @@ export class ArrowFromFrame extends GenericArrow<Frame, Frame> {
     this.isLive = this.source.environment && Layout.liveEnvIDs.has(this.source.environment.id);
   }
 
+  protected getOriginFilterKey() {
+    return 'frame' as const;
+  }
+
   protected calculateSteps() {
     const to = this.target;
     if (!to) return [];

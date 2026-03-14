@@ -27,6 +27,8 @@ import {
   truncateFunctionTooltip
 } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
+import { ArrowFromFnToBody } from '../arrows/ArrowFromFnToBody';
+import { FnBodyTarget } from '../arrows/FnBodyTarget';
 import { Binding } from '../Binding';
 import { Value } from './Value';
 
@@ -52,7 +54,9 @@ export class GlobalFnValue extends Value implements IHoverable {
 
   centerX: number;
   private isExpandedDescription: boolean = false;
+  private isHovered: boolean = false;
   private _arrow: ArrowFromFn | undefined;
+  private _bodyArrow: ArrowFromFnToBody | undefined;
 
   constructor(
     /** underlying function */
@@ -105,14 +109,40 @@ export class GlobalFnValue extends Value implements IHoverable {
     this.addReference(mainReference);
   }
 
-  handleNewReference(): void {}
+  handleNewReference(): void { }
 
   arrow(): ArrowFromFn | undefined {
     return this._arrow;
   }
 
+  private getBodyLabelY(): number {
+    const baseY = this.y() + this.radius + Config.TextMargin;
+    if (
+      !CseMachine.getPrintableMode() &&
+      this.isTooltipTruncated &&
+      this.isExpandedDescription
+    ) {
+      return baseY;
+    }
+    return baseY + this.printDescriptionOffsetY;
+  }
+
+  private createBodyArrow(): void {
+    const target = new FnBodyTarget(
+      this.x() + Config.TextMargin,
+      this.getBodyLabelY(),
+      Config.FnDescriptionMaxWidth,
+      this.printDescriptionHeight
+    );
+    this._bodyArrow = new ArrowFromFnToBody(this).to(target) as ArrowFromFnToBody;
+    this._bodyArrow.setVisible(
+      this.isHovered && !CseMachine.getPrintableMode() && !this.isExpandedDescription
+    );
+  }
+
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
+    this.isHovered = true;
     setHoveredCursor(currentTarget);
     if (this.isExpandedDescription && this.isTooltipTruncated) {
       this.labelRef.current?.hide();
@@ -123,14 +153,17 @@ export class GlobalFnValue extends Value implements IHoverable {
       this.labelRef.current?.moveToTop();
       this.labelRef.current?.show();
     }
+    this._bodyArrow?.setVisible(!this.isExpandedDescription);
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
+    this.isHovered = false;
     setUnhoveredCursor(currentTarget);
     this.isExpandedDescription = false;
     this.labelRef.current?.hide();
     this.revealLabelRef.current?.hide();
+    this._bodyArrow?.setVisible(false);
   };
 
   onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
@@ -139,6 +172,7 @@ export class GlobalFnValue extends Value implements IHoverable {
     this.labelRef.current?.hide();
     this.revealLabelRef.current?.moveToTop();
     this.revealLabelRef.current?.show();
+    this._bodyArrow?.setVisible(false);
     currentTarget.getLayer()?.batchDraw();
   };
 
@@ -147,6 +181,7 @@ export class GlobalFnValue extends Value implements IHoverable {
     if (Layout.globalEnvNode.frame) {
       this._arrow = new ArrowFromFn(this).to(Layout.globalEnvNode.frame) as ArrowFromFn;
     }
+    this.createBodyArrow();
     const textColor = this.isReferenced() ? defaultTextColor() : fadedTextColor();
     const strokeColor = this.isReferenced() ? defaultStrokeColor() : fadedStrokeColor();
     return (
@@ -241,6 +276,7 @@ export class GlobalFnValue extends Value implements IHoverable {
             />
           </KonvaLabel>
         )}
+        {this._bodyArrow?.draw()}
         {this._arrow?.draw()}
       </React.Fragment>
     );

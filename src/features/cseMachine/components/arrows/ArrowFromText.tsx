@@ -16,6 +16,10 @@ export class ArrowFromText extends GenericArrow<Text, Value> {
     this.isLive = this.source.options.faded === undefined ? true : !this.source.options.faded;
   }
 
+  protected getOriginFilterKey() {
+    return 'text' as const;
+  }
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
