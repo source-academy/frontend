@@ -18,7 +18,7 @@ export class ArrowFromControlItemComponent extends GenericArrow<
   }
 
   protected getOriginFilterKey() {
-    return 'controlStash' as const;
+    return 'control' as const;
   }
 
   protected calculateSteps() {

@@ -127,11 +127,12 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
    * Subclasses can override this to provide custom hover colors.
    */
   protected getHighlightedColor(): string {
-    return Config.ArrowHighlightedColor;
+    return CseMachine.getPrintableMode()
+      ? Config.PrintArrowHighlightedColor
+      : Config.ArrowHighlightedColor;
   }
 
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
-    if (CseMachine.getPrintableMode()) return;
     e.cancelBubble = true;
     this.setHighlightedStyle();
     // Move entire arrow group to top
@@ -147,7 +148,6 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   };
 
   onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
-    if (CseMachine.getPrintableMode()) return;
     e.cancelBubble = true;
 
     // Don't change color if selected

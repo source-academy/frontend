@@ -114,7 +114,13 @@ export type ReferenceType = Binding | ArrayUnit;
 export type StepsArray = Array<(x: number, y: number) => [number, number]>;
 
 /** categories for filtering arrows by source/origin */
-export type ArrowOriginFilterKey = 'text' | 'frame' | 'function' | 'controlStash';
+export type ArrowOriginFilterKey =
+  | 'text'
+  | 'frame'
+  | 'function'
+  | 'control'
+  | 'stash'
+  | 'arrayUnit';
 
 /** visibility map for arrow origin categories */
 export type ArrowOriginFilters = Record<ArrowOriginFilterKey, boolean>;

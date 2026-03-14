@@ -31,7 +31,9 @@ export default class CseMachine {
     text: true,
     frame: true,
     function: true,
-    controlStash: true
+    control: true,
+    stash: true,
+    arrayUnit: true
   };
   private static environmentTree: EnvTree | undefined;
   private static currentEnvId: string;

@@ -326,9 +326,19 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                         onChange={() => this.toggleArrowFilter('function')}
                       />
                       <Checkbox
-                        checked={arrowFilters.controlStash}
-                        label="From control and stash"
-                        onChange={() => this.toggleArrowFilter('controlStash')}
+                        checked={arrowFilters.control}
+                        label="From control"
+                        onChange={() => this.toggleArrowFilter('control')}
+                      />
+                      <Checkbox
+                        checked={arrowFilters.stash}
+                        label="From stash"
+                        onChange={() => this.toggleArrowFilter('stash')}
+                      />
+                      <Checkbox
+                        checked={arrowFilters.arrayUnit}
+                        label="From array units"
+                        onChange={() => this.toggleArrowFilter('arrayUnit')}
                       />
                     </div>
                   }
@@ -573,7 +583,9 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
     this.sliderRelease(0);
   };
 
-  private toggleArrowFilter = (origin: 'text' | 'frame' | 'function' | 'controlStash') => {
+  private toggleArrowFilter = (
+    origin: 'text' | 'frame' | 'function' | 'control' | 'stash' | 'arrayUnit'
+  ) => {
     const filters = CseMachine.getArrowOriginFilters();
     CseMachine.setArrowOriginVisible(origin, !filters[origin]);
     CseMachine.clearCachedLayouts();

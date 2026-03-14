@@ -136,7 +136,8 @@ export class GlobalFnValue extends Value implements IHoverable {
     );
     this._bodyArrow = new ArrowFromFnToBody(this).to(target) as ArrowFromFnToBody;
     this._bodyArrow.setVisible(
-      this.isHovered && !CseMachine.getPrintableMode() && !this.isExpandedDescription
+      CseMachine.getPrintableMode() ||
+      (this.isHovered && !CseMachine.getPrintableMode() && !this.isExpandedDescription)
     );
   }
 
