@@ -18,7 +18,8 @@ import type {
   SubmissionsTableFilters,
   WorkspaceLocation,
   WorkspaceLocationsWithTools,
-  WorkspaceState} from './WorkspaceTypes';
+  WorkspaceState
+} from './WorkspaceTypes';
 
 const newActions = createActions('workspace', {
   setTokenCount: (workspaceLocation: WorkspaceLocation, tokenCount: number) => ({
