@@ -427,6 +427,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     );
     handleClearContext(question.library, true);
     handleUpdateHasUnsavedChanges(false);
+    handleFetchVersionHistory();
 
     const chapter = question.library.chapter;
     const questionType = question.type;

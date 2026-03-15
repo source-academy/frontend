@@ -230,16 +230,24 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): any {
   // Skip if code is unchanged from the latest saved version
   const latestVersion: string | undefined = yield select((state: OverallState) => {
     const versions = state.workspaces[workspaceLocation].versionHistory.versions;
-    return versions.length > 0 ? versions[0].code : undefined;
+    if (versions.length === 0) return undefined;
+    return versions.reduce((latest, v) => (v.timestamp > latest.timestamp ? v : latest)).code;
   });
 
   if (code === latestVersion) {
+    yield put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'));
     return;
   }
 
   // Submit the answer; the backend handles saving as a version
   yield put(SessionActions.submitAnswer(questionId, code));
   yield put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'));
+
+  // Refresh version history
+  yield call(fetchVersionHistorySaga, {
+    payload: { workspaceLocation },
+    type: WorkspaceActions.fetchVersionHistory.type
+  });
 }
 
 /**
