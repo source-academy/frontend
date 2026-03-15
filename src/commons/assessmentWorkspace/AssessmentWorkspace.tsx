@@ -820,7 +820,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       ) : null;
 
     const saveStatusIndicator =
-      question.type !== QuestionTypes.mcq || isTeamAssessment ? (
+      question.type !== QuestionTypes.mcq && !isTeamAssessment ? (
         <ControlBarSaveStatusIndicator saveStatus={saveStatus} key="save_status" />
       ) : null;
 
