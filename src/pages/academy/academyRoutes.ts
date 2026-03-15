@@ -96,7 +96,7 @@ const getCommonAcademyRoutes = (): RouteObject[] => {
   ];
 };
 
-const GroundControl = () => import('./groundControl/GroundControlContainer');
+const GroundControl = () => import('./groundControl/GroundControl');
 const Grading = () => import('./grading/Grading');
 const Sourcereel = () => import('./sourcereel/Sourcereel');
 const GameSimulator = () => import('./gameSimulator/GameSimulator');
