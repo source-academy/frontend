@@ -11,14 +11,6 @@
     {
       "matchPackageNames": ["/^@blueprintjs.*/"],
       "groupName": "blueprintjs"
-    },
-    // Group all non-major dev dependencies together
-    {
-      "groupName": "all dev dependencies (non-major)",
-      "groupSlug": "all-dev-minor-patch",
-      "matchDepTypes": ["devDependencies"],
-      "matchPackageNames": ["*"],
-      "matchUpdateTypes": ["minor", "patch"]
     }
   ],
   "enabledManagers": ["npm"]
