@@ -15,8 +15,6 @@ export const renderTreeJson = async (element: React.ReactElement) => {
 
 /**
  * Recursively traverses a nested object and returns all matches.
- *
- * Used in traversing nested objects such as `shallowRender`'s output.
  */
 export function deepFilter<T>(
   nestedObject: T,
