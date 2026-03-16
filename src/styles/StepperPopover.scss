@@ -1,0 +1,49 @@
+/* Styling for the stepper popover box */
+.stepper-popover {
+  .stepper-display {
+    font:
+      16px / normal 'Inconsolata',
+      'Consolas',
+      monospace;
+  }
+
+  .stepper-literal {
+    color: #ff6078;
+  }
+
+  .stepper-operator {
+    color: #f89210;
+  }
+
+  .stepper-identifier {
+    color: #f8d871;
+  }
+
+  .stepper-conditional-operator {
+    color: #ffffff;
+  }
+
+  .stepper-mu-term {
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  /* Support for nested blueprint/global code blocks */
+  .bp4-code-block {
+    .stepper-literal {
+      color: #ff6078;
+    }
+
+    .stepper-operator {
+      color: #f89210;
+    }
+
+    .stepper-identifier {
+      color: #f8d871;
+    }
+
+    .stepper-conditional-operator {
+      color: #ffffff;
+    }
+  }
+}

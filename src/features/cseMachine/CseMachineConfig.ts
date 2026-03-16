@@ -20,6 +20,9 @@ export const Config = Object.freeze({
   FnInnerRadius: 3,
   FnTooltipOpacity: 0.3,
   FnTooltipTextPadding: 5,
+  FnDescriptionMaxWidth: 150,
+  FnDescriptionMaxHeight: 60,
+  FnDescriptionRevealOffsetY: 8,
 
   DataMinWidth: 20,
   DataUnitWidth: 40,
@@ -46,6 +49,7 @@ export const Config = Object.freeze({
   MaxExportWidth: 20000,
   MaxExportHeight: 12000,
 
+  MinTerminalSegmentLength: 30,
   // Canvas background color
   BgColor: '#2c3e50',
   PrintBgColor: '#fff',

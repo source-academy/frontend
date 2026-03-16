@@ -26,7 +26,7 @@ import {
   setHoveredCursor,
   setUnhoveredCursor
 } from '../../CseMachineUtils';
-import { Continuation } from '../../utils/scheme';
+import { Continuation } from '../../utils/continuation';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
 import { Frame } from '../Frame';
