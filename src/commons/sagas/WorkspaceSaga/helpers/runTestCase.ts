@@ -1,4 +1,4 @@
-import { random } from 'es-toolkit';
+import { random } from 'es-toolkit/compat';
 import type { Context } from 'js-slang';
 import { call, put, select, StrictEffect } from 'redux-saga/effects';
 
