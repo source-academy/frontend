@@ -410,6 +410,7 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                       aria-haspopup="false"
                       aria-label="Cursor at row 1"
                       autocapitalize="off"
+                      autocomplete="off"
                       autocorrect="off"
                       class="ace_text-input"
                       role="textbox"
@@ -495,10 +496,11 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                       </div>
                     </div>
                     <div
-                      class="ace_tooltip"
+                      class="ace_tooltip ace_gutter-tooltip"
                       id="gt1"
                       role="tooltip"
-                      style="display: none; pointer-events: auto;"
+                      style="display: none; white-space: pre-wrap; pointer-events: auto;"
+                      tabindex="-1"
                     />
                   </div>
                   <div
@@ -573,7 +575,6 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_introduction"
-                          aria-disabled="false"
                           aria-expanded="true"
                           aria-selected="true"
                           class="bp6-tab side-content-tab"
@@ -611,7 +612,6 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_data_visualizer"
-                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp6-tab side-content-tab"
@@ -649,7 +649,6 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_cse_machine"
-                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp6-tab side-content-tab"
@@ -687,7 +686,6 @@ exports[`Playground tests > Playground renders correctly 1`] = `
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_remote_execution"
-                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp6-tab side-content-tab"
@@ -1476,6 +1474,7 @@ and also the
                       aria-haspopup="false"
                       aria-label="Cursor at row 1"
                       autocapitalize="off"
+                      autocomplete="off"
                       autocorrect="off"
                       class="ace_text-input"
                       role="textbox"
@@ -1562,10 +1561,11 @@ and also the
                       </div>
                     </div>
                     <div
-                      class="ace_tooltip"
+                      class="ace_tooltip ace_gutter-tooltip"
                       id="gt2"
                       role="tooltip"
-                      style="display: none; pointer-events: auto;"
+                      style="display: none; white-space: pre-wrap; pointer-events: auto;"
+                      tabindex="-1"
                     />
                   </div>
                   <div
@@ -2050,6 +2050,7 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                       aria-haspopup="false"
                       aria-label="Cursor at row 1"
                       autocapitalize="off"
+                      autocomplete="off"
                       autocorrect="off"
                       class="ace_text-input"
                       role="textbox"
@@ -2135,10 +2136,11 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                       </div>
                     </div>
                     <div
-                      class="ace_tooltip"
+                      class="ace_tooltip ace_gutter-tooltip"
                       id="gt3"
                       role="tooltip"
-                      style="display: none; pointer-events: auto;"
+                      style="display: none; white-space: pre-wrap; pointer-events: auto;"
+                      tabindex="-1"
                     />
                   </div>
                   <div
@@ -2213,7 +2215,6 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_introduction"
-                          aria-disabled="false"
                           aria-expanded="true"
                           aria-selected="true"
                           class="bp6-tab side-content-tab"
@@ -2251,7 +2252,6 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_data_visualizer"
-                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp6-tab side-content-tab"
@@ -2289,7 +2289,6 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_subst_visualiser"
-                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp6-tab side-content-tab"
@@ -2327,7 +2326,6 @@ exports[`Playground tests > Playground with link renders correctly 1`] = `
                         </div>
                         <div
                           aria-controls="bp6-tab-panel_side-content-tabs_remote_execution"
-                          aria-disabled="false"
                           aria-expanded="false"
                           aria-selected="false"
                           class="bp6-tab side-content-tab"
@@ -2793,6 +2791,7 @@ and also the
                       aria-haspopup="false"
                       aria-label="Cursor at row 1"
                       autocapitalize="off"
+                      autocomplete="off"
                       autocorrect="off"
                       class="ace_text-input"
                       role="textbox"
@@ -2879,10 +2878,11 @@ and also the
                       </div>
                     </div>
                     <div
-                      class="ace_tooltip"
+                      class="ace_tooltip ace_gutter-tooltip"
                       id="gt4"
                       role="tooltip"
-                      style="display: none; pointer-events: auto;"
+                      style="display: none; white-space: pre-wrap; pointer-events: auto;"
+                      tabindex="-1"
                     />
                   </div>
                   <div

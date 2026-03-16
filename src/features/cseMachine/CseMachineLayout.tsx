@@ -116,12 +116,12 @@ export class Layout {
   static currentStackTruncDark: React.ReactNode;
   static currentStackLight: React.ReactNode;
   static currentStackTruncLight: React.ReactNode;
-  static stageRef: RefObject<Stage> = React.createRef();
+  static stageRef: RefObject<Stage | null> = React.createRef();
 
   // buffer for faster rendering of diagram when scrolling
   static invisiblePaddingVertical: number = 300;
   static invisiblePaddingHorizontal: number = 300;
-  static scrollContainerRef: RefObject<HTMLDivElement> = React.createRef();
+  static scrollContainerRef: RefObject<HTMLDivElement | null> = React.createRef();
 
   static updateDimensions(width: number, height: number) {
     // update the size of the scroll container and stage given the width and height of the sidebar content.
