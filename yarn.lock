@@ -3399,17 +3399,20 @@ __metadata:
   linkType: hard
 
 "@rsbuild/plugin-sass@npm:^1.3.1":
-  version: 1.5.0
-  resolution: "@rsbuild/plugin-sass@npm:1.5.0"
+  version: 1.5.1
+  resolution: "@rsbuild/plugin-sass@npm:1.5.1"
   dependencies:
     deepmerge: "npm:^4.3.1"
     loader-utils: "npm:^2.0.4"
-    postcss: "npm:^8.5.6"
+    postcss: "npm:^8.5.8"
     reduce-configs: "npm:^1.1.1"
     sass-embedded: "npm:^1.97.3"
   peerDependencies:
     "@rsbuild/core": ^1.3.0 || ^2.0.0-0
-  checksum: 10c0/09bb573c93d1f6a642160060c7bef989772d5e137cde3c00119aff634288741f0f9fb1f9dc803e8bafecb06b41fb623d7c4549eb17b874424b2cb292b49a079d
+  peerDependenciesMeta:
+    "@rsbuild/core":
+      optional: true
+  checksum: 10c0/b26be920fa975e4d17e7db82b82f8004f553c5eea383cf9ba82ee147c3e4f567cf651bee62532477785c45b82ed75d1b621fcea3f6ea6a2ddd65571c34f050b1
   languageName: node
   linkType: hard
 
@@ -11297,6 +11300,17 @@ __metadata:
     picocolors: "npm:^1.1.1"
     source-map-js: "npm:^1.2.1"
   checksum: 10c0/5127cc7c91ed7a133a1b7318012d8bfa112da9ef092dddf369ae699a1f10ebbd89b1b9f25f3228795b84585c72aabd5ced5fc11f2ba467eedf7b081a66fad024
+  languageName: node
+  linkType: hard
+
+"postcss@npm:^8.5.8":
+  version: 8.5.8
+  resolution: "postcss@npm:8.5.8"
+  dependencies:
+    nanoid: "npm:^3.3.11"
+    picocolors: "npm:^1.1.1"
+    source-map-js: "npm:^1.2.1"
+  checksum: 10c0/dd918f7127ee7c60a0295bae2e72b3787892296e1d1c3c564d7a2a00c68d8df83cadc3178491259daa19ccc54804fb71ed8c937c6787e08d8bd4bedf8d17044c
   languageName: node
   linkType: hard
 
