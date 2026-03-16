@@ -753,7 +753,6 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
             <div
               aria-hidden="true"
               class="bp6-collapse-body"
-              style="transform: translateY(-undefinedpx);"
             />
           </div>
         </div>
@@ -1544,7 +1543,6 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
             <div
               aria-hidden="true"
               class="bp6-collapse-body"
-              style="transform: translateY(-undefinedpx);"
             />
           </div>
         </div>

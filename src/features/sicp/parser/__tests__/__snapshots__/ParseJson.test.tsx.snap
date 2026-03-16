@@ -121,7 +121,6 @@ exports[`Parse exercise > EXERCISE with solution successful 1`] = `
         <div
           aria-hidden="true"
           class="bp6-collapse-body"
-          style="transform: translateY(-undefinedpx);"
         />
       </div>
     </div>
@@ -163,7 +162,6 @@ exports[`Parse exercise > EXERCISE without solution successful 1`] = `
         <div
           aria-hidden="true"
           class="bp6-collapse-body"
-          style="transform: translateY(-undefinedpx);"
         />
       </div>
     </div>
