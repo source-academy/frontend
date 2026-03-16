@@ -1,3 +1,4 @@
+import { render } from '@testing-library/react';
 import { Chapter, Variant } from 'js-slang/dist/langs';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 
@@ -47,23 +48,23 @@ test('Repl renders correctly', async () => {
     externalLibrary: ExternalLibraryName.NONE,
     replButtons: []
   };
-  const app = <Repl {...props} />;
-  expect(app).toMatchSnapshot();
+  const { asFragment } = render(<Repl {...props} />);
+  expect(asFragment()).toMatchSnapshot();
 });
 
 test('Code output renders correctly', async () => {
-  const app = <Output {...{ output: mockCodeOutput }} />;
-  expect(app).toMatchSnapshot();
+  const { asFragment } = render(<Output {...{ output: mockCodeOutput }} />);
+  expect(asFragment()).toMatchSnapshot();
 });
 
 test('Running output renders correctly', async () => {
-  const app = <Output {...{ output: mockRunningOutput }} />;
-  expect(app).toMatchSnapshot();
+  const { asFragment } = render(<Output {...{ output: mockRunningOutput }} />);
+  expect(asFragment()).toMatchSnapshot();
 });
 
 test('Result output (no consoleLogs) renders correctly', async () => {
-  const app = <Output {...{ output: mockResultOutput }} />;
-  expect(app).toMatchSnapshot();
+  const { asFragment } = render(<Output {...{ output: mockResultOutput }} />);
+  expect(asFragment()).toMatchSnapshot();
 });
 
 test('Result output (with consoleLogs) renders correctly', async () => {
@@ -71,13 +72,13 @@ test('Result output (with consoleLogs) renders correctly', async () => {
     ...mockResultOutput,
     consoleLogs: mockRunningOutput.consoleLogs
   };
-  const app = <Output {...{ output: props }} />;
-  expect(app).toMatchSnapshot();
+  const { asFragment } = render(<Output {...{ output: props }} />);
+  expect(asFragment()).toMatchSnapshot();
 });
 
 test('Error output (no consoleLogs) renders correctly', async () => {
-  const app = <Output {...{ output: mockErrorOutput }} />;
-  expect(app).toMatchSnapshot();
+  const { asFragment } = render(<Output {...{ output: mockErrorOutput }} />);
+  expect(asFragment()).toMatchSnapshot();
 });
 
 test('Error output (with consoleLogs) renders correctly', async () => {
@@ -85,11 +86,11 @@ test('Error output (with consoleLogs) renders correctly', async () => {
     ...mockErrorOutput,
     consoleLogs: mockRunningOutput.consoleLogs
   };
-  const app = <Output {...{ output: props }} />;
-  expect(app).toMatchSnapshot();
+  const { asFragment } = render(<Output {...{ output: props }} />);
+  expect(asFragment()).toMatchSnapshot();
 });
 
 test('Empty output renders an empty card', async () => {
-  const app = <Output {...{ output: {} as InterpreterOutput }} />;
-  expect(app).toMatchSnapshot();
+  const { asFragment } = render(<Output {...{ output: {} as InterpreterOutput }} />);
+  expect(asFragment()).toMatchSnapshot();
 });
