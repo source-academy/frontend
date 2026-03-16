@@ -175,7 +175,6 @@
     "redux-saga-test-plan": "^4.0.6",
     "resize-observer-polyfill": "^1.5.1",
     "sass": "^1.63.6",
-    "shallow-react-snapshot": "^0.2.2",
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "timers-browserify": "^2.0.12",

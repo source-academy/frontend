@@ -8048,7 +8048,6 @@ __metadata:
     rehype-react: "npm:^8.0.0"
     resize-observer-polyfill: "npm:^1.5.1"
     sass: "npm:^1.63.6"
-    shallow-react-snapshot: "npm:^0.2.2"
     showdown: "npm:^2.1.0"
     sourceror: "npm:^0.8.5"
     stream-browserify: "npm:^3.0.0"
@@ -13000,13 +12999,6 @@ __metadata:
   bin:
     sha.js: ./bin.js
   checksum: 10c0/b7a371bca8821c9cc98a0aeff67444a03d48d745cb103f17228b96793f455f0eb0a691941b89ea1e60f6359207e36081d9be193252b0f128e0daf9cfea2815a5
-  languageName: node
-  linkType: hard
-
-"shallow-react-snapshot@npm:^0.2.2":
-  version: 0.2.3
-  resolution: "shallow-react-snapshot@npm:0.2.3"
-  checksum: 10c0/178b5c92aa264da9cac379eb436bab675cdf470ea7e8391fd95eb04c6a3cbb825bc7cc3fa52c5c321662b03f3669814d7e60a6bdc72564875b6d1e2e18a698bf
   languageName: node
   linkType: hard
 

@@ -1,11 +1,5 @@
 import { render } from '@testing-library/react';
 import React, { act } from 'react';
-import { shallow } from 'shallow-react-snapshot';
-
-export const shallowRender = (element: React.ReactElement) => {
-  const app = render(element);
-  return shallow(app.container, element);
-};
 
 export const renderTree = async (element: React.ReactElement) => {
   const app = render(element);
