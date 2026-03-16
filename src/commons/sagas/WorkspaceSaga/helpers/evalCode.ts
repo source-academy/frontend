@@ -194,60 +194,29 @@ const deriveStepperBreakpointSteps = (
   }
 
   const entrypointLines = breakpointLinesByFile.get(entrypointFilePath) ?? new Set<number>();
-
-  const markerMatchesBreakpoint = (
-    marker: NonNullable<StepperOutputStep['markers']>[number],
-    redexType: 'beforeMarker' | 'afterMarker'
-  ): boolean => {
-    if (marker.redexType !== redexType) return false;
-    const line = marker.redex?.loc?.start?.line;
-    if (typeof line !== 'number') return false;
-    const source =
-      typeof marker.redex?.loc?.source === 'string' ? marker.redex.loc.source : entrypointFilePath;
-    const lines = breakpointLinesByFile.get(source) ?? entrypointLines;
-    return lines.has(line);
-  };
-
   const breakpointSteps: number[] = [];
-  // Track which breakpoint lines have already fired, so each line only stops once.
-  const firedLines = new Set<string>();
 
   for (let stepIndex = 0; stepIndex < stepperSteps.length; stepIndex++) {
-    const currentStepMarkers = stepperSteps[stepIndex].markers ?? [];
-
-    const afterMarkerBreakpointLine = currentStepMarkers.find(m =>
-      markerMatchesBreakpoint(m, 'afterMarker')
-    )?.redex?.loc?.start?.line;
-
-    const prevStepMarkers = stepIndex > 0 ? (stepperSteps[stepIndex - 1].markers ?? []) : [];
-    const prevStepCoversLine =
-      afterMarkerBreakpointLine !== undefined &&
-      prevStepMarkers.some(
-        m =>
-          m.redexType === 'beforeMarker' && m.redex?.loc?.start?.line === afterMarkerBreakpointLine
-      );
-
-    const beforeMarker = currentStepMarkers.find(m => markerMatchesBreakpoint(m, 'beforeMarker'));
-    const beforeMarkerLine = beforeMarker?.redex?.loc?.start?.line;
-    const beforeMarkerSource =
-      typeof beforeMarker?.redex?.loc?.source === 'string'
-        ? beforeMarker.redex.loc.source
-        : entrypointFilePath;
-
-    // Build a unique key per line+file so we track fired state per file.
-    const firedKey =
-      beforeMarkerLine !== undefined ? `${beforeMarkerSource}:${beforeMarkerLine}` : undefined;
-
     const isBreakpointStep =
-      // Only fire if this line hasn't already stopped once before.
-      (firedKey !== undefined &&
-        !firedLines.has(firedKey) &&
-        currentStepMarkers.some(m => markerMatchesBreakpoint(m, 'beforeMarker'))) ||
-      (afterMarkerBreakpointLine !== undefined && !prevStepCoversLine);
+      stepperSteps[stepIndex].markers?.some(marker => {
+        if (marker.redexType !== 'beforeMarker') {
+          return false;
+        }
+
+        const line = marker.redex?.loc?.start?.line;
+        if (typeof line !== 'number') {
+          return false;
+        }
+
+        const source =
+          typeof marker.redex?.loc?.source === 'string'
+            ? marker.redex.loc.source
+            : entrypointFilePath;
+        const lines = breakpointLinesByFile.get(source) ?? entrypointLines;
+        return lines.has(line);
+      }) ?? false;
 
     if (isBreakpointStep) {
-      // Mark this line as fired so it doesn't stop again.
-      if (firedKey !== undefined) firedLines.add(firedKey);
       breakpointSteps.push(stepIndex);
     }
   }
