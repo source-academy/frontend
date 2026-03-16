@@ -8046,10 +8046,10 @@ __metadata:
     process: "npm:^0.11.10"
     query-string: "npm:^9.0.0"
     re-resizable: "npm:^6.9.9"
-    react: "npm:^19.1.0"
+    react: "npm:^19.2.4"
     react-ace: "npm:^14.0.0"
     react-debounce-render: "npm:^8.0.2"
-    react-dom: "npm:^19.1.0"
+    react-dom: "npm:^19.2.4"
     react-drag-drop-files: "npm:^3.0.0"
     react-draggable: "npm:^4.4.5"
     react-dropzone: "npm:^15.0.0"
@@ -11631,7 +11631,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^19.1.0":
+"react-dom@npm:^19.2.4":
   version: 19.2.4
   resolution: "react-dom@npm:19.2.4"
   dependencies:
@@ -12022,7 +12022,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^19.1.0":
+"react@npm:^19.2.4":
   version: 19.2.4
   resolution: "react@npm:19.2.4"
   checksum: 10c0/cd2c9ff67a720799cc3b38a516009986f7fc4cb8d3e15716c6211cf098d1357ee3e348ab05ad0600042bbb0fd888530ba92e329198c92eafa0994f5213396596
