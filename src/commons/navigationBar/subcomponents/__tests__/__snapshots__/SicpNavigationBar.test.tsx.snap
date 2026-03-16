@@ -1,0 +1,79 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Navbar renders correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="bp6-navbar SicpNavigationBar secondary-navbar"
+  >
+    <div
+      class="bp6-navbar-group bp6-align-left"
+    >
+      <button
+        class="bp6-button bp6-minimal"
+      >
+        <span
+          class="bp6-button-text"
+        >
+          Table of Contents
+        </span>
+      </button>
+    </div>
+    <div
+      class="bp6-navbar-group bp6-align-right"
+    >
+      <div>
+        <button
+          class="bp6-button bp6-minimal"
+        >
+          <span
+            class="bp6-button-text"
+          >
+            Next
+          </span>
+          <span
+            aria-hidden="true"
+            class="bp6-icon bp6-icon-standard bp6-icon-arrow-right"
+            data-icon="arrow-right"
+          />
+        </button>
+      </div>
+    </div>
+    <div
+      class="bp6-navbar-group"
+    >
+      <div
+        style="width: 100%; display: flex; gap: 2px; justify-content: center;"
+      >
+        <button
+          class="bp6-button bp6-minimal"
+        >
+          <span
+            aria-hidden="true"
+            class="bp6-icon bp6-icon-standard bp6-icon-search"
+            data-icon="search"
+          />
+          <span
+            class="bp6-button-text"
+          >
+            Text Search
+          </span>
+        </button>
+        <button
+          class="bp6-button bp6-minimal"
+        >
+          <span
+            aria-hidden="true"
+            class="bp6-icon bp6-icon-standard bp6-icon-search"
+            data-icon="search"
+          />
+          <span
+            class="bp6-button-text"
+          >
+            Index Search
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
