@@ -1,12 +1,12 @@
-import * as Sentry from '@sentry/browser';
+import * as Sentry from '@sentry/react';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import { vi } from 'vitest';
 
 import { wrapSaga } from '../SafeEffects';
 
-vi.mock('@sentry/browser', async () => ({
-  ...(await vi.importActual('../../../../node_modules/@sentry/browser')),
+vi.mock('@sentry/react', async importOriginal => ({
+  ...(await importOriginal()),
   captureException: vi.fn()
 }));
 
@@ -27,6 +27,7 @@ describe('Test wrapSaga', () => {
 
   test('wrapSaga handles errors appropriately', async () => {
     const errorToThrow = new Error();
+    // eslint-disable-next-line require-yield
     const wrappedSaga = wrapSaga(function* () {
       throw errorToThrow;
     });

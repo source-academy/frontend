@@ -1,8 +1,8 @@
 import { Classes, Colors, Divider, FormGroup, Popover, Text, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import * as CopyToClipboard from 'react-copy-to-clipboard';
 import { useParams } from 'react-router';
+import CopyToClipboard from 'src/commons/utils/CopyToClipboard';
 
 import { createNewSession, getDocInfoFromSessionId } from '../collabEditing/CollabEditingHelper';
 import ControlButton from '../ControlButton';

@@ -1,4 +1,4 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import yaml from 'js-yaml';
 import React, { useEffect, useState } from 'react';
 import debounceRender from 'react-debounce-render';
@@ -48,10 +48,11 @@ function handleHeaders(headers: string): void {
     const headerObject = yaml.load(headers) as Record<string, any>;
     for (const [key, value] of Object.entries(headerObject)) {
       switch (key) {
-        case CONFIG_STRING:
+        case CONFIG_STRING: {
           const { chapter, variant } = value;
           handleEnvironment({ [DEFAULT_ENV]: { chapter, variant } });
           break;
+        }
         case ENV_STRING:
           handleEnvironment(value);
           break;

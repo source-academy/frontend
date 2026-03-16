@@ -77,6 +77,7 @@ class GameManager extends Phaser.Scene {
   private taskLogManager?: GameTaskLogManager;
   private dashboardManager?: GameDashboardManager;
   private quizManager?: GameQuizManager;
+  private actionJustSaved: boolean = false;
 
   constructor() {
     super('GameManager');
@@ -185,10 +186,14 @@ class GameManager extends Phaser.Scene {
   // Location Helpers //
   //////////////////////
 
+  // Notify the GameManager of a save when we change location
+  public notifyActionJustSaved() {
+    this.actionJustSaved = true;
+  }
+
   public async create() {
     GameGlobalAPI.getInstance().hideLayer(Layer.Character);
     await this.changeLocationTo(this.currentLocationId, true);
-    await GameGlobalAPI.getInstance().saveGame();
   }
 
   /**
@@ -256,6 +261,9 @@ class GameManager extends Phaser.Scene {
   public async changeLocationTo(locationId: LocationId, startAction: boolean = false) {
     this.currentLocationId = locationId;
 
+    //Reset the actionJustSaved flag
+    this.actionJustSaved = false;
+
     // Transition to the new location
     await blackFade(this, 300, 500, async () => {
       await this.getLayerManager().clearAllLayers();
@@ -264,6 +272,14 @@ class GameManager extends Phaser.Scene {
 
     // Update state after location is fully rendered, location has been visited
     this.getStateManager().triggerInteraction(locationId);
+
+    // Triggers a location Save at the end of every location change,
+    // except for locations where we have saved from running Location Actions
+    if (this.actionJustSaved) {
+      return;
+    }
+
+    await GameGlobalAPI.getInstance().saveGame();
   }
 
   /**

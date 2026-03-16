@@ -10,7 +10,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import clsx from 'clsx';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -716,7 +716,7 @@ const EditingWorkspace: React.FC<EditingWorkspaceProps> = props => {
 
 function uniq(a: string[]) {
   const seen: Record<string, boolean> = {};
-  return a.filter(item => (seen.hasOwnProperty(item) ? false : (seen[item] = true)));
+  return a.filter(item => (Object.hasOwnProperty.call(seen, item) ? false : (seen[item] = true)));
 }
 
 export default EditingWorkspace;

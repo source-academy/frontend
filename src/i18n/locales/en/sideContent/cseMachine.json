@@ -1,0 +1,17 @@
+{
+  "maxStepsExceeded": "Maximum number of steps exceeded.",
+  "increaseStepLimit": "Please increase the step limit if you would like to see further evaluation.",
+  "csecDescription": "The CSEC machine generates control, stash, environment and class model diagrams adapted from the notation introduced in <0>Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3, Section 2</0>.",
+  "javaCsec": "You have chosen the sublanguage <0>Java CSEC</0>.",
+  "cseDescription": "The CSE machine generates control, stash and environment model diagrams following a notation introduced in <0>Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 3, Section 2</0>.",
+  "instructions": "On this tab, the REPL will be hidden from view, so do check that your code has no errors before running the stepper. You may use this tool by running your program and then dragging the slider above to see the state of the control, stash and environment at different stages in the evaluation of your program. Clicking on the fast-forward button (double chevron) will take you to the next breakpoint in your program.",
+  "shortcutsTitle": "Some useful keyboard shortcuts:",
+  "shortcuts": {
+    "a": "a: Move to the first step",
+    "e": "e: Move to the last step",
+    "f": "f: Move to the next step",
+    "b": "b: Move to the previous step"
+  },
+  "shortcutsNote": "Note that these shortcuts are only active when the browser focus is on this tab.",
+  "label": "CSE Machine"
+}

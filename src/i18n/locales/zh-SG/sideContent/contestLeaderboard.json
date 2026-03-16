@@ -1,0 +1,22 @@
+{
+  "noEntries": "未找到符合条件的比赛排行榜条目。",
+  "titles": {
+    "score": "得分排行榜",
+    "popularVote": "人气投票排行榜",
+    "default": "比赛排行榜"
+  },
+  "tooltips": {
+    "score": "查看得分最高的比赛条目！",
+    "popularVote": "查看最受欢迎的比赛条目！",
+    "default": "查看评分最高的比赛条目！"
+  },
+  "headers": {
+    "studentName": "学生姓名",
+    "rank": "排名",
+    "score": {
+      "calculated": "计算得分",
+      "popularity": "人气得分",
+      "default": "指标"
+    }
+  }
+}

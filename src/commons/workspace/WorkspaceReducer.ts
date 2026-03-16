@@ -46,7 +46,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> 
 ) => {
   const workspaceLocation = getWorkspaceLocation(action);
   switch (workspaceLocation) {
-    case 'sourcecast':
+    case 'sourcecast': {
       const sourcecastState = SourcecastReducer(state.sourcecast, action);
       if (sourcecastState === state.sourcecast) {
         break;
@@ -55,7 +55,8 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> 
         ...state,
         sourcecast: sourcecastState
       };
-    case 'sourcereel':
+    }
+    case 'sourcereel': {
       const sourcereelState = SourcereelReducer(state.sourcereel, action);
       if (sourcereelState === state.sourcereel) {
         break;
@@ -64,6 +65,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState, SourceActionType> 
         ...state,
         sourcereel: sourcereelState
       };
+    }
     default:
       break;
   }
@@ -99,7 +101,8 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
             action.payload.library.chapter,
             action.payload.library.external.symbols,
             workspaceLocation,
-            action.payload.library.variant
+            action.payload.library.variant,
+            action.payload.library.languageOptions
           ),
           globals: action.payload.library.globals,
           externalLibrary: action.payload.library.external.name
@@ -371,7 +374,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       debuggerContext.result = action.payload.result;
       debuggerContext.lastDebuggerResult = action.payload.lastDebuggerResult;
       debuggerContext.code = action.payload.code;
-      debuggerContext.context = action.payload.context;
+      debuggerContext.context = castDraft(action.payload.context);
       debuggerContext.workspaceLocation = action.payload.workspaceLocation;
     })
     .addCase(WorkspaceActions.toggleUsingUpload, (state, action) => {

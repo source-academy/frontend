@@ -1,5 +1,5 @@
-import { BasicHostPlugin } from 'conductor/dist/conductor/host';
-import { IChannel, IConduit } from 'conductor/dist/conduit';
+import { BasicHostPlugin } from '@sourceacademy/conductor/dist/conductor/host';
+import { IChannel, IConduit } from '@sourceacademy/conductor/dist/conduit';
 
 export class BrowserHostPlugin extends BasicHostPlugin {
   requestFile(fileName: string): Promise<string | undefined> {

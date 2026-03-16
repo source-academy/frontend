@@ -1,7 +1,11 @@
-import { Chapter, Language, type SourceError, type Value, Variant } from 'js-slang/dist/types';
+import { type SourceError } from 'js-slang/dist/errors/base';
+import { Chapter, Language, Variant } from 'js-slang/dist/langs';
+import { type Value } from 'js-slang/dist/types';
 
 import type { AchievementState } from '../../features/achievement/AchievementTypes';
 import type { DashboardState } from '../../features/dashboard/DashboardTypes';
+import type { LanguageDirectoryState } from '../../features/directory/LanguageDirectoryTypes';
+import type { PluginDirectoryState } from '../../features/directory/PluginDirectoryTypes';
 import type { LeaderboardState } from '../../features/leaderboard/LeaderboardTypes';
 import type { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
@@ -37,6 +41,8 @@ export type OverallState = {
   readonly fileSystem: FileSystemState;
   readonly sideContent: SideContentManagerState;
   readonly vscode: VscodeState;
+  readonly languageDirectory: LanguageDirectoryState;
+  readonly pluginDirectory: PluginDirectoryState;
 };
 
 export type Story = {
@@ -125,7 +131,6 @@ export enum StoriesRole {
 
 export enum SupportedLanguage {
   JAVASCRIPT = 'JavaScript',
-  SCHEME = 'Scheme',
   PYTHON = 'Python',
   JAVA = 'Java',
   C = 'C'
@@ -133,7 +138,6 @@ export enum SupportedLanguage {
 
 export const SUPPORTED_LANGUAGES = [
   SupportedLanguage.JAVASCRIPT,
-  SupportedLanguage.SCHEME,
   SupportedLanguage.PYTHON,
   SupportedLanguage.JAVA,
   SupportedLanguage.C
@@ -189,32 +193,6 @@ export const htmlLanguage: SALanguage = {
   mainLanguage: SupportedLanguage.JAVASCRIPT,
   supports: {}
 };
-
-const schemeSubLanguages: Array<Pick<SALanguage, 'chapter' | 'variant' | 'displayName'>> = [
-  { chapter: Chapter.SCHEME_1, variant: Variant.EXPLICIT_CONTROL, displayName: 'Scheme \xa71' },
-  { chapter: Chapter.SCHEME_2, variant: Variant.EXPLICIT_CONTROL, displayName: 'Scheme \xa72' },
-  { chapter: Chapter.SCHEME_3, variant: Variant.EXPLICIT_CONTROL, displayName: 'Scheme \xa73' },
-  { chapter: Chapter.SCHEME_4, variant: Variant.EXPLICIT_CONTROL, displayName: 'Scheme \xa74' },
-  { chapter: Chapter.FULL_SCHEME, variant: Variant.EXPLICIT_CONTROL, displayName: 'Full Scheme' }
-];
-
-export const schemeLanguages: SALanguage[] = schemeSubLanguages.map(sublang => {
-  return {
-    ...sublang,
-    mainLanguage: SupportedLanguage.SCHEME,
-    supports: { repl: true, cseMachine: true }
-  };
-});
-
-export function isSchemeLanguage(chapter: Chapter): boolean {
-  return [
-    Chapter.SCHEME_1,
-    Chapter.SCHEME_2,
-    Chapter.SCHEME_3,
-    Chapter.SCHEME_4,
-    Chapter.FULL_SCHEME
-  ].includes(chapter);
-}
 
 export function isCseVariant(variant: Variant): boolean {
   return variant == Variant.EXPLICIT_CONTROL;
@@ -312,7 +290,6 @@ export const ALL_LANGUAGES: readonly SALanguage[] = [
   fullJSLanguage,
   fullTSLanguage,
   htmlLanguage,
-  ...schemeLanguages,
   ...pyLanguages,
   ...javaLanguages,
   ...cLanguages
@@ -613,6 +590,18 @@ export const defaultVscode: VscodeState = {
   isVscode: false
 };
 
+export const defaultLanguageDirectory: LanguageDirectoryState = {
+  selectedLanguageId: null,
+  selectedEvaluatorId: null,
+  languages: [],
+  languageMap: {}
+};
+
+export const defaultPluginDirectory: PluginDirectoryState = {
+  plugins: [],
+  pluginMap: {}
+};
+
 export const defaultState: OverallState = {
   router: defaultRouter,
   achievement: defaultAchievement,
@@ -625,5 +614,7 @@ export const defaultState: OverallState = {
   featureFlags: defaultFeatureFlags,
   fileSystem: defaultFileSystem,
   sideContent: defaultSideContentManager,
-  vscode: defaultVscode
+  vscode: defaultVscode,
+  languageDirectory: defaultLanguageDirectory,
+  pluginDirectory: defaultPluginDirectory
 };

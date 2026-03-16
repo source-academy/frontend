@@ -2,19 +2,18 @@ import { ActionCondition, IGameActionable } from '../action/GameActionTypes';
 import { SpeakerDetail } from '../character/GameCharacterTypes';
 
 /**
- * @typedef {string} PartName - the label for one part/section of the dialogue
+ * The label for one part/section of the dialogue
  * Parts can be used to play one part of the dialogue after another.
  */
 export type PartName = string;
 
 /**
- * @typedef {string} Choice - choice option that is shown on a prompt button
+ * Choice option that is shown on a prompt button
  */
 export type Choice = string;
 
 /**
- * @typedef DialogueLine - a line in the dialogue which can be augmented with
- * actions, gotos and prompts
+ * A line in the dialogue which can be augmented with actions, gotos and prompts.
  * @param line - the spoken text for this line
  * @param speakerDetail - change in speaker for this line if any
  * @param goto - which part of the dialogue to go to after this line.
@@ -33,7 +32,7 @@ export type DialogueLine = IGameActionable & {
 };
 
 /**
- * @typedef DialogueStorageLine - dialogue line containing only the speaker name and the line itself.
+ * A dialogue line containing only the speaker name and the line itself.
  * This is primarily used for storing minimal information in the dialogue storage.
  * @param speaker - the name of the speaker
  * @param line - the spoken text for this line
@@ -49,7 +48,7 @@ export type Dialogue = {
 };
 
 /**
- * @typedef Prompt - a prompt pop-up with a title and choices
+ * A prompt pop-up with a title and choices.
  * @param promptTitle - a line or question to provide context for prompt
  * @param choices - possible options the user can select and associated
  * gotos

@@ -1,8 +1,6 @@
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
 import 'src/styles/Leaderboard.scss';
 
-import { ColDef } from 'ag-grid-community';
+import { type ColDef, themeAlpine } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import React, { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
@@ -19,13 +17,17 @@ import leaderboard_background from '../../../assets/leaderboard_background.jpg';
 import LeaderboardDropdown from './LeaderboardDropdown';
 import LeaderboardExportButton from './LeaderboardExportButton';
 import LeaderboardPodium from './LeaderboardPodium';
+import { convertToRandomNumber } from './OverallLeaderboard';
 
 type Props = {
-  type: string;
-  contestID: number;
+  type: 'score' | 'popularvote';
+  contest: LeaderboardContestDetails;
 };
 
-const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
+const ContestLeaderboard: React.FC<Props> = ({
+  type,
+  contest: { contest_id: contestId, title: contestName }
+}) => {
   const courseID = useTypedSelector(store => store.session.courseId);
   const visibleEntries = useTypedSelector(
     store => store.session?.topContestLeaderboardDisplay ?? 10
@@ -39,17 +41,11 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
 
   useEffect(() => {
     if (type === 'score') {
-      dispatch(LeaderboardActions.getAllContestScores(contestID, visibleEntries));
+      dispatch(LeaderboardActions.getAllContestScores(contestId, visibleEntries));
     } else {
-      dispatch(LeaderboardActions.getAllContestPopularVotes(contestID, visibleEntries));
+      dispatch(LeaderboardActions.getAllContestPopularVotes(contestId, visibleEntries));
     }
-  }, [dispatch, contestID, type]);
-
-  // Retrieve contests (For dropdown)
-  const contestDetails: LeaderboardContestDetails[] = useTypedSelector(
-    store => store.leaderboard.contests
-  );
-  const contestName = contestDetails.find(contest => contest.contest_id === contestID)?.title;
+  }, [dispatch, contestId, type]);
 
   useEffect(() => {
     dispatch(LeaderboardActions.getContests());
@@ -71,17 +67,6 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
     .filter(row => row.rank <= Number(visibleEntries))
     .slice(top3.length);
 
-  // Set sample profile pictures (Seeded random)
-  function convertToRandomNumber(id: string): number {
-    const str = id.slice(1);
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      const char = str.charCodeAt(i);
-      hash = (hash << 5) - hash + char;
-    }
-    return (Math.abs(hash) % 7) + 1;
-  }
-
   rankedLeaderboard.map((row: ContestLeaderboardRow) => {
     row.avatar = `/assets/Sample_Profile_${convertToRandomNumber(row.username)}.jpg`;
   });
@@ -98,9 +83,8 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
     () => [
       {
         field: 'rank',
-        suppressMovable: true,
         headerName: 'Rank',
-        width: 84,
+        flex: 84,
         sortable: true,
         cellRenderer: (params: any) => {
           const rank = params.value;
@@ -110,9 +94,8 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
       },
       {
         field: 'avatar',
-        suppressMovable: true,
         headerName: 'Avatar',
-        width: 180,
+        flex: 180,
         sortable: false,
         cellRenderer: (params: any) => (
           <img
@@ -124,20 +107,18 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
           />
         )
       },
-      { field: 'name', suppressMovable: true, headerName: 'Name', width: 520, sortable: true },
+      { field: 'name', headerName: 'Name', flex: 520, sortable: true },
       {
         field: 'score',
-        suppressMovable: true,
         headerName: 'Score',
-        width: 154,
+        flex: 154,
         sortable: true,
         valueFormatter: params => params.value?.toFixed(2)
       },
       {
         field: 'code',
-        suppressMovable: true,
         headerName: 'Code',
-        width: 260,
+        flex: 260,
         sortable: false,
         cellRenderer: (params: any) => (
           <a
@@ -153,6 +134,7 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
         )
       }
     ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -163,16 +145,16 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
 
       <div className="buttons-container">
         {/* Leaderboard Options Dropdown */}
-        <LeaderboardDropdown contests={contestDetails} />
-
+        <LeaderboardDropdown />
         {/* Export Button */}
-        <LeaderboardExportButton type={type} contest={contestName} contestID={contestID} />
+        <LeaderboardExportButton type={type} contest={contestName} contestID={contestId} />
       </div>
 
       {/* Leaderboard Table (Top 3) */}
-      <div className="ag-theme-alpine">
+      <div className="leaderboard-table-container">
         <h2>Contest Winners</h2>
         <AgGridReact
+          theme={themeAlpine}
           rowData={top3}
           columnDefs={columnDefs}
           domLayout="autoHeight"
@@ -186,9 +168,10 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
       <div className="table-gap"></div>
 
       {/* Honourable Mentions */}
-      <div className="ag-theme-alpine">
+      <div className="leaderboard-table-container">
         <h2>Honourable Mentions</h2>
         <AgGridReact
+          theme={themeAlpine}
           rowData={rest}
           columnDefs={columnDefs}
           domLayout="autoHeight"
@@ -201,10 +184,5 @@ const ContestLeaderboard: React.FC<Props> = ({ type, contestID }) => {
     </div>
   );
 };
-
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
-export const Component = ContestLeaderboard;
-Component.displayName = 'ContestLeaderboard';
 
 export default ContestLeaderboard;

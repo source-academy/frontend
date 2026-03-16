@@ -13,7 +13,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { sortBy } from 'es-toolkit';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, useLoaderData, useParams } from 'react-router';
 import { numberRegExp } from 'src/features/academy/AcademyTypes';
@@ -308,5 +308,10 @@ const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) 
     options={{ minimal: true, className: 'collapse-button' }}
   />
 );
+
+// react-router lazy loading
+// https://reactrouter.com/en/main/route/lazy
+export const Component = Assessment;
+Component.displayName = 'Assessment';
 
 export default Assessment;

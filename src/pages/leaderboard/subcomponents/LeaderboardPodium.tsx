@@ -37,9 +37,4 @@ const LeaderboardPodium: React.FC<Props> = ({ type, data, outputType }) => {
   );
 };
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
-export const Component = LeaderboardPodium;
-Component.displayName = 'LeaderboardPodium';
-
 export default LeaderboardPodium;

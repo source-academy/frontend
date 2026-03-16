@@ -1030,8 +1030,9 @@ export const getGrading = async (
 
   const gradingResult = await resp.json();
   const grading: GradingAnswer = gradingResult.answers.map((gradingQuestion: any) => {
-    const { student, question, grade, team } = gradingQuestion;
+    const { id, student, question, grade, team } = gradingQuestion;
     const result = {
+      id,
       question: {
         answer: question.answer,
         lastModifiedAt: question.lastModifiedAt,
@@ -1054,7 +1055,9 @@ export const getGrading = async (
         xp: grade.xp,
         xpAdjustment: grade.xpAdjustment,
         comments: grade.comments
-      }
+      },
+      ai_comments: gradingQuestion.ai_comments?.response?.split('|||') || [],
+      prompts: gradingQuestion.prompts
     } as GradingQuestion;
 
     if (gradingQuestion.grade.grader !== null) {
@@ -1064,7 +1067,11 @@ export const getGrading = async (
     return result;
   });
 
-  return { answers: grading, assessment: gradingResult.assessment };
+  return {
+    enable_llm_grading: gradingResult.enable_llm_grading,
+    answers: grading,
+    assessment: gradingResult.assessment
+  };
 };
 
 /**
@@ -1544,6 +1551,36 @@ export const removeAssessmentConfig = async (
       noHeaderAccept: true
     }
   );
+
+  return resp;
+};
+
+/**
+ * POST /courses/{courseId}/admin/generate-comments/{answer_id}/
+ */
+export const postGenerateComments = async (
+  tokens: Tokens,
+  answer_id: number
+): Promise<{ comments: string[] } | null> => {
+  const resp = await request(`${courseId()}/admin/generate-comments/${answer_id}`, 'POST', {
+    ...tokens
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  return await resp.json();
+};
+
+export const saveFinalComment = async (
+  tokens: Tokens,
+  answer_id: number,
+  comment: string
+): Promise<Response | null> => {
+  const resp = await request(`${courseId()}/admin/save-final-comment/${answer_id}`, 'POST', {
+    body: { comment: comment },
+    ...tokens
+  });
 
   return resp;
 };

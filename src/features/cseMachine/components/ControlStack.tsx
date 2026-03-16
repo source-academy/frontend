@@ -1,6 +1,7 @@
 import { Control } from 'js-slang/dist/cse-machine/interpreter';
 import { ControlItem, Instr } from 'js-slang/dist/cse-machine/types';
-import { Chapter, StatementSequence } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
+import { StatementSequence } from 'js-slang/dist/types';
 import { Node } from 'js-slang/dist/types';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';

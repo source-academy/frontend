@@ -1,5 +1,3 @@
-/*eslint no-eval: "error"*/
-/*eslint-env browser*/
 import { camelCase } from 'es-toolkit';
 import { mapKeys } from 'es-toolkit/compat';
 import type { SagaIterator } from 'redux-saga';
@@ -640,7 +638,11 @@ function* sendGrade(
   });
 
   yield put(
-    actions.updateGrading(submissionId, { answers: newGrading, assessment: grading.assessment })
+    actions.updateGrading(submissionId, {
+      answers: newGrading,
+      assessment: grading.assessment,
+      enable_llm_grading: false
+    })
   );
 }
 

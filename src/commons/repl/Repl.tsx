@@ -2,9 +2,9 @@ import { Card, Pre } from '@blueprintjs/core';
 import { Ace } from 'ace-builds';
 import clsx from 'clsx';
 import { parseError } from 'js-slang';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { stringify } from 'js-slang/dist/utils/stringify';
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import type { InterpreterOutput, ResultOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';

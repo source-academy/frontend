@@ -1,0 +1,13 @@
+{
+  "welcome": "Welcome to the Stepper!",
+  "instructions": "On this tab, the REPL will be hidden from view, so do check that your code has no errors before running the stepper. You may use this tool by writing your program on the left, then dragging the slider above to see its evaluation.",
+  "evaluationSteps": "On even-numbered steps, the part of the program that will be evaluated next is highlighted in yellow. On odd-numbered steps, the result of the evaluation is highlighted in green. You can change the maximum steps limit (500-5000, default 1000) in the control bar.",
+  "shortcutsTitle": "Some useful keyboard shortcuts:",
+  "shortcuts": {
+    "a": "a: Move to the first step",
+    "e": "e: Move to the last step",
+    "f": "f: Move to the next step",
+    "b": "b: Move to the previous step"
+  },
+  "shortcutsNote": "Note that these shortcuts are only active when the browser focus is on this tab (click on or above the explanation text)."
+}

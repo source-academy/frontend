@@ -103,19 +103,15 @@ export const retrieveFilesInWorkspaceAsRecord = (
  * @param fileSystem        The file system instance.
  * @param files             A mapping from file paths to file contents.
  */
-export const overwriteFilesInWorkspace = (
+export const overwriteFilesInWorkspace = async (
   workspaceLocation: WorkspaceLocation,
   fileSystem: FSModule,
   files: Record<string, string>
 ): Promise<void> => {
-  return rmFilesInDirRecursively(fileSystem, WORKSPACE_BASE_PATHS[workspaceLocation]).then(() => {
-    return new Promise(async (resolve, reject) => {
-      for (const [filePath, fileContents] of Object.entries(files)) {
-        await writeFileRecursively(fileSystem, filePath, fileContents).catch(err => reject(err));
-      }
-      resolve();
-    });
-  });
+  await rmFilesInDirRecursively(fileSystem, WORKSPACE_BASE_PATHS[workspaceLocation]);
+  for (const [filePath, fileContents] of Object.entries(files)) {
+    await writeFileRecursively(fileSystem, filePath, fileContents);
+  }
 };
 
 /**

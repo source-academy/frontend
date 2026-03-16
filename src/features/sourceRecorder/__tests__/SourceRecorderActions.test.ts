@@ -1,4 +1,4 @@
-import { Chapter } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
 
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
