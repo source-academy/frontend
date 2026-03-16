@@ -45,6 +45,8 @@ test('Dropdown does not mount Profile, DropdownCourses and DropdownCreateCourses
   const app = getElement(mockStore);
   const tree = await renderTreeJson(app);
   expect(tree).toMatchSnapshot();
+
+  // TODO: Expect the Profile component to NOT be mounted
 });
 
 test('Dropdown correctly mounts Profile, DropdownCourses, and DropdownCreateCourses components when a user is logged in', async () => {
@@ -56,4 +58,6 @@ test('Dropdown correctly mounts Profile, DropdownCourses, and DropdownCreateCour
   const app = getElement(mockStore);
   const tree = await renderTreeJson(app);
   expect(tree).toMatchSnapshot();
+
+  // TODO: Expect the Profile component to be mounted
 });
