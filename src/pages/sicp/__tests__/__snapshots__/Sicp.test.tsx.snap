@@ -104,7 +104,6 @@ exports[`Sicp renders > correctly 1`] = `
                 <div
                   aria-hidden="true"
                   class="bp6-collapse-body"
-                  style="transform: translateY(-undefinedpx);"
                 />
               </div>
             </li>
@@ -129,7 +128,6 @@ exports[`Sicp renders > correctly 1`] = `
                 <div
                   aria-hidden="true"
                   class="bp6-collapse-body"
-                  style="transform: translateY(-undefinedpx);"
                 />
               </div>
             </li>
@@ -154,7 +152,6 @@ exports[`Sicp renders > correctly 1`] = `
                 <div
                   aria-hidden="true"
                   class="bp6-collapse-body"
-                  style="transform: translateY(-undefinedpx);"
                 />
               </div>
             </li>
@@ -179,7 +176,6 @@ exports[`Sicp renders > correctly 1`] = `
                 <div
                   aria-hidden="true"
                   class="bp6-collapse-body"
-                  style="transform: translateY(-undefinedpx);"
                 />
               </div>
             </li>
@@ -204,7 +200,6 @@ exports[`Sicp renders > correctly 1`] = `
                 <div
                   aria-hidden="true"
                   class="bp6-collapse-body"
-                  style="transform: translateY(-undefinedpx);"
                 />
               </div>
             </li>
@@ -247,7 +242,6 @@ exports[`Sicp renders > correctly 1`] = `
                 <div
                   aria-hidden="true"
                   class="bp6-collapse-body"
-                  style="transform: translateY(-undefinedpx);"
                 />
               </div>
             </li>
@@ -290,7 +284,6 @@ exports[`Sicp renders > correctly 1`] = `
                 <div
                   aria-hidden="true"
                   class="bp6-collapse-body"
-                  style="transform: translateY(-undefinedpx);"
                 />
               </div>
             </li>
@@ -333,7 +326,6 @@ exports[`Sicp renders > correctly 1`] = `
                 <div
                   aria-hidden="true"
                   class="bp6-collapse-body"
-                  style="transform: translateY(-undefinedpx);"
                 />
               </div>
             </li>
@@ -376,7 +368,6 @@ exports[`Sicp renders > correctly 1`] = `
                 <div
                   aria-hidden="true"
                   class="bp6-collapse-body"
-                  style="transform: translateY(-undefinedpx);"
                 />
               </div>
             </li>
@@ -419,7 +410,6 @@ exports[`Sicp renders > correctly 1`] = `
                 <div
                   aria-hidden="true"
                   class="bp6-collapse-body"
-                  style="transform: translateY(-undefinedpx);"
                 />
               </div>
             </li>
@@ -444,7 +434,6 @@ exports[`Sicp renders > correctly 1`] = `
                 <div
                   aria-hidden="true"
                   class="bp6-collapse-body"
-                  style="transform: translateY(-undefinedpx);"
                 />
               </div>
             </li>
@@ -469,7 +458,6 @@ exports[`Sicp renders > correctly 1`] = `
                 <div
                   aria-hidden="true"
                   class="bp6-collapse-body"
-                  style="transform: translateY(-undefinedpx);"
                 />
               </div>
             </li>
