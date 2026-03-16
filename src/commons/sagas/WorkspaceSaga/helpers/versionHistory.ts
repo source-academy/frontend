@@ -239,9 +239,9 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): any {
     return;
   }
 
-  // Submit the answer; the backend handles saving as a version
+  // Submit the answer; the backend handles saving as a version.
+  // Save status (saved/saveFailed) is dispatched by the submitAnswer saga in BackendSaga.
   yield put(SessionActions.submitAnswer(questionId, code));
-  yield put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'));
 
   // Refresh version history
   yield call(fetchVersionHistorySaga, {
