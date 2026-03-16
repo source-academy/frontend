@@ -8072,6 +8072,7 @@ __metadata:
     path-browserify: "npm:^1.0.1"
     phaser: "npm:~3.90.0"
     phaser3spectorjs: "npm:^0.0.8"
+    precache-striping: "npm:^0.3.4"
     prettier: "npm:^3.3.3"
     process: "npm:^0.11.10"
     query-string: "npm:^9.0.0"
@@ -11392,6 +11393,16 @@ __metadata:
   bin:
     prebuild-install: bin.js
   checksum: 10c0/25919a42b52734606a4036ab492d37cfe8b601273d8dfb1fa3c84e141a0a475e7bad3ab848c741d2f810cef892fcf6059b8c7fe5b29f98d30e0c29ad009bedff
+  languageName: node
+  linkType: hard
+
+"precache-striping@npm:^0.3.4":
+  version: 0.3.4
+  resolution: "precache-striping@npm:0.3.4"
+  peerDependencies:
+    workbox-precaching: ">=6.5.0"
+    workbox-routing: ">=6.5.0"
+  checksum: 10c0/552901b887b5bdd7f413848c5d74aae7fa24dbe8f2ad7b4b27882e04e489ffc5e73de87a616ec563191cf58cb21998baf8a892fc30a72af62495169126e2257b
   languageName: node
   linkType: hard
 
