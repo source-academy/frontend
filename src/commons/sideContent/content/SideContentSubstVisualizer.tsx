@@ -260,7 +260,7 @@ const FunctionDefinitionPopoverContent: React.FC<FunctionDefinitionPopoverConten
   renderFunctionArguments
 }) => {
   return (
-    <div className={classNames('stepper-popover', Classes.DARK)}>
+    <div className={clsx('stepper-popover', Classes.DARK)}>
       <div className="stepper-display">
         <Icon icon="code" />
         <span>{' Function definition'}</span>
