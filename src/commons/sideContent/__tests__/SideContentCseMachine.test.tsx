@@ -9,6 +9,13 @@ import { mockContext } from '../../mocks/ContextMocks';
 import { visualizeCseMachine } from '../../utils/JsSlangHelper';
 import { SideContentCseMachine } from '../content/SideContentCseMachine';
 
+// Mock BlueprintJS Slider due to a bug in initial state causing invalid CSS
+// to be generated: `style="left: calc(-0px + (% * nan));"`
+vi.mock('@blueprintjs/core', async importOriginal => ({
+  ...(await importOriginal()),
+  Slider: (props: any) => <div data-testid="mock-slider">{props.children}</div>
+}));
+
 const mockStore = mockInitialStore();
 const element = (
   <Provider store={mockStore}>

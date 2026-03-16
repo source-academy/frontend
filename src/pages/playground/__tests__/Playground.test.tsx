@@ -21,6 +21,13 @@ import Playground, { handleHash } from '../Playground';
 (window as any).Inspector = vi.fn();
 (window as any).Inspector.highlightClean = vi.fn();
 
+// Mock BlueprintJS Slider due to a bug in initial state causing invalid CSS
+// to be generated: `style="left: calc(-0px + (% * nan));"`
+vi.mock('@blueprintjs/core', async importOriginal => ({
+  ...(await importOriginal()),
+  Slider: (props: any) => <div data-testid="mock-slider">{props.children}</div>
+}));
+
 // Using @testing-library/react to render snapshot instead of react-test-renderer
 // as the useRefs require the notion of React DOM
 const renderTree = async (router: Router) => {
