@@ -1572,39 +1572,19 @@ export const postGenerateComments = async (
   return await resp.json();
 };
 
-export const saveFinalComment = async (
-  tokens: Tokens,
-  answer_id: number,
-  comment: string
-): Promise<Response | null> => {
-  const resp = await request(`${courseId()}/admin/save-final-comment/${answer_id}`, 'POST', {
-    body: { comment: comment },
-    ...tokens
-  });
-
-  return resp;
-};
-
 export const saveChosenComments = async (
   tokens: Tokens,
-  submissionId: number,
-  questionId: number,
   answerId: number,
   selectedIndices: number[],
   edits: Record<number, string>
 ): Promise<Response | null> => {
-  const resp = await request(
-    `${courseId()}/admin/save-chosen-comments/${submissionId}/${questionId}`,
-    'POST',
-    {
-      body: {
-        answer_id: answerId,
-        selected_indices: selectedIndices,
-        edits: edits
-      },
-      ...tokens
-    }
-  );
+  const resp = await request(`${courseId()}/admin/save-chosen-comments/${answerId}`, 'POST', {
+    body: {
+      selected_indices: selectedIndices,
+      edits: edits
+    },
+    ...tokens
+  });
 
   return resp;
 };
