@@ -1,7 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/errors/base';
-import { act } from 'react';
-
 
 import { AutogradingResult, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import { mockGradingAnswer } from '../../mocks/GradingMocks';
