@@ -88,7 +88,7 @@ describe('nonempty client ID', () => {
     const closeWindowMock = vi.spyOn(window, 'close');
     closeWindowMock.mockImplementation(() => {});
 
-    act(() => {
+    await act(async () => {
       renderWithLocation(<GitHubCallback />, urlWithCode);
     });
 
