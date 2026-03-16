@@ -38,13 +38,6 @@ export default defineConfig({
       //   inlineProcessEnv.REACT_APP_SW_EXCLUDE_REGEXES = undefined;
       // }
 
-      // const injectManifestPlugin = config.plugins.find(
-      //   plugin => plugin.constructor.name === 'InjectManifest'
-      // );
-      // if (injectManifestPlugin) {
-      //   injectManifestPlugin.config.maximumFileSizeToCacheInBytes = 20 * 1024 * 1024;
-      // }
-
       // // add rules to pack WASM (for Sourceror)
       // const wasmExtensionRegExp = /\.wasm$/;
       // config.resolve.extensions.push('.wasm');
