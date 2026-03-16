@@ -1,4 +1,4 @@
-import { call, debounce, put, select, takeEvery } from 'redux-saga/effects';
+import { call, debounce, put, select, take, takeEvery } from 'redux-saga/effects';
 
 import SessionActions from '../../../application/actions/SessionActions';
 import type { OverallState } from '../../../application/ApplicationTypes';
@@ -143,7 +143,7 @@ export function* restoreVersionSaga(
     return;
   }
 
-  const { code, name: restoredVersionName, timestamp: restoredVersionTimestamp } = restoredVersion;
+  const { name: restoredVersionName, timestamp: restoredVersionTimestamp } = restoredVersion;
 
   // Get active editor tab index to update the editor
   const activeEditorTabIndex: number | null = yield select(
@@ -161,9 +161,6 @@ export function* restoreVersionSaga(
     const overview = state.session.assessmentOverviews?.find(o => o.id === assessmentId);
     return overview ? overview.maxTeamSize !== 1 : false;
   });
-
-  // Populate the editor with the restored code
-  yield put(WorkspaceActions.updateEditorValue(workspaceLocation, activeEditorTabIndex, code));
 
   if (isTeamAssessment) {
     // For team assessments, dont submit
@@ -246,6 +243,13 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): any {
 
   // Submit the answer; the backend handles saving as a version.
   yield put(SessionActions.submitAnswer(questionId, code));
+
+  // Wait for submit to complete before refreshing
+  yield take(
+    (action: any) =>
+      action.type === WorkspaceActions.updateSaveStatus.type &&
+      (action.payload.saveStatus === 'saved' || action.payload.saveStatus === 'saveFailed')
+  );
 
   // Refresh version history
   yield call(fetchVersionHistorySaga, {
