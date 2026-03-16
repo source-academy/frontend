@@ -82,7 +82,7 @@ export class PrecacheStriping {
     registerRoute(new PrecacheRoute(leaderController, optionResolver()));
   }
   public get createHandlerBoundToURL() {
-    return this._leader.createHandlerBoundToURL;
+    return this._leader.createHandlerBoundToURL.bind(this._leader);
   }
   public registerRoute(capture: RouteMatchCallback, handler: RouteHandler) {
     registerRoute(new Route(capture, handler));
