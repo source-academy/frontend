@@ -6,7 +6,7 @@ import type { Tokens } from '../../../application/types/SessionTypes';
 import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
 import WorkspaceActions from '../../../workspace/WorkspaceActions';
 import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
-import { getVersionHistory, postAnswer, updateVersionName } from '../../RequestsSaga';
+import { getVersionHistory, updateVersionName } from '../../RequestsSaga';
 
 /**
  * Helper to get the current question ID for assessment or grading workspace.
@@ -145,46 +145,51 @@ export function* restoreVersionSaga(
 
   const { code, name: restoredVersionName, timestamp: restoredVersionTimestamp } = restoredVersion;
 
-  const questionId: number | undefined = yield call(getCurrentQuestionId, workspaceLocation);
-  if (questionId === undefined) {
+  // Get active editor tab index to update the editor
+  const activeEditorTabIndex: number | null = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].activeEditorTabIndex
+  );
+
+  if (activeEditorTabIndex === null) {
     return;
   }
 
-  // Get authentication tokens
-  const tokens: Tokens = yield select((state: OverallState) => ({
-    accessToken: state.session.accessToken,
-    refreshToken: state.session.refreshToken
-  }));
+  // Check if this is a team assessment
+  const isTeamAssessment: boolean = yield select((state: OverallState) => {
+    const assessmentId = state.workspaces.assessment.currentAssessment;
+    if (assessmentId === undefined) return false;
+    const overview = state.session.assessmentOverviews?.find(o => o.id === assessmentId);
+    return overview ? overview.maxTeamSize !== 1 : false;
+  });
 
-  // Submit the restored code as the answer
-  const resp: Response | null = yield call(postAnswer, questionId, code, tokens);
+  // Populate the editor with the restored code
+  yield put(WorkspaceActions.updateEditorValue(workspaceLocation, activeEditorTabIndex, code));
 
-  if (resp && resp.ok) {
-    // Fetch updated version history to get the new version's ID
-    yield call(fetchVersionHistorySaga, {
-      payload: { workspaceLocation },
-      type: WorkspaceActions.fetchVersionHistory.type
-    });
+  if (isTeamAssessment) {
+    // For team assessments, dont submit
+    yield put(WorkspaceActions.updateHasUnsavedChanges(workspaceLocation, true));
+    return;
+  }
 
-    // Name the restored as "(name)-restored"
-    const newestVersion: { id: string; timestamp: number } | undefined = yield select(
-      (state: OverallState) => {
-        const versions = state.workspaces[workspaceLocation].versionHistory.versions;
-        if (versions.length === 0) return undefined;
-        return versions.reduce((latest, v) => (v.timestamp > latest.timestamp ? v : latest));
-      }
-    );
+  // Auto-save the restored code
+  yield call(performAutoSave, workspaceLocation);
 
-    if (newestVersion) {
-      const restoredLabel =
-        restoredVersionName || new Date(restoredVersionTimestamp).toLocaleString();
-      const restoredName = `${restoredLabel}-restored`;
-
-      // Optimistically update the name in state
-      yield put(WorkspaceActions.nameVersion(workspaceLocation, newestVersion.id, restoredName));
+  // Name the restored version as "(name)-restored"
+  const newestVersion: { id: string; timestamp: number } | undefined = yield select(
+    (state: OverallState) => {
+      const versions = state.workspaces[workspaceLocation].versionHistory.versions;
+      if (versions.length === 0) return undefined;
+      return versions.reduce((latest, v) => (v.timestamp > latest.timestamp ? v : latest));
     }
-  } else {
-    yield put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saveFailed'));
+  );
+
+  if (newestVersion) {
+    const restoredLabel =
+      restoredVersionName || new Date(restoredVersionTimestamp).toLocaleString();
+    const restoredName = `${restoredLabel}-restored`;
+
+    // Optimistically update the name in state
+    yield put(WorkspaceActions.nameVersion(workspaceLocation, newestVersion.id, restoredName));
   }
 }
 
@@ -240,7 +245,6 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): any {
   }
 
   // Submit the answer; the backend handles saving as a version.
-  // Save status (saved/saveFailed) is dispatched by the submitAnswer saga in BackendSaga.
   yield put(SessionActions.submitAnswer(questionId, code));
 
   // Refresh version history
