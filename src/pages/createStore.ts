@@ -29,6 +29,7 @@ export function createStore() {
     // We already provide the generic type argument, so we put
     // `as any` to prevent excessively long type inference
     preloadedState: initialStore as any
+    // TODO: Sentry Redux integration once we update to RTK2
   });
   sagaMiddleware.run(MainSaga);
 
@@ -54,6 +55,12 @@ function loadStore(loadedStore: SavedState | undefined) {
         octokit: loadedStore.session.githubAccessToken
           ? generateOctokitInstance(loadedStore.session.githubAccessToken)
           : undefined
+      }
+    },
+    featureFlags: {
+      modifiedFlags: {
+        ...defaultState.featureFlags.modifiedFlags,
+        ...loadedStore.featureFlags
       }
     },
     workspaces: {

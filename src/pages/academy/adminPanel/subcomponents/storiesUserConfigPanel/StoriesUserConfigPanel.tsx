@@ -1,5 +1,5 @@
 import { Button, H2 } from '@blueprintjs/core';
-import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
+import { type ColDef, type GridApi, type GridReadyEvent, themeBalham } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import React from 'react';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
@@ -65,8 +65,9 @@ const StoriesUserConfigPanel: React.FC<Props> = props => {
   };
 
   const grid = (
-    <div className="Grid ag-grid-parent ag-theme-balham">
+    <div className="Grid">
       <AgGridReact
+        theme={themeBalham}
         domLayout="autoHeight"
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}

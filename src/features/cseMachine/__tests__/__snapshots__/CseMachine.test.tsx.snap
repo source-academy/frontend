@@ -1153,10 +1153,16 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Group
-    listening={false}
+    listening={true}
+    onClick={[Function]}
+    onContextMenu={[Function]}
+    onMouseDown={[Function]}
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
   >
     <Path
       data="M 140 162.5 L 170 240 L 170 240 "
+      hitStrokeWidth={10}
       preventDefault={false}
       stroke="#999"
       strokeWidth={1}
@@ -1279,10 +1285,16 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Group
-    listening={false}
+    listening={true}
+    onClick={[Function]}
+    onContextMenu={[Function]}
+    onMouseDown={[Function]}
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
   >
     <Path
       data="M 140 232.5 L 170 390 L 170 390 "
+      hitStrokeWidth={10}
       preventDefault={false}
       stroke="#999"
       strokeWidth={1}
@@ -1762,10 +1774,16 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     />
   </Label>
   <Group
-    listening={false}
+    listening={true}
+    onClick={[Function]}
+    onContextMenu={[Function]}
+    onMouseDown={[Function]}
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
   >
     <Path
       data="M 140 92.5 L 170 105 L 170 105 "
+      hitStrokeWidth={10}
       preventDefault={false}
       stroke="#999"
       strokeWidth={1}
@@ -1937,10 +1955,16 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     />
   </Label>
   <Group
-    listening={false}
+    listening={true}
+    onClick={[Function]}
+    onContextMenu={[Function]}
+    onMouseDown={[Function]}
+    onMouseEnter={[Function]}
+    onMouseLeave={[Function]}
   >
     <Path
       data="M 181.5 40 L 349 330 L 349 330 "
+      hitStrokeWidth={10}
       preventDefault={false}
       stroke="#999"
       strokeWidth={1}

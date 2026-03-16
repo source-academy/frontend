@@ -1,22 +1,24 @@
 import { memoize } from 'lodash';
-import { LoaderFunction, Navigate, redirect, RouteObject } from 'react-router';
+import { type LoaderFunction, redirect, replace, type RouteObject } from 'react-router';
 import { Role } from 'src/commons/application/ApplicationTypes';
-import Assessment from 'src/commons/assessment/Assessment';
 import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';
 import { assessmentTypeLink } from 'src/commons/utils/ParamParseHelper';
 import { assessmentRegExp, gradingRegExp, teamRegExp } from 'src/features/academy/AcademyTypes';
 import { GuardedRoute } from 'src/routes/routeGuard';
 
 import { store } from '../createStore';
+import {
+  contestLeaderboardLoader,
+  leaderboardLoader
+} from '../leaderboard/subcomponents/leaderboardUtils';
 
 const notFoundPath = 'not_found';
 
+const Assessment = () => import('../../commons/assessment/Assessment');
 const Game = () => import('./game/Game');
 const Sourcecast = () => import('../sourcecast/Sourcecast');
 const Achievement = () => import('../achievement/Achievement');
-const Leaderboard = () => import('../leaderboard/Leaderboard');
-const OverallLeaderboardWrapper = () =>
-  import('../leaderboard/subcomponents/OverallLeaderboardWrapper');
+const OverallLeaderboard = () => import('../leaderboard/subcomponents/OverallLeaderboard');
 const ContestLeaderboardWrapper = () =>
   import('../leaderboard/subcomponents/ContestLeaderboardWrapper');
 const NotFound = () => import('../notFound/NotFound');
@@ -70,17 +72,26 @@ const getCommonAcademyRoutes = (): RouteObject[] => {
 
   return [
     gameRoute,
-    { path: '', element: <Navigate replace to={notFoundPath} />, loader: homePageRedirect },
+    { path: '', loader: () => homePageRedirect() || replace(notFoundPath) },
     {
       path: `:assessmentConfigType/${assessmentRegExp}`,
-      element: <Assessment />,
+      lazy: Assessment,
       loader: assessmentLoader
     },
     { path: 'sourcecast/:sourcecastId?', lazy: Sourcecast },
     { path: 'achievements/*', lazy: Achievement },
-    { path: 'leaderboard/overall', lazy: OverallLeaderboardWrapper },
-    { path: 'leaderboard/contests/*', lazy: ContestLeaderboardWrapper },
-    { path: 'leaderboard/*', lazy: Leaderboard },
+    {
+      path: 'leaderboard',
+      loader: leaderboardLoader,
+      children: [
+        { path: 'overall', lazy: OverallLeaderboard },
+        {
+          path: 'contests/:contestId?/:leaderboardType',
+          loader: contestLeaderboardLoader,
+          lazy: ContestLeaderboardWrapper
+        }
+      ]
+    },
     { path: '*', lazy: NotFound }
   ];
 };

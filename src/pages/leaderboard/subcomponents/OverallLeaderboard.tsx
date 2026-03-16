@@ -1,31 +1,63 @@
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
 import 'src/styles/Leaderboard.scss';
 
-import { ColDef, IDatasource } from 'ag-grid-community';
+import { ColDef, IDatasource, themeAlpine } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import default_avatar from 'src/assets/default-avatar.jpg';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import LeaderboardActions from 'src/features/leaderboard/LeaderboardActions';
-import {
-  LeaderboardContestDetails,
-  LeaderboardRow
-} from 'src/features/leaderboard/LeaderboardTypes';
+import { LeaderboardRow } from 'src/features/leaderboard/LeaderboardTypes';
 
-import leaderboard_background from '../../../assets/leaderboard_background.jpg';
+import leaderboardBackground from '../../../assets/leaderboard_background.jpg';
 import LeaderboardDropdown from './LeaderboardDropdown';
 import LeaderboardExportButton from './LeaderboardExportButton';
 import LeaderboardPodium from './LeaderboardPodium';
 
+// Set sample profile pictures (Seeded random)
+export function convertToRandomNumber(id: string): number {
+  const str = id.slice(1);
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+  }
+  return (Math.abs(hash) % 7) + 1;
+}
+
+const columnDefs: ColDef<LeaderboardRow>[] = [
+  {
+    field: 'rank',
+    headerName: 'Rank',
+    flex: 84,
+    sortable: true,
+    cellRenderer: (params: any) => {
+      const rank = params.value;
+      const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
+      return `${rank} ${medal}`;
+    }
+  },
+  {
+    field: 'avatar',
+    headerName: 'Avatar',
+    flex: 180,
+    sortable: false,
+    cellRenderer: (params: any) => (
+      <img
+        src={params.value}
+        alt="avatar"
+        className="avatar"
+        onError={e => (e.currentTarget.src = default_avatar)}
+        style={{ flex: '40px', height: '40px', borderRadius: '50%' }}
+      />
+    )
+  },
+  { field: 'name', headerName: 'Name', flex: 520, sortable: true },
+  { field: 'xp', headerName: 'XP', flex: 414, sortable: true }
+];
+
 const OverallLeaderboard: React.FC = () => {
   const dispatch = useDispatch();
-
-  // Retrieve contests (For dropdown)
-  const contestDetails: LeaderboardContestDetails[] = useTypedSelector(
-    store => store.leaderboard.contests
-  );
 
   useEffect(() => {
     dispatch(LeaderboardActions.getContests());
@@ -34,55 +66,12 @@ const OverallLeaderboard: React.FC = () => {
   // Temporary loading of leaderboard background
   useEffect(() => {
     const originalBackground = document.body.style.background;
-    document.body.style.background = `url(${leaderboard_background}) center/cover no-repeat fixed`;
+    document.body.style.background = `url(${leaderboardBackground}) center/cover no-repeat fixed`;
     return () => {
       // Cleanup
       document.body.style.background = originalBackground;
     };
   }, []);
-
-  // Define column definitions for ag-Grid
-  const columnDefs: ColDef<LeaderboardRow>[] = useMemo(
-    () => [
-      {
-        field: 'rank',
-        suppressMovable: true,
-        headerName: 'Rank',
-        width: 84,
-        sortable: true,
-        cellRenderer: (params: any) => {
-          const rank = params.value;
-          const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
-          return `${rank} ${medal}`;
-        }
-      },
-      {
-        field: 'avatar',
-        suppressMovable: true,
-        headerName: 'Avatar',
-        width: 180,
-        sortable: false,
-        cellRenderer: (params: any) => (
-          <img
-            src={params.value}
-            alt="avatar"
-            className="avatar"
-            onError={e => (e.currentTarget.src = default_avatar)}
-            style={{ width: '40px', height: '40px', borderRadius: '50%' }}
-          />
-        )
-      },
-      { field: 'name', suppressMovable: true, headerName: 'Name', width: 520, sortable: true },
-      {
-        field: 'xp',
-        suppressMovable: true,
-        headerName: 'XP',
-        width: 414 /*154*/,
-        sortable: true
-      }
-    ],
-    []
-  );
 
   const paginatedLeaderboard: { rows: LeaderboardRow[]; userCount: number } = useTypedSelector(
     store => store.leaderboard.paginatedUserXp
@@ -129,17 +118,6 @@ const OverallLeaderboard: React.FC = () => {
     }
   }, [paginatedLeaderboard]);
 
-  // Set sample profile pictures (Seeded random)
-  function convertToRandomNumber(id: string): number {
-    const str = id.slice(1);
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      const char = str.charCodeAt(i);
-      hash = (hash << 5) - hash + char;
-    }
-    return (Math.abs(hash) % 7) + 1;
-  }
-
   paginatedLeaderboard.rows.map((row: LeaderboardRow) => {
     row.avatar = `/assets/Sample_Profile_${convertToRandomNumber(row.username)}.jpg`;
   });
@@ -151,16 +129,19 @@ const OverallLeaderboard: React.FC = () => {
 
       <div className="buttons-container">
         {/* Leaderboard Options Dropdown */}
-        <LeaderboardDropdown contests={contestDetails} />
+        <LeaderboardDropdown />
 
         {/* Export Button */}
         <LeaderboardExportButton type="overall" />
       </div>
 
       {/* Leaderboard Table (Replaced with ag-Grid) */}
-      <div className="ag-theme-alpine">
+      <div className="leaderboard-table-container">
         <AgGridReact
+          theme={themeAlpine}
           pagination={true}
+          suppressCellFocus
+          suppressMovableColumns
           paginationPageSizeSelector={false}
           columnDefs={columnDefs}
           rowModelType="infinite"

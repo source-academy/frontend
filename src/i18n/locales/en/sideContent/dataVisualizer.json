@@ -1,0 +1,8 @@
+{
+  "defaultText": "The data visualizer helps you to visualize data structures.",
+  "instructions": "It is activated by calling the function <0/>, where <1/> would be the <2/> data structure that you want to visualize and <3/> is the number of structures.",
+  "reference": "The data visualizer uses box-and-pointer diagrams, as introduced in <0>Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter 2, Section 2</0>.",
+  "label": "Data Visualizer",
+  "previous": "Previous",
+  "next": "Next"
+}

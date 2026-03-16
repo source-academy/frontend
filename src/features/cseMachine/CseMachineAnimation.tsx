@@ -27,7 +27,6 @@ import { ArrayValue } from './components/values/ArrayValue';
 import CseMachine from './CseMachine';
 import { Layout } from './CseMachineLayout';
 import { isBuiltInFn, isEnvEqual, isInstr, isStreamFn } from './CseMachineUtils';
-import { isList, isSymbol } from './utils/scheme';
 
 export class CseAnimation {
   static readonly animations: Animatable[] = [];
@@ -166,7 +165,7 @@ export class CseAnimation {
       CseAnimation.handleNode(lastControlItem);
     } else if (isInstr(lastControlItem)) {
       switch (lastControlItem.instrType) {
-        case InstrType.APPLICATION:
+        case InstrType.APPLICATION: {
           const appInstr = lastControlItem as AppInstr;
           const fnStashItem = Layout.previousStashComponent.stashItemComponents.at(
             -appInstr.numOfArgs - 1
@@ -194,6 +193,7 @@ export class CseAnimation {
             )
           );
           break;
+        }
         case InstrType.ARRAY_ACCESS:
           CseAnimation.animations.push(
             new ArrayAccessAnimation(
@@ -204,7 +204,7 @@ export class CseAnimation {
             )
           );
           break;
-        case InstrType.ARRAY_ASSIGNMENT:
+        case InstrType.ARRAY_ASSIGNMENT: {
           const arrayItem = Layout.previousStashComponent.stashItemComponents.at(-3)!;
           CseAnimation.animations.push(
             new ArrayAssignmentAnimation(
@@ -217,7 +217,8 @@ export class CseAnimation {
             )
           );
           break;
-        case InstrType.ARRAY_LITERAL:
+        }
+        case InstrType.ARRAY_LITERAL: {
           const arrSize = (lastControlItem as ArrLitInstr).arity;
           CseAnimation.animations.push(
             new InstructionApplicationAnimation(
@@ -227,6 +228,7 @@ export class CseAnimation {
             )
           );
           break;
+        }
         case InstrType.ASSIGNMENT:
           CseAnimation.animations.push(
             new AssignmentAnimation(
@@ -263,19 +265,21 @@ export class CseAnimation {
           );
           break;
         case InstrType.POP:
-          const currentStashSize = Layout.stashComponent.stash.size();
-          const previousStashSize = Layout.previousStashComponent.stash.size();
-          const lastStashIsUndefined =
-            currentStashSize === 1 &&
-            currStashComponent!.text === 'undefined' &&
-            currentStashSize === previousStashSize;
-          CseAnimation.animations.push(
-            new PopAnimation(
-              lastControlComponent,
-              Layout.previousStashComponent.stashItemComponents.at(-1)!,
-              lastStashIsUndefined ? currStashComponent : undefined
-            )
-          );
+          {
+            const currentStashSize = Layout.stashComponent.stash.size();
+            const previousStashSize = Layout.previousStashComponent.stash.size();
+            const lastStashIsUndefined =
+              currentStashSize === 1 &&
+              currStashComponent!.text === 'undefined' &&
+              currentStashSize === previousStashSize;
+            CseAnimation.animations.push(
+              new PopAnimation(
+                lastControlComponent,
+                Layout.previousStashComponent.stashItemComponents.at(-1)!,
+                lastStashIsUndefined ? currStashComponent : undefined
+              )
+            );
+          }
           break;
         case InstrType.UNARY_OP:
           CseAnimation.animations.push(
@@ -286,7 +290,7 @@ export class CseAnimation {
             )
           );
           break;
-        case InstrType.SPREAD:
+        case InstrType.SPREAD: {
           const control = Layout.controlComponent.stackItemComponents;
           const array = Layout.previousStashComponent.stashItemComponents.at(-1)!.arrow!
             .target! as ArrayValue;
@@ -315,6 +319,7 @@ export class CseAnimation {
             )
           );
           break;
+        }
         case InstrType.ARRAY_LENGTH:
         case InstrType.BREAK:
         case InstrType.BREAK_MARKER:
@@ -323,75 +328,6 @@ export class CseAnimation {
         case InstrType.RESET:
           break;
       }
-    } else {
-      // these are either scheme lists or values.
-      // The value is a number, boolean, string or null. (control -> stash)
-      if (
-        lastControlItem === null ||
-        typeof lastControlItem === 'number' ||
-        typeof lastControlItem === 'boolean' ||
-        typeof lastControlItem === 'string'
-      ) {
-        CseAnimation.animations.push(
-          new ControlToStashAnimation(lastControlComponent, currStashComponent!)
-        );
-      }
-      // The value is a symbol. (lookup, control -> stash)
-      else if (isSymbol(lastControlItem)) {
-        CseAnimation.animations.push(
-          new ControlToStashAnimation(lastControlComponent, currStashComponent!)
-        );
-      }
-      // The value is a list. (control -> control)
-      else if (isList(lastControlItem)) {
-        // base our decision on the first element of the list.
-        const firstElement = (lastControlItem as any)[0];
-        if (isSymbol(firstElement)) {
-          switch (firstElement.sym) {
-            case 'lambda':
-            case 'define':
-            case 'set!':
-            case 'if':
-            case 'begin':
-              CseAnimation.animations.push(
-                new ControlExpansionAnimation(
-                  lastControlComponent,
-                  CseAnimation.getNewControlItems()
-                )
-              );
-              break;
-            case 'quote':
-              CseAnimation.animations.push(
-                new ControlToStashAnimation(lastControlComponent, currStashComponent!)
-              );
-              break;
-            case 'define-syntax':
-              // undefined was pushed onto the stash.
-              CseAnimation.animations.push(
-                new ControlToStashAnimation(lastControlComponent, currStashComponent!)
-              );
-              break;
-            case 'syntax-rules':
-            // nothing.
-            default:
-              // it's probably an application, or a macro expansion.
-              // either way, it's a control -> control expansion.
-              CseAnimation.animations.push(
-                new ControlExpansionAnimation(
-                  lastControlComponent,
-                  CseAnimation.getNewControlItems()
-                )
-              );
-              break;
-          }
-        } else {
-          // it's probably an application.
-          CseAnimation.animations.push(
-            new ControlExpansionAnimation(lastControlComponent, CseAnimation.getNewControlItems())
-          );
-        }
-      }
-      return;
     }
   }
 

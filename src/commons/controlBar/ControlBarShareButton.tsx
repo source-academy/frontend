@@ -9,7 +9,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
-import * as CopyToClipboard from 'react-copy-to-clipboard';
+import CopyToClipboard from 'src/commons/utils/CopyToClipboard';
 
 import ControlButton from '../ControlButton';
 import Constants from '../utils/Constants';

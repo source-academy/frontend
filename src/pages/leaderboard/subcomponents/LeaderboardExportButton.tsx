@@ -107,9 +107,4 @@ const LeaderboardExportButton: React.FC<Props> = ({ type, contest, contestID }) 
   );
 };
 
-// react-router lazy loading
-// https://reactrouter.com/en/main/route/lazy
-export const Component = LeaderboardExportButton;
-Component.displayName = 'LeaderboardExportButton';
-
 export default LeaderboardExportButton;

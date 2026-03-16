@@ -151,6 +151,7 @@ export default defineConfig({
   output: {
     distPath: {
       root: './build'
-    }
+    },
+    sourceMap: true
   }
 });

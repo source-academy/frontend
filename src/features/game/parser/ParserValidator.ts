@@ -204,7 +204,7 @@ export default class ParserValidator {
               }
               break;
 
-            case GameEntityType.bgms:
+            case GameEntityType.bgms: {
               // Count BGMs matching itemId
               const numberOfBgm = Parser.checkpoint.map
                 .getSoundAssets()
@@ -223,8 +223,9 @@ export default class ParserValidator {
                 throw new Error(`More than 1 bgm key "${itemId}"`);
               }
               break;
+            }
 
-            case GameEntityType.sfxs:
+            case GameEntityType.sfxs: {
               // Count SFXs matching itemId
               const numberOfSfx = Parser.checkpoint.map
                 .getSoundAssets()
@@ -243,6 +244,7 @@ export default class ParserValidator {
                 throw new Error(`More than 1 sfx key "${itemId}"`);
               }
               break;
+            }
           }
         });
       }

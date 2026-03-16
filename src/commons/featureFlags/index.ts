@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { SagaIterator } from 'redux-saga';
 
 import { FeatureFlag } from './FeatureFlag';
 
@@ -33,7 +34,8 @@ export const FeatureFlagsReducer = featureFlagsSlice.reducer;
 export function createFeatureFlag<T>(
   flagName: string,
   defaultValue: T,
-  flagDesc?: string
+  flagDesc?: string,
+  callback?: (newValue: T) => SagaIterator
 ): FeatureFlag<T> {
-  return new FeatureFlag<T>(flagName, defaultValue, flagDesc);
+  return new FeatureFlag<T>(flagName, defaultValue, flagDesc, callback);
 }

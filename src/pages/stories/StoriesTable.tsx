@@ -1,9 +1,6 @@
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-quartz.css';
-
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ColDef } from 'ag-grid-community';
+import { ColDef, themeQuartz } from 'ag-grid-community';
 import { AgGridReact, CustomCellRendererProps } from 'ag-grid-react';
 import React, { useMemo } from 'react';
 import GradingFlex from 'src/commons/grading/GradingFlex';
@@ -65,8 +62,9 @@ const StoriesTable: React.FC<Props> = ({ headers, stories, storyActions }) => {
   );
 
   return (
-    <div className="ag-theme-quartz" style={{ marginTop: 24 }}>
+    <div style={{ marginTop: 24 }}>
       <AgGridReact
+        theme={themeQuartz}
         rowData={stories}
         columnDefs={columns}
         defaultColDef={defaultColDef}
