@@ -140,7 +140,6 @@
     "@types/identity-obj-proxy": "^3",
     "@types/js-cookie": "^3.0.6",
     "@types/js-yaml": "^4.0.5",
-    "@types/lodash": "^4.14.195",
     "@types/react": "^19.1.8",
     "@types/react-copy-to-clipboard": "^5.0.4",
     "@types/react-dom": "^19.1.6",
