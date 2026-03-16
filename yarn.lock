@@ -3384,14 +3384,17 @@ __metadata:
   linkType: hard
 
 "@rsbuild/plugin-react@npm:^1.1.0, @rsbuild/plugin-react@npm:^1.3.0":
-  version: 1.4.5
-  resolution: "@rsbuild/plugin-react@npm:1.4.5"
+  version: 1.4.6
+  resolution: "@rsbuild/plugin-react@npm:1.4.6"
   dependencies:
-    "@rspack/plugin-react-refresh": "npm:^1.6.0"
+    "@rspack/plugin-react-refresh": "npm:^1.6.1"
     react-refresh: "npm:^0.18.0"
   peerDependencies:
     "@rsbuild/core": ^1.0.0 || ^2.0.0-0
-  checksum: 10c0/492cca2bb96f5861d5e1b1ff4aba07ae79f785087fe05c8dfe8ce6cbc82c17bdaa2c7c06238d7e815a5c9183a6b3cb64395cb9e5330c62d9c9ae530e9e77e50c
+  peerDependenciesMeta:
+    "@rsbuild/core":
+      optional: true
+  checksum: 10c0/e878c565ecdb23a1b08050adcd05e06c2c07dd8fc06be3d4de52b4976f593c27a823c42a2fbd21628ff70a24ad00f00171e889615a5b291a3bc02834e009f96f
   languageName: node
   linkType: hard
 
@@ -3560,9 +3563,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rspack/plugin-react-refresh@npm:^1.6.0":
-  version: 1.6.0
-  resolution: "@rspack/plugin-react-refresh@npm:1.6.0"
+"@rspack/plugin-react-refresh@npm:^1.6.1":
+  version: 1.6.1
+  resolution: "@rspack/plugin-react-refresh@npm:1.6.1"
   dependencies:
     error-stack-parser: "npm:^2.1.4"
     html-entities: "npm:^2.6.0"
@@ -3572,7 +3575,7 @@ __metadata:
   peerDependenciesMeta:
     webpack-hot-middleware:
       optional: true
-  checksum: 10c0/21d28d463af1c9e2a76103dbeab38677d7b9154470516fa1bc02255bd97857863c031ba0401ef2cdd2f02e70221923f4851c81eb5a3f7a2ae5324cce2e48dc76
+  checksum: 10c0/4e6ca235fcf9ddebd86894827ba85df8e97a6f3b97a925876549aa07ac995ffeba954ebe52075110b7e98aef648df730dced8faa0c31d86689eaffcb097cae12
   languageName: node
   linkType: hard
 
