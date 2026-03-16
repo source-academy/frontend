@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { act } from 'react';
+import { act, type JSX } from 'react';
 import { Route, Routes, StaticRouter } from 'react-router';
 import { Mock, vi } from 'vitest';
 

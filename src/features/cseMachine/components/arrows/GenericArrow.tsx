@@ -21,8 +21,8 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   source: Source;
   target: Target | undefined;
   faded: boolean = false;
-  private pathRef: RefObject<Konva.Path> = React.createRef();
-  private arrowHeadRef: RefObject<Konva.Arrow> = React.createRef();
+  private pathRef: RefObject<Konva.Path | null> = React.createRef();
+  private arrowHeadRef: RefObject<Konva.Arrow | null> = React.createRef();
 
   // Check if this arrow is selected
   protected isSelected(): boolean {
