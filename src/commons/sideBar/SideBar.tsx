@@ -1,6 +1,6 @@
 import { Card, Icon, IconName } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React from 'react';
+import React, { type JSX } from 'react';
 
 import { SideContentType } from '../sideContent/SideContentTypes';
 

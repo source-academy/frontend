@@ -1,13 +1,21 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Sicp latex renders > correctly block 1`] = `
-<Latex$1>
-  1+1
-</Latex$1>
+<DocumentFragment>
+  <span
+    class="__Latex__"
+  >
+    1+1
+  </span>
+</DocumentFragment>
 `;
 
 exports[`Sicp latex renders > correctly inline 1`] = `
-<Latex$1>
-  1+1
-</Latex$1>
+<DocumentFragment>
+  <span
+    class="__Latex__"
+  >
+    1+1
+  </span>
+</DocumentFragment>
 `;

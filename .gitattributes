@@ -1,0 +1,3 @@
+# Ensure all TS/TSX files are treated as text and normalized with LF line endings
+*.ts text eol=lf
+*.tsx text eol=lf

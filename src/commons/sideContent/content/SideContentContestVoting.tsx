@@ -119,7 +119,9 @@ const SideContentContestVoting: React.FC<SideContentContestVotingProps> = ({
           onDragLeave={handleDragLeave}
           onDragEnter={handleDragEnter}
           onDrop={handleDrop}
-          ref={item => (tierContainerRefs.current[index] = item)}
+          ref={item => {
+            tierContainerRefs.current[index] = item;
+          }}
         />
       </div>
     ));
@@ -148,7 +150,9 @@ const SideContentContestVoting: React.FC<SideContentContestVotingProps> = ({
                   id={`item-${index + 1}`}
                   onDragStart={handleDragStart}
                   onDragEnd={handleDragEnd(contestEntry)}
-                  ref={item => (contestEntryRefs.current[index] = item)}
+                  ref={item => {
+                    contestEntryRefs.current[index] = item;
+                  }}
                   data-testid="voting-item"
                 >
                   <Card

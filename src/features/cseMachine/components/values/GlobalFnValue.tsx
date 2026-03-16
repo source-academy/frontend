@@ -47,8 +47,8 @@ export class GlobalFnValue extends Value implements IHoverable {
   readonly printDescriptionOffsetY: number;
   readonly printDescriptionBottomGap: number;
   readonly totalWidth: number;
-  readonly labelRef: RefObject<Label> = React.createRef();
-  readonly revealLabelRef: RefObject<Label> = React.createRef();
+  readonly labelRef: RefObject<Label | null> = React.createRef();
+  readonly revealLabelRef: RefObject<Label | null> = React.createRef();
 
   centerX: number;
   private isExpandedDescription: boolean = false;

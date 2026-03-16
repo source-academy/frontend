@@ -12,7 +12,6 @@
     "strict": true,
     "useUnknownInCatchVariables": false,
     "moduleResolution": "bundler",
-    "rootDir": "src",
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
@@ -25,7 +24,10 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "src/*": ["src/*"]
+    }
   },
   "include": ["src"],
   "exclude": ["src/setupTests.ts"]

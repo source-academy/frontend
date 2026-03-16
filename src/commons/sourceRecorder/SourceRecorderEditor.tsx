@@ -60,7 +60,7 @@ type OwnProps = {
 
 class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}> {
   public ShareAce: any;
-  public AceEditor: React.RefObject<AceEditor>;
+  public AceEditor: React.RefObject<AceEditor | null>;
   private onChangeMethod: (newCode: string, delta: CodeDelta) => void;
   private onCursorChange: (selecction: any) => void;
   private onSelectionChange: (selection: any) => void;

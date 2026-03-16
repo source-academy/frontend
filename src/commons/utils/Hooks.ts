@@ -79,7 +79,9 @@ export const useTypedSelector: TypedUseSelectorHook<OverallState> = useSelector;
  * @param ref A reference to the underlying HTML element.
  */
 
-export const useDimensions = (ref: RefObject<HTMLElement>): [width: number, height: number] => {
+export const useDimensions = (
+  ref: RefObject<HTMLElement | null>
+): [width: number, height: number] => {
   const [width, setWidth] = React.useState(0);
   const [height, setHeight] = React.useState(0);
 

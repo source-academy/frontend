@@ -1,5 +1,5 @@
 import { Card, Elevation } from '@blueprintjs/core';
-import React, { useEffect } from 'react';
+import React, { type JSX, useEffect } from 'react';
 
 export type ContentDisplayProps = {
   fullWidth?: boolean;

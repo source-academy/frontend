@@ -1,5 +1,6 @@
 import { NonIdealState } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import type { JSX } from 'react';
 
 export enum SicpErrorType {
   UNEXPECTED_ERROR,
