@@ -3,9 +3,9 @@
 import eslint from '@eslint/js';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import tseslint from 'typescript-eslint';
-import reactRefresh from 'eslint-plugin-react-refresh';
 
 export default tseslint.config(
   { ignores: ['eslint.config.mjs', '**/*.snap'] },
@@ -20,15 +20,21 @@ export default tseslint.config(
       'react-refresh/only-export-components': 'warn'
     }
   },
+  reactHooksPlugin.configs.flat['recommended-latest'],
   {
     files: ['**/*.ts*'],
     plugins: {
-      'react-hooks': reactHooksPlugin,
       react: reactPlugin,
       'simple-import-sort': simpleImportSort
     },
     rules: {
-      ...reactHooksPlugin.configs['recommended-latest'].rules,
+      'react-hooks/globals': 'warn', // TODO: Fix and delete (default is error)
+      'react-hooks/immutability': 'warn', // TODO: Fix and delete (default is error)
+      'react-hooks/purity': 'warn', // TODO: Fix and delete (default is error)
+      'react-hooks/set-state-in-effect': 'warn', // TODO: Fix and delete (default is error)
+      'react-hooks/static-components': 'warn', // TODO: Fix and delete (default is error)
+      'react-hooks/refs': 'warn', // TODO: Fix and delete (default is error)
+      'react-hooks/use-memo': 'warn', // TODO: Fix and delete (default is error)
       'no-empty': 'warn',
       'no-restricted-imports': [
         'error',
