@@ -46,8 +46,13 @@ export class Level extends Visible {
       0
     );
     const lastFrame = this.frames[this.frames.length - 1];
-    // derive the width of this level from the last frame
-    this._width = lastFrame.x() + lastFrame.totalWidth - this.x() + Config.LevelPaddingX;
+    // derive the width of this level from the last frame and its right-side data overflow
+    this._width =
+      lastFrame.x() +
+      lastFrame.totalWidth +
+      lastFrame.totalDataWidth -
+      this.x() +
+      Config.LevelPaddingX;
   }
 
   destroy() {

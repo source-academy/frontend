@@ -292,10 +292,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
   // Playground hotkeys
   const [isGreen, setIsGreen] = useState(false);
   const playgroundHotkeyBindings: HotkeyItem[] = useMemo(
-    () => [['alt+shift+h', () => setIsGreen(v => !v)]],
+    () => [['ctrl+alt+h', () => setIsGreen(v => !v)]],
     [setIsGreen]
   );
   useHotkeys(playgroundHotkeyBindings);
+
+  useEffect(() => {
+    CseMachine.clearCachedLayouts();
+    window.requestAnimationFrame(() => CseMachine.redraw());
+  }, [isGreen]);
 
   const remoteExecutionTab: SideContentTab = useMemo(
     () => makeRemoteExecutionTabFrom(deviceSecret, setDeviceSecret),
@@ -467,7 +472,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     return {
       handleEditorEval: () => {
         if (updateCse) {
-          CseMachine.masterLayout = null;
+          CseMachine.clearCachedLayouts();
         }
         dispatch(WorkspaceActions.evalEditor(workspaceLocation));
       },
