@@ -56,6 +56,7 @@ import { Continuation, isContinuation } from './utils/continuation';
 export type LayoutCache = {
   framesX: Map<string, number>;
   framesY: Map<string, number>;
+  framesWidth: Map<string, number>; // addded to test width
   levelWidth: Map<string, number>;
   largestWidth: number;
 };
@@ -657,6 +658,7 @@ export class Layout {
     const cache: LayoutCache = {
       framesX: new Map(),
       framesY: new Map(), // added template
+      framesWidth: new Map(), // addded to test width
       levelWidth: new Map(),
       largestWidth: 0
     };
@@ -671,6 +673,7 @@ export class Layout {
       cache.largestWidth = Math.max(cache.largestWidth, currWidth);
       frames.forEach(frame => {
         cache.framesX.set(frame.environment.id, frame.x() - offset);
+        cache.framesWidth.set(frame.environment.id, frame.width()); // addded to test width
         cache.framesY.set(frame.environment.id, frame.y()); // added template
         cache.levelWidth.set(frame.environment.id, currWidth);
       });
@@ -720,6 +723,15 @@ export class Layout {
     return undefined;
   }
 
+  static getGhostFrameWidth(envId: string): number | undefined { // added template
+    const cache = CseMachine.getMasterLayout();
+    if (cache && cache.framesWidth.has(envId)) {
+      const fixedWidth = cache.framesWidth.get(envId)!;
+      return fixedWidth;
+    }
+    return undefined;
+  }
+
   /**
    * Reassign x coordinate of every frame to their predetermined position by calling getGhostFrameX.
    */
@@ -745,6 +757,12 @@ export class Layout {
         if (cache.framesY.has(id)) {
           const fixedY = Layout.getGhostFrameY(id)!;
           frame.reassignCoordinatesY(fixedY);
+        }
+
+        // get predetermined width        
+        if (cache.framesWidth.has(id)) {
+          const fixedWidth = Layout.getGhostFrameWidth(id)!;
+          frame.reassignWidth(fixedWidth);
         }
       });
     });

@@ -153,8 +153,10 @@ export class Frame extends Visible implements IHoverable {
       let bindingTextWidth = getTextWidth(
         key + (constant ? Config.ConstantColon : Config.VariableColon)
       );
+      // TODO: Check if key + colon size exceed default frame width
       if (isUnassigned(data.value)) {
         bindingTextWidth += Config.TextPaddingX + getTextWidth(Config.UnassignedData);
+        // TODO: Check if unassigned text size exceed default frame width
       } else if (isPrimitiveData(data.value)) {
         bindingTextWidth +=
           Config.TextPaddingX +
@@ -163,8 +165,11 @@ export class Frame extends Visible implements IHoverable {
               ? data.value.toReplString()
               : JSON.stringify(data.value) || String(data.value)
           );
+          // TODO: Check if primitive value size exceed default frame width
       }
+      // To replace later
       this._width = Math.max(this._width, bindingTextWidth + Config.FramePaddingX * 2);
+      // this._width = Config.FrameDefaultWidth;
     }
 
     // Create all the bindings and values
@@ -262,6 +267,10 @@ export class Frame extends Visible implements IHoverable {
    */
   reassignCoordinatesY(newY: number): void {
     this._y = newY;
+  }
+
+  reassignWidth(newWidth: number): void {
+    this._width = newWidth;
   }
 
   onMouseEnter = () => {};
