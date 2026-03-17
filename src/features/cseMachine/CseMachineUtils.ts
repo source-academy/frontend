@@ -25,8 +25,8 @@ import { Binding } from './components/Binding';
 import { ControlItemComponent } from './components/ControlItemComponent';
 import { isNode } from './components/ControlStack';
 import { Frame } from './components/Frame';
-import { StashItemComponent } from './components/StashItemComponent';
 import { Level } from './components/Level'; // CHANGEDD
+import { StashItemComponent } from './components/StashItemComponent';
 import { ArrayValue } from './components/values/ArrayValue';
 import { ContValue } from './components/values/ContValue';
 import { FnValue } from './components/values/FnValue';

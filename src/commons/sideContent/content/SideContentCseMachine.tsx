@@ -21,12 +21,12 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
 import { Output } from 'src/commons/repl/Repl';
 import type { PlaygroundWorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
+import { ClearDeadFramesAnimation } from 'src/features/cseMachine/animationComponents/ClearDeadFramesAnimation'; // CHANGEDD
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
 import { Layout } from 'src/features/cseMachine/CseMachineLayout';
-import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 import { computeFramesCoordChange } from 'src/features/cseMachine/CseMachineUtils'; // CHANGEDD
-import { ClearDeadFramesAnimation } from 'src/features/cseMachine/animationComponents/ClearDeadFramesAnimation'; // CHANGEDD
+import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
 import { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
 import { HighlightedLines } from '../../editor/EditorTypes';
