@@ -222,10 +222,21 @@ const deriveStepperBreakpointSteps = (
     const prevStepMarkers = stepIndex > 0 ? (stepperSteps[stepIndex - 1].markers ?? []) : [];
     const prevStepCoversLine =
       afterMarkerBreakpointLine !== undefined &&
-      prevStepMarkers.some(
-        m =>
-          m.redexType === 'beforeMarker' && m.redex?.loc?.start?.line === afterMarkerBreakpointLine
-      );
+      prevStepMarkers.some(m => {
+        if (m.redexType !== 'beforeMarker') return false;
+        if (m.redex?.loc?.start?.line !== afterMarkerBreakpointLine) return false;
+        // Also check the source file matches, to avoid incorrectly skipping
+        // breakpoints on the same line number in different files.
+        const afterMarkerSource =
+          typeof currentStepMarkers.find(m => markerMatchesBreakpoint(m, 'afterMarker'))?.redex?.loc
+            ?.source === 'string'
+            ? currentStepMarkers.find(m => markerMatchesBreakpoint(m, 'afterMarker'))?.redex?.loc
+                ?.source
+            : entrypointFilePath;
+        const prevMarkerSource =
+          typeof m.redex?.loc?.source === 'string' ? m.redex.loc.source : entrypointFilePath;
+        return prevMarkerSource === afterMarkerSource;
+      });
 
     const beforeMarker = currentStepMarkers.find(m => markerMatchesBreakpoint(m, 'beforeMarker'));
     const beforeMarkerLine = beforeMarker?.redex?.loc?.start?.line;
@@ -249,6 +260,15 @@ const deriveStepperBreakpointSteps = (
       // Mark this line as fired so it doesn't stop again.
       if (firedKey !== undefined) firedLines.add(firedKey);
       breakpointSteps.push(stepIndex);
+    }
+    // Also mark the afterMarker line as fired if it triggered this step,
+    // to prevent duplicate stops if the same afterMarker line appears again.
+    if (afterMarkerBreakpointLine !== undefined && !prevStepCoversLine) {
+      const afterMarkerSource = currentStepMarkers.find(m =>
+        markerMatchesBreakpoint(m, 'afterMarker')
+      )?.redex?.loc?.source;
+      const afterMarkerKey = `${typeof afterMarkerSource === 'string' ? afterMarkerSource : entrypointFilePath}:${afterMarkerBreakpointLine}`;
+      firedLines.add(afterMarkerKey);
     }
   }
 
