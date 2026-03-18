@@ -45,18 +45,11 @@ export default class DataVisualizer {
     structures.push(nodePos);
     if (structures[1]===null){
       //nodeCount keeps track of the most number of elements at each dept
-      console.log(this.nodeCount);
       if (this.nodeCount[depth]===undefined){
         this.nodeCount[depth]=0;
       }
       this.nodeCount[depth]=Math.max(this.nodeCount[depth],nodePos);
-      //console.log(structures);
-      console.log(this.nodeCount);
-      console.log("end: "+"nodePos:"+nodePos+" d:"+depth);
-      console.log(this.nodeCount);
     }
-
-      console.log("n:"+structures[0]+" d:"+depth);
       this.binaryTreeDepth=Math.max(this.binaryTreeDepth,depth);
       this.get_depth(structures[0],depth+1, 0);
       this.get_depth(structures[1],depth,nodePos+1);
@@ -131,13 +124,9 @@ export default class DataVisualizer {
     if (!DataVisualizer.isRedraw){
       this.dataRecords.push(structures);
     }
-    console.log(structures);
     DataVisualizer.isBinTree=this.isBinaryTree(structures);
     DataVisualizer.isGenTree=this.isGeneralTree(structures);
       this.get_depth(structures[0],0,0);
-      console.log('Binary tree depth: ' + DataVisualizer.binaryTreeDepth);
-      console.log(structures);
-      console.log("nodeCount: " + this.nodeCount);
     
 
     this.dataList=structures;
@@ -166,7 +155,7 @@ export default class DataVisualizer {
     if (this.nodeToLabelMap.has(dataNode)) {
       return this.nodeToLabelMap.get(dataNode) ?? 0;
     } else {
-      console.log('*' + this.nodeLabel + ': ' + dataNode.data);
+      // console.log('*' + this.nodeLabel + ': ' + dataNode.data);
       this.nodeToLabelMap.set(dataNode, this.nodeLabel);
       return this.nodeLabel++;
     }

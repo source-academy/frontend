@@ -78,9 +78,6 @@ export class Tree {
       if (typeof tree[tree.length-1] == 'number'){
         node.nodePos=tree.pop();
       }
-      //console.log(tree);
-      //node.nodePos=nodeCount;
-      // Done like that instead of in constructor to prevent infinite recursion
       node.children = tree.map(constructNode);
 
       return node;
@@ -352,19 +349,8 @@ class TreeDrawer {
           let myX;
           const scalerV = Math.round( Math.pow(longest, DataVisualizer.binaryTreeDepth) / 
                                     Math.pow(longest, (Math.round(y / (Config.BoxHeight * 4))) + 1) );
-        
-          /*
-          if (node.children[1] instanceof ArrayTreeNode) {
-            if (node.children[1].children[0] instanceof ArrayTreeNode) {
-              console.log("Origin Index: " + node.children[1].nodePos + ", Value: " + node.children[1].children[0].children[0].data);
-            }
-          }
-            */
 
           if (index == 0) {
-            if (node.children![0] instanceof ArrayTreeNode) {
-              console.log("Origin Index: " + originIndex + ", Value: " + node.children![0].children![0].data);
-            }
             myY = y + Config.DistanceY * 2;
             myX = originX + (Config.NWidth + Config.BoxWidth) * (longest + 1) * (originIndex - 1) * scalerV;
             TreeDrawer.colorCounter++;
@@ -391,7 +377,6 @@ class TreeDrawer {
         });
       }
       else { // OriginalView
-        console.log(node);
         const drawable = node.createDrawable(x, y, parentX, parentY, 0);
         this.drawables.push(drawable);
         let leftX = x;
