@@ -24,7 +24,6 @@ export default class DataVisualizer {
   public static treeMode: boolean = false;
   public static BinTreeMode: boolean = false;
   public static normalMode: boolean = true;
-  private static dataList: Data []=[]; 
   public static binaryTreeDepth: number = 0;
   public static isBinTree: boolean = false;
   public static isGenTree: boolean = false;
@@ -128,8 +127,6 @@ export default class DataVisualizer {
     DataVisualizer.isGenTree=this.isGeneralTree(structures);
       this.get_depth(structures[0],0,0);
     
-
-    this.dataList=structures;
     DataVisualizer._instance.addStep(structures);
     DataVisualizer.setSteps(DataVisualizer._instance.steps);
   }
@@ -174,19 +171,12 @@ export default class DataVisualizer {
     const treeDrawer = Tree.fromSourceStructure(xs).draw();
 
     // To account for overflow to the left side due to a backward arrow
-    // const leftMargin = Config.ArrowMarginHorizontal + Config.StrokeWidth;
     const leftMargin = (Config.StrokeWidth / 2);
 
     // To account for overflow to the top due to a backward arrow
     const topMargin = Config.StrokeWidth / 2;
 
     const layer = treeDrawer.draw(leftMargin, topMargin);
-    //const treeLayer=treeDrawer.draw(leftMargin, topMargin, true);
-    // if (DataVisualizer.treeMode){
-    //   layer=treeLayer;
-    // }
-    // me added, below is + leftMargin for default extra space on the right, and + one node width cuz gotta include the very root node
-
 
     //for normal mode
     if (DataVisualizer.normalMode){
@@ -245,7 +235,6 @@ export default class DataVisualizer {
     this.clear();
     DataVisualizer.counter = - DataVisualizer.counter;
     return DataVisualizer.dataRecords.map(structures => this.drawData(structures));
-    //return this.drawData(this.dataList);
   }
 
 }
