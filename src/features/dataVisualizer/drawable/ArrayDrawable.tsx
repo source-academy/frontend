@@ -11,6 +11,7 @@ type ArrayProps = {
   nodes: TreeNode[];
   x: number;
   y: number;
+  color: string;
 };
 
 /**
@@ -55,7 +56,9 @@ class ArrayDrawable extends React.PureComponent<ArrayProps> {
           height={Config.BoxHeight}
           strokeWidth={Config.StrokeWidth}
           stroke={Config.Stroke}
-          fill="#17181A"
+          fill= {this.props.color}
+          //"#d81d1d"
+
           preventDefault={false}
         />
         {/* Vertical lines in the box */}

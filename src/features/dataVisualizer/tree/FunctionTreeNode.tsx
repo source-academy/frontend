@@ -1,4 +1,3 @@
-import type { JSX } from 'react';
 import { Group } from 'react-konva';
 
 import { Config } from '../Config';
@@ -9,7 +8,7 @@ import { DrawableTreeNode } from './DrawableTreeNode';
  * Represents a node corresponding to a Source (and Javascript) function.
  */
 export class FunctionTreeNode extends DrawableTreeNode {
-  createDrawable(x: number, y: number, parentX: number, parentY: number): JSX.Element {
+  createDrawable(x: number, y: number, parentX: number, parentY: number, colorIndex: number): JSX.Element {
     this._drawable = (
       <Group key={x + ', ' + y}>
         <FunctionDrawable {...{ x, y }}></FunctionDrawable>
