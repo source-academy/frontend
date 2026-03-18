@@ -362,8 +362,8 @@ class TreeDrawer {
             */
 
           if (index == 0) {
-            if (node.children[0] instanceof ArrayTreeNode) {
-              console.log("Origin Index: " + originIndex + ", Value: " + node.children[0].children[0].data);
+            if (node.children![0] instanceof ArrayTreeNode) {
+              console.log("Origin Index: " + originIndex + ", Value: " + node.children![0].children![0].data);
             }
             myY = y + Config.DistanceY * 2;
             myX = originX + (Config.NWidth + Config.BoxWidth) * (longest + 1) * (originIndex - 1) * scalerV;
@@ -380,9 +380,9 @@ class TreeDrawer {
             this.runningX2 = myX;
           }
 
-          if (node.children[1] instanceof ArrayTreeNode) {
-            if (node.children[1].children[0] instanceof ArrayTreeNode) {
-              originIndex = node.children[1].nodePos;
+          if (node.children![1] instanceof ArrayTreeNode) {
+            if (node.children![1].children![0] instanceof ArrayTreeNode) {
+              originIndex = node.children![1].nodePos;
               originX = myX - (Config.NWidth + Config.BoxWidth) * originIndex;
             }
           }
