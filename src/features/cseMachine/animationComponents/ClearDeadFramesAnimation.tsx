@@ -3,6 +3,7 @@ import { Group } from 'react-konva';
 
 import { Frame } from '../components/Frame';
 import { Text } from '../components/Text';
+import { PrimitiveValue } from '../components/values/PrimitiveValue';
 import CseMachine from '../CseMachine';
 import { Config } from '../CseMachineConfig';
 import { 
@@ -29,7 +30,7 @@ export class ClearDeadFramesAnimation extends Animatable {
   constructor(changedFramePairs: Frame[][]) {
     super();
 
-    // changedTextPairs only account for binding keys, not values YET
+    // changedTextPairs only account for binding keys and text values
     const changedTextPairs: Text[][] = [];
 
     // FRAMES
@@ -56,13 +57,21 @@ export class ClearDeadFramesAnimation extends Animatable {
         })
       )
 
-      // Set up changedTextPairs (only keys for now)
+      // Set up changedTextPairs
       const oldBindings = framePair[0].bindings;
       const newBindings = framePair[1].bindings;
       for (let i = 0; i < oldBindings.length; i++) {
+        if (oldBindings[i].isDummyBinding) { continue; }
         changedTextPairs.push([oldBindings[i].key, newBindings[i].key]);
-        console.log(oldBindings[i].key);
-        console.log(newBindings[i].key);
+
+        // Create animations for primitive text values 
+        if (oldBindings[i].value instanceof PrimitiveValue) {
+          const oldValue: PrimitiveValue = oldBindings[i].value as PrimitiveValue;
+          const newValue: PrimitiveValue = newBindings[i].value as PrimitiveValue;
+          if (oldValue.text instanceof Text) {
+            changedTextPairs.push([(oldValue.text as Text), (newValue.text as Text)])
+          }
+        }
       }
     }
 
