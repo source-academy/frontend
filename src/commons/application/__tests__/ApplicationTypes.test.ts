@@ -1,9 +1,10 @@
-import { Chapter, Variant } from 'js-slang/dist/langs';
+import { Chapter, Variant } from 'js-slang/dist/types';
 
 import {
   ALL_LANGUAGES,
   getLanguageConfig,
   pyLanguages,
+  schemeLanguages,
   sourceLanguages
 } from '../ApplicationTypes';
 
@@ -93,5 +94,11 @@ describe('available Source language configurations', () => {
 describe('available Python language configurations', () => {
   test('matches snapshot', () => {
     expect(pyLanguages).toMatchSnapshot();
+  });
+});
+
+describe('available Scheme language configurations', () => {
+  test('matches snapshot', () => {
+    expect(schemeLanguages).toMatchSnapshot();
   });
 });

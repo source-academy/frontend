@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react';
+import { shallowRender } from 'src/commons/utils/TestUtils';
 import { vi } from 'vitest';
 
 import SideContentContestLeaderboard from '../content/SideContentContestLeaderboard';
@@ -35,8 +36,10 @@ const mockProps = {
 
 // Basic snapshot testing to catch unexpected changes
 test('SideContentContestLeaderboard matches snapshot', () => {
-  const { asFragment } = render(<SideContentContestLeaderboard {...mockProps} />);
-  expect(asFragment()).toMatchSnapshot();
+  const contestLeaderboardComponentRender = shallowRender(
+    <SideContentContestLeaderboard {...mockProps} />
+  );
+  expect(contestLeaderboardComponentRender).toMatchSnapshot();
 });
 
 test('SideContentContestLeaderboard component renders correct number of entries.', async () => {

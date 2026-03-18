@@ -1,11 +1,9 @@
-import { Provider } from 'react-redux';
-import { renderTree } from 'src/commons/utils/TestUtils';
-import { createStore } from 'src/pages/createStore';
+import { shallowRender } from 'src/commons/utils/TestUtils';
 
 import Editor, { EditorProps } from '../Editor';
 import { Position } from '../EditorTypes';
 
-test('Editor renders correctly', async () => {
+test('Editor renders correctly', () => {
   const props: EditorProps = {
     editorTabIndex: 0,
     breakpoints: [],
@@ -22,11 +20,7 @@ test('Editor renders correctly', async () => {
     handleUpdateHasUnsavedChanges: hasUnsavedChanges => {},
     handlePromptAutocomplete: (row: number, col: number, callback: any) => {}
   };
-  const Element: React.FC = () => (
-    <Provider store={createStore()}>
-      <Editor {...props} />
-    </Provider>
-  );
-  const tree = await renderTree(<Element />);
+  const Element: React.FC = () => <Editor {...props} />;
+  const tree = shallowRender(<Element />);
   expect(tree).toMatchSnapshot();
 });

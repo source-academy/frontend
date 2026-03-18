@@ -7,9 +7,7 @@ import {
   runInContext
 } from 'js-slang';
 import createContext from 'js-slang/dist/createContext';
-import { ErrorType, type SourceError } from 'js-slang/dist/errors/base';
-import { Chapter, Variant } from 'js-slang/dist/langs';
-import { type Finished } from 'js-slang/dist/types';
+import { Chapter, ErrorType, type Finished, type SourceError, Variant } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 import { expectSaga } from 'redux-saga-test-plan';
 import * as matchers from 'redux-saga-test-plan/matchers';
@@ -43,19 +41,6 @@ import { evalCodeSaga } from '../WorkspaceSaga/helpers/evalCode';
 import { evalEditorSaga } from '../WorkspaceSaga/helpers/evalEditor';
 import { evalTestCode } from '../WorkspaceSaga/helpers/evalTestCode';
 import { runTestCase } from '../WorkspaceSaga/helpers/runTestCase';
-
-vi.mock('src/features/cseMachine/CseMachine', async importOriginal => {
-  const actual: any = await importOriginal();
-  return {
-    ...actual, // Keep all original exports (like the default export)
-    CseMachine: {
-      ...actual.CseMachine, // Keep any other CseMachine properties
-      drawCse: vi.fn(), // Mock just the UI methods that crash the test
-      init: vi.fn(),
-      clearCse: vi.fn()
-    }
-  };
-});
 
 function generateDefaultState(
   workspaceLocation: WorkspaceLocation,
@@ -833,10 +818,8 @@ describe('evalCode', () => {
       envSteps: -1,
       executionMethod: 'auto'
     };
-    lastDebuggerResult = { status: 'error', context };
-    state = generateDefaultState(workspaceLocation, {
-      lastDebuggerResult: { status: 'error', context }
-    });
+    lastDebuggerResult = { status: 'error' };
+    state = generateDefaultState(workspaceLocation, { lastDebuggerResult: { status: 'error' } });
   });
 
   describe('on EVAL_EDITOR action without interruptions or pausing', () => {

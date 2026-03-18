@@ -4,11 +4,14 @@ import { MemoryRouter } from 'react-router';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
 import { UserCourse } from 'src/commons/application/types/SessionTypes';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
-import { renderTreeJson } from 'src/commons/utils/TestUtils';
+import { renderTree, renderTreeJson } from 'src/commons/utils/TestUtils';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
 import { vi } from 'vitest';
 
+import Profile from '../../profile/Profile';
 import Dropdown from '../Dropdown';
+import DropdownCourses from '../DropdownCourses';
+import DropdownCreateCourse from '../DropdownCreateCourse';
 
 const getMockedStore = ({
   name,
@@ -46,7 +49,11 @@ test('Dropdown does not mount Profile, DropdownCourses and DropdownCreateCourses
   const tree = await renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
-  // TODO: Expect the Profile component to NOT be mounted
+  // Expect the Profile component to NOT be mounted
+  const dropdown = await renderTree(app);
+  expect(dropdown.root.findAllByType(Profile).length).toBe(0);
+  expect(dropdown.root.findAllByType(DropdownCourses).length).toBe(0);
+  expect(dropdown.root.findAllByType(DropdownCreateCourse).length).toBe(0);
 });
 
 test('Dropdown correctly mounts Profile, DropdownCourses, and DropdownCreateCourses components when a user is logged in', async () => {
@@ -59,5 +66,9 @@ test('Dropdown correctly mounts Profile, DropdownCourses, and DropdownCreateCour
   const tree = await renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
-  // TODO: Expect the Profile component to be mounted
+  // Expect the Profile component to be mounted
+  const dropdown = await renderTree(app);
+  expect(dropdown.root.findByType(Profile)).toBeTruthy();
+  expect(dropdown.root.findByType(DropdownCourses)).toBeTruthy();
+  expect(dropdown.root.findByType(DropdownCreateCourse)).toBeTruthy();
 });

@@ -1,6 +1,6 @@
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import { type Context, findDeclaration, getNames } from 'js-slang';
-import { Chapter, Variant } from 'js-slang/dist/langs';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import Phaser from 'phaser';
 import { call, put, select } from 'redux-saga/effects';
 
@@ -407,7 +407,7 @@ const WorkspaceSaga = combineSagaHandlers({
    * the function.
    */
   [WorkspaceActions.beginClearContext.type]: function* (action): any {
-    yield call([DataVisualizer, DataVisualizer.clear]);
+    yield call([DataVisualizer, DataVisualizer.clearWithData]);
     yield call([CseMachine, CseMachine.clear]);
     const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
     for (const [key, value] of globals) {

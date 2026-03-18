@@ -1,4 +1,4 @@
-import { Chapter, Variant } from 'js-slang/dist/langs';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import { mockStudents } from 'src/commons/mocks/UserMocks';
 import {
   paginationToBackendParams,

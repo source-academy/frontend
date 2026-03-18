@@ -1,4 +1,4 @@
-import { Chapter, Variant } from 'js-slang/dist/langs';
+import { Chapter, Variant } from 'js-slang/dist/types';
 
 import StoriesActions from '../StoriesActions';
 

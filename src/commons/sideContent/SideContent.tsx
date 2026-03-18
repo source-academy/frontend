@@ -1,5 +1,4 @@
 import { Card, Icon, Tab, TabProps, Tabs, Tooltip } from '@blueprintjs/core';
-import type { JSX } from 'react';
 
 import { assertType } from '../utils/TypeHelper';
 import { generateTabAlert, getTabId } from './SideContentHelper';

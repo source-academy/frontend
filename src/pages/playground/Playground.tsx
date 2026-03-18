@@ -6,7 +6,7 @@ import type { SharedbAceUser } from '@sourceacademy/sharedb-ace/types';
 import { Ace, Range } from 'ace-builds';
 import type { FSModule } from 'browserfs/dist/node/core/FS';
 import classNames from 'classnames';
-import { Chapter, Variant } from 'js-slang/dist/langs';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -34,7 +34,6 @@ import {
 } from 'src/commons/utils/WarningDialogHelper';
 import WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
 import type { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
-import CseMachine from 'src/features/cseMachine/CseMachine';
 import GithubActions from 'src/features/github/GitHubActions';
 import PersistenceActions from 'src/features/persistence/PersistenceActions';
 import {
@@ -221,7 +220,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sharedbConnected,
     usingSubst,
     usingCse,
-    updateCse,
     isFolderModeEnabled,
     activeEditorTabIndex,
     context: { chapter: playgroundSourceChapter, variant: playgroundSourceVariant }
@@ -292,15 +290,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
   // Playground hotkeys
   const [isGreen, setIsGreen] = useState(false);
   const playgroundHotkeyBindings: HotkeyItem[] = useMemo(
-    () => [['ctrl+alt+h', () => setIsGreen(v => !v)]],
+    () => [['alt+shift+h', () => setIsGreen(v => !v)]],
     [setIsGreen]
   );
   useHotkeys(playgroundHotkeyBindings);
-
-  useEffect(() => {
-    CseMachine.clearCachedLayouts();
-    window.requestAnimationFrame(() => CseMachine.redraw());
-  }, [isGreen]);
 
   const remoteExecutionTab: SideContentTab = useMemo(
     () => makeRemoteExecutionTabFrom(deviceSecret, setDeviceSecret),
@@ -470,12 +463,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const autorunButtonHandlers = useMemo(() => {
     return {
-      handleEditorEval: () => {
-        if (updateCse) {
-          CseMachine.clearCachedLayouts();
-        }
-        dispatch(WorkspaceActions.evalEditor(workspaceLocation));
-      },
+      handleEditorEval: () => dispatch(WorkspaceActions.evalEditor(workspaceLocation)),
       handleInterruptEval: () =>
         dispatch(InterpreterActions.beginInterruptExecution(workspaceLocation)),
       handleToggleEditorAutorun: () =>
@@ -484,7 +472,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       handleDebuggerReset: () => dispatch(InterpreterActions.debuggerReset(workspaceLocation)),
       handleDebuggerResume: () => dispatch(InterpreterActions.debuggerResume(workspaceLocation))
     };
-  }, [dispatch, workspaceLocation, updateCse]);
+  }, [dispatch, workspaceLocation]);
 
   const languageConfig: SALanguage = useTypedSelector(state => state.playground.languageConfig);
 

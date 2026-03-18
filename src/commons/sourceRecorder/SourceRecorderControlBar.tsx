@@ -1,6 +1,6 @@
 import { ButtonGroup, Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Chapter } from 'js-slang/dist/langs';
+import { Chapter } from 'js-slang/dist/types';
 import React from 'react';
 
 import {
@@ -53,7 +53,7 @@ type State = {
 };
 
 class SourceRecorderControlBar extends React.PureComponent<SourceRecorderControlBarProps, State> {
-  private audio: React.RefObject<HTMLAudioElement | null>;
+  private audio: React.RefObject<HTMLAudioElement>;
 
   constructor(props: SourceRecorderControlBarProps) {
     super(props);

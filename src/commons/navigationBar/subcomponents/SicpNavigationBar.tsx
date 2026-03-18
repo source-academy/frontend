@@ -91,15 +91,6 @@ const SicpNavigationBar: React.FC = () => {
   };
 
   const fetchSearchData = () => {
-    if (process.env.NODE_ENV === 'test') {
-      const emptyTrie: TrieNode = { children: {}, value: [] as any, key: '' };
-      return {
-        indexTrie: emptyTrie,
-        textTrie: emptyTrie,
-        idToContentMap: {}
-      } as SearchData;
-    }
-
     const xhr = new XMLHttpRequest();
     const url = Constants.sicpBackendUrl + 'json/rewritedSearchData.json';
     xhr.open('GET', url, false); //sync download

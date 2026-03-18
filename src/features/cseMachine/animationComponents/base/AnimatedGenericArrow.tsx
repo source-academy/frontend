@@ -33,13 +33,13 @@ export class AnimatedGenericArrow<
     this._width = arrow.width();
     this._height = arrow.height();
     this.pathComponent = new AnimatedPathComponent({
-      stroke: !arrow.isLive ? fadedStrokeColor() : defaultStrokeColor(),
+      stroke: arrow.faded ? fadedStrokeColor() : defaultStrokeColor(),
       data: arrow.path(),
       ...props
     });
     this.pathComponent.addListener(this.onPropsChange);
     this.arrowComponent = new AnimatedArrowComponent({
-      fill: !arrow.isLive ? fadedStrokeColor() : defaultStrokeColor(),
+      fill: arrow.faded ? fadedStrokeColor() : defaultStrokeColor(),
       points: arrow.points.slice(arrow.points.length - 4),
       ...props
     });

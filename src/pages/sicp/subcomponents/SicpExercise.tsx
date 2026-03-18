@@ -1,5 +1,5 @@
 import { Button, Card, Collapse, Elevation } from '@blueprintjs/core';
-import React, { type JSX } from 'react';
+import React from 'react';
 
 export const noSolutionPlaceholder = (
   <span>

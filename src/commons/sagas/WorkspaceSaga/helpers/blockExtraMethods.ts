@@ -1,5 +1,5 @@
 import { Context } from 'js-slang';
-import { Variant } from 'js-slang/dist/langs';
+import { Variant } from 'js-slang/dist/types';
 import { call } from 'redux-saga/effects';
 
 import {

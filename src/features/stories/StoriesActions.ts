@@ -1,6 +1,4 @@
-import { SourceError } from 'js-slang/dist/errors/base';
-import { Chapter, Variant } from 'js-slang/dist/langs';
-import { Context, Value } from 'js-slang/dist/types';
+import { Chapter, Context, SourceError, Value, Variant } from 'js-slang/dist/types';
 import { StoriesRole } from 'src/commons/application/ApplicationTypes';
 import { createActions } from 'src/commons/redux/utils';
 

@@ -24,7 +24,7 @@ import {
   setUnhoveredStyle,
   truncateText
 } from '../CseMachineUtils';
-import { isContinuation } from '../utils/continuation';
+import { isContinuation } from '../utils/scheme';
 import { ArrowFromStashItemComponent } from './arrows/ArrowFromStashItemComponent';
 import { ArrayValue } from './values/ArrayValue';
 import { ContValue } from './values/ContValue';

@@ -13,7 +13,7 @@ import { HotkeyItem } from '@mantine/hooks';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import classNames from 'classnames';
 import { t } from 'i18next';
-import { Chapter } from 'js-slang/dist/langs';
+import { Chapter } from 'js-slang/dist/types';
 import { debounce } from 'lodash';
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
@@ -42,7 +42,6 @@ type State = {
   lastStep: boolean;
   stepLimitExceeded: boolean;
   chapter: Chapter;
-  clearDeadFrames: boolean;
 };
 
 type CseMachineProps = OwnProps & StateProps & DispatchProps;
@@ -83,8 +82,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
       height: this.calculateHeight(props.sideContentHeight),
       lastStep: false,
       stepLimitExceeded: false,
-      chapter: props.chapter,
-      clearDeadFrames: false
+      chapter: props.chapter
     };
     if (this.isJava()) {
       JavaCseMachine.init(
@@ -108,11 +106,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
         },
         // We shouldn't be able to move slider to a step number beyond the step limit
         isControlEmpty => {
-          const isAtLastStep = this.state.value === this.props.stepsTotal;
-
-          this.setState({
-            stepLimitExceeded: !isControlEmpty && isAtLastStep
-          });
+          this.setState({ stepLimitExceeded: false });
         }
       );
     }
@@ -212,11 +206,6 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
           ['e', () => {}]
         ];
 
-    const currentStep = Math.max(0, this.state.value);
-    const isAtFirstStep = currentStep < 1;
-    const isAtLastStep = currentStep >= this.props.stepsTotal;
-    const isNavDisabled = !this.state.visualization;
-
     return (
       <HotKeys
         bindings={hotkeyBindings}
@@ -279,35 +268,16 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                     />
                   </AnchorButton>
                 </Tooltip>
-
-                <Tooltip content="Alignment" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization) {
-                        CseMachine.toggleCenterAlignment();
-                        CseMachine.redraw();
-                      }
-                    }}
-                    icon="eye-open"
-                    disabled={!this.state.visualization}
-                  >
-                    <Checkbox
-                      checked={CseMachine.getCenterAlignment()}
-                      disabled={!this.state.visualization}
-                      style={{ margin: 0 }}
-                    />
-                  </AnchorButton>
-                </Tooltip>
               </ButtonGroup>
             )}
             <ButtonGroup>
               <Button
-                disabled={isNavDisabled || isAtFirstStep}
+                disabled={!this.state.visualization}
                 icon="double-chevron-left"
                 onClick={this.stepPrevBreakpoint}
               />
               <Button
-                disabled={isNavDisabled || isAtFirstStep}
+                disabled={!this.state.visualization}
                 icon="chevron-left"
                 onClick={
                   this.isJava() || CseMachine.getControlStash()
@@ -316,7 +286,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                 }
               />
               <Button
-                disabled={isNavDisabled || isAtLastStep}
+                disabled={!this.state.visualization}
                 icon="chevron-right"
                 onClick={
                   this.isJava() || CseMachine.getControlStash()
@@ -325,34 +295,13 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                 }
               />
               <Button
-                disabled={isNavDisabled || isAtLastStep}
+                disabled={!this.state.visualization}
                 icon="double-chevron-right"
                 onClick={this.stepNextBreakpoint}
               />
             </ButtonGroup>
-
             {!this.isJava() && (
               <ButtonGroup>
-                <Tooltip content="Clear Dead Frames" compact>
-                  <AnchorButton
-                    onMouseUp={() => {
-                      if (this.state.visualization) {
-                        this.setState(
-                          prevState => ({
-                            clearDeadFrames: true
-                          }),
-                          () => {
-                            CseMachine.setClearDeadFrames(this.state.clearDeadFrames);
-                            CseMachine.clearCachedLayouts();
-                            CseMachine.redraw();
-                          }
-                        );
-                      }
-                    }}
-                    icon="eraser"
-                    disabled={this.state.clearDeadFrames || !this.state.visualization}
-                  ></AnchorButton>
-                </Tooltip>
                 <Tooltip content="Print" compact>
                   <AnchorButton
                     onMouseUp={() => {
@@ -447,14 +396,9 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   };
 
   private sliderShift = (newValue: number) => {
-    if (this.state.clearDeadFrames) {
-      CseMachine.setClearDeadFrames(false);
-      CseMachine.clearCachedLayouts();
-      CseMachine.redraw();
-    }
     this.props.handleStepUpdate(newValue);
     this.setState((state: State) => {
-      return { value: newValue, clearDeadFrames: false };
+      return { value: newValue };
     });
   };
 

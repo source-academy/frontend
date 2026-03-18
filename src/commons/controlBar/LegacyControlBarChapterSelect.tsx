@@ -1,7 +1,7 @@
 import { Button, Menu, MenuItem, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
-import { Chapter, Variant } from 'js-slang/dist/langs';
+import { Chapter, Variant } from 'js-slang/dist/types';
 import React from 'react';
 
 import {
@@ -11,6 +11,7 @@ import {
   javaLanguages,
   pyLanguages,
   SALanguage,
+  schemeLanguages,
   sourceLanguages,
   styliseSublanguage
 } from '../application/ApplicationTypes';
@@ -85,6 +86,7 @@ export const LegacyControlBarChapterSelect: React.FC<ControlBarChapterSelectProp
     // for public deployments. HTML, while sandboxed, is treated the same way to be safe.
     // See https://github.com/source-academy/frontend/pull/2460#issuecomment-1528759912
     ...(Constants.playgroundOnly ? [fullJSLanguage, fullTSLanguage, htmlLanguage] : []),
+    ...schemeLanguages,
     ...pyLanguages,
     ...javaLanguages
   ];

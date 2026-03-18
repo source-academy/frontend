@@ -424,10 +424,6 @@ $code-color-notification: #f9f0d7;
               'Consolas',
               monospace;
           }
-          // for ? :
-          .stepper-conditional-operator {
-            color: #ffffff;
-          }
 
           .stepper-literal {
             color: #ff6078;
@@ -441,29 +437,24 @@ $code-color-notification: #f9f0d7;
             color: #f8d871;
           }
 
-          // this is used for hoverable
-          // add bold font
-          // removed background since it clashes with the after/bef sub bg
           .stepper-mu-term {
-            font-weight: bold;
             pointer-events: auto;
             cursor: pointer;
             z-index: 20;
             padding: 0px 3px;
             border-radius: 5px;
-            background: transparent;
+            background: rgba(255, 83, 83, 0.2);
           }
-          // removed background since it clashes with the after/bef sub bg
-          // maybe not neccessary to exist anymore
+
           .stepper-mu-term:hover {
-            background: transparent;
+            background: rgba(255, 83, 83, 0.5);
           }
 
           .beforeMarker {
             position: relative;
             -webkit-box-decoration-break: slice;
             box-decoration-break: slice;
-            background: rgba(172, 0, 0, 0.75);
+            background: rgba(179, 101, 57, 0.75);
             pointer-events: auto;
             cursor: pointer;
             z-index: 20;

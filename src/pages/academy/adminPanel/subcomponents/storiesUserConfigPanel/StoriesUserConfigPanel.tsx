@@ -30,7 +30,7 @@ const defaultColumnDefs: ColDef = {
  *   no admins left in a course)
  */
 const StoriesUserConfigPanel: React.FC<Props> = props => {
-  const gridApi = React.useRef<GridApi>(null);
+  const gridApi = React.useRef<GridApi>();
 
   const storiesUsers = props.storiesUsers?.map(e =>
     !e.name ? { ...e, name: '(user has yet to log in)' } : e
@@ -89,10 +89,12 @@ const StoriesUserConfigPanel: React.FC<Props> = props => {
           text="Export as CSV"
           className="export-csv-button"
           onClick={() => {
-            gridApi.current?.exportDataAsCsv({
-              fileName: `SA Stories Users (${new Date().toISOString()}).csv`,
-              columnKeys: ['name', 'username', 'role']
-            });
+            if (gridApi.current) {
+              gridApi.current.exportDataAsCsv({
+                fileName: `SA Stories Users (${new Date().toISOString()}).csv`,
+                columnKeys: ['name', 'username', 'role']
+              });
+            }
           }}
         />
       </div>

@@ -1,7 +1,13 @@
 /* tslint:disable: ban-types*/
 import createSlangContext, { defineBuiltin, importBuiltins } from 'js-slang/dist/createContext';
-import { type Chapter, LanguageOptions, Variant } from 'js-slang/dist/langs';
-import { type Context, type CustomBuiltIns, type Value } from 'js-slang/dist/types';
+import {
+  type Chapter,
+  type Context,
+  type CustomBuiltIns,
+  LanguageOptions,
+  type Value,
+  Variant
+} from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import { difference, keys } from 'lodash';
 import CseMachine from 'src/features/cseMachine/CseMachine';

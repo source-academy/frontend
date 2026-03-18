@@ -32,10 +32,6 @@ export class UnassignedValue extends Value {
     throw new Error('Unassigned value cannot have more than one reference!');
   }
 
-  setFaded(faded: boolean) {
-    if (this.text instanceof Text) this.text.options.faded = faded;
-  }
-
   draw(): React.ReactNode {
     this._isDrawn = true;
     return <React.Fragment key={Layout.key++}>{this.text.draw()}</React.Fragment>;

@@ -7,6 +7,7 @@ import {
   javaLanguages,
   pyLanguages,
   SALanguage,
+  schemeLanguages,
   sourceLanguages,
   SUPPORTED_LANGUAGES,
   SupportedLanguage
@@ -25,6 +26,7 @@ const LegacyNavigationBarLangSelectButton = () => {
   const defaultSublanguages: { [lang in SupportedLanguage]: SALanguage } = {
     [SupportedLanguage.JAVASCRIPT]: sourceLanguages[0],
     [SupportedLanguage.PYTHON]: pyLanguages[0],
+    [SupportedLanguage.SCHEME]: schemeLanguages[0],
     [SupportedLanguage.JAVA]: javaLanguages[0],
     [SupportedLanguage.C]: cLanguages[0]
   };
