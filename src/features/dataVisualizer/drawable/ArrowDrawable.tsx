@@ -15,16 +15,12 @@ type Props = {
  * Used with ArrayDrawable and FunctionDrawable.
  */
 const ArrowDrawable: React.FC<Props> = props => {
-  if (DataVisualizer.getBinTreeMode()) { // RenderBinaryTree
+  if (DataVisualizer.getBinTreeMode()) {
+    // RenderBinaryTree
     return (
       <Arrow
         key={props + ''}
-        points={[
-          props.from.x,
-          props.from.y,
-          props.to.x,
-          props.to.y
-        ]}
+        points={[props.from.x, props.from.y, props.to.x, props.to.y]}
         pointerWidth={Config.ArrowPointerSize}
         pointerLength={Config.ArrowPointerSize}
         fill={Config.Fill}
@@ -33,17 +29,12 @@ const ArrowDrawable: React.FC<Props> = props => {
         preventDefault={false}
       ></Arrow>
     );
-  }
-  else if (DataVisualizer.getTreeMode()) { // RenderGeneralTree
+  } else if (DataVisualizer.getTreeMode()) {
+    // RenderGeneralTree
     return (
       <Arrow
         key={props + ''}
-        points={[
-          props.from.x,
-          props.from.y,
-          props.to.x,
-          props.to.y
-        ]}
+        points={[props.from.x, props.from.y, props.to.x, props.to.y]}
         pointerWidth={Config.ArrowPointerSize}
         pointerLength={Config.ArrowPointerSize}
         fill={Config.Fill}
@@ -52,15 +43,15 @@ const ArrowDrawable: React.FC<Props> = props => {
         preventDefault={false}
       ></Arrow>
     );
-  }
-  else { // OriginalView
+  } else {
+    // OriginalView
     return (
       <Arrow
         key={props + ''}
         points={[
           props.from.x,
           props.from.y,
-          props.to.x + (Config.BoxWidth / 2),
+          props.to.x + Config.BoxWidth / 2,
           props.to.y + Config.ArrowPointerOffsetVertical
         ]}
         pointerWidth={Config.ArrowPointerSize}
