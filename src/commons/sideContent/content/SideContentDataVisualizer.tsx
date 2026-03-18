@@ -154,7 +154,9 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
                     if (DataVisualizer.getTreeMode()) {
                       DataVisualizer.toggleTreeMode();
                     }
-                    DataVisualizer.toggleNormalMode();
+                    if (!DataVisualizer.getNormalMode()) {
+                      DataVisualizer.toggleNormalMode();
+                    }
                     DataVisualizer.redraw();
                   }}
                 >
@@ -178,6 +180,9 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
                       DataVisualizer.toggleTreeMode();
                     }
                     if (DataVisualizer.getNormalMode()) {
+                      DataVisualizer.toggleNormalMode();
+                    }
+                    if (DataVisualizer.getBinTreeMode()) {
                       DataVisualizer.toggleNormalMode();
                     }
                     DataVisualizer.toggleBinTreeMode();
@@ -207,6 +212,9 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
                       DataVisualizer.toggleBinTreeMode();
                     }
                     if (DataVisualizer.getNormalMode()) {
+                      DataVisualizer.toggleNormalMode();
+                    }
+                    if (DataVisualizer.getTreeMode()) {
                       DataVisualizer.toggleNormalMode();
                     }
                     DataVisualizer.toggleTreeMode();

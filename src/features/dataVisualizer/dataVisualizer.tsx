@@ -57,7 +57,9 @@ export default class DataVisualizer {
 
   //modify to check for general trees too, make sure no pairs
   public static isBinaryTree(structures: Data[]): boolean {
-    //modify for non trees too
+    if (structures == null) {
+      return false;
+    }
     if (structures[0] === null) {
       return true;
     }
