@@ -2,11 +2,16 @@ import Heap from 'js-slang/dist/cse-machine/heap';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { Chapter } from 'js-slang/dist/langs';
 import { Frame } from 'js-slang/dist/types';
-import { KonvaEventObject } from 'konva/lib/Node';
 import { Group } from 'konva/lib/Group';
+import { KonvaEventObject } from 'konva/lib/Node';
 import { Stage } from 'konva/lib/Stage';
 import React, { RefObject } from 'react';
-import { Group as KonvaGroup, Layer as KonvaLayer, Rect as KonvaRect, Stage as KonvaStage } from 'react-konva';
+import {
+  Group as KonvaGroup,
+  Layer as KonvaLayer,
+  Rect as KonvaRect,
+  Stage as KonvaStage
+} from 'react-konva';
 import classes from 'src/styles/Draggable.module.scss';
 
 import { arrowSelection } from './components/arrows/ArrowSelection';
@@ -475,8 +480,9 @@ export class Layout {
     const bounds = [
       this.contentGroupRef.current?.getClientRect(),
       this.animationGroupRef.current?.getClientRect()
-    ].filter((rect): rect is { x: number; y: number; width: number; height: number } =>
-      !!rect && rect.width > 0 && rect.height > 0
+    ].filter(
+      (rect): rect is { x: number; y: number; width: number; height: number } =>
+        !!rect && rect.width > 0 && rect.height > 0
     );
 
     if (bounds.length === 0) {
@@ -819,5 +825,3 @@ export class Layout {
     });
   }
 }
-
-
