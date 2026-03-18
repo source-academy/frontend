@@ -2,13 +2,13 @@ import React from 'react';
 import { Group } from 'react-konva';
 
 import { Frame } from '../components/Frame';
+import { Text } from '../components/Text';
 import CseMachine from '../CseMachine';
 import { Config } from '../CseMachineConfig';
 import { 
   defaultActiveColor, 
-  defaultStrokeColor,
-  defaultBackgroundColor 
-} from '../CseMachineUtils';
+  defaultBackgroundColor, 
+  defaultStrokeColor} from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedRectComponent, AnimatedTextComponent } from './base/AnimationComponents';
 import { getNodePosition } from './base/AnimationUtils';
@@ -21,15 +21,16 @@ export class ClearDeadFramesAnimation extends Animatable {
   private frameAnimations: AnimatedRectComponent[];
   private newFrameCovers: AnimatedRectComponent[];
 
-  // Did not use AnimatedTextbox because text in bindings are
-  // separate (one in each binding, rather than a collective
-  // text for a frame), so it would be more accurate to model
-  // text for each binding separately from the frames
-  // private textAnimations: AnimatedTextComponent[];
-  // private newTextPositions
+  // Used AnimatedTextComponent instead of AnimatedTextbox because
+  // text is stored in each binding rather than an entire frame
+  private textAnimations: AnimatedTextComponent[];
+  private newTextCovers: AnimatedTextComponent[];
 
   constructor(changedFramePairs: Frame[][]) {
     super();
+
+    // changedTextPairs only account for binding keys, not values YET
+    const changedTextPairs: Text[][] = [];
 
     // FRAMES
     this.frameAnimations = [];
@@ -51,9 +52,41 @@ export class ClearDeadFramesAnimation extends Animatable {
           ...newFramePosition,
           cornerRadius: Config.FrameCornerRadius,
           stroke: defaultBackgroundColor(),
-          strokeWidth: 4,
+          strokeWidth: 4
         })
       )
+
+      // Set up changedTextPairs (only keys for now)
+      const oldBindings = framePair[0].bindings;
+      const newBindings = framePair[1].bindings;
+      for (let i = 0; i < oldBindings.length; i++) {
+        changedTextPairs.push([oldBindings[i].key, newBindings[i].key]);
+        console.log(oldBindings[i].key);
+        console.log(newBindings[i].key);
+      }
+    }
+
+    // TEXTS
+    this.textAnimations = [];
+    this.newTextCovers = [];
+    for (const textPair of changedTextPairs) {
+      const oldTextPosition = getNodePosition(textPair[0]);
+      this.textAnimations.push(
+        new AnimatedTextComponent({
+          ...oldTextPosition,
+          text: textPair[0].fullStr
+        })
+      )
+      const newTextPosition = getNodePosition(textPair[1]);
+      this.newTextCovers.push(
+        new AnimatedTextComponent({
+          ...newTextPosition,
+          text: textPair[1].fullStr,
+          fill: defaultBackgroundColor(),
+          stroke: defaultBackgroundColor(), 
+          strokeWidth: 4 // stroke is required for strokeWidth
+        })
+      );
     }
   }
 
@@ -64,20 +97,30 @@ export class ClearDeadFramesAnimation extends Animatable {
       <Group key={Animatable.key--} ref={this.ref}>
         {this.newFrameCovers.map((rect) => rect.draw())}
         {this.frameAnimations.map((rect) => rect.draw())}
+        {this.newTextCovers.map((rect) => rect.draw())}
+        {this.textAnimations.map((rect) => rect.draw())}
       </Group>
     );
   }
 
   async animate() {
+    // FRAMES
     for (let frameIdx = 0; frameIdx < this.frameAnimations.length; frameIdx++) {
       const newFramePosition = getNodePosition(this.newFrameCovers[frameIdx]);
-      if (frameIdx == this.frameAnimations.length - 1) { // last animation, await
-        await this.frameAnimations[frameIdx].animateTo({
-          x: newFramePosition.x, y: newFramePosition.y
+      this.frameAnimations[frameIdx].animateTo({
+        x: newFramePosition.x, y: newFramePosition.y
+      }, { duration: 2 })
+    }
+    // TEXTS
+    for (let textIdx = 0; textIdx < this.textAnimations.length; textIdx++) {
+      const newTextPosition = getNodePosition(this.newTextCovers[textIdx]);
+      if (textIdx == this.textAnimations.length - 1) { // last animation, await
+        await this.textAnimations[textIdx].animateTo({
+          x: newTextPosition.x, y: newTextPosition.y
         }, { duration: 2 })
       } else {
-        this.frameAnimations[frameIdx].animateTo({
-          x: newFramePosition.x, y: newFramePosition.y
+        this.textAnimations[textIdx].animateTo({
+          x: newTextPosition.x, y: newTextPosition.y
         }, { duration: 2 })
       }
     }
@@ -91,6 +134,12 @@ export class ClearDeadFramesAnimation extends Animatable {
     }
     for (const frameCover of this.newFrameCovers) {
         frameCover.destroy();
+    }
+    for (const textAnim of this.textAnimations) {
+        textAnim.destroy();
+    }
+    for (const textCover of this.newTextCovers) {
+        textCover.destroy();
     }
   }
 }

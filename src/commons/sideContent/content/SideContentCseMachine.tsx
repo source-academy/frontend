@@ -351,9 +351,6 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                             CseMachine.redraw();
                             const currLevels = Layout.levels;
                             const changedFramePairs = computeFramesCoordChange(prevLevels, currLevels);
-                            console.log(prevLevels);
-                            console.log(currLevels);
-                            console.log(changedFramePairs);
                             if (changedFramePairs.length > 0) {
                               CseAnimation.animations.push(new ClearDeadFramesAnimation(changedFramePairs));
                               CseAnimation.enableAnimations();
