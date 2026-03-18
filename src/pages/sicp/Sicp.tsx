@@ -192,10 +192,20 @@ const Sicp: React.FC = () => {
             <SicpIndexPage />
           ) : (
             <div className="sicp-content">
-              <Link to="#begin" ref={ref => (refs.current['#begin'] = ref)} />
+              <Link
+                to="#begin"
+                ref={ref => {
+                  refs.current['#begin'] = ref;
+                }}
+              />
               {data}
               {navigationButtons}
-              <Link to="#end" ref={ref => (refs.current['#end'] = ref)} />
+              <Link
+                to="#end"
+                ref={ref => {
+                  refs.current['#end'] = ref;
+                }}
+              />
             </div>
           )}
         </CodeSnippetContext.Provider>
