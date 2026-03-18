@@ -5,11 +5,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={40}
   >
@@ -32,11 +27,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={45}
@@ -66,11 +56,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={75}
   >
@@ -93,11 +78,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={80}
@@ -127,11 +107,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={110}
   >
@@ -154,11 +129,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={115}
@@ -188,11 +158,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={145}
   >
@@ -215,11 +180,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={150}
@@ -249,11 +209,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={180}
   >
@@ -276,11 +231,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={185}
@@ -310,11 +260,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={215}
   >
@@ -337,11 +282,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={220}
@@ -371,11 +311,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={250}
   >
@@ -398,11 +333,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={255}
@@ -432,11 +362,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={285}
   >
@@ -459,11 +384,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={290}
@@ -493,11 +413,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={320}
   >
@@ -520,11 +435,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={325}
@@ -554,11 +464,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={355}
   >
@@ -581,11 +486,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={360}
@@ -615,11 +515,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={140}
     y={5}
   >
@@ -640,11 +535,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={45}
@@ -674,11 +564,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={178}
     y={5}
   >
@@ -699,11 +584,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={183}
     y={45}
@@ -733,11 +613,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={207}
     y={5}
   >
@@ -758,11 +633,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={212}
     y={45}
@@ -792,11 +662,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={236}
     y={5}
   >
@@ -817,11 +682,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={241}
     y={45}
@@ -851,11 +711,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={265}
     y={5}
   >
@@ -876,11 +731,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={270}
     y={45}
@@ -910,11 +760,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={294}
     y={5}
   >
@@ -935,11 +780,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={299}
     y={45}
@@ -969,11 +809,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={323}
     y={5}
   >
@@ -994,11 +829,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={328}
     y={45}
@@ -1028,11 +858,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={352}
     y={5}
   >
@@ -1053,11 +878,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={357}
     y={45}
@@ -1087,11 +907,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={381}
     y={5}
   >
@@ -1112,11 +927,6 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={386}
     y={45}
@@ -1146,11 +956,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={40}
   >
@@ -1173,11 +978,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={45}
@@ -1207,11 +1007,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={75}
   >
@@ -1234,11 +1029,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={80}
@@ -1268,11 +1058,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={110}
   >
@@ -1295,11 +1080,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={115}
@@ -1329,11 +1109,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={145}
   >
@@ -1356,11 +1131,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={150}
@@ -1389,21 +1159,11 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     onMouseDown={[Function]}
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
   >
     <Path
       data="M 140 162.5 L 170 240 L 170 240 "
       hitStrokeWidth={10}
       preventDefault={false}
-      ref={
-        {
-          "current": null,
-        }
-      }
       stroke="#999"
       strokeWidth={1}
     />
@@ -1419,11 +1179,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
         ]
       }
       preventDefault={false}
-      ref={
-        {
-          "current": null,
-        }
-      }
       strokeEnabled={false}
     />
   </Group>
@@ -1435,11 +1190,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={180}
   >
@@ -1462,11 +1212,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={185}
@@ -1496,11 +1241,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={215}
   >
@@ -1523,11 +1263,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={220}
@@ -1556,21 +1291,11 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     onMouseDown={[Function]}
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
   >
     <Path
       data="M 140 232.5 L 170 390 L 170 390 "
       hitStrokeWidth={10}
       preventDefault={false}
-      ref={
-        {
-          "current": null,
-        }
-      }
       stroke="#999"
       strokeWidth={1}
     />
@@ -1586,11 +1311,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
         ]
       }
       preventDefault={false}
-      ref={
-        {
-          "current": null,
-        }
-      }
       strokeEnabled={false}
     />
   </Group>
@@ -1602,11 +1322,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={250}
   >
@@ -1629,11 +1344,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={255}
@@ -1663,11 +1373,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={285}
   >
@@ -1690,11 +1395,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={290}
@@ -1724,11 +1424,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={320}
   >
@@ -1751,11 +1446,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={325}
@@ -1785,11 +1475,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={355}
   >
@@ -1812,11 +1497,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={360}
@@ -1846,11 +1526,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={390}
   >
@@ -1873,11 +1548,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={395}
@@ -1907,11 +1577,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={425}
   >
@@ -1934,11 +1599,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={430}
@@ -1968,11 +1628,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={460}
   >
@@ -1995,11 +1650,6 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={465}
@@ -2029,11 +1679,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={40}
   >
@@ -2056,11 +1701,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={45}
@@ -2090,11 +1730,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={75}
   >
@@ -2117,11 +1752,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={80}
@@ -2150,21 +1780,11 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     onMouseDown={[Function]}
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
   >
     <Path
       data="M 140 92.5 L 170 105 L 170 105 "
       hitStrokeWidth={10}
       preventDefault={false}
-      ref={
-        {
-          "current": null,
-        }
-      }
       stroke="#999"
       strokeWidth={1}
     />
@@ -2180,11 +1800,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
         ]
       }
       preventDefault={false}
-      ref={
-        {
-          "current": null,
-        }
-      }
       strokeEnabled={false}
     />
   </Group>
@@ -2196,11 +1811,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={110}
   >
@@ -2223,11 +1833,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={115}
@@ -2257,11 +1862,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={20}
     y={145}
   >
@@ -2284,11 +1884,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={150}
@@ -2318,11 +1913,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
   <Label
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
     x={140}
     y={5}
   >
@@ -2343,11 +1933,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     />
   </Label>
   <Label
-    ref={
-      {
-        "current": null,
-      }
-    }
     visible={false}
     x={145}
     y={45}
@@ -2376,21 +1961,11 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     onMouseDown={[Function]}
     onMouseEnter={[Function]}
     onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
   >
     <Path
       data="M 181.5 40 L 349 330 L 349 330 "
       hitStrokeWidth={10}
       preventDefault={false}
-      ref={
-        {
-          "current": null,
-        }
-      }
       stroke="#999"
       strokeWidth={1}
     />
@@ -2406,11 +1981,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
         ]
       }
       preventDefault={false}
-      ref={
-        {
-          "current": null,
-        }
-      }
       strokeEnabled={false}
     />
   </Group>

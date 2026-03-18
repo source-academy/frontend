@@ -35,7 +35,7 @@ type State = {
 };
 
 export class ControlBarShareButton extends React.PureComponent<ControlBarShareButtonProps, State> {
-  private shareInputElem: React.RefObject<HTMLInputElement | null>;
+  private shareInputElem: React.RefObject<HTMLInputElement>;
 
   constructor(props: ControlBarShareButtonProps) {
     super(props);

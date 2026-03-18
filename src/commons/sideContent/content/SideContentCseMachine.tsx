@@ -214,11 +214,6 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
           ['e', () => {}]
         ];
 
-    const currentStep = Math.max(0, this.state.value);
-    const isAtFirstStep = currentStep < 1;
-    const isAtLastStep = currentStep >= this.props.stepsTotal;
-    const isNavDisabled = !this.state.visualization;
-
     return (
       <HotKeys
         bindings={hotkeyBindings}
@@ -304,12 +299,12 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
             )}
             <ButtonGroup>
               <Button
-                disabled={isNavDisabled || isAtFirstStep}
+                disabled={!this.state.visualization}
                 icon="double-chevron-left"
                 onClick={this.stepPrevBreakpoint}
               />
               <Button
-                disabled={isNavDisabled || isAtFirstStep}
+                disabled={!this.state.visualization}
                 icon="chevron-left"
                 onClick={
                   this.isJava() || CseMachine.getControlStash()
@@ -318,7 +313,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                 }
               />
               <Button
-                disabled={isNavDisabled || isAtLastStep}
+                disabled={!this.state.visualization}
                 icon="chevron-right"
                 onClick={
                   this.isJava() || CseMachine.getControlStash()
@@ -327,7 +322,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                 }
               />
               <Button
-                disabled={isNavDisabled || isAtLastStep}
+                disabled={!this.state.visualization}
                 icon="double-chevron-right"
                 onClick={this.stepNextBreakpoint}
               />

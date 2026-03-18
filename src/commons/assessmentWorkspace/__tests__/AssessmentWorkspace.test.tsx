@@ -3,6 +3,7 @@ import { act } from 'react';
 import { Provider } from 'react-redux';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
+import { renderTreeJson } from 'src/commons/utils/TestUtils';
 import { assertType } from 'src/commons/utils/TypeHelper';
 import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
 import { vi } from 'vitest';
@@ -112,9 +113,10 @@ const getContestVotingTab = (tree: HTMLElement) => tree.querySelector('.ContestE
 describe('AssessmentWorkspace', () => {
   test('AssessmentWorkspace page "loading" content renders correctly', async () => {
     const app = createMemoryRouterWithRoutes(mockUndefinedAssessmentWorkspaceProps);
-    const { asFragment } = render(app);
-    expect(asFragment()).toMatchSnapshot();
+    const tree = await renderTreeJson(app);
+    expect(tree).toMatchSnapshot();
 
+    render(app);
     screen.getByText('Getting mission ready...');
   });
 

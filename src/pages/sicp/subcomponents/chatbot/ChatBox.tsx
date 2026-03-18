@@ -29,7 +29,7 @@ const createErrorMessage = (): ChatMessage => ({
   role: 'assistant'
 });
 
-const scrollToBottom = (ref: React.RefObject<HTMLDivElement | null>) => {
+const scrollToBottom = (ref: React.RefObject<HTMLDivElement>) => {
   ref.current?.scrollTo({ top: ref.current?.scrollHeight });
 };
 

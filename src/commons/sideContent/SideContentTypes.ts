@@ -1,5 +1,4 @@
 import { IconName } from '@blueprintjs/core';
-import type { JSX } from 'react';
 
 import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 

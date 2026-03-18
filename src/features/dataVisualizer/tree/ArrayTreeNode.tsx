@@ -1,4 +1,3 @@
-import type { JSX } from 'react';
 import { Group } from 'react-konva';
 
 import { Config } from '../Config';

@@ -1,5 +1,6 @@
 import { Store } from '@reduxjs/toolkit';
-import { screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import { act } from 'react';
 import { Provider } from 'react-redux';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { OverallState, Role } from 'src/commons/application/ApplicationTypes';
@@ -56,7 +57,8 @@ test('Assessment page "loading" content renders correctly', async () => {
   const tree = await renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
-  await screen.findByText('Fetching assessment...');
+  render(app);
+  screen.getByText('Fetching assessment...');
 });
 
 test('Assessment page with 0 missions renders correctly', async () => {
@@ -66,7 +68,8 @@ test('Assessment page with 0 missions renders correctly', async () => {
   const tree = await renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
-  await screen.findByText('There are no assessments.');
+  await act(() => render(app));
+  screen.getByText('There are no assessments.');
 });
 
 test('Assessment page with multiple loaded missions renders correctly', async () => {
@@ -79,7 +82,8 @@ test('Assessment page with multiple loaded missions renders correctly', async ()
   const tree = await renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
-  expect(await screen.findAllByTestId('Assessment-Attempt-Button')).toHaveLength(3);
+  await act(() => render(app));
+  expect(screen.getAllByTestId('Assessment-Attempt-Button').length).toBe(3);
 });
 
 test('Assessment page does not show attempt Button for upcoming assessments for student user', async () => {
@@ -92,5 +96,6 @@ test('Assessment page does not show attempt Button for upcoming assessments for 
   const tree = await renderTreeJson(app);
   expect(tree).toMatchSnapshot();
 
-  expect(await screen.findAllByTestId('Assessment-Attempt-Button')).toHaveLength(2);
+  await act(() => render(app));
+  expect(screen.getAllByTestId('Assessment-Attempt-Button').length).toBe(2);
 });

@@ -1,75 +1,74 @@
-import { render } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router';
-import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
-import { EditorBinding, WorkspaceSettingsContext } from 'src/commons/WorkspaceSettingsContext';
-import { vi } from 'vitest';
+import { useLocation } from 'react-router';
+import { useTypedSelector } from 'src/commons/utils/Hooks';
+import { shallowRender } from 'src/commons/utils/TestUtils';
+import { Mock, vi } from 'vitest';
 
 import { Role } from '../../application/ApplicationTypes';
 import NavigationBar from '../NavigationBar';
 
-const renderNav = (store: any) =>
-  render(
-    <Provider store={store}>
-      <WorkspaceSettingsContext.Provider value={[{ editorBinding: EditorBinding.NONE }, vi.fn()]}>
-        <MemoryRouter initialEntries={['/courses/1/game']}>
-          <NavigationBar />
-        </MemoryRouter>
-      </WorkspaceSettingsContext.Provider>
-    </Provider>
-  );
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
+  useLocation: vi.fn()
+}));
+vi.mock('react-redux', async () => ({
+  ...(await vi.importActual('react-redux')),
+  useSelector: vi.fn()
+}));
+
+const useSelectorMock = useTypedSelector as Mock;
+const useLocationMock = useLocation as Mock;
 
 describe('NavigationBar', () => {
-  it('Renders "Not logged in" correctly', () => {
-    const store = mockInitialStore({
-      session: {
-        role: undefined,
-        name: undefined
-      }
+  beforeEach(() => {
+    useLocationMock.mockReturnValue({
+      pathname: 'localhost:8000/courses/1/game'
     });
+  });
 
-    const tree = renderNav(store);
-    expect(tree.asFragment()).toMatchSnapshot();
+  it('Renders "Not logged in" correctly', () => {
+    useSelectorMock.mockReturnValueOnce({});
+    const tree = shallowRender(<NavigationBar />);
+    expect(tree).toMatchSnapshot();
   });
 
   it('Renders correctly for student with course', () => {
-    const store = mockInitialStore({
-      session: {
-        role: Role.Student,
-        name: 'Bob',
-        courseId: 1,
-        courseShortName: 'CS1101S',
-        assessmentConfigurations: [
-          {
-            type: 'Missions'
-          } as any,
-          {
-            type: 'Quests'
-          } as any,
-          {
-            type: 'Paths'
-          } as any,
-          {
-            type: 'Contests'
-          } as any
-        ]
-      }
+    useSelectorMock.mockReturnValueOnce({
+      role: Role.Student,
+      name: 'Bob',
+      courseId: 1,
+      courseShortName: 'CS1101S',
+      enableAchievements: true,
+      enableContestLeaderboard: false,
+      enableOverallLeaderboard: false,
+      enableSourcecast: true,
+      assessmentConfigurations: [
+        {
+          type: 'Missions'
+        },
+        {
+          type: 'Quests'
+        },
+        {
+          type: 'Paths'
+        },
+        {
+          type: 'Contests'
+        },
+        {
+          type: 'Missions'
+        }
+      ]
     });
 
-    const tree = renderNav(store);
-    expect(tree.asFragment()).toMatchSnapshot();
+    const tree = shallowRender(<NavigationBar />);
+    expect(tree).toMatchSnapshot();
   });
 
   test('Renders correctly for student without course', () => {
-    const store = mockInitialStore({
-      session: {
-        role: undefined,
-        name: 'Bob',
-        courseId: undefined
-      }
+    useSelectorMock.mockReturnValueOnce({
+      name: 'Bob'
     });
-
-    const tree = renderNav(store);
-    expect(tree.asFragment()).toMatchSnapshot();
+    const tree = shallowRender(<NavigationBar />);
+    expect(tree).toMatchSnapshot();
   });
 });

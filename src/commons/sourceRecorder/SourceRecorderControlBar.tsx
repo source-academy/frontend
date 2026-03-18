@@ -53,7 +53,7 @@ type State = {
 };
 
 class SourceRecorderControlBar extends React.PureComponent<SourceRecorderControlBarProps, State> {
-  private audio: React.RefObject<HTMLAudioElement | null>;
+  private audio: React.RefObject<HTMLAudioElement>;
 
   constructor(props: SourceRecorderControlBarProps) {
     super(props);

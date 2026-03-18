@@ -115,12 +115,12 @@ export class Layout {
   static currentStackTruncDark: React.ReactNode;
   static currentStackLight: React.ReactNode;
   static currentStackTruncLight: React.ReactNode;
-  static stageRef: RefObject<Stage | null> = React.createRef();
+  static stageRef: RefObject<Stage> = React.createRef();
 
   // buffer for faster rendering of diagram when scrolling
   static invisiblePaddingVertical: number = 300;
   static invisiblePaddingHorizontal: number = 300;
-  static scrollContainerRef: RefObject<HTMLDivElement | null> = React.createRef();
+  static scrollContainerRef: RefObject<HTMLDivElement> = React.createRef();
 
   static updateDimensions(width: number, height: number) {
     // update the size of the scroll container and stage given the width and height of the sidebar content.
@@ -664,8 +664,7 @@ export class Layout {
       const controlStashOffset =
         ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth;
       const offset = controlStash ? controlStashOffset : 0;
-      // `level.width()` already includes the last frame's right-side overflow.
-      const currWidth = level.width();
+      const currWidth = level.width() + frames[frames.length - 1].totalDataWidth;
       cache.largestWidth = Math.max(cache.largestWidth, currWidth);
       frames.forEach(frame => {
         cache.frames.set(frame.environment.id, frame.x() - offset);
@@ -684,7 +683,7 @@ export class Layout {
     if (Layout.clearDeadFrames) {
       return undefined;
     }
-    const cache = CseMachine.getMasterLayout();
+    const cache = CseMachine.masterLayout;
     if (cache && cache.frames.has(envId)) {
       const fixedX = cache.frames.get(envId)!;
       // add offset for control stash and center alignment
@@ -704,10 +703,10 @@ export class Layout {
    * Reassign x coordinate of every frame to their predetermined position by calling getGhostFrameX.
    */
   static applyFixedPositions() {
-    if (Layout.clearDeadFrames || !CseMachine.getMasterLayout()) {
+    if (Layout.clearDeadFrames || !CseMachine.masterLayout) {
       return;
     }
-    const cache = CseMachine.getMasterLayout()!; // getLayoutPositions() must have been called before
+    const cache = CseMachine.masterLayout!; // getLayoutPositions() must have been called before
     Layout.levels.forEach(level => {
       level.frames.forEach(frame => {
         const id = frame.environment.id;

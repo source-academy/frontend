@@ -1,4 +1,4 @@
-import React, { type JSX, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
 import AchievementAdder from './achievementEditor/AchievementAdder';

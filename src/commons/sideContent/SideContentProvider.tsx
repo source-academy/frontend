@@ -1,4 +1,4 @@
-import { type JSX, useCallback } from 'react';
+import { useCallback } from 'react';
 
 import { useSideContent } from './SideContentHelper';
 import type {

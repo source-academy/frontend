@@ -1,79 +1,97 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Navbar renders correctly 1`] = `
-<DocumentFragment>
-  <div
-    class="bp6-navbar SicpNavigationBar secondary-navbar"
+<React.Fragment>
+  <Blueprint6.Omnibar
+    className="sicp-search-bar"
+    inputProps={
+      {
+        "disabled": false,
+        "placeholder": "Text Search...",
+      }
+    }
+    isOpen={false}
+    itemListRenderer={[Function]}
+    itemRenderer={[Function]}
+    items={[]}
+    onClose={[Function]}
+    onItemSelect={[Function]}
+    onQueryChange={[Function]}
+    overlayProps={
+      {
+        "className": "bp6-overlay-scroll-container",
+      }
+    }
+    query=""
+  />
+  <Blueprint6.Navbar
+    className="SicpNavigationBar secondary-navbar"
   >
-    <div
-      class="bp6-navbar-group bp6-align-left"
+    <Blueprint6.NavbarGroup
+      align="left"
     >
-      <button
-        class="bp6-button bp6-minimal"
-      >
-        <span
-          class="bp6-button-text"
-        >
-          Table of Contents
-        </span>
-      </button>
-    </div>
-    <div
-      class="bp6-navbar-group bp6-align-right"
+      <TableOfContentsButton
+        handleOpenToc={[Function]}
+      />
+    </Blueprint6.NavbarGroup>
+    <Blueprint6.NavbarGroup
+      align="right"
     >
       <div>
-        <button
-          class="bp6-button bp6-minimal"
-        >
-          <span
-            class="bp6-button-text"
-          >
-            Next
-          </span>
-          <span
-            aria-hidden="true"
-            class="bp6-icon bp6-icon-standard bp6-icon-arrow-right"
-            data-icon="arrow-right"
-          />
-        </button>
+        <ControlButton
+          icon="arrow-right"
+          label="Next"
+          onClick={[Function]}
+          options={
+            {
+              "iconOnRight": true,
+            }
+          }
+        />
       </div>
-    </div>
-    <div
-      class="bp6-navbar-group"
+    </Blueprint6.NavbarGroup>
+    <Blueprint6.NavbarGroup
+      align="center"
     >
       <div
-        style="width: 100%; display: flex; gap: 2px; justify-content: center;"
+        style={
+          {
+            "display": "flex",
+            "gap": 2,
+            "justifyContent": "center",
+            "width": "100%",
+          }
+        }
       >
-        <button
-          class="bp6-button bp6-minimal"
-        >
-          <span
-            aria-hidden="true"
-            class="bp6-icon bp6-icon-standard bp6-icon-search"
-            data-icon="search"
-          />
-          <span
-            class="bp6-button-text"
-          >
-            Text Search
-          </span>
-        </button>
-        <button
-          class="bp6-button bp6-minimal"
-        >
-          <span
-            aria-hidden="true"
-            class="bp6-icon bp6-icon-standard bp6-icon-search"
-            data-icon="search"
-          />
-          <span
-            class="bp6-button-text"
-          >
-            Index Search
-          </span>
-        </button>
+        <ControlButton
+          icon="search"
+          label="Text Search"
+          onClick={[Function]}
+        />
+        <ControlButton
+          icon="search"
+          label="Index Search"
+          onClick={[Function]}
+        />
       </div>
-    </div>
-  </div>
-</DocumentFragment>
+    </Blueprint6.NavbarGroup>
+  </Blueprint6.Navbar>
+  <Blueprint6.Drawer
+    autoFocus={true}
+    canEscapeKeyClose={true}
+    canOutsideClickClose={true}
+    className="sicp-toc-drawer"
+    enforceFocus={true}
+    hasBackdrop={true}
+    isOpen={false}
+    onClose={[Function]}
+    position="left"
+    style={{}}
+    usePortal={false}
+  >
+    <SicpToc
+      handleCloseToc={[Function]}
+    />
+  </Blueprint6.Drawer>
+</React.Fragment>
 `;

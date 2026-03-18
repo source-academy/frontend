@@ -1,5 +1,4 @@
 import Konva from 'konva';
-import type { JSX } from 'react';
 import { Layer, Text } from 'react-konva';
 
 import { Config } from '../Config';
