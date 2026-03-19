@@ -1,12 +1,13 @@
 import { AnchorButton, Icon } from '@blueprintjs/core';
 import * as React from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
+import pixelLogo from 'src/assets/pixel.jpg';
 import { useSession } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/RagChatbot.module.scss';
 
 import RagChatBox from './RagChatBox';
 
-const ICON_SIZE = 50;
+const ICON_SIZE = 70;
 const CHAT_WIDTH = 400;
 const CHAT_HEIGHT = 450;
 const CHAT_EXPANDED_WIDTH = 700;
@@ -41,7 +42,7 @@ const RagChatbot: React.FC = () => {
   const { isLoggedIn } = useSession();
   const [isPop, setPop] = React.useState(false);
   const [isDivVisible, setIsDivVisible] = React.useState(false);
-  const [tipsMessage, setTipsMessage] = React.useState('Click me to ask about course materials');
+  const [tipsMessage, setTipsMessage] = React.useState('Click me for a chat!');
   const [isExpanded, setIsExpanded] = React.useState(false);
   const [position, setPosition] = React.useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = React.useState(false);
@@ -70,7 +71,7 @@ const RagChatbot: React.FC = () => {
       setTipsMessage('');
       setPosition(pos => clampPosition(pos.x, pos.y, true, isExpanded));
     } else {
-      setTipsMessage('Click me to ask about course materials');
+      setTipsMessage('Click me for a chat!');
     }
   };
 
@@ -105,7 +106,7 @@ const RagChatbot: React.FC = () => {
             {isDivVisible && (
               <div className={classes['tips-box']}>
                 <p className={classes['tips-message']}>
-                  Course Assistant
+                  {'I am Pixel, your CS1101S assistant'}
                   <br />
                   {tipsMessage}
                 </p>
@@ -116,7 +117,18 @@ const RagChatbot: React.FC = () => {
               onMouseEnter={() => !isDragging && setIsDivVisible(true)}
               onMouseLeave={() => setIsDivVisible(false)}
               onClick={togglePop}
-              icon={<Icon icon="chat" size={24} />}
+              icon={
+                <Icon
+                  icon={
+                    <img
+                      src={pixelLogo}
+                      className={classes['pixel-avatar']}
+                      alt="Pixel Logo"
+                      draggable={false}
+                    />
+                  }
+                />
+              }
             />
           </div>
           {isPop && <RagChatBox isExpanded={isExpanded} toggleExpanded={toggleExpanded} />}

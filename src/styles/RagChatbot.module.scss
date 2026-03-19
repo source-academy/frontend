@@ -11,8 +11,6 @@
   position: relative;
   width: 400px;
   height: 450px;
-  max-height: 80vh;
-  max-width: 100vw;
   border-radius: 8px;
   background-color: #f1f1f1;
   padding: 16px;
@@ -27,9 +25,22 @@
 
 .chat-container-expanded {
   width: 700px;
-  max-width: 100vw;
   height: 80vh;
   max-height: 800px;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.chat-header-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
 }
 
 .expand-button {
@@ -55,7 +66,7 @@
   padding-right: 10px;
   bottom: 10px;
   right: 65px;
-  width: 200px;
+  width: 260px;
   height: auto;
   border: 1px solid black;
   background-color: #f1f1f1;
@@ -63,18 +74,21 @@
 }
 
 .tips-message {
-  padding: auto;
+  padding: 4px 8px;
+  margin: 0;
   font-size: 13px;
   text-align: right;
+  white-space: normal;
+  word-break: normal;
 }
 
 .bot-button {
   position: absolute;
   right: 10px;
   bottom: 10px;
-  background-color: #4a7fcb;
+  background-color: #e8e8e8;
   border: none;
-  padding: 0;
+  padding: 6px;
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -83,18 +97,20 @@
   align-items: center;
   user-select: none;
   -webkit-user-select: none;
-  display: flex;
-  color: white;
-  font-size: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 
   &:active {
     cursor: grabbing;
   }
+}
 
-  &:hover {
-    background-color: #3a6fbb;
-  }
+.pixel-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  user-select: none;
 }
 
 .chat-message {
@@ -106,29 +122,20 @@
   min-height: 0;
 }
 
-.chat-header {
-  font-size: 14px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 8px;
-  text-align: center;
-}
-
 .user-input {
   width: 100%;
-  font-size: 16px;
+  font-size: 20px;
   color: black;
   background-color: white;
   border: 1px solid black;
   margin-bottom: 0px;
   padding-left: 10px;
-  padding: 8px 10px;
 }
 
 .user {
-  background-color: #4a7fcb;
+  background-color: #a3a3a4;
   color: #fff;
-  font-size: 14px;
+  font-size: 15px;
   text-align: left;
   padding: 10px;
   line-height: 1.5;
@@ -139,7 +146,7 @@
 
 .assistant {
   background-color: #e1e1e1;
-  font-size: 14px;
+  font-size: 15px;
   color: #333;
   text-align: left;
   padding: 10px;
@@ -159,8 +166,7 @@
 .button-send {
   width: 40%;
   height: 100%;
-  background-color: #4a7fcb;
-  color: white;
+  background-color: gray;
   font-size: 15px;
   margin-right: 5%;
   margin-top: 0%;

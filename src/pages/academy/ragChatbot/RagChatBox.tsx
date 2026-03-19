@@ -109,15 +109,16 @@ const RagChatBox: React.FC<Props> = ({ isExpanded, toggleExpanded }) => {
     <div
       className={`${classes['chat-container']} ${isExpanded ? classes['chat-container-expanded'] : ''}`}
     >
-      <Button
-        size="small"
-        variant="minimal"
-        icon={isExpanded ? 'minimize' : 'maximize'}
-        onClick={toggleExpanded}
-        title={isExpanded ? 'Shrink chat' : 'Expand chat'}
-        className={classes['expand-button']}
-      />
-      <div className={classes['chat-header']}>Course Assistant</div>
+      <div className={classes['chat-header']}>
+        <Button
+          size="small"
+          variant="minimal"
+          icon={isExpanded ? 'minimize' : 'maximize'}
+          onClick={toggleExpanded}
+          title={isExpanded ? 'Shrink chat' : 'Expand chat'}
+          className={classes['expand-button']}
+        />
+      </div>
       <div className={classes['chat-message']} ref={chatRef}>
         {messages.map(message => (
           <div
@@ -140,7 +141,7 @@ const RagChatBox: React.FC<Props> = ({ isExpanded, toggleExpanded }) => {
           type="text"
           disabled={isLoading}
           className={classes['user-input']}
-          placeholder={isLoading ? 'Waiting for response...' : 'Ask about lectures, exams...'}
+          placeholder={isLoading ? 'Waiting for response...' : 'Ask Pixel anything...'}
           value={userInput}
           onChange={handleUserInput}
           onKeyDown={keyDown}
@@ -155,7 +156,7 @@ const RagChatBox: React.FC<Props> = ({ isExpanded, toggleExpanded }) => {
             Send
           </Button>
           <Button className={classes['button-clean']} onClick={resetChat}>
-            Reset
+            Clean
           </Button>
         </div>
       </div>
