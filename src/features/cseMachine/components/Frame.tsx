@@ -8,6 +8,7 @@ import { Layout } from '../CseMachineLayout';
 import { Env, EnvTreeNode, IHoverable } from '../CseMachineTypes';
 import {
   defaultActiveColor,
+  defaultBackgroundColor,
   defaultStrokeColor,
   fadedStrokeColor,
   getTextWidth,
@@ -283,6 +284,7 @@ export class Frame extends Visible implements IHoverable {
           onMouseLeave={this.onMouseLeave}
           listening={false}
           key={Layout.key++}
+          fill={defaultBackgroundColor()}
         />
         {this.bindings.map(binding => binding.draw())}
         {this.arrow?.draw()}

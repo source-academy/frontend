@@ -2,6 +2,7 @@ import Heap from 'js-slang/dist/cse-machine/heap';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { Chapter } from 'js-slang/dist/langs';
 import { Frame } from 'js-slang/dist/types';
+import { Layer as KonvaLayerNode } from 'konva/lib/Layer';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Stage } from 'konva/lib/Stage';
 import React, { RefObject } from 'react';
@@ -116,11 +117,20 @@ export class Layout {
   static currentStackLight: React.ReactNode;
   static currentStackTruncLight: React.ReactNode;
   static stageRef: RefObject<Stage | null> = React.createRef();
+  static arrowUnderlayLayerRef: RefObject<KonvaLayerNode | null> = React.createRef();
 
   // buffer for faster rendering of diagram when scrolling
   static invisiblePaddingVertical: number = 300;
   static invisiblePaddingHorizontal: number = 300;
   static scrollContainerRef: RefObject<HTMLDivElement | null> = React.createRef();
+
+  /** Remove re-parented arrow nodes from the underlay layer while preserving the base rect. */
+  static clearArrowUnderlayArrows() {
+    const layer = Layout.arrowUnderlayLayerRef.current;
+    if (!layer) return;
+    layer.find('.cse-arrow-underlay-node').forEach(node => node.destroy());
+    layer.batchDraw();
+  }
 
   static updateDimensions(width: number, height: number) {
     // update the size of the scroll container and stage given the width and height of the sidebar content.
@@ -216,10 +226,10 @@ export class Layout {
       Layout.visibleWidth,
       Config.CanvasMinWidth,
       Layout.levels.reduce<number>((maxWidth, level) => Math.max(maxWidth, level.width()), 0) +
-        Config.CanvasPaddingX * 2 +
-        (CseMachine.getControlStash()
-          ? Layout.controlComponent.width() + Config.CanvasPaddingX * 2
-          : 0)
+      Config.CanvasPaddingX * 2 +
+      (CseMachine.getControlStash()
+        ? Layout.controlComponent.width() + Config.CanvasPaddingX * 2
+        : 0)
     );
     // initialise animations
     CseAnimation.updateAnimation();
@@ -567,6 +577,7 @@ export class Layout {
     if (Layout.key !== 0) {
       return Layout.prevLayout;
     } else {
+      Layout.clearArrowUnderlayArrows();
       const layout = (
         <div className="sa-cse-machine" data-testid="sa-cse-machine">
           <div
@@ -598,6 +609,19 @@ export class Layout {
                 onWheel={Layout.zoomStage}
                 className={classes['draggable']}
               >
+                <KonvaLayer ref={Layout.arrowUnderlayLayerRef}>
+                  <KonvaRect
+                    {...ShapeDefaultProps}
+                    x={0}
+                    y={0}
+                    width={Layout.width()}
+                    height={Layout.height()}
+                    fillEnabled={true}
+                    strokeEnabled={false}
+                    key={Layout.key++}
+                    listening={false}
+                  />
+                </KonvaLayer>
                 <KonvaLayer>
                   <KonvaRect
                     {...ShapeDefaultProps}
@@ -605,7 +629,7 @@ export class Layout {
                     y={0}
                     width={Layout.width()}
                     height={Layout.height()}
-                    fill={defaultBackgroundColor()}
+                    // fill={defaultBackgroundColor()}
                     key={Layout.key++}
                     listening={false}
                   />
