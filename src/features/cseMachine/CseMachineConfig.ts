@@ -66,6 +66,7 @@ export const Config = Object.freeze({
   PrintStrokeColor: '#777',
   PrintStrokeColorFaded: '#ccc',
   ArrowHighlightedColor: '#ffffff',
+  PrintArrowHighlightedColor: '#d32f2f',
 
   // Colors of different states
   ActiveColor: '#030fff',

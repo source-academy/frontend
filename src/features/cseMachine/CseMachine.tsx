@@ -4,7 +4,7 @@ import React from 'react';
 
 import { arrowSelection } from './components/arrows/ArrowSelection';
 import { Layout, LayoutCache } from './CseMachineLayout';
-import { EnvTree } from './CseMachineTypes';
+import { ArrowOriginFilterKey, ArrowOriginFilters, EnvTree } from './CseMachineTypes';
 import { deepCopyTree, getEnvId } from './CseMachineUtils';
 
 type SetVis = (vis: React.ReactNode) => void;
@@ -27,6 +27,14 @@ export default class CseMachine {
   private static stackTruncated: boolean = false;
   private static centerAlignment: boolean = false; // added for center alignment
   private static centerAlignmentToggled: boolean = false;
+  private static arrowOriginFilters: ArrowOriginFilters = {
+    text: true,
+    frame: true,
+    function: true,
+    control: true,
+    stash: true,
+    arrayUnit: true
+  };
   private static environmentTree: EnvTree | undefined;
   private static currentEnvId: string;
   private static control: Control | undefined;
@@ -76,6 +84,19 @@ export default class CseMachine {
   // added for center alignment
   public static getCenterAlignment(): boolean {
     return CseMachine.centerAlignment;
+  }
+
+  public static getArrowOriginFilters(): ArrowOriginFilters {
+    return { ...CseMachine.arrowOriginFilters };
+  }
+
+  public static isArrowOriginVisible(origin: ArrowOriginFilterKey | null): boolean {
+    if (origin === null) return true;
+    return CseMachine.arrowOriginFilters[origin];
+  }
+
+  public static setArrowOriginVisible(origin: ArrowOriginFilterKey, visible: boolean): void {
+    CseMachine.arrowOriginFilters[origin] = visible;
   }
   public static getMasterLayout(): LayoutCache | null {
     return CseMachine.getPrintableMode()

@@ -5,6 +5,8 @@ import {
   Checkbox,
   Classes,
   Divider,
+  Popover,
+  Position,
   Slider,
   Tooltip
 } from '@blueprintjs/core';
@@ -43,6 +45,7 @@ type State = {
   stepLimitExceeded: boolean;
   chapter: Chapter;
   clearDeadFrames: boolean;
+  arrowFilterOpen: boolean;
 };
 
 type CseMachineProps = OwnProps & StateProps & DispatchProps;
@@ -84,7 +87,8 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
       lastStep: false,
       stepLimitExceeded: false,
       chapter: props.chapter,
-      clearDeadFrames: false
+      clearDeadFrames: false,
+      arrowFilterOpen: false
     };
     if (this.isJava()) {
       JavaCseMachine.init(
@@ -198,19 +202,20 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   }
 
   public render() {
+    const arrowFilters = CseMachine.getArrowOriginFilters();
     const hotkeyBindings: HotkeyItem[] = this.state.visualization
       ? [
-          ['a', this.stepFirst],
-          ['f', this.stepNext],
-          ['b', this.stepPrevious],
-          ['e', this.stepLast(this.props.stepsTotal)]
-        ]
+        ['a', this.stepFirst],
+        ['f', this.stepNext],
+        ['b', this.stepPrevious],
+        ['e', this.stepLast(this.props.stepsTotal)]
+      ]
       : [
-          ['a', () => {}],
-          ['f', () => {}],
-          ['b', () => {}],
-          ['e', () => {}]
-        ];
+        ['a', () => { }],
+        ['f', () => { }],
+        ['b', () => { }],
+        ['e', () => { }]
+      ];
 
     const currentStep = Math.max(0, this.state.value);
     const isAtFirstStep = currentStep < 1;
@@ -298,6 +303,48 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                     />
                   </AnchorButton>
                 </Tooltip>
+                <Popover
+                  isOpen={this.state.arrowFilterOpen}
+                  onInteraction={nextOpen => this.setState({ arrowFilterOpen: nextOpen })}
+                  position={Position.BOTTOM_LEFT}
+                  content={
+                    <div style={{ padding: '8px 10px', minWidth: '210px' }}>
+                      <div style={{ marginBottom: '8px', fontWeight: 600 }}>Filter Arrows</div>
+                      <Checkbox
+                        checked={arrowFilters.text}
+                        label="From text"
+                        onChange={() => this.toggleArrowFilter('text')}
+                      />
+                      <Checkbox
+                        checked={arrowFilters.frame}
+                        label="From frames"
+                        onChange={() => this.toggleArrowFilter('frame')}
+                      />
+                      <Checkbox
+                        checked={arrowFilters.function}
+                        label="From function objects"
+                        onChange={() => this.toggleArrowFilter('function')}
+                      />
+                      <Checkbox
+                        checked={arrowFilters.control}
+                        label="From control"
+                        onChange={() => this.toggleArrowFilter('control')}
+                      />
+                      <Checkbox
+                        checked={arrowFilters.stash}
+                        label="From stash"
+                        onChange={() => this.toggleArrowFilter('stash')}
+                      />
+                      <Checkbox
+                        checked={arrowFilters.arrayUnit}
+                        label="From array units"
+                        onChange={() => this.toggleArrowFilter('arrayUnit')}
+                      />
+                    </div>
+                  }
+                >
+                  <AnchorButton icon="flow-branch" disabled={!this.state.visualization} />
+                </Popover>
               </ButtonGroup>
             )}
             <ButtonGroup>
@@ -383,8 +430,8 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
           </div>
         </div>{' '}
         {this.state.visualization &&
-        this.props.machineOutput.length &&
-        this.props.machineOutput[0].type === 'errors' ? (
+          this.props.machineOutput.length &&
+          this.props.machineOutput[0].type === 'errors' ? (
           this.props.machineOutput.map((slice, index) => (
             <Output output={slice} key={index} usingSubst={false} isHtml={false} />
           ))
@@ -534,6 +581,16 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
     }
     this.sliderShift(0);
     this.sliderRelease(0);
+  };
+
+  private toggleArrowFilter = (
+    origin: 'text' | 'frame' | 'function' | 'control' | 'stash' | 'arrayUnit'
+  ) => {
+    const filters = CseMachine.getArrowOriginFilters();
+    CseMachine.setArrowOriginVisible(origin, !filters[origin]);
+    CseMachine.clearCachedLayouts();
+    CseMachine.redraw();
+    this.forceUpdate();
   };
 }
 

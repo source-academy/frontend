@@ -6,7 +6,7 @@ import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'rea
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { IHoverable, IVisible, StepsArray } from '../../CseMachineTypes';
+import { ArrowOriginFilterKey, IHoverable, IVisible, StepsArray } from '../../CseMachineTypes';
 import { defaultStrokeColor, fadedStrokeColor } from '../../CseMachineUtils';
 import { Visible } from '../Visible';
 import { arrowSelection } from './ArrowSelection';
@@ -14,9 +14,9 @@ import { arrowSelection } from './ArrowSelection';
 /** this class encapsulates an arrow to be drawn between 2 points */
 export class GenericArrow<Source extends IVisible, Target extends IVisible>
   extends Visible
-  implements IHoverable
-{
+  implements IHoverable {
   private _path: string = '';
+  private _visible: boolean = true;
   points: number[] = [];
   source: Source;
   target: Target | undefined;
@@ -146,11 +146,12 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
    * Subclasses can override this to provide custom hover colors.
    */
   protected getHighlightedColor(): string {
-    return Config.ArrowHighlightedColor;
+    return CseMachine.getPrintableMode()
+      ? Config.PrintArrowHighlightedColor
+      : Config.ArrowHighlightedColor;
   }
 
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
-    if (CseMachine.getPrintableMode()) return;
     e.cancelBubble = true;
     this.setHighlightedStyle();
     // Move entire arrow group to top
@@ -166,7 +167,6 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   };
 
   onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
-    if (CseMachine.getPrintableMode()) return;
     e.cancelBubble = true;
 
     // Don't change color if selected
@@ -238,8 +238,30 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     return this.faded ? fadedStrokeColor() : defaultStrokeColor();
   }
 
+  /** Subclasses can disable all pointer interactions for passive arrows. */
+  protected isInteractive(): boolean {
+    return true;
+  }
+
+  /** Subclasses can classify arrow origin for filter UI. */
+  protected getOriginFilterKey(): ArrowOriginFilterKey | null {
+    return null;
+  }
+
+  setVisible(visible: boolean): void {
+    this._visible = visible;
+    if (this.ref.current) {
+      if (visible) {
+        this.ref.current.show();
+      } else {
+        this.ref.current.hide();
+      }
+      this.ref.current.getLayer()?.batchDraw();
+    }
+  }
+
   // Subclasses can override to recompute liveness before drawing
-  protected updateIsLive(): void {} //kind of an abstract method
+  protected updateIsLive(): void { } //kind of an abstract method
 
   draw() {
     this.recomputePath();
@@ -247,19 +269,25 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     if (Layout.clearDeadFrames && !this.isLive) {
       return null;
     }
+    if (!CseMachine.isArrowOriginVisible(this.getOriginFilterKey())) {
+      return null;
+    }
 
     const stroke = this.isLive ? defaultStrokeColor() : fadedStrokeColor();
+
+    const interactive = this.isInteractive();
 
     return (
       <KonvaGroup
         key={Layout.key++}
         ref={this.ref}
-        listening={true}
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
-        onClick={this.onClick}
-        onContextMenu={this.onContextMenu}
-        onMouseDown={e => (e.cancelBubble = true)}
+        visible={this._visible}
+        listening={interactive}
+        onMouseEnter={interactive ? this.onMouseEnter : undefined}
+        onMouseLeave={interactive ? this.onMouseLeave : undefined}
+        onClick={interactive ? this.onClick : undefined}
+        onContextMenu={interactive ? this.onContextMenu : undefined}
+        onMouseDown={interactive ? e => (e.cancelBubble = true) : undefined}
       >
         <KonvaPath
           {...ShapeDefaultProps}

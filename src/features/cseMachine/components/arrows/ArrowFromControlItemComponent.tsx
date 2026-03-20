@@ -17,6 +17,10 @@ export class ArrowFromControlItemComponent extends GenericArrow<
     this.isLive = true; // Control items are always live
   }
 
+  protected getOriginFilterKey() {
+    return 'control' as const;
+  }
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
@@ -27,10 +31,10 @@ export class ArrowFromControlItemComponent extends GenericArrow<
       () => [
         to.x(),
         to.y() +
-          // Draw arrow slightly below frame corner if frame is far enough
-          (to.x() > ControlStashConfig.ControlItemWidth + 100
-            ? ControlStashConfig.ControlItemTextPadding
-            : 0)
+        // Draw arrow slightly below frame corner if frame is far enough
+        (to.x() > ControlStashConfig.ControlItemWidth + 100
+          ? ControlStashConfig.ControlItemTextPadding
+          : 0)
       ]
     ];
 
