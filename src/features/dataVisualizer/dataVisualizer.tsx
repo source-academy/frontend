@@ -24,10 +24,11 @@ export default class DataVisualizer {
   public static treeMode = false;
   public static BinTreeMode = false;
   public static normalMode = true;
-  public static binaryTreeDepth = 0;
+  public static TreeDepth = 0;
   public static isBinTree = false;
   public static isGenTree = false;
   public static nodeCount: number[] = [];
+  public static longestNodePos: number = 0;
 
   private steps: Step[] = [];
   private nodeLabel = 0;
@@ -36,42 +37,40 @@ export default class DataVisualizer {
   private constructor() {}
 
   public static get_depth(structures: Data[], depth: number, nodePos: number): number {
-    //works assuming is a binary tree
-    //let depth=0;
     if (!(structures instanceof Array)) {
       return 0;
     }
-    structures.push(nodePos);
-    if (structures[1] === null) {
-      //nodeCount keeps track of the most number of elements at each dept
+      //nodeCount keeps track of the current index of nodes at each depth
+    if (this.getTreeMode()) {
       if (this.nodeCount[depth] === undefined) {
         this.nodeCount[depth] = 0;
       }
-      this.nodeCount[depth] = Math.max(this.nodeCount[depth], nodePos);
+      structures.push(this.nodeCount[depth]);
+      if (this.nodeCount[depth] > this.longestNodePos) {
+        this.longestNodePos = this.nodeCount[depth];
+      }
+      this.nodeCount[depth]++;
     }
-    this.binaryTreeDepth = Math.max(this.binaryTreeDepth, depth);
-    this.get_depth(structures[0], depth + 1, 0);
-    this.get_depth(structures[1], depth, nodePos + 1);
-    return depth;
+
+      this.TreeDepth = Math.max(this.TreeDepth,depth);
+      this.get_depth(structures[0], depth + 1, 0);
+      this.get_depth(structures[1], depth, nodePos + 1);
+      return depth;
   }
 
-  //modify to check for general trees too, make sure no pairs
   public static isBinaryTree(structures: Data[]): boolean {
-    if (structures == null) {
-      return false;
-    }
-    if (structures[0] === null) {
+    if (structures[0] === null){
       return true;
     }
     let next = structures[0];
-    let ans = false;
-    let count = 0;
-    while (next instanceof Array) {
+    let ans = false
+    let count=0;
+    while(next instanceof Array){
       count++;
       next = next[1];
     }
-    if (count == 3) {
-      ans = true;
+    if (count == 3){
+      ans = true
     }
     return ans && this.isBinaryTree(structures[0][1]);
   }
@@ -132,6 +131,7 @@ export default class DataVisualizer {
   }
 
   public static clearWithData(): void {
+    DataVisualizer.longestNodePos = 0;
     DataVisualizer.dataRecords = [];
     DataVisualizer.isRedraw = false;
     DataVisualizer.clear();
@@ -140,7 +140,7 @@ export default class DataVisualizer {
   public static clear(): void {
     DataVisualizer._instance = new DataVisualizer();
     this.nodeCount = [];
-    this.binaryTreeDepth = 0;
+    this.TreeDepth = 0;
     DataVisualizer.setSteps(DataVisualizer._instance.steps);
   }
 
@@ -226,10 +226,8 @@ export default class DataVisualizer {
       );
     } else if (DataVisualizer.getTreeMode()) {
       // RenderGeneralTree
-      const L = DataVisualizer.nodeCount[0];
-      const EY4 =
-        (Config.NWidth + Config.BoxWidth) * (L + 1) * Math.pow(L, DataVisualizer.binaryTreeDepth) -
-        Config.BoxWidth; // GP Term, minus extra blank space of box width at the end
+      // const L = DataVisualizer.nodeCount[0];
+      const EY4 = (Config.NWidth + Config.BoxWidth) * (DataVisualizer.longestNodePos + 1) - Config.BoxWidth;
       const EY3 = treeDrawer.downCOUNTER;
       return (
         <Stage

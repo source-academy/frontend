@@ -51,6 +51,7 @@ export class Tree {
 
   static fromSourceStructure(tree: Data): Tree {
     let nodeCount = 0;
+    const genTreeChecker = DataVisualizer.getTreeMode();
     function constructNode(structure: Data): TreeNode {
       const alreadyDrawnNode = visitedStructures.get(structure);
       if (alreadyDrawnNode !== undefined) {
@@ -75,9 +76,11 @@ export class Tree {
       treeNodes[nodeCount] = node;
       nodeCount++;
 
-      if (typeof tree[tree.length - 1] === 'number') {
-        node.nodePos = tree.pop();
+      if (genTreeChecker) {
+        node.nodePos = tree[tree.length - 1];
+        tree.pop();
       }
+
       node.children = tree.map(constructNode);
 
       return node;
@@ -143,6 +146,8 @@ class TreeDrawer {
   private minX = 0;
   private minY = 0;
   public static colorCounter = 0;
+
+  private leftMargin: integer = (Config.StrokeWidth / 2);
 
   constructor(tree: Tree) {
     this.tree = tree;
@@ -321,7 +326,7 @@ class TreeDrawer {
           let myY;
           let myX;
           let scalerV = Math.round(
-            Math.pow(2, DataVisualizer.binaryTreeDepth) /
+            Math.pow(2, DataVisualizer.TreeDepth) /
               Math.pow(2, Math.round(y / (6 * Config.BoxHeight)))
           );
           scalerV--;
@@ -384,21 +389,15 @@ class TreeDrawer {
 
         const longest = DataVisualizer.nodeCount[0]; // e.g. 3
         this.runningX2 = (Config.NWidth + Config.BoxWidth) * (longest + 1);
-        this.downCOUNTER = DataVisualizer.binaryTreeDepth;
+        this.downCOUNTER = DataVisualizer.TreeDepth;
 
         node.children?.forEach((childNode, index) => {
           let myY;
           let myX;
-          const scalerV = Math.round(
-            Math.pow(longest, DataVisualizer.binaryTreeDepth) /
-              Math.pow(longest, Math.round(y / (Config.BoxHeight * 4)) + 1)
-          );
 
-          if (index === 0) {
+          if (index == 0) {
             myY = y + Config.DistanceY * 2;
-            myX =
-              originX +
-              (Config.NWidth + Config.BoxWidth) * (longest + 1) * (originIndex - 1) * scalerV;
+            myX = originX;
             TreeDrawer.colorCounter++;
             colorIndex = TreeDrawer.colorCounter;
           } else {
@@ -407,16 +406,15 @@ class TreeDrawer {
             colorIndex = parentIndex;
           }
 
-          if (x > this.runningX2 && index === 0 && y === parentY + Config.DistanceY * 2) {
-            // NEW right branches that stretch towards the right
+          if (x > this.runningX2 && index == 0 && y == parentY + Config.DistanceY * 2) { // NEW right branches that stretch towards the right
             this.rightCOUNTER++;
             this.runningX2 = myX;
           }
 
-          if (node.children![1] instanceof ArrayTreeNode) {
-            if (node.children![1].children![0] instanceof ArrayTreeNode) {
-              originIndex = node.children![1].nodePos;
-              originX = myX - (Config.NWidth + Config.BoxWidth) * originIndex;
+          if (node.children[1] instanceof ArrayTreeNode) {
+            if (node.children[1].children[0] instanceof ArrayTreeNode) {
+              originIndex = node.children[1].children[0].nodePos;
+              originX = 0 + this.leftMargin + (Config.NWidth + Config.BoxWidth) * originIndex;
             }
           }
 
