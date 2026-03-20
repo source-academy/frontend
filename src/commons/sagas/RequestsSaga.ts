@@ -1574,40 +1574,99 @@ export const postGenerateComments = async (
   return await resp.json();
 };
 
-export const saveFinalComment = async (
+export const saveChosenComments = async (
   tokens: Tokens,
-  answer_id: number,
-  comment: string
+  answerId: number,
+  selectedIndices: number[],
+  edits: Record<number, string>
 ): Promise<Response | null> => {
-  const resp = await request(`${courseId()}/admin/save-final-comment/${answer_id}`, 'POST', {
-    body: { comment: comment },
+  const resp = await request(`${courseId()}/admin/save-chosen-comments/${answerId}`, 'POST', {
+    body: {
+      selected_indices: selectedIndices,
+      edits: edits
+    },
     ...tokens
   });
 
   return resp;
 };
 
-export const saveChosenComments = async (
+/**
+ * GET /courses/{courseId}/admin/llm-stats/{assessmentId}
+ * Fetches assessment-level LLM usage statistics with per-question breakdown.
+ */
+export const getLLMAssessmentStats = async (
   tokens: Tokens,
-  submissionId: number,
-  questionId: number,
-  answerId: number,
-  selectedIndices: number[],
-  edits: Record<number, string>
-): Promise<Response | null> => {
-  const resp = await request(
-    `${courseId()}/admin/save-chosen-comments/${submissionId}/${questionId}`,
-    'POST',
-    {
-      body: {
-        answer_id: answerId,
-        selected_indices: selectedIndices,
-        edits: edits
-      },
-      ...tokens
-    }
-  );
+  assessmentId: number
+): Promise<any | null> => {
+  const resp = await request(`${courseId()}/admin/llm-stats/${assessmentId}`, 'GET', {
+    ...tokens
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+  return await resp.json();
+};
 
+/**
+ * GET /courses/{courseId}/admin/llm-stats/{assessmentId}/{questionId}
+ * Fetches question-level LLM usage statistics.
+ */
+export const getLLMQuestionStats = async (
+  tokens: Tokens,
+  assessmentId: number,
+  questionId: number
+): Promise<any | null> => {
+  const resp = await request(`${courseId()}/admin/llm-stats/${assessmentId}/${questionId}`, 'GET', {
+    ...tokens
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+  return await resp.json();
+};
+
+/**
+ * GET /courses/{courseId}/admin/llm-stats/{assessmentId}/feedback?question_id={questionId}
+ * Fetches LLM feedback for an assessment, optionally filtered by question.
+ */
+export const getLLMFeedback = async (
+  tokens: Tokens,
+  assessmentId: number,
+  questionId?: number
+): Promise<any[] | null> => {
+  let url = `${courseId()}/admin/llm-stats/${assessmentId}/feedback`;
+  if (questionId) {
+    url += `?question_id=${questionId}`;
+  }
+  const resp = await request(url, 'GET', {
+    ...tokens
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+  return await resp.json();
+};
+
+/**
+ * POST /courses/{courseId}/admin/llm-stats/{assessmentId}/feedback
+ * Submits feedback for the LLM feature on an assessment (optionally for a specific question).
+ */
+export const submitLLMFeedback = async (
+  tokens: Tokens,
+  assessmentId: number,
+  body: string,
+  rating?: number,
+  questionId?: number
+): Promise<Response | null> => {
+  const resp = await request(`${courseId()}/admin/llm-stats/${assessmentId}/feedback`, 'POST', {
+    body: {
+      body,
+      rating,
+      question_id: questionId
+    },
+    ...tokens
+  });
   return resp;
 };
 
