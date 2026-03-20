@@ -28,7 +28,9 @@ export class BrowserHostPlugin extends BasicHostPlugin {
     super(conduit, channels);
     this.__onRequestFile = onRequestFile;
     this.__onRequestLoadPlugin = onRequestLoadPlugin;
-    const resultChannel = channels[7] as IChannel<IResultMessage>;
-    resultChannel.subscribe(resultMessage => this.receiveResult?.(resultMessage.result));
+    const resultChannel = channels.find(
+      (channel): channel is IChannel<IResultMessage> => channel.name === '__result'
+    );
+    resultChannel?.subscribe(resultMessage => this.receiveResult?.(resultMessage.result));
   }
 }

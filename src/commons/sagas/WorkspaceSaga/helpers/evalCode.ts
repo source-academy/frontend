@@ -550,8 +550,7 @@ export function* evalCodeConductorSaga(
     evaluator = yield call(getEvaluatorDefinitionSaga);
     if (!evaluator?.path) throw Error('no evaluator');
   }
-  const overrideEvaluatorPath: string =
-    (yield select(selectConductorEvaluatorUrl))?.trim?.() ?? '';
+  const overrideEvaluatorPath: string = (yield select(selectConductorEvaluatorUrl))?.trim?.() ?? '';
   const path: string = overrideEvaluatorPath || evaluator.path;
 
   // Download evaluator code
