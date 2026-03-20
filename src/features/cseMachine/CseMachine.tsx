@@ -312,53 +312,12 @@ export default class CseMachine {
         this.centerAlignmentToggled = false;
       }
 
-      if (
-        CseMachine.getPrintableMode() &&
-        CseMachine.getControlStash() &&
-        CseMachine.getStackTruncated() &&
-        Layout.currentStackTruncLight !== undefined
-      ) {
-        this.setVis(Layout.currentStackTruncLight);
-      } else if (
-        CseMachine.getPrintableMode() &&
-        CseMachine.getControlStash() &&
-        !CseMachine.getStackTruncated() &&
-        Layout.currentStackLight !== undefined
-      ) {
-        this.setVis(Layout.currentStackLight);
-      } else if (
-        !CseMachine.getPrintableMode() &&
-        CseMachine.getControlStash() &&
-        CseMachine.getStackTruncated() &&
-        Layout.currentStackTruncDark !== undefined
-      ) {
-        this.setVis(Layout.currentStackTruncDark);
-      } else if (
-        !CseMachine.getPrintableMode() &&
-        CseMachine.getControlStash() &&
-        !CseMachine.getStackTruncated() &&
-        Layout.currentStackDark !== undefined
-      ) {
-        this.setVis(Layout.currentStackDark);
-      } else if (
-        CseMachine.getPrintableMode() &&
-        !CseMachine.getControlStash() &&
-        Layout.currentLight !== undefined
-      ) {
-        this.setVis(Layout.currentLight);
-      } else if (
-        !CseMachine.getPrintableMode() &&
-        !CseMachine.getControlStash() &&
-        Layout.currentDark !== undefined
-      ) {
-        this.setVis(Layout.currentDark);
-      } else {
-        Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
-        if (CseMachine.getMasterLayout()) {
-          Layout.applyFixedPositions();
-        }
-        this.setVis(Layout.draw());
+      // Always redraw from fresh context so the underlay arrow layer stays in sync.
+      Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
+      if (CseMachine.getMasterLayout()) {
+        Layout.applyFixedPositions();
       }
+      this.setVis(Layout.draw());
       Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
     }
   }

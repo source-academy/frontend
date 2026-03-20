@@ -1,21 +1,18 @@
 import Konva from 'konva';
-import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { IHoverable, IVisible, StepsArray } from '../../CseMachineTypes';
+import { ArrowOriginFilterKey, IVisible, StepsArray } from '../../CseMachineTypes';
 import { defaultStrokeColor, fadedStrokeColor } from '../../CseMachineUtils';
 import { Visible } from '../Visible';
 import { arrowSelection } from './ArrowSelection';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
 export class GenericArrow<Source extends IVisible, Target extends IVisible>
-  extends Visible
-  implements IHoverable
-{
+  extends Visible {
   private _path: string = '';
   points: number[] = [];
   source: Source;
@@ -50,6 +47,30 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     this._y = from.y();
     this.isLive = false; // default to false
   }
+
+  private moveToArrowUnderlay(node: Konva.Group): boolean {
+    const underlayLayer = Layout.arrowUnderlayLayerRef.current;
+    if (!underlayLayer || !node.getStage()) return false;
+    if (node.getLayer() === underlayLayer) return true;
+
+    node.moveTo(underlayLayer);
+    underlayLayer.batchDraw();
+    node.getStage()?.batchDraw();
+    return true;
+  }
+
+  private attachToArrowUnderlay = (node: Konva.Group | null) => {
+    (this.ref as React.MutableRefObject<Konva.Group | null>).current = node;
+    if (!node) return;
+
+    if (this.moveToArrowUnderlay(node)) return;
+
+    requestAnimationFrame(() => {
+      const currentNode = (this.ref as React.MutableRefObject<Konva.Group | null>).current;
+      if (!currentNode || !currentNode.getStage()) return;
+      this.moveToArrowUnderlay(currentNode);
+    });
+  };
 
   path(): string {
     return this._path;
@@ -149,34 +170,32 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     return this.isLive ? Config.ArrowHighlightedColor : Config.ArrowDeadHighlightedColor;
   }
 
-  onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
-    if (CseMachine.getPrintableMode()) return;
-    e.cancelBubble = true;
-    this.setHighlightedStyle();
-    // Move entire arrow group to top
-    if (this.ref.current && this.ref.current.moveToTop) {
-      // Move the arrow's parent container to top first, then move arrow within that
-      const parent = this.ref.current.getParent();
-      if (parent && parent.moveToTop) {
-        parent.moveToTop();
-      }
-      this.ref.current.moveToTop();
-    }
-    this.ref.current?.getLayer()?.batchDraw();
-  };
+  // onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
+  //   e.cancelBubble = true;
+  //   this.setHighlightedStyle();
+  //   // Move entire arrow group to top
+  //   if (this.ref.current && this.ref.current.moveToTop) {
+  //     // Move the arrow's parent container to top first, then move arrow within that
+  //     const parent = this.ref.current.getParent();
+  //     if (parent && parent.moveToTop) {
+  //       parent.moveToTop();
+  //     }
+  //     this.ref.current.moveToTop();
+  //   }
+  //   this.ref.current?.getLayer()?.batchDraw();
+  // };
 
-  onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
-    if (CseMachine.getPrintableMode()) return;
-    e.cancelBubble = true;
+  // onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
+  //   e.cancelBubble = true;
 
-    // Don't change color if selected
-    if (this.isSelected()) {
-      return;
-    }
+  //   // Don't change color if selected
+  //   if (this.isSelected()) {
+  //     return;
+  //   }
 
-    this.setNormalStyle();
-    this.ref.current?.getLayer()?.batchDraw();
-  };
+  //   this.setNormalStyle();
+  //   this.ref.current?.getLayer()?.batchDraw();
+  // };
 
   public setHighlightedStyle() {
     const highlightColor = this.getHighlightedColor();
@@ -207,27 +226,32 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     this.target?.setArrowSourceNormalStyle?.();
   }
 
-  onClick = (e: KonvaEventObject<MouseEvent>) => {
-    e.cancelBubble = true;
+  // onClick = (e: KonvaEventObject<MouseEvent>) => {
+  //   e.cancelBubble = true;
 
-    // Toggle selection - clear first, then select if it wasn't already selected
-    const wasSelected = this.isSelected();
-    arrowSelection.clearSelection();
+  //   // Toggle selection - clear first, then select if it wasn't already selected
+  //   const wasSelected = this.isSelected();
+  //   const oldArrow = arrowSelection.clearSelection();
 
-    if (!wasSelected) {
-      this.select();
-      // Update this arrow's visual state
-      this.setHighlightedStyle();
-    }
+  //   // Update old arrow's visual state
+  //   if (oldArrow && oldArrow !== this) {
+  //     oldArrow.setNormalStyle();
+  //   }
 
-    // Force redraw entire layer to update all arrows
-    this.ref.current?.getLayer()?.batchDraw();
-  };
+  //   if (!wasSelected) {
+  //     this.select();
+  //     // Update this arrow's visual state
+  //     this.setHighlightedStyle();
+  //   }
 
-  onContextMenu = (e: KonvaEventObject<MouseEvent>) => {
-    e.evt.preventDefault(); // Prevent browser context menu
-    this.onClick(e);
-  };
+  //   // Force redraw entire layer to update all arrows
+  //   this.ref.current?.getLayer()?.batchDraw();
+  // };
+
+  // onContextMenu = (e: KonvaEventObject<MouseEvent>) => {
+  //   e.evt.preventDefault(); // Prevent browser context menu
+  //   this.onClick(e);
+  // };
 
   protected getCurrentColor(): string {
     if (this.isSelected()) {
@@ -251,13 +275,15 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     return (
       <KonvaGroup
         key={Layout.key++}
-        ref={this.ref}
-        listening={true}
-        onMouseEnter={this.onMouseEnter}
-        onMouseLeave={this.onMouseLeave}
-        onClick={this.onClick}
-        onContextMenu={this.onContextMenu}
-        onMouseDown={e => (e.cancelBubble = true)}
+        ref={this.attachToArrowUnderlay}
+        name="cse-arrow-underlay-node"
+        visible={this._visible}
+        listening={interactive}
+      // onMouseEnter={interactive ? this.onMouseEnter : undefined}
+      // onMouseLeave={interactive ? this.onMouseLeave : undefined}
+      // onClick={interactive ? this.onClick : undefined}
+      // onContextMenu={interactive ? this.onContextMenu : undefined}
+      // onMouseDown={interactive ? e => (e.cancelBubble = true) : undefined}
       >
         <KonvaPath
           {...ShapeDefaultProps}
