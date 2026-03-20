@@ -147,7 +147,7 @@ class TreeDrawer {
   private minY = 0;
   public static colorCounter = 0;
 
-  private leftMargin: integer = (Config.StrokeWidth / 2);
+  private leftMargin: integer = Config.StrokeWidth / 2;
 
   constructor(tree: Tree) {
     this.tree = tree;
@@ -406,14 +406,15 @@ class TreeDrawer {
             colorIndex = parentIndex;
           }
 
-          if (x > this.runningX2 && index == 0 && y == parentY + Config.DistanceY * 2) { // NEW right branches that stretch towards the right
+          if (x > this.runningX2 && index == 0 && y == parentY + Config.DistanceY * 2) {
+            // NEW right branches that stretch towards the right
             this.rightCOUNTER++;
             this.runningX2 = myX;
           }
 
-          if (node.children[1] instanceof ArrayTreeNode) {
-            if (node.children[1].children[0] instanceof ArrayTreeNode) {
-              originIndex = node.children[1].children[0].nodePos;
+          if (node.children![1] instanceof ArrayTreeNode) {
+            if (node.children![1].children![0] instanceof ArrayTreeNode) {
+              originIndex = node.children![1].children![0].nodePos;
               originX = 0 + this.leftMargin + (Config.NWidth + Config.BoxWidth) * originIndex;
             }
           }

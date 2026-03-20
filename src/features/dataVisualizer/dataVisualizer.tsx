@@ -40,7 +40,7 @@ export default class DataVisualizer {
     if (!(structures instanceof Array)) {
       return 0;
     }
-      //nodeCount keeps track of the current index of nodes at each depth
+    //nodeCount keeps track of the current index of nodes at each depth
     if (this.getTreeMode()) {
       if (this.nodeCount[depth] === undefined) {
         this.nodeCount[depth] = 0;
@@ -52,25 +52,25 @@ export default class DataVisualizer {
       this.nodeCount[depth]++;
     }
 
-      this.TreeDepth = Math.max(this.TreeDepth,depth);
-      this.get_depth(structures[0], depth + 1, 0);
-      this.get_depth(structures[1], depth, nodePos + 1);
-      return depth;
+    this.TreeDepth = Math.max(this.TreeDepth, depth);
+    this.get_depth(structures[0], depth + 1, 0);
+    this.get_depth(structures[1], depth, nodePos + 1);
+    return depth;
   }
 
   public static isBinaryTree(structures: Data[]): boolean {
-    if (structures[0] === null){
+    if (structures[0] === null) {
       return true;
     }
     let next = structures[0];
-    let ans = false
-    let count=0;
-    while(next instanceof Array){
+    let ans = false;
+    let count = 0;
+    while (next instanceof Array) {
       count++;
       next = next[1];
     }
-    if (count == 3){
-      ans = true
+    if (count == 3) {
+      ans = true;
     }
     return ans && this.isBinaryTree(structures[0][1]);
   }
@@ -227,7 +227,8 @@ export default class DataVisualizer {
     } else if (DataVisualizer.getTreeMode()) {
       // RenderGeneralTree
       // const L = DataVisualizer.nodeCount[0];
-      const EY4 = (Config.NWidth + Config.BoxWidth) * (DataVisualizer.longestNodePos + 1) - Config.BoxWidth;
+      const EY4 =
+        (Config.NWidth + Config.BoxWidth) * (DataVisualizer.longestNodePos + 1) - Config.BoxWidth;
       const EY3 = treeDrawer.downCOUNTER;
       return (
         <Stage
