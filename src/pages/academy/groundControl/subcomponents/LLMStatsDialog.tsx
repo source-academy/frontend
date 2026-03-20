@@ -41,6 +41,10 @@ type AssessmentStats = {
   unique_submissions: number;
   unique_users: number;
   questions: QuestionStat[];
+  llm_total_cost?: string | number;
+  llm_total_input_tokens?: number;
+  llm_total_output_tokens?: number;
+  llm_total_cached_tokens?: number;
 };
 
 type QuestionDetailStats = {
@@ -141,13 +145,22 @@ type LLMStatsDialogProps = {
   onClose: () => void;
   assessmentId: number;
   assessmentTitle: string;
+  //for cost tracking
+  llmTotalInputTokens?: number;
+  llmTotalOutputTokens?: number;
+  llmTotalCachedTokens?: number;
+  llmTotalCost?: string | number;
 };
 
 const LLMStatsDialog: React.FC<LLMStatsDialogProps> = ({
   isOpen,
   onClose,
   assessmentId,
-  assessmentTitle
+  assessmentTitle,
+  llmTotalInputTokens,
+  llmTotalOutputTokens,
+  llmTotalCachedTokens,
+  llmTotalCost
 }) => {
   const tokens = useTokens();
   const tokensRef = useRef(tokens);
@@ -277,6 +290,50 @@ const LLMStatsDialog: React.FC<LLMStatsDialogProps> = ({
               <StatCard label="Total Uses" value={stats.total_uses} />
               <StatCard label="Unique Submissions" value={stats.unique_submissions} />
               <StatCard label="Unique Users" value={stats.unique_users} />
+            </div>
+
+            <Divider style={{ margin: '20px 0' }} />
+
+            {/* LLM Usage & Cost */}
+            <H5>LLM Usage & Cost</H5>
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '24px' }}>
+              <Card
+                style={{
+                  flex: 1,
+                  textAlign: 'center',
+                  padding: '12px',
+                  minWidth: '140px',
+                  borderTop: '3px solid #0F9960'
+                }}
+              >
+                <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#0F9960' }}>
+                  {/* Read from stats first, fallback to props, then 0 */}
+                  {`$${parseFloat(String(stats.llm_total_cost ?? llmTotalCost ?? 0)).toFixed(4)}`}
+                </div>
+                <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
+                  Total Cost (SGD)
+                </div>
+              </Card>
+              <StatCard
+                label="Standard Input"
+                value={(stats.llm_total_input_tokens ?? llmTotalInputTokens ?? 0).toLocaleString()}
+              />
+              <StatCard
+                label="Cached (Saved)"
+                value={(
+                  stats.llm_total_cached_tokens ??
+                  llmTotalCachedTokens ??
+                  0
+                ).toLocaleString()}
+              />
+              <StatCard
+                label="Output Tokens"
+                value={(
+                  stats.llm_total_output_tokens ??
+                  llmTotalOutputTokens ??
+                  0
+                ).toLocaleString()}
+              />
             </div>
 
             {/* Task List */}

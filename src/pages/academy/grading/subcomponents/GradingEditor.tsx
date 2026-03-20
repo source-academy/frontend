@@ -120,22 +120,11 @@ const GradingEditor: React.FC<Props> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.submissionId, props.questionId]);
 
-<<<<<<< HEAD
-  const onToggleComment = (index: number) => {
-    setSelectedIndices(prev =>
-      prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
-    );
-=======
   // Unlock save controls once Redux props refresh after a save cycle.
   useEffect(() => {
     saveInFlightRef.current = false;
     setIsSaveInFlight(false);
   }, [props.comments, props.xpAdjustment, props.gradedAt, props.submissionId, props.questionId]);
-
-  const getCommentSuggestions = async () => {
-    const resp = await postGenerateComments(tokens, props.answer_id);
-    return resp;
-  };
 
   // Invisible delimiters used internally to preserve per-comment editing state
   // without showing any marker text in the editor.
@@ -155,7 +144,6 @@ const GradingEditor: React.FC<Props> = props => {
       userText: value.slice(0, markerIdx),
       commentsBlock: value.slice(markerIdx + SECTION_MARKER.length)
     };
->>>>>>> zhengjiadad/feature-ai-comments
   };
 
   /**
@@ -491,27 +479,40 @@ const GradingEditor: React.FC<Props> = props => {
   }`;
 
   const handleGenerate = async (force: boolean = false) => {
-    // If we are re-generating, ask for confirmation first
     if (force) {
       const confirm = await showSimpleConfirmDialog({
         contents: (
-          <p>Are you sure? Doing so will result in the previous prompt results being lost.</p>
+          <>
+            <p>Are you sure? Doing so will result in the previous prompt results being lost.</p>
+            <p>
+              <b>Note: This will incur additional LLM token costs.</b>
+            </p>
+          </>
         ),
         positiveLabel: 'Re-generate',
-        positiveIntent: 'danger'
+        positiveIntent: Intent.DANGER
       });
+
       if (!confirm) return;
     }
 
     setHasClickedGenerate(true);
-    // Pass a flag to the backend to tell it to ignore the cache
-    const resp = await postGenerateComments(tokens, props.answer_id, force);
-    setHasClickedGenerate(false);
 
-    if (resp && resp.comments) {
-      setSuggestions(resp.comments);
-      setHasGenerated(true);
-      showSuccessMessage(force ? 'Comments re-generated!' : 'Comments generated!');
+    try {
+      const resp = await postGenerateComments(tokens, props.answer_id, force);
+
+      if (resp && resp.comments) {
+        setSuggestions(resp.comments);
+        setHasGenerated(true);
+        setSelectedIndices([]);
+        setCommentTexts({});
+
+        showSuccessMessage(force ? 'Comments re-generated!' : 'Comments generated!');
+      }
+    } catch (error) {
+      showWarningMessage('Failed to generate comments. Please try again.');
+    } finally {
+      setHasClickedGenerate(false);
     }
   };
 
@@ -627,29 +628,10 @@ const GradingEditor: React.FC<Props> = props => {
               </Button>
 
               <Button
-<<<<<<< HEAD
-                intent={hasGenerated ? 'none' : 'primary'}
+                intent={hasGenerated ? Intent.NONE : Intent.PRIMARY}
                 loading={hasClickedGenerate}
+                disabled={hasClickedGenerate}
                 onClick={() => handleGenerate(hasGenerated)}
-=======
-                intent="primary"
-                //Disable if currently fetching OR if we already have comments
-                disabled={hasClickedGenerate || hasGenerated}
-                onClick={async () => {
-                  setHasClickedGenerate(true);
-                  const resp = await getCommentSuggestions();
-                  setHasClickedGenerate(false);
-
-                  if (resp && resp.comments) {
-                    setSuggestions(resp.comments);
-                    //Lock the button locally once successful
-                    setHasGenerated(true);
-                    showSuccessMessage('Comments generated and saved!');
-                  }
-                  setSelectedIndices([]);
-                  setCommentTexts({});
-                }}
->>>>>>> zhengjiadad/feature-ai-comments
               >
                 {hasGenerated ? 'Re-generate Comments' : 'Generate Comments'}
               </Button>

@@ -55,6 +55,9 @@ export type SessionState = {
   readonly assessmentConfigurations?: AssessmentConfiguration[];
   readonly userCourseRegistrations?: AdminPanelCourseRegistration[];
 
+  readonly llmInputCost?: number;
+  readonly llmOutputCost?: number;
+
   // For research data collection
   readonly agreedToResearch?: boolean | null;
   readonly sessionId: number;
@@ -125,6 +128,9 @@ export type CourseConfiguration = {
   llmModel?: string;
   llmApiUrl?: string;
   llmCourseLevelPrompt?: string;
+  //For llm token consumption calc
+  llmInputCost?: number;
+  llmOutputCost?: number;
 };
 
 export type AdminPanelCourseRegistration = {
