@@ -285,26 +285,7 @@ export class Layout {
   /** remove any global functions not referenced elsewhere in the program */
   private static removeUnreferencedGlobalFns(): void {
     const referencedFns = new Set<GlobalFn | NonGlobalFn>();
-    const visitedData = new Set<DataArray>();
-
-    const findGlobalFnReferences = (envNode: EnvTreeNode): void => {
-      const headValues = Object.values(envNode.environment.head);
-      const unreferenced = setDifference(envNode.environment.heap.getHeap(), new Set(headValues));
-      for (const data of headValues) {
-        if (isGlobalFn(data)) {
-          referencedFns.add(data);
-        } else if (isDataArray(data)) {
-          findGlobalFnReferencesInData(data);
-        }
-      }
-      for (const data of unreferenced) {
-        // The heap will never contain a global function, unless it is the global/prelude environment
-        if (isDataArray(data)) {
-          findGlobalFnReferencesInData(data);
-        }
-      }
-      envNode.children.forEach(findGlobalFnReferences);
-    };
+    const visitedData = new Set<DataArray>();   
 
     const findGlobalFnReferencesInData = (data: DataArray): void => {
       if (visitedData.has(data)) return;
@@ -318,13 +299,10 @@ export class Layout {
       });
     };
 
-    // First, add any referenced global functions in the stash
-    for (const item of Layout.stash.getStack()) {
-      if (isGlobalFn(item)) {
-        referencedFns.add(item);
-      } else if (isDataArray(item)) {
-        findGlobalFnReferencesInData(item);
-      }
+    // only include predeclared or built-in functions used in user code
+    for (const name of CseMachine.usedBuiltInNames) {
+      const fn = Layout.globalEnvNode.environment.head[name];
+      if (fn && isGlobalFn(fn)) referencedFns.add(fn);
     }
 
     // Then, find any references within any arrays inside the global environment heap,
@@ -336,9 +314,6 @@ export class Layout {
         findGlobalFnReferencesInData(data);
       }
     }
-
-    // Finally, find any references inside the global environment children
-    Layout.globalEnvNode.children.forEach(findGlobalFnReferences);
 
     const functionNames = new Map(
       Object.entries(Layout.globalEnvNode.environment.head).map(([key, value]) => [value, key])

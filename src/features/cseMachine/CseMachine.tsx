@@ -4,7 +4,7 @@ import React from 'react';
 
 import { arrowSelection } from './components/arrows/ArrowSelection';
 import { Layout, LayoutCache } from './CseMachineLayout';
-import { EnvTree } from './CseMachineTypes';
+import { EnvTree, EnvTreeNode } from './CseMachineTypes';
 import { deepCopyTree, getEnvId } from './CseMachineUtils';
 
 type SetVis = (vis: React.ReactNode) => void;
@@ -22,6 +22,7 @@ export default class CseMachine {
   // Ghost layout snapshots, separated by mode to keep coordinates fixed within each mode.
   public static normalLayoutCache: LayoutCache | null = null;
   public static printLayoutCache: LayoutCache | null = null;
+  public static usedBuiltInNames = new Set<string>();
   private static printableMode: boolean = false;
   private static controlStash: boolean = false; // TODO: discuss if the default should be true
   private static stackTruncated: boolean = false;
@@ -54,6 +55,7 @@ export default class CseMachine {
     Layout.key = 0;
     CseMachine.normalLayoutCache = null;
     CseMachine.printLayoutCache = null;
+    CseMachine.usedBuiltInNames.clear();
   }
   // added for center alignment
   public static toggleCenterAlignment(): void {
@@ -133,8 +135,41 @@ export default class CseMachine {
       context.chapter
     );
 
-    // Build ghost layout cache lazily per mode, using mode-specific layout.
+    // Build ghost layout cache and built-in/predeclared functions cache lazily per mode, using mode-specific layout.
     if (!CseMachine.normalLayoutCache || !CseMachine.printLayoutCache) {
+      const userCode = context.unTypecheckedCode[0];
+   
+      if (typeof userCode === 'string') {
+        const cleanCode = userCode
+          .replace(/\/\/.*/g, '')                      
+          .replace(/\/\*[\s\S]*?\*\//g, '')           
+          .replace(/(["'`])(?:(?=(\\?))\2[\s\S])*?\1/g, ''); 
+        //console.log("CLEAN CODE (No comments/strings):", cleanCode);
+        const words = cleanCode.match(/[a-zA-Z_$][a-zA-Z0-9_$]*/g) || [];
+
+        const rootNode = context.runtime.environmentTree.root as EnvTreeNode;
+        const globalEnvHead = rootNode.environment.head;
+        const preludeEnvHead = rootNode.children[0].environment.head;
+        for (const word of words) {
+          if (word in globalEnvHead || word in preludeEnvHead) {
+            CseMachine.usedBuiltInNames.add(word); 
+          }
+        }
+        for (const name of CseMachine.usedBuiltInNames) {
+          // If the function is in the Prelude, it might have dependencies
+          if (name in preludeEnvHead) {
+            const source = preludeEnvHead[name].toString();
+            const internalWords = source.match(/[a-zA-Z_$][a-zA-Z0-9_$]*/g) || [];
+
+            for (const dep of internalWords) {
+              if (dep in globalEnvHead || dep in preludeEnvHead) {
+                CseMachine.usedBuiltInNames.add(dep);
+              }
+            } 
+          }
+        }
+      }
+
       const originalMode = CseMachine.getPrintableMode();
 
       const buildCache = (printable: boolean) => {
