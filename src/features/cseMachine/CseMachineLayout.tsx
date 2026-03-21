@@ -118,18 +118,19 @@ export class Layout {
   static currentStackTruncLight: React.ReactNode;
   static stageRef: RefObject<Stage | null> = React.createRef();
   static arrowUnderlayLayerRef: RefObject<KonvaLayerNode | null> = React.createRef();
+  static underlayArrows: React.ReactNode[] = [];
 
   // buffer for faster rendering of diagram when scrolling
   static invisiblePaddingVertical: number = 300;
   static invisiblePaddingHorizontal: number = 300;
   static scrollContainerRef: RefObject<HTMLDivElement | null> = React.createRef();
 
-  /** Remove re-parented arrow nodes from the underlay layer while preserving the base rect. */
-  static clearArrowUnderlayArrows() {
-    const layer = Layout.arrowUnderlayLayerRef.current;
-    if (!layer) return;
-    layer.find('.cse-arrow-underlay-node').forEach(node => node.destroy());
-    layer.batchDraw();
+  static resetUnderlayArrows() {
+    Layout.underlayArrows = [];
+  }
+
+  static registerUnderlayArrow(arrow: React.ReactNode) {
+    Layout.underlayArrows.push(arrow);
   }
 
   static updateDimensions(width: number, height: number) {
@@ -182,6 +183,7 @@ export class Layout {
     Layout.values.clear();
     arrowSelection.clearSelection();
     Layout.key = 0;
+    Layout.resetUnderlayArrows();
 
     // deep copy so we don't mutate the context
     Layout.globalEnvNode = deepCopyTree(envTree).root;
@@ -577,7 +579,11 @@ export class Layout {
     if (Layout.key !== 0) {
       return Layout.prevLayout;
     } else {
-      Layout.clearArrowUnderlayArrows();
+      Layout.resetUnderlayArrows();
+      const levelNodes = Layout.levels.map(level => level.draw());
+      const controlNode = CseMachine.getControlStash() ? Layout.controlComponent.draw() : null;
+      const stashNode = CseMachine.getControlStash() ? Layout.stashComponent.draw() : null;
+      const underlayArrows = [...Layout.underlayArrows];
       const layout = (
         <div className="sa-cse-machine" data-testid="sa-cse-machine">
           <div
@@ -621,6 +627,7 @@ export class Layout {
                     key={Layout.key++}
                     listening={false}
                   />
+                  {underlayArrows}
                 </KonvaLayer>
                 <KonvaLayer>
                   <KonvaRect
@@ -633,9 +640,9 @@ export class Layout {
                     key={Layout.key++}
                     listening={false}
                   />
-                  {Layout.levels.map(level => level.draw())}
-                  {CseMachine.getControlStash() && Layout.controlComponent.draw()}
-                  {CseMachine.getControlStash() && Layout.stashComponent.draw()}
+                  {levelNodes}
+                  {controlNode}
+                  {stashNode}
                 </KonvaLayer>
                 <KonvaLayer ref={CseAnimation.layerRef} listening={false}>
                   {CseMachine.getControlStash() && CseAnimation.animations.map(c => c.draw())}

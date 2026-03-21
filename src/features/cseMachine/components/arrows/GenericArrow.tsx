@@ -49,28 +49,8 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     this.isLive = false; // default to false
   }
 
-  private moveToArrowUnderlay(node: Konva.Group): boolean {
-    const underlayLayer = Layout.arrowUnderlayLayerRef.current;
-    if (!underlayLayer || !node.getStage()) return false;
-    if (node.getLayer() === underlayLayer) return true;
-
-    node.moveTo(underlayLayer);
-    underlayLayer.batchDraw();
-    node.getStage()?.batchDraw();
-    return true;
-  }
-
-  private attachToArrowUnderlay = (node: Konva.Group | null) => {
+  private attachArrowRef = (node: Konva.Group | null) => {
     (this.ref as React.MutableRefObject<Konva.Group | null>).current = node;
-    if (!node) return;
-
-    if (this.moveToArrowUnderlay(node)) return;
-
-    requestAnimationFrame(() => {
-      const currentNode = (this.ref as React.MutableRefObject<Konva.Group | null>).current;
-      if (!currentNode || !currentNode.getStage()) return;
-      this.moveToArrowUnderlay(currentNode);
-    });
   };
 
   path(): string {
@@ -299,10 +279,10 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
 
     const interactive = this.isInteractive();
 
-    return (
+    Layout.registerUnderlayArrow(
       <KonvaGroup
         key={Layout.key++}
-        ref={this.attachToArrowUnderlay}
+        ref={this.attachArrowRef}
         name="cse-arrow-underlay-node"
         visible={this._visible}
         listening={interactive}
@@ -332,5 +312,8 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
         />
       </KonvaGroup>
     );
+
+    return null;
   }
 }
+
