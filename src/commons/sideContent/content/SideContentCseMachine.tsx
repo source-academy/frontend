@@ -11,6 +11,7 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { HotkeyItem } from '@mantine/hooks';
 import { bindActionCreators } from '@reduxjs/toolkit';
+import { wait } from '@testing-library/user-event/dist/cjs/utils/index.js';
 import classNames from 'classnames';
 import { t } from 'i18next';
 import { Chapter } from 'js-slang/dist/langs';
@@ -33,7 +34,6 @@ import WorkspaceActions from '../../workspace/WorkspaceActions';
 import { beginAlertSideContent } from '../SideContentActions';
 import { getLocation } from '../SideContentHelper';
 import { NonStoryWorkspaceLocation, SideContentTab, SideContentType } from '../SideContentTypes';
-import { wait } from '@testing-library/user-event/dist/cjs/utils/index.js';
 
 type State = {
   visualization: React.ReactNode;

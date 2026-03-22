@@ -1,5 +1,6 @@
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Label } from 'konva/lib/shapes/Label';
+import { _isEventFromThisInstance } from 'node_modules/ag-grid-community/dist/types/src/agStack/utils/event';
 import React, { RefObject } from 'react';
 import {
   Circle,
@@ -30,9 +31,8 @@ import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { ArrowFromStreamNullaryFn } from '../arrows/ArrowFromStreamNullaryFn';
 import { Binding } from '../Binding';
 import { Frame } from '../Frame';
-import { Value } from './Value';
 import { ArrayValue } from './ArrayValue';
-import { _isEventFromThisInstance } from 'node_modules/ag-grid-community/dist/types/src/agStack/utils/event';
+import { Value } from './Value';
 
 /** this class encapsulates a JS Slang function (not from the global frame) that
  *  contains extra props such as environment and fnName */

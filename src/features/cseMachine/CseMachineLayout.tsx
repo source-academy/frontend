@@ -123,6 +123,7 @@ export class Layout {
    */
   static streamLengthMap: Map<string, number> = new Map();
   static pendingFnLink: boolean = false;
+  static streamCoords: number[][] = [];
 
   static updateDimensions(width: number, height: number) {
     // update the size of the scroll container and stage given the width and height of the sidebar content.

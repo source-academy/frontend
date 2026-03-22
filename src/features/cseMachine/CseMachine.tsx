@@ -29,6 +29,7 @@ export default class CseMachine {
   private static stash: Stash | undefined;
   private static streamLineage: Map<string, string[]>;
   private static streamPairIdToStreamId: Map<string, string>;
+  private static streamPairIdToParentCount: Map<string, number>;
   public static togglePrintableMode(): void {
     CseMachine.printableMode = !CseMachine.printableMode;
   }
@@ -64,6 +65,9 @@ export default class CseMachine {
   }
   public static getStreamPairIdToStreamId(key: string): string | undefined {
     return CseMachine.streamPairIdToStreamId.get(key);
+  }
+  public static getStreamPairIdToParentCounts(key: string): number | undefined {
+    return CseMachine.streamPairIdToParentCount.get(key);
   }
   public static viewStreamLineage(): void {
     console.log(CseMachine.streamLineage);
@@ -113,6 +117,7 @@ export default class CseMachine {
     CseMachine.stash = context.runtime.stash;
     CseMachine.streamLineage = context.streamLineage;
     CseMachine.streamPairIdToStreamId = context.streamPairIdToStreamId;
+    CseMachine.streamPairIdToParentCount = context.streemPairIdToParentCount;
     console.log(context.streamPairIdToStreamId);
 
     Layout.setContext(
