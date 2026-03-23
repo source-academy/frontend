@@ -3,6 +3,7 @@ import type { JSX } from 'react';
 import { Layer, Text } from 'react-konva';
 
 import { Config } from '../Config';
+import DataVisualizer from '../dataVisualizer';
 import { Data, Pair } from '../dataVisualizerTypes';
 import { isArray, isFunction, toText } from '../dataVisualizerUtils';
 import { ArrowDrawable, BackwardArrowDrawable } from '../drawable/Drawable';
@@ -50,7 +51,7 @@ export class Tree {
 
   static fromSourceStructure(tree: Data): Tree {
     let nodeCount = 0;
-
+    const genTreeChecker = DataVisualizer.getTreeMode();
     function constructNode(structure: Data): TreeNode {
       const alreadyDrawnNode = visitedStructures.get(structure);
       if (alreadyDrawnNode !== undefined) {
@@ -71,12 +72,15 @@ export class Tree {
      */
     function constructTree(tree: Array<Data>) {
       const node = new ArrayTreeNode();
-
       visitedStructures.set(tree, node);
       treeNodes[nodeCount] = node;
       nodeCount++;
 
-      // Done like that instead of in constructor to prevent infinite recursion
+      if (genTreeChecker) {
+        node.nodePos = tree[tree.length - 1];
+        tree.pop();
+      }
+
       node.children = tree.map(constructNode);
 
       return node;
@@ -116,6 +120,7 @@ export class Tree {
   }
 
   draw(): TreeDrawer {
+    TreeDrawer.colorCounter = 0;
     return new TreeDrawer(this);
   }
 }
@@ -125,6 +130,12 @@ export class Tree {
  */
 class TreeDrawer {
   private tree: Tree;
+  public leftCOUNTER: integer = 0;
+  public rightCOUNTER: integer = 0;
+  public downCOUNTER: integer = 0;
+  private runningX: integer = 0;
+  private runningY: integer = 0;
+  private runningX2: integer = 0; // for rightCOUNTER
 
   private drawables: JSX.Element[];
   private nodeWidths: Map<TreeNode, number>;
@@ -134,6 +145,9 @@ class TreeDrawer {
   // Used to account for backward arrow
   private minX = 0;
   private minY = 0;
+  public static colorCounter = 0;
+
+  private leftMargin: integer = Config.StrokeWidth / 2;
 
   constructor(tree: Tree) {
     this.tree = tree;
@@ -162,15 +176,77 @@ class TreeDrawer {
           <Text {...textConfig} />
         </Layer>
       );
-    } else {
-      this.drawNode(this.tree.rootNode, x, y, x, y);
-      this.width = this.getNodeWidth(this.tree.rootNode) - this.minX;
-      this.height = this.getNodeHeight(this.tree.rootNode) - this.minY + Config.StrokeWidth;
+    }
+    // NON-BINARY TREE WARNING
+    if (!DataVisualizer.isBinTree && DataVisualizer.getBinTreeMode()) {
       return (
-        <Layer key={x + ', ' + y} offsetX={this.minX} offsetY={this.minY}>
-          {this.drawables}
+        <Layer>
+          <Text
+            text={'Render binary tree only supports binary trees'}
+            align="center"
+            fontStyle="normal"
+            fontSize={20}
+            fill="red"
+          />
         </Layer>
       );
+    }
+    // NON-GENERAL TREE WARNING
+    else if (!DataVisualizer.isGenTree && DataVisualizer.getTreeMode()) {
+      console.log('Not general tree');
+      return (
+        <Layer>
+          <Text
+            text={'Render general tree only supports trees'}
+            align="center"
+            fontStyle="normal"
+            fontSize={20}
+            fill={'red'}
+          />
+        </Layer>
+      );
+    } else {
+      if (DataVisualizer.getBinTreeMode()) {
+        // RenderBinaryTree
+        this.drawNode(this.tree.rootNode, x, y, x, y, 0, 0, 0, 0);
+        this.width = this.getNodeWidth(this.tree.rootNode) - this.minX;
+        this.height = this.getNodeHeight(this.tree.rootNode) - this.minY + Config.StrokeWidth;
+
+        const EY1 = Math.max(this.leftCOUNTER, this.rightCOUNTER);
+        let EY2;
+        if (EY1 === 0) {
+          EY2 = EY1;
+        } else {
+          EY2 = 2 * (Math.pow(2, EY1 - 1) - 1) + 1; // how many nodegroups stretch left or right (not including root)
+        }
+        return (
+          <Layer key={x + ', ' + y} offsetX={-(EY2 * Config.NWidth)} offsetY={this.minY}>
+            {this.drawables}
+          </Layer>
+        );
+      } else if (DataVisualizer.getTreeMode()) {
+        // RenderGeneralTree
+        this.drawNode(this.tree.rootNode, x, y, x, y, 0, 0, 0, 0);
+        this.width = this.getNodeWidth(this.tree.rootNode) - this.minX;
+        this.height = this.getNodeHeight(this.tree.rootNode) - this.minY + Config.StrokeWidth;
+
+        return (
+          <Layer key={x + ', ' + y} offsetX={0} offsetY={this.minY}>
+            {this.drawables}
+          </Layer>
+        );
+      } else {
+        // OriginalView
+        this.drawNode(this.tree.rootNode, x, y, x, y, 0, 0, 0, 0);
+        this.width = this.getNodeWidth(this.tree.rootNode) - this.minX;
+        this.height = this.getNodeHeight(this.tree.rootNode) - this.minY + Config.StrokeWidth;
+
+        return (
+          <Layer key={x + ', ' + y} offsetX={0} offsetY={this.minY}>
+            {this.drawables}
+          </Layer>
+        );
+      }
     }
   }
 
@@ -186,7 +262,17 @@ class TreeDrawer {
    * @param parentX The x position of the parent. If there is no parent, it is the same as x.
    * @param parentY The y position of the parent. If there is no parent, it is the same as y.
    */
-  drawNode(node: TreeNode, x: number, y: number, parentX: number, parentY: number) {
+  drawNode(
+    node: TreeNode,
+    x: number,
+    y: number,
+    parentX: number,
+    parentY: number,
+    colorIndex: number,
+    parentIndex: number,
+    originIndex: number,
+    originX: number
+  ) {
     if (node instanceof AlreadyParsedTreeNode) {
       // if its child is part of a cycle and it's been drawn, link back to that node instead
       const drawnNode = node.actualNode;
@@ -228,21 +314,135 @@ class TreeDrawer {
 
     // draws the content
     if (node instanceof FunctionTreeNode) {
-      const drawable = node.createDrawable(x, y, parentX, parentY);
+      const drawable = node.createDrawable(x, y, parentX, parentY, 0);
       this.drawables.push(drawable);
     } else if (node instanceof ArrayTreeNode) {
-      const drawable = node.createDrawable(x, y, parentX, parentY);
-      this.drawables.push(drawable);
+      if (DataVisualizer.getBinTreeMode()) {
+        // RenderBinaryTree
+        const drawable = node.createDrawable(x, y, parentX, parentY, colorIndex);
+        this.drawables.push(drawable);
 
-      // if it has children, draw them
-      // const width = this.getNodeWidth(node);
-      let leftX = x;
-      node.children?.forEach((childNode, index) => {
-        const childY = childNode instanceof AlreadyParsedTreeNode ? y : y + Config.DistanceY;
-        this.drawNode(childNode, leftX, childY, x + Config.BoxWidth * index, y);
-        const childNodeWidth = this.getNodeWidth(childNode);
-        leftX += childNodeWidth ? childNodeWidth + Config.DistanceX : 0;
-      });
+        node.children?.forEach((childNode, index) => {
+          let myY;
+          let myX;
+          let scalerV = Math.round(
+            Math.pow(2, DataVisualizer.TreeDepth) /
+              Math.pow(2, Math.round(y / (6 * Config.BoxHeight)))
+          );
+          scalerV--;
+
+          if (index === 0 && y === parentY + Config.DistanceY) {
+            // NEW left branch
+            myY = y + Config.DistanceY * 2;
+            myX = x - Config.NWidth * scalerV;
+            TreeDrawer.colorCounter++;
+            colorIndex = TreeDrawer.colorCounter;
+          } else if (index === 0) {
+            // NEW right branch
+            myY = y + Config.DistanceY * 2;
+            myX = x + Config.NWidth * scalerV;
+            colorIndex = TreeDrawer.colorCounter;
+          } else if (y === parentY + Config.DistanceY) {
+            // third box
+            myY = y;
+            myX = x + Config.NWidth * 2;
+            colorIndex = parentIndex;
+          } else {
+            // second box
+            myY = y + Config.DistanceY;
+            myX = x - Config.NWidth;
+            colorIndex = parentIndex;
+          }
+
+          if (x < this.runningX && index === 0 && y === parentY + Config.DistanceY) {
+            // NEW left branches that stretch towards the left
+            this.leftCOUNTER++;
+            this.runningX = myX;
+          } else if (x > this.runningX2 && index === 0 && y === parentY + Config.DistanceY) {
+            // NEW right branches that stretch towards the right
+            this.rightCOUNTER++;
+            this.runningX2 = myX;
+          }
+
+          if (y > this.runningY && index === 0) {
+            // NEW branches (doesn't matter left or right) that stretches down
+            this.downCOUNTER++;
+            this.runningY = myY;
+          }
+
+          this.drawNode(
+            childNode,
+            myX,
+            myY,
+            x + Config.BoxWidth * index,
+            y,
+            colorIndex,
+            colorIndex,
+            0,
+            0
+          );
+        });
+      } else if (DataVisualizer.getTreeMode()) {
+        // RenderGeneralTree
+        const drawable = node.createDrawable(x, y, parentX, parentY, colorIndex);
+        this.drawables.push(drawable);
+
+        const longest = DataVisualizer.nodeCount[0]; // e.g. 3
+        this.runningX2 = (Config.NWidth + Config.BoxWidth) * (longest + 1);
+        this.downCOUNTER = DataVisualizer.TreeDepth;
+
+        node.children?.forEach((childNode, index) => {
+          let myY;
+          let myX;
+
+          if (index == 0) {
+            myY = y + Config.DistanceY * 2;
+            myX = originX;
+            TreeDrawer.colorCounter++;
+            colorIndex = TreeDrawer.colorCounter;
+          } else {
+            myY = y;
+            myX = x + Config.NWidth + Config.BoxWidth;
+            colorIndex = parentIndex;
+          }
+
+          if (x > this.runningX2 && index == 0 && y == parentY + Config.DistanceY * 2) {
+            // NEW right branches that stretch towards the right
+            this.rightCOUNTER++;
+            this.runningX2 = myX;
+          }
+
+          if (node.children![1] instanceof ArrayTreeNode) {
+            if (node.children![1].children![0] instanceof ArrayTreeNode) {
+              originIndex = node.children![1].children![0].nodePos;
+              originX = 0 + this.leftMargin + (Config.NWidth + Config.BoxWidth) * originIndex;
+            }
+          }
+
+          this.drawNode(
+            childNode,
+            myX,
+            myY,
+            x + Config.BoxWidth * index,
+            y,
+            colorIndex,
+            colorIndex,
+            originIndex,
+            originX
+          );
+        });
+      } else {
+        // OriginalView
+        const drawable = node.createDrawable(x, y, parentX, parentY, 0);
+        this.drawables.push(drawable);
+        let leftX = x;
+        node.children?.forEach((childNode, index) => {
+          const childY = childNode instanceof AlreadyParsedTreeNode ? y : y + Config.DistanceY;
+          this.drawNode(childNode, leftX, childY, x + Config.BoxWidth * index, y, 0, 0, 0, 0);
+          const childNodeWidth = this.getNodeWidth(childNode);
+          leftX += childNodeWidth ? childNodeWidth + Config.DistanceX : 0;
+        });
+      }
     }
   }
 

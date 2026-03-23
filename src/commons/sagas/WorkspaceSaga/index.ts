@@ -407,7 +407,7 @@ const WorkspaceSaga = combineSagaHandlers({
    * the function.
    */
   [WorkspaceActions.beginClearContext.type]: function* (action): any {
-    yield call([DataVisualizer, DataVisualizer.clear]);
+    yield call([DataVisualizer, DataVisualizer.clearWithData]);
     yield call([CseMachine, CseMachine.clear]);
     const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
     for (const [key, value] of globals) {
