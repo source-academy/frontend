@@ -1,6 +1,6 @@
 import { Icon } from '@blueprintjs/core';
 import { CustomHeaderProps } from 'ag-grid-react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import GradingFlex from 'src/commons/grading/GradingFlex';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
@@ -33,16 +33,13 @@ const GradingColumnCustomHeaders: React.FC<Props> = props => {
 
   return (
     <GradingFlex
-      className={classNames(
-        props.eGridHeader.classList,
-        classes['grading-table-header-individual']
-      )}
+      className={clsx(props.eGridHeader.classList, classes['grading-table-header-individual'])}
     >
       <span className="ag-header-cell-text">{props.displayName}</span>
 
       {!props.disabledSortCols.includes(props.column.getColId()) && (
         <div
-          className={classNames(classes['grading-table-col-icons'], 'grading-table-sort-cols')}
+          className={clsx(classes['grading-table-col-icons'], 'grading-table-sort-cols')}
           onClick={() => nextSortState()}
         >
           <Icon icon={sortState} />
@@ -50,7 +47,7 @@ const GradingColumnCustomHeaders: React.FC<Props> = props => {
       )}
 
       <div
-        className={classNames(classes['grading-table-col-icons'], 'grading-table-hide-cols')}
+        className={clsx(classes['grading-table-col-icons'], 'grading-table-hide-cols')}
         onClick={() => props.hideColumn(props.column.getColId())}
       >
         <Icon icon="eye-off" />

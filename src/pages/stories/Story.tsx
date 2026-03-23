@@ -1,7 +1,7 @@
 import 'js-slang/dist/editors/ace/theme/source';
 
 import { Classes, InputGroup } from '@blueprintjs/core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import AceEditor, { IEditorProps } from 'react-ace';
 import { useDispatch } from 'react-redux';
@@ -87,7 +87,7 @@ const Story: React.FC<Props> = ({ isViewOnly = false }) => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' }} className={classNames(Classes.DARK)}>
+    <div style={{ display: 'flex', flexDirection: 'column' }} className={clsx(Classes.DARK)}>
       <ControlBar {...controlBarProps} />
       <div style={{ width: '100vw', height: '100%', display: 'flex' }}>
         {!isViewOnly && (

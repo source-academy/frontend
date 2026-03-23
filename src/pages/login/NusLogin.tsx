@@ -1,5 +1,5 @@
 import { Button, ButtonGroup, Card, Divider, Elevation, H1, H3 } from '@blueprintjs/core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -30,11 +30,11 @@ const NusLogin: React.FC = () => {
 
   return (
     <div className={classes['container']}>
-      <div className={classNames('col-lg-8', 'hidden-xs', classes['unpadded'])}>
+      <div className={clsx('col-lg-8', 'hidden-xs', classes['unpadded'])}>
         <img className={classes['logo']} src={BLUE_BG} alt="nusInfoBackgroundImg" />
       </div>
-      <div className={classNames('col-xs-12 col-lg-4', classes['unpadded'])}>
-        <div className={classNames('row', classes['row'])}>
+      <div className={clsx('col-xs-12 col-lg-4', classes['unpadded'])}>
+        <div className={clsx('row', classes['row'])}>
           <Card className={classes['header']} elevation={Elevation.ZERO}>
             <a
               className={classes['logo']}
@@ -49,9 +49,9 @@ const NusLogin: React.FC = () => {
             <H3 style={{ marginBottom: 0 }}>{Constants.sourceAcademyDeploymentName}</H3>
           </Card>
         </div>
-        <div className={classNames('row', classes['row'])} style={{ height: '100%' }}>
+        <div className={clsx('row', classes['row'])} style={{ height: '100%' }}>
           <Card
-            className={classNames(classes['text-center'], classes['body'])}
+            className={clsx(classes['text-center'], classes['body'])}
             elevation={Elevation.ZERO}
           >
             <H1>Login</H1>

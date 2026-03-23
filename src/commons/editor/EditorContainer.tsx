@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { pick } from 'es-toolkit';
 import React from 'react';
 
 import SourcecastEditor, {
@@ -40,7 +40,7 @@ export const convertEditorTabStateToProps = (
   return {
     editorTabIndex,
     editorValue: editorTab.value,
-    ..._.pick(editorTab, 'filePath', 'highlightedLines', 'breakpoints', 'newCursorPosition')
+    ...pick(editorTab, ['filePath', 'highlightedLines', 'breakpoints', 'newCursorPosition'])
   };
 };
 

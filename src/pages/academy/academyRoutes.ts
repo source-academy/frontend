@@ -1,4 +1,4 @@
-import { memoize } from 'lodash';
+import { memoize } from 'es-toolkit';
 import { type LoaderFunction, redirect, replace, type RouteObject } from 'react-router';
 import { Role } from 'src/commons/application/ApplicationTypes';
 import { AssessmentConfiguration } from 'src/commons/assessment/AssessmentTypes';

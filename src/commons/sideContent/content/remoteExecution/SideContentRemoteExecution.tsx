@@ -7,7 +7,7 @@ import {
   NonIdealState,
   Spinner
 } from '@blueprintjs/core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React, { SetStateAction, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { NavLink } from 'react-router';
@@ -150,7 +150,7 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
           <DeviceContent session={currentSession} />
         </div>
         <div className="col-xs-6 devices-menu-container">
-          <Menu className={classNames(Classes.ELEVATION_0)}>
+          <Menu className={clsx(Classes.ELEVATION_0)}>
             <MenuItem
               text="Browser"
               onClick={() => dispatch(actions.remoteExecDisconnect())}

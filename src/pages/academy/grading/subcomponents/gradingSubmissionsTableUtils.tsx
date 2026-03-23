@@ -1,5 +1,5 @@
 import { ColDef, ICellRendererParams } from 'ag-grid-community';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { ColumnFields, ColumnName, IGradingTableRow } from 'src/features/grading/GradingTypes';
 import classes from 'src/styles/Grading.module.scss';
 
@@ -15,7 +15,7 @@ export const generateCols = (filterMode: boolean) => {
 
   const generalColProperties = {
     suppressMovable: true,
-    cellClass: classNames(classes['grading-def-cell'], classes['grading-def-cell-pointer']),
+    cellClass: clsx(classes['grading-def-cell'], classes['grading-def-cell-pointer']),
     headerClass: classes['grading-default-headers'],
     flex: 1 // weight of column width
   } satisfies ColDef<IGradingTableRow>;
@@ -25,8 +25,8 @@ export const generateCols = (filterMode: boolean) => {
     headerName: ColumnName.assessmentName,
     field: ColumnFields.assessmentName,
     flex: 3,
-    cellClass: classNames(generalColProperties.cellClass, classes['grading-cell-align-left']),
-    headerClass: classNames(generalColProperties.headerClass, classes['grading-left-align']),
+    cellClass: clsx(generalColProperties.cellClass, classes['grading-cell-align-left']),
+    headerClass: clsx(generalColProperties.headerClass, classes['grading-left-align']),
     cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
       return params.data !== undefined
         ? {
@@ -64,8 +64,8 @@ export const generateCols = (filterMode: boolean) => {
     field: ColumnFields.studentName,
     filter: true,
     flex: 1.5,
-    cellClass: classNames(generalColProperties.cellClass, classes['grading-cell-align-left']),
-    headerClass: classNames(generalColProperties.headerClass, classes['grading-left-align']),
+    cellClass: clsx(generalColProperties.cellClass, classes['grading-cell-align-left']),
+    headerClass: clsx(generalColProperties.headerClass, classes['grading-left-align']),
     cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
       return params.data !== undefined
         ? {
@@ -138,7 +138,7 @@ export const generateCols = (filterMode: boolean) => {
     ...generalColProperties,
     headerName: ColumnName.xp,
     field: ColumnFields.xp,
-    cellClass: classNames(
+    cellClass: clsx(
       generalColProperties.cellClass,
       classes['grading-xp-cell'],
       !filterMode ? classes['grading-def-cell-pointer'] : classes['grading-def-cell-selectable']
@@ -150,7 +150,7 @@ export const generateCols = (filterMode: boolean) => {
     headerName: ColumnName.actionsIndex,
     field: ColumnFields.actionsIndex,
     flex: 1.4,
-    headerClass: classNames(generalColProperties.headerClass, classes['grading-left-align']),
+    headerClass: clsx(generalColProperties.headerClass, classes['grading-left-align']),
     cellRendererSelector: (params: ICellRendererParams<IGradingTableRow>) => {
       return params.data !== undefined
         ? {

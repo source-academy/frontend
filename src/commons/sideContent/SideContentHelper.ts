@@ -1,9 +1,9 @@
 import * as bpcore from '@blueprintjs/core';
 import { TabId } from '@blueprintjs/core';
 import * as bpicons from '@blueprintjs/icons';
+import compat from 'es-toolkit/compat';
 import * as jsslang from 'js-slang';
 import * as jsslangDist from 'js-slang/dist';
-import lodash from 'lodash';
 import phaser from 'phaser';
 import React, { useCallback } from 'react';
 import JSXRuntime from 'react/jsx-runtime';
@@ -35,7 +35,7 @@ const requireProvider = (x: string) => {
     '@blueprintjs/icons': bpicons,
     'js-slang': jsslang,
     'js-slang/dist': jsslangDist,
-    lodash,
+    lodash: compat,
     phaser
   };
 

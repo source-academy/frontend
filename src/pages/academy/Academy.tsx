@@ -1,5 +1,5 @@
 import { Card, Classes, NonIdealState, Spinner, SpinnerSize } from '@blueprintjs/core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Navigate, Outlet, useNavigate, useParams } from 'react-router';
@@ -55,7 +55,7 @@ const CourseSelectingAcademy: React.FC = () => {
   ) : routeCourseId === courseId ? (
     <Academy />
   ) : (
-    <div className={classNames(classes['Academy-switching-courses'], Classes.DARK)}>
+    <div className={clsx(classes['Academy-switching-courses'], Classes.DARK)}>
       <Card className={Classes.ELEVATION_4}>
         <NonIdealState
           description="Switching courses..."

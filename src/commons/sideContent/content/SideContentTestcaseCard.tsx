@@ -1,5 +1,5 @@
 import { Card, Classes, Elevation, Pre } from '@blueprintjs/core';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { parseError } from 'js-slang';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import React from 'react';
@@ -61,7 +61,7 @@ const SideContentTestcaseCard: React.FC<SideContentTestcaseCardProps> = props =>
    * be rendered in the GitHubAssessmentWorkspace for students.
    */
   return (
-    <div className={classNames('AutograderCard', extraClasses)} data-testid="AutograderCard">
+    <div className={clsx('AutograderCard', extraClasses)} data-testid="AutograderCard">
       <Card className={Classes.INTERACTIVE} elevation={Elevation.ONE} onClick={handleRunTestcase}>
         {testcase.type === TestcaseTypes.opaque && props.workspaceLocation === 'assessment' ? (
           // Render a placeholder cell in place of the actual testcase data for opaque testcases

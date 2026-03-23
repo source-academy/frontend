@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import { isEqual } from 'es-toolkit';
 
 /**
  * Performs a deep comparison between the previous & next props state
@@ -9,4 +9,4 @@ import * as _ from 'lodash';
  * @param nextProps The next state of the props passed into a component
  */
 export const propsAreEqual = <T>(prevProps: T, nextProps: T): boolean =>
-  _.isEqual(prevProps, nextProps);
+  isEqual(prevProps, nextProps);
