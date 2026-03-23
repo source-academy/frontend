@@ -29,7 +29,11 @@ import DisplayBufferService from '../../../utils/DisplayBufferService';
 import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../../../utils/SourcerorHelper';
 import WorkspaceActions from '../../../workspace/WorkspaceActions';
-import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
+import {
+  type EditorTabState,
+  EVAL_SILENT,
+  type WorkspaceLocation
+} from '../../../workspace/WorkspaceTypes';
 import { getEvaluatorDefinitionSaga } from '../../LanguageDirectorySaga';
 import { selectStoryEnv, selectWorkspace } from '../../SafeEffects';
 import { dumpDisplayBuffer } from './dumpDisplayBuffer';
@@ -158,6 +162,142 @@ async function cCompileAndRun(cCode: string, context: Context): Promise<Result> 
     return { status: 'error', context };
   }
 }
+
+/**
+ * Computes which stepper step indices correspond to editor breakpoints.
+ *
+ * we derive breakpoint steps by matching each step’s
+ * source location (loc.start.line) against the editor’s breakpoint lines.
+ *
+ * Ace breakpoints are 0-indexed, while AST line numbers are 1-indexed,
+ * so we convert aceRow + 1 before comparison.
+ *
+ * Returns a list of 0-based step indices that align with breakpoint lines.
+ */
+type StepperLoc = {
+  source?: string | null;
+  start?: { line?: number };
+};
+
+type StepperOutputStep = {
+  ast?: unknown;
+  markers?: Array<{
+    redexType?: 'beforeMarker' | 'afterMarker';
+    redex?: {
+      loc?: StepperLoc;
+    };
+  }>;
+};
+
+const isStepperOutput = (value: unknown): value is StepperOutputStep[] => {
+  return (
+    Array.isArray(value) &&
+    value.length > 0 &&
+    value[0] !== null &&
+    typeof value[0] === 'object' &&
+    'ast' in value[0]
+  );
+};
+
+const deriveStepperBreakpointSteps = (
+  stepperSteps: StepperOutputStep[],
+  editorTabs: EditorTabState[],
+  entrypointFilePath: string
+): number[] => {
+  const breakpointLinesByFile = new Map<string, Set<number>>();
+
+  for (const editorTab of editorTabs) {
+    const filePath = editorTab.filePath ?? entrypointFilePath;
+    const lineSet = breakpointLinesByFile.get(filePath) ?? new Set<number>();
+    editorTab.breakpoints.forEach((value, aceRow) => {
+      if (value) {
+        lineSet.add(aceRow + 1);
+      }
+    });
+    breakpointLinesByFile.set(filePath, lineSet);
+  }
+
+  const entrypointLines = breakpointLinesByFile.get(entrypointFilePath) ?? new Set<number>();
+
+  const markerMatchesBreakpoint = (
+    marker: NonNullable<StepperOutputStep['markers']>[number],
+    redexType: 'beforeMarker' | 'afterMarker'
+  ): boolean => {
+    if (marker.redexType !== redexType) return false;
+    const line = marker.redex?.loc?.start?.line;
+    if (typeof line !== 'number') return false;
+    const source =
+      typeof marker.redex?.loc?.source === 'string' ? marker.redex.loc.source : entrypointFilePath;
+    const lines = breakpointLinesByFile.get(source) ?? entrypointLines;
+    return lines.has(line);
+  };
+
+  const breakpointSteps: number[] = [];
+  // Track which breakpoint lines have already fired, so each line only stops once.
+  const firedLines = new Set<string>();
+
+  for (let stepIndex = 0; stepIndex < stepperSteps.length; stepIndex++) {
+    const currentStepMarkers = stepperSteps[stepIndex].markers ?? [];
+
+    const afterMarkerBreakpointLine = currentStepMarkers.find(m =>
+      markerMatchesBreakpoint(m, 'afterMarker')
+    )?.redex?.loc?.start?.line;
+
+    const prevStepMarkers = stepIndex > 0 ? (stepperSteps[stepIndex - 1].markers ?? []) : [];
+    const prevStepCoversLine =
+      afterMarkerBreakpointLine !== undefined &&
+      prevStepMarkers.some(m => {
+        if (m.redexType !== 'beforeMarker') return false;
+        if (m.redex?.loc?.start?.line !== afterMarkerBreakpointLine) return false;
+        // Also check the source file matches, to avoid incorrectly skipping
+        // breakpoints on the same line number in different files.
+        const afterMarkerSource =
+          typeof currentStepMarkers.find(m => markerMatchesBreakpoint(m, 'afterMarker'))?.redex?.loc
+            ?.source === 'string'
+            ? currentStepMarkers.find(m => markerMatchesBreakpoint(m, 'afterMarker'))?.redex?.loc
+                ?.source
+            : entrypointFilePath;
+        const prevMarkerSource =
+          typeof m.redex?.loc?.source === 'string' ? m.redex.loc.source : entrypointFilePath;
+        return prevMarkerSource === afterMarkerSource;
+      });
+
+    const beforeMarker = currentStepMarkers.find(m => markerMatchesBreakpoint(m, 'beforeMarker'));
+    const beforeMarkerLine = beforeMarker?.redex?.loc?.start?.line;
+    const beforeMarkerSource =
+      typeof beforeMarker?.redex?.loc?.source === 'string'
+        ? beforeMarker.redex.loc.source
+        : entrypointFilePath;
+
+    // Build a unique key per line+file so we track fired state per file.
+    const firedKey =
+      beforeMarkerLine !== undefined ? `${beforeMarkerSource}:${beforeMarkerLine}` : undefined;
+
+    const isBreakpointStep =
+      // Only fire if this line hasn't already stopped once before.
+      (firedKey !== undefined &&
+        !firedLines.has(firedKey) &&
+        currentStepMarkers.some(m => markerMatchesBreakpoint(m, 'beforeMarker'))) ||
+      (afterMarkerBreakpointLine !== undefined && !prevStepCoversLine);
+
+    if (isBreakpointStep) {
+      // Mark this line as fired so it doesn't stop again.
+      if (firedKey !== undefined) firedLines.add(firedKey);
+      breakpointSteps.push(stepIndex);
+    }
+    // Also mark the afterMarker line as fired if it triggered this step,
+    // to prevent duplicate stops if the same afterMarker line appears again.
+    if (afterMarkerBreakpointLine !== undefined && !prevStepCoversLine) {
+      const afterMarkerSource = currentStepMarkers.find(m =>
+        markerMatchesBreakpoint(m, 'afterMarker')
+      )?.redex?.loc?.source;
+      const afterMarkerKey = `${typeof afterMarkerSource === 'string' ? afterMarkerSource : entrypointFilePath}:${afterMarkerBreakpointLine}`;
+      firedLines.add(afterMarkerKey);
+    }
+  }
+
+  return breakpointSteps;
+};
 
 export function* evalCodeSaga(
   files: Record<string, string>,
@@ -379,6 +519,26 @@ export function* evalCodeSaga(
 
     yield put(actions.addEvent(events));
     return;
+  }
+
+  // If we are in playground/sicp and running the substitution stepper,
+  // derive breakpoint step indices from the precomputed step list.
+  // Unlike CSE (which records breakpoint hits during execution),
+  // the stepper requires us to match step source locations against
+  // editor breakpoint lines and compute them manually.
+  if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
+    if (context.chapter <= Chapter.SOURCE_2 && substIsActive) {
+      let stepperBreakpointSteps: number[] = [];
+      if (isStepperOutput(result.value)) {
+        const { editorTabs } = yield* selectWorkspace(workspaceLocation);
+        stepperBreakpointSteps = deriveStepperBreakpointSteps(
+          result.value,
+          editorTabs,
+          entrypointFilePath
+        );
+      }
+      yield put(actions.updateBreakpointSteps(stepperBreakpointSteps, workspaceLocation));
+    }
   }
 
   yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
