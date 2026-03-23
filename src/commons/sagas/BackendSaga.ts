@@ -277,10 +277,9 @@ const newBackendSagaOne = combineSagaHandlers({
 
     const resp: Response | null = yield call(postAnswer, questionId, answer, tokens);
     if (!resp || !resp.ok) {
+      yield put(WorkspaceActions.updateSaveStatus('assessment', 'saveFailed'));
       return yield handleResponseError(resp);
     }
-
-    yield call(showSuccessMessage, 'Saved!', 1000);
 
     // Now, update the answer for the question in the assessment in the store
     const assessmentId: number = yield select(
@@ -301,7 +300,8 @@ const newBackendSagaOne = combineSagaHandlers({
     };
 
     yield put(actions.updateAssessment(newAssessment));
-    return yield put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false));
+    yield put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false));
+    return yield put(WorkspaceActions.updateSaveStatus('assessment', 'saved'));
   },
   [SessionActions.checkAnswerLastModifiedAt.type]: function* (action) {
     const tokens: Tokens = yield selectTokens();

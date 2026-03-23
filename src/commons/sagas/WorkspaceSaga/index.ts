@@ -37,6 +37,11 @@ import { selectWorkspace } from '../SafeEffects';
 import { evalCodeSaga } from './helpers/evalCode';
 import { evalEditorSaga } from './helpers/evalEditor';
 import { runTestCase } from './helpers/runTestCase';
+import {
+  fetchVersionHistorySaga,
+  nameVersionSaga,
+  restoreVersionSaga
+} from './helpers/versionHistory';
 
 const WorkspaceSaga = combineSagaHandlers({
   [WorkspaceActions.addHtmlConsoleError.type]: function* (action) {
@@ -477,6 +482,15 @@ const WorkspaceSaga = combineSagaHandlers({
         }
       }
     }
+  },
+  [WorkspaceActions.fetchVersionHistory.type]: function* (action) {
+    yield* fetchVersionHistorySaga(action);
+  },
+  [WorkspaceActions.nameVersion.type]: function* (action) {
+    yield* nameVersionSaga(action);
+  },
+  [WorkspaceActions.restoreVersion.type]: function* (action) {
+    yield* restoreVersionSaga(action);
   }
 });
 

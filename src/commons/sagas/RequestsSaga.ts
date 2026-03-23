@@ -1850,3 +1850,57 @@ export const courseIdWithoutPrefix: () => string = () => {
     throw new Error(`No course selected`);
   }
 };
+
+/**
+ * GET /courses/:courseId/assessments/question/:questionId/version/history
+ * Fetch version history for a workspace
+ */
+export const getVersionHistory = async (
+  questionId: number,
+  tokens: Tokens
+): Promise<any[] | null> => {
+  const resp = await request(
+    `${courseId()}/assessments/question/${questionId}/version/history`,
+    'GET',
+    {
+      accessToken: tokens.accessToken,
+      errorMessage: 'Could not fetch version history.',
+      refreshToken: tokens.refreshToken
+    }
+  );
+  if (!resp || !resp.ok) {
+    return null;
+  }
+  const versions = await resp.json();
+  return versions.map((v: any) => ({
+    id: String(v.id),
+    name: v.name,
+    code: v.version?.code,
+    timestamp: new Date(v.inserted_at + 'Z').getTime()
+  }));
+};
+
+/**
+ * PUT courses/:course_id/assessments/question/:questionid/version/:versionid/name
+ * Update the name of a version
+ */
+export const updateVersionName = async (
+  questionId: number,
+  versionId: string,
+  name: string,
+  tokens: Tokens
+): Promise<Response | null> => {
+  const resp = await request(
+    `${courseId()}/assessments/question/${questionId}/version/${versionId}/name`,
+    'PUT',
+    {
+      accessToken: tokens.accessToken,
+      body: {
+        name
+      },
+      errorMessage: 'Could not update version name.',
+      refreshToken: tokens.refreshToken
+    }
+  );
+  return resp;
+};

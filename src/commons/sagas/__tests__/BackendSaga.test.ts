@@ -676,7 +676,7 @@ describe('Test SUBMIT_ANSWER action', () => {
         ]
       ])
       .not.call.fn(showWarningMessage)
-      .call(showSuccessMessage, 'Saved!', 1000)
+      .not.call.fn(showSuccessMessage)
       .put(SessionActions.updateAssessment(mockNewAssessment))
       .put(WorkspaceActions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false))
       .dispatch({ type: SessionActions.submitAnswer.type, payload: mockAnsweredAssessmentQuestion })
@@ -718,7 +718,7 @@ describe('Test SUBMIT_ANSWER action', () => {
         ]
       ])
       .not.call.fn(showWarningMessage)
-      .call(showSuccessMessage, 'Saved!', 1000)
+      .not.call.fn(showSuccessMessage)
       .put(SessionActions.updateAssessment(mockNewAssessment))
       .put(WorkspaceActions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false))
       .dispatch({ type: SessionActions.submitAnswer.type, payload: mockAnsweredAssessmentQuestion })
