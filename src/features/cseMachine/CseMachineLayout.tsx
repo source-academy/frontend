@@ -2,10 +2,16 @@ import Heap from 'js-slang/dist/cse-machine/heap';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { Chapter } from 'js-slang/dist/langs';
 import { Frame } from 'js-slang/dist/types';
+import { Group } from 'konva/lib/Group';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Stage } from 'konva/lib/Stage';
 import React, { RefObject } from 'react';
-import { Layer as KonvaLayer, Rect as KonvaRect, Stage as KonvaStage } from 'react-konva';
+import {
+  Group as KonvaGroup,
+  Layer as KonvaLayer,
+  Rect as KonvaRect,
+  Stage as KonvaStage
+} from 'react-konva';
 import classes from 'src/styles/Draggable.module.scss';
 
 import { arrowSelection } from './components/arrows/ArrowSelection';
@@ -116,6 +122,8 @@ export class Layout {
   static currentStackLight: React.ReactNode;
   static currentStackTruncLight: React.ReactNode;
   static stageRef: RefObject<Stage | null> = React.createRef();
+  static contentGroupRef: RefObject<Group | null> = React.createRef();
+  static animationGroupRef: RefObject<Group | null> = React.createRef();
 
   // buffer for faster rendering of diagram when scrolling
   static invisiblePaddingVertical: number = 300;
@@ -462,48 +470,139 @@ export class Layout {
     else Layout.values.set((data as any).id, value);
   }
 
+  private static getExportScale(width: number, height: number, padding: number): number {
+    const safeWidth = Math.max(Config.MaxExportWidth - padding * 2, 1);
+    const safeHeight = Math.max(Config.MaxExportHeight - padding * 2, 1);
+    return Math.min(safeWidth / width, safeHeight / height, 1);
+  }
+
+  private static getExportBounds() {
+    const bounds = [
+      this.contentGroupRef.current?.getClientRect(),
+      this.animationGroupRef.current?.getClientRect()
+    ].filter(
+      (rect): rect is { x: number; y: number; width: number; height: number } =>
+        !!rect && rect.width > 0 && rect.height > 0
+    );
+
+    if (bounds.length === 0) {
+      return {
+        x: Layout.invisiblePaddingHorizontal,
+        y: Layout.invisiblePaddingVertical,
+        width: Layout.width(),
+        height: Layout.height()
+      };
+    }
+
+    const minX = Math.min(...bounds.map(rect => rect.x));
+    const minY = Math.min(...bounds.map(rect => rect.y));
+    const maxX = Math.max(...bounds.map(rect => rect.x + rect.width));
+    const maxY = Math.max(...bounds.map(rect => rect.y + rect.height));
+    const padding = Math.max(Config.CanvasPaddingX, Config.CanvasPaddingY);
+
+    return {
+      x: Math.max(0, minX - padding),
+      y: Math.max(0, minY - padding),
+      width: maxX - minX + padding * 2,
+      height: maxY - minY + padding * 2
+    };
+  }
+
+  private static fitStageToBounds(bounds: { x: number; y: number; width: number; height: number }) {
+    const stage = this.stageRef.current;
+    const container = this.scrollContainerRef.current;
+    if (!stage) {
+      return;
+    }
+
+    const viewportWidth = Math.max(Layout.visibleWidth, 1);
+    const viewportHeight = Math.max(Layout.visibleHeight, 1);
+    const scale = Math.min(viewportWidth / bounds.width, viewportHeight / bounds.height);
+    const nextScale = Number.isFinite(scale) && scale > 0 ? scale : 1;
+
+    stage.width(Layout.stageWidth);
+    stage.height(Layout.stageHeight);
+    stage.scale({ x: nextScale, y: nextScale });
+    stage.position({
+      x: (viewportWidth - bounds.width * nextScale) / 2 - bounds.x * nextScale,
+      y: (viewportHeight - bounds.height * nextScale) / 2 - bounds.y * nextScale
+    });
+    container?.scrollTo({ left: 0, top: 0 });
+    Layout.handleScrollPosition(0, 0);
+    stage.batchDraw();
+  }
+
   /**
-   * Scrolls diagram to top left, resets the zoom, and saves the diagram as multiple images of width < MaxExportWidth.
+   * Scrolls diagram to top left, resets the zoom, and saves the full diagram as a single image.
+   * If the layout exceeds safe export bounds, the image is scaled down to fit.
    */
   static exportImage = () => {
     const container = this.scrollContainerRef.current;
+    const stage = this.stageRef.current;
+    if (!stage) {
+      return;
+    }
+
+    const previousStageWidth = stage.width();
+    const previousStageHeight = stage.height();
+
+    const finalizeStage = (bounds: { x: number; y: number; width: number; height: number }) => {
+      stage.width(previousStageWidth);
+      stage.height(previousStageHeight);
+      Layout.fitStageToBounds(bounds);
+    };
+
     container?.scrollTo({ left: 0, top: 0 });
     Layout.handleScrollPosition(0, 0);
-    this.stageRef.current?.scale({ x: 1, y: 1 });
-    const height = Layout.height();
-    const width = Layout.width();
-    const horizontalImages = Math.ceil(width / Config.MaxExportWidth);
-    const verticalImages = Math.ceil(height / Config.MaxExportHeight);
-    const download_images = () => {
-      const download_next = (n: number) => {
-        if (n >= horizontalImages * verticalImages) {
-          return;
-        }
-        const x = n % horizontalImages;
-        const y = Math.floor(n / horizontalImages);
-        const a = document.createElement('a');
-        a.style.display = 'none';
-        a.href =
-          this.stageRef.current?.toDataURL({
-            x: x * Config.MaxExportWidth + Layout.invisiblePaddingHorizontal,
-            y: y * Config.MaxExportHeight + Layout.invisiblePaddingVertical,
-            width: Math.min(width - x * Config.MaxExportWidth, Config.MaxExportWidth),
-            height: Math.min(height - y * Config.MaxExportHeight, Config.MaxExportHeight),
-            mimeType: 'image/jpeg'
-          }) ?? '';
+    stage.scale({ x: 1, y: 1 });
+    stage.position({ x: 0, y: 0 });
 
-        a.download = `diagram_${x}_${y}.jpg`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(function () {
-          download_next(n + 1);
-        }, 1000);
-      };
-      // Initiate the first download.
-      download_next(0);
+    const bounds = Layout.getExportBounds();
+    const exportPadding = Math.max(Config.CanvasPaddingX, Config.CanvasPaddingY);
+    const exportScale = Layout.getExportScale(bounds.width, bounds.height, exportPadding);
+
+    stage.width(Math.max(previousStageWidth, Math.ceil(bounds.x + bounds.width)));
+    stage.height(Math.max(previousStageHeight, Math.ceil(bounds.y + bounds.height)));
+    stage.batchDraw();
+
+    const rawImageUrl = stage.toDataURL({
+      x: bounds.x,
+      y: bounds.y,
+      width: bounds.width,
+      height: bounds.height,
+      pixelRatio: exportScale,
+      mimeType: 'image/png'
+    });
+
+    const image = new window.Image();
+    image.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = image.width + exportPadding * 2;
+      canvas.height = image.height + exportPadding * 2;
+      const context = canvas.getContext('2d');
+
+      if (!context) {
+        finalizeStage(bounds);
+        return;
+      }
+
+      context.fillStyle = defaultBackgroundColor();
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(image, exportPadding, exportPadding);
+
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = canvas.toDataURL('image/jpeg');
+      a.download = 'diagram.jpg';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      finalizeStage(bounds);
     };
-    download_images();
+    image.onerror = () => {
+      finalizeStage(bounds);
+    };
+    image.src = rawImageUrl;
   };
 
   /**
@@ -544,8 +643,8 @@ export class Layout {
       const direction =
         typeof event != 'boolean' ? (event.evt.deltaY > 0 ? -1 : 1) : event ? 1 : -1;
 
-      // Check if the zoom limits have been reached
-      if ((direction > 0 && oldScale < 3) || (direction < 0 && oldScale > 0.4)) {
+      // Keep the zoom-in ceiling, but allow unlimited zooming out.
+      if (direction < 0 || oldScale < 3) {
         const newScale =
           direction > 0
             ? oldScale * Layout.scaleFactor ** multiplier
@@ -609,12 +708,16 @@ export class Layout {
                     key={Layout.key++}
                     listening={false}
                   />
-                  {Layout.levels.map(level => level.draw())}
-                  {CseMachine.getControlStash() && Layout.controlComponent.draw()}
-                  {CseMachine.getControlStash() && Layout.stashComponent.draw()}
+                  <KonvaGroup ref={Layout.contentGroupRef}>
+                    {Layout.levels.map(level => level.draw())}
+                    {CseMachine.getControlStash() && Layout.controlComponent.draw()}
+                    {CseMachine.getControlStash() && Layout.stashComponent.draw()}
+                  </KonvaGroup>
                 </KonvaLayer>
                 <KonvaLayer ref={CseAnimation.layerRef} listening={false}>
-                  {CseMachine.getControlStash() && CseAnimation.animations.map(c => c.draw())}
+                  <KonvaGroup ref={Layout.animationGroupRef}>
+                    {CseMachine.getControlStash() && CseAnimation.animations.map(c => c.draw())}
+                  </KonvaGroup>
                 </KonvaLayer>
               </KonvaStage>
             </div>
