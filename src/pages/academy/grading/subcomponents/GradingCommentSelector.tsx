@@ -1,11 +1,12 @@
-import { H5, NonIdealState, Spinner } from '@blueprintjs/core';
+import { Checkbox, H5, NonIdealState, Spinner } from '@blueprintjs/core';
 import React from 'react';
 import styles from 'src/styles/GradingCommentSelector.module.scss';
 
 type Props = {
   comments: string[];
   isLoading: boolean;
-  onSelect: (comment: string) => void;
+  selectedIndices: number[];
+  onToggle: (index: number) => void;
 };
 
 const GradingCommentSelector: React.FC<Props> = props => {
@@ -17,24 +18,31 @@ const GradingCommentSelector: React.FC<Props> = props => {
         <NonIdealState icon={<Spinner />} />
       ) : (
         <div>
-          {' '}
           {props.comments.length > 0 ? (
-            props.comments.map((el, index) => {
+            props.comments.map((comment, index) => {
+              const isSelected = props.selectedIndices.includes(index);
+
               return (
-                <button
+                <div
                   key={index}
-                  className={styles['grading-comment-selector-item']}
-                  onClick={() => {
-                    props.onSelect(el);
-                  }}
+                  className={`${styles['grading-comment-selector-item']} ${isSelected ? styles['selected'] : ''}`}
                 >
-                  {el}
-                </button>
+                  <div className={styles['comment-header']}>
+                    <Checkbox
+                      checked={isSelected}
+                      onChange={() => props.onToggle(index)}
+                      className={styles['comment-checkbox']}
+                    />
+                    <div className={styles['comment-text']} onClick={() => props.onToggle(index)}>
+                      {comment}
+                    </div>
+                  </div>
+                </div>
               );
             })
           ) : (
             <span>No Comments Generated</span>
-          )}{' '}
+          )}
         </div>
       )}
     </div>

@@ -69,6 +69,7 @@ export type AssessmentOverview = {
   hasVotingFeatures: boolean;
   hasTokenCounter?: boolean;
   isVotingPublished?: boolean;
+  isLlmGraded?: boolean;
   maxXp: number;
   earlySubmissionXp: number;
   number?: string; // For mission control
@@ -83,6 +84,13 @@ export type AssessmentOverview = {
   xp: number;
   maxTeamSize: number; // For team assessment
   hoursBeforeEarlyXpDecay: number;
+  // For llm token tracking
+  llmInputCost?: number;
+  llmOutputCost?: number;
+  llmTotalInputTokens?: number;
+  llmTotalOutputTokens?: number;
+  llmTotalCachedTokens?: number;
+  llmTotalCost?: string | number;
 };
 
 /*

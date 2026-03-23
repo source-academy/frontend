@@ -21,6 +21,7 @@ import DeleteCell from './subcomponents/GroundControlDeleteCell';
 import Dropzone from './subcomponents/GroundControlDropzone';
 import EditCell from './subcomponents/GroundControlEditCell';
 import EditTeamSizeCell from './subcomponents/GroundControlEditTeamSizeCell';
+import LLMStatsCell from './subcomponents/GroundControlLLMStatsCell';
 import PublishCell from './subcomponents/GroundControlPublishCell';
 import ReleaseGradingCell from './subcomponents/GroundControlReleaseGradingCell';
 
@@ -156,6 +157,7 @@ const GroundControl: React.FC<Props> = props => {
               handleConfigureAssessment={props.handleConfigureAssessment}
               handleAssignEntriesForVoting={props.handleAssignEntriesForVoting}
             />
+            <LLMStatsCell data={data} />
           </>
         );
       },

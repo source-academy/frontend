@@ -11,7 +11,7 @@ import {
   Pre
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
 import { useDispatch } from 'react-redux';
 import { AutogradingResult, LLMPrompt } from 'src/commons/assessment/AssessmentTypes';
@@ -21,8 +21,7 @@ import SessionActions from '../../../../commons/application/actions/SessionActio
 import ControlButton from '../../../../commons/ControlButton';
 import Markdown from '../../../../commons/Markdown';
 import { Prompt } from '../../../../commons/ReactRouterPrompt';
-import { postGenerateComments } from '../../../../commons/sagas/RequestsSaga';
-import { saveFinalComment } from '../../../../commons/sagas/RequestsSaga';
+import { postGenerateComments, saveChosenComments } from '../../../../commons/sagas/RequestsSaga';
 import { getPrettyDate } from '../../../../commons/utils/DateHelper';
 import { showSimpleConfirmDialog } from '../../../../commons/utils/DialogHelper';
 import {
@@ -31,6 +30,7 @@ import {
 } from '../../../../commons/utils/notifications/NotificationsHelper';
 import { convertParamToInt } from '../../../../commons/utils/ParamParseHelper';
 import GradingCommentSelector from './GradingCommentSelector';
+import LLMFeedbackButton from './LLMFeedbackButton';
 
 type GradingSaveFunction = (
   submissionId: number,
@@ -43,6 +43,7 @@ type Props = {
   prompts: LLMPrompt[];
   answer_id: number;
   solution: number | string | null;
+  assessmentId: number;
   questionId: number;
   submissionId: number;
   initialXp: number;
@@ -61,10 +62,13 @@ type Props = {
 };
 
 const gradingEditorButtonClass = 'grading-editor-button';
+const EMPTY_SELECTION_SAVE_KEY = JSON.stringify({ selected_indices: [], edits: {} });
 
 const GradingEditor: React.FC<Props> = props => {
   const dispatch = useDispatch();
   const tokens = useTokens();
+  const lastSavedSelectionKeyRef = useRef<string>(EMPTY_SELECTION_SAVE_KEY);
+  const saveInFlightRef = useRef<boolean>(false);
   const { handleGradingSave, handleGradingSaveAndContinue, handleReautogradeAnswer } = useMemo(
     () =>
       ({
@@ -109,41 +113,190 @@ const GradingEditor: React.FC<Props> = props => {
    * appear although there exist unsaved changes
    */
   const [currentlySaving, setCurrentlySaving] = useState(false);
+  const [isSaveInFlight, setIsSaveInFlight] = useState(false);
 
   useEffect(() => {
     makeInitialState();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.submissionId, props.questionId]);
 
-  const getCommentSuggestions = async () => {
-    const resp = await postGenerateComments(tokens, props.answer_id);
-    return resp;
+  // Unlock save controls once Redux props refresh after a save cycle.
+  useEffect(() => {
+    saveInFlightRef.current = false;
+    setIsSaveInFlight(false);
+  }, [props.comments, props.xpAdjustment, props.gradedAt, props.submissionId, props.questionId]);
+
+  // Invisible delimiters used internally to preserve per-comment editing state
+  // without showing any marker text in the editor.
+  const COMMENT_SEPARATOR = '\n\u2063\u2063\n';
+  const SECTION_MARKER = '\n\u2064\u2064\n';
+
+  /**
+   * Splits the editor value into the user's freeform text (above the marker)
+   * and the generated-comments block (below the marker).
+   */
+  const splitEditor = (value: string): { userText: string; commentsBlock: string } => {
+    const markerIdx = value.indexOf(SECTION_MARKER);
+    if (markerIdx === -1) {
+      return { userText: value, commentsBlock: '' };
+    }
+    return {
+      userText: value.slice(0, markerIdx),
+      commentsBlock: value.slice(markerIdx + SECTION_MARKER.length)
+    };
   };
 
-  const onSelectGeneratedComments = (comment: string) => {
-    if (!selectedSuggestions.includes(comment)) {
-      setSelectedSuggestions([comment, ...selectedSuggestions]);
+  /**
+   * Joins the user freeform text and the generated-comments block back together.
+   * If there are no selected comments the marker is omitted so the editor stays clean.
+   */
+  const joinEditor = (userText: string, commentsBlock: string): string => {
+    if (!commentsBlock) return userText;
+    return userText + SECTION_MARKER + commentsBlock;
+  };
+
+  const buildCommentsBlock = (indices: number[], texts: Record<number, string>) => {
+    return [...indices]
+      .sort((a, b) => a - b)
+      .map(i => texts[i])
+      .filter(Boolean)
+      .join(COMMENT_SEPARATOR);
+  };
+
+  /**
+   * Parses the current comments block back into per-comment texts so that
+   * user edits made directly in the editor are preserved.
+   */
+  const syncCommentsBlock = (
+    commentsBlock: string,
+    indices: number[],
+    currentTexts: Record<number, string>
+  ): Record<number, string> => {
+    const sorted = [...indices].sort((a, b) => a - b);
+    if (sorted.length === 0) return { ...currentTexts };
+    const parts = commentsBlock.split(COMMENT_SEPARATOR);
+    const updated = { ...currentTexts };
+
+    sorted.forEach((idx, i) => {
+      if (i < parts.length) {
+        updated[idx] = parts[i];
+      }
+    });
+
+    // If user added extra separators, fold remainder into the last comment
+    if (parts.length > sorted.length && sorted.length > 0) {
+      const lastIdx = sorted[sorted.length - 1];
+      updated[lastIdx] = parts.slice(sorted.length - 1).join(COMMENT_SEPARATOR);
     }
 
-    setEditorValue(editorValue + comment);
+    return updated;
   };
 
-  const postSaveFinalComment = async (comment: string) => {
-    const resp = await saveFinalComment(tokens, props.answer_id, comment);
-    return resp;
+  const onToggleComment = (index: number) => {
+    const isDeselecting = selectedIndices.includes(index);
+    const { userText, commentsBlock } = splitEditor(editorValue);
+
+    // Sync current comments block back to per-comment texts
+    const synced =
+      selectedIndices.length > 0
+        ? syncCommentsBlock(commentsBlock, selectedIndices, commentTexts)
+        : { ...commentTexts };
+
+    if (isDeselecting) {
+      const newTexts = { ...synced };
+      const newIndices = selectedIndices.filter(i => i !== index);
+      setCommentTexts(newTexts);
+      setSelectedIndices(newIndices);
+      setEditorValue(joinEditor(userText, buildCommentsBlock(newIndices, newTexts)));
+    } else {
+      const newTexts = { ...synced };
+      if (newTexts[index] === undefined) {
+        newTexts[index] = suggestions[index];
+      }
+      const newIndices = [...selectedIndices, index];
+      setCommentTexts(newTexts);
+      setSelectedIndices(newIndices);
+      setEditorValue(joinEditor(userText, buildCommentsBlock(newIndices, newTexts)));
+    }
+  };
+
+  const stripInternalMarkers = (value: string): string => {
+    return value.replaceAll(SECTION_MARKER, '\n').replaceAll(COMMENT_SEPARATOR, '\n');
+  };
+
+  const postSaveChosenComments = async (): Promise<boolean> => {
+    // Only persist AI selections when this answer has generated suggestions.
+    if (!props.is_llm || suggestions.length === 0) {
+      return true;
+    }
+
+    const { commentsBlock } = splitEditor(editorValue);
+    const synced =
+      selectedIndices.length > 0
+        ? syncCommentsBlock(commentsBlock, selectedIndices, commentTexts)
+        : { ...commentTexts };
+
+    setCommentTexts(synced);
+
+    const sortedSelectedIndices = [...selectedIndices].sort((a, b) => a - b);
+
+    // Send only edits that differ from the original generated text.
+    const changedEdits: Record<number, string> = {};
+    sortedSelectedIndices.forEach(idx => {
+      const original = suggestions[idx] ?? '';
+      const edited = synced[idx] ?? original;
+      if (edited !== original) {
+        changedEdits[idx] = stripInternalMarkers(edited);
+      }
+    });
+
+    const currentSelectionKey = JSON.stringify({
+      selected_indices: sortedSelectedIndices,
+      edits: changedEdits
+    });
+
+    // Avoid rewriting identical selection state on repeated saves.
+    if (currentSelectionKey === lastSavedSelectionKeyRef.current) {
+      return true;
+    }
+
+    const resp = await saveChosenComments(
+      tokens,
+      props.answer_id,
+      sortedSelectedIndices,
+      changedEdits
+    );
+
+    if (!resp || !resp.ok) {
+      showWarningMessage('Failed to save selected AI comments. Please try again.');
+      return false;
+    }
+
+    lastSavedSelectionKeyRef.current = currentSelectionKey;
+
+    return true;
   };
 
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [selectedSuggestions, setSelectedSuggestions] = useState<string[]>([]);
+  const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
+  const [commentTexts, setCommentTexts] = useState<Record<number, string>>({});
   const [hasClickedGenerate, setHasClickedGenerate] = useState<boolean>(false);
   const [isViewLLMPromptOpen, setIsViewLLMPromptOpen] = useState<boolean>(false);
+  const [hasGenerated, setHasGenerated] = useState<boolean>(false); //If generate comments button has been pressed
 
   const makeInitialState = () => {
     setXpAdjustmentInput(props.xpAdjustment.toString());
     setEditorValue(props.comments);
     setSelectedTab('write');
     setCurrentlySaving(false);
-    setSuggestions(props.ai_comments || []);
+    //Load existing comments from props (the database)
+    const existingComments = props.ai_comments || [];
+    setSuggestions(existingComments);
+    //Lock the button if we already have comments for this submission
+    setHasGenerated(existingComments.length > 0);
+    setSelectedIndices([]);
+    setCommentTexts({});
+    lastSavedSelectionKeyRef.current = EMPTY_SELECTION_SAVE_KEY;
   };
 
   /**
@@ -165,17 +318,33 @@ const GradingEditor: React.FC<Props> = props => {
   const validateXpBeforeSave =
     (handleSaving: GradingSaveFunction): (() => void) =>
     async () => {
+      if (saveInFlightRef.current) {
+        return;
+      }
+
       const newXpAdjustmentInput = convertParamToInt(xpAdjustmentInput || undefined) || undefined;
       const xp = props.initialXp + (newXpAdjustmentInput || 0);
-      await postSaveFinalComment(editorValue);
+
       if (xp < 0 || xp > props.maxXp) {
         showWarningMessage(
           `XP ${xp.toString()} is out of bounds. Maximum xp is ${props.maxXp.toString()}.`
         );
         return;
-      } else {
-        handleSaving(props.submissionId, props.questionId, newXpAdjustmentInput, editorValue);
       }
+
+      const cleanedEditorValue = stripInternalMarkers(editorValue);
+
+      saveInFlightRef.current = true;
+      setIsSaveInFlight(true);
+
+      const hasSavedChosenComments = await postSaveChosenComments();
+      if (!hasSavedChosenComments) {
+        saveInFlightRef.current = false;
+        setIsSaveInFlight(false);
+        return;
+      }
+
+      handleSaving(props.submissionId, props.questionId, newXpAdjustmentInput, cleanedEditorValue);
     };
 
   /**
@@ -190,6 +359,20 @@ const GradingEditor: React.FC<Props> = props => {
   ) => {
     const callback = (): void => {
       handleGradingSaveAndContinue(submissionId, questionId, xpAdjustment, comments!);
+    };
+    setCurrentlySaving(true);
+    // TODO: Check (not sure how) if this results in a regression.
+    callback();
+  };
+
+  const onClickSaveChanges: GradingSaveFunction = (
+    submissionId: number,
+    questionId: number,
+    xpAdjustment: number | undefined,
+    comments?: string
+  ) => {
+    const callback = (): void => {
+      handleGradingSave(submissionId, questionId, xpAdjustment, comments!);
     };
     setCurrentlySaving(true);
     // TODO: Check (not sure how) if this results in a regression.
@@ -272,16 +455,19 @@ const GradingEditor: React.FC<Props> = props => {
   const saveButtonOpts = {
     intent: hasUnsavedChanges || isNewQuestion ? Intent.WARNING : Intent.NONE,
     minimal: !hasUnsavedChanges && !isNewQuestion,
+    disabled: isSaveInFlight,
     className: gradingEditorButtonClass
   };
   const discardButtonOpts = {
     intent: hasUnsavedChanges ? Intent.DANGER : Intent.NONE,
     minimal: !hasUnsavedChanges,
+    disabled: isSaveInFlight,
     className: gradingEditorButtonClass
   };
   const saveAndContinueButtonOpts = {
     intent: hasUnsavedChanges || isNewQuestion ? Intent.SUCCESS : Intent.NONE,
     minimal: !hasUnsavedChanges && !isNewQuestion,
+    disabled: isSaveInFlight,
     className: gradingEditorButtonClass
   };
   const onTabChange = (tab: ReactMdeProps['selectedTab']) => setSelectedTab(tab);
@@ -291,6 +477,44 @@ const GradingEditor: React.FC<Props> = props => {
   const xpPlaceholder = `${props.initialXp > 0 ? '-' : ''}${props.initialXp} to ${
     props.maxXp - props.initialXp
   }`;
+
+  const handleGenerate = async (force: boolean = false) => {
+    if (force) {
+      const confirm = await showSimpleConfirmDialog({
+        contents: (
+          <>
+            <p>Are you sure? Doing so will result in the previous prompt results being lost.</p>
+            <p>
+              <b>Note: This will incur additional LLM token costs.</b>
+            </p>
+          </>
+        ),
+        positiveLabel: 'Re-generate',
+        positiveIntent: Intent.DANGER
+      });
+
+      if (!confirm) return;
+    }
+
+    setHasClickedGenerate(true);
+
+    try {
+      const resp = await postGenerateComments(tokens, props.answer_id, force);
+
+      if (resp && resp.comments) {
+        setSuggestions(resp.comments);
+        setHasGenerated(true);
+        setSelectedIndices([]);
+        setCommentTexts({});
+
+        showSuccessMessage(force ? 'Comments re-generated!' : 'Comments generated!');
+      }
+    } catch (error) {
+      showWarningMessage('Failed to generate comments. Please try again.');
+    } finally {
+      setHasClickedGenerate(false);
+    }
+  };
 
   return (
     <div className="GradingEditor">
@@ -354,7 +578,7 @@ const GradingEditor: React.FC<Props> = props => {
         </div>
       </div>
 
-      {props.is_llm && (
+      {props.is_llm && props.prompts && props.prompts.length > 0 && (
         <>
           <Dialog
             title="Full Composed LLM Prompt"
@@ -389,13 +613,13 @@ const GradingEditor: React.FC<Props> = props => {
           </Dialog>
           <div style={{ marginBottom: '10px' }}>
             <GradingCommentSelector
-              onSelect={onSelectGeneratedComments}
+              onToggle={onToggleComment}
               isLoading={hasClickedGenerate}
               comments={suggestions}
+              selectedIndices={selectedIndices}
             />
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
               <Button
-                style={{ marginRight: '1rem' }}
                 onClick={async () => {
                   setIsViewLLMPromptOpen(true);
                 }}
@@ -404,16 +628,19 @@ const GradingEditor: React.FC<Props> = props => {
               </Button>
 
               <Button
-                intent="primary"
-                onClick={async () => {
-                  setHasClickedGenerate(true);
-                  const resp = await getCommentSuggestions();
-                  setHasClickedGenerate(false);
-                  setSuggestions(resp ? resp.comments : []);
-                }}
+                intent={hasGenerated ? Intent.NONE : Intent.PRIMARY}
+                loading={hasClickedGenerate}
+                disabled={hasClickedGenerate}
+                onClick={() => handleGenerate(hasGenerated)}
               >
-                Generate Comments
+                {hasGenerated ? 'Re-generate Comments' : 'Generate Comments'}
               </Button>
+
+              <LLMFeedbackButton
+                tokens={tokens}
+                assessmentId={props.assessmentId}
+                questionId={props.questionId}
+              />
             </div>
           </div>
         </>
@@ -439,7 +666,7 @@ const GradingEditor: React.FC<Props> = props => {
             <ControlButton
               label="Save Changes"
               icon={IconNames.FLOPPY_DISK}
-              onClick={validateXpBeforeSave(handleGradingSave)}
+              onClick={validateXpBeforeSave(onClickSaveChanges)}
               options={saveButtonOpts}
             />
           </div>
