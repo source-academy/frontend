@@ -687,13 +687,9 @@ export class Layout {
    * @returns coordinate of cached position, or undefined if it doesn't exist
    */
   static getGhostFrameX(envId: string): number | undefined {
-    if (Layout.clearDeadFrames) {
-      return undefined;
-    }
     const cache = CseMachine.getMasterLayout();
     if (cache && cache.framesX.has(envId)) {
       const fixedX = cache.framesX.get(envId)!;
-      // add offset for control stash and center alignment
       let offset: number = 0;
       offset += CseMachine.getControlStash()
         ? ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth
@@ -711,10 +707,7 @@ export class Layout {
    * @param envId id of current component in the environment
    * @returns coordinate of cached position, or undefined if it doesn't exist
    */
-  static getGhostFrameY(envId: string): number | undefined { // added template
-    if (Layout.clearDeadFrames) {
-      return undefined;
-    }
+  static getGhostFrameY(envId: string): number | undefined {
     const cache = CseMachine.getMasterLayout();
     if (cache && cache.framesY.has(envId)) {
       const fixedY = cache.framesY.get(envId)!;
@@ -733,10 +726,10 @@ export class Layout {
   }
 
   /**
-   * Reassign x coordinate of every frame to their predetermined position by calling getGhostFrameX.
+   * Reassign x coordinate of every frame to their predetermined position
    */
   static applyFixedPositions() {
-    if (Layout.clearDeadFrames || !CseMachine.getMasterLayout()) {
+    if (!CseMachine.getMasterLayout()) { // shoudn't happen since getLayoutPositions is called before, but just in case
       return;
     }
     const cache = CseMachine.getMasterLayout()!; // getLayoutPositions() must have been called before
@@ -764,6 +757,35 @@ export class Layout {
           const fixedWidth = Layout.getGhostFrameWidth(id)!;
           frame.reassignWidth(fixedWidth);
         }
+      });
+    });
+  }
+
+  static applyCenterAlignment() { // don't have usage yet
+    console.log('applying center alignment');
+    if (!CseMachine.getMasterLayout()) {
+      return;
+    }
+    const cache = CseMachine.getMasterLayout()!; // getLayoutPositions() must have been called before
+    Layout.levels.forEach(level => {
+      level.frames.forEach(frame => {
+        const id = frame.environment.id;
+
+        // const fixedX = Layout.getGhostFrameX(id)!;
+        let fixedX = cache.framesX.get(id)!;
+        // add offset for control stash and center alignment
+        let offset: number = 0;
+        offset += CseMachine.getControlStash()
+          ? ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth
+          : 0;
+        offset += CseMachine.getCenterAlignment()
+          ? Math.floor((cache.largestWidth - cache.levelWidth.get(id)!) / 2)
+          : 0;
+        fixedX += offset;
+        frame.reassignCoordinatesX(fixedX);
+        frame.bindings.forEach(binding => {
+          binding.reassignCoordinates(fixedX);
+        });
       });
     });
   }

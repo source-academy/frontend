@@ -171,18 +171,17 @@ export default class CseMachine {
   }
 
   static redraw() {
+    // console.log('2. redrawing');
     if (CseMachine.environmentTree && CseMachine.control && CseMachine.stash) {
       // checks if the required diagram exists, and updates the dom node using setVis
-
       // if center alignment is toggled, change the alignment and redraw the diagram with new coordinates
       if (this.centerAlignmentToggled) {
+        // console.log('center alignment toggled');
         Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
         if (!CseMachine.getMasterLayout()) {
           CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
         }
-        if (CseMachine.getMasterLayout()) {
-          Layout.applyFixedPositions();
-        }
+        Layout.applyCenterAlignment();
         this.setVis(Layout.draw());
         this.centerAlignmentToggled = false;
       }
@@ -229,9 +228,11 @@ export default class CseMachine {
         this.setVis(Layout.currentDark);
       } else {
         Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
-        if (CseMachine.getMasterLayout()) {
-          Layout.applyFixedPositions();
+        if (!CseMachine.getMasterLayout()) {
+          CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
         }
+        Layout.applyFixedPositions();
+        // console.log('3. redraw: drawing with current layout');
         this.setVis(Layout.draw());
       }
       Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
