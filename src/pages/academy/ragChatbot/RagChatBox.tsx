@@ -1,8 +1,11 @@
 import { Button } from '@blueprintjs/core';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { Tokens } from 'src/commons/application/types/SessionTypes';
 import { useTokens } from 'src/commons/utils/Hooks';
 import { initRagChat, sendRagMessage } from 'src/features/ragChat/api';
+import ChatbotCodeSnippet from 'src/pages/sicp/subcomponents/chatbot/ChatbotCodeSnippet';
 import classes from 'src/styles/RagChatbot.module.scss';
 import { v4 as uuid } from 'uuid';
 
@@ -12,9 +15,78 @@ type ChatMessage = {
   content: string;
 };
 
+const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
+
+type RagMessageRendererProps = {
+  message: ChatMessage;
+  activeSnippetId: string;
+  setActiveSnippetId: (id: string) => void;
+};
+
+const RagMessageRenderer: React.FC<RagMessageRendererProps> = ({
+  message,
+  activeSnippetId,
+  setActiveSnippetId
+}) => {
+  const content = message.content;
+  const messageId = message.id;
+
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  let codeBlockIndex = 0;
+
+  // Reset regex state
+  codeBlockRegex.lastIndex = 0;
+
+  while ((match = codeBlockRegex.exec(content)) !== null) {
+    // Render text before this code block as markdown
+    if (match.index > lastIndex) {
+      const text = content.slice(lastIndex, match.index);
+      parts.push(
+        <ReactMarkdown key={`${messageId}-text-${lastIndex}`} remarkPlugins={[remarkGfm]}>
+          {text}
+        </ReactMarkdown>
+      );
+    }
+
+    const lang = match[1] || 'javascript';
+    const code = match[2];
+    const snippetId = `${messageId}-code-${codeBlockIndex}`;
+    codeBlockIndex++;
+
+    parts.push(
+      <ChatbotCodeSnippet
+        key={snippetId}
+        id={snippetId}
+        code={code}
+        activeSnippetId={activeSnippetId}
+        setActiveSnippet={setActiveSnippetId}
+        language={lang}
+      />
+    );
+
+    lastIndex = codeBlockRegex.lastIndex;
+  }
+
+  // Render remaining text as markdown
+  if (lastIndex < content.length) {
+    const text = content.slice(lastIndex);
+    parts.push(
+      <ReactMarkdown key={`${messageId}-text-end`} remarkPlugins={[remarkGfm]}>
+        {text}
+      </ReactMarkdown>
+    );
+  }
+
+  return <>{parts}</>;
+};
+
 type Props = {
   isExpanded: boolean;
   toggleExpanded: () => void;
+  activeSnippetId: string;
+  setActiveSnippetId: (id: string) => void;
 };
 
 const createInitialMessage = (): ChatMessage => ({
@@ -33,7 +105,7 @@ const scrollToBottom = (ref: React.RefObject<HTMLDivElement>) => {
   ref.current?.scrollTo({ top: ref.current?.scrollHeight });
 };
 
-const RagChatBox: React.FC<Props> = ({ isExpanded, toggleExpanded }) => {
+const RagChatBox: React.FC<Props> = ({ isExpanded, toggleExpanded, activeSnippetId, setActiveSnippetId }) => {
   const chatRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(() => [createInitialMessage()]);
@@ -121,17 +193,16 @@ const RagChatBox: React.FC<Props> = ({ isExpanded, toggleExpanded }) => {
       </div>
       <div className={classes['chat-message']} ref={chatRef}>
         {messages.map(message => (
-          <div
-            key={message.id}
-            className={classes[`${message.role}`]}
-            style={{ whiteSpace: 'pre-line' }}
-          >
-            {message.content.split('\n').map((line, i) => (
-              <React.Fragment key={i}>
-                {line}
-                <br />
-              </React.Fragment>
-            ))}
+          <div key={message.id} className={classes[`${message.role}`]}>
+            {message.role === 'assistant' ? (
+              <RagMessageRenderer
+                message={message}
+                activeSnippetId={activeSnippetId}
+                setActiveSnippetId={setActiveSnippetId}
+              />
+            ) : (
+              message.content
+            )}
           </div>
         ))}
         {isLoading && <p>loading...</p>}

@@ -43,10 +43,13 @@ const RagChatbot: React.FC = () => {
   const [isPop, setPop] = React.useState(false);
   const [isDivVisible, setIsDivVisible] = React.useState(false);
   const [tipsMessage, setTipsMessage] = React.useState('Click me for a chat!');
+  const [activeSnippetId, setActiveSnippetId] = React.useState('');
   const [isExpanded, setIsExpanded] = React.useState(false);
   const [position, setPosition] = React.useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = React.useState(false);
   const nodeRef = React.useRef<HTMLDivElement>(null);
+
+  const isSnippetOpen = activeSnippetId !== '';
 
   // Only show for logged-in users
   if (!isLoggedIn) {
@@ -101,7 +104,7 @@ const RagChatbot: React.FC = () => {
         onDrag={handleDrag}
         onStop={handleDragStop}
       >
-        <div ref={nodeRef} className={classes['bot-container']}>
+        <div ref={nodeRef} className={classes['bot-container']} style={{ display: isSnippetOpen ? 'none' : 'block' }}>
           <div className={classes['bot-area']}>
             {isDivVisible && (
               <div className={classes['tips-box']}>
@@ -131,7 +134,7 @@ const RagChatbot: React.FC = () => {
               }
             />
           </div>
-          {isPop && <RagChatBox isExpanded={isExpanded} toggleExpanded={toggleExpanded} />}
+          {isPop && <RagChatBox isExpanded={isExpanded} toggleExpanded={toggleExpanded} activeSnippetId={activeSnippetId} setActiveSnippetId={setActiveSnippetId} />}
         </div>
       </Draggable>
     </div>

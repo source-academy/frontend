@@ -11,8 +11,6 @@
   position: relative;
   width: 400px;
   height: 450px;
-  max-height: 80vh;
-  max-width: 100vw;
   border-radius: 8px;
   background-color: #f1f1f1;
   padding: 16px;
@@ -30,6 +28,20 @@
   max-width: 100vw;
   height: 80vh;
   max-height: 800px;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  flex-shrink: 0;
+}
+
+.chat-header-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
 }
 
 .expand-button {
@@ -55,7 +67,7 @@
   padding-right: 10px;
   bottom: 10px;
   right: 65px;
-  width: 180px;
+  width: 260px;
   height: auto;
   border: 1px solid black;
   background-color: #f1f1f1;
@@ -63,9 +75,12 @@
 }
 
 .tips-message {
-  padding: auto;
+  padding: 4px 8px;
+  margin: 0;
   font-size: 13px;
   text-align: right;
+  white-space: normal;
+  word-break: normal;
 }
 
 .bot-button {
@@ -140,6 +155,78 @@
   border-radius: 10px;
   display: block;
   margin-bottom: 10px;
+
+  p {
+    margin: 0 0 8px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  ul,
+  ol {
+    margin: 4px 0;
+    padding-left: 20px;
+  }
+
+  code {
+    background-color: rgba(0, 0, 0, 0.08);
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 13px;
+  }
+
+  pre {
+    margin: 8px 0;
+    border-radius: 6px;
+    overflow-x: auto;
+
+    code {
+      background: none;
+      padding: 0;
+    }
+  }
+
+  table {
+    border-collapse: collapse;
+    margin: 8px 0;
+    font-size: 14px;
+
+    th,
+    td {
+      border: 1px solid #ccc;
+      padding: 4px 8px;
+    }
+
+    th {
+      background-color: rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  blockquote {
+    margin: 8px 0;
+    padding-left: 12px;
+    border-left: 3px solid #999;
+    color: #555;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 8px 0 4px;
+    line-height: 1.3;
+  }
+
+  h1 {
+    font-size: 1.3em;
+  }
+  h2 {
+    font-size: 1.15em;
+  }
+  h3 {
+    font-size: 1.05em;
+  }
 }
 
 .button-container {
