@@ -51,6 +51,10 @@ export const request = async (
   opts: RequestOptions,
   rawUrl?: string
 ): Promise<Response | null> => {
+  if (Constants.forwardLoadBalancerCookies) {
+    // Always attach cookies to every API call
+    opts.withCredentials = true;
+  }
   const fetchOptions = generateApiCallHeadersAndFetchOptions(method, opts);
 
   try {

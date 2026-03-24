@@ -1,4 +1,4 @@
-import { Chapter } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
 
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {

@@ -1,5 +1,5 @@
 import { createContext, hasDeclaration } from 'js-slang';
-import { Variant } from 'js-slang/dist/types';
+import { Variant } from 'js-slang/dist/langs';
 import React from 'react';
 
 import { Documentation } from '../documentation/Documentation';

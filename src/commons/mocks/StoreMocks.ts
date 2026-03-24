@@ -9,6 +9,7 @@ import {
   defaultLanguageDirectory,
   defaultLeaderboard,
   defaultPlayground,
+  defaultPluginDirectory,
   defaultRouter,
   defaultSession,
   defaultSideContentManager,
@@ -38,7 +39,8 @@ export function mockInitialStore(
     fileSystem: defaultFileSystem,
     sideContent: defaultSideContentManager,
     vscode: defaultVscode,
-    languageDirectory: defaultLanguageDirectory
+    languageDirectory: defaultLanguageDirectory,
+    pluginDirectory: defaultPluginDirectory
   };
 
   const lodashMergeCustomizer = (objValue: any, srcValue: any) => {

@@ -101,7 +101,8 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
             action.payload.library.chapter,
             action.payload.library.external.symbols,
             workspaceLocation,
-            action.payload.library.variant
+            action.payload.library.variant,
+            action.payload.library.languageOptions
           ),
           globals: action.payload.library.globals,
           externalLibrary: action.payload.library.external.name
@@ -373,7 +374,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       debuggerContext.result = action.payload.result;
       debuggerContext.lastDebuggerResult = action.payload.lastDebuggerResult;
       debuggerContext.code = action.payload.code;
-      debuggerContext.context = action.payload.context;
+      debuggerContext.context = castDraft(action.payload.context);
       debuggerContext.workspaceLocation = action.payload.workspaceLocation;
     })
     .addCase(WorkspaceActions.toggleUsingUpload, (state, action) => {

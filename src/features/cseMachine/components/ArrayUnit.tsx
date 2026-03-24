@@ -64,6 +64,11 @@ export class ArrayUnit extends Visible {
     if (this.isDrawn()) return null;
     this._isDrawn = true;
 
+    const isLive = this.parent.isEnclosingFrameLive();
+    if (this.value instanceof PrimitiveValue) {
+      this.value.setFaded(!isLive || !this.parent.isReferenced());
+    } //this ensures that primitive values inside unreferenced arrays are also faded
+
     if (!(this.value instanceof PrimitiveValue)) {
       this.arrow = new ArrowFromArrayUnit(this).to(this.value);
     }
@@ -91,6 +96,11 @@ export class ArrayUnit extends Visible {
       visible: CseMachine.getPrintableMode()
     };
 
+    const strokeColor =
+      this.parent.isReferenced() && this.parent.isEnclosingFrameLive()
+        ? defaultStrokeColor()
+        : fadedStrokeColor();
+
     return (
       <React.Fragment key={Layout.key++}>
         <RoundedRect
@@ -99,7 +109,7 @@ export class ArrayUnit extends Visible {
           y={this.y()}
           width={this.width()}
           height={this.height()}
-          stroke={this.parent.isReferenced() ? defaultStrokeColor() : fadedStrokeColor()}
+          stroke={strokeColor}
           hitStrokeWidth={Config.DataHitStrokeWidth}
           fillEnabled={true}
           cornerRadius={cornerRadius}
@@ -111,6 +121,7 @@ export class ArrayUnit extends Visible {
           {...ShapeDefaultProps}
           {...indexProps}
           text={`${this.index}`}
+          stroke={strokeColor}
         />
         {this.value.draw()}
         {this.arrow?.draw()}

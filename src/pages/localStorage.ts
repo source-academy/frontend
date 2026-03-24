@@ -1,10 +1,11 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 import { StoriesAuthState } from 'src/features/stories/StoriesTypes';
 
 import { OverallState, SALanguage } from '../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../commons/application/types/ExternalTypes';
 import { SessionState } from '../commons/application/types/SessionTypes';
+import { FeatureFlagsState } from '../commons/featureFlags';
 import { showWarningMessage } from '../commons/utils/notifications/NotificationsHelper';
 import { EditorTabState } from '../commons/workspace/WorkspaceTypes';
 import { AchievementItem } from '../features/achievement/AchievementTypes';
@@ -21,6 +22,7 @@ export type NullableValue<T> = {
 export type SavedState = {
   session: Partial<SessionState>;
   achievements: AchievementItem[];
+  featureFlags: FeatureFlagsState['modifiedFlags'];
   playgroundIsFolderModeEnabled: boolean;
   playgroundActiveEditorTabIndex: NullableValue<number>;
   playgroundEditorTabs: EditorTabState[];
@@ -73,12 +75,15 @@ export const saveState = (state: OverallState) => {
         topContestLeaderboardDisplay: state.session.topContestLeaderboardDisplay,
         enableSourcecast: state.session.enableSourcecast,
         enableStories: state.session.enableStories,
+        enableLlmGrading: state.session.enableLlmGrading,
+        llmCourseLevelPrompt: state.session.llmCourseLevelPrompt,
         moduleHelpText: state.session.moduleHelpText,
         assetsPrefix: state.session.assetsPrefix,
         assessmentConfigurations: state.session.assessmentConfigurations,
         githubAccessToken: state.session.githubAccessToken
       },
       achievements: state.achievement.achievements,
+      featureFlags: state.featureFlags.modifiedFlags,
       playgroundIsFolderModeEnabled: state.workspaces.playground.isFolderModeEnabled,
       playgroundActiveEditorTabIndex: {
         value: state.workspaces.playground.activeEditorTabIndex

@@ -1,10 +1,10 @@
 import { flagConductorEnable } from '../../features/conductor/flagConductorEnable';
-import { flagConductorEvaluatorUrl } from '../../features/conductor/flagConductorEvaluatorUrl';
-import { flagLanguageDirectoryEnable } from '../../features/languageDirectory/flagLanguageDirectory';
+import { flagDirectoryLanguageUrl } from '../../features/directory/flagDirectoryLanguageUrl';
+import { flagDirectoryPluginUrl } from '../../features/directory/flagDirectoryPluginUrl';
 import { FeatureFlag } from './FeatureFlag';
 
 export const publicFlags: FeatureFlag<any>[] = [
   flagConductorEnable,
-  flagConductorEvaluatorUrl,
-  flagLanguageDirectoryEnable
+  flagDirectoryLanguageUrl,
+  flagDirectoryPluginUrl
 ];

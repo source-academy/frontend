@@ -1,4 +1,4 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { cloneDeep } from 'lodash';
 import CommonsActions from 'src/commons/application/actions/CommonsActions';
 import InterpreterActions from 'src/commons/application/actions/InterpreterActions';

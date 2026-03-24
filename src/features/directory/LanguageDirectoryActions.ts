@@ -1,10 +1,12 @@
-import { createActions } from 'src/commons/redux/utils';
+import { ILanguageDefinition } from '@sourceacademy/language-directory/dist/types';
 
-const LanguageDirectoryActions = createActions('conductor/languageDirectory', {
+import { createActions } from '../../commons/redux/utils';
+
+const LanguageDirectoryActions = createActions('directory/languages', {
   /** Fetch languages (saga) */
   fetchLanguages: null,
   /** Set languages list */
-  setLanguages: (languages: any[]) => ({ languages }),
+  setLanguages: (languages: ILanguageDefinition[]) => ({ languages }),
   /** Set selected language; evaluatorId optional (defaults to first available) */
   setSelectedLanguage: (languageId: string, evaluatorId?: string) => ({ languageId, evaluatorId }),
   /** Set selected evaluator explicitly */

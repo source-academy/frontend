@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { Chapter } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
 import { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
 import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';

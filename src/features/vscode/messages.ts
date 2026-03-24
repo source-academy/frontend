@@ -3,7 +3,7 @@
 // Ideally it is split into multiple files, but for ease of copying, it is kept as one file.
 
 /** A subset of the WorkspaceLocation type found in source-academy/frontend */
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 
 const VscWorkspaceLocationArray = ['assessment', 'playground'];
 export const isVscWorkspaceLocation = (s: any) => VscWorkspaceLocationArray.includes(s);
