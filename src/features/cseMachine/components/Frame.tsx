@@ -59,6 +59,7 @@ export class Frame extends Visible implements IHoverable {
   readonly bindings: Binding[] = [];
   /** name of this frame to display */
   private _name!: Text; // removed readonly to allow reassignment for fixed layout
+  private readonly rectRef = React.createRef<any>();
   /** the level in which this frame resides */
   readonly level: Level | undefined;
   /** environment associated with this frame */
@@ -260,6 +261,22 @@ export class Frame extends Visible implements IHoverable {
 
   onMouseLeave = () => {};
 
+  setArrowSourceHighlightedStyle(): void {
+    this.rectRef.current?.stroke(Config.HoverColor);
+    this.name.setArrowSourceHighlightedStyle();
+  }
+
+  setArrowSourceNormalStyle(): void {
+    this.rectRef.current?.stroke(
+      CseMachine.getCurrentEnvId() === this.environment?.id
+        ? defaultActiveColor()
+        : this.isLive
+          ? defaultStrokeColor()
+          : fadedStrokeColor()
+    );
+    this.name.setArrowSourceNormalStyle();
+  }
+
   draw(): React.ReactNode {
     return (
       <Group ref={this.ref} key={Layout.key++}>
@@ -267,6 +284,7 @@ export class Frame extends Visible implements IHoverable {
 
         <Rect
           {...ShapeDefaultProps}
+          ref={this.rectRef}
           x={this.x()}
           y={this.y()}
           width={this.width()}

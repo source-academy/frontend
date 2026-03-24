@@ -31,5 +31,7 @@ export abstract class Visible implements IVisible {
     this._isDrawn = false;
   }
   public ref: RefObject<any> = React.createRef();
+  setArrowSourceHighlightedStyle(): void {}
+  setArrowSourceNormalStyle(): void {}
   abstract draw(key?: number): React.ReactNode;
 }

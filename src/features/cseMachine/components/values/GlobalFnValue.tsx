@@ -142,6 +142,23 @@ export class GlobalFnValue extends Value implements IHoverable {
     currentTarget.getLayer()?.batchDraw();
   };
 
+  setArrowSourceHighlightedStyle(): void {
+    const shapes = this.ref.current?.getChildren?.() ?? [];
+    shapes.forEach((shape: any) => {
+      if (shape.attrs.stroke) shape.stroke(Config.HoverColor);
+      if (shape.attrs.fill) shape.fill(Config.HoverColor);
+    });
+  }
+
+  setArrowSourceNormalStyle(): void {
+    const strokeColor = this.isReferenced() ? defaultStrokeColor() : fadedStrokeColor();
+    const shapes = this.ref.current?.getChildren?.() ?? [];
+    shapes.forEach((shape: any) => {
+      if (shape.attrs.stroke) shape.stroke(strokeColor);
+      if (shape.attrs.fill) shape.fill(strokeColor);
+    });
+  }
+
   draw(): React.ReactNode {
     this._isDrawn = true;
     if (Layout.globalEnvNode.frame) {
