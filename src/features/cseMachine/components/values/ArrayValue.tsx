@@ -47,8 +47,8 @@ export class ArrayValue extends Value implements IHoverable {
       this.streamId = parseInt(streamIdString);
       const streamPairCount = Layout.streamLengthMap.get(streamIdString);
       if (streamPairCount != undefined) {
-        Layout.streamLengthMap.set(streamIdString, streamPairCount + 1);
         this.arrayIdWithinStream = streamPairCount;
+        Layout.streamLengthMap.set(streamIdString, streamPairCount + 1);
       } else {
         Layout.streamLengthMap.set(streamIdString, 1);
         this.arrayIdWithinStream = 0;
@@ -62,16 +62,33 @@ export class ArrayValue extends Value implements IHoverable {
     }
       
     if (parentCount != undefined) {
-      if (Layout.streamCoords[this.streamId][parentCount] == undefined) {
-        Layout.streamCoords[this.streamId][parentCount] = 1;
-      } else {
-        Layout.streamCoords[this.streamId][parentCount]++;
+      // streamHeights[0] is always initialised to 0, so this shouldnt ever cause 
+      // an arrayindexexception
+      if (Layout.streamHeights[this.streamId] == undefined) {
+        Layout.streamHeights[this.streamId] = Layout.streamHeights[this.streamId - 1] + 1;
       }
 
-      this.visualisationY = Layout.streamCoords[this.streamId][parentCount];
-      this.visualisationX = this.arrayIdWithinStream;
-      console.log("My x is: " + this.visualisationX);
+      if (typeof data[1] == "function") {
+        if (Layout.streamCoords[this.streamId][parentCount] == undefined) {
+          Layout.streamCoords[this.streamId][parentCount] = Layout.streamHeights[this.streamId];
+        } else {
+          Layout.streamCoords[this.streamId][parentCount]++;
+        }
+
+        this.visualisationY = Layout.streamCoords[this.streamId][parentCount];
+        this.visualisationX = parentCount;
+      } else {
+        this.visualisationY = Layout.streamHeights[this.streamId];
+        this.visualisationX = this.arrayIdWithinStream;
+      }
+
+
+
+
+      console.log("My x is: " + this.visualisationX + "stream" + this.streamId);
       console.log("My y is: " + this.visualisationY);
+    } else {
+
     }
 
 

@@ -124,6 +124,7 @@ export class Layout {
   static streamLengthMap: Map<string, number> = new Map();
   static pendingFnLink: boolean = false;
   static streamCoords: number[][] = [];
+  static streamHeights: number[] = [0];
 
   static updateDimensions(width: number, height: number) {
     // update the size of the scroll container and stage given the width and height of the sidebar content.
@@ -543,6 +544,8 @@ export class Layout {
 
   static draw(): React.ReactNode {
     Layout.streamLengthMap.clear();
+    Layout.streamCoords = [];
+    Layout.streamHeights = [0];
 
     const pairValues: Value[] = Array.from(Layout.values.values()).filter(v => {
       try {
