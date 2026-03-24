@@ -170,20 +170,12 @@ export class FnValue extends Value implements IHoverable {
   };
 
   setArrowSourceHighlightedStyle(): void {
-    const shapes = this.ref.current?.getChildren?.() ?? [];
-    shapes.forEach((shape: any) => {
-      if (shape.attrs.stroke) shape.stroke(Config.HoverColor);
-      if (shape.attrs.fill) shape.fill(Config.HoverColor);
-    });
+    this.setShapesStyle(Config.HoverColor);
   }
 
   setArrowSourceNormalStyle(): void {
     const strokeColor = this.isLive() ? defaultStrokeColor() : fadedStrokeColor();
-    const shapes = this.ref.current?.getChildren?.() ?? [];
-    shapes.forEach((shape: any) => {
-      if (shape.attrs.stroke) shape.stroke(strokeColor);
-      if (shape.attrs.fill) shape.fill(strokeColor);
-    });
+    this.setShapesStyle(strokeColor);
   }
 
   isLive(): boolean {

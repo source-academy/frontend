@@ -30,7 +30,20 @@ export abstract class Visible implements IVisible {
   reset(): void {
     this._isDrawn = false;
   }
+  setShapesStyle(color: string) {
+    const shapes = this.ref.current?.getChildren?.() ?? [];
+    shapes.forEach((shape: any) => {
+      if (shape.attrs.stroke) shape.stroke(color);
+      if (shape.attrs.fill) shape.fill(color);
+    });
+  }
   public ref: RefObject<any> = React.createRef();
+  protected tag = this.ref.current?.getChildren?.()[0];
+  protected secItem = this.ref.current?.getChildren?.()[1];
+  resetStyle(): void {
+    this.tag = this.ref.current?.getChildren?.()[0];
+    this.secItem = this.ref.current?.getChildren?.()[1];
+  }
   setArrowSourceHighlightedStyle(): void {}
   setArrowSourceNormalStyle(): void {}
   abstract draw(key?: number): React.ReactNode;

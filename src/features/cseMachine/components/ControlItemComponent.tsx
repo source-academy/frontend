@@ -93,17 +93,15 @@ export class ControlItemComponent extends Visible implements IHoverable {
   };
 
   setArrowSourceHighlightedStyle(): void {
-    const tag = this.ref.current?.getChildren?.()[0];
-    const text = this.ref.current?.getChildren?.()[1];
-    tag?.stroke(Config.HoverColor);
-    text?.fill(Config.HoverColor);
+    this.resetStyle();
+    this.tag?.stroke(Config.HoverColor);
+    this.secItem?.fill(Config.HoverColor);
   }
 
   setArrowSourceNormalStyle(): void {
-    const tag = this.ref.current?.getChildren?.()[0];
-    const text = this.ref.current?.getChildren?.()[1];
-    tag?.stroke(this.topItem ? defaultActiveColor() : defaultStrokeColor());
-    text?.fill(defaultTextColor());
+    this.resetStyle();
+    this.tag?.stroke(this.topItem ? defaultActiveColor() : defaultStrokeColor());
+    this.secItem?.fill(defaultTextColor());
   }
 
   destroy() {
