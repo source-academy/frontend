@@ -4,15 +4,13 @@ export CI=true
 
 main() {
     stash_output=$(git stash push --keep-index --message precommit 2>&1)
-    echo_cyan "> git stash push --keep-index --message precommit"
-    if [[ ! -z "${stash_output}" ]]; then
-        echo "${stash_output}" | sed 's/^/  /'
-    fi
+    echo_cyan "Stashing unstaged changes (if any)"
     
     # Check if a stash was actually created
     stash_created=false
     if [[ "${stash_output}" == *"Saved working directory"* ]]; then
         stash_created=true
+        echo "  Unstaged changes have been stashed with the message 'precommit'."
         echo "  If you cancel this pre-push hook, use \`git stash pop\` to retrieve your"
         echo "  unstaged changes."
     fi
