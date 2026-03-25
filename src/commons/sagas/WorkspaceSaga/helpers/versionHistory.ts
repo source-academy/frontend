@@ -170,6 +170,8 @@ export function* restoreVersionSaga(
   }
 
   // Auto-save the restored code
+  yield put(WorkspaceActions.updateHasUnsavedChanges(workspaceLocation, true));
+  yield put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saving'));
   const newVersionCreated: boolean = yield call(performAutoSave, workspaceLocation);
 
   if (!newVersionCreated) {
