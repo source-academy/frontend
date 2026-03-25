@@ -7,6 +7,7 @@ import { showWarningMessage } from '../../../utils/notifications/NotificationsHe
 import WorkspaceActions from '../../../workspace/WorkspaceActions';
 import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import { getVersionHistory, updateVersionName } from '../../RequestsSaga';
+import { SagaIterator } from 'redux-saga';
 
 /**
  * Helper to get the current question ID for assessment or grading workspace.
@@ -121,7 +122,7 @@ export function* nameVersionSaga(action: ReturnType<typeof WorkspaceActions.name
  */
 export function* restoreVersionSaga(
   action: ReturnType<typeof WorkspaceActions.restoreVersion>
-): any {
+): SagaIterator {
   const { workspaceLocation, versionId } = action.payload;
 
   if (workspaceLocation !== 'assessment') {
@@ -194,7 +195,7 @@ export function* restoreVersionSaga(
  * Performs auto-save by submitting the answer to the backend.
  * The backend handles saving as a version on submission.
  */
-function* performAutoSave(workspaceLocation: WorkspaceLocation): any {
+function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
   // Only assessment workspaces auto-save
   if (workspaceLocation !== 'assessment') {
     return;
@@ -268,7 +269,7 @@ export function* watchAutoSave() {
     WorkspaceActions.updateEditorValue.type,
     function* (action: ReturnType<typeof WorkspaceActions.updateEditorValue>) {
       const { workspaceLocation } = action.payload;
-      yield* performAutoSave(workspaceLocation);
+      yield call(performAutoSave, workspaceLocation);
     }
   );
 }
