@@ -1872,14 +1872,16 @@ export const getVersionHistory = async (
     return null;
   }
   const versions = await resp.json();
-  return versions.map((v: any) => ({
-    id: String(v.id),
-    name: v.name,
-    code: v.version?.code,
-    timestamp: new Date(
-      /[Z+]/.test(v.inserted_at.slice(19)) ? v.inserted_at : v.inserted_at + 'Z'
-    ).getTime()
-  }));
+  return versions
+    .filter((v: any) => typeof v.version?.code === 'string')
+    .map((v: any) => ({
+      id: String(v.id),
+      name: v.name,
+      code: v.version.code,
+      timestamp: new Date(
+        /[Z+]/.test(v.inserted_at.slice(19)) ? v.inserted_at : v.inserted_at + 'Z'
+      ).getTime()
+    }));
 };
 
 /**
