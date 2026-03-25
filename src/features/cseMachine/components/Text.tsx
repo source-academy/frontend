@@ -26,6 +26,7 @@ export interface TextOptions {
   isStringIdentifiable: boolean;
   faded: boolean;
   hidden: boolean;
+  value: number;
 }
 
 export const defaultOptions: TextOptions = {
@@ -36,7 +37,8 @@ export const defaultOptions: TextOptions = {
   fontVariant: Config.FontVariant, // can be normal or small-caps. Default is normal
   isStringIdentifiable: false, // if true, contain strings within double quotation marks "". Default is false
   faded: false, // if true, draws text with a lighter shade
-  hidden: false // if true, hides the text when only when first drawn
+  hidden: false, // if true, hides the text when only when first drawn
+  value: 0 // if > 0, add colon or equal sign to the end of the text (given from binding)
 };
 
 /** this class encapsulates a string to be drawn onto the canvas */
@@ -60,7 +62,7 @@ export class Text extends Visible implements IHoverable {
     super();
     this.options = { ...this.options, ...options };
 
-    const { fontSize, fontStyle, fontFamily, maxWidth, isStringIdentifiable } = this.options;
+    const { fontSize, fontStyle, fontFamily, maxWidth, isStringIdentifiable, value } = this.options;
 
     this.fullStr = this.partialStr = isSourceObject(data)
       ? data.toReplString()
@@ -72,12 +74,21 @@ export class Text extends Visible implements IHoverable {
     if (widthOf(this.partialStr) > maxWidth) {
       let truncatedText: string = Config.Ellipsis;
       let i = 0;
-      while (widthOf(this.partialStr.substring(0, i) + Config.Ellipsis) < maxWidth) {
-        truncatedText = this.partialStr.substring(0, i++) + Config.Ellipsis;
+      if (value > 0) {
+        const colon: string = value === 1 ? Config.ConstantColon: Config.VariableColon ;
+        while (widthOf(this.partialStr.substring(0, i) + Config.Ellipsis + colon) < maxWidth) {
+          truncatedText = this.partialStr.substring(0, i++) + Config.Ellipsis + colon;
+          }
+      } else {
+        while (widthOf(this.partialStr.substring(0, i) + Config.Ellipsis) < maxWidth) {
+          truncatedText = this.partialStr.substring(0, i++) + Config.Ellipsis;
+        }
       }
       this._width = widthOf(truncatedText);
       this.partialStr = truncatedText;
     } else {
+      this.partialStr += value > 0 ? (value === 1 ? Config.ConstantColon: Config.VariableColon) : "";
+      this.fullStr = this.partialStr;
       this._width = Math.max(Config.TextMinWidth, widthOf(this.partialStr));
     }
   }

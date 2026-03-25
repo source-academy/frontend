@@ -57,7 +57,7 @@ export class Binding extends Visible {
       this._y = this.frame.y() + Config.FramePaddingY;
     }
 
-    this.keyString += isConstant ? Config.ConstantColon : Config.VariableColon;
+    const colon = isConstant ? 1 : 2; // 1 for constant (single colon), 2 for variable (double colon)
     this.value = Layout.createValue(data, this);
 
     const keyYOffset =
@@ -66,7 +66,15 @@ export class Binding extends Visible {
         : (this.value.height() - Config.FontSize) / 2;
 
     this.keyYOffset = keyYOffset;
-    this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, { faded: !this.isLive });
+    const availableKeyWidth = !this.frame.level?.parentLevel
+      ? Config.FrameDefaultWidth - Config.FramePaddingX * 2 // for global frame, use default frame width
+      : (this.frame.width() - Config.TextPaddingX - Config.FramePaddingX * 2) / 2;
+
+    this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, { 
+      maxWidth: availableKeyWidth,
+      faded: !this.isLive,
+      value: colon
+    });
 
     const printFnDescriptionHeight =
       CseMachine.getPrintableMode() &&

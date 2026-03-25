@@ -850,10 +850,10 @@ export class Layout {
         }
 
         // get predetermined y coordinate
-        if (cache.framesY.has(id)) {
-          const fixedY = Layout.getGhostFrameY(id)!;
-          frame.reassignCoordinatesY(fixedY);
-        }
+        // if (cache.framesY.has(id)) {
+        //   const fixedY = Layout.getGhostFrameY(id)!;
+        //   frame.reassignCoordinatesY(fixedY);
+        // }
 
         // get predetermined width        
         if (cache.framesWidth.has(id)) {
