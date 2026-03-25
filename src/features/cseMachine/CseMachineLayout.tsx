@@ -287,7 +287,7 @@ export class Layout {
     const referencedFns = new Set<GlobalFn | NonGlobalFn>();
     const visitedData = new Set<DataArray>();
 
-     const findGlobalFnReferences = (envNode: EnvTreeNode): void => {
+    const findGlobalFnReferences = (envNode: EnvTreeNode): void => {
       const headValues = Object.values(envNode.environment.head);
       const unreferenced = setDifference(envNode.environment.heap.getHeap(), new Set(headValues));
       for (const data of headValues) {
@@ -306,7 +306,6 @@ export class Layout {
       envNode.children.forEach(findGlobalFnReferences);
     };
 
-
     const findGlobalFnReferencesInData = (data: DataArray): void => {
       if (visitedData.has(data)) return;
       visitedData.add(data);
@@ -319,7 +318,7 @@ export class Layout {
       });
     };
 
-    // only include predeclared or built-in functions used in user code 
+    // only include predeclared or built-in functions used in user code
     for (const name of CseMachine.usedBuiltInNames) {
       const fn = Layout.globalEnvNode.environment.head[name];
       if (fn && isGlobalFn(fn)) referencedFns.add(fn);
