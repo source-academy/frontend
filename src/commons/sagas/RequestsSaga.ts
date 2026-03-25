@@ -1873,7 +1873,7 @@ export const getVersionHistory = async (
   }
   const versions = await resp.json();
   return versions
-    .filter((v: any) => typeof v.version?.code === 'string')
+    .filter((v: any) => typeof v.version?.code === 'string' && v.inserted_at != null)
     .map((v: any) => ({
       id: String(v.id),
       name: v.name,
