@@ -74,6 +74,7 @@ export const VersionHistoryPanel: React.FC<Props> = ({
     >
       <div className="version-history-item-info">
         <EditableText
+          key={version.name ?? version.id}
           className="version-history-item-name"
           defaultValue={version.name || formatTimestamp(version.timestamp)}
           placeholder={formatTimestamp(version.timestamp)}
