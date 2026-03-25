@@ -58,6 +58,7 @@ export class Binding extends Visible {
     }
 
     const colon = isConstant ? 1 : 2; // 1 for constant (single colon), 2 for variable (double colon)
+    this.keyString += isConstant ? Config.ConstantColon : Config.VariableColon;
     this.value = Layout.createValue(data, this);
 
     const keyYOffset =
