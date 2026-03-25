@@ -55,7 +55,8 @@ import {
   isNonGlobalFn,
   isPrimitiveData,
   isStreamFn,
-  isUnassigned
+  isUnassigned,
+  setDifference
 } from './CseMachineUtils';
 import { Continuation, isContinuation } from './utils/continuation';
 export type LayoutCache = {
@@ -286,6 +287,26 @@ export class Layout {
     const referencedFns = new Set<GlobalFn | NonGlobalFn>();
     const visitedData = new Set<DataArray>();
 
+     const findGlobalFnReferences = (envNode: EnvTreeNode): void => {
+      const headValues = Object.values(envNode.environment.head);
+      const unreferenced = setDifference(envNode.environment.heap.getHeap(), new Set(headValues));
+      for (const data of headValues) {
+        if (isGlobalFn(data)) {
+          referencedFns.add(data);
+        } else if (isDataArray(data)) {
+          findGlobalFnReferencesInData(data);
+        }
+      }
+      for (const data of unreferenced) {
+        // The heap will never contain a global function, unless it is the global/prelude environment
+        if (isDataArray(data)) {
+          findGlobalFnReferencesInData(data);
+        }
+      }
+      envNode.children.forEach(findGlobalFnReferences);
+    };
+
+
     const findGlobalFnReferencesInData = (data: DataArray): void => {
       if (visitedData.has(data)) return;
       visitedData.add(data);
@@ -298,7 +319,7 @@ export class Layout {
       });
     };
 
-    // only include predeclared or built-in functions used in user code
+    // only include predeclared or built-in functions used in user code 
     for (const name of CseMachine.usedBuiltInNames) {
       const fn = Layout.globalEnvNode.environment.head[name];
       if (fn && isGlobalFn(fn)) referencedFns.add(fn);
@@ -313,6 +334,9 @@ export class Layout {
         findGlobalFnReferencesInData(data);
       }
     }
+
+    // Finally, find any references inside the global environment children
+    Layout.globalEnvNode.children.forEach(findGlobalFnReferences);
 
     const functionNames = new Map(
       Object.entries(Layout.globalEnvNode.environment.head).map(([key, value]) => [value, key])
