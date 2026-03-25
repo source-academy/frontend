@@ -291,7 +291,7 @@ export function* watchSavingStatus() {
     function* (action: ReturnType<typeof WorkspaceActions.updateEditorValue>) {
       const { workspaceLocation } = action.payload;
       // Only set saving status for workspaces that actually auto-save
-      if (workspaceLocation === 'grading') {
+      if (workspaceLocation !== 'assessment') {
         return;
       }
       yield put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saving'));
