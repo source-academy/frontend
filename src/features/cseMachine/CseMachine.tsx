@@ -138,7 +138,7 @@ export default class CseMachine {
     // Build ghost layout cache and built-in/predeclared functions cache lazily per mode, using mode-specific layout.
     if (!CseMachine.normalLayoutCache || !CseMachine.printLayoutCache) {
       const userCode = context?.unTypecheckedCode?.[0];
-
+    
       if (typeof userCode === 'string') {
         const cleanCode = userCode
           .replace(/(["'`])(?:(?=(\\?))\2[\s\S])*?\1/g, '') 
@@ -147,20 +147,18 @@ export default class CseMachine {
       
         const words = cleanCode.match(/[a-zA-Z_$][a-zA-Z0-9_$]*/g) || [];
       
-        // 2. Safe access for tests: ensure environmentTree exists
         const rootNode = context?.runtime?.environmentTree?.root as EnvTreeNode | undefined;
-        
-        // 3. Wrap the logic in an if-statement. If the test has no tree, skip!
+
         if (rootNode) {
           const globalEnvHead = rootNode?.environment?.head || {};
           const preludeEnvHead = rootNode?.children?.[0]?.environment?.head || {};
-          
+
           for (const word of words) {
             if (word in globalEnvHead || word in preludeEnvHead) {
               CseMachine.usedBuiltInNames.add(word); 
             }
           }
-          
+          // Adding transitive dependencies for referenced Prelude functions
           for (const name of CseMachine.usedBuiltInNames) {
             if (name in preludeEnvHead) {
               const source = preludeEnvHead[name]?.toString() || '';
