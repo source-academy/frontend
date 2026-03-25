@@ -3,7 +3,6 @@ import type { JSX } from 'react';
 import { Layer, Stage, Text } from 'react-konva';
 
 import { Config } from '../Config';
-import { Data } from '../dataVisualizerTypes';
 import { toText } from '../dataVisualizerUtils';
 import { ArrowDrawable, BackwardArrowDrawable } from '../drawable/Drawable';
 import { AlreadyParsedTreeNode } from './AlreadyParsedTreeNode';

@@ -1,5 +1,4 @@
 import Konva from 'konva';
-import { n } from 'node_modules/react-router/dist/development/index-react-server-client-EzWJGpN_.mjs';
 import type { JSX } from 'react';
 import { Layer, Stage, Text } from 'react-konva';
 

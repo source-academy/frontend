@@ -1,12 +1,6 @@
-import Konva from 'konva';
-import type { JSX } from 'react';
-import { Layer, Text } from 'react-konva';
-
-import { Config } from '../Config';
 import DataVisualizer from '../dataVisualizer';
 import { Data, Pair } from '../dataVisualizerTypes';
-import { isArray, isFunction, toText } from '../dataVisualizerUtils';
-import { ArrowDrawable, BackwardArrowDrawable } from '../drawable/Drawable';
+import { isArray, isFunction } from '../dataVisualizerUtils';
 import { AlreadyParsedTreeNode } from './AlreadyParsedTreeNode';
 import { BinaryTreeDrawer } from './BinaryTreeDrawer';
 import { GeneralTreeDrawer } from './GeneralTreeDrawer';
