@@ -806,7 +806,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
           key="save"
           hasUnsavedChanges={hasUnsavedChanges}
           onClickSave={onClickSave}
-          isDisabled={!props.canSave}
+          isDisabled={!props.canSave || !teamFormationOverview}
         />
       ) : null;
 
