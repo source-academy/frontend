@@ -796,7 +796,9 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       />
     );
 
-    const isTeamAssessment: boolean = assessmentOverview ? assessmentOverview.maxTeamSize !== 1 : false;
+    const isTeamAssessment: boolean = assessmentOverview
+      ? assessmentOverview.maxTeamSize !== 1
+      : false;
 
     const saveButton =
       isTeamAssessment && question.type === QuestionTypes.programming ? (
