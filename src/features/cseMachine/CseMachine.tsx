@@ -140,48 +140,48 @@ export default class CseMachine {
       const userCode = context?.unTypecheckedCode?.[0];
 
       if (typeof userCode === 'string') {
-    const cleanCode = userCode
-      // Filtering out comments/strings
-      .replace(/"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`/g, '')
-      .replace(/\/\*[\s\S]*?\*\//g, '')           
-      .replace(/\/\/.*/g, '');                      
+        const cleanCode = userCode
+          // Filtering out comments/strings
+          .replace(/"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`/g, '')
+          .replace(/\/\*[\s\S]*?\*\//g, '')
+          .replace(/\/\/.*/g, '');
 
-    const words = cleanCode.match(/[a-zA-Z_$][a-zA-Z0-9_$]*/g) || [];
+        const words = cleanCode.match(/[a-zA-Z_$][a-zA-Z0-9_$]*/g) || [];
 
-    const rootNode = context?.runtime?.environmentTree?.root as EnvTreeNode | undefined;
-    
-    if (rootNode) {
-      const globalEnvHead = rootNode?.environment?.head || {};
-      const preludeEnvHead = rootNode?.children?.[0]?.environment?.head || {};
-      // adding referenced built-in and predelcared functions
-      for (const word of words) {
-        if (word in globalEnvHead || word in preludeEnvHead) {
-          CseMachine.usedBuiltInNames.add(word); 
-        }
-      }
-    
-      const worklist = Array.from(CseMachine.usedBuiltInNames);
-      
-      for (let i = 0; i < worklist.length; i++) {
-        const name = worklist[i];
-        
-        if (name in preludeEnvHead) {
-          const source = preludeEnvHead[name]?.toString() || '';
-          const internalWords = source.match(/[a-zA-Z_$][a-zA-Z0-9_$]*/g) || [];
-          // Adding transitive dependencies for referenced Prelude functions
-          for (const dep of internalWords) {
-            if (
-              (dep in globalEnvHead || dep in preludeEnvHead) && 
-              !CseMachine.usedBuiltInNames.has(dep)
-            ) {
-              CseMachine.usedBuiltInNames.add(dep);
-              worklist.push(dep); 
+        const rootNode = context?.runtime?.environmentTree?.root as EnvTreeNode | undefined;
+
+        if (rootNode) {
+          const globalEnvHead = rootNode?.environment?.head || {};
+          const preludeEnvHead = rootNode?.children?.[0]?.environment?.head || {};
+          // adding referenced built-in and predelcared functions
+          for (const word of words) {
+            if (word in globalEnvHead || word in preludeEnvHead) {
+              CseMachine.usedBuiltInNames.add(word);
             }
-          } 
+          }
+
+          const worklist = Array.from(CseMachine.usedBuiltInNames);
+
+          for (let i = 0; i < worklist.length; i++) {
+            const name = worklist[i];
+
+            if (name in preludeEnvHead) {
+              const source = preludeEnvHead[name]?.toString() || '';
+              const internalWords = source.match(/[a-zA-Z_$][a-zA-Z0-9_$]*/g) || [];
+              // Adding transitive dependencies for referenced Prelude functions
+              for (const dep of internalWords) {
+                if (
+                  (dep in globalEnvHead || dep in preludeEnvHead) &&
+                  !CseMachine.usedBuiltInNames.has(dep)
+                ) {
+                  CseMachine.usedBuiltInNames.add(dep);
+                  worklist.push(dep);
+                }
+              }
+            }
+          }
         }
       }
-    }
-  }
 
       const originalMode = CseMachine.getPrintableMode();
 
