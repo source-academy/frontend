@@ -6,6 +6,8 @@ export const keyboardShortcuts = {
   Explore: Phaser.Input.Keyboard.KeyCodes.E,
   Move: Phaser.Input.Keyboard.KeyCodes.V,
   Talk: Phaser.Input.Keyboard.KeyCodes.T,
+  //Proposal: Add a shortcut key for skipping dialogue
+  SkipDialogue: Phaser.Input.Keyboard.KeyCodes.S,
   Options: [
     Phaser.Input.Keyboard.KeyCodes.ONE,
     Phaser.Input.Keyboard.KeyCodes.TWO,

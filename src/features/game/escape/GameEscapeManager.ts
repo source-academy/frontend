@@ -22,6 +22,8 @@ import EscapeConstants, {
 class GameEscapeManager implements IGameUI {
   private bgmVolumeRadioButtons: CommonRadioButton | undefined;
   private sfxVolumeRadioButtons: CommonRadioButton | undefined;
+  //Proposal: Add property for the new skipConfirm radio button
+  private skipConfirmRadioButtons: CommonRadioButton | undefined; 
   private scene: IBaseScene;
 
   /**
@@ -73,19 +75,32 @@ class GameEscapeManager implements IGameUI {
     );
 
     // Get user settings, to use as default choice in the radio buttons
-    const { bgmVolume, sfxVolume } = this.getSettingsSaveManager().getSettings();
+    //Proposal: Get skipConfirm from settings as well
+    const { bgmVolume, sfxVolume, skipConfirm } = this.getSettingsSaveManager().getSettings();
     const sfxVolIdx = SettingsConstants.volContainerOpts.findIndex(
       value => parseFloat(value) === sfxVolume
     );
     const bgmVolIdx = SettingsConstants.volContainerOpts.findIndex(
       value => parseFloat(value) === bgmVolume
     );
+    //Proposal: Add Index for Skip Confirm (0 = ON, 1 = OFF)
+    const skipConfirmIdx = skipConfirm !== false ? 0 : 1; 
 
+
+    //Proposal: Add the SettingsConstants.volContainerOpts as an additional input (for the next 2 lines)
     // SFX Radio buttons
-    this.sfxVolumeRadioButtons = this.createSettingsRadioOptions(sfxVolIdx, settingsPos[0][1]);
+    this.sfxVolumeRadioButtons = this.createSettingsRadioOptions(SettingsConstants.volContainerOpts, sfxVolIdx, settingsPos[0][1]);
     // BGM Radio buttons
-    this.bgmVolumeRadioButtons = this.createSettingsRadioOptions(bgmVolIdx, settingsPos[1][1]);
-    escapeMenuContainer.add([this.sfxVolumeRadioButtons, this.bgmVolumeRadioButtons]);
+    this.bgmVolumeRadioButtons = this.createSettingsRadioOptions(SettingsConstants.volContainerOpts, bgmVolIdx, settingsPos[1][1]);
+    //Proposal: Add Skip Confirm Radio buttons (Next 5 lines of code)
+    this.skipConfirmRadioButtons = this.createSettingsRadioOptions(
+      EscapeConstants.skipConfirmOpts,
+      skipConfirmIdx,
+      settingsPos[2][1]
+    );
+    escapeMenuContainer.add([this.sfxVolumeRadioButtons, this.bgmVolumeRadioButtons,
+      //Proposal: Add Skip Confirm Radio buttons to the container
+      this.skipConfirmRadioButtons]);
 
     // Get all the buttons
     const buttons = this.getOptButtons();
@@ -114,7 +129,8 @@ class GameEscapeManager implements IGameUI {
    * are handled separately (radio buttons)
    */
   private getSettings() {
-    return ['SFX', 'BGM'];
+    //Proposal: Add Skip Confirm to the list of settings options
+    return ['SFX', 'BGM', 'Skip Confirm'];
   }
 
   /**
@@ -123,11 +139,12 @@ class GameEscapeManager implements IGameUI {
    * @param defaultChoiceIdx default option for the radio button
    * @param yPos y position of the radio buttons
    */
-  private createSettingsRadioOptions(defaultChoiceIdx: number, yPos: number) {
+  //Proposal: Add so that it now accepts 'choices' array to be reusable for ON/OFF
+  private createSettingsRadioOptions(choices: string[], defaultChoiceIdx: number, yPos: number) {
     return new CommonRadioButton(
       this.scene,
       {
-        choices: SettingsConstants.volContainerOpts,
+        choices: choices, //Proposal: change the previous to choices: SettingsConstants.volContainerOpts
         defaultChoiceIdx: defaultChoiceIdx,
         maxXSpace: EscapeConstants.radioButtons.xSpace,
         radioChoiceConfig: {
@@ -206,9 +223,14 @@ class GameEscapeManager implements IGameUI {
     const bgmVol = this.bgmVolumeRadioButtons
       ? parseFloat(this.bgmVolumeRadioButtons.getChosenChoice())
       : 1;
+    //Proposal: Read the choice from the radio button. If it says 'ON', skipConfirm is true. (Next 3 lines)
+    const skipConfirmVal = this.skipConfirmRadioButtons
+      ? this.skipConfirmRadioButtons.getChosenChoice() === 'ON'
+      : true;
 
     // Save settings
-    const newSettings = { bgmVolume: bgmVol, sfxVolume: sfxVol };
+    //Proposal: Add so that it also saves the skip confirm setting
+    const newSettings = { bgmVolume: bgmVol, sfxVolume: sfxVol, skipConfirm: skipConfirmVal };
     await this.getSettingsSaveManager().saveSettings(newSettings);
 
     // Apply settings
