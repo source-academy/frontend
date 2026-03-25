@@ -1,3 +1,4 @@
+import { Rect as KonvaRect } from 'konva/lib/shapes/Rect';
 import React from 'react';
 import { Group, Rect } from 'react-konva';
 
@@ -59,7 +60,7 @@ export class Frame extends Visible implements IHoverable {
   readonly bindings: Binding[] = [];
   /** name of this frame to display */
   private _name!: Text; // removed readonly to allow reassignment for fixed layout
-  private readonly rectRef = React.createRef<any>();
+  private readonly rectRef = React.createRef<KonvaRect | null>();
   /** the level in which this frame resides */
   readonly level: Level | undefined;
   /** environment associated with this frame */

@@ -107,13 +107,11 @@ export class StashItemComponent extends Visible implements IHoverable {
   };
 
   setArrowSourceHighlightedStyle(): void {
-    this.resetStyle();
     this.tag?.stroke(Config.HoverColor);
     this.secItem?.fill(Config.HoverColor);
   }
 
   setArrowSourceNormalStyle(): void {
-    this.resetStyle();
     this.tag?.stroke(isStashItemInDanger(this.index) ? defaultDangerColor() : defaultStrokeColor());
     this.secItem?.fill(defaultTextColor());
   }
