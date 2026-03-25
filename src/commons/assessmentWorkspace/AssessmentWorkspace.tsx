@@ -707,14 +707,14 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
     };
 
     const checkLastModified = () => {
-      const isTeamAssessment: boolean = assessmentOverview?.maxTeamSize !== 0;
+      const isTeamAssessment: boolean = assessmentOverview?.maxTeamSize !== 1;
       if (isTeamAssessment && question.type === QuestionTypes.programming) {
         handleCheckLastModifiedAt(question.id, question.lastModifiedAt, saveClick);
       }
     };
 
     const saveClick = async (modified: boolean) => {
-      const isTeamAssessment: boolean = assessmentOverview?.maxTeamSize !== 0;
+      const isTeamAssessment: boolean = assessmentOverview?.maxTeamSize !== 1;
       if (isTeamAssessment && question.type === QuestionTypes.programming) {
         if (modified) {
           const confirm = await showSimpleConfirmDialog({
@@ -796,7 +796,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
       />
     );
 
-    const isTeamAssessment: boolean = assessmentOverview?.maxTeamSize !== 1;
+    const isTeamAssessment: boolean = assessmentOverview ? assessmentOverview.maxTeamSize !== 1 : false;
 
     const saveButton =
       isTeamAssessment && question.type === QuestionTypes.programming ? (
