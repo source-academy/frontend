@@ -149,7 +149,8 @@ export default class CseMachine {
 
         const rootNode = context.runtime.environmentTree.root as EnvTreeNode;
         const globalEnvHead = rootNode.environment.head;
-        const preludeEnvHead = rootNode.children[0].environment.head;
+        const preludeEnvHead = rootNode?.children?.[0]?.environment?.head || {};
+        // catching all referenced predeclared and built-in functions in user code
         for (const word of words) {
           if (word in globalEnvHead || word in preludeEnvHead) {
             CseMachine.usedBuiltInNames.add(word);
