@@ -490,7 +490,7 @@ const WorkspaceSaga = combineSagaHandlers({
     yield* nameVersionSaga(action);
   },
   [WorkspaceActions.restoreVersion.type]: function* (action) {
-    yield* restoreVersionSaga(action);
+    yield call(restoreVersionSaga, action);
   }
 });
 
