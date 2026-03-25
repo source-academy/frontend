@@ -545,7 +545,7 @@ export class Layout {
   static draw(): React.ReactNode {
     Layout.streamLengthMap.clear();
     Layout.streamCoords = [];
-    Layout.streamHeights = [0];
+    // Layout.streamHeights = [0];
 
     const pairValues: Value[] = Array.from(Layout.values.values()).filter(v => {
       try {

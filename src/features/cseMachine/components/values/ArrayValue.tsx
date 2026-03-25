@@ -13,6 +13,7 @@ import { ArrayUnit } from '../ArrayUnit';
 import { Binding } from '../Binding';
 import { FnValue } from './FnValue';
 import { Value } from './Value';
+import { cons } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/base';
 
 /** this class encapsulates an array value in source,
  *  defined as a JS array with not 2 elements */
@@ -60,22 +61,41 @@ export class ArrayValue extends Value implements IHoverable {
     if (Layout.streamCoords[this.streamId] == undefined) {
       Layout.streamCoords[this.streamId] = [];
     }
-      
+
     if (parentCount != undefined) {
       // streamHeights[0] is always initialised to 0, so this shouldnt ever cause 
       // an arrayindexexception
       if (Layout.streamHeights[this.streamId] == undefined) {
         Layout.streamHeights[this.streamId] = Layout.streamHeights[this.streamId - 1] + 1;
-      }
+      } 
+
+      // for (let i = 0; i < Layout.streamHeights.length; i++) {
+      //   if(Layout.streamCoords[this.streamId][0] != null) {
+      //     Layout.streamHeights[i] = Math.max(...Layout.streamCoords[this.streamId]) + 1;
+      //   }
+      // }
+      // else {
+      //   Layout.streamHeights[this.streamId] = Math.max(...Layout.streamCoords[this.streamId]) + 1;
+      // }
 
       if (typeof data[1] == "function") {
         if (Layout.streamCoords[this.streamId][parentCount] == undefined) {
           Layout.streamCoords[this.streamId][parentCount] = Layout.streamHeights[this.streamId];
         } else {
           Layout.streamCoords[this.streamId][parentCount]++;
+          // if(Layout.streamHeights[this.streamId] < Layout.streamCoords[this.streamId][parentCount]) {
+          //   Layout.streamHeights[this.streamId]  = Layout.streamCoords[this.streamId][parentCount];
+          // }
         }
-
-        this.visualisationY = Layout.streamCoords[this.streamId][parentCount];
+      if (this.streamId !== undefined) {
+          // Convert the string ID to a number first
+          const height = CseMachine.getStreamIdToHeight(String(this.streamId));
+          
+          if (height !== undefined) {
+              // height is already a number here because of the Map's return type
+              this.visualisationY = Layout.streamCoords[Number(height)][parentCount];
+          }
+      }
         this.visualisationX = parentCount;
       } else {
         this.visualisationY = Layout.streamHeights[this.streamId];
@@ -87,6 +107,8 @@ export class ArrayValue extends Value implements IHoverable {
 
       console.log("My x is: " + this.visualisationX + "stream" + this.streamId);
       console.log("My y is: " + this.visualisationY);
+      console.log(Layout.streamHeights);
+      console.log(CseMachine.getStreamIdToHeight(String(this.streamId)));
     } else {
 
     }
@@ -183,7 +205,10 @@ export class ArrayValue extends Value implements IHoverable {
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
     e.cancelBubble = true;
     for (const unit of this.units) {
-      unit.showIndex();
+      // unit.showIndex();
+      console.log(this.streamId);
+      console.log(this.data.id);
+
     }
   };
 

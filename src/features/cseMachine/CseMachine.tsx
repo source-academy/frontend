@@ -2,7 +2,6 @@ import { Context } from 'js-slang';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import React from 'react';
 
-import { FnValue } from './components/values/FnValue';
 import { Layout } from './CseMachineLayout';
 import { EnvTree } from './CseMachineTypes';
 import { deepCopyTree, getEnvId } from './CseMachineUtils';
@@ -25,6 +24,7 @@ export default class CseMachine {
   private static pairCreationMode: boolean = false;
   private static environmentTree: EnvTree | undefined;
   private static currentEnvId: string;
+  private static streamIdToHeight: Map<string, string>;
   private static control: Control | undefined;
   private static stash: Stash | undefined;
   private static streamLineage: Map<string, string[]>;
@@ -60,6 +60,9 @@ export default class CseMachine {
   public static getPairCreationMode(): boolean {
     return CseMachine.pairCreationMode;
   }
+  public static getStreamIdToHeight(key: string): string | undefined {
+    return CseMachine.streamIdToHeight.get(key);
+  }
   public static getStreamLineage(key: string): string[] | undefined {
     return CseMachine.streamLineage.get(key);
   }
@@ -74,7 +77,7 @@ export default class CseMachine {
   }
   public static findKeyByValueInMap(value: any) {
     for (const [key, array] of CseMachine.streamLineage.entries()) { 
-      console.log(key + array);
+      // console.log(key + array);
       if (array.includes(value)) {
         return key; 
       }
@@ -116,6 +119,7 @@ export default class CseMachine {
     CseMachine.control = context.runtime.control;
     CseMachine.stash = context.runtime.stash;
     CseMachine.streamLineage = context.streamLineage;
+    CseMachine.streamIdToHeight = context.streamIdToHeight;
     CseMachine.streamPairIdToStreamId = context.streamPairIdToStreamId;
     CseMachine.streamPairIdToParentCount = context.streemPairIdToParentCount;
     console.log(context.streamPairIdToStreamId);
