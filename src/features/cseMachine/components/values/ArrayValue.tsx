@@ -69,35 +69,59 @@ export class ArrayValue extends Value implements IHoverable {
         Layout.streamHeights[this.streamId] = Layout.streamHeights[this.streamId - 1] + 1;
       } 
 
-      // for (let i = 0; i < Layout.streamHeights.length; i++) {
-      //   if(Layout.streamCoords[this.streamId][0] != null) {
-      //     Layout.streamHeights[i] = Math.max(...Layout.streamCoords[this.streamId]) + 1;
+
+
+      // if (typeof data[1] == "function") {
+      //   if (Layout.streamCoords[this.streamId][parentCount] == undefined) {
+      //     // Layout.streamCoords[this.streamId][parentCount] = Layout.streamHeights[this.streamId];
+      //     let x = CseMachine.getStreamIdToHeight(String(this.streamId));
+      //     if(x!=undefined){
+      //       Layout.streamCoords[this.streamId][parentCount] = Number(x);
+      //     }
+
+      //   } else {
+      //     Layout.streamCoords[this.streamId][parentCount]++;
+      //     // if(Layout.streamHeights[this.streamId] < Layout.streamCoords[this.streamId][parentCount]) {
+      //     //   Layout.streamHeights[this.streamId]  = Layout.streamCoords[this.streamId][parentCount];
+      //     // }
       //   }
-      // }
-      // else {
-      //   Layout.streamHeights[this.streamId] = Math.max(...Layout.streamCoords[this.streamId]) + 1;
+      // // if (this.streamId !== undefined) {
+      // //     // Convert the string ID to a number first
+      // //     const height = CseMachine.getStreamIdToHeight(String(this.streamId));
+          
+      // //     if (height !== undefined) {
+      // //         // height is already a number here because of the Map's return type
+      // //         this.visualisationY = Layout.streamCoords[Number(height)][parentCount];
+      // //     }
+      // // }
+      //   this.visualisationX = parentCount;
+      // } else {
+      //   this.visualisationY = Layout.streamHeights[this.streamId];
+      //   this.visualisationX = this.arrayIdWithinStream;
       // }
 
       if (typeof data[1] == "function") {
-        if (Layout.streamCoords[this.streamId][parentCount] == undefined) {
-          Layout.streamCoords[this.streamId][parentCount] = Layout.streamHeights[this.streamId];
+        // 1. Fetch the base Y height for this specific stream
+        const baseHeightStr = CseMachine.getStreamIdToHeight(String(this.streamId));
+        
+        // Fallback to streamHeights if the map doesn't have it yet
+        const baseHeight = baseHeightStr !== undefined ? Number(baseHeightStr) : Layout.streamHeights[this.streamId];
+
+        // 2. Check if a pair already exists at this X-coordinate (parentCount) for this stream
+        if (Layout.streamCoords[this.streamId][parentCount] === undefined) {
+          // If empty, this pair takes the base height
+          Layout.streamCoords[this.streamId][parentCount] = baseHeight;
         } else {
+          // If occupied (e.g., a stream branch was evaluated), push this new pair down by 1 unit
           Layout.streamCoords[this.streamId][parentCount]++;
-          // if(Layout.streamHeights[this.streamId] < Layout.streamCoords[this.streamId][parentCount]) {
-          //   Layout.streamHeights[this.streamId]  = Layout.streamCoords[this.streamId][parentCount];
-          // }
         }
-      if (this.streamId !== undefined) {
-          // Convert the string ID to a number first
-          const height = CseMachine.getStreamIdToHeight(String(this.streamId));
-          
-          if (height !== undefined) {
-              // height is already a number here because of the Map's return type
-              this.visualisationY = Layout.streamCoords[Number(height)][parentCount];
-          }
-      }
+
+        // 3. CRITICAL: Actually assign the calculated Y coordinate to the array!
+        this.visualisationY = Layout.streamCoords[this.streamId][parentCount];
         this.visualisationX = parentCount;
+        
       } else {
+        // Handling for non-stream lists/pairs
         this.visualisationY = Layout.streamHeights[this.streamId];
         this.visualisationX = this.arrayIdWithinStream;
       }
