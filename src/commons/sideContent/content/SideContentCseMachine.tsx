@@ -348,16 +348,25 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                           () => {
                             CseMachine.setClearDeadFrames(this.state.clearDeadFrames);
                             CseMachine.clearCachedLayouts();
+                            
+                            // Temporarily store the original draw function
+                            const originalDraw = Layout.draw;
+
+                            // Overriding because the animations are causing
+                            // Konva objects to not be drawn
+                            Layout.draw = () => {
+                              const currLevels = Layout.levels;
+                              const changedFramePairs = computeFramesCoordChange(prevLevels, currLevels);
+                              if (changedFramePairs.length > 0) {
+                                CseAnimation.animations.push(new ClearDeadFramesAnimation(changedFramePairs));
+                                CseAnimation.enableAnimations();
+                              }
+                              
+                              Layout.draw = originalDraw;
+
+                              return originalDraw.apply(Layout);
+                            };
                             CseMachine.redraw();
-                            const currLevels = Layout.levels;
-                            const changedFramePairs = computeFramesCoordChange(prevLevels, currLevels);
-                            if (changedFramePairs.length > 0) {
-                              CseAnimation.animations.push(new ClearDeadFramesAnimation(changedFramePairs));
-                              CseAnimation.enableAnimations();
-                              Layout.key = 0;
-                              Layout.prevLayout = undefined;
-                              this.setState({ visualization: Layout.draw() });
-                            }
                             // END CHANGEDD
                           }
                         );

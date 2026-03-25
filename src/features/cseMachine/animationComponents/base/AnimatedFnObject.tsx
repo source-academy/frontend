@@ -3,7 +3,7 @@ import { Group } from 'react-konva';
 
 import { FnValue } from '../../components/values/FnValue';
 import { Config } from '../../CseMachineConfig';
-import { defaultStrokeColor } from '../../CseMachineUtils';
+import { defaultBackgroundColor, defaultStrokeColor } from '../../CseMachineUtils';
 import { Animatable, AnimatableTo, AnimationConfig } from './Animatable';
 import { AnimatedCircleComponent } from './AnimationComponents';
 
@@ -22,7 +22,7 @@ export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
     if (props.height) this._height = props.height;
   };
 
-  constructor(fn: FnValue, props?: CircleConfig) {
+  constructor(fn: FnValue, props?: CircleConfig, isCover?: boolean) {
     super();
     this._x = fn.x();
     this._y = fn.y();
@@ -32,32 +32,72 @@ export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
 
     const { width, height, radius, x, y, ...safeProps } = props || {};
 
-    this.leftCircle = new AnimatedCircleComponent({
-      x: this.centerX - Config.FnRadius,
-      y: this._y,
-      radius: Config.FnRadius,
-      ...safeProps
-    })
-    this.leftInner = new AnimatedCircleComponent({
-      x: this.centerX - Config.FnRadius,
-      y: this._y,
-      fill: defaultStrokeColor(),
-      radius: Config.FnInnerRadius,
-      ...safeProps
-    })
-    this.rightCircle = new AnimatedCircleComponent({
-      x: this.centerX + Config.FnRadius,
-      y: this._y,
-      radius: Config.FnRadius,
-      ...safeProps
-    })
-    this.rightInner = new AnimatedCircleComponent({
-      x: this.centerX + Config.FnRadius,
-      y: this._y,
-      fill: defaultStrokeColor(),
-      radius: Config.FnInnerRadius,
-      ...safeProps
-    })
+    this.leftCircle = isCover
+      ? new AnimatedCircleComponent({
+          x: this.centerX - Config.FnRadius,
+          y: this._y,
+          radius: Config.FnRadius,
+          stroke: defaultBackgroundColor(),
+          strokeWidth: 3.5,
+          ...safeProps
+        })
+      : new AnimatedCircleComponent({
+          x: this.centerX - Config.FnRadius,
+          y: this._y,
+          radius: Config.FnRadius,
+          ...safeProps
+        })
+    this.leftInner = isCover
+      ? new AnimatedCircleComponent({
+          x: this.centerX - Config.FnRadius,
+          y: this._y,
+          radius: Config.FnInnerRadius,
+          strokeWidth: 2,
+          fill: defaultBackgroundColor(),
+          stroke: defaultBackgroundColor(),
+          ...safeProps
+        })
+      : new AnimatedCircleComponent({
+          x: this.centerX - Config.FnRadius,
+          y: this._y,
+          radius: Config.FnInnerRadius,
+          strokeWidth: 0,
+          fill: defaultStrokeColor(),
+          ...safeProps
+      })
+    this.rightCircle = isCover
+      ? new AnimatedCircleComponent({
+          x: this.centerX + Config.FnRadius,
+          y: this._y,
+          radius: Config.FnRadius,
+          stroke: defaultBackgroundColor(),
+          strokeWidth: 3.5,
+          ...safeProps
+        })
+      : new AnimatedCircleComponent({
+        x: this.centerX + Config.FnRadius,
+        y: this._y,
+        radius: Config.FnRadius,
+        ...safeProps
+      })
+    this.rightInner = isCover
+      ? new AnimatedCircleComponent({
+          x: this.centerX + Config.FnRadius,
+          y: this._y,
+          radius: Config.FnInnerRadius,
+          strokeWidth: 2,
+          fill: defaultBackgroundColor(),
+          stroke: defaultBackgroundColor(),
+          ...safeProps
+        })
+      : new AnimatedCircleComponent({
+          x: this.centerX + Config.FnRadius,
+          y: this._y,
+          radius: Config.FnInnerRadius,
+          strokeWidth: 0,
+          fill: defaultStrokeColor(),
+          ...safeProps
+      })
     this.leftCircle.addListener(this.onPropsChange);
     this.leftInner.addListener(this.onPropsChange);
     this.rightCircle.addListener(this.onPropsChange);

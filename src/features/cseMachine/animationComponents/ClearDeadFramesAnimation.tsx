@@ -30,7 +30,7 @@ export class ClearDeadFramesAnimation extends Animatable {
   private newTextCovers: AnimatedTextComponent[];
 
   private fnAnimations: AnimatedFnObject[];
-  private newFns: AnimatedFnObject[];
+  private newFnCovers: AnimatedFnObject[];
 
   constructor(changedFramePairs: Frame[][]) {
     super();
@@ -67,17 +67,21 @@ export class ClearDeadFramesAnimation extends Animatable {
       const oldBindings = framePair[0].bindings;
       const newBindings = framePair[1].bindings;
       for (let i = 0; i < oldBindings.length; i++) {
-        if (oldBindings[i].isDummyBinding) { continue; }
-        changedTextPairs.push([oldBindings[i].key, newBindings[i].key]);
+        if (oldBindings[i].isDummyBinding == false) { 
+          changedTextPairs.push([oldBindings[i].key, newBindings[i].key]);
 
-        // Create animations for primitive text values 
-        if (oldBindings[i].value instanceof PrimitiveValue) {
-          const oldValue: PrimitiveValue = oldBindings[i].value as PrimitiveValue;
-          const newValue: PrimitiveValue = newBindings[i].value as PrimitiveValue;
-          if (oldValue.text instanceof Text) {
-            changedTextPairs.push([(oldValue.text as Text), (newValue.text as Text)])
+          // Create animations for primitive text values 
+          if (oldBindings[i].value instanceof PrimitiveValue) {
+            const oldValue: PrimitiveValue = oldBindings[i].value as PrimitiveValue;
+            const newValue: PrimitiveValue = newBindings[i].value as PrimitiveValue;
+            if (oldValue.text instanceof Text) {
+              changedTextPairs.push([(oldValue.text as Text), (newValue.text as Text)])
+            }
           }
-        } else if (oldBindings[i].value instanceof FnValue) {
+        }
+
+        // Create animations for FnValue, even if is dummy binding
+        if (oldBindings[i].value instanceof FnValue) {
           const oldFn: FnValue = oldBindings[i].value as FnValue;
           const newFn: FnValue = newBindings[i].value as FnValue;
           changedFnPairs.push([oldFn, newFn]);
@@ -110,9 +114,8 @@ export class ClearDeadFramesAnimation extends Animatable {
 
     // FN OBJECTS
     this.fnAnimations = [];
-    this.newFns = [];
+    this.newFnCovers = [];
     for (const fnPair of changedFnPairs) {
-      console.log(fnPair)
       const oldFnPosition = getNodePosition(fnPair[0]);
       this.fnAnimations.push(
         new AnimatedFnObject(fnPair[0], {
@@ -120,13 +123,12 @@ export class ClearDeadFramesAnimation extends Animatable {
         })
       );
       const newFnPosition = getNodePosition(fnPair[1]);
-      this.newFns.push(
+      this.newFnCovers.push(
         new AnimatedFnObject(fnPair[1], {
           ...newFnPosition,
-        })
+        }, true)
       )
     }
-    console.log(this.fnAnimations)
   }
 
   // Covers must be written on an earlier line than their animations
@@ -138,6 +140,7 @@ export class ClearDeadFramesAnimation extends Animatable {
         {this.frameAnimations.map((rect) => rect.draw())}
         {this.newTextCovers.map((rect) => rect.draw())}
         {this.textAnimations.map((rect) => rect.draw())}
+        {this.newFnCovers.map((rect) => rect.draw())}
         {this.fnAnimations.map((rect) => rect.draw())}
       </Group>
     );
@@ -160,7 +163,7 @@ export class ClearDeadFramesAnimation extends Animatable {
     }
     // FN OBJECTS
     for (let fnIdx = 0; fnIdx < this.fnAnimations.length; fnIdx++) {
-      const newFnPosition = getNodePosition(this.newFns[fnIdx]);
+      const newFnPosition = getNodePosition(this.newFnCovers[fnIdx]);
       if (fnIdx == this.fnAnimations.length - 1) { // last animation, await
         await this.fnAnimations[fnIdx].animateTo({
           x: newFnPosition.x, y: newFnPosition.y
@@ -190,6 +193,9 @@ export class ClearDeadFramesAnimation extends Animatable {
     }
     for (const fnAnim of this.fnAnimations) {
         fnAnim.destroy();
+    }
+    for (const fnCover of this.fnAnimations) {
+        fnCover.destroy();
     }
   }
 }
