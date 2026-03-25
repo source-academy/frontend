@@ -23,6 +23,7 @@ import { TaskDetail } from '../../task/GameTaskTypes';
 import { courseId, mandatory } from '../../utils/GameUtils';
 import GameManager from './GameManager';
 
+
 /**
  * This class exposes all the public API's of managers
  * in the Game Manager scene.
@@ -67,6 +68,10 @@ class GameGlobalAPI {
 
   public async changeLocationTo(locationName: string) {
     await this.getGameManager().changeLocationTo(locationName);
+  }
+
+  public async restoreLocation(locationId: LocationId) {
+    await this.getGameManager().restoreLocation(locationId);
   }
 
   /////////////////////
@@ -557,6 +562,15 @@ class GameGlobalAPI {
   public getQuizScore(key: string): number {
     return this.getGameManager().getStateManager().getQuizScore(key);
   }
+
+  //////////////////////
+  //      Talk        //
+  //////////////////////
+
+  public async showTopicList() {
+    await this.getGameManager().getTopicManager().generateTopicList();
+  }
+
 }
 
 export default GameGlobalAPI;

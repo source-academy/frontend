@@ -62,7 +62,7 @@ export function toS3Path(fileName: string, courseCoded = false) {
   }
   return (
     Constants.assetsFolder +
-    (courseCoded && !Constants.useEmptyAssetPrefix && !Constants.isDev
+    (courseCoded && !Constants.useEmptyAssetPrefix 
       ? assetsPrefix() + fileName
       : fileName)
   );

@@ -15,7 +15,7 @@ import { GamePhaseType, GameTerminalPhaseType } from './GamePhaseTypes';
  */
 export default class GamePhaseManager {
   public phaseMap: Map<GamePhaseType, IGameUI>;
-  private phaseStack: GamePhaseType[];
+  public phaseStack: GamePhaseType[]; // to test make it public
   private inputManager: GameInputManager;
   private interruptCheckCallback: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => boolean;
   private interruptTransitionCallback: (
@@ -139,7 +139,6 @@ export default class GamePhaseManager {
     this.inputManager.enableKeyboardInput(false);
     this.inputManager.enableMouseInput(false);
     await this.phaseMap.get(prevPhase)!.deactivateUI();
-
     if (this.interruptCheckCallback(prevPhase, newPhase)) {
       // Enable input in case interrupt transition callback needs it
       this.inputManager.enableMouseInput(true);

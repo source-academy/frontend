@@ -31,6 +31,7 @@ export type GameLocation = IGameActionable & {
   previewKey: AssetKey | null;
   modes: Set<GameMode>;
   navigation: Set<LocationId>;
+  back: LocationId;
   talkTopics: Set<ItemId>;
   objects: Set<ItemId>;
   boundingBoxes: Set<ItemId>;

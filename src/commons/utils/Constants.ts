@@ -12,7 +12,6 @@ const isTest = process.env.NODE_ENV === 'test';
 
 const sourceAcademyVersion = process.env.REACT_APP_VERSION || 'local';
 const sourceAcademyEnvironment = process.env.REACT_APP_ENVIRONMENT || 'dev';
-const isDev = sourceAcademyEnvironment === 'dev';
 const sourceAcademyDeploymentName = isTest
   ? 'Source Academy @ NUS'
   : process.env.REACT_APP_DEPLOYMENT_NAME || 'Source Academy';
@@ -156,7 +155,6 @@ export enum Links {
 }
 
 const Constants = {
-  isDev,
   sourceAcademyVersion,
   sourceAcademyEnvironment,
   sourceAcademyDeploymentName,

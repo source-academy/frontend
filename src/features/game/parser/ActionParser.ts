@@ -194,6 +194,13 @@ export default class ActionParser {
         actionParamObj.id = actionParams[0];
         Parser.validator.assertItemType(GameItemType.quizzes, actionParams[0], actionType);
         break;
+
+      case GameActionType.ChangeLocationTo:
+        actionParamObj.id = actionParams[0];
+        break;
+
+      case GameActionType.ShowTopics:
+        break;
     }
 
     const actionId = Parser.generateActionId();

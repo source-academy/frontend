@@ -8,7 +8,7 @@ import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
 import { ActivatableSprite } from '../../objects/GameObjectTypes';
-import { GamePhaseType } from '../../phase/GamePhaseTypes';
+// import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { sleep } from '../../utils/GameUtils';
 import ExploreModeConstants from './GameModeExploreConstants';
 
@@ -30,7 +30,8 @@ class GameModeExplore implements IGameUI {
 
     const backButton = new CommonBackButton(
       gameManager,
-      async () => await GameGlobalAPI.getInstance().swapPhase(GamePhaseType.Menu)
+      // async () => await GameGlobalAPI.getInstance().swapPhase(GamePhaseType.Menu)
+      async () => await GameGlobalAPI.getInstance().restoreLocation(GameGlobalAPI.getInstance().getCurrLocId())
     );
     exploreMenuContainer.add(backButton);
     return exploreMenuContainer;

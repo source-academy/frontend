@@ -3,7 +3,6 @@ import UtilConstants, { Links } from 'src/commons/utils/Constants';
 import FontAssets from '../assets/FontAssets';
 
 export const Constants = {
-  isDev: UtilConstants.isDev,
   assetsFolder: Links.sourceAcademyAssets,
   useEmptyAssetPrefix: UtilConstants.useEmptyAssetPrefix,
   fadeDuration: 600,

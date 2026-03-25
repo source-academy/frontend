@@ -8,7 +8,7 @@ import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { keyboardShortcuts } from '../../input/GameInputConstants';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameItemType } from '../../location/GameMapTypes';
-import { GamePhaseType } from '../../phase/GamePhaseTypes';
+// import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import GameGlobalAPI from '../../scenes/gameManager/GameGlobalAPI';
 import { createButton, createButtonText } from '../../utils/ButtonUtils';
 import { mandatory, sleep } from '../../utils/GameUtils';
@@ -81,7 +81,7 @@ class GameModeTalk implements IGameUI {
 
     const backButton = new CommonBackButton(
       gameManager,
-      async () => await GameGlobalAPI.getInstance().swapPhase(GamePhaseType.Menu)
+      async () => await this.deactivateUI()
     );
     talkMenuContainer.add(backButton);
     return talkMenuContainer;
@@ -101,6 +101,7 @@ class GameModeTalk implements IGameUI {
         text: dialogue.title,
         callback: async () => {
           GameGlobalAPI.getInstance().triggerInteraction(dialogueId);
+          await this.deactivateUI();
           await GameGlobalAPI.getInstance().showDialogue(dialogueId);
         },
         interactionId: dialogueId

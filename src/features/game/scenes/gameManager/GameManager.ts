@@ -20,9 +20,10 @@ import GameInputManager from '../../input/GameInputManager';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import { LocationId } from '../../location/GameMapTypes';
-import { GameItemType } from '../../location/GameMapTypes';
+// import { GameItemType } from '../../location/GameMapTypes';
 import GameLogManager from '../../log/GameLogManager';
-import { GameMode } from '../../mode/GameModeTypes';
+import TopicListManager from '../../mode/talk/TopicListManager';
+// import { GameMode } from '../../mode/GameModeTypes';
 import GameObjectManager from '../../objects/GameObjectManager';
 import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
@@ -77,6 +78,7 @@ class GameManager extends Phaser.Scene {
   private taskLogManager?: GameTaskLogManager;
   private dashboardManager?: GameDashboardManager;
   private quizManager?: GameQuizManager;
+  private topicManager?: TopicListManager;
   private actionJustSaved: boolean = false;
 
   constructor() {
@@ -129,6 +131,7 @@ class GameManager extends Phaser.Scene {
       [this.logManager, this.taskLogManager, this.collectibleManager, this.achievementManager]
     );
     this.quizManager = new GameQuizManager();
+    this.topicManager = new TopicListManager();
   }
 
   //////////////////////
@@ -234,20 +237,24 @@ class GameManager extends Phaser.Scene {
       await this.getActionManager().processGameActions(
         this.getStateManager().getGameMap().getGameStartActions()
       );
+      
+      if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Sequence)) {
+        await this.getPhaseManager().swapPhase(GamePhaseType.Explore); // by default the game is in explore mode at start
+      }
     }
 
     // Location cutscene
     await this.getActionManager().processGameActions(gameLocation.actionIds);
 
     // Location notification
-    if (this.getStateManager().hasLocationNotif(locationId)) {
-      await GameGlobalAPI.getInstance().bringUpUpdateNotif(gameLocation.name);
-      this.getStateManager().removeLocationNotif(locationId);
-    }
+    // if (this.getStateManager().hasLocationNotif(locationId)) {
+    //   await GameGlobalAPI.getInstance().bringUpUpdateNotif(gameLocation.name);
+    //   this.getStateManager().removeLocationNotif(locationId);
+    // }
+    await GameGlobalAPI.getInstance().bringUpUpdateNotif(gameLocation.name);
+      this.getStateManager().removeLocationNotif(locationId); // will it be better to have location notification all the time?
 
-    if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Sequence)) {
-      await this.getPhaseManager().swapPhase(GamePhaseType.Menu);
-    }
+    
   }
 
   /**
@@ -263,7 +270,6 @@ class GameManager extends Phaser.Scene {
 
     //Reset the actionJustSaved flag
     this.actionJustSaved = false;
-
     // Transition to the new location
     await blackFade(this, 300, 500, async () => {
       await this.getLayerManager().clearAllLayers();
@@ -279,9 +285,12 @@ class GameManager extends Phaser.Scene {
       return;
     }
 
-    await GameGlobalAPI.getInstance().saveGame();
   }
 
+  public async restoreLocation(locationId: LocationId) {
+    const gameLocation = GameGlobalAPI.getInstance().getLocationAtId(locationId);
+    this.changeLocationTo(gameLocation.back, true);
+  }
   /**
    * Bind escape menu, dashboard, and mode selections to keyboard triggers.
    */
@@ -302,46 +311,6 @@ class GameManager extends Phaser.Scene {
         await this.getPhaseManager().pushPhase(GamePhaseType.Dashboard);
       }
     });
-    this.registerMenuKeyboardListener(
-      keyboardShortcuts.Explore,
-      GameMode.Explore,
-      GamePhaseType.Explore
-    );
-    this.registerMenuKeyboardListener(keyboardShortcuts.Move, GameMode.Move, GamePhaseType.Move);
-    this.registerMenuKeyboardListener(keyboardShortcuts.Talk, GameMode.Talk, GamePhaseType.Talk);
-  }
-
-  /**
-   * Helper function to register keyboard listeners for mode selections.
-   */
-  private registerMenuKeyboardListener(shortcut: number, mode: GameMode, phase: GamePhaseType) {
-    this.getInputManager().registerKeyboardListener(shortcut, 'up', async () => {
-      const modes = this.getCurrentLocationModes();
-      if (modes.includes(mode) && this.getPhaseManager().isCurrentPhase(GamePhaseType.Menu)) {
-        await this.getPhaseManager().pushPhase(phase);
-      } else if (this.getPhaseManager().isCurrentPhase(phase)) {
-        await this.getPhaseManager().swapPhase(GamePhaseType.Menu);
-      }
-    });
-  }
-
-  /**
-   * the same method from GameModeMenu to get the available modes under current location
-   */
-  private getCurrentLocationModes() {
-    const currLocId = this.currentLocationId;
-    let latestModesInLoc = this.getStateManager().getLocationModes(currLocId);
-    const talkTopics = GameGlobalAPI.getInstance().getGameItemsInLocation(
-      GameItemType.talkTopics,
-      currLocId
-    );
-
-    // Remove talk mode if there is no talk topics
-    if (talkTopics.length === 0) {
-      latestModesInLoc = latestModesInLoc.filter(mode => mode !== GameMode.Talk);
-    }
-
-    return latestModesInLoc;
   }
 
   /**
@@ -430,6 +399,7 @@ class GameManager extends Phaser.Scene {
     }
   }
 
+  
   public getSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
   public getStateManager = () => mandatory(this.stateManager);
   public getObjectManager = () => mandatory(this.objectManager);
@@ -452,6 +422,7 @@ class GameManager extends Phaser.Scene {
   public getTaskLogManager = () => mandatory(this.taskLogManager);
   public getDashboardManager = () => mandatory(this.dashboardManager);
   public getQuizManager = () => mandatory(this.quizManager);
+  public getTopicManager = () => mandatory(this.topicManager);
 }
 
 export default GameManager;
