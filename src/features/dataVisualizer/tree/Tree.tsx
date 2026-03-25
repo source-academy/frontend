@@ -1,5 +1,5 @@
 import DataVisualizer from '../dataVisualizer';
-import { Data, Pair } from '../dataVisualizerTypes';
+import { Data } from '../dataVisualizerTypes';
 import { isArray, isFunction } from '../dataVisualizerUtils';
 import { AlreadyParsedTreeNode } from './AlreadyParsedTreeNode';
 import { BinaryTreeDrawer } from './BinaryTreeDrawer';
@@ -115,7 +115,7 @@ export class Tree {
       return new DataTreeNode(data);
     }
 
-    const visitedStructures: Map<Function | Pair | Array<Data>, DrawableTreeNode> = new Map(); // detects cycles
+    const visitedStructures: Map<Data, DrawableTreeNode> = new Map(); // detects cycles
     const treeNodes: DrawableTreeNode[] = [];
     const rootNode = constructNode(tree);
 
