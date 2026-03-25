@@ -846,7 +846,7 @@ const AssessmentWorkspace: React.FC<AssessmentWorkspaceProps> = props => {
               saveStatusIndicator,
               chapterSelect
             ]
-          : [resetButton],
+          : [saveButton, resetButton, versionHistoryButton, saveStatusIndicator],
       flowButtons: [previousButton, questionView, nextButton]
     };
   };
