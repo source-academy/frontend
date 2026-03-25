@@ -1876,7 +1876,9 @@ export const getVersionHistory = async (
     id: String(v.id),
     name: v.name,
     code: v.version?.code,
-    timestamp: new Date(v.inserted_at + 'Z').getTime()
+    timestamp: new Date(
+      /[Z+]/.test(v.inserted_at.slice(19)) ? v.inserted_at : v.inserted_at + 'Z'
+    ).getTime()
   }));
 };
 
