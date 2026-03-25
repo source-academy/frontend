@@ -10,7 +10,7 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import type { CodeVersion } from '../workspace/WorkspaceTypes';
 
@@ -40,17 +40,21 @@ export const VersionHistoryPanel: React.FC<Props> = ({
 }) => {
   const [selectedVersionId, setSelectedVersionId] = useState<string | null>(null);
 
+  const sortedVersions = useMemo(
+    () => [...versions].sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0)),
+    [versions]
+  );
+
   useEffect(() => {
-    if (!isOpen || versions.length === 0) {
+    if (!isOpen || sortedVersions.length === 0) {
       setSelectedVersionId(null);
       return;
     }
-    const sorted = [...versions].sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0));
-    const stillValid = sorted.some(v => v.id === selectedVersionId);
+    const stillValid = sortedVersions.some(v => v.id === selectedVersionId);
     if (!stillValid) {
-      setSelectedVersionId(sorted[0].id);
+      setSelectedVersionId(sortedVersions[0].id);
     }
-  }, [versions, isOpen]);
+  }, [sortedVersions, isOpen]);
 
   const handleRestore = useCallback(
     (versionId: string) => {
@@ -105,7 +109,6 @@ export const VersionHistoryPanel: React.FC<Props> = ({
     );
   };
 
-  const sortedVersions = [...versions].sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0));
   const selectedVersion = versions.find(v => v.id === selectedVersionId);
 
   const content = isLoading ? (
