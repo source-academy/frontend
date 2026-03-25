@@ -253,6 +253,7 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
   yield take(
     (action: any) =>
       action.type === WorkspaceActions.updateSaveStatus.type &&
+      action.payload.workspaceLocation === workspaceLocation &&
       (action.payload.saveStatus === 'saved' || action.payload.saveStatus === 'saveFailed')
   );
 
