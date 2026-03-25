@@ -55,8 +55,7 @@ import {
   isNonGlobalFn,
   isPrimitiveData,
   isStreamFn,
-  isUnassigned,
-  setDifference
+  isUnassigned
 } from './CseMachineUtils';
 import { Continuation, isContinuation } from './utils/continuation';
 export type LayoutCache = {

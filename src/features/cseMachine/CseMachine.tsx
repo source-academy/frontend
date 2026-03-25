@@ -141,10 +141,10 @@ export default class CseMachine {
    
       if (typeof userCode === 'string') {
         const cleanCode = userCode
-          .replace(/\/\/.*/g, '')                      
+          .replace(/(["'`])(?:(?=(\\?))\2[\s\S])*?\1/g, '')                 
           .replace(/\/\*[\s\S]*?\*\//g, '')           
-          .replace(/(["'`])(?:(?=(\\?))\2[\s\S])*?\1/g, ''); 
-        //console.log("CLEAN CODE (No comments/strings):", cleanCode);
+          .replace(/\/\/.*/g, ''); 
+  
         const words = cleanCode.match(/[a-zA-Z_$][a-zA-Z0-9_$]*/g) || [];
 
         const rootNode = context.runtime.environmentTree.root as EnvTreeNode;
