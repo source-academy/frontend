@@ -1,3 +1,4 @@
+import { SagaIterator } from 'redux-saga';
 import { call, debounce, put, select, take, takeEvery } from 'redux-saga/effects';
 
 import SessionActions from '../../../application/actions/SessionActions';
@@ -7,7 +8,6 @@ import { showWarningMessage } from '../../../utils/notifications/NotificationsHe
 import WorkspaceActions from '../../../workspace/WorkspaceActions';
 import type { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import { getVersionHistory, updateVersionName } from '../../RequestsSaga';
-import { SagaIterator } from 'redux-saga';
 
 /**
  * Helper to get the current question ID for assessment or grading workspace.
@@ -170,7 +170,11 @@ export function* restoreVersionSaga(
   }
 
   // Auto-save the restored code
-  yield call(performAutoSave, workspaceLocation);
+  const newVersionCreated: boolean = yield call(performAutoSave, workspaceLocation);
+
+  if (!newVersionCreated) {
+    return;
+  }
 
   // Name the restored version as "(name)-restored"
   const newestVersion: { id: string; timestamp: number } | undefined = yield select(
@@ -239,7 +243,7 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
 
   if (code === latestVersion) {
     yield put(WorkspaceActions.updateSaveStatus(workspaceLocation, 'saved'));
-    return;
+    return false;
   }
 
   // Submit the answer; the backend handles saving as a version.
@@ -257,6 +261,8 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
     payload: { workspaceLocation },
     type: WorkspaceActions.fetchVersionHistory.type
   });
+
+  return true;
 }
 
 /**
