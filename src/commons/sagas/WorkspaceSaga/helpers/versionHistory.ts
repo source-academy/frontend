@@ -202,7 +202,7 @@ export function* restoreVersionSaga(
 function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
   // Only assessment workspaces auto-save
   if (workspaceLocation !== 'assessment') {
-    return;
+    return false;
   }
 
   // Skip auto-save for team assessments
@@ -214,7 +214,7 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
   });
 
   if (isTeamAssessment) {
-    return;
+    return false;
   }
 
   // Get the current code from the active editor tab
@@ -223,7 +223,7 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
   );
 
   if (activeEditorTabIndex === null) {
-    return;
+    return false;
   }
 
   const code = editorTabs[activeEditorTabIndex].value;
@@ -231,7 +231,7 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
   const questionId: number | undefined = yield call(getCurrentQuestionId, workspaceLocation);
 
   if (questionId === undefined) {
-    return;
+    return false;
   }
 
   // Skip if code is unchanged from the latest saved version
