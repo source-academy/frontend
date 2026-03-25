@@ -92,20 +92,25 @@ This largest width is equivalent to the n<sup>th</sup> term of a finite geometri
 > *L = DataVisualizer.nodeCount[0];*<br>
 > *EY4 = (Config.NWidth + Config.BoxWidth) * (L + 1) * Math.pow(L, DataVisualizer.binaryTreeDepth) - Config.BoxWidth;*
 
+### `nodePos` (only for General Tree mode)
+Since our graph is left-aligned, `nodePos` keeps track of the box's position from the left for its level.This is done through `dataVisualizer.get_depth`. 
+`nodeCount` is used to keep track of the current number of boxes in each level. During each iteration, the current count of boxes at that level is pushed into the end of the array representing the current box (`structures`). The `nodeCount` at that depth is then incremented. The `longestNodePos` is also updated if needed to keep track of the maximum number of boxes in a level for the graph, so as to render the width of the image correctly.
+
+When the input data is being converted from `Data[]` to nodes (`Tree.constructTree`), the 2nd last (the last is `colorIndex` as explained below) value is popped and inserted into the `nodePos` field of node, which is then accessed later to space out the nodes.
+
 ## Coloring
-All boxes belonging to the same node would be the same color. The coloring mechanism uses two key variables: `TreeDrawer.colorCounter` and `colorIndex`.
+Under `ArrayTreeNode.tsx`, there exsits a class field which consists of an array of colors. The color that is rendered is determined by the colorIndex parameter that is passed into createDrawable, which will find the appropriate color by using `this.Colors[colorIndex % this.Colors.length]`. The colorIndex of -1 is specially used to represent black color.
 
-- `TreeDrawer.colorCounter` is a static counter that starts at 0 for each new tree drawing (reset in `Tree.draw()`). It increments each time a new node is encountered during the recursive drawing process, ensuring each unique node in the tree gets a distinct color index.
+### Original view
+All boxes are rendered in black color, hence all colorIndex passed into `createDrawable` is -1.
 
-- `colorIndex` is a parameter passed to the `createDrawable` method of each `ArrayTreeNode`. It determines the actual color by indexing into a predefined array of colors: `this.Colors[colorIndex % this.Colors.length]`, where `this.Colors` is an array of 9 colors defined in `ArrayTreeNode.tsx`.
+### Binary Tree and General Tree mode
+Only the root node is black color. For other nodes, the `colorIndex` of the leftmost node increases by one each level. Within a level, the `colorIndex` increases by 1 for the next node on the right. This creates an effect where the colors for each level is offset by 1, reducing the chance of color collisions.
 
-In binary tree mode:
-- When drawing a new branch (left or right child), `colorCounter` increments, assigning a new `colorIndex` to the child node.
-- Boxes within the same node (e.g., the three boxes representing a binary tree node) share the same `colorIndex`, thus the same color, hence `colorIndex` is set to `parentIndex`.
+#### `nodeColor`
+The above is achieved during the first traversal of the tree in `DataVisualizer.get_depth`. `nodeColor` is used to keep track of the previous color to assigned to a node at that level. When it reaches a new level that is not explored yet (ie. `this.nodeColor[depth]==undefined`), it sets the starting color index to the depth it is on. If it is on a new node, it will also add 1 to `nodeColor` at that depth. This is then pushed to the end of the array representing that box (`structures`). That value will then be recorded in the instance field of a `node` similar to `nodePos` above.
 
-In general tree mode, similar logic applies, with `colorCounter` incrementing for each new child subtree.
-
-In original mode, `colorIndex` is set to 0, resulting in all boxes being black.
+To reserve black color for only the root node, `nodeColor[0]` is set to -1 to ensure that all nodes at level 0 is black.
 
 ## Tree checking
 ### Binary Tree mode

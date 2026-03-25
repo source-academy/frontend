@@ -28,6 +28,7 @@ export default class DataVisualizer {
   public static isBinTree = false;
   public static isGenTree = false;
   public static nodeCount: number[] = [];
+  public static nodeColor: number[] = [];
   public static longestNodePos: number = 0;
 
   private steps: Step[] = [];
@@ -36,11 +37,16 @@ export default class DataVisualizer {
 
   private constructor() {}
 
-  public static get_depth(structures: Data[], depth: number, nodePos: number): number {
+  public static get_depth(
+    structures: Data[],
+    depth: number,
+    nodePos: number,
+    newNode: boolean
+  ): number {
     if (!(structures instanceof Array)) {
       return 0;
     }
-    //nodeCount keeps track of the current index of nodes at each depth
+    // nodeCount keeps track of the current index of nodes at each depth
     if (this.getTreeMode()) {
       if (this.nodeCount[depth] === undefined) {
         this.nodeCount[depth] = 0;
@@ -51,10 +57,19 @@ export default class DataVisualizer {
       }
       this.nodeCount[depth]++;
     }
+    if (this.getBinTreeMode() || this.getTreeMode()) {
+      if (this.nodeColor[depth] === undefined) {
+        this.nodeColor[depth] = depth;
+      }
+      if (newNode) {
+        this.nodeColor[depth]++;
+      }
+      structures.push(this.nodeColor[depth]);
+    }
 
     this.TreeDepth = Math.max(this.TreeDepth, depth);
-    this.get_depth(structures[0], depth + 1, 0);
-    this.get_depth(structures[1], depth, nodePos + 1);
+    this.get_depth(structures[0], depth + 1, 0, true);
+    this.get_depth(structures[1], depth, nodePos + 1, false);
     return depth;
   }
 
@@ -124,7 +139,10 @@ export default class DataVisualizer {
     }
     DataVisualizer.isBinTree = this.isBinaryTree(structures);
     DataVisualizer.isGenTree = this.isGeneralTree(structures);
-    this.get_depth(structures[0], 0, 0);
+    DataVisualizer.nodeCount = [];
+    DataVisualizer.nodeColor = [];
+    this.nodeColor[0] = -1;
+    this.get_depth(structures[0], 0, 0, false);
 
     DataVisualizer._instance.addStep(structures);
     DataVisualizer.setSteps(DataVisualizer._instance.steps);
@@ -163,10 +181,6 @@ export default class DataVisualizer {
     this.steps.push(step);
   }
 
-  /**
-   *  For student use. Draws a structure by converting it into a tree object, attempts to draw on the canvas,
-   *  Then shift it to the left end.
-   */
   private createDrawing(xs: Data, key: number): JSX.Element {
     const treeDrawer = Tree.fromSourceStructure(xs).draw();
 
@@ -176,82 +190,9 @@ export default class DataVisualizer {
     // To account for overflow to the top due to a backward arrow
     const topMargin = Config.StrokeWidth / 2;
 
-    const layer = treeDrawer.draw(leftMargin, topMargin);
-
-    //for normal mode
-    if (DataVisualizer.normalMode) {
-      return (
-        <Stage
-          key={key}
-          width={treeDrawer.width + leftMargin}
-          height={treeDrawer.height + topMargin}
-        >
-          {layer}
-        </Stage>
-      );
-    }
-    // NON-BINARY TREE WARNING
-    if (!DataVisualizer.isBinTree && DataVisualizer.BinTreeMode) {
-      return (
-        <Stage key={key} width={400} height={100}>
-          {layer}
-        </Stage>
-      );
-    }
-    if (!DataVisualizer.isGenTree && DataVisualizer.treeMode) {
-      return (
-        <Stage key={key} width={400} height={100}>
-          {layer}
-        </Stage>
-      );
-    }
-    if (DataVisualizer.getBinTreeMode()) {
-      // RenderBinaryTree
-      const EY1 = Math.max(treeDrawer.leftCOUNTER, treeDrawer.rightCOUNTER);
-      const EY2 = 2 * (Math.pow(2, EY1 - 1) - 1) + 1; // how many nodegroups stretch left or right (not including root)
-      const EY3 = treeDrawer.downCOUNTER - 1; // how many node groups stretch down
-      return (
-        <Stage
-          key={key}
-          width={EY2 * Config.NWidth * 2 + leftMargin * 2 + Config.NWidth}
-          height={
-            EY3 * Config.DistanceY * 2 +
-            EY3 * Config.BoxHeight * 2 +
-            Config.BoxHeight * 3 +
-            topMargin * 2
-          }
-        >
-          {layer}
-        </Stage>
-      );
-    } else if (DataVisualizer.getTreeMode()) {
-      // RenderGeneralTree
-      // const L = DataVisualizer.nodeCount[0];
-      const EY4 =
-        (Config.NWidth + Config.BoxWidth) * (DataVisualizer.longestNodePos + 1) - Config.BoxWidth;
-      const EY3 = treeDrawer.downCOUNTER;
-      return (
-        <Stage
-          key={key}
-          width={EY4 + leftMargin * 2}
-          height={EY3 * Config.BoxHeight * 4 + Config.BoxHeight + topMargin * 2}
-        >
-          {layer}
-        </Stage>
-      );
-    } else {
-      // OriginalView
-      return (
-        <Stage
-          key={key}
-          width={treeDrawer.width + leftMargin}
-          height={treeDrawer.height + topMargin}
-        >
-          {layer}
-        </Stage>
-      );
-    }
+    return treeDrawer.draw(leftMargin, topMargin, key);
   }
+
   static redraw() {
     this.isRedraw = true;
     this.clear();
