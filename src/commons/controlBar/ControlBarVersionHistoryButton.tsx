@@ -4,7 +4,7 @@ import React from 'react';
 import ControlButton from '../ControlButton';
 
 type Props = {
-  onClick?(): any;
+  onClick?: () => void;
 };
 
 export const ControlBarVersionHistoryButton: React.FC<Props> = ({ onClick }) => {
