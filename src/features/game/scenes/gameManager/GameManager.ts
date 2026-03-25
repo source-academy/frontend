@@ -247,10 +247,6 @@ class GameManager extends Phaser.Scene {
     await this.getActionManager().processGameActions(gameLocation.actionIds);
 
     // Location notification
-    // if (this.getStateManager().hasLocationNotif(locationId)) {
-    //   await GameGlobalAPI.getInstance().bringUpUpdateNotif(gameLocation.name);
-    //   this.getStateManager().removeLocationNotif(locationId);
-    // }
     await GameGlobalAPI.getInstance().bringUpUpdateNotif(gameLocation.name);
       this.getStateManager().removeLocationNotif(locationId); // will it be better to have location notification all the time?
 
