@@ -3,6 +3,7 @@ import { Group } from 'react-konva';
 
 import { Frame } from '../components/Frame';
 import { Text } from '../components/Text';
+import { FnValue } from '../components/values/FnValue';
 import { PrimitiveValue } from '../components/values/PrimitiveValue';
 import CseMachine from '../CseMachine';
 import { Config } from '../CseMachineConfig';
@@ -11,6 +12,7 @@ import {
   defaultBackgroundColor, 
   defaultStrokeColor} from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
+import { AnimatedFnObject } from './base/AnimatedFnObject';
 import { AnimatedRectComponent, AnimatedTextComponent } from './base/AnimationComponents';
 import { getNodePosition } from './base/AnimationUtils';
 
@@ -27,11 +29,15 @@ export class ClearDeadFramesAnimation extends Animatable {
   private textAnimations: AnimatedTextComponent[];
   private newTextCovers: AnimatedTextComponent[];
 
+  private fnAnimations: AnimatedFnObject[];
+  private newFns: AnimatedFnObject[];
+
   constructor(changedFramePairs: Frame[][]) {
     super();
 
     // changedTextPairs only account for binding keys and text values
     const changedTextPairs: Text[][] = [];
+    const changedFnPairs: FnValue[][] = [];
 
     // FRAMES
     this.frameAnimations = [];
@@ -71,6 +77,10 @@ export class ClearDeadFramesAnimation extends Animatable {
           if (oldValue.text instanceof Text) {
             changedTextPairs.push([(oldValue.text as Text), (newValue.text as Text)])
           }
+        } else if (oldBindings[i].value instanceof FnValue) {
+          const oldFn: FnValue = oldBindings[i].value as FnValue;
+          const newFn: FnValue = newBindings[i].value as FnValue;
+          changedFnPairs.push([oldFn, newFn]);
         }
       }
     }
@@ -85,7 +95,7 @@ export class ClearDeadFramesAnimation extends Animatable {
           ...oldTextPosition,
           text: textPair[0].fullStr
         })
-      )
+      );
       const newTextPosition = getNodePosition(textPair[1]);
       this.newTextCovers.push(
         new AnimatedTextComponent({
@@ -97,6 +107,26 @@ export class ClearDeadFramesAnimation extends Animatable {
         })
       );
     }
+
+    // FN OBJECTS
+    this.fnAnimations = [];
+    this.newFns = [];
+    for (const fnPair of changedFnPairs) {
+      console.log(fnPair)
+      const oldFnPosition = getNodePosition(fnPair[0]);
+      this.fnAnimations.push(
+        new AnimatedFnObject(fnPair[0], {
+          ...oldFnPosition
+        })
+      );
+      const newFnPosition = getNodePosition(fnPair[1]);
+      this.newFns.push(
+        new AnimatedFnObject(fnPair[1], {
+          ...newFnPosition,
+        })
+      )
+    }
+    console.log(this.fnAnimations)
   }
 
   // Covers must be written on an earlier line than their animations
@@ -108,6 +138,7 @@ export class ClearDeadFramesAnimation extends Animatable {
         {this.frameAnimations.map((rect) => rect.draw())}
         {this.newTextCovers.map((rect) => rect.draw())}
         {this.textAnimations.map((rect) => rect.draw())}
+        {this.fnAnimations.map((rect) => rect.draw())}
       </Group>
     );
   }
@@ -123,13 +154,20 @@ export class ClearDeadFramesAnimation extends Animatable {
     // TEXTS
     for (let textIdx = 0; textIdx < this.textAnimations.length; textIdx++) {
       const newTextPosition = getNodePosition(this.newTextCovers[textIdx]);
-      if (textIdx == this.textAnimations.length - 1) { // last animation, await
-        await this.textAnimations[textIdx].animateTo({
-          x: newTextPosition.x, y: newTextPosition.y
+      this.textAnimations[textIdx].animateTo({
+        x: newTextPosition.x, y: newTextPosition.y
+      }, { duration: 2 })
+    }
+    // FN OBJECTS
+    for (let fnIdx = 0; fnIdx < this.fnAnimations.length; fnIdx++) {
+      const newFnPosition = getNodePosition(this.newFns[fnIdx]);
+      if (fnIdx == this.fnAnimations.length - 1) { // last animation, await
+        await this.fnAnimations[fnIdx].animateTo({
+          x: newFnPosition.x, y: newFnPosition.y
         }, { duration: 2 })
       } else {
-        this.textAnimations[textIdx].animateTo({
-          x: newTextPosition.x, y: newTextPosition.y
+        this.fnAnimations[fnIdx].animateTo({
+          x: newFnPosition.x, y: newFnPosition.y
         }, { duration: 2 })
       }
     }
@@ -149,6 +187,9 @@ export class ClearDeadFramesAnimation extends Animatable {
     }
     for (const textCover of this.newTextCovers) {
         textCover.destroy();
+    }
+    for (const fnAnim of this.fnAnimations) {
+        fnAnim.destroy();
     }
   }
 }

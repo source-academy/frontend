@@ -1,7 +1,7 @@
 import Konva from 'konva';
 import { AnimationFn } from 'konva/lib/types';
 import React from 'react';
-import { Arrow, KonvaNodeComponent, Path, Rect, Text } from 'react-konva';
+import { Arrow, Circle, KonvaNodeComponent, Path, Rect, Text } from 'react-konva';
 
 import { CseAnimation } from '../../CseMachineAnimation';
 import { Config } from '../../CseMachineConfig';
@@ -220,5 +220,16 @@ export class AnimatedArrowComponent extends AnimationComponent<Konva.Arrow, Konv
       pointerWidth: Config.ArrowHeadSize
     };
     super(Arrow, { ...defaultProps, ...props });
+  }
+}
+
+// Mainly for animating function object
+export class AnimatedCircleComponent extends AnimationComponent<Konva.Circle, Konva.CircleConfig> {
+  constructor(props: Konva.CircleConfig) {
+    const defaultProps = {
+      radius: Config.FnRadius,
+      stroke: defaultStrokeColor()
+    };
+    super(Circle, { ...defaultProps, ...props });
   }
 }
