@@ -67,10 +67,19 @@ export const VersionHistoryPanel: React.FC<Props> = ({
   const renderVersionItem = (version: CodeVersion) => (
     <div
       key={version.id}
+      role="button"
+      tabIndex={0}
+      aria-pressed={version.id === selectedVersionId}
       className={classNames('version-history-item', {
         'version-history-item--selected': version.id === selectedVersionId
       })}
       onClick={() => setSelectedVersionId(version.id)}
+      onKeyDown={e => {
+        if (e.target === e.currentTarget && (e.key === 'Enter' || e.key === ' ')) {
+          e.preventDefault();
+          setSelectedVersionId(version.id);
+        }
+      }}
     >
       <div className="version-history-item-info">
         <EditableText
