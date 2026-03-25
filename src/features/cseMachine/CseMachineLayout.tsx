@@ -284,7 +284,7 @@ export class Layout {
   /** remove any global functions not referenced elsewhere in the program */
   private static removeUnreferencedGlobalFns(): void {
     const referencedFns = new Set<GlobalFn | NonGlobalFn>();
-    const visitedData = new Set<DataArray>();   
+    const visitedData = new Set<DataArray>();
 
     const findGlobalFnReferencesInData = (data: DataArray): void => {
       if (visitedData.has(data)) return;
