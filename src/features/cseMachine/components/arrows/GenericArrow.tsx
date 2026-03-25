@@ -211,12 +211,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
 
     // Toggle selection - clear first, then select if it wasn't already selected
     const wasSelected = this.isSelected();
-    const oldArrow = arrowSelection.clearSelection();
-
-    // Update old arrow's visual state
-    if (oldArrow && oldArrow !== this) {
-      oldArrow.setNormalStyle();
-    }
+    arrowSelection.clearSelection();
 
     if (!wasSelected) {
       this.select();
