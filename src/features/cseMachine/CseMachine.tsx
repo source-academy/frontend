@@ -137,35 +137,40 @@ export default class CseMachine {
 
     // Build ghost layout cache and built-in/predeclared functions cache lazily per mode, using mode-specific layout.
     if (!CseMachine.normalLayoutCache || !CseMachine.printLayoutCache) {
-      const userCode = context.unTypecheckedCode[0];
+      const userCode = context?.unTypecheckedCode?.[0];
 
       if (typeof userCode === 'string') {
         const cleanCode = userCode
-          .replace(/(["'`])(?:(?=(\\?))\2[\s\S])*?\1/g, '')
-          .replace(/\/\*[\s\S]*?\*\//g, '')
-          .replace(/\/\/.*/g, '');
-
+          .replace(/(["'`])(?:(?=(\\?))\2[\s\S])*?\1/g, '') 
+          .replace(/\/\*[\s\S]*?\*\//g, '')           
+          .replace(/\/\/.*/g, '');                      
+      
         const words = cleanCode.match(/[a-zA-Z_$][a-zA-Z0-9_$]*/g) || [];
-
-        const rootNode = context.runtime.environmentTree.root as EnvTreeNode;
-        const globalEnvHead = rootNode.environment.head;
-        const preludeEnvHead = rootNode?.children?.[0]?.environment?.head || {};
-        // catching all referenced predeclared and built-in functions in user code
-        for (const word of words) {
-          if (word in globalEnvHead || word in preludeEnvHead) {
-            CseMachine.usedBuiltInNames.add(word);
+      
+        // 2. Safe access for tests: ensure environmentTree exists
+        const rootNode = context?.runtime?.environmentTree?.root as EnvTreeNode | undefined;
+        
+        // 3. Wrap the logic in an if-statement. If the test has no tree, skip!
+        if (rootNode) {
+          const globalEnvHead = rootNode?.environment?.head || {};
+          const preludeEnvHead = rootNode?.children?.[0]?.environment?.head || {};
+          
+          for (const word of words) {
+            if (word in globalEnvHead || word in preludeEnvHead) {
+              CseMachine.usedBuiltInNames.add(word); 
+            }
           }
-        }
-        for (const name of CseMachine.usedBuiltInNames) {
-          // If the function is in the Prelude, it might have dependencies
-          if (name in preludeEnvHead) {
-            const source = preludeEnvHead[name].toString();
-            const internalWords = source.match(/[a-zA-Z_$][a-zA-Z0-9_$]*/g) || [];
-
-            for (const dep of internalWords) {
-              if (dep in globalEnvHead || dep in preludeEnvHead) {
-                CseMachine.usedBuiltInNames.add(dep);
-              }
+          
+          for (const name of CseMachine.usedBuiltInNames) {
+            if (name in preludeEnvHead) {
+              const source = preludeEnvHead[name]?.toString() || '';
+              const internalWords = source.match(/[a-zA-Z_$][a-zA-Z0-9_$]*/g) || [];
+            
+              for (const dep of internalWords) {
+                if ((dep in globalEnvHead || dep in preludeEnvHead) && !CseMachine.usedBuiltInNames.has(dep)) {
+                  CseMachine.usedBuiltInNames.add(dep);
+                }
+              } 
             }
           }
         }
