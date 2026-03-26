@@ -1,7 +1,7 @@
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 
 import SoundAssets from '../../assets/SoundAssets';
-import CommonBackButton from '../../commons/CommonBackButton';
+import CommonLeaveButton from '../../commons/CommonLeaveButton';
 import { Constants, screenSize } from '../../commons/CommonConstants';
 import { IGameUI, ItemId } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
@@ -28,12 +28,11 @@ class GameModeExplore implements IGameUI {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const exploreMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
-    const backButton = new CommonBackButton(
+    const leaveButton = new CommonLeaveButton(
       gameManager,
-      async () => await GameGlobalAPI.getInstance().restoreLocation(GameGlobalAPI.getInstance().getCurrLocId()), 
-      "turn around and leave"
+      async () => await GameGlobalAPI.getInstance().restoreLocation(GameGlobalAPI.getInstance().getCurrLocId())
     );
-    exploreMenuContainer.add(backButton);
+    exploreMenuContainer.add(leaveButton);
     return exploreMenuContainer;
   }
 

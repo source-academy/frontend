@@ -4,6 +4,7 @@ import { createButton } from '../utils/ButtonUtils';
 import { screenCenter } from './CommonConstants';
 import { BitmapFontStyle } from './CommonTypes';
 
+const backMessage = "back";
 const backTextYPos = -screenCenter.y * 0.975;
 const backButtonStyle: BitmapFontStyle = {
   key: FontAssets.zektonDarkFont.key,
@@ -23,9 +24,9 @@ class CommonBackButton extends Phaser.GameObjects.Container {
    * @param scene scene for the button to be attached to
    * @param callback callback to be executed on onClick
    */
-  constructor(scene: Phaser.Scene, callback: any, message: string) {
+  constructor(scene: Phaser.Scene, callback: any) {
     super(scene, 0, 0);
-    this.renderBackButton(callback, message);
+    this.renderBackButton(callback, backMessage);
   }
 
   private renderBackButton(callback: any, message: string) {
