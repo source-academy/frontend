@@ -129,31 +129,21 @@ export function* restoreVersionSaga(
     return;
   }
 
-  // Find the restored version's code and name from state
-  const restoredVersion:
-    | { code: string; name: string | null | undefined; timestamp: number }
-    | undefined = yield select((state: OverallState) => {
-    const version = state.workspaces[workspaceLocation].versionHistory.versions.find(
-      v => v.id === versionId
-    );
-    if (!version) return undefined;
-    return { code: version.code, name: version.name, timestamp: version.timestamp };
-  });
+  // Find the restored version's name and timestamp from state
+  const restoredVersion: { name: string | null | undefined; timestamp: number } | undefined =
+    yield select((state: OverallState) => {
+      const version = state.workspaces[workspaceLocation].versionHistory.versions.find(
+        v => v.id === versionId
+      );
+      if (!version) return undefined;
+      return { name: version.name, timestamp: version.timestamp };
+    });
 
   if (restoredVersion === undefined) {
     return;
   }
 
   const { name: restoredVersionName, timestamp: restoredVersionTimestamp } = restoredVersion;
-
-  // Get active editor tab index to update the editor
-  const activeEditorTabIndex: number | null = yield select(
-    (state: OverallState) => state.workspaces[workspaceLocation].activeEditorTabIndex
-  );
-
-  if (activeEditorTabIndex === null) {
-    return;
-  }
 
   // Check if this is a team assessment
   const isTeamAssessment: boolean = yield select((state: OverallState) => {
