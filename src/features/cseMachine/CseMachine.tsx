@@ -208,7 +208,7 @@ export default class CseMachine {
                 }
               }
 
-              // 2. Check Identifier Usage
+              // Check Identifier Usage
               if (node.type === 'Identifier') {
                 // Ignore property access
                 const isProperty = parentType === 'MemberExpression' && keyName === 'property';
