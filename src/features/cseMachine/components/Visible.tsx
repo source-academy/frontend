@@ -1,3 +1,4 @@
+import Konva from 'konva';
 import React from 'react';
 import { RefObject } from 'react';
 
@@ -32,9 +33,15 @@ export abstract class Visible implements IVisible {
   }
   setShapesStyle(color: string): void {
     const shapes = this.ref.current?.getChildren?.() ?? [];
-    shapes.forEach((shape: any) => {
-      if (shape.attrs.stroke) shape.stroke(color);
-      if (shape.attrs.fill) shape.fill(color);
+    shapes.forEach((shape: Konva.Node) => {
+      if (shape instanceof Konva.Shape) {
+        if (shape.attrs.stroke) {
+          shape.stroke(color);
+        }
+        if (shape.attrs.fill) {
+          shape.fill(color);
+        }
+      }
     });
   }
   public ref: RefObject<any> = React.createRef();

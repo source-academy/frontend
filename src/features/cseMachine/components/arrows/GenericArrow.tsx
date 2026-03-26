@@ -218,9 +218,6 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
       this.select();
       // Update this arrow's visual state
       this.setHighlightedStyle();
-    } else {
-      // If the arrow was already selected, deselect it and revert to normal style
-      this.setNormalStyle();
     }
 
     // Force redraw entire layer to update all arrows
