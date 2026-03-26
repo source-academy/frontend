@@ -259,11 +259,17 @@ function* performAutoSave(workspaceLocation: WorkspaceLocation): SagaIterator {
       (action.payload.saveStatus === 'saved' || action.payload.saveStatus === 'saveFailed')
   );
 
-  // Refresh version history
-  yield call(fetchVersionHistorySaga, {
-    payload: { workspaceLocation },
-    type: WorkspaceActions.fetchVersionHistory.type
-  });
+  // Refresh version history only if the panel is open;
+  const isHistoryPanelOpen: boolean = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].versionHistory.isHistoryPanelOpen
+  );
+
+  if (isHistoryPanelOpen) {
+    yield call(fetchVersionHistorySaga, {
+      payload: { workspaceLocation },
+      type: WorkspaceActions.fetchVersionHistory.type
+    });
+  }
 
   return true;
 }
