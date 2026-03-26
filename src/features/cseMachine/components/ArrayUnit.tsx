@@ -60,6 +60,22 @@ export class ArrayUnit extends Visible {
     if (!CseMachine.getPrintableMode()) this.indexRef.current?.hide();
   }
 
+  setArrowSourceHighlightedStyle(): void {
+    if (this.parent.isLive()) {
+      this.ref.current?.stroke(Config.HoverColor);
+    } else {
+      this.ref.current?.stroke(Config.HoverDeadColor);
+    }
+  }
+
+  setArrowSourceNormalStyle(): void {
+    this.ref.current?.stroke(
+      this.parent.isReferenced() && this.parent.isEnclosingFrameLive()
+        ? defaultStrokeColor()
+        : fadedStrokeColor()
+    );
+  }
+
   draw(): React.ReactNode {
     if (this.isDrawn()) return null;
     this._isDrawn = true;
