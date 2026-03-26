@@ -190,7 +190,7 @@ codeSamples.forEach((code, idx) => {
     checkLayout();
     CseMachine.togglePrintableMode();
   });
-});
+}, 10_000);
 
 const codeSamplesControlStash: [string, string, number, boolean?][] = [
   [
