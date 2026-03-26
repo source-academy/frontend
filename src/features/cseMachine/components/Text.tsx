@@ -96,7 +96,11 @@ export class Text extends Visible implements IHoverable {
   };
 
   setArrowSourceHighlightedStyle(): void {
-    this.ref.current?.fill(Config.HoverColor);
+    if (this.options.faded) {
+      this.ref.current?.fill(Config.HoverDeadColor);
+    } else {
+      this.ref.current?.fill(Config.HoverColor);
+    }
   }
 
   setArrowSourceNormalStyle(): void {

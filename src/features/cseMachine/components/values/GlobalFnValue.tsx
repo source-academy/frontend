@@ -143,7 +143,11 @@ export class GlobalFnValue extends Value implements IHoverable {
   };
 
   setArrowSourceHighlightedStyle(): void {
-    this.setShapesStyle(Config.HoverColor);
+    if (this.isReferenced()) {
+      this.setShapesStyle(Config.HoverColor);
+    } else {
+      this.setShapesStyle(Config.HoverDeadColor);
+    }
   }
 
   setArrowSourceNormalStyle(): void {

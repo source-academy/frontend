@@ -129,7 +129,11 @@ export class ContValue extends Value implements IHoverable {
   };
 
   setArrowSourceHighlightedStyle(): void {
-    this.setShapesStyle(Config.HoverColor);
+    if (this.isLive()) {
+      this.setShapesStyle(Config.HoverColor);
+    } else {
+      this.setShapesStyle(Config.HoverDeadColor);
+    }
   }
 
   setArrowSourceNormalStyle(): void {

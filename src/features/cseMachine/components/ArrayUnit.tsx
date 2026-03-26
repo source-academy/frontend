@@ -61,7 +61,11 @@ export class ArrayUnit extends Visible {
   }
 
   setArrowSourceHighlightedStyle(): void {
-    this.ref.current?.stroke(Config.HoverColor);
+    if (this.parent.isLive()) {
+      this.ref.current?.stroke(Config.HoverColor);
+    } else {
+      this.ref.current?.stroke(Config.HoverDeadColor);
+    }
   }
 
   setArrowSourceNormalStyle(): void {

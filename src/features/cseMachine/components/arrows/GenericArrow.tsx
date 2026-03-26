@@ -146,7 +146,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
    * Subclasses can override this to provide custom hover colors.
    */
   protected getHighlightedColor(): string {
-    return Config.ArrowHighlightedColor;
+    return this.isLive ? Config.ArrowHighlightedColor : Config.ArrowDeadHighlightedColor;
   }
 
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
@@ -190,8 +190,8 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
       this.arrowHeadRef.current.pointerLength(Config.ArrowHoveredHeadSize);
     }
     this.source.setArrowSourceHighlightedStyle?.();
+    this.target?.setArrowSourceHighlightedStyle?.();
   }
-
   public setNormalStyle() {
     const color = this.isLive ? defaultStrokeColor() : fadedStrokeColor();
     if (this.pathRef.current) {
@@ -204,6 +204,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
       this.arrowHeadRef.current.pointerLength(Config.ArrowHeadSize);
     }
     this.source.setArrowSourceNormalStyle?.();
+    this.target?.setArrowSourceNormalStyle?.();
   }
 
   onClick = (e: KonvaEventObject<MouseEvent>) => {

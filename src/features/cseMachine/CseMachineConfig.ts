@@ -66,6 +66,7 @@ export const Config = Object.freeze({
   PrintStrokeColor: '#777',
   PrintStrokeColorFaded: '#ccc',
   ArrowHighlightedColor: '#ffffff',
+  ArrowDeadHighlightedColor: '#787777',
 
   // Colors of different states
   ActiveColor: '#030fff',
@@ -73,6 +74,7 @@ export const Config = Object.freeze({
   DangerColor: '#ff1744',
   PrintDangerColor: '#f44336',
   HoverColor: '#25c225',
+  HoverDeadColor: '#127a12',
   PrintHoverColor: '#0dbf0d',
 
   // Colors for text hover background

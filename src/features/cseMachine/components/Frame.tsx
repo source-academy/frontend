@@ -263,7 +263,11 @@ export class Frame extends Visible implements IHoverable {
   onMouseLeave = () => {};
 
   setArrowSourceHighlightedStyle(): void {
-    this.rectRef.current?.stroke(Config.HoverColor);
+    if (this.isLive) {
+      this.rectRef.current?.stroke(Config.HoverColor);
+    } else {
+      this.rectRef.current?.stroke(Config.HoverDeadColor);
+    }
     this.name.setArrowSourceHighlightedStyle();
   }
 
