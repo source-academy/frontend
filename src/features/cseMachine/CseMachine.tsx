@@ -21,7 +21,9 @@ export default class CseMachine {
   private static setIsStepLimitExceeded: SetisStepLimitExceeded;
   // Ghost layout snapshots, separated by mode to keep coordinates fixed within each mode.
   public static normalLayoutCache: LayoutCache | null = null;
+  public static normalLiveLayoutCache: LayoutCache | null = null;
   public static printLayoutCache: LayoutCache | null = null;
+  public static printLiveLayoutCache: LayoutCache | null = null;
   private static printableMode: boolean = false;
   private static controlStash: boolean = false; // TODO: discuss if the default should be true
   private static stackTruncated: boolean = false;
@@ -44,18 +46,15 @@ export default class CseMachine {
     Layout.clearDeadFrames = enabled;
   }
   public static clearCachedLayouts(): void {
-    Layout.currentLight = undefined;
-    Layout.currentDark = undefined;
-    Layout.currentStackDark = undefined;
-    Layout.currentStackTruncDark = undefined;
-    Layout.currentStackLight = undefined;
-    Layout.currentStackTruncLight = undefined;
-    Layout.prevLayout = undefined;
-    Layout.key = 0;
     CseMachine.normalLayoutCache = null;
+    CseMachine.normalLiveLayoutCache = null;
     CseMachine.printLayoutCache = null;
+    CseMachine.printLiveLayoutCache = null;
   }
-  // added for center alignment
+  public static clearLiveLayouts(): void {
+    CseMachine.normalLiveLayoutCache = null;
+    CseMachine.printLiveLayoutCache = null;
+  }
   public static toggleCenterAlignment(): void {
     CseMachine.centerAlignment = !CseMachine.centerAlignment;
     CseMachine.centerAlignmentToggled = true;
@@ -73,20 +72,32 @@ export default class CseMachine {
   public static getStackTruncated(): boolean {
     return CseMachine.stackTruncated;
   }
-  // added for center alignment
   public static getCenterAlignment(): boolean {
     return CseMachine.centerAlignment;
   }
   public static getMasterLayout(): LayoutCache | null {
     return CseMachine.getPrintableMode()
-      ? CseMachine.printLayoutCache
-      : CseMachine.normalLayoutCache;
+      ? Layout.clearDeadFrames
+        ? CseMachine.printLiveLayoutCache
+        : CseMachine.printLayoutCache
+      : Layout.clearDeadFrames
+        ? CseMachine.normalLiveLayoutCache
+        : CseMachine.normalLayoutCache;
   }
   public static setMasterLayout(cache: LayoutCache): void {
     if (CseMachine.getPrintableMode()) {
       CseMachine.printLayoutCache = cache;
+      if (Layout.clearDeadFrames) {
+        CseMachine.printLiveLayoutCache = cache;
+      } else {
+        CseMachine.printLayoutCache = cache;
+      }
     } else {
-      CseMachine.normalLayoutCache = cache;
+      if (Layout.clearDeadFrames) {
+        CseMachine.normalLiveLayoutCache = cache;
+      } else {
+        CseMachine.normalLayoutCache = cache;
+      }
     }
   }
 
@@ -174,6 +185,7 @@ export default class CseMachine {
     // console.log('2. redrawing');
     if (CseMachine.environmentTree && CseMachine.control && CseMachine.stash) {
       // checks if the required diagram exists, and updates the dom node using setVis
+
       // if center alignment is toggled, change the alignment and redraw the diagram with new coordinates
       if (this.centerAlignmentToggled) {
         // console.log('center alignment toggled');
@@ -184,6 +196,14 @@ export default class CseMachine {
         Layout.applyCenterAlignment();
         this.setVis(Layout.draw());
         this.centerAlignmentToggled = false;
+      }
+      // redraw environment model and populate live layout caches
+      if (Layout.clearDeadFrames) {
+        Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
+        if (!CseMachine.getMasterLayout()) {
+          CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
+        }
+        Layout.applyFixedPositions();
       }
 
       if (
