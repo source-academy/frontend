@@ -40,10 +40,7 @@ export const VersionHistoryPanel: React.FC<Props> = ({
 }) => {
   const [selectedVersionId, setSelectedVersionId] = useState<string | null>(null);
 
-  const sortedVersions = useMemo(
-    () => [...versions].sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0)),
-    [versions]
-  );
+  const sortedVersions = useMemo(() => [...versions].reverse(), [versions]);
 
   useEffect(() => {
     if (!isOpen || sortedVersions.length === 0) {
