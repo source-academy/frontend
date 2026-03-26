@@ -30,8 +30,8 @@ class GameModeExplore implements IGameUI {
 
     const backButton = new CommonBackButton(
       gameManager,
-      // async () => await GameGlobalAPI.getInstance().swapPhase(GamePhaseType.Menu)
-      async () => await GameGlobalAPI.getInstance().restoreLocation(GameGlobalAPI.getInstance().getCurrLocId())
+      async () => await GameGlobalAPI.getInstance().restoreLocation(GameGlobalAPI.getInstance().getCurrLocId()), 
+      "turn around and leave"
     );
     exploreMenuContainer.add(backButton);
     return exploreMenuContainer;
