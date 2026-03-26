@@ -1,5 +1,6 @@
 import { Context } from 'js-slang';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
+import { parse } from 'js-slang/dist/parser/parser';
 import React from 'react';
 
 import { arrowSelection } from './components/arrows/ArrowSelection';
@@ -140,42 +141,118 @@ export default class CseMachine {
       const userCode = context?.unTypecheckedCode?.[0];
 
       if (typeof userCode === 'string') {
-        const cleanCode = userCode
-          // Filtering out comments/strings
-          .replace(/"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`/g, '')
-          .replace(/\/\*[\s\S]*?\*\//g, '')
-          .replace(/\/\/.*/g, '');
-
-        const words = cleanCode.match(/[a-zA-Z_$][a-zA-Z0-9_$]*/g) || [];
-
         const rootNode = context?.runtime?.environmentTree?.root as EnvTreeNode | undefined;
 
         if (rootNode) {
           const globalEnvHead = rootNode?.environment?.head || {};
           const preludeEnvHead = rootNode?.children?.[0]?.environment?.head || {};
-          // adding referenced built-in and predelcared functions
-          for (const word of words) {
-            if (word in globalEnvHead || word in preludeEnvHead) {
-              CseMachine.usedBuiltInNames.add(word);
-            }
-          }
 
-          const worklist = Array.from(CseMachine.usedBuiltInNames);
+          // Helper to check if a word is actually a built-in function
+          const isBuiltIn = (name: string) => name in globalEnvHead || name in preludeEnvHead;
 
-          for (let i = 0; i < worklist.length; i++) {
-            const name = worklist[i];
+          const ast = parse(userCode, context);
 
-            if (name in preludeEnvHead) {
-              const source = preludeEnvHead[name]?.toString() || '';
-              const internalWords = source.match(/[a-zA-Z_$][a-zA-Z0-9_$]*/g) || [];
-              // Adding transitive dependencies for referenced Prelude functions
-              for (const dep of internalWords) {
-                if (
-                  (dep in globalEnvHead || dep in preludeEnvHead) &&
-                  !CseMachine.usedBuiltInNames.has(dep)
-                ) {
-                  CseMachine.usedBuiltInNames.add(dep);
-                  worklist.push(dep);
+          if (ast) {
+            // THE scope stack: Index 0 is the global program scope.
+            // We push a new Set() when entering a block/function, and pop() when leaving.
+            const scopeStack: Set<string>[] = [new Set()];
+
+            const currentScope = () => scopeStack[scopeStack.length - 1];
+
+            // Checks if a variable exists in the current scope or any parent scope
+            const isDeclaredInScope = (name: string) => {
+              for (let i = scopeStack.length - 1; i >= 0; i--) {
+                if (scopeStack[i].has(name)) return true;
+              }
+              return false;
+            };
+
+            const declareName = (node: any) => {
+              if (node && node.type === 'Identifier') {
+                currentScope().add(node.name);
+              }
+            };
+
+            // The Recursive Walker
+            const walk = (node: any, parentType?: string, keyName?: string) => {
+              if (!node || typeof node !== 'object') return;
+
+              let isNewScope = false;
+
+              // Enter Scope Boundary (Blocks and Functions)
+              if (node.type === 'BlockStatement' || node.type === 'Program') {
+                isNewScope = true;
+                if (node.type !== 'Program') scopeStack.push(new Set());
+
+                // add declarations into this scope before traversing deeper
+                const body = node.body || [];
+                for (const stmt of body) {
+                  if (stmt.type === 'VariableDeclaration') {
+                    for (const decl of stmt.declarations) {
+                      declareName(decl.id);
+                    }
+                  } else if (stmt.type === 'FunctionDeclaration') {
+                    declareName(stmt.id);
+                  }
+                }
+              } else if (
+                node.type === 'ArrowFunctionExpression' ||
+                node.type === 'FunctionExpression' ||
+                node.type === 'FunctionDeclaration'
+              ) {
+                isNewScope = true;
+                scopeStack.push(new Set());
+                // Function parameters act as local variables in this new scope
+                if (node.params) {
+                  node.params.forEach(declareName);
+                }
+              }
+
+              // 2. Check Identifier Usage
+              if (node.type === 'Identifier') {
+                // Ignore property access
+                const isProperty = parentType === 'MemberExpression' && keyName === 'property';
+
+                // If it's used, not in our scope stack, and is a built-in, add it to used global functions
+                if (!isProperty && !isDeclaredInScope(node.name) && isBuiltIn(node.name)) {
+                  CseMachine.usedBuiltInNames.add(node.name);
+                }
+              }
+
+              // Traverse Children Recursively
+              for (const key in node) {
+                const child = node[key];
+                if (child && typeof child === 'object') {
+                  if (Array.isArray(child)) {
+                    child.forEach(c => walk(c, node.type, key));
+                  } else {
+                    walk(child, node.type, key);
+                  }
+                }
+              }
+
+              // Exit Scope Boundary
+              if (isNewScope && node.type !== 'Program') {
+                scopeStack.pop();
+              }
+            };
+            walk(ast);
+
+            const worklist = Array.from(CseMachine.usedBuiltInNames);
+
+            for (let i = 0; i < worklist.length; i++) {
+              const name = worklist[i];
+
+              // If it's a predeclared function, it might rely on other predeclared/built-in
+              if (name in preludeEnvHead) {
+                const source = preludeEnvHead[name]?.toString() || '';
+                const internalWords = source.match(/[a-zA-Z_$][a-zA-Z0-9_$]*/g) || [];
+
+                for (const dep of internalWords) {
+                  if (isBuiltIn(dep) && !CseMachine.usedBuiltInNames.has(dep)) {
+                    CseMachine.usedBuiltInNames.add(dep);
+                    worklist.push(dep);
+                  }
                 }
               }
             }
