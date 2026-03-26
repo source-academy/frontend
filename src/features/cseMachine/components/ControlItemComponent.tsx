@@ -92,6 +92,16 @@ export class ControlItemComponent extends Visible implements IHoverable {
     this.ref.current.zIndex(this.zIndex);
   };
 
+  setArrowSourceHighlightedStyle(): void {
+    this.tag?.stroke(Config.HoverColor);
+    this.secItem?.fill(Config.HoverColor);
+  }
+
+  setArrowSourceNormalStyle(): void {
+    this.tag?.stroke(this.topItem ? defaultActiveColor() : defaultStrokeColor());
+    this.secItem?.fill(defaultTextColor());
+  }
+
   destroy() {
     this.ref.current.destroyChildren();
   }
