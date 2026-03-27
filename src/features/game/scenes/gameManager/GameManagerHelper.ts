@@ -1,5 +1,4 @@
 import GameModeExplore from '../../mode/explore/GameModeExplore';
-import GameModeMove from '../../mode/move/GameModeMove';
 import GameModeSequence from '../../mode/sequence/GameModeSequence';
 import GameModeTalk from '../../mode/talk/GameModeTalk';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
@@ -9,7 +8,6 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
  */
 export const createGamePhases = () => {
   return new Map([
-    [GamePhaseType.Move, new GameModeMove()],
     [GamePhaseType.Explore, new GameModeExplore()],
     [GamePhaseType.Talk, new GameModeTalk()],
     [GamePhaseType.Sequence, new GameModeSequence()],
