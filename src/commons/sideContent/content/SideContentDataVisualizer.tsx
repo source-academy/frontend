@@ -182,10 +182,9 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
                     if (DataVisualizer.getNormalMode()) {
                       DataVisualizer.toggleNormalMode();
                     }
-                    if (DataVisualizer.getBinTreeMode()) {
+                    if (!DataVisualizer.getBinTreeMode()) {
                       DataVisualizer.toggleBinTreeMode();
                     }
-                    DataVisualizer.toggleBinTreeMode();
                     DataVisualizer.redraw();
                   }}
                 >
@@ -214,10 +213,9 @@ class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchP
                     if (DataVisualizer.getNormalMode()) {
                       DataVisualizer.toggleNormalMode();
                     }
-                    if (DataVisualizer.getTreeMode()) {
+                    if (!DataVisualizer.getTreeMode()) {
                       DataVisualizer.toggleTreeMode();
                     }
-                    DataVisualizer.toggleTreeMode();
                     DataVisualizer.redraw();
                   }}
                 >
