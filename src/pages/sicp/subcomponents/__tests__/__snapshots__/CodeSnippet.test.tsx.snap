@@ -1,201 +1,169 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Sicp Code Snippet > renders correctly with prepend 1`] = `
-<div
-  className="sicp-code-snippet"
->
-  <Blueprint6.Card
-    className="sicp-code-snippet-closed"
-    elevation={2}
-    interactive={true}
+<DocumentFragment>
+  <div
+    class="sicp-code-snippet"
   >
-    <SyntaxHighlighter
-      language="javascript"
-      onClick={[Function]}
-      style={
-        {
-          ":not(pre) > code[class*="language-"]": {
-            "background": "transparent",
-            "borderRadius": "0.3em",
-            "padding": "0.1em",
-            "whiteSpace": "normal",
-          },
-          "boolean": {
-            "color": "#FF628C",
-          },
-          "code[class*="language-"]": {
-            "MozHyphens": "none",
-            "MozTabSize": "4",
-            "OTabSize": "4",
-            "WebkitHyphens": "none",
-            "background": "transparent",
-            "color": "white",
-            "fontFamily": "'Inconsolata', 'Consolas', monospace",
-            "fontSize": "1rem",
-            "hyphens": "none",
-            "lineHeight": "1.5",
-            "msHyphens": "none",
-            "tabSize": "4",
-            "textAlign": "left",
-            "whiteSpace": "pre",
-            "wordBreak": "normal",
-            "wordSpacing": "normal",
-            "wordWrap": "normal",
-          },
-          "comment": {
-            "color": "#0088FF",
-          },
-          "function": {
-            "color": "#ffdd00",
-          },
-          "keyword": {
-            "color": "#FF9D00",
-          },
-          "number": {
-            "color": "#FF628C",
-          },
-          "operator": {
-            "color": "#FF9D00",
-          },
-          "pre[class*="language-"]": {
-            "MozHyphens": "none",
-            "MozTabSize": "4",
-            "OTabSize": "4",
-            "WebkitHyphens": "none",
-            "background": "#2c3e50",
-            "borderRadius": "0.3em",
-            "color": "white",
-            "fontFamily": "'Inconsolata', 'Consolas', monospace",
-            "hyphens": "none",
-            "lineHeight": "1.5",
-            "margin": "0.5em 0",
-            "msHyphens": "none",
-            "overflow": "auto",
-            "padding": "1em",
-            "tabSize": "4",
-            "textAlign": "left",
-            "whiteSpace": "pre",
-            "wordBreak": "normal",
-            "wordSpacing": "normal",
-            "wordWrap": "normal",
-          },
-          "punctuation": {
-            "color": "white",
-          },
-          "string": {
-            "color": "#3AD900",
-          },
-        }
-      }
+    <div
+      class="sicp-code-snippet-closed bp6-card bp6-elevation-2 bp6-interactive"
     >
-      const a = 1;
-a+1;
-    </SyntaxHighlighter>
-  </Blueprint6.Card>
-  <ForwardRef>
-    <em>
-      2
-    </em>
-  </ForwardRef>
-</div>
+      <pre
+        style="color: white; background: rgb(44, 62, 80); font-family: "Inconsolata", "Consolas", monospace; text-align: left; white-space: pre; word-spacing: normal; word-break: normal; word-wrap: normal; line-height: 1.5; tab-size: 4; hyphens: none; padding: 1em; margin: 0.5em 0px; overflow: auto; border-radius: 0.3em;"
+      >
+        <code
+          class="language-javascript"
+          style="white-space: pre; color: white; background: transparent; font-family: "Inconsolata", "Consolas", monospace; text-align: left; word-spacing: normal; word-break: normal; word-wrap: normal; line-height: 1.5; tab-size: 4; hyphens: none; font-size: 1rem;"
+        >
+          <span
+            class="token token"
+            style="color: rgb(255, 157, 0);"
+          >
+            const
+          </span>
+          <span>
+             a 
+          </span>
+          <span
+            class="token token"
+            style="color: rgb(255, 157, 0);"
+          >
+            =
+          </span>
+          <span>
+             
+          </span>
+          <span
+            class="token token"
+            style="color: rgb(255, 98, 140);"
+          >
+            1
+          </span>
+          <span
+            class="token token"
+            style="color: white;"
+          >
+            ;
+          </span>
+          <span>
+            
+
+          </span>
+          <span>
+            a
+          </span>
+          <span
+            class="token token"
+            style="color: rgb(255, 157, 0);"
+          >
+            +
+          </span>
+          <span
+            class="token token"
+            style="color: rgb(255, 98, 140);"
+          >
+            1
+          </span>
+          <span
+            class="token token"
+            style="color: white;"
+          >
+            ;
+          </span>
+        </code>
+      </pre>
+    </div>
+    <pre
+      class="bp6-code-block"
+    >
+      <em>
+        2
+      </em>
+    </pre>
+  </div>
+</DocumentFragment>
 `;
 
 exports[`Sicp Code Snippet > renders correctly without prepend 1`] = `
-<div
-  className="sicp-code-snippet"
->
-  <Blueprint6.Card
-    className="sicp-code-snippet-closed"
-    elevation={2}
-    interactive={true}
+<DocumentFragment>
+  <div
+    class="sicp-code-snippet"
   >
-    <SyntaxHighlighter
-      language="javascript"
-      onClick={[Function]}
-      style={
-        {
-          ":not(pre) > code[class*="language-"]": {
-            "background": "transparent",
-            "borderRadius": "0.3em",
-            "padding": "0.1em",
-            "whiteSpace": "normal",
-          },
-          "boolean": {
-            "color": "#FF628C",
-          },
-          "code[class*="language-"]": {
-            "MozHyphens": "none",
-            "MozTabSize": "4",
-            "OTabSize": "4",
-            "WebkitHyphens": "none",
-            "background": "transparent",
-            "color": "white",
-            "fontFamily": "'Inconsolata', 'Consolas', monospace",
-            "fontSize": "1rem",
-            "hyphens": "none",
-            "lineHeight": "1.5",
-            "msHyphens": "none",
-            "tabSize": "4",
-            "textAlign": "left",
-            "whiteSpace": "pre",
-            "wordBreak": "normal",
-            "wordSpacing": "normal",
-            "wordWrap": "normal",
-          },
-          "comment": {
-            "color": "#0088FF",
-          },
-          "function": {
-            "color": "#ffdd00",
-          },
-          "keyword": {
-            "color": "#FF9D00",
-          },
-          "number": {
-            "color": "#FF628C",
-          },
-          "operator": {
-            "color": "#FF9D00",
-          },
-          "pre[class*="language-"]": {
-            "MozHyphens": "none",
-            "MozTabSize": "4",
-            "OTabSize": "4",
-            "WebkitHyphens": "none",
-            "background": "#2c3e50",
-            "borderRadius": "0.3em",
-            "color": "white",
-            "fontFamily": "'Inconsolata', 'Consolas', monospace",
-            "hyphens": "none",
-            "lineHeight": "1.5",
-            "margin": "0.5em 0",
-            "msHyphens": "none",
-            "overflow": "auto",
-            "padding": "1em",
-            "tabSize": "4",
-            "textAlign": "left",
-            "whiteSpace": "pre",
-            "wordBreak": "normal",
-            "wordSpacing": "normal",
-            "wordWrap": "normal",
-          },
-          "punctuation": {
-            "color": "white",
-          },
-          "string": {
-            "color": "#3AD900",
-          },
-        }
-      }
+    <div
+      class="sicp-code-snippet-closed bp6-card bp6-elevation-2 bp6-interactive"
     >
-      const a = 1;
-a+1;
-    </SyntaxHighlighter>
-  </Blueprint6.Card>
-  <ForwardRef>
-    <em>
-      2
-    </em>
-  </ForwardRef>
-</div>
+      <pre
+        style="color: white; background: rgb(44, 62, 80); font-family: "Inconsolata", "Consolas", monospace; text-align: left; white-space: pre; word-spacing: normal; word-break: normal; word-wrap: normal; line-height: 1.5; tab-size: 4; hyphens: none; padding: 1em; margin: 0.5em 0px; overflow: auto; border-radius: 0.3em;"
+      >
+        <code
+          class="language-javascript"
+          style="white-space: pre; color: white; background: transparent; font-family: "Inconsolata", "Consolas", monospace; text-align: left; word-spacing: normal; word-break: normal; word-wrap: normal; line-height: 1.5; tab-size: 4; hyphens: none; font-size: 1rem;"
+        >
+          <span
+            class="token token"
+            style="color: rgb(255, 157, 0);"
+          >
+            const
+          </span>
+          <span>
+             a 
+          </span>
+          <span
+            class="token token"
+            style="color: rgb(255, 157, 0);"
+          >
+            =
+          </span>
+          <span>
+             
+          </span>
+          <span
+            class="token token"
+            style="color: rgb(255, 98, 140);"
+          >
+            1
+          </span>
+          <span
+            class="token token"
+            style="color: white;"
+          >
+            ;
+          </span>
+          <span>
+            
+
+          </span>
+          <span>
+            a
+          </span>
+          <span
+            class="token token"
+            style="color: rgb(255, 157, 0);"
+          >
+            +
+          </span>
+          <span
+            class="token token"
+            style="color: rgb(255, 98, 140);"
+          >
+            1
+          </span>
+          <span
+            class="token token"
+            style="color: white;"
+          >
+            ;
+          </span>
+        </code>
+      </pre>
+    </div>
+    <pre
+      class="bp6-code-block"
+    >
+      <em>
+        2
+      </em>
+    </pre>
+  </div>
+</DocumentFragment>
 `;
