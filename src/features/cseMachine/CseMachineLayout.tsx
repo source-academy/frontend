@@ -379,15 +379,9 @@ export class Layout {
    * JS Slang environment ids are numeric strings that increase monotonically as frames are created.
    */
   private static sortNodesByCreation(nodes: EnvTreeNode[]): EnvTreeNode[] {
-    return [...nodes].sort((left, right) => {
-      const leftId = Number(left.environment.id);
-      const rightId = Number(right.environment.id);
-      const bothNumeric = !Number.isNaN(leftId) && !Number.isNaN(rightId);
-
-      return bothNumeric
-        ? leftId - rightId
-        : String(left.environment.id).localeCompare(String(right.environment.id));
-    });
+    return [...nodes].sort((left, right) =>
+      left.environment.id.localeCompare(right.environment.id, undefined, { numeric: true })
+    );
   }
 
   /** initializes grid */
