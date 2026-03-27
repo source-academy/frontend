@@ -60,7 +60,10 @@ export default class LocationParser {
         });
         break;
       case 'back':
-        location.back = configValues;
+        configValues.forEach(backLocationId => {
+          Parser.validator.assertEntityType(GameEntityType.locations, backLocationId);
+          location.back = backLocationId;
+        });
         break;
       case 'talkTopics': {
         const talkTopics = configValues;
