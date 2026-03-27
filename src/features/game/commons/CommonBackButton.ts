@@ -4,7 +4,7 @@ import { createButton } from '../utils/ButtonUtils';
 import { screenCenter } from './CommonConstants';
 import { BitmapFontStyle } from './CommonTypes';
 
-const backMessage = "back";
+const backMessage = 'back';
 const backTextYPos = -screenCenter.y * 0.975;
 const backButtonStyle: BitmapFontStyle = {
   key: FontAssets.zektonDarkFont.key,

@@ -1,9 +1,9 @@
-import GameModeTalk from "./GameModeTalk";
+import GameModeTalk from './GameModeTalk';
 
 class TopicListManager {
-    public generateTopicList() {
-        new GameModeTalk().activateUI();
-    }
+  public generateTopicList() {
+    new GameModeTalk().activateUI();
+  }
 }
 
 export default TopicListManager;

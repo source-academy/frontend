@@ -166,9 +166,9 @@ export default class GameActionExecuter {
 
   /**
    * Determine whether the action is about talking or not for the cursor changer
-   * 
+   *
    * @param actionType - the type of action
-   * @returns 
+   * @returns
    */
   public static isTalkAction(actionType: GameActionType) {
     switch (actionType) {
@@ -182,9 +182,9 @@ export default class GameActionExecuter {
 
   /**
    * Determine whether the action leads to the change of the location
-   * 
+   *
    * @param actionType - the type of action
-   * @returns 
+   * @returns
    */
   public static isMoveAction(actionType: GameActionType) {
     switch (actionType) {

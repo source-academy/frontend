@@ -1,8 +1,8 @@
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 
 import SoundAssets from '../../assets/SoundAssets';
-import CommonLeaveButton from '../../commons/CommonLeaveButton';
 import { Constants, screenSize } from '../../commons/CommonConstants';
+import CommonLeaveButton from '../../commons/CommonLeaveButton';
 import { IGameUI, ItemId } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
@@ -30,7 +30,10 @@ class GameModeExplore implements IGameUI {
 
     const leaveButton = new CommonLeaveButton(
       gameManager,
-      async () => await GameGlobalAPI.getInstance().restoreLocation(GameGlobalAPI.getInstance().getCurrLocId())
+      async () =>
+        await GameGlobalAPI.getInstance().restoreLocation(
+          GameGlobalAPI.getInstance().getCurrLocId()
+        )
     );
     exploreMenuContainer.add(leaveButton);
     return exploreMenuContainer;

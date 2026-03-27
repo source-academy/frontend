@@ -83,9 +83,9 @@ export default class GameActionManager {
 
   /**
    * check if the action is about talking to change the cursor
-   * 
+   *
    * @param actionType action type
-   * @returns 
+   * @returns
    */
   public isTalkAction(actionType: GameActionType): boolean {
     return GameActionExecuter.isTalkAction(actionType);
@@ -93,13 +93,11 @@ export default class GameActionManager {
 
   /**
    * Check if the action is about moving to change the cursor
-   * 
+   *
    * @param actionType action type
-   * @returns 
+   * @returns
    */
   public isMoveAction(actionType: GameActionType): boolean {
     return GameActionExecuter.isMoveAction(actionType);
   }
-
-
 }

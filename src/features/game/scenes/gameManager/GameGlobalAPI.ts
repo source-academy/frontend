@@ -23,7 +23,6 @@ import { TaskDetail } from '../../task/GameTaskTypes';
 import { courseId, mandatory } from '../../utils/GameUtils';
 import GameManager from './GameManager';
 
-
 /**
  * This class exposes all the public API's of managers
  * in the Game Manager scene.
@@ -570,7 +569,6 @@ class GameGlobalAPI {
   public async showTopicList() {
     await this.getGameManager().getTopicManager().generateTopicList();
   }
-
 }
 
 export default GameGlobalAPI;

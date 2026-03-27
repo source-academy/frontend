@@ -237,7 +237,7 @@ class GameManager extends Phaser.Scene {
       await this.getActionManager().processGameActions(
         this.getStateManager().getGameMap().getGameStartActions()
       );
-      
+
       if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Sequence)) {
         await this.getPhaseManager().swapPhase(GamePhaseType.Explore); // by default the game is in explore mode at start
       }
@@ -248,9 +248,7 @@ class GameManager extends Phaser.Scene {
 
     // Location notification
     await GameGlobalAPI.getInstance().bringUpUpdateNotif(gameLocation.name);
-      this.getStateManager().removeLocationNotif(locationId); // will it be better to have location notification all the time?
-
-    
+    this.getStateManager().removeLocationNotif(locationId); // will it be better to have location notification all the time?
   }
 
   /**
@@ -280,7 +278,6 @@ class GameManager extends Phaser.Scene {
     if (this.actionJustSaved) {
       return;
     }
-
   }
 
   public async restoreLocation(locationId: LocationId) {
@@ -395,7 +392,6 @@ class GameManager extends Phaser.Scene {
     }
   }
 
-  
   public getSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
   public getStateManager = () => mandatory(this.stateManager);
   public getObjectManager = () => mandatory(this.objectManager);

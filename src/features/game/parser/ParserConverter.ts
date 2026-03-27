@@ -61,7 +61,7 @@ const stringToActionTypeMap = {
   update_assessment_status: GameActionType.UpdateAssessmentStatus,
   delay: GameActionType.Delay,
   show_quiz: GameActionType.ShowQuiz,
-  change_location_to: GameActionType.ChangeLocationTo, 
+  change_location_to: GameActionType.ChangeLocationTo,
   show_topics: GameActionType.ShowTopics
 };
 
