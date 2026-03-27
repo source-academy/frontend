@@ -1,3 +1,4 @@
+import { Rect as KonvaRect } from 'konva/lib/shapes/Rect';
 import React from 'react';
 import { Group, Rect } from 'react-konva';
 
@@ -15,16 +16,21 @@ import {
   isClosure,
   isDataArray,
   isDummyKey,
+  isMainReference,
   isPrimitiveData,
   isSourceObject,
   isUnassigned
 } from '../CseMachineUtils';
-import { isContinuation } from '../utils/scheme';
+import { isContinuation } from '../utils/continuation';
 import { ArrowFromFrame } from './arrows/ArrowFromFrame';
 import { GenericArrow } from './arrows/GenericArrow';
 import { Binding } from './Binding';
 import { Level } from './Level';
 import { Text } from './Text';
+import { ArrayValue } from './values/ArrayValue';
+import { ContValue } from './values/ContValue';
+import { FnValue } from './values/FnValue';
+import { GlobalFnValue } from './values/GlobalFnValue';
 import { Visible } from './Visible';
 
 const frameNames = new Map([
@@ -45,7 +51,7 @@ export class Frame extends Visible implements IHoverable {
 
   /** total height = frame height + frame title height */
   readonly totalHeight: number;
-  /** width of this frame + max width of the bound values */
+  /** width budget of this frame block (excluding right-side data overflow) */
   readonly totalWidth: number;
 
   /** width of data beside frame */
@@ -54,6 +60,7 @@ export class Frame extends Visible implements IHoverable {
   readonly bindings: Binding[] = [];
   /** name of this frame to display */
   private _name!: Text; // removed readonly to allow reassignment for fixed layout
+  private readonly rectRef = React.createRef<KonvaRect | null>();
   /** the level in which this frame resides */
   readonly level: Level | undefined;
   /** environment associated with this frame */
@@ -138,9 +145,9 @@ export class Frame extends Visible implements IHoverable {
       entries.push([`${i++}`, descriptor]);
     }
 
-    // Find the correct width of the frame before creating the bindings
+    // Find the correct width of the frame before creating the bindings.
+    // This pass sizes only the frame body (text and primitive values inside the frame).
     this._width = Config.FrameMinWidth;
-    let totalWidth = this._width + Config.FrameMinGapX;
     for (const [key, data] of entries) {
       if (isDummyKey(key)) continue;
       const constant =
@@ -160,66 +167,6 @@ export class Frame extends Visible implements IHoverable {
           );
       }
       this._width = Math.max(this._width, bindingTextWidth + Config.FramePaddingX * 2);
-
-      // calculate width needed for data spacing to avoid collision
-      if (isDataArray(data.value)) {
-        // helper function to calculate an array width
-        const getChainWidth = (startNode: any[]): number => {
-          let w = 0;
-          let curr = startNode;
-          const seen = new Set();
-
-          while (isDataArray(curr)) {
-            // escape from circular lists
-            if (seen.has(curr)) break;
-            seen.add(curr);
-            w += curr.length * Config.DataUnitWidth;
-            const lastIndex = curr.length - 1;
-            const lastElement = curr[lastIndex];
-
-            if (isDataArray(lastElement)) {
-              w += Config.DataUnitWidth;
-              curr = lastElement;
-            } else {
-              break;
-            }
-          }
-          return w;
-        };
-
-        let maxWidth = 0;
-        let currentSpineX = 0;
-        let curr = data.value;
-        const seenSpine = new Set();
-
-        while (isDataArray(curr)) {
-          if (seenSpine.has(curr)) break;
-          seenSpine.add(curr);
-          const blockWidth = curr.length * Config.DataUnitWidth;
-          const head = curr[0];
-
-          if (isDataArray(head)) {
-            const branchWidth = getChainWidth(head);
-            maxWidth = Math.max(maxWidth, currentSpineX + branchWidth);
-          }
-
-          currentSpineX += blockWidth;
-
-          const lastIndex = curr.length - 1;
-          const lastElement = curr[lastIndex];
-
-          if (isDataArray(lastElement)) {
-            currentSpineX += Config.DataUnitWidth;
-            curr = lastElement;
-          } else {
-            maxWidth = Math.max(maxWidth, currentSpineX);
-            break;
-          }
-        }
-
-        this.totalDataWidth = Math.max(this.totalDataWidth, maxWidth);
-      }
-      totalWidth = Math.max(totalWidth, this._width + Config.FrameMinGapX);
     }
 
     // Create all the bindings and values
@@ -240,9 +187,33 @@ export class Frame extends Visible implements IHoverable {
       );
       prevBinding = currBinding;
       this.bindings.push(currBinding);
-      totalWidth = Math.max(totalWidth, currBinding.width() + Config.FramePaddingX);
     }
-    this.totalWidth = totalWidth;
+
+    // Post-process using actual created values to get robust spacing for nested arrays/functions.
+    // `totalDataWidth` is measured strictly as overflow beyond the frame's right edge.
+    const frameRightX = this.x() + this.width();
+    for (const binding of this.bindings) {
+      const value = binding.value;
+      if (!isMainReference(value, binding)) continue;
+
+      let valueRightX: number | undefined;
+      if (value instanceof ArrayValue) {
+        valueRightX = value.x() + value.totalWidth;
+      } else if (value instanceof FnValue || value instanceof GlobalFnValue) {
+        valueRightX = CseMachine.getPrintableMode()
+          ? value.x() + value.totalWidth
+          : value.x() + value.width();
+      } else if (value instanceof ContValue) {
+        valueRightX = value.x() + value.width() + value.tooltipWidth;
+      }
+
+      if (valueRightX !== undefined) {
+        const overflow = Math.max(0, valueRightX - frameRightX);
+        this.totalDataWidth = Math.max(this.totalDataWidth, overflow);
+      }
+    }
+
+    this.totalWidth = this.width();
 
     // derive the height of the frame from the the position of the last binding
     this._height = prevBinding
@@ -291,6 +262,26 @@ export class Frame extends Visible implements IHoverable {
 
   onMouseLeave = () => {};
 
+  setArrowSourceHighlightedStyle(): void {
+    if (this.isLive) {
+      this.rectRef.current?.stroke(Config.HoverColor);
+    } else {
+      this.rectRef.current?.stroke(Config.HoverDeadColor);
+    }
+    this.name.setArrowSourceHighlightedStyle();
+  }
+
+  setArrowSourceNormalStyle(): void {
+    this.rectRef.current?.stroke(
+      CseMachine.getCurrentEnvId() === this.environment?.id
+        ? defaultActiveColor()
+        : this.isLive
+          ? defaultStrokeColor()
+          : fadedStrokeColor()
+    );
+    this.name.setArrowSourceNormalStyle();
+  }
+
   draw(): React.ReactNode {
     return (
       <Group ref={this.ref} key={Layout.key++}>
@@ -298,6 +289,7 @@ export class Frame extends Visible implements IHoverable {
 
         <Rect
           {...ShapeDefaultProps}
+          ref={this.rectRef}
           x={this.x()}
           y={this.y()}
           width={this.width()}

@@ -19,8 +19,9 @@ export default class CseMachine {
   public static setEditorHighlightedLines: SetEditorHighlightedLines;
   /** callback function to update the step limit exceeded state in the SideContentCseMachine component */
   private static setIsStepLimitExceeded: SetisStepLimitExceeded;
-  // This stores the "Ghost Run (last step x coordinates)" snapshot
-  public static masterLayout: LayoutCache | null = null;
+  // Ghost layout snapshots, separated by mode to keep coordinates fixed within each mode.
+  public static normalLayoutCache: LayoutCache | null = null;
+  public static printLayoutCache: LayoutCache | null = null;
   private static printableMode: boolean = false;
   private static controlStash: boolean = false; // TODO: discuss if the default should be true
   private static stackTruncated: boolean = false;
@@ -38,6 +39,21 @@ export default class CseMachine {
   }
   public static toggleStackTruncated(): void {
     CseMachine.stackTruncated = !CseMachine.stackTruncated;
+  }
+  public static setClearDeadFrames(enabled: boolean): void {
+    Layout.clearDeadFrames = enabled;
+  }
+  public static clearCachedLayouts(): void {
+    Layout.currentLight = undefined;
+    Layout.currentDark = undefined;
+    Layout.currentStackDark = undefined;
+    Layout.currentStackTruncDark = undefined;
+    Layout.currentStackLight = undefined;
+    Layout.currentStackTruncLight = undefined;
+    Layout.prevLayout = undefined;
+    Layout.key = 0;
+    CseMachine.normalLayoutCache = null;
+    CseMachine.printLayoutCache = null;
   }
   // added for center alignment
   public static toggleCenterAlignment(): void {
@@ -60,6 +76,18 @@ export default class CseMachine {
   // added for center alignment
   public static getCenterAlignment(): boolean {
     return CseMachine.centerAlignment;
+  }
+  public static getMasterLayout(): LayoutCache | null {
+    return CseMachine.getPrintableMode()
+      ? CseMachine.printLayoutCache
+      : CseMachine.normalLayoutCache;
+  }
+  public static setMasterLayout(cache: LayoutCache): void {
+    if (CseMachine.getPrintableMode()) {
+      CseMachine.printLayoutCache = cache;
+    } else {
+      CseMachine.normalLayoutCache = cache;
+    }
   }
 
   public static isControl(): boolean {
@@ -96,6 +124,7 @@ export default class CseMachine {
       throw new Error('CSE machine not initialized');
     CseMachine.control = context.runtime.control;
     CseMachine.stash = context.runtime.stash;
+    CseMachine.setClearDeadFrames(false);
 
     Layout.setContext(
       context.runtime.environmentTree as EnvTree,
@@ -103,19 +132,37 @@ export default class CseMachine {
       context.runtime.stash,
       context.chapter
     );
-    // get ghost layout on first run (when user press run and code changes)
-    if (!CseMachine.masterLayout) {
+
+    // Build ghost layout cache lazily per mode, using mode-specific layout.
+    if (!CseMachine.normalLayoutCache || !CseMachine.printLayoutCache) {
+      const originalMode = CseMachine.getPrintableMode();
+
+      const buildCache = (printable: boolean) => {
+        CseMachine.printableMode = printable;
+        Layout.setContext(
+          context.runtime.environmentTree as EnvTree,
+          context.runtime.control!,
+          context.runtime.stash!,
+          context.chapter
+        );
+        return Layout.getLayoutPositions(this.controlStash);
+      };
+
+      CseMachine.printLayoutCache = buildCache(true);
+      CseMachine.normalLayoutCache = buildCache(false);
+
+      // Restore the user's actual mode setting and layout.
+      CseMachine.printableMode = originalMode;
       Layout.setContext(
         context.runtime.environmentTree as EnvTree,
         context.runtime.control,
         context.runtime.stash,
         context.chapter
       );
-      CseMachine.masterLayout = Layout.getLayoutPositions(this.controlStash);
     }
 
     // Apply Fixed Positions
-    if (CseMachine.masterLayout) {
+    if (CseMachine.getMasterLayout()) {
       Layout.applyFixedPositions();
     }
     this.setVis(Layout.draw());
@@ -130,7 +177,10 @@ export default class CseMachine {
       // if center alignment is toggled, change the alignment and redraw the diagram with new coordinates
       if (this.centerAlignmentToggled) {
         Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
-        if (CseMachine.masterLayout) {
+        if (!CseMachine.getMasterLayout()) {
+          CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
+        }
+        if (CseMachine.getMasterLayout()) {
           Layout.applyFixedPositions();
         }
         this.setVis(Layout.draw());
@@ -179,7 +229,7 @@ export default class CseMachine {
         this.setVis(Layout.currentDark);
       } else {
         Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
-        if (CseMachine.masterLayout) {
+        if (CseMachine.getMasterLayout()) {
           Layout.applyFixedPositions();
         }
         this.setVis(Layout.draw());
@@ -201,6 +251,7 @@ export default class CseMachine {
       CseMachine.control = undefined;
       CseMachine.stash = undefined;
     }
+    CseMachine.setClearDeadFrames(false);
     this.clear();
   }
 }
