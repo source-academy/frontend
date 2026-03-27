@@ -374,12 +374,29 @@ export class Layout {
     return Layout._height;
   }
 
+  /**
+   * Sort environment nodes by creation order so left-to-right placement remains chronological.
+   * JS Slang environment ids are numeric strings that increase monotonically as frames are created.
+   */
+  private static sortNodesByCreation(nodes: EnvTreeNode[]): EnvTreeNode[] {
+    return [...nodes].sort((left, right) => {
+      const leftId = Number(left.environment.id);
+      const rightId = Number(right.environment.id);
+      const bothNumeric = !Number.isNaN(leftId) && !Number.isNaN(rightId);
+
+      return bothNumeric
+        ? leftId - rightId
+        : String(left.environment.id).localeCompare(String(right.environment.id));
+    });
+  }
+
   /** initializes grid */
   private static initializeGrid(): void {
     this.levels = [];
     let frontier: EnvTreeNode[] = Layout.clearDeadFrames
       ? Layout.getVisibleChildren([Layout.globalEnvNode])
       : [Layout.globalEnvNode];
+    frontier = Layout.sortNodesByCreation(frontier);
     let prevLevel: Level | null = null;
     let currLevel: Level;
 
@@ -399,7 +416,7 @@ export class Layout {
       });
 
       prevLevel = currLevel;
-      frontier = nextFrontier;
+      frontier = Layout.sortNodesByCreation(nextFrontier);
     }
   }
 
