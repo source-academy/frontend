@@ -57,7 +57,6 @@ class ArrayDrawable extends React.PureComponent<ArrayProps> {
           strokeWidth={Config.StrokeWidth}
           stroke={Config.Stroke}
           fill={this.props.color}
-          //"#d81d1d"
 
           preventDefault={false}
         />

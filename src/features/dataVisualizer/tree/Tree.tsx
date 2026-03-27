@@ -49,6 +49,7 @@ export class Tree {
   static fromSourceStructure(tree: Data): Tree {
     let nodeCount = 0;
     const genTreeChecker = DataVisualizer.getTreeMode();
+    const binTreeChecker = DataVisualizer.getBinTreeMode();
     function constructNode(structure: Data): TreeNode {
       const alreadyDrawnNode = visitedStructures.get(structure);
       if (alreadyDrawnNode !== undefined) {
@@ -79,7 +80,7 @@ export class Tree {
         node.nodePos = tree[tree.length - 1];
         tree.pop();
       }
-      if (DataVisualizer.getBinTreeMode()) {
+      if (binTreeChecker) {
         node.nodeColor = tree[tree.length - 1];
         tree.pop();
       }

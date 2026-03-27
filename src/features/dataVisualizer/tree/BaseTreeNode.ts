@@ -2,7 +2,8 @@ export class TreeNode {
   public children: TreeNode[] | null;
   public nodePos: number = 0;
   public nodeColor: number = 0;
-  public data: any;
+  // Note: Only specific subclasses (e.g., DataTreeNode) are expected to populate `data`.
+  public data?: any;
 
   constructor() {
     this.children = null;

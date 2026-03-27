@@ -21,7 +21,6 @@ import { ItalicLink } from './SideContentCseMachine';
 type State = {
   steps: Step[];
   currentStep: number;
-  treeMode: boolean;
 };
 
 type OwnProps = {
@@ -40,7 +39,7 @@ type DispatchProps = {
 class SideContentDataVisualizerBase extends React.Component<OwnProps & DispatchProps, State> {
   constructor(props: any) {
     super(props);
-    this.state = { steps: [], currentStep: 0, treeMode: false };
+    this.state = { steps: [], currentStep: 0 };
     DataVisualizer.init(steps => {
       if (this.state.steps.length > 0) {
         //  Blink icon
