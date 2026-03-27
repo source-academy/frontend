@@ -19,9 +19,7 @@ const stringToPositionMap = {
 
 const stringToGameModeMap = {
   talk: GameMode.Talk,
-  explore: GameMode.Explore,
-  move: GameMode.Move,
-  menu: GameMode.Menu
+  explore: GameMode.Explore
 };
 
 const stringToGameItemMap = {
