@@ -20,10 +20,8 @@ import GameInputManager from '../../input/GameInputManager';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import { LocationId } from '../../location/GameMapTypes';
-// import { GameItemType } from '../../location/GameMapTypes';
 import GameLogManager from '../../log/GameLogManager';
 import TopicListManager from '../../mode/talk/TopicListManager';
-// import { GameMode } from '../../mode/GameModeTypes';
 import GameObjectManager from '../../objects/GameObjectManager';
 import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
@@ -146,10 +144,6 @@ class GameManager extends Phaser.Scene {
     );
     this.getPhaseManager().setInterruptCallback(
       async (prevPhase: GamePhaseType, newPhase: GamePhaseType) => await this.checkpointTransition()
-    );
-    this.getPhaseManager().setCallback(
-      async (prevPhase: GamePhaseType, newPhase: GamePhaseType) =>
-        await this.handleCharacterLayer(prevPhase, newPhase)
     );
     this.preloadLocationsAssets();
     this.bindKeyboardTriggers();
@@ -369,27 +363,6 @@ class GameManager extends Phaser.Scene {
 
     // Start the next Checkpoint
     this.scene.start('CheckpointTransition');
-  }
-
-  /**
-   * Handle when character layer should be shown and hidden.
-   * Character layer should only be shown when student is at
-   * Menu Mode.
-   *
-   * This method is passed to the phase manager, to be executed on
-   * every phase transition.
-   *
-   * @param prevPhase previous phase to transition from
-   * @param newPhase new phase to transition to
-   */
-  public async handleCharacterLayer(prevPhase: GamePhaseType, newPhase: GamePhaseType) {
-    if (prevPhase === GamePhaseType.Menu) {
-      GameGlobalAPI.getInstance().fadeOutLayer(Layer.Character);
-    }
-
-    if (newPhase === GamePhaseType.Menu) {
-      GameGlobalAPI.getInstance().fadeInLayer(Layer.Character);
-    }
   }
 
   public getSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
