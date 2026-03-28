@@ -66,13 +66,17 @@ export class FnValue extends Value implements IHoverable {
     firstReference: ReferenceType
   ) {
     super();
+    console.log(CseMachine.getStreamLineage((data as any).id))
     Layout.memoizeValue(data, this);
     this.centerX = 0;
     this._width = this.radius * 4;
     this._height = this.radius * 2;
     this.fnName = isStreamFn(this.data) ? '' : this.data.functionName;
+    // this.paramsText = `params: ${getParamsText(this.data)}`;
+    // this.bodyText = `body: ${getBodyText(this.data)}`;
     this.paramsText = `params: ${getParamsText(this.data)}`;
-    this.bodyText = `body: ${getBodyText(this.data)}`;
+    this.bodyText = `id: ${(this.data as any).id}`;
+
     this.exportBodyText =
       (this.bodyText.length > 23 ? this.bodyText.slice(0, 20) : this.bodyText)
         .split('\n')
@@ -98,10 +102,16 @@ export class FnValue extends Value implements IHoverable {
 
       
       if (linkedPairs != undefined && CseMachine.getStreamLineage(thisId) != undefined) {
+        console.log(CseMachine.getStreamLineage(thisId))
+        const targetCounts = new Map<ArrayValue, number>();
+
         for (const pair of linkedPairs) {
           const pairObject = (Layout.values.get(pair) as ArrayValue);
           // The pair might not be in Layout.values if it's not reachable in the current step, so we check.
           if (pairObject instanceof ArrayValue) {
+            const currentCount = targetCounts.get(pairObject) || 0;
+            targetCounts.set(pairObject, currentCount + 1);
+
             this._streamArrows.push(new ArrowFromStreamNullaryFn(this).to(pairObject) as ArrowFromStreamNullaryFn);
             this._streamArrows[this._streamArrows.length - 1].draw();
           }
@@ -144,7 +154,15 @@ export class FnValue extends Value implements IHoverable {
   }
 
   addArrow(target: any): void {
-    this._streamArrows?.push(new ArrowFromStreamNullaryFn(this).to(target) as ArrowFromStreamNullaryFn)
+    // this._streamArrows?.push(new ArrowFromStreamNullaryFn(this).to(target) as ArrowFromStreamNullaryFn)
+
+    // Check how many arrows already point to this specific target
+    const currentCount = this._streamArrows.filter(arrow => arrow.target === target).length;
+    
+    // Pass the count as the offsetIndex
+    this._streamArrows?.push(
+      new ArrowFromStreamNullaryFn(this, currentCount).to(target) as ArrowFromStreamNullaryFn
+    );
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
@@ -161,6 +179,14 @@ export class FnValue extends Value implements IHoverable {
   };
 
   draw(): React.ReactNode {
+    console.log("DRAW")
+    const pairs = CseMachine.getStreamLineage((this.data as any).id)
+    if(pairs != undefined) {
+      for(let pair of pairs) {
+        this.addArrow(Layout.values.get(pair));
+      }
+    }
+
     if (this.fnName === undefined) {
       throw new Error('Closure has no main reference and is not initialised!');
     }

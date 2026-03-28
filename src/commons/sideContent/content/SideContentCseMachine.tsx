@@ -504,8 +504,8 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   };
 
   private getActiveChangeSteps = () => {
-    console.log(this.props.streamsPointSteps);
-    console.log(this.props.changepointSteps);
+    // console.log(this.props.streamsPointSteps);
+    // console.log(this.props.changepointSteps);
     return CseMachine.getPairCreationMode()
       ? this.props.streamsPointSteps
       : this.props.changepointSteps;

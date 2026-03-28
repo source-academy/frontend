@@ -101,27 +101,23 @@ export class ArrayValue extends Value implements IHoverable {
       // }
 
       if (typeof data[1] == "function") {
-        // 1. Fetch the base Y height for this specific stream
-        const baseHeightStr = CseMachine.getStreamIdToHeight(String(this.streamId));
-        
-        // Fallback to streamHeights if the map doesn't have it yet
-        const baseHeight = baseHeightStr !== undefined ? Number(baseHeightStr) : Layout.streamHeights[this.streamId];
+        const heightStr = CseMachine.getStreamIdToHeight(String(this.streamId));
+        const baseHeight = heightStr !== undefined ? Number(heightStr) : Layout.streamHeights[this.streamId];
 
-        // 2. Check if a pair already exists at this X-coordinate (parentCount) for this stream
-        if (Layout.streamCoords[this.streamId][parentCount] === undefined) {
-          // If empty, this pair takes the base height
-          Layout.streamCoords[this.streamId][parentCount] = baseHeight;
-        } else {
-          // If occupied (e.g., a stream branch was evaluated), push this new pair down by 1 unit
-          Layout.streamCoords[this.streamId][parentCount]++;
+        if (Layout.streamCoords[baseHeight] === undefined) {
+            Layout.streamCoords[baseHeight] = [];
         }
 
-        // 3. CRITICAL: Actually assign the calculated Y coordinate to the array!
-        this.visualisationY = Layout.streamCoords[this.streamId][parentCount];
+        if (Layout.streamCoords[baseHeight][parentCount] === undefined) {
+            Layout.streamCoords[baseHeight][parentCount] = baseHeight;
+        } else {
+            Layout.streamCoords[baseHeight][parentCount]++;
+        }
+
+        this.visualisationY = Layout.streamCoords[baseHeight][parentCount];
         this.visualisationX = parentCount;
         
       } else {
-        // Handling for non-stream lists/pairs
         this.visualisationY = Layout.streamHeights[this.streamId];
         this.visualisationX = this.arrayIdWithinStream;
       }
@@ -129,10 +125,10 @@ export class ArrayValue extends Value implements IHoverable {
 
 
 
-      console.log("My x is: " + this.visualisationX + "stream" + this.streamId);
-      console.log("My y is: " + this.visualisationY);
-      console.log(Layout.streamHeights);
-      console.log(CseMachine.getStreamIdToHeight(String(this.streamId)));
+      // console.log("My x is: " + this.visualisationX + "stream" + this.streamId);
+      // console.log("My y is: " + this.visualisationY);
+      // console.log(Layout.streamHeights);
+      // console.log(CseMachine.getStreamIdToHeight(String(this.streamId)));
     } else {
 
     }
@@ -150,8 +146,8 @@ export class ArrayValue extends Value implements IHoverable {
       // console.log("array is created from fn with id: " + CseMachine.findKeyByValueInMap(data.id));
       // CseMachine.viewStreamLineage;
       const originFnId = CseMachine.findKeyByValueInMap(data.id);
-      console.log("origin fn: " + originFnId);
-      console.log(Layout.values);
+      // console.log("origin fn: " + originFnId);
+      // console.log(Layout.values);
       if (originFnId != undefined) {
         // console.log("result of finding fn that created this array: " + Layout.values.get(originFnId));
         const originFnValue = Layout.values.get(originFnId);
@@ -229,9 +225,9 @@ export class ArrayValue extends Value implements IHoverable {
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
     e.cancelBubble = true;
     for (const unit of this.units) {
-      // unit.showIndex();
-      console.log(this.streamId);
-      console.log(this.data.id);
+      unit.showIndex();
+      // console.log(this.streamId);
+      // console.log(this.data.id);
 
     }
   };

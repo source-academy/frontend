@@ -543,6 +543,7 @@ export class Layout {
   }
 
   static draw(): React.ReactNode {
+    console.log()
     Layout.streamLengthMap.clear();
     Layout.streamCoords = [];
     // Layout.streamHeights = [0];

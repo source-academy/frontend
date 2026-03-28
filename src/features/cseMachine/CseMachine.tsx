@@ -122,7 +122,7 @@ export default class CseMachine {
     CseMachine.streamIdToHeight = context.streamIdToHeight;
     CseMachine.streamPairIdToStreamId = context.streamPairIdToStreamId;
     CseMachine.streamPairIdToParentCount = context.streemPairIdToParentCount;
-    console.log(context.streamPairIdToStreamId);
+    // console.log(context.streamPairIdToStreamId);
 
     Layout.setContext(
       context.runtime.environmentTree as EnvTree,
