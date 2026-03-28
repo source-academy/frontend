@@ -439,7 +439,9 @@ const GradingEditor: React.FC<Props> = props => {
 
   const checkHasUnsavedChanges = () => {
     const newXpAdjustmentInput = convertParamToInt(xpAdjustmentInput || undefined);
-    return props.xpAdjustment !== newXpAdjustmentInput || props.comments !== editorValue;
+    const normalizedEditorValue = stripInternalMarkers(editorValue);
+
+    return props.xpAdjustment !== newXpAdjustmentInput || props.comments !== normalizedEditorValue;
   };
 
   const checkIsNewQuestion = () => {
