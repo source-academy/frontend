@@ -29,6 +29,7 @@ import { StepperLogicalExpression } from 'js-slang/dist/tracer/nodes/Expression/
 import { StepperUnaryExpression } from 'js-slang/dist/tracer/nodes/Expression/UnaryExpression';
 import { StepperProgram } from 'js-slang/dist/tracer/nodes/Program';
 import { StepperBlockStatement } from 'js-slang/dist/tracer/nodes/Statement/BlockStatement';
+import { StepperDebuggerStatement } from 'js-slang/dist/tracer/nodes/Statement/DebuggerStatement';
 import { StepperExpressionStatement } from 'js-slang/dist/tracer/nodes/Statement/ExpressionStatement';
 import { StepperFunctionDeclaration } from 'js-slang/dist/tracer/nodes/Statement/FunctionDeclaration';
 import { StepperIfStatement } from 'js-slang/dist/tracer/nodes/Statement/IfStatement';
@@ -37,7 +38,6 @@ import {
   StepperVariableDeclaration,
   StepperVariableDeclarator
 } from 'js-slang/dist/tracer/nodes/Statement/VariableDeclaration';
-import { StepperDebuggerStatement } from 'js-slang/dist/tracer/nodes/Statement/DebuggerStatement';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
