@@ -1671,6 +1671,20 @@ export const submitLLMFeedback = async (
 };
 
 /**
+ * GET /courses/{courseId}/admin/llm-stats
+ * Fetches course-wide LLM usage statistics (assessment and question breakdown)
+ */
+export const getLLMCourseStats = async (tokens: Tokens): Promise<any | null> => {
+  const resp = await request(`${courseId()}/admin/llm-stats`, 'GET', {
+    ...tokens
+  });
+  if (!resp || !resp.ok) {
+    return null;
+  }
+  return await resp.json();
+};
+
+/**
  * GET /courses/{courseId}/admin/users
  */
 export const getUserCourseRegistrations = async (

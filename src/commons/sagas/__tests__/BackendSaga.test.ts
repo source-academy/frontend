@@ -136,6 +136,8 @@ const mockCourseConfiguration1: CourseConfiguration = {
   enableContestLeaderboard: true,
   enableSourcecast: true,
   enableStories: false,
+  enableLlmGrading: false,
+  hasLlmContent: false,
   topLeaderboardDisplay: 100,
   topContestLeaderboardDisplay: 10,
   sourceChapter: Chapter.SOURCE_1,
@@ -173,6 +175,8 @@ const mockCourseConfiguration2: CourseConfiguration = {
   topContestLeaderboardDisplay: 10,
   enableSourcecast: true,
   enableStories: false,
+  enableLlmGrading: true,
+  hasLlmContent: true,
   sourceChapter: Chapter.SOURCE_4,
   sourceVariant: Variant.DEFAULT,
   moduleHelpText: 'Help text',
@@ -451,6 +455,35 @@ describe('Test FETCH_USER_AND_COURSE action', () => {
           { user, courseRegistration, courseConfiguration, assessmentConfigurations }
         ]
       ])
+      .dispatch({ type: SessionActions.fetchUserAndCourse.type, payload: true })
+      .silentRun();
+  });
+
+  test('regression: initial fetchUserAndCourse stores hasLlmContent so navbar conditions are correct before visiting admin pages', () => {
+    const courseConfigurationWithLlm = {
+      ...mockCourseConfiguration2,
+      enableLlmGrading: true,
+      hasLlmContent: true
+    };
+
+    return expectSaga(BackendSaga)
+      .withState({ session: mockTokens })
+      .provide([
+        [
+          call(getUser, mockTokens),
+          {
+            user,
+            courseRegistration,
+            courseConfiguration: courseConfigurationWithLlm,
+            assessmentConfigurations
+          }
+        ]
+      ])
+      .call(getUser, mockTokens)
+      .put(SessionActions.setUser(user))
+      .put(SessionActions.setCourseRegistration(courseRegistration))
+      .put(SessionActions.setCourseConfiguration(courseConfigurationWithLlm))
+      .put(SessionActions.setAssessmentConfigurations(assessmentConfigurations))
       .dispatch({ type: SessionActions.fetchUserAndCourse.type, payload: true })
       .silentRun();
   });

@@ -93,6 +93,35 @@ export type AssessmentOverview = {
   llmTotalCost?: string | number;
 };
 
+export type LLMQuestionStat = {
+  question_id: number;
+  display_order: number;
+  total_uses: number;
+  avg_rating: number | null;
+  llm_total_input_tokens: number;
+  llm_total_output_tokens: number;
+  llm_total_cost: string | number;
+};
+
+export type LLMAssessmentStat = {
+  assessment_id: number;
+  title: string;
+  category: string;
+  total_uses: number;
+  avg_rating: number | null;
+  llm_total_input_tokens: number;
+  llm_total_output_tokens: number;
+  llm_total_cost: string | number;
+  questions: LLMQuestionStat[];
+};
+
+export type LLMCourseStat = {
+  course_total_input_tokens: number;
+  course_total_output_tokens: number;
+  course_total_cost: string | number;
+  assessments: LLMAssessmentStat[];
+};
+
 /*
  * Used when an assessment is being actively attempted/graded.
  */

@@ -40,6 +40,7 @@ export type SessionState = {
   readonly enableSourcecast?: boolean;
   readonly enableStories?: boolean;
   readonly enableLlmGrading?: boolean;
+  readonly hasLlmContent?: boolean;
   readonly llmModel?: string;
   readonly llmApiUrl?: string;
   readonly llmCourseLevelPrompt?: string;
@@ -117,6 +118,7 @@ export type CourseConfiguration = {
   enableSourcecast: boolean;
   enableStories: boolean;
   enableLlmGrading?: boolean;
+  hasLlmContent?: boolean;
   enableOverallLeaderboard: boolean;
   enableContestLeaderboard: boolean;
   topLeaderboardDisplay: number;
