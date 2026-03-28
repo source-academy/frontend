@@ -37,13 +37,12 @@ import {
   StepperVariableDeclaration,
   StepperVariableDeclarator
 } from 'js-slang/dist/tracer/nodes/Statement/VariableDeclaration';
+import { StepperDebuggerStatement } from 'js-slang/dist/tracer/nodes/Statement/DebuggerStatement';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 
-import { useTypedSelector } from '../../utils/Hooks';
 import { beginAlertSideContent } from '../SideContentActions';
-import { getLocation } from '../SideContentHelper';
 import { SideContentLocation, SideContentType } from '../SideContentTypes';
 
 const SubstDefaultText = () => {
@@ -101,17 +100,6 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
     () => dispatch(beginAlertSideContent(SideContentType.substVisualizer, props.workspaceLocation)),
     [props.workspaceLocation, dispatch]
   );
-
-  // Read the precomputed breakpoint step indices for substitution stepper navigation.
-  // These are stored only for playground/sicp workspaces; other locations fall back to no breakpoints.
-  const breakpointSteps = useTypedSelector(state => {
-    const [workspaceLocation] = getLocation(props.workspaceLocation);
-    if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
-      return state.workspaces[workspaceLocation].breakpointSteps;
-    }
-    return [];
-  });
-
   // set source mode as 2
   useEffect(() => {
     HighlightRulesSelector(2);
@@ -126,53 +114,50 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
     }
   }, [props.content, setStepValue, alertSideContent]);
 
-  const stepFirst = () => setStepValue(1);
-  const stepLast = () => setStepValue(lastStepValue);
+  const stepNextBreakpoint = useCallback(() => {
+    // Search forward from current step for a DebuggerStatement redex
+    for (let i = stepValue; i < props.content.length; i++) {
+      const markers = props.content[i].markers
+      if (markers?.some(marker => marker.redex?.type === 'DebuggerStatement')) {
+        setStepValue(i + 1)  // +1 because stepValue is 1-indexed
+        return
+      }
+    }
+    // Optional: If no next breakpoint found, go to the last step
+    setStepValue(props.content.length)
+  }, [stepValue, props.content])
+
+  const stepPreviousBreakpoint = useCallback(() => {
+    // Start searching from the step BEFORE the current one
+    // index = (stepValue - 1) - 1
+    for (let i = stepValue - 2; i >= 0; i--) {
+      const markers = props.content[i].markers;
+    
+      const isDebuggerStep = markers?.some(
+        marker => marker.redex?.type === 'DebuggerStatement'
+      );
+
+      if (isDebuggerStep) {
+        setStepValue(i + 1); // Convert back to 1-based indexing
+        return;
+      }
+    }
+    // Optional: If no previous breakpoint found, go to the first step
+    setStepValue(1);
+  }, [stepValue, props.content]);
+
+  //const stepFirst = () => setStepValue(1);
+  //const stepLast = () => setStepValue(lastStepValue);
   const stepPrevious = () => setStepValue(Math.max(1, stepValue - 1));
   const stepNext = () => setStepValue(Math.min(props.content.length, stepValue + 1));
-
-  // Jump to the nearest breakpoint step after or before the current step.
-  // `breakpointSteps` uses 0-based indices, while `stepValue` is 1-based for the UI,
-  // so we convert between them when comparing and updating the slider.
-  const stepNextBreakpoint = () => {
-    const currentStepIndex = stepValue - 1;
-    let nextBreakpointStep: number | undefined;
-
-    for (const breakpointStep of breakpointSteps) {
-      if (
-        breakpointStep > currentStepIndex &&
-        (nextBreakpointStep === undefined || breakpointStep < nextBreakpointStep)
-      ) {
-        nextBreakpointStep = breakpointStep;
-      }
-    }
-
-    setStepValue(nextBreakpointStep === undefined ? lastStepValue : nextBreakpointStep + 1);
-  };
-
-  const stepPrevBreakpoint = () => {
-    const currentStepIndex = stepValue - 1;
-    let prevBreakpointStep: number | undefined;
-
-    for (const breakpointStep of breakpointSteps) {
-      if (
-        breakpointStep < currentStepIndex &&
-        (prevBreakpointStep === undefined || breakpointStep > prevBreakpointStep)
-      ) {
-        prevBreakpointStep = breakpointStep;
-      }
-    }
-
-    setStepValue(prevBreakpointStep === undefined ? 1 : prevBreakpointStep + 1);
-  };
 
   // Setup hotkey bindings
   const hotkeyBindings: HotkeyItem[] = hasRunCode
     ? [
-        ['a', stepFirst],
+        ['a', stepPreviousBreakpoint],
         ['f', stepNext],
         ['b', stepPrevious],
-        ['e', stepLast]
+        ['e', stepNextBreakpoint]
       ]
     : [
         ['a', () => {}],
@@ -219,18 +204,26 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
       />
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <ButtonGroup>
-          <Button disabled={!hasRunCode} icon="double-chevron-left" onClick={stepPrevBreakpoint} />
           <Button
-            disabled={!hasRunCode || stepValue === 1}
+            disabled={!hasRunCode}
+            icon="double-chevron-left"
+            onClick={stepPreviousBreakpoint}
+          />
+          <Button
+            disabled={!hasRunCode}
             icon="chevron-left"
             onClick={stepPrevious}
           />
           <Button
-            disabled={!hasRunCode || stepValue === lastStepValue}
+            disabled={!hasRunCode}
             icon="chevron-right"
             onClick={stepNext}
           />
-          <Button disabled={!hasRunCode} icon="double-chevron-right" onClick={stepNextBreakpoint} />
+          <Button
+            disabled={!hasRunCode}
+            icon="double-chevron-right"
+            onClick={stepNextBreakpoint}
+          />  
         </ButtonGroup>
       </div>{' '}
       <br />
@@ -631,8 +624,15 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
           {renderNode(node.id, { styleWrapper: styleWrapper, popoverDepth: popoverDepth })}
           {' = '}
           {node.init
-            ? renderNode(node.init, { styleWrapper: styleWrapper, popoverDepth: popoverDepth })
+            ? renderNode(node.init, { styleWrapper: styleWrapper, popoverDepth: popoverDepth }) 
             : 'undefined'}
+        </span>
+      );
+    },
+    DebuggerStatement(node: StepperDebuggerStatement) {
+      return (
+        <span className = "stepper-operator">
+          debugger;
         </span>
       );
     }

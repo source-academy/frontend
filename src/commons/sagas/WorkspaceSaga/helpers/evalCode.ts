@@ -28,11 +28,7 @@ import DisplayBufferService from '../../../utils/DisplayBufferService';
 import { showWarningMessage } from '../../../utils/notifications/NotificationsHelper';
 import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../../../utils/SourcerorHelper';
 import WorkspaceActions from '../../../workspace/WorkspaceActions';
-import {
-  type EditorTabState,
-  EVAL_SILENT,
-  type WorkspaceLocation
-} from '../../../workspace/WorkspaceTypes';
+import { EVAL_SILENT, type WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import { getEvaluatorDefinitionSaga } from '../../LanguageDirectorySaga';
 import { selectStoryEnv, selectWorkspace } from '../../SafeEffects';
 import { dumpDisplayBuffer } from './dumpDisplayBuffer';
@@ -138,91 +134,6 @@ async function cCompileAndRun(cCode: string, context: Context): Promise<Result> 
     return { status: 'error', context };
   }
 }
-
-/**
- * Computes which stepper step indices correspond to editor breakpoints.
- *
- * we derive breakpoint steps by matching each step’s
- * source location (loc.start.line) against the editor’s breakpoint lines.
- *
- * Ace breakpoints are 0-indexed, while AST line numbers are 1-indexed,
- * so we convert aceRow + 1 before comparison.
- *
- * Returns a list of 0-based step indices that align with breakpoint lines.
- */
-type StepperLoc = {
-  source?: string | null;
-  start?: { line?: number };
-};
-
-type StepperOutputStep = {
-  ast?: unknown;
-  markers?: Array<{
-    redexType?: 'beforeMarker' | 'afterMarker';
-    redex?: {
-      loc?: StepperLoc;
-    };
-  }>;
-};
-
-const isStepperOutput = (value: unknown): value is StepperOutputStep[] => {
-  return (
-    Array.isArray(value) &&
-    value.length > 0 &&
-    value[0] !== null &&
-    typeof value[0] === 'object' &&
-    'ast' in value[0]
-  );
-};
-
-const deriveStepperBreakpointSteps = (
-  stepperSteps: StepperOutputStep[],
-  editorTabs: EditorTabState[],
-  entrypointFilePath: string
-): number[] => {
-  const breakpointLinesByFile = new Map<string, Set<number>>();
-
-  for (const editorTab of editorTabs) {
-    const filePath = editorTab.filePath ?? entrypointFilePath;
-    const lineSet = breakpointLinesByFile.get(filePath) ?? new Set<number>();
-    editorTab.breakpoints.forEach((value, aceRow) => {
-      if (value) {
-        lineSet.add(aceRow + 1);
-      }
-    });
-    breakpointLinesByFile.set(filePath, lineSet);
-  }
-
-  const entrypointLines = breakpointLinesByFile.get(entrypointFilePath) ?? new Set<number>();
-  const breakpointSteps: number[] = [];
-
-  for (let stepIndex = 0; stepIndex < stepperSteps.length; stepIndex++) {
-    const isBreakpointStep =
-      stepperSteps[stepIndex].markers?.some(marker => {
-        if (marker.redexType !== 'beforeMarker') {
-          return false;
-        }
-
-        const line = marker.redex?.loc?.start?.line;
-        if (typeof line !== 'number') {
-          return false;
-        }
-
-        const source =
-          typeof marker.redex?.loc?.source === 'string'
-            ? marker.redex.loc.source
-            : entrypointFilePath;
-        const lines = breakpointLinesByFile.get(source) ?? entrypointLines;
-        return lines.has(line);
-      }) ?? false;
-
-    if (isBreakpointStep) {
-      breakpointSteps.push(stepIndex);
-    }
-  }
-
-  return breakpointSteps;
-};
 
 export function* evalCodeSaga(
   files: Record<string, string>,
@@ -444,26 +355,6 @@ export function* evalCodeSaga(
 
     yield put(actions.addEvent(events));
     return;
-  }
-
-  // If we are in playground/sicp and running the substitution stepper,
-  // derive breakpoint step indices from the precomputed step list.
-  // Unlike CSE (which records breakpoint hits during execution),
-  // the stepper requires us to match step source locations against
-  // editor breakpoint lines and compute them manually.
-  if (workspaceLocation === 'playground' || workspaceLocation === 'sicp') {
-    if (context.chapter <= Chapter.SOURCE_2 && substIsActive) {
-      let stepperBreakpointSteps: number[] = [];
-      if (isStepperOutput(result.value)) {
-        const { editorTabs } = yield* selectWorkspace(workspaceLocation);
-        stepperBreakpointSteps = deriveStepperBreakpointSteps(
-          result.value,
-          editorTabs,
-          entrypointFilePath
-        );
-      }
-      yield put(actions.updateBreakpointSteps(stepperBreakpointSteps, workspaceLocation));
-    }
   }
 
   yield* dumpDisplayBuffer(workspaceLocation, isStoriesBlock, storyEnv);
