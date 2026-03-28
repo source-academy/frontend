@@ -117,25 +117,23 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
   const stepNextBreakpoint = useCallback(() => {
     // Search forward from current step for a DebuggerStatement redex
     for (let i = stepValue; i < props.content.length; i++) {
-      const markers = props.content[i].markers
+      const markers = props.content[i].markers;
       if (markers?.some(marker => marker.redex?.type === 'DebuggerStatement')) {
-        setStepValue(i + 1)  // +1 because stepValue is 1-indexed
-        return
+        setStepValue(i + 1); // +1 because stepValue is 1-indexed
+        return;
       }
     }
     // Optional: If no next breakpoint found, go to the last step
-    setStepValue(props.content.length)
-  }, [stepValue, props.content])
+    setStepValue(props.content.length);
+  }, [stepValue, props.content]);
 
   const stepPreviousBreakpoint = useCallback(() => {
     // Start searching from the step BEFORE the current one
     // index = (stepValue - 1) - 1
     for (let i = stepValue - 2; i >= 0; i--) {
       const markers = props.content[i].markers;
-    
-      const isDebuggerStep = markers?.some(
-        marker => marker.redex?.type === 'DebuggerStatement'
-      );
+
+      const isDebuggerStep = markers?.some(marker => marker.redex?.type === 'DebuggerStatement');
 
       if (isDebuggerStep) {
         setStepValue(i + 1); // Convert back to 1-based indexing
@@ -209,21 +207,9 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
             icon="double-chevron-left"
             onClick={stepPreviousBreakpoint}
           />
-          <Button
-            disabled={!hasRunCode}
-            icon="chevron-left"
-            onClick={stepPrevious}
-          />
-          <Button
-            disabled={!hasRunCode}
-            icon="chevron-right"
-            onClick={stepNext}
-          />
-          <Button
-            disabled={!hasRunCode}
-            icon="double-chevron-right"
-            onClick={stepNextBreakpoint}
-          />  
+          <Button disabled={!hasRunCode} icon="chevron-left" onClick={stepPrevious} />
+          <Button disabled={!hasRunCode} icon="chevron-right" onClick={stepNext} />
+          <Button disabled={!hasRunCode} icon="double-chevron-right" onClick={stepNextBreakpoint} />
         </ButtonGroup>
       </div>{' '}
       <br />
@@ -624,17 +610,13 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
           {renderNode(node.id, { styleWrapper: styleWrapper, popoverDepth: popoverDepth })}
           {' = '}
           {node.init
-            ? renderNode(node.init, { styleWrapper: styleWrapper, popoverDepth: popoverDepth }) 
+            ? renderNode(node.init, { styleWrapper: styleWrapper, popoverDepth: popoverDepth })
             : 'undefined'}
         </span>
       );
     },
     DebuggerStatement(node: StepperDebuggerStatement) {
-      return (
-        <span className = "stepper-operator">
-          debugger;
-        </span>
-      );
+      return <span className="stepper-operator">debugger;</span>;
     }
   };
 
