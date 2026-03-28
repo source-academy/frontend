@@ -7489,7 +7489,7 @@ __metadata:
     stream-browserify: "npm:^3.0.0"
     stream-http: "npm:^3.2.0"
     timers-browserify: "npm:^2.0.12"
-    typescript: "npm:^6.0.0"
+    typescript: "npm:^6.0.2"
     typescript-eslint: "npm:^8.1.0"
     unified: "npm:^11.0.0"
     url: "npm:^0.11.1"
@@ -13566,7 +13566,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^6.0.0":
+"typescript@npm:^6.0.2":
   version: 6.0.2
   resolution: "typescript@npm:6.0.2"
   bin:
@@ -13576,7 +13576,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^6.0.0#optional!builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A^6.0.2#optional!builtin<compat/typescript>":
   version: 6.0.2
   resolution: "typescript@patch:typescript@npm%3A6.0.2#optional!builtin<compat/typescript>::version=6.0.2&hash=5786d5"
   bin:
