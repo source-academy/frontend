@@ -526,6 +526,22 @@ test('UPDATE_GRADING works correctly in updating gradings', () => {
   expect(gradingMap[submissionId]).toEqual(gradingTest2);
 });
 
+test('UPDATE_GRADING_SAVE_RESULT stores the latest grading save result', () => {
+  const action = {
+    type: SessionActions.updateGradingSaveResult.type,
+    payload: {
+      submissionId: 23,
+      questionId: 2,
+      success: false,
+      saveAndContinue: true,
+      requestId: 98765
+    }
+  } as const;
+
+  const gradingSaveResult = SessionsReducer(defaultSession, action).gradingSaveResult;
+  expect(gradingSaveResult).toEqual(action.payload);
+});
+
 // UPDATE_GRADING_OVERVIEWS test data
 const gradingOverviewTest1: GradingOverview[] = [
   {

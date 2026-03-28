@@ -70,12 +70,21 @@ export type SessionState = {
   readonly teamFormationOverview?: TeamFormationOverview;
   readonly teamFormationOverviews?: TeamFormationOverview[];
   readonly gradings: { [id: number]: GradingQuery };
+  readonly gradingSaveResult?: GradingSaveResult;
   readonly notifications: Notification[];
   readonly googleUser?: string;
   readonly githubOctokitObject: { octokit: Octokit | undefined };
   readonly githubAccessToken?: string;
   readonly remoteExecutionDevices?: Device[];
   readonly remoteExecutionSession?: DeviceSession;
+};
+
+export type GradingSaveResult = {
+  submissionId: number;
+  questionId: number;
+  success: boolean;
+  saveAndContinue: boolean;
+  requestId: number;
 };
 
 export type Tokens = {

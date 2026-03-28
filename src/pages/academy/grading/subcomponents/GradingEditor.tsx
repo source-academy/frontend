@@ -13,11 +13,12 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { AutogradingResult, LLMPrompt } from 'src/commons/assessment/AssessmentTypes';
 import { useTokens } from 'src/commons/utils/Hooks';
 
 import SessionActions from '../../../../commons/application/actions/SessionActions';
+import { OverallState } from '../../../../commons/application/ApplicationTypes';
 import ControlButton from '../../../../commons/ControlButton';
 import Markdown from '../../../../commons/Markdown';
 import { Prompt } from '../../../../commons/ReactRouterPrompt';
@@ -67,6 +68,7 @@ const EMPTY_SELECTION_SAVE_KEY = JSON.stringify({ selected_indices: [], edits: {
 const GradingEditor: React.FC<Props> = props => {
   const dispatch = useDispatch();
   const tokens = useTokens();
+  const gradingSaveResult = useSelector((state: OverallState) => state.session.gradingSaveResult);
   const lastSavedSelectionKeyRef = useRef<string>(EMPTY_SELECTION_SAVE_KEY);
   const saveInFlightRef = useRef<boolean>(false);
   const { handleGradingSave, handleGradingSaveAndContinue, handleReautogradeAnswer } = useMemo(
@@ -125,6 +127,23 @@ const GradingEditor: React.FC<Props> = props => {
     saveInFlightRef.current = false;
     setIsSaveInFlight(false);
   }, [props.comments, props.xpAdjustment, props.gradedAt, props.submissionId, props.questionId]);
+
+  useEffect(() => {
+    if (
+      !gradingSaveResult ||
+      gradingSaveResult.submissionId !== props.submissionId ||
+      gradingSaveResult.questionId !== props.questionId
+    ) {
+      return;
+    }
+
+    saveInFlightRef.current = false;
+    setIsSaveInFlight(false);
+
+    if (!gradingSaveResult.success || !gradingSaveResult.saveAndContinue) {
+      setCurrentlySaving(false);
+    }
+  }, [gradingSaveResult, props.questionId, props.submissionId]);
 
   // Invisible delimiters used internally to preserve per-comment editing state
   // without showing any marker text in the editor.

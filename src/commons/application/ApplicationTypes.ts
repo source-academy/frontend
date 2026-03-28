@@ -541,6 +541,7 @@ export const defaultSession: SessionState = {
   students: undefined,
   teamFormationOverviews: undefined,
   gradings: {},
+  gradingSaveResult: undefined,
   notifications: []
 };
 
