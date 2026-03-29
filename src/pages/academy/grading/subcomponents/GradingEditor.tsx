@@ -13,9 +13,8 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
-import { useDispatch } from 'react-redux';
 import { AutogradingResult, LLMPrompt } from 'src/commons/assessment/AssessmentTypes';
-import { useTokens, useTypedSelector } from 'src/commons/utils/Hooks';
+import { useTokens, useTypedDispatch, useTypedSelector } from 'src/commons/utils/Hooks';
 
 import SessionActions from '../../../../commons/application/actions/SessionActions';
 import ControlButton from '../../../../commons/ControlButton';
@@ -65,7 +64,7 @@ const gradingEditorButtonClass = 'grading-editor-button';
 const EMPTY_SELECTION_SAVE_KEY = JSON.stringify({ selected_indices: [], edits: {} });
 
 const GradingEditor: React.FC<Props> = props => {
-  const dispatch = useDispatch();
+  const dispatch = useTypedDispatch();
   const tokens = useTokens();
   const gradingSaveResult = useTypedSelector(state => state.session.gradingSaveResult);
   const lastSavedSelectionKeyRef = useRef<string>(EMPTY_SELECTION_SAVE_KEY);
