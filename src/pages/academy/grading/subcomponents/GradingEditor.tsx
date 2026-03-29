@@ -72,6 +72,7 @@ const GradingEditor: React.FC<Props> = props => {
   const lastSavedSelectionKeyRef = useRef<string>(EMPTY_SELECTION_SAVE_KEY);
   const saveInFlightRef = useRef<boolean>(false);
   const saveAndContinueTimeoutRef = useRef<number | undefined>(undefined);
+  const saveTimeoutRef = useRef<number | undefined>(undefined);
   const { handleGradingSave, handleGradingSaveAndContinue, handleReautogradeAnswer } = useMemo(
     () =>
       ({
@@ -133,6 +134,10 @@ const GradingEditor: React.FC<Props> = props => {
       window.clearTimeout(saveAndContinueTimeoutRef.current);
       saveAndContinueTimeoutRef.current = undefined;
     }
+    if (saveTimeoutRef.current !== undefined) {
+      window.clearTimeout(saveTimeoutRef.current);
+      saveTimeoutRef.current = undefined;
+    }
   }, [props.comments, props.xpAdjustment, props.gradedAt, props.submissionId, props.questionId]);
 
   useEffect(() => {
@@ -150,6 +155,10 @@ const GradingEditor: React.FC<Props> = props => {
     if (saveAndContinueTimeoutRef.current !== undefined) {
       window.clearTimeout(saveAndContinueTimeoutRef.current);
       saveAndContinueTimeoutRef.current = undefined;
+    }
+    if (saveTimeoutRef.current !== undefined) {
+      window.clearTimeout(saveTimeoutRef.current);
+      saveTimeoutRef.current = undefined;
     }
 
     if (!gradingSaveResult.success || !gradingSaveResult.saveAndContinue) {
@@ -187,12 +196,14 @@ const GradingEditor: React.FC<Props> = props => {
   };
 
   const buildCommentsBlock = (indices: number[], texts: Record<number, string>) => {
-    return [...indices]
-      .sort((a, b) => a - b)
-      // Preserve one block segment per selected index, including empty edits,
-      // so split/join order always stays aligned with sorted selected indices.
-      .map(i => texts[i] ?? '')
-      .join(COMMENT_SEPARATOR);
+    return (
+      [...indices]
+        .sort((a, b) => a - b)
+        // Preserve one block segment per selected index, including empty edits,
+        // so split/join order always stays aligned with sorted selected indices.
+        .map(i => texts[i] ?? '')
+        .join(COMMENT_SEPARATOR)
+    );
   };
 
   /**
@@ -406,9 +417,15 @@ const GradingEditor: React.FC<Props> = props => {
     if (saveAndContinueTimeoutRef.current !== undefined) {
       window.clearTimeout(saveAndContinueTimeoutRef.current);
     }
+    if (saveTimeoutRef.current !== undefined) {
+      window.clearTimeout(saveTimeoutRef.current);
+      saveTimeoutRef.current = undefined;
+    }
     // Fallback to avoid suppressing the unsaved-changes prompt indefinitely if save fails.
     saveAndContinueTimeoutRef.current = window.setTimeout(() => {
       setCurrentlySaving(false);
+      saveInFlightRef.current = false;
+      setIsSaveInFlight(false);
       saveAndContinueTimeoutRef.current = undefined;
     }, 15000);
     // TODO: Check (not sure how) if this results in a regression.
@@ -424,7 +441,16 @@ const GradingEditor: React.FC<Props> = props => {
     const callback = (): void => {
       handleGradingSave(submissionId, questionId, xpAdjustment, comments!);
     };
-    // TODO: Check (not sure how) if this results in a regression.
+    // Fallback timeout to unlock save controls if Redux state update doesn't occur
+    // (e.g., if grading saga fails unexpectedly)
+    if (saveTimeoutRef.current !== undefined) {
+      window.clearTimeout(saveTimeoutRef.current);
+    }
+    saveTimeoutRef.current = window.setTimeout(() => {
+      saveInFlightRef.current = false;
+      setIsSaveInFlight(false);
+      saveTimeoutRef.current = undefined;
+    }, 15000);
     callback();
   };
 
