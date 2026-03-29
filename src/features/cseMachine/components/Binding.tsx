@@ -70,12 +70,12 @@ export class Binding extends Visible {
 
     const printFnDescriptionHeight =
       CseMachine.getPrintableMode() &&
-      isMainReference(this.value, this) &&
-      (this.value instanceof FnValue || this.value instanceof GlobalFnValue)
+        isMainReference(this.value, this) &&
+        (this.value instanceof FnValue || this.value instanceof GlobalFnValue)
         ? this.value.printDescriptionHeight +
-          this.value.printDescriptionOffsetY +
-          this.value.printDescriptionBottomGap +
-          Config.TextPaddingY / 2
+        this.value.printDescriptionOffsetY +
+        this.value.printDescriptionBottomGap +
+        Config.TextPaddingY / 2
         : 0;
 
     // derive the width from the right bound of the value
@@ -135,7 +135,7 @@ export class Binding extends Visible {
       !(this.value instanceof PrimitiveValue) &&
       !(this.value instanceof UnassignedValue)
     ) {
-      this.arrow = new ArrowFromText(this.key).to(this.value);
+      this.arrow = new ArrowFromText(this.key, this.frame).to(this.value);
     }
 
     return (
