@@ -656,7 +656,6 @@ function* sendGrade(
   yield put(
     actions.updateGradingSaveResult(submissionId, questionId, true, saveAndContinue, Date.now())
   );
-
   return true;
 }
 

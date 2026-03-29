@@ -71,6 +71,7 @@ const GradingEditor: React.FC<Props> = props => {
   const gradingSaveResult = useSelector((state: OverallState) => state.session.gradingSaveResult);
   const lastSavedSelectionKeyRef = useRef<string>(EMPTY_SELECTION_SAVE_KEY);
   const saveInFlightRef = useRef<boolean>(false);
+  const saveAndContinueTimeoutRef = useRef<number | undefined>(undefined);
   const { handleGradingSave, handleGradingSaveAndContinue, handleReautogradeAnswer } = useMemo(
     () =>
       ({
@@ -126,6 +127,12 @@ const GradingEditor: React.FC<Props> = props => {
   useEffect(() => {
     saveInFlightRef.current = false;
     setIsSaveInFlight(false);
+    setCurrentlySaving(false);
+
+    if (saveAndContinueTimeoutRef.current !== undefined) {
+      window.clearTimeout(saveAndContinueTimeoutRef.current);
+      saveAndContinueTimeoutRef.current = undefined;
+    }
   }, [props.comments, props.xpAdjustment, props.gradedAt, props.submissionId, props.questionId]);
 
   useEffect(() => {
@@ -139,6 +146,11 @@ const GradingEditor: React.FC<Props> = props => {
 
     saveInFlightRef.current = false;
     setIsSaveInFlight(false);
+
+    if (saveAndContinueTimeoutRef.current !== undefined) {
+      window.clearTimeout(saveAndContinueTimeoutRef.current);
+      saveAndContinueTimeoutRef.current = undefined;
+    }
 
     if (!gradingSaveResult.success || !gradingSaveResult.saveAndContinue) {
       setCurrentlySaving(false);
@@ -316,6 +328,10 @@ const GradingEditor: React.FC<Props> = props => {
     setSelectedIndices([]);
     setCommentTexts({});
     lastSavedSelectionKeyRef.current = EMPTY_SELECTION_SAVE_KEY;
+    if (saveAndContinueTimeoutRef.current !== undefined) {
+      window.clearTimeout(saveAndContinueTimeoutRef.current);
+      saveAndContinueTimeoutRef.current = undefined;
+    }
   };
 
   /**
@@ -360,6 +376,12 @@ const GradingEditor: React.FC<Props> = props => {
       if (!hasSavedChosenComments) {
         saveInFlightRef.current = false;
         setIsSaveInFlight(false);
+        setCurrentlySaving(false);
+
+        if (saveAndContinueTimeoutRef.current !== undefined) {
+          window.clearTimeout(saveAndContinueTimeoutRef.current);
+          saveAndContinueTimeoutRef.current = undefined;
+        }
         return;
       }
 
@@ -380,6 +402,14 @@ const GradingEditor: React.FC<Props> = props => {
       handleGradingSaveAndContinue(submissionId, questionId, xpAdjustment, comments!);
     };
     setCurrentlySaving(true);
+    if (saveAndContinueTimeoutRef.current !== undefined) {
+      window.clearTimeout(saveAndContinueTimeoutRef.current);
+    }
+    // Fallback to avoid suppressing the unsaved-changes prompt indefinitely if save fails.
+    saveAndContinueTimeoutRef.current = window.setTimeout(() => {
+      setCurrentlySaving(false);
+      saveAndContinueTimeoutRef.current = undefined;
+    }, 15000);
     // TODO: Check (not sure how) if this results in a regression.
     callback();
   };
@@ -393,7 +423,6 @@ const GradingEditor: React.FC<Props> = props => {
     const callback = (): void => {
       handleGradingSave(submissionId, questionId, xpAdjustment, comments!);
     };
-    setCurrentlySaving(true);
     // TODO: Check (not sure how) if this results in a regression.
     callback();
   };
@@ -440,7 +469,6 @@ const GradingEditor: React.FC<Props> = props => {
   const checkHasUnsavedChanges = () => {
     const newXpAdjustmentInput = convertParamToInt(xpAdjustmentInput || undefined);
     const normalizedEditorValue = stripInternalMarkers(editorValue);
-
     return props.xpAdjustment !== newXpAdjustmentInput || props.comments !== normalizedEditorValue;
   };
 

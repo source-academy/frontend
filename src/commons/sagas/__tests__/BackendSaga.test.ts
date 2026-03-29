@@ -46,6 +46,7 @@ import {
 import WorkspaceActions from '../../workspace/WorkspaceActions';
 import type { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import BackendSaga from '../BackendSaga';
+import { routerNavigate } from '../BackendSaga';
 import {
   getAssessment,
   getAssessmentConfigs,
@@ -63,6 +64,7 @@ import {
   postAssessment,
   postAuth,
   postCreateCourse,
+  postGrading,
   postReautogradeAnswer,
   postReautogradeSubmission,
   putAssessmentConfigs,
@@ -848,6 +850,64 @@ describe('Test SUBMIT_ASSESSMENT action', () => {
     return expect(mockStates.session.assessmentOverviews[0].status).not.toEqual(
       AssessmentStatuses.submitted
     );
+  });
+});
+
+describe('Test SUBMIT_GRADING_AND_CONTINUE action', () => {
+  const submissionId = 999;
+  const questionId = 1234;
+  const xpAdjustment = 10;
+  const comments = 'saved comments';
+
+  const mockStateWithGrading = {
+    ...mockStates,
+    session: {
+      ...mockStates.session,
+      role: Role.Staff,
+      gradings: {
+        [submissionId]: {
+          answers: [
+            {
+              question: { id: questionId },
+              grade: { xpAdjustment: 0, xp: 80, comments: '', gradedAt: '' }
+            }
+          ],
+          assessment: mockAssessment
+        }
+      }
+    },
+    workspaces: {
+      ...mockStates.workspaces,
+      grading: { currentQuestion: 1 }
+    }
+  } as any;
+
+  test('navigates only after successful save', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStateWithGrading)
+      .provide([
+        [call(postGrading, submissionId, questionId, xpAdjustment, mockTokens, comments), okResp]
+      ])
+      .call(postGrading, submissionId, questionId, xpAdjustment, mockTokens, comments)
+      .call.fn(routerNavigate)
+      .dispatch(
+        SessionActions.submitGradingAndContinue(submissionId, questionId, xpAdjustment, comments)
+      )
+      .silentRun();
+  });
+
+  test('does not navigate when save fails', () => {
+    return expectSaga(BackendSaga)
+      .withState(mockStateWithGrading)
+      .provide([
+        [call(postGrading, submissionId, questionId, xpAdjustment, mockTokens, comments), null]
+      ])
+      .call(postGrading, submissionId, questionId, xpAdjustment, mockTokens, comments)
+      .not.call.fn(routerNavigate)
+      .dispatch(
+        SessionActions.submitGradingAndContinue(submissionId, questionId, xpAdjustment, comments)
+      )
+      .silentRun();
   });
 });
 
