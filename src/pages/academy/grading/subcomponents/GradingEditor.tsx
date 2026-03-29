@@ -189,8 +189,9 @@ const GradingEditor: React.FC<Props> = props => {
   const buildCommentsBlock = (indices: number[], texts: Record<number, string>) => {
     return [...indices]
       .sort((a, b) => a - b)
-      .map(i => texts[i])
-      .filter(Boolean)
+      // Preserve one block segment per selected index, including empty edits,
+      // so split/join order always stays aligned with sorted selected indices.
+      .map(i => texts[i] ?? '')
       .join(COMMENT_SEPARATOR);
   };
 
