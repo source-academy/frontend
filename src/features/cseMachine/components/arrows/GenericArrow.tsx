@@ -1,24 +1,26 @@
 import Konva from 'konva';
+import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
 import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { ArrowOriginFilterKey, IVisible, StepsArray } from '../../CseMachineTypes';
+import { ArrowOriginFilterKey, IHoverable, IVisible, StepsArray } from '../../CseMachineTypes';
 import { defaultStrokeColor, fadedStrokeColor } from '../../CseMachineUtils';
 import { Visible } from '../Visible';
 import { arrowSelection } from './ArrowSelection';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
 export class GenericArrow<Source extends IVisible, Target extends IVisible>
-  extends Visible {
+  extends Visible implements IHoverable {
   private _path: string = '';
   points: number[] = [];
   source: Source;
   target: Target | undefined;
   faded: boolean = false;
   private pathRef: RefObject<Konva.Path | null> = React.createRef();
+  private sourceSegmentPathRef: RefObject<Konva.Path | null> = React.createRef();
   private arrowHeadRef: RefObject<Konva.Arrow | null> = React.createRef();
 
   // Check if this arrow is selected
@@ -150,38 +152,34 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     return this.isLive ? Config.ArrowHighlightedColor : Config.ArrowDeadHighlightedColor;
   }
 
-  // onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
-  //   e.cancelBubble = true;
-  //   this.setHighlightedStyle();
-  //   // Move entire arrow group to top
-  //   if (this.ref.current && this.ref.current.moveToTop) {
-  //     // Move the arrow's parent container to top first, then move arrow within that
-  //     const parent = this.ref.current.getParent();
-  //     if (parent && parent.moveToTop) {
-  //       parent.moveToTop();
-  //     }
-  //     this.ref.current.moveToTop();
-  //   }
-  //   this.ref.current?.getLayer()?.batchDraw();
-  // };
+  onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
+    e.cancelBubble = true;
+    this.ref.current?.moveToTop();
+    this.setHighlightedStyle();
+    this.ref.current?.getStage()?.batchDraw();
+  };
 
-  // onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
-  //   e.cancelBubble = true;
+  onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
+    e.cancelBubble = true;
 
-  //   // Don't change color if selected
-  //   if (this.isSelected()) {
-  //     return;
-  //   }
+    // Don't change color if selected
+    if (this.isSelected()) {
+      return;
+    }
 
-  //   this.setNormalStyle();
-  //   this.ref.current?.getLayer()?.batchDraw();
-  // };
+    this.setNormalStyle();
+    this.ref.current?.getStage()?.batchDraw();
+  };
 
   public setHighlightedStyle() {
     const highlightColor = this.getHighlightedColor();
     if (this.pathRef.current) {
       this.pathRef.current.stroke(highlightColor);
       this.pathRef.current.strokeWidth(Config.ArrowHoveredStrokeWidth);
+    }
+    if (this.sourceSegmentPathRef.current) {
+      this.sourceSegmentPathRef.current.stroke(highlightColor);
+      this.sourceSegmentPathRef.current.strokeWidth(Config.ArrowHoveredStrokeWidth);
     }
     if (this.arrowHeadRef.current) {
       this.arrowHeadRef.current.fill(highlightColor);
@@ -197,6 +195,10 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
       this.pathRef.current.stroke(color);
       this.pathRef.current.strokeWidth(Config.ArrowStrokeWidth);
     }
+    if (this.sourceSegmentPathRef.current) {
+      this.sourceSegmentPathRef.current.stroke(color);
+      this.sourceSegmentPathRef.current.strokeWidth(Config.ArrowStrokeWidth);
+    }
     if (this.arrowHeadRef.current) {
       this.arrowHeadRef.current.fill(color);
       this.arrowHeadRef.current.pointerWidth(Config.ArrowHeadSize);
@@ -206,38 +208,97 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     this.target?.setArrowSourceNormalStyle?.();
   }
 
-  // onClick = (e: KonvaEventObject<MouseEvent>) => {
-  //   e.cancelBubble = true;
+  onClick = (e: KonvaEventObject<MouseEvent>) => {
+    e.cancelBubble = true;
 
-  //   // Toggle selection - clear first, then select if it wasn't already selected
-  //   const wasSelected = this.isSelected();
-  //   const oldArrow = arrowSelection.clearSelection();
+    // Toggle selection - clear first, then select if it wasn't already selected
+    const wasSelected = this.isSelected();
+    const oldArrow = arrowSelection.clearSelection();
 
-  //   // Update old arrow's visual state
-  //   if (oldArrow && oldArrow !== this) {
-  //     oldArrow.setNormalStyle();
-  //   }
+    // Update old arrow's visual state
+    if (oldArrow && oldArrow !== this) {
+      oldArrow.setNormalStyle();
+    }
 
-  //   if (!wasSelected) {
-  //     this.select();
-  //     // Update this arrow's visual state
-  //     this.setHighlightedStyle();
-  //   }
+    if (!wasSelected) {
+      this.select();
+      this.setHighlightedStyle();
+    } else {
+      this.setNormalStyle();
+    }
 
-  //   // Force redraw entire layer to update all arrows
-  //   this.ref.current?.getLayer()?.batchDraw();
-  // };
+    this.ref.current?.getStage()?.batchDraw();
+  };
 
-  // onContextMenu = (e: KonvaEventObject<MouseEvent>) => {
-  //   e.evt.preventDefault(); // Prevent browser context menu
-  //   this.onClick(e);
-  // };
+  onContextMenu = (e: KonvaEventObject<MouseEvent>) => {
+    e.evt.preventDefault(); // Prevent browser context menu
+    this.onClick(e);
+  };
 
   protected getCurrentColor(): string {
     if (this.isSelected()) {
       return this.getHighlightedColor(); // Selected uses hover color
     }
     return this.faded ? fadedStrokeColor() : defaultStrokeColor();
+  }
+
+  /** Subclasses can disable all pointer interactions for passive arrows. */
+  protected isInteractive(): boolean {
+    return true;
+  }
+
+  /** Subclasses can classify arrow origin for filter UI. */
+  protected getOriginFilterKey(): ArrowOriginFilterKey | null {
+    return null;
+  }
+
+  /** Optional source frame bounds used to draw a visible segment above the frame. */
+  protected getSourceFrameBounds(): { x: number; y: number; width: number; height: number } | null {
+    return null;
+  }
+
+  private drawSourceFrameSegment(stroke: string, interactive: boolean): React.ReactNode {
+    const rect = this.getSourceFrameBounds();
+    if (!rect || !this.path()) return null;
+
+    return (
+      <KonvaGroup
+        key={Layout.key++}
+        clipX={rect.x}
+        clipY={rect.y}
+        clipWidth={rect.width}
+        clipHeight={rect.height}
+        visible={this._visible}
+        listening={interactive}
+      >
+        <KonvaPath
+          {...ShapeDefaultProps}
+          key={Layout.key++}
+          ref={this.sourceSegmentPathRef}
+          data={this.path()}
+          stroke={stroke}
+          strokeWidth={this.isSelected() ? Config.ArrowHoveredStrokeWidth : Config.ArrowStrokeWidth}
+          listening={interactive}
+          onMouseEnter={interactive ? this.onMouseEnter : undefined}
+          onMouseLeave={interactive ? this.onMouseLeave : undefined}
+          onClick={interactive ? this.onClick : undefined}
+          onContextMenu={interactive ? this.onContextMenu : undefined}
+          onMouseDown={interactive ? e => (e.cancelBubble = true) : undefined}
+        />
+      </KonvaGroup>
+    );
+  }
+
+  setVisible(visible: boolean): void {
+    this._visible = visible;
+    if (this.ref.current) {
+      if (visible) {
+        this.ref.current.show();
+      } else {
+        this.ref.current.hide();
+      }
+      this.ref.current.getLayer()?.batchDraw();
+    }
   }
 
   // Subclasses can override to recompute liveness before drawing
@@ -261,11 +322,11 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
         name="cse-arrow-underlay-node"
         visible={this._visible}
         listening={interactive}
-      // onMouseEnter={interactive ? this.onMouseEnter : undefined}
-      // onMouseLeave={interactive ? this.onMouseLeave : undefined}
-      // onClick={interactive ? this.onClick : undefined}
-      // onContextMenu={interactive ? this.onContextMenu : undefined}
-      // onMouseDown={interactive ? e => (e.cancelBubble = true) : undefined}
+        onMouseEnter={interactive ? this.onMouseEnter : undefined}
+        onMouseLeave={interactive ? this.onMouseLeave : undefined}
+        onClick={interactive ? this.onClick : undefined}
+        onContextMenu={interactive ? this.onContextMenu : undefined}
+        onMouseDown={interactive ? e => (e.cancelBubble = true) : undefined}
       >
         <KonvaPath
           {...ShapeDefaultProps}
@@ -288,7 +349,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
       </KonvaGroup>
     );
 
-    return null;
+    return this.drawSourceFrameSegment(stroke, interactive);
   }
 }
 
