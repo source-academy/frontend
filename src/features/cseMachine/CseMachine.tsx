@@ -154,19 +154,32 @@ export default class CseMachine {
       context.chapter
     );
 
-    // Build ghost layout cache lazily per mode.
+    // Build ghost layout cache lazily per mode, using mode-specific layout.
     if (!CseMachine.normalLayoutCache || !CseMachine.printLayoutCache) {
-      // fill up both lookup table of normal mode and printable mode
       const originalMode = CseMachine.getPrintableMode();
 
-      CseMachine.printableMode = true;
-      CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
+      const buildCache = (printable: boolean) => {
+        CseMachine.printableMode = printable;
+        Layout.setContext(
+          context.runtime.environmentTree as EnvTree,
+          context.runtime.control!,
+          context.runtime.stash!,
+          context.chapter
+        );
+        return Layout.getLayoutPositions(this.controlStash);
+      };
 
-      CseMachine.printableMode = false;
-      CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
+      CseMachine.printLayoutCache = buildCache(true);
+      CseMachine.normalLayoutCache = buildCache(false);
 
-      // 3. Restore the user's actual mode setting
+      // Restore the user's actual mode setting and layout.
       CseMachine.printableMode = originalMode;
+      Layout.setContext(
+        context.runtime.environmentTree as EnvTree,
+        context.runtime.control,
+        context.runtime.stash,
+        context.chapter
+      );
     }
 
     // Apply Fixed Positions

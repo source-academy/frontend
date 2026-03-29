@@ -25,6 +25,7 @@ export class ArrowFromText extends GenericArrow<Text, Value> {
     const to = this.target;
     if (!to) return [];
 
+
     const terminalSegmentLength = Math.max(Config.ArrowHeadSize, Config.MinTerminalSegmentLength);
     const initialSegmentLength = Math.max(Config.TextMargin, Config.MinTerminalSegmentLength);
     const verticalTerminalOffset = Math.max(Config.DataUnitHeight / 3, terminalSegmentLength);
@@ -33,7 +34,7 @@ export class ArrowFromText extends GenericArrow<Text, Value> {
 
     if (to.x() < from.x()) {
       if (to instanceof ArrayValue) {
-        steps.push((x, y) => [x + initialSegmentLength, y]);
+        steps.push((x, y) => [x + Config.TextMargin, y]);
         steps.push((x, y) => [x, to.y() - verticalTerminalOffset]);
         steps.push((x, y) => [to.x() + Config.DataUnitWidth / 2, y]);
         steps.push((x, y) => [x, to.y()]);

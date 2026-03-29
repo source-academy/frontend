@@ -109,6 +109,14 @@ export class ArrayValue extends Value implements IHoverable {
     }
   }
 
+  setArrowSourceHighlightedStyle(): void {
+    this.units.forEach(unit => unit.setArrowSourceHighlightedStyle());
+  }
+
+  setArrowSourceNormalStyle(): void {
+    this.units.forEach(unit => unit.setArrowSourceNormalStyle());
+  }
+
   isEnclosingFrameLive(): boolean {
     const id = (this.data as any).id;
     return id ? Layout.liveObjectIDs.has(id) : false;

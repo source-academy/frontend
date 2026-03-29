@@ -21,8 +21,8 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   source: Source;
   target: Target | undefined;
   faded: boolean = false;
-  private pathRef: RefObject<Konva.Path> = React.createRef();
-  private arrowHeadRef: RefObject<Konva.Arrow> = React.createRef();
+  private pathRef: RefObject<Konva.Path | null> = React.createRef();
+  private arrowHeadRef: RefObject<Konva.Arrow | null> = React.createRef();
 
   // Check if this arrow is selected
   protected isSelected(): boolean {
@@ -57,14 +57,34 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
 
   to(to: Target): GenericArrow<Source, Target> {
     this.target = to;
+    this.recomputePath();
+    return this;
+  }
+
+  private recomputePath(): void {
+    if (!this.target) {
+      this._path = '';
+      this.points = [];
+      return;
+    }
+
+    const to = this.target;
+    this._x = this.source.x();
+    this._y = this.source.y();
     this._width = Math.abs(to.x() - this.source.x());
     this._height = Math.abs(to.y() - this.source.y());
 
     const points = this.calculateSteps().reduce<Array<number>>(
-      (points, step) => [...points, ...step(points[points.length - 2], points[points.length - 1])],
+      (acc, step) => [...acc, ...step(acc[acc.length - 2], acc[acc.length - 1])],
       [this.source.x(), this.source.y()]
     );
     points.splice(0, 2);
+
+    this._path = '';
+    if (points.length < 4) {
+      this.points = points;
+      return;
+    }
 
     // starting point
     this._path += `M ${points[0]} ${points[1]} `;
@@ -99,7 +119,6 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     // end path
     this._path += `L ${points[points.length - 2]} ${points[points.length - 1]} `;
     this.points = points;
-    return this;
   }
 
   /**
@@ -129,9 +148,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
    * Subclasses can override this to provide custom hover colors.
    */
   protected getHighlightedColor(): string {
-    return CseMachine.getPrintableMode()
-      ? Config.PrintArrowHighlightedColor
-      : Config.ArrowHighlightedColor;
+    return this.isLive ? Config.ArrowHighlightedColor : Config.ArrowDeadHighlightedColor;
   }
 
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
@@ -172,8 +189,9 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
       this.arrowHeadRef.current.pointerWidth(Config.ArrowHoveredHeadSize);
       this.arrowHeadRef.current.pointerLength(Config.ArrowHoveredHeadSize);
     }
+    this.source.setArrowSourceHighlightedStyle?.();
+    this.target?.setArrowSourceHighlightedStyle?.();
   }
-
   public setNormalStyle() {
     const color = this.isLive ? defaultStrokeColor() : fadedStrokeColor();
     if (this.pathRef.current) {
@@ -185,6 +203,8 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
       this.arrowHeadRef.current.pointerWidth(Config.ArrowHeadSize);
       this.arrowHeadRef.current.pointerLength(Config.ArrowHeadSize);
     }
+    this.source.setArrowSourceNormalStyle?.();
+    this.target?.setArrowSourceNormalStyle?.();
   }
 
   onClick = (e: KonvaEventObject<MouseEvent>) => {
@@ -192,12 +212,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
 
     // Toggle selection - clear first, then select if it wasn't already selected
     const wasSelected = this.isSelected();
-    const oldArrow = arrowSelection.clearSelection();
-
-    // Update old arrow's visual state
-    if (oldArrow && oldArrow !== this) {
-      oldArrow.setNormalStyle();
-    }
+    arrowSelection.clearSelection();
 
     if (!wasSelected) {
       this.select();
@@ -247,6 +262,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   protected updateIsLive(): void { } //kind of an abstract method
 
   draw() {
+    this.recomputePath();
     this.updateIsLive(); //just before drawijng, update liveness for the arrows (since this was causing erroes earlier  )
     if (Layout.clearDeadFrames && !this.isLive) {
       return null;

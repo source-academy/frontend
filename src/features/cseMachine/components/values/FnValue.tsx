@@ -57,8 +57,8 @@ export class FnValue extends Value implements IHoverable {
 
   /** width of the closure circles + label */
   readonly totalWidth: number;
-  readonly labelRef: RefObject<Label> = React.createRef();
-  readonly revealLabelRef: RefObject<Label> = React.createRef();
+  readonly labelRef: RefObject<Label | null> = React.createRef();
+  readonly revealLabelRef: RefObject<Label | null> = React.createRef();
 
   centerX: number;
   enclosingFrame?: Frame;
@@ -203,6 +203,19 @@ export class FnValue extends Value implements IHoverable {
     this._bodyArrow?.setVisible(false);
     currentTarget.getLayer()?.batchDraw();
   };
+
+  setArrowSourceHighlightedStyle(): void {
+    if (this.isLive()) {
+      this.setShapesStyle(Config.HoverColor);
+    } else {
+      this.setShapesStyle(Config.HoverDeadColor);
+    }
+  }
+
+  setArrowSourceNormalStyle(): void {
+    const strokeColor = this.isLive() ? defaultStrokeColor() : fadedStrokeColor();
+    this.setShapesStyle(strokeColor);
+  }
 
   isLive(): boolean {
     const id = (this.data as any).id;

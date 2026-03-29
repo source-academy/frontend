@@ -49,8 +49,8 @@ export class GlobalFnValue extends Value implements IHoverable {
   readonly printDescriptionOffsetY: number;
   readonly printDescriptionBottomGap: number;
   readonly totalWidth: number;
-  readonly labelRef: RefObject<Label> = React.createRef();
-  readonly revealLabelRef: RefObject<Label> = React.createRef();
+  readonly labelRef: RefObject<Label | null> = React.createRef();
+  readonly revealLabelRef: RefObject<Label | null> = React.createRef();
 
   centerX: number;
   private isExpandedDescription: boolean = false;
@@ -176,6 +176,19 @@ export class GlobalFnValue extends Value implements IHoverable {
     this._bodyArrow?.setVisible(false);
     currentTarget.getLayer()?.batchDraw();
   };
+
+  setArrowSourceHighlightedStyle(): void {
+    if (this.isReferenced()) {
+      this.setShapesStyle(Config.HoverColor);
+    } else {
+      this.setShapesStyle(Config.HoverDeadColor);
+    }
+  }
+
+  setArrowSourceNormalStyle(): void {
+    const strokeColor = this.isReferenced() ? defaultStrokeColor() : fadedStrokeColor();
+    this.setShapesStyle(strokeColor);
+  }
 
   draw(): React.ReactNode {
     this._isDrawn = true;

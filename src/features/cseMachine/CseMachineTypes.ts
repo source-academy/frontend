@@ -40,6 +40,8 @@ export interface IVisible extends Drawable {
   height(): number;
 
   ref?: React.RefObject<any>;
+  setArrowSourceHighlightedStyle?(): void;
+  setArrowSourceNormalStyle?(): void;
 }
 
 /** unassigned is internally represented as a symbol */
