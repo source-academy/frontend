@@ -46,7 +46,6 @@ import {
 import WorkspaceActions from '../../workspace/WorkspaceActions';
 import type { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import BackendSaga from '../BackendSaga';
-import { routerNavigate } from '../BackendSaga';
 import {
   getAssessment,
   getAssessmentConfigs,
@@ -883,31 +882,50 @@ describe('Test SUBMIT_GRADING_AND_CONTINUE action', () => {
   } as any;
 
   test('navigates only after successful save', () => {
+    const router = createMemoryRouter([
+      {
+        path: '/',
+        element: null
+      }
+    ]);
+
     return expectSaga(BackendSaga)
-      .withState(mockStateWithGrading)
+      .withState({ ...mockStateWithGrading, router })
       .provide([
         [call(postGrading, submissionId, questionId, xpAdjustment, mockTokens, comments), okResp]
       ])
       .call(postGrading, submissionId, questionId, xpAdjustment, mockTokens, comments)
-      .call.fn(routerNavigate)
+      .call(showSuccessMessage, 'Submitted!', 1000)
       .dispatch(
         SessionActions.submitGradingAndContinue(submissionId, questionId, xpAdjustment, comments)
       )
-      .silentRun();
+      .silentRun()
+      .then(() => {
+        expect(router.state.location.pathname).toBe('/courses/1/grading/999/2');
+      });
   });
 
   test('does not navigate when save fails', () => {
+    const router = createMemoryRouter([
+      {
+        path: '/',
+        element: null
+      }
+    ]);
+
     return expectSaga(BackendSaga)
-      .withState(mockStateWithGrading)
+      .withState({ ...mockStateWithGrading, router })
       .provide([
         [call(postGrading, submissionId, questionId, xpAdjustment, mockTokens, comments), null]
       ])
       .call(postGrading, submissionId, questionId, xpAdjustment, mockTokens, comments)
-      .not.call.fn(routerNavigate)
       .dispatch(
         SessionActions.submitGradingAndContinue(submissionId, questionId, xpAdjustment, comments)
       )
-      .silentRun();
+      .silentRun()
+      .then(() => {
+        expect(router.state.location.pathname).toBe('/');
+      });
   });
 });
 
