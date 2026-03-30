@@ -271,9 +271,11 @@ export default class CseMachine {
       }
 
       const originalMode = CseMachine.getPrintableMode();
+      const originalAlignment = CseMachine.getCenterAlignment();
 
       const buildCache = (printable: boolean) => {
         CseMachine.printableMode = printable;
+        CseMachine.centerAlignment = false;
         Layout.setContext(
           context.runtime.environmentTree as EnvTree,
           context.runtime.control!,
@@ -288,6 +290,8 @@ export default class CseMachine {
 
       // Restore the user's actual mode setting and layout.
       CseMachine.printableMode = originalMode;
+      CseMachine.centerAlignment = originalAlignment;
+      CseMachine.setClearDeadFrames(false);
       Layout.setContext(
         context.runtime.environmentTree as EnvTree,
         context.runtime.control,
