@@ -1,5 +1,5 @@
-import { vi } from 'vitest';
 import { type LoaderFunction } from 'react-router';
+import { vi } from 'vitest';
 
 const getStateMock = vi.fn();
 
