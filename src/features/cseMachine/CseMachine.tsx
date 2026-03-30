@@ -52,6 +52,9 @@ export default class CseMachine {
     CseMachine.normalLiveLayoutCache = null;
     CseMachine.printLayoutCache = null;
     CseMachine.printLiveLayoutCache = null;
+    if (!Layout.clearDeadFrames) {
+      CseMachine.usedBuiltInNames.clear();
+    }
   }
   public static clearLiveLayouts(): void {
     CseMachine.normalLiveLayoutCache = null;
