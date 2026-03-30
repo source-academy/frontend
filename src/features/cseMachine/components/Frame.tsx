@@ -167,7 +167,7 @@ export class Frame extends Visible implements IHoverable {
               ? data.value.toReplString()
               : JSON.stringify(data.value) || String(data.value)
           );
-          // TODO: Check if primitive value size exceed default frame width
+        // TODO: Check if primitive value size exceed default frame width
       }
       // To replace later
       this._width = Math.max(this._width, bindingTextWidth + Config.FramePaddingX * 2);
