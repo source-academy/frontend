@@ -840,7 +840,7 @@ export class Layout {
    * Reassign x coordinate of every frame to their predetermined position
    */
   static applyFixedPositions() {
-    if (!CseMachine.getMasterLayout()) { // shoudn't happen since getLayoutPositions is called before, but just in case
+    if (!CseMachine.getMasterLayout()) { // shouldn't happen since getLayoutPositions is called before, but just in case
       return;
     }
     const cache = CseMachine.getMasterLayout()!; // getLayoutPositions() must have been called before
