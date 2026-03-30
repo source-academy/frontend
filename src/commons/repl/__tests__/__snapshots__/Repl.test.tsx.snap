@@ -1,232 +1,279 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Code output renders correctly 1`] = `
-<Blueprint6.Card>
-  <ForwardRef
-    className="code-output"
+<DocumentFragment>
+  <div
+    class="bp6-card bp6-elevation-0"
   >
-    display('');
-  </ForwardRef>
-</Blueprint6.Card>
+    <pre
+      class="bp6-code-block code-output"
+    >
+      display('');
+    </pre>
+  </div>
+</DocumentFragment>
 `;
 
 exports[`Empty output renders an empty card 1`] = `
-<Blueprint6.Card>
-  ''
-</Blueprint6.Card>
+<DocumentFragment>
+  <div
+    class="bp6-card bp6-elevation-0"
+  >
+    ''
+  </div>
+</DocumentFragment>
 `;
 
 exports[`Error output (no consoleLogs) renders correctly 1`] = `
-<Blueprint6.Card>
-  <ForwardRef
-    className="error-output"
+<DocumentFragment>
+  <div
+    class="bp6-card bp6-elevation-0"
   >
-    Expected , got .
-  </ForwardRef>
-</Blueprint6.Card>
+    <pre
+      class="bp6-code-block error-output"
+    >
+      Expected , got .
+    </pre>
+  </div>
+</DocumentFragment>
 `;
 
 exports[`Error output (with consoleLogs) renders correctly 1`] = `
-<Blueprint6.Card>
-  <ForwardRef
-    className="log-output"
+<DocumentFragment>
+  <div
+    class="bp6-card bp6-elevation-0"
   >
-    a
+    <pre
+      class="bp6-code-block log-output"
+    >
+      a
 bb
 cccccccccccccccccccccccccccccccc
 d
-  </ForwardRef>
-  <br />
-  <ForwardRef
-    className="error-output"
-  >
-    Expected , got .
-  </ForwardRef>
-</Blueprint6.Card>
+    </pre>
+    <br />
+    <pre
+      class="bp6-code-block error-output"
+    >
+      Expected , got .
+    </pre>
+  </div>
+</DocumentFragment>
 `;
 
 exports[`Repl renders correctly 1`] = `
-<div
-  className="Repl"
-  style={
-    {
-      "display": undefined,
-    }
-  }
->
+<DocumentFragment>
   <div
-    className="repl-output-parent"
+    class="Repl"
   >
-    <Output
-      isHtml={false}
-      output={
-        {
-          "consoleLogs": [],
-          "type": "result",
-          "value": 42,
-        }
-      }
-      usingSubst={false}
-    />
-    <Output
-      isHtml={false}
-      output={
-        {
-          "type": "code",
-          "value": "display('');",
-        }
-      }
-      usingSubst={false}
-    />
-    <Output
-      isHtml={false}
-      output={
-        {
-          "consoleLogs": [],
-          "errors": [
-            TypeError {
-              "chapter": 4,
-              "expected": "",
-              "got": "",
-              "location": {
-                "end": {
-                  "column": -1,
-                  "line": -1,
-                },
-                "start": {
-                  "column": -1,
-                  "line": -1,
-                },
-              },
-              "severity": "Error",
-              "side": "",
-              "type": "Runtime",
-            },
-          ],
-          "type": "errors",
-        }
-      }
-      usingSubst={false}
-    />
-    <Output
-      isHtml={false}
-      output={
-        {
-          "consoleLogs": [
-            "a",
-            "bb",
-            "cccccccccccccccccccccccccccccccc",
-            "d",
-          ],
-          "type": "running",
-        }
-      }
-      usingSubst={false}
-    />
-    <Blueprint6.Card
-      className="repl-input-parent row"
+    <div
+      class="repl-output-parent"
     >
-      <ReplInput
-        externalLibrary="NONE"
-        handleBrowseHistoryDown={[Function]}
-        handleBrowseHistoryUp={[Function]}
-        handleReplEval={[Function]}
-        handleReplOutputClear={[Function]}
-        handleReplValueChange={[Function]}
-        output={
-          [
-            {
-              "consoleLogs": [],
-              "type": "result",
-              "value": 42,
-            },
-            {
-              "type": "code",
-              "value": "display('');",
-            },
-            {
-              "consoleLogs": [],
-              "errors": [
-                TypeError {
-                  "chapter": 4,
-                  "expected": "",
-                  "got": "",
-                  "location": {
-                    "end": {
-                      "column": -1,
-                      "line": -1,
-                    },
-                    "start": {
-                      "column": -1,
-                      "line": -1,
-                    },
-                  },
-                  "severity": "Error",
-                  "side": "",
-                  "type": "Runtime",
-                },
-              ],
-              "type": "errors",
-            },
-            {
-              "consoleLogs": [
-                "a",
-                "bb",
-                "cccccccccccccccccccccccccccccccc",
-                "d",
-              ],
-              "type": "running",
-            },
-          ]
-        }
-        replButtons={[]}
-        replValue=""
-        sourceChapter={1}
-        sourceVariant="default"
-      />
-    </Blueprint6.Card>
-  </div>
-</div>
-`;
-
-exports[`Result output (no consoleLogs) renders correctly 1`] = `
-<ResultOutputDisplay
-  output={
-    {
-      "consoleLogs": [],
-      "type": "result",
-      "value": 42,
-    }
-  }
-/>
-`;
-
-exports[`Result output (with consoleLogs) renders correctly 1`] = `
-<ResultOutputDisplay
-  output={
-    {
-      "consoleLogs": [
-        "a",
-        "bb",
-        "cccccccccccccccccccccccccccccccc",
-        "d",
-      ],
-      "type": "result",
-      "value": 42,
-    }
-  }
-/>
-`;
-
-exports[`Running output renders correctly 1`] = `
-<Blueprint6.Card>
-  <ForwardRef
-    className="log-output"
-  >
-    a
+      <div
+        class="bp6-card bp6-elevation-0"
+      >
+        <pre
+          class="bp6-code-block result-output"
+        >
+          42
+        </pre>
+      </div>
+      <div
+        class="bp6-card bp6-elevation-0"
+      >
+        <pre
+          class="bp6-code-block code-output"
+        >
+          display('');
+        </pre>
+      </div>
+      <div
+        class="bp6-card bp6-elevation-0"
+      >
+        <pre
+          class="bp6-code-block error-output"
+        >
+          Expected , got .
+        </pre>
+      </div>
+      <div
+        class="bp6-card bp6-elevation-0"
+      >
+        <pre
+          class="bp6-code-block log-output"
+        >
+          a
 bb
 cccccccccccccccccccccccccccccccc
 d
-  </ForwardRef>
-</Blueprint6.Card>
+        </pre>
+      </div>
+      <div
+        class="repl-input-parent row bp6-card bp6-elevation-0"
+      >
+        <div
+          class=" ace_editor ace_hidpi ace-source ace_dark repl-react-ace react-ace"
+          id="ace-editor"
+          style="width: 100%; height: 1px; font-size: 17px; font-family: "Inconsolata", "Consolas", monospace;"
+        >
+          <textarea
+            aria-autocomplete="both"
+            aria-haspopup="false"
+            aria-label="Cursor at row 1"
+            autocapitalize="off"
+            autocomplete="off"
+            autocorrect="off"
+            class="ace_text-input"
+            role="textbox"
+            spellcheck="false"
+            style="opacity: 0; font-size: 1px;"
+            wrap="off"
+          />
+          <div
+            aria-hidden="true"
+            class="ace_gutter"
+            style="display: none;"
+          >
+            <div
+              class="ace_layer ace_gutter-layer ace_folding-enabled"
+              style="height: 1000000px;"
+            />
+          </div>
+          <div
+            class="ace_scroller"
+            style="line-height: 0px;"
+          >
+            <div
+              class="ace_content"
+            >
+              <div
+                class="ace_layer ace_print-margin-layer"
+              >
+                <div
+                  class="ace_print-margin"
+                  style="left: 4px; visibility: hidden;"
+                />
+              </div>
+              <div
+                class="ace_layer ace_marker-layer"
+              />
+              <div
+                class="ace_layer ace_text-layer"
+                style="height: 1000000px; margin: 0px 4px;"
+              />
+              <div
+                class="ace_layer ace_marker-layer"
+              />
+              <div
+                class="ace_layer ace_cursor-layer ace_hidden-cursors"
+              >
+                <div
+                  class="ace_cursor"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="ace_scrollbar ace_scrollbar-v"
+            style="display: none; width: 20px;"
+          >
+            <div
+              class="ace_scrollbar-inner"
+              style="width: 20px;"
+            >
+               
+            </div>
+          </div>
+          <div
+            class="ace_scrollbar ace_scrollbar-h"
+            style="display: none; height: 20px;"
+          >
+            <div
+              class="ace_scrollbar-inner"
+              style="height: 20px;"
+            >
+               
+            </div>
+          </div>
+          <div
+            style="height: auto; width: auto; top: 0px; left: 0px; visibility: hidden; position: absolute; white-space: pre; font: inherit; overflow: hidden;"
+          >
+            <div
+              style="height: auto; width: auto; top: 0px; left: 0px; visibility: hidden; position: absolute; white-space: pre; font: inherit; overflow: visible;"
+            />
+            <div
+              style="height: auto; width: auto; top: 0px; left: 0px; visibility: hidden; position: absolute; white-space: pre; font: inherit; overflow: visible;"
+            >
+              XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+            </div>
+          </div>
+          <div
+            class="ace_tooltip ace_gutter-tooltip"
+            id="gt1"
+            role="tooltip"
+            style="display: none; white-space: pre-wrap; pointer-events: auto;"
+            tabindex="-1"
+          />
+        </div>
+        <div
+          class="bp6-button-group bp6-dark"
+        />
+        <div />
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Result output (no consoleLogs) renders correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="bp6-card bp6-elevation-0"
+  >
+    <pre
+      class="bp6-code-block result-output"
+    >
+      42
+    </pre>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Result output (with consoleLogs) renders correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="bp6-card bp6-elevation-0"
+  >
+    <pre
+      class="bp6-code-block log-output"
+    >
+      a
+bb
+cccccccccccccccccccccccccccccccc
+d
+    </pre>
+    <pre
+      class="bp6-code-block result-output"
+    >
+      42
+    </pre>
+  </div>
+</DocumentFragment>
+`;
+
+exports[`Running output renders correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="bp6-card bp6-elevation-0"
+  >
+    <pre
+      class="bp6-code-block log-output"
+    >
+      a
+bb
+cccccccccccccccccccccccccccccccc
+d
+    </pre>
+  </div>
+</DocumentFragment>
 `;

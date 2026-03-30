@@ -16,6 +16,7 @@ class ArrowSelectionManager {
   clearSelection(): GenericArrow<IVisible, IVisible> | null {
     const oldArrow = this.selectedArrow;
     this.selectedArrow = null;
+    oldArrow?.setNormalStyle();
     return oldArrow;
   }
 
