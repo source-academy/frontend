@@ -873,7 +873,6 @@ export class Layout {
   }
 
   static applyCenterAlignment() { // don't have usage yet
-    console.log('applying center alignment');
     if (!CseMachine.getMasterLayout()) {
       return;
     }
