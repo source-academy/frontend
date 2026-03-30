@@ -66,7 +66,10 @@ export class Binding extends Visible {
         : (this.value.height() - Config.FontSize) / 2;
 
     this.keyYOffset = keyYOffset;
-    this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, { faded: !this.isLive });
+    this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, { 
+      faded: !this.isLive,
+      parentFrame: this.frame
+    });
 
     const printFnDescriptionHeight =
       CseMachine.getPrintableMode() &&
