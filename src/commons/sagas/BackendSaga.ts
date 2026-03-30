@@ -612,7 +612,8 @@ function* sendGrade(
   }
   const tokens: Tokens = yield selectTokens();
 
-  const resp: Response | null = yield postGrading(
+  const resp: Response | null = yield call(
+    postGrading,
     submissionId,
     questionId,
     xpAdjustment,
