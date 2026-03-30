@@ -66,6 +66,8 @@ const EMPTY_SELECTION_SAVE_KEY = JSON.stringify({ selected_indices: [], edits: {
 const GradingEditor: React.FC<Props> = props => {
   const dispatch = useTypedDispatch();
   const tokens = useTokens();
+  const prompts = props.prompts ?? [];
+  const hasPrompts = prompts.length > 0;
   const gradingSaveResult = useTypedSelector(state => state.session.gradingSaveResult);
   const lastSavedSelectionKeyRef = useRef<string>(EMPTY_SELECTION_SAVE_KEY);
   const saveInFlightRef = useRef<boolean>(false);
@@ -514,7 +516,7 @@ const GradingEditor: React.FC<Props> = props => {
 
   const copyComposedPromptToClipboard = () => {
     navigator.clipboard.writeText(
-      props.prompts
+      prompts
         .map(prompt => {
           return `**${prompt.role} Prompt**\n\n${prompt.content}`;
         })
@@ -652,39 +654,41 @@ const GradingEditor: React.FC<Props> = props => {
         </div>
       </div>
 
-      {props.is_llm && props.prompts && props.prompts.length > 0 && (
+      {props.is_llm && (
         <>
-          <Dialog
-            title="Full Composed LLM Prompt"
-            icon={IconNames.WRENCH}
-            isOpen={isViewLLMPromptOpen}
-            onClose={() => setIsViewLLMPromptOpen(false)}
-          >
-            <div className="llm-prompt-dialog">
-              <div className="forenote-section">
-                <span className="forenote">
-                  <b>Note:</b> The titles here are provided merely to distinguish the different
-                  sections. They are not included in the final prompt.
-                </span>
-                <Button
-                  onClick={() => {
-                    copyComposedPromptToClipboard();
-                  }}
-                >
-                  <Icon icon={IconNames.Clipboard} />
-                </Button>
+          {hasPrompts && (
+            <Dialog
+              title="Full Composed LLM Prompt"
+              icon={IconNames.WRENCH}
+              isOpen={isViewLLMPromptOpen}
+              onClose={() => setIsViewLLMPromptOpen(false)}
+            >
+              <div className="llm-prompt-dialog">
+                <div className="forenote-section">
+                  <span className="forenote">
+                    <b>Note:</b> The titles here are provided merely to distinguish the different
+                    sections. They are not included in the final prompt.
+                  </span>
+                  <Button
+                    onClick={() => {
+                      copyComposedPromptToClipboard();
+                    }}
+                  >
+                    <Icon icon={IconNames.Clipboard} />
+                  </Button>
+                </div>
+                {prompts.map(prompt => {
+                  return (
+                    <>
+                      <H3>{prompt.role} Level Prompt</H3>
+                      <Divider />
+                      {prompt.content}
+                    </>
+                  );
+                })}
               </div>
-              {props.prompts.map(prompt => {
-                return (
-                  <>
-                    <H3>{prompt.role} Level Prompt</H3>
-                    <Divider />
-                    {prompt.content}
-                  </>
-                );
-              })}
-            </div>
-          </Dialog>
+            </Dialog>
+          )}
           <div style={{ marginBottom: '10px' }}>
             <GradingCommentSelector
               onToggle={onToggleComment}
@@ -693,13 +697,15 @@ const GradingEditor: React.FC<Props> = props => {
               selectedIndices={selectedIndices}
             />
             <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
-              <Button
-                onClick={async () => {
-                  setIsViewLLMPromptOpen(true);
-                }}
-              >
-                View Prompt
-              </Button>
+              {hasPrompts && (
+                <Button
+                  onClick={async () => {
+                    setIsViewLLMPromptOpen(true);
+                  }}
+                >
+                  View Prompt
+                </Button>
+              )}
 
               <Button
                 intent={hasGenerated ? Intent.NONE : Intent.PRIMARY}
