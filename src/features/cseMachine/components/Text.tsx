@@ -26,6 +26,7 @@ export interface TextOptions {
   isStringIdentifiable: boolean;
   faded: boolean;
   hidden: boolean;
+  parentFrame?: any; // Reference to the frame this text belongs to
 }
 
 export const defaultOptions: TextOptions = {
