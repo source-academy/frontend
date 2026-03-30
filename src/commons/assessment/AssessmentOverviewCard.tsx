@@ -19,15 +19,13 @@ type AssessmentOverviewCardProps = {
   /** Will only render the attempt button if true, regardless of attempt status. */
   renderAttemptButton: boolean;
   renderGradingTooltip: boolean;
-  makeSubmissionButton: (overview: AssessmentOverview) => JSX.Element;
 };
 
-/** A card to display `AssessmentOverview`s. */
+/** A card to display `AssessmentOverview`s. Submission has been removed */
 const AssessmentOverviewCard: React.FC<AssessmentOverviewCardProps> = ({
   overview,
   renderAttemptButton,
   renderGradingTooltip,
-  makeSubmissionButton
 }) => {
   const { isMobileBreakpoint } = useResponsive();
   return (
@@ -49,7 +47,6 @@ const AssessmentOverviewCard: React.FC<AssessmentOverviewCardProps> = ({
           <AssessmentOverviewCardTitle
             overview={overview}
             renderProgressStatus={renderGradingTooltip}
-            makeSubmissionButton={makeSubmissionButton}
           />
           <div className={classes['listing-xp']}>
             <H6>
@@ -105,13 +102,11 @@ const AssessmentOverviewCard: React.FC<AssessmentOverviewCardProps> = ({
 type AssessmentOverviewCardTitleProps = {
   overview: AssessmentOverview;
   renderProgressStatus: boolean;
-  makeSubmissionButton: (overview: AssessmentOverview) => JSX.Element;
 };
 
 const AssessmentOverviewCardTitle: React.FC<AssessmentOverviewCardTitleProps> = ({
   overview,
   renderProgressStatus,
-  makeSubmissionButton
 }) => (
   <div className="listing-header">
     <Text ellipsize={true}>
@@ -128,7 +123,6 @@ const AssessmentOverviewCardTitle: React.FC<AssessmentOverviewCardTitleProps> = 
         {renderProgressStatus ? showGradingTooltip(overview.isGradingPublished) : null}
       </H4>
     </Text>
-    <div className="listing-button">{makeSubmissionButton(overview)}</div>
   </div>
 );
 
