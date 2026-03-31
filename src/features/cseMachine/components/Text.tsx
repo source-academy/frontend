@@ -95,6 +95,18 @@ export class Text extends Visible implements IHoverable {
     currentTarget.getLayer()?.draw();
   };
 
+  setArrowSourceHighlightedStyle(): void {
+    if (this.options.faded) {
+      this.ref.current?.fill(Config.HoverDeadColor);
+    } else {
+      this.ref.current?.fill(Config.HoverColor);
+    }
+  }
+
+  setArrowSourceNormalStyle(): void {
+    this.ref.current?.fill(this.options.faded ? fadedTextColor() : defaultTextColor());
+  }
+
   draw(): React.ReactNode {
     const props = {
       fontFamily: this.options.fontFamily,

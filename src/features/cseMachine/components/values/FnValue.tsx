@@ -204,6 +204,19 @@ export class FnValue extends Value implements IHoverable {
     currentTarget.getLayer()?.batchDraw();
   };
 
+  setArrowSourceHighlightedStyle(): void {
+    if (this.isLive()) {
+      this.setShapesStyle(Config.HoverColor);
+    } else {
+      this.setShapesStyle(Config.HoverDeadColor);
+    }
+  }
+
+  setArrowSourceNormalStyle(): void {
+    const strokeColor = this.isLive() ? defaultStrokeColor() : fadedStrokeColor();
+    this.setShapesStyle(strokeColor);
+  }
+
   isLive(): boolean {
     const id = (this.data as any).id;
     return id ? Layout.liveObjectIDs.has(id) : false;
