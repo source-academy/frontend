@@ -2,8 +2,8 @@ import Heap from 'js-slang/dist/cse-machine/heap';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { Chapter } from 'js-slang/dist/langs';
 import { Frame } from 'js-slang/dist/types';
-import { Layer as KonvaLayerNode } from 'konva/lib/Layer';
 import { Group } from 'konva/lib/Group';
+import { Layer as KonvaLayerNode } from 'konva/lib/Layer';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Stage } from 'konva/lib/Stage';
 import React, { RefObject } from 'react';
@@ -747,13 +747,10 @@ export class Layout {
                     key={Layout.key++}
                     listening={false}
                   />
-                  {levelNodes}
-                  {controlNode}
-                  {stashNode}
                   <KonvaGroup ref={Layout.contentGroupRef}>
-                    {Layout.levels.map(level => level.draw())}
-                    {CseMachine.getControlStash() && Layout.controlComponent.draw()}
-                    {CseMachine.getControlStash() && Layout.stashComponent.draw()}
+                    {levelNodes}
+                    {controlNode}
+                    {stashNode}
                   </KonvaGroup>
                 </KonvaLayer>
                 <KonvaLayer ref={CseAnimation.layerRef} listening={false}>

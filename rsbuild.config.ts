@@ -75,6 +75,12 @@ export default defineConfig({
           return /Critical dependency: the request of a dependency is an expression/.test(
             warning.message
           );
+        },
+        (warning: any) => {
+          // Ignore ts-morph warnings caused by optional Node-only paths in browser bundle.
+          const moduleName = warning.moduleDescriptor?.name;
+          if (!moduleName) return false;
+          return /@ts-morph\/common\/dist\/typescript\.js/.test(moduleName);
         }
 
         // {
@@ -107,10 +113,17 @@ export default defineConfig({
         })
       ];
 
-      // Workaround to suppress warnings caused by ts-morph in js-slang
-      // if (config.module) {
-      //   config.module.noParse = /node_modules\/@ts-morph\/common\/dist\/typescript\.js$/;
-      // }
+      // Workaround for ts-morph being transitively bundled by js-slang in browser builds.
+      if (config.module) {
+        config.module.noParse = /node_modules\/@ts-morph\/common\/dist\/typescript\.js$/;
+      }
+
+      // Avoid resolving Node built-ins for optional ts-morph paths in browser bundles.
+      config.resolve ??= {};
+      config.resolve.fallback = {
+        ...(config.resolve.fallback ?? {}),
+        perf_hooks: false
+      };
 
       return config;
     }
