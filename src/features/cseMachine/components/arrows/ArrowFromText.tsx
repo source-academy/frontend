@@ -56,16 +56,19 @@ export class ArrowFromText extends GenericArrow<Text, Value> {
         steps.push((x, y) => [x - terminalSegmentLength, y]);
       }
     } else {
+      const targetY = to instanceof ArrayValue ? to.y() + Config.DataUnitHeight / 2 : to.y();
+      const preTerminalX = Math.max(frameExitX, to.x() - terminalSegmentLength);
+
       if (to instanceof ArrayValue) {
         // Route text-to-array arrows with Manhattan segments, ending at array's left-center.
-        const arrayMidY = to.y() + Config.DataUnitHeight / 2;
-        const preTerminalX = Math.max(frameExitX, to.x() - terminalSegmentLength);
         steps.push((x, y) => [preTerminalX, y]);
-        steps.push((x, y) => [x, arrayMidY]);
+        steps.push((x, y) => [x, targetY]);
         steps.push((x, y) => [to.x(), y]);
       } else {
-        // Target is to the right - non-array values can go directly to target
-        steps.push((x, y) => [to.x(), to.y()]);
+        // Route all rightward text arrows orthogonally so special cases still stay Manhattan.
+        steps.push((x, y) => [preTerminalX, y]);
+        steps.push((x, y) => [x, targetY]);
+        steps.push((x, y) => [to.x(), y]);
       }
     }
 

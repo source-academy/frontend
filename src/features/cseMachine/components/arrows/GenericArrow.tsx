@@ -80,6 +80,14 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     );
     points.splice(0, 2);
 
+    // Remove no-op points so zero-length segments do not collapse rounded corners
+    // or force the arrowhead to sit directly on a bend.
+    for (let i = points.length - 2; i >= 2; i -= 2) {
+      if (points[i] === points[i - 2] && points[i + 1] === points[i - 1]) {
+        points.splice(i, 2);
+      }
+    }
+
     this._path = '';
     if (points.length < 4) {
       this.points = points;
@@ -101,11 +109,23 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
         const dy2 = yc - yb;
         const segment1Length = Math.abs(dx1) + Math.abs(dy1);
         const segment2Length = Math.abs(dx2) + Math.abs(dy2);
-        const maxSpaceRadius = Math.min(segment1Length, segment2Length) / 2;
+        const isLastCorner = n + 6 >= points.length;
+        const minTerminalStraightLength = Math.max(
+          Config.ArrowHeadSize,
+          Config.ArrowMinCornerRadius
+        );
+        const terminalAllowance = isLastCorner
+          ? Math.max(0, segment2Length - minTerminalStraightLength)
+          : segment2Length / 2;
+        const maxSpaceRadius = Math.min(segment1Length / 2, segment2Length / 2, terminalAllowance);
+        const desiredRadius = Math.min(
+          Config.ArrowCornerRadius,
+          maxSpaceRadius * Config.ArrowSmallBendRadiusScale
+        );
         const br =
-          maxSpaceRadius >= Config.ArrowCornerRadius
-            ? Config.ArrowCornerRadius
-            : maxSpaceRadius * Config.ArrowSmallBendRadiusScale;
+          maxSpaceRadius >= Config.ArrowMinCornerRadius
+            ? Math.max(Config.ArrowMinCornerRadius, desiredRadius)
+            : Math.max(0, maxSpaceRadius);
         const x1 = xb - br * Math.sign(dx1);
         const y1 = yb - br * Math.sign(dy1);
         const x2 = xb + br * Math.sign(dx2);
