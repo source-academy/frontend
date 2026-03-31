@@ -448,7 +448,6 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
 
   private sliderShift = (newValue: number) => {
     if (this.state.clearDeadFrames) {
-      console.log('Clearing cached layouts and dead frames');
       CseMachine.setClearDeadFrames(false);
       CseMachine.clearLiveLayouts();
       CseMachine.redraw();

@@ -168,7 +168,6 @@ export class Frame extends Visible implements IHoverable {
       }
       this._width = Math.max(this._width, bindingTextWidth + Config.FramePaddingX * 2);
       this._width = Math.min(this._width, Config.FrameDefaultWidth); // cap the frame width to default width
-      // console.log(`Calculated this frame's width`, this._width);
     }
 
     // Create all the bindings and values

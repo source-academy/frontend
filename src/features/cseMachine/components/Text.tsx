@@ -70,7 +70,6 @@ export class Text extends Visible implements IHoverable {
         ? JSON.stringify(data) || String(data)
         : String(data);
     this._height = fontSize;
-    console.log('Before:: this.partialStr', this.partialStr, 'this.fullStr', this.fullStr);
     this.partialStr =
       value == 0
         ? this.partialStr
@@ -78,7 +77,6 @@ export class Text extends Visible implements IHoverable {
           ? this.partialStr.slice(0, -3)
           : this.partialStr.slice(0, -2);
     const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
-    // console.log('After:: this.partialStr', this.partialStr, 'this.fullStr', this.fullStr);
     if (widthOf(this.partialStr) > maxWidth) {
       let truncatedText: string = Config.Ellipsis;
       let i = 0;
@@ -99,7 +97,6 @@ export class Text extends Visible implements IHoverable {
         value > 0 ? (value === 1 ? Config.ConstantColon : Config.VariableColon) : '';
       this._width = Math.max(Config.TextMinWidth, widthOf(this.partialStr));
     }
-    // console.log('After After:: this.fullStr', this.fullStr, 'this.partialStr', this.partialStr);
   }
 
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
