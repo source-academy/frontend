@@ -98,7 +98,8 @@ const FeedbackList: React.FC<{
   feedback: FeedbackEntry[];
   loading: boolean;
   emptyMessage: string;
-}> = ({ feedback, loading, emptyMessage }) => {
+  getTaskLabel?: (questionId: number) => string;
+}> = ({ feedback, loading, emptyMessage, getTaskLabel }) => {
   if (loading) return <Spinner size={SpinnerSize.SMALL} />;
   if (feedback.length === 0) {
     return <p style={{ color: '#888', fontStyle: 'italic' }}>{emptyMessage}</p>;
@@ -117,9 +118,9 @@ const FeedbackList: React.FC<{
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontWeight: 'bold' }}>{f.user_name}</span>
-              {f.question_id && (
+              {f.question_id !== null && (
                 <Tag minimal intent={Intent.PRIMARY} style={{ fontSize: '10px' }}>
-                  Task {f.question_id}
+                  {getTaskLabel ? getTaskLabel(f.question_id) : `Task ${f.question_id}`}
                 </Tag>
               )}
             </div>
@@ -178,6 +179,12 @@ const LLMStatsDialog: React.FC<LLMStatsDialogProps> = ({
   const [questionLoading, setQuestionLoading] = useState(false);
   const [questionFeedback, setQuestionFeedback] = useState<FeedbackEntry[]>([]);
   const [questionFeedbackLoading, setQuestionFeedbackLoading] = useState(false);
+
+  const questionDisplayOrderById = React.useMemo(() => {
+    const map = new Map<number, number>();
+    stats?.questions.forEach(q => map.set(q.question_id, q.display_order));
+    return map;
+  }, [stats]);
 
   // Fetch assessment-level stats + feedback
   const fetchAssessmentData = useCallback(async () => {
@@ -279,6 +286,7 @@ const LLMStatsDialog: React.FC<LLMStatsDialogProps> = ({
               feedback={questionFeedback}
               loading={questionFeedbackLoading}
               emptyMessage="No feedback received for this task."
+              getTaskLabel={() => `Task ${selectedQuestion.display_order}`}
             />
           </div>
         ) : (
@@ -377,6 +385,10 @@ const LLMStatsDialog: React.FC<LLMStatsDialogProps> = ({
               feedback={feedback}
               loading={feedbackLoading}
               emptyMessage="No feedback received for this assessment."
+              getTaskLabel={questionId => {
+                const displayOrder = questionDisplayOrderById.get(questionId);
+                return displayOrder ? `Task ${displayOrder}` : `Task ${questionId}`;
+              }}
             />
           </div>
         )}
