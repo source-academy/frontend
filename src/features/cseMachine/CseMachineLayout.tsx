@@ -868,7 +868,9 @@ export class Layout {
         // get predetermined width
         if (cache.framesWidth.has(id)) {
           const fixedWidth = Layout.getGhostFrameWidth(id)!;
-          frame.reassignWidth(fixedWidth);
+          // assuming current frame's width is bigger. Shouldn't happen but keep Seer happy
+          const currentWidth = frame.width();
+          frame.reassignWidth(Math.max(currentWidth, fixedWidth));
         }
       });
     });
