@@ -332,28 +332,32 @@ const GradingEditor: React.FC<Props> = props => {
   const [hasGenerated, setHasGenerated] = useState<boolean>(false); //If generate comments button has been pressed
 
   const restoreUserText = (savedComments: string, selectedTexts: string[]): string => {
+    const normalizedSavedComments = savedComments.replace(/\r\n/g, '\n');
+
     if (selectedTexts.length === 0) {
-      return savedComments;
+      return normalizedSavedComments;
     }
 
-    const normalizedBlock = selectedTexts.join('\n');
-    if (!normalizedBlock) {
-      return savedComments;
+    // Support both historical storage formats:
+    // 1) comments joined by single newlines
+    // 2) comments joined by double newlines
+    const candidateBlocks = [selectedTexts.join('\n'), selectedTexts.join('\n\n')].filter(Boolean);
+
+    for (const block of candidateBlocks) {
+      if (normalizedSavedComments === block) {
+        return '';
+      }
+
+      if (normalizedSavedComments.endsWith(`\n${block}`)) {
+        return normalizedSavedComments.slice(0, -1 * (block.length + 1));
+      }
+
+      if (normalizedSavedComments.endsWith(`\n\n${block}`)) {
+        return normalizedSavedComments.slice(0, -1 * (block.length + 2));
+      }
     }
 
-    if (savedComments === normalizedBlock) {
-      return '';
-    }
-
-    if (savedComments.endsWith(`\n${normalizedBlock}`)) {
-      return savedComments.slice(0, -1 * (normalizedBlock.length + 1));
-    }
-
-    if (savedComments.endsWith(`\n\n${normalizedBlock}`)) {
-      return savedComments.slice(0, -1 * (normalizedBlock.length + 2));
-    }
-
-    return savedComments;
+    return normalizedSavedComments;
   };
 
   const makeInitialState = () => {
@@ -521,9 +525,7 @@ const GradingEditor: React.FC<Props> = props => {
    */
   const discardChanges = (): void => {
     if (!checkHasUnsavedChanges() || window.confirm('This will reset the editor. Are you sure?')) {
-      setXpAdjustmentInput(props.xpAdjustment!.toString());
-      setEditorValue(props.comments);
-      // TODO: Check (not sure how) if this results in a regression.
+      makeInitialState();
       showSuccessMessage('Discarded!', 1000);
     }
   };
