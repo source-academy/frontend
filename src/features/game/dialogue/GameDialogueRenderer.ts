@@ -62,13 +62,10 @@ class DialogueRenderer {
   public destroy() {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
 
-    //Proposal: safety check for typewriter (if condition)
     if (this.typewriter && this.typewriter.clearTyping) {
       this.typewriter.clearTyping();
     }
 
-    //Proposal: Move it to the safety check
-    //this.typewriter.clearTyping();
     this.blinkingDiamond.clearBlink();
     this.getDialogueBox().off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP);
     fadeAndDestroy(gameManager, this.getDialogueContainer());
@@ -99,7 +96,6 @@ class DialogueRenderer {
     this.typewriter.changeLine(message);
   }
 
-  //Proposal: finishTypewriting
   public finishTypewriting() {
     if (this.typewriter && this.typewriter.finishTyping) {
       this.typewriter.finishTyping();

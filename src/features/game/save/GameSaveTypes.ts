@@ -56,7 +56,5 @@ export type UserSaveState = {
 export type SettingsJson = {
   bgmVolume: number;
   sfxVolume: number;
-  
-  //Proposal: Add an option to toggle if the player wants to confirm skipping dialogue
   skipConfirm: boolean;
 };

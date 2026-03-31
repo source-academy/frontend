@@ -28,7 +28,6 @@ const EscapeConstants = {
   radioButtons: { xSpace: screenSize.x * 0.2 },
   radioChoiceTextConfig: { x: 0, y: -45, oriX: 0.5, oriY: 0.25 },
   volOpt: { x: screenSize.x * 0.05 },
-  //Proposal: Add the skipConfirmOpts constant in settings to be toggled
   skipConfirmOpts: ['ON', 'OFF']
 };
 
