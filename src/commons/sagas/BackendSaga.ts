@@ -650,7 +650,7 @@ function* sendGrade(
     actions.updateGrading(submissionId, {
       answers: newGrading,
       assessment: grading.assessment,
-      enable_llm_grading: false
+      enable_llm_grading: grading.enable_llm_grading
     })
   );
 
