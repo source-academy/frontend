@@ -205,17 +205,17 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
     const arrowFilters = CseMachine.getArrowOriginFilters();
     const hotkeyBindings: HotkeyItem[] = this.state.visualization
       ? [
-        ['a', this.stepFirst],
-        ['f', this.stepNext],
-        ['b', this.stepPrevious],
-        ['e', this.stepLast(this.props.stepsTotal)]
-      ]
+          ['a', this.stepFirst],
+          ['f', this.stepNext],
+          ['b', this.stepPrevious],
+          ['e', this.stepLast(this.props.stepsTotal)]
+        ]
       : [
-        ['a', () => { }],
-        ['f', () => { }],
-        ['b', () => { }],
-        ['e', () => { }]
-      ];
+          ['a', () => {}],
+          ['f', () => {}],
+          ['b', () => {}],
+          ['e', () => {}]
+        ];
 
     const currentStep = Math.max(0, this.state.value);
     const isAtFirstStep = currentStep < 1;
@@ -430,8 +430,8 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
           </div>
         </div>{' '}
         {this.state.visualization &&
-          this.props.machineOutput.length &&
-          this.props.machineOutput[0].type === 'errors' ? (
+        this.props.machineOutput.length &&
+        this.props.machineOutput[0].type === 'errors' ? (
           this.props.machineOutput.map((slice, index) => (
             <Output output={slice} key={index} usingSubst={false} isHtml={false} />
           ))

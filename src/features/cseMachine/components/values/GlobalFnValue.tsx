@@ -109,7 +109,7 @@ export class GlobalFnValue extends Value implements IHoverable {
     this.addReference(mainReference);
   }
 
-  handleNewReference(): void { }
+  handleNewReference(): void {}
 
   arrow(): ArrowFromFn | undefined {
     return this._arrow;
@@ -117,11 +117,7 @@ export class GlobalFnValue extends Value implements IHoverable {
 
   private getBodyLabelY(): number {
     const baseY = this.y() + this.radius + Config.TextMargin;
-    if (
-      !CseMachine.getPrintableMode() &&
-      this.isTooltipTruncated &&
-      this.isExpandedDescription
-    ) {
+    if (!CseMachine.getPrintableMode() && this.isTooltipTruncated && this.isExpandedDescription) {
       return baseY;
     }
     return baseY + this.printDescriptionOffsetY;
@@ -137,7 +133,7 @@ export class GlobalFnValue extends Value implements IHoverable {
     this._bodyArrow = new ArrowFromFnToBody(this).to(target) as ArrowFromFnToBody;
     this._bodyArrow.setVisible(
       CseMachine.getPrintableMode() ||
-      (this.isHovered && !CseMachine.getPrintableMode() && !this.isExpandedDescription)
+        (this.isHovered && !CseMachine.getPrintableMode() && !this.isExpandedDescription)
     );
   }
 
