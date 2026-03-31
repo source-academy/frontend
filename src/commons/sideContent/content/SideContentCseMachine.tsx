@@ -343,7 +343,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                           }),
                           () => {
                             CseMachine.setClearDeadFrames(this.state.clearDeadFrames);
-                            CseMachine.clearCachedLayouts();
+                            CseMachine.clearLiveLayouts();
                             CseMachine.redraw();
                           }
                         );
@@ -450,7 +450,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
     if (this.state.clearDeadFrames) {
       console.log('Clearing cached layouts and dead frames');
       CseMachine.setClearDeadFrames(false);
-      CseMachine.clearCachedLayouts();
+      CseMachine.clearLiveLayouts();
       CseMachine.redraw();
     }
     this.props.handleStepUpdate(newValue);

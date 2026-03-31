@@ -813,7 +813,7 @@ export class Layout {
     return undefined;
   }
 
-    /**
+  /**
    * Get the cached y coordinate corresponding to the given environment id, and add offset.
    * @param envId id of current component in the environment
    * @returns coordinate of cached position, or undefined if it doesn't exist
@@ -827,7 +827,8 @@ export class Layout {
     return undefined;
   }
 
-  static getGhostFrameWidth(envId: string): number | undefined { // added template
+  static getGhostFrameWidth(envId: string): number | undefined {
+    // added template
     const cache = CseMachine.getMasterLayout();
     if (cache && cache.framesWidth.has(envId)) {
       const fixedWidth = cache.framesWidth.get(envId)!;
@@ -840,7 +841,8 @@ export class Layout {
    * Reassign x coordinate of every frame to their predetermined position
    */
   static applyFixedPositions() {
-    if (!CseMachine.getMasterLayout()) { // shoudn't happen since getLayoutPositions is called before, but just in case
+    if (!CseMachine.getMasterLayout()) {
+      // shouldn't happen since getLayoutPositions is called before, but just in case
       return;
     }
     const cache = CseMachine.getMasterLayout()!; // getLayoutPositions() must have been called before
@@ -863,17 +865,19 @@ export class Layout {
         //   frame.reassignCoordinatesY(fixedY);
         // }
 
-        // get predetermined width        
+        // get predetermined width
         if (cache.framesWidth.has(id)) {
           const fixedWidth = Layout.getGhostFrameWidth(id)!;
-          frame.reassignWidth(fixedWidth);
+          // assuming current frame's width is bigger. Shouldn't happen but keep Seer happy
+          const currentWidth = frame.width();
+          frame.reassignWidth(Math.max(currentWidth, fixedWidth));
         }
       });
     });
   }
 
-  static applyCenterAlignment() { // don't have usage yet
-    console.log('applying center alignment');
+  static applyCenterAlignment() {
+    // don't have usage yet
     if (!CseMachine.getMasterLayout()) {
       return;
     }
