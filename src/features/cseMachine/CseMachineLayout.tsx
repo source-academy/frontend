@@ -318,13 +318,10 @@ export class Layout {
       });
     };
 
-    // First, add any referenced global functions in the stash
-    for (const item of Layout.stash.getStack()) {
-      if (isGlobalFn(item)) {
-        referencedFns.add(item);
-      } else if (isDataArray(item)) {
-        findGlobalFnReferencesInData(item);
-      }
+    // only include predeclared or built-in functions used in user code
+    for (const name of CseMachine.usedBuiltInNames) {
+      const fn = Layout.globalEnvNode.environment.head[name];
+      if (fn && isGlobalFn(fn)) referencedFns.add(fn);
     }
 
     // Then, find any references within any arrays inside the global environment heap,
