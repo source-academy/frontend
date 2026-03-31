@@ -31,10 +31,10 @@ export class ArrowFromControlItemComponent extends GenericArrow<
       () => [
         to.x(),
         to.y() +
-        // Draw arrow slightly below frame corner if frame is far enough
-        (to.x() > ControlStashConfig.ControlItemWidth + 100
-          ? ControlStashConfig.ControlItemTextPadding
-          : 0)
+          // Draw arrow slightly below frame corner if frame is far enough
+          (to.x() > ControlStashConfig.ControlItemWidth + 100
+            ? ControlStashConfig.ControlItemTextPadding
+            : 0)
       ]
     ];
 
