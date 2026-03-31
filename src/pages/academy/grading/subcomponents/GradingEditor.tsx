@@ -57,7 +57,11 @@ type Props = {
   studentAnswer: string | null;
   graderName?: string;
   gradedAt?: string;
-  ai_comments?: string[];
+  ai_comments?: {
+    comments: string[];
+    selectedIndices: number[];
+    selectedEdits: Record<number, string>;
+  };
 };
 
 const gradingEditorButtonClass = 'grading-editor-button';
@@ -327,18 +331,59 @@ const GradingEditor: React.FC<Props> = props => {
   const [isViewLLMPromptOpen, setIsViewLLMPromptOpen] = useState<boolean>(false);
   const [hasGenerated, setHasGenerated] = useState<boolean>(false); //If generate comments button has been pressed
 
+  const restoreUserText = (savedComments: string, selectedTexts: string[]): string => {
+    if (selectedTexts.length === 0) {
+      return savedComments;
+    }
+
+    const normalizedBlock = selectedTexts.join('\n');
+    if (!normalizedBlock) {
+      return savedComments;
+    }
+
+    if (savedComments === normalizedBlock) {
+      return '';
+    }
+
+    if (savedComments.endsWith(`\n${normalizedBlock}`)) {
+      return savedComments.slice(0, -1 * (normalizedBlock.length + 1));
+    }
+
+    if (savedComments.endsWith(`\n\n${normalizedBlock}`)) {
+      return savedComments.slice(0, -1 * (normalizedBlock.length + 2));
+    }
+
+    return savedComments;
+  };
+
   const makeInitialState = () => {
     setXpAdjustmentInput(props.xpAdjustment.toString());
-    setEditorValue(props.comments);
     setSelectedTab('write');
     setCurrentlySaving(false);
-    //Load existing comments from props (the database)
-    const existingComments = props.ai_comments || [];
+    // Load existing AI comments from props (the database)
+    const existingComments = props.ai_comments?.comments || [];
+    const persistedSelectedIndices = props.ai_comments?.selectedIndices || [];
+    const persistedSelectedEdits = props.ai_comments?.selectedEdits || {};
+
+    const validSelectedIndices = [...persistedSelectedIndices]
+      .filter(index => index >= 0 && index < existingComments.length)
+      .sort((a, b) => a - b);
+
+    const hydratedCommentTexts: Record<number, string> = {};
+    validSelectedIndices.forEach(index => {
+      hydratedCommentTexts[index] = persistedSelectedEdits[index] ?? existingComments[index] ?? '';
+    });
+
+    const selectedTexts = validSelectedIndices.map(index => hydratedCommentTexts[index] || '');
+    const restoredUserText = restoreUserText(props.comments, selectedTexts);
+    const restoredCommentsBlock = buildCommentsBlock(validSelectedIndices, hydratedCommentTexts);
+
+    setEditorValue(joinEditor(restoredUserText, restoredCommentsBlock));
     setSuggestions(existingComments);
-    //Lock the button if we already have comments for this submission
+    // Lock the button if we already have comments for this submission
     setHasGenerated(existingComments.length > 0);
-    setSelectedIndices([]);
-    setCommentTexts({});
+    setSelectedIndices(validSelectedIndices);
+    setCommentTexts(hydratedCommentTexts);
     lastSavedSelectionKeyRef.current = EMPTY_SELECTION_SAVE_KEY;
     if (saveAndContinueTimeoutRef.current !== undefined) {
       window.clearTimeout(saveAndContinueTimeoutRef.current);
@@ -707,14 +752,16 @@ const GradingEditor: React.FC<Props> = props => {
                 </Button>
               )}
 
-              <Button
-                intent={hasGenerated ? Intent.NONE : Intent.PRIMARY}
-                loading={hasClickedGenerate}
-                disabled={hasClickedGenerate}
-                onClick={() => handleGenerate(hasGenerated)}
-              >
-                {hasGenerated ? 'Re-generate Comments' : 'Generate Comments'}
-              </Button>
+              {hasPrompts && (
+                <Button
+                  intent={hasGenerated ? Intent.NONE : Intent.PRIMARY}
+                  loading={hasClickedGenerate}
+                  disabled={hasClickedGenerate}
+                  onClick={() => handleGenerate(hasGenerated)}
+                >
+                  {hasGenerated ? 'Re-generate Comments' : 'Generate Comments'}
+                </Button>
+              )}
 
               <LLMFeedbackButton
                 tokens={tokens}

@@ -194,7 +194,11 @@ export type GradingQuestion = {
   };
   autogradingResults: AutogradingResult[];
   autoGradingStatus: string;
-  ai_comments?: string[];
+  ai_comments?: {
+    comments: string[];
+    selectedIndices: number[];
+    selectedEdits: Record<number, string>;
+  };
   prompts: LLMPrompt[];
 };
 

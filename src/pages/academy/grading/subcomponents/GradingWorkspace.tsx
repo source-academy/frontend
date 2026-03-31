@@ -303,7 +303,13 @@ const GradingWorkspace: React.FC<Props> = props => {
         body: (
           <GradingEditor
             answer_id={grading!.answers[questionId].id}
-            ai_comments={grading!.answers[questionId].ai_comments || []}
+            ai_comments={
+              grading!.answers[questionId].ai_comments || {
+                comments: [],
+                selectedIndices: [],
+                selectedEdits: {}
+              }
+            }
             solution={grading!.answers[questionId].question.solution}
             assessmentId={grading!.assessment.id}
             questionId={grading!.answers[questionId].question.id}

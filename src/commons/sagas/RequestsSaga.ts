@@ -1031,6 +1031,18 @@ export const getGrading = async (
   const gradingResult = await resp.json();
   const grading: GradingAnswer = gradingResult.answers.map((gradingQuestion: any) => {
     const { id, student, question, grade, team } = gradingQuestion;
+    const aiComments = gradingQuestion.ai_comments;
+    const selectedEdits = Object.entries(aiComments?.selectedEdits || {}).reduce(
+      (acc: Record<number, string>, [rawIndex, content]) => {
+        const parsedIndex = Number(rawIndex);
+        if (!Number.isNaN(parsedIndex) && typeof content === 'string') {
+          acc[parsedIndex] = content;
+        }
+        return acc;
+      },
+      {}
+    );
+
     const result = {
       id,
       question: {
@@ -1056,7 +1068,11 @@ export const getGrading = async (
         xpAdjustment: grade.xpAdjustment,
         comments: grade.comments
       },
-      ai_comments: gradingQuestion.ai_comments?.response?.split('|||') || [],
+      ai_comments: {
+        comments: aiComments?.response?.split('|||') || [],
+        selectedIndices: aiComments?.selectedIndices || [],
+        selectedEdits
+      },
       prompts: gradingQuestion.prompts
     } as GradingQuestion;
 

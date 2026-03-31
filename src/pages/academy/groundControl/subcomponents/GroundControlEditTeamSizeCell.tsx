@@ -50,12 +50,7 @@ const EditTeamSizeCell: React.FC<Props> = ({ data, onTeamSizeChange }) => {
         disabled={teamSize === minTeamSize}
       />
       <span>{teamSize}</span>
-      <Button
-        small
-        minimal
-        icon={IconNames.PLUS}
-        onClick={handleIncrement}
-      />
+      <Button small minimal icon={IconNames.PLUS} onClick={handleIncrement} />
     </div>
   );
 };
