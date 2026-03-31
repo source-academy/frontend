@@ -1516,9 +1516,7 @@ export const getAssessmentConfigs = async (
 /**
  * GET /courses/{courseId}/admin/config/pixelbot_document_map
  */
-export const getPixelbotDocumentMap = async (
-  tokens: Tokens
-): Promise<any[] | null> => {
+export const getPixelbotDocumentMap = async (tokens: Tokens): Promise<any[] | null> => {
   const resp = await request(`${courseId()}/admin/config/pixelbot_document_map`, 'GET', {
     ...tokens
   });

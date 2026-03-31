@@ -229,7 +229,14 @@ const AdminPanel: React.FC = () => {
         <Tab
           id="pixelbot-settings"
           title="Pixelbot Settings"
-          panel={<PixelbotConfigPanel {...courseConfigPanelProps} />}
+          panel={
+            <PixelbotConfigPanel
+              {...courseConfigPanelProps}
+              onSave={(config: UpdateCourseConfiguration) =>
+                dispatch(SessionActions.updateCourseConfig(config))
+              }
+            />
+          }
         />
       </Tabs>
     </div>

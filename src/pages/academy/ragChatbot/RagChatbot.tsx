@@ -104,7 +104,11 @@ const RagChatbot: React.FC = () => {
         onDrag={handleDrag}
         onStop={handleDragStop}
       >
-        <div ref={nodeRef} className={classes['bot-container']} style={{ display: isSnippetOpen ? 'none' : 'block' }}>
+        <div
+          ref={nodeRef}
+          className={classes['bot-container']}
+          style={{ display: isSnippetOpen ? 'none' : 'block' }}
+        >
           <div className={classes['bot-area']}>
             {isDivVisible && (
               <div className={classes['tips-box']}>
@@ -134,7 +138,14 @@ const RagChatbot: React.FC = () => {
               }
             />
           </div>
-          {isPop && <RagChatBox isExpanded={isExpanded} toggleExpanded={toggleExpanded} activeSnippetId={activeSnippetId} setActiveSnippetId={setActiveSnippetId} />}
+          {isPop && (
+            <RagChatBox
+              isExpanded={isExpanded}
+              toggleExpanded={toggleExpanded}
+              activeSnippetId={activeSnippetId}
+              setActiveSnippetId={setActiveSnippetId}
+            />
+          )}
         </div>
       </Draggable>
     </div>

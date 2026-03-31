@@ -116,40 +116,40 @@ const Chatbot: React.FC<Props> = ({ getSection, getText }) => {
           className={classes['bot-container']}
           style={{ display: isSnippetOpen ? 'none' : 'block' }}
         >
-            <div className={classes['bot-area']}>
-              {isDivVisible && (
-                <div className={classes['tips-box']}>
-                  <p className={classes['tips-message']}>
-                    I am Louis, your SICP bot
-                    <br />
-                    {tipsMessage}
-                  </p>
-                </div>
-              )}
-              <AnchorButton
-                className={classes['bot-button']}
-                onMouseEnter={() => !isDragging && setIsDivVisible(true)}
-                onMouseLeave={() => setIsDivVisible(false)}
-                onClick={togglePop}
-                icon={
-                  <Icon
-                    icon={
-                      <img src={logo} className={classes['iSA']} alt="SA Logo" draggable={false} />
-                    }
-                  />
-                }
-              />
-            </div>
-            {isPop && (
-              <ChatBox
-                getSection={getSection}
-                getText={getText}
-                activeSnippetId={activeSnippetId}
-                setActiveSnippetId={setActiveSnippetId}
-                isExpanded={isExpanded}
-                toggleExpanded={toggleExpanded}
-              />
+          <div className={classes['bot-area']}>
+            {isDivVisible && (
+              <div className={classes['tips-box']}>
+                <p className={classes['tips-message']}>
+                  I am Louis, your SICP bot
+                  <br />
+                  {tipsMessage}
+                </p>
+              </div>
             )}
+            <AnchorButton
+              className={classes['bot-button']}
+              onMouseEnter={() => !isDragging && setIsDivVisible(true)}
+              onMouseLeave={() => setIsDivVisible(false)}
+              onClick={togglePop}
+              icon={
+                <Icon
+                  icon={
+                    <img src={logo} className={classes['iSA']} alt="SA Logo" draggable={false} />
+                  }
+                />
+              }
+            />
+          </div>
+          {isPop && (
+            <ChatBox
+              getSection={getSection}
+              getText={getText}
+              activeSnippetId={activeSnippetId}
+              setActiveSnippetId={setActiveSnippetId}
+              isExpanded={isExpanded}
+              toggleExpanded={toggleExpanded}
+            />
+          )}
         </div>
       </Draggable>
     </div>

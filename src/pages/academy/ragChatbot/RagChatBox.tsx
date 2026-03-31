@@ -105,7 +105,12 @@ const scrollToBottom = (ref: React.RefObject<HTMLDivElement>) => {
   ref.current?.scrollTo({ top: ref.current?.scrollHeight });
 };
 
-const RagChatBox: React.FC<Props> = ({ isExpanded, toggleExpanded, activeSnippetId, setActiveSnippetId }) => {
+const RagChatBox: React.FC<Props> = ({
+  isExpanded,
+  toggleExpanded,
+  activeSnippetId,
+  setActiveSnippetId
+}) => {
   const chatRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>(() => [createInitialMessage()]);

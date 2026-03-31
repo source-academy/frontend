@@ -4,12 +4,16 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useTypedSelector } from 'src/commons/utils/Hooks';
 import classes from 'src/styles/PixelbotConfig.module.scss';
 
-import { Tokens, UpdateCourseConfiguration } from '../../../../commons/application/types/SessionTypes';
+import {
+  Tokens,
+  UpdateCourseConfiguration
+} from '../../../../commons/application/types/SessionTypes';
 import { getPixelbotDocumentMap } from '../../../../commons/sagas/RequestsSaga';
 
 type Props = {
   courseConfiguration: UpdateCourseConfiguration;
   setCourseConfiguration: (courseConfiguration: UpdateCourseConfiguration) => void;
+  onSave: (courseConfiguration: UpdateCourseConfiguration) => void;
 };
 
 const DEFAULT_ROUTING_PROMPT = `You are a document routing assistant. Given a student's question and a list of available course documents, determine which documents are most relevant to answering the question.
@@ -73,7 +77,6 @@ const PixelbotConfigPanel: React.FC<Props> = props => {
       }
     };
     fetchDocumentMap();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const startEditRouting = useCallback(() => {
@@ -82,10 +85,12 @@ const PixelbotConfigPanel: React.FC<Props> = props => {
   }, [pixelbotRoutingPrompt]);
 
   const saveRouting = useCallback(() => {
-    props.setCourseConfiguration({
+    const updatedConfig = {
       ...props.courseConfiguration,
       pixelbotRoutingPrompt: routingDraft
-    });
+    };
+    props.setCourseConfiguration(updatedConfig);
+    props.onSave(updatedConfig);
     setEditingRouting(false);
   }, [props, routingDraft]);
 
@@ -103,10 +108,12 @@ const PixelbotConfigPanel: React.FC<Props> = props => {
   }, [pixelbotAnswerPrompt]);
 
   const saveAnswer = useCallback(() => {
-    props.setCourseConfiguration({
+    const updatedConfig = {
       ...props.courseConfiguration,
       pixelbotAnswerPrompt: answerDraft
-    });
+    };
+    props.setCourseConfiguration(updatedConfig);
+    props.onSave(updatedConfig);
     setEditingAnswer(false);
   }, [props, answerDraft]);
 
@@ -133,8 +140,7 @@ const PixelbotConfigPanel: React.FC<Props> = props => {
       <Divider style={{ marginBottom: '24px' }} />
 
       <div className={classes['section']}>
-        <div className={classes['section-header']}>
-          <div></div>
+        <div className={classes['section-header-center']}>
           <div>
             <div className={classes['section-title']}>Routing Prompt (System Prompt 1)</div>
             <div className={classes['section-helper']}>
@@ -190,8 +196,7 @@ const PixelbotConfigPanel: React.FC<Props> = props => {
       </div>
 
       <div className={classes['section']}>
-        <div className={classes['section-header']}>
-          <div></div>
+        <div className={classes['section-header-center']}>
           <div>
             <div className={classes['section-title']}>Answer Prompt (System Prompt 2)</div>
             <div className={classes['section-helper']}>

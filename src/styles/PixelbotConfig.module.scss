@@ -27,6 +27,12 @@
       justify-content: center;
       align-items: center;
       margin-bottom: 8px;
+      position: relative;
+
+      .edit-icon {
+        position: absolute;
+        right: 0;
+      }
     }
 
     .section-title {
