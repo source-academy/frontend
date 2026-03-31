@@ -71,18 +71,22 @@ export class Text extends Visible implements IHoverable {
         : String(data);
     this._height = fontSize;
     console.log('Before:: this.partialStr', this.partialStr, 'this.fullStr', this.fullStr);
-    this.partialStr = value == 0 ? this.partialStr 
-    : value === 1 ? this.partialStr.slice(0, -3) : this.partialStr.slice(0, -2);
+    this.partialStr =
+      value == 0
+        ? this.partialStr
+        : value === 1
+          ? this.partialStr.slice(0, -3)
+          : this.partialStr.slice(0, -2);
     const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
     // console.log('After:: this.partialStr', this.partialStr, 'this.fullStr', this.fullStr);
     if (widthOf(this.partialStr) > maxWidth) {
       let truncatedText: string = Config.Ellipsis;
       let i = 0;
       if (value > 0) {
-        const colon: string = value === 1 ? Config.ConstantColon: Config.VariableColon ;
+        const colon: string = value === 1 ? Config.ConstantColon : Config.VariableColon;
         while (widthOf(this.partialStr.substring(0, i) + Config.Ellipsis + colon) < maxWidth) {
           truncatedText = this.partialStr.substring(0, i++) + Config.Ellipsis + colon;
-          }
+        }
       } else {
         while (widthOf(this.partialStr.substring(0, i) + Config.Ellipsis) < maxWidth) {
           truncatedText = this.partialStr.substring(0, i++) + Config.Ellipsis;
@@ -91,7 +95,8 @@ export class Text extends Visible implements IHoverable {
       this._width = widthOf(truncatedText);
       this.partialStr = truncatedText;
     } else {
-      this.partialStr += value > 0 ? (value === 1 ? Config.ConstantColon: Config.VariableColon) : "";
+      this.partialStr +=
+        value > 0 ? (value === 1 ? Config.ConstantColon : Config.VariableColon) : '';
       this._width = Math.max(Config.TextMinWidth, widthOf(this.partialStr));
     }
     // console.log('After After:: this.fullStr', this.fullStr, 'this.partialStr', this.partialStr);

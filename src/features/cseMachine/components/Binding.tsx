@@ -71,7 +71,7 @@ export class Binding extends Visible {
       ? Config.FrameDefaultWidth - Config.FramePaddingX * 2 // for global frame, use default frame width
       : (this.frame.width() - Config.TextPaddingX - Config.FramePaddingX * 2) / 2;
 
-    this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, { 
+    this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, {
       maxWidth: availableKeyWidth,
       faded: !this.isLive,
       value: colon

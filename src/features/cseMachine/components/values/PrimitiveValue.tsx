@@ -25,13 +25,17 @@ export class PrimitiveValue extends Value {
     // derive the coordinates from the main reference (binding / array unit)
     if (reference instanceof Binding) {
       const maxWidth = Math.max(
-        reference.frame.width() - getTextWidth(reference.keyString + ":= ") - Config.TextPaddingX - Config.FramePaddingX * 2,
+        reference.frame.width() -
+          getTextWidth(reference.keyString + ':= ') -
+          Config.TextPaddingX -
+          Config.FramePaddingX * 2,
         (reference.frame.width() - Config.FramePaddingX * 2) / 2
       );
       this._x = Math.min(
-        reference.x() + getTextWidth(reference.keyString + ":= ") + Config.TextPaddingX,
-        reference.frame.x() + (reference.frame.width() - Config.TextPaddingX - Config.FramePaddingX * 2) / 2 
-        + getTextWidth(":= ")
+        reference.x() + getTextWidth(reference.keyString + ':= ') + Config.TextPaddingX,
+        reference.frame.x() +
+          (reference.frame.width() - Config.TextPaddingX - Config.FramePaddingX * 2) / 2 +
+          getTextWidth(':= ')
       );
       this._y = reference.y();
       this.text = new Text(this.data, this.x(), this.y(), {
@@ -86,9 +90,10 @@ export class PrimitiveValue extends Value {
       if (reference instanceof Binding) {
         // If attached to a variable name (x: 10)
         this._x = Math.min(
-        reference.x() + getTextWidth(reference.keyString + ":= ") + Config.TextPaddingX,
-        reference.frame.x() + (reference.frame.width() - Config.TextPaddingX - Config.FramePaddingX * 2) / 2 
-        + getTextWidth(":= ")
+          reference.x() + getTextWidth(reference.keyString + ':= ') + Config.TextPaddingX,
+          reference.frame.x() +
+            (reference.frame.width() - Config.TextPaddingX - Config.FramePaddingX * 2) / 2 +
+            getTextWidth(':= ')
         );
         this._y = reference.y();
       } else {
