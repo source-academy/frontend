@@ -45,6 +45,7 @@ export const Config = Object.freeze({
   ArrowHoveredStrokeWidth: 2,
   ArrowHoveredHeadSize: 15,
   ArrowCornerRadius: 20,
+  ArrowMinCornerRadius: 5,
   ArrowSmallBendRadiusScale: 1,
 
   MaxExportWidth: 20000,
