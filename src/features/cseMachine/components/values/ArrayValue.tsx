@@ -1,3 +1,4 @@
+import { cons } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/base';
 import Closure from 'js-slang/dist/cse-machine/closure';
 import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
@@ -13,7 +14,6 @@ import { ArrayUnit } from '../ArrayUnit';
 import { Binding } from '../Binding';
 import { FnValue } from './FnValue';
 import { Value } from './Value';
-import { cons } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/base';
 
 /** this class encapsulates an array value in source,
  *  defined as a JS array with not 2 elements */

@@ -161,7 +161,7 @@ export class FnValue extends Value implements IHoverable {
     
     // Pass the count as the offsetIndex
     this._streamArrows?.push(
-      new ArrowFromStreamNullaryFn(this, currentCount).to(target) as ArrowFromStreamNullaryFn
+      new ArrowFromStreamNullaryFn(this).to(target) as ArrowFromStreamNullaryFn
     );
   }
 
@@ -181,9 +181,12 @@ export class FnValue extends Value implements IHoverable {
   draw(): React.ReactNode {
     console.log("DRAW")
     const pairs = CseMachine.getStreamLineage((this.data as any).id)
-    if(pairs != undefined) {
-      for(let pair of pairs) {
-        this.addArrow(Layout.values.get(pair));
+
+    if (CseMachine.getPairCreationMode()) {
+      if(pairs != undefined) {
+        for(const pair of pairs) {
+          this.addArrow(Layout.values.get(pair));
+        }
       }
     }
 
