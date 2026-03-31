@@ -48,7 +48,8 @@ window.HTMLElement.prototype.scrollIntoView = function () {};
 const originalFetch = global.fetch?.bind(global);
 
 global.fetch = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
-  const url = typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url;
+  const url =
+    typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url;
 
   if (
     url.includes('source-academy.github.io/language-directory/directory.json') ||
