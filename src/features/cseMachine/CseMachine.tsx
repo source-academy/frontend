@@ -5,8 +5,7 @@ import React from 'react';
 
 import { arrowSelection } from './components/arrows/ArrowSelection';
 import { Layout, LayoutCache } from './CseMachineLayout';
-import { ArrowOriginFilterKey, ArrowOriginFilters, EnvTree } from './CseMachineTypes';
-import { EnvTree, EnvTreeNode } from './CseMachineTypes';
+import { ArrowOriginFilterKey, ArrowOriginFilters, EnvTree, EnvTreeNode } from './CseMachineTypes';
 import { deepCopyTree, getEnvId } from './CseMachineUtils';
 
 type SetVis = (vis: React.ReactNode) => void;
