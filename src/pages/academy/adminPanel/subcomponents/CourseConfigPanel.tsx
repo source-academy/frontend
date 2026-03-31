@@ -246,11 +246,12 @@ const CourseConfigPanel: React.FC<Props> = props => {
                 <InputGroup
                   id="llmInputCost"
                   placeholder="3.20"
-                  value={String(props.courseConfiguration.llmInputCost || '')}
+                  value={String(props.courseConfiguration.llmInputCost ?? '')}
                   onChange={e =>
                     props.setCourseConfiguration({
                       ...props.courseConfiguration,
-                      llmInputCost: Number(e.target.value)
+                      llmInputCost:
+                        e.target.value.trim() === '' ? undefined : Number(e.target.value)
                     })
                   }
                 />
@@ -265,11 +266,12 @@ const CourseConfigPanel: React.FC<Props> = props => {
                 <InputGroup
                   id="llmOutputCost"
                   placeholder="12.80"
-                  value={String(props.courseConfiguration.llmOutputCost || '')}
+                  value={String(props.courseConfiguration.llmOutputCost ?? '')}
                   onChange={e =>
                     props.setCourseConfiguration({
                       ...props.courseConfiguration,
-                      llmOutputCost: Number(e.target.value)
+                      llmOutputCost:
+                        e.target.value.trim() === '' ? undefined : Number(e.target.value)
                     })
                   }
                 />
