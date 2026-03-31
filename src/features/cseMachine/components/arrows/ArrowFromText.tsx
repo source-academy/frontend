@@ -31,7 +31,7 @@ export class ArrowFromText extends GenericArrow<Text, Value> {
     const textRightEdge = from.x() + from.width();
     const frameExitX = from.options.parentFrame
       ? from.options.parentFrame.x() + from.options.parentFrame.width() + postFrameStraightLength
-      : textRightEdge + initialSegmentLength + postFrameStraightLength;
+      : textRightEdge + postFrameStraightLength;
 
     // Extend straight from text to frame boundary
     if (frameExitX > textRightEdge) {

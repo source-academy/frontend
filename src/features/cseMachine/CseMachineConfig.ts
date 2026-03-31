@@ -12,7 +12,7 @@ export const Config = Object.freeze({
   FramePaddingX: 20,
   FramePaddingY: 30,
   FrameMinGapX: 80,
-  FrameMarginX: 30,
+  FrameMarginX: 50,
   FrameMarginY: 10,
   FrameCornerRadius: 3,
 

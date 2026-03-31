@@ -44,3 +44,26 @@ window.matchMedia =
 
 // JSDOM does not implement scrollIntoView, so we have to mock it.
 window.HTMLElement.prototype.scrollIntoView = function () {};
+
+const originalFetch = global.fetch?.bind(global);
+
+global.fetch = vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+  const url =
+    typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url;
+
+  if (
+    url.includes('source-academy.github.io/language-directory/directory.json') ||
+    url.includes('source-academy.github.io/plugin-directory/directory.json')
+  ) {
+    return new Response(JSON.stringify([]), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
+  if (!originalFetch) {
+    throw new Error(`Unhandled fetch in test environment: ${url}`);
+  }
+
+  return originalFetch(input, init);
+}) as typeof fetch;
