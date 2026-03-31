@@ -17,6 +17,26 @@ import { vi } from 'vitest';
 
 import Playground, { handleHash } from '../Playground';
 
+const { fetchMock } = vi.hoisted(() => {
+  const mock = vi.fn(async (input: RequestInfo | URL) => {
+    const url = String(input);
+    if (
+      url.includes('source-academy.github.io/language-directory/directory.json') ||
+      url.includes('source-academy.github.io/plugin-directory/directory.json')
+    ) {
+      return new Response(JSON.stringify([]), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+    throw new Error(`Unexpected fetch in Playground test: ${url}`);
+  });
+
+  vi.stubGlobal('fetch', mock);
+
+  return { fetchMock: mock };
+});
+
 // Mock inspector
 (window as any).Inspector = vi.fn();
 (window as any).Inspector.highlightClean = vi.fn();
@@ -46,6 +66,7 @@ describe('Playground tests', () => {
     store.getState().workspaces.playground.editorTabs[0].value;
 
   beforeEach(() => {
+    fetchMock.mockClear();
     mockStore = createStore();
     routes = [
       {

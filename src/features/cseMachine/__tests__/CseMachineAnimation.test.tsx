@@ -170,11 +170,11 @@ test('AnimationComponent animates correctly with parallel animateTo calls 1', as
     expected: elapsed => {
       const d = CseAnimation.defaultDuration;
       return {
-        x: [CseAnimation.defaultEasing(Math.min(elapsed / d, 1), 0, 100, 1), 1],
-        y: [CseAnimation.defaultEasing(Math.min(Math.max(0, elapsed / d - 0.5), 1), 0, 100, 1), 1],
+        x: [CseAnimation.defaultEasing(Math.min(elapsed / d, 1), 0, 100, 1), 6],
+        y: [CseAnimation.defaultEasing(Math.min(Math.max(0, elapsed / d - 0.5), 1), 0, 100, 1), 6],
         opacity: [
           CseAnimation.defaultEasing(Math.min(Math.max(0, elapsed / d / 0.75 - 1 / 3), 1), 0, 1, 1),
-          0.01
+          0.08
         ]
       };
     }
@@ -197,10 +197,10 @@ test('AnimationComponent animates correctly with parallel animateTo calls 2', as
       return {
         x:
           elapsed < d
-            ? [easing(elapsed, 0, 100, d), 4]
+            ? [easing(elapsed, 0, 100, d), 10]
             : elapsed < d * 2
-              ? [easing(elapsed - d, 100, 100, d), 4]
-              : [easing(elapsed - d * 2, 200, -50, d), 2]
+              ? [easing(elapsed - d, 100, 100, d), 10]
+              : [easing(elapsed - d * 2, 200, -50, d), 6]
       };
     }
   });

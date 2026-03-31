@@ -295,12 +295,13 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     const stroke = this.isLive ? defaultStrokeColor() : fadedStrokeColor();
 
     const interactive = this.isInteractive();
+    const visibilityProps = this._visible ? {} : { visible: false };
 
     return (
       <KonvaGroup
         key={Layout.key++}
         ref={this.ref}
-        visible={this._visible}
+        {...visibilityProps}
         listening={interactive}
         onMouseEnter={interactive ? this.onMouseEnter : undefined}
         onMouseLeave={interactive ? this.onMouseLeave : undefined}
