@@ -768,7 +768,7 @@ export class Layout {
   static getLayoutPositions(controlStash: boolean): LayoutCache {
     const cache: LayoutCache = {
       framesX: new Map(),
-      framesY: new Map(), 
+      framesY: new Map(),
       framesWidth: new Map(),
       levelWidth: new Map(),
       largestWidth: 0
@@ -784,8 +784,8 @@ export class Layout {
       cache.largestWidth = Math.max(cache.largestWidth, currWidth);
       frames.forEach(frame => {
         cache.framesX.set(frame.environment.id, frame.x() - offset);
-        cache.framesWidth.set(frame.environment.id, frame.width()); 
-        cache.framesY.set(frame.environment.id, frame.y()); 
+        cache.framesWidth.set(frame.environment.id, frame.width());
+        cache.framesY.set(frame.environment.id, frame.y());
         cache.levelWidth.set(frame.environment.id, currWidth);
       });
     });
