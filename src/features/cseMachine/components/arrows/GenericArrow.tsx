@@ -209,7 +209,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
       this.arrowHeadRef.current.pointerWidth(Config.ArrowHoveredHeadSize);
       this.arrowHeadRef.current.pointerLength(Config.ArrowHoveredHeadSize);
     }
-    this.source.setArrowSourceHighlightedStyle?.();
+    this.source?.setArrowSourceHighlightedStyle?.();
     this.target?.setArrowSourceHighlightedStyle?.();
   }
   public setNormalStyle() {
@@ -283,7 +283,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
 
   draw() {
     this.recomputePath();
-    this.updateIsLive(); //just before drawijng, update liveness for the arrows (since this was causing erroes earlier  )
+    this.updateIsLive(); //just before drawing, update liveness for the arrows (since this was causing erroes earlier  )
     if (Layout.clearDeadFrames && !this.isLive) {
       return null;
     }
