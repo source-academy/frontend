@@ -320,13 +320,10 @@ export class Layout {
       });
     };
 
-    // First, add any referenced global functions in the stash
-    for (const item of Layout.stash.getStack()) {
-      if (isGlobalFn(item)) {
-        referencedFns.add(item);
-      } else if (isDataArray(item)) {
-        findGlobalFnReferencesInData(item);
-      }
+    // only include predeclared or built-in functions used in user code
+    for (const name of CseMachine.usedBuiltInNames) {
+      const fn = Layout.globalEnvNode.environment.head[name];
+      if (fn && isGlobalFn(fn)) referencedFns.add(fn);
     }
 
     // Then, find any references within any arrays inside the global environment heap,
@@ -376,12 +373,23 @@ export class Layout {
     return Layout._height;
   }
 
+  /**
+   * Sort environment nodes by creation order so left-to-right placement remains chronological.
+   * JS Slang environment ids are numeric strings that increase monotonically as frames are created.
+   */
+  private static sortNodesByCreation(nodes: EnvTreeNode[]): EnvTreeNode[] {
+    return [...nodes].sort((left, right) =>
+      left.environment.id.localeCompare(right.environment.id, undefined, { numeric: true })
+    );
+  }
+
   /** initializes grid */
   private static initializeGrid(): void {
     this.levels = [];
     let frontier: EnvTreeNode[] = Layout.clearDeadFrames
       ? Layout.getVisibleChildren([Layout.globalEnvNode])
       : [Layout.globalEnvNode];
+    frontier = Layout.sortNodesByCreation(frontier);
     let prevLevel: Level | null = null;
     let currLevel: Level;
 
@@ -401,7 +409,7 @@ export class Layout {
       });
 
       prevLevel = currLevel;
-      frontier = nextFrontier;
+      frontier = Layout.sortNodesByCreation(nextFrontier);
     }
   }
 
