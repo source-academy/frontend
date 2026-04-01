@@ -8,6 +8,7 @@ import { ArrayValue } from '../components/values/ArrayValue';
 import { FnValue } from '../components/values/FnValue';
 import { PrimitiveValue } from '../components/values/PrimitiveValue';
 import CseMachine from '../CseMachine';
+import { CseAnimation } from '../CseMachineAnimation';
 import { Config } from '../CseMachineConfig';
 import { 
   defaultActiveColor, 
@@ -36,6 +37,7 @@ export class ClearDeadFramesAnimation extends Animatable {
 
   constructor(changedFramePairs: Frame[][]) {
     super();
+    CseAnimation.setHideReferenceArrows(true);
 
     // changedTextPairs only account for binding keys and text values
     const changedTextPairs: Text[][] = [];
@@ -60,6 +62,7 @@ export class ClearDeadFramesAnimation extends Animatable {
         new AnimatedRectComponent({
           ...newFramePosition,
           cornerRadius: Config.FrameCornerRadius,
+          fill: defaultBackgroundColor(),
           stroke: defaultBackgroundColor(),
           strokeWidth: 4
         })
@@ -107,6 +110,7 @@ export class ClearDeadFramesAnimation extends Animatable {
                 new AnimatedRectComponent({ 
                   ...getNodePosition(newArr), 
                   cornerRadius: 0,
+                  fill: defaultBackgroundColor(),
                   stroke: defaultBackgroundColor(),
                   strokeWidth: 4 })
               )
@@ -191,6 +195,7 @@ export class ClearDeadFramesAnimation extends Animatable {
         new AnimatedRectComponent({
           ...getNodePosition(newUnit),
           cornerRadius: cornerRadius,
+          fill: defaultBackgroundColor(),
           stroke: defaultBackgroundColor(),
           strokeWidth: 4
         })
@@ -282,5 +287,14 @@ export class ClearDeadFramesAnimation extends Animatable {
     for (const fnCover of this.newFnCovers) {
         fnCover.destroy();
     }
+
+    const animationIdx = CseAnimation.animations.indexOf(this);
+    if (animationIdx >= 0) {
+      CseAnimation.animations.splice(animationIdx, 1);
+    }
+    CseAnimation.setHideReferenceArrows(false);
+    CseMachine.clearCachedLayouts();
+    CseMachine.redraw();
   }
 }
+

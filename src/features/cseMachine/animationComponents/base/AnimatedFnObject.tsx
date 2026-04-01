@@ -16,10 +16,10 @@ export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
 
   // Update the current component's dimensions based on the inner rect component's dimensions
   private onPropsChange = (props: CircleConfig) => {
-    if (props.x) this._x = props.x;
-    if (props.y) this._y = props.y;
-    if (props.width) this._width = props.width;
-    if (props.height) this._height = props.height;
+    if (props.x !== undefined) this._x = props.x;
+    if (props.y !== undefined) this._y = props.y;
+    if (props.width !== undefined) this._width = props.width;
+    if (props.height !== undefined) this._height = props.height;
   };
 
   constructor(fn: FnValue, props?: CircleConfig, isCover?: boolean) {
@@ -37,6 +37,7 @@ export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
           x: this.centerX - Config.FnRadius,
           y: this._y,
           radius: Config.FnRadius,
+          fill: defaultBackgroundColor(),
           stroke: defaultBackgroundColor(),
           strokeWidth: 3.5,
           ...safeProps
@@ -70,6 +71,7 @@ export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
           x: this.centerX + Config.FnRadius,
           y: this._y,
           radius: Config.FnRadius,
+          fill: defaultBackgroundColor(),
           stroke: defaultBackgroundColor(),
           strokeWidth: 3.5,
           ...safeProps
@@ -152,3 +154,4 @@ export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
     this.rightInner.destroy();
   }
 }
+
