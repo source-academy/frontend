@@ -283,61 +283,61 @@ export class ClearDeadFramesAnimation extends Animatable {
   }
 
   async animate() {
+    const animations: Promise<void>[] = [];
+
     // FRAMES
     for (let frameIdx = 0; frameIdx < this.frameAnimations.length; frameIdx++) {
       const newFramePosition = getNodePosition(this.newFrameCovers[frameIdx]);
-      this.frameAnimations[frameIdx].animateTo(
-        {
-          x: newFramePosition.x,
-          y: newFramePosition.y
-        },
-        { duration: 2 }
+      animations.push(
+        this.frameAnimations[frameIdx].animateTo(
+          {
+            x: newFramePosition.x,
+            y: newFramePosition.y
+          },
+          { duration: 2 }
+        )
       );
     }
     // TEXTS
     for (let textIdx = 0; textIdx < this.textAnimations.length; textIdx++) {
       const newTextPosition = getNodePosition(this.newTextCovers[textIdx]);
-      this.textAnimations[textIdx].animateTo(
-        {
-          x: newTextPosition.x,
-          y: newTextPosition.y
-        },
-        { duration: 2 }
+      animations.push(
+        this.textAnimations[textIdx].animateTo(
+          {
+            x: newTextPosition.x,
+            y: newTextPosition.y
+          },
+          { duration: 2 }
+        )
       );
     }
     // ArrayNullUnit's line
     for (let lineIdx = 0; lineIdx < this.lineAnimations.length; lineIdx++) {
       const newLinePosition = getNodePosition(this.newLineCovers[lineIdx]);
-      this.lineAnimations[lineIdx].animateTo(
-        {
-          x: newLinePosition.x,
-          y: newLinePosition.y
-        },
-        { duration: 2 }
+      animations.push(
+        this.lineAnimations[lineIdx].animateTo(
+          {
+            x: newLinePosition.x,
+            y: newLinePosition.y
+          },
+          { duration: 2 }
+        )
       );
     }
     // FN OBJECTS
     for (let fnIdx = 0; fnIdx < this.fnAnimations.length; fnIdx++) {
       const newFnPosition = getNodePosition(this.newFnCovers[fnIdx]);
-      if (fnIdx == this.fnAnimations.length - 1) {
-        // last animation, await
-        await this.fnAnimations[fnIdx].animateTo(
-          {
-            x: newFnPosition.x,
-            y: newFnPosition.y
-          },
-          { duration: 2 }
-        );
-      } else {
+      animations.push(
         this.fnAnimations[fnIdx].animateTo(
           {
             x: newFnPosition.x,
             y: newFnPosition.y
           },
           { duration: 2 }
-        );
-      }
+        )
+      );
     }
+    await Promise.all(animations);
     this.destroy();
   }
 
