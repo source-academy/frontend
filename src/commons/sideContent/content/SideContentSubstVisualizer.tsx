@@ -49,29 +49,29 @@ const SubstDefaultText = () => {
   return (
     <div>
       <div id="substituter-default-text" className={Classes.RUNNING_TEXT}>
-        {t('welcome')}
+        {t($ => $.welcome)}
         <br />
         <br />
-        {t('instructions')}
+        {t($ => $.instructions)}
         <br />
         <br />
-        {t('evaluationSteps')}
+        {t($ => $.evaluationSteps)}
         <br />
         <br />
         <Divider />
-        {t('shortcutsTitle')}
+        {t($ => $.shortcutsTitle)}
         <br />
         <br />
-        {t('shortcuts.a')}
+        {t($ => $.shortcuts.a)}
         <br />
-        {t('shortcuts.e')}
+        {t($ => $.shortcuts.e)}
         <br />
-        {t('shortcuts.f')}
+        {t($ => $.shortcuts.f)}
         <br />
-        {t('shortcuts.b')}
+        {t($ => $.shortcuts.b)}
         <br />
         <br />
-        {t('shortcutsNote')}
+        {t($ => $.shortcutsNote)}
       </div>
     </div>
   );

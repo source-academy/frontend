@@ -92,8 +92,8 @@ function AdminView({ users, playgroundCode }: AdminViewProps) {
       <HTMLTable compact className={classes['table']}>
         <thead>
           <tr>
-            <th>{t('name')}</th>
-            <th>{t('role')}</th>
+            <th>{t($ => $.name)}</th>
+            <th>{t($ => $.role)}</th>
           </tr>
         </thead>
         <tbody>
@@ -179,8 +179,8 @@ const SideContentSessionManagement: React.FC<Props> = ({
           <HTMLTable compact className={classes['table']}>
             <thead>
               <tr>
-                <th>{t('name')}</th>
-                <th>{t('role')}</th>
+                <th>{t($ => $.name)}</th>
+                <th>{t($ => $.role)}</th>
               </tr>
             </thead>
             <tbody>
