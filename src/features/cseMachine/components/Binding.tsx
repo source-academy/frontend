@@ -57,7 +57,7 @@ export class Binding extends Visible {
       this._y = this.frame.y() + Config.FramePaddingY;
     }
 
-    const colon = isConstant ? 1 : 2; // 1 for constant (single colon), 2 for variable (double colon)
+    const colon = isConstant ? 1 : 2; // 1 for constant (:= ), 2 for variable (: )
     this.keyString += isConstant ? Config.ConstantColon : Config.VariableColon;
     this.value = Layout.createValue(data, this);
 

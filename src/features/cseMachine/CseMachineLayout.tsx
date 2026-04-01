@@ -62,7 +62,7 @@ import { Continuation, isContinuation } from './utils/continuation';
 export type LayoutCache = {
   framesX: Map<string, number>;
   framesY: Map<string, number>;
-  framesWidth: Map<string, number>; // addded to test width
+  framesWidth: Map<string, number>;
   levelWidth: Map<string, number>;
   largestWidth: number;
 };
@@ -858,6 +858,7 @@ export class Layout {
           });
         }
 
+        // TODO: fix y coordinate
         // get predetermined y coordinate
         // if (cache.framesY.has(id)) {
         //   const fixedY = Layout.getGhostFrameY(id)!;
