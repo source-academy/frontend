@@ -481,7 +481,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         dispatch(WorkspaceActions.evalEditor(workspaceLocation));
         CseMachine.setClearDeadFrames(false);
         if (CseMachine.getCenterAlignment()) {
-          CseMachine.toggleCenterAlignment(false);
+          CseMachine.toggleCenterAlignment();
         }
       },
       handleInterruptEval: () =>
