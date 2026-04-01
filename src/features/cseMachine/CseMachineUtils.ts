@@ -419,7 +419,7 @@ export function computeFramesCoordChange(oldLevels: Level[], newLevels: Level[])
     let oldFrameIdx = 0; // Will always >= newFrameIdx
     let newFrameIdx = 0; // Will always increment one-by-one such that each frame is appended to result
 
-    while (newFrameIdx < newLevelFrames.length) {
+    while (newFrameIdx < newLevelFrames.length && oldFrameIdx < oldLevelFrames.length) {
       if (!oldLevelFrames[oldFrameIdx].isLive) { 
         oldFrameIdx++;
       } else {
