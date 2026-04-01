@@ -46,11 +46,11 @@ export class ArrayValue extends Value implements IHoverable {
       this.enclosingFrame = newReference.frame;
       // check for whether cache already has x cooridnates
       const ghostX = Layout.getGhostFrameX(newReference.frame.environment.id);
-      // If frame x cooridnates exists in cache, use it. Otherwise, fallback to current (live) X.
+      // If frame x coordinates exists in cache, use it. Otherwise, fallback to current (live) X.
       const frameX = ghostX !== undefined ? ghostX : newReference.frame.x();
       this._x = frameX + newReference.frame.width() + Config.FrameMarginX;
 
-      this._y = newReference.y() + 20;
+      this._y = newReference.y() + Config.ArrayVerticalOffset;
     } else {
       if (newReference.isLastUnit) {
         this._x = newReference.x() + Config.DataUnitWidth * 2;

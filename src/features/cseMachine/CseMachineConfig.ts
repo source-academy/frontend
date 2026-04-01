@@ -16,6 +16,8 @@ export const Config = Object.freeze({
   FrameMarginY: 10,
   FrameCornerRadius: 3,
 
+  ArrayVerticalOffset: 20,
+
   FnRadius: 15,
   FnInnerRadius: 3,
   FnTooltipOpacity: 0.3,
