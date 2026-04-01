@@ -26,16 +26,17 @@ export class PrimitiveValue extends Value {
     if (reference instanceof Binding) {
       const maxWidth = Math.max(
         reference.frame.width() -
-          getTextWidth(reference.keyString + ':= ') -
+          getTextWidth(reference.keyString) -
           Config.TextPaddingX -
           Config.FramePaddingX * 2,
         (reference.frame.width() - Config.FramePaddingX * 2) / 2
       );
+      const colon = reference.isConstant ? Config.ConstantColon : Config.VariableColon;
       this._x = Math.min(
-        reference.x() + getTextWidth(reference.keyString + ':= ') + Config.TextPaddingX,
+        reference.x() + getTextWidth(reference.keyString) + Config.TextPaddingX,
         reference.frame.x() +
           (reference.frame.width() - Config.TextPaddingX - Config.FramePaddingX * 2) / 2 +
-          getTextWidth(':= ')
+          getTextWidth(colon)
       );
       this._y = reference.y();
       this.text = new Text(this.data, this.x(), this.y(), {
@@ -89,11 +90,12 @@ export class PrimitiveValue extends Value {
     if (reference) {
       if (reference instanceof Binding) {
         // If attached to a variable name (x: 10)
+        const colon = reference.isConstant ? Config.ConstantColon : Config.VariableColon;
         this._x = Math.min(
-          reference.x() + getTextWidth(reference.keyString + ':= ') + Config.TextPaddingX,
+          reference.x() + getTextWidth(reference.keyString) + Config.TextPaddingX,
           reference.frame.x() +
             (reference.frame.width() - Config.TextPaddingX - Config.FramePaddingX * 2) / 2 +
-            getTextWidth(':= ')
+            getTextWidth(colon)
         );
         this._y = reference.y();
       } else {
