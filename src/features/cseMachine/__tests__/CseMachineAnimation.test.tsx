@@ -221,8 +221,8 @@ test('AnimationComponent animates correctly with conflicting animateTo calls', a
           elapsed < d * 0.5
             ? [easing(elapsed, 0, 200, d), 4]
             : // Larger tolerance value at the start because of overshoot from 2nd animation,
-            // will gradually go back to value of 100 towards the end.
-            [100, easing(elapsed - d * 0.5, 15, 1, d)]
+              // will gradually go back to value of 100 towards the end.
+              [100, easing(elapsed - d * 0.5, 15, 1, d)]
       };
     }
   });
