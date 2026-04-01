@@ -874,33 +874,4 @@ export class Layout {
       });
     });
   }
-
-  static applyCenterAlignment() {
-    // don't have usage yet
-    if (!CseMachine.getMasterLayout()) {
-      return;
-    }
-    const cache = CseMachine.getMasterLayout()!; // getLayoutPositions() must have been called before
-    Layout.levels.forEach(level => {
-      level.frames.forEach(frame => {
-        const id = frame.environment.id;
-
-        // const fixedX = Layout.getGhostFrameX(id)!;
-        let fixedX = cache.framesX.get(id)!;
-        // add offset for control stash and center alignment
-        let offset: number = 0;
-        offset += CseMachine.getControlStash()
-          ? ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth
-          : 0;
-        offset += CseMachine.getCenterAlignment()
-          ? Math.floor((cache.largestWidth - cache.levelWidth.get(id)!) / 2)
-          : 0;
-        fixedX += offset;
-        frame.reassignCoordinatesX(fixedX);
-        frame.bindings.forEach(binding => {
-          binding.reassignCoordinates(fixedX);
-        });
-      });
-    });
-  }
 }
