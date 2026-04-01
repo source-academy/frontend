@@ -23,6 +23,11 @@ export class ArrowFromFn extends GenericArrow<FnValue | GlobalFnValue | ContValu
       this.isLive = this.source.isLive();
     }
   }
+
+  protected getOriginFilterKey() {
+    return 'function' as const;
+  }
+
   protected calculateSteps() {
     const from = this.source;
     const to = this.target;
