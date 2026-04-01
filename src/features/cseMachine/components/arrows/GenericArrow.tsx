@@ -3,6 +3,7 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
+import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
 import { ArrowOriginFilterKey, IHoverable, IVisible, StepsArray } from '../../CseMachineTypes';
@@ -149,7 +150,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
    * Subclasses can override this to provide custom hover colors.
    */
   protected getHighlightedColor(): string {
-    return this.isLive ? Config.ArrowHighlightedColor : Config.ArrowDeadHighlightedColor;
+    return CseMachine.getPrintableMode() ? Config.PrintDangerColor : Config.ArrowHighlightedColor;
   }
 
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
