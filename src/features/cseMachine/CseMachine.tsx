@@ -29,7 +29,7 @@ export default class CseMachine {
   private static printableMode: boolean = false;
   private static controlStash: boolean = false; // TODO: discuss if the default should be true
   private static stackTruncated: boolean = false;
-  private static centerAlignment: boolean = false; // added for center alignment
+  private static centerAlignment: boolean = false; 
   private static centerAlignmentToggled: boolean = false;
   private static environmentTree: EnvTree | undefined;
   private static currentEnvId: string;
