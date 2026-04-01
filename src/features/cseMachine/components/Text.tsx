@@ -62,7 +62,8 @@ export class Text extends Visible implements IHoverable {
     super();
     this.options = { ...this.options, ...options };
 
-    const { fontSize, fontStyle, fontFamily, maxWidth, isStringIdentifiable, bindingType } = this.options;
+    const { fontSize, fontStyle, fontFamily, maxWidth, isStringIdentifiable, bindingType } =
+      this.options;
 
     this.fullStr = this.partialStr = isSourceObject(data)
       ? data.toReplString()
@@ -71,7 +72,7 @@ export class Text extends Visible implements IHoverable {
         : String(data);
     this._height = fontSize;
     this.partialStr =
-      bindingType === 0 
+      bindingType === 0
         ? this.partialStr
         : bindingType === 1
           ? this.partialStr.slice(0, -Config.ConstantColon.length)
