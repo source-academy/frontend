@@ -71,14 +71,15 @@ export class Text extends Visible implements IHoverable {
         ? JSON.stringify(data) || String(data)
         : String(data);
     this._height = fontSize;
+    const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
+    const originalWidth = widthOf(this.partialStr);
     this.partialStr =
       bindingType === 0
         ? this.partialStr
         : bindingType === 1
           ? this.partialStr.slice(0, -Config.ConstantColon.length)
           : this.partialStr.slice(0, -Config.VariableColon.length);
-    const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
-    if (widthOf(this.partialStr) > maxWidth) {
+    if (originalWidth > maxWidth) {
       let truncatedText: string = Config.Ellipsis;
       let i = 0;
       if (bindingType > 0) {
