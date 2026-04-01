@@ -144,17 +144,21 @@ export class FnValue extends Value implements IHoverable {
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
     setHoveredCursor(currentTarget);
+    this.ref.current?.getParent()?.moveToTop();
     if (this.isExpandedDescription && this.isTooltipTruncated) {
       this.labelRef.current?.hide();
       this.revealLabelRef.current?.moveToTop();
       this.revealLabelRef.current?.show();
+      this.revealLabelRef.current?.getLayer()?.batchDraw();
     } else {
       this.revealLabelRef.current?.hide();
       this.labelRef.current?.moveToTop();
       this.labelRef.current?.show();
+      this.labelRef.current?.getLayer()?.batchDraw();
     }
     this.showTooltipArrow = true;
     this.tooltipArrow?.setVisible(true);
+    currentTarget.getLayer()?.batchDraw();
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
@@ -169,6 +173,7 @@ export class FnValue extends Value implements IHoverable {
 
   onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode() || !this.isTooltipTruncated) return;
+    this.ref.current?.getParent()?.moveToTop();
     this.isExpandedDescription = true;
     this.labelRef.current?.hide();
     this.revealLabelRef.current?.moveToTop();
