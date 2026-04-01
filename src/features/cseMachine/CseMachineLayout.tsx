@@ -2,6 +2,7 @@ import Heap from 'js-slang/dist/cse-machine/heap';
 import { Control, Stash } from 'js-slang/dist/cse-machine/interpreter';
 import { Chapter } from 'js-slang/dist/langs';
 import { Frame } from 'js-slang/dist/types';
+import { Group as KonvaGroupNode } from 'konva/lib/Group';
 import { Layer as KonvaLayerNode } from 'konva/lib/Layer';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { Stage } from 'konva/lib/Stage';
@@ -122,6 +123,8 @@ export class Layout {
   static currentStackLight: React.ReactNode;
   static currentStackTruncLight: React.ReactNode;
   static stageRef: RefObject<Stage | null> = React.createRef();
+  static contentGroupRef: RefObject<KonvaGroupNode | null> = React.createRef();
+  static animationGroupRef: RefObject<KonvaGroupNode | null> = React.createRef();
   static arrowUnderlayLayerRef: RefObject<KonvaLayerNode | null> = React.createRef();
   static underlayArrows: React.ReactNode[] = [];
 
@@ -744,9 +747,11 @@ export class Layout {
                     key={Layout.key++}
                     listening={false}
                   />
-                  {levelNodes}
-                  {controlNode}
-                  {stashNode}
+                  <KonvaGroup ref={Layout.contentGroupRef}>
+                    {levelNodes}
+                    {controlNode}
+                    {stashNode}
+                  </KonvaGroup>
                 </KonvaLayer>
                 <KonvaLayer ref={CseAnimation.layerRef} listening={false}>
                   <KonvaGroup ref={Layout.animationGroupRef}>

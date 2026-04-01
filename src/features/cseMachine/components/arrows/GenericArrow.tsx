@@ -3,7 +3,6 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React, { RefObject } from 'react';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
-import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
 import { ArrowOriginFilterKey, IHoverable, IVisible, StepsArray } from '../../CseMachineTypes';
@@ -19,6 +18,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   source: Source;
   target: Target | undefined;
   faded: boolean = false;
+  protected _visible: boolean = true;
   private pathRef: RefObject<Konva.Path | null> = React.createRef();
   private sourceSegmentPathRef: RefObject<Konva.Path | null> = React.createRef();
   private arrowHeadRef: RefObject<Konva.Arrow | null> = React.createRef();
@@ -302,7 +302,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   }
 
   // Subclasses can override to recompute liveness before drawing
-  protected updateIsLive(): void {} //kind of an abstract method
+  protected updateIsLive(): void { } //kind of an abstract method
 
   draw() {
     this.recomputePath();
