@@ -33,6 +33,7 @@ export class CseAnimation {
   static readonly defaultDuration = 300;
   static readonly defaultEasing = Easings.StrongEaseInOut;
   private static animationEnabled = false;
+  private static hideReferenceArrows = false;
   private static currentFrame: Frame;
   private static previousFrame: Frame;
 
@@ -47,6 +48,14 @@ export class CseAnimation {
 
   static disableAnimations(): void {
     CseAnimation.animationEnabled = false;
+  }
+
+  static setHideReferenceArrows(shouldHide: boolean): void {
+    CseAnimation.hideReferenceArrows = shouldHide;
+  }
+
+  static shouldHideReferenceArrows(): boolean {
+    return CseAnimation.hideReferenceArrows;
   }
 
   static setCurrentFrame(frame: Frame) {

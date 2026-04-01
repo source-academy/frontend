@@ -101,10 +101,10 @@ abstract class BaseAnimationComponent<
       throw new Error('Missing animation layer! Unable to create animation component!');
     }
     this.animation = new Konva.Animation(this.animationFn, CseAnimation.getLayer());
-    if (props.x) this._x = props.x;
-    if (props.y) this._y = props.y;
-    if (props.width) this._width = props.width;
-    if (props.height) this._height = props.height;
+    if (props.x !== undefined) this._x = props.x;
+    if (props.y !== undefined) this._y = props.y;
+    if (props.width !== undefined) this._width = props.width;
+    if (props.height !== undefined) this._height = props.height;
   }
 
   animateTo(to: Partial<KonvaConfig>, animationConfig?: AnimationConfig): Promise<void> {

@@ -4,6 +4,7 @@ import React, { RefObject } from 'react';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
 import CseMachine from '../../CseMachine';
+import { CseAnimation } from '../../CseMachineAnimation';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
 import { IHoverable, IVisible, StepsArray } from '../../CseMachineTypes';
@@ -242,6 +243,9 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   draw() {
     this.recomputePath();
     this.updateIsLive(); //just before drawijng, update liveness for the arrows (since this was causing erroes earlier  )
+    if (CseAnimation.shouldHideReferenceArrows()) {
+      return null;
+    }
     if (Layout.clearDeadFrames && !this.isLive) {
       return null;
     }

@@ -8,11 +8,9 @@ import { ArrayValue } from '../components/values/ArrayValue';
 import { FnValue } from '../components/values/FnValue';
 import { PrimitiveValue } from '../components/values/PrimitiveValue';
 import CseMachine from '../CseMachine';
+import { CseAnimation } from '../CseMachineAnimation';
 import { Config } from '../CseMachineConfig';
-import { 
-  defaultActiveColor, 
-  defaultBackgroundColor, 
-  defaultStrokeColor} from '../CseMachineUtils';
+import { defaultActiveColor, defaultBackgroundColor, defaultStrokeColor } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedFnObject } from './base/AnimatedFnObject';
 import { AnimatedLineComponent, AnimatedRectComponent, AnimatedTextComponent } from './base/AnimationComponents';
@@ -40,6 +38,7 @@ export class ClearDeadFramesAnimation extends Animatable {
 
   constructor(changedFramePairs: Frame[][]) {
     super();
+    CseAnimation.setHideReferenceArrows(true);
 
     // changedTextPairs only account for binding keys and text values
     const changedTextPairs: Text[][] = [];
@@ -54,34 +53,37 @@ export class ClearDeadFramesAnimation extends Animatable {
         new AnimatedRectComponent({
           ...oldFramePosition,
           cornerRadius: Config.FrameCornerRadius,
-          stroke: CseMachine.getCurrentEnvId() != null && 
-                  framePair[0].environment?.id === CseMachine.getCurrentEnvId()
-                    ? defaultActiveColor() : defaultStrokeColor()
+          stroke:
+            CseMachine.getCurrentEnvId() != null &&
+            framePair[0].environment?.id === CseMachine.getCurrentEnvId()
+              ? defaultActiveColor()
+              : defaultStrokeColor()
         })
-      )
+      );
       const newFramePosition = getNodePosition(framePair[1]);
       this.newFrameCovers.push(
         new AnimatedRectComponent({
           ...newFramePosition,
           cornerRadius: Config.FrameCornerRadius,
+          fill: defaultBackgroundColor(),
           stroke: defaultBackgroundColor(),
           strokeWidth: 4
         })
-      )
+      );
 
       // For each binding in this frame
       const oldBindings = framePair[0].bindings;
       const newBindings = framePair[1].bindings;
       for (let i = 0; i < oldBindings.length; i++) {
-        if (oldBindings[i].isDummyBinding == false) { 
+        if (oldBindings[i].isDummyBinding == false) {
           changedTextPairs.push([oldBindings[i].key, newBindings[i].key]);
 
-          // Create animations for primitive text values 
+          // Create animations for primitive text values
           if (oldBindings[i].value instanceof PrimitiveValue) {
             const oldValue: PrimitiveValue = oldBindings[i].value as PrimitiveValue;
             const newValue: PrimitiveValue = newBindings[i].value as PrimitiveValue;
             if (oldValue.text instanceof Text) {
-              changedTextPairs.push([(oldValue.text as Text), (newValue.text as Text)])
+              changedTextPairs.push([oldValue.text as Text, newValue.text as Text]);
             }
           }
         }
@@ -101,22 +103,32 @@ export class ClearDeadFramesAnimation extends Animatable {
           if (oldArr.isLive()) {
             const newArr: ArrayValue = newBindings[i].value as ArrayValue;
 
-            if (oldArr.units.length == 0) { // Only ArrayEmptyUnit
+            if (oldArr.units.length == 0) {
+              // Only ArrayEmptyUnit
               this.frameAnimations.push(
-                new AnimatedRectComponent({ 
-                  ...getNodePosition(oldArr), 
-                  cornerRadius: 0 })
-              )
+                new AnimatedRectComponent({
+                  ...getNodePosition(oldArr),
+                  cornerRadius: 0
+                })
+              );
               this.newFrameCovers.push(
-                new AnimatedRectComponent({ 
-                  ...getNodePosition(newArr), 
+                new AnimatedRectComponent({
+                  ...getNodePosition(newArr),
                   cornerRadius: 0,
+                  fill: defaultBackgroundColor(),
                   stroke: defaultBackgroundColor(),
-                  strokeWidth: 4 })
-              )
-            } else { // Has at least one ArrayUnit
+                  strokeWidth: 4
+                })
+              );
+            } else {
+              // Has at least one ArrayUnit
               this.recurseInArray(
-                oldArr, newArr, changedFramePairs, changedTextPairs, changedFnPairs);
+                oldArr,
+                newArr,
+                changedFramePairs,
+                changedTextPairs,
+                changedFnPairs
+              );
             }
           }
         }
@@ -140,7 +152,7 @@ export class ClearDeadFramesAnimation extends Animatable {
           ...newTextPosition,
           text: textPair[1].partialStr,
           fill: defaultBackgroundColor(),
-          stroke: defaultBackgroundColor(), 
+          stroke: defaultBackgroundColor(),
           strokeWidth: 4 // stroke is required for strokeWidth
         })
       );
@@ -158,10 +170,14 @@ export class ClearDeadFramesAnimation extends Animatable {
       );
       const newFnPosition = getNodePosition(fnPair[1]);
       this.newFnCovers.push(
-        new AnimatedFnObject(fnPair[1], {
-          ...newFnPosition,
-        }, true)
-      )
+        new AnimatedFnObject(
+          fnPair[1],
+          {
+            ...newFnPosition
+          },
+          true
+        )
+      );
     }
   }
 
@@ -177,12 +193,13 @@ export class ClearDeadFramesAnimation extends Animatable {
     for (let unitIdx = 0; unitIdx < oldArr.units.length; unitIdx++) {
       const oldUnit: ArrayUnit = oldArr.units[unitIdx];
       const newUnit: ArrayUnit = newArr.units[unitIdx];
-      const cornerRadius = [ // clockwise order
+      const cornerRadius = [
+        // clockwise order
         oldUnit.isFirstUnit ? Config.DataCornerRadius : 0,
         oldUnit.isLastUnit ? Config.DataCornerRadius : 0,
         oldUnit.isLastUnit ? Config.DataCornerRadius : 0,
         oldUnit.isFirstUnit ? Config.DataCornerRadius : 0
-      ]
+      ];
 
       // Add the border first
       this.frameAnimations.push(
@@ -190,25 +207,23 @@ export class ClearDeadFramesAnimation extends Animatable {
           ...getNodePosition(oldUnit),
           cornerRadius: cornerRadius
         })
-      )
+      );
       this.newFrameCovers.push(
         new AnimatedRectComponent({
           ...getNodePosition(newUnit),
           cornerRadius: cornerRadius,
+          fill: defaultBackgroundColor(),
           stroke: defaultBackgroundColor(),
           strokeWidth: 4
         })
-      )
+      );
 
       // Add the value next
       if (oldUnit.value instanceof PrimitiveValue) {
         const oldValue: PrimitiveValue = oldUnit.value as PrimitiveValue;
         const newValue: PrimitiveValue = newUnit.value as PrimitiveValue;
         if (oldValue.text instanceof Text) { // TODO: text is a bit misaligned for some reason, including cover text
-          console.log(oldValue);
-          console.log(newValue);
-          console.log(newValue.text);
-          changedTextPairs.push([(oldValue.text as Text), (newValue.text as Text)]);
+          changedTextPairs.push([oldValue.text as Text, newValue.text as Text]);
         } else if (oldValue.text instanceof ArrayNullUnit) {
           let { x, y, height, width } = getNodePosition(oldValue.text as ArrayNullUnit);
           this.lineAnimations.push(
@@ -233,13 +248,15 @@ export class ClearDeadFramesAnimation extends Animatable {
         }
         
       } else if (oldUnit.value instanceof FnValue) {
-        changedFnPairs.push([(oldUnit.value as FnValue), (newUnit.value as FnValue)]);
+        changedFnPairs.push([oldUnit.value as FnValue, newUnit.value as FnValue]);
       } else if (oldUnit.value instanceof ArrayValue) {
         this.recurseInArray(
           oldUnit.value as ArrayValue,
           newUnit.value as ArrayValue,
-          changedFramePairs, changedTextPairs, changedFnPairs
-        )
+          changedFramePairs,
+          changedTextPairs,
+          changedFnPairs
+        );
       }
     }
   }
@@ -265,16 +282,24 @@ export class ClearDeadFramesAnimation extends Animatable {
     // FRAMES
     for (let frameIdx = 0; frameIdx < this.frameAnimations.length; frameIdx++) {
       const newFramePosition = getNodePosition(this.newFrameCovers[frameIdx]);
-      this.frameAnimations[frameIdx].animateTo({
-        x: newFramePosition.x, y: newFramePosition.y
-      }, { duration: 2 })
+      this.frameAnimations[frameIdx].animateTo(
+        {
+          x: newFramePosition.x,
+          y: newFramePosition.y
+        },
+        { duration: 2 }
+      );
     }
     // TEXTS
     for (let textIdx = 0; textIdx < this.textAnimations.length; textIdx++) {
       const newTextPosition = getNodePosition(this.newTextCovers[textIdx]);
-      this.textAnimations[textIdx].animateTo({
-        x: newTextPosition.x, y: newTextPosition.y
-      }, { duration: 2 })
+      this.textAnimations[textIdx].animateTo(
+        {
+          x: newTextPosition.x,
+          y: newTextPosition.y
+        },
+        { duration: 2 }
+      );
     }
     // ArrayNullUnit's line
     for (let lineIdx = 0; lineIdx < this.lineAnimations.length; lineIdx++) {
@@ -286,44 +311,62 @@ export class ClearDeadFramesAnimation extends Animatable {
     // FN OBJECTS
     for (let fnIdx = 0; fnIdx < this.fnAnimations.length; fnIdx++) {
       const newFnPosition = getNodePosition(this.newFnCovers[fnIdx]);
-      if (fnIdx == this.fnAnimations.length - 1) { // last animation, await
-        await this.fnAnimations[fnIdx].animateTo({
-          x: newFnPosition.x, y: newFnPosition.y
-        }, { duration: 2 })
+      if (fnIdx == this.fnAnimations.length - 1) {
+        // last animation, await
+        await this.fnAnimations[fnIdx].animateTo(
+          {
+            x: newFnPosition.x,
+            y: newFnPosition.y
+          },
+          { duration: 2 }
+        );
       } else {
-        this.fnAnimations[fnIdx].animateTo({
-          x: newFnPosition.x, y: newFnPosition.y
-        }, { duration: 2 })
+        this.fnAnimations[fnIdx].animateTo(
+          {
+            x: newFnPosition.x,
+            y: newFnPosition.y
+          },
+          { duration: 2 }
+        );
       }
     }
-    this.destroy()
+    this.destroy();
   }
 
   destroy() {
     this.ref.current?.hide();
     for (const frameAnim of this.frameAnimations) {
-        frameAnim.destroy();
+      frameAnim.destroy();
     }
     for (const frameCover of this.newFrameCovers) {
-        frameCover.destroy();
+      frameCover.destroy();
     }
     for (const textAnim of this.textAnimations) {
-        textAnim.destroy();
+      textAnim.destroy();
     }
     for (const textCover of this.newTextCovers) {
-        textCover.destroy();
+      textCover.destroy();
     }
     for (const fnAnim of this.fnAnimations) {
-        fnAnim.destroy();
+      fnAnim.destroy();
     }
     for (const fnCover of this.newFnCovers) {
-        fnCover.destroy();
+      fnCover.destroy();
     }
+
     for (const lineAnim of this.lineAnimations) {
         lineAnim.destroy();
     }
     for (const lineCover of this.newLineCovers) {
         lineCover.destroy();
     }
+    
+    const animationIdx = CseAnimation.animations.indexOf(this);
+    if (animationIdx >= 0) {
+      CseAnimation.animations.splice(animationIdx, 1);
+    }
+    CseAnimation.setHideReferenceArrows(false);
+    CseMachine.clearCachedLayouts();
+    CseMachine.redraw();
   }
 }
