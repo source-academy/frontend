@@ -91,9 +91,9 @@ export class Frame extends Visible implements IHoverable {
         this.leftSiblingFrame.totalDataWidth +
         Config.FrameMarginX
       : this.level.x();
-    // ensure x coordinate cannot be less than that of parent frame during default alignment
-    if (!CseMachine.getCenterAlignment() && this.parentFrame)
-      this._x = Math.max(this._x, this.parentFrame.x()); // added condition for center alignment
+    // Frames are strictly left-aligned within their level to prevent large gaps from forming.
+    // Previously, a frame's position was also influenced by its parent's position, which could
+    // cause an entire level of frames to be shifted undesirably.
     this._y = this.level.y() + Config.FontSize + Config.TextPaddingY / 2;
 
     // get all keys and object descriptors of each value inside the head
