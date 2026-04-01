@@ -1,8 +1,10 @@
 import React from 'react';
 import { Group } from 'react-konva';
 
+import { ArrayUnit } from '../components/ArrayUnit';
 import { Frame } from '../components/Frame';
 import { Text } from '../components/Text';
+import { ArrayValue } from '../components/values/ArrayValue';
 import { FnValue } from '../components/values/FnValue';
 import { PrimitiveValue } from '../components/values/PrimitiveValue';
 import CseMachine from '../CseMachine';
@@ -15,8 +17,6 @@ import { Animatable } from './base/Animatable';
 import { AnimatedFnObject } from './base/AnimatedFnObject';
 import { AnimatedRectComponent, AnimatedTextComponent } from './base/AnimationComponents';
 import { getNodePosition } from './base/AnimationUtils';
-import { ArrayValue } from '../components/values/ArrayValue';
-import { ArrayUnit } from '../components/ArrayUnit';
 
 /**
  * Animation after clicking "Clear Dead Frames"
