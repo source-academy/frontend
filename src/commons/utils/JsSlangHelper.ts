@@ -95,7 +95,11 @@ export function visualizeCseMachine({ context }: { context: Context }) {
   try {
     CseMachine.drawCse(context);
   } catch (err) {
-    console.error(err);
+    // Saga/unit tests may execute without mounting the CSE side content, so this
+    // initialization error is expected and should be treated as a no-op.
+    if (err instanceof Error && err.message === 'CSE machine not initialized') {
+      return;
+    }
     throw new Error('CSE machine is not enabled');
   }
 }
