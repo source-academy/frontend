@@ -47,7 +47,7 @@ export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
           y: this._y,
           radius: Config.FnRadius,
           ...safeProps
-        })
+        });
     this.leftInner = isCover
       ? new AnimatedCircleComponent({
           x: this.centerX - Config.FnRadius,
@@ -65,7 +65,7 @@ export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
           strokeWidth: 0,
           fill: defaultStrokeColor(),
           ...safeProps
-      })
+        });
     this.rightCircle = isCover
       ? new AnimatedCircleComponent({
           x: this.centerX + Config.FnRadius,
@@ -77,11 +77,11 @@ export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
           ...safeProps
         })
       : new AnimatedCircleComponent({
-        x: this.centerX + Config.FnRadius,
-        y: this._y,
-        radius: Config.FnRadius,
-        ...safeProps
-      })
+          x: this.centerX + Config.FnRadius,
+          y: this._y,
+          radius: Config.FnRadius,
+          ...safeProps
+        });
     this.rightInner = isCover
       ? new AnimatedCircleComponent({
           x: this.centerX + Config.FnRadius,
@@ -99,7 +99,7 @@ export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
           strokeWidth: 0,
           fill: defaultStrokeColor(),
           ...safeProps
-      })
+        });
     this.leftCircle.addListener(this.onPropsChange);
     this.leftInner.addListener(this.onPropsChange);
     this.rightCircle.addListener(this.onPropsChange);
@@ -120,26 +120,38 @@ export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
   async animateTo(to: Partial<CircleConfig>, animationConfig?: AnimationConfig) {
     const { x, y, ...others } = to;
     await Promise.all([
-      this.leftCircle.animateTo({
-        ...others,
-        ...(x !== undefined && { x: x + Config.FnRadius }), 
-        ...(y !== undefined && { y: y })
-      }, animationConfig),
-      this.leftInner.animateTo({
-        ...others,
-        ...(x !== undefined && { x: x + Config.FnRadius }), 
-        ...(y !== undefined && { y: y })
-      }, animationConfig),
-      this.rightCircle.animateTo({
-        ...others,
-        ...(x !== undefined && { x: x + 3 * Config.FnRadius }), 
-        ...(y !== undefined && { y: y })
-      }, animationConfig),
-      this.rightInner.animateTo({
-        ...others,
-        ...(x !== undefined && { x: x + 3 * Config.FnRadius }), 
-        ...(y !== undefined && { y: y })
-      }, animationConfig)
+      this.leftCircle.animateTo(
+        {
+          ...others,
+          ...(x !== undefined && { x: x + Config.FnRadius }),
+          ...(y !== undefined && { y: y })
+        },
+        animationConfig
+      ),
+      this.leftInner.animateTo(
+        {
+          ...others,
+          ...(x !== undefined && { x: x + Config.FnRadius }),
+          ...(y !== undefined && { y: y })
+        },
+        animationConfig
+      ),
+      this.rightCircle.animateTo(
+        {
+          ...others,
+          ...(x !== undefined && { x: x + 3 * Config.FnRadius }),
+          ...(y !== undefined && { y: y })
+        },
+        animationConfig
+      ),
+      this.rightInner.animateTo(
+        {
+          ...others,
+          ...(x !== undefined && { x: x + 3 * Config.FnRadius }),
+          ...(y !== undefined && { y: y })
+        },
+        animationConfig
+      )
     ]);
   }
 
@@ -154,4 +166,3 @@ export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
     this.rightInner.destroy();
   }
 }
-

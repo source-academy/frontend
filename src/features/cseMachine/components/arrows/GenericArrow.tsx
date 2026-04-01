@@ -285,4 +285,3 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     );
   }
 }
-

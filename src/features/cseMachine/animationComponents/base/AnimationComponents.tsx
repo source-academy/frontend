@@ -233,4 +233,3 @@ export class AnimatedCircleComponent extends AnimationComponent<Konva.Circle, Ko
     super(Circle, { ...defaultProps, ...props });
   }
 }
-

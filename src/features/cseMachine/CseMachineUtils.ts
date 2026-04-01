@@ -384,8 +384,8 @@ export function computeLiveState(envTree: EnvTree): {
 }
 
 // CHANGEDD
-/** Returns an array of pairs of frames. 
- * The two frames in each pair represent the same frame in concept, but the frame's position has 
+/** Returns an array of pairs of frames.
+ * The two frames in each pair represent the same frame in concept, but the frame's position has
  * shifted between steps, creating two distinct Frame objects.
  * The first frame in each pair represents the frame before it shifted. The second frame represents
  * the frame after it shifted.
@@ -402,7 +402,7 @@ export function computeFramesCoordChange(oldLevels: Level[], newLevels: Level[])
     for (let levelIdx = 0; levelIdx < oldLevels.length; levelIdx++) {
       const framesOfLevel: Frame[] = oldLevels[levelIdx].frames;
       for (const frame of framesOfLevel) {
-        if (frame.isLive) { 
+        if (frame.isLive) {
           tempOldLevels.push(oldLevels[levelIdx]);
           break;
         }
@@ -420,7 +420,7 @@ export function computeFramesCoordChange(oldLevels: Level[], newLevels: Level[])
     let newFrameIdx = 0; // Will always increment one-by-one such that each frame is appended to result
 
     while (newFrameIdx < newLevelFrames.length && oldFrameIdx < oldLevelFrames.length) {
-      if (!oldLevelFrames[oldFrameIdx].isLive) { 
+      if (!oldLevelFrames[oldFrameIdx].isLive) {
         oldFrameIdx++;
       } else {
         const oldFrame = oldLevelFrames[oldFrameIdx];

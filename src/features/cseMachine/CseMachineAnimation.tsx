@@ -356,4 +356,3 @@ export class CseAnimation {
     await Promise.all(this.animations.map(a => a.animate()));
   }
 }
-
