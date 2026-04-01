@@ -1,6 +1,7 @@
 import React from 'react';
 import { Group } from 'react-konva';
 
+import { ArrayNullUnit } from '../components/ArrayNullUnit';
 import { ArrayUnit } from '../components/ArrayUnit';
 import { Frame } from '../components/Frame';
 import { Text } from '../components/Text';
@@ -15,7 +16,6 @@ import { Animatable } from './base/Animatable';
 import { AnimatedFnObject } from './base/AnimatedFnObject';
 import { AnimatedLineComponent, AnimatedRectComponent, AnimatedTextComponent } from './base/AnimationComponents';
 import { getNodePosition } from './base/AnimationUtils';
-import { ArrayNullUnit } from '../components/ArrayNullUnit';
 
 /**
  * Animation after clicking "Clear Dead Frames"
