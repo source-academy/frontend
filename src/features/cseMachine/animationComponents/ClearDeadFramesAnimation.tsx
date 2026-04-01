@@ -15,6 +15,8 @@ import { Animatable } from './base/Animatable';
 import { AnimatedFnObject } from './base/AnimatedFnObject';
 import { AnimatedRectComponent, AnimatedTextComponent } from './base/AnimationComponents';
 import { getNodePosition } from './base/AnimationUtils';
+import { ArrayValue } from '../components/values/ArrayValue';
+import { ArrayUnit } from '../components/ArrayUnit';
 
 /**
  * Animation after clicking "Clear Dead Frames"
@@ -63,7 +65,7 @@ export class ClearDeadFramesAnimation extends Animatable {
         })
       )
 
-      // Set up changedTextPairs
+      // For each binding in this frame
       const oldBindings = framePair[0].bindings;
       const newBindings = framePair[1].bindings;
       for (let i = 0; i < oldBindings.length; i++) {
@@ -83,8 +85,36 @@ export class ClearDeadFramesAnimation extends Animatable {
         // Create animations for FnValue, even if is dummy binding
         if (oldBindings[i].value instanceof FnValue) {
           const oldFn: FnValue = oldBindings[i].value as FnValue;
-          const newFn: FnValue = newBindings[i].value as FnValue;
-          changedFnPairs.push([oldFn, newFn]);
+          if (oldFn.isLive()) {
+            const newFn: FnValue = newBindings[i].value as FnValue;
+            changedFnPairs.push([oldFn, newFn]);
+          }
+        }
+
+        // Create animations for ArrayValue, even if is dummy binding
+        if (oldBindings[i].value instanceof ArrayValue) {
+          const oldArr: ArrayValue = oldBindings[i].value as ArrayValue;
+          if (oldArr.isLive()) {
+            const newArr: ArrayValue = newBindings[i].value as ArrayValue;
+
+            if (oldArr.units.length == 0) { // Only ArrayEmptyUnit
+              this.frameAnimations.push(
+                new AnimatedRectComponent({ 
+                  ...getNodePosition(oldArr), 
+                  cornerRadius: 0 })
+              )
+              this.newFrameCovers.push(
+                new AnimatedRectComponent({ 
+                  ...getNodePosition(newArr), 
+                  cornerRadius: 0,
+                  stroke: defaultBackgroundColor(),
+                  strokeWidth: 4 })
+              )
+            } else { // Has at least one ArrayUnit
+              this.recurseInArray(
+                oldArr, newArr, changedFramePairs, changedTextPairs, changedFnPairs);
+            }
+          }
         }
       }
     }
@@ -128,6 +158,61 @@ export class ClearDeadFramesAnimation extends Animatable {
           ...newFnPosition,
         }, true)
       )
+    }
+  }
+
+  // Method for ArrayValues to be used in constructor
+  private recurseInArray(
+    oldArr: ArrayValue,
+    newArr: ArrayValue,
+    changedFramePairs: Frame[][],
+    changedTextPairs: Text[][],
+    changedFnPairs: FnValue[][]
+  ): void {
+    // Check each ArrayUnit, add them accordingly
+    for (let unitIdx = 0; unitIdx < oldArr.units.length; unitIdx++) {
+      const oldUnit: ArrayUnit = oldArr.units[unitIdx];
+      const newUnit: ArrayUnit = newArr.units[unitIdx];
+      const cornerRadius = [ // clockwise order
+        oldUnit.isFirstUnit ? Config.DataCornerRadius : 0,
+        oldUnit.isLastUnit ? Config.DataCornerRadius : 0,
+        oldUnit.isLastUnit ? Config.DataCornerRadius : 0,
+        oldUnit.isFirstUnit ? Config.DataCornerRadius : 0
+      ]
+
+      // Add the border first
+      this.frameAnimations.push(
+        new AnimatedRectComponent({
+          ...getNodePosition(oldUnit),
+          cornerRadius: cornerRadius
+        })
+      )
+      this.newFrameCovers.push(
+        new AnimatedRectComponent({
+          ...getNodePosition(newUnit),
+          cornerRadius: cornerRadius,
+          stroke: defaultBackgroundColor(),
+          strokeWidth: 4
+        })
+      )
+
+      // Add the value next
+      if (oldUnit.value instanceof PrimitiveValue) {
+        const oldValue: PrimitiveValue = oldUnit.value as PrimitiveValue;
+        const newValue: PrimitiveValue = newUnit.value as PrimitiveValue;
+        if (oldValue.text instanceof Text) {
+          changedTextPairs.push([(oldValue.text as Text), (newValue.text as Text)]);
+        } // TODO: text is a bit misaligned for some reason
+        // TODO: Account for ArrayNullUnit
+      } else if (oldUnit.value instanceof FnValue) {
+        changedFnPairs.push([(oldUnit.value as FnValue), (newUnit.value as FnValue)]);
+      } else if (oldUnit.value instanceof ArrayValue) {
+        this.recurseInArray(
+          oldUnit.value as ArrayValue,
+          newUnit.value as ArrayValue,
+          changedFramePairs, changedTextPairs, changedFnPairs
+        )
+      }
     }
   }
 
