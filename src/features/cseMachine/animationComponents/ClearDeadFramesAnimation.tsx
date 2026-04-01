@@ -201,9 +201,6 @@ export class ClearDeadFramesAnimation extends Animatable {
         const oldValue: PrimitiveValue = oldUnit.value as PrimitiveValue;
         const newValue: PrimitiveValue = newUnit.value as PrimitiveValue;
         if (oldValue.text instanceof Text) {
-          console.log(oldValue);
-          console.log(newValue);
-          console.log(newValue.text);
           changedTextPairs.push([(oldValue.text as Text), (newValue.text as Text)]);
         } // TODO: text is a bit misaligned for some reason, including cover text
         // TODO: Account for ArrayNullUnit
