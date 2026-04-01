@@ -294,6 +294,7 @@ export class FnValue extends Value implements IHoverable {
           x={this.x() + Config.TextMargin}
           y={this.y() + this.radius + Config.TextMargin + this.printDescriptionOffsetY}
           visible={CseMachine.getPrintableMode()}
+          listening={false}
           ref={this.labelRef}
         >
           {CseMachine.getPrintableMode() ? (
@@ -324,6 +325,7 @@ export class FnValue extends Value implements IHoverable {
             x={this.x() + Config.TextMargin}
             y={this.y() + this.radius + Config.TextMargin}
             visible={false}
+            listening={false}
             ref={this.revealLabelRef}
           >
             <KonvaTag

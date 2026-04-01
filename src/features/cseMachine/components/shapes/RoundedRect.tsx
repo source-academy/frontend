@@ -12,6 +12,7 @@ interface Props {
   cornerRadius: { upperLeft: number; lowerLeft: number; upperRight: number; lowerRight: number };
   stroke: string;
   fill?: string;
+  listening?: boolean;
   fillEnabled: boolean;
   hitStrokeWidth: number;
   forwardRef: RefObject<any>;
