@@ -282,7 +282,7 @@ export class ClearDeadFramesAnimation extends Animatable {
     for (const fnAnim of this.fnAnimations) {
         fnAnim.destroy();
     }
-    for (const fnCover of this.fnAnimations) {
+    for (const fnCover of this.newFnCovers) {
         fnCover.destroy();
     }
   }
