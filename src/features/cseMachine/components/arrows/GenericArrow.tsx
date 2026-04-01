@@ -13,7 +13,9 @@ import { arrowSelection } from './ArrowSelection';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
 export class GenericArrow<Source extends IVisible, Target extends IVisible>
-  extends Visible implements IHoverable {
+  extends Visible
+  implements IHoverable
+{
   private _path: string = '';
   points: number[] = [];
   source: Source;
@@ -303,7 +305,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   }
 
   // Subclasses can override to recompute liveness before drawing
-  protected updateIsLive(): void { } //kind of an abstract method
+  protected updateIsLive(): void {} //kind of an abstract method
 
   draw() {
     this.recomputePath();
@@ -353,4 +355,3 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
     return this.drawSourceFrameSegment(stroke, interactive);
   }
 }
-

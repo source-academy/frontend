@@ -202,8 +202,7 @@ export class FnValue extends Value implements IHoverable {
       this.y() + this.radius + Config.TextMargin + (useExpanded ? 0 : this.printDescriptionOffsetY);
     const text = useExpanded ? this.tooltip : this.exportTooltip;
     const width =
-      Math.min(Config.FnDescriptionMaxWidth, getTextWidth(text)) +
-      Config.FnTooltipTextPadding * 2;
+      Math.min(Config.FnDescriptionMaxWidth, getTextWidth(text)) + Config.FnTooltipTextPadding * 2;
     const height =
       getTextHeight(text, Config.FnDescriptionMaxWidth) + Config.FnTooltipTextPadding * 2;
 

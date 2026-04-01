@@ -97,10 +97,7 @@ export class ArrowFromFnTooltip extends GenericArrow<FnLeftCircleAnchor, FnToolt
 
     // GenericArrow drops the very first source coordinate, so we emit two points:
     // 1) source center anchor, 2) tooltip anchor. This guarantees a visible line body.
-    return [
-      () => [from.x(), from.y()],
-      () => [to.x(), to.y()]
-    ];
+    return [() => [from.x(), from.y()], () => [to.x(), to.y()]];
   }
 
   protected isInteractive(): boolean {

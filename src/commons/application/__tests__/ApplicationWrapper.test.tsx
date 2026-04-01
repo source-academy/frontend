@@ -10,8 +10,8 @@ window.matchMedia =
   function () {
     return {
       matches: false,
-      addListener: function () { },
-      removeListener: function () { }
+      addListener: function () {},
+      removeListener: function () {}
     };
   };
 

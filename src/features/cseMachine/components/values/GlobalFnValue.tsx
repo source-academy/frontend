@@ -108,7 +108,7 @@ export class GlobalFnValue extends Value implements IHoverable {
     this.addReference(mainReference);
   }
 
-  handleNewReference(): void { }
+  handleNewReference(): void {}
 
   arrow(): ArrowFromFn | undefined {
     return this._arrow;
@@ -175,8 +175,7 @@ export class GlobalFnValue extends Value implements IHoverable {
       this.y() + this.radius + Config.TextMargin + (useExpanded ? 0 : this.printDescriptionOffsetY);
     const text = useExpanded ? this.tooltip : this.exportTooltip;
     const width =
-      Math.min(Config.FnDescriptionMaxWidth, getTextWidth(text)) +
-      Config.FnTooltipTextPadding * 2;
+      Math.min(Config.FnDescriptionMaxWidth, getTextWidth(text)) + Config.FnTooltipTextPadding * 2;
     const height =
       getTextHeight(text, Config.FnDescriptionMaxWidth) + Config.FnTooltipTextPadding * 2;
 
