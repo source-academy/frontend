@@ -127,14 +127,14 @@ export class ClearDeadFramesAnimation extends Animatable {
       this.textAnimations.push(
         new AnimatedTextComponent({
           ...oldTextPosition,
-          text: textPair[0].fullStr
+          text: textPair[0].partialStr
         })
       );
       const newTextPosition = getNodePosition(textPair[1]);
       this.newTextCovers.push(
         new AnimatedTextComponent({
           ...newTextPosition,
-          text: textPair[1].fullStr,
+          text: textPair[1].partialStr,
           fill: defaultBackgroundColor(),
           stroke: defaultBackgroundColor(), 
           strokeWidth: 4 // stroke is required for strokeWidth
@@ -201,8 +201,11 @@ export class ClearDeadFramesAnimation extends Animatable {
         const oldValue: PrimitiveValue = oldUnit.value as PrimitiveValue;
         const newValue: PrimitiveValue = newUnit.value as PrimitiveValue;
         if (oldValue.text instanceof Text) {
+          console.log(oldValue);
+          console.log(newValue);
+          console.log(newValue.text);
           changedTextPairs.push([(oldValue.text as Text), (newValue.text as Text)]);
-        } // TODO: text is a bit misaligned for some reason
+        } // TODO: text is a bit misaligned for some reason, including cover text
         // TODO: Account for ArrayNullUnit
       } else if (oldUnit.value instanceof FnValue) {
         changedFnPairs.push([(oldUnit.value as FnValue), (newUnit.value as FnValue)]);
@@ -222,10 +225,10 @@ export class ClearDeadFramesAnimation extends Animatable {
     return (
       <Group key={Animatable.key--} ref={this.ref}>
         {this.newFrameCovers.map((rect) => rect.draw())}
-        {this.frameAnimations.map((rect) => rect.draw())}
         {this.newTextCovers.map((rect) => rect.draw())}
-        {this.textAnimations.map((rect) => rect.draw())}
         {this.newFnCovers.map((rect) => rect.draw())}
+        {this.frameAnimations.map((rect) => rect.draw())}
+        {this.textAnimations.map((rect) => rect.draw())}
         {this.fnAnimations.map((rect) => rect.draw())}
       </Group>
     );
