@@ -14,7 +14,11 @@ import { Config } from '../CseMachineConfig';
 import { defaultActiveColor, defaultBackgroundColor, defaultStrokeColor } from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedFnObject } from './base/AnimatedFnObject';
-import { AnimatedLineComponent, AnimatedRectComponent, AnimatedTextComponent } from './base/AnimationComponents';
+import {
+  AnimatedLineComponent,
+  AnimatedRectComponent,
+  AnimatedTextComponent
+} from './base/AnimationComponents';
 import { getNodePosition } from './base/AnimationUtils';
 
 /**
@@ -222,7 +226,8 @@ export class ClearDeadFramesAnimation extends Animatable {
       if (oldUnit.value instanceof PrimitiveValue) {
         const oldValue: PrimitiveValue = oldUnit.value as PrimitiveValue;
         const newValue: PrimitiveValue = newUnit.value as PrimitiveValue;
-        if (oldValue.text instanceof Text) { // TODO: text is a bit misaligned for some reason, including cover text
+        if (oldValue.text instanceof Text) {
+          // TODO: text is a bit misaligned for some reason, including cover text
           changedTextPairs.push([oldValue.text as Text, newValue.text as Text]);
         } else if (oldValue.text instanceof ArrayNullUnit) {
           let { x, y, height, width } = getNodePosition(oldValue.text as ArrayNullUnit);
@@ -243,10 +248,9 @@ export class ClearDeadFramesAnimation extends Animatable {
               strokeWidth: 4
             })
           );
-          console.log(this.lineAnimations)
-          console.log(this.newLineCovers)
+          console.log(this.lineAnimations);
+          console.log(this.newLineCovers);
         }
-        
       } else if (oldUnit.value instanceof FnValue) {
         changedFnPairs.push([oldUnit.value as FnValue, newUnit.value as FnValue]);
       } else if (oldUnit.value instanceof ArrayValue) {
@@ -266,14 +270,14 @@ export class ClearDeadFramesAnimation extends Animatable {
   draw(): React.ReactNode {
     return (
       <Group key={Animatable.key--} ref={this.ref}>
-        {this.newLineCovers.map((rect) => rect.draw())}
-        {this.newFrameCovers.map((rect) => rect.draw())}
-        {this.newTextCovers.map((rect) => rect.draw())}
-        {this.newFnCovers.map((rect) => rect.draw())}
-        {this.lineAnimations.map((rect) => rect.draw())}
-        {this.frameAnimations.map((rect) => rect.draw())}
-        {this.textAnimations.map((rect) => rect.draw())}
-        {this.fnAnimations.map((rect) => rect.draw())}
+        {this.newLineCovers.map(rect => rect.draw())}
+        {this.newFrameCovers.map(rect => rect.draw())}
+        {this.newTextCovers.map(rect => rect.draw())}
+        {this.newFnCovers.map(rect => rect.draw())}
+        {this.lineAnimations.map(rect => rect.draw())}
+        {this.frameAnimations.map(rect => rect.draw())}
+        {this.textAnimations.map(rect => rect.draw())}
+        {this.fnAnimations.map(rect => rect.draw())}
       </Group>
     );
   }
@@ -304,9 +308,13 @@ export class ClearDeadFramesAnimation extends Animatable {
     // ArrayNullUnit's line
     for (let lineIdx = 0; lineIdx < this.lineAnimations.length; lineIdx++) {
       const newLinePosition = getNodePosition(this.newLineCovers[lineIdx]);
-      this.lineAnimations[lineIdx].animateTo({
-        x: newLinePosition.x, y: newLinePosition.y
-      }, { duration: 2 })
+      this.lineAnimations[lineIdx].animateTo(
+        {
+          x: newLinePosition.x,
+          y: newLinePosition.y
+        },
+        { duration: 2 }
+      );
     }
     // FN OBJECTS
     for (let fnIdx = 0; fnIdx < this.fnAnimations.length; fnIdx++) {
@@ -355,12 +363,12 @@ export class ClearDeadFramesAnimation extends Animatable {
     }
 
     for (const lineAnim of this.lineAnimations) {
-        lineAnim.destroy();
+      lineAnim.destroy();
     }
     for (const lineCover of this.newLineCovers) {
-        lineCover.destroy();
+      lineCover.destroy();
     }
-    
+
     const animationIdx = CseAnimation.animations.indexOf(this);
     if (animationIdx >= 0) {
       CseAnimation.animations.splice(animationIdx, 1);
