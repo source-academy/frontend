@@ -1,3 +1,4 @@
+import { Rect as KonvaRect } from 'konva/lib/shapes/Rect';
 import React from 'react';
 import { Group, Rect } from 'react-konva';
 
@@ -59,6 +60,7 @@ export class Frame extends Visible implements IHoverable {
   readonly bindings: Binding[] = [];
   /** name of this frame to display */
   private _name!: Text; // removed readonly to allow reassignment for fixed layout
+  private readonly rectRef = React.createRef<KonvaRect | null>();
   /** the level in which this frame resides */
   readonly level: Level | undefined;
   /** environment associated with this frame */
@@ -90,9 +92,9 @@ export class Frame extends Visible implements IHoverable {
         this.leftSiblingFrame.totalDataWidth +
         Config.FrameMarginX
       : this.level.x();
-    // ensure x coordinate cannot be less than that of parent frame during default alignment
-    if (!CseMachine.getCenterAlignment() && this.parentFrame)
-      this._x = Math.max(this._x, this.parentFrame.x()); // added condition for center alignment
+    // Frames are strictly left-aligned within their level to prevent large gaps from forming.
+    // Previously, a frame's position was also influenced by its parent's position, which could
+    // cause an entire level of frames to be shifted undesirably.
     this._y = this.level.y() + Config.FontSize + Config.TextPaddingY / 2;
 
     // get all keys and object descriptors of each value inside the head
@@ -260,6 +262,26 @@ export class Frame extends Visible implements IHoverable {
 
   onMouseLeave = () => {};
 
+  setArrowSourceHighlightedStyle(): void {
+    if (this.isLive) {
+      this.rectRef.current?.stroke(Config.HoverColor);
+    } else {
+      this.rectRef.current?.stroke(Config.HoverDeadColor);
+    }
+    this.name.setArrowSourceHighlightedStyle();
+  }
+
+  setArrowSourceNormalStyle(): void {
+    this.rectRef.current?.stroke(
+      CseMachine.getCurrentEnvId() === this.environment?.id
+        ? defaultActiveColor()
+        : this.isLive
+          ? defaultStrokeColor()
+          : fadedStrokeColor()
+    );
+    this.name.setArrowSourceNormalStyle();
+  }
+
   draw(): React.ReactNode {
     return (
       <Group ref={this.ref} key={Layout.key++}>
@@ -267,6 +289,7 @@ export class Frame extends Visible implements IHoverable {
 
         <Rect
           {...ShapeDefaultProps}
+          ref={this.rectRef}
           x={this.x()}
           y={this.y()}
           width={this.width()}
