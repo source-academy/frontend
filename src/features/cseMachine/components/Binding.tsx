@@ -57,6 +57,7 @@ export class Binding extends Visible {
       this._y = this.frame.y() + Config.FramePaddingY;
     }
 
+    const GlobalDefaultText = this.keyString === Config.GlobalFrameDefaultText;
     const colon = isConstant ? 1 : 2; // 1 for constant (:= ), 2 for variable (: )
     this.keyString += isConstant ? Config.ConstantColon : Config.VariableColon;
     this.value = Layout.createValue(data, this);
@@ -67,8 +68,8 @@ export class Binding extends Visible {
         : (this.value.height() - Config.FontSize) / 2;
 
     this.keyYOffset = keyYOffset;
-    const availableKeyWidth = !this.frame.level?.parentLevel
-      ? Config.FrameDefaultWidth - Config.FramePaddingX * 2 // for global frame, use default frame width
+    const availableKeyWidth = GlobalDefaultText
+      ? Config.FrameDefaultWidth - Config.FramePaddingX * 2 // for GlobalFrameDefaultText, use default frame width
       : (this.frame.width() - Config.TextPaddingX - Config.FramePaddingX * 2) / 2;
 
     this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, {
