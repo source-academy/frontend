@@ -26,7 +26,7 @@ export interface TextOptions {
   isStringIdentifiable: boolean;
   faded: boolean;
   hidden: boolean;
-  value: number;
+  bindingType: number; // 0 = no binding, 1 = constant, 2 = variable
 }
 
 export const defaultOptions: TextOptions = {
@@ -38,7 +38,7 @@ export const defaultOptions: TextOptions = {
   isStringIdentifiable: false, // if true, contain strings within double quotation marks "". Default is false
   faded: false, // if true, draws text with a lighter shade
   hidden: false, // if true, hides the text when only when first drawn
-  value: 0 // if > 0, add colon or equal sign to the end of the text (given from binding)
+  bindingType: 0 // if > 0, add colon or equal sign to the end of the text (given from binding)
 };
 
 /** this class encapsulates a string to be drawn onto the canvas */
@@ -62,7 +62,7 @@ export class Text extends Visible implements IHoverable {
     super();
     this.options = { ...this.options, ...options };
 
-    const { fontSize, fontStyle, fontFamily, maxWidth, isStringIdentifiable, value } = this.options;
+    const { fontSize, fontStyle, fontFamily, maxWidth, isStringIdentifiable, bindingType } = this.options;
 
     this.fullStr = this.partialStr = isSourceObject(data)
       ? data.toReplString()
@@ -71,17 +71,17 @@ export class Text extends Visible implements IHoverable {
         : String(data);
     this._height = fontSize;
     this.partialStr =
-      value == 0
+      bindingType == 0 
         ? this.partialStr
-        : value === 1
+        : bindingType === 1
           ? this.partialStr.slice(0, -3)
           : this.partialStr.slice(0, -2);
     const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
     if (widthOf(this.partialStr) > maxWidth) {
       let truncatedText: string = Config.Ellipsis;
       let i = 0;
-      if (value > 0) {
-        const colon: string = value === 1 ? Config.ConstantColon : Config.VariableColon;
+      if (bindingType > 0) {
+        const colon: string = bindingType === 1 ? Config.ConstantColon : Config.VariableColon;
         while (widthOf(this.partialStr.substring(0, i) + Config.Ellipsis + colon) < maxWidth) {
           truncatedText = this.partialStr.substring(0, i++) + Config.Ellipsis + colon;
         }
@@ -94,7 +94,7 @@ export class Text extends Visible implements IHoverable {
       this.partialStr = truncatedText;
     } else {
       this.partialStr +=
-        value > 0 ? (value === 1 ? Config.ConstantColon : Config.VariableColon) : '';
+        bindingType > 0 ? (bindingType === 1 ? Config.ConstantColon : Config.VariableColon) : '';
       this._width = Math.max(Config.TextMinWidth, widthOf(this.partialStr));
     }
   }
