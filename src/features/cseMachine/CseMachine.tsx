@@ -53,6 +53,17 @@ export default class CseMachine {
     CseMachine.printLayoutCache = null;
     CseMachine.printLiveLayoutCache = null;
     CseMachine.usedBuiltInNames.clear();
+    CseMachine.clearMemoizedLayouts();
+  }
+  private static clearMemoizedLayouts(): void {
+    Layout.currentLight = undefined;
+    Layout.currentDark = undefined;
+    Layout.currentStackDark = undefined;
+    Layout.currentStackTruncDark = undefined;
+    Layout.currentStackLight = undefined;
+    Layout.currentStackTruncLight = undefined;
+    Layout.prevLayout = undefined;
+    Layout.key = 0;
   }
   public static clearLiveLayouts(): void {
     CseMachine.normalLiveLayoutCache = null;
