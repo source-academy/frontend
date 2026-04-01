@@ -15,8 +15,9 @@ import {
   defaultStrokeColor} from '../CseMachineUtils';
 import { Animatable } from './base/Animatable';
 import { AnimatedFnObject } from './base/AnimatedFnObject';
-import { AnimatedRectComponent, AnimatedTextComponent } from './base/AnimationComponents';
+import { AnimatedLineComponent, AnimatedRectComponent, AnimatedTextComponent } from './base/AnimationComponents';
 import { getNodePosition } from './base/AnimationUtils';
+import { ArrayNullUnit } from '../components/ArrayNullUnit';
 
 /**
  * Animation after clicking "Clear Dead Frames"
@@ -33,6 +34,9 @@ export class ClearDeadFramesAnimation extends Animatable {
 
   private fnAnimations: AnimatedFnObject[];
   private newFnCovers: AnimatedFnObject[];
+
+  private lineAnimations: AnimatedLineComponent[] = [];
+  private newLineCovers: AnimatedLineComponent[] = [];
 
   constructor(changedFramePairs: Frame[][]) {
     super();
@@ -200,13 +204,34 @@ export class ClearDeadFramesAnimation extends Animatable {
       if (oldUnit.value instanceof PrimitiveValue) {
         const oldValue: PrimitiveValue = oldUnit.value as PrimitiveValue;
         const newValue: PrimitiveValue = newUnit.value as PrimitiveValue;
-        if (oldValue.text instanceof Text) {
+        if (oldValue.text instanceof Text) { // TODO: text is a bit misaligned for some reason, including cover text
           console.log(oldValue);
           console.log(newValue);
           console.log(newValue.text);
           changedTextPairs.push([(oldValue.text as Text), (newValue.text as Text)]);
-        } // TODO: text is a bit misaligned for some reason, including cover text
-        // TODO: Account for ArrayNullUnit
+        } else if (oldValue.text instanceof ArrayNullUnit) {
+          let { x, y, height, width } = getNodePosition(oldValue.text as ArrayNullUnit);
+          this.lineAnimations.push(
+            new AnimatedLineComponent({
+              x: x,
+              y: y,
+              points: [0, height, width, 0]
+            })
+          );
+          ({ x, y, height, width } = getNodePosition(newValue.text as ArrayNullUnit));
+          this.newLineCovers.push(
+            new AnimatedLineComponent({
+              x: x,
+              y: y,
+              points: [0, height, width, 0],
+              stroke: defaultBackgroundColor(),
+              strokeWidth: 4
+            })
+          );
+          console.log(this.lineAnimations)
+          console.log(this.newLineCovers)
+        }
+        
       } else if (oldUnit.value instanceof FnValue) {
         changedFnPairs.push([(oldUnit.value as FnValue), (newUnit.value as FnValue)]);
       } else if (oldUnit.value instanceof ArrayValue) {
@@ -224,9 +249,11 @@ export class ClearDeadFramesAnimation extends Animatable {
   draw(): React.ReactNode {
     return (
       <Group key={Animatable.key--} ref={this.ref}>
+        {this.newLineCovers.map((rect) => rect.draw())}
         {this.newFrameCovers.map((rect) => rect.draw())}
         {this.newTextCovers.map((rect) => rect.draw())}
         {this.newFnCovers.map((rect) => rect.draw())}
+        {this.lineAnimations.map((rect) => rect.draw())}
         {this.frameAnimations.map((rect) => rect.draw())}
         {this.textAnimations.map((rect) => rect.draw())}
         {this.fnAnimations.map((rect) => rect.draw())}
@@ -247,6 +274,13 @@ export class ClearDeadFramesAnimation extends Animatable {
       const newTextPosition = getNodePosition(this.newTextCovers[textIdx]);
       this.textAnimations[textIdx].animateTo({
         x: newTextPosition.x, y: newTextPosition.y
+      }, { duration: 2 })
+    }
+    // ArrayNullUnit's line
+    for (let lineIdx = 0; lineIdx < this.lineAnimations.length; lineIdx++) {
+      const newLinePosition = getNodePosition(this.newLineCovers[lineIdx]);
+      this.lineAnimations[lineIdx].animateTo({
+        x: newLinePosition.x, y: newLinePosition.y
       }, { duration: 2 })
     }
     // FN OBJECTS
@@ -282,8 +316,14 @@ export class ClearDeadFramesAnimation extends Animatable {
     for (const fnAnim of this.fnAnimations) {
         fnAnim.destroy();
     }
-    for (const fnCover of this.fnAnimations) {
+    for (const fnCover of this.newFnCovers) {
         fnCover.destroy();
+    }
+    for (const lineAnim of this.lineAnimations) {
+        lineAnim.destroy();
+    }
+    for (const lineCover of this.newLineCovers) {
+        lineCover.destroy();
     }
   }
 }
