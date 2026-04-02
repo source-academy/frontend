@@ -3,10 +3,12 @@ import { Group } from 'react-konva';
 
 import { ArrayNullUnit } from '../components/ArrayNullUnit';
 import { ArrayUnit } from '../components/ArrayUnit';
+import { Binding } from '../components/Binding';
 import { Frame } from '../components/Frame';
 import { Text } from '../components/Text';
 import { ArrayValue } from '../components/values/ArrayValue';
 import { FnValue } from '../components/values/FnValue';
+import { GlobalFnValue } from '../components/values/GlobalFnValue';
 import { PrimitiveValue } from '../components/values/PrimitiveValue';
 import CseMachine from '../CseMachine';
 import { CseAnimation } from '../CseMachineAnimation';
@@ -40,14 +42,29 @@ export class ClearDeadFramesAnimation extends Animatable {
   private lineAnimations: AnimatedLineComponent[] = [];
   private newLineCovers: AnimatedLineComponent[] = [];
 
+  private static getBindingIdentity(binding: Binding): string {
+    if (!binding.isDummyBinding) {
+      return `binding:${binding.keyString}`;
+    }
+
+    const data = binding.data as { id?: string | number };
+    if (data && data.id !== undefined) {
+      return `dummy:${String(data.id)}`;
+    }
+
+    return `dummy:${binding.keyString}:${typeof binding.data}:${String(binding.data)}`;
+  }
+
   constructor(changedFramePairs: Frame[][]) {
     super();
     CseAnimation.setHideReferenceArrows(true);
-    CseAnimation.setHiddenFrameIds(changedFramePairs.map(([, newFrame]) => newFrame.environment.id));
+    CseAnimation.setHiddenFrameIds(
+      changedFramePairs.map(([, newFrame]) => newFrame.environment.id)
+    );
 
     // changedTextPairs only account for binding keys and text values
     const changedTextPairs: Text[][] = [];
-    const changedFnPairs: FnValue[][] = [];
+    const changedFnPairs: Array<[FnValue | GlobalFnValue, FnValue | GlobalFnValue]> = [];
 
     // FRAMES
     this.frameAnimations = [];
@@ -78,40 +95,54 @@ export class ClearDeadFramesAnimation extends Animatable {
 
       // For each binding in this frame
       const oldBindings = framePair[0].bindings;
-      const newBindings = framePair[1].bindings;
-      for (let i = 0; i < oldBindings.length; i++) {
-        // Defensive check in case accessing newBindings[i] causes out-of-bounds
-        if (i >= newBindings.length) {
+      const newBindingsByIdentity = new Map(
+        framePair[1].bindings.map(binding => [
+          ClearDeadFramesAnimation.getBindingIdentity(binding),
+          binding
+        ])
+      );
+      for (const oldBinding of oldBindings) {
+        const newBinding = newBindingsByIdentity.get(
+          ClearDeadFramesAnimation.getBindingIdentity(oldBinding)
+        );
+        if (!newBinding) {
           continue;
         }
 
-        if (oldBindings[i].isDummyBinding == false) {
-          changedTextPairs.push([oldBindings[i].key, newBindings[i].key]);
+        if (oldBinding.isDummyBinding == false) {
+          changedTextPairs.push([oldBinding.key, newBinding.key]);
 
           // Create animations for primitive text values
-          if (oldBindings[i].value instanceof PrimitiveValue) {
-            const oldValue: PrimitiveValue = oldBindings[i].value as PrimitiveValue;
-            const newValue: PrimitiveValue = newBindings[i].value as PrimitiveValue;
+          if (
+            oldBinding.value instanceof PrimitiveValue &&
+            newBinding.value instanceof PrimitiveValue
+          ) {
+            const oldValue: PrimitiveValue = oldBinding.value as PrimitiveValue;
+            const newValue: PrimitiveValue = newBinding.value as PrimitiveValue;
             if (oldValue.text instanceof Text) {
               changedTextPairs.push([oldValue.text as Text, newValue.text as Text]);
             }
           }
         }
 
-        // Create animations for FnValue, even if is dummy binding
-        if (oldBindings[i].value instanceof FnValue) {
-          const oldFn: FnValue = oldBindings[i].value as FnValue;
-          if (oldFn.isLive()) {
-            const newFn: FnValue = newBindings[i].value as FnValue;
-            changedFnPairs.push([oldFn, newFn]);
+        // Create animations for function objects, even if is dummy binding
+        if (
+          (oldBinding.value instanceof FnValue || oldBinding.value instanceof GlobalFnValue) &&
+          (newBinding.value instanceof FnValue || newBinding.value instanceof GlobalFnValue)
+        ) {
+          const oldFn = oldBinding.value;
+          const oldFnVisible =
+            oldFn instanceof GlobalFnValue ? oldFn.isReferenced() : oldFn.isLive();
+          if (oldFnVisible) {
+            changedFnPairs.push([oldFn, newBinding.value]);
           }
         }
 
         // Create animations for ArrayValue, even if is dummy binding
-        if (oldBindings[i].value instanceof ArrayValue) {
-          const oldArr: ArrayValue = oldBindings[i].value as ArrayValue;
+        if (oldBinding.value instanceof ArrayValue && newBinding.value instanceof ArrayValue) {
+          const oldArr: ArrayValue = oldBinding.value as ArrayValue;
           if (oldArr.isLive()) {
-            const newArr: ArrayValue = newBindings[i].value as ArrayValue;
+            const newArr: ArrayValue = newBinding.value as ArrayValue;
 
             if (oldArr.units.length == 0) {
               // Only ArrayEmptyUnit
@@ -197,7 +228,7 @@ export class ClearDeadFramesAnimation extends Animatable {
     newArr: ArrayValue,
     changedFramePairs: Frame[][],
     changedTextPairs: Text[][],
-    changedFnPairs: FnValue[][]
+    changedFnPairs: Array<[FnValue | GlobalFnValue, FnValue | GlobalFnValue]>
   ): void {
     // Check each ArrayUnit, add them accordingly
     for (let unitIdx = 0; unitIdx < oldArr.units.length; unitIdx++) {

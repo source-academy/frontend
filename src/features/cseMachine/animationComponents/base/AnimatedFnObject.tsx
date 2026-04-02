@@ -2,6 +2,7 @@ import { CircleConfig } from 'konva/lib/shapes/Circle';
 import { Group } from 'react-konva';
 
 import { FnValue } from '../../components/values/FnValue';
+import { GlobalFnValue } from '../../components/values/GlobalFnValue';
 import { Config } from '../../CseMachineConfig';
 import { defaultBackgroundColor, defaultStrokeColor } from '../../CseMachineUtils';
 import { Animatable, AnimatableTo, AnimationConfig } from './Animatable';
@@ -22,7 +23,7 @@ export class AnimatedFnObject extends AnimatableTo<CircleConfig> {
     if (props.height !== undefined) this._height = props.height;
   };
 
-  constructor(fn: FnValue, props?: CircleConfig, isCover?: boolean) {
+  constructor(fn: FnValue | GlobalFnValue, props?: CircleConfig, isCover?: boolean) {
     super();
     this._x = fn.x();
     this._y = fn.y();
