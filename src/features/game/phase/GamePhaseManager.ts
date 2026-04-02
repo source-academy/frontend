@@ -1,6 +1,7 @@
 import { Constants } from '../commons/CommonConstants';
 import { IGameUI } from '../commons/CommonTypes';
 import GameInputManager from '../input/GameInputManager';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { GamePhaseType, GameTerminalPhaseType } from './GamePhaseTypes';
 
 /**
@@ -114,6 +115,7 @@ export default class GamePhaseManager {
    * @param newPhase phase to swap to
    */
   public async swapPhase(newPhase: GamePhaseType): Promise<void> {
+    GameGlobalAPI.getInstance().hideTooltip();
     const prevPhase = this.getCurrentPhase();
     if (newPhase === prevPhase) return;
     this.phaseStack.pop();

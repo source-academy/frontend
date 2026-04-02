@@ -31,6 +31,7 @@ import SourceAcademyGame from '../../SourceAcademyGame';
 import GameStateManager from '../../state/GameStateManager';
 import GameTaskLogManager from '../../task/GameTaskLogManager';
 import GameToolbarManager from '../../toolbar/GameToolbarManager';
+import TooltipManager from '../../tooltip/TooltipManager';
 import { mandatory, sleep, toS3Path } from '../../utils/GameUtils';
 import GameGlobalAPI from './GameGlobalAPI';
 import { createGamePhases } from './GameManagerHelper';
@@ -77,6 +78,7 @@ class GameManager extends Phaser.Scene {
   private dashboardManager?: GameDashboardManager;
   private quizManager?: GameQuizManager;
   private topicManager?: TopicListManager;
+  private tooltipManager?: TooltipManager;
   private actionJustSaved: boolean = false;
 
   constructor() {
@@ -130,6 +132,7 @@ class GameManager extends Phaser.Scene {
     );
     this.quizManager = new GameQuizManager();
     this.topicManager = new TopicListManager();
+    this.tooltipManager = new TooltipManager();
   }
 
   //////////////////////
@@ -190,6 +193,8 @@ class GameManager extends Phaser.Scene {
 
   public async create() {
     GameGlobalAPI.getInstance().hideLayer(Layer.Character);
+    // add a tooltip to the scene to be used as needed
+    this.getTooltipManager().addTooltip(); 
     await this.changeLocationTo(this.currentLocationId, true);
   }
 
@@ -231,9 +236,9 @@ class GameManager extends Phaser.Scene {
       await this.getActionManager().processGameActions(
         this.getStateManager().getGameMap().getGameStartActions()
       );
-
+      // By default, change the mode into Explore
       if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Sequence)) {
-        await this.getPhaseManager().swapPhase(GamePhaseType.Explore); // by default the game is in explore mode at start
+        await this.getPhaseManager().swapPhase(GamePhaseType.Explore); 
       }
     }
 
@@ -242,7 +247,7 @@ class GameManager extends Phaser.Scene {
 
     // Location notification
     await GameGlobalAPI.getInstance().bringUpUpdateNotif(gameLocation.name);
-    this.getStateManager().removeLocationNotif(locationId); // will it be better to have location notification all the time?
+    this.getStateManager().removeLocationNotif(locationId);
   }
 
   /**
@@ -255,6 +260,7 @@ class GameManager extends Phaser.Scene {
    */
   public async changeLocationTo(locationId: LocationId, startAction: boolean = false) {
     this.currentLocationId = locationId;
+    this.getTooltipManager().hideTooltip();
 
     //Reset the actionJustSaved flag
     this.actionJustSaved = false;
@@ -273,7 +279,11 @@ class GameManager extends Phaser.Scene {
       return;
     }
   }
-
+  /**
+   * Change location to the location cannot reach from current scene
+   * 
+   * @param locationId id of the current location
+   */
   public async restoreLocation(locationId: LocationId) {
     const gameLocation = GameGlobalAPI.getInstance().getLocationAtId(locationId);
     this.changeLocationTo(gameLocation.back, true);
@@ -388,6 +398,7 @@ class GameManager extends Phaser.Scene {
   public getDashboardManager = () => mandatory(this.dashboardManager);
   public getQuizManager = () => mandatory(this.quizManager);
   public getTopicManager = () => mandatory(this.topicManager);
+  public getTooltipManager = () => mandatory(this.tooltipManager);
 }
 
 export default GameManager;

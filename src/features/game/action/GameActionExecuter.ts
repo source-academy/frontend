@@ -17,7 +17,6 @@ export default class GameActionExecuter {
    */
   public static async executeGameAction(actionType: GameActionType, actionParams: any) {
     const globalAPI = GameGlobalAPI.getInstance();
-
     switch (actionType) {
       case GameActionType.AddItem:
         globalAPI.addItem(actionParams.gameItemType, actionParams.locationId, actionParams.id);

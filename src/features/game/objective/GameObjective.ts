@@ -54,6 +54,8 @@ class GameObjective {
    * Check whether all the objectives are complete.
    */
   public isAllComplete(): boolean {
+    console.log(this.numOfCompletedObjectives);
+    console.log(this.totalNumOfObjectives);
     return this.numOfCompletedObjectives >= this.totalNumOfObjectives;
   }
 
