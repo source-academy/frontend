@@ -25,7 +25,7 @@ import { Binding } from './components/Binding';
 import { ControlItemComponent } from './components/ControlItemComponent';
 import { isNode } from './components/ControlStack';
 import { Frame } from './components/Frame';
-import { Level } from './components/Level'; // CHANGEDD
+import { Level } from './components/Level';
 import { StashItemComponent } from './components/StashItemComponent';
 import { ArrayValue } from './components/values/ArrayValue';
 import { ContValue } from './components/values/ContValue';
@@ -383,7 +383,6 @@ export function computeLiveState(envTree: EnvTree): {
   return liveState;
 }
 
-// CHANGEDD
 /** Returns an array of pairs of frames.
  * The two frames in each pair represent the same frame in concept, but the frame's position has
  * shifted between steps, creating two distinct Frame objects.
@@ -438,7 +437,6 @@ export function computeFramesCoordChange(oldLevels: Level[], newLevels: Level[])
 
   return result;
 }
-// END CHANGEDD
 
 /** Returns a set with the elements in `set1` that are not in `set2` */
 export function setDifference<T>(set1: Set<T>, set2: Set<T>) {

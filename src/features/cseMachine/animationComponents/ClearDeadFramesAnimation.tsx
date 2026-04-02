@@ -248,8 +248,6 @@ export class ClearDeadFramesAnimation extends Animatable {
               strokeWidth: 4
             })
           );
-          console.log(this.lineAnimations);
-          console.log(this.newLineCovers);
         }
       } else if (oldUnit.value instanceof FnValue) {
         changedFnPairs.push([oldUnit.value as FnValue, newUnit.value as FnValue]);
