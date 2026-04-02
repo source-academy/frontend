@@ -83,7 +83,8 @@ export class Text extends Visible implements IHoverable {
       let truncatedText: string = Config.Ellipsis;
       let i = 0;
       if (bindingType !== 'none') {
-        const colon: string = bindingType === 'constant' ? Config.ConstantColon : Config.VariableColon;
+        const colon: string =
+          bindingType === 'constant' ? Config.ConstantColon : Config.VariableColon;
         while (widthOf(this.partialStr.substring(0, i) + Config.Ellipsis + colon) < maxWidth) {
           truncatedText = this.partialStr.substring(0, i++) + Config.Ellipsis + colon;
         }
@@ -96,7 +97,11 @@ export class Text extends Visible implements IHoverable {
       this.partialStr = truncatedText;
     } else {
       this.partialStr +=
-        bindingType !== 'none' ? (bindingType === 'constant' ? Config.ConstantColon : Config.VariableColon) : '';
+        bindingType !== 'none'
+          ? bindingType === 'constant'
+            ? Config.ConstantColon
+            : Config.VariableColon
+          : '';
       this._width = Math.max(Config.TextMinWidth, widthOf(this.partialStr));
     }
   }
