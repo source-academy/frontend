@@ -9,7 +9,8 @@ export const Config = Object.freeze({
   LevelPaddingY: 10,
 
   FrameMinWidth: 100,
-  FrameDefaultWidth: 256, // default width according to global frame width
+  // default width according to global text width (216) * 2 + padding (20) * 2
+  FrameDefaultWidth: 472,
   FramePaddingX: 20,
   FramePaddingY: 30,
   FrameMinGapX: 80,

@@ -170,7 +170,7 @@ export class Frame extends Visible implements IHoverable {
       }
       // To replace later
       this._width = Math.max(this._width, bindingTextWidth + Config.FramePaddingX * 2);
-      // this._width = Config.FrameDefaultWidth;
+      this._width = Math.min(this._width, Config.FrameDefaultWidth); // cap the frame width to default width
     }
 
     // Create all the bindings and values

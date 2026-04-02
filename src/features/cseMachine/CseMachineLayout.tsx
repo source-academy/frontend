@@ -62,7 +62,7 @@ import { Continuation, isContinuation } from './utils/continuation';
 export type LayoutCache = {
   framesX: Map<string, number>;
   framesY: Map<string, number>;
-  framesWidth: Map<string, number>; // addded to test width
+  framesWidth: Map<string, number>;
   levelWidth: Map<string, number>;
   largestWidth: number;
 };
@@ -768,8 +768,8 @@ export class Layout {
   static getLayoutPositions(controlStash: boolean): LayoutCache {
     const cache: LayoutCache = {
       framesX: new Map(),
-      framesY: new Map(), // added template
-      framesWidth: new Map(), // addded to test width
+      framesY: new Map(),
+      framesWidth: new Map(),
       levelWidth: new Map(),
       largestWidth: 0
     };
@@ -784,8 +784,8 @@ export class Layout {
       cache.largestWidth = Math.max(cache.largestWidth, currWidth);
       frames.forEach(frame => {
         cache.framesX.set(frame.environment.id, frame.x() - offset);
-        cache.framesWidth.set(frame.environment.id, frame.width()); // addded to test width
-        cache.framesY.set(frame.environment.id, frame.y()); // added template
+        cache.framesWidth.set(frame.environment.id, frame.width());
+        cache.framesY.set(frame.environment.id, frame.y());
         cache.levelWidth.set(frame.environment.id, currWidth);
       });
     });
@@ -828,7 +828,6 @@ export class Layout {
   }
 
   static getGhostFrameWidth(envId: string): number | undefined {
-    // added template
     const cache = CseMachine.getMasterLayout();
     if (cache && cache.framesWidth.has(envId)) {
       const fixedWidth = cache.framesWidth.get(envId)!;
@@ -859,6 +858,7 @@ export class Layout {
           });
         }
 
+        // TODO: fix y coordinate
         // get predetermined y coordinate
         // if (cache.framesY.has(id)) {
         //   const fixedY = Layout.getGhostFrameY(id)!;
@@ -872,35 +872,6 @@ export class Layout {
           const currentWidth = frame.width();
           frame.reassignWidth(Math.max(currentWidth, fixedWidth));
         }
-      });
-    });
-  }
-
-  static applyCenterAlignment() {
-    // don't have usage yet
-    if (!CseMachine.getMasterLayout()) {
-      return;
-    }
-    const cache = CseMachine.getMasterLayout()!; // getLayoutPositions() must have been called before
-    Layout.levels.forEach(level => {
-      level.frames.forEach(frame => {
-        const id = frame.environment.id;
-
-        // const fixedX = Layout.getGhostFrameX(id)!;
-        let fixedX = cache.framesX.get(id)!;
-        // add offset for control stash and center alignment
-        let offset: number = 0;
-        offset += CseMachine.getControlStash()
-          ? ControlStashConfig.ControlPosX + ControlStashConfig.ControlItemWidth
-          : 0;
-        offset += CseMachine.getCenterAlignment()
-          ? Math.floor((cache.largestWidth - cache.levelWidth.get(id)!) / 2)
-          : 0;
-        fixedX += offset;
-        frame.reassignCoordinatesX(fixedX);
-        frame.bindings.forEach(binding => {
-          binding.reassignCoordinates(fixedX);
-        });
       });
     });
   }
