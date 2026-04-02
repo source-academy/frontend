@@ -370,7 +370,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                                 return originalDraw.apply(Layout);
                               } finally {
                                 Layout.draw = originalDraw;
-                              } 
+                              }
                             };
                             CseMachine.redraw();
                           }
