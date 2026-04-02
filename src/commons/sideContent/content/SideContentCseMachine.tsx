@@ -343,7 +343,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                           }),
                           () => {
                             CseMachine.setClearDeadFrames(this.state.clearDeadFrames);
-                            CseMachine.clearCachedLayouts();
+                            CseMachine.clearLiveLayouts();
                             CseMachine.redraw();
                           }
                         );
@@ -449,7 +449,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   private sliderShift = (newValue: number) => {
     if (this.state.clearDeadFrames) {
       CseMachine.setClearDeadFrames(false);
-      CseMachine.clearCachedLayouts();
+      CseMachine.clearLiveLayouts();
       CseMachine.redraw();
     }
     this.props.handleStepUpdate(newValue);
