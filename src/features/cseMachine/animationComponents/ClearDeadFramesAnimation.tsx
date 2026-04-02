@@ -126,6 +126,13 @@ export class ClearDeadFramesAnimation extends Animatable {
         })
       );
 
+      changedTextPairs.push({
+        oldText: framePair[0].name,
+        newText: framePair[1].name,
+        targetX: framePair[1].name.x(),
+        targetY: framePair[1].name.y()
+      });
+
       // For each binding in this frame
       const oldBindings = framePair[0].bindings;
       const newBindingsByIdentity = new Map(
