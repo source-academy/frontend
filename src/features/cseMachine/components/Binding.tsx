@@ -58,7 +58,7 @@ export class Binding extends Visible {
     }
 
     const GlobalDefaultText = this.keyString === Config.GlobalFrameDefaultText;
-    const colon = isConstant ? 1 : 2; // 1 for constant (:= ), 2 for variable (: )
+    const colon = isConstant ? 'constant' : 'variable';
     this.keyString += isConstant ? Config.ConstantColon : Config.VariableColon;
     this.value = Layout.createValue(data, this);
 

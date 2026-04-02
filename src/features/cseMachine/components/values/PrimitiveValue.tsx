@@ -90,13 +90,7 @@ export class PrimitiveValue extends Value {
     if (reference) {
       if (reference instanceof Binding) {
         // If attached to a variable name
-        const colon = reference.isConstant ? Config.ConstantColon : Config.VariableColon;
-        this._x = Math.min(
-          reference.x() + getTextWidth(reference.keyString) + Config.TextPaddingX,
-          reference.frame.x() +
-            (reference.frame.width() - Config.TextPaddingX - Config.FramePaddingX * 2) / 2 +
-            getTextWidth(colon)
-        );
+        this._x = reference.x() + reference.key.width() + Config.TextPaddingX;
         this._y = reference.y();
       } else {
         const textWidth = this.text.width();

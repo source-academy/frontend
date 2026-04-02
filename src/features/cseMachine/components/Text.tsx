@@ -26,7 +26,7 @@ export interface TextOptions {
   isStringIdentifiable: boolean;
   faded: boolean;
   hidden: boolean;
-  bindingType: number; // 0 = no binding, 1 = constant, 2 = variable
+  bindingType: 'none' | 'constant' | 'variable';
 }
 
 export const defaultOptions: TextOptions = {
@@ -38,7 +38,7 @@ export const defaultOptions: TextOptions = {
   isStringIdentifiable: false, // if true, contain strings within double quotation marks "". Default is false
   faded: false, // if true, draws text with a lighter shade
   hidden: false, // if true, hides the text when only when first drawn
-  bindingType: 0 // if > 0, add colon or equal sign to the end of the text (given from binding)
+  bindingType: 'none' // if > 0, add colon or equal sign to the end of the text (given from binding)
 };
 
 /** this class encapsulates a string to be drawn onto the canvas */
@@ -46,8 +46,8 @@ export class Text extends Visible implements IHoverable {
   readonly _height: number;
   readonly _width: number;
 
-  private partialStr: string; // truncated string representation of data
-  private fullStr: string; // full string representation of data
+  public partialStr: string; // truncated string representation of data
+  readonly fullStr: string; // full string representation of data
 
   readonly options: TextOptions = defaultOptions;
   readonly labelRef: React.RefObject<Label | null> = React.createRef();
@@ -74,16 +74,16 @@ export class Text extends Visible implements IHoverable {
     const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
     const originalWidth = widthOf(this.partialStr);
     this.partialStr =
-      bindingType === 0
+      bindingType === 'none'
         ? this.partialStr
-        : bindingType === 1
+        : bindingType === 'constant'
           ? this.partialStr.slice(0, -Config.ConstantColon.length)
           : this.partialStr.slice(0, -Config.VariableColon.length);
     if (originalWidth > maxWidth) {
       let truncatedText: string = Config.Ellipsis;
       let i = 0;
-      if (bindingType > 0) {
-        const colon: string = bindingType === 1 ? Config.ConstantColon : Config.VariableColon;
+      if (bindingType !== 'none') {
+        const colon: string = bindingType === 'constant' ? Config.ConstantColon : Config.VariableColon;
         while (widthOf(this.partialStr.substring(0, i) + Config.Ellipsis + colon) < maxWidth) {
           truncatedText = this.partialStr.substring(0, i++) + Config.Ellipsis + colon;
         }
@@ -96,7 +96,7 @@ export class Text extends Visible implements IHoverable {
       this.partialStr = truncatedText;
     } else {
       this.partialStr +=
-        bindingType > 0 ? (bindingType === 1 ? Config.ConstantColon : Config.VariableColon) : '';
+        bindingType !== 'none' ? (bindingType === 'constant' ? Config.ConstantColon : Config.VariableColon) : '';
       this._width = Math.max(Config.TextMinWidth, widthOf(this.partialStr));
     }
   }
