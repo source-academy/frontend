@@ -66,7 +66,7 @@ export class FnValue extends Value implements IHoverable {
     firstReference: ReferenceType
   ) {
     super();
-    console.log(CseMachine.getStreamLineage((data as any).id))
+    //console.log(CseMachine.getStreamLineage((data as any).id))
     Layout.memoizeValue(data, this);
     this.centerX = 0;
     this._width = this.radius * 4;
@@ -161,7 +161,7 @@ export class FnValue extends Value implements IHoverable {
     
     // Pass the count as the offsetIndex
     this._streamArrows?.push(
-      new ArrowFromStreamNullaryFn(this).to(target) as ArrowFromStreamNullaryFn
+      new ArrowFromStreamNullaryFn(this, currentCount).to(target) as ArrowFromStreamNullaryFn
     );
   }
 
@@ -179,13 +179,17 @@ export class FnValue extends Value implements IHoverable {
   };
 
   draw(): React.ReactNode {
-    console.log("DRAW")
     const pairs = CseMachine.getStreamLineage((this.data as any).id)
-
+    this._streamArrows = [];
     if (CseMachine.getPairCreationMode()) {
+      // Clear arrows to prevent duplicates from multiple draw calls
+
       if(pairs != undefined) {
         for(const pair of pairs) {
-          this.addArrow(Layout.values.get(pair));
+          const target = Layout.values.get(pair);
+          if (target) {
+            this.addArrow(target);
+          }
         }
       }
     }
