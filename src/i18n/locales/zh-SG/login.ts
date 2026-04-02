@@ -1,0 +1,6 @@
+const translations = {
+  'Logging In': '登录中...',
+  'Log in with': '使用 {{name}} 登录'
+};
+
+export default translations;
