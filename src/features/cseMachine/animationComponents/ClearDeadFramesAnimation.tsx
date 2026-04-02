@@ -27,6 +27,13 @@ import { getNodePosition } from './base/AnimationUtils';
  * Animation after clicking "Clear Dead Frames"
  * Shifts frames to close gaps
  */
+type AnimatedTextPair = {
+  oldText: Text;
+  newText: Text;
+  targetX: number;
+  targetY: number;
+};
+
 export class ClearDeadFramesAnimation extends Animatable {
   private frameAnimations: AnimatedRectComponent[];
   private newFrameCovers: AnimatedRectComponent[];
@@ -41,6 +48,30 @@ export class ClearDeadFramesAnimation extends Animatable {
 
   private lineAnimations: AnimatedLineComponent[] = [];
   private newLineCovers: AnimatedLineComponent[] = [];
+
+  private static getBindingKeyTarget(binding: Binding): Pick<AnimatedTextPair, 'targetX' | 'targetY'> {
+    return {
+      targetX: binding.x(),
+      targetY: binding.y() + binding.keyYOffset
+    };
+  }
+
+  private static getBindingValueTarget(
+    binding: Binding,
+    value: PrimitiveValue
+  ): Pick<AnimatedTextPair, 'targetX' | 'targetY'> {
+    if (!(value.text instanceof Text)) {
+      return {
+        targetX: value.x(),
+        targetY: value.y()
+      };
+    }
+
+    return {
+      targetX: binding.x() + binding.key.width() + Config.TextPaddingX,
+      targetY: binding.y()
+    };
+  }
 
   private static getBindingIdentity(binding: Binding): string {
     if (!binding.isDummyBinding) {
@@ -63,7 +94,7 @@ export class ClearDeadFramesAnimation extends Animatable {
     );
 
     // changedTextPairs only account for binding keys and text values
-    const changedTextPairs: Text[][] = [];
+    const changedTextPairs: AnimatedTextPair[] = [];
     const changedFnPairs: Array<[FnValue | GlobalFnValue, FnValue | GlobalFnValue]> = [];
 
     // FRAMES
@@ -110,7 +141,12 @@ export class ClearDeadFramesAnimation extends Animatable {
         }
 
         if (oldBinding.isDummyBinding == false) {
-          changedTextPairs.push([oldBinding.key, newBinding.key]);
+          const keyTarget = ClearDeadFramesAnimation.getBindingKeyTarget(newBinding);
+          changedTextPairs.push({
+            oldText: oldBinding.key,
+            newText: newBinding.key,
+            ...keyTarget
+          });
 
           // Create animations for primitive text values
           if (
@@ -120,7 +156,12 @@ export class ClearDeadFramesAnimation extends Animatable {
             const oldValue: PrimitiveValue = oldBinding.value as PrimitiveValue;
             const newValue: PrimitiveValue = newBinding.value as PrimitiveValue;
             if (oldValue.text instanceof Text) {
-              changedTextPairs.push([oldValue.text as Text, newValue.text as Text]);
+              const valueTarget = ClearDeadFramesAnimation.getBindingValueTarget(newBinding, newValue);
+              changedTextPairs.push({
+                oldText: oldValue.text as Text,
+                newText: newValue.text as Text,
+                ...valueTarget
+              });
             }
           }
         }
@@ -180,18 +221,18 @@ export class ClearDeadFramesAnimation extends Animatable {
     this.textAnimations = [];
     this.newTextCovers = [];
     for (const textPair of changedTextPairs) {
-      const oldTextPosition = getNodePosition(textPair[0]);
+      const oldTextPosition = getNodePosition(textPair.oldText);
       this.textAnimations.push(
         new AnimatedTextComponent({
           ...oldTextPosition,
-          text: textPair[0].partialStr
+          text: textPair.oldText.partialStr
         })
       );
-      const newTextPosition = getNodePosition(textPair[1]);
       this.newTextCovers.push(
         new AnimatedTextComponent({
-          ...newTextPosition,
-          text: textPair[1].partialStr,
+          x: textPair.targetX,
+          y: textPair.targetY,
+          text: textPair.newText.partialStr,
           fill: defaultBackgroundColor(),
           stroke: defaultBackgroundColor(),
           strokeWidth: 4 // stroke is required for strokeWidth
@@ -265,7 +306,12 @@ export class ClearDeadFramesAnimation extends Animatable {
         const newValue: PrimitiveValue = newUnit.value as PrimitiveValue;
         if (oldValue.text instanceof Text) {
           // TODO: text is a bit misaligned for some reason, including cover text
-          changedTextPairs.push([oldValue.text as Text, newValue.text as Text]);
+          changedTextPairs.push({
+            oldText: oldValue.text as Text,
+            newText: newValue.text as Text,
+            targetX: newValue.x(),
+            targetY: newValue.y()
+          });
         } else if (oldValue.text instanceof ArrayNullUnit) {
           let { x, y, height, width } = getNodePosition(oldValue.text as ArrayNullUnit);
           this.lineAnimations.push(
