@@ -27,7 +27,6 @@ class GameModeExplore implements IGameUI {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const exploreMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
     return exploreMenuContainer;
-
   }
 
   /**
@@ -58,10 +57,12 @@ class GameModeExplore implements IGameUI {
     const currentLocationId = GameGlobalAPI.getInstance().getCurrLocId();
     const currentLocation = GameGlobalAPI.getInstance().getLocationAtId(currentLocationId);
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
-    
+
     //Only add the leave button into the ui when storywriters need a leave button to go to a location
-    this.uiContainer = currentLocation.back? this.createUIContainerWithLeaveButton(): this.createUIContainer();
-    
+    this.uiContainer = currentLocation.back
+      ? this.createUIContainerWithLeaveButton()
+      : this.createUIContainer();
+
     GameGlobalAPI.getInstance().addToLayer(Layer.UI, this.uiContainer);
 
     this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
@@ -120,20 +121,20 @@ class GameModeExplore implements IGameUI {
           return;
         }
 
-        activatable.clickArea.on('pointerout', () =>{
-          this.explorePointerOut(activatable.interactionId)
+        activatable.clickArea.on('pointerout', () => {
+          this.explorePointerOut(activatable.interactionId);
           GameGlobalAPI.getInstance().hideTooltip();
         });
-        activatable.clickArea.on('pointerover', (pointer : Phaser.Input.Pointer) =>{
+        activatable.clickArea.on('pointerover', (pointer: Phaser.Input.Pointer) => {
           this.explorePointerOver(activatable.interactionId, pointer.x, pointer.y);
-          });
+        });
         activatable.clickArea.on('pointerup', async () => {
           this.explorePointerUp(activatable.interactionId);
           await GameGlobalAPI.getInstance().processGameActions(activatable.actionIds);
         });
-        activatable.clickArea.on('pointermove', (pointer : Phaser.Input.Pointer) => {
+        activatable.clickArea.on('pointermove', (pointer: Phaser.Input.Pointer) => {
           GameGlobalAPI.getInstance().moveTooltip(pointer.x, pointer.y);
-        })
+        });
       });
   }
 

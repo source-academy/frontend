@@ -194,7 +194,7 @@ class GameManager extends Phaser.Scene {
   public async create() {
     GameGlobalAPI.getInstance().hideLayer(Layer.Character);
     // add a tooltip to the scene to be used as needed
-    this.getTooltipManager().addTooltip(); 
+    this.getTooltipManager().addTooltip();
     await this.changeLocationTo(this.currentLocationId, true);
   }
 
@@ -238,7 +238,7 @@ class GameManager extends Phaser.Scene {
       );
       // By default, change the mode into Explore
       if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Sequence)) {
-        await this.getPhaseManager().swapPhase(GamePhaseType.Explore); 
+        await this.getPhaseManager().swapPhase(GamePhaseType.Explore);
       }
     }
 
@@ -281,7 +281,7 @@ class GameManager extends Phaser.Scene {
   }
   /**
    * Change location to the location cannot reach from current scene
-   * 
+   *
    * @param locationId id of the current location
    */
   public async restoreLocation(locationId: LocationId) {

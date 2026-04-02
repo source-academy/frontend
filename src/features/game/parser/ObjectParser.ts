@@ -84,7 +84,7 @@ export default class ObjectParser {
       interactionId: objectId,
       isDoor: false,
       isChat: false,
-      leadTo: ""
+      leadTo: ''
     };
 
     Parser.checkpoint.map.addMapAsset(this.objectAssetKey(shortPath), {

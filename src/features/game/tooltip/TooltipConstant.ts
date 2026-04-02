@@ -1,6 +1,6 @@
 import FontAssets from '../assets/FontAssets';
-import { BitmapFontStyle } from '../commons/CommonTypes';
 import { screenCenter } from '../commons/CommonConstants';
+import { BitmapFontStyle } from '../commons/CommonTypes';
 import dialogueConstants from '../dialogue/GameDialogueConstants';
 
 export const notifStyle: BitmapFontStyle = {
