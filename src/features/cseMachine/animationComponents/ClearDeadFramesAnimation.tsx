@@ -317,7 +317,6 @@ export class ClearDeadFramesAnimation extends Animatable {
         const oldValue: PrimitiveValue = oldUnit.value as PrimitiveValue;
         const newValue: PrimitiveValue = newUnit.value as PrimitiveValue;
         if (oldValue.text instanceof Text) {
-        if (oldValue.text instanceof Text) {
           changedTextPairs.push({
             oldText: oldValue.text as Text,
             newText: newValue.text as Text,
