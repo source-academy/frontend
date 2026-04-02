@@ -374,7 +374,7 @@ export class ClearDeadFramesAnimation extends Animatable {
       CseAnimation.animations.splice(animationIdx, 1);
     }
     CseAnimation.setHideReferenceArrows(false);
-    CseMachine.clearCachedLayouts();
+    CseMachine.clearLiveLayouts();
     CseMachine.redraw();
   }
 }
