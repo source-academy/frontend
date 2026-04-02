@@ -24,9 +24,23 @@ export class PrimitiveValue extends Value {
 
     // derive the coordinates from the main reference (binding / array unit)
     if (reference instanceof Binding) {
-      this._x = reference.x() + getTextWidth(reference.keyString) + Config.TextPaddingX;
+      const maxWidth = Math.max(
+        reference.frame.width() -
+          getTextWidth(reference.keyString) -
+          Config.TextPaddingX -
+          Config.FramePaddingX * 2,
+        (reference.frame.width() - Config.FramePaddingX * 2) / 2
+      );
+      const colon = reference.isConstant ? Config.ConstantColon : Config.VariableColon;
+      this._x = Math.min(
+        reference.x() + getTextWidth(reference.keyString) + Config.TextPaddingX,
+        reference.frame.x() +
+          (reference.frame.width() - Config.TextPaddingX - Config.FramePaddingX * 2) / 2 +
+          getTextWidth(colon)
+      );
       this._y = reference.y();
       this.text = new Text(this.data, this.x(), this.y(), {
+        maxWidth: maxWidth,
         isStringIdentifiable: !isSourceObject(data),
         faded: true
       });
@@ -75,8 +89,8 @@ export class PrimitiveValue extends Value {
     const reference = this.references[0];
     if (reference) {
       if (reference instanceof Binding) {
-        // If attached to a variable name (x: 10)
-        this._x = reference.x() + getTextWidth(reference.keyString) + Config.TextPaddingX;
+        // If attached to a variable name
+        this._x = reference.x() + reference.key.width() + Config.TextPaddingX;
         this._y = reference.y();
       } else {
         const textWidth = this.text.width();

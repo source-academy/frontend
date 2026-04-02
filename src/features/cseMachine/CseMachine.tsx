@@ -29,7 +29,7 @@ export default class CseMachine {
   private static printableMode: boolean = false;
   private static controlStash: boolean = false; // TODO: discuss if the default should be true
   private static stackTruncated: boolean = false;
-  private static centerAlignment: boolean = false; // added for center alignment
+  private static centerAlignment: boolean = false;
   private static centerAlignmentToggled: boolean = false;
   private static arrowOriginFilters: ArrowOriginFilters = {
     text: true,
@@ -61,6 +61,17 @@ export default class CseMachine {
     CseMachine.printLayoutCache = null;
     CseMachine.printLiveLayoutCache = null;
     CseMachine.usedBuiltInNames.clear();
+    CseMachine.clearMemoizedLayouts();
+  }
+  private static clearMemoizedLayouts(): void {
+    Layout.currentLight = undefined;
+    Layout.currentDark = undefined;
+    Layout.currentStackDark = undefined;
+    Layout.currentStackTruncDark = undefined;
+    Layout.currentStackLight = undefined;
+    Layout.currentStackTruncLight = undefined;
+    Layout.prevLayout = undefined;
+    Layout.key = 0;
   }
   public static clearLiveLayouts(): void {
     CseMachine.normalLiveLayoutCache = null;
