@@ -51,7 +51,7 @@ const LoginCallback: React.FC = () => {
       <Card elevation={Elevation.FOUR}>
         <div>
           <NonIdealState
-            description={t('Logging In')}
+            description={t($ => $['Logging In'])}
             icon={<Spinner size={SpinnerSize.LARGE} />}
           />
         </div>
