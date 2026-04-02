@@ -49,7 +49,9 @@ export class ClearDeadFramesAnimation extends Animatable {
   private lineAnimations: AnimatedLineComponent[] = [];
   private newLineCovers: AnimatedLineComponent[] = [];
 
-  private static getBindingKeyTarget(binding: Binding): Pick<AnimatedTextPair, 'targetX' | 'targetY'> {
+  private static getBindingKeyTarget(
+    binding: Binding
+  ): Pick<AnimatedTextPair, 'targetX' | 'targetY'> {
     return {
       targetX: binding.x(),
       targetY: binding.y() + binding.keyYOffset
@@ -156,7 +158,10 @@ export class ClearDeadFramesAnimation extends Animatable {
             const oldValue: PrimitiveValue = oldBinding.value as PrimitiveValue;
             const newValue: PrimitiveValue = newBinding.value as PrimitiveValue;
             if (oldValue.text instanceof Text) {
-              const valueTarget = ClearDeadFramesAnimation.getBindingValueTarget(newBinding, newValue);
+              const valueTarget = ClearDeadFramesAnimation.getBindingValueTarget(
+                newBinding,
+                newValue
+              );
               changedTextPairs.push({
                 oldText: oldValue.text as Text,
                 newText: newValue.text as Text,
@@ -268,7 +273,7 @@ export class ClearDeadFramesAnimation extends Animatable {
     oldArr: ArrayValue,
     newArr: ArrayValue,
     changedFramePairs: Frame[][],
-    changedTextPairs: Text[][],
+    changedTextPairs: AnimatedTextPair[],
     changedFnPairs: Array<[FnValue | GlobalFnValue, FnValue | GlobalFnValue]>
   ): void {
     // Check each ArrayUnit, add them accordingly
