@@ -43,6 +43,7 @@ export class ClearDeadFramesAnimation extends Animatable {
   constructor(changedFramePairs: Frame[][]) {
     super();
     CseAnimation.setHideReferenceArrows(true);
+    CseAnimation.setHiddenFrameIds(changedFramePairs.map(([, newFrame]) => newFrame.environment.id));
 
     // changedTextPairs only account for binding keys and text values
     const changedTextPairs: Text[][] = [];
@@ -377,6 +378,7 @@ export class ClearDeadFramesAnimation extends Animatable {
       CseAnimation.animations.splice(animationIdx, 1);
     }
     CseAnimation.setHideReferenceArrows(false);
+    CseAnimation.clearHiddenFrameIds();
     CseMachine.clearLiveLayouts();
     CseMachine.redraw();
   }

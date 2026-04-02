@@ -300,6 +300,10 @@ export class Frame extends Visible implements IHoverable {
   }
 
   draw(): React.ReactNode {
+    if (CseAnimation.shouldHideFrame(this.environment.id)) {
+      return null;
+    }
+
     return (
       <Group ref={this.ref} key={Layout.key++}>
         {this.name.draw()}
