@@ -626,7 +626,7 @@ export const SideContentCseMachine = connect(
 )(SideContentCseMachineBase);
 
 const makeCseMachineTabFrom = (location: NonStoryWorkspaceLocation): SideContentTab => ({
-  label: t('sideContent:cseMachine.label'),
+  label: t($ => $.cseMachine.label, { ns: 'sideContent' }),
   iconName: IconNames.GLOBE,
   body: <SideContentCseMachine workspaceLocation={location} />,
   id: SideContentType.cseMachine
@@ -655,12 +655,12 @@ const CseMachineDefaultText: React.FC<{ isJava: boolean }> = ({ isJava }) => {
         <span>
           <Trans
             ns="sideContent"
-            i18nKey="cseMachine.csecDescription"
+            i18nKey={$ => $.cseMachine.csecDescription}
             components={[<ItalicLink href={Links.textbookChapter3_2} />]}
           />{' '}
           <Trans
             ns="sideContent"
-            i18nKey="cseMachine.javaCsec"
+            i18nKey={$ => $.cseMachine.javaCsec}
             components={[<ItalicLink href={`${Links.sourceDocs}java_csec/`} />]}
           />
         </span>
@@ -668,30 +668,30 @@ const CseMachineDefaultText: React.FC<{ isJava: boolean }> = ({ isJava }) => {
         <span>
           <Trans
             ns="sideContent"
-            i18nKey="cseMachine.cseDescription"
+            i18nKey={$ => $.cseMachine.cseDescription}
             components={[<ItalicLink href={Links.textbookChapter3_2} />]}
           />
         </span>
       )}
       <br />
       <br />
-      {t('instructions')}
+      {t($ => $.instructions)}
       <br />
       <br />
       <Divider />
-      {t('shortcutsTitle')}
+      {t($ => $.shortcutsTitle)}
       <br />
       <br />
-      {t('shortcuts.a')}
+      {t($ => $.shortcuts.a)}
       <br />
-      {t('shortcuts.e')}
+      {t($ => $.shortcuts.e)}
       <br />
-      {t('shortcuts.f')}
+      {t($ => $.shortcuts.f)}
       <br />
-      {t('shortcuts.b')}
+      {t($ => $.shortcuts.b)}
       <br />
       <br />
-      {t('shortcutsNote')}
+      {t($ => $.shortcutsNote)}
     </div>
   );
 };

@@ -56,27 +56,27 @@ const SideContentUpload: React.FC<Props> = ({ onUpload }) => {
 
   return (
     <div>
-      <p>{t('description')}</p>
-      <p>{t('acceptedFiles')}</p>
-      <p>{t('compileCommand')}</p>
+      <p>{t($ => $.description)}</p>
+      <p>{t($ => $.acceptedFiles)}</p>
+      <p>{t($ => $.compileCommand)}</p>
       <pre>
-        <code>{t('javacCommand')}</code>
+        <code>{t($ => $.javacCommand)}</code>
       </pre>
-      <p>{t('warning')}</p>
+      <p>{t($ => $.warning)}</p>
       <p>
-        <strong>{t('mainClass')}</strong>
+        <strong>{t($ => $.mainClass)}</strong>
       </p>
       <FileInput
         inputProps={{ multiple: true, accept: '.class' }}
         onInputChange={handleFileUpload}
-        text={count === 0 ? t('chooseFiles') : `${count} ${t('filesUploaded')}`}
+        text={count === 0 ? t($ => $.chooseFiles) : `${count} ${t($ => $.filesUploaded)}`}
       />
     </div>
   );
 };
 
 const makeUploadTabFrom = (onUpload: (files: UploadResult) => void): SideContentTab => ({
-  label: t('sideContent:upload.label'),
+  label: t($ => $.upload.label, { ns: 'sideContent' }),
   iconName: IconNames.Upload,
   body: <SideContentUpload onUpload={onUpload} />,
   id: SideContentType.upload

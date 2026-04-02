@@ -1,0 +1,19 @@
+const translations = {
+  gradingCsv: {
+    assessmentNumber: 'Assessment Number',
+    assessmentName: 'Assessment Name',
+    studentName: 'Student Name',
+    studentUsername: 'Student Username',
+    group: 'Group',
+    progress: 'Progress',
+    questionCount: 'Question Count',
+    questionsGraded: 'Questions Graded',
+    initialXp: 'Initial XP',
+    xpAdjustment: 'XP Adjustment',
+    currentXpExclBonus: 'Current XP (excl. bonus)',
+    maxXp: 'Max XP',
+    bonusXp: 'Bonus XP'
+  }
+};
+
+export default translations;
