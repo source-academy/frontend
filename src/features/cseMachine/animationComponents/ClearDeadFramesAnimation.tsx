@@ -79,6 +79,11 @@ export class ClearDeadFramesAnimation extends Animatable {
       const oldBindings = framePair[0].bindings;
       const newBindings = framePair[1].bindings;
       for (let i = 0; i < oldBindings.length; i++) {
+        // Defensive check in case accessing newBindings[i] causes out-of-bounds
+        if (i >= newBindings.length) {
+          continue;
+        }
+
         if (oldBindings[i].isDummyBinding == false) {
           changedTextPairs.push([oldBindings[i].key, newBindings[i].key]);
 

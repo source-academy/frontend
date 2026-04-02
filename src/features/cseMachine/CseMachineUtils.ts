@@ -410,6 +410,11 @@ export function computeFramesCoordChange(oldLevels: Level[], newLevels: Level[])
     oldLevels = tempOldLevels;
   }
 
+  // Defensive check in case CSE machine's layout is updated to have more complex frame movements
+  if (oldLevels.length !== newLevels.length) {
+    throw new Error('Level count mismatch for Clear Dead Frames animation');
+  }
+
   // Match each frame that is live
   // Matched frames conceptually represent the same frame, but on different steps (prev vs curr)
   for (let levelIdx = 0; levelIdx < oldLevels.length; levelIdx++) {
