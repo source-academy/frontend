@@ -478,7 +478,7 @@ const GradingEditor: React.FC<Props> = props => {
         .filter(index => index >= 0 && index < (props.ai_comments?.comments || []).length)
         .map(index => {
           const original = props.ai_comments?.comments?.[index] ?? '';
-          const text = props.ai_comments?.selectedEdits?.[index] ?? original;
+          const text = normalizeCommentText(props.ai_comments?.selectedEdits?.[index] ?? original);
           return { originalIndex: index, text, isEdited: text !== original };
         });
       const { selectedIndices: previousSelectedIndices, changedEdits: previousChangedEdits } =
@@ -502,10 +502,6 @@ const GradingEditor: React.FC<Props> = props => {
       syncAiCommentsToStore(selectedComments, suggestions);
 
       handleSaving(props.submissionId, props.questionId, newXpAdjustmentInput, cleanedEditorValue);
-
-      if (saveAndContinue) {
-        return;
-      }
 
       const gradingSaved = await waitForGradingSaveResult(saveAndContinue);
       if (!gradingSaved) {
@@ -721,7 +717,6 @@ const GradingEditor: React.FC<Props> = props => {
         setSuggestions(resp.comments);
         setHasGenerated(true);
         setSelectedComments([]);
-        lastSavedSelectionKeyRef.current = EMPTY_SELECTION_SAVE_KEY;
         initialSelectionKeyRef.current = EMPTY_SELECTION_SAVE_KEY;
 
         showSuccessMessage(force ? 'Comments re-generated!' : 'Comments generated!');
