@@ -1,4 +1,5 @@
 @import 'react-simple-keyboard/build/css/index.css';
+@import 'stepperVariables';
 
 $shadow-dark: rgba(0, 0, 0, 0.5);
 $shadow-light: rgba(0, 0, 0, 0.2);
@@ -179,13 +180,13 @@ $shadow-light: rgba(0, 0, 0, 0.2);
         position: relative;
         -webkit-box-decoration-break: slice;
         box-decoration-break: slice;
-        background: rgba(172, 0, 0, 0.75);
+        background: $before-marker-bg;
         pointer-events: auto;
         cursor: pointer;
         z-index: 20;
 
         &:hover {
-          background: rgba(100, 101, 57, 0.75);
+          background: $before-marker-bg;
         }
       }
 
@@ -193,13 +194,13 @@ $shadow-light: rgba(0, 0, 0, 0.2);
         position: relative;
         -webkit-box-decoration-break: clone;
         box-decoration-break: clone;
-        background: green;
+        background: $after-marker-bg;
         pointer-events: auto;
         cursor: pointer;
         z-index: 20;
 
         &:hover {
-          background: rgba(61, 101, 57, 0.75);
+          background: $after-marker-bg;
         }
       }
 

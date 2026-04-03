@@ -144,8 +144,6 @@ const SideContentSubstVisualizer: React.FC<SubstVisualizerPropsAST> = props => {
     setStepValue(1);
   }, [stepValue, props.content]);
 
-  //const stepFirst = () => setStepValue(1);
-  //const stepLast = () => setStepValue(lastStepValue);
   const stepPrevious = () => setStepValue(Math.max(1, stepValue - 1));
   const stepNext = () => setStepValue(Math.min(props.content.length, stepValue + 1));
 
