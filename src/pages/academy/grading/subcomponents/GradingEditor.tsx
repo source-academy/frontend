@@ -67,16 +67,30 @@ type Props = {
 const gradingEditorButtonClass = 'grading-editor-button';
 const EMPTY_SELECTION_SAVE_KEY = JSON.stringify({ selected_indices: [], edits: {} });
 
+type SelectedComment = {
+  originalIndex: number;
+  text: string;
+  isEdited: boolean;
+};
+
+const normalizeCommentText = (text: string): string => text.replace(/^\n+/, '');
+
 const GradingEditor: React.FC<Props> = props => {
   const dispatch = useTypedDispatch();
   const tokens = useTokens();
   const prompts = props.prompts ?? [];
   const hasPrompts = prompts.length > 0;
   const gradingSaveResult = useTypedSelector(state => state.session.gradingSaveResult);
+  const currentGrading = useTypedSelector(state => state.session.gradings[props.submissionId]);
+  const gradingSaveResultRef = useRef(gradingSaveResult);
   const lastSavedSelectionKeyRef = useRef<string>(EMPTY_SELECTION_SAVE_KEY);
+  const initialSelectionKeyRef = useRef<string>(EMPTY_SELECTION_SAVE_KEY);
   const saveInFlightRef = useRef<boolean>(false);
   const saveAndContinueTimeoutRef = useRef<number | undefined>(undefined);
   const saveTimeoutRef = useRef<number | undefined>(undefined);
+  const selectedCommentsRef = useRef<SelectedComment[]>([]);
+  const suggestionsRef = useRef<string[]>([]);
+  const aiCommentTextareaRefs = useRef<Record<number, HTMLTextAreaElement | null>>({});
   const { handleGradingSave, handleGradingSaveAndContinue, handleReautogradeAnswer } = useMemo(
     () =>
       ({
@@ -101,10 +115,7 @@ const GradingEditor: React.FC<Props> = props => {
   const [xpAdjustmentInput, setXpAdjustmentInput] = useState<string | null>(
     props.xpAdjustment.toString()
   );
-  /**
-   * The text in the react-mde editor, that will be saved
-   * to a comment displayed below the numerical XP */
-  const [editorValue, setEditorValue] = useState(props.comments);
+  const [userText, setUserText] = useState(props.comments);
   /**
    * The selected tab for the react-mde editor (either 'write' or 'preview')
    */
@@ -122,6 +133,10 @@ const GradingEditor: React.FC<Props> = props => {
    */
   const [currentlySaving, setCurrentlySaving] = useState(false);
   const [isSaveInFlight, setIsSaveInFlight] = useState(false);
+
+  useEffect(() => {
+    gradingSaveResultRef.current = gradingSaveResult;
+  }, [gradingSaveResult]);
 
   useEffect(() => {
     makeInitialState();
@@ -153,6 +168,11 @@ const GradingEditor: React.FC<Props> = props => {
       return;
     }
 
+    // Ignore stale save results when the editor is (re)mounted without an active save.
+    if (!saveInFlightRef.current && !currentlySaving) {
+      return;
+    }
+
     saveInFlightRef.current = false;
     setIsSaveInFlight(false);
 
@@ -165,110 +185,162 @@ const GradingEditor: React.FC<Props> = props => {
       saveTimeoutRef.current = undefined;
     }
 
+    if (gradingSaveResult.success) {
+      const currentSelectionKey = buildSelectionKey(
+        selectedCommentsRef.current,
+        suggestionsRef.current
+      );
+      initialSelectionKeyRef.current = currentSelectionKey;
+      lastSavedSelectionKeyRef.current = currentSelectionKey;
+    }
+
     if (!gradingSaveResult.success || !gradingSaveResult.saveAndContinue) {
       setCurrentlySaving(false);
     }
-  }, [gradingSaveResult, props.questionId, props.submissionId]);
+  }, [gradingSaveResult, currentlySaving, props.questionId, props.submissionId]);
 
-  // Invisible delimiters used internally to preserve per-comment editing state
-  // without showing any marker text in the editor.
-  const COMMENT_SEPARATOR = '\n\u2063\u2063\n';
-  const SECTION_MARKER = '\n\u2064\u2064\n';
+  const buildSelectionPayload = (selected: SelectedComment[], sourceSuggestions: string[]) => {
+    const sorted = [...selected].sort((a, b) => a.originalIndex - b.originalIndex);
+    const selectedIndices = sorted.map(comment => comment.originalIndex);
+    const changedEdits: Record<number, string> = {};
 
-  /**
-   * Splits the editor value into the user's freeform text (above the marker)
-   * and the generated-comments block (below the marker).
-   */
-  const splitEditor = (value: string): { userText: string; commentsBlock: string } => {
-    const markerIdx = value.indexOf(SECTION_MARKER);
-    if (markerIdx === -1) {
-      return { userText: value, commentsBlock: '' };
-    }
-    return {
-      userText: value.slice(0, markerIdx),
-      commentsBlock: value.slice(markerIdx + SECTION_MARKER.length)
-    };
-  };
-
-  /**
-   * Joins the user freeform text and the generated-comments block back together.
-   * If there are no selected comments the marker is omitted so the editor stays clean.
-   */
-  const joinEditor = (userText: string, commentsBlock: string): string => {
-    if (!commentsBlock) return userText;
-    return userText + SECTION_MARKER + commentsBlock;
-  };
-
-  const buildCommentsBlock = (indices: number[], texts: Record<number, string>) => {
-    return (
-      [...indices]
-        .sort((a, b) => a - b)
-        // Preserve one block segment per selected index, including empty edits,
-        // so split/join order always stays aligned with sorted selected indices.
-        .map(i => texts[i] ?? '')
-        .join(COMMENT_SEPARATOR)
-    );
-  };
-
-  /**
-   * Parses the current comments block back into per-comment texts so that
-   * user edits made directly in the editor are preserved.
-   */
-  const syncCommentsBlock = (
-    commentsBlock: string,
-    indices: number[],
-    currentTexts: Record<number, string>
-  ): Record<number, string> => {
-    const sorted = [...indices].sort((a, b) => a - b);
-    if (sorted.length === 0) return { ...currentTexts };
-    const parts = commentsBlock.split(COMMENT_SEPARATOR);
-    const updated = { ...currentTexts };
-
-    sorted.forEach((idx, i) => {
-      if (i < parts.length) {
-        updated[idx] = parts[i];
+    sorted.forEach(comment => {
+      const original = sourceSuggestions[comment.originalIndex] ?? '';
+      if (comment.text !== original) {
+        changedEdits[comment.originalIndex] = comment.text;
       }
     });
 
-    // If user added extra separators, fold remainder into the last comment
-    if (parts.length > sorted.length && sorted.length > 0) {
-      const lastIdx = sorted[sorted.length - 1];
-      updated[lastIdx] = parts.slice(sorted.length - 1).join(COMMENT_SEPARATOR);
+    return { selectedIndices, changedEdits };
+  };
+
+  const buildSelectionKey = (selected: SelectedComment[], sourceSuggestions: string[]) => {
+    const payload = buildSelectionPayload(selected, sourceSuggestions);
+    return JSON.stringify({
+      selected_indices: payload.selectedIndices,
+      edits: payload.changedEdits
+    });
+  };
+
+  const syncAiCommentsToStore = (selected: SelectedComment[], sourceSuggestions: string[]) => {
+    if (!currentGrading) {
+      return;
     }
 
-    return updated;
+    const { selectedIndices, changedEdits } = buildSelectionPayload(selected, sourceSuggestions);
+    const updatedAnswers = currentGrading.answers.map(answer => {
+      if (answer.question.id !== props.questionId) {
+        return answer;
+      }
+
+      return {
+        ...answer,
+        ai_comments: {
+          comments: sourceSuggestions,
+          selectedIndices,
+          selectedEdits: changedEdits
+        }
+      };
+    });
+
+    dispatch(
+      SessionActions.updateGrading(props.submissionId, {
+        ...currentGrading,
+        answers: updatedAnswers
+      })
+    );
+  };
+
+  const buildPersistedSelectionKey = () => {
+    const existingComments = props.ai_comments?.comments || [];
+    const persistedSelectedIndices = props.ai_comments?.selectedIndices || [];
+    const persistedSelectedEdits = props.ai_comments?.selectedEdits || {};
+
+    const validSelectedIndices = [...new Set(persistedSelectedIndices)]
+      .filter(index => index >= 0 && index < existingComments.length)
+      .sort((a, b) => a - b);
+
+    const hydratedSelectedComments: SelectedComment[] = validSelectedIndices.map(index => {
+      const original = existingComments[index] ?? '';
+      const text = normalizeCommentText(persistedSelectedEdits[index] ?? original);
+      return {
+        originalIndex: index,
+        text,
+        isEdited: text !== original
+      };
+    });
+
+    return buildSelectionKey(hydratedSelectedComments, existingComments);
+  };
+
+  const waitForGradingSaveResult = (saveAndContinue: boolean) => {
+    const lastRequestId = gradingSaveResultRef.current?.requestId ?? 0;
+    return new Promise<boolean>(resolve => {
+      const startedAt = Date.now();
+      const maxWaitMs = 15000;
+      const pollIntervalMs = 100;
+      const interval = window.setInterval(() => {
+        const result = gradingSaveResultRef.current;
+        const timedOut = Date.now() - startedAt >= maxWaitMs;
+
+        if (
+          result &&
+          result.submissionId === props.submissionId &&
+          result.questionId === props.questionId &&
+          result.saveAndContinue === saveAndContinue &&
+          result.requestId > lastRequestId
+        ) {
+          window.clearInterval(interval);
+          resolve(result.success);
+          return;
+        }
+
+        if (timedOut) {
+          window.clearInterval(interval);
+          resolve(false);
+        }
+      }, pollIntervalMs);
+    });
   };
 
   const onToggleComment = (index: number) => {
-    const isDeselecting = selectedIndices.includes(index);
-    const { userText, commentsBlock } = splitEditor(editorValue);
-
-    // Sync current comments block back to per-comment texts
-    const synced =
-      selectedIndices.length > 0
-        ? syncCommentsBlock(commentsBlock, selectedIndices, commentTexts)
-        : { ...commentTexts };
-
-    if (isDeselecting) {
-      const newTexts = { ...synced };
-      const newIndices = selectedIndices.filter(i => i !== index);
-      setCommentTexts(newTexts);
-      setSelectedIndices(newIndices);
-      setEditorValue(joinEditor(userText, buildCommentsBlock(newIndices, newTexts)));
-    } else {
-      const newTexts = { ...synced };
-      if (newTexts[index] === undefined) {
-        newTexts[index] = suggestions[index];
+    setSelectedComments(prev => {
+      const alreadySelected = prev.some(comment => comment.originalIndex === index);
+      if (alreadySelected) {
+        return prev.filter(comment => comment.originalIndex !== index);
       }
-      const newIndices = [...selectedIndices, index];
-      setCommentTexts(newTexts);
-      setSelectedIndices(newIndices);
-      setEditorValue(joinEditor(userText, buildCommentsBlock(newIndices, newTexts)));
-    }
+
+      const original = suggestions[index] ?? '';
+      return [
+        ...prev,
+        { originalIndex: index, text: normalizeCommentText(original), isEdited: false }
+      ].sort(
+        (a, b) => a.originalIndex - b.originalIndex
+      );
+    });
   };
 
-  const stripInternalMarkers = (value: string): string => {
-    return value.replaceAll(SECTION_MARKER, '\n').replaceAll(COMMENT_SEPARATOR, '\n');
+  const onSelectedCommentTextChange = (originalIndex: number, text: string) => {
+    const normalizedText = normalizeCommentText(text);
+    setSelectedComments(prev =>
+      prev.map(comment => {
+        if (comment.originalIndex !== originalIndex) {
+          return comment;
+        }
+        const original = suggestions[originalIndex] ?? '';
+        return { ...comment, text: normalizedText, isEdited: normalizedText !== original };
+      })
+    );
+
+    window.requestAnimationFrame(() => {
+      const textarea = aiCommentTextareaRefs.current[originalIndex];
+      if (!textarea) {
+        return;
+      }
+
+      textarea.style.height = '0px';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    });
   };
 
   const postSaveChosenComments = async (): Promise<boolean> => {
@@ -277,30 +349,8 @@ const GradingEditor: React.FC<Props> = props => {
       return true;
     }
 
-    const { commentsBlock } = splitEditor(editorValue);
-    const synced =
-      selectedIndices.length > 0
-        ? syncCommentsBlock(commentsBlock, selectedIndices, commentTexts)
-        : { ...commentTexts };
-
-    setCommentTexts(synced);
-
-    const sortedSelectedIndices = [...selectedIndices].sort((a, b) => a - b);
-
-    // Send only edits that differ from the original generated text.
-    const changedEdits: Record<number, string> = {};
-    sortedSelectedIndices.forEach(idx => {
-      const original = suggestions[idx] ?? '';
-      const edited = synced[idx] ?? original;
-      if (edited !== original) {
-        changedEdits[idx] = stripInternalMarkers(edited);
-      }
-    });
-
-    const currentSelectionKey = JSON.stringify({
-      selected_indices: sortedSelectedIndices,
-      edits: changedEdits
-    });
+    const { selectedIndices, changedEdits } = buildSelectionPayload(selectedComments, suggestions);
+    const currentSelectionKey = JSON.stringify({ selected_indices: selectedIndices, edits: changedEdits });
 
     // Avoid rewriting identical selection state on repeated saves.
     if (currentSelectionKey === lastSavedSelectionKeyRef.current) {
@@ -310,7 +360,7 @@ const GradingEditor: React.FC<Props> = props => {
     const resp = await saveChosenComments(
       tokens,
       props.answer_id,
-      sortedSelectedIndices,
+      selectedIndices,
       changedEdits
     );
 
@@ -325,40 +375,30 @@ const GradingEditor: React.FC<Props> = props => {
   };
 
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
-  const [commentTexts, setCommentTexts] = useState<Record<number, string>>({});
+  const [selectedComments, setSelectedComments] = useState<SelectedComment[]>([]);
   const [hasClickedGenerate, setHasClickedGenerate] = useState<boolean>(false);
   const [isViewLLMPromptOpen, setIsViewLLMPromptOpen] = useState<boolean>(false);
   const [hasGenerated, setHasGenerated] = useState<boolean>(false); //If generate comments button has been pressed
 
-  const restoreUserText = (savedComments: string, selectedTexts: string[]): string => {
-    const normalizedSavedComments = savedComments.replace(/\r\n/g, '\n');
+  useEffect(() => {
+    selectedCommentsRef.current = selectedComments;
+  }, [selectedComments]);
 
-    if (selectedTexts.length === 0) {
-      return normalizedSavedComments;
-    }
+  useEffect(() => {
+    suggestionsRef.current = suggestions;
+  }, [suggestions]);
 
-    // Support both historical storage formats:
-    // 1) comments joined by single newlines
-    // 2) comments joined by double newlines
-    const candidateBlocks = [selectedTexts.join('\n'), selectedTexts.join('\n\n')].filter(Boolean);
-
-    for (const block of candidateBlocks) {
-      if (normalizedSavedComments === block) {
-        return '';
+  useEffect(() => {
+    selectedComments.forEach(comment => {
+      const textarea = aiCommentTextareaRefs.current[comment.originalIndex];
+      if (!textarea) {
+        return;
       }
 
-      if (normalizedSavedComments.endsWith(`\n${block}`)) {
-        return normalizedSavedComments.slice(0, -1 * (block.length + 1));
-      }
-
-      if (normalizedSavedComments.endsWith(`\n\n${block}`)) {
-        return normalizedSavedComments.slice(0, -1 * (block.length + 2));
-      }
-    }
-
-    return normalizedSavedComments;
-  };
+      textarea.style.height = '0px';
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    });
+  }, [selectedComments]);
 
   const makeInitialState = () => {
     setXpAdjustmentInput(props.xpAdjustment.toString());
@@ -369,26 +409,28 @@ const GradingEditor: React.FC<Props> = props => {
     const persistedSelectedIndices = props.ai_comments?.selectedIndices || [];
     const persistedSelectedEdits = props.ai_comments?.selectedEdits || {};
 
-    const validSelectedIndices = [...persistedSelectedIndices]
+    const validSelectedIndices = [...new Set(persistedSelectedIndices)]
       .filter(index => index >= 0 && index < existingComments.length)
       .sort((a, b) => a - b);
 
-    const hydratedCommentTexts: Record<number, string> = {};
-    validSelectedIndices.forEach(index => {
-      hydratedCommentTexts[index] = persistedSelectedEdits[index] ?? existingComments[index] ?? '';
+    const hydratedSelectedComments: SelectedComment[] = validSelectedIndices.map(index => {
+      const original = existingComments[index] ?? '';
+      const text = normalizeCommentText(persistedSelectedEdits[index] ?? original);
+      return {
+        originalIndex: index,
+        text,
+        isEdited: text !== original
+      };
     });
 
-    const selectedTexts = validSelectedIndices.map(index => hydratedCommentTexts[index] || '');
-    const restoredUserText = restoreUserText(props.comments, selectedTexts);
-    const restoredCommentsBlock = buildCommentsBlock(validSelectedIndices, hydratedCommentTexts);
-
-    setEditorValue(joinEditor(restoredUserText, restoredCommentsBlock));
+    setUserText(props.comments);
     setSuggestions(existingComments);
     // Lock the button if we already have comments for this submission
     setHasGenerated(existingComments.length > 0);
-    setSelectedIndices(validSelectedIndices);
-    setCommentTexts(hydratedCommentTexts);
-    lastSavedSelectionKeyRef.current = EMPTY_SELECTION_SAVE_KEY;
+    setSelectedComments(hydratedSelectedComments);
+    const persistedSelectionKey = buildSelectionKey(hydratedSelectedComments, existingComments);
+    initialSelectionKeyRef.current = persistedSelectionKey;
+    lastSavedSelectionKeyRef.current = persistedSelectionKey;
     if (saveAndContinueTimeoutRef.current !== undefined) {
       window.clearTimeout(saveAndContinueTimeoutRef.current);
       saveAndContinueTimeoutRef.current = undefined;
@@ -428,10 +470,26 @@ const GradingEditor: React.FC<Props> = props => {
         return;
       }
 
-      const cleanedEditorValue = stripInternalMarkers(editorValue);
+      const cleanedEditorValue = userText;
 
+      setCurrentlySaving(true);
       saveInFlightRef.current = true;
       setIsSaveInFlight(true);
+
+      const saveAndContinue = handleSaving === onClickSaveAndContinue;
+      const previousSelectionKey = buildPersistedSelectionKey();
+      const previousSelectedComments: SelectedComment[] = (props.ai_comments?.selectedIndices || [])
+        .filter(index => index >= 0 && index < (props.ai_comments?.comments || []).length)
+        .map(index => {
+          const original = props.ai_comments?.comments?.[index] ?? '';
+          const text = props.ai_comments?.selectedEdits?.[index] ?? original;
+          return { originalIndex: index, text, isEdited: text !== original };
+        });
+      const { selectedIndices: previousSelectedIndices, changedEdits: previousChangedEdits } =
+        buildSelectionPayload(
+          previousSelectedComments,
+          props.ai_comments?.comments || []
+        );
 
       const hasSavedChosenComments = await postSaveChosenComments();
       if (!hasSavedChosenComments) {
@@ -446,7 +504,44 @@ const GradingEditor: React.FC<Props> = props => {
         return;
       }
 
+      // Keep the in-memory grading state aligned with the latest saved AI selection
+      // so leaving and re-entering preserves selected comments and edits.
+      syncAiCommentsToStore(selectedComments, suggestions);
+
       handleSaving(props.submissionId, props.questionId, newXpAdjustmentInput, cleanedEditorValue);
+
+      if (saveAndContinue) {
+        return;
+      }
+
+      const gradingSaved = await waitForGradingSaveResult(saveAndContinue);
+      if (!gradingSaved) {
+        const currentSelectionKey = buildSelectionKey(selectedComments, suggestions);
+        if (currentSelectionKey !== previousSelectionKey) {
+          const rollbackResp = await saveChosenComments(
+            tokens,
+            props.answer_id,
+            previousSelectedIndices,
+            previousChangedEdits
+          );
+
+          if (rollbackResp && rollbackResp.ok) {
+            lastSavedSelectionKeyRef.current = previousSelectionKey;
+            initialSelectionKeyRef.current = previousSelectionKey;
+            syncAiCommentsToStore(previousSelectedComments, props.ai_comments?.comments || []);
+            showWarningMessage('Failed to save grading. Reverted AI comment selection to last saved state.');
+          } else {
+            showWarningMessage(
+              'Failed to save grading, and failed to rollback AI comment selection. Please refresh and retry.'
+            );
+          }
+        }
+      } else {
+        // Mark AI selection as clean after full grading save succeeds.
+        const currentSelectionKey = buildSelectionKey(selectedComments, suggestions);
+        initialSelectionKeyRef.current = currentSelectionKey;
+        lastSavedSelectionKeyRef.current = currentSelectionKey;
+      }
     };
 
   /**
@@ -496,6 +591,7 @@ const GradingEditor: React.FC<Props> = props => {
       window.clearTimeout(saveTimeoutRef.current);
     }
     saveTimeoutRef.current = window.setTimeout(() => {
+      setCurrentlySaving(false);
       saveInFlightRef.current = false;
       setIsSaveInFlight(false);
       saveTimeoutRef.current = undefined;
@@ -542,8 +638,10 @@ const GradingEditor: React.FC<Props> = props => {
 
   const checkHasUnsavedChanges = () => {
     const newXpAdjustmentInput = convertParamToInt(xpAdjustmentInput || undefined);
-    const normalizedEditorValue = stripInternalMarkers(editorValue);
-    return props.xpAdjustment !== newXpAdjustmentInput || props.comments !== normalizedEditorValue;
+    const hasTextChanges = props.comments !== userText;
+    const hasSelectionChanges =
+      buildSelectionKey(selectedComments, suggestions) !== initialSelectionKeyRef.current;
+    return props.xpAdjustment !== newXpAdjustmentInput || hasTextChanges || hasSelectionChanges;
   };
 
   const checkIsNewQuestion = () => {
@@ -627,8 +725,9 @@ const GradingEditor: React.FC<Props> = props => {
       if (resp && resp.comments) {
         setSuggestions(resp.comments);
         setHasGenerated(true);
-        setSelectedIndices([]);
-        setCommentTexts({});
+        setSelectedComments([]);
+        lastSavedSelectionKeyRef.current = EMPTY_SELECTION_SAVE_KEY;
+        initialSelectionKeyRef.current = EMPTY_SELECTION_SAVE_KEY;
 
         showSuccessMessage(force ? 'Comments re-generated!' : 'Comments generated!');
       }
@@ -642,7 +741,7 @@ const GradingEditor: React.FC<Props> = props => {
   return (
     <div className="GradingEditor">
       <Prompt
-        when={!currentlySaving && hasUnsavedChanges}
+        when={!currentlySaving && !isSaveInFlight && hasUnsavedChanges}
         message={'You have unsaved changes. Are you sure you want to leave?'}
       />
 
@@ -741,7 +840,7 @@ const GradingEditor: React.FC<Props> = props => {
               onToggle={onToggleComment}
               isLoading={hasClickedGenerate}
               comments={suggestions}
-              selectedIndices={selectedIndices}
+              selectedIndices={selectedComments.map(comment => comment.originalIndex)}
             />
             <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem' }}>
               {hasPrompts && (
@@ -775,10 +874,14 @@ const GradingEditor: React.FC<Props> = props => {
         </>
       )}
 
-      <div className="react-mde-parent">
+      <div
+        className={`react-mde-parent grading-editor-writing-surface${
+          selectedComments.length > 0 ? ' with-ai-comments' : ''
+        }`}
+      >
         <ReactMde
-          value={editorValue}
-          onChange={setEditorValue}
+          value={userText}
+          onChange={setUserText}
           selectedTab={selectedTab}
           onTabChange={onTabChange}
           generateMarkdownPreview={generateMarkdownPreview}
@@ -787,7 +890,37 @@ const GradingEditor: React.FC<Props> = props => {
           minPreviewHeight={240}
           getIcon={blueprintIconProvider}
         />
-      </div>
+
+        {selectedComments.length > 0 && (
+          <div className="grading-editor-ai-comment-blocks">
+            {selectedComments
+              .slice()
+              .sort((a, b) => a.originalIndex - b.originalIndex)
+              .map(comment => (
+                <textarea
+                  className="grading-editor-ai-comment-input"
+                  ref={node => {
+                    aiCommentTextareaRefs.current[comment.originalIndex] = node;
+                  }}
+                  key={comment.originalIndex}
+                  value={comment.text}
+                  onChange={event =>
+                    onSelectedCommentTextChange(comment.originalIndex, event.target.value)
+                  }
+                  rows={1}
+                  style={{
+                    outline: 'none',
+                    resize: 'none',
+                    margin: 0,
+                    display: 'block',
+                    width: '100%',
+                    overflow: 'hidden'
+                  }}
+                />
+              ))}
+          </div>
+        )}
+        </div>
 
       {selectedTab === 'write' && (
         <div className="grading-editor-draft-buttons">
