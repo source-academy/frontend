@@ -5,6 +5,8 @@ import { Button, OverlaysProvider } from '@blueprintjs/core';
 import { setModulesStaticURL } from 'js-slang/dist/modules/loader';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import javascript from 'react-syntax-highlighter/dist/esm/languages/prism/javascript';
 import Constants, { Links } from 'src/commons/utils/Constants';
 import { showWarningMessage } from 'src/commons/utils/notifications/NotificationsHelper';
 import { register as registerServiceWorker } from 'src/commons/utils/RegisterServiceWorker';
@@ -15,6 +17,8 @@ import { initializeAgGridModules } from './bootstrap/agGrid';
 import { initializeSentryLogging } from './bootstrap/sentry';
 import ApplicationWrapper from './commons/application/ApplicationWrapper';
 import { createInBrowserFileSystem } from './pages/fileSystem/createInBrowserFileSystem';
+
+SyntaxHighlighter.registerLanguage('javascript', javascript);
 
 initializeSentryLogging();
 initializeAgGridModules();

@@ -102,6 +102,7 @@ const NavigationBar: React.FC = () => {
     enableContestLeaderboard,
     enableSourcecast,
     enableStories,
+    enableLlmGrading,
     assessmentConfigurations
   } = useSession();
   const assessmentTypes = useMemo(
@@ -173,8 +174,14 @@ const NavigationBar: React.FC = () => {
   ]);
 
   const fullAcademyMobileNavbarLeftAdditionalInfo = useMemo(
-    () => getAcademyNavbarRightInfo({ isEnrolledInACourse, courseId, role }),
-    [isEnrolledInACourse, courseId, role]
+    () =>
+      getAcademyNavbarRightInfo({
+        isEnrolledInACourse,
+        courseId,
+        role,
+        enableLlmGrading
+      }),
+    [isEnrolledInACourse, courseId, role, enableLlmGrading]
   );
 
   const fullAcademyMobileNavbarLeftInfoWithAssessments: NavbarEntryInfo[] = useMemo(() => {

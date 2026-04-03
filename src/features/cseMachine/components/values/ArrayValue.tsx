@@ -2,6 +2,7 @@ import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group } from 'react-konva';
 
+import CseMachine from '../../CseMachine';
 import { Config } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
 import { DataArray, IHoverable, ReferenceType } from '../../CseMachineTypes';
@@ -9,12 +10,16 @@ import { isMainReference } from '../../CseMachineUtils';
 import { ArrayEmptyUnit } from '../ArrayEmptyUnit';
 import { ArrayUnit } from '../ArrayUnit';
 import { Binding } from '../Binding';
+import { Frame } from '../Frame';
 import { FnValue } from './FnValue';
+import { GlobalFnValue } from './GlobalFnValue';
 import { Value } from './Value';
 
 /** this class encapsulates an array value in source,
  *  defined as a JS array with not 2 elements */
 export class ArrayValue extends Value implements IHoverable {
+  /** frame that encloses this array, if any */
+  enclosingFrame?: Frame;
   /** array of units this array is made of */
   units: ArrayUnit[] = [];
   /** width of the array or the nested values inside the array. */
@@ -38,7 +43,13 @@ export class ArrayValue extends Value implements IHoverable {
 
     // derive the coordinates from the main reference (binding / array unit)
     if (newReference instanceof Binding) {
-      this._x = newReference.frame.x() + newReference.frame.width() + Config.FrameMarginX;
+      this.enclosingFrame = newReference.frame;
+      // check for whether cache already has x cooridnates
+      const ghostX = Layout.getGhostFrameX(newReference.frame.environment.id);
+      // If frame x cooridnates exists in cache, use it. Otherwise, fallback to current (live) X.
+      const frameX = ghostX !== undefined ? ghostX : newReference.frame.x();
+      this._x = frameX + newReference.frame.width() + Config.FrameMarginX;
+
       this._y = newReference.y();
     } else {
       if (newReference.isLastUnit) {
@@ -62,24 +73,57 @@ export class ArrayValue extends Value implements IHoverable {
 
       // Update total width and height for values that are drawn next to the array
       if (
-        (unit.value instanceof ArrayValue || unit.value instanceof FnValue) &&
+        (unit.value instanceof ArrayValue ||
+          unit.value instanceof FnValue ||
+          unit.value instanceof GlobalFnValue) &&
         isMainReference(unit.value, unit)
       ) {
+        const childWidth =
+          unit.value instanceof ArrayValue
+            ? unit.value.totalWidth
+            : CseMachine.getPrintableMode()
+              ? unit.value.totalWidth
+              : unit.value.width();
+
+        const bottomY =
+          unit.value instanceof ArrayValue
+            ? unit.value.y() + unit.value.totalHeight
+            : CseMachine.getPrintableMode()
+              ? unit.value.y() +
+                Config.FnRadius +
+                Config.TextMargin +
+                unit.value.printDescriptionOffsetY +
+                unit.value.printDescriptionHeight +
+                unit.value.printDescriptionBottomGap
+              : unit.value.y() + unit.value.height() / 2;
+
         this.totalWidth = Math.max(
           this.totalWidth,
-          unit.value.totalWidth +
+          childWidth +
             (i === this.data.length - 1 ? (i + 2) * Config.DataUnitWidth : i * Config.DataUnitWidth)
         );
-        this.totalHeight = Math.max(
-          this.totalHeight,
-          unit.value.y() +
-            (unit.value instanceof ArrayValue ? unit.value.totalHeight : unit.value.height() / 2) -
-            unit.y()
-        );
+        this.totalHeight = Math.max(this.totalHeight, bottomY - unit.y());
       }
 
       this.units[i] = unit;
     }
+  }
+
+  setArrowSourceHighlightedStyle(): void {
+    this.units.forEach(unit => unit.setArrowSourceHighlightedStyle());
+  }
+
+  setArrowSourceNormalStyle(): void {
+    this.units.forEach(unit => unit.setArrowSourceNormalStyle());
+  }
+
+  isEnclosingFrameLive(): boolean {
+    const id = (this.data as any).id;
+    return id ? Layout.liveObjectIDs.has(id) : false;
+  }
+
+  isLive(): boolean {
+    return this.isEnclosingFrameLive();
   }
 
   markAsReferenced() {
@@ -105,6 +149,9 @@ export class ArrayValue extends Value implements IHoverable {
   };
 
   draw(): React.ReactNode {
+    if (Layout.clearDeadFrames && !this.isLive()) {
+      return null;
+    }
     if (this.isDrawn()) return null;
     this._isDrawn = true;
     return (

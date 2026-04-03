@@ -66,7 +66,7 @@ The project requires some environment variables to be set to work properly. In t
 Unless you need to use the shortener locally, you can leave these values blank. Otherwise, ask your backend engineer.
 
 1. `REACT_APP_URL_SHORTENER_SIGNATURE`: The API key for the YOURLS URL shortener.
-1. `REACT_APP_URL_SHORTENER_DOMAIN`: The base URL of the YOURLS URL shortener. Unless you need to use the shortener locally, you can leave this blank. Otherwise, ask your backend engineer.
+1. `REACT_APP_URL_SHORTENER_BASE`: The base URL of the YOURLS URL shortener. Unless you need to use the shortener locally, you can leave this blank. Otherwise, ask your backend engineer.
 
 #### Authentication provider configuration
 

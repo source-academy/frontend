@@ -236,6 +236,47 @@ const CourseConfigPanel: React.FC<Props> = props => {
                   }
                 />
               </FormGroup>
+
+              <FormGroup
+                helperText="Input Cost per 1M tokens in SGD (e.g., 3.20 for GPT-4o). Leave blank for default rate of 12.80 for GPT-4o as of Mar 2026"
+                inline={true}
+                label="LLM Input Cost (SGD)"
+                labelFor="llmInputCost"
+              >
+                <InputGroup
+                  id="llmInputCost"
+                  placeholder="3.20"
+                  value={String(props.courseConfiguration.llmInputCost ?? '')}
+                  onChange={e =>
+                    props.setCourseConfiguration({
+                      ...props.courseConfiguration,
+                      llmInputCost:
+                        e.target.value.trim() === '' ? undefined : Number(e.target.value)
+                    })
+                  }
+                />
+              </FormGroup>
+
+              <FormGroup
+                helperText="Output Cost per 1M tokens in SGD (e.g., 12.80 for GPT-4o). Leave blank for default rate of 12.80 for GPT-4o as of Mar 2026"
+                inline={true}
+                label="LLM Output Cost (SGD)"
+                labelFor="llmOutputCost"
+              >
+                <InputGroup
+                  id="llmOutputCost"
+                  placeholder="12.80"
+                  value={String(props.courseConfiguration.llmOutputCost ?? '')}
+                  onChange={e =>
+                    props.setCourseConfiguration({
+                      ...props.courseConfiguration,
+                      llmOutputCost:
+                        e.target.value.trim() === '' ? undefined : Number(e.target.value)
+                    })
+                  }
+                />
+              </FormGroup>
+
               <FormGroup
                 helperText={
                   <span>

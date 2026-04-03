@@ -20,6 +20,9 @@ export const Config = Object.freeze({
   FnInnerRadius: 3,
   FnTooltipOpacity: 0.3,
   FnTooltipTextPadding: 5,
+  FnDescriptionMaxWidth: 150,
+  FnDescriptionMaxHeight: 60,
+  FnDescriptionRevealOffsetY: 8,
 
   DataMinWidth: 20,
   DataUnitWidth: 40,
@@ -40,26 +43,30 @@ export const Config = Object.freeze({
   ArrowStrokeWidth: 1,
   ArrowHitStrokeWidth: 5,
   ArrowHoveredStrokeWidth: 2,
+  ArrowHoveredHeadSize: 15,
   ArrowCornerRadius: 40,
 
   MaxExportWidth: 20000,
   MaxExportHeight: 12000,
 
+  MinTerminalSegmentLength: 30,
   // Canvas background color
   BgColor: '#2c3e50',
   PrintBgColor: '#fff',
 
   // Colors of all text
   TextColor: '#999',
-  TextColorFaded: '#5b6773',
+  TextColorFaded: '#455',
   PrintTextColor: '#333',
   PrintTextColorFaded: '#ccc',
 
   // Colors of arrows and borders
   StrokeColor: '#999',
-  StrokeColorFaded: '#5b6773',
+  StrokeColorFaded: '#455',
   PrintStrokeColor: '#777',
   PrintStrokeColorFaded: '#ccc',
+  ArrowHighlightedColor: '#ffffff',
+  ArrowDeadHighlightedColor: '#787777',
 
   // Colors of different states
   ActiveColor: '#030fff',
@@ -67,6 +74,7 @@ export const Config = Object.freeze({
   DangerColor: '#ff1744',
   PrintDangerColor: '#f44336',
   HoverColor: '#25c225',
+  HoverDeadColor: '#127a12',
   PrintHoverColor: '#0dbf0d',
 
   // Colors for text hover background

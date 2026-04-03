@@ -15,7 +15,6 @@ import {
   setHoveredCursor,
   setUnhoveredCursor
 } from '../CseMachineUtils';
-import { isCustomPrimitive } from '../utils/altLangs';
 import { Visible } from './Visible';
 
 export interface TextOptions {
@@ -49,7 +48,7 @@ export class Text extends Visible implements IHoverable {
   readonly fullStr: string; // full string representation of data
 
   readonly options: TextOptions = defaultOptions;
-  readonly labelRef: React.RefObject<Label> = React.createRef();
+  readonly labelRef: React.RefObject<Label | null> = React.createRef();
 
   constructor(
     readonly data: Data,
@@ -65,11 +64,9 @@ export class Text extends Visible implements IHoverable {
 
     this.fullStr = this.partialStr = isSourceObject(data)
       ? data.toReplString()
-      : isCustomPrimitive(data)
-        ? String(data)
-        : isStringIdentifiable
-          ? JSON.stringify(data) || String(data)
-          : String(data);
+      : isStringIdentifiable
+        ? JSON.stringify(data) || String(data)
+        : String(data);
     this._height = fontSize;
     const widthOf = (s: string) => getTextWidth(s, `${fontStyle} ${fontSize}px ${fontFamily}`);
     if (widthOf(this.partialStr) > maxWidth) {
@@ -97,6 +94,18 @@ export class Text extends Visible implements IHoverable {
     this.labelRef.current?.hide();
     currentTarget.getLayer()?.draw();
   };
+
+  setArrowSourceHighlightedStyle(): void {
+    if (this.options.faded) {
+      this.ref.current?.fill(Config.HoverDeadColor);
+    } else {
+      this.ref.current?.fill(Config.HoverColor);
+    }
+  }
+
+  setArrowSourceNormalStyle(): void {
+    this.ref.current?.fill(this.options.faded ? fadedTextColor() : defaultTextColor());
+  }
 
   draw(): React.ReactNode {
     const props = {

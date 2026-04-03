@@ -21,6 +21,7 @@ import DeleteCell from './subcomponents/GroundControlDeleteCell';
 import Dropzone from './subcomponents/GroundControlDropzone';
 import EditCell from './subcomponents/GroundControlEditCell';
 import EditTeamSizeCell from './subcomponents/GroundControlEditTeamSizeCell';
+import LLMStatsCell from './subcomponents/GroundControlLLMStatsCell';
 import PublishCell from './subcomponents/GroundControlPublishCell';
 import ReleaseGradingCell from './subcomponents/GroundControlReleaseGradingCell';
 
@@ -82,6 +83,7 @@ const GroundControl: React.FC<Props> = props => {
     {
       headerName: 'Open Date',
       field: 'openAt',
+      minWidth: 240,
       filter: 'agDateColumnFilter',
       filterParams: {
         comparator: dateFilterComparator,
@@ -98,6 +100,7 @@ const GroundControl: React.FC<Props> = props => {
     {
       headerName: 'Close Date',
       field: 'closeAt',
+      minWidth: 240,
       filter: 'agDateColumnFilter',
       filterParams: {
         comparator: dateFilterComparator,
@@ -147,16 +150,18 @@ const GroundControl: React.FC<Props> = props => {
     {
       headerName: 'Actions',
       field: 'placeholderDelete' as any,
+      minWidth: 132,
       cellRenderer: ({ data }: { data: AssessmentOverview }) => {
         return (
-          <>
+          <div className="ground-control-actions-cell">
             <DeleteCell data={data} handleDeleteAssessment={props.handleDeleteAssessment} />
             <ConfigureCell
               data={data}
               handleConfigureAssessment={props.handleConfigureAssessment}
               handleAssignEntriesForVoting={props.handleAssignEntriesForVoting}
             />
-          </>
+            <LLMStatsCell data={data} />
+          </div>
         );
       },
       cellRendererParams: {

@@ -1,11 +1,12 @@
 import { compileAndRun as compileAndRunCCode } from '@sourceacademy/c-slang/ctowasm/dist/index';
-import type { IConduit } from '@sourceacademy/conductor/dist/conduit';
+import type { IConduit } from '@sourceacademy/conductor/conduit';
 import { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
 import { tokenizer } from 'acorn';
 import { type Context, interrupt, type Result, resume, runFilesInContext } from 'js-slang';
 import { ACORN_PARSE_OPTIONS } from 'js-slang/dist/constants';
+import { ErrorSeverity, ErrorType, type SourceError } from 'js-slang/dist/errors/base';
 import { InterruptedError } from 'js-slang/dist/errors/errors';
-import { Chapter, ErrorSeverity, ErrorType, type SourceError, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { pick } from 'lodash';
 import { eventChannel, type SagaIterator } from 'redux-saga';
 import { call, cancel, cancelled, fork, put, race, select, take } from 'redux-saga/effects';
@@ -19,9 +20,9 @@ import type { BrowserHostPlugin } from '../../../../features/conductor/BrowserHo
 import { createConductor } from '../../../../features/conductor/createConductor';
 import { selectConductorEnable } from '../../../../features/conductor/flagConductorEnable';
 import { selectConductorEvaluatorUrl } from '../../../../features/conductor/flagConductorEvaluatorUrl';
-import { selectDirectoryLanguageEnable } from '../../../../features/directory/flagDirectoryLanguageEnable';
+import LanguageDirectoryActions from '../../../../features/directory/LanguageDirectoryActions';
 import StoriesActions from '../../../../features/stories/StoriesActions';
-import { isSchemeLanguage, type OverallState } from '../../../application/ApplicationTypes';
+import { type OverallState } from '../../../application/ApplicationTypes';
 import { SideContentType } from '../../../sideContent/SideContentTypes';
 import { actions } from '../../../utils/ActionsHelper';
 import DisplayBufferService from '../../../utils/DisplayBufferService';
@@ -33,6 +34,29 @@ import { getEvaluatorDefinitionSaga } from '../../LanguageDirectorySaga';
 import { selectStoryEnv, selectWorkspace } from '../../SafeEffects';
 import { dumpDisplayBuffer } from './dumpDisplayBuffer';
 import { updateInspector } from './updateInspector';
+
+function toConductorSourceError(error: unknown): SourceError {
+  const message =
+    typeof error === 'object' && error !== null && 'message' in error
+      ? String((error as { message?: unknown }).message)
+      : String(error);
+  return {
+    type: ErrorType.RUNTIME,
+    severity: ErrorSeverity.ERROR,
+    location: {
+      start: {
+        line: 0,
+        column: 0
+      },
+      end: {
+        line: 0,
+        column: 0
+      }
+    },
+    explain: () => message,
+    elaborate: () => ''
+  };
+}
 
 async function wasm_compile_and_run(
   wasmCode: string,
@@ -52,7 +76,7 @@ async function wasm_compile_and_run(
     return { status: 'finished', context, value: returnedValue };
   } catch (e) {
     console.log(e);
-    return { status: 'error' };
+    return { status: 'error', context };
   }
 }
 
@@ -131,7 +155,7 @@ async function cCompileAndRun(cCode: string, context: Context): Promise<Result> 
   } catch (e) {
     console.log(e);
     reportCRuntimeError(e.message, context);
-    return { status: 'error' };
+    return { status: 'error', context };
   }
 }
 
@@ -204,8 +228,7 @@ export function* evalCodeSaga(
   const { currentStep, cseIsActive, isFolderModeEnabled, needUpdateCse, stepLimit, substIsActive } =
     yield* getWorkspaceData();
 
-  const cseActiveAndCorrectChapter =
-    (isSchemeLanguage(context.chapter) || context.chapter >= Chapter.SOURCE_3) && cseIsActive;
+  const cseActiveAndCorrectChapter = context.chapter >= Chapter.SOURCE_3 && cseIsActive;
   if (cseActiveAndCorrectChapter) {
     context.executionMethod = 'cse-machine';
   }
@@ -456,6 +479,55 @@ function* handleStdout(
   }
 }
 
+function* handleResults(
+  hostPlugin: BrowserHostPlugin,
+  workspaceLocation: WorkspaceLocation
+): SagaIterator {
+  const resultChan = eventChannel(emitter => {
+    hostPlugin.receiveResult = emitter;
+    return () => {
+      if (hostPlugin.receiveResult === emitter) delete hostPlugin.receiveResult;
+    };
+  });
+  try {
+    while (true) {
+      const result = yield take(resultChan);
+      yield put(actions.evalInterpreterSuccess(result, workspaceLocation));
+    }
+  } finally {
+    if (yield cancelled()) {
+      resultChan.close();
+    }
+  }
+}
+
+function* handleErrors(
+  hostPlugin: BrowserHostPlugin,
+  workspaceLocation: WorkspaceLocation
+): SagaIterator {
+  const errorChan = eventChannel(emitter => {
+    hostPlugin.receiveError = emitter;
+    return () => {
+      if (hostPlugin.receiveError === emitter) delete hostPlugin.receiveError;
+    };
+  });
+  try {
+    while (true) {
+      const error = yield take(errorChan);
+      yield put(actions.evalInterpreterError([toConductorSourceError(error)], workspaceLocation));
+    }
+  } finally {
+    if (yield cancelled()) {
+      errorChan.close();
+    }
+  }
+}
+/**
+ * Runs code using the evaluators in the Language Directory using the Conductor framework.
+ * Invoked when the conductor.enable feature flag is enabled.
+ * Fetches the evaluator from the URL specified in the language directory and creates a Conductor instance
+ * to load the evaluator and run the code in a web worker.
+ */
 export function* evalCodeConductorSaga(
   files: Record<string, string>,
   entrypointFilePath: string,
@@ -465,26 +537,43 @@ export function* evalCodeConductorSaga(
   actionType: string,
   storyEnv?: string
 ): SagaIterator {
-  let path: string;
-  if (yield select(selectDirectoryLanguageEnable)) {
-    const evaluator: IEvaluatorDefinition | undefined = yield call(getEvaluatorDefinitionSaga);
+  // Wait 5 seconds for language directory to initialise before continuing evaluation
+  let evaluator: IEvaluatorDefinition | undefined = yield call(getEvaluatorDefinitionSaga);
+  if (!evaluator?.path) {
+    const { timeout } = yield race({
+      evaluatorSelected: take(LanguageDirectoryActions.setSelectedEvaluator.type),
+      timeout: call(() => new Promise(resolve => setTimeout(() => resolve(true), 5000)))
+    });
+    if (timeout) {
+      throw Error('language directory could not be loaded in time');
+    }
+    evaluator = yield call(getEvaluatorDefinitionSaga);
     if (!evaluator?.path) throw Error('no evaluator');
-    path = evaluator.path;
-  } else {
-    path = yield select(selectConductorEvaluatorUrl);
   }
+  const overrideEvaluatorPath: string = (yield select(selectConductorEvaluatorUrl))?.trim?.() ?? '';
+  const path: string = overrideEvaluatorPath || evaluator.path;
+
+  // Download evaluator code
   const evaluatorResponse: Response = yield call(fetch, path);
   if (!evaluatorResponse.ok) throw Error("can't get evaluator");
   const evaluatorBlob: Blob = yield call([evaluatorResponse, 'blob']);
   const url: string = yield call(URL.createObjectURL, evaluatorBlob);
+
+  // Create Conductor instance ith the evaluator
   const { hostPlugin, conduit }: { hostPlugin: BrowserHostPlugin; conduit: IConduit } = yield call(
     createConductor,
     url,
     async (fileName: string) => files[fileName],
     (pluginName: string) => {} // TODO: implement dynamic plugin loading
   );
+
+  // Begin evaluation
   const stdoutTask = yield fork(handleStdout, hostPlugin, workspaceLocation);
+  const resultTask = yield fork(handleResults, hostPlugin, workspaceLocation);
+  const errorTask = yield fork(handleErrors, hostPlugin, workspaceLocation);
   yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);
+
+  // This exit logic of this while loop might be causing an unintended infinite loop in the REPL
   while (true) {
     const { stop } = yield race({
       repl: take(actions.evalRepl.type),
@@ -500,6 +589,8 @@ export function* evalCodeConductorSaga(
   }
   yield call([conduit, 'terminate']);
   yield cancel(stdoutTask);
+  yield cancel(resultTask);
+  yield cancel(errorTask);
   //yield put(actions.debuggerReset(workspaceLocation));
   yield put(actions.endInterruptExecution(workspaceLocation));
   console.log('killed');

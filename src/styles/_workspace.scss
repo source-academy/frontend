@@ -344,6 +344,62 @@ $code-color-notification: #f9f0d7;
         margin-bottom: 12px;
       }
 
+      $grading-editor-input-bg: #202b33;
+
+      .grading-editor-writing-surface {
+        border: 1px solid #1b2530;
+        border-radius: 3px;
+        overflow: hidden;
+        background-color: $grading-editor-input-bg;
+
+        .react-mde {
+          border: 0 !important;
+          border-radius: 0;
+          background-color: $grading-editor-input-bg;
+          margin-bottom: 0;
+
+          .mde-textarea-wrapper {
+            background-color: $grading-editor-input-bg;
+          }
+
+          textarea.mde-text {
+            background-color: $grading-editor-input-bg;
+          }
+
+          .grip {
+            background-color: $grading-editor-input-bg;
+            border-top: 1px solid #1b2530;
+          }
+        }
+
+        .grading-editor-ai-comment-blocks {
+          background-color: $grading-editor-input-bg;
+        }
+
+        .grading-editor-ai-comment-input {
+          display: block;
+          width: 100%;
+          padding: 11px;
+          box-sizing: border-box;
+          font-family: inherit;
+          line-height: 1.5;
+          color: $cadet-color-5;
+          background-color: $grading-editor-input-bg;
+          border: 0;
+
+          &:focus {
+            box-shadow: none;
+          }
+        }
+
+        &.with-ai-comments {
+          .react-mde .grip {
+            display: none;
+          }
+        }
+
+      }
+
       .grading-editor-draft-buttons {
         display: flex;
         flex-direction: row;
@@ -424,6 +480,10 @@ $code-color-notification: #f9f0d7;
               'Consolas',
               monospace;
           }
+          // for ? :
+          .stepper-conditional-operator {
+            color: #ffffff;
+          }
 
           .stepper-literal {
             color: #ff6078;
@@ -437,24 +497,29 @@ $code-color-notification: #f9f0d7;
             color: #f8d871;
           }
 
+          // this is used for hoverable
+          // add bold font
+          // removed background since it clashes with the after/bef sub bg
           .stepper-mu-term {
+            font-weight: bold;
             pointer-events: auto;
             cursor: pointer;
             z-index: 20;
             padding: 0px 3px;
             border-radius: 5px;
-            background: rgba(255, 83, 83, 0.2);
+            background: transparent;
           }
-
+          // removed background since it clashes with the after/bef sub bg
+          // maybe not neccessary to exist anymore
           .stepper-mu-term:hover {
-            background: rgba(255, 83, 83, 0.5);
+            background: transparent;
           }
 
           .beforeMarker {
             position: relative;
             -webkit-box-decoration-break: slice;
             box-decoration-break: slice;
-            background: rgba(179, 101, 57, 0.75);
+            background: rgba(172, 0, 0, 0.75);
             pointer-events: auto;
             cursor: pointer;
             z-index: 20;

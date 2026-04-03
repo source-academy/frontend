@@ -13,7 +13,7 @@ import {
   TextArea
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import AcademyActions from 'src/features/academy/AcademyActions';
@@ -29,7 +29,7 @@ type Props = {
   onClose: () => void;
 };
 
-const DropdownCreateCourse: React.FC<Props> = props => {
+const DropdownCreateCourse = (props => {
   const dispatch = useDispatch();
 
   const [courseConfig, setCourseConfig] = React.useState<UpdateCourseConfiguration>({
@@ -313,6 +313,6 @@ const DropdownCreateCourse: React.FC<Props> = props => {
       </DialogBody>
     </Dialog>
   );
-};
+}) satisfies React.FC<Props>;
 
 export default DropdownCreateCourse;

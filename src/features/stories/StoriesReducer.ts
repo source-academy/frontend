@@ -1,4 +1,5 @@
 import { createReducer, type Reducer } from '@reduxjs/toolkit';
+import { castDraft } from 'immer';
 import { logOut } from 'src/commons/application/actions/CommonsActions';
 
 import {
@@ -28,10 +29,8 @@ const newStoriesReducer = createReducer(defaultStories, builder => {
   builder
     .addCase(StoriesActions.addStoryEnv, (state, action) => {
       const env = getStoriesEnv(action);
-      state.envs[env] = createDefaultStoriesEnv(
-        action.payload.env,
-        action.payload.chapter,
-        action.payload.variant
+      state.envs[env] = castDraft(
+        createDefaultStoriesEnv(action.payload.env, action.payload.chapter, action.payload.variant)
       );
     })
     .addCase(StoriesActions.clearStoryEnv, (state, action) => {
@@ -39,10 +38,8 @@ const newStoriesReducer = createReducer(defaultStories, builder => {
         state.envs = {};
       } else {
         const { chapter, variant } = state.envs[action.payload.env].context;
-        state.envs[action.payload.env] = createDefaultStoriesEnv(
-          action.payload.env,
-          chapter,
-          variant
+        state.envs[action.payload.env] = castDraft(
+          createDefaultStoriesEnv(action.payload.env, chapter, variant)
         );
       }
     })
@@ -126,7 +123,7 @@ const newStoriesReducer = createReducer(defaultStories, builder => {
       debuggerContext.result = action.payload.result;
       debuggerContext.lastDebuggerResult = action.payload.lastDebuggerResult;
       debuggerContext.code = action.payload.code;
-      debuggerContext.context = action.payload.context;
+      debuggerContext.context = castDraft(action.payload.context);
       debuggerContext.workspaceLocation = 'stories';
     })
     .addCase(StoriesActions.toggleStoriesUsingSubst, (state, action) => {

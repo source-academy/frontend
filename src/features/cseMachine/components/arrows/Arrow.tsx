@@ -33,6 +33,7 @@ export abstract class Arrow {
   abstract width(): number;
   abstract isSelected(): boolean;
   abstract path(): string;
+  abstract isLive: boolean;
 
   /** factory method that returns the corresponding arrow depending on where the arrow is `from` */
   public static from(source: Visible): GenericArrow<Visible, Visible> {

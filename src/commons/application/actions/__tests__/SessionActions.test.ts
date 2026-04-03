@@ -1,4 +1,4 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import { mockStudents } from 'src/commons/mocks/UserMocks';
 import {
   paginationToBackendParams,
@@ -434,6 +434,33 @@ test('submitGradingAndContinue generates correct action object', () => {
       questionId,
       xpAdjustment,
       comments
+    }
+  });
+});
+
+test('updateGradingSaveResult generates correct action object', () => {
+  const submissionId = 11;
+  const questionId = 5;
+  const success = false;
+  const saveAndContinue = true;
+  const requestId = 12345;
+
+  const action = SessionActions.updateGradingSaveResult(
+    submissionId,
+    questionId,
+    success,
+    saveAndContinue,
+    requestId
+  );
+
+  expect(action).toEqual({
+    type: SessionActions.updateGradingSaveResult.type,
+    payload: {
+      submissionId,
+      questionId,
+      success,
+      saveAndContinue,
+      requestId
     }
   });
 });

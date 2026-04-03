@@ -1,5 +1,3 @@
-import { _Symbol } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/base';
-import { SchemeNumber } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/stdlib/core-math';
 import React from 'react';
 
 import { Config } from '../../CseMachineConfig';
@@ -18,7 +16,7 @@ export class PrimitiveValue extends Value {
 
   constructor(
     /** data */
-    readonly data: Primitive | _Symbol | SchemeNumber,
+    readonly data: Primitive,
     /** what this value is being referenced by */
     reference: ReferenceType
   ) {
@@ -29,7 +27,8 @@ export class PrimitiveValue extends Value {
       this._x = reference.x() + getTextWidth(reference.keyString) + Config.TextPaddingX;
       this._y = reference.y();
       this.text = new Text(this.data, this.x(), this.y(), {
-        isStringIdentifiable: !isSourceObject(data)
+        isStringIdentifiable: !isSourceObject(data),
+        faded: true
       });
     } else {
       const maxWidth = reference.width();
@@ -67,7 +66,27 @@ export class PrimitiveValue extends Value {
     if (this.text instanceof Text) this.text.options.faded = false;
   }
 
+  setFaded(faded: boolean) {
+    if (this.text instanceof Text) this.text.options.faded = faded;
+  }
+
   draw(): React.ReactNode {
+    //Recomputing x and y coordinates due to change in variables/arrays coordinates after preassigning them
+    const reference = this.references[0];
+    if (reference) {
+      if (reference instanceof Binding) {
+        // If attached to a variable name (x: 10)
+        this._x = reference.x() + getTextWidth(reference.keyString) + Config.TextPaddingX;
+        this._y = reference.y();
+      } else {
+        const textWidth = this.text.width();
+        this._x = reference.x() + (reference.width() - textWidth) / 2;
+        this._y = reference.y() + (reference.height() - Config.FontSize) / 2;
+      }
+
+      (this.text as any)._x = this.x();
+      (this.text as any)._y = this.y();
+    }
     return <React.Fragment key={Layout.key++}>{this.text.draw()}</React.Fragment>;
   }
 }

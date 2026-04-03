@@ -1,6 +1,4 @@
-import path from 'node:path';
-
-import react from '@vitejs/plugin-react-swc';
+import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
@@ -9,13 +7,20 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./src/setupTests.ts'],
+    // Prevent worker startup timeout cascades in constrained environments.
+    pool: 'threads',
+    poolOptions: {
+      threads: {
+        singleThread: true
+      }
+    },
     coverage: {
       reporter: ['text', 'html', 'lcov']
     }
   },
   resolve: {
+    tsconfigPaths: true,
     alias: {
-      src: path.resolve(__dirname, 'src'),
       // File mocks for static assets
       '\\.(jpg|jpeg|png|gif)$': './src/fileMock.ts',
       '\\.svg$': 'identity-obj-proxy',
