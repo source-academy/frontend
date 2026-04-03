@@ -152,7 +152,10 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
    * Subclasses can override this to provide custom hover colors.
    */
   protected getHighlightedColor(): string {
-    return CseMachine.getPrintableMode() ? Config.PrintDangerColor : Config.ArrowHighlightedColor;
+    if (CseMachine.getPrintableMode()) {
+      return Config.PrintDangerColor;
+    }
+    return this.isLive ? Config.ArrowHighlightedColor : Config.ArrowDeadHighlightedColor;
   }
 
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
