@@ -589,7 +589,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   private toggleArrowFilter = (origin: ArrowOriginFilterKey) => {
     const filters = CseMachine.getArrowOriginFilters();
     CseMachine.setArrowOriginVisible(origin, !filters[origin]);
-    CseMachine.clearCachedLayouts();
+    CseMachine.clearRenderedLayouts();
     CseMachine.redraw();
     this.forceUpdate();
   };

@@ -63,6 +63,18 @@ export default class CseMachine {
     CseMachine.usedBuiltInNames.clear();
     CseMachine.clearMemoizedLayouts();
   }
+
+  /**
+   * Clears memoized rendered nodes while preserving fixed-position caches and
+   * used built-in names inferred from source code.
+   *
+   * Use this for view-only toggles (for example arrow filters) that should
+   * force a fresh draw without recomputing global-frame built-in function names.
+   */
+  public static clearRenderedLayouts(): void {
+    CseMachine.clearMemoizedLayouts();
+  }
+
   private static clearMemoizedLayouts(): void {
     Layout.currentLight = undefined;
     Layout.currentDark = undefined;
