@@ -48,7 +48,7 @@ const SideContentHtmlDisplayBase: React.FC<OwnProps & DispatchProps> = props => 
   return (
     <iframe
       className="sa-html-display"
-      title={t('title')}
+      title={t($ => $.title)}
       sandbox="allow-scripts"
       srcDoc={content}
       src="about:blank"
@@ -72,7 +72,7 @@ const makeHtmlDisplayTabFrom = (
   handleError: (errorMsg: string) => void,
   workspaceLocation: SideContentLocation
 ): SideContentTab => ({
-  label: t('sideContent:htmlDisplay.label'),
+  label: t($ => $.htmlDisplay.label, { ns: 'sideContent' }),
   iconName: IconNames.MODAL,
   body: (
     <SideContentHtmlDisplay

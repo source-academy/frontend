@@ -155,8 +155,10 @@ export class Frame extends Visible implements IHoverable {
       let bindingTextWidth = getTextWidth(
         key + (constant ? Config.ConstantColon : Config.VariableColon)
       );
+      // TODO: Check if key + colon size exceed default frame width
       if (isUnassigned(data.value)) {
         bindingTextWidth += Config.TextPaddingX + getTextWidth(Config.UnassignedData);
+        // TODO: Check if unassigned text size exceed default frame width
       } else if (isPrimitiveData(data.value)) {
         bindingTextWidth +=
           Config.TextPaddingX +
@@ -165,8 +167,11 @@ export class Frame extends Visible implements IHoverable {
               ? data.value.toReplString()
               : JSON.stringify(data.value) || String(data.value)
           );
+        // TODO: Check if primitive value size exceed default frame width
       }
+      // To replace later
       this._width = Math.max(this._width, bindingTextWidth + Config.FramePaddingX * 2);
+      this._width = Math.min(this._width, Config.FrameDefaultWidth); // cap the frame width to default width
     }
 
     // Create all the bindings and values
@@ -243,7 +248,7 @@ export class Frame extends Visible implements IHoverable {
    * Reassigns the coordinates according to the final position of this frame
    * @param newX taken from cached layout
    */
-  reassignCoordinates(newX: number): void {
+  reassignCoordinatesX(newX: number): void {
     this._x = newX;
 
     let textOffset = 0;
@@ -256,6 +261,18 @@ export class Frame extends Visible implements IHoverable {
       this.level!.y(), // this method is only called after the frame is drawn
       { maxWidth: this.width(), faded: !this.isLive }
     );
+  }
+
+  /**
+   * Reassigns the coordinates according to the final position of this frame
+   * @param newY taken from cached layout
+   */
+  reassignCoordinatesY(newY: number): void {
+    this._y = newY;
+  }
+
+  reassignWidth(newWidth: number): void {
+    this._width = newWidth;
   }
 
   onMouseEnter = () => {};
