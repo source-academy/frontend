@@ -314,9 +314,7 @@ const GradingEditor: React.FC<Props> = props => {
       return [
         ...prev,
         { originalIndex: index, text: normalizeCommentText(original), isEdited: false }
-      ].sort(
-        (a, b) => a.originalIndex - b.originalIndex
-      );
+      ].sort((a, b) => a.originalIndex - b.originalIndex);
     });
   };
 
@@ -350,19 +348,17 @@ const GradingEditor: React.FC<Props> = props => {
     }
 
     const { selectedIndices, changedEdits } = buildSelectionPayload(selectedComments, suggestions);
-    const currentSelectionKey = JSON.stringify({ selected_indices: selectedIndices, edits: changedEdits });
+    const currentSelectionKey = JSON.stringify({
+      selected_indices: selectedIndices,
+      edits: changedEdits
+    });
 
     // Avoid rewriting identical selection state on repeated saves.
     if (currentSelectionKey === lastSavedSelectionKeyRef.current) {
       return true;
     }
 
-    const resp = await saveChosenComments(
-      tokens,
-      props.answer_id,
-      selectedIndices,
-      changedEdits
-    );
+    const resp = await saveChosenComments(tokens, props.answer_id, selectedIndices, changedEdits);
 
     if (!resp || !resp.ok) {
       showWarningMessage('Failed to save selected AI comments. Please try again.');
@@ -486,10 +482,7 @@ const GradingEditor: React.FC<Props> = props => {
           return { originalIndex: index, text, isEdited: text !== original };
         });
       const { selectedIndices: previousSelectedIndices, changedEdits: previousChangedEdits } =
-        buildSelectionPayload(
-          previousSelectedComments,
-          props.ai_comments?.comments || []
-        );
+        buildSelectionPayload(previousSelectedComments, props.ai_comments?.comments || []);
 
       const hasSavedChosenComments = await postSaveChosenComments();
       if (!hasSavedChosenComments) {
@@ -529,7 +522,9 @@ const GradingEditor: React.FC<Props> = props => {
             lastSavedSelectionKeyRef.current = previousSelectionKey;
             initialSelectionKeyRef.current = previousSelectionKey;
             syncAiCommentsToStore(previousSelectedComments, props.ai_comments?.comments || []);
-            showWarningMessage('Failed to save grading. Reverted AI comment selection to last saved state.');
+            showWarningMessage(
+              'Failed to save grading. Reverted AI comment selection to last saved state.'
+            );
           } else {
             showWarningMessage(
               'Failed to save grading, and failed to rollback AI comment selection. Please refresh and retry.'
@@ -920,7 +915,7 @@ const GradingEditor: React.FC<Props> = props => {
               ))}
           </div>
         )}
-        </div>
+      </div>
 
       {selectedTab === 'write' && (
         <div className="grading-editor-draft-buttons">
