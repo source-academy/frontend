@@ -80,8 +80,10 @@ const EditCell: React.FC<Props> = ({ data, forOpenDate, handleAssessmentChangeDa
 
   return (
     <>
-      <span className="date-cell-text">{currentDate.format(dateDisplayFormat)}</span>
-      <ControlButton icon={IconNames.EDIT} onClick={handleOpenDialog} />
+      <div className="date-cell-content">
+        <span className="date-cell-text">{currentDate.format(dateDisplayFormat)}</span>
+        <ControlButton icon={IconNames.EDIT} onClick={handleOpenDialog} />
+      </div>
       <Dialog
         icon={IconNames.INFO_SIGN}
         isOpen={isDialogOpen}
