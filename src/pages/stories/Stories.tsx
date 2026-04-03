@@ -37,9 +37,9 @@ const Stories: React.FC = () => {
   const handleDeleteStory = useCallback(
     async (id: number) => {
       const confirm = await showSimpleConfirmDialog({
-        contents: <p>{t('deleteConfirmation')}</p>,
+        contents: <p>{t($ => $.deleteConfirmation)}</p>,
         positiveIntent: 'danger',
-        positiveLabel: t('delete')
+        positiveLabel: t($ => $.delete)
       });
       if (confirm) {
         dispatch(StoriesActions.deleteStory(id));
@@ -125,7 +125,7 @@ const Stories: React.FC = () => {
           <GradingFlex justifyContent="space-between">
             <GradingFlex justifyContent="flex-start" alignItems="center" style={{ columnGap: 16 }}>
               <GradingText style={{ fontSize: '1.125rem', opacity: 0.9 }}>
-                {t('allStories')}
+                {t($ => $.allStories)}
               </GradingText>
               {isLoggedIn && (
                 <Button onClick={handleNewStory} icon={IconNames.PLUS}>

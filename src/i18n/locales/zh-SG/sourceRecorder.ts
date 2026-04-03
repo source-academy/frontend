@@ -1,0 +1,10 @@
+const translations = {
+  sourceRecorder: {
+    deleteTitle: '删除 Sourcecast',
+    deleteConfirmation: '您确定要删除此 Sourcecast 条目吗？',
+    confirmDelete: '确认删除',
+    cancel: '取消'
+  }
+};
+
+export default translations;

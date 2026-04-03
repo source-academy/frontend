@@ -22,12 +22,14 @@ export default class CseMachine {
   private static setIsStepLimitExceeded: SetisStepLimitExceeded;
   // Ghost layout snapshots, separated by mode to keep coordinates fixed within each mode.
   public static normalLayoutCache: LayoutCache | null = null;
+  public static normalLiveLayoutCache: LayoutCache | null = null;
   public static printLayoutCache: LayoutCache | null = null;
+  public static printLiveLayoutCache: LayoutCache | null = null;
   public static usedBuiltInNames = new Set<string>();
   private static printableMode: boolean = false;
   private static controlStash: boolean = false; // TODO: discuss if the default should be true
   private static stackTruncated: boolean = false;
-  private static centerAlignment: boolean = false; // added for center alignment
+  private static centerAlignment: boolean = false;
   private static centerAlignmentToggled: boolean = false;
   private static environmentTree: EnvTree | undefined;
   private static currentEnvId: string;
@@ -46,6 +48,14 @@ export default class CseMachine {
     Layout.clearDeadFrames = enabled;
   }
   public static clearCachedLayouts(): void {
+    CseMachine.normalLayoutCache = null;
+    CseMachine.normalLiveLayoutCache = null;
+    CseMachine.printLayoutCache = null;
+    CseMachine.printLiveLayoutCache = null;
+    CseMachine.usedBuiltInNames.clear();
+    CseMachine.clearMemoizedLayouts();
+  }
+  private static clearMemoizedLayouts(): void {
     Layout.currentLight = undefined;
     Layout.currentDark = undefined;
     Layout.currentStackDark = undefined;
@@ -54,11 +64,11 @@ export default class CseMachine {
     Layout.currentStackTruncLight = undefined;
     Layout.prevLayout = undefined;
     Layout.key = 0;
-    CseMachine.normalLayoutCache = null;
-    CseMachine.printLayoutCache = null;
-    CseMachine.usedBuiltInNames.clear();
   }
-  // added for center alignment
+  public static clearLiveLayouts(): void {
+    CseMachine.normalLiveLayoutCache = null;
+    CseMachine.printLiveLayoutCache = null;
+  }
   public static toggleCenterAlignment(): void {
     CseMachine.centerAlignment = !CseMachine.centerAlignment;
     CseMachine.centerAlignmentToggled = true;
@@ -76,20 +86,31 @@ export default class CseMachine {
   public static getStackTruncated(): boolean {
     return CseMachine.stackTruncated;
   }
-  // added for center alignment
   public static getCenterAlignment(): boolean {
     return CseMachine.centerAlignment;
   }
   public static getMasterLayout(): LayoutCache | null {
     return CseMachine.getPrintableMode()
-      ? CseMachine.printLayoutCache
-      : CseMachine.normalLayoutCache;
+      ? Layout.clearDeadFrames
+        ? CseMachine.printLiveLayoutCache
+        : CseMachine.printLayoutCache
+      : Layout.clearDeadFrames
+        ? CseMachine.normalLiveLayoutCache
+        : CseMachine.normalLayoutCache;
   }
   public static setMasterLayout(cache: LayoutCache): void {
     if (CseMachine.getPrintableMode()) {
-      CseMachine.printLayoutCache = cache;
+      if (Layout.clearDeadFrames) {
+        CseMachine.printLiveLayoutCache = cache;
+      } else {
+        CseMachine.printLayoutCache = cache;
+      }
     } else {
-      CseMachine.normalLayoutCache = cache;
+      if (Layout.clearDeadFrames) {
+        CseMachine.normalLiveLayoutCache = cache;
+      } else {
+        CseMachine.normalLayoutCache = cache;
+      }
     }
   }
 
@@ -261,9 +282,11 @@ export default class CseMachine {
       }
 
       const originalMode = CseMachine.getPrintableMode();
+      const originalAlignment = CseMachine.getCenterAlignment();
 
       const buildCache = (printable: boolean) => {
         CseMachine.printableMode = printable;
+        CseMachine.centerAlignment = false;
         Layout.setContext(
           context.runtime.environmentTree as EnvTree,
           context.runtime.control!,
@@ -278,6 +301,8 @@ export default class CseMachine {
 
       // Restore the user's actual mode setting and layout.
       CseMachine.printableMode = originalMode;
+      CseMachine.centerAlignment = originalAlignment;
+      CseMachine.setClearDeadFrames(false);
       Layout.setContext(
         context.runtime.environmentTree as EnvTree,
         context.runtime.control,
@@ -305,17 +330,66 @@ export default class CseMachine {
         if (!CseMachine.getMasterLayout()) {
           CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
         }
-        if (CseMachine.getMasterLayout()) {
-          Layout.applyFixedPositions();
-        }
+        Layout.applyFixedPositions();
         this.setVis(Layout.draw());
         this.centerAlignmentToggled = false;
       }
-
-      // Always redraw from fresh context so the underlay arrow layer stays in sync.
-      Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
-      if (CseMachine.getMasterLayout()) {
+      // redraw environment model and populate live layout caches
+      if (Layout.clearDeadFrames) {
+        Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
+        if (!CseMachine.getMasterLayout()) {
+          CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
+        }
         Layout.applyFixedPositions();
+      }
+
+      if (
+        CseMachine.getPrintableMode() &&
+        CseMachine.getControlStash() &&
+        CseMachine.getStackTruncated() &&
+        Layout.currentStackTruncLight !== undefined
+      ) {
+        this.setVis(Layout.currentStackTruncLight);
+      } else if (
+        CseMachine.getPrintableMode() &&
+        CseMachine.getControlStash() &&
+        !CseMachine.getStackTruncated() &&
+        Layout.currentStackLight !== undefined
+      ) {
+        this.setVis(Layout.currentStackLight);
+      } else if (
+        !CseMachine.getPrintableMode() &&
+        CseMachine.getControlStash() &&
+        CseMachine.getStackTruncated() &&
+        Layout.currentStackTruncDark !== undefined
+      ) {
+        this.setVis(Layout.currentStackTruncDark);
+      } else if (
+        !CseMachine.getPrintableMode() &&
+        CseMachine.getControlStash() &&
+        !CseMachine.getStackTruncated() &&
+        Layout.currentStackDark !== undefined
+      ) {
+        this.setVis(Layout.currentStackDark);
+      } else if (
+        CseMachine.getPrintableMode() &&
+        !CseMachine.getControlStash() &&
+        Layout.currentLight !== undefined
+      ) {
+        this.setVis(Layout.currentLight);
+      } else if (
+        !CseMachine.getPrintableMode() &&
+        !CseMachine.getControlStash() &&
+        Layout.currentDark !== undefined
+      ) {
+        this.setVis(Layout.currentDark);
+      } else {
+        Layout.setContext(CseMachine.environmentTree, CseMachine.control, CseMachine.stash);
+        if (!CseMachine.getMasterLayout()) {
+          CseMachine.setMasterLayout(Layout.getLayoutPositions(this.controlStash));
+        }
+        Layout.applyFixedPositions();
+        this.setVis(Layout.draw());
       }
       this.setVis(Layout.draw());
       Layout.updateDimensions(Layout.visibleWidth, Layout.visibleHeight);
