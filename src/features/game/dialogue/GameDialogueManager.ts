@@ -12,7 +12,6 @@ import DialogueGenerator from './GameDialogueGenerator';
 import DialogueRenderer from './GameDialogueRenderer';
 import DialogueSpeakerRenderer from './GameDialogueSpeakerRenderer';
 
-
 /**
  * Given a dialogue Id, this manager renders the correct dialogue.
  * It displays the lines, speakers, and performs actions
@@ -31,6 +30,7 @@ export default class DialogueManager {
   private isSkipping: boolean = false;
   private nextLineResolve?: (value: void | PromiseLike<void>) => void;
   private isPrompting: boolean = false;
+  private isDialoguePromptActive: boolean = false;
 
   /**
    * @param dialogueId the dialogue Id of the dialogue you want to play
@@ -47,10 +47,7 @@ export default class DialogueManager {
     const dialogueContainer = this.dialogueRenderer.getDialogueContainer();
     this.createSkipButton(dialogueContainer);
 
-    GameGlobalAPI.getInstance().addToLayer(
-      Layer.Dialogue,
-      dialogueContainer
-    );
+    GameGlobalAPI.getInstance().addToLayer(Layer.Dialogue, dialogueContainer);
 
     GameGlobalAPI.getInstance().fadeInLayer(Layer.Dialogue);
     await new Promise(resolve => this.playWholeDialogue(resolve as () => void));
@@ -69,22 +66,22 @@ export default class DialogueManager {
     // add keyboard listener for dialogue box
     this.nextLineResolve = () => this.showNextLine(resolve);
 
-
     this.getInputManager().registerKeyboardListener(keyboardShortcuts.Next, 'up', async () => {
       // show the next line if dashboard or escape menu are not displayed
-      if (!GameGlobalAPI.getInstance().getGameManager().getPhaseManager().isCurrentPhaseTerminal()) {
-        if (!this.isSkipping && !this.isPrompting) { 
+      if (
+        !GameGlobalAPI.getInstance().getGameManager().getPhaseManager().isCurrentPhaseTerminal()
+      ) {
+        if (!this.isSkipping && !this.isPrompting) {
           await this.showNextLine(resolve);
         }
       }
     });
 
-    
     this.getInputManager().registerKeyboardListener(
       keyboardShortcuts.SkipDialogue,
       'up',
       async () => {
-        await this.triggerSkip(); 
+        await this.triggerSkip();
       }
     );
 
@@ -98,9 +95,8 @@ export default class DialogueManager {
       });
   }
 
-
   private async triggerSkip() {
-    if (this.isPrompting || this.isSkipping) return;
+    if (this.isPrompting || this.isSkipping || this.isDialoguePromptActive) return;
 
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const phaseManager = gameManager.getPhaseManager();
@@ -161,12 +157,11 @@ export default class DialogueManager {
     this.skipButton.setDisplaySize(45, 45);
 
     this.skipButton.on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
-      await this.triggerSkip(); 
+      await this.triggerSkip();
     });
 
     dialogueContainer.add(this.skipButton);
   }
-
 
   /**
    * Skips all remaining dialogue until a prompt (choice) is encountered.
@@ -178,7 +173,7 @@ export default class DialogueManager {
 
     // Plays the sound effect exactly once when skip starts
     GameGlobalAPI.getInstance().playSound(SoundAssets.dialogueAdvance.key);
-
+    
     try {
       // Keep advancing the dialogue until we hit a stopping point
       while (this.isSkipping) {
@@ -199,7 +194,7 @@ export default class DialogueManager {
         }
 
         if (this.nextLineResolve) {
-          await this.showNextLine(() => {});  
+          await this.showNextLine(() => { });
         }
 
         // Small delay to prevent freezing
@@ -209,7 +204,6 @@ export default class DialogueManager {
       this.isSkipping = false;
     }
   }
-
 
   private async peekNextLine() {
     const currentPart = (this.getDialogueGenerator() as any).currPart;
@@ -226,6 +220,7 @@ export default class DialogueManager {
     return { ...nextLine, hasPrompt };
   }
 
+
   public async showNextLine(resolve: () => void) {
     // Only play sound if we are not skipping, to avoid spamming sounds when skipping
     if (!this.isSkipping) {
@@ -234,6 +229,7 @@ export default class DialogueManager {
 
     const { line, speakerDetail, actionIds, prompt } =
       await this.getDialogueGenerator().generateNextLine();
+
     const lineWithQuizScores = this.makeLineWithQuizScores(line);
     const lineWithName = lineWithQuizScores.replace('{name}', this.getUsername());
     this.getDialogueRenderer().changeText(lineWithName);
@@ -247,27 +243,44 @@ export default class DialogueManager {
     this.getInputManager().enableKeyboardInput(false);
 
     if (prompt) {
-      // disable keyboard input to prevent continue dialogue
+      // Prevent skipping, hide the skip button and prevent the usage of "s" keyboard shortcut
+      this.isDialoguePromptActive = true;
+      if (this.skipButton) this.skipButton.setVisible(false);
+
       this.getInputManager().enableKeyboardInput(false);
       const response = await promptWithChoices(
         GameGlobalAPI.getInstance().getGameManager(),
         prompt.promptTitle,
         prompt.choices.map(choice => choice[0])
       );
-
       this.getInputManager().enableKeyboardInput(true);
       this.getDialogueGenerator().updateCurrPart(prompt.choices[response][1]);
+
+
+      if (this.skipButton) this.skipButton.setVisible(true);
+      this.isDialoguePromptActive = false;
     }
+
     await GameGlobalAPI.getInstance().processGameActionsInSamePhase(actionIds);
     GameGlobalAPI.getInstance().enableSprite(this.getDialogueRenderer().getDialogueBox(), true);
     this.getInputManager().enableKeyboardInput(true);
 
     if (!line) {
-      // clear keyboard listeners when dialogue ends
-      this.getInputManager().clearKeyboardListeners([keyboardShortcuts.Next, keyboardShortcuts.SkipDialogue]);
+      //Permanently hide the skip button when there is no more dialogue
+      if (this.skipButton) {
+        this.skipButton.setVisible(false);
+      }
+
+
+      // Prevents skipping by using the "s" keyboard shortcut
+      this.getInputManager().clearKeyboardListeners([
+        keyboardShortcuts.Next,
+        keyboardShortcuts.SkipDialogue
+      ]);
       resolve();
     }
   }
+
 
   /**
    * Hide all dialogue boxes, speaker boxes and speaker sprites

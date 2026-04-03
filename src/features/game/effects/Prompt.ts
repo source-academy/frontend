@@ -91,7 +91,7 @@ export async function promptWithChoices(
   GameGlobalAPI.getInstance().addToLayer(targetLayer, promptContainer);
 
   //Used to prevent spamming the confirm for the skip button using shortcut key
-  let isResolved = false; 
+  let isResolved = false;
 
   const activatePromptContainer: Promise<number> = new Promise(resolve => {
     promptContainer.add(
@@ -103,7 +103,7 @@ export async function promptWithChoices(
           bitMapTextStyle: promptOptStyle,
           onUp: () => {
             //Prevents the confirm prompt from showing up multiple times if someone tries to spam clicks it
-            if (isResolved) return; 
+            if (isResolved) return;
 
             const phaseManager = GameGlobalAPI.getInstance().getGameManager().getPhaseManager();
 
@@ -111,7 +111,7 @@ export async function promptWithChoices(
               return;
             }
 
-            isResolved = true; 
+            isResolved = true;
 
             resolve(index);
           }

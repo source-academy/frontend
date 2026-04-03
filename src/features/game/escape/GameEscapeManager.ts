@@ -22,7 +22,7 @@ import EscapeConstants, {
 class GameEscapeManager implements IGameUI {
   private bgmVolumeRadioButtons: CommonRadioButton | undefined;
   private sfxVolumeRadioButtons: CommonRadioButton | undefined;
-  private skipConfirmRadioButtons: CommonRadioButton | undefined; 
+  private skipConfirmRadioButtons: CommonRadioButton | undefined;
   private scene: IBaseScene;
 
   /**
@@ -81,20 +81,30 @@ class GameEscapeManager implements IGameUI {
     const bgmVolIdx = SettingsConstants.volContainerOpts.findIndex(
       value => parseFloat(value) === bgmVolume
     );
-    const skipConfirmIdx = skipConfirm !== false ? 0 : 1; 
-
+    const skipConfirmIdx = skipConfirm !== false ? 0 : 1;
 
     // SFX Radio buttons
-    this.sfxVolumeRadioButtons = this.createSettingsRadioOptions(SettingsConstants.volContainerOpts, sfxVolIdx, settingsPos[0][1]);
+    this.sfxVolumeRadioButtons = this.createSettingsRadioOptions(
+      SettingsConstants.volContainerOpts,
+      sfxVolIdx,
+      settingsPos[0][1]
+    );
     // BGM Radio buttons
-    this.bgmVolumeRadioButtons = this.createSettingsRadioOptions(SettingsConstants.volContainerOpts, bgmVolIdx, settingsPos[1][1]);
+    this.bgmVolumeRadioButtons = this.createSettingsRadioOptions(
+      SettingsConstants.volContainerOpts,
+      bgmVolIdx,
+      settingsPos[1][1]
+    );
     this.skipConfirmRadioButtons = this.createSettingsRadioOptions(
       EscapeConstants.skipConfirmOpts,
       skipConfirmIdx,
       settingsPos[2][1]
     );
-    escapeMenuContainer.add([this.sfxVolumeRadioButtons, this.bgmVolumeRadioButtons,
-      this.skipConfirmRadioButtons]);
+    escapeMenuContainer.add([
+      this.sfxVolumeRadioButtons,
+      this.bgmVolumeRadioButtons,
+      this.skipConfirmRadioButtons
+    ]);
 
     // Get all the buttons
     const buttons = this.getOptButtons();
@@ -136,7 +146,7 @@ class GameEscapeManager implements IGameUI {
     return new CommonRadioButton(
       this.scene,
       {
-        choices: choices, 
+        choices: choices,
         defaultChoiceIdx: defaultChoiceIdx,
         maxXSpace: EscapeConstants.radioButtons.xSpace,
         radioChoiceConfig: {
