@@ -15,6 +15,7 @@ import {
   setHoveredCursor,
   setUnhoveredCursor
 } from '../CseMachineUtils';
+import { Frame } from './Frame';
 import { Visible } from './Visible';
 
 export interface TextOptions {
@@ -27,6 +28,7 @@ export interface TextOptions {
   faded: boolean;
   hidden: boolean;
   bindingType: 'none' | 'constant' | 'variable';
+  parentFrame?: Frame; // Reference to the frame this text belongs to
 }
 
 export const defaultOptions: TextOptions = {
