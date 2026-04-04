@@ -2383,7 +2383,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     }
   >
     <Path
-      data="M 181.5 40 L 349 330 L 349 330 "
+      data="M 181.5 40 L 369 330 L 369 330 "
       hitStrokeWidth={10}
       preventDefault={false}
       ref={
@@ -2401,7 +2401,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
         [
           181.5,
           40,
-          349,
+          369,
           330,
         ]
       }
