@@ -725,7 +725,9 @@ export class Layout {
                   </KonvaGroup>
                 </KonvaLayer>
                 <KonvaLayer ref={CseAnimation.layerRef} listening={false}>
-                  {CseAnimation.animations.map(c => c.draw())}
+                  <KonvaGroup ref={Layout.animationGroupRef}>
+                    {CseAnimation.animations.map(c => c.draw())}
+                  </KonvaGroup>
                 </KonvaLayer>
               </KonvaStage>
             </div>
