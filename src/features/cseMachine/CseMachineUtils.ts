@@ -412,7 +412,8 @@ export function computeFramesCoordChange(oldLevels: Level[], newLevels: Level[])
 
   // Defensive check in case CSE machine's layout is updated to have more complex frame movements
   if (oldLevels.length !== newLevels.length) {
-    throw new Error('Level count mismatch for Clear Dead Frames animation');
+    console.log('Level count mismatch for Clear Dead Frames animation, animation not played.')
+    return [];
   }
 
   // Match each frame that is live
