@@ -95,7 +95,6 @@ export class ClearDeadFramesAnimation extends Animatable {
       changedFramePairs.map(([, newFrame]) => newFrame.environment.id)
     );
 
-    // changedTextPairs only account for binding keys and text values
     const changedTextPairs: AnimatedTextPair[] = [];
     const changedFnPairs: Array<[FnValue | GlobalFnValue, FnValue | GlobalFnValue]> = [];
 
@@ -317,12 +316,6 @@ export class ClearDeadFramesAnimation extends Animatable {
         const oldValue: PrimitiveValue = oldUnit.value as PrimitiveValue;
         const newValue: PrimitiveValue = newUnit.value as PrimitiveValue;
         if (oldValue.text instanceof Text) {
-          changedTextPairs.push({
-            oldText: oldValue.text as Text,
-            newText: newValue.text as Text,
-            targetX: newValue.x(),
-            targetY: newValue.y()
-          });
           changedTextPairs.push({
             oldText: oldValue.text as Text,
             newText: newValue.text as Text,
