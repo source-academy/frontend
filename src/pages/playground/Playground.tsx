@@ -474,7 +474,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
         if (updateCse) {
           CseMachine.clearCachedLayouts();
         }
+        // reset stepper before evaluation
+        dispatch(WorkspaceActions.updateCurrentStep(-1, workspaceLocation));
+        dispatch(WorkspaceActions.updateStepsTotal(0, workspaceLocation));
+        dispatch(WorkspaceActions.toggleUpdateCse(true, workspaceLocation));
         dispatch(WorkspaceActions.evalEditor(workspaceLocation));
+        CseMachine.setClearDeadFrames(false);
+        if (CseMachine.getCenterAlignment()) {
+          CseMachine.toggleCenterAlignment();
+        }
       },
       handleInterruptEval: () =>
         dispatch(InterpreterActions.beginInterruptExecution(workspaceLocation)),

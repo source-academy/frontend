@@ -1,0 +1,7 @@
+const translations = {
+  noEntries: '未找到符合条件的投票条目。',
+  title: '比赛投票',
+  tooltip: '从 D（最差）到 S（最佳）为您最喜欢的比赛条目排名！'
+};
+
+export default translations;
