@@ -179,7 +179,7 @@ export class FnValue extends Value implements IHoverable {
   };
 
   draw(): React.ReactNode {
-    const pairs = CseMachine.getStreamLineage((this.data as any).id)
+    const pairs = CseMachine.getStreamLineage((this.data as any).id);
     this._streamArrows = [];
     if (CseMachine.getPairCreationMode()) {
       // Clear arrows to prevent duplicates from multiple draw calls
