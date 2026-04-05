@@ -9,6 +9,11 @@ const InterpreterActions = createActions('interpreter', {
     logString,
     workspaceLocation
   }),
+  appendInterpreterResult: (value: Value, workspaceLocation: WorkspaceLocation) => ({
+    type: 'result',
+    value,
+    workspaceLocation
+  }),
   evalInterpreterSuccess: (value: Value, workspaceLocation: WorkspaceLocation) => ({
     type: 'result',
     value,
@@ -27,6 +32,11 @@ const InterpreterActions = createActions('interpreter', {
     index
   }),
   evalInterpreterError: (errors: SourceError[], workspaceLocation: WorkspaceLocation) => ({
+    type: 'errors',
+    errors,
+    workspaceLocation
+  }),
+  appendInterpreterError: (errors: SourceError[], workspaceLocation: WorkspaceLocation) => ({
     type: 'errors',
     errors,
     workspaceLocation
