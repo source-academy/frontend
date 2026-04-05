@@ -618,7 +618,7 @@ export class Layout {
         </div>
       );
       Layout.prevLayout = layout;
-      if(CseMachine.getPairCreationMode()) {
+      if (CseMachine.getPairCreationMode()) {
         if (CseMachine.getPrintableMode()) {
           if (CseMachine.getControlStash()) {
             if (CseMachine.getStackTruncated()) {
