@@ -16,7 +16,7 @@ import { GamePhaseType, GameTerminalPhaseType } from './GamePhaseTypes';
  */
 export default class GamePhaseManager {
   public phaseMap: Map<GamePhaseType, IGameUI>;
-  public phaseStack: GamePhaseType[]; // to test make it public
+  private phaseStack: GamePhaseType[];
   private inputManager: GameInputManager;
   private interruptCheckCallback: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => boolean;
   private interruptTransitionCallback: (
