@@ -162,16 +162,16 @@ class GameModeExplore implements IGameUI {
    */
   private explorePointerOver(id: ItemId, x: number, y: number) {
     const hasTriggered = GameGlobalAPI.getInstance().hasTriggeredInteraction(id);
-    const objectProp = GameGlobalAPI.getInstance().getObjectById(id);
+    const objectProp = GameGlobalAPI.getInstance().getGameMap().getObjectPropMap().get(id);
     GameGlobalAPI.getInstance().objectHoverGlow(id, true);
 
-    if (objectProp.isDoor) {
+    if (objectProp && objectProp.isDoor) {
       const locationId = objectProp.leadTo;
       const nextLocation = GameGlobalAPI.getInstance().getLocationAtId(locationId);
       const locationName = nextLocation.name;
       GameGlobalAPI.getInstance().setDefaultCursor(ExploreModeConstants.move);
       GameGlobalAPI.getInstance().displayTooltip(x, y, locationName);
-    } else if (objectProp.isChat) {
+    } else if (objectProp && objectProp.isChat) {
       GameGlobalAPI.getInstance().setDefaultCursor(ExploreModeConstants.chat);
     } else {
       if (hasTriggered) {
