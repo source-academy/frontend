@@ -98,6 +98,10 @@ export class ClearDeadFramesAnimation extends Animatable {
     const changedTextPairs: AnimatedTextPair[] = [];
     const changedFnPairs: Array<[FnValue | GlobalFnValue, FnValue | GlobalFnValue]> = [];
 
+    // Account for duplicated fn values and array values
+    const visitedFnValues = new Set<FnValue | GlobalFnValue>();
+    const visitedArrayValues = new Set<ArrayValue>();
+
     // FRAMES
     this.frameAnimations = [];
     this.newFrameCovers = [];
@@ -186,6 +190,7 @@ export class ClearDeadFramesAnimation extends Animatable {
           const oldFnVisible =
             oldFn instanceof GlobalFnValue ? oldFn.isReferenced() : oldFn.isLive();
           if (oldFnVisible) {
+            visitedFnValues.add(oldFn);
             changedFnPairs.push([oldFn, newBinding.value]);
           }
         }
@@ -193,7 +198,8 @@ export class ClearDeadFramesAnimation extends Animatable {
         // Create animations for ArrayValue, even if is dummy binding
         if (oldBinding.value instanceof ArrayValue && newBinding.value instanceof ArrayValue) {
           const oldArr: ArrayValue = oldBinding.value as ArrayValue;
-          if (oldArr.isLive()) {
+          if (oldArr.isLive() && !visitedArrayValues.has(oldArr)) {
+            visitedArrayValues.add(oldArr);
             const newArr: ArrayValue = newBinding.value as ArrayValue;
 
             if (oldArr.units.length == 0) {
@@ -220,7 +226,9 @@ export class ClearDeadFramesAnimation extends Animatable {
                 newArr,
                 changedFramePairs,
                 changedTextPairs,
-                changedFnPairs
+                changedFnPairs,
+                visitedFnValues,
+                visitedArrayValues
               );
             }
           }
@@ -280,10 +288,16 @@ export class ClearDeadFramesAnimation extends Animatable {
     newArr: ArrayValue,
     changedFramePairs: Frame[][],
     changedTextPairs: AnimatedTextPair[],
-    changedFnPairs: Array<[FnValue | GlobalFnValue, FnValue | GlobalFnValue]>
+    changedFnPairs: Array<[FnValue | GlobalFnValue, FnValue | GlobalFnValue]>,
+    visitedFnValues: Set<FnValue | GlobalFnValue>,
+    visitedArrayValues: Set<ArrayValue>
   ): void {
     // Check each ArrayUnit, add them accordingly
     for (let unitIdx = 0; unitIdx < oldArr.units.length; unitIdx++) {
+      if (unitIdx >= newArr.units.length) {
+        continue;
+      } // Defensive check for out-of-bounds
+
       const oldUnit: ArrayUnit = oldArr.units[unitIdx];
       const newUnit: ArrayUnit = newArr.units[unitIdx];
       const cornerRadius = [
@@ -343,15 +357,25 @@ export class ClearDeadFramesAnimation extends Animatable {
           );
         }
       } else if (oldUnit.value instanceof FnValue) {
-        changedFnPairs.push([oldUnit.value as FnValue, newUnit.value as FnValue]);
+        const oldFn = oldUnit.value as FnValue;
+        if (!visitedFnValues.has(oldFn)) {
+          visitedFnValues.add(oldFn);
+          changedFnPairs.push([oldFn, newUnit.value as FnValue]);
+        }
       } else if (oldUnit.value instanceof ArrayValue) {
-        this.recurseInArray(
-          oldUnit.value as ArrayValue,
-          newUnit.value as ArrayValue,
-          changedFramePairs,
-          changedTextPairs,
-          changedFnPairs
-        );
+        const oldArr = oldUnit.value as ArrayValue;
+        if (!visitedArrayValues.has(oldArr)) {
+          visitedArrayValues.add(oldArr);
+          this.recurseInArray(
+            oldUnit.value as ArrayValue,
+            newUnit.value as ArrayValue,
+            changedFramePairs,
+            changedTextPairs,
+            changedFnPairs,
+            visitedFnValues,
+            visitedArrayValues
+          );
+        }
       }
     }
   }
