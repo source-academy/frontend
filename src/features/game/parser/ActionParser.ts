@@ -216,7 +216,7 @@ export default class ActionParser {
   }
 
   /**
-   * detect if the object is a door with the action changeLoctionTo
+   * detect if the object is a door with the action changeLocationTo
    * @param fullActionStrings
    * @returns
    */
