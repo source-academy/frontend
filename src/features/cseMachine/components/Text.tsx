@@ -56,8 +56,8 @@ export class Text extends Visible implements IHoverable {
 
   constructor(
     readonly data: Data,
-    public _x: number,
-    public _y: number,
+    protected _x: number,
+    protected _y: number,
     /** additional options (for customization of text) */
     options: Partial<TextOptions> = {}
   ) {
