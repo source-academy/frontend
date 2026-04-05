@@ -232,36 +232,11 @@ export default class ActionParser {
       const gameActionType = ParserConverter.stringToActionType(actionType);
 
       switch (gameActionType) {
-        case GameActionType.ObtainCollectible:
-        case GameActionType.CompleteObjective:
-        case GameActionType.CompleteTask:
-        case GameActionType.ShowTask:
-        case GameActionType.PreviewLocation:
-        case GameActionType.ChangeBackground:
-        case GameActionType.StartAnimation:
-        case GameActionType.StopAnimation:
-        case GameActionType.ShowDialogue:
-        case GameActionType.AddItem:
-        case GameActionType.RemoveItem:
-        case GameActionType.AddLocationMode:
-        case GameActionType.RemoveLocationMode:
-        case GameActionType.AddPopup:
-        case GameActionType.MakeObjectBlink:
-        case GameActionType.MakeObjectGlow:
-        case GameActionType.PlayBGM:
-        case GameActionType.PlaySFX:
-        case GameActionType.ShowObjectLayer:
-        case GameActionType.UpdateCharacter:
-        case GameActionType.MoveCharacter:
-        case GameActionType.NavigateToAssessment:
-        case GameActionType.Delay:
-        case GameActionType.ShowQuiz:
-        case GameActionType.ShowTopics:
-          break;
-
         case GameActionType.ChangeLocationTo:
           object.leadTo = actionParams[0];
           return true;
+        default:
+          break;
       }
     }
     return false;
@@ -284,35 +259,10 @@ export default class ActionParser {
       const gameActionType = ParserConverter.stringToActionType(actionType);
 
       switch (gameActionType) {
-        case GameActionType.ObtainCollectible:
-        case GameActionType.CompleteObjective:
-        case GameActionType.CompleteTask:
-        case GameActionType.ShowTask:
-        case GameActionType.PreviewLocation:
-        case GameActionType.ChangeBackground:
-        case GameActionType.StartAnimation:
-        case GameActionType.StopAnimation:
-        case GameActionType.ShowDialogue:
-        case GameActionType.AddItem:
-        case GameActionType.RemoveItem:
-        case GameActionType.AddLocationMode:
-        case GameActionType.RemoveLocationMode:
-        case GameActionType.AddPopup:
-        case GameActionType.MakeObjectBlink:
-        case GameActionType.MakeObjectGlow:
-        case GameActionType.PlayBGM:
-        case GameActionType.PlaySFX:
-        case GameActionType.ShowObjectLayer:
-        case GameActionType.UpdateCharacter:
-        case GameActionType.MoveCharacter:
-        case GameActionType.NavigateToAssessment:
-        case GameActionType.Delay:
-        case GameActionType.ShowQuiz:
-        case GameActionType.ChangeLocationTo:
-          break;
-
         case GameActionType.ShowTopics:
           return true;
+        default:
+          break;
       }
     }
     return false;
