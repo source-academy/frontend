@@ -849,14 +849,14 @@ export class Layout {
       level.frames.forEach(frame => {
         const id = frame.environment.id;
 
-       // Get predetermined X and Y coordinates together
+        // Get predetermined X and Y coordinates together
         if (cache.framesX.has(id) && cache.framesY.has(id)) {
           const fixedX = Layout.getGhostFrameX(id)!;
           const fixedY = Layout.getGhostFrameY(id)!;
-          
+
           frame.reassignCoordinatesX(fixedX);
           frame.reassignCoordinatesY(fixedY);
-          
+
           frame.bindings.forEach(binding => {
             binding.reassignCoordinates(fixedX, fixedY);
           });

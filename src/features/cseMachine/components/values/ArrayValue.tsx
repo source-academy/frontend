@@ -52,7 +52,7 @@ export class ArrayValue extends Value implements IHoverable {
       const frameY = ghostY !== undefined ? ghostY : newReference.frame.y();
       this._x = frameX + newReference.frame.width() + Config.FrameMarginX;
       const relativeOffset = newReference.y() - newReference.frame.y();
-      this._y = frameY + relativeOffset;  
+      this._y = frameY + relativeOffset;
     } else {
       if (newReference.isLastUnit) {
         this._x = newReference.x() + Config.DataUnitWidth * 2;
