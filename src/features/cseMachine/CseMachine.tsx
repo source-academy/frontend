@@ -121,7 +121,7 @@ export default class CseMachine {
     CseMachine.streamLineage = context.streamLineage;
     CseMachine.streamIdToHeight = context.streamIdToHeight;
     CseMachine.streamPairIdToStreamId = context.streamPairIdToStreamId;
-    CseMachine.streamPairIdToParentCount = context.streemPairIdToParentCount;
+    CseMachine.streamPairIdToParentCount = context.streamPairIdToParentCount;
     // console.log(context.streamPairIdToStreamId);
 
     Layout.setContext(
