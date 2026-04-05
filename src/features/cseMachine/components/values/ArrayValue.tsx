@@ -69,59 +69,39 @@ export class ArrayValue extends Value implements IHoverable {
         Layout.streamHeights[this.streamId] = Layout.streamHeights[this.streamId - 1] + 1;
       } 
 
-
-
-      // if (typeof data[1] == "function") {
-      //   if (Layout.streamCoords[this.streamId][parentCount] == undefined) {
-      //     // Layout.streamCoords[this.streamId][parentCount] = Layout.streamHeights[this.streamId];
-      //     let x = CseMachine.getStreamIdToHeight(String(this.streamId));
-      //     if(x!=undefined){
-      //       Layout.streamCoords[this.streamId][parentCount] = Number(x);
-      //     }
-
-      //   } else {
-      //     Layout.streamCoords[this.streamId][parentCount]++;
-      //     // if(Layout.streamHeights[this.streamId] < Layout.streamCoords[this.streamId][parentCount]) {
-      //     //   Layout.streamHeights[this.streamId]  = Layout.streamCoords[this.streamId][parentCount];
-      //     // }
-      //   }
-      // // if (this.streamId !== undefined) {
-      // //     // Convert the string ID to a number first
-      // //     const height = CseMachine.getStreamIdToHeight(String(this.streamId));
-          
-      // //     if (height !== undefined) {
-      // //         // height is already a number here because of the Map's return type
-      // //         this.visualisationY = Layout.streamCoords[Number(height)][parentCount];
-      // //     }
-      // // }
-      //   this.visualisationX = parentCount;
-      // } else {
-      //   this.visualisationY = Layout.streamHeights[this.streamId];
-      //   this.visualisationX = this.arrayIdWithinStream;
-      // }
+      // loop through getStreamIdToHeight map to find starting point (y-axis) of this stream
+      let startingY = 1; 
+      console.log("streamId: "+this.streamId)
+      for (let i = 0; i < this.streamId; i++) {
+          const prevHeightStr = CseMachine.getStreamIdToHeight(String(i));
+          const prevHeight = prevHeightStr !== undefined ? Number(prevHeightStr) : 1; 
+          startingY += prevHeight;
+      }
 
       if (typeof data[1] == "function") {
-        const heightStr = CseMachine.getStreamIdToHeight(String(this.streamId));
-        const baseHeight = heightStr !== undefined ? Number(heightStr) : Layout.streamHeights[this.streamId];
-
-        if (Layout.streamCoords[baseHeight] === undefined) {
-            Layout.streamCoords[baseHeight] = [];
+      
+        if (Layout.streamCoords[startingY] === undefined) {
+            Layout.streamCoords[startingY] = [];
         }
 
-        if (Layout.streamCoords[baseHeight][parentCount] === undefined) {
-            Layout.streamCoords[baseHeight][parentCount] = baseHeight;
+        // Track overlaps at certain x coordinate 
+        if (Layout.streamCoords[startingY][parentCount] === undefined) {
+            // Lane is empty at this x, so take the starting height
+            Layout.streamCoords[startingY][parentCount] = startingY;
         } else {
-            Layout.streamCoords[baseHeight][parentCount]++;
+            Layout.streamCoords[startingY][parentCount]++;
         }
 
-        this.visualisationY = Layout.streamCoords[baseHeight][parentCount];
+        this.visualisationY = Layout.streamCoords[startingY][parentCount];
         this.visualisationX = parentCount;
         
       } else {
-        this.visualisationY = Layout.streamHeights[this.streamId];
-        this.visualisationX = this.arrayIdWithinStream;
+        // eval_stream or any lists won't work.
+        // Need to fix this: 
+        console.log(CseMachine.viewStreamLineage)
+        this.visualisationY = startingY + 1;
+        this.visualisationX = 0;
       }
-
 
 
 
