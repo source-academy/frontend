@@ -171,9 +171,15 @@ export default class DialogueManager {
     if (this.isSkipping) return; // Prevent multiple skip calls
     this.isSkipping = true;
 
+    // Hide and disable button while skipping
+    if (this.skipButton) {
+      this.skipButton.setVisible(false);
+      this.skipButton.disableInteractive();
+    }
+
     // Plays the sound effect exactly once when skip starts
     GameGlobalAPI.getInstance().playSound(SoundAssets.dialogueAdvance.key);
-    
+
     try {
       // Keep advancing the dialogue until we hit a stopping point
       while (this.isSkipping) {
@@ -181,20 +187,20 @@ export default class DialogueManager {
           this.dialogueRenderer.finishTypewriting();
         }
 
-        const nextLine = await this.peekNextLine();
+        const nextLine = this.getDialogueGenerator().peekNextLine();
 
-        if (!nextLine || !nextLine.line) {
-          this.isSkipping = false;
-          break;
-        }
-
-        if (nextLine.prompt) {
+        if (nextLine && nextLine.prompt) {
           this.isSkipping = false;
           break;
         }
 
         if (this.nextLineResolve) {
-          await this.showNextLine(() => { });
+          await this.nextLineResolve();
+        }
+
+        if (!nextLine || !nextLine.line) {
+          this.isSkipping = false;
+          break;
         }
 
         // Small delay to prevent freezing
@@ -202,24 +208,17 @@ export default class DialogueManager {
       }
     } finally {
       this.isSkipping = false;
+
+      if (
+        this.skipButton &&
+        !this.isDialoguePromptActive &&
+        this.getDialogueGenerator().peekNextLine() !== null
+      ) {
+        this.skipButton.setVisible(true);
+        this.skipButton.setInteractive({ useHandCursor: true });
+      }
     }
   }
-
-  private async peekNextLine() {
-    const currentPart = (this.getDialogueGenerator() as any).currPart;
-    const currentLineNum = (this.getDialogueGenerator() as any).currLineNum;
-
-    const nextLine = await this.getDialogueGenerator().generateNextLine();
-
-    const hasPrompt = nextLine.prompt !== undefined;
-
-    // Restore the state so we don't skip the actual advancement
-    (this.getDialogueGenerator() as any).currPart = currentPart;
-    (this.getDialogueGenerator() as any).currLineNum = currentLineNum;
-
-    return { ...nextLine, hasPrompt };
-  }
-
 
   public async showNextLine(resolve: () => void) {
     // Only play sound if we are not skipping, to avoid spamming sounds when skipping
