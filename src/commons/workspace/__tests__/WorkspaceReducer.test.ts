@@ -627,6 +627,26 @@ describe('EVAL_REPL', () => {
         }
       });
     });
+
+    describe('SET_IS_RUNNING', () => {
+      test('sets isRunning to the provided value', () => {
+        const actions = generateActions(l => InterpreterActions.setIsRunning(false, l));
+
+        actions.forEach(action => {
+          const initialState: WorkspaceManagerState = generateDefaultWorkspace({ isRunning: true });
+          const result = WorkspaceReducer(initialState, action);
+          const location: WorkspaceLocation = action.payload.workspaceLocation;
+
+          expect(result).toEqual({
+            ...initialState,
+            [location]: {
+              ...initialState[location],
+              isRunning: false
+            }
+          });
+        });
+      });
+    });
   });
 });
 

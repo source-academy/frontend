@@ -241,6 +241,10 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
       state[workspaceLocation].isRunning = false;
       state[workspaceLocation].isDebugging = false;
     })
+    .addCase(InterpreterActions.setIsRunning, (state, action) => {
+      const workspaceLocation = getWorkspaceLocation(action);
+      state[workspaceLocation].isRunning = action.payload.isRunning;
+    })
     /**
      * Called to signal the end of an interruption,
      * i.e called after the interpreter is told to stop interruption,

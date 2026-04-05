@@ -31,6 +31,10 @@ const InterpreterActions = createActions('interpreter', {
     errors,
     workspaceLocation
   }),
+  setIsRunning: (isRunning: boolean, workspaceLocation: WorkspaceLocation) => ({
+    isRunning,
+    workspaceLocation
+  }),
   beginInterruptExecution: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   endInterruptExecution: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),
   beginDebuggerPause: (workspaceLocation: WorkspaceLocation) => ({ workspaceLocation }),

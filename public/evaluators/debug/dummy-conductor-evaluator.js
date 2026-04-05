@@ -12,7 +12,9 @@
 
   // Fixed version of conductor runner that is known to work with the current conductor API.
   const CONDUCTOR_RUNNER_URL =
-    'https://cdn.jsdelivr.net/npm/@sourceacademy/conductor@0.3.0/dist/conductor/runner/index.js'; 
+    'https://cdn.jsdelivr.net/npm/@sourceacademy/conductor@0.3.0/dist/conductor/runner/index.js';
+  const CONDUCTOR_TYPES_URL =
+    'https://cdn.jsdelivr.net/npm/@sourceacademy/conductor@0.3.0/dist/conductor/types/index.js';
 
   function parseResult(text) {
     const value = text.trim();
@@ -64,6 +66,7 @@
       this.conductor.sendOutput('[dummy] output message');
       this.conductor.sendResult('[dummy] result message');
       this.conductor.sendError({ name: 'DummyEvaluatorError', message: '[dummy] error message' });
+      this.conductor.updateStatus(RunnerStatus.STOPPED, true);
     }
 
     async evaluateChunk(chunk) {
@@ -76,11 +79,13 @@
 
       if (text.startsWith('result ')) {
         this.conductor.sendResult(parseResult(text.slice(7)));
+        this.conductor.updateStatus(RunnerStatus.STOPPED, true);
         return;
       }
 
       if (text.startsWith('error ')) {
         this.conductor.sendError({ name: 'DummyEvaluatorError', message: text.slice(6) });
+        this.conductor.updateStatus(RunnerStatus.ERROR, true);
         return;
       }
 
@@ -89,6 +94,7 @@
   }
 
   const runner = await import(CONDUCTOR_RUNNER_URL);
+  const { RunnerStatus } = await import(CONDUCTOR_TYPES_URL);
   const initialise = runner.initialise;
 
   if (typeof initialise !== 'function') {
@@ -101,6 +107,7 @@
     }
 
     runnerConductor.sendError(normaliseError(event.reason, 'DummyEvaluatorFatalError'));
+    runnerConductor.updateStatus(RunnerStatus.ERROR, true);
   });
 
   initialise(DummyEvaluator);

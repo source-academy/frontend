@@ -58,6 +58,17 @@ test('evalInterpreterError generates correct action object', () => {
   });
 });
 
+test('setIsRunning generates correct action object', () => {
+  const action = InterpreterActions.setIsRunning(false, playgroundWorkspace);
+  expect(action).toEqual({
+    type: InterpreterActions.setIsRunning.type,
+    payload: {
+      isRunning: false,
+      workspaceLocation: playgroundWorkspace
+    }
+  });
+});
+
 test('beginInterruptExecution generates correct action object', () => {
   const action = InterpreterActions.beginInterruptExecution(gradingWorkspace);
   expect(action).toEqual({

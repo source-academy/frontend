@@ -1,5 +1,6 @@
 import { compileAndRun as compileAndRunCCode } from '@sourceacademy/c-slang/ctowasm/dist/index';
 import type { IConduit } from '@sourceacademy/conductor/conduit';
+import { RunnerStatus } from '@sourceacademy/conductor/types';
 import { IEvaluatorDefinition } from '@sourceacademy/language-directory/dist/types';
 import { tokenizer } from 'acorn';
 import { type Context, interrupt, type Result, resume, runFilesInContext } from 'js-slang';
@@ -522,6 +523,36 @@ function* handleErrors(
     }
   }
 }
+
+function* handleStatuses(
+  hostPlugin: BrowserHostPlugin,
+  workspaceLocation: WorkspaceLocation
+): SagaIterator {
+  const statusChan = eventChannel<{ status: RunnerStatus; isActive: boolean }>(emitter => {
+    const onStatusUpdate = (status: RunnerStatus, isActive: boolean) => emitter({ status, isActive });
+    hostPlugin.receiveStatusUpdate = onStatusUpdate;
+    return () => {
+      if (hostPlugin.receiveStatusUpdate === onStatusUpdate) delete hostPlugin.receiveStatusUpdate;
+    };
+  });
+  try {
+    while (true) {
+      const { status, isActive } = yield take(statusChan);
+      if (status === RunnerStatus.RUNNING) {
+        yield put(actions.setIsRunning(isActive, workspaceLocation));
+      }
+
+      const isTerminalStatus =
+        isActive && (status === RunnerStatus.STOPPED || status === RunnerStatus.ERROR);
+
+      if (isTerminalStatus) {
+        yield put(actions.beginInterruptExecution(workspaceLocation));
+      }
+    }
+  } finally {
+    statusChan.close();
+  }
+}
 /**
  * Runs code using the evaluators in the Language Directory using the Conductor framework.
  * Invoked when the conductor.enable feature flag is enabled.
@@ -571,6 +602,7 @@ export function* evalCodeConductorSaga(
   const stdoutTask = yield fork(handleStdout, hostPlugin, workspaceLocation);
   const resultTask = yield fork(handleResults, hostPlugin, workspaceLocation);
   const errorTask = yield fork(handleErrors, hostPlugin, workspaceLocation);
+  const statusTask = yield fork(handleStatuses, hostPlugin, workspaceLocation);
   yield call([hostPlugin, 'startEvaluator'], entrypointFilePath);
 
   // This exit logic of this while loop might be causing an unintended infinite loop in the REPL
@@ -591,6 +623,7 @@ export function* evalCodeConductorSaga(
   yield cancel(stdoutTask);
   yield cancel(resultTask);
   yield cancel(errorTask);
+  yield cancel(statusTask);
   //yield put(actions.debuggerReset(workspaceLocation));
   yield put(actions.endInterruptExecution(workspaceLocation));
   console.log('killed');
