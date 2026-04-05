@@ -189,7 +189,7 @@ export class ClearDeadFramesAnimation extends Animatable {
           const oldFn = oldBinding.value;
           const oldFnVisible =
             oldFn instanceof GlobalFnValue ? oldFn.isReferenced() : oldFn.isLive();
-          if (oldFnVisible) {
+          if (oldFnVisible && !visitedFnValues.has(oldFn)) {
             visitedFnValues.add(oldFn);
             changedFnPairs.push([oldFn, newBinding.value]);
           }
