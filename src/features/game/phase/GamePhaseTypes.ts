@@ -1,5 +1,4 @@
 export enum GamePhaseType {
-  Move = 'Move',
   Explore = 'Explore',
   Talk = 'Talk',
   EscapeMenu = 'EscapeMenu',
