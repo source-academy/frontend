@@ -1,14 +1,13 @@
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 
 import SoundAssets from '../../assets/SoundAssets';
-import CommonBackButton from '../../commons/CommonBackButton';
 import { Constants, screenSize } from '../../commons/CommonConstants';
+import CommonLeaveButton from '../../commons/CommonLeaveButton';
 import { IGameUI, ItemId } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
 import { ActivatableSprite } from '../../objects/GameObjectTypes';
-import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { sleep } from '../../utils/GameUtils';
 import ExploreModeConstants from './GameModeExploreConstants';
 
@@ -22,17 +21,29 @@ class GameModeExplore implements IGameUI {
 
   /**
    * Create the container that encapsulate the 'Explore' mode UI,
-   * i.e. the back button.
+   * except the back button
    */
   public createUIContainer(): Phaser.GameObjects.Container {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const exploreMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
+    return exploreMenuContainer;
+  }
 
-    const backButton = new CommonBackButton(
+  /**
+   * Create the container that excapsulate the "Explore" mode UI
+   * with the leave button
+   */
+  public createUIContainerWithLeaveButton(): Phaser.GameObjects.Container {
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
+    const exploreMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
+    const leaveButton = new CommonLeaveButton(
       gameManager,
-      async () => await GameGlobalAPI.getInstance().swapPhase(GamePhaseType.Menu)
+      async () =>
+        await GameGlobalAPI.getInstance().restoreLocation(
+          GameGlobalAPI.getInstance().getCurrLocId()
+        )
     );
-    exploreMenuContainer.add(backButton);
+    exploreMenuContainer.add(leaveButton);
     return exploreMenuContainer;
   }
 
@@ -43,9 +54,15 @@ class GameModeExplore implements IGameUI {
    * pushed.
    */
   public async activateUI(): Promise<void> {
+    const currentLocationId = GameGlobalAPI.getInstance().getCurrLocId();
+    const currentLocation = GameGlobalAPI.getInstance().getLocationAtId(currentLocationId);
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
 
-    this.uiContainer = this.createUIContainer();
+    //Only add the leave button into the ui when storywriters need a leave button to go to a location
+    this.uiContainer = currentLocation.back
+      ? this.createUIContainerWithLeaveButton()
+      : this.createUIContainer();
+
     GameGlobalAPI.getInstance().addToLayer(Layer.UI, this.uiContainer);
 
     this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
@@ -104,15 +121,19 @@ class GameModeExplore implements IGameUI {
           return;
         }
 
-        activatable.clickArea.on('pointerout', () =>
-          this.explorePointerOut(activatable.interactionId)
-        );
-        activatable.clickArea.on('pointerover', () =>
-          this.explorePointerOver(activatable.interactionId)
-        );
+        activatable.clickArea.on('pointerout', () => {
+          this.explorePointerOut(activatable.interactionId);
+          GameGlobalAPI.getInstance().hideTooltip();
+        });
+        activatable.clickArea.on('pointerover', (pointer: Phaser.Input.Pointer) => {
+          this.explorePointerOver(activatable.interactionId, pointer.x, pointer.y);
+        });
         activatable.clickArea.on('pointerup', async () => {
           this.explorePointerUp(activatable.interactionId);
           await GameGlobalAPI.getInstance().processGameActions(activatable.actionIds);
+        });
+        activatable.clickArea.on('pointermove', (pointer: Phaser.Input.Pointer) => {
+          GameGlobalAPI.getInstance().moveTooltip(pointer.x, pointer.y);
         });
       });
   }
@@ -128,6 +149,7 @@ class GameModeExplore implements IGameUI {
         activatable.clickArea.off('pointerout');
         activatable.clickArea.off('pointerover');
         activatable.clickArea.off('pointerup');
+        activatable.clickArea.off('pointermove');
       });
   }
 
@@ -139,14 +161,25 @@ class GameModeExplore implements IGameUI {
    * @param id id of the object, to be used to check whether it has been
    *           triggered before
    */
-  private explorePointerOver(id: ItemId) {
+  private explorePointerOver(id: ItemId, x: number, y: number) {
     const hasTriggered = GameGlobalAPI.getInstance().hasTriggeredInteraction(id);
+    const objectProp = GameGlobalAPI.getInstance().getGameMap().getObjectPropMap().get(id);
     GameGlobalAPI.getInstance().objectHoverGlow(id, true);
 
-    if (hasTriggered) {
-      GameGlobalAPI.getInstance().setDefaultCursor(ExploreModeConstants.checked);
+    if (objectProp && objectProp.isDoor) {
+      const locationId = objectProp.leadTo;
+      const nextLocation = GameGlobalAPI.getInstance().getLocationAtId(locationId);
+      const locationName = nextLocation.name;
+      GameGlobalAPI.getInstance().setDefaultCursor(ExploreModeConstants.move);
+      GameGlobalAPI.getInstance().displayTooltip(x, y, locationName);
+    } else if (objectProp && objectProp.isChat) {
+      GameGlobalAPI.getInstance().setDefaultCursor(ExploreModeConstants.chat);
     } else {
-      GameGlobalAPI.getInstance().setDefaultCursor(ExploreModeConstants.hover);
+      if (hasTriggered) {
+        GameGlobalAPI.getInstance().setDefaultCursor(ExploreModeConstants.checked);
+      } else {
+        GameGlobalAPI.getInstance().setDefaultCursor(ExploreModeConstants.hover);
+      }
     }
   }
 
