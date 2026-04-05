@@ -493,7 +493,7 @@ function* handleResults(
   try {
     while (true) {
       const result = yield take(resultChan);
-      yield put(actions.evalInterpreterSuccess(result, workspaceLocation));
+      yield put(actions.appendInterpreterResult(result, workspaceLocation));
     }
   } finally {
     if (yield cancelled()) {
@@ -515,7 +515,7 @@ function* handleErrors(
   try {
     while (true) {
       const error = yield take(errorChan);
-      yield put(actions.evalInterpreterError([toConductorSourceError(error)], workspaceLocation));
+      yield put(actions.appendInterpreterError([toConductorSourceError(error)], workspaceLocation));
     }
   } finally {
     if (yield cancelled()) {
