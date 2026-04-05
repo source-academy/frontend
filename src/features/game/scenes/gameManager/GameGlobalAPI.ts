@@ -69,6 +69,10 @@ class GameGlobalAPI {
     await this.getGameManager().changeLocationTo(locationName);
   }
 
+  public async restoreLocation(locationId: LocationId) {
+    await this.getGameManager().restoreLocation(locationId);
+  }
+
   /////////////////////
   //    Game Mode    //
   /////////////////////
@@ -556,6 +560,30 @@ class GameGlobalAPI {
 
   public getQuizScore(key: string): number {
     return this.getGameManager().getStateManager().getQuizScore(key);
+  }
+
+  //////////////////////
+  //      Talk        //
+  //////////////////////
+
+  public async showTopicList() {
+    await this.getGameManager().getTopicManager().generateTopicList();
+  }
+
+  //////////////////////
+  //     Tooltip      //
+  //////////////////////
+
+  public async displayTooltip(x: number, y: number, message: string) {
+    await this.getGameManager().getTooltipManager().displayTooltip(x, y, message);
+  }
+
+  public async hideTooltip() {
+    await this.getGameManager().getTooltipManager().hideTooltip();
+  }
+
+  public async moveTooltip(x: number, y: number) {
+    await this.getGameManager().getTooltipManager().moveTooltip(x, y);
   }
 }
 
