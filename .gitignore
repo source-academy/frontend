@@ -5,9 +5,11 @@
 
 # testing
 /coverage
+.coverage-fix.tmp
 
 # production
 /build
+tsconfig.tsbuildinfo
 src/styles/*.css
 /.env
 
