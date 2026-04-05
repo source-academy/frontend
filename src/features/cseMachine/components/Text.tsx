@@ -56,8 +56,8 @@ export class Text extends Visible implements IHoverable {
 
   constructor(
     readonly data: Data,
-    readonly _x: number,
-    readonly _y: number,
+    public _x: number,
+    public _y: number,
     /** additional options (for customization of text) */
     options: Partial<TextOptions> = {}
   ) {
@@ -127,6 +127,14 @@ export class Text extends Visible implements IHoverable {
     } else {
       this.ref.current?.fill(Config.HoverColor);
     }
+  }
+
+  setX(x: number): void {
+    this._x = x;
+  }
+
+  setY(y: number): void {
+    this._y = y;
   }
 
   setArrowSourceNormalStyle(): void {
