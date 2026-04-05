@@ -71,7 +71,6 @@ export class ArrayValue extends Value implements IHoverable {
 
       // loop through getStreamIdToHeight map to find starting point (y-axis) of this stream
       let startingY = 1; 
-      console.log("streamId: "+this.streamId)
       for (let i = 0; i < this.streamId; i++) {
           const prevHeightStr = CseMachine.getStreamIdToHeight(String(i));
           const prevHeight = prevHeightStr !== undefined ? Number(prevHeightStr) : 1; 
@@ -98,7 +97,6 @@ export class ArrayValue extends Value implements IHoverable {
       } else {
         // eval_stream or any lists won't work.
         // Need to fix this: 
-        console.log(CseMachine.viewStreamLineage)
         this.visualisationY = startingY + 1;
         this.visualisationX = 0;
       }

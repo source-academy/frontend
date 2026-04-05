@@ -102,7 +102,7 @@ export class FnValue extends Value implements IHoverable {
 
       
       if (linkedPairs != undefined && CseMachine.getStreamLineage(thisId) != undefined) {
-        console.log(CseMachine.getStreamLineage(thisId))
+        // console.log(CseMachine.getStreamLineage(thisId))
         const targetCounts = new Map<ArrayValue, number>();
 
         for (const pair of linkedPairs) {
