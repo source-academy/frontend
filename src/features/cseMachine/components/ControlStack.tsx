@@ -9,7 +9,7 @@ import { Label, Tag, Text } from 'react-konva';
 
 import CseMachine from '../CseMachine';
 import { Config } from '../CseMachineConfig';
-import { ControlStashConfig } from '../CseMachineControlStashConfig';
+import { ControlStashConfig, getControlX } from '../CseMachineControlStashConfig';
 import { Layout } from '../CseMachineLayout';
 import { IHoverable } from '../CseMachineTypes';
 import {
@@ -34,7 +34,7 @@ export class ControlStack extends Visible implements IHoverable {
     readonly chapter: Chapter
   ) {
     super();
-    this._x = ControlStashConfig.ControlPosX;
+    this._x = getControlX();
     this._y = ControlStashConfig.ControlPosY;
     this._width = ControlStashConfig.ControlItemWidth;
     this._height = ControlStashConfig.StashItemHeight + ControlStashConfig.StashItemTextPadding * 2;
@@ -101,7 +101,7 @@ export class ControlStack extends Visible implements IHoverable {
       <>
         {CseMachine.getStackTruncated() && Layout.control.size() > 10 && (
           <Label
-            x={ControlStashConfig.ShowMoreButtonX}
+            x={ControlStashConfig.ShowMoreButtonX + ControlStashConfig.ControlShiftX}
             y={ControlStashConfig.ShowMoreButtonY}
             onMouseEnter={this.onMouseEnter}
             onMouseLeave={this.onMouseLeave}

@@ -10,7 +10,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={40}
   >
     <Tag
@@ -38,7 +38,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={45}
   >
     <Tag
@@ -71,7 +71,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={75}
   >
     <Tag
@@ -99,7 +99,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={80}
   >
     <Tag
@@ -132,7 +132,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={110}
   >
     <Tag
@@ -160,7 +160,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={115}
   >
     <Tag
@@ -193,7 +193,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={145}
   >
     <Tag
@@ -221,7 +221,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={150}
   >
     <Tag
@@ -254,7 +254,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={180}
   >
     <Tag
@@ -282,7 +282,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={185}
   >
     <Tag
@@ -315,7 +315,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={215}
   >
     <Tag
@@ -343,7 +343,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={220}
   >
     <Tag
@@ -376,7 +376,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={250}
   >
     <Tag
@@ -404,7 +404,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={255}
   >
     <Tag
@@ -437,7 +437,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={285}
   >
     <Tag
@@ -465,7 +465,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={290}
   >
     <Tag
@@ -498,7 +498,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={320}
   >
     <Tag
@@ -526,7 +526,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={325}
   >
     <Tag
@@ -559,7 +559,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={355}
   >
     <Tag
@@ -587,7 +587,7 @@ exports[`CSE Machine Control Stash correctly renders: Control is truncated prope
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={360}
   >
     <Tag
@@ -1151,7 +1151,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={40}
   >
     <Tag
@@ -1179,7 +1179,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={45}
   >
     <Tag
@@ -1212,7 +1212,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={75}
   >
     <Tag
@@ -1240,7 +1240,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={80}
   >
     <Tag
@@ -1273,7 +1273,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={110}
   >
     <Tag
@@ -1301,7 +1301,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={115}
   >
     <Tag
@@ -1334,7 +1334,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={145}
   >
     <Tag
@@ -1362,7 +1362,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={150}
   >
     <Tag
@@ -1396,7 +1396,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     }
   >
     <Path
-      data="M 140 162.5 L 170 240 L 170 240 "
+      data="M 120 162.5 L 130 162.5 Q 140 162.5 140 172.5 L 140 225 Q 140 240 155 240 L 170 240 "
       hitStrokeWidth={10}
       preventDefault={false}
       ref={
@@ -1413,7 +1413,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
       points={
         [
           140,
-          162.5,
+          240,
           170,
           240,
         ]
@@ -1440,7 +1440,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={180}
   >
     <Tag
@@ -1468,7 +1468,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={185}
   >
     <Tag
@@ -1501,7 +1501,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={215}
   >
     <Tag
@@ -1529,7 +1529,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={220}
   >
     <Tag
@@ -1563,7 +1563,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
     }
   >
     <Path
-      data="M 140 232.5 L 170 390 L 170 390 "
+      data="M 120 232.5 L 130 232.5 Q 140 232.5 140 242.5 L 140 375 Q 140 390 155 390 L 170 390 "
       hitStrokeWidth={10}
       preventDefault={false}
       ref={
@@ -1580,7 +1580,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
       points={
         [
           140,
-          232.5,
+          390,
           170,
           390,
         ]
@@ -1607,7 +1607,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={250}
   >
     <Tag
@@ -1635,7 +1635,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={255}
   >
     <Tag
@@ -1668,7 +1668,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={285}
   >
     <Tag
@@ -1696,7 +1696,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={290}
   >
     <Tag
@@ -1729,7 +1729,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={320}
   >
     <Tag
@@ -1757,7 +1757,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={325}
   >
     <Tag
@@ -1790,7 +1790,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={355}
   >
     <Tag
@@ -1818,7 +1818,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={360}
   >
     <Tag
@@ -1851,7 +1851,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={390}
   >
     <Tag
@@ -1879,7 +1879,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={395}
   >
     <Tag
@@ -1912,7 +1912,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={425}
   >
     <Tag
@@ -1940,7 +1940,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={430}
   >
     <Tag
@@ -1973,7 +1973,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={460}
   >
     <Tag
@@ -2001,7 +2001,7 @@ exports[`CSE Machine Control Stash correctly renders: arrows from the environmen
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={465}
   >
     <Tag
@@ -2034,7 +2034,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={40}
   >
     <Tag
@@ -2062,7 +2062,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={45}
   >
     <Tag
@@ -2095,7 +2095,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={75}
   >
     <Tag
@@ -2123,7 +2123,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={80}
   >
     <Tag
@@ -2157,7 +2157,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     }
   >
     <Path
-      data="M 140 92.5 L 170 105 L 170 105 "
+      data="M 120 92.5 L 133.75 92.5 Q 140 92.5 140 98.75 L 140 98.75 Q 140 105 146.25 105 L 170 105 "
       hitStrokeWidth={10}
       preventDefault={false}
       ref={
@@ -2174,7 +2174,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
       points={
         [
           140,
-          92.5,
+          105,
           170,
           105,
         ]
@@ -2201,7 +2201,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={110}
   >
     <Tag
@@ -2229,7 +2229,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={115}
   >
     <Tag
@@ -2262,7 +2262,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
         "current": null,
       }
     }
-    x={20}
+    x={0}
     y={145}
   >
     <Tag
@@ -2290,7 +2290,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
       }
     }
     visible={false}
-    x={145}
+    x={125}
     y={150}
   >
     <Tag
@@ -2383,7 +2383,7 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
     }
   >
     <Path
-      data="M 181.5 40 L 369 330 L 369 330 "
+      data="M 181.5 40 L 181.5 280 Q 181.5 300 201.5 300 L 354 300 Q 369 300 369 315 L 369 330 "
       hitStrokeWidth={10}
       preventDefault={false}
       ref={
@@ -2399,8 +2399,8 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
       pointerWidth={10}
       points={
         [
-          181.5,
-          40,
+          369,
+          300,
           369,
           330,
         ]

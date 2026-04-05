@@ -2,7 +2,7 @@ import { astToString, ECE } from 'java-slang';
 import { Group } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
-import { ControlStashConfig } from '../../CseMachineControlStashConfig';
+import { ControlStashConfig, getControlX } from '../../CseMachineControlStashConfig';
 import { defaultActiveColor, defaultStrokeColor } from '../../CseMachineUtils';
 import { CseMachine } from '../CseMachine';
 import { ControlItem } from './ControlItem';
@@ -14,7 +14,7 @@ export class Control extends Visible {
     super();
 
     // Position.
-    this._x = ControlStashConfig.ControlPosX;
+    this._x = getControlX();
     this._y =
       ControlStashConfig.ControlPosY +
       ControlStashConfig.StashItemHeight +

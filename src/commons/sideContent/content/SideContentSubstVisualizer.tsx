@@ -29,7 +29,6 @@ import { StepperLogicalExpression } from 'js-slang/dist/tracer/nodes/Expression/
 import { StepperUnaryExpression } from 'js-slang/dist/tracer/nodes/Expression/UnaryExpression';
 import { StepperProgram } from 'js-slang/dist/tracer/nodes/Program';
 import { StepperBlockStatement } from 'js-slang/dist/tracer/nodes/Statement/BlockStatement';
-import { StepperDebuggerStatement } from 'js-slang/dist/tracer/nodes/Statement/DebuggerStatement';
 import { StepperExpressionStatement } from 'js-slang/dist/tracer/nodes/Statement/ExpressionStatement';
 import { StepperFunctionDeclaration } from 'js-slang/dist/tracer/nodes/Statement/FunctionDeclaration';
 import { StepperIfStatement } from 'js-slang/dist/tracer/nodes/Statement/IfStatement';
@@ -613,7 +612,7 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
         </span>
       );
     },
-    DebuggerStatement(node: StepperDebuggerStatement) {
+    DebuggerStatement(node: StepperBaseNode) {
       return <span className="stepper-operator">debugger;</span>;
     }
   };
@@ -678,16 +677,15 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
   };
 
   // Entry point of rendering
-  const renderer = renderers[currentNode.type as keyof typeof renderers];
+  const renderer = (
+    renderers as unknown as Record<string, (node: StepperBaseNode) => React.ReactNode>
+  )[currentNode.type];
   const isParenthesis = expressionNeedsParenthesis(
     currentNode,
     renderContext.parentNode,
     renderContext.isRight
   );
-  let result: React.ReactNode = renderer
-    ? // @ts-expect-error All subclasses of stepper base node has its corresponding renderes
-      renderer(currentNode)
-    : `<${currentNode.type}>`; // For debugging in case some AST renderer has not been implemented yet
+  let result: React.ReactNode = renderer ? renderer(currentNode) : `<${currentNode.type}>`; // For debugging in case some AST renderer has not been implemented yet
   if (isParenthesis) {
     result = (
       <span>

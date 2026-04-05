@@ -4,7 +4,7 @@ import { Label, Tag, Text } from 'react-konva';
 
 import { Visible } from '../../components/Visible';
 import { ShapeDefaultProps } from '../../CseMachineConfig';
-import { ControlStashConfig } from '../../CseMachineControlStashConfig';
+import { ControlStashConfig, getControlX } from '../../CseMachineControlStashConfig';
 import { IHoverable } from '../../CseMachineTypes';
 import {
   defaultActiveColor,
@@ -39,7 +39,7 @@ export class ControlItem extends Visible implements IHoverable {
     super();
 
     // Position.
-    this._x = ControlStashConfig.ControlPosX;
+    this._x = getControlX();
     this._y = y;
 
     // Text.
