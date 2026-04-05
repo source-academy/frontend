@@ -149,6 +149,7 @@ class GameModeExplore implements IGameUI {
         activatable.clickArea.off('pointerout');
         activatable.clickArea.off('pointerover');
         activatable.clickArea.off('pointerup');
+        activatable.clickArea.off('pointermove');
       });
   }
 
