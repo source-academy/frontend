@@ -1,4 +1,3 @@
-import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import TooltipRenderer from './TooltipRenderer';
 class TooltipManager {
@@ -11,11 +10,6 @@ class TooltipManager {
     this.tooltipRenderer = new TooltipRenderer();
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
 
-    GameGlobalAPI.getInstance().addToLayer(
-      Layer.Tooltip,
-      this.tooltipRenderer.getTooltipContainer()
-    );
-    GameGlobalAPI.getInstance().fadeInLayer(Layer.Tooltip);
     gameManager.add.existing(this.tooltipRenderer.getTooltipContainer());
   }
 
