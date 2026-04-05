@@ -28,15 +28,16 @@ room
             add_item(objects, room, classroomChair)
         + console, /objects/cmd-console/emergency.png, 557, 906, 526, 263
             make_object_blink*(carpet, false)
-            show_dialogue(addHallway)
+            show_dialogue*(addHallway)
         + navigatorgGuy, /objects/cmd-navigator/emergency.png, 504, 568, 117, 277
             show_dialogue(canNowTalk)
             add_mode(room, talk)
+            change_location_to*(hallway)
         + todaysTopic, /objects/cr-todaysTopic/emergency.png, 188, 286, 289, 128
-            preview_location(hallway)
+            preview_location*(hallway)
             move_character(scottie, room, center)
         + bigMug, /objects/yourMug/emergency.png, 1355, 526, 136, 169
-            make_object_glow*(bigMug)
+            show_topics*()
         + bottomDoor, /objects/dc-bttm_door02/normal.png, 653, 735, 345, 68
             play_sfx(card)
         + sideDoor, /objects/dc-lf_door03/normal.png, 255, 533, 36, 172
@@ -56,6 +57,8 @@ hallway
             play_bgm(heavyHitter)
             remove_item(objects, room, computerOnShelf)
             remove_mode(classroom, talk)
+        + MagicDoorToTheRoom, /objects/dc-lf_door03/normal.png, 255, 533, 36, 172
+            change_location_to*(room)
     characters
         + scottie, Scottie, sad, left, 1.4
 
