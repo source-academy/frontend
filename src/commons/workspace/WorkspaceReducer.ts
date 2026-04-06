@@ -1,5 +1,6 @@
 import { createReducer, type Reducer } from '@reduxjs/toolkit';
 import { castDraft, type Draft } from 'immer';
+import { type SourceError } from 'js-slang/dist/errors/base';
 
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
 import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
@@ -134,7 +135,7 @@ const newWorkspaceReducer = createReducer(defaultWorkspaceManager, builder => {
   function applyInterpreterErrorOutput(
     state: Draft<WorkspaceManagerState>,
     workspaceLocation: WorkspaceLocation,
-    errors: any,
+    errors: SourceError[],
     shouldStopRunning: boolean,
     shouldStopDebugging: boolean
   ) {

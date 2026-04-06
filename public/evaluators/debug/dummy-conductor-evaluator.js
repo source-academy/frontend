@@ -15,7 +15,6 @@
     'https://cdn.jsdelivr.net/npm/@sourceacademy/conductor@0.3.0/dist/conductor/runner/index.js';
   const CONDUCTOR_TYPES_URL =
     'https://cdn.jsdelivr.net/npm/@sourceacademy/conductor@0.3.0/dist/conductor/types/index.js';
-  const DISPLAY_EVENT_PREFIX = '__conductor_display__:';
 
   function parseResult(text) {
     const value = text.trim();
@@ -41,10 +40,6 @@
     return { name: fallbackName, message: String(err) };
   }
 
-  function serialiseDisplayEvent(type, payload) {
-    return `${DISPLAY_EVENT_PREFIX}${JSON.stringify({ type, payload })}`;
-  }
-
   let runnerConductor;
   let activeEvaluator;
 
@@ -53,9 +48,7 @@
       return;
     }
 
-    runnerConductor.sendOutput(
-      serialiseDisplayEvent('error', normaliseError(error, 'DummyEvaluatorFatalError'))
-    );
+    runnerConductor.sendError(normaliseError(error, 'DummyEvaluatorFatalError'));
     activeEvaluator?.failExecution();
   }
 
@@ -91,11 +84,11 @@
     }
 
     sendDisplayResult(result) {
-      this.conductor.sendOutput(serialiseDisplayEvent('result', result));
+      this.conductor.sendResult(result);
     }
 
     sendDisplayError(error) {
-      this.conductor.sendOutput(serialiseDisplayEvent('error', error));
+      this.conductor.sendError(error);
     }
 
     async startEvaluator(entryPoint) {
