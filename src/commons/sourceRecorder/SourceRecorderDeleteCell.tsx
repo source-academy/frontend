@@ -34,22 +34,22 @@ const SourceRecorderDeleteCell: React.FC<SourceRecorderDeleteCellProps> = props 
         icon="info-sign"
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
-        title={t('deleteTitle')}
+        title={t($ => $.deleteTitle)}
         canOutsideClickClose={true}
       >
         <DialogBody>
-          <p>{t('deleteConfirmation')}</p>
+          <p>{t($ => $.deleteConfirmation)}</p>
         </DialogBody>
         <DialogFooter
           actions={
             <>
               <ControlButton
-                label={t('confirmDelete')}
+                label={t($ => $.confirmDelete)}
                 icon={IconNames.TRASH}
                 onClick={handleDelete}
               />
               <ControlButton
-                label={t('cancel')}
+                label={t($ => $.cancel)}
                 icon={IconNames.CROSS}
                 onClick={handleCloseDialog}
               />
