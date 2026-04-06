@@ -36,6 +36,39 @@ export default class DataVisualizer {
 
   private constructor() {}
 
+  public static isBinaryTree(structures: Data[]): boolean {
+    if (structures[0] === null) {
+      return true;
+    }
+    if (structures[0].length != 2) {
+      return false;
+    }
+    let next = structures[0];
+    let ans = false;
+    let count = 0;
+    while (next instanceof Array) {
+      count++;
+      next = next[1];
+    }
+    if (count == 3) {
+      ans = true;
+    }
+    return ans && this.isBinaryTree(structures[0][1]);
+  }
+
+  public static isGeneralTree(structures: Data[]): boolean {
+    if (structures == null || (structures.length == 2 && structures[1] == null)) {
+      return true;
+    }
+    if (!(structures[0] instanceof Array) && structures[1] != null) {
+      return this.isGeneralTree(structures[1]);
+    }
+    if (structures.length != 2 || (!(structures[1] instanceof Array) && structures[1] != null)) {
+      return false;
+    }
+    return this.isGeneralTree(structures[1]) && this.isGeneralTree(structures[0]);
+  }
+
   public static get_depth(
     structures: Data[],
     depth: number,
@@ -70,33 +103,6 @@ export default class DataVisualizer {
     this.get_depth(structures[0], depth + 1, 0, true);
     this.get_depth(structures[1], depth, nodePos + 1, false);
     return depth;
-  }
-
-  public static isBinaryTree(structures: Data[]): boolean {
-    if (structures[0] === null) {
-      return true;
-    }
-    let next = structures[0];
-    let ans = false;
-    let count = 0;
-    while (next instanceof Array) {
-      count++;
-      next = next[1];
-    }
-    if (count == 3) {
-      ans = true;
-    }
-    return ans && this.isBinaryTree(structures[0][1]);
-  }
-
-  public static isGeneralTree(structures: Data[]): boolean {
-    if (structures == null) {
-      return true;
-    }
-    if (structures.length > 2 || (!(structures[1] instanceof Array) && structures[1] != null)) {
-      return false;
-    }
-    return this.isGeneralTree(structures[1]) && this.isGeneralTree(structures[0]);
   }
 
   public static init(setSteps: (step: Step[]) => void): void {
@@ -137,7 +143,7 @@ export default class DataVisualizer {
       this.dataRecords.push(structures);
     }
     DataVisualizer.isBinTree = this.isBinaryTree(structures);
-    DataVisualizer.isGenTree = this.isGeneralTree(structures);
+    DataVisualizer.isGenTree = this.isGeneralTree(structures[0]);
     DataVisualizer.nodeCount = [];
     DataVisualizer.nodeColor = [];
     this.nodeColor[0] = -1;
@@ -169,7 +175,6 @@ export default class DataVisualizer {
     if (this.nodeToLabelMap.has(dataNode)) {
       return this.nodeToLabelMap.get(dataNode) ?? 0;
     } else {
-      // console.log('*' + this.nodeLabel + ': ' + dataNode.data);
       this.nodeToLabelMap.set(dataNode, this.nodeLabel);
       return this.nodeLabel++;
     }

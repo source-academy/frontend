@@ -21,6 +21,23 @@ import {
  */
 export class GeneralTreeDrawer extends OriginalTreeDrawer {
   draw(x: number, y: number, key: number): JSX.Element {
+    // NON-GENERAL TREE WARNING
+    if (!DataVisualizer.isGenTree) {
+      return (
+        <Stage key={key} width={400} height={100}>
+          <Layer>
+            <Text
+              text={'Render general tree only supports trees'}
+              align="center"
+              fontStyle="normal"
+              fontSize={20}
+              fill="red"
+            />
+          </Layer>
+        </Stage>
+      );
+    }
+
     if (this.tree.rootNode instanceof DataTreeNode) {
       const text = toText(this.tree.rootNode.data);
       const textConfig = {
@@ -37,23 +54,6 @@ export class GeneralTreeDrawer extends OriginalTreeDrawer {
         <Stage key={key} width={this.width + x} height={this.height + y}>
           <Layer>
             <Text {...textConfig} />
-          </Layer>
-        </Stage>
-      );
-    }
-
-    // NON-GENERAL TREE WARNING
-    if (!DataVisualizer.isGenTree) {
-      return (
-        <Stage key={key} width={400} height={100}>
-          <Layer>
-            <Text
-              text={'Render general tree only supports trees'}
-              align="center"
-              fontStyle="normal"
-              fontSize={20}
-              fill="red"
-            />
           </Layer>
         </Stage>
       );
