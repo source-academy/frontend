@@ -2234,51 +2234,6 @@ exports[`CSE Machine Control Stash correctly renders: global environments are tr
       text="closure"
     />
   </Label>
-  <Group
-    listening={true}
-    onClick={[Function]}
-    onContextMenu={[Function]}
-    onMouseDown={[Function]}
-    onMouseEnter={[Function]}
-    onMouseLeave={[Function]}
-    ref={
-      {
-        "current": null,
-      }
-    }
-  >
-    <Path
-      data="M 181.5 40 L 369 330 L 369 330 "
-      hitStrokeWidth={10}
-      preventDefault={false}
-      ref={
-        {
-          "current": null,
-        }
-      }
-      stroke="#999"
-      strokeWidth={1}
-    />
-    <Arrow
-      fill="#999"
-      pointerWidth={10}
-      points={
-        [
-          181.5,
-          40,
-          369,
-          330,
-        ]
-      }
-      preventDefault={false}
-      ref={
-        {
-          "current": null,
-        }
-      }
-      strokeEnabled={false}
-    />
-  </Group>
 </React.Fragment>
 `;
 
