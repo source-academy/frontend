@@ -15,6 +15,22 @@ type SetisStepLimitExceeded = (isControlEmpty: boolean) => void;
 
 /** CSE Machine is exposed from this class */
 export default class CseMachine {
+  private static readonly arrowOriginFilterKeys: ArrowOriginFilterKey[] = [
+    'text',
+    'frame',
+    'function',
+    'array',
+    'control',
+    'stash'
+  ];
+  private static readonly defaultArrowOriginFilters: ArrowOriginFilters = {
+    text: true,
+    frame: true,
+    function: true,
+    array: true,
+    control: true,
+    stash: true
+  };
   /** callback function to update the visualization state in the SideContentCseMachine component */
   private static setVis: SetVis;
   /** function to highlight editor lines */
@@ -33,12 +49,7 @@ export default class CseMachine {
   private static centerAlignment: boolean = false;
   private static centerAlignmentToggled: boolean = false;
   private static arrowOriginFilters: ArrowOriginFilters = {
-    text: true,
-    frame: true,
-    function: true,
-    array: true,
-    control: true,
-    stash: true
+    ...CseMachine.defaultArrowOriginFilters
   };
   private static environmentTree: EnvTree | undefined;
   private static currentEnvId: string;
@@ -122,6 +133,16 @@ export default class CseMachine {
 
   public static setArrowOriginVisible(origin: ArrowOriginFilterKey, visible: boolean): void {
     CseMachine.arrowOriginFilters[origin] = visible;
+  }
+
+  public static setAllArrowOriginsVisible(visible: boolean): void {
+    for (const origin of CseMachine.arrowOriginFilterKeys) {
+      CseMachine.arrowOriginFilters[origin] = visible;
+    }
+  }
+
+  public static resetArrowOriginFilters(): void {
+    CseMachine.arrowOriginFilters = { ...CseMachine.defaultArrowOriginFilters };
   }
   public static getMasterLayout(): LayoutCache | null {
     return CseMachine.getPrintableMode()
@@ -440,6 +461,7 @@ export default class CseMachine {
   }
 
   static clearCse() {
+    CseMachine.resetArrowOriginFilters();
     if (this.setVis) {
       this.setVis(undefined);
       CseMachine.environmentTree = undefined;
