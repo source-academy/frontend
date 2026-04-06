@@ -398,11 +398,11 @@ export function computeFramesCoordChange(oldLevels: Level[], newLevels: Level[])
     const tempOldLevels: Level[] = []; // Stores levels that are not cleared
 
     // Find the levels that are not cleared (has at least one live frame)
-    for (let levelIdx = 0; levelIdx < oldLevels.length; levelIdx++) {
-      const framesOfLevel: Frame[] = oldLevels[levelIdx].frames;
+    for (const oldLevel of oldLevels) {
+      const framesOfLevel: Frame[] = oldLevel.frames;
       for (const frame of framesOfLevel) {
         if (frame.isLive) {
-          tempOldLevels.push(oldLevels[levelIdx]);
+          tempOldLevels.push(oldLevel);
           break;
         }
       }
