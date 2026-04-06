@@ -4,7 +4,7 @@ import { createButton } from '../utils/ButtonUtils';
 import { screenCenter } from './CommonConstants';
 import { BitmapFontStyle } from './CommonTypes';
 
-const backMessage = 'back';
+const leaveMessage = 'turn around and leave';
 const backTextYPos = -screenCenter.y * 0.975;
 const backButtonStyle: BitmapFontStyle = {
   key: FontAssets.zektonDarkFont.key,
@@ -19,26 +19,26 @@ const backButtonStyle: BitmapFontStyle = {
  * The style and colours are fixed.
  * It is not recommended to change the position of the container.
  */
-class CommonBackButton extends Phaser.GameObjects.Container {
+class CommonLeaveButton extends Phaser.GameObjects.Container {
   /**
    * @param scene scene for the button to be attached to
    * @param callback callback to be executed on onClick
    */
   constructor(scene: Phaser.Scene, callback: any) {
     super(scene, 0, 0);
-    this.renderBackButton(callback, backMessage);
+    this.renderLeaveButton(callback, leaveMessage);
   }
 
-  private renderBackButton(callback: any, message: string) {
-    const backButton = createButton(this.scene, {
+  private renderLeaveButton(callback: any, message: string) {
+    const leaveButton = createButton(this.scene, {
       assetKey: ImageAssets.topButton.key,
       message: message,
       textConfig: { x: 0, y: backTextYPos, oriX: 0.5, oriY: 0.25 },
       bitMapTextStyle: backButtonStyle,
       onUp: callback
     }).setPosition(screenCenter.x, screenCenter.y);
-    this.add(backButton);
+    this.add(leaveButton);
   }
 }
 
-export default CommonBackButton;
+export default CommonLeaveButton;

@@ -75,7 +75,8 @@ export class Binding extends Visible {
     this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, {
       maxWidth: availableKeyWidth,
       faded: !this.isLive,
-      bindingType: colon
+      bindingType: colon,
+      parentFrame: this.frame
     });
 
     const printFnDescriptionHeight =
