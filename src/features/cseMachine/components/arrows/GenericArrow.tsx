@@ -1,17 +1,39 @@
+import Konva from 'konva';
+import { KonvaEventObject } from 'konva/lib/Node';
+import React, { RefObject } from 'react';
 import { Arrow as KonvaArrow, Group as KonvaGroup, Path as KonvaPath } from 'react-konva';
 
+import CseMachine from '../../CseMachine';
 import { Config, ShapeDefaultProps } from '../../CseMachineConfig';
 import { Layout } from '../../CseMachineLayout';
-import { IVisible, StepsArray } from '../../CseMachineTypes';
+import { IHoverable, IVisible, StepsArray } from '../../CseMachineTypes';
 import { defaultStrokeColor, fadedStrokeColor } from '../../CseMachineUtils';
 import { Visible } from '../Visible';
+import { arrowSelection } from './ArrowSelection';
 
 /** this class encapsulates an arrow to be drawn between 2 points */
-export class GenericArrow<Source extends IVisible, Target extends IVisible> extends Visible {
+export class GenericArrow<Source extends IVisible, Target extends IVisible>
+  extends Visible
+  implements IHoverable
+{
   private _path: string = '';
   points: number[] = [];
   source: Source;
   target: Target | undefined;
+  faded: boolean = false;
+  private pathRef: RefObject<Konva.Path | null> = React.createRef();
+  private arrowHeadRef: RefObject<Konva.Arrow | null> = React.createRef();
+
+  // Check if this arrow is selected
+  protected isSelected(): boolean {
+    return arrowSelection.isSelected(this);
+  }
+
+  // Select this arrow
+  protected select(): void {
+    arrowSelection.setSelected(this);
+  }
+
   isLive: boolean = false; // Added to track if the arrow is live (an inherent property of the arrow)
   /*
    * The above is added since an arrow can in general be drawn between two points
@@ -35,14 +57,42 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
 
   to(to: Target): GenericArrow<Source, Target> {
     this.target = to;
+    this.recomputePath();
+    return this;
+  }
+
+  private recomputePath(): void {
+    if (!this.target) {
+      this._path = '';
+      this.points = [];
+      return;
+    }
+
+    const to = this.target;
+    this._x = this.source.x();
+    this._y = this.source.y();
     this._width = Math.abs(to.x() - this.source.x());
     this._height = Math.abs(to.y() - this.source.y());
 
     const points = this.calculateSteps().reduce<Array<number>>(
-      (points, step) => [...points, ...step(points[points.length - 2], points[points.length - 1])],
+      (acc, step) => [...acc, ...step(acc[acc.length - 2], acc[acc.length - 1])],
       [this.source.x(), this.source.y()]
     );
     points.splice(0, 2);
+
+    // Remove no-op points so zero-length segments do not collapse rounded corners
+    // or force the arrowhead to sit directly on a bend.
+    for (let i = points.length - 2; i >= 2; i -= 2) {
+      if (points[i] === points[i - 2] && points[i + 1] === points[i - 1]) {
+        points.splice(i, 2);
+      }
+    }
+
+    this._path = '';
+    if (points.length < 4) {
+      this.points = points;
+      return;
+    }
 
     // starting point
     this._path += `M ${points[0]} ${points[1]} `;
@@ -57,11 +107,25 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
         const dx2 = xc - xb;
         const dy1 = yb - ya;
         const dy2 = yc - yb;
-        const br = Math.min(
-          Config.ArrowCornerRadius,
-          Math.max(Math.abs(dx1), Math.abs(dy1)) / 2,
-          Math.max(Math.abs(dx2), Math.abs(dy2)) / 2
+        const segment1Length = Math.abs(dx1) + Math.abs(dy1);
+        const segment2Length = Math.abs(dx2) + Math.abs(dy2);
+        const isLastCorner = n + 6 >= points.length;
+        const minTerminalStraightLength = Math.max(
+          Config.ArrowHeadSize,
+          Config.ArrowMinCornerRadius
         );
+        const terminalAllowance = isLastCorner
+          ? Math.max(0, segment2Length - minTerminalStraightLength)
+          : segment2Length / 2;
+        const maxSpaceRadius = Math.min(segment1Length / 2, segment2Length / 2, terminalAllowance);
+        const desiredRadius = Math.min(
+          Config.ArrowCornerRadius,
+          maxSpaceRadius * Config.ArrowSmallBendRadiusScale
+        );
+        const br =
+          maxSpaceRadius >= Config.ArrowMinCornerRadius
+            ? Math.max(Config.ArrowMinCornerRadius, desiredRadius)
+            : Math.max(0, maxSpaceRadius);
         const x1 = xb - br * Math.sign(dx1);
         const y1 = yb - br * Math.sign(dy1);
         const x2 = xb + br * Math.sign(dx2);
@@ -75,7 +139,6 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
     // end path
     this._path += `L ${points[points.length - 2]} ${points[points.length - 1]} `;
     this.points = points;
-    return this;
   }
 
   /**
@@ -100,28 +163,140 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible> exte
     return [() => [to.x(), to.y()]];
   }
 
+  /**
+   * Returns the hover color for this arrow type.
+   * Subclasses can override this to provide custom hover colors.
+   */
+  protected getHighlightedColor(): string {
+    return this.isLive ? Config.ArrowHighlightedColor : Config.ArrowDeadHighlightedColor;
+  }
+
+  onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
+    if (CseMachine.getPrintableMode()) return;
+    e.cancelBubble = true;
+    this.setHighlightedStyle();
+    // Move entire arrow group to top
+    if (this.ref.current && this.ref.current.moveToTop) {
+      // Move the arrow's parent container to top first, then move arrow within that
+      const parent = this.ref.current.getParent();
+      if (parent && parent.moveToTop) {
+        parent.moveToTop();
+      }
+      this.ref.current.moveToTop();
+    }
+    this.ref.current?.getLayer()?.batchDraw();
+  };
+
+  onMouseLeave = (e: KonvaEventObject<MouseEvent>) => {
+    if (CseMachine.getPrintableMode()) return;
+    e.cancelBubble = true;
+
+    // Don't change color if selected
+    if (this.isSelected()) {
+      return;
+    }
+
+    this.setNormalStyle();
+    this.ref.current?.getLayer()?.batchDraw();
+  };
+
+  public setHighlightedStyle() {
+    const highlightColor = this.getHighlightedColor();
+    if (this.pathRef.current) {
+      this.pathRef.current.stroke(highlightColor);
+      this.pathRef.current.strokeWidth(Config.ArrowHoveredStrokeWidth);
+    }
+    if (this.arrowHeadRef.current) {
+      this.arrowHeadRef.current.fill(highlightColor);
+      this.arrowHeadRef.current.pointerWidth(Config.ArrowHoveredHeadSize);
+      this.arrowHeadRef.current.pointerLength(Config.ArrowHoveredHeadSize);
+    }
+    this.source.setArrowSourceHighlightedStyle?.();
+    this.target?.setArrowSourceHighlightedStyle?.();
+  }
+  public setNormalStyle() {
+    const color = this.isLive ? defaultStrokeColor() : fadedStrokeColor();
+    if (this.pathRef.current) {
+      this.pathRef.current.stroke(color);
+      this.pathRef.current.strokeWidth(Config.ArrowStrokeWidth);
+    }
+    if (this.arrowHeadRef.current) {
+      this.arrowHeadRef.current.fill(color);
+      this.arrowHeadRef.current.pointerWidth(Config.ArrowHeadSize);
+      this.arrowHeadRef.current.pointerLength(Config.ArrowHeadSize);
+    }
+    this.source.setArrowSourceNormalStyle?.();
+    this.target?.setArrowSourceNormalStyle?.();
+  }
+
+  onClick = (e: KonvaEventObject<MouseEvent>) => {
+    e.cancelBubble = true;
+
+    // Toggle selection - clear first, then select if it wasn't already selected
+    const wasSelected = this.isSelected();
+    arrowSelection.clearSelection();
+
+    if (!wasSelected) {
+      this.select();
+      // Update this arrow's visual state
+      this.setHighlightedStyle();
+    }
+
+    // Force redraw entire layer to update all arrows
+    this.ref.current?.getLayer()?.batchDraw();
+  };
+
+  onContextMenu = (e: KonvaEventObject<MouseEvent>) => {
+    e.evt.preventDefault(); // Prevent browser context menu
+    this.onClick(e);
+  };
+
+  protected getCurrentColor(): string {
+    if (this.isSelected()) {
+      return this.getHighlightedColor(); // Selected uses hover color
+    }
+    return this.faded ? fadedStrokeColor() : defaultStrokeColor();
+  }
+
   // Subclasses can override to recompute liveness before drawing
   protected updateIsLive(): void {} //kind of an abstract method
 
   draw() {
+    this.recomputePath();
     this.updateIsLive(); //just before drawijng, update liveness for the arrows (since this was causing erroes earlier  )
+    if (Layout.clearDeadFrames && !this.isLive) {
+      return null;
+    }
+
     const stroke = this.isLive ? defaultStrokeColor() : fadedStrokeColor();
 
     return (
-      <KonvaGroup key={Layout.key++} ref={this.ref} listening={false}>
+      <KonvaGroup
+        key={Layout.key++}
+        ref={this.ref}
+        listening={true}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
+        onClick={this.onClick}
+        onContextMenu={this.onContextMenu}
+        onMouseDown={e => (e.cancelBubble = true)}
+      >
         <KonvaPath
           {...ShapeDefaultProps}
+          ref={this.pathRef}
           stroke={stroke}
-          strokeWidth={Config.ArrowStrokeWidth}
+          strokeWidth={this.isSelected() ? Config.ArrowHoveredStrokeWidth : Config.ArrowStrokeWidth}
           data={this.path()}
           key={Layout.key++}
+          hitStrokeWidth={10}
         />
         <KonvaArrow
           {...ShapeDefaultProps}
+          ref={this.arrowHeadRef}
           points={this.points.slice(this.points.length - 4)}
           fill={stroke}
           strokeEnabled={false}
-          pointerWidth={Config.ArrowHeadSize}
+          pointerWidth={this.isSelected() ? Config.ArrowHoveredHeadSize : Config.ArrowHeadSize}
           key={Layout.key++}
         />
       </KonvaGroup>

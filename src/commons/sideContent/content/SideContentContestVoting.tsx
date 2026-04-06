@@ -119,7 +119,9 @@ const SideContentContestVoting: React.FC<SideContentContestVotingProps> = ({
           onDragLeave={handleDragLeave}
           onDragEnter={handleDragEnter}
           onDrop={handleDrop}
-          ref={item => (tierContainerRefs.current[index] = item)}
+          ref={item => {
+            tierContainerRefs.current[index] = item;
+          }}
         />
       </div>
     ));
@@ -148,7 +150,9 @@ const SideContentContestVoting: React.FC<SideContentContestVotingProps> = ({
                   id={`item-${index + 1}`}
                   onDragStart={handleDragStart}
                   onDragEnd={handleDragEnd(contestEntry)}
-                  ref={item => (contestEntryRefs.current[index] = item)}
+                  ref={item => {
+                    contestEntryRefs.current[index] = item;
+                  }}
                   data-testid="voting-item"
                 >
                   <Card
@@ -168,7 +172,7 @@ const SideContentContestVoting: React.FC<SideContentContestVotingProps> = ({
             </div>
           </div>
         ) : (
-          <div className="noResults">{t('noEntries')}</div>
+          <div className="noResults">{t($ => $.noEntries)}</div>
         )}
       </div>
     ),
@@ -215,8 +219,8 @@ const SideContentContestVoting: React.FC<SideContentContestVotingProps> = ({
         variant="minimal"
         onClick={() => setShowContestEntries(!showContestEntries)}
       >
-        <span>{t('title')}</span>
-        <Tooltip content={<span>{t('tooltip')}</span>}>
+        <span>{t($ => $.title)}</span>
+        <Tooltip content={<span>{t($ => $.tooltip)}</span>}>
           <Icon icon={IconNames.HELP} />
         </Tooltip>
       </Button>

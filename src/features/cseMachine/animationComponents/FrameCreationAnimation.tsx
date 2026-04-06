@@ -68,7 +68,7 @@ export class FrameCreationAnimation extends Animatable {
       this.frameArrowAnimation = new AnimatedGenericArrow(frame.arrow, { opacity: 0 });
     }
     this.frameNameAnimation = new AnimatedTextComponent({
-      text: frame.name.partialStr,
+      text: frame.name['partialStr'],
       ...getNodeDimensions(frame.name),
       x: frame.name.x() - xDiff,
       y: frame.name.y() - yDiff,
@@ -88,7 +88,7 @@ export class FrameCreationAnimation extends Animatable {
     );
     this.frameValueAnimations = this.frameValues.map(value => {
       return new AnimatedTextComponent({
-        text: (value.text as Text).partialStr,
+        text: (value.text as Text)['partialStr'],
         ...getNodeDimensions(value),
         x: value.x() - xDiff,
         y: value.y() - yDiff,
