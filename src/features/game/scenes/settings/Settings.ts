@@ -177,7 +177,11 @@ class Settings extends Phaser.Scene {
       : 1;
 
     // Save settings
-    await this.getSaveManager().saveSettings({ bgmVolume: bgmVol, sfxVolume: sfxVol, skipConfirm: false });
+    await this.getSaveManager().saveSettings({
+      bgmVolume: bgmVol,
+      sfxVolume: sfxVol,
+      skipConfirm: false
+    });
 
     // Apply settings
     SourceAcademyGame.getInstance()
