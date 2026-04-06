@@ -1,0 +1,42 @@
+// Styling Stepper Popover box
+@import 'stepperVariables';
+
+%stepper-tokens {
+  .stepper-literal {
+    color: $stepper-literal-color;
+  }
+  .stepper-operator {
+    color: $stepper-operator-color;
+  }
+  .stepper-identifier {
+    color: $stepper-identifier-color;
+  }
+  .stepper-conditional-operator {
+    color: $stepper-conditional-color;
+  }
+  .stepper-mu-term {
+    font-weight: bold;
+    cursor: pointer;
+  }
+}
+
+.stepper-popover {
+  @extend %stepper-tokens;
+
+  .stepper-display {
+    font: $stepper-display-font;
+  }
+
+  .bp4-code-block {
+    @extend %stepper-tokens;
+  }
+}
+
+.sa-substituter {
+  @extend %stepper-tokens;
+
+  .stepper-display {
+    font: $stepper-display-font;
+    color: $stepper-conditional-color;
+  }
+}

@@ -1,25 +1,137 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`Application renders correctly 1`] = `
-<Context.Provider
-  value={
-    [
-      {
-        "editorBinding": "",
-      },
-      [Function],
-    ]
-  }
->
+<DocumentFragment>
   <div
-    className="Application"
+    class="Application"
   >
-    <NavigationBar />
     <div
-      className="Application__main"
+      class="bp6-navbar NavigationBar primary-navbar _primary-navbar_d292d6 bp6-dark"
     >
-      <Outlet />
+      <div
+        class="bp6-navbar-group bp6-align-left"
+      >
+        <span
+          class="bp6-popover-target"
+        >
+          <a
+            aria-haspopup="menu"
+            class="NavigationBar__link"
+            data-discover="true"
+            href="/welcome"
+          >
+            <div
+              class="bp6-navbar-heading"
+            >
+              <button
+                class="bp6-button bp6-active bp6-minimal app-title"
+                type="button"
+              >
+                <span
+                  aria-hidden="true"
+                  class="bp6-icon bp6-icon-standard bp6-icon-symbol-diamond"
+                  data-icon="symbol-diamond"
+                />
+                <span
+                  class="bp6-button-text"
+                >
+                  Source Academy @ NUS
+                </span>
+              </button>
+            </div>
+          </a>
+        </span>
+        <a
+          class=""
+          data-discover="true"
+          href="/sicpjs"
+          title="SICP JS"
+        >
+          <button
+            class="bp6-button bp6-minimal"
+            type="button"
+          >
+            <span
+              aria-hidden="true"
+              class="bp6-icon bp6-icon-standard bp6-icon-book"
+              data-icon="book"
+            />
+            <span
+              class="bp6-button-text"
+            >
+              SICP JS
+            </span>
+          </button>
+        </a>
+      </div>
+      <div
+        class="bp6-navbar-group bp6-align-right"
+      >
+        <span
+          class="bp6-popover-target"
+        >
+          <button
+            aria-expanded="false"
+            aria-haspopup="menu"
+            class="bp6-button"
+            data-testid="NavigationBarLangSelectButton"
+            type="button"
+          >
+            <span
+              class="bp6-button-text"
+            >
+              JavaScript
+            </span>
+            <span
+              aria-hidden="true"
+              class="bp6-icon bp6-icon-standard bp6-icon-caret-down"
+              data-icon="caret-down"
+            />
+          </button>
+        </span>
+        <a
+          class="NavigationBar__link bp6-button bp6-minimal"
+          data-discover="true"
+          href="/contributors"
+        >
+          <span
+            aria-hidden="true"
+            class="bp6-icon bp6-icon-standard bp6-icon-heart"
+            data-icon="heart"
+          />
+        </a>
+        <div
+          class="visible-xs"
+        >
+          <div
+            class="bp6-navbar-divider thin-divider"
+          />
+        </div>
+        <div
+          class="hidden-xs"
+        >
+          <div
+            class="bp6-navbar-divider default-divider"
+          />
+        </div>
+        <span
+          class="bp6-popover-target"
+        >
+          <button
+            class="bp6-button bp6-minimal"
+          >
+            <span
+              aria-hidden="true"
+              class="bp6-icon bp6-icon-standard bp6-icon-caret-down"
+              data-icon="caret-down"
+            />
+          </button>
+        </span>
+      </div>
     </div>
+    <div
+      class="Application__main"
+    />
   </div>
-</Context.Provider>
+</DocumentFragment>
 `;
