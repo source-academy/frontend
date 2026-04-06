@@ -283,8 +283,7 @@ class GameManager extends Phaser.Scene {
 
     await GameGlobalAPI.getInstance().saveGame();
   }
-  
-  
+
   /**
    * Change location to the location cannot reach from current scene
    *
