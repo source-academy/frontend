@@ -56,12 +56,14 @@ export class Text extends Visible implements IHoverable {
 
   constructor(
     readonly data: Data,
-    protected _x: number,
-    protected _y: number,
+    x: number,
+    y: number,
     /** additional options (for customization of text) */
     options: Partial<TextOptions> = {}
   ) {
     super();
+    this._x = x; 
+    this._y = y;
     this.options = { ...this.options, ...options };
 
     const { fontSize, fontStyle, fontFamily, maxWidth, isStringIdentifiable, bindingType } =
