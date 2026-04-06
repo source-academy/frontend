@@ -6,5 +6,5 @@ import { FeatureFlag } from './FeatureFlag';
 export const publicFlags: FeatureFlag<any>[] = [
   flagConductorEnable,
   flagDirectoryLanguageUrl,
-  flagDirectoryPluginUrl,
+  flagDirectoryPluginUrl
 ];
