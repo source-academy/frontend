@@ -15,6 +15,7 @@
     'https://cdn.jsdelivr.net/npm/@sourceacademy/conductor@0.3.0/dist/conductor/runner/index.js';
   const CONDUCTOR_TYPES_URL =
     'https://cdn.jsdelivr.net/npm/@sourceacademy/conductor@0.3.0/dist/conductor/types/index.js';
+  const DISPLAY_EVENT_PREFIX = '__conductor_display__:';
 
   function parseResult(text) {
     const value = text.trim();
@@ -40,12 +41,61 @@
     return { name: fallbackName, message: String(err) };
   }
 
+  function serialiseDisplayEvent(type, payload) {
+    return `${DISPLAY_EVENT_PREFIX}${JSON.stringify({ type, payload })}`;
+  }
+
   let runnerConductor;
+  let activeEvaluator;
+
+  function failActiveExecution(error) {
+    if (!runnerConductor) {
+      return;
+    }
+
+    runnerConductor.sendOutput(
+      serialiseDisplayEvent('error', normaliseError(error, 'DummyEvaluatorFatalError'))
+    );
+    activeEvaluator?.failExecution();
+  }
 
   class DummyEvaluator {
     constructor(conductor) {
       this.conductor = conductor;
       runnerConductor = conductor;
+      activeEvaluator = this;
+      this.conductor.updateStatus(RunnerStatus.EVAL_READY, true);
+    }
+
+    beginExecution() {
+      this.conductor.updateStatus(RunnerStatus.EVAL_READY, false);
+      this.conductor.updateStatus(RunnerStatus.WAITING, false);
+      this.conductor.updateStatus(RunnerStatus.RUNNING, true);
+    }
+
+    finishExecution() {
+      this.conductor.updateStatus(RunnerStatus.RUNNING, false);
+      this.conductor.updateStatus(RunnerStatus.WAITING, true);
+    }
+
+    stopExecution() {
+      this.conductor.updateStatus(RunnerStatus.RUNNING, false);
+      this.conductor.updateStatus(RunnerStatus.WAITING, false);
+      this.conductor.updateStatus(RunnerStatus.STOPPED, true);
+    }
+
+    failExecution() {
+      this.conductor.updateStatus(RunnerStatus.RUNNING, false);
+      this.conductor.updateStatus(RunnerStatus.WAITING, false);
+      this.conductor.updateStatus(RunnerStatus.ERROR, true);
+    }
+
+    sendDisplayResult(result) {
+      this.conductor.sendOutput(serialiseDisplayEvent('result', result));
+    }
+
+    sendDisplayError(error) {
+      this.conductor.sendOutput(serialiseDisplayEvent('error', error));
     }
 
     async startEvaluator(entryPoint) {
@@ -54,19 +104,34 @@
         throw new Error('Cannot load entrypoint file');
       }
 
-      await this.evaluateFile(entryPoint, fileContent);
+      this.beginExecution();
+      const shouldContinue = await this.evaluateFile(entryPoint, fileContent);
+      if (shouldContinue === false) {
+        return;
+      }
+      this.finishExecution();
 
       while (true) {
+        this.conductor.updateStatus(RunnerStatus.WAITING, true);
         const chunk = await this.conductor.requestChunk();
-        await this.evaluateChunk(chunk);
+        this.beginExecution();
+        const shouldContinue = await this.evaluateChunk(chunk);
+        if (shouldContinue === false) {
+          return;
+        }
+        this.finishExecution();
       }
     }
 
     async evaluateFile(fileName, fileContent) {
       this.conductor.sendOutput('[dummy] output message');
-      this.conductor.sendResult('[dummy] result message');
-      this.conductor.sendError({ name: 'DummyEvaluatorError', message: '[dummy] error message' });
-      this.conductor.updateStatus(RunnerStatus.STOPPED, true);
+      this.conductor.sendOutput(`[dummy] loaded file 1`);
+      this.conductor.sendOutput(`[dummy] loaded file 2`);
+      this.sendDisplayError({ name: 'DummyEvaluatorError', message: '[dummy] error message' });
+      this.conductor.sendOutput(`[dummy] loaded file 3`);
+      this.sendDisplayResult('[dummy] result message');
+
+      return true;
     }
 
     async evaluateChunk(chunk) {
@@ -78,18 +143,28 @@
       }
 
       if (text.startsWith('result ')) {
-        this.conductor.sendResult(parseResult(text.slice(7)));
-        this.conductor.updateStatus(RunnerStatus.STOPPED, true);
-        return;
+        this.sendDisplayResult(parseResult(text.slice(7)));
+        return true;
       }
 
       if (text.startsWith('error ')) {
-        this.conductor.sendError({ name: 'DummyEvaluatorError', message: text.slice(6) });
-        this.conductor.updateStatus(RunnerStatus.ERROR, true);
-        return;
+        this.sendDisplayError({ name: 'DummyEvaluatorError', message: text.slice(6) });
+        return true;
       }
 
-      this.conductor.sendOutput('[dummy] try: output ..., result ..., error ...');
+      if (text === 'stop') {
+        this.stopExecution();
+        return false;
+      }
+
+      if (text.startsWith('fatal ')) {
+        this.sendDisplayError({ name: 'DummyEvaluatorError', message: text.slice(6) });
+        this.failExecution();
+        return false;
+      }
+
+      this.conductor.sendOutput('[dummy] try: output ..., result ..., error ..., stop, fatal ...');
+      return true;
     }
   }
 
@@ -102,12 +177,8 @@
   }
 
   self.addEventListener('unhandledrejection', function (event) {
-    if (!runnerConductor) {
-      return;
-    }
-
-    runnerConductor.sendError(normaliseError(event.reason, 'DummyEvaluatorFatalError'));
-    runnerConductor.updateStatus(RunnerStatus.ERROR, true);
+    event.preventDefault();
+    failActiveExecution(event.reason);
   });
 
   initialise(DummyEvaluator);
