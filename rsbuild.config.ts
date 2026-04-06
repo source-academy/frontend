@@ -1,3 +1,4 @@
+import { InjectManifest } from '@aaroon/workbox-rspack-plugin';
 import { defineConfig, loadEnv } from '@rsbuild/core';
 import { pluginEslint } from '@rsbuild/plugin-eslint';
 import { pluginNodePolyfill } from '@rsbuild/plugin-node-polyfill';
@@ -37,13 +38,6 @@ export default defineConfig({
       //   inlineProcessEnv.REACT_APP_SW_EXCLUDE_REGEXES = undefined;
       // }
 
-      // const injectManifestPlugin = config.plugins.find(
-      //   plugin => plugin.constructor.name === 'InjectManifest'
-      // );
-      // if (injectManifestPlugin) {
-      //   injectManifestPlugin.config.maximumFileSizeToCacheInBytes = 20 * 1024 * 1024;
-      // }
-
       // // add rules to pack WASM (for Sourceror)
       // const wasmExtensionRegExp = /\.wasm$/;
       // config.resolve.extensions.push('.wasm');
@@ -60,22 +54,6 @@ export default defineConfig({
       // };
       // config.output.webassemblyModuleFilename = 'static/[hash].module.wasm';
 
-      // // Polyfill Node.js core modules.
-      // // An empty implementation (false) is provided when there is no browser equivalent.
-      // config.resolve.fallback = {
-      //   child_process: false,
-      //   constants: require.resolve('constants-browserify'),
-      //   fs: false,
-      //   http: require.resolve('stream-http'),
-      //   https: require.resolve('https-browserify'),
-      //   os: require.resolve('os-browserify/browser'),
-      //   'path/posix': require.resolve('path-browserify'),
-      //   'process/browser': require.resolve('process/browser'),
-      //   stream: require.resolve('stream-browserify'),
-      //   timers: require.resolve('timers-browserify'),
-      //   url: require.resolve('url/')
-      // };
-
       // // workaround .mjs files by Acorn
       // config.module.rules.push({
       //   test: /\.mjs$/,
@@ -90,13 +68,15 @@ export default defineConfig({
         (warning: any) => {
           // Ignore the warnings that occur because js-slang uses dynamic imports
           // to load Source modules
-          const moduleName = warning.moduleDescriptor?.name
-          if (!moduleName) return false
+          const moduleName = warning.moduleDescriptor?.name;
+          if (!moduleName) return false;
 
-          if (!/js-slang\/dist\/modules\/loader\/loaders.js/.test(moduleName)) return false
-          return /Critical dependency: the request of a dependency is an expression/.test(warning.message)
+          if (!/js-slang\/dist\/modules\/loader\/loaders.js/.test(moduleName)) return false;
+          return /Critical dependency: the request of a dependency is an expression/.test(
+            warning.message
+          );
         }
-        
+
         // {
         //   // Ignore warnings for dependencies that do not ship with a source map.
         //   // This is because we cannot do anything about our dependencies.
@@ -117,6 +97,15 @@ export default defineConfig({
       //     Buffer: ['buffer', 'Buffer']
       //   })
       // ];
+
+      config.plugins = [
+        ...config.plugins,
+        new InjectManifest({
+          swSrc: './src/service-worker.ts',
+          swDest: 'service-worker.js',
+          maximumFileSizeToCacheInBytes: 20 * 1024 * 1024
+        })
+      ];
 
       // Workaround to suppress warnings caused by ts-morph in js-slang
       // if (config.module) {
@@ -139,6 +128,7 @@ export default defineConfig({
   output: {
     distPath: {
       root: './build'
-    }
+    },
+    sourceMap: true
   }
 });

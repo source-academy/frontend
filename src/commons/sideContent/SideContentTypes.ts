@@ -1,4 +1,5 @@
 import { IconName } from '@blueprintjs/core';
+import type { JSX } from 'react';
 
 import { DebuggerContext, WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
@@ -26,6 +27,7 @@ export enum SideContentType {
   questionOverview = 'question_overview',
   remoteExecution = 'remote_execution',
   scoreLeaderboard = 'score_leaderboard',
+  sessionManagement = 'session_management',
   missionMetadata = 'mission_metadata',
   mobileEditor = 'mobile_editor',
   mobileEditorRun = 'mobile_editor_run',

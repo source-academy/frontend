@@ -1,5 +1,6 @@
 import React from 'react';
 
+import CseMachine from '../CseMachine';
 import { Config } from '../CseMachineConfig';
 import { Layout } from '../CseMachineLayout';
 import { Data } from '../CseMachineTypes';
@@ -9,7 +10,6 @@ import { GenericArrow } from './arrows/GenericArrow';
 import { Frame } from './Frame';
 import { Text } from './Text';
 import { ArrayValue } from './values/ArrayValue';
-import { ContValue } from './values/ContValue';
 import { FnValue } from './values/FnValue';
 import { GlobalFnValue } from './values/GlobalFnValue';
 import { PrimitiveValue } from './values/PrimitiveValue';
@@ -28,6 +28,8 @@ export class Binding extends Visible {
    * i.e. the value is anonymous
    */
   readonly isDummyBinding: boolean = false;
+  readonly keyYOffset: number;
+
   /** arrow that is drawn from the key to the value */
   arrow?: GenericArrow<Text, Value>;
 
@@ -40,7 +42,8 @@ export class Binding extends Visible {
     readonly frame: Frame,
     /** previous binding (the binding above it) */
     readonly prevBinding: Binding | null,
-    readonly isConstant: boolean = false
+    readonly isConstant: boolean = false,
+    readonly isLive: boolean = true
   ) {
     super();
     this.isDummyBinding = isDummyKey(this.keyString);
@@ -54,6 +57,8 @@ export class Binding extends Visible {
       this._y = this.frame.y() + Config.FramePaddingY;
     }
 
+    const GlobalDefaultText = this.keyString === Config.GlobalFrameDefaultText;
+    const colon = isConstant ? 'constant' : 'variable';
     this.keyString += isConstant ? Config.ConstantColon : Config.VariableColon;
     this.value = Layout.createValue(data, this);
 
@@ -62,21 +67,37 @@ export class Binding extends Visible {
         ? (Config.DataUnitHeight - Config.FontSize) / 2
         : (this.value.height() - Config.FontSize) / 2;
 
-    this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset);
+    this.keyYOffset = keyYOffset;
+    const availableKeyWidth = GlobalDefaultText
+      ? Config.FrameDefaultWidth - Config.FramePaddingX * 2 // for GlobalFrameDefaultText, use default frame width
+      : (this.frame.width() - Config.TextPaddingX - Config.FramePaddingX * 2) / 2;
+
+    this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, {
+      maxWidth: availableKeyWidth,
+      faded: !this.isLive,
+      bindingType: colon,
+      parentFrame: this.frame
+    });
+
+    const printFnDescriptionHeight =
+      CseMachine.getPrintableMode() &&
+      isMainReference(this.value, this) &&
+      (this.value instanceof FnValue || this.value instanceof GlobalFnValue)
+        ? this.value.printDescriptionHeight +
+          this.value.printDescriptionOffsetY +
+          this.value.printDescriptionBottomGap +
+          Config.TextPaddingY / 2
+        : 0;
 
     // derive the width from the right bound of the value
-    this._width = isMainReference(this.value, this)
-      ? this.value.x() +
-        this.value.width() -
-        this.x() +
-        (this.value instanceof FnValue ||
-        this.value instanceof GlobalFnValue ||
-        this.value instanceof ContValue
-          ? this.value.tooltipWidth
-          : 0)
-      : this.key.width();
+    this._width = isMainReference(this.value, this) ? this.value.x() - this.x() : this.key.width();
 
-    this._height = Math.max(this.key.height(), this.value.height());
+    this._height = Math.max(
+      this.key.height(),
+      this.value instanceof ArrayValue
+        ? this.value.totalHeight
+        : this.value.height() + printFnDescriptionHeight
+    );
 
     if (this.isDummyBinding && !isMainReference(this.value, this)) {
       if (this.prevBinding) {
@@ -87,7 +108,39 @@ export class Binding extends Visible {
     }
   }
 
+  /**
+   * Reassigns the coordinates according to the final position of this frame
+   * @param newX taken from cached layout
+   */
+  reassignCoordinates(newX: number, newY: number): void {
+    if (this.prevBinding) {
+      this._x = this.prevBinding.x();
+      this._y = this.prevBinding.y() + this.prevBinding.height() + Config.TextPaddingY;
+    } else {
+      this._x = newX + Config.FramePaddingX;
+      this._y = newY + Config.FramePaddingY;
+    }
+  }
+
   draw(): React.ReactNode {
+    const isLive = this.isDummyBinding //check if binding is an unreferenced heap object
+      ? ((this.value as any).isLive?.() ?? false)
+      : this.frame.isLive;
+
+    if (Layout.clearDeadFrames && !isLive) {
+      return null;
+    }
+
+    this.key.options.faded = !isLive;
+
+    if (this.value instanceof PrimitiveValue || this.value instanceof UnassignedValue) {
+      this.value.setFaded(!isLive);
+    }
+
+    // Update Text to new position
+    (this.key as any)._x = this.x();
+    (this.key as any)._y = this.y() + this.keyYOffset;
+
     if (
       !this.isDummyBinding && // value is unreferenced in dummy binding
       !(this.value instanceof PrimitiveValue) &&

@@ -17,16 +17,16 @@ export type BitmapFontStyle = {
 };
 
 /**
- * @typedef {string} ItemId - id associated with an item.
+ * ID associated with an item.
  * Item can be any of the following:
  * (Dialogue | ObjectProperty | BboxProperty | Character | Action | AwardProperty)
  */
 export type ItemId = string;
 
-/** @typedef {string} AssetKey - key associated with an asset */
+/** Key associated with an asset */
 export type AssetKey = string;
 
-/** @typedef {string} AssetPath - path associated with an asset */
+/** Path associated with an asset */
 export type AssetPath = string;
 
 /**

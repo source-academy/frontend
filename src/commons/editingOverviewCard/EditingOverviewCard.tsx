@@ -16,7 +16,7 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router';
 import Textarea from 'react-textarea-autosize';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
@@ -113,7 +113,7 @@ export const EditingOverviewCard: React.FC<EditingOverviewCardProps> = props => 
           </div>
           <div className="listing-controls">
             <Text className="listing-due-date">
-              <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
+              <Icon className="listing-due-icon" size={12} icon={IconNames.TIME} />
               <div className="date-container">Opens at:&nbsp;</div>
               <div className="date-container" onClick={toggleEditField('openAt')}>
                 {editingOverviewField === 'openAt'

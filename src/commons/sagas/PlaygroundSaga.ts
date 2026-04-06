@@ -1,5 +1,5 @@
 import type { FSModule } from 'browserfs/dist/node/core/FS';
-import { Chapter } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
 import { compressToEncodedURIComponent } from 'lz-string';
 import qs from 'query-string';
 import { call, delay, put, race, select } from 'redux-saga/effects';
@@ -7,11 +7,7 @@ import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
 import PlaygroundActions from '../../features/playground/PlaygroundActions';
-import {
-  isSchemeLanguage,
-  isSourceLanguage,
-  type OverallState
-} from '../application/ApplicationTypes';
+import { isSourceLanguage, type OverallState } from '../application/ApplicationTypes';
 import { retrieveFilesInWorkspaceAsRecord } from '../fileSystem/utils';
 import { combineSagaHandlers } from '../redux/utils';
 import SideContentActions from '../sideContent/SideContentActions';
@@ -22,7 +18,7 @@ import WorkspaceActions from '../workspace/WorkspaceActions';
 import { selectWorkspace } from './SafeEffects';
 
 const PlaygroundSaga = combineSagaHandlers({
-  [PlaygroundActions.changeQueryString.type]: updateQueryString,
+  [PlaygroundActions.generateLzString.type]: updateQueryString,
   [PlaygroundActions.shortenURL.type]: function* ({ payload: keyword }) {
     const queryString = yield select((state: OverallState) => state.playground.queryString);
     const errorMsg = 'ERROR';
@@ -109,10 +105,6 @@ const PlaygroundSaga = combineSagaHandlers({
       yield put(WorkspaceActions.toggleUsingUpload(true, workspaceLocation));
     } else {
       yield put(WorkspaceActions.toggleUsingUpload(false, workspaceLocation));
-    }
-
-    if (isSchemeLanguage(playgroundSourceChapter) && newId === SideContentType.cseMachine) {
-      yield put(WorkspaceActions.toggleUsingCse(true, workspaceLocation));
     }
   }
 });

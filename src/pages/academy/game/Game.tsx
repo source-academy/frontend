@@ -21,6 +21,7 @@ const Game: React.FC = () => {
 
   const [isTestStudent, setIsTestStudent] = React.useState(false);
   const [isUsingMock, setIsUsingMock] = React.useState(false);
+  const isVscode = useTypedSelector(state => state.vscode.isVscode);
 
   React.useEffect(() => {
     dispatch(AchievementActions.getAchievements());
@@ -69,7 +70,11 @@ const Game: React.FC = () => {
 
     if (window.screen.orientation) {
       if (!isFullscreen) {
-        // @ts-expect-error: lock is not defined in the type definition
+        // TODO: For some reason, the line shows a type error in the IDE,
+        // but not during `yarn tsc`. Hence we have to use `ts-ignore`
+        // instead of `ts-expect-error`.
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore: lock is not defined in the type definition
         // as it is not suppored in some browsers (notably Firefox)
         window.screen.orientation.lock('landscape');
       } else {
@@ -129,20 +134,22 @@ const Game: React.FC = () => {
   return (
     <>
       <div id="game-display" ref={setGameDisplayRefs}>
-        <Tooltip
-          className="fullscreen-button"
-          content={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
-          portalContainer={gameDisplayRef.current || undefined}
-          renderTarget={({ isOpen, ...targetProps }) => (
-            <Button
-              {...targetProps}
-              minimal
-              icon={isFullscreen ? IconNames.MINIMIZE : IconNames.MAXIMIZE}
-              onClick={enhancedToggleFullscreen}
-              style={{ left: iconLeft, padding: iconPadding }}
-            />
-          )}
-        />
+        {!isVscode && (
+          <Tooltip
+            className="fullscreen-button"
+            content={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+            portalContainer={gameDisplayRef.current || undefined}
+            renderTarget={({ isOpen, ...targetProps }) => (
+              <Button
+                {...targetProps}
+                minimal
+                icon={isFullscreen ? IconNames.MINIMIZE : IconNames.MAXIMIZE}
+                onClick={enhancedToggleFullscreen}
+                style={{ left: iconLeft, padding: iconPadding }}
+              />
+            )}
+          />
+        )}
       </div>
       {isTestStudent && (
         <div className="Horizontal">

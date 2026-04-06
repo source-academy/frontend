@@ -1,7 +1,4 @@
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-balham.css';
-
-import { ColDef } from 'ag-grid-community';
+import { type ColDef, themeBalham } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { startCase } from 'lodash';
 import React from 'react';
@@ -31,8 +28,9 @@ const Dashboard: React.FC = () => {
 
   const content = (
     <div className="Dashboard">
-      <div className="Grid ag-grid-parent ag-theme-balham">
+      <div className="Grid">
         <AgGridReact
+          theme={themeBalham}
           domLayout="autoHeight"
           columnDefs={columnDefs}
           defaultColDef={defaultColumnDefs}

@@ -29,7 +29,6 @@ The Source Academy (<https://sourceacademy.org/>) is an immersive online experie
    > We recommend using `corepack` to manage the version of `yarn`, you may simply run `corepack enable` to complete this step.
 
 1. Run `yarn install` to install dependencies.
-
    - If you are on Ubuntu and encounter the error message: `No such file or directory: 'install'`, you might be running the incorrect "yarn" from the cmdtest testing suite instead of the JavaScript package manager of the same name. Refer to this [StackOverflow post](https://stackoverflow.com/questions/46013544/yarn-install-command-error-no-such-file-or-directory-install).
    - If you are on the new M1 or M2 Mac chips, and encounter an error while installing `canvas`, refer to [this documentation](https://github.com/Automattic/node-canvas/wiki/Installation:-Mac-OS-X#homebrew) to install the requisite dependencies first.
 
@@ -66,7 +65,7 @@ The project requires some environment variables to be set to work properly. In t
 Unless you need to use the shortener locally, you can leave these values blank. Otherwise, ask your backend engineer.
 
 1. `REACT_APP_URL_SHORTENER_SIGNATURE`: The API key for the YOURLS URL shortener.
-1. `REACT_APP_URL_SHORTENER_DOMAIN`: The base URL of the YOURLS URL shortener. Unless you need to use the shortener locally, you can leave this blank. Otherwise, ask your backend engineer.
+1. `REACT_APP_URL_SHORTENER_BASE`: The base URL of the YOURLS URL shortener. Unless you need to use the shortener locally, you can leave this blank. Otherwise, ask your backend engineer.
 
 #### Authentication provider configuration
 

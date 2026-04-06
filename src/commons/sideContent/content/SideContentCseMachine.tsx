@@ -12,16 +12,20 @@ import { IconNames } from '@blueprintjs/icons';
 import { HotkeyItem } from '@mantine/hooks';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import classNames from 'classnames';
-import { Chapter } from 'js-slang/dist/types';
+import { t } from 'i18next';
+import { Chapter } from 'js-slang/dist/langs';
 import { debounce } from 'lodash';
 import React from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import HotKeys from 'src/commons/hotkeys/HotKeys';
 import { Output } from 'src/commons/repl/Repl';
 import type { PlaygroundWorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
+import { ClearDeadFramesAnimation } from 'src/features/cseMachine/animationComponents/ClearDeadFramesAnimation';
 import CseMachine from 'src/features/cseMachine/CseMachine';
 import { CseAnimation } from 'src/features/cseMachine/CseMachineAnimation';
 import { Layout } from 'src/features/cseMachine/CseMachineLayout';
+import { computeFramesCoordChange } from 'src/features/cseMachine/CseMachineUtils';
 import { CseMachine as JavaCseMachine } from 'src/features/cseMachine/java/CseMachine';
 
 import { InterpreterOutput, OverallState } from '../../application/ApplicationTypes';
@@ -40,6 +44,7 @@ type State = {
   lastStep: boolean;
   stepLimitExceeded: boolean;
   chapter: Chapter;
+  clearDeadFrames: boolean;
 };
 
 type CseMachineProps = OwnProps & StateProps & DispatchProps;
@@ -80,7 +85,8 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
       height: this.calculateHeight(props.sideContentHeight),
       lastStep: false,
       stepLimitExceeded: false,
-      chapter: props.chapter
+      chapter: props.chapter,
+      clearDeadFrames: false
     };
     if (this.isJava()) {
       JavaCseMachine.init(
@@ -104,7 +110,11 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
         },
         // We shouldn't be able to move slider to a step number beyond the step limit
         isControlEmpty => {
-          this.setState({ stepLimitExceeded: false });
+          const isAtLastStep = this.state.value === this.props.stepsTotal;
+
+          this.setState({
+            stepLimitExceeded: !isControlEmpty && isAtLastStep
+          });
         }
       );
     }
@@ -204,6 +214,11 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
           ['e', () => {}]
         ];
 
+    const currentStep = Math.max(0, this.state.value);
+    const isAtFirstStep = currentStep < 1;
+    const isAtLastStep = currentStep >= this.props.stepsTotal;
+    const isNavDisabled = !this.state.visualization;
+
     return (
       <HotKeys
         bindings={hotkeyBindings}
@@ -266,16 +281,35 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                     />
                   </AnchorButton>
                 </Tooltip>
+
+                <Tooltip content="Alignment" compact>
+                  <AnchorButton
+                    onMouseUp={() => {
+                      if (this.state.visualization) {
+                        CseMachine.toggleCenterAlignment();
+                        CseMachine.redraw();
+                      }
+                    }}
+                    icon="eye-open"
+                    disabled={!this.state.visualization}
+                  >
+                    <Checkbox
+                      checked={CseMachine.getCenterAlignment()}
+                      disabled={!this.state.visualization}
+                      style={{ margin: 0 }}
+                    />
+                  </AnchorButton>
+                </Tooltip>
               </ButtonGroup>
             )}
             <ButtonGroup>
               <Button
-                disabled={!this.state.visualization}
+                disabled={isNavDisabled || isAtFirstStep}
                 icon="double-chevron-left"
                 onClick={this.stepPrevBreakpoint}
               />
               <Button
-                disabled={!this.state.visualization}
+                disabled={isNavDisabled || isAtFirstStep}
                 icon="chevron-left"
                 onClick={
                   this.isJava() || CseMachine.getControlStash()
@@ -284,7 +318,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                 }
               />
               <Button
-                disabled={!this.state.visualization}
+                disabled={isNavDisabled || isAtLastStep}
                 icon="chevron-right"
                 onClick={
                   this.isJava() || CseMachine.getControlStash()
@@ -293,13 +327,60 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
                 }
               />
               <Button
-                disabled={!this.state.visualization}
+                disabled={isNavDisabled || isAtLastStep}
                 icon="double-chevron-right"
                 onClick={this.stepNextBreakpoint}
               />
             </ButtonGroup>
+
             {!this.isJava() && (
               <ButtonGroup>
+                <Tooltip content="Clear Dead Frames" compact>
+                  <AnchorButton
+                    onMouseUp={() => {
+                      if (this.state.visualization) {
+                        const prevLevels = Layout.levels;
+                        this.setState(
+                          prevState => ({
+                            clearDeadFrames: true
+                          }),
+                          () => {
+                            CseMachine.setClearDeadFrames(this.state.clearDeadFrames);
+                            CseMachine.clearLiveLayouts();
+
+                            // Temporarily store the original draw function
+                            const originalDraw = Layout.draw;
+
+                            // Overriding because the animations are causing
+                            // Konva objects to not be drawn
+                            Layout.draw = () => {
+                              try {
+                                const currLevels = Layout.levels;
+                                const changedFramePairs = computeFramesCoordChange(
+                                  prevLevels,
+                                  currLevels
+                                );
+                                if (changedFramePairs.length > 0) {
+                                  CseAnimation.animations.push(
+                                    new ClearDeadFramesAnimation(changedFramePairs)
+                                  );
+                                  CseAnimation.enableAnimations();
+                                }
+
+                                return originalDraw.apply(Layout);
+                              } finally {
+                                Layout.draw = originalDraw;
+                              }
+                            };
+                            CseMachine.redraw();
+                          }
+                        );
+                      }
+                    }}
+                    icon="eraser"
+                    disabled={this.state.clearDeadFrames || !this.state.visualization}
+                  ></AnchorButton>
+                </Tooltip>
                 <Tooltip content="Print" compact>
                   <AnchorButton
                     onMouseUp={() => {
@@ -353,63 +434,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
             this.state.visualization
           )
         ) : (
-          <div
-            id="cse-machine-default-text"
-            className={Classes.RUNNING_TEXT}
-            data-testid="cse-machine-default-text"
-          >
-            {this.isJava() ? (
-              <span>
-                The CSEC machine generates control, stash, environment and class model diagrams
-                adapted from the notation introduced in{' '}
-                <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
-                  <i>
-                    Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter
-                    3, Section 2
-                  </i>
-                </a>
-                {'. '}
-                You have chosen the sublanguage{' '}
-                <a href={`${Links.sourceDocs}java_csec/`} rel="noopener noreferrer" target="_blank">
-                  <i>Java CSEC</i>
-                </a>
-              </span>
-            ) : (
-              <span>
-                The CSE machine generates control, stash and environment model diagrams following a
-                notation introduced in{' '}
-                <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
-                  <i>
-                    Structure and Interpretation of Computer Programs, JavaScript Edition, Chapter
-                    3, Section 2
-                  </i>
-                </a>
-              </span>
-            )}
-            .
-            <br />
-            <br /> On this tab, the REPL will be hidden from view, so do check that your code has no
-            errors before running the stepper. You may use this tool by running your program and
-            then dragging the slider above to see the state of the control, stash and environment at
-            different stages in the evaluation of your program. Clicking on the fast-forward button
-            (double chevron) will take you to the next breakpoint in your program
-            <br />
-            <br />
-            <Divider />
-            Some useful keyboard shortcuts:
-            <br />
-            <br />
-            a: Move to the first step
-            <br />
-            e: Move to the last step
-            <br />
-            f: Move to the next step
-            <br />
-            b: Move to the previous step
-            <br />
-            <br />
-            Note that these shortcuts are only active when the browser focus is on this tab.
-          </div>
+          <CseMachineDefaultText isJava={this.isJava()} />
         )}
         <ButtonGroup
           vertical={true}
@@ -450,9 +475,14 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
   };
 
   private sliderShift = (newValue: number) => {
+    if (this.state.clearDeadFrames) {
+      CseMachine.setClearDeadFrames(false);
+      CseMachine.clearLiveLayouts();
+      CseMachine.redraw();
+    }
     this.props.handleStepUpdate(newValue);
     this.setState((state: State) => {
-      return { value: newValue };
+      return { value: newValue, clearDeadFrames: false };
     });
   };
 
@@ -596,10 +626,74 @@ export const SideContentCseMachine = connect(
 )(SideContentCseMachineBase);
 
 const makeCseMachineTabFrom = (location: NonStoryWorkspaceLocation): SideContentTab => ({
-  label: 'CSE Machine',
+  label: t($ => $.cseMachine.label, { ns: 'sideContent' }),
   iconName: IconNames.GLOBE,
   body: <SideContentCseMachine workspaceLocation={location} />,
   id: SideContentType.cseMachine
 });
+
+export const ItalicLink: React.FC<{ href: string; children?: React.ReactNode }> = ({
+  href,
+  children
+}) => {
+  return (
+    <a href={href} rel="noopener noreferrer" target="_blank">
+      <i>{children}</i>
+    </a>
+  );
+};
+
+const CseMachineDefaultText: React.FC<{ isJava: boolean }> = ({ isJava }) => {
+  const { t } = useTranslation('sideContent', { keyPrefix: 'cseMachine' });
+  return (
+    <div
+      id="cse-machine-default-text"
+      className={Classes.RUNNING_TEXT}
+      data-testid="cse-machine-default-text"
+    >
+      {isJava ? (
+        <span>
+          <Trans
+            ns="sideContent"
+            i18nKey={$ => $.cseMachine.csecDescription}
+            components={[<ItalicLink href={Links.textbookChapter3_2} />]}
+          />{' '}
+          <Trans
+            ns="sideContent"
+            i18nKey={$ => $.cseMachine.javaCsec}
+            components={[<ItalicLink href={`${Links.sourceDocs}java_csec/`} />]}
+          />
+        </span>
+      ) : (
+        <span>
+          <Trans
+            ns="sideContent"
+            i18nKey={$ => $.cseMachine.cseDescription}
+            components={[<ItalicLink href={Links.textbookChapter3_2} />]}
+          />
+        </span>
+      )}
+      <br />
+      <br />
+      {t($ => $.instructions)}
+      <br />
+      <br />
+      <Divider />
+      {t($ => $.shortcutsTitle)}
+      <br />
+      <br />
+      {t($ => $.shortcuts.a)}
+      <br />
+      {t($ => $.shortcuts.e)}
+      <br />
+      {t($ => $.shortcuts.f)}
+      <br />
+      {t($ => $.shortcuts.b)}
+      <br />
+      <br />
+      {t($ => $.shortcutsNote)}
+    </div>
+  );
+};
 
 export default makeCseMachineTabFrom;

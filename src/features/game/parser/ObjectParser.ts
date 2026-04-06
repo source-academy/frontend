@@ -27,6 +27,8 @@ export default class ObjectParser {
       if (body.length) {
         object.isInteractive = true;
         object.actionIds = ActionParser.parseActions(body);
+        object.isDoor = ActionParser.haveMoveAction(body, object);
+        object.isChat = ActionParser.haveTopicAction(body);
       }
     });
   }
@@ -79,7 +81,10 @@ export default class ObjectParser {
       width: parseInt(width) || undefined,
       height: parseInt(height) || undefined,
       isInteractive: false,
-      interactionId: objectId
+      interactionId: objectId,
+      isDoor: false,
+      isChat: false,
+      leadTo: ''
     };
 
     Parser.checkpoint.map.addMapAsset(this.objectAssetKey(shortPath), {

@@ -1,4 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
+import { castDraft } from 'immer';
 import { defaultWorkspaceManager } from 'src/commons/application/ApplicationTypes';
 
 import { RecordingStatus } from '../SourceRecorderTypes';
@@ -11,10 +12,10 @@ export const SourcereelReducer = createReducer(defaultWorkspaceManager.sourceree
       state.playbackData.inputs = [];
     })
     .addCase(SourcereelActions.recordInput, (state, action) => {
-      state.playbackData.inputs.push(action.payload.input);
+      state.playbackData.inputs.push(castDraft(action.payload.input));
     })
     .addCase(SourcereelActions.resetInputs, (state, action) => {
-      state.playbackData.inputs = action.payload.inputs;
+      state.playbackData.inputs = castDraft(action.payload.inputs);
     })
     .addCase(SourcereelActions.timerPause, (state, action) => {
       state.recordingStatus = RecordingStatus.paused;

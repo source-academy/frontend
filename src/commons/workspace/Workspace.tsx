@@ -227,17 +227,19 @@ const Workspace: React.FC<WorkspaceProps> = props => {
             <Resizable {...editorResizableProps()}>{createWorkspaceInput(props)}</Resizable>
           )}
           <div className="right-parent" ref={setFullscreenRefs}>
-            <Tooltip
-              className="fullscreen-button"
-              content={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
-              portalContainer={fullscreenContainerRef.current || undefined}
-            >
-              <Button
-                minimal
-                icon={isFullscreen ? IconNames.MINIMIZE : IconNames.MAXIMIZE}
-                onClick={toggleFullscreen}
-              />
-            </Tooltip>
+            {!isVscode && (
+              <Tooltip
+                className="fullscreen-button"
+                content={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}
+                portalContainer={fullscreenContainerRef.current || undefined}
+              >
+                <Button
+                  minimal
+                  icon={isFullscreen ? IconNames.MINIMIZE : IconNames.MAXIMIZE}
+                  onClick={toggleFullscreen}
+                />
+              </Tooltip>
+            )}
             {props.sideContentIsResizeable === undefined || props.sideContentIsResizeable
               ? resizableSideContent
               : sideContent}

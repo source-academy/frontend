@@ -1,0 +1,40 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Sicp exercise renders > correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="sicp-exercise bp6-card bp6-elevation-1"
+  >
+    <b>
+      Title
+    </b>
+    <div>
+      <div>
+        body
+      </div>
+    </div>
+    <div
+      class="sicp-button-container"
+    >
+      <button
+        class="bp6-button bp6-large sicp-show-solution-button"
+        type="button"
+      >
+        <span
+          class="bp6-button-text"
+        >
+          Show Solution
+        </span>
+      </button>
+    </div>
+    <div
+      class="bp6-collapse sicp-solution"
+    >
+      <div
+        aria-hidden="true"
+        class="bp6-collapse-body"
+      />
+    </div>
+  </div>
+</DocumentFragment>
+`;

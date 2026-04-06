@@ -1,5 +1,5 @@
 import { Button, H2 } from '@blueprintjs/core';
-import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
+import { type ColDef, type GridApi, type GridReadyEvent, themeBalham } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import React from 'react';
 import { Role } from 'src/commons/application/ApplicationTypes';
@@ -30,7 +30,7 @@ const defaultColumnDefs: ColDef = {
  *   no admins left in a course)
  */
 const UserConfigPanel: React.FC<Props> = props => {
-  const gridApi = React.useRef<GridApi>();
+  const gridApi = React.useRef<GridApi>(null);
 
   const userCourseRegistrations = props.userCourseRegistrations?.map(e =>
     !e.name ? { ...e, name: '(user has yet to log in)' } : e
@@ -66,8 +66,9 @@ const UserConfigPanel: React.FC<Props> = props => {
   };
 
   const grid = (
-    <div className="Grid ag-grid-parent ag-theme-balham">
+    <div className="Grid">
       <AgGridReact
+        theme={themeBalham}
         domLayout="autoHeight"
         columnDefs={columnDefs}
         defaultColDef={defaultColumnDefs}
@@ -89,12 +90,10 @@ const UserConfigPanel: React.FC<Props> = props => {
           text="Export as CSV"
           className="export-csv-button"
           onClick={() => {
-            if (gridApi.current) {
-              gridApi.current.exportDataAsCsv({
-                fileName: `SA Users (${new Date().toISOString()}).csv`,
-                columnKeys: ['name', 'username', 'group', 'role']
-              });
-            }
+            gridApi.current?.exportDataAsCsv({
+              fileName: `SA Users (${new Date().toISOString()}).csv`,
+              columnKeys: ['name', 'username', 'group', 'role']
+            });
           }}
         />
       </div>

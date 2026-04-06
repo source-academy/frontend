@@ -12,7 +12,7 @@ type Props = {
 const SideContentMarkdownEditor: React.FC<Props> = ({ allowEdits, content, setContent }) => {
   const [editorModeOn, setEditorModeOn] = React.useState(false);
 
-  const node = React.useRef() as any;
+  const node = React.useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClick(event: any) {
@@ -38,12 +38,7 @@ const SideContentMarkdownEditor: React.FC<Props> = ({ allowEdits, content, setCo
   return (
     <div ref={node}>
       {editorModeOn ? (
-        <TextArea
-          onChange={onEditorChange}
-          fill={true}
-          growVertically={true}
-          defaultValue={content}
-        />
+        <TextArea onChange={onEditorChange} fill={true} autoResize={true} defaultValue={content} />
       ) : (
         <Markdown content={content} openLinksInNewWindow={true} />
       )}

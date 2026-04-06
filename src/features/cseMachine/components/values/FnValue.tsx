@@ -20,11 +20,13 @@ import {
   fadedTextColor,
   getBodyText,
   getParamsText,
+  getTextHeight,
   getTextWidth,
   isMainReference,
   isStreamFn,
   setHoveredCursor,
-  setUnhoveredCursor
+  setUnhoveredCursor,
+  truncateFunctionTooltip
 } from '../../CseMachineUtils';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
@@ -46,10 +48,19 @@ export class FnValue extends Value implements IHoverable {
   readonly tooltipWidth: number;
   readonly exportTooltip: string;
   readonly exportTooltipWidth: number;
-  readonly labelRef: RefObject<Label> = React.createRef();
+  readonly isTooltipTruncated: boolean;
+  readonly printDescriptionHeight: number;
+  readonly printDescriptionOffsetY: number;
+  readonly printDescriptionBottomGap: number;
+
+  /** width of the closure circles + label */
+  readonly totalWidth: number;
+  readonly labelRef: RefObject<Label | null> = React.createRef();
+  readonly revealLabelRef: RefObject<Label | null> = React.createRef();
 
   centerX: number;
   enclosingFrame?: Frame;
+  private isExpandedDescription: boolean = false;
   private _arrow: ArrowFromFn | undefined;
 
   constructor(
@@ -65,7 +76,6 @@ export class FnValue extends Value implements IHoverable {
     this._width = this.radius * 4;
     this._height = this.radius * 2;
 
-    this.enclosingFrame = Frame.getFrom(this.data.environment);
     this.fnName = isStreamFn(this.data) ? '' : this.data.functionName;
 
     this.paramsText = `params: ${getParamsText(this.data)}`;
@@ -76,12 +86,24 @@ export class FnValue extends Value implements IHoverable {
         .slice(0, 2)
         .join('\n') + ' ...';
     this.tooltip = `${this.paramsText}\n${this.bodyText}`;
-    this.exportTooltip = `${this.paramsText}\n${this.exportBodyText}`;
-    this.tooltipWidth = Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText));
-    this.exportTooltipWidth = Math.max(
-      getTextWidth(this.paramsText),
-      getTextWidth(this.exportBodyText)
+    this.exportTooltip = truncateFunctionTooltip(
+      this.tooltip,
+      Config.FnDescriptionMaxWidth,
+      Config.FnDescriptionMaxHeight
     );
+    this.isTooltipTruncated = this.exportTooltip !== this.tooltip;
+    this.tooltipWidth = Math.max(getTextWidth(this.paramsText), getTextWidth(this.bodyText));
+    this.exportTooltipWidth = Math.min(
+      Config.FnDescriptionMaxWidth,
+      getTextWidth(this.exportTooltip)
+    );
+    this.printDescriptionHeight =
+      getTextHeight(this.exportTooltip, Config.FnDescriptionMaxWidth) +
+      Config.FnTooltipTextPadding * 2;
+    this.printDescriptionOffsetY = Math.ceil(Config.TextPaddingY / 2);
+    this.printDescriptionBottomGap = Math.ceil(Config.TextPaddingY / 2);
+    this.totalWidth =
+      this._width + Config.TextMargin + this.exportTooltipWidth + Config.FnTooltipTextPadding * 2;
 
     this.addReference(firstReference);
   }
@@ -91,8 +113,15 @@ export class FnValue extends Value implements IHoverable {
 
     // derive the coordinates from the main reference (binding / array unit)
     if (newReference instanceof Binding) {
-      this._x = newReference.frame.x() + newReference.frame.width() + Config.FrameMarginX;
-      this._y = newReference.y();
+      // check for frame x cooridnate in cache
+      const ghostX = Layout.getGhostFrameX(newReference.frame.environment.id);
+      const ghostY = Layout.getGhostFrameY(newReference.frame.environment.id);
+      // if frame x coordinate exitst use it, if not use live value
+      const frameX = ghostX !== undefined ? ghostX : newReference.frame.x();
+      this._x = frameX + newReference.frame.width() + Config.FrameMarginX;
+      const frameY = ghostY !== undefined ? ghostY : newReference.frame.y();
+      const relativeOffset = newReference.y() - newReference.frame.y();
+      this._y = frameY + relativeOffset;
       this.centerX = this._x + this.radius * 2;
     } else {
       if (newReference.isLastUnit) {
@@ -100,7 +129,7 @@ export class FnValue extends Value implements IHoverable {
         this._y = newReference.y() + Config.DataUnitHeight / 2 - this.radius;
       } else {
         this._x = newReference.x();
-        this._y = newReference.y() + newReference.parent.height() + Config.DataUnitHeight;
+        this._y = newReference.y() + newReference.parent.totalHeight + Config.DataUnitHeight;
       }
       this.centerX = this._x + Config.DataUnitWidth / 2;
       this._x = this.centerX - this.radius * 2;
@@ -115,28 +144,78 @@ export class FnValue extends Value implements IHoverable {
   onMouseEnter = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
     setHoveredCursor(currentTarget);
-    this.labelRef.current?.moveToTop();
-    this.labelRef.current?.show();
+    if (this.isExpandedDescription && this.isTooltipTruncated) {
+      this.labelRef.current?.hide();
+      this.revealLabelRef.current?.moveToTop();
+      this.revealLabelRef.current?.show();
+    } else {
+      this.revealLabelRef.current?.hide();
+      this.labelRef.current?.moveToTop();
+      this.labelRef.current?.show();
+    }
   };
 
   onMouseLeave = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
     if (CseMachine.getPrintableMode()) return;
     setUnhoveredCursor(currentTarget);
+    this.isExpandedDescription = false;
     this.labelRef.current?.hide();
+    this.revealLabelRef.current?.hide();
   };
+
+  onClick = ({ currentTarget }: KonvaEventObject<MouseEvent>) => {
+    if (CseMachine.getPrintableMode() || !this.isTooltipTruncated) return;
+    this.isExpandedDescription = true;
+    this.labelRef.current?.hide();
+    this.revealLabelRef.current?.moveToTop();
+    this.revealLabelRef.current?.show();
+    currentTarget.getLayer()?.batchDraw();
+  };
+
+  setArrowSourceHighlightedStyle(): void {
+    if (this.isLive()) {
+      this.setShapesStyle(Config.HoverColor);
+    } else {
+      this.setShapesStyle(Config.HoverDeadColor);
+    }
+  }
+
+  setArrowSourceNormalStyle(): void {
+    const strokeColor = this.isLive() ? defaultStrokeColor() : fadedStrokeColor();
+    this.setShapesStyle(strokeColor);
+  }
+
+  isLive(): boolean {
+    const id = (this.data as any).id;
+    return id ? Layout.liveObjectIDs.has(id) : false;
+  }
 
   draw(): React.ReactNode {
     if (this.fnName === undefined) {
       throw new Error('Closure has no main reference and is not initialised!');
     }
+    //update center x accourding to the same id from cache
+    this.centerX = this.x() + this.radius * 2;
+    this.enclosingFrame = Frame.getFrom(this.data.environment);
     if (this.enclosingFrame) {
       this._arrow = new ArrowFromFn(this).to(this.enclosingFrame) as ArrowFromFn;
     }
-    const textColor = this.isReferenced() ? defaultTextColor() : fadedTextColor();
-    const strokeColor = this.isReferenced() ? defaultStrokeColor() : fadedStrokeColor();
+
+    const isLive: boolean = this.isLive();
+    const textColor = isLive ? defaultTextColor() : fadedTextColor();
+    const strokeColor = isLive ? defaultStrokeColor() : fadedStrokeColor();
+    //dont need to check isReferenced here since live is ALL we need to know
+    if (Layout.clearDeadFrames && !isLive) {
+      return null;
+    }
     return (
       <React.Fragment key={Layout.key++}>
-        <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} ref={this.ref}>
+        <Group
+          onMouseEnter={this.onMouseEnter}
+          onMouseLeave={this.onMouseLeave}
+          onClick={this.onClick}
+          ref={this.ref}
+        >
           <Circle
             {...ShapeDefaultProps}
             key={Layout.key++}
@@ -171,8 +250,8 @@ export class FnValue extends Value implements IHoverable {
           />
         </Group>
         <KonvaLabel
-          x={this.x() + this.width() + Config.TextPaddingX * 2}
-          y={this.y() - Config.TextPaddingY}
+          x={this.x() + Config.TextMargin}
+          y={this.y() + this.radius + Config.TextMargin + this.printDescriptionOffsetY}
           visible={CseMachine.getPrintableMode()}
           ref={this.labelRef}
         >
@@ -186,14 +265,41 @@ export class FnValue extends Value implements IHoverable {
             />
           )}
           <KonvaText
-            text={CseMachine.getPrintableMode() ? this.exportTooltip : this.tooltip}
+            text={
+              !CseMachine.getPrintableMode() && this.isTooltipTruncated
+                ? `${this.exportTooltip}\n(click for full)`
+                : this.exportTooltip
+            }
             fontFamily={Config.FontFamily}
             fontSize={Config.FontSize}
             fontStyle={Config.FontStyle}
-            fill={textColor}
-            padding={5}
+            fill={textColor} //even the text that appears on hover is faded if unreferenced
+            padding={Config.FnTooltipTextPadding}
+            width={Config.FnDescriptionMaxWidth}
           />
         </KonvaLabel>
+        {!CseMachine.getPrintableMode() && this.isTooltipTruncated && (
+          <KonvaLabel
+            x={this.x() + Config.TextMargin}
+            y={this.y() + this.radius + Config.TextMargin}
+            visible={false}
+            ref={this.revealLabelRef}
+          >
+            <KonvaTag
+              stroke={Config.HoverBgColor}
+              fill={Config.HoverBgColor}
+              opacity={Config.FnTooltipOpacity}
+            />
+            <KonvaText
+              text={this.tooltip}
+              fontFamily={Config.FontFamily}
+              fontSize={Config.FontSize}
+              fontStyle={Config.FontStyle}
+              fill={textColor}
+              padding={Config.FnTooltipTextPadding}
+            />
+          </KonvaLabel>
+        )}
         {this._arrow?.draw()}
       </React.Fragment>
     );

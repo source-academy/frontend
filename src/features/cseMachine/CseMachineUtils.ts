@@ -1,5 +1,3 @@
-import { estreeDecode } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/encoder-visitor';
-import { unparse } from 'js-slang/dist/alt-langs/scheme/scm-slang/src/utils/reverse_parser';
 import JsSlangClosure from 'js-slang/dist/cse-machine/closure';
 import {
   AppInstr,
@@ -12,14 +10,14 @@ import {
   InstrType,
   UnOpInstr
 } from 'js-slang/dist/cse-machine/types';
-import { Chapter, Environment, Value as StashValue } from 'js-slang/dist/types';
+import { Chapter } from 'js-slang/dist/langs';
+import { Environment, Value as StashValue } from 'js-slang/dist/types';
 import { astToString } from 'js-slang/dist/utils/ast/astToString';
 import { Group } from 'konva/lib/Group';
 import { Node } from 'konva/lib/Node';
 import { Shape } from 'konva/lib/Shape';
 import { Text } from 'konva/lib/shapes/Text';
 import { cloneDeep, isObject } from 'lodash';
-import { isSchemeLanguage } from 'src/commons/application/ApplicationTypes';
 import classes from 'src/styles/Draggable.module.scss';
 
 import { ArrayUnit } from './components/ArrayUnit';
@@ -27,6 +25,7 @@ import { Binding } from './components/Binding';
 import { ControlItemComponent } from './components/ControlItemComponent';
 import { isNode } from './components/ControlStack';
 import { Frame } from './components/Frame';
+import { Level } from './components/Level';
 import { StashItemComponent } from './components/StashItemComponent';
 import { ArrayValue } from './components/values/ArrayValue';
 import { ContValue } from './components/values/ContValue';
@@ -54,12 +53,7 @@ import {
   StreamFn,
   Unassigned
 } from './CseMachineTypes';
-import {
-  getAlternateControlItemComponent,
-  isCustomPrimitive,
-  needsNewRepresentation
-} from './utils/altLangs';
-import { isContinuation, schemeToString } from './utils/scheme';
+import { isContinuation } from './utils/continuation';
 class AssertionError extends Error {
   constructor(msg?: string) {
     super(msg);
@@ -205,8 +199,7 @@ export function isPrimitiveData(data: Data): data is Primitive {
     isString(data) ||
     isNumber(data) ||
     isBoolean(data) ||
-    isSourceObject(data) ||
-    isCustomPrimitive(data)
+    isSourceObject(data)
   );
 }
 
@@ -214,6 +207,242 @@ export function isPrimitiveData(data: Data): data is Primitive {
 type ExtendedSet<T> = Set<T> & {
   difference(other: Set<T>): Set<T>;
 };
+
+/** Returns environment given its `id`, recursively searching starting from `node` */
+function findEnvById(node: EnvTreeNode, id: string): Env | null {
+  if (node.environment && node.environment.id === id) {
+    return node.environment as Env;
+  }
+  for (const child of node.children as EnvTreeNode[]) {
+    const res = findEnvById(child, id);
+    if (res) return res;
+  }
+  return null;
+}
+
+/** Returns id of specific values */
+function getObjectId(value: any): string | null {
+  if (!value) return null;
+  if (isClosure(value) || isDataArray(value) || isContinuation(value) || isStreamFn(value)) {
+    return (value as any).id ?? null;
+  }
+  return null;
+}
+
+/** Adds the id of environments (that are reachable from `value`) into `roots` */
+function addEnvFromValue(value: any, roots: Set<string>) {
+  // closures / stream functions created by Source
+  if (isClosure(value) || isStreamFn(value)) {
+    if (value.environment) {
+      roots.add(value.environment.id);
+    }
+  }
+
+  // JS Slang arrays (have id + environment)
+  if (isDataArray(value)) {
+    if (value.environment) {
+      roots.add(value.environment.id);
+    }
+  }
+}
+
+/** Returns a set of id of root environments */
+function collectRootEnvIds(): Set<string> {
+  const roots = new Set<string>();
+
+  // Root 1: global env + current env
+  if (Layout.globalEnvNode?.environment) {
+    roots.add(Layout.globalEnvNode.environment.id);
+  }
+  const currentEnvId = CseMachine.getCurrentEnvId();
+  if (currentEnvId) {
+    roots.add(currentEnvId);
+  }
+
+  // Root 2: stash values
+  Layout.stash.getStack().forEach((item: any) => {
+    addEnvFromValue(item, roots);
+  });
+
+  // Root 3: control stack items
+  Layout.control.getStack().forEach((item: ControlItem) => {
+    if (isInstr(item) && item.instrType === InstrType.ENVIRONMENT) {
+      const envInstr = item as EnvInstr;
+      roots.add(getEnvId(envInstr.env));
+    }
+    // If control contains literal values(may ALSO be direct unreferenced bindings to frames which have enclosing envs)
+    addEnvFromValue(item as any, roots);
+  });
+
+  return roots;
+}
+
+/** Adds values into liveObjectIds and pushes the values' environments for `markReachableEnvs` */
+function pushEnvFromData(
+  value: any,
+  pushEnv: (e: Env | null | undefined) => void,
+  markLiveObject?: (id: string) => void,
+  visitedObjects = new Set<any>()
+) {
+  if (!value || visitedObjects.has(value)) return;
+  visitedObjects.add(value);
+
+  const id = getObjectId(value); // directly add as a live object first since anything is an OBJECT
+  if (id && markLiveObject) markLiveObject(id);
+
+  if (isClosure(value) || isStreamFn(value)) {
+    if (value.environment) {
+      pushEnv((value as any).environment as Env);
+    }
+    return;
+  }
+
+  if (isDataArray(value)) {
+    if ((value as any).environment) {
+      pushEnv((value as any).environment as Env);
+    }
+    const arr = value as any[]; // going through each element of the array for any references
+    for (const elem of arr) {
+      pushEnvFromData(elem, pushEnv, markLiveObject, visitedObjects);
+    }
+    return;
+  }
+}
+
+/** Returns environment id and object id that are reachable from root environments */
+function markReachableEnvs(
+  envTree: EnvTree,
+  rootIds: Set<string>
+): { liveEnvIds: Set<string>; liveObjectIds: Set<string> } {
+  const visited = new Set<string>();
+  const liveObjectIds = new Set<string>();
+  const worklist: Env[] = [];
+
+  const pushEnv = (env: Env | null | undefined) => {
+    if (!env) return;
+    if (visited.has(env.id)) return;
+    visited.add(env.id);
+    worklist.push(env);
+  };
+
+  const markLiveObject = (id: string) => liveObjectIds.add(id);
+  const visitedObjects = new Set<any>();
+
+  rootIds.forEach(id => {
+    const env = findEnvById(envTree.root, id);
+    if (env) pushEnv(env); //to add the root envs to the worklist for DFS later on
+  });
+
+  while (worklist.length > 0) {
+    const env = worklist.pop()!;
+    pushEnv(env.tail as Env); //add tail env to worklist since we only go through the head in one iteration
+
+    Object.values(env.head).forEach(v => {
+      pushEnvFromData(v, pushEnv, markLiveObject, visitedObjects); //adds envs and objects referenced by this env's head
+    });
+  }
+
+  return { liveEnvIds: visited, liveObjectIds };
+}
+
+/** Returns environment id and object id that are reachable from root environments and control/stash */
+export function computeLiveState(envTree: EnvTree): {
+  liveEnvIds: Set<string>;
+  liveObjectIds: Set<string>;
+} {
+  const roots = collectRootEnvIds();
+
+  // Add envs reachable from objects on control/stash as extra roots
+  const extraRootIds = new Set<string>();
+  const pushEnv = (env: Env | null | undefined) => {
+    //specially made ONLY for stack/control dummy bindings
+    if (env && env.id) extraRootIds.add(env.id);
+  };
+
+  // const visitedObjects = new Set<any>();
+
+  Layout.stash.getStack().forEach((item: any) => {
+    pushEnvFromData(item, pushEnv, undefined, new Set<any>());
+  });
+  Layout.control.getStack().forEach((item: ControlItem) => {
+    pushEnvFromData(item as any, pushEnv, undefined, new Set<any>());
+  });
+
+  const allRoots = new Set<string>([...roots, ...extraRootIds]); //combine both roots
+  const liveState = markReachableEnvs(envTree, allRoots);
+
+  // Mark objects that are live due to being on control/stash
+  const markLiveObject = (id: string) => liveState.liveObjectIds.add(id);
+  Layout.stash.getStack().forEach((item: any) => {
+    pushEnvFromData(item, () => {}, markLiveObject, new Set<any>());
+  });
+  Layout.control.getStack().forEach((item: ControlItem) => {
+    pushEnvFromData(item as any, () => {}, markLiveObject, new Set<any>());
+  });
+
+  return liveState;
+}
+
+/** Returns an array of pairs of frames.
+ * The two frames in each pair represent the same frame in concept, but the frame's position has
+ * shifted between steps, creating two distinct Frame objects.
+ * The first frame in each pair represents the frame before it shifted. The second frame represents
+ * the frame after it shifted.
+ */
+export function computeFramesCoordChange(oldLevels: Level[], newLevels: Level[]): Frame[][] {
+  const result: Frame[][] = [];
+
+  // Match levels such that oldLevels.length == newLevels.length
+  // in case Clear Dead Frames causes an entire Level to be cleared
+  const normalizedOldLevels =
+    oldLevels.length === newLevels.length
+      ? oldLevels
+      : oldLevels.filter(({ frames }) => frames.some(f => f.isLive));
+
+  // Defensive check in case layout is updated to have more complex frame movements
+  // This error only occurs if the following invariant is violated:
+  // "oldLevels.length != newLevels.length is always due to deletion of levels with only dead frames."
+  // This invariant may be violated if frames can migrate between levels.
+  if (normalizedOldLevels.length !== newLevels.length) {
+    // TODO: Change console.error into throw new Error, and catch them upstream (eg at CseMachine.redraw()),
+    // with centralized error handling for all layout logic.
+    console.error('Level count mismatch for Clear Dead Frames animation, animation not played.');
+
+    // Empty array is returned to SideContentCseMachine, causing the animation to not play
+    // since the length of changedFramePairs (the returned value) == 0.
+    return [];
+  }
+
+  // Match each frame that is live
+  // Matched frames conceptually represent the same frame, but on different steps (prev vs curr)
+  for (let levelIdx = 0; levelIdx < normalizedOldLevels.length; levelIdx++) {
+    const oldLevelFrames = normalizedOldLevels[levelIdx].frames;
+    const newLevelFrames = newLevels[levelIdx].frames;
+    let oldFrameIdx = 0; // Will always >= newFrameIdx
+    let newFrameIdx = 0; // Will always increment one-by-one such that each frame is appended to result
+
+    while (newFrameIdx < newLevelFrames.length && oldFrameIdx < oldLevelFrames.length) {
+      if (!oldLevelFrames[oldFrameIdx].isLive) {
+        oldFrameIdx++;
+      } else {
+        const oldFrame = oldLevelFrames[oldFrameIdx];
+        const newFrame = newLevelFrames[newFrameIdx];
+
+        // If oldFrame and newFrame are NOT in the same position, push to result array
+        if (
+          oldFrame.x() != newFrame.x() ||
+          normalizedOldLevels[levelIdx].y() != newLevels[levelIdx].y()
+        ) {
+          result.push([oldFrame, newFrame]);
+        }
+        oldFrameIdx++;
+        newFrameIdx++;
+      }
+    }
+  }
+
+  return result;
+}
 
 /** Returns a set with the elements in `set1` that are not in `set2` */
 export function setDifference<T>(set1: Set<T>, set2: Set<T>) {
@@ -233,7 +462,7 @@ export function setDifference<T>(set1: Set<T>, set2: Set<T>) {
  * order is the first binding or array unit which shares the same environment with `value`.
  *
  * An exception is for a global function value, in which case the global frame binding is
- * always prioritised over array units.
+ * always prioritised over other bindings or array units.
  */
 export function isMainReference(value: Value, reference: ReferenceType) {
   if (isContinuation(value.data)) {
@@ -442,8 +671,8 @@ export function getNonEmptyEnv(environment: Env): Env {
 
 /** Returns whether the given environments `env1` and `env2` refer to the same environment. */
 export function isEnvEqual(env1: Env, env2: Env): boolean {
-  // Cannot check env references because of deep cloning and the step after where
-  // property descriptors are copied over, so can only check id
+  // Cannot check env references because of partial cloning of environment tree,
+  // so we can only check id
   return env1.id === env2.id;
 }
 
@@ -568,6 +797,53 @@ export const truncateText = (programStr: string, maxWidth: number, maxHeight: nu
   return [...lines, Config.Ellipsis].join('\n');
 };
 
+const appendSuffixWithinWidth = (line: string, suffix: string, maxWidth: number): string => {
+  const ellipsis = Config.Ellipsis;
+  const ellipsisIndex = line.lastIndexOf(ellipsis);
+
+  if (ellipsisIndex === -1) {
+    return line;
+  }
+
+  let prefix = line.slice(0, ellipsisIndex);
+  let candidate = `${prefix} ${ellipsis + suffix}`;
+
+  while (prefix && getTextWidth(candidate) > maxWidth) {
+    prefix = prefix.slice(0, -1);
+    candidate = `${prefix} ${ellipsis + suffix}`;
+  }
+
+  return candidate;
+};
+
+export const truncateFunctionTooltip = (
+  tooltip: string,
+  maxWidth: number,
+  maxHeight: number
+): string => {
+  const truncatedTooltip = truncateText(tooltip, maxWidth, maxHeight);
+
+  if (truncatedTooltip === tooltip) {
+    return truncatedTooltip;
+  }
+
+  const lines = truncatedTooltip.split('\n');
+  const originalLines = tooltip.split('\n');
+
+  const paramsLineIndex = originalLines.findIndex(line => line.startsWith('params:'));
+  if (paramsLineIndex !== -1 && lines[paramsLineIndex]?.endsWith(Config.Ellipsis)) {
+    lines[paramsLineIndex] = appendSuffixWithinWidth(lines[paramsLineIndex], ')', maxWidth);
+  }
+
+  const bodyClosingLineIndex = originalLines.findLastIndex(line => line.trim() === '}');
+  if (bodyClosingLineIndex !== -1 && bodyClosingLineIndex >= lines.length) {
+    const lastLineIndex = lines.length - 1;
+    lines[lastLineIndex] = appendSuffixWithinWidth(lines[lastLineIndex], ' }', maxWidth);
+  }
+
+  return lines.join('\n');
+};
+
 /**
  * Typeguard for Instr to distinguish between program statements and instructions.
  * The typeguard from js-slang cannot be used due to Typescript raising some weird errors
@@ -593,48 +869,13 @@ export function getControlItemComponent(
     : index === Layout.control.size() - 1;
   if (!isInstr(controlItem)) {
     if (!isNode(controlItem)) {
-      // at the moment, the only non-node and non-instruction control items are
-      // literals from scheme.
-      const representation = schemeToString(controlItem as any);
-      return new ControlItemComponent(
-        representation,
-        representation,
-        stackHeight,
-        highlightOnHover,
-        unhighlightOnHover,
-        topItem
-      );
-    }
-    // there's no reason to provide an alternate representation
-    // for a instruction.
-    if (needsNewRepresentation(chapter)) {
-      return getAlternateControlItemComponent(
-        controlItem,
-        stackHeight,
-        highlightOnHover,
-        unhighlightOnHover,
-        topItem,
-        chapter
-      );
-    }
-
-    if (isSchemeLanguage(chapter)) {
-      // use the js-slang decoder on the control item
-      controlItem = estreeDecode(controlItem as any);
-      const text = unparse(controlItem as any);
-      return new ControlItemComponent(
-        text,
-        text,
-        stackHeight,
-        highlightOnHover,
-        unhighlightOnHover,
-        topItem
-      );
+      // should not happen
+      throw new Error('Unknown control item type');
     }
 
     // at this point, the control item is a node.
     switch ((controlItem as any).type) {
-      case 'Program':
+      case 'Program': {
         // If the control item is the whole program
         // add {} to represent the implicit block
         const originalText = astToString(controlItem as any)
@@ -651,7 +892,8 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
-      case 'Literal':
+      }
+      case 'Literal': {
         const textL =
           typeof (controlItem as any).value === 'string'
             ? `"${(controlItem as any).value}"`
@@ -664,7 +906,8 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
-      default:
+      }
+      default: {
         const text = astToString(controlItem as any).trim();
         return new ControlItemComponent(
           text,
@@ -674,6 +917,7 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
+      }
     }
   } else {
     switch (controlItem.instrType) {
@@ -704,7 +948,7 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
-      case InstrType.ASSIGNMENT:
+      case InstrType.ASSIGNMENT: {
         const assmtInstr = controlItem as AssmtInstr;
         return new ControlItemComponent(
           `asgn ${assmtInstr.symbol}`,
@@ -714,7 +958,8 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
-      case InstrType.UNARY_OP:
+      }
+      case InstrType.UNARY_OP: {
         const unOpInstr = controlItem as UnOpInstr;
         return new ControlItemComponent(
           unOpInstr.symbol,
@@ -724,7 +969,8 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
-      case InstrType.BINARY_OP:
+      }
+      case InstrType.BINARY_OP: {
         const binOpInstr = controlItem as BinOpInstr;
         return new ControlItemComponent(
           binOpInstr.symbol,
@@ -734,6 +980,7 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
+      }
       case InstrType.POP:
         return new ControlItemComponent(
           'pop',
@@ -743,7 +990,7 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
-      case InstrType.APPLICATION:
+      case InstrType.APPLICATION: {
         const appInstr = controlItem as AppInstr;
         return new ControlItemComponent(
           `call ${appInstr.numOfArgs}`,
@@ -753,6 +1000,7 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
+      }
       case InstrType.BRANCH:
         return new ControlItemComponent(
           'branch',
@@ -762,7 +1010,7 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
-      case InstrType.ENVIRONMENT:
+      case InstrType.ENVIRONMENT: {
         const envInstr = controlItem as EnvInstr;
         return new ControlItemComponent(
           'env',
@@ -779,7 +1027,8 @@ export function getControlItemComponent(
             undefined
           )
         );
-      case InstrType.ARRAY_LITERAL:
+      }
+      case InstrType.ARRAY_LITERAL: {
         const arrayLiteralInstr = controlItem as ArrLitInstr;
         const arity = arrayLiteralInstr.arity;
         return new ControlItemComponent(
@@ -790,6 +1039,7 @@ export function getControlItemComponent(
           unhighlightOnHover,
           topItem
         );
+      }
       case InstrType.ARRAY_ACCESS:
         return new ControlItemComponent(
           'arr acc',
@@ -901,11 +1151,16 @@ export function getStashItemComponent(
   return new StashItemComponent(stashItem, stackHeight, index, arrowTo);
 }
 
-// Helper function to get environment ID. Accounts for the hidden prelude environment right
-// after the global environment. Does not need to be used for frame environments, only for
-// environments from the context.
+// Helper function to get environment ID.
+// Accounts for the hidden prelude environment and empty environments.
 export const getEnvId = (environment: Environment): string => {
-  return environment.name === 'prelude' ? environment.tail!.id : environment.id;
+  while (
+    environment.tail &&
+    (environment.name === 'prelude' || Object.keys(environment.head).length === 0)
+  ) {
+    environment = environment.tail;
+  }
+  return environment.id;
 };
 
 // Function that returns whether the stash item will be popped off in the next step
@@ -939,8 +1194,15 @@ export const isStashItemInDanger = (stashIndex: number): boolean => {
   return false;
 };
 
+const isHulkModeEnabled = () =>
+  typeof document !== 'undefined' && document.querySelector('.Playground.GreenScreen') !== null;
+
 export const defaultBackgroundColor = () =>
-  CseMachine.getPrintableMode() ? Config.PrintBgColor : Config.BgColor;
+  isHulkModeEnabled()
+    ? '#00ff00'
+    : CseMachine.getPrintableMode()
+      ? Config.PrintBgColor
+      : Config.BgColor;
 
 export const defaultTextColor = () =>
   CseMachine.getPrintableMode() ? Config.PrintTextColor : Config.TextColor;

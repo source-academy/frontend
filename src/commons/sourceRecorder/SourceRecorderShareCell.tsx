@@ -1,7 +1,7 @@
 import { Popover, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useRef, useState } from 'react';
-import * as CopyToClipboard from 'react-copy-to-clipboard';
+import CopyToClipboard from 'src/commons/utils/CopyToClipboard';
 
 import { SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import ControlButton from '../ControlButton';

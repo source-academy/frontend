@@ -343,7 +343,11 @@ export function* mockBackendSaga(): SagaIterator {
       return gradingQuestion;
     });
     yield put(
-      actions.updateGrading(submissionId, { answers: newGrading, assessment: grading.assessment })
+      actions.updateGrading(submissionId, {
+        answers: newGrading,
+        assessment: grading.assessment,
+        enable_llm_grading: false
+      })
     );
     yield call(showSuccessMessage, 'Submitted!', 1000);
   };

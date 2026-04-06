@@ -4,8 +4,7 @@ import { Button, Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useLocation, useNavigate, useParams } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router';
 import Constants from 'src/commons/utils/Constants';
 import { useSession } from 'src/commons/utils/Hooks';
 import { setLocalStorage } from 'src/commons/utils/LocalStorageHelper';
@@ -193,10 +192,20 @@ const Sicp: React.FC = () => {
             <SicpIndexPage />
           ) : (
             <div className="sicp-content">
-              <Link to="#begin" ref={ref => (refs.current['#begin'] = ref)} />
+              <Link
+                to="#begin"
+                ref={ref => {
+                  refs.current['#begin'] = ref;
+                }}
+              />
               {data}
               {navigationButtons}
-              <Link to="#end" ref={ref => (refs.current['#end'] = ref)} />
+              <Link
+                to="#end"
+                ref={ref => {
+                  refs.current['#end'] = ref;
+                }}
+              />
             </div>
           )}
         </CodeSnippetContext.Provider>

@@ -1,10 +1,10 @@
 import { Classes, NonIdealState } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import * as Sentry from '@sentry/react';
 import classNames from 'classnames';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { RouterProvider } from 'react-router';
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router';
 import { getAcademyRoutes } from 'src/pages/academy/academyRoutes';
 
 import { getFullAcademyRouterConfig, playgroundOnlyRouterConfig } from '../../routes/routerConfig';
@@ -38,9 +38,7 @@ const ApplicationWrapper: React.FC = () => {
       ? playgroundOnlyRouterConfig
       : getFullAcademyRouterConfig({ name, isLoggedIn, courseId, academyRoutes });
 
-    const r = createBrowserRouter(routerConfig, {
-      future: { v7_relativeSplatPath: true }
-    });
+    const r = Sentry.wrapCreateBrowserRouterV7(createBrowserRouter)(routerConfig);
     dispatch(updateReactRouter(r));
 
     return r;

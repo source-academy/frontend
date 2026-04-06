@@ -1,18 +1,16 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    ":dependencyDashboard",
-    "group:allNonMajor",
-    ":label(dependencies)"
-  ],
-  "major": {
-    "dependencyDashboardApproval": true
-  },
+  "extends": ["config:recommended", ":dependencyDashboard", ":label(dependencies)"],
   "packageRules": [
+    // Non-dev dependencies are updated individually
     {
       "rangeStrategy": "update-lockfile",
-      "matchPackageNames": ["*"]
+      "matchPackageNames": ["*"],
+      "minimumReleaseAge": "5 days"
+    },
+    {
+      "matchPackageNames": ["/^@blueprintjs.*/"],
+      "groupName": "blueprintjs"
     }
   ],
   "enabledManagers": ["npm"]

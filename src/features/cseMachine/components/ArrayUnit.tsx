@@ -30,29 +30,26 @@ export class ArrayUnit extends Visible {
   readonly isFirstUnit: boolean;
   /** check if this is the last unit in the array */
   readonly isLastUnit: boolean;
-  /** check if this unit is the main reference of the value */
-  readonly isMainReference: boolean;
   /** arrow that is drawn from the array unit to the value */
   arrow?: GenericArrow<ArrayUnit, Value>;
   readonly indexRef = React.createRef<Text>();
 
   constructor(
     /** index of this unit in its parent */
-    readonly idx: number,
+    readonly index: number,
     /** the value this unit contains*/
     readonly data: Data,
     /** parent of this unit */
     readonly parent: ArrayValue
   ) {
     super();
-    this._x = this.parent.x() + this.idx * Config.DataUnitWidth;
+    this._x = this.parent.x() + this.index * Config.DataUnitWidth;
     this._y = this.parent.y();
     this._height = Config.DataUnitHeight;
     this._width = Config.DataUnitWidth;
-    this.isFirstUnit = this.idx === 0;
-    this.isLastUnit = this.idx === this.parent.data.length - 1;
+    this.isFirstUnit = this.index === 0;
+    this.isLastUnit = this.index === this.parent.data.length - 1;
     this.value = Layout.createValue(this.data, this);
-    this.isMainReference = this.value.references.length > 1;
   }
 
   showIndex() {
@@ -63,9 +60,30 @@ export class ArrayUnit extends Visible {
     if (!CseMachine.getPrintableMode()) this.indexRef.current?.hide();
   }
 
+  setArrowSourceHighlightedStyle(): void {
+    if (this.parent.isLive()) {
+      this.ref.current?.stroke(Config.HoverColor);
+    } else {
+      this.ref.current?.stroke(Config.HoverDeadColor);
+    }
+  }
+
+  setArrowSourceNormalStyle(): void {
+    this.ref.current?.stroke(
+      this.parent.isReferenced() && this.parent.isEnclosingFrameLive()
+        ? defaultStrokeColor()
+        : fadedStrokeColor()
+    );
+  }
+
   draw(): React.ReactNode {
     if (this.isDrawn()) return null;
     this._isDrawn = true;
+
+    const isLive = this.parent.isEnclosingFrameLive();
+    if (this.value instanceof PrimitiveValue) {
+      this.value.setFaded(!isLive || !this.parent.isReferenced());
+    } //this ensures that primitive values inside unreferenced arrays are also faded
 
     if (!(this.value instanceof PrimitiveValue)) {
       this.arrow = new ArrowFromArrayUnit(this).to(this.value);
@@ -94,6 +112,11 @@ export class ArrayUnit extends Visible {
       visible: CseMachine.getPrintableMode()
     };
 
+    const strokeColor =
+      this.parent.isReferenced() && this.parent.isEnclosingFrameLive()
+        ? defaultStrokeColor()
+        : fadedStrokeColor();
+
     return (
       <React.Fragment key={Layout.key++}>
         <RoundedRect
@@ -102,7 +125,7 @@ export class ArrayUnit extends Visible {
           y={this.y()}
           width={this.width()}
           height={this.height()}
-          stroke={this.parent.isReferenced() ? defaultStrokeColor() : fadedStrokeColor()}
+          stroke={strokeColor}
           hitStrokeWidth={Config.DataHitStrokeWidth}
           fillEnabled={true}
           cornerRadius={cornerRadius}
@@ -113,7 +136,8 @@ export class ArrayUnit extends Visible {
           ref={this.indexRef}
           {...ShapeDefaultProps}
           {...indexProps}
-          text={`${this.idx}`}
+          text={`${this.index}`}
+          stroke={strokeColor}
         />
         {this.value.draw()}
         {this.arrow?.draw()}

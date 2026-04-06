@@ -24,7 +24,7 @@ import {
   setUnhoveredStyle,
   truncateText
 } from '../CseMachineUtils';
-import { isContinuation } from '../utils/scheme';
+import { isContinuation } from '../utils/continuation';
 import { ArrowFromStashItemComponent } from './arrows/ArrowFromStashItemComponent';
 import { ArrayValue } from './values/ArrayValue';
 import { ContValue } from './values/ContValue';
@@ -85,13 +85,13 @@ export class StashItemComponent extends Visible implements IHoverable {
   }
 
   // Save previous z-index to go back to later
-  private zIndex = 0;
+  private zIndex = 1;
   onMouseEnter = (e: KonvaEventObject<MouseEvent>) => {
     if (!isStashItemInDanger(this.index)) {
       setHoveredStyle(e.currentTarget);
     }
     setHoveredCursor(e.currentTarget);
-    this.zIndex = this.ref.current.zIndex();
+    this.zIndex = Math.max(this.ref.current.zIndex(), 1);
     this.ref.current.moveToTop();
     this.tooltipRef.current.moveToTop();
     this.tooltipRef.current.show();
@@ -105,6 +105,16 @@ export class StashItemComponent extends Visible implements IHoverable {
     }
     this.ref.current.zIndex(this.zIndex);
   };
+
+  setArrowSourceHighlightedStyle(): void {
+    this.tag?.stroke(Config.HoverColor);
+    this.secItem?.fill(Config.HoverColor);
+  }
+
+  setArrowSourceNormalStyle(): void {
+    this.tag?.stroke(isStashItemInDanger(this.index) ? defaultDangerColor() : defaultStrokeColor());
+    this.secItem?.fill(defaultTextColor());
+  }
 
   destroy() {
     this.ref.current.destroyChildren();

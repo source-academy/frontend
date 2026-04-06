@@ -1,4 +1,4 @@
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 
 import { AuthProviderType } from './AuthHelper';
 
@@ -21,6 +21,11 @@ const storiesBackendUrl = process.env.REACT_APP_STORIES_BACKEND_URL;
 const cadetLoggerUrl = isTest ? undefined : process.env.REACT_APP_CADET_LOGGER;
 const cadetLoggerInterval = parseInt(process.env.REACT_APP_CADET_LOGGER_INTERVAL || '10000', 10);
 const useBackend = !isTest && isTrue(process.env.REACT_APP_USE_BACKEND);
+/**
+ * Whether or not attach cookies to every API call. Useful for load balancers that
+ * route requests based on cookies (e.g. for sticky sessions).
+ */
+const forwardLoadBalancerCookies = isTrue(process.env.REACT_APP_FORWARD_LOAD_BALANCER_COOKIES);
 const useEmptyAssetPrefix = isTrue(process.env.REACT_APP_USE_EMPTY_ASSET_PREFIX);
 const defaultSourceChapter = Chapter.SOURCE_4;
 const defaultSourceVariant = Variant.DEFAULT;
@@ -42,6 +47,7 @@ const sicpBackendUrl =
   process.env.REACT_APP_SICPJS_BACKEND_URL || 'https://sicp.sourceacademy.org/';
 const javaPackagesUrl = 'https://source-academy.github.io/modules/java/java-packages/src/';
 const workspaceSettingsLocalStorageKey = 'workspace-settings';
+const collabSessionIdLocalStorageKey = 'playground-session-id';
 
 // For achievements feature (CA - Continual Assessment)
 // TODO: remove dependency of the ca levels on the env file
@@ -143,7 +149,9 @@ export enum Links {
   aceHotkeys = 'https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts',
   sourceHotkeys = 'https://github.com/source-academy/frontend/wiki/Source-Academy-Keyboard-Shortcuts',
 
-  ecmaScript_2021 = 'https://262.ecma-international.org/12.0/'
+  ecmaScript_2021 = 'https://262.ecma-international.org/12.0/',
+
+  vscode = 'vscode://source-academy.source-academy/sso'
 }
 
 const Constants = {
@@ -155,6 +163,7 @@ const Constants = {
   storiesBackendUrl,
   cadetLoggerUrl,
   useBackend,
+  forwardLoadBalancerCookies,
   useEmptyAssetPrefix,
   defaultSourceChapter,
   defaultSourceVariant,
@@ -181,6 +190,7 @@ const Constants = {
   sicpBackendUrl,
   javaPackagesUrl,
   workspaceSettingsLocalStorageKey,
+  collabSessionIdLocalStorageKey,
   caFulfillmentLevel,
   featureFlags
 };

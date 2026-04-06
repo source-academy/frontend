@@ -1,10 +1,11 @@
 import { Button, H2 } from '@blueprintjs/core';
 import {
-  CellValueChangedEvent,
-  ColDef,
-  GridApi,
-  GridReadyEvent,
-  RowDragEvent
+  type CellValueChangedEvent,
+  type ColDef,
+  type GridApi,
+  type GridReadyEvent,
+  type RowDragEvent,
+  themeBalham
 } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { cloneDeep, isEqual } from 'lodash';
@@ -61,7 +62,7 @@ const AssessmentConfigPanel: WithImperativeApi<
   React.FC<Props>
 > = forwardRef<ImperativeAssessmentConfigPanel, Props>(
   ({ setHasChangesAssessmentConfig, initialConfigs }, imperativeRef) => {
-    const gridApi = React.useRef<GridApi<AssessmentConfiguration>>();
+    const gridApi = React.useRef<GridApi<AssessmentConfiguration>>(null);
     // Create a mutable copy of the initialConfigs to track changes
     // to prevent UI flicker during state changes.
     const tableState = useRef(cloneDeep(initialConfigs));
@@ -262,12 +263,14 @@ const AssessmentConfigPanel: WithImperativeApi<
       [
         deleteRowHandler,
         setDisplayInDashboard,
+        setIsMinigame,
         setEarlyXp,
         setHasTokenCounter,
         setHasVotingFeatures,
         setHoursBeforeDecay,
         setIsGradingAutoPublished,
-        setIsManuallyGraded
+        setIsManuallyGraded,
+        setIsMinigame
       ]
     );
 
@@ -315,8 +318,9 @@ const AssessmentConfigPanel: WithImperativeApi<
     };
 
     const grid = (
-      <div className="Grid ag-grid-parent ag-theme-balham">
+      <div className="Grid">
         <AgGridReact
+          theme={themeBalham}
           domLayout="autoHeight"
           columnDefs={columnDefs}
           defaultColDef={defaultColumnDefs}

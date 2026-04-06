@@ -1,6 +1,6 @@
 import { Classes, Icon, Tab, Tabs, Tooltip } from '@blueprintjs/core';
 import classNames from 'classnames';
-import React from 'react';
+import React, { type JSX } from 'react';
 import { SideContentProps } from 'src/commons/sideContent/SideContent';
 import { generateIconId } from 'src/commons/sideContent/SideContentHelper';
 import SideContentProvider from 'src/commons/sideContent/SideContentProvider';
@@ -37,7 +37,7 @@ const renderTab = (tab: SideContentTab, isIOS: boolean) => {
       }}
     >
       <div className="side-content-tooltip" id={generateIconId(tabId)}>
-        <Icon icon={tab.iconName} iconSize={iconSize} />
+        <Icon icon={tab.iconName} size={iconSize} />
       </div>
     </Tooltip>
   );

@@ -1,7 +1,11 @@
 import { h } from 'hastscript';
+import { Nodes as MdastNodes } from 'mdast';
 import { fromMarkdown } from 'mdast-util-from-markdown';
-import { defaultHandlers, toHast } from 'mdast-util-to-hast';
-import { MdastNodes, Options as MdastToHastConverterOptions } from 'mdast-util-to-hast/lib';
+import {
+  defaultHandlers,
+  Options as MdastToHastConverterOptions,
+  toHast
+} from 'mdast-util-to-hast';
 import React from 'react';
 import * as runtime from 'react/jsx-runtime';
 import { IEditorProps } from 'react-ace';

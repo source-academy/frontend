@@ -1,5 +1,5 @@
-import { Ace } from 'ace-builds/ace';
-import { Chapter } from 'js-slang/dist/types';
+import { Ace } from 'ace-builds';
+import { Chapter } from 'js-slang/dist/langs';
 
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { Position } from '../../commons/editor/EditorTypes';

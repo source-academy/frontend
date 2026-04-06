@@ -13,7 +13,7 @@ import {
   TextArea
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import AcademyActions from 'src/features/academy/AcademyActions';
@@ -29,7 +29,7 @@ type Props = {
   onClose: () => void;
 };
 
-const DropdownCreateCourse: React.FC<Props> = props => {
+const DropdownCreateCourse = (props => {
   const dispatch = useDispatch();
 
   const [courseConfig, setCourseConfig] = React.useState<UpdateCourseConfiguration>({
@@ -40,9 +40,11 @@ const DropdownCreateCourse: React.FC<Props> = props => {
     enableAchievements: true,
     enableSourcecast: true,
     enableStories: false,
+    enableLlmGrading: false,
     sourceChapter: Chapter.SOURCE_1,
     sourceVariant: Variant.DEFAULT,
-    moduleHelpText: ''
+    moduleHelpText: '',
+    llmApiKey: ''
   });
 
   const [courseHelpTextSelectedTab, setCourseHelpTextSelectedTab] =
@@ -222,7 +224,8 @@ const DropdownCreateCourse: React.FC<Props> = props => {
                 })
               }
             />
-
+          </div>
+          <div>
             <Switch
               checked={courseConfig.enableStories}
               inline
@@ -231,6 +234,18 @@ const DropdownCreateCourse: React.FC<Props> = props => {
                 setCourseConfig({
                   ...courseConfig,
                   enableStories: (e.target as HTMLInputElement).checked
+                })
+              }
+            />
+
+            <Switch
+              checked={courseConfig.enableLlmGrading}
+              inline
+              label="Enable LLM Grading"
+              onChange={e =>
+                setCourseConfig({
+                  ...courseConfig,
+                  enableLlmGrading: (e.target as HTMLInputElement).checked
                 })
               }
             />
@@ -273,6 +288,24 @@ const DropdownCreateCourse: React.FC<Props> = props => {
               fill
             />
           </FormGroup>
+          <FormGroup
+            helperText="API Key for LLM endpoint. This key will be encrypted and will not be retrievable on the frontend after."
+            label={'LLM API Key'}
+            labelInfo="(optional)"
+            labelFor="llmApiKey"
+          >
+            <InputGroup
+              id="llmApiKey"
+              type="password"
+              value={courseConfig.llmApiKey}
+              onChange={e =>
+                setCourseConfig({
+                  ...courseConfig,
+                  llmApiKey: e.target.value
+                })
+              }
+            />
+          </FormGroup>
         </div>
         <div className="create-course-button-container">
           <Button text="Create Course" onClick={submitHandler} />
@@ -280,6 +313,6 @@ const DropdownCreateCourse: React.FC<Props> = props => {
       </DialogBody>
     </Dialog>
   );
-};
+}) satisfies React.FC<Props>;
 
 export default DropdownCreateCourse;

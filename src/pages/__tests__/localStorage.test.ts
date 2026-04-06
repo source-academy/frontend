@@ -19,6 +19,8 @@ const mockShortDefaultState: SavedState = {
     viewable: defaultState.session.viewable,
     enableGame: defaultState.session.enableGame,
     enableAchievements: defaultState.session.enableAchievements,
+    enableOverallLeaderboard: defaultState.session.enableOverallLeaderboard,
+    enableContestLeaderboard: defaultState.session.enableContestLeaderboard,
     enableSourcecast: defaultState.session.enableSourcecast,
     enableStories: defaultState.session.enableStories,
     moduleHelpText: defaultState.session.moduleHelpText,
@@ -26,6 +28,7 @@ const mockShortDefaultState: SavedState = {
     assessmentConfigurations: defaultState.session.assessmentConfigurations
   },
   achievements: defaultState.achievement.achievements,
+  featureFlags: defaultState.featureFlags.modifiedFlags,
   playgroundIsFolderModeEnabled: defaultState.workspaces.playground.isFolderModeEnabled,
   playgroundActiveEditorTabIndex: {
     value: defaultState.workspaces.playground.activeEditorTabIndex

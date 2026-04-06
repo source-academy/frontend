@@ -5,7 +5,7 @@ import { store } from 'src/pages/createStore';
 
 import { Tokens } from '../application/types/SessionTypes';
 import { postRefresh } from '../sagas/RequestsSaga';
-import { MockResponse } from './__tests__/RequestHelper';
+import { MockResponse } from './__tests__/RequestHelper.test';
 import { actions } from './ActionsHelper';
 import Constants from './Constants';
 import { dismiss, showWarningMessage } from './notifications/NotificationsHelper';
@@ -51,6 +51,10 @@ export const request = async (
   opts: RequestOptions,
   rawUrl?: string
 ): Promise<Response | null> => {
+  if (Constants.forwardLoadBalancerCookies) {
+    // Always attach cookies to every API call
+    opts.withCredentials = true;
+  }
   const fetchOptions = generateApiCallHeadersAndFetchOptions(method, opts);
 
   try {

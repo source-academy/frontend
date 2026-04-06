@@ -1,0 +1,159 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SideContentContestLeaderboard matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="ContestLeaderboard"
+  >
+    <button
+      class="bp6-button bp6-minimal collapse-button"
+      type="button"
+    >
+      <span
+        aria-hidden="true"
+        class="bp6-icon bp6-icon-standard bp6-icon-caret-down"
+        data-icon="caret-down"
+      />
+      <span
+        class="bp6-button-text"
+      >
+        <span>
+          Score Leaderboard
+        </span>
+        <span
+          class="bp6-popover-target"
+        >
+          <span
+            aria-hidden="true"
+            class="bp6-icon bp6-icon-standard bp6-icon-help"
+            data-icon="help"
+            tabindex="0"
+          />
+        </span>
+      </span>
+    </button>
+    <div
+      class="bp6-collapse"
+      style="height: auto; overflow-y: visible; transition: none;"
+    >
+      <div
+        aria-hidden="false"
+        class="bp6-collapse-body"
+        style="transform: translateY(0); transition: none;"
+      >
+        <div>
+          <div
+            class="leaderboard-header"
+          >
+            <div
+              class="header-entryid"
+            >
+              Student Name
+              <span
+                aria-hidden="true"
+                class="bp6-icon bp6-icon-standard bp6-icon-caret-down"
+                data-icon="caret-down"
+              />
+            </div>
+            <div
+              class="header-entryrank"
+            >
+              Rank
+              <span
+                aria-hidden="true"
+                class="bp6-icon bp6-icon-standard bp6-icon-caret-down"
+                data-icon="caret-down"
+              />
+            </div>
+            <div
+              class="header-score"
+            >
+              Calculated Score
+              <span
+                aria-hidden="true"
+                class="bp6-icon bp6-icon-standard bp6-icon-caret-down"
+                data-icon="caret-down"
+              />
+            </div>
+          </div>
+          <div
+            class="LeaderboardCard"
+          >
+            <div
+              class="bp6-interactive bp6-card bp6-elevation-1"
+              data-testid="SideContentLeaderboardCard"
+            >
+              <pre
+                class="bp6-code-block contestentry-entryid"
+              >
+                student_1
+              </pre>
+              <pre
+                class="bp6-code-block contestentry-rank"
+              >
+                1
+              </pre>
+              <pre
+                class="bp6-code-block contestentry-score"
+                data-testid="contestentry-score"
+              >
+                100
+              </pre>
+            </div>
+          </div>
+          <div
+            class="LeaderboardCard"
+          >
+            <div
+              class="bp6-interactive bp6-card bp6-elevation-1"
+              data-testid="SideContentLeaderboardCard"
+            >
+              <pre
+                class="bp6-code-block contestentry-entryid"
+              >
+                student_2
+              </pre>
+              <pre
+                class="bp6-code-block contestentry-rank"
+              >
+                2
+              </pre>
+              <pre
+                class="bp6-code-block contestentry-score"
+                data-testid="contestentry-score"
+              >
+                90
+              </pre>
+            </div>
+          </div>
+          <div
+            class="LeaderboardCard"
+          >
+            <div
+              class="bp6-interactive bp6-card bp6-elevation-1"
+              data-testid="SideContentLeaderboardCard"
+            >
+              <pre
+                class="bp6-code-block contestentry-entryid"
+              >
+                student_3
+              </pre>
+              <pre
+                class="bp6-code-block contestentry-rank"
+              >
+                3
+              </pre>
+              <pre
+                class="bp6-code-block contestentry-score"
+                data-testid="contestentry-score"
+              >
+                80
+              </pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

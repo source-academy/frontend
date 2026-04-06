@@ -26,7 +26,7 @@ import {
   setHoveredCursor,
   setUnhoveredCursor
 } from '../../CseMachineUtils';
-import { Continuation } from '../../utils/scheme';
+import { Continuation } from '../../utils/continuation';
 import { ArrowFromFn } from '../arrows/ArrowFromFn';
 import { Binding } from '../Binding';
 import { Frame } from '../Frame';
@@ -37,7 +37,7 @@ import { Value } from './Value';
 export class ContValue extends Value implements IHoverable {
   readonly radius: number = Config.FnRadius;
   readonly innerRadius: number = Config.FnInnerRadius;
-  readonly labelRef: RefObject<Label> = React.createRef();
+  readonly labelRef: RefObject<Label | null> = React.createRef();
 
   readonly tooltip: string = 'continuation';
   readonly tooltipWidth: number = getTextWidth(this.tooltip);
@@ -71,6 +71,22 @@ export class ContValue extends Value implements IHoverable {
     this.stash = this.data.getStash();
 
     this.addReference(firstReference);
+  }
+
+  // isLive(): boolean {
+  //   if (this.enclosingFrame) {
+  //     return (
+  //       (this.enclosingFrame.environment &&
+  //         Layout.liveEnvIDs.has(this.enclosingFrame.environment.id)) ||
+  //       CseMachine.getCurrentEnvId() === this.enclosingFrame.environment?.id
+  //     );
+  //   }
+  //   return false;
+  // }
+
+  isLive(): boolean {
+    const id = (this.data as any).id;
+    return id ? Layout.liveObjectIDs.has(id) : false;
   }
 
   handleNewReference(newReference: ReferenceType): void {
@@ -112,12 +128,27 @@ export class ContValue extends Value implements IHoverable {
     this.labelRef.current?.hide();
   };
 
+  setArrowSourceHighlightedStyle(): void {
+    if (this.isLive()) {
+      this.setShapesStyle(Config.HoverColor);
+    } else {
+      this.setShapesStyle(Config.HoverDeadColor);
+    }
+  }
+
+  setArrowSourceNormalStyle(): void {
+    const strokeColor = this.isLive() ? defaultStrokeColor() : fadedStrokeColor();
+    this.setShapesStyle(strokeColor);
+  }
+
   draw(): React.ReactNode {
     if (this.enclosingFrame) {
       this._arrow = new ArrowFromFn(this).to(this.enclosingFrame) as ArrowFromFn;
     }
-    const textColor = this.isReferenced() ? defaultTextColor() : fadedTextColor();
-    const strokeColor = this.isReferenced() ? defaultStrokeColor() : fadedStrokeColor();
+    const textColor = this.isLive() ? defaultTextColor() : fadedTextColor();
+    const strokeColor = this.isLive() ? defaultStrokeColor() : fadedStrokeColor();
+    //dont need to check isReferenced here since live is ALL we need to know
+
     return (
       <React.Fragment key={Layout.key++}>
         <Group onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} ref={this.ref}>

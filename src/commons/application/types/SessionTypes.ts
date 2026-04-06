@@ -1,5 +1,5 @@
 import { Octokit } from '@octokit/rest';
-import { Chapter, Variant } from 'js-slang/dist/types';
+import { Chapter, Variant } from 'js-slang/dist/langs';
 
 import { GradingOverviews, GradingQuery } from '../../../features/grading/GradingTypes';
 import { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
@@ -39,6 +39,14 @@ export type SessionState = {
   readonly enableAchievements?: boolean;
   readonly enableSourcecast?: boolean;
   readonly enableStories?: boolean;
+  readonly enableLlmGrading?: boolean;
+  readonly llmModel?: string;
+  readonly llmApiUrl?: string;
+  readonly llmCourseLevelPrompt?: string;
+  readonly enableOverallLeaderboard?: boolean;
+  readonly enableContestLeaderboard?: boolean;
+  readonly topLeaderboardDisplay?: number;
+  readonly topContestLeaderboardDisplay?: number;
   readonly sourceChapter?: Chapter;
   readonly sourceVariant?: Variant;
   readonly moduleHelpText?: string;
@@ -105,10 +113,18 @@ export type CourseConfiguration = {
   enableAchievements: boolean;
   enableSourcecast: boolean;
   enableStories: boolean;
+  enableLlmGrading?: boolean;
+  enableOverallLeaderboard: boolean;
+  enableContestLeaderboard: boolean;
+  topLeaderboardDisplay: number;
+  topContestLeaderboardDisplay: number;
   sourceChapter: Chapter;
   sourceVariant: Variant;
   moduleHelpText: string;
   assetsPrefix: string;
+  llmModel?: string;
+  llmApiUrl?: string;
+  llmCourseLevelPrompt?: string;
 };
 
 export type AdminPanelCourseRegistration = {
@@ -120,4 +136,4 @@ export type AdminPanelCourseRegistration = {
   group?: string;
 };
 
-export type UpdateCourseConfiguration = Partial<CourseConfiguration>;
+export type UpdateCourseConfiguration = Partial<CourseConfiguration & { llmApiKey: string }>;
