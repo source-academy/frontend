@@ -115,10 +115,13 @@ export class FnValue extends Value implements IHoverable {
     if (newReference instanceof Binding) {
       // check for frame x cooridnate in cache
       const ghostX = Layout.getGhostFrameX(newReference.frame.environment.id);
+      const ghostY = Layout.getGhostFrameY(newReference.frame.environment.id);
       // if frame x coordinate exitst use it, if not use live value
       const frameX = ghostX !== undefined ? ghostX : newReference.frame.x();
       this._x = frameX + newReference.frame.width() + Config.FrameMarginX;
-      this._y = newReference.y();
+      const frameY = ghostY !== undefined ? ghostY : newReference.frame.y();
+      const relativeOffset = newReference.y() - newReference.frame.y();
+      this._y = frameY + relativeOffset;
       this.centerX = this._x + this.radius * 2;
     } else {
       if (newReference.isLastUnit) {
