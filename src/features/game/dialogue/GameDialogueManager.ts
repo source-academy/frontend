@@ -255,7 +255,6 @@ export default class DialogueManager {
       this.getInputManager().enableKeyboardInput(true);
       this.getDialogueGenerator().updateCurrPart(prompt.choices[response][1]);
 
-
       if (this.skipButton) this.skipButton.setVisible(true);
       this.isDialoguePromptActive = false;
     }
@@ -270,16 +269,19 @@ export default class DialogueManager {
         this.skipButton.setVisible(false);
       }
 
-
       // Prevents skipping by using the "s" keyboard shortcut
       this.getInputManager().clearKeyboardListeners([
         keyboardShortcuts.Next,
         keyboardShortcuts.SkipDialogue
       ]);
       resolve();
+    } else if (!this.isSkipping && !this.isDialoguePromptActive) {
+      if (this.skipButton) {
+        this.skipButton.setVisible(true);
+        this.skipButton.setInteractive({ useHandCursor: true });
+      }
     }
   }
-
 
   /**
    * Hide all dialogue boxes, speaker boxes and speaker sprites
