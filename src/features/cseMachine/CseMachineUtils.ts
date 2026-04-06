@@ -25,6 +25,7 @@ import { Binding } from './components/Binding';
 import { ControlItemComponent } from './components/ControlItemComponent';
 import { isNode } from './components/ControlStack';
 import { Frame } from './components/Frame';
+import { Level } from './components/Level';
 import { StashItemComponent } from './components/StashItemComponent';
 import { ArrayValue } from './components/values/ArrayValue';
 import { ContValue } from './components/values/ContValue';
@@ -380,6 +381,67 @@ export function computeLiveState(envTree: EnvTree): {
   });
 
   return liveState;
+}
+
+/** Returns an array of pairs of frames.
+ * The two frames in each pair represent the same frame in concept, but the frame's position has
+ * shifted between steps, creating two distinct Frame objects.
+ * The first frame in each pair represents the frame before it shifted. The second frame represents
+ * the frame after it shifted.
+ */
+export function computeFramesCoordChange(oldLevels: Level[], newLevels: Level[]): Frame[][] {
+  const result: Frame[][] = [];
+
+  // Match levels such that oldLevels.length == newLevels.length
+  // in case Clear Dead Frames causes an entire Level to be cleared
+  const normalizedOldLevels =
+    oldLevels.length === newLevels.length
+      ? oldLevels
+      : oldLevels.filter(({ frames }) => frames.some(f => f.isLive));
+
+  // Defensive check in case layout is updated to have more complex frame movements
+  // This error only occurs if the following invariant is violated:
+  // "oldLevels.length != newLevels.length is always due to deletion of levels with only dead frames."
+  // This invariant may be violated if frames can migrate between levels.
+  if (normalizedOldLevels.length !== newLevels.length) {
+    // TODO: Change console.error into throw new Error, and catch them upstream (eg at CseMachine.redraw()),
+    // with centralized error handling for all layout logic.
+    console.error('Level count mismatch for Clear Dead Frames animation, animation not played.');
+
+    // Empty array is returned to SideContentCseMachine, causing the animation to not play
+    // since the length of changedFramePairs (the returned value) == 0.
+    return [];
+  }
+
+  // Match each frame that is live
+  // Matched frames conceptually represent the same frame, but on different steps (prev vs curr)
+  for (let levelIdx = 0; levelIdx < normalizedOldLevels.length; levelIdx++) {
+    const oldLevelFrames = normalizedOldLevels[levelIdx].frames;
+    const newLevelFrames = newLevels[levelIdx].frames;
+    let oldFrameIdx = 0; // Will always >= newFrameIdx
+    let newFrameIdx = 0; // Will always increment one-by-one such that each frame is appended to result
+
+    while (newFrameIdx < newLevelFrames.length && oldFrameIdx < oldLevelFrames.length) {
+      if (!oldLevelFrames[oldFrameIdx].isLive) {
+        oldFrameIdx++;
+      } else {
+        const oldFrame = oldLevelFrames[oldFrameIdx];
+        const newFrame = newLevelFrames[newFrameIdx];
+
+        // If oldFrame and newFrame are NOT in the same position, push to result array
+        if (
+          oldFrame.x() != newFrame.x() ||
+          normalizedOldLevels[levelIdx].y() != newLevels[levelIdx].y()
+        ) {
+          result.push([oldFrame, newFrame]);
+        }
+        oldFrameIdx++;
+        newFrameIdx++;
+      }
+    }
+  }
+
+  return result;
 }
 
 /** Returns a set with the elements in `set1` that are not in `set2` */
