@@ -678,7 +678,6 @@ function renderNode(currentNode: StepperBaseNode, renderContext: RenderContext):
 
   // Entry point of rendering
   const renderer = (
-    // All subclasses of stepper base node has its corresponding renderes
     renderers as unknown as Record<string, (node: StepperBaseNode) => React.ReactNode>
   )[currentNode.type];
   const isParenthesis = expressionNeedsParenthesis(
