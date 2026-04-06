@@ -1,5 +1,5 @@
-import { KonvaEventObject } from 'konva/lib/Node';
 import Closure from 'js-slang/dist/cse-machine/closure';
+import { KonvaEventObject } from 'konva/lib/Node';
 import React from 'react';
 import { Group } from 'react-konva';
 
@@ -37,7 +37,7 @@ export class ArrayValue extends Value implements IHoverable {
     super();
     Layout.memoizeValue(data, this);
     this.addReference(firstReference);
-      /** handling pairs for stream visualisation */
+    /** handling pairs for stream visualisation */
     if (data[1] instanceof Closure) {
       // console.log("array with nullary func id: " + data[1].id);
       // console.log("array is created from fn with id: " + CseMachine.findKeyByValueInMap(data.id));

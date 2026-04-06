@@ -699,7 +699,7 @@ export class Layout {
         return false;
       }
     });
-    
+
     if (Layout.key !== 0) {
       return Layout.prevLayout;
     } else {
@@ -746,10 +746,9 @@ export class Layout {
                     listening={false}
                   />
                   <KonvaGroup ref={Layout.contentGroupRef}>
-                    {CseMachine.getPairCreationMode() 
+                    {CseMachine.getPairCreationMode()
                       ? pairValues.map(v => v.draw())
-                      : Layout.levels.map(level => level.draw())
-                    } 
+                      : Layout.levels.map(level => level.draw())}
                     {console.log()}
                     {CseMachine.getControlStash() && Layout.controlComponent.draw()}
                     {CseMachine.getControlStash() && Layout.stashComponent.draw()}

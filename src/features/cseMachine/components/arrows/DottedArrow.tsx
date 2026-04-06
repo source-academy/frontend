@@ -6,8 +6,8 @@ import { IVisible } from '../../CseMachineTypes';
 import { GenericArrow } from './GenericArrow';
 
 export class DottedArrow extends GenericArrow<IVisible, IVisible> {
-    draw() {
-    const stroke = "#ded74e";
+  draw() {
+    const stroke = '#ded74e';
     return (
       <KonvaGroup key={Layout.key++} ref={this.ref} listening={false}>
         <KonvaPath

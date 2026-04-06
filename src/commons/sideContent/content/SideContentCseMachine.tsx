@@ -586,7 +586,7 @@ class SideContentCseMachineBase extends React.Component<CseMachineProps, State> 
     this.sliderRelease(0);
   };
 
-    private getActiveChangeSteps = () => {
+  private getActiveChangeSteps = () => {
     return CseMachine.getPairCreationMode()
       ? this.props.streamsPointSteps
       : this.props.changepointSteps;

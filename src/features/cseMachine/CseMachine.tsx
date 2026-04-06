@@ -37,7 +37,7 @@ export default class CseMachine {
   private static currentEnvId: string;
   private static control: Control | undefined;
   private static stash: Stash | undefined;
-    private static streamLineage: Map<string, string[]>;
+  private static streamLineage: Map<string, string[]>;
   public static togglePrintableMode(): void {
     CseMachine.printableMode = !CseMachine.printableMode;
   }
@@ -126,10 +126,10 @@ export default class CseMachine {
     return CseMachine.streamLineage.get(key);
   }
   public static findKeyByValueInMap(value: any) {
-    for (const [key, array] of CseMachine.streamLineage.entries()) { 
+    for (const [key, array] of CseMachine.streamLineage.entries()) {
       // console.log(key + array);
       if (array.includes(value)) {
-        return key; 
+        return key;
       }
     }
 

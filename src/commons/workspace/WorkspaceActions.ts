@@ -272,10 +272,7 @@ const newActions = createActions('workspace', {
     changepointSteps,
     workspaceLocation
   }),
-  updateStreamsPointSteps: (
-    streamsPointSteps: number[],
-    workspaceLocation: WorkspaceLocation
-  ) => ({
+  updateStreamsPointSteps: (streamsPointSteps: number[], workspaceLocation: WorkspaceLocation) => ({
     streamsPointSteps,
     workspaceLocation
   }),

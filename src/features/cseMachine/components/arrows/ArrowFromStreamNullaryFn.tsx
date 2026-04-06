@@ -6,12 +6,8 @@ import { FnValue } from '../values/FnValue';
 import { GlobalFnValue } from '../values/GlobalFnValue';
 import { DottedArrow } from './DottedArrow';
 
-
 /** this class encapsulates an GenericArrow to be drawn between 2 points */
 export class ArrowFromStreamNullaryFn extends DottedArrow {
-  
-
-
   // protected calculateSteps() {
   //   const from = this.source;
   //   const to = this.target;
@@ -25,7 +21,10 @@ export class ArrowFromStreamNullaryFn extends DottedArrow {
   //   return steps;
   // }
 
-    constructor(from: FnValue | GlobalFnValue | ContValue, public offsetIndex: number = 0) {
+  constructor(
+    from: FnValue | GlobalFnValue | ContValue,
+    public offsetIndex: number = 0
+  ) {
     super(from);
     this.faded = !from.isReferenced();
   }
@@ -55,7 +54,6 @@ export class ArrowFromStreamNullaryFn extends DottedArrow {
       const archHeight = 50;
       const midPointY = Math.min(startPointY, endPointY) - archHeight - verticalShift;
       const steps: StepsArray = [
-        
         // The GenericArrow class will draw a path through these points,
         // creating smooth curves at the corners.
         () => [startPointX, startPointY],
@@ -63,7 +61,7 @@ export class ArrowFromStreamNullaryFn extends DottedArrow {
         () => [endPointX, endPointY]
       ];
       return steps;
-    } 
+    }
     const endPointX = to.x();
     const endPointY = to.y() + Config.DataUnitHeight / 2;
     const steps: StepsArray = [
