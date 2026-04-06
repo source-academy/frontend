@@ -70,7 +70,7 @@ export class Binding extends Visible {
     this.keyYOffset = keyYOffset;
     const availableKeyWidth = GlobalDefaultText
       ? Config.FrameDefaultWidth - Config.FramePaddingX * 2 // for GlobalFrameDefaultText, use default frame width
-      : (this.frame.width() - Config.TextPaddingX - Config.FramePaddingX * 2) / 2;
+      : (Config.FrameDefaultWidth - Config.TextPaddingX - Config.FramePaddingX * 2) / 2;
 
     this.key = new Text(this.keyString, this.x(), this.y() + keyYOffset, {
       maxWidth: availableKeyWidth,
