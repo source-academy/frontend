@@ -25,6 +25,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
   protected _visible: boolean = true;
   private pathRef: RefObject<Konva.Path | null> = React.createRef();
   private sourceSegmentPathRef: RefObject<Konva.Path | null> = React.createRef();
+  private sourceSegmentGroupRef: RefObject<Konva.Group | null> = React.createRef();
   private arrowHeadRef: RefObject<Konva.Arrow | null> = React.createRef();
 
   // Check if this arrow is selected
@@ -292,6 +293,7 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
 
     return (
       <KonvaGroup
+        ref={this.sourceSegmentGroupRef}
         key={Layout.key++}
         clipX={rect.x}
         clipY={rect.y}
@@ -320,14 +322,14 @@ export class GenericArrow<Source extends IVisible, Target extends IVisible>
 
   setVisible(visible: boolean): void {
     this._visible = visible;
-    if (this.ref.current) {
-      if (visible) {
-        this.ref.current.show();
-      } else {
-        this.ref.current.hide();
-      }
-      this.ref.current.getLayer()?.batchDraw();
+    if (visible) {
+      this.ref.current?.show();
+      this.sourceSegmentGroupRef.current?.show();
+    } else {
+      this.ref.current?.hide();
+      this.sourceSegmentGroupRef.current?.hide();
     }
+    this.ref.current?.getStage()?.batchDraw();
   }
 
   // Subclasses can override to recompute liveness before drawing
